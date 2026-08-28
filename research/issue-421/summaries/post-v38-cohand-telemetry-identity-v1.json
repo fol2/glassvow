@@ -1,0 +1,50 @@
+{
+  "authority": "Apply decision boundary 1 and freeze exactly the TURN/KINDLE trace for one deterministic zero-row reconstruction of simultaneous Ward/Warden's-Edge co-hand opportunity. Do not add a candidate, payoff, gameplay hook, policy knob, causal row, ML, RL or optimiser.",
+  "cacheObjects": {
+    "outputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "planSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458"
+  },
+  "decision": "freeze-turn-and-kindle-telemetry",
+  "decisionBoundary": 1,
+  "factorDisposition": {
+    "additionalMethod": "No ML, RL, optimiser or fitted model is used or authorised.",
+    "candidate": "None is constructed, simulated, frozen or promoted.",
+    "payoffs": "Scoreline and Afterimage remain separate, fixed and absent.",
+    "ponytailKnobs": "No non-null research knob exists or is exercised."
+  },
+  "godotVersion": "4.7.1.stable.official.a13da4feb",
+  "identity": {
+    "anchorWithoutCohandEventsMismatchRows": 0,
+    "policyMismatchRows": 0,
+    "rngMismatchRows": 0
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 256,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "f651c220bfbbbd24d3fdec3b707209187c2192d0a40c0e8fe06255963b3377cc",
+  "rowsPerArm": 256,
+  "runnerSha256": "53baead2ef8b85f65b7594e2c141849423a95a2114a32319c1f121ef27069e47",
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "traceSchemaFaults": [],
+  "wallTimeSeconds": 9.388354209018871
+}

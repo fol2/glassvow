@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "What is the smallest source-complete deterministic observation that can distinguish same-turn simultaneous Ward/Warden's-Edge hand opportunity from the broader same-fight draw upper bound?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "c31d8b7e53b5cc2d9bab7d26100de35d74b519abfb5355b78340b60eaa8f9ea4",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_sim.gd": "7af44a32910b2f84e5d240f59dd00753c74d8d544f751f334441e000ce6cb56d"
+    },
+    "fileSha256": {
+      "task-capsule.json": "7bb656db975899cea5fa1e119b28ae6ab8504213c121236154e1a3642932f822",
+      "protocols/post-v38-draw-opportunity-decomposition-v1.json": "d744eb0d2f2b70d04c46ade5f8bba233ce2934135fa77199d0bdd9a5df1fb64d",
+      "summaries/post-v38-draw-opportunity-decomposition-v1.json": "645294800dc7938ac824693ea21dd5e214a0e924aa12aefdb9dfed6bda9eef2e",
+      "summaries/post-v38-draw-telemetry-identity-v1.json": "6282bba159c186f301cb8d892428df8db8aeb51385ed15968c1af8d3b0197ee1"
+    }
+  },
+  "sourceAssertions": {
+    "domain/state/combat_state.gd": [
+      "var hand: Array[CardInst] = []"
+    ],
+    "domain/rules/combat.gd": [
+      "cb.queue.append({\"t\": EventTypes.TURN, \"n\": cb.turn})",
+      "cb.hand.append(c)",
+      "cb.queue.append({\"t\": EventTypes.DRAW, \"uid\": c.uid, \"id\": String(c.id)})",
+      "cb.hand.remove_at(i)",
+      "cb.queue.append({\"t\": EventTypes.PLAY, \"uid\": inst.uid, \"id\": String(inst.id), \"targetIdx\": target_idx})",
+      "cb.hand.erase(held)",
+      "cb.queue.append({\"t\": EventTypes.KINDLE, \"uid\": held.uid, \"id\": String(held.id)})",
+      "cb.queue.append({\"t\": EventTypes.KINDLE, \"uid\": inst.uid, \"id\": String(inst.id)})",
+      "cb.hand = []"
+    ],
+    "tools/balance_sim.gd": [
+      "for event_v: Variant in game.cb.queue:",
+      "_trace_append(\"draws\", {\"fight\": fight_index, \"event\": event_index,",
+      "_trace_append(\"plays\", {\"fight\": fight_index, \"event\": event_index,"
+    ]
+  },
+  "sourceCompleteness": {
+    "handMutationCensus": [
+      "draw_cards appends one CardInst and immediately emits DRAW with uid and id",
+      "play_card removes one CardInst and immediately emits PLAY with uid and id",
+      "addCard can append directly to hand, but the exact current-main catalogue contains no base or upgraded addCard-to-hand effect",
+      "pyreTithe erases every held CardInst and emits one KINDLE with uid and id for each",
+      "end_turn discards the remaining hand and resets it to empty before the next TURN",
+      "kindle_from_hand removes one CardInst and immediately emits KINDLE with uid and id"
+    ],
+    "reconstruction": "Start each fight with an empty hand. At TURN clear the reconstructed hand, at DRAW add uid and id, and at PLAY or KINDLE remove uid. A co-hand opportunity exists immediately after any event when at least one defend and one guardedStrike uid remain. End-turn discard does not require a new field because the following TURN clears state before new draws.",
+    "targetScope": "Exact only for current-main Ward (defend) and Warden's Edge (guardedStrike) under the frozen content SHA. It does not reconstruct legal targets, energy sufficiency or policy score."
+  },
+  "eligibilityCriteria": {
+    "maximumHookCount": 1,
+    "maximumContainerCount": 2,
+    "maximumFieldsPerContainer": 4,
+    "fixedScalarSchema": "Every entry must have a fixed set of scalar fields; unbounded whole-hand or uid-array payloads are ineligible.",
+    "directDiscriminator": "The surface must determine whether Ward and Warden's Edge were simultaneously held in one player turn, not merely drawn in one fight.",
+    "existingDeterministicEvents": "Every new field must already exist on events consumed by the current BalanceSim._harvest_fight loop.",
+    "completeMutationCensus": "The frozen current-main hand mutation census and content addCard-to-hand absence must make reconstruction exact for the target cards.",
+    "preservesFrozenTrace": "The existing draws and plays schemas must remain byte-identical; new observations use separate containers.",
+    "identityAnchor": "The exact 256-row draw-telemetry explicit-null output must be available for a no-other-field identity comparison.",
+    "unclosed": "The surface must not reopen a payoff, acquisition, rarity, Ward-priority, upgrade telemetry or any closed structural family."
+  },
+  "surfaces": [
+    {
+      "id": "turn-and-kindle-event-reconstruction",
+      "containers": {
+        "turns": ["fight", "event", "n"],
+        "kindles": ["fight", "event", "id", "uid"]
+      },
+      "fieldCounts": [3, 4],
+      "containerCount": 2,
+      "hook": "BalanceSim._harvest_fight existing event loop",
+      "hookCount": 1,
+      "directDiscriminator": true,
+      "existingDeterministicEvents": true,
+      "fixedScalarSchema": true,
+      "completeMutationCensus": true,
+      "preservesFrozenTrace": true,
+      "identityAnchorAvailable": true,
+      "priorClosureAliases": [],
+      "interpretation": "Reconstruct exact target-card co-hand opportunity. It does not establish that both cards were jointly affordable, legally useful or selected by the policy."
+    },
+    {
+      "id": "discard-hand-uid-reconstruction",
+      "containers": {
+        "discardHands": ["fight", "event", "uids"],
+        "kindles": ["fight", "event", "id", "uid"]
+      },
+      "fieldCounts": [3, 4],
+      "containerCount": 2,
+      "hook": "BalanceSim._harvest_fight existing event loop",
+      "hookCount": 1,
+      "directDiscriminator": true,
+      "existingDeterministicEvents": true,
+      "fixedScalarSchema": false,
+      "completeMutationCensus": true,
+      "preservesFrozenTrace": true,
+      "identityAnchorAvailable": true,
+      "priorClosureAliases": [],
+      "interpretation": "Exact but carries an unbounded uid array when the scalar TURN marker already provides the reset boundary."
+    },
+    {
+      "id": "pilot-whole-hand-legal-snapshots",
+      "containers": {
+        "decisions": ["fight", "turn", "handUids", "legalUids", "energy"]
+      },
+      "fieldCounts": [5],
+      "containerCount": 1,
+      "hook": "Would require a new BalancePilot decision-loop hook",
+      "hookCount": 2,
+      "directDiscriminator": true,
+      "existingDeterministicEvents": false,
+      "fixedScalarSchema": false,
+      "completeMutationCensus": true,
+      "preservesFrozenTrace": true,
+      "identityAnchorAvailable": true,
+      "priorClosureAliases": [],
+      "interpretation": "Measures more than the unresolved co-hand question and introduces a new policy hook."
+    },
+    {
+      "id": "annotate-existing-draws-and-plays-with-turn",
+      "containers": {
+        "draws": ["fight", "event", "turn", "id", "uid"],
+        "plays": ["fight", "event", "turn", "id", "uid"]
+      },
+      "fieldCounts": [5, 5],
+      "containerCount": 0,
+      "hook": "BalanceSim._harvest_fight existing event loop",
+      "hookCount": 1,
+      "directDiscriminator": false,
+      "existingDeterministicEvents": true,
+      "fixedScalarSchema": true,
+      "completeMutationCensus": false,
+      "preservesFrozenTrace": false,
+      "identityAnchorAvailable": true,
+      "priorClosureAliases": [],
+      "interpretation": "Changes two frozen schemas and still omits kindle removal, so it is neither minimal nor complete."
+    }
+  ],
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed causal factor; not observed, varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed causal factor; not observed, varied or estimated."
+    },
+    "acquisitionPriority": {
+      "levels": ["pristine-current-main"],
+      "status": "Fixed exact reward policy."
+    },
+    "faultlineRarity": {
+      "levels": ["current-uncommon"],
+      "status": "Fixed exact current-main rarity."
+    },
+    "wardSetupPriority": {
+      "levels": ["pristine-current-main"],
+      "status": "Fixed exact combat policy; no non-null knob exists."
+    },
+    "observationSurface": {
+      "levels": ["none-selected-yet"],
+      "status": "This zero-row audit may select at most one surface for a later identity preflight."
+    }
+  },
+  "factorDisposition": {
+    "candidate": "None.",
+    "causalRows": "None are authorised.",
+    "additionalMethod": "No ML, RL, optimiser or fitted model. The current evidence does not isolate a policy-repertoire bottleneck.",
+    "closedEvidence": "Every prior family and upgrade telemetry remain closed. TURN and KINDLE are new observation fields only."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumSourceSurfaces": 4,
+    "maximumSelectedSurfaces": 1,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Exactly one surface passes every direct, existing-event, single-hook, two-container, four-scalar-field, mutation-census, trace-preservation, identity-anchor and unclosed gate within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze exactly separate turns(fight,event,n) and kindles(fight,event,id,uid) containers for one separately preregistered 256-row identity preflight against the identity-safe draw trace. Add no other event, field, candidate, payoff, gameplay hook, policy knob, causal row, ML, RL or optimiser.",
+    "futility": "No surface passes every gate.",
+    "futilityAuthority": "Apply decision boundary 2 and close exact co-hand reconstruction from current events. Continue inside issue #421 with the next evidence-backed structural mechanism; do not widen telemetry or guess a policy method.",
+    "inconclusive": "A frozen source, content census or exact decision is unavailable at the 30-second cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the audit inconclusive. Add no field, row, repair, rerun, candidate, method or protected seed."
+  }
+}

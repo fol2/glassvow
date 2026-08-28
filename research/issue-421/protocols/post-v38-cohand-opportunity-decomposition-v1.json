@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Does the identity-proved clean current-main trace provide robust simultaneous Ward and Warden's-Edge hand opportunity, and at which exact necessary-condition boundary is the natural route first lost?",
+  "immutableInputs": {
+    "runnerSha256": "371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c",
+    "fileSha256": {
+      "task-capsule.json": "7bb656db975899cea5fa1e119b28ae6ab8504213c121236154e1a3642932f822",
+      "protocols/post-v38-cohand-observability-v1.json": "9a920164dfdde25edcf4cffdde58a434edbb54853a13d4313757a5c1abcca90a",
+      "summaries/post-v38-cohand-observability-v1.json": "2d3c3b8ce091bf8fc9560d6204d7e37cb2b1e4b9a960f32f29f533cd7625b7d4",
+      "protocols/post-v38-cohand-telemetry-identity-v1.json": "f651c220bfbbbd24d3fdec3b707209187c2192d0a40c0e8fe06255963b3377cc",
+      "summaries/post-v38-cohand-telemetry-identity-v1.json": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+      "protocols/post-v38-draw-opportunity-decomposition-v1.json": "d744eb0d2f2b70d04c46ade5f8bba233ce2934135fa77199d0bdd9a5df1fb64d",
+      "summaries/post-v38-draw-opportunity-decomposition-v1.json": "645294800dc7938ac824693ea21dd5e214a0e924aa12aefdb9dfed6bda9eef2e"
+    }
+  },
+  "trace": {
+    "planSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "outputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "identitySummarySha256": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+    "selectionRule": "Read the complete sole 256-row co-hand-telemetry explicit-null arm. No row, policy or seed is selected by any endpoint."
+  },
+  "priorDecomposition": {
+    "path": "summaries/post-v38-draw-opportunity-decomposition-v1.json",
+    "sha256": "645294800dc7938ac824693ea21dd5e214a0e924aa12aefdb9dfed6bda9eef2e",
+    "drawOpportunityPolicies": 20,
+    "coPlayPolicies": 13,
+    "naturalOrderPolicies": 10,
+    "failureClass": "within-fight-temporal-or-play-selection-unresolved"
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346596,
+      346597,
+      346598,
+      346599
+    ],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "The exact full-cohort policy and simulation-seed identities from the identity preflight are reused. No simulator executes and no identity is added, removed or replaced."
+  },
+  "design": {
+    "type": "zero-row deterministic necessary-condition decomposition; not a factorial, causal contrast or candidate screen",
+    "matrix": [
+      {
+        "stage": "same-fight draw upper bound",
+        "observation": "Ward and Warden's Edge both drawn in one fight",
+        "rows": 256
+      },
+      {
+        "stage": "simultaneous co-hand opportunity",
+        "observation": "Ward and Warden's Edge simultaneously reconstructed in hand during one turn",
+        "rows": 256
+      },
+      {
+        "stage": "same-fight co-play",
+        "observation": "Ward and Warden's Edge both played in one fight",
+        "rows": 256
+      },
+      {
+        "stage": "natural action order",
+        "observation": "Ward played before a later Warden's Edge in one fight",
+        "rows": 256
+      }
+    ],
+    "sharedAnchor": "Every stage reads the same complete identity-proved explicit-null rows, frozen policies, simulation seeds, current-main content, Duskblade Vow-5 baseline, whole-run trace and robust-policy estimator.",
+    "noCartesianExpansion": "The matrix comprises repeated observations on one frozen arm. No payoff, acquisition, rarity, Ward-priority, candidate or joint cell exists."
+  },
+  "routeDefinitions": {
+    "eventOrder": "Within each fight, sort the frozen TURN, DRAW, PLAY and KINDLE observations by their exact event index.",
+    "handReconstruction": "TURN clears the reconstructed hand; DRAW adds its uid and card id; PLAY or KINDLE removes its uid. Current frozen content has no addCard-to-hand effect, and the identity preflight requires every PLAY and KINDLE uid to have been drawn in that fight.",
+    "drawOpportunityRow": "Within at least one fight, a Ward card instance (defend) and Warden's Edge (guardedStrike) are both drawn at any event positions.",
+    "simultaneousCohandRow": "After at least one ordered event within a fight, the reconstructed current-turn hand simultaneously contains defend and guardedStrike.",
+    "coPlayRow": "Within at least one fight, defend and guardedStrike are both played in either order.",
+    "naturalOrderRow": "Within at least one fight, defend is played before a later guardedStrike.",
+    "robustPolicy": "A policy satisfies a route when at least two of its four frozen simulation-seed rows satisfy that route."
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "acquisitionPriority": {
+      "levels": [
+        "pristine-current-main"
+      ],
+      "status": "Fixed exact reward policy."
+    },
+    "faultlineRarity": {
+      "levels": [
+        "current-uncommon"
+      ],
+      "status": "Fixed exact current-main rarity."
+    },
+    "wardSetupPriority": {
+      "levels": [
+        "pristine-current-main"
+      ],
+      "status": "Fixed exact current-main combat policy; no research knob exists."
+    },
+    "observedBoundary": {
+      "levels": [
+        "same-fight-draw",
+        "simultaneous-co-hand",
+        "same-fight-co-play",
+        "Ward-before-Edge"
+      ],
+      "status": "Necessary-condition observations on the same frozen rows, not causal factors."
+    }
+  },
+  "interactionsAndAliases": {
+    "mechanisticNesting": "Simultaneous co-hand must be a subset of same-fight draw, and natural order must be a subset of co-play. The runner fails closed if either relationship is violated.",
+    "coPlayNotNestedInCohand": "A policy can robustly co-play the cards across different turns without ever having them simultaneously in hand. Therefore co-play is not required to be a subset of simultaneous co-hand.",
+    "cohandAlias": "Simultaneous co-hand establishes temporal hand opportunity only. It does not establish joint energy affordability, joint legality, usefulness or policy selection.",
+    "remainingAlias": "If simultaneous co-hand passes while co-play fails, legality and play selection remain aliased. This result cannot identify a policy-repertoire bottleneck or authorise ML, RL or an optimiser.",
+    "noExpansion": "No result may reopen a closed payoff, scalar family, Ward-priority mapping, acquisition cell or #524/#525 path, and no rows may be added to complete a Cartesian product."
+  },
+  "estimands": {
+    "primary": "Exact count and identities of robust simultaneous-co-hand policies.",
+    "lossBoundaries": "Exact draw-but-not-co-hand, co-hand-but-not-co-play, co-play-without-co-hand and co-play-but-not-natural-order policy sets.",
+    "consistency": "Exact required nesting plus exact reproduction of the prior draw, co-play and natural-order policy counts.",
+    "reliability": "Exact stall or error row count.",
+    "notEstimated": "No legal-action set, joint affordability, causal effect, complementarity, Afterimage or Scoreline payoff, candidate feasibility, detector performance, product balance, ML, RL or optimisation endpoint is estimated."
+  },
+  "gates": {
+    "minimumDrawOpportunityPolicies": 16,
+    "minimumSimultaneousCohandPolicies": 16,
+    "minimumCoPlayPolicies": 16,
+    "minimumNaturalOrderPolicies": 16,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "All 16-policy minima reuse the frozen 64-policy support scale. The already observed co-play count of 13 and natural-order count of 10 are reproduced, not used to weaken any gate."
+  },
+  "factorDisposition": {
+    "candidate": "None. A necessary-condition boundary cannot freeze or promote content.",
+    "scalarFamily": "Remains closed; no payoff, Ward-priority or acquisition cell is reopened.",
+    "additionalMethod": "No ML, RL, optimiser or fitted model is used. A remaining legality-or-play-selection alias can authorise at most one separately preregistered zero-row audit of existing legal-opportunity evidence, not a policy method.",
+    "protectedSeeds": "Acceptance and reserve seeds remain unused."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python verifies every frozen file and cache, reconstructs hand state from exact events, maps the complete plan to output, computes the four robust policy sets once and applies the frozen gates.",
+    "firstLook": "The complete 64-policy by four-seed trace is the only look. No row is generated, repaired, added, removed or rerun.",
+    "successStop": "Stop only if draw opportunity, simultaneous co-hand, co-play, natural order and reliability all pass.",
+    "futilityStop": "Stop at the first failed mechanistic boundary in draw, simultaneous-co-hand, co-play, natural-order, reliability order without weakening a gate.",
+    "inconclusiveStop": "Stop at 30 seconds if the fixed exact decision is unavailable."
+  },
+  "decisionRules": {
+    "success": "All draw, simultaneous-co-hand, co-play, natural-order and reliability gates pass within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze only natural-route capacity as evidence for the next separately preregistered structural mechanism audit. Do not freeze a candidate or add a causal row, payoff, knob, ML, RL or optimiser.",
+    "futility": "Any frozen gate fails at the complete cohort.",
+    "futilityAuthority": "Apply decision boundary 2 and close the natural Afterimage route at the first exact failed necessary condition. If simultaneous co-hand fails, continue inside issue #421 with a different evidence-backed structural mechanism. If co-play fails after co-hand passes, only one separately preregistered zero-row audit of existing legal-opportunity evidence may be considered; no policy method is authorised.",
+    "inconclusive": "A frozen cache, protocol or exact decision is unavailable at the 30-second cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the decomposition inconclusive. Add no field, row, repair, rerun, candidate, method or protected seed."
+  }
+}

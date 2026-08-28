@@ -1,0 +1,227 @@
+{
+  "assessments": [
+    {
+      "eligible": true,
+      "gateResults": {
+        "completeMutationCensus": true,
+        "containerLimit": true,
+        "directDiscriminator": true,
+        "existingDeterministicEvents": true,
+        "fixedScalarSchema": true,
+        "identityAnchorAvailable": true,
+        "preservesFrozenTrace": true,
+        "scalarFieldLimit": true,
+        "singleExistingHook": true,
+        "unclosed": true
+      },
+      "id": "turn-and-kindle-event-reconstruction",
+      "surface": {
+        "completeMutationCensus": true,
+        "containerCount": 2,
+        "containers": {
+          "kindles": [
+            "fight",
+            "event",
+            "id",
+            "uid"
+          ],
+          "turns": [
+            "fight",
+            "event",
+            "n"
+          ]
+        },
+        "directDiscriminator": true,
+        "existingDeterministicEvents": true,
+        "fieldCounts": [
+          3,
+          4
+        ],
+        "fixedScalarSchema": true,
+        "hook": "BalanceSim._harvest_fight existing event loop",
+        "hookCount": 1,
+        "id": "turn-and-kindle-event-reconstruction",
+        "identityAnchorAvailable": true,
+        "interpretation": "Reconstruct exact target-card co-hand opportunity. It does not establish that both cards were jointly affordable, legally useful or selected by the policy.",
+        "preservesFrozenTrace": true,
+        "priorClosureAliases": []
+      }
+    },
+    {
+      "eligible": false,
+      "gateResults": {
+        "completeMutationCensus": true,
+        "containerLimit": true,
+        "directDiscriminator": true,
+        "existingDeterministicEvents": true,
+        "fixedScalarSchema": false,
+        "identityAnchorAvailable": true,
+        "preservesFrozenTrace": true,
+        "scalarFieldLimit": true,
+        "singleExistingHook": true,
+        "unclosed": true
+      },
+      "id": "discard-hand-uid-reconstruction",
+      "surface": {
+        "completeMutationCensus": true,
+        "containerCount": 2,
+        "containers": {
+          "discardHands": [
+            "fight",
+            "event",
+            "uids"
+          ],
+          "kindles": [
+            "fight",
+            "event",
+            "id",
+            "uid"
+          ]
+        },
+        "directDiscriminator": true,
+        "existingDeterministicEvents": true,
+        "fieldCounts": [
+          3,
+          4
+        ],
+        "fixedScalarSchema": false,
+        "hook": "BalanceSim._harvest_fight existing event loop",
+        "hookCount": 1,
+        "id": "discard-hand-uid-reconstruction",
+        "identityAnchorAvailable": true,
+        "interpretation": "Exact but carries an unbounded uid array when the scalar TURN marker already provides the reset boundary.",
+        "preservesFrozenTrace": true,
+        "priorClosureAliases": []
+      }
+    },
+    {
+      "eligible": false,
+      "gateResults": {
+        "completeMutationCensus": true,
+        "containerLimit": true,
+        "directDiscriminator": true,
+        "existingDeterministicEvents": false,
+        "fixedScalarSchema": false,
+        "identityAnchorAvailable": true,
+        "preservesFrozenTrace": true,
+        "scalarFieldLimit": false,
+        "singleExistingHook": false,
+        "unclosed": true
+      },
+      "id": "pilot-whole-hand-legal-snapshots",
+      "surface": {
+        "completeMutationCensus": true,
+        "containerCount": 1,
+        "containers": {
+          "decisions": [
+            "fight",
+            "turn",
+            "handUids",
+            "legalUids",
+            "energy"
+          ]
+        },
+        "directDiscriminator": true,
+        "existingDeterministicEvents": false,
+        "fieldCounts": [
+          5
+        ],
+        "fixedScalarSchema": false,
+        "hook": "Would require a new BalancePilot decision-loop hook",
+        "hookCount": 2,
+        "id": "pilot-whole-hand-legal-snapshots",
+        "identityAnchorAvailable": true,
+        "interpretation": "Measures more than the unresolved co-hand question and introduces a new policy hook.",
+        "preservesFrozenTrace": true,
+        "priorClosureAliases": []
+      }
+    },
+    {
+      "eligible": false,
+      "gateResults": {
+        "completeMutationCensus": false,
+        "containerLimit": true,
+        "directDiscriminator": false,
+        "existingDeterministicEvents": true,
+        "fixedScalarSchema": true,
+        "identityAnchorAvailable": true,
+        "preservesFrozenTrace": false,
+        "scalarFieldLimit": false,
+        "singleExistingHook": true,
+        "unclosed": true
+      },
+      "id": "annotate-existing-draws-and-plays-with-turn",
+      "surface": {
+        "completeMutationCensus": false,
+        "containerCount": 0,
+        "containers": {
+          "draws": [
+            "fight",
+            "event",
+            "turn",
+            "id",
+            "uid"
+          ],
+          "plays": [
+            "fight",
+            "event",
+            "turn",
+            "id",
+            "uid"
+          ]
+        },
+        "directDiscriminator": false,
+        "existingDeterministicEvents": true,
+        "fieldCounts": [
+          5,
+          5
+        ],
+        "fixedScalarSchema": true,
+        "hook": "BalanceSim._harvest_fight existing event loop",
+        "hookCount": 1,
+        "id": "annotate-existing-draws-and-plays-with-turn",
+        "identityAnchorAvailable": true,
+        "interpretation": "Changes two frozen schemas and still omits kindle removal, so it is neither minimal nor complete.",
+        "preservesFrozenTrace": false,
+        "priorClosureAliases": []
+      }
+    }
+  ],
+  "authority": "Apply decision boundary 1 and freeze exactly separate turns(fight,event,n) and kindles(fight,event,id,uid) containers for one separately preregistered 256-row identity preflight against the identity-safe draw trace. Add no other event, field, candidate, payoff, gameplay hook, policy knob, causal row, ML, RL or optimiser.",
+  "contentAddCardToHandEffects": [],
+  "decision": "freeze-turn-and-kindle-events-for-cohand-identity-preflight",
+  "decisionBoundary": 1,
+  "factorDisposition": {
+    "additionalMethod": "No ML, RL, optimiser or fitted model. The current evidence does not isolate a policy-repertoire bottleneck.",
+    "candidate": "None.",
+    "causalRows": "None are authorised.",
+    "closedEvidence": "Every prior family and upgrade telemetry remain closed. TURN and KINDLE are new observation fields only."
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "9a920164dfdde25edcf4cffdde58a434edbb54853a13d4313757a5c1abcca90a",
+  "runnerSha256": "c31d8b7e53b5cc2d9bab7d26100de35d74b519abfb5355b78340b60eaa8f9ea4",
+  "schemaVersion": 1,
+  "selectedSurface": "turn-and-kindle-event-reconstruction",
+  "wallTimeSeconds": 5.925145750050433
+}

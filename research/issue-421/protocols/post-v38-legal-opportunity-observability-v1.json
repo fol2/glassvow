@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Can one minimal existing deterministic event surface bound robust joint legal opportunity for Ward and Warden's Edge without a Pilot hook, new gameplay state or simulator rows in this audit?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "687616d62f7a2fd1036526407d1b3a85376beeb3b7ce511cea6e6942bf43a2b4",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_sim.gd": "7f82177d3c71e3a0cc56f820f017cfab6ec99173caf326486209034d60dbb5fd"
+    },
+    "fileSha256": {
+      "task-capsule.json": "7bb656db975899cea5fa1e119b28ae6ab8504213c121236154e1a3642932f822",
+      "protocols/post-v38-cohand-opportunity-decomposition-v1.json": "998c5fbbe4506d61e111239af34df46193e59cf6f030898b4a7496a7c4eabe9d",
+      "summaries/post-v38-cohand-opportunity-decomposition-v1.json": "f2f29b3902d0d7cff438cedc73ee91148213a52a9b4d32247290e60f718ac821"
+    }
+  },
+  "observedBoundary": {
+    "simultaneousCohandPolicies": 17,
+    "minimumSupportedPolicies": 16,
+    "coPlayPolicies": 13,
+    "failureClass": "legality-or-play-selection-unresolved",
+    "authority": "Audit existing legal-opportunity evidence only. Do not add a policy method."
+  },
+  "sourceCensus": {
+    "combatCurrentEnergyMutationSites": 5,
+    "combatEnergyEventAppendSites": 5,
+    "requiredSnippets": [
+      "p.energy = (p.energy if run.has_relic(\"frozenCore\") else 0) + energy",
+      "cb.player.energy += 1",
+      "p.energy -= cost",
+      "p.energy += _ji(fx[\"n\"])",
+      "cb.queue.append({\"t\": EventTypes.ENERGY, \"n\": p.energy})",
+      "cb.queue.append({\"t\": EventTypes.ENERGY, \"n\": cb.player.energy})"
+    ],
+    "scope": "The five current-Energy writes on the simulator combat path each append the exact resulting Energy value. Energy-max initialisation, reward and rollback writes occur outside combat and settle into the next TURN-associated Energy event. The direct onboarding-only UI write is outside BalanceSim and this cohort.",
+    "targetCards": "Current content fixes defend and guardedStrike at cost one. Ward is a playable self target; Warden's Edge is a playable enemy target."
+  },
+  "candidateSurfaces": [
+    {
+      "id": "energy-event-decision-interval",
+      "newContainers": {
+        "energies": [
+          "fight",
+          "event",
+          "n"
+        ]
+      },
+      "hook": "BalanceSim._harvest_fight existing event loop",
+      "mechanism": "Append only existing ENERGY events and combine them with the already identity-proved TURN, DRAW, PLAY and KINDLE events.",
+      "decisionValue": "Provides a conservative exact lower and upper interval for robust joint affordability. It can isolate play selection if the lower bound reaches 16, close legal capacity if the upper bound stays below 16, or record an interval-crossing result inconclusive."
+    },
+    {
+      "id": "static-cost-from-existing-trace",
+      "newContainers": {},
+      "hook": "None",
+      "rejection": "Static costs omit live Energy, Frozen Core carry-over, Energy gains and first-card discounts."
+    },
+    {
+      "id": "pilot-legal-action-snapshots",
+      "newContainers": {
+        "decisions": [
+          "fight",
+          "turn",
+          "legalUids",
+          "energy"
+        ]
+      },
+      "hook": "New BalancePilot decision-loop hook",
+      "rejection": "It measures more state and adds a policy hook when one existing scalar event provides the required decision interval."
+    }
+  ],
+  "selectionRule": {
+    "requiredId": "energy-event-decision-interval",
+    "rule": "Select exactly one surface only when it alone passes every frozen source, size, identity-anchor and direct-interval gate. Otherwise close this observability route."
+  },
+  "futureEstimatorIfIdentityPasses": {
+    "rowLowerBound": "At any simultaneous co-hand event state, current Energy is at least two; both fixed one-cost cards are jointly affordable regardless of first-card discount.",
+    "rowUpperBound": "At any simultaneous co-hand event state, current Energy is at least two, or current Energy is one before any card has been played that turn; the latter may have a zero-cost first card but remains discount-aliased.",
+    "robustPolicy": "At least two of the same four frozen simulation-seed rows satisfy the bound.",
+    "success": "The lower-bound policy count is at least 16; this proves supported legal opportunity and isolates the remaining loss downstream of legality.",
+    "futility": "The upper-bound policy count is below 16; this closes supported legal opportunity.",
+    "inconclusive": "The lower bound is below 16 while the upper bound is at least 16; stop at the fixed interval without adding fields or guessing the discount state."
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "acquisitionPriority": {
+      "levels": [
+        "pristine-current-main"
+      ],
+      "status": "Fixed exact reward policy."
+    },
+    "faultlineRarity": {
+      "levels": [
+        "current-uncommon"
+      ],
+      "status": "Fixed exact current-main rarity."
+    },
+    "wardSetupPriority": {
+      "levels": [
+        "pristine-current-main"
+      ],
+      "status": "Fixed exact current-main combat policy; no research knob exists."
+    },
+    "energyTelemetry": {
+      "levels": [
+        "absent",
+        "fight-event-value"
+      ],
+      "status": "Observation-only candidate surface, never read by gameplay."
+    }
+  },
+  "interactionsAndAliases": {
+    "discountAlias": "Energy one before the first play aliases no discount with Duskmirror or the current first-card-discount omen; it enters only the upper bound.",
+    "targetAlias": "The interval estimates joint affordability of the two current playable cards during active combat. It does not estimate their tactical usefulness or policy score.",
+    "selectionAlias": "Only a lower-bound pass followed by the already failed co-play gate can isolate downstream play selection. This audit itself cannot identify a policy-repertoire bottleneck.",
+    "noFactorInteraction": "No gameplay factor varies, so no payoff or cross-package interaction is estimated."
+  },
+  "gates": {
+    "maximumHookCount": 1,
+    "maximumContainerCount": 1,
+    "maximumScalarFieldsPerContainer": 3,
+    "required": [
+      "unclosed",
+      "existing deterministic events",
+      "single existing hook",
+      "container and scalar-field limits",
+      "fixed scalar schema",
+      "complete Energy-mutation census",
+      "direct preregisterable decision interval",
+      "identity anchor available",
+      "frozen trace preserved"
+    ]
+  },
+  "factorDisposition": {
+    "candidate": "None.",
+    "causalRows": "None are authorised by this audit.",
+    "additionalMethod": "No ML, RL, optimiser, fitted model or policy hook. The current evidence has not yet isolated a policy-repertoire bottleneck.",
+    "protectedSeeds": "Acceptance and reserve seeds remain unused."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python verifies the frozen source and evidence hashes, exact card definitions, current-Energy mutation and event counts, assesses all frozen surfaces once and owns the stop/go decision.",
+    "firstLook": "The exact source census is the only look. No simulator or cache row is read, generated, repaired or rerun.",
+    "successStop": "Stop only when exactly energy-event-decision-interval passes every gate.",
+    "futilityStop": "Stop if zero, multiple or a different surface passes.",
+    "inconclusiveStop": "Stop at 30 seconds if the fixed exact decision is unavailable."
+  },
+  "decisionRules": {
+    "success": "Exactly the required Energy-event surface passes every frozen gate within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze only energies(fight,event,n) for one separately preregistered 256-row identity preflight against the exact co-hand trace. Add no other field, candidate, payoff, gameplay hook, policy knob, causal row, ML, RL or optimiser.",
+    "futility": "The exact source census or unique-surface selection fails.",
+    "futilityAuthority": "Apply decision boundary 2 and close existing-event legal-opportunity observability. Continue inside issue #421 with a different evidence-backed structural mechanism; do not add a policy method.",
+    "inconclusive": "A frozen input or exact decision is unavailable at the 30-second cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the audit inconclusive. Add no field, row, repair, rerun, candidate, method or protected seed."
+  }
+}

@@ -42,6 +42,9 @@
     "Natural current-main Ward-before-Warden's-Edge order is closed as sufficient route capacity. The topology summary's decision label says repertoire bottleneck, but its authoritative failureClass is substrate-opportunity-bottleneck; do not use the label to authorise ML, RL or a policy method.",
     "Identity-safe fight-scoped DRAW telemetry is frozen: all 256 rows matched the clean explicit-null anchor after removing only the new draws container, with zero RNG, policy or schema faults.",
     "The draw-opportunity decomposition closes natural Afterimage-route capacity at an unresolved within-fight temporal-or-play-selection boundary: 20 policies robustly drew both cards in a fight, 13 robustly co-played them and 10 robustly played Ward first. Same-fight draws are only an upper bound on simultaneous hand availability; do not infer a policy bottleneck.",
+    "Identity-safe TURN and KINDLE telemetry proves 17 policies robustly held Ward and Warden's Edge simultaneously, while only 13 robustly co-played them. The first failed necessary condition is legality-or-play-selection unresolved; natural Afterimage remains closed and no policy method is authorised.",
+    "The Energy-event observability audit selected only energies(fight,event,n), but its one permitted 256-row identity preflight failed the frozen schema gate in 87 rows because a terminal start-of-turn Smolder death emits TURN and returns before Energy. Path, RNG and policy identity were exact. Preserve the result and do not repair, rerun or use those rows for legal-opportunity capacity.",
+    "Natural Ward/Warden's-Edge and Energy-observability routes are closed. Continue with a materially different evidence-backed Duskblade structural mechanism; do not reinterpret the Energy schema failure as a policy-repertoire bottleneck.",
     "At the next decision boundary freeze at most one candidate, close the scalar family and continue structurally inside #421, or record inconclusive at the preregistered cap.",
     "Do not use acceptance seeds 3000-5199 or reserve seeds 5200-5399 before the authorised final exact-SHA boundary.",
     "Keep research outside production truth; do not create a research PR, run product CI, or merge the archive-only evidence branch."
@@ -83,6 +86,20 @@
     "drawTelemetryIdentitySummarySha256": "6282bba159c186f301cb8d892428df8db8aeb51385ed15968c1af8d3b0197ee1",
     "drawOpportunityProtocolSha256": "d744eb0d2f2b70d04c46ade5f8bba233ce2934135fa77199d0bdd9a5df1fb64d",
     "drawOpportunitySummarySha256": "645294800dc7938ac824693ea21dd5e214a0e924aa12aefdb9dfed6bda9eef2e",
+    "cohandObservabilityProtocolSha256": "9a920164dfdde25edcf4cffdde58a434edbb54853a13d4313757a5c1abcca90a",
+    "cohandObservabilitySummarySha256": "2d3c3b8ce091bf8fc9560d6204d7e37cb2b1e4b9a960f32f29f533cd7625b7d4",
+    "cohandTelemetryIdentityProtocolSha256": "f651c220bfbbbd24d3fdec3b707209187c2192d0a40c0e8fe06255963b3377cc",
+    "cohandTelemetryIdentitySummarySha256": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+    "cohandTelemetryPlanSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "cohandTelemetryOutputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "cohandOpportunityProtocolSha256": "998c5fbbe4506d61e111239af34df46193e59cf6f030898b4a7496a7c4eabe9d",
+    "cohandOpportunitySummarySha256": "f2f29b3902d0d7cff438cedc73ee91148213a52a9b4d32247290e60f718ac821",
+    "legalOpportunityObservabilityProtocolSha256": "24097d073d3c9977b8a99b86e4673da276a4c0de884169d980a1759b8ca8b434",
+    "legalOpportunityObservabilitySummarySha256": "f3985d6880657ea6e0c6b09bb523dde365c95bf0e096805d7b6e124e9e7d4336",
+    "energyTelemetryIdentityProtocolSha256": "81e395a4cdadd475926f8f7af49a6f8bd2a621907b176e943743fd237a000a94",
+    "energyTelemetryIdentitySummarySha256": "b030035cedc3551aadb80158270c7fe636f6990d2278651ab80969348afdb846",
+    "energyTelemetryPlanSha256": "f4225f9f6941bf18beda54485e0c467076d0aa3c1f49bdfedd85e80d2bea0291",
+    "energyTelemetryOutputSha256": "7ad51f977df6557dc5733a1d823d0f0fea3d4eec0cbcd36b2515b8e62c000133",
     "knobIdentityProtocolSha256": "3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff",
     "blockedCrnProtocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
     "blockedCrnAnalysisSha256": "7ab28c0e6d7c6053ae4f036b7ea4cb8c9eedd2727b79774db2c7e3469910f21e",
@@ -389,18 +406,43 @@
       "decision": "Close natural Afterimage-route capacity at the measured temporal-or-play-selection boundary.",
       "evidence": "summaries/post-v38-draw-opportunity-decomposition-v1.json",
       "reason": "Robust same-fight draw opportunity passed at 20 policies, but co-play failed at 13 and Ward-first order failed at 10. Same-fight draws can occur on different turns, so the result remains aliased and does not identify a policy-repertoire bottleneck or justify ML/RL."
+    },
+    {
+      "decision": "Freeze TURN and KINDLE events as the sole minimal co-hand observation surface.",
+      "evidence": "summaries/post-v38-cohand-observability-v1.json",
+      "reason": "The complete hand-mutation census selected fixed scalar events in the existing harvest loop and rejected whole-hand snapshots, discard arrays and a new Pilot hook."
+    },
+    {
+      "decision": "Freeze TURN and KINDLE telemetry as identity-safe observation only.",
+      "evidence": "summaries/post-v38-cohand-telemetry-identity-v1.json",
+      "reason": "All 256 rows exactly matched the draw-trace anchor after removing only turns and kindles; RNG and policy mismatches and schema faults were zero."
+    },
+    {
+      "decision": "Close the natural Afterimage route at a legality-or-play-selection boundary.",
+      "evidence": "summaries/post-v38-cohand-opportunity-decomposition-v1.json",
+      "reason": "Seventeen policies robustly held Ward and Warden's Edge simultaneously, passing the fixed minimum of 16, but only 13 robustly co-played them. Four co-hand policies did not co-play; no policy bottleneck or method was inferred."
+    },
+    {
+      "decision": "Select only exact Energy events for one legal-opportunity identity preflight.",
+      "evidence": "summaries/post-v38-legal-opportunity-observability-v1.json",
+      "reason": "The source-complete audit rejected static-cost inference and a new Pilot snapshot hook. One fixed three-scalar container could have supplied a preregistered conservative affordability interval."
+    },
+    {
+      "decision": "Reject Energy telemetry and close the legal-opportunity observation route without repair or rerun.",
+      "evidence": "summaries/post-v38-energy-telemetry-identity-v1.json",
+      "reason": "Path, result, RNG and policy identity were exact across 256 rows, but 87 rows failed the frozen every-TURN Energy-coverage rule: terminal start-of-turn Smolder death returns after TURN and before Energy. The rows grant no legal-capacity authority."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
     "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
     "heldOutConfirmation": "Root-546 policies and disjoint simulation seeds reproduced proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
-    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 Ward packet and every Dusk edge retained by immutable #524 are closed. Shatterer's Crown, the Shatter-to-heavy-Attack relay, reseam break, the exact Honing repeat family, both one-bit and Power-cycle setup grammars, Executioner's Seal, reward-Attack overchip, Reaper's Bell and turn-state action economy failed frozen repertoire gates. Native coverage left only deed-unlocked Ember-reserve damage; normal-reward, shop and Library acquisition all failed and current combat policy has no candidate-specific discriminator. The first new durable carrier, Mirror Oath, passed zero-row capacity but failed its preregistered complete-path identity anchor and is closed without repair. Permanent removal, elite victory and no-HP-loss victory were too broad or package-aliased; one-turn victory was too sparse. Prior Dusk Scoreline complementarity remains evidence. A clean current-main trace now measures 20 robust same-fight Ward/Warden's-Edge draw policies, 13 co-play policies and 10 Ward-first policies; the remaining loss is explicitly aliased between turn-level hand availability and play selection, so no policy method is yet justified.",
+    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 Ward packet and every Dusk edge retained by immutable #524 are closed. Shatterer's Crown, the Shatter-to-heavy-Attack relay, reseam break, the exact Honing repeat family, both one-bit and Power-cycle setup grammars, Executioner's Seal, reward-Attack overchip, Reaper's Bell and turn-state action economy failed frozen repertoire gates. Native coverage left only deed-unlocked Ember-reserve damage; normal-reward, shop and Library acquisition all failed and current combat policy has no candidate-specific discriminator. The first new durable carrier, Mirror Oath, passed zero-row capacity but failed its preregistered complete-path identity anchor and is closed without repair. Permanent removal, elite victory and no-HP-loss victory were too broad or package-aliased; one-turn victory was too sparse. Prior Dusk Scoreline complementarity remains evidence. A clean current-main trace measures 20 robust same-fight Ward/Warden's-Edge draw policies, 17 simultaneous-co-hand policies, 13 co-play policies and 10 Ward-first policies. The Energy observation preflight then failed its frozen schema in 87 terminal Smolder-death rows despite exact path, RNG and policy identity, so neither the natural route nor Energy telemetry identifies a policy-repertoire bottleneck or justifies a method.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
   "toolchainBoundary": "Resolved with the isolated official Godot 4.7.1.stable.official.a13da4feb binary. Its release SHA-512 and codesign are verified, every new execution is pinned to it, and a frozen pre-change identity plan replayed row-exactly against the archived 4.7.2 evidence.",
-  "nextAction": "Freeze one zero-row observability audit for exact turn-level co-hand reconstruction from existing deterministic TURN, DRAW, PLAY and KINDLE events. If and only if one minimal same-loop surface passes source completeness and clean-anchor gates, run one separately preregistered 256-row identity preflight. Use the resulting cache only to distinguish temporal hand opportunity from later legality or play selection. Do not add a candidate, payoff, gameplay hook, policy knob, ML, RL, optimiser, protected seed or adaptive continuation.",
+  "nextAction": "Freeze one zero-row competing-options audit over materially different current-main Duskblade structural mechanisms that are not among the closed Ward, Kindle, carrier, trigger or action-grammar families. Select at most one smallest mechanistically complete option only when source-complete evidence and measured decision value distinguish it; otherwise close the catalogue at the preregistered cap. Do not add simulator rows, a candidate, payoff, policy knob, ML, RL, optimiser or protected seed before that decision.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

@@ -1,0 +1,168 @@
+{
+  "assessments": [
+    {
+      "eligible": true,
+      "gateResults": {
+        "completeEnergyMutationCensus": true,
+        "containerLimit": true,
+        "directDecisionInterval": true,
+        "existingDeterministicEvents": true,
+        "fixedScalarSchema": true,
+        "identityAnchorAvailable": true,
+        "preservesFrozenTrace": true,
+        "scalarFieldLimit": true,
+        "singleExistingHook": true,
+        "unclosed": true
+      },
+      "id": "energy-event-decision-interval",
+      "surface": {
+        "completeEnergyMutationCensus": true,
+        "containerCount": 1,
+        "containers": {
+          "energies": [
+            "fight",
+            "event",
+            "n"
+          ]
+        },
+        "directDecisionInterval": true,
+        "existingDeterministicEvents": true,
+        "fieldCounts": [
+          3
+        ],
+        "fixedScalarSchema": true,
+        "hook": "BalanceSim._harvest_fight existing event loop",
+        "hookCount": 1,
+        "id": "energy-event-decision-interval",
+        "identityAnchorAvailable": true,
+        "interpretation": "Reconstruct exact current Energy beside the frozen hand and first-play state. Energy at least two proves both one-cost cards jointly affordable regardless of any first-card discount; Energy zero, or Energy one after a prior play, proves not jointly affordable. Energy one before the first play remains discount-aliased and contributes only to the upper bound.",
+        "preservesFrozenTrace": true,
+        "priorClosureAliases": []
+      }
+    },
+    {
+      "eligible": false,
+      "gateResults": {
+        "completeEnergyMutationCensus": false,
+        "containerLimit": true,
+        "directDecisionInterval": false,
+        "existingDeterministicEvents": false,
+        "fixedScalarSchema": true,
+        "identityAnchorAvailable": true,
+        "preservesFrozenTrace": true,
+        "scalarFieldLimit": true,
+        "singleExistingHook": true,
+        "unclosed": true
+      },
+      "id": "static-cost-from-existing-trace",
+      "surface": {
+        "completeEnergyMutationCensus": false,
+        "containerCount": 0,
+        "containers": {},
+        "directDecisionInterval": false,
+        "existingDeterministicEvents": false,
+        "fieldCounts": [],
+        "fixedScalarSchema": true,
+        "hook": "No new hook",
+        "hookCount": 0,
+        "id": "static-cost-from-existing-trace",
+        "identityAnchorAvailable": true,
+        "interpretation": "Base costs alone omit live Energy, carry-over, gains and first-card discounts.",
+        "preservesFrozenTrace": true,
+        "priorClosureAliases": []
+      }
+    },
+    {
+      "eligible": false,
+      "gateResults": {
+        "completeEnergyMutationCensus": true,
+        "containerLimit": true,
+        "directDecisionInterval": true,
+        "existingDeterministicEvents": false,
+        "fixedScalarSchema": false,
+        "identityAnchorAvailable": true,
+        "preservesFrozenTrace": true,
+        "scalarFieldLimit": false,
+        "singleExistingHook": false,
+        "unclosed": true
+      },
+      "id": "pilot-legal-action-snapshots",
+      "surface": {
+        "completeEnergyMutationCensus": true,
+        "containerCount": 1,
+        "containers": {
+          "decisions": [
+            "fight",
+            "turn",
+            "legalUids",
+            "energy"
+          ]
+        },
+        "directDecisionInterval": true,
+        "existingDeterministicEvents": false,
+        "fieldCounts": [
+          4
+        ],
+        "fixedScalarSchema": false,
+        "hook": "Would require a new BalancePilot decision-loop hook",
+        "hookCount": 2,
+        "id": "pilot-legal-action-snapshots",
+        "identityAnchorAvailable": true,
+        "interpretation": "Measures the policy decision surface when an existing scalar event is sufficient.",
+        "preservesFrozenTrace": true,
+        "priorClosureAliases": []
+      }
+    }
+  ],
+  "authority": "Apply decision boundary 1 and freeze only energies(fight,event,n) for one separately preregistered 256-row identity preflight against the exact co-hand trace. Add no other field, candidate, payoff, gameplay hook, policy knob, causal row, ML, RL or optimiser.",
+  "decision": "freeze-energy-events-for-legal-opportunity-identity-preflight",
+  "decisionBoundary": 1,
+  "factorDisposition": {
+    "additionalMethod": "No ML, RL, optimiser, fitted model or policy hook. The current evidence has not yet isolated a policy-repertoire bottleneck.",
+    "candidate": "None.",
+    "causalRows": "None are authorised by this audit.",
+    "protectedSeeds": "Acceptance and reserve seeds remain unused."
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "24097d073d3c9977b8a99b86e4673da276a4c0de884169d980a1759b8ca8b434",
+  "runnerSha256": "687616d62f7a2fd1036526407d1b3a85376beeb3b7ce511cea6e6942bf43a2b4",
+  "schemaVersion": 1,
+  "selectedSurface": "energy-event-decision-interval",
+  "sourceCensus": {
+    "combatCurrentEnergyMutationSites": 5,
+    "combatEnergyEventAppendSites": 5,
+    "targetCards": {
+      "defend": {
+        "cost": 1,
+        "target": "self"
+      },
+      "guardedStrike": {
+        "cost": 1,
+        "target": "enemy"
+      }
+    }
+  },
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "wallTimeSeconds": 5.913436750066467
+}

@@ -1,0 +1,144 @@
+{
+  "authority": "Apply decision boundary 2 and close the natural Afterimage route at the first exact failed necessary condition. If simultaneous co-hand fails, continue inside issue #421 with a different evidence-backed structural mechanism. If co-play fails after co-hand passes, only one separately preregistered zero-row audit of existing legal-opportunity evidence may be considered; no policy method is authorised.",
+  "cachedObservationRowsRead": 256,
+  "counts": {
+    "baselineFaultRows": 0,
+    "coPlayButNotNaturalOrderPolicies": 3,
+    "coPlayPolicies": 13,
+    "coPlayWithoutCohandPolicies": 0,
+    "cohandButNotCoPlayPolicies": 4,
+    "drawButNotCohandPolicies": 3,
+    "drawOpportunityPolicies": 20,
+    "naturalOrderPolicies": 10,
+    "simultaneousCohandPolicies": 17
+  },
+  "decision": "close-natural-afterimage-route-at-exact-cohand-boundary",
+  "decisionBoundary": 2,
+  "factorDisposition": {
+    "additionalMethod": "No ML, RL, optimiser or fitted model is used. A remaining legality-or-play-selection alias can authorise at most one separately preregistered zero-row audit of existing legal-opportunity evidence, not a policy method.",
+    "candidate": "None. A necessary-condition boundary cannot freeze or promote content.",
+    "protectedSeeds": "Acceptance and reserve seeds remain unused.",
+    "scalarFamily": "Remains closed; no payoff, Ward-priority or acquisition cell is reopened."
+  },
+  "failureClass": "legality-or-play-selection-unresolved",
+  "gateResults": {
+    "coPlay": false,
+    "drawOpportunity": true,
+    "naturalOrder": false,
+    "reliability": true,
+    "simultaneousCohand": true
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "futility",
+  "policySets": {
+    "coPlay": [
+      0,
+      5,
+      11,
+      14,
+      18,
+      24,
+      27,
+      33,
+      35,
+      41,
+      43,
+      55,
+      62
+    ],
+    "coPlayButNotNaturalOrder": [
+      27,
+      43,
+      55
+    ],
+    "coPlayWithoutCohand": [],
+    "cohandButNotCoPlay": [
+      12,
+      25,
+      30,
+      44
+    ],
+    "drawButNotCohand": [
+      20,
+      28,
+      37
+    ],
+    "drawOpportunity": [
+      0,
+      5,
+      11,
+      12,
+      14,
+      18,
+      20,
+      24,
+      25,
+      27,
+      28,
+      30,
+      33,
+      35,
+      37,
+      41,
+      43,
+      44,
+      55,
+      62
+    ],
+    "naturalOrder": [
+      0,
+      5,
+      11,
+      14,
+      18,
+      24,
+      33,
+      35,
+      41,
+      62
+    ],
+    "simultaneousCohand": [
+      0,
+      5,
+      11,
+      12,
+      14,
+      18,
+      24,
+      25,
+      27,
+      30,
+      33,
+      35,
+      41,
+      43,
+      44,
+      55,
+      62
+    ]
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "998c5fbbe4506d61e111239af34df46193e59cf6f030898b4a7496a7c4eabe9d",
+  "runnerSha256": "371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c",
+  "schemaVersion": 1,
+  "wallTimeSeconds": 7.097049584030174
+}

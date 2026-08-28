@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Does adding only TURN and KINDLE observations preserve the complete identity-safe draw trace, RNG, policy and results across the full frozen current-main cohort?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinaryPath": "/Users/jamesto/Research/glassvow-p9-421/toolchains/godot-4.7.1/godot",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "anchorOutputSha256": "5ebbfec8247bb8f92f1b04bbcba1f3563e562a1fa40a7444265422511e28a18b",
+    "runnerSha256": "53baead2ef8b85f65b7594e2c141849423a95a2114a32319c1f121ef27069e47",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "7f82177d3c71e3a0cc56f820f017cfab6ec99173caf326486209034d60dbb5fd",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2"
+    },
+    "fileSha256": {
+      "task-capsule.json": "7bb656db975899cea5fa1e119b28ae6ab8504213c121236154e1a3642932f822",
+      "protocols/post-v38-cohand-observability-v1.json": "9a920164dfdde25edcf4cffdde58a434edbb54853a13d4313757a5c1abcca90a",
+      "summaries/post-v38-cohand-observability-v1.json": "2d3c3b8ce091bf8fc9560d6204d7e37cb2b1e4b9a960f32f29f533cd7625b7d4",
+      "cache/sha256/5ebbfec8247bb8f92f1b04bbcba1f3563e562a1fa40a7444265422511e28a18b.json": "5ebbfec8247bb8f92f1b04bbcba1f3563e562a1fa40a7444265422511e28a18b"
+    }
+  },
+  "design": {
+    "type": "one-arm full-cohort observation identity preflight with a frozen common-random-number draw-trace anchor; not a gameplay-factor experiment",
+    "matrix": [
+      {
+        "arm": "identity-safe-draw-trace-anchor",
+        "turns": "absent",
+        "kindles": "absent",
+        "rows": 256
+      },
+      {
+        "arm": "cohand-telemetry-explicit-null",
+        "turns": "fight, event, n",
+        "kindles": "fight, event, id, uid",
+        "rows": 256
+      }
+    ],
+    "sharedAnchor": "Both arms use the exact same 64 resolved root-551 policy identities, four simulation seed identities, current-main content, Duskblade Vow-5 baseline, explicit null, whole-run estimator and complete-cohort stopping rule.",
+    "mechanisticContrast": "Remove only turns and kindles from each observed row and require exact equality with its frozen draw-trace anchor row. The draws, plays, all other trajectory fields, result, RNG cursor and policy snapshot cannot differ.",
+    "aliasStructure": "The anchor aliases TURN and KINDLE telemetry with unavailable. No gameplay factor, candidate, payoff, acquisition priority, rarity or Ward setup level varies."
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": ["absent-current-main"],
+      "definition": "Separate fixed causal factor; not varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": ["absent-current-main"],
+      "definition": "Separate fixed causal factor; not varied or estimated."
+    },
+    "acquisitionPriority": {
+      "levels": ["pristine-current-main"],
+      "definition": "Fixed exact reward policy."
+    },
+    "faultlineRarity": {
+      "levels": ["current-uncommon"],
+      "definition": "Fixed exact current-main rarity."
+    },
+    "wardSetupPriority": {
+      "levels": ["pristine-current-main"],
+      "definition": "Fixed exact current-main combat policy."
+    },
+    "cohandTelemetry": {
+      "levels": ["absent", "turns-plus-kindles"],
+      "definition": "Observation-only appends from existing TURN and KINDLE branches in the same BalanceSim._harvest_fight loop. The trace is never read by gameplay."
+    }
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "rows": 256,
+    "identity": "Every policy index and seed from the sole frozen draw-telemetry arm appears exactly once in the same order in the new arm; no identity can be selected, removed, replaced or added after execution."
+  },
+  "traceDefinition": {
+    "turns": ["fight", "event", "n"],
+    "kindles": ["fight", "event", "id", "uid"],
+    "schema": "Every row has at least one TURN; turn numbers start at one and are contiguous within each fight. KINDLE may be empty; every entry has exact scalar fields and a non-negative uid. Every PLAY and KINDLE uid must previously appear in DRAW for the same fight under the frozen no-addCard-to-hand content census.",
+    "scope": "Observation only. This preflight estimates identity and schema, not co-hand counts, legality, policy selection, package activation, payoff, acquisition, balance or product acceptance."
+  },
+  "estimands": {
+    "pathIdentity": "Exact canonical equality for all 256 paired rows after removing only turns and kindles from the new trajectory.",
+    "rngIdentity": "Exact final RNG cursor equality for every pair.",
+    "policyIdentity": "Exact resolved policy snapshot equality for every pair.",
+    "traceSchema": "Zero schema, value, turn-sequence or not-previously-drawn faults.",
+    "notEstimated": "No co-hand opportunity count, legal action, causal effect, complementarity, decision value, candidate feasibility, detector performance or optimisation benefit is estimated."
+  },
+  "factorDisposition": {
+    "candidate": "None is constructed, simulated, frozen or promoted.",
+    "payoffs": "Scoreline and Afterimage remain separate, fixed and absent.",
+    "ponytailKnobs": "No non-null research knob exists or is exercised.",
+    "additionalMethod": "No ML, RL, optimiser or fitted model is used or authorised."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 1,
+    "maximumNewSimulatorObservationRows": 256,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 90,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python constructs the complete frozen row rectangle, executes it once, content-addresses the plan and output, performs exact paired comparisons and owns the stop/go decision.",
+    "firstLook": "All 256 rows are the only look. No reserve, repair, rerun, row replacement or adaptive continuation exists.",
+    "stagedConstraint": "This identity stage may authorise only a zero-row reconstruction from the resulting trace. It cannot support a causal, policy or gameplay endpoint claim."
+  },
+  "decisionRules": {
+    "success": "All 256 rows complete within 90 seconds; removing only turns and kindles yields exact anchor equality; RNG and policy identities have zero mismatches; the trace schema has zero faults; and the ledger remains exact.",
+    "successAuthority": "Apply decision boundary 1 and freeze exactly the TURN/KINDLE trace for one deterministic zero-row reconstruction of simultaneous Ward/Warden's-Edge co-hand opportunity. Do not add a candidate, payoff, gameplay hook, policy knob, causal row, ML, RL or optimiser.",
+    "futility": "Any paired identity, RNG, policy, schema or ledger check fails.",
+    "futilityAuthority": "Apply decision boundary 2 and close TURN/KINDLE telemetry without repair or rerun. Continue inside issue #421 with the next evidence-backed structural mechanism; do not infer a policy bottleneck or add a method.",
+    "inconclusive": "A frozen input is unavailable, the single process cannot produce the complete output, or the decision is unavailable at 90 seconds.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the preflight inconclusive at the cap. Add no row, repair, rerun, candidate, method or protected seed."
+  }
+}
