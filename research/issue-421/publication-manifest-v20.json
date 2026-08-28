@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 20,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "turn-state closure, exact native grammar coverage and Novaflare reward-selector closure",
+  "decision": "CLOSE_TURN_STATE_AND_NOVAFLARE_REWARD_SELECTOR",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-native-grammar-novaflare-v1.md",
+    "progressReportSha256": "a4d3fbb7e3e26c94b9d346db0c113f4e0a2bb22a4b43af2a3f599649e4c857a9",
+    "turnStateProtocol": "protocols/post-v38-turn-state-economy-capacity-v1.json",
+    "turnStateProtocolSha256": "210491fd49f2c64e5166d9fef260ee2fa264e803304a3445bec917f61ffaa956",
+    "turnStateSummary": "summaries/post-v38-turn-state-economy-capacity-v1.json",
+    "turnStateSummarySha256": "7cd0edf36fcd011422ec99a94d84cc0a774307c1db6150fff3d830fdf1d7c842",
+    "turnStateRunner": "tools/post_v38_turn_state_economy_capacity.py",
+    "turnStateRunnerSha256": "f55c3c4b20e37a438cdf5fb63bd4c262cf1e3c898ccb15ed3ed27b5c528f4cd2",
+    "nativeCoverageProtocol": "protocols/post-v38-native-dusk-grammar-coverage-v1.json",
+    "nativeCoverageProtocolSha256": "25c2b5a9ba5c01117411aaf04c88fed88998566ea18eba0e1a6c398aef62c85a",
+    "nativeCoverageSummary": "summaries/post-v38-native-dusk-grammar-coverage-v1.json",
+    "nativeCoverageSummarySha256": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff",
+    "nativeCoverageRunner": "tools/post_v38_native_dusk_grammar_coverage.py",
+    "nativeCoverageRunnerSha256": "f6099406c35c1fe3af8615039b64424007560c12158566a71107895e06ad8a86",
+    "novaflareProtocol": "protocols/post-v38-novaflare-capacity-v1.json",
+    "novaflareProtocolSha256": "8b43e8b204ba9618e8b76598e3c6d2941985e9592b957b4125941d7f64d0cb13",
+    "novaflareSummary": "summaries/post-v38-novaflare-capacity-v1.json",
+    "novaflareSummarySha256": "ca0fe007e4b20cedd008ee9a07594daa096c55b4232ef53a6db176e2320cfcb1",
+    "novaflareRunner": "tools/post_v38_novaflare_capacity.py",
+    "novaflareRunnerSha256": "24d9583ca919b7c74fd32524318e56cfea71f1511a7a796f6c85744e3e44936d",
+    "readmeSha256": "7be6d6a79d95bbb9d3293bf3b4ebe018bfed2e86e2ff7808660d10b9cbeae002",
+    "taskCapsuleSha256": "5d3662e20a51700d38f8ffce7ce4f61ed5ce13fbc864428ce2215dd913370cd2"
+  },
+  "result": {
+    "turnStateDecisionBoundary": 2,
+    "turnStateDecision": "close-turn-state-action-economy-family",
+    "duskmirrorRobustOwnerPolicies": 2,
+    "duskmirrorViablePotentialActivePolicies": 1,
+    "frozenCoreRobustOwnerPolicies": 3,
+    "frozenCoreViablePotentialActivePolicies": 2,
+    "nativeCoverageDecisionBoundary": 1,
+    "nativeCoverageDecision": "freeze-one-uncovered-native-family-for-capacity",
+    "uncoveredNativeFamily": "deed-unlocked-ember-reserve-damage",
+    "novaflareDecisionBoundary": 2,
+    "novaflareDecision": "close-novaflare-reward-selector-route",
+    "novaflareRewardSelectorPolicies": 34,
+    "novaflareSelectorInactivePolicies": 30,
+    "novaflareViablePotentialActivePolicies": 12,
+    "scorelineCandidateOnlyPolicies": 21,
+    "afterimageCandidateOnlyPolicies": 2,
+    "interpretation": "Existing turn-state action economy lacks supported ownership. Novaflare normal-reward selection has broad and viable support but is not independently identifiable from Afterimage; neither result authorises telemetry or simulation.",
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumModelContextTokens": 0,
+    "protectedSeedRows": 0
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 514,
+    "payloadFilesIndexed": 493,
+    "protocolFiles": 84,
+    "summaryFiles": 108,
+    "toolFiles": 41,
+    "newRawObjects": 0,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "80fcdd94faa5b85d525f262c6b240fe8b948c3cb0ff0819e231d10c84cd018ed"
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "43067ff5d314bc2fbb942eccb972e425748d2e40",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "nextAction": "Preregister one exhaustive zero-row source/capacity screen containing separate event and shop Novaflare acquisition blocks. If neither exposes a materially different independent discriminator, close deed-unlocked Ember-reserve damage and proceed to the smallest new deterministic structural primitive inside issue #421.",
+  "omissions": [
+    "No runtime primitive, research knob, telemetry field, simulator row, product content or policy weight was added.",
+    "No gate was weakened after the Novaflare counts were visible; the normal-reward route is closed and cannot be rescued by event/shop evidence.",
+    "No #524/#525 historical plan, ML, RL, optimiser, protected seed, product PR, CI run, acceptance claim or #108 receipt was used."
+  ],
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421",
+    "receiptIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}

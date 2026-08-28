@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-novaflare-capacity",
+  "question": "Does exact current policy grammar contain a broad, inactive, viable and independently identifiable Novaflare reward-selector route, with enough frozen reward and combat opportunity to justify an identity-safe spendthrift-unlock and Novaflare-only telemetry preflight before any new simulator row?",
+  "competingOptions": [
+    "freeze Novaflare as the sole carrier for null-path identity and observation-only telemetry preflight",
+    "close the Novaflare reward-selector scalar route and continue only with a materially different source-backed structural discriminator inside issue #421",
+    "record an inconclusive result at the frozen cap"
+  ],
+  "candidate": {
+    "id": "novaflare-ember-reserve-damage",
+    "cardId": "novaflare",
+    "definition": {
+      "type": "attack",
+      "rarity": "rare",
+      "cost": 2,
+      "target": "enemy",
+      "locked": "spendthrift",
+      "vfx": "fire",
+      "effects": [
+        {"kind": "special", "id": "emberNova", "n": 3}
+      ],
+      "up": {
+        "effects": [
+          {"kind": "special", "id": "emberNova", "n": 4}
+        ],
+        "text": "Deal @4@ damage for every Ember in your lantern."
+      },
+      "name": "Novaflare",
+      "text": "Deal @3@ damage for every Ember in your lantern."
+    },
+    "spendthriftUnlocks": ["card:novaflare", "card:emberdance"],
+    "competingUnlockDefinition": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 0,
+      "target": "self",
+      "locked": "spendthrift",
+      "vfx": "fire",
+      "exhaust": true,
+      "effects": [
+        {"kind": "special", "id": "emberdance", "n": 3}
+      ],
+      "up": {
+        "effects": [
+          {"kind": "special", "id": "emberdance", "n": 4}
+        ],
+        "text": "Spill your lantern: gain 4 Ward for each Ember spent. Kindle."
+      },
+      "name": "Emberdance",
+      "text": "Spill your lantern: gain 3 Ward for each Ember spent. Kindle."
+    },
+    "mediator": "When played, the existing emberNova effect deals its authored multiplier times the exact pre-play Ember reserve. Dusk Shatter, kills and Kindle can produce Embers; automatic Flare use consumes three and is fixed interference.",
+    "authoredPayoff": "Only Novaflare's existing Ember-reserve damage is in scope. Its definition, Ember production, Flare, Emberdance, reward generation, policy and RNG are unchanged in this screen.",
+    "mechanisticJustification": "This is the sole uncovered current-main Dusk family: converting a persistent Ember reserve into card damage. It is distinct from closed Ward/Kindle payoff, Shatter output and unconditional resource scalar families.",
+    "claimBoundary": "A static reward selector plus current reward and combat opportunities is a deliberately permissive capacity condition. It does not establish an offer, acquisition, draw, play, positive pre-play reserve, damage, causal payoff, package admission or product quality."
+  },
+  "selectorFormula": {
+    "exact": "policy.card.rarity.rare - 2 + policy.special.doubleBlock >= policy.cardDecline",
+    "derivation": "Current card_score starts with rare weight minus printed cost 2; emberNova aliases to special.doubleBlock; Novaflare has no Dusk aspect bonus and no other base effect.",
+    "scope": "This exactly classifies whether a policy would accept Novaflare when it is the highest-scoring normal card reward. It does not classify event or shop acquisition, competing offers or combat play priority."
+  },
+  "closedDirections": [
+    "adding Tithe of Panes or Pyreheart before measured producer bottleneck and decision value",
+    "changing Novaflare, Emberdance, Flare, Ember production, reward odds, rarity, price or policy weights",
+    "forcing an offer, acquisition, draw, play or positive Ember reserve",
+    "reopening Ward, Kindle, Afterimage, Scoreline, Cracked, Shatter, Crown, Honing, cadence or action-economy closures",
+    "using shop or event acquisition to rescue a failed reward-selector route without a separate source-backed preregistration",
+    "ML, RL, an optimiser, adaptive candidate tuning or protected seeds"
+  ],
+  "factorDefinitions": {
+    "novaflarePayoff": {
+      "levels": ["current"],
+      "current": "Exact current emberNova multiplier times pre-play Ember reserve.",
+      "status": "Fixed observational mechanism; not varied and not a causal estimand."
+    },
+    "spendthriftUnlockProfile": {
+      "levels": ["baseline"],
+      "baseline": "Exact cached unlock profile without spendthrift card unlocks.",
+      "status": "Fixed in this zero-row screen. Baseline and enabled levels are preregistered only for the later identity preflight if this screen passes."
+    },
+    "scorelinePayoff": {
+      "levels": ["current"],
+      "current": "Exact frozen Scoreline payoff and Faultline path.",
+      "status": "Separate causal factor fixed throughout; never bundled with Novaflare or Afterimage."
+    },
+    "afterimagePayoff": {
+      "levels": ["current"],
+      "current": "Exact frozen Afterimage payoff and Guarded Strike path.",
+      "status": "Separate causal factor fixed independently from Scoreline and Novaflare."
+    },
+    "acquisitionPriority": {
+      "levels": ["current"],
+      "current": "Exact frozen policy card score, decline threshold and natural reward/economy path."
+    },
+    "faultlineRarity": {
+      "levels": ["current"],
+      "current": "Exact baseline Faultline definition."
+    },
+    "wardSetupPriority": {
+      "levels": ["current"],
+      "current": "Exact current/null Ward setup path."
+    }
+  },
+  "designMatrix": {
+    "kind": "single-cell immutable observational reuse; not a factorial",
+    "cells": [
+      {
+        "id": "current-trace",
+        "novaflarePayoff": "current",
+        "spendthriftUnlockProfile": "baseline",
+        "scorelinePayoff": "current",
+        "afterimagePayoff": "current",
+        "acquisitionPriority": "current",
+        "faultlineRarity": "current",
+        "wardSetupPriority": "current",
+        "cachedRows": 256,
+        "newRows": 0
+      }
+    ],
+    "causalContrasts": [],
+    "anchors": [
+      "exact current-main content and rules",
+      "31 exact Scoreline-route policies",
+      "54 exact Afterimage-route policies",
+      "one immutable baseline fault"
+    ],
+    "aliasStructure": "The reward selector is aliased with the unobserved condition that Novaflare is highest among a normal reward. Current event and shop paths can bypass the decline selector; current path opportunity predates the spendthrift unlock; combat opportunity does not establish a positive Ember reserve. These aliases forbid acquisition or payoff claims and can only authorise exact telemetry.",
+    "expansionRule": "No simulator or joint cell is authorised. A pass may add only the two identity-preflight knobs below. Any later CRN design must be mechanism-blocked, retain identical policies and seeds in every contrast, and add cross-package joint cells only if shared anchors measure decision-changing interference."
+  },
+  "identityPreflightIfAuthorised": {
+    "spendthriftUnlockProfile": {
+      "null": "Omitted/baseline exactly reproduces the frozen unlock list, content path, RNG identity, policy identity and results.",
+      "enabled": "Adds exactly card:novaflare and card:emberdance through the existing deed unlock path; no content definition, policy, reward algorithm, unrelated pool or RNG call is edited.",
+      "intendedMediator": "Only eligibility of the two exact spendthrift cards in matching-tier card pools."
+    },
+    "novaflareTelemetry": {
+      "null": "Omitted/off exactly reproduces frozen path, RNG identity, policy identity and results.",
+      "enabled": "Observes Novaflare offered source, acquisition, draw, play, pre-play Embers, computed damage and Flare-before-Novaflare ordering without adding an RNG call or changing state.",
+      "intendedMediator": "Observation of Novaflare acquisition and Ember-reserve conversion only."
+    },
+    "proofRule": "Each null is proved separately and jointly on the complete frozen cohort before any enabled-profile scientific row. An enabled knob must affect only its named mediator; downstream path differences from the acquisition intervention are outcomes, not identity proof.",
+    "rowAuthority": 0
+  },
+  "capacityDefinitions": {
+    "rewardSelectorPolicy": "The exact frozen Novaflare base card score is at least the policy's exact cardDecline threshold.",
+    "selectorInactivePolicy": "The exact frozen Novaflare base card score is below cardDecline. This is exact reward-selector inactivity, not proof that event/shop acquisition or combat play is impossible.",
+    "robustRewardOpportunityPolicy": "At least two of four frozen rows contain at least one normal card reward.",
+    "robustCombatOpportunityPolicy": "At least two of four frozen rows contain at least one combat. This only overstates opportunity for a positive Ember reserve.",
+    "robustOtherAcquisitionOpportunityPolicy": "At least two of four frozen paths visit an event or shop. Reported only to expose selector-bypass alias; it cannot rescue a gate.",
+    "potentialActivePolicy": "Reward-selector, robust-reward-opportunity and robust-combat-opportunity all hold on the same policy identity.",
+    "ambiguousSelectorPolicy": "Reward-selector holds but one or both robust opportunity conditions fail.",
+    "viablePotentialActivePolicy": "A potential-active policy has at least one winning frozen row containing both reward and combat opportunity.",
+    "candidateOnlyPolicy": "Potential-active for the Novaflare reward-selector route but not active for the named shared anchor.",
+    "anchorOnlyPolicy": "Active for the named shared anchor but not potential-active for the Novaflare reward-selector route."
+  },
+  "mechanisticInteractionsAndAliases": {
+    "preregisteredMechanisticInteractions": [
+      "Novaflare payoff x acquisition priority, because acquisition is necessary before reserve conversion",
+      "Novaflare payoff x automatic Flare ordering, because Flare consumes the same Ember reservoir",
+      "spendthrift unlock profile x Emberdance competition, because the deed adds both cards"
+    ],
+    "notEstimatedHere": "No interaction is estimated in this zero-row screen. Scoreline and Afterimage anchors are evaluated separately; they are not merged into an old four-factor design.",
+    "crossPackageInterferenceRule": "Both shared-anchor separation gates must pass before identity preflight. Later joint cells are forbidden unless comparable enabled-profile telemetry measures interference large enough to change the stop/go decision.",
+    "staging": "This stage uses source and cached path evidence only. Telemetry may follow on the same policies and seeds; whole-run causal endpoints require comparable cells with the same baseline, estimator, first-look budget and stopping rule."
+  },
+  "baseline": {
+    "name": "current-main root-551 Duskblade Vow-5 natural reward/economy rectangle",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "outputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf"
+  },
+  "traceEvidence": {
+    "name": "identity-proved explicit-current arm from the Momentum preference CRN rectangle",
+    "planSha256": "4983c07159961f57ef033670e6f06e2b82b52134e808f199d7aa067a190b4a69",
+    "outputSha256": "ac86dac85f5398e6c8e4d63ef10cf5d57d85739f9cc62fb1ffdf1b9b21b06ed2",
+    "currentRows": 256,
+    "identityRule": "After trace and row-label fields are removed, every current row exactly equals its cached baseline path, RNG, policy and result before any selector or outcome count is read."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "identity": "The exact complete current-main first-look rectangle is reused for selector, opportunity, viability and both shared anchors. No policy or seed is added, removed, selected or replaced."
+  },
+  "sharedAnchors": {
+    "scoreline": {
+      "definition": "At least two of four rows play Chisel before a later Faultline in the same fight.",
+      "policies": [0, 2, 3, 7, 10, 12, 13, 14, 15, 17, 18, 20, 23, 28, 29, 31, 32, 33, 35, 39, 40, 49, 51, 53, 54, 55, 56, 57, 58, 59, 61]
+    },
+    "afterimage": {
+      "definition": "At least two of four rows record positive Afterimage Guard damage.",
+      "policies": [0, 1, 2, 3, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 29, 30, 32, 33, 34, 35, 37, 38, 39, 41, 42, 43, 44, 45, 46, 47, 48, 49, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 62, 63]
+    }
+  },
+  "estimands": {
+    "unit": "Frozen policy identity with a two-of-four robustness rule.",
+    "primary": "Exact reward-selector, selector-inactive, potential-active and ambiguous policy counts and identities.",
+    "opportunity": "Exact robust normal-reward, combat and other-acquisition path-opportunity policy sets from immutable rows.",
+    "viability": "Exact potential-active policies with at least one qualifying winning row.",
+    "separation": "Separate exact candidate-only, anchor-only, cross-active and Jaccard statistics against Scoreline and Afterimage.",
+    "notEstimated": "No Novaflare offer, acquisition, draw, play, pre-play Ember reserve, damage, Flare interference effect, causal payoff, duration, RandomBuild, Ashwarden, detector, protected seed or product endpoint is estimated."
+  },
+  "estimator": {
+    "method": "Deterministic exact-source score derivation, immutable row identity checks and exact policy-set arithmetic.",
+    "model": "None. No bootstrap, fitted model, optimiser, ML or RL component is used.",
+    "firstLook": "One exact carrier, one exact selector formula, one immutable cohort and one complete first look. No threshold, predicate, anchor or cohort changes after counts are visible.",
+    "stopping": "Authorise only identity preflight if every gate passes; close this scalar selector route if any gate fails; record inconclusive if the deterministic decision cannot finish at the cap."
+  },
+  "gates": {
+    "minimumRewardSelectorPolicies": 16,
+    "minimumSelectorInactivePolicies": 16,
+    "minimumRobustRewardOpportunityPolicies": 16,
+    "minimumRobustCombatOpportunityPolicies": 16,
+    "minimumPotentialActivePolicies": 16,
+    "minimumViablePotentialActivePolicies": 8,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.75,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16 active/inactive and eight viability/two-sided-separation minima reuse the frozen 64-policy first-look support scale. The 0.75 ceiling and one immutable cached fault are unchanged. Scoreline and Afterimage must pass separately."
+  },
+  "budget": {
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Every selector support, selector inactivity, reward opportunity, combat opportunity, viability, separate two-sided anchor-separation and reliability gate passes.",
+    "successAuthority": "Freeze Novaflare as the sole carrier and implement only the two preregistered identity-preflight knobs. Prove omitted/off path, RNG, policy and result identity separately and jointly on the same 64 policies and four seeds. Do not execute an enabled unlock row, vary a payoff, add a producer, claim acquisition or select a different candidate.",
+    "futility": "Any frozen gate fails.",
+    "futilityAuthority": "Close the Novaflare reward-selector scalar route. Continue inside issue #421 only if exact current source supplies a materially different non-reward acquisition or combat-policy discriminator with its own preregistration; otherwise close deed-unlocked Ember-reserve damage and proceed to the smallest new deterministic structural primitive. Do not weaken a gate or tune Novaflare.",
+    "inconclusive": "The current-main source, immutable trace or deterministic screen cannot produce a complete decision before the wall-time cap.",
+    "inconclusiveAuthority": "Record the inconclusive result at the cap without implementation, simulator spend, a causal factor, ML/RL or protected seeds."
+  },
+  "methodBoundary": "Deterministic Python owns candidate construction, exact selector evaluation, cache checks, policy classification and stop/go. #524/#525 enter only through already-published immutable #421 decisions and are not reconstructed. No model context, human label, optimiser or adaptive candidate iteration enters execution.",
+  "preFirstLookValidationCorrection": {
+    "failedRunnerSha256": "f949ae842327c2a32229e4410dfa574d2ba394c4af635b259ff21abb51de6f94",
+    "failure": "The frozen source assertion included indentation around the line continuation and rejected the exact source blob before prior evidence, ledger, cache or any cohort row was read.",
+    "correction": "Match the same two exact score-expression fragments without indentation. No factor, level, cohort, anchor, estimand, gate, budget or decision rule changed.",
+    "rowsRead": 0,
+    "outcomesRead": 0,
+    "summaryWritten": false
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    },
+    "runnerSha256": "24d9583ca919b7c74fd32524318e56cfea71f1511a7a796f6c85744e3e44936d"
+  },
+  "priorEvidence": {
+    "nativeGrammarCoverage": {
+      "path": "summaries/post-v38-native-dusk-grammar-coverage-v1.json",
+      "sha256": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff",
+      "decision": "freeze-one-uncovered-native-family-for-capacity"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  }
+}

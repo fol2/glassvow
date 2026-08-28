@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-native-dusk-grammar-coverage",
+  "question": "After all immutable and current #421 closures are applied to exact current-main source, is any naturally reachable or deed-unlockable Duskblade combat-mechanism family still uncovered strongly enough to receive a separate capacity preregistration before the issue uses its authority for a new primitive?",
+  "competingOptions": [
+    "freeze at most one source-defined uncovered existing family for a separate zero-row capacity preregistration",
+    "close the existing native Duskblade grammar and proceed to design the smallest new deterministic primitive authorised by issue #421",
+    "record an inconclusive result at the frozen cap"
+  ],
+  "scientificBasis": {
+    "coverageRule": "Enumerate exact current-main Dusk aspect gates, Dusk policy affinities, stateful natural relic hooks and deed-unlocked combat cards/relics. Map a family to a closure only through an immutable summary SHA and exact decision. Treat universal scalars and non-combat context as non-candidates rather than negative evidence.",
+    "newPrimitiveBoundary": "Issue #421 permits the smallest new deterministic card, relic or effect primitive only when evidence shows existing grammar cannot express the missing complementarity. This audit must therefore search current deed unlocks as well as the baseline reward pools before that authority can be used.",
+    "claimBoundary": "Source coverage does not establish activation, reachability, complementarity, package admission or product quality. One uncovered family receives capacity authority only; it receives no simulator row, causal claim or shipping authority."
+  },
+  "coverageUniverse": {
+    "sourceScope": "Exact current-main Duskblade start kit and default Art; every combat branch gated by aspect or Dusk policy affinity; every mutable-state natural relic hook; every deed-unlocked combat card/relic with a Dusk core mediator.",
+    "duskStartDeck": ["strike", "strike", "strike", "strike", "defend", "defend", "defend", "eclipseSlash", "chisel", "firstSpark"],
+    "duskDefaultArt": "flare",
+    "candidateFamilies": [
+      "facet-shatter-threshold-overflow",
+      "cracked-vulnerable-execute",
+      "staggered-or-cracked-echo",
+      "same-instance-growth-repeat",
+      "setup-and-action-order",
+      "dusk-favoured-relics",
+      "kindle-ember-ward",
+      "non-final-death-action-economy",
+      "turn-state-action-economy",
+      "deed-unlocked-ember-reserve-damage"
+    ],
+    "maximumUncoveredFamilies": 1,
+    "uncoveredCarrierDefinitions": {
+      "novaflare": {
+        "type": "attack",
+        "rarity": "rare",
+        "cost": 2,
+        "target": "enemy",
+        "locked": "spendthrift",
+        "vfx": "fire",
+        "effects": [
+          {"kind": "special", "id": "emberNova", "n": 3}
+        ],
+        "up": {
+          "effects": [
+            {"kind": "special", "id": "emberNova", "n": 4}
+          ],
+          "text": "Deal @4@ damage for every Ember in your lantern."
+        },
+        "name": "Novaflare",
+        "text": "Deal @3@ damage for every Ember in your lantern."
+      }
+    },
+    "unlockDefinitions": {
+      "spendthrift": ["card:novaflare", "card:emberdance"],
+      "lanternFed": ["card:tithe", "card:pyreheart"]
+    }
+  },
+  "coverageFamilies": [
+    {
+      "id": "facet-shatter-threshold-overflow",
+      "sourceMembers": ["Dusk-only apply_chips", "Shatter", "Shatterer's Crown", "Quakeblow", "Ringing Blow", "Bellstrike", "Annealing Rite", "same-enemy reseam", "heavy-Attack relay"],
+      "evidence": ["genericShatterFlow", "crownEffect", "shatterTempo", "reseamBreak", "rewardOverchip"],
+      "disposition": "closed",
+      "reason": "Generic flow, threshold, relay, reseam and complete positive-chip reward routes all failed frozen repertoire gates. Deed-unlocked Quakeblow is the same authored positive-chip mechanism and does not create a new state representation."
+    },
+    {
+      "id": "cracked-vulnerable-execute",
+      "sourceMembers": ["Eclipse Slash", "Shatterhymn", "Faultline", "vulnerable Attack preference"],
+      "evidence": ["partialFacet", "crackedTempo"],
+      "disposition": "closed",
+      "reason": "The partial-Facet and Cracked tempo directions are bounded negatives. No new vulnerable threshold, execute value or named-card retune is authorised."
+    },
+    {
+      "id": "staggered-or-cracked-echo",
+      "sourceMembers": ["Resonant Lance", "special.shatterEcho", "paneBreaker deed unlock"],
+      "evidence": ["resonance"],
+      "disposition": "closed",
+      "reason": "The exact existing Resonant Lance package was rejected; its deed unlock does not make the same mechanism new evidence."
+    },
+    {
+      "id": "same-instance-growth-repeat",
+      "sourceMembers": ["Honing Edge", "special.momentum", "same CardInst uid repeat", "identity-safe policy remap"],
+      "evidence": ["momentumPreference"],
+      "disposition": "closed",
+      "reason": "Exact-repeat active and Honing-only support remained below frozen minima after the sole measured policy-alias remap."
+    },
+    {
+      "id": "setup-and-action-order",
+      "sourceMembers": ["reward Power", "direct Energy producer", "reward draw Skill", "Power plus cycle", "next-Attack consumer"],
+      "evidence": ["oneBitSetup", "powerCycle"],
+      "disposition": "closed",
+      "reason": "The exhaustive one-bit classes and only evidence-justified two-stage conjunction failed viability, inactivity or both."
+    },
+    {
+      "id": "dusk-favoured-relics",
+      "sourceMembers": ["Shatterer's Crown", "Prism Charm", "Executioner's Seal", "Bell of Endings"],
+      "evidence": ["retainedDusk", "crownEffect", "executionersSeal"],
+      "disposition": "closed",
+      "reason": "The exact Dusk bonus relic set and immutable retained edges are exhausted; Crown was broad and Seal lacked natural support. Prism/Bell remain immutable evidence, not a path to reconstruct."
+    },
+    {
+      "id": "kindle-ember-ward",
+      "sourceMembers": ["First Spark", "Pyre Tithe", "Verdant Branch", "Crown of Tithes", "Emberdance", "Flawless Form", "Ward setup"],
+      "evidence": ["retainedDusk", "wardWholeRun"],
+      "disposition": "closed",
+      "reason": "Current #421 reconciliation closes the immutable Kindle/Branch and Ward directions. Emberdance and Flawless Form are the same Ward/Kindle payoff families, not new damage mediators."
+    },
+    {
+      "id": "non-final-death-action-economy",
+      "sourceMembers": ["Reaper's Bell", "non-final enemy death", "+1 Energy", "draw 1"],
+      "evidence": ["reapersBell"],
+      "disposition": "closed",
+      "reason": "Only nine policies were robust owners/potential-active and five were viable under an upper bound that overstates exposure."
+    },
+    {
+      "id": "turn-state-action-economy",
+      "sourceMembers": ["Duskmirror", "first_card_played", "Frozen Core", "retained Energy"],
+      "evidence": ["turnStateEconomy"],
+      "disposition": "closed",
+      "reason": "Duskmirror and Frozen Core had only two and three robust owners respectively; neither supported an independent repertoire route."
+    },
+    {
+      "id": "deed-unlocked-ember-reserve-damage",
+      "sourceMembers": ["Novaflare", "special.emberNova", "spendthrift deed unlock", "Tithe of Panes", "Pyreheart", "lanternFed deed unlock", "Dusk Shatter/kill/Kindle Ember production", "Flare consumption interference"],
+      "evidence": [],
+      "disposition": "uncovered",
+      "reason": "Novaflare is a current shipped, deed-unlockable damage carrier scaling on the Dusk core Ember reservoir. Prior evidence contains no immutable decision for this exact reserve-to-damage mechanism. Producer additions are not assumed: carrier reachability and policy capacity must be screened first, with Tithe/Pyreheart considered only if later telemetry measures a producer bottleneck and decision value."
+    }
+  ],
+  "nonCandidateSourceFamilies": [
+    {
+      "id": "unconditional-start-and-global-scalars",
+      "members": ["War Fetish", "Ember Lantern", "Traveler's Pack", "Hollow Crown", "Thin Glass", "Waning Moon"],
+      "classification": "non-selective-scalar-or-context",
+      "reason": "These shift universal start/turn resources or environment values without a policy-selective Dusk mediator; acceptance forbids broad global power masquerading as diversity."
+    },
+    {
+      "id": "reward-choice-and-shop-scalars",
+      "members": ["Seer's Orb", "Merchant's Mark", "Hungry Dark"],
+      "classification": "non-selective-scalar-or-context",
+      "reason": "These alter choice count or prices, not a combat mechanism package; the scalar acquisition family is already closed."
+    },
+    {
+      "id": "automatic-core-ember-art-loop",
+      "members": ["Shatter/kill/Kindle Ember gain", "Dusk default Flare", "automatic BalancePilot Art use"],
+      "classification": "non-selective-scalar-or-context",
+      "reason": "The baseline loop is Dusk identity shared by every policy, not a second independently reachable package. It becomes relevant only as the fixed producer/interference context for the uncovered Novaflare carrier."
+    },
+    {
+      "id": "deed-unlocked-generic-effects",
+      "members": ["Shardstorm", "Night Sight", "Thief of Wicks"],
+      "classification": "non-selective-scalar-or-context",
+      "reason": "Generic area damage, unconditional extra draw and non-combat bounty lack a distinct Dusk mediator."
+    }
+  ],
+  "sourceAssertions": [
+    {"id": "Dusk Facet gate", "path": "domain/rules/combat.gd", "contains": "if run.aspect != 0:\n\t\treturn"},
+    {"id": "Shatter Ember source", "path": "domain/rules/combat.gd", "contains": "gain_embers(run, cb, 2)"},
+    {"id": "execute source", "path": "domain/rules/combat.gd", "contains": "\"execute\":"},
+    {"id": "same-instance growth source", "path": "domain/rules/combat.gd", "contains": "inst.bonus += _ji(fx.get(\"grow\", 0))"},
+    {"id": "echo source", "path": "domain/rules/combat.gd", "contains": "\"shatterEcho\":"},
+    {"id": "Ember reserve damage source", "path": "domain/rules/combat.gd", "contains": "_ji(fx[\"n\"]) * cb.embers"},
+    {"id": "Kindle source", "path": "domain/rules/combat.gd", "contains": "func kindle_from_hand"},
+    {"id": "Art interference source", "path": "domain/rules/combat.gd", "contains": "gain_embers(run, cb, -cost)"},
+    {"id": "non-final-death source", "path": "domain/rules/combat.gd", "contains": "if run.has_relic(\"reapersBell\")"},
+    {"id": "Frozen Core source", "path": "domain/rules/combat.gd", "contains": "p.energy = (p.energy if run.has_relic(\"frozenCore\") else 0) + energy"},
+    {"id": "Duskmirror source", "path": "domain/rules/combat.gd", "contains": "if run.has_relic(\"duskmirror\") and not cb.first_card_played:"},
+    {"id": "Dusk affinity cards", "path": "tools/balance_pilot.gd", "contains": "[\"eclipseSlash\", \"chisel\", \"warCry\", \"limitBreak\", \"resonantLance\", \"executioner\"]"},
+    {"id": "Dusk affinity relics", "path": "tools/balance_pilot.gd", "contains": "[\"shatterersCrown\", \"prismCharm\", \"executionersSeal\"]"},
+    {"id": "automatic Art use", "path": "tools/balance_pilot.gd", "contains": "if game.rules.can_use_art(game.run, game.cb):\n\t\tgame.apply({\"t\": \"useArt\"})"},
+    {"id": "first-card state", "path": "domain/state/combat_state.gd", "contains": "var first_card_played: bool = false"},
+    {"id": "unlock card pool source", "path": "domain/rules/rewards.gd", "contains": "if unlock.begins_with(\"card:\")"},
+    {"id": "unlock relic pool source", "path": "domain/rules/rewards.gd", "contains": "if unlock.begins_with(\"relic:\")"}
+  ],
+  "estimands": {
+    "unit": "Source-defined mechanism family.",
+    "primary": "Exact covered, non-candidate and uncovered family identities under the frozen universe.",
+    "provenance": "Exact current-main source/content hashes and immutable summary SHA/decision pairs for every closed family.",
+    "notEstimated": "No path activation, offer, acquisition, complementarity, effect size, interaction, duration, RandomBuild, detector, protected-seed or product endpoint is estimated."
+  },
+  "estimator": {
+    "method": "Deterministic exact-source assertions and immutable evidence-key coverage.",
+    "model": "None. No trace mining, simulator, bootstrap, fitted model, optimiser, ML or RL component is used.",
+    "firstLook": "One complete source/evidence universe frozen before execution. No family, evidence mapping or exclusion changes after the uncovered count is visible.",
+    "stopping": "Freeze exactly one uncovered family for a separate capacity preregistration; close existing grammar when none remains; record inconclusive if source/evidence identity cannot be completed at the cap."
+  },
+  "budget": {
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Exactly one current-main candidate family is uncovered and every other candidate family has an exact immutable closure.",
+    "successAuthority": "Freeze only deed-unlocked Ember-reserve damage, beginning with Novaflare as the sole carrier, for a separate zero-row policy/acquisition capacity preregistration. Do not simulate, change content, assume Tithe/Pyreheart, add Emberdance, vary Flare/Ember payoff or claim package feasibility from source coverage.",
+    "futility": "No candidate family remains uncovered.",
+    "futilityAuthority": "Close existing native Duskblade grammar and preregister the smallest new deterministic Dusk-only primitive design authorised by issue #421. Do not reopen any mapped family or use an unconditional scalar.",
+    "inconclusive": "More than one family remains uncovered, a source/evidence identity fails, or the deterministic audit cannot finish before the wall-time cap.",
+    "inconclusiveAuthority": "Record the inconclusive result at the cap without choosing among uncovered families, implementation, simulator spend, ML/RL or protected seeds."
+  },
+  "methodBoundary": "Deterministic Python owns source identity, assertion checking, evidence mapping, uncovered-family counting and stop/go. #524/#525 enter only through already-published immutable #421 decisions; their historical plans are not reconstructed. No model context or human label enters execution.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "sourceSha256": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83"
+    },
+    "runnerSha256": "f6099406c35c1fe3af8615039b64424007560c12158566a71107895e06ad8a86"
+  },
+  "priorEvidence": {
+    "resonance": {"path": "summaries/resonance-package-v1.json", "sha256": "90eb3c12f86bdabd6e2a01387ec108d199f686b46f90fa983b1c9e11cac2a74d", "decision": "REJECT_EXISTING_RESONANCE_PACKAGE"},
+    "partialFacet": {"path": "summaries/facet-focus-v1.json", "sha256": "fa11d04c131e10206ad9797cdf40c61ee2e17ba050113d68741bf5b3d10e6241", "decision": "STOP_INCONCLUSIVE_PARTIAL_FACET_PROTOTYPE"},
+    "crackedTempo": {"path": "summaries/cracked-tempo-v1.json", "sha256": "fa2d279bd61bf6dd41cdc1585d5590241b0d881493b2cb498f9663d1539c6dd1", "decision": "REJECT_CRACKED_TEMPO_PROTOTYPE"},
+    "genericShatterFlow": {"path": "summaries/shatter-flow-v1.json", "sha256": "369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce", "decision": "REJECT_GENERIC_SHATTER_FLOW_PROTOTYPE"},
+    "crownEffect": {"path": "summaries/post-v38-crown-effect-crn-v1-audit.json", "sha256": "e8de4178d6f0dfe8546a1057f0b51822556fc12a7dcc672d6916e019ecd4f1dd", "decision": "close-shatterers-crown-effect-family"},
+    "shatterTempo": {"path": "summaries/post-v38-shatter-tempo-capacity-v1.json", "sha256": "8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388", "decision": "close-shatter-tempo-relay-without-implementation"},
+    "reseamBreak": {"path": "summaries/post-v38-reseam-break-capacity-v1.json", "sha256": "5c9046438a41b996ced634013e7e5d3d7c79abd63d288af98f9e8b051b8fbab4", "decision": "close-reseam-break-without-implementation"},
+    "momentumPreference": {"path": "summaries/post-v38-momentum-preference-capacity-v1.json", "sha256": "fdc51ca09f103f53528afb4f3b641a0c330db3dff1935287e1981b40a2dfd73b", "decision": "close-momentum-remap-and-honing-repeat-family"},
+    "oneBitSetup": {"path": "summaries/post-v38-action-grammar-inventory-v1.json", "sha256": "4eeda4d020539996106ea674d17acd7d0804a8181583c2cf4e856946febca3da", "decision": "close-one-bit-setup-action-grammar"},
+    "powerCycle": {"path": "summaries/post-v38-power-cycle-capacity-v1.json", "sha256": "bf3e927846079cf8e032ed82aac79be48a4249a02cbc49ea03a471fdde82ecd1", "decision": "close-power-cycle-two-stage-grammar"},
+    "retainedDusk": {"path": "summaries/post-v38-retained-dusk-inventory-v1.json", "sha256": "a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66", "decision": "close-immutable-retained-dusk-inventory"},
+    "wardWholeRun": {"path": "summaries/post-v38-ward-whole-run-discovery-v1-audit.json", "sha256": "45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b", "decision": "reject-exact-ward-candidate-close-tested-direction"},
+    "executionersSeal": {"path": "summaries/post-v38-executioners-seal-capacity-v1.json", "sha256": "897f0b4c9b07df07cbc445eaedbc8bdd34ec8d22d9171448f48a28f6d9e8a0a4", "decision": "close-executioners-seal-cadence-family"},
+    "rewardOverchip": {"path": "summaries/post-v38-reward-overchip-capacity-v1.json", "sha256": "71b616c8c0f1f0c18ee8b578d5fcc87561d9b1d9eb92772752ec5bc7bd379fc8", "decision": "close-reward-overchip-mediator-family"},
+    "reapersBell": {"path": "summaries/post-v38-reapers-bell-capacity-v1.json", "sha256": "0c8ed919c183c0a8255bbec2c1c24d0c78818d39005d5d0b07224d69dfe3ff05", "decision": "close-reapers-bell-death-chain-family"},
+    "turnStateEconomy": {"path": "summaries/post-v38-turn-state-economy-capacity-v1.json", "sha256": "7cd0edf36fcd011422ec99a94d84cc0a774307c1db6150fff3d830fdf1d7c842", "decision": "close-turn-state-action-economy-family"}
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  }
+}

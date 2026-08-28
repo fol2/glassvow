@@ -1,4 +1,4 @@
-a9182c8dd6adc221e26909a9b6d11793b62243c00d9f0595ba7d9fc68dde20d6  ./README.md
+7be6d6a79d95bbb9d3293bf3b4ebe018bfed2e86e2ff7808660d10b9cbeae002  ./README.md
 0d06b45fe5be03b1a48c6c970103b235e4c47fbacc308dcbd539b7e480771a5b  ./artifacts/godot-4.7.1-toolchain-v1.json
 0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb  ./artifacts/issue-525-ward-mirror-edge-4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c.json
 d0452a96d6fc25094059e337e112dffede04984928e7893b097429ee3a008e5d  ./artifacts/ledger-freeze-blocked-crn-v2.json
@@ -86,6 +86,8 @@ de389e1b27684ae5894333a90656e02e93f5b94781a5aa01ad577e13cb5bce71  ./protocols/po
 7fe3302debb072e6bcd0276dea16e7ee26c58f08006c9778a4265892696af401  ./protocols/post-v38-knob-identity-v1.json
 3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff  ./protocols/post-v38-knob-identity-v2.json
 ac2202a945a88d2067eb55cb51e93e541653cb541aba73f7a965b935296214dc  ./protocols/post-v38-momentum-preference-capacity-v1.json
+25c2b5a9ba5c01117411aaf04c88fed88998566ea18eba0e1a6c398aef62c85a  ./protocols/post-v38-native-dusk-grammar-coverage-v1.json
+8b43e8b204ba9618e8b76598e3c6d2941985e9592b957b4125941d7f64d0cb13  ./protocols/post-v38-novaflare-capacity-v1.json
 3fede567018740c1208ea9f736a508dd5895979d89301c386e9862f886c41985  ./protocols/post-v38-package-commitment-capacity-v1.json
 928f1e84ffa6b8975f978e2e2224a1f15d28bebee39f9df9d0e04b4a7638c0b5  ./protocols/post-v38-package-commitment-capacity-v2.json
 134d908c9db8998413e3c9858f3b9a9a09deb125ca779a23218a7a923ca549dd  ./protocols/post-v38-package-order-discovery-v1.json
@@ -101,6 +103,7 @@ b7bb4e534c75c36d65faf9d50eab9fa57cfabcd6b3098c99dce71ba7d2fe3f15  ./protocols/po
 406357da0e9784dd31e64e04c7eb6d8d1881ad3442c79c202bac328ce63d2a28  ./protocols/post-v38-retained-dusk-inventory-v1.json
 e7a1bfd8797874f93fc2dd15cabb39fe088bb0c3c50a3861dc1c44ef97d1f5bc  ./protocols/post-v38-reward-overchip-capacity-v1.json
 e9c413088d5ccef93b5d9c3793688ae0e14d3364cc7d8f7e854bbef92a1645d8  ./protocols/post-v38-shatter-tempo-capacity-v1.json
+210491fd49f2c64e5166d9fef260ee2fa264e803304a3445bec917f61ffaa956  ./protocols/post-v38-turn-state-economy-capacity-v1.json
 bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa  ./protocols/post-v38-ward-whole-run-discovery-v1.json
 13e04805bb42f1094c71965a9bbc576458de33f02552d7f5147e9f1cb95584ce  ./protocols/resonance-package-v1.json
 cfc90844c253dfbf0bf67823d4f231240e9fa9684915b8ae7bcdfb9ba739ec77  ./protocols/scoreline-handshake-v1.json
@@ -401,6 +404,8 @@ bd7c13a74851d7e9410d2eb7dc6748eb7d35397567d0b5d2ced1f0062d40f4f6  ./summaries/po
 1ecf612b7243068cf227386439b2b3e7dc153411444c2c0087077b3698e88904  ./summaries/post-v38-knob-identity-v1.json
 26075a5319ab8e0320e933a9e1d9223fd1ffe48ee587cbdf50c6127064c58aa0  ./summaries/post-v38-knob-identity-v2.json
 fdc51ca09f103f53528afb4f3b641a0c330db3dff1935287e1981b40a2dfd73b  ./summaries/post-v38-momentum-preference-capacity-v1.json
+df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff  ./summaries/post-v38-native-dusk-grammar-coverage-v1.json
+ca0fe007e4b20cedd008ee9a07594daa096c55b4232ef53a6db176e2320cfcb1  ./summaries/post-v38-novaflare-capacity-v1.json
 5219b2c613e11bc467518f872fe892f6e9d28daa4c05fbe54fe4ea05ed2592dd  ./summaries/post-v38-package-commitment-capacity-v1.json
 ebd909bbd23bc403e18894637dcb3041d1c4a240bb0e2464ae5eaa39b55cb4f2  ./summaries/post-v38-package-commitment-capacity-v2.json
 a520a17d524ec46e2468e1dedf757bbd8636906b7a7cc3660aa28cd7daa0210e  ./summaries/post-v38-package-order-discovery-v1-audit.json
@@ -418,6 +423,7 @@ bf3e927846079cf8e032ed82aac79be48a4249a02cbc49ea03a471fdde82ecd1  ./summaries/po
 a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66  ./summaries/post-v38-retained-dusk-inventory-v1.json
 71b616c8c0f1f0c18ee8b578d5fcc87561d9b1d9eb92772752ec5bc7bd379fc8  ./summaries/post-v38-reward-overchip-capacity-v1.json
 8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388  ./summaries/post-v38-shatter-tempo-capacity-v1.json
+7cd0edf36fcd011422ec99a94d84cc0a774307c1db6150fff3d830fdf1d7c842  ./summaries/post-v38-turn-state-economy-capacity-v1.json
 45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b  ./summaries/post-v38-ward-whole-run-discovery-v1-audit.json
 62fbd2b3bb903bf41ffa4ed6f151884b0807376293eddf249c676ed05b8105e8  ./summaries/post-v38-ward-whole-run-discovery-v1.json
 325db4ca19d4e3ca3c090c573a2fcb348f5acde4b624c5e8e280eaf213d1def6  ./summaries/progress-post-directive-blocked-crn-v2.md
@@ -428,6 +434,7 @@ e03ef16b219fc05d266b1d97a8a005153caecb7216308ebaf51903bf61efe6be  ./summaries/pr
 5e142f7d739efe723ec9c43a9ed79efad8c073ad87210de0434a0d04ecde048d  ./summaries/progress-post-directive-hand-size-ash-admission-v1.md
 dc7de373d7a4acbf76ddf760198ec7ce63a9a2c8c7c45b7df14dfb9cea70dee4  ./summaries/progress-post-directive-heldout-v1.md
 2f89780384bfda06c4fdb3625c0c553c7672c64f55bd3481fcffb2863a3f01c6  ./summaries/progress-post-directive-momentum-preference-capacity-v1.md
+a4d3fbb7e3e26c94b9d346db0c113f4e0a2bb22a4b43af2a3f599649e4c857a9  ./summaries/progress-post-directive-native-grammar-novaflare-v1.md
 2d0468cc6a96956594bc9a5ab069fe01a24cdfc1bb6ca0f4670fdeb5a62e445d  ./summaries/progress-post-directive-package-commitment-capacity-v1.md
 b4ce5a1e17a93a2b07a2c90306d9f1b31f422c2626e23a65ca0003c294d49810  ./summaries/progress-post-directive-package-order-discovery-v1.md
 3b07dadb223868a6271922aba193a901b885427269d8d337dab5ddfc83195bc8  ./summaries/progress-post-directive-package-order-heldout-v1.md
@@ -442,7 +449,7 @@ e922767610253d42b6330cd97047acbedfb2400d7d8fe8b37dce251ca24a507a  ./summaries/pr
 90eb3c12f86bdabd6e2a01387ec108d199f686b46f90fa983b1c9e11cac2a74d  ./summaries/resonance-package-v1.json
 82df397f2a3f7b60465cdab0ca925a1c9173e1bee4aa613d0960149a4a47b4ea  ./summaries/scoreline-handshake-v1.json
 369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce  ./summaries/shatter-flow-v1.json
-e3e5980398446f65cc21cc521e53315cdd413de9bd669d88c6dc41caf8db6cbe  ./task-capsule.json
+5d3662e20a51700d38f8ffce7ce4f61ed5ce13fbc864428ce2215dd913370cd2  ./task-capsule.json
 6eb56ed83e4ef28d46e9913554fac9438163993d8c6a8eb7c9a4e6771eff012a  ./tools/identify_v33_v38.py
 87540fcd4903444658db14a8494d0ab8e5847f92a71f236a59f2b9c94564873d  ./tools/post_v38_action_grammar_inventory.py
 0f6bb1288a9a25de9f0b55356b1f6fc4df0ea40917403a1a477f8f8823097542  ./tools/post_v38_ash_package_pair.py
@@ -461,6 +468,8 @@ a6b06e4491b872e14b3a053c48a8859784d3f0a12bf5db973d6589cfd0036048  ./tools/post_v
 b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b  ./tools/post_v38_knob_identity.py
 e1b4983f6d2d0b8a5608dc099430c32e54ddd689a7797415a3f17f7f7127f7c8  ./tools/post_v38_knob_identity_v2.py
 c3d87254121e3f14188a8574e81764211822134f813867eaf2988eeb3b67e465  ./tools/post_v38_momentum_preference_capacity.py
+f6099406c35c1fe3af8615039b64424007560c12158566a71107895e06ad8a86  ./tools/post_v38_native_dusk_grammar_coverage.py
+24d9583ca919b7c74fd32524318e56cfea71f1511a7a796f6c85744e3e44936d  ./tools/post_v38_novaflare_capacity.py
 006e0a7c9adbd97525608ac5d0e77a517c986121389499f9ab941f268d3d8689  ./tools/post_v38_package_commitment_capacity.py
 d888748c8bb7481bd52464d2053136a607bd93c2da16267cdf1abe3d06082b1e  ./tools/post_v38_package_commitment_capacity_v2.py
 68022202c526e74ec5893879f26b993484259365854e610e66ce62a795c52990  ./tools/post_v38_package_order_discovery.py
@@ -478,6 +487,7 @@ c69d268887dfc3502905ca4588adee2b98d31bb8749497517f22b4866c6fe58d  ./tools/post_v
 ff0cab1d8278b308e0cc4f3e4a1dd4b1b24769852b9020015c9b72c5cb61376b  ./tools/post_v38_retained_dusk_inventory.py
 fa469e1b9ecb9dc0a4e8ccd576a1254338f5cd3e76642bf71c7cd132f344d39d  ./tools/post_v38_reward_overchip_capacity.py
 95be635ce9230ab8ae5c62b2aca22c99268b8f8652210a3845cf2c4bd09e41eb  ./tools/post_v38_shatter_tempo_capacity.py
+f55c3c4b20e37a438cdf5fb63bd4c262cf1e3c898ccb15ed3ed27b5c528f4cd2  ./tools/post_v38_turn_state_economy_capacity.py
 0d7dca792d968d1bfcfc28d1428f4071c0822a2e64372a67043773c2991547a0  ./tools/post_v38_ward_whole_run_discovery.py
 c28afa712e3eab5587aba75cf922b0cc039dc5c69205ad123c814061b379a5a1  ./tools/post_v38_ward_whole_run_discovery_audit.py
 78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80  ./tools/research.py

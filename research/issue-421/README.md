@@ -11,9 +11,10 @@ independent held-out confirmation, structural package-order work, hand-size
 reconciliation, Ash package admission, exact Ward whole-run rejection, the
 natural Shatterer's Crown and Shatter-to-heavy-Attack closures, and the exact
 same-instance Honing Edge policy-repertoire test, one-bit and two-stage
-setup-grammar closures, the existing Executioner's Seal cadence screen and the
-complete reward-Attack overchip screen, plus the Reaper's Bell death-chain
-screen. It is a progress snapshot,
+setup-grammar closures, the existing Executioner's Seal cadence screen, the
+complete reward-Attack overchip screen, the Reaper's Bell death-chain screen,
+the remaining turn-state action-economy closure, the exact native grammar audit
+and the Novaflare reward-selector closure. It is a progress snapshot,
 not detector admission, product promotion or a P9
 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
@@ -226,9 +227,36 @@ viable against eight. It had five candidate-only policies against Scoreline
 and one against Afterimage, both below eight. No proc telemetry, score/rarity
 change or hand-picked kill card is authorised.
 
+The complete remaining turn-state action-economy family is now closed as well.
+Duskmirror had only two robust owners/potential-active policies and one viable;
+Frozen Core had three and two. Both had opportunity in all 64 policies, so the
+failure is supported ownership and repertoire rather than an unobservable
+turn-state hook. The two mechanisms were separate blocks and were never
+combined into a factorial.
+
+An exact source/evidence coverage audit then found one native Dusk family not
+already tied to an immutable decision: deed-unlocked Ember-reserve damage,
+carried by Novaflare. A separately preregistered zero-row capacity screen found
+34 normal-reward selectors, 30 selector-inactive policies and 12 viable
+potential-active policies. Scoreline separation passed, but Afterimage
+separation failed with only two Novaflare-only policies against eight. The
+normal-reward selector route is closed without telemetry or a simulator row.
+Event and shop acquisition may be screened only as separate source-defined
+blocks; they cannot change or rescue this failed gate.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-native-grammar-novaflare-v1.md`](summaries/progress-post-directive-native-grammar-novaflare-v1.md),
+[`protocols/post-v38-turn-state-economy-capacity-v1.json`](protocols/post-v38-turn-state-economy-capacity-v1.json),
+[`summaries/post-v38-turn-state-economy-capacity-v1.json`](summaries/post-v38-turn-state-economy-capacity-v1.json),
+[`protocols/post-v38-native-dusk-grammar-coverage-v1.json`](protocols/post-v38-native-dusk-grammar-coverage-v1.json),
+[`summaries/post-v38-native-dusk-grammar-coverage-v1.json`](summaries/post-v38-native-dusk-grammar-coverage-v1.json),
+[`protocols/post-v38-novaflare-capacity-v1.json`](protocols/post-v38-novaflare-capacity-v1.json)
+and
+[`summaries/post-v38-novaflare-capacity-v1.json`](summaries/post-v38-novaflare-capacity-v1.json)
+for the current existing-grammar boundary and Novaflare selector result. Then
+read
 [`summaries/progress-post-directive-reapers-bell-capacity-v1.md`](summaries/progress-post-directive-reapers-bell-capacity-v1.md),
 [`protocols/post-v38-reapers-bell-capacity-v1.json`](protocols/post-v38-reapers-bell-capacity-v1.json)
 and
