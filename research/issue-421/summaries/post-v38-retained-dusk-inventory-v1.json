@@ -1,0 +1,98 @@
+{
+  "authority": "Close the immutable #524 retained Dusk edge inventory as a source of the missing package and continue to a materially different evidence-backed mechanism inside issue #421. Do not retune or splice the Ward or Kindle families.",
+  "closedDirections": {
+    "exactWardPacket": {
+      "candidateId": "4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c",
+      "contentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb",
+      "decision": "reject-exact-ward-candidate-close-tested-direction"
+    },
+    "issue525Families": [
+      "dusk-kindle-draw-l1",
+      "dusk-cinder-cut-l2",
+      "dusk-branch-flare-l3"
+    ],
+    "kindleEdgeDisposition": "offering->verdantBranch is excluded because immutable #525 exhausted the Kindle/Branch ladder with sufficient held-out precision.",
+    "wardBoundary": "Only unchanged current-main support for the two immutable level-1 Ward edges may be inventoried. No value, rarity, cost, reward pool, acquisition rule, new card or packet splice may vary."
+  },
+  "decision": "close-immutable-retained-dusk-inventory",
+  "decisionBoundary": 2,
+  "edgeSeparation": {
+    "braceOnly": 2,
+    "bulwarkOnly": 2,
+    "crossActive": 0
+  },
+  "edgeSupport": {
+    "brace": {
+      "active": 2,
+      "activePolicies": [
+        35,
+        62
+      ],
+      "bothOffered": 61,
+      "clear": false,
+      "consumerReached": 2,
+      "inactive": 62,
+      "reachable": 13
+    },
+    "bulwark": {
+      "active": 2,
+      "activePolicies": [
+        15,
+        53
+      ],
+      "bothOffered": 45,
+      "clear": false,
+      "consumerReached": 2,
+      "inactive": 62,
+      "reachable": 3
+    }
+  },
+  "faults": 1,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "protectedSeedRows": 0,
+    "records": 479669,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "protectedSeedRows": 0,
+    "records": 479669,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok"
+  },
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "policyIdentities": 64,
+  "protectedSeedRows": 0,
+  "protocolSha256": "406357da0e9784dd31e64e04c7eb6d8d1881ad3442c79c202bac328ce63d2a28",
+  "retainedDuskEdges": [
+    "kindle-draw|offering->verdantBranch|duskblade",
+    "ward-double|brace->fortify|duskblade",
+    "ward-double|bulwark->fortify|duskblade"
+  ],
+  "runnerSha256": "ff0cab1d8278b308e0cc4f3e4a1dd4b1b24769852b9020015c9b72c5cb61376b",
+  "schemaVersion": 1,
+  "scorelineActivePolicies": 0,
+  "scorelineSeparation": {
+    "brace": {
+      "crossActive": 0,
+      "scorelineOnly": 0,
+      "wardOnly": 2
+    },
+    "bulwark": {
+      "crossActive": 0,
+      "scorelineOnly": 0,
+      "wardOnly": 2
+    }
+  },
+  "selectedProducer": null,
+  "selectionOrder": [
+    "bulwark",
+    "brace"
+  ]
+}

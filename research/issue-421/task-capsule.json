@@ -14,6 +14,7 @@
     "Do not add ML, RL or another optimiser unless the blocked experiment first identifies a policy-repertoire bottleneck and measured decision value justifies it.",
     "The scalar candidate and family are now closed by exact-candidate causal-panel decision boundary 2; do not select another scalar cell.",
     "The exact #525 ward-mirror-edge packet and tested level-2 direction are closed by current-main whole-run decision boundary 2; do not retune, splice or send it to held-out confirmation.",
+    "The immutable #524 retained Dusk edge inventory is closed by a zero-row current-main capacity audit; do not return to its Ward or Kindle families.",
     "At the next decision boundary freeze at most one candidate, close the scalar family and continue structurally inside #421, or record inconclusive at the preregistered cap.",
     "Do not use acceptance seeds 3000-5199 or reserve seeds 5200-5399 before the authorised final exact-SHA boundary.",
     "Keep research outside production truth; do not create a research PR, run product CI, or merge the archive-only evidence branch."
@@ -72,7 +73,9 @@
     "wardMirrorEdgeContentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb",
     "wardWholeRunProtocolSha256": "bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa",
     "wardWholeRunAnalysisSha256": "63b6d9ba4c79fa86eeeb0a8e54287463df4864deac27f0128d3a07ed9d77526c",
-    "wardWholeRunAuditSha256": "45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b"
+    "wardWholeRunAuditSha256": "45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b",
+    "retainedDuskInventoryProtocolSha256": "406357da0e9784dd31e64e04c7eb6d8d1881ad3442c79c202bac328ce63d2a28",
+    "retainedDuskInventorySummarySha256": "a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66"
   },
   "decisions": [
     {
@@ -159,18 +162,23 @@
       "decision": "Reject the exact #525 ward-mirror-edge packet and close its tested level-2 direction without retuning.",
       "evidence": "summaries/post-v38-ward-whole-run-discovery-v1-audit.json",
       "reason": "On a complete 1,536-row current-main CRN rectangle, Ward had only 14 active policies, Brace only six, Scoreline zero and functional separation zero. Duskblade Vow-0 RandomBuild reached 0.50 with movement 0.234375, while Ashwarden Vow-0 moved 0.1875; both movement intervals lay wholly above the 0.10 limit. The independent read-only audit reproduced every hard failure and added zero rows."
+    },
+    {
+      "decision": "Close the immutable #524 retained Dusk edge inventory and proceed only to a materially different mechanism.",
+      "evidence": "summaries/post-v38-retained-dusk-inventory-v1.json",
+      "reason": "Immutable #524 retained only Offering-to-Verdant Branch plus the Brace/Bulwark-to-Mirrorlight Ward edges for Duskblade. #525 already closed Kindle/Branch. On the frozen current-main root-551 baseline, Brace and Bulwark each activated for only 2 of 64 policies against the fixed 16 minimum; Bulwark was reachable for only three, Scoreline activated for zero and one baseline row stalled. The audit added zero rows."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
     "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
     "heldOutConfirmation": "Root-546 policies and disjoint simulation seeds reproduced proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
-    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 ward-mirror-edge packet failed current-main whole-run sensitivity, separation and RandomBuild guardrails and is closed. Prior Dusk Scoreline complementarity remains evidence, but current-main produced zero Scoreline consumer witnesses; a second materially different Dusk direction remains outstanding.",
+    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 ward-mirror-edge packet failed current-main whole-run sensitivity, separation and RandomBuild guardrails and is closed. Every Dusk edge retained by immutable #524 is now either exhausted by #525 or below current-main necessary capacity. Prior Dusk Scoreline complementarity remains evidence, but current-main produced zero Scoreline consumer witnesses; materially different Dusk support remains outstanding.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
   "toolchainBoundary": "Resolved with the isolated official Godot 4.7.1.stable.official.a13da4feb binary. Its release SHA-512 and codesign are verified, every new execution is pinned to it, and a frozen pre-change identity plan replayed row-exactly against the archived 4.7.2 evidence.",
-  "nextAction": "Read the retained local edge-aspect interactions from immutable #524 evidence and perform a zero-new-row current-main source and archived-trace inventory to identify the smallest materially different Duskblade mediator with whole-run decision value. Freeze its exact mechanism, contrast, common policy/seed identities, estimator, caps and boundary rules before implementation or any simulator row. Do not reconstruct #524's historical plan, rescue Afterimage, retune or splice the closed ward packet, repeat #517/#519/#525, add ML/RL, spend protected seeds or promote product content.",
+  "nextAction": "Freeze a deterministic zero-new-row source-and-trace screen over materially different authored current-main Duskblade mediators. Exclude every tested #524 package and every #525 or closed #421 family before reading support counts; require an existing measurable producer-consumer mediator and sufficient current-main co-occurrence; select at most one mechanism for a causal prototype. Do not rescue Afterimage, retune Ward or Kindle, reconstruct #524/#525, repeat #517/#519, add ML/RL, spend protected seeds or promote product content.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

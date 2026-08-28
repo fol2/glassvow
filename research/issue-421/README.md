@@ -130,9 +130,24 @@ edge-aspect interactions in immutable #524 evidence. It must identify a
 materially different, expressible Duskblade mediator before implementation or
 new simulator spend; it does not reconstruct #524's historical plan.
 
+That inventory is now complete and closes the retained Dusk set. Immutable
+#524 retained only Offering-to-Verdant Branch and the Brace/Bulwark-to-
+Mirrorlight Ward edges for Duskblade. #525 already exhausted the Kindle/Branch
+direction. On the frozen current-main root-551 baseline, Brace and Bulwark each
+activated for only 2/64 policies against the fixed minimum of 16; Bulwark was
+reachable for only three policies, Scoreline was active for zero and one row
+stalled. No edge was frozen. Another Ward or Kindle iteration is forbidden;
+the next screen must be materially different.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-retained-dusk-inventory-v1.md`](summaries/progress-post-directive-retained-dusk-inventory-v1.md),
+[`protocols/post-v38-retained-dusk-inventory-v1.json`](protocols/post-v38-retained-dusk-inventory-v1.json),
+[`summaries/post-v38-retained-dusk-inventory-v1.json`](summaries/post-v38-retained-dusk-inventory-v1.json)
+and
+[`artifacts/ledger-freeze-retained-dusk-inventory-v1.json`](artifacts/ledger-freeze-retained-dusk-inventory-v1.json)
+for the current zero-row retained-edge closure. Then read
 [`summaries/progress-post-directive-ward-whole-run-discovery-v1.md`](summaries/progress-post-directive-ward-whole-run-discovery-v1.md),
 [`protocols/post-v38-ward-whole-run-discovery-v1.json`](protocols/post-v38-ward-whole-run-discovery-v1.json),
 [`execution/post-v38-ward-whole-run-discovery-v1.json`](execution/post-v38-ward-whole-run-discovery-v1.json),
@@ -338,6 +353,12 @@ the complete frozen CRN rectangle and stopped at boundary 2. The ledger is now
 Its independent audit added zero rows, reproduced all hard-failure witnesses
 and left that identity byte-exact. No protected seed has been used.
 
+The immutable retained-Dusk inventory then read only the existing root-551
+current-main baseline and added zero observations or ledger rows. It closed the
+three #524-retained Dusk edges after reproducing the #525 Kindle closure and
+measuring only 2/64 active policies for each unchanged Ward edge. The ledger
+therefore remains byte-identical.
+
 ## Frozen identities
 
 - source and archive base: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
@@ -375,11 +396,13 @@ and left that identity byte-exact. No protected seed has been used.
 - Ward whole-run analysis SHA-256: `63b6d9ba4c79fa86eeeb0a8e54287463df4864deac27f0128d3a07ed9d77526c`
 - Ward whole-run audit SHA-256: `45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b`
 - Ward whole-run raw archive SHA-256: `5a95a5564b64a8839b1152e3665b2a1f57d294dbfb8ab9060d165268f7bd01aa`
+- retained Dusk inventory protocol SHA-256: `406357da0e9784dd31e64e04c7eb6d8d1881ad3442c79c202bac328ce63d2a28`
+- retained Dusk inventory summary SHA-256: `a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66`
 
 ## Remote heads at publication preparation
 
 - `origin/main`: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
-- `research/issue-421-p9-recovery-evidence`: `b7227e5b6b947f87a258899f5fb24bb1fdda7c0f`
+- `research/issue-421-p9-recovery-evidence`: `6a82544a083a02f5e06f7f389568ae622f7d0d59`
 - `research/issue-524-causal-slate-evidence`: `f305b95d9e1d173e5d8150289afab9688c0ea7f0`
 - `research/issue-525-mechanism-package-synthesis-evidence`: `7132e5e0d6e6e6dc196dda3ed90ad2be292608d6`
 - `work/421-h34`: `4a94d155400162289a84f416336ff407f55b3cf6`
@@ -387,9 +410,9 @@ and left that identity byte-exact. No protected seed has been used.
 - `work/421-s009-exam`: `b30b290813d88109c5b9bc34354babefdc406f8d`
 
 Research is continuing under #421 after admitting the hand-size and Bloodfire
-Ash package directions and rejecting the exact #525 Ward packet at its
-current-main whole-run boundary. The scalar, producer-first,
-normalised-payoff commitment and tested Ward level-2 directions remain closed.
-The next bounded step is the zero-row current-main inventory of immutable #524
-Duskblade edge evidence. Detector admission, promotion and protected seeds
-remain outstanding and unauthorised.
+Ash package directions, rejecting the exact #525 Ward packet and closing every
+Dusk edge retained by immutable #524. The scalar, producer-first,
+normalised-payoff commitment, Ward and Kindle directions remain closed. The
+next bounded step is a preregistered source-and-trace screen over materially
+different authored current-main Duskblade mediators. Detector admission,
+promotion and protected seeds remain outstanding and unauthorised.

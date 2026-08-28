@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Do either of the two non-Kindle Duskblade edge-aspect interactions retained by immutable #524 already have sufficient current-main whole-run policy capacity to justify freezing at most one direction for independent confirmation, without retuning the rejected #525 Ward packet?",
+  "retrospectiveScope": "This is a preregistered zero-new-row necessary-capacity inventory over one complete current-main baseline cache. Immutable #524 supplies only the local causal edge prior. The inventory does not rerun or reconstruct #524/#525, estimate a new causal content effect, admit a package, reopen the exact Ward packet, or support a Scoreline, detector or product claim.",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "immutableScientificEvidence": {
+    "issue524PackageGate": {
+      "commit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "path": "research/issue-524/artifacts/stage-b-mechanism-package-gate-v1.json",
+      "sha256": "c7f12c85998b86a345d84c28593256676731733e605a38fbb57b46db777e313a"
+    },
+    "issue524MechanismGraph": {
+      "commit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "path": "research/issue-524/artifacts/authored-mechanism-graph-v1.json",
+      "sha256": "61ab0bd24964293df7ea610911a66a32d41850cdb71100d96566607884b3c5ec"
+    },
+    "issue525TerminalFinding": {
+      "commit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "path": "research/issue-525/artifacts/terminal-stop-finding-v1.json",
+      "sha256": "46b10157cbc1d9abb60a2a2a5a68cbffe8b601088842cb6f7f02dae65953fa1c"
+    },
+    "wardWholeRunAudit": {
+      "path": "summaries/post-v38-ward-whole-run-discovery-v1-audit.json",
+      "sha256": "45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b"
+    }
+  },
+  "retainedDuskEdges": [
+    "kindle-draw|offering->verdantBranch|duskblade",
+    "ward-double|brace->fortify|duskblade",
+    "ward-double|bulwark->fortify|duskblade"
+  ],
+  "closedDirections": {
+    "issue525Families": [
+      "dusk-kindle-draw-l1",
+      "dusk-cinder-cut-l2",
+      "dusk-branch-flare-l3"
+    ],
+    "kindleEdgeDisposition": "offering->verdantBranch is excluded because immutable #525 exhausted the Kindle/Branch ladder with sufficient held-out precision.",
+    "exactWardPacket": {
+      "candidateId": "4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c",
+      "contentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb",
+      "decision": "reject-exact-ward-candidate-close-tested-direction"
+    },
+    "wardBoundary": "Only unchanged current-main support for the two immutable level-1 Ward edges may be inventoried. No value, rarity, cost, reward pool, acquisition rule, new card or packet splice may vary."
+  },
+  "baseline": {
+    "name": "current-main exact content under the root-551 Ward first-look baseline arm",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "output": {
+      "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+      "sha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf"
+    }
+  },
+  "eligibleCurrentMainProducers": [
+    "brace",
+    "bulwark"
+  ],
+  "packageDefinition": {
+    "name": "current-main Ward double",
+    "consumer": "fortify",
+    "mediator": "Ward gained by the named producer and subsequently doubled by Mirrorlight",
+    "edgeActivation": "For a root-551 policy identity, at least one of its four frozen Duskblade Vow-5 simulations ends with the producer and fortify, plays both cards and records positive wardDoubledByFortify.",
+    "reachability": "At least one of the four simulations ends with both the named producer and fortify.",
+    "consumerReached": "The complete edge-activation witness is present."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyFirstIndex": 0,
+    "policyLastIndex": 63,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346596,
+      346597,
+      346598,
+      346599
+    ],
+    "policyRows": 256,
+    "role": "Necessary-capacity discovery inventory only; any retained direction requires a disjoint independently preregistered confirmation."
+  },
+  "estimands": {
+    "edgeSupport": "For Brace and Bulwark separately, count active, inactive, final-pair reachable, consumer-reached and both-offered policy identities on the same complete current-main rectangle.",
+    "withinFamilySeparation": "Count Brace-only, Bulwark-only and cross-active policy identities; descriptive only because both edges belong to one Ward package.",
+    "scorelineSeparation": "Count Scoreline-only, Ward-edge-only and cross-active identities for each edge; descriptive only and incapable of admitting a pair when current-main Scoreline has no consumer witness.",
+    "faults": "Count Dusk policy rows with a stall/error outcome or non-empty error."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumInactivePolicies": 16,
+    "minimumReachablePolicies": 8,
+    "minimumConsumerReachedPolicies": 8,
+    "maximumFaults": 0,
+    "provenance": "The 16/16 sensitivity and eight reachability minima are the exact 64-policy first-look gates frozen before the Ward whole-run experiment."
+  },
+  "selectionOrder": [
+    "bulwark",
+    "brace"
+  ],
+  "selectionOrderReason": "If both unchanged edges clear, Bulwark precedes Brace because immutable #524 measured higher acquisition probability for Bulwark (0.2855902778 versus 0.046875) under the same legacy profile. This order is frozen before reading current-main support counts and is not a numeric retune.",
+  "budget": {
+    "sourcePolicyRows": 256,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 60,
+    "maximumModelContextTokensDuringExecution": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "At least one unchanged current-main retained Ward edge clears 16 active, 16 inactive, eight reachable and eight consumer-reached policy identities with zero faults. Freeze only the first clear edge in the preregistered order.",
+    "futility": "Neither unchanged Ward edge clears every necessary-capacity gate, or any fault is present.",
+    "inconclusive": "Any immutable hash, exact Dusk retained-edge set, #525 closed-family set, current-main content identity, complete policy rectangle, policy identity, ledger identity, numeric input or wall-time assertion fails.",
+    "successAuthority": "Freeze at most one unchanged current-main Ward edge for a separately preregistered disjoint whole-run capacity confirmation. Do not modify Ward content, claim package admission, rescue Scoreline or spend protected seeds.",
+    "futilityAuthority": "Close the immutable #524 retained Dusk edge inventory as a source of the missing package and continue to a materially different evidence-backed mechanism inside issue #421. Do not retune or splice the Ward or Kindle families.",
+    "inconclusiveAuthority": "Record no scientific decision and run no simulator row until the immutable evidence or identity fault is resolved."
+  },
+  "methodBoundary": "No ML, RL, optimiser, candidate generation, simulation or content construction is authorised. Deterministic code reads only immutable Git blobs and an already complete content-addressed current-main cache.",
+  "immutableInputs": {
+    "runnerSha256": "ff0cab1d8278b308e0cc4f3e4a1dd4b1b24769852b9020015c9b72c5cb61376b"
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "protectedSeedRows": 0,
+    "records": 479669,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok"
+  }
+}

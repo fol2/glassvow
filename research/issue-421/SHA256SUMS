@@ -1,4 +1,4 @@
-a8b96a5f1069038ae0fd2883d7a777b6303f7dd42fd124b5105eb8d151870fcb  ./README.md
+211280093c36ac1f9aa33ca0ee94e4944cf8b6e2bfb3a177fa8473468bdd423c  ./README.md
 0d06b45fe5be03b1a48c6c970103b235e4c47fbacc308dcbd539b7e480771a5b  ./artifacts/godot-4.7.1-toolchain-v1.json
 0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb  ./artifacts/issue-525-ward-mirror-edge-4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c.json
 d0452a96d6fc25094059e337e112dffede04984928e7893b097429ee3a008e5d  ./artifacts/ledger-freeze-blocked-crn-v2.json
@@ -10,6 +10,7 @@ c97aa1d00477d34f47d08b35f5a119e1ae8c6d134122c011ee60d64de53a0c2d  ./artifacts/le
 80d4c1fa2a7053a0f4535f9bce28824f0198d52416d784744dded190649b3bb1  ./artifacts/ledger-freeze-package-order-heldout-v1.json
 3006ef8b7537e1024827cf86f5b2e3f5c159f113c884d70e42c47527fc8974c2  ./artifacts/ledger-freeze-policy-package-order-v1.json
 ef99bdb256bc46826a648331303b31e02a73bd7a120c3e01a99c34f9737c9f2e  ./artifacts/ledger-freeze-pre-directive-v1.json
+3f8643351a257ea7b282f169f32c7e4237eda717ca7d2a0027a9f99ec74afe99  ./artifacts/ledger-freeze-retained-dusk-inventory-v1.json
 335ab9b10912c761ffd0ae4937f4fcfb8164dd9079b5f9b995eadae26d9b624a  ./artifacts/ledger-freeze-v38.json
 1659946947e5eb73ec079631598ab88761261fa31052b5e9ec9e228f5c690ab8  ./artifacts/ledger-freeze-ward-whole-run-discovery-v1.json
 13d81e79056172c27e172fdfe496b06790229ab7c34ad67f97247133f8ba6b59  ./execution/post-v38-blocked-crn-v2.json
@@ -83,6 +84,7 @@ d8496263dbaab0534cf44702e9ea1078c952b87c145b5c04b3492085d6f15be0  ./protocols/po
 ba5ddf6949c7cecad598b0bebe53355fd6e6fc476e1c5442f6a6acd9ac460a5c  ./protocols/post-v38-policy-package-order-decision-value-v2.json
 6c406f831b0db224a7c9478a24f831b4e5a835bd71d611567a3b9380118f0bbc  ./protocols/post-v38-policy-package-order-identity-v1.json
 57da713afd2eb967700570350bf7f127a667c025a27eebcacba8299cb99d229c  ./protocols/post-v38-policy-signal-v1.json
+406357da0e9784dd31e64e04c7eb6d8d1881ad3442c79c202bac328ce63d2a28  ./protocols/post-v38-retained-dusk-inventory-v1.json
 bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa  ./protocols/post-v38-ward-whole-run-discovery-v1.json
 13e04805bb42f1094c71965a9bbc576458de33f02552d7f5147e9f1cb95584ce  ./protocols/resonance-package-v1.json
 cfc90844c253dfbf0bf67823d4f231240e9fa9684915b8ae7bcdfb9ba739ec77  ./protocols/scoreline-handshake-v1.json
@@ -383,6 +385,7 @@ a520a17d524ec46e2468e1dedf757bbd8636906b7a7cc3660aa28cd7daa0210e  ./summaries/po
 1e2e9c5cac149136d5be7d3d3c03e089ab07fa6e43ec33d5da15bbf2c85e713e  ./summaries/post-v38-policy-package-order-decision-value-v2.json
 17e56ec1f69489b518d6c246401083698897bafa7f6a9833509fe0cbcf523a1c  ./summaries/post-v38-policy-package-order-identity-v1.json
 3281960a1ea51be16016f682faa644166e6b3353c12dee19962bdd51c98fc075  ./summaries/post-v38-policy-signal-v1.json
+a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66  ./summaries/post-v38-retained-dusk-inventory-v1.json
 45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b  ./summaries/post-v38-ward-whole-run-discovery-v1-audit.json
 62fbd2b3bb903bf41ffa4ed6f151884b0807376293eddf249c676ed05b8105e8  ./summaries/post-v38-ward-whole-run-discovery-v1.json
 325db4ca19d4e3ca3c090c573a2fcb348f5acde4b624c5e8e280eaf213d1def6  ./summaries/progress-post-directive-blocked-crn-v2.md
@@ -393,13 +396,14 @@ dc7de373d7a4acbf76ddf760198ec7ce63a9a2c8c7c45b7df14dfb9cea70dee4  ./summaries/pr
 b4ce5a1e17a93a2b07a2c90306d9f1b31f422c2626e23a65ca0003c294d49810  ./summaries/progress-post-directive-package-order-discovery-v1.md
 3b07dadb223868a6271922aba193a901b885427269d8d337dab5ddfc83195bc8  ./summaries/progress-post-directive-package-order-heldout-v1.md
 e7ee3155905b4418448a04cdfe277f224ee008880a9cd42c191bbaee15142ef1  ./summaries/progress-post-directive-policy-package-order-v1.md
+f901f0420d407519133e2d1f50bdf57cf9d28dc412e29c744ed5867a9730e8ae  ./summaries/progress-post-directive-retained-dusk-inventory-v1.md
 0708fecb5c70499a6b2090be8f0e3fff6e2457fd4cb52243d657b3f235a8e848  ./summaries/progress-post-directive-ward-whole-run-discovery-v1.md
 6efd6479752302f82192cb8425ae57591f570fd58b0b11bf601e694def6910b2  ./summaries/progress-pre-directive-factorial-v1.md
 1c7827b386e34ffe523d9e34fba77d1ce5132530e385c4c39379ed404905aa55  ./summaries/progress-v38-identification-v1.md
 90eb3c12f86bdabd6e2a01387ec108d199f686b46f90fa983b1c9e11cac2a74d  ./summaries/resonance-package-v1.json
 82df397f2a3f7b60465cdab0ca925a1c9173e1bee4aa613d0960149a4a47b4ea  ./summaries/scoreline-handshake-v1.json
 369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce  ./summaries/shatter-flow-v1.json
-d24772f805cd75f0a91ae3378ae3fa772e5c6356a29a66f7200cc431c3f2cf7d  ./task-capsule.json
+c9c73af9b23e55d9adfc81d53072f6f64b20365f083154ea343d340f3ff369c0  ./task-capsule.json
 6eb56ed83e4ef28d46e9913554fac9438163993d8c6a8eb7c9a4e6771eff012a  ./tools/identify_v33_v38.py
 0f6bb1288a9a25de9f0b55356b1f6fc4df0ea40917403a1a477f8f8823097542  ./tools/post_v38_ash_package_pair.py
 a6435cc05f13042ee9132de90a40d11a61716b56d116b729aff92faad5a152cb  ./tools/post_v38_blocked_crn.py
@@ -422,6 +426,7 @@ d3bdb9012f37552a2fdf6f8026692dc1a5258bc980813f3baf33dfa56a31ec8c  ./tools/post_v
 7c8a4d0ff8e4cab1c2ea65a94db438c40a211ae5c026c87845c244eb7d708d18  ./tools/post_v38_policy_package_order_decision_value_v2.py
 5896ebf44a0519e9c7c72ccda7565d7bb18849fd15dfe1bedb65e5f46479a1ab  ./tools/post_v38_policy_package_order_identity.py
 c44dc0da9c06b27b4b38f82f7ad099dcacf6b22b4842f896c855c8d34a19e9ba  ./tools/post_v38_policy_signal.py
+ff0cab1d8278b308e0cc4f3e4a1dd4b1b24769852b9020015c9b72c5cb61376b  ./tools/post_v38_retained_dusk_inventory.py
 0d7dca792d968d1bfcfc28d1428f4071c0822a2e64372a67043773c2991547a0  ./tools/post_v38_ward_whole_run_discovery.py
 c28afa712e3eab5587aba75cf922b0cc039dc5c69205ad123c814061b379a5a1  ./tools/post_v38_ward_whole_run_discovery_audit.py
 0480163456dc6693e90d5f87163918d8452e4dd5c2c822c60543ab03efe3d6a9  ./tools/research.py
