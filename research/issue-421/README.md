@@ -14,7 +14,8 @@ same-instance Honing Edge policy-repertoire test, one-bit and two-stage
 setup-grammar closures, the existing Executioner's Seal cadence screen, the
 complete reward-Attack overchip screen, the Reaper's Bell death-chain screen,
 the remaining turn-state action-economy closure, the exact native grammar audit
-and the complete Novaflare acquisition closure. It is a progress snapshot,
+and the complete Novaflare acquisition, Mirror Oath identity and
+removal-refinement capacity closures. It is a progress snapshot,
 not detector admission, product promotion or a P9
 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
@@ -260,9 +261,22 @@ its complete trajectory. All three new null encodings were pairwise exact, but
 that post-failure fact cannot waive the frozen rule. Mirror Oath was not
 repaired, rerun, promoted or used for a balance claim.
 
+The subsequent removal-refinement screen is also closed. Existing current-main
+telemetry supplied shop, Forgotten Shrine and Mirror removal routes, so the
+screen reused the exact root-551 current-main cohort and added no simulator or
+ledger row. It found 32 robust-active and 14 viable policies, but only eight
+exact-inactive policies against 16. It also had only four removal-only policies
+against the separate Afterimage anchor minimum of eight. No route subset,
+policy retune, payoff, carrier or rerun is authorised.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-removal-refinement-closure-v1.md`](summaries/progress-post-directive-removal-refinement-closure-v1.md),
+[`protocols/post-v38-removal-refinement-capacity-v1.json`](protocols/post-v38-removal-refinement-capacity-v1.json)
+and
+[`summaries/post-v38-removal-refinement-capacity-v1.json`](summaries/post-v38-removal-refinement-capacity-v1.json)
+for the latest zero-row closure. Then read
 [`summaries/progress-post-directive-mirror-oath-identity-closure-v1.md`](summaries/progress-post-directive-mirror-oath-identity-closure-v1.md),
 [`protocols/post-v38-mirror-oath-identity-v1.json`](protocols/post-v38-mirror-oath-identity-v1.json)
 and

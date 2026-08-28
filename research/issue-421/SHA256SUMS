@@ -1,4 +1,4 @@
-90810ab68c52f79c9e4b6a91234f12640381827ce516d8082f030bd1e4085819  ./README.md
+0ff575ee4713f3a6b8b671316b7607a2c7553fca14e0e36375fba49557abc2d4  ./README.md
 0d06b45fe5be03b1a48c6c970103b235e4c47fbacc308dcbd539b7e480771a5b  ./artifacts/godot-4.7.1-toolchain-v1.json
 0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb  ./artifacts/issue-525-ward-mirror-edge-4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c.json
 d0452a96d6fc25094059e337e112dffede04984928e7893b097429ee3a008e5d  ./artifacts/ledger-freeze-blocked-crn-v2.json
@@ -102,6 +102,7 @@ ba5ddf6949c7cecad598b0bebe53355fd6e6fc476e1c5442f6a6acd9ac460a5c  ./protocols/po
 57da713afd2eb967700570350bf7f127a667c025a27eebcacba8299cb99d229c  ./protocols/post-v38-policy-signal-v1.json
 dfd47aea75b0662a048172ce83a0fb0db8e990667002ea0e79b11b2068d7e6cd  ./protocols/post-v38-power-cycle-capacity-v1.json
 fc17c6eac833bb9a2951145f276928ea44c275a2d1ad50be8ebd0fbfdef4487d  ./protocols/post-v38-reapers-bell-capacity-v1.json
+49945d91274a326d858deafa963e5eec70ce7b86291906fea7c9ea8726d99ecd  ./protocols/post-v38-removal-refinement-capacity-v1.json
 b7bb4e534c75c36d65faf9d50eab9fa57cfabcd6b3098c99dce71ba7d2fe3f15  ./protocols/post-v38-reseam-break-capacity-v1.json
 406357da0e9784dd31e64e04c7eb6d8d1881ad3442c79c202bac328ce63d2a28  ./protocols/post-v38-retained-dusk-inventory-v1.json
 e7a1bfd8797874f93fc2dd15cabb39fe088bb0c3c50a3861dc1c44ef97d1f5bc  ./protocols/post-v38-reward-overchip-capacity-v1.json
@@ -430,6 +431,7 @@ a520a17d524ec46e2468e1dedf757bbd8636906b7a7cc3660aa28cd7daa0210e  ./summaries/po
 3281960a1ea51be16016f682faa644166e6b3353c12dee19962bdd51c98fc075  ./summaries/post-v38-policy-signal-v1.json
 bf3e927846079cf8e032ed82aac79be48a4249a02cbc49ea03a471fdde82ecd1  ./summaries/post-v38-power-cycle-capacity-v1.json
 0c8ed919c183c0a8255bbec2c1c24d0c78818d39005d5d0b07224d69dfe3ff05  ./summaries/post-v38-reapers-bell-capacity-v1.json
+ea92533f960e22d06cd00f20867038f8dbe12c12cae1c05d86857e6889e14db0  ./summaries/post-v38-removal-refinement-capacity-v1.json
 5c9046438a41b996ced634013e7e5d3d7c79abd63d288af98f9e8b051b8fbab4  ./summaries/post-v38-reseam-break-capacity-v1.json
 a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66  ./summaries/post-v38-retained-dusk-inventory-v1.json
 71b616c8c0f1f0c18ee8b578d5fcc87561d9b1d9eb92772752ec5bc7bd379fc8  ./summaries/post-v38-reward-overchip-capacity-v1.json
@@ -453,6 +455,7 @@ b4ce5a1e17a93a2b07a2c90306d9f1b31f422c2626e23a65ca0003c294d49810  ./summaries/pr
 3b07dadb223868a6271922aba193a901b885427269d8d337dab5ddfc83195bc8  ./summaries/progress-post-directive-package-order-heldout-v1.md
 e7ee3155905b4418448a04cdfe277f224ee008880a9cd42c191bbaee15142ef1  ./summaries/progress-post-directive-policy-package-order-v1.md
 1400026eaefb4b12030dfa4f2f737ddcdb0fd60c5b442dca8e38b060068d5820  ./summaries/progress-post-directive-reapers-bell-capacity-v1.md
+890e285844c79317a85daefe439ddbcbf81529b433516edf13d85c12ca5301d3  ./summaries/progress-post-directive-removal-refinement-closure-v1.md
 f901f0420d407519133e2d1f50bdf57cf9d28dc412e29c744ed5867a9730e8ae  ./summaries/progress-post-directive-retained-dusk-inventory-v1.md
 de0cf9e70b1e67ec17097146673734a2b5bbd3f4d6fc29e20e870ec7f39c31e2  ./summaries/progress-post-directive-setup-grammar-closures-v1.md
 e922767610253d42b6330cd97047acbedfb2400d7d8fe8b37dce251ca24a507a  ./summaries/progress-post-directive-shatter-tempo-capacity-v1.md
@@ -462,7 +465,7 @@ e922767610253d42b6330cd97047acbedfb2400d7d8fe8b37dce251ca24a507a  ./summaries/pr
 90eb3c12f86bdabd6e2a01387ec108d199f686b46f90fa983b1c9e11cac2a74d  ./summaries/resonance-package-v1.json
 82df397f2a3f7b60465cdab0ca925a1c9173e1bee4aa613d0960149a4a47b4ea  ./summaries/scoreline-handshake-v1.json
 369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce  ./summaries/shatter-flow-v1.json
-2beafa539418b49249b74fd054021f7c04c8c62429d6719e040920577efc9c09  ./task-capsule.json
+4cd82169cea5a3394175bfd8ed055195f02a28f6d8b27370a8860ea64aeafd05  ./task-capsule.json
 6eb56ed83e4ef28d46e9913554fac9438163993d8c6a8eb7c9a4e6771eff012a  ./tools/identify_v33_v38.py
 87540fcd4903444658db14a8494d0ab8e5847f92a71f236a59f2b9c94564873d  ./tools/post_v38_action_grammar_inventory.py
 0f6bb1288a9a25de9f0b55356b1f6fc4df0ea40917403a1a477f8f8823097542  ./tools/post_v38_ash_package_pair.py
@@ -499,6 +502,7 @@ d3bdb9012f37552a2fdf6f8026692dc1a5258bc980813f3baf33dfa56a31ec8c  ./tools/post_v
 c44dc0da9c06b27b4b38f82f7ad099dcacf6b22b4842f896c855c8d34a19e9ba  ./tools/post_v38_policy_signal.py
 e4cff3d51d3ddc23043adc522a9fbcebb9c9c2d77ec293aff743e8f6fa3f32ae  ./tools/post_v38_power_cycle_capacity.py
 c69d268887dfc3502905ca4588adee2b98d31bb8749497517f22b4866c6fe58d  ./tools/post_v38_reapers_bell_capacity.py
+99aabde5dc66f3c3947f14da56429fd6ea5314fe504f8ad9a64825712406442e  ./tools/post_v38_removal_refinement_capacity.py
 51b7e8efdc9c4b57050b625caf51837d434d49cd1947bb45b3e30f8908aee8fc  ./tools/post_v38_reseam_break_capacity.py
 ff0cab1d8278b308e0cc4f3e4a1dd4b1b24769852b9020015c9b72c5cb61376b  ./tools/post_v38_retained_dusk_inventory.py
 fa469e1b9ecb9dc0a4e8ccd576a1254338f5cd3e76642bf71c7cd132f344d39d  ./tools/post_v38_reward_overchip_capacity.py
