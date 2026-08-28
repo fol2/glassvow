@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Which completed issue #421 results are valid only within their frozen research harness, which failed by crossing simulator substrates, and what is the narrowest scientifically valid boundary before another simulator row?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "5fef730de01b36037ad081a863748212aaeb3ccdf0c0eccae061989ac79b0159",
+    "helperSha256": {
+      "post_v38_action_grammar_inventory.py": "87540fcd4903444658db14a8494d0ab8e5847f92a71f236a59f2b9c94564873d",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b"
+    },
+    "pristineCurrentMainSha256": {
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "issueBodyPath": "cache/sha256/3a0b39ceca35c54610dcf5e7e67710e3bd501a4bd76399075511ef8734a390b4.txt",
+    "fileSha256": {
+      "task-capsule.json": "46f6540d4444723296bfb3fa85a7c495a56977039b84b3388eb20b369369eaf1",
+      "cache/sha256/3a0b39ceca35c54610dcf5e7e67710e3bd501a4bd76399075511ef8734a390b4.txt": "3a0b39ceca35c54610dcf5e7e67710e3bd501a4bd76399075511ef8734a390b4",
+      "protocols/post-v38-ward-whole-run-discovery-v1.json": "bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa",
+      "protocols/post-v38-momentum-preference-capacity-v1.json": "ac2202a945a88d2067eb55cb51e93e541653cb541aba73f7a965b935296214dc",
+      "summaries/post-v38-exact-complementarity-v1-audit.json": "8630a5e6ab6559b7e98fa5947e865a11f26ee505879026450f73e95fcb468621",
+      "summaries/post-v38-mirror-oath-capacity-v1.json": "f8175e3ae9d7cae221214545e23363f6076f2164586ce38df94c891a3c83f445",
+      "summaries/post-v38-mirror-oath-identity-v1.json": "fc894063c063ebb5e3216ab5d6015762ea89c33587261bdbd0f9677eb948c585",
+      "summaries/post-v38-observability-gap-audit-v1.json": "c0e3445cc797a9149c56dab21be75814fc1e0c39e98457a9196160951f3230e7",
+      "summaries/post-v38-upgrade-telemetry-identity-v1.json": "2a1d2a9c251846ac07bed519ce76e31fd7761fbd7ff7f1905383f143d78206da",
+      "summaries/post-v38-upgrade-telemetry-identity-v2-audit.json": "8d1bd92252d68bdf3d6dd42661248d78560644dc2f9705310e7b71e152f08382"
+    }
+  },
+  "authorityAssertions": {
+    "issueBody": [
+      "Research may use existing values and couplings, or prototype the smallest new deterministic card, relic or effect primitive when evidence shows the existing grammar cannot express the required complementarity.",
+      "Before new rows, record the current research question or competing options, cheapest discriminating experiment, sufficient precision/budget, and success/stop/inconclusive rule.",
+      "A research family failing, a need for a different Duskblade mechanic, a routine structural prototype, method selection, budget allocation within a justified research contract, review fixes, PR merge and branch cleanup are **not** human escalation points."
+    ],
+    "taskCapsule": [
+      "Freeze one bounded zero-row provenance and authority audit before another simulator row.",
+      "distinguish frozen research-simulator contrast evidence from pristine current-main simulator identity evidence",
+      "Do not repair or rerun upgrade telemetry"
+    ],
+    "exactTaskCapsuleConstraints": [
+      "The scalar candidate and family are now closed by exact-candidate causal-panel decision boundary 2; do not select another scalar cell.",
+      "The exact Mirror Oath durable-carrier family is closed by its preregistered identity preflight: all focused mediator controls passed and all three new null encodings were pairwise exact, but zero of 256 rows reproduced the frozen current-main complete trajectory because the anchor did not represent the full candidate substrate. Do not repair the anchor, rerun the preflight, retune the carrier or promote its source changes.",
+      "The minimal current-main upgrade telemetry implementation is closed by preregistered identity decision boundary 2: explicit-null and enabled arms were pairwise exact, but each differed from the reused baseline in 223 of 256 identities. Do not repair, rerun or use its 512 rows for capacity, package, payoff, causal or product claims.",
+      "The reused root-551 baseline is the current-content arm of the Ward research experiment, executed with research-modified Pilot and BalanceSim blobs. It is valid only for contrasts that froze those implementations and is not pristine current-main simulator identity evidence. Preserve the v1 diagnostic defect; the v2 audit supersedes only its interpretation."
+    ]
+  },
+  "lineage": {
+    "baselineProtocol": "protocols/post-v38-ward-whole-run-discovery-v1.json",
+    "traceProtocol": "protocols/post-v38-momentum-preference-capacity-v1.json",
+    "baselineResearchImplementation": {
+      "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "pilotSha256": "58462de3c9ccadfd36410912c1b4f8bf025df2c41069366756b9cf022a2fe658",
+      "balanceSimSha256": "45a3d3b95f53f89ab4444e45da32ba7f691090518d74706823e44478a2e55777",
+      "balancePolicySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "traceResearchImplementation": {
+      "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "pilotSha256": "0c63d17e6d743bb1af925c45a9d494ecac263e310195522dbe0b8c149cf36104",
+      "balanceSimSha256": "9f0ae71382b4f86a45f5d974f19c46d00c305c09c44737dd282d74a7351cacba",
+      "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "baselinePlanSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "baselineOutputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf",
+    "tracePlanSha256": "4983c07159961f57ef033670e6f06e2b82b52134e808f199d7aa067a190b4a69",
+    "traceOutputSha256": "ac86dac85f5398e6c8e4d63ef10cf5d57d85739f9cc62fb1ffdf1b9b21b06ed2",
+    "anchorSha256": {
+      "baselinePlan": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+      "baselineOutput": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf",
+      "tracePlan": "4983c07159961f57ef033670e6f06e2b82b52134e808f199d7aa067a190b4a69",
+      "traceOutput": "ac86dac85f5398e6c8e4d63ef10cf5d57d85739f9cc62fb1ffdf1b9b21b06ed2",
+      "exactComplementarityAnalysis": "1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29",
+      "wardWholeRunAnalysis": "63b6d9ba4c79fa86eeeb0a8e54287463df4864deac27f0128d3a07ed9d77526c"
+    },
+    "affectedProtocolCount": 23,
+    "affectedProtocolManifestSha256": "ea411021d379499ecc0079007d083e2f1830008bd852ad41f48dd42335688e8b"
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "rowIdentity": "The exact 64-policy by four-seed Duskblade Vow-5 rectangle is read from both immutable cache objects. No identity is selected, added, removed or simulated."
+  },
+  "evidence": {
+    "exactComplementarity": {
+      "path": "summaries/post-v38-exact-complementarity-v1-audit.json",
+      "sha256": "8630a5e6ab6559b7e98fa5947e865a11f26ee505879026450f73e95fcb468621",
+      "assertions": {
+        "decisionBoundary": 2,
+        "decisiveFailure.mechanismWitnesses": 3,
+        "decisiveFailure.requiredMechanismWitnesses": 16,
+        "clearPackages.dusk-scoreline.mechanismWitnesses": 88
+      }
+    },
+    "mirrorOathCapacity": {
+      "path": "summaries/post-v38-mirror-oath-capacity-v1.json",
+      "sha256": "f8175e3ae9d7cae221214545e23363f6076f2164586ce38df94c891a3c83f445",
+      "assertions": {
+        "decisionBoundary": 1,
+        "counts.candidatePotentialActivePolicies": 38,
+        "counts.exactInactivePolicies": 24,
+        "counts.viablePotentialActivePolicies": 18
+      }
+    },
+    "mirrorOathIdentity": {
+      "path": "summaries/post-v38-mirror-oath-identity-v1.json",
+      "sha256": "fc894063c063ebb5e3216ab5d6015762ea89c33587261bdbd0f9677eb948c585",
+      "assertions": {
+        "decisionClass": "futility",
+        "wholeRunIdentity.frozenAnchorExactRows.joint-null": 0,
+        "stopping.repairOrRerun": false
+      }
+    },
+    "observability": {
+      "path": "summaries/post-v38-observability-gap-audit-v1.json",
+      "sha256": "c0e3445cc797a9149c56dab21be75814fc1e0c39e98457a9196160951f3230e7",
+      "assertions": {
+        "decisionBoundary": 1,
+        "selectedSurface": "upgrade-completion",
+        "additionalMethodDecisionValue.optimiserOrMlRlAuthorised": false
+      }
+    },
+    "upgradeIdentity": {
+      "path": "summaries/post-v38-upgrade-telemetry-identity-v1.json",
+      "sha256": "2a1d2a9c251846ac07bed519ce76e31fd7761fbd7ff7f1905383f143d78206da",
+      "assertions": {
+        "decisionBoundary": 2,
+        "decision": "reject-upgrade-telemetry-as-not-identity-safe",
+        "identity.explicitNullVersusBaselineMismatchRows": 223,
+        "identity.enabledWithoutObservationVersusBaselineMismatchRows": 223,
+        "identity.pairedMismatchRows": 0
+      }
+    },
+    "provenanceAudit": {
+      "path": "summaries/post-v38-upgrade-telemetry-identity-v2-audit.json",
+      "sha256": "8d1bd92252d68bdf3d6dd42661248d78560644dc2f9705310e7b71e152f08382",
+      "assertions": {
+        "observed.rngMismatchRows": 186,
+        "observed.nonPackageObservationMismatchRows": 198,
+        "observed.pairedNullEnabledMismatchRows": 0,
+        "baselineProvenance.sourceComparison.policyBlobSha256Equal": true,
+        "baselineProvenance.sourceComparison.pilotBlobSha256Equal": false,
+        "baselineProvenance.sourceComparison.simulatorBlobSha256Equal": false
+      }
+    }
+  },
+  "scopeClasses": {
+    "failedCrossSubstrateIdentity": [
+      "protocols/post-v38-upgrade-telemetry-identity-v1.json"
+    ],
+    "researchHarnessEvidenceCount": 22,
+    "disposition": {
+      "researchHarnessEvidence": "Preserve each result and completed stop boundary only within the exact research Pilot, BalanceSim, policy, content, plan and cache identities it froze. Do not relabel it as pristine-current-main simulator identity evidence.",
+      "failedCrossSubstrateIdentity": "Preserve the upgrade-telemetry failure and both diagnostics. Do not repair, rerun or use its rows for a capacity, package, payoff, causal or product claim.",
+      "historicalScientificEvidence": "Issue #524 and #525 remain immutable evidence only; this audit neither reconstructs their plans nor repeats their research paths."
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 512,
+    "maximumAffectedProtocolsRead": 23,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "nextBoundary": {
+    "id": "pristine-current-main-null-harness-preregistration",
+    "type": "methodological-identity-boundary",
+    "question": "Can one separately preregistered clean research harness reproduce pristine current-main path, RNG, policy and result identity at exact null before any new causal factor is admitted?",
+    "reason": "The reused cache is internally exact for its frozen research harness but does not identify pristine current main. Upgrade completion was selected only as an observation surface; its failed identity preflight supplies no authority for an upgrade mechanic or payoff.",
+    "candidateFrozen": false,
+    "simulatorRowsAuthorised": 0,
+    "requiredBeforeRows": [
+      "Freeze the exact current-main source, content, Pilot, BalanceSim and policy blobs.",
+      "Freeze one common-random-number cohort, baseline, row and wall-time caps, estimator, and success, futility and inconclusive rules.",
+      "Define every null hook before implementation and require exact path, RNG, policy and result identity against the pristine executable path.",
+      "Keep Scoreline payoff and Afterimage payoff as separate fixed factors; admit no candidate, payoff, factorial, ML, RL or optimiser from this audit."
+    ],
+    "forbiddenInference": "Neither the selected observability surface nor a permissive historical capacity count identifies a new structural mechanic. A later mechanism needs its own measured decision value and preregistration."
+  },
+  "decisionRules": {
+    "success": "All immutable inputs, authority fragments, completed stop constraints, 256-row research-harness cache identity, pristine divergence, 23-protocol manifest, evidence assertions and ledger identity are exact within the wall-time cap.",
+    "successAuthority": "Apply decision boundary 2: close the mixed-substrate cache for pristine-main causal use while preserving all completed research-harness boundaries. Freeze only the separate pristine-current-main null-harness preregistration. This audit authorises zero simulator rows and no candidate, payoff, mechanism, factorial, ML, RL or optimiser.",
+    "futility": "Any immutable input, authority fragment, completed stop constraint, frozen cache identity, provenance distinction, affected-protocol classification, evidence assertion or ledger identity is false.",
+    "futilityAuthority": "Close this audit input set at decision boundary 2. Preserve every prior stop, add no simulator row and do not infer a candidate or method from a failed provenance classification.",
+    "inconclusive": "Execution exceeds 30 seconds before all fixed checks complete.",
+    "inconclusiveAuthority": "Record decision boundary 3 at the cap. Add no row, repair, rerun, candidate, payoff, mechanism, method or protected seed."
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "assessments": [
+    {
+      "eligible": true,
+      "gateResults": {
+        "directDiscriminator": true,
+        "existingDeterministicEvent": true,
+        "identityAnchorAvailable": true,
+        "minimalFields": true,
+        "singleHook": true,
+        "unclosed": true
+      },
+      "id": "fight-scoped-draw-events",
+      "surface": {
+        "directDiscriminator": true,
+        "existingDeterministicEvent": true,
+        "fields": [
+          "fight",
+          "event",
+          "id",
+          "uid"
+        ],
+        "hook": "BalanceSim._harvest_fight existing EventTypes.DRAW branch",
+        "hookCount": 1,
+        "id": "fight-scoped-draw-events",
+        "identityAnchorAvailable": true,
+        "interpretation": "Robust same-fight draw co-availability below 16 is a hand/deck-cycle substrate failure. Draw co-availability at or above 16 with co-play below 16 isolates downstream play selection. Neither case proves package activation or payoff.",
+        "mediator": "A concrete CardInst is drawn into hand in a known fight before any later play-selection claim.",
+        "priorClosureAliases": []
+      }
+    },
+    {
+      "eligible": false,
+      "gateResults": {
+        "directDiscriminator": true,
+        "existingDeterministicEvent": false,
+        "identityAnchorAvailable": true,
+        "minimalFields": false,
+        "singleHook": false,
+        "unclosed": true
+      },
+      "id": "whole-hand-decision-snapshots",
+      "surface": {
+        "directDiscriminator": true,
+        "existingDeterministicEvent": false,
+        "fields": [
+          "fight",
+          "event",
+          "handUids",
+          "legalUids",
+          "energy"
+        ],
+        "hook": "Would require a new pilot decision-loop hook rather than reuse the current harvested event.",
+        "hookCount": 2,
+        "id": "whole-hand-decision-snapshots",
+        "identityAnchorAvailable": true,
+        "interpretation": "More detailed than needed for the current draw-versus-play question and therefore not selected.",
+        "mediator": "The complete hand and legal-action set at every pilot choice.",
+        "priorClosureAliases": []
+      }
+    },
+    {
+      "eligible": false,
+      "gateResults": {
+        "directDiscriminator": false,
+        "existingDeterministicEvent": true,
+        "identityAnchorAvailable": true,
+        "minimalFields": true,
+        "singleHook": true,
+        "unclosed": true
+      },
+      "id": "acquisition-only-lifecycle",
+      "surface": {
+        "directDiscriminator": false,
+        "existingDeterministicEvent": true,
+        "fields": [
+          "offered",
+          "chosen",
+          "accepted"
+        ],
+        "hook": "Existing cardRewards trace and terminal deckIds.",
+        "hookCount": 0,
+        "id": "acquisition-only-lifecycle",
+        "identityAnchorAvailable": true,
+        "interpretation": "Cannot establish that Ward and Warden's Edge were available in the same fight, so it cannot separate draw availability from play selection.",
+        "mediator": "Warden's Edge is offered, accepted or present in the terminal deck.",
+        "priorClosureAliases": []
+      }
+    }
+  ],
+  "authority": "Apply decision boundary 1 and freeze exactly fight-scoped draw events for one separately preregistered full-cohort identity preflight against the clean current-main explicit-null trace. Add only a draws container with fight, event, id and uid. Do not add a candidate, payoff, gameplay hook, policy knob, causal row, ML, RL or optimiser.",
+  "decision": "freeze-fight-scoped-draw-telemetry-identity-preflight",
+  "decisionBoundary": 1,
+  "factorDisposition": {
+    "additionalMethod": "No ML, RL, optimiser or fitted model. The current failure is substrate opportunity, not yet a proved policy-repertoire bottleneck.",
+    "candidate": "None.",
+    "causalRows": "None are authorised by this audit.",
+    "closedEvidence": "Upgrade telemetry and every completed structural family remain closed; fight-scoped draw events are a new observation field, not a repair or rerun of upgrade telemetry."
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "e2a07b4ef792053f895eba38ef8ec271eb590c50c331b30f560649a11fd3e074",
+  "runnerSha256": "637e81a87bfe88177d6e65405de4777ecd3698fddb63f80bf8240af029af86fb",
+  "schemaVersion": 1,
+  "selectedSurface": "fight-scoped-draw-events",
+  "wallTimeSeconds": 6.170048958971165
+}

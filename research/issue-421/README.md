@@ -24,6 +24,36 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### V26 clean current-main trace boundary
+
+The reused root-551 cache is no longer treated as pristine-current-main identity
+evidence. A zero-row provenance audit reproduced that cache under its exact
+research Pilot and simulator blobs, then closed cross-substrate use. The failed
+upgrade-telemetry preflight remains frozen without repair or rerun.
+
+A new preregistered current-main null harness passed every exact identity check.
+Across 1,024 observations, pristine versus capture-off, capture-off versus
+capture-on, omitted versus explicit null, RNG and policy mismatch counts were
+all zero, and the trace schema had no faults. This clean trace is now the sole
+current-main identity anchor.
+
+Natural Ward-before-Warden's-Edge capacity then failed on that anchor: 13 of 64
+policies robustly co-played the cards, 10 robustly played Ward first and three
+had a winning Ward-first row. The topology summary's authoritative failure class
+is substrate opportunity; its broader decision label grants no policy-method
+authority.
+
+The smallest existing `DRAW` observation passed a separate 256-row identity
+preflight with zero path, RNG, policy or schema mismatches. Its zero-row
+decomposition found 20 robust same-fight draw-opportunity policies, 13 co-play
+policies and 10 Ward-first policies. Same-fight draws can occur on different
+turns, so the remaining failure is explicitly
+`within-fight-temporal-or-play-selection-unresolved`, not a proved policy-
+repertoire bottleneck. No ML, RL, optimiser, candidate, payoff or protected seed
+is authorised. The next bounded action is a zero-row audit of whether existing
+turn, draw, play and kindle events can reconstruct simultaneous co-hand
+opportunity exactly.
+
 V38 is rejected and frozen. Its complete discovery controls found 0.125
 Duskblade Vow-0 RandomBuild movement against the 0.10 limit and one
 candidate-added stall.

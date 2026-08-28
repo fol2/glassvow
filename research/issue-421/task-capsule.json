@@ -37,6 +37,11 @@
     "The observability protocol incorrectly described row.deck as retaining terminal upgrade flags. Exact source shows that it is an integer deck size with no per-card upgrade detail. Preserve the original audit; the correction strengthens the gap and changes no selection, gate or authority.",
     "The minimal current-main upgrade telemetry implementation is closed by preregistered identity decision boundary 2: explicit-null and enabled arms were pairwise exact, but each differed from the reused baseline in 223 of 256 identities. Do not repair, rerun or use its 512 rows for capacity, package, payoff, causal or product claims.",
     "The reused root-551 baseline is the current-content arm of the Ward research experiment, executed with research-modified Pilot and BalanceSim blobs. It is valid only for contrasts that froze those implementations and is not pristine current-main simulator identity evidence. Preserve the v1 diagnostic defect; the v2 audit supersedes only its interpretation.",
+    "The zero-row provenance and authority audit closes every cross-substrate cache for pristine-current-main causal identity. Twenty-two protocols retain only their exact research-harness scope; upgrade telemetry remains the one failed cross-substrate identity preflight.",
+    "The clean current-main null harness is frozen by exact full-cohort identity: pristine versus capture-off, capture-off versus capture-on, omitted versus explicit null, RNG and policy mismatches were all zero across the preregistered 1,024-row four-arm design.",
+    "Natural current-main Ward-before-Warden's-Edge order is closed as sufficient route capacity. The topology summary's decision label says repertoire bottleneck, but its authoritative failureClass is substrate-opportunity-bottleneck; do not use the label to authorise ML, RL or a policy method.",
+    "Identity-safe fight-scoped DRAW telemetry is frozen: all 256 rows matched the clean explicit-null anchor after removing only the new draws container, with zero RNG, policy or schema faults.",
+    "The draw-opportunity decomposition closes natural Afterimage-route capacity at an unresolved within-fight temporal-or-play-selection boundary: 20 policies robustly drew both cards in a fight, 13 robustly co-played them and 10 robustly played Ward first. Same-fight draws are only an upper bound on simultaneous hand availability; do not infer a policy bottleneck.",
     "At the next decision boundary freeze at most one candidate, close the scalar family and continue structurally inside #421, or record inconclusive at the preregistered cap.",
     "Do not use acceptance seeds 3000-5199 or reserve seeds 5200-5399 before the authorised final exact-SHA boundary.",
     "Keep research outside production truth; do not create a research PR, run product CI, or merge the archive-only evidence branch."
@@ -69,6 +74,15 @@
     "researchLedgerRecords": 480372,
     "researchLedgerSha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
     "protectedSeedRows": 0,
+    "provenanceAuthorityAuditSha256": "0e39787baebbf7ff0ad487905ec4f0802d92d2ab2a397d539769820a9e373b35",
+    "pristineNullHarnessProtocolSha256": "a2b593f48159f1ecd99150dd9bd04253c02166e457502add010d398e587c7788",
+    "pristineNullHarnessSummarySha256": "7c97b46581f701bf2a0c24fc637f5850c9e7c9be1226d983aadc8a1380f23d72",
+    "currentMainOrderTopologySummarySha256": "9ae19bbdddb5b36cbfd5114bfef57a863a677b0eac7009b6be560939a09721f3",
+    "opportunityObservabilitySummarySha256": "55c38b011f270c497f80b6f1c30edcaeba4a4857c5c80b02ba3fa00ea8f4f31a",
+    "drawTelemetryIdentityProtocolSha256": "dc942f52ce8deee8a45da7f96f772957b371ca0e9bb1b1a8b277732e7fdbd1f0",
+    "drawTelemetryIdentitySummarySha256": "6282bba159c186f301cb8d892428df8db8aeb51385ed15968c1af8d3b0197ee1",
+    "drawOpportunityProtocolSha256": "d744eb0d2f2b70d04c46ade5f8bba233ce2934135fa77199d0bdd9a5df1fb64d",
+    "drawOpportunitySummarySha256": "645294800dc7938ac824693ea21dd5e214a0e924aa12aefdb9dfed6bda9eef2e",
     "knobIdentityProtocolSha256": "3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff",
     "blockedCrnProtocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
     "blockedCrnAnalysisSha256": "7ab28c0e6d7c6053ae4f036b7ea4cb8c9eedd2727b79774db2c7e3469910f21e",
@@ -350,18 +364,43 @@
       "decision": "Reject upgrade telemetry and close this observation implementation without repair or rerun.",
       "evidence": "summaries/post-v38-upgrade-telemetry-identity-v1.json",
       "reason": "The explicit-null and enabled arms were pairwise exact, but each differed from the reused baseline in 223 of 256 identities. A zero-row audit established that the baseline used research-modified Pilot and simulator blobs and was not pristine current-main simulator identity evidence."
+    },
+    {
+      "decision": "Close cross-substrate cached evidence for pristine-current-main causal identity and require a fresh clean null harness.",
+      "evidence": "summaries/post-v38-provenance-authority-audit-v1.json",
+      "reason": "The exact historical research harness reproduced all 256 cached rows, but its Pilot and simulator blobs are not pristine main. Twenty-two protocols retain only their frozen research-harness scope, and the failed upgrade telemetry rows grant no causal authority."
+    },
+    {
+      "decision": "Freeze the pristine-current-main null harness as the sole current identity anchor.",
+      "evidence": "summaries/post-v38-pristine-null-harness-v1.json",
+      "reason": "The invalid configuration failed closed and every exact path, result, RNG, policy and null-encoding contrast had zero mismatches across 1,024 preregistered observations; the trace schema had zero faults."
+    },
+    {
+      "decision": "Close natural Ward-before-Warden's-Edge order as sufficient current-main route capacity.",
+      "evidence": "summaries/post-v38-current-main-order-topology-v1.json",
+      "reason": "Only 13 of 64 policies robustly co-played Ward and Warden's Edge, 10 played Ward first and three had a winning Ward-first row. The authoritative failure class is substrate opportunity; the broader decision label does not authorise a policy method."
+    },
+    {
+      "decision": "Freeze fight-scoped DRAW telemetry as identity-safe observation only.",
+      "evidence": "summaries/post-v38-draw-telemetry-identity-v1.json",
+      "reason": "All 256 rows exactly matched the frozen clean explicit-null anchor after removing only draws; RNG and policy mismatches and draw-schema faults were zero."
+    },
+    {
+      "decision": "Close natural Afterimage-route capacity at the measured temporal-or-play-selection boundary.",
+      "evidence": "summaries/post-v38-draw-opportunity-decomposition-v1.json",
+      "reason": "Robust same-fight draw opportunity passed at 20 policies, but co-play failed at 13 and Ward-first order failed at 10. Same-fight draws can occur on different turns, so the result remains aliased and does not identify a policy-repertoire bottleneck or justify ML/RL."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
     "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
     "heldOutConfirmation": "Root-546 policies and disjoint simulation seeds reproduced proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
-    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 Ward packet and every Dusk edge retained by immutable #524 are closed. Shatterer's Crown, the Shatter-to-heavy-Attack relay, reseam break, the exact Honing repeat family, both one-bit and Power-cycle setup grammars, Executioner's Seal, reward-Attack overchip, Reaper's Bell and turn-state action economy failed frozen repertoire gates. Native coverage left only deed-unlocked Ember-reserve damage; normal-reward, shop and Library acquisition all failed and current combat policy has no candidate-specific discriminator. The first new durable carrier, Mirror Oath, passed zero-row capacity but failed its preregistered complete-path identity anchor and is closed without repair. Permanent removal, elite victory and no-HP-loss victory were too broad or package-aliased; one-turn victory was too sparse. Prior Dusk Scoreline complementarity remains evidence; the measured bottleneck is simultaneous active, inactive, viable and package-independent policy support.",
+    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 Ward packet and every Dusk edge retained by immutable #524 are closed. Shatterer's Crown, the Shatter-to-heavy-Attack relay, reseam break, the exact Honing repeat family, both one-bit and Power-cycle setup grammars, Executioner's Seal, reward-Attack overchip, Reaper's Bell and turn-state action economy failed frozen repertoire gates. Native coverage left only deed-unlocked Ember-reserve damage; normal-reward, shop and Library acquisition all failed and current combat policy has no candidate-specific discriminator. The first new durable carrier, Mirror Oath, passed zero-row capacity but failed its preregistered complete-path identity anchor and is closed without repair. Permanent removal, elite victory and no-HP-loss victory were too broad or package-aliased; one-turn victory was too sparse. Prior Dusk Scoreline complementarity remains evidence. A clean current-main trace now measures 20 robust same-fight Ward/Warden's-Edge draw policies, 13 co-play policies and 10 Ward-first policies; the remaining loss is explicitly aliased between turn-level hand availability and play selection, so no policy method is yet justified.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
   "toolchainBoundary": "Resolved with the isolated official Godot 4.7.1.stable.official.a13da4feb binary. Its release SHA-512 and codesign are verified, every new execution is pinned to it, and a frozen pre-change identity plan replayed row-exactly against the archived 4.7.2 evidence.",
-  "nextAction": "Freeze one bounded zero-row provenance and authority audit before another simulator row. It must distinguish frozen research-simulator contrast evidence from pristine current-main simulator identity evidence, preserve every completed decision boundary, and identify at most one structurally valid next boundary. Do not repair or rerun upgrade telemetry, add ML/RL or an optimiser, reopen any closed family, reconstruct #524/#525, use protected seeds or return to adaptive candidate tuning.",
+  "nextAction": "Freeze one zero-row observability audit for exact turn-level co-hand reconstruction from existing deterministic TURN, DRAW, PLAY and KINDLE events. If and only if one minimal same-loop surface passes source completeness and clean-anchor gates, run one separately preregistered 256-row identity preflight. Use the resulting cache only to distinguish temporal hand opportunity from later legality or play selection. Do not add a candidate, payoff, gameplay hook, policy knob, ML, RL, optimiser, protected seed or adaptive continuation.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

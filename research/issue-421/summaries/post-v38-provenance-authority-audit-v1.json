@@ -1,0 +1,337 @@
+{
+  "affectedProtocolManifest": [
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-action-grammar-inventory-v1.json",
+      "sha256": "294ce6b23792346ca62995411a89ad032e0171c5f69f8ba920e7921ad7675d95"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput"
+      ],
+      "path": "protocols/post-v38-crown-effect-crn-v1.json",
+      "sha256": "ca03b6ea0efe8d6da71399e70fd04be8d6ba4e1517fb6736cc36b01864fae31f"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput"
+      ],
+      "path": "protocols/post-v38-dusk-mechanism-screen-v1.json",
+      "sha256": "e882f66df0a21363a03d92333cea21fee79334ad3d392c981670613bd05af0b9"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-elite-victory-capacity-v1.json",
+      "sha256": "2eec98bd7d41d7ff60540a56f1c35aea35109a80de5a37cb2dc9ddd416c009a4"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-executioners-seal-capacity-v1.json",
+      "sha256": "73542ac5bb2ead91b8cc2b1019bd37b482aa8426a1b656103257c57380a63794"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-fight-quality-capacity-v1.json",
+      "sha256": "dbf01b88b3a13ebf92469ec551be59f45742812d23703231afb12cb3dd271c7a"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "exactComplementarityAnalysis"
+      ],
+      "path": "protocols/post-v38-honing-repeat-capacity-v1.json",
+      "sha256": "de389e1b27684ae5894333a90656e02e93f5b94781a5aa01ad577e13cb5bce71"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-mirror-oath-capacity-v1.json",
+      "sha256": "25df665822b245e7d4becd717d1f2ef59086d31dafe49745b5389e783f94a86c"
+    },
+    {
+      "anchors": [
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-mirror-oath-identity-v1.json",
+      "sha256": "0157b80cbc9deee1ce3a00b26b5c22537cbdb7d15b22ca95fcafa3fba8763fbb"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput"
+      ],
+      "path": "protocols/post-v38-momentum-preference-capacity-v1.json",
+      "sha256": "ac2202a945a88d2067eb55cb51e93e541653cb541aba73f7a965b935296214dc"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-novaflare-capacity-v1.json",
+      "sha256": "8b43e8b204ba9618e8b76598e3c6d2941985e9592b957b4125941d7f64d0cb13"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-novaflare-nonreward-capacity-v1.json",
+      "sha256": "19b1c78930aa961f1b6df93a37b3cf77527e40ba9da5e308f3518b3291d164bd"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-observability-gap-audit-v1.json",
+      "sha256": "3d0ea49acbf0b89b22d2bdca791ff8167f89453c6ec040d1995b93e7b9111c53"
+    },
+    {
+      "anchors": [
+        "exactComplementarityAnalysis"
+      ],
+      "path": "protocols/post-v38-package-order-discovery-v1.json",
+      "sha256": "134d908c9db8998413e3c9858f3b9a9a09deb125ca779a23218a7a923ca549dd"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-power-cycle-capacity-v1.json",
+      "sha256": "dfd47aea75b0662a048172ce83a0fb0db8e990667002ea0e79b11b2068d7e6cd"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-reapers-bell-capacity-v1.json",
+      "sha256": "fc17c6eac833bb9a2951145f276928ea44c275a2d1ad50be8ebd0fbfdef4487d"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-removal-refinement-capacity-v1.json",
+      "sha256": "49945d91274a326d858deafa963e5eec70ce7b86291906fea7c9ea8726d99ecd"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "exactComplementarityAnalysis"
+      ],
+      "path": "protocols/post-v38-reseam-break-capacity-v1.json",
+      "sha256": "b7bb4e534c75c36d65faf9d50eab9fa57cfabcd6b3098c99dce71ba7d2fe3f15"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput"
+      ],
+      "path": "protocols/post-v38-retained-dusk-inventory-v1.json",
+      "sha256": "406357da0e9784dd31e64e04c7eb6d8d1881ad3442c79c202bac328ce63d2a28"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-reward-overchip-capacity-v1.json",
+      "sha256": "e7a1bfd8797874f93fc2dd15cabb39fe088bb0c3c50a3861dc1c44ef97d1f5bc"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "exactComplementarityAnalysis"
+      ],
+      "path": "protocols/post-v38-shatter-tempo-capacity-v1.json",
+      "sha256": "e9c413088d5ccef93b5d9c3793688ae0e14d3364cc7d8f7e854bbef92a1645d8"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput",
+        "tracePlan",
+        "traceOutput"
+      ],
+      "path": "protocols/post-v38-turn-state-economy-capacity-v1.json",
+      "sha256": "210491fd49f2c64e5166d9fef260ee2fa264e803304a3445bec917f61ffaa956"
+    },
+    {
+      "anchors": [
+        "baselinePlan",
+        "baselineOutput"
+      ],
+      "path": "protocols/post-v38-upgrade-telemetry-identity-v1.json",
+      "sha256": "eab3d8a629f48751665950c5fabdc968e1296ac026f3305b70ad3f952ef5966f"
+    }
+  ],
+  "authority": "Apply decision boundary 2: close the mixed-substrate cache for pristine-main causal use while preserving all completed research-harness boundaries. Freeze only the separate pristine-current-main null-harness preregistration. This audit authorises zero simulator rows and no candidate, payoff, mechanism, factorial, ML, RL or optimiser.",
+  "decision": "close-cross-substrate-cache-for-pristine-main-causal-use-require-fresh-null-harness",
+  "decisionBoundary": 2,
+  "decisionValueEvidence": {
+    "afterimageMechanismWitnesses": 3,
+    "afterimageRequiredWitnesses": 16,
+    "measuredBottleneck": "At W0, exact-content local evidence was unresolved on two older 64-policy splits and now has only 3 mechanism witnesses in 128 independent policies. The same content at the W2 mechanism control cleared both older splits with 12 and 15 witnesses. This is a policy action-order/setup bottleneck, not evidence for another payoff scalar.",
+    "mirrorOathExactInactivePolicies": 24,
+    "mirrorOathPotentialActivePolicies": 38,
+    "mirrorOathViablePolicies": 18,
+    "scorelineMechanismWitnesses": 88,
+    "upgradeCompletionPaths": 2,
+    "upgradeDirectPolicyControls": 3
+  },
+  "gateResults": {
+    "completedBoundariesPreserved": true,
+    "frozenResearchLineage": true,
+    "measuredBottleneckPreserved": true,
+    "observabilityAuthorityNotWidened": true,
+    "pristineIdentitySeparated": true,
+    "upgradeTelemetryClosed": true
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "nextBoundary": {
+    "candidateFrozen": false,
+    "forbiddenInference": "Neither the selected observability surface nor a permissive historical capacity count identifies a new structural mechanic. A later mechanism needs its own measured decision value and preregistration.",
+    "id": "pristine-current-main-null-harness-preregistration",
+    "question": "Can one separately preregistered clean research harness reproduce pristine current-main path, RNG, policy and result identity at exact null before any new causal factor is admitted?",
+    "reason": "The reused cache is internally exact for its frozen research harness but does not identify pristine current main. Upgrade completion was selected only as an observation surface; its failed identity preflight supplies no authority for an upgrade mechanic or payoff.",
+    "requiredBeforeRows": [
+      "Freeze the exact current-main source, content, Pilot, BalanceSim and policy blobs.",
+      "Freeze one common-random-number cohort, baseline, row and wall-time caps, estimator, and success, futility and inconclusive rules.",
+      "Define every null hook before implementation and require exact path, RNG, policy and result identity against the pristine executable path.",
+      "Keep Scoreline payoff and Afterimage payoff as separate fixed factors; admit no candidate, payoff, factorial, ML, RL or optimiser from this audit."
+    ],
+    "simulatorRowsAuthorised": 0,
+    "type": "methodological-identity-boundary"
+  },
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "57f9c0e7ee9ed6221b17303ec7e42810de8c33d6d6da7f01cea187f92d00fbf1",
+  "runnerSha256": "5fef730de01b36037ad081a863748212aaeb3ccdf0c0eccae061989ac79b0159",
+  "schemaVersion": 1,
+  "scopeClasses": {
+    "disposition": {
+      "failedCrossSubstrateIdentity": "Preserve the upgrade-telemetry failure and both diagnostics. Do not repair, rerun or use its rows for a capacity, package, payoff, causal or product claim.",
+      "historicalScientificEvidence": "Issue #524 and #525 remain immutable evidence only; this audit neither reconstructs their plans nor repeats their research paths.",
+      "researchHarnessEvidence": "Preserve each result and completed stop boundary only within the exact research Pilot, BalanceSim, policy, content, plan and cache identities it froze. Do not relabel it as pristine-current-main simulator identity evidence."
+    },
+    "failedCrossSubstrateIdentity": [
+      "protocols/post-v38-upgrade-telemetry-identity-v1.json"
+    ],
+    "researchHarnessEvidence": [
+      "protocols/post-v38-action-grammar-inventory-v1.json",
+      "protocols/post-v38-crown-effect-crn-v1.json",
+      "protocols/post-v38-dusk-mechanism-screen-v1.json",
+      "protocols/post-v38-elite-victory-capacity-v1.json",
+      "protocols/post-v38-executioners-seal-capacity-v1.json",
+      "protocols/post-v38-fight-quality-capacity-v1.json",
+      "protocols/post-v38-honing-repeat-capacity-v1.json",
+      "protocols/post-v38-mirror-oath-capacity-v1.json",
+      "protocols/post-v38-mirror-oath-identity-v1.json",
+      "protocols/post-v38-momentum-preference-capacity-v1.json",
+      "protocols/post-v38-novaflare-capacity-v1.json",
+      "protocols/post-v38-novaflare-nonreward-capacity-v1.json",
+      "protocols/post-v38-observability-gap-audit-v1.json",
+      "protocols/post-v38-package-order-discovery-v1.json",
+      "protocols/post-v38-power-cycle-capacity-v1.json",
+      "protocols/post-v38-reapers-bell-capacity-v1.json",
+      "protocols/post-v38-removal-refinement-capacity-v1.json",
+      "protocols/post-v38-reseam-break-capacity-v1.json",
+      "protocols/post-v38-retained-dusk-inventory-v1.json",
+      "protocols/post-v38-reward-overchip-capacity-v1.json",
+      "protocols/post-v38-shatter-tempo-capacity-v1.json",
+      "protocols/post-v38-turn-state-economy-capacity-v1.json"
+    ]
+  },
+  "sourceLineage": {
+    "baselineResearchImplementation": {
+      "balancePolicySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "balanceSimSha256": "45a3d3b95f53f89ab4444e45da32ba7f691090518d74706823e44478a2e55777",
+      "pilotSha256": "58462de3c9ccadfd36410912c1b4f8bf025df2c41069366756b9cf022a2fe658",
+      "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+    },
+    "pristineCurrentMain": {
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    },
+    "pristineVersusResearchNonPackageMismatchRows": 198,
+    "pristineVersusResearchRngMismatchRows": 186,
+    "researchTraceExactRows": 256,
+    "researchTraceRows": 256,
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "traceResearchImplementation": {
+      "balanceSimSha256": "9f0ae71382b4f86a45f5d974f19c46d00c305c09c44737dd282d74a7351cacba",
+      "pilotSha256": "0c63d17e6d743bb1af925c45a9d494ecac263e310195522dbe0b8c149cf36104",
+      "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+    }
+  },
+  "wallTimeSeconds": 9.463773292023689
+}

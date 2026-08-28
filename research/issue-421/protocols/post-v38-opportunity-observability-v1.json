@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "What is the smallest deterministic observation that can distinguish insufficient same-fight Ward/Warden's-Edge availability from a policy play-selection bottleneck after the natural co-play opportunity gate failed at 13 of 64 policies?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "637e81a87bfe88177d6e65405de4777ecd3698fddb63f80bf8240af029af86fb",
+    "sourceSha256": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "tools/balance_sim.gd": "4873034f383a6b5c70e9c2bb02b3f85b6aaa5da11c879ecf6b4b0201b3e67330"
+    },
+    "fileSha256": {
+      "task-capsule.json": "46f6540d4444723296bfb3fa85a7c495a56977039b84b3388eb20b369369eaf1",
+      "protocols/post-v38-current-main-order-topology-v1.json": "aef67c53827e9491b107578d3899c4e5ee2c11ea46a6d84b13ce0682cc9af710",
+      "summaries/post-v38-current-main-order-topology-v1.json": "9ae19bbdddb5b36cbfd5114bfef57a863a677b0eac7009b6be560939a09721f3",
+      "summaries/post-v38-pristine-null-harness-v1.json": "7c97b46581f701bf2a0c24fc637f5850c9e7c9be1226d983aadc8a1380f23d72"
+    }
+  },
+  "sourceAssertions": {
+    "domain/rules/combat.gd": [
+      "cb.queue.append({\"t\": EventTypes.DRAW, \"uid\": c.uid, \"id\": String(c.id)})"
+    ],
+    "tools/balance_sim.gd": [
+      "_research_trace[\"plays\"] = []",
+      "elif kind == \"draw\":",
+      "_bump(\"%sDrawn\" % drawn)",
+      "_trace_append(\"plays\", {\"fight\": fight_index, \"event\": event_index,"
+    ]
+  },
+  "evidence": {
+    "topologySummary": {
+      "path": "summaries/post-v38-current-main-order-topology-v1.json",
+      "sha256": "9ae19bbdddb5b36cbfd5114bfef57a863a677b0eac7009b6be560939a09721f3",
+      "assertions": {
+        "decisionBoundary": 2,
+        "failureClass": "substrate-opportunity-bottleneck",
+        "counts.opportunityPolicies": 13,
+        "counts.naturalOrderActivePolicies": 10,
+        "counts.viableNaturalOrderPolicies": 3,
+        "gateResults.opportunity": false
+      }
+    }
+  },
+  "eligibilityCriteria": {
+    "maximumHookCount": 1,
+    "maximumFieldCount": 4,
+    "directDiscriminator": "The observation must distinguish same-fight card availability from downstream play selection without a payoff or candidate.",
+    "existingDeterministicEvent": "Every field must already exist on one deterministic event consumed by the current observation loop.",
+    "identityAnchor": "The exact clean current-main explicit-null trace must be available for a full-cohort no-other-field identity comparison.",
+    "unclosed": "The observation surface must not reopen upgrade telemetry, acquisition tuning, Ward priority, a closed structural family or a payoff."
+  },
+  "surfaces": [
+    {
+      "id": "fight-scoped-draw-events",
+      "mediator": "A concrete CardInst is drawn into hand in a known fight before any later play-selection claim.",
+      "fields": ["fight", "event", "id", "uid"],
+      "hook": "BalanceSim._harvest_fight existing EventTypes.DRAW branch",
+      "hookCount": 1,
+      "directDiscriminator": true,
+      "existingDeterministicEvent": true,
+      "identityAnchorAvailable": true,
+      "priorClosureAliases": [],
+      "interpretation": "Robust same-fight draw co-availability below 16 is a hand/deck-cycle substrate failure. Draw co-availability at or above 16 with co-play below 16 isolates downstream play selection. Neither case proves package activation or payoff."
+    },
+    {
+      "id": "whole-hand-decision-snapshots",
+      "mediator": "The complete hand and legal-action set at every pilot choice.",
+      "fields": ["fight", "event", "handUids", "legalUids", "energy"],
+      "hook": "Would require a new pilot decision-loop hook rather than reuse the current harvested event.",
+      "hookCount": 2,
+      "directDiscriminator": true,
+      "existingDeterministicEvent": false,
+      "identityAnchorAvailable": true,
+      "priorClosureAliases": [],
+      "interpretation": "More detailed than needed for the current draw-versus-play question and therefore not selected."
+    },
+    {
+      "id": "acquisition-only-lifecycle",
+      "mediator": "Warden's Edge is offered, accepted or present in the terminal deck.",
+      "fields": ["offered", "chosen", "accepted"],
+      "hook": "Existing cardRewards trace and terminal deckIds.",
+      "hookCount": 0,
+      "directDiscriminator": false,
+      "existingDeterministicEvent": true,
+      "identityAnchorAvailable": true,
+      "priorClosureAliases": [],
+      "interpretation": "Cannot establish that Ward and Warden's Edge were available in the same fight, so it cannot separate draw availability from play selection."
+    }
+  ],
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed factor; not observed or varied."
+    },
+    "afterimagePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed factor; not observed or varied."
+    },
+    "acquisitionPriority": {
+      "levels": ["pristine-current-main"],
+      "status": "Fixed; existing acquisition events are not interpreted as a causal acquisition effect."
+    },
+    "faultlineRarity": {
+      "levels": ["current-uncommon"],
+      "status": "Fixed exact current main."
+    },
+    "wardSetupPriority": {
+      "levels": ["pristine-current-main"],
+      "status": "Fixed; no non-null research knob exists."
+    },
+    "observationSurface": {
+      "levels": ["none-selected-yet"],
+      "status": "This zero-row audit may select at most one telemetry surface for a later identity preflight."
+    }
+  },
+  "factorDisposition": {
+    "candidate": "None.",
+    "causalRows": "None are authorised by this audit.",
+    "additionalMethod": "No ML, RL, optimiser or fitted model. The current failure is substrate opportunity, not yet a proved policy-repertoire bottleneck.",
+    "closedEvidence": "Upgrade telemetry and every completed structural family remain closed; fight-scoped draw events are a new observation field, not a repair or rerun of upgrade telemetry."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumSourceSurfaces": 3,
+    "maximumSelectedSurfaces": 1,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Exactly one surface passes every direct-discriminator, existing-event, single-hook, four-field, identity-anchor and unclosed gate within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze exactly fight-scoped draw events for one separately preregistered full-cohort identity preflight against the clean current-main explicit-null trace. Add only a draws container with fight, event, id and uid. Do not add a candidate, payoff, gameplay hook, policy knob, causal row, ML, RL or optimiser.",
+    "futility": "No surface passes every gate.",
+    "futilityAuthority": "Apply decision boundary 2 and close the observed opportunity-decomposition surfaces. Continue inside issue #421 with the next evidence-backed structural mechanism; do not widen telemetry or guess a policy method.",
+    "inconclusive": "The fixed source or decision is unavailable at the 30-second cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the audit inconclusive. Add no field, row, repair, rerun, candidate, method or protected seed."
+  }
+}

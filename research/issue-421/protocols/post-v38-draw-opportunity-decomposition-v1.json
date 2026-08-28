@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Does the identity-proved clean current-main trace provide robust same-fight Ward and Warden's-Edge draw opportunity, and at which measured boundary is natural co-play lost?",
+  "immutableInputs": {
+    "runnerSha256": "cb52af4a63de300473e25f6185a7c8c171426f4f9da8db665a9676a41ffcd0cd",
+    "fileSha256": {
+      "task-capsule.json": "46f6540d4444723296bfb3fa85a7c495a56977039b84b3388eb20b369369eaf1",
+      "protocols/post-v38-draw-telemetry-identity-v1.json": "dc942f52ce8deee8a45da7f96f772957b371ca0e9bb1b1a8b277732e7fdbd1f0",
+      "summaries/post-v38-draw-telemetry-identity-v1.json": "6282bba159c186f301cb8d892428df8db8aeb51385ed15968c1af8d3b0197ee1",
+      "protocols/post-v38-current-main-order-topology-v1.json": "aef67c53827e9491b107578d3899c4e5ee2c11ea46a6d84b13ce0682cc9af710",
+      "summaries/post-v38-current-main-order-topology-v1.json": "9ae19bbdddb5b36cbfd5114bfef57a863a677b0eac7009b6be560939a09721f3"
+    }
+  },
+  "trace": {
+    "planSha256": "391ef7c3b798ff1a9381ce6efcb165fc523133fb9747d3ce5516ea6367516748",
+    "outputSha256": "5ebbfec8247bb8f92f1b04bbcba1f3563e562a1fa40a7444265422511e28a18b",
+    "identitySummarySha256": "6282bba159c186f301cb8d892428df8db8aeb51385ed15968c1af8d3b0197ee1",
+    "selectionRule": "Read the complete sole 256-row draw-telemetry explicit-null arm. No row or identity is selected by an endpoint."
+  },
+  "priorTopology": {
+    "path": "summaries/post-v38-current-main-order-topology-v1.json",
+    "sha256": "9ae19bbdddb5b36cbfd5114bfef57a863a677b0eac7009b6be560939a09721f3",
+    "coPlayPolicies": 13,
+    "naturalOrderPolicies": 10,
+    "failureClass": "substrate-opportunity-bottleneck"
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "The exact full-cohort policy and simulation seed identities from the identity preflight are reused. No simulator executes and no identity is added, removed or replaced."
+  },
+  "routeDefinitions": {
+    "drawOpportunityRow": "Within at least one fight, both a Ward card instance (defend) and Warden's Edge (guardedStrike) are drawn at any event positions.",
+    "drawOpportunityPolicy": "At least two of four frozen rows are draw-opportunity rows.",
+    "coPlayRow": "Within at least one fight, Ward and Warden's Edge are both played in either order.",
+    "coPlayPolicy": "At least two of four frozen rows are co-play rows.",
+    "naturalOrderRow": "Within at least one fight, Ward is played before a later Warden's Edge.",
+    "naturalOrderPolicy": "At least two of four frozen rows are natural-order rows."
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "acquisitionPriority": {
+      "levels": ["pristine-current-main"],
+      "status": "Fixed exact reward policy."
+    },
+    "faultlineRarity": {
+      "levels": ["current-uncommon"],
+      "status": "Fixed exact current-main rarity."
+    },
+    "wardSetupPriority": {
+      "levels": ["pristine-current-main"],
+      "status": "Fixed exact current-main combat policy; no research knob exists."
+    },
+    "observedBoundary": {
+      "levels": ["same-fight-draw", "same-fight-co-play", "Ward-before-Edge"],
+      "status": "Ordered necessary-condition observations on the same frozen rows, not causal factors."
+    }
+  },
+  "interactionsAndAliases": {
+    "mechanisticNesting": "Natural order is a subset of co-play, and co-play must be a subset of same-fight draw opportunity. The runner fails closed if either relationship is violated.",
+    "drawAlias": "Same-fight draw opportunity is an upper bound on simultaneous hand or legal-action availability because the two cards may be drawn on different turns. Therefore a passing draw gate with a failing co-play gate does not by itself isolate policy selection; it leaves within-fight temporal availability and play selection aliased.",
+    "correction": "The earlier observability preflight's broad interpretation that a passing same-fight draw gate would isolate downstream play selection is not used. This preregistration freezes the scientifically narrower upper-bound interpretation before aggregate draw counts are read.",
+    "noExpansion": "No payoff, acquisition, rarity, Ward-priority, candidate, optimiser or joint cell exists. Counts cannot unlock a Cartesian experiment."
+  },
+  "estimands": {
+    "primary": "Exact count and identities of robust same-fight draw-opportunity policies.",
+    "lossBoundaries": "Exact draw-but-not-co-play and co-play-but-not-natural-order policy sets.",
+    "consistency": "Exact nesting of natural order within co-play within the same-fight draw upper bound, plus exact reproduction of the prior co-play and natural-order counts.",
+    "reliability": "Exact stall or error row count.",
+    "notEstimated": "No simultaneous hand availability, legal-action set, causal effect, Afterimage or Scoreline payoff, candidate feasibility, detector, product balance, ML, RL or optimisation endpoint is estimated."
+  },
+  "gates": {
+    "minimumDrawOpportunityPolicies": 16,
+    "minimumCoPlayPolicies": 16,
+    "minimumNaturalOrderPolicies": 16,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16-policy minima reuse the frozen 64-policy support scale from the current-main topology audit. They are not weakened after observing the prior co-play count of 13."
+  },
+  "factorDisposition": {
+    "candidate": "None. An observation boundary cannot freeze or promote content.",
+    "scalarFamily": "Remains closed; no payoff, Ward-priority or acquisition cell is reopened.",
+    "additionalMethod": "No ML, RL, optimiser or fitted model is used. Only an isolated policy-action-order failure after draw and co-play capacity pass could justify a separate zero-row method decision-value audit.",
+    "protectedSeeds": "Acceptance and reserve seeds remain unused."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python verifies every frozen file and cache, maps the complete plan to output, computes all three nested robust policy sets once and applies the frozen gates.",
+    "firstLook": "The complete 64-policy by four-seed trace is the only look. No row is generated, repaired, added, removed or rerun.",
+    "successStop": "Stop only if draw opportunity, co-play, natural order and reliability all pass.",
+    "futilityStop": "Stop at the first failed mechanistic boundary in draw, co-play, natural-order, reliability order without weakening a gate.",
+    "inconclusiveStop": "Stop at 30 seconds if the fixed exact decision is unavailable."
+  },
+  "decisionRules": {
+    "success": "All draw-opportunity, co-play, natural-order and reliability gates pass within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze only natural route capacity as evidence for a separate zero-row structural mechanism audit. Do not freeze a candidate or add a causal row, payoff, knob, ML, RL or optimiser.",
+    "futility": "Any frozen gate fails at the complete cohort.",
+    "futilityAuthority": "Apply decision boundary 2 and close natural Afterimage-route capacity at the recorded first mechanistic failure. Continue inside issue #421 with the next evidence-backed structural mechanism. If the failure is the aliased temporal-or-selection class, only a separately preregistered minimal existing-event observability audit is authorised; no method is authorised.",
+    "inconclusive": "A frozen cache, protocol or exact decision is unavailable at the 30-second cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the decomposition inconclusive. Add no field, row, repair, rerun, candidate, method or protected seed."
+  }
+}

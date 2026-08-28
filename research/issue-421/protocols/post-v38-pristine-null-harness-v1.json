@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Does the smallest clean issue #421 research harness exactly reproduce pristine current-main path, RNG, policy and results at null while its observation-only trace exposes the same frozen path?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinaryPath": "/Users/jamesto/Research/glassvow-p9-421/toolchains/godot-4.7.1/godot",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "8282718b29e8d27ea2d5825f33e9f7cd3d2a69147953149f500fe9feaf82388c",
+    "pristineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/research_421_null_harness_probe.gd": "2453d6785f6617dbf5f2b2459897734145327fb88cc60621ccc7204bb4e9bf58",
+      "tools/research_421_null_harness_probe.gd.uid": "14e21d44c51f5088f087e81af1f2cab4460e1694ff7d8e9f79088b5f13dca791"
+    },
+    "instrumentedSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "4873034f383a6b5c70e9c2bb02b3f85b6aaa5da11c879ecf6b4b0201b3e67330",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "efc6d7e9f42ba30f935f64195745d9bcccb518c0bb26b22bfa010a7899a7bcce"
+    },
+    "fileSha256": {
+      "task-capsule.json": "46f6540d4444723296bfb3fa85a7c495a56977039b84b3388eb20b369369eaf1",
+      "cache/sha256/3a0b39ceca35c54610dcf5e7e67710e3bd501a4bd76399075511ef8734a390b4.txt": "3a0b39ceca35c54610dcf5e7e67710e3bd501a4bd76399075511ef8734a390b4",
+      "summaries/post-v38-provenance-authority-audit-v1.json": "0e39787baebbf7ff0ad487905ec4f0802d92d2ab2a397d539769820a9e373b35"
+    }
+  },
+  "design": {
+    "type": "four-arm fractional identity design with common random numbers; not a gameplay-factor factorial",
+    "matrix": [
+      {
+        "arm": "pristine",
+        "executableSubstrate": "pristine-current-main",
+        "traceCapture": "unavailable",
+        "nullEncoding": "unavailable"
+      },
+      {
+        "arm": "capture-off",
+        "executableSubstrate": "instrumented-current-main",
+        "traceCapture": "off",
+        "nullEncoding": "omitted"
+      },
+      {
+        "arm": "capture-on-omitted-null",
+        "executableSubstrate": "instrumented-current-main",
+        "traceCapture": "on",
+        "nullEncoding": "omitted"
+      },
+      {
+        "arm": "capture-on-explicit-null",
+        "executableSubstrate": "instrumented-current-main",
+        "traceCapture": "on",
+        "nullEncoding": "schemaVersion=1 only"
+      }
+    ],
+    "omittedCells": "No pristine capture arm exists because pristine main exposes no trace. No explicit-null capture-off arm is needed: pristine versus capture-off isolates executable substrate, capture-off versus capture-on omitted-null isolates capture, and the two capture-on arms isolate null encoding on the fully observed path. Completing a Cartesian product has no measured decision value.",
+    "sharedAnchors": "All arms use the exact same current-main content, resolved root-551 policy identities, four simulation seed identities, Duskblade Vow-5 setting, baseline semantics, first-look rectangle, estimator and stopping rule.",
+    "mechanisticallyJustifiedInteractions": [
+      "executable substrate x trace capture, tested by pristine versus instrumented capture-off followed by instrumented capture-off versus capture-on",
+      "trace capture x null encoding, tested by the two capture-on arms so node, play and reward paths are directly comparable"
+    ],
+    "aliasStructure": "The pristine arm aliases trace and null as unavailable. The capture-off arm identifies instrumented executable identity without observing trajectory. The two capture-on arms separate omitted from explicit null. No gameplay mediator, payoff, candidate or policy factor is varied or estimated."
+  },
+  "factorDefinitions": {
+    "executableSubstrate": {
+      "levels": ["pristine-current-main", "instrumented-current-main"],
+      "definition": "Exact source commit and content in both levels. The instrumented level changes only BalanceSim's trailing research-null and trace parameters plus observation writes."
+    },
+    "traceCapture": {
+      "levels": ["off", "on"],
+      "definition": "Off emits no trajectory field. On emits ordered nodes, plays, combat card rewards and boss-relic offers/choices into a caller-owned dictionary without reading it for gameplay."
+    },
+    "nullEncoding": {
+      "levels": ["omitted", "schemaVersion=1 only"],
+      "definition": "Omitted and explicit null have no gameplay hook. Any other key, value or type must terminate before RunState construction."
+    },
+    "scorelinePayoff": {
+      "levels": ["absent-current-main"],
+      "definition": "Separate fixed factor. Current-main Faultline has no research Scoreline payoff; this preflight does not introduce one."
+    },
+    "afterimagePayoff": {
+      "levels": ["absent-current-main"],
+      "definition": "Separate fixed factor. Current-main Warden's Edge has no research Afterimage payoff; this preflight does not introduce one."
+    },
+    "acquisitionPriority": {
+      "levels": ["pristine-current-main"],
+      "definition": "Exact sampled policy reward scoring; no research acquisition hook exists."
+    },
+    "faultlineRarity": {
+      "levels": ["current-uncommon"],
+      "definition": "Exact current-main Faultline definition and rarity."
+    },
+    "wardSetupPriority": {
+      "levels": ["pristine-current-main"],
+      "definition": "Exact current-main combat policy; no research Ward setup hook exists."
+    }
+  },
+  "factorDisposition": {
+    "candidate": "None is frozen, constructed, simulated or promoted.",
+    "payoffs": "Scoreline and Afterimage remain separate and absent at current-main research-payoff levels.",
+    "ponytailKnobs": "No non-null Ward-setup or acquisition knob is implemented. Any future factorial must separately freeze its exact levels and prove full-cohort null identity plus focused mediator isolation against this harness before a causal row.",
+    "additionalMethod": "No ML, RL, optimiser or fitted model is used or authorised."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "rowsPerArm": 256,
+    "identity": "Policy.sample_range root 551 at the exact policy index and the same simulation seed are reused in all four arms. No identity is selected, removed, replaced or added after execution."
+  },
+  "traceDefinition": {
+    "nodes": ["act", "index", "id", "row", "type", "combatKind"],
+    "plays": ["fight", "event", "id", "uid"],
+    "cardRewards": ["offered", "chosen", "accepted"],
+    "bossRelics": ["offered", "chosen"],
+    "scope": "Observation only. No endpoint, mediator activation, package, payoff, acquisition effect or product claim is estimated from these fields."
+  },
+  "estimands": {
+    "pristineIdentity": "Exact canonical row equality for pristine versus instrumented capture-off across all 256 identities.",
+    "captureIdentity": "Exact canonical equality after removing only trajectory from capture-on omitted-null, compared with capture-off, across all 256 identities.",
+    "nullPathIdentity": "Exact canonical equality including the complete registered trajectory for capture-on omitted-null versus capture-on explicit-null across all 256 identities.",
+    "rngIdentity": "Exact equality of the final RNG cursor across all four arms for every identity.",
+    "policyIdentity": "Exact equality of the resolved policy snapshot across all four arms for every identity.",
+    "reliability": "Any baseline error/stall identity must be retained exactly in every arm; a non-zero shared baseline count is not repaired or selected away.",
+    "traceSchema": "Every captured trajectory has exactly the frozen containers and field sets; every play UID is non-negative and every row has at least one node.",
+    "notEstimated": "No strategy-package activation, complementarity, payoff, acquisition, rarity, Ward priority, detector, RandomBuild, duration, win-rate, product balance or optimisation endpoint is estimated."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "invalidConfigurationChecks": 1,
+    "godotProcessExecutions": 2,
+    "pristineObservationRows": 256,
+    "instrumentedObservationRows": 768,
+    "maximumNewSimulatorObservationRows": 1024,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 180,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python constructs the full row rectangles, content-addresses both plans and outputs, runs the invalid configuration before any RunState, executes pristine once and the fixed three-arm instrumented plan once, performs exact comparisons and owns the stop/go decision.",
+    "order": [
+      "Reject an unregistered research421 key before RunState construction.",
+      "Execute the complete 256-row pristine rectangle.",
+      "Execute the complete fixed 768-row instrumented rectangle.",
+      "Analyse all exact contrasts once; no result can add, remove or reprioritise a row."
+    ],
+    "firstLook": "The complete 1,024-row design is the only look. No cohort, reserve, repair or rerun exists.",
+    "stagedConstraint": "Capture-off and capture-on use the same frozen cohort. Trace evidence supports path identity only; endpoints are comparably evaluated in every arm before any result claim.",
+    "protectedSeedsExcluded": {
+      "acceptance": "3000-5199",
+      "reserve": "5200-5399"
+    }
+  },
+  "decisionRules": {
+    "success": "The invalid configuration fails closed; every one of the three 256-row exact contrasts has zero mismatches; final RNG and policy snapshots are exact across all four arms; the trace schema has zero faults; all immutable-input and ledger checks pass within 180 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze exactly this clean current-main null harness and observation schema as the identity anchor for one subsequent zero-row method/mechanism decision. This does not freeze a candidate or authorise a causal simulator row. A later factor must add its own exact definitions, levels, mediator-isolation proof and full-cohort null comparison before execution.",
+    "futility": "The invalid configuration is accepted, any exact identity or trace-schema check fails, or the ledger changes.",
+    "futilityAuthority": "Apply decision boundary 2: close this null-harness implementation without repair or rerun and continue inside issue #421 from the next evidence-backed structural/methodological boundary. Do not use any failed row for causal, capacity, package, payoff or product claims.",
+    "inconclusive": "A frozen input is unavailable, either fixed process cannot produce its complete output, or execution exceeds 180 seconds before the exact decision is available.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the preflight inconclusive at the cap. Do not add a row, switch cohort, repair, rerun, infer a factor or use protected seeds."
+  }
+}

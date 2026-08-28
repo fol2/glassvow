@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "On the newly identity-proved pristine-current-main trace, does the existing Duskblade policy repertoire provide robust, viable and Scoreline-separated natural Ward-before-Warden's-Edge order capacity, or is action order still the measured bottleneck?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "65279eff4c1651f5aee5a1dd7d617551fd88d8cabb03c50d106153362679b944",
+    "helperSha256": {
+      "post_v38_action_grammar_inventory.py": "87540fcd4903444658db14a8494d0ab8e5847f92a71f236a59f2b9c94564873d",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b"
+    },
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "4873034f383a6b5c70e9c2bb02b3f85b6aaa5da11c879ecf6b4b0201b3e67330",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "efc6d7e9f42ba30f935f64195745d9bcccb518c0bb26b22bfa010a7899a7bcce"
+    },
+    "fileSha256": {
+      "task-capsule.json": "46f6540d4444723296bfb3fa85a7c495a56977039b84b3388eb20b369369eaf1",
+      "protocols/post-v38-pristine-null-harness-v1.json": "a2b593f48159f1ecd99150dd9bd04253c02166e457502add010d398e587c7788",
+      "summaries/post-v38-pristine-null-harness-v1.json": "7c97b46581f701bf2a0c24fc637f5850c9e7c9be1226d983aadc8a1380f23d72",
+      "summaries/post-v38-provenance-authority-audit-v1.json": "0e39787baebbf7ff0ad487905ec4f0802d92d2ab2a397d539769820a9e373b35"
+    }
+  },
+  "trace": {
+    "planSha256": "5a750c9589aac14d98527fcb72e2cfa12c40900abd0f0f0bb924609a1020d4a8",
+    "outputSha256": "a3c8e75f885e2072e92af2c840aea911b67fab3973680aeae96a5f15cdfb9ee6",
+    "probeSha256": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+    "planRows": 768,
+    "explicitNullStartIndex": 512,
+    "selectedArm": "capture-on-explicit-null",
+    "selectionRule": "Read exactly the final preregistered 256-row arm from the immutable three-arm plan. It is byte-identical to capture-on omitted-null and its non-trajectory fields are byte-identical to pristine current main. No row or identity is selected by an endpoint."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "identity": "The exact policy and simulation seed identities frozen by the null-harness protocol are reused. No simulator executes and no identity is added, removed or replaced."
+  },
+  "routeDefinitions": {
+    "afterimageOrderRow": "Within at least one fight, an existing starter Ward play occurs before a later Warden's Edge play. This is a natural action-order proxy only; current-main content has no Afterimage research payoff.",
+    "afterimageOrderActivePolicy": "At least two of four frozen rows are afterimage-order rows.",
+    "afterimageOrderExactInactivePolicy": "None of the four frozen rows is an afterimage-order row.",
+    "afterimageOrderViablePolicy": "An active policy has at least one winning frozen row that is an afterimage-order row.",
+    "coPlayOpportunityPolicy": "At least two of four frozen rows play Ward and Warden's Edge in the same fight in either order.",
+    "reverseOrderPolicy": "At least two of four frozen rows play Warden's Edge before a later Ward in the same fight. This is diagnostic, not a success route.",
+    "scorelineOrderPolicy": "At least two of four frozen rows play Chisel before a later Faultline in the same fight. This separate route proxy does not vary or claim a Scoreline payoff.",
+    "candidateOnlyPolicy": "Natural Ward-before-Warden's-Edge active and not Chisel-before-Faultline active.",
+    "scorelineOnlyPolicy": "Chisel-before-Faultline active and not natural Ward-before-Warden's-Edge active."
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed factor; no payoff is varied or inferred."
+    },
+    "afterimagePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed factor; no payoff is varied or inferred."
+    },
+    "acquisitionPriority": {
+      "levels": ["pristine-current-main"],
+      "status": "Fixed exact policy and natural reward path."
+    },
+    "faultlineRarity": {
+      "levels": ["current-uncommon"],
+      "status": "Fixed exact current-main definition."
+    },
+    "wardSetupPriority": {
+      "levels": ["pristine-current-main"],
+      "status": "Fixed exact current-main combat policy; no research setup knob exists."
+    },
+    "observedTopology": {
+      "levels": ["natural-frozen-trace"],
+      "status": "The sole analysed surface. This is a zero-row necessary-capacity audit, not a causal factor."
+    }
+  },
+  "interactionsAndAliases": {
+    "mechanisticallyJustifiedInteraction": "Natural producer-consumer order is compared with co-play opportunity because co-play without Ward-first order isolates the action-sequencing loss. Natural Ward-before-Edge and Chisel-before-Faultline sets are compared because issue #421 requires two distinct Duskblade routes.",
+    "aliasStructure": "A Ward-before-Edge row is only an optimistic route proxy: it does not prove Afterimage application, consumption or payoff. Co-play opportunity is broader and can only overstate usable capacity. Scoreline order is separately fixed and likewise carries no payoff claim.",
+    "noExpansion": "No joint payoff, rarity, acquisition, Ward-priority, candidate or optimiser cell exists. Counts cannot unlock a Cartesian expansion."
+  },
+  "estimands": {
+    "primary": "Exact counts and identities of robust natural Ward-before-Warden's-Edge active and exact-inactive policies.",
+    "opportunity": "Exact count and identities of robust same-fight co-play policies, plus the policies narrowed out by correct order.",
+    "viability": "Exact count and identities of active policies with at least one winning natural-order row.",
+    "separation": "Exact candidate-only, Scoreline-only and cross-active policy sets plus their Jaccard overlap.",
+    "diagnostic": "Exact count and identities of robust reverse-order policies.",
+    "reliability": "Exact stall/error rows in the selected identity-proved arm.",
+    "notEstimated": "No Afterimage or Scoreline activation, payoff, complementarity, acquisition effect, policy-score causation, duration effect, detector, product balance, ML, RL or optimisation endpoint is estimated."
+  },
+  "gates": {
+    "minimumOpportunityPolicies": 16,
+    "minimumActivePolicies": 16,
+    "minimumInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumScorelineOnlyPolicies": 8,
+    "maximumScorelineJaccard": 0.75,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16 active/inactive/opportunity and eight viability/two-sided-separation minima reuse the frozen 64-policy support scale. The 0.75 Jaccard ceiling and one immutable baseline fault allowance are unchanged."
+  },
+  "factorDisposition": {
+    "candidate": "None. A route proxy cannot freeze or promote content.",
+    "scalarFamily": "Remains closed; no payoff, Ward-priority or acquisition cell is reopened.",
+    "additionalMethod": "No ML, RL, optimiser or fitted model is used. A policy-action-order failure may authorise only a separate zero-row method decision-value audit, not a method implementation.",
+    "protectedSeeds": "Acceptance and reserve seeds remain unused."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 768,
+    "analysedObservationRows": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python verifies every immutable input, selects the frozen arm by preregistered plan position, groups exact plays by fight and event, computes exact policy sets and applies the frozen gates once.",
+    "firstLook": "The complete 64-policy by four-seed arm is the only look. No row is generated, selected, repaired, added or rerun.",
+    "successStop": "Stop when every opportunity, active, inactive, viability, two-sided separation and reliability gate passes.",
+    "futilityStop": "Stop at the complete cohort when any gate fails; classify the first mechanistic failure as substrate opportunity, policy action order, nonseparation or reliability without weakening a gate.",
+    "inconclusiveStop": "Stop at 30 seconds if the fixed exact decision is unavailable."
+  },
+  "decisionRules": {
+    "success": "Every frozen capacity, viability, two-sided separation and reliability gate passes within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze only the natural current-main order topology as capacity evidence for a separate zero-row structural mechanism audit. The prior scalar candidate remains closed, and no causal row, payoff, candidate, ML, RL or optimiser is authorised.",
+    "futility": "Any frozen gate fails at the complete cohort.",
+    "futilityAuthority": "Apply decision boundary 2: close natural current-main action order as sufficient package capacity. Preserve the exact failure class as the sole input to a separate zero-row method/mechanism decision-value audit. Do not implement a policy method, candidate, payoff, knob or causal experiment yet.",
+    "inconclusive": "A frozen cache, source, protocol or exact decision is unavailable at the 30-second cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the audit inconclusive. Do not add a row, switch trace arm, repair, rerun, infer a candidate or use protected seeds."
+  }
+}

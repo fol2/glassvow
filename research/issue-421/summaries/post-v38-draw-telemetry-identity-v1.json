@@ -1,0 +1,50 @@
+{
+  "authority": "Apply decision boundary 1 and freeze exactly the fight-scoped draw trace for one deterministic zero-row decomposition of draw co-availability versus downstream co-play. Do not add a candidate, payoff, gameplay hook, policy knob, causal row, ML, RL or optimiser.",
+  "cacheObjects": {
+    "outputSha256": "5ebbfec8247bb8f92f1b04bbcba1f3563e562a1fa40a7444265422511e28a18b",
+    "planSha256": "391ef7c3b798ff1a9381ce6efcb165fc523133fb9747d3ce5516ea6367516748"
+  },
+  "decision": "freeze-fight-scoped-draw-telemetry",
+  "decisionBoundary": 1,
+  "drawSchemaFaults": [],
+  "factorDisposition": {
+    "additionalMethod": "No ML, RL, optimiser or fitted model is used or authorised.",
+    "candidate": "None is constructed, simulated, frozen or promoted.",
+    "payoffs": "Scoreline and Afterimage remain separate, fixed and absent.",
+    "ponytailKnobs": "No non-null research knob exists or is exercised."
+  },
+  "godotVersion": "4.7.1.stable.official.a13da4feb",
+  "identity": {
+    "anchorWithoutDrawsMismatchRows": 0,
+    "policyMismatchRows": 0,
+    "rngMismatchRows": 0
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 256,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "dc942f52ce8deee8a45da7f96f772957b371ca0e9bb1b1a8b277732e7fdbd1f0",
+  "rowsPerArm": 256,
+  "runnerSha256": "cd9c8856bf1a8f208a9d46f9b8d92029e231e0e2e5e5835316db9b7818c83e49",
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "wallTimeSeconds": 9.283733083982952
+}

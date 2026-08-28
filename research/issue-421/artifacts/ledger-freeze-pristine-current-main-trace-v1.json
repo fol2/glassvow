@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "purpose": "Post-draw-opportunity immutable ledger identity",
+  "records": 480372,
+  "firstSequence": 1,
+  "lastSequence": 480372,
+  "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+  "sqliteIntegrity": "ok",
+  "protectedSeedRows": 0,
+  "newLedgerRowsSinceUpgradeTelemetryClosure": 0,
+  "newSimulatorObservationRowsInThisSnapshot": 1280,
+  "breakdown": {
+    "pristineNullHarness": 1024,
+    "drawTelemetryIdentity": 256,
+    "zeroRowAudits": 0
+  }
+}
