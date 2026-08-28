@@ -1,0 +1,318 @@
+{
+  "GodotProcesses": 0,
+  "assessments": [
+    {
+      "attributes": {
+        "currentCarrierCount": 1,
+        "deterministicConsumer": true,
+        "deterministicProducerPlacement": true,
+        "duskOnlyMechanism": true,
+        "gameplayHookCount": 0,
+        "naturalMediatorCost": false,
+        "noRng": true,
+        "noSaveState": true,
+        "privatePackageMediator": false,
+        "reusesExistingAddCardHandler": false
+      },
+      "eligible": false,
+      "id": "existing-enemy-marker-damage",
+      "priorClosureAliases": [
+        "admitted Scoreline enemy-marker direct-damage payoff"
+      ]
+    },
+    {
+      "attributes": {
+        "currentCarrierCount": 1,
+        "deterministicConsumer": true,
+        "deterministicProducerPlacement": true,
+        "duskOnlyMechanism": false,
+        "gameplayHookCount": 0,
+        "naturalMediatorCost": false,
+        "noRng": true,
+        "noSaveState": true,
+        "privatePackageMediator": false,
+        "reusesExistingAddCardHandler": false
+      },
+      "eligible": false,
+      "id": "existing-player-marker-guard",
+      "priorClosureAliases": [
+        "closed Afterimage player-marker Ward payoff"
+      ]
+    },
+    {
+      "attributes": {
+        "currentCarrierCount": 1,
+        "deterministicConsumer": true,
+        "deterministicProducerPlacement": true,
+        "duskOnlyMechanism": false,
+        "gameplayHookCount": 1,
+        "naturalMediatorCost": true,
+        "noRng": true,
+        "noSaveState": true,
+        "privatePackageMediator": false,
+        "reusesExistingAddCardHandler": true
+      },
+      "eligible": false,
+      "id": "existing-hex-conversion",
+      "priorClosureAliases": [
+        "issue-524 old Hex label rejected as causal ground truth",
+        "existing non-combat Hex acquisition and removal substrate"
+      ]
+    },
+    {
+      "attributes": {
+        "currentCarrierCount": 2,
+        "deterministicConsumer": true,
+        "deterministicProducerPlacement": true,
+        "duskOnlyMechanism": false,
+        "gameplayHookCount": 1,
+        "naturalMediatorCost": true,
+        "noRng": true,
+        "noSaveState": true,
+        "privatePackageMediator": false,
+        "reusesExistingAddCardHandler": true
+      },
+      "eligible": false,
+      "id": "existing-status-card-conversion",
+      "priorClosureAliases": [
+        "issue-525 Kindle and Branch primitive ladder exhausted",
+        "admitted Ash hand-size payoff substrate"
+      ]
+    },
+    {
+      "attributes": {
+        "currentCarrierCount": 0,
+        "deterministicConsumer": true,
+        "deterministicProducerPlacement": true,
+        "duskOnlyMechanism": true,
+        "gameplayHookCount": 3,
+        "naturalMediatorCost": false,
+        "noRng": true,
+        "noSaveState": false,
+        "privatePackageMediator": true,
+        "reusesExistingAddCardHandler": false
+      },
+      "eligible": false,
+      "id": "new-persistent-counter-or-resource",
+      "priorClosureAliases": [
+        "complete existing combat-state grammar closed",
+        "turn-state and resource families closed"
+      ]
+    },
+    {
+      "attributes": {
+        "currentCarrierCount": 0,
+        "deterministicConsumer": false,
+        "deterministicProducerPlacement": false,
+        "duskOnlyMechanism": true,
+        "gameplayHookCount": 2,
+        "naturalMediatorCost": false,
+        "noRng": false,
+        "noSaveState": true,
+        "privatePackageMediator": false,
+        "reusesExistingAddCardHandler": false
+      },
+      "eligible": false,
+      "id": "new-random-offer-or-route-relay",
+      "priorClosureAliases": [
+        "acquisition and route families closed"
+      ]
+    },
+    {
+      "attributes": {
+        "currentCarrierCount": 0,
+        "deterministicConsumer": true,
+        "deterministicProducerPlacement": true,
+        "duskOnlyMechanism": true,
+        "gameplayHookCount": 1,
+        "naturalMediatorCost": true,
+        "noRng": true,
+        "noSaveState": true,
+        "privatePackageMediator": true,
+        "reusesExistingAddCardHandler": true
+      },
+      "eligible": true,
+      "id": "private-combat-debt-conversion",
+      "priorClosureAliases": []
+    }
+  ],
+  "authority": "Apply decision boundary 1 and freeze only private-combat-debt-conversion as a falsifiable mechanism design. Next run a separately preregistered zero-new-row capacity and implementation-identity contract. Do not implement, simulate, inspect support, assert efficacy or change any frozen design field here.",
+  "cacheFilesRead": 0,
+  "currentCandidateEffectCarriers": [],
+  "decision": "freeze-private-combat-debt-conversion-design",
+  "decisionBoundary": 1,
+  "evidenceResults": {
+    "afterimage-scalar-closure": {
+      "decision": "scalar-candidate-rejected-close-family-continue-structurally",
+      "sha256": "8630a5e6ab6559b7e98fa5947e865a11f26ee505879026450f73e95fcb468621"
+    },
+    "current-cohand-observability": {
+      "decision": "freeze-turn-and-kindle-events-for-cohand-identity-preflight",
+      "sha256": "2d3c3b8ce091bf8fc9560d6204d7e37cb2b1e4b9a960f32f29f533cd7625b7d4"
+    },
+    "existing-state-zone-closure": {
+      "decision": "close-existing-combat-state-zone-grammar",
+      "sha256": "1415ee899fefc2087a1b3730dfb71610ff4a5c8ed8e93842007b4f28eee4d4ed"
+    },
+    "native-dusk-coverage": {
+      "decision": "freeze-one-uncovered-native-family-for-capacity",
+      "sha256": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff"
+    },
+    "scoreline-admission": {
+      "decision": "ADMIT_LOCAL_PANEL_SCORELINE_HANDSHAKE",
+      "sha256": "82df397f2a3f7b60465cdab0ca925a1c9173e1bee4aa613d0960149a4a47b4ea"
+    },
+    "skill-chip-closure": {
+      "decision": "close-current-skill-chip-line-at-cap",
+      "sha256": "471317d70b827206b7ea0787ea91f53822e4a8bab0cbecf2082c85e8889e7eae"
+    },
+    "unused-transition-quarantine": {
+      "decision": "record-unused-discrete-transition-audit-inconclusive-at-cap",
+      "sha256": "a26063c374b21063674f72e49aee06be208f2c43a3d1055b1b18d9bd6e26155d"
+    }
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "protectedSeedRows": 0,
+  "protocolSha256": "38e59969746652a083977286a7f16f82b032a8d4fc06eafbb04664dbc2f650f6",
+  "runnerSha256": "55ae451d0ca8558039592141cf97f6fac7ee3362d385e3c46938184b393c625d",
+  "schemaVersion": 1,
+  "selectedDesign": {
+    "consumer": {
+      "anchor": "Refract Ward amount with its draw removed; clears the first matching hand token only.",
+      "baseEffects": [
+        {
+          "kind": "block",
+          "n": 6
+        },
+        {
+          "aspect": 0,
+          "id": "glassDebt",
+          "kind": "removeCardFromHand",
+          "maximum": 1
+        }
+      ],
+      "cost": 1,
+      "rarity": "uncommon",
+      "researchId": "debtWard",
+      "target": "self",
+      "type": "skill",
+      "upgradeEffects": [
+        {
+          "kind": "block",
+          "n": 9
+        },
+        {
+          "aspect": 0,
+          "id": "glassDebt",
+          "kind": "removeCardFromHand",
+          "maximum": 1
+        }
+      ]
+    },
+    "forbiddenAdaptation": [
+      "No value, rarity, carrier, token penalty, aspect gate or removal-count change after support is read.",
+      "No candidate-by-candidate tuning, rescue cell, alternate token or Hex substitution.",
+      "No ML, RL, optimiser, protected seed or acceptance endpoint.",
+      "Failure closes this exact design and returns to the next evidence-backed structural mechanism inside issue 421."
+    ],
+    "id": "private-combat-debt-conversion",
+    "mechanisticSeparation": {
+      "fromAfterimage": "The package contrast is debt creation versus debt removal. Ward is a fixed carrier anchor, not the mediator payoff, and Afterimage remains a separate fixed interference stratum.",
+      "fromAshHandSize": "The aspect-qualified mediator is inert for Ashwarden; base Attack and Ward carrier effects remain available for aspect-identity controls.",
+      "fromKindle": "The token is a curse, removal never calls exhaust_card and grants no Ember.",
+      "fromScoreline": "The mediator is a private player-hand liability and deterministic clean-up action; it neither reads nor damages an enemy marker."
+    },
+    "mediator": {
+      "definition": {
+        "cost": null,
+        "effects": [],
+        "endTurnLoseHp": 1,
+        "rarity": "special",
+        "target": "none",
+        "type": "curse",
+        "unplayable": true,
+        "vfx": "void"
+      },
+      "id": "glassDebt",
+      "lifetime": "ordinary combat CardInst only; no RunState or save field",
+      "naturalCost": "Each uncleared copy in hand loses exactly 1 HP at end of turn and cannot be Kindled.",
+      "scope": "private combat-only card token"
+    },
+    "minimumRuntimeHook": {
+      "changes": [
+        "return from an effect whose numeric aspect does not match run.aspect",
+        "handle removeCardFromHand by removing at most the first matching CardInst from cb.hand without exhaust_card, Ember or RNG",
+        "include deterministic CardInst uid in addCard and removal telemetry"
+      ],
+      "function": "CombatRules._apply_effect",
+      "nullIdentityBasis": "Current catalogue has no addCard, removeCardFromHand or aspect-qualified player-card effect, so omitted research content cannot execute the new branches.",
+      "requiredPreflight": "Direct controls plus omitted-versus-explicit-null whole-run identity must prove exact path, RNG, policy, result and telemetry isolation before any enabled support row."
+    },
+    "producer": {
+      "anchor": "Twin Shards total damage, with no extra chip, draw, energy, status or RNG.",
+      "baseEffects": [
+        {
+          "kind": "dmg",
+          "n": 8
+        },
+        {
+          "aspect": 0,
+          "id": "glassDebt",
+          "kind": "addCard",
+          "where": "hand"
+        }
+      ],
+      "cost": 1,
+      "rarity": "common",
+      "researchId": "debtEdge",
+      "target": "enemy",
+      "type": "attack",
+      "upgradeEffects": [
+        {
+          "kind": "dmg",
+          "n": 12
+        },
+        {
+          "aspect": 0,
+          "id": "glassDebt",
+          "kind": "addCard",
+          "where": "hand"
+        }
+      ]
+    },
+    "status": "mechanism hypothesis only"
+  },
+  "selectedDesigns": [
+    "private-combat-debt-conversion"
+  ],
+  "sourceIdentity": {
+    "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8"
+    },
+    "taskCapsuleSha256": "25c2a5c90aedd98db3458b003307ef0a1543b14954562c2a9a81631e3a3d2588"
+  },
+  "supportMetricsInspected": 0,
+  "traceFilesRead": 0,
+  "wallTimeSeconds": 6.147463291999884
+}

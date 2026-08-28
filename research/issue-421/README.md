@@ -24,6 +24,37 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### V35 minimum-mechanism and authority boundary
+
+The exact current-main combat-state and card-zone audit covered all 52 mutable
+surfaces and closed the existing grammar. The smallest new generated-card debt
+prototype then stopped at its one-attempt identity schema cap: its probe read
+`CardInst.upgraded`, whereas exact current-main owns `CardInst.up`. No whole-run,
+capacity, support or causal row ran, so the design is quarantined rather than
+scientifically rejected.
+
+The sole post-quarantine two-hook design, a harmful private `glassBurden`
+status produced by one common Attack and cleared by one uncommon Skill, passed
+every zero-row capacity gate except independent separation from Afterimage. It
+had 34 potential-active and 14 viable policies, but only three candidate-only
+identities against the frozen minimum of eight. That exact design is closed
+without value, rarity, threshold or cohort changes.
+
+A separate method-boundary audit found no measured authority for ML, RL or an
+optimiser. The next deterministic acquisition rung was then checked against 125
+exact source function blocks. Current generic relic/save/string-ID machinery is
+compatible, but zero native functions combine an explicit choice, Dusk
+qualification, RNG freedom, persistence, Pilot visibility and freedom from the
+closed acquisition aliases. The relevant second-Dusk-package gate is therefore
+unavailable under current authority.
+
+The safe state contains zero new simulator rows, zero ledger rows and zero
+protected-seed rows. The recommended authority decision is one versioned,
+repair-only private-debt identity v2 changing only the probe field to exact
+`CardInst.up`; the alternative is explicit authority for a new product-level
+deterministic acquisition/UI surface. Until then, #421 remains open and no
+detector, RC or P9 claim is made.
+
 ### V26 clean current-main trace boundary
 
 The reused root-551 cache is no longer treated as pristine-current-main identity

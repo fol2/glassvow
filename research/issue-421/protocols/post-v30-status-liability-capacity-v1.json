@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "researchQuestion": "Before implementing the frozen private player-status liability, does the exact current 64-policy cohort contain enough independent producer and consumer acceptance, two-reward opportunity, viability and separate Scoreline and Afterimage separation to justify research-factor identity work?",
+  "claimBoundary": "This is a deliberately permissive necessary-capacity upper bound over immutable current rows. Passing authorises only null and mediator-isolation identity preflight. It cannot establish an offer, acquisition, co-holding, order, glassBurden event, complementarity, causal effect or product value; failure closes the exact design without implementation or simulator spend.",
+  "candidate": {
+    "id": "private-player-status-liability",
+    "statusId": "glassBurden",
+    "cardIds": [
+      "burdenCut",
+      "settlingWard"
+    ],
+    "producer": {
+      "id": "burdenCut",
+      "type": "attack",
+      "rarity": "common",
+      "cost": 1,
+      "baseDamage": 8,
+      "upgradeDamage": 12,
+      "specialId": "takeGlassBurden"
+    },
+    "consumer": {
+      "id": "settlingWard",
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 1,
+      "baseWard": 6,
+      "upgradeWard": 9,
+      "specialId": "settleGlassBurden"
+    },
+    "mediator": {
+      "production": "Duskblade Burden Cut adds exactly one glassBurden player-status stack after its fixed damage.",
+      "consumption": "Duskblade Settling Ward removes exactly one positive glassBurden stack after its fixed Ward; absence is inert.",
+      "naturalCost": "At each player end turn, lose HP equal to the positive glassBurden stack count without ticking it; the stack persists until consumed or combat ends.",
+      "boundary": "Combat-local, deterministic and Dusk-only. It never generates a card, reads or writes a zone, uses RNG, enters RunState or save data, or changes Scoreline or Afterimage."
+    }
+  },
+  "carrierScoreFormula": {
+    "producer": "policy.card.rarity.common - 1 + 8 + policy.special.fallback",
+    "consumer": "policy.card.rarity.uncommon - 1 + 6 * policy.card.blockHeal + policy.special.fallback",
+    "selector": "Each exact current Pilot score is independently greater than or equal to the same policy.cardDecline threshold. Both unknown special IDs receive exactly policy.special.fallback.",
+    "joint": "A policy is a joint selector only when both frozen carrier scores pass. No package bonus, status liability value, acquisition priority, payoff, outcome, threshold adjustment, model or learned score enters selection."
+  },
+  "factorDefinitions": {
+    "statusLiabilityPool": {
+      "levels": ["absent-current"],
+      "absent-current": "Exact current-main content and pools; Burden Cut and Settling Ward do not exist.",
+      "futureIdentityLevels": ["null", "enabled"],
+      "boundary": "Pool exposure is fixed absent here and remains unauthorised unless every capacity gate passes."
+    },
+    "glassBurdenPayoff": {
+      "levels": ["absent-current"],
+      "absent-current": "Exact current CombatRules; glassBurden and both special IDs do not exist.",
+      "futureIdentityLevels": ["null", "enabled"],
+      "boundary": "The fixed enabled definition is one stack produced, one stack consumed and one HP lost per uncleared stack per player end turn. No scalar level is searched."
+    },
+    "acquisitionPriority": {
+      "levels": ["current"],
+      "current": "Exact frozen Pilot scoring and cardDecline. No candidate preference or package bonus."
+    },
+    "scorelinePayoff": {
+      "levels": ["current"],
+      "current": "Exact current Scoreline payoff and Faultline route; fixed as a separate causal factor and never bundled with glassBurden or Afterimage."
+    },
+    "faultlineRarity": {
+      "levels": ["current"],
+      "current": "Exact current Faultline rarity and reward path."
+    },
+    "afterimagePayoff": {
+      "levels": ["current"],
+      "current": "Exact current Warden's Edge Afterimage payoff; fixed independently from Scoreline and glassBurden."
+    },
+    "wardSetupPriority": {
+      "levels": ["current"],
+      "current": "Exact current Ward setup and action policy; no ordering intervention."
+    }
+  },
+  "designMatrix": {
+    "kind": "one immutable current-cache capacity cell; not a factorial and not causal",
+    "cells": [
+      {
+        "id": "current-trace-capacity",
+        "statusLiabilityPool": "absent-current",
+        "glassBurdenPayoff": "absent-current",
+        "acquisitionPriority": "current",
+        "scorelinePayoff": "current",
+        "faultlineRarity": "current",
+        "afterimagePayoff": "current",
+        "wardSetupPriority": "current",
+        "cachedRows": 256,
+        "newRows": 0
+      }
+    ],
+    "causalContrasts": [],
+    "sharedAnchors": [
+      "exact current-main baseline identity",
+      "31 exact Scoreline-route policy identities",
+      "54 exact Afterimage-substrate policy identities"
+    ],
+    "expansionRule": "No simulator cell is authorised here. If capacity and identity pass, preregister a mechanism-blocked CRN with equal policy and seed identities, baseline, first-look budget, estimator and stopping rule within every contrast. Keep Scoreline payoff and Afterimage payoff separate. Add cross-package joint cells only when shared-anchor interference has measured decision value; never complete a Cartesian product for its own sake."
+  },
+  "opportunityAndEstimands": {
+    "unit": "One frozen policy identity with a two-of-four robustness rule.",
+    "twoRewardOpportunity": "A row exposes at least two exact normal card-reward records. A policy is robust when this holds in at least two of its four fixed rows.",
+    "candidatePotentialActive": "Joint carrier selector intersect robust two-reward opportunity.",
+    "exactInactive": "Joint nonselector union policies with no two-reward row across all four seeds.",
+    "ambiguous": "Every remaining policy; ambiguous policies count as neither active nor inactive.",
+    "viablePotentialActive": "Candidate-potential-active policy with at least one winning row that also has two reward records.",
+    "scorelineSeparation": "Candidate-potential-active versus the immutable Scoreline-route policy set, with candidate-only, anchor-only, overlap and Jaccard estimated separately.",
+    "afterimageSeparation": "Candidate-potential-active versus the immutable Afterimage-substrate policy set, with candidate-only, anchor-only, overlap and Jaccard estimated separately.",
+    "notEstimated": "No actual offer, acquisition, co-holding, play order, producer event, consumer event, liability payment, complementarity, effect size, interaction, RandomBuild, Ashwarden, detector, protected seed or product endpoint is estimated."
+  },
+  "mechanisticInteractionsAndAliases": {
+    "justifiedFutureInteractions": [
+      "statusLiabilityPool x acquisitionPriority, because natural exposure and independent acceptance are necessary before both carriers can be held",
+      "glassBurdenPayoff x acquisitionPriority, because the liability/clean-up relation can affect value only after the carriers enter the policy repertoire",
+      "glassBurdenPayoff x wardSetupPriority, because the fixed consumer carries Ward but its causal payoff is removal of a harmful stack"
+    ],
+    "scorelineInterference": "Scoreline is the admitted other Dusk package. This audit requires two-sided policy separation but does not claim causal independence.",
+    "afterimageInterference": "Afterimage is a distinct positive player-status package. Its payoff remains fixed and separate; this audit requires two-sided policy separation but does not pool it with Scoreline.",
+    "aliasStructure": [
+      "The producer and consumer selector sets are necessary upper bounds because competing offers, acquisition order, co-holding and play sequence are unobserved.",
+      "Two reward records are only an opportunity proxy and can overstate exposure to both exact cards.",
+      "Current Scoreline and Afterimage anchors measure policy-route overlap, not package-level causal interference.",
+      "The unknown-special fallback enters each exact current carrier score but cannot value the glassBurden mediator."
+    ],
+    "staging": "Cheap source and mediator evidence may precede whole-run evidence. No endpoint supports a causal claim unless every contrasted cell is evaluated on the same frozen policies, seeds, baseline, estimator, first-look budget and stopping rule."
+  },
+  "identityPreflightIfAuthorised": {
+    "statusLiabilityPool": {
+      "null": "Omitted or zero exactly reproduces current content, pool, RNG identity, policy identity and results.",
+      "enabled": "Adds only Burden Cut and Settling Ward through the existing Dusk reward-pool path; no other card, score, pool or RNG call changes.",
+      "intendedMediator": "Offer and acquisition eligibility of the two frozen carriers only."
+    },
+    "glassBurdenPayoff": {
+      "null": "Omitted or zero leaves the added cards' fixed damage and Ward inert with respect to glassBurden and exactly reproduces the corresponding null path and RNG identity.",
+      "enabled": "Adds/removes only glassBurden through the two fixed special IDs and charges only positive stacks at player end turn.",
+      "intendedMediator": "The harmful persistent player-status production, clean-up and end-turn liability only."
+    },
+    "proofRule": "Prove null identity and focused enabled controls before any enabled whole-run or causal row. Each enabled knob must affect only its named mediator; no repair, retune or second identity attempt is authorised.",
+    "telemetry": "Observation-only offer, acquisition, draw, carrier play, glassBurden +1/-1, end-turn liability and relevant Scoreline/Afterimage route fields. Off/on telemetry must be state and RNG inert.",
+    "rowAuthority": 0
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    "runnerSha256": "7b8db7093075adc4a63eb79ddf087d8c1af5e0dc87b0b15e3a1ddb13ffbb18e9",
+    "taskCapsuleSha256": "da55817ef7bdc0eb776627956234fe3e35ee0df2e886f73c47461b7cdbd5e0db"
+  },
+  "sourceAssertions": {
+    "rarity score": "rarity.get(str(d.get(\"rarity\", \"starter\")), 0)",
+    "cost score": "float(str(d.get(\"cost\", 0)))",
+    "damage score": "\"dmg\": score += float(str(fx.get(\"n\", 0))) * float(str(fx.get(\"times\", 1)))",
+    "Ward score": "\"block\", \"heal\": score += float(str(fx.get(\"n\", 0))) * _w(\"card\", \"blockHeal\")",
+    "special score": "\"special\": score += _special_value(str(fx.get(\"id\", \"\")), dusk)",
+    "special fallback": "return _w(\"special\", \"fallback\")",
+    "acceptance threshold": "return score >= card_decline_threshold"
+  },
+  "priorEvidence": {
+    "post-quarantine-structural-census": {
+      "path": "summaries/post-v30-post-quarantine-structural-census-v1.json",
+      "sha256": "56e4bfe94791ad5574fc459f750bf12d536b71085dd4e33c5e055b96a12c71e5",
+      "decision": "freeze-private-status-liability-design"
+    },
+    "private-token-quarantine": {
+      "path": "summaries/post-v30-private-debt-identity-audit-v1.json",
+      "sha256": "f6d0a810418ec58b890d9e120e06d5b2fd5bf9622d795c01bc149dc43315e8af",
+      "decision": "quarantine-private-debt-at-identity-schema-cap"
+    },
+    "existing-state-zone-closure": {
+      "path": "summaries/post-v30-combat-state-zone-frontier-audit-v1.json",
+      "sha256": "1415ee899fefc2087a1b3730dfb71610ff4a5c8ed8e93842007b4f28eee4d4ed",
+      "decision": "close-existing-combat-state-zone-grammar"
+    },
+    "afterimage-scalar-closure": {
+      "path": "summaries/post-v38-exact-complementarity-v1-audit.json",
+      "sha256": "8630a5e6ab6559b7e98fa5947e865a11f26ee505879026450f73e95fcb468621",
+      "decision": "scalar-candidate-rejected-close-family-continue-structurally"
+    }
+  },
+  "anchorProtocol": {
+    "path": "protocols/post-v38-mirror-oath-capacity-v1.json",
+    "sha256": "25df665822b245e7d4becd717d1f2ef59086d31dafe49745b5389e783f94a86c",
+    "role": "Immutable source of the separately defined Scoreline-route and Afterimage-substrate policy identities."
+  },
+  "baseline": {
+    "name": "current-main root-551 Duskblade Vow-5 natural reward and economy rectangle",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "outputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf"
+  },
+  "traceEvidence": {
+    "name": "identity-proved explicit-current arm from the Momentum preference CRN rectangle",
+    "planSha256": "4983c07159961f57ef033670e6f06e2b82b52134e808f199d7aa067a190b4a69",
+    "outputSha256": "ac86dac85f5398e6c8e4d63ef10cf5d57d85739f9cc62fb1ffdf1b9b21b06ed2",
+    "currentRows": 256,
+    "identityRule": "Every current row must exactly equal its cached current-main baseline path, RNG, policy and result after only trace and label fields are removed before a score, opportunity or outcome count is read."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "identity": "The complete first-look rectangle is fixed. No policy or seed may be added, removed, selected, replaced or given a different endpoint cohort."
+  },
+  "gates": {
+    "minimumProducerSelectorPolicies": 16,
+    "minimumConsumerSelectorPolicies": 16,
+    "minimumJointSelectorPolicies": 16,
+    "minimumJointNonselectorPolicies": 16,
+    "minimumRobustTwoRewardOpportunityPolicies": 16,
+    "minimumCandidatePotentialActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePotentialActivePolicies": 8,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.75,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16 active, inactive, opportunity and selector minima; eight viability and two-sided separation minima; 0.75 Jaccard ceiling; and one immutable baseline-fault allowance are frozen on the established 64-policy scale before either cache is opened."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCacheFilesRead": 2,
+    "maximumCacheRowsRead": 512,
+    "maximumSupportRowsInspected": 256,
+    "maximumGodotProcesses": 0,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "success": "Exact source, cache, trace, anchor and ledger identities pass; both carriers, their joint set, joint inactivity, robust two-reward opportunity, candidate support, exact inactivity, viability, separate two-sided Scoreline and Afterimage separation and reliability pass every frozen gate within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and authorise only a separately preregistered research-factor identity preflight for fixed pool exposure and the fixed glassBurden payoff. Null settings must reproduce exact identity and each enabled setting must change only its named mediator before any enabled whole-run or causal row.",
+    "futility": "Any frozen necessary-capacity gate fails.",
+    "futilityAuthority": "Apply decision boundary 2, close the exact private-player-status-liability design and continue with the next evidence-backed structural mechanism inside issue 421. Do not change a carrier, value, rarity, status cost, persistence, threshold, cohort, gate or priority rule.",
+    "inconclusive": "The exact cache, source, trace, anchor, ledger or deterministic decision cannot complete at the one-attempt 30-second cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the exact capacity audit inconclusive without implementation, another cache, simulator row, proxy, repair, rerun or protected seed; continue scientifically inside issue 421 unless the relevant gate itself is unavailable."
+  },
+  "methodBoundary": "Deterministic Python owns candidate construction, cache validation, exact score evaluation, classification and stop/go. No model context, human label, optimiser, ML, RL, adaptive tuning or protected seed enters execution. Issue 524 and 525 enter only as immutable evidence already represented by accepted issue 421 decisions; their historical plans and exhausted searches are not reconstructed."
+}

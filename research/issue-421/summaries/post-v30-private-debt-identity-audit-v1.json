@@ -1,0 +1,73 @@
+{
+  "GodotProcesses": 1,
+  "authority": "Apply decision boundary 3, quarantine the exact private-combat-debt prototype at its identity cap and continue with the next evidence-backed structural mechanism inside issue 421. Do not replace upgraded with up, repair the runner, rerun a control, open the capacity cache, infer mediator efficacy, change the design or create a successor.",
+  "capacityCacheFilesRead": 0,
+  "causalRows": 0,
+  "decision": "quarantine-private-debt-at-identity-schema-cap",
+  "decisionBoundary": 3,
+  "directExecutionsAttempted": 16,
+  "directRowsEmpty": 14,
+  "directRowsReturned": 2,
+  "enabledWholeRunRows": 0,
+  "executionArtifacts": {
+    "attemptedDirectRows": 16,
+    "causalRows": 0,
+    "emptyRows": 14,
+    "enabledWholeRunRows": 0,
+    "outputSha256": "3e05f41d139533b1869ffc5511f28cfb1b762b8c020545ee3acfa6048ec9e222",
+    "planSha256": "8c73c982a4f7fab015bc3e46e34796579a8371644618573c96ba7a147ac230ec",
+    "returnedRowIds": [
+      "penalty-dusk-enabled",
+      "penalty-dusk-null"
+    ],
+    "wholeRunPlansConstructed": 0,
+    "wholeRunRows": 0
+  },
+  "identityAttempt": {
+    "attemptsAllowed": 1,
+    "attemptsUsed": 1,
+    "protocolPath": "protocols/post-v30-private-debt-identity-v1.json",
+    "protocolSha256": "8fb1fd790ed6e180ae951f459ed3b6cb5b141c20105514979b105b37530ef444",
+    "runnerPath": "post_v30_private_debt_identity.py",
+    "runnerSha256": "19770eda80dc9a39009c03c5d7b3ada6432d907cb45dcfde2b842a7f65917f06",
+    "summaryPath": "summaries/post-v30-private-debt-identity-v1.json"
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "inconclusive",
+  "protectedSeedRows": 0,
+  "protocolSha256": "b2d1606e76039ba28b61b332e008df1e5d9116fbdfe235e7591467bde57eb0bd",
+  "reason": "The sole direct process wrote 16 positions, but 14 producer or consumer positions are empty because the frozen probe reads CardInst.upgraded while exact current-main CardInst defines only CardInst.up. Only the two penalty controls returned. The Python runner then raised KeyError before direct analysis, whole-run identity or summary publication. This is an observation-schema execution failure, not evidence for or against the debt mediator.",
+  "runnerSha256": "65a908f11c27c754b1ead2b41292830ac27d63b7ba7423364216d74496ef609a",
+  "schemaVersion": 1,
+  "sourceEvidence": {
+    "actualCardInstField": "up",
+    "cardInstPath": "private-debt-baseline-source/domain/state/card_inst.gd",
+    "cardInstSha256": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d",
+    "invalidAccessCount": 3,
+    "invalidProbeField": "upgraded",
+    "probePath": "private-debt-identity-source/tools/research_421_private_debt_probe.gd",
+    "probeSha256": "577a64abf6070985a48f229130954704042927c887ed9921909ec38067bc3c5b"
+  },
+  "supportRowsInspected": 0,
+  "wallTimeSeconds": 6.13429274992086,
+  "wholeRunIdentityRows": 0
+}

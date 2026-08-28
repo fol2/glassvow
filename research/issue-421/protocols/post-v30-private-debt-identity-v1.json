@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "researchQuestion": "Does the frozen private-combat-debt implementation have exact direct mediator mapping and an identity-safe dormant/null path before any enabled whole-run or support claim?",
+  "claimBoundary": "This preflight may establish only direct effect mapping and null implementation identity. It cannot establish acquisition, activation, complementarity, viability, causal effect, Scoreline or Afterimage interference, RandomBuild movement, product value or shipping fitness.",
+  "factors": {
+    "mechanismEffect": {
+      "null": "The three private research cards exist outside all reward pools; Debt Edge has only its frozen damage and Debt Ward only its frozen Ward.",
+      "enabled": "The cards remain outside every reward pool; Dusk Debt Edge adds one Glass Debt to hand and Dusk Debt Ward removes at most the first Glass Debt from hand.",
+      "fixed": "Card IDs, types, rarities, costs, targets, base and upgraded damage or Ward, token penalty and all current content remain exact."
+    },
+    "wholeRunArms": {
+      "current-main": "Exact c413016 current-main code and exact current content.",
+      "prototype-code-current-content": "Prototype CombatRules with exact current content, so no candidate effect can execute.",
+      "prototype-null-content": "Prototype CombatRules plus the three dormant null cards, still absent from every reward pool."
+    }
+  },
+  "directControls": [
+    {
+      "id": "producer-dusk-base",
+      "kind": "producer",
+      "aspect": "duskblade",
+      "upgraded": false,
+      "fillerCount": 0,
+      "seed": 422120
+    },
+    {
+      "id": "producer-dusk-up-full",
+      "kind": "producer",
+      "aspect": "duskblade",
+      "upgraded": true,
+      "fillerCount": 9,
+      "seed": 422121
+    },
+    {
+      "id": "producer-ash-base",
+      "kind": "producer",
+      "aspect": "ashwarden",
+      "upgraded": false,
+      "fillerCount": 0,
+      "seed": 422122
+    },
+    {
+      "id": "consumer-dusk-two",
+      "kind": "consumer",
+      "aspect": "duskblade",
+      "upgraded": false,
+      "debtCount": 2,
+      "seed": 422123
+    },
+    {
+      "id": "consumer-dusk-up-one",
+      "kind": "consumer",
+      "aspect": "duskblade",
+      "upgraded": true,
+      "debtCount": 1,
+      "seed": 422124
+    },
+    {
+      "id": "consumer-dusk-zero",
+      "kind": "consumer",
+      "aspect": "duskblade",
+      "upgraded": false,
+      "debtCount": 0,
+      "seed": 422125
+    },
+    {
+      "id": "consumer-ash-two",
+      "kind": "consumer",
+      "aspect": "ashwarden",
+      "upgraded": false,
+      "debtCount": 2,
+      "seed": 422126
+    },
+    {
+      "id": "penalty-dusk",
+      "kind": "penalty",
+      "aspect": "duskblade",
+      "seed": 422127
+    }
+  ],
+  "directExpectedMapping": {
+    "producer": "Damage is exactly 8 or 12 in both arms. Enabled Dusk adds exactly one uid-bearing Glass Debt event and hand card, including from a ten-card pre-play hand; Ash is exact-null. Base Facet, discard, Ember, exhaust and RNG remain exact.",
+    "consumer": "Ward is exactly 6 or 9 in both arms. Enabled Dusk removes at most the first matching hand token with the same uid in the direct event; zero-debt and Ash controls are exact-null. Removal never exhausts and never changes Ember or RNG.",
+    "token": "Glass Debt is unplayable by the Kindle contract, loses exactly 1 HP at end of turn, follows normal discard, and is identical between null and enabled content.",
+    "eventCorrespondence": "Every produced or removed token has zero or exactly one direct event with its deterministic CardInst uid; no queue-derived proxy substitutes for the direct event."
+  },
+  "identityCohort": {
+    "freshness": "A read-only pre-freeze search found zero exact policyRoot 422101, whole-run seeds 422110 and 422111, or direct seeds 422120 through 422127 in the append-only ledger and existing protocols or summaries.",
+    "policyRoot": 422101,
+    "policyIndices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "simulationSeeds": [
+      422110,
+      422111
+    ],
+    "identities": 16,
+    "aspect": "duskblade",
+    "vow": 0,
+    "commonRandomNumbers": "All three arms use the same 16 policy and simulation-seed identities, estimator and complete trajectory capture."
+  },
+  "contentLevels": {
+    "construction": "Python preserves every existing JSON dictionary insertion order, appends exactly debtEdge, debtWard and glassDebt, writes compact UTF-8 JSON, and never edits a reward pool. Null omits only the two mediator effects; enabled is the exact frozen design.",
+    "nullSha256": "4971d209e064db180028c7011a77e68e7144f3f27d6ad2c6654bf60199683397",
+    "enabledSha256": "687bae7d7556569a9786405cfc31f474ec7c93355cccfdabea138cea7142f1fc"
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "baselineSourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "pristineContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "prototypeCombatRulesSha256": "1134a656ec3116f64604a659c1cadc0051d92f27f149ed217074282506016f64",
+    "balanceSimSha256": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+    "pilotSha256": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "directProbeSha256": "577a64abf6070985a48f229130954704042927c887ed9921909ec38067bc3c5b",
+    "directProbeUidSha256": "249e5a97834032efbeca3283482187692e4b1fde0cd2bca8c887990aadf1e9d9",
+    "designProtocolSha256": "38e59969746652a083977286a7f16f82b032a8d4fc06eafbb04664dbc2f650f6",
+    "designSummarySha256": "360ae15dc0845b51042d67524186952d13da98fe71278b9992ad46b0b3a48109",
+    "taskCapsuleSha256": "31cda77f6d8fb69d871ceb412d16dab920446ec72e4177dd09f6cd29238fd9c1",
+    "runnerSha256": "19770eda80dc9a39009c03c5d7b3ada6432d907cb45dcfde2b842a7f65917f06"
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "directExecutions": 16,
+    "wholeRunIdentities": 16,
+    "maximumWholeRunIdentityObservationRows": 48,
+    "maximumGodotProcesses": 4,
+    "maximumEnabledWholeRunRows": 0,
+    "maximumCausalRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 180,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "success": "All 16 direct null/enabled controls match the exact producer, consumer, token, uid-event, aspect, RNG and no-Kindle/no-Ember mapping; all 48 paired whole-run identity observations are exact for complete path, RNG, policy, result and telemetry; reliability, source, content and ledger identities remain exact within four processes and 180 seconds.",
+    "successAuthority": "Apply decision boundary 1 and admit only the frozen implementation as identity-safe for the separately frozen zero-new-row capacity audit. Do not run an enabled whole-run, causal row, acquisition factor, support fit, Scoreline or Afterimage interference claim.",
+    "futility": "Any direct mapping, event correspondence, aspect isolation, no-Kindle/no-Ember rule, RNG identity, dormant code identity or dormant content identity is non-exact.",
+    "futilityAuthority": "Apply decision boundary 2, close the exact private-combat-debt design and continue with the next evidence-backed structural mechanism inside issue 421. Do not repair, rerun, change a carrier, token, value, event or aspect gate.",
+    "inconclusive": "The exact runtime, source, content, process, cache, ledger or 180-second execution contract cannot complete on its sole attempt.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the identity preflight inconclusive at cap. Quarantine this exact prototype without enabled whole-run, causal claim, repair, rerun or protected seed, then continue scientifically inside issue 421 unless the relevant gate itself is unavailable."
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "researchQuestion": "Does exact current-main contain exactly one native, deterministic, Dusk-qualified, policy-visible and persistable exclusive-acquisition path outside every closed acquisition alias, so the next structural rung can reuse it without new orchestration or a breaking contract?",
+  "competingOptions": [
+    "freeze exactly one eligible native path shape for a later no-row package-design audit",
+    "record the native exclusive-acquisition path unavailable because no unique path satisfies every frozen rule",
+    "record the exact-source audit inconclusive at the frozen cap"
+  ],
+  "claimBoundary": "This is a source-feasibility audit of the smallest native-reuse rung. It may identify one existing function shape or prove none is eligible under the frozen one-function, policy-visible and closed-alias exclusions. It cannot establish that every imaginable new acquisition system is impossible, select content, design a package, implement, infer support or authorise a simulator row.",
+  "minimumNativeReuseRule": {
+    "functionBoundary": "One existing non-Pilot function block must already combine acquisition, explicit choice, aspect qualification, persistence and no RNG. Cross-function orchestration does not count because it would be a new acquisition system rather than native reuse.",
+    "policyVisibility": "The exact Pilot must contain a choice-bearing acquisition block in the same classified path alias. A product-only choice that the research policy cannot express is ineligible.",
+    "closedAliasExclusion": "Normal reward, shop, event, deed/unlock, boss relic, Lantern Art, removal and elite paths are ineligible because immutable decisions close those complete current-source route families. Fight-quality and Hearth evidence close the remaining tested trigger and natural-relic continuations.",
+    "persistence": "The path must reuse a generic current RunState collection and generic save/content dictionary identity; no new save field, internal-ID representation or migration is allowed.",
+    "uniqueness": "Exactly one block may pass. Zero means unavailable. More than one leaves a product-defining route choice absent from the SSOT and is also unavailable under this audit."
+  },
+  "sourceClassification": {
+    "parser": "Deterministically split exact GDScript at top-level static or instance function declarations and classify lowercase literal substrings within each complete function block.",
+    "acquisitionTerms": [
+      "card",
+      "relic",
+      "reward",
+      "shop",
+      "event",
+      "lantern",
+      "art",
+      "deed",
+      "unlock",
+      "remove",
+      "elite"
+    ],
+    "choiceTerms": [
+      "choose",
+      "choice",
+      "select",
+      "option",
+      "pick"
+    ],
+    "aspectTerms": [
+      "aspect",
+      "duskblade",
+      "dusk"
+    ],
+    "rngTerms": [
+      "rng",
+      "randi",
+      "randf",
+      "shuffle",
+      "pick_random"
+    ],
+    "persistenceTerms": [
+      "relic",
+      "unlock",
+      "run.",
+      "run_state",
+      "deck",
+      "owned"
+    ],
+    "aliasOrder": [
+      "lantern-art",
+      "boss-relic",
+      "shop",
+      "event",
+      "deed-unlock",
+      "removal",
+      "elite",
+      "normal-reward",
+      "unclassified"
+    ],
+    "genericContractChecks": [
+      "RunState source contains a generic relic collection",
+      "SaveService source uses a dictionary payload rather than a new candidate-specific schema field",
+      "ContentDB source uses string-keyed dictionaries rather than a closed candidate enum"
+    ]
+  },
+  "closedAliases": [
+    "normal-reward",
+    "shop",
+    "event",
+    "deed-unlock",
+    "boss-relic",
+    "lantern-art",
+    "removal",
+    "elite"
+  ],
+  "factorBoundary": {
+    "scorelinePayoff": "Separate exact-current causal factor, fixed and unmodified.",
+    "afterimagePayoff": "Separate exact-current causal factor, fixed and unmodified.",
+    "candidateAcquisition": "No factor or level exists. A feasible path shape would still require a separate design and identity protocol.",
+    "acquisitionPriority": "Exact current and fixed; no policy method is authorised.",
+    "designMatrix": "No cells, anchors or causal contrasts. Zero simulator rows.",
+    "futureRule": "Any later experiment must separately freeze exact factor definitions, levels, matrix, shared Scoreline and Afterimage anchors, estimands, interactions, aliases, common policies and seeds, estimator and stop rule."
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "a02b993a1fa1691169e0bd135124b26f7d92413055b8a298f834127fab41d137",
+    "taskCapsuleSha256": "c2b7f2a1358f6f9ce6e2cad14f8ebe77ed7682776bd5bd24fd93e3dd2be88e5c",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "content/content_db.gd": "e1d0c2291ed50f820ba7ea202e16b46eb318f26244f37d37c294f5cb073cef6d",
+      "domain/game.gd": "4eb3f416eef60797bc0cfdf9169250f07fccb3a05c0b16dcb9d7ef054898c824",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "application/save_service.gd": "0fe7571cd446dead364b6c8cb3ad9f443b6d76bee3de8dda4d59b14e1f2afc7c",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    }
+  },
+  "closedPathEvidence": {
+    "normal-card-reward": {
+      "path": "summaries/post-v30-status-liability-capacity-v1.json",
+      "sha256": "34719303b15024f9db7ea463acc1b416d9797ad5bc9886fed79d928ac454c3f6",
+      "decision": "close-status-liability-at-capacity"
+    },
+    "shop-event-deed": {
+      "path": "summaries/post-v38-novaflare-nonreward-capacity-v1.json",
+      "sha256": "53c2e858dbb59e6258eea0fdb11cabcc8e89b959df6455f41494fe63f1b57e23",
+      "decision": "close-deed-unlocked-ember-reserve-damage-family"
+    },
+    "boss-relic": {
+      "path": "summaries/post-v38-dusk-mechanism-screen-v1.json",
+      "sha256": "9ba14ec9a63ecb9a8e7cafa9b4edc0b5def546755c25e57234ee15dc251b2a64",
+      "decision": "close-dusk-shatter-threshold-crown-screen"
+    },
+    "lantern-art": {
+      "path": "summaries/post-v30-lantern-art-capacity-v1.json",
+      "sha256": "b029910d7f776f114a814885c2804f160c325d88b460b8f732c341ed9e619c1f",
+      "decision": "close-lantern-art-family-at-cap"
+    },
+    "removal": {
+      "path": "summaries/post-v38-removal-refinement-capacity-v1.json",
+      "sha256": "ea92533f960e22d06cd00f20867038f8dbe12c12cae1c05d86857e6889e14db0",
+      "decision": "close-removal-refinement-trigger-family"
+    },
+    "elite": {
+      "path": "summaries/post-v38-elite-victory-capacity-v1.json",
+      "sha256": "609dcb2d5595ff4f2505755b005c56d098ef50ee1b2c3743aa2a9d4ccf28f2da",
+      "decision": "close-elite-victory-trigger-family"
+    },
+    "fight-quality": {
+      "path": "summaries/post-v38-fight-quality-capacity-v1.json",
+      "sha256": "4332f3ad1cf49d44cb25860626ffc6d5b978b12644482a0108d310fdc8178746",
+      "decision": "close-exact-equality-fight-quality-family"
+    },
+    "method-boundary": {
+      "path": "summaries/post-v30-method-boundary-audit-v1.json",
+      "sha256": "ca1d6ba8e4bc2b83b6619b30005c841c4d73efba7df3f6b846e2fd322e6f5078",
+      "decision": "freeze-deterministic-exclusive-acquisition-class-for-source-audit"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumSourceFilesRead": 8,
+    "maximumEvidenceFilesRead": 8,
+    "maximumTraceFilesRead": 0,
+    "maximumCacheFilesRead": 0,
+    "maximumSupportRowsInspected": 0,
+    "maximumGodotProcesses": 0,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "success": "Exactly one non-Pilot function block combines acquisition, explicit choice, aspect qualification, persistence, no RNG, matching Pilot visibility and no closed alias; generic current RunState, save and content identity checks all pass.",
+    "successAuthority": "Apply decision boundary 1 and freeze only the exact eligible native path shape for a separately preregistered zero-row package-design audit. Do not choose content, implement, inspect support, run Godot, simulate or infer efficacy.",
+    "futility": "Zero or more than one native path passes, or the generic persistence contract is not exact.",
+    "futilityAuthority": "Apply decision boundary 2 and record native deterministic exclusive acquisition unavailable under the smallest current-source reuse rung. Do not loosen a closed alias, add a new acquisition/UI/save surface, repair a quarantine, select a product-defining route, add ML/RL/optimisation or simulate. Preserve the safe state and invoke the current human-authority contract because the relevant second-Dusk-package gate now requires either new product authority or a change to an immutable one-attempt boundary.",
+    "inconclusive": "Any source, evidence, task-capsule, parser, ledger or 30-second identity cannot be established.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the relevant source gate inconclusive without a candidate, implementation, support read, Godot process, simulator row, ML/RL, optimiser or protected seed. Preserve the safe state and invoke only the current human-authority contract."
+  },
+  "methodBoundary": "Deterministic Python owns exact source loading, function inventory, alias classification and stop/go. The one-function requirement is the minimum native-reuse rung, not a claim over hypothetical new product systems. Issue 524 and 525 remain immutable evidence and are not reconstructed."
+}

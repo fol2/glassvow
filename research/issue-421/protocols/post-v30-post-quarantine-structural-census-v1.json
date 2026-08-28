@@ -1,0 +1,325 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "researchQuestion": "After exact closure of current state and zone grammar and quarantine of the private generated-card token, is any materially distinct minimum deterministic combat-local mediator class still admissible without reusing a closed payoff, route, action-economy or policy family?",
+  "claimBoundary": "This zero-row census may freeze one new mechanism class for a separately preregistered capacity audit. It cannot claim support, complementarity, acquisition, activation, viability, causal effect, policy value or shipping fitness.",
+  "cheapestDiscriminatingExperiment": "Read exact current content and CombatRules plus six immutable decision summaries. Reject every family that aliases a closed state, zone, payoff, route or method, needs RNG or save state, lacks a natural causal cost, crosses the Dusk aspect boundary or needs more than two gameplay hooks. Read no trace, cache or support.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "8a80caa0d7cebdfa62bad7e0459e8d134e215bca9df8bb6dc1d37b1abe642cf1",
+    "taskCapsuleSha256": "6e2d3481a978f5d6b2044757df7cfeeaad892fc58e0a0f5e8594663937be2b0f",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8"
+    }
+  },
+  "sourceAssertions": {
+    "shared status accumulator": "func _add_status(cb: CombatState, statuses: Dictionary, who: Variant, id: String, n: int) -> void:",
+    "signed status delta": "var next: int = _sget(statuses, id) + n",
+    "special dispatcher": "func _apply_special(",
+    "end-turn hook": "func end_turn(run: RunState, cb: CombatState) -> void:",
+    "current player-status expiry set": "for s: String in [\"vulnerable\", \"weak\", \"frail\", \"beacon\"]:",
+    "direct player loss": "damage_player(run, cb, _ji(d[\"endTurnLoseHp\"]), \"burn\")",
+    "Dusk aspect guard pattern": "if run.aspect != 0:"
+  },
+  "priorEvidence": {
+    "combat-state-zone-closure": {
+      "path": "summaries/post-v30-combat-state-zone-frontier-audit-v1.json",
+      "sha256": "1415ee899fefc2087a1b3730dfb71610ff4a5c8ed8e93842007b4f28eee4d4ed",
+      "decision": "close-existing-combat-state-zone-grammar"
+    },
+    "minimum-new-mediator-design": {
+      "path": "summaries/post-v30-minimum-new-mediator-design-audit-v1.json",
+      "sha256": "360ae15dc0845b51042d67524186952d13da98fe71278b9992ad46b0b3a48109",
+      "decision": "freeze-private-combat-debt-conversion-design"
+    },
+    "private-token-quarantine": {
+      "path": "summaries/post-v30-private-debt-identity-audit-v1.json",
+      "sha256": "f6d0a810418ec58b890d9e120e06d5b2fd5bf9622d795c01bc149dc43315e8af",
+      "decision": "quarantine-private-debt-at-identity-schema-cap"
+    },
+    "afterimage-scalar-closure": {
+      "path": "summaries/post-v38-exact-complementarity-v1-audit.json",
+      "sha256": "8630a5e6ab6559b7e98fa5947e865a11f26ee505879026450f73e95fcb468621",
+      "decision": "scalar-candidate-rejected-close-family-continue-structurally"
+    },
+    "native-dusk-coverage": {
+      "path": "summaries/post-v38-native-dusk-grammar-coverage-v1.json",
+      "sha256": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff",
+      "decision": "freeze-one-uncovered-native-family-for-capacity"
+    },
+    "cohand-observability": {
+      "path": "summaries/post-v38-cohand-observability-v1.json",
+      "sha256": "2d3c3b8ce091bf8fc9560d6204d7e37cb2b1e4b9a960f32f29f533cd7625b7d4",
+      "decision": "freeze-turn-and-kindle-events-for-cohand-identity-preflight"
+    }
+  },
+  "candidates": [
+    {
+      "id": "private-generated-card-liability",
+      "priorClosureAliases": [
+        "private-combat-debt-conversion quarantined at its one-attempt identity cap"
+      ],
+      "attributes": {
+        "privateMediator": true,
+        "naturalCausalCost": true,
+        "combatLocal": true,
+        "duskIsolated": true,
+        "deterministic": true,
+        "noRng": true,
+        "noSaveState": true,
+        "gameplayHookCount": 1,
+        "currentCarrierCount": 0
+      }
+    },
+    {
+      "id": "private-player-status-liability",
+      "priorClosureAliases": [],
+      "attributes": {
+        "privateMediator": true,
+        "naturalCausalCost": true,
+        "combatLocal": true,
+        "duskIsolated": true,
+        "deterministic": true,
+        "noRng": true,
+        "noSaveState": true,
+        "gameplayHookCount": 2,
+        "currentCarrierCount": 0
+      }
+    },
+    {
+      "id": "enemy-marker-conversion",
+      "priorClosureAliases": [
+        "admitted Scoreline enemy-marker damage",
+        "closed Cracked, Dimmed and enemy-status lattice families"
+      ],
+      "attributes": {
+        "privateMediator": false,
+        "naturalCausalCost": false,
+        "combatLocal": true,
+        "duskIsolated": true,
+        "deterministic": true,
+        "noRng": true,
+        "noSaveState": true,
+        "gameplayHookCount": 1,
+        "currentCarrierCount": 1
+      }
+    },
+    {
+      "id": "positive-player-marker-conversion",
+      "priorClosureAliases": [
+        "closed Afterimage player-marker Ward payoff",
+        "existing player buff and quality state"
+      ],
+      "attributes": {
+        "privateMediator": false,
+        "naturalCausalCost": false,
+        "combatLocal": true,
+        "duskIsolated": false,
+        "deterministic": true,
+        "noRng": true,
+        "noSaveState": true,
+        "gameplayHookCount": 1,
+        "currentCarrierCount": 1
+      }
+    },
+    {
+      "id": "direct-hand-discard-exhaust-card-relation",
+      "priorClosureAliases": [
+        "complete card-zone grammar",
+        "co-hand and package-order families",
+        "Kindle, repeated-Attack and action-economy families"
+      ],
+      "attributes": {
+        "privateMediator": true,
+        "naturalCausalCost": true,
+        "combatLocal": true,
+        "duskIsolated": true,
+        "deterministic": true,
+        "noRng": true,
+        "noSaveState": true,
+        "gameplayHookCount": 1,
+        "currentCarrierCount": 1
+      }
+    },
+    {
+      "id": "new-resource-counter-cost-or-transform-state",
+      "priorClosureAliases": [
+        "complete combat-state grammar",
+        "turn-state, resource, cadence, setup and action-economy families"
+      ],
+      "attributes": {
+        "privateMediator": true,
+        "naturalCausalCost": false,
+        "combatLocal": false,
+        "duskIsolated": true,
+        "deterministic": true,
+        "noRng": true,
+        "noSaveState": false,
+        "gameplayHookCount": 3,
+        "currentCarrierCount": 0
+      }
+    },
+    {
+      "id": "new-relic-or-acquisition-route-trigger",
+      "priorClosureAliases": [
+        "natural reward, shop, event and guaranteed acquisition families",
+        "existing relic trigger and persistent ownership surfaces"
+      ],
+      "attributes": {
+        "privateMediator": false,
+        "naturalCausalCost": true,
+        "combatLocal": false,
+        "duskIsolated": true,
+        "deterministic": true,
+        "noRng": false,
+        "noSaveState": false,
+        "gameplayHookCount": 3,
+        "currentCarrierCount": 1
+      }
+    },
+    {
+      "id": "learned-random-or-optimised-policy-mediator",
+      "priorClosureAliases": [
+        "no measured policy-repertoire bottleneck or method decision value"
+      ],
+      "attributes": {
+        "privateMediator": false,
+        "naturalCausalCost": false,
+        "combatLocal": false,
+        "duskIsolated": false,
+        "deterministic": false,
+        "noRng": false,
+        "noSaveState": true,
+        "gameplayHookCount": 4,
+        "currentCarrierCount": 0
+      }
+    }
+  ],
+  "selectedDesigns": [
+    "private-player-status-liability"
+  ],
+  "selectedDesign": {
+    "id": "private-player-status-liability",
+    "statusId": "glassBurden",
+    "specialIds": [
+      "takeGlassBurden",
+      "settleGlassBurden"
+    ],
+    "cardIds": [
+      "burdenCut",
+      "settlingWard"
+    ],
+    "producer": {
+      "researchId": "burdenCut",
+      "type": "attack",
+      "rarity": "common",
+      "cost": 1,
+      "target": "enemy",
+      "baseEffects": [
+        {
+          "kind": "dmg",
+          "n": 8
+        },
+        {
+          "kind": "special",
+          "id": "takeGlassBurden"
+        }
+      ],
+      "upgradeEffects": [
+        {
+          "kind": "dmg",
+          "n": 12
+        },
+        {
+          "kind": "special",
+          "id": "takeGlassBurden"
+        }
+      ]
+    },
+    "consumer": {
+      "researchId": "settlingWard",
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "self",
+      "baseEffects": [
+        {
+          "kind": "block",
+          "n": 6
+        },
+        {
+          "kind": "special",
+          "id": "settleGlassBurden"
+        }
+      ],
+      "upgradeEffects": [
+        {
+          "kind": "block",
+          "n": 9
+        },
+        {
+          "kind": "special",
+          "id": "settleGlassBurden"
+        }
+      ]
+    },
+    "mediator": {
+      "scope": "Dusk-only player combat status; never written to RunState or save data.",
+      "production": "takeGlassBurden adds exactly one glassBurden stack through the existing signed status accumulator.",
+      "consumption": "settleGlassBurden removes exactly one stack only when one is present; absence is inert and can never create a negative stack.",
+      "naturalCost": "At each player end turn, lose HP equal to the positive glassBurden stack count. The status persists until consumed or combat ends.",
+      "telemetry": "Existing status events with id glassBurden and n +1 or -1 are the direct producer and consumer witnesses."
+    },
+    "minimumRuntimeHooks": [
+      {
+        "function": "CombatRules._apply_special",
+        "change": "Handle both frozen special IDs behind run.aspect == 0 using the existing status accumulator."
+      },
+      {
+        "function": "CombatRules.end_turn",
+        "change": "Before ordinary hand penalties, lose HP equal to positive glassBurden without ticking or mutating the stack."
+      }
+    ],
+    "mechanisticSeparation": {
+      "fromPrivateCardDebt": "No CardInst is generated, placed, drawn, discarded, exhausted or removed; the quarantined generated-token path is never executed.",
+      "fromScoreline": "The mediator is a private player liability and clean-up relation; it never reads, writes or damages an enemy marker.",
+      "fromAfterimage": "The player status is harmful and persistent until cleaned. Ward remains a fixed carrier anchor rather than the causal payoff.",
+      "fromKindleAndHandSize": "No card-zone mutation, Kindle, Ember, hand-size or discard event participates."
+    },
+    "forbiddenAdaptation": [
+      "No carrier, value, rarity, status cost, persistence, stack count, special ID or hook change after support is read.",
+      "No generated card, Hex, existing debuff, discard relation, payoff substitution or repair of the quarantined private-debt probe.",
+      "No ML, RL, optimiser, protected seed, enabled whole-run or causal claim before separate capacity and identity gates."
+    ]
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumSourceFilesRead": 2,
+    "maximumEvidenceFilesRead": 6,
+    "maximumTraceFilesRead": 0,
+    "maximumCacheFilesRead": 0,
+    "maximumSupportRowsInspected": 0,
+    "maximumGodotProcesses": 0,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Exact current source, all six immutable decisions and ledger identity pass; exactly one class has no closure alias and satisfies private mediator, natural cost, combat locality, Dusk isolation, determinism, no RNG, no save state, at most two gameplay hooks and zero current carrier within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze only private-player-status-liability for a separately preregistered zero-new-row capacity audit. Do not implement a hook, read support here, run Godot, alter a carrier or infer efficacy.",
+    "futility": "No class satisfies every frozen rule.",
+    "futilityAuthority": "Apply decision boundary 2 and close this finite post-quarantine structural grammar. Continue with the next evidence-backed method inside issue 421 without reopening an alias, private card token, ML/RL or optimiser absent measured decision value.",
+    "inconclusive": "Any source, evidence, catalogue, selected-set, ledger or 30-second identity fails.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the census inconclusive at cap without selecting, implementing, simulating, reading support, repairing or using a protected seed."
+  }
+}

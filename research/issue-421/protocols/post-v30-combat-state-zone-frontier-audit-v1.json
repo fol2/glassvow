@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "zero-row-source-complete-combat-state-zone-frontier",
+  "question": "After every admitted, closed or quarantined issue #421 family is applied, does exact current-main retain any gameplay-consumed combat state or card-zone representation that can express the missing second Duskblade complementarity package?",
+  "hypotheses": {
+    "H0": "Every exact combat, combatant and card-instance field is already an admitted package, a closed or quarantined grammar alias, a decomposed container or fixed product context.",
+    "H1": "Exactly one field surface has an existing gameplay consumer and no immutable issue #421 disposition."
+  },
+  "competingOptions": [
+    "freeze at most one exact unclosed state surface for a separate capacity preregistration",
+    "close existing combat state and card-zone grammar, establishing the issue-body precondition for a separately preregistered smallest new deterministic mediator",
+    "record an inconclusive result at the frozen cap"
+  ],
+  "scientificBasis": "Exact source owns a finite 52-field state vocabulary across CombatState, PlayerCombatant, EnemyCombatant and CardInst. A one-to-one field audit is cheaper and stricter than proposing another card: it can prove whether any existing state or zone consumer remains after immutable decisions, without outcome support, simulator rows or a chosen payoff.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "350f2bc1eebd4890f86304470f6fbd7168004c0dfc9d41d05185457d4c00f190",
+    "taskCapsuleSha256": "4089c6f37f0b9a2a23dfa12702fdc59490572edf158ecb4672120f1589fc640c",
+    "sourceSha256": {
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "domain/state/card_inst.gd": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    }
+  },
+  "stateInventory": {
+    "combat": [
+      "kind",
+      "affix",
+      "turn",
+      "over",
+      "result",
+      "queue",
+      "player",
+      "enemies",
+      "draw",
+      "hand",
+      "discard",
+      "exhaust",
+      "embers",
+      "ember_cap",
+      "art_used_turn",
+      "kindled_turn",
+      "kindles_this_turn",
+      "pending_chips_active",
+      "pending_chips",
+      "counters_played",
+      "counters_attacks",
+      "first_card_played",
+      "hp_lost",
+      "prism_procd",
+      "finale_handoff"
+    ],
+    "player": [
+      "hp",
+      "max_hp",
+      "block",
+      "energy",
+      "energy_max",
+      "statuses"
+    ],
+    "enemy": [
+      "key",
+      "variant_id",
+      "def",
+      "idx",
+      "name",
+      "hp",
+      "max_hp",
+      "block",
+      "statuses",
+      "staggered",
+      "last_moves",
+      "move_key",
+      "elite",
+      "boss",
+      "facet_max",
+      "chips",
+      "flags"
+    ],
+    "card": [
+      "uid",
+      "id",
+      "up",
+      "bonus"
+    ]
+  },
+  "stateSurfaceCoverage": [
+    {
+      "id": "encounter-identity-and-terminal-context",
+      "fields": {
+        "combat": ["kind", "affix", "over", "result", "finale_handoff"],
+        "enemy": ["key", "variant_id", "def", "idx", "name", "elite", "boss", "flags"],
+        "card": ["uid", "id"]
+      },
+      "disposition": "fixed-product-context",
+      "evidence": ["nativeGrammar", "fightQuality"],
+      "aliasStructure": "Encounter identity, stable object identity, authored AI flags and terminal handoff select or describe the running product. Elite/fight-quality triggers are closed; changing an encounter, act, identity or flag subset would be content selection, not an unconsumed strategy mediator."
+    },
+    {
+      "id": "decomposed-combatant-containers",
+      "fields": {
+        "combat": ["player", "enemies"]
+      },
+      "disposition": "container-decomposed",
+      "evidence": [],
+      "aliasStructure": "These two fields contain the separately enumerated PlayerCombatant and EnemyCombatant fields and add no state of their own."
+    },
+    {
+      "id": "turn-cadence-and-event-transport",
+      "fields": {
+        "combat": ["turn", "queue", "art_used_turn", "kindled_turn", "kindles_this_turn", "counters_played", "counters_attacks", "first_card_played"]
+      },
+      "disposition": "closed-or-quarantined",
+      "evidence": ["actionGrammar", "turnState", "nativeGrammar", "unusedTransition"],
+      "aliasStructure": "Turn setup/action order and retained Energy are closed; Lantern Art and Kindle counters are closed; existing play/Attack cadence consumers reduce to closed damage, strength or Ward payoffs. Queue transport was exhaustively partitioned and its sole unused-transition audit is quarantined, so no event rescue or new cadence payoff is available."
+    },
+    {
+      "id": "card-zones-and-instance-state",
+      "fields": {
+        "combat": ["draw", "hand", "discard", "exhaust"],
+        "card": ["up", "bonus"]
+      },
+      "disposition": "admitted-closed-or-quarantined",
+      "evidence": ["ashPackage", "actionGrammar", "momentum", "upgradeTelemetry", "unusedTransition", "skillChip"],
+      "aliasStructure": "Hand size is admitted for Ashwarden; draw/cycle and Skill-chip sequencing are closed; discard/exhaust terminal movement is universal or Kindle/Ember context; reshuffle is quarantined; same-instance growth is closed; upgrade observation failed identity and cannot be rescued."
+    },
+    {
+      "id": "dusk-facet-and-ember-state",
+      "fields": {
+        "combat": ["embers", "ember_cap", "pending_chips_active", "pending_chips", "prism_procd"]
+      },
+      "disposition": "closed",
+      "evidence": ["nativeGrammar", "crossEnemyFacet", "skillChip"],
+      "aliasStructure": "Every exact Ember consumer and current Facet ownership, chip, Shatter, Prism and Skill-chip route has an immutable closure or quarantine. A different consumer or payoff would be a new primitive, not unused existing grammar."
+    },
+    {
+      "id": "player-resources-status-and-quality",
+      "fields": {
+        "combat": ["hp_lost"],
+        "player": ["hp", "max_hp", "block", "energy", "energy_max", "statuses"]
+      },
+      "disposition": "admitted-closed-or-fixed-context",
+      "evidence": ["ashPackage", "actionGrammar", "turnState", "fightQuality", "nativeGrammar"],
+      "aliasStructure": "Bloodfire/hand-size support is admitted for Ashwarden. HP-loss quality, recovery, Ward, Energy, power/status setup and turn reservoirs are closed or fixed combat resources. Recombining their thresholds or payoffs would reopen a closed family."
+    },
+    {
+      "id": "enemy-combat-state",
+      "fields": {
+        "enemy": ["hp", "max_hp", "block", "statuses", "staggered", "last_moves", "move_key", "facet_max", "chips"]
+      },
+      "disposition": "closed-or-quarantined",
+      "evidence": ["nativeGrammar", "enemyStatusLattice", "crossEnemyFacet", "shatterSuppression", "unusedTransition"],
+      "aliasStructure": "Enemy HP/terminal topology, Ward, statuses, intent history, stagger and Facet state map to exact closed or quarantined families. Selecting a threshold, enemy, intent, status subset or observation repair is forbidden."
+    }
+  ],
+  "uncoveredStateSurfaces": [],
+  "priorEvidence": {
+    "nativeGrammar": {
+      "path": "summaries/post-v38-native-dusk-grammar-coverage-v1.json",
+      "sha256": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff",
+      "decision": "freeze-one-uncovered-native-family-for-capacity"
+    },
+    "actionGrammar": {
+      "path": "summaries/post-v38-action-grammar-inventory-v1.json",
+      "sha256": "4eeda4d020539996106ea674d17acd7d0804a8181583c2cf4e856946febca3da",
+      "decision": "close-one-bit-setup-action-grammar"
+    },
+    "turnState": {
+      "path": "summaries/post-v38-turn-state-economy-capacity-v1.json",
+      "sha256": "7cd0edf36fcd011422ec99a94d84cc0a774307c1db6150fff3d830fdf1d7c842",
+      "decision": "close-turn-state-action-economy-family"
+    },
+    "ashPackage": {
+      "path": "summaries/post-v38-ash-package-pair-v1.json",
+      "sha256": "af6424db4266531fadd7c7de07db0b46e028a4543604636ec1b13b819b2b7c1f",
+      "decision": "admit-ash-hand-size-bloodfire-pair"
+    },
+    "momentum": {
+      "path": "summaries/post-v38-momentum-preference-capacity-v1.json",
+      "sha256": "fdc51ca09f103f53528afb4f3b641a0c330db3dff1935287e1981b40a2dfd73b",
+      "decision": "close-momentum-remap-and-honing-repeat-family"
+    },
+    "upgradeTelemetry": {
+      "path": "summaries/post-v38-upgrade-telemetry-identity-v1.json",
+      "sha256": "2a1d2a9c251846ac07bed519ce76e31fd7761fbd7ff7f1905383f143d78206da",
+      "decision": "reject-upgrade-telemetry-as-not-identity-safe"
+    },
+    "fightQuality": {
+      "path": "summaries/post-v38-fight-quality-capacity-v1.json",
+      "sha256": "4332f3ad1cf49d44cb25860626ffc6d5b978b12644482a0108d310fdc8178746",
+      "decision": "close-exact-equality-fight-quality-family"
+    },
+    "enemyStatusLattice": {
+      "path": "summaries/post-v30-enemy-status-lattice-audit-v1.json",
+      "sha256": "addd1c79e733aeb55a2dd1458878d1b9509debabbe2e69e4b24283bcc0a72328",
+      "decision": "close-cracked-dimmed-conjunction-as-closed-alias"
+    },
+    "crossEnemyFacet": {
+      "path": "summaries/post-v30-cross-enemy-facet-identity-v1.json",
+      "sha256": "a3f9f81407dc5d943487de33a5474663dc11f2216e68507873c2251caedaa0ee",
+      "decision": "close-cross-enemy-facet-on-identity-failure"
+    },
+    "shatterSuppression": {
+      "path": "summaries/post-v30-shatter-action-suppression-capacity-v1.json",
+      "sha256": "9a56bf08578cd47af6b78eed49ed321bba30c86e9058fd4cab8cb70aa6f15c3e",
+      "decision": "close-damaging-intent-shatter-suppression-on-observability-gate"
+    },
+    "skillChip": {
+      "path": "summaries/post-v30-skill-chip-capacity-v1.json",
+      "sha256": "471317d70b827206b7ea0787ea91f53822e4a8bab0cbecf2082c85e8889e7eae",
+      "decision": "close-current-skill-chip-line-at-cap"
+    },
+    "unusedTransition": {
+      "path": "summaries/post-v30-unused-discrete-transition-audit-v1.json",
+      "sha256": "a26063c374b21063674f72e49aee06be208f2c43a3d1055b1b18d9bd6e26155d",
+      "decision": "record-unused-discrete-transition-audit-inconclusive-at-cap"
+    }
+  },
+  "factorDisposition": {
+    "scorelinePayoff": "Separate, fixed and not varied.",
+    "afterimagePayoff": "Separate, fixed and not varied.",
+    "candidate": "No card, relic, effect, carrier, payoff or acquisition path is selected.",
+    "method": "No ML, RL, optimiser, fitted model or adaptive search is used.",
+    "support": "No trace, cache, policy support or outcome endpoint is read."
+  },
+  "budget": {
+    "maximumSourceFilesRead": 6,
+    "maximumEvidenceFilesRead": 12,
+    "maximumTraceFilesRead": 0,
+    "maximumCacheFilesRead": 0,
+    "maximumSupportRowsRead": 0,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "decisionRules": {
+    "success": "All 52 fields are covered exactly once and exactly one preregistered state surface is marked uncovered, with every source, evidence and ledger identity exact within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze only the one preregistered unclosed surface for a separate zero-row capacity protocol. Do not choose a payoff, carrier, factor, method or row.",
+    "futility": "All 52 fields are covered exactly once and no state surface is uncovered.",
+    "futilityAuthority": "Apply decision boundary 2 and close the existing combat-state and card-zone grammar. This establishes that exact current grammar cannot supply the missing Duskblade complementarity package. Continue under the issue-body authority only with a separately preregistered smallest new deterministic mediator design; do not retry any mapped field, observation or payoff.",
+    "inconclusive": "The source field set, one-to-one coverage, evidence identity, ledger identity or 30-second cap fails.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the audit inconclusive without selecting a state surface, candidate, method, support row or protected seed."
+  }
+}
