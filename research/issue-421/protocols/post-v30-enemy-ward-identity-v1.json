@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "enemy-ward-transition-identity-preflight",
+  "question": "Are the observation and ward-break-without-blood research knobs exact nulls when disabled, and does the enabled factor change only the frozen implicit-Facet mediator and its existing mechanistic interactions?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "483d742785a90a179edf0433bcad9b90085fc3f1c78ba07edb821ff2a1c57912",
+    "balanceSimSha256": "9e3a43c7f9c6acf2d5a7cf7fe4dc82816ba2f64c916435dff5a9428beb0f871b",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "6abe0f1aaff5513b2c11889801eff1cf39b19fd7687e84b8f9bdac99fbfc0a1e",
+    "probeUidSha256": "a62c4b4063e39f34cd5cd89d00e05d0d821aaa63cf47e5f1e624609d4273d927",
+    "runnerSha256": "6d089aba73738e864726586e5663a669b3e2aab26aaa9c75a5465e7f2c2d3643",
+    "frontierProtocolSha256": "0ec0d46180525ac2c1f0db111ed9e5a11266128a5b677d18f941020e6e4f72fe",
+    "frontierSummarySha256": "bda04cf79d3dff08e12a5502dede581197f9529bcf954a527c1c198fe1dba172",
+    "taskCapsuleSha256": "f1eb62e006e1b61f4cdd741785db013288ebd5cb295d4d502a6d32a4fdfdf244"
+  },
+  "factorDefinition": {
+    "name": "research_enemy_ward_facet",
+    "levels": {
+      "omitted": "The optional simulator argument is absent; CombatRules retains false.",
+      "false": "Explicit false; exact semantic, trajectory, RNG, policy and result null against omitted.",
+      "trueDirectOnly": "In Dusk direct controls only, a positive pre-hit enemy Ward reduced exactly to zero with zero HP loss marks the existing per-card target hit flag. No true whole-run is authorised."
+    },
+    "observationKnob": {
+      "name": "research_enemy_ward_trace",
+      "false": "No event enrichment and trajectory is exactly {capture:false}.",
+      "true": "Only capture nodes, card rewards, boss relics and selected combat events; hitEnemy adds pre/post Ward, pending-card, Attack, aspect and frozen mediator booleans. Core state, path, RNG, policy and result must equal capture false."
+    },
+    "mechanisticInteractions": [
+      "Dusk aspect x Ward-break trigger: Ashwarden remains an exact no-chip control.",
+      "Ward-break trigger x authored card chip: the existing per formula is reused, so Chisel produces two chips on the direct exact-break anchor.",
+      "Ward-break trigger x Beacon status: the existing per formula is reused, so one Beacon stack produces two chips on the direct exact-break anchor; Beacon is not varied whole-run.",
+      "Ward-break trigger x repeated hits: the existing boolean hit flag collapses multiple hits to one card-target payout.",
+      "Ward-break trigger x existing Facet threshold: Shatter may occur only through the ordinary apply_chips path; direct controls remain below threshold."
+    ],
+    "forbiddenDirectEffects": "Damage, Ward absorption, HP, Energy, card movement, target, event order other than the intended CHIP insertion, authored chip value, Beacon state, Ashwarden, RNG, policy and every non-Facet state must remain exact.",
+    "aliasStructure": "A blood-producing hit already sets the same boolean and receives no additional payout. Retained Ward is not a transition. The factor has no scalar level, card/enemy subset, carrier or acquisition factor."
+  },
+  "directControls": [
+    {
+      "input": {"id":"exact-break-factor-off","seed":421980,"aspect":"duskblade","factor":false,"card":"strike","upgraded":false,"hp":100,"block":6,"chips":0,"facetMax":4,"beacon":0},
+      "expected": {"id":"exact-break-factor-off","aspect":"duskblade","factor":false,"card":"strike","upgraded":false,"target":0,"beacon":0,"playReturned":true,"preview":{"hits":[{"dmg":6,"times":1}],"total":6,"loss":0,"lethal":false,"chips":0,"willShatter":false},"enemyBefore":{"hp":100,"block":6,"chips":0,"facetMax":4},"enemyAfter":{"hp":100,"block":0,"chips":0,"facetMax":4},"hitEvents":[{"idx":0,"amount":0,"blocked":6,"hpAfter":100,"blockBefore":6,"blockAfter":0,"pendingChipsActive":true,"isAttack":true,"duskAspect":true,"wardBreakWithoutBlood":true,"facetHitFlagged":false,"researchFacetHitFlagged":false}],"chipEvents":[],"eventKinds":["play","energy","hitEnemy","toDiscard"],"playerAfter":{"hp":64,"energy":2,"beacon":0}}
+    },
+    {
+      "input": {"id":"exact-break-factor-on","seed":421980,"aspect":"duskblade","factor":true,"card":"strike","upgraded":false,"hp":100,"block":6,"chips":0,"facetMax":4,"beacon":0},
+      "expected": {"id":"exact-break-factor-on","aspect":"duskblade","factor":true,"card":"strike","upgraded":false,"target":0,"beacon":0,"playReturned":true,"preview":{"hits":[{"dmg":6,"times":1}],"total":6,"loss":0,"lethal":false,"chips":1,"willShatter":false},"enemyBefore":{"hp":100,"block":6,"chips":0,"facetMax":4},"enemyAfter":{"hp":100,"block":0,"chips":1,"facetMax":4},"hitEvents":[{"idx":0,"amount":0,"blocked":6,"hpAfter":100,"blockBefore":6,"blockAfter":0,"pendingChipsActive":true,"isAttack":true,"duskAspect":true,"wardBreakWithoutBlood":true,"facetHitFlagged":true,"researchFacetHitFlagged":true}],"chipEvents":[{"idx":0,"n":1,"chips":1,"facetMax":4}],"eventKinds":["play","energy","hitEnemy","chip","toDiscard"],"playerAfter":{"hp":64,"energy":2,"beacon":0}}
+    },
+    {
+      "input": {"id":"ward-retained-factor-on","seed":421981,"aspect":"duskblade","factor":true,"card":"strike","upgraded":false,"hp":100,"block":7,"chips":0,"facetMax":4,"beacon":0},
+      "expected": {"id":"ward-retained-factor-on","aspect":"duskblade","factor":true,"card":"strike","upgraded":false,"target":0,"beacon":0,"playReturned":true,"preview":{"hits":[{"dmg":6,"times":1}],"total":6,"loss":0,"lethal":false,"chips":0,"willShatter":false},"enemyBefore":{"hp":100,"block":7,"chips":0,"facetMax":4},"enemyAfter":{"hp":100,"block":1,"chips":0,"facetMax":4},"hitEvents":[{"idx":0,"amount":0,"blocked":6,"hpAfter":100,"blockBefore":7,"blockAfter":1,"pendingChipsActive":true,"isAttack":true,"duskAspect":true,"wardBreakWithoutBlood":false,"facetHitFlagged":false,"researchFacetHitFlagged":false}],"chipEvents":[],"eventKinds":["play","energy","hitEnemy","toDiscard"],"playerAfter":{"hp":64,"energy":2,"beacon":0}}
+    },
+    {
+      "input": {"id":"ward-break-with-blood-factor-on","seed":421982,"aspect":"duskblade","factor":true,"card":"strike","upgraded":false,"hp":100,"block":5,"chips":0,"facetMax":4,"beacon":0},
+      "expected": {"id":"ward-break-with-blood-factor-on","aspect":"duskblade","factor":true,"card":"strike","upgraded":false,"target":0,"beacon":0,"playReturned":true,"preview":{"hits":[{"dmg":6,"times":1}],"total":6,"loss":1,"lethal":false,"chips":1,"willShatter":false},"enemyBefore":{"hp":100,"block":5,"chips":0,"facetMax":4},"enemyAfter":{"hp":99,"block":0,"chips":1,"facetMax":4},"hitEvents":[{"idx":0,"amount":1,"blocked":5,"hpAfter":99,"blockBefore":5,"blockAfter":0,"pendingChipsActive":true,"isAttack":true,"duskAspect":true,"wardBreakWithoutBlood":false,"facetHitFlagged":true,"researchFacetHitFlagged":false}],"chipEvents":[{"idx":0,"n":1,"chips":1,"facetMax":4}],"eventKinds":["play","energy","hitEnemy","chip","toDiscard"],"playerAfter":{"hp":64,"energy":2,"beacon":0}}
+    },
+    {
+      "input": {"id":"blood-without-ward-factor-on","seed":421983,"aspect":"duskblade","factor":true,"card":"strike","upgraded":false,"hp":100,"block":0,"chips":0,"facetMax":4,"beacon":0},
+      "expected": {"id":"blood-without-ward-factor-on","aspect":"duskblade","factor":true,"card":"strike","upgraded":false,"target":0,"beacon":0,"playReturned":true,"preview":{"hits":[{"dmg":6,"times":1}],"total":6,"loss":6,"lethal":false,"chips":1,"willShatter":false},"enemyBefore":{"hp":100,"block":0,"chips":0,"facetMax":4},"enemyAfter":{"hp":94,"block":0,"chips":1,"facetMax":4},"hitEvents":[{"idx":0,"amount":6,"blocked":0,"hpAfter":94,"blockBefore":0,"blockAfter":0,"pendingChipsActive":true,"isAttack":true,"duskAspect":true,"wardBreakWithoutBlood":false,"facetHitFlagged":true,"researchFacetHitFlagged":false}],"chipEvents":[{"idx":0,"n":1,"chips":1,"facetMax":4}],"eventKinds":["play","energy","hitEnemy","chip","toDiscard"],"playerAfter":{"hp":64,"energy":2,"beacon":0}}
+    },
+    {
+      "input": {"id":"ash-exact-break-factor-on","seed":421984,"aspect":"ashwarden","factor":true,"card":"strike","upgraded":false,"hp":100,"block":6,"chips":0,"facetMax":4,"beacon":0},
+      "expected": {"id":"ash-exact-break-factor-on","aspect":"ashwarden","factor":true,"card":"strike","upgraded":false,"target":0,"beacon":0,"playReturned":true,"preview":{"hits":[{"dmg":6,"times":1}],"total":6,"loss":0,"lethal":false,"chips":0,"willShatter":false},"enemyBefore":{"hp":100,"block":6,"chips":0,"facetMax":4},"enemyAfter":{"hp":100,"block":0,"chips":0,"facetMax":4},"hitEvents":[{"idx":0,"amount":0,"blocked":6,"hpAfter":100,"blockBefore":6,"blockAfter":0,"pendingChipsActive":true,"isAttack":true,"duskAspect":false,"wardBreakWithoutBlood":true,"facetHitFlagged":false,"researchFacetHitFlagged":false}],"chipEvents":[],"eventKinds":["play","energy","hitEnemy","toDiscard"],"playerAfter":{"hp":88,"energy":2,"beacon":0}}
+    },
+    {
+      "input": {"id":"authored-chip-exact-break-factor-on","seed":421985,"aspect":"duskblade","factor":true,"card":"chisel","upgraded":false,"hp":100,"block":4,"chips":0,"facetMax":4,"beacon":0},
+      "expected": {"id":"authored-chip-exact-break-factor-on","aspect":"duskblade","factor":true,"card":"chisel","upgraded":false,"target":0,"beacon":0,"playReturned":true,"preview":{"hits":[{"dmg":4,"times":1}],"total":4,"loss":0,"lethal":false,"chips":2,"willShatter":false},"enemyBefore":{"hp":100,"block":4,"chips":0,"facetMax":4},"enemyAfter":{"hp":100,"block":0,"chips":2,"facetMax":4},"hitEvents":[{"idx":0,"amount":0,"blocked":4,"hpAfter":100,"blockBefore":4,"blockAfter":0,"pendingChipsActive":true,"isAttack":true,"duskAspect":true,"wardBreakWithoutBlood":true,"facetHitFlagged":true,"researchFacetHitFlagged":true}],"chipEvents":[{"idx":0,"n":2,"chips":2,"facetMax":4}],"eventKinds":["play","energy","hitEnemy","chip","toDiscard"],"playerAfter":{"hp":64,"energy":2,"beacon":0}}
+    },
+    {
+      "input": {"id":"beacon-exact-break-factor-on","seed":421986,"aspect":"duskblade","factor":true,"card":"strike","upgraded":false,"hp":100,"block":6,"chips":0,"facetMax":4,"beacon":1},
+      "expected": {"id":"beacon-exact-break-factor-on","aspect":"duskblade","factor":true,"card":"strike","upgraded":false,"target":0,"beacon":1,"playReturned":true,"preview":{"hits":[{"dmg":6,"times":1}],"total":6,"loss":0,"lethal":false,"chips":2,"willShatter":false},"enemyBefore":{"hp":100,"block":6,"chips":0,"facetMax":4},"enemyAfter":{"hp":100,"block":0,"chips":2,"facetMax":4},"hitEvents":[{"idx":0,"amount":0,"blocked":6,"hpAfter":100,"blockBefore":6,"blockAfter":0,"pendingChipsActive":true,"isAttack":true,"duskAspect":true,"wardBreakWithoutBlood":true,"facetHitFlagged":true,"researchFacetHitFlagged":true}],"chipEvents":[{"idx":0,"n":2,"chips":2,"facetMax":4}],"eventKinds":["play","energy","hitEnemy","chip","toDiscard"],"playerAfter":{"hp":64,"energy":2,"beacon":1}}
+    },
+    {
+      "input": {"id":"multihit-fully-absorbed-factor-on","seed":421987,"aspect":"duskblade","factor":true,"card":"twinFangs","upgraded":false,"hp":100,"block":8,"chips":0,"facetMax":4,"beacon":0},
+      "expected": {"id":"multihit-fully-absorbed-factor-on","aspect":"duskblade","factor":true,"card":"twinFangs","upgraded":false,"target":0,"beacon":0,"playReturned":true,"preview":{"hits":[{"dmg":4,"times":2}],"total":8,"loss":0,"lethal":false,"chips":1,"willShatter":false},"enemyBefore":{"hp":100,"block":8,"chips":0,"facetMax":4},"enemyAfter":{"hp":100,"block":0,"chips":1,"facetMax":4},"hitEvents":[{"idx":0,"amount":0,"blocked":4,"hpAfter":100,"blockBefore":8,"blockAfter":4,"pendingChipsActive":true,"isAttack":true,"duskAspect":true,"wardBreakWithoutBlood":false,"facetHitFlagged":false,"researchFacetHitFlagged":false},{"idx":0,"amount":0,"blocked":4,"hpAfter":100,"blockBefore":4,"blockAfter":0,"pendingChipsActive":true,"isAttack":true,"duskAspect":true,"wardBreakWithoutBlood":true,"facetHitFlagged":true,"researchFacetHitFlagged":true}],"chipEvents":[{"idx":0,"n":1,"chips":1,"facetMax":4}],"eventKinds":["play","energy","hitEnemy","hitEnemy","chip","toDiscard"],"playerAfter":{"hp":64,"energy":2,"beacon":0}}
+    },
+    {
+      "input": {"id":"multihit-break-then-blood-factor-on","seed":421988,"aspect":"duskblade","factor":true,"card":"twinFangs","upgraded":false,"hp":100,"block":4,"chips":0,"facetMax":4,"beacon":0},
+      "expected": {"id":"multihit-break-then-blood-factor-on","aspect":"duskblade","factor":true,"card":"twinFangs","upgraded":false,"target":0,"beacon":0,"playReturned":true,"preview":{"hits":[{"dmg":4,"times":2}],"total":8,"loss":4,"lethal":false,"chips":1,"willShatter":false},"enemyBefore":{"hp":100,"block":4,"chips":0,"facetMax":4},"enemyAfter":{"hp":96,"block":0,"chips":1,"facetMax":4},"hitEvents":[{"idx":0,"amount":0,"blocked":4,"hpAfter":100,"blockBefore":4,"blockAfter":0,"pendingChipsActive":true,"isAttack":true,"duskAspect":true,"wardBreakWithoutBlood":true,"facetHitFlagged":true,"researchFacetHitFlagged":true},{"idx":0,"amount":4,"blocked":0,"hpAfter":96,"blockBefore":0,"blockAfter":0,"pendingChipsActive":true,"isAttack":true,"duskAspect":true,"wardBreakWithoutBlood":false,"facetHitFlagged":true,"researchFacetHitFlagged":false}],"chipEvents":[{"idx":0,"n":1,"chips":1,"facetMax":4}],"eventKinds":["play","energy","hitEnemy","hitEnemy","chip","toDiscard"],"playerAfter":{"hp":64,"energy":2,"beacon":0}}
+    }
+  ],
+  "focusedMediatorComparison": {
+    "pair": ["exact-break-factor-off", "exact-break-factor-on"],
+    "metadataExcludedBeforeComparison": ["id", "factor"],
+    "intendedFieldsExcludedBeforeComparison": ["preview.chips", "preview.willShatter", "enemyAfter.chips", "chipEvents", "eventKinds.CHIP", "hitEvents.facetHitFlagged", "hitEvents.researchFacetHitFlagged"],
+    "requiredIntendedDelta": "The enabled row changes preview chips 0 to 1, enemy chips 0 to 1, the two Facet flags false to true and inserts exactly one n=1 CHIP event. Every retained field, including RNG cursors, must be equal."
+  },
+  "traceSentinelCohort": {
+    "policyRoot": 421970,
+    "policyIndices": [0, 1, 2, 3],
+    "simulationSeeds": [421971, 421972],
+    "aspect": "duskblade",
+    "vow": 5,
+    "identities": 8,
+    "arms": [
+      {"factor": false, "capture": false},
+      {"factor": false, "capture": true}
+    ],
+    "purpose": "Prove observation capture is core-state, path, RNG, policy and result inert before the omitted-versus-explicit-false factor identity stage."
+  },
+  "identityCohort": {
+    "policyRoot": 421970,
+    "policyIndices": [0, 1, 2, 3],
+    "simulationSeeds": [421973, 421974, 421975, 421976],
+    "aspect": "duskblade",
+    "vow": 5,
+    "identities": 16,
+    "arms": [
+      {"factor": "omitted", "capture": true},
+      {"factor": false, "capture": true}
+    ],
+    "freshness": "A read-only pre-freeze search found zero policyRoot 421970 and seeds 421971 through 421976 in the append-only ledger and existing protocols or summaries."
+  },
+  "traceSchema": {
+    "topLevelKeys": ["capture", "nodes", "combatEvents", "cardRewards", "bossRelics"],
+    "combatEventKinds": ["turn", "play", "hitEnemy", "chip", "shatter", "die", "endTurn"],
+    "hitFields": ["fight", "idx", "amount", "blocked", "blockBefore", "blockAfter", "pendingChipsActive", "isAttack", "duskAspect", "wardBreakWithoutBlood", "facetHitFlagged", "researchFacetHitFlagged"],
+    "nullLaw": "With factor false, researchFacetHitFlagged is always false, facetHitFlagged exactly equals pendingChipsActive and isAttack and positive HP loss, blocked equals blockBefore minus blockAfter, and wardBreakWithoutBlood exactly equals positive pre-hit Ward, zero post-hit Ward and zero HP loss.",
+    "supportBoundary": "Schema validation may verify these per-event identities but must not count, stratify or interpret natural Ward-break support in this preflight."
+  },
+  "budget": {
+    "directExecutions": 10,
+    "maximumWholeRunIdentityObservationRows": 48,
+    "maximumGodotProcesses": 3,
+    "maximumWallTimeSeconds": 180,
+    "maximumNewLedgerRows": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "enabledFactorWholeRunRows": 0,
+    "causalRows": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "decisionRules": {
+    "success": "All ten direct maps, within-row RNG checks, the explicitly normalised focused comparison, eight capture sentinels and 16 omitted-versus-explicit-false identities pass exactly within all caps.",
+    "successAuthority": "Apply decision boundary 1 and admit ward-break-without-blood plus its trace as identity-safe for one separately preregistered source-complete natural-capacity audit. The capacity audit may use only the frozen null trace to count the exact event and existing interaction anchors; it must not execute the enabled factor, fit a causal endpoint, add a carrier, policy method, ML, RL, optimiser, protected seed or product change.",
+    "futility": "Any direct mapping, focused mediator, capture, complete trajectory, path, RNG, policy, result, reliability or schema identity fails.",
+    "futilityAuthority": "Apply decision boundary 2 and close the complete enemy-Ward transition family without repair, rerun, alternate encoding, trace change, carrier, capacity, causal row, threshold or payoff change. Continue inside issue #421 only from another source-complete structural representation.",
+    "inconclusive": "A source, toolchain, ledger, cohort or cap identity fails, the run exceeds 180 seconds, or execution cannot classify a frozen check.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the identity preflight inconclusive at cap without repair, rerun, support inspection, enabled whole-run, causal row, product change, method or protected seed."
+  }
+}

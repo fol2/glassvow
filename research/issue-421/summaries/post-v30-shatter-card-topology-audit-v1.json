@@ -1,0 +1,198 @@
+{
+  "authority": "Apply decision boundary 1 and freeze only multiple-events-multiple-targets for one separately preregistered zero-new-row capacity screen against the eligible 4.7.2 explicit-Flare cache. Do not open the cache before its complete gates are frozen, inspect Beacon, implement a payoff, add a carrier, simulate, add a ledger row, use a method or protected seed.",
+  "cacheFilesRead": 0,
+  "cardShatterTopologyPartition": [
+    {
+      "closureEvidence": [
+        "genericShatter"
+      ],
+      "definition": "The PLAY window contains zero SHATTER events and therefore zero distinct Shatter targets.",
+      "disposition": "excluded-non-event",
+      "id": "no-shatter-event",
+      "reason": "No Shatter topology exists; rewarding this cell would be an Attack, card-play or failure scalar."
+    },
+    {
+      "closureEvidence": [
+        "genericShatter",
+        "crownThreshold",
+        "shatterTempo",
+        "lanternArt"
+      ],
+      "definition": "The PLAY window contains exactly one SHATTER event on one enemy idx.",
+      "disposition": "closed-alias",
+      "id": "one-event-one-target",
+      "reason": "This is ordinary target-local Shatter. Its threshold, global payoff, Art buff and temporal fuel variants are bounded closed families."
+    },
+    {
+      "closureEvidence": [
+        "reseamBreak",
+        "multiHit"
+      ],
+      "definition": "The PLAY window contains at least two SHATTER events but exactly one distinct enemy idx.",
+      "disposition": "closed-alias",
+      "id": "multiple-events-one-target",
+      "reason": "Repeated same-enemy Shatter is the closed reseam topology; selecting hit multiplicity or a card subset would reopen frozen families."
+    },
+    {
+      "closureEvidence": [],
+      "definition": "The PLAY window contains at least two SHATTER events on at least two distinct living-enemy idx values.",
+      "disposition": "uncovered",
+      "id": "multiple-events-multiple-targets",
+      "reason": "This is a resolved card-scoped cross-enemy concurrency relation. It is not the closed pre-card partial-Facet ownership predicate, same-target repeat, global Art buff or hit-multiplicity scalar."
+    }
+  ],
+  "decision": "freeze-multi-enemy-card-shatter-for-capacity-preregistration",
+  "decisionBoundary": 1,
+  "evidenceResults": {
+    "crossEnemyFacet": {
+      "decision": "close-cross-enemy-facet-on-identity-failure",
+      "sha256": "a3f9f81407dc5d943487de33a5474663dc11f2216e68507873c2251caedaa0ee"
+    },
+    "crownThreshold": {
+      "decision": "close-shatterers-crown-effect-family",
+      "sha256": "e8de4178d6f0dfe8546a1057f0b51822556fc12a7dcc672d6916e019ecd4f1dd"
+    },
+    "genericShatter": {
+      "decision": "REJECT_GENERIC_SHATTER_FLOW_PROTOTYPE",
+      "sha256": "369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce"
+    },
+    "lanternArt": {
+      "decision": "close-lantern-art-family-at-cap",
+      "sha256": "b029910d7f776f114a814885c2804f160c325d88b460b8f732c341ed9e619c1f"
+    },
+    "multiHit": {
+      "decision": "close-complete-multihit-extra-facet-family-at-cap",
+      "sha256": "dbf144eaf0615808eea7d63721a5695c5a3fa0878e62f5b183b362cdbb64e5cb"
+    },
+    "reseamBreak": {
+      "decision": "close-reseam-break-without-implementation",
+      "sha256": "5c9046438a41b996ced634013e7e5d3d7c79abd63d288af98f9e8b051b8fbab4"
+    },
+    "shatterTempo": {
+      "decision": "close-shatter-tempo-relay-without-implementation",
+      "sha256": "8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388"
+    }
+  },
+  "frontierScope": {
+    "claimBoundary": "This source-only audit may select at most one topology for a separately preregistered zero-new-row capacity screen. It cannot establish natural activation, candidate payoff, causal effect, complementarity, acquisition, package acceptance or product authority.",
+    "completePartition": [
+      "no-shatter-event",
+      "one-event-one-target",
+      "multiple-events-one-target",
+      "multiple-events-multiple-targets"
+    ],
+    "excluded": [
+      "Art or potion Shatters outside a PLAY window",
+      "same-enemy Shatter threshold or reseam reward",
+      "hit count, damage, Ward, status or partial-Facet threshold",
+      "card, enemy, act or formation subset",
+      "payoff, carrier, acquisition or policy score",
+      "new persistent state, ML, RL or optimiser",
+      "trace, cache or outcome support"
+    ],
+    "included": "The count of SHATTER events and distinct enemy idx values emitted while one played card resolves. The representation is Dusk-only by existing apply_chips law and adds no payoff, state, event, threshold or carrier."
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "naturalRouteIdentity": {
+    "carrierCount": 5,
+    "formations": 54,
+    "maximumEnemies": 3,
+    "multiEnemyFormations": 22,
+    "multiTargetShatterCapableCards": [
+      {
+        "effectKinds": [
+          "dmg"
+        ],
+        "id": "cleave",
+        "name": "Fan of Glass",
+        "rarity": "common",
+        "type": "attack"
+      },
+      {
+        "effectKinds": [
+          "dmg"
+        ],
+        "id": "tempest",
+        "name": "Hailglass",
+        "rarity": "uncommon",
+        "type": "attack"
+      },
+      {
+        "effectKinds": [
+          "dmg",
+          "status"
+        ],
+        "id": "annihilate",
+        "name": "Requiem",
+        "rarity": "rare",
+        "type": "attack"
+      },
+      {
+        "effectKinds": [
+          "chip"
+        ],
+        "id": "limitBreak",
+        "name": "Annealing Rite",
+        "rarity": "rare",
+        "type": "skill"
+      },
+      {
+        "effectKinds": [
+          "dmg"
+        ],
+        "id": "shardstorm",
+        "name": "Shardstorm",
+        "rarity": "rare",
+        "type": "attack"
+      }
+    ],
+    "singleEnemyFormations": 32
+  },
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "protectedSeedRows": 0,
+  "protocolSha256": "8ba4422988ff3868d126372bb9fa6b407f953c85a73d76cccc3bdc4c07ace03c",
+  "runnerSha256": "d85f5044efe5c9ba6fedb386e54a5d6815971e385fcdc1e891263315c0edc154",
+  "schemaVersion": 1,
+  "selectedRepresentation": {
+    "acquisition": null,
+    "capacityOnly": true,
+    "carrier": null,
+    "eventOrderSafety": "The window begins at PLAY and ends at the played card's TO_DISCARD, EXHAUST or POWER_CONSUMED event. Art and turn-boundary Shatters are outside it.",
+    "exactPredicate": "Within one PLAY-to-card-terminal event window, SHATTER event count is at least two and the set of SHATTER idx values has size at least two.",
+    "id": "multiple-events-multiple-targets",
+    "name": "multi-enemy card Shatter",
+    "payoff": null,
+    "persistentStateAdded": false,
+    "rngAdded": false
+  },
+  "sourceIdentity": {
+    "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    "taskCapsuleSha256": "11d5854e01c27f6c175649c6d723e930a03162805d4da94100891dcefb03a1e2"
+  },
+  "traceFilesRead": 0,
+  "wallTimeSeconds": 6.049402542063035
+}

@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 33,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "parentArchiveHead": "cc48d6cb2cb9340dc2da14c257cbf1d30b474f7a",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "cross-enemy Facet and enemy-Ward identity closures plus multi-enemy card-Shatter observability closure",
+  "decision": "CLOSE_THREE_STRUCTURAL_FAMILIES_AND_CONTINUE_ISSUE_421",
+  "authority": {
+    "taskSSOT": "https://github.com/fol2/glassvow/issues/421",
+    "controllingDelta": "https://github.com/fol2/glassvow/issues/421#issuecomment-5453573232",
+    "programmeContinuesInsideIssue421": true,
+    "successorTicket": null
+  },
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-v30-structural-identity-and-shatter-closure-v1.md",
+    "progressReportSha256": "20d78d6c2f9ece2d561f79f6c4e08ee1bf90d8090689b98b0a07c9742c866be9",
+    "duskStateFrontierProtocolSha256": "c4c6fb69ae3ac34527662db1f00b571fbc0173bb140f49483488662a9b1cd684",
+    "duskStateFrontierSummarySha256": "c462bfad7f74deb6884d429feaab01707fc64f101fe3b168b7680be0fa5cb9c7",
+    "crossEnemyFacetProtocolSha256": "53bd9ce287f4f1742133729522559827056dd75f1c67ab358a6ad56aed011974",
+    "crossEnemyFacetSummarySha256": "a3f9f81407dc5d943487de33a5474663dc11f2216e68507873c2251caedaa0ee",
+    "enemyWardFrontierProtocolSha256": "0ec0d46180525ac2c1f0db111ed9e5a11266128a5b677d18f941020e6e4f72fe",
+    "enemyWardFrontierSummarySha256": "bda04cf79d3dff08e12a5502dede581197f9529bcf954a527c1c198fe1dba172",
+    "enemyWardIdentityProtocolSha256": "0063a6fb774094b45756b5ced3f5dd730d73d488880ec4d4d81bcd53fab2a315",
+    "enemyWardIdentitySummarySha256": "2f522812a599d7b8add69971c0a5442814e50783c8b4a326bcdf182e9239c750",
+    "shatterTopologyProtocolSha256": "8ba4422988ff3868d126372bb9fa6b407f953c85a73d76cccc3bdc4c07ace03c",
+    "shatterTopologySummarySha256": "ca6b5fefb9db252f56e181616b957200cb50e694db3d2bba3d0bf4499faec5bf",
+    "shatterCapacityProtocolSha256": "a3b1cbb5288dbd08e9253250a49250ae6f9a9c4caa8953dd1cfd7a0cabee021f",
+    "shatterCapacitySummarySha256": "d8ed3a2e09e0c21d89665eafaa65c8e8716c9bba0a6b82b8fe4b6a83f1639db5",
+    "crossEnemyFacetSourceArchiveSha256": "e17e67400cb3888dbf11ee66b7b92bdfbb8bb8279d1f7aa2944ad4cef36e3bda",
+    "enemyWardSourceArchiveSha256": "e7eaec81f5119b8f8141f15bef9867ff42e4352f20a2819062e6fa8d849ab52e",
+    "taskCapsuleSha256": "f8baa0c73d4be865110ef021c15fca885f771aeec3af137650fd06d59504127b"
+  },
+  "gateResults": {
+    "crossEnemyFacet": {
+      "decisionBoundary": 2,
+      "decision": "close-cross-enemy-facet-on-identity-failure",
+      "GodotProcesses": 1,
+      "directRawMaps": 10,
+      "failure": "focused mediator isolation retained distinct control IDs",
+      "wholeRunIdentityRows": 0,
+      "causalRows": 0
+    },
+    "enemyWard": {
+      "decisionBoundary": 2,
+      "decision": "close-enemy-ward-transition-on-identity-failure",
+      "GodotProcesses": 2,
+      "directControls": 10,
+      "mappingMismatchRows": 0,
+      "rngMismatchRows": 0,
+      "focusedMediatorMismatchRows": 0,
+      "nullSentinelRows": 16,
+      "failure": "poison synthetic hitEnemy events lack the frozen Ward fields",
+      "enabledRows": 0,
+      "causalRows": 0
+    },
+    "multiEnemyCardShatter": {
+      "topologyDecisionBoundary": 1,
+      "capacityDecisionBoundary": 2,
+      "decision": "close-multi-enemy-card-shatter-on-observability-gate",
+      "sourceCarriers": 5,
+      "multiEnemyFormations": 22,
+      "missingRequiredEventFields": 5,
+      "cacheFilesRead": 0,
+      "supportRowsRead": 0,
+      "newSimulatorRows": 0
+    }
+  },
+  "interpretationBoundary": {
+    "identity": "Cross-enemy Facet and enemy-Ward were each stopped by their own one-attempt preregistered identity rule. Direct effect maps do not override either failure.",
+    "capacity": "The multi-enemy card-Shatter relation is source-reachable but not exactly identifiable from the sole authorised trace projection. No aggregate proxy was used.",
+    "forbidden": [
+      "repair or rerun either identity preflight",
+      "filter poison events or change the Ward schema",
+      "infer target identity from aggregate Shatters",
+      "add telemetry to rescue the closed Shatter topology",
+      "choose a card subset, payoff or carrier",
+      "use protected seeds"
+    ],
+    "next": "Run one zero-row source-complete Shatter-aftermath branch audit and select at most one unclosed exact relation before reading support."
+  },
+  "reproductionIdentity": {
+    "godot": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinary": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "canonicalHostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+    "currentMainContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+    "duskStateFrontierRunnerSha256": "b1a46fa194341659381c9df9f62b2eff333f6fcbab09b810f5e209c9a4d301ec",
+    "crossEnemyFacetRunnerSha256": "2e5f1e1f3794ec4143a8dce49f207500b51a6f3884b3128f0e8c70a4701e27fb",
+    "enemyWardFrontierRunnerSha256": "bf709cef76695493a5bf8f904584f6116e928d531adf03556f5a3032242aad88",
+    "enemyWardIdentityRunnerSha256": "6d089aba73738e864726586e5663a669b3e2aab26aaa9c75a5465e7f2c2d3643",
+    "shatterTopologyRunnerSha256": "d85f5044efe5c9ba6fedb386e54a5d6815971e385fcdc1e891263315c0edc154",
+    "shatterCapacityRunnerSha256": "ce08187b42fa1f8bbfe8e2915f7828a4a34f4f70f0f1ee92177746261b4e17a2"
+  },
+  "cacheObjects": {
+    "crossEnemyDirectPlan": "e93326122056fedef98d26b176b2eee773e5b9240c1fdc1012b26bab6d5d0037",
+    "crossEnemyDirectOutput": "f7b9f122c706a99bab699947295af319ee4aa4ba77fb1f1cb9520ca1fece8354",
+    "enemyWardDirectPlan": "523b9d8cefc347a0677476c9799bcf58f89d28238f2bd25439b63183ca889d8d",
+    "enemyWardDirectOutput": "ef980b1aac46f53d5dda2a2cecdd16e414e16895cc02023ba79b7e2f57dea0c0",
+    "enemyWardSentinelPlan": "60e52c6dd1a6e8c8e366b5c2b76e88697d8a2f1953b8b16515558d80e77b874d",
+    "enemyWardSentinelOutput": "c40c644619d69f2718b4d4b0d6ad45a070c06b3e154910373f5c50e7f90851fa"
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0,
+    "newLedgerRows": 0
+  },
+  "verification": {
+    "sha256Index": "PASS (740/740)",
+    "sha256IndexSha256": "b190152427e3528c8e99975b1df108e240256f3742181cb5d9125c0a271c9a87",
+    "pythonCompile": "PASS for six new deterministic runners",
+    "jsonParse": "PASS for all new protocols, summaries, manifest and task capsule",
+    "diffCheck": "PASS",
+    "anchors": "PASS",
+    "benchmarkFreeze": {
+      "exitCode": 1,
+      "reportedPath": "research/issue-421/prototype/domain/rules/combat.gd",
+      "parentEvidenceHeadCount": 2,
+      "v33CountAtKnownPath": 2,
+      "branchRelativeDelta": 0,
+      "interpretation": "The archive-only branch already carried two frozen historical citations at its parent evidence head. V33 changes no plain prototype source and adds no citation; the known archive-only result is disclosed and is not claimed as a product gate pass."
+    }
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryExcludingPycache": 774,
+    "payloadFilesIndexed": 740,
+    "protocolFiles": 125,
+    "summaryFiles": 166,
+    "topLevelToolFiles": 85,
+    "cacheObjectFiles": 273,
+    "newPackagedCacheObjects": 6,
+    "newSourceArchives": 2,
+    "sha256Index": "SHA256SUMS"
+  },
+  "remoteHeadsBeforePublication": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "cc48d6cb2cb9340dc2da14c257cbf1d30b474f7a",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "executionDisclosure": "This publication adds three direct/identity processes and 16 null whole-run observations in total. Both Shatter audits were zero-row, and the capacity gate stopped before cache access. Deterministic code owned every stop/go. No causal row, optimiser, ML, RL, human label, ledger write, protected seed or product mutation entered the decisions.",
+  "archiveOnly": true,
+  "productPr": null,
+  "actionsRun": false,
+  "mainChanged": false
+}

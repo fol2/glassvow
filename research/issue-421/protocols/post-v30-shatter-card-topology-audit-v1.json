@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "zero-row-source-complete-shatter-card-topology-frontier",
+  "question": "After generic Shatter, threshold, same-enemy repeat, heavy-Attack relay, Facet-state and global Art families are closed, does exact current-main expose one untested per-card Shatter target topology?",
+  "scientificBasis": "Within a PLAY-to-card-terminal event window, SHATTER events have an enemy idx. Event count and distinct idx count produce an exhaustive four-cell topology: none; one event on one target; multiple events on one target; or multiple events across multiple targets. Exact prior evidence closes the first three as non-events, ordinary Shatter or same-enemy repeat families. The last cell is a distinct cross-enemy concurrency relation and exact content supplies five all-enemy damage-or-chip cards plus 22 multi-enemy formations.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "d85f5044efe5c9ba6fedb386e54a5d6815971e385fcdc1e891263315c0edc154",
+    "taskCapsuleSha256": "11d5854e01c27f6c175649c6d723e930a03162805d4da94100891dcefb03a1e2",
+    "sourceSha256": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    }
+  },
+  "frontierScope": {
+    "included": "The count of SHATTER events and distinct enemy idx values emitted while one played card resolves. The representation is Dusk-only by existing apply_chips law and adds no payoff, state, event, threshold or carrier.",
+    "completePartition": [
+      "no-shatter-event",
+      "one-event-one-target",
+      "multiple-events-one-target",
+      "multiple-events-multiple-targets"
+    ],
+    "excluded": [
+      "Art or potion Shatters outside a PLAY window",
+      "same-enemy Shatter threshold or reseam reward",
+      "hit count, damage, Ward, status or partial-Facet threshold",
+      "card, enemy, act or formation subset",
+      "payoff, carrier, acquisition or policy score",
+      "new persistent state, ML, RL or optimiser",
+      "trace, cache or outcome support"
+    ],
+    "claimBoundary": "This source-only audit may select at most one topology for a separately preregistered zero-new-row capacity screen. It cannot establish natural activation, candidate payoff, causal effect, complementarity, acquisition, package acceptance or product authority."
+  },
+  "sourceAssertions": [
+    {
+      "id": "card-scoped Facet accumulator opens",
+      "path": "domain/rules/combat.gd",
+      "contains": "cb.pending_chips_active = true  # facet chips land after the whole card resolves\n\tcb.pending_chips = {}"
+    },
+    {
+      "id": "card-scoped Facet accumulator closes",
+      "path": "domain/rules/combat.gd",
+      "contains": "cb.pending_chips_active = false\n\tcb.pending_chips = {}"
+    },
+    {
+      "id": "per-target pending application",
+      "path": "domain/rules/combat.gd",
+      "contains": "for idx_v: Variant in cb.pending_chips.keys():  # insertion order == JS Map order"
+    },
+    {
+      "id": "one target may Shatter repeatedly",
+      "path": "domain/rules/combat.gd",
+      "contains": "while e.chips >= e.facet_max and e.hp > 0:\n\t\te.chips -= e.facet_max\n\t\t_shatter_enemy(run, cb, e)"
+    },
+    {
+      "id": "Shatter event exposes target identity",
+      "path": "domain/rules/combat.gd",
+      "contains": "cb.queue.append({\"t\": EventTypes.SHATTER, \"idx\": e.idx, \"facetMax\": e.facet_max})"
+    },
+    {
+      "id": "all-enemy damage iterates living targets",
+      "path": "domain/rules/combat.gd",
+      "contains": "if all_enemies:\n\t\t\t\t\tfor e: EnemyCombatant in cb.enemies:"
+    },
+    {
+      "id": "all-enemy explicit chips iterate living targets",
+      "path": "domain/rules/combat.gd",
+      "contains": "if all_enemies:\n\t\t\t\teach = cb.living_enemies()"
+    },
+    {
+      "id": "play and Shatter event identities are stable",
+      "path": "domain/events/event_types.gd",
+      "contains": "const PLAY: StringName = &\"play\""
+    },
+    {
+      "id": "pilot already observes target-local imminent Shatter",
+      "path": "tools/balance_pilot.gd",
+      "contains": "if typeof(pv) == TYPE_DICTIONARY and pv.get(\"willShatter\", false):"
+    }
+  ],
+  "naturalRouteIdentity": {
+    "multiTargetShatterCapableCards": [
+      {"id":"cleave","name":"Fan of Glass","type":"attack","rarity":"common","effectKinds":["dmg"]},
+      {"id":"tempest","name":"Hailglass","type":"attack","rarity":"uncommon","effectKinds":["dmg"]},
+      {"id":"annihilate","name":"Requiem","type":"attack","rarity":"rare","effectKinds":["dmg","status"]},
+      {"id":"limitBreak","name":"Annealing Rite","type":"skill","rarity":"rare","effectKinds":["chip"]},
+      {"id":"shardstorm","name":"Shardstorm","type":"attack","rarity":"rare","effectKinds":["dmg"]}
+    ],
+    "carrierCount": 5,
+    "formations": 54,
+    "multiEnemyFormations": 22,
+    "singleEnemyFormations": 32,
+    "maximumEnemies": 3
+  },
+  "priorEvidence": {
+    "genericShatter": {
+      "path": "summaries/shatter-flow-v1.json",
+      "sha256": "369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce",
+      "decision": "REJECT_GENERIC_SHATTER_FLOW_PROTOTYPE"
+    },
+    "crownThreshold": {
+      "path": "summaries/post-v38-crown-effect-crn-v1-audit.json",
+      "sha256": "e8de4178d6f0dfe8546a1057f0b51822556fc12a7dcc672d6916e019ecd4f1dd",
+      "decision": "close-shatterers-crown-effect-family"
+    },
+    "shatterTempo": {
+      "path": "summaries/post-v38-shatter-tempo-capacity-v1.json",
+      "sha256": "8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388",
+      "decision": "close-shatter-tempo-relay-without-implementation"
+    },
+    "reseamBreak": {
+      "path": "summaries/post-v38-reseam-break-capacity-v1.json",
+      "sha256": "5c9046438a41b996ced634013e7e5d3d7c79abd63d288af98f9e8b051b8fbab4",
+      "decision": "close-reseam-break-without-implementation"
+    },
+    "multiHit": {
+      "path": "summaries/post-v30-multihit-facet-capacity-v1.json",
+      "sha256": "dbf144eaf0615808eea7d63721a5695c5a3fa0878e62f5b183b362cdbb64e5cb",
+      "decision": "close-complete-multihit-extra-facet-family-at-cap"
+    },
+    "lanternArt": {
+      "path": "summaries/post-v30-lantern-art-capacity-v1.json",
+      "sha256": "b029910d7f776f114a814885c2804f160c325d88b460b8f732c341ed9e619c1f",
+      "decision": "close-lantern-art-family-at-cap"
+    },
+    "crossEnemyFacet": {
+      "path": "summaries/post-v30-cross-enemy-facet-identity-v1.json",
+      "sha256": "a3f9f81407dc5d943487de33a5474663dc11f2216e68507873c2251caedaa0ee",
+      "decision": "close-cross-enemy-facet-on-identity-failure"
+    }
+  },
+  "cardShatterTopologyPartition": [
+    {
+      "id": "no-shatter-event",
+      "definition": "The PLAY window contains zero SHATTER events and therefore zero distinct Shatter targets.",
+      "closureEvidence": ["genericShatter"],
+      "disposition": "excluded-non-event",
+      "reason": "No Shatter topology exists; rewarding this cell would be an Attack, card-play or failure scalar."
+    },
+    {
+      "id": "one-event-one-target",
+      "definition": "The PLAY window contains exactly one SHATTER event on one enemy idx.",
+      "closureEvidence": ["genericShatter", "crownThreshold", "shatterTempo", "lanternArt"],
+      "disposition": "closed-alias",
+      "reason": "This is ordinary target-local Shatter. Its threshold, global payoff, Art buff and temporal fuel variants are bounded closed families."
+    },
+    {
+      "id": "multiple-events-one-target",
+      "definition": "The PLAY window contains at least two SHATTER events but exactly one distinct enemy idx.",
+      "closureEvidence": ["reseamBreak", "multiHit"],
+      "disposition": "closed-alias",
+      "reason": "Repeated same-enemy Shatter is the closed reseam topology; selecting hit multiplicity or a card subset would reopen frozen families."
+    },
+    {
+      "id": "multiple-events-multiple-targets",
+      "definition": "The PLAY window contains at least two SHATTER events on at least two distinct living-enemy idx values.",
+      "closureEvidence": [],
+      "disposition": "uncovered",
+      "reason": "This is a resolved card-scoped cross-enemy concurrency relation. It is not the closed pre-card partial-Facet ownership predicate, same-target repeat, global Art buff or hit-multiplicity scalar."
+    }
+  ],
+  "selectedRepresentation": {
+    "id": "multiple-events-multiple-targets",
+    "name": "multi-enemy card Shatter",
+    "exactPredicate": "Within one PLAY-to-card-terminal event window, SHATTER event count is at least two and the set of SHATTER idx values has size at least two.",
+    "eventOrderSafety": "The window begins at PLAY and ends at the played card's TO_DISCARD, EXHAUST or POWER_CONSUMED event. Art and turn-boundary Shatters are outside it.",
+    "persistentStateAdded": false,
+    "rngAdded": false,
+    "payoff": null,
+    "carrier": null,
+    "acquisition": null,
+    "capacityOnly": true
+  },
+  "capacityEvidenceBoundary": {
+    "eligibleCache": "Only explicit-Flare current-default arms from immutable 4.7.2 Lantern capacity output bb19c9c3e41c08312cff6eb8bd9a62d8ca2fa88ed187e66a4d47af877b371a7c after its omitted-versus-Flare identity proof.",
+    "forbiddenCache": "Beacon arms, 4.7.1 traces, protected seeds, V30 endpoints and every failed identity output.",
+    "precondition": "A separate capacity protocol must freeze exact row selection, event parser, robust-policy gates, two-sided Scoreline and Afterimage anchors, carrier breadth, viability, reliability, wall time and all decision rules before opening the eligible cache."
+  },
+  "budget": {
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "decisionRules": {
+    "success": "The four-cell topology is source-exhaustive with exactly one unclosed relation; all source, content, evidence and ledger identities pass without reading trace or cache support and execution finishes within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze only multiple-events-multiple-targets for one separately preregistered zero-new-row capacity screen against the eligible 4.7.2 explicit-Flare cache. Do not open the cache before its complete gates are frozen, inspect Beacon, implement a payoff, add a carrier, simulate, add a ledger row, use a method or protected seed.",
+    "futility": "No unique unclosed per-card Shatter topology remains.",
+    "futilityAuthority": "Apply decision boundary 2 and close this Shatter card-topology frontier. Continue inside issue #421 only from another source-complete structural representation; do not change event cardinality, select a card subset or add a payoff.",
+    "inconclusive": "Any partition, source, evidence, content or ledger identity fails, more than one topology is unclosed, or execution exceeds 30 seconds.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the topology audit inconclusive at cap without reading support, selecting a representation, implementing, simulating, adding a row, using a method or protected seed."
+  }
+}

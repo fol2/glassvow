@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "zero-new-row-multi-enemy-card-shatter-capacity-observability",
+  "question": "Can the only authorised immutable 4.7.2 current-default cache identify the selected multiple-events-multiple-targets predicate exactly enough to apply a frozen natural-capacity screen?",
+  "scientificBasis": "The selected representation is card-scoped and target-specific. Exact capacity therefore requires a PLAY identity, every SHATTER event emitted before that card terminates, each SHATTER enemy idx and the terminal event for the same card uid. Aggregate fight Shatters or a list of played cards cannot attribute a Shatter to a card or distinguish one target from multiple targets. Observability is a fail-fast precondition before support access.",
+  "selectedRepresentation": {
+    "id": "multiple-events-multiple-targets",
+    "exactPredicate": "Within one PLAY-to-card-terminal event window, SHATTER event count is at least two and the set of SHATTER idx values has size at least two.",
+    "payoff": null,
+    "carrier": null,
+    "acquisition": null,
+    "capacityOnly": true
+  },
+  "eligibleEvidence": {
+    "cacheSha256": "bb19c9c3e41c08312cff6eb8bd9a62d8ca2fa88ed187e66a4d47af877b371a7c",
+    "rowSelection": "Only the 256 explicit-flare rows from the immutable Lantern-Art capacity output. Beacon rows are excluded. The rows are the frozen policyRoot 421901, policy indices 0 through 63 and simulation seeds 421910 through 421913, Duskblade, Vow 5, exact source c4130163c7fb8edd865c0adc95732aae03e1bad2 and authored current-default Flare.",
+    "identityAuthority": "The preceding Lantern trace-null sentinel proved the added trace arrays preserve omitted-versus-explicit-Flare complete identity. This screen adds no field and may not repair or reinterpret that projection.",
+    "forbidden": "Beacon rows, 4.7.1 outputs, failed-identity outputs, protected seeds, ledger endpoints, V30 adaptive evidence and every other cache object."
+  },
+  "sourceTraceProjection": {
+    "schemaKeys": [
+      "capture",
+      "nodes",
+      "plays",
+      "cardRewards",
+      "bossRelics",
+      "arts",
+      "beaconAttacks",
+      "beaconChips"
+    ],
+    "availableFields": [
+      "trajectory.plays.fight",
+      "trajectory.plays.event",
+      "trajectory.plays.id",
+      "trajectory.plays.uid",
+      "fights.act",
+      "fights.kind",
+      "fights.enemies",
+      "fights.result",
+      "fights.turns",
+      "fights.hpLost",
+      "fights.shatters",
+      "fights.smolderKills"
+    ],
+    "missingByConstruction": [
+      "trajectory.cardEvents.shatter.event",
+      "trajectory.cardEvents.shatter.idx",
+      "trajectory.cardEvents.terminal.event",
+      "trajectory.cardEvents.terminal.uid",
+      "trajectory.cardEvents.terminal.kind"
+    ],
+    "aliasFailure": "fights.shatters is an aggregate over the complete fight. It cannot identify the producing PLAY, the number of distinct targets, same-target repeats, Art or relic-produced Shatters, or a card-terminal boundary."
+  },
+  "eventParser": {
+    "requiredFields": [
+      "trajectory.plays.fight",
+      "trajectory.plays.event",
+      "trajectory.plays.id",
+      "trajectory.plays.uid",
+      "trajectory.cardEvents.shatter.event",
+      "trajectory.cardEvents.shatter.idx",
+      "trajectory.cardEvents.terminal.event",
+      "trajectory.cardEvents.terminal.uid",
+      "trajectory.cardEvents.terminal.kind"
+    ],
+    "windowConstruction": "Within each fight, sort PLAY, SHATTER and terminal events by the immutable queue event index. Open a window at PLAY(fight,event,id,uid). Close only on TO_DISCARD, EXHAUST or POWER_CONSUMED with the same uid. Reject overlapping, unterminated, duplicated or out-of-order windows. Count SHATTER events strictly after PLAY and before its matching terminal; preserve every integer idx.",
+    "rowActivation": "A row is active when at least one valid card window contains at least two SHATTER events and at least two distinct integer idx values.",
+    "carrierIdentity": "The carrier is the PLAY id for each active window. No card ID, rarity, act, formation or outcome subset is permitted.",
+    "failClosed": "Any missing required field, malformed event, unpaired terminal or ambiguous attribution fails observability before support is read or counted."
+  },
+  "cohort": {
+    "policyRoot": 421901,
+    "policyIndices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63],
+    "simulationSeeds": [421910, 421911, 421912, 421913],
+    "minimumRowsPerRobustPolicy": 2,
+    "identities": 256,
+    "aspect": "duskblade",
+    "vow": 5,
+    "baseline": "Exact current-main authored-default Flare only."
+  },
+  "anchors": {
+    "scoreline": {
+      "producer": "chisel",
+      "consumer": "executioner",
+      "definition": "A robust policy plays Chisel before a later Faultline in one fight in at least two of four eligible rows.",
+      "status": "Separate activation anchor only; Scoreline payoff is absent and no interference effect is estimated."
+    },
+    "afterimage": {
+      "producer": "defend",
+      "consumer": "guardedStrike",
+      "definition": "A robust policy plays Ward before a later Warden's Edge in one fight in at least two of four eligible rows.",
+      "status": "Separate activation anchor only; Afterimage payoff is absent and no interference effect is estimated."
+    }
+  },
+  "estimands": {
+    "activePolicy": "At least two of four rows activate the exact multi-enemy-card-Shatter predicate.",
+    "exactInactivePolicy": "None of four rows activates the predicate.",
+    "viablePolicy": "An active policy has at least one winning row that activates the predicate.",
+    "carrierBreadth": "Number of distinct exact PLAY card IDs producing an active window anywhere in the eligible rectangle.",
+    "functionalSeparation": "Candidate-only, anchor-only, cross-active and Jaccard policy counts against Scoreline and Afterimage separately on the same rows.",
+    "reliability": "Count rows whose outcome is stall or error or whose error field is non-empty.",
+    "notEstimated": "No payoff, causal effect, policy optimisation, detector, protected seed, product candidate or cross-package interference effect is estimated."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumCarrierIds": 2,
+    "minimumCandidateOnlyPoliciesPerAnchor": 8,
+    "minimumAnchorOnlyPoliciesPerAnchor": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumFaultRows": 1,
+    "provenance": "The 16 active and inactive, eight viable, two-carrier, separate eight-policy anchor and 0.55 overlap gates reuse the frozen 64-policy capacity scale. One baseline fault is the unchanged current-main reliability ceiling."
+  },
+  "stopping": {
+    "order": "Validate immutable source, evidence, ledger and exact trace projection. If any parser field is unavailable, stop at futility without opening the cache. Only a fully observable projection may open exactly one cache object and apply every gate at one fixed first look.",
+    "noRetry": "One attempt. Do not add telemetry, repair the trace, substitute aggregate Shatters, infer targets from card identity, change the window, inspect another cache, weaken a gate or rerun."
+  },
+  "budget": {
+    "maximumCacheFilesRead": 1,
+    "maximumSupportRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "success": "The source projection supplies every exact parser field and the single eligible 256-row first look passes every support, inactivity, viability, carrier, separate-anchor and reliability gate.",
+    "successAuthority": "Apply decision boundary 1 and freeze only the multi-enemy-card-Shatter representation for a separately preregistered identity-safe payoff/carrier study. Do not choose its payoff from this capacity data, implement, add a row, use a method or protected seed.",
+    "futility": "The authorised cache projection cannot identify the exact predicate, or any fixed capacity gate fails.",
+    "futilityAuthority": "Apply decision boundary 2 and close the complete multi-enemy-card-Shatter topology without telemetry repair, aggregate proxy, alternate cache, card subset, payoff, carrier, implementation or rerun. Continue issue #421 with the next source- and evidence-backed structural mechanism.",
+    "inconclusive": "An immutable input, cache identity, ledger identity or wall-time condition prevents the preregistered decision without an identified fixed failure.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the capacity screen inconclusive at cap without trace repair, cache substitution, row extension, implementation or inference."
+  },
+  "sourceAssertions": [
+    {
+      "id": "trace initialises only fixed projected arrays",
+      "path": "trace:tools/balance_sim.gd",
+      "contains": "_research_trace[\"nodes\"] = []\n\t\t_research_trace[\"plays\"] = []\n\t\t_research_trace[\"cardRewards\"] = []\n\t\t_research_trace[\"bossRelics\"] = []\n\t\t_research_trace[\"arts\"] = []\n\t\t_research_trace[\"beaconAttacks\"] = []\n\t\t_research_trace[\"beaconChips\"] = []"
+    },
+    {
+      "id": "play projection has no target or terminal event",
+      "path": "trace:tools/balance_sim.gd",
+      "contains": "_trace_append(\"plays\", {\"fight\": fight_index, \"event\": event_index,\n\t\t\t\t\"id\": last_play, \"uid\": _ji(event.get(\"uid\", -1))})"
+    },
+    {
+      "id": "fight projection exposes only aggregate Shatters",
+      "path": "trace:tools/balance_sim.gd",
+      "contains": "\"shatters\": int(float(str(game.run.stats.get(\"shatters\", 0)))) - shatters_before"
+    },
+    {
+      "id": "whole-run probe returns only frozen trajectory",
+      "path": "trace:tools/research_421_lantern_art_identity_probe.gd",
+      "contains": "row[\"trajectory\"] = trace"
+    },
+    {
+      "id": "current-main Shatter event owns enemy idx",
+      "path": "main:domain/rules/combat.gd",
+      "contains": "cb.queue.append({\"t\": EventTypes.SHATTER, \"idx\": e.idx, \"facetMax\": e.facet_max})"
+    },
+    {
+      "id": "current-main has explicit card terminal event identities",
+      "path": "main:domain/events/event_types.gd",
+      "contains": "const TO_DISCARD: StringName = &\"toDiscard\""
+    }
+  ],
+  "priorEvidence": {
+    "topology": {
+      "path": "summaries/post-v30-shatter-card-topology-audit-v1.json",
+      "sha256": "ca6b5fefb9db252f56e181616b957200cb50e694db3d2bba3d0bf4499faec5bf",
+      "decision": "freeze-multi-enemy-card-shatter-for-capacity-preregistration"
+    },
+    "lanternCapacity": {
+      "path": "summaries/post-v30-lantern-art-capacity-v1.json",
+      "sha256": "b029910d7f776f114a814885c2804f160c325d88b460b8f732c341ed9e619c1f",
+      "decision": "close-lantern-art-family-at-cap"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "ce08187b42fa1f8bbfe8e2915f7828a4a34f4f70f0f1ee92177746261b4e17a2",
+    "taskCapsuleSha256": "17379ceb4fa35366a8bd0c362c514c2510638df4aef902cc91e0f350f43676f3",
+    "eligibleCacheSha256": "bb19c9c3e41c08312cff6eb8bd9a62d8ca2fa88ed187e66a4d47af877b371a7c",
+    "currentMainSourceSha256": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a"
+    },
+    "traceSourceSha256": {
+      "tools/balance_sim.gd": "29bdad3cd816fe40a0302aa75149281d9bd8bf27483260ae7722139a23534ed3",
+      "tools/research_421_lantern_art_identity_probe.gd": "5dd5cddff8cb6307a59278c6b0bf494f20292c52d11e30dc740463005bb8a235",
+      "tools/research_421_lantern_art_identity_probe.gd.uid": "773eb8a034c563a79743160b6965f8cc000690219a7663f1ceffbbe910d44743"
+    }
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  }
+}

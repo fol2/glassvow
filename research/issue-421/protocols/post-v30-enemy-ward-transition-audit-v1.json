@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "zero-row-source-complete-enemy-ward-transition-frontier",
+  "question": "After all tested Dusk Facet-chip variants and the cross-enemy topology family are closed, does exact current-main expose one untested discrete enemy-Ward transition at the existing Attack damage seam?",
+  "scientificBasis": "Exact hit_enemy algebra partitions every resolved Attack against a living enemy by pre-hit Ward, post-hit Ward and HP loss. The five frozen cells are exhaustive and mutually exclusive. Current Facet logic already recognises both cells with positive HP loss. The only uncovered discrete transition is positive Ward becoming zero with zero HP loss; rewarding retained Ward or a zero-damage no-Ward state would require a scalar threshold rather than a state transition.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "bf709cef76695493a5bf8f904584f6116e928d531adf03556f5a3032242aad88",
+    "taskCapsuleSha256": "d57f3a1dffbbcaf450f1ebab1a3ad27dc90d3f9256c6e258ccbfe0312a3f4610",
+    "sourceSha256": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    }
+  },
+  "frontierScope": {
+    "included": "One deterministic boolean mapping at hit_enemy after final Attack damage, enemy Ward absorption and HP loss are known. It may only turn the existing per-target pending-chip hit flag on when positive pre-hit enemy Ward becomes exactly zero without HP loss.",
+    "completePartition": [
+      "blood-without-ward",
+      "ward-break-with-blood",
+      "ward-break-without-blood",
+      "ward-retained-no-blood",
+      "no-ward-no-blood"
+    ],
+    "excluded": [
+      "Ward amount or ratio threshold",
+      "partial Ward damage payoff",
+      "additional chip when HP loss already activates the existing hit flag",
+      "new status, resource, event or persistent state",
+      "card, reward, enemy or acquisition subset",
+      "damage, Ward, chip or Facet scalar change",
+      "policy score, ML, RL or optimiser",
+      "trace, cache or outcome support"
+    ],
+    "claimBoundary": "This zero-row audit may select at most one source-defined transition for a separately preregistered identity preflight. It cannot establish natural event capacity, causality, complementarity, carrier, acquisition, candidate feasibility, package acceptance or product authority."
+  },
+  "sourceAssertions": [
+    {
+      "id": "enemy Ward absorption algebra",
+      "path": "domain/rules/combat.gd",
+      "contains": "var blocked: int = mini(e.block, dmg)\n\te.block -= blocked\n\tvar loss: int = dmg - blocked"
+    },
+    {
+      "id": "enemy hit event records Ward and HP loss",
+      "path": "domain/rules/combat.gd",
+      "contains": "\"amount\": loss,\n\t\t\"blocked\": blocked,\n\t\t\"hpAfter\": maxi(0, e.hp)"
+    },
+    {
+      "id": "existing implicit Facet trigger is blood only",
+      "path": "domain/rules/combat.gd",
+      "contains": "if cb.pending_chips_active and is_attack and loss > 0:"
+    },
+    {
+      "id": "existing per-card hit representation is boolean",
+      "path": "domain/rules/combat.gd",
+      "contains": "var rec: Dictionary = cb.pending_chips.get(e.idx, {\"hit\": false, \"extra\": 0})\n\t\trec[\"hit\"] = true"
+    },
+    {
+      "id": "existing Attack chip payoff is reused",
+      "path": "domain/rules/combat.gd",
+      "contains": "per = 1 + _ji(d.get(\"chip\", 0)) + _sget(p.statuses, \"beacon\")"
+    },
+    {
+      "id": "enemy Ward is an existing move output",
+      "path": "domain/rules/combat.gd",
+      "contains": "if mv.get(\"block\") != null:\n\t\t\t\tgain_block_enemy(cb, e, _ji(mv[\"block\"]), run)"
+    },
+    {
+      "id": "enemy Ward uses existing state only",
+      "path": "domain/state/enemy_combatant.gd",
+      "contains": "var block: int = 0"
+    },
+    {
+      "id": "pilot has no enemy-Ward transition discriminator",
+      "path": "tools/balance_pilot.gd",
+      "contains": "if typeof(pv) == TYPE_DICTIONARY and pv.get(\"willShatter\", false):"
+    }
+  ],
+  "naturalRouteIdentity": {
+    "positiveBlockMoves": 36,
+    "blockCapableEnemies": 24,
+    "blockValues": [5, 6, 7, 8, 10, 12, 13, 14, 15, 16, 17, 18, 20, 30],
+    "formations": 54,
+    "blockCapableFormations": 37,
+    "blockFreeFormations": 17,
+    "blockCapableFormationsByTier": {
+      "boss": 4,
+      "elite": 6,
+      "normal": 17,
+      "weak": 10
+    },
+    "allBlockCapableEnemiesReachable": true
+  },
+  "priorEvidence": {
+    "multiHit": {
+      "path": "summaries/post-v30-multihit-facet-capacity-v1.json",
+      "sha256": "dbf144eaf0615808eea7d63721a5695c5a3fa0878e62f5b183b362cdbb64e5cb",
+      "decision": "close-complete-multihit-extra-facet-family-at-cap"
+    },
+    "dimmedFacet": {
+      "path": "summaries/post-v30-dimmed-facet-capacity-v1.json",
+      "sha256": "b72b84d97675eb87ead2cee9a138e533e731f6620af1ff2fcc5a5ce6d58fe649",
+      "decision": "close-dimmed-facet-primitive-family-at-cap"
+    },
+    "lanternArt": {
+      "path": "summaries/post-v30-lantern-art-capacity-v1.json",
+      "sha256": "b029910d7f776f114a814885c2804f160c325d88b460b8f732c341ed9e619c1f",
+      "decision": "close-lantern-art-family-at-cap"
+    },
+    "rewardOverchip": {
+      "path": "summaries/post-v38-reward-overchip-capacity-v1.json",
+      "sha256": "71b616c8c0f1f0c18ee8b578d5fcc87561d9b1d9eb92772752ec5bc7bd379fc8",
+      "decision": "close-reward-overchip-mediator-family"
+    },
+    "crossEnemy": {
+      "path": "summaries/post-v30-cross-enemy-facet-identity-v1.json",
+      "sha256": "a3f9f81407dc5d943487de33a5474663dc11f2216e68507873c2251caedaa0ee",
+      "decision": "close-cross-enemy-facet-on-identity-failure"
+    },
+    "genericShatter": {
+      "path": "summaries/shatter-flow-v1.json",
+      "sha256": "369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce",
+      "decision": "REJECT_GENERIC_SHATTER_FLOW_PROTOTYPE"
+    }
+  },
+  "attackOutcomePartition": [
+    {
+      "id": "blood-without-ward",
+      "definition": "preBlock = 0 and loss > 0",
+      "currentMapping": "The existing Attack hit flag is true and supplies the ordinary implicit Facet chip.",
+      "closureEvidence": ["multiHit", "dimmedFacet", "lanternArt", "rewardOverchip"],
+      "disposition": "closed-alias",
+      "reason": "Adding another chip to the existing blood mapping is a payoff variant already bounded by the frozen extra-chip families."
+    },
+    {
+      "id": "ward-break-with-blood",
+      "definition": "preBlock > 0, postBlock = 0 and loss > 0",
+      "currentMapping": "The existing Attack hit flag is already true because blood was drawn; the Ward transition needs no second flag or payoff.",
+      "closureEvidence": ["multiHit", "lanternArt", "rewardOverchip"],
+      "disposition": "closed-alias",
+      "reason": "A second chip would tune the payoff of an already rewarded card-target result rather than fill a missing transition mapping."
+    },
+    {
+      "id": "ward-break-without-blood",
+      "definition": "preBlock > 0, postBlock = 0 and loss = 0",
+      "currentMapping": "The existing Attack hit flag remains false even though positive enemy Ward made a discrete transition to zero.",
+      "closureEvidence": [],
+      "disposition": "uncovered",
+      "reason": "This is the sole discrete damage-seam transition absent from the existing blood-or-Facet mapping. It is enemy-local, source-defined and does not require a threshold, history, scalar or new state."
+    },
+    {
+      "id": "ward-retained-no-blood",
+      "definition": "preBlock > 0, postBlock > 0 and loss = 0",
+      "currentMapping": "No chip; Ward amount changes but no discrete state boundary is crossed.",
+      "closureEvidence": ["genericShatter"],
+      "disposition": "excluded-non-transition",
+      "reason": "Selecting a partial Ward amount, ratio or damage threshold would be scalar tuning rather than the preregistered transition frontier."
+    },
+    {
+      "id": "no-ward-no-blood",
+      "definition": "preBlock = 0 and loss = 0",
+      "currentMapping": "No chip and no enemy Ward transition.",
+      "closureEvidence": ["genericShatter"],
+      "disposition": "excluded-non-transition",
+      "reason": "Rewarding an Attack with neither blood nor Ward transition would be an unconditional or zero-damage payoff, outside this source-complete frontier."
+    }
+  ],
+  "selectedPrimitive": {
+    "id": "ward-break-without-blood",
+    "stateRepresentation": "Existing local values blocked, e.block and loss after hit_enemy resolves final Attack damage.",
+    "exactEffect": "For Duskblade only, an Attack that absorbs positive enemy Ward to exactly zero while dealing zero HP loss sets the existing per-card, per-target pending-chip hit flag true. It awards the same one implicit Facet chip already used by blood; it never adds a second chip when loss is positive.",
+    "multiHitSafety": "The existing boolean hit flag collapses multiple hits. Later blood or another hit cannot stack this primitive within the same card and target.",
+    "persistentStateAdded": false,
+    "eventAdded": false,
+    "rngAdded": false,
+    "carrier": null,
+    "acquisition": null,
+    "identityPreflightOnly": true,
+    "requiredTrace": [
+      "fight, turn and play ordinal",
+      "card id, type and target identity",
+      "pre-hit Ward, blocked amount, post-hit Ward and HP loss",
+      "pending hit-flag transition",
+      "chip and Shatter events"
+    ]
+  },
+  "budget": {
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "decisionRules": {
+    "success": "All five Attack outcomes are reproduced from exact source algebra, exactly one cell is uncovered, all source, content, evidence and ledger identities pass, no trace or cache support is read and execution finishes within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze only ward-break-without-blood for one separately preregistered direct, trace-sentinel and explicit-null identity preflight. Do not inspect natural event support, execute an enabled whole-run, add a carrier or causal row, change the boolean or one-chip mapping, add a threshold, tune policy, use ML, RL, optimiser or protected seeds.",
+    "futility": "No unique uncovered discrete transition remains.",
+    "futilityAuthority": "Apply decision boundary 2 and close this enemy-Ward transition frontier. Continue inside issue #421 only from another source-complete structural representation; do not change a cell, threshold, payoff or closure.",
+    "inconclusive": "Any partition, source, content, evidence or ledger identity fails, more than one cell is uncovered, or execution exceeds 30 seconds.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the transition audit inconclusive at the cap without selecting a primitive, reading support, adding a row, modifying source, using a method or using protected seeds."
+  }
+}

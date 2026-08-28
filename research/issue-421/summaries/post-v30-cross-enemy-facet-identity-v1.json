@@ -1,0 +1,58 @@
+{
+  "authority": "Apply decision boundary 2 and close cross-enemy-partial-facet-extra-chip without repair, rerun, alternate encoding, trace change, carrier, capacity, causal row or threshold change. Continue inside issue #421 only from another source-complete structural state representation.",
+  "decision": "close-cross-enemy-facet-on-identity-failure",
+  "decisionBoundary": 2,
+  "directControls": {},
+  "execution": {
+    "GodotProcesses": 1,
+    "causalEndpointsInspected": 0,
+    "causalRows": 0,
+    "directExecutions": 0,
+    "enabledFactorWholeRunRows": 0,
+    "manifests": {},
+    "maximumModelContextTokens": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "supportMetricsInspected": 0,
+    "wallTimeSeconds": 0.7933882500510663,
+    "wholeRunIdentityObservationRows": 0
+  },
+  "failure": "Cross-enemy Facet identity mismatch: focused mediator isolation",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "outcomeClass": "futility",
+  "protocolSha256": "53bd9ce287f4f1742133729522559827056dd75f1c67ab358a6ad56aed011974",
+  "schemaVersion": 1,
+  "sourceIdentity": {
+    "balanceSimSha256": "863ce055aa37ab3e33c15adeaf8c0a8f0acc11909b13128fa0af772e5213bd11",
+    "combatRulesSha256": "d3ddd6b7354a1e9a669981b67fd8e5719f18bb57a1922fe86c380e3096b66529",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "frontierProtocolSha256": "c4c6fb69ae3ac34527662db1f00b571fbc0173bb140f49483488662a9b1cd684",
+    "frontierSummarySha256": "c462bfad7f74deb6884d429feaab01707fc64f101fe3b168b7680be0fa5cb9c7",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "745c669dcf553d1dab079f98d8cf2dc113fdf783ba404ad7d3610dc7ab7cb5ce",
+    "probeUidSha256": "d215af2e0a50253343a1e6c9ca2ab939c90b992e5f9b9c57892db0e110f7f26c",
+    "runnerSha256": "2e5f1e1f3794ec4143a8dce49f207500b51a6f3884b3128f0e8c70a4701e27fb",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "taskCapsuleSha256": "4af1901bf168ab238236c58c3b1503e63dbbd2a202014da2d691ecf3ff5a476f"
+  },
+  "traceSentinel": {},
+  "wholeRunIdentity": {}
+}

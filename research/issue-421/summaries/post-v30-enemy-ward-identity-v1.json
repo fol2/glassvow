@@ -1,0 +1,68 @@
+{
+  "authority": "Apply decision boundary 2 and close the complete enemy-Ward transition family without repair, rerun, alternate encoding, trace change, carrier, capacity, causal row, threshold or payoff change. Continue inside issue #421 only from another source-complete structural representation.",
+  "decision": "close-enemy-ward-transition-on-identity-failure",
+  "decisionBoundary": 2,
+  "directControls": {
+    "focusedMediatorMismatchRows": 0,
+    "mappingMismatchRows": 0,
+    "rngMismatchRows": 0,
+    "rows": 10
+  },
+  "execution": {
+    "GodotProcesses": 2,
+    "causalEndpointsInspected": 0,
+    "causalRows": 0,
+    "directExecutions": 10,
+    "enabledFactorWholeRunRows": 0,
+    "manifests": {
+      "direct": {
+        "outputSha256": "ef980b1aac46f53d5dda2a2cecdd16e414e16895cc02023ba79b7e2f57dea0c0",
+        "planSha256": "523b9d8cefc347a0677476c9799bcf58f89d28238f2bd25439b63183ca889d8d"
+      }
+    },
+    "maximumModelContextTokens": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "supportMetricsInspected": 0,
+    "wallTimeSeconds": 2.2457298330264166,
+    "wholeRunIdentityObservationRows": 16
+  },
+  "failure": "Enemy-Ward identity mismatch: sentinel trace schema",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "outcomeClass": "futility",
+  "protocolSha256": "0063a6fb774094b45756b5ced3f5dd730d73d488880ec4d4d81bcd53fab2a315",
+  "schemaVersion": 1,
+  "sourceIdentity": {
+    "balanceSimSha256": "9e3a43c7f9c6acf2d5a7cf7fe4dc82816ba2f64c916435dff5a9428beb0f871b",
+    "combatRulesSha256": "483d742785a90a179edf0433bcad9b90085fc3f1c78ba07edb821ff2a1c57912",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "frontierProtocolSha256": "0ec0d46180525ac2c1f0db111ed9e5a11266128a5b677d18f941020e6e4f72fe",
+    "frontierSummarySha256": "bda04cf79d3dff08e12a5502dede581197f9529bcf954a527c1c198fe1dba172",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "6abe0f1aaff5513b2c11889801eff1cf39b19fd7687e84b8f9bdac99fbfc0a1e",
+    "probeUidSha256": "a62c4b4063e39f34cd5cd89d00e05d0d821aaa63cf47e5f1e624609d4273d927",
+    "runnerSha256": "6d089aba73738e864726586e5663a669b3e2aab26aaa9c75a5465e7f2c2d3643",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "taskCapsuleSha256": "f1eb62e006e1b61f4cdd741785db013288ebd5cb295d4d502a6d32a4fdfdf244"
+  },
+  "traceSentinel": {},
+  "wholeRunIdentity": {}
+}

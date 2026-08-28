@@ -1,0 +1,470 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "cross-enemy-partial-facet-trace-and-factor-identity",
+  "question": "Does the minimal card-scoped cross-enemy partial-Facet factor preserve exact null path, RNG, policy and result identity, and does true affect only its intended one-chip mediator under focused controls?",
+  "scientificBasis": "The zero-row source frontier selected exactly one previously unrepresented Facet-ownership relation. This preflight tests the smallest order-safe encoding before any support, capacity, causal, carrier or acquisition claim.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "d3ddd6b7354a1e9a669981b67fd8e5719f18bb57a1922fe86c380e3096b66529",
+    "balanceSimSha256": "863ce055aa37ab3e33c15adeaf8c0a8f0acc11909b13128fa0af772e5213bd11",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "745c669dcf553d1dab079f98d8cf2dc113fdf783ba404ad7d3610dc7ab7cb5ce",
+    "probeUidSha256": "d215af2e0a50253343a1e6c9ca2ab939c90b992e5f9b9c57892db0e110f7f26c",
+    "runnerSha256": "2e5f1e1f3794ec4143a8dce49f207500b51a6f3884b3128f0e8c70a4701e27fb",
+    "frontierProtocolSha256": "c4c6fb69ae3ac34527662db1f00b571fbc0173bb140f49483488662a9b1cd684",
+    "frontierSummarySha256": "c462bfad7f74deb6884d429feaab01707fc64f101fe3b168b7680be0fa5cb9c7",
+    "taskCapsuleSha256": "4af1901bf168ab238236c58c3b1503e63dbbd2a202014da2d691ecf3ff5a476f"
+  },
+  "factorDefinitions": {
+    "crossEnemyFacet": {
+      "levels": [
+        "omitted",
+        false,
+        true
+      ],
+      "nullAlias": "Omitted leaves the new CombatRules boolean at its exact false default. Explicit false assigns false after game construction. Both must preserve the complete whole-run row, captured path, RNG cursor, policy snapshot and result.",
+      "trueDefinition": "At card-play start, snapshot living enemy identities with 0 < chips < facet_max. For Duskblade only, an Attack that later draws unblocked blood and applies positive implicit chips to target e adds exactly one chip iff the snapshot contains another identity distinct from e.",
+      "orderSafety": "The snapshot is frozen before any card effect, so an all-enemy Attack cannot create eligibility for a later target in its own iteration.",
+      "directOnly": "True is permitted only in the focused controls in this protocol. No true whole-run may execute."
+    },
+    "traceCapture": {
+      "levels": [
+        false,
+        true
+      ],
+      "definition": "Capture is a simulator-only output dictionary containing nodes, selected combat events, card rewards and boss relic choices. It must not enter game truth or change the returned run row.",
+      "selectedEventTypes": [
+        "turn",
+        "play",
+        "hitEnemy",
+        "chip",
+        "shatter",
+        "die",
+        "endTurn"
+      ],
+      "requiredPlayFields": [
+        "fight",
+        "t",
+        "uid",
+        "id",
+        "targetIdx"
+      ],
+      "requiredChipFields": [
+        "fight",
+        "t",
+        "idx",
+        "n",
+        "chips",
+        "facetMax"
+      ]
+    }
+  },
+  "directControls": [
+    {
+      "input": {
+        "id": "other-partial-factor-off",
+        "seed": 421940,
+        "aspect": "duskblade",
+        "factor": false,
+        "card": "strike",
+        "target": 1,
+        "enemies": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ]
+      },
+      "expected": {
+        "id": "other-partial-factor-off",
+        "aspect": "duskblade",
+        "factor": false,
+        "card": "strike",
+        "target": 1,
+        "playReturned": true,
+        "enemyBefore": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ],
+        "enemyAfter": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 94, "block": 0, "chips": 1, "facetMax": 8}
+        ],
+        "chipEvents": [
+          {"idx": 1, "n": 1, "chips": 1, "facetMax": 8}
+        ]
+      }
+    },
+    {
+      "input": {
+        "id": "other-partial-factor-on",
+        "seed": 421941,
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "strike",
+        "target": 1,
+        "enemies": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ]
+      },
+      "expected": {
+        "id": "other-partial-factor-on",
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "strike",
+        "target": 1,
+        "playReturned": true,
+        "enemyBefore": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ],
+        "enemyAfter": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 94, "block": 0, "chips": 2, "facetMax": 8}
+        ],
+        "chipEvents": [
+          {"idx": 1, "n": 2, "chips": 2, "facetMax": 8}
+        ]
+      }
+    },
+    {
+      "input": {
+        "id": "other-partial-reversed-on",
+        "seed": 421942,
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "strike",
+        "target": 0,
+        "enemies": [
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8}
+        ]
+      },
+      "expected": {
+        "id": "other-partial-reversed-on",
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "strike",
+        "target": 0,
+        "playReturned": true,
+        "enemyBefore": [
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8}
+        ],
+        "enemyAfter": [
+          {"hp": 94, "block": 0, "chips": 2, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8}
+        ],
+        "chipEvents": [
+          {"idx": 0, "n": 2, "chips": 2, "facetMax": 8}
+        ]
+      }
+    },
+    {
+      "input": {
+        "id": "same-target-only-on",
+        "seed": 421943,
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "strike",
+        "target": 1,
+        "enemies": [
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8}
+        ]
+      },
+      "expected": {
+        "id": "same-target-only-on",
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "strike",
+        "target": 1,
+        "playReturned": true,
+        "enemyBefore": [
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8}
+        ],
+        "enemyAfter": [
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8},
+          {"hp": 94, "block": 0, "chips": 2, "facetMax": 8}
+        ],
+        "chipEvents": [
+          {"idx": 1, "n": 1, "chips": 2, "facetMax": 8}
+        ]
+      }
+    },
+    {
+      "input": {
+        "id": "dead-other-on",
+        "seed": 421944,
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "strike",
+        "target": 1,
+        "enemies": [
+          {"hp": 0, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ]
+      },
+      "expected": {
+        "id": "dead-other-on",
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "strike",
+        "target": 1,
+        "playReturned": true,
+        "enemyBefore": [
+          {"hp": 0, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ],
+        "enemyAfter": [
+          {"hp": 0, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 94, "block": 0, "chips": 1, "facetMax": 8}
+        ],
+        "chipEvents": [
+          {"idx": 1, "n": 1, "chips": 1, "facetMax": 8}
+        ]
+      }
+    },
+    {
+      "input": {
+        "id": "zero-other-on",
+        "seed": 421945,
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "strike",
+        "target": 1,
+        "enemies": [
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ]
+      },
+      "expected": {
+        "id": "zero-other-on",
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "strike",
+        "target": 1,
+        "playReturned": true,
+        "enemyBefore": [
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ],
+        "enemyAfter": [
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8},
+          {"hp": 94, "block": 0, "chips": 1, "facetMax": 8}
+        ],
+        "chipEvents": [
+          {"idx": 1, "n": 1, "chips": 1, "facetMax": 8}
+        ]
+      }
+    },
+    {
+      "input": {
+        "id": "blocked-target-on",
+        "seed": 421946,
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "strike",
+        "target": 1,
+        "enemies": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 6, "chips": 0, "facetMax": 8}
+        ]
+      },
+      "expected": {
+        "id": "blocked-target-on",
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "strike",
+        "target": 1,
+        "playReturned": true,
+        "enemyBefore": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 6, "chips": 0, "facetMax": 8}
+        ],
+        "enemyAfter": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ],
+        "chipEvents": []
+      }
+    },
+    {
+      "input": {
+        "id": "ash-other-partial-on",
+        "seed": 421947,
+        "aspect": "ashwarden",
+        "factor": true,
+        "card": "strike",
+        "target": 1,
+        "enemies": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ]
+      },
+      "expected": {
+        "id": "ash-other-partial-on",
+        "aspect": "ashwarden",
+        "factor": true,
+        "card": "strike",
+        "target": 1,
+        "playReturned": true,
+        "enemyBefore": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ],
+        "enemyAfter": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 94, "block": 0, "chips": 0, "facetMax": 8}
+        ],
+        "chipEvents": []
+      }
+    },
+    {
+      "input": {
+        "id": "same-card-order-on",
+        "seed": 421948,
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "cleave",
+        "target": null,
+        "enemies": [
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ]
+      },
+      "expected": {
+        "id": "same-card-order-on",
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "cleave",
+        "target": null,
+        "playReturned": true,
+        "enemyBefore": [
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ],
+        "enemyAfter": [
+          {"hp": 94, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 94, "block": 0, "chips": 1, "facetMax": 8}
+        ],
+        "chipEvents": [
+          {"idx": 0, "n": 1, "chips": 1, "facetMax": 8},
+          {"idx": 1, "n": 1, "chips": 1, "facetMax": 8}
+        ]
+      }
+    },
+    {
+      "input": {
+        "id": "aoe-prepartial-on",
+        "seed": 421949,
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "cleave",
+        "target": null,
+        "enemies": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ]
+      },
+      "expected": {
+        "id": "aoe-prepartial-on",
+        "aspect": "duskblade",
+        "factor": true,
+        "card": "cleave",
+        "target": null,
+        "playReturned": true,
+        "enemyBefore": [
+          {"hp": 100, "block": 0, "chips": 1, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8},
+          {"hp": 100, "block": 0, "chips": 0, "facetMax": 8}
+        ],
+        "enemyAfter": [
+          {"hp": 94, "block": 0, "chips": 2, "facetMax": 8},
+          {"hp": 94, "block": 0, "chips": 2, "facetMax": 8},
+          {"hp": 94, "block": 0, "chips": 2, "facetMax": 8}
+        ],
+        "chipEvents": [
+          {"idx": 0, "n": 1, "chips": 2, "facetMax": 8},
+          {"idx": 1, "n": 2, "chips": 2, "facetMax": 8},
+          {"idx": 2, "n": 2, "chips": 2, "facetMax": 8}
+        ]
+      }
+    }
+  ],
+  "traceSentinelCohort": {
+    "policyRoot": 421921,
+    "policyIndices": [0, 1],
+    "simulationSeeds": [421930, 421931],
+    "aspect": "duskblade",
+    "vow": 5,
+    "identities": 4,
+    "arms": [
+      {"factor": false, "capture": false},
+      {"factor": false, "capture": true}
+    ],
+    "purpose": "Prove capture-off versus capture-on core identity and the frozen trace schema before the larger omitted-versus-false whole-run identity stage."
+  },
+  "identityCohort": {
+    "policyRoot": 421921,
+    "policyIndices": [0, 1, 2, 3],
+    "simulationSeeds": [421934, 421935, 421936, 421937],
+    "aspect": "duskblade",
+    "vow": 5,
+    "identities": 16,
+    "arms": [
+      {"factor": "omitted", "capture": true},
+      {"factor": false, "capture": true}
+    ],
+    "freshness": "A read-only pre-freeze search found zero exact policyRoot 421921 and simulation seeds 421930 through 421937 in the append-only ledger and existing protocols, summaries or runners."
+  },
+  "estimands": {
+    "directMapping": "Every focused control must equal its frozen expected enemy and CHIP-event map; RNG before and after must match exactly.",
+    "mediatorIsolation": "After subtracting the single intended extra chip from the true other-partial row, its complete direct result must equal the paired false row.",
+    "traceIdentity": "For each sentinel identity, capture-off and capture-on returned run rows must match after removing only trace output. Capture-off must remain exactly {capture:false}; capture-on must satisfy the frozen five-key schema.",
+    "nullIdentity": "For each fresh whole-run identity, omitted and explicit false must match complete row, captured trajectory, RNG, policy snapshot, result and reliability exactly.",
+    "supportBoundary": "No opportunity, activation, policy-support, Scoreline, Afterimage, duration or outcome-effect count is computed in this preflight."
+  },
+  "executionAndStopping": {
+    "order": [
+      "ten focused direct controls",
+      "eight-observation capture sentinel",
+      "32-observation omitted-versus-false whole-run identity"
+    ],
+    "failFast": "Any immutable-input, direct-map, mediator-isolation, RNG, sentinel-core, trace-schema, complete-row, path, policy, result, reliability, process, row, wall-time, ledger or protected-seed mismatch stops before the next stage.",
+    "deterministicOwnership": "Python constructs plans, invokes the exact Godot binary, content-addresses plans and outputs, compares every identity and owns stop/go. No human chooses a row or interprets support during execution.",
+    "rerun": "Exactly one attempt. An identity failure closes the primitive without repair or rerun."
+  },
+  "budget": {
+    "directExecutions": 10,
+    "maximumWholeRunIdentityObservationRows": 40,
+    "maximumGodotProcesses": 3,
+    "maximumWallTimeSeconds": 180,
+    "maximumNewLedgerRows": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "enabledFactorWholeRunRows": 0,
+    "causalRows": 0,
+    "protectedSeeds": 0
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "decisionRules": {
+    "success": "All ten focused controls, the four-identity trace sentinel and the 16-identity omitted-versus-false whole-run preflight pass every exact gate within all ceilings.",
+    "successAuthority": "Apply decision boundary 1 and freeze cross-enemy-partial-facet-extra-chip plus its five-key trace as identity-safe. Authorise only a separately preregistered baseline trace capacity screen on a common fresh cohort; do not run a true whole-run, causal row, candidate, carrier, acquisition factor, Scoreline or Afterimage payoff, ML, RL, optimiser or protected seed.",
+    "futility": "Any exact direct, mediator, null, trace, RNG, policy, result or reliability identity gate fails within the cap.",
+    "futilityAuthority": "Apply decision boundary 2 and close cross-enemy-partial-facet-extra-chip without repair, rerun, alternate encoding, trace change, carrier, capacity, causal row or threshold change. Continue inside issue #421 only from another source-complete structural state representation.",
+    "inconclusive": "The exact decision cannot complete within the process, row, wall-time, ledger or protected-seed cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the identity preflight inconclusive at the cap without rerun, source change, support inspection, capacity, causal row, method or protected seed."
+  }
+}

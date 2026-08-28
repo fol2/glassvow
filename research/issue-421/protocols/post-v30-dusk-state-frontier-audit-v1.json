@@ -1,0 +1,292 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "zero-row-source-complete-facet-ownership-frontier",
+  "question": "After closure of current Dusk grammar and the tested chip variants, does exact current-main expose one materially new Facet-state representation that can be defined without a scalar, optimiser or persistent target-history state?",
+  "scientificBasis": "For one existing positive partial Facet observed at a card-play boundary, enemy identity supplies an exhaustive binary partition: the partial Facet belongs to the current chip target or to another living target. Exact prior evidence closes the current-target relation. The other-target relation is therefore audited as a state-representation gap, not selected from outcome support.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "b1a46fa194341659381c9df9f62b2eff333f6fcbab09b810f5e209c9a4d301ec",
+    "taskCapsuleSha256": "cfa74ae73600ec6f61d02527c8db338707f15acb9249617b386f91df7e29d5ce",
+    "sourceSha256": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    }
+  },
+  "frontierScope": {
+    "included": "A one-extra-Facet deterministic predicate evaluated from the pre-card partial-Facet ownership relation among current living enemies. It may read only existing enemy hp, chips, facet_max and identity plus the existing Dusk aspect and positive implicit Attack-chip boundary.",
+    "completePartition": [
+      "same-current-target",
+      "other-living-target"
+    ],
+    "excluded": [
+      "new status or resource",
+      "persistent target history",
+      "card, reward or acquisition subset",
+      "unconditional or global scalar",
+      "payoff level other than exactly one extra Facet chip",
+      "ML, RL or optimiser",
+      "trace or cached outcome support"
+    ],
+    "claimBoundary": "This audit can identify one source-defined state representation for trace-only identity preflight. It cannot establish natural policy capacity, causal effect, candidate feasibility, carrier, acquisition, package acceptance or product authority."
+  },
+  "stateIdentity": {
+    "combatStateFields": [
+      "kind",
+      "affix",
+      "turn",
+      "over",
+      "result",
+      "queue",
+      "player",
+      "enemies",
+      "draw",
+      "hand",
+      "discard",
+      "exhaust",
+      "embers",
+      "ember_cap",
+      "art_used_turn",
+      "kindled_turn",
+      "kindles_this_turn",
+      "pending_chips_active",
+      "pending_chips",
+      "counters_played",
+      "counters_attacks",
+      "first_card_played",
+      "hp_lost",
+      "prism_procd",
+      "finale_handoff"
+    ],
+    "enemyCombatantFields": [
+      "key",
+      "variant_id",
+      "def",
+      "idx",
+      "name",
+      "hp",
+      "max_hp",
+      "block",
+      "statuses",
+      "staggered",
+      "last_moves",
+      "move_key",
+      "elite",
+      "boss",
+      "facet_max",
+      "chips",
+      "flags"
+    ],
+    "finding": "Exact current-main stores per-enemy chips and facet_max plus the enemy vector, but no player-Attack target history or distinct-target Facet state. The new relation can be evaluated as a card-scoped snapshot without adding persistent combat or save state."
+  },
+  "sourceAssertions": [
+    {
+      "id": "Dusk-only chip application",
+      "path": "domain/rules/combat.gd",
+      "contains": "if run.aspect != 0:\n\t\treturn"
+    },
+    {
+      "id": "implicit chip indexed by enemy",
+      "path": "domain/rules/combat.gd",
+      "contains": "var rec: Dictionary = cb.pending_chips.get(e.idx, {\"hit\": false, \"extra\": 0})"
+    },
+    {
+      "id": "play exposes target identity",
+      "path": "domain/rules/combat.gd",
+      "contains": "cb.queue.append({\"t\": EventTypes.PLAY, \"uid\": inst.uid, \"id\": String(inst.id), \"targetIdx\": target_idx})"
+    },
+    {
+      "id": "chip event exposes enemy identity",
+      "path": "domain/rules/combat.gd",
+      "contains": "\"t\": EventTypes.CHIP,\n\t\t\"idx\": e.idx"
+    },
+    {
+      "id": "chip application iterates indexed targets",
+      "path": "domain/rules/combat.gd",
+      "contains": "for idx_v: Variant in cb.pending_chips.keys():"
+    },
+    {
+      "id": "living enemy vector",
+      "path": "domain/state/combat_state.gd",
+      "contains": "func living_enemies() -> Array[EnemyCombatant]:"
+    },
+    {
+      "id": "per-enemy Facet threshold",
+      "path": "domain/state/enemy_combatant.gd",
+      "contains": "var facet_max: int = 0"
+    },
+    {
+      "id": "per-enemy partial Facet state",
+      "path": "domain/state/enemy_combatant.gd",
+      "contains": "var chips: int = 0"
+    },
+    {
+      "id": "play event identity",
+      "path": "domain/events/event_types.gd",
+      "contains": "const PLAY: StringName = &\"play\""
+    },
+    {
+      "id": "chip event identity",
+      "path": "domain/events/event_types.gd",
+      "contains": "const CHIP: StringName = &\"chip\""
+    },
+    {
+      "id": "pilot observes imminent target-local Shatter",
+      "path": "tools/balance_pilot.gd",
+      "contains": "if typeof(pv) == TYPE_DICTIONARY and pv.get(\"willShatter\", false):"
+    },
+    {
+      "id": "pilot otherwise selects target by current HP",
+      "path": "tools/balance_pilot.gd",
+      "contains": "if e.hp < lowest.hp:"
+    }
+  ],
+  "naturalRouteIdentity": {
+    "formations": 54,
+    "multiEnemyFormations": 22,
+    "singleEnemyFormations": 32,
+    "maximumEnemies": 3,
+    "multiEnemyByAct": [
+      7,
+      5,
+      6,
+      4
+    ]
+  },
+  "priorEvidence": {
+    "facetFocus": {
+      "path": "summaries/facet-focus-v1.json",
+      "sha256": "fa11d04c131e10206ad9797cdf40c61ee2e17ba050113d68741bf5b3d10e6241",
+      "decision": "STOP_INCONCLUSIVE_PARTIAL_FACET_PROTOTYPE"
+    },
+    "genericShatter": {
+      "path": "summaries/shatter-flow-v1.json",
+      "sha256": "369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce",
+      "decision": "REJECT_GENERIC_SHATTER_FLOW_PROTOTYPE"
+    },
+    "reseamBreak": {
+      "path": "summaries/post-v38-reseam-break-capacity-v1.json",
+      "sha256": "5c9046438a41b996ced634013e7e5d3d7c79abd63d288af98f9e8b051b8fbab4",
+      "decision": "close-reseam-break-without-implementation"
+    },
+    "rewardOverchip": {
+      "path": "summaries/post-v38-reward-overchip-capacity-v1.json",
+      "sha256": "71b616c8c0f1f0c18ee8b578d5fcc87561d9b1d9eb92772752ec5bc7bd379fc8",
+      "decision": "close-reward-overchip-mediator-family"
+    },
+    "multiHit": {
+      "path": "summaries/post-v30-multihit-facet-capacity-v1.json",
+      "sha256": "dbf144eaf0615808eea7d63721a5695c5a3fa0878e62f5b183b362cdbb64e5cb",
+      "decision": "close-complete-multihit-extra-facet-family-at-cap"
+    },
+    "dimmedFacet": {
+      "path": "summaries/post-v30-dimmed-facet-capacity-v1.json",
+      "sha256": "b72b84d97675eb87ead2cee9a138e533e731f6620af1ff2fcc5a5ce6d58fe649",
+      "decision": "close-dimmed-facet-primitive-family-at-cap"
+    },
+    "lanternArt": {
+      "path": "summaries/post-v30-lantern-art-capacity-v1.json",
+      "sha256": "b029910d7f776f114a814885c2804f160c325d88b460b8f732c341ed9e619c1f",
+      "decision": "close-lantern-art-family-at-cap"
+    }
+  },
+  "facetOwnershipPartition": [
+    {
+      "id": "target-local-partial-facet",
+      "relation": "same-current-target",
+      "definition": "At card-play start, the current chip target itself has 0 < chips < facet_max.",
+      "closureEvidence": [
+        "facetFocus",
+        "genericShatter",
+        "reseamBreak"
+      ],
+      "disposition": "closed",
+      "reason": "The target-local partial-Facet payoff, generic Shatter flow and same-enemy reseam direction are immutable bounded negatives. Changing the payoff or threshold would reopen those families."
+    },
+    {
+      "id": "cross-enemy-partial-facet-extra-chip",
+      "relation": "other-living-target",
+      "definition": "At card-play start, another living enemy distinct from the current chip target has 0 < chips < facet_max.",
+      "closureEvidence": [],
+      "disposition": "uncovered",
+      "reason": "Exact state stores a Facet vector but no tested mechanism reads partial Facet ownership across enemy identities. This is a new topology relation, not a target-local threshold, card subset, status predicate, global Attack buff or unconditional chip scalar."
+    }
+  ],
+  "closedAliases": [
+    {
+      "id": "incoming-card-hit-multiplicity",
+      "closureEvidence": [
+        "multiHit"
+      ],
+      "disposition": "closed-alias"
+    },
+    {
+      "id": "target-dimmed-conditioned-chip",
+      "closureEvidence": [
+        "dimmedFacet"
+      ],
+      "disposition": "closed-alias"
+    },
+    {
+      "id": "global-attack-chip-buff",
+      "closureEvidence": [
+        "lanternArt"
+      ],
+      "disposition": "closed-alias"
+    },
+    {
+      "id": "unconditional-reward-attack-overchip",
+      "closureEvidence": [
+        "rewardOverchip"
+      ],
+      "disposition": "closed-alias"
+    }
+  ],
+  "selectedPrimitive": {
+    "id": "cross-enemy-partial-facet-extra-chip",
+    "stateRepresentation": "A card-scoped snapshot of living enemy identities whose Facet state is partial before the card resolves.",
+    "exactEffect": "For Duskblade only, when an Attack draws unblocked blood and would apply positive implicit Facet chips to target e, add exactly one chip if the pre-card snapshot contains a different living enemy with 0 < chips < facet_max.",
+    "orderSafety": "The snapshot is frozen before card effects. Same-card target iteration cannot create its own eligibility.",
+    "persistentStateAdded": false,
+    "rngAdded": false,
+    "carrier": null,
+    "acquisition": null,
+    "identityPreflightOnly": true,
+    "requiredTrace": [
+      "fight",
+      "turn",
+      "play ordinal",
+      "card id and type",
+      "target identity",
+      "pre-card living enemy hp, chips and facet_max",
+      "implicit chip target and amount"
+    ]
+  },
+  "budget": {
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "decisionRules": {
+    "success": "The exact binary Facet-ownership partition has exactly one unclosed relation, all source, state, encounter, evidence and ledger identities pass, no trace or cache support is read and the audit finishes within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze only cross-enemy-partial-facet-extra-chip for one separately preregistered trace-only null and focused-mediator identity preflight. Do not construct a carrier, add a causal or capacity row, inspect outcome support, change the one-chip effect, add target history, ML, RL, optimiser or protected seed.",
+    "futility": "Both Facet-ownership relations have immutable closures.",
+    "futilityAuthority": "Apply decision boundary 2 and close this Facet-ownership frontier. Continue inside issue #421 only from another source-complete state representation; do not change a relation, payoff, closure or threshold.",
+    "inconclusive": "The partition, source, evidence, encounter or ledger identity fails, more than one relation is unclosed, or the audit exceeds 30 seconds.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the state-frontier audit inconclusive at the cap without selecting a primitive, reading support, adding a row, modifying source, using a method or using protected seeds."
+  }
+}

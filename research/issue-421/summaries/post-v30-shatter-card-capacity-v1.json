@@ -1,0 +1,118 @@
+{
+  "authority": "Apply decision boundary 2 and close the complete multi-enemy-card-Shatter topology without telemetry repair, aggregate proxy, alternate cache, card subset, payoff, carrier, implementation or rerun. Continue issue #421 with the next source- and evidence-backed structural mechanism.",
+  "decision": "close-multi-enemy-card-shatter-on-observability-gate",
+  "decisionBoundary": 2,
+  "eligibleCache": {
+    "filesRead": 0,
+    "reason": "Source observability gate runs before cache access.",
+    "sha256": "bb19c9c3e41c08312cff6eb8bd9a62d8ca2fa88ed187e66a4d47af877b371a7c",
+    "supportRowsRead": 0
+  },
+  "eventParser": {
+    "carrierIdentity": "The carrier is the PLAY id for each active window. No card ID, rarity, act, formation or outcome subset is permitted.",
+    "failClosed": "Any missing required field, malformed event, unpaired terminal or ambiguous attribution fails observability before support is read or counted.",
+    "requiredFields": [
+      "trajectory.plays.fight",
+      "trajectory.plays.event",
+      "trajectory.plays.id",
+      "trajectory.plays.uid",
+      "trajectory.cardEvents.shatter.event",
+      "trajectory.cardEvents.shatter.idx",
+      "trajectory.cardEvents.terminal.event",
+      "trajectory.cardEvents.terminal.uid",
+      "trajectory.cardEvents.terminal.kind"
+    ],
+    "rowActivation": "A row is active when at least one valid card window contains at least two SHATTER events and at least two distinct integer idx values.",
+    "windowConstruction": "Within each fight, sort PLAY, SHATTER and terminal events by the immutable queue event index. Open a window at PLAY(fight,event,id,uid). Close only on TO_DISCARD, EXHAUST or POWER_CONSUMED with the same uid. Reject overlapping, unterminated, duplicated or out-of-order windows. Count SHATTER events strictly after PLAY and before its matching terminal; preserve every integer idx."
+  },
+  "execution": {
+    "cacheFilesRead": 0,
+    "maximumModelContextTokens": 0,
+    "newLedgerRows": 0,
+    "newSimulatorObservationRows": 0,
+    "protectedSeedRows": 0,
+    "traceFilesRead": 0,
+    "wallTimeSeconds": 6.157224124995992
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "missingRequiredFields": [
+    "trajectory.cardEvents.shatter.event",
+    "trajectory.cardEvents.shatter.idx",
+    "trajectory.cardEvents.terminal.event",
+    "trajectory.cardEvents.terminal.kind",
+    "trajectory.cardEvents.terminal.uid"
+  ],
+  "outcomeClass": "futility",
+  "protocolSha256": "a3b1cbb5288dbd08e9253250a49250ae6f9a9c4caa8953dd1cfd7a0cabee021f",
+  "registeredCapacityGates": {
+    "maximumAnchorJaccard": 0.55,
+    "maximumFaultRows": 1,
+    "minimumActivePolicies": 16,
+    "minimumAnchorOnlyPoliciesPerAnchor": 8,
+    "minimumCandidateOnlyPoliciesPerAnchor": 8,
+    "minimumCarrierIds": 2,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "provenance": "The 16 active and inactive, eight viable, two-carrier, separate eight-policy anchor and 0.55 overlap gates reuse the frozen 64-policy capacity scale. One baseline fault is the unchanged current-main reliability ceiling."
+  },
+  "runnerSha256": "ce08187b42fa1f8bbfe8e2915f7828a4a34f4f70f0f1ee92177746261b4e17a2",
+  "schemaVersion": 1,
+  "selectedRepresentation": {
+    "acquisition": null,
+    "capacityOnly": true,
+    "carrier": null,
+    "exactPredicate": "Within one PLAY-to-card-terminal event window, SHATTER event count is at least two and the set of SHATTER idx values has size at least two.",
+    "id": "multiple-events-multiple-targets",
+    "payoff": null
+  },
+  "sourceTraceProjection": {
+    "aliasFailure": "fights.shatters is an aggregate over the complete fight. It cannot identify the producing PLAY, the number of distinct targets, same-target repeats, Art or relic-produced Shatters, or a card-terminal boundary.",
+    "availableFields": [
+      "trajectory.plays.fight",
+      "trajectory.plays.event",
+      "trajectory.plays.id",
+      "trajectory.plays.uid",
+      "fights.act",
+      "fights.kind",
+      "fights.enemies",
+      "fights.result",
+      "fights.turns",
+      "fights.hpLost",
+      "fights.shatters",
+      "fights.smolderKills"
+    ],
+    "missingByConstruction": [
+      "trajectory.cardEvents.shatter.event",
+      "trajectory.cardEvents.shatter.idx",
+      "trajectory.cardEvents.terminal.event",
+      "trajectory.cardEvents.terminal.uid",
+      "trajectory.cardEvents.terminal.kind"
+    ],
+    "schemaKeys": [
+      "capture",
+      "nodes",
+      "plays",
+      "cardRewards",
+      "bossRelics",
+      "arts",
+      "beaconAttacks",
+      "beaconChips"
+    ]
+  }
+}
