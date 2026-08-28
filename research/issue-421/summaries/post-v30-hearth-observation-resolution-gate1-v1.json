@@ -1,0 +1,81 @@
+{
+  "authority": "Freeze Gate 1 as identity-safe and preregister Gate 2 before any sentinel or causal row. Gate 1 does not authorise a payoff claim, candidate, held-out run or product mutation.",
+  "controlled": {
+    "events": 4,
+    "mismatches": 0,
+    "rows": 8
+  },
+  "decision": "gate1-identity-green-authorise-gate2-preregistration",
+  "decisionBoundary": 1,
+  "execution": {
+    "GodotProcesses": 3,
+    "causalEndpointsInspected": 0,
+    "causalFits": 0,
+    "causalRows": 0,
+    "controlledExecutions": 8,
+    "manifests": {
+      "captureOff": {
+        "outputSha256": "dc7448f525b1d39bb42ef7b1e1c40e9759e96c053ab0e740e612dd135fa56e10",
+        "planSha256": "b021077435c32148baaf879774799af78cb01b0d1d9b5026c31327510ec383a7"
+      },
+      "captureOn": {
+        "outputSha256": "0d3b823b019ebd7bda98c33fa3c5aed7d498e3b1cb4a8a82bc12d5ebf95e3357",
+        "planSha256": "f9820205e40b4bd2c741e5e2c3fda1f96020c2a8f85ddbf7fb283f5b1a9aaf67"
+      },
+      "controlled": {
+        "outputSha256": "b059466fb8c2421587f68e7b28be725a7d080f754d144c2f7d013f8bee6b614d",
+        "planSha256": "b3f6d9f8c3077733292f51b76f455710d307177fc54b73684420e373986149ba"
+      }
+    },
+    "maximumModelContextTokens": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "wallTimeSeconds": 3.565203916048631,
+    "wholeRunIdentityObservationRows": 32
+  },
+  "failure": "",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "protocolSha256": "dae991077656e22d64410426d65243e8559cf08da10b52ef682ad073ec686c56",
+  "schemaVersion": 1,
+  "sourceIdentity": {
+    "balanceSimSha256": "cc9ee33a8b5c47661355f345a9543dcae7451713e922651af6b3da0807d26309",
+    "combatRulesSha256": "da957f7296690a58351fa3ce18fe656a592073efc2010ff6d1d1a84fcc0f37cd",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "gate0Sha256": "acca9d5760e333e49f074723add8f6cdc2063c3cc25e269de329f5e2e290550a",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "1a3e87344aefd74eac4101df966e0cb3d723f73cbc986806eb205eebef2617cd",
+    "probeUidSha256": "a4c3c7e11916b76cb5b1ce9d80cf4c5e1c00487c6acb8a0eb33fe0d208fa882d",
+    "runnerSha256": "0bbc1f72bdd43e565eb7e748d0752f49b27e0b894a6894023c7eff6a28c4a783",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "taskCapsuleSha256": "d9df11e034048c5963060c11fc341a841c2ae1e20da1df053ead58c46fff2d7c"
+  },
+  "wholeRunIdentity": {
+    "captureOnEvents": 181,
+    "coreMismatchRows": 0,
+    "identities": 16,
+    "pathMismatchRows": 0,
+    "policyMismatchRows": 0,
+    "positiveBranchEvents": 25,
+    "reliabilityFaultRows": 0,
+    "resultMismatchRows": 0,
+    "rngMismatchRows": 0
+  }
+}

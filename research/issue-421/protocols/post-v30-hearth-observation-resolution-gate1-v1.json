@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v30-hearth-observation-resolution-gate1",
+  "question": "Does the smallest direct current-main Crown of the Hearth branch payload map the four decisive controlled states exactly and remain capture-identity-safe on fresh whole-run identities under the qualified runtime?",
+  "authority": {
+    "task": "https://github.com/fol2/glassvow/issues/421",
+    "controllingDelta": "https://github.com/fol2/glassvow/issues/421#issuecomment-5453573232",
+    "gate0": "summaries/post-v30-hearth-observation-resolution-gate0-v1.json"
+  },
+  "design": {
+    "type": "fail-fast deterministic branch witness and paired capture identity",
+    "branchLocation": "CombatRules._win_combat at the exact current-main crownOfTheHearth predicate and effect",
+    "observation": "One capture-gated payload is emitted for each completed-combat evaluation. It records branch-time ownership and Ember state, direct branch and proc execution, HP transition and the existing proc queue correspondence.",
+    "eventIdentity": "fight is the zero-based whole-run fight identity supplied before _fight; event is the deterministic combat-queue index at the Crown predicate. procQueueEvent separately identifies the existing Crown proc when the branch executes.",
+    "pathIdentity": "Both whole-run arms record the same node sequence, per-fight queue SHA-256 and intermediate RNG cursor. The complete row is compared after removing only captureHearth and hearthBranchEvents.",
+    "notCausal": "No payoff or acquisition-priority factor is present. No V30 row, endpoint, policy, seed, anchor or fit is used."
+  },
+  "controlledStates": [
+    {
+      "state": "no-crown",
+      "fight": 700,
+      "hp": 40,
+      "maxHp": 60,
+      "embers": 2,
+      "relics": []
+    },
+    {
+      "state": "crown-zero-ember",
+      "fight": 701,
+      "hp": 40,
+      "maxHp": 60,
+      "embers": 0,
+      "relics": [
+        "crownOfTheHearth"
+      ]
+    },
+    {
+      "state": "crown-positive-ember-headroom",
+      "fight": 702,
+      "hp": 40,
+      "maxHp": 60,
+      "embers": 2,
+      "relics": [
+        "crownOfTheHearth"
+      ]
+    },
+    {
+      "state": "crown-positive-ember-hp-cap",
+      "fight": 703,
+      "hp": 60,
+      "maxHp": 60,
+      "embers": 2,
+      "relics": [
+        "crownOfTheHearth"
+      ]
+    }
+  ],
+  "payloadSchema": [
+    "fight",
+    "event",
+    "crownOwned",
+    "embers",
+    "branchExecuted",
+    "procExecuted",
+    "procQueueEvent",
+    "procQueueMatched",
+    "hpBefore",
+    "requestedHealInput",
+    "actualHeal",
+    "hpAfter",
+    "payloadEmitted"
+  ],
+  "identityCohort": {
+    "freshness": "A read-only pre-freeze search found zero matching policy-root or simulation-seed identities in the append-only ledger and existing protocols.",
+    "policyRoot": 421701,
+    "policyIndices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "simulationSeeds": [
+      421710,
+      421711
+    ],
+    "identities": 16,
+    "aspect": "duskblade",
+    "vow": 5,
+    "baseline": "Exact current-main content at source c4130163c7fb8edd865c0adc95732aae03e1bad2."
+  },
+  "gates": {
+    "controlledMapping": "All eight state-by-capture executions must equal the frozen expected gameplay, queue, RNG and payload dictionaries exactly.",
+    "controlledCorrespondence": "Capture-off emits zero payloads and capture-on emits exactly one payload for each of the four branch evaluations.",
+    "wholeRunCorrespondence": "Capture-off emits zero payloads. Capture-on emits exactly one uniquely identified payload for every won fight and none for a non-winning terminal fight.",
+    "wholeRunPayload": "Every payload must have the exact schema, branch predicate, requested input, HP arithmetic, proc execution and independent proc-queue correspondence.",
+    "identity": "After removing only captureHearth and hearthBranchEvents, every paired whole-run row, node path, fight path, queue hash, RNG, policy, result and reliability field must be exactly equal.",
+    "reliability": "Zero error or stall rows in both arms."
+  },
+  "budget": {
+    "controlledExecutions": 8,
+    "wholeRunIdentities": 16,
+    "maximumWholeRunIdentityObservationRows": 32,
+    "maximumGodotProcesses": 3,
+    "maximumNewLedgerRows": 0,
+    "maximumCausalRows": 0,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "success": "Every controlled mapping, zero-or-one correspondence, direct payload, whole-run core/path/RNG/policy/result/reliability identity and numeric cap is exact green.",
+    "successAuthority": "Freeze Gate 1 as identity-safe and preregister Gate 2 before any sentinel or causal row. Gate 1 does not authorise a payoff claim, candidate, held-out run or product mutation.",
+    "failure": "Any schema, controlled mapping, correspondence, identity, reliability, source, runtime, ledger, process, row or wall-time check fails.",
+    "failureAuthority": "Quarantine Hearth immediately and continue with the next evidence-backed structural mechanism inside issue #421. No whole-run causal row, telemetry repair, second witness or rescue is authorised.",
+    "noRetry": "This is the single authorised Gate 1 attempt. Do not edit the protocol, cohort, expected mapping, source or runner after execution to obtain a different result."
+  },
+  "fixedInterferenceStrata": {
+    "scoreline": "Fixed current-main and not estimated.",
+    "afterimage": "Fixed current-main and not estimated."
+  },
+  "runtimeHost": {
+    "binary": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "binarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "host": "Apple M1 Max 64 GB arm64 Darwin",
+    "issue456HostPacketSha256": "d9800f55ff11e3f9035e4292a9a1440ad4514e8954264b7a942615830cf11792",
+    "canonicalFingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8"
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "da957f7296690a58351fa3ce18fe656a592073efc2010ff6d1d1a84fcc0f37cd",
+    "balanceSimSha256": "cc9ee33a8b5c47661355f345a9543dcae7451713e922651af6b3da0807d26309",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "1a3e87344aefd74eac4101df966e0cb3d723f73cbc986806eb205eebef2617cd",
+    "probeUidSha256": "a4c3c7e11916b76cb5b1ce9d80cf4c5e1c00487c6acb8a0eb33fe0d208fa882d",
+    "runnerSha256": "0bbc1f72bdd43e565eb7e748d0752f49b27e0b894a6894023c7eff6a28c4a783",
+    "gate0Sha256": "acca9d5760e333e49f074723add8f6cdc2063c3cc25e269de329f5e2e290550a",
+    "taskCapsuleSha256": "d9df11e034048c5963060c11fc341a841c2ae1e20da1df053ead58c46fff2d7c"
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "V30Boundary": {
+    "archiveCommit": "36a5d6bab7ce364987c3296b6ca0d63b58db4ef3",
+    "status": "INCONCLUSIVE_TELEMETRY_SCHEMA_NO_FIT",
+    "reusedRows": 0,
+    "reusedEndpoints": 0,
+    "fits": 0
+  }
+}

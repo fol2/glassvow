@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 31,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "parentArchiveHead": "36a5d6bab7ce364987c3296b6ca0d63b58db4ef3",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "qualified-runtime Hearth observation resolution and fail-fast Gate 2 quarantine",
+  "decision": "QUARANTINE_HEARTH_GATE2_CONTROL_IDENTITY_FAILURE",
+  "authority": {
+    "taskSSOT": "https://github.com/fol2/glassvow/issues/421",
+    "controllingDelta": "https://github.com/fol2/glassvow/issues/421#issuecomment-5453573232",
+    "programmeContinuesInsideIssue421": true,
+    "successorTicket": null
+  },
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-v30-hearth-observation-resolution-v1.md",
+    "progressReportSha256": "dc2f309697f486444e36135625cadf8a0cbba141c5b6e578149f7d73b5dde449",
+    "gate0Summary": "summaries/post-v30-hearth-observation-resolution-gate0-v1.json",
+    "gate0SummarySha256": "acca9d5760e333e49f074723add8f6cdc2063c3cc25e269de329f5e2e290550a",
+    "gate1Protocol": "protocols/post-v30-hearth-observation-resolution-gate1-v1.json",
+    "gate1ProtocolSha256": "dae991077656e22d64410426d65243e8559cf08da10b52ef682ad073ec686c56",
+    "gate1Summary": "summaries/post-v30-hearth-observation-resolution-gate1-v1.json",
+    "gate1SummarySha256": "d8a066884ddd06de9db7cdf9e1fbfd6f046e19eb63a38fcf26949d6cdfc8ec5d",
+    "gate1Runner": "tools/post_v30_hearth_observation_resolution_gate1.py",
+    "gate1RunnerSha256": "0bbc1f72bdd43e565eb7e748d0752f49b27e0b894a6894023c7eff6a28c4a783",
+    "gate2Protocol": "protocols/post-v30-hearth-qualified-crn-gate2-v1.json",
+    "gate2ProtocolSha256": "8c72b0d2777c34de47e688dc54ea40a59ec69c4f8d01742d09c635fdc501cb54",
+    "gate2Summary": "summaries/post-v30-hearth-qualified-crn-gate2-v1.json",
+    "gate2SummarySha256": "e7de2bcb35a4252222b30f83b75d79fa05ef33d30d7b95f3b83651b4edbade20",
+    "gate2Runner": "tools/post_v30_hearth_qualified_crn_gate2.py",
+    "gate2RunnerSha256": "3875cf9ba799ee5836aa7ac185e1a369f941fb1582ee196400284253ce0108ac",
+    "sourceArchive": "raw/post-v30-hearth-observation-resolution-source-v1.tar.gz",
+    "sourceArchiveSha256": "6fe802aa5cfb8a768aecb201c915207ff39f54de8b9c5a4e170937d6718c92dc",
+    "taskCapsuleSha256": "3ecbdcc182c85e4d55e63d7577c5cb97a87631f7840d50607586551de4ebf19b"
+  },
+  "gateResults": {
+    "gate0": {
+      "decisionBoundary": 1,
+      "decision": "authorise-only-fresh-controlled-crown-branch-observation-witness",
+      "newSimulatorRows": 0,
+      "causalClaims": 0
+    },
+    "gate1": {
+      "decisionBoundary": 1,
+      "decision": "gate1-identity-green-authorise-gate2-preregistration",
+      "controlledRows": 8,
+      "wholeRunIdentities": 16,
+      "captureOnEvents": 181,
+      "positiveBranchEvents": 25,
+      "coreMismatchRows": 0,
+      "pathMismatchRows": 0,
+      "rngMismatchRows": 0,
+      "policyMismatchRows": 0,
+      "resultMismatchRows": 0,
+      "reliabilityFaultRows": 0,
+      "causalEndpointsInspected": 0
+    },
+    "gate2": {
+      "decisionBoundary": 3,
+      "decision": "quarantine-hearth-gate2-control-identity-failure",
+      "failure": "Hearth Gate 2 mismatch: payoff hpBefore emberheart-before-H0",
+      "exactCause": "The preregistration expected Emberheart to heal six HP before Crown; exact current content healed three HP.",
+      "GodotProcesses": 1,
+      "directControlRowsProduced": 30,
+      "wholeRunRows": 0,
+      "sentinelRows": 0,
+      "causalRows": 0,
+      "causalEndpointsInspected": 0,
+      "bootstrapEstimands": 0,
+      "wallTimeSeconds": 0.7780849169939756
+    }
+  },
+  "factorContract": {
+    "design": "Fresh full-rank two-factor Hearth payoff H by acquisition priority Q; not V30 and not the old four-factor design.",
+    "scorelinePayoff": "Separate fixed non-factor with its own ordered-play interference stratum.",
+    "afterimagePayoff": "Separate fixed non-factor with its own ordered-play interference stratum.",
+    "aliases": "Omitted current and explicit H1Q0 were preregistered as a null identity pair but never executed because the direct-control gate failed.",
+    "interactions": "Only H by Q was causal; Sun Blossom, maximum-HP cap, Emberheart and Gravebloom were preregistered natural effect modifiers.",
+    "additionalJointCellsExecuted": 0
+  },
+  "interpretationBoundary": {
+    "gate1": "Direct Crown branch observation is identity-safe under the tested 4.7.2 controls and fresh 16-identity cohort; this is observation evidence only.",
+    "gate2": "The attempt is a quarantined preregistration/control failure, not evidence for or against the Hearth causal effect.",
+    "forbidden": ["correct expected Emberheart value", "rerun Hearth", "salvage remaining controls", "fit or interpret a causal endpoint", "use protected seeds"],
+    "next": "Publish this packet, then conduct a zero-row source-and-evidence catalogue of materially different Duskblade structural mechanisms outside all closed families."
+  },
+  "reproductionIdentity": {
+    "godot": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinary": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "issue456HostPacketSha256": "d9800f55ff11e3f9035e4292a9a1440ad4514e8954264b7a942615830cf11792",
+    "canonicalHostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+    "currentMainContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "prototypeCombatRulesSha256": "5785eba944461b275b163fc211445ab11e6e141454f9169b7a24a2d080279583",
+    "prototypePilotSha256": "56f12294ad2afe393db876f6600a2e0b4f0d312632b3609ee666b1f612e119ce",
+    "prototypeBalanceSimSha256": "dd7f6fe1414230da41253ec3bb0a393d072bea939f7dfb77b6283f32c7b241ba",
+    "gate2ProbeSha256": "1aa3e3bc201ae3d945dadc70f16ebaf537a0c645af97ffa54a9864634d5c1329",
+    "gate2ProbeUidSha256": "64dce5d4a0282f9844cffbf2e8bd12ff091edcab333008f1430e005cc912761b"
+  },
+  "cacheObjects": {
+    "gate1CaptureOffPlan": "b021077435c32148baaf879774799af78cb01b0d1d9b5026c31327510ec383a7",
+    "gate1CaptureOffOutput": "dc7448f525b1d39bb42ef7b1e1c40e9759e96c053ab0e740e612dd135fa56e10",
+    "gate1CaptureOnPlan": "f9820205e40b4bd2c741e5e2c3fda1f96020c2a8f85ddbf7fb283f5b1a9aaf67",
+    "gate1CaptureOnOutput": "0d3b823b019ebd7bda98c33fa3c5aed7d498e3b1cb4a8a82bc12d5ebf95e3357",
+    "gate1ControlledPlan": "b3f6d9f8c3077733292f51b76f455710d307177fc54b73684420e373986149ba",
+    "gate1ControlledOutput": "b059466fb8c2421587f68e7b28be725a7d080f754d144c2f7d013f8bee6b614d",
+    "gate2ControlsPlan": "3b838127229f07b3fc4b761200bac49f9ae0e3cafdcc3eb7b38b76c67829ac92",
+    "gate2ControlsOutput": "08697bf4b1af35a587c278b8b9363aea965ce4dbbfbe657ebedb146f02e3ad35"
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0,
+    "newLedgerRows": 0
+  },
+  "verification": {
+    "sha256Index": "PASS (695/695)",
+    "sha256IndexSha256": "0f366d06f920448abccab1d37840bda41a87519effb82b52dfdf39b0419c36c0",
+    "pythonCompile": "PASS",
+    "jsonParse": "PASS",
+    "prototypeGodotParse": "PASS for five relevant scripts under exact Godot 4.7.2 before Gate 2 freeze",
+    "diffCheck": "PASS",
+    "anchors": "PASS",
+    "benchmarkFreeze": {
+      "exitCode": 1,
+      "reportedPath": "research/issue-421/prototype/domain/rules/combat.gd",
+      "parentEvidenceHeadCount": 2,
+      "v31CountAtKnownPath": 2,
+      "v31PlainPrototypeCount": 0,
+      "branchRelativeDelta": 0,
+      "interpretation": "The archive-only branch already carried two frozen historical citations at its parent evidence head. V31 adds none; its exact combat source is stored in the source archive rather than duplicated as scanned plain text. This known archive-only result is disclosed and is not claimed as a product gate pass."
+    }
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 792,
+    "payloadFilesIndexed": 695,
+    "protocolFiles": 114,
+    "summaryFiles": 153,
+    "topLevelToolFiles": 74,
+    "cacheObjectFiles": 267,
+    "newCacheObjects": 8,
+    "newSourceArchives": 1,
+    "sha256Index": "SHA256SUMS"
+  },
+  "remoteHeadsBeforePublication": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "36a5d6bab7ce364987c3296b6ca0d63b58db4ef3",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "executionDisclosure": "Gate 0 was zero-row. Gate 1 ran its frozen eight direct controls and 32 capture-off/on whole-run observations once. Gate 2 ran one frozen 30-control process and stopped before its sentinel. Deterministic code owned construction, execution, caching and stop/go. No V30 endpoint, causal fit, candidate, optimiser, ML, RL, human label, ledger write or protected seed entered the Gate 2 decision.",
+  "archiveOnly": true,
+  "productPr": null,
+  "actionsRun": false,
+  "mainChanged": false
+}

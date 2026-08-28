@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v30-hearth-observation-resolution-gate0",
+  "decision": "authorise-smallest-controlled-branch-witness-only",
+  "authority": {
+    "task": "https://github.com/fol2/glassvow/issues/421",
+    "controllingDelta": "https://github.com/fol2/glassvow/issues/421#issuecomment-5453573232",
+    "commentId": 5453573232
+  },
+  "currentMain": {
+    "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "remote": "origin/main"
+  },
+  "activeInstructionIdentity": {
+    "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+    ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+    "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+    "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95",
+    "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39"
+  },
+  "qualifiedRuntime": {
+    "binary": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "binarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "host": {
+      "cpu": "Apple M1 Max",
+      "memory": "64 GB",
+      "model": "MacBookPro18,2",
+      "arch": "arm64",
+      "os": "Darwin"
+    },
+    "issue456M1PacketSha256": "d9800f55ff11e3f9035e4292a9a1440ad4514e8954264b7a942615830cf11792",
+    "issue456CanonicalPacketSha256": "4f290c9bd8d6e8379aae05e911ed4a23060bf7631ee79dbc2b160fa75400cff6",
+    "canonicalFingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+    "qualification": "QUALIFIED primary simulation worker; eight workers",
+    "newHostFingerprintRows": 0,
+    "pathBoundary": "Every new execution must invoke the absolute application binary, never the PATH name."
+  },
+  "immutableV30Evidence": {
+    "status": "INCONCLUSIVE_TELEMETRY_SCHEMA_NO_FIT",
+    "archiveCommit": "36a5d6bab7ce364987c3296b6ca0d63b58db4ef3",
+    "protocolSha256": "cb9d158f40efae0ff9b390e67222c8c1a3c8085efffabf52e2eafe11e31ca876",
+    "summarySha256": "cd11f2ea729cb4d02ded6911365337c269ee767c4a2ee943dac966599da5dddb",
+    "auditProtocolSha256": "c948fe0bb48614ac5ae89d20484a4a46a8a2e8ff24200836db1c8eaaf777a4ca",
+    "auditSummarySha256": "306ca21ca1144437482cfbec794494db79205905533de408136670461d591731",
+    "sourceArchiveSha256": "18f756f9b63ba348a13582b6f0b30c7b76e3339cf396a1254e94fadc629621a6",
+    "rawArchiveSha256": "d4d3f60b5ca0c8da66ed0467382cfe5a9950aa65b7d5aa8df93189ca90a6722b",
+    "faultCellOutputSha256": "1283f18b6e4b7170fc0987b791b7c8abb8d1ebf85a1836ad805377db3806f448",
+    "fault": {
+      "cell": "H1Q1",
+      "rowIndex": 138,
+      "policyIndex": 34,
+      "seed": 346598,
+      "fightIndex": 19,
+      "fightResult": "win",
+      "postFightCrownOwned": true,
+      "postFightTerminalEmbers": 1,
+      "queueDerivedProc": false
+    },
+    "prohibitions": [
+      "No fit, recode, drop, imputation, repair, repeat, reinterpretation or cached causal endpoint reuse.",
+      "The retained fault cannot support a Hearth payoff, family or product decision."
+    ]
+  },
+  "zeroRowDiagnosis": {
+    "archivedBranchObservation": "CombatRules._win_combat evaluates Crown ownership and cb.embers at the Crown branch, applies the requested heal through heal_player, and emits the existing Crown proc.",
+    "archivedHarvestObservation": "The V30 BalanceSim._harvest_fight observation runs after _fight and stores then-current Crown ownership and terminal Ember, while deriving proc only by scanning the combat queue.",
+    "minimumUnavailableObservation": "The archive does not retain Crown ownership, Ember value, HP before, requested heal input, actual heal return, HP after or a direct payload at the Crown branch for the faulted fight.",
+    "temporalBoundary": "Current source contains executable card-resolution work after a call may have completed combat. Therefore the archived post-fight fields are not accepted as branch-time fields without a new controlled witness.",
+    "causeBoundary": "No claim is made about why the V30 values differ, whether missingness is isolated, or whether the Crown branch executed in the faulted row."
+  },
+  "smallestAuthorisedWitness": {
+    "location": "Exact current-main crownOfTheHearth branch in domain/rules/combat.gd",
+    "payloadFields": [
+      "fight identity",
+      "event identity",
+      "branch-time Crown ownership",
+      "branch-time Ember value",
+      "branch execution",
+      "proc execution",
+      "HP before",
+      "requested heal input",
+      "actual heal return",
+      "HP after",
+      "payload emission"
+    ],
+    "controlledStates": [
+      "no Crown",
+      "Crown with zero Ember",
+      "Crown with positive Ember and heal headroom",
+      "Crown with positive Ember at the HP cap"
+    ],
+    "requiredIdentity": "Capture on versus capture off must preserve gameplay, path, RNG, policy, result and reliability, with zero or exactly one deterministic payload per controlled branch evaluation.",
+    "causalRowsAuthorised": 0
+  },
+  "ledgerBefore": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerAfter": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "execution": {
+    "cachedRowsRead": 1,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "causalEndpointsInspected": 0,
+    "causalFits": 0
+  },
+  "remoteHeads": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "origin/research/issue-421-p9-recovery-evidence": "36a5d6bab7ce364987c3296b6ca0d63b58db4ef3",
+    "origin/research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "origin/research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6dc196dda3ed90ad2be292608d6",
+    "origin/work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "origin/work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  }
+}

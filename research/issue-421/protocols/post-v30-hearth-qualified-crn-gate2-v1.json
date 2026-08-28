@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-v30-hearth-qualified-crn-gate2-v1",
+  "authority": {
+    "taskSSOT": "https://github.com/fol2/glassvow/issues/421",
+    "controllingDelta": "https://github.com/fol2/glassvow/issues/421#issuecomment-5453573232",
+    "scope": "One fresh fail-fast Gate 2 experiment after green Gates 0 and 1; this is not a V30 rerun and consumes no V30 causal endpoint."
+  },
+  "researchQuestion": "On fresh current-main identities and the qualified Godot 4.7.2 runtime, does Crown of the Hearth's current three-HP-per-Ember payoff complement a binary legal-offer acquisition priority strongly enough to form a reachable, policy-sensitive Duskblade package without material Scoreline or Afterimage interference?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "5785eba944461b275b163fc211445ab11e6e141454f9169b7a24a2d080279583",
+    "balancePilotSha256": "56f12294ad2afe393db876f6600a2e0b4f0d312632b3609ee666b1f612e119ce",
+    "balanceSimSha256": "dd7f6fe1414230da41253ec3bb0a393d072bea939f7dfb77b6283f32c7b241ba",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "1aa3e3bc201ae3d945dadc70f16ebaf537a0c645af97ffa54a9864634d5c1329",
+    "probeUidSha256": "64dce5d4a0282f9844cffbf2e8bd12ff091edcab333008f1430e005cc912761b",
+    "runnerSha256": "3875cf9ba799ee5836aa7ac185e1a369f941fb1582ee196400284253ce0108ac",
+    "gate0Sha256": "acca9d5760e333e49f074723add8f6cdc2063c3cc25e269de329f5e2e290550a",
+    "gate1ProtocolSha256": "dae991077656e22d64410426d65243e8559cf08da10b52ef682ad073ec686c56",
+    "gate1SummarySha256": "d8a066884ddd06de9db7cdf9e1fbfd6f046e19eb63a38fcf26949d6cdfc8ec5d",
+    "taskCapsuleSha256": "c1349b99992f389193809c8ccfddd1021b9bd870a3319789aa15c06bd1f11e5b"
+  },
+  "runtimeQualification": {
+    "absoluteBinary": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "issue456HostPacketSha256": "d9800f55ff11e3f9035e4292a9a1440ad4514e8954264b7a942615830cf11792",
+    "canonicalHostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+    "host": "Apple M1 Max, 64 GB, arm64, MacBookPro18,2",
+    "pathInvocationAllowed": false,
+    "godot471Allowed": false
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "freshness": {
+    "protocolAndRunnerExactIntegerMatchesBeforeFreeze": 0,
+    "ledgerJsonTreeExactIntegerMatchesBeforeFreeze": 0,
+    "freshPolicyRoot": 421702,
+    "freshSimulationSeeds": [421720, 421721, 421722, 421723],
+    "acceptanceSeedRangeUsed": false,
+    "reserveSeedRangeUsed": false,
+    "humanLabelsUsed": false,
+    "v30RowsOrEndpointsUsed": false
+  },
+  "factors": {
+    "HearthPayoff": {
+      "symbol": "H",
+      "definition": "Integer multiplier supplied at the existing Crown of the Hearth post-combat heal call; acquisition and the owned-and-positive-Ember branch predicate remain fixed.",
+      "levels": {
+        "H0": {"hearthPayoffPerEmber": 0, "meaning": "Disabled payoff with branch and relic proc retained."},
+        "H1": {"hearthPayoffPerEmber": 3, "meaning": "Exact current shipped payoff."}
+      }
+    },
+    "HearthAcquisitionPriority": {
+      "symbol": "Q",
+      "definition": "After the frozen policy has made and, for RandomBuild, consumed its original relic choice and RNG draw, override only a legal offered Crown of the Hearth choice.",
+      "levels": {
+        "Q0": {"hearthAcquisitionPriority": false, "meaning": "Exact current policy."},
+        "Q1": {"hearthAcquisitionPriority": true, "meaning": "Crown override only when legal, offered and not banned."}
+      }
+    }
+  },
+  "designMatrix": {
+    "H0Q0": {"hearthPayoffPerEmber": 0, "hearthAcquisitionPriority": false},
+    "H1Q0": {"hearthPayoffPerEmber": 3, "hearthAcquisitionPriority": false},
+    "H0Q1": {"hearthPayoffPerEmber": 0, "hearthAcquisitionPriority": true},
+    "H1Q1": {"hearthPayoffPerEmber": 3, "hearthAcquisitionPriority": true}
+  },
+  "nonFactors": {
+    "ScorelinePayoff": "Fixed at exact current content in all four cells; it is not varied, fitted or aliased with H.",
+    "AfterimagePayoff": "Fixed at exact current content in all four cells; it is separate from Scoreline and is not varied, fitted or aliased with H.",
+    "ScorelineRouteStratum": "A policy is robustly exposed when at least two of four seeds contain a fight where Chisel is played before Faultline (internal id executioner).",
+    "AfterimageRouteStratum": "A policy is robustly exposed when at least two of four seeds contain a fight where Ward (internal id defend) is played before Warden's Edge (internal id guardedStrike).",
+    "oldFourFactorDescriptionAllowed": false,
+    "additionalJointCells": "None. The H1Q0 and H1Q1 cells are the shared preregistered route anchors. A full-cohort versus route-stable-subset boundary change records measured interference decision value and boundary 3; it does not trigger an adaptive cell."
+  },
+  "mechanisticInteractions": {
+    "estimated": [
+      "H by Q on run quality, fight duration and direct Crown branch count"
+    ],
+    "registeredNaturalEffectModifiers": [
+      "Sun Blossom multiplies the existing heal after the frozen Crown input.",
+      "Maximum HP can cap actual healing below the requested Crown input.",
+      "Emberheart executes before Crown and can change HP at the Crown branch.",
+      "Gravebloom executes after Crown and its half-HP threshold can change downstream healing.",
+      "Natural upstream Ember production and spending determine branch exposure but are not manipulated or conditioned on in causal fits."
+    ],
+    "interferenceDiagnostics": [
+      "Scoreline ordered-play route status under shared H1Q0 and H1Q1 anchors.",
+      "Afterimage ordered-play route status under shared H1Q0 and H1Q1 anchors."
+    ]
+  },
+  "aliasStructure": {
+    "rank": 4,
+    "columns": ["intercept", "H", "Q", "H:Q"],
+    "fullRank": true,
+    "causalAliases": [],
+    "nonCausalStrata": ["ScorelineRoute", "AfterimageRoute", "SunBlossom", "maximumHpCap", "Emberheart", "Gravebloom", "terminalEmbers"],
+    "rule": "Post-treatment relic ownership, terminal Ember and route status are never regression adjustments. They supply support, mediator correspondence and separate interference diagnostics only."
+  },
+  "cohort": {
+    "aspect": "duskblade",
+    "vow": 5,
+    "policyRoot": 421702,
+    "policyIndices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63],
+    "simulationSeeds": [421720, 421721, 421722, 421723],
+    "randomBuild": false,
+    "randomPlay": false,
+    "baseline": "H0Q0",
+    "commonRandomNumbers": "Every cell uses the same 64 frozen policy identities and four frozen simulation seed identities."
+  },
+  "sentinel": {
+    "policyIndices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    "simulationSeeds": [421720, 421721],
+    "firstExecution": "Run the direct controls, then omitted-current plus all four explicit cells for these 32 identities only.",
+    "allowedInspection": ["control expectations", "omitted-versus-explicit exact identity", "schema", "branch predicate", "proc correspondence", "HP transition", "path and policy identity", "reliability"],
+    "prohibitedInspection": ["quality contrast", "duration contrast", "support classification", "bootstrap interval", "candidate decision"],
+    "greenRule": "All 30 controls pass, omitted equals explicit H1Q0 exactly, all cells have exact schema and policy identity, reliability faults are zero, H1Q1 and H0Q1 each expose the Crown branch, and at least one branch identity is shared with H0Q1 retaining proc but zero requested and actual heal.",
+    "failureRule": "Quarantine Hearth immediately; execute no remainder row and make no causal claim."
+  },
+  "controls": {
+    "purpose": "Prove on Godot 4.7.2 before the factorial that each null is exact and each non-null knob changes only its intended direct mediator, including registered downstream heal interactions.",
+    "payoffStates": [
+      {
+        "id": "absent-crown", "fight": 0, "hp": 40, "maxHp": 60, "embers": 2, "relics": [],
+        "expected": {
+          "0": {"branchExecuted": false, "hpBefore": 40, "requestedHealInput": 0, "actualHeal": 0, "hpAfter": 40, "event": 0, "procQueueEvent": -1, "terminalHp": 40, "relicProcIds": []},
+          "3": {"branchExecuted": false, "hpBefore": 40, "requestedHealInput": 0, "actualHeal": 0, "hpAfter": 40, "event": 0, "procQueueEvent": -1, "terminalHp": 40, "relicProcIds": []}
+        }
+      },
+      {
+        "id": "zero-ember", "fight": 1, "hp": 40, "maxHp": 60, "embers": 0, "relics": ["crownOfTheHearth"],
+        "expected": {
+          "0": {"branchExecuted": false, "hpBefore": 40, "requestedHealInput": 0, "actualHeal": 0, "hpAfter": 40, "event": 0, "procQueueEvent": -1, "terminalHp": 40, "relicProcIds": []},
+          "3": {"branchExecuted": false, "hpBefore": 40, "requestedHealInput": 0, "actualHeal": 0, "hpAfter": 40, "event": 0, "procQueueEvent": -1, "terminalHp": 40, "relicProcIds": []}
+        }
+      },
+      {
+        "id": "ordinary-heal", "fight": 2, "hp": 40, "maxHp": 60, "embers": 2, "relics": ["crownOfTheHearth"],
+        "expected": {
+          "0": {"branchExecuted": true, "hpBefore": 40, "requestedHealInput": 0, "actualHeal": 0, "hpAfter": 40, "event": 0, "procQueueEvent": 0, "terminalHp": 40, "relicProcIds": ["crownOfTheHearth"]},
+          "3": {"branchExecuted": true, "hpBefore": 40, "requestedHealInput": 6, "actualHeal": 6, "hpAfter": 46, "event": 0, "procQueueEvent": 0, "terminalHp": 46, "relicProcIds": ["crownOfTheHearth"]}
+        }
+      },
+      {
+        "id": "maximum-hp-cap", "fight": 3, "hp": 58, "maxHp": 60, "embers": 2, "relics": ["crownOfTheHearth"],
+        "expected": {
+          "0": {"branchExecuted": true, "hpBefore": 58, "requestedHealInput": 0, "actualHeal": 0, "hpAfter": 58, "event": 0, "procQueueEvent": 0, "terminalHp": 58, "relicProcIds": ["crownOfTheHearth"]},
+          "3": {"branchExecuted": true, "hpBefore": 58, "requestedHealInput": 6, "actualHeal": 2, "hpAfter": 60, "event": 0, "procQueueEvent": 0, "terminalHp": 60, "relicProcIds": ["crownOfTheHearth"]}
+        }
+      },
+      {
+        "id": "sun-blossom", "fight": 4, "hp": 40, "maxHp": 60, "embers": 2, "relics": ["crownOfTheHearth", "sunBlossom"],
+        "expected": {
+          "0": {"branchExecuted": true, "hpBefore": 40, "requestedHealInput": 0, "actualHeal": 0, "hpAfter": 40, "event": 0, "procQueueEvent": 0, "terminalHp": 40, "relicProcIds": ["crownOfTheHearth"]},
+          "3": {"branchExecuted": true, "hpBefore": 40, "requestedHealInput": 6, "actualHeal": 9, "hpAfter": 49, "event": 0, "procQueueEvent": 0, "terminalHp": 49, "relicProcIds": ["crownOfTheHearth"]}
+        }
+      },
+      {
+        "id": "emberheart-before", "fight": 5, "hp": 40, "maxHp": 60, "embers": 2, "relics": ["crownOfTheHearth", "emberHeart"],
+        "expected": {
+          "0": {"branchExecuted": true, "hpBefore": 46, "requestedHealInput": 0, "actualHeal": 0, "hpAfter": 46, "event": 1, "procQueueEvent": 1, "terminalHp": 46, "relicProcIds": ["emberHeart", "crownOfTheHearth"]},
+          "3": {"branchExecuted": true, "hpBefore": 46, "requestedHealInput": 6, "actualHeal": 6, "hpAfter": 52, "event": 1, "procQueueEvent": 1, "terminalHp": 52, "relicProcIds": ["emberHeart", "crownOfTheHearth"]}
+        }
+      },
+      {
+        "id": "gravebloom-after", "fight": 6, "hp": 28, "maxHp": 60, "embers": 2, "relics": ["crownOfTheHearth", "gravebloom"],
+        "expected": {
+          "0": {"branchExecuted": true, "hpBefore": 28, "requestedHealInput": 0, "actualHeal": 0, "hpAfter": 28, "event": 0, "procQueueEvent": 0, "terminalHp": 38, "relicProcIds": ["crownOfTheHearth", "gravebloom"]},
+          "3": {"branchExecuted": true, "hpBefore": 28, "requestedHealInput": 6, "actualHeal": 6, "hpAfter": 34, "event": 0, "procQueueEvent": 0, "terminalHp": 34, "relicProcIds": ["crownOfTheHearth"]}
+        }
+      }
+    ],
+    "priorityStates": [
+      {"id": "deterministic-eligible", "randomBuild": false, "banned": [], "offered": ["hollowCrown", "crownOfTheHearth", "thornBand"], "rngSeed": 421730, "expected": {"off": {"selected": "hollowCrown", "rngAfter": 421730}, "on": {"selected": "crownOfTheHearth", "rngAfter": 421730}}},
+      {"id": "deterministic-absent", "randomBuild": false, "banned": [], "offered": ["hollowCrown", "thornBand"], "rngSeed": 421730, "expected": {"off": {"selected": "hollowCrown", "rngAfter": 421730}, "on": {"selected": "hollowCrown", "rngAfter": 421730}}},
+      {"id": "deterministic-banned", "randomBuild": false, "banned": ["crownOfTheHearth"], "offered": ["hollowCrown", "crownOfTheHearth", "thornBand"], "rngSeed": 421730, "expected": {"off": {"selected": "hollowCrown", "rngAfter": 421730}, "on": {"selected": "hollowCrown", "rngAfter": 421730}}},
+      {"id": "deterministic-crown-only", "randomBuild": false, "banned": [], "offered": ["crownOfTheHearth"], "rngSeed": 421730, "expected": {"off": {"selected": "crownOfTheHearth", "rngAfter": 421730}, "on": {"selected": "crownOfTheHearth", "rngAfter": 421730}}},
+      {"id": "random-eligible-noncrown", "randomBuild": true, "banned": [], "offered": ["hollowCrown", "crownOfTheHearth", "thornBand"], "rngSeed": 421730, "expected": {"off": {"selected": "hollowCrown", "rngAfter": 1831987543}, "on": {"selected": "crownOfTheHearth", "rngAfter": 1831987543}}},
+      {"id": "random-eligible-crown", "randomBuild": true, "banned": [], "offered": ["hollowCrown", "crownOfTheHearth", "thornBand"], "rngSeed": 421732, "expected": {"off": {"selected": "crownOfTheHearth", "rngAfter": 1831987545}, "on": {"selected": "crownOfTheHearth", "rngAfter": 1831987545}}},
+      {"id": "random-absent", "randomBuild": true, "banned": [], "offered": ["hollowCrown", "thornBand"], "rngSeed": 421733, "expected": {"off": {"selected": "thornBand", "rngAfter": 1831987546}, "on": {"selected": "thornBand", "rngAfter": 1831987546}}},
+      {"id": "random-banned", "randomBuild": true, "banned": ["crownOfTheHearth"], "offered": ["hollowCrown", "crownOfTheHearth", "thornBand"], "rngSeed": 421733, "expected": {"off": {"selected": "thornBand", "rngAfter": 1831987546}, "on": {"selected": "thornBand", "rngAfter": 1831987546}}}
+    ]
+  },
+  "estimands": {
+    "quality": "Intent-to-treat run quality: zero for loss; for a win, one plus terminal HP divided by terminal maximum HP.",
+    "activation": "Count of direct branch-time Crown payloads with branchExecuted=true per run.",
+    "duration": "Mean turns per observed fight in a run.",
+    "contrasts": {
+      "payoffAtPriorityOff": "H1Q0 minus H0Q0",
+      "payoffAtPriorityOn": "H1Q1 minus H0Q1",
+      "priorityAtPayoffOff": "H0Q1 minus H0Q0",
+      "priorityAtPayoffOn": "H1Q1 minus H1Q0",
+      "interaction": "(H1Q1 minus H0Q1) minus (H1Q0 minus H0Q0)"
+    },
+    "unit": "First average the four matched seeds within each frozen policy identity, then estimate the unweighted mean across policy identities.",
+    "conditioning": "No causal estimand conditions on post-treatment Crown ownership, Ember, branch activation, Scoreline route or Afterimage route."
+  },
+  "estimator": {
+    "kind": "paired policy-cluster percentile bootstrap",
+    "bootstrapResamples": 5000,
+    "bootstrapSeedBase": 421800,
+    "seedRule": "For metrics sorted activation, duration, quality and contrasts in the frozen listed order, seed = 421800 + metricIndex*10 + contrastIndex; stable-route sensitivity adds 100.",
+    "interval": [0.025, 0.975],
+    "stopping": "One sentinel and, only if green, one complete four-cell rectangle. No sequential endpoint look, extension, cell replacement, cohort change or rerun."
+  },
+  "candidate": {
+    "researchCell": "H1Q1",
+    "hearthPayoffPerEmber": 3,
+    "hearthAcquisitionPriority": true,
+    "shippingStatus": "research-only unless boundary 1 and independent held-out confirmation subsequently pass",
+    "maximumCandidatesAtBoundary": 1
+  },
+  "budget": {
+    "controlledExecutions": 30,
+    "sentinelIdentitiesPerArm": 32,
+    "sentinelWholeRunObservationRows": 160,
+    "rowsPerCell": 256,
+    "causalWholeRunRows": 1024,
+    "maximumWholeRunObservationRows": 1056,
+    "maximumGodotProcesses": 10,
+    "maximumWallTimeSeconds": 240,
+    "maximumModelContextTokensDuringConstructionSimulationFittingAndStopGo": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "additionalJointCells": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "gates": {
+      "robustMinimumSeeds": 2,
+      "viableMinimumWinningSeeds": 2,
+      "minimumActivePolicies": 16,
+      "minimumInactivePolicies": 16,
+      "minimumViableActivePolicies": 8,
+      "minimumPositivePayoffPolicies": 8,
+      "minimumExactZeroPayoffPolicies": 16,
+      "minimumPriorityActivationGainPolicies": 8,
+      "minimumCandidateOnlyPolicies": 8,
+      "minimumAnchorOnlyPolicies": 8,
+      "maximumAnchorJaccard": 0.55,
+      "minimumStableInterferencePolicies": 32,
+      "minimumPayoffLowerBound": 0.0,
+      "minimumInteractionLowerBound": 0.0,
+      "priorityQualityNonInferiorityMargin": 0.02,
+      "maximumTurnsPerFightIncrease": 0.25,
+      "maximumVow5WinRate": 0.9
+    },
+    "success": "Boundary 1 only when every support and separate Scoreline/Afterimage separation gate passes, the payoff-at-priority-on and H-by-Q quality lower bounds are strictly positive, priority-at-payoff-on is non-inferior by 0.02 quality units, duration and Vow-5 guardrails pass, reliability is exact and the route-stable sensitivity has the same effect boundary. Freeze H1Q1 only for independent held-out confirmation.",
+    "futility": "Boundary 2 when a frozen support, separation or Vow-5 gate fails, the payoff or interaction upper bound is non-positive, priority quality is decisively worse than the margin, or the duration lower bound exceeds 0.25 turns per fight. Close this scalar family and continue the next evidence-backed structural mechanism inside #421.",
+    "inconclusive": "Boundary 3 when intervals remain between success and futility, route-stable sensitivity changes the boundary, stable route support is below 32, a sentinel fails, a second observation ambiguity appears, or a numeric cap is reached. Quarantine without repair, reinterpretation or rerun.",
+    "authorities": {
+      "1": "Freeze at most the one H1Q1 research candidate for a separately preregistered independent held-out confirmation; do not promote yet.",
+      "2": "Close the Hearth scalar family and continue the next evidence-backed structural mechanism inside issue #421 without a successor ticket.",
+      "3": "Record the preregistered inconclusive or identity/schema stop, quarantine Hearth, preserve protected seeds and invoke only the current human-authority contract if the relevant gate is unavailable or inconclusive."
+    }
+  }
+}

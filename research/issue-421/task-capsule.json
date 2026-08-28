@@ -2,8 +2,13 @@
   "schemaVersion": 2,
   "goal": "Validate a causal strategy detector, make the exact RC content pass it, merge the smallest complete delivery and record the exact merged-SHA P9 pass on issue #108.",
   "acceptanceAuthority": "https://github.com/fol2/glassvow/issues/421",
+  "controllingAuthorityDelta": "https://github.com/fol2/glassvow/issues/421#issuecomment-5453573232",
   "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
   "activeConstraints": [
+    "Preserve evidence commit 36a5d6bab7ce364987c3296b6ca0d63b58db4ef3 as immutable V30 INCONCLUSIVE_TELEMETRY_SCHEMA_NO_FIT evidence; do not fit, recode, repair, repeat, reinterpret or reuse its causal endpoints.",
+    "The sole authorised Hearth continuation is one fail-fast observation-resolution contract: Gate 0 zero-row diagnosis, Gate 1 exact branch telemetry identity, then only if green a fresh qualified-runtime Gate 2 sentinel and full-rank 2x2 CRN.",
+    "The authorised Hearth Gate 2 attempt is quarantined at its direct-control gate. Its frozen Emberheart expectation used six HP while exact current content supplied three, so the run stopped after one Godot process with zero whole-run or causal rows. Do not correct, rerun, salvage the other controls or use its output for a causal claim.",
+    "Use the #456-qualified M1 Max absolute Godot 4.7.2 application binary and fresh research identities. No 4.7.1, acceptance/reserve seed, human label, rescue cell, ML, RL, optimiser, product mutation, PR, Actions or product-wide CI is authorised in research.",
     "Continue issue #421 under its current body and the current-main AI-SDLC; do not restart the programme or create a successor.",
     "Treat issue #524 and #525 only as immutable scientific evidence and do not repeat their exhausted research paths.",
     "Treat Scoreline payoff and Afterimage payoff as separate causal factors. Neither varied in the completed two-factor Crown-effect design; do not revive the old four-factor description.",
@@ -76,14 +81,22 @@
     }
   },
   "currentIdentity": {
-    "godot": "4.7.1.stable.official.a13da4feb",
-    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "godot": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinary": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "issue456HostPacketSha256": "d9800f55ff11e3f9035e4292a9a1440ad4514e8954264b7a942615830cf11792",
+    "issue456CanonicalFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
     "archivedExperimentGodot": "4.7.2.stable.official.ed1daf0bf",
     "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
     "researchContentSha256": "0aacecf001f44ffa557a868e63a28117d223d51c411ceef547a61a81acca3e76",
     "researchLedgerRecords": 480372,
     "researchLedgerSha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
     "protectedSeedRows": 0,
+    "hearthObservationResolutionGate0Sha256": "acca9d5760e333e49f074723add8f6cdc2063c3cc25e269de329f5e2e290550a",
+    "hearthObservationResolutionGate1ProtocolSha256": "dae991077656e22d64410426d65243e8559cf08da10b52ef682ad073ec686c56",
+    "hearthObservationResolutionGate1SummarySha256": "d8a066884ddd06de9db7cdf9e1fbfd6f046e19eb63a38fcf26949d6cdfc8ec5d",
+    "hearthQualifiedCrnGate2ProtocolSha256": "8c72b0d2777c34de47e688dc54ea40a59ec69c4f8d01742d09c635fdc501cb54",
+    "hearthQualifiedCrnGate2SummarySha256": "e7de2bcb35a4252222b30f83b75d79fa05ef33d30d7b95f3b83651b4edbade20",
     "provenanceAuthorityAuditSha256": "0e39787baebbf7ff0ad487905ec4f0802d92d2ab2a397d539769820a9e373b35",
     "pristineNullHarnessProtocolSha256": "a2b593f48159f1ecd99150dd9bd04253c02166e457502add010d398e587c7788",
     "pristineNullHarnessSummarySha256": "7c97b46581f701bf2a0c24fc637f5850c9e7c9be1226d983aadc8a1380f23d72",
@@ -498,6 +511,21 @@
       "decision": "Confirm the Hearth CRN boundary-3 observation-contract stop and invoke human authority for an inconclusive relevant gate.",
       "evidence": "summaries/post-v38-hearth-blocked-crn-audit-v1.json",
       "reason": "The zero-row audit read all four content-addressed cells and found exactly one fault: a won fight with Crown owned and one terminal Ember recorded proc=false. The frozen row lacks the per-fight queue and HP transition needed to distinguish branch execution from observation loss. No causal fit, salvage, simulator row, ledger row or protected seed was added."
+    },
+    {
+      "decision": "Authorise only the smallest fresh controlled Crown-branch observation witness.",
+      "evidence": "summaries/post-v30-hearth-observation-resolution-gate0-v1.json",
+      "reason": "The current-main, #456-runtime zero-row diagnosis preserved V30 unchanged and confirmed that its post-fight ownership, Ember and queue-derived proc fields omit branch-time state, direct payload and HP transition. It makes no missingness-cause or payoff claim and authorises only Gate 1."
+    },
+    {
+      "decision": "Admit the direct Crown-branch observation witness as identity-safe and authorise Gate 2 preregistration only.",
+      "evidence": "summaries/post-v30-hearth-observation-resolution-gate1-v1.json",
+      "reason": "All eight controlled capture-off/on states mapped exactly, all 16 fresh whole-run identities preserved core result, path, RNG, policy and complete outcome, and 181 direct branch-time payloads had zero event-correspondence or reliability fault. The experiment added no causal endpoint inspection, fit, ledger row or protected-seed row."
+    },
+    {
+      "decision": "Quarantine Hearth at the one authorised Gate 2 direct-control attempt without a sentinel or causal row.",
+      "evidence": "summaries/post-v30-hearth-qualified-crn-gate2-v1.json",
+      "reason": "The frozen Emberheart control expected six pre-Crown HP while exact current content healed three. Deterministic execution stopped after one Godot process and 30 direct controls, before any whole-run, sentinel, causal endpoint, fit, ledger row or protected seed. The preregistered identity-failure rule forbids correction, rerun, salvage or causal interpretation."
     }
   ],
   "proofMap": {
@@ -508,11 +536,13 @@
     "hearthObservabilityPayoff": "The zero-row exact-source audit froze only a four-field capture-gated post-fight row and an integer three-versus-zero Crown-heal input. It preregistered Emberheart, Sun Blossom, Gravebloom, maximum-HP and upstream Ember supply/spend interactions, and a staged 18-control plus 768-row identity design with disabled whole-run fixed at zero.",
     "hearthPayoffIdentity": "All 18 direct controls and 768 whole-run identity observations passed with zero null, core, trace, RNG, policy or schema mismatch. The payoff scalar and four-field Hearth trace are identity-safe only; no disabled whole-run or causal claim has run.",
     "hearthBlockedCrn": "The full-rank H by Q design froze separate Scoreline and Afterimage interference strata, one cached H1Q0 anchor, three new 256-row cells, policy-cluster estimands and exact stop rules. Its only first look reached all 768 new rows but stopped before fitting on one H1Q1 proc-schema contradiction. A zero-row audit confirmed that exact fault and the absence of sufficient cached state to identify branch execution versus observation loss.",
+    "hearthObservationResolution": "Gate 0 isolated the archived observation fault without a row. Gate 1 then directly captured the four Crown branch states and proved capture-off/on identity across 16 fresh current-main policy-seed identities: zero core, path, RNG, policy, result, event-correspondence or reliability mismatch. This authorises only a fresh Gate 2 preregistration and sentinel.",
+    "hearthQualifiedCrnGate2": "The fresh two-factor H by Q protocol fixed Scoreline and Afterimage as separate interference strata and froze 30 controls, a 160-observation sentinel and a 1,024-row rectangle. Its only attempt stopped at the control gate because the preregistered Emberheart pre-Crown HP expectation contradicted exact content. No whole-run or causal row executed; Hearth is quarantined without repair or reinterpretation.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
-  "toolchainBoundary": "Resolved with the isolated official Godot 4.7.1.stable.official.a13da4feb binary. Its release SHA-512 and codesign are verified, every new execution is pinned to it, and a frozen pre-change identity plan replayed row-exactly against the archived 4.7.2 evidence.",
-  "nextAction": "Publish the immutable Hearth payoff/telemetry identity, blocked-CRN and zero-row decision-audit artefacts on the existing archive-only review ref, then present one concise human-authority decision package for the inconclusive relevant observation gate. The safe default keeps boundary 3, performs no fit or rerun, adds no joint cell or method, and spends no protected seed. Do not continue this family, close it as futility, or move to held-out without that authority.",
+  "toolchainBoundary": "Every new execution is pinned to /Applications/Godot.app/Contents/MacOS/Godot at 4.7.2.stable.official.ed1daf0bf on the #456-qualified Apple M1 Max 64 GB host, bound to canonical fingerprint 27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8. PATH invocation and every 4.7.1 binary are prohibited.",
+  "nextAction": "Publish the immutable Gate 0, Gate 1 and quarantined Gate 2 packet, then run a zero-row source-and-evidence catalogue of materially different Duskblade structural mechanisms outside every closed family. Select at most one cheapest discriminating identity preflight only if exact current evidence supplies a mechanistic gap; do not guess, repair Hearth, add ML or RL, or create a successor ticket.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

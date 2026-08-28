@@ -1,0 +1,63 @@
+{
+  "analysis": {},
+  "authority": "Record the preregistered inconclusive or identity/schema stop, quarantine Hearth, preserve protected seeds and invoke only the current human-authority contract if the relevant gate is unavailable or inconclusive.",
+  "controlledKnobIdentity": {},
+  "decision": "quarantine-hearth-gate2-control-identity-failure",
+  "decisionBoundary": 3,
+  "execution": {
+    "GodotProcesses": 1,
+    "bootstrapEstimands": 0,
+    "causalEndpointsInspected": 0,
+    "causalWholeRunRows": 0,
+    "controlledExecutions": 0,
+    "manifests": {
+      "controls": {
+        "outputSha256": "08697bf4b1af35a587c278b8b9363aea965ce4dbbfbe657ebedb146f02e3ad35",
+        "planSha256": "3b838127229f07b3fc4b761200bac49f9ae0e3cafdcc3eb7b38b76c67829ac92"
+      }
+    },
+    "maximumModelContextTokens": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "wallTimeSeconds": 0.7780849169939756,
+    "wholeRunObservationRows": 0
+  },
+  "failure": "Hearth Gate 2 mismatch: payoff hpBefore emberheart-before-H0",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "protocolSha256": "8c72b0d2777c34de47e688dc54ea40a59ec69c4f8d01742d09c635fdc501cb54",
+  "schemaVersion": 1,
+  "sentinel": {},
+  "sourceIdentity": {
+    "balancePilotSha256": "56f12294ad2afe393db876f6600a2e0b4f0d312632b3609ee666b1f612e119ce",
+    "balanceSimSha256": "dd7f6fe1414230da41253ec3bb0a393d072bea939f7dfb77b6283f32c7b241ba",
+    "combatRulesSha256": "5785eba944461b275b163fc211445ab11e6e141454f9169b7a24a2d080279583",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "gate0Sha256": "acca9d5760e333e49f074723add8f6cdc2063c3cc25e269de329f5e2e290550a",
+    "gate1ProtocolSha256": "dae991077656e22d64410426d65243e8559cf08da10b52ef682ad073ec686c56",
+    "gate1SummarySha256": "d8a066884ddd06de9db7cdf9e1fbfd6f046e19eb63a38fcf26949d6cdfc8ec5d",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "1aa3e3bc201ae3d945dadc70f16ebaf537a0c645af97ffa54a9864634d5c1329",
+    "probeUidSha256": "64dce5d4a0282f9844cffbf2e8bd12ff091edcab333008f1430e005cc912761b",
+    "runnerSha256": "3875cf9ba799ee5836aa7ac185e1a369f941fb1582ee196400284253ce0108ac",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "taskCapsuleSha256": "c1349b99992f389193809c8ccfddd1021b9bd870a3319789aa15c06bd1f11e5b"
+  }
+}
