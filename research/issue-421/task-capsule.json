@@ -28,6 +28,7 @@
     "The complete existing turn-state action-economy family is closed by zero-row decision boundary 2: Duskmirror and Frozen Core had only two and three robust owners/potential-active respectively; do not change either effect, score, rarity, ownership or opportunity definition.",
     "Exact current-main native grammar coverage leaves deed-unlocked Ember-reserve damage as the sole uncovered family; Novaflare is its sole carrier and Tithe of Panes, Pyreheart and Emberdance are not assumed producers or candidates.",
     "The Novaflare normal-reward selector route is closed by zero-row decision boundary 2: 34 selectors and 12 viable policies passed support, but only two were independent of Afterimage against eight; do not weaken that gate, tune Novaflare or treat event/shop acquisition as a rescue.",
+    "The complete deed-unlocked Ember-reserve damage family is closed by zero-row decision boundary 2: optimistic shop and event routes were active for 56 and 55 policies and left only eight and nine inactive; exact source has no Novaflare-specific combat selector, so do not run another acquisition or invented combat-threshold iteration.",
     "At the next decision boundary freeze at most one candidate, close the scalar family and continue structurally inside #421, or record inconclusive at the preregistered cap.",
     "Do not use acceptance seeds 3000-5199 or reserve seeds 5200-5399 before the authorised final exact-SHA boundary.",
     "Keep research outside production truth; do not create a research PR, run product CI, or merge the archive-only evidence branch."
@@ -117,7 +118,9 @@
     "nativeDuskGrammarProtocolSha256": "25c2b5a9ba5c01117411aaf04c88fed88998566ea18eba0e1a6c398aef62c85a",
     "nativeDuskGrammarSummarySha256": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff",
     "novaflareCapacityProtocolSha256": "8b43e8b204ba9618e8b76598e3c6d2941985e9592b957b4125941d7f64d0cb13",
-    "novaflareCapacitySummarySha256": "ca0fe007e4b20cedd008ee9a07594daa096c55b4232ef53a6db176e2320cfcb1"
+    "novaflareCapacitySummarySha256": "ca0fe007e4b20cedd008ee9a07594daa096c55b4232ef53a6db176e2320cfcb1",
+    "novaflareNonrewardProtocolSha256": "19b1c78930aa961f1b6df93a37b3cf77527e40ba9da5e308f3518b3291d164bd",
+    "novaflareNonrewardSummarySha256": "53c2e858dbb59e6258eea0fdb11cabcc8e89b959df6455f41494fe63f1b57e23"
   },
   "decisions": [
     {
@@ -279,18 +282,23 @@
       "decision": "Close the Novaflare normal-reward selector route.",
       "evidence": "summaries/post-v38-novaflare-capacity-v1.json",
       "reason": "Exact current policy scoring produced 34 selectors, 30 selector-inactive and 12 viable policies, and Scoreline separation passed. Afterimage separation failed because only two policies were Novaflare-only against the frozen minimum of eight."
+    },
+    {
+      "decision": "Close the complete deed-unlocked Ember-reserve damage family and proceed to a new deterministic structural primitive.",
+      "evidence": "summaries/post-v38-novaflare-nonreward-capacity-v1.json",
+      "reason": "The complete non-reward acquisition inventory contained only shop and Library event blocks. Optimistic upper bounds were active for 56 and 55 policies but left only eight and nine inactive, and both failed separate shared-anchor support. Exact source has no Novaflare-specific combat policy discriminator, so existing grammar is exhausted."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
     "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
     "heldOutConfirmation": "Root-546 policies and disjoint simulation seeds reproduced proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
-    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 Ward packet and every Dusk edge retained by immutable #524 are closed. Shatterer's Crown, the Shatter-to-heavy-Attack relay, reseam break, the exact Honing repeat family, both one-bit and Power-cycle setup grammars, Executioner's Seal, reward-Attack overchip, Reaper's Bell and turn-state action economy failed frozen repertoire gates. Native coverage left only deed-unlocked Ember-reserve damage; its Novaflare normal-reward selector route also failed separate Afterimage support. Prior Dusk Scoreline complementarity remains evidence; materially different confirmed Dusk support remains outstanding.",
+    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 Ward packet and every Dusk edge retained by immutable #524 are closed. Shatterer's Crown, the Shatter-to-heavy-Attack relay, reseam break, the exact Honing repeat family, both one-bit and Power-cycle setup grammars, Executioner's Seal, reward-Attack overchip, Reaper's Bell and turn-state action economy failed frozen repertoire gates. Native coverage left only deed-unlocked Ember-reserve damage; normal-reward, shop and Library acquisition all failed and current combat policy has no candidate-specific discriminator. Existing native Dusk grammar is exhausted. Prior Dusk Scoreline complementarity remains evidence; a new minimal deterministic Dusk structural primitive is now required.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
   "toolchainBoundary": "Resolved with the isolated official Godot 4.7.1.stable.official.a13da4feb binary. Its release SHA-512 and codesign are verified, every new execution is pinned to it, and a frozen pre-change identity plan replayed row-exactly against the archived 4.7.2 evidence.",
-  "nextAction": "Preregister one exhaustive zero-row source/capacity screen containing separate event and shop acquisition blocks for Novaflare. Neither block may alter or rescue the closed normal-reward selector gate. If exact source supplies no materially different discriminator, close deed-unlocked Ember-reserve damage and proceed to the smallest new deterministic structural primitive. Do not return to closed families, #524/#525 history, #517/#519, ML/RL, protected seeds or adaptive candidate tuning.",
+  "nextAction": "Preregister the smallest new deterministic Dusk-only structural primitive authorised by issue #421, with exact source placement, one mediator, identity-safe null, separate Scoreline and Afterimage anchors and a zero-row capacity gate before implementation or simulator spend. Do not return to any closed native family, #524/#525 history, #517/#519, ML/RL, protected seeds or adaptive candidate tuning.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

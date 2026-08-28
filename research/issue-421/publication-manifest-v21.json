@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 21,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "terminal existing-grammar closure through Novaflare event and shop acquisition",
+  "decision": "CLOSE_DEED_UNLOCKED_EMBER_RESERVE_DAMAGE",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-novaflare-nonreward-closure-v1.md",
+    "progressReportSha256": "84bd19b5093885af1c8e7caba97444d30909e4ced4ec36ce8d951678e3b4ea39",
+    "protocol": "protocols/post-v38-novaflare-nonreward-capacity-v1.json",
+    "protocolSha256": "19b1c78930aa961f1b6df93a37b3cf77527e40ba9da5e308f3518b3291d164bd",
+    "summary": "summaries/post-v38-novaflare-nonreward-capacity-v1.json",
+    "summarySha256": "53c2e858dbb59e6258eea0fdb11cabcc8e89b959df6455f41494fe63f1b57e23",
+    "runner": "tools/post_v38_novaflare_nonreward_capacity.py",
+    "runnerSha256": "107c4bee93c8c913114c78c7df4deaf339fc862623b16ced293858effaa2317f",
+    "readmeSha256": "cc0f6a15cffef9e1715e86ba74aae66dc438e1500937a4b583f89e016f63bedf",
+    "taskCapsuleSha256": "6ad710d001467737d58dd9c93d292ea78405448a5f05733351c08b761157a9dc"
+  },
+  "result": {
+    "decisionBoundary": 2,
+    "decision": "close-deed-unlocked-ember-reserve-damage-family",
+    "selectedBlock": null,
+    "passingBlocks": [],
+    "shopPotentialActivePolicies": 56,
+    "shopExactInactivePolicies": 8,
+    "shopViablePotentialActivePolicies": 20,
+    "shopScorelineOnlyPolicies": 5,
+    "shopAfterimageOnlyPolicies": 7,
+    "eventPotentialActivePolicies": 55,
+    "eventExactInactivePolicies": 9,
+    "eventViablePotentialActivePolicies": 20,
+    "eventScorelineOnlyPolicies": 5,
+    "eventAfterimageOnlyPolicies": 7,
+    "interpretation": "Both remaining acquisition channels are broad upper-capacity routes with insufficient inactivity and separate anchor support. Current combat policy has no candidate-specific discriminator, so the native Ember-reserve family is exhausted.",
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumModelContextTokens": 0,
+    "protectedSeedRows": 0
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 519,
+    "payloadFilesIndexed": 497,
+    "protocolFiles": 85,
+    "summaryFiles": 110,
+    "toolFiles": 42,
+    "newRawObjects": 0,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "bad368e9730b2d2ce457bee7f91d852082d98a08ad60fa7a8ec4b5d78048d555"
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "48f9372de975683256d48485e4a82804917ab19c",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "nextAction": "Preregister the smallest new deterministic Dusk-only structural primitive authorised by issue #421, including exact source placement, one mediator, an identity-safe null and a zero-row capacity gate before implementation or simulator spend.",
+  "omissions": [
+    "No content, runtime primitive, research knob, telemetry field, acquisition rule, simulator row or policy threshold was added.",
+    "No result-derived probability or combat cut-point was introduced and no closed Novaflare route was reopened.",
+    "No #524/#525 historical plan, ML, RL, optimiser, protected seed, product PR, CI run, acceptance claim or #108 receipt was used."
+  ],
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421",
+    "receiptIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}

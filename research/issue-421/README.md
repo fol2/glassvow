@@ -14,7 +14,7 @@ same-instance Honing Edge policy-repertoire test, one-bit and two-stage
 setup-grammar closures, the existing Executioner's Seal cadence screen, the
 complete reward-Attack overchip screen, the Reaper's Bell death-chain screen,
 the remaining turn-state action-economy closure, the exact native grammar audit
-and the Novaflare reward-selector closure. It is a progress snapshot,
+and the complete Novaflare acquisition closure. It is a progress snapshot,
 not detector admission, product promotion or a P9
 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
@@ -241,12 +241,23 @@ carried by Novaflare. A separately preregistered zero-row capacity screen found
 potential-active policies. Scoreline separation passed, but Afterimage
 separation failed with only two Novaflare-only policies against eight. The
 normal-reward selector route is closed without telemetry or a simulator row.
-Event and shop acquisition may be screened only as separate source-defined
-blocks; they cannot change or rescue this failed gate.
+
+The two remaining non-reward acquisition channels are now closed too. An
+optimistic best-price shop route was active for 56/64 policies and left only
+eight inactive; a positive-probability Library event route was active for
+55/64 and left only nine inactive. Both also failed separate shared-anchor
+support. Exact source has no Novaflare-specific combat policy discriminator,
+so deed-unlocked Ember-reserve damage is exhausted. No reward, event, shop or
+invented combat-selector iteration may reopen it.
 
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-novaflare-nonreward-closure-v1.md`](summaries/progress-post-directive-novaflare-nonreward-closure-v1.md),
+[`protocols/post-v38-novaflare-nonreward-capacity-v1.json`](protocols/post-v38-novaflare-nonreward-capacity-v1.json)
+and
+[`summaries/post-v38-novaflare-nonreward-capacity-v1.json`](summaries/post-v38-novaflare-nonreward-capacity-v1.json)
+for the terminal existing-grammar closure. Then read
 [`summaries/progress-post-directive-native-grammar-novaflare-v1.md`](summaries/progress-post-directive-native-grammar-novaflare-v1.md),
 [`protocols/post-v38-turn-state-economy-capacity-v1.json`](protocols/post-v38-turn-state-economy-capacity-v1.json),
 [`summaries/post-v38-turn-state-economy-capacity-v1.json`](summaries/post-v38-turn-state-economy-capacity-v1.json),
