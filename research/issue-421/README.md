@@ -139,9 +139,24 @@ reachable for only three policies, Scoreline was active for zero and one row
 stalled. No edge was frozen. Another Ward or Kindle iteration is forbidden;
 the next screen must be materially different.
 
+A source-first screen then reduced immutable #524's 78 Dusk-specific Shatter
+edges to one untested target family: Shatterer's Crown. Current main showed
+25 active and 39 inactive Crown policies, but guaranteed boss-offer inclusion
+failed before implementation. Exact policy-score enumeration found only 15
+robust selectors and 14 projected-active policies against fixed minima of 16.
+The offer route is closed without a knob or simulator row. The natural Crown
+effect remains a causal question, not an admitted package.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-dusk-mechanism-screen-v1.md`](summaries/progress-post-directive-dusk-mechanism-screen-v1.md),
+[`protocols/post-v38-dusk-mechanism-screen-v1.json`](protocols/post-v38-dusk-mechanism-screen-v1.json),
+[`summaries/post-v38-dusk-mechanism-screen-v1.json`](summaries/post-v38-dusk-mechanism-screen-v1.json)
+and
+[`artifacts/ledger-freeze-dusk-mechanism-screen-v1.json`](artifacts/ledger-freeze-dusk-mechanism-screen-v1.json)
+for the current source-first candidate filter and offer-inclusion closure. Then
+read
 [`summaries/progress-post-directive-retained-dusk-inventory-v1.md`](summaries/progress-post-directive-retained-dusk-inventory-v1.md),
 [`protocols/post-v38-retained-dusk-inventory-v1.json`](protocols/post-v38-retained-dusk-inventory-v1.json),
 [`summaries/post-v38-retained-dusk-inventory-v1.json`](summaries/post-v38-retained-dusk-inventory-v1.json)
@@ -359,6 +374,11 @@ three #524-retained Dusk edges after reproducing the #525 Kindle closure and
 measuring only 2/64 active policies for each unchanged Ward edge. The ledger
 therefore remains byte-identical.
 
+The Dusk source-and-policy screen also added zero observations and zero ledger
+rows. It selected Shatterer's Crown before reading policy support, then closed
+guaranteed boss-offer inclusion at 15 robust selectors and 14 projected-active
+policies. The ledger remains byte-identical.
+
 ## Frozen identities
 
 - source and archive base: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
@@ -398,11 +418,13 @@ therefore remains byte-identical.
 - Ward whole-run raw archive SHA-256: `5a95a5564b64a8839b1152e3665b2a1f57d294dbfb8ab9060d165268f7bd01aa`
 - retained Dusk inventory protocol SHA-256: `406357da0e9784dd31e64e04c7eb6d8d1881ad3442c79c202bac328ce63d2a28`
 - retained Dusk inventory summary SHA-256: `a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66`
+- Dusk mechanism screen protocol SHA-256: `e882f66df0a21363a03d92333cea21fee79334ad3d392c981670613bd05af0b9`
+- Dusk mechanism screen summary SHA-256: `9ba14ec9a63ecb9a8e7cafa9b4edc0b5def546755c25e57234ee15dc251b2a64`
 
 ## Remote heads at publication preparation
 
 - `origin/main`: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
-- `research/issue-421-p9-recovery-evidence`: `6a82544a083a02f5e06f7f389568ae622f7d0d59`
+- `research/issue-421-p9-recovery-evidence`: `a0a050d0eb980a6be919e29e21fc9662c718fc14`
 - `research/issue-524-causal-slate-evidence`: `f305b95d9e1d173e5d8150289afab9688c0ea7f0`
 - `research/issue-525-mechanism-package-synthesis-evidence`: `7132e5e0d6e6e6dc196dda3ed90ad2be292608d6`
 - `work/421-h34`: `4a94d155400162289a84f416336ff407f55b3cf6`
@@ -411,8 +433,9 @@ therefore remains byte-identical.
 
 Research is continuing under #421 after admitting the hand-size and Bloodfire
 Ash package directions, rejecting the exact #525 Ward packet and closing every
-Dusk edge retained by immutable #524. The scalar, producer-first,
-normalised-payoff commitment, Ward and Kindle directions remain closed. The
-next bounded step is a preregistered source-and-trace screen over materially
-different authored current-main Duskblade mediators. Detector admission,
-promotion and protected seeds remain outstanding and unauthorised.
+Dusk edge retained by immutable #524 plus the Crown guaranteed-offer route. The
+scalar, producer-first, normalised-payoff commitment, Ward and Kindle
+directions remain closed. The next bounded step is an identity-safe ablation
+of the existing natural Crown threshold-and-Fervor effect, leaving acquisition
+untouched. Detector admission, promotion and protected seeds remain
+outstanding and unauthorised.

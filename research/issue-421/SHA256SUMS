@@ -1,7 +1,8 @@
-211280093c36ac1f9aa33ca0ee94e4944cf8b6e2bfb3a177fa8473468bdd423c  ./README.md
+770fe30bc95365d9ed81f93f73dc5506ab6cff21e44e7bb01db3ecabcbf482f8  ./README.md
 0d06b45fe5be03b1a48c6c970103b235e4c47fbacc308dcbd539b7e480771a5b  ./artifacts/godot-4.7.1-toolchain-v1.json
 0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb  ./artifacts/issue-525-ward-mirror-edge-4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c.json
 d0452a96d6fc25094059e337e112dffede04984928e7893b097429ee3a008e5d  ./artifacts/ledger-freeze-blocked-crn-v2.json
+5f275087a19dc28dd198caa195817cf11f4c95ff5a64e35650ef6876202751a1  ./artifacts/ledger-freeze-dusk-mechanism-screen-v1.json
 3c5b8be1d532d93180ae40e7d96cbdcc9a8242f626ba89b9c915cd18a6b2678c  ./artifacts/ledger-freeze-exact-complementarity-v1.json
 e11073bd5e1f84ed1637e702afb56304e1462e0fbd463f99193f744bbf568c7f  ./artifacts/ledger-freeze-hand-size-ash-admission-v1.json
 15cffdec02dc9117236afd8a5869e9c5550e4a8ff86ead53366c435c89d9e8ec  ./artifacts/ledger-freeze-heldout-confirmation-v1.json
@@ -67,6 +68,7 @@ abe0147b3d18d0a58c1ca66595eb3b1d3e59e2b4e07083840d5ef4f1b1b26292  ./protocols/cr
 3974dc28586ddabf2efc5454bae8b9326bbca02660647224b972c6131bdfe819  ./protocols/post-v38-ash-package-pair-v1.json
 ef1c1e62c2a22966b5f2d9f70b2dbb87e71055d355c9a8740e7ee5a7bb163730  ./protocols/post-v38-blocked-crn-v1.json
 a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d  ./protocols/post-v38-blocked-crn-v2.json
+e882f66df0a21363a03d92333cea21fee79334ad3d392c981670613bd05af0b9  ./protocols/post-v38-dusk-mechanism-screen-v1.json
 21b79cfe4f21da1ccf272018cf0f49b225688bd1e2651752fe8a35e244489fd6  ./protocols/post-v38-exact-complementarity-v1.json
 9c53ef14c63b4981eedbb5b1aab315da5ad46d0cf45f174a52340d8d09427d01  ./protocols/post-v38-factorial-v1.json
 859f633351247bb86d6cc73bb68e4c5fbf54f54ed8104521fc77e09ae5234b51  ./protocols/post-v38-hand-size-inventory-v1.json
@@ -363,6 +365,7 @@ fa11d04c131e10206ad9797cdf40c61ee2e17ba050113d68741bf5b3d10e6241  ./summaries/fa
 af6424db4266531fadd7c7de07db0b46e028a4543604636ec1b13b819b2b7c1f  ./summaries/post-v38-ash-package-pair-v1.json
 f6ec487ae5f4135dd2b29ca0b3b1877d812d8416a4444a6b681c04bceac6b6e1  ./summaries/post-v38-blocked-crn-v2-audit.json
 6a1e72f136d12b0dc6462996ffd8180097cb34f2148f025605f5768632bebd06  ./summaries/post-v38-blocked-crn-v2.json
+9ba14ec9a63ecb9a8e7cafa9b4edc0b5def546755c25e57234ee15dc251b2a64  ./summaries/post-v38-dusk-mechanism-screen-v1.json
 766db56d4525f66d617f8f4dffb425cd10b7cdad3852e2d5427c5867de569c17  ./summaries/post-v38-exact-complementarity-audit-v1.json
 8630a5e6ab6559b7e98fa5947e865a11f26ee505879026450f73e95fcb468621  ./summaries/post-v38-exact-complementarity-v1-audit.json
 be2f0776a72c31dc1df7b410e2b1abb4535da47eab5522b88324298679bc4234  ./summaries/post-v38-exact-complementarity-v1.json
@@ -389,6 +392,7 @@ a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66  ./summaries/po
 45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b  ./summaries/post-v38-ward-whole-run-discovery-v1-audit.json
 62fbd2b3bb903bf41ffa4ed6f151884b0807376293eddf249c676ed05b8105e8  ./summaries/post-v38-ward-whole-run-discovery-v1.json
 325db4ca19d4e3ca3c090c573a2fcb348f5acde4b624c5e8e280eaf213d1def6  ./summaries/progress-post-directive-blocked-crn-v2.md
+e03ef16b219fc05d266b1d97a8a005153caecb7216308ebaf51903bf61efe6be  ./summaries/progress-post-directive-dusk-mechanism-screen-v1.md
 06cd14c5e49ad5bc9a9fa676039f3869816340c9fce23d2ffba94b6e7ab39439  ./summaries/progress-post-directive-exact-complementarity-v1.md
 5e142f7d739efe723ec9c43a9ed79efad8c073ad87210de0434a0d04ecde048d  ./summaries/progress-post-directive-hand-size-ash-admission-v1.md
 dc7de373d7a4acbf76ddf760198ec7ce63a9a2c8c7c45b7df14dfb9cea70dee4  ./summaries/progress-post-directive-heldout-v1.md
@@ -403,10 +407,11 @@ f901f0420d407519133e2d1f50bdf57cf9d28dc412e29c744ed5867a9730e8ae  ./summaries/pr
 90eb3c12f86bdabd6e2a01387ec108d199f686b46f90fa983b1c9e11cac2a74d  ./summaries/resonance-package-v1.json
 82df397f2a3f7b60465cdab0ca925a1c9173e1bee4aa613d0960149a4a47b4ea  ./summaries/scoreline-handshake-v1.json
 369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce  ./summaries/shatter-flow-v1.json
-c9c73af9b23e55d9adfc81d53072f6f64b20365f083154ea343d340f3ff369c0  ./task-capsule.json
+73961bd301912686f6a26025896118533dd62fb86631e805967866ef35a8e770  ./task-capsule.json
 6eb56ed83e4ef28d46e9913554fac9438163993d8c6a8eb7c9a4e6771eff012a  ./tools/identify_v33_v38.py
 0f6bb1288a9a25de9f0b55356b1f6fc4df0ea40917403a1a477f8f8823097542  ./tools/post_v38_ash_package_pair.py
 a6435cc05f13042ee9132de90a40d11a61716b56d116b729aff92faad5a152cb  ./tools/post_v38_blocked_crn.py
+86f98bec032865a21cb11640f988b86e2039b5652b9a3af05cc875d80885991f  ./tools/post_v38_dusk_mechanism_screen.py
 ab3abe3331b5830f979958703ae2b4e82a71cf7af8460e73bf6958e2d67b57fb  ./tools/post_v38_exact_complementarity.py
 ca4a2beb6e026ff7fa26029c156cdd2156b1e4991c075209f3abc5a373f7269d  ./tools/post_v38_exact_complementarity_audit.py
 9418a3419c4feecae84360a9ea4068b60157c239d0359bb265939d3c579cdf97  ./tools/post_v38_factorial.py

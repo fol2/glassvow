@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 13,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "source-first Shatterer's Crown guaranteed-offer decision-value closure",
+  "decision": "CLOSE_SHATTERERS_CROWN_GUARANTEED_OFFER_ROUTE",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-dusk-mechanism-screen-v1.md",
+    "progressReportSha256": "e03ef16b219fc05d266b1d97a8a005153caecb7216308ebaf51903bf61efe6be",
+    "protocol": "protocols/post-v38-dusk-mechanism-screen-v1.json",
+    "protocolSha256": "e882f66df0a21363a03d92333cea21fee79334ad3d392c981670613bd05af0b9",
+    "summary": "summaries/post-v38-dusk-mechanism-screen-v1.json",
+    "summarySha256": "9ba14ec9a63ecb9a8e7cafa9b4edc0b5def546755c25e57234ee15dc251b2a64",
+    "runner": "tools/post_v38_dusk_mechanism_screen.py",
+    "runnerSha256": "86f98bec032865a21cb11640f988b86e2039b5652b9a3af05cc875d80885991f",
+    "ledgerFreeze": "artifacts/ledger-freeze-dusk-mechanism-screen-v1.json",
+    "ledgerFreezeSha256": "5f275087a19dc28dd198caa195817cf11f4c95ff5a64e35650ef6876202751a1",
+    "readmeSha256": "770fe30bc95365d9ed81f93f73dc5506ab6cff21e44e7bb01db3ecabcbf482f8",
+    "taskCapsuleSha256": "73961bd301912686f6a26025896118533dd62fb86631e805967866ef35a8e770"
+  },
+  "sourceFilter": {
+    "immutableDuskEdges": 78,
+    "mediator": "shatter",
+    "excludedTestedTargets": [
+      "relic:prismCharm",
+      "relic:bellOfEndings"
+    ],
+    "eligibleTarget": "relic:shatterersCrown",
+    "sourceAliasesCollapsed": 26,
+    "outcomeFieldsUsedForSelection": []
+  },
+  "result": {
+    "decisionBoundary": 2,
+    "currentNaturalSupport": {
+      "crownActivePolicies": 25,
+      "crownInactivePolicies": 39,
+      "bossReachablePolicies": 50,
+      "shatterCapablePolicies": 64
+    },
+    "guaranteedOfferDecisionValue": {
+      "robustSelectors": 15,
+      "robustDecliners": 17,
+      "contextDependentPolicies": 32,
+      "projectedActivePolicies": 14,
+      "minimumSelectors": 16,
+      "minimumDecliners": 16,
+      "minimumProjectedActive": 16,
+      "pairWinsHistogram": {
+        "0": 17,
+        "1": 16,
+        "2": 0,
+        "3": 16,
+        "4": 0,
+        "5": 0,
+        "6": 15
+      }
+    },
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0
+  },
+  "claimBoundary": "Guaranteed boss-offer inclusion is closed before implementation. Natural Crown support is descriptive and authorises only a separately preregistered effect-ablation identity question, not package or product admission.",
+  "localLedgerFreeze": {
+    "records": 479669,
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "bytes": 2595717120,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 451,
+    "payloadFilesIndexed": 437,
+    "protocolFiles": 71,
+    "summaryFiles": 87,
+    "artifactFiles": 15,
+    "toolFiles": 27,
+    "newRawObjects": 0,
+    "rawArchive": null,
+    "rawArchiveReason": "The screen reused immutable Git blobs and the complete current-main cache already published in v11; it created no simulator output.",
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "d507ee08ebfebc4cbc5caac2fd19dbfbc849ab748200790b5d01a128036b7ff6"
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "a0a050d0eb980a6be919e29e21fc9662c718fc14",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "nextAction": "Preregister an identity-safe research-only ablation of the existing natural Crown facet-threshold and Fervor mediator, leaving acquisition, policy and reward paths untouched before any causal row.",
+  "omissions": [
+    "No boss-offer knob, content change, simulator row or ledger row was created.",
+    "No threshold, tie rule, candidate, policy cohort or closed family was retuned.",
+    "No ML, RL, optimiser, PR, CI run or protected seed was used."
+  ],
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421",
+    "receiptIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}

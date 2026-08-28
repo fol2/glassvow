@@ -1,0 +1,104 @@
+{
+  "authority": "Close the existing Shatterer's Crown offer-inclusion mechanism and author the smallest new deterministic Duskblade mediator justified by the measured source and capacity bottleneck. Do not search another existing scalar, Ward, Kindle, Afterimage or tested #524 package.",
+  "candidate": {
+    "bossPool": [
+      "crownOfCinders",
+      "hollowCrown",
+      "crownOfTithes",
+      "shatterersCrown",
+      "crownOfTheHearth"
+    ],
+    "claimBoundary": "The screen can authorise only an identity-safe research knob that guarantees the existing relic is included in an otherwise unchanged boss offer. It cannot authorise ownership, a score bonus, a content change or package admission.",
+    "definition": {
+      "glyph": "\u265a",
+      "name": "Shatterer's Crown",
+      "rarity": "boss",
+      "text": "Enemy glass runs thin: all facet gauges are 1 smaller. Enemies begin with 1 Fervor.",
+      "tone": "#8fd0ff"
+    },
+    "duskBonusRelics": [
+      "shatterersCrown",
+      "prismCharm",
+      "executionersSeal"
+    ],
+    "graphTarget": "relic:shatterersCrown",
+    "id": "dusk-shatter-threshold-crown",
+    "mediator": "Dusk-only facet chips reaching the reduced facet threshold and producing Shatter",
+    "relicId": "shatterersCrown",
+    "setup": "At combat start the existing relic reduces every enemy facet_max by one and grants each enemy one Fervor.",
+    "sourceAlias": "All 26 authored attack-card sources are one shared Dusk Shatter producer family; no source card is selected or tuned."
+  },
+  "currentMainSupport": {
+    "bossReachablePolicies": 50,
+    "crownAcquiredPolicies": 25,
+    "crownActivePolicies": 25,
+    "crownInactivePolicies": 39,
+    "shatterCapablePolicies": 64
+  },
+  "decision": "close-dusk-shatter-threshold-crown-screen",
+  "decisionBoundary": 2,
+  "gateResults": {
+    "bossReachable": true,
+    "projectedActive": false,
+    "robustDecliners": true,
+    "robustSelectors": false,
+    "shatterCapable": true
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "protectedSeedRows": 0,
+    "records": 479669,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "protectedSeedRows": 0,
+    "records": 479669,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok"
+  },
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "offerInclusionDecisionValue": {
+    "contextDependentPolicies": 32,
+    "definition": {
+      "claimBoundary": "This is a deterministic policy-capacity calculation, not a causal trajectory or outcome estimate.",
+      "offer": "Shatterer's Crown plus an unordered pair from the other four current boss relics; all six pairs are enumerated without simulation.",
+      "projectedActive": "A robust selector that reached at least one boss boundary and produced at least one Shatter on the frozen current-main rectangle.",
+      "robustDecliner": "Strictly selects Crown for none of the six possible co-offer pairs.",
+      "robustSelector": "Strictly selects Crown for all six possible co-offer pairs.",
+      "score": "Exactly int(policy.relics[id] plus policy.relicDuskBonus for Shatterer's Crown), matching the frozen BalancePilot comparison.",
+      "strictPairWin": "Crown score is strictly greater than both co-offered relic scores. Ties never count as evidence because live choice depends on offer order."
+    },
+    "pairWinsHistogram": {
+      "0": 17,
+      "1": 16,
+      "2": 0,
+      "3": 16,
+      "4": 0,
+      "5": 0,
+      "6": 15
+    },
+    "projectedActivePolicies": 14,
+    "robustDecliners": 17,
+    "robustSelectors": 15
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "e882f66df0a21363a03d92333cea21fee79334ad3d392c981670613bd05af0b9",
+  "runnerSha256": "86f98bec032865a21cb11640f988b86e2039b5652b9a3af05cc875d80885991f",
+  "schemaVersion": 1,
+  "sourceFilter": {
+    "duskEdges": 78,
+    "eligibleTarget": "relic:shatterersCrown",
+    "excludedTestedTargets": [
+      "relic:bellOfEndings",
+      "relic:prismCharm"
+    ],
+    "mediator": "shatter",
+    "sourceAliasesCollapsed": 26
+  }
+}

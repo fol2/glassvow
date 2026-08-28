@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "protocolSha256": "e882f66df0a21363a03d92333cea21fee79334ad3d392c981670613bd05af0b9",
+  "decision": "close-dusk-shatter-threshold-crown-screen",
+  "decisionBoundary": 2,
+  "before": {
+    "records": 479669,
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "after": {
+    "records": 479669,
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "newSimulatorObservationRows": 0,
+  "newLedgerRows": 0,
+  "authority": "The source-and-policy screen was read-only. The boss-offer inclusion route is closed without implementing a knob or spending a simulator row."
+}
