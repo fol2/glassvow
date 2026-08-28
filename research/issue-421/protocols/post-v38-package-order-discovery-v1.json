@@ -1,0 +1,254 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "On one fixed post-scalar substrate, does the identity-safe package-order grammar causally restore Duskblade Afterimage complementarity while preserving an equally supported feasible package set?",
+  "method": "One mechanism-blocked CRN discovery. Every package receives the same 64 policy and seed identities and a complete packageOrder-on none/A/B/AB target/control rectangle. Afterimage alone receives the complete off rectangle because prior equal-cohort evidence identified it as the failed action-order bottleneck. The other packages receive shared matched off/on AB interference anchors; their missing off cells are added only when a frozen anchor gate measures decision-valued interference.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "pilotSha256": "e40a0d87ce6613468d3c1ac993cbe4d0b44a9be1c44df332c2f0dd8178cdf1e1",
+    "probeSha256": "a7f614f1b26e7f8f578305a0d3fbe20d0f6d1cc84eee8323a614faaa3d8a9044",
+    "researchCoreSha256": "0480163456dc6693e90d5f87163918d8452e4dd5c2c822c60543ab03efe3d6a9",
+    "identityRunnerSha256": "4dcf906c44dc1bfcb72f50f205430aa5487e4e98c6ac8b17c532b6e042c2336f",
+    "runnerSha256": "68022202c526e74ec5893879f26b993484259365854e610e66ce62a795c52990"
+  },
+  "entryGates": {
+    "packageOrderIdentity": {
+      "path": "summaries/post-v38-package-order-identity-v1.json",
+      "sha256": "190e57b2ce109bd037115011299d870c071a6da3255e1f064b76c4034e2e3587",
+      "decision": "package-order-identity-safe"
+    },
+    "priorExactPanel": {
+      "path": "summaries/post-v38-exact-complementarity-v1.json",
+      "sha256": "be2f0776a72c31dc1df7b410e2b1abb4535da47eab5522b88324298679bc4234",
+      "decision": "reject-candidate-close-scalar-family-continue-structurally"
+    },
+    "priorExactAnalysis": {
+      "path": "cache/sha256/1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29.json",
+      "sha256": "1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29",
+      "decision": "reject-candidate-close-scalar-family-continue-structurally"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "014b2c3c3c416fd5922b234ae664063f1a3985b8a274946770e02bd62545e360",
+    "records": 465049,
+    "firstSequence": 1,
+    "lastSequence": 465049,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "structuralCandidate": {
+    "id": "fixed-substrate-Q2-W0__package-order-1",
+    "contentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+    "research421": {
+      "acquisitionPriority": 2,
+      "wardSetupPriority": 0
+    },
+    "packageOrderLevel": 1,
+    "substrateBoundary": "The prior scalar candidate and family remain closed. These exact content and scalar settings are a fixed mechanism substrate because three packages cleared on them and the fourth exposed a measured action-order bottleneck; no alternative scalar cell is selected or compared.",
+    "singleCandidateAuthority": "Only this substrate plus the exact identity-safe binary grammar may advance from this protocol."
+  },
+  "packages": {
+    "ash-bloodfire-leech": {
+      "aspect": "ashwarden",
+      "producer": "bloodRite",
+      "consumer": "leechBlade",
+      "mediator": "player-bloodfire",
+      "cardMetric": "damage",
+      "cardMetricDirection": 1
+    },
+    "ash-poison-catalyst": {
+      "aspect": "ashwarden",
+      "producer": "toxicMist",
+      "consumer": "catalyst",
+      "mediator": "enemy-mistbound",
+      "cardMetric": "status:poison",
+      "cardMetricDirection": 1
+    },
+    "dusk-afterimage-guard": {
+      "aspect": "duskblade",
+      "producer": "defend",
+      "consumer": "guardedStrike",
+      "mediator": "player-afterimage",
+      "cardMetric": "status:afterimage",
+      "cardMetricDirection": -1
+    },
+    "dusk-scoreline": {
+      "aspect": "duskblade",
+      "producer": "chisel",
+      "consumer": "executioner",
+      "mediator": "enemy-scoreline",
+      "cardMetric": "shatter",
+      "cardMetricDirection": 1
+    }
+  },
+  "admissionSet": {
+    "requiredDuskPackages": [
+      "dusk-afterimage-guard",
+      "dusk-scoreline"
+    ],
+    "supplementalAshPackages": [
+      "ash-bloodfire-leech",
+      "ash-poison-catalyst"
+    ],
+    "minimumSupplementalAshPackages": 1,
+    "immutableAdmittedAshPackage": {
+      "id": "ash-hand-size-payoff",
+      "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "issue525ArchiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "relevantCardPairSha256": "727d621094927ded47c39c69d6375813f01115276505f1666fdb344dbbbcf1ea",
+      "use": "Immutable scientific admission and reproduction evidence only. Do not reconstruct or rerun either exhausted research path."
+    },
+    "successSet": "Both Dusk packages and at least one equally evaluated supplemental Ash package clear at packageOrder 1. Together with immutable hand-size-payoff, this is the minimum two-package-per-aspect local causal set."
+  },
+  "causalFactors": {
+    "scorelinePayoff": {
+      "level": "low",
+      "role": "Fixed substrate value; not varied and not aliased with Afterimage payoff."
+    },
+    "afterimagePayoff": {
+      "level": "low",
+      "role": "Fixed substrate value; not varied and not aliased with Scoreline payoff."
+    },
+    "acquisitionPriority": {
+      "level": 2,
+      "role": "Fixed substrate value."
+    },
+    "wardSetupPriority": {
+      "level": 0,
+      "role": "Fixed substrate value."
+    },
+    "faultlineRarity": {
+      "level": "uncommon",
+      "role": "Fixed substrate value."
+    },
+    "producerPresence": {
+      "levels": ["absent", "present"],
+      "intervention": "Replace the fixed producer slot with the registered producer when present, otherwise the registered neutral filler."
+    },
+    "consumerPresence": {
+      "levels": ["absent", "present"],
+      "intervention": "Replace the fixed consumer slot with the registered consumer when present, otherwise the registered neutral filler."
+    },
+    "aspect": {
+      "levels": ["package-target", "other-control"],
+      "intervention": "Run the identical deck, policy and seed in the target aspect and other-aspect control."
+    },
+    "packageOrder": {
+      "levels": [0, 1],
+      "intervention": "Use the identity-safe registered action-order grammar at 1 and its exact frozen null at 0."
+    },
+    "package": {
+      "levels": [
+        "ash-bloodfire-leech",
+        "ash-poison-catalyst",
+        "dusk-afterimage-guard",
+        "dusk-scoreline"
+      ],
+      "blocking": "Package is a mechanism block with its own deck and response; no pooled package main effect is estimated."
+    }
+  },
+  "designMatrix": {
+    "none": {"producerPresence": "absent", "consumerPresence": "absent"},
+    "A": {"producerPresence": "present", "consumerPresence": "absent"},
+    "B": {"producerPresence": "absent", "consumerPresence": "present"},
+    "AB": {"producerPresence": "present", "consumerPresence": "present"},
+    "packageOrderOn": "All four packages receive none/A/B/AB in both aspects.",
+    "afterimageOrderOff": "Afterimage receives none/A/B/AB in both aspects, supporting the full packageOrder x producer x consumer causal contrast.",
+    "otherOrderOffAnchors": "The other three packages initially receive AB only in both aspects. These anchors support only matched AB endpoint, outcome, fault and duration movement; they do not support an off-setting complementarity claim.",
+    "optionalExpansion": "For each non-Afterimage package whose frozen AB interference gate fires, add its off-setting none/A/B cells in both aspects on the same 64 identities, completing rather than changing its rectangle.",
+    "deckIdentity": "Every arm has exactly ten cards. Non-intervened slots, enemy, unlocks, policy and seed are identical within every supported contrast.",
+    "aliasStructure": "The on-setting none/A/B/AB cells are reused once for package complementarity and any completed structure interaction. Afterimage is fully crossed by design. A non-Afterimage off AB anchor is not aliased to missing off arms and cannot support a structure interaction unless deterministic expansion completes that package. Fixed payoff, rarity, Ward and acquisition substrate values are not causal factors in this experiment."
+  },
+  "cohort": {
+    "policyIdentity": {
+      "root": 548,
+      "firstIndex": 0,
+      "lastIndex": 63,
+      "count": 64
+    },
+    "researchSeeds": {
+      "first": 346128,
+      "last": 346191,
+      "count": 64
+    },
+    "commonRandomNumbers": "For a given index and seed, every package receives the same on-setting target/control and four arms; every packageOrder contrast reuses those exact identities and no selected package receives a different cohort.",
+    "independence": "Root 548 and seeds 346128-346191 are disjoint from all roots and seed ranges used by the prior identity, first-look, held-out and exact-panel evidence."
+  },
+  "anchors": {
+    "primaryFailureAnchor": "Afterimage packageOrder 0 exactly repeats the failed Q2/W0 mechanism under the new common cohort.",
+    "sharedInterference": "Every other package receives matched target/control AB cells at packageOrder 0 and 1 before any optional expansion.",
+    "otherAspect": "Every package and supported arm is evaluated in its target aspect and the other-aspect control.",
+    "reliability": "Every supported cell reports outcomes, stalls/errors and duration on the same identities."
+  },
+  "estimands": {
+    "conditionalProducerEffect": "At packageOrder 1, consumer-card response AB minus B within package and aspect.",
+    "producerConsumerInteraction": "At packageOrder 1, consumer-card response AB minus A minus B plus none within package and aspect.",
+    "targetMinusControlInteraction": "At packageOrder 1, target-aspect interaction minus matched other-aspect interaction.",
+    "afterimageStructuralGain": "For each identity, packageOrder 1 minus 0 of the Afterimage target-minus-control producer-consumer interaction.",
+    "mechanismWitness": "A target-aspect AB row has positive interaction and registered producer application plus consumer use in card-level event metrics.",
+    "duration": "For target-aspect blocks where all arms win, AB turns minus the best none/A/B duration.",
+    "interferenceAnchor": "For each non-Afterimage package, packageOrder 1 minus 0 of the target-minus-control AB card response, standardised by pooled target AB response scale, plus matched outcome, fault and duration movement."
+  },
+  "estimator": {
+    "unit": "The frozen policy-index and research-seed identity is the paired causal unit.",
+    "standardisation": "Package conditional and interaction contrasts use the population standard deviation of all four target-aspect responses. Interference anchors use the pooled off/on target-AB response standard deviation. Structural gains and duration remain in raw response units.",
+    "bootstrap": "Exactly 5000 deterministic paired bootstrap resamples with a fresh random.Random(421) stream per estimand.",
+    "bootstrapSeed": 421,
+    "multiplicity": "No package, response, threshold, cohort, arm, expansion rule or bootstrap seed may be added or changed after the first observation."
+  },
+  "gates": {
+    "minimumStandardisedComplementarity": 0.25,
+    "minimumMechanismWitnesses": 8,
+    "durationUpperBound": 0.25,
+    "conditionalEffect": "Lower 95% bound of standardised target AB-minus-B is at least 0.25.",
+    "interaction": "Lower 95% bound of standardised target AB-A-B+none is at least 0.25.",
+    "aspectSeparation": "Lower 95% bound of raw target-minus-control interaction is greater than zero.",
+    "afterimageCausalRescue": "Afterimage clears all on-setting package gates and the lower 95% bound of its raw packageOrder structural gain is greater than zero.",
+    "reliability": "Every simulated row is stall/error-free, AB adds no fault, and no target duration block is missing.",
+    "duration": "Upper 95% bound of AB-minus-best-single duration is at most 0.25 turns."
+  },
+  "interferenceGate": {
+    "standardisedEndpointMagnitude": 0.25,
+    "durationMagnitudeTurns": 0.25,
+    "expandWhen": "Expand a non-Afterimage package if the matched AB endpoint-movement interval is wholly at or beyond plus or minus 0.25 SD, the duration-movement interval is wholly at or beyond plus or minus 0.25 turns, or any matched outcome/fault identity changes.",
+    "decisionValue": "A fired gate means the shared structural grammar moved a previously admitted package enough that the missing off arms can distinguish broad AB movement from a producer-consumer interaction. A quiet anchor gives no authority for that unsupported interaction and spends no rows."
+  },
+  "budget": {
+    "packages": 4,
+    "aspectsPerPackage": 2,
+    "armsPerCompleteRectangle": 4,
+    "policySeedIdentities": 64,
+    "packageOrderOnRows": 2048,
+    "afterimageOrderOffRows": 512,
+    "sharedOtherOrderOffABRows": 384,
+    "initialSimulatorObservationRows": 2944,
+    "rowsPerOptionalExpansion": 384,
+    "maximumOptionalExpansions": 3,
+    "maximumNewSimulatorObservationRows": 4096,
+    "bootstrapResamples": 5000,
+    "maximumWallTimeSeconds": 1800,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Both Dusk packages and at least one supplemental Ash package clear every on-setting package gate, and Afterimage's structural-gain lower bound is greater than zero. Freeze exactly this one structural candidate for independent held-out confirmation.",
+    "futility": "A required Dusk package decisively fails, too many supplemental Ash packages decisively fail to meet the minimum, Afterimage decisively fails, or the Afterimage structural-gain upper bound is not greater than zero. Close packageOrder and continue with the next evidence-backed structural mechanism inside issue #421.",
+    "inconclusive": "Success is not met without a registered decisive failure, or execution reaches an immutable-input, incomplete-design, cache, engine, harness, row-cap or wall-cap fault. Record inconclusive at the cap and do not rerun or extend.",
+    "successAuthority": "Freeze at most the one exact structural candidate for an independently preregistered held-out complementarity and whole-run confirmation. This is not detector admission, product promotion or protected-seed authority.",
+    "futilityAuthority": "Close this package-order grammar and continue structurally inside issue #421 without selecting another scalar cell.",
+    "inconclusiveAuthority": "Stop at decision boundary 3. Do not add rows, alter the grammar or rerun."
+  },
+  "stoppingRule": "Execute the 2944-row first look once, compute all on package gates and shared anchors, add only deterministically triggered 384-row completion blocks, then take exactly one frozen decision boundary. No candidate or threshold changes are allowed.",
+  "deterministicOwnership": "post_v38_package_order_discovery.py alone constructs rows, invokes simulation and cache, fits every estimand, applies expansion and stop rules and records the decision with zero model-context tokens.",
+  "methodBoundary": {
+    "ml": "Deferred. The measured repertoire bottleneck exists, but the deterministic structural grammar is the cheaper justified method.",
+    "rl": "Deferred on the same basis.",
+    "adaptiveTuning": "Alternative scalar cells, grammar levels, package-specific cohorts, promising-cell extensions and V39-style candidate tuning are forbidden."
+  },
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

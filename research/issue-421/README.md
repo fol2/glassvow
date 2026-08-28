@@ -6,8 +6,8 @@
 This directory publishes reviewable evidence from the active scientific issue
 [#421](https://github.com/fol2/glassvow/issues/421) campaign. It now covers the
 V38 freeze, the zero-row identifiability audit, the pre-directive experiment,
-and the post-directive knob proof, mechanism-blocked CRN first look and
-independent held-out confirmation. It is a progress snapshot, not detector
+and the post-directive knob proof, mechanism-blocked CRN first look,
+independent held-out confirmation and structural package-order discovery. It is a progress snapshot, not detector
 admission, product promotion or a P9 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
 and is not intended to enter `main`.
@@ -61,7 +61,33 @@ close the scalar family and continue structurally inside #421. The measured
 bottleneck is producer-before-consumer action ordering, not acquisition or
 payoff. Another scalar cell is forbidden.
 
+The smallest structural follow-up is now identity-safe. At packageOrder 0 it
+reproduces the frozen whole-run trajectories, policy identities, RNG cursors
+and results exactly. Its controlled surfaces change no score, policy or RNG;
+they only choose the registered producer when both package cards are held and
+their mediator is absent.
+
+The mechanism-blocked structural discovery evaluated every package on the same
+64-policy cohort. All four packageOrder-on causal panels cleared with zero
+faults. Afterimage moved from 5/64 witnesses at the matched null to 31/64 and
+its structural-gain interval was [0.438, 0.828]. Only Scoreline fired the shared
+interference gate, so only its missing null cells were completed. The run
+stopped at 3,328 of 4,096 possible rows and froze exactly one structural
+candidate for independent held-out confirmation.
+
 ## Reading order
+
+Start with
+[`summaries/progress-post-directive-package-order-discovery-v1.md`](summaries/progress-post-directive-package-order-discovery-v1.md),
+[`protocols/post-v38-package-order-identity-v1.json`](protocols/post-v38-package-order-identity-v1.json),
+[`protocols/post-v38-package-order-discovery-v1.json`](protocols/post-v38-package-order-discovery-v1.json)
+and
+[`summaries/post-v38-package-order-discovery-v1-audit.json`](summaries/post-v38-package-order-discovery-v1-audit.json)
+for the current structural identity, causal contract, result and independent
+read-only recomputation. The raw cache objects and exact harness are in
+[`raw/post-directive-package-order-raw-v1.tar.gz`](raw/post-directive-package-order-raw-v1.tar.gz)
+and
+[`raw/post-directive-package-order-harness-v1.tar.gz`](raw/post-directive-package-order-harness-v1.tar.gz).
 
 1. [`summaries/progress-post-directive-exact-complementarity-v1.md`](summaries/progress-post-directive-exact-complementarity-v1.md),
    [`protocols/post-v38-exact-complementarity-v1.json`](protocols/post-v38-exact-complementarity-v1.json),
@@ -178,6 +204,13 @@ After exact-candidate complementarity the ledger is 2,523,049,984 bytes with
 The equal-cohort causal panel added 4,096 observations and zero acceptance or
 reserve rows. Its boundary-2 result closes the scalar family.
 
+After structural package-order discovery the ledger is 2,530,525,184 bytes
+with 468,385 records and SHA-256
+`3e462d0285570812f49d2f0daa06d9505f6d9c99da6d35accb1833d7a30db616`.
+The identity preflight added zero observations. The staged discovery added
+3,328 observations, spent one of three optional 384-row expansions and used
+zero acceptance or reserve rows.
+
 ## Frozen identities
 
 - source and archive base: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
@@ -195,6 +228,9 @@ reserve rows. Its boundary-2 result closes the scalar family.
 - held-out confirmation analysis SHA-256: `aa4ac97242d701bd3ff187ebcf8ee6bd804e7277845aba0474f435267b03dcb3`
 - exact complementarity protocol SHA-256: `21b79cfe4f21da1ccf272018cf0f49b225688bd1e2651752fe8a35e244489fd6`
 - exact complementarity analysis SHA-256: `1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29`
+- package-order identity protocol SHA-256: `47974f7effa559dad1acc6d5ff97acb30486ffe45733bf5ee032ffec728f121a`
+- package-order discovery protocol SHA-256: `134d908c9db8998413e3c9858f3b9a9a09deb125ca779a23218a7a923ca549dd`
+- package-order discovery analysis SHA-256: `4e6f7e53f853ca44040a7851940717cc3fa8d612741ec8f53ed89c53ea31138f`
 
 ## Remote heads at publication preparation
 
@@ -205,7 +241,7 @@ reserve rows. Its boundary-2 result closes the scalar family.
 - `work/421-landscape-retune`: `ad4b99b1538d7200e9b228051a029e554e9b9912`
 - `work/421-s009-exam`: `b30b290813d88109c5b9bc34354babefdc406f8d`
 
-Research is continuing structurally under #421. The scalar family is closed;
-that negative is not a human hand-off and does not authorise a successor or a
-second scalar candidate. Detector admission, promotion and protected seeds
-remain unauthorised.
+Research is continuing under #421 with exactly one frozen structural candidate.
+The scalar family remains closed; no successor or second scalar candidate is
+authorised. Independent held-out confirmation, detector admission, promotion
+and protected seeds remain outstanding and unauthorised at this snapshot.

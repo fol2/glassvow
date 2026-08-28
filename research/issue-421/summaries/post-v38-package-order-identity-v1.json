@@ -1,0 +1,91 @@
+{
+  "decision": "package-order-identity-safe",
+  "frozenPathOutputSha256": "f4ef07a244bf92ecf793285f05f9001aa7d6a39240ce9c77b6b33cccd274e5c2",
+  "invalidPlanSha256": "e3c8417b81cd91732eeb5e19471046f610a15b6bd58cb6d7f65bea70e873cf46",
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 465049,
+    "protectedSeedRows": 0,
+    "records": 465049,
+    "sha256": "014b2c3c3c416fd5922b234ae664063f1a3985b8a274946770e02bd62545e360",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 465049,
+    "protectedSeedRows": 0,
+    "records": 465049,
+    "sha256": "014b2c3c3c416fd5922b234ae664063f1a3985b8a274946770e02bd62545e360",
+    "sqliteIntegrity": "ok"
+  },
+  "newLedgerObservationRows": 0,
+  "outputSha256": "688f856f755ba36f2aac74ac23db7841dc89c89726073d440f892b6cf3f5c723",
+  "planSha256": "6da4321ba819692c44fe51ac975ce18690fc476b073ca329e73f70ed5ca05610",
+  "protocolSha256": "47974f7effa559dad1acc6d5ff97acb30486ffe45733bf5ee032ffec728f121a",
+  "runnerSha256": "4dcf906c44dc1bfcb72f50f205430aa5487e4e98c6ac8b17c532b6e042c2336f",
+  "schemaVersion": 1,
+  "surfaceResults": {
+    "0": {
+      "absentOffChoice": "executioner",
+      "absentOnChoice": "chisel",
+      "consumer": "executioner",
+      "mediator": "scoreline",
+      "policyScoresAndRngExactWithinContrasts": true,
+      "presentMediatorNegativeControlExact": true,
+      "presentOffChoice": "executioner",
+      "presentOnChoice": "executioner",
+      "producer": "chisel"
+    },
+    "1": {
+      "absentOffChoice": "guardedStrike",
+      "absentOnChoice": "defend",
+      "consumer": "guardedStrike",
+      "mediator": "afterimage",
+      "policyScoresAndRngExactWithinContrasts": true,
+      "presentMediatorNegativeControlExact": true,
+      "presentOffChoice": "guardedStrike",
+      "presentOnChoice": "guardedStrike",
+      "producer": "defend"
+    },
+    "2": {
+      "absentOffChoice": "bloodRite",
+      "absentOnChoice": "bloodRite",
+      "consumer": "leechBlade",
+      "mediator": "bloodfire",
+      "policyScoresAndRngExactWithinContrasts": true,
+      "presentMediatorNegativeControlExact": true,
+      "presentOffChoice": "bloodRite",
+      "presentOnChoice": "bloodRite",
+      "producer": "bloodRite"
+    },
+    "3": {
+      "absentOffChoice": "catalyst",
+      "absentOnChoice": "toxicMist",
+      "consumer": "catalyst",
+      "mediator": "mistbound",
+      "policyScoresAndRngExactWithinContrasts": true,
+      "presentMediatorNegativeControlExact": true,
+      "presentOffChoice": "catalyst",
+      "presentOnChoice": "catalyst",
+      "producer": "toxicMist"
+    }
+  },
+  "unregisteredLevelFailedClosed": true,
+  "wallTimeSeconds": 1.881138458964415,
+  "wholeRunIdentity": {
+    "null-ash-sampled": {
+      "outcome": "loss",
+      "policySha256": "c15e9b566f6037c4aeee8e7f6acd114a62e2b16ecf5c2b075271a12424800b61",
+      "rng": 247618783,
+      "rowSha256": "39ce858b41f0e2f682b45a3f220f5e56641132af654223f665dfb712e0a2780a",
+      "trajectorySha256": "4f527a078f61d5a22871869eb19781e6ecab0477229377c6d3807fa57e2b423d"
+    },
+    "null-dusk-sampled": {
+      "outcome": "loss",
+      "policySha256": "27f30a481080978d188ec34c8e41295bef8c513bc22665c9e314fbfe5ea07f0d",
+      "rng": -1809406619,
+      "rowSha256": "a18bbe70665fadc7db3266404c727c8915f5a3d30abde58047d792d7b6b4eba1",
+      "trajectorySha256": "f2e016301391a5598bd347567c44eb4b8d88b2854b03cfe2bbd551aa01725c9d"
+    }
+  }
+}

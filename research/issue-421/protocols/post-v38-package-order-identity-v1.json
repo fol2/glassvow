@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "question": "Does the deterministic issue #421 package-order grammar preserve the frozen whole-run path at its null setting and change only the preregistered first-action mediator when enabled?",
+  "decision": "Admit this structural mechanism to a separately preregistered CRN experiment only if every frozen-path identity, controlled-surface isolation, negative-control, registered-level and zero-ledger assertion passes.",
+  "evidenceBoundary": {
+    "trigger": "The exact equal-cohort complementarity panel rejected the sole scalar candidate because Afterimage produced only 3 of 128 policy witnesses while the other three packages cleared their frozen gates.",
+    "measuredBottleneck": "Afterimage acquisition was common but its exact complementarity was rare at Ward setup priority 0, while historical Ward setup priority 2 controls were materially more active. This identifies action order or setup as the next structural mechanism, not another payoff or acquisition scalar.",
+    "forbidden": "This preflight is identity and direct-mediator evidence only. It may not support a balance, package, detector or acceptance claim and it may not reopen the closed scalar family."
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "contentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "pilotSha256": "e40a0d87ce6613468d3c1ac993cbe4d0b44a9be1c44df332c2f0dd8178cdf1e1",
+    "balanceSimSha256": "45a3d3b95f53f89ab4444e45da32ba7f691090518d74706823e44478a2e55777",
+    "probeSha256": "a7f614f1b26e7f8f578305a0d3fbe20d0f6d1cc84eee8323a614faaa3d8a9044",
+    "runnerSha256": "4dcf906c44dc1bfcb72f50f205430aa5487e4e98c6ac8b17c532b6e042c2336f"
+  },
+  "ledgerFreeze": {
+    "sha256": "014b2c3c3c416fd5922b234ae664063f1a3985b8a274946770e02bd62545e360",
+    "records": 465049,
+    "firstSequence": 1,
+    "lastSequence": 465049,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "frozenPath": {
+    "protocolSha256": "3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff",
+    "outputSha256": "f4ef07a244bf92ecf793285f05f9001aa7d6a39240ce9c77b6b33cccd274e5c2",
+    "comparison": "Canonical equality of complete whole-run rows produced before packageOrder existed."
+  },
+  "factorDefinition": {
+    "name": "packageOrder",
+    "type": "research-only binary deterministic action-order grammar outside the sampled policy vector",
+    "levels": [0, 1],
+    "null": 0,
+    "nullSettings": {
+      "wardSetupPriority": 1,
+      "acquisitionPriority": 4,
+      "packageOrder": 0
+    },
+    "enabledRule": "During a non-lethal pilot choice, and before the unchanged normal score argmax, consider only a registered aspect-valid producer-consumer pair for which both cards are held and legal and its registered mediator is absent. Reject a producer whose previewed self-loss is lethal. If more than one pair qualifies, select the producer with the highest unchanged normal combat score; ties retain registered pair order. Return that producer using its unchanged legal target.",
+    "registeredPairs": [
+      {
+        "pairIndex": 0,
+        "aspect": "duskblade",
+        "producer": "chisel",
+        "consumer": "executioner",
+        "mediator": "scoreline",
+        "mediatorOwner": "target enemy"
+      },
+      {
+        "pairIndex": 1,
+        "aspect": "duskblade",
+        "producer": "defend",
+        "consumer": "guardedStrike",
+        "mediator": "afterimage",
+        "mediatorOwner": "player"
+      },
+      {
+        "pairIndex": 2,
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "bloodfire",
+        "mediatorOwner": "player"
+      },
+      {
+        "pairIndex": 3,
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "mistbound",
+        "mediatorOwner": "target enemy"
+      }
+    ],
+    "intendedMediator": "The deterministic first legal card identity when both package cards are co-held and the package mediator is absent.",
+    "allowedDownstreamConsequences": "Only consequences caused by that changed action order may differ after the selected card is played.",
+    "forbiddenDirectEffects": "The factor must not enter policy resolution or policy_snapshot, change any combat score or target, consume RNG, alter acquisition scoring, cross an aspect boundary, act when the mediator is present, or affect a hand without a registered legal pair.",
+    "mechanisticJustification": "The failed package had adequate acquisition but insufficient producer-before-consumer setup. A deterministic package grammar tests that measured bottleneck directly without another scalar, optimiser, ML or RL method.",
+    "aliasStructure": "No alias is permitted. packageOrder is crossed only against its own null within the same pair and mediator-presence state while wardSetupPriority, acquisitionPriority, content, policy, enemy, hand, energy and seed remain fixed. Mediator-present cells are preregistered negative-control anchors, not another causal factor."
+  },
+  "wholeRunIdentityCases": [
+    {
+      "id": "null-dusk-sampled",
+      "stage": "post-v38-knob-identity-v2",
+      "aspect": "duskblade",
+      "vow": 5,
+      "seed": 345000,
+      "policyRoot": 544,
+      "policyIndex": 0,
+      "frozenRowIndex": 0
+    },
+    {
+      "id": "null-ash-sampled",
+      "stage": "post-v38-knob-identity-v2",
+      "aspect": "ashwarden",
+      "vow": 5,
+      "seed": 345001,
+      "policyRoot": 544,
+      "policyIndex": 1,
+      "frozenRowIndex": 2
+    }
+  ],
+  "surfacePolicy": {
+    "card": {
+      "aspectBonus": 7
+    }
+  },
+  "surfaceCases": [
+    {
+      "pairIndex": 0,
+      "producer": "chisel",
+      "consumer": "executioner",
+      "mediator": "scoreline",
+      "seed": 345200
+    },
+    {
+      "pairIndex": 1,
+      "producer": "defend",
+      "consumer": "guardedStrike",
+      "mediator": "afterimage",
+      "seed": 345201
+    },
+    {
+      "pairIndex": 2,
+      "producer": "bloodRite",
+      "consumer": "leechBlade",
+      "mediator": "bloodfire",
+      "seed": 345202
+    },
+    {
+      "pairIndex": 3,
+      "producer": "toxicMist",
+      "consumer": "catalyst",
+      "mediator": "mistbound",
+      "seed": 345203
+    }
+  ],
+  "anchors": {
+    "frozenWholeRuns": "One Duskblade and one Ashwarden sampled-policy whole run retain the exact old identifiers, seeds, policy identities, result rows, trajectories and RNG cursors.",
+    "controlledHand": "Every surface contains exactly the registered producer, registered consumer and strike against gravewarden at 3 energy under the same resolved policy.",
+    "negativeControls": "For every package, mediator-present off and on cells must select the same first action while all direct fields remain exact.",
+    "positiveControls": "For every package, the mediator-absent enabled cell must select the registered producer and content inspection must show that producer establishes the registered mediator."
+  },
+  "estimands": {
+    "nullIdentity": "Canonical equality of each omitted-setting row, its explicit full-null row and the corresponding pre-packageOrder frozen row, including policy, complete ordered trajectory, final RNG and result.",
+    "directMediator": "Within each package and mediator-presence state, packageOrder 1 minus 0 for firstChoice, holding all other inputs exact.",
+    "directIsolation": "Exact equality within each off-on contrast for resolved policy, every normal combat score and RNG before and after choice.",
+    "negativeControl": "Exact equality of firstChoice under packageOrder 0 and 1 when the registered mediator is already present.",
+    "trustBoundary": "packageOrder 2 must terminate the probe non-zero before a row is accepted."
+  },
+  "budget": {
+    "wholeRunReplayExecutions": 4,
+    "controlledSurfaceChecks": 16,
+    "invalidConfigurationChecks": 1,
+    "probeRowsMaximum": 20,
+    "newLedgerObservationRows": 0,
+    "maximumWallTimeSeconds": 600,
+    "maximumModelContextTokensDuringExecution": 0,
+    "protectedSeeds": 0
+  },
+  "successRule": "All whole-run null rows exactly reproduce the frozen path; all four absent-mediator enabled cells choose their registered producer; every present-mediator negative control is exact; policy, scores and RNG are exact within every contrast; every producer establishes only its registered package mediator through existing content; the unregistered level fails closed; and the ledger is byte-identical before and after.",
+  "futilityRule": "Any exact mismatch, unintended direct-field movement, failed positive or negative control, unregistered-level acceptance or ledger mutation rejects packageOrder and forbids simulator observations under it.",
+  "inconclusiveRule": "An immutable-input mismatch, missing frozen cache object, unavailable Godot 4.7.2 stable surface, process failure unrelated to a registered assertion, corrupt cache, timeout or unreadable ledger yields no identity conclusion and no authority for simulator observations.",
+  "stoppingRule": "Run this fixed plan once. Stop at the first failure. On success, admit only the exact binary grammar and proceed to a new frozen CRN protocol; on futility or inconclusive result, run no simulator row.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

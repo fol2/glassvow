@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-package-order-discovery-v1",
+  "ledger": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2530525184,
+    "sha256": "3e462d0285570812f49d2f0daa06d9505f6d9c99da6d35accb1833d7a30db616",
+    "sqliteIntegrity": "ok",
+    "records": 468385,
+    "firstSequence": 1,
+    "lastSequence": 468385
+  },
+  "identityPreflight": {
+    "protocolSha256": "47974f7effa559dad1acc6d5ff97acb30486ffe45733bf5ee032ffec728f121a",
+    "summarySha256": "190e57b2ce109bd037115011299d870c071a6da3255e1f064b76c4034e2e3587",
+    "newSimulatorObservationRows": 0,
+    "decision": "package-order-identity-safe"
+  },
+  "packageOrderDiscovery": {
+    "protocolSha256": "134d908c9db8998413e3c9858f3b9a9a09deb125ca779a23218a7a923ca549dd",
+    "analysisSha256": "4e6f7e53f853ca44040a7851940717cc3fa8d612741ec8f53ed89c53ea31138f",
+    "auditSha256": "a520a17d524ec46e2468e1dedf757bbd8636906b7a7cc3660aa28cd7daa0210e",
+    "simulatorObservationRows": 3328,
+    "initialRows": 2944,
+    "optionalExpansionRows": 384,
+    "optionalExpansions": ["dusk-scoreline"],
+    "decision": "freeze-one-structural-candidate-for-independent-heldout-confirmation"
+  },
+  "protectedSeeds": {
+    "acceptanceRange": "3000-5199",
+    "acceptanceObservationRows": 0,
+    "reserveRange": "5200-5399",
+    "reserveObservationRows": 0
+  },
+  "publication": {
+    "sqlitePublishedInGit": false,
+    "reason": "The multi-gigabyte append-only ledger remains local and hash-pinned; content-addressed plans, outputs and decision objects are archived remotely."
+  }
+}

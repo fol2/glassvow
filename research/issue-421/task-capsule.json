@@ -40,8 +40,8 @@
     "godot": "4.7.2.stable.official.ed1daf0bf",
     "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
     "researchContentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
-    "researchLedgerRecords": 465049,
-    "researchLedgerSha256": "014b2c3c3c416fd5922b234ae664063f1a3985b8a274946770e02bd62545e360",
+    "researchLedgerRecords": 468385,
+    "researchLedgerSha256": "3e462d0285570812f49d2f0daa06d9505f6d9c99da6d35accb1833d7a30db616",
     "protectedSeedRows": 0,
     "knobIdentityProtocolSha256": "3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff",
     "blockedCrnProtocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
@@ -50,7 +50,10 @@
     "heldOutProtocolSha256": "d8496263dbaab0534cf44702e9ea1078c952b87c145b5c04b3492085d6f15be0",
     "heldOutAnalysisSha256": "aa4ac97242d701bd3ff187ebcf8ee6bd804e7277845aba0474f435267b03dcb3",
     "exactComplementarityProtocolSha256": "21b79cfe4f21da1ccf272018cf0f49b225688bd1e2651752fe8a35e244489fd6",
-    "exactComplementarityAnalysisSha256": "1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29"
+    "exactComplementarityAnalysisSha256": "1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29",
+    "packageOrderIdentityProtocolSha256": "47974f7effa559dad1acc6d5ff97acb30486ffe45733bf5ee032ffec728f121a",
+    "packageOrderDiscoveryProtocolSha256": "134d908c9db8998413e3c9858f3b9a9a09deb125ca779a23218a7a923ca549dd",
+    "packageOrderDiscoveryAnalysisSha256": "4e6f7e53f853ca44040a7851940717cc3fa8d612741ec8f53ed89c53ea31138f"
   },
   "decisions": [
     {
@@ -92,17 +95,27 @@
       "decision": "Reject the one scalar candidate, close the scalar family and continue with a structural sequencing mechanism inside issue #421.",
       "evidence": "summaries/post-v38-exact-complementarity-v1-audit.json",
       "reason": "Three packages cleared, but exact frozen-setting Dusk Afterimage had 3 of 128 mechanism witnesses against the fixed 16 minimum and both causal lower bounds at zero. Reachability was already high and W2 controls were clear, isolating action-order/setup rather than payoff or acquisition."
+    },
+    {
+      "decision": "Admit the binary package-order grammar as identity-safe.",
+      "evidence": "summaries/post-v38-package-order-identity-v1.json",
+      "reason": "Its null reproduced the frozen Dusk and Ash whole-run rows exactly; policy, combat scores and RNG stayed exact on every package surface; mediator-present controls were inert; and enabled absent-mediator cells selected only the registered producer."
+    },
+    {
+      "decision": "Freeze exactly one structural candidate for independent held-out confirmation.",
+      "evidence": "summaries/post-v38-package-order-discovery-v1-audit.json",
+      "reason": "All four packages cleared on one equal 64-policy cohort with zero faults. Afterimage improved from 5 to 31 witnesses and its matched structural-gain interval was [0.438, 0.828]. Only Scoreline triggered the preregistered interference expansion, so 768 optional rows remained unspent."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
     "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
     "heldOutConfirmation": "Root-546 policies and disjoint simulation seeds reproduced proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
-    "packageSupport": "Ash hand-size is retained from immutable #524/#525 evidence; both new Ash packages and Dusk Scoreline pass exact causal panels. Dusk Afterimage needs a null-safe structural producer-before-consumer sequencing mechanism before the two-package Dusk bar can close.",
+    "packageSupport": "Ash hand-size is retained from immutable #524/#525 evidence. All four registered packages now pass the exact structural discovery panel; independent held-out complementarity and whole-run activation/reachability remain required before detector calibration.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
-  "nextAction": "Prototype the smallest null-safe deterministic package-order grammar, prove exact null path/RNG/result identity and intended action-order mediation, then preregister one equal-cohort structural causal comparison. Do not reopen scalar selection, add ML/RL yet, spend protected seeds or promote product content.",
+  "nextAction": "Preregister an independent policy/seed cohort and confirm exact structural-candidate complementarity plus whole-run activation, reachability, repertoire sensitivity and guardrails. Do not change the candidate, reopen scalar selection, add ML/RL, spend protected seeds or promote product content.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

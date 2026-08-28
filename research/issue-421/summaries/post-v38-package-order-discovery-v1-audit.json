@@ -1,0 +1,39 @@
+{
+  "afterimage": {
+    "offClear": false,
+    "offWitnesses": 5,
+    "onClear": true,
+    "onWitnesses": 31,
+    "structuralGain": {
+      "p025": 0.4375,
+      "p975": 0.828125,
+      "point": 0.625,
+      "scale": 1.0
+    }
+  },
+  "allOrderOnPackagesClear": true,
+  "allRowsAndDecisionRecomputed": true,
+  "analysisSha256": "4e6f7e53f853ca44040a7851940717cc3fa8d612741ec8f53ed89c53ea31138f",
+  "auditRunnerSha256": "d3bdb9012f37552a2fdf6f8026692dc1a5258bc980813f3baf33dfa56a31ec8c",
+  "authority": "Freeze at most the one exact structural candidate for an independently preregistered held-out complementarity and whole-run confirmation. This is not detector admission, product promotion or protected-seed authority.",
+  "decision": "package-order-discovery-audit-pass",
+  "decisionBoundary": 1,
+  "discoveryDecision": "freeze-one-structural-candidate-for-independent-heldout-confirmation",
+  "ledger": {
+    "firstSequence": 1,
+    "lastSequence": 468385,
+    "protectedSeedRows": 0,
+    "records": 468385,
+    "sha256": "3e462d0285570812f49d2f0daa06d9505f6d9c99da6d35accb1833d7a30db616",
+    "sqliteIntegrity": "ok"
+  },
+  "optionalExpansions": [
+    "dusk-scoreline"
+  ],
+  "protectedSeedRows": 0,
+  "protocolSha256": "134d908c9db8998413e3c9858f3b9a9a09deb125ca779a23218a7a923ca549dd",
+  "rows": 3328,
+  "runnerSha256": "68022202c526e74ec5893879f26b993484259365854e610e66ce62a795c52990",
+  "schemaVersion": 1,
+  "summaryFileSha256": "0a09fd5108d1e1313657966b72cad435e9081a0b4f389793979d7365acd31f09"
+}
