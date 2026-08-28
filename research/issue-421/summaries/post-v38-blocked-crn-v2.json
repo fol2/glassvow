@@ -1,0 +1,56 @@
+{
+  "analysisSha256": "7ab28c0e6d7c6053ae4f036b7ea4cb8c9eedd2727b79774db2c7e3469910f21e",
+  "decision": "freeze-one-for-held-out-confirmation",
+  "decisionBoundary": 1,
+  "executionManifestSha256": "13d81e79056172c27e172fdfe496b06790229ab7c34ad67f97247133f8ba6b59",
+  "expansionReasons": [],
+  "expansionTriggered": false,
+  "feasibleCellsInFrozenOrder": [
+    "S-low__A-low__Q-2__R-uncommon__W-0",
+    "S-low__A-low__Q-2__R-uncommon__W-1",
+    "S-low__A-low__Q-2__R-uncommon__W-2",
+    "S-low__A-low__Q-2__R-rare__W-2",
+    "S-low__A-low__Q-4__R-uncommon__W-0",
+    "S-low__A-low__Q-4__R-uncommon__W-1",
+    "S-low__A-low__Q-4__R-uncommon__W-2",
+    "S-low__A-low__Q-4__R-rare__W-2",
+    "S-low__A-high__Q-2__R-uncommon__W-0",
+    "S-low__A-high__Q-2__R-uncommon__W-1",
+    "S-low__A-high__Q-2__R-uncommon__W-2",
+    "S-low__A-high__Q-4__R-uncommon__W-0",
+    "S-low__A-high__Q-4__R-uncommon__W-1",
+    "S-low__A-high__Q-4__R-uncommon__W-2",
+    "S-high__A-low__Q-2__R-uncommon__W-2",
+    "S-high__A-low__Q-2__R-rare__W-2",
+    "S-high__A-low__Q-4__R-uncommon__W-2",
+    "S-high__A-low__Q-4__R-rare__W-2",
+    "S-high__A-high__Q-2__R-uncommon__W-2",
+    "S-high__A-high__Q-4__R-uncommon__W-2"
+  ],
+  "initialUniqueCells": 20,
+  "newSimulatorObservationRows": 10752,
+  "optionalCellsObserved": 0,
+  "protectedSeedRows": 0,
+  "protocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
+  "runnerSha256": "a6435cc05f13042ee9132de90a40d11a61716b56d116b729aff92faad5a152cb",
+  "schemaVersion": 2,
+  "selectedCandidate": {
+    "cell": {
+      "A": "low",
+      "Q": 2,
+      "R": "uncommon",
+      "S": "low",
+      "W": 0,
+      "blocks": [
+        "afterimage"
+      ],
+      "id": "S-low__A-low__Q-2__R-uncommon__W-0"
+    },
+    "contentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+    "research421": {
+      "acquisitionPriority": 2,
+      "wardSetupPriority": 0
+    }
+  },
+  "wallTimeSeconds": 432.317256291979
+}

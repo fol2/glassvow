@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-blocked-crn-v2-first-look",
+  "ledger": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2487861248,
+    "sha256": "d0e57954ce17635b6b5b25b4fd2a9de8280cb84332e86b7ecea3d0d513daca80",
+    "sqliteIntegrity": "ok",
+    "records": 457861,
+    "firstSequence": 1,
+    "lastSequence": 457861
+  },
+  "recordKinds": {
+    "analysis": 217,
+    "cem-run": 42,
+    "decision": 5,
+    "observation": 456576,
+    "plan": 483,
+    "probe-run": 316,
+    "protocol": 51,
+    "run": 125,
+    "source-identity": 46
+  },
+  "blockedExperiment": {
+    "protocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
+    "simulatorObservationRows": 10752,
+    "initialUniqueCells": 20,
+    "optionalCellsObserved": 0,
+    "completeRectanglesIncludingLive": 21,
+    "rowsPerRectangle": 512
+  },
+  "protectedSeeds": {
+    "acceptanceRange": "3000-5199",
+    "acceptanceObservationRows": 0,
+    "reserveRange": "5200-5399",
+    "reserveObservationRows": 0
+  },
+  "publication": {
+    "sqlitePublishedInGit": false,
+    "reason": "The multi-gigabyte append-only campaign ledger remains local and hash-pinned; only the content-addressed plans, outputs and decision objects for this stage are archived remotely."
+  }
+}

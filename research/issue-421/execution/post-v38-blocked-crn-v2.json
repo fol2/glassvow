@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "status": "frozen-before-first-observation",
+  "protocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
+  "runnerSha256": "a6435cc05f13042ee9132de90a40d11a61716b56d116b729aff92faad5a152cb",
+  "probeSha256": "f770cef88fb6e7a9b57e98f7d08b2ecc3fc2230dc77339e9fe75417c6d111245",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "identitySummarySha256": "26075a5319ab8e0320e933a9e1d9223fd1ffe48ee587cbdf50c6127064c58aa0",
+  "ledgerSha256BeforeFirstObservation": "5dafd3dbee1ce90ee12a5cd8ed9fd2a29559775b8dd5cbc3051251e18a040833",
+  "ledgerRecordsBeforeFirstObservation": 447063,
+  "initialSimulatorObservationRows": 10752,
+  "conditionalExpansionObservationRows": 6144,
+  "maximumSimulatorObservationRows": 16896,
+  "maximumWallTimeSeconds": 3600,
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "bootstrapResamples": 5000,
+  "bootstrapSeed": 421,
+  "protectedSeeds": 0,
+  "executionCommand": "PYTHONDONTWRITEBYTECODE=1 python3 post_v38_blocked_crn.py execute"
+}

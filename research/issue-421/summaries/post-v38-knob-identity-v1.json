@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "decision": "knobs-preflight-rejected",
+  "protocolSha256": "7fe3302debb072e6bcd0276dea16e7ee26c58f08006c9778a4265892696af401",
+  "runnerSha256": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+  "planSha256": "9833c43a6047a2a001c4b0a0e48a3cf9a42328441147b3a2fe9bfd97a7ee26fa",
+  "outputSha256": "0bdc41da6376b00490bd74ab190db6bdf493e4687b79eca6cb5a1f3195bfc6eb",
+  "terminalAssertion": "Ward knob did not alter only the intended setup choice",
+  "interpretation": "The preregistered categorical Ward choice check failed. This rejects protocol v1 and does not establish that the direct Ward score mediator is absent; the fixed surface may not straddle its decision threshold.",
+  "completedChecks": {
+    "duskNullReplayCanonicalEquality": true,
+    "ashNullReplayCanonicalEquality": true,
+    "controlledSurfaceNullCanonicalEquality": true,
+    "wardPolicyCompletionBonusesAndRngUnchanged": true,
+    "wardLowChoice": "guardedStrike",
+    "wardHighChoice": "guardedStrike",
+    "acquisitionLowScorelineCompletionBonus": 14.0,
+    "acquisitionHighScorelineCompletionBonus": 28.0,
+    "acquisitionLowAfterimageCompletionBonus": 14.0,
+    "acquisitionHighAfterimageCompletionBonus": 28.0
+  },
+  "exactNullEvidence": {
+    "dusk": {
+      "rowSha256": "e5f1ce1920e1fb20d11ede58c6723c1b1b7f550e65f332339ba70abc511c3f85",
+      "policySha256": "27f30a481080978d188ec34c8e41295bef8c513bc22665c9e314fbfe5ea07f0d",
+      "trajectorySha256": "f2e016301391a5598bd347567c44eb4b8d88b2854b03cfe2bbd551aa01725c9d",
+      "rng": -1809406619,
+      "outcome": "loss"
+    },
+    "ash": {
+      "rowSha256": "5fdeae9ffd58b61eb5134ac56ad68886500b7a7538e03df52c19714058b9673d",
+      "policySha256": "c15e9b566f6037c4aeee8e7f6acd114a62e2b16ecf5c2b075271a12424800b61",
+      "trajectorySha256": "4f527a078f61d5a22871869eb19781e6ecab0477229377c6d3807fa57e2b423d",
+      "rng": 247618783,
+      "outcome": "loss"
+    },
+    "surfaceRowSha256": "1d8cd29d6c336ef59828071ac6bd8166b93d56e4b3ae689126dbb2d3eede0284"
+  },
+  "notReachedAfterFailFast": {
+    "acquisitionIsolationAssertion": true,
+    "unknownKeyFailClosedCheck": true
+  },
+  "budgetUse": {
+    "wholeRunReplayExecutions": 4,
+    "controlledSurfaceRows": 6,
+    "invalidConfigurationChecks": 0,
+    "newLedgerObservationRows": 0,
+    "protectedSeedRows": 0,
+    "maximumModelContextTokensDuringExecution": 0
+  },
+  "ledgerAfterFailureAudit": {
+    "sha256": "5dafd3dbee1ce90ee12a5cd8ed9fd2a29559775b8dd5cbc3051251e18a040833",
+    "records": 447063,
+    "firstSequence": 1,
+    "lastSequence": 447063,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "authority": "No blocked CRN cell is authorised by this result. Preserve protocol v1 and its cached plan and output; any repaired identity claim requires a new preregistered protocol identity."
+}

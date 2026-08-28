@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "decision": "first-look-freeze-confirmed-for-held-out-only",
+  "protocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
+  "runnerSha256": "a6435cc05f13042ee9132de90a40d11a61716b56d116b729aff92faad5a152cb",
+  "summaryFileSha256": "6a1e72f136d12b0dc6462996ffd8180097cb34f2148f025605f5768632bebd06",
+  "analysisSha256": "7ab28c0e6d7c6053ae4f036b7ea4cb8c9eedd2727b79774db2c7e3469910f21e",
+  "execution": {
+    "initialUniqueCells": 20,
+    "optionalCellsObserved": 0,
+    "newSimulatorObservationRows": 10752,
+    "completeRectangles": 21,
+    "rowsPerRectangle": 512,
+    "wallTimeSeconds": 432.317256291979,
+    "protectedSeedRows": 0,
+    "expansionTriggered": false,
+    "expansionReasons": []
+  },
+  "crnIdentityAudit": {
+    "policyIdentities": 64,
+    "policySnapshotsPerIdentityAcrossAllRectangles": 1,
+    "randomIdentitiesPerRectangle": 256,
+    "policyIdentitiesBySeedsPerRectangle": "64 x 4",
+    "allRectanglesComplete": true,
+    "result": "The 64 policy snapshots and every simulation-seed identity were held exact across the live baseline and all 20 cells."
+  },
+  "selectedCandidate": {
+    "id": "S-low__A-low__Q-2__R-uncommon__W-0",
+    "contentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+    "research421": {
+      "acquisitionPriority": 2,
+      "wardSetupPriority": 0
+    },
+    "selectionBasis": "First feasible cell in the frozen order; no outcome magnitude or post-hoc tie-break was used.",
+    "policySensitivity": {
+      "scoreline": {"active": 38, "inactive": 26},
+      "afterimage": {"active": 32, "inactive": 32}
+    },
+    "exclusivePolicyIdentities": {
+      "scoreline": 17,
+      "afterimage": 11
+    },
+    "consumerReachabilityPolicyIdentities": {
+      "scoreline": 38,
+      "afterimage": 32
+    },
+    "policyVow5WinRate": 0.04296875,
+    "policyFaults": 0,
+    "durationCandidateMinusLive": {
+      "point": -0.06983062634155661,
+      "p025": -0.13876322538218458,
+      "p975": 0.0028743261204038162
+    },
+    "randomBuildWinRates": {
+      "duskblade:v0": 0.296875,
+      "duskblade:v5": 0.0625,
+      "ashwarden:v0": 0.1875,
+      "ashwarden:v5": 0.09375
+    },
+    "maximumAbsoluteRandomBuildMovement": 0.078125,
+    "addedFaults": 0
+  },
+  "identifiedMechanismEffects": {
+    "acquisitionPriority_2_to_4_in_scoreline_block": {
+      "scorelineIntensityStandardised": {"point": 0.2392010152461007, "p025": 0.09769760941992635, "p975": 0.408574608983573},
+      "afterimageIntensityStandardised": {"point": 0.33639379464849173, "p025": 0.15412594903057278, "p975": 0.5430474726841926}
+    },
+    "acquisitionPriority_2_to_4_in_afterimage_block": {
+      "scorelineIntensityStandardised": {"point": 0.23260162968238576, "p025": 0.09596440739744927, "p975": 0.40221647294930674},
+      "afterimageIntensityStandardised": {"point": 0.2844381549208773, "p025": 0.11521579812354597, "p975": 0.48071869183786026}
+    },
+    "wardSetupPriority_0_to_1_afterimageIntensityStandardised": {"point": 0.11294478389242964, "p025": 0.043673163075882045, "p975": 0.1958745285637915},
+    "wardSetupPriority_1_to_2_afterimageIntensityStandardised": {"point": 0.07011653745273805, "p025": 0.002409891334938296, "p975": 0.14705549754895306},
+    "scorelinePayoff_low_to_high_scorelineIntensityStandardised": {"point": 0.004272190836585322, "p025": -0.11952449226579871, "p975": 0.11871820956463588},
+    "afterimagePayoff_low_to_high_afterimageIntensityStandardised": {"point": 0.008220779559312538, "p025": -0.013025905681603578, "p975": 0.03622126100897722}
+  },
+  "crossPackageInterference": {
+    "Q2MaximumMediatorAbsoluteStandardisedPoint": 0.01669167139914111,
+    "Q4MaximumMediatorAbsoluteStandardisedPoint": 0.015382871933446564,
+    "SxAxQMaximumMediatorAbsoluteStandardisedPoint": 0.02096428085548153,
+    "maximumWinAbsolutePoint": 0.00390625,
+    "jointHighAddedFaults": 0,
+    "decision": "No preregistered decision-value threshold fired; no optional cell was authorised."
+  },
+  "priorEvidenceReconciliation": {
+    "preDirectiveResult": "The earlier 32-policy discovery and validation splits had only one to seven inactive identities in sampled cells and therefore failed their repertoire gates.",
+    "currentObservation": "The independently preregistered root-545 panel has 21 to 32 inactive identities per route across observed cells, including 26 and 32 in the selected cell.",
+    "interpretation": "The difference is cohort geometry, not a reversal or deletion of the earlier bounded negative. The current first look does not establish population-level repertoire; that is why the frozen candidate now requires an independent held-out policy cohort."
+  },
+  "ledgerAfterAudit": {
+    "sha256": "d0e57954ce17635b6b5b25b4fd2a9de8280cb84332e86b7ecea3d0d513daca80",
+    "records": 457861,
+    "firstSequence": 1,
+    "lastSequence": 457861,
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "authority": "Exactly one candidate is frozen for independent held-out confirmation. This audit does not authorise alternative cells, optional expansion, product promotion, ML, RL, acceptance seeds or reserve seeds."
+}

@@ -5,9 +5,10 @@
 
 This directory publishes reviewable evidence from the active scientific issue
 [#421](https://github.com/fol2/glassvow/issues/421) campaign. It now covers the
-V38 freeze, the zero-row identifiability audit, and the pre-directive
-common-random-number experiment. It is a progress snapshot, not a terminal
-finding, detector admission, product candidate or P9 receipt. The branch is a
+V38 freeze, the zero-row identifiability audit, the pre-directive experiment,
+and the post-directive knob proof and mechanism-blocked CRN first look. It is a
+progress snapshot, not held-out confirmation, detector admission, product
+promotion or a P9 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
 and is not intended to enter `main`.
 
@@ -33,34 +34,52 @@ policy-sensitivity panel through saturated route activation. A subsequent
 zero-row policy-signal audit found no held-out predictive policy increment.
 
 Those later outputs are frozen as pre-directive evidence, not promoted as a
-compliant scalar-family decision. The active next gate is exact null identity
-and intended-mediator isolation for both research knobs, followed by a
-five-factor mechanism-blocked CRN preregistration. No new simulator observation
-is authorised before both gates pass.
+compliant scalar-family decision.
+
+The post-directive knob preflight now proves exact null policy, path, RNG and
+result identity and isolates the direct Ward-score and acquisition-score
+mediators. The mechanism-blocked five-factor experiment then ran 20 unique
+cells plus one live baseline on a common 64-policy/64-seed first look. No
+cross-package decision-value trigger fired, so all 12 optional cells and their
+6,144 rows remained unspent. All observed cells passed the fixed candidate
+gates; the frozen order selected exactly one low/low/Q2/uncommon/W0 candidate
+for independent held-out confirmation. That freeze is not product authority.
 
 ## Reading order
 
-1. [`summaries/progress-pre-directive-factorial-v1.md`](summaries/progress-pre-directive-factorial-v1.md)
-   — current progress, the directive boundary, results and remote heads.
-2. [`protocols/post-v38-factorial-v1.json`](protocols/post-v38-factorial-v1.json),
+1. [`summaries/progress-post-directive-blocked-crn-v2.md`](summaries/progress-post-directive-blocked-crn-v2.md)
+   — current progress, exact post-directive results and remote heads.
+2. [`protocols/post-v38-knob-identity-v2.json`](protocols/post-v38-knob-identity-v2.json),
+   [`summaries/post-v38-knob-identity-v2.json`](summaries/post-v38-knob-identity-v2.json),
+   [`protocols/post-v38-blocked-crn-v2.json`](protocols/post-v38-blocked-crn-v2.json),
+   [`summaries/post-v38-blocked-crn-v2.json`](summaries/post-v38-blocked-crn-v2.json)
+   and [`summaries/post-v38-blocked-crn-v2-audit.json`](summaries/post-v38-blocked-crn-v2-audit.json)
+   — exact identity, design, first-look decision and read-only audit.
+3. [`artifacts/ledger-freeze-blocked-crn-v2.json`](artifacts/ledger-freeze-blocked-crn-v2.json),
+   [`raw/post-directive-blocked-crn-raw-v2.tar.gz`](raw/post-directive-blocked-crn-raw-v2.tar.gz)
+   and [`raw/post-directive-harness-v2.tar.gz`](raw/post-directive-harness-v2.tar.gz)
+   — exact post-directive ledger, raw cache objects and harness.
+4. [`summaries/progress-pre-directive-factorial-v1.md`](summaries/progress-pre-directive-factorial-v1.md)
+   — the directive boundary and immutable earlier results.
+5. [`protocols/post-v38-factorial-v1.json`](protocols/post-v38-factorial-v1.json),
    [`summaries/post-v38-factorial-v1.json`](summaries/post-v38-factorial-v1.json),
    [`protocols/post-v38-policy-signal-v1.json`](protocols/post-v38-policy-signal-v1.json)
    and [`summaries/post-v38-policy-signal-v1.json`](summaries/post-v38-policy-signal-v1.json)
    — exact pre-directive contracts and outputs.
-3. [`artifacts/ledger-freeze-pre-directive-v1.json`](artifacts/ledger-freeze-pre-directive-v1.json)
+6. [`artifacts/ledger-freeze-pre-directive-v1.json`](artifacts/ledger-freeze-pre-directive-v1.json)
    and [`raw/post-v38-factorial-raw-v1.tar.gz`](raw/post-v38-factorial-raw-v1.tar.gz)
    — ledger identity and complete raw plan/output evidence for the later run.
-4. [`summaries/progress-v38-identification-v1.md`](summaries/progress-v38-identification-v1.md)
+7. [`summaries/progress-v38-identification-v1.md`](summaries/progress-v38-identification-v1.md)
    — the earlier V38 freeze and identifiability decision.
-5. [`summaries/post-v38-identification-v1.json`](summaries/post-v38-identification-v1.json)
+8. [`summaries/post-v38-identification-v1.json`](summaries/post-v38-identification-v1.json)
    and [`protocols/post-v38-identification-v1.json`](protocols/post-v38-identification-v1.json)
    — zero-new-row identifiability result and preregistration.
-6. [`summaries/combined-finalist-v38-scoreline-rarity.json`](summaries/combined-finalist-v38-scoreline-rarity.json)
+9. [`summaries/combined-finalist-v38-scoreline-rarity.json`](summaries/combined-finalist-v38-scoreline-rarity.json)
    and [`protocols/combined-finalist-v38-scoreline-rarity.json`](protocols/combined-finalist-v38-scoreline-rarity.json)
    — the frozen V38 rejection.
-7. [`task-capsule.json`](task-capsule.json) — current outcome, invariants,
+10. [`task-capsule.json`](task-capsule.json) — current outcome, invariants,
    authoritative priors, decisions and next action.
-8. [`artifacts/ledger-freeze-v38.json`](artifacts/ledger-freeze-v38.json) —
+11. [`artifacts/ledger-freeze-v38.json`](artifacts/ledger-freeze-v38.json) —
    append-only ledger identity, record counts and protected-seed proof.
 
 All earlier protocols and summaries from this campaign are retained in their
@@ -77,6 +96,10 @@ boundary.
 by the later five-factor experiment. It intentionally preserves the
 `_research421` policy-snapshot identity defect found before the next run; it is
 evidence, not the repair.
+
+`raw/post-directive-harness-v2.tar.gz` records the repaired exact source and
+deterministic identity and blocked-design runners. The files remain research
+evidence and are not installed into the archive branch's product paths.
 
 ## Evidence cache and ledger
 
@@ -103,6 +126,13 @@ After the pre-directive experiment the ledger is 2,396,471,296 bytes with
 The complete 34,304-row experiment is available through the compressed raw
 archive without placing the full multi-gigabyte campaign ledger in Git.
 
+After the post-directive first look the ledger is 2,487,861,248 bytes with
+457,861 records and SHA-256
+`d0e57954ce17635b6b5b25b4fd2a9de8280cb84332e86b7ecea3d0d513daca80`.
+The 59-object compressed raw archive contains the identity and blocked-design
+plans, outputs, content variants and analyses. It added 10,752 observations and
+zero acceptance or reserve rows.
+
 ## Frozen identities
 
 - source and archive base: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
@@ -112,6 +142,10 @@ archive without placing the full multi-gigabyte campaign ledger in Git.
 - post-V38 protocol SHA-256: `5a4fdfd9c24331430d08b239fd4c62edb884c16728e6e09afe15909b137eb3c1`
 - post-V38 result SHA-256: `7541976e28e1bfb70f422b109cc4e965e1961883ad5eb42ce93af8554afe9c63`
 - Godot: `4.7.2.stable.official.ed1daf0bf`
+- knob identity v2 protocol SHA-256: `3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff`
+- blocked CRN v2 protocol SHA-256: `a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d`
+- blocked CRN analysis SHA-256: `7ab28c0e6d7c6053ae4f036b7ea4cb8c9eedd2727b79774db2c7e3469910f21e`
+- frozen held-out candidate content SHA-256: `765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07`
 
 ## Remote heads at publication preparation
 
@@ -123,4 +157,5 @@ archive without placing the full multi-gigabyte campaign ledger in Git.
 - `work/421-s009-exam`: `b30b290813d88109c5b9bc34354babefdc406f8d`
 
 Research is continuing under #421. A negative or inconclusive experiment is not
-a human hand-off and does not authorise a successor ticket.
+a human hand-off and does not authorise a successor ticket. The one frozen
+candidate now requires a separately preregistered independent held-out cohort.

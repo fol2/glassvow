@@ -39,9 +39,13 @@
     "godot": "4.7.2.stable.official.ed1daf0bf",
     "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
     "researchContentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
-    "researchLedgerRecords": 447063,
-    "researchLedgerSha256": "5dafd3dbee1ce90ee12a5cd8ed9fd2a29559775b8dd5cbc3051251e18a040833",
-    "protectedSeedRows": 0
+    "researchLedgerRecords": 457861,
+    "researchLedgerSha256": "d0e57954ce17635b6b5b25b4fd2a9de8280cb84332e86b7ecea3d0d513daca80",
+    "protectedSeedRows": 0,
+    "knobIdentityProtocolSha256": "3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff",
+    "blockedCrnProtocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
+    "blockedCrnAnalysisSha256": "7ab28c0e6d7c6053ae4f036b7ea4cb8c9eedd2727b79774db2c7e3469910f21e",
+    "frozenHeldOutCandidateContentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07"
   },
   "decisions": [
     {
@@ -63,16 +67,27 @@
       "decision": "Freeze new simulator observations at ledger sequence 447063.",
       "evidence": "artifacts/ledger-freeze-pre-directive-v1.json",
       "reason": "The current `_research421` insertion changes policy snapshot identity under explicit null settings."
+    },
+    {
+      "decision": "Admit both research knobs as identity-safe under protocol v2.",
+      "evidence": "summaries/post-v38-knob-identity-v2.json",
+      "reason": "Omitted and explicit-null policy, path, RNG and result identities match exactly; Ward changes only Defend's direct score and acquisition changes only registered completion bonuses."
+    },
+    {
+      "decision": "Do not expand the blocked CRN design and freeze exactly one candidate for held-out confirmation.",
+      "evidence": "summaries/post-v38-blocked-crn-v2-audit.json",
+      "reason": "No SxA or SxAxQ decision-value trigger fired. All 20 first-look cells passed, so the frozen ordering selected low/low/Q2/uncommon/W0 without an outcome-based tie-break."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
-    "blockedExperiment": "Five-factor mechanism blocks share fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors estimate cross-package interference before any expansion.",
+    "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
+    "heldOutConfirmation": "A new policy root and disjoint simulation seeds must reproduce proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
     "packageSupport": "Discovery and held-out interaction, panel activation, reachability, policy sensitivity, functional separation and reliability for two packages per aspect.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
-  "nextAction": "Repair the two research knobs outside the policy vector, run the zero-observation identity and mediator-isolation preflight, then freeze the five-factor mechanism-blocked CRN protocol and numeric ceilings before adding any simulator row.",
+  "nextAction": "Preregister one independent held-out policy and simulation cohort for the frozen low/low/Q2/uncommon/W0 candidate. Do not reopen cell selection, spend protected seeds or promote product content before that confirmation passes.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

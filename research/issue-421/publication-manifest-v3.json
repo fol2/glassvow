@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 3,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "post-directive knob identity proof and mechanism-blocked CRN first look",
+  "decision": "ONE_CANDIDATE_FROZEN_INDEPENDENT_HELDOUT_REQUIRED",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-blocked-crn-v2.md",
+    "progressReportSha256": "325db4ca19d4e3ca3c090c573a2fcb348f5acde4b624c5e8e280eaf213d1def6",
+    "knobIdentityProtocol": "protocols/post-v38-knob-identity-v2.json",
+    "knobIdentityProtocolSha256": "3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff",
+    "knobIdentitySummary": "summaries/post-v38-knob-identity-v2.json",
+    "knobIdentitySummarySha256": "26075a5319ab8e0320e933a9e1d9223fd1ffe48ee587cbdf50c6127064c58aa0",
+    "blockedProtocol": "protocols/post-v38-blocked-crn-v2.json",
+    "blockedProtocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
+    "executionManifest": "execution/post-v38-blocked-crn-v2.json",
+    "executionManifestSha256": "13d81e79056172c27e172fdfe496b06790229ab7c34ad67f97247133f8ba6b59",
+    "blockedSummary": "summaries/post-v38-blocked-crn-v2.json",
+    "blockedSummarySha256": "6a1e72f136d12b0dc6462996ffd8180097cb34f2148f025605f5768632bebd06",
+    "blockedAudit": "summaries/post-v38-blocked-crn-v2-audit.json",
+    "blockedAuditSha256": "f6ec487ae5f4135dd2b29ca0b3b1877d812d8416a4444a6b681c04bceac6b6e1",
+    "ledgerFreeze": "artifacts/ledger-freeze-blocked-crn-v2.json",
+    "ledgerFreezeSha256": "d0452a96d6fc25094059e337e112dffede04984928e7893b097429ee3a008e5d",
+    "rawArchive": "raw/post-directive-blocked-crn-raw-v2.tar.gz",
+    "rawArchiveSha256": "d01e7bfae54bbe26999570e75f802ed94d7a38c2b6425c2693d80a67bdfee44b",
+    "harnessArchive": "raw/post-directive-harness-v2.tar.gz",
+    "harnessArchiveSha256": "9d06512a0d531cb38fcf559673a79e220d483311732df3f66861cbaeb3dbbdd6"
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 348,
+    "payloadFilesIndexed": 344,
+    "protocolFiles": 55,
+    "summaryFiles": 55,
+    "rawPostDirectiveObjects": 59,
+    "rawPostDirectiveUncompressedBytes": 77582778,
+    "rawPostDirectiveArchiveBytes": 6434765,
+    "postDirectiveHarnessArchiveBytes": 88633,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "066366cf9fe7ed811212b2fb4594d1a54edb1a86cf98616bcdfc43a34519fe0c"
+  },
+  "localLedgerFreeze": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2487861248,
+    "sha256": "d0e57954ce17635b6b5b25b4fd2a9de8280cb84332e86b7ecea3d0d513daca80",
+    "sqliteIntegrity": "ok",
+    "records": 457861,
+    "blockedObservationRows": 10752,
+    "optionalObservationRows": 0,
+    "protectedSeedRows": 0,
+    "publishedInGit": false
+  },
+  "knobIdentity": {
+    "v1Decision": "knobs-preflight-rejected",
+    "v1ProtocolSha256": "7fe3302debb072e6bcd0276dea16e7ee26c58f08006c9778a4265892696af401",
+    "v2Decision": "knobs-identity-safe",
+    "v2ProtocolSha256": "3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff",
+    "nullPathExact": true,
+    "directMediatorsIsolated": true,
+    "newLedgerObservationRows": 0
+  },
+  "blockedExperiment": {
+    "factorCount": 5,
+    "scorelineAndAfterimagePayoffsSeparate": true,
+    "mechanismBlocked": true,
+    "initialUniqueCells": 20,
+    "optionalCellsObserved": 0,
+    "simulatorObservationRows": 10752,
+    "expansionTriggered": false,
+    "analysisSha256": "7ab28c0e6d7c6053ae4f036b7ea4cb8c9eedd2727b79774db2c7e3469910f21e",
+    "selectedCandidateId": "S-low__A-low__Q-2__R-uncommon__W-0",
+    "selectedContentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+    "heldOutConfirmed": false,
+    "productPromotionAuthorised": false
+  },
+  "postSnapshotBoundary": {
+    "nextAction": "Preregister an independent held-out policy root and disjoint simulation seeds for the one frozen candidate.",
+    "alternativeCellsAuthorised": false,
+    "optionalExpansionAuthorised": false,
+    "mlOrRlAuthorised": false,
+    "acceptanceSeedsAuthorised": false,
+    "reserveSeedsAuthorised": false,
+    "p9ReceiptAuthorised": false
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "b96845e77be1835341e588a9d0de1a0e910fcd4f",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "omissions": [
+    "The 2.3 GB append-only SQLite ledger is hash-pinned locally but omitted from permanent Git history.",
+    "Unreferenced campaign cache objects, transient work outputs, duplicate source trees, generated imports and SQLite sidecars are not published.",
+    "The post-directive harness is archived under research/issue-421/raw and is not applied to product paths.",
+    "No held-out, protected-seed, product, pull-request, CI, merge or P9-receipt artefact exists at this snapshot."
+  ],
+  "github": {
+    "taskIssue": "https://github.com/fol2/glassvow/issues/421",
+    "releaseGateIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 2,
+  "question": "Under a new exact harness identity, do the two issue #421 research knobs preserve the frozen policy and whole-run trajectory at null, and does each knob change only its direct preregistered score mediator on the unchanged controlled surface?",
+  "decision": "Admit the knobs for a separately preregistered blocked CRN experiment only if every exact identity, direct-mediator isolation, registered-level, fail-closed and zero-ledger check passes.",
+  "priorFailedProtocol": {
+    "protocolSha256": "7fe3302debb072e6bcd0276dea16e7ee26c58f08006c9778a4265892696af401",
+    "summarySha256": "1ecf612b7243068cf227386439b2b3e7dc153411444c2c0087077b3698e88904",
+    "decision": "knobs-preflight-rejected",
+    "failure": "Ward levels 0 and 2 both selected guardedStrike on the fixed surface, so the preregistered categorical-choice assertion failed."
+  },
+  "repairRationale": {
+    "causalGraph": "wardSetupPriority -> Defend combat score -> possible action and trajectory changes",
+    "change": "Measure the exact direct Defend score delta and non-target card scores rather than require the fixed state to cross a downstream argmax threshold.",
+    "frozenFromV1": "The content, source commit, sampled policies, whole-run seeds, fixed hand, enemy, policy weights, factor levels, null settings and acquisition estimand are unchanged.",
+    "forbidden": "Do not search for or construct a threshold-crossing state, reinterpret the v1 failure as a pass, or use this preflight as balance evidence."
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "contentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "pilotSha256": "93a32555c5c273bcd27ea9c5210fcb958f1c1962faad3b1e76bd20d5f3f7e901",
+    "balanceSimSha256": "45a3d3b95f53f89ab4444e45da32ba7f691090518d74706823e44478a2e55777",
+    "probeSha256": "f770cef88fb6e7a9b57e98f7d08b2ecc3fc2230dc77339e9fe75417c6d111245",
+    "runnerSha256": "e1b4983f6d2d0b8a5608dc099430c32e54ddd689a7797415a3f17f7f7127f7c8"
+  },
+  "ledgerFreeze": {
+    "sha256": "5dafd3dbee1ce90ee12a5cd8ed9fd2a29559775b8dd5cbc3051251e18a040833",
+    "records": 447063,
+    "firstSequence": 1,
+    "lastSequence": 447063,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "factorDefinitions": {
+    "wardSetupPriority": {
+      "type": "research-only pilot scalar outside the sampled policy vector",
+      "levels": [0, 1, 2],
+      "null": 1,
+      "onlyDirectRead": "Add level times the frozen policy card.aspectBonus to Defend's combat score only for Duskblade when Warden's Edge is held and Afterimage is absent.",
+      "intendedMediator": "The continuous Defend combat score before deterministic argmax selection.",
+      "allowedDownstreamConsequences": "The selected action, subsequent path and final result may change only through that score.",
+      "forbiddenDirectEffects": "It must not enter policy resolution or policy_snapshot, consume RNG, change another card's combat score, alter card-reward scoring directly, or affect Ashwarden."
+    },
+    "acquisitionPriority": {
+      "type": "research-only pilot scalar outside the sampled policy vector",
+      "levels": [2, 4],
+      "null": 4,
+      "onlyDirectRead": "Add level times the frozen policy card.aspectBonus to a card-reward score only when that offered card completes one of the four preregistered aspect-valid producer-consumer pairs already present in the deck.",
+      "intendedMediator": "The continuous aspect-valid package-completion card-reward bonus.",
+      "allowedDownstreamConsequences": "The accepted card, subsequent path and final result may change only through that reward score.",
+      "forbiddenDirectEffects": "It must not enter policy resolution or policy_snapshot, consume RNG, alter combat choice scoring directly, or cross the aspect boundary."
+    },
+    "nullSettings": {
+      "wardSetupPriority": 1,
+      "acquisitionPriority": 4
+    }
+  },
+  "identityCases": [
+    {
+      "id": "null-dusk-sampled",
+      "aspect": "duskblade",
+      "vow": 5,
+      "seed": 345000,
+      "policyRoot": 544,
+      "policyIndex": 0
+    },
+    {
+      "id": "null-ash-sampled",
+      "aspect": "ashwarden",
+      "vow": 5,
+      "seed": 345001,
+      "policyRoot": 544,
+      "policyIndex": 1
+    }
+  ],
+  "surfaceCase": {
+    "seed": 345100,
+    "policy": {
+      "card": {
+        "aspectBonus": 7
+      }
+    },
+    "unchangedState": {
+      "aspect": "duskblade",
+      "enemy": "gravewarden",
+      "hand": ["defend", "guardedStrike", "strike"],
+      "energy": 3
+    },
+    "settings": {
+      "ward-low": {
+        "wardSetupPriority": 0,
+        "acquisitionPriority": 4
+      },
+      "ward-high": {
+        "wardSetupPriority": 2,
+        "acquisitionPriority": 4
+      },
+      "acquisition-low": {
+        "wardSetupPriority": 1,
+        "acquisitionPriority": 2
+      },
+      "acquisition-high": {
+        "wardSetupPriority": 1,
+        "acquisitionPriority": 4
+      }
+    },
+    "expectedWardDefendScoreDelta": 14,
+    "expectedCompletionBonus": {
+      "low": 14,
+      "high": 28
+    },
+    "firstChoiceRole": "Reported as a downstream observation only; it is not a v2 success criterion and the surface may not be moved to make it cross a threshold."
+  },
+  "estimands": {
+    "nullIdentity": "Canonical equality of the complete row under omitted research settings and explicit null settings, including resolved policy snapshot, ordered node/play/reward trajectory, final RNG cursor and all result fields.",
+    "wardDirectIsolation": "Ward 0 versus 2 changes Defend's score by exactly 14 on the unchanged fixed hand, while guardedStrike and strike scores, both package-completion bonuses, policy identity and RNG remain exact.",
+    "acquisitionDirectIsolation": "Acquisition 2 versus 4 changes both aspect-valid completion bonuses from 14 to 28, while all fixed-hand combat scores, first choice, policy identity and RNG remain exact.",
+    "trustBoundary": "An unknown research knob key must terminate the probe non-zero before simulation."
+  },
+  "budget": {
+    "wholeRunReplayExecutions": 4,
+    "controlledSurfaceChecks": 6,
+    "invalidConfigurationChecks": 1,
+    "probeRowsMaximum": 10,
+    "newLedgerObservationRows": 0,
+    "maximumWallTimeSeconds": 600,
+    "maximumModelContextTokensDuringExecution": 0,
+    "protectedSeeds": 0
+  },
+  "successRule": "Every null pair is canonically identical; Ward changes exactly its direct Defend score mediator and no other controlled direct field; acquisition changes exactly both package-completion bonuses and no combat field; the ledger is byte-identical before and after; the unknown key fails closed.",
+  "futilityRule": "Any exact mismatch, unintended direct-field movement, missing direct-mediator movement, unregistered level acceptance or ledger mutation rejects the knobs. Do not run the blocked experiment.",
+  "inconclusiveRule": "An immutable-input mismatch, unavailable Godot 4.7.2 stable surface, process failure unrelated to a registered assertion, corrupt cache, timeout or unreadable ledger yields no identity conclusion and no authority for simulator observations.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

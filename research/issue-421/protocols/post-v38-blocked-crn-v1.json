@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "question": "Which independently varied Scoreline payoff, Afterimage payoff, acquisition priority, Faultline rarity and Ward setup levels causally produce two reachable, policy-sensitive Duskblade packages without broad power movement or reliability regression?",
+  "decision": "Use two mechanism-blocked common-random-number designs and the smallest shared cross-package anchors to select at most one feasible scalar candidate, close the tested scalar family and continue structurally inside issue #421, or stop inconclusive at the frozen cap.",
+  "method": "five-factor mechanism-blocked common-random-number identification; not the old four-factor design and not a blind joint factorial",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "baseResearchContentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "pilotSha256": "93a32555c5c273bcd27ea9c5210fcb958f1c1962faad3b1e76bd20d5f3f7e901",
+    "balanceSimSha256": "45a3d3b95f53f89ab4444e45da32ba7f691090518d74706823e44478a2e55777",
+    "probeSha256": "93cb42680eaa5c9d86d697191f131cb2f2ab43865f1f5451e84e56b1998a5413",
+    "knobIdentityProtocolSha256": "7fe3302debb072e6bcd0276dea16e7ee26c58f08006c9778a4265892696af401"
+  },
+  "entryGate": {
+    "requiredIdentityDecision": "knobs-identity-safe",
+    "requiredIdentitySummary": "summaries/post-v38-knob-identity-v1.json",
+    "requiredLedgerRecords": 447063,
+    "requiredLedgerSha256": "5dafd3dbee1ce90ee12a5cd8ed9fd2a29559775b8dd5cbc3051251e18a040833",
+    "requiredProtectedSeedRows": 0,
+    "executionFreeze": "Before the first observation, a machine-readable execution manifest must bind this protocol SHA-256, the deterministic runner SHA-256 and the unchanged harness identities above."
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": ["low", "high"],
+      "low": "Remove scorelineBonus from normal and upgraded Faultline while retaining Duskblade Scoreline consumption and remaining-Facet completion.",
+      "high": "Set normal Faultline scorelineBonus to 12 and upgraded Faultline scorelineBonus to 15, retaining the same consumption and remaining-Facet completion.",
+      "onlyContentLeaves": [
+        "cards.executioner.effects[0].scorelineBonus",
+        "cards.executioner.up.effects[0].scorelineBonus",
+        "cards.executioner.text",
+        "cards.executioner.up.text"
+      ]
+    },
+    "afterimagePayoff": {
+      "levels": ["low", "high"],
+      "low": "Set normal and upgraded Warden's Edge reflection to 2 times current Ward when Afterimage is consumed.",
+      "high": "Set normal and upgraded Warden's Edge reflection to 3 times current Ward when Afterimage is consumed.",
+      "onlyContentLeaves": [
+        "cards.guardedStrike.effects[0].reflection",
+        "cards.guardedStrike.up.effects[0].reflection",
+        "cards.guardedStrike.text",
+        "cards.guardedStrike.up.text"
+      ]
+    },
+    "acquisitionPriority": {
+      "levels": [2, 4],
+      "null": 4,
+      "definition": "Research-only card-reward completion bonus equal to the level times each frozen policy's card.aspectBonus; it is read only when an offered card completes an aspect-valid registered pair already in the deck."
+    },
+    "faultlineRarity": {
+      "levels": ["uncommon", "rare"],
+      "definition": "Set only cards.executioner.rarity; every other catalogue leaf is identical within the matched content variant."
+    },
+    "wardSetupPriority": {
+      "levels": [0, 1, 2],
+      "null": 1,
+      "definition": "Research-only combat score bonus equal to the level times each frozen policy's card.aspectBonus, read only for Duskblade Defend while Warden's Edge is held and Afterimage is absent."
+    }
+  },
+  "contentVariants": {
+    "score-high__after-high__rarity-rare": "fb8bf18fe4053fc6e25eb15eba69208921d4fb1e8cfa5b530781c95b2a4c028f",
+    "score-high__after-high__rarity-uncommon": "17bad9d30dae579bf79b4740a46eb19d6306d85655b05630bb31ff8df9069f03",
+    "score-high__after-low__rarity-rare": "b66dd6edc7f47635b931e28329b75fbb12d29cf746e155f6b5fa0add0203c805",
+    "score-high__after-low__rarity-uncommon": "c5865ff3258fe99ac3ff0985c4393285b81463d5492b362ebe7761557da8b3f0",
+    "score-low__after-high__rarity-rare": "a01f02ee45a231daf7ef98cca49cf9029e2872e51e260e03c67fb16e012e8290",
+    "score-low__after-high__rarity-uncommon": "8ca0089d90448a114d74e518edf7f0a7c066bafb920f6ffa876550481d44e5a5",
+    "score-low__after-low__rarity-rare": "ced60018ff018b6938dd8489f8d1f6b69a89045a7644e6a39c36cac2a07b2f87",
+    "score-low__after-low__rarity-uncommon": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07"
+  },
+  "registeredPackages": {
+    "scoreline": {
+      "producer": "chisel",
+      "consumer": "executioner",
+      "appliedMetric": "scorelineApplied",
+      "consumedMetric": "scorelineConsumed"
+    },
+    "afterimage": {
+      "producer": "defend",
+      "consumer": "guardedStrike",
+      "appliedMetric": "afterimageApplied",
+      "consumedMetric": "afterimageConsumed"
+    }
+  },
+  "initialDesignMatrix": [
+    {"id": "S-low__A-low__Q-2__R-uncommon__W-2", "S": "low", "A": "low", "Q": 2, "R": "uncommon", "W": 2, "blocks": ["scoreline", "afterimage"], "alias": "shared-low-q2"},
+    {"id": "S-low__A-low__Q-2__R-rare__W-2", "S": "low", "A": "low", "Q": 2, "R": "rare", "W": 2, "blocks": ["scoreline"]},
+    {"id": "S-low__A-low__Q-4__R-uncommon__W-2", "S": "low", "A": "low", "Q": 4, "R": "uncommon", "W": 2, "blocks": ["scoreline", "afterimage"], "alias": "shared-low-q4"},
+    {"id": "S-low__A-low__Q-4__R-rare__W-2", "S": "low", "A": "low", "Q": 4, "R": "rare", "W": 2, "blocks": ["scoreline"]},
+    {"id": "S-high__A-low__Q-2__R-uncommon__W-2", "S": "high", "A": "low", "Q": 2, "R": "uncommon", "W": 2, "blocks": ["scoreline", "anchor-corner"]},
+    {"id": "S-high__A-low__Q-2__R-rare__W-2", "S": "high", "A": "low", "Q": 2, "R": "rare", "W": 2, "blocks": ["scoreline"]},
+    {"id": "S-high__A-low__Q-4__R-uncommon__W-2", "S": "high", "A": "low", "Q": 4, "R": "uncommon", "W": 2, "blocks": ["scoreline", "anchor-corner"]},
+    {"id": "S-high__A-low__Q-4__R-rare__W-2", "S": "high", "A": "low", "Q": 4, "R": "rare", "W": 2, "blocks": ["scoreline"]},
+    {"id": "S-low__A-low__Q-2__R-uncommon__W-0", "S": "low", "A": "low", "Q": 2, "R": "uncommon", "W": 0, "blocks": ["afterimage"]},
+    {"id": "S-low__A-high__Q-2__R-uncommon__W-0", "S": "low", "A": "high", "Q": 2, "R": "uncommon", "W": 0, "blocks": ["afterimage"]},
+    {"id": "S-low__A-low__Q-2__R-uncommon__W-1", "S": "low", "A": "low", "Q": 2, "R": "uncommon", "W": 1, "blocks": ["afterimage"]},
+    {"id": "S-low__A-high__Q-2__R-uncommon__W-1", "S": "low", "A": "high", "Q": 2, "R": "uncommon", "W": 1, "blocks": ["afterimage"]},
+    {"id": "S-low__A-high__Q-2__R-uncommon__W-2", "S": "low", "A": "high", "Q": 2, "R": "uncommon", "W": 2, "blocks": ["afterimage", "anchor-corner"]},
+    {"id": "S-low__A-low__Q-4__R-uncommon__W-0", "S": "low", "A": "low", "Q": 4, "R": "uncommon", "W": 0, "blocks": ["afterimage"]},
+    {"id": "S-low__A-high__Q-4__R-uncommon__W-0", "S": "low", "A": "high", "Q": 4, "R": "uncommon", "W": 0, "blocks": ["afterimage"]},
+    {"id": "S-low__A-low__Q-4__R-uncommon__W-1", "S": "low", "A": "low", "Q": 4, "R": "uncommon", "W": 1, "blocks": ["afterimage"]},
+    {"id": "S-low__A-high__Q-4__R-uncommon__W-1", "S": "low", "A": "high", "Q": 4, "R": "uncommon", "W": 1, "blocks": ["afterimage"]},
+    {"id": "S-low__A-high__Q-4__R-uncommon__W-2", "S": "low", "A": "high", "Q": 4, "R": "uncommon", "W": 2, "blocks": ["afterimage", "anchor-corner"]},
+    {"id": "S-high__A-high__Q-2__R-uncommon__W-2", "S": "high", "A": "high", "Q": 2, "R": "uncommon", "W": 2, "blocks": ["interference-anchor"]},
+    {"id": "S-high__A-high__Q-4__R-uncommon__W-2", "S": "high", "A": "high", "Q": 4, "R": "uncommon", "W": 2, "blocks": ["interference-anchor"]}
+  ],
+  "optionalExpansionMatrix": [
+    {"id": "S-low__A-high__Q-2__R-rare__W-2", "S": "low", "A": "high", "Q": 2, "R": "rare", "W": 2, "tier": "rarity-boundary"},
+    {"id": "S-high__A-high__Q-2__R-rare__W-2", "S": "high", "A": "high", "Q": 2, "R": "rare", "W": 2, "tier": "rarity-boundary"},
+    {"id": "S-low__A-high__Q-4__R-rare__W-2", "S": "low", "A": "high", "Q": 4, "R": "rare", "W": 2, "tier": "rarity-boundary"},
+    {"id": "S-high__A-high__Q-4__R-rare__W-2", "S": "high", "A": "high", "Q": 4, "R": "rare", "W": 2, "tier": "rarity-boundary"},
+    {"id": "S-high__A-low__Q-2__R-uncommon__W-1", "S": "high", "A": "low", "Q": 2, "R": "uncommon", "W": 1, "tier": "ward-default-boundary"},
+    {"id": "S-high__A-high__Q-2__R-uncommon__W-1", "S": "high", "A": "high", "Q": 2, "R": "uncommon", "W": 1, "tier": "ward-default-boundary"},
+    {"id": "S-high__A-low__Q-4__R-uncommon__W-1", "S": "high", "A": "low", "Q": 4, "R": "uncommon", "W": 1, "tier": "ward-default-boundary"},
+    {"id": "S-high__A-high__Q-4__R-uncommon__W-1", "S": "high", "A": "high", "Q": 4, "R": "uncommon", "W": 1, "tier": "ward-default-boundary"},
+    {"id": "S-high__A-low__Q-2__R-uncommon__W-0", "S": "high", "A": "low", "Q": 2, "R": "uncommon", "W": 0, "tier": "ward-off-boundary"},
+    {"id": "S-high__A-high__Q-2__R-uncommon__W-0", "S": "high", "A": "high", "Q": 2, "R": "uncommon", "W": 0, "tier": "ward-off-boundary"},
+    {"id": "S-high__A-low__Q-4__R-uncommon__W-0", "S": "high", "A": "low", "Q": 4, "R": "uncommon", "W": 0, "tier": "ward-off-boundary"},
+    {"id": "S-high__A-high__Q-4__R-uncommon__W-0", "S": "high", "A": "high", "Q": 4, "R": "uncommon", "W": 0, "tier": "ward-off-boundary"}
+  ],
+  "aliasStructure": {
+    "physicalAliases": [
+      "The Q=2 and Q=4 S-low/A-low/R-uncommon/W-2 cells belong to both mechanism blocks and are simulated once.",
+      "For each acquisition level, the interference difference-in-differences reuses the shared-low, Scoreline-high-only and Afterimage-high-only cells and adds only the joint-high cell."
+    ],
+    "conditionalClaims": [
+      "Scoreline block effects are conditional on Afterimage payoff low and Ward setup 2.",
+      "Afterimage block effects are conditional on Scoreline payoff low and Faultline uncommon.",
+      "Initial cross-package interference is conditional on Faultline uncommon and Ward setup 2, estimated separately at acquisition 2 and 4.",
+      "No unobserved Cartesian-product main effect or interaction is estimable or claimable."
+    ],
+    "sharedFactor": "Acquisition priority is the same causal factor, policy implementation and two levels in both blocks; it is not duplicated into package-specific knobs."
+  },
+  "mechanisticInteractions": {
+    "scorelineBlock": [
+      "scorelinePayoff x acquisitionPriority: reward completion priority changes how often the payoff-bearing consumer becomes reachable",
+      "scorelinePayoff x faultlineRarity: payoff and offer frequency jointly determine realised Scoreline consumption",
+      "acquisitionPriority x faultlineRarity: selection priority can compensate for lower offer frequency"
+    ],
+    "afterimageBlock": [
+      "afterimagePayoff x acquisitionPriority: reward completion priority changes Warden's Edge reachability",
+      "afterimagePayoff x wardSetupPriority: consumption payoff and deliberate Afterimage setup jointly determine exploitation",
+      "acquisitionPriority x wardSetupPriority: acquisition and combat setup are sequential requirements for the package"
+    ],
+    "crossPackage": [
+      "scorelinePayoff x afterimagePayoff at each acquisition level: the packages compete for card rewards, hand slots, energy and combat actions",
+      "scorelinePayoff x afterimagePayoff x acquisitionPriority: stronger completion priority may amplify reward competition between the packages"
+    ],
+    "excluded": "No other interaction is fitted or interpreted before its exact optional boundary cells are triggered and observed."
+  },
+  "cohorts": {
+    "policyIdentity": {
+      "root": 545,
+      "indices": "0-63",
+      "count": 64
+    },
+    "policySimulationSeeds": {
+      "first": 345600,
+      "last": 345603,
+      "count": 4
+    },
+    "randomBuildSeeds": {
+      "first": 345500,
+      "last": 345563,
+      "count": 64
+    },
+    "randomBuildGrids": [
+      "duskblade:v0",
+      "duskblade:v5",
+      "ashwarden:v0",
+      "ashwarden:v5"
+    ],
+    "policyGrid": "duskblade:v5",
+    "commonRandomNumbers": "Every initial and triggered expansion cell uses every identity above. No cell receives a promising-only cohort, extra seed or different first look."
+  },
+  "baseline": {
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "researchSettings": {
+      "wardSetupPriority": 1,
+      "acquisitionPriority": 4
+    },
+    "rectangles": "The same 64 RandomBuild seeds on all four grids and the same 64 policies x 4 seeds on Duskblade Vow 5 are run once and reused for every candidate comparison.",
+    "causalContrasts": "Factor effects use matched low/high design cells under identical remaining factor levels; the live baseline is not substituted for a missing factorial corner."
+  },
+  "endpoints": {
+    "scorelineIntensity": "For each policy-cell unit, log1p of the mean over four seeds of min(scorelineApplied, scorelineConsumed).",
+    "afterimageIntensity": "For each policy-cell unit, log1p of the mean over four seeds of min(afterimageApplied, afterimageConsumed).",
+    "routeActive": "A policy identity is active for a route when at least one of its four seeds has both the registered applied and consumed metric above zero.",
+    "routeExclusive": "A policy identity is active for one route and inactive for the other in the same cell.",
+    "policyWin": "Mean win indicator over the four seeds for each policy identity.",
+    "randomBuildWin": "Paired win indicator by aspect, vow and RandomBuild seed.",
+    "fault": "Outcome stall or error, or a non-empty error field.",
+    "duration": "Mean combat turns per fight in a whole run; candidate-minus-live is paired on policy identity and simulation seed."
+  },
+  "estimator": {
+    "mainEffects": "Average matched high-minus-low difference across every observed context in the relevant mechanism block; acquisition effects are reported once per block and jointly, not treated as two factors.",
+    "interference": "At each acquisition level, joint-high minus Scoreline-high-only minus Afterimage-high-only plus shared-low, using the three reused corners and one joint-high anchor.",
+    "uncertainty": "Percentile 95% interval from 5000 deterministic cluster-bootstrap resamples; policy identity is the cluster for policy endpoints and simulation seed is the cluster for RandomBuild endpoints.",
+    "bootstrapSeed": 421,
+    "standardisation": "Mediator effects use the square root of the mean low/high sample variances. If that denominator is zero, an exactly zero raw contrast maps to zero and a non-zero raw contrast maps to signed infinity.",
+    "multiplicity": "No p-value fishing or post-hoc model selection. Decisions use preregistered practical thresholds and interval location only."
+  },
+  "candidateGate": {
+    "policySensitivity": "Each route has at least 16 active and 16 inactive policy identities among the same 64.",
+    "functionalSeparation": "Each route has at least four exclusive policy identities in the same cell.",
+    "reachability": "Each route has at least eight policy identities with a registered consumer consumption event; no diagnostic or injected acquisition path substitutes for the live reward path.",
+    "randomBuild": "On every aspect-vow grid the candidate RandomBuild win rate is below 0.50, absolute paired movement from the frozen live baseline is at most 0.10, and added faults are zero.",
+    "reliability": "The policy panel has zero stalls and errors and no candidate-added fault against the matched live baseline.",
+    "duration": "The upper 95% bound of paired candidate-minus-live mean combat turns per fight is at most 0.25 turns.",
+    "vow5": "The Duskblade Vow-5 policy-panel win rate is at most 0.90.",
+    "admission": "Every gate passes on the frozen first-look cohort; no endpoint absent from a comparable rectangle supports admission."
+  },
+  "interferenceExpansionRule": {
+    "mediatorDecisionValue": "Trigger when a Scoreline or Afterimage interaction interval excludes zero and its absolute point estimate is at least 0.25 pooled standard deviations.",
+    "winDecisionValue": "Trigger when a policy-win or any RandomBuild-grid interaction interval excludes zero and its absolute point estimate is at least 0.10.",
+    "reliabilityDecisionValue": "Trigger on any joint-high added stall or error.",
+    "action": "If any trigger fires, simulate all 12 optional expansion cells on the complete frozen cohorts. Do not choose a tier, cell or cohort from observed promise. If none fires, expansion rows are exactly zero."
+  },
+  "selectionRule": {
+    "maximumCandidates": 1,
+    "order": [
+      "scorelinePayoff low before high",
+      "afterimagePayoff low before high",
+      "acquisitionPriority 2 before 4",
+      "Faultline uncommon before rare",
+      "Ward setup 0 before 1 before 2",
+      "cell id ascending as the final exact tie-break"
+    ],
+    "rule": "After the expansion decision, intersect all candidate gates and freeze only the first feasible cell in this order for a new independent held-out confirmation protocol. Outcome magnitude never breaks a tie."
+  },
+  "budget": {
+    "initialUniqueCells": 20,
+    "optionalExpansionCells": 12,
+    "candidateRowsPerCell": 512,
+    "liveBaselineRows": 512,
+    "initialObservationRows": 10752,
+    "optionalExpansionObservationRows": 6144,
+    "maximumNewSimulatorObservationRows": 16896,
+    "firstLookPolicies": 64,
+    "firstLookRandomBuildSeedsPerGrid": 64,
+    "policySeedsPerPolicy": 4,
+    "bootstrapResamples": 5000,
+    "maximumWallTimeSeconds": 3600,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "successRule": "Exactly one or more cells pass every candidate gate after the preregistered expansion decision. Freeze at most the lexicographically first feasible cell for independent held-out confirmation; do not spend holdout or protected seeds under this protocol.",
+  "futilityRule": "If no cell is feasible, no interference expansion trigger fires or the complete triggered expansion is finished, and every near-feasible cell has at least one gate whose 95% interval cannot cross its practical threshold, close this tested scalar family and continue with the next evidence-backed structural mechanism inside issue #421.",
+  "inconclusiveRule": "At the 16896-row or 3600-second cap, record inconclusive if any otherwise near-feasible cell still has only interval uncertainty capable of changing its gate, or if an immutable-input mismatch, incomplete CRN rectangle, unavailable engine, cache corruption or harness fault prevents the registered estimands. Do not rerun, add seeds or tune levels under this protocol.",
+  "methodBoundary": {
+    "ml": "Not authorised by this protocol. A later method requires this experiment to identify a remaining policy-repertoire bottleneck and a separate measured decision-value justification.",
+    "rl": "Not authorised by this protocol. No policy optimiser may replace the fixed identities or change cell cohorts.",
+    "adaptiveTuning": "V39-style candidate-by-candidate value tuning, promising-cell extensions and Cartesian completion are forbidden."
+  },
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "decision": "knobs-identity-safe",
+  "identityCases": {
+    "null-ash-sampled": {
+      "outcome": "loss",
+      "policySha256": "c15e9b566f6037c4aeee8e7f6acd114a62e2b16ecf5c2b075271a12424800b61",
+      "rng": 247618783,
+      "rowSha256": "39ce858b41f0e2f682b45a3f220f5e56641132af654223f665dfb712e0a2780a",
+      "trajectorySha256": "4f527a078f61d5a22871869eb19781e6ecab0477229377c6d3807fa57e2b423d"
+    },
+    "null-dusk-sampled": {
+      "outcome": "loss",
+      "policySha256": "27f30a481080978d188ec34c8e41295bef8c513bc22665c9e314fbfe5ea07f0d",
+      "rng": -1809406619,
+      "rowSha256": "a18bbe70665fadc7db3266404c727c8915f5a3d30abde58047d792d7b6b4eba1",
+      "trajectorySha256": "f2e016301391a5598bd347567c44eb4b8d88b2854b03cfe2bbd551aa01725c9d"
+    }
+  },
+  "invalidPlanSha256": "83939f38f92b2c208399027e523cb19272b4779bc7117c6c749f25f66c8655db",
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 447063,
+    "protectedSeedRows": 0,
+    "records": 447063,
+    "sha256": "5dafd3dbee1ce90ee12a5cd8ed9fd2a29559775b8dd5cbc3051251e18a040833",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 447063,
+    "protectedSeedRows": 0,
+    "records": 447063,
+    "sha256": "5dafd3dbee1ce90ee12a5cd8ed9fd2a29559775b8dd5cbc3051251e18a040833",
+    "sqliteIntegrity": "ok"
+  },
+  "mediatorIsolation": {
+    "acquisitionPriority": {
+      "combatScoresChoicePolicyAndRngUnchanged": true,
+      "highBonus": 28,
+      "lowBonus": 14
+    },
+    "wardSetupPriority": {
+      "completionBonusesPolicyAndRngUnchanged": true,
+      "defendScoreDelta": 14.0,
+      "highChoice": "guardedStrike",
+      "highDefendScore": 17.2394304372935,
+      "lowChoice": "guardedStrike",
+      "lowDefendScore": 3.2394304372935,
+      "otherCardScoresUnchanged": true
+    }
+  },
+  "newLedgerObservationRows": 0,
+  "nullSurfaceSha256": "3322552847601808c8280a99e9b828c185e0b9f0fdc0f7b10c53b9ef05b005fd",
+  "outputSha256": "f4ef07a244bf92ecf793285f05f9001aa7d6a39240ce9c77b6b33cccd274e5c2",
+  "planSha256": "e2b3987cfa2004bfc065c27b3a9266c674e6aa769683a930f702f66827c9d153",
+  "protocolSha256": "3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff",
+  "runnerSha256": "e1b4983f6d2d0b8a5608dc099430c32e54ddd689a7797415a3f17f7f7127f7c8",
+  "schemaVersion": 1,
+  "unknownKeyFailedClosed": true,
+  "wallTimeSeconds": 1.2655433749896474
+}
