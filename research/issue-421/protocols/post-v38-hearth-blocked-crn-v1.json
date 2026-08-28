@@ -1,0 +1,292 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-hearth-blocked-crn",
+  "question": "On the frozen Duskblade Vow-5 policy and seed rectangle, does current-main Crown of the Hearth healing have a positive policy-sensitive whole-run effect when the identity-safe acquisition-priority lever exposes it, while preserving a distinct repertoire from the separately fixed Scoreline and Afterimage routes?",
+  "design": {
+    "type": "mechanism-blocked 2 by 2 common-random-number design",
+    "cellsAnalysed": 4,
+    "newCells": 3,
+    "sharedAnchor": "H1Q0 is the exact cached current-main payoff, priority-off and capture-on cell from the payoff identity preflight.",
+    "firstLook": "One complete look after all three new 256-row cells. There is no interim fit, sequential extension, candidate generation, cohort replacement, threshold change or rerun.",
+    "sameIdentity": "Every causal contrast uses the same 64 Policy.sample_range(551, policyIndex, 1) identities, four simulation seed identities, Duskblade Vow 5 baseline content, capture-on estimator and stopping rule.",
+    "noCartesianCompletion": "Scoreline payoff, Afterimage payoff, Faultline rarity and Ward setup priority are not varied. No joint cell is spent merely to complete a Cartesian product."
+  },
+  "factorDefinitions": {
+    "hearthPayoff": {
+      "id": "H",
+      "type": "binary causal factor",
+      "levels": {
+        "H1": "Current-main Crown of the Hearth post-combat input of three HP per terminal Ember, passed through the existing shared heal law and clamp.",
+        "H0": "Exactly zero HP per terminal Ember at the same Crown branch; acquisition, Crown proc, terminal Ember, queue, content and all other authored effects remain unchanged."
+      }
+    },
+    "acquisitionPriority": {
+      "id": "Q",
+      "type": "binary exposure factor",
+      "levels": {
+        "Q0": "Current-main relic selection. No offer, legality, RNG draw or policy score changes.",
+        "Q1": "If and only if crownOfTheHearth is already in the unchanged legal boss-relic offer, select it after the original policy or RandomBuild choice and RNG consumption."
+      }
+    },
+    "scorelinePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate causal factor fixed throughout; neither its payoff nor Faultline rarity is varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate causal factor fixed throughout; neither its payoff nor Ward setup priority is varied or estimated."
+    }
+  },
+  "aliasStructure": {
+    "H1": "The reused H1Q0 cell omits payoffLevel and therefore executes the frozen current-main scalar three. The H1Q1 plan uses the same omitted encoding. The exact identity preflight separately proved explicit three equals omitted on all 18 controls and all 256 whole-run rows.",
+    "H0": "The H0 cells use the sole registered zero encoding.",
+    "Q0": "The reused H1Q0 plan omits priority; H0Q0 uses explicit false. The priority identity preflight proved omitted equals false on all 15 controls and both complete 256-row null arms, including path, RNG cursor, policy and result.",
+    "Q1": "The Q1 cells use the sole registered true encoding already proven to change only an already-legal Crown choice in the direct mediator controls.",
+    "model": "Intercept, H, Q and H by Q are full rank in the 2 by 2 matrix. Scoreline payoff, Afterimage payoff, Faultline rarity and Ward setup priority are fixed and therefore intentionally not estimable; no payoff interaction is aliased to a claimed effect."
+  },
+  "designMatrix": {
+    "H1Q0": {
+      "hearthPayoff": "current-main-three",
+      "acquisitionPriority": "off",
+      "probePayoffLevel": "omitted",
+      "priority": false,
+      "execution": "reuse-exact-anchor"
+    },
+    "H0Q0": {
+      "hearthPayoff": "disabled-zero",
+      "acquisitionPriority": "off",
+      "probePayoffLevel": "zero",
+      "priority": false,
+      "execution": "one-new-complete-cell"
+    },
+    "H1Q1": {
+      "hearthPayoff": "current-main-three",
+      "acquisitionPriority": "on",
+      "probePayoffLevel": "omitted",
+      "priority": true,
+      "execution": "one-new-complete-cell"
+    },
+    "H0Q1": {
+      "hearthPayoff": "disabled-zero",
+      "acquisitionPriority": "on",
+      "probePayoffLevel": "zero",
+      "priority": true,
+      "execution": "one-new-complete-cell"
+    }
+  },
+  "newCells": [
+    "H0Q0",
+    "H1Q1",
+    "H0Q1"
+  ],
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "policyIdentities": "0-63 in ascending order",
+    "simulationSeeds": [
+      346596,
+      346597,
+      346598,
+      346599
+    ],
+    "minimumRowsPerRobustPolicy": 2,
+    "aspect": "duskblade",
+    "vow": 5,
+    "rowsPerCell": 256,
+    "baseline": "Exact current-main content a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1 at source c4130163c7fb8edd865c0adc95732aae03e1bad2."
+  },
+  "sharedAnchorCell": {
+    "cell": "H1Q0",
+    "planSha256": "8aa5573748852882ced9c3b564ba9547d26e96fead587998532f14b526b18228",
+    "outputSha256": "3803f91378e36c118075db252a39e22e085a261809266c5129aacbb7cb4e5975",
+    "probeSha256": "8b4bdda8475ec2487aeb708ea3645f8cc27c0d886d6ba3b9755ad264b5078f9f",
+    "rows": 256,
+    "status": "Shared by all Hearth contrasts and both separate cross-package interference checks; it is read, never rerun."
+  },
+  "sharedRouteAnchors": {
+    "scoreline": [
+      0,
+      7,
+      9,
+      10,
+      13,
+      14,
+      15,
+      17,
+      22,
+      23,
+      28,
+      31,
+      39,
+      41,
+      52,
+      56,
+      62,
+      63
+    ],
+    "afterimage": [
+      0,
+      5,
+      11,
+      12,
+      14,
+      18,
+      24,
+      25,
+      27,
+      30,
+      33,
+      35,
+      41,
+      43,
+      44,
+      55,
+      62
+    ]
+  },
+  "anchorDefinitions": {
+    "scoreline": "A policy is robust when Chisel is played before a later Executioner in one fight in at least two of its four H1Q0 rows. The exact 18-policy list is frozen; no Scoreline payoff is inferred.",
+    "afterimage": "A policy is robust when Defend and Guarded Strike are simultaneously held in at least two of its four H1Q0 rows. The exact 17-policy list is frozen; no Afterimage payoff is inferred.",
+    "priorityOnCheck": "Recompute each route set under H1Q1, then compare Hearth activation separately with the frozen H1Q0 and observed H1Q1 Scoreline sets, and separately with the frozen H1Q0 and observed H1Q1 Afterimage sets.",
+    "decisionValue": "Cross-package interference has measured decision value exactly when either route's functional-separation pass/fail changes between its H1Q0 anchor and H1Q1 observation. Because distinctness is an acceptance invariant, such a change closes this scalar family; it does not authorise rescue cells. When no decision changes, additional joint cells have zero measured decision value and are forbidden."
+  },
+  "mechanisticInteractions": {
+    "H_by_Q": "Q changes legal Crown acquisition only; H can act only after Crown is owned, a fight is won and terminal Ember is positive. The difference-in-differences is therefore the preregistered exposure-by-payoff interaction.",
+    "emberHeart": "Emberheart heals before Crown and can reduce Crown headroom. It remains fixed authored Dusk context.",
+    "sunBlossom": "Sun Blossom multiplies the Crown heal input by 1.5 inside the shared heal law. It remains naturally acquired and fixed.",
+    "gravebloom": "Gravebloom evaluates after Crown. A disabled Crown payoff can cause a downstream threshold crossing; this is a mediated consequence of H, not a second factor.",
+    "maximumHp": "The shared maximum-HP clamp can cap realised healing; it remains fixed.",
+    "emberSupplyAndSpend": "Crown of Cinders, Kindle sources and automatic Art spend affect terminal Ember upstream and remain natural fixed context.",
+    "scorelineAndAfterimage": "Their payoffs are separate and fixed. Only route-set interference is checked; no Scoreline, Afterimage, Faultline-rarity, Ward-priority or joint-payoff causal claim is available."
+  },
+  "contrasts": {
+    "payoffAtPriorityOff": {
+      "H1Q0": 1,
+      "H0Q0": -1
+    },
+    "payoffAtPriorityOn": {
+      "H1Q1": 1,
+      "H0Q1": -1
+    },
+    "priorityAtCurrentPayoff": {
+      "H1Q1": 1,
+      "H1Q0": -1
+    },
+    "priorityAtDisabledPayoff": {
+      "H0Q1": 1,
+      "H0Q0": -1
+    },
+    "payoffByPriorityInteraction": {
+      "H1Q1": 1,
+      "H0Q1": -1,
+      "H1Q0": -1,
+      "H0Q0": 1
+    }
+  },
+  "estimands": {
+    "quality": "Per row: win indicator plus terminal HP divided by terminal maximum HP. Per policy: arithmetic mean of the four same-seed CRN differences.",
+    "activation": "Per row Crown proc-fight count from the identity-proved four-field harvest trace; primary activation effect is Q1 minus Q0 at H1.",
+    "mediators": "Owned-fight count and terminal Ember sum over Crown-proc fights, estimated on the same policy clusters.",
+    "secondary": "Paired win, HP fraction and mean turns per completed fight on the same rows.",
+    "interaction": "The H by Q difference-in-differences for every endpoint; quality is the preregistered interaction gate.",
+    "policySensitivity": "Exact policy counts with positive, zero and negative payoffAtPriorityOn quality means.",
+    "repertoire": "Exact robust-active, exact-inactive and viable H1Q1 policy sets plus separate Scoreline and Afterimage separation/interference results.",
+    "reliability": "Exact stall or error count across all four analysed cells and H1Q1 Vow-5 win rate.",
+    "notEstimated": "No protected-seed, RandomBuild, Ashwarden, detector, held-out, product, Scoreline-payoff, Afterimage-payoff, Faultline-rarity or Ward-setup effect is estimated."
+  },
+  "estimators": {
+    "point": "Unweighted arithmetic mean of 64 within-policy four-seed CRN means.",
+    "interval": "Deterministic percentile bootstrap over the 64 frozen policy-cluster values with 5000 resamples.",
+    "bootstrapResamples": 5000,
+    "bootstrapSeed": 421641,
+    "confidence": 0.95,
+    "stopping": "One fixed complete-rectangle first look; no sequential peeking, extension, promising-cell cohort change or unsupported endpoint claim."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumPositivePayoffPolicies": 8,
+    "minimumZeroPayoffPolicies": 16,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumDurationIncreaseTurnsPerFight": 0.25,
+    "maximumVow5WinRate": 0.9,
+    "maximumFaultRows": 0,
+    "effect": "The lower 95% policy-cluster bound must exceed zero for payoffAtPriorityOn quality, priorityAtCurrentPayoff proc fights and H by Q quality.",
+    "interference": "Hearth activation must pass the unchanged two-sided separation thresholds against both H1Q0 and H1Q1 route sets, separately for Scoreline and Afterimage, without a pass/fail decision change.",
+    "provenance": "The 16 active/inactive, eight viable/positive/candidate-only/anchor-only, 0.55 Jaccard, 0.25-turn and 0.90 Vow-5 thresholds reuse the frozen 64-policy package-support scale. Sixteen zero-payoff witnesses is the same preregistered inactive-support minimum applied to the causal response."
+  },
+  "budget": {
+    "cachedAnchorObservationRowsRead": 256,
+    "newCellObservationRows": 256,
+    "newCells": 3,
+    "maximumNewSimulatorObservationRows": 768,
+    "maximumGodotProcesses": 3,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 300,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "additionalJointCells": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns the three plans, exact cache writes, simulator invocation count, matched fitting, interference checks and stop/go. Exact Godot 4.7.1 owns whole-run execution.",
+    "successStop": "At 768 new rows, stop at boundary 1 only when every identity, support, payoff, interaction, activation, separation, interference, duration, reliability and Vow-5 gate passes.",
+    "futilityStop": "At 768 new rows, stop at boundary 2 when a fixed count, separation, interference, reliability or Vow-5 gate fails; an effect upper bound is non-positive; or the duration lower bound exceeds 0.25.",
+    "inconclusiveStop": "At the frozen cap, stop at boundary 3 for an execution, source, cache, row, schema, engine, ledger or wall-time failure, or when no fixed failure exists but an effect or duration interval straddles its boundary.",
+    "noRerun": "No repair, repeat, reserve seed, protected seed, additional joint cell, model, optimiser, ML or RL path is authorised by this protocol."
+  },
+  "decisionRules": {
+    "success": "All preregistered gates pass at the one complete first look.",
+    "successAuthority": "Apply decision boundary 1 and freeze at most the exact current-main Crown of the Hearth package, with the research-only acquisition-priority exposure lever, for one independently preregistered held-out confirmation on fresh policy and research-seed identities. Held-out must add RandomBuild separation, reachability, duration, reliability and independent package evidence before any promotion. Do not tune the payoff, priority, cohort or detector and do not use protected seeds.",
+    "futility": "Any fixed failure rule is met at the complete first look.",
+    "futilityAuthority": "Apply decision boundary 2, close this Hearth scalar family and continue with the next source- and evidence-backed structural Duskblade mechanism inside issue #421. Do not tune Crown, its payoff, offers or priority; add joint rescue cells; return to V39 adaptation; add ML, RL or an optimiser; or spend protected seeds.",
+    "inconclusive": "Execution cannot produce a decision, or an otherwise admissible effect or duration interval straddles its boundary at the cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the result inconclusive at the preregistered cap. Do not rerun, extend, replace cohorts, add a joint cell or method, or spend protected seeds."
+  },
+  "factorDisposition": {
+    "candidate": "No product candidate is constructed or promoted. Boundary 1 freezes at most the existing Hearth package for one independent held-out confirmation.",
+    "scorelineAfterimage": "Payoffs remain separate fixed factors. Interference is assessed in distinct route strata, never pooled or described as the old four-factor design.",
+    "additionalMethod": "No ML, RL, optimiser, fitted policy mapping or new content primitive is used or authorised.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "frozenEvidence": {
+    "summaries/post-v38-hearth-capacity-v1.json": "71b47f449e0a396ae428874ee11624b77bb609d07df1f14cc35e6536200cb8eb",
+    "summaries/post-v38-hearth-priority-identity-v1.json": "33e209bfa1917687a409a3ab1a738790a547e8dbce54b725d1c82f06e8beef3e",
+    "summaries/post-v38-hearth-payoff-identity-v1.json": "8f723d8aff95505a53786ee757f60faecc8afa7819f4a8febd8dbdb6a4ab9b7d",
+    "artifacts/post-v38-hearth-payoff-identity-source-v1.tar.gz": "b8880f13a71e0acbca961290e9d8c9e976e454fd7b2f4695d8e52a2ec1326718",
+    "task-capsule.json": "71d5ce98632c008b07bfe4a533dc03b49da4816554b5d9f0efc42b3b92494c93"
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "07da60a0e31f32ee889da18b591b43d4ab1c25cb9c49591de00df845bc8ecbaa",
+    "balanceSimSha256": "8b0eaf88b2245760f15c1a427c3f5cf8b72eceddfe9f6254fb8cdf40c0eadde0",
+    "pilotSha256": "7d190cfc923b7a2441bb8621c9dca6c32a72d1efb0c04e4bed3a522727373f3c",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "59641b166ef35168da3c1a92b522c7f6b60a87cfe27c4eea3eb37819cda27f37",
+    "probeUidSha256": "3c9bd3acce1ebcdcd947b3552bead03e3839680dd71cc47500fde9a3ffd43abe",
+    "researchCoreSha256": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+    "identityHelperSha256": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+    "payoffIdentityHelperSha256": "5ca96c96afbf2b6791b9151e88bece03cfb17ce96762e3ebb97f5659add05b36",
+    "structuralHelperSha256": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+    "cohandHelperSha256": "371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c",
+    "runnerSha256": "c85423b6529506883e44684a91f96c6da4492263ae334c19cad829d10a87d6be"
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  }
+}

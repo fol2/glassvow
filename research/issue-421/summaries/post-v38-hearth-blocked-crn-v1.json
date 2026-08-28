@@ -1,0 +1,109 @@
+{
+  "additionalJointCells": 0,
+  "analysis": {},
+  "authority": "Apply decision boundary 3 and record the result inconclusive at the preregistered cap. Do not rerun, extend, replace cohorts, add a joint cell or method, or spend protected seeds.",
+  "decision": "record-hearth-blocked-crn-inconclusive-at-cap",
+  "decisionBoundary": 3,
+  "designMatrix": {
+    "H0Q0": {
+      "acquisitionPriority": "off",
+      "execution": "one-new-complete-cell",
+      "hearthPayoff": "disabled-zero",
+      "priority": false,
+      "probePayoffLevel": "zero"
+    },
+    "H0Q1": {
+      "acquisitionPriority": "on",
+      "execution": "one-new-complete-cell",
+      "hearthPayoff": "disabled-zero",
+      "priority": true,
+      "probePayoffLevel": "zero"
+    },
+    "H1Q0": {
+      "acquisitionPriority": "off",
+      "execution": "reuse-exact-anchor",
+      "hearthPayoff": "current-main-three",
+      "priority": false,
+      "probePayoffLevel": "omitted"
+    },
+    "H1Q1": {
+      "acquisitionPriority": "on",
+      "execution": "one-new-complete-cell",
+      "hearthPayoff": "current-main-three",
+      "priority": true,
+      "probePayoffLevel": "omitted"
+    }
+  },
+  "execution": {
+    "cells": {
+      "H0Q0": {
+        "outputSha256": "649a6b70331a31ea42be3968203289123b2b84aa013aefdfbf8e3ff537742b63",
+        "planSha256": "a3254db75b9c321adb6e43f35bd9b7f3ee334cf37b0cb486e054b6b9824e7ae4",
+        "reused": false,
+        "rows": 256
+      },
+      "H0Q1": {
+        "outputSha256": "f7a96cd84be7ece3b1b5246eb1b7c443ad80ca917823a6c8e824d823856a3460",
+        "planSha256": "3a314554a70bb4bdcc281884a14c1beca6d080ffc4e17a0218874e7c3c052c61",
+        "reused": false,
+        "rows": 256
+      },
+      "H1Q0": {
+        "outputSha256": "3803f91378e36c118075db252a39e22e085a261809266c5129aacbb7cb4e5975",
+        "planSha256": "8aa5573748852882ced9c3b564ba9547d26e96fead587998532f14b526b18228",
+        "reused": true,
+        "rows": 256
+      },
+      "H1Q1": {
+        "outputSha256": "1283f18b6e4b7170fc0987b791b7c8abb8d1ebf85a1836ad805377db3806f448",
+        "planSha256": "552bd8915584f394cc1447ef89bddf67a7aca5e302289d5d8645a38d0f14ea38",
+        "reused": false,
+        "rows": 256
+      }
+    },
+    "executionError": "Hearth blocked CRN mismatch: H1Q1 trace schema",
+    "maximumModelContextTokens": 0,
+    "newLedgerRows": 0,
+    "newSimulatorObservationRows": 768,
+    "protectedSeedRows": 0,
+    "wallTimeSeconds": 26.888460832997225
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "outcomeClass": "inconclusive",
+  "protocolSha256": "cb9d158f40efae0ff9b390e67222c8c1a3c8085efffabf52e2eafe11e31ca876",
+  "schemaVersion": 1,
+  "sourceIdentity": {
+    "balanceSimSha256": "8b0eaf88b2245760f15c1a427c3f5cf8b72eceddfe9f6254fb8cdf40c0eadde0",
+    "cohandHelperSha256": "371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c",
+    "combatRulesSha256": "07da60a0e31f32ee889da18b591b43d4ab1c25cb9c49591de00df845bc8ecbaa",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "identityHelperSha256": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+    "payoffIdentityHelperSha256": "5ca96c96afbf2b6791b9151e88bece03cfb17ce96762e3ebb97f5659add05b36",
+    "pilotSha256": "7d190cfc923b7a2441bb8621c9dca6c32a72d1efb0c04e4bed3a522727373f3c",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "59641b166ef35168da3c1a92b522c7f6b60a87cfe27c4eea3eb37819cda27f37",
+    "probeUidSha256": "3c9bd3acce1ebcdcd947b3552bead03e3839680dd71cc47500fde9a3ffd43abe",
+    "researchCoreSha256": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+    "runnerSha256": "c85423b6529506883e44684a91f96c6da4492263ae334c19cad829d10a87d6be",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "structuralHelperSha256": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040"
+  }
+}

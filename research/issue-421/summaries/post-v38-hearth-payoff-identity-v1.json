@@ -1,0 +1,98 @@
+{
+  "authority": "Apply decision boundary 1 and freeze only the exact Hearth payoff scalar and four-field harvest telemetry as identity-safe for a separately preregistered mechanism-blocked CRN design. Before any causal row, freeze Hearth payoff by acquisition-priority cells, the shared policy/seed cohort, estimands, interference anchors, numeric caps and success/futility/inconclusive rules. Do not jointly vary Scoreline or Afterimage by default and do not add ML, RL, an optimiser or protected seeds.",
+  "cacheObjects": {
+    "omittedCaptureOffOutputSha256": "b11b371c9d9dca6316822eb3f0570eb7abb6d6715f88dfbc243b9361c1b0ab7a",
+    "omittedCaptureOffPlanSha256": "d1e267ddc98b22b3bdce5afa133300262143a7e6e900db88f3416a5f4049997e",
+    "omittedCaptureOnOutputSha256": "3803f91378e36c118075db252a39e22e085a261809266c5129aacbb7cb4e5975",
+    "omittedCaptureOnPlanSha256": "8aa5573748852882ced9c3b564ba9547d26e96fead587998532f14b526b18228",
+    "omittedControlsOutputSha256": "0b925a0fb9c72789aa1b097cec635ceda89c26e30398d7bbedd0575b9e04808b",
+    "omittedControlsPlanSha256": "2d77b13d0b82900d98319f732568354d262f48245dd2157fb67357d68ed51fd5",
+    "threeCaptureOnOutputSha256": "92543afe2a65073c70d1aae69f6a997839dc45745f22ee12a2ec0b965d741f4e",
+    "threeCaptureOnPlanSha256": "f5d6f6f9aaf916f9fc305ae43195de67b3ab431b9415fbacb71a58a82571ccd6",
+    "threeControlsOutputSha256": "05992b8022ff87da7ac76fa8739f6c84859b2282288ab6092fd2625dadad8b6d",
+    "threeControlsPlanSha256": "bdce5e6da15d3a10c6fdae314b1abec6afc43dfa90e276d3f28f11a7277234cf",
+    "zeroControlsOutputSha256": "c11e608d3e11e522976da8f9bea4b47bf137deee98e272017976411d4353f611",
+    "zeroControlsPlanSha256": "36de365c8a568f3b09157743adb7440212cac1ee2dd89783cf28b5f628c2722d"
+  },
+  "controlFaults": [],
+  "controlledSurfaceExecutions": 18,
+  "controls": {
+    "crownProcMismatchControls": 0,
+    "currentExpectedHpMismatchControls": 0,
+    "disabledExpectedHpMismatchControls": 0,
+    "disabledNonMediatorMismatchControls": 0,
+    "omittedThreeMismatchControls": 0
+  },
+  "decision": "freeze-hearth-payoff-and-harvest-telemetry-for-blocked-crn-design",
+  "decisionBoundary": 1,
+  "disabledWholeRunRows": 0,
+  "executionError": "",
+  "factorDisposition": {
+    "additionalMethod": "No ML, RL, optimiser, fitted model or new policy mapping is used or authorised.",
+    "candidate": "None is constructed, simulated or promoted.",
+    "causalRows": "Disabled zero receives zero whole-run rows; every whole-run observation is identity-only.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "godotVersion": "4.7.1.stable.official.a13da4feb",
+  "identity": {
+    "captureOffAnchorCoreMismatchRows": 0,
+    "captureOffOnCoreMismatchRows": 0,
+    "captureOnWithoutHearthAnchorMismatchRows": 0,
+    "explicitThreeOmittedMismatchRows": 0,
+    "policyMismatchRows": 0,
+    "priorTrajectoryMismatchRows": 0,
+    "rngMismatchRows": 0
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "mechanisticInteractions": {
+    "crossPackage": "Scoreline and Afterimage remain separate. Shared anchors may later measure interference; no joint cell is authorised here.",
+    "emberHeart": "Emberheart heals before Crown and can reduce Crown headroom. It remains fixed authored Dusk context.",
+    "emberSupplyAndSpend": "Crown of Cinders, Kindle sources and automatic Art spend affect terminal Ember upstream. They remain natural fixed context and are not independently varied.",
+    "gravebloom": "Gravebloom evaluates after Crown. A disabled Crown payoff can cause a downstream Gravebloom threshold crossing; that is a preregistered consequence of the Crown-healing pathway, not a second knob or direct source edit.",
+    "maximumHp": "The shared clamp can cap realised healing. The direct matrix fixes a three-HP-headroom case and a full-HP null.",
+    "sunBlossom": "Sun Blossom multiplies the Crown heal input by 1.5 inside the shared heal law. The frozen direct control expects nine HP from two Embers.",
+    "targetLaterBlock": "Hearth payoff by Hearth acquisition priority is the only proposed causal block after identity; it is not executed here."
+  },
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 768,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "e084b8fb74db654d9bfc5d06c4b1d2c5f97fc040d94bf6345b988a3e9e12d8f3",
+  "runnerSha256": "5ca96c96afbf2b6791b9151e88bece03cfb17ce96762e3ebb97f5659add05b36",
+  "schemaVersion": 1,
+  "sourceIdentity": {
+    "balanceSimSha256": "8b0eaf88b2245760f15c1a427c3f5cf8b72eceddfe9f6254fb8cdf40c0eadde0",
+    "combatRulesSha256": "07da60a0e31f32ee889da18b591b43d4ab1c25cb9c49591de00df845bc8ecbaa",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "identityHelperSha256": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+    "pilotSha256": "7d190cfc923b7a2441bb8621c9dca6c32a72d1efb0c04e4bed3a522727373f3c",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "8b4bdda8475ec2487aeb708ea3645f8cc27c0d886d6ba3b9755ad264b5078f9f",
+    "probeUidSha256": "3c9bd3acce1ebcdcd947b3552bead03e3839680dd71cc47500fde9a3ffd43abe",
+    "researchCoreSha256": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+    "runnerSha256": "5ca96c96afbf2b6791b9151e88bece03cfb17ce96762e3ebb97f5659add05b36",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+  },
+  "traceSchemaFaults": [],
+  "wallTimeSeconds": 29.32256395800505,
+  "wholeRunIdentityRows": 768
+}

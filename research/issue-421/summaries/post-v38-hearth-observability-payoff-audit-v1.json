@@ -1,0 +1,457 @@
+{
+  "authority": "Apply decision boundary 1 and freeze only the four-field capture-gated Hearth harvest row and exact Crown-heal input scalar for the separately frozen 18-control plus 768-row identity preflight. Implement no other hook or field. Run no disabled whole-run, causal block, Scoreline or Afterimage cell, candidate, ML, RL, optimiser or protected seed before that identity decision.",
+  "cachedObservationRowsRead": 0,
+  "decision": "freeze-hearth-harvest-telemetry-and-payoff-disable-for-identity-preflight",
+  "decisionBoundary": 1,
+  "factorContract": {
+    "afterimagePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed causal factor; not varied, observed or estimated."
+    },
+    "aliasStructure": {
+      "payoffDisabled": "Integer zero is not a null alias; it is a future causal treatment authorised only after direct mediator isolation and null identity pass.",
+      "payoffNull": "Omitted and explicit integer three intentionally alias current main and must be exact.",
+      "priority": "False is the fixed current-main acquisition level already proved exact; priority is not varied in this preflight.",
+      "telemetry": "Capture-on may differ only by the `hearthFights` trace container; stripping that container must reproduce the frozen trace exactly."
+    },
+    "faultlineRarity": {
+      "levels": [
+        "current-uncommon"
+      ],
+      "status": "Fixed exact current main."
+    },
+    "hearthAcquisitionPriority": {
+      "levels": [
+        "false-current-main"
+      ],
+      "status": "Fixed at the already identity-safe current-main level throughout this audit and the payoff/telemetry identity preflight."
+    },
+    "hearthPayoffPerTerminalEmber": {
+      "levels": [
+        "omitted-current-main-3",
+        "explicit-current-main-3",
+        "disabled-0"
+      ],
+      "status": "Separate binary causal factor with two exact null encodings. Disabled receives focused controls only in the identity preflight."
+    },
+    "hearthTelemetry": {
+      "levels": [
+        "capture-off",
+        "capture-on-four-field-harvest-row"
+      ],
+      "status": "Observation-only identity factor; never a gameplay or payoff factor."
+    },
+    "scorelinePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed causal factor; not varied, observed or estimated."
+    },
+    "wardSetupPriority": {
+      "levels": [
+        "pristine-current-main"
+      ],
+      "status": "Fixed exact current main."
+    }
+  },
+  "identityPreflightDesign": {
+    "anchors": {
+      "comparison": "Omitted capture-off must match anchor core; omitted capture-on stripped only of `hearthFights` must match the complete anchor trace; capture-off and capture-on core rows must match; explicit three must match omitted capture-on exactly.",
+      "currentMainOutputSha256": "f9959d0262e2b3e85cc21262225202c3e6d9e2cb35347667cc2aac45719e977e",
+      "currentMainPlanSha256": "14b185746e6e78ad2c54a81a2347fa7bad300c550f712584279096032129c865",
+      "identitySafeBalanceSimSha256": "7f82177d3c71e3a0cc56f820f017cfab6ec99173caf326486209034d60dbb5fd",
+      "identitySafePriorityPilotSha256": "7d190cfc923b7a2441bb8621c9dca6c32a72d1efb0c04e4bed3a522727373f3c"
+    },
+    "budget": {
+      "controlledSurfaceExecutions": 18,
+      "disabledWholeRunRows": 0,
+      "maximumGodotProcesses": 6,
+      "maximumModelContextTokensDuringExecutionAndDecision": 0,
+      "maximumNewLedgerRows": 0,
+      "maximumNewSimulatorObservationRows": 768,
+      "maximumWallTimeSeconds": 300,
+      "protectedSeeds": 0,
+      "wholeRunIdentityRows": 768
+    },
+    "cohort": {
+      "aspect": "duskblade",
+      "policyIdentities": "0-63",
+      "policyRoot": 551,
+      "rowsPerWholeRunArm": 256,
+      "simulationSeeds": [
+        346596,
+        346597,
+        346598,
+        346599
+      ],
+      "vow": 5
+    },
+    "directControls": {
+      "estimand": "Exact omitted-versus-three state, queue and RNG mismatch count; exact disabled differences in only realised Crown HP change, with Crown proc, Ember, queue order and RNG fixed.",
+      "matrix": "Six fixed states by omitted current, explicit three and disabled zero = 18 executions.",
+      "states": [
+        "Crown with two Embers and unrestricted HP headroom",
+        "Crown with two Embers and three HP headroom",
+        "Crown plus Sun Blossom with two Embers and unrestricted headroom",
+        "no Crown with two Embers",
+        "Crown with zero Embers",
+        "Crown with two Embers at full HP"
+      ],
+      "stop": "Do not run a whole-run arm unless all 18 fixed controls match exactly."
+    },
+    "estimands": {
+      "disabledMediator": "Exact direct-control differences in Crown-attributable HP only, with acquisition, terminal Ember, activation event, queue order and RNG fixed.",
+      "notEstimated": "No disabled whole-run outcome, causal payoff effect, interaction, detector, candidate, support count, duration, ML, RL or product endpoint.",
+      "payoffNull": "Exact mismatch counts for omitted versus explicit three across full rows, ordered trajectory, RNG and policy.",
+      "telemetryIdentity": "Exact core-row mismatch count for capture-off versus capture-on and exact prior-trace mismatch count after stripping only `hearthFights`."
+    },
+    "stopping": {
+      "firstLook": "One 18-execution direct look, followed only on exact success by the three complete 256-row identity arms. No repair, rerun, cohort change, threshold change or disabled whole-run exists.",
+      "futility": "Any completed direct or whole-run identity comparison differs, any cohort is incomplete or ledger identity changes.",
+      "inconclusive": "Execution errors, times out or cannot produce an exact decision at the cap.",
+      "success": "All direct controls pass; all 768 identity rows complete; every prescribed null, core, trace, RNG and policy mismatch count is zero; ledger identity is exact; and execution finishes within 300 seconds."
+    },
+    "type": "staged direct-mediator, payoff-null and observation-only identity preflight; not a causal experiment or factorial",
+    "wholeRunMatrix": [
+      {
+        "id": "cached-current-main-anchor",
+        "outputSha256": "f9959d0262e2b3e85cc21262225202c3e6d9e2cb35347667cc2aac45719e977e",
+        "payoff": "omitted-current-main-3",
+        "priority": "false-current-main",
+        "rows": 0,
+        "telemetry": "prior capture schema"
+      },
+      {
+        "id": "omitted-capture-off",
+        "payoff": "omitted-current-main-3",
+        "priority": "false-current-main",
+        "rows": 256,
+        "telemetry": "capture-off"
+      },
+      {
+        "id": "omitted-capture-on",
+        "payoff": "omitted-current-main-3",
+        "priority": "false-current-main",
+        "rows": 256,
+        "telemetry": "capture-on-four-field-harvest-row"
+      },
+      {
+        "id": "explicit-three-capture-on",
+        "payoff": "explicit-current-main-3",
+        "priority": "false-current-main",
+        "rows": 256,
+        "telemetry": "capture-on-four-field-harvest-row"
+      }
+    ]
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "mechanisticInteractions": {
+    "crossPackage": "Scoreline and Afterimage remain separate. Shared anchors may later measure interference; no joint cell is authorised by this audit.",
+    "emberHeart": "Emberheart heals before Crown and can reduce Crown headroom. It is fixed authored Dusk context.",
+    "emberSupplyAndSpend": "Crown of Cinders, Kindle sources and automatic Art spend affect terminal Ember upstream. They remain natural fixed context and are not independently varied.",
+    "gravebloom": "Gravebloom evaluates after Crown. Disabling Crown can cause a downstream Gravebloom threshold crossing; this is a preregistered consequence of the Crown-healing pathway, not a second knob or direct source edit.",
+    "maximumHp": "The shared clamp can cap realised healing. A fixed direct control must cover limited headroom and a full-HP null.",
+    "sunBlossom": "Sun Blossom multiplies the Crown heal input by 1.5 inside the shared heal law. A fixed direct control must prove the expected multiplier without changing its ownership.",
+    "targetLaterBlock": "Hearth payoff by Hearth acquisition priority is the only mechanistically justified causal block after identity; it is not executed here."
+  },
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "observationAssessments": [
+    {
+      "eligible": true,
+      "gateResults": {
+        "activation": true,
+        "captureGated": true,
+        "crownOpportunity": true,
+        "identityAnchor": true,
+        "minimalFields": true,
+        "singleHarvestHook": true,
+        "terminalEmber": true,
+        "unclosed": true
+      },
+      "id": "capture-gated-hearth-harvest-row",
+      "surface": {
+        "activation": true,
+        "captureGated": true,
+        "crownOpportunity": true,
+        "fields": [
+          "fight",
+          "owned",
+          "terminalEmbers",
+          "proc"
+        ],
+        "hook": "BalanceSim._harvest_fight, after its existing complete queue scan and before rewards",
+        "hookCount": 1,
+        "id": "capture-gated-hearth-harvest-row",
+        "identityAnchorAvailable": true,
+        "mechanism": "The fixed harvest already has game.run.player.relics, game.cb.embers and every RELIC_PROC event. The fight index links to the existing result without duplicating it.",
+        "priorClosureAliases": [],
+        "terminalEmber": true
+      }
+    },
+    {
+      "eligible": false,
+      "gateResults": {
+        "activation": true,
+        "captureGated": true,
+        "crownOpportunity": false,
+        "identityAnchor": true,
+        "minimalFields": true,
+        "singleHarvestHook": true,
+        "terminalEmber": false,
+        "unclosed": true
+      },
+      "id": "crown-relic-proc-event-only",
+      "surface": {
+        "activation": true,
+        "captureGated": true,
+        "crownOpportunity": false,
+        "fields": [
+          "fight",
+          "event",
+          "id"
+        ],
+        "hook": "Existing RELIC_PROC branch",
+        "hookCount": 1,
+        "id": "crown-relic-proc-event-only",
+        "identityAnchorAvailable": true,
+        "mechanism": "Directly identifies successful activation but cannot distinguish no Crown from Crown with zero terminal Ember and does not retain the terminal reserve.",
+        "priorClosureAliases": [],
+        "terminalEmber": false
+      }
+    },
+    {
+      "eligible": false,
+      "gateResults": {
+        "activation": false,
+        "captureGated": true,
+        "crownOpportunity": false,
+        "identityAnchor": true,
+        "minimalFields": true,
+        "singleHarvestHook": true,
+        "terminalEmber": false,
+        "unclosed": true
+      },
+      "id": "last-ember-event-reconstruction",
+      "surface": {
+        "activation": false,
+        "captureGated": true,
+        "crownOpportunity": false,
+        "fields": [
+          "fight",
+          "event",
+          "total"
+        ],
+        "hook": "Existing EMBER events",
+        "hookCount": 1,
+        "id": "last-ember-event-reconstruction",
+        "identityAnchorAvailable": true,
+        "mechanism": "A fight can retain its start value without emitting a later EMBER event, so the last event is not a complete terminal-state observation.",
+        "priorClosureAliases": [],
+        "terminalEmber": false
+      }
+    },
+    {
+      "eligible": false,
+      "gateResults": {
+        "activation": true,
+        "captureGated": false,
+        "crownOpportunity": true,
+        "identityAnchor": true,
+        "minimalFields": true,
+        "singleHarvestHook": true,
+        "terminalEmber": true,
+        "unclosed": true
+      },
+      "id": "core-fight-result-extension",
+      "surface": {
+        "activation": true,
+        "captureGated": false,
+        "crownOpportunity": true,
+        "fields": [
+          "fight",
+          "owned",
+          "terminalEmbers",
+          "proc"
+        ],
+        "hook": "BalanceSim._fight return dictionary",
+        "hookCount": 1,
+        "id": "core-fight-result-extension",
+        "identityAnchorAvailable": true,
+        "mechanism": "Would widen every simulator result row outside the existing research capture gate and is therefore broader than the selected trace row.",
+        "priorClosureAliases": [],
+        "terminalEmber": true
+      }
+    }
+  ],
+  "outcomeClass": "success",
+  "payoffControlAssessments": [
+    {
+      "control": {
+        "changesOnlyCrownHealInput": true,
+        "contentFilesChanged": 0,
+        "directControlCapable": true,
+        "exactCurrentNull": true,
+        "id": "crown-heal-input-exact-scalar",
+        "levels": [
+          "omitted-current-main-3",
+          "explicit-current-main-3",
+          "disabled-0"
+        ],
+        "mechanism": "A research-only integer defaults to three, accepts only zero or three, and changes only the argument of the existing Crown heal call. The enclosing branch and following RELIC_PROC remain exact.",
+        "preservesAcquisition": true,
+        "preservesActivation": true,
+        "runtimeHook": "The existing `heal_player(run, null, cb.embers * 3)` integer multiplier only",
+        "runtimeHookCount": 1
+      },
+      "eligible": true,
+      "gateResults": {
+        "changesOnlyCrownHealInput": true,
+        "directControlCapable": true,
+        "exactCurrentNull": true,
+        "noContentMutation": true,
+        "preservesAcquisition": true,
+        "preservesActivation": true,
+        "singleRuntimeHook": true
+      },
+      "id": "crown-heal-input-exact-scalar"
+    },
+    {
+      "control": {
+        "changesOnlyCrownHealInput": false,
+        "contentFilesChanged": 0,
+        "directControlCapable": true,
+        "exactCurrentNull": true,
+        "id": "whole-crown-branch-disable",
+        "levels": [
+          "current",
+          "branch-skipped"
+        ],
+        "mechanism": "Skipping the branch also removes the Crown RELIC_PROC event, so it aliases activation with payoff.",
+        "preservesAcquisition": true,
+        "preservesActivation": false,
+        "runtimeHook": "The entire Crown conditional",
+        "runtimeHookCount": 1
+      },
+      "eligible": false,
+      "gateResults": {
+        "changesOnlyCrownHealInput": false,
+        "directControlCapable": true,
+        "exactCurrentNull": true,
+        "noContentMutation": true,
+        "preservesAcquisition": true,
+        "preservesActivation": false,
+        "singleRuntimeHook": true
+      },
+      "id": "whole-crown-branch-disable"
+    },
+    {
+      "control": {
+        "changesOnlyCrownHealInput": true,
+        "contentFilesChanged": 1,
+        "directControlCapable": true,
+        "exactCurrentNull": false,
+        "id": "new-content-heal-per-ember-field",
+        "levels": [
+          "omitted",
+          "3",
+          "0"
+        ],
+        "mechanism": "Adds an unnecessary content-construction alias and repeats the constructor-identity risk that already closed weak-mend.",
+        "preservesAcquisition": true,
+        "preservesActivation": true,
+        "runtimeHook": "New relic content field plus CombatRules lookup",
+        "runtimeHookCount": 2
+      },
+      "eligible": false,
+      "gateResults": {
+        "changesOnlyCrownHealInput": true,
+        "directControlCapable": true,
+        "exactCurrentNull": false,
+        "noContentMutation": false,
+        "preservesAcquisition": true,
+        "preservesActivation": true,
+        "singleRuntimeHook": false
+      },
+      "id": "new-content-heal-per-ember-field"
+    },
+    {
+      "control": {
+        "changesOnlyCrownHealInput": false,
+        "contentFilesChanged": 0,
+        "directControlCapable": false,
+        "exactCurrentNull": true,
+        "id": "remove-crown-acquisition",
+        "levels": [
+          "current",
+          "Crown unavailable"
+        ],
+        "mechanism": "Conflates payoff with the already separate acquisition-priority factor.",
+        "preservesAcquisition": false,
+        "preservesActivation": false,
+        "runtimeHook": "Boss offer or acquisition path",
+        "runtimeHookCount": 1
+      },
+      "eligible": false,
+      "gateResults": {
+        "changesOnlyCrownHealInput": false,
+        "directControlCapable": false,
+        "exactCurrentNull": true,
+        "noContentMutation": true,
+        "preservesAcquisition": false,
+        "preservesActivation": false,
+        "singleRuntimeHook": true
+      },
+      "id": "remove-crown-acquisition"
+    }
+  ],
+  "postCombatOrder": [
+    "quests.on_combat_win(run, cb)",
+    "run.player.hp = clampi(cb.player.hp, 1, run.player.max_hp)",
+    "if run.has_relic(\"emberHeart\"):",
+    "if run.has_relic(\"crownOfTheHearth\") and cb.embers > 0:",
+    "heal_player(run, null, cb.embers * 3)",
+    "_proc(cb, \"crownOfTheHearth\")",
+    "if run.has_relic(\"gravebloom\")",
+    "cb.queue.append({\"t\": EventTypes.VICTORY"
+  ],
+  "protectedSeedRows": 0,
+  "protocolSha256": "24c7b788a08cb61ac31cbbe4ceaa11f58090d0b40e68811e47f86acc941587c1",
+  "runnerSha256": "6f6d23b579b88d8b328769e24ee605c56c04cd6d3511b04c67e75a8bdea63e2c",
+  "schemaVersion": 1,
+  "selectedObservationSurface": "capture-gated-hearth-harvest-row",
+  "selectedPayoffControl": "crown-heal-input-exact-scalar",
+  "sourceIdentity": {
+    "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "currentMainSha256": {
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    },
+    "prototypeSha256": {
+      "tools/balance_pilot.gd": "7d190cfc923b7a2441bb8621c9dca6c32a72d1efb0c04e4bed3a522727373f3c",
+      "tools/balance_sim.gd": "7f82177d3c71e3a0cc56f820f017cfab6ec99173caf326486209034d60dbb5fd"
+    }
+  },
+  "wallTimeSeconds": 6.07644595799502
+}

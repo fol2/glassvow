@@ -1,0 +1,59 @@
+{
+  "authority": "Confirm the experiment's boundary-3 stop, publish the immutable protocol, runner, summary and raw cells on the archive-only review ref, and invoke issue #421's human-authority contract for an inconclusive relevant observation gate. Do not rerun, repair, reinterpret, fit, close the family, move to held-out, add a method or spend protected seeds without that decision.",
+  "cachedObservationRowsRead": 1024,
+  "decision": "confirm-hearth-crn-inconclusive-observation-contract-stop",
+  "decisionBoundary": 1,
+  "experimentProtocolSha256": "cb9d158f40efae0ff9b390e67222c8c1a3c8085efffabf52e2eafe11e31ca876",
+  "experimentSummarySha256": "cd11f2ea729cb4d02ded6911365337c269ee767c4a2ee943dac966599da5dddb",
+  "faultObservation": {
+    "branchPredicateFromFrozenRow": true,
+    "capturedProc": false,
+    "cell": "H1Q1",
+    "fightIndex": 19,
+    "fightResult": "win",
+    "owned": true,
+    "policyIndex": 34,
+    "rowIndex": 138,
+    "seed": 346598,
+    "terminalEmbers": 1
+  },
+  "faults": {
+    "H0Q0": [],
+    "H0Q1": [],
+    "H1Q0": [],
+    "H1Q1": [
+      "row-138:fight-19-proc"
+    ]
+  },
+  "interpretation": {
+    "causalDecision": "Unavailable. The frozen first look stopped before fitting, and no cached endpoint is promoted post hoc.",
+    "experimentDecision": "Boundary 3 is exact: one H1Q1 row violates the preregistered proc observation contract.",
+    "rerun": "Forbidden by the experiment protocol; no repair, reinterpretation or repeat was performed.",
+    "rootCauseBoundary": "The cached row localises a contradiction between branch-predicate fields and queue-derived proc telemetry, but lacks the per-fight queue and HP transition needed to distinguish branch execution from observation loss without a new experiment."
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "protectedSeedRows": 0,
+  "protocolSha256": "c948fe0bb48614ac5ae89d20484a4a46a8a2e8ff24200836db1c8eaaf777a4ca",
+  "runnerSha256": "556988088d632cf52f279d1db7fa9fae0afaadb99294d9f48dd6e417ae8ae830",
+  "schemaVersion": 1,
+  "wallTimeSeconds": 11.873595708981156
+}

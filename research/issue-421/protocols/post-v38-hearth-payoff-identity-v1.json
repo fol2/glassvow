@@ -1,0 +1,256 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-hearth-payoff-and-telemetry-identity",
+  "question": "Do the exact current-main Hearth payoff null aliases and four-field harvest telemetry preserve path, result, RNG and policy identity, while disabled payoff changes only the direct Crown healing input on fixed controls?",
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "hearthPayoffPerTerminalEmber": {
+      "levels": ["omitted-current-main-3", "explicit-current-main-3", "disabled-0"],
+      "implementation": "A research-only integer defaults to three and changes only the multiplier passed to the existing `heal_player(run, null, ...)` call. The enclosing Crown branch and following RELIC_PROC are unchanged.",
+      "status": "The sole gameplay factor under direct identity preflight. Disabled zero receives no whole-run row."
+    },
+    "hearthAcquisitionPriority": {
+      "levels": ["false-current-main"],
+      "status": "Fixed at the exact identity-safe false level in every control and whole-run arm."
+    },
+    "hearthTelemetry": {
+      "levels": ["capture-off", "capture-on-four-field-harvest-row"],
+      "implementation": "The existing capture-gated post-fight harvest appends fight, Crown ownership, terminal cb.embers and the observed Crown RELIC_PROC boolean.",
+      "status": "Observation-only factor; not a gameplay treatment."
+    },
+    "faultlineRarity": {
+      "levels": ["current-uncommon"],
+      "status": "Fixed exact current main."
+    },
+    "wardSetupPriority": {
+      "levels": ["pristine-current-main"],
+      "status": "Fixed exact current main."
+    }
+  },
+  "aliasStructure": {
+    "payoffNull": "Omitted and explicit integer three intentionally alias the current-main payoff and must match exactly.",
+    "payoffDisabled": "Integer zero is a future causal treatment, not a null alias. It is confined to fixed direct controls here.",
+    "telemetry": "Capture-on may differ only by the new `hearthFights` trace container. Removing that container must reproduce the complete frozen trace; removing the full trajectory must make capture-off and capture-on core rows exact.",
+    "priority": "False is the single fixed acquisition-priority level. Its omitted/false alias was already proved and is not re-estimated."
+  },
+  "design": {
+    "type": "staged direct-mediator, payoff-null and observation-only identity preflight; not a causal experiment or factorial",
+    "stageOne": "Execute six frozen direct states under omitted current, explicit three and disabled zero. Continue only if omitted equals three exactly and zero changes only the expected realised Crown HP delta while terminal Ember, acquisition state, Crown proc, queue order and RNG remain exact.",
+    "stageTwo": "Only after stage one passes, execute three complete 256-row whole-run identity arms on the same policy and seed rectangle. Disabled zero receives no whole-run.",
+    "sameCohort": "Every whole-run contrast uses the same 64 policy identities, four simulation seed identities, exact source, content, priority false, baseline, first look, estimator and stopping rule.",
+    "noAdaptiveRepair": "No cohort change, rerun, source repair, threshold change, promising-cell extension or post-hoc endpoint exists."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "policyIdentities": "0-63",
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "aspect": "duskblade",
+    "vow": 5,
+    "rowsPerArm": 256
+  },
+  "focusedControls": [
+    {
+      "id": "eligible",
+      "playerHp": 60,
+      "playerMaxHp": 100,
+      "embers": 2,
+      "relics": ["crownOfTheHearth"]
+    },
+    {
+      "id": "limited-headroom",
+      "playerHp": 97,
+      "playerMaxHp": 100,
+      "embers": 2,
+      "relics": ["crownOfTheHearth"]
+    },
+    {
+      "id": "sun-blossom",
+      "playerHp": 60,
+      "playerMaxHp": 100,
+      "embers": 2,
+      "relics": ["crownOfTheHearth", "sunBlossom"]
+    },
+    {
+      "id": "crown-absent",
+      "playerHp": 60,
+      "playerMaxHp": 100,
+      "embers": 2,
+      "relics": []
+    },
+    {
+      "id": "zero-embers",
+      "playerHp": 60,
+      "playerMaxHp": 100,
+      "embers": 0,
+      "relics": ["crownOfTheHearth"]
+    },
+    {
+      "id": "full-hp",
+      "playerHp": 100,
+      "playerMaxHp": 100,
+      "embers": 2,
+      "relics": ["crownOfTheHearth"]
+    }
+  ],
+  "designMatrix": [
+    {
+      "id": "direct-omitted",
+      "payoff": "omitted-current-main-3",
+      "telemetry": "not-applicable",
+      "priority": "false-current-main",
+      "executions": 6
+    },
+    {
+      "id": "direct-explicit-three",
+      "payoff": "explicit-current-main-3",
+      "telemetry": "not-applicable",
+      "priority": "false-current-main",
+      "executions": 6
+    },
+    {
+      "id": "direct-disabled-zero",
+      "payoff": "disabled-0",
+      "telemetry": "not-applicable",
+      "priority": "false-current-main",
+      "executions": 6
+    },
+    {
+      "id": "cached-current-main-anchor",
+      "payoff": "omitted-current-main-3",
+      "telemetry": "prior capture schema",
+      "priority": "false-current-main",
+      "rows": 0,
+      "outputSha256": "f9959d0262e2b3e85cc21262225202c3e6d9e2cb35347667cc2aac45719e977e"
+    },
+    {
+      "id": "omitted-capture-off",
+      "payoff": "omitted-current-main-3",
+      "telemetry": "capture-off",
+      "priority": "false-current-main",
+      "rows": 256
+    },
+    {
+      "id": "omitted-capture-on",
+      "payoff": "omitted-current-main-3",
+      "telemetry": "capture-on-four-field-harvest-row",
+      "priority": "false-current-main",
+      "rows": 256
+    },
+    {
+      "id": "explicit-three-capture-on",
+      "payoff": "explicit-current-main-3",
+      "telemetry": "capture-on-four-field-harvest-row",
+      "priority": "false-current-main",
+      "rows": 256
+    }
+  ],
+  "anchors": {
+    "currentMainOutputSha256": "f9959d0262e2b3e85cc21262225202c3e6d9e2cb35347667cc2aac45719e977e",
+    "currentMainPlanSha256": "14b185746e6e78ad2c54a81a2347fa7bad300c550f712584279096032129c865",
+    "currentMainRows": 256,
+    "identitySafeBalanceSimSha256": "7f82177d3c71e3a0cc56f820f017cfab6ec99173caf326486209034d60dbb5fd",
+    "identitySafePriorityPilotSha256": "7d190cfc923b7a2441bb8621c9dca6c32a72d1efb0c04e4bed3a522727373f3c",
+    "comparison": "Capture-off core must match the anchor core. Capture-on with only `hearthFights` removed must match the full anchor. Capture-off and capture-on core must match. Explicit three capture-on must match omitted capture-on exactly."
+  },
+  "estimands": {
+    "focusedPayoffNull": "Exact omitted-versus-three mismatch count across all six direct states.",
+    "focusedDisabledMediator": "Exact zero-versus-three mismatch count after removing only runHpAfter and runHpDelta, plus exact expected HP-delta and Crown-proc mismatch counts.",
+    "wholePayoffNull": "Exact full-row, ordered-trajectory, RNG and policy mismatch counts for explicit three versus omitted capture-on.",
+    "telemetryIdentity": "Exact capture-off versus capture-on core mismatch count and exact current-main trace mismatch count after removing only `hearthFights`.",
+    "traceSchema": "Exact one-row-per-fight, four-field schema and equivalence of proc to owned AND terminalEmbers greater than zero AND win.",
+    "notEstimated": "No disabled whole-run outcome, causal payoff effect, interaction, detector, candidate, support count, duration, ML, RL or product endpoint."
+  },
+  "mechanisticInteractions": {
+    "targetLaterBlock": "Hearth payoff by Hearth acquisition priority is the only proposed causal block after identity; it is not executed here.",
+    "emberHeart": "Emberheart heals before Crown and can reduce Crown headroom. It remains fixed authored Dusk context.",
+    "sunBlossom": "Sun Blossom multiplies the Crown heal input by 1.5 inside the shared heal law. The frozen direct control expects nine HP from two Embers.",
+    "gravebloom": "Gravebloom evaluates after Crown. A disabled Crown payoff can cause a downstream Gravebloom threshold crossing; that is a preregistered consequence of the Crown-healing pathway, not a second knob or direct source edit.",
+    "maximumHp": "The shared clamp can cap realised healing. The direct matrix fixes a three-HP-headroom case and a full-HP null.",
+    "emberSupplyAndSpend": "Crown of Cinders, Kindle sources and automatic Art spend affect terminal Ember upstream. They remain natural fixed context and are not independently varied.",
+    "crossPackage": "Scoreline and Afterimage remain separate. Shared anchors may later measure interference; no joint cell is authorised here."
+  },
+  "sourceDiffBoundary": {
+    "combatRules": "One research-only integer default, one setter and replacement of the hard-coded Crown multiplier; no branch, event, content or shared heal-law change.",
+    "balanceSim": "One capture container, one local proc boolean and one four-field append inside the existing fixed harvest; no result-row or package-event change.",
+    "pilot": "Exact previously identity-proved Hearth priority implementation, fixed false throughout.",
+    "probe": "One isolated research probe owns factor setting, fixed controls and whole-run capture only."
+  },
+  "factorDisposition": {
+    "candidate": "None is constructed, simulated or promoted.",
+    "causalRows": "Disabled zero receives zero whole-run rows; every whole-run observation is identity-only.",
+    "additionalMethod": "No ML, RL, optimiser, fitted model or new policy mapping is used or authorised.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "budget": {
+    "maximumGodotProcesses": 6,
+    "controlledSurfaceExecutions": 18,
+    "wholeRunIdentityRows": 768,
+    "disabledWholeRunRows": 0,
+    "maximumNewSimulatorObservationRows": 768,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 300,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns plans, exact content-addressed caching, process count, comparisons, trace validation and stop/go; exact Godot 4.7.1 owns direct and whole-run execution.",
+    "firstLook": "One fixed 18-execution direct look, followed only on exact success by the three complete 256-row identity arms. No repair, rerun, disabled whole-run, cohort change or threshold change exists.",
+    "successStop": "Stop when all 18 controls match, all 768 identity rows are complete, every null/core/trace/RNG/policy mismatch count and schema-fault count is zero, ledger identity is exact and execution finishes within 300 seconds.",
+    "futilityStop": "Stop and close the Hearth payoff route when any completed control, null, core, trace or schema comparison differs, any cohort is incomplete or ledger identity changes.",
+    "inconclusiveStop": "Stop at the cap when execution errors, times out or cannot produce an exact decision."
+  },
+  "decisionRules": {
+    "success": "All fixed direct and whole-run identity gates pass exactly within the frozen budgets.",
+    "successAuthority": "Apply decision boundary 1 and freeze only the exact Hearth payoff scalar and four-field harvest telemetry as identity-safe for a separately preregistered mechanism-blocked CRN design. Before any causal row, freeze Hearth payoff by acquisition-priority cells, the shared policy/seed cohort, estimands, interference anchors, numeric caps and success/futility/inconclusive rules. Do not jointly vary Scoreline or Afterimage by default and do not add ML, RL, an optimiser or protected seeds.",
+    "futility": "Any completed direct or whole-run identity gate fails, any trace-schema fault exists, a cohort is incomplete or ledger identity changes.",
+    "futilityAuthority": "Apply decision boundary 2 and close the Hearth payoff route without repair or rerun. Do not move the hook, change the null alias, add a content field, suppress the Crown branch, alter acquisition, weaken identity or preserve the family with another method.",
+    "inconclusive": "Execution errors, times out or cannot produce an exact decision at the cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the identity preflight inconclusive at the cap without rerun, causal row, candidate, method or protected seed."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "frozenPath": {
+    "planSha256": "14b185746e6e78ad2c54a81a2347fa7bad300c550f712584279096032129c865",
+    "outputSha256": "f9959d0262e2b3e85cc21262225202c3e6d9e2cb35347667cc2aac45719e977e",
+    "rows": 256,
+    "identity": "The omitted-priority exact current-main output from the completed Hearth acquisition-priority identity preflight."
+  },
+  "frozenEvidence": {
+    "protocols/post-v38-hearth-observability-payoff-audit-v1.json": "24c7b788a08cb61ac31cbbe4ceaa11f58090d0b40e68811e47f86acc941587c1",
+    "protocols/post-v38-hearth-priority-identity-v1.json": "8f6e3e4d5b17fa4d442f7017d8096ed37a4a4e567de9664b4fb786e688fe6b60",
+    "summaries/post-v38-cohand-telemetry-identity-v1.json": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+    "summaries/post-v38-hearth-observability-payoff-audit-v1.json": "67a55a79e1cd20a65be484a63e7f1254809cf1b739c1abe6ee3d2ff008c33b58",
+    "summaries/post-v38-hearth-priority-identity-v1.json": "33e209bfa1917687a409a3ab1a738790a547e8dbce54b725d1c82f06e8beef3e",
+    "task-capsule.json": "97472c2206f01320ea2f37ba35139f5b08d5dd5993d8f530b6e53a649b020c99"
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "07da60a0e31f32ee889da18b591b43d4ab1c25cb9c49591de00df845bc8ecbaa",
+    "balanceSimSha256": "8b0eaf88b2245760f15c1a427c3f5cf8b72eceddfe9f6254fb8cdf40c0eadde0",
+    "pilotSha256": "7d190cfc923b7a2441bb8621c9dca6c32a72d1efb0c04e4bed3a522727373f3c",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "8b4bdda8475ec2487aeb708ea3645f8cc27c0d886d6ba3b9755ad264b5078f9f",
+    "probeUidSha256": "3c9bd3acce1ebcdcd947b3552bead03e3839680dd71cc47500fde9a3ffd43abe",
+    "researchCoreSha256": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+    "identityHelperSha256": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+    "runnerSha256": "5ca96c96afbf2b6791b9151e88bece03cfb17ce96762e3ebb97f5659add05b36"
+  }
+}
