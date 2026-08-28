@@ -113,6 +113,47 @@ static func _test_causal_binding_closure(fails: Array[String],
 	_check(fails, MapLayoutCompiler._binding_nodes(component_binding, input) \
 			== component_nodes,
 		"two-edge inversion-component closure remains exactly governed")
+	var nested_binding: Dictionary = {
+		"node_id": "", "edge_id": "",
+		"details": {
+			"edge_ids": [component_a["id"], component_b["id"]],
+			"entities": [
+				component_a["id"], component_b["id"], "C1", "C2", "D1", "D2",
+			],
+			"causal_obstacle_ids": [
+				"edge:%s/s00" % unrelated_a["id"], "node:U", "node:X",
+			],
+			"supported_causal_obstacle_ids": [
+				"edge:%s/s00" % unrelated_a["id"], "node:U", "node:X",
+			],
+		},
+	}
+	MapLayoutCompiler._promote_atomic_causal_binding(
+		nested_binding, {"route_order": edges}
+	)
+	var nested_nodes: Array[String] = MapLayoutCompiler._binding_nodes(
+		nested_binding, input
+	)
+	var nested_sets: Dictionary = MapNodeCandidateGenerator.generate(
+		input, quality, 0
+	).get("node_sets", {})
+	var nested_selection: Dictionary = {}
+	for node_id: String in MapLayoutCanonical.sorted_keys(nested_sets):
+		nested_selection[node_id] = 0
+	var nested_priorities: Dictionary = {}
+	for child: Dictionary in MapLayoutCompiler._substitution_children(
+			nested_binding, input, nested_sets, nested_selection):
+		var substitution: Dictionary = child["substitution"]
+		var child_nodes: Array = substitution["node_ids"]
+		if child_nodes.size() == 1:
+			nested_priorities[str(child_nodes[0])] = child["priority"]
+	var nested_details: Dictionary = nested_binding["details"]
+	_check(fails, nested_details.get("priority_obstacle_ids", []) == ["node:X"]
+			and nested_nodes == ["C1", "C2", "D1", "D2", "U", "V", "X"]
+			and MapLayoutCanonical.float_value(nested_priorities.get("X", 0.0)) == 1.0
+			and MapLayoutCanonical.float_value(nested_priorities.get("U", 1.0)) == 0.0
+			and MapLayoutCanonical.float_value(nested_priorities.get("V", 1.0)) == 0.0,
+		"nested component attribution prioritises only the independent node blocker while preserving full causal closure")
 	var reordered_nodes: Array = nodes.duplicate(true)
 	var reordered_edges: Array = edges.duplicate(true)
 	reordered_nodes.reverse()

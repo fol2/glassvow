@@ -169,6 +169,7 @@ static func route_planned(edge: Dictionary, plan: Dictionary,
 		"first_blocker": {},
 		"rejected_plans": [],
 		"bypass_side_order": [],
+		"bypass_blocking_obstacle_ids": [],
 		"router_calls": {"ordinary": 1, "near": 0, "far": 0},
 		"router_diagnostics": {"ordinary": {}, "near": [], "far": []},
 		"terminal": false,
@@ -236,6 +237,11 @@ static func route_planned(edge: Dictionary, plan: Dictionary,
 			return _with_access_stubs(
 				bypass["route"], edge, plan, diagnostics
 			)
+		for obstacle_id_v: Variant in bypass.get("blocking_obstacle_ids", []):
+			var obstacle_id: String = str(obstacle_id_v)
+			if obstacle_id not in diagnostics["bypass_blocking_obstacle_ids"]:
+				diagnostics["bypass_blocking_obstacle_ids"].append(obstacle_id)
+		diagnostics["bypass_blocking_obstacle_ids"].sort()
 		diagnostics["rejected_plans"].append({
 			"edge_id": edge_id,
 			"plan_id": "bypass:%s" % side["id"],
@@ -515,6 +521,11 @@ static func _route_bypass(edge: Dictionary, plan: Dictionary,
 	var points: Array[Vector2] = [source,
 		Vector2(MapLayoutCanonical.float_value(side["west_x"]), z),
 		Vector2(MapLayoutCanonical.float_value(side["east_x"]), z), target]
+	var planned_blocking_ids: Dictionary = {}
+	for i: int in range(points.size() - 1):
+		for obstacle_id: String in _endpoint_blocking_obstacle_ids(
+				points[i], points[i + 1], obstacles, radius):
+			planned_blocking_ids[obstacle_id] = true
 	var stage: Rect2 = MapPinProjection.lattice_footprint().grow(radius)
 	var channel: PackedVector2Array = _rectangle(
 		stage.position.x, stage.end.x,
@@ -535,9 +546,17 @@ static func _route_bypass(edge: Dictionary, plan: Dictionary,
 		evidence["leg"] = i
 		leg_diagnostics.append(evidence)
 		if str(routed.get("status", "")) != MapSingleEdgeRouter.ROUTED:
+			var blocking_ids: Array[String] = _endpoint_blocking_obstacle_ids(
+				points[i], points[i + 1], obstacles, radius
+			)
+			evidence["endpoint_blocking_obstacle_ids"] = blocking_ids
+			leg_diagnostics[-1] = evidence
 			return {"ok": false, "calls": calls, "reason": "%s leg %d: %s" % [
 				side["id"], i, routed.get("reason", "route failed")], "route": routed,
-				"leg_diagnostics": leg_diagnostics}
+				"leg_diagnostics": leg_diagnostics,
+				"blocking_obstacle_ids": MapLayoutCanonical.sorted_keys(
+					planned_blocking_ids
+				)}
 		digests.append(str(routed["digest"]))
 		_append_path(centreline, routed["centerline"])
 	var out: Dictionary = {"status": MapSingleEdgeRouter.ROUTED,
@@ -546,6 +565,21 @@ static func _route_bypass(edge: Dictionary, plan: Dictionary,
 	out["digest"] = MapLayoutCanonical.digest(out)
 	return {"ok": true, "calls": calls, "reason": "", "route": out,
 		"leg_diagnostics": leg_diagnostics}
+
+
+static func _endpoint_blocking_obstacle_ids(a: Vector2, b: Vector2,
+		obstacles: Array[Dictionary], radius: float) -> Array[String]:
+	var ids: Dictionary = {}
+	for obstacle: Dictionary in obstacles:
+		var inflated: Array = MapSingleEdgeRouter.inflate_obstacles(
+			[obstacle], radius
+		)
+		if inflated.size() != 1:
+			continue
+		if not MapSingleEdgeRouter.segment_is_clear(a, a, inflated) \
+				or not MapSingleEdgeRouter.segment_is_clear(b, b, inflated):
+			ids[str(obstacle["id"])] = true
+	return MapLayoutCanonical.sorted_keys(ids)
 
 
 static func _router_evidence(route: Dictionary) -> Dictionary:

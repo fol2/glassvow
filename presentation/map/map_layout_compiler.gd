@@ -239,8 +239,46 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 					atomic["component_diagnostics"]
 				)
 				if atomic.get("ok", false) != true:
+					var atomic_binding: Dictionary = atomic["binding"]
+					var blocking_atomic_id: String = _blocking_completed_component(
+						atomic_binding, plan, completed_components
+					)
+					var repaired_atomic: Dictionary = _repair_blocking_atomic_component(
+						component, blocking_atomic_id, edges_by_id, plan, heroes, routes,
+						source, assets, quality, half_width, safety, bypass_usage
+					)
+					if repaired_atomic.get("ok", false) == true:
+						var blocking_component: Dictionary = repaired_atomic[
+							"blocking_component"
+						]
+						var blocking_edges: Array = blocking_component["edge_ids"]
+						var kept_rows: Array = []
+						for row: Dictionary in route_rows:
+							if str(row.get("edge_id", "")) not in blocking_edges:
+								kept_rows.append(row)
+						route_rows = kept_rows
+						var blocking_id: String = str(blocking_component["id"])
+						plan_diagnostics["selected_bypass_owners"].erase(blocking_id)
+						for member_id_v: Variant in blocking_edges:
+							plan_diagnostics["chosen_bypass_sides"].erase(
+								str(member_id_v)
+							)
+						var current: Dictionary = repaired_atomic["current"]
+						var replay: Dictionary = repaired_atomic["replay"]
+						for repaired: Dictionary in [current, replay]:
+							_record_atomic_diagnostics(plan_diagnostics, repaired)
+							plan_diagnostics["component_route_plans"].append(
+								repaired["component_diagnostics"]
+							)
+							route_rows.append_array(repaired["route_rows"])
+						routes = replay["routes"]
+						bypass_usage = replay["usage"]
+						completed_components[component_id] = true
+						continue
+					if not blocking_atomic_id.is_empty():
+						_promote_atomic_causal_binding(atomic_binding, plan)
 					return _attempt_failure(chosen_ids, route_rows,
-						atomic["binding"], plan_diagnostics)
+						atomic_binding, plan_diagnostics)
 				routes = atomic["routes"]
 				bypass_usage = atomic["usage"]
 				route_rows.append_array(atomic["route_rows"])
@@ -438,6 +476,101 @@ static func _repair_blocking_component(edge: Dictionary, failed: Dictionary,
 		"replay": replay}
 
 
+static func _repair_blocking_atomic_component(component: Dictionary,
+		blocking_id: String, edges_by_id: Dictionary, plan: Dictionary,
+		heroes: Dictionary, accepted_routes: Dictionary, source: Dictionary,
+		assets: Dictionary, quality: Dictionary, half_width: float,
+		safety: float, usage: Dictionary) -> Dictionary:
+	if blocking_id.is_empty() or component["edge_ids"].size() != 2:
+		return {}
+	var blocking: Dictionary = plan["components_by_id"][blocking_id]
+	if blocking["edge_ids"].size() != 2:
+		return {}
+	var provisional_routes: Dictionary = accepted_routes.duplicate(true)
+	for member_id_v: Variant in blocking["edge_ids"]:
+		provisional_routes.erase(str(member_id_v))
+	var provisional_usage: Dictionary = usage.duplicate(true)
+	var removed_usage: int = MapLayoutCanonical.int_value(
+		provisional_usage["components"].get(blocking_id, 0)
+	)
+	provisional_usage["total"] = MapLayoutCanonical.int_value(
+		provisional_usage["total"]
+	) - removed_usage
+	provisional_usage["components"].erase(blocking_id)
+	var current: Dictionary = _route_atomic_component(
+		component, _component_plan_specs(
+			component, plan, half_width + safety, quality
+		), edges_by_id, plan, heroes, provisional_routes, source, assets,
+		quality, half_width, safety, provisional_usage
+	)
+	if current.get("ok", false) != true:
+		return {}
+	var current_routes: Dictionary = current["routes"]
+	var current_usage: Dictionary = current["usage"]
+	var replay: Dictionary = _route_atomic_component(
+		blocking, _component_plan_specs(
+			blocking, plan, half_width + safety, quality
+		), edges_by_id, plan, heroes, current_routes, source, assets,
+		quality, half_width, safety, current_usage
+	)
+	if replay.get("ok", false) != true:
+		return {}
+	return {"ok": true, "blocking_component": blocking,
+		"current": current, "replay": replay}
+
+
+static func _blocking_completed_component(binding: Dictionary,
+		plan: Dictionary, completed_components: Dictionary) -> String:
+	var matches: Dictionary = {}
+	for obstacle_id_v: Variant in binding.get(
+			"details", {}
+	).get("causal_obstacle_ids", []):
+		var obstacle_id: String = str(obstacle_id_v)
+		var entity: String = _Routes.obstacle_entity(obstacle_id)
+		var component_id: String = str(plan["edge_components"].get(entity, ""))
+		if completed_components.has(component_id):
+			matches[component_id] = true
+		if obstacle_id.begins_with("node:"):
+			for completed_id: String in MapLayoutCanonical.sorted_keys(
+					completed_components):
+				if entity in plan["components_by_id"][completed_id]["node_ids"]:
+					matches[completed_id] = true
+	var ids: Array[String] = MapLayoutCanonical.sorted_keys(matches)
+	return ids[0] if ids.size() == 1 else ""
+
+
+static func _promote_atomic_causal_binding(binding: Dictionary,
+		plan: Dictionary) -> void:
+	var details: Dictionary = binding.get("details", {})
+	var coupled_nodes: Dictionary = {}
+	for obstacle_id_v: Variant in details.get(
+			"supported_causal_obstacle_ids", []):
+		var obstacle_id: String = str(obstacle_id_v)
+		if not obstacle_id.begins_with("edge:"):
+			continue
+		var edge_id: String = _Routes.obstacle_entity(obstacle_id)
+		for edge: Dictionary in plan["route_order"]:
+			if str(edge["id"]) == edge_id:
+				coupled_nodes[str(edge["from"])] = true
+				coupled_nodes[str(edge["to"])] = true
+				break
+	var priority_obstacles: Array[String] = []
+	for obstacle_id_v: Variant in details.get(
+			"supported_causal_obstacle_ids", []):
+		var obstacle_id: String = str(obstacle_id_v)
+		if obstacle_id.begins_with("node:") \
+				and not coupled_nodes.has(_Routes.obstacle_entity(obstacle_id)):
+			priority_obstacles.append(obstacle_id)
+	details["priority_obstacle_ids"] = priority_obstacles
+	var entities: Array = details.get("entities", []).duplicate()
+	for obstacle_id_v: Variant in details.get("causal_obstacle_ids", []):
+		var entity: String = _Routes.obstacle_entity(str(obstacle_id_v))
+		if not entity.is_empty() and entity not in entities:
+			entities.append(entity)
+	details["entities"] = entities
+	binding["details"] = details
+
+
 static func _edge_route_binding(edge: Dictionary, routed: Dictionary,
 		route_diagnostics: Dictionary) -> Dictionary:
 	var edge_id: String = str(edge["id"])
@@ -496,9 +629,11 @@ static func _route_atomic_component(component: Dictionary,
 	var rejected_routes: Array[Dictionary] = []
 	var total_calls: Dictionary = {"normal": 0, "bypass": 0}
 	var first_binding: Dictionary = {}
+	var causal_obstacles: Dictionary = {}
 	var selected: Dictionary = {}
 	for plan_index: int in range(specs.size()):
 		var spec: Dictionary = specs[plan_index]
+		var plan_causal_obstacles: Dictionary = {}
 		var provisional_routes: Dictionary = accepted_routes.duplicate(true)
 		var provisional_usage: Dictionary = entry_usage.duplicate(true)
 		var member_rows: Array = []
@@ -516,6 +651,11 @@ static func _route_atomic_component(component: Dictionary,
 				provisional_usage, bool(spec["reverse_side_order"])
 			)
 			var route_diagnostics: Dictionary = routed_edge.get("plan", {})
+			for obstacle_id_v: Variant in route_diagnostics.get(
+					"bypass_blocking_obstacle_ids", []):
+				var obstacle_id: String = str(obstacle_id_v)
+				causal_obstacles[obstacle_id] = true
+				plan_causal_obstacles[obstacle_id] = true
 			var router_calls: Dictionary = route_diagnostics.get("router_calls", {})
 			for call_id: String in ["ordinary", "near", "far"]:
 				plan_calls[call_id] += MapLayoutCanonical.int_value(
@@ -569,6 +709,9 @@ static func _route_atomic_component(component: Dictionary,
 		record["entry_bypass_usage"] = entry_usage.duplicate(true)
 		record["provisional_bypass_usage"] = provisional_usage
 		record["first_binding"] = failure
+		record["causal_obstacle_ids"] = MapLayoutCanonical.sorted_keys(
+			plan_causal_obstacles
+		)
 		plan_records.append(record)
 		if failure.is_empty() and selected.is_empty():
 			selected = {
@@ -593,6 +736,17 @@ static func _route_atomic_component(component: Dictionary,
 	var plan_ids: Array[String] = []
 	for spec: Dictionary in specs:
 		plan_ids.append(str(spec["plan_id"]))
+	var supported_causal_obstacles: Dictionary = {}
+	if plan_records.size() == 4:
+		for obstacle_id_v: Variant in plan_records[0]["causal_obstacle_ids"]:
+			var obstacle_id: String = str(obstacle_id_v)
+			var supported: bool = true
+			for plan_index: int in range(1, plan_records.size()):
+				supported = supported and obstacle_id in plan_records[
+					plan_index
+				]["causal_obstacle_ids"]
+			if supported:
+				supported_causal_obstacles[obstacle_id] = true
 	var component_diagnostics: Dictionary = {
 		"component_id": component_id,
 		"edge_ids": component["edge_ids"],
@@ -607,6 +761,10 @@ static func _route_atomic_component(component: Dictionary,
 		"accepted_route_digests": {} if selected.is_empty() else \
 			selected["route_digests"],
 		"route_calls": total_calls,
+		"causal_obstacle_ids": MapLayoutCanonical.sorted_keys(causal_obstacles),
+		"supported_causal_obstacle_ids": MapLayoutCanonical.sorted_keys(
+			supported_causal_obstacles
+		),
 	}
 	var base: Dictionary = {
 		"component_diagnostics": component_diagnostics,
@@ -633,6 +791,10 @@ static func _route_atomic_component(component: Dictionary,
 			"edge_ids": component["edge_ids"],
 			"local_node_ids": component["node_ids"],
 			"entities": entities,
+			"causal_obstacle_ids": MapLayoutCanonical.sorted_keys(causal_obstacles),
+			"supported_causal_obstacle_ids": MapLayoutCanonical.sorted_keys(
+				supported_causal_obstacles
+			),
 			"plan_ids": plan_ids,
 			"plans": plan_records,
 			"first_binding_blocker": first_binding,
@@ -726,14 +888,21 @@ static func _substitution_children(binding: Dictionary, input: MapLayoutInput,
 	if not blocker_id.is_empty():
 		priority_nodes[blocker_id] = true
 	var details: Dictionary = binding.get("details", {})
-	var blocker_entity: String = _Routes.obstacle_entity(
-		str(details.get("blocking_obstacle_id", ""))
-	)
-	for edge: Dictionary in input.edge_records():
-		if str(edge["id"]) == blocker_entity:
-			priority_nodes[str(edge["from"])] = true
-			priority_nodes[str(edge["to"])] = true
-			break
+	var priority_obstacles: Array = details.get(
+		"priority_obstacle_ids", []
+	).duplicate()
+	priority_obstacles.append(details.get("blocking_obstacle_id", ""))
+	for obstacle_id_v: Variant in priority_obstacles:
+		var obstacle_id: String = str(obstacle_id_v)
+		var blocker_entity: String = _Routes.obstacle_entity(obstacle_id)
+		if obstacle_id.begins_with("node:"):
+			priority_nodes[blocker_entity] = true
+			continue
+		for edge: Dictionary in input.edge_records():
+			if str(edge["id"]) == blocker_entity:
+				priority_nodes[str(edge["from"])] = true
+				priority_nodes[str(edge["to"])] = true
+				break
 	if node_ids.size() == 2:
 		var a_id: String = node_ids[0]
 		var b_id: String = node_ids[1]
