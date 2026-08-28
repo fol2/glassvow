@@ -7,6 +7,7 @@ const Metrics: GDScript = preload("res://tools/balance_metrics.gd")
 const Incentives: GDScript = preload("res://tools/vow_incentives.gd")
 const PROFILE: String = "mature-three-act-no-side-state-v1"
 static var _probe: Dictionary = {}
+static var _research_trace: Dictionary = {}
 func _initialize() -> void:
 	var opts: Dictionary = _options(OS.get_cmdline_user_args())
 	if opts.has("error"):
@@ -67,20 +68,34 @@ func _initialize() -> void:
 static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0,
 		ban: PackedStringArray = PackedStringArray(), policy: Dictionary = {},
 		random_build: bool = false, random_play: bool = false, mix: Dictionary = {},
-		vigil: VigilState = null, strip_start_hex: bool = false) -> Dictionary:
+		vigil: VigilState = null, strip_start_hex: bool = false,
+		research421: Dictionary = {}, research_trace: Dictionary = {}) -> Dictionary:
 	_probe = {}
+	_research_trace = research_trace
+	if _research_trace.get("capture", false) == true:
+		_research_trace["nodes"] = []
+		_research_trace["plays"] = []
+		_research_trace["cardRewards"] = []
+		_research_trace["bossRelics"] = []
 	Pilot.set_ban(ban)
 	Pilot.apply_policy(policy)
+	var research_fault: String = Pilot.set_research421(research421)
+	if not research_fault.is_empty():
+		return {"seed": seed, "aspect": aspect, "vow": vow, "outcome": "error",
+			"error": research_fault}
 	Pilot.set_modes(random_build, random_play)
 	var aspect_index: int = 1 if aspect == "ashwarden" else 0
 	var profile: Dictionary = {
 		"aspect": aspect_index, "vow": vow, "reveals": content.reveal_ids.duplicate(),
 		"unlocks": ["aspect2"], "quests": {}, "shards": [], "lamplighter": false,
 	}
+	if aspect_index == 0 and Pilot._research421("mirrorOathPool") > 0.0:
+		profile["unlocks"].append("card:mirrorOath")
 	if vigil != null:
 		profile["quests"] = vigil.quests.duplicate(true)
 		profile["shards"] = vigil.shards.duplicate()
 	var run: RunState = RunState.new_run(content, seed, "sim-%s-%d" % [aspect, seed], profile)
+	apply_research421(run)
 	if strip_start_hex:
 		_strip_hex(run)
 	_apply_ban(run)
@@ -99,10 +114,13 @@ static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0
 				return _finish(run, aspect, seed, "error", fights, "unreachable node", economy,
 					vigil, content)
 			var node: MapNode = map.current()
+			_trace_append("nodes", {"act": run.act, "index": i, "id": String(node.id),
+				"row": node.row, "type": String(node.type),
+				"combatKind": node.combat_kind() if node.is_combat() else ""})
 			_enter_node(run, node)
 			if node.is_combat():
 				var fight: Dictionary = _fight(game, node)
-				_harvest_fight(game)
+				_harvest_fight(game, fights.size())
 				fights.append(fight)
 				if fight["result"] != "win":
 					return _finish(run, aspect, seed,
@@ -122,6 +140,7 @@ static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0
 					if offered_id == "hollowCrown":
 						_bump("hollowCrownOffered")
 				var relic: String = Pilot.choose_relic(offered, content, run.aspect, run.rng)
+				_trace_append("bossRelics", {"offered": offered.duplicate(), "chosen": relic})
 				if not relic.is_empty():
 					if relic == "hollowCrown":
 						_bump("hollowCrownPicked")
@@ -131,6 +150,14 @@ static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0
 				run.start_next_act(content)
 				break
 	return _finish(run, aspect, seed, "error", fights, "run route exhausted", economy, vigil, content)
+static func apply_research421(run: RunState) -> void:
+	var settings: Dictionary = Pilot.research421_snapshot()
+	if run.aspect == 0 and float(str(settings["mirrorOathGate"])) > 0.0:
+		run.stats["_research421MirrorOathGate"] = true
+	if float(str(settings["shatterersCrownFacetThreshold"])) == 0.0:
+		run.stats["_research421DisableShatterersCrownFacetThreshold"] = true
+	if float(str(settings["shatterersCrownFervor"])) == 0.0:
+		run.stats["_research421DisableShatterersCrownFervor"] = true
 static func _fight(game: GlassvowGame, node: MapNode) -> Dictionary:
 	var enemies: Array[String] = node.enemies.duplicate()
 	if enemies.is_empty():
@@ -173,11 +200,17 @@ static func _claim_rewards(game: GlassvowGame, rewards: Dictionary) -> void:
 		_bump("%sOffered" % str(card_v))
 	var card: String = Pilot.choose_card(rewards.get("cards", []), game.content, game.run.aspect,
 		game.run.rng, game.run.player.deck)
+	var accepted: bool = false
 	if not card.is_empty() and not Pilot.is_banned(card):
 		var score: float = Pilot.card_reward_score(
 			game.content.cards.get(card, {}), game.run.aspect, card, game.run.player.deck)
 		if Pilot.accepts_card_reward(score):
 			game.run.player.deck.append(CardInst.new(game.run.next_uid(), StringName(card), false))
+			accepted = true
+			if card == "mirrorOath":
+				_bump("mirrorOathAcquired")
+	_trace_append("cardRewards", {"offered": rewards.get("cards", []).duplicate(),
+		"chosen": card, "accepted": accepted})
 	var potion_v: Variant = rewards.get("potion")
 	if potion_v != null and not Pilot.is_banned(str(potion_v)):
 		var slot: int = game.run.player.potions.find("")
@@ -245,6 +278,8 @@ static func _resolve_event(game: GlassvowGame) -> void:
 				game.run.rng, game.run.player.deck)
 			if not id.is_empty():
 				game.run.player.deck.append(CardInst.new(game.run.next_uid(), StringName(id), false))
+				if id == "mirrorOath":
+					_bump("mirrorOathAcquired")
 		"upgrade": _upgrade_best(game)
 		"remove":
 			var worst: CardInst = Pilot.worst_card(game.run, game.content, game.run.player.deck)
@@ -395,6 +430,8 @@ static func _resolve_shop(game: GlassvowGame) -> void:
 			game.rewards.gain_relic(game.run, id)
 		elif category == "cards":
 			game.run.player.deck.append(CardInst.new(game.run.next_uid(), StringName(id), false))
+			if id == "mirrorOath":
+				_bump("mirrorOathAcquired")
 		elif category == "potions":
 			var slot: int = game.run.player.potions.find("")
 			if slot >= 0:
@@ -445,7 +482,15 @@ static func _bump(key: String, n: int = 1) -> void:
 	_probe[key] = int(float(str(_probe.get(key, 0)))) + n
 
 
-static func _harvest_fight(game: GlassvowGame) -> void:
+static func _trace_append(key: String, row: Dictionary) -> void:
+	if _research_trace.get("capture", false) != true:
+		return
+	var rows: Array = _research_trace.get(key, [])
+	rows.append(row)
+	_research_trace[key] = rows
+
+
+static func _harvest_fight(game: GlassvowGame, fight_index: int) -> void:
 	var relics: Array[String] = game.run.player.relics
 	if relics.has("ashenCore"):
 		_bump("ashenCoreOwned")
@@ -454,6 +499,8 @@ static func _harvest_fight(game: GlassvowGame) -> void:
 	if relics.has("hollowCrown"):
 		_bump("hollowCrownOwned")
 	var last_play: String = ""
+	var mirror_oath_active: bool = false
+	var event_index: int = 0
 	for event_v: Variant in game.cb.queue:
 		var event: Dictionary = event_v
 		var kind: String = str(event.get("t", ""))
@@ -472,6 +519,12 @@ static func _harvest_fight(game: GlassvowGame) -> void:
 				_bump("cardsDrawnByDeflect")
 		elif kind == "play":
 			last_play = str(event.get("id", ""))
+			if last_play == "defend" \
+					and game.run.stats.get("_research421MirrorOathGate", false) == true \
+					and not mirror_oath_active:
+				_bump("afterimageGateSuppressed")
+			_trace_append("plays", {"fight": fight_index, "event": event_index,
+				"id": last_play, "uid": _ji(event.get("uid", -1))})
 			_bump("%sPlayed" % last_play)
 		elif kind == "hitEnemy" and last_play in ["phantomBlades", "guardedStrike", "leechBlade"]:
 			var metric: String = "phantomDamage" if last_play == "phantomBlades" \
@@ -481,7 +534,11 @@ static func _harvest_fight(game: GlassvowGame) -> void:
 		elif kind == "status":
 			var status_id: String = str(event.get("id", ""))
 			var status_n: int = _ji(event.get("n", 0))
-			if last_play == "eclipseSlash" and status_id == "vulnerable":
+			if status_id == "mirrorOath" and status_n > 0:
+				mirror_oath_active = true
+			if last_play == "mirrorOath" and status_id == "mirrorOath" and status_n > 0:
+				_bump("mirrorOathApplied", status_n)
+			elif last_play == "eclipseSlash" and status_id == "vulnerable":
 				_bump("crackedAppliedByEclipseSlash")
 			elif last_play in ["ashBite", "smother"] and status_id == "poison":
 				_bump("smolderAppliedByStarters")
@@ -526,6 +583,14 @@ static func _harvest_fight(game: GlassvowGame) -> void:
 				_bump("ashenCoreTriggered")
 			elif relic_id == "smolderingCoal":
 				_bump("smolderingCoalTriggered")
+		event_index += 1
+
+
+static func research421_harvest_probe(game: GlassvowGame) -> Dictionary:
+	_probe = {}
+	_research_trace = {}
+	_harvest_fight(game, 0)
+	return _probe.duplicate(true)
 
 
 static func _economy_row(run: RunState) -> Dictionary:

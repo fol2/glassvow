@@ -1,0 +1,236 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-mirror-oath-identity",
+  "question": "Do the two preregistered Mirror Oath research knobs preserve the complete frozen path at null and affect only acquisition eligibility or Afterimage producer eligibility when enabled, before any scientific simulator observation?",
+  "scientificBasis": {
+    "acceptedTrigger": "The immutable Mirror Oath capacity screen passed every frozen upper-capacity gate after exact current native grammar was exhausted.",
+    "measuredBottleneck": "Afterimage had broad acquisition and consumer opportunity but insufficient natural durable commitment. This preflight tests the exact research representation of one acquisition-and-play commitment carrier, not its balance value.",
+    "minimality": "Reuse the existing unlock-to-matching-tier path, status application law, Ward producer, Afterimage mediator, Warden's Edge consumer and all payoff values. Add no optimiser, policy threshold, scalar payoff, producer or consumer.",
+    "claimBoundary": "This is identity and direct-mediator evidence only. It cannot establish offer frequency, acquisition, play, complementarity, effect size, package admission, detector performance or product acceptance."
+  },
+  "candidate": {
+    "id": "mirror-oath-afterimage-commitment",
+    "cardId": "mirrorOath",
+    "cardDefinition": {
+      "type": "power",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "self",
+      "vfx": "ward",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "mirrorOath",
+          "n": 1
+        }
+      ],
+      "up": {
+        "cost": 0,
+        "text": "Duskblade: playing Ward forms Afterimage."
+      },
+      "name": "Mirror Oath",
+      "text": "Duskblade: playing Ward forms Afterimage."
+    },
+    "statusDefinition": {
+      "icon": "◇",
+      "kind": "buff",
+      "name": "Mirror Oath",
+      "desc": "Your Ward cards can form Afterimage."
+    },
+    "unchangedProducer": "defend",
+    "unchangedMediator": "afterimage",
+    "unchangedConsumer": "guardedStrike",
+    "unchangedPayoff": "afterimageGuard"
+  },
+  "factorDefinitions": {
+    "mirrorOathPool": {
+      "type": "research-only binary deterministic acquisition-eligibility factor",
+      "levels": [
+        0,
+        1
+      ],
+      "null": 0,
+      "nullRule": "Omitted or zero adds no unlock and executes the exact frozen profile and matching-tier pools.",
+      "enabledRule": "For Duskblade only, append exactly card:mirrorOath to the existing profile unlocks before RunState.new_run. Rewards.card_pool then appends exactly mirrorOath to the uncommon pool through the unchanged unlock path.",
+      "intendedMediator": "Mirror Oath offer and acquisition eligibility only.",
+      "forbiddenDirectEffects": "No card score, decline threshold, policy, base pool, other unlock, RNG call, combat state, Ashwarden pool or result may change directly."
+    },
+    "mirrorOathGate": {
+      "type": "research-only binary deterministic Afterimage-producer eligibility factor",
+      "levels": [
+        0,
+        1
+      ],
+      "null": 0,
+      "nullRule": "Omitted or zero preserves the exact frozen ungated Duskblade Ward-to-Afterimage path.",
+      "enabledRule": "For Duskblade only, suppress the existing Ward Afterimage status application while the player lacks the exact combat-duration mirrorOath status. Playing Mirror Oath permits the unchanged application.",
+      "intendedMediator": "Afterimage producer eligibility conditional on Mirror Oath status only.",
+      "forbiddenDirectEffects": "Ward, energy, HP, policy, score, target, RNG, Scoreline, Afterimage payoff, Warden's Edge, Ashwarden and every other status must remain exact."
+    },
+    "scorelinePayoff": {
+      "levels": [
+        "current"
+      ],
+      "fixed": "Exact frozen Scoreline and Faultline payoff path. This remains a separate causal factor and is not bundled with Afterimage."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "current"
+      ],
+      "fixed": "Exact frozen Warden's Edge Afterimage payoff. The gate changes producer eligibility, not payoff."
+    },
+    "acquisitionPriority": {
+      "levels": [
+        4
+      ],
+      "fixed": "Exact frozen candidate-substrate acquisition priority."
+    },
+    "faultlineRarity": {
+      "levels": [
+        "current"
+      ],
+      "fixed": "Exact frozen Faultline rarity."
+    },
+    "wardSetupPriority": {
+      "levels": [
+        1
+      ],
+      "fixed": "Exact frozen Ward setup priority; no action-order intervention."
+    }
+  },
+  "designMatrix": {
+    "pool-null-only": {
+      "mirrorOathPool": 0
+    },
+    "gate-null-only": {
+      "mirrorOathGate": 0
+    },
+    "joint-null": {
+      "mirrorOathPool": 0,
+      "mirrorOathGate": 0
+    }
+  },
+  "designMeaning": "The three whole-run arms are deliberately aliased encodings of the same null path, not causal treatment cells and not a factorial. Each must reproduce every one of the 256 frozen rows exactly. Enabled levels occur only on fixed controlled surfaces that isolate their direct mediator.",
+  "mechanisticallyJustifiedInteractions": [
+    "mirrorOathPool x mirrorOathGate is the later mechanism of interest because acquisition and play are required before the gate can permit Afterimage production.",
+    "mirrorOathGate x afterimagePayoff is mechanistically possible, but payoff is fixed and no interaction is estimated here."
+  ],
+  "aliasStructure": {
+    "wholeRunNullAliases": "pool-null-only, gate-null-only and joint-null all resolve to the same complete default settings. Their intentional alias is the identity estimand.",
+    "controlledSurfaces": "Pool isolation compares only unlock and uncommon-pool append fields. Gate isolation removes only the Afterimage status event, status field and their observation counters before requiring exact equality.",
+    "noOutcomeAlias": "No enabled whole-run cell exists, so this preflight cannot alias selection, acquisition, play or outcome effects."
+  },
+  "fixedResearchSettings": {
+    "wardSetupPriority": 1,
+    "acquisitionPriority": 4,
+    "packageOrder": 0,
+    "policyPackageOrder": 0,
+    "momentumPolicyPreference": 0,
+    "shatterersCrownFacetThreshold": 1,
+    "shatterersCrownFervor": 1
+  },
+  "anchors": {
+    "frozenWholeRuns": "The exact 64-policy by four-seed explicit-current rectangle from the identity-proved Momentum preference trace, including complete ordered trajectory, policy, RNG, package events and result.",
+    "poolPositiveControl": "Duskblade mirrorOathPool 1 appends exactly card:mirrorOath and mirrorOath at the end of the existing unlock and uncommon-pool arrays without consuming RNG.",
+    "poolNegativeControl": "Ashwarden mirrorOathPool 1 leaves unlocks, uncommon pool, policy, RNG and combat state exact.",
+    "gatePositiveControls": "Duskblade Ward produces Afterimage at null, is suppressed when the gate is enabled without Mirror Oath, and produces the same Afterimage after Mirror Oath is played.",
+    "gateNegativeControls": "Ward value, Ashwarden path and the complete Scoreline route remain exact across the gate contrast.",
+    "telemetryControl": "Harvesting offer/acquisition/draw/play/gate/application/consumption counters leaves RNG, HP, Ward, energy, statuses, enemy state and the ordered event queue byte-equivalent before and after."
+  },
+  "estimands": {
+    "nullIdentity": "For each frozen policy-seed identity and each of three null encodings, canonical equality of the complete row after removing only id, stage and arm labels.",
+    "poolDirectMediator": "Enabled minus null for the ordered profile unlocks and uncommon pool on fixed Duskblade and Ashwarden controlled surfaces.",
+    "gateDirectMediator": "Enabled minus null for the Afterimage application only, holding scripted cards, order, policy, aspect, enemy, seed and every non-mediator field exact.",
+    "carrierPositiveControl": "Exact mirrorOath and afterimage status presence after Mirror Oath then Ward under the enabled gate.",
+    "separatePackageNegativeControl": "Canonical equality of the exercised Chisel-to-Faultline Scoreline route across gate null and enabled.",
+    "telemetryInertia": "Canonical equality of complete game state and RNG immediately before and after observation-only harvest.",
+    "trustBoundary": "Level 2 for either registered knob must terminate the probe with exit code 2, an unregistered-level diagnostic and no output row."
+  },
+  "surfaceDesign": {
+    "seed": 347000,
+    "policy": {},
+    "enemy": "gravewarden",
+    "energy": 20,
+    "expectedWard": 5,
+    "routes": [
+      "Ward without Mirror Oath",
+      "Mirror Oath then Ward",
+      "Chisel then Faultline"
+    ],
+    "identity": "Every within-route contrast freezes aspect, seed, resolved policy, hand, order, target, enemy, energy, content and observation method."
+  },
+  "frozenPath": {
+    "name": "identity-proved explicit-current arm from the Momentum preference CRN rectangle",
+    "planSha256": "4983c07159961f57ef033670e6f06e2b82b52134e808f199d7aa067a190b4a69",
+    "outputSha256": "ac86dac85f5398e6c8e4d63ef10cf5d57d85739f9cc62fb1ffdf1b9b21b06ed2",
+    "currentRows": 256,
+    "comparison": "Exact complete-row equality after removing only id, stage and arm labels."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346596,
+      346597,
+      346598,
+      346599
+    ],
+    "identity": "All 256 frozen identities are replayed under each null encoding. No policy or seed is selected, removed, replaced or added."
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "contentSha256": "0aacecf001f44ffa557a868e63a28117d223d51c411ceef547a61a81acca3e76",
+    "combatRulesSha256": "d77cf86b8f7e965cce9cb3cbad85d79f498aae3505f9eab0b1c9775018eb2e70",
+    "rewardRulesSha256": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+    "runStateSha256": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+    "pilotSha256": "213c3153916e4dbb323f660e3774874f8c144dc0a549735ea7d606cc7d7c9ae7",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "balanceSimSha256": "02e2023f59b699966f7451e3900301614e9c271798f7a4a0404d38a701716f15",
+    "probeSha256": "40e6b805b10e8ee00ca978d7704da5b5cd66e23da41614e0ef06f121f06bf72e",
+    "researchCoreSha256": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+    "runnerSha256": "dd5e9d71d984cd412c60485558b80a4815842e2f70c41c96c9f7e2034dee0bf2"
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "wholeRunReplayExecutions": 768,
+    "controlledSurfaceExecutions": 13,
+    "maximumProbeExecutions": 781,
+    "invalidConfigurationChecks": 2,
+    "newScientificSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 1800,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "successRule": "Every one of the 768 whole-run null replays is exactly equal to its frozen row; omitted and explicit null controlled surfaces are exact; pool enabled appends only the one Duskblade unlock and uncommon carrier without RNG or state movement; gate enabled changes only Afterimage producer eligibility; Mirror Oath satisfies that gate; Ashwarden and Scoreline negative controls are exact; telemetry harvest is state and RNG inert; both invalid levels fail closed; the exact 4.7.1 binary is used; and the ledger is byte-identical before and after.",
+  "futilityRule": "Any complete-row mismatch, pool or gate direct-field leakage, missing positive control, changed Ashwarden or Scoreline control, telemetry state/RNG movement, accepted invalid level or ledger mutation rejects these knobs. Run no scientific row; close this scalar-free carrier family and continue with the next evidence-backed structural mechanism inside issue #421.",
+  "inconclusiveRule": "Immutable-input drift, missing or corrupt cache, unavailable exact Godot binary, unrelated process failure, unreadable ledger or timeout records an inconclusive result at this cap and gives no authority for a scientific row.",
+  "stoppingRule": "Execute the fixed 13 controlled surfaces first, then the complete 768 null replay plan, then the two invalid-level checks. Stop at the first failure. Run once only; do not repair after looking at an outcome. No promising cell, adaptive cohort or extra row exists.",
+  "decisionBoundary": {
+    "onSuccess": "Freeze exactly Mirror Oath and the two identity-safe binary research knobs for a separately preregistered, mechanism-blocked equal-cohort CRN first look. Begin with comparable acquisition, play and mediator evidence; expand to whole-run or shared Scoreline interference cells only when measured decision value justifies them.",
+    "onFutility": "Close the Mirror Oath carrier family and continue with the next evidence-backed structural mechanism inside issue #421.",
+    "onInconclusive": "Record the inconclusive result at the preregistered cap."
+  },
+  "forbidden": [
+    "any balance, package, detector, acceptance or product claim",
+    "any enabled whole-run treatment cell in this preflight",
+    "changing the card, status, payoff, producer, consumer, cohort, estimator or gate after execution begins",
+    "adding ML, RL, another optimiser or a policy threshold",
+    "using protected or reserve seeds",
+    "writing any plan, run or observation to the append-only research ledger",
+    "returning to adaptive candidate-by-candidate tuning"
+  ]
+}

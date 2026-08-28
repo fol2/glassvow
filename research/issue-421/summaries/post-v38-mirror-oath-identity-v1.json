@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "decision": "mirror-oath-knobs-preflight-rejected",
+  "decisionClass": "futility",
+  "protocolSha256": "0157b80cbc9deee1ce3a00b26b5c22537cbdb7d15b22ca95fcafa3fba8763fbb",
+  "runnerSha256": "dd5e9d71d984cd412c60485558b80a4815842e2f70c41c96c9f7e2034dee0bf2",
+  "exactToolchain": {
+    "version": "4.7.1.stable.official.a13da4feb",
+    "binarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f"
+  },
+  "controlledSurface": {
+    "decision": "PASS",
+    "planSha256": "9fce46309a5895b3581ba7601e2ad399097f39037403905e728bea1b1de81c10",
+    "outputSha256": "dc84c2ffd6d7b4867309b6fb56617ee939e0a50a13c33148c5fd797b57c05ced",
+    "rows": 13,
+    "mirrorOathPool": {
+      "nullIdentity": true,
+      "exactDuskUncommonAppend": "mirrorOath",
+      "AshPoolExact": true,
+      "policyRngAndCombatStateExact": true
+    },
+    "mirrorOathGate": {
+      "nullIdentity": true,
+      "onlySuppressedMediator": "afterimage",
+      "WardExact": true,
+      "oathPositiveControl": true,
+      "AshNegativeControl": true,
+      "ScorelineNegativeControl": true
+    },
+    "telemetryStateAndRngInert": true
+  },
+  "wholeRunIdentity": {
+    "decision": "FAIL",
+    "planSha256": "09704f5d1672cee171d3ad09436e65ee4f3d928603a782704105daa03845ea6c",
+    "outputSha256": "9d711bea9766cf7aa26cfde295fe0d2141360ec4bb0c12729037036b99a63446",
+    "fixedReplayExecutions": 768,
+    "firstFailure": {
+      "arm": "pool-null-only",
+      "policyIndex": 0,
+      "seed": 346596,
+      "changedTopLevelFields": [
+        "fights",
+        "packageEvents",
+        "trajectory"
+      ],
+      "frozenOutcome": "loss",
+      "observedOutcome": "loss",
+      "frozenFinalRng": 827336654,
+      "observedFinalRng": 827336654
+    },
+    "frozenAnchorExactRows": {
+      "pool-null-only": 0,
+      "gate-null-only": 0,
+      "joint-null": 0
+    },
+    "postFailureBoundedDiagnostic": {
+      "status": "exploratory-read-only-cache-analysis-not-an-acceptance-test",
+      "rowsPerArm": 256,
+      "policyExactRowsPerArm": 256,
+      "outcomeExactRowsPerArm": 234,
+      "finalRngExactRowsPerArm": 80,
+      "trajectoryExactRowsPerArm": 0,
+      "pairwiseExactRows": {
+        "pool-null-only__gate-null-only": 256,
+        "pool-null-only__joint-null": 256,
+        "gate-null-only__joint-null": 256
+      }
+    }
+  },
+  "anchorDiagnosis": {
+    "frozenContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "preMirrorCandidateContentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
+    "executedCandidateContentSha256": "0aacecf001f44ffa557a868e63a28117d223d51c411ceef547a61a81acca3e76",
+    "baselineToPreMirrorCandidateChangedCards": [
+      "bloodRite",
+      "catalyst",
+      "chisel",
+      "defend",
+      "executioner",
+      "guardedStrike",
+      "leechBlade",
+      "toxicMist"
+    ],
+    "baselineToPreMirrorCandidateChangedStatuses": [
+      "afterimage",
+      "bloodfire",
+      "mistbound",
+      "scoreline"
+    ],
+    "preMirrorToExecutedCandidateChangedCards": [
+      "mirrorOath"
+    ],
+    "preMirrorToExecutedCandidateChangedStatuses": [
+      "mirrorOath"
+    ],
+    "mirrorOathPresentInBaseCardPools": false,
+    "boundedInterpretation": "The preregistered historical anchor used current-main content, while the executed null used the complete pre-existing four-package candidate substrate plus an unpooled Mirror Oath definition. All three new null encodings were pairwise exact, but none reproduced the preregistered current-main trajectory. This identifies an invalid identity anchor for this candidate substrate and cannot be waived after execution; it does not establish a Mirror Oath balance effect."
+  },
+  "stopping": {
+    "stoppedAtFirstAnalysedWholeRunMismatch": true,
+    "batchDisclosure": "The fixed Godot probe produced all 768 preregistered replay rows before the Python analyser evaluated the first comparison. No adaptive row was added and no result informed execution, but the remaining cached rows are post-failure diagnostic evidence only.",
+    "invalidLevelChecksRun": 0,
+    "repairOrRerun": false,
+    "nextAction": "Close the exact Mirror Oath carrier family and continue with the next evidence-backed structural mechanism inside issue #421."
+  },
+  "budget": {
+    "controlledSurfaceExecutions": 13,
+    "wholeRunReplayExecutions": 768,
+    "newScientificSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "ledgerBefore": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerAfter": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "claimBoundary": "This rejects the exact Mirror Oath two-knob preflight under its frozen current-main identity anchor. It authorises no enabled scientific row, candidate, detector, acceptance or product claim and does not generalise to every durable Afterimage commitment mechanism."
+}

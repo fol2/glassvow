@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 22,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "Mirror Oath zero-row capacity pass and preregistered identity-futility closure",
+  "decision": "CLOSE_MIRROR_OATH_CARRIER_IDENTITY_FUTILITY",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-mirror-oath-identity-closure-v1.md",
+    "progressReportSha256": "77e86107c02daddd01caff075b41d640330524611b61eb056a4baa7a734219c8",
+    "capacityProtocol": "protocols/post-v38-mirror-oath-capacity-v1.json",
+    "capacityProtocolSha256": "25df665822b245e7d4becd717d1f2ef59086d31dafe49745b5389e783f94a86c",
+    "capacitySummary": "summaries/post-v38-mirror-oath-capacity-v1.json",
+    "capacitySummarySha256": "f8175e3ae9d7cae221214545e23363f6076f2164586ce38df94c891a3c83f445",
+    "capacityRunner": "tools/post_v38_mirror_oath_capacity.py",
+    "capacityRunnerSha256": "f97947307bd3d77bbe10d089e2809441b20270a66bf544d7f398243e8cbd1a98",
+    "identityProtocol": "protocols/post-v38-mirror-oath-identity-v1.json",
+    "identityProtocolSha256": "0157b80cbc9deee1ce3a00b26b5c22537cbdb7d15b22ca95fcafa3fba8763fbb",
+    "identitySummary": "summaries/post-v38-mirror-oath-identity-v1.json",
+    "identitySummarySha256": "fc894063c063ebb5e3216ab5d6015762ea89c33587261bdbd0f9677eb948c585",
+    "identityRunner": "tools/post_v38_mirror_oath_identity.py",
+    "identityRunnerSha256": "dd5e9d71d984cd412c60485558b80a4815842e2f70c41c96c9f7e2034dee0bf2",
+    "readmeSha256": "90810ab68c52f79c9e4b6a91234f12640381827ce516d8082f030bd1e4085819",
+    "taskCapsuleSha256": "2beafa539418b49249b74fd054021f7c04c8c62429d6719e040920577efc9c09"
+  },
+  "result": {
+    "capacityDecision": "authorise-mirror-oath-two-knob-identity-preflight",
+    "capacity": {
+      "carrierSelectorPolicies": 41,
+      "carrierNonselectorPolicies": 23,
+      "candidatePotentialActivePolicies": 38,
+      "exactInactivePolicies": 24,
+      "substrateNarrowedOutPolicies": 16,
+      "viablePotentialActivePolicies": 18,
+      "candidateOnlyPolicies": 17,
+      "scorelineOnlyPolicies": 10,
+      "scorelineJaccard": 0.4375,
+      "allFrozenGatesPassed": true,
+      "newSimulatorRows": 0
+    },
+    "identityDecisionBoundary": 2,
+    "identityDecision": "mirror-oath-knobs-preflight-rejected",
+    "identityDecisionClass": "futility",
+    "controlledSurface": {
+      "rows": 13,
+      "decision": "PASS",
+      "poolNullIdentity": true,
+      "gateNullIdentity": true,
+      "poolMediatorIsolation": true,
+      "gateMediatorIsolation": true,
+      "AshNegativeControl": true,
+      "ScorelineNegativeControl": true,
+      "telemetryStateAndRngInert": true
+    },
+    "wholeRunIdentity": {
+      "fixedReplayExecutions": 768,
+      "firstFailurePolicyIndex": 0,
+      "firstFailureSeed": 346596,
+      "firstFailureArm": "pool-null-only",
+      "frozenAnchorExactRowsPerArm": 0,
+      "pairwiseExactRowsBetweenEveryNewNullArm": 256,
+      "repairOrRerun": false,
+      "interpretation": "The historical current-main anchor did not represent the full pre-existing four-package candidate substrate. This cannot be waived after the preregistered complete-row failure and does not establish a Mirror Oath balance effect."
+    },
+    "newScientificSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeedRows": 0
+  },
+  "rawObjects": {
+    "candidateContent": "raw/cache/sha256/0aacecf001f44ffa557a868e63a28117d223d51c411ceef547a61a81acca3e76.json",
+    "controlledPlan": "raw/cache/sha256/9fce46309a5895b3581ba7601e2ad399097f39037403905e728bea1b1de81c10.json",
+    "controlledOutput": "raw/cache/sha256/dc84c2ffd6d7b4867309b6fb56617ee939e0a50a13c33148c5fd797b57c05ced.json",
+    "wholeRunPlan": "raw/cache/sha256/09704f5d1672cee171d3ad09436e65ee4f3d928603a782704105daa03845ea6c.json",
+    "wholeRunOutput": "raw/cache/sha256/9d711bea9766cf7aa26cfde295fe0d2141360ec4bb0c12729037036b99a63446.json"
+  },
+  "reproductionIdentity": {
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "candidateContentSha256": "0aacecf001f44ffa557a868e63a28117d223d51c411ceef547a61a81acca3e76",
+    "combatRulesSha256": "d77cf86b8f7e965cce9cb3cbad85d79f498aae3505f9eab0b1c9775018eb2e70",
+    "pilotSha256": "213c3153916e4dbb323f660e3774874f8c144dc0a549735ea7d606cc7d7c9ae7",
+    "balanceSimSha256": "02e2023f59b699966f7451e3900301614e9c271798f7a4a0404d38a701716f15",
+    "probeSha256": "40e6b805b10e8ee00ca978d7704da5b5cd66e23da41614e0ef06f121f06bf72e",
+    "frozenCurrentMainContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "preMirrorCandidateContentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48"
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "executionDisclosure": "The controlled plan passed before the whole-run plan. The fixed Godot process produced all 768 preregistered whole-run rows before the Python analyser stopped at the first comparison failure. No adaptive row was added; remaining cached rows are post-failure diagnostic evidence only. The two invalid-level checks were not reached.",
+  "verification": {
+    "sha256Index": "PASS",
+    "anchors": "PASS",
+    "benchmarkFreeze": {
+      "exitCode": 1,
+      "reportedPath": "research/issue-421/prototype/domain/rules/combat.gd",
+      "mainCensusCount": 0,
+      "evidenceBranchHeadCount": 2,
+      "v22Count": 2,
+      "branchRelativeDelta": 0,
+      "interpretation": "The archive-only prototype already carried the two frozen historical citations at the prior remote evidence head, while the main census has never indexed this unmerged archive path. V22 preserves the exact executable research source and adds no citation relative to the evidence branch. This known archive-only gate result is reported, not waived as a product gate."
+    }
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 532,
+    "payloadFilesIndexed": 509,
+    "protocolFiles": 87,
+    "summaryFiles": 113,
+    "toolFiles": 44,
+    "newRawObjects": 5,
+    "newRawBytes": 13022164,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "c41722c43af175b33b17f11793f62a1204d955b5cae07b868857f077ecdb9303"
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "efe7c878fbb0236ef7ceef43b4148df1d66fddf6",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "nextAction": "Run a zero-row capacity screen for the next materially different Dusk-only structural mechanism. Freeze a correct same-substrate identity anchor before implementation; do not repair or rerun Mirror Oath.",
+  "omissions": [
+    "No Mirror Oath source change was promoted, repaired, rerun, accepted or used for a balance claim.",
+    "No enabled whole-run treatment cell, causal effect estimate, detector, protected seed, product PR, CI run, acceptance claim or #108 receipt was produced.",
+    "No Scoreline payoff and Afterimage payoff were bundled; both remained separate fixed factors.",
+    "No #524/#525 historical plan, ML, RL, optimiser or adaptive candidate tuning was used."
+  ],
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421",
+    "receiptIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}

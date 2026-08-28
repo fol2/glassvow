@@ -14,8 +14,45 @@ const REMOVAL_APPETITE_DEFAULT: float = 16.4400114826858
 const REMOVAL_MIN_COPIES_DEFAULT: int = 2
 ## Shop eligibility ceiling is appetite minus this. Not a sampled knob.
 const REMOVAL_SHOP_MARGIN: float = 2.0
+const RESEARCH421_DEFAULTS: Dictionary = {
+	"wardSetupPriority": 1.0,
+	"acquisitionPriority": 4.0,
+	"packageOrder": 0.0,
+	"policyPackageOrder": 0.0,
+	"momentumPolicyPreference": 0.0,
+	"shatterersCrownFacetThreshold": 1.0,
+	"shatterersCrownFervor": 1.0,
+	"mirrorOathPool": 0.0,
+	"mirrorOathGate": 0.0,
+}
+const RESEARCH421_LEVELS: Dictionary = {
+	"wardSetupPriority": [0.0, 1.0, 2.0],
+	"acquisitionPriority": [2.0, 4.0],
+	"packageOrder": [0.0, 1.0],
+	"policyPackageOrder": [0.0, 1.0],
+	"momentumPolicyPreference": [0.0, 1.0],
+	"shatterersCrownFacetThreshold": [0.0, 1.0],
+	"shatterersCrownFervor": [0.0, 1.0],
+	"mirrorOathPool": [0.0, 1.0],
+	"mirrorOathGate": [0.0, 1.0],
+}
+const RESEARCH421_COMBAT_PAIRS: Array[Dictionary] = [
+	{"aspect": 0, "producer": &"chisel", "consumer": &"executioner",
+		"status": &"scoreline", "onPlayer": false,
+		"preferenceGroup": "special", "preferenceKey": "execute", "preferenceMedian": 13.0},
+	{"aspect": 0, "producer": &"defend", "consumer": &"guardedStrike",
+		"status": &"afterimage", "onPlayer": true,
+		"preferenceGroup": "special", "preferenceKey": "doubleBlock", "preferenceMedian": 9.0},
+	{"aspect": 1, "producer": &"bloodRite", "consumer": &"leechBlade",
+		"status": &"bloodfire", "onPlayer": true,
+		"preferenceGroup": "special", "preferenceKey": "leech", "preferenceMedian": 12.0},
+	{"aspect": 1, "producer": &"toxicMist", "consumer": &"catalyst",
+		"status": &"mistbound", "onPlayer": false,
+		"preferenceGroup": "special", "preferenceKey": "catalystAsh", "preferenceMedian": 30.0},
+]
 static var banned: Dictionary = {}
 static var vector: Dictionary = {}
+static var research421: Dictionary = RESEARCH421_DEFAULTS.duplicate()
 static var card_decline_threshold: float = CARD_DECLINE_DEFAULT
 static var removal_appetite: float = REMOVAL_APPETITE_DEFAULT
 static var removal_min_copies: int = REMOVAL_MIN_COPIES_DEFAULT
@@ -27,6 +64,7 @@ static func set_modes(build: bool, play: bool) -> void:
 	random_play = play
 static func apply_policy(policy: Dictionary) -> void:
 	vector = Policy.resolve(policy)
+	research421 = RESEARCH421_DEFAULTS.duplicate()
 	card_decline_threshold = float(str(vector["cardDecline"]))
 	removal_appetite = float(str(vector["removalAppetite"]))
 	removal_min_copies = int(float(str(vector["removalMinCopies"])))
@@ -47,6 +85,27 @@ static func _wf(key: String) -> float:
 	if vector.is_empty():
 		apply_policy({})
 	return float(str(vector[key]))
+static func set_research421(values: Dictionary) -> String:
+	var resolved: Dictionary = RESEARCH421_DEFAULTS.duplicate()
+	for key_v: Variant in values:
+		var key: String = str(key_v)
+		if not resolved.has(key):
+			return "unknown research421 key %s" % key
+		if typeof(values[key_v]) not in [TYPE_INT, TYPE_FLOAT]:
+			return "research421 %s must be numeric" % key
+		var value: float = float(str(values[key_v]))
+		if value not in RESEARCH421_LEVELS[key]:
+			return "research421 %s has unregistered level %s" % [key, value]
+		resolved[key] = value
+	if float(str(resolved["packageOrder"])) > 0.0 \
+			and float(str(resolved["policyPackageOrder"])) > 0.0:
+		return "research421 packageOrder and policyPackageOrder cannot both be enabled"
+	research421 = resolved
+	return ""
+static func research421_snapshot() -> Dictionary:
+	return research421.duplicate(true)
+static func _research421(key: String) -> float:
+	return float(str(research421[key]))
 static func _wi(key: String) -> int:
 	return int(_wf(key))
 static func accepts_card_reward(score: float) -> bool:
@@ -127,6 +186,10 @@ static func _pick_play(game: GlassvowGame) -> Dictionary:
 	var best: Dictionary = {}
 	var best_score: float = -INF
 	var dusk: bool = game.run.aspect == 0
+	if not lethal:
+		var ordered: Dictionary = _package_order_pick(game, unblocked, dusk)
+		if not ordered.is_empty():
+			return ordered
 	for card: CardInst in game.cb.hand:
 		var d: Dictionary = game.rules.card_data(card)
 		var target: Variant = _target(game, card, d)
@@ -150,6 +213,57 @@ static func _pick_play(game: GlassvowGame) -> Dictionary:
 			best = {"uid": card.uid, "target": target}
 			best_score = score
 	return best
+static func _package_order_pick(game: GlassvowGame, unblocked: int, dusk: bool) -> Dictionary:
+	var universal: bool = _research421("packageOrder") > 0.0
+	var policy_selective: bool = _research421("policyPackageOrder") > 0.0
+	if not universal and not policy_selective:
+		return {}
+	var best: Dictionary = {}
+	var best_score: float = -INF
+	for pair: Dictionary in RESEARCH421_COMBAT_PAIRS:
+		if int(float(str(pair["aspect"]))) != game.run.aspect \
+				or _package_mediator_present(game, pair) \
+				or (policy_selective and not universal and not _package_order_policy_prefers(pair)):
+			continue
+		var producer: CardInst = _hand_card(game, StringName(str(pair["producer"])))
+		var consumer: CardInst = _hand_card(game, StringName(str(pair["consumer"])))
+		if producer == null or consumer == null:
+			continue
+		var consumer_d: Dictionary = game.rules.card_data(consumer)
+		var consumer_target: Variant = _target(game, consumer, consumer_d)
+		if not game.rules.can_play(game.run, game.cb, consumer, consumer_target):
+			continue
+		var producer_d: Dictionary = game.rules.card_data(producer)
+		var producer_target: Variant = _target(game, producer, producer_d)
+		if not game.rules.can_play(game.run, game.cb, producer, producer_target):
+			continue
+		var preview_v: Variant = game.rules.preview_play(
+			game.cb, producer, producer_target, game.run)
+		var preview: Dictionary = preview_v if typeof(preview_v) == TYPE_DICTIONARY else {}
+		if int(float(str(preview.get("loss", 0)))) >= game.cb.player.hp:
+			continue
+		var score: float = _combat_score(
+			game, producer, producer_d, producer_target, preview, unblocked, dusk)
+		if score > best_score:
+			best = {"uid": producer.uid, "target": producer_target}
+			best_score = score
+	return best
+static func _package_order_policy_prefers(pair: Dictionary) -> bool:
+	return _w(str(pair["preferenceGroup"]), str(pair["preferenceKey"])) \
+		>= float(str(pair["preferenceMedian"]))
+static func _package_mediator_present(game: GlassvowGame, pair: Dictionary) -> bool:
+	var status: StringName = StringName(str(pair["status"]))
+	if pair["onPlayer"] == true:
+		return int(float(str(game.cb.player.statuses.get(status, 0)))) > 0
+	for enemy: EnemyCombatant in game.cb.living_enemies():
+		if int(float(str(enemy.statuses.get(status, 0)))) > 0:
+			return true
+	return false
+static func _hand_card(game: GlassvowGame, id: StringName) -> CardInst:
+	for card: CardInst in game.cb.hand:
+		if card.id == id:
+			return card
+	return null
 static func _combat_score(game: GlassvowGame, card: CardInst, d: Dictionary, target: Variant,
 		preview: Dictionary, unblocked: int, dusk: bool) -> float:
 	var cid: String = String(card.id)
@@ -159,7 +273,7 @@ static func _combat_score(game: GlassvowGame, card: CardInst, d: Dictionary, tar
 	score += float(loss) * _w("combat", "loss")
 	if dusk and cid == "defend" and _hand_has(game, &"guardedStrike") \
 			and int(float(str(game.cb.player.statuses.get("afterimage", 0)))) <= 0:
-		score += _w("card", "aspectBonus")
+		score += _research421("wardSetupPriority") * _w("card", "aspectBonus")
 	if unblocked > 0 and block > 0:
 		score += float(mini(block, unblocked)) * (_w("combat", "blockUrgent") \
 			if unblocked * 2 >= game.cb.player.hp else _w("combat", "blockNormal"))
@@ -344,8 +458,12 @@ static func _special_value(id: String, dusk: bool) -> float:
 			return _w("special", "catalystAsh") if not dusk else _w("special", "catalystDusk")
 		"shatterEcho":
 			return _w("special", "shatterEchoDusk") if dusk else _w("special", "shatterEchoAsh")
-		"execute", "momentum":
+		"execute":
 			return _w("special", "execute")
+		"momentum":
+			return _w("special", "shatterEchoDusk") \
+				if dusk and _research421("momentumPolicyPreference") > 0.0 \
+				else _w("special", "execute")
 		"leech", "devour", "phantom":
 			return _w("special", "leech")
 		"doubleBlock", "flawless", "emberNova", "afterimageGuard":
@@ -399,7 +517,8 @@ static func card_reward_score(d: Dictionary, aspect: int, card_id: String,
 	if applicable and not partner.is_empty():
 		for card: CardInst in deck:
 			if String(card.id) == partner:
-				return score + 4.0 * _w("card", "aspectBonus")
+				return score + _research421("acquisitionPriority") \
+					* _w("card", "aspectBonus")
 	return score
 static func choose_card(ids: Array, content: ContentDB, aspect: int, rng: Rng = null,
 		deck: Array = []) -> String:

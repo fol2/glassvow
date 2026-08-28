@@ -250,9 +250,24 @@ support. Exact source has no Novaflare-specific combat policy discriminator,
 so deed-unlocked Ember-reserve damage is exhausted. No reward, event, shop or
 invented combat-selector iteration may reopen it.
 
+The first new durable commitment carrier is now closed as well. A zero-row
+Mirror Oath capacity screen cleared every prerequisite and authorised only two
+binary research knobs plus observation-only telemetry. All 13 focused identity
+and mediator controls passed. The preregistered whole-run identity then failed
+at its first comparison: the historical current-main anchor did not represent
+the complete candidate substrate, and zero of 256 rows in each null arm matched
+its complete trajectory. All three new null encodings were pairwise exact, but
+that post-failure fact cannot waive the frozen rule. Mirror Oath was not
+repaired, rerun, promoted or used for a balance claim.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-mirror-oath-identity-closure-v1.md`](summaries/progress-post-directive-mirror-oath-identity-closure-v1.md),
+[`protocols/post-v38-mirror-oath-identity-v1.json`](protocols/post-v38-mirror-oath-identity-v1.json)
+and
+[`summaries/post-v38-mirror-oath-identity-v1.json`](summaries/post-v38-mirror-oath-identity-v1.json)
+for the latest closure. Then read
 [`summaries/progress-post-directive-novaflare-nonreward-closure-v1.md`](summaries/progress-post-directive-novaflare-nonreward-closure-v1.md),
 [`protocols/post-v38-novaflare-nonreward-capacity-v1.json`](protocols/post-v38-novaflare-nonreward-capacity-v1.json)
 and

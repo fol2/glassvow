@@ -293,8 +293,10 @@ func _apply_start_relics(run: RunState, cb: CombatState) -> void:
 		_proc(cb, "crownOfCinders")
 	if run.has_relic("shatterersCrown"):
 		for e: EnemyCombatant in cb.enemies:
-			e.facet_max = maxi(2, e.facet_max - 1)
-			e.statuses["str"] = _sget(e.statuses, "str") + 1
+			if run.stats.get("_research421DisableShatterersCrownFacetThreshold", false) != true:
+				e.facet_max = maxi(2, e.facet_max - 1)
+			if run.stats.get("_research421DisableShatterersCrownFervor", false) != true:
+				e.statuses["str"] = _sget(e.statuses, "str") + 1
 		_proc(cb, "shatterersCrown")
 	if run.has_relic("smolderingCoal") and not _player_smolder_blocked(run):
 		var coal_smolder: int = _ji(content.relic(&"smolderingCoal").get("startSmolder", 2))
@@ -393,7 +395,11 @@ func draw_cards(run: RunState, cb: CombatState, n: int) -> void:
 # ---------------------------------------------------------------- shared laws
 
 func add_status_player(cb: CombatState, id: String, n: int, run: RunState = null) -> void:
-	if id == "afterimage" and run != null and run.aspect != 0:
+	if id == "afterimage" and run != null:
+		if run.aspect != 0 or (run.stats.get("_research421MirrorOathGate", false) == true \
+				and _sget(cb.player.statuses, "mirrorOath") <= 0):
+			return
+	if id == "mirrorOath" and run != null and run.aspect != 0:
 		return
 	if id == "bloodfire" and run != null and run.aspect != 1:
 		return
