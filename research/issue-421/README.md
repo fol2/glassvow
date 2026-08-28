@@ -10,7 +10,8 @@ and the post-directive knob proof, mechanism-blocked CRN first look,
 independent held-out confirmation, structural package-order work, hand-size
 reconciliation, Ash package admission, exact Ward whole-run rejection, the
 natural Shatterer's Crown and Shatter-to-heavy-Attack closures, and the exact
-same-instance Honing Edge policy-repertoire test. It is a progress snapshot,
+same-instance Honing Edge policy-repertoire test, plus one-bit and two-stage
+setup-grammar closures. It is a progress snapshot,
 not detector admission, product promotion or a P9
 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
@@ -190,9 +191,26 @@ Scoreline-inactive in both arms, both absolute gates failed. Decision boundary
 2 therefore closes the remap and complete Honing repeat family without payoff
 implementation or tuning.
 
+A source-defined setup inventory then closed every one-bit producer-to-next-
+Attack grammar without a simulator row. Power was saturated at 63 active and
+zero inactive policies; Energy had only six viable-active policies; Cycle had
+only 12 inactive. The only two-stage extension with measured decision value,
+Power plus a reward draw-Skill before Attack, preserved 15 viable-active and
+strong two-sided Scoreline separation but reached only 13 inactive policies
+against 16. It is also closed. No producer subset, order-specific cell or
+payoff adjustment is authorised; the next family must use a materially
+different state representation.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-setup-grammar-closures-v1.md`](summaries/progress-post-directive-setup-grammar-closures-v1.md),
+[`protocols/post-v38-action-grammar-inventory-v1.json`](protocols/post-v38-action-grammar-inventory-v1.json),
+[`summaries/post-v38-action-grammar-inventory-v1.json`](summaries/post-v38-action-grammar-inventory-v1.json),
+[`protocols/post-v38-power-cycle-capacity-v1.json`](protocols/post-v38-power-cycle-capacity-v1.json)
+and
+[`summaries/post-v38-power-cycle-capacity-v1.json`](summaries/post-v38-power-cycle-capacity-v1.json)
+for the current zero-row setup-grammar bounds and closures. Then read
 [`summaries/progress-post-directive-momentum-preference-capacity-v1.md`](summaries/progress-post-directive-momentum-preference-capacity-v1.md),
 [`protocols/post-v38-momentum-preference-capacity-v1.json`](protocols/post-v38-momentum-preference-capacity-v1.json),
 [`execution/post-v38-momentum-preference-capacity-v1.json`](execution/post-v38-momentum-preference-capacity-v1.json),

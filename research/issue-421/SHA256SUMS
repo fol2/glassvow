@@ -1,4 +1,4 @@
-3fbac62cbea53a1c6cfaf2250e62a13eb9bea81495806abd06311c6077e3e38a  ./README.md
+75b4816586eb558033dd1939ef50e562dbb3222e5574c23a503a33984ae0bdf6  ./README.md
 0d06b45fe5be03b1a48c6c970103b235e4c47fbacc308dcbd539b7e480771a5b  ./artifacts/godot-4.7.1-toolchain-v1.json
 0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb  ./artifacts/issue-525-ward-mirror-edge-4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c.json
 d0452a96d6fc25094059e337e112dffede04984928e7893b097429ee3a008e5d  ./artifacts/ledger-freeze-blocked-crn-v2.json
@@ -69,6 +69,7 @@ a4d2b7761091ad972e14d8ff471e82bda41632e698dde762b0b3dad5a8d754e2  ./protocols/co
 e71e38fcaf69b8950a2c25a1313b1b21e5af4a9331b65b1cfc8c37cb027ba76a  ./protocols/combined-finalist-v9.json
 abe0147b3d18d0a58c1ca66595eb3b1d3e59e2b4e07083840d5ef4f1b1b26292  ./protocols/cracked-tempo-v1.json
 30c208b2f43f0ca0e924774ae8d45332769ab75080ac6bd3df529b76742053ee  ./protocols/facet-focus-v1.json
+294ce6b23792346ca62995411a89ad032e0171c5f69f8ba920e7921ad7675d95  ./protocols/post-v38-action-grammar-inventory-v1.json
 3974dc28586ddabf2efc5454bae8b9326bbca02660647224b972c6131bdfe819  ./protocols/post-v38-ash-package-pair-v1.json
 ef1c1e62c2a22966b5f2d9f70b2dbb87e71055d355c9a8740e7ee5a7bb163730  ./protocols/post-v38-blocked-crn-v1.json
 a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d  ./protocols/post-v38-blocked-crn-v2.json
@@ -93,6 +94,7 @@ ac2202a945a88d2067eb55cb51e93e541653cb541aba73f7a965b935296214dc  ./protocols/po
 ba5ddf6949c7cecad598b0bebe53355fd6e6fc476e1c5442f6a6acd9ac460a5c  ./protocols/post-v38-policy-package-order-decision-value-v2.json
 6c406f831b0db224a7c9478a24f831b4e5a835bd71d611567a3b9380118f0bbc  ./protocols/post-v38-policy-package-order-identity-v1.json
 57da713afd2eb967700570350bf7f127a667c025a27eebcacba8299cb99d229c  ./protocols/post-v38-policy-signal-v1.json
+dfd47aea75b0662a048172ce83a0fb0db8e990667002ea0e79b11b2068d7e6cd  ./protocols/post-v38-power-cycle-capacity-v1.json
 b7bb4e534c75c36d65faf9d50eab9fa57cfabcd6b3098c99dce71ba7d2fe3f15  ./protocols/post-v38-reseam-break-capacity-v1.json
 406357da0e9784dd31e64e04c7eb6d8d1881ad3442c79c202bac328ce63d2a28  ./protocols/post-v38-retained-dusk-inventory-v1.json
 e9c413088d5ccef93b5d9c3793688ae0e14d3364cc7d8f7e854bbef92a1645d8  ./protocols/post-v38-shatter-tempo-capacity-v1.json
@@ -375,6 +377,7 @@ aa695bd0818d164fd7cd7a4b34d63c88717ffba5fac9eff01623a4f4523929dc  ./summaries/co
 e9c6320a7b9742023495e5310d846e93e42de8dc80ab587bf974bd6096704b0c  ./summaries/combined-finalist-v9.json
 fa2d279bd61bf6dd41cdc1585d5590241b0d881493b2cb498f9663d1539c6dd1  ./summaries/cracked-tempo-v1.json
 fa11d04c131e10206ad9797cdf40c61ee2e17ba050113d68741bf5b3d10e6241  ./summaries/facet-focus-v1.json
+4eeda4d020539996106ea674d17acd7d0804a8181583c2cf4e856946febca3da  ./summaries/post-v38-action-grammar-inventory-v1.json
 af6424db4266531fadd7c7de07db0b46e028a4543604636ec1b13b819b2b7c1f  ./summaries/post-v38-ash-package-pair-v1.json
 f6ec487ae5f4135dd2b29ca0b3b1877d812d8416a4444a6b681c04bceac6b6e1  ./summaries/post-v38-blocked-crn-v2-audit.json
 6a1e72f136d12b0dc6462996ffd8180097cb34f2148f025605f5768632bebd06  ./summaries/post-v38-blocked-crn-v2.json
@@ -405,6 +408,7 @@ a520a17d524ec46e2468e1dedf757bbd8636906b7a7cc3660aa28cd7daa0210e  ./summaries/po
 1e2e9c5cac149136d5be7d3d3c03e089ab07fa6e43ec33d5da15bbf2c85e713e  ./summaries/post-v38-policy-package-order-decision-value-v2.json
 17e56ec1f69489b518d6c246401083698897bafa7f6a9833509fe0cbcf523a1c  ./summaries/post-v38-policy-package-order-identity-v1.json
 3281960a1ea51be16016f682faa644166e6b3353c12dee19962bdd51c98fc075  ./summaries/post-v38-policy-signal-v1.json
+bf3e927846079cf8e032ed82aac79be48a4249a02cbc49ea03a471fdde82ecd1  ./summaries/post-v38-power-cycle-capacity-v1.json
 5c9046438a41b996ced634013e7e5d3d7c79abd63d288af98f9e8b051b8fbab4  ./summaries/post-v38-reseam-break-capacity-v1.json
 a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66  ./summaries/post-v38-retained-dusk-inventory-v1.json
 8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388  ./summaries/post-v38-shatter-tempo-capacity-v1.json
@@ -422,6 +426,7 @@ b4ce5a1e17a93a2b07a2c90306d9f1b31f422c2626e23a65ca0003c294d49810  ./summaries/pr
 3b07dadb223868a6271922aba193a901b885427269d8d337dab5ddfc83195bc8  ./summaries/progress-post-directive-package-order-heldout-v1.md
 e7ee3155905b4418448a04cdfe277f224ee008880a9cd42c191bbaee15142ef1  ./summaries/progress-post-directive-policy-package-order-v1.md
 f901f0420d407519133e2d1f50bdf57cf9d28dc412e29c744ed5867a9730e8ae  ./summaries/progress-post-directive-retained-dusk-inventory-v1.md
+de0cf9e70b1e67ec17097146673734a2b5bbd3f4d6fc29e20e870ec7f39c31e2  ./summaries/progress-post-directive-setup-grammar-closures-v1.md
 e922767610253d42b6330cd97047acbedfb2400d7d8fe8b37dce251ca24a507a  ./summaries/progress-post-directive-shatter-tempo-capacity-v1.md
 0708fecb5c70499a6b2090be8f0e3fff6e2457fd4cb52243d657b3f235a8e848  ./summaries/progress-post-directive-ward-whole-run-discovery-v1.md
 6efd6479752302f82192cb8425ae57591f570fd58b0b11bf601e694def6910b2  ./summaries/progress-pre-directive-factorial-v1.md
@@ -429,8 +434,9 @@ e922767610253d42b6330cd97047acbedfb2400d7d8fe8b37dce251ca24a507a  ./summaries/pr
 90eb3c12f86bdabd6e2a01387ec108d199f686b46f90fa983b1c9e11cac2a74d  ./summaries/resonance-package-v1.json
 82df397f2a3f7b60465cdab0ca925a1c9173e1bee4aa613d0960149a4a47b4ea  ./summaries/scoreline-handshake-v1.json
 369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce  ./summaries/shatter-flow-v1.json
-0f74a3ccef4d1904fe44a8d09f35169129c608ca31ae806c83f36c630200c0de  ./task-capsule.json
+4f6908b6499a7d2671d15eb08e6cfa792a3ccd64c4cc85ddb0ab67aca7ed5f44  ./task-capsule.json
 6eb56ed83e4ef28d46e9913554fac9438163993d8c6a8eb7c9a4e6771eff012a  ./tools/identify_v33_v38.py
+87540fcd4903444658db14a8494d0ab8e5847f92a71f236a59f2b9c94564873d  ./tools/post_v38_action_grammar_inventory.py
 0f6bb1288a9a25de9f0b55356b1f6fc4df0ea40917403a1a477f8f8823097542  ./tools/post_v38_ash_package_pair.py
 a6435cc05f13042ee9132de90a40d11a61716b56d116b729aff92faad5a152cb  ./tools/post_v38_blocked_crn.py
 d024df9beb7f1a261751de7a2c203906b3615cee0fcd6bd0c722d61976804b5c  ./tools/post_v38_crown_effect_crn.py
@@ -457,6 +463,7 @@ d3bdb9012f37552a2fdf6f8026692dc1a5258bc980813f3baf33dfa56a31ec8c  ./tools/post_v
 7c8a4d0ff8e4cab1c2ea65a94db438c40a211ae5c026c87845c244eb7d708d18  ./tools/post_v38_policy_package_order_decision_value_v2.py
 5896ebf44a0519e9c7c72ccda7565d7bb18849fd15dfe1bedb65e5f46479a1ab  ./tools/post_v38_policy_package_order_identity.py
 c44dc0da9c06b27b4b38f82f7ad099dcacf6b22b4842f896c855c8d34a19e9ba  ./tools/post_v38_policy_signal.py
+e4cff3d51d3ddc23043adc522a9fbcebb9c9c2d77ec293aff743e8f6fa3f32ae  ./tools/post_v38_power_cycle_capacity.py
 51b7e8efdc9c4b57050b625caf51837d434d49cd1947bb45b3e30f8908aee8fc  ./tools/post_v38_reseam_break_capacity.py
 ff0cab1d8278b308e0cc4f3e4a1dd4b1b24769852b9020015c9b72c5cb61376b  ./tools/post_v38_retained_dusk_inventory.py
 95be635ce9230ab8ae5c62b2aca22c99268b8f8652210a3845cf2c4bd09e41eb  ./tools/post_v38_shatter_tempo_capacity.py

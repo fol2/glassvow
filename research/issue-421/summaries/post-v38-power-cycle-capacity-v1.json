@@ -1,0 +1,363 @@
+{
+  "activatedCycleCards": [
+    "deflect",
+    "preparation",
+    "sidestep",
+    "surge"
+  ],
+  "activatedPairs": [
+    [
+      "agility",
+      "deflect"
+    ],
+    [
+      "agility",
+      "preparation"
+    ],
+    [
+      "agility",
+      "sidestep"
+    ],
+    [
+      "agility",
+      "surge"
+    ],
+    [
+      "bastion",
+      "deflect"
+    ],
+    [
+      "bastion",
+      "preparation"
+    ],
+    [
+      "bastion",
+      "sidestep"
+    ],
+    [
+      "bastion",
+      "surge"
+    ],
+    [
+      "empower",
+      "deflect"
+    ],
+    [
+      "empower",
+      "preparation"
+    ],
+    [
+      "empower",
+      "sidestep"
+    ],
+    [
+      "empower",
+      "surge"
+    ],
+    [
+      "frenzy",
+      "deflect"
+    ],
+    [
+      "frenzy",
+      "preparation"
+    ],
+    [
+      "frenzy",
+      "sidestep"
+    ],
+    [
+      "frenzy",
+      "surge"
+    ],
+    [
+      "ironSkin",
+      "deflect"
+    ],
+    [
+      "ironSkin",
+      "preparation"
+    ],
+    [
+      "ironSkin",
+      "sidestep"
+    ],
+    [
+      "ironSkin",
+      "surge"
+    ],
+    [
+      "regrowth",
+      "deflect"
+    ],
+    [
+      "regrowth",
+      "preparation"
+    ],
+    [
+      "regrowth",
+      "sidestep"
+    ],
+    [
+      "regrowth",
+      "surge"
+    ],
+    [
+      "risingLitany",
+      "deflect"
+    ],
+    [
+      "risingLitany",
+      "preparation"
+    ],
+    [
+      "risingLitany",
+      "sidestep"
+    ],
+    [
+      "risingLitany",
+      "surge"
+    ],
+    [
+      "virulence",
+      "deflect"
+    ],
+    [
+      "virulence",
+      "preparation"
+    ],
+    [
+      "virulence",
+      "sidestep"
+    ],
+    [
+      "virulence",
+      "surge"
+    ]
+  ],
+  "activatedPowerCards": [
+    "agility",
+    "bastion",
+    "empower",
+    "frenzy",
+    "ironSkin",
+    "regrowth",
+    "risingLitany",
+    "virulence"
+  ],
+  "authority": "Close the exact Power-cycle two-stage grammar without implementation. Continue with the next materially different source- and evidence-backed structural family inside issue #421; do not subset source cards, require an order, change persistence, weaken support or alter the payoff.",
+  "candidate": {
+    "carrierBoundary": "This capacity screen selects only a research mechanism. A shipping reward/economy carrier is not chosen unless later causal and independent held-out evidence admits the package.",
+    "cycleCards": [
+      "deflect",
+      "preparation",
+      "sidestep",
+      "surge"
+    ],
+    "cycleDefinition": "Any Skill in the frozen natural reward pools with a direct positive authored draw effect.",
+    "futureFactor": "powerCycleTemperPayoff",
+    "futureLevels": [
+      0,
+      1
+    ],
+    "futurePayoff": "At level 1 and for Duskblade only, the consuming Attack chips exactly 1 additional Facet after it resolves. Level 0 changes nothing.",
+    "id": "power-cycle-temper",
+    "mechanisticJustification": "A persistent Power is deck-level form commitment and a draw-Skill is immediate hand-shaping. Requiring both before an Attack is a two-stage commitment grammar, not a producer subset, one-bit persistence retune, named-card handshake or scalar Shatter reward.",
+    "nonEffects": "No damage, Energy, Ward, draw, healing, status, offer, rarity, acquisition, policy score or RNG call changes. Repeated setup actions do not stack and no setup survives combat.",
+    "powerCards": [
+      "agility",
+      "bastion",
+      "empower",
+      "frenzy",
+      "ironSkin",
+      "regrowth",
+      "risingLitany",
+      "virulence"
+    ],
+    "powerDefinition": "Any card in the frozen natural reward pools whose authored type is power.",
+    "state": "Two combat-scoped booleans, formReady and flowReady, both initially false. A Power play sets formReady; a reward draw-Skill play sets flowReady. Neither stacks. Once both are true, the next played Attack consumes both."
+  },
+  "counts": {
+    "acquiredPolicies": 56,
+    "activePolicies": 35,
+    "ambiguousPolicies": 16,
+    "baselineFaultRows": 1,
+    "distinctActivatedCycleCards": 4,
+    "distinctActivatedPairs": 32,
+    "distinctActivatedPowerCards": 8,
+    "inactivePolicies": 13,
+    "offeredPolicies": 64,
+    "viableActivePolicies": 15
+  },
+  "decision": "close-power-cycle-two-stage-grammar",
+  "decisionBoundary": 2,
+  "gateResults": {
+    "active": true,
+    "inactive": false,
+    "reachable": true,
+    "reliability": true,
+    "scorelineSeparation": true,
+    "sourceBreadth": true,
+    "viable": true
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "policySets": {
+    "active": [
+      1,
+      2,
+      4,
+      5,
+      6,
+      7,
+      11,
+      12,
+      13,
+      14,
+      16,
+      17,
+      24,
+      25,
+      29,
+      30,
+      31,
+      32,
+      34,
+      35,
+      36,
+      37,
+      39,
+      40,
+      41,
+      42,
+      43,
+      45,
+      46,
+      49,
+      53,
+      54,
+      58,
+      59,
+      63
+    ],
+    "ambiguous": [
+      3,
+      8,
+      9,
+      10,
+      15,
+      18,
+      19,
+      20,
+      33,
+      44,
+      51,
+      52,
+      56,
+      57,
+      60,
+      61
+    ],
+    "candidateOnly": [
+      1,
+      4,
+      5,
+      6,
+      11,
+      16,
+      24,
+      25,
+      30,
+      34,
+      36,
+      37,
+      41,
+      42,
+      43,
+      45,
+      46,
+      63
+    ],
+    "inactive": [
+      0,
+      21,
+      22,
+      23,
+      26,
+      27,
+      28,
+      38,
+      47,
+      48,
+      50,
+      55,
+      62
+    ],
+    "scorelineOnly": [
+      0,
+      3,
+      10,
+      15,
+      18,
+      20,
+      23,
+      28,
+      33,
+      51,
+      55,
+      56,
+      57,
+      61
+    ],
+    "viableActive": [
+      6,
+      11,
+      12,
+      14,
+      17,
+      24,
+      29,
+      30,
+      34,
+      35,
+      37,
+      45,
+      46,
+      53,
+      59
+    ]
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "dfd47aea75b0662a048172ce83a0fb0db8e990667002ea0e79b11b2068d7e6cd",
+  "runnerSha256": "e4cff3d51d3ddc23043adc522a9fbcebb9c9c2d77ec293aff743e8f6fa3f32ae",
+  "schemaVersion": 1,
+  "separation": {
+    "candidateOnlyPolicies": 18,
+    "crossActivePolicies": 17,
+    "jaccard": 0.3469387755102041,
+    "scorelineOnlyPolicies": 14
+  },
+  "traceIdentity": {
+    "pathRngResultExact": true,
+    "rows": 256
+  },
+  "wallTimeSeconds": 6.052057542023249
+}

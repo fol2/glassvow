@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-power-cycle-capacity",
+  "question": "Does the one evidence-justified two-stage Duskblade setup grammar — one natural reward Power and one natural reward draw-Skill in either order before a later Attack — have enough exact active, inactive, viable, reachable and Scoreline-separated policy support to justify implementing its disabled payoff factor for identity preflight?",
+  "competingOptions": [
+    "freeze the exact Power-plus-cycle two-stage grammar for disabled-factor identity preflight",
+    "close this two-stage grammar without implementation and continue with another materially different structural family inside issue #421",
+    "record an inconclusive result at the frozen cap"
+  ],
+  "measuredDecisionValue": {
+    "oneBitPower": "Power-to-Attack was viable for 22 policies but saturated at 63 active and zero inactive.",
+    "oneBitCycle": "Cycle-to-Attack was viable for 15 policies and separated from Scoreline, but had only 12 inactive against the fixed minimum of 16.",
+    "whyThisConjunction": "Requiring both distinct setup classes can only reduce the 40 Cycle-active policies and increase its 12 inactive policies, while its observed viability upper bound of 15 still exceeds the required eight. It therefore has measured value against the only failed Cycle gate without weakening a threshold.",
+    "whyEnergyIsExcluded": "Energy-to-Attack had only six viable policies. Any additional monotone setup condition has viability at most six and cannot reach eight, so Power-plus-Energy and Energy-plus-Cycle are closed by bound rather than spent as Cartesian cells.",
+    "noOtherCells": "No reverse-order cell is needed because the primitive accepts either setup order, and no pairwise or triple Cartesian product is authorised."
+  },
+  "candidate": {
+    "id": "power-cycle-temper",
+    "powerDefinition": "Any card in the frozen natural reward pools whose authored type is power.",
+    "powerCards": ["agility", "bastion", "empower", "frenzy", "ironSkin", "regrowth", "risingLitany", "virulence"],
+    "cycleDefinition": "Any Skill in the frozen natural reward pools with a direct positive authored draw effect.",
+    "cycleCards": ["deflect", "preparation", "sidestep", "surge"],
+    "state": "Two combat-scoped booleans, formReady and flowReady, both initially false. A Power play sets formReady; a reward draw-Skill play sets flowReady. Neither stacks. Once both are true, the next played Attack consumes both.",
+    "futureFactor": "powerCycleTemperPayoff",
+    "futureLevels": [0, 1],
+    "futurePayoff": "At level 1 and for Duskblade only, the consuming Attack chips exactly 1 additional Facet after it resolves. Level 0 changes nothing.",
+    "mechanisticJustification": "A persistent Power is deck-level form commitment and a draw-Skill is immediate hand-shaping. Requiring both before an Attack is a two-stage commitment grammar, not a producer subset, one-bit persistence retune, named-card handshake or scalar Shatter reward.",
+    "nonEffects": "No damage, Energy, Ward, draw, healing, status, offer, rarity, acquisition, policy score or RNG call changes. Repeated setup actions do not stack and no setup survives combat.",
+    "carrierBoundary": "This capacity screen selects only a research mechanism. A shipping reward/economy carrier is not chosen unless later causal and independent held-out evidence admits the package."
+  },
+  "closedDirections": [
+    "all one-bit producer-to-next-Attack grammars, including Power, Energy and Cycle separately",
+    "all Energy conjunctions by the frozen six-policy viability upper bound",
+    "Resonant Lance, partial-Facet, Cracked, generic Shatter, Crown, heavy-Attack, reseam and Honing families",
+    "Ward, Kindle, Afterimage and immutable issue #524/#525 tested paths",
+    "producer subsetting, order-specific cells, payoff-level tuning and adaptive candidate search"
+  ],
+  "fixedCausalFactors": {
+    "powerCycleTemperPayoff": "Unimplemented and fixed at level 0 in every evidence row.",
+    "scorelinePayoff": "A separate causal factor fixed by the exact baseline content and rules; never varied or estimated.",
+    "afterimagePayoff": "A separate causal factor fixed independently by the exact baseline content and rules; never varied or estimated.",
+    "acquisitionPriority": "Fixed at the exact current baseline path.",
+    "faultlineRarity": "Fixed by the baseline content SHA.",
+    "wardSetupPriority": "Fixed at the exact current/null path.",
+    "policyMapping": "The closed Momentum remap is absent; only the identity-proved current trace is used."
+  },
+  "capacityDefinitions": {
+    "activeRow": "Within one fight, at least one registered Power and one registered cycle Skill are played as distinct events in either order, and a later Attack is played after both.",
+    "activePolicy": "At least two of four frozen rows are active.",
+    "inactivePolicy": "None of four frozen rows is active.",
+    "ambiguousPolicy": "Exactly one of four frozen rows is active.",
+    "offeredPolicy": "At least one frozen row naturally offers at least one Power and at least one cycle Skill.",
+    "acquiredPolicy": "At least one frozen row ends with at least one Power and at least one cycle Skill in the deck.",
+    "viableActivePolicy": "The policy is active and has at least one active Vow-5 row whose whole-run outcome is win.",
+    "activatedPair": "One exact Power-card ID and cycle-card ID observed before the later Attack in a qualifying row.",
+    "scorelineRoutePolicy": "At least two of four frozen rows play Chisel before a later Faultline in the same fight.",
+    "candidateOnlyPolicy": "Active for Power-cycle but not the Scoreline route.",
+    "scorelineOnlyPolicy": "Active for the Scoreline route but not Power-cycle."
+  },
+  "interactionAndAlias": {
+    "mechanisticInteraction": "The future payoff requires the logical conjunction formReady AND flowReady. Both setup orders map to the same state and payoff; order is not a factor.",
+    "aliasStructure": "The frozen Power and cycle source sets are disjoint. No card or event can set both booleans, so the two-stage mediator is not aliased to a one-card trigger.",
+    "scorelineInterference": "Candidate-only, Scoreline-only and Jaccard gates use the same frozen policies. Scoreline payoff remains fixed and no joint payoff cell is constructed.",
+    "claimBoundary": "This zero-row capacity screen estimates no payoff or interaction effect. A pass authorises only disabled-factor identity and focused mediator proof."
+  },
+  "baseline": {
+    "name": "current-main root-551 Duskblade Vow-5 natural reward/economy rectangle",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "outputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf"
+  },
+  "traceEvidence": {
+    "planSha256": "4983c07159961f57ef033670e6f06e2b82b52134e808f199d7aa067a190b4a69",
+    "outputSha256": "ac86dac85f5398e6c8e4d63ef10cf5d57d85739f9cc62fb1ffdf1b9b21b06ed2",
+    "currentRows": 256,
+    "identityRule": "Every current trace row must exactly equal its cached current-main path, RNG, policy and result after trace and row-label fields are removed."
+  },
+  "scorelineAnchor": {
+    "activePolicies": 31
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "identity": "The exact complete current-main first-look rectangle is reused. No policy or seed is added, removed, selected or replaced."
+  },
+  "estimands": {
+    "unit": "Policy identity with the frozen two-of-four robustness rule.",
+    "primary": "Exact active, inactive and ambiguous policy counts and identities.",
+    "reachability": "Exact policies with both source classes naturally offered and acquired.",
+    "viability": "Exact active policies with at least one active winning Vow-5 row.",
+    "sourceBreadth": "Exact distinct activated Power cards, cycle cards and Power-cycle pairs.",
+    "separation": "Exact candidate-only, Scoreline-only, cross-active and Jaccard policy-set statistics.",
+    "notEstimated": "No payoff, causal interaction, duration, RandomBuild, Ashwarden, detector, protected-seed or product effect is estimated."
+  },
+  "estimator": {
+    "method": "Deterministic source filtering, exact same-fight event ordering and exact policy-set arithmetic.",
+    "model": "None. No bootstrap, fitted model, optimiser, ML or RL component is used.",
+    "firstLook": "One candidate, one immutable trace and one complete first look. There is no optional cell, cohort extension or outcome-based follow-up.",
+    "stopping": "Authorise identity preflight only if every gate passes; otherwise close this exact two-stage grammar or record inconclusive at the cap."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumInactivePolicies": 16,
+    "minimumOfferedPolicies": 8,
+    "minimumAcquiredPolicies": 8,
+    "minimumViableActivePolicies": 8,
+    "minimumDistinctActivatedPowerCards": 2,
+    "minimumDistinctActivatedCycleCards": 2,
+    "minimumDistinctActivatedPairs": 2,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumScorelineOnlyPolicies": 8,
+    "maximumScorelineJaccard": 0.75,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16 active/16 inactive and eight reachability, viability and two-sided separation minima reuse the frozen 64-policy first-look scale. At least two source cards per class and two exact pairs reject a one-card or one-pair alias. The 0.75 Jaccard ceiling and one immutable baseline fault are unchanged."
+  },
+  "budget": {
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Every active, inactive, reachability, viability, source-breadth, two-sided Scoreline-separation and reliability gate passes.",
+    "successAuthority": "Implement only the exact Dusk-only two-bit binary payoff factor, disabled by default, and one focused both-order producer/consumer surface. Prove omitted/null path, RNG, policy and result identity; each setup bit in isolation must be inert, both setup orders must produce the same one-bit-ready mediator, and level 1 may change only the consuming Attack's one-Facet payoff. No causal row, shipping carrier, extra level or other two-stage grammar is authorised before a new protocol.",
+    "futility": "Any frozen gate fails.",
+    "futilityAuthority": "Close the exact Power-cycle two-stage grammar without implementation. Continue with the next materially different source- and evidence-backed structural family inside issue #421; do not subset source cards, require an order, change persistence, weaken support or alter the payoff.",
+    "inconclusive": "The immutable trace, source identity or deterministic screen cannot produce a decision before the numeric wall-time cap.",
+    "inconclusiveAuthority": "Record the inconclusive result at the cap without implementation, simulator spend, trace extension or protected seeds."
+  },
+  "methodBoundary": "Deterministic Python owns source construction, trace validation, exact two-stage detection, policy classification and stop/go. No model context, human label, ML, RL, optimiser or adaptive candidate iteration enters the decision.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "e4cff3d51d3ddc23043adc522a9fbcebb9c9c2d77ec293aff743e8f6fa3f32ae"
+  },
+  "priorEvidence": {
+    "oneBitInventory": {
+      "path": "summaries/post-v38-action-grammar-inventory-v1.json",
+      "sha256": "4eeda4d020539996106ea674d17acd7d0804a8181583c2cf4e856946febca3da",
+      "decision": "close-one-bit-setup-action-grammar"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  }
+}
