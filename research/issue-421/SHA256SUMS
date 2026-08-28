@@ -1,4 +1,4 @@
-75b4816586eb558033dd1939ef50e562dbb3222e5574c23a503a33984ae0bdf6  ./README.md
+38ca84ad8ef91c7bc199e2a07b0ae7ad58764547c39f7519b407738cb4b73cac  ./README.md
 0d06b45fe5be03b1a48c6c970103b235e4c47fbacc308dcbd539b7e480771a5b  ./artifacts/godot-4.7.1-toolchain-v1.json
 0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb  ./artifacts/issue-525-ward-mirror-edge-4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c.json
 d0452a96d6fc25094059e337e112dffede04984928e7893b097429ee3a008e5d  ./artifacts/ledger-freeze-blocked-crn-v2.json
@@ -76,6 +76,7 @@ a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d  ./protocols/po
 ca03b6ea0efe8d6da71399e70fd04be8d6ba4e1517fb6736cc36b01864fae31f  ./protocols/post-v38-crown-effect-crn-v1.json
 e882f66df0a21363a03d92333cea21fee79334ad3d392c981670613bd05af0b9  ./protocols/post-v38-dusk-mechanism-screen-v1.json
 21b79cfe4f21da1ccf272018cf0f49b225688bd1e2651752fe8a35e244489fd6  ./protocols/post-v38-exact-complementarity-v1.json
+73542ac5bb2ead91b8cc2b1019bd37b482aa8426a1b656103257c57380a63794  ./protocols/post-v38-executioners-seal-capacity-v1.json
 9c53ef14c63b4981eedbb5b1aab315da5ad46d0cf45f174a52340d8d09427d01  ./protocols/post-v38-factorial-v1.json
 859f633351247bb86d6cc73bb68e4c5fbf54f54ed8104521fc77e09ae5234b51  ./protocols/post-v38-hand-size-inventory-v1.json
 5fbbd3af42c668b5ca528ef56295ce433184f919f0227abc9bf94ec53f8858da  ./protocols/post-v38-hand-size-inventory-v2.json
@@ -97,6 +98,7 @@ ba5ddf6949c7cecad598b0bebe53355fd6e6fc476e1c5442f6a6acd9ac460a5c  ./protocols/po
 dfd47aea75b0662a048172ce83a0fb0db8e990667002ea0e79b11b2068d7e6cd  ./protocols/post-v38-power-cycle-capacity-v1.json
 b7bb4e534c75c36d65faf9d50eab9fa57cfabcd6b3098c99dce71ba7d2fe3f15  ./protocols/post-v38-reseam-break-capacity-v1.json
 406357da0e9784dd31e64e04c7eb6d8d1881ad3442c79c202bac328ce63d2a28  ./protocols/post-v38-retained-dusk-inventory-v1.json
+e7a1bfd8797874f93fc2dd15cabb39fe088bb0c3c50a3861dc1c44ef97d1f5bc  ./protocols/post-v38-reward-overchip-capacity-v1.json
 e9c413088d5ccef93b5d9c3793688ae0e14d3364cc7d8f7e854bbef92a1645d8  ./protocols/post-v38-shatter-tempo-capacity-v1.json
 bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa  ./protocols/post-v38-ward-whole-run-discovery-v1.json
 13e04805bb42f1094c71965a9bbc576458de33f02552d7f5147e9f1cb95584ce  ./protocols/resonance-package-v1.json
@@ -387,6 +389,7 @@ e8de4178d6f0dfe8546a1057f0b51822556fc12a7dcc672d6916e019ecd4f1dd  ./summaries/po
 766db56d4525f66d617f8f4dffb425cd10b7cdad3852e2d5427c5867de569c17  ./summaries/post-v38-exact-complementarity-audit-v1.json
 8630a5e6ab6559b7e98fa5947e865a11f26ee505879026450f73e95fcb468621  ./summaries/post-v38-exact-complementarity-v1-audit.json
 be2f0776a72c31dc1df7b410e2b1abb4535da47eab5522b88324298679bc4234  ./summaries/post-v38-exact-complementarity-v1.json
+897f0b4c9b07df07cbc445eaedbc8bdd34ec8d22d9171448f48a28f6d9e8a0a4  ./summaries/post-v38-executioners-seal-capacity-v1.json
 3244f38ca060c3257b6fb21846752e2887b8655d78a40575878c5891f2484795  ./summaries/post-v38-factorial-v1.json
 07c1e9212e673bf4793c6f79afcba7bceac091ce221374c606f17de8c8c21296  ./summaries/post-v38-hand-size-inventory-v1.json
 22b33149ae0d77c454b5c8a25c8979cfb9cb3b040b3e0613456305d55aaf6d5c  ./summaries/post-v38-hand-size-inventory-v2.json
@@ -411,6 +414,7 @@ a520a17d524ec46e2468e1dedf757bbd8636906b7a7cc3660aa28cd7daa0210e  ./summaries/po
 bf3e927846079cf8e032ed82aac79be48a4249a02cbc49ea03a471fdde82ecd1  ./summaries/post-v38-power-cycle-capacity-v1.json
 5c9046438a41b996ced634013e7e5d3d7c79abd63d288af98f9e8b051b8fbab4  ./summaries/post-v38-reseam-break-capacity-v1.json
 a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66  ./summaries/post-v38-retained-dusk-inventory-v1.json
+71b616c8c0f1f0c18ee8b578d5fcc87561d9b1d9eb92772752ec5bc7bd379fc8  ./summaries/post-v38-reward-overchip-capacity-v1.json
 8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388  ./summaries/post-v38-shatter-tempo-capacity-v1.json
 45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b  ./summaries/post-v38-ward-whole-run-discovery-v1-audit.json
 62fbd2b3bb903bf41ffa4ed6f151884b0807376293eddf249c676ed05b8105e8  ./summaries/post-v38-ward-whole-run-discovery-v1.json
@@ -418,6 +422,7 @@ a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66  ./summaries/po
 4e116aa416c3c873018ce4bb242d1984d379afd1dd81fde16a8c3e9381afa150  ./summaries/progress-post-directive-crown-effect-crn-v1.md
 e03ef16b219fc05d266b1d97a8a005153caecb7216308ebaf51903bf61efe6be  ./summaries/progress-post-directive-dusk-mechanism-screen-v1.md
 06cd14c5e49ad5bc9a9fa676039f3869816340c9fce23d2ffba94b6e7ab39439  ./summaries/progress-post-directive-exact-complementarity-v1.md
+7f4dd9a716213d166eb00838876736b0ecfc33d4eedf21486387dd420b6a2053  ./summaries/progress-post-directive-existing-cadence-overchip-closures-v1.md
 5e142f7d739efe723ec9c43a9ed79efad8c073ad87210de0434a0d04ecde048d  ./summaries/progress-post-directive-hand-size-ash-admission-v1.md
 dc7de373d7a4acbf76ddf760198ec7ce63a9a2c8c7c45b7df14dfb9cea70dee4  ./summaries/progress-post-directive-heldout-v1.md
 2f89780384bfda06c4fdb3625c0c553c7672c64f55bd3481fcffb2863a3f01c6  ./summaries/progress-post-directive-momentum-preference-capacity-v1.md
@@ -434,7 +439,7 @@ e922767610253d42b6330cd97047acbedfb2400d7d8fe8b37dce251ca24a507a  ./summaries/pr
 90eb3c12f86bdabd6e2a01387ec108d199f686b46f90fa983b1c9e11cac2a74d  ./summaries/resonance-package-v1.json
 82df397f2a3f7b60465cdab0ca925a1c9173e1bee4aa613d0960149a4a47b4ea  ./summaries/scoreline-handshake-v1.json
 369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce  ./summaries/shatter-flow-v1.json
-4f6908b6499a7d2671d15eb08e6cfa792a3ccd64c4cc85ddb0ab67aca7ed5f44  ./task-capsule.json
+0117638eb9f50ff16053cbdefd13c47bfc66bac74ff0f43ab3c923b3502e5f23  ./task-capsule.json
 6eb56ed83e4ef28d46e9913554fac9438163993d8c6a8eb7c9a4e6771eff012a  ./tools/identify_v33_v38.py
 87540fcd4903444658db14a8494d0ab8e5847f92a71f236a59f2b9c94564873d  ./tools/post_v38_action_grammar_inventory.py
 0f6bb1288a9a25de9f0b55356b1f6fc4df0ea40917403a1a477f8f8823097542  ./tools/post_v38_ash_package_pair.py
@@ -444,6 +449,7 @@ d024df9beb7f1a261751de7a2c203906b3615cee0fcd6bd0c722d61976804b5c  ./tools/post_v
 86f98bec032865a21cb11640f988b86e2039b5652b9a3af05cc875d80885991f  ./tools/post_v38_dusk_mechanism_screen.py
 ab3abe3331b5830f979958703ae2b4e82a71cf7af8460e73bf6958e2d67b57fb  ./tools/post_v38_exact_complementarity.py
 ca4a2beb6e026ff7fa26029c156cdd2156b1e4991c075209f3abc5a373f7269d  ./tools/post_v38_exact_complementarity_audit.py
+7b781c36d63870e8b05f7b0ebb1fc1359b77924cef9370b227493e26fc4d6ae7  ./tools/post_v38_executioners_seal_capacity.py
 9418a3419c4feecae84360a9ea4068b60157c239d0359bb265939d3c579cdf97  ./tools/post_v38_factorial.py
 54d25da12337954b996787d0ec0628dda5854c9dbb6b19380674690ace285736  ./tools/post_v38_hand_size_inventory.py
 cb4a2262c833eea58f270d20d3d7b90c95415fb4e3b0fb742801c01ec5c8eb73  ./tools/post_v38_hand_size_inventory_v2.py
@@ -466,6 +472,7 @@ c44dc0da9c06b27b4b38f82f7ad099dcacf6b22b4842f896c855c8d34a19e9ba  ./tools/post_v
 e4cff3d51d3ddc23043adc522a9fbcebb9c9c2d77ec293aff743e8f6fa3f32ae  ./tools/post_v38_power_cycle_capacity.py
 51b7e8efdc9c4b57050b625caf51837d434d49cd1947bb45b3e30f8908aee8fc  ./tools/post_v38_reseam_break_capacity.py
 ff0cab1d8278b308e0cc4f3e4a1dd4b1b24769852b9020015c9b72c5cb61376b  ./tools/post_v38_retained_dusk_inventory.py
+fa469e1b9ecb9dc0a4e8ccd576a1254338f5cd3e76642bf71c7cd132f344d39d  ./tools/post_v38_reward_overchip_capacity.py
 95be635ce9230ab8ae5c62b2aca22c99268b8f8652210a3845cf2c4bd09e41eb  ./tools/post_v38_shatter_tempo_capacity.py
 0d7dca792d968d1bfcfc28d1428f4071c0822a2e64372a67043773c2991547a0  ./tools/post_v38_ward_whole_run_discovery.py
 c28afa712e3eab5587aba75cf922b0cc039dc5c69205ad123c814061b379a5a1  ./tools/post_v38_ward_whole_run_discovery_audit.py

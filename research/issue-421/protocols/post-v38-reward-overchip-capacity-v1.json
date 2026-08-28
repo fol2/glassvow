@@ -1,0 +1,266 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-reward-overchip-capacity",
+  "question": "Is the complete current-main reward-pool Attack set with authored extra Facet chip broad, reproducibly active, inactive, viable, naturally reached and Scoreline-separated enough to justify exact per-play chip/overflow telemetry before any causal ablation row?",
+  "competingOptions": [
+    "authorise only observation-only per-play chip and overflow telemetry plus exact current-path identity proof",
+    "close the reward-Attack overchip mediator family and continue with another materially different mechanism inside issue #421",
+    "record an inconclusive result at the frozen cap"
+  ],
+  "sourceFilter": {
+    "selectionRule": "From the exact current-main common, uncommon and rare card reward pools, select every Attack whose authored top-level chip value is greater than zero. Freeze the complete result before reading any path or outcome count.",
+    "result": ["oblivionStrike", "uppercut"],
+    "excludedStarterControl": "chisel",
+    "outcomeFieldsUsedForSelection": [],
+    "claimBoundary": "The filter is exhaustive only for existing reward-pool Attacks with a positive authored top-level chip value. It does not include starter Chisel, non-Attack chip effects, a new carrier or a changed card definition."
+  },
+  "candidate": {
+    "id": "dusk-reward-attack-facet-overchip",
+    "cards": ["oblivionStrike", "uppercut"],
+    "definitions": {
+      "oblivionStrike": {
+        "type": "attack",
+        "rarity": "rare",
+        "cost": 3,
+        "target": "enemy",
+        "chip": 2,
+        "vfx": "blunt",
+        "effects": [
+          {"kind": "dmg", "n": 30}
+        ],
+        "up": {
+          "chip": 3,
+          "effects": [
+            {"kind": "dmg", "n": 40}
+          ],
+          "text": "Deal @40@ damage. Chip 3 extra Facets."
+        },
+        "name": "Bellstrike",
+        "text": "Deal @30@ damage. Chip 2 extra Facets."
+      },
+      "uppercut": {
+        "type": "attack",
+        "rarity": "uncommon",
+        "cost": 2,
+        "target": "enemy",
+        "chip": 1,
+        "vfx": "blunt",
+        "effects": [
+          {"kind": "dmg", "n": 10},
+          {"kind": "status", "who": "target", "id": "weak", "n": 1}
+        ],
+        "up": {
+          "chip": 2,
+          "effects": [
+            {"kind": "dmg", "n": 13},
+            {"kind": "status", "who": "target", "id": "weak", "n": 2}
+          ],
+          "text": "Deal @13@ damage. Chip 2 extra Facets. Apply 2 Dimmed."
+        },
+        "name": "Ringing Blow",
+        "text": "Deal @10@ damage. Chip 1 extra Facet. Apply 1 Dimmed."
+      }
+    },
+    "mediator": "A naturally acquired reward-pool Attack contributes its authored positive chip value to the connecting Attack's normal one-Facet chip. apply_chips subtracts each shattered pane's facet_max and retains any remainder against the next harder pane.",
+    "authoredPayoff": "Only the existing extra Facet chip and existing overflow carry are in scope. No new payoff, card value, policy score, rarity, offer, acquisition rule or RNG call exists in this screen.",
+    "mechanisticJustification": "The route concentrates Dusk Facet pressure in two deliberate reward Attacks and can carry surplus across an annealed pane. That native per-Attack resource geometry is materially narrower than the closed generic Shatter-count and Shatter-flow families.",
+    "claimBoundary": "A candidate-card play and any Shatter in the same fight is deliberately only an upper-capacity condition. It does not prove that the card connected, caused the Shatter, crossed a pane, retained overflow, changed an endpoint or forms an admissible package."
+  },
+  "starterControl": {
+    "cardId": "chisel",
+    "role": "A universal starter Attack with authored chip is measured only as a broadness and Scoreline-interference control. It cannot enter the candidate set or rescue a failed reward-card route.",
+    "definition": {
+      "type": "attack",
+      "rarity": "starter",
+      "cost": 1,
+      "target": "enemy",
+      "chip": 1,
+      "vfx": "pierce",
+      "effects": [
+        {"kind": "dmg", "n": 4}
+      ],
+      "up": {
+        "effects": [
+          {"kind": "dmg", "n": 7}
+        ],
+        "text": "Deal @7@ damage. Chip 1 extra Facet."
+      },
+      "name": "Chisel",
+      "text": "Deal @4@ damage. Chip 1 extra Facet."
+    }
+  },
+  "closedDirections": [
+    "generic Shatter flow, Shatter count, Crown threshold and partial-Facet Faultline",
+    "Prism Charm and all immutable issue #524/#525 targets",
+    "Executioner's Seal cadence, heavy-Attack relay, reseam break and Honing repeat",
+    "one-bit and Power-cycle setup grammars",
+    "Ward, Kindle, Afterimage, Cracked and Resonant Lance",
+    "adding starter Chisel, changing a card's chip value, subsetting the two reward cards or introducing an overflow payoff"
+  ],
+  "factorDefinitions": {
+    "rewardAttackAuthoredChip": {
+      "levels": ["current"],
+      "current": "Exact frozen Bellstrike and Ringing Blow definitions, including base and upgraded chip values.",
+      "status": "Fixed observational mechanism; not varied and not a causal estimand."
+    },
+    "scorelinePayoff": {
+      "levels": ["current"],
+      "current": "Exact frozen Scoreline payoff and Faultline path.",
+      "status": "Separate causal factor fixed throughout; never aliased with reward-Attack chip."
+    },
+    "afterimagePayoff": {
+      "levels": ["current"],
+      "current": "Exact frozen Afterimage payoff and path.",
+      "status": "Separate causal factor fixed independently; never aliased with Scoreline or reward-Attack chip."
+    },
+    "acquisitionPriority": {
+      "levels": ["current"],
+      "current": "Exact frozen policy and natural reward/economy path."
+    },
+    "faultlineRarity": {
+      "levels": ["current"],
+      "current": "Exact baseline content definition."
+    },
+    "wardSetupPriority": {
+      "levels": ["current"],
+      "current": "Exact current/null path."
+    }
+  },
+  "designMatrix": {
+    "kind": "single-cell immutable observational reuse; not a factorial",
+    "cells": [
+      {
+        "id": "current-trace",
+        "rewardAttackAuthoredChip": "current",
+        "scorelinePayoff": "current",
+        "afterimagePayoff": "current",
+        "acquisitionPriority": "current",
+        "faultlineRarity": "current",
+        "wardSetupPriority": "current",
+        "cachedRows": 256,
+        "newRows": 0
+      }
+    ],
+    "causalContrasts": [],
+    "anchors": ["exact current-main content and rules", "31-policy Scoreline-route anchor", "one immutable baseline fault"],
+    "expansionRule": "No joint cell is authorised. A complete pass may add only identity-safe telemetry; a causal factor, levels, CRN contrast and any interference anchor require a later preregistration before rows."
+  },
+  "upperCapacityDefinitions": {
+    "qualifyingRow": "Within one fight, Bellstrike or Ringing Blow is played and the frozen whole-fight summary records at least one Shatter. Ordering and causation are intentionally not inferred.",
+    "potentialActivePolicy": "At least two of the four frozen rows are qualifying rows.",
+    "exactInactivePolicy": "None of the four frozen rows is a qualifying row.",
+    "ambiguousPolicy": "Exactly one of four frozen rows is a qualifying row.",
+    "offeredPolicy": "At least one frozen row naturally records oblivionStrikeOffered or uppercutOffered.",
+    "acquiredPolicy": "At least one frozen row ends with Bellstrike or Ringing Blow in the deck.",
+    "viablePotentialActivePolicy": "The policy is potential-active and has at least one qualifying Vow-5 row whose whole-run outcome is win.",
+    "sourceBreadth": "Distinct candidate card IDs observed in any qualifying row.",
+    "starterControlPolicy": "At least two of four frozen rows play Chisel in a fight containing any Shatter.",
+    "scorelineRoutePolicy": "At least two of four frozen rows play Chisel before a later Faultline in the same fight.",
+    "candidateOnlyPolicy": "Potential-active for reward overchip but not Scoreline-route active.",
+    "scorelineOnlyPolicy": "Scoreline-route active but not potential-active for reward overchip."
+  },
+  "interactionAndAlias": {
+    "mechanisticInteractions": "None are estimated. The only observed conjunction is candidate-card play with any same-fight Shatter.",
+    "upperBoundAlias": "Same-fight co-occurrence is aliased with unknown target, hit, chip timing, pane threshold, upgrade state and Shatter cause. Every alias can overstate true activation, so failure is decisive and success authorises exact telemetry only.",
+    "scorelineInterference": "Candidate-only, Scoreline-only and Jaccard gates use the same frozen policy identities. Starter Chisel is reported separately and cannot enter the candidate route.",
+    "scorelineAfterimageSeparation": "Scoreline payoff and Afterimage payoff remain distinct fixed factors. Neither is varied, combined into an old four-factor design or assigned an estimand.",
+    "staging": "Source and upper-capacity evidence may move to observation-only path/mediator telemetry. No whole-run causal endpoint is supported until the exact same policies, seeds, baseline, estimator and stop rule are preregistered for every contrast."
+  },
+  "baseline": {
+    "name": "current-main root-551 Duskblade Vow-5 natural reward/economy rectangle",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "outputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf"
+  },
+  "traceEvidence": {
+    "name": "identity-proved explicit-current arm from the Momentum preference CRN rectangle",
+    "planSha256": "4983c07159961f57ef033670e6f06e2b82b52134e808f199d7aa067a190b4a69",
+    "outputSha256": "ac86dac85f5398e6c8e4d63ef10cf5d57d85739f9cc62fb1ffdf1b9b21b06ed2",
+    "currentRows": 256,
+    "identityRule": "After trace and row-label fields are removed, every current row must exactly equal its cached baseline path, RNG, policy and result before any candidate count is read."
+  },
+  "scorelineAnchor": {
+    "activePolicies": 31,
+    "source": "The exact current-arm same-fight Chisel-before-Faultline policy set already frozen before this screen."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "identity": "The exact complete current-main first-look rectangle is reused for the candidate, starter control and Scoreline anchor. No policy or seed is added, removed, selected or replaced."
+  },
+  "estimands": {
+    "unit": "Policy identity with the frozen two-of-four robustness rule.",
+    "sourceCompleteness": "Exact current-main reward-pool Attack IDs with authored top-level chip greater than zero and exact definitions.",
+    "primary": "Exact potential-active, inactive and ambiguous policy counts and identities under the deliberately permissive same-fight upper bound.",
+    "reachability": "Exact natural offer and final-deck acquisition policy counts.",
+    "viability": "Exact potential-active policies with at least one qualifying winning Vow-5 row.",
+    "sourceBreadth": "Exact candidate card IDs observed in qualifying rows.",
+    "separation": "Exact candidate-only, Scoreline-only, cross-active and Jaccard policy-set statistics; starter-control overlap is descriptive only.",
+    "notEstimated": "No exact hit, Shatter cause, pre-chip level, overflow, causal payoff, interaction, duration, RandomBuild, Ashwarden, detector, protected-seed or product effect is estimated."
+  },
+  "estimator": {
+    "method": "Deterministic current-main source assertions, exact same-fight co-occurrence and exact policy-set arithmetic.",
+    "model": "None. No bootstrap, fitted model, optimiser, ML or RL component is used.",
+    "firstLook": "One exhaustive source-defined candidate set, one starter control, one immutable trace and one complete first look. No card, predicate, threshold or cohort changes after counts are visible.",
+    "stopping": "Authorise exact telemetry only if every gate passes; otherwise close the mediator family or record inconclusive at the numeric cap."
+  },
+  "gates": {
+    "minimumPotentialActivePolicies": 16,
+    "minimumInactivePolicies": 16,
+    "minimumOfferedPolicies": 8,
+    "minimumAcquiredPolicies": 8,
+    "minimumViablePotentialActivePolicies": 8,
+    "minimumDistinctQualifyingCards": 2,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumScorelineOnlyPolicies": 8,
+    "maximumScorelineJaccard": 0.75,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16 active/inactive and eight reachability, viability and two-sided separation minima reuse the frozen 64-policy first-look support scale. Both source cards must qualify, the 0.75 Jaccard ceiling is unchanged, and one fault is the immutable cached baseline."
+  },
+  "budget": {
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Every source, potential-active, inactive, natural reachability, viability, source-breadth, two-sided Scoreline-separation and reliability gate passes.",
+    "successAuthority": "Add only observation-only per-play preChips and overflow fields plus the minimum exact-causation trace needed to distinguish candidate-card hits from other same-fight Shatters. Prove omitted/current path, RNG, policy and result identity on the frozen cohort before any new simulator row. Do not add or vary a payoff, change card definitions, include Chisel, select a subset or infer a causal endpoint.",
+    "futility": "Any frozen gate fails.",
+    "futilityAuthority": "Close the complete reward-Attack overchip mediator family and continue with the next materially different source- and evidence-backed structural mechanism inside issue #421. Do not add Chisel, change the source filter, weaken support or treat same-fight co-occurrence as exact causation.",
+    "inconclusive": "The current-main source, immutable trace or deterministic screen cannot produce a complete decision before the numeric wall-time cap.",
+    "inconclusiveAuthority": "Record the inconclusive result at the cap without telemetry, simulator spend, trace extension, a causal factor or protected seeds."
+  },
+  "methodBoundary": "Deterministic Python owns source-card construction, source assertions, trace validation, upper-capacity classification and stop/go. Existing exact traces are immutable input. No model context, human label, ML, RL, optimiser or adaptive candidate iteration enters the decision.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "combatRulesSha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+    "runnerSha256": "fa469e1b9ecb9dc0a4e8ccd576a1254338f5cd3e76642bf71c7cd132f344d39d"
+  },
+  "priorEvidence": {
+    "genericShatterFlow": {
+      "path": "summaries/shatter-flow-v1.json",
+      "sha256": "369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce",
+      "decision": "REJECT_GENERIC_SHATTER_FLOW_PROTOTYPE"
+    },
+    "executionersSeal": {
+      "path": "summaries/post-v38-executioners-seal-capacity-v1.json",
+      "sha256": "897f0b4c9b07df07cbc445eaedbc8bdd34ec8d22d9171448f48a28f6d9e8a0a4",
+      "decision": "close-executioners-seal-cadence-family"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 18,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "existing Executioner's Seal cadence and reward-Attack overchip closures",
+  "decision": "CLOSE_EXISTING_CADENCE_AND_REWARD_OVERCHIP",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-existing-cadence-overchip-closures-v1.md",
+    "progressReportSha256": "7f4dd9a716213d166eb00838876736b0ecfc33d4eedf21486387dd420b6a2053",
+    "executionersSealProtocol": "protocols/post-v38-executioners-seal-capacity-v1.json",
+    "executionersSealProtocolSha256": "73542ac5bb2ead91b8cc2b1019bd37b482aa8426a1b656103257c57380a63794",
+    "executionersSealSummary": "summaries/post-v38-executioners-seal-capacity-v1.json",
+    "executionersSealSummarySha256": "897f0b4c9b07df07cbc445eaedbc8bdd34ec8d22d9171448f48a28f6d9e8a0a4",
+    "executionersSealRunner": "tools/post_v38_executioners_seal_capacity.py",
+    "executionersSealRunnerSha256": "7b781c36d63870e8b05f7b0ebb1fc1359b77924cef9370b227493e26fc4d6ae7",
+    "rewardOverchipProtocol": "protocols/post-v38-reward-overchip-capacity-v1.json",
+    "rewardOverchipProtocolSha256": "e7a1bfd8797874f93fc2dd15cabb39fe088bb0c3c50a3861dc1c44ef97d1f5bc",
+    "rewardOverchipSummary": "summaries/post-v38-reward-overchip-capacity-v1.json",
+    "rewardOverchipSummarySha256": "71b616c8c0f1f0c18ee8b578d5fcc87561d9b1d9eb92772752ec5bc7bd379fc8",
+    "rewardOverchipRunner": "tools/post_v38_reward_overchip_capacity.py",
+    "rewardOverchipRunnerSha256": "fa469e1b9ecb9dc0a4e8ccd576a1254338f5cd3e76642bf71c7cd132f344d39d",
+    "readmeSha256": "38ca84ad8ef91c7bc199e2a07b0ae7ad58764547c39f7519b407738cb4b73cac",
+    "taskCapsuleSha256": "0117638eb9f50ff16053cbdefd13c47bfc66bac74ff0f43ab3c923b3502e5f23"
+  },
+  "result": {
+    "decisionBoundary": 2,
+    "executionersSeal": {
+      "robustOwnerPolicies": 11,
+      "potentialActivePolicies": 6,
+      "exactInactivePolicies": 32,
+      "viablePotentialActivePolicies": 4,
+      "candidateOnlyPolicies": 3,
+      "decision": "close-executioners-seal-cadence-family"
+    },
+    "rewardOverchip": {
+      "sourceCards": ["oblivionStrike", "uppercut"],
+      "potentialActivePolicies": 41,
+      "exactInactivePolicies": 9,
+      "minimumInactivePolicies": 16,
+      "viablePotentialActivePolicies": 16,
+      "candidateOnlyPolicies": 18,
+      "scorelineOnlyPolicies": 8,
+      "decision": "close-reward-overchip-mediator-family"
+    },
+    "interpretation": "Executioner's Seal lacks natural owner/proc capacity, while the exhaustive reward-Attack chip route is already too broad under a deliberately permissive upper bound. Neither supports an identifiable Duskblade repertoire package.",
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumModelContextTokens": 0,
+    "protectedSeedRows": 0
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 498,
+    "payloadFilesIndexed": 479,
+    "protocolFiles": 80,
+    "summaryFiles": 102,
+    "toolFiles": 37,
+    "newRawObjects": 0,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "b4f36c52ffc256bedced9f1d6b1944c6c7f374bf286ec998e7efda4b2657a46b"
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "b1c4347da3ff476ee72d236ea52af3527c4d3c33",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "nextAction": "Preregister a zero-row source-and-capacity contract for the next materially different Duskblade structural mechanism. Do not alter either closed family or spend rows merely to continue the search.",
+  "omissions": [
+    "No runtime primitive, telemetry field, payoff, product content, cadence change or source-card subset was implemented.",
+    "No simulator row, ledger row, protected seed, ML, RL, optimiser or model-context token was used.",
+    "No product PR, CI run, acceptance claim or #108 receipt was created."
+  ],
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421",
+    "receiptIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}

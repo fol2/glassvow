@@ -10,8 +10,9 @@ and the post-directive knob proof, mechanism-blocked CRN first look,
 independent held-out confirmation, structural package-order work, hand-size
 reconciliation, Ash package admission, exact Ward whole-run rejection, the
 natural Shatterer's Crown and Shatter-to-heavy-Attack closures, and the exact
-same-instance Honing Edge policy-repertoire test, plus one-bit and two-stage
-setup-grammar closures. It is a progress snapshot,
+same-instance Honing Edge policy-repertoire test, one-bit and two-stage
+setup-grammar closures, the existing Executioner's Seal cadence screen and the
+complete reward-Attack overchip screen. It is a progress snapshot,
 not detector admission, product promotion or a P9
 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
@@ -201,9 +202,32 @@ against 16. It is also closed. No producer subset, order-specific cell or
 payoff adjustment is authorised; the next family must use a materially
 different state representation.
 
+The remaining source-defined Dusk-favoured cadence is now closed as well.
+Executioner's Seal had only 11 robust owner policies, six permissive potential-
+active policies and four viable potential-active policies against frozen
+minima of 16, 16 and eight. Its candidate-only Scoreline separation was only
+three policies. No acquisition/proc telemetry, cadence change or simulator row
+was authorised.
+
+The exhaustive reward-Attack overchip route then passed natural reachability,
+viability, two-card source breadth and two-sided Scoreline separation, but its
+deliberately permissive same-fight upper bound was already active for 41/64
+policies and left only nine exact-inactive policies against 16. Bellstrike and
+Ringing Blow therefore express another broad Facet-pressure route rather than
+an identifiable repertoire discriminator. Starter Chisel remains only a
+broadness control. No exact chip telemetry, payoff factor, simulator row or
+ledger row was added.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-existing-cadence-overchip-closures-v1.md`](summaries/progress-post-directive-existing-cadence-overchip-closures-v1.md),
+[`protocols/post-v38-executioners-seal-capacity-v1.json`](protocols/post-v38-executioners-seal-capacity-v1.json),
+[`summaries/post-v38-executioners-seal-capacity-v1.json`](summaries/post-v38-executioners-seal-capacity-v1.json),
+[`protocols/post-v38-reward-overchip-capacity-v1.json`](protocols/post-v38-reward-overchip-capacity-v1.json)
+and
+[`summaries/post-v38-reward-overchip-capacity-v1.json`](summaries/post-v38-reward-overchip-capacity-v1.json)
+for the current zero-row source, capacity and broadness closures. Then read
 [`summaries/progress-post-directive-setup-grammar-closures-v1.md`](summaries/progress-post-directive-setup-grammar-closures-v1.md),
 [`protocols/post-v38-action-grammar-inventory-v1.json`](protocols/post-v38-action-grammar-inventory-v1.json),
 [`summaries/post-v38-action-grammar-inventory-v1.json`](summaries/post-v38-action-grammar-inventory-v1.json),
@@ -516,11 +540,15 @@ policies. The ledger remains byte-identical.
 - retained Dusk inventory summary SHA-256: `a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66`
 - Dusk mechanism screen protocol SHA-256: `e882f66df0a21363a03d92333cea21fee79334ad3d392c981670613bd05af0b9`
 - Dusk mechanism screen summary SHA-256: `9ba14ec9a63ecb9a8e7cafa9b4edc0b5def546755c25e57234ee15dc251b2a64`
+- Executioner's Seal capacity protocol SHA-256: `73542ac5bb2ead91b8cc2b1019bd37b482aa8426a1b656103257c57380a63794`
+- Executioner's Seal capacity summary SHA-256: `897f0b4c9b07df07cbc445eaedbc8bdd34ec8d22d9171448f48a28f6d9e8a0a4`
+- reward-overchip capacity protocol SHA-256: `e7a1bfd8797874f93fc2dd15cabb39fe088bb0c3c50a3861dc1c44ef97d1f5bc`
+- reward-overchip capacity summary SHA-256: `71b616c8c0f1f0c18ee8b578d5fcc87561d9b1d9eb92772752ec5bc7bd379fc8`
 
 ## Remote heads at publication preparation
 
 - `origin/main`: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
-- `research/issue-421-p9-recovery-evidence`: `a0a050d0eb980a6be919e29e21fc9662c718fc14`
+- `research/issue-421-p9-recovery-evidence`: `b1c4347da3ff476ee72d236ea52af3527c4d3c33`
 - `research/issue-524-causal-slate-evidence`: `f305b95d9e1d173e5d8150289afab9688c0ea7f0`
 - `research/issue-525-mechanism-package-synthesis-evidence`: `7132e5e0d6e6e6dc196dda3ed90ad2be292608d6`
 - `work/421-h34`: `4a94d155400162289a84f416336ff407f55b3cf6`
@@ -528,10 +556,9 @@ policies. The ledger remains byte-identical.
 - `work/421-s009-exam`: `b30b290813d88109c5b9bc34354babefdc406f8d`
 
 Research is continuing under #421 after admitting the hand-size and Bloodfire
-Ash package directions, rejecting the exact #525 Ward packet and closing every
-Dusk edge retained by immutable #524 plus the Crown guaranteed-offer route. The
-scalar, producer-first, normalised-payoff commitment, Ward and Kindle
-directions remain closed. The next bounded step is an identity-safe ablation
-of the existing natural Crown threshold-and-Fervor effect, leaving acquisition
-untouched. Detector admission, promotion and protected seeds remain
+Ash package directions and scientifically closing the exact #525 Ward packet,
+the immutable #524 Dusk inventory, Crown, Shatter tempo, reseam, Honing, setup,
+Executioner's Seal and reward-overchip directions. The next bounded step is a
+zero-row source-and-capacity contract for a materially different structural
+mechanism. Detector admission, promotion and protected seeds remain
 outstanding and unauthorised.
