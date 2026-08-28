@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-exact-complementarity-v1",
+  "ledger": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2523049984,
+    "sha256": "014b2c3c3c416fd5922b234ae664063f1a3985b8a274946770e02bd62545e360",
+    "sqliteIntegrity": "ok",
+    "records": 465049,
+    "firstSequence": 1,
+    "lastSequence": 465049
+  },
+  "exactComplementarity": {
+    "protocolSha256": "21b79cfe4f21da1ccf272018cf0f49b225688bd1e2651752fe8a35e244489fd6",
+    "analysisSha256": "1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29",
+    "simulatorObservationRows": 4096,
+    "packages": 4,
+    "rowsPerPackage": 1024,
+    "decision": "reject-candidate-close-scalar-family-continue-structurally"
+  },
+  "protectedSeeds": {
+    "acceptanceRange": "3000-5199",
+    "acceptanceObservationRows": 0,
+    "reserveRange": "5200-5399",
+    "reserveObservationRows": 0
+  },
+  "publication": {
+    "sqlitePublishedInGit": false,
+    "reason": "The multi-gigabyte append-only ledger remains local and hash-pinned; only content-addressed plans, outputs and decision objects are archived remotely."
+  }
+}

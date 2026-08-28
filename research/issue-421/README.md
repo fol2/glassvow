@@ -53,49 +53,65 @@ with the first look was zero. The 3,072-row result authorises exact-candidate
 complementarity and detector work only. It does not authorise another scalar
 candidate, detector admission, promotion or protected seeds.
 
+The exact-candidate equal-cohort causal panel then cleared both new Ash
+packages and Dusk Scoreline, but Dusk Afterimage produced only 3 mechanism
+witnesses out of the frozen 128, below 16, with both interaction lower bounds
+at zero. The deterministic decision is boundary 2: reject the candidate,
+close the scalar family and continue structurally inside #421. The measured
+bottleneck is producer-before-consumer action ordering, not acquisition or
+payoff. Another scalar cell is forbidden.
+
 ## Reading order
 
-1. [`summaries/progress-post-directive-heldout-v1.md`](summaries/progress-post-directive-heldout-v1.md),
+1. [`summaries/progress-post-directive-exact-complementarity-v1.md`](summaries/progress-post-directive-exact-complementarity-v1.md),
+   [`protocols/post-v38-exact-complementarity-v1.json`](protocols/post-v38-exact-complementarity-v1.json),
+   [`summaries/post-v38-exact-complementarity-v1.json`](summaries/post-v38-exact-complementarity-v1.json)
+   and [`summaries/post-v38-exact-complementarity-v1-audit.json`](summaries/post-v38-exact-complementarity-v1-audit.json)
+   — current boundary, exact four-arm causal contract, result and mechanistic audit.
+2. [`artifacts/ledger-freeze-exact-complementarity-v1.json`](artifacts/ledger-freeze-exact-complementarity-v1.json)
+   and [`raw/post-directive-exact-complementarity-raw-v1.tar.gz`](raw/post-directive-exact-complementarity-raw-v1.tar.gz)
+   — exact causal-panel ledger identity and content-addressed plans/outputs.
+3. [`summaries/progress-post-directive-heldout-v1.md`](summaries/progress-post-directive-heldout-v1.md),
    [`protocols/post-v38-heldout-confirmation-v1.json`](protocols/post-v38-heldout-confirmation-v1.json),
    [`summaries/post-v38-heldout-confirmation-v1.json`](summaries/post-v38-heldout-confirmation-v1.json)
    and [`summaries/post-v38-heldout-confirmation-v1-audit.json`](summaries/post-v38-heldout-confirmation-v1-audit.json)
    — current decision, exact held-out contract, result and read-only audit.
-2. [`artifacts/ledger-freeze-heldout-confirmation-v1.json`](artifacts/ledger-freeze-heldout-confirmation-v1.json)
+4. [`artifacts/ledger-freeze-heldout-confirmation-v1.json`](artifacts/ledger-freeze-heldout-confirmation-v1.json)
    and [`raw/post-directive-heldout-confirmation-raw-v1.tar.gz`](raw/post-directive-heldout-confirmation-raw-v1.tar.gz)
    — held-out ledger identity and complete content-addressed plans/outputs.
-3. [`summaries/progress-post-directive-blocked-crn-v2.md`](summaries/progress-post-directive-blocked-crn-v2.md)
+5. [`summaries/progress-post-directive-blocked-crn-v2.md`](summaries/progress-post-directive-blocked-crn-v2.md)
    — preceding blocked-design progress and remote heads.
-4. [`protocols/post-v38-knob-identity-v2.json`](protocols/post-v38-knob-identity-v2.json),
+6. [`protocols/post-v38-knob-identity-v2.json`](protocols/post-v38-knob-identity-v2.json),
    [`summaries/post-v38-knob-identity-v2.json`](summaries/post-v38-knob-identity-v2.json),
    [`protocols/post-v38-blocked-crn-v2.json`](protocols/post-v38-blocked-crn-v2.json),
    [`summaries/post-v38-blocked-crn-v2.json`](summaries/post-v38-blocked-crn-v2.json)
    and [`summaries/post-v38-blocked-crn-v2-audit.json`](summaries/post-v38-blocked-crn-v2-audit.json)
    — exact identity, design, first-look decision and read-only audit.
-5. [`artifacts/ledger-freeze-blocked-crn-v2.json`](artifacts/ledger-freeze-blocked-crn-v2.json),
+7. [`artifacts/ledger-freeze-blocked-crn-v2.json`](artifacts/ledger-freeze-blocked-crn-v2.json),
    [`raw/post-directive-blocked-crn-raw-v2.tar.gz`](raw/post-directive-blocked-crn-raw-v2.tar.gz)
    and [`raw/post-directive-harness-v2.tar.gz`](raw/post-directive-harness-v2.tar.gz)
    — exact post-directive ledger, raw cache objects and harness.
-6. [`summaries/progress-pre-directive-factorial-v1.md`](summaries/progress-pre-directive-factorial-v1.md)
+8. [`summaries/progress-pre-directive-factorial-v1.md`](summaries/progress-pre-directive-factorial-v1.md)
    — the directive boundary and immutable earlier results.
-7. [`protocols/post-v38-factorial-v1.json`](protocols/post-v38-factorial-v1.json),
+9. [`protocols/post-v38-factorial-v1.json`](protocols/post-v38-factorial-v1.json),
    [`summaries/post-v38-factorial-v1.json`](summaries/post-v38-factorial-v1.json),
    [`protocols/post-v38-policy-signal-v1.json`](protocols/post-v38-policy-signal-v1.json)
    and [`summaries/post-v38-policy-signal-v1.json`](summaries/post-v38-policy-signal-v1.json)
    — exact pre-directive contracts and outputs.
-8. [`artifacts/ledger-freeze-pre-directive-v1.json`](artifacts/ledger-freeze-pre-directive-v1.json)
+10. [`artifacts/ledger-freeze-pre-directive-v1.json`](artifacts/ledger-freeze-pre-directive-v1.json)
    and [`raw/post-v38-factorial-raw-v1.tar.gz`](raw/post-v38-factorial-raw-v1.tar.gz)
    — ledger identity and complete raw plan/output evidence for the later run.
-9. [`summaries/progress-v38-identification-v1.md`](summaries/progress-v38-identification-v1.md)
+11. [`summaries/progress-v38-identification-v1.md`](summaries/progress-v38-identification-v1.md)
    — the earlier V38 freeze and identifiability decision.
-10. [`summaries/post-v38-identification-v1.json`](summaries/post-v38-identification-v1.json)
+12. [`summaries/post-v38-identification-v1.json`](summaries/post-v38-identification-v1.json)
    and [`protocols/post-v38-identification-v1.json`](protocols/post-v38-identification-v1.json)
    — zero-new-row identifiability result and preregistration.
-11. [`summaries/combined-finalist-v38-scoreline-rarity.json`](summaries/combined-finalist-v38-scoreline-rarity.json)
+13. [`summaries/combined-finalist-v38-scoreline-rarity.json`](summaries/combined-finalist-v38-scoreline-rarity.json)
    and [`protocols/combined-finalist-v38-scoreline-rarity.json`](protocols/combined-finalist-v38-scoreline-rarity.json)
    — the frozen V38 rejection.
-12. [`task-capsule.json`](task-capsule.json) — current outcome, invariants,
+14. [`task-capsule.json`](task-capsule.json) — current outcome, invariants,
    authoritative priors, decisions and next action.
-13. [`artifacts/ledger-freeze-v38.json`](artifacts/ledger-freeze-v38.json) —
+15. [`artifacts/ledger-freeze-v38.json`](artifacts/ledger-freeze-v38.json) —
    append-only ledger identity, record counts and protected-seed proof.
 
 All earlier protocols and summaries from this campaign are retained in their
@@ -156,6 +172,12 @@ The held-out archive contains the two complete plans/outputs, both content
 objects, analysis and summary. It added 3,072 observations and zero acceptance
 or reserve rows.
 
+After exact-candidate complementarity the ledger is 2,523,049,984 bytes with
+465,049 records and SHA-256
+`014b2c3c3c416fd5922b234ae664063f1a3985b8a274946770e02bd62545e360`.
+The equal-cohort causal panel added 4,096 observations and zero acceptance or
+reserve rows. Its boundary-2 result closes the scalar family.
+
 ## Frozen identities
 
 - source and archive base: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
@@ -171,6 +193,8 @@ or reserve rows.
 - frozen held-out candidate content SHA-256: `765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07`
 - held-out confirmation protocol SHA-256: `d8496263dbaab0534cf44702e9ea1078c952b87c145b5c04b3492085d6f15be0`
 - held-out confirmation analysis SHA-256: `aa4ac97242d701bd3ff187ebcf8ee6bd804e7277845aba0474f435267b03dcb3`
+- exact complementarity protocol SHA-256: `21b79cfe4f21da1ccf272018cf0f49b225688bd1e2651752fe8a35e244489fd6`
+- exact complementarity analysis SHA-256: `1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29`
 
 ## Remote heads at publication preparation
 
@@ -181,7 +205,7 @@ or reserve rows.
 - `work/421-landscape-retune`: `ad4b99b1538d7200e9b228051a029e554e9b9912`
 - `work/421-s009-exam`: `b30b290813d88109c5b9bc34354babefdc406f8d`
 
-Research is continuing under #421. A negative or inconclusive experiment is not
-a human hand-off and does not authorise a successor ticket. The one frozen
-candidate is held-out-confirmed for exact complementarity and detector work
-only; promotion and protected seeds remain unauthorised.
+Research is continuing structurally under #421. The scalar family is closed;
+that negative is not a human hand-off and does not authorise a successor or a
+second scalar candidate. Detector admission, promotion and protected seeds
+remain unauthorised.

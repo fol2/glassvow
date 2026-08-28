@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 5,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "exact-candidate complementarity boundary and scalar-family closure",
+  "decision": "SCALAR_CANDIDATE_REJECTED_FAMILY_CLOSED_CONTINUE_STRUCTURAL_SEQUENCING",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-exact-complementarity-v1.md",
+    "progressReportSha256": "06cd14c5e49ad5bc9a9fa676039f3869816340c9fce23d2ffba94b6e7ab39439",
+    "zeroRowAuditRunner": "tools/post_v38_exact_complementarity_audit.py",
+    "zeroRowAuditRunnerSha256": "ca4a2beb6e026ff7fa26029c156cdd2156b1e4991c075209f3abc5a373f7269d",
+    "zeroRowAudit": "summaries/post-v38-exact-complementarity-audit-v1.json",
+    "zeroRowAuditSha256": "766db56d4525f66d617f8f4dffb425cd10b7cdad3852e2d5427c5867de569c17",
+    "protocol": "protocols/post-v38-exact-complementarity-v1.json",
+    "protocolSha256": "21b79cfe4f21da1ccf272018cf0f49b225688bd1e2651752fe8a35e244489fd6",
+    "executionManifest": "execution/post-v38-exact-complementarity-v1.json",
+    "executionManifestSha256": "6b32bfa1b34466d0470eab7869afbb1c27ba914976ab15b4d765a28266dfc085",
+    "runner": "tools/post_v38_exact_complementarity.py",
+    "runnerSha256": "ab3abe3331b5830f979958703ae2b4e82a71cf7af8460e73bf6958e2d67b57fb",
+    "summary": "summaries/post-v38-exact-complementarity-v1.json",
+    "summaryFileSha256": "be2f0776a72c31dc1df7b410e2b1abb4535da47eab5522b88324298679bc4234",
+    "summaryCanonicalSha256": "2fa4497932d0cfcb0d76ac8329d66756cbd95cd35105acb9d254e5a392eaf136",
+    "analysisSha256": "1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29",
+    "audit": "summaries/post-v38-exact-complementarity-v1-audit.json",
+    "auditSha256": "8630a5e6ab6559b7e98fa5947e865a11f26ee505879026450f73e95fcb468621",
+    "ledgerFreeze": "artifacts/ledger-freeze-exact-complementarity-v1.json",
+    "ledgerFreezeSha256": "3c5b8be1d532d93180ae40e7d96cbdcc9a8242f626ba89b9c915cd18a6b2678c",
+    "rawArchive": "raw/post-directive-exact-complementarity-raw-v1.tar.gz",
+    "rawArchiveSha256": "fbe2216a8e40ebc217129d1961f8235fd2f0bba665682780dac62a6eaf43b118"
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 368,
+    "payloadFilesIndexed": 362,
+    "protocolFiles": 57,
+    "summaryFiles": 62,
+    "exactPanelRawObjects": 11,
+    "exactPanelRawUncompressedBytes": 5520188,
+    "exactPanelRawArchiveBytes": 195867,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "538f070c26c56eeba9fbf48021368f95817d4acc611f717117a44966e7dd5796"
+  },
+  "localLedgerFreeze": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2523049984,
+    "sha256": "014b2c3c3c416fd5922b234ae664063f1a3985b8a274946770e02bd62545e360",
+    "sqliteIntegrity": "ok",
+    "records": 465049,
+    "exactComplementarityObservationRows": 4096,
+    "protectedSeedRows": 0,
+    "publishedInGit": false
+  },
+  "exactComplementarity": {
+    "candidateId": "S-low__A-low__Q-2__R-uncommon__W-0",
+    "candidateContentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+    "policyRoot": 547,
+    "policyIdentities": 128,
+    "rows": 4096,
+    "clearPackages": [
+      "ash-bloodfire-leech",
+      "ash-poison-catalyst",
+      "dusk-scoreline"
+    ],
+    "decisiveFailurePackage": "dusk-afterimage-guard",
+    "decisiveFailureWitnesses": 3,
+    "requiredWitnesses": 16,
+    "decision": "reject-candidate-close-scalar-family-continue-structurally",
+    "analysisSha256": "1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29",
+    "productPromotionAuthorised": false
+  },
+  "mechanisticNarrowing": {
+    "reachability": "The whole-run held-out candidate had 101 Afterimage final-pair policies and 94 active policies, so acquisition is not the immediate bottleneck.",
+    "payoff": "The blocked experiment found near-zero Afterimage payoff effect.",
+    "sequencing": "W0 has 3 of 128 exact causal witnesses while the W2 mechanism control cleared two earlier splits; producer-before-consumer action ordering is the measured bottleneck.",
+    "nextAction": "Implement one null-safe deterministic package-order grammar and preregister its identity proof and equal-cohort causal comparison.",
+    "mlOrRl": "Deferred until the smaller structural grammar is tested and a further method comparison shows decision value."
+  },
+  "postSnapshotBoundary": {
+    "alternativeScalarCellsAuthorised": false,
+    "scalarFamilyClosed": true,
+    "structuralSequencingPrototypeAuthorised": true,
+    "mlOrRlAuthorised": false,
+    "detectorAdmissionAuthorised": false,
+    "productPromotionAuthorised": false,
+    "acceptanceSeedsAuthorised": false,
+    "reserveSeedsAuthorised": false,
+    "p9ReceiptAuthorised": false
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "08176a53146caa85bb120e246b7ba5de685cae0d",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "omissions": [
+    "The 2.5 GB append-only SQLite ledger is hash-pinned locally but omitted from permanent Git history.",
+    "Unreferenced cache objects, transient work outputs, generated imports and SQLite sidecars are not published.",
+    "Research programs remain under research/issue-421/tools and are not applied to product paths.",
+    "No structural-prototype result, detector admission, protected-seed result, product pull request, CI result, merge or P9 receipt exists at this snapshot."
+  ],
+  "github": {
+    "taskIssue": "https://github.com/fol2/glassvow/issues/421",
+    "releaseGateIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}

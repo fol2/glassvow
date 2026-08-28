@@ -1,0 +1,245 @@
+{
+  "authority": "Preregister one 4 x 2 x 4 x 128 equal-cohort exact-candidate causal panel. No alternative scalar cell, ML, RL, product promotion or protected seed is authorised.",
+  "candidateContentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+  "decision": "heldout-four-package-causal-panel-required",
+  "evidenceBoundary": {
+    "cheapestDiscriminator": "One equal 128-policy causal panel covering all four packages, both aspects and all four none/A/B/AB arms on the exact candidate content and frozen Q2/W0 settings.",
+    "forbiddenInference": "Do not substitute the W2 Afterimage control or older non-exact Ash content for the frozen candidate, and do not give only unresolved or promising packages extra support.",
+    "resolved": "Exact-content Scoreline local complementarity and four-package whole-run held-out activation/repertoire evidence.",
+    "unresolved": "Exact frozen-setting Afterimage complementarity and exact-content held-out local complementarity for both Ash packages."
+  },
+  "existingExactCandidateDuskEvidence": {
+    "afterimageW0": {
+      "decision": "unresolved-not-decisive",
+      "discovery": {
+        "activation": {
+          "p025": 0.0,
+          "p975": 0.8873565094161139,
+          "point": 0.35494260376644554,
+          "scale": 0.08804240366863003
+        },
+        "addedStalls": 0,
+        "aspectSeparation": {
+          "p025": 0.0,
+          "p975": 0.078125,
+          "point": 0.03125,
+          "scale": 1.0
+        },
+        "clear": false,
+        "decisiveFailure": false,
+        "duration": {
+          "p025": 0.0,
+          "p975": 0.109375,
+          "point": 0.046875,
+          "scale": 1.0
+        },
+        "policyWitnesses": 2
+      },
+      "validation": {
+        "activation": {
+          "p025": 0.1684677260570645,
+          "p975": 1.0950402193709194,
+          "point": 0.5896370411997258,
+          "scale": 0.18549546985287135
+        },
+        "addedStalls": 0,
+        "aspectSeparation": {
+          "p025": 0.03125,
+          "p975": 0.203125,
+          "point": 0.109375,
+          "scale": 1.0
+        },
+        "clear": false,
+        "decisiveFailure": false,
+        "duration": {
+          "p025": 0.03125,
+          "p975": 0.171875,
+          "point": 0.09375,
+          "scale": 1.0
+        },
+        "policyWitnesses": 6
+      }
+    },
+    "afterimageW2MechanismControl": {
+      "decision": "reproducible-clear-but-not-the-frozen-W0-setting",
+      "discovery": {
+        "activation": {
+          "p025": 0.46213178411509787,
+          "p975": 1.3203765260431368,
+          "point": 0.8582447419280389,
+          "scale": 0.23667491343282984
+        },
+        "addedStalls": 0,
+        "aspectSeparation": {
+          "p025": 0.09375,
+          "p975": 0.3125,
+          "point": 0.203125,
+          "scale": 1.0
+        },
+        "clear": true,
+        "decisiveFailure": false,
+        "duration": {
+          "p025": 0.015625,
+          "p975": 0.125,
+          "point": 0.0625,
+          "scale": 1.0
+        },
+        "policyWitnesses": 12
+      },
+      "validation": {
+        "activation": {
+          "p025": 0.5243225050930763,
+          "p975": 1.415670763751306,
+          "point": 0.9437805091675373,
+          "scale": 0.2980036112931352
+        },
+        "addedStalls": 0,
+        "aspectSeparation": {
+          "p025": 0.15625,
+          "p975": 0.421875,
+          "point": 0.28125,
+          "scale": 1.0
+        },
+        "clear": true,
+        "decisiveFailure": false,
+        "duration": {
+          "p025": 0.0,
+          "p975": 0.140625,
+          "point": 0.0625,
+          "scale": 1.0
+        },
+        "policyWitnesses": 15
+      }
+    },
+    "scorelineW0": {
+      "decision": "reproducible-clear",
+      "discovery": {
+        "activation": {
+          "p025": 1.258478239828026,
+          "p975": 1.7883638144924583,
+          "point": 1.5234210271602422,
+          "scale": 0.4717999733401328
+        },
+        "addedStalls": 0,
+        "aspectSeparation": {
+          "p025": 0.59375,
+          "p975": 0.84375,
+          "point": 0.71875,
+          "scale": 1.0
+        },
+        "clear": true,
+        "decisiveFailure": false,
+        "duration": {
+          "p025": -0.328125,
+          "p975": -0.125,
+          "point": -0.21875,
+          "scale": 1.0
+        },
+        "policyWitnesses": 44
+      },
+      "validation": {
+        "activation": {
+          "p025": 1.1671139497635283,
+          "p975": 1.7506709246452925,
+          "point": 1.4588924372044105,
+          "scale": 0.42840718346422485
+        },
+        "addedStalls": 0,
+        "aspectSeparation": {
+          "p025": 0.5,
+          "p975": 0.75,
+          "point": 0.625,
+          "scale": 1.0
+        },
+        "clear": true,
+        "decisiveFailure": false,
+        "duration": {
+          "p025": -0.5,
+          "p975": -0.171875,
+          "point": -0.328125,
+          "scale": 1.0
+        },
+        "policyWitnesses": 41
+      }
+    }
+  },
+  "immutableInputs": {
+    "factorialProtocol": "9c53ef14c63b4981eedbb5b1aab315da5ad46d0cf45f174a52340d8d09427d01",
+    "factorialSummary": "3244f38ca060c3257b6fb21846752e2887b8655d78a40575878c5891f2484795",
+    "heldOutAnalysis": "aa4ac97242d701bd3ff187ebcf8ee6bd804e7277845aba0474f435267b03dcb3",
+    "heldOutProtocol": "d8496263dbaab0534cf44702e9ea1078c952b87c145b5c04b3492085d6f15be0",
+    "heldOutSummary": "1574e08b855cb17381e0333db26f091d352a5c6ed0c21ec381238bd9eafb280f",
+    "localDiscovery": "86ece2a789b71f827a51d3bab4866fb1ed094301cbc87f315a2bf918f04e67b0",
+    "localValidation": "36721f0976f47ccc0402e2aafbdd071e1f702fd2480a5a25f91320752d2a946b"
+  },
+  "ledgerUnchanged": {
+    "firstSequence": 1,
+    "lastSequence": 460941,
+    "protectedSeedRows": 0,
+    "records": 460941,
+    "sha256": "aacdb478eda35704bf4a49128fca804bbffcccad7f2fe2d62a153b0aabde285a",
+    "sqliteIntegrity": "ok"
+  },
+  "newSimulatorObservationRows": 0,
+  "schemaVersion": 1,
+  "wholeRunHeldOut": {
+    "decision": "confirm-one-frozen-candidate",
+    "policyIdentityAudit": {
+      "clear": true,
+      "firstLookOverlapCount": 0,
+      "firstLookSnapshots": 64,
+      "oneSnapshotPerIdentityAcrossArmsAspectsAndSeeds": true,
+      "policyIdentities": 128,
+      "uniqueHeldOutSnapshots": 128
+    },
+    "strategyPackageActivation": {
+      "clear": true,
+      "functionalSeparation": {
+        "ashwarden": {
+          "ash-bloodfire-leechOnly": 12,
+          "ash-poison-catalystOnly": 46,
+          "clear": true
+        },
+        "duskblade": {
+          "clear": true,
+          "dusk-afterimage-guardOnly": 30,
+          "dusk-scorelineOnly": 17
+        }
+      },
+      "packages": {
+        "ash-bloodfire-leech": {
+          "active": 36,
+          "consumerReachedWithFinalPair": 36,
+          "finalPairReachable": 58,
+          "inactive": 92,
+          "reachabilityClear": true,
+          "sensitivityClear": true
+        },
+        "ash-poison-catalyst": {
+          "active": 70,
+          "consumerReachedWithFinalPair": 70,
+          "finalPairReachable": 82,
+          "inactive": 58,
+          "reachabilityClear": true,
+          "sensitivityClear": true
+        },
+        "dusk-afterimage-guard": {
+          "active": 94,
+          "consumerReachedWithFinalPair": 94,
+          "finalPairReachable": 101,
+          "inactive": 34,
+          "reachabilityClear": true,
+          "sensitivityClear": true
+        },
+        "dusk-scoreline": {
+          "active": 81,
+          "consumerReachedWithFinalPair": 81,
+          "finalPairReachable": 96,
+          "inactive": 47,
+          "reachabilityClear": true,
+          "sensitivityClear": true
+        }
+      }
+    }
+  }
+}

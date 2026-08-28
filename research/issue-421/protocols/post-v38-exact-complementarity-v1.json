@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "On the exact one frozen candidate, which equally supported registered producer-consumer packages show held-out causal complementarity, target-aspect separation, mechanism witnesses and acceptable duration/reliability?",
+  "method": "One non-adaptive mechanism-blocked causal panel. Every tested package receives the same 128 policy identities, research seeds, target/control aspects and complete none/A/B/AB design. No package is extended from observed promise.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "pilotSha256": "93a32555c5c273bcd27ea9c5210fcb958f1c1962faad3b1e76bd20d5f3f7e901",
+    "probeSha256": "f770cef88fb6e7a9b57e98f7d08b2ecc3fc2230dc77339e9fe75417c6d111245",
+    "researchCoreSha256": "0480163456dc6693e90d5f87163918d8452e4dd5c2c822c60543ab03efe3d6a9",
+    "auditRunnerSha256": "ca4a2beb6e026ff7fa26029c156cdd2156b1e4991c075209f3abc5a373f7269d",
+    "runnerSha256": "ab3abe3331b5830f979958703ae2b4e82a71cf7af8460e73bf6958e2d67b57fb"
+  },
+  "entryGate": {
+    "auditSummary": "summaries/post-v38-exact-complementarity-audit-v1.json",
+    "auditSummarySha256": "766db56d4525f66d617f8f4dffb425cd10b7cdad3852e2d5427c5867de569c17",
+    "requiredAuditDecision": "heldout-four-package-causal-panel-required",
+    "executionManifest": "execution/post-v38-exact-complementarity-v1.json",
+    "freeze": "The execution manifest must bind this protocol, runner, probe, zero-row audit, ledger identity and every numeric ceiling before the first causal-panel observation."
+  },
+  "ledgerFreeze": {
+    "sha256": "aacdb478eda35704bf4a49128fca804bbffcccad7f2fe2d62a153b0aabde285a",
+    "records": 460941,
+    "firstSequence": 1,
+    "lastSequence": 460941,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "candidate": {
+    "id": "S-low__A-low__Q-2__R-uncommon__W-0",
+    "contentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+    "research421": {
+      "acquisitionPriority": 2,
+      "wardSetupPriority": 0
+    },
+    "selectionAuthority": "Exactly one candidate was frozen by protocol a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d and independently confirmed by protocol d8496263dbaab0534cf44702e9ea1078c952b87c145b5c04b3492085d6f15be0."
+  },
+  "packages": {
+    "ash-bloodfire-leech": {
+      "aspect": "ashwarden",
+      "producer": "bloodRite",
+      "consumer": "leechBlade",
+      "mediator": "player-bloodfire",
+      "cardMetric": "damage",
+      "cardMetricDirection": 1
+    },
+    "ash-poison-catalyst": {
+      "aspect": "ashwarden",
+      "producer": "toxicMist",
+      "consumer": "catalyst",
+      "mediator": "enemy-mistbound",
+      "cardMetric": "status:poison",
+      "cardMetricDirection": 1
+    },
+    "dusk-afterimage-guard": {
+      "aspect": "duskblade",
+      "producer": "defend",
+      "consumer": "guardedStrike",
+      "mediator": "player-afterimage",
+      "cardMetric": "status:afterimage",
+      "cardMetricDirection": -1
+    },
+    "dusk-scoreline": {
+      "aspect": "duskblade",
+      "producer": "chisel",
+      "consumer": "executioner",
+      "mediator": "enemy-scoreline",
+      "cardMetric": "shatter",
+      "cardMetricDirection": 1
+    }
+  },
+  "admissionSet": {
+    "requiredDuskPackages": [
+      "dusk-afterimage-guard",
+      "dusk-scoreline"
+    ],
+    "supplementalAshPackages": [
+      "ash-bloodfire-leech",
+      "ash-poison-catalyst"
+    ],
+    "minimumSupplementalAshPackages": 1,
+    "immutableAdmittedAshHandSizePackage": {
+      "id": "ash-hand-size-payoff",
+      "producer": "preparation",
+      "consumer": "phantomBlades",
+      "mediator": "hand-size",
+      "evidence": {
+        "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+        "issue524FindingSha256": "acecbae3171e739aeae4fe71dde2d0635ce98c453c58400de9bde627b2368fa2",
+        "issue525ArchiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+        "issue525FindingSha256": "46b10157cbc1d9abb60a2a2a5a68cbffe8b601088842cb6f7f02dae65953fa1c",
+        "use": "Immutable admission and independent reproduction evidence only; do not reconstruct or rerun the exhausted research path."
+      },
+      "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "relevantCardIds": [
+        "preparation",
+        "phantomBlades"
+      ],
+      "relevantCardPairSha256": "727d621094927ded47c39c69d6375813f01115276505f1666fdb344dbbbcf1ea",
+      "exactCandidateIdentity": "The candidate and live catalogues have byte-identical canonical Preparation and Phantom Blades definitions. This protocol verifies that identity before execution and deliberately does not rerun the admitted hand-size research."
+    },
+    "successSet": "Both Dusk packages and at least one equally evaluated supplemental Ash package must clear. Together with immutable independently reproduced hand-size-payoff, this establishes at least two packages per aspect while preserving every additional clear Ash package."
+  },
+  "causalFactors": {
+    "producerPresence": {
+      "levels": [
+        "absent",
+        "present"
+      ],
+      "intervention": "Replace the fixed producer slot with the registered producer when present, otherwise the registered neutral filler."
+    },
+    "consumerPresence": {
+      "levels": [
+        "absent",
+        "present"
+      ],
+      "intervention": "Replace the fixed consumer slot with the registered consumer when present, otherwise the registered neutral filler."
+    },
+    "aspect": {
+      "levels": [
+        "package-target",
+        "other-control"
+      ],
+      "intervention": "Run the identical deck, policy and seed once in the package's target aspect and once in the other aspect."
+    },
+    "package": {
+      "levels": [
+        "ash-bloodfire-leech",
+        "ash-poison-catalyst",
+        "dusk-afterimage-guard",
+        "dusk-scoreline"
+      ],
+      "blocking": "Package is a mechanism block, not a pooled numeric factor. No cross-package main effect is estimated."
+    }
+  },
+  "designMatrix": {
+    "none": {
+      "producerPresence": "absent",
+      "consumerPresence": "absent"
+    },
+    "A": {
+      "producerPresence": "present",
+      "consumerPresence": "absent"
+    },
+    "B": {
+      "producerPresence": "absent",
+      "consumerPresence": "present"
+    },
+    "AB": {
+      "producerPresence": "present",
+      "consumerPresence": "present"
+    },
+    "deckIdentity": "Every arm has exactly ten cards. Non-intervened slots, enemy, unlocks, aspect, policy and research seed are identical within a causal block.",
+    "aliasStructure": "There are no physical aliases between packages because their decks and response metrics differ. Within a package, the same none/A/B/AB cells support both conditional and interaction estimands; they are simulated once."
+  },
+  "cohort": {
+    "policyIdentity": {
+      "root": 547,
+      "firstIndex": 0,
+      "lastIndex": 127,
+      "count": 128
+    },
+    "researchSeeds": {
+      "first": 346000,
+      "last": 346127,
+      "count": 128
+    },
+    "commonRandomNumbers": "For a given index/seed, every package receives both aspects and all four arms. No package, aspect or arm receives extra identities or a different first look.",
+    "independence": "Root 547 and seeds 346000-346127 are disjoint from the root-540/541 exact-content local evidence, root-545 first look and root-546 whole-run held-out confirmation."
+  },
+  "estimands": {
+    "conditionalProducerEffect": "Within each package and aspect, consumer-card response AB minus B. This isolates the registered producer's contribution when the consumer is available.",
+    "producerConsumerInteraction": "Within each package and aspect, consumer-card response AB minus A minus B plus none. This is the preregistered complementarity interaction; its sign is normalised by cardMetricDirection.",
+    "targetMinusControlInteraction": "For each policy/seed, target-aspect producer-consumer interaction minus the matched other-aspect interaction.",
+    "mechanismWitness": "A target-aspect AB row has positive interaction and the registered producer application plus consumer use is visible in card-level event metrics.",
+    "duration": "For target-aspect blocks where all arms win, AB turns minus the minimum turns among none, A and B. No missing block may support admission."
+  },
+  "estimator": {
+    "unit": "The frozen policy-index/research-seed identity is the paired causal unit.",
+    "standardisation": "Conditional and interaction contrasts are divided by the population standard deviation of all four target-aspect arm responses for that package. A zero contrast on zero scale maps to zero; a non-zero constant contrast maps to signed infinity.",
+    "bootstrap": "Exactly 5000 deterministic paired bootstrap resamples with a fresh random.Random(421) stream per estimand.",
+    "bootstrapSeed": 421,
+    "multiplicity": "No package, metric, contrast, threshold, cohort or bootstrap seed may be added or changed after the first observation."
+  },
+  "gates": {
+    "minimumStandardisedComplementarity": 0.25,
+    "minimumMechanismWitnesses": 16,
+    "durationUpperBound": 0.25,
+    "conditionalEffect": "The lower 95% bound of the standardised target-aspect AB-minus-B effect is at least 0.25.",
+    "interaction": "The lower 95% bound of the standardised target-aspect AB-A-B+none interaction is at least 0.25.",
+    "aspectSeparation": "The lower 95% bound of the raw target-minus-control interaction is greater than zero.",
+    "reliability": "All 1,024 rows per package are stall/error-free and AB adds no fault relative to its matched other arms.",
+    "duration": "There are no missing target blocks and the upper 95% bound of AB-minus-best-single duration is at most 0.25 turns.",
+    "admission": "Both required Dusk packages and at least one supplemental Ash package pass every package gate. Every additional clear Ash package is retained; an unclear or failed surplus Ash package cannot substitute for a required Dusk package."
+  },
+  "budget": {
+    "packages": 4,
+    "aspectsPerPackage": 2,
+    "armsPerAspect": 4,
+    "policySeedIdentities": 128,
+    "rowsPerPackage": 1024,
+    "maximumNewSimulatorObservationRows": 4096,
+    "bootstrapResamples": 5000,
+    "maximumWallTimeSeconds": 1800,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Both required Dusk packages and at least one supplemental Ash package clear every registered gate. Admit the exact complementarity set and continue to deterministic detector construction without changing the candidate.",
+    "futility": "A required Dusk package decisively fails, or fewer than one supplemental Ash package can still clear because their registered upper bounds, witness/fault/duration outcomes decisively fail. Reject the candidate, close the scalar family and continue with the next evidence-backed structural mechanism inside issue #421.",
+    "inconclusive": "The success set is not met, but at least one still-required package has no decisive failure; or execution reaches an immutable-input, incomplete-rectangle, cache, engine, harness, row-cap or wall-cap fault. Record inconclusive at the cap and do not rerun or extend this protocol.",
+    "successAuthority": "The exact candidate has the package-level complementarity set needed for detector construction. This does not admit the detector, authorise product promotion or authorise acceptance/reserve seeds.",
+    "futilityAuthority": "The scalar candidate and family are closed. Continue structurally inside issue #421; do not select another observed scalar cell.",
+    "inconclusiveAuthority": "Stop this protocol at decision boundary 3. Do not add rows, alter the package set or rerun."
+  },
+  "deterministicOwnership": "post_v38_exact_complementarity.py alone constructs all four equal package rectangles, invokes the bound simulator/cache, fits every registered estimand, applies gates and selects the decision boundary with zero model-context tokens.",
+  "methodBoundary": {
+    "ml": "Not authorised.",
+    "rl": "Not authorised.",
+    "adaptiveTuning": "Alternative scalar cells, package-specific extensions, promising-package support and V39-style tuning are forbidden."
+  },
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "status": "frozen-before-first-observation",
+  "protocolSha256": "21b79cfe4f21da1ccf272018cf0f49b225688bd1e2651752fe8a35e244489fd6",
+  "runnerSha256": "ab3abe3331b5830f979958703ae2b4e82a71cf7af8460e73bf6958e2d67b57fb",
+  "probeSha256": "f770cef88fb6e7a9b57e98f7d08b2ecc3fc2230dc77339e9fe75417c6d111245",
+  "auditSummarySha256": "766db56d4525f66d617f8f4dffb425cd10b7cdad3852e2d5427c5867de569c17",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "ledgerSha256BeforeFirstObservation": "aacdb478eda35704bf4a49128fca804bbffcccad7f2fe2d62a153b0aabde285a",
+  "ledgerRecordsBeforeFirstObservation": 460941,
+  "packages": 4,
+  "rowsPerPackage": 1024,
+  "maximumSimulatorObservationRows": 4096,
+  "maximumWallTimeSeconds": 1800,
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "bootstrapResamples": 5000,
+  "bootstrapSeed": 421,
+  "protectedSeeds": 0,
+  "executionCommand": "PYTHONDONTWRITEBYTECODE=1 python3 post_v38_exact_complementarity.py execute"
+}

@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "decision": "scalar-candidate-rejected-close-family-continue-structurally",
+  "decisionBoundary": 2,
+  "protocolSha256": "21b79cfe4f21da1ccf272018cf0f49b225688bd1e2651752fe8a35e244489fd6",
+  "runnerSha256": "ab3abe3331b5830f979958703ae2b4e82a71cf7af8460e73bf6958e2d67b57fb",
+  "executionManifestSha256": "6b32bfa1b34466d0470eab7869afbb1c27ba914976ab15b4d765a28266dfc085",
+  "summaryFileSha256": "be2f0776a72c31dc1df7b410e2b1abb4535da47eab5522b88324298679bc4234",
+  "analysisSha256": "1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29",
+  "candidate": {
+    "id": "S-low__A-low__Q-2__R-uncommon__W-0",
+    "contentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+    "research421": {
+      "acquisitionPriority": 2,
+      "wardSetupPriority": 0
+    }
+  },
+  "execution": {
+    "newSimulatorObservationRows": 4096,
+    "rowsPerPackage": 1024,
+    "wallTimeSeconds": 52.460233208024874,
+    "protectedSeedRows": 0
+  },
+  "clearPackages": {
+    "ash-bloodfire-leech": {
+      "interactionStandardised": {
+        "point": 0.6069304495494493,
+        "p025": 0.489406444262327,
+        "p975": 0.728404564180086
+      },
+      "targetMinusControlInteraction": {
+        "point": 11.8984375,
+        "p025": 9.5544921875,
+        "p975": 14.328125
+      },
+      "mechanismWitnesses": 100
+    },
+    "ash-poison-catalyst": {
+      "interactionStandardised": {
+        "point": 1.3140880433134243,
+        "p025": 1.0882066387932328,
+        "p975": 1.5471765120565404
+      },
+      "targetMinusControlInteraction": {
+        "point": 4.2734375,
+        "p025": 3.5388671875,
+        "p975": 5.031445312499997
+      },
+      "mechanismWitnesses": 71
+    },
+    "dusk-scoreline": {
+      "interactionStandardised": {
+        "point": 1.5635336136146383,
+        "p025": 1.3503244844853695,
+        "p975": 1.741207887889029
+      },
+      "targetMinusControlInteraction": {
+        "point": 0.6875,
+        "p025": 0.59375,
+        "p975": 0.765625
+      },
+      "mechanismWitnesses": 88
+    }
+  },
+  "decisiveFailure": {
+    "package": "dusk-afterimage-guard",
+    "interactionStandardised": {
+      "point": 0.3070872091564625,
+      "p025": 0.0,
+      "p975": 0.7165368213650791
+    },
+    "targetMinusControlInteraction": {
+      "point": 0.0234375,
+      "p025": 0.0,
+      "p975": 0.0546875
+    },
+    "mechanismWitnesses": 3,
+    "requiredMechanismWitnesses": 16,
+    "faults": 0,
+    "addedFaults": 0,
+    "durationABMinusBestSingle": {
+      "point": 0.1328125,
+      "p025": 0.078125,
+      "p975": 0.1953125
+    },
+    "classification": "The fixed 3-of-128 mechanism-witness count is below the preregistered 16 and is decisive at the complete cohort. The interaction and aspect-separation lower bounds also remain at zero."
+  },
+  "mechanisticNarrowing": {
+    "acquisitionIsNotTheImmediateBottleneck": "The independent whole-run candidate panel acquired the Afterimage pair in 101 of 128 policies and activated it in 94, so catalogue reachability is present.",
+    "payoffIsNotTheImmediateBottleneck": "The mechanism-blocked first look estimated the low-to-high Afterimage payoff effect near zero, while both adjacent Ward-setup-priority contrasts increased Afterimage intensity.",
+    "sequencingIsTheMeasuredBottleneck": "At W0, exact-content local evidence was unresolved on two older 64-policy splits and now has only 3 mechanism witnesses in 128 independent policies. The same content at the W2 mechanism control cleared both older splits with 12 and 15 witnesses. This is a policy action-order/setup bottleneck, not evidence for another payoff scalar.",
+    "nextStructuralMechanism": "Test one null-safe deterministic package-order grammar that sequences a co-held registered producer before its consumer when the mediator is absent. Apply it equally to all registered pairs; do not retune Ward priority or select another scalar content cell.",
+    "methodBoundary": "The bottleneck and decision value are now measured. The cheapest causal discriminator is the deterministic structural grammar. ML/RL remains deferred unless that preregistered structural mechanism fails and a further method comparison shows decision value."
+  },
+  "immutableHandSizeEvidence": {
+    "package": "ash-hand-size-payoff",
+    "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "issue525ArchiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "candidateAndLiveRelevantCardPairSha256": "727d621094927ded47c39c69d6375813f01115276505f1666fdb344dbbbcf1ea",
+    "boundary": "Retain immutable admission/reproduction evidence; do not rerun the exhausted hand-size research path."
+  },
+  "ledgerAfterAudit": {
+    "sha256": "014b2c3c3c416fd5922b234ae664063f1a3985b8a274946770e02bd62545e360",
+    "bytes": 2523049984,
+    "records": 465049,
+    "firstSequence": 1,
+    "lastSequence": 465049,
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "authority": "Close the tested scalar candidate and family. Continue inside issue #421 with the smallest evidence-backed structural sequencing mechanism. Do not select another scalar cell, add ML/RL yet, promote product content or spend protected seeds."
+}
