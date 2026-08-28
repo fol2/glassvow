@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Does the exact immutable #525 ward-mirror-edge packet provide current-main whole-run Duskblade policy sensitivity, reward/economy reachability and functional separation from Scoreline without material cross-package interference or guardrail regression?",
+  "method": "One exact binary content intervention evaluated by a mechanism-blocked common-random-number whole-run first look. This is not the old four-factor or five-factor design and does not fit another scalar candidate.",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "factorDefinitions": {
+    "wardContentPacket": {
+      "causalRole": "the only varied causal factor",
+      "levels": {
+        "currentMainBaseline": {
+          "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+          "research421": {}
+        },
+        "exactWardCandidate": {
+          "candidateId": "4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c",
+          "contentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb",
+          "research421": {}
+        }
+      },
+      "contrast": "exactWardCandidate minus currentMainBaseline on identical policy and simulation-seed identities"
+    },
+    "scorelinePayoff": {
+      "causalRole": "frozen shared interference anchor, not varied",
+      "level": "current-main exact value",
+      "reason": "Scoreline activation can change only through reward-pool, acquisition, combat-opportunity or global-run interference from the ward packet."
+    },
+    "afterimagePayoff": {
+      "causalRole": "absent from this experiment and not aliased with Scoreline",
+      "level": "current-main exact value",
+      "claimBoundary": "No Afterimage endpoint or rescue claim is supported."
+    }
+  },
+  "designMatrix": {
+    "contentArms": [
+      "currentMainBaseline",
+      "exactWardCandidate"
+    ],
+    "policyGrids": [
+      "duskblade:v5",
+      "ashwarden:v5"
+    ],
+    "randomBuildGrids": [
+      "duskblade:v0",
+      "duskblade:v5",
+      "ashwarden:v0",
+      "ashwarden:v5"
+    ],
+    "cells": "Both content levels receive every named grid, every policy identity and every simulation seed. There are no optional or promising-only cells.",
+    "mechanismBlock": "Dusk policy rows jointly measure Scoreline and ward activation on each identical policy identity. Ash policy and all RandomBuild grids are guardrail blocks, not package-effect factors."
+  },
+  "anchors": {
+    "scorelineInterference": "Paired exactWardCandidate-minus-currentMainBaseline change in the binary Scoreline-active indicator for every Dusk policy identity.",
+    "randomBuild": "Paired candidate-minus-baseline win indicator on each separately named aspect-vow grid.",
+    "identity": "The canonical policy snapshot must be exact across both content arms, aspects and four simulation seeds and disjoint from every registered prior cohort.",
+    "expansionRule": "No joint-cell expansion exists. Scoreline interference above the frozen decision threshold causes rejection or inconclusive classification; it does not authorise extra cells or content tuning."
+  },
+  "packages": {
+    "dusk-scoreline": {
+      "aspect": "duskblade",
+      "producer": "chisel",
+      "consumer": "executioner",
+      "activation": "The final deck contains both cards and one of four matched simulations records positive scorelineApplied and scorelineConsumed.",
+      "reachability": "The final deck contains both cards; consumer-reached additionally requires positive scorelineConsumed."
+    },
+    "dusk-ward-mirror-edge": {
+      "aspect": "duskblade",
+      "producers": [
+        "brace",
+        "mirrorEdge"
+      ],
+      "consumer": "fortify",
+      "mediator": "Ward gained by a registered producer and subsequently doubled by Mirrorlight",
+      "activation": "For at least one registered producer, the final deck contains that producer and fortify and one of four matched simulations records both cards played plus positive wardDoubledByFortify.",
+      "edgeActivation": "Each of brace and mirrorEdge is counted separately with the same final-pair, producer-play, fortify-play and positive-double requirements.",
+      "reachability": "The final deck contains fortify and at least one registered producer; consumer-reached uses the complete activation witness."
+    }
+  },
+  "candidate": {
+    "id": "4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c",
+    "family": "ward-mirror-edge-l2",
+    "sourceFamily": "ward-double-l1",
+    "contentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb",
+    "sourcePath": "/Users/jamesto/Research/glassvow-p9-421-publication/research/issue-421/artifacts/issue-525-ward-mirror-edge-4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c.json",
+    "parameters": {
+      "block": 11,
+      "damage": 6,
+      "rarity": "common"
+    },
+    "mirrorEdgeDefinition": {
+      "cost": 1,
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 6
+        },
+        {
+          "kind": "block",
+          "n": 11
+        }
+      ],
+      "name": "Mirror Edge",
+      "rarity": "common",
+      "target": "enemy",
+      "text": "Deal @6@ damage. Gain #11# Ward.",
+      "type": "attack",
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 9
+          },
+          {
+            "kind": "block",
+            "n": 14
+          }
+        ],
+        "text": "Deal @9@ damage. Gain #14# Ward."
+      },
+      "vfx": "slash"
+    },
+    "selectionBoundary": "This is the only candidate. It is copied byte-for-byte from immutable #525 evidence and is not generated, fitted, ranked or tuned by this protocol."
+  },
+  "baseline": {
+    "name": "current-main live content",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "researchSettings": {}
+  },
+  "immutableScientificEvidence": {
+    "issue525": {
+      "commit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "candidateId": "4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c",
+      "blobs": {
+        "candidateFreeze": {
+          "path": "research/issue-525/artifacts/phase-c-level2-candidate-freeze-v1.json",
+          "sha256": "a8a966663f260b9128376d332c173ae0944bd5f006099f96589f8fefa85ba351"
+        },
+        "level2Validation": {
+          "path": "research/issue-525/artifacts/phase-c-level2-validation-v1.json",
+          "sha256": "1655f9be631c2cff1791d004ff7940718f2fa5b5f47b9ea13b9017cd118ed436"
+        },
+        "terminalFinding": {
+          "path": "research/issue-525/artifacts/terminal-stop-finding-v1.json",
+          "sha256": "46b10157cbc1d9abb60a2a2a5a68cbffe8b601088842cb6f7f02dae65953fa1c"
+        },
+        "immutableManifest": {
+          "path": "research/issue-525/immutable-manifest-v1.json",
+          "sha256": "d537981f9444de5804bf566a29c97e5f230bb834eef3e6b3f845feb80a72d3ae"
+        },
+        "deterministicDefinition": {
+          "path": "research/issue-525/tools/structural.py",
+          "sha256": "76d6a666c9e2f66f82f4934410fc21604296babfa613f375a0f97be98e488d87"
+        }
+      },
+      "usableResult": "The exact candidate passed both registered ward edges and discovery and validation probe/panel gates; it was not admitted on whole-run evidence."
+    },
+    "scorelineComplementarity": {
+      "path": "summaries/post-v38-exact-complementarity-v1-audit.json",
+      "sha256": "8630a5e6ab6559b7e98fa5947e865a11f26ee505879026450f73e95fcb468621",
+      "decision": "scalar-candidate-rejected-close-family-continue-structurally",
+      "usableResult": "Dusk Scoreline independently cleared exact-candidate complementarity with 88 mechanism witnesses; the overall scalar candidate failed only the separate Afterimage package."
+    },
+    "engineIdentity": {
+      "path": "summaries/post-v38-policy-package-order-identity-v1.json",
+      "sha256": "17e56ec1f69489b518d6c246401083698897bafa7f6a9833509fe0cbcf523a1c",
+      "decision": "policy-package-order-identity-safe",
+      "usableResult": "The exact Godot 4.7.1 replay is row-exact against the frozen path and subsequent null research settings preserve identity."
+    },
+    "scope": "Read-only evidence only. This protocol does not rerun #524/#525 probes, reconstruct their historical search plan or revisit exhausted Kindle/Branch paths."
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "balancePolicySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "pilotSha256": "58462de3c9ccadfd36410912c1b4f8bf025df2c41069366756b9cf022a2fe658",
+    "balanceSimSha256": "45a3d3b95f53f89ab4444e45da32ba7f691090518d74706823e44478a2e55777",
+    "probeSha256": "0c1353a3ef8526afeb1a206d30985f9fd11e864dd925360738ac20e9fa13304e",
+    "researchCoreSha256": "0480163456dc6693e90d5f87163918d8452e4dd5c2c822c60543ab03efe3d6a9",
+    "wholeRunAnalysisRunnerSha256": "a6b06e4491b872e14b3a053c48a8859784d3f0a12bf5db973d6589cfd0036048",
+    "blockedAnalysisRunnerSha256": "a6435cc05f13042ee9132de90a40d11a61716b56d116b729aff92faad5a152cb",
+    "runnerSha256": "0d7dca792d968d1bfcfc28d1428f4071c0822a2e64372a67043773c2991547a0"
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "records": 478125,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok"
+  },
+  "cohorts": {
+    "policyIdentity": {
+      "root": 551,
+      "firstIndex": 0,
+      "lastIndex": 63,
+      "count": 64
+    },
+    "policySimulationSeeds": {
+      "first": 346596,
+      "last": 346599,
+      "count": 4
+    },
+    "randomBuildSeeds": {
+      "first": 346532,
+      "last": 346595,
+      "count": 64
+    },
+    "commonRandomNumbers": "Both content arms use every identical root-551 policy, all four policy simulation seeds and every RandomBuild seed on all named grids.",
+    "novelty": "Root 551 and seeds 346532-346599 must have zero prior ledger observations before execution."
+  },
+  "excludedPolicyCohorts": [
+    {
+      "protocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
+      "root": 545,
+      "count": 64
+    },
+    {
+      "protocolSha256": "d8496263dbaab0534cf44702e9ea1078c952b87c145b5c04b3492085d6f15be0",
+      "root": 546,
+      "count": 128
+    },
+    {
+      "protocolSha256": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e",
+      "root": 550,
+      "count": 128
+    }
+  ],
+  "heldOutReservation": {
+    "policyIdentity": {
+      "root": 552,
+      "firstIndex": 0,
+      "lastIndex": 127,
+      "count": 128
+    },
+    "randomBuildSeeds": {
+      "first": 346600,
+      "last": 346727,
+      "count": 128
+    },
+    "policySimulationSeeds": {
+      "first": 346728,
+      "last": 346731,
+      "count": 4
+    },
+    "authority": "Remain unused unless decision boundary 1 freezes this exact candidate. A separate immutable held-out protocol must inherit the candidate, estimands and proportionally scaled gates before execution."
+  },
+  "estimands": {
+    "policyActivation": "For each package and edge, aggregate the registered binary activation over the same four simulations for each root-551 policy identity.",
+    "policySensitivity": "Count active and inactive policy identities for Scoreline and the union of the two registered ward edges.",
+    "rewardEconomyReachability": "Count final-pair and complete consumer-reached identities for both packages and separately for Brace and Mirror Edge ward edges.",
+    "functionalSeparation": "Count Scoreline-only, ward-only and cross-active policy identities on the same candidate rectangle.",
+    "scorelineInterference": "Paired mean candidate-minus-baseline Scoreline-active indicator with a 95% policy-cluster bootstrap interval.",
+    "wardActivationImpact": "Paired mean candidate-minus-baseline ward-active indicator with the same estimator; diagnostic only because admission is defined by candidate support and exact #525 complementarity.",
+    "randomBuild": "Paired candidate-minus-baseline win indicator separately for every aspect-vow grid.",
+    "duration": "Candidate-minus-baseline mean combat turns per fight for every matched policy simulation row.",
+    "reliability": "Candidate faults and candidate-added faults on every complete policy and RandomBuild rectangle."
+  },
+  "mechanisticallyJustifiedInteractions": {
+    "fitted": [],
+    "reason": "Only one binary exact-content factor varies, so no factorial interaction is identifiable.",
+    "interferenceAnchor": "The paired Scoreline activation contrast measures the only preregistered cross-package path: ward reward-pool and run changes altering acquisition or expression of an unchanged Scoreline package."
+  },
+  "aliasStructure": {
+    "exactPacketAlias": "The seven #525 content edits and new common-pool entry vary together. Whole-run evidence identifies only the exact 0acbe... packet, not individual numeric fields or Mirror Edge in isolation.",
+    "closedResearchKnobs": "acquisitionPriority, wardSetupPriority, packageOrder, policyPackageOrder and policyPackageCommitment are all at exact null and are not factors.",
+    "invalidClaims": [
+      "No Afterimage effect or rescue.",
+      "No field-level attribution inside the ward packet.",
+      "No detector, RC, product or protected-seed admission.",
+      "No inference from an endpoint outside a complete matched rectangle."
+    ]
+  },
+  "estimator": {
+    "bootstrap": "Exactly 5000 deterministic cluster-bootstrap resamples with a fresh random.Random(421) stream per estimand. Policy identity is the cluster for activation and RandomBuild seed is the cluster for grid movement.",
+    "bootstrapResamples": 5000,
+    "bootstrapSeed": 421,
+    "pointEstimates": "Means for paired binary or duration differences and exact counts for support gates.",
+    "multiplicity": "No post-hoc endpoint, fitted threshold, alternate seed, candidate ranking or outcome-based cohort change."
+  },
+  "gates": {
+    "minimumActiveAndInactivePolicies": 16,
+    "minimumReachablePolicies": 8,
+    "minimumWardEdgeReachablePolicies": 8,
+    "minimumExclusivePolicies": 4,
+    "maximumAbsoluteScorelineAnchorMovement": 0.1,
+    "randomBuildWinCeiling": 0.5,
+    "maximumAbsoluteRandomBuildMovement": 0.1,
+    "vow5PolicyWinCeiling": 0.9,
+    "durationUpperBound": 0.25,
+    "reliability": "Zero candidate policy faults, zero candidate-added policy faults and zero candidate-added RandomBuild faults.",
+    "provenance": "The 16/16 sensitivity, eight reachability and four separation thresholds are the exact 64-policy proportional first-look versions used by the earlier mechanism-blocked protocol. RandomBuild, Vow-5 and duration thresholds are unchanged."
+  },
+  "budget": {
+    "rowsPerContentArm": 768,
+    "randomBuildRowsPerContentArm": 256,
+    "policyRowsPerContentArm": 512,
+    "maximumNewSimulatorObservationRows": 1536,
+    "firstLookPoliciesPerAspect": 64,
+    "randomBuildSeedsPerGrid": 64,
+    "policySeedsPerPolicy": 4,
+    "bootstrapResamples": 5000,
+    "maximumWallTimeSeconds": 900,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Both packages pass sensitivity and reward/economy reachability; both ward edges pass their separate reachability gate; functional separation, policy identity, Scoreline anchor, reliability, RandomBuild, Vow-5 and duration gates all pass.",
+    "futility": "Reject at boundary 2 if a package, ward edge, separation, reliability, RandomBuild win ceiling or Vow-5 gate fails; a RandomBuild or Scoreline movement interval lies wholly beyond its threshold; or a duration lower bound exceeds 0.25 turns.",
+    "inconclusive": "Record boundary 3 if an identity, immutable input, content load, complete rectangle, cache, engine, ledger, row-cap or wall-cap assertion fails, or only a movement/duration point or interval straddles its decision threshold.",
+    "successAuthority": "Freeze exactly candidate 4f02c9b... and its 0acbe... content for the preregistered root-552 independent whole-run confirmation. Do not evaluate another ward candidate or spend protected seeds.",
+    "futilityAuthority": "Close the exact ward-mirror-edge packet and tested level-2 direction without retuning; continue with the next evidence-backed structural mechanism inside issue #421.",
+    "inconclusiveAuthority": "Stop at the preregistered cap. Do not rerun, extend, repair or tune this protocol."
+  },
+  "deterministicOwnership": "post_v38_ward_whole_run_discovery.py alone verifies immutable evidence, caches the exact candidate, constructs both CRN rectangles, invokes exact Godot 4.7.1, records the append-only ledger, computes every registered estimand and chooses the decision boundary with zero model-context tokens.",
+  "protectedSeedsExcluded": true,
+  "methodBoundary": "No ML, RL or optimiser is authorised. The exact candidate was selected by immutable #525 evidence; this experiment answers only its missing current-main whole-run admission question."
+}

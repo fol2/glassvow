@@ -13,6 +13,7 @@
     "Freeze numeric row, wall-time and model-context ceilings plus success, futility and inconclusive rules before execution.",
     "Do not add ML, RL or another optimiser unless the blocked experiment first identifies a policy-repertoire bottleneck and measured decision value justifies it.",
     "The scalar candidate and family are now closed by exact-candidate causal-panel decision boundary 2; do not select another scalar cell.",
+    "The exact #525 ward-mirror-edge packet and tested level-2 direction are closed by current-main whole-run decision boundary 2; do not retune, splice or send it to held-out confirmation.",
     "At the next decision boundary freeze at most one candidate, close the scalar family and continue structurally inside #421, or record inconclusive at the preregistered cap.",
     "Do not use acceptance seeds 3000-5199 or reserve seeds 5200-5399 before the authorised final exact-SHA boundary.",
     "Keep research outside production truth; do not create a research PR, run product CI, or merge the archive-only evidence branch."
@@ -42,8 +43,8 @@
     "archivedExperimentGodot": "4.7.2.stable.official.ed1daf0bf",
     "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
     "researchContentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
-    "researchLedgerRecords": 478125,
-    "researchLedgerSha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "researchLedgerRecords": 479669,
+    "researchLedgerSha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
     "protectedSeedRows": 0,
     "knobIdentityProtocolSha256": "3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff",
     "blockedCrnProtocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
@@ -68,7 +69,10 @@
     "ashPackagePairProtocolSha256": "3974dc28586ddabf2efc5454bae8b9326bbca02660647224b972c6131bdfe819",
     "ashPackagePairSummarySha256": "af6424db4266531fadd7c7de07db0b46e028a4543604636ec1b13b819b2b7c1f",
     "wardMirrorEdgeCandidateId": "4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c",
-    "wardMirrorEdgeContentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb"
+    "wardMirrorEdgeContentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb",
+    "wardWholeRunProtocolSha256": "bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa",
+    "wardWholeRunAnalysisSha256": "63b6d9ba4c79fa86eeeb0a8e54287463df4864deac27f0128d3a07ed9d77526c",
+    "wardWholeRunAuditSha256": "45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b"
   },
   "decisions": [
     {
@@ -150,18 +154,23 @@
       "decision": "Admit Ash hand-size and Bloodfire as the two package-support directions for matched detector construction.",
       "evidence": "summaries/post-v38-ash-package-pair-v1.json",
       "reason": "On the same 128-policy structural-null rectangle, hand-size had 35 active and 93 inactive policies, Bloodfire had 36 active and 92 inactive, both cleared reachability, functional separation was 27 versus 28 exclusive policies and faults were zero. This unfiltered support does not reopen the failed preference grammar."
+    },
+    {
+      "decision": "Reject the exact #525 ward-mirror-edge packet and close its tested level-2 direction without retuning.",
+      "evidence": "summaries/post-v38-ward-whole-run-discovery-v1-audit.json",
+      "reason": "On a complete 1,536-row current-main CRN rectangle, Ward had only 14 active policies, Brace only six, Scoreline zero and functional separation zero. Duskblade Vow-0 RandomBuild reached 0.50 with movement 0.234375, while Ashwarden Vow-0 moved 0.1875; both movement intervals lay wholly above the 0.10 limit. The independent read-only audit reproduced every hard failure and added zero rows."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
     "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
     "heldOutConfirmation": "Root-546 policies and disjoint simulation seeds reproduced proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
-    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. Dusk Scoreline remains supported. The exact #525 ward-mirror-edge candidate is independently probe/panel promotable but still requires current-main whole-run economy, policy-sensitivity and separation admission.",
+    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 ward-mirror-edge packet failed current-main whole-run sensitivity, separation and RandomBuild guardrails and is closed. Prior Dusk Scoreline complementarity remains evidence, but current-main produced zero Scoreline consumer witnesses; a second materially different Dusk direction remains outstanding.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
   "toolchainBoundary": "Resolved with the isolated official Godot 4.7.1.stable.official.a13da4feb binary. Its release SHA-512 and codesign are verified, every new execution is pinned to it, and a frozen pre-change identity plan replayed row-exactly against the archived 4.7.2 evidence.",
-  "nextAction": "Using the exact published #525 ward-mirror-edge content object, preregister the cheapest current-main mechanism-blocked Scoreline-versus-ward whole-run admission experiment. Freeze package activation, common policy/seed identities, estimator, row/wall-time/context caps and success/futility/inconclusive rules before any row. Do not rescue Afterimage, retune a closed grammar, repeat #517/#519/#525, add ML/RL, spend protected seeds or promote product content.",
+  "nextAction": "Read the retained local edge-aspect interactions from immutable #524 evidence and perform a zero-new-row current-main source and archived-trace inventory to identify the smallest materially different Duskblade mediator with whole-run decision value. Freeze its exact mechanism, contrast, common policy/seed identities, estimator, caps and boundary rules before implementation or any simulator row. Do not reconstruct #524's historical plan, rescue Afterimage, retune or splice the closed ward packet, repeat #517/#519/#525, add ML/RL, spend protected seeds or promote product content.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

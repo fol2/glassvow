@@ -1,0 +1,148 @@
+{
+  "analysisSha256": "63b6d9ba4c79fa86eeeb0a8e54287463df4864deac27f0128d3a07ed9d77526c",
+  "authority": "The frozen boundary-2 rejection is independently reproduced. Do not retune or rerun this ward packet.",
+  "baselineSupport": {
+    "edges": {
+      "brace": {
+        "active": 2,
+        "reachable": 13
+      },
+      "mirrorEdge": {
+        "active": 0,
+        "reachable": 0
+      }
+    },
+    "scoreline": {
+      "active": 0,
+      "consumerReached": 0,
+      "inactive": 64,
+      "reachable": 58
+    },
+    "separation": {
+      "crossActive": 0,
+      "scorelineOnly": 0,
+      "wardOnly": 2
+    },
+    "ward": {
+      "active": 2,
+      "consumerReached": 2,
+      "inactive": 62,
+      "reachable": 13
+    }
+  },
+  "candidateFaults": 0,
+  "candidateSupport": {
+    "edges": {
+      "brace": {
+        "active": 6,
+        "reachable": 11
+      },
+      "mirrorEdge": {
+        "active": 13,
+        "reachable": 19
+      }
+    },
+    "scoreline": {
+      "active": 0,
+      "consumerReached": 0,
+      "inactive": 64,
+      "reachable": 55
+    },
+    "separation": {
+      "crossActive": 0,
+      "scorelineOnly": 0,
+      "wardOnly": 14
+    },
+    "ward": {
+      "active": 14,
+      "consumerReached": 14,
+      "inactive": 50,
+      "reachable": 20
+    }
+  },
+  "decision": "reject-exact-ward-candidate-close-tested-direction",
+  "decisionBoundary": 2,
+  "hardFailureWitnesses": {
+    "ashRandomBuildMovement": true,
+    "braceEdge": true,
+    "duskRandomBuildCeiling": true,
+    "duskRandomBuildMovement": true,
+    "functionalSeparation": true,
+    "scorelineConsumerReach": true,
+    "scorelineSensitivity": true,
+    "wardSensitivity": true
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "protectedSeedRows": 0,
+    "records": 479669,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "protectedSeedRows": 0,
+    "records": 479669,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok"
+  },
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outputs": {
+    "baseline": {
+      "outputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf",
+      "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f"
+    },
+    "candidate": {
+      "outputSha256": "53ea7e29ebd732e56d0ccf22a5f8204499307b65a191ad5edffdf00bbbe58df6",
+      "planSha256": "e730bb444316c5de4ba538eb8e77e0ba919753b5b9484bb79970a982148e8032"
+    }
+  },
+  "policyIdentity": {
+    "exactAcrossArmsAspectsAndSeeds": true,
+    "policyIdentities": 64,
+    "uniqueSnapshots": 64
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa",
+  "randomBuild": {
+    "ashwarden:v0": {
+      "baselineWins": 15,
+      "candidateMinusBaseline": 0.1875,
+      "candidateWinRate": 0.421875,
+      "candidateWins": 27,
+      "pairs": 64
+    },
+    "ashwarden:v5": {
+      "baselineWins": 2,
+      "candidateMinusBaseline": 0.046875,
+      "candidateWinRate": 0.078125,
+      "candidateWins": 5,
+      "pairs": 64
+    },
+    "duskblade:v0": {
+      "baselineWins": 17,
+      "candidateMinusBaseline": 0.234375,
+      "candidateWinRate": 0.5,
+      "candidateWins": 32,
+      "pairs": 64
+    },
+    "duskblade:v5": {
+      "baselineWins": 9,
+      "candidateMinusBaseline": -0.015625,
+      "candidateWinRate": 0.125,
+      "candidateWins": 8,
+      "pairs": 64
+    }
+  },
+  "rows": {
+    "baseline": 768,
+    "candidate": 768,
+    "total": 1536
+  },
+  "schemaVersion": 1,
+  "status": "PASS"
+}

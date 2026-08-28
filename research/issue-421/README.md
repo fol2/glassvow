@@ -8,8 +8,9 @@ This directory publishes reviewable evidence from the active scientific issue
 V38 freeze, the zero-row identifiability audit, the pre-directive experiment,
 and the post-directive knob proof, mechanism-blocked CRN first look,
 independent held-out confirmation, structural package-order work, hand-size
-reconciliation and Ash package admission. It is a progress snapshot, not detector
-admission, product promotion or a P9 receipt. The branch is a
+reconciliation, Ash package admission and exact Ward whole-run rejection. It
+is a progress snapshot, not detector admission, product promotion or a P9
+receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
 and is not intended to enter `main`.
 
@@ -115,14 +116,34 @@ separation with zero faults. Those two Ash directions are admitted for matched
 detector construction. The failed preference-filtered Bloodfire grammar remains
 closed.
 
-The next Dusk input is the exact immutable #525 `ward-mirror-edge` content
-packet, not another scalar or Afterimage rescue. It passed independent
-probe/panel evidence but has not had whole-run economy or policy admission. Its
-exact content is published here before a new-row protocol is frozen.
+The exact immutable #525 `ward-mirror-edge` packet has now failed its complete
+current-main whole-run CRN admission. Ward reached only 14/64 active policies,
+Brace reached six, Scoreline reached zero and functional separation reached
+zero. Independently, Duskblade Vow-0 RandomBuild reached the forbidden 0.50
+ceiling and both Duskblade and Ashwarden Vow-0 movement intervals lay wholly
+above the 0.10 limit. The deterministic decision is boundary 2: reject the
+exact packet, close its tested level-2 direction and do not retune, splice or
+send it to held-out confirmation.
+
+The next step is a zero-row current-main inventory of the retained local
+edge-aspect interactions in immutable #524 evidence. It must identify a
+materially different, expressible Duskblade mediator before implementation or
+new simulator spend; it does not reconstruct #524's historical plan.
 
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-ward-whole-run-discovery-v1.md`](summaries/progress-post-directive-ward-whole-run-discovery-v1.md),
+[`protocols/post-v38-ward-whole-run-discovery-v1.json`](protocols/post-v38-ward-whole-run-discovery-v1.json),
+[`execution/post-v38-ward-whole-run-discovery-v1.json`](execution/post-v38-ward-whole-run-discovery-v1.json),
+[`summaries/post-v38-ward-whole-run-discovery-v1.json`](summaries/post-v38-ward-whole-run-discovery-v1.json),
+[`summaries/post-v38-ward-whole-run-discovery-v1-audit.json`](summaries/post-v38-ward-whole-run-discovery-v1-audit.json),
+[`artifacts/ledger-freeze-ward-whole-run-discovery-v1.json`](artifacts/ledger-freeze-ward-whole-run-discovery-v1.json)
+and
+[`raw/post-directive-ward-whole-run-discovery-raw-v1.tar.gz`](raw/post-directive-ward-whole-run-discovery-raw-v1.tar.gz)
+for the current Dusk boundary, exact protocol, execution identity, result,
+independent read-only recomputation, ledger identity and complete
+content-addressed plans/outputs. Then read
 [`summaries/progress-post-directive-hand-size-ash-admission-v1.md`](summaries/progress-post-directive-hand-size-ash-admission-v1.md),
 [`protocols/post-v38-hand-size-inventory-v2.json`](protocols/post-v38-hand-size-inventory-v2.json),
 [`summaries/post-v38-hand-size-inventory-v2.json`](summaries/post-v38-hand-size-inventory-v2.json),
@@ -234,9 +255,11 @@ evidence and are not installed into the archive branch's product paths.
 
 ## Evidence cache and ledger
 
-`raw/cache/sha256/` contains all 212 content-addressed cache objects referenced
-by the published protocols, summaries and task capsule, totalling 7,212,968
-bytes before Git compression.
+`raw/cache/sha256/` contains the 212 directly published content-addressed cache
+objects from the earlier protocols, summaries and task capsule, totalling
+7,212,968 bytes before Git compression. The Ward whole-run archive adds its six
+exact plan, output, analysis and canonical-summary cache objects without
+duplicating their 11.3 MB uncompressed payload in the Git tree.
 
 At the V38 freeze, the append-only SQLite ledger was 2.0 GB and was deliberately
 not copied into Git history. That freeze remains immutable at
@@ -308,6 +331,13 @@ fault stopped before estimands; v2 corrected only that expected hash. The Ash
 pair then passed on the same frozen structural-null rectangle. The ledger
 remains byte-identical and no protected seed has been used.
 
+The exact Ward whole-run first look then added 1,536 simulator observations on
+the complete frozen CRN rectangle and stopped at boundary 2. The ledger is now
+2,595,717,120 bytes with 479,669 records and SHA-256
+`d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e`.
+Its independent audit added zero rows, reproduced all hard-failure witnesses
+and left that identity byte-exact. No protected seed has been used.
+
 ## Frozen identities
 
 - source and archive base: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
@@ -341,11 +371,15 @@ remains byte-identical and no protected seed has been used.
 - Ash package-pair protocol SHA-256: `3974dc28586ddabf2efc5454bae8b9326bbca02660647224b972c6131bdfe819`
 - Ash package-pair summary SHA-256: `af6424db4266531fadd7c7de07db0b46e028a4543604636ec1b13b819b2b7c1f`
 - exact #525 ward candidate content SHA-256: `0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb`
+- Ward whole-run protocol SHA-256: `bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa`
+- Ward whole-run analysis SHA-256: `63b6d9ba4c79fa86eeeb0a8e54287463df4864deac27f0128d3a07ed9d77526c`
+- Ward whole-run audit SHA-256: `45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b`
+- Ward whole-run raw archive SHA-256: `5a95a5564b64a8839b1152e3665b2a1f57d294dbfb8ab9060d165268f7bd01aa`
 
 ## Remote heads at publication preparation
 
 - `origin/main`: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
-- `research/issue-421-p9-recovery-evidence`: `650bc9aef67765ffbd41b2756ecc0e8868f625a8`
+- `research/issue-421-p9-recovery-evidence`: `b7227e5b6b947f87a258899f5fb24bb1fdda7c0f`
 - `research/issue-524-causal-slate-evidence`: `f305b95d9e1d173e5d8150289afab9688c0ea7f0`
 - `research/issue-525-mechanism-package-synthesis-evidence`: `7132e5e0d6e6e6dc196dda3ed90ad2be292608d6`
 - `work/421-h34`: `4a94d155400162289a84f416336ff407f55b3cf6`
@@ -353,8 +387,9 @@ remains byte-identical and no protected seed has been used.
 - `work/421-s009-exam`: `b30b290813d88109c5b9bc34354babefdc406f8d`
 
 Research is continuing under #421 after admitting the hand-size and Bloodfire
-Ash package directions and closing the first-acquisition lock before
-implementation. The scalar, producer-first and normalised-payoff commitment
-grammars remain closed. The next bounded step is current-main whole-run admission
-of the exact #525 ward candidate alongside Scoreline. Detector admission,
-promotion and protected seeds remain outstanding and unauthorised.
+Ash package directions and rejecting the exact #525 Ward packet at its
+current-main whole-run boundary. The scalar, producer-first,
+normalised-payoff commitment and tested Ward level-2 directions remain closed.
+The next bounded step is the zero-row current-main inventory of immutable #524
+Duskblade edge evidence. Detector admission, promotion and protected seeds
+remain outstanding and unauthorised.

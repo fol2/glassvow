@@ -1,0 +1,58 @@
+{
+  "analysisSha256": "63b6d9ba4c79fa86eeeb0a8e54287463df4864deac27f0128d3a07ed9d77526c",
+  "authority": "Close the exact ward-mirror-edge packet and tested level-2 direction without retuning; continue with the next evidence-backed structural mechanism inside issue #421.",
+  "candidate": {
+    "contentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb",
+    "family": "ward-mirror-edge-l2",
+    "id": "4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c",
+    "mirrorEdgeDefinition": {
+      "cost": 1,
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 6
+        },
+        {
+          "kind": "block",
+          "n": 11
+        }
+      ],
+      "name": "Mirror Edge",
+      "rarity": "common",
+      "target": "enemy",
+      "text": "Deal @6@ damage. Gain #11# Ward.",
+      "type": "attack",
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 9
+          },
+          {
+            "kind": "block",
+            "n": 14
+          }
+        ],
+        "text": "Deal @9@ damage. Gain #14# Ward."
+      },
+      "vfx": "slash"
+    },
+    "parameters": {
+      "block": 11,
+      "damage": 6,
+      "rarity": "common"
+    },
+    "selectionBoundary": "This is the only candidate. It is copied byte-for-byte from immutable #525 evidence and is not generated, fitted, ranked or tuned by this protocol.",
+    "sourceFamily": "ward-double-l1",
+    "sourcePath": "/Users/jamesto/Research/glassvow-p9-421-publication/research/issue-421/artifacts/issue-525-ward-mirror-edge-4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c.json"
+  },
+  "decision": "reject-exact-ward-candidate-close-tested-direction",
+  "decisionBoundary": 2,
+  "executionManifestSha256": "bfb08db7af22863edad7d186941c8732256e5a1473c30c3ead55dd4f7d431b16",
+  "newSimulatorObservationRows": 1536,
+  "protectedSeedRows": 0,
+  "protocolSha256": "bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa",
+  "runnerSha256": "0d7dca792d968d1bfcfc28d1428f4071c0822a2e64372a67043773c2991547a0",
+  "schemaVersion": 1,
+  "wallTimeSeconds": 64.52874249999877
+}

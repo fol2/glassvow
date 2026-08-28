@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "protocolSha256": "bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa",
+  "executionManifestSha256": "bfb08db7af22863edad7d186941c8732256e5a1473c30c3ead55dd4f7d431b16",
+  "decision": "reject-exact-ward-candidate-close-tested-direction",
+  "decisionBoundary": 2,
+  "before": {
+    "records": 478125,
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "afterExecution": {
+    "records": 479669,
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "afterIndependentAudit": {
+    "records": 479669,
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "newRecords": 1544,
+  "newSimulatorObservationRows": 1536,
+  "newProtocolRecords": 1,
+  "newPlanRecords": 2,
+  "newProbeRunRecords": 2,
+  "newAnalysisRecords": 2,
+  "newSourceIdentityRecords": 1,
+  "independentAuditNewRows": 0,
+  "authority": "The independent audit was read-only. The exact ward packet and tested level-2 direction are closed without retuning; held-out root 552 and seeds 346600-346731 remain unused."
+}

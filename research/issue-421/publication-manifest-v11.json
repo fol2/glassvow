@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 11,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "exact immutable #525 ward packet current-main whole-run boundary-2 rejection",
+  "decision": "REJECT_EXACT_WARD_PACKET_CLOSE_TESTED_LEVEL2_DIRECTION",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-ward-whole-run-discovery-v1.md",
+    "progressReportSha256": "0708fecb5c70499a6b2090be8f0e3fff6e2457fd4cb52243d657b3f235a8e848",
+    "protocol": "protocols/post-v38-ward-whole-run-discovery-v1.json",
+    "protocolSha256": "bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa",
+    "executionManifest": "execution/post-v38-ward-whole-run-discovery-v1.json",
+    "executionManifestSha256": "bfb08db7af22863edad7d186941c8732256e5a1473c30c3ead55dd4f7d431b16",
+    "summary": "summaries/post-v38-ward-whole-run-discovery-v1.json",
+    "summarySha256": "62fbd2b3bb903bf41ffa4ed6f151884b0807376293eddf249c676ed05b8105e8",
+    "analysisSha256": "63b6d9ba4c79fa86eeeb0a8e54287463df4864deac27f0128d3a07ed9d77526c",
+    "audit": "summaries/post-v38-ward-whole-run-discovery-v1-audit.json",
+    "auditSha256": "45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b",
+    "runner": "tools/post_v38_ward_whole_run_discovery.py",
+    "runnerSha256": "0d7dca792d968d1bfcfc28d1428f4071c0822a2e64372a67043773c2991547a0",
+    "auditRunner": "tools/post_v38_ward_whole_run_discovery_audit.py",
+    "auditRunnerSha256": "c28afa712e3eab5587aba75cf922b0cc039dc5c69205ad123c814061b379a5a1",
+    "ledgerFreeze": "artifacts/ledger-freeze-ward-whole-run-discovery-v1.json",
+    "ledgerFreezeSha256": "1659946947e5eb73ec079631598ab88761261fa31052b5e9ec9e228f5c690ab8",
+    "rawArchive": "raw/post-directive-ward-whole-run-discovery-raw-v1.tar.gz",
+    "rawArchiveSha256": "5a95a5564b64a8839b1152e3665b2a1f57d294dbfb8ab9060d165268f7bd01aa",
+    "readmeSha256": "a8b96a5f1069038ae0fd2883d7a777b6303f7dd42fd124b5105eb8d151870fcb",
+    "taskCapsuleSha256": "d24772f805cd75f0a91ae3378ae3fa772e5c6356a29a66f7200cc431c3f2cf7d"
+  },
+  "causalContract": {
+    "variedFactor": "One binary exact-content packet: immutable #525 ward-mirror-edge candidate versus current-main baseline.",
+    "scorelinePayoff": "Frozen current-main shared interference anchor; not varied.",
+    "afterimagePayoff": "Separate, frozen at current main and absent from every endpoint.",
+    "closedKnobs": "acquisitionPriority, wardSetupPriority, packageOrder, policyPackageOrder and policyPackageCommitment remained exact nulls.",
+    "alias": "The seven packet edits vary together, so no field-level or Mirror Edge-only attribution is supported.",
+    "matrix": "Every arm received the same 64 root-551 policies, four policy seeds, four aspect-vow RandomBuild grids and 64 RandomBuild seeds; there were no optional cells.",
+    "caps": {
+      "maximumNewSimulatorObservationRows": 1536,
+      "maximumWallTimeSeconds": 900,
+      "maximumModelContextTokensDuringExecutionAndDecision": 0,
+      "protectedSeeds": 0
+    }
+  },
+  "result": {
+    "decisionBoundary": 2,
+    "newSimulatorObservationRows": 1536,
+    "wallTimeSeconds": 64.52874249999877,
+    "scoreline": {
+      "active": 0,
+      "inactive": 64,
+      "reachable": 55,
+      "consumerReached": 0
+    },
+    "ward": {
+      "active": 14,
+      "inactive": 50,
+      "reachable": 20,
+      "consumerReached": 14
+    },
+    "wardEdges": {
+      "braceActive": 6,
+      "braceReachable": 11,
+      "mirrorEdgeActive": 13,
+      "mirrorEdgeReachable": 19
+    },
+    "functionalSeparation": {
+      "scorelineOnly": 0,
+      "wardOnly": 14,
+      "crossActive": 0
+    },
+    "randomBuild": {
+      "duskbladeVow0CandidateWinRate": 0.5,
+      "duskbladeVow0Movement": 0.234375,
+      "ashwardenVow0CandidateWinRate": 0.421875,
+      "ashwardenVow0Movement": 0.1875,
+      "vow5Clear": true
+    },
+    "policyIdentityClear": true,
+    "durationClear": true,
+    "candidateFaults": 0,
+    "protectedSeedRows": 0
+  },
+  "independentAudit": {
+    "status": "PASS",
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "reproducedHardFailureWitnesses": 8,
+    "ledgerBeforeAndAfterExact": true
+  },
+  "localLedgerFreeze": {
+    "records": 479669,
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "bytes": 2595717120,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 439,
+    "payloadFilesIndexed": 427,
+    "protocolFiles": 69,
+    "summaryFiles": 83,
+    "artifactFiles": 13,
+    "toolFiles": 25,
+    "newRawObjects": 6,
+    "rawArchiveBytes": 1017461,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "e6825c5e392ab8ff087227beb349d88320eff18c82ba1907d1b7ea42b32d873f"
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "b7227e5b6b947f87a258899f5fb24bb1fdda7c0f",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "nextAction": "Perform a zero-new-row current-main inventory of the retained local edge-aspect interactions in immutable #524 evidence, then preregister only the smallest materially different Duskblade mechanism with measured whole-run decision value.",
+  "omissions": [
+    "No immutable #524 or #525 experiment was rerun or reconstructed.",
+    "No held-out root-552 policy or reserved seed was spent.",
+    "No numeric retune, packet splice, Afterimage rescue, ML, RL or optimiser was attempted.",
+    "No detector or product candidate was admitted.",
+    "No product path, PR, CI run, merge or protected-seed row was created."
+  ],
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421",
+    "receiptIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}
