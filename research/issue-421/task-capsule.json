@@ -62,7 +62,13 @@
     "policyPackageOrderDecisionValueProtocolSha256": "ba5ddf6949c7cecad598b0bebe53355fd6e6fc476e1c5442f6a6acd9ac460a5c",
     "policyPackageOrderDecisionValueSummarySha256": "1e2e9c5cac149136d5be7d3d3c03e089ab07fa6e43ec33d5da15bbf2c85e713e",
     "packageCommitmentCapacityProtocolSha256": "928f1e84ffa6b8975f978e2e2224a1f15d28bebee39f9df9d0e04b4a7638c0b5",
-    "packageCommitmentCapacitySummarySha256": "ebd909bbd23bc403e18894637dcb3041d1c4a240bb0e2464ae5eaa39b55cb4f2"
+    "packageCommitmentCapacitySummarySha256": "ebd909bbd23bc403e18894637dcb3041d1c4a240bb0e2464ae5eaa39b55cb4f2",
+    "handSizeInventoryProtocolSha256": "5fbbd3af42c668b5ca528ef56295ce433184f919f0227abc9bf94ec53f8858da",
+    "handSizeInventorySummarySha256": "22b33149ae0d77c454b5c8a25c8979cfb9cb3b040b3e0613456305d55aaf6d5c",
+    "ashPackagePairProtocolSha256": "3974dc28586ddabf2efc5454bae8b9326bbca02660647224b972c6131bdfe819",
+    "ashPackagePairSummarySha256": "af6424db4266531fadd7c7de07db0b46e028a4543604636ec1b13b819b2b7c1f",
+    "wardMirrorEdgeCandidateId": "4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c",
+    "wardMirrorEdgeContentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb"
   },
   "decisions": [
     {
@@ -134,18 +140,28 @@
       "decision": "Close the normalised-payoff package-commitment grammar without implementation or simulator spend.",
       "evidence": "summaries/post-v38-package-commitment-capacity-v2.json",
       "reason": "Scoreline, Afterimage and Poison cleared every necessary-capacity gate, but Bloodfire had only 20 active preferred policies against the fixed minimum of 32. Revision 1's ledger-schema inconclusive is retained; revision 2 changed only that pre-estimand wiring field. The four normalisers and assignment rule cannot be retuned."
+    },
+    {
+      "decision": "Close the first-acquisition package-lock direction before implementation.",
+      "evidence": "summaries/post-v38-hand-size-inventory-v2.json",
+      "reason": "Current main and immutable #525 source/content reconcile exactly and hand-size support reproduced, but the structural-null Ash rectangle had only one hand-size-token-only policy; the necessary state-lock capacity gate therefore failed without a simulator row."
+    },
+    {
+      "decision": "Admit Ash hand-size and Bloodfire as the two package-support directions for matched detector construction.",
+      "evidence": "summaries/post-v38-ash-package-pair-v1.json",
+      "reason": "On the same 128-policy structural-null rectangle, hand-size had 35 active and 93 inactive policies, Bloodfire had 36 active and 92 inactive, both cleared reachability, functional separation was 27 versus 28 exclusive policies and faults were zero. This unfiltered support does not reopen the failed preference grammar."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
     "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
     "heldOutConfirmation": "Root-546 policies and disjoint simulation seeds reproduced proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
-    "packageSupport": "Ash hand-size is retained from immutable #524/#525 evidence. Current Scoreline, Afterimage and Poison directions have discovery and independent local complementarity, reachability and measured whole-run capacity; Bloodfire is not acceptance-mandated and fails the normalised-payoff strict-retention gate.",
+    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. Dusk Scoreline remains supported. The exact #525 ward-mirror-edge candidate is independently probe/panel promotable but still requires current-main whole-run economy, policy-sensitivity and separation admission.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
   "toolchainBoundary": "Resolved with the isolated official Godot 4.7.1.stable.official.a13da4feb binary. Its release SHA-512 and codesign are verified, every new execution is pinned to it, and a frozen pre-change identity plan replayed row-exactly against the archived 4.7.2 evidence.",
-  "nextAction": "Hash-reconcile immutable #524/#525 hand-size package definitions against the exact current live and frozen candidate content, then preregister a zero-row whole-run hand-size-versus-Poison support and interference audit. Use that inventory before selecting one materially different Duskblade structure. Do not rescue Bloodfire, retune package commitment, repeat #517/#519/#525, add ML/RL, spend protected seeds or promote product content.",
+  "nextAction": "Using the exact published #525 ward-mirror-edge content object, preregister the cheapest current-main mechanism-blocked Scoreline-versus-ward whole-run admission experiment. Freeze package activation, common policy/seed identities, estimator, row/wall-time/context caps and success/futility/inconclusive rules before any row. Do not rescue Afterimage, retune a closed grammar, repeat #517/#519/#525, add ML/RL, spend protected seeds or promote product content.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

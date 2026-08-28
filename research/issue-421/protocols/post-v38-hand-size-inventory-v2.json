@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 2,
+  "issue": 421,
+  "question": "Run the exact v1 hand-size inventory audit after correcting its one misspelt pre-estimand immutable Git-blob SHA.",
+  "baseProtocol": {
+    "path": "protocols/post-v38-hand-size-inventory-v1.json",
+    "sha256": "859f633351247bb86d6cc73bb68e4c5fbf54f54ed8104521fc77e09ae5234b51"
+  },
+  "revision1Inconclusive": {
+    "path": "summaries/post-v38-hand-size-inventory-v1.json",
+    "sha256": "07c1e9212e673bf4793c6f79afcba7bceac091ce221374c606f17de8c8c21296"
+  },
+  "onlyCorrection": {
+    "jsonPointer": "/immutableGitEvidence/issue525HandSizePositiveControl/sha256",
+    "from": "202eb434198aaa4df76a16c0577a804a88bfbd7dc40973c445f85f1bd110374",
+    "to": "202eb434198aaa4df76a16c0577a804a88bfbbd7dc40973c445f85f1bd110374",
+    "reason": "The v1 expected value omitted one hexadecimal b; the exact blob at the immutable 40-character #525 evidence head hashes to the corrected value."
+  },
+  "inheritedWithoutChange": [
+    "question",
+    "source evidence",
+    "source and content reconciliation",
+    "retrospective claim boundary",
+    "arms and decision arm",
+    "package and state-lock definitions",
+    "levels and alias structure",
+    "activation definitions",
+    "estimands",
+    "gates",
+    "budget",
+    "decision and stopping rules"
+  ],
+  "auditCoreSha256": "54d25da12337954b996787d0ec0628dda5854c9dbb6b19380674690ace285736",
+  "entrypointSha256": "cb4a2262c833eea58f270d20d3d7b90c95415fb4e3b0fb742801c01ec5c8eb73"
+}

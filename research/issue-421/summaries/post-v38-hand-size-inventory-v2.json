@@ -1,0 +1,216 @@
+{
+  "armResults": {
+    "liveBaseline": {
+      "aspects": {
+        "ashwarden": {
+          "ash-hand-size-payoffOnly": 27,
+          "ash-hand-size-payoffTokenOnly": 3,
+          "ash-poison-catalystOnly": 0,
+          "ash-poison-catalystTokenOnly": 21,
+          "crossActive": 0,
+          "dualPackageTokens": 102,
+          "functionalSeparationClear": false,
+          "stateLockCapacityClear": false
+        },
+        "duskblade": {
+          "crossActive": 0,
+          "dualPackageTokens": 79,
+          "dusk-afterimage-guardOnly": 0,
+          "dusk-afterimage-guardTokenOnly": 43,
+          "dusk-scorelineOnly": 0,
+          "dusk-scorelineTokenOnly": 3,
+          "functionalSeparationClear": false,
+          "stateLockCapacityClear": false
+        }
+      },
+      "faults": 0,
+      "fullPackageInventoryClear": false,
+      "packages": {
+        "ash-hand-size-payoff": {
+          "active": 27,
+          "consumerReachedWithFinalPair": 27,
+          "finalPairReachable": 36,
+          "inactive": 101,
+          "reachabilityClear": true,
+          "sensitivityClear": false
+        },
+        "ash-poison-catalyst": {
+          "active": 0,
+          "consumerReachedWithFinalPair": 0,
+          "finalPairReachable": 88,
+          "inactive": 128,
+          "reachabilityClear": false,
+          "sensitivityClear": false
+        },
+        "dusk-afterimage-guard": {
+          "active": 0,
+          "consumerReachedWithFinalPair": 0,
+          "finalPairReachable": 122,
+          "inactive": 128,
+          "reachabilityClear": false,
+          "sensitivityClear": false
+        },
+        "dusk-scoreline": {
+          "active": 0,
+          "consumerReachedWithFinalPair": 0,
+          "finalPairReachable": 82,
+          "inactive": 128,
+          "reachabilityClear": false,
+          "sensitivityClear": false
+        }
+      },
+      "stateLockCapacityClear": false
+    },
+    "structuralCandidate": {
+      "aspects": {
+        "ashwarden": {
+          "ash-hand-size-payoffOnly": 3,
+          "ash-hand-size-payoffTokenOnly": 1,
+          "ash-poison-catalystOnly": 81,
+          "ash-poison-catalystTokenOnly": 18,
+          "crossActive": 32,
+          "dualPackageTokens": 107,
+          "functionalSeparationClear": false,
+          "stateLockCapacityClear": false
+        },
+        "duskblade": {
+          "crossActive": 75,
+          "dualPackageTokens": 80,
+          "dusk-afterimage-guardOnly": 22,
+          "dusk-afterimage-guardTokenOnly": 17,
+          "dusk-scorelineOnly": 24,
+          "dusk-scorelineTokenOnly": 24,
+          "functionalSeparationClear": true,
+          "stateLockCapacityClear": true
+        }
+      },
+      "faults": 0,
+      "fullPackageInventoryClear": false,
+      "packages": {
+        "ash-hand-size-payoff": {
+          "active": 35,
+          "consumerReachedWithFinalPair": 35,
+          "finalPairReachable": 40,
+          "inactive": 93,
+          "reachabilityClear": true,
+          "sensitivityClear": true
+        },
+        "ash-poison-catalyst": {
+          "active": 113,
+          "consumerReachedWithFinalPair": 113,
+          "finalPairReachable": 113,
+          "inactive": 15,
+          "reachabilityClear": true,
+          "sensitivityClear": false
+        },
+        "dusk-afterimage-guard": {
+          "active": 97,
+          "consumerReachedWithFinalPair": 97,
+          "finalPairReachable": 97,
+          "inactive": 31,
+          "reachabilityClear": true,
+          "sensitivityClear": false
+        },
+        "dusk-scoreline": {
+          "active": 99,
+          "consumerReachedWithFinalPair": 99,
+          "finalPairReachable": 104,
+          "inactive": 29,
+          "reachabilityClear": true,
+          "sensitivityClear": false
+        }
+      },
+      "stateLockCapacityClear": false
+    },
+    "structuralNull": {
+      "aspects": {
+        "ashwarden": {
+          "ash-hand-size-payoffOnly": 4,
+          "ash-hand-size-payoffTokenOnly": 1,
+          "ash-poison-catalystOnly": 78,
+          "ash-poison-catalystTokenOnly": 18,
+          "crossActive": 31,
+          "dualPackageTokens": 107,
+          "functionalSeparationClear": false,
+          "stateLockCapacityClear": false
+        },
+        "duskblade": {
+          "crossActive": 62,
+          "dualPackageTokens": 79,
+          "dusk-afterimage-guardOnly": 27,
+          "dusk-afterimage-guardTokenOnly": 18,
+          "dusk-scorelineOnly": 30,
+          "dusk-scorelineTokenOnly": 24,
+          "functionalSeparationClear": true,
+          "stateLockCapacityClear": true
+        }
+      },
+      "faults": 0,
+      "fullPackageInventoryClear": false,
+      "packages": {
+        "ash-hand-size-payoff": {
+          "active": 35,
+          "consumerReachedWithFinalPair": 35,
+          "finalPairReachable": 41,
+          "inactive": 93,
+          "reachabilityClear": true,
+          "sensitivityClear": true
+        },
+        "ash-poison-catalyst": {
+          "active": 109,
+          "consumerReachedWithFinalPair": 109,
+          "finalPairReachable": 113,
+          "inactive": 19,
+          "reachabilityClear": true,
+          "sensitivityClear": false
+        },
+        "dusk-afterimage-guard": {
+          "active": 89,
+          "consumerReachedWithFinalPair": 89,
+          "finalPairReachable": 97,
+          "inactive": 39,
+          "reachabilityClear": true,
+          "sensitivityClear": true
+        },
+        "dusk-scoreline": {
+          "active": 92,
+          "consumerReachedWithFinalPair": 92,
+          "finalPairReachable": 103,
+          "inactive": 36,
+          "reachabilityClear": true,
+          "sensitivityClear": true
+        }
+      },
+      "stateLockCapacityClear": false
+    }
+  },
+  "authority": "Close the first-acquisition state-lock direction before implementation and continue to a materially different evidence-backed structure inside issue #421.",
+  "decision": "close-first-acquisition-state-lock-before-implementation",
+  "decisionBoundary": 2,
+  "handSizeCardPacketSha256": "6dacfd41ef2bdaca01d387130d95506de5d213baeb6049ea02e3180167659f4f",
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "records": 478125,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "records": 478125,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok"
+  },
+  "newSimulatorObservationRows": 0,
+  "policyIdentities": 128,
+  "protectedSeedRows": 0,
+  "protocolSha256": "5fbbd3af42c668b5ca528ef56295ce433184f919f0227abc9bf94ec53f8858da",
+  "retrospectiveScope": "This is a declared retrospective, zero-new-row reconciliation and necessary-capacity audit. Immutable #524/#525 complementarity is not re-estimated. Whole-run activation uses only registered producer play, Phantom Blades play/direct damage and final-deck acquisition witnesses. The state-lock capacity screen does not infer acquisition order or an unexecuted intervention outcome; a pass can authorise only the exact binary knob and identity preflight.",
+  "runnerSha256": "54d25da12337954b996787d0ec0628dda5854c9dbb6b19380674690ace285736",
+  "schemaVersion": 1,
+  "sourceEvidenceProtocol": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e",
+  "sourceReconciliationExact": true
+}

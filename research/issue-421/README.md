@@ -7,7 +7,8 @@ This directory publishes reviewable evidence from the active scientific issue
 [#421](https://github.com/fol2/glassvow/issues/421) campaign. It now covers the
 V38 freeze, the zero-row identifiability audit, the pre-directive experiment,
 and the post-directive knob proof, mechanism-blocked CRN first look,
-independent held-out confirmation and structural package-order discovery. It is a progress snapshot, not detector
+independent held-out confirmation, structural package-order work, hand-size
+reconciliation and Ash package admission. It is a progress snapshot, not detector
 admission, product promotion or a P9 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
 and is not intended to enter `main`.
@@ -104,9 +105,32 @@ the already admitted Ashwarden hand-size package from immutable #524/#525
 evidence before selecting a materially different Duskblade structure; Bloodfire
 is not an acceptance-mandated package.
 
+The exact source and content reconciliation now reproduces the admitted
+hand-size package on current main. A first-acquisition state-lock capacity audit
+failed before implementation because the frozen Ash rectangle contained only
+one hand-size-token-only policy. A separate zero-row audit then paired hand-size
+with the already causally supported, unfiltered Bloodfire direction: both
+packages cleared 32/32 sensitivity, reachability and eight-policy functional
+separation with zero faults. Those two Ash directions are admitted for matched
+detector construction. The failed preference-filtered Bloodfire grammar remains
+closed.
+
+The next Dusk input is the exact immutable #525 `ward-mirror-edge` content
+packet, not another scalar or Afterimage rescue. It passed independent
+probe/panel evidence but has not had whole-run economy or policy admission. Its
+exact content is published here before a new-row protocol is frozen.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-hand-size-ash-admission-v1.md`](summaries/progress-post-directive-hand-size-ash-admission-v1.md),
+[`protocols/post-v38-hand-size-inventory-v2.json`](protocols/post-v38-hand-size-inventory-v2.json),
+[`summaries/post-v38-hand-size-inventory-v2.json`](summaries/post-v38-hand-size-inventory-v2.json),
+[`protocols/post-v38-ash-package-pair-v1.json`](protocols/post-v38-ash-package-pair-v1.json)
+and
+[`summaries/post-v38-ash-package-pair-v1.json`](summaries/post-v38-ash-package-pair-v1.json)
+for the current Ash admission and state-lock closure. Inventory revision 1 and
+its pre-estimand immutable-hash inconclusive are retained transparently. Then read
 [`summaries/progress-post-directive-package-commitment-capacity-v1.md`](summaries/progress-post-directive-package-commitment-capacity-v1.md),
 [`protocols/post-v38-package-commitment-capacity-v2.json`](protocols/post-v38-package-commitment-capacity-v2.json)
 and
@@ -278,6 +302,12 @@ estimand; revision 2 inherited the complete scientific design and closed the
 grammar because Bloodfire retained only 20 active preferred policies. The
 ledger again remains byte-identical.
 
+The hand-size reconciliation, first-acquisition lock capacity audit and Ash
+package-pair admission also added zero observations. The v1 immutable-hash
+fault stopped before estimands; v2 corrected only that expected hash. The Ash
+pair then passed on the same frozen structural-null rectangle. The ledger
+remains byte-identical and no protected seed has been used.
+
 ## Frozen identities
 
 - source and archive base: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
@@ -306,20 +336,25 @@ ledger again remains byte-identical.
 - policy-package-order decision-value protocol SHA-256: `ba5ddf6949c7cecad598b0bebe53355fd6e6fc476e1c5442f6a6acd9ac460a5c`
 - package-commitment capacity protocol SHA-256: `928f1e84ffa6b8975f978e2e2224a1f15d28bebee39f9df9d0e04b4a7638c0b5`
 - package-commitment capacity summary SHA-256: `ebd909bbd23bc403e18894637dcb3041d1c4a240bb0e2464ae5eaa39b55cb4f2`
+- hand-size inventory v2 protocol SHA-256: `5fbbd3af42c668b5ca528ef56295ce433184f919f0227abc9bf94ec53f8858da`
+- hand-size inventory v2 summary SHA-256: `22b33149ae0d77c454b5c8a25c8979cfb9cb3b040b3e0613456305d55aaf6d5c`
+- Ash package-pair protocol SHA-256: `3974dc28586ddabf2efc5454bae8b9326bbca02660647224b972c6131bdfe819`
+- Ash package-pair summary SHA-256: `af6424db4266531fadd7c7de07db0b46e028a4543604636ec1b13b819b2b7c1f`
+- exact #525 ward candidate content SHA-256: `0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb`
 
 ## Remote heads at publication preparation
 
 - `origin/main`: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
-- `research/issue-421-p9-recovery-evidence`: `c563cade956a5087d2b1f0d4aa8d64096489924d`
+- `research/issue-421-p9-recovery-evidence`: `650bc9aef67765ffbd41b2756ecc0e8868f625a8`
 - `research/issue-524-causal-slate-evidence`: `f305b95d9e1d173e5d8150289afab9688c0ea7f0`
 - `research/issue-525-mechanism-package-synthesis-evidence`: `7132e5e0d6e6e6dc196dda3ed90ad2be292608d6`
 - `work/421-h34`: `4a94d155400162289a84f416336ff407f55b3cf6`
 - `work/421-landscape-retune`: `ad4b99b1538d7200e9b228051a029e554e9b9912`
 - `work/421-s009-exam`: `b30b290813d88109c5b9bc34354babefdc406f8d`
 
-Research is continuing under #421 after closing both producer-first grammars
-and the normalised-payoff commitment grammar. The scalar family remains closed;
-no successor or second scalar candidate is authorised. Immutable hand-size
-evidence must now be reconciled with the exact current content and whole-run
-package inventory before another structure is selected. Detector admission,
+Research is continuing under #421 after admitting the hand-size and Bloodfire
+Ash package directions and closing the first-acquisition lock before
+implementation. The scalar, producer-first and normalised-payoff commitment
+grammars remain closed. The next bounded step is current-main whole-run admission
+of the exact #525 ward candidate alongside Scoreline. Detector admission,
 promotion and protected seeds remain outstanding and unauthorised.

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "purpose": "Freeze the append-only ledger across the zero-row hand-size reconciliation, state-lock capacity closure and Ash package-pair admission.",
+  "before": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2582220800,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok",
+    "records": 478125,
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0
+  },
+  "after": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2582220800,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok",
+    "records": 478125,
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0
+  },
+  "newSimulatorObservationRows": 0,
+  "newLedgerRows": 0,
+  "acceptanceOrReserveRows": 0,
+  "protocols": {
+    "handSizeInventoryV1": "859f633351247bb86d6cc73bb68e4c5fbf54f54ed8104521fc77e09ae5234b51",
+    "handSizeInventoryV2": "5fbbd3af42c668b5ca528ef56295ce433184f919f0227abc9bf94ec53f8858da",
+    "ashPackagePairV1": "3974dc28586ddabf2efc5454bae8b9326bbca02660647224b972c6131bdfe819"
+  },
+  "summaries": {
+    "handSizeInventoryV1": "07c1e9212e673bf4793c6f79afcba7bceac091ce221374c606f17de8c8c21296",
+    "handSizeInventoryV2": "22b33149ae0d77c454b5c8a25c8979cfb9cb3b040b3e0613456305d55aaf6d5c",
+    "ashPackagePairV1": "af6424db4266531fadd7c7de07db0b46e028a4543604636ec1b13b819b2b7c1f"
+  },
+  "decision": "ADMIT_ASH_HAND_SIZE_BLOODFIRE_CLOSE_FIRST_ACQUISITION_LOCK_ZERO_ROWS"
+}

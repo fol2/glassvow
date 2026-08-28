@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "decisionBoundary": 3,
+  "decision": "inconclusive-immutable-blob-hash-before-estimands",
+  "protocolSha256": "859f633351247bb86d6cc73bb68e4c5fbf54f54ed8104521fc77e09ae5234b51",
+  "runnerSha256": "54d25da12337954b996787d0ec0628dda5854c9dbb6b19380674690ace285736",
+  "faultType": "RuntimeError",
+  "fault": "The frozen issue-525 hand-size positive-control Git-blob SHA omitted one hexadecimal b and did not match the exact immutable blob.",
+  "faultBoundary": "The process stopped while verifying immutable Git evidence, before source/content reconciliation, ledger access, root-550 rows, policy snapshots, activation sets or any estimand.",
+  "estimandsComputed": false,
+  "newSimulatorObservationRows": 0,
+  "newLedgerRows": 0,
+  "protectedSeedRows": 0,
+  "ledger": {
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "records": 478125,
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "authority": "Record no scientific decision from v1. A corrected zero-row revision may change only the misspelt expected SHA from 202eb434198aaa4df76a16c0577a804a88bfbd7dc40973c445f85f1bd110374 to 202eb434198aaa4df76a16c0577a804a88bfbbd7dc40973c445f85f1bd110374 while inheriting every scientific field."
+}

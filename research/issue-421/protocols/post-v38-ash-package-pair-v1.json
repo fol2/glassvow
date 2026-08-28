@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Do immutable hand-size-payoff and exact-candidate Bloodfire complementarity evidence form a policy-sensitive, reachable and functionally separated Ashwarden package pair on the frozen root-550 structural-null whole-run rectangle?",
+  "sourceEvidenceProtocol": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e",
+  "retrospectiveScope": "This is a declared retrospective, zero-new-row package-inventory audit. It does not re-estimate immutable #524/#525 hand-size complementarity or the exact-candidate Bloodfire causal panel. It uses their frozen activation definitions on one complete structural-null policy rectangle and can admit only Ash package support, not the rejected scalar substrate, a detector or product content.",
+  "immutableEvidence": {
+    "handSizeInventoryProtocolV1": {
+      "path": "protocols/post-v38-hand-size-inventory-v1.json",
+      "sha256": "859f633351247bb86d6cc73bb68e4c5fbf54f54ed8104521fc77e09ae5234b51"
+    },
+    "handSizeInventoryProtocolV2": {
+      "path": "protocols/post-v38-hand-size-inventory-v2.json",
+      "sha256": "5fbbd3af42c668b5ca528ef56295ce433184f919f0227abc9bf94ec53f8858da"
+    },
+    "handSizeInventorySummaryV2": {
+      "path": "summaries/post-v38-hand-size-inventory-v2.json",
+      "sha256": "22b33149ae0d77c454b5c8a25c8979cfb9cb3b040b3e0613456305d55aaf6d5c"
+    },
+    "handSizeInventoryCore": {
+      "path": "post_v38_hand_size_inventory.py",
+      "sha256": "54d25da12337954b996787d0ec0628dda5854c9dbb6b19380674690ace285736"
+    },
+    "exactComplementarityProtocol": {
+      "path": "protocols/post-v38-exact-complementarity-v1.json",
+      "sha256": "21b79cfe4f21da1ccf272018cf0f49b225688bd1e2651752fe8a35e244489fd6"
+    },
+    "exactComplementarityAudit": {
+      "path": "summaries/post-v38-exact-complementarity-v1-audit.json",
+      "sha256": "8630a5e6ab6559b7e98fa5947e865a11f26ee505879026450f73e95fcb468621"
+    },
+    "packageOrderHeldoutProtocol": {
+      "path": "protocols/post-v38-package-order-heldout-v1.json",
+      "sha256": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e"
+    }
+  },
+  "immutableInputs": {
+    "runnerSha256": "0f6bb1288a9a25de9f0b55356b1f6fc4df0ea40917403a1a477f8f8823097542"
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "records": 478125,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok"
+  },
+  "packages": {
+    "ash-hand-size-payoff": {
+      "aspect": "ashwarden",
+      "producers": [
+        "preparation",
+        "surge"
+      ],
+      "consumer": "phantomBlades",
+      "lockTokens": [
+        "preparation",
+        "surge",
+        "phantomBlades"
+      ],
+      "activation": "At least one final deck contains Phantom Blades and Preparation or Surge; Phantom Blades and a present producer are both played; phantomDamage is positive."
+    },
+    "ash-bloodfire-leech": {
+      "aspect": "ashwarden",
+      "producers": [
+        "bloodRite"
+      ],
+      "consumer": "leechBlade",
+      "consumedMetric": "bloodfireConsumed",
+      "lockTokens": [
+        "bloodRite",
+        "leechBlade"
+      ]
+    }
+  },
+  "aspectPackages": {
+    "ashwarden": [
+      "ash-hand-size-payoff",
+      "ash-bloodfire-leech"
+    ]
+  },
+  "estimands": {
+    "packageSupport": "For each package, count root-550 structural-null active/inactive, final-pair reachable and consumer-reached policy identities.",
+    "functionalSeparation": "Count hand-size-only, Bloodfire-only and cross-active policy identities on the same structural-null rectangle.",
+    "faults": "Count policy rows with non-empty error or stall/error outcome."
+  },
+  "gates": {
+    "minimumActiveAndInactivePolicies": 32,
+    "minimumReachablePolicies": 16,
+    "minimumExclusivePolicies": 8,
+    "minimumCrossActivePolicies": 16,
+    "provenance": "The decision uses only the unchanged 32/32 sensitivity, 16 reachability and eight within-aspect separation minima from the package-order held-out protocol. The cross-active value is descriptive and does not enter package admission."
+  },
+  "budget": {
+    "sourceStructuralNullRows": 1536,
+    "sourcePolicyRows": 1024,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecution": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Both Ash packages have at least 32 active and 32 inactive policy identities, at least 16 final-pair and consumer-reached identities, at least eight hand-size-only and eight Bloodfire-only identities, and zero policy faults.",
+    "futility": "Any package sensitivity, reachability, functional-separation or fault gate fails.",
+    "inconclusive": "Any immutable hash, complete rectangle, exact policy identity, ledger identity, numeric input or wall-time assertion fails before the deterministic decision.",
+    "successAuthority": "Admit Ashwarden hand-size-payoff and Bloodfire as the two package-support directions for subsequent matched detector construction. This does not promote the rejected scalar substrate, universal order grammar, detector, product content or protected seeds.",
+    "futilityAuthority": "Close the hand-size-plus-Bloodfire pair and continue to a materially different evidence-backed Ash structure inside issue #421; do not rescue it by policy-preference retuning.",
+    "inconclusiveAuthority": "Record no decision and run no simulator row until the immutable evidence fault is resolved."
+  }
+}
