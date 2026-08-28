@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "goal": "Validate a causal strategy detector, make the exact RC content pass it, merge the smallest complete delivery and record the exact merged-SHA P9 pass on issue #108.",
   "acceptanceAuthority": "https://github.com/fol2/glassvow/issues/421",
-  "controllingAuthorityDelta": "https://github.com/fol2/glassvow/issues/421#issuecomment-5453573232",
+  "controllingAuthorityDelta": "https://github.com/fol2/glassvow/issues/421#issuecomment-5457447279",
   "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
   "activeConstraints": [
     "Preserve evidence commit 36a5d6bab7ce364987c3296b6ca0d63b58db4ef3 as immutable V30 INCONCLUSIVE_TELEMETRY_SCHEMA_NO_FIT evidence; do not fit, recode, repair, repeat, reinterpret or reuse its causal endpoints.",
@@ -79,7 +79,14 @@
     "The deterministic-exclusive-package-acquisition source gate is unavailable at decision boundary 2. Exact current-main has generic relic, save-dictionary and string-ID compatibility, but none of 51 acquisition-related blocks is simultaneously an explicit choice, Dusk-qualified, RNG-free, persistent, policy-visible and outside every closed route alias. Do not add a new acquisition/UI/save surface, loosen an alias or continue without the current human-authority contract.",
     "At the next decision boundary freeze at most one candidate, close the scalar family and continue structurally inside #421, or record inconclusive at the preregistered cap.",
     "Do not use acceptance seeds 3000-5199 or reserve seeds 5200-5399 before the authorised final exact-SHA boundary.",
-    "Keep research outside production truth; do not create a research PR, run product CI, or merge the archive-only evidence branch."
+    "Keep research outside production truth; do not create a research PR, run product CI, or merge the archive-only evidence branch.",
+    "Preserve archive commit 9f2d063fbeaf4ae2d92e52f12cdf8ee50197f6ee and private-debt identity v1 as immutable INCONCLUSIVE_SCHEMA_PRIVATE_DEBT_IDENTITY_NO_FIT evidence; do not reinterpret its empty positions or reuse its output as science.",
+    "Execute exactly one separately frozen private-debt identity v2 on resolved current main. The only semantic correction is each private-debt probe access from nonexistent CardInst.upgraded to CardInst.up; candidate behaviour, controls, policy and seed identities, content, budgets, estimands, gates and stop rules remain unchanged.",
+    "Before counted v2 identity execution, deterministic zero-row preflight must prove current-main CardInst.up, no remaining probe access to CardInst.upgraded, and a semantic diff limited to that field correction plus required v2 provenance. Identity pass proceeds to the frozen capacity contract; valid identity failure, drift or post-preflight execution/schema failure closes the design without retune, rerun, v3 or rescue.",
+    "Only after private debt closes at identity or capacity may one bounded research-only smallest deterministic Dusk-exclusive acquisition/UI contract proceed under the automatic Option 2 fallback. Do not run it in parallel or cross the promotion boundary.",
+    "Private-debt identity v2 is closed by preregistered decision boundary 2. Its 16 direct rows passed exact mediator, aspect, RNG, Kindle, Ember and penalty mapping, but all three whole-run arms returned zero comparable rows and failed the frozen current-main row-count gate. Do not retune, rerun, run v3, open the capacity cache or rescue this design; proceed only with the authorised Option 2 fallback.",
+    "The bounded Option 2 zero-row design audit froze choice-screen-existing-consumer as the unique minimum Dusk acquisition/UI contract. Reuse the existing ChoiceScreen, add exactly one existing consumer to the existing saved deck, preserve poolWave2 eligibility, choose through existing Pilot scoring with null RNG and unchanged cardDecline, and add no new ID, save field, presentation type, RNG call or payoff. Only a separately frozen research identity preflight may proceed; no product mutation or simulator row is yet authorised.",
+    "The exact ChoiceScreen/existing-consumer acquisition contract is closed by its one-attempt identity decision boundary 2. All six direct controls passed exact selection, decline, RandomBuild null-RNG, Dusk/Ash isolation, one-card deck delta, content/payoff identity and existing-save round-trip, but the frozen baseline/prototype content-identity assertion differed before whole-run endpoint comparison. Do not repair the comparator, change the consumer list, UI path, selector, cohort, threshold or null encoding, or rerun this contract."
   ],
   "nonGoals": [
     "Do not tune a detector to live content.",
@@ -294,7 +301,20 @@
     "methodBoundaryAuditSummarySha256": "ca1d6ba8e4bc2b83b6619b30005c841c4d73efba7df3f6b846e2fd322e6f5078",
     "exclusiveAcquisitionSourceAuditRunnerSha256": "a02b993a1fa1691169e0bd135124b26f7d92413055b8a298f834127fab41d137",
     "exclusiveAcquisitionSourceAuditProtocolSha256": "9344ba637a7393b4a20ba4c2e3ea9e9976eb4cd66cdbfba95ae8692dd4b0329d",
-    "exclusiveAcquisitionSourceAuditSummarySha256": "822fd4567e20d34704a453ce3bdccaef1c3ded086bbb6a2068e2e3d489a5d82d"
+    "exclusiveAcquisitionSourceAuditSummarySha256": "822fd4567e20d34704a453ce3bdccaef1c3ded086bbb6a2068e2e3d489a5d82d",
+    "privateDebtIdentityV2PreflightProtocolSha256": "a221c07cf716b4373b229f3a33f9b42b414191098c1af0be2ec91540e85c2a9a",
+    "privateDebtIdentityV2PreflightSummarySha256": "8fa4cdc5510e86c249a0cb4642e38e3fe1560b59730b5e89593780c96a49f988",
+    "privateDebtIdentityV2ProtocolSha256": "6d763b02c48610421c6c8cf81f962c80b58417e4175de4a47407350bbce24e00",
+    "privateDebtIdentityV2SummarySha256": "700dc5da09dcc48044a0f714d4e13ecc5420bc146b6c8ae69b9b1cd0b9ec3abe",
+    "duskAcquisitionDesignRunnerSha256": "7acfa9d8527be1214b7f2227134dd4fa127f571ee5c8dc0e0a6c187b863af7c7",
+    "duskAcquisitionDesignProtocolSha256": "d95e055e68d0e1b61769ea2ac5df338598eb01be79155ba9c88dff4e5d55694e",
+    "duskAcquisitionDesignSummarySha256": "35765c290f9ef4259927a71e470e8065a0c1dca2649c90f2d45b60e5f9bdb009",
+    "duskAcquisitionIdentityRunnerSha256": "2826de9b1d70d391ba6305a21049daf05f54529ce8673fbf82318e317e3a2f23",
+    "duskAcquisitionIdentityProtocolSha256": "f4a9d764c1c8456874bf59c8d8d504b8b932c06ddcc884bf370989ac71eef924",
+    "duskAcquisitionIdentitySummarySha256": "0a8bdb75530718ddc05ce05b5c00b212a41221f6d4b3233982d4bd1163b1df96",
+    "postAcquisitionStructuralBoundaryRunnerSha256": "ed8c7ad256761dddad031662d4006f888fe806d950dbf048ff4e40af5cd5647f",
+    "postAcquisitionStructuralBoundaryProtocolSha256": "a7224ccb3b5b25ad074869b3b1edc6d44ef7489f7ba90f89e1677f4b07ad84c5",
+    "postAcquisitionStructuralBoundarySummarySha256": "ede9055ae709225ee08d297615a8f59628cc6f9bf4a531615f25a28d25b5899f"
   },
   "decisions": [
     {
@@ -731,6 +751,31 @@
       "decision": "Record native deterministic exclusive acquisition unavailable and invoke the current human-authority boundary.",
       "evidence": "summaries/post-v30-exclusive-acquisition-source-audit-v1.json",
       "reason": "Eight exact current-main files yielded 125 function blocks and 51 acquisition-related blocks. Generic relic persistence, dictionary save payloads and string-keyed content IDs are compatible, but no block combines explicit choice, Dusk qualification, persistence, no RNG, matching Pilot visibility and freedom from the closed normal-reward, shop, event, deed, boss-relic, Lantern-Art, removal or elite aliases. The audit added no support, Godot, simulator, ledger or protected-seed row. A next step now requires either a new product-defining acquisition/UI surface or explicit authority to revise an immutable one-attempt quarantine, which is an unavailable relevant gate under the current #421 human-authority contract."
+    },
+    {
+      "decision": "Apply the controlling owner decision as staged Option 1 with bounded automatic fallback.",
+      "evidence": "https://github.com/fol2/glassvow/issues/421#issuecomment-5457447279",
+      "reason": "Preserve private-debt identity v1 as immutable schema-inconclusive evidence, prove the one authorised CardInst.up projection correction mechanically without scientific rows, then execute one separately frozen v2 identity contract. Its automatic disposition either advances to the unchanged capacity science or closes private debt and authorises one bounded Dusk-exclusive acquisition/UI fallback inside issue 421."
+    },
+    {
+      "decision": "Close private combat debt at identity v2 and activate the bounded Option 2 fallback.",
+      "evidence": "summaries/post-v30-private-debt-identity-v2.json",
+      "reason": "The zero-row mechanical proof passed exact current-main field, three-projection, prototype, archive and ledger identity. The sole v2 execution then passed all 16 direct mappings but produced zero rows in each of the three whole-run arms and failed the frozen current-main row-count gate. Decision boundary 2 closes the exact design without capacity access, retuning, rerun, v3 or rescue and automatically authorises one research-only smallest Dusk-exclusive acquisition/UI contract."
+    },
+    {
+      "decision": "Freeze the existing ChoiceScreen plus one existing consumer card as the unique minimum Dusk acquisition/UI contract.",
+      "evidence": "summaries/post-v30-dusk-exclusive-acquisition-design-v1.json",
+      "reason": "Exact current source proves both package producers already belong to the Dusk starter deck and the separate existing consumers do not. The deterministic minimum reused ChoiceScreen, player.deck persistence, poolWave2 progression and Pilot choose_card with null RNG followed by unchanged cardDecline. It changes two product runtime seams and two research seams, while adding no ID, save field, presentation type, RNG call or payoff. The audit read zero support or cache rows, ran zero Godot processes and left the 480,372-row ledger unchanged."
+    },
+    {
+      "decision": "Close the exact ChoiceScreen/existing-consumer acquisition contract at identity.",
+      "evidence": "summaries/post-v30-dusk-exclusive-acquisition-identity-v1.json",
+      "reason": "The invalid level failed closed and all six direct controls passed, including both consumer choices, unchanged cardDecline, RandomBuild with null RNG, Ash and explicit-off no-ops, one existing consumer only, unchanged content/payoffs and save round-trip. The fixed 768 null whole-run observations then reached the preregistered cross-probe content-identity assertion and differed, so endpoint comparison was unavailable. Decision boundary 2 closes the exact contract without repair or rerun; enabled whole-run, causal, ledger and protected rows remained zero."
+    },
+    {
+      "decision": "Record the post-acquisition structural gate unavailable under current authority.",
+      "evidence": "summaries/post-v30-post-acquisition-structural-boundary-v1.json",
+      "reason": "A preregistered zero-row representation audit covered nine mutually exclusive lifetime and representation classes against exact current-main and nine immutable decisions. No class remained both materially distinct and autonomously selectable. New combat/card representation, persistent run/relic state and new presentation/acquisition semantics remain conceptually possible but require product semantics or a frozen-boundary exception absent from the current SSOT. The audit added no support, cache, Godot, simulator, ledger or protected-seed row and therefore invokes the current #421 unavailable-gate human-authority boundary without claiming a universal scientific negative."
     }
   ],
   "proofMap": {
@@ -763,16 +808,19 @@
     "skillChipCapacity": "The complete planned Skill-chip upper bound has one source, 12 robust-active and five viable policies, but only three candidate-only identities against Scoreline. The H19 direction therefore does not justify an added Skill-chip producer or another generic Shatter/partial-Facet payoff on current evidence.",
     "combatStateZoneFrontier": "Exact current-main owns 52 mutable combat, combatant and card-instance fields. Deterministic source and immutable-decision matching covered every field once across encounter context, containers, turn/cadence transport, card zones and instance state, Dusk Facet/Ember state, player resources/status/quality and enemy combat state. There is no unclosed existing consumer; another existing-field retry would be an alias, while a separately preregistered new deterministic mediator is now evidence-authorised by the issue body.",
     "minimumNewMediatorDesign": "Seven preregistered implementation forms were checked against exact current source, immutable closures and the frozen ledger without reading support. Only private-combat-debt-conversion is novel, deterministic, Dusk-qualified, naturally costly, combat-local and implementable through the existing addCard path plus one _apply_effect hook. Producer, consumer, token, base and upgraded values, aspect gate, one-token removal, direct telemetry and all forbidden adaptations are frozen. It may proceed only to a separately preregistered zero-row capacity and implementation-identity contract.",
-    "privateDebtIdentity": "The exact prototype parsed under 4.7.2 and its identity and capacity rules were frozen before execution. Its only direct process failed at the observation schema: CardInst owns up, while three probe projections read upgraded. Fourteen of 16 output positions were empty, so no producer or consumer mapping is comparable. The run stopped before whole-run identity and before either fixed capacity cache opened. The design is quarantined without repair or rerun; no efficacy or futility claim is permitted.",
+    "privateDebtIdentity": "V1 remains immutable schema-inconclusive evidence. V2 proved the sole CardInst.up correction mechanically with zero rows and reused no v1 endpoint. Its only execution passed all 16 direct mappings but all three whole-run arms returned zero comparable rows, so the frozen row-count gate closed private debt at decision boundary 2. No capacity cache, enabled whole-run, causal, ledger or protected-seed row was used; no retune, rerun, v3 or rescue is permitted.",
     "postQuarantineStructuralCensus": "Eight mechanism classes were screened without support. The generated-card token is quarantined; enemy markers alias Scoreline and enemy-status closures; positive player markers alias Afterimage; direct zone relations alias co-hand, package-order, Kindle, repeat and action economy; resources, counters and transforms violate closed state or save boundaries; relic and acquisition triggers reuse closed routes; learned or random policy mediators lack measured method value. One private harmful player-status liability remains: Dusk Burden Cut adds one persistent glassBurden, Settling Ward removes one, and each uncleared stack costs 1 HP at end turn. It has two minimum runtime hooks and capacity-only authority.",
     "statusLiabilityCapacity": "The fixed common Attack and uncommon Skill were jointly acceptable for 34 policies and theoretically viable for 14, with 30 exact inactive policies and clean Scoreline separation. Their selector set overlapped the broad current Afterimage substrate in 31 policies and contained only three candidate-only identities. The preregistered eight-policy separation gate therefore closes the exact status-liability design before implementation; this is measured carrier-repertoire overlap, not evidence that ML, RL or another optimiser has decision value.",
     "methodBoundaryAudit": "All seven explicit method-authority signals were false across natural-order, co-hand, Energy identity, held-out policy prediction, policy package-order, package commitment and status-capacity evidence. ML, RL and optimisers remain prohibited. Because the complete two-hook combat-local grammar is exhausted, only a deterministic exclusive-acquisition class may advance one rung to source feasibility; it has no candidate or runtime authority.",
     "exclusiveAcquisitionSourceAudit": "Exact current-main retains generic relic/save/string-ID compatibility but no uniquely reusable acquisition function satisfies explicit choice, Dusk qualification, RNG freedom, persistence, policy visibility and closed-alias exclusion. The smallest native-reuse rung is unavailable. Research and protected seeds remain safe at zero new rows; continuing now needs current human authority for either a new product acquisition surface or a narrowly versioned operational-quarantine exception.",
+    "duskAcquisitionDesign": "The owner-authorised fallback compared four frozen implementation shapes against exact current source. Reusing the generic ChoiceScreen and acquiring exactly one existing package consumer was the unique minimum: both producers already start owned, both choices make the same one-card intervention, the deck already persists them, poolWave2 preserves progression, and Pilot can select deterministically without RNG or overriding cardDecline. No new content ID, save field, payoff, support read or simulator row entered the decision.",
+    "duskAcquisitionIdentity": "The exact research implementation passed six direct controls but failed its frozen cross-probe content-identity gate before whole-run endpoint comparison. The one attempt produced 774 identity observations, including 768 null whole-run rows, but zero enabled whole-run or causal rows. This closes the exact ChoiceScreen/existing-consumer contract without comparator repair, selector change or rerun.",
+    "postAcquisitionStructuralBoundary": "Nine mutually exclusive representation classes were evaluated once against exact current-main, the task capsule, nine immutable decisions and the unchanged ledger. Zero class was autonomously eligible. New combat/card representation, persistent run/relic state and new presentation/acquisition contracts remain possible only after new product semantics or a frozen-boundary exception; this is an unavailable relevant gate, not evidence that every imaginable mechanism or autonomous balancing is impossible.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
   "toolchainBoundary": "Every new execution is pinned to /Applications/Godot.app/Contents/MacOS/Godot at 4.7.2.stable.official.ed1daf0bf on the #456-qualified Apple M1 Max 64 GB host, bound to canonical fingerprint 27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8. PATH invocation and every 4.7.1 binary are prohibited.",
-  "nextAction": "Publish the complete post-v34 archive-only evidence with SHA index and exact remote-head parity, then post one concise #421 human-authority decision package. Recommend a narrowly versioned private-debt identity v2 that changes only the probe field from CardInst.upgraded to exact current CardInst.up while preserving the frozen candidate, controls, cohorts, budgets, gates and no-science-observed boundary. Alternatives are explicit authority for a new deterministic acquisition/UI surface, or a safe blocked state. Do not implement, rerun, simulate, use protected seeds, create a successor or claim acceptance until authority resolves the unavailable relevant gate.",
+  "nextAction": "Publish the exact post-acquisition evidence to the existing archive-only branch and post one concise human-authority decision package on issue #421. Keep product truth, the 480,372-row ledger and protected seeds unchanged. Await a controlling authority delta; do not create a successor, reopen a closed class, inspect the ChoiceScreen mismatch, invent product semantics, add ML/RL or execute another simulator row meanwhile.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

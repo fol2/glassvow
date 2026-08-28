@@ -1,0 +1,100 @@
+{
+  "authority": "Freeze only choice-screen-existing-consumer for one separately preregistered research-only identity preflight. Reuse ChoiceScreen, the existing two consumer IDs, player.deck persistence, choose_card with null RNG and unchanged cardDecline. Add no product mutation, new ID, save field, payoff, RNG call, ML/RL or simulator row until identity is green.",
+  "cacheFilesRead": 0,
+  "claimBoundary": "This deterministic zero-row design audit can freeze one minimum implementation shape for a separate research-only identity preflight. It cannot establish policy support, acquisition efficacy, package activation, causal benefit, detector admission, product scope or shipping acceptance, and it cannot authorise a simulator or ledger row.",
+  "decision": "freeze-choice-screen-consumer-acquisition-contract",
+  "decisionBoundary": 1,
+  "duskStartDeck": [
+    "strike",
+    "strike",
+    "strike",
+    "strike",
+    "defend",
+    "defend",
+    "defend",
+    "eclipseSlash",
+    "chisel",
+    "firstSpark"
+  ],
+  "eligibleCandidates": [
+    "choice-screen-existing-consumer",
+    "embark-inline-existing-consumer"
+  ],
+  "evidenceFilesRead": 4,
+  "godotProcesses": 0,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "minimumRank": [
+    2,
+    2
+  ],
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "packageDefinitions": {
+    "dusk-afterimage-guard": {
+      "consumer": "guardedStrike",
+      "mediator": "player-afterimage",
+      "payoff": "exact-current-ward",
+      "producer": "defend"
+    },
+    "dusk-scoreline": {
+      "consumer": "executioner",
+      "mediator": "enemy-scoreline",
+      "payoff": "exact-current-execute",
+      "producer": "chisel"
+    }
+  },
+  "productAvailabilityGate": "poolWave2",
+  "protectedSeedRows": 0,
+  "protocolSha256": "d95e055e68d0e1b61769ea2ac5df338598eb01be79155ba9c88dff4e5d55694e",
+  "rejectedCandidates": {
+    "choice-screen-package-marker": [
+      "newInternalIds",
+      "representation"
+    ],
+    "choice-screen-package-save-field": [
+      "newSaveFields",
+      "persistence",
+      "contract"
+    ]
+  },
+  "runnerSha256": "7acfa9d8527be1214b7f2227134dd4fa127f571ee5c8dc0e0a6c187b863af7c7",
+  "schemaVersion": 1,
+  "selectedCandidate": {
+    "aspect": "duskblade",
+    "breakingContract": false,
+    "changesPayoff": false,
+    "id": "choice-screen-existing-consumer",
+    "newInternalIds": 0,
+    "newPresentationTypes": 0,
+    "newRngCalls": 0,
+    "newSaveFields": 0,
+    "persistence": "existing-player-deck-save",
+    "policySelector": "choose_card-null-rng-then-cardDecline",
+    "productAvailabilityGate": "poolWave2",
+    "productionRuntimeFilesChanged": 2,
+    "representation": "one-existing-consumer-card",
+    "researchFilesChanged": 2,
+    "uiPath": "application/main.gd::_show_choice -> existing ChoiceScreen"
+  },
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "sourceFilesRead": 7,
+  "supportRowsInspected": 0,
+  "wallTimeSeconds": 12.422360375057906
+}

@@ -1,0 +1,113 @@
+{
+  "authority": "Close the exact ChoiceScreen/existing-consumer acquisition contract without repair, retune or rerun and continue inside issue 421 with the next evidence-backed structural mechanism. Do not change the consumer list, UI path, selector, cohort, threshold or null encoding and do not create a successor.",
+  "cacheObjects": {
+    "baselineOutputSha256": "1be7272596391fd1f7b296af480bc366ae8b6a2af50c71c3dc508fc6ae3b458f",
+    "baselinePlanSha256": "d33926aec9e22a14f1709120a261c52571e9a94b78c98d90d2a19b9d136c61d3",
+    "directOutputSha256": "b896aaaca79b86e28abf4e05f1f5e04c5e2622b942a34e14dd27f22ec5d86791",
+    "directPlanSha256": "ea13c02f54edd7fdcd59a032fd3256d6a34baf2ed4856fd3f845df9e440fc427",
+    "invalidPlanSha256": "057834674a349032e5eb5c836cc30b4528a471010e7206d999be433217e1e2ed",
+    "prototypeOutputSha256": "ed33bfb8876576d8cea5c47bf1effb1e38c2650b295f699bfd235ce8ce157cd9",
+    "prototypePlanSha256": "2840f6c0c02c05c1b6d262c0cdd21105149f5bed72bbd0d6d296381c4634e4e3"
+  },
+  "decision": "close-dusk-acquisition-contract-on-identity-failure",
+  "decisionBoundary": 2,
+  "directControls": {
+    "cardDeclineExact": true,
+    "cases": {
+      "afterimage-choice": {
+        "afterimageScore": 404.0,
+        "cardDecline": -1000000000.0,
+        "choice": "guardedStrike",
+        "deckDelta": 1,
+        "rngExact": true,
+        "saveRoundTripExact": true,
+        "scorelineScore": -1.0
+      },
+      "ash-no-op": {
+        "afterimageScore": 4.0,
+        "cardDecline": -1000000000.0,
+        "choice": "",
+        "deckDelta": 0,
+        "rngExact": true,
+        "saveRoundTripExact": true,
+        "scorelineScore": 199.0
+      },
+      "decline-both": {
+        "afterimageScore": 4.0,
+        "cardDecline": 1000000000.0,
+        "choice": "",
+        "deckDelta": 0,
+        "rngExact": true,
+        "saveRoundTripExact": true,
+        "scorelineScore": 199.0
+      },
+      "explicit-off-no-op": {
+        "afterimageScore": 4.0,
+        "cardDecline": -1000000000.0,
+        "choice": "",
+        "deckDelta": 0,
+        "rngExact": true,
+        "saveRoundTripExact": true,
+        "scorelineScore": 199.0
+      },
+      "random-build-null-rng": {
+        "afterimageScore": 404.0,
+        "cardDecline": -1000000000.0,
+        "choice": "guardedStrike",
+        "deckDelta": 1,
+        "rngExact": true,
+        "saveRoundTripExact": true,
+        "scorelineScore": -1.0
+      },
+      "scoreline-choice": {
+        "afterimageScore": 4.0,
+        "cardDecline": -1000000000.0,
+        "choice": "executioner",
+        "deckDelta": 1,
+        "rngExact": true,
+        "saveRoundTripExact": true,
+        "scorelineScore": 199.0
+      }
+    },
+    "contentAndPayoffIdentityExact": true,
+    "duskOnlyExact": true,
+    "oneExistingConsumerExact": true,
+    "randomBuildNullRngExact": true,
+    "rows": 6,
+    "saveRoundTripExact": true,
+    "status": "PASS"
+  },
+  "enabledWholeRunRows": 0,
+  "executionError": "Dusk acquisition identity mismatch: content identity across probes",
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "invalidConfigurationFailedClosed": true,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newCausalRows": 0,
+  "newIdentityObservationRows": 774,
+  "newLedgerRows": 0,
+  "outcomeClass": "futility",
+  "protectedSeedRows": 0,
+  "protocolSha256": "f4a9d764c1c8456874bf59c8d8d504b8b932c06ddcc884bf370989ac71eef924",
+  "runnerSha256": "2826de9b1d70d391ba6305a21049daf05f54529ce8673fbf82318e317e3a2f23",
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "wallTimeSeconds": 26.856507375021465,
+  "wholeRunIdentity": {}
+}

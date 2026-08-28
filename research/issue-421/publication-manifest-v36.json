@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 36,
+  "issue": 421,
+  "purpose": "remote-review-only; controlling-owner-fallback-closure-and-unavailable-gate-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "parentArchiveHead": "9f2d063fbeaf4ae2d92e52f12cdf8ee50197f6ee",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "private-debt identity v2 closure, bounded Dusk ChoiceScreen acquisition closure and post-acquisition structural authority boundary",
+  "decision": "POST_ACQUISITION_STRUCTURAL_GATE_UNAVAILABLE_UNDER_CURRENT_AUTHORITY",
+  "authority": {
+    "taskSSOT": "https://github.com/fol2/glassvow/issues/421",
+    "controllingDelta": "https://github.com/fol2/glassvow/issues/421#issuecomment-5457447279",
+    "programmeContinuesInsideIssue421": true,
+    "successorTicket": null,
+    "escalationClass": "unavailable relevant second-Dusk-package gate",
+    "recommendedDecision": "authorise one separately versioned zero-row forensic classification of the closed ChoiceScreen cross-probe content-identity mismatch; no repair or identity rerun is implied"
+  },
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-v30-owner-fallback-closure-v1.md",
+    "progressReportSha256": "0f9a010208585af25b17166afe37cf760eb5865fcab8b6a593ae04e43d5000e2",
+    "taskCapsuleSha256": "89153ad1358d1e23f6ae79fa8b5ea1ed18f838ec1d59c5d24bd042707fd03380",
+    "studies": {
+      "privateDebtIdentityV2Preflight": {
+        "runnerSha256": "58f96edde0123436df4c9a32a830742a8642c0b29f891a7fbab190f7676bdfc9",
+        "protocolSha256": "a221c07cf716b4373b229f3a33f9b42b414191098c1af0be2ec91540e85c2a9a",
+        "summarySha256": "8fa4cdc5510e86c249a0cb4642e38e3fe1560b59730b5e89593780c96a49f988"
+      },
+      "privateDebtIdentityV2": {
+        "runnerSha256": "418f184351f7a84c7bbca7ba56d44f06cb9612ffbaf6830a88be042c5385d994",
+        "protocolSha256": "6d763b02c48610421c6c8cf81f962c80b58417e4175de4a47407350bbce24e00",
+        "summarySha256": "700dc5da09dcc48044a0f714d4e13ecc5420bc146b6c8ae69b9b1cd0b9ec3abe"
+      },
+      "duskAcquisitionDesign": {
+        "runnerSha256": "7acfa9d8527be1214b7f2227134dd4fa127f571ee5c8dc0e0a6c187b863af7c7",
+        "protocolSha256": "d95e055e68d0e1b61769ea2ac5df338598eb01be79155ba9c88dff4e5d55694e",
+        "summarySha256": "35765c290f9ef4259927a71e470e8065a0c1dca2649c90f2d45b60e5f9bdb009"
+      },
+      "duskAcquisitionIdentity": {
+        "runnerSha256": "2826de9b1d70d391ba6305a21049daf05f54529ce8673fbf82318e317e3a2f23",
+        "protocolSha256": "f4a9d764c1c8456874bf59c8d8d504b8b932c06ddcc884bf370989ac71eef924",
+        "summarySha256": "0a8bdb75530718ddc05ce05b5c00b212a41221f6d4b3233982d4bd1163b1df96"
+      },
+      "postAcquisitionStructuralBoundary": {
+        "runnerSha256": "ed8c7ad256761dddad031662d4006f888fe806d950dbf048ff4e40af5cd5647f",
+        "protocolSha256": "a7224ccb3b5b25ad074869b3b1edc6d44ef7489f7ba90f89e1677f4b07ad84c5",
+        "summarySha256": "ede9055ae709225ee08d297615a8f59628cc6f9bf4a531615f25a28d25b5899f"
+      }
+    }
+  },
+  "gateResults": {
+    "privateDebtIdentityV2Preflight": {
+      "decisionBoundary": 1,
+      "decision": "admit-private-debt-identity-v2-execution",
+      "correctedProjectionCount": 3,
+      "remainingInvalidProjectionCount": 0,
+      "newSimulatorRows": 0
+    },
+    "privateDebtIdentityV2": {
+      "decisionBoundary": 2,
+      "decision": "close-private-debt-design-at-identity",
+      "directMappingsPassed": 16,
+      "wholeRunRowsByArm": {
+        "current-main": 0,
+        "prototype-code-current-content": 0,
+        "prototype-null-content": 0
+      },
+      "enabledWholeRunRows": 0,
+      "causalRows": 0
+    },
+    "duskAcquisitionDesign": {
+      "decisionBoundary": 1,
+      "decision": "freeze-choice-screen-consumer-acquisition-contract",
+      "eligibleMinimumContracts": 1,
+      "newSaveFields": 0,
+      "newInternalIds": 0,
+      "newRngCalls": 0,
+      "newPresentationTypes": 0
+    },
+    "duskAcquisitionIdentity": {
+      "decisionBoundary": 2,
+      "decision": "close-dusk-acquisition-contract-on-identity-failure",
+      "directControlsPassed": 6,
+      "nullWholeRunIdentityObservations": 768,
+      "failure": "preregistered cross-probe content identity differed before endpoint comparison",
+      "enabledWholeRunRows": 0,
+      "causalRows": 0
+    },
+    "postAcquisitionStructuralBoundary": {
+      "decisionBoundary": 2,
+      "decision": "record-post-acquisition-structural-gate-unavailable",
+      "representationClasses": 9,
+      "eligibleAutonomousClasses": [],
+      "humanAuthorityClasses": [
+        "new-combat-or-card-representation",
+        "new-persistent-run-state-or-relic-contract",
+        "new-presentation-or-acquisition-contract"
+      ],
+      "newSimulatorRows": 0
+    }
+  },
+  "rawCacheObjects": [
+    "057834674a349032e5eb5c836cc30b4528a471010e7206d999be433217e1e2ed",
+    "1a5653d44a95c1cf9fc9b098bb82dca4f9d1ac990ffc2c441dd5ebaa557716c0",
+    "1be7272596391fd1f7b296af480bc366ae8b6a2af50c71c3dc508fc6ae3b458f",
+    "2840f6c0c02c05c1b6d262c0cdd21105149f5bed72bbd0d6d296381c4634e4e3",
+    "8334573c26008822c1820718b47e7433b55460d3b10f3ec116e0fad701fd080a",
+    "84f3f2518cf3cf966ccd35660a0cc0ffe979ac792b15c9951dc69642b9d80423",
+    "85ae0c36763446eb4a1192a798c2fde1a380f5de6a03fea13f20dc6308f59531",
+    "87cbf9f590122f7f88e0e6c17f9c78a5f00bd96b1f3ebea1d10a94cb8f9c1c3f",
+    "91b6efa09b80e5c7073e7971018aac3752cf5489f715d4c3183c86fb8914b86f",
+    "b896aaaca79b86e28abf4e05f1f5e04c5e2622b942a34e14dd27f22ec5d86791",
+    "d33926aec9e22a14f1709120a261c52571e9a94b78c98d90d2a19b9d136c61d3",
+    "e8629af6f45669ea7de26fc1214ea33ed41104f39f8a7deacbd6353739a058b7",
+    "ea13c02f54edd7fdcd59a032fd3256d6a34baf2ed4856fd3f845df9e440fc427",
+    "eb9b4cf286c55692bb2ea012c85d90d0b512bf68fcc207dc2a42865113884984",
+    "ed33bfb8876576d8cea5c47bf1effb1e38c2650b295f699bfd235ce8ce157cd9"
+  ],
+  "prototypeArchive": {
+    "privateDebtV2ProbeSha256": "9f71c602901bc7b324a478cacb07caf1986dad71dc6e0369ec24252a58702c0a",
+    "duskAcquisitionRunStateSha256": "59eda7922eb9e2b98a0e67d433427be5f174462e8c0731329328b15d4de20b5d",
+    "duskAcquisitionPilotSha256": "77a2120f3c406e2ef699966daa28101551f83d63629ae1914953e34b28f485d7",
+    "duskAcquisitionSimulatorSha256": "6249998321ca1640c66362cb525f36ec6278c407f9939aed0a691c2ced7b8651",
+    "duskAcquisitionProbeSha256": "e8f42a050b3c742131ae13dfa088b22be6d6130a636e3298375e5f6dee345c4d",
+    "duskAcquisitionBaselineProbeSha256": "fd4dd3757b4706422353702ffb790e71f8bf660b2c97459b12170a180226013c",
+    "identity": "SHA-identical copies of research-only source; never product authority"
+  },
+  "interpretationBoundary": {
+    "claim": "The finite current #421 representation grammar contains no autonomously selectable next class after the owner-bounded fallback closed. This is an unavailable relevant gate, not proof that every imaginable mechanic or autonomous balancing is impossible.",
+    "forbidden": [
+      "inspect, repair or rerun the closed ChoiceScreen identity without new authority",
+      "select a new product representation, UI or persistent state without frozen semantics",
+      "reopen private debt, private status or another immutable closed family",
+      "add ML, RL, optimiser or adaptive candidate-by-candidate tuning",
+      "use protected seeds",
+      "claim detector, RC, #421 or P9 acceptance"
+    ],
+    "decisionRequired": "Authorise one zero-row forensic classification of the ChoiceScreen mismatch, define one new product contract, or retain the safe unavailable-gate state."
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0,
+    "newLedgerRows": 0
+  },
+  "verification": {
+    "pythonParse": "PASS for five new deterministic runners",
+    "jsonParse": "PASS for all new protocols, summaries and the copied task capsule",
+    "copyParity": "PASS for all new runners, protocols, summaries, task capsule, prototype source and content-addressed raw objects",
+    "rawObjectIdentity": "PASS for 15/15 filename-to-content SHA-256 identities",
+    "sha256Index": "PASS (830/830)",
+    "sha256IndexSha256": "bfd3def67081124062117e8b229745521b10c3e12fe33ae7812e337a6c4298e5",
+    "productGateClaim": null
+  },
+  "remoteHeadsBeforePublication": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "9f2d063fbeaf4ae2d92e52f12cdf8ee50197f6ee",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6"
+  },
+  "executionDisclosure": "The controlling fallback added 768 null acquisition identity observations but zero enabled whole-run or causal row. The final structural-boundary audit was zero-row. No ledger row, protected seed, product mutation, ML, RL, optimiser or human label entered a decision.",
+  "archiveOnly": true,
+  "productPr": null,
+  "actionsRun": false,
+  "mainChanged": false
+}

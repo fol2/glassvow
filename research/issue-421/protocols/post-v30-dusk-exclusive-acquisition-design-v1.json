@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "researchQuestion": "What is the unique smallest contract-safe implementation shape for the owner-authorised research-only Dusk-exclusive acquisition/UI fallback after native reuse and private debt both closed?",
+  "competingOptions": [
+    "reuse the existing generic ChoiceScreen to acquire exactly one existing package consumer through the existing deck/save path",
+    "extend Embark itself with the same existing-consumer choice",
+    "introduce a package marker, content ID, save field or new presentation type",
+    "close the fallback because no unique contract-safe minimum exists"
+  ],
+  "claimBoundary": "This deterministic zero-row design audit can freeze one minimum implementation shape for a separate research-only identity preflight. It cannot establish policy support, acquisition efficacy, package activation, causal benefit, detector admission, product scope or shipping acceptance, and it cannot authorise a simulator or ledger row.",
+  "ownerAuthority": "https://github.com/fol2/glassvow/issues/421#issuecomment-5457447279",
+  "scientificBasis": {
+    "nativeBoundary": "The immutable v35 source audit found no complete reusable acquisition function but proved generic deck, save-dictionary and string-ID compatibility. The controlling owner decision now authorises exactly one bounded new acquisition/UI design.",
+    "packageReuse": "The Dusk starter deck already owns Chisel and Ward, the frozen producers for the existing Scoreline and Afterimage packages. Faultline and Warden's Edge are their separate existing consumers and are absent from that starter deck.",
+    "minimumRepresentation": "Acquire exactly one existing consumer. This completes exactly one package, gives both choices the same one-card deck-size intervention, introduces no card, relic, status, payoff, RNG call, save field or internal ID, and persists through the existing player deck.",
+    "minimumUi": "Reuse application/main.gd::_show_choice and the existing ChoiceScreen card-choice surface. No Embark or presentation implementation changes are needed.",
+    "policyVisibility": "Research passes the two existing consumer IDs to BalancePilot.choose_card with a null RNG and then requires BalancePilot.accepts_card_reward. The null RNG keeps RandomBuild from randomising this contract, while the unchanged cardDecline preserves the frozen policy acceptance boundary.",
+    "availability": "The product-facing choice is eligible only once poolWave2 is revealed, because Faultline is already gated there. Warden's Edge needs no later reveal. This does not bypass current progression.",
+    "mutualExclusion": "One choice ID carries at most one consumer into RunState.new_run; no package marker or second consumer is added. A research policy may select neither when its best existing consumer is below cardDecline."
+  },
+  "packageDefinitions": {
+    "dusk-scoreline": {
+      "producer": "chisel",
+      "consumer": "executioner",
+      "mediator": "enemy-scoreline",
+      "payoff": "exact-current-execute"
+    },
+    "dusk-afterimage-guard": {
+      "producer": "defend",
+      "consumer": "guardedStrike",
+      "mediator": "player-afterimage",
+      "payoff": "exact-current-ward"
+    }
+  },
+  "productAvailabilityGate": "poolWave2",
+  "candidateMatrix": [
+    {
+      "id": "choice-screen-existing-consumer",
+      "aspect": "duskblade",
+      "uiPath": "application/main.gd::_show_choice -> existing ChoiceScreen",
+      "representation": "one-existing-consumer-card",
+      "persistence": "existing-player-deck-save",
+      "policySelector": "choose_card-null-rng-then-cardDecline",
+      "productAvailabilityGate": "poolWave2",
+      "productionRuntimeFilesChanged": 2,
+      "researchFilesChanged": 2,
+      "newPresentationTypes": 0,
+      "newSaveFields": 0,
+      "newInternalIds": 0,
+      "newRngCalls": 0,
+      "changesPayoff": false,
+      "breakingContract": false
+    },
+    {
+      "id": "embark-inline-existing-consumer",
+      "aspect": "duskblade",
+      "uiPath": "extend EmbarkScreen and its begin signal",
+      "representation": "one-existing-consumer-card",
+      "persistence": "existing-player-deck-save",
+      "policySelector": "choose_card-null-rng-then-cardDecline",
+      "productAvailabilityGate": "poolWave2",
+      "productionRuntimeFilesChanged": 3,
+      "researchFilesChanged": 2,
+      "newPresentationTypes": 0,
+      "newSaveFields": 0,
+      "newInternalIds": 0,
+      "newRngCalls": 0,
+      "changesPayoff": false,
+      "breakingContract": false
+    },
+    {
+      "id": "choice-screen-package-marker",
+      "aspect": "duskblade",
+      "uiPath": "existing ChoiceScreen plus a new persistent package marker",
+      "representation": "existing-consumer-plus-new-marker",
+      "persistence": "existing-player-deck-save",
+      "policySelector": "choose_card-null-rng-then-cardDecline",
+      "productAvailabilityGate": "poolWave2",
+      "productionRuntimeFilesChanged": 3,
+      "researchFilesChanged": 2,
+      "newPresentationTypes": 0,
+      "newSaveFields": 0,
+      "newInternalIds": 1,
+      "newRngCalls": 0,
+      "changesPayoff": false,
+      "breakingContract": false
+    },
+    {
+      "id": "choice-screen-package-save-field",
+      "aspect": "duskblade",
+      "uiPath": "existing ChoiceScreen plus a new RunState package field",
+      "representation": "one-existing-consumer-card",
+      "persistence": "new-package-save-field",
+      "policySelector": "choose_card-null-rng-then-cardDecline",
+      "productAvailabilityGate": "poolWave2",
+      "productionRuntimeFilesChanged": 4,
+      "researchFilesChanged": 2,
+      "newPresentationTypes": 0,
+      "newSaveFields": 1,
+      "newInternalIds": 0,
+      "newRngCalls": 0,
+      "changesPayoff": false,
+      "breakingContract": true
+    }
+  ],
+  "rankingRule": "Reject every candidate with a new save field, internal ID, RNG call, presentation type, payoff change, breaking contract, non-Dusk scope, non-existing-consumer representation, non-deck persistence, changed progression gate or a policy selector that does not reuse choose_card(null RNG) followed by cardDecline. Sort remaining candidates by production runtime files changed, then research files changed, then ID. Exactly one candidate must own the minimum first two coordinates.",
+  "expectedMinimumCandidate": "choice-screen-existing-consumer",
+  "identityContractForNextStage": {
+    "levels": {
+      "omitted": "Exact current-main call and profile with no acquisition key.",
+      "explicitNull": "The new option is present and disabled; no choice is evaluated or persisted.",
+      "enabled": "For Dusk only, choose at most one of executioner and guardedStrike using choose_card with null RNG; acquire it only when its unchanged score meets unchanged cardDecline."
+    },
+    "nullProof": "Omitted and explicit-null must reproduce exact current-main path, RNG cursor, policy snapshot, result and row bytes on the same frozen identities.",
+    "directControls": "Prove Dusk-only qualification, poolWave2 product eligibility, zero RNG movement, exact cardDecline acceptance, exactly one existing consumer appended, both existing producers unchanged, payoff/content identity, Ash no-op, invalid-ID rejection and save round-trip through the existing deck field.",
+    "nextBoundary": "Only a green separately frozen identity preflight may open a zero-new-row policy-capacity audit. No enabled whole-run or causal row is authorised by this design audit."
+  },
+  "factorBoundary": {
+    "scorelinePayoff": "Separate exact-current causal factor, fixed and unmodified.",
+    "afterimagePayoff": "Separate exact-current causal factor, fixed and unmodified.",
+    "acquisitionUi": "No causal factor is run here. The next stage may identity-test only omitted, explicit-null and enabled encodings.",
+    "acquisitionPriority": "Exact current and unmodified; this design does not reopen packageOrder or normalised-payoff commitment.",
+    "designMatrix": "No cells, anchors or causal contrasts. Zero simulator rows.",
+    "futureRule": "Any later experiment must freeze exact package-selection strata, common policies and seeds, Scoreline and Afterimage anchors, estimands, interactions, aliases, estimator, budgets and stop rules before rows."
+  },
+  "sourceSeamAssertions": {
+    "application/main.gd": [
+      "func _show_choice(",
+      "ChoiceScreenType.new(",
+      "func _on_embark_begin(",
+      "func _new_run(profile: Dictionary = {})"
+    ],
+    "presentation/run/choice_screen.gd": [
+      "signal chosen(id: String)",
+      "row.has(\"card\")",
+      "chosen.emit(choice_id)"
+    ],
+    "domain/state/run_state.gd": [
+      "profile.get(\"aspect\", 0)",
+      "var deck_ids: Array = cp.get(\"startDeck\", [])",
+      "rs.player.deck.append(CardInst.new(",
+      "\"deck\": deck_out"
+    ],
+    "application/save_service.gd": [
+      "run.to_save_dict()",
+      "static func _store_json_atomic(path: String, value: Dictionary)"
+    ],
+    "tools/balance_pilot.gd": [
+      "static func accepts_card_reward(score: float)",
+      "static func choose_card(",
+      "if random_build and rng != null"
+    ],
+    "tools/balance_sim.gd": [
+      "Pilot.apply_policy(policy)",
+      "\"reveals\": content.reveal_ids.duplicate()",
+      "RunState.new_run(content, seed"
+    ]
+  },
+  "immutableEvidence": {
+    "methodBoundary": {
+      "path": "summaries/post-v30-method-boundary-audit-v1.json",
+      "sha256": "ca1d6ba8e4bc2b83b6619b30005c841c4d73efba7df3f6b846e2fd322e6f5078",
+      "decision": "freeze-deterministic-exclusive-acquisition-class-for-source-audit"
+    },
+    "nativeSourceAudit": {
+      "path": "summaries/post-v30-exclusive-acquisition-source-audit-v1.json",
+      "sha256": "822fd4567e20d34704a453ce3bdccaef1c3ded086bbb6a2068e2e3d489a5d82d",
+      "decision": "record-native-exclusive-acquisition-path-unavailable"
+    },
+    "duskPackageCapacity": {
+      "path": "summaries/post-v38-package-commitment-capacity-v2.json",
+      "sha256": "ebd909bbd23bc403e18894637dcb3041d1c4a240bb0e2464ae5eaa39b55cb4f2",
+      "decision": "close-normalised-payoff-package-commitment-without-implementation"
+    },
+    "privateDebtClosure": {
+      "path": "summaries/post-v30-private-debt-identity-v2.json",
+      "sha256": "700dc5da09dcc48044a0f714d4e13ecc5420bc146b6c8ae69b9b1cd0b9ec3abe",
+      "decision": "close-private-debt-design-at-identity"
+    }
+  },
+  "immutableInputs": {
+    "sourceRoot": "/Users/jamesto/Coding/glassvow/.claude/worktrees/issue-421-p9-recovery",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "7acfa9d8527be1214b7f2227134dd4fa127f571ee5c8dc0e0a6c187b863af7c7",
+    "taskCapsuleSha256": "c44a8708192f189c87ce6dd2694743fcf7a9a233ef30a3e1927bf47e513f6176",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "application/main.gd": "8ad9523cf04dcf5f6eb6d675c94102aa3d035f7ad53132e84c4a59349c41350e",
+      "presentation/run/choice_screen.gd": "054c4969c1ab2505815a42c5676a0d20c0c059a4dfc8459bcf75d8a3a54c78ed",
+      "application/save_service.gd": "0fe7571cd446dead364b6c8cb3ad9f443b6d76bee3de8dda4d59b14e1f2afc7c",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    }
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumSourceFilesRead": 7,
+    "maximumEvidenceFilesRead": 4,
+    "maximumTraceFilesRead": 0,
+    "maximumCacheFilesRead": 0,
+    "maximumSupportRowsInspected": 0,
+    "maximumGodotProcesses": 0,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "success": "Every immutable source, evidence and ledger identity passes; both package producers are already in the Dusk starter deck; both separate existing consumers are absent, content-valid and pool-backed; the generic ChoiceScreen, deck/save and Pilot seams are exact; and choice-screen-existing-consumer is the unique contract-safe minimum by the frozen ranking rule.",
+    "successAuthority": "Freeze only choice-screen-existing-consumer for one separately preregistered research-only identity preflight. Reuse ChoiceScreen, the existing two consumer IDs, player.deck persistence, choose_card with null RNG and unchanged cardDecline. Add no product mutation, new ID, save field, payoff, RNG call, ML/RL or simulator row until identity is green.",
+    "futility": "The exact source contract fails, no contract-safe candidate exists, the minimum is tied, or the expected existing ChoiceScreen design is not the unique minimum.",
+    "futilityAuthority": "Close the bounded Dusk acquisition/UI fallback without implementation or simulator spend and continue inside issue 421 only with the next evidence-backed structural mechanism. Do not broaden candidate enumeration, relax a contract, add ML/RL or create a successor.",
+    "inconclusive": "Any immutable hash, source parse, evidence decision, ledger identity or 30-second execution cap cannot be established.",
+    "inconclusiveAuthority": "Record the design gate inconclusive with zero implementation and rows. Preserve the safe state and invoke only the current issue 421 human-authority contract if no other evidence-backed continuation exists."
+  },
+  "methodBoundary": "Deterministic Python owns source validation, package construction, candidate rejection, minimum ranking and stop/go. Issues 524 and 525 remain immutable evidence and are not reconstructed. No model context, human label, optimiser, ML, RL or adaptive candidate iteration enters execution."
+}

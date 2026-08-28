@@ -24,6 +24,27 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### V36 controlling-owner fallback closure
+
+Comment `5457447279` authorised one schema-only private-debt identity v2 and,
+if it closed, one bounded deterministic Dusk-exclusive acquisition/UI fallback.
+The mechanical v2 preflight passed; the one v2 execution passed all direct
+maps but returned zero comparable whole-run rows, so private debt closed at its
+frozen row-count gate. The unique minimum fallback reused `ChoiceScreen`, one
+existing consumer, existing deck persistence and null-RNG Pilot selection. Its
+six direct controls passed, but its fixed 768-row null panel failed the frozen
+cross-probe content-identity assertion before endpoint comparison, closing the
+exact contract without repair or rerun.
+
+A subsequent preregistered zero-row representation audit found no
+autonomously eligible next class. New combat/card representation, persistent
+run/relic state and new presentation/acquisition semantics remain conceptually
+possible, but each needs product semantics or a frozen-boundary exception that
+the current SSOT does not provide. This is an unavailable relevant gate, not a
+universal scientific negative. The ledger remains byte-identical at 480,372
+rows, with zero protected-seed rows. See
+`summaries/progress-post-v30-owner-fallback-closure-v1.md`.
+
 ### V35 minimum-mechanism and authority boundary
 
 The exact current-main combat-state and card-zone audit covered all 52 mutable

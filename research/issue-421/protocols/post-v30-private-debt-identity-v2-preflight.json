@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "zero-row-private-debt-identity-v2-source-interface-preflight",
+  "authority": "https://github.com/fol2/glassvow/issues/421#issuecomment-5457447279",
+  "question": "Does the separately versioned private-debt v2 differ from immutable v1 only by the three authorised CardInst.up projection corrections while preserving current-main source, prototype behaviour and all scientific identities?",
+  "claimBoundary": "This is a mechanical source/interface proof, not a scientific attempt. It may authorise one frozen v2 identity execution only; it cannot establish mediator mapping, identity, support, capacity, activation, complementarity, product value or shipping fitness.",
+  "supersededMechanicalInvocation": {
+    "protocolSha256": "d501645f8f7e74dca994dcad71bc404c6f279dacc675e64373db1ffc5ff81a40",
+    "runnerSha256": "7334401007f034c68d3cd991f485eb288cc6939ec9ec87daac391d64d3a62197",
+    "failure": "The shared git helper stripped the first porcelain line's leading status column before comparison.",
+    "onlyCorrection": "Read git status porcelain lines without stripping significant leading spaces.",
+    "wholeRunRows": 0,
+    "capacityRows": 0,
+    "supportRows": 0,
+    "causalRows": 0,
+    "newSimulatorObservationRows": 0,
+    "GodotProcesses": 0,
+    "summaryWritten": false
+  },
+  "correction": {
+    "from": "Three private-debt result projections access nonexistent CardInst.upgraded.",
+    "to": "The same three result projections access current-main CardInst.up.",
+    "unchanged": [
+      "candidate and prototype CombatRules behaviour",
+      "direct controls and their input upgraded keys",
+      "policy and simulation-seed identities",
+      "content construction and hashes",
+      "whole-run arms and estimator",
+      "budgets, success, futility and inconclusive rules",
+      "v1 evidence and output quarantine"
+    ]
+  },
+  "v1Evidence": {
+    "archiveCommit": "9f2d063fbeaf4ae2d92e52f12cdf8ee50197f6ee",
+    "classification": "INCONCLUSIVE_SCHEMA_PRIVATE_DEBT_IDENTITY_NO_FIT",
+    "identityProtocolPath": "protocols/post-v30-private-debt-identity-v1.json",
+    "identityProtocolSha256": "8fb1fd790ed6e180ae951f459ed3b6cb5b141c20105514979b105b37530ef444",
+    "auditSummaryPath": "summaries/post-v30-private-debt-identity-audit-v1.json",
+    "auditSummarySha256": "f6d0a810418ec58b890d9e120e06d5b2fd5bf9622d795c01bc149dc43315e8af",
+    "reuseBoundary": "No v1 output endpoint or identity observation may enter v2 science."
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "v1SourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "v2SourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "archiveCommit": "9f2d063fbeaf4ae2d92e52f12cdf8ee50197f6ee",
+    "cardInstSha256": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d",
+    "v1CombatRulesSha256": "1134a656ec3116f64604a659c1cadc0051d92f27f149ed217074282506016f64",
+    "v2CombatRulesSha256": "1134a656ec3116f64604a659c1cadc0051d92f27f149ed217074282506016f64",
+    "v1ProbeSha256": "577a64abf6070985a48f229130954704042927c887ed9921909ec38067bc3c5b",
+    "v2ProbeSha256": "9f71c602901bc7b324a478cacb07caf1986dad71dc6e0369ec24252a58702c0a",
+    "probeUidSha256": "249e5a97834032efbeca3283482187692e4b1fde0cd2bca8c887990aadf1e9d9",
+    "v1InvalidProjectionCount": 3,
+    "v2InvalidProjectionCount": 0,
+    "v2CorrectedProjectionCount": 3,
+    "semanticChanges": [
+      "card.upgraded -> card.up at producer result projection",
+      "card.upgraded -> card.up at consumer result projection",
+      "card.upgraded -> card.up at card-zone result projection"
+    ],
+    "taskCapsuleSha256": "5e6b2494c931e8d73f6521ec0ada9dc612160c42e108200e3895cd4b80ab270f",
+    "runnerSha256": "58f96edde0123436df4c9a32a830742a8642c0b29f891a7fbab190f7676bdfc9"
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumWholeRunRows": 0,
+    "maximumCapacityRows": 0,
+    "maximumSupportRows": 0,
+    "maximumCausalRows": 0,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumGodotProcesses": 0,
+    "maximumWallTimeSeconds": 15,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "successfulProofAttempts": 1,
+    "maximumMechanicalInvocations": 2
+  },
+  "decisionRules": {
+    "success": "Exact current-main CardInst declares up and no upgraded field; v2 has no CardInst.upgraded access, has exactly three card.up projections, normalises byte-for-byte to the v1 probe after only those replacements, and preserves exact prototype code, UID, source, archive, task capsule and ledger identities within the zero-row budget.",
+    "successAuthority": "Run the separately frozen private-debt identity v2 exactly once. Reuse no v1 output endpoint or identity observation.",
+    "futility": "Any semantic source difference exists beyond the three authorised CardInst field projections.",
+    "futilityAuthority": "Do not execute v2 science or repair the semantic candidate under this authority.",
+    "inconclusive": "Any immutable source, archive, evidence, provenance, ledger or 15-second execution identity cannot be established.",
+    "inconclusiveAuthority": "Do not execute v2 science while the mechanical prerequisite is unproved; preserve v1 and protected seeds."
+  }
+}

@@ -1,0 +1,315 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "researchQuestion": "Does the frozen ChoiceScreen/existing-consumer Dusk acquisition contract preserve exact current-main whole-run identity when omitted or explicitly off, and does its enabled direct surface add only one accepted existing Dusk consumer without RNG, payoff, progression or save-schema drift?",
+  "claimBoundary": "This is an implementation-identity preflight. It may prove null path identity and direct mediator isolation, then authorise a zero-new-row policy-capacity audit. It cannot establish acquisition support, package activation, causal benefit, RandomBuild safety, detector admission, a product candidate or shipping scope. Enabled whole-run execution is prohibited.",
+  "designAuthority": {
+    "protocol": "protocols/post-v30-dusk-exclusive-acquisition-design-v1.json",
+    "sha256": "d95e055e68d0e1b61769ea2ac5df338598eb01be79155ba9c88dff4e5d55694e",
+    "summary": "summaries/post-v30-dusk-exclusive-acquisition-design-v1.json",
+    "summarySha256": "35765c290f9ef4259927a71e470e8065a0c1dca2649c90f2d45b60e5f9bdb009",
+    "decision": "freeze-choice-screen-consumer-acquisition-contract"
+  },
+  "factorDefinition": {
+    "name": "duskExclusiveAcquisition",
+    "type": "research-only deterministic pre-run acquisition surface outside the sampled policy vector",
+    "levels": {
+      "omitted": "Call the prototype simulator through its legacy arity so the new trailing argument is omitted.",
+      "off": "Pass the explicit false trailing argument; do not evaluate a package choice or add a profile key.",
+      "pilot": "For Dusk only, call BalancePilot.choose_card over executioner then guardedStrike with a null RNG, accept the best only when its unchanged card_score meets unchanged cardDecline, and pass at most that one existing consumer to RunState.new_run."
+    },
+    "null": [
+      "omitted",
+      "off"
+    ],
+    "enabled": "pilot",
+    "productUiShape": "After the existing Embark decision and only once poolWave2 is revealed, application/main.gd may reuse _show_choice and existing ChoiceScreen to present the same two existing consumers. Product UI is not implemented in this research preflight.",
+    "persistence": "RunState adds the selected existing consumer to player.deck. The existing save dictionary serialises and reloads that CardInst; there is no package field, marker or migration.",
+    "mutualExclusion": "The fixed ordered choice list contains executioner and guardedStrike and returns at most one ID. A policy below cardDecline returns none.",
+    "duskQualification": "Only aspect duskblade may evaluate or receive the choice. Ashwarden is an exact no-op.",
+    "progression": "The prospective product surface is gated at poolWave2 because executioner is already gated there; guardedStrike has no later gate. The mature research profile already reveals all current pool waves.",
+    "rng": "The selector omits the optional RNG argument. Even under RandomBuild, choose_card therefore follows its deterministic score path and no RNG object is read or advanced.",
+    "scorelinePayoff": "Separate exact-current factor, fixed and byte-identical in content.",
+    "afterimagePayoff": "Separate exact-current factor, fixed and byte-identical in content.",
+    "acquisitionPriority": "Exact current and unmodified. This factor does not reopen packageOrder, commitment or an acquisition-priority scalar.",
+    "allowedDirectDifference": "For an accepted Dusk choice only, append one base non-upgraded CardInst with the selected existing consumer ID and advance only the CardInst UID cursor by one. The existing starter deck, producers, content, policy snapshot and RNG remain exact.",
+    "forbiddenDirectEffects": "No new ID, save field, content definition, payoff, score, threshold, producer, second consumer, relic, status, unlock, RNG call, Ash change, policy method, ML, RL or optimiser."
+  },
+  "packageDefinitions": {
+    "dusk-scoreline": {
+      "producer": "chisel",
+      "consumer": "executioner",
+      "mediator": "enemy-scoreline",
+      "payoff": "exact-current-execute"
+    },
+    "dusk-afterimage-guard": {
+      "producer": "defend",
+      "consumer": "guardedStrike",
+      "mediator": "player-afterimage",
+      "payoff": "exact-current-ward"
+    }
+  },
+  "identityCohort": {
+    "policyRoot": 552,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      347200,
+      347201,
+      347202,
+      347203
+    ],
+    "rowsPerArm": 256,
+    "arms": [
+      "pristine-current-main",
+      "prototype-omitted",
+      "prototype-explicit-off"
+    ],
+    "identity": "All three arms use every one of the same 64 freshly sampled policy identities and four fresh simulation seed identities. No row is selected, removed, replaced or added after execution."
+  },
+  "directCases": [
+    {
+      "id": "scoreline-choice",
+      "aspect": "duskblade",
+      "acquisition": "pilot",
+      "randomBuild": false,
+      "seed": 422200,
+      "expectedChoice": "executioner",
+      "reason": "accepted",
+      "policy": {
+        "cardDecline": -1000000000,
+        "card": {
+          "rarity": {
+            "common": 0,
+            "uncommon": 0
+          },
+          "blockHeal": 0,
+          "aspectBonus": 100
+        },
+        "special": {
+          "execute": 100
+        }
+      }
+    },
+    {
+      "id": "afterimage-choice",
+      "aspect": "duskblade",
+      "acquisition": "pilot",
+      "randomBuild": false,
+      "seed": 422201,
+      "expectedChoice": "guardedStrike",
+      "reason": "accepted",
+      "policy": {
+        "cardDecline": -1000000000,
+        "card": {
+          "rarity": {
+            "common": 0,
+            "uncommon": 0
+          },
+          "blockHeal": 100,
+          "aspectBonus": 0
+        },
+        "special": {
+          "execute": 0
+        }
+      }
+    },
+    {
+      "id": "decline-both",
+      "aspect": "duskblade",
+      "acquisition": "pilot",
+      "randomBuild": false,
+      "seed": 422202,
+      "expectedChoice": "",
+      "reason": "decline",
+      "policy": {
+        "cardDecline": 1000000000,
+        "card": {
+          "rarity": {
+            "common": 0,
+            "uncommon": 0
+          },
+          "blockHeal": 0,
+          "aspectBonus": 100
+        },
+        "special": {
+          "execute": 100
+        }
+      }
+    },
+    {
+      "id": "random-build-null-rng",
+      "aspect": "duskblade",
+      "acquisition": "pilot",
+      "randomBuild": true,
+      "seed": 422203,
+      "expectedChoice": "guardedStrike",
+      "reason": "accepted",
+      "policy": {
+        "cardDecline": -1000000000,
+        "card": {
+          "rarity": {
+            "common": 0,
+            "uncommon": 0
+          },
+          "blockHeal": 100,
+          "aspectBonus": 0
+        },
+        "special": {
+          "execute": 0
+        }
+      }
+    },
+    {
+      "id": "ash-no-op",
+      "aspect": "ashwarden",
+      "acquisition": "pilot",
+      "randomBuild": false,
+      "seed": 422204,
+      "expectedChoice": "",
+      "reason": "aspect",
+      "policy": {
+        "cardDecline": -1000000000,
+        "card": {
+          "rarity": {
+            "common": 0,
+            "uncommon": 0
+          },
+          "blockHeal": 0,
+          "aspectBonus": 100
+        },
+        "special": {
+          "execute": 100
+        }
+      }
+    },
+    {
+      "id": "explicit-off-no-op",
+      "aspect": "duskblade",
+      "acquisition": "off",
+      "randomBuild": false,
+      "seed": 422205,
+      "expectedChoice": "",
+      "reason": "off",
+      "policy": {
+        "cardDecline": -1000000000,
+        "card": {
+          "rarity": {
+            "common": 0,
+            "uncommon": 0
+          },
+          "blockHeal": 0,
+          "aspectBonus": 100
+        },
+        "special": {
+          "execute": 100
+        }
+      }
+    }
+  ],
+  "anchors": {
+    "pristine": "Fresh exact-current-main rows under qualified Godot 4.7.2 are the baseline; no older 4.7.1 output or research-modified cache is reused.",
+    "null": "Prototype omitted and explicit-off use the exact same policies, simulation seeds, content, Dusk Vow-5 setting and full whole-run estimator as pristine.",
+    "direct": "Each direct control constructs null and enabled RunState values from the same content and seed, compares deck, UID and RNG, then reloads the enabled save through current RunState.from_save_dict.",
+    "content": "The exact current Chisel, Ward, Faultline and Warden's Edge definitions remain byte-identical. Both producers remain in the starter deck; only one existing consumer may be appended."
+  },
+  "estimands": {
+    "baselineIdentity": "Exact canonical dictionary equality for pristine current-main versus prototype omitted across all 256 identities.",
+    "explicitNullIdentity": "Exact canonical dictionary equality for prototype omitted versus prototype explicit-off across all 256 identities.",
+    "rngIdentity": "Exact final RNG equality across all three whole-run arms for every policy-seed identity and exact null-versus-enabled RunState RNG equality in every direct case.",
+    "policyIdentity": "Exact resolved policy snapshot equality across all three whole-run arms for every identity.",
+    "outcomeIdentity": "Exact outcome equality across all three whole-run arms; every shared baseline error or stall must remain shared rather than selected away.",
+    "directSelection": "The fixed policies select Faultline, select Warden's Edge, decline both, retain deterministic Warden's Edge under RandomBuild with null RNG, no-op on Ash and no-op when explicitly off exactly as registered.",
+    "directIsolation": "An accepted Dusk choice appends exactly one base existing consumer after the unchanged starter deck, advances only UID by one, consumes no RNG, preserves both producers and content definitions, and round-trips through the existing save deck. Every non-choice case is exact null.",
+    "trustBoundary": "An unregistered acquisition value must terminate non-zero before any output row. Enabled whole-run is absent from the deterministic plan and rejected by the probe.",
+    "notEstimated": "No enabled whole-run outcome, policy support, choice distribution, package activation, causal effect, RandomBuild movement, duration, detector endpoint, product UX, protected-seed or shipping result is estimated."
+  },
+  "immutableInputs": {
+    "baselineSourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "prototypeSourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "2826de9b1d70d391ba6305a21049daf05f54529ce8673fbf82318e317e3a2f23",
+    "taskCapsuleSha256": "b8c651f05d5f46accbf55b40cce21b3316850279c8e0990a02ef6a3945d5b8cc",
+    "designProtocolSha256": "d95e055e68d0e1b61769ea2ac5df338598eb01be79155ba9c88dff4e5d55694e",
+    "designSummarySha256": "35765c290f9ef4259927a71e470e8065a0c1dca2649c90f2d45b60e5f9bdb009",
+    "baselineStatus": [
+      "?? tools/research_421_dusk_acquisition_probe.gd",
+      "?? tools/research_421_dusk_acquisition_probe.gd.uid"
+    ],
+    "prototypeStatus": [
+      " M domain/state/run_state.gd",
+      " M tools/balance_pilot.gd",
+      " M tools/balance_sim.gd",
+      "?? tools/research_421_dusk_acquisition_probe.gd",
+      "?? tools/research_421_dusk_acquisition_probe.gd.uid"
+    ],
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/research_421_dusk_acquisition_probe.gd": "fd4dd3757b4706422353702ffb790e71f8bf660b2c97459b12170a180226013c",
+      "tools/research_421_dusk_acquisition_probe.gd.uid": "816f5461e7022a7dd06d542ae10513616917ae6a31e891a3db69877fde553e58"
+    },
+    "prototypeSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/state/run_state.gd": "59eda7922eb9e2b98a0e67d433427be5f174462e8c0731329328b15d4de20b5d",
+      "tools/balance_pilot.gd": "77a2120f3c406e2ef699966daa28101551f83d63629ae1914953e34b28f485d7",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "6249998321ca1640c66362cb525f36ec6278c407f9939aed0a691c2ced7b8651",
+      "tools/research_421_dusk_acquisition_probe.gd": "e8f42a050b3c742131ae13dfa088b22be6d6130a636e3298375e5f6dee345c4d",
+      "tools/research_421_dusk_acquisition_probe.gd.uid": "816f5461e7022a7dd06d542ae10513616917ae6a31e891a3db69877fde553e58"
+    }
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "invalidConfigurationChecks": 1,
+    "directControlRows": 6,
+    "wholeRunIdentityRows": 768,
+    "maximumIdentityObservationRows": 774,
+    "enabledWholeRunRows": 0,
+    "maximumNewCausalRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumGodotProcesses": 4,
+    "maximumWallTimeSeconds": 300,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python validates every immutable source and hash, rejects an invalid level, builds all direct cases and the complete common-random-number null rectangle, invokes the exact absolute Godot binary, content-addresses plans and outputs, performs exact comparisons and owns stop/go.",
+    "order": [
+      "Reject one invalid acquisition value before an output row.",
+      "Execute all six fixed direct cases once; any mismatch stops identity admission.",
+      "Execute the 256-row pristine current-main rectangle once.",
+      "Execute the fixed 512-row prototype omitted-plus-explicit-off rectangle once.",
+      "Compare exact rows, RNG, policy, outcome, direct deck/save effects and ledger identity once."
+    ],
+    "firstLook": "The complete 774-row identity design is the only look. No enabled whole-run, cohort change, repair, reserve or rerun exists.",
+    "stagedConstraint": "Direct enabled evidence supports mediator isolation only. Every endpoint-bearing whole-run arm is null and comparably evaluated on the same complete cohort.",
+    "protectedSeedsExcluded": {
+      "acceptance": "3000-5199",
+      "reserve": "5200-5399"
+    }
+  },
+  "decisionRules": {
+    "success": "The invalid value fails closed; all six direct controls match their frozen choice, aspect, cardDecline, zero-RNG, one-consumer, content/payoff and existing-save expectations; all 256 pristine-versus-omitted and 256 omitted-versus-explicit-off rows are exact; RNG, policy and outcome mismatches are zero; exactly 774 identity observations and zero enabled whole-run, causal, ledger or protected rows execute within 300 seconds.",
+    "successAuthority": "Freeze the exact Dusk acquisition implementation as identity-safe and proceed only to one separately preregistered zero-new-row policy-capacity audit on immutable policies. Do not run enabled whole-run or causal rows, implement product UI, alter the selector, add a method or use protected seeds before capacity passes.",
+    "futility": "The invalid value fails open, any registered direct expectation fails, any whole-run null row/RNG/policy/outcome differs, an unintended field moves, or the ledger changes.",
+    "futilityAuthority": "Close the exact ChoiceScreen/existing-consumer acquisition contract without repair, retune or rerun and continue inside issue 421 with the next evidence-backed structural mechanism. Do not change the consumer list, UI path, selector, cohort, threshold or null encoding and do not create a successor.",
+    "inconclusive": "An immutable input, exact Godot process, output schema, row count or 300-second cap is unavailable before a valid identity decision.",
+    "inconclusiveAuthority": "Record the identity preflight inconclusive at the cap with no enabled whole-run or causal inference. Preserve the safe state and continue only under the current issue 421 authority contract; escalate only if no evidence-backed continuation remains and the relevant gate is genuinely unavailable."
+  },
+  "methodBoundary": "Issues 524 and 525 remain immutable evidence and are not reconstructed. Scoreline and Afterimage payoffs remain separate and fixed. Deterministic code owns construction, execution, caching and stop/go; no human label, model context, optimiser, ML, RL or adaptive candidate step enters execution."
+}

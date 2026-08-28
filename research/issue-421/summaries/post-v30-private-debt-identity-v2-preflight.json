@@ -1,0 +1,56 @@
+{
+  "GodotProcesses": 0,
+  "authority": "Run the separately frozen private-debt identity v2 exactly once. Reuse no v1 output endpoint or identity observation.",
+  "capacityRows": 0,
+  "causalRows": 0,
+  "decision": "admit-private-debt-identity-v2-execution",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "a221c07cf716b4373b229f3a33f9b42b414191098c1af0be2ec91540e85c2a9a",
+  "schemaVersion": 1,
+  "sourceInterfaceIdentity": {
+    "archiveCommit": "9f2d063fbeaf4ae2d92e52f12cdf8ee50197f6ee",
+    "cardInstSha256": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d",
+    "probeUidSha256": "249e5a97834032efbeca3283482187692e4b1fde0cd2bca8c887990aadf1e9d9",
+    "runnerSha256": "58f96edde0123436df4c9a32a830742a8642c0b29f891a7fbab190f7676bdfc9",
+    "semanticChanges": [
+      "card.upgraded -> card.up at producer result projection",
+      "card.upgraded -> card.up at consumer result projection",
+      "card.upgraded -> card.up at card-zone result projection"
+    ],
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "taskCapsuleSha256": "5e6b2494c931e8d73f6521ec0ada9dc612160c42e108200e3895cd4b80ab270f",
+    "v1CombatRulesSha256": "1134a656ec3116f64604a659c1cadc0051d92f27f149ed217074282506016f64",
+    "v1InvalidProjectionCount": 3,
+    "v1ProbeSha256": "577a64abf6070985a48f229130954704042927c887ed9921909ec38067bc3c5b",
+    "v1SourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "v2CombatRulesSha256": "1134a656ec3116f64604a659c1cadc0051d92f27f149ed217074282506016f64",
+    "v2CorrectedProjectionCount": 3,
+    "v2InvalidProjectionCount": 0,
+    "v2ProbeSha256": "9f71c602901bc7b324a478cacb07caf1986dad71dc6e0369ec24252a58702c0a",
+    "v2SourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+  },
+  "supportRows": 0,
+  "wallTimeSeconds": 6.189911166904494,
+  "wholeRunRows": 0
+}
