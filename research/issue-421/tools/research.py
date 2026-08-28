@@ -559,7 +559,8 @@ def combined_panel_plan(protocol: dict[str, Any], split: str,
     }
 
 
-def run_plan(db: sqlite3.Connection, protocol_sha: str, plan: dict[str, Any]) -> dict[str, Any]:
+def run_plan(db: sqlite3.Connection, protocol_sha: str, plan: dict[str, Any],
+             timeout: int | None = None) -> dict[str, Any]:
     plan_sha, plan_path = cache_json(plan)
     record(db, "plan", plan_sha, plan)
     run_identity = f"probe:{plan_sha}"
@@ -576,7 +577,8 @@ def run_plan(db: sqlite3.Connection, protocol_sha: str, plan: dict[str, Any]) ->
             ["godot", "--headless", "-s", "res://tools/research_421_probe.gd", "--",
              f"--plan={plan_path}", f"--out={raw_path}"],
             cwd=SOURCE, text=True, capture_output=True,
-            timeout=1800 if plan.get("mode") == "whole-run" else 180,
+            timeout=timeout if timeout is not None else (
+                1800 if plan.get("mode") == "whole-run" else 180),
         )
         if result.returncode or not raw_path.is_file():
             raise RuntimeError(

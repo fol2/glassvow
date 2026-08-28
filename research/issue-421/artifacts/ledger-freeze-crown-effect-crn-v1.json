@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "protocolSha256": "ca03b6ea0efe8d6da71399e70fd04be8d6ba4e1517fb6736cc36b01864fae31f",
+  "executionManifestSha256": "168af3c418c0354564ae09cd8140cd4773059a1135a2548d1f2a331b4397750a",
+  "decision": "close-shatterers-crown-effect-family",
+  "decisionBoundary": 2,
+  "before": {
+    "records": 479669,
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "afterExecution": {
+    "records": 479853,
+    "firstSequence": 1,
+    "lastSequence": 479853,
+    "sha256": "2d4ee63ac8cd83664972da376b6a9bab09ebf741020ef159297a5a50a7bd4d2b",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "afterIndependentAudit": {
+    "records": 479853,
+    "firstSequence": 1,
+    "lastSequence": 479853,
+    "sha256": "2d4ee63ac8cd83664972da376b6a9bab09ebf741020ef159297a5a50a7bd4d2b",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "newRecords": 184,
+  "newSimulatorObservationRows": 178,
+  "newPlanRecords": 3,
+  "newProbeRunRecords": 3,
+  "independentAuditNewRows": 0,
+  "authority": "The independent audit was read-only. Both Crown cells are closed by the frozen inactive-policy failures; no held-out cohort, protected seed or further Crown level is authorised."
+}

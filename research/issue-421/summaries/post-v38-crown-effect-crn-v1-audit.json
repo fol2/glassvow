@@ -1,0 +1,97 @@
+{
+  "auditRunnerSha256": "7e7fa21212bfa32392f31afbfb5230356de395a349bc6e61a8248edc582ff3a4",
+  "decision": "close-shatterers-crown-effect-family",
+  "decisionBoundary": 2,
+  "effects": {
+    "authoredTotal": {
+      "duration": {
+        "inactivePolicies": 3,
+        "negativePolicies": 13,
+        "p025": -0.10620366227127724,
+        "p975": 0.05232355917802973,
+        "point": -0.026996327950708023,
+        "positivePolicies": 9
+      },
+      "shatters": {
+        "inactivePolicies": 1,
+        "negativePolicies": 1,
+        "p025": 3.42,
+        "p975": 9.8,
+        "point": 6.34,
+        "positivePolicies": 23
+      }
+    },
+    "thresholdAtFervor": {
+      "duration": {
+        "inactivePolicies": 4,
+        "negativePolicies": 9,
+        "p025": -0.12248219906505685,
+        "p975": 0.14258951357306668,
+        "point": 0.004145751719376572,
+        "positivePolicies": 12
+      },
+      "shatters": {
+        "inactivePolicies": 1,
+        "negativePolicies": 1,
+        "p025": 4.06,
+        "p975": 10.900499999999994,
+        "point": 7.16,
+        "positivePolicies": 23
+      }
+    },
+    "thresholdOnlyTotal": {
+      "duration": {
+        "inactivePolicies": 3,
+        "negativePolicies": 11,
+        "p025": -0.0518214265184017,
+        "p975": 0.0807869442452052,
+        "point": 0.01704812184465987,
+        "positivePolicies": 11
+      },
+      "shatters": {
+        "inactivePolicies": 0,
+        "negativePolicies": 2,
+        "p025": 3.8,
+        "p975": 10.58,
+        "point": 6.8,
+        "positivePolicies": 23
+      }
+    }
+  },
+  "fixedFailures": {
+    "requiredInactivePolicies": 8,
+    "shippingInactivePolicies": 1,
+    "thresholdOnlyInactivePolicies": 0
+  },
+  "identity": {
+    "acquisitionPrefixExact": true,
+    "currentFrozenBaselineExact": true,
+    "negativeControlExact": true,
+    "policyExact": true
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 479853,
+    "protectedSeedRows": 0,
+    "records": 479853,
+    "sha256": "2d4ee63ac8cd83664972da376b6a9bab09ebf741020ef159297a5a50a7bd4d2b",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 479853,
+    "protectedSeedRows": 0,
+    "records": 479853,
+    "sha256": "2d4ee63ac8cd83664972da376b6a9bab09ebf741020ef159297a5a50a7bd4d2b",
+    "sqliteIntegrity": "ok"
+  },
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "protocolSha256": "ca03b6ea0efe8d6da71399e70fd04be8d6ba4e1517fb6736cc36b01864fae31f",
+  "rawOutputSha256": "632ec8619e37954741fe7d48bb695486a542332a67f60538b7b37c33c0fcc9a0",
+  "rawRows": 160,
+  "schemaVersion": 1,
+  "status": "PASS",
+  "summarySha256": "7b7a11a1f78f42dcdf7f8a1ccd2515c9ddb10b066ade66a04f66f486b4aafa14"
+}

@@ -6,7 +6,7 @@
   "activeConstraints": [
     "Continue issue #421 under its current body and the current-main AI-SDLC; do not restart the programme or create a successor.",
     "Treat issue #524 and #525 only as immutable scientific evidence and do not repeat their exhausted research paths.",
-    "Treat Scoreline payoff and Afterimage payoff as separate causal factors; the active design has five factors, not the old four-factor description.",
+    "Treat Scoreline payoff and Afterimage payoff as separate causal factors. Neither varied in the completed two-factor Crown-effect design; do not revive the old four-factor description.",
     "Use mechanism-blocked common-random-number designs before any wider joint design, with shared interference anchors and no rows spent merely to complete a Cartesian product.",
     "Within every contrast use the same frozen policies, simulation seeds, baseline, first-look budget, estimator and stopping rule.",
     "Before any new simulator observation, prove exact null path, RNG, policy and result identity for both research knobs and prove each affects only its intended mediator.",
@@ -16,6 +16,7 @@
     "The exact #525 ward-mirror-edge packet and tested level-2 direction are closed by current-main whole-run decision boundary 2; do not retune, splice or send it to held-out confirmation.",
     "The immutable #524 retained Dusk edge inventory is closed by a zero-row current-main capacity audit; do not return to its Ward or Kindle families.",
     "The Shatterer's Crown guaranteed boss-offer route is closed by the frozen source-and-policy screen; do not implement its offer knob or weaken its one-policy shortfall.",
+    "The natural Shatterer's Crown effect family is closed by preregistered CRN decision boundary 2: its strong threshold effect was broad across exposed policies and failed the fixed inactive-policy gate; do not remove Fervor, add a level or reinterpret it as a strategy package.",
     "At the next decision boundary freeze at most one candidate, close the scalar family and continue structurally inside #421, or record inconclusive at the preregistered cap.",
     "Do not use acceptance seeds 3000-5199 or reserve seeds 5200-5399 before the authorised final exact-SHA boundary.",
     "Keep research outside production truth; do not create a research PR, run product CI, or merge the archive-only evidence branch."
@@ -45,8 +46,8 @@
     "archivedExperimentGodot": "4.7.2.stable.official.ed1daf0bf",
     "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
     "researchContentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
-    "researchLedgerRecords": 479669,
-    "researchLedgerSha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "researchLedgerRecords": 479853,
+    "researchLedgerSha256": "2d4ee63ac8cd83664972da376b6a9bab09ebf741020ef159297a5a50a7bd4d2b",
     "protectedSeedRows": 0,
     "knobIdentityProtocolSha256": "3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff",
     "blockedCrnProtocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
@@ -78,7 +79,10 @@
     "retainedDuskInventoryProtocolSha256": "406357da0e9784dd31e64e04c7eb6d8d1881ad3442c79c202bac328ce63d2a28",
     "retainedDuskInventorySummarySha256": "a6883def74ed313fb8d5c70e66ca9dc6111da4a7b4de363ebc3437828e2bfe66",
     "duskMechanismScreenProtocolSha256": "e882f66df0a21363a03d92333cea21fee79334ad3d392c981670613bd05af0b9",
-    "duskMechanismScreenSummarySha256": "9ba14ec9a63ecb9a8e7cafa9b4edc0b5def546755c25e57234ee15dc251b2a64"
+    "duskMechanismScreenSummarySha256": "9ba14ec9a63ecb9a8e7cafa9b4edc0b5def546755c25e57234ee15dc251b2a64",
+    "crownEffectCrnProtocolSha256": "ca03b6ea0efe8d6da71399e70fd04be8d6ba4e1517fb6736cc36b01864fae31f",
+    "crownEffectCrnSummarySha256": "7b7a11a1f78f42dcdf7f8a1ccd2515c9ddb10b066ade66a04f66f486b4aafa14",
+    "crownEffectCrnAuditSha256": "e8de4178d6f0dfe8546a1057f0b51822556fc12a7dcc672d6916e019ecd4f1dd"
   },
   "decisions": [
     {
@@ -175,18 +179,23 @@
       "decision": "Close Shatterer's Crown guaranteed boss-offer inclusion before implementation.",
       "evidence": "summaries/post-v38-dusk-mechanism-screen-v1.json",
       "reason": "A source-first filter left Shatterer's Crown as the sole untested Dusk-specific authored target after excluding the #524 Prism/Bell package. Natural current-main support was 25 active and 39 inactive policies, but exact offer-pair enumeration produced only 15 robust selectors and 14 projected-active policies against frozen minima of 16. The one-policy shortfall is decisive; no tie or threshold retune is allowed."
+    },
+    {
+      "decision": "Close the natural Shatterer's Crown effect family and continue with a new structural Duskblade mediator.",
+      "evidence": "summaries/post-v38-crown-effect-crn-v1-audit.json",
+      "reason": "Exact null, baseline, policy, acquisition-prefix and no-Crown identities passed. The authored Crown effect added 6.34 Shatters per exposed policy cluster with 95% interval [3.42, 9.80], and threshold-only added 6.80 [3.80, 10.58], but 23 of 25 exposed policies benefited while only one and zero were inactive against the fixed minimum of eight. Both cells are broad threshold power rather than repertoire discriminators. The independent audit added zero rows."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
     "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
     "heldOutConfirmation": "Root-546 policies and disjoint simulation seeds reproduced proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
-    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 Ward packet and every Dusk edge retained by immutable #524 are closed. A source-first screen found 25/39 natural Shatterer's Crown support but rejected guaranteed boss-offer inclusion at 15 robust selectors and 14 projected-active policies. That descriptive support authorises only an identity-safe natural-effect ablation question, not package admission. Prior Dusk Scoreline complementarity remains evidence; materially different confirmed Dusk support remains outstanding.",
+    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 Ward packet and every Dusk edge retained by immutable #524 are closed. Shatterer's Crown guaranteed-offer inclusion failed before implementation; its separate natural-effect CRN then found a strong but nearly universal exposed-policy threshold effect, with only one or zero inactive policies against eight. The complete Crown family is closed as broad power, not package differentiation. Prior Dusk Scoreline complementarity remains evidence; materially different confirmed Dusk support remains outstanding.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
   "toolchainBoundary": "Resolved with the isolated official Godot 4.7.1.stable.official.a13da4feb binary. Its release SHA-512 and codesign are verified, every new execution is pinned to it, and a frozen pre-change identity plan replayed row-exactly against the archived 4.7.2 evidence.",
-  "nextAction": "Preregister the smallest identity-safe research-only Shatterer's Crown effect ablation. Omitted/null settings must reproduce current-main policy, acquisition, path, RNG and results exactly; the non-null setting may disable only the existing facet-threshold reduction and enemy-Fervor cost while leaving the natural relic reward path untouched. Freeze the identity panel, causal discovery cohort, estimands, caps and success/futility/inconclusive rules before any row. Do not implement boss-offer inclusion, rescue Afterimage, retune Ward or Kindle, reconstruct #524/#525, repeat #517/#519, add ML/RL, spend protected seeds or promote product content.",
+  "nextAction": "Treat the existing Dusk grammar as exhausted and preregister the smallest new deterministic structural mediator justified by the missing policy-selective repertoire. Begin with a source-and-capacity contract and identity-safe prototype boundary before any simulator row. Do not return to Crown, Ward, Kindle, Afterimage, the tested #524 packages, #517/#519, ML/RL, protected seeds or adaptive candidate tuning.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

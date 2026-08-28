@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Among frozen current-main Duskblade policy and simulation identities that naturally acquire Shatterer's Crown, does the authored facet-threshold benefit causally increase Shatter expression, and is its separately authored enemy-Fervor cost responsible for material masking or interference?",
+  "retrospectiveScope": "This is a preregistered discovery experiment on one source-selected existing mechanism. It does not change acquisition, offers, policy scores, rarity, content, protected seeds or the immutable #524/#525 evidence. It cannot admit a detector, promote product content or establish held-out package support.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "baselineContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "76bb23bedc9d2b5631c954cb7a0f7715e3f55e2b65d3a195da6307f75e1363e7",
+    "pilotSha256": "a244136081b3306100e9c56016e47312f81e6555f085bf63a168ae613fd4a93c",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "balanceSimSha256": "816d8af98718a549d3e846d215d5f29ddc8d5aa58c93586be31b595d509e6c36",
+    "probeSha256": "006d69cb027b83802e303916d52deef7fa1cd4aa578fbf0213c2d7616838a854",
+    "researchCoreSha256": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+    "runnerSha256": "d024df9beb7f1a261751de7a2c203906b3615cee0fcd6bd0c722d61976804b5c"
+  },
+  "baseline": {
+    "role": "Frozen current-main natural-acquisition screen only; cohort selection reads Crown ownership, policy identity and seed identity, never a causal outcome difference.",
+    "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "outputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf"
+  },
+  "factorDefinitions": {
+    "shatterersCrownFacetThreshold": {
+      "type": "binary research-only causal factor outside the sampled policy vector",
+      "levels": [0, 1],
+      "null": 1,
+      "level1": "Preserve the exact current-main relic effect: after enemy facet maxima are constructed, reduce each by one with the existing floor of two.",
+      "level0": "Suppress only that one-facet reduction when Shatterer's Crown is owned; preserve ownership, offer and choice history, relic proc, enemy construction, Fervor and RNG.",
+      "onlyDirectRead": "CombatRules._apply_start_relics reads one run-local research marker inside the existing Shatterer's Crown ownership branch."
+    },
+    "shatterersCrownFervor": {
+      "type": "binary research-only causal factor outside the sampled policy vector",
+      "levels": [0, 1],
+      "null": 1,
+      "level1": "Preserve the exact current-main relic cost: grant each enemy one Fervor at combat start.",
+      "level0": "Suppress only that one-Fervor grant when Shatterer's Crown is owned; preserve ownership, offer and choice history, relic proc, facet threshold and RNG.",
+      "onlyDirectRead": "CombatRules._apply_start_relics reads one separate run-local research marker inside the existing Shatterer's Crown ownership branch."
+    }
+  },
+  "fixedResearchSettings": {
+    "wardSetupPriority": 1,
+    "acquisitionPriority": 4,
+    "packageOrder": 0,
+    "policyPackageOrder": 0
+  },
+  "fixedNonFactors": {
+    "scorelinePayoff": "Fixed by the baseline content SHA and never varied.",
+    "afterimagePayoff": "Fixed separately by the baseline content SHA and never varied.",
+    "faultlineRarity": "Fixed by the baseline content SHA and never varied.",
+    "acquisition": "No offer, rarity, score, ownership or acquisition-priority intervention is permitted.",
+    "description": "Scoreline payoff and Afterimage payoff remain separate causal concepts but are not factors in this Crown experiment. This is not the retired four-factor or blind joint-factorial design."
+  },
+  "designMatrix": {
+    "current": {
+      "shatterersCrownFacetThreshold": 1,
+      "shatterersCrownFervor": 1
+    },
+    "thresholdOff": {
+      "shatterersCrownFacetThreshold": 0,
+      "shatterersCrownFervor": 1
+    },
+    "fervorOff": {
+      "shatterersCrownFacetThreshold": 1,
+      "shatterersCrownFervor": 0
+    },
+    "bothOff": {
+      "shatterersCrownFacetThreshold": 0,
+      "shatterersCrownFervor": 0
+    }
+  },
+  "anchors": {
+    "current": "Shared exact current-main anchor for both single-factor contrasts and the authored-total contrast.",
+    "bothOff": "Shared no-mechanical-effect anchor that preserves natural Crown acquisition, ownership and relic proc.",
+    "noCrown": "Eight preregistered policy-seed identities that do not acquire Crown. All four cells must be canonically identical and support no effect estimate.",
+    "frozenBaseline": "Every current-cell analysis row, after removing trace-only metadata, must exactly equal its already cached current-main result.",
+    "expansion": "The four cells are all required to identify the authored benefit, authored cost and their mechanistically plausible nonlinear survival/turn interaction. No additional joint cell may be constructed."
+  },
+  "contrasts": {
+    "authoredTotal": {
+      "current": 1,
+      "bothOff": -1
+    },
+    "thresholdAtFervor": {
+      "current": 1,
+      "thresholdOff": -1
+    },
+    "thresholdWithoutFervor": {
+      "fervorOff": 1,
+      "bothOff": -1
+    },
+    "fervorAtThreshold": {
+      "current": 1,
+      "fervorOff": -1
+    },
+    "fervorWithoutThreshold": {
+      "thresholdOff": 1,
+      "bothOff": -1
+    },
+    "thresholdByFervorInteraction": {
+      "current": 1,
+      "thresholdOff": -1,
+      "fervorOff": -1,
+      "bothOff": 1
+    },
+    "thresholdOnlyTotal": {
+      "fervorOff": 1,
+      "bothOff": -1
+    }
+  },
+  "interactionAndAlias": {
+    "justifiedInteraction": "Facet threshold changes Shatter timing while Fervor changes incoming damage and survival; those paths can interact through later combat duration, routing and opportunity to Shatter, so their difference-in-differences is identified rather than assumed zero.",
+    "aliasStructure": "None. Both binary factors vary independently in a complete 2x2 within every policy-seed block. Policy identity and simulation seed are CRN blocking variables, not factors. Acquisition remains fixed and therefore is not aliased with either effect.",
+    "claimBoundary": "Downstream trajectory divergence after Crown acquisition is part of the treatment effect. Only the acquisition prefix must remain identical."
+  },
+  "identityPreflight": {
+    "surface": "For Crown-owned and no-Crown focused combats, omitted settings must equal explicit null. Each non-null factor may change only its registered enemy mediator; queue, relic ownership, policy, RNG and all other state must remain exact.",
+    "wholeRun": "For two natural-Crown and two no-Crown frozen rows, omitted and explicit-null complete results must be canonically equal to each other and to the cached current-main row.",
+    "invalidLevels": "Each factor is separately probed at level 2 and must fail closed with exit 2, no output and an unregistered-level diagnostic.",
+    "authority": "Discovery rows execute only after every preflight assertion passes."
+  },
+  "identityCases": [
+    {
+      "id": "active-p2-s346596",
+      "policyIndex": 2,
+      "seed": 346596,
+      "crownOwned": true
+    },
+    {
+      "id": "active-p3-s346596",
+      "policyIndex": 3,
+      "seed": 346596,
+      "crownOwned": true
+    },
+    {
+      "id": "negative-p0-s346596",
+      "policyIndex": 0,
+      "seed": 346596,
+      "crownOwned": false
+    },
+    {
+      "id": "negative-p1-s346596",
+      "policyIndex": 1,
+      "seed": 346596,
+      "crownOwned": false
+    }
+  ],
+  "cohorts": {
+    "policyRoot": 551,
+    "aspect": "duskblade",
+    "vow": 5,
+    "policyIdentity": "Policy.sample_range root 551 with the exact listed policy index; the resolved policy snapshot must be equal in every cell.",
+    "simulationIdentity": "The exact listed simulation seed is reused in every cell of its block.",
+    "activeSelection": "All and only the 32 frozen baseline policy-seed rows whose natural final relic inventory contains Shatterer's Crown. Because both treatments first act after acquisition and cannot alter offers or scoring, this is pretreatment exposure selection.",
+    "activeRows": [
+      {"policyIndex": 2, "seed": 346596},
+      {"policyIndex": 2, "seed": 346599},
+      {"policyIndex": 3, "seed": 346596},
+      {"policyIndex": 6, "seed": 346596},
+      {"policyIndex": 6, "seed": 346598},
+      {"policyIndex": 8, "seed": 346598},
+      {"policyIndex": 10, "seed": 346598},
+      {"policyIndex": 15, "seed": 346597},
+      {"policyIndex": 18, "seed": 346598},
+      {"policyIndex": 19, "seed": 346596},
+      {"policyIndex": 21, "seed": 346598},
+      {"policyIndex": 24, "seed": 346599},
+      {"policyIndex": 26, "seed": 346599},
+      {"policyIndex": 30, "seed": 346599},
+      {"policyIndex": 31, "seed": 346597},
+      {"policyIndex": 31, "seed": 346599},
+      {"policyIndex": 34, "seed": 346596},
+      {"policyIndex": 35, "seed": 346596},
+      {"policyIndex": 35, "seed": 346599},
+      {"policyIndex": 36, "seed": 346598},
+      {"policyIndex": 39, "seed": 346596},
+      {"policyIndex": 39, "seed": 346599},
+      {"policyIndex": 40, "seed": 346596},
+      {"policyIndex": 42, "seed": 346599},
+      {"policyIndex": 49, "seed": 346596},
+      {"policyIndex": 51, "seed": 346598},
+      {"policyIndex": 51, "seed": 346599},
+      {"policyIndex": 53, "seed": 346599},
+      {"policyIndex": 54, "seed": 346596},
+      {"policyIndex": 55, "seed": 346596},
+      {"policyIndex": 57, "seed": 346597},
+      {"policyIndex": 57, "seed": 346599}
+    ],
+    "negativeControlSelection": "The lowest eight distinct baseline policy identities, taking their first simulation seed without Crown ownership.",
+    "negativeControlRows": [
+      {"policyIndex": 0, "seed": 346596},
+      {"policyIndex": 1, "seed": 346596},
+      {"policyIndex": 2, "seed": 346597},
+      {"policyIndex": 3, "seed": 346597},
+      {"policyIndex": 4, "seed": 346596},
+      {"policyIndex": 5, "seed": 346596},
+      {"policyIndex": 6, "seed": 346597},
+      {"policyIndex": 7, "seed": 346596}
+    ]
+  },
+  "estimands": {
+    "unit": "Policy identity. Repeated naturally exposed simulation seeds within a policy are averaged before inference.",
+    "primary": "Cluster-mean paired difference in total whole-run Shatters for each preregistered contrast.",
+    "duration": "Cluster-mean paired difference in mean combat turns per fight.",
+    "secondary": "Cluster-mean paired differences in win, fault, final HP and the full threshold-by-Fervor interaction.",
+    "policySensitivity": "Exact counts of policy-cluster Shatter differences greater than zero and equal to zero.",
+    "viability": "Distinct policy identities in the candidate cell with at least one win and at least one Shatter on the exposed cohort.",
+    "reliability": "Exact stall/error count in the candidate cell.",
+    "notEstimated": "No no-Crown treatment effect, acquisition effect, offer effect, detector score, RandomBuild effect or protected-seed acceptance endpoint is estimated."
+  },
+  "estimators": {
+    "point": "Unweighted arithmetic mean of within-policy mean CRN differences.",
+    "interval": "Percentile bootstrap over the frozen policy-cluster values with 5000 resamples.",
+    "bootstrapResamples": 5000,
+    "bootstrapSeed": 421553,
+    "stopping": "One fixed first look at the complete rectangle; no sequential peeking, extension or cohort replacement."
+  },
+  "gates": {
+    "minimumPositivePolicyWitnesses": 8,
+    "minimumInactivePolicyWitnesses": 8,
+    "minimumViablePolicies": 8,
+    "maximumVow5WinRate": 0.9,
+    "durationUpperBound": 0.25,
+    "effect": "Both the candidate-total and its threshold-mechanism Shatter interval must have a lower 95% bound greater than zero.",
+    "identity": "All null, baseline, policy, no-Crown and acquisition-prefix identities pass.",
+    "reliability": "Candidate has zero stalls/errors.",
+    "provenance": "The eight positive, inactive and viable policy minima are the existing 64-policy first-look package-support minimum applied to the 25 naturally exposed policy identities. The Vow-5 and 0.25-turn boundaries are unchanged."
+  },
+  "candidateSelection": {
+    "order": [
+      "shipping-shatterers-crown",
+      "threshold-only-shatterers-crown"
+    ],
+    "shipping-shatterers-crown": "Select current (threshold 1, Fervor 1) only if authoredTotal and thresholdAtFervor pass every gate.",
+    "threshold-only-shatterers-crown": "Otherwise select fervorOff (threshold 1, Fervor 0) only if thresholdOnlyTotal and thresholdWithoutFervor pass every gate.",
+    "maximumSelected": 1,
+    "claimBoundary": "Selection freezes at most one candidate for a newly preregistered independent held-out confirmation. It is not product promotion or package admission."
+  },
+  "budget": {
+    "surfaceObservationRows": 10,
+    "wholeRunIdentityObservationRows": 8,
+    "invalidLevelInvocations": 2,
+    "discoveryActiveRows": 128,
+    "discoveryNegativeControlRows": 32,
+    "discoveryObservationRows": 160,
+    "maximumNewSimulatorObservationRows": 178,
+    "maximumWallTimeSeconds": 600,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Freeze the first candidate in the preregistered order whose total, threshold-mechanism, policy-sensitivity, viability, identity, reliability, Vow-5 and duration gates all pass.",
+    "futility": "Close the Shatterer's Crown effect family when both candidates have a fixed non-interval failure, a non-positive point or upper bound, or a duration lower bound above 0.25. Continue with the next evidence-backed structural Duskblade mechanism inside #421 without tuning this family.",
+    "inconclusive": "Record inconclusive at the cap when neither candidate passes, at least one avoids a fixed failure but an effect or duration interval straddles its boundary, or an immutable-input, engine, cache, ledger, identity, row or wall assertion fails.",
+    "successAuthority": "Freeze at most the selected exact Crown cell for one independent held-out confirmation with fresh policy and simulation identities plus required RandomBuild and guardrail evidence. Do not evaluate the other Crown cell, tune a level, promote product content or spend protected seeds.",
+    "futilityAuthority": "Close this Crown effect family and continue with the next source- and evidence-backed structural Duskblade mechanism inside issue #421. Do not alter acquisition, add a Crown level or return to Ward, Kindle, Afterimage, tested #524 packages or V39-style tuning.",
+    "inconclusiveAuthority": "Stop at the preregistered cap and record the inconclusive result. Do not extend, replace cohorts, tune thresholds or spend protected seeds."
+  },
+  "methodBoundary": "Deterministic Python constructs every row, invokes the exact simulator, uses the append-only content-addressed cache and ledger, fits only the frozen cluster bootstrap and selects the decision. No ML, RL, optimiser, candidate-by-candidate tuning or human label enters the experiment.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  },
+  "ledgerFreeze": {
+    "sha256": "d96ee5162d5c7878f1e4b394791632e4cd514153c1510f4e8d055cbc4cb9834e",
+    "records": 479669,
+    "firstSequence": 1,
+    "lastSequence": 479669,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  }
+}

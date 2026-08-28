@@ -8,7 +8,8 @@ This directory publishes reviewable evidence from the active scientific issue
 V38 freeze, the zero-row identifiability audit, the pre-directive experiment,
 and the post-directive knob proof, mechanism-blocked CRN first look,
 independent held-out confirmation, structural package-order work, hand-size
-reconciliation, Ash package admission and exact Ward whole-run rejection. It
+reconciliation, Ash package admission, exact Ward whole-run rejection and the
+natural Shatterer's Crown effect closure. It
 is a progress snapshot, not detector admission, product promotion or a P9
 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
@@ -147,9 +148,35 @@ robust selectors and 14 projected-active policies against fixed minima of 16.
 The offer route is closed without a knob or simulator row. The natural Crown
 effect remains a causal question, not an admitted package.
 
+That natural-effect question is now closed by a preregistered 178-row CRN
+experiment and independent zero-row audit. Two identity-safe binary factors
+separated the existing one-facet threshold benefit from its one-Fervor enemy
+cost while leaving acquisition untouched. Every null, cached-current,
+policy, acquisition-prefix and no-Crown identity passed. The threshold was
+causally strong: current added 6.34 Shatters per exposed policy cluster with
+95% interval [3.42, 9.80], and threshold-only added 6.80 [3.80, 10.58]. The
+fixed strategy-sensitivity gate nevertheless failed because 23 of 25 exposed
+policies benefited while only one current and zero threshold-only policies
+were inactive against the minimum of eight. Crown is broad threshold power,
+not a policy-selective repertoire discriminator. Both cells and the complete
+Crown family are closed without reinterpretation, another level or held-out
+spend.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-crown-effect-crn-v1.md`](summaries/progress-post-directive-crown-effect-crn-v1.md),
+[`protocols/post-v38-crown-effect-crn-v1.json`](protocols/post-v38-crown-effect-crn-v1.json),
+[`execution/post-v38-crown-effect-crn-v1.json`](execution/post-v38-crown-effect-crn-v1.json),
+[`summaries/post-v38-crown-effect-crn-v1.json`](summaries/post-v38-crown-effect-crn-v1.json),
+[`summaries/post-v38-crown-effect-crn-v1-audit.json`](summaries/post-v38-crown-effect-crn-v1-audit.json),
+[`artifacts/ledger-freeze-crown-effect-crn-v1.json`](artifacts/ledger-freeze-crown-effect-crn-v1.json),
+[`raw/post-directive-crown-effect-crn-raw-v1.tar.gz`](raw/post-directive-crown-effect-crn-raw-v1.tar.gz)
+and
+[`raw/post-directive-crown-effect-crn-harness-v1.tar.gz`](raw/post-directive-crown-effect-crn-harness-v1.tar.gz)
+for the current exact design, identity proof, complete CRN rectangle, causal
+result, independent recomputation, ledger boundary, raw content-addressed
+plans/outputs and exact research harness. Then read
 [`summaries/progress-post-directive-dusk-mechanism-screen-v1.md`](summaries/progress-post-directive-dusk-mechanism-screen-v1.md),
 [`protocols/post-v38-dusk-mechanism-screen-v1.json`](protocols/post-v38-dusk-mechanism-screen-v1.json),
 [`summaries/post-v38-dusk-mechanism-screen-v1.json`](summaries/post-v38-dusk-mechanism-screen-v1.json)

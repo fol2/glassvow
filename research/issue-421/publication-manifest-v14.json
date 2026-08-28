@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 14,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "identity-safe natural Shatterer's Crown effect CRN closure",
+  "decision": "CLOSE_SHATTERERS_CROWN_EFFECT_FAMILY",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-crown-effect-crn-v1.md",
+    "progressReportSha256": "4e116aa416c3c873018ce4bb242d1984d379afd1dd81fde16a8c3e9381afa150",
+    "protocol": "protocols/post-v38-crown-effect-crn-v1.json",
+    "protocolSha256": "ca03b6ea0efe8d6da71399e70fd04be8d6ba4e1517fb6736cc36b01864fae31f",
+    "execution": "execution/post-v38-crown-effect-crn-v1.json",
+    "executionSha256": "168af3c418c0354564ae09cd8140cd4773059a1135a2548d1f2a331b4397750a",
+    "summary": "summaries/post-v38-crown-effect-crn-v1.json",
+    "summarySha256": "7b7a11a1f78f42dcdf7f8a1ccd2515c9ddb10b066ade66a04f66f486b4aafa14",
+    "audit": "summaries/post-v38-crown-effect-crn-v1-audit.json",
+    "auditSha256": "e8de4178d6f0dfe8546a1057f0b51822556fc12a7dcc672d6916e019ecd4f1dd",
+    "runner": "tools/post_v38_crown_effect_crn.py",
+    "runnerSha256": "d024df9beb7f1a261751de7a2c203906b3615cee0fcd6bd0c722d61976804b5c",
+    "auditRunner": "tools/post_v38_crown_effect_crn_audit.py",
+    "auditRunnerSha256": "7e7fa21212bfa32392f31afbfb5230356de395a349bc6e61a8248edc582ff3a4",
+    "ledgerFreeze": "artifacts/ledger-freeze-crown-effect-crn-v1.json",
+    "ledgerFreezeSha256": "cac458e1bb794fc991aa0193c17fc42d8dee6e694a7203a11197dafa08b6a121",
+    "rawArchive": "raw/post-directive-crown-effect-crn-raw-v1.tar.gz",
+    "rawArchiveSha256": "b89ccf6f58604b9b873c2382876a78905d11966bf526374b25bba4bad56833ff",
+    "harnessArchive": "raw/post-directive-crown-effect-crn-harness-v1.tar.gz",
+    "harnessArchiveSha256": "d0cd3f80d45f75cc77c48b05c15686ef507d322a4addedf97f4962d89a1dbcb2",
+    "readmeSha256": "fd939405f044c349270c9a170ea4081fe24f64f749e63ead9f2bbf1f913c26ba",
+    "taskCapsuleSha256": "0468d2a8559754c9950c5487e11bded1f6eb7590cd426ebb115b36b7ede26d98"
+  },
+  "design": {
+    "factors": {
+      "shatterersCrownFacetThreshold": [0, 1],
+      "shatterersCrownFervor": [0, 1]
+    },
+    "matrix": [
+      "current",
+      "thresholdOff",
+      "fervorOff",
+      "bothOff"
+    ],
+    "activePolicySeedBlocks": 32,
+    "activePolicies": 25,
+    "negativeControlBlocks": 8,
+    "aliasStructure": "none; complete 2x2 within every CRN block",
+    "onlyInteraction": "facet threshold by Fervor",
+    "scorelineAndAfterimage": "separate fixed non-factors; never varied",
+    "acquisition": "unchanged and exact through natural Crown acquisition"
+  },
+  "identity": {
+    "focusedNullExact": true,
+    "focusedMediatorIsolationExact": true,
+    "invalidLevelsFailClosed": true,
+    "wholeRunNullEqualsCachedCurrentMain": true,
+    "fullCurrentRectangleEqualsCachedCurrentMain": true,
+    "policyIdentityExact": true,
+    "acquisitionPrefixExact": true,
+    "noCrownCellsExact": true
+  },
+  "result": {
+    "decisionBoundary": 2,
+    "selectedCandidate": null,
+    "authoredCurrent": {
+      "meanShatterEffect": 6.34,
+      "shatterInterval95": [3.42, 9.8],
+      "positivePolicies": 23,
+      "inactivePolicies": 1,
+      "minimumInactivePolicies": 8,
+      "viablePolicies": 12,
+      "vow5WinRate": 0.375,
+      "faults": 0
+    },
+    "thresholdOnly": {
+      "meanShatterEffect": 6.8,
+      "shatterInterval95": [3.8, 10.58],
+      "positivePolicies": 23,
+      "inactivePolicies": 0,
+      "minimumInactivePolicies": 8,
+      "viablePolicies": 11,
+      "vow5WinRate": 0.34375,
+      "faults": 0
+    },
+    "interpretation": "The facet threshold strongly raises Shatters for nearly every exposed policy. It is broad threshold power, not a policy-selective repertoire discriminator; Fervor removal does not repair the fixed inactive-policy failure.",
+    "newSimulatorObservationRows": 178,
+    "independentAuditObservationRows": 0,
+    "wallTimeSeconds": 20.53026695898734,
+    "maximumModelContextTokens": 0,
+    "protectedSeedRows": 0
+  },
+  "localLedgerFreeze": {
+    "records": 479853,
+    "firstSequence": 1,
+    "lastSequence": 479853,
+    "sha256": "2d4ee63ac8cd83664972da376b6a9bab09ebf741020ef159297a5a50a7bd4d2b",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 462,
+    "payloadFilesIndexed": 447,
+    "protocolFiles": 72,
+    "summaryFiles": 90,
+    "artifactFiles": 16,
+    "toolFiles": 29,
+    "executionFiles": 7,
+    "newRawObjects": 10,
+    "rawArchive": "raw/post-directive-crown-effect-crn-raw-v1.tar.gz",
+    "harnessArchive": "raw/post-directive-crown-effect-crn-harness-v1.tar.gz",
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "c83df62928e4a2036305e0a31d3e0366462519e5540884739685d93043d73437"
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "b8983a53533efc8af9b49ffee8b068d197bf7b22",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "nextAction": "Treat the existing Dusk grammar as exhausted and preregister the smallest new deterministic structural mediator with a source-and-capacity contract before implementation or simulator spend.",
+  "omissions": [
+    "No gate, threshold, factor level, candidate order, policy identity or simulation seed was changed after execution.",
+    "No held-out cohort was spent because both preregistered cells had fixed inactive-policy failures.",
+    "No Crown acquisition, offer, score, rarity or product content was changed.",
+    "No ML, RL, optimiser, PR, CI run or protected seed was used."
+  ],
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421",
+    "receiptIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}
