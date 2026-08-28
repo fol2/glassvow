@@ -84,9 +84,29 @@ grammar is therefore closed. The next discriminator must make setup commitment
 policy-selective without repeating the exhausted #517 latent whole-run geometry
 or #519 matched-cost functional-kernel/QD race.
 
+The exact current-main Godot 4.7.1 toolchain then replayed the frozen package-
+order identity panel row-for-row against the archived 4.7.2 output. A separate
+positive-median `policyPackageOrder` knob passed exact null, RNG, policy and
+mediator identity, but a preregistered zero-row screen closed it before any new
+simulation: Poison was active at both observed endpoints for 109/128 policies,
+so endpoint selection could leave at most 19 inactive against the fixed minimum
+of 32. The no-interference splice also left only 30 Scoreline-inactive policies
+and six Ash Bloodfire-only policies. Both producer-first grammars are closed;
+the next discriminator is acquisition commitment, starting with a zero-row
+capacity audit rather than an implemented guess.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-policy-package-order-v1.md`](summaries/progress-post-directive-policy-package-order-v1.md),
+[`protocols/post-v38-policy-package-order-identity-v1.json`](protocols/post-v38-policy-package-order-identity-v1.json),
+[`summaries/post-v38-policy-package-order-identity-v1.json`](summaries/post-v38-policy-package-order-identity-v1.json),
+[`protocols/post-v38-policy-package-order-decision-value-v2.json`](protocols/post-v38-policy-package-order-decision-value-v2.json)
+and
+[`summaries/post-v38-policy-package-order-decision-value-v2.json`](summaries/post-v38-policy-package-order-decision-value-v2.json)
+for the exact-current-engine replay, identity-safe knob and zero-row closure.
+Revision 1 of the decision-value screen is retained transparently as an
+inconclusive pre-estimand harness fault. Then read
 [`summaries/progress-post-directive-package-order-heldout-v1.md`](summaries/progress-post-directive-package-order-heldout-v1.md),
 [`protocols/post-v38-package-order-heldout-v1.json`](protocols/post-v38-package-order-heldout-v1.json)
 and
@@ -231,6 +251,12 @@ After independent package-order held-out confirmation the ledger is
 The staged protocol added 9,728 observations and zero acceptance or reserve
 rows. Its boundary-2 result closes the universal package-order grammar.
 
+The exact 4.7.1 cross-engine replay, policy-selective identity preflight and two
+decision-value audit revisions added zero observations. The first audit stopped
+before an estimand because of its recorded harness fault; the corrected audit
+closed the positive-median grammar. The ledger therefore remains byte-identical
+at 478,125 records, and no protected seed has been used.
+
 ## Frozen identities
 
 - source and archive base: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
@@ -239,7 +265,9 @@ rows. Its boundary-2 result closes the universal package-order grammar.
 - research runner SHA-256: `0480163456dc6693e90d5f87163918d8452e4dd5c2c822c60543ab03efe3d6a9`
 - post-V38 protocol SHA-256: `5a4fdfd9c24331430d08b239fd4c62edb884c16728e6e09afe15909b137eb3c1`
 - post-V38 result SHA-256: `7541976e28e1bfb70f422b109cc4e965e1961883ad5eb42ce93af8554afe9c63`
-- Godot: `4.7.2.stable.official.ed1daf0bf`
+- archived experiment Godot: `4.7.2.stable.official.ed1daf0bf`
+- exact current-main Godot: `4.7.1.stable.official.a13da4feb`
+- exact current-main Godot binary SHA-256: `ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f`
 - knob identity v2 protocol SHA-256: `3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff`
 - blocked CRN v2 protocol SHA-256: `a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d`
 - blocked CRN analysis SHA-256: `7ab28c0e6d7c6053ae4f036b7ea4cb8c9eedd2727b79774db2c7e3469910f21e`
@@ -253,19 +281,22 @@ rows. Its boundary-2 result closes the universal package-order grammar.
 - package-order discovery analysis SHA-256: `4e6f7e53f853ca44040a7851940717cc3fa8d612741ec8f53ed89c53ea31138f`
 - package-order held-out protocol SHA-256: `4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e`
 - package-order held-out analysis SHA-256: `1d855508351e2b9d16efadece99c6ed86a331127e00fc43dcd092f6b20769393`
+- policy-package-order identity protocol SHA-256: `6c406f831b0db224a7c9478a24f831b4e5a835bd71d611567a3b9380118f0bbc`
+- policy-package-order decision-value protocol SHA-256: `ba5ddf6949c7cecad598b0bebe53355fd6e6fc476e1c5442f6a6acd9ac460a5c`
 
 ## Remote heads at publication preparation
 
 - `origin/main`: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
-- `research/issue-421-p9-recovery-evidence`: `8b5fd3433cfa1fe8ddc0561e22abe0dee81c44a7`
+- `research/issue-421-p9-recovery-evidence`: `5dd80aa542d581e43f2875ce50f62eb50603cf1b`
 - `research/issue-524-causal-slate-evidence`: `f305b95d9e1d173e5d8150289afab9688c0ea7f0`
 - `research/issue-525-mechanism-package-synthesis-evidence`: `7132e5e0d6e6e6dc196dda3ed90ad2be292608d6`
 - `work/421-h34`: `4a94d155400162289a84f416336ff407f55b3cf6`
 - `work/421-landscape-retune`: `ad4b99b1538d7200e9b228051a029e554e9b9912`
 - `work/421-s009-exam`: `b30b290813d88109c5b9bc34354babefdc406f8d`
 
-Research is continuing under #421 after closing the universal structural
-candidate. The scalar family remains closed; no successor or second scalar
-candidate is authorised. Policy-selective sequencing, detector admission,
+Research is continuing under #421 after closing both producer-first grammars.
+The scalar family remains closed; no successor or second scalar candidate is
+authorised. Acquisition commitment must first show retrospective capacity and
+then exact null identity before any new simulation. Detector admission,
 promotion and protected seeds remain outstanding and unauthorised at this
 snapshot.

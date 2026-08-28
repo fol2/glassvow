@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-policy-package-order-v1",
+  "ledger": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2582220800,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok",
+    "records": 478125,
+    "firstSequence": 1,
+    "lastSequence": 478125
+  },
+  "policyPackageOrder": {
+    "identityProtocolSha256": "6c406f831b0db224a7c9478a24f831b4e5a835bd71d611567a3b9380118f0bbc",
+    "identitySummarySha256": "17e56ec1f69489b518d6c246401083698897bafa7f6a9833509fe0cbcf523a1c",
+    "identityDecision": "policy-package-order-identity-safe",
+    "decisionValueProtocolV1Sha256": "57f3273312aad3e0b2f716b3e89097b1c71fb444e58404ddda752eb77c75692e",
+    "decisionValueV1": "inconclusive-runner-wiring-before-estimands",
+    "decisionValueProtocolV2Sha256": "ba5ddf6949c7cecad598b0bebe53355fd6e6fc476e1c5442f6a6acd9ac460a5c",
+    "decisionValueSummaryV2Sha256": "1e2e9c5cac149136d5be7d3d3c03e089ab07fa6e43ec33d5da15bbf2c85e713e",
+    "decisionValue": "close-positive-median-policy-package-order-without-new-simulator-rows",
+    "simulatorObservationRows": 0
+  },
+  "protectedSeeds": {
+    "acceptanceRange": "3000-5199",
+    "acceptanceObservationRows": 0,
+    "reserveRange": "5200-5399",
+    "reserveObservationRows": 0
+  },
+  "publication": {
+    "sqlitePublishedInGit": false,
+    "reason": "The multi-gigabyte append-only ledger remains local and hash-pinned; all new work in this stage is zero-row identity or deterministic evidence reuse."
+  }
+}

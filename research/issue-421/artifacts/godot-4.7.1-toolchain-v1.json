@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "release": "https://github.com/godotengine/godot-builds/releases/tag/4.7.1-stable",
+  "archive": "Godot_v4.7.1-stable_macos.universal.zip",
+  "archiveBytes": 166939858,
+  "archiveSha512": "a5c6443e193829de9a3237b57ef5e01c23839888900e241543da0dd4bac1050125e19469f0cca9a9958ac346070d98cab8e5d6aee16b181c6d06cda86bd07224",
+  "checksumSource": "SHA512-SUMS.txt from the same official release",
+  "version": "4.7.1.stable.official.a13da4feb",
+  "binarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+  "architectures": ["arm64", "x86_64"],
+  "codesign": {
+    "validOnDisk": true,
+    "satisfiesDesignatedRequirement": true
+  },
+  "installationBoundary": "Portable research-only extraction; the system Godot 4.7.2 installation and PATH were not replaced.",
+  "crossEngineReplay": {
+    "planSha256": "6da4321ba819692c44fe51ac975ce18690fc476b073ca329e73f70ed5ca05610",
+    "frozenGodot472OutputSha256": "688f856f755ba36f2aac74ac23db7841dc89c89726073d440f892b6cf3f5c723",
+    "preChangeGodot471OutputSha256": "fb1e0af502334366e020acf520671b6a3866cefad491964dc0e6be5b77661234",
+    "rowsCanonicalSha256": "ee65156981b8c05d3782ad1a9ff61fe8e61d684a492d2d542423e1abcab1a3af",
+    "rows": 20,
+    "exact": true,
+    "newLedgerObservationRows": 0
+  },
+  "publication": {
+    "binaryPublishedInGit": false,
+    "reason": "The official 167 MB archive is reproducible from the pinned release and checksum; only provenance, hashes and the exact research harness are evidence payloads."
+  }
+}

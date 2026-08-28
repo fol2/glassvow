@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "decisionBoundary": 3,
+  "decision": "inconclusive-runner-wiring-before-estimands",
+  "protocolSha256": "57f3273312aad3e0b2f716b3e89097b1c71fb444e58404ddda752eb77c75692e",
+  "runnerSha256": "4bac8d76c7210151de876c363045d2ccd2a636826cc3248ac629a620c0c359b3",
+  "faultType": "AttributeError",
+  "fault": "post_v38_package_order_heldout does not export validate_rectangle; the frozen helper is post_v38_heldout_confirmation.validate_rectangle",
+  "faultBoundary": "The process stopped at the first candidate-arm rectangle validation before policy snapshots, eligibility sets, activation sets, splices, gates or a scientific decision were computed.",
+  "estimandsComputed": false,
+  "newSimulatorObservationRows": 0,
+  "newLedgerRows": 0,
+  "protectedSeedRows": 0,
+  "ledger": {
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "records": 478125,
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "authority": "Record no decision from v1. A corrected zero-row audit may use identical immutable evidence, gates, thresholds, estimands and stopping rules only because the wiring fault occurred before any estimand was computed."
+}

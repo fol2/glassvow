@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "question": "Does the exact positive-median policyPackageOrder grammar have enough measured repertoire decision value on the frozen root-550 evidence to justify any new simulator row?",
+  "retrospectiveScope": "This is a declared retrospective, zero-new-row reuse of the immutable package-order held-out rectangle. It is a necessary method-value screen, not a causal estimate of the unexecuted mixed grammar. The no-interference splice may authorise a new CRN experiment but cannot admit a package, detector or product result.",
+  "sourceEvidenceProtocol": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e",
+  "immutableInputs": {
+    "runnerSha256": "4bac8d76c7210151de876c363045d2ccd2a636826cc3248ac629a620c0c359b3"
+  },
+  "immutableEvidence": {
+    "policyPackageOrderIdentityProtocol": {
+      "path": "protocols/post-v38-policy-package-order-identity-v1.json",
+      "sha256": "6c406f831b0db224a7c9478a24f831b4e5a835bd71d611567a3b9380118f0bbc"
+    },
+    "policyPackageOrderIdentitySummary": {
+      "path": "summaries/post-v38-policy-package-order-identity-v1.json",
+      "sha256": "17e56ec1f69489b518d6c246401083698897bafa7f6a9833509fe0cbcf523a1c"
+    },
+    "packageOrderHeldoutProtocol": {
+      "path": "protocols/post-v38-package-order-heldout-v1.json",
+      "sha256": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e"
+    },
+    "packageOrderHeldoutSummary": {
+      "path": "summaries/post-v38-package-order-heldout-v1.json",
+      "sha256": "853df2c3988270f3d1236b51177b85d014b92e200bad52fc05a66059a3985070"
+    },
+    "packageOrderHeldoutAudit": {
+      "path": "summaries/post-v38-package-order-heldout-v1-audit.json",
+      "sha256": "77361eb742de4c916c0ffc7e764f46af5df7ee610d0156740819c21daa5df8a6"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "records": 478125,
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "packagePreferences": {
+    "ash-bloodfire-leech": {
+      "group": "special",
+      "key": "leech",
+      "threshold": 12.0
+    },
+    "ash-poison-catalyst": {
+      "group": "special",
+      "key": "catalystAsh",
+      "threshold": 30.0
+    },
+    "dusk-afterimage-guard": {
+      "group": "special",
+      "key": "doubleBlock",
+      "threshold": 9.0
+    },
+    "dusk-scoreline": {
+      "group": "special",
+      "key": "execute",
+      "threshold": 13.0
+    }
+  },
+  "aspectPackages": {
+    "ashwarden": ["ash-bloodfire-leech", "ash-poison-catalyst"],
+    "duskblade": ["dusk-afterimage-guard", "dusk-scoreline"]
+  },
+  "designMatrix": {
+    "rows": "Reuse only the complete root-550 sampled-policy rows from the frozen same-content universal structural candidate and packageOrder-null arms. RandomBuild and live-baseline rows are not needed for this repertoire-only screen.",
+    "eligibility": "For each policy identity and package separately, eligible means the resolved registered payoff preference is greater than or equal to its exact sample-origin median. Scoreline, Afterimage, Bloodfire and Poison remain separate factors.",
+    "noInterferenceSplice": "For a package, use its observed universal-candidate activation state on eligible identities and its observed structural-null activation state on ineligible identities. This is a deterministic descriptive splice, not an unobserved endpoint claim.",
+    "observedEndpointSelectionBound": "The intersection of universal-candidate and structural-null active sets is active under every per-policy selection between those two observed endpoint states. Therefore 128 minus that intersection is the maximum inactive count available without a new cross-package interference effect.",
+    "functionalSeparation": "Apply the frozen within-aspect exclusive-policy gate to the four no-interference splice sets.",
+    "aliasStructure": "No simulator cell, fitted threshold, alternative sign, package-specific retune or joint-interference assumption is introduced. A failed splice cannot be rescued by assuming an unmeasured cross-package effect."
+  },
+  "estimands": {
+    "eligibilityBalance": "Eligible and ineligible policy counts for each separate package preference.",
+    "observedUniversalMovement": "Universal candidate gains and losses relative to structural null, split by package eligibility.",
+    "noInterferenceSensitivity": "Active and inactive counts after the preregistered candidate-if-eligible, null-if-ineligible splice.",
+    "noInterferenceFunctionalSeparation": "Within-aspect package-only counts under those splice activation sets.",
+    "endpointSelectionCapacity": "Maximum inactive count obtainable by selecting, per policy, between the two observed candidate/null activation endpoints."
+  },
+  "gates": {
+    "minimumEligibleAndIneligiblePolicies": 32,
+    "minimumActiveAndInactivePolicies": 32,
+    "minimumExclusivePolicies": 8
+  },
+  "decisionRules": {
+    "success": "Every package has at least 32 eligible and 32 ineligible policies; every no-interference splice has at least 32 active and 32 inactive policies; both aspects retain at least eight package-only policies in each direction; and every observed-endpoint selection capacity can meet the inactive minimum.",
+    "futility": "Any eligibility, sensitivity, functional-separation or observed-endpoint capacity gate fails.",
+    "inconclusive": "Any immutable evidence, policy identity, complete-rectangle, ledger-integrity or exact-hash assertion fails before the deterministic audit result.",
+    "successAuthority": "The exact positive-median grammar has measured decision value for one separately preregistered mechanism-blocked CRN experiment. This does not authorise changed thresholds, ML/RL, detector admission, product promotion or protected seeds.",
+    "futilityAuthority": "Close the positive-median policyPackageOrder grammar without a simulator row. Do not assume beneficial cross-package interference or retune its sign or thresholds; continue with the next evidence-backed structural mechanism inside issue #421.",
+    "inconclusiveAuthority": "Record no decision and run no simulator row until the immutable evidence fault is resolved."
+  },
+  "budget": {
+    "sourceWholeRunObservationRows": 4608,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecution": 0,
+    "protectedSeeds": 0
+  },
+  "stoppingRule": "Run the fixed read-only audit once. Take boundary 1 only if every decision-value gate passes; otherwise take boundary 2 and close this exact grammar. No optional calculation, threshold change, cohort change, simulator row or rerun exists.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "aliasFailedClosed": true,
+  "decision": "policy-package-order-identity-safe",
+  "engineAndLegacyAnchor": {
+    "currentReplayOutputSha256": "fabe270002a148ba7f6e9313ef6109a29e33fe8b8040acbcf81d69c1e587d419",
+    "currentReplayPlanSha256": "6da4321ba819692c44fe51ac975ce18690fc476b073ca329e73f70ed5ca05610",
+    "frozenOutputSha256": "688f856f755ba36f2aac74ac23db7841dc89c89726073d440f892b6cf3f5c723",
+    "normalisedRowsExact": true,
+    "preChange471OutputSha256": "fb1e0af502334366e020acf520671b6a3866cefad491964dc0e6be5b77661234",
+    "preChange471RowsCanonicalSha256": "ee65156981b8c05d3782ad1a9ff61fe8e61d684a492d2d542423e1abcab1a3af"
+  },
+  "godotVersion": "4.7.1.stable.official.a13da4feb",
+  "invalidAliasPlanSha256": "7429dc6dad2475f0c662591af2c134d71c63037c7861877f8c8d9988e71462cc",
+  "invalidLevelPlanSha256": "657de05d2c58f3488bf9ac518ada791584b7ebdbc2a8297a1aa2fa1f2c17ecaa",
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "records": 478125,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "records": 478125,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok"
+  },
+  "newLedgerObservationRows": 0,
+  "outputSha256": "04fef0b84a3f2ea8820233cead0295888955b0704dff9e201a207c75712fe9f8",
+  "planSha256": "7482da69e5744b91e4f752841730ce473ac7110df4c35449dfa9c3e588bb81d6",
+  "protocolSha256": "6c406f831b0db224a7c9478a24f831b4e5a835bd71d611567a3b9380118f0bbc",
+  "runnerSha256": "5896ebf44a0519e9c7c72ccda7565d7bb18849fd15dfe1bedb65e5f46479a1ab",
+  "schemaVersion": 1,
+  "surfaceResults": {
+    "0": {
+      "atAbsentOffChoice": "executioner",
+      "atAbsentOnChoice": "chisel",
+      "atPresentOffChoice": "executioner",
+      "atPresentOnChoice": "executioner",
+      "belowAbsentOffChoice": "executioner",
+      "belowAbsentOnChoice": "executioner",
+      "consumer": "executioner",
+      "median": 13.0,
+      "mediator": "scoreline",
+      "policyScoresEligibilityAndRngExactWithinContrasts": true,
+      "preference": "special.execute",
+      "producer": "chisel"
+    },
+    "1": {
+      "atAbsentOffChoice": "guardedStrike",
+      "atAbsentOnChoice": "defend",
+      "atPresentOffChoice": "guardedStrike",
+      "atPresentOnChoice": "guardedStrike",
+      "belowAbsentOffChoice": "guardedStrike",
+      "belowAbsentOnChoice": "guardedStrike",
+      "consumer": "guardedStrike",
+      "median": 9.0,
+      "mediator": "afterimage",
+      "policyScoresEligibilityAndRngExactWithinContrasts": true,
+      "preference": "special.doubleBlock",
+      "producer": "defend"
+    },
+    "2": {
+      "atAbsentOffChoice": "leechBlade",
+      "atAbsentOnChoice": "bloodRite",
+      "atPresentOffChoice": "leechBlade",
+      "atPresentOnChoice": "leechBlade",
+      "belowAbsentOffChoice": "leechBlade",
+      "belowAbsentOnChoice": "leechBlade",
+      "consumer": "leechBlade",
+      "median": 12.0,
+      "mediator": "bloodfire",
+      "policyScoresEligibilityAndRngExactWithinContrasts": true,
+      "preference": "special.leech",
+      "producer": "bloodRite"
+    },
+    "3": {
+      "atAbsentOffChoice": "catalyst",
+      "atAbsentOnChoice": "toxicMist",
+      "atPresentOffChoice": "catalyst",
+      "atPresentOnChoice": "catalyst",
+      "belowAbsentOffChoice": "catalyst",
+      "belowAbsentOnChoice": "catalyst",
+      "consumer": "catalyst",
+      "median": 30.0,
+      "mediator": "mistbound",
+      "policyScoresEligibilityAndRngExactWithinContrasts": true,
+      "preference": "special.catalystAsh",
+      "producer": "toxicMist"
+    }
+  },
+  "unregisteredLevelFailedClosed": true,
+  "wallTimeSeconds": 3.7389223750215024
+}
