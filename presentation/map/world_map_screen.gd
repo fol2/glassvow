@@ -16,6 +16,8 @@ signal sealed_door_requested
 var before_pick: Callable = Callable()
 
 const TRAVEL_TIME: float = 0.4
+const _MAP_QUALITY: JSON = preload("res://docs/map/map-quality-v2.json")
+const _InputBinding = preload("res://domain/map_layout/map_layout_input_binding.gd")
 
 const HINT_PT: float = 13.0
 const HINT_TOP: float = -44.0
@@ -508,9 +510,23 @@ func _focus_xz(i: int) -> Vector2:
 	# reproduce, which is exactly what test_map's re-aim gate is watching for.
 	# The shape is known without a frame.
 	var reference: Vector2 = Vector2(StageShape.REFERENCES[shape])
-	var aspect: float = reference.x / maxf(reference.y, 1.0)
+	var quality_v: Variant = _MAP_QUALITY.data
+	if not quality_v is Dictionary:
+		push_error("WorldMapScreen cannot resolve the governed map quality registry")
+		return MapCameraRig.DEFAULT_XZ
+	var quality: Dictionary = quality_v
+	var world: Vector3 = MapPinProjection.world_anchor(map.nodes[i])
+	var bound: Dictionary = _InputBinding.bind(map, _act)
+	if bound.get("ok", false) != true:
+		push_error("WorldMapScreen cannot bind the focused candidate envelope")
+		return MapCameraRig.DEFAULT_XZ
+	var bound_nodes: Array = bound["nodes"]
+	var bound_edges: Array = bound["edges"]
+	var envelopes: Dictionary = MapQualityEvaluator.node_candidate_bounds(
+		bound_nodes, bound_edges, quality)
 	return _map_scene.get_rig().pose_leading(
-		MapPinProjection.world_anchor(map.nodes[i]), aspect)
+		world, reference, MapQualityEvaluator.focused_touch_inset_px(quality),
+		MapQualityEvaluator.focused_anchor_envelope(map.nodes[i].id, envelopes))
 
 
 func _on_waystone_chosen(i: int) -> void:

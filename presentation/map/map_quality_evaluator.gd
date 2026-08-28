@@ -4,7 +4,8 @@ extends RefCounted
 const VERSION: String = "map-quality-evaluator-v1"
 const EMPTY_MANIFEST: Dictionary = {"assets": [], "profile_defaults": {}, "profile_overrides": {}}
 @warning_ignore_start("unsafe_call_argument")
-static func camera_registry(nodes: Array, quality: Dictionary) -> Dictionary:
+static func camera_registry(nodes: Array, quality: Dictionary,
+		edges: Array = []) -> Dictionary:
 	var chosen: Dictionary = {}
 	for value: Variant in nodes:
 		var node: Dictionary = value
@@ -21,22 +22,85 @@ static func camera_registry(nodes: Array, quality: Dictionary) -> Dictionary:
 	for pair: Array in [["pan-left", Vector2(lo.x, mid.y)], ["pan-right", Vector2(hi.x, mid.y)], ["pan-near", Vector2(mid.x, lo.y)], ["pan-far", Vector2(mid.x, hi.y)], ["pan-near-left", lo], ["pan-near-right", Vector2(hi.x, lo.y)], ["pan-far-left", Vector2(lo.x, hi.y)], ["pan-far-right", hi]]:
 		poses.append({"id": pair[0], "kind": "pan", "focus": "", "xz": pair[1]})
 	var profiles: Array = []
+	var errors: Array = []
+	var focus_inset: float = focused_touch_inset_px(quality)
+	var focus_envelopes: Dictionary = node_candidate_bounds(
+		nodes, edges, quality)
 	for shape: StringName in StageShape.SHIPPING:
 		var stage: Vector2i = StageShape.REFERENCES[shape]
-		var aspect: float = float(stage.x) / float(stage.y)
 		for zoom_i: int in range(MapCameraRig.ZOOM_STOPS.size()):
 			var zoom: float = MapCameraRig.ZOOM_STOPS[zoom_i]
 			for value: Variant in poses:
 				var pose: Dictionary = value
 				var xz: Vector2 = _v2(pose.get("xz", Vector2.ZERO))
+				var profile_id: String = "%s/z%d/%s" % [shape, zoom_i, pose["id"]]
 				if str(pose["kind"]) == "focus":
 					var world: Vector3 = _v3(pose["world"])
-					xz = Vector2(world.x + (0.5 - MapCameraRig.LEAD_X) * zoom * aspect, lerpf(world.z, 0.0, MapCameraRig.LANE_PULL) + MapCameraRig.look_dz())
+					var resolved: Dictionary = MapCameraRig.resolve_leading(world,
+						Vector2(stage), zoom, focus_inset,
+						focused_anchor_envelope(str(pose["focus"]), focus_envelopes))
+					var resolved_pose_v: Variant = resolved.get("pose", null)
+					if resolved.get("ok", false) != true or not resolved_pose_v is Vector2:
+						var failure: Dictionary = resolved.get("failure", {}).duplicate(true)
+						failure["profile_id"] = profile_id
+						failure["focus_node_id"] = pose["focus"]
+						errors.append(failure)
+						continue
+					xz = resolved_pose_v
 				xz = Vector2(clampf(xz.x, lo.x, hi.x), clampf(xz.y, lo.y, hi.y))
-				var entry: Dictionary = {"id": "%s/z%d/%s" % [shape, zoom_i, pose["id"]], "shape": str(shape), "stage": [stage.x, stage.y], "zoom": zoom, "tilt": MapCameraRig.TILT_DEGREES, "height": MapCameraRig.CAM_HEIGHT, "flex_cap": StageShape.FLEX_CAP, "pose": _a2(xz), "kind": pose["kind"], "focus": pose["focus"]}
+				var entry: Dictionary = {"id": profile_id, "shape": str(shape), "stage": [stage.x, stage.y], "zoom": zoom, "tilt": MapCameraRig.TILT_DEGREES, "height": MapCameraRig.CAM_HEIGHT, "flex_cap": StageShape.FLEX_CAP, "pose": _a2(xz), "kind": pose["kind"], "focus": pose["focus"]}
 				entry["digest"] = MapLayoutCanonical.digest(entry)
 				profiles.append(entry)
-	return {"schema_version": 1, "version": "map-camera-profiles-v1", "profiles": profiles, "digest": MapLayoutCanonical.digest(profiles)}
+	return {"schema_version": 1, "version": "map-camera-profiles-v2", "profiles": profiles,
+		"errors": errors, "digest": MapLayoutCanonical.digest(profiles)}
+
+
+static func focused_touch_inset_px(quality: Dictionary) -> float:
+	return _touch_size_px(quality) * 0.5 \
+		+ _limit(_index(quality["hard"]), "focused_node_safe_frame_margin_px")
+
+
+## Shared #467 legal bounds used by candidate generation and camera identity.
+static func node_candidate_bounds(nodes: Array, edges: Array,
+		quality: Dictionary) -> Dictionary:
+	var governed: Dictionary = quality["geometry"]["row_lane_envelope"]
+	var row_half: float = _f(governed["row_half_extent_m"])
+	var lane_half: float = _f(governed["lane_half_extent_m"])
+	var stage: Rect2 = MapPinProjection.lattice_footprint()
+	var initial: Dictionary = {}
+	for node: Dictionary in nodes:
+		var node_id: String = str(node["id"])
+		var base: Vector3 = _authored(node, quality)
+		var fixed: bool = str(node["type"]) in ["boss", "act4", "entrance"]
+		initial[node_id] = {
+			"base": base,
+			"min_x": base.x if fixed else maxf(stage.position.x, base.x - row_half),
+			"max_x": base.x if fixed else minf(stage.end.x, base.x + row_half),
+			"min_z": base.z if fixed else maxf(stage.position.y, base.z - lane_half),
+			"max_z": base.z if fixed else minf(stage.end.y, base.z + lane_half),
+		}
+	var out: Dictionary = initial.duplicate(true)
+	var progress: float = _f(governed["minimum_forward_progress_m"])
+	for edge: Dictionary in edges:
+		var from_id: String = str(edge["from"])
+		var to_id: String = str(edge["to"])
+		var from: Dictionary = out[from_id]
+		var to: Dictionary = out[to_id]
+		from["max_x"] = minf(_f(from["max_x"]),
+			_f(initial[to_id]["min_x"]) - progress)
+		to["min_x"] = maxf(_f(to["min_x"]),
+			_f(initial[from_id]["max_x"]) + progress)
+		out[from_id] = from
+		out[to_id] = to
+	return out
+
+
+static func focused_anchor_envelope(node_id: String,
+		envelopes: Dictionary) -> Rect2:
+	var limit: Dictionary = envelopes[node_id]
+	return Rect2(Vector2(_f(limit["min_x"]), _f(limit["min_z"])), Vector2(
+		_f(limit["max_x"]) - _f(limit["min_x"]),
+		_f(limit["max_z"]) - _f(limit["min_z"])))
 static func evaluate(input: MapLayoutInput, result: MapLayoutResult, assets: Dictionary, quality: Dictionary) -> Dictionary:
 	var source: Dictionary = input.to_dict()
 	var layout: Dictionary = result.identity_dict()
@@ -44,7 +108,7 @@ static func evaluate(input: MapLayoutInput, result: MapLayoutResult, assets: Dic
 	var topology: Array = input.edge_records()
 	var anchors: Dictionary = layout["node_anchors"]
 	var edges: Dictionary = layout["edges"]
-	var cameras: Dictionary = camera_registry(nodes, quality)
+	var cameras: Dictionary = camera_registry(nodes, quality, topology)
 	var hard_rows: Dictionary = _index(quality["hard"])
 	var ew: float = _f(quality["epsilon"]["world_m"])
 	var ep: float = _f(quality["epsilon"]["screen_px"])
@@ -53,6 +117,13 @@ static func evaluate(input: MapLayoutInput, result: MapLayoutResult, assets: Dic
 	var obstacles: Dictionary = _obstacles(layout, assets.get("profiles", {}))
 	var values: Dictionary = {"row_lane_envelope_excess_m": 0.0, "journey_order_reversal_count": 0, "edge_scenery_corridor_penetration_m": 0.0, "edge_nonendpoint_node_penetration_m": 0.0, "unrelated_edge_intersection_count": 0, "vigil_protected_zone_intrusion_count": 0, "terminus_protected_zone_intrusion_count": 0}
 	var violations: Array = []
+	var camera_errors: Array = cameras.get("errors", [])
+	for error_v: Variant in camera_errors:
+		var error: Dictionary = error_v
+		violations.append(_violation("focused_node_safe_frame_margin_px",
+			str(error.get("profile_id", "camera-resolution")),
+			[str(error.get("focus_node_id", ""))], -1.0,
+			{"camera_resolution_failure": error}, {}))
 	var raw: Array = []
 	var soft: Dictionary = {}
 	var envelope: Dictionary = geometry["row_lane_envelope"]
@@ -132,7 +203,7 @@ static func evaluate(input: MapLayoutInput, result: MapLayoutResult, assets: Dic
 	values["deterministic_identity_mismatch_count"] = 1 if identity_bad else 0
 	if identity_bad:
 		violations.append(_violation("deterministic_identity_mismatch_count", "identity", [], 1.0, {"input": input.digest(), "layout_input": layout["input_digest"]}, {"camera": cameras["digest"], "quality": MapLayoutCanonical.digest(quality), "assets": assets.get("digest", "")}))
-	var hard_pass: bool = true
+	var hard_pass: bool = camera_errors.is_empty()
 	for value: Variant in quality["hard"]:
 		var hard: Dictionary = value
 		var id: String = str(hard["id"])
@@ -144,7 +215,7 @@ static func evaluate(input: MapLayoutInput, result: MapLayoutResult, assets: Dic
 static func _screen(profile: Dictionary, nodes: Array, topology: Array, anchors: Dictionary, edges: Dictionary, obstacles: Dictionary, quality: Dictionary, hard: Dictionary, epsilon: float) -> Dictionary:
 	var calibration: Dictionary = quality["calibration"]["shipping_touch_waystone"]
 	var radius: float = _f(calibration["ink_radius_px"]) * _f(calibration["default_layout_scale"])
-	var touch: float = maxf(_f(calibration["phone_touch_floor_px"]), radius * 2.0)
+	var touch: float = _touch_size_px(quality)
 	var values: Dictionary = {"node_ink_clearance_px": INF, "node_touch_target_min_px": touch, "node_touch_overlap_area_px2": 0.0, "node_touch_scenery_silhouette_overlap_area_px2": 0.0, "node_touch_hero_silhouette_overlap_area_px2": 0.0, "node_node_ink_overlap_area_px2": 0.0, "node_scenery_silhouette_overlap_area_px2": 0.0, "node_hero_silhouette_overlap_area_px2": 0.0, "branch_fanout_separation_px": INF, "focused_node_safe_frame_margin_px": INF, "route_state_exposure_ratio": 1.0}
 	var violations: Array = []
 	var projected_nodes: Dictionary = {}
@@ -205,9 +276,14 @@ static func _screen(profile: Dictionary, nodes: Array, topology: Array, anchors:
 		{"metric_id": "route_state_exposure_ratio", "profile_id": profile["id"],
 			"value": exposure["ratio"], "visible_length_px": exposure["visible"],
 			"total_length_px": exposure["total"],
-			"status": "not_applicable" if _f(exposure["total"]) <= 0.0 else "measured"},
-		{"metric_id": "branch_fanout_separation_px", "profile_id": profile["id"],
-			"value": fanout["minimum"], "status": fanout["status"]}, focus_row]}
+				"status": "not_applicable" if _f(exposure["total"]) <= 0.0 else "measured"},
+			{"metric_id": "branch_fanout_separation_px", "profile_id": profile["id"],
+				"value": fanout["minimum"], "status": fanout["status"]}, focus_row]}
+static func _touch_size_px(quality: Dictionary) -> float:
+	var calibration: Dictionary = quality["calibration"]["shipping_touch_waystone"]
+	var diameter: float = _f(calibration["ink_radius_px"]) \
+		* _f(calibration["default_layout_scale"]) * 2.0
+	return maxf(_f(calibration["phone_touch_floor_px"]), diameter)
 static func _obstacles(data: Dictionary, profiles: Dictionary) -> Dictionary:
 	var helper: MapAssetProfiles = MapAssetProfiles.new(EMPTY_MANIFEST)
 	var out: Dictionary = {}

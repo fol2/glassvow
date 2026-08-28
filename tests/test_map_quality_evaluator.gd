@@ -1,12 +1,14 @@
 extends RefCounted
 @warning_ignore_start("unsafe_call_argument")
 const Contract = preload("res://tests/test_map_layout_contract.gd")
+const Binding = preload("res://domain/map_layout/map_layout_input_binding.gd")
 static func _ok(fails: Array[String], value: bool, text: String) -> void:
 	if not value: fails.append("test_map_quality_evaluator: " + text)
 static func run(fails: Array[String]) -> void:
 	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
 	var assets: Dictionary = _assets()
 	_test_registry(fails, quality)
+	_test_focused_camera_binding(fails, quality, assets)
 	_test_nodes_and_phone(fails, quality, assets)
 	_test_routes(fails, quality, assets)
 	_test_fanout(fails, quality, assets)
@@ -14,9 +16,124 @@ static func run(fails: Array[String]) -> void:
 static func _test_registry(fails: Array[String], quality: Dictionary) -> void:
 	var nodes: Array = [_node("A", 2, 3), _node("B", 9, 3)]
 	var a: Dictionary = MapQualityEvaluator.camera_registry(nodes, quality)
-	var b: Dictionary = MapQualityEvaluator.camera_registry(nodes.duplicate(true), quality)
+	var reversed: Array = nodes.duplicate(true); reversed.reverse()
+	var b: Dictionary = MapQualityEvaluator.camera_registry(reversed, quality)
 	_ok(fails, str(a["digest"]) == str(b["digest"]) and a["profiles"].size() == 132 and str(a["profiles"][0]["digest"]).length() == 64 and is_equal_approx(float(a["profiles"][0]["flex_cap"]), StageShape.FLEX_CAP),
-		"three shapes, four zooms, opening, occupied rows and eight pan poses are stable")
+		"three shapes, four zooms, opening, occupied rows and eight pan poses are stable under reordered input")
+	var inset: float = MapQualityEvaluator.focused_touch_inset_px(quality)
+	for profile: Dictionary in a["profiles"]:
+		if str(profile["kind"]) != "focus": continue
+		var focus: Dictionary = nodes[0] if str(profile["focus"]) == "A" else nodes[1]
+		var world: Vector3 = _seat(focus)
+		_ok(fails, _v2(profile["pose"]).is_equal_approx(_old_focus_pose(
+			world, _v2(profile["stage"]), _f(profile["zoom"]))),
+			"centre-lane profile %s retains the preferred 0.7 pose" % profile["id"])
+	var rig: MapCameraRig = MapCameraRig.new(); rig.set_zoom_stop(0)
+	var live_world: Vector3 = _seat(nodes[0])
+	var live_stage: Vector2 = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
+	var live_envelope: Rect2 = MapQualityEvaluator.focused_anchor_envelope(
+		"A", MapQualityEvaluator.node_candidate_bounds(nodes, [], quality))
+	var live_pose: Vector2 = rig.pose_leading(live_world, live_stage, inset, live_envelope)
+	var evaluator_profile: Dictionary = _camera_profile(a, "pad-landscape/z0/row-02")
+	_ok(fails, live_pose.is_equal_approx(_v2(evaluator_profile["pose"])),
+		"live and evaluator calls produce the same pose from the same explicit inputs")
+	var impossible: Dictionary = MapCameraRig.resolve_leading(live_world, live_stage,
+		MapCameraRig.ZOOM_STOPS[0], live_stage.y * 0.5, live_envelope)
+	_ok(fails, impossible.get("ok", true) == false
+		and impossible.get("failure", {}).has("stage")
+		and impossible.get("failure", {}).has("zoom"),
+		"an impossible inset fails closed with exact stage and zoom geometry")
+	rig.free()
+
+
+static func _test_focused_camera_binding(fails: Array[String], quality: Dictionary,
+		assets: Dictionary) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var required: float = _f(MapQualityEvaluator._index(quality["hard"])[
+		"focused_node_safe_frame_margin_px"]["limit"])
+	for fixture: Array in [[717, "6,0", -63.23927475, 9],
+			[17634, "9,0", -74.61313034, 6]]:
+		var seed: int = MapLayoutCanonical.int_value(fixture[0])
+		var focus_id: String = str(fixture[1])
+		var state: RunState = RunState.new_run(content, seed, "focus-binding-%d" % seed)
+		var bound: Dictionary = Binding.bind(WorldMap.for_run(state, content), 0)
+		var nodes: Array = bound["nodes"]
+		var input: MapLayoutInput = MapLayoutInput.from_dict({
+			"schema_version": MapLayoutInput.SCHEMA_VERSION,
+			"generator_schema": "map-compiler-v2",
+			"generator_version": "map-camera-focus-test-v1",
+			"nodes": nodes, "edges": bound["edges"], "act": 0,
+			"run_seed": seed, "scenery_seed": seed + 97,
+			"asset_profile_digest": assets["digest"],
+			"camera_profile_digest": MapQualityEvaluator.camera_registry(
+				nodes, quality, bound["edges"])["digest"],
+			"quality_registry_digest": MapLayoutCanonical.digest(quality),
+			"hero_anchor_contract": _hero(),
+		})
+		var node_sets: Dictionary = MapNodeCandidateGenerator.generate(
+			input, quality, 0)["node_sets"]
+		var node_set: Dictionary = node_sets[focus_id]
+		var registry: Dictionary = MapQualityEvaluator.camera_registry(
+			nodes, quality, bound["edges"])
+		var reversed_nodes: Array = nodes.duplicate(true); reversed_nodes.reverse()
+		var reversed_edges: Array = bound["edges"].duplicate(true); reversed_edges.reverse()
+		var reordered_registry: Dictionary = MapQualityEvaluator.camera_registry(
+			reversed_nodes, quality, reversed_edges)
+		_ok(fails, registry["profiles"] == reordered_registry["profiles"]
+			and str(registry["digest"]) == str(reordered_registry["digest"]),
+			"seed %d edge-aware camera profiles survive equivalent input reorder" % seed)
+		var focus_envelopes: Dictionary = MapQualityEvaluator.node_candidate_bounds(
+			nodes, bound["edges"], quality)
+		var profile_id: String = "pad-landscape/z0/row-%02d" % int(focus_id.split(",")[0])
+		var governed: Dictionary = _camera_profile(registry, profile_id)
+		var world: Vector3 = _v3(node_set["authored_anchor"])
+		var old: Dictionary = governed.duplicate(true)
+		old["pose"] = _a2(_old_focus_pose(world, _v2(old["stage"]), _f(old["zoom"])))
+		var old_best: float = -INF
+		var governed_worst: float = INF
+		for candidate: Dictionary in node_set["candidates"]:
+			var anchor: Vector3 = _v3(candidate["anchor"])
+			old_best = maxf(old_best, _focus_margin(anchor, old, quality))
+			governed_worst = minf(governed_worst, _focus_margin(anchor, governed, quality))
+		_ok(fails, node_set["candidates"].size() == MapLayoutCanonical.int_value(fixture[3])
+			and absf(old_best - _f(fixture[2])) <= 0.001
+			and old_best < required,
+			"old unconditional 0.7 reproduces seed %d %s at %s" % [seed, focus_id, profile_id])
+		_ok(fails, governed_worst >= required,
+			"every legal seed %d %s candidate clears the unchanged 8 px floor" % [seed, focus_id])
+		var unchanged: bool = true
+		var unchanged_count: int = 0
+		for profile: Dictionary in registry["profiles"]:
+			if str(profile["kind"]) != "focus":
+				continue
+			var profile_focus: String = str(profile["focus"])
+			var profile_set: Dictionary = node_sets[profile_focus]
+			var profile_world: Vector3 = _v3(profile_set["authored_anchor"])
+			var old_profile: Dictionary = profile.duplicate(true)
+			old_profile["pose"] = _a2(_old_focus_pose(profile_world,
+				_v2(profile["stage"]), _f(profile["zoom"])))
+			var profile_envelope: Rect2 = MapQualityEvaluator.focused_anchor_envelope(
+				profile_focus, focus_envelopes)
+			var resolved: Dictionary = MapCameraRig.resolve_leading(profile_world,
+				_v2(profile["stage"]), _f(profile["zoom"]),
+				MapQualityEvaluator.focused_touch_inset_px(quality), profile_envelope)
+			if not is_equal_approx(_f(resolved.get("effective_pull", -1.0)),
+					MapCameraRig.LANE_PULL):
+				continue
+			unchanged_count += 1
+			unchanged = unchanged and _v2(profile["pose"]).is_equal_approx(
+				_v2(old_profile["pose"]))
+		_ok(fails, unchanged and unchanged_count > 0,
+			"every non-binding seed %d stage and zoom keeps the exact 0.7 pose" % seed)
+		var rig: MapCameraRig = MapCameraRig.new(); rig.set_zoom_stop(0)
+		var stage: Vector2 = _v2(governed["stage"])
+		var envelope: Rect2 = MapQualityEvaluator.focused_anchor_envelope(
+			focus_id, focus_envelopes)
+		_ok(fails, rig.pose_leading(world, stage,
+			MapQualityEvaluator.focused_touch_inset_px(quality), envelope).is_equal_approx(
+				_v2(governed["pose"])),
+			"seed %d live and evaluator focused poses share one resolver" % seed)
+		rig.free()
 static func _test_nodes_and_phone(fails: Array[String], quality: Dictionary, assets: Dictionary) -> void:
 	var nodes: Array = [_node("A", 4, 3), _node("B", 4, 3)]
 	var seat: Vector3 = _seat(nodes[0])
@@ -89,7 +206,8 @@ static func _case(nodes: Array, anchors: Dictionary, paths: Array, scenery: Dict
 	var input_raw: Dictionary = {"schema_version": 1, "generator_schema": "map-compiler-v2",
 		"generator_version": "2.0.0-test", "nodes": nodes, "edges": topology, "act": 0,
 		"run_seed": 717, "scenery_seed": 717, "asset_profile_digest": assets["digest"],
-		"camera_profile_digest": MapQualityEvaluator.camera_registry(nodes, quality)["digest"],
+		"camera_profile_digest": MapQualityEvaluator.camera_registry(
+			nodes, quality, topology)["digest"],
 		"quality_registry_digest": MapLayoutCanonical.digest(quality), "hero_anchor_contract": _hero()}
 	var input: MapLayoutInput = MapLayoutInput.from_dict(input_raw)
 	var identity: Dictionary = {"schema_version": 1, "generator_version": "2.0.0-test",
@@ -128,6 +246,36 @@ static func _seat(node: Dictionary) -> Vector3:
 	return MapPinProjection.sample(float(node["row"]), float(node["col"]))
 static func _a3(value: Vector3) -> Array[float]:
 	return [value.x, value.y, value.z]
+static func _a2(value: Vector2) -> Array[float]:
+	return [value.x, value.y]
+static func _v2(value: Variant) -> Vector2:
+	var row: Array = value
+	return Vector2(_f(row[0]), _f(row[1]))
+static func _v3(value: Variant) -> Vector3:
+	var row: Array = value
+	return Vector3(_f(row[0]), _f(row[1]), _f(row[2]))
+static func _f(value: Variant) -> float:
+	return MapLayoutCanonical.float_value(value)
+static func _camera_profile(registry: Dictionary, id: String) -> Dictionary:
+	for profile: Dictionary in registry["profiles"]:
+		if str(profile["id"]) == id: return profile
+	return {}
+static func _old_focus_pose(world: Vector3, stage: Vector2, zoom: float) -> Vector2:
+	var bounds: Rect2 = MapCameraRig.bounds_from_lattice()
+	var pose: Vector2 = Vector2(world.x + (0.5 - MapCameraRig.LEAD_X)
+		* zoom * stage.x / stage.y,
+		lerpf(world.z, 0.0, MapCameraRig.LANE_PULL) + MapCameraRig.look_dz())
+	return Vector2(clampf(pose.x, bounds.position.x, bounds.end.x),
+		clampf(pose.y, bounds.position.y, bounds.end.y))
+static func _focus_margin(world: Vector3, profile: Dictionary,
+		quality: Dictionary) -> float:
+	var projected: Vector2 = MapQualityEvaluator._project(world, profile)
+	var stage: Vector2 = _v2(profile["stage"])
+	var required: float = _f(MapQualityEvaluator._index(quality["hard"])[
+		"focused_node_safe_frame_margin_px"]["limit"])
+	var touch_half: float = MapQualityEvaluator.focused_touch_inset_px(quality) - required
+	return minf(minf(projected.x, stage.x - projected.x),
+		minf(projected.y, stage.y - projected.y)) - touch_half
 static func _has(report: Dictionary, metric: String, a: String, b: String) -> bool:
 	for row: Dictionary in report["violations"]:
 		if str(row["metric_id"]) == metric and str(row["entities"]).contains(a) \

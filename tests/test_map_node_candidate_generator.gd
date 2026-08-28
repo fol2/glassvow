@@ -169,7 +169,8 @@ static func _input(nodes: Array, edges: Array, seed: int, quality: Dictionary,
 		"generator_version": "2.0.0-candidates.1", "nodes": nodes, "edges": edges,
 		"act": 0, "run_seed": seed, "scenery_seed": seed + 97,
 		"asset_profile_digest": _SHA,
-		"camera_profile_digest": MapQualityEvaluator.camera_registry(nodes, quality)["digest"],
+		"camera_profile_digest": MapQualityEvaluator.camera_registry(
+			nodes, quality, edges)["digest"],
 		"hero_anchor_contract": {"schema_version": 1,
 			"anchors": {"vigil": {"profile_id": "vigil"}, "terminus": {"profile_id": "terminus"}},
 			"protected_zones": zones}, "quality_registry_digest": MapLayoutCanonical.digest(quality)})

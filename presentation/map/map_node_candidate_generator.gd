@@ -43,7 +43,7 @@ static func generate(input: MapLayoutInput, quality: Dictionary, restart_id: int
 	if not errors.is_empty():
 		return _finish(report)
 	var stage: Rect2 = MapPinProjection.lattice_footprint()
-	var bounds: Dictionary = _bounds(nodes, edges, quality, stage)
+	var bounds: Dictionary = _bounds(nodes, edges, quality)
 	var sets: Dictionary = {}
 	var impossible: Array = report["impossibilities"]
 	for node: Dictionary in nodes:
@@ -57,34 +57,9 @@ static func generate(input: MapLayoutInput, quality: Dictionary, restart_id: int
 	report["node_sets"] = sets
 	return _finish(report)
 
-static func _bounds(nodes: Array, edges: Array, quality: Dictionary, stage: Rect2) -> Dictionary:
-	var envelope: Dictionary = quality["geometry"]["row_lane_envelope"]
-	var row_half: float = _f(envelope["row_half_extent_m"])
-	var lane_half: float = _f(envelope["lane_half_extent_m"])
-	var initial: Dictionary = {}
-	for node: Dictionary in nodes:
-		var id: String = str(node["id"])
-		var base: Vector3 = MapQualityEvaluator._authored(node, quality)
-		var fixed: bool = not _fixed(str(node["type"])).is_empty()
-		initial[id] = {"base": base,
-			"min_x": base.x if fixed else maxf(stage.position.x, base.x - row_half),
-			"max_x": base.x if fixed else minf(stage.end.x, base.x + row_half),
-			"min_z": base.z if fixed else maxf(stage.position.y, base.z - lane_half),
-			"max_z": base.z if fixed else minf(stage.end.y, base.z + lane_half)}
-	var out: Dictionary = initial.duplicate(true)
-	var progress: float = _f(envelope["minimum_forward_progress_m"])
-	for edge: Dictionary in edges:
-		var from_id: String = str(edge["from"])
-		var to_id: String = str(edge["to"])
-		var from: Dictionary = out[from_id]
-		var to: Dictionary = out[to_id]
-		var initial_from: Dictionary = initial[from_id]
-		var initial_to: Dictionary = initial[to_id]
-		from["max_x"] = minf(_f(from["max_x"]), _f(initial_to["min_x"]) - progress)
-		to["min_x"] = maxf(_f(to["min_x"]), _f(initial_from["max_x"]) + progress)
-		out[from_id] = from
-		out[to_id] = to
-	return out
+static func _bounds(nodes: Array, edges: Array,
+		quality: Dictionary) -> Dictionary:
+	return MapQualityEvaluator.node_candidate_bounds(nodes, edges, quality)
 
 static func _node_set(node: Dictionary, source: Dictionary, quality: Dictionary,
 		restart_id: int, stage: Rect2, bounds: Dictionary) -> Dictionary:

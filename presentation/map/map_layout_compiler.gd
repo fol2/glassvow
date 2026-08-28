@@ -123,7 +123,8 @@ static func _validate_authorities(source: Dictionary, input: MapLayoutInput,
 		return _digest_binding("quality_registry_digest",
 			str(source["quality_registry_digest"]), quality_digest)
 	var camera_digest: String = str(
-		MapQualityEvaluator.camera_registry(input.node_records(), quality)["digest"]
+		MapQualityEvaluator.camera_registry(
+			input.node_records(), quality, input.edge_records())["digest"]
 	)
 	if camera_digest != str(source["camera_profile_digest"]):
 		return _digest_binding("camera_profile_digest",

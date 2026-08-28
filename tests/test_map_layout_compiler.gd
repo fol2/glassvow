@@ -876,7 +876,8 @@ static func _input(nodes: Array, edges: Array, seed: int, act: int,
 		"run_seed": seed,
 		"scenery_seed": seed + 97,
 		"asset_profile_digest": assets["digest"],
-		"camera_profile_digest": MapQualityEvaluator.camera_registry(nodes, quality)["digest"],
+		"camera_profile_digest": MapQualityEvaluator.camera_registry(
+			nodes, quality, edges)["digest"],
 		"hero_anchor_contract": hero,
 		"quality_registry_digest": MapLayoutCanonical.digest(quality),
 	})

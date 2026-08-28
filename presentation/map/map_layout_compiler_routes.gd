@@ -84,7 +84,7 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 		}
 	var egress_sources: Dictionary = {}
 	var camera_registry: Dictionary = MapQualityEvaluator.camera_registry(
-		nodes, quality
+		nodes, quality, edges
 	)
 	var hard: Dictionary = MapQualityEvaluator._index(quality["hard"])
 	for profile: Dictionary in camera_registry["profiles"]:
