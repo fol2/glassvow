@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "status": "frozen-before-first-observation",
+  "protocolSha256": "d8496263dbaab0534cf44702e9ea1078c952b87c145b5c04b3492085d6f15be0",
+  "runnerSha256": "a6b06e4491b872e14b3a053c48a8859784d3f0a12bf5db973d6589cfd0036048",
+  "probeSha256": "f770cef88fb6e7a9b57e98f7d08b2ecc3fc2230dc77339e9fe75417c6d111245",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "ledgerSha256BeforeFirstObservation": "d0e57954ce17635b6b5b25b4fd2a9de8280cb84332e86b7ecea3d0d513daca80",
+  "ledgerRecordsBeforeFirstObservation": 457861,
+  "candidateRows": 1536,
+  "liveBaselineRows": 1536,
+  "maximumSimulatorObservationRows": 3072,
+  "maximumWallTimeSeconds": 3600,
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "bootstrapResamples": 5000,
+  "bootstrapSeed": 421,
+  "protectedSeeds": 0,
+  "executionCommand": "PYTHONDONTWRITEBYTECODE=1 python3 post_v38_heldout_confirmation.py execute"
+}

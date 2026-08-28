@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-heldout-confirmation-v1",
+  "ledger": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2514243584,
+    "sha256": "aacdb478eda35704bf4a49128fca804bbffcccad7f2fe2d62a153b0aabde285a",
+    "sqliteIntegrity": "ok",
+    "records": 460941,
+    "firstSequence": 1,
+    "lastSequence": 460941
+  },
+  "heldOutConfirmation": {
+    "protocolSha256": "d8496263dbaab0534cf44702e9ea1078c952b87c145b5c04b3492085d6f15be0",
+    "analysisSha256": "aa4ac97242d701bd3ff187ebcf8ee6bd804e7277845aba0474f435267b03dcb3",
+    "simulatorObservationRows": 3072,
+    "candidateRows": 1536,
+    "liveBaselineRows": 1536,
+    "decision": "confirm-one-frozen-candidate"
+  },
+  "protectedSeeds": {
+    "acceptanceRange": "3000-5199",
+    "acceptanceObservationRows": 0,
+    "reserveRange": "5200-5399",
+    "reserveObservationRows": 0
+  },
+  "publication": {
+    "sqlitePublishedInGit": false,
+    "reason": "The multi-gigabyte append-only ledger remains local and hash-pinned; only content-addressed plans, outputs and decision objects are archived remotely."
+  }
+}

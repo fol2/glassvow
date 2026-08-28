@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Does the one candidate frozen by the mechanism-blocked CRN first look reproduce the required whole-run strategy-package activation, policy sensitivity, functional separation and guardrails on statistically independent policy and simulation identities?",
+  "scope": "This protocol confirms whole-run activation, repertoire sensitivity and guardrails only. It does not claim new local complementarity evidence; exact-candidate held-out complementarity remains required before detector admission.",
+  "method": "One fixed candidate versus one fixed live baseline on complete common-random-number rectangles. There is no candidate construction, ranking, tuning, optional expansion or second candidate.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "pilotSha256": "93a32555c5c273bcd27ea9c5210fcb958f1c1962faad3b1e76bd20d5f3f7e901",
+    "balanceSimSha256": "45a3d3b95f53f89ab4444e45da32ba7f691090518d74706823e44478a2e55777",
+    "probeSha256": "f770cef88fb6e7a9b57e98f7d08b2ecc3fc2230dc77339e9fe75417c6d111245",
+    "researchCoreSha256": "0480163456dc6693e90d5f87163918d8452e4dd5c2c822c60543ab03efe3d6a9",
+    "blockedRunnerSha256": "a6435cc05f13042ee9132de90a40d11a61716b56d116b729aff92faad5a152cb",
+    "runnerSha256": "a6b06e4491b872e14b3a053c48a8859784d3f0a12bf5db973d6589cfd0036048"
+  },
+  "entryGate": {
+    "firstLookProtocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
+    "firstLookPolicyIdentities": 64,
+    "requiredFirstLookDecision": "freeze-one-for-held-out-confirmation",
+    "firstLookEvidence": {
+      "summary": {
+        "path": "summaries/post-v38-blocked-crn-v2.json",
+        "sha256": "6a1e72f136d12b0dc6462996ffd8180097cb34f2148f025605f5768632bebd06"
+      },
+      "audit": {
+        "path": "summaries/post-v38-blocked-crn-v2-audit.json",
+        "sha256": "f6ec487ae5f4135dd2b29ca0b3b1877d812d8416a4444a6b681c04bceac6b6e1"
+      }
+    },
+    "executionManifest": "execution/post-v38-heldout-confirmation-v1.json",
+    "freeze": "The execution manifest must bind this protocol, runner, probe, ledger identity and every numeric ceiling before the first observation."
+  },
+  "ledgerFreeze": {
+    "sha256": "d0e57954ce17635b6b5b25b4fd2a9de8280cb84332e86b7ecea3d0d513daca80",
+    "records": 457861,
+    "firstSequence": 1,
+    "lastSequence": 457861,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "candidate": {
+    "cell": {
+      "A": "low",
+      "Q": 2,
+      "R": "uncommon",
+      "S": "low",
+      "W": 0,
+      "blocks": [
+        "afterimage"
+      ],
+      "id": "S-low__A-low__Q-2__R-uncommon__W-0"
+    },
+    "contentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+    "research421": {
+      "acquisitionPriority": 2,
+      "wardSetupPriority": 0
+    }
+  },
+  "baseline": {
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "researchSettings": {
+      "acquisitionPriority": 4,
+      "wardSetupPriority": 1
+    }
+  },
+  "packages": {
+    "ash-bloodfire-leech": {
+      "aspect": "ashwarden",
+      "producer": "bloodRite",
+      "consumer": "leechBlade",
+      "mediator": "player-bloodfire",
+      "appliedMetric": "bloodfireApplied",
+      "consumedMetric": "bloodfireConsumed"
+    },
+    "ash-poison-catalyst": {
+      "aspect": "ashwarden",
+      "producer": "toxicMist",
+      "consumer": "catalyst",
+      "mediator": "enemy-mistbound",
+      "appliedMetric": "mistboundAppliedByToxicMist",
+      "consumedMetric": "mistboundConsumedByCatalyst"
+    },
+    "dusk-scoreline": {
+      "aspect": "duskblade",
+      "producer": "chisel",
+      "consumer": "executioner",
+      "mediator": "enemy-scoreline",
+      "appliedMetric": "scorelineApplied",
+      "consumedMetric": "scorelineConsumed"
+    },
+    "dusk-afterimage-guard": {
+      "aspect": "duskblade",
+      "producer": "defend",
+      "consumer": "guardedStrike",
+      "mediator": "player-afterimage",
+      "appliedMetric": "afterimageApplied",
+      "consumedMetric": "afterimageConsumed"
+    }
+  },
+  "cohorts": {
+    "policyIdentity": {
+      "root": 546,
+      "firstIndex": 0,
+      "lastIndex": 127,
+      "count": 128
+    },
+    "policySimulationSeeds": {
+      "first": 345900,
+      "last": 345903,
+      "count": 4
+    },
+    "randomBuildSeeds": {
+      "first": 345700,
+      "last": 345827,
+      "count": 128
+    },
+    "policyGrids": [
+      "duskblade:v5",
+      "ashwarden:v5"
+    ],
+    "randomBuildGrids": [
+      "duskblade:v0",
+      "duskblade:v5",
+      "ashwarden:v0",
+      "ashwarden:v5"
+    ],
+    "independence": "Policy root 546, all 128 policy indices and every simulation seed are disjoint from the root-545 first look. The canonical policy snapshot hashes must also have zero overlap with the 64 first-look snapshots.",
+    "commonRandomNumbers": "Candidate and live use identical policy identities, policy simulation seeds and RandomBuild identities. Every registered endpoint is evaluated on its complete comparable rectangle."
+  },
+  "gates": {
+    "minimumActiveAndInactivePolicies": 32,
+    "minimumExclusivePolicies": 8,
+    "minimumReachablePolicies": 16,
+    "randomBuildWinCeiling": 0.5,
+    "maximumAbsoluteRandomBuildMovement": 0.1,
+    "vow5PolicyWinCeiling": 0.9,
+    "durationUpperBound": 0.25,
+    "reliability": "Zero candidate stalls or errors and zero candidate-added faults on both policy grids; zero candidate-added faults on every RandomBuild grid.",
+    "activation": "A policy is active for a package only when the final deck contains its registered producer and consumer and at least one of its four simulations records both registered applied and consumed events.",
+    "functionalSeparation": "Within each aspect, at least eight held-out policies activate each package without activating the other package.",
+    "reachability": "At least sixteen held-out policies acquire the final producer-consumer pair and record its consumer event for each package through the live reward/economy path.",
+    "admission": "All four package, identity, reliability, RandomBuild, Vow-5 and duration gates must pass. No endpoint absent from a complete matched rectangle supports confirmation."
+  },
+  "estimator": {
+    "activationUnit": "Policy identity, aggregated over the same four policy simulation seeds.",
+    "randomBuild": "Paired candidate-minus-live win indicator by separately named aspect-vow grid and RandomBuild seed.",
+    "duration": "Paired candidate-minus-live mean combat turns per fight by aspect, policy identity and simulation seed.",
+    "bootstrap": "Exactly 5000 deterministic paired bootstrap resamples with a fresh random.Random(421) stream per estimand.",
+    "bootstrapSeed": 421,
+    "multiplicity": "No endpoint, threshold, cohort, package or bootstrap seed may be added or changed after the first observation."
+  },
+  "budget": {
+    "rowsPerContentArm": 1536,
+    "randomBuildRowsPerContentArm": 512,
+    "policyRowsPerContentArm": 1024,
+    "maximumNewSimulatorObservationRows": 3072,
+    "heldOutPoliciesPerAspect": 128,
+    "heldOutRandomBuildSeedsPerGrid": 128,
+    "policySeedsPerPolicy": 4,
+    "bootstrapResamples": 5000,
+    "maximumWallTimeSeconds": 3600,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "All preregistered gates pass. Confirm exactly this one candidate and continue to exact-candidate held-out complementarity and detector work; do not select another scalar cell.",
+    "futility": "Any fixed identity, activation, separation, reachability, reliability, RandomBuild or Vow-5 gate fails, or a duration interval lies wholly above 0.25. Reject this candidate, close the tested scalar family and continue with the next evidence-backed structural mechanism inside issue #421.",
+    "inconclusive": "Only a duration interval is missing or straddles 0.25, or execution reaches an immutable-input, incomplete-rectangle, cache, engine, harness, row-cap or wall-cap fault. Record inconclusive at the cap and do not rerun or extend this protocol.",
+    "successAuthority": "The one frozen scalar candidate is independently confirmed for exact-candidate complementarity and detector evaluation only. This does not authorise detector admission, product promotion, acceptance seeds or reserve seeds.",
+    "futilityAuthority": "The scalar family is closed. Continue structurally inside issue #421 without selecting another observed scalar cell.",
+    "inconclusiveAuthority": "Stop this protocol at decision boundary 3. Do not rerun, add rows or alter cohorts."
+  },
+  "deterministicOwnership": "post_v38_heldout_confirmation.py alone constructs both complete rectangles, invokes the bound simulator/cache, audits policy identity, evaluates every registered gate and selects the decision boundary with zero model-context tokens.",
+  "methodBoundary": {
+    "ml": "Not authorised.",
+    "rl": "Not authorised.",
+    "adaptiveTuning": "V39-style candidate-by-candidate tuning, alternative-cell substitution, cohort extension and promising-route support are forbidden."
+  },
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

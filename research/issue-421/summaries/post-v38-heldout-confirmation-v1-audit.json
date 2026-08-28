@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "decision": "one-frozen-candidate-confirmed-for-exact-complementarity-and-detector-only",
+  "protocolSha256": "d8496263dbaab0534cf44702e9ea1078c952b87c145b5c04b3492085d6f15be0",
+  "runnerSha256": "a6b06e4491b872e14b3a053c48a8859784d3f0a12bf5db973d6589cfd0036048",
+  "executionManifestSha256": "d07aa966467332166fdb4f178df3e7e9b953734214964df9225f9c35b25279fa",
+  "summaryFileSha256": "1574e08b855cb17381e0333db26f091d352a5c6ed0c21ec381238bd9eafb280f",
+  "analysisSha256": "aa4ac97242d701bd3ff187ebcf8ee6bd804e7277845aba0474f435267b03dcb3",
+  "candidate": {
+    "id": "S-low__A-low__Q-2__R-uncommon__W-0",
+    "contentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+    "research421": {
+      "acquisitionPriority": 2,
+      "wardSetupPriority": 0
+    }
+  },
+  "execution": {
+    "newSimulatorObservationRows": 3072,
+    "candidateRows": 1536,
+    "liveBaselineRows": 1536,
+    "wallTimeSeconds": 128.90891004202422,
+    "protectedSeedRows": 0
+  },
+  "policyIdentityAudit": {
+    "heldOutPolicyIdentities": 128,
+    "uniqueHeldOutSnapshots": 128,
+    "firstLookSnapshots": 64,
+    "firstLookOverlapCount": 0,
+    "oneSnapshotPerIdentityAcrossCandidateLiveAspectsAndSeeds": true
+  },
+  "strategyPackageActivation": {
+    "ash-bloodfire-leech": {
+      "active": 36,
+      "inactive": 92,
+      "finalPairReachable": 58,
+      "consumerReachedWithFinalPair": 36
+    },
+    "ash-poison-catalyst": {
+      "active": 70,
+      "inactive": 58,
+      "finalPairReachable": 82,
+      "consumerReachedWithFinalPair": 70
+    },
+    "dusk-afterimage-guard": {
+      "active": 94,
+      "inactive": 34,
+      "finalPairReachable": 101,
+      "consumerReachedWithFinalPair": 94
+    },
+    "dusk-scoreline": {
+      "active": 81,
+      "inactive": 47,
+      "finalPairReachable": 96,
+      "consumerReachedWithFinalPair": 81
+    }
+  },
+  "exclusivePolicyIdentities": {
+    "ash-bloodfire-leech": 12,
+    "ash-poison-catalyst": 46,
+    "dusk-afterimage-guard": 30,
+    "dusk-scoreline": 17
+  },
+  "guardrails": {
+    "policyVow5WinRates": {
+      "ashwarden": 0.099609375,
+      "duskblade": 0.041015625
+    },
+    "durationCandidateMinusLive": {
+      "ashwarden": {
+        "point": 0.05547299776375984,
+        "p025": 0.019134602192625718,
+        "p975": 0.09043022029845174
+      },
+      "duskblade": {
+        "point": 0.057107359391508856,
+        "p025": 0.014116175066647682,
+        "p975": 0.09961368720297727
+      }
+    },
+    "randomBuildWinRates": {
+      "ashwarden:v0": 0.203125,
+      "ashwarden:v5": 0.046875,
+      "duskblade:v0": 0.2890625,
+      "duskblade:v5": 0.0625
+    },
+    "maximumAbsoluteRandomBuildMovement": 0.046875,
+    "candidateFaults": 0,
+    "addedFaults": 0
+  },
+  "scientificBoundary": {
+    "confirmed": "The one frozen candidate reproduced whole-run activation, policy sensitivity, within-aspect functional separation, live reward-path reachability and all registered guardrails on disjoint policy and simulation identities.",
+    "notYetClaimed": "This held-out stage did not estimate local producer-consumer complementarity and does not admit the detector, authorise product promotion or authorise acceptance/reserve seeds.",
+    "nextAction": "Audit exact-candidate local complementarity evidence and run only the cheapest preregistered held-out causal panel needed to close any unresolved package endpoint before detector construction."
+  },
+  "ledgerAfterAudit": {
+    "sha256": "aacdb478eda35704bf4a49128fca804bbffcccad7f2fe2d62a153b0aabde285a",
+    "bytes": 2514243584,
+    "records": 460941,
+    "firstSequence": 1,
+    "lastSequence": 460941,
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  }
+}

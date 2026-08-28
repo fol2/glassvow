@@ -6,9 +6,9 @@
 This directory publishes reviewable evidence from the active scientific issue
 [#421](https://github.com/fol2/glassvow/issues/421) campaign. It now covers the
 V38 freeze, the zero-row identifiability audit, the pre-directive experiment,
-and the post-directive knob proof and mechanism-blocked CRN first look. It is a
-progress snapshot, not held-out confirmation, detector admission, product
-promotion or a P9 receipt. The branch is a
+and the post-directive knob proof, mechanism-blocked CRN first look and
+independent held-out confirmation. It is a progress snapshot, not detector
+admission, product promotion or a P9 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
 and is not intended to enter `main`.
 
@@ -45,41 +45,57 @@ cross-package decision-value trigger fired, so all 12 optional cells and their
 gates; the frozen order selected exactly one low/low/Q2/uncommon/W0 candidate
 for independent held-out confirmation. That freeze is not product authority.
 
+The independent held-out protocol has now confirmed that one candidate on 128
+new policy identities and disjoint simulation seeds. All four registered
+packages passed activation, inactive-witness, reachability and within-aspect
+functional-separation gates; all guardrails passed; policy-snapshot overlap
+with the first look was zero. The 3,072-row result authorises exact-candidate
+complementarity and detector work only. It does not authorise another scalar
+candidate, detector admission, promotion or protected seeds.
+
 ## Reading order
 
-1. [`summaries/progress-post-directive-blocked-crn-v2.md`](summaries/progress-post-directive-blocked-crn-v2.md)
-   — current progress, exact post-directive results and remote heads.
-2. [`protocols/post-v38-knob-identity-v2.json`](protocols/post-v38-knob-identity-v2.json),
+1. [`summaries/progress-post-directive-heldout-v1.md`](summaries/progress-post-directive-heldout-v1.md),
+   [`protocols/post-v38-heldout-confirmation-v1.json`](protocols/post-v38-heldout-confirmation-v1.json),
+   [`summaries/post-v38-heldout-confirmation-v1.json`](summaries/post-v38-heldout-confirmation-v1.json)
+   and [`summaries/post-v38-heldout-confirmation-v1-audit.json`](summaries/post-v38-heldout-confirmation-v1-audit.json)
+   — current decision, exact held-out contract, result and read-only audit.
+2. [`artifacts/ledger-freeze-heldout-confirmation-v1.json`](artifacts/ledger-freeze-heldout-confirmation-v1.json)
+   and [`raw/post-directive-heldout-confirmation-raw-v1.tar.gz`](raw/post-directive-heldout-confirmation-raw-v1.tar.gz)
+   — held-out ledger identity and complete content-addressed plans/outputs.
+3. [`summaries/progress-post-directive-blocked-crn-v2.md`](summaries/progress-post-directive-blocked-crn-v2.md)
+   — preceding blocked-design progress and remote heads.
+4. [`protocols/post-v38-knob-identity-v2.json`](protocols/post-v38-knob-identity-v2.json),
    [`summaries/post-v38-knob-identity-v2.json`](summaries/post-v38-knob-identity-v2.json),
    [`protocols/post-v38-blocked-crn-v2.json`](protocols/post-v38-blocked-crn-v2.json),
    [`summaries/post-v38-blocked-crn-v2.json`](summaries/post-v38-blocked-crn-v2.json)
    and [`summaries/post-v38-blocked-crn-v2-audit.json`](summaries/post-v38-blocked-crn-v2-audit.json)
    — exact identity, design, first-look decision and read-only audit.
-3. [`artifacts/ledger-freeze-blocked-crn-v2.json`](artifacts/ledger-freeze-blocked-crn-v2.json),
+5. [`artifacts/ledger-freeze-blocked-crn-v2.json`](artifacts/ledger-freeze-blocked-crn-v2.json),
    [`raw/post-directive-blocked-crn-raw-v2.tar.gz`](raw/post-directive-blocked-crn-raw-v2.tar.gz)
    and [`raw/post-directive-harness-v2.tar.gz`](raw/post-directive-harness-v2.tar.gz)
    — exact post-directive ledger, raw cache objects and harness.
-4. [`summaries/progress-pre-directive-factorial-v1.md`](summaries/progress-pre-directive-factorial-v1.md)
+6. [`summaries/progress-pre-directive-factorial-v1.md`](summaries/progress-pre-directive-factorial-v1.md)
    — the directive boundary and immutable earlier results.
-5. [`protocols/post-v38-factorial-v1.json`](protocols/post-v38-factorial-v1.json),
+7. [`protocols/post-v38-factorial-v1.json`](protocols/post-v38-factorial-v1.json),
    [`summaries/post-v38-factorial-v1.json`](summaries/post-v38-factorial-v1.json),
    [`protocols/post-v38-policy-signal-v1.json`](protocols/post-v38-policy-signal-v1.json)
    and [`summaries/post-v38-policy-signal-v1.json`](summaries/post-v38-policy-signal-v1.json)
    — exact pre-directive contracts and outputs.
-6. [`artifacts/ledger-freeze-pre-directive-v1.json`](artifacts/ledger-freeze-pre-directive-v1.json)
+8. [`artifacts/ledger-freeze-pre-directive-v1.json`](artifacts/ledger-freeze-pre-directive-v1.json)
    and [`raw/post-v38-factorial-raw-v1.tar.gz`](raw/post-v38-factorial-raw-v1.tar.gz)
    — ledger identity and complete raw plan/output evidence for the later run.
-7. [`summaries/progress-v38-identification-v1.md`](summaries/progress-v38-identification-v1.md)
+9. [`summaries/progress-v38-identification-v1.md`](summaries/progress-v38-identification-v1.md)
    — the earlier V38 freeze and identifiability decision.
-8. [`summaries/post-v38-identification-v1.json`](summaries/post-v38-identification-v1.json)
+10. [`summaries/post-v38-identification-v1.json`](summaries/post-v38-identification-v1.json)
    and [`protocols/post-v38-identification-v1.json`](protocols/post-v38-identification-v1.json)
    — zero-new-row identifiability result and preregistration.
-9. [`summaries/combined-finalist-v38-scoreline-rarity.json`](summaries/combined-finalist-v38-scoreline-rarity.json)
+11. [`summaries/combined-finalist-v38-scoreline-rarity.json`](summaries/combined-finalist-v38-scoreline-rarity.json)
    and [`protocols/combined-finalist-v38-scoreline-rarity.json`](protocols/combined-finalist-v38-scoreline-rarity.json)
    — the frozen V38 rejection.
-10. [`task-capsule.json`](task-capsule.json) — current outcome, invariants,
+12. [`task-capsule.json`](task-capsule.json) — current outcome, invariants,
    authoritative priors, decisions and next action.
-11. [`artifacts/ledger-freeze-v38.json`](artifacts/ledger-freeze-v38.json) —
+13. [`artifacts/ledger-freeze-v38.json`](artifacts/ledger-freeze-v38.json) —
    append-only ledger identity, record counts and protected-seed proof.
 
 All earlier protocols and summaries from this campaign are retained in their
@@ -133,6 +149,13 @@ The 59-object compressed raw archive contains the identity and blocked-design
 plans, outputs, content variants and analyses. It added 10,752 observations and
 zero acceptance or reserve rows.
 
+After independent held-out confirmation the ledger is 2,514,243,584 bytes with
+460,941 records and SHA-256
+`aacdb478eda35704bf4a49128fca804bbffcccad7f2fe2d62a153b0aabde285a`.
+The held-out archive contains the two complete plans/outputs, both content
+objects, analysis and summary. It added 3,072 observations and zero acceptance
+or reserve rows.
+
 ## Frozen identities
 
 - source and archive base: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
@@ -146,6 +169,8 @@ zero acceptance or reserve rows.
 - blocked CRN v2 protocol SHA-256: `a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d`
 - blocked CRN analysis SHA-256: `7ab28c0e6d7c6053ae4f036b7ea4cb8c9eedd2727b79774db2c7e3469910f21e`
 - frozen held-out candidate content SHA-256: `765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07`
+- held-out confirmation protocol SHA-256: `d8496263dbaab0534cf44702e9ea1078c952b87c145b5c04b3492085d6f15be0`
+- held-out confirmation analysis SHA-256: `aa4ac97242d701bd3ff187ebcf8ee6bd804e7277845aba0474f435267b03dcb3`
 
 ## Remote heads at publication preparation
 
@@ -158,4 +183,5 @@ zero acceptance or reserve rows.
 
 Research is continuing under #421. A negative or inconclusive experiment is not
 a human hand-off and does not authorise a successor ticket. The one frozen
-candidate now requires a separately preregistered independent held-out cohort.
+candidate is held-out-confirmed for exact complementarity and detector work
+only; promotion and protected seeds remain unauthorised.
