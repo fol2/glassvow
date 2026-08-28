@@ -12,7 +12,8 @@ reconciliation, Ash package admission, exact Ward whole-run rejection, the
 natural Shatterer's Crown and Shatter-to-heavy-Attack closures, and the exact
 same-instance Honing Edge policy-repertoire test, one-bit and two-stage
 setup-grammar closures, the existing Executioner's Seal cadence screen and the
-complete reward-Attack overchip screen. It is a progress snapshot,
+complete reward-Attack overchip screen, plus the Reaper's Bell death-chain
+screen. It is a progress snapshot,
 not detector admission, product promotion or a P9
 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
@@ -218,9 +219,21 @@ an identifiable repertoire discriminator. Starter Chisel remains only a
 broadness control. No exact chip telemetry, payoff factor, simulator row or
 ledger row was added.
 
+The remaining source-defined non-final-death action-economy hook is also
+closed. Reaper's Bell was naturally acquired by 40/64 policies at least once,
+but only nine were robust owners/potential-active against 16 and only five were
+viable against eight. It had five candidate-only policies against Scoreline
+and one against Afterimage, both below eight. No proc telemetry, score/rarity
+change or hand-picked kill card is authorised.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-reapers-bell-capacity-v1.md`](summaries/progress-post-directive-reapers-bell-capacity-v1.md),
+[`protocols/post-v38-reapers-bell-capacity-v1.json`](protocols/post-v38-reapers-bell-capacity-v1.json)
+and
+[`summaries/post-v38-reapers-bell-capacity-v1.json`](summaries/post-v38-reapers-bell-capacity-v1.json)
+for the current source-defined death-chain closure. Then read
 [`summaries/progress-post-directive-existing-cadence-overchip-closures-v1.md`](summaries/progress-post-directive-existing-cadence-overchip-closures-v1.md),
 [`protocols/post-v38-executioners-seal-capacity-v1.json`](protocols/post-v38-executioners-seal-capacity-v1.json),
 [`summaries/post-v38-executioners-seal-capacity-v1.json`](summaries/post-v38-executioners-seal-capacity-v1.json),
@@ -544,11 +557,13 @@ policies. The ledger remains byte-identical.
 - Executioner's Seal capacity summary SHA-256: `897f0b4c9b07df07cbc445eaedbc8bdd34ec8d22d9171448f48a28f6d9e8a0a4`
 - reward-overchip capacity protocol SHA-256: `e7a1bfd8797874f93fc2dd15cabb39fe088bb0c3c50a3861dc1c44ef97d1f5bc`
 - reward-overchip capacity summary SHA-256: `71b616c8c0f1f0c18ee8b578d5fcc87561d9b1d9eb92772752ec5bc7bd379fc8`
+- Reaper's Bell capacity protocol SHA-256: `fc17c6eac833bb9a2951145f276928ea44c275a2d1ad50be8ebd0fbfdef4487d`
+- Reaper's Bell capacity summary SHA-256: `0c8ed919c183c0a8255bbec2c1c24d0c78818d39005d5d0b07224d69dfe3ff05`
 
 ## Remote heads at publication preparation
 
 - `origin/main`: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
-- `research/issue-421-p9-recovery-evidence`: `b1c4347da3ff476ee72d236ea52af3527c4d3c33`
+- `research/issue-421-p9-recovery-evidence`: `222a6e3b2ab9eafaab2a9d9af87094baceb201e4`
 - `research/issue-524-causal-slate-evidence`: `f305b95d9e1d173e5d8150289afab9688c0ea7f0`
 - `research/issue-525-mechanism-package-synthesis-evidence`: `7132e5e0d6e6e6dc196dda3ed90ad2be292608d6`
 - `work/421-h34`: `4a94d155400162289a84f416336ff407f55b3cf6`
@@ -558,7 +573,7 @@ policies. The ledger remains byte-identical.
 Research is continuing under #421 after admitting the hand-size and Bloodfire
 Ash package directions and scientifically closing the exact #525 Ward packet,
 the immutable #524 Dusk inventory, Crown, Shatter tempo, reseam, Honing, setup,
-Executioner's Seal and reward-overchip directions. The next bounded step is a
-zero-row source-and-capacity contract for a materially different structural
-mechanism. Detector admission, promotion and protected seeds remain
-outstanding and unauthorised.
+Executioner's Seal, reward overchip and Reaper's Bell directions. The next
+bounded step is a zero-row source-and-capacity contract for a materially
+different structural mechanism. Detector admission, promotion and protected
+seeds remain outstanding and unauthorised.

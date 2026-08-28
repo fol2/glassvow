@@ -24,6 +24,7 @@
     "The exact Power-plus-cycle two-stage extension is closed by zero-row decision boundary 2: it retained 15 viable-active policies and two-sided separation but had only 13 inactive against 16; do not add an order-specific cell or weaken the gate.",
     "The existing Executioner's Seal tenth-Attack cadence is closed by zero-row decision boundary 2: only six policies met the permissive upper-capacity condition and four were viable potential-active; do not change cadence, ownership, rarity, score or offers.",
     "The complete reward-Attack overchip mediator is closed by zero-row decision boundary 2: its permissive upper bound was active for 41 policies and left only nine inactive against 16; do not add Chisel, subset Bellstrike/Ringing Blow, change chip values or infer exact causation.",
+    "The existing Reaper's Bell non-final-death chain is closed by zero-row decision boundary 2: only nine policies were robust owners/potential-active and five were viable, with five candidate-only identities against Scoreline and one against Afterimage; do not change trigger, resources, rarity, score or offers.",
     "At the next decision boundary freeze at most one candidate, close the scalar family and continue structurally inside #421, or record inconclusive at the preregistered cap.",
     "Do not use acceptance seeds 3000-5199 or reserve seeds 5200-5399 before the authorised final exact-SHA boundary.",
     "Keep research outside production truth; do not create a research PR, run product CI, or merge the archive-only evidence branch."
@@ -105,7 +106,9 @@
     "executionersSealCapacityProtocolSha256": "73542ac5bb2ead91b8cc2b1019bd37b482aa8426a1b656103257c57380a63794",
     "executionersSealCapacitySummarySha256": "897f0b4c9b07df07cbc445eaedbc8bdd34ec8d22d9171448f48a28f6d9e8a0a4",
     "rewardOverchipCapacityProtocolSha256": "e7a1bfd8797874f93fc2dd15cabb39fe088bb0c3c50a3861dc1c44ef97d1f5bc",
-    "rewardOverchipCapacitySummarySha256": "71b616c8c0f1f0c18ee8b578d5fcc87561d9b1d9eb92772752ec5bc7bd379fc8"
+    "rewardOverchipCapacitySummarySha256": "71b616c8c0f1f0c18ee8b578d5fcc87561d9b1d9eb92772752ec5bc7bd379fc8",
+    "reapersBellCapacityProtocolSha256": "fc17c6eac833bb9a2951145f276928ea44c275a2d1ad50be8ebd0fbfdef4487d",
+    "reapersBellCapacitySummarySha256": "0c8ed919c183c0a8255bbec2c1c24d0c78818d39005d5d0b07224d69dfe3ff05"
   },
   "decisions": [
     {
@@ -247,18 +250,23 @@
       "decision": "Close the complete reward-Attack overchip mediator family.",
       "evidence": "summaries/post-v38-reward-overchip-capacity-v1.json",
       "reason": "The exhaustive Bellstrike/Ringing Blow route passed reachability, viability, two-card breadth and Scoreline separation, but its deliberately permissive same-fight upper bound was already active for 41 of 64 policies and left only nine inactive against 16. It is broad Facet pressure, not an identifiable repertoire split."
+    },
+    {
+      "decision": "Close the existing Reaper's Bell non-final-death chain.",
+      "evidence": "summaries/post-v38-reapers-bell-capacity-v1.json",
+      "reason": "Although 40 policies acquired the relic at least once and all were chain-capable, only nine were robust owners/potential-active and five were viable against frozen minima of 16 and eight. Candidate-only support was five against Scoreline and one against Afterimage, so exact proc telemetry was not justified."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
     "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
     "heldOutConfirmation": "Root-546 policies and disjoint simulation seeds reproduced proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
-    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 Ward packet and every Dusk edge retained by immutable #524 are closed. Shatterer's Crown, the Shatter-to-heavy-Attack relay, reseam break, the exact Honing repeat family, both one-bit and Power-cycle setup grammars, Executioner's Seal and reward-Attack overchip failed frozen repertoire gates. Prior Dusk Scoreline complementarity remains evidence; materially different confirmed Dusk support remains outstanding.",
+    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 Ward packet and every Dusk edge retained by immutable #524 are closed. Shatterer's Crown, the Shatter-to-heavy-Attack relay, reseam break, the exact Honing repeat family, both one-bit and Power-cycle setup grammars, Executioner's Seal, reward-Attack overchip and Reaper's Bell failed frozen repertoire gates. Prior Dusk Scoreline complementarity remains evidence; materially different confirmed Dusk support remains outstanding.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
   "toolchainBoundary": "Resolved with the isolated official Godot 4.7.1.stable.official.a13da4feb binary. Its release SHA-512 and codesign are verified, every new execution is pinned to it, and a frozen pre-change identity plan replayed row-exactly against the archived 4.7.2 evidence.",
-  "nextAction": "Preregister a materially different Duskblade state representation, beginning with a zero-row source-and-capacity contract before implementation or simulator spend. Do not return to one-bit/two-bit setup-to-next-Attack, heavy-Attack relay, reseam break, Honing repeat, Crown, Executioner's Seal, reward overchip, Ward, Kindle, Afterimage, the tested #524 packages, #517/#519, ML/RL, protected seeds or adaptive candidate tuning.",
+  "nextAction": "Preregister a materially different Duskblade state representation, beginning with a zero-row source-and-capacity contract before implementation or simulator spend. Do not return to one-bit/two-bit setup-to-next-Attack, heavy-Attack relay, reseam break, Honing repeat, Crown, Executioner's Seal, reward overchip, Reaper's Bell, Ward, Kindle, Afterimage, the tested #524 packages, #517/#519, ML/RL, protected seeds or adaptive candidate tuning.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

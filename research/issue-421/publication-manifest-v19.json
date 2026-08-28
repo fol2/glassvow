@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 19,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "Reaper's Bell non-final-death chain closure",
+  "decision": "CLOSE_REAPERS_BELL_DEATH_CHAIN",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-reapers-bell-capacity-v1.md",
+    "progressReportSha256": "1400026eaefb4b12030dfa4f2f737ddcdb0fd60c5b442dca8e38b060068d5820",
+    "protocol": "protocols/post-v38-reapers-bell-capacity-v1.json",
+    "protocolSha256": "fc17c6eac833bb9a2951145f276928ea44c275a2d1ad50be8ebd0fbfdef4487d",
+    "summary": "summaries/post-v38-reapers-bell-capacity-v1.json",
+    "summarySha256": "0c8ed919c183c0a8255bbec2c1c24d0c78818d39005d5d0b07224d69dfe3ff05",
+    "runner": "tools/post_v38_reapers_bell_capacity.py",
+    "runnerSha256": "c69d268887dfc3502905ca4588adee2b98d31bb8749497517f22b4866c6fe58d",
+    "readmeSha256": "a9182c8dd6adc221e26909a9b6d11793b62243c00d9f0595ba7d9fc68dde20d6",
+    "taskCapsuleSha256": "e3e5980398446f65cc21cc521e53315cdd413de9bd669d88c6dc41caf8db6cbe"
+  },
+  "result": {
+    "decisionBoundary": 2,
+    "candidate": "reapersBell",
+    "robustOwnerPolicies": 9,
+    "anyAcquiredPolicies": 40,
+    "chainCapablePolicies": 64,
+    "potentialActivePolicies": 9,
+    "exactInactivePolicies": 24,
+    "viablePotentialActivePolicies": 5,
+    "scorelineCandidateOnlyPolicies": 5,
+    "afterimageCandidateOnlyPolicies": 1,
+    "decision": "close-reapers-bell-death-chain-family",
+    "interpretation": "The trigger is naturally reachable but robust ownership, viability and separate repertoire support are insufficient even under an upper bound that can only overstate exposure.",
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumModelContextTokens": 0,
+    "protectedSeedRows": 0
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 503,
+    "payloadFilesIndexed": 483,
+    "protocolFiles": 81,
+    "summaryFiles": 104,
+    "toolFiles": 38,
+    "newRawObjects": 0,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "7513669478e62d5105af34f81d88eaae1b0b1073ba93266a185efff42757a567"
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "222a6e3b2ab9eafaab2a9d9af87094baceb201e4",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "nextAction": "Preregister the separate turn-transition and first-card action-economy mechanisms before reading their support. Do not alter or pair the closed Bell trigger.",
+  "omissions": [
+    "No runtime primitive, telemetry field, causal factor, product content, relic change or hand-picked kill-card pair was implemented.",
+    "No simulator row, ledger row, protected seed, ML, RL, optimiser or model-context token was used.",
+    "No product PR, CI run, acceptance claim or #108 receipt was created."
+  ],
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421",
+    "receiptIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}
