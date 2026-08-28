@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-source-complete-exhaustion-audit",
+  "question": "After the frozen native grammar, trigger, carrier, Ward, Shatter, action-economy and complete competing-option closures, does exact current-main contain any direct Dusk-core runtime state consumer that has not received a scientific decision?",
+  "scientificBasis": {
+    "coverageRule": "Facet and Shatter are already closed source families. Enumerate every executable CombatRules line that reads or writes cb.embers, ember_cap or gain_embers, then map every containing function once to fixed context, an exact prior closure or an unclosed direct state consumer.",
+    "completenessBoundary": "This is source-complete for exact current-main direct Ember-state runtime surfaces. It does not claim that all imaginable new primitives or all arbitrary pairs of generic card effects are exhausted.",
+    "selectionRule": "Exactly one unclosed direct consumer may receive a separate zero-row capacity preregistration. No outcome, support count, fitted score, simulator row or qualitative ranking enters this audit.",
+    "mechanisticDistinctness": "Crown of the Hearth converts the unspent terminal Ember reserve into post-combat HP. It is not Novaflare reserve damage, Emberdance reserve Ward, automatic Lantern Art spend, an in-combat Weak extension, a voluntary-loss mark, a victory-quality threshold or a generic healing scalar."
+  },
+  "expectedEmberLineInventory": {
+    "_apply_art_effect": [
+      "gain_embers(run, cb, _ji(fx[\"n\"]))"
+    ],
+    "_apply_effect": [
+      "gain_embers(run, cb, _ji(fx[\"n\"]))"
+    ],
+    "_apply_special": [
+      "gain_embers(run, cb, _ji(fx[\"embers\"]))",
+      "hit_enemy(run, cb, target, _ji(fx[\"n\"]) * cb.embers, true, damage_mult)",
+      "var spent: int = cb.embers",
+      "gain_embers(run, cb, -spent)"
+    ],
+    "_apply_start_relics": [
+      "cb.ember_cap = 12",
+      "cb.embers = clampi(cb.embers + 2, 0, cb.ember_cap)"
+    ],
+    "_on_enemy_death": [
+      "gain_embers(run, cb, 1)"
+    ],
+    "_shatter_enemy": [
+      "gain_embers(run, cb, 2)",
+      "gain_embers(run, cb, 2)"
+    ],
+    "_start_player_turn": [
+      "gain_embers(run, cb, emberflow)"
+    ],
+    "_win_combat": [
+      "if run.has_relic(\"crownOfTheHearth\") and cb.embers > 0:",
+      "heal_player(run, null, cb.embers * 3)"
+    ],
+    "can_use_art": [
+      "return not cb.over and cb.art_used_turn != cb.turn and cb.embers >= _ji(art.get(\"cost\", 0))"
+    ],
+    "exhaust_card": [
+      "gain_embers(run, cb, 1)"
+    ],
+    "gain_embers": [
+      "func gain_embers(run: RunState, cb: CombatState, n: int) -> int:",
+      "var next: int = clampi(cb.embers + n, 0, cb.ember_cap)",
+      "var delta: int = next - cb.embers",
+      "cb.embers = next",
+      "cb.queue.append({\"t\": EventTypes.EMBER, \"n\": delta, \"total\": cb.embers})"
+    ],
+    "start_combat": [
+      "cb.embers = clampi(_ji(omen.get(\"startEmbers\", 0)), 0, cb.ember_cap)"
+    ],
+    "use_art": [
+      "gain_embers(run, cb, -cost)"
+    ],
+    "use_potion": [
+      "gain_embers(run, cb, 3)"
+    ]
+  },
+  "runtimeSurfaceCoverage": [
+    {
+      "id": "authored-art-ember-source",
+      "function": "_apply_art_effect",
+      "lines": ["gain_embers(run, cb, _ji(fx[\"n\"]))"],
+      "disposition": "fixed-context",
+      "reason": "No current authored Art has an Ember effect; this generic handler has no current carrier."
+    },
+    {
+      "id": "authored-card-ember-source",
+      "function": "_apply_effect",
+      "lines": ["gain_embers(run, cb, _ji(fx[\"n\"]))"],
+      "disposition": "closed",
+      "reason": "Direct card Ember production is part of the frozen Kindle and Ember producer context; it is not a payoff by itself.",
+      "evidence": {
+        "summaries/post-v38-native-dusk-grammar-coverage-v1.json": "freeze-one-uncovered-native-family-for-capacity"
+      }
+    },
+    {
+      "id": "authored-special-ember-couplings",
+      "function": "_apply_special",
+      "lines": [
+        "gain_embers(run, cb, _ji(fx[\"embers\"]))",
+        "hit_enemy(run, cb, target, _ji(fx[\"n\"]) * cb.embers, true, damage_mult)",
+        "var spent: int = cb.embers",
+        "gain_embers(run, cb, -spent)"
+      ],
+      "disposition": "closed",
+      "reason": "Devour is recovery context, emberNova reserve damage is closed, and Emberdance reserve Ward is the closed Kindle/Ward family.",
+      "evidence": {
+        "summaries/post-v38-novaflare-nonreward-capacity-v1.json": "close-deed-unlocked-ember-reserve-damage-family",
+        "summaries/post-v38-ward-whole-run-discovery-v1.json": "reject-exact-ward-candidate-close-tested-direction",
+        "summaries/post-v38-competing-structural-options-v1.json": "freeze-weak-mend-persistence-for-identity-preflight"
+      }
+    },
+    {
+      "id": "crown-of-cinders-cap-and-start",
+      "function": "_apply_start_relics",
+      "lines": [
+        "cb.ember_cap = 12",
+        "cb.embers = clampi(cb.embers + 2, 0, cb.ember_cap)"
+      ],
+      "disposition": "fixed-context",
+      "reason": "This boss relic changes Ember supply and capacity but supplies no independent payoff; it becomes a producer or interference factor only after a consumer has capacity."
+    },
+    {
+      "id": "enemy-death-ember-source",
+      "function": "_on_enemy_death",
+      "lines": ["gain_embers(run, cb, 1)"],
+      "disposition": "fixed-context",
+      "reason": "Enemy death is a universal core Ember source, not an independently selectable payoff."
+    },
+    {
+      "id": "dusk-shatter-ember-source",
+      "function": "_shatter_enemy",
+      "lines": [
+        "gain_embers(run, cb, 2)",
+        "gain_embers(run, cb, 2)"
+      ],
+      "disposition": "closed",
+      "reason": "Dusk Shatter and Prism Charm Ember production belong to the exact closed Shatter family.",
+      "evidence": {
+        "summaries/post-v38-native-dusk-grammar-coverage-v1.json": "freeze-one-uncovered-native-family-for-capacity"
+      }
+    },
+    {
+      "id": "emberflow-turn-source",
+      "function": "_start_player_turn",
+      "lines": ["gain_embers(run, cb, emberflow)"],
+      "disposition": "closed",
+      "reason": "Pyreheart was explicitly retained only as an unassumed producer in the now-closed complete Ember-reserve damage family.",
+      "evidence": {
+        "summaries/post-v38-novaflare-nonreward-capacity-v1.json": "close-deed-unlocked-ember-reserve-damage-family"
+      }
+    },
+    {
+      "id": "ember-reserve-postcombat-heal",
+      "function": "_win_combat",
+      "lines": [
+        "if run.has_relic(\"crownOfTheHearth\") and cb.embers > 0:",
+        "heal_player(run, null, cb.embers * 3)"
+      ],
+      "disposition": "unclosed",
+      "reason": "The exact shipped boss relic directly consumes the terminal Ember reserve for post-combat healing, and no prior #421 scientific decision names this consumer family."
+    },
+    {
+      "id": "lantern-art-affordability",
+      "function": "can_use_art",
+      "lines": ["return not cb.over and cb.art_used_turn != cb.turn and cb.embers >= _ji(art.get(\"cost\", 0))"],
+      "disposition": "fixed-context",
+      "reason": "Lantern Art use is the automatic frozen baseline Ember consumer, not a second package candidate."
+    },
+    {
+      "id": "kindle-and-burn-ember-source",
+      "function": "exhaust_card",
+      "lines": ["gain_embers(run, cb, 1)"],
+      "disposition": "closed",
+      "reason": "Kindle, burn and Verdant Branch are exact closed families.",
+      "evidence": {
+        "summaries/post-v38-native-dusk-grammar-coverage-v1.json": "freeze-one-uncovered-native-family-for-capacity"
+      }
+    },
+    {
+      "id": "ember-state-plumbing",
+      "function": "gain_embers",
+      "lines": [
+        "func gain_embers(run: RunState, cb: CombatState, n: int) -> int:",
+        "var next: int = clampi(cb.embers + n, 0, cb.ember_cap)",
+        "var delta: int = next - cb.embers",
+        "cb.embers = next",
+        "cb.queue.append({\"t\": EventTypes.EMBER, \"n\": delta, \"total\": cb.embers})"
+      ],
+      "disposition": "fixed-context",
+      "reason": "The shared bounded setter and event emission are state plumbing, not a mechanism candidate."
+    },
+    {
+      "id": "omen-start-ember-context",
+      "function": "start_combat",
+      "lines": ["cb.embers = clampi(_ji(omen.get(\"startEmbers\", 0)), 0, cb.ember_cap)"],
+      "disposition": "fixed-context",
+      "reason": "Omen start Embers are encounter context and do not define a policy-selective Dusk package."
+    },
+    {
+      "id": "lantern-art-spend",
+      "function": "use_art",
+      "lines": ["gain_embers(run, cb, -cost)"],
+      "disposition": "fixed-context",
+      "reason": "The automatic frozen Lantern Art spend is baseline context."
+    },
+    {
+      "id": "potion-ember-source",
+      "function": "use_potion",
+      "lines": ["gain_embers(run, cb, 3)"],
+      "disposition": "fixed-context",
+      "reason": "The generic potion source is not an independently selectable Dusk payoff."
+    }
+  ],
+  "unclosedCarrierDefinition": {
+    "rarity": "boss",
+    "glyph": "♥",
+    "tone": "#ff5964",
+    "name": "Crown of the Hearth",
+    "text": "At the end of combat, heal 3 HP for every Ember still in your lantern."
+  },
+  "priorCrownMentionInventory": {
+    "summaries/post-v38-dusk-mechanism-screen-v1.json": [
+      "candidate/bossPool/4"
+    ]
+  },
+  "design": {
+    "type": "zero-row exact-source coverage audit; not a factorial, causal contrast, candidate search or optimiser",
+    "matrix": "Fourteen exact current-main CombatRules functions containing executable Ember-state access, each covered once.",
+    "anchor": "Exact source SHA and task-capsule SHA. No cached or simulated outcome is read.",
+    "noCartesianExpansion": "No factor varies and no joint cell exists."
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "acquisitionPriority": {
+      "levels": ["pristine-current-main"],
+      "status": "Fixed and not estimated; Crown reachability is source-only at this stage."
+    },
+    "runtimeSurface": {
+      "levels": ["the fourteen frozen function-level Ember surfaces"],
+      "status": "Deterministic coverage units, not experimental treatment levels."
+    }
+  },
+  "estimands": {
+    "primary": "Exact count and identity of unclosed direct Ember-state consumer families.",
+    "coverage": "Exact function and executable-line coverage of current-main Ember-state reads and writes.",
+    "notEstimated": "No acquisition, ownership, activation, Ember remainder, healing realised, interference, complementarity, payoff, duration, RandomBuild, detector, policy, ML, RL or product endpoint is estimated."
+  },
+  "factorDisposition": {
+    "candidate": "No candidate is built or simulated. One unclosed family can receive only a separate zero-row capacity preregistration.",
+    "payoffs": "Scoreline and Afterimage remain separate, fixed and absent at current-main research-payoff levels.",
+    "additionalMethod": "No ML, RL, optimiser, fitted model or policy mapping is used or authorised.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "budget": {
+    "maximumSourceFilesRead": 5,
+    "maximumCachedObservationRowsRead": 0,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns exact source identity, function extraction, line coverage, prior-decision identity and stop/go.",
+    "firstLook": "One complete exact-source inventory. No trace, simulator, row, subset, threshold, new surface, ranking or rerun exists.",
+    "successStop": "Stop when exactly one unclosed direct consumer remains within 30 seconds.",
+    "futilityStop": "Stop and record current-source structural exhaustion when no unclosed consumer remains.",
+    "inconclusiveStop": "Stop at the cap when multiple unclosed consumers remain or any exact identity is unavailable."
+  },
+  "decisionRules": {
+    "success": "Exactly one direct Ember-state consumer is unclosed and every exact source, evidence, coverage and ledger assertion passes within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze only ember-reserve-postcombat-heal for a separate zero-row natural reachability and policy-capacity preregistration. Do not construct a candidate, change acquisition, add telemetry, simulate, vary a payoff or use protected seeds.",
+    "futility": "No direct Ember-state consumer remains unclosed.",
+    "futilityAuthority": "Apply decision boundary 2 and record current-source structural exhaustion at the cap. Do not invent a mechanism or reopen a closed family.",
+    "inconclusive": "More than one consumer remains unclosed, an exact identity fails or the cap expires.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the audit inconclusive at the cap without selecting, ranking, implementing, simulating, adding a method or using protected seeds."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    "fileSha256": {
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "protocols/post-v38-competing-structural-options-v1.json": "2140a7337a9027ceafca1e82b71cb01f3c7f2ed4f6c1eb95af3b2ab2916c9dfe",
+      "protocols/post-v38-native-dusk-grammar-coverage-v1.json": "25c2b5a9ba5c01117411aaf04c88fed88998566ea18eba0e1a6c398aef62c85a",
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "summaries/post-v38-competing-structural-options-v1.json": "bb744b8247a050b68936062f09204b1ef53554a0164b21fe1b309cdd7d8293b4",
+      "summaries/post-v38-native-dusk-grammar-coverage-v1.json": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff",
+      "summaries/post-v38-novaflare-nonreward-capacity-v1.json": "53c2e858dbb59e6258eea0fdb11cabcc8e89b959df6455f41494fe63f1b57e23",
+      "summaries/post-v38-weak-mend-identity-diagnostic-v1.json": "3bd7eb6d3ee460479f30a65dee1be7453de27ff81c3d70d2f7930b38e257013a",
+      "summaries/post-v38-weak-mend-identity-v1.json": "252da79af4432e73319dc184e1eaebc33e6d46c188457628ca15f30a819afaf0",
+      "task-capsule.json": "27fadd505b279d5427f6533bd4b5f4fe31128022d735652fca671b256dfc4f3d"
+    },
+    "runnerSha256": "20b2a4f2d2d5f3e84e00bcf47e152f23687b386579bfcec2e0c33aa177724412"
+  }
+}

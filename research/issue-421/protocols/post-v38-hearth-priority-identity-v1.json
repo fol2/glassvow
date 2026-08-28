@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-hearth-priority-identity",
+  "question": "Does the sole authorised binary Hearth acquisition-priority knob reproduce the exact current-main policy, path, RNG and result when omitted or false, and change only the chosen relic when enabled and Crown is already a legal offer?",
+  "knob": {
+    "id": "hearthAcquisitionPriority",
+    "type": "bool",
+    "omitted": "No priority field in the probe plan; Pilot priority is reset to false before every row.",
+    "zero": "Explicit priority=false.",
+    "enabled": "Explicit priority=true; if and only if crownOfTheHearth is a legal member of the unchanged offered set, choose it.",
+    "rngContract": "RandomBuild still performs the original legal-list pick and consumes the same one RNG value before the enabled choice override.",
+    "invalidLevels": "The probe rejects every present non-bool priority value."
+  },
+  "focusedControls": [
+    {
+      "id": "eligible",
+      "purpose": "A deterministic policy that would choose Crown of Tithes changes only to Crown of the Hearth.",
+      "zeroChoice": "crownOfTithes",
+      "enabledChoice": "crownOfTheHearth",
+      "rngUnchanged": true
+    },
+    {
+      "id": "crown-absent",
+      "purpose": "An offer without Crown is unchanged.",
+      "zeroChoice": "crownOfTithes",
+      "enabledChoice": "crownOfTithes",
+      "rngUnchanged": true
+    },
+    {
+      "id": "crown-banned",
+      "purpose": "A banned Crown is not a legal priority target.",
+      "zeroChoice": "hollowCrown",
+      "enabledChoice": "hollowCrown",
+      "rngUnchanged": true
+    },
+    {
+      "id": "already-selected",
+      "purpose": "A policy already choosing Crown is unchanged.",
+      "zeroChoice": "crownOfTheHearth",
+      "enabledChoice": "crownOfTheHearth",
+      "rngUnchanged": true
+    },
+    {
+      "id": "random-rng",
+      "purpose": "RandomBuild changes only the chosen ID while consuming the same original RNG pick.",
+      "zeroChoice": "hollowCrown",
+      "enabledChoice": "crownOfTheHearth",
+      "rngBefore": 1,
+      "rngAfter": 1831565814
+    }
+  ],
+  "design": {
+    "type": "staged exact-null and focused-mediator identity preflight; not a causal experiment or factorial",
+    "stageOne": "Run all five focused controls under omitted, explicit false and enabled priority. Continue only if omitted equals false and enabled changes exactly the two eligible choice IDs, no offered list and no RNG cursor.",
+    "stageTwo": "Only after stage one passes, run the complete frozen 64-policy by four-seed whole-run rectangle under omitted and explicit false and compare both to the identity-proved current-main anchor.",
+    "enabledWholeRuns": "None. The enabled priority receives no whole-run, causal, payoff or product observation in this preflight.",
+    "noAdaptiveCohort": "Every null arm uses the same frozen policies, seeds, baseline, budget, estimator and stopping rule."
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "hearthPayoff": {
+      "levels": ["current-main-three-HP-per-terminal-Ember"],
+      "status": "Separate fixed authored payoff; not varied or estimated."
+    },
+    "acquisitionPriority": {
+      "levels": ["omitted", "false", "true-focused-controls-only"],
+      "status": "The sole research factor under identity preflight."
+    }
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "rowsPerNullArm": 256,
+    "aspect": "duskblade",
+    "vow": 5,
+    "identity": "The exact identity-proved current-main co-hand explicit-null rectangle."
+  },
+  "frozenPath": {
+    "planSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "outputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "identitySummarySha256": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da"
+  },
+  "estimands": {
+    "focusedNull": "Exact omitted-versus-false mismatch count across five direct controls.",
+    "focusedMediator": "Exact enabled choice, offered-list and RNG-cursor differences across eligible, absent, banned, already-selected and RandomBuild controls.",
+    "wholeNull": "Exact full-row, trajectory, RNG and policy mismatch counts for omitted and false against the frozen 256-row anchor and against each other.",
+    "notEstimated": "No enabled whole-run path, terminal Ember, Crown proc, healing, payoff, interaction, duration, RandomBuild outcome, detector, causal effect, ML, RL or product endpoint is estimated."
+  },
+  "factorDisposition": {
+    "candidate": "None is constructed, simulated or promoted.",
+    "payoffs": "Scoreline, Afterimage and current-main Hearth payoffs remain separate and fixed.",
+    "acquisitionPriority": "Success freezes only this exact binary research knob as identity-safe for a later separately preregistered mechanism block.",
+    "additionalMethod": "No ML, RL, optimiser, fitted model or new policy mapping is used or authorised.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "budget": {
+    "maximumGodotProcesses": 5,
+    "controlledSurfaceExecutions": 15,
+    "wholeRunNullRows": 512,
+    "enabledWholeRunRows": 0,
+    "maximumNewSimulatorObservationRows": 512,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 240,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns plans, exact content-addressed caching, subprocess count, comparison and stop/go; exact Godot 4.7.1 owns direct choice and whole-run execution.",
+    "firstLook": "One focused three-arm look, followed only on exact success by two complete null arms. No repair, rerun, enabled whole-run, cohort change or threshold change exists.",
+    "successStop": "Stop when all 15 controls match their frozen expectations and all 512 null rows match the anchor and each other exactly within 240 seconds.",
+    "futilityStop": "Stop and close the priority route when any completed control or null comparison differs, any cohort is incomplete or ledger identity changes.",
+    "inconclusiveStop": "Stop at the cap when execution errors, times out or an exact decision is unavailable."
+  },
+  "decisionRules": {
+    "success": "All focused null and mediator checks pass, both complete null whole-run arms are exact against the anchor and each other, ledger identity is exact and the cap is not exceeded.",
+    "successAuthority": "Apply decision boundary 1 and freeze only hearthAcquisitionPriority as identity-safe for a separately preregistered mechanism-blocked CRN design. Before any causal row, separately justify and identity-prove the exact Hearth payoff or activation observation factor. Do not vary Scoreline or Afterimage jointly by default, add telemetry, tune a priority magnitude, use ML/RL/optimisation or use protected seeds.",
+    "futility": "Any completed focused or null identity gate fails, an expected cohort is incomplete or ledger identity changes.",
+    "futilityAuthority": "Apply decision boundary 2 and close the Hearth acquisition-priority route without repair or rerun. Do not preserve the family by moving the hook, changing null encoding, tuning policy scores, changing offers or weakening identity.",
+    "inconclusive": "Execution errors, times out or cannot produce an exact decision at the cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the preflight inconclusive at the cap without rerun, enabled whole-run, causal row, method or protected seed."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "frozenEvidence": {
+    "protocols/post-v38-hearth-capacity-v1.json": "560886ba966fb0b81b6d8104c89885ac62e6dc2cfe892b0b54e3a80b09a42a97",
+    "summaries/post-v38-hearth-capacity-v1.json": "71b47f449e0a396ae428874ee11624b77bb609d07df1f14cc35e6536200cb8eb",
+    "summaries/post-v38-source-complete-exhaustion-audit-v1.json": "e782f220dfa44bee544322e8108c342e20a51cbb6baf85bf3f3b9e065be886bb",
+    "task-capsule.json": "5e22ed03f62041cbd27a45f07c2861de4c2ec33568155dec42142620b7ab7720"
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "balanceSimSha256": "7f82177d3c71e3a0cc56f820f017cfab6ec99173caf326486209034d60dbb5fd",
+    "pilotSha256": "7d190cfc923b7a2441bb8621c9dca6c32a72d1efb0c04e4bed3a522727373f3c",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "e81cbcf579adc9d612951cc687cebe1492b387fdac970eaf9dd4321bbd487def",
+    "probeUidSha256": "2774f4ea739608543d72851a60d3a6b668dbb474a3caff52c96b40570039d17e",
+    "prototypePatchSha256": "b7c07d4d09463ee6f6935212416c163845827b6547386c82c4196f31ffc1ceb1",
+    "researchCoreSha256": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+    "identityHelperSha256": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+    "runnerSha256": "f081f44517c3e1fb6bdea2a630f0f6e7fcf9caca8128b5a76f9cd3f86ff63786"
+  }
+}

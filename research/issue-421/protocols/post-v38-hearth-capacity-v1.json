@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-hearth-capacity",
+  "question": "Does exact current-main Crown of the Hearth have enough natural boss-offer, selection and post-acquisition Dusk opportunity capacity to continue, or does a uniquely measured acquisition-choice bottleneck justify one identity-only acquisition-priority knob?",
+  "scientificBasis": {
+    "necessaryChain": "A row must first receive a Crown offer, then naturally select Crown, then win a later fight with at least one Dusk Shatter. Each step is evaluated on the same frozen policy and seed identity. The first failing necessary condition owns the decision.",
+    "offerDecisionValue": "A binary Crown priority can have measured decision value only when the natural offer cohort independently passes the full support, inactivity, viability and separate-anchor gates while natural selection fails the active-support minimum.",
+    "claimBoundary": "A post-acquisition winning Shatter proves only that Dusk Ember production was possible after ownership. The trace does not contain terminal Ember reserve, Crown proc, realised healing or missing-HP headroom, so it cannot establish activation or payoff.",
+    "methodBoundary": "No candidate, content edit, acquisition edit, telemetry, simulator, causal effect, fitted model, optimiser, ML or RL enters this audit."
+  },
+  "trace": {
+    "planSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "outputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identitySummarySha256": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+    "selectionRule": "Read the complete sole 256-row co-hand-telemetry explicit-null arm once. No row, policy or seed is selected by an endpoint."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "aspect": "duskblade",
+    "vow": 5,
+    "identity": "Exact identity-proved current-main policy and seed rectangle used by every necessary condition and both anchors."
+  },
+  "definitions": {
+    "bossOffer": "The captured offered list at either current boss-relic boundary contains crownOfTheHearth.",
+    "naturalSelection": "The frozen current-main policy chooses crownOfTheHearth from a captured boss offer.",
+    "acquisitionAct": "BossRelics list index plus one. The identity-frozen capture appends a choice before start_next_act, while fight summaries use one-based act numbers.",
+    "postAcquisitionDuskOpportunity": "After natural Crown selection, a later-act fight has result=win and shatters>0.",
+    "viablePolicy": "A robustly active policy has at least one active row whose whole-run outcome is win.",
+    "exactInactivePolicy": "No row for the policy meets the relevant predicate.",
+    "robustPolicy": "At least two of the four frozen rows meet the relevant predicate."
+  },
+  "design": {
+    "type": "zero-row hierarchical necessary-condition capacity audit; not a factorial, causal contrast or candidate optimisation",
+    "matrix": [
+      {"block": "boss offer", "rows": 256},
+      {"block": "natural selection", "rows": 256},
+      {"block": "post-acquisition Dusk opportunity", "rows": 256},
+      {"block": "Scoreline anchor", "rows": 256},
+      {"block": "Afterimage anchor", "rows": 256}
+    ],
+    "sharedAnchor": "All blocks are repeated deterministic observations on the same complete trace, policies, seeds, baseline, estimator and stop rule.",
+    "noCartesianExpansion": "No factor varies and no joint cell exists. The same cached rows are read once."
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": ["absent-current-main"],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "hearthPayoff": {
+      "levels": ["current-main-three-HP-per-terminal-Ember"],
+      "status": "Separate fixed authored payoff; neither activation nor effect is estimated."
+    },
+    "acquisitionPriority": {
+      "levels": ["pristine-current-main"],
+      "conditionalNextLevel": "force Crown choice only when Crown is already in the unchanged offered set",
+      "status": "Fixed in this audit. The conditional level receives identity-preflight authority only at the preregistered acquisition-choice boundary."
+    }
+  },
+  "anchors": {
+    "scoreline": {
+      "definition": "A robust policy plays Chisel before a later Faultline in one fight in at least two of four frozen rows.",
+      "activePolicies": 18,
+      "status": "Separate overlap anchor only; no Scoreline payoff or interaction is estimated."
+    },
+    "afterimage": {
+      "definition": "A robust policy simultaneously holds Ward and Warden's Edge in at least two of four frozen rows.",
+      "activePolicies": 17,
+      "status": "Separate conservative overlap anchor only; no Afterimage payoff or interaction is estimated."
+    }
+  },
+  "interactionsAndAliases": {
+    "notEstimated": "No causal interaction is estimated. Candidate-only, anchor-only and Jaccard counts are shared-anchor decision-value screens.",
+    "terminalAlias": "Shatter after acquisition is an Ember-production upper bound. Automatic Lantern Art can spend Embers, missing HP can cap healing and a later win can end at zero reserve.",
+    "selectionAlias": "Boss offer and natural selection are exact observed transitions. The binary priority target is the already-observed offer cohort; no score magnitude is tuned.",
+    "familyAlias": "Crown post-combat reserve healing does not reopen Novaflare reserve damage, Emberdance reserve Ward, weak-mend, voluntary-loss recovery or fight-quality triggers."
+  },
+  "estimands": {
+    "primary": "For boss offer, natural selection and post-acquisition Dusk opportunity separately: exact robust potential-active, exact-inactive, ambiguous and viable policy counts.",
+    "separation": "Candidate-only, anchor-only, cross-active and Jaccard counts against Scoreline and Afterimage separately for every necessary condition.",
+    "sourceBreadth": "Exact natural acquisition acts and row counts for offers, selections and later Dusk opportunity.",
+    "reliability": "Exact stall or error row count.",
+    "notEstimated": "No terminal Ember reserve, Crown proc, realised healing, missing-HP headroom, payoff, acquisition effect, interaction, duration, RandomBuild, detector, protected-seed or product endpoint is estimated."
+  },
+  "gates": {
+    "minimumPotentialActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16-policy support and inactivity minima, eight-policy viability and separate-anchor minima, 0.55 overlap ceiling and one-fault ceiling reuse the frozen 64-policy capacity scale without result-dependent weakening."
+  },
+  "factorDisposition": {
+    "candidate": "None is constructed, simulated or promoted.",
+    "payoffs": "Scoreline, Afterimage and current-main Hearth payoffs remain separate and fixed.",
+    "acquisitionPriority": "At most one binary force-choice-when-offered knob may receive a separate exact-null and focused-mediator identity preflight after the acquisition-choice boundary. No priority value is tuned.",
+    "additionalMethod": "No ML, RL, optimiser, fitted model or new policy mapping is used or authorised. The acquisition-choice finding is candidate-specific and does not establish a general policy-repertoire bottleneck.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python verifies exact source, capture, trace, policy, seed, anchor, evidence and ledger identity; evaluates the three necessary conditions once; and owns stop/go.",
+    "firstLook": "The complete 64-policy by four-seed cached trace is the only look. No simulator, row, repair, subset, threshold, score increment, new condition or rerun exists.",
+    "naturalSuccessStop": "Stop when offer, selection and later Dusk opportunity each pass every gate.",
+    "acquisitionChoiceStop": "Stop at decision boundary 1 when the offer cohort passes every gate but natural selection fails the active-support minimum; freeze only the binary priority knob for identity preflight.",
+    "futilityStop": "Stop and close the natural family when offer decision value fails or a later condition fails without the unique acquisition-choice pattern.",
+    "inconclusiveStop": "Stop at the cap if any exact input or decision is unavailable or execution exceeds 30 seconds."
+  },
+  "decisionRules": {
+    "success": "Either all three natural necessary conditions pass every gate, or boss offer passes every gate and natural selection uniquely fails active support.",
+    "successAuthority": "Apply decision boundary 1. For natural success, freeze only terminal-Ember observability for a separate identity preflight. For the acquisition-choice pattern, freeze only one binary force-Crown-when-already-offered priority knob for exact-null and focused-mediator identity preflight. Do not construct a candidate, change offers, vary a payoff, add a causal row, use ML/RL/optimisation or use protected seeds.",
+    "futility": "Boss offer fails any gate, or a later necessary condition fails without the unique acquisition-choice pattern.",
+    "futilityAuthority": "Apply decision boundary 2 and close the natural Ember-reserve post-combat healing family without implementation. Do not tune Crown, its score, offer rate, payoff, threshold or carrier, and do not reopen a closed family.",
+    "inconclusive": "An exact input, trace, source, capture, anchor, ledger or decision is unavailable at the cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the capacity result inconclusive at the cap without selecting, implementing, simulating, adding telemetry or a method, or using protected seeds."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    "traceCaptureSourcePath": "weak-mend-identity-source/tools/balance_sim.gd",
+    "traceCaptureSourceSha256": "7f82177d3c71e3a0cc56f820f017cfab6ec99173caf326486209034d60dbb5fd",
+    "fileSha256": {
+      "post_v38_cohand_opportunity_decomposition.py": "371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c",
+      "post_v38_competing_structural_options.py": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "protocols/post-v38-cohand-telemetry-identity-v1.json": "f651c220bfbbbd24d3fdec3b707209187c2192d0a40c0e8fe06255963b3377cc",
+      "summaries/post-v38-cohand-telemetry-identity-v1.json": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+      "summaries/post-v38-source-complete-exhaustion-audit-v1.json": "e782f220dfa44bee544322e8108c342e20a51cbb6baf85bf3f3b9e065be886bb",
+      "task-capsule.json": "5e22ed03f62041cbd27a45f07c2861de4c2ec33568155dec42142620b7ab7720"
+    },
+    "runnerSha256": "8b6feed3b5ee9aac2ce45020eea6c8c8f94f4595d5c87e018e7fe1ff7a25c853"
+  }
+}

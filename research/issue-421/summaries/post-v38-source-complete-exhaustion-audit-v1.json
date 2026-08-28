@@ -1,0 +1,266 @@
+{
+  "authority": "Apply decision boundary 1 and freeze only ember-reserve-postcombat-heal for a separate zero-row natural reachability and policy-capacity preregistration. Do not construct a candidate, change acquisition, add telemetry, simulate, vary a payoff or use protected seeds.",
+  "cachedObservationRowsRead": 0,
+  "decision": "freeze-ember-reserve-postcombat-heal-for-zero-row-capacity-preregistration",
+  "decisionBoundary": 1,
+  "emberLineInventory": {
+    "_apply_art_effect": [
+      "gain_embers(run, cb, _ji(fx[\"n\"]))"
+    ],
+    "_apply_effect": [
+      "gain_embers(run, cb, _ji(fx[\"n\"]))"
+    ],
+    "_apply_special": [
+      "gain_embers(run, cb, _ji(fx[\"embers\"]))",
+      "hit_enemy(run, cb, target, _ji(fx[\"n\"]) * cb.embers, true, damage_mult)",
+      "var spent: int = cb.embers",
+      "gain_embers(run, cb, -spent)"
+    ],
+    "_apply_start_relics": [
+      "cb.ember_cap = 12",
+      "cb.embers = clampi(cb.embers + 2, 0, cb.ember_cap)"
+    ],
+    "_on_enemy_death": [
+      "gain_embers(run, cb, 1)"
+    ],
+    "_shatter_enemy": [
+      "gain_embers(run, cb, 2)",
+      "gain_embers(run, cb, 2)"
+    ],
+    "_start_player_turn": [
+      "gain_embers(run, cb, emberflow)"
+    ],
+    "_win_combat": [
+      "if run.has_relic(\"crownOfTheHearth\") and cb.embers > 0:",
+      "heal_player(run, null, cb.embers * 3)"
+    ],
+    "can_use_art": [
+      "return not cb.over and cb.art_used_turn != cb.turn and cb.embers >= _ji(art.get(\"cost\", 0))"
+    ],
+    "exhaust_card": [
+      "gain_embers(run, cb, 1)"
+    ],
+    "gain_embers": [
+      "func gain_embers(run: RunState, cb: CombatState, n: int) -> int:",
+      "var next: int = clampi(cb.embers + n, 0, cb.ember_cap)",
+      "var delta: int = next - cb.embers",
+      "cb.embers = next",
+      "cb.queue.append({\"t\": EventTypes.EMBER, \"n\": delta, \"total\": cb.embers})"
+    ],
+    "start_combat": [
+      "cb.embers = clampi(_ji(omen.get(\"startEmbers\", 0)), 0, cb.ember_cap)"
+    ],
+    "use_art": [
+      "gain_embers(run, cb, -cost)"
+    ],
+    "use_potion": [
+      "gain_embers(run, cb, 3)"
+    ]
+  },
+  "factorDisposition": {
+    "additionalMethod": "No ML, RL, optimiser, fitted model or policy mapping is used or authorised.",
+    "candidate": "No candidate is built or simulated. One unclosed family can receive only a separate zero-row capacity preregistration.",
+    "payoffs": "Scoreline and Afterimage remain separate, fixed and absent at current-main research-payoff levels.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "priorCrownMentionInventory": {
+    "summaries/post-v38-dusk-mechanism-screen-v1.json": [
+      "candidate/bossPool/4"
+    ]
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "4c3be522bef47438f10afa9078affabaac0a5f4812453859ffdc104b469f4b39",
+  "runnerSha256": "20b2a4f2d2d5f3e84e00bcf47e152f23687b386579bfcec2e0c33aa177724412",
+  "runtimeSurfaceCoverage": [
+    {
+      "disposition": "fixed-context",
+      "function": "_apply_art_effect",
+      "id": "authored-art-ember-source",
+      "lines": [
+        "gain_embers(run, cb, _ji(fx[\"n\"]))"
+      ],
+      "reason": "No current authored Art has an Ember effect; this generic handler has no current carrier."
+    },
+    {
+      "disposition": "closed",
+      "evidence": {
+        "summaries/post-v38-native-dusk-grammar-coverage-v1.json": "freeze-one-uncovered-native-family-for-capacity"
+      },
+      "function": "_apply_effect",
+      "id": "authored-card-ember-source",
+      "lines": [
+        "gain_embers(run, cb, _ji(fx[\"n\"]))"
+      ],
+      "reason": "Direct card Ember production is part of the frozen Kindle and Ember producer context; it is not a payoff by itself."
+    },
+    {
+      "disposition": "closed",
+      "evidence": {
+        "summaries/post-v38-competing-structural-options-v1.json": "freeze-weak-mend-persistence-for-identity-preflight",
+        "summaries/post-v38-novaflare-nonreward-capacity-v1.json": "close-deed-unlocked-ember-reserve-damage-family",
+        "summaries/post-v38-ward-whole-run-discovery-v1.json": "reject-exact-ward-candidate-close-tested-direction"
+      },
+      "function": "_apply_special",
+      "id": "authored-special-ember-couplings",
+      "lines": [
+        "gain_embers(run, cb, _ji(fx[\"embers\"]))",
+        "hit_enemy(run, cb, target, _ji(fx[\"n\"]) * cb.embers, true, damage_mult)",
+        "var spent: int = cb.embers",
+        "gain_embers(run, cb, -spent)"
+      ],
+      "reason": "Devour is recovery context, emberNova reserve damage is closed, and Emberdance reserve Ward is the closed Kindle/Ward family."
+    },
+    {
+      "disposition": "fixed-context",
+      "function": "_apply_start_relics",
+      "id": "crown-of-cinders-cap-and-start",
+      "lines": [
+        "cb.ember_cap = 12",
+        "cb.embers = clampi(cb.embers + 2, 0, cb.ember_cap)"
+      ],
+      "reason": "This boss relic changes Ember supply and capacity but supplies no independent payoff; it becomes a producer or interference factor only after a consumer has capacity."
+    },
+    {
+      "disposition": "fixed-context",
+      "function": "_on_enemy_death",
+      "id": "enemy-death-ember-source",
+      "lines": [
+        "gain_embers(run, cb, 1)"
+      ],
+      "reason": "Enemy death is a universal core Ember source, not an independently selectable payoff."
+    },
+    {
+      "disposition": "closed",
+      "evidence": {
+        "summaries/post-v38-native-dusk-grammar-coverage-v1.json": "freeze-one-uncovered-native-family-for-capacity"
+      },
+      "function": "_shatter_enemy",
+      "id": "dusk-shatter-ember-source",
+      "lines": [
+        "gain_embers(run, cb, 2)",
+        "gain_embers(run, cb, 2)"
+      ],
+      "reason": "Dusk Shatter and Prism Charm Ember production belong to the exact closed Shatter family."
+    },
+    {
+      "disposition": "closed",
+      "evidence": {
+        "summaries/post-v38-novaflare-nonreward-capacity-v1.json": "close-deed-unlocked-ember-reserve-damage-family"
+      },
+      "function": "_start_player_turn",
+      "id": "emberflow-turn-source",
+      "lines": [
+        "gain_embers(run, cb, emberflow)"
+      ],
+      "reason": "Pyreheart was explicitly retained only as an unassumed producer in the now-closed complete Ember-reserve damage family."
+    },
+    {
+      "disposition": "unclosed",
+      "function": "_win_combat",
+      "id": "ember-reserve-postcombat-heal",
+      "lines": [
+        "if run.has_relic(\"crownOfTheHearth\") and cb.embers > 0:",
+        "heal_player(run, null, cb.embers * 3)"
+      ],
+      "reason": "The exact shipped boss relic directly consumes the terminal Ember reserve for post-combat healing, and no prior #421 scientific decision names this consumer family."
+    },
+    {
+      "disposition": "fixed-context",
+      "function": "can_use_art",
+      "id": "lantern-art-affordability",
+      "lines": [
+        "return not cb.over and cb.art_used_turn != cb.turn and cb.embers >= _ji(art.get(\"cost\", 0))"
+      ],
+      "reason": "Lantern Art use is the automatic frozen baseline Ember consumer, not a second package candidate."
+    },
+    {
+      "disposition": "closed",
+      "evidence": {
+        "summaries/post-v38-native-dusk-grammar-coverage-v1.json": "freeze-one-uncovered-native-family-for-capacity"
+      },
+      "function": "exhaust_card",
+      "id": "kindle-and-burn-ember-source",
+      "lines": [
+        "gain_embers(run, cb, 1)"
+      ],
+      "reason": "Kindle, burn and Verdant Branch are exact closed families."
+    },
+    {
+      "disposition": "fixed-context",
+      "function": "gain_embers",
+      "id": "ember-state-plumbing",
+      "lines": [
+        "func gain_embers(run: RunState, cb: CombatState, n: int) -> int:",
+        "var next: int = clampi(cb.embers + n, 0, cb.ember_cap)",
+        "var delta: int = next - cb.embers",
+        "cb.embers = next",
+        "cb.queue.append({\"t\": EventTypes.EMBER, \"n\": delta, \"total\": cb.embers})"
+      ],
+      "reason": "The shared bounded setter and event emission are state plumbing, not a mechanism candidate."
+    },
+    {
+      "disposition": "fixed-context",
+      "function": "start_combat",
+      "id": "omen-start-ember-context",
+      "lines": [
+        "cb.embers = clampi(_ji(omen.get(\"startEmbers\", 0)), 0, cb.ember_cap)"
+      ],
+      "reason": "Omen start Embers are encounter context and do not define a policy-selective Dusk package."
+    },
+    {
+      "disposition": "fixed-context",
+      "function": "use_art",
+      "id": "lantern-art-spend",
+      "lines": [
+        "gain_embers(run, cb, -cost)"
+      ],
+      "reason": "The automatic frozen Lantern Art spend is baseline context."
+    },
+    {
+      "disposition": "fixed-context",
+      "function": "use_potion",
+      "id": "potion-ember-source",
+      "lines": [
+        "gain_embers(run, cb, 3)"
+      ],
+      "reason": "The generic potion source is not an independently selectable Dusk payoff."
+    }
+  ],
+  "schemaVersion": 1,
+  "selectedFamily": "ember-reserve-postcombat-heal",
+  "sourceIdentity": {
+    "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    }
+  },
+  "unclosedFamilies": [
+    "ember-reserve-postcombat-heal"
+  ],
+  "wallTimeSeconds": 11.27673225000035
+}

@@ -1,0 +1,87 @@
+{
+  "authority": "Apply decision boundary 1 and freeze only hearthAcquisitionPriority as identity-safe for a separately preregistered mechanism-blocked CRN design. Before any causal row, separately justify and identity-prove the exact Hearth payoff or activation observation factor. Do not vary Scoreline or Afterimage jointly by default, add telemetry, tune a priority magnitude, use ML/RL/optimisation or use protected seeds.",
+  "cacheObjects": {
+    "enabledControlsOutputSha256": "61c61def9492378db58ff3e0d232e01f6c835bc56a189cd05286280a2c18acd2",
+    "enabledControlsPlanSha256": "308143138c69a45ee1bdf17f2cca34650402f34961ff11da35422ad85b242732",
+    "omittedControlsOutputSha256": "934e5448eec3e80f54c92d450c362a76402cae76729ef507abb00eb146febb04",
+    "omittedControlsPlanSha256": "30d8cce4b1b08f9f3f597b6a35d3e4e80e8bf874deb0ed097139b34e00fa47d9",
+    "omittedWholeOutputSha256": "f9959d0262e2b3e85cc21262225202c3e6d9e2cb35347667cc2aac45719e977e",
+    "omittedWholePlanSha256": "14b185746e6e78ad2c54a81a2347fa7bad300c550f712584279096032129c865",
+    "zeroControlsOutputSha256": "869b72ca8500951cc38bd56fb5c3b2cbfde7d03a9b8a6f8167af79fcc42ee5ac",
+    "zeroControlsPlanSha256": "19d2508c01d3e6209eac1f2e17680d5b10ed40ae7c1c1381b9619b9791cd6aa3",
+    "zeroWholeOutputSha256": "d56984831db080ebada1699607beff4522c913d6ebc737c45ffe973794c51c28",
+    "zeroWholePlanSha256": "ddd02035b831f597221464617ce091268ef4cd99afeff0448bda090cbb8d972e"
+  },
+  "controlFaults": [],
+  "controlledSurfaceExecutions": 15,
+  "controls": {
+    "eligibleChoiceChanges": 1,
+    "enabledChangedChoiceControls": 2,
+    "enabledChangedOfferControls": 0,
+    "enabledRngMismatchControls": 0,
+    "omittedZeroMismatchControls": 0,
+    "randomChoiceChanges": 1
+  },
+  "decision": "freeze-hearth-acquisition-priority-for-blocked-crn-design",
+  "decisionBoundary": 1,
+  "enabledWholeRunRows": 0,
+  "executionError": "",
+  "factorDisposition": {
+    "acquisitionPriority": "Success freezes only this exact binary research knob as identity-safe for a later separately preregistered mechanism block.",
+    "additionalMethod": "No ML, RL, optimiser, fitted model or new policy mapping is used or authorised.",
+    "candidate": "None is constructed, simulated or promoted.",
+    "payoffs": "Scoreline, Afterimage and current-main Hearth payoffs remain separate and fixed.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "godotVersion": "4.7.1.stable.official.a13da4feb",
+  "identity": {
+    "omittedAnchorMismatchRows": 0,
+    "omittedZeroMismatchRows": 0,
+    "policyMismatchRows": 0,
+    "rngMismatchRows": 0,
+    "trajectoryMismatchRows": 0,
+    "zeroAnchorMismatchRows": 0
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 512,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "8f6e3e4d5b17fa4d442f7017d8096ed37a4a4e567de9664b4fb786e688fe6b60",
+  "runnerSha256": "f081f44517c3e1fb6bdea2a630f0f6e7fcf9caca8128b5a76f9cd3f86ff63786",
+  "schemaVersion": 1,
+  "sourceIdentity": {
+    "balanceSimSha256": "7f82177d3c71e3a0cc56f820f017cfab6ec99173caf326486209034d60dbb5fd",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "identityHelperSha256": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+    "pilotSha256": "7d190cfc923b7a2441bb8621c9dca6c32a72d1efb0c04e4bed3a522727373f3c",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "e81cbcf579adc9d612951cc687cebe1492b387fdac970eaf9dd4321bbd487def",
+    "probeUidSha256": "2774f4ea739608543d72851a60d3a6b668dbb474a3caff52c96b40570039d17e",
+    "prototypePatchSha256": "b7c07d4d09463ee6f6935212416c163845827b6547386c82c4196f31ffc1ceb1",
+    "researchCoreSha256": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+    "runnerSha256": "f081f44517c3e1fb6bdea2a630f0f6e7fcf9caca8128b5a76f9cd3f86ff63786",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+  },
+  "wallTimeSeconds": 20.75436120806262,
+  "wholeRunNullRows": 512
+}
