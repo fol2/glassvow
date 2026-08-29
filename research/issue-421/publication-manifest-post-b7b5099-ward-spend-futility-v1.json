@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5464228499,
+  "authorityCommentBodySha256": "367cb6da57c092f487ff39ce023bd86607a475abf0e12dbf02ad03d5082b768f",
+  "archiveParent": "b7b509939ff0bd8f75ba2218309e09cb94808878",
+  "preservedRefs": {
+    "research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+    "research/issue-421-post-843e899-family-ladder-evidence": "d48628913409375437a20a52e290d098cc20062e",
+    "research/issue-421-post-d486-private-overflow-evidence": "810264c3eed46060a3398ddd96d1d5bb5634d96e",
+    "research/issue-421-post-810264c-private-causal-coverage-evidence": "b7b509939ff0bd8f75ba2218309e09cb94808878"
+  },
+  "publicationRef": "research/issue-421-post-b7b5099-ward-spend-futility-evidence",
+  "source": {
+    "main": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "taskCapsulePath": "task-capsule-5464228499-v24.json",
+    "taskCapsuleSha256": "c02d98cdbccf70cffdb59cc870aa8406ff2ca0f8b01466506c114b9524f37b74",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "baseline": {
+      "combatSha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "playerCombatantSha256": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3"
+    },
+    "prototype": {
+      "uncompressedPatchSha256": "c282b30b00745424026be0803c391adf148591e1d12d7e44a2db1429ea69b352",
+      "patchGzipSha256": "6fd8d414cccd504d5b04f222baa4b36ce07649006cbbd380b85d3c1b8c151ddb",
+      "combatSha256": "9668ee4ce1bce8169ad38dcca2fdac90339df71d3b154263b12417e46f903f1f",
+      "playerCombatantSha256": "12f15b50d1eb06c9871fb7bda5caa2f50cab114b0350f850157edad4f301428c",
+      "probeSha256": "575582fdecc0263cbf7faa6d86693a838b68c12e5bbadfb94f720e1772bd9ee9",
+      "patchAppliesToMain": true
+    }
+  },
+  "results": {
+    "design": {
+      "outcome": "SUCCESS",
+      "decision": "freeze-ward-spend-contract-for-source-null-and-direct-proof",
+      "newSimulatorRows": 0,
+      "protocolSha256": "0c708aeea5fb4293648aa9c550089cb8cccb5b6331aafdf71285b0f15f5d8af5",
+      "summarySha256": "36777c4d8e3979436955d0bc550fdcd7c68e1f0575ffaf9c032adfb7b24169f1",
+      "runnerSha256": "581eacf8379ebd190edff4b61e77f4cf98ca41cd99b26fe7092ab53ba04760c4"
+    },
+    "sourceAndDirect": {
+      "outcome": "FUTILITY",
+      "decision": "close-ward-spend-family-at-source-direct-gate",
+      "sourceFaults": 0,
+      "directFaults": 6,
+      "directControlledObservations": 82,
+      "GodotProcesses": 2,
+      "wallTimeSeconds": 7.391065874951892,
+      "newSimulatorRows": 0,
+      "protocolSha256": "fd7b0f9273cf7412a9fff171b90bbb4596878f4a1fa496a1ae20f79b6fe49e15",
+      "summarySha256": "052481cdc39523a891d43c15c698ff107b9bd6a5f55730aea70a6612d8e858f8",
+      "runnerSha256": "ddbb20943e8a2e5b1feaba00fa7c714c17250180162d8534f059a4c445d9c3de",
+      "dispositionSha256": "d93a589d53125602c618ba3ad773de06b63c0e2294251b18ce04bc9fd9afd35a"
+    }
+  },
+  "directFaults": [
+    "upgraded-brace-realised-credit: producer realised credits",
+    "upgraded-brace-realised-credit: credit-set values",
+    "enemy-ward-separate-payoff: preview chip isolation",
+    "victory-expiry: producer realised credits",
+    "victory-expiry: credit-set values",
+    "single-consume: bounded state and path isolation"
+  ],
+  "decisiveContradiction": {
+    "scenario": "enemy-ward-separate-payoff",
+    "ordinaryAttack": "5 damage fully absorbed by the first 5 of 7 enemy Ward",
+    "separatePayoff": "4 requested non-Attack damage absorbed the remaining 2 Ward and realised 2 HP loss",
+    "executionFacetChips": 0,
+    "previewFacetChips": 1,
+    "consequence": "The enabled preview exposes a false policy signal and violates truthful-preview and causal-factor isolation before natural capacity."
+  },
+  "automaticDisposition": {
+    "closed": "The complete exact deliberate-Ward-investment to same-turn Ward-spend-finisher family is closed at its common source/direct gate.",
+    "noRescue": "No analyser, scenario, source, threshold, card, producer, payoff, cohort, policy, method or rerun rescue is authorised.",
+    "bulwark": "The conditional second producer level was not reached because the common source/direct gate failed before capacity.",
+    "notEstablished": "This bounded negative is not universal impossibility of every defence/offence trade-off."
+  },
+  "humanAuthorityPackage": {
+    "trigger": "The complete owner-selected family is validly exhausted under comment 5464228499.",
+    "decisionRequired": "Choose one finite next product-semantic family direction, explicitly relax one named immutable boundary, or amend #421 acceptance/P9 authority.",
+    "whyAutomationCannotDecide": "Every previously closed family remains immutable and the controlling comment authorises no successor semantic family after this family closes. Inventing a new producer/consumer meaning would guess.",
+    "recommendation": "Keep product truth, protected seeds and all valid closures unchanged; supply only the smallest finite semantic direction if #421 research is to continue.",
+    "safeIssueState": "needs-info"
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "verification": {
+    "directControlledObservations": 82,
+    "newScientificSimulatorRows": 0,
+    "godotProcesses": 2,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "rawContentAddressedObjects": 6,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0
+  },
+  "prohibitedClaimsAndActions": [
+    "universal impossibility of every defence/offence mechanism",
+    "scientific selection of a new primitive without owner semantics",
+    "capacity, causal payoff, package or detector admission",
+    "ML, RL or optimiser rescue",
+    "product promotion or product truth mutation",
+    "protected acceptance or reserve seed access",
+    "research or product pull request or Actions",
+    "replacement or successor ticket",
+    "#421 acceptance or #108 P9 receipt"
+  ],
+  "claimBoundary": "This publication establishes only the preregistered source/direct futility and automatic closure of the exact owner-selected Ward-spend family. It activates the current human-authority clause without reopening any earlier family or claiming broad mechanism impossibility."
+}

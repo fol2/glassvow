@@ -24,6 +24,42 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### Post-b7b5099 Ward-spend source/direct futility and authority boundary
+
+Owner comment `5464228499` selected one complete deliberate-Ward-investment to
+same-turn Ward-spend-finisher family. The design freeze succeeded with zero
+simulator rows. Its common source/direct gate then completed 82 controlled
+observations in two Godot processes and returned `FUTILITY` with six frozen
+faults. The automatic disposition closes this exact family before capacity;
+the conditional Bulwark level, CRN, held-out and protected-seed stages did not
+run and may not be used as a rescue.
+
+The `enemy-ward-separate-payoff` control is independently decisive. An ordinary
+five-damage Attack was fully absorbed by enemy Ward, after which a separate
+non-Attack payoff realised two HP damage. Execution correctly emitted zero
+Facet chips, while preview predicted one. The enabled preview therefore exposed
+a false frozen-policy signal and failed truthful-preview and causal-factor
+isolation. The remaining frozen faults record unisolated Heavy Air Ward
+multipliers and a downstream event-field shift; none authorises a repair or
+rerun.
+
+The conclusion is bounded to this owner-selected family. It is not a universal
+impossibility claim about defence/offence trade-offs. With the complete family
+validly exhausted, comment `5464228499` permits one human-authority package:
+choose one finite next product-semantic family direction, explicitly relax one
+named immutable boundary, or amend #421 acceptance/P9 authority. Automation
+cannot select among those product decisions without guessing. See
+`publication-manifest-post-b7b5099-ward-spend-futility-v1.json` and
+`summaries/post-b7b5099-ward-spend-futility-disposition-v1.md`.
+
+This continuation used current main
+`5f53020f588145ec5fbf803de32d82c7d29c06d2`, preserved archive parent
+`b7b509939ff0bd8f75ba2218309e09cb94808878`, and added zero simulator, ledger
+or protected-seed rows. The ledger remains byte-identical at 482,036 records
+and SHA-256
+`97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213`.
+No product code, PR, Actions run, acceptance or P9 receipt follows.
+
 ### Post-810264c corrected causal-class exhaustion and owner-authority boundary
 
 The zero-row follow-up partitioned causal topology rather than storage. Every

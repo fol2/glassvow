@@ -1,0 +1,97 @@
+{
+  "GodotProcesses": 2,
+  "archiveHeadPreserved": "b7b509939ff0bd8f75ba2218309e09cb94808878",
+  "authority": "Controlling owner decision 5464228499 and the frozen automatic disposition close the exact family at a failed source/direct gate.",
+  "claimBoundary": "Exact current-main source/interface, base-surface comparator, default/explicit null, direct A/B/AB mechanism, realised Ward, insufficient Ward and credit, ordering, Dusk boundary, lifecycle expiry, Fortify and non-producer isolation only. Zero simulator, support, endpoint, balance, product, protected-seed, #421 acceptance or P9 claim.",
+  "contentProjectionSha256": {
+    "baseline": "3c181ba8c30e42b2a5d25f3b47e950bde212f77635b42aa12453de37e63f6aea",
+    "candidate": "890bd421e740056a8312187721ddb0fded20eb6d3ac0fa8cf186d0cf9264a760"
+  },
+  "decision": "close-ward-spend-family-at-source-direct-gate",
+  "decisionBoundary": 2,
+  "directControlledObservations": 82,
+  "directFaults": [
+    "upgraded-brace-realised-credit: producer realised credits",
+    "upgraded-brace-realised-credit: credit-set values",
+    "enemy-ward-separate-payoff: preview chip isolation",
+    "victory-expiry: producer realised credits",
+    "victory-expiry: credit-set values",
+    "single-consume: bounded state and path isolation"
+  ],
+  "executionError": "",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "futility",
+  "outputSha256": {
+    "baseline": "3061cdc025b170f8217e04c841e03762645dd128f83ed57f3f886b897ed9fe2f",
+    "candidate": "9035686eba9629692128555cbcb657ac771034b894ef3831e0e8d97f78724816"
+  },
+  "planSha256": {
+    "baseline": "636a9a057693de0c3454ad752a6d0d2fb8ee8001150af657bf27fa894f5847f7",
+    "candidate": "a265dadc529443845a871fe45dfd95e3117bbbc0300cf03dff2a744eb6a953ea"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "fd7b0f9273cf7412a9fff171b90bbb4596878f4a1fa496a1ae20f79b6fe49e15",
+  "runnerSha256": "ddbb20943e8a2e5b1feaba00fa7c714c17250180162d8534f059a4c445d9c3de",
+  "schemaVersion": 1,
+  "sourceGateFaults": [],
+  "sourceIdentity": {
+    "baselineHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/player_combatant.gd": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3"
+    },
+    "baselineStatus": [],
+    "candidateHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "candidatePrototypeDiffSha256": "c282b30b00745424026be0803c391adf148591e1d12d7e44a2db1429ea69b352",
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "9668ee4ce1bce8169ad38dcca2fdac90339df71d3b154263b12417e46f903f1f",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "12f15b50d1eb06c9871fb7bda5caa2f50cab114b0350f850157edad4f301428c",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_ward_spend_probe.gd": "575582fdecc0263cbf7faa6d86693a838b68c12e5bbadfb94f720e1772bd9ee9"
+    },
+    "candidateStatus": [
+      " M domain/rules/combat.gd",
+      " M domain/state/player_combatant.gd",
+      "?? tools/research_421_ward_spend_probe.gd"
+    ],
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "predecessorSha256": {
+      "protocols/post-b7b5099-ward-spend-design-v1.json": "0c708aeea5fb4293648aa9c550089cb8cccb5b6331aafdf71285b0f15f5d8af5",
+      "summaries/post-b7b5099-ward-spend-design-v1.json": "36777c4d8e3979436955d0bc550fdcd7c68e1f0575ffaf9c032adfb7b24169f1",
+      "summaries/post-b7b5099-ward-spend-primary-sources-v1.md": "d84bf14b557d07c6dd2c0946f684a36e52d0e683a7c39be4221fc6b39bc1144c",
+      "task-capsule-5464228499-v23.json": "4c4eb587921bf4dce06636f903ad561d22881178e90265dd48aee13f7e297013"
+    },
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+      "refs/remotes/origin/research/issue-421-post-810264c-private-causal-coverage-evidence": "b7b509939ff0bd8f75ba2218309e09cb94808878",
+      "refs/remotes/origin/research/issue-421-post-d486-private-overflow-evidence": "810264c3eed46060a3398ddd96d1d5bb5634d96e"
+    },
+    "runnerSha256": "ddbb20943e8a2e5b1feaba00fa7c714c17250180162d8534f059a4c445d9c3de",
+    "taskCapsuleSha256": "c02d98cdbccf70cffdb59cc870aa8406ff2ca0f8b01466506c114b9524f37b74"
+  },
+  "wallTimeSeconds": 7.391065874951892
+}
