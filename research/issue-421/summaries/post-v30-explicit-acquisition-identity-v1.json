@@ -1,0 +1,102 @@
+{
+  "GodotProcesses": 3,
+  "authority": "Close the exact explicit-acquisition factor without repair, retune, rerun, v2, enabled whole-run or subgroup rescue, then continue inside issue 421 with the next evidence-backed structural mechanism permitted by the task SSOT.",
+  "cacheObjects": {
+    "directOutputSha256": "4855dc110b35969652efb27c7304bf090065f4dbe04192131bfade01c6edd6ba",
+    "directPlanSha256": "481e0ed42a966f552551a60b1a62d90763c8b60fa939bc1b9bd19d279bd3c782",
+    "invalidPlanSha256": "c54705c0eea6438be61f62b83d2f09dfe13936a150000d580d3099da4dac28c8",
+    "sentinelOutputSha256": "071a09daf9ffe76e1f52fca827245477506075dabd3372a86e375219af53482d",
+    "sentinelPlanSha256": "81618f176ae8791d185bee4e56e41041078bb8e322b2e8f4e270093b6addd04f"
+  },
+  "decision": "close-explicit-acquisition-factor-on-identity-failure",
+  "decisionBoundary": 2,
+  "directControls": {
+    "cases": {
+      "ash-executioner-ignored": {
+        "choice": "",
+        "deckDelta": 0,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      },
+      "ash-guarded-strike-ignored": {
+        "choice": "",
+        "deckDelta": 0,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      },
+      "dusk-executioner": {
+        "choice": "executioner",
+        "deckDelta": 1,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      },
+      "dusk-executioner-random-build-boundary": {
+        "choice": "executioner",
+        "deckDelta": 1,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      },
+      "dusk-guarded-strike": {
+        "choice": "guardedStrike",
+        "deckDelta": 1,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      },
+      "dusk-guarded-strike-random-build-boundary": {
+        "choice": "guardedStrike",
+        "deckDelta": 1,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      },
+      "dusk-off": {
+        "choice": "",
+        "deckDelta": 0,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      }
+    },
+    "rows": 7,
+    "status": "PASS"
+  },
+  "enabledWholeRunRows": 0,
+  "executionError": "Explicit acquisition identity mismatch: sentinel row schema",
+  "fullNullIdentity": {},
+  "invalidConfigurationFailedClosed": true,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newCausalRows": 0,
+  "newIdentityObservationRows": 7,
+  "newLedgerRows": 0,
+  "newSupportRows": 0,
+  "outcomeClass": "futility",
+  "preflight": {
+    "canonicalRowFields": 17,
+    "crossArmEqualityFieldsInvariant": true,
+    "expectedCardinalityExact": true,
+    "prototypeDriverSha256": "bfc6a21467bee6e22ce8758979ee09eae5040bde6beff1d46d56a59d795baf5a",
+    "sourceDeltaExact": true,
+    "status": "PASS"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "fe3583538eb32e4783e3e3f8cea6cb667c0e8926f0947678a5bc87fa8312229b",
+  "runnerSha256": "d7abaa439621a1e248d05b8beb5d23a643f9ee6f155b0f9051d3acd14eebcef9",
+  "schemaVersion": 1,
+  "sentinelIdentity": {},
+  "wallTimeSeconds": 14.623516666004434
+}

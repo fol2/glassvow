@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "declaration": "Post-attempt zero-row forensic audit. It preserves and classifies immutable v1 source, plans, outputs and summary only. It cannot repair a call, rerun Godot, create an observation, inspect support or make an acquisition identity or mechanism claim.",
+  "authority": {
+    "taskSsot": "https://github.com/fol2/glassvow/issues/421",
+    "ownerDecision": "https://github.com/fol2/glassvow/issues/421#issuecomment-5458109992",
+    "ownerCommentBodySha256": "f561d1260860d776c181b272ac0269661dcb1f611ed910ed42299e4aa054969d",
+    "controllingRule": "Before a full identity panel, deterministic preflight must validate output wiring and cross-arm equality fields. Empty-output wiring cannot close another mechanism family."
+  },
+  "finding": "V1 direct controls are seven-for-seven exact, but every one of the 32 sentinel output positions is an empty dictionary. Exact source proves the omitted call passed an extra Boolean into the new trailing String acquisition parameter and the explicit-off call supplied one argument beyond that signature. The frozen Python schema gate correctly stopped the remainder, but its preflight had not validated these call bindings. V1 therefore reached no scientific null-identity decision and cannot close or support the acquisition factor.",
+  "v1SummaryPath": "summaries/post-v30-explicit-acquisition-identity-v1.json",
+  "sourceEvidence": {
+    "probePath": "dusk-explicit-acquisition-identity-v1-source/tools/research_421_explicit_dusk_acquisition_probe.gd",
+    "probeSha256": "0852f97faa300c655bd6707ae5f723db6c3d6f13dad56e5cc350e6012bda8052",
+    "simPath": "dusk-explicit-acquisition-identity-v1-source/tools/balance_sim.gd",
+    "simSha256": "71d81315fc3e1ffb53014883543608dd3554f68884c9d76ed7c5eac1abd36d27",
+    "signatureLastParameter": "dusk_acquisition_choice: String",
+    "omittedFault": "The omitted call supplies false in the acquisition position.",
+    "offFault": "The explicit-off call supplies false in the acquisition position and the String value as an extra argument."
+  },
+  "executionArtifacts": {
+    "directOutputSha256": "4855dc110b35969652efb27c7304bf090065f4dbe04192131bfade01c6edd6ba",
+    "directValidRows": 7,
+    "sentinelPlanSha256": "81618f176ae8791d185bee4e56e41041078bb8e322b2e8f4e270093b6addd04f",
+    "sentinelOutputSha256": "071a09daf9ffe76e1f52fca827245477506075dabd3372a86e375219af53482d",
+    "sentinelAttemptedRows": 32,
+    "sentinelEmptyRows": 32,
+    "sentinelValidObservationRows": 0,
+    "remainderRows": 0,
+    "enabledWholeRunRows": 0,
+    "supportRows": 0,
+    "causalRows": 0
+  },
+  "immutableInputs": {
+    "runnerSha256": "bf503d2fd041ee2f09b1d9bfc1f1af5fbaf9fa99a7bff23b391b1b62fb462dff",
+    "evidenceSha256": {
+      "task-capsule.json": "3fd6e43fb2c0309a90345574fdd4f04a572941e309fa02a8666f944a8befe9b3",
+      "protocols/post-v30-explicit-acquisition-identity-v1.json": "fe3583538eb32e4783e3e3f8cea6cb667c0e8926f0947678a5bc87fa8312229b",
+      "post_v30_explicit_acquisition_identity.py": "d7abaa439621a1e248d05b8beb5d23a643f9ee6f155b0f9051d3acd14eebcef9",
+      "summaries/post-v30-explicit-acquisition-identity-v1.json": "692793e695635a069dd1169a4bc8c7904cb1f9868c580d9f5d283ed436868c7b"
+    }
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumSourceFilesRead": 2,
+    "maximumCacheFilesRead": 3,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumGodotProcesses": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "scientificSuccess": "Unavailable because no valid sentinel row exists.",
+    "scientificFutility": "Unavailable because null arms were not comparably evaluated.",
+    "mechanical": "Exact immutable source and output evidence identifies empty-output whole-run call binding after seven valid direct controls and before any comparable null panel.",
+    "mechanicalAuthority": "Preserve v1 as a mechanical harness failure with no scientific disposition. Under controlling owner comment 5458109992, freeze one separately versioned correction limited to removing the stray Boolean argument from each whole-run call and strengthening preflight to bind the complete call templates. Do not change factor semantics, direct cases, content, cohort, policies, seeds, estimands, budget, stop rules or enabled-row prohibition."
+  }
+}

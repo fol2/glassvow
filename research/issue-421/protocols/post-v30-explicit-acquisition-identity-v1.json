@@ -1,0 +1,381 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "explicit-acquisition-implementation-identity-v1",
+  "authority": {
+    "taskSsot": "https://github.com/fol2/glassvow/issues/421",
+    "taskBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "ownerDecision": "https://github.com/fol2/glassvow/issues/421#issuecomment-5458109992",
+    "ownerCommentId": 5458109992,
+    "ownerCommentUpdatedAt": "2026-08-28T21:57:08Z",
+    "ownerCommentBodySha256": "f561d1260860d776c181b272ac0269661dcb1f611ed910ed42299e4aa054969d"
+  },
+  "researchQuestion": "Does the minimum research-only exogenous Dusk acquisition factor preserve exact legacy behaviour when omitted or explicitly off, while adding exactly one existing chosen consumer with no acquisition RNG, save drift or cross-aspect leakage in direct controls?",
+  "claimBoundary": "This is an implementation-identity experiment only. It may establish that omitted and explicit-off null settings are exact and that direct executioner or guardedStrike assignment changes only the intended starting-deck mediator. It cannot establish activation capacity, policy sensitivity, package support, complementarity, causal benefit, Scoreline or Afterimage payoff value, interaction, candidate admission, protected-seed performance, product UI or shipping fitness.",
+  "factorDefinitions": {
+    "explicitDuskAcquisition": {
+      "type": "research-controlled acquisition factor",
+      "levels": {
+        "pristine": "Immutable exact-current-main simulator with no acquisition argument or source delta.",
+        "omitted": "Prototype simulator with the trailing acquisition argument omitted.",
+        "off": "Prototype simulator with acquisition explicitly set to off.",
+        "executioner": "Dusk-only deterministic addition of one existing executioner card through the existing deck, UID and save representation.",
+        "guardedStrike": "Dusk-only deterministic addition of one existing guardedStrike card through the existing deck, UID and save representation."
+      },
+      "wholeRunLevels": [
+        "pristine",
+        "omitted",
+        "off"
+      ],
+      "directOnlyLevels": [
+        "executioner",
+        "guardedStrike"
+      ]
+    },
+    "scorelinePayoff": {
+      "type": "separate causal factor",
+      "level": "exact current",
+      "varied": false
+    },
+    "afterimagePayoff": {
+      "type": "separate causal factor",
+      "level": "exact current",
+      "varied": false
+    },
+    "acquisitionPriority": {
+      "type": "policy factor",
+      "level": "exact frozen root-552 sampled policy identity",
+      "varied": false
+    },
+    "faultlineRarity": {
+      "type": "Scoreline package factor",
+      "level": "exact current",
+      "varied": false
+    },
+    "wardSetupPriority": {
+      "type": "Afterimage package factor",
+      "level": "exact frozen policy identity",
+      "varied": false
+    }
+  },
+  "designMatrix": [
+    {
+      "arm": "pristine",
+      "factorLevel": "pristine",
+      "source": "immutable baseline cache",
+      "rows": 256,
+      "newRows": 0,
+      "role": "shared anchor"
+    },
+    {
+      "arm": "omitted",
+      "factorLevel": "omitted",
+      "source": "prototype",
+      "rows": 256,
+      "newRows": 256,
+      "role": "first null"
+    },
+    {
+      "arm": "explicit-off",
+      "factorLevel": "off",
+      "source": "prototype",
+      "rows": 256,
+      "newRows": 256,
+      "role": "second null"
+    },
+    {
+      "arm": "direct-controls",
+      "factorLevel": "off, executioner or guardedStrike",
+      "source": "prototype direct probe",
+      "rows": 7,
+      "newRows": 7,
+      "role": "mediator and boundary controls"
+    }
+  ],
+  "anchors": {
+    "source": "The baseline and prototype are both detached from exact origin/main c4130163c7fb8edd865c0adc95732aae03e1bad2. The complete prototype tracked diff and every touched source hash are frozen.",
+    "toolchain": "Every Godot process uses only /Applications/Godot.app/Contents/MacOS/Godot at 4.7.2.stable.official.ed1daf0bf and its frozen binary SHA-256.",
+    "content": "All arms use byte-identical content a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1 and search space 524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca.",
+    "cohort": "Every whole-run contrast uses the same 64 root-552 policy identities, seeds 347200 through 347203, Duskblade, Vow 5, baseline, estimator and stopping rule.",
+    "ordering": "Policy index is outermost and seed identity is innermost in every arm; no row may be removed, replaced, imputed or selected away.",
+    "ledger": "The append-only ledger remains exactly 480372 records at SHA-256 4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0 with zero protected-seed rows."
+  },
+  "estimands": {
+    "pristineVersusOmitted": "Exact equality in every canonical row field for each of 256 paired identities.",
+    "omittedVersusOff": "Exact equality in every canonical row field for each of the same 256 paired identities.",
+    "directMediator": "For Dusk, executioner or guardedStrike adds exactly one named card at the next UID, leaves choice and run RNG unchanged, and survives the existing save round trip. Off and Ash controls add none.",
+    "path": "Exact fights equality.",
+    "rng": "Exact final RNG equality.",
+    "policy": "Exact resolved policy dictionary equality.",
+    "result": "Exact terminal deck, economy, gold, health and relic equality.",
+    "telemetry": "Exact packageEvents equality.",
+    "reliability": "Exact error and outcome equality with complete cardinality.",
+    "notEstimated": "Enabled whole-run behaviour, activation, acquisition preference, support, benefit, causal effect, payoff effect, functional separation, interaction, RandomBuild performance, protected seeds or product acceptance."
+  },
+  "mechanisticInteractions": {
+    "estimated": [],
+    "reason": "Only null identity and focused direct mediator controls are run. Scoreline payoff, Afterimage payoff, acquisition priority, Faultline rarity and Ward setup priority do not vary.",
+    "futureBoundary": "A later support design, if authorised by exact identity success, must retain separate Scoreline-payoff and Afterimage-payoff mechanism blocks and shared interference anchors before any optional joint cells."
+  },
+  "aliasStructure": {
+    "omittedAndOff": "Both are separately encoded null levels and must be exactly equal to each other; neither may be treated as an enabled acquisition arm.",
+    "pristineAndPrototype": "Semantic content, source commit, Godot and stage are shared equality fields. Driver SHA, probe SHA and filesystem path are per-arm provenance and must match their own frozen expectations.",
+    "consumerIdentity": "executioner and guardedStrike are existing distinct content IDs and are never pooled, relabelled or inferred from payoff telemetry.",
+    "payoffs": "Scoreline and Afterimage remain distinct fixed factors; this experiment cannot alias their effects into acquisition."
+  },
+  "contentPath": "/Users/jamesto/Research/glassvow-p9-421/cache/sha256/a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1.json",
+  "cohort": {
+    "policyRoot": 552,
+    "policyCount": 64,
+    "simulationSeeds": [
+      347200,
+      347201,
+      347202,
+      347203
+    ],
+    "aspect": "duskblade",
+    "vow": 5,
+    "rows": 256
+  },
+  "directCases": [
+    {
+      "id": "dusk-executioner",
+      "aspect": "duskblade",
+      "acquisition": "executioner",
+      "randomBuild": false,
+      "seed": 423000,
+      "expectedChoice": "executioner"
+    },
+    {
+      "id": "dusk-guarded-strike",
+      "aspect": "duskblade",
+      "acquisition": "guardedStrike",
+      "randomBuild": false,
+      "seed": 423001,
+      "expectedChoice": "guardedStrike"
+    },
+    {
+      "id": "dusk-off",
+      "aspect": "duskblade",
+      "acquisition": "off",
+      "randomBuild": false,
+      "seed": 423002,
+      "expectedChoice": ""
+    },
+    {
+      "id": "ash-executioner-ignored",
+      "aspect": "ashwarden",
+      "acquisition": "executioner",
+      "randomBuild": false,
+      "seed": 423003,
+      "expectedChoice": ""
+    },
+    {
+      "id": "ash-guarded-strike-ignored",
+      "aspect": "ashwarden",
+      "acquisition": "guardedStrike",
+      "randomBuild": false,
+      "seed": 423004,
+      "expectedChoice": ""
+    },
+    {
+      "id": "dusk-executioner-random-build-boundary",
+      "aspect": "duskblade",
+      "acquisition": "executioner",
+      "randomBuild": true,
+      "seed": 423005,
+      "expectedChoice": "executioner"
+    },
+    {
+      "id": "dusk-guarded-strike-random-build-boundary",
+      "aspect": "duskblade",
+      "acquisition": "guardedStrike",
+      "randomBuild": true,
+      "seed": 423006,
+      "expectedChoice": "guardedStrike"
+    }
+  ],
+  "staging": {
+    "invalidFirst": "One invalid acquisition value must fail before content loading or output creation.",
+    "directSecond": "All seven focused controls must pass before any whole-run identity row.",
+    "sentinelThird": "The first four frozen policy identities across all four seeds run omitted and off, for 32 new rows. Both paired contrasts must be exact before expansion.",
+    "remainderFourth": "Only after the sentinel is exact may the remaining 60 policies run omitted and off, for 480 new rows.",
+    "sentinelPolicyCount": 4,
+    "expectedOutputRows": {
+      "direct": 7,
+      "sentinel": 32,
+      "remainder": 480
+    }
+  },
+  "probeContract": {
+    "path": "tools/research_421_explicit_dusk_acquisition_probe.gd",
+    "cardinalityAnchors": [
+      "rows.append(_whole(content, spec))",
+      "rows.append(_direct(content, spec))",
+      "_write(opts, loaded, rows)"
+    ],
+    "equalityAnchors": [
+      "return Sim.simulate(",
+      "\"contentIdentity\": loaded[\"identity\"]",
+      "\"rows\": rows"
+    ],
+    "enabledWholeRunGuard": "Any whole-run row with executioner or guardedStrike must fail before content loading or output creation."
+  },
+  "comparisonContract": {
+    "rowFieldsByEstimand": {
+      "identity": [
+        "aspect",
+        "seed",
+        "vow"
+      ],
+      "path": [
+        "fights"
+      ],
+      "rng": [
+        "rng"
+      ],
+      "policy": [
+        "policy"
+      ],
+      "result": [
+        "deck",
+        "deckIds",
+        "economy",
+        "gold",
+        "goldEarned",
+        "hp",
+        "maxHp",
+        "relics"
+      ],
+      "telemetry": [
+        "packageEvents"
+      ],
+      "reliability": [
+        "error",
+        "outcome"
+      ]
+    },
+    "canonicalRowFields": [
+      "aspect",
+      "deck",
+      "deckIds",
+      "economy",
+      "error",
+      "fights",
+      "gold",
+      "goldEarned",
+      "hp",
+      "maxHp",
+      "outcome",
+      "packageEvents",
+      "policy",
+      "relics",
+      "rng",
+      "seed",
+      "vow"
+    ],
+    "normalisation": "Compare the canonical JSON dictionaries exactly as stored. No field removal, row selection, imputation, endpoint staging or cohort change is permitted.",
+    "stopping": "A preflight, invalid, direct or sentinel failure stops before the remaining whole-run panel. A green sentinel permits exactly one complete remainder."
+  },
+  "outputProvenance": {
+    "baselineProbeSha256": "fd4dd3757b4706422353702ffb790e71f8bf660b2c97459b12170a180226013c",
+    "prototypeProbeSha256": "0852f97faa300c655bd6707ae5f723db6c3d6f13dad56e5cc350e6012bda8052",
+    "baselineContentIdentity": {
+      "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "contentFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "contentPath": "/Users/jamesto/Research/glassvow-p9-421/cache/sha256/a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1.json",
+      "contentSemanticSha256": "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa",
+      "driverSha256": "d399e38c77988f0c039c8efda8ad349a141fac1a97ebca765b0a0103a95a67c7",
+      "godot": "4.7.2-stable (official)",
+      "searchSpacePath": "res://docs/balance/421-content-search-space-v1.json",
+      "searchSpaceSha256": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
+      "stage": ""
+    },
+    "prototypeContentIdentity": {
+      "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "contentFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "contentPath": "/Users/jamesto/Research/glassvow-p9-421/cache/sha256/a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1.json",
+      "contentSemanticSha256": "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa",
+      "driverSha256": "bfc6a21467bee6e22ce8758979ee09eae5040bde6beff1d46d56a59d795baf5a",
+      "godot": "4.7.2-stable (official)",
+      "searchSpacePath": "res://docs/balance/421-content-search-space-v1.json",
+      "searchSpaceSha256": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
+      "stage": ""
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceStatus": [
+      " M domain/state/run_state.gd",
+      " M tools/balance_sim.gd",
+      "?? tools/research_421_explicit_dusk_acquisition_probe.gd",
+      "?? tools/research_421_explicit_dusk_acquisition_probe.gd.uid"
+    ],
+    "trackedDiffSha256": "b82fd3e1a82b19f27b06dfba51fa7d144c88a15ac1591c86a56f4da738463935",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "taskCapsuleSha256": "3fd6e43fb2c0309a90345574fdd4f04a572941e309fa02a8666f944a8befe9b3",
+    "runnerSha256": "d7abaa439621a1e248d05b8beb5d23a643f9ee6f155b0f9051d3acd14eebcef9",
+    "prototypeDriverSha256": "bfc6a21467bee6e22ce8758979ee09eae5040bde6beff1d46d56a59d795baf5a",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "sourceSha256": {
+      "domain/state/run_state.gd": "59eda7922eb9e2b98a0e67d433427be5f174462e8c0731329328b15d4de20b5d",
+      "tools/balance_sim.gd": "71d81315fc3e1ffb53014883543608dd3554f68884c9d76ed7c5eac1abd36d27",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_catalogue.gd": "6e240546cd616a2518ee7a2b8fae41aa8a94078429155f89f6d9165eef1c20c0",
+      "tools/balance_sweep.gd": "6d78dcd3d00aa6300aaf32fc498c7a3c9fb4ffea1725f59e6fc8be7b5fa61ff0",
+      "tools/balance_cem.gd": "154fd167ed914e7bfc3b6abd8e45cac381b748f19a52f67d3ba10908049964af",
+      "tools/research_421_explicit_dusk_acquisition_probe.gd": "0852f97faa300c655bd6707ae5f723db6c3d6f13dad56e5cc350e6012bda8052",
+      "tools/research_421_explicit_dusk_acquisition_probe.gd.uid": "ec77c4414de892b4b836aa101dfed8de88c59daab88280f0ae45cd5af6d6806e"
+    },
+    "evidenceSha256": {
+      "protocols/post-v30-explicit-acquisition-method-design-v1.json": "171b48ac148580d4261b037e52ab74ac8b804395f0c4ab794ab743d4a47d70a6",
+      "summaries/post-v30-explicit-acquisition-method-design-v1.json": "0f3bd15686d9cfd3bb4feef8d26a070143ef2b4b24b0a147b1e6a53c49d78fbf",
+      "protocols/post-v30-dusk-exclusive-acquisition-identity-v2.json": "e7b3c1191d62ce507db5034224dcfcdb8e1df220673fd1c7df39437446ffd34b",
+      "summaries/post-v30-dusk-exclusive-acquisition-identity-v2.json": "ca315590ecd9e0f3d1c3d4960083570651a9831724538688ac661a1690c94127",
+      "summaries/post-v30-dusk-exclusive-acquisition-capacity-v1.json": "c4530c2c0aebcc9427a3d971a8d926126865ece0b790d1c51dfb728111ab4ed9",
+      "dusk-acquisition-baseline-v1-source/domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "dusk-acquisition-baseline-v1-source/tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    }
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumReusedBaselineIdentityObservationRows": 256,
+    "maximumNewIdentityObservationRows": 519,
+    "maximumEnabledWholeRunRows": 0,
+    "maximumSupportRows": 0,
+    "maximumCausalRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumGodotProcesses": 4,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "success": "All immutable hashes, source normalisation, probe cardinality anchors, exact plan cardinalities, baseline schema and provenance pass; invalid input fails closed; all seven direct controls pass; both 16-row null contrasts pass the sentinel; then both complete 256-row paired contrasts have zero mismatch in every canonical field, the ledger is unchanged, exactly 519 new identity rows and no enabled whole-run row are emitted, and all numeric ceilings hold.",
+    "successAuthority": "Freeze this research-only exogenous acquisition factor as implementation-identity-safe and preregister the cheapest fixed-cohort activation/support panel. Do not call it policy sensitivity or causal benefit, and do not change payoff, content, policy method, seeds or cohort.",
+    "futility": "After a green mechanical preflight, invalid-input handling, a focused direct mediator control, sentinel identity or complete null identity has a genuine value, path, RNG, policy, result, telemetry, reliability or cardinality mismatch.",
+    "futilityAuthority": "Close the exact explicit-acquisition factor without repair, retune, rerun, v2, enabled whole-run or subgroup rescue, then continue inside issue 421 with the next evidence-backed structural mechanism permitted by the task SSOT.",
+    "inconclusive": "A required immutable artefact, source hash, source normalisation, probe invariant, cache object, schema, provenance, ledger identity, process, output or numeric execution prerequisite is missing or the frozen wall-time, row or process cap is exceeded before a valid identity decision.",
+    "inconclusiveAuthority": "Record the identity result inconclusive at the preregistered cap, run no enabled whole-run and do not repair or rerun this exact factor. Continue only as permitted by the current issue and owner authority."
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python constructs every plan, content-addresses plans and outputs, invokes the exact Godot binary, validates schemas and provenance, performs paired comparisons and writes the one summary.",
+    "firstLook": "Direct controls and the 32-row sentinel are the only staged looks. Staging moves from cheap mediator and null evidence to the same frozen whole-run cohort; it does not alter policy or seed identity and supports no endpoint absent from a comparable arm.",
+    "automaticDisposition": [
+      "Exact success freezes at most this one factor for a separately preregistered support panel.",
+      "A genuine identity failure closes the scalar family.",
+      "Missing prerequisites or cap exhaustion records an inconclusive result."
+    ]
+  },
+  "methodBoundary": "Issues 524 and 525 remain immutable evidence and are not reconstructed. The closed score selector is not retuned. ML, RL and another optimiser remain prohibited because no enabled support or causal observation has measured method decision value."
+}

@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "zero-row semantic audit of post-scalar structural direction v1",
+  "authority": {
+    "taskSsot": "https://github.com/fol2/glassvow/issues/421",
+    "ownerDecision": "https://github.com/fol2/glassvow/issues/421#issuecomment-5458109992",
+    "rule": "Do not turn a semantic or harness mismatch into scientific mechanism evidence. Preserve the immutable v1 result and return to a source-complete mechanism question without a new simulator row."
+  },
+  "researchQuestion": "Did the zero-row dual-relic-Oath selection bind an exact current-main Scoreline mediator, Afterimage mediator and payoff operation strongly enough to authorise its source-design step?",
+  "claimBoundary": "This audit can only classify whether v1 reached a valid representation decision. It cannot repair or rerun v1, select an Oath, close a mechanism family, choose a new payoff, inspect support, simulate or authorise product work.",
+  "v1AfterimageAssertion": "exact current guardedStrike payoff",
+  "requiredScorelineMediatorFields": [
+    "scorelineBonus",
+    "scorelineApplied",
+    "scorelineConsumed"
+  ],
+  "requiredAfterimageMediatorFields": [
+    "reflection",
+    "afterimage",
+    "afterimageApplied",
+    "afterimageConsumed"
+  ],
+  "requiredExactMechanismTokens": [
+    "scorelineBonus",
+    "scorelineConsumed",
+    "reflection",
+    "afterimageApplied",
+    "afterimageConsumed"
+  ],
+  "exactCurrentCards": {
+    "executioner": {
+      "type": "attack",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "blunt",
+      "effects": [
+        {
+          "kind": "special",
+          "id": "execute",
+          "n": 8,
+          "bonus": 6
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "execute",
+            "n": 11,
+            "bonus": 8
+          }
+        ],
+        "text": "Deal @11@ damage. Cracked enemies take 8 more."
+      },
+      "name": "Faultline",
+      "text": "Deal @8@ damage. Cracked enemies take 6 more."
+    },
+    "guardedStrike": {
+      "type": "attack",
+      "rarity": "common",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "slash",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 5
+        },
+        {
+          "kind": "block",
+          "n": 4
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 7
+          },
+          {
+            "kind": "block",
+            "n": 6
+          }
+        ],
+        "text": "Deal @7@ damage. Gain #6# Ward."
+      },
+      "name": "Warden's Edge",
+      "text": "Deal @5@ damage. Gain #4# Ward."
+    }
+  },
+  "semanticTest": {
+    "scoreline": "Exact current Faultline has execute base and Cracked bonus only; scorelineBonus and Scoreline apply/consume fields belong to an immutable research mutation, not current main.",
+    "afterimage": "Exact current Warden's Edge has damage and Ward only; reflection and Afterimage apply/consume fields belong to an immutable research mutation, not current main.",
+    "oath": "A persistent marker is not itself a causal mechanism. Without a frozen producer, mediator, consumer, payoff operation and opposite-package suppression operation, productSemanticsBounded cannot be true.",
+    "disposition": "If all three facts hold, v1 is semantic-precondition-inconclusive and its selected Oath class is quarantined before design."
+  },
+  "immutableInputs": {
+    "runnerSha256": "56b597c2fefc06831286b7973e6fc9545e61b3d0f79eca0621907e82314d0b91",
+    "taskCapsuleSha256": "603fa58f9b7e165d86fa6cbcfc4421bf5bc5c9665614412877a6a9ab25a4e713",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    },
+    "evidenceSha256": {
+      "protocols/post-v30-post-scalar-structural-direction-v1.json": "afb42dbfb3c95168a6350ee0e3a3b0c5d3105d5c81d0f0c148301ca7624370af",
+      "post_v30_post_scalar_structural_direction.py": "9ac208bc1c831356c767bb42398a0a10d9a2609e504e6a588d55d316174fce6f",
+      "summaries/post-v30-post-scalar-structural-direction-v1.json": "0d34c0be5b7ff244dd19bf1509fee32ce02dea87cf4b9149b1fa346d545a5058",
+      "protocols/post-v38-blocked-crn-v2.json": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
+      "summaries/post-v38-exact-complementarity-v1-audit.json": "8630a5e6ab6559b7e98fa5947e865a11f26ee505879026450f73e95fcb468621"
+    }
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumWallTimeSeconds": 30,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumSupportRows": 0,
+    "maximumCausalRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumGodotProcesses": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "inconclusive": "Exact source and immutable evidence prove that both named causal mediators and the selected Oath's exact payoff operation were absent from the v1 eligibility contract.",
+    "inconclusiveAuthority": "Preserve v1 as immutable zero-row semantic-precondition-inconclusive evidence. Do not implement, repair, relabel or rerun the Oath selection. Continue inside issue 421 with one source-complete mechanism-requirement audit that must freeze an exact producer, mediator, consumer, payoff operation and lifecycle before comparing representations; use no support, simulator, ML, RL, optimiser or protected seed."
+  },
+  "methodBoundary": "The mismatch does not identify policy-method value and cannot reopen the closed acquisition scalar or any exhausted Scoreline, Afterimage or package-commitment factor."
+}

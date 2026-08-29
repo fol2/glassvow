@@ -1,0 +1,177 @@
+{
+  "GodotProcesses": 0,
+  "assessments": {
+    "exact-current-state-reuse": {
+      "eligible": false,
+      "failedEligibility": [
+        "materiallyDistinct",
+        "evidenceSelected",
+        "notClosedAlias",
+        "separatePayoffs",
+        "decisionValueMeasured",
+        "mechanism-semantics-incomplete"
+      ],
+      "humanAuthorityClass": false,
+      "lifecycleClass": "existing-mixed",
+      "missingMechanismFields": [
+        "mediatorState",
+        "payoffOperation",
+        "scorelineFactor",
+        "afterimageFactor",
+        "interferenceRule"
+      ]
+    },
+    "learned-or-optimised-selector": {
+      "eligible": false,
+      "failedEligibility": [
+        "materiallyDistinct",
+        "evidenceSelected",
+        "notClosedAlias",
+        "broadTaskAuthority",
+        "sourceCarrierAvailable",
+        "deterministic",
+        "noRng",
+        "duskOnly",
+        "separatePayoffs",
+        "methodAuthorised",
+        "decisionValueMeasured",
+        "mechanism-semantics-incomplete"
+      ],
+      "humanAuthorityClass": false,
+      "lifecycleClass": "policy-method",
+      "missingMechanismFields": [
+        "producer",
+        "mediatorState",
+        "consumer",
+        "payoffOperation",
+        "lifecycle",
+        "naturalCost",
+        "duskBoundary",
+        "scorelineFactor",
+        "afterimageFactor",
+        "interferenceRule",
+        "nullPath",
+        "policyExposure"
+      ]
+    },
+    "new-fight-local-combat-or-card-primitive": {
+      "eligible": false,
+      "failedEligibility": [
+        "evidenceSelected",
+        "mechanism-semantics-incomplete",
+        "human-authority-required"
+      ],
+      "humanAuthorityClass": true,
+      "lifecycleClass": "fight-local",
+      "missingMechanismFields": [
+        "producer",
+        "mediatorState",
+        "consumer",
+        "payoffOperation",
+        "lifecycle",
+        "naturalCost",
+        "duskBoundary",
+        "scorelineFactor",
+        "afterimageFactor",
+        "interferenceRule",
+        "nullPath",
+        "policyExposure"
+      ]
+    },
+    "new-persistent-run-or-relic-primitive": {
+      "eligible": false,
+      "failedEligibility": [
+        "evidenceSelected",
+        "mechanism-semantics-incomplete",
+        "human-authority-required"
+      ],
+      "humanAuthorityClass": true,
+      "lifecycleClass": "run-persistent",
+      "missingMechanismFields": [
+        "producer",
+        "mediatorState",
+        "consumer",
+        "payoffOperation",
+        "lifecycle",
+        "naturalCost",
+        "duskBoundary",
+        "scorelineFactor",
+        "afterimageFactor",
+        "interferenceRule",
+        "nullPath",
+        "policyExposure"
+      ]
+    },
+    "presentation-or-acquisition-only": {
+      "eligible": false,
+      "failedEligibility": [
+        "materiallyDistinct",
+        "evidenceSelected",
+        "notClosedAlias",
+        "separatePayoffs",
+        "decisionValueMeasured",
+        "mechanism-semantics-incomplete"
+      ],
+      "humanAuthorityClass": false,
+      "lifecycleClass": "run-persistent-acquisition",
+      "missingMechanismFields": [
+        "payoffOperation",
+        "scorelineFactor",
+        "afterimageFactor",
+        "interferenceRule"
+      ]
+    }
+  },
+  "authority": "Apply decision boundary 2 and record the post-fallback mechanism gate unavailable under current authority. Preserve source, ledger and protected seeds; publish the zero-row evidence and present one concise human-authority decision package containing the missing exact mechanism contract and materially different lifecycle options. Keep issue 421 as the single task. Do not invent or recommend an unfrozen candidate, create a successor, implement, simulate, add ML/RL or claim issue 421 or P9 acceptance.",
+  "cacheFilesRead": 0,
+  "claimBoundary": "This audit decides only whether the post-fallback evidence and SSOT uniquely specify a source-complete mechanism. An unavailable result is an authority boundary, not a scientific negative about every possible Duskblade mechanism, autonomous balancing or P9. It does not select content, propose a candidate, implement, inspect support, simulate, reopen a closed family, authorise ML/RL, use protected seeds, accept issue 421 or issue a P9 receipt.",
+  "decision": "record-post-fallback-mechanism-authority-gate-unavailable",
+  "decisionBoundary": 2,
+  "eligibleAutonomousClasses": [],
+  "evidenceFilesRead": 5,
+  "executionError": "",
+  "factorDisposition": {
+    "afterimagePayoff": "A separate causal factor. Exact current-main has no Afterimage or reflection mediator field or apply/consume contract; no closed research mutation may be relabelled as current product semantics.",
+    "jointDesign": "No payoff level, joint cell or factorial is authorised. A later experiment requires exact null identity and separate mechanism blocks with shared interference anchors before any optional joint cell.",
+    "method": "ML, RL and every optimiser remain prohibited because the closed scalar panel did not identify measured method decision value.",
+    "scorelinePayoff": "A separate causal factor. Exact current-main has no Scoreline mediator field or apply/consume contract; no closed research mutation may be relabelled as current product semantics."
+  },
+  "humanAuthorityClasses": [
+    "new-fight-local-combat-or-card-primitive",
+    "new-persistent-run-or-relic-primitive"
+  ],
+  "humanAuthorityLifecycleClasses": [
+    "fight-local",
+    "run-persistent"
+  ],
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newCausalRows": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "newSupportRows": 0,
+  "outcomeClass": "unavailable",
+  "protectedSeedRows": 0,
+  "protocolSha256": "7434949d89c48999e090c5a6850c8d7aacc5c2f707ab0aa7d5252bd9f4164a7f",
+  "runnerSha256": "66b9b2bad9de08e2c3ce3be111a207a026f5f954af219cd6d746846f08b303cb",
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "sourceFilesRead": 9,
+  "wallTimeSeconds": 12.17629124992527
+}

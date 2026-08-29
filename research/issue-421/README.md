@@ -24,6 +24,42 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### V37 comparator correction, scalar closure and mechanism authority boundary
+
+Controlling owner comment `5458109992` classified the earlier ChoiceScreen
+cross-probe mismatch as a comparator-schema defect and authorised one zero-row
+semantic identity v2 plus the bounded existing-consumer fallback. Identity v2
+passed from the seven immutable v1 cache objects. The exact current selector
+then closed at capacity, and the only admissible research method was a fixed
+exogenous `off` / `executioner` / `guardedStrike` factor.
+
+That factor passed corrected implementation identity, but its common-cohort
+support panel was non-selective: Scoreline co-play was robust in all 64 policies,
+Afterimage co-play in 63, neither arm retained an exact-inactive policy, their
+active-set Jaccard was 0.984375 and guardedStrike flipped 15 Scoreline anchors.
+The scalar family is closed without retune, subset rescue or another arm.
+
+A zero-row representation audit then selected a dual relic Oath from a false
+semantic precondition. Exact current-main has no Scoreline or Afterimage
+apply/consume mediator on the named consumers, and the proposed Oath had no
+exact producer, mediator, consumer, payoff or lifecycle. The versioned semantic
+audit quarantines that result before design.
+
+The final source-complete mechanism-requirement audit found no autonomously
+eligible continuation. Fight-local combat/card state and run-persistent
+state/relic storage are both broadly authorised and mechanically available, but
+their different lifecycles and all twelve required causal/product semantics are
+absent from evidence and the SSOT. Selecting either would be a genuinely
+product-defining subjective choice. Decision boundary 2 therefore records the
+relevant gate unavailable under current authority; it is not a universal
+scientific negative.
+
+Since archive head `ce0d9089`, this bounded continuation added 1,031 observations
+in seven Godot processes: seven direct identity rows, 512 null identity rows and
+512 support rows. It added zero causal rows, zero ledger rows and zero protected-
+seed rows. `main` remains `c4130163`; #421 and the #108 P9 receipt remain open.
+See `summaries/progress-post-v30-explicit-acquisition-mechanism-boundary-v1.md`.
+
 ### V36 controlling-owner fallback closure
 
 Comment `5457447279` authorised one schema-only private-debt identity v2 and,

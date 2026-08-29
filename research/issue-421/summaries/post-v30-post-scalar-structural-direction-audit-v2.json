@@ -1,0 +1,71 @@
+{
+  "GodotProcesses": 0,
+  "authority": "Preserve v1 as immutable zero-row semantic-precondition-inconclusive evidence. Do not implement, repair, relabel or rerun the Oath selection. Continue inside issue 421 with one source-complete mechanism-requirement audit that must freeze an exact producer, mediator, consumer, payoff operation and lifecycle before comparing representations; use no support, simulator, ML, RL, optimiser or protected seed.",
+  "decision": "quarantine-dual-oath-selection-before-design",
+  "decisionBoundary": 3,
+  "executionError": "",
+  "findings": {
+    "afterimageMediatorFieldsAbsent": true,
+    "classification": "semantic-precondition-mismatch",
+    "currentExecutionerKeys": [
+      "bonus",
+      "cost",
+      "effects",
+      "id",
+      "kind",
+      "n",
+      "name",
+      "rarity",
+      "target",
+      "text",
+      "type",
+      "up",
+      "vfx"
+    ],
+    "currentGuardedStrikeKeys": [
+      "cost",
+      "effects",
+      "kind",
+      "n",
+      "name",
+      "rarity",
+      "target",
+      "text",
+      "type",
+      "up",
+      "vfx"
+    ],
+    "oathMechanismUnderdefined": true,
+    "scientificDecisionReached": false,
+    "scorelineMediatorFieldsAbsent": true,
+    "v1AfterimageAssertion": "exact current guardedStrike payoff"
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newCausalRows": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "newSupportRows": 0,
+  "outcomeClass": "inconclusive",
+  "protectedSeedRows": 0,
+  "protocolSha256": "f88d6cd75b8ba4b4ca196801963a074d3638e9bfe5a18a63e5ae8d1dd02fb886",
+  "runnerSha256": "56b597c2fefc06831286b7973e6fc9545e61b3d0f79eca0621907e82314d0b91",
+  "schemaVersion": 1,
+  "wallTimeSeconds": 12.235385540989228
+}

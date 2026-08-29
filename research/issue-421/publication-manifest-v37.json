@@ -1,0 +1,252 @@
+{
+  "schemaVersion": 37,
+  "issue": 421,
+  "purpose": "remote-review-only; comparator-correction-through-post-fallback-mechanism-authority-boundary; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "parentArchiveHead": "ce0d9089b12115c10031b8e976a8f212a4895d09",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "ChoiceScreen comparator correction, exact selector and explicit-acquisition scalar closure, semantic-precondition quarantine and source-complete mechanism authority boundary",
+  "decision": "POST_FALLBACK_MECHANISM_AUTHORITY_GATE_UNAVAILABLE",
+  "authority": {
+    "taskSSOT": "https://github.com/fol2/glassvow/issues/421",
+    "taskBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "controllingDelta": "https://github.com/fol2/glassvow/issues/421#issuecomment-5458109992",
+    "controllingDeltaBodySha256": "f561d1260860d776c181b272ac0269661dcb1f611ed910ed42299e4aa054969d",
+    "programmeContinuesInsideIssue421": true,
+    "successorTicket": null,
+    "escalationClass": "genuinely product-defining subjective choice plus unavailable relevant mechanism gate",
+    "decisionRequired": "Freeze one complete twelve-field fight-local or run-persistent mechanism contract, or explicitly change the #421 acceptance/stop authority while acknowledging that #421 and the #108 P9 receipt remain incomplete."
+  },
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-v30-explicit-acquisition-mechanism-boundary-v1.md",
+    "progressReportSha256": "70527fd87ce6ac79324dd1074c63afda7a55902c40fba12114c14993859177ed",
+    "taskCapsuleSha256": "6eb3e793a96be638e50ce8f4a99655ee3f9af5912ca042a56f77446b739f1ac0",
+    "studies": {
+      "choiceScreenIdentityV2": {
+        "runnerSha256": "ae9dc7b93a1101d703d78c13edc2812d193708a037b19e6904e0f8bbb3d8ab17",
+        "protocolSha256": "e7b3c1191d62ce507db5034224dcfcdb8e1df220673fd1c7df39437446ffd34b",
+        "summarySha256": "ca315590ecd9e0f3d1c3d4960083570651a9831724538688ac661a1690c94127"
+      },
+      "choiceScreenSelectorCapacity": {
+        "runnerSha256": "261ca2a0f901a90a2f1273dde80d236a2da24604229b5cf47aeec5ccdd4fb90d",
+        "protocolSha256": "3fb5854b7ae5ce9b7c59e3a5c6be5cfac19fbe8bca8b6dc63a4f0c8c98514169",
+        "summarySha256": "c4530c2c0aebcc9427a3d971a8d926126865ece0b790d1c51dfb728111ab4ed9"
+      },
+      "explicitAcquisitionMethodDesign": {
+        "runnerSha256": "f02601b1f052e7cb820c1fbad4e176a7b00ca5d23326baff26b133b04ca9280c",
+        "protocolSha256": "171b48ac148580d4261b037e52ab74ac8b804395f0c4ab794ab743d4a47d70a6",
+        "summarySha256": "0f3bd15686d9cfd3bb4feef8d26a070143ef2b4b24b0a147b1e6a53c49d78fbf"
+      },
+      "explicitAcquisitionIdentityV1": {
+        "runnerSha256": "d7abaa439621a1e248d05b8beb5d23a643f9ee6f155b0f9051d3acd14eebcef9",
+        "protocolSha256": "fe3583538eb32e4783e3e3f8cea6cb667c0e8926f0947678a5bc87fa8312229b",
+        "summarySha256": "692793e695635a069dd1169a4bc8c7904cb1f9868c580d9f5d283ed436868c7b"
+      },
+      "explicitAcquisitionIdentityV1Audit": {
+        "runnerSha256": "bf503d2fd041ee2f09b1d9bfc1f1af5fbaf9fa99a7bff23b391b1b62fb462dff",
+        "protocolSha256": "57dad9d8aff1e1bc731dcc0bd822ada0150b3a62a3c5d8b8f6d2e42e19f298d7",
+        "summarySha256": "c75de9ddf9f360cf15e86514c5c0d2c55d44003d550bdde0341b2d3ce3cc400b"
+      },
+      "explicitAcquisitionIdentityV2": {
+        "runnerSha256": "19efc05a103ec4e27c8ca09dcac211b04f5db2295174f1455294eeeda17bdbb8",
+        "protocolSha256": "41cd3939161f83cabff9891e30f235f999643b84025c710c89854841566dbd8b",
+        "summarySha256": "b92989b458be009aa90bb22f45d13345a6d512554e360574dd8b7c0a395f9b64"
+      },
+      "explicitAcquisitionSupport": {
+        "runnerSha256": "79ac7c87c6fd8fe7e3f4ba39a0ff6e8afbae847732bfcb65cbc9e17c7ec70bf0",
+        "protocolSha256": "dcfad4ad12104fe71b2bcd6554e7aa57a126e72e1f0960a645432e7c46579200",
+        "summarySha256": "0364d18cda1e971a70988ae88d61a131d3aebf2bb7ca8fbe5d7e5ee05f0ac043"
+      },
+      "postScalarStructuralDirectionV1": {
+        "runnerSha256": "9ac208bc1c831356c767bb42398a0a10d9a2609e504e6a588d55d316174fce6f",
+        "protocolSha256": "afb42dbfb3c95168a6350ee0e3a3b0c5d3105d5c81d0f0c148301ca7624370af",
+        "summarySha256": "0d34c0be5b7ff244dd19bf1509fee32ce02dea87cf4b9149b1fa346d545a5058"
+      },
+      "postScalarStructuralDirectionAuditV1": {
+        "runnerSha256": "56b597c2fefc06831286b7973e6fc9545e61b3d0f79eca0621907e82314d0b91",
+        "protocolSha256": "dd541385c0df7c70b23e9fdee9858b44f21de20af1864ed5d2a86a6051446f31",
+        "summarySha256": null,
+        "mechanicalFailure": "Python lowercase false after all semantic checks; no summary, simulator row, Godot process or ledger change"
+      },
+      "postScalarStructuralDirectionAuditV2": {
+        "entrypointSha256": "01148983e73c28017017fa915c7e0ca8d4184a45961ad458b3301b7a9695a45c",
+        "analyserSha256": "56b597c2fefc06831286b7973e6fc9545e61b3d0f79eca0621907e82314d0b91",
+        "protocolSha256": "f88d6cd75b8ba4b4ca196801963a074d3638e9bfe5a18a63e5ae8d1dd02fb886",
+        "summarySha256": "a0f648513a49a6ba18605536743381fe57611950e8b8ddec11780386825ca1fd"
+      },
+      "mechanismRequirementBoundary": {
+        "runnerSha256": "66b9b2bad9de08e2c3ce3be111a207a026f5f954af219cd6d746846f08b303cb",
+        "protocolSha256": "7434949d89c48999e090c5a6850c8d7aacc5c2f707ab0aa7d5252bd9f4164a7f",
+        "summarySha256": "6dad7a3ef4af56b4ebfe00c2c77395af5ab7719aefbfe7bc8241f681391fc6c8"
+      }
+    }
+  },
+  "gateResults": {
+    "choiceScreenIdentityV2": {
+      "decisionBoundary": 1,
+      "decision": "freeze-choice-screen-identity-v2",
+      "frozenObservationsReanalysed": 768,
+      "newSimulatorRows": 0,
+      "GodotProcesses": 0,
+      "completeIdentityMismatches": 0
+    },
+    "choiceScreenSelectorCapacity": {
+      "decisionBoundary": 2,
+      "decision": "close-choice-screen-selector-at-capacity",
+      "choices": {
+        "executioner": 53,
+        "guardedStrike": 1,
+        "decline": 10
+      },
+      "baselineViable": {
+        "executioner": 6,
+        "guardedStrike": 0,
+        "decline": 1
+      }
+    },
+    "explicitAcquisitionIdentityV1": {
+      "scientificDecision": null,
+      "classification": "mechanical empty-output call-binding failure",
+      "directRows": 7,
+      "directControlsPassed": 7,
+      "comparableSentinelRows": 0,
+      "GodotProcesses": 3
+    },
+    "explicitAcquisitionIdentityV2": {
+      "decisionBoundary": 1,
+      "decision": "freeze-explicit-acquisition-factor-for-support",
+      "newNullIdentityRows": 512,
+      "reusedDirectRows": 7,
+      "completeIdentityMismatches": 0,
+      "GodotProcesses": 2
+    },
+    "explicitAcquisitionSupport": {
+      "decisionBoundary": 2,
+      "decision": "close-explicit-acquisition-at-support-cap",
+      "newSupportRows": 512,
+      "scorelineRobustPolicies": 64,
+      "afterimageRobustPolicies": 63,
+      "scorelineExactInactivePolicies": 0,
+      "afterimageExactInactivePolicies": 0,
+      "intendedSetJaccard": 0.984375,
+      "scorelineAnchorFlipsFromGuardedStrike": 15,
+      "GodotProcesses": 2
+    },
+    "semanticPreconditionAudit": {
+      "decisionBoundary": 3,
+      "decision": "quarantine-dual-oath-selection-before-design",
+      "scorelineMediatorFieldsAbsent": true,
+      "afterimageMediatorFieldsAbsent": true,
+      "oathMechanismUnderdefined": true,
+      "scientificDecisionReached": false
+    },
+    "mechanismRequirementBoundary": {
+      "decisionBoundary": 2,
+      "decision": "record-post-fallback-mechanism-authority-gate-unavailable",
+      "eligibleAutonomousClasses": [],
+      "humanAuthorityClasses": [
+        "new-fight-local-combat-or-card-primitive",
+        "new-persistent-run-or-relic-primitive"
+      ],
+      "humanAuthorityLifecycleClasses": [
+        "fight-local",
+        "run-persistent"
+      ],
+      "newSimulatorRows": 0,
+      "GodotProcesses": 0
+    }
+  },
+  "rawCacheObjects": [
+    "071a09daf9ffe76e1f52fca827245477506075dabd3372a86e375219af53482d",
+    "0f71d12b8a124363c4ce57a403657c02e4529735018495d2809d23758152ce9f",
+    "19ed154a3296ea5e57171195e573a94e2bbbb527fd688698bc22ca8417db0763",
+    "1c9c2748dc6c2359744e469c0db2d361281b6080e71ae8ddb759e5bbd4e9bf18",
+    "29127a4bf462e041a7ff1aeaa41adf89680ea02e4569df827f1040a8dc0ef73a",
+    "3edbd2d0a951345c69a9c5c38367361712f887bd1fb24a8f33dce017dfd255ff",
+    "481e0ed42a966f552551a60b1a62d90763c8b60fa939bc1b9bd19d279bd3c782",
+    "4855dc110b35969652efb27c7304bf090065f4dbe04192131bfade01c6edd6ba",
+    "7a14f57f48112c01174dc8d1fdbd41a4f5e14e15a4fbd3ac6ea7799d59373a8d",
+    "81618f176ae8791d185bee4e56e41041078bb8e322b2e8f4e270093b6addd04f",
+    "bd83feeb16285910620d2a7b05676663fa124332db66b32b8a1321b9061176b0",
+    "c54705c0eea6438be61f62b83d2f09dfe13936a150000d580d3099da4dac28c8",
+    "d3116ce0e34f3d5124f2d831a2c97e07d0ac6d62100d794c7db1b93f37745ca9"
+  ],
+  "prototypeArchive": {
+    "explicitAcquisitionV1": {
+      "runStateSha256": "59eda7922eb9e2b98a0e67d433427be5f174462e8c0731329328b15d4de20b5d",
+      "balanceSimSha256": "71d81315fc3e1ffb53014883543608dd3554f68884c9d76ed7c5eac1abd36d27",
+      "probeSha256": "0852f97faa300c655bd6707ae5f723db6c3d6f13dad56e5cc350e6012bda8052",
+      "probeUidSha256": "ec77c4414de892b4b836aa101dfed8de88c59daab88280f0ae45cd5af6d6806e"
+    },
+    "explicitAcquisitionV2": {
+      "runStateSha256": "59eda7922eb9e2b98a0e67d433427be5f174462e8c0731329328b15d4de20b5d",
+      "balanceSimSha256": "71d81315fc3e1ffb53014883543608dd3554f68884c9d76ed7c5eac1abd36d27",
+      "probeSha256": "967df110a54cc97fa8841987b110cddc32f2eca58d7e3171a1c2e0eae44d5f14",
+      "probeUidSha256": "ec77c4414de892b4b836aa101dfed8de88c59daab88280f0ae45cd5af6d6806e"
+    },
+    "explicitAcquisitionSupportV1": {
+      "runStateSha256": "59eda7922eb9e2b98a0e67d433427be5f174462e8c0731329328b15d4de20b5d",
+      "balanceSimSha256": "71d81315fc3e1ffb53014883543608dd3554f68884c9d76ed7c5eac1abd36d27",
+      "probeSha256": "f1b31e84c075ad178de9366defbd43edc6eccf7997170fbe611d1bf1a605b12b",
+      "probeUidSha256": "ddc0eef0e06a8d6fcf358127e58b2d3f06cac4197c045ed4cdb9e9fd67422f1d"
+    },
+    "identity": "SHA-identical copies of research-only source deltas; never product authority"
+  },
+  "interpretationBoundary": {
+    "claim": "The current SSOT and evidence do not uniquely specify one complete post-fallback mechanism. Fight-local and run-persistent directions remain materially distinct and require product semantics. This is an unavailable relevant gate, not a universal scientific negative.",
+    "requiredMechanismFields": [
+      "producer",
+      "mediator state",
+      "consumer",
+      "payoff operation",
+      "lifecycle",
+      "natural cost",
+      "Dusk boundary",
+      "Scoreline factor",
+      "Afterimage factor",
+      "interference rule",
+      "null path",
+      "policy exposure"
+    ],
+    "forbidden": [
+      "choose or recommend an unfrozen fight-local or run-persistent behaviour",
+      "implement or simulate before the exact mechanism contract is supplied",
+      "reopen the closed explicit-acquisition scalar or the quarantined Oath selection",
+      "add ML, RL, optimiser or adaptive candidate-by-candidate tuning",
+      "use protected seeds",
+      "claim detector, RC, #421 or P9 acceptance"
+    ]
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0,
+    "newLedgerRows": 0
+  },
+  "verification": {
+    "pythonParse": "PASS for eleven new deterministic runners",
+    "jsonParse": "PASS for all new protocols, summaries, manifest and the copied task capsule",
+    "copyParity": "PASS for all new runners, protocols, summaries, task capsule, prototype source and raw objects",
+    "rawObjectIdentity": "PASS for 13/13 filename-to-content SHA-256 identities",
+    "sha256Index": "PASS (888/888)",
+    "sha256IndexSha256": "75734e529ac1482af339b90185c9229180d3332f531417f8d45a14732bdef81f",
+    "productGateClaim": null
+  },
+  "remoteHeadsBeforePublication": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "ce0d9089b12115c10031b8e976a8f212a4895d09",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6"
+  },
+  "executionDisclosure": "The bounded continuation added 1,031 observations in seven Godot processes: seven direct identity, 512 null identity and 512 support observations. It added zero causal rows, zero ledger rows and zero protected-seed rows. Every later representation, semantic and authority decision was zero-row.",
+  "archiveOnly": true,
+  "productPr": null,
+  "actionsRun": false,
+  "mainChanged": false
+}

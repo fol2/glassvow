@@ -1,0 +1,116 @@
+{
+  "GodotProcesses": 0,
+  "authority": "Freeze the exact ChoiceScreen null implementation as identity-safe and continue autonomously to the next cheapest separately preregistered ChoiceScreen capacity or support gate. Do not run enabled whole-run or causal rows until that gate gives measured authority.",
+  "comparisons": {
+    "omittedVersusExplicitOff": {
+      "completeRowMismatchRows": 0,
+      "mismatchRowsByEstimand": {
+        "identity": 0,
+        "path": 0,
+        "policy": 0,
+        "reliability": 0,
+        "result": 0,
+        "rng": 0,
+        "telemetry": 0
+      },
+      "mismatchRowsByField": {
+        "aspect": 0,
+        "deck": 0,
+        "deckIds": 0,
+        "economy": 0,
+        "error": 0,
+        "fights": 0,
+        "gold": 0,
+        "goldEarned": 0,
+        "hp": 0,
+        "maxHp": 0,
+        "outcome": 0,
+        "packageEvents": 0,
+        "policy": 0,
+        "relics": 0,
+        "rng": 0,
+        "seed": 0,
+        "vow": 0
+      },
+      "rows": 256
+    },
+    "pristineVersusOmitted": {
+      "completeRowMismatchRows": 0,
+      "mismatchRowsByEstimand": {
+        "identity": 0,
+        "path": 0,
+        "policy": 0,
+        "reliability": 0,
+        "result": 0,
+        "rng": 0,
+        "telemetry": 0
+      },
+      "mismatchRowsByField": {
+        "aspect": 0,
+        "deck": 0,
+        "deckIds": 0,
+        "economy": 0,
+        "error": 0,
+        "fights": 0,
+        "gold": 0,
+        "goldEarned": 0,
+        "hp": 0,
+        "maxHp": 0,
+        "outcome": 0,
+        "packageEvents": 0,
+        "policy": 0,
+        "relics": 0,
+        "rng": 0,
+        "seed": 0,
+        "vow": 0
+      },
+      "rows": 256
+    }
+  },
+  "decision": "freeze-choice-screen-identity-v2",
+  "decisionBoundary": 1,
+  "enabledWholeRunRows": 0,
+  "executionError": "",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newCapacityRows": 0,
+  "newCausalRows": 0,
+  "newIdentityObservationRows": 0,
+  "newLedgerRows": 0,
+  "newSupportRows": 0,
+  "outcomeClass": "success",
+  "preflight": {
+    "baselineRows": 256,
+    "cacheObjectsVerified": 7,
+    "cohortOrderExact": true,
+    "directRows": 6,
+    "perArmProvenanceExact": true,
+    "prototypeExplicitOffRows": 256,
+    "prototypeOmittedRows": 256,
+    "rowSchemaFields": 17,
+    "semanticContentIdentityExact": true,
+    "status": "PASS"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "e7b3c1191d62ce507db5034224dcfcdb8e1df220673fd1c7df39437446ffd34b",
+  "reusedV1IdentityObservationRows": 768,
+  "runnerSha256": "ae9dc7b93a1101d703d78c13edc2812d193708a037b19e6904e0f8bbb3d8ab17",
+  "schemaVersion": 1,
+  "wallTimeSeconds": 18.753863125108182
+}

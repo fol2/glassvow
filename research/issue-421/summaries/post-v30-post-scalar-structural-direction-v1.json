@@ -1,0 +1,156 @@
+{
+  "GodotProcesses": 0,
+  "authority": "Freeze only the selected representation for one separately preregistered source-feasibility and exact design contract. Do not yet add content IDs, choose names or numeric values, implement, simulate, inspect support, add a policy method, use protected seeds or cross promotion.",
+  "decision": "freeze-dual-additive-relic-oath-for-design",
+  "decisionBoundary": 1,
+  "evaluated": {
+    "card-instance-route-tag": {
+      "attributes": {
+        "addressesMeasuredInterference": true,
+        "addressesMeasuredSaturation": true,
+        "addressesMeasuredSelectorScarcity": false,
+        "deterministic": true,
+        "internalIdCompatible": true,
+        "materiallyDistinct": true,
+        "noRng": true,
+        "notClosedAlias": false,
+        "nullIdentityPossible": true,
+        "policyVisible": true,
+        "productSemanticsBounded": false,
+        "saveSchemaCompatible": false,
+        "separatePayoffs": true
+      },
+      "eligible": false,
+      "failedFields": [
+        "addressesMeasuredSelectorScarcity",
+        "notClosedAlias",
+        "productSemanticsBounded",
+        "saveSchemaCompatible"
+      ]
+    },
+    "combat-first-use-commitment": {
+      "attributes": {
+        "addressesMeasuredInterference": true,
+        "addressesMeasuredSaturation": true,
+        "addressesMeasuredSelectorScarcity": false,
+        "deterministic": true,
+        "internalIdCompatible": true,
+        "materiallyDistinct": true,
+        "noRng": true,
+        "notClosedAlias": false,
+        "nullIdentityPossible": true,
+        "policyVisible": true,
+        "productSemanticsBounded": true,
+        "saveSchemaCompatible": true,
+        "separatePayoffs": true
+      },
+      "eligible": false,
+      "failedFields": [
+        "addressesMeasuredSelectorScarcity",
+        "notClosedAlias"
+      ]
+    },
+    "dual-additive-relic-oath": {
+      "attributes": {
+        "addressesMeasuredInterference": true,
+        "addressesMeasuredSaturation": true,
+        "addressesMeasuredSelectorScarcity": true,
+        "deterministic": true,
+        "internalIdCompatible": true,
+        "materiallyDistinct": true,
+        "noRng": true,
+        "notClosedAlias": true,
+        "nullIdentityPossible": true,
+        "policyVisible": true,
+        "productSemanticsBounded": true,
+        "saveSchemaCompatible": true,
+        "separatePayoffs": true
+      },
+      "eligible": true,
+      "failedFields": []
+    },
+    "learned-or-optimised-selector": {
+      "attributes": {
+        "addressesMeasuredInterference": false,
+        "addressesMeasuredSaturation": false,
+        "addressesMeasuredSelectorScarcity": true,
+        "deterministic": false,
+        "internalIdCompatible": true,
+        "materiallyDistinct": false,
+        "noRng": false,
+        "notClosedAlias": false,
+        "nullIdentityPossible": false,
+        "policyVisible": false,
+        "productSemanticsBounded": false,
+        "saveSchemaCompatible": true,
+        "separatePayoffs": false
+      },
+      "eligible": false,
+      "failedFields": [
+        "materiallyDistinct",
+        "addressesMeasuredSaturation",
+        "addressesMeasuredInterference",
+        "notClosedAlias",
+        "productSemanticsBounded",
+        "deterministic",
+        "noRng",
+        "policyVisible",
+        "separatePayoffs",
+        "nullIdentityPossible"
+      ]
+    },
+    "new-persistent-run-field": {
+      "attributes": {
+        "addressesMeasuredInterference": true,
+        "addressesMeasuredSaturation": true,
+        "addressesMeasuredSelectorScarcity": true,
+        "deterministic": true,
+        "internalIdCompatible": true,
+        "materiallyDistinct": true,
+        "noRng": true,
+        "notClosedAlias": true,
+        "nullIdentityPossible": true,
+        "policyVisible": true,
+        "productSemanticsBounded": true,
+        "saveSchemaCompatible": false,
+        "separatePayoffs": true
+      },
+      "eligible": false,
+      "failedFields": [
+        "saveSchemaCompatible"
+      ]
+    }
+  },
+  "executionError": "",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newCausalRows": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "newSupportRows": 0,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "afb42dbfb3c95168a6350ee0e3a3b0c5d3105d5c81d0f0c148301ca7624370af",
+  "runnerSha256": "9ac208bc1c831356c767bb42398a0a10d9a2609e504e6a588d55d316174fce6f",
+  "schemaVersion": 1,
+  "selected": [
+    "dual-additive-relic-oath"
+  ],
+  "wallTimeSeconds": 19.992087582941167
+}

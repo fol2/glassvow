@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "explicit-acquisition-fixed-cohort-support-v1",
+  "authority": {
+    "taskSsot": "https://github.com/fol2/glassvow/issues/421",
+    "taskBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "ownerDecision": "https://github.com/fol2/glassvow/issues/421#issuecomment-5458109992",
+    "ownerCommentId": 5458109992,
+    "ownerCommentUpdatedAt": "2026-08-28T21:57:08Z",
+    "ownerCommentBodySha256": "f561d1260860d776c181b272ac0269661dcb1f611ed910ed42299e4aa054969d",
+    "classification": "The identity-safe research-only exogenous acquisition factor is the sole eligible post-selector direction. This fixed-cohort panel may measure run-level package co-play support and interference only; it does not establish exact mechanism activation, policy choice sensitivity or causal benefit."
+  },
+  "researchQuestion": "On the exact frozen 64-policy common-random-number cohort, does forcing executioner or guardedStrike produce sufficiently selective, viable run-level co-play support for its intended package, without material cross-package interference or global outcome and duration movement, to justify one separately preregistered exact-mechanism trace?",
+  "claimBoundary": "This panel estimates run-level co-play support under two exogenous acquisition levels. Co-play is not exact mechanism activation, and an exogenous level is not an observed policy choice. No payoff, exact causal interaction, product acceptance, held-out confirmation, protected-seed result or shipping fitness is estimated.",
+  "factorDefinitions": {
+    "explicitDuskAcquisition": {
+      "type": "research-only exogenous categorical factor",
+      "levels": {
+        "off": "Immutable exact-current baseline with no extra acquisition.",
+        "executioner": "Add exactly one existing executioner to the Dusk deck through the identity-safe existing deck, UID and save representation before the frozen run.",
+        "guardedStrike": "Add exactly one existing guardedStrike to the Dusk deck through the identity-safe existing deck, UID and save representation before the frozen run."
+      },
+      "varied": true
+    },
+    "scorelinePayoff": {
+      "type": "separate Scoreline causal factor",
+      "level": "exact current Chisel and executioner authored effects",
+      "varied": false
+    },
+    "afterimagePayoff": {
+      "type": "separate Afterimage causal factor",
+      "level": "exact current defend and guardedStrike authored effects",
+      "varied": false
+    },
+    "acquisitionPriority": {
+      "type": "policy factor",
+      "level": "exogenously assigned acquisition with exact frozen root-552 policy identities",
+      "variedByPolicy": false
+    },
+    "faultlineRarity": {
+      "type": "Scoreline mechanism factor",
+      "level": "exact current",
+      "varied": false
+    },
+    "wardSetupPriority": {
+      "type": "Afterimage mechanism factor",
+      "level": "exact frozen policy identity",
+      "varied": false
+    }
+  },
+  "packages": {
+    "scoreline": {
+      "producer": "chisel",
+      "consumer": "executioner",
+      "enabledArm": "executioner",
+      "coPlayPredicate": "chiselPlayed > 0 and executionerPlayed > 0 within the same complete run"
+    },
+    "afterimage": {
+      "producer": "defend",
+      "consumer": "guardedStrike",
+      "enabledArm": "guardedStrike",
+      "coPlayPredicate": "defendPlayed > 0 and guardedStrikePlayed > 0 within the same complete run"
+    }
+  },
+  "designMatrix": [
+    {
+      "block": "shared baseline anchor",
+      "arm": "off",
+      "explicitDuskAcquisition": "off",
+      "scorelinePayoff": "exact current",
+      "afterimagePayoff": "exact current",
+      "rows": 256,
+      "newRows": 0
+    },
+    {
+      "block": "Scoreline support",
+      "arm": "executioner",
+      "explicitDuskAcquisition": "executioner",
+      "scorelinePayoff": "exact current",
+      "afterimagePayoff": "exact current",
+      "rows": 256,
+      "newRows": 256
+    },
+    {
+      "block": "Afterimage support",
+      "arm": "guardedStrike",
+      "explicitDuskAcquisition": "guardedStrike",
+      "scorelinePayoff": "exact current",
+      "afterimagePayoff": "exact current",
+      "rows": 256,
+      "newRows": 256
+    }
+  ],
+  "anchors": {
+    "source": "Baseline and both enabled arms are detached from origin/main c4130163c7fb8edd865c0adc95732aae03e1bad2. The enabled source must be byte-identical to the passed identity-v2 source except for the separately bound support probe.",
+    "toolchain": "Every new process uses only /Applications/Godot.app/Contents/MacOS/Godot at 4.7.2.stable.official.ed1daf0bf and its frozen binary SHA-256.",
+    "content": "All arms use content a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1 and search space 524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca.",
+    "cohort": "Every contrast uses the same 64 root-552 policy identities, seeds 347200 through 347203, Duskblade, Vow 5, baseline, estimator and stopping rule.",
+    "ordering": "Policy index is outermost and simulation seed identity innermost in every arm; no row may be removed, replaced, imputed or selected away.",
+    "interference": "Each enabled arm is evaluated against the same preregistered baseline Scoreline and Afterimage robust co-play anchor sets. No joint Cartesian cell is authorised.",
+    "ledger": "The append-only ledger remains exactly 480372 records at SHA-256 4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0 with zero protected-seed rows."
+  },
+  "baselineAnchors": {
+    "definition": "A policy is a robust baseline co-play anchor when the package predicate is true on at least three of its four frozen seeds.",
+    "scorelinePolicies": [
+      3,
+      4,
+      10,
+      31,
+      39,
+      59
+    ],
+    "afterimagePolicies": [
+      51,
+      52,
+      55
+    ]
+  },
+  "estimands": {
+    "robustCoPlaySupport": "For each intended arm, the number of policies whose package co-play predicate is true on at least three of four frozen seeds.",
+    "exactInactivity": "For each intended arm, the number of policies whose package co-play predicate is false on all four frozen seeds.",
+    "robustConsumerDraw": "For each intended arm, the number of policies that draw the added consumer on at least three of four frozen seeds.",
+    "viability": "For each intended arm, the number of robust co-play policies with at least one expressed winning run.",
+    "intendedAnchorGain": "The number of robust intended-package policies under the intended arm that were not robust anchors in the shared baseline.",
+    "functionalSeparation": "Counts of intended robust support unique to Scoreline and Afterimage and the Jaccard overlap of the two intended robust sets.",
+    "crossPackageInterference": "Symmetric-difference count between each non-intended package robust set under the opposite acquisition and its preregistered baseline anchor set.",
+    "winMovement": "Policy-clustered paired mean candidate-minus-baseline win indicator with a fixed 5,000-resample percentile interval.",
+    "durationMovement": "Policy-clustered paired mean candidate-minus-baseline turns per fight with a fixed 5,000-resample percentile interval.",
+    "reliability": "Complete cardinality and zero stall, error or non-empty error field in both enabled rectangles.",
+    "notEstimated": "Exact card-order mechanism activation, target state, damage attribution, payoff effects, payoff interactions, policy choice sensitivity, RandomBuild, protected seeds, product UI or acceptance."
+  },
+  "mechanisticInteractions": {
+    "estimated": [],
+    "reason": "Scoreline payoff, Afterimage payoff, Faultline rarity and Ward setup priority are separate fixed factors. The panel measures support and shared-anchor interference, not a payoff interaction.",
+    "expansionRule": "No joint cell may be added from this panel. Only a success disposition may preregister the cheapest exact-mechanism trace; additional joint cells require measured interference decision value in a later immutable protocol."
+  },
+  "aliasStructure": {
+    "coPlay": "Run-level producer and consumer co-play can include unrelated fights and ordering; it is not exact activation, exact package use or causal mediation.",
+    "forcedAcquisition": "An exogenously added card is not a policy choice and cannot establish policy repertoire sufficiency.",
+    "payoffs": "Scoreline and Afterimage payoff remain separate fixed factors; neither is aliased into acquisition or pooled into a four-factor description.",
+    "baseline": "The same off rows anchor both intended gains, both cross-package checks and both global guardrails.",
+    "arms": "Executioner and guardedStrike are two levels of one acquisition factor in separate mechanism blocks, not an invitation to complete a Cartesian product."
+  },
+  "contentPath": "/Users/jamesto/Research/glassvow-p9-421/cache/sha256/a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1.json",
+  "cohort": {
+    "policyRoot": 552,
+    "policyCount": 64,
+    "simulationSeeds": [
+      347200,
+      347201,
+      347202,
+      347203
+    ],
+    "aspect": "duskblade",
+    "vow": 5,
+    "rows": 256,
+    "minimumRowsPerRobustPolicy": 3
+  },
+  "staging": {
+    "mechanicalFirst": "Validate every immutable hash, source equivalence, probe anchor, cache identity, baseline schema, baseline anchor set and complete deterministic plan before execution.",
+    "sentinelSecond": "Run the first four frozen policies across all four seeds in both enabled arms, for 32 rows used only for schema, policy identity and reliability. A fault stops before expansion; scientific support endpoints are not inspected at this stage.",
+    "remainderThird": "Only after a reliable sentinel, run the remaining 60 policies across the same four seeds in both arms, for 480 rows. Neither arm receives a different cohort or support-conditioned expansion.",
+    "sentinelPolicyCount": 4,
+    "expectedRows": {
+      "sentinel": 32,
+      "remainder": 480
+    }
+  },
+  "probeContract": {
+    "path": "tools/research_421_explicit_dusk_acquisition_support_probe.gd",
+    "cardinalityAnchors": [
+      "rows.append(Sim.simulate(",
+      "_write(opts, loaded, rows)"
+    ],
+    "equalityAnchors": [
+      "str(spec[\"acquisition\"])",
+      "\"contentIdentity\": loaded[\"identity\"]",
+      "\"rows\": rows"
+    ],
+    "enabledGuard": "The support probe accepts only executioner or guardedStrike; off, omitted and every other value fail before content execution."
+  },
+  "sourceEquivalence": {
+    "identitySource": "/Users/jamesto/Research/glassvow-p9-421/dusk-explicit-acquisition-identity-v2-source",
+    "identitySourcePaths": [
+      "domain/state/run_state.gd",
+      "tools/balance_sim.gd",
+      "tools/balance_sweep.gd",
+      "tools/balance_cem.gd",
+      "tools/balance_pilot.gd",
+      "tools/balance_policy.gd",
+      "tools/balance_catalogue.gd"
+    ],
+    "rule": "Every listed semantic and driver source is byte-identical to identity v2. Only the support-only probe is new."
+  },
+  "comparisonContract": {
+    "canonicalRowFields": [
+      "aspect",
+      "deck",
+      "deckIds",
+      "economy",
+      "error",
+      "fights",
+      "gold",
+      "goldEarned",
+      "hp",
+      "maxHp",
+      "outcome",
+      "packageEvents",
+      "policy",
+      "relics",
+      "rng",
+      "seed",
+      "vow"
+    ],
+    "nestedFields": "packageEvents and policy must be dictionaries; fights must be a non-empty array of dictionaries with turns.",
+    "policyIdentity": "Every enabled row must reproduce the exact baseline resolved-policy dictionary for the same policy index and simulation seed.",
+    "normalisation": "No field removal, row selection, imputation, endpoint staging or cohort change is permitted."
+  },
+  "estimator": {
+    "unit": "frozen policy identity",
+    "withinPolicy": "Mean the four paired seed differences before resampling.",
+    "bootstrap": "Exactly 5,000 policy-cluster resamples with Python random.Random seeds 423100 and 423101 for win, and 423110 and 423111 for duration.",
+    "interval": "2.5th and 97.5th percentile interval.",
+    "supportRule": "At least three of four seeds for robust co-play or robust draw; zero of four for exact inactivity."
+  },
+  "outputProvenance": {
+    "baselineProbeSha256": "fd4dd3757b4706422353702ffb790e71f8bf660b2c97459b12170a180226013c",
+    "supportProbeSha256": "f1b31e84c075ad178de9366defbd43edc6eccf7997170fbe611d1bf1a605b12b",
+    "baselineContentIdentity": {
+      "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "contentFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "contentPath": "/Users/jamesto/Research/glassvow-p9-421/cache/sha256/a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1.json",
+      "contentSemanticSha256": "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa",
+      "driverSha256": "d399e38c77988f0c039c8efda8ad349a141fac1a97ebca765b0a0103a95a67c7",
+      "godot": "4.7.2-stable (official)",
+      "searchSpacePath": "res://docs/balance/421-content-search-space-v1.json",
+      "searchSpaceSha256": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
+      "stage": ""
+    },
+    "supportContentIdentity": {
+      "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "contentFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "contentPath": "/Users/jamesto/Research/glassvow-p9-421/cache/sha256/a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1.json",
+      "contentSemanticSha256": "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa",
+      "driverSha256": "bfc6a21467bee6e22ce8758979ee09eae5040bde6beff1d46d56a59d795baf5a",
+      "godot": "4.7.2-stable (official)",
+      "searchSpacePath": "res://docs/balance/421-content-search-space-v1.json",
+      "searchSpaceSha256": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
+      "stage": ""
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceStatus": [
+      " M domain/state/run_state.gd",
+      " M tools/balance_sim.gd",
+      "?? tools/research_421_explicit_dusk_acquisition_support_probe.gd",
+      "?? tools/research_421_explicit_dusk_acquisition_support_probe.gd.uid"
+    ],
+    "trackedDiffSha256": "b82fd3e1a82b19f27b06dfba51fa7d144c88a15ac1591c86a56f4da738463935",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "taskCapsuleSha256": "75e34abdab548c99cb5e876c044093a8be9674ed564d90c9862e8d6282cd0360",
+    "runnerSha256": "79ac7c87c6fd8fe7e3f4ba39a0ff6e8afbae847732bfcb65cbc9e17c7ec70bf0",
+    "driverSha256": "bfc6a21467bee6e22ce8758979ee09eae5040bde6beff1d46d56a59d795baf5a",
+    "sourceSha256": {
+      "domain/state/run_state.gd": "59eda7922eb9e2b98a0e67d433427be5f174462e8c0731329328b15d4de20b5d",
+      "tools/balance_sim.gd": "71d81315fc3e1ffb53014883543608dd3554f68884c9d76ed7c5eac1abd36d27",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_catalogue.gd": "6e240546cd616a2518ee7a2b8fae41aa8a94078429155f89f6d9165eef1c20c0",
+      "tools/balance_sweep.gd": "6d78dcd3d00aa6300aaf32fc498c7a3c9fb4ffea1725f59e6fc8be7b5fa61ff0",
+      "tools/balance_cem.gd": "154fd167ed914e7bfc3b6abd8e45cac381b748f19a52f67d3ba10908049964af",
+      "tools/research_421_explicit_dusk_acquisition_support_probe.gd": "f1b31e84c075ad178de9366defbd43edc6eccf7997170fbe611d1bf1a605b12b",
+      "tools/research_421_explicit_dusk_acquisition_support_probe.gd.uid": "ddc0eef0e06a8d6fcf358127e58b2d3f06cac4197c045ed4cdb9e9fd67422f1d"
+    },
+    "evidenceSha256": {
+      "protocols/post-v30-explicit-acquisition-method-design-v1.json": "171b48ac148580d4261b037e52ab74ac8b804395f0c4ab794ab743d4a47d70a6",
+      "summaries/post-v30-explicit-acquisition-method-design-v1.json": "0f3bd15686d9cfd3bb4feef8d26a070143ef2b4b24b0a147b1e6a53c49d78fbf",
+      "protocols/post-v30-explicit-acquisition-identity-v1-audit.json": "57dad9d8aff1e1bc731dcc0bd822ada0150b3a62a3c5d8b8f6d2e42e19f298d7",
+      "summaries/post-v30-explicit-acquisition-identity-v1-audit.json": "c75de9ddf9f360cf15e86514c5c0d2c55d44003d550bdde0341b2d3ce3cc400b",
+      "protocols/post-v30-explicit-acquisition-identity-v2.json": "41cd3939161f83cabff9891e30f235f999643b84025c710c89854841566dbd8b",
+      "post_v30_explicit_acquisition_identity_v2.py": "19efc05a103ec4e27c8ca09dcac211b04f5db2295174f1455294eeeda17bdbb8",
+      "summaries/post-v30-explicit-acquisition-identity-v2.json": "b92989b458be009aa90bb22f45d13345a6d512554e360574dd8b7c0a395f9b64"
+    }
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "gates": {
+    "minimumRobustCoPlayPolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumRobustConsumerDrawPolicies": 16,
+    "minimumViableCoPlayPolicies": 8,
+    "minimumIntendedAnchorGainPolicies": 8,
+    "minimumExclusivePolicies": 8,
+    "maximumIntendedJaccard": 0.55,
+    "maximumCrossPackageAnchorFlips": 7,
+    "maximumVow5WinRate": 0.9,
+    "maximumAbsoluteWinMovement": 0.1,
+    "maximumDurationMovement": 0.25
+  },
+  "budget": {
+    "maximumReusedBaselineRows": 256,
+    "maximumNewSupportObservationRows": 512,
+    "maximumNewCausalRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumGodotProcesses": 2,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "success": "Every immutable and mechanical preflight passes; the sentinel has complete schema, exact policy identities and zero faults; both complete 256-row enabled rectangles pass every fixed support, inactivity, draw, viability, gain, separation, interference, reliability and Vow-5 gate; each win interval lies wholly within plus or minus 0.10; each duration interval upper bound is at most 0.25; the ledger is unchanged and all numeric ceilings hold.",
+    "successAuthority": "Freeze this one explicit-acquisition factor, with its two mechanism-blocked levels, only for one separately preregistered exact-mechanism trace. Do not call co-play activation, admit a product candidate, use held-out or protected seeds, vary a payoff, add a joint cell or introduce ML, RL or another optimiser.",
+    "futility": "After a green mechanical preflight, the reliable complete panel fails any fixed gate, a win movement point estimate exceeds plus or minus 0.10, a duration movement lower interval exceeds 0.25, or the sentinel contains a fault.",
+    "futilityAuthority": "Close this exact exogenous acquisition scalar family without retune, subgroup rescue, another arm, cohort change, threshold change or rerun, then continue inside issue 421 with the next evidence-backed structural mechanism.",
+    "inconclusive": "A required immutable artefact, cache, source identity, schema, provenance, ledger identity or numeric cap fails before a valid endpoint decision, or all fixed gates avoid futility but a win or duration interval does not fit wholly inside its success bound.",
+    "inconclusiveAuthority": "Record this exact panel inconclusive at its preregistered cap. Do not repair, rerun, create v2, inspect a promising subgroup or expand the design. Continue only as permitted by issue 421 and the controlling owner decision."
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python validates immutable evidence, constructs plans, invokes the exact Godot binary, content-addresses plans and outputs, maps paired identities, computes fixed support and clustered estimands and writes one summary.",
+    "firstLook": "The 32-row sentinel is used only for schema, policy identity and reliability. Promising support cannot alter expansion.",
+    "automaticDisposition": [
+      "Success freezes at most the exact acquisition factor for a separately preregistered mechanism trace.",
+      "A valid fixed-gate failure closes the exact scalar family.",
+      "Unavailable evidence or unresolved interval at the cap records inconclusive."
+    ]
+  },
+  "methodBoundary": "Issues 524 and 525 remain immutable evidence and are not reconstructed. The closed score selector is not retuned. No ML, RL, optimiser, candidate-by-candidate adaptation, product mutation, PR, Actions or protected seed is authorised by this panel."
+}

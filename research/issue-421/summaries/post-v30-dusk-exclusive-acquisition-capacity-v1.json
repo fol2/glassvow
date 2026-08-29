@@ -1,0 +1,674 @@
+{
+  "GodotProcesses": 0,
+  "authority": "Close the exact current-policy ChoiceScreen selector at capacity without retuning, subgroup rescue or enabled whole-run rows. Continue inside issue 421 with the next evidence-backed structural mechanism; do not add ML, RL or an optimiser without a separate measured method-decision gate.",
+  "capacity": {
+    "counts": {
+      "baselineFaultRows": 0,
+      "declinePolicies": 10,
+      "declineViablePolicies": 1,
+      "executionerPolicies": 53,
+      "executionerViablePolicies": 6,
+      "guardedStrikePolicies": 1,
+      "guardedStrikeViablePolicies": 0,
+      "tiedPolicies": 0
+    },
+    "eligible": false,
+    "gateResults": {
+      "declineSupport": false,
+      "declineViability": false,
+      "executionerSupport": true,
+      "executionerViability": false,
+      "guardedStrikeSupport": false,
+      "guardedStrikeViability": false,
+      "noOrderTies": true,
+      "reliability": true
+    },
+    "policyScores": {
+      "0": {
+        "cardDecline": 33.7911006156355,
+        "decision": "decline",
+        "executioner": 30.377978884912388,
+        "guardedStrike": 8.276160340880105,
+        "marginToAlternative": 22.101818544032284,
+        "marginToDecline": -3.4131217307231125
+      },
+      "1": {
+        "cardDecline": 2.99925729632378,
+        "decision": "executioner",
+        "executioner": 48.874767477335666,
+        "guardedStrike": 13.55744154881208,
+        "marginToAlternative": 35.31732592852359,
+        "marginToDecline": 45.87551018101189
+      },
+      "10": {
+        "cardDecline": 0.858608353883028,
+        "decision": "executioner",
+        "executioner": 36.72376161251501,
+        "guardedStrike": 9.842523595801485,
+        "marginToAlternative": 26.881238016713528,
+        "marginToDecline": 35.865153258631985
+      },
+      "11": {
+        "cardDecline": 4.85979273915291,
+        "decision": "executioner",
+        "executioner": 16.910665248395837,
+        "guardedStrike": 6.539730638171314,
+        "marginToAlternative": 10.370934610224523,
+        "marginToDecline": 12.050872509242927
+      },
+      "12": {
+        "cardDecline": 1.59170836210251,
+        "decision": "executioner",
+        "executioner": 25.10623511330916,
+        "guardedStrike": 6.749460259600687,
+        "marginToAlternative": 18.356774853708473,
+        "marginToDecline": 23.514526751206652
+      },
+      "13": {
+        "cardDecline": 35.9647201839834,
+        "decision": "decline",
+        "executioner": 20.70207613581976,
+        "guardedStrike": 14.11071511008133,
+        "marginToAlternative": 6.591361025738429,
+        "marginToDecline": -15.262644048163644
+      },
+      "14": {
+        "cardDecline": 25.0165187567472,
+        "decision": "executioner",
+        "executioner": 30.8636583540145,
+        "guardedStrike": 20.88509541962477,
+        "marginToAlternative": 9.978562934389732,
+        "marginToDecline": 5.847139597267301
+      },
+      "15": {
+        "cardDecline": 11.0313931014389,
+        "decision": "executioner",
+        "executioner": 28.94456035294327,
+        "guardedStrike": 11.406008843714929,
+        "marginToAlternative": 17.53855150922834,
+        "marginToDecline": 17.91316725150437
+      },
+      "16": {
+        "cardDecline": 8.48845344036818,
+        "decision": "executioner",
+        "executioner": 28.66227858470278,
+        "guardedStrike": 10.28317424579518,
+        "marginToAlternative": 18.3791043389076,
+        "marginToDecline": 20.1738251443346
+      },
+      "17": {
+        "cardDecline": 9.8300617467612,
+        "decision": "executioner",
+        "executioner": 33.91440818038487,
+        "guardedStrike": 14.128489090873373,
+        "marginToAlternative": 19.785919089511495,
+        "marginToDecline": 24.08434643362367
+      },
+      "18": {
+        "cardDecline": 13.2593926973641,
+        "decision": "executioner",
+        "executioner": 41.16432427343844,
+        "guardedStrike": 19.977246322520678,
+        "marginToAlternative": 21.18707795091776,
+        "marginToDecline": 27.90493157607434
+      },
+      "19": {
+        "cardDecline": 17.0432648342103,
+        "decision": "decline",
+        "executioner": 13.683176355316,
+        "guardedStrike": 6.735932927952687,
+        "marginToAlternative": 6.947243427363313,
+        "marginToDecline": -3.3600884788943013
+      },
+      "2": {
+        "cardDecline": 6.37235627509654,
+        "decision": "executioner",
+        "executioner": 41.889101964315486,
+        "guardedStrike": 10.733515788310509,
+        "marginToAlternative": 31.155586176004977,
+        "marginToDecline": 35.51674568921894
+      },
+      "20": {
+        "cardDecline": 1.735749989748,
+        "decision": "executioner",
+        "executioner": 35.28134201371931,
+        "guardedStrike": 9.076975417173287,
+        "marginToAlternative": 26.204366596546024,
+        "marginToDecline": 33.54559202397131
+      },
+      "21": {
+        "cardDecline": 15.7607640698552,
+        "decision": "executioner",
+        "executioner": 43.508991786338754,
+        "guardedStrike": 9.426897837826088,
+        "marginToAlternative": 34.082093948512664,
+        "marginToDecline": 27.748227716483555
+      },
+      "22": {
+        "cardDecline": 28.7458540592343,
+        "decision": "executioner",
+        "executioner": 35.286811548267536,
+        "guardedStrike": 7.354431353953342,
+        "marginToAlternative": 27.932380194314195,
+        "marginToDecline": 6.540957489033236
+      },
+      "23": {
+        "cardDecline": 1.54440890997648,
+        "decision": "executioner",
+        "executioner": 37.92614078981134,
+        "guardedStrike": 9.736923168038391,
+        "marginToAlternative": 28.18921762177295,
+        "marginToDecline": 36.38173187983486
+      },
+      "24": {
+        "cardDecline": 2.11137842386961,
+        "decision": "executioner",
+        "executioner": 47.4084170348723,
+        "guardedStrike": 12.95049027580653,
+        "marginToAlternative": 34.45792675906577,
+        "marginToDecline": 45.29703861100269
+      },
+      "25": {
+        "cardDecline": 9.18602232821286,
+        "decision": "executioner",
+        "executioner": 69.4773440450424,
+        "guardedStrike": 14.431498702013368,
+        "marginToAlternative": 55.04584534302903,
+        "marginToDecline": 60.29132171682954
+      },
+      "26": {
+        "cardDecline": 26.8420078512281,
+        "decision": "executioner",
+        "executioner": 32.848646859321704,
+        "guardedStrike": 8.01091117275384,
+        "marginToAlternative": 24.837735686567864,
+        "marginToDecline": 6.006639008093604
+      },
+      "27": {
+        "cardDecline": 36.3182951230556,
+        "decision": "decline",
+        "executioner": 9.04741046186112,
+        "guardedStrike": 11.24980304138207,
+        "marginToAlternative": 2.20239257952095,
+        "marginToDecline": -25.06849208167353
+      },
+      "28": {
+        "cardDecline": 8.48951251246035,
+        "decision": "executioner",
+        "executioner": 16.2938404777272,
+        "guardedStrike": 9.539288497404526,
+        "marginToAlternative": 6.754551980322676,
+        "marginToDecline": 7.804327965266852
+      },
+      "29": {
+        "cardDecline": 27.5949218776077,
+        "decision": "executioner",
+        "executioner": 43.66811751487854,
+        "guardedStrike": 13.30933287796157,
+        "marginToAlternative": 30.35878463691697,
+        "marginToDecline": 16.07319563727084
+      },
+      "3": {
+        "cardDecline": 19.0675487183034,
+        "decision": "executioner",
+        "executioner": 45.213875891511016,
+        "guardedStrike": 6.659154818998192,
+        "marginToAlternative": 38.55472107251283,
+        "marginToDecline": 26.146327173207617
+      },
+      "30": {
+        "cardDecline": 28.4590957593173,
+        "decision": "executioner",
+        "executioner": 68.16529926697386,
+        "guardedStrike": 7.329908346842129,
+        "marginToAlternative": 60.83539092013173,
+        "marginToDecline": 39.70620350765656
+      },
+      "31": {
+        "cardDecline": 29.5717162825167,
+        "decision": "executioner",
+        "executioner": 58.8578185341494,
+        "guardedStrike": 13.383927460179759,
+        "marginToAlternative": 45.47389107396964,
+        "marginToDecline": 29.286102251632702
+      },
+      "32": {
+        "cardDecline": 13.3746611326933,
+        "decision": "executioner",
+        "executioner": 49.656191238652596,
+        "guardedStrike": 11.369023096318951,
+        "marginToAlternative": 38.28716814233364,
+        "marginToDecline": 36.2815301059593
+      },
+      "33": {
+        "cardDecline": 35.6780142523348,
+        "decision": "executioner",
+        "executioner": 48.149123500265816,
+        "guardedStrike": 7.565050289123214,
+        "marginToAlternative": 40.5840732111426,
+        "marginToDecline": 12.471109247931018
+      },
+      "34": {
+        "cardDecline": 33.9259080775082,
+        "decision": "executioner",
+        "executioner": 60.64869178294094,
+        "guardedStrike": 7.033957270871318,
+        "marginToAlternative": 53.614734512069624,
+        "marginToDecline": 26.722783705432747
+      },
+      "35": {
+        "cardDecline": 17.5189123954624,
+        "decision": "executioner",
+        "executioner": 37.4986514854072,
+        "guardedStrike": 16.648277512174566,
+        "marginToAlternative": 20.850373973232635,
+        "marginToDecline": 19.9797390899448
+      },
+      "36": {
+        "cardDecline": 18.6145497392863,
+        "decision": "executioner",
+        "executioner": 37.20305639147902,
+        "guardedStrike": 17.652710451733178,
+        "marginToAlternative": 19.550345939745846,
+        "marginToDecline": 18.588506652192724
+      },
+      "37": {
+        "cardDecline": 10.1738469488919,
+        "decision": "guardedStrike",
+        "executioner": 9.30166851285841,
+        "guardedStrike": 13.407147534625178,
+        "marginToAlternative": 4.105479021766769,
+        "marginToDecline": 3.2333005857332786
+      },
+      "38": {
+        "cardDecline": 10.363812064752,
+        "decision": "executioner",
+        "executioner": 25.4988181449428,
+        "guardedStrike": 9.293862162600355,
+        "marginToAlternative": 16.204955982342444,
+        "marginToDecline": 15.135006080190799
+      },
+      "39": {
+        "cardDecline": 3.58785077929497,
+        "decision": "executioner",
+        "executioner": 27.8125810485487,
+        "guardedStrike": 10.732023267788946,
+        "marginToAlternative": 17.080557780759754,
+        "marginToDecline": 24.22473026925373
+      },
+      "4": {
+        "cardDecline": 3.60864195041358,
+        "decision": "executioner",
+        "executioner": 26.74235819661632,
+        "guardedStrike": 10.95414132298066,
+        "marginToAlternative": 15.788216873635658,
+        "marginToDecline": 23.133716246202738
+      },
+      "40": {
+        "cardDecline": 37.9117713868618,
+        "decision": "decline",
+        "executioner": 33.46214035104254,
+        "guardedStrike": 6.452442208806167,
+        "marginToAlternative": 27.009698142236374,
+        "marginToDecline": -4.449631035819259
+      },
+      "41": {
+        "cardDecline": 2.83106057904661,
+        "decision": "executioner",
+        "executioner": 33.55381675956647,
+        "guardedStrike": 8.526967859722559,
+        "marginToAlternative": 25.026848899843912,
+        "marginToDecline": 30.722756180519863
+      },
+      "42": {
+        "cardDecline": 11.7811176087707,
+        "decision": "decline",
+        "executioner": 10.27079903581491,
+        "guardedStrike": 7.3814352548149875,
+        "marginToAlternative": 2.889363780999923,
+        "marginToDecline": -1.5103185729557893
+      },
+      "43": {
+        "cardDecline": 4.17685047723353,
+        "decision": "executioner",
+        "executioner": 30.99364738297176,
+        "guardedStrike": 16.27857534993892,
+        "marginToAlternative": 14.71507203303284,
+        "marginToDecline": 26.81679690573823
+      },
+      "44": {
+        "cardDecline": 16.4303393289447,
+        "decision": "executioner",
+        "executioner": 45.02857491905216,
+        "guardedStrike": 16.91778046785246,
+        "marginToAlternative": 28.110794451199702,
+        "marginToDecline": 28.59823559010746
+      },
+      "45": {
+        "cardDecline": 27.396024800837,
+        "decision": "decline",
+        "executioner": 15.03900086621725,
+        "guardedStrike": 9.897792067352583,
+        "marginToAlternative": 5.1412087988646675,
+        "marginToDecline": -12.35702393461975
+      },
+      "46": {
+        "cardDecline": 6.59164321608841,
+        "decision": "executioner",
+        "executioner": 52.949784172699296,
+        "guardedStrike": 14.84193148836394,
+        "marginToAlternative": 38.107852684335356,
+        "marginToDecline": 46.35814095661089
+      },
+      "47": {
+        "cardDecline": 12.4950208887458,
+        "decision": "executioner",
+        "executioner": 35.155471657400284,
+        "guardedStrike": 14.62228437953199,
+        "marginToAlternative": 20.533187277868294,
+        "marginToDecline": 22.660450768654485
+      },
+      "48": {
+        "cardDecline": 38.8228685036302,
+        "decision": "executioner",
+        "executioner": 51.01606374394905,
+        "guardedStrike": 7.407594469536207,
+        "marginToAlternative": 43.60846927441284,
+        "marginToDecline": 12.19319524031885
+      },
+      "49": {
+        "cardDecline": 2.86704843863845,
+        "decision": "executioner",
+        "executioner": 49.70813344357951,
+        "guardedStrike": 13.141294412967309,
+        "marginToAlternative": 36.5668390306122,
+        "marginToDecline": 46.841085004941064
+      },
+      "5": {
+        "cardDecline": 22.2458224371076,
+        "decision": "executioner",
+        "executioner": 76.6516903145259,
+        "guardedStrike": 11.94043308244279,
+        "marginToAlternative": 64.7112572320831,
+        "marginToDecline": 54.405867877418295
+      },
+      "50": {
+        "cardDecline": 38.2291890121996,
+        "decision": "decline",
+        "executioner": 24.879304551016318,
+        "guardedStrike": 12.388070871048768,
+        "marginToAlternative": 12.49123367996755,
+        "marginToDecline": -13.34988446118328
+      },
+      "51": {
+        "cardDecline": 10.6353045254946,
+        "decision": "executioner",
+        "executioner": 15.89002260772139,
+        "guardedStrike": 14.35701756936852,
+        "marginToAlternative": 1.5330050383528704,
+        "marginToDecline": 5.254718082226789
+      },
+      "52": {
+        "cardDecline": 10.6099564488977,
+        "decision": "executioner",
+        "executioner": 32.9434567699454,
+        "guardedStrike": 20.01438409726038,
+        "marginToAlternative": 12.92907267268502,
+        "marginToDecline": 22.3335003210477
+      },
+      "53": {
+        "cardDecline": 25.3055023681372,
+        "decision": "executioner",
+        "executioner": 32.21398657670562,
+        "guardedStrike": 22.23708730661382,
+        "marginToAlternative": 9.976899270091803,
+        "marginToDecline": 6.908484208568421
+      },
+      "54": {
+        "cardDecline": 14.4042764231563,
+        "decision": "executioner",
+        "executioner": 19.33655693312803,
+        "guardedStrike": 15.975248542569961,
+        "marginToAlternative": 3.3613083905580687,
+        "marginToDecline": 4.932280509971729
+      },
+      "55": {
+        "cardDecline": 37.1620141528547,
+        "decision": "executioner",
+        "executioner": 51.6869369789181,
+        "guardedStrike": 14.84257947379761,
+        "marginToAlternative": 36.844357505120485,
+        "marginToDecline": 14.524922826063396
+      },
+      "56": {
+        "cardDecline": 36.9581522233784,
+        "decision": "decline",
+        "executioner": 30.72824499487669,
+        "guardedStrike": 8.598345182443994,
+        "marginToAlternative": 22.129899812432697,
+        "marginToDecline": -6.229907228501709
+      },
+      "57": {
+        "cardDecline": 8.71652052737772,
+        "decision": "executioner",
+        "executioner": 36.49247711920051,
+        "guardedStrike": 21.835158159977084,
+        "marginToAlternative": 14.657318959223424,
+        "marginToDecline": 27.77595659182279
+      },
+      "58": {
+        "cardDecline": 9.905687244609,
+        "decision": "executioner",
+        "executioner": 30.100858636417186,
+        "guardedStrike": 9.691784146720288,
+        "marginToAlternative": 20.4090744896969,
+        "marginToDecline": 20.195171391808188
+      },
+      "59": {
+        "cardDecline": 19.3179130367935,
+        "decision": "executioner",
+        "executioner": 57.815314815660926,
+        "guardedStrike": 8.575565635330058,
+        "marginToAlternative": 49.23974918033087,
+        "marginToDecline": 38.49740177886743
+      },
+      "6": {
+        "cardDecline": 8.34571050480008,
+        "decision": "executioner",
+        "executioner": 25.10028363878937,
+        "guardedStrike": 7.856344758452931,
+        "marginToAlternative": 17.24393888033644,
+        "marginToDecline": 16.75457313398929
+      },
+      "60": {
+        "cardDecline": 24.0301117673516,
+        "decision": "executioner",
+        "executioner": 47.591284429421606,
+        "guardedStrike": 15.92691446532794,
+        "marginToAlternative": 31.664369964093666,
+        "marginToDecline": 23.561172662070007
+      },
+      "61": {
+        "cardDecline": 32.6928401738405,
+        "decision": "executioner",
+        "executioner": 43.665593144795636,
+        "guardedStrike": 15.314458714370499,
+        "marginToAlternative": 28.351134430425137,
+        "marginToDecline": 10.972752970955135
+      },
+      "62": {
+        "cardDecline": 33.1340725533664,
+        "decision": "executioner",
+        "executioner": 33.35182492273493,
+        "guardedStrike": 9.826374158855641,
+        "marginToAlternative": 23.525450763879284,
+        "marginToDecline": 0.21775236936852593
+      },
+      "63": {
+        "cardDecline": 28.3463735319674,
+        "decision": "executioner",
+        "executioner": 76.5674551028314,
+        "guardedStrike": 19.229174015897186,
+        "marginToAlternative": 57.33828108693422,
+        "marginToDecline": 48.221081570864
+      },
+      "7": {
+        "cardDecline": 24.2989040073007,
+        "decision": "decline",
+        "executioner": 19.359385396447962,
+        "guardedStrike": 12.167153617733799,
+        "marginToAlternative": 7.192231778714163,
+        "marginToDecline": -4.939518610852737
+      },
+      "8": {
+        "cardDecline": 8.0331926420331,
+        "decision": "executioner",
+        "executioner": 40.5025769647951,
+        "guardedStrike": 11.39692006267463,
+        "marginToAlternative": 29.105656902120465,
+        "marginToDecline": 32.469384322762
+      },
+      "9": {
+        "cardDecline": 18.0333064123988,
+        "decision": "executioner",
+        "executioner": 18.80624765475118,
+        "guardedStrike": 9.993382911862795,
+        "marginToAlternative": 8.812864742888383,
+        "marginToDecline": 0.7729412423523776
+      }
+    },
+    "policySets": {
+      "decline": [
+        0,
+        7,
+        13,
+        19,
+        27,
+        40,
+        42,
+        45,
+        50,
+        56
+      ],
+      "declineViable": [
+        13
+      ],
+      "executioner": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        38,
+        39,
+        41,
+        43,
+        44,
+        46,
+        47,
+        48,
+        49,
+        51,
+        52,
+        53,
+        54,
+        55,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ],
+      "executionerViable": [
+        4,
+        14,
+        17,
+        39,
+        51,
+        63
+      ],
+      "guardedStrike": [
+        37
+      ],
+      "guardedStrikeViable": [],
+      "ties": []
+    }
+  },
+  "decision": "close-choice-screen-selector-at-capacity",
+  "decisionBoundary": 2,
+  "executionError": "",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newCausalRows": 0,
+  "newIdentityObservationRows": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "newSupportRows": 0,
+  "observedInputs": {
+    "pilotSha256": "77a2120f3c406e2ef699966daa28101551f83d63629ae1914953e34b28f485d7",
+    "runnerSha256": "261ca2a0f901a90a2f1273dde80d236a2da24604229b5cf47aeec5ccdd4fb90d",
+    "scoringHelperSha256": "107c4bee93c8c913114c78c7df4deaf339fc862623b16ced293858effaa2317f",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "taskCapsuleSha256": "68d9d30bfe3c1200e071b196f162ca2a71b58f4177cac5c1610723acce38336c"
+  },
+  "outcomeClass": "futility",
+  "preflight": {
+    "cacheObjectsVerified": 5,
+    "cachedDirectRowsRead": 6,
+    "cachedWholeRunRowsRead": 256,
+    "directScoreAnchorsExact": true,
+    "directSelectorAnchorsExact": true,
+    "policyIdentities": 64,
+    "status": "PASS"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "3fb5854b7ae5ce9b7c59e3a5c6be5cfac19fbe8bca8b6dc63a4f0c8c98514169",
+  "runnerSha256": "261ca2a0f901a90a2f1273dde80d236a2da24604229b5cf47aeec5ccdd4fb90d",
+  "schemaVersion": 1,
+  "wallTimeSeconds": 11.872001042007469
+}

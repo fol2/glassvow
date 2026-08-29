@@ -1,0 +1,38 @@
+{
+  "authority": "Preserve v1 as a mechanical harness failure with no scientific disposition. Under controlling owner comment 5458109992, freeze one separately versioned correction limited to removing the stray Boolean argument from each whole-run call and strengthening preflight to bind the complete call templates. Do not change factor semantics, direct cases, content, cohort, policies, seeds, estimands, budget, stop rules or enabled-row prohibition.",
+  "decision": "classify-v1-as-empty-output-call-binding-failure",
+  "decisionBoundary": 0,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newGodotProcesses": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "mechanical-harness-failure",
+  "protectedSeedRows": 0,
+  "protocolSha256": "57dad9d8aff1e1bc731dcc0bd822ada0150b3a62a3c5d8b8f6d2e42e19f298d7",
+  "reason": "V1 direct controls are seven-for-seven exact, but every one of the 32 sentinel output positions is an empty dictionary. Exact source proves the omitted call passed an extra Boolean into the new trailing String acquisition parameter and the explicit-off call supplied one argument beyond that signature. The frozen Python schema gate correctly stopped the remainder, but its preflight had not validated these call bindings. V1 therefore reached no scientific null-identity decision and cannot close or support the acquisition factor.",
+  "runnerSha256": "bf503d2fd041ee2f09b1d9bfc1f1af5fbaf9fa99a7bff23b391b1b62fb462dff",
+  "schemaVersion": 1,
+  "scientificIdentityDecision": "not reached",
+  "v1DirectValidRows": 7,
+  "v1SentinelAttemptedRows": 32,
+  "v1SentinelEmptyPositions": 32,
+  "v1SentinelValidObservationRows": 0,
+  "wallTimeSeconds": 5.983736082911491
+}

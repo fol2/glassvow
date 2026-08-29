@@ -1,0 +1,419 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "explicit-acquisition-implementation-identity-v2",
+  "authority": {
+    "taskSsot": "https://github.com/fol2/glassvow/issues/421",
+    "taskBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "ownerDecision": "https://github.com/fol2/glassvow/issues/421#issuecomment-5458109992",
+    "ownerCommentId": 5458109992,
+    "ownerCommentUpdatedAt": "2026-08-28T21:57:08Z",
+    "ownerCommentBodySha256": "f561d1260860d776c181b272ac0269661dcb1f611ed910ed42299e4aa054969d",
+    "classification": "V1 reached no scientific identity decision because an unvalidated whole-run call binding produced only empty sentinel positions. The controlling owner rule forbids mechanism closure for empty-output wiring and permits this separately versioned correction limited to those two bindings plus stronger preflight."
+  },
+  "researchQuestion": "After mechanically proving the exact two-call correction, does the minimum research-only exogenous Dusk acquisition factor preserve every canonical legacy field when omitted or explicitly off?",
+  "claimBoundary": "V2 may establish null implementation identity only. It reuses the immutable seven direct controls because the complete probe diff proves their source unchanged. It cannot establish activation, policy sensitivity, package support, complementarity, causal benefit, payoff value, interaction, candidate admission, product UI, protected-seed performance or shipping fitness.",
+  "factorDefinitions": {
+    "explicitDuskAcquisition": {
+      "type": "research-controlled acquisition factor",
+      "levels": {
+        "pristine": "Immutable exact-current-main simulator with no acquisition source delta.",
+        "omitted": "V2 prototype simulator invoked through the exact legacy argument list, omitting the trailing acquisition argument.",
+        "off": "V2 prototype simulator invoked with the trailing acquisition String set to off.",
+        "executioner": "Dusk-only deterministic addition of one existing executioner through the existing deck, UID and save representation; direct-control evidence only.",
+        "guardedStrike": "Dusk-only deterministic addition of one existing guardedStrike through the existing deck, UID and save representation; direct-control evidence only."
+      },
+      "wholeRunLevels": [
+        "pristine",
+        "omitted",
+        "off"
+      ],
+      "directOnlyLevels": [
+        "executioner",
+        "guardedStrike"
+      ]
+    },
+    "scorelinePayoff": {
+      "type": "separate causal factor",
+      "level": "exact current",
+      "varied": false
+    },
+    "afterimagePayoff": {
+      "type": "separate causal factor",
+      "level": "exact current",
+      "varied": false
+    },
+    "acquisitionPriority": {
+      "type": "policy factor",
+      "level": "exact frozen root-552 sampled policy identity",
+      "varied": false
+    },
+    "faultlineRarity": {
+      "type": "Scoreline package factor",
+      "level": "exact current",
+      "varied": false
+    },
+    "wardSetupPriority": {
+      "type": "Afterimage package factor",
+      "level": "exact frozen policy identity",
+      "varied": false
+    }
+  },
+  "designMatrix": [
+    {
+      "arm": "pristine",
+      "factorLevel": "pristine",
+      "source": "immutable baseline cache",
+      "rows": 256,
+      "newRows": 0,
+      "role": "shared anchor"
+    },
+    {
+      "arm": "omitted",
+      "factorLevel": "omitted",
+      "source": "v2 prototype",
+      "rows": 256,
+      "newRows": 256,
+      "role": "first null"
+    },
+    {
+      "arm": "explicit-off",
+      "factorLevel": "off",
+      "source": "v2 prototype",
+      "rows": 256,
+      "newRows": 256,
+      "role": "second null"
+    },
+    {
+      "arm": "direct-controls",
+      "factorLevel": "off, executioner or guardedStrike",
+      "source": "immutable v1 direct output under exact unchanged source",
+      "rows": 7,
+      "newRows": 0,
+      "role": "mediator and boundary controls"
+    }
+  ],
+  "anchors": {
+    "source": "Baseline, v1 and v2 are detached from origin/main c4130163c7fb8edd865c0adc95732aae03e1bad2. V1-to-v2 probe normalisation must prove exactly two corrected argument tails and no other source change.",
+    "toolchain": "Every new process uses only /Applications/Godot.app/Contents/MacOS/Godot at 4.7.2.stable.official.ed1daf0bf and its frozen binary SHA-256.",
+    "content": "All arms use content a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1 and search space 524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca.",
+    "cohort": "Every whole-run contrast uses the same 64 root-552 policy identities, seeds 347200 through 347203, Duskblade, Vow 5, baseline, estimator and stopping rule.",
+    "ordering": "Policy index is outermost and seed identity innermost in every arm; no row may be removed, replaced, imputed or selected away.",
+    "direct": "V1 direct plan 481e0ed42a966f552551a60b1a62d90763c8b60fa939bc1b9bd19d279bd3c782 and output 4855dc110b35969652efb27c7304bf090065f4dbe04192131bfade01c6edd6ba are reused only after complete-probe normalisation proves the direct function, validation and write path byte-identical.",
+    "ledger": "The append-only ledger remains exactly 480372 records at SHA-256 4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0 with zero protected-seed rows."
+  },
+  "estimands": {
+    "pristineVersusOmitted": "Exact equality in every canonical row field for each of 256 paired identities.",
+    "omittedVersusOff": "Exact equality in every canonical row field for each of the same 256 paired identities.",
+    "directMediator": "Reused immutable v1 proof that Dusk executioner or guardedStrike adds exactly one named card at the next UID, changes no acquisition or run RNG and survives the existing save round trip, while off and Ash add none.",
+    "path": "Exact fights equality.",
+    "rng": "Exact final RNG equality.",
+    "policy": "Exact resolved policy dictionary equality.",
+    "result": "Exact terminal deck, economy, gold, health and relic equality.",
+    "telemetry": "Exact packageEvents equality.",
+    "reliability": "Exact error and outcome equality with complete cardinality.",
+    "notEstimated": "Enabled whole-run behaviour, activation, acquisition preference, support, benefit, causal effect, payoff effect, functional separation, interaction, RandomBuild performance, protected seeds or product acceptance."
+  },
+  "mechanisticInteractions": {
+    "estimated": [],
+    "reason": "Only null identity is newly run. Scoreline payoff, Afterimage payoff, acquisition priority, Faultline rarity and Ward setup priority do not vary.",
+    "futureBoundary": "Any later support design must retain separate Scoreline-payoff and Afterimage-payoff mechanism blocks and shared interference anchors before optional joint cells."
+  },
+  "aliasStructure": {
+    "omittedAndOff": "Both are separately encoded null levels and must be exactly equal; neither is an enabled acquisition arm.",
+    "pristineAndPrototype": "Semantic content, source commit, Godot and stage are shared equality fields. Driver SHA, probe SHA and filesystem path are per-arm provenance with frozen per-arm expectations.",
+    "v1AndV2": "Only the two whole-run argument tails differ. Normalising those tails must reproduce the complete immutable v1 probe byte-for-byte.",
+    "payoffs": "Scoreline and Afterimage remain separate fixed factors and cannot be aliased into acquisition."
+  },
+  "contentPath": "/Users/jamesto/Research/glassvow-p9-421/cache/sha256/a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1.json",
+  "cohort": {
+    "policyRoot": 552,
+    "policyCount": 64,
+    "simulationSeeds": [
+      347200,
+      347201,
+      347202,
+      347203
+    ],
+    "aspect": "duskblade",
+    "vow": 5,
+    "rows": 256
+  },
+  "directCases": [
+    {
+      "id": "dusk-executioner",
+      "aspect": "duskblade",
+      "acquisition": "executioner",
+      "randomBuild": false,
+      "seed": 423000,
+      "expectedChoice": "executioner"
+    },
+    {
+      "id": "dusk-guarded-strike",
+      "aspect": "duskblade",
+      "acquisition": "guardedStrike",
+      "randomBuild": false,
+      "seed": 423001,
+      "expectedChoice": "guardedStrike"
+    },
+    {
+      "id": "dusk-off",
+      "aspect": "duskblade",
+      "acquisition": "off",
+      "randomBuild": false,
+      "seed": 423002,
+      "expectedChoice": ""
+    },
+    {
+      "id": "ash-executioner-ignored",
+      "aspect": "ashwarden",
+      "acquisition": "executioner",
+      "randomBuild": false,
+      "seed": 423003,
+      "expectedChoice": ""
+    },
+    {
+      "id": "ash-guarded-strike-ignored",
+      "aspect": "ashwarden",
+      "acquisition": "guardedStrike",
+      "randomBuild": false,
+      "seed": 423004,
+      "expectedChoice": ""
+    },
+    {
+      "id": "dusk-executioner-random-build-boundary",
+      "aspect": "duskblade",
+      "acquisition": "executioner",
+      "randomBuild": true,
+      "seed": 423005,
+      "expectedChoice": "executioner"
+    },
+    {
+      "id": "dusk-guarded-strike-random-build-boundary",
+      "aspect": "duskblade",
+      "acquisition": "guardedStrike",
+      "randomBuild": true,
+      "seed": 423006,
+      "expectedChoice": "guardedStrike"
+    }
+  ],
+  "staging": {
+    "mechanicalFirst": "Bind complete corrected call templates, prove the exact two-tail v1-to-v2 normalisation, source hashes, plan cardinality, canonical fields and output provenance before execution.",
+    "directReuseSecond": "Reuse the seven immutable v1 direct controls only after the complete probe normalisation proves their source unchanged.",
+    "sentinelThird": "The first four frozen policies across all four seeds run omitted and off, for 32 new rows. Both paired contrasts must be exact before expansion.",
+    "remainderFourth": "Only after the sentinel is exact may the remaining 60 policies run omitted and off, for 480 new rows.",
+    "sentinelPolicyCount": 4,
+    "expectedOutputRows": {
+      "direct": 7,
+      "sentinel": 32,
+      "remainder": 480
+    }
+  },
+  "probeContract": {
+    "path": "tools/research_421_explicit_dusk_acquisition_probe.gd",
+    "cardinalityAnchors": [
+      "rows.append(_whole(content, spec))",
+      "rows.append(_direct(content, spec))",
+      "_write(opts, loaded, rows)"
+    ],
+    "equalityAnchors": [
+      "return Sim.simulate(",
+      "\"contentIdentity\": loaded[\"identity\"]",
+      "\"rows\": rows"
+    ],
+    "enabledWholeRunGuard": "Any whole-run executioner or guardedStrike level fails before content loading or output creation."
+  },
+  "callBindingContract": {
+    "probePath": "tools/research_421_explicit_dusk_acquisition_probe.gd",
+    "omittedTemplate": "\t\treturn Sim.simulate(\n\t\t\tcontent, str(spec[\"aspect\"]), int(float(str(spec[\"seed\"]))),\n\t\t\tint(float(str(spec[\"vow\"]))), PackedStringArray(), sampled[0],\n\t\t\tfalse, false, {}, null, false)\n",
+    "offTemplate": "\treturn Sim.simulate(\n\t\tcontent, str(spec[\"aspect\"]), int(float(str(spec[\"seed\"]))),\n\t\tint(float(str(spec[\"vow\"]))), PackedStringArray(), sampled[0],\n\t\tfalse, false, {}, null, false, str(spec[\"acquisition\"]))\n",
+    "correctedOmittedTail": "\t\t\tfalse, false, {}, null, false)\n",
+    "correctedOffTail": "\t\tfalse, false, {}, null, false, str(spec[\"acquisition\"]))\n",
+    "faultyOmittedTail": "\t\t\tfalse, false, {}, null, false, false)\n",
+    "faultyOffTail": "\t\tfalse, false, {}, null, false, false, str(spec[\"acquisition\"]))\n",
+    "unchangedSourcePaths": [
+      "domain/state/run_state.gd",
+      "tools/balance_sim.gd"
+    ],
+    "semanticRule": "Replacing only the corrected tails with the frozen faulty tails must reproduce the complete v1 probe exactly."
+  },
+  "comparisonContract": {
+    "rowFieldsByEstimand": {
+      "identity": [
+        "aspect",
+        "seed",
+        "vow"
+      ],
+      "path": [
+        "fights"
+      ],
+      "rng": [
+        "rng"
+      ],
+      "policy": [
+        "policy"
+      ],
+      "result": [
+        "deck",
+        "deckIds",
+        "economy",
+        "gold",
+        "goldEarned",
+        "hp",
+        "maxHp",
+        "relics"
+      ],
+      "telemetry": [
+        "packageEvents"
+      ],
+      "reliability": [
+        "error",
+        "outcome"
+      ]
+    },
+    "canonicalRowFields": [
+      "aspect",
+      "deck",
+      "deckIds",
+      "economy",
+      "error",
+      "fights",
+      "gold",
+      "goldEarned",
+      "hp",
+      "maxHp",
+      "outcome",
+      "packageEvents",
+      "policy",
+      "relics",
+      "rng",
+      "seed",
+      "vow"
+    ],
+    "normalisation": "Compare canonical JSON dictionaries exactly as stored. No field removal, row selection, imputation, endpoint staging or cohort change is permitted.",
+    "stopping": "A mechanical, schema or provenance failure records inconclusive before any scientific endpoint decision. A valid sentinel endpoint mismatch closes the factor; a green sentinel permits exactly one remainder."
+  },
+  "reusedDirectEvidence": {
+    "planSha256": "481e0ed42a966f552551a60b1a62d90763c8b60fa939bc1b9bd19d279bd3c782",
+    "outputSha256": "4855dc110b35969652efb27c7304bf090065f4dbe04192131bfade01c6edd6ba",
+    "probeSha256": "0852f97faa300c655bd6707ae5f723db6c3d6f13dad56e5cc350e6012bda8052",
+    "rows": 7,
+    "contentIdentity": {
+      "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "contentFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "contentPath": "/Users/jamesto/Research/glassvow-p9-421/cache/sha256/a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1.json",
+      "contentSemanticSha256": "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa",
+      "driverSha256": "bfc6a21467bee6e22ce8758979ee09eae5040bde6beff1d46d56a59d795baf5a",
+      "godot": "4.7.2-stable (official)",
+      "searchSpacePath": "res://docs/balance/421-content-search-space-v1.json",
+      "searchSpaceSha256": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
+      "stage": ""
+    }
+  },
+  "outputProvenance": {
+    "baselineProbeSha256": "fd4dd3757b4706422353702ffb790e71f8bf660b2c97459b12170a180226013c",
+    "prototypeProbeSha256": "967df110a54cc97fa8841987b110cddc32f2eca58d7e3171a1c2e0eae44d5f14",
+    "baselineContentIdentity": {
+      "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "contentFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "contentPath": "/Users/jamesto/Research/glassvow-p9-421/cache/sha256/a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1.json",
+      "contentSemanticSha256": "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa",
+      "driverSha256": "d399e38c77988f0c039c8efda8ad349a141fac1a97ebca765b0a0103a95a67c7",
+      "godot": "4.7.2-stable (official)",
+      "searchSpacePath": "res://docs/balance/421-content-search-space-v1.json",
+      "searchSpaceSha256": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
+      "stage": ""
+    },
+    "prototypeContentIdentity": {
+      "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "contentFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "contentPath": "/Users/jamesto/Research/glassvow-p9-421/cache/sha256/a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1.json",
+      "contentSemanticSha256": "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa",
+      "driverSha256": "bfc6a21467bee6e22ce8758979ee09eae5040bde6beff1d46d56a59d795baf5a",
+      "godot": "4.7.2-stable (official)",
+      "searchSpacePath": "res://docs/balance/421-content-search-space-v1.json",
+      "searchSpaceSha256": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
+      "stage": ""
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceStatus": [
+      " M domain/state/run_state.gd",
+      " M tools/balance_sim.gd",
+      "?? tools/research_421_explicit_dusk_acquisition_probe.gd",
+      "?? tools/research_421_explicit_dusk_acquisition_probe.gd.uid"
+    ],
+    "trackedDiffSha256": "b82fd3e1a82b19f27b06dfba51fa7d144c88a15ac1591c86a56f4da738463935",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "taskCapsuleSha256": "ce2e6db4e5a2a7f4f15631d082d54b756a74580185b6f9c46305c84fca0cb5fc",
+    "runnerSha256": "19efc05a103ec4e27c8ca09dcac211b04f5db2295174f1455294eeeda17bdbb8",
+    "prototypeDriverSha256": "bfc6a21467bee6e22ce8758979ee09eae5040bde6beff1d46d56a59d795baf5a",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "sourceSha256": {
+      "domain/state/run_state.gd": "59eda7922eb9e2b98a0e67d433427be5f174462e8c0731329328b15d4de20b5d",
+      "tools/balance_sim.gd": "71d81315fc3e1ffb53014883543608dd3554f68884c9d76ed7c5eac1abd36d27",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_catalogue.gd": "6e240546cd616a2518ee7a2b8fae41aa8a94078429155f89f6d9165eef1c20c0",
+      "tools/balance_sweep.gd": "6d78dcd3d00aa6300aaf32fc498c7a3c9fb4ffea1725f59e6fc8be7b5fa61ff0",
+      "tools/balance_cem.gd": "154fd167ed914e7bfc3b6abd8e45cac381b748f19a52f67d3ba10908049964af",
+      "tools/research_421_explicit_dusk_acquisition_probe.gd": "967df110a54cc97fa8841987b110cddc32f2eca58d7e3171a1c2e0eae44d5f14",
+      "tools/research_421_explicit_dusk_acquisition_probe.gd.uid": "ec77c4414de892b4b836aa101dfed8de88c59daab88280f0ae45cd5af6d6806e"
+    },
+    "evidenceSha256": {
+      "protocols/post-v30-explicit-acquisition-method-design-v1.json": "171b48ac148580d4261b037e52ab74ac8b804395f0c4ab794ab743d4a47d70a6",
+      "summaries/post-v30-explicit-acquisition-method-design-v1.json": "0f3bd15686d9cfd3bb4feef8d26a070143ef2b4b24b0a147b1e6a53c49d78fbf",
+      "protocols/post-v30-explicit-acquisition-identity-v1.json": "fe3583538eb32e4783e3e3f8cea6cb667c0e8926f0947678a5bc87fa8312229b",
+      "post_v30_explicit_acquisition_identity.py": "d7abaa439621a1e248d05b8beb5d23a643f9ee6f155b0f9051d3acd14eebcef9",
+      "summaries/post-v30-explicit-acquisition-identity-v1.json": "692793e695635a069dd1169a4bc8c7904cb1f9868c580d9f5d283ed436868c7b",
+      "protocols/post-v30-explicit-acquisition-identity-v1-audit.json": "57dad9d8aff1e1bc731dcc0bd822ada0150b3a62a3c5d8b8f6d2e42e19f298d7",
+      "post_v30_explicit_acquisition_identity_v1_audit.py": "bf503d2fd041ee2f09b1d9bfc1f1af5fbaf9fa99a7bff23b391b1b62fb462dff",
+      "summaries/post-v30-explicit-acquisition-identity-v1-audit.json": "c75de9ddf9f360cf15e86514c5c0d2c55d44003d550bdde0341b2d3ce3cc400b",
+      "dusk-explicit-acquisition-identity-v1-source/tools/research_421_explicit_dusk_acquisition_probe.gd": "0852f97faa300c655bd6707ae5f723db6c3d6f13dad56e5cc350e6012bda8052",
+      "dusk-acquisition-baseline-v1-source/domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "dusk-acquisition-baseline-v1-source/tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    }
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumReusedBaselineIdentityObservationRows": 256,
+    "maximumReusedDirectIdentityObservationRows": 7,
+    "maximumNewIdentityObservationRows": 512,
+    "maximumEnabledWholeRunRows": 0,
+    "maximumSupportRows": 0,
+    "maximumCausalRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumGodotProcesses": 2,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "success": "All immutable hashes, exact two-binding normalisation, complete corrected call templates, source normalisation, plan cardinalities, baseline schema and provenance pass; the seven unchanged direct controls revalidate from immutable v1 evidence; both 16-row null contrasts pass the sentinel; then both complete 256-row paired contrasts have zero mismatch in every canonical field, the ledger is unchanged, exactly 512 new identity rows and no enabled row are emitted, and all numeric ceilings hold.",
+    "successAuthority": "Freeze this research-only exogenous acquisition factor as implementation-identity-safe and preregister the cheapest fixed-cohort activation/support panel. Do not call it policy sensitivity or causal benefit and do not change payoff, content, policy method, policies, seeds or cohort.",
+    "futility": "After a green mechanical and schema preflight, a valid sentinel or complete null panel has a genuine path, RNG, policy, result, telemetry, reliability or canonical-row mismatch.",
+    "futilityAuthority": "Close the exact explicit-acquisition factor without retune, rerun, v3, enabled whole-run or subgroup rescue, then continue inside issue 421 with the next evidence-backed structural mechanism.",
+    "inconclusive": "A required immutable artefact, source hash, two-binding normalisation, complete call template, probe invariant, cache object, schema, provenance, ledger identity, process or output is missing, or a frozen numeric cap is exceeded before a valid paired identity decision.",
+    "inconclusiveAuthority": "Record v2 inconclusive at the preregistered cap, run no enabled whole-run and do not repair or rerun this exact factor. Continue only as permitted by the current issue and owner authority."
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python validates immutable v1 and v2 evidence, binds complete call templates, constructs every plan, content-addresses plans and outputs, invokes the exact Godot binary, validates schemas and provenance, performs paired comparisons and writes one summary.",
+    "firstLook": "The 32-row sentinel is the only scientific first look. It uses the first four identities from the same frozen policy-seed rectangle; no promising cell receives a different cohort or endpoint.",
+    "automaticDisposition": [
+      "Exact success freezes at most this one factor for a separately preregistered support panel.",
+      "A valid endpoint identity failure closes the scalar family.",
+      "Missing prerequisites, schema or cap exhaustion records an inconclusive result."
+    ]
+  },
+  "methodBoundary": "Issues 524 and 525 remain immutable evidence and are not reconstructed. The closed score selector is not retuned. ML, RL and another optimiser remain prohibited because no enabled support or causal observation has measured method decision value."
+}

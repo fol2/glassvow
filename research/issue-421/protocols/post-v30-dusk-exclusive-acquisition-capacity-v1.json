@@ -1,0 +1,270 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "zero-new-row-choice-screen-policy-selection-capacity",
+  "authority": {
+    "taskSsot": "https://github.com/fol2/glassvow/issues/421",
+    "taskBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "ownerDecision": "https://github.com/fol2/glassvow/issues/421#issuecomment-5458109992",
+    "ownerCommentBodySha256": "f561d1260860d776c181b272ac0269661dcb1f611ed910ed42299e4aa054969d",
+    "identityDecision": "summaries/post-v30-dusk-exclusive-acquisition-identity-v2.json",
+    "identityDecisionSha256": "ca315590ecd9e0f3d1c3d4960083570651a9831724538688ac661a1690c94127"
+  },
+  "researchQuestion": "Can the exact current 64-policy repertoire express the frozen deterministic ChoiceScreen selector as three sufficiently supported and competent decisions: choose Faultline, choose Warden's Edge, or decline both?",
+  "cheapestDiscriminatingExperiment": "Read the immutable 256-row pristine v1 policy rectangle once, recover each of its 64 seed-invariant policy snapshots, prove the existing Python card-score projection against all six immutable direct Godot score anchors, and evaluate the exact two-card selector and unchanged cardDecline threshold without a new simulation.",
+  "claimBoundary": "This is a necessary policy-selection capacity gate. It can establish only that the frozen policy repertoire contains substantial, mutually exclusive, baseline-competent witnesses for both package choices and decline. It cannot establish acquisition execution, card play, producer-consumer activation, complementarity, causal benefit, functional package separation, RandomBuild movement, duration, detector admission, a candidate or product fitness.",
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": [
+        "exact-current"
+      ],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "exact-current"
+      ],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "acquisitionPriority": {
+      "levels": [
+        "exact sampled policy vector"
+      ],
+      "status": "The full frozen policy identity supplies card rarity, block/heal, Dusk aspect, execute and cardDecline weights. No new scalar, commitment bit, package order or optimiser is introduced."
+    },
+    "choice": {
+      "levels": [
+        "executioner",
+        "guardedStrike",
+        "decline"
+      ],
+      "status": "Deterministic derived decision, not an assigned causal factor. Faultline wins exact score ties because it is first in the frozen selector; the gate permits zero such ties."
+    },
+    "faultlineRarity": {
+      "levels": [
+        "exact-current-uncommon"
+      ],
+      "status": "Fixed Scoreline package factor; not varied."
+    },
+    "wardSetupPriority": {
+      "levels": [
+        "exact sampled blockHeal weight"
+      ],
+      "status": "Existing Afterimage-relevant policy component; not modified or independently assigned."
+    }
+  },
+  "design": {
+    "type": "zero-new-row deterministic policy-capacity partition; not a factorial or causal contrast",
+    "matrix": [
+      {
+        "block": "policy selector",
+        "policyIdentities": 64,
+        "observationsPerPolicy": 1,
+        "endpoint": "executioner, guardedStrike or decline"
+      },
+      {
+        "block": "baseline competence",
+        "policyIdentities": 64,
+        "immutableSimulationSeedsPerPolicy": 4,
+        "endpoint": "at least one exact-current whole-run win"
+      },
+      {
+        "block": "direct score calibration",
+        "fixedControls": 6,
+        "endpoint": "exact Python-versus-Godot consumer scores and eligible Dusk pilot choices"
+      }
+    ],
+    "sharedAnchor": "Every selector decision uses the same frozen content, consumer order, policy identity, threshold and score estimator. Every competence label uses all four immutable baseline seeds without selection or replacement.",
+    "noCartesianExpansion": "No causal factor varies and no joint cell is created. Scoreline and Afterimage remain separate fixed packages."
+  },
+  "selectorContract": {
+    "consumerOrder": [
+      "executioner",
+      "guardedStrike"
+    ],
+    "decision": "Score both exact current definitions for Dusk; retain the first maximum; accept it only when its score is greater than or equal to the policy's unchanged cardDecline value; otherwise decline.",
+    "rng": "choose_dusk_package calls choose_card without an RNG. RandomBuild therefore does not enter the random branch.",
+    "sourceAnchors": [
+      "static func choose_dusk_package(content: ContentDB) -> String:",
+      "choose_card([\"executioner\", \"guardedStrike\"], content, 0)",
+      "if candidate > score:",
+      "return id if accepts_card_reward(score) else \"\"",
+      "return score >= card_decline_threshold",
+      "if random_build and rng != null:"
+    ],
+    "consumerDefinitions": {
+      "executioner": {
+        "type": "attack",
+        "rarity": "uncommon",
+        "cost": 1,
+        "target": "enemy",
+        "vfx": "blunt",
+        "effects": [
+          {
+            "kind": "special",
+            "id": "execute",
+            "n": 8,
+            "bonus": 6
+          }
+        ],
+        "up": {
+          "effects": [
+            {
+              "kind": "special",
+              "id": "execute",
+              "n": 11,
+              "bonus": 8
+            }
+          ],
+          "text": "Deal @11@ damage. Cracked enemies take 8 more."
+        },
+        "name": "Faultline",
+        "text": "Deal @8@ damage. Cracked enemies take 6 more."
+      },
+      "guardedStrike": {
+        "type": "attack",
+        "rarity": "common",
+        "cost": 1,
+        "target": "enemy",
+        "vfx": "slash",
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 5
+          },
+          {
+            "kind": "block",
+            "n": 4
+          }
+        ],
+        "up": {
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 7
+            },
+            {
+              "kind": "block",
+              "n": 6
+            }
+          ],
+          "text": "Deal @7@ damage. Gain #6# Ward."
+        },
+        "name": "Warden's Edge",
+        "text": "Deal @5@ damage. Gain #4# Ward."
+      }
+    }
+  },
+  "cohort": {
+    "policyRoot": 552,
+    "policyCount": 64,
+    "simulationSeeds": [
+      347200,
+      347201,
+      347202,
+      347203
+    ],
+    "rows": 256,
+    "aspect": "duskblade",
+    "vow": 5,
+    "identity": "The exact identity-v2-proved pristine current-main rectangle. A policy must have one canonical snapshot repeated across all four frozen seeds; every policy and seed is retained."
+  },
+  "directAnchors": {
+    "rows": 6,
+    "identity": "The immutable v1 direct plan and output contain Scoreline choice, Afterimage choice, decline, RandomBuild null-RNG, Ash no-op and explicit-off no-op controls. This gate rechecks only deterministic card-score projection and eligible Dusk-pilot choice; it does not rerun a control."
+  },
+  "definitions": {
+    "executionerPolicy": "The exact selector accepts executioner for the policy.",
+    "guardedStrikePolicy": "The exact selector accepts guardedStrike for the policy.",
+    "declinePolicy": "The higher of the two exact consumer scores is below unchanged cardDecline.",
+    "viablePolicy": "A policy in the relevant decision set has at least one win across its four immutable pristine baseline rows.",
+    "tie": "The two exact consumer scores are numerically equal before the first-in-order rule.",
+    "reliabilityFault": "An immutable pristine row has a non-empty error or outcome stall/error."
+  },
+  "estimands": {
+    "primary": "Exact counts and identities of executioner, guardedStrike and decline policies among all 64 frozen policies.",
+    "competence": "For each of the three decision sets, exact count and identity of policies with at least one pristine baseline win.",
+    "scoreMargins": "For every policy, exact consumer scores, cardDecline, alternative margin and decline margin as deterministic audit detail only.",
+    "reliability": "Exact immutable baseline stall/error row count.",
+    "notEstimated": "No enabled acquisition, play, activation, complementarity, payoff, interaction, RandomBuild, duration, causal or product endpoint."
+  },
+  "mechanisticInteractions": {
+    "estimated": [],
+    "reason": "Scoreline payoff, Afterimage payoff, Faultline rarity and Ward setup remain fixed. Choice groups are selector outputs, not assigned intervention cells.",
+    "futureBoundary": "Only a capacity pass may authorise one separately preregistered enabled support panel. That panel must retain common policies, seeds, baseline, estimator and stopping, and still cannot claim causal benefit without comparable factor contrasts."
+  },
+  "aliasStructure": {
+    "selectionVersusActivation": "Choosing a card does not prove drawing or playing it with its existing producer.",
+    "competenceVersusExploitation": "A pristine baseline win shows a policy is not uniformly failing; it does not prove the acquired card caused or improved that win.",
+    "functionalSeparation": "Mutually exclusive selector groups are policy-decision separation only, not the acceptance criterion's functional package separation.",
+    "policyMethod": "A capacity failure does not by itself authorise ML, RL, an optimiser, a package-order retry or adaptive tuning."
+  },
+  "gates": {
+    "minimumPoliciesPerChoice": 16,
+    "minimumDeclinePolicies": 16,
+    "minimumViablePoliciesPerDecision": 8,
+    "maximumTiedPolicies": 0,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16-policy support/inactivity scale, eight-policy competence scale and one-fault ceiling reuse the frozen 64-policy issue-421 capacity scale. Requiring all three mutually exclusive decisions prevents a broadly forced acquisition from masquerading as policy sensitivity. Zero ties prevents consumer order from supplying hidden capacity."
+  },
+  "cacheObjects": {
+    "baselinePlan": "d33926aec9e22a14f1709120a261c52571e9a94b78c98d90d2a19b9d136c61d3",
+    "baselineOutput": "1be7272596391fd1f7b296af480bc366ae8b6a2af50c71c3dc508fc6ae3b458f",
+    "directPlan": "ea13c02f54edd7fdcd59a032fd3256d6a34baf2ed4856fd3f845df9e440fc427",
+    "directOutput": "b896aaaca79b86e28abf4e05f1f5e04c5e2622b942a34e14dd27f22ec5d86791",
+    "content": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+  },
+  "evidenceSha256": {
+    "protocols/post-v30-dusk-exclusive-acquisition-identity-v1.json": "f4a9d764c1c8456874bf59c8d8d504b8b932c06ddcc884bf370989ac71eef924",
+    "summaries/post-v30-dusk-exclusive-acquisition-identity-v1.json": "0a8bdb75530718ddc05ce05b5c00b212a41221f6d4b3233982d4bd1163b1df96",
+    "post_v30_dusk_exclusive_acquisition_identity_v2.py": "ae9dc7b93a1101d703d78c13edc2812d193708a037b19e6904e0f8bbb3d8ab17",
+    "protocols/post-v30-dusk-exclusive-acquisition-identity-v2.json": "e7b3c1191d62ce507db5034224dcfcdb8e1df220673fd1c7df39437446ffd34b",
+    "summaries/post-v30-dusk-exclusive-acquisition-identity-v2.json": "ca315590ecd9e0f3d1c3d4960083570651a9831724538688ac661a1690c94127"
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "outputGodotIdentity": "4.7.2-stable (official)",
+    "stageIdentity": "",
+    "taskCapsuleSha256": "68d9d30bfe3c1200e071b196f162ca2a71b58f4177cac5c1610723acce38336c",
+    "scoringHelperSha256": "107c4bee93c8c913114c78c7df4deaf339fc862623b16ced293858effaa2317f",
+    "pilotSha256": "77a2120f3c406e2ef699966daa28101551f83d63629ae1914953e34b28f485d7",
+    "runnerSha256": "261ca2a0f901a90a2f1273dde80d236a2da24604229b5cf47aeec5ccdd4fb90d"
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCacheObjectsRead": 5,
+    "maximumCachedWholeRunRowsRead": 256,
+    "maximumCachedDirectRowsRead": 6,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewIdentityObservationRows": 0,
+    "maximumNewSupportRows": 0,
+    "maximumNewCausalRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumGodotProcesses": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "success": "All immutable source, evidence, cache, selector, direct score, direct eligible-choice, policy, cohort and ledger identities pass; executioner, guardedStrike and decline each contain at least 16 policies and at least eight baseline-viable policies; exact score ties are zero; baseline faults are at most one; and execution remains within the frozen zero-new-row 30-second budget.",
+    "successAuthority": "Freeze current policy-selection capacity and preregister exactly one cheapest enabled whole-run support and activation panel using the same 64 policies, four seeds, pristine baseline, deterministic selector, consumers, threshold, row normalisation and first-look stopping rule. Do not claim causality, admit a candidate or use protected seeds.",
+    "futility": "Any of the three decision sets fails support or competence, any tie makes consumer order supply capacity, or baseline reliability exceeds the frozen ceiling after all mechanical prerequisites pass.",
+    "futilityAuthority": "Close the exact current-policy ChoiceScreen selector at capacity without retuning, subgroup rescue or enabled whole-run rows. Continue inside issue 421 with the next evidence-backed structural mechanism; do not add ML, RL or an optimiser without a separate measured method-decision gate.",
+    "inconclusive": "Any required source, evidence, cache, schema, score projection, direct anchor, policy identity, cohort, ledger or 30-second prerequisite is missing or ambiguous before a valid capacity decision.",
+    "inconclusiveAuthority": "Record the gate inconclusive without new rows, selector changes or rescue execution and continue only under the current issue-421 automatic evidence and human-authority contract."
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python verifies every immutable hash and source anchor, calibrates the reused exact card-score projection against six direct Godot rows, recovers all 64 policies from the complete identity-proved rectangle, partitions them once, applies all frozen gates and owns stop/go.",
+    "firstLook": "The complete 64-policy partition and all 256 immutable baseline competence rows are the only look. No policy, score, threshold, row or endpoint is removed, replaced, selected or added.",
+    "automaticDisposition": "Pass proceeds only to a separate enabled support panel. Failure closes the exact selector-supported route. Missing inputs record an inconclusive result at the cap."
+  },
+  "methodBoundary": "Issues 524 and 525 remain immutable evidence and are not reconstructed. No source edit, Godot process, simulator observation, causal factor, protected seed, human label, model context, ML, RL, optimiser or adaptive candidate step enters this gate."
+}

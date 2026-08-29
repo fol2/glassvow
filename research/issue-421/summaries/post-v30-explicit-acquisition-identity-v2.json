@@ -1,0 +1,159 @@
+{
+  "GodotProcesses": 2,
+  "authority": "Freeze this research-only exogenous acquisition factor as implementation-identity-safe and preregister the cheapest fixed-cohort activation/support panel. Do not call it policy sensitivity or causal benefit and do not change payoff, content, policy method, policies, seeds or cohort.",
+  "cacheObjects": {
+    "remainderOutputSha256": "1c9c2748dc6c2359744e469c0db2d361281b6080e71ae8ddb759e5bbd4e9bf18",
+    "remainderPlanSha256": "d3116ce0e34f3d5124f2d831a2c97e07d0ac6d62100d794c7db1b93f37745ca9",
+    "sentinelOutputSha256": "29127a4bf462e041a7ff1aeaa41adf89680ea02e4569df827f1040a8dc0ef73a",
+    "sentinelPlanSha256": "19ed154a3296ea5e57171195e573a94e2bbbb527fd688698bc22ca8417db0763"
+  },
+  "decision": "freeze-explicit-acquisition-factor-for-support",
+  "decisionBoundary": 1,
+  "directControls": {
+    "cases": {
+      "ash-executioner-ignored": {
+        "choice": "",
+        "deckDelta": 0,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      },
+      "ash-guarded-strike-ignored": {
+        "choice": "",
+        "deckDelta": 0,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      },
+      "dusk-executioner": {
+        "choice": "executioner",
+        "deckDelta": 1,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      },
+      "dusk-executioner-random-build-boundary": {
+        "choice": "executioner",
+        "deckDelta": 1,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      },
+      "dusk-guarded-strike": {
+        "choice": "guardedStrike",
+        "deckDelta": 1,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      },
+      "dusk-guarded-strike-random-build-boundary": {
+        "choice": "guardedStrike",
+        "deckDelta": 1,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      },
+      "dusk-off": {
+        "choice": "",
+        "deckDelta": 0,
+        "rngExact": true,
+        "saveRoundTripExact": true
+      }
+    },
+    "rows": 7,
+    "source": "reused immutable v1 under exact unchanged direct source",
+    "status": "PASS"
+  },
+  "enabledWholeRunRows": 0,
+  "executionError": "",
+  "fullNullIdentity": {
+    "omittedVersusOff": {
+      "completeRowMismatchRows": 0,
+      "mismatchRowsByEstimand": {
+        "identity": 0,
+        "path": 0,
+        "policy": 0,
+        "reliability": 0,
+        "result": 0,
+        "rng": 0,
+        "telemetry": 0
+      },
+      "rows": 256
+    },
+    "pristineVersusOmitted": {
+      "completeRowMismatchRows": 0,
+      "mismatchRowsByEstimand": {
+        "identity": 0,
+        "path": 0,
+        "policy": 0,
+        "reliability": 0,
+        "result": 0,
+        "rng": 0,
+        "telemetry": 0
+      },
+      "rows": 256
+    }
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "mechanicalPreflight": {
+    "canonicalRowFields": 17,
+    "completeCallTemplatesExact": true,
+    "crossArmEqualityFieldsInvariant": true,
+    "directControlsReusedUnderExactUnchangedSource": true,
+    "expectedCardinalityExact": true,
+    "prototypeDriverSha256": "bfc6a21467bee6e22ce8758979ee09eae5040bde6beff1d46d56a59d795baf5a",
+    "sourceDeltaExact": true,
+    "status": "PASS",
+    "v1ToV2SemanticDiffLimitedToTwoBindings": true
+  },
+  "newCausalRows": 0,
+  "newIdentityObservationRows": 512,
+  "newLedgerRows": 0,
+  "newSupportRows": 0,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "41cd3939161f83cabff9891e30f235f999643b84025c710c89854841566dbd8b",
+  "reusedDirectIdentityRows": 7,
+  "runnerSha256": "19efc05a103ec4e27c8ca09dcac211b04f5db2295174f1455294eeeda17bdbb8",
+  "schemaVersion": 1,
+  "sentinelIdentity": {
+    "omittedVersusOff": {
+      "completeRowMismatchRows": 0,
+      "mismatchRowsByEstimand": {
+        "identity": 0,
+        "path": 0,
+        "policy": 0,
+        "reliability": 0,
+        "result": 0,
+        "rng": 0,
+        "telemetry": 0
+      },
+      "rows": 16
+    },
+    "pristineVersusOmitted": {
+      "completeRowMismatchRows": 0,
+      "mismatchRowsByEstimand": {
+        "identity": 0,
+        "path": 0,
+        "policy": 0,
+        "reliability": 0,
+        "result": 0,
+        "rng": 0,
+        "telemetry": 0
+      },
+      "rows": 16
+    }
+  },
+  "wallTimeSeconds": 37.713851124979556
+}
