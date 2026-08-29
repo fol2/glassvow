@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Do current-main source and the complete immutable 256-row Dusk context provide exactly one identity-safe, death-disambiguated observation surface and enough policy, viability and card-pair support to justify one separately preregistered target-switch trace identity experiment?",
+  "hypothesis": "Actual target switching between two single-target Attacks is an unobserved fight-local decision unit distinct from closed named-card, alternating-cadence, focused-to-sweep, Shatter and enemy-status families. Existing PLAY.targetIdx plus DIE.idx events are the smallest sufficient observation because targetIdx alone aliases a deliberate switch with a forced change after target death.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/heads/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/remotes/origin/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v8.json",
+    "taskCapsuleSha256": "290b157771ffe79c8fbfc17ab1e88efc93e91a8d13714b4eebe1d1a4f1436134",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+      "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    },
+    "traceSourcePath": "/Users/jamesto/Research/glassvow-p9-421/cohand-telemetry-source",
+    "traceSourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "traceSourceSha256": {
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_sim.gd": "7f82177d3c71e3a0cc56f820f017cfab6ec99173caf326486209034d60dbb5fd",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2"
+    },
+    "researchFileSha256": {
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_competing_structural_options.py": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+      "post_v38_fanout_capacity_v1.py": "c9438fd6078b7509533507c1bda1336f57386da6d07fba895c3ca6ed074a4163",
+      "notes/post-fanout-next-method-primary-research.md": "66d9cd1356fce979c348a12469857f6b1b437ef5c152f39f3e9c629373395442",
+      "protocols/post-v38-fanout-capacity-v1.json": "282840cc98fa7d9dc62aad12c5d62413833b7ba1433a50362df8364dbe1f4804",
+      "summaries/post-v38-fanout-capacity-v1.json": "c3eaa2e733e29b4cc0c910da197261e17422a016b92722bf4d327525243d05ca",
+      "summaries/post-v38-dusk-cadence-capacity-v1.json": "563ea29e964d5f5ff2b6e42bc789cc938a362467359e429c4707765622c93cf2",
+      "summaries/cracked-tempo-v1.json": "fa2d279bd61bf6dd41cdc1585d5590241b0d881493b2cb498f9663d1539c6dd1",
+      "summaries/post-v30-enemy-status-lattice-audit-v1.json": "addd1c79e733aeb55a2dd1458878d1b9509debabbe2e69e4b24283bcc0a72328",
+      "summaries/post-v38-native-dusk-grammar-coverage-v1.json": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff",
+      "summaries/post-v30-shatter-card-capacity-v1.json": "d8ed3a2e09e0c21d89665eafaa65c8e8716c9bba0a6b82b8fe4b6a83f1639db5"
+    },
+    "runnerSha256": "f756d76e4d09e73d207f352748dd9599a4587d72093e2a2c78d76ea73dfc7f37"
+  },
+  "closedFamilyExclusions": {
+    "namedCardSequencing": "Scoreline, Afterimage, their timing controls and commitment fallbacks remain closed. Exact card IDs are breadth witnesses only.",
+    "genericCadence": "The closed cadence family alternates Attack and Skill over three plays. This audit requires two authored single-target Attacks and estimates no cadence payoff.",
+    "focusedToSweep": "The closed fanout family changes authored scope from enemy to allEnemies. Both target-switch cards have authored target=enemy; only their runtime enemy indices may differ.",
+    "shatterAndFacet": "No HIT, CHIP, SHATTER, Facet or damage event enters the predicate. The closed one-card cross-target Shatter family has a different event unit.",
+    "enemyStatus": "No Cracked, Dimmed, Weak, Smolder or other status enters the predicate, mediator or proposed payoff.",
+    "otherClosedFamilies": "Do not reconstruct Kindle, Ward, Ember-reserve damage, relic, one-bit setup, action-economy, weak-mend, same-instance repeat, acquisition scalar or private-debt paths.",
+    "method": "No ML, RL, optimiser, policy remap, grammar expansion or adaptive candidate tuning is permitted."
+  },
+  "futureMechanismContract": {
+    "researchIdentity": "dusk-target-transfer; a research identity, not shipping copy.",
+    "producer": "After an exact Duskblade Attack with authored target=enemy resolves while combat remains live and its selected target remains alive, store that target index.",
+    "mediatorState": "One player-combat previous-target integer plus one paid Boolean for the current player turn; neither is a RunState or save field.",
+    "consumer": "The next exact Attack in the same player turn with authored target=enemy consumes the mediator only when it selects a different living enemy index after its unchanged authored effects and while combat remains live.",
+    "payoffOperation": "After valid consumption, request exactly one Ember through the existing bounded Ember operation, at most once in that player turn; requested and realised values remain separate telemetry.",
+    "lifecycle": "The previous-target mediator and paid flag clear at each player-turn start and combat end. Other card types and all-enemy Attacks neither consume nor replace it. A same-target Attack replaces the stored index without paying. Target death clears the stored index before another single-target Attack can consume it.",
+    "naturalCost": "Enter a multi-enemy fight, draw and pay for at least two existing single-target Attacks in one turn, keep the first target alive, then select a different living target for the next single-target Attack.",
+    "acquisition": "None. Existing current-main reward pools, rarities, cards and deck/save representation remain unchanged.",
+    "duskBoundary": "The existing Emberheart is the proposed Dusk gate. Ashwarden and mechanism-off are exact current-main paths; Emberheart's authored post-combat healing is unchanged.",
+    "factorIsolation": "Scoreline and Afterimage are separate factors fixed off. Target transfer reads only card type, authored target scope, exact selected target index, target death, current turn and exact Emberheart identity.",
+    "rngAndPersistence": "No RNG call or cursor movement, no new run-persistent field, internal ID, save version, content entry, reward entry or acquisition UI.",
+    "telemetry": "Direct research-only producer, target-survived, mediator-set/replacement/clear, consumer, same-target rejection, forced-death rejection, mediator-consume, payoff and turn-expiry stages with exact card and target indices plus requested and realised Ember."
+  },
+  "frozenCausalFactors": {
+    "targetSwitchPayoff": {
+      "definition": "Dusk-only target-transfer mediator and one-Ember payoff defined by the complete future mechanism contract.",
+      "levels": {
+        "off": 0,
+        "different-living-target-ember-1": 1
+      },
+      "status": "Only observation eligibility is evaluated here. The non-null level does not exist and may not be implemented before observation identity and actual-capacity success."
+    },
+    "scorelinePayoff": {
+      "levels": ["off"],
+      "definition": "Separate closed causal factor, fixed absent and never pooled with target-switch endpoints."
+    },
+    "afterimagePayoff": {
+      "levels": ["off"],
+      "definition": "Separate closed causal factor, fixed absent and never pooled with target-switch endpoints."
+    },
+    "acquisitionPriority": {
+      "levels": ["current-main"],
+      "definition": "Frozen exact reward policy; not varied or estimated."
+    },
+    "factorCount": 1,
+    "independence": "Only targetSwitchPayoff could vary in a future causal experiment. Scoreline and Afterimage remain separate fixed factors. This is not the old four-factor design and no joint factorial is authorised."
+  },
+  "designMatrix": {
+    "current-main-trace": {
+      "targetSwitchPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "acquisitionPriority": "current-main",
+      "rows": 256,
+      "meaning": "Identity-proved explicit-null current-main observations. Deterministic code reconstructs only an upper-bound two-single-target-Attack context."
+    }
+  },
+  "design": {
+    "type": "zero-new-row source, representation, context and alias audit; not a factorial and not a causal experiment",
+    "construction": "Enumerate every frozen observation surface and every eligible player turn in the complete 256-row rectangle. Select a surface only if exactly one passes every fixed interface gate, then apply context support, viability, card breadth, reliability and closed-family event-unit gates once.",
+    "contextPairRule": "In a fight whose frozen starting formation has at least two enemies, filter each player turn to authored type=attack,target=enemy plays. The first two such plays form the sole upper-bound pair for that turn. Intervening Skills, Powers and all-enemy Attacks do not alter this observation interval. At most one pair per turn is counted.",
+    "actualSwitchRuleReservedForNextStage": "After identity succeeds, a pair qualifies only when target indices differ and no DIE event for the first target occurs strictly after the first PLAY and before the second PLAY. No actual-switch count is available or estimated here.",
+    "mechanisticallyJustifiedInteractions": [
+      "First PLAY target index by intervening DIE index by second PLAY target index defines deliberate switching; none alone is the mechanism.",
+      "Multi-enemy starting formation by two-single-target-Attack context is structural eligibility, not an estimated product interaction.",
+      "Dusk/Emberheart identity by target-switch payoff is the only future causal interaction; it is not estimated here."
+    ],
+    "aliasStructure": "targetIdx-only is explicitly aliased with forced change after target death and must fail. DIE without both target indices cannot identify a switch. Exact card identities are breadth witnesses, not candidate levels. Same-target pairs, forced-death changes, all-enemy scope changes, one-card cross-target events, status transitions and named-card sequences are distinct or excluded units.",
+    "anchors": "The frozen current-main trace is the later identity comparator. Scoreline and Afterimage policy sets are immutable overlap anchors only; their payoffs do not vary. No cross-package joint cell has decision value while both closed factors remain fixed off.",
+    "interferenceRule": "No Scoreline or Afterimage setting may vary. If an independently admitted Dusk package later exists, shared off/off and single-package anchor cells must first measure cross-package interference before any joint target-switch cell; no Cartesian completion is permitted.",
+    "omittedCells": "No target-specific order, exact-card subset, adjacency variant, payoff value, acquisition, rarity, policy knob, Ash intervention, RandomBuild, simulator, held-out, joint-package, ML, RL, optimiser or protected-seed cell is authorised."
+  },
+  "observationSurfaces": [
+    {
+      "id": "play-target-index-only",
+      "eventInputs": ["PLAY.targetIdx"],
+      "observationOnly": true,
+      "newGameplayHookCount": 0,
+      "existingEventBranchCount": 1,
+      "containers": {
+        "plays-added-fields": ["targetIdx"]
+      },
+      "fixedScalarSchema": true,
+      "targetIdentity": true,
+      "forcedSwitchDisambiguation": false,
+      "identityAnchorAvailable": true,
+      "interpretation": "Reject: a changed index can be forced because the first target died."
+    },
+    {
+      "id": "play-target-index-plus-die-index",
+      "eventInputs": ["PLAY.targetIdx", "DIE.idx"],
+      "observationOnly": true,
+      "newGameplayHookCount": 0,
+      "existingEventBranchCount": 2,
+      "containers": {
+        "plays-added-fields": ["targetIdx"],
+        "dies": ["fight", "event", "idx"]
+      },
+      "fixedScalarSchema": true,
+      "targetIdentity": true,
+      "forcedSwitchDisambiguation": true,
+      "identityAnchorAvailable": true,
+      "interpretation": "Smallest sufficient surface: two existing event branches in the same trace-only harvest loop."
+    },
+    {
+      "id": "pilot-legal-action-snapshots",
+      "eventInputs": [],
+      "observationOnly": true,
+      "newGameplayHookCount": 1,
+      "existingEventBranchCount": 0,
+      "containers": {
+        "decisions": ["fight", "event", "legalTargetIndices", "chosenTargetIdx"]
+      },
+      "fixedScalarSchema": false,
+      "targetIdentity": true,
+      "forcedSwitchDisambiguation": true,
+      "identityAnchorAvailable": false,
+      "interpretation": "Reject: a new policy-loop hook and variable legal-set schema when existing events suffice."
+    }
+  ],
+  "surfaceGates": {
+    "maximumExistingEventBranches": 2,
+    "maximumTraceContainers": 2,
+    "maximumScalarFieldsPerContainer": 3,
+    "provenance": "Permit only fixed scalar copies from at most two existing event branches in the already identity-proved BalanceSim harvest loop. No gameplay or policy hook is allowed."
+  },
+  "selectionRule": {
+    "requiredSurfaceId": "play-target-index-plus-die-index",
+    "rule": "Exactly one surface must pass every gate and it must be the death-disambiguated existing-event surface. No fallback ranking or tie-break is allowed."
+  },
+  "trace": {
+    "planSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "outputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identitySummarySha256": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+    "selectionRule": "Read the complete sole 256-row co-hand-telemetry explicit-null arm. No row, policy, seed, fight, turn, card, pair or endpoint is selected after observation."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "Every policy and seed from the complete identity-proved current-main rectangle is used exactly once; there is one frozen policy snapshot per identity across its four seeds."
+  },
+  "anchors": {
+    "scoreline": {
+      "definition": "A robust policy plays Chisel before a later Executioner in one fight in at least two of four frozen rows.",
+      "activePolicies": 18,
+      "status": "Immutable overlap anchor only; Scoreline remains closed and fixed off."
+    },
+    "afterimage": {
+      "definition": "A robust policy simultaneously holds Ward and Warden's Edge in at least two of four frozen rows.",
+      "activePolicies": 17,
+      "status": "Immutable overlap anchor only; Afterimage remains closed and fixed off."
+    },
+    "identity": "The exact 256-row frozen trace is the future comparator after removing only targetIdx additions and the dies container.",
+    "forcedDeath": "A matching DIE.idx between the two PLAY events excludes the pair rather than being relabelled as target switching."
+  },
+  "estimands": {
+    "unit": "Policy identity over its complete four-seed rectangle.",
+    "activeContext": "At least one upper-bound two-single-target-Attack turn in at least two of four rows.",
+    "viableContext": "An active-context policy with at least one qualifying row that wins.",
+    "breadth": "Distinct exact first cards, second cards and ordered pairs over all qualifying turns.",
+    "surfaceEligibility": "Exactly one frozen observation surface passes all interface, sufficiency and identity-anchor gates.",
+    "reliability": "Pre-existing stall/error rows in the immutable trace; no added-fault estimand exists because no simulator runs.",
+    "overlapAnchors": "Candidate-context-only, anchor-only, cross-active and Jaccard policy-set overlap against separate closed Scoreline and Afterimage opportunity sets; descriptive only at this upper-bound stage.",
+    "notEstimated": "Actual target identity, target survival, target-switch activation, mediator activation, Ember payoff, causal complementarity, duration effect, Ash isolation, RandomBuild/global-power movement, held-out reproducibility, package admission, detector score, product balance or protected confirmation."
+  },
+  "contextGates": {
+    "minimumActivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumDistinctFirstCards": 4,
+    "minimumDistinctSecondCards": 4,
+    "minimumDistinctPairs": 8,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16-policy context, eight-policy viability and one immutable baseline-fault limits reuse the frozen 64-policy structural-capacity scale. Four cards in each position and eight exact pairs reject a named-card alias. Exact inactivity is not required before actual target indices exist because death-disambiguated switching may provide the selective inactive set."
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateObservationSurfaces": 3,
+    "selectedSurfacesMaximum": 1
+  },
+  "claimBoundary": "Source, trace-interface and upper-bound natural context eligibility only; no actual target-switch, mechanism, mediator, Ember payoff, causal, package-admission, detector, product or P9 claim.",
+  "decisionRules": {
+    "success": "Every immutable, source, trace, policy-identity, unique-surface, context-support, viability, breadth, reliability, closed-family event-unit, budget and zero-ledger check passes at the sole complete look.",
+    "successAuthority": "Apply boundary 1: freeze only PLAY.targetIdx plus DIE.idx in the existing observation-only trace loop for one separately preregistered exact-identity experiment on the same 256 policy-seed identities. Do not add a gameplay hook, mediator, payoff, policy control, causal row, ML, RL or optimiser before that protocol is frozen.",
+    "futility": "Any declared source, sufficiency, unique-surface, context, viability, breadth, reliability or closed-family event-unit gate fails on the complete immutable evidence.",
+    "futilityAuthority": "Apply boundary 2: close the exact actual-target-switch observability direction without target-only rescue, variable legal-action snapshots, card subsets, payoff, policy, cohort or method tuning and continue with the next evidence-backed minimal structural mechanism inside #421.",
+    "inconclusive": "An immutable input, source event, trace, schema, policy identity, ledger or wall-time check prevents the complete deterministic decision.",
+    "inconclusiveAuthority": "Apply boundary 3: record the exact missing relevant gate at the frozen cap; add no repair, rerun, replacement trace, simulator row, method or protected seed, then follow the current human-authority contract for an unavailable or inconclusive relevant gate."
+  },
+  "executionAndStopping": {
+    "order": [
+      "Verify live task, current-main instructions, repository/archive refs, closed-family evidence, source, task capsule, helpers, trace and ledger identities.",
+      "Enumerate and gate the three frozen observation surfaces from current-main event sources without editing source.",
+      "Reconstruct the first upper-bound single-target Attack pair in every player turn of every frozen multi-enemy fight.",
+      "Apply support, viability, breadth, reliability and closed-family event-unit gates once.",
+      "Verify the ledger is byte-identical and apply exactly one decision boundary."
+    ],
+    "firstLook": "The complete 256-row cached rectangle and three predeclared observation surfaces are the sole look. No source field, surface, predicate, threshold, cohort or endpoint may change after execution begins.",
+    "stagedConstraint": "This stage can reject or justify one trace-only identity experiment. It contains no intervention or comparably evaluated enabled endpoint and cannot support a causal or package claim.",
+    "futureCrnConstraint": "Any later causal contrast must freeze identical policy identities, simulation seed identities, baseline, estimator, first-look budget and stopping rule across all compared levels. Staging may move from trace evidence to whole-run evidence but may not give promising cells different cohorts.",
+    "knobIdentityConstraint": "Before any gameplay mechanism row, omitted and explicit-off settings must exactly reproduce the frozen path, RNG identity and results, and direct controls must prove the knob affects only its declared target-transfer mediator.",
+    "methodConstraint": "Deterministic code owns construction, caching, analysis and stop/go. No ML, RL or optimiser may be added unless this experiment first exposes a frozen policy-repertoire bottleneck and measured decision value justifies the method.",
+    "stopping": "One zero-row complete-cohort look. No sequential peeking, target-only rescue, surface addition, subset selection, threshold relaxation, cohort replacement or endpoint addition."
+  }
+}

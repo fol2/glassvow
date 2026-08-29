@@ -1,0 +1,57 @@
+{
+  "authority": "Apply boundary 1: freeze exactly this target-and-death trace for one deterministic zero-new-row actual-switch capacity reconstruction over the complete output. Do not add a gameplay mediator, payoff, policy knob, causal row, ML, RL or optimiser before that capacity protocol is frozen.",
+  "cacheObjects": {
+    "outputSha256": "3ccc833689b6cc93f62e2f6393934394392c180cfeb7538048eea97f1583719c",
+    "planSha256": "5e8e1e43af03508c3ec0ec5229003735333c81203d84a90cde47def48b18c90d"
+  },
+  "claimBoundary": "Trace schema and identity only; no actual target-switch, mechanism, mediator, Ember payoff, causal, package-admission, detector, product or P9 claim.",
+  "coverageChecks": {
+    "dieEvents": true,
+    "playEvents": true,
+    "targetedPlayEvents": true
+  },
+  "decision": "freeze-target-and-death-trace-for-capacity",
+  "decisionBoundary": 1,
+  "godotVersion": "4.7.1.stable.official.a13da4feb",
+  "identity": {
+    "policyMismatchRows": 0,
+    "rngMismatchRows": 0,
+    "seedMismatchRows": 0,
+    "strippedRowMismatchRows": 0
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 256,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+  "rowsPerArm": 256,
+  "runnerSha256": "1760dd1f97ad39a388b7e3480420fc8e67eaf2ea53ba82ec4a60a1ccbb5cdb74",
+  "schemaVersion": 1,
+  "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "sourcePatchSha256": "529930aa7e0ea74749467919928f4ea5d0b07fd7edc52408514d4e0e94d6bdbb",
+  "telemetryCounts": {
+    "dieEvents": 4360,
+    "playEvents": 26077,
+    "targetedPlayEvents": 16794
+  },
+  "traceSchemaFaults": [],
+  "wallTimeSeconds": 9.608735
+}

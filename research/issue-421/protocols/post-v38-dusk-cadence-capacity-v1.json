@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does the identity-proved current-main trace contain a policy-sensitive, viable and Scoreline-separated capacity substrate for one Dusk-only same-turn alternating Attack/Skill three-card cadence, without exact named-card acquisition or a generic added-card main effect?",
+  "hypothesis": "A three-card alternating Attack/Skill cadence removes the measured exact-consumer reservation and added-card confounding bottlenecks while retaining enough active, inactive, viable and functionally separate policies to justify one research-only identity prototype.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/heads/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/remotes/origin/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v3.json",
+    "taskCapsuleSha256": "6ff3ebad75d4c36404e1dd2f6fbc484a88f02f26fa0cbc3476bfc792a6f0fc50",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    "researchFileSha256": {
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_cohand_opportunity_decomposition.py": "371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c",
+      "post_v38_competing_structural_options.py": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+      "summaries/post-v38-cohand-telemetry-identity-v1.json": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+      "summaries/post-v38-scoreline-component-crn-v1.json": "1a56fca83591c593e90cdaf7731e41d43fbec47b9b447307b3c9e8c14acf8c83"
+    },
+    "runnerSha256": "5c04470f054f61d30a3e0454b0929f4aef5e94e91dcf8287df2a39152aaf6f9d"
+  },
+  "closedFamilyExclusions": {
+    "namedCardSequencing": "Do not reopen the exact Scoreline or Afterimage skeletons, their ordering controls or their commitment fallbacks.",
+    "addedExistingCard": "Do not add an existing card: the Scoreline component panel measured a generic Executioner main effect and closed that representation.",
+    "nativeScalarAndStructuralFamilies": "Do not reconstruct the closed Kindle, Ward, Shatter, Cracked tempo, Ember-reserve, relic, one-bit setup, action-economy, weak-mend, private-debt or historical scalar paths.",
+    "method": "No ML, RL, optimiser, policy remap or adaptive candidate tuning is permitted."
+  },
+  "mechanismContract": {
+    "researchIdentity": "dusk-cadence",
+    "scope": "Duskblade only; Ashwarden and the off setting are exact current-main null paths.",
+    "carrier": "The existing Dusk start relic Emberheart is the proposed research gate; its authored six-HP post-combat heal remains unchanged.",
+    "producer": "The first played card of type Attack or Skill in the current player turn begins an alternating streak.",
+    "mediator": "One turn-local integer streak length over consecutive eligible card plays; a same-type eligible play resets it to one and a played Power or other non-Attack/non-Skill card clears it.",
+    "consumer": "The third consecutive eligible card whose type differs from the immediately previous eligible card in the same player turn.",
+    "payoff": "After the consumer's unchanged authored effects, gain exactly one Ember through the existing bounded Ember operation, at most once in that player turn.",
+    "lifecycle": "The streak and paid flag reset at each player-turn start and disappear at combat end; they never enter RunState or a save.",
+    "naturalCost": "Draw, pay for and deliberately sequence three alternating Attack/Skill cards in one turn.",
+    "acquisition": "None. The proposed carrier is the existing Dusk start relic and no card, relic, pool, reward, ChoiceScreen or deterministic assignment is added.",
+    "stateEncoding": "If capacity passes, the identity prototype may add only one bounded turn-local cadence counter and one once-per-turn paid flag to CombatState.",
+    "rng": "No RNG call, cursor movement or new random identity.",
+    "telemetry": "Direct research-only producer, mediator-advance/reset, consumer, payoff and turn-expiry stages with card ID, card type, streak and realised Ember delta."
+  },
+  "frozenFactors": {
+    "duskCadencePayoff": {
+      "levels": {
+        "off": 0,
+        "alternating-three-ember-1": 1
+      },
+      "status": "Only an opportunity proxy is evaluated here. The non-null level may be implemented only after capacity success."
+    },
+    "scorelinePayoff": {
+      "level": "off",
+      "status": "Fixed absent; used only as a cached overlap anchor."
+    },
+    "afterimagePayoff": {
+      "level": "off",
+      "status": "Fixed absent; used only as a cached overlap anchor."
+    },
+    "factorCount": 1
+  },
+  "designMatrix": {
+    "current-main-trace": {
+      "duskCadencePayoff": "off",
+      "rows": 256,
+      "meaning": "Identity-proved explicit-null current-main observations. Deterministic code reconstructs the non-interventional upper-bound opportunity only."
+    }
+  },
+  "design": {
+    "type": "zero-new-row complete-cohort capacity and alias audit; not a factorial and not a causal experiment",
+    "construction": "Evaluate the one frozen three-card grammar across every player turn in all 256 rows before applying exact support, breadth, viability, reliability and anchor-separation rules.",
+    "cardTypeRule": "Card type is read from the frozen current-main content. Attack and Skill are eligible. A Power or any other played type breaks the streak. Lantern Art, potions, draw events and unplayed cards are outside it.",
+    "cardOrderRule": "Within a player turn, card-play event identity determines order. At most the first qualifying alternating triple per turn is counted, matching the proposed once-per-turn payoff.",
+    "mechanisticallyJustifiedInteraction": "The proposed payoff requires the interaction of card-type alternation and a third eligible play; neither an isolated card type nor generic card acquisition is a candidate factor.",
+    "aliasStructure": "Attack-Skill-Attack and Skill-Attack-Skill are symmetric orientations of one cadence factor, not separate candidates. Exact named card triples are breadth witnesses, never separately selected cells.",
+    "interference": "No Scoreline or Afterimage setting varies. Their frozen current-main opportunity sets are shared anchors used only to reject a repertoire alias before implementation.",
+    "omittedCells": "No payoff level sweep, named-card subset, acquisition factor, policy control, Ash cell, RandomBuild cell, simulator row, held-out row, joint package cell, ML, RL, optimiser or protected-seed cell is authorised."
+  },
+  "trace": {
+    "planSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "outputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identitySummarySha256": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+    "selectionRule": "Read the complete sole 256-row co-hand-telemetry explicit-null arm. No row, policy, seed, turn, card or endpoint is selected after observation."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346596,
+      346597,
+      346598,
+      346599
+    ],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "Every policy and seed from the complete identity-proved current-main rectangle is used exactly once; there is one frozen policy snapshot per identity across its four seeds."
+  },
+  "anchors": {
+    "scoreline": {
+      "definition": "A robust policy plays Chisel before a later Executioner in one fight in at least two of four frozen rows.",
+      "activePolicies": 18,
+      "status": "Immutable overlap anchor only; no Scoreline payoff or causal claim is estimated."
+    },
+    "afterimage": {
+      "definition": "A robust policy simultaneously holds Ward and Warden's Edge in at least two of four frozen rows.",
+      "activePolicies": 17,
+      "status": "Immutable conservative overlap anchor only; the Afterimage family remains closed."
+    }
+  },
+  "estimands": {
+    "unit": "Policy identity over its complete four-seed rectangle.",
+    "active": "At least one same-turn alternating eligible three-card opportunity in at least two of four rows.",
+    "inactive": "No qualifying opportunity in any of four rows.",
+    "viable": "An active policy with at least one qualifying row that wins.",
+    "breadth": "Distinct exact card identities in all three positions, distinct exact card triples and observed rows in both symmetric type orientations.",
+    "separation": "Candidate-only, anchor-only, cross-active and Jaccard policy-set overlap against the separate Scoreline and Afterimage anchors.",
+    "reliability": "Pre-existing stall/error rows in the immutable trace; no added-fault estimand exists because no simulator or intervention runs.",
+    "notEstimated": "Mediator identity, Ember payoff, causal complementarity, duration effect, RandomBuild/global-power movement, Ash isolation, held-out reproducibility, package admission, detector score, product balance or protected confirmation."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumDistinctCardsPerPosition": 4,
+    "minimumDistinctCardTriples": 8,
+    "minimumRowsPerOrientation": 8,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16-policy support and inactivity minima, eight-policy viability and separate-anchor minima, 0.55 overlap ceiling and one immutable baseline-fault ceiling reuse the frozen 64-policy structural-capacity scale. Four cards per position and eight exact triples are the minimum breadth that rejects an exact named-card alias while staying below the policy-support floor."
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1
+  },
+  "decisionRules": {
+    "success": "Every immutable, trace, policy-identity, support, viability, breadth, orientation, anchor-separation, reliability, budget and zero-ledger check passes at the sole complete look.",
+    "successAuthority": "Apply boundary 1: freeze only the exact alternating-three-ember-one contract for one separately preregistered exact-null and direct-mediator identity prototype. Do not vary length, orientation, payoff, carrier, card type, acquisition or policy and do not add a simulator row before that identity protocol is frozen.",
+    "futility": "Any declared capacity, viability, breadth, orientation, anchor-separation or reliability gate fails on the complete immutable trace.",
+    "futilityAuthority": "Apply boundary 2: close the exact Dusk cadence family without subset, length, orientation, payoff, carrier, cohort, policy or method rescue and continue with the next evidence-backed minimal structural mechanism inside #421.",
+    "inconclusive": "An immutable input, trace, schema, policy-identity, ledger or wall-time check prevents the complete deterministic decision.",
+    "inconclusiveAuthority": "Apply boundary 3: record the exact missing gate at the frozen cap; do not repair, rerun, extend, replace the trace or use protected seeds."
+  },
+  "executionAndStopping": {
+    "order": [
+      "Verify live task, repository/archive refs, source, task capsule, helper, trace and ledger identities.",
+      "Reconstruct all player turns and the one frozen cadence opportunity deterministically from the complete trace.",
+      "Apply the exact support, viability, breadth, orientation, separation and reliability gates once.",
+      "Verify the ledger is byte-identical and apply exactly one decision boundary."
+    ],
+    "stopping": "One zero-row complete-cohort look. No sequential peeking, option enumeration, subset selection, threshold relaxation, cohort replacement or endpoint addition."
+  }
+}

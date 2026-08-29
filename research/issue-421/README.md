@@ -911,3 +911,32 @@ optimiser, protected seeds and adaptive tuning remain unauthorised. The next
 step is a bounded zero-row provenance and authority audit before another
 simulator row. See
 `summaries/progress-post-directive-observability-identity-closure-v1.md`.
+
+## Post-Scoreline structural and target-switch evidence
+
+The cadence and focused-to-sweep families were each closed at their frozen
+zero-row capacity boundaries. Cadence was too universal to be selective
+(`59/64` robust active, zero exact inactive); focused-to-sweep was too sparse
+(`4/64` robust active, two viable). No prototype or causal row was added.
+
+A primary-source method audit then selected deterministic exact enumeration,
+not ML, RL or another optimiser, because the smallest unresolved variable was
+runtime target identity. The selected observation patch copied only existing
+`PLAY.targetIdx` and `DIE.idx` event data into the research trace. Across the
+same 256 policy-seed identities it produced zero stripped-row, RNG, policy,
+seed or schema mismatch while observing 26,077 plays, 16,794 targeted plays
+and 4,360 deaths. The append-only ledger was unchanged.
+
+The preregistered actual-switch audit then closed target transfer: only four
+policies robustly changed to a different living target and only two were
+viable, versus the required 16 and eight. The paired death observation was
+decisive rather than decorative. Target indices alone would have labelled 49
+policies active; 45 were death-alias-only, with 232 forced-death-change turns.
+No threshold, third-card, direction, subset, payoff, carrier, policy or cohort
+rescue is permitted.
+
+Those 232 turns are discovery evidence only. They may justify a separate
+zero-row causal-attribution audit of a materially different direct-kill relay;
+they do not admit that mechanism or reopen target transfer. See
+`publication-manifest-target-switch-v1.json` for exact identities and claim
+boundaries. No protected seed, product branch, PR or GitHub Action was used.

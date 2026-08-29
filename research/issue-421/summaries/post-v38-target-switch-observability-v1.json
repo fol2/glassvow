@@ -1,0 +1,322 @@
+{
+  "authority": "Apply boundary 1: freeze only PLAY.targetIdx plus DIE.idx in the existing observation-only trace loop for one separately preregistered exact-identity experiment on the same 256 policy-seed identities. Do not add a gameplay hook, mediator, payoff, policy control, causal row, ML, RL or optimiser before that protocol is frozen.",
+  "cachedObservationRowsRead": 256,
+  "checks": {
+    "activeContext": true,
+    "closedFamilyEventUnit": true,
+    "deterministicTargetSelector": true,
+    "firstCardBreadth": true,
+    "frozenTraceOmission": true,
+    "pairBreadth": true,
+    "reliability": true,
+    "secondCardBreadth": true,
+    "sourceDeathIdentity": true,
+    "sourcePlayTarget": true,
+    "uniqueObservationSurface": true,
+    "viableContext": true
+  },
+  "claimBoundary": "Source, trace-interface and upper-bound natural context eligibility only; no actual target-switch, mechanism, mediator, Ember payoff, causal, package-admission, detector, product or P9 claim.",
+  "counts": {
+    "activeContextPolicies": 64,
+    "baselineFaultRows": 0,
+    "distinctFirstCards": 17,
+    "distinctPairs": 152,
+    "distinctSecondCards": 17,
+    "qualifyingRows": 256,
+    "qualifyingTurns": 2407,
+    "viableContextPolicies": 15
+  },
+  "decision": "freeze-target-and-death-trace-identity-preflight",
+  "decisionBoundary": 1,
+  "elapsedSeconds": 6.413221,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "policySets": {
+    "activeContext": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63
+    ],
+    "viableContext": [
+      5,
+      6,
+      8,
+      14,
+      18,
+      29,
+      35,
+      37,
+      38,
+      39,
+      45,
+      48,
+      59,
+      61,
+      63
+    ]
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "2aa95482a0211e9132d1e329831de152ffd4e26040e8db80ce1809cc522083a0",
+  "runnerSha256": "f756d76e4d09e73d207f352748dd9599a4587d72093e2a2c78d76ea73dfc7f37",
+  "schemaVersion": 1,
+  "selectedSurface": "play-target-index-plus-die-index",
+  "separationAnchors": {
+    "afterimage": {
+      "anchorOnlyPolicies": 0,
+      "candidateOnlyPolicies": 47,
+      "crossActivePolicies": 17,
+      "jaccard": 0.265625
+    },
+    "scoreline": {
+      "anchorOnlyPolicies": 0,
+      "candidateOnlyPolicies": 46,
+      "crossActivePolicies": 18,
+      "jaccard": 0.28125
+    }
+  },
+  "sourceBreadth": {
+    "firstCards": [
+      "chisel",
+      "devour",
+      "eclipseSlash",
+      "executioner",
+      "flurry",
+      "guardedStrike",
+      "heavyBlow",
+      "leechBlade",
+      "lunge",
+      "momentum",
+      "oblivionStrike",
+      "phantomBlades",
+      "quickSlash",
+      "strike",
+      "twinFangs",
+      "uppercut",
+      "venomStrike"
+    ],
+    "secondCards": [
+      "chisel",
+      "devour",
+      "eclipseSlash",
+      "executioner",
+      "flurry",
+      "guardedStrike",
+      "heavyBlow",
+      "leechBlade",
+      "lunge",
+      "momentum",
+      "oblivionStrike",
+      "phantomBlades",
+      "quickSlash",
+      "strike",
+      "twinFangs",
+      "uppercut",
+      "venomStrike"
+    ]
+  },
+  "sourceCensus": {
+    "cachedDeathContainers": 0,
+    "cachedTargetIdxFields": 0,
+    "dieIdxEmitSites": 1,
+    "playTargetIdxEmitSites": 1,
+    "probeDeterministicModeSites": 1,
+    "targetSelectorFound": true,
+    "targetSelectorRandomTokens": 0,
+    "traceDieContainers": 0,
+    "tracePlayAppendSites": 1,
+    "traceTargetIdxFields": 0
+  },
+  "surfaceAssessments": [
+    {
+      "checks": {
+        "containerLimit": true,
+        "existingBranchLimit": true,
+        "existingDeterministicEvents": true,
+        "fixedScalarSchema": true,
+        "forcedSwitchDisambiguation": false,
+        "identityAnchor": true,
+        "noNewGameplayHook": true,
+        "observationOnly": true,
+        "scalarSchemaLimit": true,
+        "targetIdentity": true
+      },
+      "eligible": false,
+      "id": "play-target-index-only",
+      "surface": {
+        "containers": {
+          "plays-added-fields": [
+            "targetIdx"
+          ]
+        },
+        "eventInputs": [
+          "PLAY.targetIdx"
+        ],
+        "existingEventBranchCount": 1,
+        "fixedScalarSchema": true,
+        "forcedSwitchDisambiguation": false,
+        "id": "play-target-index-only",
+        "identityAnchorAvailable": true,
+        "interpretation": "Reject: a changed index can be forced because the first target died.",
+        "newGameplayHookCount": 0,
+        "observationOnly": true,
+        "targetIdentity": true
+      }
+    },
+    {
+      "checks": {
+        "containerLimit": true,
+        "existingBranchLimit": true,
+        "existingDeterministicEvents": true,
+        "fixedScalarSchema": true,
+        "forcedSwitchDisambiguation": true,
+        "identityAnchor": true,
+        "noNewGameplayHook": true,
+        "observationOnly": true,
+        "scalarSchemaLimit": true,
+        "targetIdentity": true
+      },
+      "eligible": true,
+      "id": "play-target-index-plus-die-index",
+      "surface": {
+        "containers": {
+          "dies": [
+            "fight",
+            "event",
+            "idx"
+          ],
+          "plays-added-fields": [
+            "targetIdx"
+          ]
+        },
+        "eventInputs": [
+          "PLAY.targetIdx",
+          "DIE.idx"
+        ],
+        "existingEventBranchCount": 2,
+        "fixedScalarSchema": true,
+        "forcedSwitchDisambiguation": true,
+        "id": "play-target-index-plus-die-index",
+        "identityAnchorAvailable": true,
+        "interpretation": "Smallest sufficient surface: two existing event branches in the same trace-only harvest loop.",
+        "newGameplayHookCount": 0,
+        "observationOnly": true,
+        "targetIdentity": true
+      }
+    },
+    {
+      "checks": {
+        "containerLimit": true,
+        "existingBranchLimit": true,
+        "existingDeterministicEvents": true,
+        "fixedScalarSchema": false,
+        "forcedSwitchDisambiguation": true,
+        "identityAnchor": false,
+        "noNewGameplayHook": false,
+        "observationOnly": true,
+        "scalarSchemaLimit": false,
+        "targetIdentity": true
+      },
+      "eligible": false,
+      "id": "pilot-legal-action-snapshots",
+      "surface": {
+        "containers": {
+          "decisions": [
+            "fight",
+            "event",
+            "legalTargetIndices",
+            "chosenTargetIdx"
+          ]
+        },
+        "eventInputs": [],
+        "existingEventBranchCount": 0,
+        "fixedScalarSchema": false,
+        "forcedSwitchDisambiguation": true,
+        "id": "pilot-legal-action-snapshots",
+        "identityAnchorAvailable": false,
+        "interpretation": "Reject: a new policy-loop hook and variable legal-set schema when existing events suffice.",
+        "newGameplayHookCount": 1,
+        "observationOnly": true,
+        "targetIdentity": true
+      }
+    }
+  ]
+}

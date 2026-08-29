@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "taskSsotBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+  "authority": {
+    "commentId": 5459094066,
+    "bodySha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "authorAssociation": "OWNER"
+  },
+  "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "immutableArchiveHeads": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b"
+  },
+  "currentScientificState": {
+    "ashPackageSupport": "Immutable evidence admits hand-size-payoff and Bloodfire as distinct research package directions; this is not product promotion.",
+    "duskGap": "No two-package Dusk set has crossed the complete #421 admission boundary.",
+    "fightLocalNamedCards": "Scoreline and Afterimage mechanical identities passed, but every natural-capacity, bounded order-control and permitted commitment continuation is closed exactly as recorded.",
+    "duskCadence": "Closed at zero-row capacity because the alternating Attack/Skill predicate had no exactly inactive policy and failed both package-separation anchors.",
+    "focusedToSweep": "Closed at zero-row capacity: only four robust active and two viable policies, with four reverse-only and five sweep-exposure-only policies; no implementation or simulator row was authorised."
+  },
+  "latestDecision": {
+    "protocolPath": "protocols/post-v38-fanout-capacity-v1.json",
+    "protocolSha256": "282840cc98fa7d9dc62aad12c5d62413833b7ba1433a50362df8364dbe1f4804",
+    "runnerPath": "post_v38_fanout_capacity_v1.py",
+    "runnerSha256": "c9438fd6078b7509533507c1bda1336f57386da6d07fba895c3ca6ed074a4163",
+    "summaryPath": "summaries/post-v38-fanout-capacity-v1.json",
+    "summarySha256": "c3eaa2e733e29b4cc0c910da197261e17422a016b92722bf4d327525243d05ca",
+    "outcome": "FUTILITY",
+    "decision": "close-focused-to-sweep-fanout-at-zero-row-capacity",
+    "cachedObservationRowsRead": 256,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0
+  },
+  "closedAliasPreflight": {
+    "proposal": "A new carrier consuming existing enemy Cracked for an Ember payoff.",
+    "decision": "reject-before-preregistration-or-execution",
+    "reason": "The immutable enemy-status lattice closes every current enemy-Cracked continuation and explicitly forbids an invented payoff.",
+    "scientificRows": 0,
+    "ledgerRows": 0
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "nextQuestion": "Does the complete current-main trace support one selective Dusk-only light-to-heavy Attack relay in which the immediately previous played Attack this turn has authored base cost one and the consumer is a non-starter authored base-cost-two-or-more Attack, while reverse order and mere heavy-card exposure remain insufficient?",
+  "nextAction": "Freeze and execute one zero-new-row complete-cohort capacity and alias audit. The heavy-to-light orientation is a preregistered reverse-order control only, not a rescue candidate. Construct no prototype unless every support, breadth, viability, exposure, order, reliability and package-separation gate passes.",
+  "boundaries": {
+    "researchOnly": true,
+    "zeroProtectedSeeds": true,
+    "noResearchPrOrActions": true,
+    "noSuccessorTicket": true,
+    "closedFamiliesImmutable": true,
+    "noCrackedContinuation": true,
+    "noCadenceOrFanoutRescue": true,
+    "noHeavyToLightCandidate": true,
+    "noMlRlOrOptimiserWithoutMeasuredDecisionValue": true,
+    "humanEscalationOnlyUnderCurrentContract": true
+  }
+}

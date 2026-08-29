@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "supersedes": {
+    "path": "task-capsule-5459094066-v9.json",
+    "sha256": "b6d2b879c81ea2e9b9e648cf735766ec1b32b605f936ae74255e075d34a957de"
+  },
+  "taskSsotBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+  "authority": {
+    "commentId": 5459094066,
+    "bodySha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "authorAssociation": "OWNER"
+  },
+  "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "immutableArchiveHeads": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b"
+  },
+  "observationEligibility": {
+    "protocolSha256": "2aa95482a0211e9132d1e329831de152ffd4e26040e8db80ce1809cc522083a0",
+    "summarySha256": "385016d7c40a1ea9dce14ff6943db726554ca316baa2a8d2f0708b659a49a983",
+    "outcome": "SUCCESS boundary 1",
+    "selectedSurface": "PLAY.targetIdx plus DIE.idx",
+    "newSimulatorRows": 0,
+    "newLedgerRows": 0
+  },
+  "traceIdentityResult": {
+    "protocolPath": "protocols/post-v38-target-switch-trace-identity-v1.json",
+    "protocolSha256": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+    "runnerPath": "post_v38_target_switch_trace_identity_v1.py",
+    "runnerSha256": "1760dd1f97ad39a388b7e3480420fc8e67eaf2ea53ba82ec4a60a1ccbb5cdb74",
+    "summaryPath": "summaries/post-v38-target-switch-trace-identity-v1.json",
+    "summarySha256": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+    "outcome": "SUCCESS boundary 1",
+    "identityMismatches": {
+      "strippedRows": 0,
+      "rng": 0,
+      "policy": 0,
+      "seed": 0
+    },
+    "traceSchemaFaults": 0,
+    "telemetry": {
+      "playEvents": 26077,
+      "targetedPlayEvents": 16794,
+      "dieEvents": 4360
+    },
+    "cacheObjects": {
+      "planSha256": "5e8e1e43af03508c3ec0ec5229003735333c81203d84a90cde47def48b18c90d",
+      "outputSha256": "3ccc833689b6cc93f62e2f6393934394392c180cfeb7538048eea97f1583719c"
+    },
+    "rows": {
+      "newSimulatorObservation": 256,
+      "newLedger": 0,
+      "protected": 0
+    },
+    "claimBoundary": "Trace schema and exact identity only; no actual switch, gameplay mediator, payoff or causal claim."
+  },
+  "identitySource": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/target-switch-observation-v1-source",
+    "head": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "stagedPatchSha256": "529930aa7e0ea74749467919928f4ea5d0b07fd7edc52408514d4e0e94d6bdbb",
+    "balanceSimSha256": "28c05711875c5460da90d55b4bfe91788143456bba99ee1a2b96fbd9b3280654",
+    "probeSha256": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+    "probeUidSha256": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2",
+    "parseGate": "scripts OK (244 checked) under pinned Godot 4.7.1 after normal import"
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "nextQuestion": "Across the complete frozen 64-policy by four-seed rectangle, does the identity-proved target-and-death trace contain a reliable, viable, policy-selective and functionally separated natural capacity for a deliberate change between the first two single-target Attacks in one player turn while the first target remains alive?",
+  "nextAction": "Freeze and execute exactly one deterministic zero-new-row actual-switch capacity reconstruction over cache object 3ccc8336. Only complete success may authorise a separately preregistered exact-null and direct-mediator identity prototype.",
+  "boundaries": {
+    "researchOnly": true,
+    "zeroProtectedSeeds": true,
+    "noResearchPrOrActions": true,
+    "noSuccessorTicket": true,
+    "closedFamiliesImmutable": true,
+    "noPayoffOrGameplayPrototypeAtCapacityStage": true,
+    "noAdaptiveCandidateByCandidateTuning": true,
+    "noMlRlOrOptimiserWithoutMeasuredDecisionValue": true,
+    "humanEscalationOnlyUnderCurrentContract": true
+  }
+}

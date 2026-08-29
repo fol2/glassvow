@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "supersedes": {
+    "path": "task-capsule-5459094066-v8.json",
+    "sha256": "290b157771ffe79c8fbfc17ab1e88efc93e91a8d13714b4eebe1d1a4f1436134"
+  },
+  "taskSsotBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+  "authority": {
+    "commentId": 5459094066,
+    "bodySha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "authorAssociation": "OWNER"
+  },
+  "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "immutableArchiveHeads": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b"
+  },
+  "observabilityResult": {
+    "protocolPath": "protocols/post-v38-target-switch-observability-v1.json",
+    "protocolSha256": "2aa95482a0211e9132d1e329831de152ffd4e26040e8db80ce1809cc522083a0",
+    "runnerPath": "post_v38_target_switch_observability_v1.py",
+    "runnerSha256": "f756d76e4d09e73d207f352748dd9599a4587d72093e2a2c78d76ea73dfc7f37",
+    "summaryPath": "summaries/post-v38-target-switch-observability-v1.json",
+    "summarySha256": "385016d7c40a1ea9dce14ff6943db726554ca316baa2a8d2f0708b659a49a983",
+    "outcome": "SUCCESS boundary 1",
+    "selectedSurface": "PLAY.targetIdx plus DIE.idx in the existing observation-only trace loop",
+    "context": {
+      "activePolicies": 64,
+      "viablePolicies": 15,
+      "distinctFirstCards": 17,
+      "distinctSecondCards": 17,
+      "distinctPairs": 152,
+      "baselineFaultRows": 0
+    },
+    "rows": {
+      "cachedRead": 256,
+      "newSimulator": 0,
+      "newLedger": 0,
+      "protected": 0
+    },
+    "claimBoundary": "Upper-bound context and observation eligibility only; no actual target-switch, mechanism or payoff claim."
+  },
+  "identitySource": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/target-switch-observation-v1-source",
+    "head": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "balanceSimSha256": "28c05711875c5460da90d55b4bfe91788143456bba99ee1a2b96fbd9b3280654",
+    "probeSha256": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+    "probeUidSha256": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2",
+    "deltaFromIdentityProvedTrace": "Initialise one dies array, copy targetIdx into each existing play row, and copy fight/event/idx from each existing die branch; no gameplay event, policy, content or RNG path changes.",
+    "parseGate": "scripts OK (244 checked) under pinned Godot 4.7.1 after normal import"
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "nextQuestion": "Does the selected target-and-death trace preserve every frozen result, policy, RNG and pre-existing trajectory field across the exact same 256 policy-seed identities while producing only valid fixed-schema target and death observations?",
+  "nextAction": "Freeze and execute one 256-row trace-only exact identity preflight against the immutable d5b34580 current-main output. Only complete identity success may authorise a zero-new-row actual-switch capacity reconstruction.",
+  "boundaries": {
+    "researchOnly": true,
+    "zeroProtectedSeeds": true,
+    "noResearchPrOrActions": true,
+    "noSuccessorTicket": true,
+    "closedFamiliesImmutable": true,
+    "noPayoffOrGameplayPrototypeAtIdentityStage": true,
+    "noAdaptiveCandidateByCandidateTuning": true,
+    "noMlRlOrOptimiserWithoutMeasuredDecisionValue": true,
+    "humanEscalationOnlyUnderCurrentContract": true
+  }
+}

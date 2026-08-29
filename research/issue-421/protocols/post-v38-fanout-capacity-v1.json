@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does the identity-proved current-main trace contain a policy-sensitive, viable and functionally separated capacity substrate for one Dusk-only focused-to-sweep sequence: a single-enemy Attack followed later in the same player turn by an all-enemy Attack in a multi-enemy fight?",
+  "hypothesis": "Focused-to-sweep order is a middle-granularity targeting-topology decision: narrower than the closed generic Attack/Skill cadence, broader than the closed exact named-card pairs, and separable from simply acquiring an all-enemy Attack.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/heads/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/remotes/origin/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v4.json",
+    "taskCapsuleSha256": "465b5febaeac7cf9f4f7e5ca1b4ab1d09204371020fde8fc5daff8e937023bb5",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    "researchFileSha256": {
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_competing_structural_options.py": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+      "protocols/post-v38-dusk-cadence-capacity-v1.json": "cd0b14b0a5a8a5e0389cbf52aa6d0fd31380a8500b84b991b6186677dc961ddc",
+      "summaries/post-v38-dusk-cadence-capacity-v1.json": "563ea29e964d5f5ff2b6e42bc789cc938a362467359e429c4707765622c93cf2",
+      "summaries/cracked-tempo-v1.json": "fa2d279bd61bf6dd41cdc1585d5590241b0d881493b2cb498f9663d1539c6dd1",
+      "summaries/post-v30-enemy-status-lattice-audit-v1.json": "addd1c79e733aeb55a2dd1458878d1b9509debabbe2e69e4b24283bcc0a72328",
+      "summaries/post-v38-native-dusk-grammar-coverage-v1.json": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff",
+      "protocols/post-v30-shatter-card-capacity-v1.json": "a3b1cbb5288dbd08e9253250a49250ae6f9a9c4caa8953dd1cfd7a0cabee021f",
+      "summaries/post-v30-shatter-card-capacity-v1.json": "d8ed3a2e09e0c21d89665eafaa65c8e8716c9bba0a6b82b8fe4b6a83f1639db5"
+    },
+    "runnerSha256": "c9438fd6078b7509533507c1bda1336f57386da6d07fba895c3ca6ed074a4163"
+  },
+  "closedFamilyExclusions": {
+    "namedCardSequencing": "Do not reopen Scoreline, Afterimage, their order controls or their commitment fallbacks.",
+    "genericCadence": "Do not subset, shorten, reverse, retune or recarrier the closed alternating Attack/Skill three-card cadence.",
+    "enemyStatus": "Do not use Cracked, Dimmed, Weak, Smolder or another existing status lattice as producer, mediator, consumer or payoff evidence.",
+    "multiEnemyShatter": "The closed multi-enemy-card-Shatter unit is one card producing multiple Shatter events across targets. Fanout instead tests an ordered two-card target-scope sequence, reads no Facet or Shatter event and proposes no Shatter payoff; multi-enemy formation is context only.",
+    "otherClosedFamilies": "Do not reconstruct Kindle, Ward, Shatter, Ember-reserve damage, relic, one-bit setup, action-economy, weak-mend, same-instance repeat, acquisition scalar or private-debt paths.",
+    "method": "No ML, RL, optimiser, policy remap, grammar expansion or adaptive candidate tuning is permitted."
+  },
+  "mechanismContract": {
+    "researchIdentity": "dusk-fanout; a research identity, not shipping copy.",
+    "producer": "After an exact Duskblade Attack whose authored target scope is enemy resolves while combat remains live, set one non-stacking turn-local focused mark.",
+    "mediatorState": "One player-combat Boolean focused mark plus one paid flag for the current player turn; neither is a RunState or save field.",
+    "consumer": "A later exact Attack in the same player turn whose authored target scope is allEnemies consumes the focused mark after its unchanged authored effects, only in a fight that began with at least two enemies and while combat remains live.",
+    "payoffOperation": "After consumption, request exactly one Ember through the existing bounded Ember operation, at most once in that player turn; requested and realised values remain separate telemetry.",
+    "lifecycle": "The focused mark and paid flag clear at each player-turn start and combat end. Repeated focused Attacks replace the same Boolean; a sweep before any focus does not prime or pay.",
+    "naturalCost": "Acquire an existing all-enemy Attack, draw and pay for both cards, enter a multi-enemy fight, and deliberately play a single-enemy Attack before the sweep in one turn.",
+    "acquisition": "None. Existing current-main reward pools, rarities, cards and deck/save representation remain unchanged.",
+    "duskBoundary": "The existing Emberheart is the proposed Dusk gate. Ashwarden and mechanism-off are exact current-main paths; Emberheart's authored post-combat healing is unchanged.",
+    "factorIsolation": "Scoreline and Afterimage are fixed off and absent. Fanout reads only card type, authored target scope, initial enemy count, current turn and exact Emberheart identity.",
+    "rngAndPersistence": "No RNG call or cursor movement, no new run-persistent field, internal ID, save version, content entry, reward entry or acquisition UI.",
+    "telemetry": "Direct research-only producer, mediator-set/replacement, consumer, mediator-consume, payoff and turn-expiry stages with card ID, target scope, requested Ember and realised Ember."
+  },
+  "frozenCausalFactors": {
+    "fanoutPayoff": {
+      "definition": "Dusk-only focused-to-sweep turn-local mediator and one-Ember payoff defined by the complete mechanism contract.",
+      "levels": {
+        "off": 0,
+        "focused-then-sweep-ember-1": 1
+      },
+      "status": "Only a natural opportunity proxy is evaluated here. The non-null level may be implemented only after capacity success."
+    },
+    "scorelinePayoff": {
+      "level": "off",
+      "status": "Fixed absent; used only as an immutable overlap anchor."
+    },
+    "afterimagePayoff": {
+      "level": "off",
+      "status": "Fixed absent; used only as an immutable overlap anchor."
+    },
+    "factorCount": 1,
+    "independence": "Only fanoutPayoff could vary in a later experiment. No acquisition, payoff-value, direction, carrier, status or cross-package factor is opened here."
+  },
+  "designMatrix": {
+    "current-main-trace": {
+      "fanoutPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "rows": 256,
+      "meaning": "Identity-proved explicit-null current-main observations. Deterministic code reconstructs only the non-interventional upper-bound opportunity."
+    }
+  },
+  "design": {
+    "type": "zero-new-row complete-cohort capacity and alias audit; not a factorial and not a causal experiment",
+    "construction": "Evaluate the one frozen focused-to-sweep predicate over every player turn in every multi-enemy fight in all 256 rows, then apply exact support, reverse-order, sweep-exposure, breadth, viability, reliability and package-separation rules.",
+    "cardScopeRule": "The producer is an Attack with authored target=enemy. The consumer is a later Attack with authored target=allEnemies. Skills, Powers, statuses, Art, potions, damage events, Shatter events and target indices are outside the grammar.",
+    "fightRule": "Only fights whose frozen starting formation contains at least two enemies are eligible. At most the first qualifying pair per player turn is counted, matching the proposed once-per-turn payoff.",
+    "mechanisticallyJustifiedInteractions": [
+      "Focused Attack by later sweep is structural legality: neither isolated card scope is a candidate mechanism.",
+      "Multi-enemy starting formation by ordered pair is a deterministic eligibility boundary, not an estimated product interaction.",
+      "Aspect by fanout is a deterministic Dusk/Emberheart boundary reserved for identity; no Ash endpoint is estimated here."
+    ],
+    "aliasStructure": "Exact producer-consumer card IDs are breadth witnesses, never candidate cells. Sweep-before-focus is the sole frozen reverse-order witness, not a second candidate. Any-sweep exposure is a one-sided alias control: fanout must leave robust sweep-owning/playing policies inactive, proving acquisition alone is insufficient. The one-card cross-target Shatter family has no shared event unit or payoff.",
+    "interference": "No Scoreline or Afterimage setting varies. Their current-main opportunity sets are shared anchors used only to reject repertoire aliasing. No joint package cell has decision value before fanout identity and capacity pass.",
+    "omittedCells": "No reverse-direction candidate, adjacency variant, same-target variant, status, Shatter, Facet, damage, Ward, Energy, acquisition, reward, payoff sweep, policy control, Ash intervention, RandomBuild, simulator, held-out, joint-package, ML, RL, optimiser or protected-seed cell is authorised."
+  },
+  "sourceAnchors": {
+    "sweeps": [
+      "annihilate",
+      "cleave",
+      "shardstorm",
+      "tempest"
+    ],
+    "meaning": "Complete current-main Attack/target=allEnemies content inventory. Observed breadth may be smaller but must cross its preregistered minimum."
+  },
+  "trace": {
+    "planSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "outputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identitySummarySha256": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+    "selectionRule": "Read the complete sole 256-row co-hand-telemetry explicit-null arm. No row, policy, seed, fight, turn, card, pair or endpoint is selected after observation."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346596,
+      346597,
+      346598,
+      346599
+    ],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "Every policy and seed from the complete identity-proved current-main rectangle is used exactly once; there is one frozen policy snapshot per identity across its four seeds."
+  },
+  "anchors": {
+    "scoreline": {
+      "definition": "A robust policy plays Chisel before a later Executioner in one fight in at least two of four frozen rows.",
+      "activePolicies": 18,
+      "status": "Immutable overlap anchor only; the Scoreline family remains closed."
+    },
+    "afterimage": {
+      "definition": "A robust policy simultaneously holds Ward and Warden's Edge in at least two of four frozen rows.",
+      "activePolicies": 17,
+      "status": "Immutable conservative overlap anchor only; the Afterimage family remains closed."
+    },
+    "reverseOrder": "Robust sweep-before-focus policies that are not robust focused-to-sweep policies prove the declared direction is a policy-order decision rather than a symmetric topology label.",
+    "sweepExposure": "Robust any-sweep policies that are not robust fanout policies prove acquisition and use of an all-enemy Attack are insufficient for activation."
+  },
+  "estimands": {
+    "unit": "Policy identity over its complete four-seed rectangle.",
+    "active": "At least one focused-to-sweep opportunity in at least two of four rows.",
+    "inactive": "No focused-to-sweep opportunity in any of four rows.",
+    "viable": "An active policy with at least one qualifying row that wins.",
+    "reverseOrder": "Robust sweep-before-focus policies minus robust focused-to-sweep policies.",
+    "sweepExposure": "Robust policies playing any all-enemy Attack in a multi-enemy fight minus robust focused-to-sweep policies.",
+    "breadth": "Distinct exact producer cards, consumer cards and ordered exact pairs over all qualifying turns.",
+    "separation": "Candidate-only, anchor-only, cross-active and Jaccard policy-set overlap against the separate Scoreline and Afterimage anchors.",
+    "reliability": "Pre-existing stall/error rows in the immutable trace; no added-fault estimand exists because no simulator or intervention runs.",
+    "notEstimated": "Mechanical identity, actual target/hit eligibility, mediator activation, Ember payoff, causal complementarity, duration effect, Ash isolation, RandomBuild/global-power movement, held-out reproducibility, package admission, detector score, product balance or protected confirmation."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumDistinctProducers": 4,
+    "minimumDistinctConsumers": 3,
+    "minimumDistinctPairs": 8,
+    "minimumReverseOnlyPolicies": 8,
+    "minimumSweepExposureOnlyPolicies": 8,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16-policy support/inactivity, eight-policy viability and package-separation minima, 0.55 overlap ceiling and one immutable baseline-fault ceiling reuse the frozen 64-policy structural-capacity scale. Four producers, three of four authored sweeps and eight exact pairs reject an exact-card alias. Eight reverse-only and sweep-exposure-only policies require an independently expressed order decision beyond direction symmetry or acquisition."
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1
+  },
+  "decisionRules": {
+    "success": "Every immutable, source, trace, policy-identity, support, viability, breadth, reverse-order, sweep-exposure, package-separation, reliability, budget and zero-ledger check passes at the sole complete look.",
+    "successAuthority": "Apply boundary 1: freeze only the exact focused-to-sweep-ember-one contract for a separately preregistered exact-null and direct-mediator identity prototype. Do not vary direction, adjacency, payoff, carrier, card scope or acquisition and do not add a simulator row before that identity protocol is frozen.",
+    "futility": "Any declared capacity, viability, breadth, order, exposure, separation or reliability gate fails on the complete immutable trace.",
+    "futilityAuthority": "Apply boundary 2: close the exact focused-to-sweep fanout family without reverse-direction, adjacency, card-subset, payoff, carrier, cohort, policy or method rescue and continue with the next evidence-backed minimal structural mechanism inside #421.",
+    "inconclusive": "An immutable input, trace, schema, policy identity, ledger or wall-time check prevents the complete deterministic decision.",
+    "inconclusiveAuthority": "Apply boundary 3: record the exact missing gate at the frozen cap; do not repair, rerun, extend, replace the trace or use protected seeds."
+  },
+  "executionAndStopping": {
+    "order": [
+      "Verify live task, repository/archive refs, closed-family evidence, source, task capsule, helper, trace and ledger identities.",
+      "Reconstruct every player turn in every frozen multi-enemy fight and the one focused-to-sweep opportunity deterministically.",
+      "Apply the exact support, viability, breadth, reverse-order, sweep-exposure, separation and reliability gates once.",
+      "Verify the ledger is byte-identical and apply exactly one decision boundary."
+    ],
+    "firstLook": "The complete 256-row cached rectangle is the sole look. No source descriptor, predicate, direction, threshold, cohort or endpoint may change after execution begins.",
+    "stagedConstraint": "This stage can reject or justify one identity prototype only. It contains no intervention or comparably evaluated enabled endpoint and cannot support a causal or package claim.",
+    "stopping": "One zero-row complete-cohort look. No sequential peeking, option enumeration, reverse rescue, subset selection, threshold relaxation, cohort replacement or endpoint addition."
+  }
+}

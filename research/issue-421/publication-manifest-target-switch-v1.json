@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "archiveParent": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+  "preservedRefs": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b"
+  },
+  "publicationRef": "research/issue-421-target-switch-evidence",
+  "source": {
+    "main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "observationSourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "observationPatchSha256": "529930aa7e0ea74749467919928f4ea5d0b07fd7edc52408514d4e0e94d6bdbb",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+  },
+  "results": {
+    "duskCadenceCapacity": {
+      "outcome": "FUTILITY",
+      "decision": "close-dusk-cadence-at-zero-row-capacity",
+      "activePolicies": 59,
+      "exactInactivePolicies": 0,
+      "viablePolicies": 15,
+      "newSimulatorRows": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "cd0b14b0a5a8a5e0389cbf52aa6d0fd31380a8500b84b991b6186677dc961ddc",
+      "summarySha256": "563ea29e964d5f5ff2b6e42bc789cc938a362467359e429c4707765622c93cf2"
+    },
+    "focusedToSweepCapacity": {
+      "outcome": "FUTILITY",
+      "decision": "close-focused-to-sweep-fanout-at-zero-row-capacity",
+      "activePolicies": 4,
+      "exactInactivePolicies": 47,
+      "viablePolicies": 2,
+      "newSimulatorRows": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "282840cc98fa7d9dc62aad12c5d62413833b7ba1433a50362df8364dbe1f4804",
+      "summarySha256": "c3eaa2e733e29b4cc0c910da197261e17422a016b92722bf4d327525243d05ca"
+    },
+    "targetSwitchObservability": {
+      "outcome": "SUCCESS",
+      "selectedSurface": "PLAY.targetIdx plus DIE.idx",
+      "activeContextPolicies": 64,
+      "viableContextPolicies": 15,
+      "newSimulatorRows": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "2aa95482a0211e9132d1e329831de152ffd4e26040e8db80ce1809cc522083a0",
+      "summarySha256": "385016d7c40a1ea9dce14ff6943db726554ca316baa2a8d2f0708b659a49a983"
+    },
+    "targetDeathTraceIdentity": {
+      "outcome": "SUCCESS",
+      "observations": 256,
+      "strippedRowMismatches": 0,
+      "rngMismatches": 0,
+      "policyMismatches": 0,
+      "seedMismatches": 0,
+      "schemaFaults": 0,
+      "playEvents": 26077,
+      "targetedPlayEvents": 16794,
+      "dieEvents": 4360,
+      "newLedgerRows": 0,
+      "protocolSha256": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+      "summarySha256": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d"
+    },
+    "actualTargetSwitchCapacity": {
+      "outcome": "FUTILITY",
+      "decision": "close-target-transfer-at-zero-row-capacity",
+      "activePolicies": 4,
+      "exactInactivePolicies": 48,
+      "viablePolicies": 2,
+      "targetIndexChangePoliciesBeforeDeathDisambiguation": 49,
+      "deathAliasOnlyPolicies": 45,
+      "forcedDeathChangeTurns": 232,
+      "sameTargetTurns": 2143,
+      "semanticFaultPairs": 0,
+      "newSimulatorRows": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "97997ab6184f8391453430879cbb0f307b196c1e1488b0e66b7d99811f295913",
+      "summarySha256": "309f9266aca4a85840425c1bf036b99bf15e54923a02b003171060ec46a3b3e7"
+    }
+  },
+  "methodDecision": {
+    "noteSha256": "6d57a44747f237ed57ae0aae17816176747eacb67841dd12ddd1a038d570918c",
+    "selected": "deterministic exact enumeration followed by mechanism-blocked common-random-number evidence only after identity and capacity pass",
+    "notAuthorised": ["ML", "RL", "Bayesian optimisation", "quality-diversity search"]
+  },
+  "decisionEvidence": {
+    "targetIdxOnlyAlias": "Forty-nine robust policies changed target indices, but death disambiguation left only four robust deliberate-switch policies; forty-five were death-alias-only. The targetIdx-only representation would therefore have produced a materially false capacity conclusion.",
+    "familyDisposition": "The exact target-transfer family is closed without a third-Attack, adjacency, direction, card-subset, payoff, carrier, policy, cohort or method rescue.",
+    "nextEvidenceQuestion": "Treat the 232 forced-death-change turns only as discovery evidence and preregister a zero-row causal-attribution audit before deciding whether a materially different direct-kill-to-next-card relay has a valid event unit."
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "verification": {
+    "observationSourceScripts": "scripts OK (244 checked) under pinned Godot 4.7.1 after normal import",
+    "targetDeathIdentity": "256 exact paired rows; zero path, RNG, policy, seed or schema mismatch",
+    "capacity": "one complete cached look; zero new simulator rows; byte-identical ledger"
+  },
+  "rawCacheObjects": {
+    "planSha256": "5e8e1e43af03508c3ec0ec5229003735333c81203d84a90cde47def48b18c90d",
+    "outputSha256": "3ccc833689b6cc93f62e2f6393934394392c180cfeb7538048eea97f1583719c",
+    "count": 2
+  },
+  "claimBoundary": "These are discovery-stage structural negatives plus one identity-safe observation surface. No Dusk package, causal payoff, detector, product, protected-seed or P9 claim follows."
+}

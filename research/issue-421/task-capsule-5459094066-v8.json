@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "supersedes": {
+    "path": "task-capsule-5459094066-v7.json",
+    "sha256": "1d275dc1cea3a598a5a37f66fd7b793f2ddef7e91ef03624efd04947ecadf5c3"
+  },
+  "taskSsotBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+  "authority": {
+    "commentId": 5459094066,
+    "bodySha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "authorAssociation": "OWNER"
+  },
+  "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "activeInstructionSha256": {
+    "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+    ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+    "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+    "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+    "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95"
+  },
+  "immutableArchiveHeads": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b"
+  },
+  "currentScientificState": {
+    "ashPackageSupport": "Immutable evidence admits hand-size-payoff and Bloodfire as distinct research package directions; this is not product promotion.",
+    "duskGap": "No two-package Dusk set has crossed the complete #421 admission boundary.",
+    "closedDuskFamilies": "Scoreline, Afterimage, cadence, focused-to-sweep, Cracked/enemy-status and light-to-heavy/Shatter continuations remain closed exactly as recorded.",
+    "method": "Exact deterministic enumeration remains selected. ML, RL, Bayesian optimisation and quality-diversity remain unauthorised until a frozen objective and measured same-budget decision value exist."
+  },
+  "targetObservationCorrection": {
+    "runtimeFacts": [
+      "Current-main PLAY already emits targetIdx after legality succeeds.",
+      "Current-main DIE already emits the dead enemy idx.",
+      "The identity-proved co-hand research trace omits both fields while retaining the shared event index."
+    ],
+    "v7Insufficiency": "targetIdx alone cannot distinguish a deliberate switch from a forced change after the first target dies. No simulator row was run under that incomplete representation.",
+    "smallestSufficientRepresentation": "Copy PLAY.targetIdx and DIE.idx from the existing deterministic event queue into the existing observation-only trace loop. A qualifying switch requires a different second target and no matching DIE for the first target between the two single-target plays.",
+    "claimBoundary": "Observation eligibility only; no target-switch activation, mechanism, payoff, package, detector or product claim."
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "nextQuestion": "Do current-main source and the complete 256-row immutable context provide one identity-safe, death-disambiguated observation surface and enough policy, viability and card-pair support to justify a separately preregistered trace-only CRN identity experiment?",
+  "nextAction": "Freeze and run one zero-new-row target-switch observability audit. Only complete success may authorise a separately frozen PLAY.targetIdx plus DIE.idx trace identity preflight.",
+  "boundaries": {
+    "researchOnly": true,
+    "zeroProtectedSeeds": true,
+    "noResearchPrOrActions": true,
+    "noSuccessorTicket": true,
+    "closedFamiliesImmutable": true,
+    "noPayoffOrGameplayPrototypeAtObservationStage": true,
+    "noAdaptiveCandidateByCandidateTuning": true,
+    "noMlRlOrOptimiserWithoutMeasuredDecisionValue": true,
+    "humanEscalationOnlyUnderCurrentContract": true
+  }
+}

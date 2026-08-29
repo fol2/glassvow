@@ -1,0 +1,262 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does the complete identity-proved target-and-death trace contain a reliable, viable, policy-selective and functionally separated natural capacity for a deliberate change between the first two single-target Attacks in one player turn while the first target remains alive?",
+  "hypothesis": "Runtime target selection is a narrower policy decision than owning or playing two single-target Attacks: the death-disambiguated first-pair predicate should retain robust active and exact-inactive policy sets, broad exact-card support, both target-transition directions and separation from the closed Scoreline and Afterimage opportunity sets.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/heads/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/remotes/origin/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v10.json",
+    "taskCapsuleSha256": "ade89434ce96fe46cc6a950d517486d5e71acb8ba2216d995316e0336851010e",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+      "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+      "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+      "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "observationSourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourcePatchSha256": "529930aa7e0ea74749467919928f4ea5d0b07fd7edc52408514d4e0e94d6bdbb",
+    "observationSourceSha256": {
+      "tools/balance_sim.gd": "28c05711875c5460da90d55b4bfe91788143456bba99ee1a2b96fbd9b3280654",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2"
+    },
+    "researchFileSha256": {
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_competing_structural_options.py": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+      "post_v38_cohand_opportunity_decomposition.py": "371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c",
+      "protocols/post-v38-target-switch-observability-v1.json": "2aa95482a0211e9132d1e329831de152ffd4e26040e8db80ce1809cc522083a0",
+      "summaries/post-v38-target-switch-observability-v1.json": "385016d7c40a1ea9dce14ff6943db726554ca316baa2a8d2f0708b659a49a983",
+      "protocols/post-v38-target-switch-trace-identity-v1.json": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+      "post_v38_target_switch_trace_identity_v1.py": "1760dd1f97ad39a388b7e3480420fc8e67eaf2ea53ba82ec4a60a1ccbb5cdb74",
+      "summaries/post-v38-target-switch-trace-identity-v1.json": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+      "notes/post-fanout-next-method-primary-research.md": "66d9cd1356fce979c348a12469857f6b1b437ef5c152f39f3e9c629373395442"
+    },
+    "runnerSha256": "c2e00c8a71a0490aa17726adbfdfb56571cef787eaf35f662488aacc3027b27d"
+  },
+  "closedFamilyExclusions": {
+    "namedCardSequencing": "Scoreline, Afterimage, their timing controls and commitment fallbacks remain closed. Exact card IDs are breadth witnesses only.",
+    "genericCadence": "The closed cadence family alternates Attack and Skill over three plays. This audit uses exactly the first two authored single-target Attacks and estimates no cadence payoff.",
+    "focusedToSweep": "The closed fanout family changes authored scope from enemy to allEnemies. Both target-transfer cards have authored target=enemy and differ only by runtime living target index.",
+    "shatterFacetAndStatus": "No HIT, CHIP, SHATTER, Facet, damage or status event enters the predicate. DIE is used only to reject a forced target change.",
+    "otherClosedFamilies": "Do not reconstruct Kindle, Ward, Ember-reserve damage, relic, one-bit setup, action-economy, weak-mend, same-instance repeat, acquisition scalar or private-debt paths.",
+    "method": "No ML, RL, optimiser, policy remap, grammar expansion or adaptive candidate tuning is permitted."
+  },
+  "mechanismContract": {
+    "researchIdentity": "dusk-target-transfer; a research identity, not shipping copy.",
+    "producer": "After an exact Duskblade Attack with authored target=enemy resolves while combat remains live and its selected target remains alive, store that target index.",
+    "mediatorState": "One player-combat previous-target integer plus one paid Boolean for the current player turn; neither is a RunState or save field.",
+    "consumer": "The next exact Attack in the same player turn with authored target=enemy consumes the mediator only when it selects a different living enemy index after its unchanged authored effects and while combat remains live.",
+    "payoffOperation": "After valid consumption, request exactly one Ember through the existing bounded Ember operation, at most once in that player turn; requested and realised values remain separate telemetry.",
+    "lifecycle": "The previous-target mediator and paid flag clear at each player-turn start and combat end. Other card types and all-enemy Attacks neither consume nor replace it. A same-target Attack replaces the stored index without paying. Target death clears the stored index before another single-target Attack can consume it.",
+    "naturalCost": "Enter a multi-enemy fight, draw and pay for at least two existing single-target Attacks in one turn, keep the first target alive, then select a different living target for the next single-target Attack.",
+    "acquisition": "None. Existing current-main reward pools, rarities, cards and deck/save representation remain unchanged.",
+    "duskBoundary": "The existing Emberheart is the proposed Dusk gate. Ashwarden and mechanism-off are exact current-main paths; Emberheart's authored post-combat healing is unchanged.",
+    "factorIsolation": "Scoreline and Afterimage are separate factors fixed off. Target transfer reads only card type, authored target scope, exact selected target index, target death, current turn and exact Emberheart identity.",
+    "rngAndPersistence": "No RNG call or cursor movement, no new run-persistent field, internal ID, save version, content entry, reward entry or acquisition UI.",
+    "telemetry": "Direct research-only producer, target-survived, mediator-set/replacement/clear, consumer, same-target rejection, forced-death rejection, mediator-consume, payoff and turn-expiry stages with exact card and target indices plus requested and realised Ember."
+  },
+  "frozenCausalFactors": {
+    "targetSwitchPayoff": {
+      "definition": "Dusk-only target-transfer mediator and one-Ember payoff defined by the complete mechanism contract.",
+      "levels": {
+        "off": 0,
+        "different-living-target-ember-1": 1
+      },
+      "status": "Fixed off here. The enabled level does not exist and may be implemented only after capacity success in a separate exact-null and direct-mediator identity stage."
+    },
+    "scorelinePayoff": {
+      "levels": ["off"],
+      "definition": "Separate closed causal factor fixed absent and never pooled with the target-transfer endpoint."
+    },
+    "afterimagePayoff": {
+      "levels": ["off"],
+      "definition": "Separate closed causal factor fixed absent and never pooled with the target-transfer endpoint."
+    },
+    "acquisitionPriority": {
+      "levels": ["current-main"],
+      "definition": "Frozen exact reward policy; not varied or estimated."
+    },
+    "futureFactorCount": 1,
+    "variedCausalFactorCount": 0,
+    "independence": "All causal factors are fixed off. This is not the old four-factor design and contains no causal or joint package cell."
+  },
+  "designMatrix": {
+    "identity-proved-current-main-trace": {
+      "targetSwitchPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "acquisitionPriority": "current-main",
+      "rows": 256,
+      "status": "Immutable cached observation arm only; deterministic reconstruction adds no simulator row."
+    }
+  },
+  "design": {
+    "type": "zero-new-row complete-cohort actual-switch capacity and alias audit; not a factorial and not a causal experiment",
+    "construction": "In every eligible player turn, filter plays to authored type=attack,target=enemy and classify only the first two. A deliberate switch requires differing target indices and no DIE for the first target strictly between the two PLAY events.",
+    "fightRule": "Only fights whose frozen starting formation has at least two enemies are eligible. At most the first filtered pair per player turn is counted; intervening other card types and target scopes do not reset or consume the observation interval.",
+    "mechanisticallyJustifiedInteractions": [
+      "First PLAY target index by intervening DIE index by second PLAY target index defines deliberate switching; none alone is sufficient.",
+      "Multi-enemy starting formation by two-single-target-Attack context is structural eligibility, not an estimated product interaction.",
+      "Dusk/Emberheart identity by target-switch payoff is the sole future causal interaction and is not estimated here."
+    ],
+    "aliasStructure": "A differing target index without DIE exclusion aliases forced change after target death. Same-target pairs are explicit non-activations. Robust upper-bound-context policies without robust deliberate switches reject two-Attack opportunity as sufficient. Exact card IDs and ordered target-index transitions are breadth witnesses, not candidate cells. Forced-death-only and same-target policy sets are descriptive alias controls, not extra candidate levels or post-look rescue gates.",
+    "interference": "Scoreline and Afterimage remain separate and fixed off. Their immutable robust opportunity sets are shared repertoire-overlap anchors only. No joint cell has decision value before target-transfer identity and a later comparable CRN effect establish an independently admitted package.",
+    "omittedCells": "No exact-target-specific candidate, reverse direction, adjacency variant, third-Attack rescue, exact-card subset, payoff value, acquisition, rarity, policy knob, Ash intervention, RandomBuild, simulator, held-out, joint-package, ML, RL, optimiser or protected-seed cell is authorised."
+  },
+  "sourceAnchors": {
+    "singleTargetAttacks": [
+      "ashBite",
+      "chisel",
+      "devour",
+      "eclipseSlash",
+      "executioner",
+      "flurry",
+      "guardedStrike",
+      "heavyBlow",
+      "leechBlade",
+      "lunge",
+      "momentum",
+      "novaflare",
+      "oblivionStrike",
+      "phantomBlades",
+      "quakeblow",
+      "quickSlash",
+      "resonantLance",
+      "strike",
+      "twinFangs",
+      "uppercut",
+      "venomStrike"
+    ],
+    "meaning": "Complete current-main authored type=attack,target=enemy inventory. Observed exact IDs are breadth witnesses only."
+  },
+  "trace": {
+    "planSha256": "5e8e1e43af03508c3ec0ec5229003735333c81203d84a90cde47def48b18c90d",
+    "outputSha256": "3ccc833689b6cc93f62e2f6393934394392c180cfeb7538048eea97f1583719c",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identityProtocolSha256": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+    "identitySummarySha256": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+    "selectionRule": "Read all 256 rows of the sole identity-proved target/death observation output. No row, policy, seed, fight, turn, pair or endpoint is selected after observation."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "Every policy and seed from the complete frozen current-main rectangle is read exactly once; each policy has one exact frozen snapshot across its four seeds."
+  },
+  "anchors": {
+    "upperBoundContext": {
+      "definition": "A robust policy reaches at least one first-two-single-target-Attack turn in at least two of four frozen rows.",
+      "activePolicies": 64,
+      "status": "Immutable cross-stage consistency anchor from the prior observation-eligibility result."
+    },
+    "scoreline": {
+      "definition": "A robust policy plays Chisel before a later Executioner in one fight in at least two of four frozen rows.",
+      "activePolicies": 18,
+      "status": "Immutable overlap anchor only; Scoreline remains closed and fixed off."
+    },
+    "afterimage": {
+      "definition": "A robust policy simultaneously holds Ward and Warden's Edge in at least two of four frozen rows.",
+      "activePolicies": 17,
+      "status": "Immutable conservative overlap anchor only; Afterimage remains closed and fixed off."
+    }
+  },
+  "estimands": {
+    "unit": "Policy identity over its complete four-seed rectangle.",
+    "active": "At least one deliberate first-pair target switch in at least two of four rows.",
+    "inactive": "No deliberate first-pair target switch in any of four rows.",
+    "viable": "An active policy with at least one qualifying row that wins.",
+    "contextOnly": "Robust upper-bound-context policies minus robust deliberate-switch policies.",
+    "targetChangeIgnoringDeath": "Robust policies with differing first-pair target indices before applying the death exclusion; descriptive only.",
+    "deathAliasOnly": "Robust target-index-change policies minus robust deliberate-switch policies; descriptive evidence of the targetIdx-only alias, not a success gate.",
+    "sameTarget": "Robust policies with a first-pair same-target observation; descriptive non-activation evidence, not a success gate.",
+    "breadth": "Distinct exact first cards, second cards, ordered card pairs and ordered target-index transitions over deliberate-switch turns.",
+    "separation": "Candidate-only, anchor-only, cross-active and Jaccard policy-set overlap against the separate Scoreline and Afterimage anchors.",
+    "reliability": "Pre-existing stall/error rows and impossible dead-target reuse in the immutable trace; no added-fault estimand exists because no simulator runs.",
+    "notEstimated": "Gameplay mediator identity, Ember payoff, causal complementarity, duration effect, Ash isolation, RandomBuild/global-power movement, held-out reproducibility, package admission, detector score, product balance or protected confirmation."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumContextOnlyPolicies": 8,
+    "minimumDistinctFirstCards": 4,
+    "minimumDistinctSecondCards": 4,
+    "minimumDistinctCardPairs": 8,
+    "minimumDistinctTargetTransitions": 2,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumBaselineFaultRows": 1,
+    "maximumSemanticFaultPairs": 0,
+    "provenance": "The 16-policy active/inactive, eight-policy viability, package-separation, 0.55 overlap and one immutable baseline-fault limits reuse the frozen 64-policy structural-capacity scale. Eight context-only policies require the runtime choice to add information beyond two-Attack opportunity. Four cards per position and eight ordered pairs reject a named-card alias. Two ordered target transitions reject a fixed-index-direction alias. Forced-death and same-target controls remain descriptive because their absence cannot invalidate the conservative survival predicate and they are not candidate cells."
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1,
+    "firstLooks": 1
+  },
+  "claimBoundary": "Natural policy capacity, runtime-choice selectivity and closed-package repertoire separation only; no gameplay implementation, mediator identity, Ember payoff, causal, package-admission, detector, product or P9 claim.",
+  "decisionRules": {
+    "success": "Every immutable, source, trace, policy-identity, active, inactive, viability, context-only, exact-card breadth, target-transition breadth, package-separation, semantic-validity, reliability, budget and zero-ledger check passes at the sole complete look.",
+    "successAuthority": "Apply boundary 1: freeze only the exact dusk-target-transfer contract for a separately preregistered exact-null and direct-mediator identity prototype. Do not vary pair position, target direction, card identity, payoff, carrier, acquisition or policy, and do not add a causal simulator row before omitted/off identity and direct producer, same-target, target-death, consumer, once-per-turn and scope-isolation controls pass.",
+    "futility": "Any declared active, inactive, viability, context-only, breadth, transition, separation, semantic-validity or reliability gate fails on the complete immutable trace.",
+    "futilityAuthority": "Apply boundary 2: close the exact target-transfer family without third-Attack, adjacency, target-direction, card-subset, payoff, carrier, cohort, policy or method rescue and continue with the next evidence-backed minimal structural mechanism inside #421.",
+    "inconclusive": "An immutable input, source, trace, schema, policy identity, ledger or wall-time check prevents the complete deterministic decision.",
+    "inconclusiveAuthority": "Apply boundary 3: record the exact missing relevant gate at the frozen cap; add no repair, rerun, replacement trace, simulator row, method or protected seed, then follow the current human-authority contract for an unavailable or inconclusive relevant gate."
+  },
+  "executionAndStopping": {
+    "order": [
+      "Verify live task, current-main instructions, repository/archive refs, closed-family evidence, source, task capsule, helpers, trace identity and ledger identities.",
+      "Reconstruct and classify only the first two single-target Attacks in every player turn of every frozen multi-enemy fight.",
+      "Apply support, inactivity, viability, context-only, breadth, transition, package-separation, semantic-validity and reliability gates once.",
+      "Verify the ledger is byte-identical and apply exactly one decision boundary."
+    ],
+    "firstLook": "The complete 256-row cached rectangle is the sole look. No predicate, pair position, threshold, cohort, anchor or endpoint may change after execution begins.",
+    "stagedConstraint": "This stage can reject or justify one exact-null and direct-mediator identity prototype only. It contains no intervention or comparably evaluated enabled endpoint and cannot support a causal or package claim.",
+    "futureCrnConstraint": "Any later causal contrast must use the same frozen policy identities, simulation seed identities, baseline, first-look budget, estimator and stopping rule at every compared level. Cheap path evidence may precede whole-run evidence but cannot support an endpoint not comparably evaluated.",
+    "knobIdentityConstraint": "Before any future mechanism row, omitted and explicit-off settings must reproduce exact path, RNG identity and result, and deterministic direct controls must prove the knob affects only the target-transfer mediator and declared bounded payoff.",
+    "methodConstraint": "Deterministic code owns construction, caching, fitting and stop/go. No ML, RL or optimiser is authorised unless a later comparable experiment isolates a remaining policy-repertoire bottleneck and measures decision value for the added method.",
+    "stopping": "One zero-row complete-cohort look; exactly one of success, futility or inconclusive is recorded. No sequential peeking, third-card rescue, target-direction split, subset selection, threshold relaxation, cohort replacement or endpoint addition."
+  }
+}

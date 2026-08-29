@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does adding only PLAY.targetIdx and DIE.idx to the existing identity-proved research trace preserve every frozen result, policy, RNG cursor and pre-existing trajectory field across the exact same 256 policy-seed identities while producing a valid fixed scalar schema?",
+  "hypothesis": "Both values already exist in the deterministic combat event queue and are copied only by BalanceSim's observation harvest loop, so removing the added targetIdx fields and dies container must reproduce the frozen trace exactly without changing the run path or RNG identity.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/heads/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/remotes/origin/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v9.json",
+    "taskCapsuleSha256": "b6d2b879c81ea2e9b9e648cf735766ec1b32b605f936ae74255e075d34a957de",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourcePatchSha256": "529930aa7e0ea74749467919928f4ea5d0b07fd7edc52408514d4e0e94d6bdbb",
+    "sourceSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+      "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "28c05711875c5460da90d55b4bfe91788143456bba99ee1a2b96fbd9b3280654",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2"
+    },
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinaryPath": "/Users/jamesto/Research/glassvow-p9-421/toolchains/godot-4.7.1/godot",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "anchorPlanSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "anchorOutputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "researchFileSha256": {
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_target_switch_observability_v1.py": "f756d76e4d09e73d207f352748dd9599a4587d72093e2a2c78d76ea73dfc7f37",
+      "protocols/post-v38-target-switch-observability-v1.json": "2aa95482a0211e9132d1e329831de152ffd4e26040e8db80ce1809cc522083a0",
+      "summaries/post-v38-target-switch-observability-v1.json": "385016d7c40a1ea9dce14ff6943db726554ca316baa2a8d2f0708b659a49a983",
+      "protocols/post-v38-cohand-telemetry-identity-v1.json": "f651c220bfbbbd24d3fdec3b707209187c2192d0a40c0e8fe06255963b3377cc",
+      "summaries/post-v38-cohand-telemetry-identity-v1.json": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+      "notes/post-fanout-next-method-primary-research.md": "66d9cd1356fce979c348a12469857f6b1b437ef5c152f39f3e9c629373395442"
+    },
+    "runnerSha256": "1760dd1f97ad39a388b7e3480420fc8e67eaf2ea53ba82ec4a60a1ccbb5cdb74"
+  },
+  "mechanismFreeze": {
+    "source": "protocols/post-v38-target-switch-observability-v1.json",
+    "sha256": "2aa95482a0211e9132d1e329831de152ffd4e26040e8db80ce1809cc522083a0",
+    "fields": {
+      "researchIdentity": "dusk-target-transfer",
+      "producer": "A Dusk single-target Attack resolves while its selected target remains alive.",
+      "mediator": "One turn-local previous-target integer plus one paid Boolean; no RunState or save field.",
+      "consumer": "The next single-target Attack selects a different living target in the same player turn.",
+      "payoff": "Request exactly one bounded Ember after valid consumption, at most once per turn.",
+      "lifecycle": "Reset at player-turn start and combat end; target death clears; same-target replaces without paying; other scopes and card types do not consume.",
+      "naturalCost": "Acquire, draw and pay for two existing single-target Attacks in a multi-enemy fight while keeping the first target alive.",
+      "acquisition": "None; current-main pools, rarities, deck and save representation remain unchanged.",
+      "duskBoundary": "Existing Emberheart only; Ashwarden and off are exact current-main paths.",
+      "factorIsolation": "Scoreline and Afterimage are separate fixed-off factors; no status, Facet, Shatter, Ward or authored scope change is read.",
+      "rngAndPersistence": "No RNG, cursor, persistent field, internal ID, save version, content entry or UI change.",
+      "telemetry": "Producer, survival, mediator, same-target, forced-death, consumer, payoff and expiry with exact indices and requested/realised Ember."
+    },
+    "status": "The mechanism remains unimplemented and unestimated. This identity stage may authorise only zero-row actual-switch reconstruction."
+  },
+  "factorDefinitions": {
+    "targetDeathTrace": {
+      "definition": "Observation-only copies from existing PLAY.targetIdx and DIE.idx event branches in the same BalanceSim harvest loop; gameplay never reads the trace.",
+      "levels": {
+        "absent-frozen-anchor": 0,
+        "play-target-plus-death-index": 1
+      }
+    },
+    "targetSwitchPayoff": {
+      "levels": ["off"],
+      "definition": "Separate future causal factor fixed absent; no mediator or payoff exists."
+    },
+    "scorelinePayoff": {
+      "levels": ["off"],
+      "definition": "Separate closed causal factor fixed absent and never pooled with another endpoint."
+    },
+    "afterimagePayoff": {
+      "levels": ["off"],
+      "definition": "Separate closed causal factor fixed absent and never pooled with another endpoint."
+    },
+    "acquisitionPriority": {
+      "levels": ["current-main"],
+      "definition": "Frozen exact reward policy; not varied or estimated."
+    },
+    "causalFactorCount": 0,
+    "observationFactorCount": 1,
+    "independence": "Only targetDeathTrace varies and it is removed before identity comparison. This is not the old four-factor design and contains no joint causal cell."
+  },
+  "designMatrix": [
+    {
+      "arm": "frozen-current-main-trace-anchor",
+      "targetDeathTrace": "absent-frozen-anchor",
+      "targetSwitchPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "rows": 256,
+      "status": "Immutable cached comparator; no new execution."
+    },
+    {
+      "arm": "target-death-trace-explicit-null",
+      "targetDeathTrace": "play-target-plus-death-index",
+      "targetSwitchPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "rows": 256,
+      "status": "Sole new observation arm."
+    }
+  ],
+  "design": {
+    "type": "one-arm complete-cohort observation identity preflight with a frozen common-random-number trace anchor; not a gameplay-factor or causal experiment",
+    "sharedIdentities": "Both arms use the exact same 64 resolved root-551 policy identities, four simulation seed identities, current-main content, Duskblade Vow-5 baseline, explicit-null research setting, whole-run estimator and complete-cohort stopping rule.",
+    "identityContrast": "Remove only the dies container and targetIdx key from every candidate PLAY row, then require exact canonical equality with the frozen anchor row. RNG cursor, policy snapshot, result, fights and every pre-existing trajectory field must also remain exact.",
+    "mechanisticallyJustifiedInteraction": "PLAY.targetIdx by intervening DIE.idx is retained only as observation structure for a later deliberate-switch predicate; no endpoint interaction is fitted here.",
+    "aliasStructure": "The anchor aliases both new trace fields with unavailable. targetIdx alone remains rejected because it aliases forced target death. The paired identity comparison does not estimate a switch, mediator or payoff.",
+    "interference": "Scoreline and Afterimage remain separate and fixed off. No shared causal anchor, joint package cell or Cartesian completion has decision value at an observation identity gate."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "rows": 256,
+    "identity": "Every row dictionary from the immutable anchor plan is copied in the same order. No identity may be selected, removed, replaced or added after execution."
+  },
+  "traceDefinition": {
+    "playsAddedField": {
+      "targetIdx": "Exact integer enemy index for cards authored target=enemy; JSON null for every other authored target scope."
+    },
+    "dies": ["fight", "event", "idx"],
+    "schema": "Every candidate trajectory has exactly the frozen anchor keys plus dies. Every PLAY has exactly fight,event,id,uid,targetIdx. Every DIE has non-negative fight,event,idx integers within the frozen fight formation; event order is strictly increasing within each field and fight; an enemy index dies at most once per fight.",
+    "scope": "Observation only. The fields are appended from existing deterministic events after the whole fight and are never read by gameplay, policy, acquisition or reward code."
+  },
+  "estimands": {
+    "pathIdentity": "Exact canonical equality for all 256 paired rows after removing only targetIdx and dies from the candidate trajectory.",
+    "rngIdentity": "Exact final RNG cursor equality for every pair.",
+    "policyIdentity": "Exact resolved policy snapshot equality for every pair.",
+    "seedIdentity": "Exact simulation seed equality for every pair.",
+    "traceSchema": "Zero schema, type, range, event-order or duplicate-death faults.",
+    "coverage": "At least one PLAY, one targeted PLAY and one DIE observation across the complete candidate arm, fixed before execution only to reject an empty nominal trace.",
+    "notEstimated": "No actual target-switch count, target-survival rate, mediator activation, Ember payoff, causal effect, package separation, policy sensitivity, acquisition reachability, detector score, product balance or protected confirmation."
+  },
+  "gates": {
+    "minimumPlayEvents": 1,
+    "minimumTargetedPlayEvents": 1,
+    "minimumDieEvents": 1,
+    "maximumStrippedRowMismatchRows": 0,
+    "maximumRngMismatchRows": 0,
+    "maximumPolicyMismatchRows": 0,
+    "maximumSeedMismatchRows": 0,
+    "maximumTraceSchemaFaults": 0
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 1,
+    "maximumNewSimulatorObservationRows": 256,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 90,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1,
+    "firstLooks": 1
+  },
+  "claimBoundary": "Trace schema and identity only; no actual target-switch, mechanism, mediator, Ember payoff, causal, package-admission, detector, product or P9 claim.",
+  "decisionRules": {
+    "success": "All 256 rows complete within 90 seconds; stripping only targetIdx and dies gives exact anchor equality; RNG, policy and seed identities have zero mismatches; schema faults are zero; each non-empty coverage gate passes; and the ledger remains exact.",
+    "successAuthority": "Apply boundary 1: freeze exactly this target-and-death trace for one deterministic zero-new-row actual-switch capacity reconstruction over the complete output. Do not add a gameplay mediator, payoff, policy knob, causal row, ML, RL or optimiser before that capacity protocol is frozen.",
+    "futility": "Any paired identity, RNG, policy, seed, schema, non-empty coverage or ledger check fails.",
+    "futilityAuthority": "Apply boundary 2: close this exact target-and-death representation and the target-switch direction without repair, rerun, target-only rescue, legal-action snapshots, policy/cohort change or method addition; continue with the next evidence-backed minimal structural mechanism inside #421.",
+    "inconclusive": "A frozen input is unavailable, the sole process cannot produce the complete output, or the decision is unavailable at 90 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record the exact missing relevant gate at the frozen cap; add no repair, rerun, row, alternative representation, method or protected seed, then follow the current human-authority contract for an unavailable or inconclusive relevant gate."
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python copies the complete frozen row rectangle, runs it once under pinned Godot 4.7.1, content-addresses the plan and output, performs exact paired comparisons and owns stop/go.",
+    "firstLook": "All 256 rows are the only look. No reserve, repair, rerun, row replacement, schema change, cohort change or adaptive continuation exists.",
+    "stagedConstraint": "This identity stage may authorise only a zero-row capacity reconstruction. It cannot support a causal, policy, gameplay or package endpoint claim.",
+    "futureCrnConstraint": "Any later causal contrast must use identical frozen policy identities, simulation seed identities, baseline, estimator, first-look budget and stopping rule across every compared level.",
+    "knobConstraint": "No gameplay knob exists here. Before any future mechanism row, omitted and explicit-off paths must reproduce exact path, RNG and results, and direct controls must prove the knob affects only the target-transfer mediator.",
+    "methodConstraint": "No ML, RL or optimiser is authorised unless later measured evidence isolates a remaining policy-repertoire bottleneck and same-budget decision value.",
+    "stopping": "One complete-cohort look; exactly one of success, futility or inconclusive is recorded."
+  }
+}
