@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "archiveParent": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+  "preservedRefs": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410"
+  },
+  "publicationRef": "research/issue-421-afterimage-order-evidence",
+  "results": {
+    "identity": {
+      "outcome": "SUCCESS",
+      "observations": 809,
+      "faults": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "fd275e4610100562050fce4c59889caae644e93020e03e0e1b85c0c4147fff3d",
+      "summarySha256": "446b2ff0af2b5a98a0bf263d2caf9ea4f1c0b46b03cf4e82ae3aae2960331e6c"
+    },
+    "naturalCapacity": {
+      "outcome": "FUTILITY",
+      "decision": "close-afterimage-order-at-capacity",
+      "observations": 256,
+      "newLedgerRows": 256,
+      "protocolSha256": "c2a2f6ad9eb07466f62a0ec16193462ae8ed1eb8dfc339bae515675304ea4947",
+      "summarySha256": "f9f9e632113c6c1737450f37f973ea8ba8370cc75e40a4c4ea34e583e92de140",
+      "ledgerAfterSha256": "9279d2a77b43726760f825e15c6d1b1bacfc64cc2aad771e4accf0403aef2ba3",
+      "ledgerRecordsAfter": 481012,
+      "protectedSeedRows": 0
+    }
+  },
+  "capacityCounts": {
+    "currentActiveRows": 0,
+    "enabledActiveRows": 12,
+    "enabledPayoffEvents": 39,
+    "interventionRows": 19,
+    "interventionEvents": 66,
+    "uncoveredInterventionEvents": 27,
+    "robustActivePolicies": 2,
+    "robustWardenEdgeDrawnPolicies": 3,
+    "addedStallOrErrorRows": 0,
+    "policyIdentityMismatchRows": 0
+  },
+  "decomposition": {
+    "sha256": "376a19590d9fc44c262176d4042157e4bd2255d54c537cdeb4da168b4e57dcde",
+    "failureClass": "consumer reservation remains unresolved after producer priority",
+    "afterimageDisposition": "The exact order representation is closed. Another timing, hold, scoring or adaptive policy control is forbidden in this family.",
+    "nextAction": "Proceed separately with the queued Scoreline existing-representation commitment fallback; do not combine it with Afterimage."
+  },
+  "verification": {
+    "candidateScripts": "scripts OK (244 checked)",
+    "baselineScripts": "scripts OK (244 checked)"
+  },
+  "claimBoundary": "Identity is green, but natural capacity is a valid negative: uncovered interventions disprove acquisition as the sole Afterimage deficit. No endpoint, package, candidate, detector, product, protected-seed or P9 claim follows.",
+  "rawCacheSha256": [
+    "04d4969013ce5e8e3270cbdca78d3a3d867d42481f4879ead4627fc221e35ddd",
+    "22362734e98ff68609948592bb26b9148acb3f6e411e4f7088868c59f241671b",
+    "287ade312837bbb602f349bc0ba5b4db98c57aa129db9d72dccd579651e392ef",
+    "598fb508f0774d402b875f3f9edc62986dfb32f7fec9cf5668aa9b959255b558",
+    "7f5c9a49dd2645683d7568e0e20243f12e32780aff70cf4200d563cc96293981",
+    "9b2ff8d326c2045ad4ae1fd215bbe9eeeec038661689ec7f2cbcf0ab08450f98",
+    "a385c7a64c953699a19a595d7c22973b00684b53fd4ba0992f5d4de7ce9e499f",
+    "bbfaa4ad30321b1c3cf22a3a98b7ae20fd9eddb6836750bf6e789a2f05b0fa87",
+    "beae056f2464fa28f673d0411e83514fefcb557895ca9032c05b1e261aa94821",
+    "bf2a4b4fcefd59f79c06baf53c78a54bd2db95b3eedc4c1a5fb0aad24d64b4d4",
+    "cfe9b3181835e7482a71ab4211d6f996932328a1f57212756a203e5d11b49087",
+    "e16f457ba24aefcfadb6dba427e60084cb9a6099100ace20c82249134155fdab",
+    "e61eee010c7b8f88fc5d2662096626a07a113880c5b9a292c968e8a9b572863b",
+    "ec6d9939f12bfc5ac1b5572f11b3e9dda845c69709a2fab73905585bb6082613"
+  ]
+}

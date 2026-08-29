@@ -24,6 +24,32 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### Afterimage order identity success and capacity closure
+
+The single evidence-triggered `ward-before-edge` policy control passed its
+complete 809-observation identity preflight. Pristine, omitted and explicit
+null paths, policy identities, RNG and results were exact; all eight malformed
+interfaces failed closed; and the direct eligible, ineligible, Ash and
+Scoreline-interference controls passed with zero faults and zero ledger rows.
+
+Its separately frozen two-arm natural-capacity census then completed all 256
+current-versus-enabled rows. The enabled arm gained 12 active rows and 39 exact
+Afterimage payoffs from a current arm with none, with zero added stall/error and
+zero policy-identity drift. It nevertheless left 27 of 66 intervention events
+without a same-row payoff and retained only two robust active policies. The
+predeclared acquisition-only rule therefore failed: prioritising Defend did not
+reserve the consumer, and the mediator could still expire after another card
+spent the remaining energy. This exact order family is closed without another
+timing, hold, scoring or adaptive-policy control.
+
+All 256 observations were atomically appended to the sole ledger, now 481,012
+records with SHA-256
+`9279d2a77b43726760f825e15c6d1b1bacfc64cc2aad771e4accf0403aef2ba3`,
+SQLite integrity `ok` and zero protected-seed rows. The next separate action is
+the already queued Scoreline existing-representation commitment fallback; it
+must not be combined with Afterimage. See
+`publication-manifest-afterimage-order-v1.json`.
+
 ### Fight-local v2 identity success and natural-capacity closure
 
 The distinct categorical representation replaced v1 numeric settings with

@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does the single evidence-triggered ward-before-edge policy control preserve every null identity and affect only the preregistered Afterimage within-fight order mediator, without changing RNG, acquisition, card content, energy costs, Scoreline or Ashwarden?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v2.json",
+    "taskCapsuleSha256": "007c8285d43212206002f18899309e4bc8789436c59a69b9a2085bca4c5e508f",
+    "predecessorSha256": {
+      "protocols/post-v38-fight-local-identity-v2.json": "08714f8b6034b2c71e633719c0350caca7c4e2cbdb8c4f267a5e178acfdc6b49",
+      "summaries/post-v38-fight-local-identity-v2.json": "058a5e953a465520b5893725e298cac74bb69e2ce42948bfdf5ba3cad09180de",
+      "protocols/post-v38-fight-local-capacity-v1.json": "156cadcfd94718f8074a16db4602832d2712bdbca71759302f2c32ce77999df2",
+      "summaries/post-v38-fight-local-capacity-v1.json": "580ee0fa49f94ef62bc2a983724b2bb83e80bf72f9085fa321dcbba09f12376c",
+      "summaries/post-v38-fight-local-capacity-decomposition-v1.json": "f4d8490c791b5a35f435fef42b71abf61c0779501a58ce3b8136a053be403ea5",
+      "summaries/post-v38-current-main-order-topology-v1.json": "9ae19bbdddb5b36cbfd5114bfef57a863a677b0eac7009b6be560939a09721f3"
+    },
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinaryPath": "/opt/homebrew/bin/godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "600aaa836a70e715b9a98b7428f509da6a97e0aa062de2779ea2a78f50aad5a6",
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/research_421_afterimage_order_baseline_probe.gd": "36919eea206b9f4b6f416c8dcbbf3fe1005b3a4ba35207ab9f35af7af8232065",
+      "tools/research_421_afterimage_order_baseline_probe.gd.uid": "a8d921f9cddc63ec09957b48eb849d7bec1afb15f74c96fe0e1f93c38f9b42f1"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "80f42cfe1f296b7585ad08ce79cf4d2c4229116977d3d1c3b8ed9760a31d744b",
+      "domain/state/combat_state.gd": "b8ccde9c3b1dec4331fcfc6fb4a23a94ed9f30cff9e38e46b4a89afc5e0de477",
+      "tools/balance_pilot.gd": "d403553607c0c5b6a9df2daf63e5662d65789802698678cd426370808eb148a3",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "8ba3e78ce7716c72cf7e9bc2c05489daaf46686c666d5f69471964506f5620dc",
+      "tools/research_421_afterimage_order_probe.gd": "c7790f31946f600731e916707ef8781f2e36d2efa72b8abeef97dae12f8bb905",
+      "tools/research_421_afterimage_order_probe.gd.uid": "d198d51662d4c5bbeaf2c11d04942286ae4119efc0d486b5c11c7d5c48d46661"
+    }
+  },
+  "closedPredecessorBoundary": {
+    "fightLocalV2Identity": "Frozen success. Its combat rules and combat state are byte-identical in this candidate.",
+    "fightLocalV2Capacity": "Frozen futility. Scoreline and Afterimage current-policy natural-capacity blocks remain closed exactly as recorded.",
+    "evidenceTrigger": "The zero-row decomposition and immutable topology jointly identify acquisition plus within-fight order as Afterimage's bottleneck and select exactly one current versus ward-before-edge control.",
+    "noRescue": "This is a distinct representation, schema, probe identity and disjoint cohort. It does not change, rerun or reinterpret any closed row."
+  },
+  "frozenCausalFactors": {
+    "scorelinePayoff": {
+      "definition": "Duskblade exact Chisel realised hit sets one target-local non-stacking mark; a later exact Executioner on that living target consumes it for one separate bounded raw damage operation.",
+      "levels": {
+        "off": 0,
+        "chisel-base-4": 4,
+        "faultline-bonus-6": 6,
+        "faultline-base-8": 8
+      },
+      "lifecycle": "Until consume, marked-target death or combat end.",
+      "status": "Unchanged frozen v2 factor; no new Scoreline capacity or endpoint row is in this experiment."
+    },
+    "afterimagePayoff": {
+      "definition": "Duskblade exact Defend realised Ward sets one player-local non-stacking bounded value; a later exact Warden's Edge in the same player turn consumes it for one separate mirrored-Ward operation.",
+      "levels": {
+        "off": 0,
+        "wardens-edge-4": 4,
+        "ward-base-5": 5,
+        "ward-upgraded-8": 8
+      },
+      "lifecycle": "Until consume or player-turn end.",
+      "status": "Unchanged frozen v2 factor."
+    },
+    "afterimageOrder": {
+      "definition": "A research-only policy decision factor. Current uses the frozen policy unchanged. Ward-before-edge selects exact Defend before current scoring only when every trigger in the order-control contract is true.",
+      "levels": [
+        "current",
+        "ward-before-edge"
+      ],
+      "status": "The only new factor."
+    },
+    "factorCount": 3,
+    "independence": "Scoreline payoff, Afterimage payoff and Afterimage order are separate causal factors. This is not the old four-factor design and no acquisition-priority or rarity factor is varied."
+  },
+  "orderControlContract": {
+    "scope": "Duskblade deterministic BalancePilot card choice only; research-only and absent from product truth.",
+    "eligibility": "Afterimage payoff is non-off; no Afterimage value is stored; exact Defend and exact Warden's Edge are both in hand and individually legal; their exact sequential authored costs fit current energy.",
+    "decision": "Return exact Defend before the unchanged current scoring path. Once a value is stored, the control is inactive and current policy selects the later Warden's Edge.",
+    "mediator": "Only the already frozen Afterimage Ward value; the control creates no state of its own.",
+    "consumer": "The unchanged frozen exact Warden's Edge consumer.",
+    "naturalCosts": "Acquisition, draw, hand co-presence, authored costs, current energy, target legality and subsequent current-policy choice remain real. No card, energy, draw or acquisition is granted.",
+    "rng": "No RNG call, seed change or cohort-dependent branch.",
+    "telemetry": "One research421AfterimageOrder intervention event only after the selected Defend successfully plays; producer, mediator, consumer and payoff telemetry remain the frozen direct events.",
+    "nullPath": "Omitted settings, explicit both-payoffs-off/current, current level, Ashwarden, missing either exact card, insufficient sequential energy or an already-stored value do not intervene.",
+    "factorIsolation": "The control reads only Afterimage enablement and combat state; Scoreline settings cannot change the decision.",
+    "expiry": "No new lifecycle. The frozen Afterimage mediator expires on consume or player-turn end.",
+    "excluded": "No generic hold policy, optimiser, ML, RL, scoring-weight change, content change, save field, relic, ChoiceScreen, acquisition change, random play change or online adaptation."
+  },
+  "encodingGrammar": {
+    "schemaVersion": {
+      "type": "string",
+      "onlyLevel": "fight-local-order-v1"
+    },
+    "scorelinePayoff": {
+      "type": "string",
+      "levels": [
+        "off",
+        "chisel-base-4",
+        "faultline-bonus-6",
+        "faultline-base-8"
+      ]
+    },
+    "afterimagePayoff": {
+      "type": "string",
+      "levels": [
+        "off",
+        "wardens-edge-4",
+        "ward-base-5",
+        "ward-upgraded-8"
+      ]
+    },
+    "afterimageOrder": {
+      "type": "string",
+      "levels": [
+        "current",
+        "ward-before-edge"
+      ],
+      "constraint": "ward-before-edge is illegal when Afterimage payoff is off"
+    },
+    "nullEncodings": [
+      "research421 omitted",
+      "schemaVersion=fight-local-order-v1, scorelinePayoff=off, afterimagePayoff=off, afterimageOrder=current"
+    ],
+    "rejection": "Unknown schema type/value, unknown key, unknown token, enabled order with Afterimage off, or non-dictionary settings terminates before RunState construction."
+  },
+  "design": {
+    "type": "single-factor identity preflight with common random numbers and mechanism-blocked direct controls; not a factorial and not an endpoint experiment",
+    "nullMatrix": [
+      "pristine current-main",
+      "candidate with research421 omitted",
+      "candidate with both payoffs off and order=current"
+    ],
+    "directMatrix": [
+      "eligible Dusk, energy two, both exact cards: current versus ward-before-edge",
+      "otherwise identical energy-one sequence-affordability null",
+      "otherwise identical no-Defend null",
+      "otherwise identical no-Warden's-Edge null",
+      "otherwise identical Ashwarden null",
+      "otherwise identical already-stored-mediator null",
+      "eligible Dusk shared Scoreline-on anchor: current versus ward-before-edge"
+    ],
+    "anchors": {
+      "eligible": "Proves current chooses Warden's Edge while enabled chooses Defend then current policy consumes with Warden's Edge.",
+      "null": "Pristine, omitted and explicit null share all 265 identities.",
+      "interference": "The single Scoreline-on direct anchor must exactly equal the matching Scoreline-off direct path and emit no Scoreline event."
+    },
+    "mechanisticallyJustifiedInteractions": [
+      "Afterimage payoff availability by Afterimage order is structural legality, not an estimated interaction.",
+      "Scoreline payoff by Afterimage order is checked only at one shared direct interference anchor."
+    ],
+    "aliasStructure": "Omitted settings aliases both payoffs off and current order. Explicit current is the exact policy null. Ward-before-edge has no legal off-payoff alias. The direct Scoreline anchor aliases its corresponding Scoreline-off path only if measured interference is exactly zero.",
+    "omittedCells": "No enabled whole-run, acquisition, rarity, payoff-level sweep, joint Cartesian product, causal endpoint, ML, RL, optimiser, protected seed, persistent fallback or product cell is authorised."
+  },
+  "cohort": {
+    "policyRoot": 554,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346606,
+      346607,
+      346608,
+      346609
+    ],
+    "scriptedSeed": 347602,
+    "wholeRunRowsPerNullArm": 256,
+    "scriptedNullRowsPerNullArm": 9,
+    "disjointness": "Root 554 and every listed seed are absent from closed v1, v2 identity and v2 capacity cohorts."
+  },
+  "estimands": {
+    "pristineIdentity": "Zero canonical row mismatches after removing only the candidate probe research-state observation for pristine versus omitted across 265 paired identities.",
+    "explicitNullIdentity": "Zero canonical row mismatches after the same removal for omitted versus explicit off/current across 265 paired identities.",
+    "rngIdentity": "Zero final RNG mismatches across all three null arms and every current/enabled direct pair.",
+    "interfaceSafety": "All eight malformed or illegal settings fail for the preregistered reason without output.",
+    "sourceCardinality": "Exactly one deterministic order-helper call and one intervention telemetry append site.",
+    "eligibleMediatorEffect": "Current chooses only Warden's Edge; enabled chooses exact Defend then Warden's Edge and emits exact producer, mediator-set, consumer, mediator-consume, payoff and one intervention event with realised payoff five.",
+    "ineligibleNulls": "Energy-one, missing-Defend, missing-Warden's-Edge, Ash and occupied-mediator pairs are exact row identities with zero intervention events.",
+    "interference": "The Scoreline-on anchor is exact against the corresponding Scoreline-off current and enabled paths and emits zero Scoreline events.",
+    "precision": "All estimands are exact Boolean/count gates with required fault or mismatch count zero; no fit, interval or stochastic effect estimate is used.",
+    "notEstimated": "Natural capacity, acquisition support, endpoint effect, policy repertoire viability, detector acceptance, candidate feasibility, product balance or protected confirmation."
+  },
+  "ledgerFreeze": {
+    "sha256": "2e7a85ec119c7e58667a3c170f8ece4ee4cbeb045537e390a2b0466bffb517be",
+    "records": 480756,
+    "firstSequence": 1,
+    "lastSequence": 480756,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "invalidConfigurationChecks": 8,
+    "godotProcessExecutions": 10,
+    "rowsPerNullArm": 265,
+    "enabledDirectRows": 14,
+    "maximumNewSimulatorObservationRows": 809,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 180,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns the fixed null cohort, seven paired direct cells, validation, content-addressed plans and outputs, exact comparison and stop/go.",
+    "order": [
+      "Verify every frozen predecessor, repository ref, source head, file hash, Godot identity and ledger.",
+      "Check the order-helper and telemetry call cardinality.",
+      "Reject all eight malformed or illegal settings.",
+      "Execute the complete pristine null plan once.",
+      "Execute the complete candidate omitted-null, explicit-null and fourteen-row direct plan once.",
+      "Analyse the sole complete look and verify byte-identical ledger state."
+    ],
+    "firstLook": "The complete 809-observation design is the only look. No fault may change a row, trigger, token, cohort, threshold or order under this protocol.",
+    "stagedConstraint": "This stage can establish source, null and direct mediator identity only. It contains no comparably evaluated whole-run enabled endpoint and cannot support a causal endpoint claim.",
+    "protectedSeedsExcluded": {
+      "acceptance": "3000-5199",
+      "reserve": "5200-5399"
+    }
+  },
+  "decisionRules": {
+    "success": "All immutable, predecessor, interface, source-cardinality, exact-null, RNG, eligible-mediator, ineligible-null and Scoreline-interference gates pass; exactly 809 observations complete within 180 seconds and the ledger adds zero rows.",
+    "successAuthority": "Apply boundary 1: freeze this single order representation and separately preregister the cheapest Afterimage natural-capacity comparison. Do not admit a package, add a factorial or use protected seeds.",
+    "futility": "Any completed immutable, interface, cardinality, null, RNG, direct-mediator, ineligible-null, interference, row-count or ledger gate fails.",
+    "futilityAuthority": "Apply boundary 2: close this exact order representation without a rescue loop and continue with the next evidence-backed mechanism inside #421.",
+    "inconclusive": "A frozen input or fixed process is unavailable, output is incomplete, or the exact decision is unavailable by 180 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record at cap; do not rerun, alter the cohort, repair, infer an endpoint or use protected seeds."
+  }
+}

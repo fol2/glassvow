@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "With the frozen Afterimage payoff held at five and every acquisition, draw, energy and policy identity shared by common random numbers, does the identity-safe ward-before-edge control create enough natural Afterimage activation for a causal panel, or does it isolate unchanged Warden's Edge acquisition and reachability as the sole remaining deficit?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410"
+    },
+    "taskCapsulePath": "task-capsule-5459094066-v2.json",
+    "taskCapsuleSha256": "007c8285d43212206002f18899309e4bc8789436c59a69b9a2085bca4c5e508f",
+    "identityProtocolSha256": "fd275e4610100562050fce4c59889caae644e93020e03e0e1b85c0c4147fff3d",
+    "identitySummarySha256": "446b2ff0af2b5a98a0bf263d2caf9ea4f1c0b46b03cf4e82ae3aae2960331e6c",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinaryPath": "/opt/homebrew/bin/godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "d0850860f5af7b8e9aaaebb2ad7bf163934ad27998f0771e55c347523367ccb1",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "80f42cfe1f296b7585ad08ce79cf4d2c4229116977d3d1c3b8ed9760a31d744b",
+      "domain/state/combat_state.gd": "b8ccde9c3b1dec4331fcfc6fb4a23a94ed9f30cff9e38e46b4a89afc5e0de477",
+      "tools/balance_pilot.gd": "d403553607c0c5b6a9df2daf63e5662d65789802698678cd426370808eb148a3",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "8ba3e78ce7716c72cf7e9bc2c05489daaf46686c666d5f69471964506f5620dc",
+      "tools/research_421_afterimage_order_probe.gd": "c7790f31946f600731e916707ef8781f2e36d2efa72b8abeef97dae12f8bb905",
+      "tools/research_421_afterimage_order_probe.gd.uid": "d198d51662d4c5bbeaf2c11d04942286ae4119efc0d486b5c11c7d5c48d46661"
+    }
+  },
+  "identityGate": {
+    "status": "passed",
+    "protocolSha256": "fd275e4610100562050fce4c59889caae644e93020e03e0e1b85c0c4147fff3d",
+    "observations": 809,
+    "nullMismatchRows": 0,
+    "rngMismatchRows": 0,
+    "directFaults": 0,
+    "newLedgerRows": 0,
+    "authority": "Natural-capacity screen only; no endpoint, package or candidate claim."
+  },
+  "factorDefinitions": {
+    "afterimagePayoff": {
+      "fixedLevel": "ward-base-5",
+      "meaning": "The frozen Defend realised-Ward producer and exact Warden's Edge mirrored-Ward consumer, capped at the authored base Ward anchor five."
+    },
+    "afterimageOrder": {
+      "current": "The frozen current policy with no order intervention.",
+      "ward-before-edge": "The identity-safe single policy factor: select exact Defend first only under its fully frozen eligibility contract."
+    },
+    "scorelinePayoff": {
+      "fixedLevel": "off",
+      "meaning": "Scoreline cards, pools and current policy remain present, but its research payoff is off."
+    },
+    "factorSeparation": "Only Afterimage order varies. Afterimage payoff is fixed at five and Scoreline payoff is fixed off. This is a two-arm single-factor comparison, not a joint factorial.",
+    "jointDisposition": "No joint cell. The identity preflight's shared Scoreline-on anchor measured exactly zero direct interference, so another joint row has no decision value."
+  },
+  "design": {
+    "type": "two-arm natural-capacity census with common random numbers; not an endpoint causal panel",
+    "matrix": [
+      "Afterimage five plus current policy",
+      "Afterimage five plus ward-before-edge"
+    ],
+    "sharedAnchors": "Both arms use the same root-555 policy identity, simulation seed, Duskblade Vow-5 baseline, content, acquisition, reward RNG, first-look budget, estimator and stopping rule.",
+    "policy": "The same frozen policy vector in both arms. The enabled arm adds only the identity-safe exact order branch; it does not change policy weights, acquisition or random modes.",
+    "telemetry": "Frozen Afterimage producer, mediator, consumer, payoff and expiry counters plus the direct order-intervention event and existing exact Warden's Edge offer, draw and play counters.",
+    "reliability": "Every current row remains in the census. An enabled stall or error absent from its exact current identity fails integrity.",
+    "aliasStructure": "Current is the exact order-factor null. Both arms share the same non-null Afterimage payoff, so this screen estimates order-mediated activation capacity only and cannot estimate payoff magnitude."
+  },
+  "cohort": {
+    "policyRoot": 555,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346610,
+      346611
+    ],
+    "rowsPerArm": 128,
+    "disjointness": "Root 555 and both seeds are absent from all closed identity and capacity cohorts and from protected acceptance and reserve ranges."
+  },
+  "estimands": {
+    "activeRow": "A row with at least one exact Afterimage payoff event.",
+    "robustActivePolicy": "A fixed root-555 policy identity with at least one enabled payoff event in both frozen simulation seeds.",
+    "interventionRow": "An enabled row with at least one exact order-intervention event.",
+    "gainedActiveRow": "A matched identity with zero current payoff events and at least one enabled payoff event.",
+    "lostActiveRow": "A matched identity with current payoff and zero enabled payoff.",
+    "interventionCoverage": "For every enabled row, exact payoff-event count is at least exact intervention-event count; uncovered intervention events must be zero.",
+    "progressionIntegrity": "Producer equals mediator-set and consumer equals mediator-consume equals payoff in each arm and row.",
+    "valueIntegrity": "Stored value is in [0, five per producer], producer realised Ward covers stored Ward, requested value is in [0, five per payoff], and mirrored realised Ward equals requested Ward.",
+    "factorIsolation": "Scoreline emits zero research events in every row.",
+    "consumerReachability": "Existing Warden's Edge offered, drawn and played rows/events, plus policies with draws in both seeds.",
+    "policyIdentity": "Exact policy snapshot equality between arms at every common-random-number identity.",
+    "reliability": "Zero enabled stalls or errors absent from the matched current row.",
+    "notEstimated": "Win-rate or HP effect, duration, economy effect, complementarity, candidate feasibility, detector acceptance, product balance and protected confirmation."
+  },
+  "supportFloor": {
+    "robustActivePolicies": 8,
+    "activeRows": 16,
+    "payoffEvents": 16,
+    "interventionRows": 16,
+    "gainedActiveRows": 8,
+    "minimumNaturalWitnessRows": 4,
+    "rationale": "Full capacity retains the frozen one-eighth repertoire and sixteen-row floor. Four exact gained/intervention witnesses are sufficient only to classify a mechanically complete natural path whose unchanged consumer acquisition ceiling independently prevents the full floor; they do not admit a causal endpoint."
+  },
+  "acquisitionOnlyRule": {
+    "requirements": [
+      "All telemetry, value, factor-isolation, policy and reliability checks pass.",
+      "At least four intervention rows and four gained active matched rows occur.",
+      "Enabled payoff events exceed current payoff events, no active row is lost, and every intervention is covered by a same-row payoff.",
+      "Full capacity fails.",
+      "Warden's Edge drawn rows are below sixteen or fewer than eight policy identities draw it in both seeds."
+    ],
+    "interpretation": "The identity and direct gates already prove the fight-local mechanism and order branch. Meeting every requirement isolates unchanged deterministic acquisition and draw reachability as the remaining support deficit at this stage.",
+    "authority": "Close the natural-capacity order representation and proceed only to the owner-authorised existing-representation commitment fallback. Do not admit a causal endpoint or candidate."
+  },
+  "ledgerFreeze": {
+    "sha256": "2e7a85ec119c7e58667a3c170f8ece4ee4cbeb045537e390a2b0466bffb517be",
+    "records": 480756,
+    "firstSequence": 1,
+    "lastSequence": 480756,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 1,
+    "maximumSimulatorRows": 256,
+    "maximumNewLedgerRows": 256,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python constructs both complete arm rectangles before execution, executes one Godot process, content-addresses the plan and output, computes exact gates and appends all 256 observations to the sole ledger in one transaction.",
+    "order": [
+      "Verify identity success, task capsule, repository refs, source hashes, Godot and ledger freeze.",
+      "Execute the fixed 256-row plan once.",
+      "Evaluate telemetry and value integrity, factor isolation, policy identity, reliability, activation support, intervention coverage and consumer reachability.",
+      "Atomically append the complete observation set, verify sequence growth, protected-row count and SQLite integrity, then apply exactly one automatic disposition."
+    ],
+    "firstLook": "The complete 256-row design is the only look. No arm, policy, seed, threshold or token changes after execution.",
+    "stagedConstraint": "This stage may admit the order factor to a causal panel or isolate acquisition as the remaining deficit. It cannot support an endpoint, package or product claim.",
+    "protectedSeedsExcluded": {
+      "acceptance": "3000-5199",
+      "reserve": "5200-5399"
+    }
+  },
+  "decisionRules": {
+    "success": "All integrity gates pass; at least eight robust active policies, sixteen enabled active rows, sixteen payoff events, sixteen intervention rows and eight gained active rows are observed; no active row is lost and no intervention is uncovered.",
+    "successAuthority": "Apply boundary 1: admit only this order factor to one separately preregistered smallest sufficient CRN causal panel.",
+    "acquisitionOnly": "Every acquisition-only rule passes while full capacity fails.",
+    "acquisitionOnlyAuthority": "Apply boundary 2: close natural Afterimage at capacity and continue with the owner-authorised existing-representation commitment fallback; do not add another order control.",
+    "futility": "The complete result satisfies neither success nor acquisition-only, or any integrity, isolation, policy or reliability fault occurs.",
+    "futilityAuthority": "Apply boundary 2: close this exact order representation without rescue and continue with the next evidence-backed structural mechanism inside #421.",
+    "inconclusive": "The frozen input, output or atomic ledger receipt is unavailable, or the complete decision exceeds 120 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record at cap; do not rerun, alter the cohort, repair, infer an endpoint or use protected seeds."
+  }
+}

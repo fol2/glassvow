@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "classification": "post-decision deterministic zero-row decomposition",
+  "identityProtocolSha256": "fd275e4610100562050fce4c59889caae644e93020e03e0e1b85c0c4147fff3d",
+  "identitySummarySha256": "446b2ff0af2b5a98a0bf263d2caf9ea4f1c0b46b03cf4e82ae3aae2960331e6c",
+  "capacityProtocolSha256": "c2a2f6ad9eb07466f62a0ec16193462ae8ed1eb8dfc339bae515675304ea4947",
+  "capacitySummarySha256": "f9f9e632113c6c1737450f37f973ea8ba8370cc75e40a4c4ea34e583e92de140",
+  "capacityOutputSha256": "287ade312837bbb602f349bc0ba5b4db98c57aa129db9d72dccd579651e392ef",
+  "frozenDisposition": "close-afterimage-order-at-capacity",
+  "observations": {
+    "currentRows": 128,
+    "enabledRows": 128,
+    "currentPayoffRows": 0,
+    "currentPayoffEvents": 0,
+    "enabledPayoffRows": 12,
+    "enabledPayoffEvents": 39,
+    "interventionRows": 19,
+    "interventionEvents": 66,
+    "coveredInterventionEvents": 39,
+    "uncoveredInterventionEvents": 27,
+    "enabledProducerEvents": 870,
+    "enabledTurnExpiryEvents": 658,
+    "enabledCombatExpiryEvents": 41,
+    "enabledWardenEdgeDrawnRows": 22,
+    "enabledWardenEdgePlayedRows": 18,
+    "robustActivePolicies": 2,
+    "robustWardenEdgeDrawnPolicies": 3,
+    "addedStallOrErrorRows": 0,
+    "policyIdentityMismatchRows": 0
+  },
+  "mechanisticClassification": {
+    "positiveEvidence": "The control created twelve gained active identities and thirty-nine exact mirrored-Ward payoffs from a current arm with none, with zero reliability or policy-identity regression.",
+    "blockingEvidence": "Twenty-seven of sixty-six intervention events were not covered by a same-row payoff. Every intervention row also recorded at least one player-turn expiry; four intervention identities drew Warden's Edge but never played it.",
+    "sourceExplanation": "The frozen control prioritises Defend only while no mediator is stored. After Defend, it deliberately returns to current scoring. Other selected cards can consume the remaining energy before Warden's Edge, so the existing mediator expires. This is the preregistered consumer-reservation failure, not evidence that acquisition is the sole deficit.",
+    "acquisitionBoundary": "Warden's Edge reachability also remains sparse, but the uncovered interventions prove a separate within-fight policy deficit. The acquisition-only fallback rule therefore did not pass.",
+    "claimBoundary": "Aggregate path telemetry identifies the failed policy boundary. It does not estimate an endpoint, admit Afterimage, authorise an Afterimage commitment fallback or support a product claim."
+  },
+  "automaticNextAction": {
+    "afterimage": "Keep the exact ward-before-edge representation closed. Do not add another timing, hold, scoring or adaptive policy control under this family.",
+    "scoreline": "Proceed with the separately queued owner-authorised existing-representation commitment fallback. Frozen Scoreline mechanics, telemetry and reliability passed; its capacity failure was solely deterministic acquisition and reachability support.",
+    "separation": "Do not combine Scoreline fallback with Afterimage, add a joint cell or reopen either closed capacity cohort."
+  },
+  "newSimulatorRows": 0,
+  "newLedgerRows": 0,
+  "protectedSeedRows": 0
+}
