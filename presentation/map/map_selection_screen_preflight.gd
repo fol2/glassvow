@@ -198,11 +198,11 @@ static func _stronger(a: Dictionary, b: Dictionary) -> bool:
 		a["weakest_signed_hard_margin"])
 	var b_margin: float = MapLayoutCanonical.float_value(
 		b["weakest_signed_hard_margin"])
-	if not is_equal_approx(a_margin, b_margin):
+	if a_margin != b_margin:
 		return a_margin > b_margin
 	var a_cost: float = MapLayoutCanonical.float_value(a["candidate_cost_m2"])
 	var b_cost: float = MapLayoutCanonical.float_value(b["candidate_cost_m2"])
-	if not is_equal_approx(a_cost, b_cost):
+	if a_cost != b_cost:
 		return a_cost < b_cost
 	return MapLayoutCanonical.canonical_text(a["candidate_ids"]) \
 		< MapLayoutCanonical.canonical_text(b["candidate_ids"])

@@ -29,12 +29,12 @@ static func apply(routes: Dictionary, quality: Dictionary) -> Dictionary:
 	if conflicts.size() > MAX_ORIENTATION_CONFLICTS:
 		return _failure("orientation_bound",
 			"%d XZ conflicts exceed the bounded two-orientation proof" \
-				% conflicts.size(), {"conflicts": conflicts})
+				% conflicts.size(), {"conflicts": conflicts}, routes)
 	var options: Array[Array] = []
 	for conflict: Dictionary in conflicts:
 		if MapLayoutCanonical.int_value(conflict["proper_crossing_count"]) != 1:
 			return _failure("ambiguous_xz_overlap",
-				"only one proper transverse crossing is gradeable", conflict)
+				"only one proper transverse crossing is gradeable", conflict, routes)
 		var edge_ids: Array = conflict["edge_ids"]
 		var first_route: Dictionary = routes[str(edge_ids[0])]
 		var second_route: Dictionary = routes[str(edge_ids[1])]
@@ -96,7 +96,7 @@ static func apply(routes: Dictionary, quality: Dictionary) -> Dictionary:
 	if best.is_empty():
 		return _failure("two_level_infeasible",
 			"neither bounded orientation yields a governed two-level result",
-			{"conflicts": conflicts, "options": options})
+			{"conflicts": conflicts, "options": options}, routes)
 	var best_routes: Dictionary = best["routes"]
 	var best_orientations: Array = best["orientations"]
 	return {"ok": true, "routes": best_routes, "receipt": _receipt(
@@ -564,7 +564,26 @@ static func _receipt(conflicts: Array, orientations: Array,
 
 
 static func _failure(id: String, reason: String,
-		details: Dictionary) -> Dictionary:
+		details: Dictionary, routes: Dictionary) -> Dictionary:
+	var causal_edges: Dictionary = {}
+	for edge_id_v: Variant in details.get("edge_ids", []):
+		causal_edges[str(edge_id_v)] = true
+	for conflict_v: Variant in details.get("conflicts", []):
+		if conflict_v is Dictionary:
+			var conflict: Dictionary = conflict_v
+			for edge_id_v: Variant in conflict.get("edge_ids", []):
+				causal_edges[str(edge_id_v)] = true
+	var edge_ids: Array[String] = MapLayoutCanonical.sorted_keys(causal_edges)
+	var causal_nodes: Dictionary = {}
+	for edge_id: String in edge_ids:
+		var route: Dictionary = routes.get(edge_id, {})
+		for endpoint: String in [str(route.get("from", "")),
+				str(route.get("to", ""))]:
+			if not endpoint.is_empty():
+				causal_nodes[endpoint] = true
+	var binding_details: Dictionary = details.duplicate(true)
+	binding_details["entities"] = edge_ids
+	binding_details["local_node_ids"] = MapLayoutCanonical.sorted_keys(causal_nodes)
 	return {"ok": false, "binding": {
 		"kind": "grade_separation",
 		"id": id,
@@ -572,7 +591,7 @@ static func _failure(id: String, reason: String,
 		"edge_id": "",
 		"profile_id": "world",
 		"reason": reason,
-		"details": details,
+		"details": binding_details,
 	}}
 
 

@@ -3,6 +3,9 @@ extends RefCounted
 
 const Binding = preload("res://domain/map_layout/map_layout_input_binding.gd")
 const Routes = preload("res://presentation/map/map_layout_compiler_routes.gd")
+const Grade = preload("res://presentation/map/map_grade_separation.gd")
+const SelectionIterator = preload(
+	"res://presentation/map/map_compatibility_selection_iterator.gd")
 
 @warning_ignore_start("unsafe_call_argument")
 
@@ -18,6 +21,7 @@ static func run(fails: Array[String]) -> void:
 	))
 	_test_portal_geometry(fails, quality)
 	_test_causal_binding_closure(fails, quality)
+	_test_grade_nogood_closure(fails, quality)
 	_test_inflation_safe_corridor_culling(fails, quality)
 	_test_complete_chain(fails, quality)
 	_test_layered_route_plan(fails, quality)
@@ -198,6 +202,49 @@ static func _binding_nodes_with_early_return(binding: Dictionary,
 			affected[str(edge["from"])] = true
 			affected[str(edge["to"])] = true
 	return MapLayoutCanonical.sorted_keys(affected)
+
+
+static func _test_grade_nogood_closure(fails: Array[String],
+		quality: Dictionary) -> void:
+	var nodes: Array = [
+		_node("A", 2, 1), _node("B", 4, 1),
+		_node("C", 2, 5), _node("D", 4, 5),
+	]
+	var edges: Array = [_edge("A", "B"), _edge("C", "D")]
+	var assets: Dictionary = _assets()
+	var input: MapLayoutInput = _input(
+		nodes, edges, 717, 0, _hero(), quality, assets)
+	var candidate_rows: Dictionary = {
+		"A": ["a0"], "B": ["b0"], "C": ["c0"], "D": ["d0", "d1"],
+	}
+	var node_sets: Dictionary = {}
+	var constraints: Dictionary = {}
+	for node_id: String in MapLayoutCanonical.sorted_keys(candidate_rows):
+		var ids: Array = candidate_rows[node_id]
+		node_sets[node_id] = _selection_node_set(ids)
+		constraints["1/%s" % node_id] = _selection_unary(node_id, ids)
+	var iterator: RefCounted = SelectionIterator.new(
+		node_sets, constraints, {"network": "grade-nogood"})
+	var first: Dictionary = iterator.next_assignment()
+	var first_grade: Dictionary = Grade.apply(_grade_routes(false), quality)
+	var binding: Dictionary = first_grade.get("binding", {})
+	var governed: Array[String] = MapLayoutCompiler._binding_nodes(binding, input)
+	var nogood: Dictionary = iterator.add_nogood(
+		governed, first.get("candidate_ids", {}))
+	var second: Dictionary = iterator.next_assignment() \
+		if nogood.get("ok", false) == true else {}
+	var second_grade: Dictionary = Grade.apply(_grade_routes(true), quality) \
+		if second.get("candidate_ids", {}).get("D", "") == "d1" else {}
+	_check(fails, first_grade.get("ok", true) == false
+			and binding.get("id", "") == "ambiguous_xz_overlap"
+			and binding.get("details", {}).get("local_node_ids", []) \
+				== ["A", "B", "C", "D"]
+			and governed == ["A", "B", "C", "D"]
+			and nogood.get("ok", false) == true
+			and second.get("status", "") == SelectionIterator.ASSIGNMENT
+			and second.get("candidate_ids", {}).get("D", "") == "d1"
+			and second_grade.get("ok", false) == true,
+		"a grade failure records one exact endpoint nogood before the next assignment succeeds")
 
 
 static func _attempted_candidate_ids(diagnostics: Dictionary) -> Dictionary:
@@ -909,6 +956,46 @@ static func _input(nodes: Array, edges: Array, seed: int, act: int,
 		"hero_anchor_contract": hero,
 		"quality_registry_digest": MapLayoutCanonical.digest(quality),
 	})
+
+
+static func _selection_node_set(ids: Array) -> Dictionary:
+	var candidates: Array[Dictionary] = []
+	for index: int in range(ids.size()):
+		candidates.append({"id": str(ids[index]),
+			"displacement_cost_m2": float(index)})
+	return {"candidates": candidates}
+
+
+static func _selection_unary(node_id: String, ids: Array) -> Dictionary:
+	var allowed: Dictionary = {}
+	var ranked: Dictionary = {}
+	var order: Array = []
+	for index: int in range(ids.size()):
+		var candidate_ids: Array[String] = [str(ids[index])]
+		var key: String = MapLayoutCanonical.canonical_text(candidate_ids)
+		allowed[key] = true
+		ranked[key] = {"candidate_ids": candidate_ids,
+			"weakest_signed_hard_margin": float(ids.size() - index),
+			"candidate_cost_m2": float(index)}
+		order.append(candidate_ids)
+	return {"id": "1/%s" % node_id, "node_ids": [node_id],
+		"allowed_candidate_ids": allowed, "ranked_combinations": ranked,
+		"surviving_order": order}
+
+
+static func _grade_routes(proper_crossing: bool) -> Dictionary:
+	var vertical_start: Array = [0.0, 0.0, -4.0] \
+		if proper_crossing else [0.0, 0.0, 0.0]
+	return {
+		MapLayoutInput.edge_id("A", "B"): {
+			"from": "A", "to": "B", "corridor_width": 0.72,
+			"centerline": [[-4.0, 0.0, 0.0], [4.0, 0.0, 0.0]],
+		},
+		MapLayoutInput.edge_id("C", "D"): {
+			"from": "C", "to": "D", "corridor_width": 0.72,
+			"centerline": [vertical_start, [0.0, 0.0, 4.0]],
+		},
+	}
 
 
 static func _world_edge_count(world: WorldMap) -> int:

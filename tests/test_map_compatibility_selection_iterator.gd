@@ -3,6 +3,8 @@ extends RefCounted
 
 const Iterator = preload(
 	"res://presentation/map/map_compatibility_selection_iterator.gd")
+const Preflight = preload(
+	"res://presentation/map/map_selection_screen_preflight.gd")
 
 @warning_ignore_start("unsafe_call_argument")
 
@@ -14,6 +16,7 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 
 static func run(fails: Array[String]) -> void:
 	_test_components_nogoods_and_replay(fails)
+	_test_exact_priority_order(fails)
 	_test_lookup_exhaustion(fails)
 	_test_materialisation_exhaustion(fails)
 	_test_no_compatible_assignment(fails)
@@ -114,6 +117,22 @@ static func _test_lookup_exhaustion(fails: Array[String]) -> void:
 		"a rejected-branch network stops exactly at its compatibility-work authority")
 
 
+static func _test_exact_priority_order(fails: Array[String]) -> void:
+	var expected: Array[String] = [
+		"z-margin", "a-margin", "z-cheap", "a-expensive",
+	]
+	var rows: Array[Dictionary] = _priority_rows()
+	var reversed_rows: Array[Dictionary] = _priority_rows()
+	reversed_rows.reverse()
+	rows.sort_custom(Preflight._stronger)
+	reversed_rows.sort_custom(Preflight._stronger)
+	_check(fails, _priority_ids(rows) == expected
+			and _priority_ids(reversed_rows) == expected
+			and _priority_emissions(false) == expected
+			and _priority_emissions(true) == expected,
+		"near-equal binary64 margins and costs retain one exact order under replay")
+
+
 static func _test_materialisation_exhaustion(fails: Array[String]) -> void:
 	var ids: Array[String] = []
 	for index: int in range(66):
@@ -179,6 +198,60 @@ static func _component_fixture(reordered: bool) -> Dictionary:
 		constraints["2/%s+%s" % [row[0], row[1]]] = _pair(
 			str(row[0]), str(row[1]), row[2])
 	return {"node_sets": node_sets, "constraints": constraints}
+
+
+static func _priority_rows() -> Array[Dictionary]:
+	return [
+		{"candidate_ids": ["a-margin"],
+			"weakest_signed_hard_margin": 1.0,
+			"candidate_cost_m2": 0.0},
+		{"candidate_ids": ["z-margin"],
+			"weakest_signed_hard_margin": 1.000000001,
+			"candidate_cost_m2": 100.0},
+		{"candidate_ids": ["a-expensive"],
+			"weakest_signed_hard_margin": 0.5,
+			"candidate_cost_m2": 1.000000001},
+		{"candidate_ids": ["z-cheap"],
+			"weakest_signed_hard_margin": 0.5,
+			"candidate_cost_m2": 1.0},
+	]
+
+
+static func _priority_ids(rows: Array[Dictionary]) -> Array[String]:
+	var out: Array[String] = []
+	for row: Dictionary in rows:
+		out.append(str(row["candidate_ids"][0]))
+	return out
+
+
+static func _priority_emissions(reordered: bool) -> Array[String]:
+	var rows: Array[Dictionary] = _priority_rows()
+	if reordered:
+		rows.reverse()
+	var candidates: Array[Dictionary] = []
+	var allowed: Dictionary = {}
+	var ranked: Dictionary = {}
+	var order: Array = []
+	for row: Dictionary in rows:
+		var candidate_id: String = str(row["candidate_ids"][0])
+		candidates.append({"id": candidate_id,
+			"displacement_cost_m2": row["candidate_cost_m2"]})
+		var key: String = MapLayoutCanonical.canonical_text([candidate_id])
+		allowed[key] = true
+		ranked[key] = row
+		order.append([candidate_id])
+	var iterator: RefCounted = Iterator.new({"N": {"candidates": candidates}}, {
+		"1/N": {"id": "1/N", "node_ids": ["N"],
+			"allowed_candidate_ids": allowed, "ranked_combinations": ranked,
+			"surviving_order": order},
+	}, {"network": "exact-priority"})
+	var out: Array[String] = []
+	for ignored: int in range(rows.size()):
+		var result: Dictionary = iterator.next_assignment()
+		var candidate_ids: Dictionary = result.get("candidate_ids", {})
+		out.append(str(candidate_ids.get("N", "")))
+		iterator.add_nogood(["N"], candidate_ids)
+	return out
 
 
 static func _node_set(candidate_ids: Array[String]) -> Dictionary:

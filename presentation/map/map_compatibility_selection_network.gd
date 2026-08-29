@@ -117,14 +117,14 @@ static func _candidate_before(node_id: String, a: int, b: int,
 		a_row.get("weakest_signed_hard_margin", -INF))
 	var b_margin: float = MapLayoutCanonical.float_value(
 		b_row.get("weakest_signed_hard_margin", -INF))
-	if not is_equal_approx(a_margin, b_margin):
+	if a_margin != b_margin:
 		return a_margin > b_margin
 	var candidates: Array = node_sets[node_id].get("candidates", [])
 	var a_cost: float = MapLayoutCanonical.float_value(
 		candidates[a].get("displacement_cost_m2", INF))
 	var b_cost: float = MapLayoutCanonical.float_value(
 		candidates[b].get("displacement_cost_m2", INF))
-	if not is_equal_approx(a_cost, b_cost):
+	if a_cost != b_cost:
 		return a_cost < b_cost
 	return a_id < b_id
 
