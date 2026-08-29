@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "archiveParent": "86d4b9793474b322f6b0f971d6c435461f38544c",
+  "preservedRefs": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+    "research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+    "research/issue-421-post-target-capacity-evidence": "86d4b9793474b322f6b0f971d6c435461f38544c"
+  },
+  "publicationRef": "research/issue-421-post-reshuffle-frontier-evidence",
+  "source": {
+    "main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "observationSourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "observationPatchSha256": "a43ce695efd32fa92aa4674460b67395d835e68a93e7c8a31d1a5fef9c19c4d1",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "tracePlanSha256": "367efa00c91cb7ea4bdfeea24b2971e612042b8a428f0bbc6c375effc512775b",
+    "traceOutputSha256": "f0bdda679bf8b2cc116d09c11680bc74ff89ec087aff0f29cc14822275bfad70"
+  },
+  "results": {
+    "reshuffleObservability": {
+      "outcome": "SUCCESS",
+      "decision": "freeze-reshuffle-trace-surface-for-identity",
+      "selectedSurface": "RESHUFFLE(fight,event,n)",
+      "cachedRowsRead": 256,
+      "newSimulatorRows": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "7e34d8cd5718b2e3c7ad5fcc206133cc4b336682bae41724c5b19fb5089d3bb7",
+      "summarySha256": "3cf6377deda62b1bba08badf46763a813a2676b2bd66ae1d2c3692e5342909d9"
+    },
+    "reshuffleTraceIdentity": {
+      "outcome": "SUCCESS",
+      "decision": "freeze-reshuffle-trace-for-capacity",
+      "rowsPerArm": 256,
+      "policyMismatchRows": 0,
+      "seedMismatchRows": 0,
+      "rngMismatchRows": 0,
+      "strippedRowMismatchRows": 0,
+      "reshuffleEvents": 1882,
+      "rowsWithReshuffle": 256,
+      "newSimulatorRows": 256,
+      "newLedgerRows": 0,
+      "protocolSha256": "1a9ca927445defe81eddaf2778254e7df2d0e76877068728afc93ed24962740e",
+      "summarySha256": "b9a218f5f3a012e103c36c01a5ea6de5a94f8396ea2842d098c53c833cc88554"
+    },
+    "reshuffleCapacity": {
+      "outcome": "FUTILITY",
+      "decision": "close-reshuffle-echo-at-zero-row-capacity",
+      "activePolicies": 64,
+      "exactInactivePolicies": 0,
+      "exposureOnlyPolicies": 0,
+      "viablePolicies": 15,
+      "qualifyingRows": 256,
+      "qualifyingTurns": 1760,
+      "distinctConsumers": 42,
+      "distinctConsumerTypes": 3,
+      "distinctConsumerTargets": 3,
+      "newSimulatorRows": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "3070ad0f4ba325bc4840f19d77173a4c8b8aa5fbf05d865103e1543e7a4a3b67",
+      "summarySha256": "f23af519e43e84a8d42ab92a20d9ab888ce6a0903e2ba0338114bec537cff565"
+    },
+    "fightLocalFrontier": {
+      "outcome": "FUTILITY",
+      "decision": "record-fight-local-mechanism-selection-gate-unavailable",
+      "frontierClasses": 10,
+      "methodClasses": 4,
+      "selectedMechanisms": [],
+      "selectedMethods": [],
+      "unresolvedSemanticClasses": [
+        "terminal-hit-semantic-family",
+        "new-cross-turn-hold-lifecycle",
+        "new-intent-history-lifecycle",
+        "new-private-counter-tag-or-transform"
+      ],
+      "newSimulatorRows": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "1ed01e349db8c3601fa93ccc33ae5fb9bd55b0bbe17ae9f1ae3741c3106b95cb",
+      "summarySha256": "2e21b108bc2e8233cdbd995877d5bf20b396d6e245966bc729ca13a48b6380f3"
+    }
+  },
+  "mechanicalProvenance": {
+    "v1": {
+      "disposition": "self-check failure before task, source, evidence, trace or ledger reads",
+      "protocolSha256": "bb9e2ac5837e75f5e56214be078865bd48dfa2ab77f1628b26b776731f02d91e",
+      "runnerSha256": "a849376284d268996b1d9ab00a708b1eb4622233cd08cb12693932a6dea2fc19",
+      "failureSha256": "fb91b6124784da7ad38bae4aafc94f3717d70ccc8f4ccac672a578779ed90ac5"
+    },
+    "v2": {
+      "disposition": "preserved unexecuted after byte-exact source-assertion preflight",
+      "protocolSha256": "cf49ab92d90c03b551505a476c92745f00989314129d9f9a3ff4d817c0477e7d",
+      "runnerSha256": "c31f7c9e4988c0a368be91b3fb62e1ca355247053ecdc7bcb7be995bf9e861f0",
+      "failureSha256": "c654a24a5bb9ab36b6ad80542e053e8d71b3ecdff67e91f739d0407ccc00776f"
+    },
+    "primarySourceReviewSha256": "58324e9f4ac1b0ec420445cad83e0247a10b8084776b0fc8010a323b73d27535"
+  },
+  "humanAuthorityGate": {
+    "status": "unavailable",
+    "requiredDecision": "Supply or choose one complete product-semantic twelve-field grammar, or explicitly authorise one finite pre-support family-selection rule.",
+    "prohibitedWithoutDecision": [
+      "candidate selection by taste",
+      "subset rescue of a closed family",
+      "new simulator row",
+      "ML, RL, BO, SMBO or quality-diversity",
+      "protected-seed access",
+      "successor ticket"
+    ]
+  },
+  "taskCapsule": {
+    "path": "task-capsule-5459094066-v19.json",
+    "sha256": "7752a841f318c14ba766a268f8aad63f5270d99bc6bd9e7c55a5358b19b43cc0"
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "verification": {
+    "newSimulatorRowsAcrossThisPublication": 256,
+    "newLedgerRowsAcrossThisPublication": 0,
+    "protectedSeedRows": 0,
+    "frontierGateNewSimulatorRows": 0
+  },
+  "claimBoundary": "The reshuffle family is closed only at its preregistered immediate-next-PLAY capacity boundary. The frontier audit establishes only that no presently executable evidence-backed fight-local class or additional deterministic method remains under the frozen grammar and evidence. It neither proves universal impossibility nor selects missing product semantics. No causal, package, detector, product, protected-seed, #421 acceptance or #108 P9 claim follows."
+}

@@ -964,3 +964,46 @@ zero-row causal-attribution audit of a materially different direct-kill relay;
 they do not admit that mechanism or reopen target transfer. See
 `publication-manifest-target-switch-v1.json` for exact identities and claim
 boundaries. No protected seed, product branch, PR or GitHub Action was used.
+
+## Post-reshuffle and fight-local frontier evidence
+
+The selected `RESHUFFLE(fight,event,n)` observation passed exact-null trace
+identity over the same 256 policy-seed identities: policy, seed, RNG and every
+pre-existing result field had zero mismatches. The trace contained 1,882
+reshuffle events in all 256 rows. This was observation-only research; it added
+no ledger or protected-seed row.
+
+The preregistered first-reshuffle to immediate-next-PLAY capacity audit then
+closed that complete family. All 64 policies were active, none was exactly
+inactive or exposure-only, and the surface aliased the previously closed
+Scoreline, Afterimage, draw-thread and duplicate-copy families. It may not be
+rescued with a count threshold, timing split, consumer subset, payoff, carrier,
+policy, cohort or method change.
+
+The final zero-row frontier audit evaluated ten frozen mechanism classes and
+four method classes against exact current-main source and all immutable
+closures. It selected no executable mechanism and no method. Exact-lethal and
+positive-overkill remain real terminal-hit observations, but an immediate-next-
+PLAY use is a subset of the closed kill topology; precision-only, excess-only,
+cross-turn, intent-history and private-state uses require materially different
+product semantics. Exact enumeration, BO/SMBO, RL and quality-diversity have no
+frozen legal grammar, direct objective or measured decision value here.
+
+The result is the preregistered unavailable mechanism-selection gate, not a
+universal impossibility claim. Under the current human-authority contract, no
+further candidate or simulator row is lawful until the owner either supplies or
+chooses one complete twelve-field product-semantic grammar, or explicitly
+authorises one finite pre-support family-selection rule. See
+`publication-manifest-post-reshuffle-frontier-v1.json` for exact identities,
+mechanical preflight provenance and claim boundaries.
+
+Remote heads at this publication's preparation remained:
+
+- `origin/main`: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
+- `research/issue-421-p9-recovery-evidence`: `93dea98437bfe0d8d6344d526e439eb903d4830c`
+- `research/issue-421-fight-local-evidence`: `62c39b3bacbe8cacef5e8b419512844469e0cc34`
+- `research/issue-421-fight-local-v2-evidence`: `4de26171c6dbfc28fdcd736777250d1af5efb410`
+- `research/issue-421-afterimage-order-evidence`: `666c728e926e6f6a39528c7179e1c6330e20f221`
+- `research/issue-421-scoreline-commitment-evidence`: `a1a16f4941b8fbef7832c1560c30d2647cc4d74b`
+- `research/issue-421-target-switch-evidence`: `ff82d6084268633134597e8d64d35c485324fdac`
+- `research/issue-421-post-target-capacity-evidence`: `86d4b9793474b322f6b0f971d6c435461f38544c`

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "supersedes": {
+    "path": "task-capsule-5459094066-v14.json",
+    "sha256": "b6a5fa5a20d12ae76fed4253fc86e588e1b6d256ed9c945cc3a4254232813c49"
+  },
+  "taskSsotBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+  "authority": {
+    "commentId": 5459094066,
+    "bodySha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "authorAssociation": "OWNER"
+  },
+  "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "immutableArchiveHeads": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+    "research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+    "research/issue-421-post-target-capacity-evidence": "86d4b9793474b322f6b0f971d6c435461f38544c"
+  },
+  "duplicateCopyDisposition": {
+    "protocolPath": "protocols/post-v38-duplicate-copy-capacity-v1.json",
+    "protocolSha256": "95d22e02bf041e401267e409305b83b087590ab4aae8663f47de4b8cc13370f5",
+    "runnerPath": "post_v38_duplicate_copy_capacity_v1.py",
+    "runnerSha256": "b2ec34e98be40b1e7205f104588569e33f810022135a96a8da83f8d39f0b3eb5",
+    "summaryPath": "summaries/post-v38-duplicate-copy-capacity-v1.json",
+    "summarySha256": "72a850dd102994b0fc778ac7c057b19c4f505801c43997b0c815f07f07eebd86",
+    "outcome": "FUTILITY boundary 2",
+    "decision": "close-duplicate-copy-echo-at-zero-row-capacity",
+    "counts": {
+      "activePolicies": 37,
+      "exactInactivePolicies": 9,
+      "viablePolicies": 12,
+      "exposureActivePolicies": 54,
+      "exposureOnlyPolicies": 17,
+      "distinctRepeatedCards": 32,
+      "adjacentTurns": 316,
+      "nonAdjacentTurns": 85
+    },
+    "failedGates": ["inactiveSupport", "scorelineSeparation", "afterimageSeparation"],
+    "rows": {"cachedRead": 256, "newSimulator": 0, "newLedger": 0, "protected": 0},
+    "closure": "No starter, card subset, adjacency, same-instance, payoff, acquisition, cohort, policy or method rescue is permitted."
+  },
+  "publishedEvidence": {
+    "ref": "research/issue-421-post-target-capacity-evidence",
+    "head": "86d4b9793474b322f6b0f971d6c435461f38544c",
+    "manifestSha256": "a72693487b471d09b5ae9f997ab220a6dd736e538e79b8ecb7aa844ba03d0727",
+    "issueComment": 5460566921,
+    "pullRequests": 0,
+    "actions": 0
+  },
+  "nextEvidenceBasis": {
+    "sourceTransition": "Current-main draw_cards emits RESHUFFLE with exact positive discard count after draw-empty/discard-nonempty transfer and seeded shuffle, immediately before the resulting DRAW.",
+    "observationGap": "The identity-proved trace contains turns, draws and plays but no RESHUFFLE record, so exact cycle capacity cannot be inferred from source or draw count.",
+    "candidateClass": "A reshuffle sets one non-stacking player-turn mark; the next PLAY in that turn consumes it for one bounded Ember. No payoff is implemented or estimated at the observation stage.",
+    "priorQuarantine": "The older broad unused-transition audit remains immutable inconclusive and selected nothing. Controlling comment 5459094066 is later owner authority for a new scoped fight-local design; this continuation does not repair, rerun or treat that audit as positive evidence.",
+    "whyDifferent": "Reshuffle is an exact deck-zone boundary, not hand size, draw count, draw-thread, card cadence, Power-cycle, discard/exhaust terminal movement, target/death or reward acquisition."
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "nextQuestion": "Does exact current-main source plus the complete identity-proved trace context provide one identity-safe and decision-valued RESHUFFLE observation surface for a separately preregistered trace-only experiment?",
+  "nextAction": "Run one zero-new-row scoped reshuffle-observability eligibility audit. Only complete success may authorise a frozen trace-only identity experiment; terminal-hit cells and every closed or quarantined family remain excluded.",
+  "boundaries": {
+    "researchOnly": true,
+    "zeroProtectedSeeds": true,
+    "noResearchPrOrActions": true,
+    "noSuccessorTicket": true,
+    "closedFamiliesImmutable": true,
+    "priorInconclusiveAuditNotRepairedOrRerun": true,
+    "noGameplayPrototypeBeforeObservationIdentityAndCapacity": true,
+    "noAdaptiveCandidateByCandidateTuning": true,
+    "noMlRlOrOptimiserWithoutMeasuredDecisionValue": true,
+    "humanEscalationOnlyUnderCurrentContract": true
+  }
+}

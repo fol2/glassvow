@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "outcomeClass": "mechanical-preflight-failure",
+  "decision": "preserve-v1-self-check-failure",
+  "protocolSha256": "bb9e2ac5837e75f5e56214be078865bd48dfa2ab77f1628b26b776731f02d91e",
+  "runnerSha256": "a849376284d268996b1d9ab00a708b1eb4622233cd08cb12693932a6dea2fc19",
+  "failureStage": "runner self_check before task, source, evidence, trace or ledger reads",
+  "error": "Fight-local frontier mismatch: self-check unavailable",
+  "rootCause": "The synthetic incomplete mechanism declared requiresNewProductSemantics but omitted mechanisticallyDistinct=true, so it did not enter the unresolved semantic set required by the test's expected unavailable classification.",
+  "correctionAuthority": "Preserve protocol and runner v1 byte-for-byte. A separately versioned v2 may add only mechanisticallyDistinct=true to that synthetic self-check fixture and bind this failure identity. The complete production frontier classes, signals, methods, evidence, decision rules, budget and expected disposition must remain unchanged.",
+  "newSimulatorObservationRows": 0,
+  "cachedObservationRowsRead": 0,
+  "newLedgerRows": 0,
+  "protectedSeedRows": 0,
+  "claimBoundary": "Mechanical runner preflight only; no frontier, mechanism, method, support, causal, product or P9 disposition follows from v1."
+}

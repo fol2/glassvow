@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does exact current-main source plus the complete identity-proved trace context provide one identity-safe and decision-valued RESHUFFLE observation surface for a separately preregistered trace-only experiment?",
+  "hypothesis": "RESHUFFLE is an already-emitted deterministic deck-zone boundary with a positive discard-count payload, so adding that single event to the existing queue projection can measure natural cycle opportunities without inventing a payoff, candidate subset or simulator cohort.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/heads/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/remotes/origin/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/heads/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+      "refs/remotes/origin/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+      "refs/heads/research/issue-421-post-target-capacity-evidence": "86d4b9793474b322f6b0f971d6c435461f38544c",
+      "refs/remotes/origin/research/issue-421-post-target-capacity-evidence": "86d4b9793474b322f6b0f971d6c435461f38544c"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v15.json",
+    "taskCapsuleSha256": "17c4e255346297f8379e7383fc5b9775f2bfbac1b77eb2e26c79429f29d36856",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+      "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+      "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+      "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8"
+    },
+    "targetObservationHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "targetObservationPatchSha256": "529930aa7e0ea74749467919928f4ea5d0b07fd7edc52408514d4e0e94d6bdbb",
+    "targetObservationSha256": {
+      "tools/balance_sim.gd": "28c05711875c5460da90d55b4bfe91788143456bba99ee1a2b96fbd9b3280654",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2"
+    },
+    "researchFileSha256": {
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "protocols/post-v30-unused-discrete-transition-audit-v1.json": "169fb241e556d9dd5729ae6bbbd5a6b541ab4ccb098cfa30435ed01ca0a1dc01",
+      "summaries/post-v30-unused-discrete-transition-audit-v1.json": "a26063c374b21063674f72e49aee06be208f2c43a3d1055b1b18d9bd6e26155d",
+      "protocols/post-v38-target-switch-trace-identity-v1.json": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+      "summaries/post-v38-target-switch-trace-identity-v1.json": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d"
+    },
+    "runnerSha256": "63766ceedd3a963b105c62fe000f2ac49c15c38e2cf7e7db52d4a98ed81a9316"
+  },
+  "sourceAssertions": [
+    {
+      "id": "stable-reshuffle-event-identity",
+      "path": "domain/events/event_types.gd",
+      "contains": "const RESHUFFLE: StringName = &\"reshuffle\""
+    },
+    {
+      "id": "exact-draw-zone-transition",
+      "path": "domain/rules/combat.gd",
+      "contains": "\t\tif cb.draw.is_empty():\n\t\t\tif cb.discard.is_empty():\n\t\t\t\tbreak\n\t\t\tvar count: int = cb.discard.size()\n\t\t\tcb.draw = cb.discard\n\t\t\tcb.discard = []\n\t\t\t_shuffle_cards(run.rng, cb.draw)\n\t\t\tcb.queue.append({\"t\": EventTypes.RESHUFFLE, \"n\": count})\n\t\tvar c: CardInst = cb.draw.pop_back()\n\t\tcb.hand.append(c)\n\t\tcb.queue.append({\"t\": EventTypes.DRAW, \"uid\": c.uid, \"id\": String(c.id)})"
+    }
+  ],
+  "priorQuarantine": {
+    "protocolPath": "protocols/post-v30-unused-discrete-transition-audit-v1.json",
+    "protocolSha256": "169fb241e556d9dd5729ae6bbbd5a6b541ab4ccb098cfa30435ed01ca0a1dc01",
+    "summaryPath": "summaries/post-v30-unused-discrete-transition-audit-v1.json",
+    "summarySha256": "a26063c374b21063674f72e49aee06be208f2c43a3d1055b1b18d9bd6e26155d",
+    "frozenOutcome": "inconclusive",
+    "frozenDecision": "record-unused-discrete-transition-audit-inconclusive-at-cap",
+    "selectedRepresentations": [],
+    "boundary": "Immutable broad audit evidence only. This scoped experiment neither repairs nor reruns it and draws no positive inference from it."
+  },
+  "selectedSurface": {
+    "event": "RESHUFFLE",
+    "fields": ["fight", "event", "n"]
+  },
+  "futureMechanismTemplate": {
+    "producer": "The exact current-main draw-empty and discard-nonempty transfer emits RESHUFFLE after seeded shuffle with its positive transferred-card count.",
+    "consumer": "The immediate next authored PLAY in the same player turn.",
+    "mediator": "One Dusk-only non-stacking player-turn mark set by RESHUFFLE and consumed by the immediate next PLAY; it expires at turn end.",
+    "commonPayoff": "After that PLAY resolves, grant exactly one bounded Ember, at most once in the turn. This is a later identity-prototype contract only and is not implemented or estimated here.",
+    "payoffProvenance": "One Ember is the smallest positive unit of the existing Dusk fight-local resource and adds no scalar level.",
+    "duskBoundary": "Existing Emberheart is the proposed Dusk identity gate; Ashwarden and mechanism-off remain exact current-main paths.",
+    "acquisition": "None; existing content, pools, rarities, policies and saves remain unchanged.",
+    "rng": "Observation adds no RNG call or cursor movement; RESHUFFLE already follows the exact current-main seeded shuffle.",
+    "persistence": "No content ID, reward entry, RunState field, save field or save version.",
+    "telemetry": "Research-only RESHUFFLE fight/event/count and existing TURN, DRAW and PLAY identities.",
+    "scope": "Deck-zone boundary only; not draw quantity, hand size, card identity, reward acquisition or a terminal transition.",
+    "expiry": "No next PLAY in the same player turn means no consumer and no future payoff."
+  },
+  "frozenCausalFactors": {
+    "reshuffleEchoPayoff": {
+      "definition": "The future mechanism template with the common one-Ember payoff.",
+      "levels": ["off"],
+      "status": "Fixed off; no causal row exists in this eligibility audit."
+    },
+    "scorelinePayoff": {
+      "definition": "Separate closed Scoreline causal factor.",
+      "levels": ["off"]
+    },
+    "afterimagePayoff": {
+      "definition": "Separate closed Afterimage causal factor.",
+      "levels": ["off"]
+    },
+    "acquisitionPriority": {
+      "definition": "Frozen exact current-main policy identity.",
+      "levels": ["current-main"]
+    },
+    "variedCausalFactorCount": 0,
+    "independence": "This is neither the old four-factor design nor any factorial; Scoreline and Afterimage remain separate closed factors."
+  },
+  "designMatrix": {
+    "identity-proved-current-main-trace-context": {
+      "reshuffleEchoPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "acquisitionPriority": "current-main",
+      "cachedRows": 256,
+      "newRows": 0,
+      "status": "Sole immutable context arm; this audit selects only whether one future trace field is identifiable."
+    }
+  },
+  "anchors": {
+    "source": "Exact EventTypes.RESHUFFLE identity and draw_cards zone-transfer order at current main.",
+    "trace": "The complete 64-policy by four-seed identity-proved current-main rectangle with frozen policy snapshots.",
+    "negative": "The old broad audit remains inconclusive with no selected representation.",
+    "closedFamilies": "All published fight-local and post-target capacity families remain immutable negative or closed evidence and are not cells."
+  },
+  "estimands": {
+    "unit": "One eligibility decision over exact source and the complete cached trace context.",
+    "sourceIdentity": "Whether RESHUFFLE has one stable event name, one exact zone boundary, deterministic seeded ordering and a positive count payload.",
+    "projectionIdentity": "Whether the existing queue walker can add only fight, event and n without changing policy, seed, RNG, result or other trace fields.",
+    "contextAdequacy": "Whether the frozen rectangle supplies complete policies, viable outcomes and sufficient TURN, DRAW and PLAY context for a separate trace-only experiment.",
+    "notEstimated": "RESHUFFLE frequency, active/inactive capacity, consumer support, payoff identity, causal effect, separation, fresh-cohort reproducibility, package admission, detector score, product balance or P9 acceptance."
+  },
+  "design": {
+    "type": "Zero-new-row source-and-context observability eligibility audit; not a factorial and not a causal experiment.",
+    "mechanisticallyJustifiedInteractions": [
+      "Draw-empty plus discard-nonempty is necessary and sufficient for the existing RESHUFFLE event.",
+      "Seeded shuffle precedes RESHUFFLE and the resulting DRAW, fixing event order without an added RNG call.",
+      "Only a later same-turn next PLAY could consume the proposed mark; that capacity is deliberately not inferred here."
+    ],
+    "aliasStructure": "RESHUFFLE count aliases transferred discard size but not future PLAY, payoff, policy value or efficacy. Existing DRAW events cannot recover the exact boundary. The old broad audit is quarantined rather than pooled.",
+    "omittedCells": "No payoff-on cell, candidate card, subset, timing variant, acquisition, rarity, policy knob, replacement cohort, new simulator row, held-out row, joint package, ML, RL, optimiser or protected seed."
+  },
+  "trace": {
+    "planSha256": "5e8e1e43af03508c3ec0ec5229003735333c81203d84a90cde47def48b18c90d",
+    "outputSha256": "3ccc833689b6cc93f62e2f6393934394392c180cfeb7538048eea97f1583719c",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identityProtocolSha256": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+    "identitySummarySha256": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+    "selectionRule": "Read all 256 rows once for context counts only; do not infer unrecorded RESHUFFLE events or select any row, policy, seed, fight, turn, threshold or endpoint."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "rows": 256,
+    "identity": "Every policy and seed in the frozen current-main rectangle is read exactly once; each policy retains one exact snapshot across four seeds."
+  },
+  "gates": {
+    "minimumViablePolicies": 8,
+    "minimumTurnEvents": 1000,
+    "minimumDrawEvents": 10000,
+    "minimumPlayEvents": 10000,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The eight-policy viability floor reuses the preregistered 64-policy structural scale. Event floors are conservative context checks below the frozen observed totals and are not RESHUFFLE frequency thresholds."
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1,
+    "firstLooks": 1
+  },
+  "claimBoundary": "Eligibility for one separately preregistered RESHUFFLE trace identity experiment only; no observed RESHUFFLE, capacity, payoff, causal, fresh-cohort, held-out, package-admission, detector, product or P9 claim.",
+  "decisionRules": {
+    "success": "Every immutable identity, source-order, projection, quarantine, context, reliability, ledger and budget check passes at the sole look.",
+    "successAuthority": "Apply boundary 1 only by freezing the single RESHUFFLE(fight,event,n) surface for a separate 256-row exact-null trace identity experiment on the same policies and seeds. Before any capacity or payoff row, prove identical policy, seed, RNG, result and all pre-existing trace fields. Add no causal row and make no frequency claim here.",
+    "futility": "Any eligibility check fails within the valid wall-time cap.",
+    "futilityAuthority": "Apply boundary 2: close the RESHUFFLE observation surface without repairing the old audit or trying DRAW inference, terminal-hit cells, subsets, timing variants, payoffs, acquisition, replacement cohorts, policy remaps, ML, RL or an optimiser; continue with the next evidence-backed minimal structural mechanism inside #421.",
+    "inconclusive": "The runner exceeds the frozen wall-time ceiling after validating immutable inputs.",
+    "inconclusiveAuthority": "Apply boundary 3: record the scoped eligibility audit inconclusive at its preregistered cap. Do not rerun, change the ceiling, infer a surface, or spend a simulator row without new owner authority."
+  }
+}

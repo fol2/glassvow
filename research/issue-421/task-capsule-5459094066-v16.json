@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "supersedes": {
+    "path": "task-capsule-5459094066-v15.json",
+    "sha256": "17c4e255346297f8379e7383fc5b9775f2bfbac1b77eb2e26c79429f29d36856"
+  },
+  "taskSsotBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+  "authority": {
+    "commentId": 5459094066,
+    "bodySha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "authorAssociation": "OWNER"
+  },
+  "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "immutableArchiveHeads": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+    "research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+    "research/issue-421-post-target-capacity-evidence": "86d4b9793474b322f6b0f971d6c435461f38544c"
+  },
+  "reshuffleObservabilityDisposition": {
+    "protocolPath": "protocols/post-v38-reshuffle-observability-v1.json",
+    "protocolSha256": "7e34d8cd5718b2e3c7ad5fcc206133cc4b336682bae41724c5b19fb5089d3bb7",
+    "runnerPath": "post_v38_reshuffle_observability_v1.py",
+    "runnerSha256": "63766ceedd3a963b105c62fe000f2ac49c15c38e2cf7e7db52d4a98ed81a9316",
+    "summaryPath": "summaries/post-v38-reshuffle-observability-v1.json",
+    "summarySha256": "3cf6377deda62b1bba08badf46763a813a2676b2bd66ae1d2c3692e5342909d9",
+    "outcome": "SUCCESS boundary 1",
+    "decision": "freeze-reshuffle-trace-surface-for-identity",
+    "selectedSurface": {"event": "RESHUFFLE", "fields": ["fight", "event", "n"]},
+    "context": {
+      "policies": 64,
+      "viablePolicies": 15,
+      "turns": 9640,
+      "draws": 54121,
+      "plays": 26077,
+      "policySnapshotFaults": 0,
+      "baselineFaultRows": 0
+    },
+    "rows": {"cachedRead": 256, "newSimulator": 0, "newLedger": 0, "protected": 0},
+    "claimBoundary": "Eligibility for one exact-null trace identity experiment only; no observed RESHUFFLE, capacity, payoff or causal claim."
+  },
+  "traceIdentitySource": {
+    "path": "reshuffle-observation-v1-source",
+    "head": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "stagedPatchSha256": "a43ce695efd32fa92aa4674460b67395d835e68a93e7c8a31d1a5fef9c19c4d1",
+    "balanceSimSha256": "e4f5c2470e45397d0e15a4b2ef69345f6c2c968fbfc3fec39bffa1dfab55c88e",
+    "probeSha256": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+    "probeUidSha256": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2",
+    "parseGate": "scripts OK (2 checked)",
+    "diffFromIdentityProvedTargetTrace": "Only initialise trajectory.reshuffles and append existing RESHUFFLE fight,event,n in the same queue walker."
+  },
+  "priorQuarantine": {
+    "summaryPath": "summaries/post-v30-unused-discrete-transition-audit-v1.json",
+    "summarySha256": "a26063c374b21063674f72e49aee06be208f2c43a3d1055b1b18d9bd6e26155d",
+    "outcome": "INCONCLUSIVE",
+    "selectedRepresentations": [],
+    "status": "Immutable and not repaired or rerun."
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "nextQuestion": "Does adding only trajectory.reshuffles from existing queue events preserve all 256 frozen result, policy, RNG, seed and pre-existing trace identities while producing valid ordered positive-count observations?",
+  "nextAction": "Execute one preregistered 256-row exact-null trace identity arm against the immutable target/death trace output. Strip only reshuffles for equality. Success may authorise only a zero-new-row reshuffle-to-next-PLAY capacity reconstruction.",
+  "boundaries": {
+    "researchOnly": true,
+    "zeroProtectedSeeds": true,
+    "noResearchPrOrActions": true,
+    "noSuccessorTicket": true,
+    "closedFamiliesImmutable": true,
+    "priorInconclusiveAuditNotRepairedOrRerun": true,
+    "noGameplayPrototypeBeforeObservationIdentityAndCapacity": true,
+    "noAdaptiveCandidateByCandidateTuning": true,
+    "noMlRlOrOptimiserWithoutMeasuredDecisionValue": true,
+    "humanEscalationOnlyUnderCurrentContract": true
+  }
+}

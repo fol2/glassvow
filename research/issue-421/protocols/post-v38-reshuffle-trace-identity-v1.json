@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does adding only trajectory.reshuffles from existing queue events preserve all 256 frozen result, policy, RNG, seed and pre-existing trace identities while producing valid ordered positive-count observations?",
+  "hypothesis": "The RESHUFFLE event already exists in the deterministic combat queue, and the candidate changes only the observation harvest loop, so removing trajectory.reshuffles must reproduce the identity-proved target/death trace exactly without changing any run path or RNG cursor.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/heads/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/remotes/origin/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/heads/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+      "refs/remotes/origin/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+      "refs/heads/research/issue-421-post-target-capacity-evidence": "86d4b9793474b322f6b0f971d6c435461f38544c",
+      "refs/remotes/origin/research/issue-421-post-target-capacity-evidence": "86d4b9793474b322f6b0f971d6c435461f38544c"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v16.json",
+    "taskCapsuleSha256": "a61020336829077122374261431a61971813d9eacd69a874aaf1f2878e37cdf3",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourcePatchSha256": "a43ce695efd32fa92aa4674460b67395d835e68a93e7c8a31d1a5fef9c19c4d1",
+    "sourceSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+      "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+      "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+      "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "e4f5c2470e45397d0e15a4b2ef69345f6c2c968fbfc3fec39bffa1dfab55c88e",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2"
+    },
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinaryPath": "/Users/jamesto/Research/glassvow-p9-421/toolchains/godot-4.7.1/godot",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "anchorPlanSha256": "5e8e1e43af03508c3ec0ec5229003735333c81203d84a90cde47def48b18c90d",
+    "anchorOutputSha256": "3ccc833689b6cc93f62e2f6393934394392c180cfeb7538048eea97f1583719c",
+    "researchFileSha256": {
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_reshuffle_observability_v1.py": "63766ceedd3a963b105c62fe000f2ac49c15c38e2cf7e7db52d4a98ed81a9316",
+      "protocols/post-v38-reshuffle-observability-v1.json": "7e34d8cd5718b2e3c7ad5fcc206133cc4b336682bae41724c5b19fb5089d3bb7",
+      "summaries/post-v38-reshuffle-observability-v1.json": "3cf6377deda62b1bba08badf46763a813a2676b2bd66ae1d2c3692e5342909d9",
+      "protocols/post-v38-target-switch-trace-identity-v1.json": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+      "summaries/post-v38-target-switch-trace-identity-v1.json": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+      "protocols/post-v30-unused-discrete-transition-audit-v1.json": "169fb241e556d9dd5729ae6bbbd5a6b541ab4ccb098cfa30435ed01ca0a1dc01",
+      "summaries/post-v30-unused-discrete-transition-audit-v1.json": "a26063c374b21063674f72e49aee06be208f2c43a3d1055b1b18d9bd6e26155d"
+    },
+    "runnerSha256": "0e636ba0a15b4c0210196ec413f20ae959c067981cc7fddaed519cbb79da20ef"
+  },
+  "mechanismFreeze": {
+    "source": "protocols/post-v38-reshuffle-observability-v1.json",
+    "sha256": "7e34d8cd5718b2e3c7ad5fcc206133cc4b336682bae41724c5b19fb5089d3bb7",
+    "selectedSurface": {"event": "RESHUFFLE", "fields": ["fight", "event", "n"]},
+    "producer": "The exact current-main draw-empty and discard-nonempty transfer emits RESHUFFLE after seeded shuffle with the positive transferred-card count.",
+    "consumer": "The immediate next authored PLAY in the same player turn.",
+    "mediator": "One Dusk-only non-stacking player-turn mark, not implemented here.",
+    "commonPayoff": "One bounded Ember after the consumer resolves, at most once per turn, not implemented or estimated here.",
+    "status": "Only the selected observation surface is authorised. Capacity, mediator and payoff remain unimplemented and unestimated."
+  },
+  "factorDefinitions": {
+    "reshuffleTrace": {
+      "definition": "Observation-only copy of existing RESHUFFLE fight, queue-event index and positive n payload in the existing BalanceSim harvest loop; gameplay never reads the trace.",
+      "levels": {
+        "absent-frozen-anchor": 0,
+        "fight-event-count": 1
+      }
+    },
+    "reshuffleEchoPayoff": {
+      "definition": "Separate future causal factor fixed absent; no mark or payoff exists.",
+      "levels": ["off"]
+    },
+    "scorelinePayoff": {
+      "definition": "Separate closed causal factor fixed absent and never pooled with another endpoint.",
+      "levels": ["off"]
+    },
+    "afterimagePayoff": {
+      "definition": "Separate closed causal factor fixed absent and never pooled with another endpoint.",
+      "levels": ["off"]
+    },
+    "acquisitionPriority": {
+      "definition": "Frozen exact current-main reward policy.",
+      "levels": ["current-main"]
+    },
+    "causalFactorCount": 0,
+    "observationFactorCount": 1,
+    "independence": "Only reshuffleTrace varies and is stripped before identity comparison. This is not the old four-factor design and contains no joint causal cell."
+  },
+  "designMatrix": [
+    {
+      "arm": "identity-proved-target-death-trace-anchor",
+      "reshuffleTrace": "absent-frozen-anchor",
+      "reshuffleEchoPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "acquisitionPriority": "current-main",
+      "rows": 256,
+      "execution": "immutable-cache"
+    },
+    {
+      "arm": "reshuffle-trace-explicit-null",
+      "reshuffleTrace": "fight-event-count",
+      "reshuffleEchoPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "acquisitionPriority": "current-main",
+      "rows": 256,
+      "execution": "sole-new-observation-arm"
+    }
+  ],
+  "anchors": {
+    "path": "Exact canonical equality to cached target/death trace after removing only trajectory.reshuffles.",
+    "rng": "Exact final RNG cursor equality for every paired row.",
+    "policyAndSeed": "Exact resolved policy snapshot and simulation seed equality for every paired row.",
+    "source": "Current-main RESHUFFLE event identity and queue order remain byte-pinned.",
+    "negative": "The old broad transition audit remains immutable inconclusive with no selected representation.",
+    "closedFamilies": "Every published Scoreline, Afterimage, target-switch and post-target family remains immutable evidence and is not a cell."
+  },
+  "design": {
+    "type": "One-arm complete-cohort observation identity preflight with a frozen common-random-number trace anchor; not a gameplay-factor or causal experiment.",
+    "sharedIdentities": "Both arms use the exact same 64 resolved root-551 policy identities, four simulation seed identities, current-main content, Duskblade Vow-5 baseline, explicit-null research setting, whole-run estimator and complete-cohort stopping rule.",
+    "identityContrast": "Remove only trajectory.reshuffles from each candidate row, then require exact canonical equality with its frozen anchor row. RNG cursor, policy snapshot, seed, result, fights and every pre-existing trajectory field remain exact.",
+    "mechanisticallyJustifiedInteractions": [
+      "RESHUFFLE fight and event locate the exact existing deck-zone boundary in the queue.",
+      "RESHUFFLE n must be a positive transferred-card count.",
+      "The immediately following queue event must be the resulting DRAW; this validates only the event projection, not a future PLAY consumer."
+    ],
+    "aliasStructure": "The absent anchor aliases RESHUFFLE with unobserved. DRAW count cannot reconstruct the exact zone boundary. n aliases discard size at transfer but not future PLAY, payoff or efficacy. The old broad audit is quarantined, not pooled.",
+    "interference": "Scoreline and Afterimage remain separate fixed-off factors. No shared causal anchor, package interaction or Cartesian completion has decision value at an observation identity gate.",
+    "omittedCells": "No payoff-on cell, candidate card, subset, timing variant, acquisition, rarity, policy knob, replacement cohort, held-out row, joint package, ML, RL, optimiser or protected seed."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "rows": 256,
+    "identity": "Every row dictionary from the immutable anchor plan is copied in the same order. No identity may be selected, removed, replaced or added after execution."
+  },
+  "traceDefinition": {
+    "reshuffles": ["fight", "event", "n"],
+    "schema": "Every candidate trajectory has exactly the frozen anchor keys plus reshuffles. Each RESHUFFLE has integer fight,event,n; fight is in range, event is non-negative, n is positive, order is strictly increasing per fight, and a DRAW exists at event plus one in the same fight.",
+    "scope": "Observation only. The field is appended from an existing deterministic event after each whole fight and is never read by gameplay, policy, acquisition or reward code."
+  },
+  "estimands": {
+    "pathIdentity": "Exact canonical equality for all 256 paired rows after removing only trajectory.reshuffles.",
+    "rngIdentity": "Exact final RNG cursor equality for every pair.",
+    "policyIdentity": "Exact resolved policy snapshot equality for every pair.",
+    "seedIdentity": "Exact simulation seed equality for every pair.",
+    "traceSchema": "Zero schema, type, range, event-order or next-DRAW faults.",
+    "nonEmptyProjection": "At least one RESHUFFLE event, one row containing it and one positive n value across the complete arm; these only reject an empty nominal trace.",
+    "notEstimated": "RESHUFFLE active/inactive policy capacity, same-turn next-PLAY support, count sensitivity, mediator activation, Ember payoff, causal effect, package separation, acquisition reachability, detector score, product balance or protected confirmation."
+  },
+  "gates": {
+    "minimumReshuffleEvents": 1,
+    "minimumRowsWithReshuffle": 1,
+    "minimumDistinctPositiveCounts": 1,
+    "maximumStrippedRowMismatchRows": 0,
+    "maximumRngMismatchRows": 0,
+    "maximumPolicyMismatchRows": 0,
+    "maximumSeedMismatchRows": 0,
+    "maximumTraceSchemaFaults": 0
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 1,
+    "maximumNewSimulatorObservationRows": 256,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 90,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1,
+    "firstLooks": 1
+  },
+  "claimBoundary": "RESHUFFLE trace schema, non-empty observation and exact null identity only; no natural capacity, next-PLAY consumer, mechanism, mediator, Ember payoff, causal, package-admission, detector, product or P9 claim.",
+  "decisionRules": {
+    "success": "All 256 rows complete within 90 seconds; stripping only reshuffles gives exact anchor equality; RNG, policy and seed identities have zero mismatches; schema faults are zero; all non-empty projection checks pass; and the ledger remains exact.",
+    "successAuthority": "Apply boundary 1: freeze exactly this RESHUFFLE trace for one deterministic zero-new-row reshuffle-to-immediate-next-PLAY capacity reconstruction over the complete output. Do not add a gameplay mark, payoff, policy knob, causal row, ML, RL or optimiser before that capacity protocol is frozen and passes.",
+    "futility": "Any paired identity, RNG, policy, seed, schema, non-empty projection or ledger check fails.",
+    "futilityAuthority": "Apply boundary 2: close this exact RESHUFFLE representation and cycle-boundary direction without repair, rerun, DRAW inference, count subset, timing rescue, policy or cohort change, or method addition; continue with the next evidence-backed minimal structural mechanism inside #421.",
+    "inconclusive": "A frozen input is unavailable, the sole process cannot produce the complete output, or the decision is unavailable at 90 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record the exact unavailable gate at the frozen cap. Do not repair, rerun, change the ceiling, add an alternative representation or spend a protected seed; proceed only under the current human-authority contract."
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python copies the complete frozen row rectangle, runs it once under pinned Godot 4.7.1, content-addresses the plan and output, performs exact paired comparisons and owns stop/go.",
+    "firstLook": "All 256 rows are the only look. No reserve, repair, rerun, row replacement, schema change, cohort change or adaptive continuation exists.",
+    "stagedConstraint": "This identity stage may authorise only a zero-row capacity reconstruction. It cannot support a causal, policy, gameplay or package endpoint claim.",
+    "futureCrnConstraint": "Any later causal contrast must use identical frozen policy identities, simulation seed identities, baseline, estimator, first-look budget and stopping rule across every compared level.",
+    "knobConstraint": "No gameplay knob exists here. Before any future mechanism row, omitted and explicit-off paths must reproduce exact path, RNG and results, and direct controls must prove the knob affects only the reshuffle-to-next-PLAY mediator.",
+    "methodConstraint": "No ML, RL or optimiser is authorised unless later measured evidence isolates a remaining policy-repertoire bottleneck and same-budget decision value.",
+    "stopping": "One complete-cohort look; exactly one of success, futility or inconclusive is recorded."
+  }
+}

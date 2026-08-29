@@ -1,0 +1,77 @@
+{
+  "authority": "Apply boundary 1 only by freezing the single RESHUFFLE(fight,event,n) surface for a separate 256-row exact-null trace identity experiment on the same policies and seeds. Before any capacity or payoff row, prove identical policy, seed, RNG, result and all pre-existing trace fields. Add no causal row and make no frequency claim here.",
+  "cachedObservationRowsRead": 256,
+  "checks": {
+    "completePolicies": true,
+    "drawContext": true,
+    "exactZoneBoundary": true,
+    "minimalExistingQueueProjection": true,
+    "observationCurrentlyAbsent": true,
+    "playContext": true,
+    "policyIdentity": true,
+    "positiveCountPayload": true,
+    "priorAuditRemainsInconclusive": true,
+    "reliability": true,
+    "seededShufflePrecedesEvent": true,
+    "singleSelectedSurface": true,
+    "stableEventIdentity": true,
+    "turnContext": true,
+    "viableContext": true
+  },
+  "claimBoundary": "Eligibility for one separately preregistered RESHUFFLE trace identity experiment only; no observed RESHUFFLE, capacity, payoff, causal, fresh-cohort, held-out, package-admission, detector, product or P9 claim.",
+  "context": {
+    "baselineFaultRows": 0,
+    "draws": 54121,
+    "plays": 26077,
+    "policies": 64,
+    "policySnapshotFaults": 0,
+    "turns": 9640,
+    "viablePolicies": 15
+  },
+  "decision": "freeze-reshuffle-trace-surface-for-identity",
+  "decisionBoundary": 1,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "priorQuarantine": {
+    "boundary": "Immutable broad audit evidence only. This scoped experiment neither repairs nor reruns it and draws no positive inference from it.",
+    "frozenDecision": "record-unused-discrete-transition-audit-inconclusive-at-cap",
+    "frozenOutcome": "inconclusive",
+    "protocolPath": "protocols/post-v30-unused-discrete-transition-audit-v1.json",
+    "protocolSha256": "169fb241e556d9dd5729ae6bbbd5a6b541ab4ccb098cfa30435ed01ca0a1dc01",
+    "selectedRepresentations": [],
+    "summaryPath": "summaries/post-v30-unused-discrete-transition-audit-v1.json",
+    "summarySha256": "a26063c374b21063674f72e49aee06be208f2c43a3d1055b1b18d9bd6e26155d"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "7e34d8cd5718b2e3c7ad5fcc206133cc4b336682bae41724c5b19fb5089d3bb7",
+  "runnerSha256": "63766ceedd3a963b105c62fe000f2ac49c15c38e2cf7e7db52d4a98ed81a9316",
+  "schemaVersion": 1,
+  "selectedSurface": {
+    "event": "RESHUFFLE",
+    "fields": [
+      "fight",
+      "event",
+      "n"
+    ]
+  },
+  "wallTimeSeconds": 6.50012
+}

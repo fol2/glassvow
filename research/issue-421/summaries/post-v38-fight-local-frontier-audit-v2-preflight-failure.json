@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "outcomeClass": "mechanical-pre-execution-failure",
+  "decision": "preserve-v2-before-execution",
+  "protocolSha256": "cf49ab92d90c03b551505a476c92745f00989314129d9f9a3ff4d817c0477e7d",
+  "runnerSha256": "c31f7c9e4988c0a368be91b3fb62e1ca355247053ecdc7bcb7be995bf9e861f0",
+  "failureStage": "manual source-assertion preflight before runner execution",
+  "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "error": "Four frozen source assertion strings do not occur byte-for-byte at the source head: the killing-blow payload, overkill payload, separate overkill algebra line and balance-pilot function declaration.",
+  "rootCause": "The assertions described the intended current terminal-hit surface but used obsolete local variable spellings and omitted the current static function qualifier. The bound source blob identities themselves are correct.",
+  "correctionAuthority": "Preserve protocol and runner v2 byte-for-byte and do not execute them. A separately versioned v3 may replace only those four assertion strings with byte-exact current-main strings and bind this preflight identity. The complete production frontier classes, signals, methods, evidence, decision rules, budget and expected disposition must remain unchanged.",
+  "newSimulatorObservationRows": 0,
+  "cachedObservationRowsRead": 0,
+  "newLedgerRows": 0,
+  "protectedSeedRows": 0,
+  "claimBoundary": "Mechanical source-assertion preflight only; no frontier, mechanism, method, support, causal, product or P9 disposition follows from v2."
+}

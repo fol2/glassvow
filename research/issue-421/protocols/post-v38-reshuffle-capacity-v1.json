@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does the exact first-RESHUFFLE-to-immediate-next-PLAY, once-per-turn mechanism have robust active, exact-inactive, viable, broad-consumer and closed-family-separated natural policy capacity?",
+  "hypothesis": "A deterministic deck-zone boundary followed by the next authored action may provide a naturally selective Dusk sequencing opportunity that is distinct from card-draw, duplicate-copy, Scoreline and Afterimage repertoires without a scalar threshold or new simulator row.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/heads/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/remotes/origin/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/heads/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+      "refs/remotes/origin/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+      "refs/heads/research/issue-421-post-target-capacity-evidence": "86d4b9793474b322f6b0f971d6c435461f38544c",
+      "refs/remotes/origin/research/issue-421-post-target-capacity-evidence": "86d4b9793474b322f6b0f971d6c435461f38544c"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v17.json",
+    "taskCapsuleSha256": "34356dedb382f3c124caf31bf7ebf4f1519b2ac8226065884f6def12eaee97e9",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+      "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+      "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+      "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8"
+    },
+    "observationSourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourcePatchSha256": "a43ce695efd32fa92aa4674460b67395d835e68a93e7c8a31d1a5fef9c19c4d1",
+    "observationSourceSha256": {
+      "tools/balance_sim.gd": "e4f5c2470e45397d0e15a4b2ef69345f6c2c968fbfc3fec39bffa1dfab55c88e",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2"
+    },
+    "researchFileSha256": {
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_competing_structural_options.py": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+      "protocols/post-v38-reshuffle-trace-identity-v1.json": "1a9ca927445defe81eddaf2778254e7df2d0e76877068728afc93ed24962740e",
+      "summaries/post-v38-reshuffle-trace-identity-v1.json": "b9a218f5f3a012e103c36c01a5ea6de5a94f8396ea2842d098c53c833cc88554",
+      "protocols/post-v38-draw-thread-capacity-v1.json": "51907e74cbfffce551865672ee67758c0a39b2f6688732838ee4ffb38b2213c7",
+      "summaries/post-v38-draw-thread-capacity-v1.json": "33b3f0a10ee1151e526820f220af2068999bc56c33090bb67afaba1fbcaff3e9",
+      "protocols/post-v38-duplicate-copy-capacity-v1.json": "95d22e02bf041e401267e409305b83b087590ab4aae8663f47de4b8cc13370f5",
+      "summaries/post-v38-duplicate-copy-capacity-v1.json": "72a850dd102994b0fc778ac7c057b19c4f505801c43997b0c815f07f07eebd86"
+    },
+    "runnerSha256": "cc01c769063073a2d741098cfd359bc55f851b38744a8670c72c62ce84736de4"
+  },
+  "mechanism": {
+    "producer": "The first exact RESHUFFLE in a player-turn interval. Any further RESHUFFLE in that turn is a non-stacking alias and cannot create another opportunity.",
+    "consumer": "The immediate next authored PLAY after the producer and before the next TURN event in the same fight.",
+    "mediator": "One Dusk-only player-turn mark set by the producer and consumed by the consumer; no next PLAY means expiry with no consume. The mark is not implemented here.",
+    "commonPayoff": "After the consumer resolves, grant exactly one Ember, at most once in the turn. The payoff is fixed absent and unestimated here.",
+    "payoffProvenance": "One Ember is the smallest positive existing Dusk fight-local resource unit and introduces no scalar level.",
+    "duskBoundary": "Existing Emberheart is the proposed identity gate; Ashwarden and off remain exact current-main paths.",
+    "acquisition": "None; existing content, pools, rarities, policies and saves remain unchanged.",
+    "rngAndPersistence": "No RNG call, cursor movement, content ID, reward entry, RunState field, save field or save version.",
+    "telemetry": "Research-only first RESHUFFLE, turn, positive count, alias count and immediate next PLAY identity.",
+    "countBoundary": "RESHUFFLE n is reported for breadth only and is never a threshold, level, selector or estimand.",
+    "timingBoundary": "Start-turn and mid-turn RESHUFFLE are pooled under the exact same mechanism and cannot become candidate levels.",
+    "oncePerTurn": "Only the first RESHUFFLE and first subsequent PLAY can qualify; later events in that turn cannot produce a second payoff."
+  },
+  "frozenCausalFactors": {
+    "reshuffleEchoPayoff": {
+      "definition": "The mechanism above with the common one-Ember payoff.",
+      "levels": ["off"],
+      "status": "Fixed off; this capacity reconstruction is observational."
+    },
+    "scorelinePayoff": {
+      "definition": "Separate closed Scoreline causal factor.",
+      "levels": ["off"]
+    },
+    "afterimagePayoff": {
+      "definition": "Separate closed Afterimage causal factor.",
+      "levels": ["off"]
+    },
+    "acquisitionPriority": {
+      "definition": "Frozen exact current-main policy.",
+      "levels": ["current-main"]
+    },
+    "variedCausalFactorCount": 0,
+    "independence": "This is neither the old four-factor design nor a factorial. Scoreline and Afterimage remain separate closed factors."
+  },
+  "designMatrix": {
+    "identity-proved-reshuffle-trace": {
+      "reshuffleEchoPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "acquisitionPriority": "current-main",
+      "cachedRows": 256,
+      "newRows": 0,
+      "status": "Sole immutable observation arm; deterministic reconstruction only."
+    }
+  },
+  "design": {
+    "type": "Zero-new-row complete-cohort structural-capacity reconstruction; not a factorial and not a causal experiment.",
+    "construction": "Within each fight, partition by consecutive TURN events. Select the first RESHUFFLE in each interval, then the first later PLAY before the next TURN. Record one exposure per reshuffling turn and at most one qualifying consumer.",
+    "mechanisticallyJustifiedInteractions": [
+      "A RESHUFFLE is necessary to set the proposed mark.",
+      "A later PLAY in the same turn is necessary to consume it.",
+      "Both together define the sole future Dusk sequencing unit; neither condition alone supports a payoff."
+    ],
+    "aliasStructure": "Later same-turn reshuffles alias the non-stacking producer. RESHUFFLE count, start-versus-mid-turn timing and consumer card identity are breadth witnesses, not levels. Scoreline, Afterimage, immediate draw-thread and duplicate-copy are immutable repertoire anchors.",
+    "omittedCells": "No count threshold, count subset, timing split, consumer subset, second consume, payoff value, duration, acquisition, rarity, policy knob, cohort replacement, simulator row, held-out row, joint package, ML, RL, optimiser or protected seed."
+  },
+  "trace": {
+    "planSha256": "367efa00c91cb7ea4bdfeea24b2971e612042b8a428f0bbc6c375effc512775b",
+    "outputSha256": "f0bdda679bf8b2cc116d09c11680bc74ff89ec087aff0f29cc14822275bfad70",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identityProtocolSha256": "1a9ca927445defe81eddaf2778254e7df2d0e76877068728afc93ed24962740e",
+    "identitySummarySha256": "b9a218f5f3a012e103c36c01a5ea6de5a94f8396ea2842d098c53c833cc88554",
+    "selectionRule": "Read all 256 rows once. No row, policy, seed, fight, turn, count, timing, card, threshold, anchor or endpoint may be selected after execution."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "Every policy and seed in the complete frozen current-main rectangle is read exactly once; each policy retains one exact snapshot across four seeds."
+  },
+  "anchors": {
+    "scoreline": {
+      "policies": [0, 7, 9, 10, 13, 14, 15, 17, 22, 23, 28, 31, 39, 41, 52, 56, 62, 63],
+      "role": "Immutable two-sided Scoreline active-policy repertoire anchor; Scoreline payoff fixed off."
+    },
+    "afterimage": {
+      "policies": [0, 5, 11, 12, 14, 18, 24, 25, 27, 30, 33, 35, 41, 43, 44, 55, 62],
+      "role": "Immutable two-sided Afterimage active-policy repertoire anchor; Afterimage payoff fixed off."
+    },
+    "drawThread": {
+      "summaryPath": "summaries/post-v38-draw-thread-capacity-v1.json",
+      "summarySha256": "33b3f0a10ee1151e526820f220af2068999bc56c33090bb67afaba1fbcaff3e9",
+      "policies": [1, 2, 5, 7, 8, 11, 12, 13, 14, 16, 19, 20, 21, 24, 25, 27, 29, 30, 31, 32, 35, 39, 42, 43, 44, 45, 46, 49, 52, 53, 56, 58, 59, 60, 61, 62, 63],
+      "role": "Immutable two-sided active-policy anchor for the closed immediate exact-UID draw-thread family."
+    },
+    "duplicateCopy": {
+      "summaryPath": "summaries/post-v38-duplicate-copy-capacity-v1.json",
+      "summarySha256": "72a850dd102994b0fc778ac7c057b19c4f505801c43997b0c815f07f07eebd86",
+      "policies": [0, 2, 5, 6, 7, 8, 9, 11, 13, 14, 16, 19, 21, 25, 27, 28, 29, 31, 33, 35, 39, 40, 41, 43, 45, 46, 48, 49, 51, 52, 53, 54, 57, 59, 60, 61, 63],
+      "role": "Immutable two-sided active-policy anchor for the closed same-ID different-CardInst duplicate-copy family."
+    }
+  },
+  "estimands": {
+    "unit": "Policy identity over its complete four-seed rectangle.",
+    "exposureActive": "At least one reshuffling turn in at least two of four rows.",
+    "active": "At least one first-RESHUFFLE to immediate-next-PLAY event in at least two of four rows.",
+    "exactInactive": "No qualifying event in any of four rows.",
+    "exposureOnly": "Exposure-active but not active, preserving a natural no-consumer control repertoire.",
+    "viable": "An active policy with at least one qualifying row that wins.",
+    "breadth": "Distinct exact consumer cards, authored card types and target scopes; count values and non-stacking aliases are descriptive only.",
+    "separation": "For each frozen anchor, candidate-only and anchor-only policy support plus Jaccard overlap.",
+    "notEstimated": "Payoff identity, causal effect, count sensitivity, timing heterogeneity, complementarity, Ash isolation, fresh-cohort reproducibility, held-out confirmation, package admission, detector score, product balance or P9 acceptance."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumExposureActivePolicies": 16,
+    "minimumExposureOnlyPolicies": 8,
+    "minimumDistinctConsumers": 8,
+    "minimumDistinctConsumerTypes": 3,
+    "minimumDistinctConsumerTargets": 2,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumSemanticFaults": 0,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16-policy active and inactive, eight-policy viability and separation, and 0.55 overlap thresholds reuse the preregistered 64-policy structural-capacity scale. Eight exact consumers, three card types and two target scopes reject a nominal single-card path without selecting a subset."
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1,
+    "firstLooks": 1
+  },
+  "claimBoundary": "Discovery-stage first-RESHUFFLE-to-next-PLAY attribution, natural policy capacity and immutable-family separation only; no implementation, realised payoff, causal, fresh-cohort, held-out, package, detector, product or P9 claim.",
+  "decisionRules": {
+    "success": "The exact reconstruction has zero semantic faults and passes every support, viability, exposure-only, consumer-breadth, four-anchor separation and reliability gate at the sole look.",
+    "successAuthority": "Apply boundary 1: freeze this one scalar-free reshuffle echo for a separate exact-null and direct-mediator identity prototype of the common one-Ember contract. Before any causal row, omitted and explicit-off paths must reproduce exact path, RNG, results, policy and seed identity; direct controls must prove only the proposed mediator changes. Then freeze common unprotected discovery and independently held-out cohorts.",
+    "futility": "Inputs and reconstruction are valid, but any frozen capacity or separation gate fails.",
+    "futilityAuthority": "Apply boundary 2: close the complete first-RESHUFFLE-to-immediate-next-PLAY family without count threshold or subset, start-versus-mid-turn split, consumer subset, second consume, payoff, duration, carrier, acquisition, cohort, policy or method rescue; continue with the next evidence-backed minimal structural mechanism inside #421.",
+    "inconclusive": "A frozen input is unavailable or the single deterministic look cannot complete within 30 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record the scoped capacity result inconclusive at its preregistered cap. Do not rerun, change the ceiling, split the mechanism or spend a simulator row without new owner authority."
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns trace loading, turn partitioning, opportunity construction, policy aggregation, anchor comparison and stop/go.",
+    "firstLook": "All 256 cached rows are the sole look. No reserve, repair, rerun, row replacement, threshold search, subset search, schema change or cohort change exists.",
+    "stagedConstraint": "This zero-row capacity stage may authorise only direct identity controls, never a causal or endpoint claim.",
+    "futureCrnConstraint": "Any later causal contrast must use identical frozen policy identities, simulation seed identities, baseline, first-look budget, estimator and stopping rule across every compared level.",
+    "methodConstraint": "No ML, RL or optimiser is authorised unless this experiment identifies a remaining policy-repertoire bottleneck and measured decision value justifies it.",
+    "stopping": "Exactly one of success, futility or inconclusive is recorded at the sole complete-cohort look."
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "supersedes": {
+    "path": "task-capsule-5459094066-v17.json",
+    "sha256": "34356dedb382f3c124caf31bf7ebf4f1519b2ac8226065884f6def12eaee97e9"
+  },
+  "taskSsotBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+  "authority": {
+    "commentId": 5459094066,
+    "bodySha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "authorAssociation": "OWNER"
+  },
+  "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "immutableArchiveHeads": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+    "research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+    "research/issue-421-post-target-capacity-evidence": "86d4b9793474b322f6b0f971d6c435461f38544c"
+  },
+  "reshuffleCapacityDisposition": {
+    "protocolPath": "protocols/post-v38-reshuffle-capacity-v1.json",
+    "protocolSha256": "3070ad0f4ba325bc4840f19d77173a4c8b8aa5fbf05d865103e1543e7a4a3b67",
+    "runnerPath": "post_v38_reshuffle_capacity_v1.py",
+    "runnerSha256": "cc01c769063073a2d741098cfd359bc55f851b38744a8670c72c62ce84736de4",
+    "summaryPath": "summaries/post-v38-reshuffle-capacity-v1.json",
+    "summarySha256": "f23af519e43e84a8d42ab92a20d9ab888ce6a0903e2ba0338114bec537cff565",
+    "outcome": "FUTILITY boundary 2",
+    "decision": "close-reshuffle-echo-at-zero-row-capacity",
+    "counts": {
+      "robustActivePolicies": 64,
+      "exactInactivePolicies": 0,
+      "viablePolicies": 15,
+      "qualifyingRows": 256,
+      "qualifyingTurns": 1760,
+      "distinctConsumers": 42,
+      "distinctConsumerTypes": 3,
+      "distinctConsumerTargets": 3
+    },
+    "failedGates": [
+      "exact inactivity",
+      "exposure-only separation",
+      "Scoreline separation",
+      "Afterimage separation",
+      "draw-thread separation",
+      "duplicate-copy separation"
+    ],
+    "rows": {"newSimulator": 0, "newLedger": 0, "protected": 0},
+    "closure": "The complete first-RESHUFFLE to immediate-next-PLAY once-per-turn family is closed without count, timing, card, payoff, carrier, policy, cohort or method rescue."
+  },
+  "currentScientificBoundary": {
+    "fightLocalSequenceClosures": [
+      "Scoreline exact named-card enemy mark",
+      "Afterimage exact named-card realised-Ward mark and its sole timing control",
+      "alternating Attack/Skill cadence",
+      "focused-to-sweep target-scope order",
+      "light-to-heavy Attack relay",
+      "deliberate living-target transfer",
+      "attributable kill to the complete immediate consumer topology",
+      "immediate exact-uid draw thread",
+      "same-ID different-uid duplicate-copy echo",
+      "first RESHUFFLE to immediate next PLAY"
+    ],
+    "claimBoundary": "These are bounded closures of their exact preregistered families, not proof that every imaginable Dusk mechanic is impossible.",
+    "methodBoundary": "No additional method is authorised until a frozen legal grammar and measured decision value identify an information or policy-repertoire bottleneck that the method can resolve."
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "nextQuestion": "After applying every immutable closure to exact current-main source, trace observables and policy grammar, is there exactly one genuinely unclosed fight-local mechanism representation or deterministic method with measured decision value, or is the next relevant mechanism-selection gate unavailable or inconclusive?",
+  "nextAction": "Complete one primary-source and immutable-evidence frontier audit with zero simulator and ledger rows. Freeze the finite candidate classes, exact closure aliases, method prerequisites and automatic success, futility and inconclusive dispositions before reading any new support. Select at most one class; do not choose between multiple materially different classes by taste or adaptive candidate iteration.",
+  "boundaries": {
+    "researchOnly": true,
+    "zeroProtectedSeeds": true,
+    "noResearchPrOrActions": true,
+    "noSuccessorTicket": true,
+    "closedFamiliesImmutable": true,
+    "archiveHead93dea984Immutable": true,
+    "noNewSimulatorRowBeforePreregistration": true,
+    "noAdaptiveCandidateByCandidateTuning": true,
+    "noMlRlBoQdWithoutFrozenGrammarAndMeasuredDecisionValue": true,
+    "humanEscalationOnlyForCurrentContractConditions": true
+  }
+}

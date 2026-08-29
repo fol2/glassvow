@@ -1,0 +1,59 @@
+{
+  "authority": "Apply boundary 1: freeze exactly this RESHUFFLE trace for one deterministic zero-new-row reshuffle-to-immediate-next-PLAY capacity reconstruction over the complete output. Do not add a gameplay mark, payoff, policy knob, causal row, ML, RL or optimiser before that capacity protocol is frozen and passes.",
+  "cacheObjects": {
+    "outputSha256": "f0bdda679bf8b2cc116d09c11680bc74ff89ec087aff0f29cc14822275bfad70",
+    "planSha256": "367efa00c91cb7ea4bdfeea24b2971e612042b8a428f0bbc6c375effc512775b"
+  },
+  "checks": {
+    "countBreadth": true,
+    "identity": true,
+    "reshuffleCoverage": true,
+    "rowCoverage": true,
+    "schema": true
+  },
+  "claimBoundary": "RESHUFFLE trace schema, non-empty observation and exact null identity only; no natural capacity, next-PLAY consumer, mechanism, mediator, Ember payoff, causal, package-admission, detector, product or P9 claim.",
+  "decision": "freeze-reshuffle-trace-for-capacity",
+  "decisionBoundary": 1,
+  "godotVersion": "4.7.1.stable.official.a13da4feb",
+  "identity": {
+    "policyMismatchRows": 0,
+    "rngMismatchRows": 0,
+    "seedMismatchRows": 0,
+    "strippedRowMismatchRows": 0
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 256,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "1a9ca927445defe81eddaf2778254e7df2d0e76877068728afc93ed24962740e",
+  "rowsPerArm": 256,
+  "runnerSha256": "0e636ba0a15b4c0210196ec413f20ae959c067981cc7fddaed519cbb79da20ef",
+  "schemaVersion": 1,
+  "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "sourcePatchSha256": "a43ce695efd32fa92aa4674460b67395d835e68a93e7c8a31d1a5fef9c19c4d1",
+  "telemetryCounts": {
+    "distinctPositiveCounts": 28,
+    "reshuffleEvents": 1882,
+    "rowsWithReshuffle": 256
+  },
+  "traceSchemaFaults": [],
+  "wallTimeSeconds": 9.837175
+}

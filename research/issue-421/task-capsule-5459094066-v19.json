@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "supersedes": {
+    "path": "task-capsule-5459094066-v18.json",
+    "sha256": "93db32931c58060bde54b2a6e3d5a08a75c2e1a3fa84eadb47fbdadac63727f7"
+  },
+  "taskSsotBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+  "authority": {
+    "commentId": 5459094066,
+    "bodySha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "authorAssociation": "OWNER"
+  },
+  "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "immutableArchiveHeads": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+    "research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+    "research/issue-421-post-target-capacity-evidence": "86d4b9793474b322f6b0f971d6c435461f38544c"
+  },
+  "reshuffleCapacityDisposition": {
+    "protocolPath": "protocols/post-v38-reshuffle-capacity-v1.json",
+    "protocolSha256": "3070ad0f4ba325bc4840f19d77173a4c8b8aa5fbf05d865103e1543e7a4a3b67",
+    "runnerPath": "post_v38_reshuffle_capacity_v1.py",
+    "runnerSha256": "cc01c769063073a2d741098cfd359bc55f851b38744a8670c72c62ce84736de4",
+    "summaryPath": "summaries/post-v38-reshuffle-capacity-v1.json",
+    "summarySha256": "f23af519e43e84a8d42ab92a20d9ab888ce6a0903e2ba0338114bec537cff565",
+    "outcome": "FUTILITY boundary 2",
+    "decision": "close-reshuffle-echo-at-zero-row-capacity",
+    "counts": {
+      "robustActivePolicies": 64,
+      "exactInactivePolicies": 0,
+      "viablePolicies": 15,
+      "qualifyingRows": 256,
+      "qualifyingTurns": 1760,
+      "distinctConsumers": 42,
+      "distinctConsumerTypes": 3,
+      "distinctConsumerTargets": 3
+    },
+    "failedGates": [
+      "exact inactivity",
+      "exposure-only separation",
+      "Scoreline separation",
+      "Afterimage separation",
+      "draw-thread separation",
+      "duplicate-copy separation"
+    ],
+    "rows": {
+      "newSimulator": 0,
+      "newLedger": 0,
+      "protected": 0
+    },
+    "closure": "The complete first-RESHUFFLE to immediate-next-PLAY once-per-turn family is closed without count, timing, card, payoff, carrier, policy, cohort or method rescue."
+  },
+  "currentScientificBoundary": {
+    "fightLocalSequenceClosures": [
+      "Scoreline exact named-card enemy mark",
+      "Afterimage exact named-card realised-Ward mark and its sole timing control",
+      "alternating Attack/Skill cadence",
+      "focused-to-sweep target-scope order",
+      "light-to-heavy Attack relay",
+      "deliberate living-target transfer",
+      "attributable kill to the complete immediate consumer topology",
+      "immediate exact-uid draw thread",
+      "same-ID different-uid duplicate-copy echo",
+      "first RESHUFFLE to immediate next PLAY"
+    ],
+    "claimBoundary": "These are bounded closures of their exact preregistered families, not proof that every imaginable Dusk mechanic is impossible.",
+    "methodBoundary": "No additional method is authorised until a frozen legal grammar and measured decision value identify an information or policy-repertoire bottleneck that the method can resolve.",
+    "frontierGate": "Unavailable: the remaining terminal-hit and lifecycle surfaces require materially different product semantics, while exact enumeration, BO/SMBO, RL and QD lack a frozen legal grammar, direct objective or measured decision value."
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "nextQuestion": "Will the owner supply or choose one complete product-semantic twelve-field grammar, or explicitly authorise one finite pre-support family-selection rule, so deterministic science can resume without choosing a mechanic by taste?",
+  "nextAction": "Publish the complete reshuffle and frontier evidence on a new archive-only ref, verify local/remote SHA parity and immutable prior heads, then issue one concise #421 authority decision package. Run no further simulator row, candidate, optimiser or protected seed until the current human-authority contract supplies the missing mechanism-selection authority.",
+  "boundaries": {
+    "researchOnly": true,
+    "zeroProtectedSeeds": true,
+    "noResearchPrOrActions": true,
+    "noSuccessorTicket": true,
+    "closedFamiliesImmutable": true,
+    "archiveHead93dea984Immutable": true,
+    "noNewSimulatorRowBeforePreregistration": true,
+    "noAdaptiveCandidateByCandidateTuning": true,
+    "noMlRlBoQdWithoutFrozenGrammarAndMeasuredDecisionValue": true,
+    "humanEscalationOnlyForCurrentContractConditions": true
+  },
+  "fightLocalFrontierDisposition": {
+    "v1MechanicalFailure": {
+      "protocolPath": "protocols/post-v38-fight-local-frontier-audit-v1.json",
+      "protocolSha256": "bb9e2ac5837e75f5e56214be078865bd48dfa2ab77f1628b26b776731f02d91e",
+      "runnerPath": "post_v38_fight_local_frontier_audit_v1.py",
+      "runnerSha256": "a849376284d268996b1d9ab00a708b1eb4622233cd08cb12693932a6dea2fc19",
+      "failurePath": "summaries/post-v38-fight-local-frontier-audit-v1-failure.json",
+      "failureSha256": "fb91b6124784da7ad38bae4aafc94f3717d70ccc8f4ccac672a578779ed90ac5",
+      "stage": "self-check before any task, source, evidence, trace or ledger read"
+    },
+    "v2PreExecutionFailure": {
+      "protocolPath": "protocols/post-v38-fight-local-frontier-audit-v2.json",
+      "protocolSha256": "cf49ab92d90c03b551505a476c92745f00989314129d9f9a3ff4d817c0477e7d",
+      "runnerPath": "post_v38_fight_local_frontier_audit_v2.py",
+      "runnerSha256": "c31f7c9e4988c0a368be91b3fb62e1ca355247053ecdc7bcb7be995bf9e861f0",
+      "failurePath": "summaries/post-v38-fight-local-frontier-audit-v2-preflight-failure.json",
+      "failureSha256": "c654a24a5bb9ab36b6ad80542e053e8d71b3ecdff67e91f739d0407ccc00776f",
+      "stage": "manual byte-exact source preflight before runner execution"
+    },
+    "v3Audit": {
+      "protocolPath": "protocols/post-v38-fight-local-frontier-audit-v3.json",
+      "protocolSha256": "1ed01e349db8c3601fa93ccc33ae5fb9bd55b0bbe17ae9f1ae3741c3106b95cb",
+      "runnerPath": "post_v38_fight_local_frontier_audit_v3.py",
+      "runnerSha256": "3b0cf460729587f134808548d7e625cddd5b4c52225cb95058b7f5565442ac4e",
+      "summaryPath": "summaries/post-v38-fight-local-frontier-audit-v3.json",
+      "summarySha256": "2e21b108bc2e8233cdbd995877d5bf20b396d6e245966bc729ca13a48b6380f3",
+      "outcome": "FUTILITY boundary 2",
+      "decision": "record-fight-local-mechanism-selection-gate-unavailable",
+      "selectedMechanisms": [],
+      "selectedMethods": [],
+      "unresolvedSemanticClasses": [
+        "terminal-hit-semantic-family",
+        "new-cross-turn-hold-lifecycle",
+        "new-intent-history-lifecycle",
+        "new-private-counter-tag-or-transform"
+      ],
+      "rows": {
+        "newSimulator": 0,
+        "newLedger": 0,
+        "protected": 0
+      }
+    },
+    "claimBoundary": "The audit proves only that no presently executable, evidence-backed fight-local mechanism class or additional deterministic method remains under the frozen grammar and evidence. It does not prove universal impossibility or choose missing product semantics."
+  }
+}
