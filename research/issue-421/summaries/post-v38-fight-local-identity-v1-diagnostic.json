@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "protocolSha256": "62f90833b5170d209189910e2ec77929c29f35548854d7e516e07e6f4462fa66",
+  "frozenSummarySha256": "69e39a4891e850f49ec247ddbf0ca3ab4ed5159a73812b3453021b8cd0acdd72",
+  "classification": "post-decision zero-simulator root-cause diagnostic",
+  "observation": {
+    "godot": "4.7.2-stable (official)",
+    "input": "JSON integer literal 1",
+    "typeCode": 3,
+    "typeName": "float",
+    "value": 1.0
+  },
+  "diagnosticProbe": {
+    "path": "diagnostics/post_v38_json_number_type_probe.gd",
+    "sha256": "a04e8606df46e3b4f3ce5ae3ca551f81720551cc3c8282ecc73640e28b1d1591"
+  },
+  "rootCause": "The frozen v1 validator requires TYPE_INT for schemaVersion and both numeric factor levels, while the frozen JSON plan boundary materialises every numeric literal as TYPE_FLOAT. Omitted-null rows can enter the simulator, but explicit-null and non-null rows cannot pass the interface. Invalid level cases are aliased behind the schema-type rejection.",
+  "disposition": "The v1 result remains INCONCLUSIVE with zero usable paired observations and zero ledger rows. Do not modify or rerun v1. A later representation must use a distinct finite encoding rather than reinterpret v1 evidence.",
+  "knownProcessArtefacts": {
+    "baselinePlanSha256": "b58c15276831e92d233a8fd4eaaca263cb7c6a2c82c3b50817ceade1e6c18f5f",
+    "candidatePlanSha256": "d7309d12ededcc198a8221b8fd76fbe46453c662f178a196413b5539cb5b57cc",
+    "baselineOutputSha256": "f05d9856397dfe7e69cb142dbc0f5997888b4b2d0e0edab13fa5b030726df37e",
+    "baselineOutputUse": "Archive only. It has no complete paired candidate output and supports no identity, causal or endpoint claim."
+  }
+}

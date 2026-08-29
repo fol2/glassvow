@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "issue": {
+    "number": 421,
+    "repository": "fol2/glassvow",
+    "state": "open",
+    "title": "P9 recovery — autonomously validate the strategy detector and ship balanced RC content",
+    "assignees": ["fol2"],
+    "labels": ["ready-for-agent", "wayfinder:task"],
+    "bodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "bodyIsTaskSsot": true
+  },
+  "authorityDelta": {
+    "commentId": 5459094066,
+    "bodySha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "author": "fol2",
+    "authorAssociation": "OWNER",
+    "createdAt": "2026-08-29T00:15:23Z",
+    "updatedAt": "2026-08-29T00:45:05Z",
+    "laterCommentsObserved": 0,
+    "controlsThisReentry": true
+  },
+  "repository": {
+    "resolvedOriginMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "archiveRef": "research/issue-421-p9-recovery-evidence",
+    "archiveHead": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "archiveLocalRemoteParity": true
+  },
+  "activeInstructionSha256": {
+    "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+    ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+    "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+    "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+    "docs/agents/triage-labels.md": "4f53c9b40ce2651e3611aa090eaedbd6dbc9b71ef8c5f7e65eac0d8263190d0d",
+    "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95"
+  },
+  "bindingBoundaries": {
+    "researchOnlyUntilPromotion": true,
+    "researchBranchPrOrCiForbidden": true,
+    "singleMutableResearchOwner": true,
+    "closedFamiliesAreImmutableEvidence": true,
+    "historicalIssues524And525AreEvidenceOnly": true,
+    "replacementOrSuccessorTicketForbidden": true,
+    "protectedSeedUseBeforeFinalConfirmationForbidden": true,
+    "humanEscalationOnlyUnderCurrentRepositoryContract": true
+  },
+  "selectedDirection": {
+    "name": "fight-local causal sequencing",
+    "aspect": "duskblade only",
+    "scoreline": "exact Chisel direct HP loss to a surviving target sets a target-local non-stacking mark; a later Faultline on that target consumes it for separate bounded raw damage",
+    "afterimage": "exact Ward card realised Ward sets a player-local non-stacking value; a later Warden's Edge in the same turn consumes it for separate mirrored raw Ward",
+    "unchanged": [
+      "authored card effects",
+      "costs",
+      "rarities",
+      "current payoffs",
+      "acquisition and combat policy",
+      "RNG",
+      "save schema",
+      "persistent run state"
+    ]
+  }
+}

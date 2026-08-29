@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "archiveParent": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+  "preservesParentRef": "research/issue-421-p9-recovery-evidence",
+  "publicationRef": "research/issue-421-fight-local-evidence",
+  "outcomeClass": "inconclusive",
+  "decisionBoundary": 3,
+  "usablePairedObservations": 0,
+  "newLedgerRows": 0,
+  "protectedSeedRows": 0,
+  "claimBoundary": "The numeric JSON settings representation is unavailable because Godot 4.7.2 materialises JSON numeric literals as float while v1 requires TYPE_INT. The complete paired candidate output does not exist. No identity, mechanism, causal, endpoint, candidate, detector, product or P9 claim follows.",
+  "primarySha256": {
+    "task-capsule-5459094066.json": "a9e0442342d752cf960450e7ceeda734df706b085d502a990725073a949a8015",
+    "protocols/post-v38-fight-local-identity-v1.json": "62f90833b5170d209189910e2ec77929c29f35548854d7e516e07e6f4462fa66",
+    "summaries/post-v38-fight-local-identity-v1.json": "69e39a4891e850f49ec247ddbf0ca3ab4ed5159a73812b3453021b8cd0acdd72",
+    "summaries/post-v38-fight-local-identity-v1-diagnostic.json": "f39f59986a820142b693959ff97f614f108d55383a10583901cbef552c4e6e1e",
+    "tools/post_v38_fight_local_identity.py": "99d692222038f0662ae2deea65c54e1f2d35af8915e858ddce60cd00f4d14199",
+    "diagnostics/post_v38_json_number_type_probe.gd": "a04e8606df46e3b4f3ce5ae3ca551f81720551cc3c8282ecc73640e28b1d1591"
+  },
+  "prototypeSha256": {
+    "prototype-fight-local-v1/domain/rules/combat.gd": "80f42cfe1f296b7585ad08ce79cf4d2c4229116977d3d1c3b8ed9760a31d744b",
+    "prototype-fight-local-v1/domain/state/combat_state.gd": "b8ccde9c3b1dec4331fcfc6fb4a23a94ed9f30cff9e38e46b4a89afc5e0de477",
+    "prototype-fight-local-v1/tools/balance_sim.gd": "b0aba8ec55642a4caecaa6ba619ae5777a75dff8d9cea47f96a5f3af98be1566",
+    "prototype-fight-local-v1/tools/research_421_fight_local_probe.gd": "57dd503b1edaaa419dea520bdad4ad004a7608c556882111cb208181a17a8a83",
+    "prototype-fight-local-v1/tools/research_421_fight_local_probe.gd.uid": "49c9bcd9fc59d20f510811d4ec3f9468a061eff9d4a83529f02fa8fa49176eb6",
+    "comparator-fight-local-v1/tools/research_421_fight_local_baseline_probe.gd": "720db988c2d5b8cb82336cff4d3f66d41752b7fe3d81e4f836ec6de4c6122e64",
+    "comparator-fight-local-v1/tools/research_421_fight_local_baseline_probe.gd.uid": "b914c17491d5a821166c855b4d9d19ed65473ed13c8a978fcc64e4d665d6d70a"
+  },
+  "rawCacheSha256": [
+    "15570db5d6b1246d9be19c5d70a1bfc25d3ae458ac32d75c430ecd43d54e51df",
+    "6d4a70c97d43298432a43f71e540d12cd459bf75a613f20e534d444d52b8db53",
+    "88c4a7ceeb572533e6915bcf63ddc7348ebdc7078f3a5cbb9815863e40ccd15c",
+    "b2f4eed9a0b3496a19bbd1efde215696688005818b49fd7763d3354ce70d0d22",
+    "b58c15276831e92d233a8fd4eaaca263cb7c6a2c82c3b50817ceade1e6c18f5f",
+    "d7309d12ededcc198a8221b8fd76fbe46453c662f178a196413b5539cb5b57cc",
+    "ee11033fba535fc28819e6a9a58d07f0a2a51ca82e0788480a290f76828abc7d",
+    "f05d9856397dfe7e69cb142dbc0f5997888b4b2d0e0edab13fa5b030726df37e"
+  ],
+  "rawUseBoundary": "The baseline plan and output are retained only to prove what the fixed process produced before the candidate interface stopped. Without a complete paired candidate output they are not eligible for any scientific comparison."
+}

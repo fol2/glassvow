@@ -24,6 +24,25 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### Fight-local v1 representation-interface inconclusive
+
+Controlling owner comment `5459094066` restored autonomous mechanism-design
+authority and selected fight-local causal sequencing. The v1 preregistration
+froze Scoreline damage and Afterimage Ward as separate factors, complete
+twelve-field contracts, direct A/B/AB and expiry controls, exact-null CRN
+identity, a shared direct interference anchor, and hard row, wall-time, ledger
+and protected-seed caps before execution.
+
+The fixed process stopped before a complete paired output. Godot 4.7.2 parses a
+JSON numeric literal such as `1` as `float`; the frozen interface required
+`TYPE_INT` for the schema and factor levels. Omitted-null rows could enter the
+simulator, but explicit-null and enabled rows could not pass the interface, and
+the invalid-level cases were aliased behind the same schema-type rejection.
+The preregistered result is therefore `INCONCLUSIVE`: zero usable paired
+observations, zero ledger rows and zero protected-seed rows. The baseline output
+is archive-only and supports no identity or causal claim. V1 is closed without
+repair or rerun; see `publication-manifest-fight-local-v1.json`.
+
 ### V37 comparator correction, scalar closure and mechanism authority boundary
 
 Controlling owner comment `5458109992` classified the earlier ChoiceScreen

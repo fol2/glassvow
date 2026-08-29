@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does the smallest fight-local representation implement the owner-selected Scoreline and Afterimage causal sequences exactly, remain Dusk-only and factor-isolated, and reproduce pristine current-main path, policy identity, RNG and results at both omitted and explicit null settings?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "archiveHead": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "taskCapsulePath": "task-capsule-5459094066.json",
+    "taskCapsuleSha256": "a9e0442342d752cf960450e7ceeda734df706b085d502a990725073a949a8015",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinaryPath": "/opt/homebrew/bin/godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "99d692222038f0662ae2deea65c54e1f2d35af8915e858ddce60cd00f4d14199",
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/research_421_fight_local_baseline_probe.gd": "720db988c2d5b8cb82336cff4d3f66d41752b7fe3d81e4f836ec6de4c6122e64",
+      "tools/research_421_fight_local_baseline_probe.gd.uid": "b914c17491d5a821166c855b4d9d19ed65473ed13c8a978fcc64e4d665d6d70a"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "80f42cfe1f296b7585ad08ce79cf4d2c4229116977d3d1c3b8ed9760a31d744b",
+      "domain/state/combat_state.gd": "b8ccde9c3b1dec4331fcfc6fb4a23a94ed9f30cff9e38e46b4a89afc5e0de477",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b0aba8ec55642a4caecaa6ba619ae5777a75dff8d9cea47f96a5f3af98be1566",
+      "tools/research_421_fight_local_probe.gd": "57dd503b1edaaa419dea520bdad4ad004a7608c556882111cb208181a17a8a83",
+      "tools/research_421_fight_local_probe.gd.uid": "49c9bcd9fc59d20f510811d4ec3f9468a061eff9d4a83529f02fa8fa49176eb6"
+    }
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": [0, 4, 6, 8],
+      "unit": "raw non-attack damage",
+      "definition": "Zero disables the complete Scoreline research path. A positive level is fixed incremental damage requested only after an eligible Faultline consumes a target-local Chisel mark; enemy Ward may reduce realised HP loss.",
+      "anchors": {
+        "4": "current Chisel base damage",
+        "6": "current Faultline conditional bonus",
+        "8": "current Faultline base damage"
+      }
+    },
+    "afterimagePayoff": {
+      "levels": [0, 4, 5, 8],
+      "unit": "raw Ward",
+      "definition": "Zero disables the complete Afterimage research path. A positive level caps the realised Ward stored by an eligible Ward card; Warden's Edge later mirrors exactly the stored value without reapplying Dexterity, Frail or omen multipliers.",
+      "anchors": {
+        "4": "current Warden's Edge base Ward",
+        "5": "current Ward card base Ward",
+        "8": "current upgraded Ward card base Ward"
+      }
+    },
+    "factorSeparation": "Scoreline payoff and Afterimage payoff are independent causal factors. Numerically equal levels are only authored anchors and are not a shared parameter.",
+    "fixedFactors": {
+      "acquisitionPriority": "pristine current-main policy",
+      "faultlineRarity": "current uncommon",
+      "wardSetupPriority": "pristine current-main policy",
+      "authoredCardContent": "unchanged current-main",
+      "RNG": "unchanged current-main"
+    }
+  },
+  "mechanismContracts": {
+    "scoreline": {
+      "producer": "A Duskblade Chisel direct hit whose exact hit_enemy return is positive and whose target remains alive after that hit.",
+      "mediatorState": "A combat-local dictionary keyed by target index. Each target holds at most one Boolean mark; a new qualifying Chisel on that target replaces rather than stacks it, while marks on different live targets remain distinct.",
+      "consumer": "A later Duskblade Faultline on the same marked target, after its unchanged authored effect has resolved, while combat and target remain live.",
+      "payoffOperation": "Consume the mark, then call hit_enemy once with the frozen Scoreline level and is_attack=false. This is separate from execute, can be absorbed by enemy Ward, does not use Strength, Dimmed, Cracked or facet scaling, and emits requested and realised telemetry.",
+      "lifecycle": "The mark survives turn boundaries and expires only on consumption, marked-target death or combat end.",
+      "naturalCost": "Current acquisition, uncommon Faultline rarity, draw, energy, target and ordering costs remain fully charged.",
+      "duskBoundary": "Ashwarden, disabled Scoreline and non-Chisel/non-Faultline cards are exact null paths.",
+      "scorelineFactor": "Varied only over 0, 4, 6 and 8.",
+      "afterimageFactor": "Fixed independently; no Scoreline operation reads Afterimage state or level.",
+      "interferenceRule": "The shared direct joint anchor must reproduce the complete single-factor Scoreline telemetry and value exactly. No joint whole-run cell is authorised by this protocol.",
+      "nullPath": "Both omitted research settings and explicit scorelineDamage=0 create no mediator, telemetry, policy, RNG, state-projection or result change.",
+      "policyExposure": "No policy score, preview, target selector, acquisition rule or random branch can read the mark or payoff level. The scripted probe records pre-payoff policy choices only as an identity check."
+    },
+    "afterimage": {
+      "producer": "A Duskblade Ward card block effect whose exact gain_block_player return is positive after current Dexterity, Frail and omen handling.",
+      "mediatorState": "One combat-local player value equal to min(realised Ward, frozen cap). A later qualifying Ward card replaces rather than adds to the stored value.",
+      "consumer": "A later Duskblade Warden's Edge in the same player turn, after its unchanged damage and Ward effects have resolved, while combat remains live.",
+      "payoffOperation": "Consume the value, then call gain_block_player once with with_dex=false and no run multiplier. The mirrored Ward is separate from Warden's Edge's authored Ward and emits requested and realised telemetry.",
+      "lifecycle": "The value expires on consumption, player-turn end or combat end.",
+      "naturalCost": "Current acquisition, common Warden's Edge rarity, draw, energy and ordering costs remain fully charged.",
+      "duskBoundary": "Ashwarden, disabled Afterimage and non-Ward/non-Warden's Edge cards are exact null paths.",
+      "scorelineFactor": "Fixed independently; no Afterimage operation reads Scoreline state or level.",
+      "afterimageFactor": "Varied only over 0, 4, 5 and 8.",
+      "interferenceRule": "The shared direct joint anchor must reproduce the complete single-factor Afterimage telemetry and value exactly. No joint whole-run cell is authorised by this protocol.",
+      "nullPath": "Both omitted research settings and explicit afterimageWardCap=0 create no mediator, telemetry, policy, RNG, state-projection or result change.",
+      "policyExposure": "No policy score, preview, target selector, acquisition rule or random branch can read the stored value or cap. The scripted probe records pre-payoff policy choices only as an identity check."
+    }
+  },
+  "design": {
+    "type": "representation identity preflight with mechanism-blocked direct controls and common random numbers; not a gameplay factorial",
+    "nullMatrix": [
+      {
+        "arm": "pristine-current-main",
+        "executable": "unmodified c4130163",
+        "researchSettings": "unavailable"
+      },
+      {
+        "arm": "candidate-omitted-null",
+        "executable": "research-only fight-local representation",
+        "researchSettings": "omitted"
+      },
+      {
+        "arm": "candidate-explicit-null",
+        "executable": "research-only fight-local representation",
+        "researchSettings": "schemaVersion=1, scorelineDamage=0, afterimageWardCap=0"
+      }
+    ],
+    "directScorelineCells": [
+      "A producer only",
+      "B consumer only",
+      "AB at 4",
+      "AB at 6",
+      "AB at 8",
+      "BA reversal",
+      "wrong target",
+      "producer replacement",
+      "target-death expiry",
+      "combat-end expiry",
+      "Ash AB null"
+    ],
+    "directAfterimageCells": [
+      "A producer only",
+      "B consumer only",
+      "AB at cap 4",
+      "AB at cap 5",
+      "upgraded-producer AB at cap 8",
+      "BA reversal",
+      "producer replacement",
+      "turn-end expiry",
+      "combat-end expiry",
+      "Ash AB null"
+    ],
+    "sharedAnchorCells": [
+      "Scoreline-only knob on the Afterimage path",
+      "Afterimage-only knob on the Scoreline path",
+      "joint Scoreline 6 and Afterimage 5 direct sequence"
+    ],
+    "mechanisticallyJustifiedInteractions": [
+      "executable substrate by null encoding, identified through pristine versus omitted null and omitted versus explicit null",
+      "Scoreline by Afterimage direct-hook interference, identified only by the shared joint anchor against both corresponding single-factor AB cells"
+    ],
+    "aliasStructure": "The pristine executable has no settings interface and therefore aliases omitted and explicit null as unavailable. Direct controls identify hook semantics, not natural exposure or whole-run endpoint effects. Values within one factor share a causal path but remain separate fixed levels. No acquisition, rarity or policy factor varies, so no contrast involving those factors is estimated.",
+    "omittedCells": "No non-null whole-run, blind Cartesian, acquisition-priority, rarity, Ward-priority, ML, RL or optimiser cell is authorised. Those rows have no decision value until null identity and direct isolation succeed and a separate cheap-capacity protocol is frozen."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "wholeRunRowsPerNullArm": 256,
+    "scriptedNullRowsPerNullArm": 9,
+    "identity": "Every null arm uses the same resolved root-551 policy index and simulation seed. Scripted null controls use the same seed, cards, order, targets, enemies, baseline and policy in all three arms. No identity can be selected, removed, repaired or added after execution."
+  },
+  "estimands": {
+    "pristineIdentity": "Exact canonical row equality after removing only the candidate probe's empty research-state observation field, for pristine versus omitted null across all 265 paired rows.",
+    "explicitNullIdentity": "Exact canonical row equality after removing only that empty research-state observation field, for omitted versus explicit null across all 265 paired rows.",
+    "rngIdentity": "Exact final RNG equality across all three null arms for every paired row.",
+    "interfaceSafety": "Five malformed schema, type, key and level inputs must fail without an output before RunState construction.",
+    "sourceCardinality": "Each producer and the shared post-card consumer hook has exactly one call site in the research representation.",
+    "scorelineSemantics": "Exact stage order and frozen value for A, B, AB, BA, wrong-target, replacement, expiry and Ash-null controls.",
+    "afterimageSemantics": "Exact stage order and frozen value for A, B, AB, BA, replacement, expiry and Ash-null controls.",
+    "mediatorIsolation": "A Scoreline-only setting emits no Afterimage event and an Afterimage-only setting emits no Scoreline event.",
+    "directInterference": "The joint direct anchor must exactly reproduce each single-factor research event stream and payoff value.",
+    "policyIdentity": "Final RNG and all pre-payoff policy-choice snapshots remain exact against the corresponding explicit-null control; no enabled setting changes policy weights or code.",
+    "notEstimated": "Natural package exposure, acquisition effect, rarity effect, policy timing, whole-run endpoint effect, detector acceptance, candidate feasibility, product balance and protected-seed confirmation are not estimated."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "invalidConfigurationChecks": 5,
+    "godotProcessExecutions": 7,
+    "rowsPerNullArm": 265,
+    "enabledDirectRows": 24,
+    "maximumNewSimulatorObservationRows": 819,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 180,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python constructs the complete plans, content-addresses plans and outputs, executes fixed processes, performs exact comparisons and owns the stop/go decision.",
+    "order": [
+      "Verify task capsule, repository refs, source heads, file hashes, Godot binary and ledger.",
+      "Check static producer and consumer call cardinality.",
+      "Reject all five invalid settings before accepting any observation output.",
+      "Execute the complete pristine current-main null plan once.",
+      "Execute the fixed candidate omitted-null, explicit-null and enabled-direct plan once.",
+      "Analyse the complete first look once and verify the ledger remains byte-identical."
+    ],
+    "firstLook": "The complete 819-row observation design is the only look. A direct or identity failure cannot be repaired or rerun under this protocol.",
+    "stagedConstraint": "Direct evidence supports representation semantics only. All null results are comparably evaluated on identical cohorts. No whole-run causal endpoint is claimed because no non-null whole-run arm exists.",
+    "protectedSeedsExcluded": {
+      "acceptance": "3000-5199",
+      "reserve": "5200-5399"
+    }
+  },
+  "decisionRules": {
+    "success": "All immutable inputs and ledger checks pass; all five invalid inputs fail closed; all 265 pristine-versus-omitted and 265 omitted-versus-explicit contrasts are exact; all RNG contrasts are exact; all direct semantics, isolation, direct interference and pre-payoff policy checks pass; exactly 819 observations complete within 180 seconds with zero ledger rows.",
+    "successAuthority": "Apply decision boundary 1: freeze this representation and direct grammar, then write one separate preregistration for the cheapest natural-exposure capacity screen. Success does not freeze a candidate, authorise a causal endpoint claim, authorise a joint whole-run cell or authorise protected seeds.",
+    "futility": "Any immutable input, call-cardinality, fail-closed interface, exact null identity, direct semantic, isolation, interference, policy or ledger check fails within the completed first look.",
+    "futilityAuthority": "Apply decision boundary 2: close this exact fight-local representation without repair, rerun or causal use, and continue inside #421 with the next evidence-backed mechanism under comment 5459094066.",
+    "inconclusive": "A frozen input or process is unavailable, either fixed output is incomplete, or the exact decision is unavailable by 180 seconds.",
+    "inconclusiveAuthority": "Apply decision boundary 3: record the result at cap. Do not add a row, switch cohort, repair, rerun, infer a causal effect or use protected seeds."
+  }
+}
