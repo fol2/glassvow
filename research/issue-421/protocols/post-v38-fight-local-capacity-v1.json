@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Under unchanged current-main acquisition, draw, energy and play-order policy, does each identity-safe fight-local v2 block naturally reach its producer, consumer and payoff often enough to justify a separate common-random-number causal panel?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34"
+    },
+    "taskCapsulePath": "task-capsule-5459094066-capacity-v1.json",
+    "taskCapsuleSha256": "db73a1237a84c18cc9688756b70e83f580e1624a81b97b1bb5c4196ca7e360cb",
+    "v2ProtocolSha256": "08714f8b6034b2c71e633719c0350caca7c4e2cbdb8c4f267a5e178acfdc6b49",
+    "v2SummarySha256": "058a5e953a465520b5893725e298cac74bb69e2ce42948bfdf5ba3cad09180de",
+    "v2RunnerSha256": "8f8e59c0c9f624d625f1cc56a2eae59f295538f4adec1fbdd42da8001b3deeb0",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinaryPath": "/opt/homebrew/bin/godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "7ce81e2cbec71c70ee32aac4dea28e3987ecb25e72c1d5bd72424a341569ffc0",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "80f42cfe1f296b7585ad08ce79cf4d2c4229116977d3d1c3b8ed9760a31d744b",
+      "domain/state/combat_state.gd": "b8ccde9c3b1dec4331fcfc6fb4a23a94ed9f30cff9e38e46b4a89afc5e0de477",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "a64a771a1b8dee9f0caf59574fbb34e7e8babf0e108ae86c1b2c319bc876c25a",
+      "tools/research_421_fight_local_v2_probe.gd": "e8797246278f517f62b9636f1c0e83212b1f7bcf999831ce6145e7b6321b6197",
+      "tools/research_421_fight_local_v2_probe.gd.uid": "7077f40670e925865e992057216d8e71b27b7eed4abc4953e096350b01a5a2c7"
+    }
+  },
+  "identityGate": {
+    "status": "passed",
+    "protocolSha256": "08714f8b6034b2c71e633719c0350caca7c4e2cbdb8c4f267a5e178acfdc6b49",
+    "observations": 819,
+    "nullMismatchRows": 0,
+    "rngMismatchRows": 0,
+    "directFaults": 0,
+    "newLedgerRows": 0,
+    "authority": "Capacity screen only; no endpoint or candidate claim."
+  },
+  "factorDefinitions": {
+    "off": {
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off"
+    },
+    "scoreline": {
+      "scorelinePayoff": "faultline-bonus-6",
+      "afterimagePayoff": "off",
+      "whyThisLevel": "The current Faultline conditional bonus is the predeclared central authored anchor. Every positive Scoreline token has the same activation path; this screen estimates activation, not magnitude."
+    },
+    "afterimage": {
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "ward-base-5",
+      "whyThisLevel": "The current Ward card base gain is the predeclared producer anchor. Every positive Afterimage token has the same activation path; this screen estimates activation, not magnitude."
+    },
+    "factorSeparation": "Scoreline and Afterimage remain independent. The opposite research factor is fixed off, but all opposite cards, acquisition pools, policy rules and authored effects remain present and unchanged in every arm.",
+    "jointDisposition": "No joint arm. The exact v2 direct joint anchor reproduced both single-factor event streams and values with zero interference, so a whole-run joint capacity row has no measured decision value."
+  },
+  "design": {
+    "type": "three-arm mechanism-blocked natural-exposure capacity census with common random numbers; not an endpoint causal panel",
+    "matrix": [
+      "off",
+      "Scoreline 6 only",
+      "Afterimage cap 5 only"
+    ],
+    "sharedAnchors": "Every arm uses the same root-553 policy index, simulation seed, Duskblade Vow-5 baseline, content, acquisition and combat policy, estimator and stopping rule.",
+    "policy": "Exact current-main policy grammar. No timing, hold, acquisition, rarity, random-play or random-build control is added.",
+    "telemetry": "Direct producer, mediator-set, consumer, mediator-consume, payoff requested/realised and expiry counters from the identity-safe v2 representation.",
+    "aliasStructure": "The off arm is the shared current-main null. Each enabled arm changes one categorical research factor only. Capacity counts do not estimate payoff magnitude or endpoints, and no row is selected out after execution.",
+    "reliability": "All off rows remain in the census. Any enabled stall or error not present in its exact off identity is an automatic block failure."
+  },
+  "cohort": {
+    "policyRoot": 553,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346604, 346605],
+    "rowsPerArm": 128,
+    "disjointness": "Root 553 and both seeds are absent from v1 and v2 identity designs and from protected acceptance/reserve ranges."
+  },
+  "estimands": {
+    "activeRow": "An enabled row with at least one exact payoff event for that block.",
+    "robustActivePolicy": "A fixed root-553 policy identity with at least one exact payoff event in both frozen simulation seeds.",
+    "progression": "Total producer, consumer and payoff event counts, with producer=mediator-set and consumer=mediator-consume=payoff in every row.",
+    "valueIntegrity": "Every Scoreline requested total equals six times payoff count and realised damage lies in [0, requested]. Every Afterimage stored/requested value lies in [0, five per event], producer realised Ward covers stored Ward, and mirrored realised Ward equals requested Ward.",
+    "factorIsolation": "The opposite block emits zero events in every enabled row.",
+    "policyIdentity": "Exact policy snapshot equality for off versus each enabled arm at every shared identity.",
+    "reliability": "Zero candidate-added stall or error rows.",
+    "notEstimated": "Win rate, loss, HP, duration, economy, reward effect, causal endpoint, complementarity, candidate feasibility, detector acceptance, product balance and protected-seed confirmation."
+  },
+  "supportFloor": {
+    "robustActivePolicies": 8,
+    "activeRowsPerBlock": 16,
+    "payoffEventsPerBlock": 16,
+    "rationale": "Eight is one eighth of the fixed 64-policy repertoire and forces at least 16 independent policy-seed payoff observations before spending a larger CRN panel. It is a preregistered decision-value floor, not a significance threshold."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 1,
+    "maximumSimulatorRows": 384,
+    "maximumNewLedgerRows": 384,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python constructs all three complete arm rectangles before execution, runs one Godot process, content-addresses plan and output, computes exact capacity gates and appends all 384 observations to the one ledger in one transaction.",
+    "order": [
+      "Verify v2 identity success, task capsule, repository refs, source hashes, Godot and ledger freeze.",
+      "Execute the fixed 384-row plan once.",
+      "Evaluate telemetry integrity, factor isolation, policy identity, reliability and support for each block independently.",
+      "Atomically append the complete observation set, verify sequence growth, zero protected rows and SQLite integrity, then emit the automatic disposition."
+    ],
+    "firstLook": "The complete 384-row design is the only look. No arm, policy, seed, threshold or token changes after execution.",
+    "stagedConstraint": "This stage may admit a block to whole-run causal evaluation but cannot support an endpoint claim itself.",
+    "protectedSeedsExcluded": {
+      "acceptance": "3000-5199",
+      "reserve": "5200-5399"
+    }
+  },
+  "decisionRules": {
+    "blockSuccess": "The block has at least eight robust active policies, 16 active rows and 16 payoff events; all telemetry, factor-isolation and policy gates pass; and it adds no stall or error.",
+    "blockSuccessAuthority": "Admit that block only to one separately preregistered smallest sufficient CRN causal panel. Do not choose a payoff level or candidate from capacity counts.",
+    "blockFutility": "Any telemetry, isolation, policy or reliability fault occurs, or any of the three support floors is missed at the complete cap.",
+    "blockFutilityAuthority": "Close that exact block and continue inside #421 with the next evidence-backed minimal mechanism for the missing package; do not add a timing/hold control unless the observed decomposition specifically identifies policy order as the bottleneck.",
+    "bothSuccess": "Admit both blocks to separate CRN panels; do not add a joint cell.",
+    "mixed": "Admit the one successful block and close the other at capacity; continue autonomously for the missing second package.",
+    "bothFutility": "Close fight-local v2 at capacity and continue with the next evidence-backed mechanism class.",
+    "inconclusive": "The frozen input, output or atomic ledger receipt is unavailable, or the complete decision exceeds 120 seconds.",
+    "inconclusiveAuthority": "Record at cap. Do not rerun, change cohort, repair, infer an endpoint or use protected seeds."
+  }
+}

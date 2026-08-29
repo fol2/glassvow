@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does the distinct categorical fight-local representation implement the already frozen Scoreline and Afterimage causal contracts exactly, fail closed at its string boundary, remain Dusk-only and factor-isolated, and reproduce pristine current-main path, policy identity, RNG and results on a cohort disjoint from closed v1?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34"
+    },
+    "taskCapsulePath": "task-capsule-5459094066-v2.json",
+    "taskCapsuleSha256": "007c8285d43212206002f18899309e4bc8789436c59a69b9a2085bca4c5e508f",
+    "closedV1ProtocolSha256": "62f90833b5170d209189910e2ec77929c29f35548854d7e516e07e6f4462fa66",
+    "v1ConstructorSha256": "99d692222038f0662ae2deea65c54e1f2d35af8915e858ddce60cd00f4d14199",
+    "v1SummarySha256": "69e39a4891e850f49ec247ddbf0ca3ab4ed5159a73812b3453021b8cd0acdd72",
+    "v1DiagnosticSha256": "f39f59986a820142b693959ff97f614f108d55383a10583901cbef552c4e6e1e",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinaryPath": "/opt/homebrew/bin/godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "8f8e59c0c9f624d625f1cc56a2eae59f295538f4adec1fbdd42da8001b3deeb0",
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/research_421_fight_local_v2_baseline_probe.gd": "bcc72bce0b13d4cf4b5818ad86027defdbf06592626e0d578784ea47d6a22956",
+      "tools/research_421_fight_local_v2_baseline_probe.gd.uid": "940da4e5f5f075dd8710b1a4c791f05cde7dbd0f10285d42db435b848612de8e"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "80f42cfe1f296b7585ad08ce79cf4d2c4229116977d3d1c3b8ed9760a31d744b",
+      "domain/state/combat_state.gd": "b8ccde9c3b1dec4331fcfc6fb4a23a94ed9f30cff9e38e46b4a89afc5e0de477",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "a64a771a1b8dee9f0caf59574fbb34e7e8babf0e108ae86c1b2c319bc876c25a",
+      "tools/research_421_fight_local_v2_probe.gd": "e8797246278f517f62b9636f1c0e83212b1f7bcf999831ce6145e7b6321b6197",
+      "tools/research_421_fight_local_v2_probe.gd.uid": "7077f40670e925865e992057216d8e71b27b7eed4abc4953e096350b01a5a2c7"
+    }
+  },
+  "closedPredecessorBoundary": {
+    "v1Outcome": "INCONCLUSIVE",
+    "v1UsablePairedObservations": 0,
+    "v1Use": "No v1 observation or result enters a v2 comparison, estimate or decision. Only the immutable scenario-construction and exact-assertion code is reused by hash.",
+    "noRescue": "V2 does not modify, reinterpret or rerun the numeric v1 interface. It has new source worktrees, probe identities, schema, token grammar and disjoint policy and seed identities."
+  },
+  "mechanismContractReference": {
+    "source": "protocols/post-v38-fight-local-identity-v1.json",
+    "sha256": "62f90833b5170d209189910e2ec77929c29f35548854d7e516e07e6f4462fa66",
+    "fields": [
+      "producer",
+      "mediatorState",
+      "consumer",
+      "payoffOperation",
+      "lifecycle",
+      "naturalCost",
+      "duskBoundary",
+      "scorelineFactor",
+      "afterimageFactor",
+      "interferenceRule",
+      "nullPath",
+      "policyExposure"
+    ],
+    "semanticDelta": "None. Both twelve-field contracts, Dusk boundary, direct telemetry, natural costs, authored card content, lifecycle, payoff operations, factor separation and no-policy-exposure rule are verbatim binding from the immutable v1 protocol.",
+    "implementationIdentity": "The candidate combat rules and combat state are byte-identical to frozen v1. Only the research settings boundary, probe identity and cohort differ."
+  },
+  "encodingGrammar": {
+    "schemaVersion": {
+      "type": "string",
+      "onlyLevel": "fight-local-v2"
+    },
+    "scorelinePayoff": {
+      "type": "string",
+      "levels": {
+        "off": 0,
+        "chisel-base-4": 4,
+        "faultline-bonus-6": 6,
+        "faultline-base-8": 8
+      }
+    },
+    "afterimagePayoff": {
+      "type": "string",
+      "levels": {
+        "off": 0,
+        "wardens-edge-4": 4,
+        "ward-base-5": 5,
+        "ward-upgraded-8": 8
+      }
+    },
+    "factorSeparation": "Scoreline and Afterimage are independently supplied keys. Each token maps one-to-one to its own frozen factor level; equal numeric anchors do not alias the factors.",
+    "nullEncodings": [
+      "research421 omitted",
+      "schemaVersion=fight-local-v2, scorelinePayoff=off, afterimagePayoff=off"
+    ],
+    "rejection": "Unknown schema type/value, unknown key, unknown token or non-dictionary settings terminate before RunState construction. No numeric factor input is legal."
+  },
+  "design": {
+    "type": "categorical representation identity preflight with mechanism-blocked direct controls and common random numbers; not a gameplay factorial",
+    "nullMatrix": [
+      "pristine current-main on the v2 cohort",
+      "candidate with research421 omitted",
+      "candidate with both categorical factors explicitly off"
+    ],
+    "directMatrix": "The immutable v1 constructor supplies the same 11 Scoreline cells, 10 Afterimage cells, two cross-factor isolation cells and one shared joint direct anchor, re-identified to the v2 scripted seed and categorical tokens.",
+    "sharedAnchors": "All null contrasts share exact root-552 policy indices, simulation seeds, content, baseline, Vow, estimator and stopping rule. Direct contrasts share exact cards, order, target, enemies, seed, baseline and policy.",
+    "mechanisticallyJustifiedInteractions": [
+      "executable substrate by categorical null encoding",
+      "Scoreline by Afterimage direct-hook interference only at the shared joint anchor"
+    ],
+    "aliasStructure": "Pristine has no settings interface and aliases both null encodings as unavailable. Every legal categorical token has one value and one factor. Direct cells estimate hook semantics only. No natural exposure, acquisition, rarity, policy or whole-run causal endpoint is estimated.",
+    "omittedCells": "No non-null whole-run, blind Cartesian, acquisition-priority, rarity, Ward-priority, ML, RL or optimiser cell is authorised."
+  },
+  "cohort": {
+    "policyRoot": 552,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346600, 346601, 346602, 346603],
+    "scriptedSeed": 347601,
+    "wholeRunRowsPerNullArm": 256,
+    "scriptedNullRowsPerNullArm": 9,
+    "disjointness": "Root 552, all four whole-run seeds and scripted seed 347601 are absent from v1. No v1 identity is rerun."
+  },
+  "estimands": {
+    "pristineIdentity": "Zero canonical row mismatches, after removing only the candidate probe empty research-state observation field, for pristine versus omitted null across 265 paired v2 identities.",
+    "explicitNullIdentity": "Zero canonical row mismatches after the same removal for omitted versus explicit categorical null across 265 paired identities.",
+    "rngIdentity": "Zero final RNG mismatches across all three null arms.",
+    "interfaceSafety": "All six malformed schema, token, key and settings-type inputs fail with their preregistered distinct reason and no output.",
+    "sourceCardinality": "Each producer and the shared post-card consumer hook has exactly one call site.",
+    "directSemantics": "Every frozen A, B, AB, BA, wrong-target, replacement, expiry, Ash-null, factor-isolation and joint-anchor assertion passes exactly.",
+    "directInterference": "The joint direct anchor exactly reproduces each corresponding single-factor research event stream and payoff value.",
+    "policyIdentity": "Final RNG and all pre-payoff policy-choice snapshots are exact against the corresponding explicit-null control.",
+    "precision": "All identity and direct estimands are exact Boolean/count gates with required mismatch or fault count zero; no interval, fit or stochastic precision estimate is used.",
+    "notEstimated": "Natural exposure, acquisition, rarity, policy timing, whole-run endpoint effect, detector acceptance, candidate feasibility, product balance and protected-seed confirmation."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "invalidConfigurationChecks": 6,
+    "godotProcessExecutions": 8,
+    "rowsPerNullArm": 265,
+    "enabledDirectRows": 24,
+    "maximumNewSimulatorObservationRows": 819,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 180,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python imports the immutable v1 scenario constructor, replaces only identity and settings encoding, content-addresses plans and outputs, executes fixed processes, performs exact comparisons and owns stop/go.",
+    "order": [
+      "Verify v1 closure, task capsule, all repository refs, source heads, file hashes, Godot and ledger.",
+      "Check static hook call cardinality.",
+      "Reject all six invalid categorical settings before accepting an observation output.",
+      "Execute the complete pristine v2-cohort null plan once.",
+      "Execute the complete fixed candidate omitted-null, explicit-null and enabled-direct plan once.",
+      "Analyse the sole complete look and verify byte-identical ledger state."
+    ],
+    "firstLook": "The complete 819-row v2 observation design is the only look. A failure cannot change a row, token, cohort, threshold or order under this protocol.",
+    "stagedConstraint": "Direct evidence supports representation semantics only. All null results use identical cohorts. No non-null whole-run endpoint exists, so no causal endpoint claim is eligible.",
+    "protectedSeedsExcluded": {
+      "acceptance": "3000-5199",
+      "reserve": "5200-5399"
+    }
+  },
+  "decisionRules": {
+    "success": "All immutable and ledger checks pass; all six invalid inputs fail closed for their distinct reason; every exact null, RNG, direct-semantic, isolation, interference and pre-payoff policy gate has zero faults; exactly 819 observations complete within 180 seconds with zero ledger rows.",
+    "successAuthority": "Apply boundary 1: freeze v2 and separately preregister the cheapest natural-exposure capacity screen. Do not freeze a candidate, claim a causal endpoint, add a joint whole-run cell or use protected seeds.",
+    "futility": "Any completed immutable, interface, identity, direct, isolation, interference, policy, row-count or ledger gate fails.",
+    "futilityAuthority": "Apply boundary 2: close v2 without rescue or causal use and continue inside #421 with the next evidence-backed minimal mechanism.",
+    "inconclusive": "A frozen input or fixed process is unavailable, output is incomplete, or the exact decision is unavailable by 180 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record at cap; do not rerun, change cohort, repair, infer a causal effect or use protected seeds."
+  }
+}

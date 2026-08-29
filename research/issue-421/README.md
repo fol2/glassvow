@@ -24,6 +24,30 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### Fight-local v2 identity success and natural-capacity closure
+
+The distinct categorical representation replaced v1 numeric settings with
+finite string tokens and a disjoint root/seeds cohort. Its complete 819-row
+first look passed all exact current-main null, RNG, fail-closed interface,
+direct A/B/AB, expiry, Dusk/Ash, factor-isolation and direct-interference gates
+with zero faults and zero ledger rows. That result admitted capacity only.
+
+The separately frozen natural-capacity census then evaluated off,
+Scoreline-only and Afterimage-only on the same 64 policies and two seeds. All
+384 observations were atomically appended to the sole ledger, which now has
+480,756 records, SHA-256 `2e7a85ec119c7e58667a3c170f8ece4ee4cbeb045537e390a2b0466bffb517be`,
+SQLite integrity `ok` and zero protected-seed rows.
+
+Both blocks missed the eight-policy robust support floor. Scoreline produced 37
+payoffs in 18 rows but only three robust policies. Afterimage produced one
+payoff in one row and no robust policy despite 567 producer events. Neither
+block enters a causal panel. A zero-row decomposition selected exactly one
+research-only Afterimage Ward-before-Warden's-Edge order control: ten rows
+played both cards but only one paid off, while independent immutable topology
+had already recorded 13 opportunity, 11 reverse-order and only three viable
+natural-order policies. No ML, RL, optimiser, joint cell or payoff retune is
+authorised. See `publication-manifest-fight-local-v2-capacity-v1.json`.
+
 ### Fight-local v1 representation-interface inconclusive
 
 Controlling owner comment `5459094066` restored autonomous mechanism-design

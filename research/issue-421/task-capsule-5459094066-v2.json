@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "taskSsotBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+  "authority": {
+    "commentId": 5459094066,
+    "bodySha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "authorAssociation": "OWNER"
+  },
+  "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "immutableArchiveHeads": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34"
+  },
+  "closedPredecessor": {
+    "protocolSha256": "62f90833b5170d209189910e2ec77929c29f35548854d7e516e07e6f4462fa66",
+    "summarySha256": "69e39a4891e850f49ec247ddbf0ca3ab4ed5159a73812b3453021b8cd0acdd72",
+    "diagnosticSha256": "f39f59986a820142b693959ff97f614f108d55383a10583901cbef552c4e6e1e",
+    "outcome": "INCONCLUSIVE",
+    "usablePairedObservations": 0,
+    "newLedgerRows": 0,
+    "disposition": "V1 is immutable and must not be repaired, modified, reinterpreted or rerun."
+  },
+  "v2Representation": {
+    "schema": "fight-local-v2",
+    "scorelineTokens": ["off", "chisel-base-4", "faultline-bonus-6", "faultline-base-8"],
+    "afterimageTokens": ["off", "wardens-edge-4", "ward-base-5", "ward-upgraded-8"],
+    "factorSeparation": "The two tokens are independent categorical causal factors; their labels deterministically map to the already frozen authored anchors.",
+    "cohortSeparation": "Policy root 552, simulation seeds 346600-346603 and scripted seed 347601 are disjoint from v1.",
+    "unchangedMechanismSemantics": true
+  },
+  "boundaries": {
+    "researchOnly": true,
+    "zeroProtectedSeeds": true,
+    "zeroLedgerRowsForIdentity": true,
+    "noResearchPrOrActions": true,
+    "noSuccessorTicket": true,
+    "humanEscalationOnlyUnderCurrentContract": true
+  }
+}

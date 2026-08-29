@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "archiveParent": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+  "preservedRefs": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34"
+  },
+  "publicationRef": "research/issue-421-fight-local-v2-evidence",
+  "results": {
+    "categoricalIdentity": {
+      "outcome": "SUCCESS",
+      "observations": 819,
+      "faults": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "08714f8b6034b2c71e633719c0350caca7c4e2cbdb8c4f267a5e178acfdc6b49",
+      "summarySha256": "058a5e953a465520b5893725e298cac74bb69e2ce42948bfdf5ba3cad09180de"
+    },
+    "naturalCapacity": {
+      "outcome": "FUTILITY",
+      "observations": 384,
+      "newLedgerRows": 384,
+      "protocolSha256": "156cadcfd94718f8074a16db4602832d2712bdbca71759302f2c32ce77999df2",
+      "summarySha256": "580ee0fa49f94ef62bc2a983724b2bb83e80bf72f9085fa321dcbba09f12376c",
+      "ledgerAfterSha256": "2e7a85ec119c7e58667a3c170f8ece4ee4cbeb045537e390a2b0466bffb517be",
+      "ledgerRecordsAfter": 480756,
+      "protectedSeedRows": 0
+    }
+  },
+  "capacityCounts": {
+    "scoreline": {
+      "activeRows": 18,
+      "payoffEvents": 37,
+      "robustActivePolicies": 3,
+      "supportFloor": 8
+    },
+    "afterimage": {
+      "activeRows": 1,
+      "payoffEvents": 1,
+      "robustActivePolicies": 0,
+      "supportFloor": 8
+    }
+  },
+  "nextMethodBoundary": {
+    "decompositionSha256": "f4d8490c791b5a35f435fef42b71abf61c0779501a58ce3b8136a053be403ea5",
+    "decision": "select-one-afterimage-ward-before-edge-control",
+    "reason": "Ten Afterimage rows played both exact cards but only one paid off; independent immutable topology recorded 13 opportunity, 11 reverse-order and three viable-natural-order policies."
+  },
+  "claimBoundary": "V2 representation identity is green, but both natural-order blocks are closed at the frozen capacity floor. No endpoint, candidate, detector, product, protected-seed or P9 claim follows.",
+  "rawCacheSha256": [
+    "103abd2f3dc6fcb82e079fe2d08b6e75fd8767178fa666247483ff5db21a344e",
+    "368a09d1ae3032f25717c514658833c03be2ad6d31465517377f8dec08ea4bff",
+    "469076e06d6f774cf477e82c24105d44c79bd02eb8a8efef22568c6af6419038",
+    "599e3ff5d87dab2bf60ebe0900d8f6ac69598ed1282258b3697d9f821a9f7f8f",
+    "5ff851ac4c7b346456dabfc2820e99db5217e2858d5702ba0b84488a47d0e3e8",
+    "6af66a5c6ca4342cf5e1249a6efa5a198a5c958e7fe95df567768551ca001968",
+    "6d24de8bf5585be4e4ad78e4445e2468c62e998e25f8340c9713af8a9039f56a",
+    "8afca7aa19a1fc18eb380eeb68886ec191d98491174ad90a525e52a9cb76bc80",
+    "adfdc9159faf547a4374f05c99ea6439d3ac0a9e220efd51c5deb0c971a3b8d9",
+    "be2624be31fc4c823b6cd228c8f8b8b4da868dc0588477fe807ee487730b9115",
+    "caab9bd684990f27df5aa02d0b8e0eb8b4bfd0e446a64ab0d19c48429c30cfb7",
+    "fe7c60b2a83d43d1128bfce0efa943f033ecb9640f88a2ceb2aba03886442cf0"
+  ]
+}
