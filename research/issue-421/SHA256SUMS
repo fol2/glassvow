@@ -1,5 +1,6 @@
-1919ff7c486abf4e05d518b92ef776e93bd1d8c1f9834317bc53c667e5450e52  ./README.md
+1f9e1ee0f05efac63da569979e659fb98e74d20b8294ab5652a4d616ef6f8d44  ./README.md
 0d06b45fe5be03b1a48c6c970103b235e4c47fbacc308dcbd539b7e480771a5b  ./artifacts/godot-4.7.1-toolchain-v1.json
+98970a3df17b45c1fe90a8e02d4cb50cc4b9c4a08abb69045a3ef4dd8fea7729  ./artifacts/issue-421-publication-comment-v27.md
 0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb  ./artifacts/issue-525-ward-mirror-edge-4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c.json
 d0452a96d6fc25094059e337e112dffede04984928e7893b097429ee3a008e5d  ./artifacts/ledger-freeze-blocked-crn-v2.json
 cac458e1bb794fc991aa0193c17fc42d8dee6e694a7203a11197dafa08b6a121  ./artifacts/ledger-freeze-crown-effect-crn-v1.json
@@ -90,6 +91,7 @@ a4d2b7761091ad972e14d8ff471e82bda41632e698dde762b0b3dad5a8d754e2  ./protocols/co
 e71e38fcaf69b8950a2c25a1313b1b21e5af4a9331b65b1cfc8c37cb027ba76a  ./protocols/combined-finalist-v9.json
 abe0147b3d18d0a58c1ca66595eb3b1d3e59e2b4e07083840d5ef4f1b1b26292  ./protocols/cracked-tempo-v1.json
 30c208b2f43f0ca0e924774ae8d45332769ab75080ac6bd3df529b76742053ee  ./protocols/facet-focus-v1.json
+14915ec25ffb041c2ce3166e9cdaf3a3be0030bc2b3d6f3b34bd6cea9a449566  ./protocols/post-810264c-private-causal-coverage-v1.json
 5228eabc4b86ed4b891880f2a149e243597f1eb75e216f723d3ee835d565f6b7  ./protocols/post-843e899-cross-turn-hold-coverage-audit-v1.json
 e7bf7280b395d8a91c9cedc6aa0fa049fd37dd238faec988c75b92a5273517c6  ./protocols/post-843e899-cross-turn-hold-design-v1.json
 bf601342c2ae0c62d547e35d937846c4a95fdd4f6ccbd2db6b3129e44ab9f4a4  ./protocols/post-843e899-cross-turn-hold-identity-v1.json
@@ -362,6 +364,7 @@ d77cf86b8f7e965cce9cb3cbad85d79f498aae3505f9eab0b1c9775018eb2e70  ./prototype/do
 3eb0c95e9429f2f072d490b6e840ed03c82d7bd6b4fc0f2934ca1d587b5b866b  ./publication-manifest-afterimage-order-v1.json
 38cb45e618204918e613c107ec6975a77e485c6aa80e93f603d0e8f808f613b9  ./publication-manifest-fight-local-v1.json
 74cc6a1f939accba8f00e80eded180f2f331620ca855b845dfe8910083e4e14c  ./publication-manifest-fight-local-v2-capacity-v1.json
+65de5c694dd93d06199fedbe05f15a447950c376a0fad1241ec4218d60c45dde  ./publication-manifest-post-810264c-private-causal-coverage-v1.json
 04cb054ae6afc731b9ca73da1194ff50be444349fac4c8ceeaa905f8a0daf736  ./publication-manifest-post-843e899-family-ladder-v1.json
 756877c47e642c9696fe1a18362dc46ba32809b0adbd36fe11cdf9aec7b220b4  ./publication-manifest-post-d486-private-overflow-v1.json
 e861130447fc8202f58a8f0d89cf0f4d905dc9e165598b8624b75ce6fbf27019  ./publication-manifest-post-reshuffle-frontier-v1.json
@@ -877,6 +880,8 @@ aa695bd0818d164fd7cd7a4b34d63c88717ffba5fac9eff01623a4f4523929dc  ./summaries/co
 e9c6320a7b9742023495e5310d846e93e42de8dc80ab587bf974bd6096704b0c  ./summaries/combined-finalist-v9.json
 fa2d279bd61bf6dd41cdc1585d5590241b0d881493b2cb498f9663d1539c6dd1  ./summaries/cracked-tempo-v1.json
 fa11d04c131e10206ad9797cdf40c61ee2e17ba050113d68741bf5b3d10e6241  ./summaries/facet-focus-v1.json
+c5ae1f503bf8d6ce677473ec8aeb965b720390ce10e68115226f99f9d94def76  ./summaries/post-810264c-private-causal-coverage-primary-sources-v1.md
+0fe6d182ece4a0125c3964c287215f4af8a86bd97fdf8cd4a59f9503925aeebb  ./summaries/post-810264c-private-causal-coverage-v1.json
 dbfccbae0faea8b3d2849661914672e2bac28c185ceed25767eb97f251693412  ./summaries/post-843e899-cross-turn-hold-coverage-audit-v1.json
 c25c5ddbb5f0cd3ec429eac9b362721cbb95ed14581a82e80a1b2eda0a26d2c6  ./summaries/post-843e899-cross-turn-hold-design-v1.json
 535f7c9bea7bc7544cd75a741b206c80d90bd418cbae36389dc3ba69e2a319d1  ./summaries/post-843e899-cross-turn-hold-identity-v1.json
@@ -1110,8 +1115,10 @@ b6d2b879c81ea2e9b9e648cf735766ec1b32b605f936ae74255e075d34a957de  ./task-capsule
 a9e0442342d752cf960450e7ceeda734df706b085d502a990725073a949a8015  ./task-capsule-5459094066.json
 673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385  ./task-capsule-5460811702-v20.json
 cdef3ea4ae0712ccb00ed0f496451bef4875ee3a43eb792b6fc9492701488d93  ./task-capsule-5460811702-v21.json
+3d5a4bc1c0c767c2ed32a1a601ca1607a7b5ed76870652d97a9c701ef748c5d4  ./task-capsule-5460811702-v22.json
 6eb3e793a96be638e50ce8f4a99655ee3f9af5912ca042a56f77446b739f1ac0  ./task-capsule.json
 6eb56ed83e4ef28d46e9913554fac9438163993d8c6a8eb7c9a4e6771eff012a  ./tools/identify_v33_v38.py
+c7c1e77911dd29f33c27551f031498b26e92cc22d6c30023cd9be33e925cd3a5  ./tools/post_810264c_private_causal_coverage_v1.py
 112442f6a7d74be62829cda9effe7b9c3f4bd3c6c6823ac1540d380dfc1ec318  ./tools/post_843e899_cross_turn_hold_coverage_audit_v1.py
 6713fd4909c02bf66daacc2d472d72477e0564a6d4f265533e25b05c1c72b01c  ./tools/post_843e899_cross_turn_hold_design_v1.py
 12b697698f658b14a86d8b7aaca406e8d68521ce1dedad63397123a360eef5c3  ./tools/post_843e899_cross_turn_hold_identity_v1.py

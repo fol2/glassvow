@@ -1,0 +1,279 @@
+{
+  "GodotProcesses": 0,
+  "allFourSerialCausalClassesExhausted": true,
+  "archiveHeadsPreserved": {
+    "810264c": "810264c3eed46060a3398ddd96d1d5bb5634d96e",
+    "843e899": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+    "d486289": "d48628913409375437a20a52e290d098cc20062e"
+  },
+  "assessments": [
+    {
+      "canonicalSha256": "53a95130a0398e454ddd6d5c61ccd03c69d15520e106b9cb95e5485766d81ffa",
+      "closureAliases": [
+        "existing combat-state and card-zone grammar",
+        "one-bit producer-to-next-Attack grammar",
+        "turn-state action-economy grammar"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "sourceAndEvidenceSelected",
+        "duskOnly",
+        "explicitProducerMediatorConsumerPayoffExpiry",
+        "naturallyCostly",
+        "boundedCardinality",
+        "notAliasOfClosedFamily"
+      ],
+      "id": "C1-existing-transition-state",
+      "selectionVector": [
+        0,
+        1,
+        2,
+        2,
+        6
+      ],
+      "unresolvedFields": [
+        "producer",
+        "consumer",
+        "payoffOperation",
+        "lifecycleExpiry",
+        "naturalCost"
+      ]
+    },
+    {
+      "canonicalSha256": "72b813a96c91f9b475b6b515a459bb87a6e1b361bf12e495b017361c40487afe",
+      "closureAliases": [
+        "Scoreline and Afterimage order",
+        "immediate post-kill consumer topology",
+        "target transfer",
+        "draw thread",
+        "duplicate copy",
+        "same-instance and cross-turn hold",
+        "intent-history lifecycle"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "sourceAndEvidenceSelected",
+        "explicitProducerMediatorConsumerPayoffExpiry",
+        "boundedCardinality",
+        "notAliasOfClosedFamily"
+      ],
+      "id": "C2-existing-relation-history",
+      "selectionVector": [
+        0,
+        1,
+        2,
+        3,
+        9
+      ],
+      "unresolvedFields": [
+        "producer",
+        "consumer",
+        "payoffOperation",
+        "lifecycleExpiry"
+      ]
+    },
+    {
+      "canonicalSha256": "e24da49e5ad7f398529f0a35722e46b21faee49122a159353ee61f28a17c2a1d",
+      "closureAliases": [
+        "terminal-hit precision and excess",
+        "positive-Ember-overflow to Heavy Blow",
+        "rejected residuals remain outside their frozen legality gates"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "sourceAndEvidenceSelected",
+        "explicitProducerMediatorConsumerPayoffExpiry",
+        "naturallyCostly",
+        "notAliasOfClosedFamily"
+      ],
+      "id": "C3-arithmetic-derived-state",
+      "selectionVector": [
+        0,
+        1,
+        2,
+        2,
+        2
+      ],
+      "unresolvedFields": [
+        "producer",
+        "consumer",
+        "payoffOperation"
+      ]
+    },
+    {
+      "canonicalSha256": "e8d2f97b142a4326df424c6c751411263762b1ca390c0607b04024aaac5a96c1",
+      "closureAliases": [
+        "private status liability",
+        "generated or replacement card debt",
+        "draw and duplicate identity",
+        "same-instance repeat",
+        "target transfer",
+        "cross-turn CardInst hold"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "sourceAndEvidenceSelected",
+        "explicitProducerMediatorConsumerPayoffExpiry",
+        "boundedCardinality",
+        "notAliasOfClosedFamily"
+      ],
+      "id": "C4-identity-local-replay-transform",
+      "selectionVector": [
+        1,
+        1,
+        3,
+        3,
+        7
+      ],
+      "unresolvedFields": [
+        "producer",
+        "consumer",
+        "payoffOperation",
+        "lifecycleExpiry"
+      ]
+    },
+    {
+      "canonicalSha256": "832c5dce99f6962b4119d90b849159c7a32699a372c250e958da48669664a7ff",
+      "closureAliases": [],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "sourceAndEvidenceSelected",
+        "duskOnly",
+        "explicitProducerMediatorConsumerPayoffExpiry",
+        "naturallyCostly",
+        "existingPolicyFirst",
+        "boundedCardinality"
+      ],
+      "id": "C5-new-fight-local-semantic-primitive",
+      "selectionVector": [
+        2,
+        2,
+        3,
+        3,
+        0
+      ],
+      "unresolvedFields": [
+        "producer",
+        "mediatorState",
+        "consumer",
+        "payoffOperation",
+        "lifecycleExpiry",
+        "naturalCost",
+        "policyExposure"
+      ]
+    },
+    {
+      "canonicalSha256": "cd03a96d7c2918102f0eaa0b21e6c5e74bba7dc2e2c6739e5ca6f20b78eec8b3",
+      "closureAliases": [
+        "global selector prohibited",
+        "persistent or acquisition commitment is a post-admission reachability fallback only"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "sourceCompatible",
+        "sourceAndEvidenceSelected",
+        "duskOnly",
+        "exactNullAbsentOffAsh",
+        "noSaveRunRelicAcquisitionRngOrGlobalSelector",
+        "explicitProducerMediatorConsumerPayoffExpiry",
+        "naturallyCostly",
+        "existingPolicyFirst",
+        "boundedCardinality",
+        "notAliasOfClosedFamily"
+      ],
+      "id": "C6-selector-or-persistent-carrier",
+      "selectionVector": [
+        3,
+        3,
+        4,
+        4,
+        2
+      ],
+      "unresolvedFields": [
+        "producer",
+        "mediatorState",
+        "consumer",
+        "payoffOperation",
+        "lifecycleExpiry",
+        "naturalCost",
+        "policyExposure"
+      ]
+    }
+  ],
+  "authority": "Apply boundary 2: close the corrected private causal class at zero rows. With terminal, cross-turn and intent-history already validly closed, publish immutable evidence and raise exactly one concise human-authority package under comment 5460811702. Keep #421 safe without a successor, prototype, product mutation, PR, Actions, protected seed, acceptance or P9 claim.",
+  "cachedObservationRowsRead": 0,
+  "claimBoundary": "Exact-source and immutable-decision causal-topology coverage, twelve-field completeness, method decision value and authority trigger only. No support, simulator, causal endpoint, balance, product, protected-seed, acceptance or P9 claim.",
+  "decision": "close-corrected-private-causal-class-and-raise-owner-authority-package",
+  "decisionBoundary": 2,
+  "humanAuthorityPackage": {
+    "decisionRequired": "Supply one finite product-semantic family-selection rule that chooses a new mechanistically meaningful producer/consumer direction; the owner agent will freeze the remaining twelve-field contract and resume the evidence ladder.",
+    "options": [
+      "Supply one new finite producer/consumer family direction without authoring all twelve fields.",
+      "Explicitly relax one named immutable family closure or the selector/persistent pre-admission constraint.",
+      "Amend #421 acceptance."
+    ],
+    "recommendation": "Keep product truth and protected seeds unchanged and request only the smallest finite producer/consumer family direction.",
+    "safeIssueState": "needs-info",
+    "trigger": "All four causal family classes in owner comment 5460811702 are validly exhausted after correcting the private carrier inference and testing the sole legal source residual.",
+    "whyAutomationCannotDecide": "Current source and immutable evidence select no unclosed producer, consumer, bounded payoff or activation objective. Choosing them by name, taste, support mining, implementation convenience or an optimiser would violate the controlling no-guessing selection rule."
+  },
+  "humanAuthorityRequired": true,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "futility",
+  "priorEvidenceDecisions": {
+    "afterimage": "close-afterimage-order-at-capacity",
+    "cross-turn": "close-cross-turn-hold-representation-and-advance-to-intent-history",
+    "draw-thread": "close-immediate-draw-thread-at-zero-row-capacity",
+    "duplicate-copy": "close-duplicate-copy-echo-at-zero-row-capacity",
+    "existing-state-zone": "close-existing-combat-state-zone-grammar",
+    "intent-history": "close-intent-history-and-advance-to-private-counter-tag-transform",
+    "one-bit-action": "close-one-bit-setup-action-grammar",
+    "overflow": "close-private-overflow-heavy-blow-representation-and-continue-causal-enumeration",
+    "post-kill": "close-immediate-post-kill-consumer-topology",
+    "private-debt": "close-private-debt-design-at-identity",
+    "same-instance": "close-honing-repeat-without-implementation",
+    "scoreline": "close-scoreline-commitment-after-component-crn",
+    "status-liability": "close-status-liability-at-capacity",
+    "target-transfer": "close-target-transfer-at-zero-row-capacity",
+    "terminal": "close-positive-overkill-and-terminal-hit-precision-advance-to-cross-turn-hold",
+    "turn-state": "close-turn-state-action-economy-family"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "14915ec25ffb041c2ce3166e9cdaf3a3be0030bc2b3d6f3b34bd6cea9a449566",
+  "runnerSha256": "c7c1e77911dd29f33c27551f031498b26e92cc22d6c30023cd9be33e925cd3a5",
+  "schemaVersion": 1,
+  "selectedTopologyIds": [],
+  "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "supportMetricsInspected": 0,
+  "taskCapsuleSha256": "3d5a4bc1c0c767c2ed32a1a601ca1607a7b5ed76870652d97a9c701ef748c5d4",
+  "wallTimeSeconds": 12.220947
+}

@@ -24,6 +24,38 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### Post-810264c corrected causal-class exhaustion and owner-authority boundary
+
+The zero-row follow-up partitioned causal topology rather than storage. Every
+deterministic fight-local private producer is either one current transition, an
+order/identity/arithmetic relation over current transitions, or a genuinely new
+semantic transition; selector or persistent commitment is a separate authority
+class. Six finite rows covered those possibilities.
+
+Existing-transition, order/history, arithmetic residual and identity-local
+replay/transform rows reduce to immutable closures or the now-closed
+overflow-to-Heavy-Blow representation. A genuinely new fight-local primitive is
+mechanically possible, but exact source and evidence select none of its
+producer, consumer, bounded payoff or activation objective. The selector or
+persistent row violates the global-selector gate or the rule that acquisition
+commitment is a reachability fallback only after mechanism admission. Zero of
+six rows owns a complete legal twelve-field contract.
+
+This is a corrected causal-family exhaustion result, not the earlier carrier
+inference and not a universal impossibility claim. With terminal, cross-turn
+and intent-history already validly closed, owner comment `5460811702` now
+permits exactly one human-authority package. The minimum input is one finite
+product-semantic family-selection rule supplying a new producer/consumer
+direction; the owner agent will freeze the remaining fields. See
+`publication-manifest-post-810264c-private-causal-coverage-v1.json`.
+
+The audit read eight exact source files and 16 immutable decision summaries. It
+used zero cached observations, support metrics, Godot processes, simulator
+rows, ledger rows, model context or protected seeds. The ledger remains
+byte-identical at 482,036 records and SHA-256
+`97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213`.
+No product code, PR, Actions run, acceptance or P9 receipt follows.
+
 ### Post-d486 private causal correction and exact overflow closure
 
 The archived private-state v1 result partitioned storage carriers, not causal
