@@ -9,6 +9,20 @@ const Preflight = preload(
 @warning_ignore_start("unsafe_call_argument")
 
 
+class MaterialisationProbe:
+	extends MapCompatibilitySelectionIterator
+	var assembly_calls: int = 0
+	var reject_first: bool = false
+
+	func _assembled_candidate_ids() -> Dictionary:
+		assembly_calls += 1
+		var candidate_ids: Dictionary = super._assembled_candidate_ids()
+		if reject_first:
+			reject_first = false
+			add_nogood(["N"], candidate_ids)
+		return candidate_ids
+
+
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
 	if not ok:
 		fails.append("test_map_compatibility_selection_iterator: %s" % what)
@@ -18,6 +32,7 @@ static func run(fails: Array[String]) -> void:
 	_test_components_nogoods_and_replay(fails)
 	_test_exact_priority_order(fails)
 	_test_lookup_exhaustion(fails)
+	_test_rejected_materialisation_accounting(fails)
 	_test_materialisation_exhaustion(fails)
 	_test_no_compatible_assignment(fails)
 
@@ -139,7 +154,7 @@ static func _test_materialisation_exhaustion(fails: Array[String]) -> void:
 		ids.append("n%02d" % index)
 	var node_sets: Dictionary = {"N": _node_set(ids)}
 	var constraints: Dictionary = {"1/N": _unary("N", ids)}
-	var iterator: RefCounted = Iterator.new(
+	var iterator: MaterialisationProbe = MaterialisationProbe.new(
 		node_sets, constraints, {"network": "materialisation-bound"})
 	var result: Dictionary = {}
 	for attempt: int in range(65):
@@ -150,11 +165,34 @@ static func _test_materialisation_exhaustion(fails: Array[String]) -> void:
 	result = iterator.next_assignment()
 	var receipt: Dictionary = result.get("receipt", {})
 	_check(fails, result.get("status", "") == Iterator.SELECTION_WORK_EXHAUSTED
+			and iterator.assembly_calls == 65
 			and MapLayoutCanonical.int_value(receipt.get(
 				"counters", {}).get("complete_selection_materialisations", -1)) == 65
+			and MapLayoutCanonical.int_value(receipt.get(
+				"counters", {}).get("route_attempts", -1)) == 65
 			and _within_limits(receipt.get("counters", {}),
 				receipt.get("limits", {})),
-		"the sixty-sixth complete selection is refused after sixty-five emissions")
+		"the sixty-sixth complete selection is refused before assembly")
+
+
+static func _test_rejected_materialisation_accounting(
+		fails: Array[String]) -> void:
+	var ids: Array[String] = ["n00", "n01"]
+	var iterator: MaterialisationProbe = MaterialisationProbe.new(
+		{"N": _node_set(ids)}, {"1/N": _unary("N", ids)},
+		{"network": "rejected-materialisation"})
+	iterator.reject_first = true
+	var result: Dictionary = iterator.next_assignment()
+	var receipt: Dictionary = result.get("receipt", {})
+	var counters: Dictionary = receipt.get("counters", {})
+	_check(fails, result.get("status", "") == Iterator.ASSIGNMENT
+			and result.get("candidate_ids", {}).get("N", "") == "n01"
+			and iterator.assembly_calls == 2
+			and MapLayoutCanonical.int_value(counters.get(
+				"complete_selection_materialisations", -1)) == 2
+			and MapLayoutCanonical.int_value(counters.get(
+				"route_attempts", -1)) == 1,
+		"a rejected complete selection consumes materialisation but not route authority")
 
 
 static func _test_no_compatible_assignment(fails: Array[String]) -> void:

@@ -77,6 +77,13 @@ func next_assignment() -> Dictionary:
 		if not _advance_governed_components(targets):
 			return _terminal_result()
 	while true:
+		if not _take("complete_selection_materialisations", {
+			"operation": "complete_selection_materialisation",
+			"materialisation_index": MapLayoutCanonical.int_value(_counters[
+				"complete_selection_materialisations"]) + 1,
+		}):
+			return _finish(SELECTION_WORK_EXHAUSTED,
+				"complete_selection_materialisations")
 		var candidate_ids: Dictionary = _assembled_candidate_ids()
 		var matched: Dictionary = _matching_nogood(candidate_ids)
 		if not matched.is_empty():
@@ -94,14 +101,12 @@ func next_assignment() -> Dictionary:
 		if direct.get("compatible", false) != true:
 			return _finish(NO_COMPATIBLE_ASSIGNMENT,
 				"component assignment failed exact direct #466 compatibility")
-		if not _take("complete_selection_materialisations", {
-			"operation": "complete_selection_materialisation",
+		if not _take("route_attempts", {
+			"operation": "route_attempt",
 			"emission_index": _emission_index + 1,
 		}):
 			return _finish(SELECTION_WORK_EXHAUSTED,
-				"complete_selection_materialisations")
-		_counters["route_attempts"] = _counters[
-			"complete_selection_materialisations"]
+				"route_attempts")
 		_emission_index += 1
 		var selection: Dictionary = {}
 		for node_id: String in _node_order:
