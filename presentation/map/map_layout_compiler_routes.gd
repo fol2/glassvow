@@ -254,7 +254,8 @@ static func route_planned(edge: Dictionary, plan: Dictionary,
 static func route_obstacles(edge: Dictionary, plan: Dictionary,
 		heroes: Dictionary, accepted_routes: Dictionary, source: Dictionary,
 		assets: Dictionary, channel: PackedVector2Array,
-		pending_radius_m: float) -> Dictionary:
+		pending_radius_m: float,
+		include_accepted_routes: bool = true) -> Dictionary:
 	var obstacles: Array[Dictionary] = []
 	var reservations: Dictionary = plan["portal_reservations"]
 	for node_id: String in MapLayoutCanonical.sorted_keys(reservations):
@@ -303,7 +304,10 @@ static func route_obstacles(edge: Dictionary, plan: Dictionary,
 			"id": "hero-zone:%s" % zone_id,
 			"polygon": canonical["points"],
 		})
-	for accepted_id: String in MapLayoutCanonical.sorted_keys(accepted_routes):
+	var accepted_ids: Array[String] = []
+	if include_accepted_routes:
+		accepted_ids = MapLayoutCanonical.sorted_keys(accepted_routes)
+	for accepted_id: String in accepted_ids:
 		var accepted: Dictionary = accepted_routes[accepted_id]
 		if _shares_endpoint(edge, accepted):
 			continue

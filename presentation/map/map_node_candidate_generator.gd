@@ -5,6 +5,9 @@ extends RefCounted
 const SCHEMA_VERSION: int = 1
 const VERSION: String = "map-node-candidates-v1"
 const MAX_CANDIDATES_PER_NODE: int = 9
+const REFINEMENT_VERSION: String = "map-node-candidate-certificate-support-v1"
+const MAX_SUPPORT_PROPOSALS_PER_NODE: int = 25
+const SUPPORT_FRACTIONS: Array[float] = [0.0, 0.25, 0.5, 0.75, 1.0]
 const _SLOTS: Array[Vector2] = [
 	Vector2.ZERO, Vector2.RIGHT, Vector2.LEFT, Vector2.DOWN, Vector2.UP,
 	Vector2(1, 1), Vector2(1, -1), Vector2(-1, 1), Vector2(-1, -1),
@@ -56,6 +59,101 @@ static func generate(input: MapLayoutInput, quality: Dictionary, restart_id: int
 				"reason_ids": _reason_ids(rejections)})
 	report["node_sets"] = sets
 	return _finish(report)
+
+
+static func refine(input: MapLayoutInput, quality: Dictionary,
+		base_node_sets: Dictionary, base_candidate_digest: String,
+		deletion_certificate: Dictionary) -> Dictionary:
+	var selected: Array[String] = []
+	selected.assign(deletion_certificate.get("refinement_node_ids", []))
+	selected.sort()
+	var receipt: Dictionary = {
+		"schema_version": SCHEMA_VERSION,
+		"version": REFINEMENT_VERSION,
+		"input_digest": "" if input == null else input.digest(),
+		"base_candidate_digest": base_candidate_digest,
+		"deletion_certificate_digest": deletion_certificate.get(
+			"certificate_digest", ""),
+		"refinement_node_ids": selected,
+		"limits": {"axis_fractions": SUPPORT_FRACTIONS,
+			"support_proposals_per_node": MAX_SUPPORT_PROPOSALS_PER_NODE},
+		"node_additions": {},
+		"errors": [],
+	}
+	var errors: Array = receipt["errors"]
+	var augmented: Dictionary = base_node_sets.duplicate(true)
+	if input == null:
+		errors.append("input is null")
+		return _finish_refinement(receipt, augmented)
+	var certificate_body: Dictionary = deletion_certificate.duplicate(true)
+	var certificate_digest: String = str(certificate_body.get(
+		"certificate_digest", ""))
+	certificate_body.erase("certificate_digest")
+	if certificate_digest.is_empty() or MapLayoutCanonical.digest(
+			certificate_body) != certificate_digest:
+		errors.append("deletion certificate digest mismatch")
+	if selected.is_empty():
+		errors.append("deletion certificate has no refinement nodes")
+	var source: Dictionary = input.to_dict()
+	var stage: Rect2 = MapPinProjection.lattice_footprint()
+	var nodes: Array = input.node_records()
+	var edges: Array = input.edge_records()
+	var bounds: Dictionary = _bounds(nodes, edges, quality)
+	var node_by_id: Dictionary = {}
+	for node_v: Variant in nodes:
+		var node: Dictionary = node_v
+		node_by_id[str(node["id"])] = node
+	var epsilon: float = _f(quality["epsilon"]["world_m"])
+	for node_id: String in selected:
+		if not augmented.has(node_id) or not node_by_id.has(node_id):
+			errors.append("refinement node is absent: %s" % node_id)
+			continue
+		var node: Dictionary = node_by_id[node_id]
+		var row: Dictionary = augmented[node_id]
+		var candidates: Array = row["candidates"].duplicate(true)
+		var additions: Array[Dictionary] = []
+		var rejections: Array[Dictionary] = []
+		var fixed: String = _fixed(str(node["type"]))
+		if fixed.is_empty():
+			var envelope: Dictionary = row["envelope"]
+			var legal_x: Array = envelope["legal_x_m"]
+			var legal_z: Array = envelope["legal_z_m"]
+			var base: Vector3 = _v3(row["authored_anchor"])
+			for x_index: int in range(SUPPORT_FRACTIONS.size()):
+				for z_index: int in range(SUPPORT_FRACTIONS.size()):
+					var support_index: int = x_index * SUPPORT_FRACTIONS.size() \
+						+ z_index
+					var anchor: Vector3 = Vector3(lerpf(_f(legal_x[0]),
+						_f(legal_x[1]), SUPPORT_FRACTIONS[x_index]), base.y,
+						lerpf(_f(legal_z[0]), _f(legal_z[1]),
+							SUPPORT_FRACTIONS[z_index]))
+					var record: Dictionary = _refinement_record(
+						node_id, support_index, anchor, base)
+					if _contains_anchor(candidates, anchor, epsilon):
+						record["reasons"] = [{"id": "duplicate_candidate"}]
+						rejections.append(record)
+						continue
+					var reasons: Array = _reasons(
+						node, anchor, base, bounds[node_id],
+						source, quality, stage)
+					if not reasons.is_empty():
+						record["reasons"] = reasons
+						rejections.append(record)
+						continue
+					candidates.append(record)
+					additions.append(record)
+		row["candidates"] = candidates
+		augmented[node_id] = row
+		receipt["node_additions"][node_id] = {
+			"node_id": node_id,
+			"fixed_contract": fixed,
+			"proposal_count": 0 if not fixed.is_empty() else \
+				MAX_SUPPORT_PROPOSALS_PER_NODE,
+			"base_candidate_count": row["candidates"].size() - additions.size(),
+			"added_candidates": additions,
+			"rejections": rejections,
+		}
+	return _finish_refinement(receipt, augmented)
 
 static func _bounds(nodes: Array, edges: Array,
 		quality: Dictionary) -> Dictionary:
@@ -150,6 +248,22 @@ static func _record(id: String, slot: int, anchor: Vector3, base: Vector3) -> Di
 	return {"id": "%d:%s/c%02d" % [id.to_utf8_buffer().size(), id, slot],
 		"proposal_index": slot, "anchor": _a3(anchor), "delta_xz_m": _a2(delta),
 		"displacement_m": delta.length(), "displacement_cost_m2": delta.length_squared()}
+static func _refinement_record(id: String, support_index: int,
+		anchor: Vector3, base: Vector3) -> Dictionary:
+	var delta: Vector2 = Vector2(anchor.x - base.x, anchor.z - base.z)
+	return {"id": "%d:%s/%s/s%02d" % [id.to_utf8_buffer().size(), id,
+		REFINEMENT_VERSION, support_index],
+		"proposal_index": _SLOTS.size() + support_index,
+		"anchor": _a3(anchor), "delta_xz_m": _a2(delta),
+		"displacement_m": delta.length(),
+		"displacement_cost_m2": delta.length_squared()}
+static func _contains_anchor(candidates: Array, anchor: Vector3,
+		epsilon: float) -> bool:
+	for candidate_v: Variant in candidates:
+		var candidate: Dictionary = candidate_v
+		if _v3(candidate["anchor"]).distance_to(anchor) <= epsilon:
+			return true
+	return false
 static func _unit(stream: String, slot: int) -> float:
 	var digest: String = MapLayoutCanonical.digest({"stream": stream, "slot": slot})
 	return float(digest.substr(0, 8).hex_to_int()) / 4294967295.0
@@ -162,9 +276,18 @@ static func _reason_ids(rejections: Array) -> Array[String]:
 static func _finish(report: Dictionary) -> Dictionary:
 	report["candidate_digest"] = MapLayoutCanonical.digest(report)
 	return MapLayoutCanonical.ordered_dictionary(report)
+static func _finish_refinement(receipt: Dictionary,
+		node_sets: Dictionary) -> Dictionary:
+	receipt["refinement_digest"] = MapLayoutCanonical.digest(receipt)
+	return {"ok": receipt["errors"].is_empty(),
+		"receipt": MapLayoutCanonical.ordered_dictionary(receipt),
+		"node_sets": node_sets}
 static func _v2(value: Variant) -> Vector2:
 	var row: Array = value
 	return Vector2(_f(row[0]), _f(row[1]))
+static func _v3(value: Variant) -> Vector3:
+	var row: Array = value
+	return Vector3(_f(row[0]), _f(row[1]), _f(row[2]))
 static func _a2(value: Vector2) -> Array[float]: return [value.x, value.y]
 static func _a3(value: Vector3) -> Array[float]: return [value.x, value.y, value.z]
 static func _f(value: Variant) -> float: return MapLayoutCanonical.float_value(value)

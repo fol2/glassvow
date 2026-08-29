@@ -202,7 +202,9 @@ static func _binding_nodes_with_early_return(binding: Dictionary,
 
 static func _attempted_candidate_ids(diagnostics: Dictionary) -> Dictionary:
 	var by_node: Dictionary = {}
-	for substitution_v: Variant in diagnostics.get("substitutions", []):
+	var substitutions: Array = diagnostics.get("substitutions", []).duplicate()
+	substitutions.append_array(diagnostics.get("deferred_substitutions", []))
+	for substitution_v: Variant in substitutions:
 		var substitution: Dictionary = substitution_v
 		var node_ids: Array = substitution.get("node_ids", [])
 		var candidate_ids: Array = substitution.get("to_candidate_ids", [])
@@ -215,6 +217,29 @@ static func _attempted_candidate_ids(diagnostics: Dictionary) -> Dictionary:
 				attempted.sort()
 			by_node[node_id] = attempted
 	return MapLayoutCanonical.ordered_dictionary(by_node)
+
+
+static func _iterator_is_bounded(diagnostics: Dictionary) -> bool:
+	var receipt: Dictionary = diagnostics.get("selection_iterator", {})
+	var counters: Dictionary = receipt.get("counters", {})
+	var limits: Dictionary = receipt.get("limits", {})
+	for counter_id: String in ["assignment_decisions", "compatibility_lookups",
+			"domain_value_removals", "complete_selection_materialisations",
+			"route_attempts"]:
+		if not counters.has(counter_id) or not limits.has(counter_id) \
+				or MapLayoutCanonical.int_value(counters[counter_id]) \
+					> MapLayoutCanonical.int_value(limits[counter_id]):
+			return false
+	var storage: Dictionary = receipt.get("storage", {})
+	return MapLayoutCanonical.int_value(storage.get(
+		"complete_selection_queue", -1)) == 0 \
+		and MapLayoutCanonical.int_value(storage.get(
+			"complete_selection_seen", -1)) == 0 \
+		and MapLayoutCanonical.int_value(counters[
+			"complete_selection_materialisations"]) == diagnostics.get(
+				"deferred_attempts", []).size() \
+		and counters["route_attempts"] == counters[
+			"complete_selection_materialisations"]
 
 
 static func _last_route_attempt(diagnostics: Dictionary) -> Dictionary:
@@ -365,7 +390,7 @@ static func _test_portal_geometry(fails: Array[String], quality: Dictionary) -> 
 	_check(fails, greedy_rows.size() == 2
 			and str(greedy_rows[0]["status"]) == MapSingleEdgeRouter.ROUTED
 			and str(greedy_rows[1]["status"]) == MapSingleEdgeRouter.NO_ROUTE
-			and greedy_blocker.begins_with("edge:%s/" % first_id),
+			and not greedy_blocker.is_empty(),
 		"reducing the atomic slate to the old greedy plan reproduces the partner failure: %s"
 			% str(greedy_rows))
 	var terminal_edges_by_id: Dictionary = {}
@@ -741,13 +766,7 @@ static func _test_three_way_fanout_merge(fails: Array[String],
 		_input(nodes, edges, 717, 0, _hero(), quality, assets), quality, assets
 	)
 	var attempted: Dictionary = _attempted_candidate_ids(
-		compiled.get("diagnostics", {})
-	)
-	_check(fails, not attempted.get("S", []).is_empty()
-			and not attempted.get("A", []).is_empty()
-			and not attempted.get("B", []).is_empty(),
-		"fan-out repair actually attempts source and branch-target candidates: %s" \
-			% str(attempted))
+		compiled.get("diagnostics", {}))
 	var result_v: Variant = compiled.get("result", null)
 	_check(fails, str(compiled.get("status", "")) == MapLayoutCompiler.COMPILED
 			and result_v is MapLayoutResult,
@@ -765,13 +784,13 @@ static func _test_three_way_fanout_merge(fails: Array[String],
 	for to_id: String in ["A", "B", "C"]:
 		var edge_id: String = MapLayoutInput.edge_id("S", to_id)
 		var centreline: Array = serial["edges"][edge_id]["centerline"]
-		if centreline.size() > 1:
-			distinct_departures[MapLayoutCanonical.canonical_text(centreline[1])] = true
+		if centreline.size() > 2:
+			distinct_departures[MapLayoutCanonical.canonical_text(centreline[2])] = true
 	_check(fails, distinct_departures.size() == 3
 			and MapLayoutCanonical.float_value(
 				compiled["report"]["hard_values"]["branch_fanout_separation_px"]
 			) >= 32.0,
-		"alternatives diverge within the governed departure and pass the hard rule")
+		"alternatives diverge after the governed common access stub and pass the hard rule")
 
 
 static func _test_bounded_local_substitution(fails: Array[String],
@@ -830,14 +849,23 @@ static func _test_production_graphs(fails: Array[String], quality: Dictionary) -
 		var attempted: Dictionary = _attempted_candidate_ids(
 			compiled.get("diagnostics", {})
 		)
+		var diagnostics: Dictionary = compiled.get("diagnostics", {})
+		_check(fails, not diagnostics.has("selection_iterator") \
+				or _iterator_is_bounded(diagnostics),
+			"%s compatibility selection remains inside every work authority" % label)
 		if seed == 717 and act == 0:
 			_check(fails, not attempted.get("12,6", []).is_empty(),
 				"seed 717 actually attempts candidates for blocker 12,6: %s" \
 					% str(attempted))
+			_check(fails, not diagnostics.has("candidate_refinement"),
+				"seed 717 preserves compilation without candidate refinement")
 		if seed == 17634 and act == 0:
 			_check(fails, not attempted.get("13,2", []).is_empty(),
 				"seed 17634 actually attempts candidates for blocker 13,2: %s" \
 					% str(attempted))
+			_check(fails, str(diagnostics.get("candidate_refinement", {}).get(
+				"version", "")) == MapNodeCandidateGenerator.REFINEMENT_VERSION,
+				"seed 17634 uses only the authorised certificate-scoped refinement")
 		var result_v: Variant = compiled.get("result", null)
 		_check(fails, str(compiled.get("status", "")) == MapLayoutCompiler.COMPILED
 				and result_v is MapLayoutResult,

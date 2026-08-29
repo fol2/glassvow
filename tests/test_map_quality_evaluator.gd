@@ -2,6 +2,7 @@ extends RefCounted
 @warning_ignore_start("unsafe_call_argument")
 const Contract = preload("res://tests/test_map_layout_contract.gd")
 const Binding = preload("res://domain/map_layout/map_layout_input_binding.gd")
+const Grade = preload("res://presentation/map/map_grade_separation.gd")
 static func _ok(fails: Array[String], value: bool, text: String) -> void:
 	if not value: fails.append("test_map_quality_evaluator: " + text)
 static func run(fails: Array[String]) -> void:
@@ -9,8 +10,10 @@ static func run(fails: Array[String]) -> void:
 	var assets: Dictionary = _assets()
 	_test_registry(fails, quality)
 	_test_focused_camera_binding(fails, quality, assets)
+	_test_selection_screen_feasibility(fails, quality, assets)
 	_test_nodes_and_phone(fails, quality, assets)
 	_test_routes(fails, quality, assets)
+	_test_grade_separation(fails, quality, assets)
 	_test_fanout(fails, quality, assets)
 	_test_seed_717(fails, quality, assets)
 static func _test_registry(fails: Array[String], quality: Dictionary) -> void:
@@ -152,6 +155,65 @@ static func _test_nodes_and_phone(fails: Array[String], quality: Dictionary, ass
 	_ok(fails, _has_profile(phone, "node_scenery_silhouette_overlap_area_px2", "phone-landscape/z3/")
 		and not _has_profile(phone, "node_scenery_silhouette_overlap_area_px2", "pad-landscape/z3/"),
 		"elongated polygon fails only the widest phone profile, not pad")
+
+
+static func _test_selection_screen_feasibility(fails: Array[String],
+		quality: Dictionary, assets: Dictionary) -> void:
+	var nodes: Array = [_node("A", 4, 3), _node("B", 4, 3)]
+	var seat: Vector3 = _seat(nodes[0])
+	var heroes: Dictionary = {
+		"vigil": _placement("hero", "hero", Vector3(100.0, 0.0, 100.0)),
+	}
+	var failing_anchors: Dictionary = {"A": _a3(seat), "B": _a3(seat)}
+	var failing: Dictionary = MapQualityEvaluator.selection_screen_feasibility(
+		nodes, [], failing_anchors, heroes, assets, quality, ["A", "B"]
+	)
+	var shared: Dictionary = MapQualityEvaluator.selection_screen_context(
+		nodes, [], heroes, assets, quality)
+	var failing_cached: Dictionary = MapQualityEvaluator.selection_screen_feasibility(
+		nodes, [], failing_anchors, heroes, assets, quality, ["A", "B"], shared
+	)
+	var failing_direct: Dictionary = _case(
+		nodes, failing_anchors, [], {}, quality, assets
+	)
+	var passing_anchors: Dictionary = {
+		"A": _a3(seat + Vector3(-2.0, 0.0, -2.3)),
+		"B": _a3(seat + Vector3(2.0, 0.0, 2.3)),
+	}
+	var passing: Dictionary = MapQualityEvaluator.selection_screen_feasibility(
+		nodes, [], passing_anchors, heroes, assets, quality, ["A", "B"]
+	)
+	var passing_cached: Dictionary = MapQualityEvaluator.selection_screen_feasibility(
+		nodes, [], passing_anchors, heroes, assets, quality, ["A", "B"], shared
+	)
+	var passing_direct: Dictionary = _case(
+		nodes, passing_anchors, [], {}, quality, assets
+	)
+	_ok(fails, failing.get("hard_pass", true) == false
+			and failing.get("hard_values", {}).get("node_ink_clearance_px", INF)
+				== failing_direct.get("hard_values", {}).get(
+					"node_ink_clearance_px", -INF)
+			and failing.get("rejection_reason", {}).get("metric_id", "") \
+				== "node_ink_clearance_px",
+		"selection precheck reuses the direct #466 failure and exact margin")
+	_ok(fails, passing.get("hard_pass", false) == true
+			and passing.get("hard_values", {}).get("node_ink_clearance_px", -INF)
+				== passing_direct.get("hard_values", {}).get(
+					"node_ink_clearance_px", INF)
+			and MapLayoutCanonical.float_value(
+				passing.get("weakest_signed_hard_margin", -INF)) >= 0.0,
+		"selection precheck accepts the same screen-legal local anchors as #466")
+	var exact_fields: Array[String] = ["hard_pass", "local_node_ids", "hard_values",
+		"hard_margins", "priority_metric_ids", "weakest_signed_hard_margin",
+		"rejection_reason"]
+	var cached_exact: bool = true
+	for field: String in exact_fields:
+		cached_exact = cached_exact and failing.get(field) == failing_cached.get(field) \
+			and passing.get(field) == passing_cached.get(field)
+	_ok(fails, cached_exact,
+		"shared-context unary/pair summaries are byte-exact with direct #466 fields")
+
+
 static func _test_routes(fails: Array[String], quality: Dictionary, assets: Dictionary) -> void:
 	var ab: Array = [_node("A", 2, 3), _node("B", 10, 3)]
 	var aa: Vector3 = _seat(ab[0]); var bb: Vector3 = _seat(ab[1])
@@ -171,6 +233,81 @@ static func _test_routes(fails: Array[String], quality: Dictionary, assets: Dict
 		[["A", "C", [_a3(ca), _a3(cc)]], ["A", "D", [_a3(ca), _a3(cd)]]], {}, quality, assets)
 	_ok(fails, int(shared["hard_values"]["unrelated_edge_intersection_count"]) == 0,
 		"shared graph endpoint is legal")
+
+
+static func _test_grade_separation(fails: Array[String], quality: Dictionary,
+		assets: Dictionary) -> void:
+	var nodes: Array = [
+		_node("A", 2, 1), _node("B", 2, 5),
+		_node("C", 10, 5), _node("D", 10, 1),
+	]
+	var anchors: Dictionary = {}
+	for node: Dictionary in nodes:
+		anchors[str(node["id"])] = _a3(_seat(node))
+	var first_id: String = MapLayoutInput.edge_id("A", "C")
+	var second_id: String = MapLayoutInput.edge_id("B", "D")
+	var routes: Dictionary = {
+		first_id: {"from": "A", "to": "C",
+			"centerline": [anchors["A"], anchors["C"]],
+			"corridor_width": 0.72},
+		second_id: {"from": "B", "to": "D",
+			"centerline": [anchors["B"], anchors["D"]],
+			"corridor_width": 0.72},
+	}
+	var graded: Dictionary = Grade.apply(routes, quality)
+	var graded_routes: Dictionary = graded.get("routes", {})
+	_ok(fails, graded.get("ok", false) == true,
+		"governed grade solver finds an orientation: %s" \
+			% str(graded.get("binding", {})))
+	if graded.get("ok", false) != true:
+		return
+	var paths: Array = []
+	for edge_id: String in MapLayoutCanonical.sorted_keys(graded_routes):
+		var edge: Dictionary = graded_routes[edge_id]
+		paths.append([edge["from"], edge["to"], edge["centerline"]])
+	var report: Dictionary = _case(nodes, anchors, paths, {}, quality, assets)
+	_ok(fails, graded.get("ok", false) == true
+			and graded.get("receipt", {}).get("bridge_span_count", 0) == 1
+			and report.get("hard_pass", false) == true
+			and MapLayoutCanonical.float_value(
+				report.get("hard_values", {}).get("minimum_vertical_clearance_m", 0.0)
+			) >= Grade.MINIMUM_VERTICAL_CLEARANCE_M
+			and MapLayoutCanonical.float_value(
+				report.get("hard_values", {}).get("maximum_ramp_grade", INF)
+			) <= Grade.MAXIMUM_RAMP_GRADE + MapLayoutCanonical.float_value(
+				quality["epsilon"]["world_m"]),
+		"one governed local bridge makes a proper crossing physically valid: %s" \
+			% str({"error": report.get("case_error", []),
+				"hard_pass": report.get("hard_pass", false),
+				"hard_values": report.get("hard_values", {}),
+				"violations": report.get("violations", []),
+				"grade": graded.get("receipt", {})}))
+	var flattened_paths: Array = []
+	for edge_id: String in MapLayoutCanonical.sorted_keys(graded_routes):
+		var edge: Dictionary = graded_routes[edge_id]
+		var flattened: Array = []
+		for point_v: Variant in edge["centerline"]:
+			var point: Vector3 = _v3(point_v)
+			flattened.append([point.x, 0.0, point.z])
+		flattened_paths.append([edge["from"], edge["to"], flattened])
+	var flattened: Dictionary = _case(
+		nodes, anchors, flattened_paths, {}, quality, assets
+	)
+	_ok(fails, flattened.get("hard_pass", true) == false
+			and MapLayoutCanonical.int_value(flattened.get(
+				"hard_values", {}).get("unrelated_edge_intersection_count", 0)) == 1,
+		"flattening the selected bridge restores the same-level crossing failure: %s" \
+			% str(flattened.get("case_error", flattened.get("violations", []))))
+	var touching: Dictionary = Grade.apply({
+		"touch-a": {"from": "A", "to": "B", "corridor_width": 0.72,
+			"centerline": [[-2.0, 0.0, 0.0], [2.0, 0.0, 0.0]]},
+		"touch-b": {"from": "C", "to": "D", "corridor_width": 0.72,
+			"centerline": [[0.0, 0.0, 0.0], [0.0, 0.0, 2.0]]},
+	}, quality)
+	_ok(fails, touching.get("ok", true) == false
+			and touching.get("binding", {}).get("id", "") \
+				== "ambiguous_xz_overlap",
+		"a tangential endpoint touch is not reclassified as a proper crossing")
 static func _test_fanout(fails: Array[String], quality: Dictionary, assets: Dictionary) -> void:
 	var nodes: Array = [_node("S", 2, 3), _node("A", 10, 1), _node("B", 10, 5)]
 	var s: Vector3 = _seat(nodes[0]); var a: Vector3 = _seat(nodes[1]); var b: Vector3 = _seat(nodes[2])
@@ -215,7 +352,10 @@ static func _case(nodes: Array, anchors: Dictionary, paths: Array, scenery: Dict
 			"vigil": _placement("hero", "hero", Vector3(100, 0, 100))},
 		"scenery_instances": scenery, "hard_measurements": {}, "soft_scores": {},
 		"selected_restart_id": 0, "selected_candidate_id": "test", "input_digest": input.digest()}
-	return MapQualityEvaluator.evaluate(input, MapLayoutResult.create(identity), assets, quality)
+	var result: MapLayoutResult = MapLayoutResult.create(identity)
+	if result == null:
+		return {"case_error": MapLayoutResult.validate_identity(identity)}
+	return MapQualityEvaluator.evaluate(input, result, assets, quality)
 static func _assets() -> Dictionary:
 	var profiles: Dictionary = {"hero": _profile("hero", Vector3(2, 3, 2)),
 		"wall": _profile("wall", Vector3(8, 2, 1))}

@@ -4,9 +4,15 @@ extends RefCounted
 
 const COMPILED: String = "COMPILED"
 const NO_FEASIBLE_NODE_ROUTE_LAYOUT: String = "NO_FEASIBLE_NODE_ROUTE_LAYOUT"
+const ALL_GROUND_EXHAUSTED: String = "ALL_GROUND_EXHAUSTED"
 const VERSION: String = "map-layout-compiler-v1"
 const MAX_LOCAL_SUBSTITUTIONS: int = 64
 const _Routes = preload("res://presentation/map/map_layout_compiler_routes.gd")
+const _Grade = preload("res://presentation/map/map_grade_separation.gd")
+const _ScreenPreflight = preload(
+	"res://presentation/map/map_selection_screen_preflight.gd")
+const _SelectionIterator = preload(
+	"res://presentation/map/map_compatibility_selection_iterator.gd")
 const _REQUIRED_HERO_FIELDS: PackedStringArray = [
 	"asset_id", "profile_id", "position", "yaw_radians", "scale",
 ]
@@ -112,7 +118,130 @@ static func compile(input: MapLayoutInput, quality: Dictionary,
 			seen[key] = true
 			queue.append(child)
 	if diagnostics["substitutions"].size() >= MAX_LOCAL_SUBSTITUTIONS:
-		return _failure(diagnostics, _bound_exhausted(last_binding))
+		diagnostics["ground_exhaustion"] = _ground_exhaustion(
+			diagnostics, last_binding, "substitution_bound"
+		)
+	else:
+		diagnostics["ground_exhaustion"] = _ground_exhaustion(
+			diagnostics, last_binding, "queue_empty"
+		)
+	return _deferred_compile(input, source, quality, assets, heroes,
+		node_sets, diagnostics)
+
+
+static func _deferred_compile(input: MapLayoutInput, source: Dictionary,
+		quality: Dictionary, assets: Dictionary, heroes: Dictionary,
+		node_sets: Dictionary, diagnostics: Dictionary) -> Dictionary:
+	var last_binding: Dictionary = {}
+	diagnostics["deferred_attempts"] = []
+	diagnostics["deferred_substitutions"] = []
+	var preflight: Dictionary = _ScreenPreflight.build(input, node_sets,
+		heroes, assets, quality, str(diagnostics["candidate_digest"]))
+	var base_preflight: Dictionary = preflight.get("receipt", {})
+	var deletion_certificate: Dictionary = preflight.get(
+		"deletion_certificate", {})
+	diagnostics["selection_screen_preflight"] = base_preflight
+	if preflight.get("ok", false) != true:
+		var preflight_binding: Dictionary = preflight.get("binding", {})
+		if str(preflight_binding.get("id", "")) != "domain_empty":
+			return _failure(diagnostics, preflight_binding)
+		var refinement: Dictionary = MapNodeCandidateGenerator.refine(
+			input, quality, node_sets, str(diagnostics["candidate_digest"]),
+			deletion_certificate)
+		diagnostics["candidate_refinement"] = refinement.get("receipt", {})
+		if refinement.get("ok", false) != true:
+			var refinement_errors: Array = diagnostics[
+				"candidate_refinement"].get("errors", [])
+			return _failure(diagnostics, _binding("candidate_refinement",
+				"certificate_support", str(refinement_errors[0]) \
+					if not refinement_errors.is_empty() else "refinement failed"))
+		node_sets = refinement["node_sets"]
+		preflight = _ScreenPreflight.build_refined(input, node_sets,
+			heroes, assets, quality, base_preflight,
+			diagnostics["candidate_refinement"])
+		diagnostics["selection_screen_refinement_preflight"] = \
+			preflight.get("receipt", {})
+		if preflight.get("ok", false) != true:
+			return _failure(diagnostics, preflight.get("binding", {}))
+	var refined_preflight: Dictionary = diagnostics.get(
+		"selection_screen_refinement_preflight", {})
+	var refinement_receipt: Dictionary = diagnostics.get(
+		"candidate_refinement", {})
+	var iterator: RefCounted = _SelectionIterator.new(
+		node_sets, preflight["constraints"], {
+			"candidate_digest": diagnostics["candidate_digest"],
+			"base_preflight_receipt_digest": base_preflight.get(
+				"receipt_digest", ""),
+			"deletion_certificate_digest": deletion_certificate.get(
+				"certificate_digest", ""),
+			"candidate_refinement_digest": refinement_receipt.get(
+				"refinement_digest", ""),
+			"refined_preflight_receipt_digest": refined_preflight.get(
+				"receipt_digest", ""),
+		})
+	var pending_substitution: Dictionary = {}
+	var previous_candidate_ids: Dictionary = {}
+	while true:
+		var selected: Dictionary = iterator.next_assignment()
+		diagnostics["selection_iterator"] = selected["receipt"]
+		var iterator_status: String = str(selected.get("status", ""))
+		if iterator_status != _SelectionIterator.ASSIGNMENT:
+			return _failure(diagnostics, _selection_iterator_binding(
+				iterator_status, diagnostics["selection_iterator"], last_binding))
+		var selection: Dictionary = selected["selection"]
+		var candidate_ids: Dictionary = selected["candidate_ids"]
+		if diagnostics["deferred_attempts"].is_empty():
+			diagnostics["screen_preflight_initial_candidate_ids"] = candidate_ids
+		elif not pending_substitution.is_empty():
+			pending_substitution["to_candidate_ids"] = _candidate_tuple(
+				pending_substitution["node_ids"], candidate_ids)
+			var changed_nodes: Array[String] = []
+			for node_id: String in MapLayoutCanonical.sorted_keys(candidate_ids):
+				if str(previous_candidate_ids.get(node_id, "")) \
+						!= str(candidate_ids[node_id]):
+					changed_nodes.append(node_id)
+			pending_substitution["changed_node_ids"] = changed_nodes
+			pending_substitution["index"] = diagnostics[
+				"deferred_substitutions"].size() + 1
+			diagnostics["deferred_substitutions"].append(pending_substitution)
+			pending_substitution = {}
+		var attempt: Dictionary = _build_attempt(
+			input, source, quality, assets, heroes, node_sets, selection, true
+		)
+		diagnostics["deferred_attempts"].append(attempt["diagnostics"])
+		for key: String in [
+			"route_order", "inversion_components", "access_lengths",
+			"route_calls", "chosen_bypass_sides", "selected_bypass_owners",
+			"rejected_route_plans", "component_route_plans",
+		]:
+			diagnostics[key] = attempt["diagnostics"].get(key, diagnostics[key])
+		diagnostics["chosen_candidate_ids"] = attempt.get(
+			"chosen_candidate_ids", {})
+		if attempt.get("ok", false) == true:
+			return _success(diagnostics, attempt["result"], attempt["report"])
+		var binding: Dictionary = attempt.get("binding", {})
+		last_binding = binding
+		if binding.get("details", {}).get("terminal", false) == true:
+			return _failure(diagnostics, binding)
+		if MapQualityEvaluator.is_selection_screen_metric(
+				str(binding.get("id", ""))):
+			return _failure(diagnostics, _screen_preflight_miss(binding))
+		if diagnostics["deferred_substitutions"].size() \
+				>= MAX_LOCAL_SUBSTITUTIONS:
+			return _failure(diagnostics, _bound_exhausted(last_binding))
+		var governed_nodes: Array[String] = _binding_nodes(binding, input)
+		var nogood: Dictionary = iterator.add_nogood(
+			governed_nodes, candidate_ids)
+		if nogood.get("ok", false) != true:
+			return _failure(diagnostics, _missing_mechanism(binding))
+		pending_substitution = {
+			"node_ids": governed_nodes,
+			"from_candidate_ids": _candidate_tuple(
+				governed_nodes, candidate_ids),
+			"binding": binding,
+			"nogood_digest": nogood.get("nogood_digest", ""),
+		}
+		previous_candidate_ids = candidate_ids
 	return _failure(diagnostics, _missing_mechanism(last_binding))
 
 
@@ -193,7 +322,8 @@ static func _hero_placements(source: Dictionary, assets: Dictionary) -> Dictiona
 
 static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 		quality: Dictionary, assets: Dictionary, heroes: Dictionary,
-		node_sets: Dictionary, selection: Dictionary) -> Dictionary:
+		node_sets: Dictionary, selection: Dictionary,
+		deferred_grade: bool = false) -> Dictionary:
 	var anchors: Dictionary = {}
 	var chosen_ids: Dictionary = {}
 	for node_id: String in MapLayoutCanonical.sorted_keys(node_sets):
@@ -233,7 +363,7 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 					component, _component_plan_specs(
 						component, plan, half_width + safety, quality
 					), edges_by_id, plan, heroes, routes, source, assets,
-					quality, half_width, safety, bypass_usage
+					quality, half_width, safety, bypass_usage, deferred_grade
 				)
 				_record_atomic_diagnostics(plan_diagnostics, atomic)
 				plan_diagnostics["component_route_plans"].append(
@@ -246,7 +376,8 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 					)
 					var repaired_atomic: Dictionary = _repair_blocking_atomic_component(
 						component, blocking_atomic_id, edges_by_id, plan, heroes, routes,
-						source, assets, quality, half_width, safety, bypass_usage
+						source, assets, quality, half_width, safety, bypass_usage,
+						deferred_grade
 					)
 					if repaired_atomic.get("ok", false) == true:
 						var blocking_component: Dictionary = repaired_atomic[
@@ -287,7 +418,7 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 				continue
 		var routed_edge: Dictionary = _route_edge(
 			edge, plan, heroes, routes, source, assets, quality,
-			half_width, safety, bypass_usage
+			half_width, safety, bypass_usage, false, deferred_grade
 		)
 		var route_plan_diagnostics: Dictionary = routed_edge.get("plan", {})
 		_record_route_diagnostics(
@@ -297,7 +428,7 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 			var repaired: Dictionary = _repair_blocking_component(
 				edge, routed_edge, edges_by_id, plan, heroes, routes,
 				source, assets, quality, half_width, safety, bypass_usage,
-				completed_components
+				completed_components, deferred_grade
 			)
 			if repaired.get("ok", false) == true:
 				var component: Dictionary = repaired["component"]
@@ -328,6 +459,24 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 		if not routed_edge.get("row", {}).is_empty():
 			route_rows.append(routed_edge["row"])
 		routes[edge_id] = routed_edge["route"]
+	if deferred_grade:
+		var graded: Dictionary = _Grade.apply(routes, quality)
+		if graded.get("ok", false) != true:
+			return _attempt_failure(chosen_ids, route_rows,
+				graded.get("binding", {}), plan_diagnostics)
+		plan_diagnostics["grade_receipt"] = graded["receipt"]
+		if MapLayoutCanonical.int_value(
+				graded["receipt"].get("bridge_span_count", 0)) == 0:
+			return _attempt_failure(chosen_ids, route_rows, {
+				"kind": "grade_separation",
+				"id": "deferred_without_grade",
+				"node_id": "",
+				"edge_id": "",
+				"profile_id": "world",
+				"reason": "deferred routing produced an all-ground result outside the frozen ground search",
+				"details": {"grade_receipt": graded["receipt"]},
+			}, plan_diagnostics)
+		routes = graded["routes"]
 	var selected_id: String = "selection/%s" % MapLayoutCanonical.digest(chosen_ids)
 	var provisional: MapLayoutResult = _result(
 		source, input, anchors, routes, heroes, {}, {}, selected_id
@@ -382,7 +531,8 @@ static func _route_edge(edge: Dictionary, plan: Dictionary,
 		heroes: Dictionary, accepted_routes: Dictionary, source: Dictionary,
 		assets: Dictionary, quality: Dictionary, half_width: float,
 		safety: float, usage: Dictionary,
-		reverse_side_order: bool = false) -> Dictionary:
+		reverse_side_order: bool = false,
+		deferred_grade: bool = false) -> Dictionary:
 	var edge_id: String = str(edge["id"])
 	var channel: PackedVector2Array = _Routes.route_channel(
 		edge, plan, (half_width + safety) * 2.0
@@ -398,6 +548,48 @@ static func _route_edge(edge: Dictionary, plan: Dictionary,
 		edge, plan, obstacles_report["obstacles"], half_width, safety,
 		quality, channel, usage, reverse_side_order
 	)
+	if deferred_grade and not accepted_routes.is_empty() \
+			and str(routed.get("status", "")) != MapSingleEdgeRouter.ROUTED:
+		var ground_route: Dictionary = routed.duplicate(true)
+		var deferred_obstacles: Dictionary = _Routes.route_obstacles(
+			edge, plan, heroes, accepted_routes, source, assets, channel,
+			half_width + safety, false
+		)
+		if deferred_obstacles.get("ok", false) == true:
+			var retry: Dictionary = _Routes.route_planned(
+				edge, plan, deferred_obstacles["obstacles"], half_width, safety,
+				quality, channel, usage, reverse_side_order
+			)
+			if str(retry.get("status", "")) == MapSingleEdgeRouter.ROUTED:
+				var removed: Array[String] = []
+				for obstacle_id_v: Variant in obstacles_report["obstacle_ids"]:
+					var obstacle_id: String = str(obstacle_id_v)
+					if obstacle_id.begins_with("edge:"):
+						removed.append(obstacle_id)
+				var retry_diagnostics: Dictionary = retry.get(
+					"plan_diagnostics", {}).duplicate(true)
+				var ground_diagnostics: Dictionary = ground_route.get(
+					"plan_diagnostics", {})
+				retry_diagnostics["normal_calls"] = MapLayoutCanonical.int_value(
+					retry_diagnostics.get("normal_calls", 0)
+				) + MapLayoutCanonical.int_value(
+					ground_diagnostics.get("normal_calls", 0)
+				)
+				retry_diagnostics["bypass_calls"] = MapLayoutCanonical.int_value(
+					retry_diagnostics.get("bypass_calls", 0)
+				) + MapLayoutCanonical.int_value(
+					ground_diagnostics.get("bypass_calls", 0)
+				)
+				retry_diagnostics["deferred_corridor_retry"] = {
+					"removed_obstacle_ids": removed,
+					"ground_status": ground_route.get("status", ""),
+					"ground_reason": ground_route.get("reason", ""),
+					"ground_digest": ground_route.get("digest", ""),
+					"ground_plan": ground_diagnostics,
+				}
+				retry["plan_diagnostics"] = retry_diagnostics
+				routed = retry
+				obstacles_report = deferred_obstacles
 	var route_diagnostics: Dictionary = routed.get("plan_diagnostics", {})
 	var row: Dictionary = {
 		"edge_id": edge_id,
@@ -429,7 +621,8 @@ static func _repair_blocking_component(edge: Dictionary, failed: Dictionary,
 		edges_by_id: Dictionary, plan: Dictionary, heroes: Dictionary,
 		accepted_routes: Dictionary, source: Dictionary, assets: Dictionary,
 		quality: Dictionary, half_width: float, safety: float, usage: Dictionary,
-		completed_components: Dictionary) -> Dictionary:
+		completed_components: Dictionary,
+		deferred_grade: bool = false) -> Dictionary:
 	var blocker_id: String = str(
 		failed.get("binding", {}).get("details", {}).get("blocking_obstacle_id", "")
 	)
@@ -460,7 +653,7 @@ static func _repair_blocking_component(edge: Dictionary, failed: Dictionary,
 	provisional_usage["components"].erase(component_id)
 	var current: Dictionary = _route_edge(
 		edge, plan, heroes, provisional_routes, source, assets, quality,
-		half_width, safety, provisional_usage
+		half_width, safety, provisional_usage, false, deferred_grade
 	)
 	if current.get("ok", false) != true:
 		return {}
@@ -469,7 +662,7 @@ static func _repair_blocking_component(edge: Dictionary, failed: Dictionary,
 		component, _component_plan_specs(
 			component, plan, half_width + safety, quality
 		), edges_by_id, plan, heroes, provisional_routes, source, assets,
-		quality, half_width, safety, provisional_usage
+		quality, half_width, safety, provisional_usage, deferred_grade
 	)
 	if replay.get("ok", false) != true:
 		return {}
@@ -481,7 +674,8 @@ static func _repair_blocking_atomic_component(component: Dictionary,
 		blocking_id: String, edges_by_id: Dictionary, plan: Dictionary,
 		heroes: Dictionary, accepted_routes: Dictionary, source: Dictionary,
 		assets: Dictionary, quality: Dictionary, half_width: float,
-		safety: float, usage: Dictionary) -> Dictionary:
+		safety: float, usage: Dictionary,
+		deferred_grade: bool = false) -> Dictionary:
 	if blocking_id.is_empty() or component["edge_ids"].size() != 2:
 		return {}
 	var blocking: Dictionary = plan["components_by_id"][blocking_id]
@@ -502,7 +696,7 @@ static func _repair_blocking_atomic_component(component: Dictionary,
 		component, _component_plan_specs(
 			component, plan, half_width + safety, quality
 		), edges_by_id, plan, heroes, provisional_routes, source, assets,
-		quality, half_width, safety, provisional_usage
+		quality, half_width, safety, provisional_usage, deferred_grade
 	)
 	if current.get("ok", false) != true:
 		return {}
@@ -512,7 +706,7 @@ static func _repair_blocking_atomic_component(component: Dictionary,
 		blocking, _component_plan_specs(
 			blocking, plan, half_width + safety, quality
 		), edges_by_id, plan, heroes, current_routes, source, assets,
-		quality, half_width, safety, current_usage
+		quality, half_width, safety, current_usage, deferred_grade
 	)
 	if replay.get("ok", false) != true:
 		return {}
@@ -623,7 +817,8 @@ static func _route_atomic_component(component: Dictionary,
 		specs: Array[Dictionary], edges_by_id: Dictionary, plan: Dictionary,
 		heroes: Dictionary, accepted_routes: Dictionary, source: Dictionary,
 		assets: Dictionary, quality: Dictionary, half_width: float,
-		safety: float, entry_usage: Dictionary) -> Dictionary:
+		safety: float, entry_usage: Dictionary,
+		deferred_grade: bool = false) -> Dictionary:
 	var component_id: String = str(component["id"])
 	var prefix: Dictionary = _accepted_prefix(accepted_routes)
 	var plan_records: Array[Dictionary] = []
@@ -649,7 +844,8 @@ static func _route_atomic_component(component: Dictionary,
 			var routed_edge: Dictionary = _route_edge(
 				edges_by_id[edge_id], plan, heroes, provisional_routes,
 				source, assets, quality, half_width, safety,
-				provisional_usage, bool(spec["reverse_side_order"])
+				provisional_usage, bool(spec["reverse_side_order"]),
+				deferred_grade
 			)
 			var route_diagnostics: Dictionary = routed_edge.get("plan", {})
 			for obstacle_id_v: Variant in route_diagnostics.get(
@@ -1003,6 +1199,14 @@ static func _binding_nodes(binding: Dictionary,
 	return MapLayoutCanonical.sorted_keys(affected)
 
 
+static func _candidate_tuple(node_ids: Array,
+		candidate_ids: Dictionary) -> Array[String]:
+	var out: Array[String] = []
+	for node_id_v: Variant in node_ids:
+		out.append(str(candidate_ids.get(str(node_id_v), "")))
+	return out
+
+
 static func _missing_mechanism(binding: Dictionary) -> Dictionary:
 	var out: Dictionary = binding.duplicate(true)
 	out["kind"] = "missing_mechanism"
@@ -1012,6 +1216,50 @@ static func _missing_mechanism(binding: Dictionary) -> Dictionary:
 		"required": "a governed candidate or routing mechanism",
 	}
 	return out
+
+
+static func _ground_exhaustion(diagnostics: Dictionary,
+		binding: Dictionary, cause: String) -> Dictionary:
+	var receipt: Dictionary = MapLayoutCanonical.ordered_dictionary({
+		"status": ALL_GROUND_EXHAUSTED,
+		"cause": cause,
+		"attempt_count": diagnostics["attempts"].size(),
+		"route_substitution_count": diagnostics["substitutions"].size(),
+		"max_route_substitutions": MAX_LOCAL_SUBSTITUTIONS,
+		"candidate_digest": diagnostics["candidate_digest"],
+		"terminal_binding": binding,
+		"attempts_digest": MapLayoutCanonical.digest(diagnostics["attempts"]),
+		"substitutions_digest": MapLayoutCanonical.digest(
+			diagnostics["substitutions"]),
+	})
+	receipt["receipt_digest"] = MapLayoutCanonical.digest(receipt)
+	return MapLayoutCanonical.ordered_dictionary(receipt)
+
+
+static func _screen_preflight_miss(binding: Dictionary) -> Dictionary:
+	return {
+		"kind": "selection_screen_preflight",
+		"id": "unindexed_binding",
+		"node_id": str(binding.get("node_id", "")),
+		"edge_id": "",
+		"profile_id": str(binding.get("profile_id", "")),
+		"reason": "complete #466 evaluation found a selection-only binding absent from the upfront index",
+		"details": {"binding": binding, "terminal": true},
+	}
+
+
+static func _selection_iterator_binding(status: String, receipt: Dictionary,
+		last_binding: Dictionary) -> Dictionary:
+	return {
+		"kind": "selection_compatibility_search",
+		"id": status,
+		"node_id": "",
+		"edge_id": "",
+		"profile_id": "selection",
+		"reason": "bounded compatibility-selection iterator terminated",
+		"details": {"selection_iterator_receipt": receipt,
+			"last_route_binding": last_binding, "terminal": true},
+	}
 
 
 static func _bound_exhausted(binding: Dictionary) -> Dictionary:
