@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "stage": "post-843e899-terminal-hit-precision-capacity",
+  "question": "Under complete fresh current-policy rectangles, does the directly identity-proved exact-lethal Facet-salvage producer have robust payoff-capable natural activation, exact-inactive controls, viable activation and more than one authored Attack identity without changing path, RNG or result?",
+  "hypothesis": "The current Dusk policy's existing lethal preview and varied policy repertoire naturally produce exact-lethal authored Attack hits while another enemy remains often enough to support a later equal-cohort CRN first look, while a substantial exact-inactive policy set preserves causal contrast.",
+  "claimBoundary": "Fresh-cohort existing-policy producer opportunity, payoff-capable natural capacity, exact-inactive controls, viability and card breadth only. The payoff is disabled and no causal effect, endpoint, policy control, complementarity, balance, product, acceptance or P9 claim is estimated.",
+  "scientificBasis": {
+    "entryGate": "The fixed source/interface/direct A/B/AB preflight completed 58 of 58 controls with zero faults and froze only facet-salvage-one-ember for natural capacity.",
+    "observationalArm": "Producer=true and consumer=false is the directly proved non-perturbing A-only instrument. It observes eligible marks and expiry but cannot grant Ember or change policy state.",
+    "capacityBoundary": "Only exact-lethal marks expiring consumer-disabled are payoff-capable because combat continued. Exact-final combat-over marks are exposure evidence but do not count as active capacity.",
+    "noGuessing": "The complete 64-policy by four-seed rectangle, thresholds, metrics, source, identity comparator and stop rule are fixed before any whole-run row. No support-derived subset or policy control exists."
+  },
+  "factorDefinitions": {
+    "terminalHitPrecisionPayoff": {
+      "levels": ["off"],
+      "fixed": "The candidate payoff is disabled in both arms. This stage cannot estimate its causal effect."
+    },
+    "producerObservation": {
+      "levels": ["absent-current-main", "producer-only-A"],
+      "meaning": "The candidate arm emits research telemetry for exact-lethal intrinsic Facet marks and expiry while consumer and payoff remain disabled.",
+      "pathConstraint": "After removing terminal-hit research telemetry and probe labels, every candidate row must exactly equal its current-main pair, including policy snapshot, fights, outcome, deck, relics, economy, final RNG and all existing package metrics."
+    },
+    "scorelinePayoff": {
+      "levels": ["off-closed"],
+      "fixed": "Separate immutable factor; absent."
+    },
+    "afterimagePayoff": {
+      "levels": ["off-closed"],
+      "fixed": "Separate immutable factor; absent."
+    },
+    "acquisitionPriority": {
+      "levels": ["current-main"],
+      "fixed": "Exact same sampled policy identity in each pair; no acquisition control."
+    },
+    "wardSetupPriority": {
+      "levels": ["current-main"],
+      "fixed": "No Ward or setup control."
+    }
+  },
+  "design": {
+    "type": "Two-arm paired non-causal natural-capacity observation; not a factorial and not an endpoint experiment.",
+    "matrix": [
+      {"arm": "current-main", "producer": "unavailable", "consumer": false, "payoff": "off", "rows": 256},
+      {"arm": "producer-only-A", "producer": true, "consumer": false, "payoff": "off", "rows": 256}
+    ],
+    "pairing": "Every arm uses policyRoot 560, policy indices 0 through 63, seeds 346626 through 346629, Duskblade, Vow 5, current content, current policy resolver, baseline, simulator and estimator in identical policy-major/seed-minor order.",
+    "mechanisticallyJustifiedInteractions": [
+      "Exact-lethal producer by continuing combat: producer marks ending consumer-disabled are payoff-capable; combat-over marks are measured but cannot reach the fixed consumer.",
+      "Exact-lethal producer by authored Attack identity: card counters describe whether natural capacity is broader than one card, without making card identity a level or subset.",
+      "Policy identity by simulation seed: a policy is robust-active only when payoff-capable activation occurs in at least two of its four fixed seeds."
+    ],
+    "aliasStructure": "Final-combat exact lethals are exposure-only and do not alias payoff-capable activation. Multiple marks in one card count as one eligible card and retain mark cardinality descriptively. Scoreline, Afterimage, generic any-kill, Reaper, next-PLAY, target transfer, Shatter tempo and positive overkill remain absent, closed or deferred.",
+    "omittedCells": "No AB payoff arm, off-versus-on endpoint, policy control, exactness tie-break, card subset, seed subset, threshold search, Scoreline, Afterimage, acquisition, Ward setup, protected seed, held-out row, ML, RL or optimiser."
+  },
+  "cohort": {
+    "policyRoot": 560,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346626, 346627, 346628, 346629],
+    "minimumRowsPerRobustPolicy": 2,
+    "rowsPerArm": 256,
+    "identity": "Fresh and disjoint from every frozen #421 whole-run cohort. Each of 64 deterministic policy identities is evaluated on all four seeds in both arms; no identity may be selected, removed, replaced or added."
+  },
+  "estimands": {
+    "unit": "Policy identity over its complete four-seed rectangle.",
+    "exposureActive": "Producer marks occur in at least two of four rows, including exact-final marks.",
+    "active": "At least one payoff-capable consumer-disabled exact-lethal card occurs in at least two of four rows.",
+    "exactInactive": "Zero payoff-capable exact-lethal cards in all four rows.",
+    "ambiguous": "Payoff-capable activation in exactly one of four rows; reported and never promoted or subsetted.",
+    "viable": "An active policy has at least one payoff-capable row whose unchanged current-main outcome is win.",
+    "cardBreadth": "Number and counts of distinct authored Attack ids associated with payoff-capable expiry; descriptive counts are complete and no card subset is selected.",
+    "identity": "Zero canonical mismatches between each current-main row and its A-only row after removing only probe labels and terminal-hit research counters.",
+    "attribution": "For every row, producer equals mediator-set; expiry partitions into eligible and combat-over cards; producer marks partition into eligible and final marks; consumer, payoff, request, realised and consumed expiry counts remain zero.",
+    "notEstimated": "Payoff effect, outcome delta, exactness preference, policy-control value, cross-package interaction, balance, product value, acceptance or protected confirmation."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumExposureActivePolicies": 16,
+    "minimumDistinctEligibleCards": 2,
+    "maximumBaselineFaultRows": 1,
+    "maximumSemanticFaults": 0,
+    "maximumIdentityMismatches": 0,
+    "provenance": "The 16 active/inactive, eight viable, two-of-four robustness and one baseline-fault limits reuse the frozen 64-policy structural-capacity scale. Two eligible card identities is the smallest pre-support gate that rejects a single-card alias without selecting a card subset."
+  },
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "baselineHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "baselineStatus": [
+      "?? tools/research_421_terminal_hit_precision_capacity_probe.gd",
+      "?? tools/research_421_terminal_hit_precision_capacity_probe.gd.uid"
+    ],
+    "candidateStatus": [
+      "M domain/rules/combat.gd",
+      " M tools/balance_sim.gd",
+      "?? tools/research_421_terminal_hit_precision_capacity_probe.gd",
+      "?? tools/research_421_terminal_hit_precision_capacity_probe.gd.uid"
+    ],
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/research_421_terminal_hit_precision_capacity_probe.gd": "b50faa6209cc18f4ed0b449a84e644817832f01367c831ebd77a4d35afcdac20",
+      "tools/research_421_terminal_hit_precision_capacity_probe.gd.uid": "473ee16c690a6ac9b516bf14f653f39a565977efef416b71a9200e059cf99f20"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3aa19c4d63e2dca4bb0c06a572867e36f39d36a8da41218eafe30046e7a32288",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "f9eb03c6ea7dcd1325bd0a82f7eb69bc165a6404a4d558a1e254885a0bc9b391",
+      "tools/research_421_terminal_hit_precision_capacity_probe.gd": "b50faa6209cc18f4ed0b449a84e644817832f01367c831ebd77a4d35afcdac20",
+      "tools/research_421_terminal_hit_precision_capacity_probe.gd.uid": "473ee16c690a6ac9b516bf14f653f39a565977efef416b71a9200e059cf99f20"
+    },
+    "candidateDiffSha256": {
+      "domain/rules/combat.gd": "f6cb0b9d19348968e256226d61702758272c7a774b20b00cec68b3657b7005b5",
+      "tools/balance_sim.gd": "b3eb60b9ce9d5bafe2786ef204362d6bb26875444d8e3a5e77dc023135c49b46"
+    },
+    "godotBinaryPath": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "runnerSha256": "815f1000cb861d7cdff51b41f7c63731eecc8073a67daf649ee780811e9bb36d",
+    "taskCapsulePath": "task-capsule-5460811702-v20.json",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+    "predecessorSha256": {
+      "post_843e899_terminal_hit_precision_design_v1.py": "c6d36413100a0570e06cbaf80f3dd675034804e5052329197980c8981c38e17c",
+      "post_843e899_terminal_hit_precision_identity_v1.py": "9674f928ed554a7fb59c01fb686215d59e463c01502d618f8b9d83b570af3364",
+      "protocols/post-843e899-terminal-hit-precision-design-v1.json": "0090af8e74ec92cad121546df84b3ab6bc319a3b9a5314cc70eb3a1bb6ff4a9f",
+      "protocols/post-843e899-terminal-hit-precision-identity-v1.json": "0f001cc9b53ec01a31f5a54b3579daf2459214443280dbac416cf85bd4ee6e86",
+      "summaries/post-843e899-terminal-hit-precision-design-v1.json": "423fa2c5cd3bd994b03c23a9d78961c5434f4b353621eeca7d24d488bc2b906d",
+      "summaries/post-843e899-terminal-hit-precision-identity-v1.json": "20389f48781a9ce7df3564f34e9d6d8d58c525efd05dc47c1cecfea1b258b5a2",
+      "summaries/post-843e899-terminal-hit-precision-primary-sources-v1.md": "f67b7dffbcc578774dac3456003008acbe15e45f1e4653f00f98777b18b6a2f5",
+      "cache/sha256/51709a8e6b6375902ab6bb77b150a0c55056c598a8e7423f96ead72aaff78cb7.json": "51709a8e6b6375902ab6bb77b150a0c55056c598a8e7423f96ead72aaff78cb7",
+      "cache/sha256/ab64bed61bcf2200bb8496501e57ec7a0737a94e2f8f7f2220d1e1a74d450e06.json": "ab64bed61bcf2200bb8496501e57ec7a0737a94e2f8f7f2220d1e1a74d450e06"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 2,
+    "newScientificSimulatorObservationRows": 512,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1,
+    "firstLooks": 1
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns complete cohort construction, two content-addressed plans, process execution, exact paired comparison, telemetry attribution, policy aggregation and stop/go.",
+    "order": "Verify immutable evidence, refs, source, Godot and ledger; pass source/cardinality gates; execute all 256 current-main rows once; execute all 256 A-only rows once; analyse the sole complete look; verify byte-identical ledger.",
+    "firstLook": "All 512 observations are the only look. No source, row, policy, seed, gate, metric, threshold, subset or cap changes after execution begins.",
+    "stagedConstraint": "This capacity stage may authorise only a separately preregistered equal-cohort CRN first look. It cannot support a payoff or endpoint claim.",
+    "futureCrnConstraint": "Any later causal arms must use the same frozen policy identities, simulation seed identities, baseline, estimator, first-look budget and stopping rule across every compared level.",
+    "methodConstraint": "No policy control, ML, RL or optimiser is authorised unless this experiment identifies a remaining repertoire bottleneck and measured decision value justifies it."
+  },
+  "decisionRules": {
+    "success": "All immutable, source, exact identity, attribution and reliability gates pass; at least 16 policies are robust-active, 16 exact-inactive, eight viable, 16 exposure-active and two distinct eligible Attack ids are observed; all 512 rows complete within 120 seconds; ledger is byte-identical.",
+    "successAuthority": "Apply boundary 1: freeze only facet-salvage-one-ember and preregister the smallest equal-cohort off-versus-AB CRN first look using current policy identities. Do not add a policy control, joint package, protected seed, ML, RL or optimiser.",
+    "futility": "Inputs and observations complete, but any identity, attribution, reliability, active, inactive, viable, exposure or minimal card-breadth gate fails.",
+    "futilityAuthority": "Apply boundary 2: close exact-lethal precision without threshold, card subset, policy, cohort, payoff or method rescue; continue serially with a zero-row positive-overkill excess design inside #421.",
+    "inconclusive": "A frozen input or fixed process is unavailable, a process is incomplete, or the exact decision is unavailable at 120 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record exact-lethal capacity inconclusive at the preregistered cap. Do not rerun, alter the cohort, change a gate or spend a causal/protected row."
+  },
+  "forbidden": [
+    "any causal payoff or endpoint claim from producer-only telemetry",
+    "any policy control, exactness preference or candidate retuning",
+    "any row, policy, seed, card, outcome or support subset",
+    "any Scoreline, Afterimage, acquisition, Ward setup or positive-overkill variation",
+    "any repair, rerun, reserve row or adaptive continuation after a completed failure",
+    "any append to the research ledger",
+    "any protected acceptance or reserve seed",
+    "any ML, RL or optimiser"
+  ]
+}

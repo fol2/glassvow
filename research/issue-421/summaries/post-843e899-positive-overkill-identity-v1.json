@@ -1,0 +1,96 @@
+{
+  "GodotProcesses": 2,
+  "archiveHeadPreserved": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+  "authority": "Apply boundary 1: freeze only positive-overkill-facet-salvage-one-ember for a separately preregistered fresh existing-policy natural-capacity check. Add no policy control, magnitude level, endpoint row, protected seed, ML, RL or optimiser.",
+  "claimBoundary": "Source, interface, direct A/B/AB, call-cardinality, exact-null and intended-mediator identity only. No support, magnitude effect, capacity, causal endpoint, policy sensitivity, balance, product, acceptance or P9 claim.",
+  "decision": "freeze-positive-overkill-facet-salvage-for-natural-capacity",
+  "decisionBoundary": 1,
+  "directControlledObservations": 58,
+  "directFaults": [],
+  "executionError": "",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "outputSha256": {
+    "baseline": "651012d2a6a7662ebaa5ebb2c0623f8f6a6bd9137fce2a9df7ca25b2cb56b834",
+    "candidate": "977010ec92f5c5e886efcd7dadbda5e24441336e98d1d96f41bc35587fdbb181"
+  },
+  "planSha256": {
+    "baseline": "5514cd164441a051bfc74f4c2431a26a034a801860b7a6a7cffd679e8d930639",
+    "candidate": "271d773020e259370e31cda9e5e493ae111be32280dc5c06d0dea4cfa3942e8e"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "ac83c8c8b6a54cc6ded75118833fc49860ddca09c9ddcd6f517bbb7a16b8fe0e",
+  "runnerSha256": "f12aaa5f0f7ec8f294e48d1134e2338dbd2d58c5ae26837387255ca71533bd0f",
+  "schemaVersion": 1,
+  "sourceGateFaults": [],
+  "sourceIdentity": {
+    "baselineHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_positive_overkill_probe.gd": "05681c52d12a6eae01c081a71cae6ff588fcbb9164edf92b9b83ca641a634611",
+      "tools/research_421_positive_overkill_probe.gd.uid": "67064d895d89855563116f5598e480386646b0d365960e46fcb3019009eca54b"
+    },
+    "baselineStatus": [
+      "?? tools/research_421_positive_overkill_probe.gd",
+      "?? tools/research_421_positive_overkill_probe.gd.uid"
+    ],
+    "candidateCombatDiffSha256": "4e99f7c409dd41aeb2123ab9ba82453a47abc37ffa3ff6592a11ec908d4e7d2c",
+    "candidateHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "527c3119273db21b0a489b888a845a5d9bbfbd0f78e24cb3b989f30a5541d36c",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_positive_overkill_probe.gd": "05681c52d12a6eae01c081a71cae6ff588fcbb9164edf92b9b83ca641a634611",
+      "tools/research_421_positive_overkill_probe.gd.uid": "67064d895d89855563116f5598e480386646b0d365960e46fcb3019009eca54b"
+    },
+    "candidateStatus": [
+      "M domain/rules/combat.gd",
+      "?? tools/research_421_positive_overkill_probe.gd",
+      "?? tools/research_421_positive_overkill_probe.gd.uid"
+    ],
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "predecessorSha256": {
+      "post_843e899_positive_overkill_design_v1.py": "b1395fc521e3c4f494891f2e337617883f2f2b242220fe006c16982902fce031",
+      "protocols/post-843e899-positive-overkill-design-v1.json": "173c0c7a1475d3bad68db084276c0ba00c03bda0a32ac7048c5dfffeedb60e02",
+      "summaries/post-843e899-positive-overkill-design-v1.json": "2a346faf8260a4f208b29ff602a5e88ae341207a1cd35a7e0c88c8498599174d",
+      "summaries/post-843e899-positive-overkill-primary-sources-v1.md": "97bc67ea53d77ded6f18a7c76691ad0e9de3ca0527704cdfdbf110d0f67ced72",
+      "summaries/post-843e899-terminal-hit-precision-capacity-v1.json": "6f826f609bf677a63ae5161d08a99e82e6b4a44b6d57149d293ae6f73d032d1c"
+    },
+    "repositoryRefs": {
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "runnerSha256": "f12aaa5f0f7ec8f294e48d1134e2338dbd2d58c5ae26837387255ca71533bd0f",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385"
+  },
+  "wallTimeSeconds": 7.203216415946372
+}

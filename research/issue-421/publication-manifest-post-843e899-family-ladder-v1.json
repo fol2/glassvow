@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "authorityCommentBodySha256": "58d71b9af60d811f40b489da19499b3dd113fd77fcb06bdf12fa6692fb5686f6",
+  "archiveParent": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+  "preservedRefs": {
+    "research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+  },
+  "publicationRef": "research/issue-421-post-843e899-family-ladder-evidence",
+  "source": {
+    "main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "taskCapsulePath": "task-capsule-5460811702-v20.json",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf"
+  },
+  "results": {
+    "terminalHitPrecision": {
+      "design": "SUCCESS",
+      "identity": "SUCCESS",
+      "directControlledObservations": 58,
+      "capacity": "FUTILITY",
+      "decision": "close-exact-lethal-precision-and-advance-to-positive-overkill",
+      "activePolicies": 43,
+      "exactInactivePolicies": 0,
+      "viablePolicies": 8,
+      "exposureActivePolicies": 64,
+      "capacityRows": 512,
+      "protocolSha256": "b5e967510eb91a8ab75490c8fdf3711d5a5b94496b26cb1c32a94f3e9e97f1f9",
+      "summarySha256": "6f826f609bf677a63ae5161d08a99e82e6b4a44b6d57149d293ae6f73d032d1c"
+    },
+    "positiveOverkill": {
+      "design": "SUCCESS",
+      "identity": "SUCCESS",
+      "directControlledObservations": 58,
+      "capacity": "FUTILITY",
+      "decision": "close-positive-overkill-and-terminal-hit-precision-advance-to-cross-turn-hold",
+      "activePolicies": 64,
+      "exactInactivePolicies": 0,
+      "viablePolicies": 7,
+      "exposureActivePolicies": 64,
+      "capacityRows": 512,
+      "protocolSha256": "5a677077c46915a8f0861050ffd3da41e2c6a36854ba344b128d51052d68cbb8",
+      "summarySha256": "8e014d8df93e25f91f3c70fe4e1474d5021ae98dc6a0507f2bc738bce10189fb"
+    },
+    "crossTurnHold": {
+      "design": "SUCCESS",
+      "identity": "SUCCESS",
+      "directControlledObservations": 57,
+      "postResultCoverage": "FUTILITY",
+      "decision": "close-cross-turn-hold-representation-and-advance-to-intent-history",
+      "blockingSourceFact": "Offering reaches Pyre Tithe, which removes sibling held cards through shared exhaust without the frozen mediator expiry hook.",
+      "capacityRows": 0,
+      "protocolSha256": "5228eabc4b86ed4b891880f2a149e243597f1eb75e216f723d3ee835d565f6b7",
+      "summarySha256": "dbfccbae0faea8b3d2849661914672e2bac28c185ceed25767eb97f251693412"
+    },
+    "intentHistory": {
+      "design": "SUCCESS",
+      "identity": "SUCCESS",
+      "directControlledObservations": 113,
+      "capacity": "FUTILITY",
+      "decision": "close-intent-history-and-advance-to-private-counter-tag-transform",
+      "activePolicies": 50,
+      "exactInactivePolicies": 2,
+      "viablePolicies": 11,
+      "exposureActivePolicies": 55,
+      "distinctEligibleCards": 17,
+      "distinctEligibleMoves": 14,
+      "capacityRows": 512,
+      "protocolSha256": "e82a8f993d1b11fa88bca77ea5413fd13ffd3d280dc0b297531ae4559b640ecd",
+      "summarySha256": "7dc4e73a5770c62b8c5fd5e46aeb19f0deaaca7fb159f14a863c98697f4363b8"
+    },
+    "privateCounterTagTransform": {
+      "design": "FUTILITY",
+      "decision": "close-private-counter-tag-transform-and-raise-owner-authority-package",
+      "finiteRepresentations": 6,
+      "eligibleRepresentations": 0,
+      "newSimulatorRows": 0,
+      "protocolSha256": "edec43a795b505296eae0bd11c2677d4b296a2857ed0727635e0dc83805e506f",
+      "summarySha256": "047563a9e7f09172d8eb34e39485cbd29e870b87427afc78a41330449480ea3e",
+      "primarySourceReportSha256": "1a2dc70e78b8ebbe645474035cab89ddd89e85ce5eb9b8635179e28db4d1df39"
+    }
+  },
+  "familyLadderDisposition": {
+    "allFourSerialClassesExhausted": true,
+    "humanAuthorityRequired": true,
+    "safeIssueState": "needs-info",
+    "minimumOwnerInput": "Supply a finite product-semantic family-selection rule that chooses a mechanistically meaningful producer/consumer direction; the owner agent will freeze the complete twelve-field contract.",
+    "scientificRecommendation": "Maintain the safe block until an explicit authority delta exists; the evidence cannot rank remaining product-semantic alternatives without guessing."
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "verification": {
+    "directControlledObservations": 286,
+    "newScientificSimulatorRows": 1536,
+    "godotProcesses": 14,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "protocols": 13,
+    "summariesAndPrimarySourceReports": 18,
+    "deterministicRunners": 13,
+    "rawCacheObjects": 24,
+    "prototypeSourceFiles": 23
+  },
+  "prohibitedClaimsAndActions": [
+    "universal mechanism impossibility",
+    "causal package or detector admission",
+    "product promotion or product truth mutation",
+    "protected acceptance or reserve seed access",
+    "research/product pull request or Actions",
+    "replacement or successor ticket",
+    "#421 acceptance or #108 P9 receipt"
+  ],
+  "claimBoundary": "This publication establishes only the preregistered dispositions of the four finite serial classes under current main, exact immutable evidence and the frozen budgets. It does not prove that every imaginable Duskblade mechanism is impossible. All four classes being exhausted activates the owner-authority clause in comment 5460811702; no further scientific row is authorised until a new authority delta supplies or relaxes the missing product semantics."
+}

@@ -1,0 +1,189 @@
+{
+  "GodotProcesses": 0,
+  "assessments": [
+    {
+      "canonicalSha256": "7bb4d022891aa8a24b54de5f8571bcbd7210363652cd4fc77e261c219a293688",
+      "closureAliases": [],
+      "eligible": true,
+      "failedGates": [],
+      "id": "positive-overkill-facet-salvage-one-ember",
+      "selectionVector": [
+        1,
+        2,
+        2,
+        2,
+        1
+      ]
+    },
+    {
+      "canonicalSha256": "14272553324a5f6c0caeedc6616f39977e1c304d06925a8ad8dfab4656f9af8e",
+      "closureAliases": [
+        "closed generic any-kill Ember branch"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "mechanisticallyJustifiedMediator",
+        "explicitProducerMediatorConsumerPayoffExpiry"
+      ],
+      "id": "direct-positive-overkill-ember",
+      "selectionVector": [
+        0,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "canonicalSha256": "8f8f9d20169f99eb1924cfde6b2bd663df90326f8db963197f9fd942916809be",
+      "closureAliases": [],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "policyControlCountAtMostOne",
+        "nonScalar"
+      ],
+      "id": "proportional-positive-overkill-ember",
+      "selectionVector": [
+        1,
+        3,
+        2,
+        4,
+        2
+      ]
+    },
+    {
+      "canonicalSha256": "2de6473eb34f8b328a1bbc389e3eec733f68ab745ed62866361b70cfca6a4a00",
+      "closureAliases": [
+        "closed Reaper and turn-state action economy",
+        "closed Ward and recovery routes"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "mechanisticallyJustifiedMediator",
+        "deterministic",
+        "fightLocal",
+        "noSaveOrPersistentRunField",
+        "noRng",
+        "explicitProducerMediatorConsumerPayoffExpiry",
+        "policyControlCountAtMostOne"
+      ],
+      "id": "direct-positive-overkill-other-resource",
+      "selectionVector": [
+        0,
+        3,
+        1,
+        3,
+        4
+      ]
+    },
+    {
+      "canonicalSha256": "644313647b739236b539ae19af6eae71c888d6cfef39870b0204d464dd418e0e",
+      "closureAliases": [
+        "closed cross-enemy Facet and target-transfer routes"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "sourceCompatible",
+        "deterministic",
+        "noGlobalSelector",
+        "policyControlCountAtMostOne"
+      ],
+      "id": "positive-overkill-cross-enemy-chip",
+      "selectionVector": [
+        1,
+        3,
+        3,
+        3,
+        1
+      ]
+    },
+    {
+      "canonicalSha256": "6dbc99aa7250e95a359a2dbfb7c342d64d9450a93009f4f036b572dc87c38f71",
+      "closureAliases": [
+        "closed immediate post-kill consumer topology",
+        "closed direct-kill to next single-target Attack"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "policyControlCountAtMostOne"
+      ],
+      "id": "positive-overkill-to-next-play",
+      "selectionVector": [
+        1,
+        4,
+        3,
+        3,
+        1
+      ]
+    }
+  ],
+  "authority": "Apply boundary 1: freeze only positive-overkill-facet-salvage-one-ember for a separately preregistered source/interface/null and direct A/B/AB preflight. Add no support row, policy control, protected seed, ML, RL or optimiser.",
+  "cachedObservationRowsRead": 0,
+  "claimBoundary": "Zero-row current-source, immutable-alias and deterministic contract selection only. No positive-overkill support, frequency, simulator, capacity, causal, policy, balance, product, acceptance or P9 claim.",
+  "decision": "freeze-positive-overkill-facet-salvage-contract-for-preflight",
+  "decisionBoundary": 1,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "priorEvidenceDecisions": {
+    "crossEnemy": "close-cross-enemy-facet-on-identity-failure",
+    "exactLethal": "close-exact-lethal-precision-and-advance-to-positive-overkill",
+    "killRelay": "close-direct-kill-relay-at-attribution-boundary",
+    "killTopology": "close-immediate-post-kill-consumer-topology",
+    "reaper": "close-reapers-bell-death-chain-family",
+    "shatterTempo": "close-shatter-tempo-relay-without-implementation",
+    "turnState": "close-turn-state-action-economy-family"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "173c0c7a1475d3bad68db084276c0ba00c03bda0a32ac7048c5dfffeedb60e02",
+  "runnerSha256": "b1395fc521e3c4f494891f2e337617883f2f2b242220fe006c16982902fce031",
+  "schemaVersion": 1,
+  "selectedCandidateIds": [
+    "positive-overkill-facet-salvage-one-ember"
+  ],
+  "selectedContract": {
+    "aliasStructure": "Exact lethal remains closed and is an explicit null. Generic any-kill and Reaper consume at death; this consumer is the same card's later Facet settlement and requires a lost intrinsic entitlement plus positive overkill. Next-PLAY, target transfer, Shatter tempo, draw, duplicate, Scoreline, Afterimage and proportional-overkill remain closed or forbidden.",
+    "consumer": "After all authored card effects, the existing deferred pending-chip settlement order-independently computes whether any dead-target record has the eligible Boolean while leaving living-target chip and Shatter settlement unchanged in current insertion order. If combat continues it consumes the aggregate once after living settlement; no later PLAY or selector participates.",
+    "duskBoundary": "The on path is legal only for run.aspect==0, where apply_chips owns Facet/Shatter. Ash, direct damage outside a PLAY and finale handoff are exact nulls even when the factor says on.",
+    "expiry": "Every mark is consumed or expires with the originating card's existing pending-chips clear. Combat-over, missing consumer and all null producers clear without excess payoff. No mark survives another PLAY, turn, combat or save.",
+    "fixedFactors": "Scoreline payoff and Afterimage payoff remain separate closed factors fixed off. Acquisition priority, Ward setup, content, card costs, enemy definitions, current policy identities, RNG identities and all other controls remain current-main within every future contrast.",
+    "mediatorState": "That target's existing per-card pending_chips record gains one ephemeral positiveOverkillIntrinsicFacet Boolean. It represents only the base intrinsic Facet entitlement earned by the blood-drawing Attack and otherwise discarded because the target died. Numeric overkill is direct telemetry, not stored scalar state; authored chip, Beacon and explicit chip effects do not count or stack.",
+    "naturalCost": "The current policy must draw and pay for an authored Attack whose status-adjusted, post-block realised HP loss strictly exceeds the target's remaining HP, while at least one enemy remains after the whole card. Exact lethal, weaker hits, non-Attack damage, poison and finale handoff produce no mediator.",
+    "nullPath": "Absent settings, explicit off, exact lethal, non-lethal, factor-on Ash, non-Attack, poison, direct hit outside PLAY and finale handoff reproduce current-main after removing settings metadata. No null adds a pending key, research event, payoff, RNG movement or result change.",
+    "payoffOperation": "The consumer requests gain_embers(run, cb, 1) exactly once at most per played card. Existing quest and Ember-cap laws own the realised delta. Direct telemetry records requested one and realised delta; multiple excess amount, hits or targets never increase the request.",
+    "policyExposure": "Evaluate frozen existing policy identities first. The pilot values lethal damage but has no overkill preference. No policy control is admitted now; at most one bounded deterministic control may be separately frozen only if capacity proves a policy-repertoire bottleneck and measured decision value.",
+    "producer": "While the factor is enabled, play_card resolves a Duskblade authored Attack. One canonical hit_enemy call deals positive post-block HP loss without finale handoff, emits killingBlow=true and overkill>0, and records that target in the originating card's existing pending_chips map.",
+    "terminalHitFactor": "One independent binary factor named terminalHitExcess with levels off and positive-overkill-facet-salvage-one-ember. Magnitude, threshold, card, target, payoff and cap are fixed and cannot become levels."
+  },
+  "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "supportMetricsInspected": 0,
+  "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+  "wallTimeSeconds": 11.462083
+}

@@ -1,0 +1,111 @@
+{
+  "GodotProcesses": 2,
+  "archiveHeadPreserved": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+  "authority": "Apply boundary 1: freeze only one-turn-held-attack-one-ember for a separately preregistered fresh existing-policy natural-capacity check. Add no policy control, endpoint row, protected seed, Scoreline, Afterimage, ML, RL or optimiser.",
+  "claimBoundary": "Source, interface, exact-null, direct A/B/AB, UID, draw-replacement, event-order, payoff and expiry identity only. No natural support, capacity, causal endpoint, policy sensitivity, balance, product, acceptance or P9 claim.",
+  "counts": {
+    "activeLifecycleScenarios": 7,
+    "baselineRows": 9,
+    "candidateRows": 48,
+    "injectedFailClosedScenarios": 3,
+    "nullIdentityComparisons": 36,
+    "rngIdentityScenarios": 9
+  },
+  "decision": "freeze-cross-turn-hold-representation-for-natural-capacity",
+  "decisionBoundary": 1,
+  "directControlledObservations": 57,
+  "directFaults": [],
+  "executionError": "",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "outputSha256": {
+    "baseline": "0227beb252c3ecae594d856dc40d11cb458793b609180e42477091155ae87950",
+    "candidate": "c84249ee01d72fc4bc2d35d7c3914f15a328daac59d9bc522209394af0c1763a"
+  },
+  "processStreams": {
+    "baseline": {
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "a4af672025e6fe94034124dae8d75120714fd358276d19eb821c890229d7019f"
+    },
+    "candidate": {
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "472bf207a9fc7be104ece090965375c897aae11912e308bfd9912dcfa0bc969a"
+    }
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "bf601342c2ae0c62d547e35d937846c4a95fdd4f6ccbd2db6b3129e44ab9f4a4",
+  "runnerSha256": "12b697698f658b14a86d8b7aaca406e8d68521ce1dedad63397123a360eef5c3",
+  "schemaVersion": 1,
+  "sourceGateFaults": [],
+  "sourceIdentity": {
+    "baselineHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_cross_turn_hold_probe.gd": "1c97f3acedec75fc3659ba00b687036abd4dc7f0adcd4f7c424ac315a8efd75d",
+      "tools/research_421_cross_turn_hold_probe.gd.uid": "583b3d4180004d820d8be98efe20f5b510743d15f340b2454680a3fa79a52fe0"
+    },
+    "baselineStatus": [
+      "?? tools/research_421_cross_turn_hold_probe.gd",
+      "?? tools/research_421_cross_turn_hold_probe.gd.uid"
+    ],
+    "candidateHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateResearchDiffSha256": "11fafc12acd773100c4b53a5609c332f431e83e97f50d237d730e754c325d3a0",
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "35088ae198a01000ced6317a73287be05a6cf372ac22c338f9d3cf0ea41ad7bb",
+      "domain/state/combat_state.gd": "7d7f85d117d705a53acfbb8d4845bcb87cd30f73a904beaea42078414ec686b3",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_cross_turn_hold_probe.gd": "1c97f3acedec75fc3659ba00b687036abd4dc7f0adcd4f7c424ac315a8efd75d",
+      "tools/research_421_cross_turn_hold_probe.gd.uid": "583b3d4180004d820d8be98efe20f5b510743d15f340b2454680a3fa79a52fe0"
+    },
+    "candidateStatus": [
+      "M domain/rules/combat.gd",
+      " M domain/state/combat_state.gd",
+      "?? tools/research_421_cross_turn_hold_probe.gd",
+      "?? tools/research_421_cross_turn_hold_probe.gd.uid"
+    ],
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "predecessorSha256": {
+      "post_843e899_cross_turn_hold_design_v1.py": "6713fd4909c02bf66daacc2d472d72477e0564a6d4f265533e25b05c1c72b01c",
+      "protocols/post-843e899-cross-turn-hold-design-v1.json": "e7bf7280b395d8a91c9cedc6aa0fa049fd37dd238faec988c75b92a5273517c6",
+      "summaries/post-843e899-cross-turn-hold-design-v1.json": "c25c5ddbb5f0cd3ec429eac9b362721cbb95ed14581a82e80a1b2eda0a26d2c6",
+      "summaries/post-843e899-cross-turn-hold-primary-sources-v1.md": "516263db61c86a67ab31112e00462e338da37b93ec9df8e45243454dc2f5bb0a",
+      "summaries/post-843e899-positive-overkill-capacity-v1.json": "8e014d8df93e25f91f3c70fe4e1474d5021ae98dc6a0507f2bc738bce10189fb"
+    },
+    "repositoryRefs": {
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "runnerSha256": "12b697698f658b14a86d8b7aaca406e8d68521ce1dedad63397123a360eef5c3",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385"
+  },
+  "wallTimeSeconds": 7.546777958981693
+}

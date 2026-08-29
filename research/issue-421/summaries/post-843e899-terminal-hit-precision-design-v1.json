@@ -1,0 +1,229 @@
+{
+  "GodotProcesses": 0,
+  "assessments": [
+    {
+      "canonicalSha256": "353047e41ea2049d8b426d0e87d1070d7aa20b69de94eafcf71e558517dd9a06",
+      "closureAliases": [],
+      "eligible": true,
+      "failedGates": [],
+      "id": "facet-salvage-one-ember",
+      "selectionVector": [
+        1,
+        2,
+        2,
+        2,
+        1
+      ]
+    },
+    {
+      "canonicalSha256": "abfbe1b69b82807ca76755050a3b367488545a11ecc31de444fbe4647da000e5",
+      "closureAliases": [
+        "current non-final any-kill Ember grant",
+        "closed any-kill family"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "mechanisticallyJustifiedMediator",
+        "explicitProducerMediatorConsumerPayoffExpiry"
+      ],
+      "id": "direct-exact-kill-ember",
+      "selectionVector": [
+        0,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "canonicalSha256": "ab55710f89a66743199c38d77b432172b7ef2ca4928f53a14b3ee543c25c154d",
+      "closureAliases": [
+        "closed Reaper's Bell death-chain action economy",
+        "closed turn-state action economy"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "mechanisticallyJustifiedMediator",
+        "explicitProducerMediatorConsumerPayoffExpiry"
+      ],
+      "id": "direct-exact-kill-energy",
+      "selectionVector": [
+        0,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "canonicalSha256": "a3cfbc6e26dbb65ac87be3308b31c3057a3d9dbf409332aa3a86b176801f31f3",
+      "closureAliases": [],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "mechanisticallyJustifiedMediator",
+        "explicitProducerMediatorConsumerPayoffExpiry"
+      ],
+      "id": "direct-exact-kill-ward",
+      "selectionVector": [
+        0,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "canonicalSha256": "8ecb36c3da14645bce6d2058ddd9bfb0207f003ca3c0da27f38fb9bdc58f0100",
+      "closureAliases": [
+        "closed Reaper's Bell death-chain draw",
+        "closed draw-thread family"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "mechanisticallyJustifiedMediator",
+        "deterministic",
+        "noRng",
+        "explicitProducerMediatorConsumerPayoffExpiry"
+      ],
+      "id": "direct-exact-kill-draw",
+      "selectionVector": [
+        0,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "canonicalSha256": "6c1895097752bbd47989f4a3c7da79543d699555bbd2201df42e9d095128b971",
+      "closureAliases": [
+        "closed weak-mend and fight-quality recovery surfaces"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "mechanisticallyJustifiedMediator",
+        "fightLocal",
+        "noSaveOrPersistentRunField",
+        "explicitProducerMediatorConsumerPayoffExpiry"
+      ],
+      "id": "direct-exact-kill-heal",
+      "selectionVector": [
+        0,
+        3,
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "canonicalSha256": "b96e819f999bf6c252d0ce11d6a67d5ebf4b34ded2594795709f7acdc9313ea0",
+      "closureAliases": [
+        "closed complete immediate post-kill consumer topology",
+        "closed direct kill to next single-target Attack"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct"
+      ],
+      "id": "exact-kill-to-next-play",
+      "selectionVector": [
+        1,
+        4,
+        3,
+        3,
+        1
+      ]
+    },
+    {
+      "canonicalSha256": "2606e9f481961b3426727a953d1e4a711e6f068f4f6146f2ac2b9c81016c79dd",
+      "closureAliases": [
+        "closed cross-enemy Facet transfer and target-topology surfaces"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "deterministic",
+        "noGlobalSelector"
+      ],
+      "id": "exact-kill-cross-enemy-chip",
+      "selectionVector": [
+        1,
+        3,
+        3,
+        3,
+        1
+      ]
+    }
+  ],
+  "authority": "Freeze only facet-salvage-one-ember for one separately preregistered source/interface, call-cardinality, comparator and exact-null preflight. Do not inspect support, execute a simulator row, vary the payoff, add a policy control, use protected seeds or mutate product truth.",
+  "cachedObservationRowsRead": 0,
+  "claimBoundary": "Exact-source, immutable-alias and deterministic contract selection only; no observation, support, simulator, causal, product or P9 claim.",
+  "decision": "freeze-terminal-hit-facet-salvage-contract-for-preflight",
+  "decisionBoundary": 1,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "priorEvidenceDecisions": {
+    "frontier": "record-fight-local-mechanism-selection-gate-unavailable",
+    "killRelay": "close-direct-kill-relay-at-attribution-boundary",
+    "killTopology": "close-immediate-post-kill-consumer-topology",
+    "reaperBell": "close-reapers-bell-death-chain-family",
+    "shatterTempo": "close-shatter-tempo-relay-without-implementation",
+    "stateZone": "close-existing-combat-state-zone-grammar",
+    "turnState": "close-turn-state-action-economy-family"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "0090af8e74ec92cad121546df84b3ab6bc319a3b9a5314cc70eb3a1bb6ff4a9f",
+  "runnerSha256": "c6d36413100a0570e06cbaf80f3dd675034804e5052329197980c8981c38e17c",
+  "schemaVersion": 1,
+  "selectedCandidateIds": [
+    "facet-salvage-one-ember"
+  ],
+  "selectedContract": {
+    "aliasStructure": "Generic any-kill and Reaper's Bell act in _on_enemy_death; the selected consumer is the later per-card Facet settlement and requires an otherwise-lost base intrinsic Dusk chip plus exact zero overkill. It never changes living chips, Facet overflow, Shatter, authored extra chip or Beacon. Immediate-next-PLAY, direct-kill relay, target transfer, Shatter tempo, draw-thread, duplicate-copy, Scoreline, Afterimage and positive-overkill remain closed or deferred and are not levels of this grammar.",
+    "consumer": "After all authored card effects, the existing deferred pending-chips settlement order-independently computes whether any dead-target record has an eligible exactLethalIntrinsicFacet mark while leaving unchanged living-target chip and Shatter settlement in its current insertion order. If combat continues, it consumes the aggregate once after living-target settlement; no later PLAY, target choice or global selector participates.",
+    "duskBoundary": "The on path is legal only for run.aspect==0, where apply_chips owns Facet/Shatter. Ashwarden, non-player Attack damage and finale handoff are exact nulls even when the setting says on.",
+    "expiry": "The mark is consumed by that card's deferred Facet settlement or expires unused when the settlement is skipped, the card has no continuing combat, or pending_chips is cleared. It cannot cross card terminal movement, another PLAY, a turn or a combat.",
+    "fixedFactors": "Scoreline payoff and Afterimage payoff remain separate closed factors fixed off. Acquisition priority, Ward setup priority, content, card costs, enemy definitions, current policy identity, RNG identity and all other research controls remain current-main and equal within every future contrast.",
+    "mediatorState": "That target's existing per-card pending_chips record gains one research-only exactLethalIntrinsicFacet boolean. It represents exactly the base one-chip intrinsic Facet entitlement that this blood-drawing Attack earned but which current deferred settlement would discard solely because the target is dead. Authored d.chip, Beacon and explicit chip effects do not count, stack, enter CombatState.to_dict or survive the card.",
+    "naturalCost": "The policy must spend and sequence an authored Attack and choose damage and target state so the final canonical hit matches remaining HP exactly after block and status arithmetic. Using a stronger overkilling hit, a non-Attack kill, a poison/art/phial kill or the wrong target produces no mediator or payoff.",
+    "nullPath": "Absent settings, explicit off and any Ashwarden on request must reproduce the frozen current-main result, event queue, policy snapshot, trajectory, RNG and output byte-for-byte after removal of the settings wrapper. Off and Ash must not add a pending-chips key, research event or payoff call.",
+    "payoffOperation": "After unchanged living-target Facet and Shatter settlement, the consumer requests gain_embers(run, cb, 1) exactly once at most per played card when the aggregate is true. Existing quest and Ember-cap laws own the realised delta. Direct research telemetry records requested=1 and realised delta; the existing EMBER event remains the payoff event when realised is non-zero.",
+    "policyExposure": "Evaluate frozen existing policy identities first. The current pilot already previews and prefers lethal attacks but has no exactness preference. No policy control is admitted now; at most one deterministic exact-lethal tie-break may be separately frozen only if direct evidence proves natural activation is the sole bottleneck.",
+    "producer": "While the factor is enabled, play_card resolves a Duskblade card of authored type attack. One canonical hit_enemy call deals positive unblocked HP loss, emits killingBlow=true and overkill=0 without finale handoff, and records that target in the card's existing pending_chips map.",
+    "terminalHitFactor": "One independent causal factor named terminalHitPrecision with levels off and facet-salvage-one-ember. The payoff magnitude, per-card cap, producer, mediator, consumer and expiry are fixed, not candidate levels."
+  },
+  "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "supportMetricsInspected": 0,
+  "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+  "wallTimeSeconds": 11.701093
+}

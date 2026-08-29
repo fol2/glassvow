@@ -1,0 +1,433 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "stage": "post-843e899-private-counter-tag-transform-zero-row-design",
+  "question": "After the first three ordered classes are validly closed, can the final private counter/tag/transform class supply exactly one finite, source-compatible twelve-field Dusk-only fight-local contract without reopening an immutable family or adding a prohibited selector?",
+  "hypothesis": "The complete fight-local carrier partition contains no legal contract: aggregate, player, enemy and card-owned private state alias closed causal topologies, while an explicit card transform requires the prohibited hand-card selector.",
+  "claimBoundary": "Exact-source carrier completeness, immutable-closure aliasing and zero-row legality only. No support, capacity, causal endpoint, policy control, complementarity, package, detector, product, protected-seed, #421 acceptance or P9 claim.",
+  "scientificBasis": {
+    "serialEntry": "The complete terminal class, exact cross-turn representation and intent-history class have reached their immutable automatic dispositions. Owner comment 5460811702 orders private counter/tag/transform last.",
+    "carrierCompleteness": "A fight-local mediator that spans producer and consumer must be owned by aggregate/player combat state, one enemy, one card instance or a card-instance mutation. Rule-owned side tables are aggregate equivalents; locals cannot span; event queues cannot own gameplay truth; persistent carriers are excluded.",
+    "noGuessing": "A carrier is not a complete mechanism. No source or immutable evidence selects a new event, threshold, named pair, payoff or automatic card selector after the mapped causal topologies close.",
+    "methodBoundary": "There is no legal candidate domain or measured policy-repertoire bottleneck, so enumeration has stopped at the finite representation partition and no QMC, optimiser, RL or quality-diversity run has decision value."
+  },
+  "twelveFieldOrder": [
+    "producer",
+    "mediatorState",
+    "consumer",
+    "payoffOperation",
+    "lifecycle",
+    "naturalCost",
+    "duskBoundary",
+    "scorelineFactor",
+    "afterimageFactor",
+    "interferenceRule",
+    "nullPath",
+    "policyExposure"
+  ],
+  "requiredGates": [
+    "completeTwelveFieldContract",
+    "materiallyDistinct",
+    "sourceCompatible",
+    "duskOnly",
+    "deterministic",
+    "exactNullAbsentOffAsh",
+    "fightLocal",
+    "noSaveRunRelicAcquisitionRngOrGlobalSelector",
+    "explicitProducerMediatorConsumerPayoffExpiry",
+    "naturallyCostly",
+    "directTelemetryPlan",
+    "existingPolicyFirst",
+    "policyControlCountAtMostOne",
+    "boundedCardinality",
+    "notAliasOfClosedFamily"
+  ],
+  "selectionObjective": {
+    "direction": "lexicographically minimise",
+    "selectionVectorFields": [
+      "newDirectObservationFields",
+      "playerVisibleSemanticUnitsPlusLifecycleBoundaries",
+      "ephemeralStateKeysPlusGameplaySourceSurfacesPlusPolicyControls",
+      "decisiveExperimentStages",
+      "candidateCountInGrammar"
+    ],
+    "finalTieBreak": "canonical candidate SHA-256",
+    "forbiddenSelectors": [
+      "support, frequency or outcome",
+      "enemy, encounter, seed or card identity",
+      "an arbitrary event, threshold, named pair or payoff",
+      "a policy subset or posterior",
+      "aesthetics or implementation convenience",
+      "an optimiser"
+    ]
+  },
+  "carrierPartition": {
+    "aggregateOrPlayer": "CombatState, PlayerCombatant or a rule-owned side table with fight lifetime.",
+    "enemy": "EnemyCombatant statuses or flags.",
+    "cardInstance": "A CardInst field or equivalent UID side table.",
+    "cardMutation": "CardInst bonus, id mutation or generated replacement.",
+    "notIndependent": {
+      "localVariable": "Cannot span producer and consumer.",
+      "eventQueue": "Presentation output cannot own gameplay truth.",
+      "runRelicAcquisition": "Explicitly excluded from the fight-local class.",
+      "rng": "Explicitly excluded.",
+      "storageRelocation": "Does not change causal topology."
+    }
+  },
+  "expectedCandidateIds": [
+    "S1-combat-private-counter-existing-event-threshold",
+    "S2-player-private-tag-existing-action-consume",
+    "S3-enemy-private-tag-existing-action-consume",
+    "S4-card-instance-private-tag-zone-replay",
+    "S5-card-instance-private-transform-replay",
+    "S6-explicit-card-transform-action-selector"
+  ],
+  "expectedSelectedCandidateIds": [],
+  "candidateDesigns": [
+    {
+      "id": "S1-combat-private-counter-existing-event-threshold",
+      "canonicalSha256": "d1ab108a985c43920425e607c7aa9af7b727e7fa7d87800fa832fc1076c1bf1f",
+      "selectionVector": [0, 1, 2, 2, 6],
+      "definition": "Add one Dusk-only aggregate counter or bit, produce it from an existing event and consume it at a finite threshold.",
+      "unresolvedFields": ["producer", "consumer", "payoffOperation", "lifecycle", "naturalCost"],
+      "closureAliases": [
+        "complete current combat-state and zone grammar",
+        "complete one-bit producer-to-next-attack and action-economy grammar"
+      ],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullAbsentOffAsh": true,
+        "fightLocal": true,
+        "noSaveRunRelicAcquisitionRngOrGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": false,
+        "naturallyCostly": false,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true,
+        "notAliasOfClosedFamily": false
+      }
+    },
+    {
+      "id": "S2-player-private-tag-existing-action-consume",
+      "canonicalSha256": "b1ec5cf813da052fc5c440b3465340531dfc8ff8cebe751154a1e73c3f835685",
+      "selectionVector": [0, 1, 2, 2, 6],
+      "definition": "Set one private Dusk player tag/status through a normal action and clear it through a later normal action.",
+      "unresolvedFields": ["producer", "consumer", "payoffOperation", "lifecycle"],
+      "closureAliases": [
+        "private player status liability",
+        "Afterimage and existing positive player marker or Ward grammar",
+        "named and generic action sequencing"
+      ],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullAbsentOffAsh": true,
+        "fightLocal": true,
+        "noSaveRunRelicAcquisitionRngOrGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": false,
+        "naturallyCostly": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true,
+        "notAliasOfClosedFamily": false
+      }
+    },
+    {
+      "id": "S3-enemy-private-tag-existing-action-consume",
+      "canonicalSha256": "0d71d8a5476859bdfec15e012a01dce8893684892f6dc3de712dad3fc3f82090",
+      "selectionVector": [0, 1, 2, 2, 6],
+      "definition": "Set one private Dusk enemy flag/status through a targeted action and clear it through a later targeted response.",
+      "unresolvedFields": ["producer", "consumer", "payoffOperation", "lifecycle"],
+      "closureAliases": [
+        "Scoreline enemy-marker commitment",
+        "enemy status, Facet and Shatter lattice",
+        "target-transfer and intent-response topology"
+      ],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullAbsentOffAsh": true,
+        "fightLocal": true,
+        "noSaveRunRelicAcquisitionRngOrGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": false,
+        "naturallyCostly": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true,
+        "notAliasOfClosedFamily": false
+      }
+    },
+    {
+      "id": "S4-card-instance-private-tag-zone-replay",
+      "canonicalSha256": "3e75cd12ffcd6a90537307fcb962862a179b502510be4fb399762efe33f83184",
+      "selectionVector": [1, 1, 3, 3, 6],
+      "definition": "Attach one combat-only private tag to a CardInst or UID and consume it on a later zone or play event.",
+      "unresolvedFields": ["producer", "consumer", "payoffOperation", "lifecycle"],
+      "closureAliases": [
+        "draw thread and duplicate-copy topology",
+        "complete hand, draw, discard and exhaust grammar",
+        "Kindle, reshuffle-next-play, cross-turn hold and same-instance repeat"
+      ],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullAbsentOffAsh": true,
+        "fightLocal": true,
+        "noSaveRunRelicAcquisitionRngOrGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": false,
+        "naturallyCostly": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true,
+        "notAliasOfClosedFamily": false
+      }
+    },
+    {
+      "id": "S5-card-instance-private-transform-replay",
+      "canonicalSha256": "5ddef5445d8394af784351d1ab60cdb42c80752de971577470c91445112d56ec",
+      "selectionVector": [2, 2, 4, 4, 6],
+      "definition": "Mutate the same card's bonus or id, or generate a deterministic replacement, then consume that transform on a later play.",
+      "unresolvedFields": ["producer", "consumer", "payoffOperation", "lifecycle", "policyExposure"],
+      "closureAliases": [
+        "Honing or Momentum same-instance repeat",
+        "private generated-card liability",
+        "complete card-zone and replay grammar"
+      ],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullAbsentOffAsh": true,
+        "fightLocal": true,
+        "noSaveRunRelicAcquisitionRngOrGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": false,
+        "naturallyCostly": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": false,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true,
+        "notAliasOfClosedFamily": false
+      }
+    },
+    {
+      "id": "S6-explicit-card-transform-action-selector",
+      "canonicalSha256": "6d17b9e1a430b5c4836cffea1bcb1db9f5c482502ef8d44f6f1786f2cdb4c222",
+      "selectionVector": [2, 3, 5, 4, 6],
+      "definition": "Introduce an action that explicitly selects a second hand card to tag or transform; an automatic target rule is the same hidden semantic selector.",
+      "unresolvedFields": ["producer", "consumer", "payoffOperation", "lifecycle", "naturalCost", "policyExposure"],
+      "closureAliases": [],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": true,
+        "sourceCompatible": false,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullAbsentOffAsh": true,
+        "fightLocal": true,
+        "noSaveRunRelicAcquisitionRngOrGlobalSelector": false,
+        "explicitProducerMediatorConsumerPayoffExpiry": false,
+        "naturallyCostly": false,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": false,
+        "policyControlCountAtMostOne": false,
+        "boundedCardinality": true,
+        "notAliasOfClosedFamily": true
+      }
+    }
+  ],
+  "sourceAssertions": [
+    {
+      "id": "aggregate current counters and zones",
+      "path": "domain/state/combat_state.gd",
+      "contains": "var counters_played: int = 0\nvar counters_attacks: int = 0\nvar first_card_played: bool = false\nvar hp_lost: int = 0"
+    },
+    {
+      "id": "player private status carrier",
+      "path": "domain/state/player_combatant.gd",
+      "contains": "var statuses: Dictionary = {}"
+    },
+    {
+      "id": "enemy private flag carrier",
+      "path": "domain/state/enemy_combatant.gd",
+      "contains": "var flags: Dictionary = {}"
+    },
+    {
+      "id": "card transform resets on combat copy",
+      "path": "domain/state/card_inst.gd",
+      "contains": "func combat_copy() -> CardInst:\n\treturn CardInst.new(uid, id, up)"
+    },
+    {
+      "id": "canonical play owns card and enemy target only",
+      "path": "domain/rules/combat.gd",
+      "contains": "func play_card(run: RunState, cb: CombatState, uid: int, target_idx: Variant = null) -> bool:"
+    },
+    {
+      "id": "canonical event vocabulary has no private tag event",
+      "path": "domain/events/event_types.gd",
+      "absent": "PRIVATE_TAG"
+    },
+    {
+      "id": "policy target interface is current card and enemy target",
+      "path": "tools/balance_pilot.gd",
+      "contains": "static func _target(game: GlassvowGame, card: CardInst, d: Dictionary) -> Variant:"
+    }
+  ],
+  "priorEvidence": {
+    "terminal-class": {
+      "path": "summaries/post-843e899-positive-overkill-capacity-v1.json",
+      "sha256": "8e014d8df93e25f91f3c70fe4e1474d5021ae98dc6a0507f2bc738bce10189fb",
+      "decision": "close-positive-overkill-and-terminal-hit-precision-advance-to-cross-turn-hold"
+    },
+    "combat-state-zone": {
+      "path": "summaries/post-v30-combat-state-zone-frontier-audit-v1.json",
+      "sha256": "1415ee899fefc2087a1b3730dfb71610ff4a5c8ed8e93842007b4f28eee4d4ed",
+      "decision": "close-existing-combat-state-zone-grammar"
+    },
+    "action-grammar": {
+      "path": "summaries/post-v38-action-grammar-inventory-v1.json",
+      "sha256": "4eeda4d020539996106ea674d17acd7d0804a8181583c2cf4e856946febca3da",
+      "decision": "close-one-bit-setup-action-grammar"
+    },
+    "status-liability": {
+      "path": "summaries/post-v30-status-liability-capacity-v1.json",
+      "sha256": "34719303b15024f9db7ea463acc1b416d9797ad5bc9886fed79d928ac454c3f6",
+      "decision": "close-status-liability-at-capacity"
+    },
+    "scoreline": {
+      "path": "summaries/post-v38-scoreline-component-crn-v1.json",
+      "sha256": "1a56fca83591c593e90cdaf7731e41d43fbec47b9b447307b3c9e8c14acf8c83",
+      "decision": "close-scoreline-commitment-after-component-crn"
+    },
+    "afterimage": {
+      "path": "summaries/post-v38-afterimage-order-capacity-v1.json",
+      "sha256": "f9f9e632113c6c1737450f37f973ea8ba8370cc75e40a4c4ea34e583e92de140",
+      "decision": "close-afterimage-order-at-capacity"
+    },
+    "private-generated-card": {
+      "path": "summaries/post-v30-private-debt-identity-v2.json",
+      "sha256": "700dc5da09dcc48044a0f714d4e13ecc5420bc146b6c8ae69b9b1cd0b9ec3abe",
+      "decision": "close-private-debt-design-at-identity"
+    },
+    "honing-repeat": {
+      "path": "summaries/post-v38-honing-repeat-capacity-v1.json",
+      "sha256": "090cf43a35e7cedf850e4f52f3adec5019423f92bc040c0453c43d6a591882c4",
+      "decision": "close-honing-repeat-without-implementation"
+    },
+    "cross-turn": {
+      "path": "summaries/post-843e899-cross-turn-hold-coverage-audit-v1.json",
+      "sha256": "dbfccbae0faea8b3d2849661914672e2bac28c185ceed25767eb97f251693412",
+      "decision": "close-cross-turn-hold-representation-and-advance-to-intent-history"
+    },
+    "intent-history": {
+      "path": "summaries/post-843e899-intent-history-capacity-v1.json",
+      "sha256": "7dc4e73a5770c62b8c5fd5e46aeb19f0deaaca7fb159f14a863c98697f4363b8",
+      "decision": "close-intent-history-and-advance-to-private-counter-tag-transform"
+    }
+  },
+  "serialFamilyDispositions": [
+    {
+      "family": "terminal-hit-precision-excess",
+      "evidenceId": "terminal-class",
+      "decision": "close-positive-overkill-and-terminal-hit-precision-advance-to-cross-turn-hold"
+    },
+    {
+      "family": "cross-turn-hold-lifecycle",
+      "evidenceId": "cross-turn",
+      "decision": "close-cross-turn-hold-representation-and-advance-to-intent-history"
+    },
+    {
+      "family": "intent-history-lifecycle",
+      "evidenceId": "intent-history",
+      "decision": "close-intent-history-and-advance-to-private-counter-tag-transform"
+    }
+  ],
+  "immutableInputs": {
+    "runnerSha256": "3da26965c953d65f6d1ad5f85f762c21f7d0f82f658becd255f17624a11c37c8",
+    "taskCapsulePath": "task-capsule-5460811702-v20.json",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+    "primarySourceReportPath": "summaries/post-843e899-private-state-primary-sources-v1.md",
+    "primarySourceReportSha256": "1a2dc70e78b8ebbe645474035cab89ddd89e85ce5eb9b8635179e28db4d1df39",
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "archiveHead": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "sourceSha256": {
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "domain/state/card_inst.gd": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumSourceFilesRead": 7,
+    "maximumEvidenceFilesRead": 10,
+    "maximumCandidateDesigns": 6,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "newScientificSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Exactly one complete representation passes every legality and alias gate under the frozen source-only lexicographic objective, every identity passes, no observation/support is read, ledger is byte-identical and execution completes within 30 seconds.",
+    "successAuthority": "Apply boundary 1: freeze only the selected twelve-field private-state contract for a separately preregistered source/interface/null and direct A/B/AB preflight. Add no capacity row, protected seed, ML, RL or optimiser.",
+    "futility": "No representation passes every zero-row legality and alias gate.",
+    "futilityAuthority": "Apply boundary 2: close private counter/tag/transform at the zero-row boundary. Because all four owner-ordered classes are now validly exhausted, publish immutable evidence and raise exactly one human-authority package on #421; preserve a safe needs-info state without a successor, product mutation, PR, Actions, protected seed, acceptance or P9 claim.",
+    "inconclusive": "Frozen source/evidence cannot establish the carrier partition or alias result, an immutable identity fails or the exact decision is unavailable at 30 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record the private-state design inconclusive at the frozen zero-row cap. Do not choose by taste, read support, repair, rerun, add a method or use protected seeds."
+  },
+  "humanAuthorityPackage": {
+    "trigger": "All four serial classes in owner comment 5460811702 are validly exhausted.",
+    "minimumOwnerInput": "Supply a finite product-semantic family-selection rule that chooses a mechanistically meaningful producer/consumer direction; the owner agent will freeze the complete twelve-field contract.",
+    "alternativeDeltas": [
+      "Explicitly relax one named immutable family closure or one save/internal-ID/selector constraint.",
+      "Amend the #421 acceptance contract."
+    ],
+    "scientificRecommendation": "Maintain the safe block until one explicit authority delta exists; current evidence cannot rank the remaining product-semantic alternatives without guessing.",
+    "safeIssueState": "needs-info",
+    "prohibited": [
+      "replacement or successor ticket",
+      "routine approval checkpoint",
+      "adaptive candidate-by-candidate tuning",
+      "ML, RL or optimiser",
+      "protected acceptance or reserve seeds",
+      "product truth mutation, research/product PR or Actions",
+      "#421 acceptance or #108 P9 receipt claim"
+    ]
+  }
+}

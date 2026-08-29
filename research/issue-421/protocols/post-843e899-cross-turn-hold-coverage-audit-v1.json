@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "stage": "post-843e899-cross-turn-hold-post-identity-coverage-audit",
+  "nature": "Post-result deterministic source-completeness audit, not a preregistered causal experiment. It preserves the valid 57-of-57 direct observations while testing whether their matrix covered every source-reachable boundary named by the frozen mechanism contract before any capacity row is authorised.",
+  "question": "Did the successful direct matrix actually cover the frozen removal-expiry boundary, including a sibling hand-removal caller which does not enter through kindle_from_hand?",
+  "claimBoundary": "Immutable current-main source reachability and direct-matrix coverage only. No simulator, support, capacity, endpoint, balance, product, acceptance or P9 claim.",
+  "finiteAudit": {
+    "contractPredicate": "The frozen identity protocol explicitly requires expiry on removal or absence.",
+    "contentPredicate": "Authored Skill offering invokes special pyreTithe.",
+    "sourcePredicate": "Pyre Tithe directly erases each other hand card and calls shared exhaust_card without calling kindle_from_hand.",
+    "hookPredicate": "Neither the Pyre Tithe branch nor shared exhaust_card invokes the mediator-expiry helper, while kindle_from_hand does.",
+    "reachabilityPredicate": "The frozen current policy contains a non-zero Pyre Tithe value, so Offering is inside the evaluated repertoire.",
+    "coveragePredicate": "The frozen direct scenarios contain no Offering, Pyre Tithe or sibling-removal anchor."
+  },
+  "interpretation": {
+    "preservedEvidence": "The 57 completed observations remain valid for their tested contexts and are not rewritten or relabelled.",
+    "entryGate": "A capacity stage requires the complete frozen lifecycle representation to have passed direct identity. A named source-reachable boundary omitted by the matrix invalidates that entry gate.",
+    "noRepair": "The completed identity protocol forbids source repair, matrix amendment or rerun. Moving the expiry hook to shared exhaust_card would be a new representation, not confirmation of this one.",
+    "serialAuthority": "A confirmed coverage breach closes this exact cross-turn hold representation and advances inside #421 to intent-history lifecycle; it does not create a human checkpoint or successor ticket."
+  },
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceStatus": [
+      "M domain/rules/combat.gd",
+      " M domain/state/combat_state.gd",
+      "?? tools/research_421_cross_turn_hold_probe.gd",
+      "?? tools/research_421_cross_turn_hold_probe.gd.uid"
+    ],
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "35088ae198a01000ced6317a73287be05a6cf372ac22c338f9d3cf0ea41ad7bb",
+      "domain/state/combat_state.gd": "7d7f85d117d705a53acfbb8d4845bcb87cd30f73a904beaea42078414ec686b3",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_cross_turn_hold_probe.gd": "1c97f3acedec75fc3659ba00b687036abd4dc7f0adcd4f7c424ac315a8efd75d",
+      "tools/research_421_cross_turn_hold_probe.gd.uid": "583b3d4180004d820d8be98efe20f5b510743d15f340b2454680a3fa79a52fe0"
+    },
+    "runnerSha256": "112442f6a7d74be62829cda9effe7b9c3f4bd3c6c6823ac1540d380dfc1ec318",
+    "taskCapsulePath": "task-capsule-5460811702-v20.json",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+    "predecessorSha256": {
+      "post_843e899_cross_turn_hold_identity_v1.py": "12b697698f658b14a86d8b7aaca406e8d68521ce1dedad63397123a360eef5c3",
+      "protocols/post-843e899-cross-turn-hold-design-v1.json": "e7bf7280b395d8a91c9cedc6aa0fa049fd37dd238faec988c75b92a5273517c6",
+      "protocols/post-843e899-cross-turn-hold-identity-v1.json": "bf601342c2ae0c62d547e35d937846c4a95fdd4f6ccbd2db6b3129e44ab9f4a4",
+      "summaries/post-843e899-cross-turn-hold-design-v1.json": "c25c5ddbb5f0cd3ec429eac9b362721cbb95ed14581a82e80a1b2eda0a26d2c6",
+      "summaries/post-843e899-cross-turn-hold-identity-v1.json": "535f7c9bea7bc7544cd75a741b206c80d90bd418cbae36389dc3ba69e2a319d1"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 0,
+    "newScientificSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 10,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "futility": "Every frozen finite predicate is true and the ledger remains byte-identical.",
+    "futilityAuthority": "Close this exact cross-turn hold representation without repair or capacity rows; preserve the valid direct result as bounded evidence; advance serially to zero-row intent-history lifecycle design inside #421.",
+    "inconclusive": "Any immutable input drifts or any finite predicate cannot be reproduced from the frozen source.",
+    "inconclusiveAuthority": "Record the coverage audit as inconclusive; authorise no capacity row, source repair, rerun, human checkpoint or successor ticket."
+  },
+  "forbidden": [
+    "editing or rerunning the completed cross-turn hold identity experiment",
+    "repairing the expiry hook and calling it the same representation",
+    "executing any capacity, causal, protected or simulator row",
+    "reopening a valid closed-family disposition",
+    "creating a human checkpoint, replacement ticket or successor ticket"
+  ]
+}

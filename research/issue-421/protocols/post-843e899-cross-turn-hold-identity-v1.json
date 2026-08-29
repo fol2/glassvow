@@ -1,0 +1,229 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "stage": "post-843e899-cross-turn-hold-identity",
+  "question": "Does the sole zero-row-selected one-turn held-Attack representation preserve current-main exactly at omitted and explicit off, isolate its producer and consumer under A/B/AB, retain and consume only the same CardInst UID, replace exactly one ordinary draw, pay exactly one requested Ember only at the next-turn PLAY boundary, and fail closed at every frozen expiry boundary?",
+  "hypothesis": "For Dusk only, after end-turn hand penalties and before the ordinary discard, retaining the first authored Attack in existing hand order as one ephemeral exact-UID mediator can cross one enemy phase, replace one next-turn ordinary draw, and request one Ember when that same UID is legally played after PLAY and ENERGY but before authored effects. The opportunity cost is the foregone prior play or Kindle, one replaced draw, and the card's ordinary play cost.",
+  "claimBoundary": "Source, interface, exact-null, direct A/B/AB, UID, draw-replacement, event-order, payoff and expiry identity only. No natural support, capacity, causal endpoint, policy sensitivity, balance, product, acceptance or P9 claim.",
+  "factorDefinitions": {
+    "crossTurnHeldAttack": {
+      "type": "one binary structural mechanism factor",
+      "levels": ["off", "one-turn-held-attack-one-ember"],
+      "null": "off",
+      "enabled": "For Dusk only, after hand penalties select the first authored Attack in current hand order, retain that exact CardInst UID across one enemy phase, replace one ordinary next-turn draw, and request one Ember once when the same UID is legally played on the immediately following player turn.",
+      "fixedPayoff": 1,
+      "fixedCardinality": 1,
+      "fixedLifetime": "created at turn T end; valid only at turn T+1; no immediate re-hold at the next end",
+      "forbiddenLevels": "No retain-all, free extra draw, multi-turn hold, card-ID substitution, selector threshold, card subset, payoff magnitude or adaptive cohort."
+    },
+    "producerControlA": {
+      "levels": [false, true],
+      "null": false,
+      "role": "Research-only mechanical A control. It may create only the exact-UID mediator, retain that one card, replace one ordinary draw and emit direct lifecycle telemetry."
+    },
+    "consumerControlB": {
+      "levels": [false, true],
+      "null": false,
+      "role": "Research-only mechanical B control. Without A's mediator it must be exact null; with the exact valid UID it may clear the mediator and request the fixed payoff only."
+    },
+    "scorelinePayoff": {
+      "levels": ["off-closed"],
+      "fixed": "Separate immutable causal factor; absent and not pooled."
+    },
+    "afterimagePayoff": {
+      "levels": ["off-closed"],
+      "fixed": "Separate immutable causal factor; absent and not pooled."
+    },
+    "acquisitionPriority": {
+      "levels": ["current-main"],
+      "fixed": "No policy or acquisition change."
+    },
+    "wardSetupPriority": {
+      "levels": ["current-main"],
+      "fixed": "No Ward or setup policy change."
+    }
+  },
+  "mechanismContract": {
+    "producer": "At Dusk END_TURN, after hand penalties, select at most one card: the first card in existing hand order whose authored type is attack.",
+    "mediator": "Keep the exact CardInst UID in hand and store only {uid, cardId, createdTurn} in one ephemeral CombatState research dictionary.",
+    "consumer": "A legal PLAY of that same UID on turn createdTurn+1, after canonical PLAY and ENERGY events and before authored effects.",
+    "payoff": "Request one Ember once; record requested and realised separately, including realised zero at the cap.",
+    "lifecycle": "Cross one enemy phase, replace one ordinary next-turn draw, and expire on exact play, Kindle, removal or absence, stale turn, next end turn, victory or defeat. The expired UID cannot be immediately re-held.",
+    "naturalCost": "The player must have left the card unplayed and unkindled on the prior turn, receives one fewer ordinary next-turn draw, and still pays the card's normal cost.",
+    "aspect": "Dusk only; Ash is exact null.",
+    "closedPackages": "Scoreline and Afterimage remain fixed off.",
+    "interference": "All ordinary enemy, intent, hand-order, draw, discard, energy, card-effect, Ember-cap and terminal paths remain live.",
+    "failClosed": "Omitted, explicit off, B-only, Ash, no Attack, same card ID with a different UID, stale, missing and malformed records cannot pay.",
+    "policy": "Current-main policy only; no control, ML, RL or optimiser.",
+    "telemetry": "Direct stages are producer, mediator-set, carry, consumer, mediator-consume, payoff and expiry, with exact UID, turn and reason fields."
+  },
+  "design": {
+    "type": "One binary structural-factor direct identity preflight with internal A/B/AB controls; not a factorial and not an endpoint experiment.",
+    "matrix": {
+      "currentMain": 9,
+      "candidateOmitted": 9,
+      "candidateExplicitOff": 9,
+      "candidateAOnly": 9,
+      "candidateBOnly": 9,
+      "candidateAB": 9,
+      "candidateABInjectedFailClosed": 3,
+      "total": 57
+    },
+    "processes": "One frozen current-main Godot process and one frozen candidate Godot process.",
+    "order": "The candidate process runs all omitted observations first before any interface call, then explicit off, A-only, B-only and AB; injected AB fail-closed observations run last. No row, order or arm is conditional on prior output.",
+    "seedIdentity": "Core contexts use seeds 421300 through 421308 in every baseline and candidate arm. Injected fail-closed contexts use 421390 through 421392 and estimate no baseline contrast.",
+    "anchors": {
+      "null": "Current-main, omitted, explicit off and B-only are canonically identical for every core context.",
+      "aspectAndType": "Ash with an Attack and Dusk with no Attack remain exact null at A and AB.",
+      "producer": "Dusk's first Attack at hand index one is the sole retained UID; all other hand UIDs discard; four rather than five ordinary cards draw with unchanged RNG.",
+      "consumer": "A and AB share identical producer, mediator, carry, state and RNG through the next turn. AB adds only exact-UID consumption and the fixed payoff.",
+      "interference": "The same-ID/different-UID play, Kindle, next-end, victory, defeat, Ember cap, stale, missing and malformed anchors exercise every frozen alias and expiry boundary."
+    }
+  },
+  "drawFixture": {
+    "ordinaryOrderBeforePopBack": [
+      "defend", "aegis", "fortify", "deflect", "defend", "aegis",
+      "fortify", "deflect", "defend", "aegis", "fortify", "deflect"
+    ],
+    "sameIdMutation": "For same-id-other-uid only, replace the final draw fixture entry with strike so a distinct strike UID is drawn in both off and held paths.",
+    "reshuffle": "The fixture is long enough that no tested draw reaches reshuffle; a one-draw difference therefore cannot consume RNG."
+  },
+  "directScenarios": [
+    {"id": "valid-play", "seed": 421300, "aspect": "duskblade", "embers": 0, "hand": ["defend", "strike", "heavyBlow"], "action": "play-held", "expected": "AB requests and realises one Ember; A expires consumer-disabled."},
+    {"id": "cap-play", "seed": 421301, "aspect": "duskblade", "embers": 9, "hand": ["defend", "strike", "heavyBlow"], "action": "play-held", "expected": "AB requests one and realises zero; A expires consumer-disabled."},
+    {"id": "ash-null", "seed": 421302, "aspect": "ashwarden", "embers": 0, "hand": ["defend", "strike"], "action": "none", "expected": "Exact null at every arm."},
+    {"id": "no-attack-null", "seed": 421303, "aspect": "duskblade", "embers": 0, "hand": ["defend", "aegis"], "action": "none", "expected": "Exact null at every arm."},
+    {"id": "same-id-other-uid", "seed": 421304, "aspect": "duskblade", "embers": 0, "hand": ["defend", "strike", "heavyBlow"], "action": "play-other-uid", "expected": "The drawn strike UID plays normally and cannot consume the retained strike UID."},
+    {"id": "kindle-held", "seed": 421305, "aspect": "duskblade", "embers": 0, "hand": ["defend", "strike", "heavyBlow"], "action": "kindle-held", "expected": "Exact retained UID expires before canonical Kindle; no cross-turn payoff."},
+    {"id": "next-end-expiry", "seed": 421306, "aspect": "duskblade", "embers": 0, "hand": ["defend", "strike", "heavyBlow"], "action": "end-again", "expected": "Expires at the next end and the expired UID cannot be immediately re-held."},
+    {"id": "defeat-expiry", "seed": 421307, "aspect": "duskblade", "embers": 0, "hand": ["defend", "strike", "heavyBlow"], "action": "terminal-loss", "expected": "Expires before canonical defeat terminal state."},
+    {"id": "victory-expiry", "seed": 421308, "aspect": "duskblade", "embers": 0, "hand": ["defend", "strike", "heavyBlow"], "action": "terminal-win", "expected": "Expires before canonical victory terminal state."}
+  ],
+  "injectedFailClosedScenarios": [
+    {"id": "injected-stale-play", "seed": 421390, "expectedExpiry": "stale-turn", "expectedPayoff": 0},
+    {"id": "injected-missing-at-turn-start", "seed": 421391, "expectedExpiry": "stale-or-missing-at-turn-start", "expectedPayoff": 0},
+    {"id": "injected-malformed-at-turn-start", "seed": 421392, "expectedExpiry": "stale-or-missing-at-turn-start", "expectedPayoff": 0}
+  ],
+  "estimands": {
+    "baselineIdentity": "Zero current-main versus omitted and zero current-main versus explicit-off mismatches across nine paired contexts.",
+    "nullAliasIdentity": "Zero omitted versus explicit-off and zero B-only versus explicit-off mismatches across nine paired contexts.",
+    "producerIsolation": "A retains only the first authored Attack UID, excludes it from discard, draws exactly four rather than five ordinary cards, stores one exact mediator, and changes no non-zone state, non-zone event or RNG.",
+    "consumerIsolation": "B-only is exact null; A and AB are identical through carry; after removing research telemetry and the sole realised payoff Ember and delta, AB equals A.",
+    "uidIdentity": "Same card ID with a different UID cannot consume or clear the mediator.",
+    "payoffPlacement": "The AB consumer occurs strictly after canonical PLAY and ENERGY and before the first authored hit; requested is always one and realised is separately one or zero.",
+    "expiryIdentity": "Kindle, next end, defeat, victory, stale, missing and malformed contexts emit one exact reason, clear the mediator and never pay.",
+    "projectionIdentity": "The mediator is absent from CombatState.to_dict and every runtime combat projection.",
+    "notEstimated": "Natural activation, viable exposure, whole-run effect, endpoint causality, policy response, balance, product or acceptance."
+  },
+  "mechanisticallyJustifiedInteractions": [
+    "crossTurnHeldAttack by aspect: only Dusk owns the producer; Ash is null.",
+    "producer by authored card type and hand order: only the first Attack is retained; no Attack is null.",
+    "producer by draw lifecycle: one retained mediator replaces exactly one ordinary next-turn draw.",
+    "consumer by CardInst identity: only the same UID can consume; equal card IDs do not alias.",
+    "consumer by Ember cap: requested one is invariant while realised may be zero.",
+    "lifecycle by terminal and removal boundary: Kindle, next end, victory, defeat, stale and missing each clear before any later opportunity."
+  ],
+  "aliasStructure": {
+    "nullAliases": "Current-main absence, class-default omission and explicit false/false are exact aliases.",
+    "componentAlias": "B-only aliases off because no mediator exists; it is not evidence about AB support.",
+    "identityNonAlias": "Same card ID with a different CardInst UID is explicitly not the mediator.",
+    "drawNonAlias": "Retaining a card plus four ordinary draws is not a free extra draw and cannot be described as six-card access.",
+    "closedFamilies": "Terminal-hit precision/excess, Scoreline, Afterimage, next-PLAY, target transfer, Shatter tempo, draw, duplicate and reshuffle families remain immutable and are not pooled or reopened.",
+    "factorial": "Scoreline payoff and Afterimage payoff are separate fixed-off factors. This direct preflight is not the historical four-factor design or a joint factorial."
+  },
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "baselineHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "baselineStatus": [
+      "?? tools/research_421_cross_turn_hold_probe.gd",
+      "?? tools/research_421_cross_turn_hold_probe.gd.uid"
+    ],
+    "candidateStatus": [
+      "M domain/rules/combat.gd",
+      " M domain/state/combat_state.gd",
+      "?? tools/research_421_cross_turn_hold_probe.gd",
+      "?? tools/research_421_cross_turn_hold_probe.gd.uid"
+    ],
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_cross_turn_hold_probe.gd": "1c97f3acedec75fc3659ba00b687036abd4dc7f0adcd4f7c424ac315a8efd75d",
+      "tools/research_421_cross_turn_hold_probe.gd.uid": "583b3d4180004d820d8be98efe20f5b510743d15f340b2454680a3fa79a52fe0"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "35088ae198a01000ced6317a73287be05a6cf372ac22c338f9d3cf0ea41ad7bb",
+      "domain/state/combat_state.gd": "7d7f85d117d705a53acfbb8d4845bcb87cd30f73a904beaea42078414ec686b3",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_cross_turn_hold_probe.gd": "1c97f3acedec75fc3659ba00b687036abd4dc7f0adcd4f7c424ac315a8efd75d",
+      "tools/research_421_cross_turn_hold_probe.gd.uid": "583b3d4180004d820d8be98efe20f5b510743d15f340b2454680a3fa79a52fe0"
+    },
+    "candidateResearchDiffSha256": "11fafc12acd773100c4b53a5609c332f431e83e97f50d237d730e754c325d3a0",
+    "godotBinaryPath": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "runnerSha256": "12b697698f658b14a86d8b7aaca406e8d68521ce1dedad63397123a360eef5c3",
+    "taskCapsulePath": "task-capsule-5460811702-v20.json",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+    "predecessorSha256": {
+      "post_843e899_cross_turn_hold_design_v1.py": "6713fd4909c02bf66daacc2d472d72477e0564a6d4f265533e25b05c1c72b01c",
+      "protocols/post-843e899-cross-turn-hold-design-v1.json": "e7bf7280b395d8a91c9cedc6aa0fa049fd37dd238faec988c75b92a5273517c6",
+      "summaries/post-843e899-cross-turn-hold-design-v1.json": "c25c5ddbb5f0cd3ec429eac9b362721cbb95ed14581a82e80a1b2eda0a26d2c6",
+      "summaries/post-843e899-cross-turn-hold-primary-sources-v1.md": "516263db61c86a67ab31112e00462e338da37b93ec9df8e45243454dc2f5bb0a",
+      "summaries/post-843e899-positive-overkill-capacity-v1.json": "8e014d8df93e25f91f3c70fe4e1474d5021ae98dc6a0507f2bc738bce10189fb"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 2,
+    "directControlledObservations": 57,
+    "newScientificSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic GDScript owns candidate construction and the fixed observation matrix. Deterministic Python owns process execution, content-addressed output caching, exact comparison, the only look and the stop/go decision.",
+    "order": "Verify immutable inputs and static source cardinality; execute the complete current-main process once; execute the complete candidate process once; analyse all 57 observations once; verify byte-identical ledger.",
+    "firstLook": "These 57 direct observations are the only look. No source, scenario, seed, UID rule, projection, comparator, cap or decision rule changes after execution begins.",
+    "successStop": "All gates pass: stop without simulator rows and separately preregister the cheapest existing-policy natural-capacity screen.",
+    "futilityStop": "Any completed source, interface, null, UID, component, draw, ordering, payoff, expiry, RNG, row-count or ledger gate fails: close this exact cross-turn representation without repair and continue serially to intent-history lifecycle.",
+    "inconclusiveStop": "A frozen executable/process is unavailable or the exact decision is unavailable at 120 seconds: record inconclusive at the cap without rerun."
+  },
+  "decisionRules": {
+    "success": "All immutable and static gates pass; exactly 57 observations complete in exactly two Godot processes; baseline/omitted/off/B identities, A/AB mediator identity, exact-UID non-alias, one-draw natural cost, consumer placement, requested/realised payoff, all expiry reasons, projection exclusion and frozen RNG checks pass; ledger is byte-identical within 120 seconds.",
+    "successAuthority": "Apply boundary 1: freeze only one-turn-held-attack-one-ember for a separately preregistered fresh existing-policy natural-capacity check. Add no policy control, endpoint row, protected seed, Scoreline, Afterimage, ML, RL or optimiser.",
+    "futility": "Any completed source, interface, null, A/B/AB, UID, draw-replacement, event-order, payoff, expiry, projection, RNG, row-count or ledger gate fails.",
+    "futilityAuthority": "Apply boundary 2: close this exact cross-turn hold representation without repair, threshold or subset rescue; continue serially with zero-row intent-history lifecycle design inside #421.",
+    "inconclusive": "A frozen input or process is unavailable, or the exact decision is unavailable at the 120-second cap.",
+    "inconclusiveAuthority": "Apply boundary 3: record cross-turn hold identity inconclusive at the preregistered cap; do not rerun, alter the matrix, use protected seeds or create a human checkpoint."
+  },
+  "forbidden": [
+    "any natural-support, capacity, endpoint, policy, balance, product, acceptance or P9 claim",
+    "any free extra draw, retain-all, multi-turn, card-ID substitution, selector, threshold, subset or magnitude level",
+    "any Scoreline, Afterimage, acquisition or Ward variation",
+    "any repair, rerun, reserve row, protected seed, adaptive candidate tuning, ML, RL or optimiser",
+    "any reopening or pooling of a valid closed-family disposition"
+  ]
+}

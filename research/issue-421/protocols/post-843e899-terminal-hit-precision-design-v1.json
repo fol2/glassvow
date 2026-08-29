@@ -1,0 +1,520 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "question": "Can exact-lethal precision support exactly one finite, source-compatible twelve-field Duskblade-only fight-local contract that is materially distinct from every immutable closure before any support or simulator row is read?",
+  "hypothesis": "The smallest legal exact-lethal grammar is not a generic death reward. A Duskblade Attack that lands an exact lethal hit creates the base intrinsic Facet entitlement which the current deferred Facet settlement discards because the target is dead. Order-independently aggregating one or more such otherwise-lost marks into at most one Ember per played card is a directly attributable, card-bounded precision-salvage mechanism rather than an any-kill or next-PLAY relay.",
+  "scientificBasis": {
+    "familyOrder": "Owner comment 5460811702 fixes terminal-hit precision before excess and exact lethal before positive overkill. Positive overkill and later family classes remain unexamined while this exact grammar is live.",
+    "zeroRowRule": "Enumerate only exact-source-compatible semantic forms, reject immutable aliases and illegal boundaries, then apply the owner's lexicographic objective without reading trace support, frequency, outcomes, cache rows or simulator data.",
+    "mechanisticRule": "A legal payoff must be carried by a source-grounded mediator. Renaming the exact-lethal predicate as a mediator and attaching an arbitrary resource grant is not a complete causal contract.",
+    "precisionSalvageRule": "Current source records a blood-drawing Attack in pending_chips, computes its Facet contribution only after the whole card resolves, skips dead targets and clears the record. Exact lethal therefore exposes the base one-chip intrinsic Dusk entitlement at an existing deterministic consumer boundary; authored chip, Beacon and explicit chip effects cannot increase the salvage payoff.",
+    "noGuessingRule": "Do not select Ward, Energy, draw, healing, a later PLAY or another target merely because the operation exists. Each rejected form must fail an explicit source, mediator, alias, RNG, persistence or selector gate.",
+    "claimBoundary": "A zero-row success freezes one research contract for a separate source/interface/null preflight. It does not establish activation, capacity, complementarity, policy sensitivity, reachability, causal benefit, package admission, product value, protected-seed authority, #421 acceptance or the #108 P9 receipt."
+  },
+  "claimBoundary": "Exact-source, immutable-alias and deterministic contract selection only; no observation, support, simulator, causal, product or P9 claim.",
+  "twelveFieldOrder": [
+    "producer",
+    "mediatorState",
+    "consumer",
+    "payoffOperation",
+    "expiry",
+    "naturalCost",
+    "duskBoundary",
+    "terminalHitFactor",
+    "fixedFactors",
+    "aliasStructure",
+    "nullPath",
+    "policyExposure"
+  ],
+  "requiredGates": [
+    "completeTwelveFieldContract",
+    "materiallyDistinct",
+    "sourceCompatible",
+    "mechanisticallyJustifiedMediator",
+    "duskOnly",
+    "deterministic",
+    "exactNullOff",
+    "exactNullAsh",
+    "fightLocal",
+    "noSaveOrPersistentRunField",
+    "noRelicOrAcquisitionUi",
+    "noRng",
+    "noGlobalSelector",
+    "explicitProducerMediatorConsumerPayoffExpiry",
+    "naturalCost",
+    "directTelemetryPlan",
+    "existingPolicyFirst",
+    "policyControlCountAtMostOne"
+  ],
+  "selectionObjective": {
+    "direction": "lexicographically minimise",
+    "selectionVectorFields": [
+      "newDirectObservationFields",
+      "playerVisibleSemanticUnitsPlusLifecycleBoundaries",
+      "ephemeralStateKeysPlusGameplaySourceSurfacesPlusPolicyControls",
+      "decisiveExperimentStages",
+      "candidateCountInGrammar"
+    ],
+    "finalTieBreak": "canonical candidate SHA-256",
+    "forbiddenSelectors": [
+      "aesthetics",
+      "post-hoc support",
+      "terminal-hit frequency",
+      "outcome",
+      "implementation convenience",
+      "an optimiser"
+    ]
+  },
+  "expectedCandidateIds": [
+    "facet-salvage-one-ember",
+    "direct-exact-kill-ember",
+    "direct-exact-kill-energy",
+    "direct-exact-kill-ward",
+    "direct-exact-kill-draw",
+    "direct-exact-kill-heal",
+    "exact-kill-to-next-play",
+    "exact-kill-cross-enemy-chip"
+  ],
+  "candidateDesigns": [
+    {
+      "id": "facet-salvage-one-ember",
+      "canonicalSha256": "353047e41ea2049d8b426d0e87d1070d7aa20b69de94eafcf71e558517dd9a06",
+      "closureAliases": [],
+      "selectionVector": [1, 2, 2, 2, 1],
+      "gates": {
+        "completeTwelveFieldContract": true,
+        "materiallyDistinct": true,
+        "sourceCompatible": true,
+        "mechanisticallyJustifiedMediator": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true
+      },
+      "contract": {
+        "producer": "While the factor is enabled, play_card resolves a Duskblade card of authored type attack. One canonical hit_enemy call deals positive unblocked HP loss, emits killingBlow=true and overkill=0 without finale handoff, and records that target in the card's existing pending_chips map.",
+        "mediatorState": "That target's existing per-card pending_chips record gains one research-only exactLethalIntrinsicFacet boolean. It represents exactly the base one-chip intrinsic Facet entitlement that this blood-drawing Attack earned but which current deferred settlement would discard solely because the target is dead. Authored d.chip, Beacon and explicit chip effects do not count, stack, enter CombatState.to_dict or survive the card.",
+        "consumer": "After all authored card effects, the existing deferred pending-chips settlement order-independently computes whether any dead-target record has an eligible exactLethalIntrinsicFacet mark while leaving unchanged living-target chip and Shatter settlement in its current insertion order. If combat continues, it consumes the aggregate once after living-target settlement; no later PLAY, target choice or global selector participates.",
+        "payoffOperation": "After unchanged living-target Facet and Shatter settlement, the consumer requests gain_embers(run, cb, 1) exactly once at most per played card when the aggregate is true. Existing quest and Ember-cap laws own the realised delta. Direct research telemetry records requested=1 and realised delta; the existing EMBER event remains the payoff event when realised is non-zero.",
+        "expiry": "The mark is consumed by that card's deferred Facet settlement or expires unused when the settlement is skipped, the card has no continuing combat, or pending_chips is cleared. It cannot cross card terminal movement, another PLAY, a turn or a combat.",
+        "naturalCost": "The policy must spend and sequence an authored Attack and choose damage and target state so the final canonical hit matches remaining HP exactly after block and status arithmetic. Using a stronger overkilling hit, a non-Attack kill, a poison/art/phial kill or the wrong target produces no mediator or payoff.",
+        "duskBoundary": "The on path is legal only for run.aspect==0, where apply_chips owns Facet/Shatter. Ashwarden, non-player Attack damage and finale handoff are exact nulls even when the setting says on.",
+        "terminalHitFactor": "One independent causal factor named terminalHitPrecision with levels off and facet-salvage-one-ember. The payoff magnitude, per-card cap, producer, mediator, consumer and expiry are fixed, not candidate levels.",
+        "fixedFactors": "Scoreline payoff and Afterimage payoff remain separate closed factors fixed off. Acquisition priority, Ward setup priority, content, card costs, enemy definitions, current policy identity, RNG identity and all other research controls remain current-main and equal within every future contrast.",
+        "aliasStructure": "Generic any-kill and Reaper's Bell act in _on_enemy_death; the selected consumer is the later per-card Facet settlement and requires an otherwise-lost base intrinsic Dusk chip plus exact zero overkill. It never changes living chips, Facet overflow, Shatter, authored extra chip or Beacon. Immediate-next-PLAY, direct-kill relay, target transfer, Shatter tempo, draw-thread, duplicate-copy, Scoreline, Afterimage and positive-overkill remain closed or deferred and are not levels of this grammar.",
+        "nullPath": "Absent settings, explicit off and any Ashwarden on request must reproduce the frozen current-main result, event queue, policy snapshot, trajectory, RNG and output byte-for-byte after removal of the settings wrapper. Off and Ash must not add a pending-chips key, research event or payoff call.",
+        "policyExposure": "Evaluate frozen existing policy identities first. The current pilot already previews and prefers lethal attacks but has no exactness preference. No policy control is admitted now; at most one deterministic exact-lethal tie-break may be separately frozen only if direct evidence proves natural activation is the sole bottleneck."
+      }
+    },
+    {
+      "id": "direct-exact-kill-ember",
+      "canonicalSha256": "abfbe1b69b82807ca76755050a3b367488545a11ecc31de444fbe4647da000e5",
+      "closureAliases": [
+        "current non-final any-kill Ember grant",
+        "closed any-kill family"
+      ],
+      "selectionVector": [0, 2, 1, 2, 1],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "mechanisticallyJustifiedMediator": false,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": false,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true
+      },
+      "contract": {}
+    },
+    {
+      "id": "direct-exact-kill-energy",
+      "canonicalSha256": "ab55710f89a66743199c38d77b432172b7ef2ca4928f53a14b3ee543c25c154d",
+      "closureAliases": [
+        "closed Reaper's Bell death-chain action economy",
+        "closed turn-state action economy"
+      ],
+      "selectionVector": [0, 2, 1, 2, 1],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "mechanisticallyJustifiedMediator": false,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": false,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true
+      },
+      "contract": {}
+    },
+    {
+      "id": "direct-exact-kill-ward",
+      "canonicalSha256": "a3cfbc6e26dbb65ac87be3308b31c3057a3d9dbf409332aa3a86b176801f31f3",
+      "closureAliases": [],
+      "selectionVector": [0, 2, 1, 2, 1],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": true,
+        "sourceCompatible": true,
+        "mechanisticallyJustifiedMediator": false,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": false,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true
+      },
+      "contract": {}
+    },
+    {
+      "id": "direct-exact-kill-draw",
+      "canonicalSha256": "8ecb36c3da14645bce6d2058ddd9bfb0207f003ca3c0da27f38fb9bdc58f0100",
+      "closureAliases": [
+        "closed Reaper's Bell death-chain draw",
+        "closed draw-thread family"
+      ],
+      "selectionVector": [0, 2, 1, 2, 1],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "mechanisticallyJustifiedMediator": false,
+        "duskOnly": true,
+        "deterministic": false,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": false,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": false,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true
+      },
+      "contract": {}
+    },
+    {
+      "id": "direct-exact-kill-heal",
+      "canonicalSha256": "6c1895097752bbd47989f4a3c7da79543d699555bbd2201df42e9d095128b971",
+      "closureAliases": [
+        "closed weak-mend and fight-quality recovery surfaces"
+      ],
+      "selectionVector": [0, 3, 1, 2, 1],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "mechanisticallyJustifiedMediator": false,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": false,
+        "noSaveOrPersistentRunField": false,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": false,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true
+      },
+      "contract": {}
+    },
+    {
+      "id": "exact-kill-to-next-play",
+      "canonicalSha256": "b96e819f999bf6c252d0ce11d6a67d5ebf4b34ded2594795709f7acdc9313ea0",
+      "closureAliases": [
+        "closed complete immediate post-kill consumer topology",
+        "closed direct kill to next single-target Attack"
+      ],
+      "selectionVector": [1, 4, 3, 3, 1],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "mechanisticallyJustifiedMediator": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true
+      },
+      "contract": {}
+    },
+    {
+      "id": "exact-kill-cross-enemy-chip",
+      "canonicalSha256": "2606e9f481961b3426727a953d1e4a711e6f068f4f6146f2ac2b9c81016c79dd",
+      "closureAliases": [
+        "closed cross-enemy Facet transfer and target-topology surfaces"
+      ],
+      "selectionVector": [1, 3, 3, 3, 1],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "mechanisticallyJustifiedMediator": true,
+        "duskOnly": true,
+        "deterministic": false,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": false,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true
+      },
+      "contract": {}
+    }
+  ],
+  "expectedSelectedCandidateIds": [
+    "facet-salvage-one-ember"
+  ],
+  "design": {
+    "type": "Zero-row exact-source and immutable-evidence design enumeration; not a factorial, causal contrast, support screen or optimiser.",
+    "matrix": "Eight predeclared exact-lethal semantic forms classified once. Only a complete source-grounded contract can enter the lexicographic selection.",
+    "anchors": "Exact current-main PLAY, canonical HIT_ENEMY exact-lethal algebra, pending_chips producer and deferred settlement, Dusk-only apply_chips, bounded gain_embers, current policy lethal preview and immutable closure decisions.",
+    "estimand": "The canonical identity of at most one legal exact-lethal precision contract under the owner gates and lexicographic objective.",
+    "notEstimated": "No event frequency, support, activation, Ember realisation, policy effect, outcome, interaction, reachability, complementarity, package quality, detector or product endpoint.",
+    "omittedCells": "No positive-overkill, direct support, simulator, trace, cache, policy remap, payoff scalar, acquisition, held-out, protected seed, ML, RL, QD or optimiser cell executes."
+  },
+  "futurePreflightBoundary": {
+    "factor": "terminalHitPrecision",
+    "levels": [
+      "off",
+      "facet-salvage-one-ember"
+    ],
+    "requiredComparators": [
+      "settings absent versus explicit off on Duskblade",
+      "current-main source versus instrumented explicit off on Duskblade",
+      "off versus on on Ashwarden",
+      "non-lethal Dusk Attack on versus off",
+      "positive-overkill Dusk Attack on versus off",
+      "exact-lethal non-Attack damage on versus off",
+      "exact-lethal Dusk Attack with another enemy alive on versus off",
+      "exact-lethal Dusk Attack ending combat on versus off",
+      "authored extra-chip and Beacon isolation controls",
+      "multi-hit and all-enemy order-independent call-cardinality controls"
+    ],
+    "directObjective": "A complete, ordered producer to mediator-set to consumer to requested/realised payoff to expiry chain, with exactly one requested Ember and at most one realised payoff per played card.",
+    "stopRule": "Any null, RNG, call-cardinality, comparator, chain, cap or expiry failure closes this exact representation without repair or rescue and advances to positive-overkill excess.",
+    "policyRule": "No policy control before natural capacity. If later direct evidence isolates exactness choice as the sole bottleneck, freeze at most one bounded deterministic control in a separate protocol."
+  },
+  "sourceAssertions": [
+    {
+      "id": "canonical exact lethal payload",
+      "path": "domain/rules/combat.gd",
+      "contains": "\"killingBlow\": (not handoff) and e.hp <= 0 and loss > 0,\n\t\t\"overkill\": 0 if handoff else maxi(0, -e.hp),"
+    },
+    {
+      "id": "attack hit records pending intrinsic chip",
+      "path": "domain/rules/combat.gd",
+      "contains": "if cb.pending_chips_active and is_attack and loss > 0:\n\t\tvar rec: Dictionary = cb.pending_chips.get(e.idx, {\"hit\": false, \"extra\": 0})\n\t\trec[\"hit\"] = true"
+    },
+    {
+      "id": "deferred settlement skips dead target",
+      "path": "domain/rules/combat.gd",
+      "contains": "var e: EnemyCombatant = cb.enemies[idx]\n\t\t\tif e.hp <= 0 or cb.over:\n\t\t\t\tcontinue"
+    },
+    {
+      "id": "intrinsic Facet contribution is computed per Attack",
+      "path": "domain/rules/combat.gd",
+      "contains": "if card_type == \"attack\":\n\t\t\tper = 1 + _ji(d.get(\"chip\", 0)) + _sget(p.statuses, \"beacon\")"
+    },
+    {
+      "id": "pending chip lifecycle clears inside play_card",
+      "path": "domain/rules/combat.gd",
+      "contains": "cb.pending_chips_active = false\n\tcb.pending_chips = {}"
+    },
+    {
+      "id": "Facet application is Dusk only",
+      "path": "domain/rules/combat.gd",
+      "contains": "func apply_chips(run: RunState, cb: CombatState, e: EnemyCombatant, n: int) -> void:\n\tif run.aspect != 0:\n\t\treturn"
+    },
+    {
+      "id": "bounded Ember operation and direct event",
+      "path": "domain/rules/combat.gd",
+      "contains": "var next: int = clampi(cb.embers + n, 0, cb.ember_cap)\n\tvar delta: int = next - cb.embers"
+    },
+    {
+      "id": "existing any-kill Ember alias",
+      "path": "domain/rules/combat.gd",
+      "contains": "gain_embers(run, cb, 1)  # the fire inside spills to your lantern"
+    },
+    {
+      "id": "existing Reaper death economy alias",
+      "path": "domain/rules/combat.gd",
+      "contains": "if run.has_relic(\"reapersBell\"):\n\t\t\t\tcb.player.energy += 1\n\t\t\t\tdraw_cards(run, cb, 1)"
+    },
+    {
+      "id": "draw can consume seeded RNG",
+      "path": "domain/rules/combat.gd",
+      "contains": "_shuffle_cards(run.rng, cb.draw)"
+    },
+    {
+      "id": "current policy sees lethal without exactness",
+      "path": "tools/balance_pilot.gd",
+      "contains": "if preview.get(\"lethal\", false):\n\t\tscore += _w(\"combat\", \"lethal\")"
+    },
+    {
+      "id": "current policy has no overkill selector",
+      "path": "tools/balance_pilot.gd",
+      "absent": "overkill"
+    },
+    {
+      "id": "pending chips are combat local and excluded from snapshot",
+      "path": "domain/state/combat_state.gd",
+      "contains": "var pending_chips: Dictionary = {}"
+    },
+    {
+      "id": "stable terminal hit event",
+      "path": "domain/events/event_types.gd",
+      "contains": "const HIT_ENEMY: StringName = &\"hitEnemy\""
+    }
+  ],
+  "priorEvidence": {
+    "frontier": {
+      "path": "summaries/post-v38-fight-local-frontier-audit-v3.json",
+      "sha256": "2e21b108bc2e8233cdbd995877d5bf20b396d6e245966bc729ca13a48b6380f3",
+      "decision": "record-fight-local-mechanism-selection-gate-unavailable"
+    },
+    "reaperBell": {
+      "path": "summaries/post-v38-reapers-bell-capacity-v1.json",
+      "sha256": "0c8ed919c183c0a8255bbec2c1c24d0c78818d39005d5d0b07224d69dfe3ff05",
+      "decision": "close-reapers-bell-death-chain-family"
+    },
+    "turnState": {
+      "path": "summaries/post-v38-turn-state-economy-capacity-v1.json",
+      "sha256": "7cd0edf36fcd011422ec99a94d84cc0a774307c1db6150fff3d830fdf1d7c842",
+      "decision": "close-turn-state-action-economy-family"
+    },
+    "shatterTempo": {
+      "path": "summaries/post-v38-shatter-tempo-capacity-v1.json",
+      "sha256": "8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388",
+      "decision": "close-shatter-tempo-relay-without-implementation"
+    },
+    "killRelay": {
+      "path": "summaries/post-v38-kill-relay-attribution-v1.json",
+      "sha256": "71a4a9117b6a43c5d88ea8172e69bdf32553faccbc89254108812d412c7818b3",
+      "decision": "close-direct-kill-relay-at-attribution-boundary"
+    },
+    "killTopology": {
+      "path": "summaries/post-v38-kill-consumer-topology-v1.json",
+      "sha256": "49b3bf3f776480327558d0bbaa8d7c8568747de918954f0666d6b386a6888711",
+      "decision": "close-immediate-post-kill-consumer-topology"
+    },
+    "stateZone": {
+      "path": "summaries/post-v30-combat-state-zone-frontier-audit-v1.json",
+      "sha256": "1415ee899fefc2087a1b3730dfb71610ff4a5c8ed8e93842007b4f28eee4d4ed",
+      "decision": "close-existing-combat-state-zone-grammar"
+    }
+  },
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "sourceSha256": {
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    "researchFileSha256": {
+      "summaries/post-843e899-terminal-hit-precision-primary-sources-v1.md": "f67b7dffbcc578774dac3456003008acbe15e45f1e4653f00f98777b18b6a2f5"
+    },
+    "taskCapsulePath": "task-capsule-5460811702-v20.json",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+    "runnerSha256": "c6d36413100a0570e06cbaf80f3dd675034804e5052329197980c8981c38e17c"
+  },
+  "ledgerFreeze": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "budget": {
+    "maximumCandidateDesigns": 8,
+    "maximumSourceFilesRead": 4,
+    "maximumEvidenceFilesRead": 7,
+    "maximumCachedObservationRowsRead": 0,
+    "maximumSupportMetricsInspected": 0,
+    "maximumGodotProcesses": 0,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumProtectedSeedRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0
+  },
+  "decisionRules": {
+    "success": "Exactly one candidate satisfies every legality gate and immutable alias rule, is uniquely first under the complete lexicographic objective, owns exactly twelve ordered fields and every identity passes inside the zero-row cap.",
+    "successAuthority": "Freeze only facet-salvage-one-ember for one separately preregistered source/interface, call-cardinality, comparator and exact-null preflight. Do not inspect support, execute a simulator row, vary the payoff, add a policy control, use protected seeds or mutate product truth.",
+    "futility": "No candidate satisfies every legality and alias gate while every immutable identity passes inside the zero-row cap.",
+    "futilityAuthority": "Close exact-lethal precision at the zero-row design boundary and evaluate positive-overkill excess next under comment 5460811702 without a simulator row, subset rescue, payoff search, optimiser or human checkpoint.",
+    "inconclusive": "An immutable identity, source assertion, evidence disposition, candidate identity, twelve-field order, ledger identity, uniqueness or wall-time cap fails.",
+    "inconclusiveAuthority": "Record the exact zero-row missing gate at the cap. Do not choose by taste or support, repair and rerun this frozen version, add a row or touch protected seeds; follow the controlling automatic disposition."
+  }
+}

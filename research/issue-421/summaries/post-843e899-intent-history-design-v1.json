@@ -1,0 +1,121 @@
+{
+  "GodotProcesses": 0,
+  "assessments": [
+    {
+      "canonicalSha256": "3cf000f86bd726429ccc1ed3719c09bac46c134b58888e54adae6c9ad1735701",
+      "closureAliases": [],
+      "eligible": true,
+      "failedGates": [],
+      "id": "I1-repeat-one-back-attack-same-target-ember-one",
+      "selectionVector": [
+        0,
+        1,
+        4,
+        3,
+        4
+      ]
+    },
+    {
+      "canonicalSha256": "6af63c70975e2b0c43355ddf769a240061f6d67cf6a2cc49d1f91e87988b3ca8",
+      "closureAliases": [],
+      "eligible": true,
+      "failedGates": [],
+      "id": "I2-repeat-one-back-attack-same-target-facet-one",
+      "selectionVector": [
+        0,
+        2,
+        6,
+        4,
+        4
+      ]
+    },
+    {
+      "canonicalSha256": "7e0b7b79948b7e049d4972ec942b5fd33b81479dce1f47088ceb8dc2f8010a7b",
+      "closureAliases": [],
+      "eligible": true,
+      "failedGates": [],
+      "id": "I3-return-two-back-attack-same-target-ember-one",
+      "selectionVector": [
+        1,
+        1,
+        4,
+        3,
+        4
+      ]
+    },
+    {
+      "canonicalSha256": "d258a823d6d1c204d683c7aef68af1c71fa59fb4b76d3c1d33456a320ce8bb36",
+      "closureAliases": [],
+      "eligible": true,
+      "failedGates": [],
+      "id": "I4-return-two-back-attack-same-target-facet-one",
+      "selectionVector": [
+        1,
+        2,
+        6,
+        4,
+        4
+      ]
+    }
+  ],
+  "authority": "Apply boundary 1: freeze only I1 repeat-one-back exact-target Attack deferred-Ember-one for a separately preregistered source/interface/null and direct A/B/AB preflight. Add no capacity row, policy control, protected seed, ML, RL or optimiser.",
+  "cachedObservationRowsRead": 0,
+  "claimBoundary": "Exact-source, immutable-closure, finite-grammar legality and lexicographic representation selection only. No natural support, causal endpoint, policy control, complementarity, package, detector, product, protected-seed, #421 acceptance or P9 claim.",
+  "decision": "freeze-repeat-one-back-attack-ember-contract-for-preflight",
+  "decisionBoundary": 1,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "priorEvidenceDecisions": {
+    "actionGrammar": "close-one-bit-setup-action-grammar",
+    "crossTurnCoverage": "close-cross-turn-hold-representation-and-advance-to-intent-history",
+    "duskCadence": "close-dusk-cadence-at-zero-row-capacity",
+    "frontier": "record-fight-local-mechanism-selection-gate-unavailable",
+    "shatterSuppression": "close-damaging-intent-shatter-suppression-on-observability-gate",
+    "stateZone": "close-existing-combat-state-zone-grammar",
+    "targetSwitch": "close-target-transfer-at-zero-row-capacity"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "9f3e68fc0b4801d1f92a0ebc1e2b4e56534ab3ea309e5c14ecb1d1672b58403b",
+  "runnerSha256": "43274555c2153f332a216cb47761ad76094ba159722909045cc27d371da613fd",
+  "schemaVersion": 1,
+  "selectedCandidateIds": [
+    "I1-repeat-one-back-attack-same-target-ember-one"
+  ],
+  "selectedContract": {
+    "afterimageFactor": "Separate closed Afterimage factor fixed off; no Ward setup, Warden's Edge, order intervention or Afterimage payoff.",
+    "consumer": "The first successful legal authored card of type attack with targetIdx equal to that exact living enemy on createdTurn, after canonical PLAY and ENERGY and before authored effects.",
+    "duskBoundary": "run.aspect == 0 only; factor-on Ash is exact current-main with no marker, event, payoff, RNG or result movement.",
+    "interferenceRule": "Preserve enemy AI, RNG, Stagger history, target choice, all card effects and settlement, Ember cap and tithe, death, terminal paths, relics, Art, Potion and every other enemy record.",
+    "lifecycle": "One telegraph/player-response window; consume once or expire before the next AI decision, target death, victory, defeat, combat-over-after-consume, stale, missing, malformed or consumer-disabled path.",
+    "mediatorState": "Store only {move, createdTurn} under one research key in that enemy's existing fight-local flags; erase the key before every later EnemyAi.decide call.",
+    "naturalCost": "Spend and pay a normal exact-target Attack during the enemy's telegraph window before that enemy acts; non-Attack actions and other targets do not consume it.",
+    "nullPath": "Absent, omitted, explicit off, B-only, Ash, first intent, changed intent, two-back-only return, Skill, wrong target, same move on another enemy, dead, expired, stale, missing or malformed record are fail-closed exact nulls.",
+    "payoffOperation": "After the entire responding card and ordinary settlement, if combat continues, request gain_embers(run, cb, 1) once and record requested versus realised delta.",
+    "policyExposure": "Frozen existing policies first with no intent, card, target, acquisition or score control; direct telemetry records producer, mediator-set, consumer, consume, payoff requested/realised and exact expiry.",
+    "producer": "Immediately after canonical INTENT in Dusk, mark each living enemy whose non-empty exact current move equals its exact one-back move.",
+    "scorelineFactor": "Separate closed Scoreline factor fixed off; no Oath, Faultline, Cracked, assignment or Scoreline payoff."
+  },
+  "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "supportMetricsInspected": 0,
+  "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+  "wallTimeSeconds": 11.753686
+}

@@ -1,0 +1,95 @@
+{
+  "GodotProcesses": 2,
+  "archiveHeadPreserved": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+  "authority": "Apply boundary 1: freeze only facet-salvage-one-ember and separately preregister the cheapest deterministic existing-policy natural-capacity check. Add no policy control, endpoint row, protected seed, ML, RL or optimiser.",
+  "claimBoundary": "Source, interface, direct A/B/AB, call-cardinality, exact-null and intended-mediator identity only. No support, natural activation, capacity, causal endpoint, policy sensitivity, complementarity, balance, product, acceptance or P9 claim.",
+  "decision": "freeze-terminal-hit-facet-salvage-for-natural-capacity",
+  "decisionBoundary": 1,
+  "directControlledObservations": 58,
+  "directFaults": [],
+  "executionError": "",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "outputSha256": {
+    "baseline": "51709a8e6b6375902ab6bb77b150a0c55056c598a8e7423f96ead72aaff78cb7",
+    "candidate": "ab64bed61bcf2200bb8496501e57ec7a0737a94e2f8f7f2220d1e1a74d450e06"
+  },
+  "planSha256": {
+    "baseline": "553b4df70fe9eefa22cf9cd19a5cb7760626b4c8f339e1a81f73777d8391e32f",
+    "candidate": "f6897e5a453260f1df37c22ce94586c93b44d236735759eb133d9c790bb4f4d4"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "0f001cc9b53ec01a31f5a54b3579daf2459214443280dbac416cf85bd4ee6e86",
+  "runnerSha256": "9674f928ed554a7fb59c01fb686215d59e463c01502d618f8b9d83b570af3364",
+  "schemaVersion": 1,
+  "sourceGateFaults": [],
+  "sourceIdentity": {
+    "baselineHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_terminal_hit_precision_probe.gd": "e64361db8cbb45ebd5828071dbfc79b0ced5b2c635075249efbd2f909b53d603",
+      "tools/research_421_terminal_hit_precision_probe.gd.uid": "26888f14b8fbfd496833dec45605ea29b96d1bc56bc527a69966d35348ef1e49"
+    },
+    "baselineStatus": [
+      "?? tools/research_421_terminal_hit_precision_probe.gd",
+      "?? tools/research_421_terminal_hit_precision_probe.gd.uid"
+    ],
+    "candidateCombatDiffSha256": "f6cb0b9d19348968e256226d61702758272c7a774b20b00cec68b3657b7005b5",
+    "candidateHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3aa19c4d63e2dca4bb0c06a572867e36f39d36a8da41218eafe30046e7a32288",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_terminal_hit_precision_probe.gd": "e64361db8cbb45ebd5828071dbfc79b0ced5b2c635075249efbd2f909b53d603",
+      "tools/research_421_terminal_hit_precision_probe.gd.uid": "26888f14b8fbfd496833dec45605ea29b96d1bc56bc527a69966d35348ef1e49"
+    },
+    "candidateStatus": [
+      "M domain/rules/combat.gd",
+      "?? tools/research_421_terminal_hit_precision_probe.gd",
+      "?? tools/research_421_terminal_hit_precision_probe.gd.uid"
+    ],
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "predecessorSha256": {
+      "post_843e899_terminal_hit_precision_design_v1.py": "c6d36413100a0570e06cbaf80f3dd675034804e5052329197980c8981c38e17c",
+      "protocols/post-843e899-terminal-hit-precision-design-v1.json": "0090af8e74ec92cad121546df84b3ab6bc319a3b9a5314cc70eb3a1bb6ff4a9f",
+      "summaries/post-843e899-terminal-hit-precision-design-v1.json": "423fa2c5cd3bd994b03c23a9d78961c5434f4b353621eeca7d24d488bc2b906d",
+      "summaries/post-843e899-terminal-hit-precision-primary-sources-v1.md": "f67b7dffbcc578774dac3456003008acbe15e45f1e4653f00f98777b18b6a2f5"
+    },
+    "repositoryRefs": {
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "runnerSha256": "9674f928ed554a7fb59c01fb686215d59e463c01502d618f8b9d83b570af3364",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385"
+  },
+  "wallTimeSeconds": 7.151741249952465
+}

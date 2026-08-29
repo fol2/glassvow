@@ -1,0 +1,480 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "stage": "post-843e899-cross-turn-hold-zero-row-design",
+  "question": "After the complete terminal-hit precision/excess closure, can the owner-ordered cross-turn hold class support exactly one finite, source-compatible twelve-field Dusk-only fight-local contract before any support or simulator row is read?",
+  "hypothesis": "The shortest directly attributable cross-turn primitive is to retain one authored Attack left in the end-turn hand, count it against the next normal draw and pay one Ember only when the exact UID is played on that immediately following turn.",
+  "claimBoundary": "Exact-source, immutable-closure, finite-grammar legality and lexicographic representation selection only. No hold activation, support, causal endpoint, policy-control, complementarity, package, detector, product, protected-seed, #421 acceptance or P9 claim.",
+  "scientificBasis": {
+    "serialEntry": "The exact-lethal and positive-overkill capacity summaries validly close the complete terminal-hit precision/excess class. Owner comment 5460811702 orders cross-turn hold next.",
+    "observability": "Current source directly exposes end-turn hand UIDs, discard UIDs, next-turn number, draw UIDs and legal play UIDs. One research event can label each causal stage without inferring identity.",
+    "naturalCost": "The retained Attack replaces one next-turn normal draw, was unavailable for prior-turn play or Kindle, and must be paid and legally played before one-turn expiry.",
+    "noGuessing": "Candidate construction and ordering use exact source, immutable aliases and the owner lexicographic objective only. No support row, frequency, outcome, card identity preference or optimiser is read."
+  },
+  "twelveFieldOrder": [
+    "producer",
+    "mediatorState",
+    "consumer",
+    "payoffOperation",
+    "lifecycle",
+    "naturalCost",
+    "duskBoundary",
+    "scorelineFactor",
+    "afterimageFactor",
+    "interferenceRule",
+    "nullPath",
+    "policyExposure"
+  ],
+  "requiredGates": [
+    "completeTwelveFieldContract",
+    "materiallyDistinct",
+    "sourceCompatible",
+    "duskOnly",
+    "deterministic",
+    "exactNullOff",
+    "exactNullAsh",
+    "fightLocal",
+    "noSaveOrPersistentRunField",
+    "noRelicOrAcquisitionUi",
+    "noRng",
+    "noGlobalSelector",
+    "explicitProducerMediatorConsumerPayoffExpiry",
+    "naturalCost",
+    "directTelemetryPlan",
+    "existingPolicyFirst",
+    "policyControlCountAtMostOne",
+    "boundedCardinality"
+  ],
+  "selectionObjective": {
+    "direction": "lexicographically minimise",
+    "selectionVectorFields": [
+      "newDirectObservationFields",
+      "playerVisibleSemanticUnitsPlusLifecycleBoundaries",
+      "ephemeralStateKeysPlusGameplaySourceSurfacesPlusPolicyControls",
+      "decisiveExperimentStages",
+      "candidateCountInGrammar"
+    ],
+    "finalTieBreak": "canonical candidate SHA-256",
+    "forbiddenSelectors": [
+      "hold support or frequency",
+      "outcome",
+      "specific card identity or name",
+      "energy or damage threshold",
+      "a policy, seed, encounter or card subset",
+      "aesthetics",
+      "implementation convenience",
+      "an optimiser"
+    ]
+  },
+  "expectedCandidateIds": [
+    "H1-one-turn-attack-retain-draw-replacement-same-uid-play-ember-one",
+    "H2-one-turn-attack-retain-extra-draw-same-uid-play-ember-one",
+    "H3-one-turn-attack-retain-draw-replacement-same-uid-play-facet-one",
+    "H4-multi-turn-attack-retain-same-uid-play-ember-one",
+    "H5-all-attack-retain-same-turn-play-ember",
+    "H6-discard-topdeck-redraw-same-uid-play-ember-one",
+    "H7-explicit-hold-selector-named-card-pair"
+  ],
+  "expectedSelectedCandidateIds": [
+    "H1-one-turn-attack-retain-draw-replacement-same-uid-play-ember-one"
+  ],
+  "candidateDesigns": [
+    {
+      "id": "H1-one-turn-attack-retain-draw-replacement-same-uid-play-ember-one",
+      "canonicalSha256": "640867f1a4857e33986726120afd72cfca1584856dc8a609df927bd52ed69953",
+      "selectionVector": [0, 3, 5, 3, 7],
+      "closureAliases": [],
+      "gates": {
+        "completeTwelveFieldContract": true,
+        "materiallyDistinct": true,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true
+      },
+      "contract": {
+        "producer": "After hand penalties at Dusk END_TURN, select the first authored Attack remaining in existing hand order; at most one exact UID.",
+        "mediatorState": "Keep that UID in hand and store only {uid, cardId, createdTurn} in one ephemeral CombatState record while every unselected card follows current discard order.",
+        "consumer": "A successful legal PLAY of that exact UID at createdTurn plus one, after normal PLAY and Energy events and before authored effects.",
+        "payoffOperation": "Request gain_embers(run, cb, 1) exactly once and record requested one versus realised capped or tithed delta.",
+        "lifecycle": "Cross one enemy phase, replace one normal next-turn draw, consume on exact play and otherwise expire at Kindle/removal, next END_TURN, terminal combat, missing card or stale turn; never immediately re-hold an expired UID.",
+        "naturalCost": "Forgo the prior-turn play or Kindle, receive one fewer normal draw, then pay and legally play the exact retained Attack before expiry.",
+        "duskBoundary": "Aspect zero only; factor-on Ash is exact current-main with no state, event, draw, Ember, RNG or result movement.",
+        "scorelineFactor": "Separate closed Scoreline factor fixed off; no Oath, Faultline, Cracked, assignment or Scoreline payoff.",
+        "afterimageFactor": "Separate closed Afterimage factor fixed off; no Ward setup, Warden's Edge, order intervention or Afterimage payoff.",
+        "interferenceRule": "Preserve hand penalties, unselected discard order, start-turn effects, hand cap, Kindle, authored effects, Ember cap and tithe, Art, Momentum, Facet/Shatter, death, relics and RNG; exact UID only.",
+        "nullPath": "Omitted/off, B-only, Ash, no Attack, same-ID different-UID, stale turn and malformed or missing mediator are fail-closed exact nulls; no residue crosses a combat.",
+        "policyExposure": "Frozen existing policies first with no hold, score, acquisition or target control; direct telemetry records producer, mediator-set, carry/draw replacement, consumer, consume, payoff requested/realised and exact expiry."
+      }
+    },
+    {
+      "id": "H2-one-turn-attack-retain-extra-draw-same-uid-play-ember-one",
+      "canonicalSha256": "e81b0ce7eb53e0ae028d232c8e30daeafa9be30dadc3329d61a72c28a39bfe66",
+      "selectionVector": [0, 3, 4, 3, 7],
+      "closureAliases": [],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": true,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturalCost": false,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true
+      },
+      "rejection": "Retaining the card while drawing the full next hand grants an extra card and fails the owner natural-cost requirement."
+    },
+    {
+      "id": "H3-one-turn-attack-retain-draw-replacement-same-uid-play-facet-one",
+      "canonicalSha256": "7c5719f9234208a075c65a45ee860da85282d15535b3e862270354436c326b6f",
+      "selectionVector": [0, 3, 6, 3, 7],
+      "closureAliases": [],
+      "gates": {
+        "completeTwelveFieldContract": true,
+        "materiallyDistinct": true,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true
+      },
+      "contract": {
+        "producer": "Same exact end-turn Attack selection as H1.",
+        "mediatorState": "Same exact one-turn hand record as H1.",
+        "consumer": "Same exact next-turn UID play plus a successful living-target Attack hit.",
+        "payoffOperation": "Add one Facet chip at deferred hit settlement.",
+        "lifecycle": "Same one-turn hold plus pending-chip settlement.",
+        "naturalCost": "Same prior-turn and draw-replacement cost as H1.",
+        "duskBoundary": "Aspect zero only.",
+        "scorelineFactor": "Closed and fixed off.",
+        "afterimageFactor": "Closed and fixed off.",
+        "interferenceRule": "Additionally preserve target, hit, pending-chip, Facet and Shatter settlement.",
+        "nullPath": "Same H1 nulls plus missed, dead and absent target nulls.",
+        "policyExposure": "Existing policy first with additional target and hit telemetry."
+      }
+    },
+    {
+      "id": "H4-multi-turn-attack-retain-same-uid-play-ember-one",
+      "canonicalSha256": "dbcba30c9aff05dcd47f296720e1c95907bdefbe94b63f162debcf001e8134b8",
+      "selectionVector": [0, 5, 6, 3, 7],
+      "closureAliases": [],
+      "gates": {
+        "completeTwelveFieldContract": true,
+        "materiallyDistinct": true,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true
+      },
+      "contract": {
+        "producer": "Same end-turn Attack producer as H1.",
+        "mediatorState": "Retain one exact UID with a remaining-turn counter.",
+        "consumer": "Play that UID on any later turn before combat ends.",
+        "payoffOperation": "One Ember once.",
+        "lifecycle": "Persist for more than one enemy phase and repeatedly replace draws.",
+        "naturalCost": "Repeated draw replacement and delayed play.",
+        "duskBoundary": "Aspect zero only.",
+        "scorelineFactor": "Closed and fixed off.",
+        "afterimageFactor": "Closed and fixed off.",
+        "interferenceRule": "Preserve other zones and effects.",
+        "nullPath": "Omitted/off/Ash exact null.",
+        "policyExposure": "Existing policy first."
+      }
+    },
+    {
+      "id": "H5-all-attack-retain-same-turn-play-ember",
+      "canonicalSha256": "49778906302c38e739875ddd4895d56de223a816cded1721e121cf562bc91f45",
+      "selectionVector": [0, 4, 7, 4, 7],
+      "closureAliases": [],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": true,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": false
+      },
+      "rejection": "Variable-card retention and payoff cardinality are unbounded by the complete hand."
+    },
+    {
+      "id": "H6-discard-topdeck-redraw-same-uid-play-ember-one",
+      "canonicalSha256": "9fec378c30bb9db5c5c0ddc4180b7b0899e32e74e35b28ce6f061b65c5da0914",
+      "selectionVector": [0, 4, 7, 4, 7],
+      "closureAliases": [
+        "closed-immediate-draw-thread",
+        "closed-reshuffle-next-play"
+      ],
+      "gates": {
+        "completeTwelveFieldContract": true,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": true,
+        "noRng": true,
+        "noGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true
+      },
+      "rejection": "Moving the selected card through discard/draw and consuming its redraw overlays immutable draw-thread and reshuffle topology and mutates more zones."
+    },
+    {
+      "id": "H7-explicit-hold-selector-named-card-pair",
+      "canonicalSha256": "2fef19adc2be6e588d2165c949ece6a8dccf3b2ef0bad969568a3f7309d09e5f",
+      "selectionVector": [1, 5, 9, 4, 7],
+      "closureAliases": [
+        "closed-afterimage-order",
+        "closed-one-bit-setup-action-grammar"
+      ],
+      "gates": {
+        "completeTwelveFieldContract": false,
+        "materiallyDistinct": false,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullOff": true,
+        "exactNullAsh": true,
+        "fightLocal": true,
+        "noSaveOrPersistentRunField": true,
+        "noRelicOrAcquisitionUi": false,
+        "noRng": true,
+        "noGlobalSelector": false,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturalCost": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": false,
+        "policyControlCountAtMostOne": false,
+        "boundedCardinality": true
+      },
+      "rejection": "A named pair and explicit selector choose product semantics and policy intervention before evidence and overlap closed order/action families."
+    }
+  ],
+  "sourceAssertions": [
+    {
+      "id": "fight-local hand zones exist",
+      "path": "domain/state/combat_state.gd",
+      "contains": "var hand: Array[CardInst] = []"
+    },
+    {
+      "id": "no existing research hold state",
+      "path": "domain/state/combat_state.gd",
+      "absent": "research421"
+    },
+    {
+      "id": "normal next-turn draw boundary",
+      "path": "domain/rules/combat.gd",
+      "contains": "draw_cards(run, cb, maxi(1, draws))"
+    },
+    {
+      "id": "exact UID play event",
+      "path": "domain/rules/combat.gd",
+      "contains": "EventTypes.PLAY, \"uid\": inst.uid, \"id\": String(inst.id)"
+    },
+    {
+      "id": "complete hand discard boundary",
+      "path": "domain/rules/combat.gd",
+      "contains": "cb.discard.append_array(cb.hand)"
+    },
+    {
+      "id": "exact UID Kindle boundary",
+      "path": "domain/rules/combat.gd",
+      "contains": "func kindle_from_hand(run: RunState, cb: CombatState, uid: int)"
+    },
+    {
+      "id": "policy exhausts legal plays first",
+      "path": "tools/balance_pilot.gd",
+      "contains": "_play_cards(game) # Verdant Branch can draw from the kindle."
+    },
+    {
+      "id": "card identity is fight local",
+      "path": "domain/state/card_inst.gd",
+      "contains": "var uid: int = 0"
+    },
+    {
+      "id": "direct lifecycle event vocabulary",
+      "path": "domain/events/event_types.gd",
+      "contains": "const DISCARD_HAND: StringName = &\"discardHand\""
+    },
+    {
+      "id": "authored attack grammar present",
+      "path": "content/full-content.json",
+      "contains": "\"type\": \"attack\""
+    }
+  ],
+  "priorEvidence": {
+    "exactLethalCapacity": {
+      "path": "summaries/post-843e899-terminal-hit-precision-capacity-v1.json",
+      "sha256": "6f826f609bf677a63ae5161d08a99e82e6b4a44b6d57149d293ae6f73d032d1c",
+      "decision": "close-exact-lethal-precision-and-advance-to-positive-overkill"
+    },
+    "positiveOverkillCapacity": {
+      "path": "summaries/post-843e899-positive-overkill-capacity-v1.json",
+      "sha256": "8e014d8df93e25f91f3c70fe4e1474d5021ae98dc6a0507f2bc738bce10189fb",
+      "decision": "close-positive-overkill-and-terminal-hit-precision-advance-to-cross-turn-hold"
+    },
+    "stateZone": {
+      "path": "summaries/post-v30-combat-state-zone-frontier-audit-v1.json",
+      "sha256": "1415ee899fefc2087a1b3730dfb71610ff4a5c8ed8e93842007b4f28eee4d4ed",
+      "decision": "close-existing-combat-state-zone-grammar"
+    },
+    "actionGrammar": {
+      "path": "summaries/post-v38-action-grammar-inventory-v1.json",
+      "sha256": "4eeda4d020539996106ea674d17acd7d0804a8181583c2cf4e856946febca3da",
+      "decision": "close-one-bit-setup-action-grammar"
+    },
+    "afterimageOrder": {
+      "path": "summaries/post-v38-afterimage-order-capacity-v1.json",
+      "sha256": "f9f9e632113c6c1737450f37f973ea8ba8370cc75e40a4c4ea34e583e92de140",
+      "decision": "close-afterimage-order-at-capacity"
+    },
+    "drawThread": {
+      "path": "summaries/post-v38-draw-thread-capacity-v1.json",
+      "sha256": "33b3f0a10ee1151e526820f220af2068999bc56c33090bb67afaba1fbcaff3e9",
+      "decision": "close-immediate-draw-thread-at-zero-row-capacity"
+    },
+    "duplicateCopy": {
+      "path": "summaries/post-v38-duplicate-copy-capacity-v1.json",
+      "sha256": "72a850dd102994b0fc778ac7c057b19c4f505801c43997b0c815f07f07eebd86",
+      "decision": "close-duplicate-copy-echo-at-zero-row-capacity"
+    },
+    "reshuffle": {
+      "path": "summaries/post-v38-reshuffle-capacity-v1.json",
+      "sha256": "f23af519e43e84a8d42ab92a20d9ab888ce6a0903e2ba0338114bec537cff565",
+      "decision": "close-reshuffle-echo-at-zero-row-capacity"
+    },
+    "turnState": {
+      "path": "summaries/post-v38-turn-state-economy-capacity-v1.json",
+      "sha256": "7cd0edf36fcd011422ec99a94d84cc0a774307c1db6150fff3d830fdf1d7c842",
+      "decision": "close-turn-state-action-economy-family"
+    },
+    "frontier": {
+      "path": "summaries/post-v38-fight-local-frontier-audit-v3.json",
+      "sha256": "2e21b108bc2e8233cdbd995877d5bf20b396d6e245966bc729ca13a48b6380f3",
+      "decision": "record-fight-local-mechanism-selection-gate-unavailable"
+    }
+  },
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/card_inst.gd": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    "runnerSha256": "6713fd4909c02bf66daacc2d472d72477e0564a6d4f265533e25b05c1c72b01c",
+    "taskCapsulePath": "task-capsule-5460811702-v20.json",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+    "primarySourceReportPath": "summaries/post-843e899-cross-turn-hold-primary-sources-v1.md",
+    "primarySourceReportSha256": "516263db61c86a67ab31112e00462e338da37b93ec9df8e45243454dc2f5bb0a"
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumSourceFilesRead": 6,
+    "maximumEvidenceFilesRead": 10,
+    "maximumCandidateDesigns": 7,
+    "maximumWallTimeSeconds": 20,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "newScientificSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Exactly one complete candidate is first under the frozen source-only lexicographic objective, every immutable source/evidence/candidate identity passes, no support or observation is read, ledger is byte-identical and execution completes within 20 seconds.",
+    "successAuthority": "Apply boundary 1: freeze only dusk-one-turn-held-attack-play-ember-one for a separately preregistered source/interface/null and direct A/B/AB preflight. Add no whole-run row, policy control, protected seed, ML, RL or optimiser.",
+    "futility": "No candidate passes every zero-row legality and alias gate.",
+    "futilityAuthority": "Apply boundary 2: close cross-turn hold lifecycle at the zero-row boundary and continue serially with intent-history lifecycle inside #421.",
+    "inconclusive": "Frozen source/evidence cannot distinguish otherwise legal candidates, an immutable identity fails or the exact decision is unavailable at 20 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record cross-turn hold design inconclusive at the frozen zero-row cap. Do not choose by taste, read support, rerun, add a method or use protected seeds."
+  },
+  "forbidden": [
+    "support, frequency, outcome or cached observation access",
+    "named-card or posterior subset selection",
+    "free extra next-turn draw",
+    "more than one held card or more than one held turn",
+    "draw-thread, reshuffle, Afterimage, action-economy or another closed-family rescue",
+    "policy, acquisition, target or hold control",
+    "product truth, research PR or Actions",
+    "protected seed, ML, RL or optimiser"
+  ]
+}

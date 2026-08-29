@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "stage": "post-843e899-intent-history-source-interface-null-direct-identity",
+  "question": "Does the sole zero-row-selected repeat-one-back representation preserve current-main exactly at omitted and explicit off, isolate its producer and consumer under A/B/AB, never expose its private key to EnemyAi, consume only an authored exact-target Attack during the one telegraph window, defer one requested Ember until complete card settlement, and fail closed at every source-reachable expiry boundary?",
+  "hypothesis": "For Dusk only, an exact consecutive authored-intent repeat can create one enemy-owned fight-local marker after canonical INTENT. A normal authored Attack against that exact enemy on the new player turn can consume it after PLAY and ENERGY, with one Ember requested only after complete ordinary card settlement if combat continues.",
+  "claimBoundary": "Source, interface, exact-null, direct A/B/AB, intent identity, enemy identity, event order, deferred payoff, private-key isolation and source-complete expiry identity only. No natural support, capacity, causal endpoint, policy sensitivity, balance, package, detector, product, acceptance or P9 claim.",
+  "factorDefinitions": {
+    "intentHistoryRepeatResponse": {
+      "type": "one binary structural mechanism factor",
+      "levels": ["off", "repeat-one-back-exact-target-attack-deferred-ember-one"],
+      "null": "off",
+      "enabled": "For Dusk only, after canonical INTENT mark each living enemy whose non-empty exact current move equals exact one-back; consume one marker only when an authored Attack is legally played against that exact enemy during the resulting player-response window; request one Ember after complete ordinary settlement if combat continues.",
+      "fixedPayoff": 1,
+      "fixedCardinality": "at most one request per exact enemy and telegraph window",
+      "fixedLifetime": "created for player turn T after INTENT; expires before the next EnemyAi call or any earlier death/terminal boundary",
+      "forbiddenLevels": "No intent subset, enemy subset, named card, two-back return, threshold, payoff magnitude, multi-window carry, global selector or adaptive cohort."
+    },
+    "producerControlA": {
+      "levels": [false, true],
+      "null": false,
+      "role": "Research-only mechanical A control. It may compare exact current and one-back keys, create only the frozen enemy-owned mediator and emit direct lifecycle telemetry."
+    },
+    "consumerControlB": {
+      "levels": [false, true],
+      "null": false,
+      "role": "Research-only mechanical B control. Without A's mediator it must be exact null; with a valid exact-enemy marker it may consume and request the fixed deferred payoff only."
+    },
+    "scorelinePayoff": {
+      "levels": ["off-closed"],
+      "fixed": "Separate immutable causal factor; absent and not pooled."
+    },
+    "afterimagePayoff": {
+      "levels": ["off-closed"],
+      "fixed": "Separate immutable causal factor; absent and not pooled."
+    },
+    "acquisitionPriority": {
+      "levels": ["current-main"],
+      "fixed": "No policy or acquisition change."
+    },
+    "wardSetupPriority": {
+      "levels": ["current-main"],
+      "fixed": "No Ward or setup policy change."
+    }
+  },
+  "mechanismContract": {
+    "producer": "Immediately after canonical INTENT in Dusk, for each living enemy whose new non-empty exact move equals exact one-back.",
+    "mediator": "Only {move, createdTurn} under one research key in that enemy's existing fight-local flags; no new state field or projection.",
+    "consumer": "The first successful legal authored card of type attack whose targetIdx is that exact living enemy on createdTurn, after canonical PLAY and ENERGY and before authored effects.",
+    "payoff": "After the whole responding card and ordinary discard/exhaust settlement, request one Ember once if combat continues; record requested and realised separately.",
+    "lifecycle": "One telegraph/player-response window; erase before every later EnemyAi call, or on exact consume, target death, victory, defeat, combat-over-after-consume, stale, malformed, move mismatch or consumer-disabled path.",
+    "naturalCost": "The player spends and pays a normal exact-target Attack during the enemy's telegraph window before that enemy acts. Skills, Arts, Potions and other targets do not consume it.",
+    "aspect": "Dusk only; Ash is exact null.",
+    "closedPackages": "Scoreline and Afterimage remain separate fixed-off factors.",
+    "interference": "Enemy AI, RNG, Stagger history, target choice, card effects and settlement, Facet/Shatter, Ember cap and tithe, death, terminals, relics, Art, Potion and other enemy flags remain live.",
+    "failClosed": "Absent, omitted, explicit off, B-only, Ash, first intent, changed intent, two-back-only return, Skill, wrong target, same move on another enemy, dead, expired, stale, missing, malformed and move-mismatch paths cannot pay.",
+    "policy": "Current-main policy only; no control, ML, RL or optimiser.",
+    "telemetry": "Direct stages are ai-boundary, producer, mediator-set, consumer, mediator-consume, payoff and expiry, with exact enemy index, move, turn, responding UID and reason where applicable."
+  },
+  "sourceCompleteAudit": {
+    "gameplaySurfaces": ["domain/rules/combat.gd"],
+    "stateCarrier": "EnemyCombatant.flags already exists and is excluded from EnemyCombatant.to_dict; no CombatState, RunState, save, event type, policy or content field changes.",
+    "aiBoundary": "The marker is erased and an exact false-presence observation is emitted before the sole EnemyAi.decide call. Initial, ordinary-action, Staggered and injected-corrupt paths all exercise this boundary.",
+    "producerBoundary": "The exact comparator runs only after the existing current/one-back/two-back values are read and canonical INTENT is emitted.",
+    "consumerBoundary": "The exact target and authored card type are known after canonical PLAY/ENERGY and before pending-chip and authored-effect execution.",
+    "deferredBoundary": "The fixed payoff is after existing effect, chip, relic and discard/exhaust settlement and before play_card returns.",
+    "expiryCallers": [
+      "the next _compute_intents before EnemyAi.decide",
+      "_on_enemy_death",
+      "_win_combat",
+      "lose_combat",
+      "post-settlement combat-over-after-consume",
+      "consumer validation for stale, malformed, move mismatch and disabled B"
+    ],
+    "callerCardinality": "Current-main contains one EnemyAi.decide call in combat.gd, two _compute_intents callers plus its definition, all normal and Staggered history append paths, and only _win_combat/lose_combat assignments to cb.over. Frozen full-file hashes bind the audit."
+  },
+  "design": {
+    "type": "One binary structural-factor direct identity preflight with internal A/B/AB controls; not a factorial and not an endpoint experiment.",
+    "matrix": {
+      "currentMain": 18,
+      "candidateOmitted": 18,
+      "candidateExplicitOff": 18,
+      "candidateAOnly": 18,
+      "candidateBOnly": 18,
+      "candidateAB": 18,
+      "candidateABInjectedFailClosed": 5,
+      "total": 113
+    },
+    "processes": "One frozen current-main Godot process and one frozen candidate Godot process.",
+    "order": "The candidate process runs all omitted observations first before any interface call, then explicit off, A-only, B-only and AB; injected AB observations run last. No row, order or arm is conditional on prior output.",
+    "seedIdentity": "Core contexts use seeds 421500 through 421517 in every baseline and candidate arm. Injected fail-closed contexts use 421590 through 421594 and estimate no baseline contrast.",
+    "anchors": {
+      "null": "Current-main, omitted, explicit off and B-only are canonically identical after removing research-only telemetry.",
+      "producer": "A and AB share exact pre-action combat, normalised flags, RNG, current/one-back identity and one marker per qualifying enemy.",
+      "consumer": "A expires consumer-disabled at the matching exact-target Attack; AB consumes the same marker and adds only the fixed deferred payoff.",
+      "interference": "Skill-before-Attack, wrong-then-right target, same move on another enemy, ordinary action, Stagger, target death, terminal paths, final and non-final kills, exhaust settlement and multiple enemies exercise every frozen causal sibling.",
+      "privateKey": "Every initial and later AI boundary in A, B and AB directly records the research key absent before EnemyAi.decide."
+    }
+  },
+  "directScenarios": [
+    {"id": "repeat-play", "seed": 421500, "expected": "Natural ashAcolyte consecutive scorch repeat; AB consumes one strike and realises one Ember."},
+    {"id": "repeat-cap", "seed": 421501, "expected": "Same exact repeat at Ember cap; AB requests one and realises zero."},
+    {"id": "ash-repeat", "seed": 421502, "expected": "Exact authored repeat on Ash is null."},
+    {"id": "first-intent", "seed": 421503, "expected": "Empty history cannot produce."},
+    {"id": "changed-intent", "seed": 421504, "expected": "ashAcolyte ritual to scorch change cannot produce."},
+    {"id": "two-back-return", "seed": 421505, "expected": "gravewarden crush-bulwark-crush is an exact return but not a repeat and is null."},
+    {"id": "skill-then-attack", "seed": 421506, "expected": "Skill leaves the marker; later exact-target Attack consumes once."},
+    {"id": "wrong-then-right", "seed": 421507, "expected": "Attack on another enemy leaves the marker; later right target consumes once."},
+    {"id": "same-move-other-enemy", "seed": 421508, "expected": "Another enemy telegraphing the same move cannot consume the owner enemy's marker."},
+    {"id": "unanswered-next-ai", "seed": 421509, "expected": "Ordinary enemy action appends history; unanswered marker expires before the next changed AI decision."},
+    {"id": "staggered-history", "seed": 421510, "expected": "Stagger still appends the exact move; unanswered marker expires before the next changed AI decision."},
+    {"id": "target-death-other-route", "seed": 421511, "expected": "Non-card death of the marked target expires target-death while another enemy keeps combat open."},
+    {"id": "victory-expiry", "seed": 421512, "expected": "Unconsumed marker expires before victory state."},
+    {"id": "defeat-expiry", "seed": 421513, "expected": "Unconsumed marker expires before defeat state."},
+    {"id": "final-responding-attack", "seed": 421514, "expected": "The exact Attack consumes, kills the final enemy and receives no payoff; combat-over-after-consume is recorded."},
+    {"id": "nonfinal-target-kill", "seed": 421515, "expected": "The exact Attack consumes and kills its target while another enemy lives; ordinary death settlement precedes one payoff."},
+    {"id": "multi-enemy-independent", "seed": 421516, "expected": "Two independent repeated intents can each consume and request at most one Ember."},
+    {"id": "exhaust-settlement", "seed": 421517, "expected": "Devour's authored effects, EXHAUST and ordinary exhaust Ember all precede the research payoff."}
+  ],
+  "injectedFailClosedScenarios": [
+    {"id": "injected-stale-play", "seed": 421590, "expected": "stale-turn expiry, no consume or payoff"},
+    {"id": "injected-missing-play", "seed": 421591, "expected": "exact null, no research event or payoff"},
+    {"id": "injected-malformed-play", "seed": 421592, "expected": "malformed expiry, no consume or payoff"},
+    {"id": "injected-move-mismatch-play", "seed": 421593, "expected": "move-mismatch expiry, no consume or payoff"},
+    {"id": "injected-malformed-before-ai", "seed": 421594, "expected": "old corrupt key expires unanswered, is absent at AI, and any newly produced valid repeat remains independent with no payoff"}
+  ],
+  "estimands": {
+    "baselineIdentity": "Zero current-main versus omitted and zero current-main versus explicit-off gameplay, state, event, RNG and result mismatches across eighteen paired contexts.",
+    "nullAliasIdentity": "Zero B-only versus explicit-off mismatches after research-only AI-boundary telemetry is removed.",
+    "producerIsolation": "A changes only one {move,createdTurn} enemy marker and direct telemetry; after normalising that private marker, A equals off in all eighteen contexts.",
+    "consumerIsolation": "After removing research telemetry and the sole immediately adjacent realised payoff Ember event(s), AB equals A in every core context.",
+    "intentIdentity": "Only exact non-empty current equals one-back can produce; first, changed and exact two-back-return contexts remain null.",
+    "enemyIdentity": "Skills and other targets cannot consume; multiple enemy records remain independent and each requests at most one payoff.",
+    "payoffPlacement": "Each consumer is after the matching exact UID's PLAY and ENERGY and before its first authored hit; each payoff is after that UID's discard/exhaust settlement.",
+    "expiryIdentity": "Unanswered ordinary/Stagger paths, target death, victory, defeat, final-combat consumption, stale, missing, malformed and move mismatch all satisfy their exact frozen disposition.",
+    "privateKeyIdentity": "Every observed A/B/AB AI boundary reports the marker absent, with exact RNG identity across all arms.",
+    "projectionIdentity": "No runtime combat projection contains the private marker.",
+    "notEstimated": "Natural activation, viable exposure, whole-run effect, endpoint causality, policy response, balance, product or acceptance."
+  },
+  "mechanisticallyJustifiedInteractions": [
+    "intent-history producer by aspect: only Dusk can create the marker; Ash is null.",
+    "current move by one-back identity: exact equality produces; empty, changed and two-back-only return do not.",
+    "consumer by authored card type and enemy identity: only an authored Attack against the marker-owning enemy can consume.",
+    "consumer by settlement and combat state: payoff waits for complete settlement and is suppressed if combat became terminal.",
+    "payoff by Ember cap and tithe: requested one is invariant while realised may be zero.",
+    "lifecycle by action, Stagger, death and terminal boundaries: each clears before any later AI can observe the marker.",
+    "enemy multiplicity: independent markers may coexist but never cross-consume or exceed one request per enemy/window."
+  ],
+  "aliasStructure": {
+    "nullAliases": "Current-main absence, class-default omission and explicit false/false are exact aliases.",
+    "componentAlias": "B-only aliases off because no mediator exists; it is not evidence about AB support.",
+    "historyNonAlias": "Consecutive one-back equality is not a generic INTENT event, damaging-intent subset, Stagger producer or two-back return.",
+    "targetNonAlias": "Exact target only binds the response to the enemy-owned mediator; it is not target-switch topology.",
+    "actionNonAlias": "The producer is enemy intent history, not a player card or generic next-Attack setup bit.",
+    "closedFamilies": "Terminal-hit precision/excess, Scoreline, Afterimage, cadence, target transfer, Shatter suppression, draw, duplicate, reshuffle and cross-turn hold dispositions remain immutable and are not pooled or reopened.",
+    "factorial": "Scoreline payoff and Afterimage payoff are separate fixed-off factors. This direct preflight is not the historical four-factor design or a joint factorial."
+  },
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "baselineHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "baselineStatus": [],
+    "candidateStatus": ["M domain/rules/combat.gd"],
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/rules/enemy_ai.gd": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3554fe8f95649623fcfd9d203fbdf17b2290105824a515409345c212c8b9a444",
+      "domain/rules/enemy_ai.gd": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "candidateResearchDiffSha256": "9d1780512f33386e197011955253d04a14bf15868ae089287d6c2399834716ea",
+    "probeSha256": "908feb8d5852bc7b90ba07abb41c52d04cd4e4323d931320875b284d1042a753",
+    "godotBinaryPath": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "runnerSha256": "6c852a146bf748a197e20f4036c5d068bbd8a1f8ec6569858b7fdccabbf1e02e",
+    "taskCapsulePath": "task-capsule-5460811702-v20.json",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+    "predecessorSha256": {
+      "post_843e899_intent_history_design_v1.py": "43274555c2153f332a216cb47761ad76094ba159722909045cc27d371da613fd",
+      "protocols/post-843e899-intent-history-design-v1.json": "9f3e68fc0b4801d1f92a0ebc1e2b4e56534ab3ea309e5c14ecb1d1672b58403b",
+      "summaries/post-843e899-intent-history-design-v1.json": "dcfaaa229f5c8e7cb07f5d56c7767a4329d4d079b0a0cc10d1a20f9ab91e73df",
+      "summaries/post-843e899-intent-history-primary-sources-v1.md": "7dc975d80267f36d83ccbc91182306f8b4e24f4d07717a0ebae968b757f7dd61",
+      "summaries/post-843e899-cross-turn-hold-coverage-audit-v1.json": "dbfccbae0faea8b3d2849661914672e2bac28c185ceed25767eb97f251693412"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 2,
+    "directControlledObservations": 113,
+    "newScientificSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic GDScript owns candidate construction and the fixed observation matrix. Deterministic Python owns process execution, content-addressed output caching, exact comparison, the only look and the stop/go decision.",
+    "order": "Verify immutable inputs and static source-complete cardinality; execute the complete current-main process once; execute the complete candidate process once; analyse all 113 observations once; verify byte-identical ledger.",
+    "firstLook": "These 113 direct observations are the only look. No source, scenario, seed, comparator, expiry, cap or decision rule changes after execution begins.",
+    "successStop": "All gates pass: stop without simulator rows and separately preregister the cheapest existing-policy natural-capacity screen.",
+    "futilityStop": "Any completed source, interface, null, intent, enemy, component, ordering, deferred-payoff, expiry, private-key, RNG, row-count or ledger gate fails: close intent-history without repair and continue serially to private counter/tag/transform.",
+    "inconclusiveStop": "A frozen executable/process is unavailable or the exact decision is unavailable at 120 seconds: record inconclusive at the cap without rerun."
+  },
+  "decisionRules": {
+    "success": "All immutable and static gates pass; exactly 113 observations complete in exactly two Godot processes; baseline/omitted/off/B identities, A/AB component isolation, intent/enemy identity, exact UID order, deferred requested/realised payoff, all expiry reasons, private-key exclusion, projection exclusion and RNG checks pass; ledger is byte-identical within 120 seconds.",
+    "successAuthority": "Apply boundary 1: freeze only repeat-one-back-exact-target-Attack-deferred-Ember-one for a separately preregistered fresh existing-policy natural-capacity screen. Add no policy control, endpoint row, protected seed, Scoreline, Afterimage, ML, RL or optimiser.",
+    "futility": "Any completed source, interface, null, A/B/AB, intent identity, enemy identity, event-order, payoff, expiry, private-key, projection, RNG, row-count or ledger gate fails.",
+    "futilityAuthority": "Apply boundary 2: close intent-history without repair, threshold or subset rescue; continue serially with zero-row private counter/tag/transform design inside #421.",
+    "inconclusive": "A frozen input or process is unavailable, or the exact decision is unavailable at the 120-second cap.",
+    "inconclusiveAuthority": "Apply boundary 3: record intent-history identity inconclusive at the preregistered cap; do not rerun, alter the matrix, use protected seeds or create a routine human checkpoint."
+  },
+  "forbidden": [
+    "any natural-support, capacity, endpoint, policy, balance, product, acceptance or P9 claim",
+    "any enemy, encounter, card, seed, intent subset, selector, threshold or payoff magnitude level",
+    "any Scoreline, Afterimage, acquisition or Ward variation",
+    "any repair, rerun, reserve row, protected seed, adaptive candidate tuning, ML, RL or optimiser",
+    "any reopening or pooling of a valid closed-family disposition"
+  ]
+}

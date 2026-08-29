@@ -24,6 +24,54 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### Post-843e899 finite family ladder exhaustion and owner-authority boundary
+
+Owner comment `5460811702` supplied a finite serial rule for the four unresolved
+fight-local classes. Exact-lethal terminal precision passed its 58-observation
+direct identity matrix, then closed at the 512-row natural-capacity gate because
+all 64 exposed policies collapsed into active or ambiguous identities and zero
+exact-inactive policies remained. Positive-overkill excess separately passed 58
+direct controls and then closed at its 512-row capacity gate with 64 active, zero
+exact-inactive and only seven viable policies. This closes the complete terminal
+precision/excess class without threshold, card, policy, payoff or cohort rescue.
+
+The cross-turn hold representation passed all 57 direct controls. A mandatory
+post-result source audit then found an untested reachable removal path: Offering
+invokes Pyre Tithe, which removes sibling held cards through shared exhaust
+without the frozen mediator expiry hook. The exact representation is closed
+without repair or capacity spend; its valid direct observations remain bounded
+evidence only.
+
+Intent history passed all 113 direct controls. Its fresh 512-row natural-capacity
+screen found 50 active, 12 ambiguous, two exact-inactive and 11 viable policies
+across 17 responding cards and 14 intent moves. The preregistered inactive floor
+of 16 failed, so that family is closed without encounter, move, card, policy,
+payoff or method rescue.
+
+The final zero-row private counter/tag/transform audit exhaustively partitioned
+aggregate, player, enemy, card-tag, card-transform and explicit-transform-
+selector representations. Five are aliases of immutable state, status, enemy-
+marker or card-zone/repeat closures. The only representation-distinct explicit
+hand-card selector violates the frozen existing-policy-first and no-global-
+selector gates. No complete twelve-field contract is legal; zero support rows,
+simulator rows, ledger rows or protected seeds were used.
+
+All four owner-ordered classes are therefore validly exhausted. Comment
+`5460811702` now permits exactly one human-authority package. The safe state is
+`needs-info`: the minimum owner input is a finite product-semantic family rule
+that chooses a meaningful producer/consumer direction, after which the owner
+agent can freeze the full contract. The evidence cannot rank that missing
+semantic direction without guessing. See
+`publication-manifest-post-843e899-family-ladder-v1.json`.
+
+This continuation is rooted at immutable archive head `843e899`; that ref is
+not moved. Across the ladder, 286 direct controlled observations and 1,536
+capacity rows ran in 14 Godot processes. The ledger remains byte-identical at
+482,036 records and SHA-256
+`97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213`,
+with zero protected-seed rows. No product code, PR, Actions run, acceptance or
+P9 receipt follows.
+
 ### Post-target fight-sequence capacity closures
 
 Four separately preregistered zero-new-row audits read the same complete 256-row

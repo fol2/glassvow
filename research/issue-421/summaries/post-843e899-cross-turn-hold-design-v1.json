@@ -1,0 +1,187 @@
+{
+  "GodotProcesses": 0,
+  "assessments": [
+    {
+      "canonicalSha256": "640867f1a4857e33986726120afd72cfca1584856dc8a609df927bd52ed69953",
+      "closureAliases": [],
+      "eligible": true,
+      "failedGates": [],
+      "id": "H1-one-turn-attack-retain-draw-replacement-same-uid-play-ember-one",
+      "selectionVector": [
+        0,
+        3,
+        5,
+        3,
+        7
+      ]
+    },
+    {
+      "canonicalSha256": "e81b0ce7eb53e0ae028d232c8e30daeafa9be30dadc3329d61a72c28a39bfe66",
+      "closureAliases": [],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "naturalCost"
+      ],
+      "id": "H2-one-turn-attack-retain-extra-draw-same-uid-play-ember-one",
+      "selectionVector": [
+        0,
+        3,
+        4,
+        3,
+        7
+      ]
+    },
+    {
+      "canonicalSha256": "7c5719f9234208a075c65a45ee860da85282d15535b3e862270354436c326b6f",
+      "closureAliases": [],
+      "eligible": true,
+      "failedGates": [],
+      "id": "H3-one-turn-attack-retain-draw-replacement-same-uid-play-facet-one",
+      "selectionVector": [
+        0,
+        3,
+        6,
+        3,
+        7
+      ]
+    },
+    {
+      "canonicalSha256": "dbcba30c9aff05dcd47f296720e1c95907bdefbe94b63f162debcf001e8134b8",
+      "closureAliases": [],
+      "eligible": true,
+      "failedGates": [],
+      "id": "H4-multi-turn-attack-retain-same-uid-play-ember-one",
+      "selectionVector": [
+        0,
+        5,
+        6,
+        3,
+        7
+      ]
+    },
+    {
+      "canonicalSha256": "49778906302c38e739875ddd4895d56de223a816cded1721e121cf562bc91f45",
+      "closureAliases": [],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "boundedCardinality"
+      ],
+      "id": "H5-all-attack-retain-same-turn-play-ember",
+      "selectionVector": [
+        0,
+        4,
+        7,
+        4,
+        7
+      ]
+    },
+    {
+      "canonicalSha256": "9fec378c30bb9db5c5c0ddc4180b7b0899e32e74e35b28ce6f061b65c5da0914",
+      "closureAliases": [
+        "closed-immediate-draw-thread",
+        "closed-reshuffle-next-play"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "materiallyDistinct"
+      ],
+      "id": "H6-discard-topdeck-redraw-same-uid-play-ember-one",
+      "selectionVector": [
+        0,
+        4,
+        7,
+        4,
+        7
+      ]
+    },
+    {
+      "canonicalSha256": "2fef19adc2be6e588d2165c949ece6a8dccf3b2ef0bad969568a3f7309d09e5f",
+      "closureAliases": [
+        "closed-afterimage-order",
+        "closed-one-bit-setup-action-grammar"
+      ],
+      "eligible": false,
+      "failedGates": [
+        "completeTwelveFieldContract",
+        "materiallyDistinct",
+        "noRelicOrAcquisitionUi",
+        "noGlobalSelector",
+        "existingPolicyFirst",
+        "policyControlCountAtMostOne"
+      ],
+      "id": "H7-explicit-hold-selector-named-card-pair",
+      "selectionVector": [
+        1,
+        5,
+        9,
+        4,
+        7
+      ]
+    }
+  ],
+  "authority": "Apply boundary 1: freeze only dusk-one-turn-held-attack-play-ember-one for a separately preregistered source/interface/null and direct A/B/AB preflight. Add no whole-run row, policy control, protected seed, ML, RL or optimiser.",
+  "cachedObservationRowsRead": 0,
+  "claimBoundary": "Exact-source, immutable-closure, finite-grammar legality and lexicographic representation selection only. No hold activation, support, causal endpoint, policy-control, complementarity, package, detector, product, protected-seed, #421 acceptance or P9 claim.",
+  "decision": "freeze-one-turn-held-attack-contract-for-preflight",
+  "decisionBoundary": 1,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "priorEvidenceDecisions": {
+    "actionGrammar": "close-one-bit-setup-action-grammar",
+    "afterimageOrder": "close-afterimage-order-at-capacity",
+    "drawThread": "close-immediate-draw-thread-at-zero-row-capacity",
+    "duplicateCopy": "close-duplicate-copy-echo-at-zero-row-capacity",
+    "exactLethalCapacity": "close-exact-lethal-precision-and-advance-to-positive-overkill",
+    "frontier": "record-fight-local-mechanism-selection-gate-unavailable",
+    "positiveOverkillCapacity": "close-positive-overkill-and-terminal-hit-precision-advance-to-cross-turn-hold",
+    "reshuffle": "close-reshuffle-echo-at-zero-row-capacity",
+    "stateZone": "close-existing-combat-state-zone-grammar",
+    "turnState": "close-turn-state-action-economy-family"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "e7bf7280b395d8a91c9cedc6aa0fa049fd37dd238faec988c75b92a5273517c6",
+  "runnerSha256": "6713fd4909c02bf66daacc2d472d72477e0564a6d4f265533e25b05c1c72b01c",
+  "schemaVersion": 1,
+  "selectedCandidateIds": [
+    "H1-one-turn-attack-retain-draw-replacement-same-uid-play-ember-one"
+  ],
+  "selectedContract": {
+    "afterimageFactor": "Separate closed Afterimage factor fixed off; no Ward setup, Warden's Edge, order intervention or Afterimage payoff.",
+    "consumer": "A successful legal PLAY of that exact UID at createdTurn plus one, after normal PLAY and Energy events and before authored effects.",
+    "duskBoundary": "Aspect zero only; factor-on Ash is exact current-main with no state, event, draw, Ember, RNG or result movement.",
+    "interferenceRule": "Preserve hand penalties, unselected discard order, start-turn effects, hand cap, Kindle, authored effects, Ember cap and tithe, Art, Momentum, Facet/Shatter, death, relics and RNG; exact UID only.",
+    "lifecycle": "Cross one enemy phase, replace one normal next-turn draw, consume on exact play and otherwise expire at Kindle/removal, next END_TURN, terminal combat, missing card or stale turn; never immediately re-hold an expired UID.",
+    "mediatorState": "Keep that UID in hand and store only {uid, cardId, createdTurn} in one ephemeral CombatState record while every unselected card follows current discard order.",
+    "naturalCost": "Forgo the prior-turn play or Kindle, receive one fewer normal draw, then pay and legally play the exact retained Attack before expiry.",
+    "nullPath": "Omitted/off, B-only, Ash, no Attack, same-ID different-UID, stale turn and malformed or missing mediator are fail-closed exact nulls; no residue crosses a combat.",
+    "payoffOperation": "Request gain_embers(run, cb, 1) exactly once and record requested one versus realised capped or tithed delta.",
+    "policyExposure": "Frozen existing policies first with no hold, score, acquisition or target control; direct telemetry records producer, mediator-set, carry/draw replacement, consumer, consume, payoff requested/realised and exact expiry.",
+    "producer": "After hand penalties at Dusk END_TURN, select the first authored Attack remaining in existing hand order; at most one exact UID.",
+    "scorelineFactor": "Separate closed Scoreline factor fixed off; no Oath, Faultline, Cracked, assignment or Scoreline payoff."
+  },
+  "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "supportMetricsInspected": 0,
+  "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+  "wallTimeSeconds": 11.416704
+}

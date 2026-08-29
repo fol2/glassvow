@@ -1,0 +1,418 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "stage": "post-843e899-intent-history-zero-row-design",
+  "question": "After the complete terminal-hit class and exact cross-turn representation are validly closed, can the owner-ordered intent-history class support exactly one finite, source-compatible twelve-field Dusk-only fight-local contract before any support or simulator row is read?",
+  "hypothesis": "The shortest directly attributable intent-history primitive is an exact consecutive authored-intent repeat on one enemy, followed during that telegraph window by a normal exact-target Attack and one deferred Ember.",
+  "claimBoundary": "Exact-source, immutable-closure, finite-grammar legality and lexicographic representation selection only. No natural support, causal endpoint, policy control, complementarity, package, detector, product, protected-seed, #421 acceptance or P9 claim.",
+  "scientificBasis": {
+    "serialEntry": "The exact cross-turn hold representation is closed by the immutable post-result coverage audit before capacity. Owner comment 5460811702 orders intent-history next.",
+    "observability": "Current source directly exposes each enemy's current move, exact one-back and two-back history, target index, card type, canonical play ordering, terminal state and Ember delta.",
+    "naturalCost": "The player must spend and legally play an authored Attack against the exact enemy during its one telegraph window before that enemy acts.",
+    "noGuessing": "Candidate construction and ordering use exact current-main source, immutable closed-family dispositions and the owner lexicographic objective only. No support row, frequency, outcome, enemy subset, card subset or optimiser is read."
+  },
+  "twelveFieldOrder": [
+    "producer",
+    "mediatorState",
+    "consumer",
+    "payoffOperation",
+    "lifecycle",
+    "naturalCost",
+    "duskBoundary",
+    "scorelineFactor",
+    "afterimageFactor",
+    "interferenceRule",
+    "nullPath",
+    "policyExposure"
+  ],
+  "requiredGates": [
+    "completeTwelveFieldContract",
+    "materiallyDistinct",
+    "sourceCompatible",
+    "duskOnly",
+    "deterministic",
+    "exactNullAbsentOffAsh",
+    "fightLocal",
+    "noSaveRunRelicAcquisitionRngOrGlobalSelector",
+    "explicitProducerMediatorConsumerPayoffExpiry",
+    "naturallyCostly",
+    "directTelemetryPlan",
+    "existingPolicyFirst",
+    "policyControlCountAtMostOne",
+    "boundedCardinality",
+    "notAliasOfClosedFamily"
+  ],
+  "selectionObjective": {
+    "direction": "lexicographically minimise",
+    "selectionVectorFields": [
+      "newDirectObservationFields",
+      "playerVisibleSemanticUnitsPlusLifecycleBoundaries",
+      "ephemeralStateKeysPlusGameplaySourceSurfacesPlusPolicyControls",
+      "decisiveExperimentStages",
+      "candidateCountInGrammar"
+    ],
+    "finalTieBreak": "canonical candidate SHA-256",
+    "forbiddenSelectors": [
+      "intent-history support or frequency",
+      "outcome",
+      "enemy, encounter, seed or card identity",
+      "energy, damage or HP threshold",
+      "a policy subset or posterior",
+      "aesthetics",
+      "implementation convenience",
+      "an optimiser"
+    ]
+  },
+  "aliasStructure": {
+    "oneBitActionGrammar": "No player-card producer, named-card sequence or generic next-Attack bit is used.",
+    "duskCadence": "No Attack/Skill cadence, sequence length or orientation is varied.",
+    "targetSwitch": "No target transfer or first-pair direction is the producer; exact target only binds the response to its enemy-owned mediator.",
+    "shatterSuppression": "No damaging-intent subset, Stagger producer or action suppression is used.",
+    "eventOnly": "Canonical INTENT is an ordering anchor, not the mechanism.",
+    "crossTurnHold": "No card identity crosses a turn and no draw or zone topology changes."
+  },
+  "expectedCandidateIds": [
+    "I1-repeat-one-back-attack-same-target-ember-one",
+    "I2-repeat-one-back-attack-same-target-facet-one",
+    "I3-return-two-back-attack-same-target-ember-one",
+    "I4-return-two-back-attack-same-target-facet-one"
+  ],
+  "expectedSelectedCandidateIds": [
+    "I1-repeat-one-back-attack-same-target-ember-one"
+  ],
+  "candidateDesigns": [
+    {
+      "id": "I1-repeat-one-back-attack-same-target-ember-one",
+      "canonicalSha256": "3cf000f86bd726429ccc1ed3719c09bac46c134b58888e54adae6c9ad1735701",
+      "selectionVector": [0, 1, 4, 3, 4],
+      "closureAliases": [],
+      "gates": {
+        "completeTwelveFieldContract": true,
+        "materiallyDistinct": true,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullAbsentOffAsh": true,
+        "fightLocal": true,
+        "noSaveRunRelicAcquisitionRngOrGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturallyCostly": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true,
+        "notAliasOfClosedFamily": true
+      },
+      "contract": {
+        "producer": "Immediately after canonical INTENT in Dusk, mark each living enemy whose non-empty exact current move equals its exact one-back move.",
+        "mediatorState": "Store only {move, createdTurn} under one research key in that enemy's existing fight-local flags; erase the key before every later EnemyAi.decide call.",
+        "consumer": "The first successful legal authored card of type attack with targetIdx equal to that exact living enemy on createdTurn, after canonical PLAY and ENERGY and before authored effects.",
+        "payoffOperation": "After the entire responding card and ordinary settlement, if combat continues, request gain_embers(run, cb, 1) once and record requested versus realised delta.",
+        "lifecycle": "One telegraph/player-response window; consume once or expire before the next AI decision, target death, victory, defeat, combat-over-after-consume, stale, missing, malformed or consumer-disabled path.",
+        "naturalCost": "Spend and pay a normal exact-target Attack during the enemy's telegraph window before that enemy acts; non-Attack actions and other targets do not consume it.",
+        "duskBoundary": "run.aspect == 0 only; factor-on Ash is exact current-main with no marker, event, payoff, RNG or result movement.",
+        "scorelineFactor": "Separate closed Scoreline factor fixed off; no Oath, Faultline, Cracked, assignment or Scoreline payoff.",
+        "afterimageFactor": "Separate closed Afterimage factor fixed off; no Ward setup, Warden's Edge, order intervention or Afterimage payoff.",
+        "interferenceRule": "Preserve enemy AI, RNG, Stagger history, target choice, all card effects and settlement, Ember cap and tithe, death, terminal paths, relics, Art, Potion and every other enemy record.",
+        "nullPath": "Absent, omitted, explicit off, B-only, Ash, first intent, changed intent, two-back-only return, Skill, wrong target, same move on another enemy, dead, expired, stale, missing or malformed record are fail-closed exact nulls.",
+        "policyExposure": "Frozen existing policies first with no intent, card, target, acquisition or score control; direct telemetry records producer, mediator-set, consumer, consume, payoff requested/realised and exact expiry."
+      }
+    },
+    {
+      "id": "I2-repeat-one-back-attack-same-target-facet-one",
+      "canonicalSha256": "6af63c70975e2b0c43355ddf769a240061f6d67cf6a2cc49d1f91e87988b3ca8",
+      "selectionVector": [0, 2, 6, 4, 4],
+      "closureAliases": [],
+      "gates": {
+        "completeTwelveFieldContract": true,
+        "materiallyDistinct": true,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullAbsentOffAsh": true,
+        "fightLocal": true,
+        "noSaveRunRelicAcquisitionRngOrGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturallyCostly": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true,
+        "notAliasOfClosedFamily": true
+      },
+      "contract": {
+        "producer": "Immediately after canonical INTENT in Dusk, mark each living enemy whose non-empty exact current move equals its exact one-back move.",
+        "mediatorState": "Store only {move, createdTurn} under one research key in that enemy's existing fight-local flags; erase the key before every later EnemyAi.decide call.",
+        "consumer": "The first successful legal authored card of type attack with targetIdx equal to that exact living enemy on createdTurn, after canonical PLAY and ENERGY and before authored effects.",
+        "payoffOperation": "After the entire responding card and ordinary settlement, if the target and combat continue, apply one Facet chip once through the canonical chip/Shatter path.",
+        "lifecycle": "One telegraph/player-response window plus deferred Facet/Shatter settlement; consume once or expire before next AI, death, terminal, stale, corrupt or disabled paths.",
+        "naturalCost": "Spend and pay a normal exact-target Attack during the enemy's telegraph window before that enemy acts; non-Attack actions and other targets do not consume it.",
+        "duskBoundary": "run.aspect == 0 only; factor-on Ash is exact current-main with no marker, event, chip, RNG or result movement.",
+        "scorelineFactor": "Separate closed Scoreline factor fixed off.",
+        "afterimageFactor": "Separate closed Afterimage factor fixed off.",
+        "interferenceRule": "Preserve enemy AI, RNG, Stagger, target choice, card effects, existing Facet gain, Shatter, action suppression, death, terminal paths and every other enemy record.",
+        "nullPath": "I1 nulls plus a target killed by ordinary settlement before deferred Facet is an exact no-payoff path.",
+        "policyExposure": "Frozen existing policies first with no control; direct telemetry additionally records living-target, canonical chip and any Shatter fan-out."
+      }
+    },
+    {
+      "id": "I3-return-two-back-attack-same-target-ember-one",
+      "canonicalSha256": "7e0b7b79948b7e049d4972ec942b5fd33b81479dce1f47088ceb8dc2f8010a7b",
+      "selectionVector": [1, 1, 4, 3, 4],
+      "closureAliases": [],
+      "gates": {
+        "completeTwelveFieldContract": true,
+        "materiallyDistinct": true,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullAbsentOffAsh": true,
+        "fightLocal": true,
+        "noSaveRunRelicAcquisitionRngOrGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturallyCostly": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true,
+        "notAliasOfClosedFamily": true
+      },
+      "contract": {
+        "producer": "Immediately after canonical INTENT in Dusk, mark each living enemy whose non-empty exact current move equals exact two-back and differs from exact one-back.",
+        "mediatorState": "Store only {move, createdTurn} under one research key in that enemy's existing fight-local flags; erase the key before every later EnemyAi.decide call.",
+        "consumer": "The first successful legal authored card of type attack with targetIdx equal to that exact living enemy on createdTurn, after canonical PLAY and ENERGY and before authored effects.",
+        "payoffOperation": "After the entire responding card and ordinary settlement, if combat continues, request gain_embers(run, cb, 1) once and record requested versus realised delta.",
+        "lifecycle": "One telegraph/player-response window; consume once or expire at the same complete surfaces as I1.",
+        "naturalCost": "Spend and pay a normal exact-target Attack during the enemy's telegraph window before that enemy acts.",
+        "duskBoundary": "run.aspect == 0 only; factor-on Ash is exact current-main.",
+        "scorelineFactor": "Separate closed Scoreline factor fixed off.",
+        "afterimageFactor": "Separate closed Afterimage factor fixed off.",
+        "interferenceRule": "Preserve the complete I1 interference set; compare three exact intent identities instead of two.",
+        "nullPath": "I1 nulls plus consecutive repeat without exact two-back return is null.",
+        "policyExposure": "Frozen existing policies first with no control; direct telemetry records current, one-back and two-back exact identities."
+      }
+    },
+    {
+      "id": "I4-return-two-back-attack-same-target-facet-one",
+      "canonicalSha256": "d258a823d6d1c204d683c7aef68af1c71fa59fb4b76d3c1d33456a320ce8bb36",
+      "selectionVector": [1, 2, 6, 4, 4],
+      "closureAliases": [],
+      "gates": {
+        "completeTwelveFieldContract": true,
+        "materiallyDistinct": true,
+        "sourceCompatible": true,
+        "duskOnly": true,
+        "deterministic": true,
+        "exactNullAbsentOffAsh": true,
+        "fightLocal": true,
+        "noSaveRunRelicAcquisitionRngOrGlobalSelector": true,
+        "explicitProducerMediatorConsumerPayoffExpiry": true,
+        "naturallyCostly": true,
+        "directTelemetryPlan": true,
+        "existingPolicyFirst": true,
+        "policyControlCountAtMostOne": true,
+        "boundedCardinality": true,
+        "notAliasOfClosedFamily": true
+      },
+      "contract": {
+        "producer": "Immediately after canonical INTENT in Dusk, mark each living enemy whose non-empty exact current move equals exact two-back and differs from exact one-back.",
+        "mediatorState": "Store only {move, createdTurn} under one research key in that enemy's existing fight-local flags; erase the key before every later EnemyAi.decide call.",
+        "consumer": "The first successful legal authored card of type attack with targetIdx equal to that exact living enemy on createdTurn, after canonical PLAY and ENERGY and before authored effects.",
+        "payoffOperation": "After the entire responding card and ordinary settlement, if the target and combat continue, apply one Facet chip once through the canonical chip/Shatter path.",
+        "lifecycle": "One telegraph/player-response window plus deferred Facet/Shatter settlement; consume once or expire at the same complete surfaces as I2.",
+        "naturalCost": "Spend and pay a normal exact-target Attack during the enemy's telegraph window before that enemy acts.",
+        "duskBoundary": "run.aspect == 0 only; factor-on Ash is exact current-main.",
+        "scorelineFactor": "Separate closed Scoreline factor fixed off.",
+        "afterimageFactor": "Separate closed Afterimage factor fixed off.",
+        "interferenceRule": "Preserve the complete I2 interference set; compare three exact intent identities instead of two.",
+        "nullPath": "I2 nulls plus consecutive repeat without exact two-back return is null.",
+        "policyExposure": "Frozen existing policies first with no control; direct telemetry adds current, one-back, two-back, chip and Shatter identities."
+      }
+    }
+  ],
+  "directPreflightFactors": {
+    "A-producerMediator": {
+      "off": "Do not compare intent history and never create the research key or research event.",
+      "on": "After canonical INTENT, create the exact I1 mediator only when current equals non-empty one-back in Dusk."
+    },
+    "B-consumerPayoff": {
+      "off": "Never pay; if an A mediator reaches a matching legal Attack, erase it with consumer-disabled expiry before authored effects.",
+      "on": "Consume an existing valid I1 mediator at the matching legal Attack and defer one Ember until complete ordinary card settlement if combat continues."
+    },
+    "cells": ["omitted", "off", "A", "B", "AB"],
+    "mechanisticInteraction": "Only AB can contain both a valid enemy-owned mediator and an enabled matching consumer; A measures production and disabled expiry, B proves no synthetic mediator, omitted/off prove exact baseline identity.",
+    "frozenComparisonIdentity": "Every contrast uses identical current-main source, probe, policy identity, seed identity, baseline, first-look budget, estimator and stopping rule."
+  },
+  "sourceAssertions": [
+    {
+      "id": "enemy exact history and current move",
+      "path": "domain/state/enemy_combatant.gd",
+      "contains": "var last_moves: Array[String] = []\nvar move_key: StringName = &\"\""
+    },
+    {
+      "id": "existing fight-local flags carrier",
+      "path": "domain/state/enemy_combatant.gd",
+      "contains": "var flags: Dictionary = {}"
+    },
+    {
+      "id": "no existing intent-history research key in enemy",
+      "path": "domain/state/enemy_combatant.gd",
+      "absent": "research421"
+    },
+    {
+      "id": "AI receives exact prior identities and flags",
+      "path": "domain/rules/enemy_ai.gd",
+      "contains": "id: StringName, turn: int, last: String, _prev: String, hp_frac: float, rng: Rng,\n\tflags: Dictionary = {}"
+    },
+    {
+      "id": "deterministic repeat witness",
+      "path": "domain/rules/enemy_ai.gd",
+      "contains": "&\"ashAcolyte\", &\"starCultist\":\n\t\t\treturn &\"ritual\" if turn == 1 else &\"scorch\""
+    },
+    {
+      "id": "deterministic return witness",
+      "path": "domain/rules/enemy_ai.gd",
+      "contains": "var seq: Array[StringName] = [&\"entomb\", &\"crush\", &\"bulwark\", &\"crush\"]"
+    },
+    {
+      "id": "canonical intent computation and emission",
+      "path": "domain/rules/combat.gd",
+      "contains": "var last: String = e.last_moves[e.last_moves.size() - 1] if e.last_moves.size() >= 1 else \"\"\n\t\tvar prev: String = e.last_moves[e.last_moves.size() - 2] if e.last_moves.size() >= 2 else \"\""
+    },
+    {
+      "id": "AI call precedes canonical intent",
+      "path": "domain/rules/combat.gd",
+      "contains": "e.move_key = EnemyAi.decide(\n\t\t\te.key, cb.turn + 1, last, prev, float(e.hp) / float(e.max_hp), run.rng, e.flags\n\t\t)\n\t\tcb.queue.append({\"t\": EventTypes.INTENT, \"idx\": e.idx, \"move\": String(e.move_key)})"
+    },
+    {
+      "id": "canonical play and energy ordering",
+      "path": "domain/rules/combat.gd",
+      "contains": "cb.queue.append({\"t\": EventTypes.PLAY, \"uid\": inst.uid, \"id\": String(inst.id), \"targetIdx\": target_idx})\n\tcb.queue.append({\"t\": EventTypes.ENERGY, \"n\": p.energy})"
+    },
+    {
+      "id": "whole-card settlement boundary",
+      "path": "domain/rules/combat.gd",
+      "contains": "cb.pending_chips_active = false\n\tcb.pending_chips = {}"
+    },
+    {
+      "id": "both ordinary and staggered actions append history",
+      "path": "domain/rules/combat.gd",
+      "contains": "e.staggered = false\n\t\t\te.last_moves.append(String(e.move_key))"
+    },
+    {
+      "id": "terminal event vocabulary",
+      "path": "domain/events/event_types.gd",
+      "contains": "const VICTORY: StringName = &\"victory\"\nconst DEFEAT: StringName = &\"defeat\""
+    },
+    {
+      "id": "existing policy exact legal target",
+      "path": "tools/balance_pilot.gd",
+      "contains": "if not game.rules.can_play(game.run, game.cb, card, target):\n\t\t\tcontinue"
+    },
+    {
+      "id": "existing policy has no intent-history score",
+      "path": "tools/balance_policy.gd",
+      "absent": "intentHistory"
+    },
+    {
+      "id": "Dusk is authored aspect zero",
+      "path": "content/full-content.json",
+      "contains": "\"aspects\": [\n    {\n      \"id\": \"duskblade\""
+    }
+  ],
+  "priorEvidence": {
+    "actionGrammar": {
+      "path": "summaries/post-v38-action-grammar-inventory-v1.json",
+      "sha256": "4eeda4d020539996106ea674d17acd7d0804a8181583c2cf4e856946febca3da",
+      "decision": "close-one-bit-setup-action-grammar"
+    },
+    "duskCadence": {
+      "path": "summaries/post-v38-dusk-cadence-capacity-v1.json",
+      "sha256": "563ea29e964d5f5ff2b6e42bc789cc938a362467359e429c4707765622c93cf2",
+      "decision": "close-dusk-cadence-at-zero-row-capacity"
+    },
+    "targetSwitch": {
+      "path": "summaries/post-v38-target-switch-capacity-v1.json",
+      "sha256": "309f9266aca4a85840425c1bf036b99bf15e54923a02b003171060ec46a3b3e7",
+      "decision": "close-target-transfer-at-zero-row-capacity"
+    },
+    "shatterSuppression": {
+      "path": "summaries/post-v30-shatter-action-suppression-capacity-v1.json",
+      "sha256": "9a56bf08578cd47af6b78eed49ed321bba30c86e9058fd4cab8cb70aa6f15c3e",
+      "decision": "close-damaging-intent-shatter-suppression-on-observability-gate"
+    },
+    "stateZone": {
+      "path": "summaries/post-v30-combat-state-zone-frontier-audit-v1.json",
+      "sha256": "1415ee899fefc2087a1b3730dfb71610ff4a5c8ed8e93842007b4f28eee4d4ed",
+      "decision": "close-existing-combat-state-zone-grammar"
+    },
+    "frontier": {
+      "path": "summaries/post-v38-fight-local-frontier-audit-v3.json",
+      "sha256": "2e21b108bc2e8233cdbd995877d5bf20b396d6e245966bc729ca13a48b6380f3",
+      "decision": "record-fight-local-mechanism-selection-gate-unavailable"
+    },
+    "crossTurnCoverage": {
+      "path": "summaries/post-843e899-cross-turn-hold-coverage-audit-v1.json",
+      "sha256": "dbfccbae0faea8b3d2849661914672e2bac28c185ceed25767eb97f251693412",
+      "decision": "close-cross-turn-hold-representation-and-advance-to-intent-history"
+    }
+  },
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/rules/enemy_ai.gd": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "runnerSha256": "43274555c2153f332a216cb47761ad76094ba159722909045cc27d371da613fd",
+    "taskCapsulePath": "task-capsule-5460811702-v20.json",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+    "primarySourceReportPath": "summaries/post-843e899-intent-history-primary-sources-v1.md",
+    "primarySourceReportSha256": "7dc975d80267f36d83ccbc91182306f8b4e24f4d07717a0ebae968b757f7dd61"
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumSourceFilesRead": 7,
+    "maximumEvidenceFilesRead": 7,
+    "maximumCandidateDesigns": 4,
+    "maximumWallTimeSeconds": 20,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "newScientificSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Exactly one complete candidate is first under the frozen source-only lexicographic objective, every immutable source/evidence/candidate identity passes, no support or observation is read, ledger is byte-identical and execution completes within 20 seconds.",
+    "successAuthority": "Apply boundary 1: freeze only I1 repeat-one-back exact-target Attack deferred-Ember-one for a separately preregistered source/interface/null and direct A/B/AB preflight. Add no capacity row, policy control, protected seed, ML, RL or optimiser.",
+    "futility": "No candidate passes every zero-row legality and alias gate.",
+    "futilityAuthority": "Apply boundary 2: close intent-history lifecycle at the zero-row boundary and continue serially with private counter/tag/transform inside #421.",
+    "inconclusive": "Frozen source/evidence cannot distinguish otherwise legal candidates, an immutable identity fails or the exact decision is unavailable at 20 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record intent-history design inconclusive at the frozen zero-row cap. Do not choose by taste, read support, rerun, add a method or use protected seeds."
+  },
+  "forbidden": [
+    "support, frequency, outcome or cached observation access",
+    "enemy, encounter, seed, card or posterior subset selection",
+    "event-only, target-switch, action-grammar, cadence or Shatter-suppression relabelling",
+    "policy, acquisition, target, intent or card control",
+    "product truth, research PR or Actions",
+    "protected seed, ML, RL or optimiser"
+  ]
+}

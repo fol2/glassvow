@@ -1,0 +1,238 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "stage": "post-843e899-positive-overkill-capacity",
+  "question": "Under complete fresh current-policy rectangles, does the directly identity-proved positive-overkill Facet-salvage producer have robust payoff-capable natural activation, exact-inactive controls, viable activation and more than one authored Attack identity without changing path, RNG or result?",
+  "hypothesis": "The current Dusk policy naturally produces authored Attack hits with strictly positive excess damage while another enemy remains often enough to support a later equal-cohort CRN first look, while a substantial exact-inactive policy set preserves causal contrast.",
+  "claimBoundary": "Fresh-cohort existing-policy positive-overkill producer opportunity, payoff-capable natural capacity, exact-inactive controls, viability and card breadth only. The payoff is disabled and no causal effect, endpoint, policy control, complementarity, balance, product, acceptance or P9 claim is estimated.",
+  "scientificBasis": {
+    "entryGate": "The fixed source/interface/direct A/B/AB preflight completed 58 of 58 controls with zero faults and froze only positive-overkill facet-salvage-one-ember for natural capacity.",
+    "observationalArm": "Producer=true and consumer=false is the directly proved non-perturbing A-only instrument. It observes eligible marks, positive excess magnitude and expiry but cannot grant Ember or change policy state.",
+    "capacityBoundary": "Only positive-overkill marks expiring consumer-disabled while combat continues are payoff-capable. Combat-over marks are exposure evidence but cannot reach the fixed consumer.",
+    "noGuessing": "The complete 64-policy by four-seed rectangle, thresholds, metrics, source, identity comparator and stop rule are fixed before any whole-run row. No support-derived subset, excess threshold, magnitude level or policy control exists."
+  },
+  "factorDefinitions": {
+    "positiveOverkillPayoff": {
+      "levels": [
+        "off"
+      ],
+      "fixed": "The candidate payoff is disabled in both arms. Positive overkill means exact integer excess damage greater than zero; no magnitude threshold or level is varied."
+    },
+    "producerObservation": {
+      "levels": [
+        "absent-current-main",
+        "producer-only-A"
+      ],
+      "meaning": "The candidate arm emits research telemetry for strictly positive intrinsic Facet excess-damage marks and expiry while consumer and payoff remain disabled.",
+      "pathConstraint": "After removing positive-overkill research telemetry and probe labels, every candidate row must exactly equal its current-main pair, including policy snapshot, fights, outcome, deck, relics, economy, final RNG and all existing package metrics."
+    },
+    "terminalHitPrecisionPayoff": {
+      "levels": [
+        "off-closed"
+      ],
+      "fixed": "Exact-lethal precision is an immutable closed family and is absent."
+    },
+    "scorelinePayoff": {
+      "levels": [
+        "off-closed"
+      ],
+      "fixed": "Separate immutable factor; absent."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "off-closed"
+      ],
+      "fixed": "Separate immutable factor; absent."
+    },
+    "acquisitionPriority": {
+      "levels": [
+        "current-main"
+      ],
+      "fixed": "Exact same sampled policy identity in each pair; no acquisition control."
+    },
+    "wardSetupPriority": {
+      "levels": [
+        "current-main"
+      ],
+      "fixed": "No Ward or setup control."
+    }
+  },
+  "design": {
+    "type": "Two-arm paired non-causal natural-capacity observation; not a factorial and not an endpoint experiment.",
+    "matrix": [
+      {
+        "arm": "current-main",
+        "producer": "unavailable",
+        "consumer": false,
+        "payoff": "off",
+        "rows": 256
+      },
+      {
+        "arm": "producer-only-A",
+        "producer": true,
+        "consumer": false,
+        "payoff": "off",
+        "rows": 256
+      }
+    ],
+    "anchors": {
+      "currentMain": "The unmodified baseline worktree at c4130163 is the sole outcome and RNG anchor.",
+      "directIdentity": "The immutable positive-overkill direct A/B/AB result d8cf8936 is the source, null, mediator and same-card payoff anchor.",
+      "closedFamilies": "Archive head 843e899, exact-lethal capacity closure 6f826f60 and all earlier valid family dispositions are immutable and cannot be reopened or pooled."
+    },
+    "pairing": "Every arm uses policyRoot 561, policy indices 0 through 63, seeds 346630 through 346633, Duskblade, Vow 5, current content, current policy resolver, baseline, simulator and estimator in identical policy-major/seed-minor order.",
+    "mechanisticallyJustifiedInteractions": [
+      "Positive-overkill producer by continuing combat: producer marks ending consumer-disabled are payoff-capable; combat-over marks are measured but cannot reach the fixed consumer.",
+      "Positive-overkill producer by authored Attack identity: card counters test whether natural capacity is broader than one card, without making card identity a level or subset.",
+      "Policy identity by simulation seed: a policy is robust-active only when payoff-capable activation occurs in at least two of its four fixed seeds."
+    ],
+    "aliasStructure": "Final-combat positive overkills are exposure-only and do not alias payoff-capable activation. Multiple marks in one card count as one eligible card and retain mark cardinality descriptively. Excess magnitude is descriptive only and cannot create a threshold. Exact lethal is excluded because excess must be strictly positive. Scoreline, Afterimage, generic any-kill, Reaper, next-PLAY, target transfer, Shatter tempo and exact-lethal precision remain absent or closed.",
+    "omittedCells": "No AB payoff arm, off-versus-on endpoint, policy control, excess threshold, magnitude level, card subset, seed subset, Scoreline, Afterimage, acquisition, Ward setup, protected seed, held-out row, ML, RL or optimiser."
+  },
+  "cohort": {
+    "policyRoot": 561,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346630,
+      346631,
+      346632,
+      346633
+    ],
+    "minimumRowsPerRobustPolicy": 2,
+    "rowsPerArm": 256,
+    "identity": "Fresh and disjoint from every frozen #421 whole-run cohort. Each of 64 deterministic policy identities is evaluated on all four seeds in both arms; no identity may be selected, removed, replaced or added."
+  },
+  "estimands": {
+    "unit": "Policy identity over its complete four-seed rectangle.",
+    "exposureActive": "Producer marks occur in at least two of four rows, including positive-overkill final marks.",
+    "active": "At least one payoff-capable consumer-disabled positive-overkill card occurs in at least two of four rows.",
+    "exactInactive": "Zero payoff-capable positive-overkill cards in all four rows.",
+    "ambiguous": "Payoff-capable activation in exactly one of four rows; reported and never promoted or subsetted.",
+    "viable": "An active policy has at least one payoff-capable row whose unchanged current-main outcome is win.",
+    "cardBreadth": "Number and counts of distinct authored Attack ids associated with payoff-capable expiry; descriptive counts are complete and no card subset is selected.",
+    "excessMagnitude": "Sum of strictly positive integer excess damage at producer marks; descriptive mechanism evidence only and never a threshold, level or selection rule.",
+    "identity": "Zero canonical mismatches between each current-main row and its A-only row after removing only probe labels and positive-overkill research counters.",
+    "attribution": "For every row, producer equals mediator-set; expiry partitions into eligible and combat-over cards; producer marks partition into eligible and final marks; consumer, payoff, request, realised and consumed expiry counts remain zero.",
+    "notEstimated": "Payoff effect, outcome delta, excess-threshold value, policy-control value, cross-package interaction, balance, product value, acceptance or protected confirmation."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumExposureActivePolicies": 16,
+    "minimumDistinctEligibleCards": 2,
+    "maximumBaselineFaultRows": 1,
+    "maximumSemanticFaults": 0,
+    "maximumIdentityMismatches": 0,
+    "provenance": "The 16 active/inactive, eight viable, two-of-four robustness and one baseline-fault limits reuse the frozen 64-policy structural-capacity scale. Two eligible card identities is the smallest pre-support gate that rejects a single-card alias without selecting a card subset."
+  },
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "baselineHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "baselineStatus": [
+      "?? tools/research_421_positive_overkill_capacity_probe.gd",
+      "?? tools/research_421_positive_overkill_capacity_probe.gd.uid"
+    ],
+    "candidateStatus": [
+      "M domain/rules/combat.gd",
+      " M tools/balance_sim.gd",
+      "?? tools/research_421_positive_overkill_capacity_probe.gd",
+      "?? tools/research_421_positive_overkill_capacity_probe.gd.uid"
+    ],
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/research_421_positive_overkill_capacity_probe.gd": "4ecc611e654040ed8df3646fed6dc39061e2bc779c2763615f5ba181d1718ff2",
+      "tools/research_421_positive_overkill_capacity_probe.gd.uid": "d6959a3bc9b9be5b0745ceef8e5a26cd982708faade1077e070e54b50ade35a8"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "527c3119273db21b0a489b888a845a5d9bbfbd0f78e24cb3b989f30a5541d36c",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "55364a1cc89c646094fba18c6a804463bae40868cef2c8681f18b62edf51c84e",
+      "tools/research_421_positive_overkill_capacity_probe.gd": "4ecc611e654040ed8df3646fed6dc39061e2bc779c2763615f5ba181d1718ff2",
+      "tools/research_421_positive_overkill_capacity_probe.gd.uid": "d6959a3bc9b9be5b0745ceef8e5a26cd982708faade1077e070e54b50ade35a8"
+    },
+    "candidateDiffSha256": {
+      "domain/rules/combat.gd": "4e99f7c409dd41aeb2123ab9ba82453a47abc37ffa3ff6592a11ec908d4e7d2c",
+      "tools/balance_sim.gd": "e6f405ccba8cad7ed0c9ce605bd0655c998826b40a6b16181af87752d44983d9"
+    },
+    "godotBinaryPath": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "runnerSha256": "eb986c458d365569b989b125097c73f9d893cacd2dd5dfbcc7f46f7969b186ed",
+    "taskCapsulePath": "task-capsule-5460811702-v20.json",
+    "taskCapsuleSha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385",
+    "predecessorSha256": {
+      "post_843e899_positive_overkill_design_v1.py": "b1395fc521e3c4f494891f2e337617883f2f2b242220fe006c16982902fce031",
+      "post_843e899_positive_overkill_identity_v1.py": "f12aaa5f0f7ec8f294e48d1134e2338dbd2d58c5ae26837387255ca71533bd0f",
+      "protocols/post-843e899-positive-overkill-design-v1.json": "173c0c7a1475d3bad68db084276c0ba00c03bda0a32ac7048c5dfffeedb60e02",
+      "protocols/post-843e899-positive-overkill-identity-v1.json": "ac83c8c8b6a54cc6ded75118833fc49860ddca09c9ddcd6f517bbb7a16b8fe0e",
+      "summaries/post-843e899-positive-overkill-design-v1.json": "2a346faf8260a4f208b29ff602a5e88ae341207a1cd35a7e0c88c8498599174d",
+      "summaries/post-843e899-positive-overkill-identity-v1.json": "d8cf893679694d176c54393700c907632c520579bad4922a7ba4a661bd8da6a3",
+      "summaries/post-843e899-positive-overkill-primary-sources-v1.md": "97bc67ea53d77ded6f18a7c76691ad0e9de3ca0527704cdfdbf110d0f67ced72",
+      "summaries/post-843e899-terminal-hit-precision-capacity-v1.json": "6f826f609bf677a63ae5161d08a99e82e6b4a44b6d57149d293ae6f73d032d1c",
+      "cache/sha256/651012d2a6a7662ebaa5ebb2c0623f8f6a6bd9137fce2a9df7ca25b2cb56b834.json": "651012d2a6a7662ebaa5ebb2c0623f8f6a6bd9137fce2a9df7ca25b2cb56b834",
+      "cache/sha256/977010ec92f5c5e886efcd7dadbda5e24441336e98d1d96f41bc35587fdbb181.json": "977010ec92f5c5e886efcd7dadbda5e24441336e98d1d96f41bc35587fdbb181"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 2,
+    "newScientificSimulatorObservationRows": 512,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1,
+    "firstLooks": 1
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns complete cohort construction, two content-addressed plans, process execution, exact paired comparison, telemetry attribution, policy aggregation and stop/go.",
+    "order": "Verify immutable evidence, refs, source, Godot and ledger; pass source/cardinality gates; execute all 256 current-main rows once; execute all 256 A-only rows once; analyse the sole complete look; verify byte-identical ledger.",
+    "firstLook": "All 512 observations are the only look. No source, row, policy, seed, gate, metric, threshold, subset or cap changes after execution begins.",
+    "stagedConstraint": "This capacity stage may authorise only a separately preregistered equal-cohort CRN first look. It cannot support a payoff or endpoint claim.",
+    "futureCrnConstraint": "Any later causal arms must use the same frozen policy identities, simulation seed identities, baseline, estimator, first-look budget and stopping rule across every compared level.",
+    "methodConstraint": "No policy control, ML, RL or optimiser is authorised unless this experiment identifies a remaining repertoire bottleneck and measured decision value justifies it."
+  },
+  "decisionRules": {
+    "success": "All immutable, source, exact identity, attribution and reliability gates pass; at least 16 policies are robust-active, 16 exact-inactive, eight viable, 16 exposure-active and two distinct eligible Attack ids are observed; all 512 rows complete within 120 seconds; ledger is byte-identical.",
+    "successAuthority": "Apply boundary 1: freeze only positive-overkill facet-salvage-one-ember and preregister the smallest equal-cohort off-versus-AB CRN first look using current policy identities. Do not add a policy control, excess threshold, joint package, protected seed, ML, RL or optimiser.",
+    "futility": "Inputs and observations complete, but any identity, attribution, reliability, active, inactive, viable, exposure or minimal card-breadth gate fails.",
+    "futilityAuthority": "Apply boundary 2: close positive overkill and therefore the complete ordered terminal-hit precision/excess class without threshold, card subset, policy, cohort, payoff or method rescue; continue serially with a zero-row cross-turn-hold lifecycle design inside #421.",
+    "inconclusive": "A frozen input or fixed process is unavailable, a process is incomplete, or the exact decision is unavailable at 120 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record positive-overkill capacity inconclusive at the preregistered cap. Do not rerun, alter the cohort, change a gate or spend a causal/protected row."
+  },
+  "forbidden": [
+    "any causal payoff or endpoint claim from producer-only telemetry",
+    "any excess threshold, magnitude level, policy control or candidate retuning",
+    "any row, policy, seed, card, outcome or support subset",
+    "any Scoreline, Afterimage, acquisition, Ward setup or exact-lethal variation",
+    "any repair, rerun, reserve row or adaptive continuation after a completed failure",
+    "any append to the research ledger",
+    "any protected acceptance or reserve seed",
+    "any ML, RL or optimiser"
+  ]
+}

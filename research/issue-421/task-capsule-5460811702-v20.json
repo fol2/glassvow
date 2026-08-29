@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "supersedes": {
+    "path": "task-capsule-5459094066-v19.json",
+    "sha256": "7752a841f318c14ba766a268f8aad63f5270d99bc6bd9e7c55a5358b19b43cc0"
+  },
+  "taskSsotBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+  "authority": {
+    "commentId": 5460811702,
+    "bodySha256": "58d71b9af60d811f40b489da19499b3dd113fd77fcb06bdf12fa6692fb5686f6",
+    "authorAssociation": "OWNER",
+    "updatedAt": "2026-08-29T07:31:07Z",
+    "decision": "Use the finite serial pre-support family-selection rule and continue autonomous design."
+  },
+  "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "activeInstructionSha256": {
+    "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+    ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+    "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+    "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+    "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95"
+  },
+  "immutableArchiveHeads": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+    "research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+    "research/issue-421-post-target-capacity-evidence": "86d4b9793474b322f6b0f971d6c435461f38544c",
+    "research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+  },
+  "immutableFrontierDisposition": {
+    "manifestPath": "research/issue-421/publication-manifest-post-reshuffle-frontier-v1.json",
+    "manifestSha256": "e861130447fc8202f58a8f0d89cf0f4d905dc9e165598b8624b75ce6fbf27019",
+    "decision": "record-fight-local-mechanism-selection-gate-unavailable",
+    "interpretation": "No already-complete contract or additional method remained under the old frozen grammar. The new owner rule supplies selection authority but does not reopen any closure."
+  },
+  "sourceSha256": {
+    "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+    "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+    "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+    "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+    "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+    "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+  },
+  "closedFamilyBoundary": {
+    "mustRemainClosed": [
+      "Scoreline",
+      "Afterimage",
+      "RESHUFFLE to immediate next PLAY",
+      "complete post-kill immediate consumer topology",
+      "direct-kill to next single-target Attack",
+      "draw-thread",
+      "duplicate-copy",
+      "target transfer",
+      "turn-state action economy",
+      "Reaper's Bell death chain",
+      "Shatter tempo relay"
+    ],
+    "rule": "No relabelling, posterior subset, payoff, policy, cohort or method rescue of a validly closed family."
+  },
+  "familySelectionRule": {
+    "serialOrder": [
+      "terminal-hit precision/excess",
+      "cross-turn hold lifecycle",
+      "intent-history lifecycle",
+      "private counter/tag/transform"
+    ],
+    "currentClass": "terminal-hit precision/excess",
+    "currentDirection": "exact-lethal precision",
+    "deferredDirection": "positive-overkill excess",
+    "lexicographicObjective": [
+      "strongest existing direct observability and causal attribution",
+      "fewest new player-visible semantics and shortest lifecycle",
+      "fewest new state fields, source surfaces and policy controls",
+      "cheapest decisive direct or capacity experiment",
+      "smallest finite candidate count",
+      "canonical candidate SHA-256"
+    ]
+  },
+  "currentQuestion": "Can exact-lethal precision support exactly one finite, source-compatible twelve-field Duskblade-only fight-local contract that is materially distinct from every immutable closure before any support or simulator row is read?",
+  "currentDecisionRule": {
+    "advance": "Freeze at most one uniquely selected complete contract, finite legal grammar, direct objective, immutable identities, null and interference rules, budgets and automatic dispositions before any new row.",
+    "close": "If no contract satisfies every zero-row legality and alias gate, close exact-lethal precision and evaluate positive-overkill excess next without a row.",
+    "inconclusive": "If deterministic source and immutable evidence cannot distinguish otherwise legal contracts under every authorised tie-break, record the exact missing gate at the frozen zero-row cap; do not choose by taste or support."
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "nextAction": "Complete a zero-row exact-source and immutable-evidence design enumeration for exact-lethal precision. Deterministic code must canonicalise all legal contracts, apply the owner objective and select at most one before any observation, support, simulator, ledger or protected-seed access.",
+  "boundaries": {
+    "researchOutsideDevelopmentCheckout": true,
+    "serialFamiliesOnly": true,
+    "zeroRowsUntilCompletePreregistration": true,
+    "zeroProtectedSeeds": true,
+    "noProductTruthMutation": true,
+    "noResearchPrOrActions": true,
+    "noSuccessorTicket": true,
+    "noOptimiserForGrammar": true,
+    "archiveHead843e899Immutable": true,
+    "closedFamiliesImmutable": true
+  }
+}
