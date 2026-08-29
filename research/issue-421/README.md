@@ -24,31 +24,35 @@ and is not intended to enter `main`.
 
 ## Current decision
 
-### Post-b7b5099 Ward-spend source/direct futility and authority boundary
+### Post-b7b5099 Ward-spend engine-precondition stop and authority boundary
 
 Owner comment `5464228499` selected one complete deliberate-Ward-investment to
-same-turn Ward-spend-finisher family. The design freeze succeeded with zero
-simulator rows. Its common source/direct gate then completed 82 controlled
-observations in two Godot processes and returned `FUTILITY` with six frozen
-faults. The automatic disposition closes this exact family before capacity;
-the conditional Bulwark level, CRN, held-out and protected-seed stages did not
-run and may not be used as a rescue.
+same-turn Ward-spend-finisher family. The zero-row design artefact froze a
+source/direct protocol, but the binding Godot precondition was not met: the
+active skill requires exact 4.7.1 before any GDScript run, while both active
+local binaries were 4.7.2 with SHA-256
+`c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf`.
 
-The `enemy-ward-separate-payoff` control is independently decisive. An ordinary
-five-damage Attack was fully absorbed by enemy Ward, after which a separate
-non-Attack payoff realised two HP damage. Execution correctly emitted zero
-Facet chips, while preview predicted one. The enabled preview therefore exposed
-a false frozen-policy signal and failed truthful-preview and causal-factor
-isolation. The remaining frozen faults record unisolated Heavy Air Ward
-multipliers and a downstream event-field shift; none authorises a repair or
-rerun.
+The first snapshot at `004679a83894f151e95aeed35d2ecaab60a9d3f5`
+incorrectly treated the resulting 82-observation 4.7.2 output as
+decision-admissible. This current disposition corrects that claim before any
+#421 result comment or label transition. The raw output, its six reported
+faults and the observed preview/execution difference remain immutable
+provenance for what ran under 4.7.2; they establish no exact-4.7.1 source,
+preview, causal, capacity or family-futility result.
 
-The conclusion is bounded to this owner-selected family. It is not a universal
-impossibility claim about defence/offence trade-offs. With the complete family
-validly exhausted, comment `5464228499` permits one human-authority package:
-choose one finite next product-semantic family direction, explicitly relax one
-named immutable boundary, or amend #421 acceptance/P9 authority. Automation
-cannot select among those product decisions without guessing. See
+The repository stop condition and frozen no-rescue rule leave no lawful
+automatic retry. The exact Ward family therefore stops at the unavailable
+engine precondition, before a valid GDScript source/direct gate. Conditional
+Bulwark, capacity, CRN, held-out and protected-seed stages did not run. This is
+not a scientific negative about the mechanism or defence/offence trade-offs.
+
+The resulting human-authority package has three valid choices: accept this
+preflight stop and select one finite next product-semantic family; explicitly
+relax the no-rerun boundary and authorise exact 4.7.1 for one separately
+versioned protocol; or amend #421 acceptance/P9 authority. Automation cannot
+choose among those alternatives without violating the engine pin, changing a
+frozen disposition or guessing product semantics. See
 `publication-manifest-post-b7b5099-ward-spend-futility-v1.json` and
 `summaries/post-b7b5099-ward-spend-futility-disposition-v1.md`.
 

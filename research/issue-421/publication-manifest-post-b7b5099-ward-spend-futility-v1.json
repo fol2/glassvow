@@ -15,8 +15,14 @@
     "main": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
     "taskCapsulePath": "task-capsule-5464228499-v24.json",
     "taskCapsuleSha256": "c02d98cdbccf70cffdb59cc870aa8406ff2ca0f8b01466506c114b9524f37b74",
+    "requiredGodotVersion": "4.7.1.stable",
     "godotVersion": "4.7.2.stable.official.ed1daf0bf",
     "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "enginePreconditionSatisfied": false,
+    "activeGodotPathsChecked": [
+      "/opt/homebrew/bin/godot",
+      "/Applications/Godot.app/Contents/MacOS/Godot"
+    ],
     "baseline": {
       "combatSha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
       "playerCombatantSha256": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3"
@@ -34,27 +40,31 @@
     "design": {
       "outcome": "SUCCESS",
       "decision": "freeze-ward-spend-contract-for-source-null-and-direct-proof",
+      "publicationAdmissibility": "ZERO_ROW_DESIGN_ARTEFACT_ONLY",
       "newSimulatorRows": 0,
       "protocolSha256": "0c708aeea5fb4293648aa9c550089cb8cccb5b6331aafdf71285b0f15f5d8af5",
       "summarySha256": "36777c4d8e3979436955d0bc550fdcd7c68e1f0575ffaf9c032adfb7b24169f1",
       "runnerSha256": "581eacf8379ebd190edff4b61e77f4cf98ca41cd99b26fe7092ab53ba04760c4"
     },
     "sourceAndDirect": {
-      "outcome": "FUTILITY",
-      "decision": "close-ward-spend-family-at-source-direct-gate",
+      "runnerOutcome": "FUTILITY",
+      "runnerDecision": "close-ward-spend-family-at-source-direct-gate",
+      "publicationOutcome": "INVALID_UNAVAILABLE_ENGINE_GATE",
+      "publicationDecision": "stop-ward-spend-family-at-binding-engine-precondition",
       "sourceFaults": 0,
       "directFaults": 6,
-      "directControlledObservations": 82,
+      "invalidDirectControlledObservations": 82,
+      "scientificallyAdmissibleDirectObservations": 0,
       "GodotProcesses": 2,
       "wallTimeSeconds": 7.391065874951892,
       "newSimulatorRows": 0,
       "protocolSha256": "fd7b0f9273cf7412a9fff171b90bbb4596878f4a1fa496a1ae20f79b6fe49e15",
       "summarySha256": "052481cdc39523a891d43c15c698ff107b9bd6a5f55730aea70a6612d8e858f8",
       "runnerSha256": "ddbb20943e8a2e5b1feaba00fa7c714c17250180162d8534f059a4c445d9c3de",
-      "dispositionSha256": "d93a589d53125602c618ba3ad773de06b63c0e2294251b18ce04bc9fd9afd35a"
+      "dispositionSha256": "1a7a41a4a604882394502df807bd3c163a6dc9723651cc2c7960e7dd577ffc30"
     }
   },
-  "directFaults": [
+  "runnerDirectFaultsNonDecisionEvidence": [
     "upgraded-brace-realised-credit: producer realised credits",
     "upgraded-brace-realised-credit: credit-set values",
     "enemy-ward-separate-payoff: preview chip isolation",
@@ -62,25 +72,25 @@
     "victory-expiry: credit-set values",
     "single-consume: bounded state and path isolation"
   ],
-  "decisiveContradiction": {
+  "wrongEngineObservationNonDecisionEvidence": {
     "scenario": "enemy-ward-separate-payoff",
     "ordinaryAttack": "5 damage fully absorbed by the first 5 of 7 enemy Ward",
     "separatePayoff": "4 requested non-Attack damage absorbed the remaining 2 Ward and realised 2 HP loss",
     "executionFacetChips": 0,
     "previewFacetChips": 1,
-    "consequence": "The enabled preview exposes a false policy signal and violates truthful-preview and causal-factor isolation before natural capacity."
+    "consequence": "Observed under Godot 4.7.2; it is not decision-admissible evidence for the exact 4.7.1 current-main contract."
   },
   "automaticDisposition": {
-    "closed": "The complete exact deliberate-Ward-investment to same-turn Ward-spend-finisher family is closed at its common source/direct gate.",
-    "noRescue": "No analyser, scenario, source, threshold, card, producer, payoff, cohort, policy, method or rerun rescue is authorised.",
-    "bulwark": "The conditional second producer level was not reached because the common source/direct gate failed before capacity.",
-    "notEstablished": "This bounded negative is not universal impossibility of every defence/offence trade-off."
+    "stopped": "The exact deliberate-Ward-investment to same-turn Ward-spend-finisher family stops at the unavailable binding engine precondition, before a valid GDScript source/direct gate.",
+    "noRescue": "No analyser, scenario, source, threshold, card, producer, payoff, cohort, policy, method or rerun rescue is authorised without an explicit authority delta.",
+    "bulwark": "The conditional second producer level was not reached because no decision-admissible source/direct gate completed.",
+    "notEstablished": "No causal, preview, capacity or family-futility finding is established for the exact 4.7.1 contract."
   },
   "humanAuthorityPackage": {
-    "trigger": "The complete owner-selected family is validly exhausted under comment 5464228499.",
-    "decisionRequired": "Choose one finite next product-semantic family direction, explicitly relax one named immutable boundary, or amend #421 acceptance/P9 authority.",
-    "whyAutomationCannotDecide": "Every previously closed family remains immutable and the controlling comment authorises no successor semantic family after this family closes. Inventing a new producer/consumer meaning would guess.",
-    "recommendation": "Keep product truth, protected seeds and all valid closures unchanged; supply only the smallest finite semantic direction if #421 research is to continue.",
+    "trigger": "Exact Godot 4.7.1 is unavailable through the active binaries, while the binding skill prohibits any GDScript execution under 4.7.2 and the frozen family prohibits a rescue rerun.",
+    "decisionRequired": "Select a finite next product-semantic family after accepting this preflight stop; explicitly relax the no-rerun boundary and authorise exact 4.7.1 for one separately versioned protocol; or amend #421 acceptance/P9 authority.",
+    "whyAutomationCannotDecide": "Running 4.7.2 violates the engine contract, retrying changes the frozen no-rescue disposition, and selecting a successor producer/consumer meaning would guess.",
+    "recommendation": "Keep product truth, protected seeds and all valid closures unchanged; accept the Ward family preflight stop and supply only the smallest finite semantic direction if #421 research is to continue.",
     "safeIssueState": "needs-info"
   },
   "ledger": {
@@ -92,7 +102,8 @@
     "protectedSeedRows": 0
   },
   "verification": {
-    "directControlledObservations": 82,
+    "invalidDirectControlledObservations": 82,
+    "scientificallyAdmissibleDirectObservations": 0,
     "newScientificSimulatorRows": 0,
     "godotProcesses": 2,
     "newLedgerRows": 0,
@@ -101,6 +112,8 @@
     "maximumModelContextTokensDuringExecutionAndDecision": 0
   },
   "prohibitedClaimsAndActions": [
+    "source/direct futility under the exact Godot 4.7.1 contract",
+    "a decision-relevant preview or causal contradiction from the 4.7.2 output",
     "universal impossibility of every defence/offence mechanism",
     "scientific selection of a new primitive without owner semantics",
     "capacity, causal payoff, package or detector admission",
@@ -111,5 +124,5 @@
     "replacement or successor ticket",
     "#421 acceptance or #108 P9 receipt"
   ],
-  "claimBoundary": "This publication establishes only the preregistered source/direct futility and automatic closure of the exact owner-selected Ward-spend family. It activates the current human-authority clause without reopening any earlier family or claiming broad mechanism impossibility."
+  "claimBoundary": "This publication establishes only that the binding exact-4.7.1 engine precondition was unavailable, that the 4.7.2 output is immutable non-decision provenance, and that no automatic no-rescue continuation remains. It supports a human-authority package without a causal, capacity, product or broad mechanism claim."
 }
