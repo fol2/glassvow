@@ -1,4 +1,4 @@
-6d2e5c57f31ea190cfdf95908a71e823547ebfe2a8cc5af50e68037c53764a8c  ./README.md
+dac90baf99333f8d909cea91c7bae6540ae13b5574160b54f148717b1dd3a5b1  ./README.md
 0d06b45fe5be03b1a48c6c970103b235e4c47fbacc308dcbd539b7e480771a5b  ./artifacts/godot-4.7.1-toolchain-v1.json
 98970a3df17b45c1fe90a8e02d4cb50cc4b9c4a08abb69045a3ef4dd8fea7729  ./artifacts/issue-421-publication-comment-v27.md
 0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb  ./artifacts/issue-525-ward-mirror-edge-4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c.json
@@ -111,6 +111,7 @@ fd7b0f9273cf7412a9fff171b90bbb4596878f4a1fa496a1ae20f79b6fe49e15  ./protocols/po
 44b6f7e0b3d2c36126690e4bc2e780796b0e9737f00aed87931e6e3d6908115f  ./protocols/post-d486-private-overflow-design-v1.json
 a87c2a125565cdee0a5d8982e79f4814fa17f88af27629bdcf57691853bbf58c  ./protocols/post-d486-private-overflow-identity-v1.json
 75d56e97fe20cfab3637bf0e00a1fe897281c98662b8f75274fd5d0390b363e1  ./protocols/post-d486-private-overflow-identity-v2.json
+9be852f9da9367418039e235d56de3dd55038b6cf981083568f2cbd53d86162e  ./protocols/post-fb3deac5-ward-spend-identity-v2.json
 3d508a11d79bd464c6ffd4297840cf55093935432134df08e6a3bf498a3854c3  ./protocols/post-v30-combat-state-zone-frontier-audit-v1.json
 53bd9ce287f4f1742133729522559827056dd75f1c67ab358a6ad56aed011974  ./protocols/post-v30-cross-enemy-facet-identity-v1.json
 16d43f02ce033a0426e77e6da7521a2bff1b91b96814e960e584138c3f2f50b6  ./protocols/post-v30-dimmed-facet-capacity-v1.json
@@ -357,6 +358,8 @@ eeeb20f870eb6b18ef8e454ed67912b39f09d9cb2e63965c98481e4ec6414905  ./prototype-up
 c72465e054c4bcc4f63d1407656db0f4521d3504a832545e85410352c9212ecb  ./prototype-upgrade-telemetry-current-main/tools/research_421_upgrade_probe.gd.uid
 575582fdecc0263cbf7faa6d86693a838b68c12e5bbadfb94f720e1772bd9ee9  ./prototype-ward-spend-finisher-v1/tools/research_421_ward_spend_probe.gd
 6fd8d414cccd504d5b04f222baa4b36ce07649006cbbd380b85d3c1b8c151ddb  ./prototype-ward-spend-finisher-v1/ward-spend-finisher-v1.patch.gz
+f949f3085c334d910c100363300774024a3f9b03fa3fb99ad9df9030b60d037b  ./prototype-ward-spend-finisher-v2/tools/research_421_ward_spend_probe_v2.gd
+3e8ea7ff5a27fff1ba6f42ea7d1cdafcaec4d958b651433ce239f12a726163b0  ./prototype-ward-spend-finisher-v2/ward-spend-finisher-v2.patch.gz
 01fdd087351f5edb476b624a913a0253250c8d94ab0dcb7d0e715756f1dbeee8  ./prototype-weak-mend-current-main/domain/rules/combat-weak-mend-edit.json
 3736dbb211aaef65ab2525705ad706c6695dd11dada3153de72bef512847b36d  ./prototype-weak-mend-current-main/tools/research_421_weak_mend_probe.gd
 26ca3ea57e7aa1a9e0e4d30a110dbb5cac982d1ddcc4a5bd5f36a76638ec12a8  ./prototype-weak-mend-current-main/tools/research_421_weak_mend_probe.gd.uid
@@ -372,6 +375,7 @@ d77cf86b8f7e965cce9cb3cbad85d79f498aae3505f9eab0b1c9775018eb2e70  ./prototype/do
 04cb054ae6afc731b9ca73da1194ff50be444349fac4c8ceeaa905f8a0daf736  ./publication-manifest-post-843e899-family-ladder-v1.json
 83fdeb4b0acff020669e8ef2bbb7ac8d20ff988ec26cae0faa3bd89b400d8713  ./publication-manifest-post-b7b5099-ward-spend-futility-v1.json
 756877c47e642c9696fe1a18362dc46ba32809b0adbd36fe11cdf9aec7b220b4  ./publication-manifest-post-d486-private-overflow-v1.json
+f9800e4821701ae2b428a0aaeac046f1f784cfb15b81de79c07483683ce96e8e  ./publication-manifest-post-fb3deac5-ward-spend-v2-preflight-v1.json
 e861130447fc8202f58a8f0d89cf0f4d905dc9e165598b8624b75ce6fbf27019  ./publication-manifest-post-reshuffle-frontier-v1.json
 a72693487b471d09b5ae9f997ab220a6dd736e538e79b8ecb7aa844ba03d0727  ./publication-manifest-post-target-capacity-v1.json
 2b2e48453f0c7e80c275d10eb0054bed277b876989fb4c607deccb31e9a4ccd3  ./publication-manifest-scoreline-commitment-v1.json
@@ -922,6 +926,8 @@ d84bf14b557d07c6dd2c0946f684a36e52d0e683a7c39be4221fc6b39bc1144c  ./summaries/po
 e666ab02e992bbf17d70a96e3973a0a8125269a587d2b3d8e0360ebb2db90dd8  ./summaries/post-d486-private-overflow-identity-v2-preflight.json
 16126cea96483d2ac668ada9a97eef64679db04b62dccc17aa59164b6b903e59  ./summaries/post-d486-private-overflow-identity-v2.json
 2bee618ff9a186918e99c44482305fddbdb22dbc1b19d593d73eb63a1045ed54  ./summaries/post-d486-private-overflow-primary-sources-v1.md
+5486166f9cbeaaac913b54b706be986b1ccb43739d3b41e242f1804f42ececdc  ./summaries/post-fb3deac5-ward-spend-identity-v2.json
+40d1a1be16d12087c34921ced282bf94a180a6d59c99b74bb102f0c8249e6809  ./summaries/post-fb3deac5-ward-spend-primary-sources-v2.md
 1415ee899fefc2087a1b3730dfb71610ff4a5c8ed8e93842007b4f28eee4d4ed  ./summaries/post-v30-combat-state-zone-frontier-audit-v1.json
 a3f9f81407dc5d943487de33a5474663dc11f2216e68507873c2251caedaa0ee  ./summaries/post-v30-cross-enemy-facet-identity-v1.json
 b72b84d97675eb87ead2cee9a138e533e731f6620af1ff2fcc5a5ce6d58fe649  ./summaries/post-v30-dimmed-facet-capacity-v1.json
@@ -1133,7 +1139,9 @@ cdef3ea4ae0712ccb00ed0f496451bef4875ee3a43eb792b6fc9492701488d93  ./task-capsule
 3d5a4bc1c0c767c2ed32a1a601ca1607a7b5ed76870652d97a9c701ef748c5d4  ./task-capsule-5460811702-v22.json
 4c4eb587921bf4dce06636f903ad561d22881178e90265dd48aee13f7e297013  ./task-capsule-5464228499-v23.json
 c02d98cdbccf70cffdb59cc870aa8406ff2ca0f8b01466506c114b9524f37b74  ./task-capsule-5464228499-v24.json
+a29f6df6b3524aef13666b2c0d570a3f1d862204a80f6eb418c684b8a4fb6589  ./task-capsule-5465170578-v25.json
 6eb3e793a96be638e50ce8f4a99655ee3f9af5912ca042a56f77446b739f1ac0  ./task-capsule.json
+9c3e4c7104dfbe9ea0ae91d36982eaeabf95c9b90ac773432192877064d2fb62  ./tools/__pycache__/post_fb3deac5_ward_spend_identity_v2.cpython-312.pyc
 6eb56ed83e4ef28d46e9913554fac9438163993d8c6a8eb7c9a4e6771eff012a  ./tools/identify_v33_v38.py
 c7c1e77911dd29f33c27551f031498b26e92cc22d6c30023cd9be33e925cd3a5  ./tools/post_810264c_private_causal_coverage_v1.py
 112442f6a7d74be62829cda9effe7b9c3f4bd3c6c6823ac1540d380dfc1ec318  ./tools/post_843e899_cross_turn_hold_coverage_audit_v1.py
@@ -1157,6 +1165,7 @@ e4545c30c9118cdfdef16a757b09900e9154c1e7d87ef729c926da27375bb776  ./tools/post_d
 bc8f198aca339544ab0002753bf439936637b3d7d665cd8c2d414bd338449fb2  ./tools/post_d486_private_overflow_identity_v1.py
 6205081c349191965181cdeab232ec38b6861f667d34d60b0df8da0d39f1046f  ./tools/post_d486_private_overflow_identity_v2.py
 524b25a613d943061d66273cb8629b1387a5a945a0dbe4757718ce94f6e83b93  ./tools/post_d486_private_overflow_identity_v2_preflight.py
+972eb73e903c7c0cd9b96fa1c3a97a7796e2163bab1e00b181e10d2be33aaa41  ./tools/post_fb3deac5_ward_spend_identity_v2.py
 350f2bc1eebd4890f86304470f6fbd7168004c0dfc9d41d05185457d4c00f190  ./tools/post_v30_combat_state_zone_frontier_audit.py
 2e5f1e1f3794ec4143a8dce49f207500b51a6f3884b3128f0e8c70a4701e27fb  ./tools/post_v30_cross_enemy_facet_identity.py
 08a8ecff1c60b2c63e89d8c72065cff1e51969b6f39e8a66b5cd1c62873a9217  ./tools/post_v30_dimmed_facet_capacity.py

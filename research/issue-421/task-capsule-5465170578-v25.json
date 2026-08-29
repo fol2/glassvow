@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 3,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "taskSsot": {
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ],
+    "outcome": "Complete the accepted #421 strategy-package, detector, RC and exact-SHA P9 outcome, then record the #108 receipt without a successor ticket."
+  },
+  "authority": {
+    "commentId": 5465170578,
+    "author": "fol2",
+    "authorAssociation": "OWNER",
+    "updatedAt": "2026-08-29T22:23:40Z",
+    "bodySha256": "f90515005affa72e3684dd0aa5acd1e05bcc5b651b72255a1ddbac9cc3d1f1c4",
+    "decision": "Run one separately versioned engine-correct continuation of the unchanged Ward-investment to same-turn Ward-spend-finisher family."
+  },
+  "resolvedMain": {
+    "sha": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "verifiedRemoteAt": "2026-08-29T22:40:46Z"
+  },
+  "activeInstructions": {
+    "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+    ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+    "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+    "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+    "docs/agents/triage-labels.md": "4f53c9b40ce2651e3611aa090eaedbd6dbc9b71ef8c5f7e65eac0d8263190d0d",
+    "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95"
+  },
+  "engineAuthority": {
+    "repositoryCompatibility": "stable Godot >= 4.7.2",
+    "selectedPath": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "selectedVersion": "4.7.2.stable.official.ed1daf0bf",
+    "selectedBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "hostFingerprint": {
+      "kernel": "Darwin 27.0.0 arm64",
+      "osVersion": "27.0",
+      "hardwareModel": "MacBookPro18,2",
+      "cpu": "Apple M1 Max",
+      "logicalCpu": 10,
+      "memoryBytes": 68719476736
+    },
+    "hostFingerprintCanonicalJsonWithLfSha256": "0be06e9f75ead434ac18f14b4b8eb8a126f8126ab4135dc9ca5cfbc11c26d8b6"
+  },
+  "immutableEvidence": {
+    "preCorrectionArchive": "004679a83894f151e95aeed35d2ecaab60a9d3f5",
+    "correctedArchive": "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+    "parentArchive": "b7b509939ff0bd8f75ba2218309e09cb94808878",
+    "quarantinedObservations": 82,
+    "quarantineDisposition": "Immutable provenance only; zero direct, capacity, causal, held-out or family decision weight."
+  },
+  "scientificInputs": {
+    "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+    "domain/state/player_combatant.gd": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3",
+    "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+    "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+    "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+    "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+    "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+  },
+  "preRowSourceCorrections": {
+    "previewFactorSeparation": "Represent the research-only non-Attack payoff separately from ordinary Attack hits and derive Facet chips only from ordinary Attack blood loss.",
+    "omenIdentity": "Use a reveal-empty run, then set the preregistered null or Heavy Air omen explicitly before combat so no random omen draw enters a contrast.",
+    "causalPathEstimand": "Require exact upstream/null identity and only the preregistered Ward, enemy-Ward, HP, damage-stat and downstream event-field consequences after an enabled payoff."
+  },
+  "currentStage": "post-fb3deac5-ward-spend-v2-source-null-direct-freeze",
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "nonGoals": [
+    "Do not recode or use the quarantined 82 observations.",
+    "Do not reopen a valid closed family or change the Ward family semantics.",
+    "Do not create a successor, product PR, research PR or Actions run.",
+    "Do not use protected seeds, mutate product truth or add an optimiser."
+  ],
+  "nextAction": "Freeze and execute the engine-correct v2 mechanical, source, exact-null and direct A/B/AB/expiry protocol once."
+}

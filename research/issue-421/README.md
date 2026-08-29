@@ -24,6 +24,42 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### Post-fb3deac5 Ward-spend v2 mechanical-preflight closure
+
+Owner comment `5465170578` corrected repository engine authority to stable
+Godot 4.7.2 or later and authorised one separately versioned continuation of
+the unchanged Ward family. The v2 preregistration froze the preferred exact
+4.7.2 binary and host, 18 fresh direct identities, 74 controlled observations,
+12 Godot processes, 120 seconds, exact A/B/AB/null/expiry estimands and an
+automatic parse-fault disposition before execution.
+
+The selected engine and every immutable source, archive, seed and ledger
+identity passed. The run then stopped in its three-process mechanical parse
+preflight, before any direct probe or decision observation. The fresh detached
+worktree had no generated `.godot/global_script_class_cache.cfg`, so the parser
+reported current-main `class_name` types including `ContentDB`, `RunState` and
+`GlassvowGame` as undeclared and emitted dependent unsafe-call warnings. The
+predecessor worktree contains that generated cache, which isolates the
+preflight root cause; it is not evidence about Ward semantics.
+
+The frozen result is `futility` for the exact v2 representation, with 0/74
+direct observations, zero simulator/ledger/protected rows and zero use of the
+82 quarantined observations. The v2 result is not overwritten or rerun after
+generating a cache. Because comment `5465170578` authorised one continuation
+and the v2 protocol forbids a rerun or representation rescue, an additional
+environment-corrected attempt needs an explicit owner authority delta. The
+recommended minimum is one pre-row correction that generates the Godot cache
+before freezing while leaving family semantics and current-main inputs
+unchanged; alternatively, the owner may declare this representation closure
+terminal for Ward and select the next finite direction inside #421. See
+`publication-manifest-post-fb3deac5-ward-spend-v2-preflight-v1.json`.
+
+Archive commits `004679a83894f151e95aeed35d2ecaab60a9d3f5` and
+`fb3deac5d3624142faad20c6d2c89eb2c392eda7` remain immutable ancestors. The
+ledger remains 482,036 records at SHA-256
+`97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213`.
+No product code, PR, Actions run, acceptance or P9 receipt follows.
+
 ### Post-b7b5099 Ward-spend engine-precondition stop and authority boundary
 
 Owner comment `5464228499` selected one complete deliberate-Ward-investment to

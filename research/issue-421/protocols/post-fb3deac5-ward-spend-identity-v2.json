@@ -1,0 +1,731 @@
+{
+  "schemaVersion": 2,
+  "issue": 421,
+  "authorityComment": 5465170578,
+  "stage": "post-fb3deac5-ward-spend-engine-correct-source-null-direct",
+  "question": "Under one explicitly selected compliant Godot 4.7.2 stable binary, does the unchanged brace-first Ward-investment to same-turn Ward-spend-finisher representation have exact current-main nulls, isolated A and B components, truthful separate-payoff preview and execution, and the preregistered expiry behaviour?",
+  "hypotheses": {
+    "H0": "The exact representation has an identity, source, null, component, preview, mediator, expiry or behaviour fault and closes without a representation rescue.",
+    "H1": "The exact representation passes every frozen source, null and direct control and may proceed to the brace-first natural capacity screen."
+  },
+  "claimBoundary": "Engine compatibility and provenance, exact source identity, current-main/null identity, direct mediator A/B/AB semantics, preview/execution separation and expiry only. Zero simulator, capacity, causal panel, endpoint, balance, product, protected-seed, #421 acceptance or #108 P9 claim.",
+  "quarantine": {
+    "archiveCommits": [
+      "004679a83894f151e95aeed35d2ecaab60a9d3f5",
+      "fb3deac5d3624142faad20c6d2c89eb2c392eda7"
+    ],
+    "observationCount": 82,
+    "decisionWeight": 0,
+    "prohibitedUses": [
+      "direct",
+      "capacity",
+      "causal",
+      "held-out",
+      "family disposition"
+    ]
+  },
+  "engineIdentity": {
+    "path": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "binarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "hostFingerprint": {
+      "kernel": "Darwin 27.0.0 arm64",
+      "osVersion": "27.0",
+      "hardwareModel": "MacBookPro18,2",
+      "cpu": "Apple M1 Max",
+      "logicalCpu": 10,
+      "memoryBytes": 68719476736
+    },
+    "hostFingerprintCanonicalJsonWithLfSha256": "0be06e9f75ead434ac18f14b4b8eb8a126f8126ab4135dc9ca5cfbc11c26d8b6"
+  },
+  "familyContract": {
+    "producer": "The realised return from the unchanged current-main brace Ward effect; bulwark remains only the conditional second producer level after a complete brace capacity failure.",
+    "mediator": "One combat-local, player-private, non-stacking {source, credit, turn} record set to exact realised Ward and omitted from projections and saves.",
+    "consumer": "A later one-energy research-only Dusk Attack with unchanged base damage 5 or 7 upgraded, followed by one research421WardSpend special in the same player turn.",
+    "spend": "Require exact producer source, same turn, realised credit and current Ward at least S; subtract S in {4,8} current Ward and consume the record once.",
+    "payoff": "Request one separate hit_enemy operation with is_attack=false for S*N/2, N in {1,2}; enemy Ward may absorb it and it cannot earn Attack Facet chips.",
+    "expiry": "Clear an unconsumed record at player end turn, victory or loss.",
+    "aspect": "Duskblade only; Ashwarden is an exact null.",
+    "naturalCost": "Normal acquisition/draw, unchanged producer and consumer energy, producer-before-consumer sequence and exact current-Ward spend; no grant, free energy, relic, selector, persistence or RNG."
+  },
+  "factorDefinitions": {
+    "producerComponent": {
+      "levels": [
+        "off",
+        "brace"
+      ],
+      "operation": "Only an exact configured brace block effect records realised Ward."
+    },
+    "consumerComponent": {
+      "levels": [
+        "off",
+        "on"
+      ],
+      "operation": "Only the research421WardSpendFinisher special may test and consume credit."
+    },
+    "wardSpend": {
+      "levels": [
+        4,
+        8
+      ],
+      "operation": "Bounded subtraction from current Ward after all eligibility checks."
+    },
+    "payoffNumeratorPerTwoWard": {
+      "levels": [
+        1,
+        2
+      ],
+      "operation": "Separate requested damage equals wardSpend * numerator / 2."
+    },
+    "omen": {
+      "levels": [
+        "none",
+        "heavyAir-source-control"
+      ],
+      "operation": "Reveal-empty runs are assigned null explicitly; the one Heavy Air source control assigns heavyAir explicitly before combat."
+    },
+    "aspect": {
+      "levels": [
+        "duskblade",
+        "ashwarden-null-control"
+      ],
+      "operation": "The mechanic is gated to aspect index 0."
+    }
+  },
+  "mechanisticInteractions": [
+    "producerComponent x consumerComponent is the only activation interaction; neither A nor B alone changes projected gameplay state.",
+    "wardSpend x payoffNumeratorPerTwoWard deterministically defines requested separate damage.",
+    "omen x producerComponent may change realised Ward and credit, but not authored Ward or payoff arithmetic.",
+    "currentWard x wardSpend and realisedCredit x wardSpend jointly determine eligibility.",
+    "enemyWard x requestedPayoff determines blocked and realised separate damage after the ordinary Attack hit.",
+    "aspect x producerComponent x consumerComponent gates every research semantic to Duskblade.",
+    "expiry x turn prevents any cross-turn consumer activation."
+  ],
+  "aliasStructure": {
+    "currentMainOmittedOff": "For every scenario, current-main base surface, candidate default omission and candidate explicit producer-empty/consumer-off have exact projected state, ordinary events, action previews, returns, stats and RNG after research-only configuration, telemetry and private mediator fields are removed.",
+    "A": "Brace producer with consumer off may set only the private realised-Ward mediator and research telemetry; its projected gameplay result aliases explicit off.",
+    "B": "Consumer on with producer off may emit only an ineligible research opportunity; its projected gameplay result aliases explicit off.",
+    "ABNull": "Wrong order, expired record, Ashwarden, other Ward source, insufficient current Ward, insufficient realised credit and base-hit lethal paths alias explicit off after research-only fields are removed.",
+    "ABEnabled": "Only exact eligible AB subtracts wardSpend and adds one separate payoff. Restoring that Ward, enemy-Ward, HP, damage-stat and the mechanically downstream hpAfter shift reproduces explicit off exactly.",
+    "preview": "Ordinary Attack hits remain byte-equal to off; the separate payoff has its own requested/blocked/realised field and cannot change Facet-chip prediction."
+  },
+  "designMatrix": {
+    "sharedAnchors": "All 18 scenarios run under current-main base, candidate omitted, and candidate explicit off.",
+    "componentContrast": "brace-s4-n2 alone runs A and B in separate fresh Godot processes and is compared with off and AB.",
+    "enabledCells": [
+      {
+        "wardSpend": 4,
+        "payoffNumeratorPerTwoWard": 1,
+        "separateRequestedDamage": 2
+      },
+      {
+        "wardSpend": 4,
+        "payoffNumeratorPerTwoWard": 2,
+        "separateRequestedDamage": 4
+      },
+      {
+        "wardSpend": 8,
+        "payoffNumeratorPerTwoWard": 1,
+        "separateRequestedDamage": 4
+      },
+      {
+        "wardSpend": 8,
+        "payoffNumeratorPerTwoWard": 2,
+        "separateRequestedDamage": 8
+      }
+    ],
+    "blocking": "Nine direct processes: one baseline, one omitted, one explicit off, one A, one B and four AB spend/payoff groups. No adaptive cell, cohort or analyser change is permitted.",
+    "notFullFactorial": "The Heavy Air and Ash controls are mechanism-specific anchors, not Cartesian factors; bulwark is not observed unless the future complete brace capacity screen fails."
+  },
+  "componentControlScenario": "brace-s4-n2",
+  "directScenarios": [
+    {
+      "id": "brace-s4-n1",
+      "spend": 4,
+      "numerator": 1,
+      "row": {
+        "seed": 2019255725,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "opportunity", "spend", "payoff-requested", "payoff-realised"],
+        "producerCredits": [8],
+        "opportunityEligible": [true],
+        "markAfter": {},
+        "payoff": true,
+        "requested": 2,
+        "realised": 2,
+        "blocked": 0,
+        "payoffActionIndex": 1
+      }
+    },
+    {
+      "id": "brace-s4-n2",
+      "spend": 4,
+      "numerator": 2,
+      "row": {
+        "seed": 1623804986,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "opportunity", "spend", "payoff-requested", "payoff-realised"],
+        "producerCredits": [8],
+        "opportunityEligible": [true],
+        "markAfter": {},
+        "payoff": true,
+        "requested": 4,
+        "realised": 4,
+        "blocked": 0,
+        "payoffActionIndex": 1
+      }
+    },
+    {
+      "id": "brace-s8-n1",
+      "spend": 8,
+      "numerator": 1,
+      "row": {
+        "seed": 1822774076,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "opportunity", "spend", "payoff-requested", "payoff-realised"],
+        "producerCredits": [8],
+        "opportunityEligible": [true],
+        "markAfter": {},
+        "payoff": true,
+        "requested": 4,
+        "realised": 4,
+        "blocked": 0,
+        "payoffActionIndex": 1
+      }
+    },
+    {
+      "id": "brace-s8-n2",
+      "spend": 8,
+      "numerator": 2,
+      "row": {
+        "seed": 491555069,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "opportunity", "spend", "payoff-requested", "payoff-realised"],
+        "producerCredits": [8],
+        "opportunityEligible": [true],
+        "markAfter": {},
+        "payoff": true,
+        "requested": 8,
+        "realised": 8,
+        "blocked": 0,
+        "payoffActionIndex": 1
+      }
+    },
+    {
+      "id": "heavy-air-realised-credit",
+      "spend": 8,
+      "numerator": 1,
+      "row": {
+        "seed": 357465821,
+        "aspect": "duskblade",
+        "omen": "heavyAir",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "opportunity", "spend", "payoff-requested", "payoff-realised"],
+        "producerCredits": [10],
+        "opportunityEligible": [true],
+        "markAfter": {},
+        "payoff": true,
+        "requested": 4,
+        "realised": 4,
+        "blocked": 0,
+        "payoffActionIndex": 1
+      }
+    },
+    {
+      "id": "enemy-ward-separate-payoff",
+      "spend": 4,
+      "numerator": 2,
+      "row": {
+        "seed": 2127543762,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 7,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "opportunity", "spend", "payoff-requested", "payoff-realised"],
+        "producerCredits": [8],
+        "opportunityEligible": [true],
+        "markAfter": {},
+        "payoff": true,
+        "requested": 4,
+        "realised": 2,
+        "blocked": 2,
+        "payoffActionIndex": 1
+      }
+    },
+    {
+      "id": "insufficient-current-ward",
+      "spend": 4,
+      "numerator": 2,
+      "row": {
+        "seed": 2012527528,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "setWard", "n": 3},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "opportunity"],
+        "producerCredits": [8],
+        "opportunityEligible": [false],
+        "markAfter": {"source": "brace", "credit": 8, "turn": 1},
+        "payoff": false
+      }
+    },
+    {
+      "id": "insufficient-realised-credit",
+      "spend": 8,
+      "numerator": 2,
+      "row": {
+        "seed": 394982683,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {"frail": 1},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "fortify"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "opportunity"],
+        "producerCredits": [6],
+        "opportunityEligible": [false],
+        "markAfter": {"source": "brace", "credit": 6, "turn": 1},
+        "payoff": false
+      }
+    },
+    {
+      "id": "wrong-order",
+      "spend": 4,
+      "numerator": 1,
+      "row": {
+        "seed": 2111933275,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0},
+          {"kind": "play", "card": "brace"}
+        ]
+      },
+      "expected": {
+        "stages": ["opportunity", "producer", "credit-set"],
+        "producerCredits": [8],
+        "opportunityEligible": [false],
+        "markAfter": {"source": "brace", "credit": 8, "turn": 1},
+        "payoff": false
+      }
+    },
+    {
+      "id": "end-turn-expiry",
+      "spend": 4,
+      "numerator": 1,
+      "row": {
+        "seed": 403817052,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "end"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "expiry", "opportunity"],
+        "producerCredits": [8],
+        "opportunityEligible": [false],
+        "markAfter": {},
+        "payoff": false
+      }
+    },
+    {
+      "id": "loss-expiry",
+      "spend": 4,
+      "numerator": 1,
+      "row": {
+        "seed": 2072524102,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "lose"}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "expiry"],
+        "producerCredits": [8],
+        "opportunityEligible": [],
+        "markAfter": {},
+        "payoff": false
+      }
+    },
+    {
+      "id": "victory-expiry",
+      "spend": 4,
+      "numerator": 1,
+      "row": {
+        "seed": 312794696,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 20,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "hit", "n": 20}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "expiry"],
+        "producerCredits": [8],
+        "opportunityEligible": [],
+        "markAfter": {},
+        "payoff": false
+      }
+    },
+    {
+      "id": "ash-null",
+      "spend": 4,
+      "numerator": 2,
+      "row": {
+        "seed": 1190930676,
+        "aspect": "ashwarden",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": [],
+        "producerCredits": [],
+        "opportunityEligible": [],
+        "markAfter": {},
+        "payoff": false
+      }
+    },
+    {
+      "id": "other-ward-source-null",
+      "spend": 4,
+      "numerator": 1,
+      "row": {
+        "seed": 1912487135,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "guardedStrike", "target": 0},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["opportunity"],
+        "producerCredits": [],
+        "opportunityEligible": [false],
+        "markAfter": {},
+        "payoff": false
+      }
+    },
+    {
+      "id": "fortify-credit-isolation",
+      "spend": 4,
+      "numerator": 2,
+      "row": {
+        "seed": 1560111139,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "fortify"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "opportunity", "spend", "payoff-requested", "payoff-realised"],
+        "producerCredits": [8],
+        "opportunityEligible": [true],
+        "markAfter": {},
+        "payoff": true,
+        "requested": 4,
+        "realised": 4,
+        "blocked": 0,
+        "payoffActionIndex": 2
+      }
+    },
+    {
+      "id": "replacement-not-stacking",
+      "spend": 4,
+      "numerator": 1,
+      "row": {
+        "seed": 1761796411,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "producer", "credit-set", "opportunity", "spend", "payoff-requested", "payoff-realised"],
+        "producerCredits": [8, 8],
+        "opportunityEligible": [true],
+        "markAfter": {},
+        "payoff": true,
+        "requested": 2,
+        "realised": 2,
+        "blocked": 0,
+        "payoffActionIndex": 2
+      }
+    },
+    {
+      "id": "single-consume",
+      "spend": 4,
+      "numerator": 1,
+      "row": {
+        "seed": 1939110495,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 60,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "opportunity", "spend", "payoff-requested", "payoff-realised", "opportunity"],
+        "producerCredits": [8],
+        "opportunityEligible": [true, false],
+        "markAfter": {},
+        "payoff": true,
+        "requested": 2,
+        "realised": 2,
+        "blocked": 0,
+        "payoffActionIndex": 1
+      }
+    },
+    {
+      "id": "base-hit-lethal-expiry",
+      "spend": 4,
+      "numerator": 2,
+      "row": {
+        "seed": 120186105,
+        "aspect": "duskblade",
+        "omen": "",
+        "playerWard": 0,
+        "playerStatuses": {},
+        "enemyHp": 5,
+        "enemyWard": 0,
+        "actions": [
+          {"kind": "play", "card": "brace"},
+          {"kind": "play", "card": "research421WardSpendFinisher", "target": 0}
+        ]
+      },
+      "expected": {
+        "stages": ["producer", "credit-set", "expiry"],
+        "producerCredits": [8],
+        "opportunityEligible": [],
+        "markAfter": {},
+        "payoff": false
+      }
+    }
+  ],
+  "seedIdentity": {
+    "derivation": "For each ordered scenario ID: first four bytes, big-endian, of SHA-256('issue421|5465170578|ward-spend-v2|' + scenarioId), then 100000000 + value modulo 2047483648.",
+    "sameAcrossArms": true,
+    "scientificSimulatorSeeds": false,
+    "freshAgainstPredecessorProtocols": true,
+    "freshAgainstAppendOnlyLedger": true,
+    "protectedRangeExcluded": "3000-5399"
+  },
+  "estimands": {
+    "nullIdentity": "Exact equality of projected combat state, ordinary events, action preview/return, run stats and RNG across current-main, omitted and explicit-off after only research-only fields are removed.",
+    "producerIsolation": "A records exact realised Ward and no projected gameplay delta relative to off.",
+    "consumerIsolation": "B records one ineligible opportunity and no projected gameplay delta relative to off.",
+    "activation": "AB eligibility, exact Ward spend, requested separate damage and realised damage/absorption agree with the frozen scenario.",
+    "previewTruth": "Separate payoff requested/blocked/realised values equal execution, ordinary hits remain unchanged, and Attack chip prediction equals off.",
+    "causalIsolation": "After removing one separate payoff event and restoring only its Ward, enemy-Ward, HP, damage-stat and downstream hpAfter consequences, the enabled path equals off exactly.",
+    "rngIdentity": "Every causal contrast uses the same scenario seed and has exact before/after RNG identity."
+  },
+  "decisionRules": {
+    "success": "Stable >=4.7.2 engine and every immutable input match; the three candidate scripts parse; seed identities are fresh; source/null/A/B/AB/expiry checks have zero faults; output cardinality is 74; and the append-only ledger is byte-identical.",
+    "futility": "Any completed identity, source, parse, null, component, preview, mediator, expiry or behaviour fault closes this exact v2 Ward-spend representation without an analyser, scenario, schema, threshold, source, card, payoff, cohort or rerun rescue.",
+    "inconclusive": "An execution error or wall-time overrun records an inconclusive result at the frozen cap without a rerun or replacement.",
+    "successAuthority": "Owner comment 5465170578 authorises the brace-first natural capacity screen after a green engine-correct direct gate.",
+    "futilityAuthority": "Owner comment 5465170578 closes an identity, telemetry or behaviour-drifted representation without another schema loop.",
+    "inconclusiveAuthority": "Owner comment 5465170578 and the frozen cap require an inconclusive record without changing cohorts or support."
+  },
+  "budget": {
+    "directControlledObservations": 74,
+    "maximumGodotProcesses": 12,
+    "mechanicalParseGodotProcesses": 3,
+    "directGodotProcesses": 9,
+    "maximumWallTimeSeconds": 120,
+    "maximumCacheObjects": 20,
+    "newScientificSimulatorRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "optimiserRows": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0
+  },
+  "contentProjectionSha256": {
+    "baseline": "3c181ba8c30e42b2a5d25f3b47e950bde212f77635b42aa12453de37e63f6aea",
+    "candidate": "890bd421e740056a8312187721ddb0fded20eb6d3ac0fa8cf186d0cf9264a760"
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+      "refs/remotes/origin/research/issue-421-post-b7b5099-ward-spend-futility-evidence": "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+      "refs/remotes/origin/research/issue-421-post-810264c-private-causal-coverage-evidence": "b7b509939ff0bd8f75ba2218309e09cb94808878"
+    },
+    "archiveCommits": [
+      "004679a83894f151e95aeed35d2ecaab60a9d3f5",
+      "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+      "b7b509939ff0bd8f75ba2218309e09cb94808878"
+    ],
+    "archiveCommitTypes": {
+      "004679a83894f151e95aeed35d2ecaab60a9d3f5": "commit",
+      "fb3deac5d3624142faad20c6d2c89eb2c392eda7": "commit",
+      "b7b509939ff0bd8f75ba2218309e09cb94808878": "commit"
+    },
+    "preCorrectionIsAncestor": true,
+    "baselineHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "candidateHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "baselineStatus": [],
+    "candidateStatus": [
+      " M domain/rules/combat.gd",
+      " M domain/state/player_combatant.gd",
+      "?? tools/research_421_ward_spend_probe_v2.gd"
+    ],
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/player_combatant.gd": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "4ebd0c76e4dd165b731e96453642b4a0fd4f707e5de7ef74187bdf676a377cf9",
+      "domain/state/player_combatant.gd": "12f15b50d1eb06c9871fb7bda5caa2f50cab114b0350f850157edad4f301428c",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_ward_spend_probe_v2.gd": "f949f3085c334d910c100363300774024a3f9b03fa3fb99ad9df9030b60d037b"
+    },
+    "candidatePrototypeDiffSha256": "27c753fbdebbf787be9a280e24529d1701218f048f4408f4f4a2b14f5c2f5291",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "972eb73e903c7c0cd9b96fa1c3a97a7796e2163bab1e00b181e10d2be33aaa41",
+    "taskCapsulePath": "task-capsule-5465170578-v25.json",
+    "taskCapsuleSha256": "a29f6df6b3524aef13666b2c0d570a3f1d862204a80f6eb418c684b8a4fb6589"
+  }
+}

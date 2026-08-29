@@ -1,0 +1,104 @@
+{
+  "GodotProcesses": 3,
+  "archiveHeadsPreserved": [
+    "004679a83894f151e95aeed35d2ecaab60a9d3f5",
+    "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+    "b7b509939ff0bd8f75ba2218309e09cb94808878"
+  ],
+  "authority": "Owner comment 5465170578 closes an identity, telemetry or behaviour-drifted representation without another schema loop.",
+  "claimBoundary": "Engine compatibility and provenance, exact source identity, current-main/null identity, direct mediator A/B/AB semantics, preview/execution separation and expiry only. Zero simulator, capacity, causal panel, endpoint, balance, product, protected-seed, #421 acceptance or #108 P9 claim.",
+  "contentProjectionSha256": {},
+  "decision": "close-ward-spend-v2-representation-at-source-direct-gate",
+  "decisionBoundary": 2,
+  "directControlledObservations": 0,
+  "directFaults": [
+    "candidate GDScript mechanical parse preflight"
+  ],
+  "engineIdentity": {
+    "binarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "hostFingerprint": {
+      "cpu": "Apple M1 Max",
+      "hardwareModel": "MacBookPro18,2",
+      "kernel": "Darwin 27.0.0 arm64",
+      "logicalCpu": 10,
+      "memoryBytes": 68719476736,
+      "osVersion": "27.0"
+    },
+    "hostFingerprintCanonicalJsonWithLfSha256": "0be06e9f75ead434ac18f14b4b8eb8a126f8126ab4135dc9ca5cfbc11c26d8b6",
+    "path": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "version": "4.7.2.stable.official.ed1daf0bf"
+  },
+  "executionError": "",
+  "immutableQuarantinedObservationCount": 82,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "futility",
+  "outputSha256": {},
+  "parseTranscript": "NG Parse Error: The argument 1 of the function \"_sget()\" requires the subtype \"Dictionary\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1407  WARNING Parse Error: The argument 1 of the function \"_omen_mods()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1419  WARNING Parse Error: The argument 1 of the function \"_sget()\" requires the subtype \"Dictionary\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1421  WARNING Parse Error: The argument 1 of the function \"_omen_mods()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1422  WARNING Parse Error: The argument 1 of the function \"_vow_mods()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1423  WARNING Parse Error: The argument 1 of the function \"_sget()\" requires the subtype \"Dictionary\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1425  WARNING Parse Error: The argument 1 of the function \"_sget()\" requires the subtype \"Dictionary\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1436  WARNING Parse Error: The argument 1 of the function \"card_data()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1450  WARNING Parse Error: The argument 1 of the function \"_preview_hit()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1450  WARNING Parse Error: The argument 2 of the function \"_preview_hit()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1452  WARNING Parse Error: The argument 1 of the function \"preview_block()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1452  WARNING Parse Error: The argument 3 of the function \"preview_block()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1457  WARNING Parse Error: The argument 1 of the function \"_preview_research421_ward_spend()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1457  WARNING Parse Error: The argument 2 of the function \"_preview_research421_ward_spend()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1457  WARNING Parse Error: The argument 3 of the function \"_preview_research421_ward_spend()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1457  WARNING Parse Error: The argument 4 of the function \"_preview_research421_ward_spend()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1460  WARNING Parse Error: The argument 1 of the function \"_sget()\" requires the subtype \"Dictionary\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1462  WARNING Parse Error: The argument 1 of the function \"_preview_hit()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1462  WARNING Parse Error: The argument 2 of the function \"_preview_hit()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1464  WARNING Parse Error: The argument 1 of the function \"_preview_hit()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1464  WARNING Parse Error: The argument 2 of the function \"_preview_hit()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1464  WARNING Parse Error: The argument 3 of the function \"_preview_hit()\" requires the subtype \"int\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1512  WARNING Parse Error: The argument 1 of the function \"_sget()\" requires the subtype \"Dictionary\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1552  WARNING Parse Error: The argument 1 of the function \"_sget()\" requires the subtype \"Dictionary\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1553  WARNING Parse Error: The argument 1 of the function \"_sget()\" requires the subtype \"Dictionary\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ndomain/rules/combat.gd:1555  WARNING Parse Error: The argument 1 of the function \"_sget()\" requires the subtype \"Dictionary\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ntools/research_421_ward_spend_probe_v2.gd:47  PARSE   Parse Error: Could not find type \"ContentDB\" in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:108  PARSE   Parse Error: Could not find type \"GlassvowGame\" in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:108  PARSE   Parse Error: Could not find type \"RunState\" in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:140  PARSE   Parse Error: Could not find type \"GlassvowGame\" in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:163  PARSE   Parse Error: Could not find type \"GlassvowGame\" in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:17  PARSE   Parse Error: Could not find type \"ContentDB\" in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:17  PARSE   Parse Error: Identifier \"ContentDB\" not declared in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:53  PARSE   Parse Error: Could not find type \"RunState\" in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:53  PARSE   Parse Error: Identifier \"RunState\" not declared in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:58  PARSE   Parse Error: Could not find type \"GlassvowGame\" in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:58  PARSE   Parse Error: Identifier \"GlassvowGame\" not declared in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:112  PARSE   Parse Error: Could not find type \"CardInst\" in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:112  PARSE   Parse Error: Identifier \"CardInst\" not declared in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:154  PARSE   Parse Error: Could not find type \"EnemyCombatant\" in the current scope.\ntools/research_421_ward_spend_probe_v2.gd:31  WARNING Parse Error: The argument 1 of the function \"_run_row()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ntools/research_421_ward_spend_probe_v2.gd:60  WARNING Parse Error: The argument 1 of the function \"_prepare()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ntools/research_421_ward_spend_probe_v2.gd:84  WARNING Parse Error: The argument 1 of the function \"_apply_action()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ntools/research_421_ward_spend_probe_v2.gd:84  WARNING Parse Error: The argument 2 of the function \"_apply_action()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\ntools/research_421_ward_spend_probe_v2.gd:101  WARNING Parse Error: The argument 1 of the function \"_mark()\" requires the subtype \"Variant\" but the supertype \"Variant\" was provided. (Warning treated as error.)\n\n2 of 3 script check(s) failed.\n",
+  "planSha256": {},
+  "protectedSeedRows": 0,
+  "protocolSha256": "9be852f9da9367418039e235d56de3dd55038b6cf981083568f2cbd53d86162e",
+  "quarantinedObservationsUsedForDecision": 0,
+  "runnerSha256": "972eb73e903c7c0cd9b96fa1c3a97a7796e2163bab1e00b181e10d2be33aaa41",
+  "schemaVersion": 2,
+  "sourceGateFaults": [
+    "candidate GDScript mechanical parse preflight"
+  ],
+  "sourceIdentity": {
+    "archiveCommitTypes": {
+      "004679a83894f151e95aeed35d2ecaab60a9d3f5": "commit",
+      "b7b509939ff0bd8f75ba2218309e09cb94808878": "commit",
+      "fb3deac5d3624142faad20c6d2c89eb2c392eda7": "commit"
+    },
+    "baselineHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/player_combatant.gd": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3"
+    },
+    "baselineStatus": [],
+    "candidateHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "candidatePrototypeDiffSha256": "27c753fbdebbf787be9a280e24529d1701218f048f4408f4f4a2b14f5c2f5291",
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "4ebd0c76e4dd165b731e96453642b4a0fd4f707e5de7ef74187bdf676a377cf9",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "12f15b50d1eb06c9871fb7bda5caa2f50cab114b0350f850157edad4f301428c",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_ward_spend_probe_v2.gd": "f949f3085c334d910c100363300774024a3f9b03fa3fb99ad9df9030b60d037b"
+    },
+    "candidateStatus": [
+      " M domain/rules/combat.gd",
+      " M domain/state/player_combatant.gd",
+      "?? tools/research_421_ward_spend_probe_v2.gd"
+    ],
+    "preCorrectionIsAncestor": true,
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+      "refs/remotes/origin/research/issue-421-post-810264c-private-causal-coverage-evidence": "b7b509939ff0bd8f75ba2218309e09cb94808878",
+      "refs/remotes/origin/research/issue-421-post-b7b5099-ward-spend-futility-evidence": "fb3deac5d3624142faad20c6d2c89eb2c392eda7"
+    },
+    "runnerSha256": "972eb73e903c7c0cd9b96fa1c3a97a7796e2163bab1e00b181e10d2be33aaa41",
+    "taskCapsuleSha256": "a29f6df6b3524aef13666b2c0d570a3f1d862204a80f6eb418c684b8a4fb6589"
+  },
+  "wallTimeSeconds": 6.490991458995268
+}

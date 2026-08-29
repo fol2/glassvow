@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5465170578,
+  "archiveParent": "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+  "immutableEvidencePreserved": [
+    "004679a83894f151e95aeed35d2ecaab60a9d3f5",
+    "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+    "b7b509939ff0bd8f75ba2218309e09cb94808878"
+  ],
+  "currentMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "engineIdentity": {
+    "compatibilityAuthority": "stable Godot >= 4.7.2",
+    "path": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "binarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "hostFingerprintCanonicalJsonWithLfSha256": "0be06e9f75ead434ac18f14b4b8eb8a126f8126ab4135dc9ca5cfbc11c26d8b6"
+  },
+  "preregistration": {
+    "protocolSha256": "9be852f9da9367418039e235d56de3dd55038b6cf981083568f2cbd53d86162e",
+    "runnerSha256": "972eb73e903c7c0cd9b96fa1c3a97a7796e2163bab1e00b181e10d2be33aaa41",
+    "taskCapsuleSha256": "a29f6df6b3524aef13666b2c0d570a3f1d862204a80f6eb418c684b8a4fb6589",
+    "directControlledObservationCap": 74,
+    "GodotProcessCap": 12,
+    "wallTimeSecondsCap": 120,
+    "freshDirectIdentities": 18,
+    "protectedSeedRangeHits": 0,
+    "predecessorProtocolIdentityHits": 0,
+    "appendOnlyLedgerIdentityHits": 0
+  },
+  "result": {
+    "outcomeClass": "futility",
+    "decision": "close-ward-spend-v2-representation-at-source-direct-gate",
+    "summarySha256": "5486166f9cbeaaac913b54b706be986b1ccb43739d3b41e242f1804f42ececdc",
+    "sourceGateFaults": [
+      "candidate GDScript mechanical parse preflight"
+    ],
+    "GodotProcesses": 3,
+    "directControlledObservations": 0,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "quarantinedObservationsUsedForDecision": 0,
+    "wallTimeSeconds": 6.490991458995268
+  },
+  "rootCause": {
+    "classification": "fresh-worktree engine-cache precondition omitted from the frozen mechanical gate",
+    "evidence": "The v2 detached worktree had no .godot/global_script_class_cache.cfg. The parse transcript consequently reports current-main class_name types such as ContentDB, RunState and GlassvowGame as undeclared, followed by derived unsafe-call warnings. The predecessor v1 worktree has the generated class cache. No direct probe process or decision observation ran.",
+    "notEstablished": [
+      "a Ward mediator semantic fault",
+      "a preview or execution contradiction",
+      "zero natural activation",
+      "capacity insufficiency",
+      "causal futility",
+      "functional non-separation",
+      "complete Ward-family exhaustion"
+    ]
+  },
+  "frozenDisposition": {
+    "representation": "The exact v2 representation is closed by its preregistered parse-fault rule; its summary is not overwritten and its protocol, source and identities are not changed.",
+    "noAutomaticRetry": "The same protocol is not rerun after generating an engine cache, and no v2b protocol is created without an owner authority delta.",
+    "authorityBoundary": "Owner comment 5465170578 authorised one separately versioned continuation. A further environment-corrected attempt would cross both that one-continuation boundary and the v2 no-rerun rule.",
+    "recommendation": "Authorise one separately versioned pre-row environment correction which generates the Godot cache before freezing and then keeps the same family semantics, current-main inputs and fresh-identity construction; or explicitly treat this representation closure as the terminal Ward-family disposition and select the next finite evidence-backed direction inside #421."
+  },
+  "ledger": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "verification": {
+    "jsonSyntax": "pass",
+    "pythonSyntax": "pass",
+    "diffCheck": "pass",
+    "anchorCheck": "pass",
+    "sha256Sums": "pass",
+    "prototypePatchInflatedSha256": "27c753fbdebbf787be9a280e24529d1701218f048f4408f4f4a2b14f5c2f5291",
+    "benchmarkFreeze": "The archive parent and candidate each report the same 30 historical archive-copy citations; this continuation adds zero. The archive-only branch is not mergeable product truth."
+  },
+  "artefacts": {
+    "protocols/post-fb3deac5-ward-spend-identity-v2.json": "9be852f9da9367418039e235d56de3dd55038b6cf981083568f2cbd53d86162e",
+    "tools/post_fb3deac5_ward_spend_identity_v2.py": "972eb73e903c7c0cd9b96fa1c3a97a7796e2163bab1e00b181e10d2be33aaa41",
+    "task-capsule-5465170578-v25.json": "a29f6df6b3524aef13666b2c0d570a3f1d862204a80f6eb418c684b8a4fb6589",
+    "summaries/post-fb3deac5-ward-spend-primary-sources-v2.md": "40d1a1be16d12087c34921ced282bf94a180a6d59c99b74bb102f0c8249e6809",
+    "summaries/post-fb3deac5-ward-spend-identity-v2.json": "5486166f9cbeaaac913b54b706be986b1ccb43739d3b41e242f1804f42ececdc",
+    "prototype-ward-spend-finisher-v2/ward-spend-finisher-v2.patch.gz": "3e8ea7ff5a27fff1ba6f42ea7d1cdafcaec4d958b651433ce239f12a726163b0",
+    "prototype-ward-spend-finisher-v2/tools/research_421_ward_spend_probe_v2.gd": "f949f3085c334d910c100363300774024a3f9b03fa3fb99ad9df9030b60d037b"
+  },
+  "prohibitedClaimsAndActions": [
+    "use of the quarantined 82 observations",
+    "Ward-family causal or capacity conclusion",
+    "product truth or shipping-candidate selection",
+    "protected acceptance or reserve evidence",
+    "research or product pull request",
+    "GitHub Actions run",
+    "replacement or successor issue",
+    "#421 acceptance or #108 P9 receipt"
+  ],
+  "claimBoundary": "This publication proves only the exact engine identity, a frozen zero-decision-row v2 mechanical-preflight disposition, its missing generated class-cache root cause, and unchanged ledger/protected/quarantine state."
+}
