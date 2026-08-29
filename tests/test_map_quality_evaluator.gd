@@ -173,6 +173,18 @@ static func _test_selection_screen_feasibility(fails: Array[String],
 	var failing_cached: Dictionary = MapQualityEvaluator.selection_screen_feasibility(
 		nodes, [], failing_anchors, heroes, assets, quality, ["A", "B"], shared
 	)
+	var terminus: Dictionary = {
+		"terminus": _placement("hero", "hero", seat),
+	}
+	var terminus_context: Dictionary = MapQualityEvaluator.selection_screen_context(
+		nodes, [], terminus, assets, quality)
+	var terminus_overlap: Dictionary = MapQualityEvaluator.selection_screen_feasibility(
+		nodes, [], {"A": _a3(seat)}, terminus, assets, quality, ["A"],
+		terminus_context)
+	_ok(fails, terminus_overlap.get("hard_pass", true) == false
+			and _has(terminus_overlap, "node_hero_silhouette_overlap_area_px2",
+				"A", "hero_placements:terminus"),
+		"cached screen preflight reports a close terminus with its world evidence")
 	var failing_direct: Dictionary = _case(
 		nodes, failing_anchors, [], {}, quality, assets
 	)

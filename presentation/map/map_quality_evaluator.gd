@@ -141,6 +141,7 @@ static func selection_screen_context(nodes: Array, edges: Array,
 		"camera": camera,
 		"hard": _index(quality["hard"]),
 		"epsilon": _f(quality["epsilon"]["screen_px"]),
+		"obstacles": obstacles,
 		"projected_obstacles": projected,
 	}
 
@@ -429,7 +430,8 @@ static func _cached_candidate_profiles(node: Dictionary, anchor: Variant,
 	for profile_v: Variant in context["camera"]["profiles"]:
 		var profile: Dictionary = profile_v
 		var profile_id: String = str(profile["id"])
-		var checked: Dictionary = _selection_screen(profile, [node], anchors, {},
+		var checked: Dictionary = _selection_screen(profile, [node], anchors,
+			context["obstacles"],
 			quality, hard, epsilon, context["projected_obstacles"][profile_id])
 		profiles[profile_id] = {
 			"values": checked["values"],

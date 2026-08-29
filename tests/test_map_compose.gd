@@ -3,18 +3,186 @@ extends RefCounted
 ## owns world input. Seed-717 projection↔hit-test agreement stays in test_map_pins.
 
 
+class FakeLayoutCompiler:
+	extends RefCounted
+	var calls: int = 0
+	var input_digests: Array[String] = []
+	var fail_next: bool = false
+
+	func compile(input: MapLayoutInput, _quality: Dictionary,
+			_assets: Dictionary) -> Dictionary:
+		calls += 1
+		input_digests.append(input.digest())
+		if fail_next:
+			fail_next = false
+			return {
+				"status": MapLayoutCompiler.NO_FEASIBLE_NODE_ROUTE_LAYOUT,
+				"result": null,
+				"diagnostics": {"input_digest": input.digest()},
+				"failure": {
+					"kind": "test", "id": "invalid", "reason": "forced failure",
+				},
+			}
+		var source: Dictionary = input.to_dict()
+		var anchors: Dictionary = {}
+		for node: Dictionary in input.node_records():
+			var anchor: Vector3 = MapPinProjection.lattice_point(
+				MapLayoutCanonical.int_value(node["row"]),
+				MapLayoutCanonical.int_value(node["col"]))
+			anchor.y = float(MapLayoutCanonical.int_value(node["row"]) % 3)
+			anchor.z += 2.75
+			anchors[str(node["id"])] = _a3(anchor)
+		var edges: Dictionary = {}
+		for edge: Dictionary in input.edge_records():
+			var from: Vector3 = _v3(anchors[str(edge["from"])])
+			var to: Vector3 = _v3(anchors[str(edge["to"])])
+			var bend: Vector3 = from.lerp(to, 0.5) + Vector3(0.0, 0.5, 1.0)
+			edges[str(edge["id"])] = {
+				"from": edge["from"], "to": edge["to"],
+				"centerline": [_a3(from), _a3(bend), _a3(to)],
+				"corridor_width": 2.5,
+			}
+		var heroes: Dictionary = {}
+		var contract: Dictionary = source["hero_anchor_contract"]
+		var contract_anchors: Dictionary = contract["anchors"]
+		for id: String in MapLayoutCanonical.sorted_keys(contract_anchors):
+			var anchor: Dictionary = contract_anchors[id]
+			heroes[id] = {
+				"asset_id": anchor["asset_id"], "profile_id": anchor["profile_id"],
+				"transform": {
+					"origin": anchor["position"],
+					"yaw_radians": anchor["yaw_radians"], "scale": anchor["scale"],
+				},
+			}
+		var result: MapLayoutResult = MapLayoutResult.create({
+			"schema_version": MapLayoutResult.SCHEMA_VERSION,
+			"generator_version": MapLayoutCompiler.VERSION,
+			"node_anchors": MapLayoutCanonical.ordered_dictionary(anchors),
+			"edges": MapLayoutCanonical.ordered_dictionary(edges),
+			"hero_placements": MapLayoutCanonical.ordered_dictionary(heroes),
+			"scenery_instances": {}, "hard_measurements": {}, "soft_scores": {},
+			"selected_restart_id": 0, "selected_candidate_id": "test/live-binding",
+			"input_digest": input.digest(),
+		})
+		return {
+			"status": MapLayoutCompiler.COMPILED, "result": result,
+			"diagnostics": {"input_digest": input.digest()},
+			"report": {"hard_pass": true},
+		}
+
+	func _a3(value: Vector3) -> Array[float]:
+		return [value.x, value.y, value.z]
+
+	func _v3(value: Variant) -> Vector3:
+		var row: Array = value
+		return Vector3(MapLayoutCanonical.float_value(row[0]),
+			MapLayoutCanonical.float_value(row[1]),
+			MapLayoutCanonical.float_value(row[2]))
+
+
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
 	if not ok:
 		fails.append("test_map_compose: %s" % what)
 
 
 static func run(fails: Array[String]) -> void:
+	_compiled_result_binding(fails)
 	_five_shapes(fails)
 	_surface_rects(fails)
 	_act_and_live(fails)
 	_seats(fails)
 	_pin_select(fails)
 	_projection_cache(fails)
+
+
+static func _compiled_result_binding(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var run: RunState = RunState.new_run(content, 717, "run-map-live-layout")
+	var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.benchmark(run), content)
+	if not screen.has_method(&"layout_result"):
+		_check(fails, false, "WorldMapScreen exposes the final compiled result")
+		screen.free()
+		return
+	var compiler: FakeLayoutCompiler = FakeLayoutCompiler.new()
+	screen.set("_layout_compile", Callable(compiler, "compile"))
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	tree.root.add_child(screen)
+	_mount(screen, StageShape.IDENTITY)
+	screen.refresh(run)
+	var result_v: Variant = screen.call(&"layout_result")
+	var result: MapLayoutResult = result_v if result_v is MapLayoutResult else null
+	_check(fails, compiler.calls == 1 and result != null,
+		"refresh compiles and binds exactly one final live result")
+	if result == null:
+		tree.root.remove_child(screen)
+		screen.free()
+		return
+	var anchors: PackedVector3Array = PackedVector3Array()
+	var data: Dictionary = result.to_dict()
+	_check(fails, screen.layout_digest() == screen._map_scene.layout_digest()
+			and screen.layout_input_digest() == screen._map_scene.layout_input_digest(),
+		"screen and renderer expose the same input and layout digests")
+	for node: MapNode in screen.map.nodes:
+		anchors.append(compiler._v3(data["node_anchors"][node.id]))
+	var seats: PackedVector2Array = screen.projected_seats()
+	var direct: PackedVector2Array = screen._map_scene.project_anchors(anchors)
+	var legacy: PackedVector2Array = screen._map_scene.project_pins(screen.map.nodes)
+	_check(fails, seats == direct and not seats.is_empty()
+			and not seats[0].is_equal_approx(legacy[0]),
+		"waystones project the compiled anchors rather than the legacy lattice")
+	var reachable: Array[int] = screen.map.reachable()
+	for i: int in reachable:
+		_check(fails, screen.pick_node_at(seats[i]) == i,
+			"compiled anchor %d agrees with its hit test" % i)
+	if not reachable.is_empty():
+		var i: int = reachable[0]
+		var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
+			"res://docs/map/map-quality-v2.json"))
+		var bound: Dictionary = MapLayoutInputBinding.bind(screen.map, run.act)
+		var bound_nodes: Array = bound["nodes"]
+		var bound_edges: Array = bound["edges"]
+		var envelopes: Dictionary = MapQualityEvaluator.node_candidate_bounds(
+			bound_nodes, bound_edges, quality)
+		var expected: Vector2 = screen._map_scene.get_rig().pose_leading(
+			anchors[i], Vector2(StageShape.REFERENCES[StageShape.IDENTITY]),
+			MapQualityEvaluator.focused_touch_inset_px(quality),
+			MapQualityEvaluator.focused_anchor_envelope(
+				screen.map.nodes[i].id, envelopes))
+		_check(fails, screen._focus_xz(i).is_equal_approx(expected),
+			"focus uses the same compiled anchor as projection and hit testing")
+	var first_digest: String = result.digest()
+	screen.map.at = 0
+	screen.map.cleared[0] = true
+	screen.refresh(run)
+	screen.set_shape(&"phone-landscape")
+	var reused_v: Variant = screen.call(&"layout_result")
+	var reused: MapLayoutResult = reused_v if reused_v is MapLayoutResult else null
+	_check(fails, compiler.calls == 1
+			and reused != null and reused.digest() == first_digest,
+		"semantic and stage-shape changes reuse the same layout")
+	run.seed += 1
+	screen.refresh(run)
+	var after_seed: int = compiler.calls
+	screen.map.nodes[0].jx += 0.01
+	screen.refresh(run)
+	var after_graph: int = compiler.calls
+	run.act = 1
+	screen.refresh(run)
+	var after_act: int = compiler.calls
+	screen.set_act_scenery(2)
+	_check(fails, after_seed == 2 and after_graph == 3 and after_act == 4
+			and compiler.calls == 5,
+		"seed, graph, act and active-profile changes each regenerate once")
+	compiler.fail_next = true
+	run.seed += 1
+	screen.call(&"_bind_compiled_layout")
+	_check(fails, screen.layout_result() == null
+			and not screen.layout_failure().is_empty()
+			and screen._map_scene.road_segments().is_empty()
+			and screen.projected_seats().is_empty(),
+		"an invalid compile fails explicitly without legacy pin or road fallback")
+	tree.root.remove_child(screen)
+	screen.free()
 
 
 static func _five_shapes(fails: Array[String]) -> void:
