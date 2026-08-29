@@ -24,6 +24,30 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### Post-target fight-sequence capacity closures
+
+Four separately preregistered zero-new-row audits read the same complete 256-row
+identity-proved target/death trace once each. The direct-kill relay closed with
+22 active, ten exact-inactive and four viable policies. Its exact 107-row
+attribution control then reproduced inside a complete immediate-consumer
+topology census; Skill was nearest to the frozen boundary at 24 active, 17
+exact-inactive and seven viable policies, while Power and all-enemy Attack were
+smaller. No topology class passed.
+
+Two materially different card-instance families also closed. Immediate
+draw-thread retained 37 active and nine viable policies but only 11
+exact-inactive policies and insufficient Afterimage separation. Same-ID,
+different-CardInst duplicate-copy echo retained 37 active and 12 viable policies
+but only nine exact-inactive policies and insufficient separation from both
+Scoreline and Afterimage. Their broad support cannot be rescued by a posterior
+card subset, longer hold, adjacency split, payoff, cohort or policy retune.
+
+All four audits added zero simulator rows, zero ledger rows and zero protected-
+seed rows; all semantic-fault counts were zero. The ledger remains 482,036
+records at SHA-256
+`97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213`.
+See `publication-manifest-post-target-capacity-v1.json`.
+
 ### Scoreline commitment identity success and component-causal closure
 
 The separately authorised existing-representation commitment passed its

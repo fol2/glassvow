@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Within the 232 discovery-stage forced-death changes, does a direct attribution predicate identify a reliable, viable, selective and functionally separated Dusk kill relay in which a single-target Attack kills its selected target before any later PLAY and the next PLAY is a single-target Attack against another living enemy that survives its unchanged effect in the same turn?",
+  "hypothesis": "Most target-index changes were caused by death rather than deliberate retargeting. Requiring selected-target death before any later PLAY, an immediately following single-target Attack and survival of the consumer target isolates a materially different kill-produced sequencing unit that may have broader policy support than target transfer without reconstructing the acquisition-bound Reaper Bell family.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/heads/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/remotes/origin/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/heads/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+      "refs/remotes/origin/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v11.json",
+    "taskCapsuleSha256": "b96be743339bd219e4d564e7bd5ec8c96257fd9f0dd6d58c98605a2b13419885",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+      "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+      "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+      "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "observationSourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourcePatchSha256": "529930aa7e0ea74749467919928f4ea5d0b07fd7edc52408514d4e0e94d6bdbb",
+    "observationSourceSha256": {
+      "tools/balance_sim.gd": "28c05711875c5460da90d55b4bfe91788143456bba99ee1a2b96fbd9b3280654",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2"
+    },
+    "researchFileSha256": {
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_competing_structural_options.py": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+      "post_v38_cohand_opportunity_decomposition.py": "371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c",
+      "protocols/post-v38-target-switch-trace-identity-v1.json": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+      "summaries/post-v38-target-switch-trace-identity-v1.json": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+      "protocols/post-v38-target-switch-capacity-v1.json": "97997ab6184f8391453430879cbb0f307b196c1e1488b0e66b7d99811f295913",
+      "summaries/post-v38-target-switch-capacity-v1.json": "309f9266aca4a85840425c1bf036b99bf15e54923a02b003171060ec46a3b3e7",
+      "protocols/post-v38-reapers-bell-capacity-v1.json": "fc17c6eac833bb9a2951145f276928ea44c275a2d1ad50be8ebd0fbfdef4487d",
+      "summaries/post-v38-reapers-bell-capacity-v1.json": "0c8ed919c183c0a8255bbec2c1c24d0c78818d39005d5d0b07224d69dfe3ff05"
+    },
+    "runnerSha256": "7735a4d0b572c9867825f0f15bfe8b052d5e32fef9c8fb3e783fa428bd0b3392"
+  },
+  "closedFamilyExclusions": {
+    "targetTransfer": "The closed target-transfer producer requires the first target to remain alive. This relay requires that exact target to die before any later PLAY; the event units are disjoint and no survivor, third-card, adjacency or target-direction rescue is permitted.",
+    "reaperBell": "The closed Reaper Bell family requires natural relic acquisition and pays immediate Energy plus draw on any non-final death. This relay has no reward acquisition, requires an attributable single-target kill and a next single-target Attack consumer, and proposes one fixed damage operation. Reaper ownership is an immutable one-sided overlap anchor only.",
+    "scorelineAndAfterimage": "Scoreline and Afterimage remain separate closed factors. Exact card IDs are breadth witnesses only and neither payoff is pooled with this endpoint.",
+    "shatterFacetAndStatus": "No CHIP, SHATTER, Facet, Cracked, Dimmed, Weak, Smolder or other status enters the producer, mediator, consumer or payoff.",
+    "otherClosedFamilies": "Do not reconstruct Kindle, Ward, Ember-reserve, cadence, focused-to-sweep, action-economy, one-bit setup, heavy relay, same-instance repeat, acquisition scalar, private-debt or historical scalar paths.",
+    "method": "No ML, RL, optimiser, policy remap, grammar expansion or adaptive candidate tuning is permitted."
+  },
+  "mechanismContract": {
+    "researchIdentity": "dusk-kill-relay-damage-two; a research identity, not shipping copy.",
+    "producer": "The first authored type=attack,target=enemy PLAY in an eligible player turn is followed by DIE for its exact selected target before any later PLAY, while at least one other enemy remains alive.",
+    "mediatorState": "One player-combat turn-local kill-relay Boolean plus one paid Boolean; no RunState or save field.",
+    "consumer": "The next PLAY in the same player turn is the second authored type=attack,target=enemy PLAY, selects a different living enemy, and that target survives the unchanged authored consumer effect.",
+    "payoffOperation": "After the valid consumer resolves and its selected target remains alive, deal exactly one separate deterministic direct-damage operation of two to that target, at most once in the player turn.",
+    "payoffDamage": 2,
+    "payoffValueProvenance": "Two is the smallest positive authored Attack damage quantum in exact current-main content. It is fixed once, not a scalar search level.",
+    "lifecycle": "Set only on the attributable selected-target death. Any intervening PLAY, player-turn end, combat end or already-paid state clears or prevents the relay. The qualifying next PLAY consumes it whether or not its target survives; damage occurs only when that target remains alive.",
+    "naturalCost": "Enter a multi-enemy fight, draw and pay for two existing single-target Attacks in one turn, kill the first selected target, immediately play the second against another living enemy, and leave that consumer target alive after its authored effect.",
+    "acquisition": "None. Existing current-main reward pools, rarities, cards, relics, deck and save representation remain unchanged.",
+    "duskBoundary": "The existing Emberheart is the proposed Dusk gate. Ashwarden and mechanism-off are exact current-main paths; Emberheart authored post-combat healing is unchanged.",
+    "factorIsolation": "Scoreline and Afterimage are separate factors fixed off. Natural Reaper Bell ownership remains unmodified baseline interference. The relay reads only exact PLAY target/card scope, exact selected-target DIE, player-turn order, living target and Emberheart identity.",
+    "rngAndPersistence": "No RNG call or cursor movement, no new run-persistent field, internal ID, save version, content entry, reward entry or acquisition UI.",
+    "telemetry": "Direct research-only producer PLAY, selected-target DIE, mediator set/clear, intervening-play expiry, consumer PLAY, consumer-survival check, consume, payoff and turn expiry with exact card, event and target indices plus requested and realised damage."
+  },
+  "frozenCausalFactors": {
+    "killRelayPayoff": {
+      "definition": "Dusk-only direct-kill relay and fixed two-damage payoff defined by the complete mechanism contract.",
+      "levels": {
+        "off": 0,
+        "direct-kill-next-attack-damage-two": 1
+      },
+      "status": "Fixed off here. The enabled level does not exist and may be implemented only after attribution success in a separate exact-null and direct-mediator identity stage."
+    },
+    "scorelinePayoff": {
+      "levels": ["off"],
+      "definition": "Separate closed causal factor fixed absent and never pooled with the kill-relay endpoint."
+    },
+    "afterimagePayoff": {
+      "levels": ["off"],
+      "definition": "Separate closed causal factor fixed absent and never pooled with the kill-relay endpoint."
+    },
+    "reaperBellPath": {
+      "levels": ["current-main-natural"],
+      "definition": "Existing reward, ownership and immediate death payoff remain frozen current-main interference; not varied or estimated."
+    },
+    "acquisitionPriority": {
+      "levels": ["current-main"],
+      "definition": "Frozen exact reward policy; not varied or estimated."
+    },
+    "futureFactorCount": 1,
+    "variedCausalFactorCount": 0,
+    "independence": "All causal factors are fixed off. This is not the old four-factor design and contains no causal or joint package cell."
+  },
+  "designMatrix": {
+    "identity-proved-current-main-target-death-trace": {
+      "killRelayPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "reaperBellPath": "current-main-natural",
+      "acquisitionPriority": "current-main",
+      "rows": 256,
+      "status": "Immutable cached discovery observation arm only; deterministic attribution adds no simulator row."
+    }
+  },
+  "design": {
+    "type": "zero-new-row complete-cohort causal-attribution, capacity and closed-family alias audit; not a factorial and not a causal experiment",
+    "construction": "Reuse the exact first-two-single-target-Attack turn unit. A broad forced-death pair exists when the first selected target dies before the second PLAY. It becomes attributable only when no PLAY intervenes and the second single-target Attack is the next PLAY. It becomes payoff-eligible only when the second selected target survives its unchanged resolution interval.",
+    "resolutionInterval": "Consumer survival is no DIE for its selected target strictly after the consumer PLAY and before the next PLAY in that turn, or through turn end when no later PLAY exists.",
+    "mechanisticallyJustifiedInteractions": [
+      "First single-target PLAY by selected-target DIE before any later PLAY establishes the producer at action-resolution granularity.",
+      "Producer death by next single-target PLAY by consumer-target survival defines the complete relay opportunity; none alone is sufficient.",
+      "Dusk/Emberheart identity by kill-relay payoff is the sole future causal interaction and is not estimated here."
+    ],
+    "aliasStructure": "The 232 broad forced-death turns are frozen discovery context, not candidate success. Intervening PLAYs break causal attribution. Consumer-target death rejects a post-resolution damage opportunity. Target transfer is disjoint because it requires producer-target survival. Reaper Bell is a one-sided overlap anchor because its acquisition-bound immediate Energy/draw path can only select a subset unrelated to this no-acquisition next-card consumer. Exact card IDs and target transitions are breadth witnesses, not candidate levels.",
+    "interference": "Scoreline and Afterimage remain separate and fixed off and are two-sided repertoire anchors. Natural Reaper Bell remains unchanged current-main interference and is a one-sided anchor. No joint package cell has decision value before exact identity and fresh-cohort comparable CRN evidence establish an independently admitted kill relay.",
+    "selectionBiasBoundary": "The same 256 rows exposed the broad forced-death signal, so this is discovery-stage prototype eligibility only. No later efficacy, complementarity or package claim may treat it as held-out; fresh unprotected discovery and independently held-out policy-seed identities must be frozen after mechanical identity.",
+    "omittedCells": "No survivor variant, third-PLAY rescue, non-adjacent relay, exact-card subset, target direction, payoff value, acquisition, rarity, policy knob, Reaper modification, Ash intervention, RandomBuild, simulator, held-out, joint-package, ML, RL, optimiser or protected-seed cell is authorised."
+  },
+  "trace": {
+    "planSha256": "5e8e1e43af03508c3ec0ec5229003735333c81203d84a90cde47def48b18c90d",
+    "outputSha256": "3ccc833689b6cc93f62e2f6393934394392c180cfeb7538048eea97f1583719c",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identitySummarySha256": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+    "selectionRule": "Read all 256 rows of the sole identity-proved target/death output. No row, policy, seed, fight, turn, pair or endpoint is selected after execution."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "Every policy and seed from the complete frozen current-main rectangle is read exactly once; each policy has one exact frozen snapshot across its four seeds."
+  },
+  "anchors": {
+    "forcedDeathDiscovery": {
+      "definition": "First two single-target Attacks select different indices and the first target dies strictly between their PLAY events, irrespective of an intervening other PLAY or consumer survival.",
+      "turns": 232,
+      "status": "Frozen discovery count from the closed target-transfer audit; exact reconstruction consistency only."
+    },
+    "scoreline": {
+      "definition": "Robust Chisel before later Executioner opportunity in at least two of four frozen rows.",
+      "policies": [0, 7, 9, 10, 13, 14, 15, 17, 22, 23, 28, 31, 39, 41, 52, 56, 62, 63],
+      "status": "Immutable two-sided overlap anchor only; Scoreline remains closed and fixed off."
+    },
+    "afterimage": {
+      "definition": "Robust simultaneous Ward and Warden Edge co-hand opportunity in at least two of four frozen rows.",
+      "policies": [0, 5, 11, 12, 14, 18, 24, 25, 27, 30, 33, 35, 41, 43, 44, 55, 62],
+      "status": "Immutable conservative two-sided overlap anchor only; Afterimage remains closed and fixed off."
+    },
+    "reaperBell": {
+      "summaryPath": "summaries/post-v38-reapers-bell-capacity-v1.json",
+      "summarySha256": "0c8ed919c183c0a8255bbec2c1c24d0c78818d39005d5d0b07224d69dfe3ff05",
+      "decision": "close-reapers-bell-death-chain-family",
+      "policies": [6, 9, 19, 29, 30, 35, 42, 51, 55],
+      "status": "Immutable one-sided acquisition-bound death-family alias anchor only."
+    },
+    "targetTransfer": {
+      "summaryPath": "summaries/post-v38-target-switch-capacity-v1.json",
+      "summarySha256": "309f9266aca4a85840425c1bf036b99bf15e54923a02b003171060ec46a3b3e7",
+      "decision": "close-target-transfer-at-zero-row-capacity",
+      "policies": [10, 23, 35, 39],
+      "status": "Immutable one-sided surviving-target alias anchor only."
+    }
+  },
+  "estimands": {
+    "unit": "Policy identity over its complete four-seed rectangle.",
+    "active": "At least one payoff-eligible direct-kill relay in at least two of four rows.",
+    "inactive": "No payoff-eligible direct-kill relay in any of four rows.",
+    "viable": "An active policy with at least one payoff-eligible row that wins.",
+    "broadForcedDeath": "The frozen permissive first-target-death context before attribution.",
+    "attributableDirectKill": "No intervening PLAY and the second single-target Attack is the next PLAY, regardless of consumer survival.",
+    "payoffEligible": "Attributable direct kill plus survival of the second selected target through its unchanged resolution interval.",
+    "breadth": "Distinct exact producer cards, consumer cards, ordered card pairs and ordered target-index transitions over payoff-eligible turns.",
+    "separation": "Two-sided policy-set separation from Scoreline and Afterimage, plus one-sided candidate-only and Jaccard separation from the acquisition-bound Reaper Bell and surviving-target target-transfer anchors.",
+    "reliability": "Pre-existing stall/error rows and impossible dead-target reuse in the immutable trace; no added-fault estimand exists because no simulator runs.",
+    "notEstimated": "Mechanical identity, realised two-damage payoff, causal complementarity, duration effect, Ash isolation, RandomBuild/global-power movement, fresh-cohort reproducibility, held-out confirmation, package admission, detector score, product balance or protected confirmation."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumDistinctFirstCards": 4,
+    "minimumDistinctSecondCards": 4,
+    "minimumDistinctCardPairs": 8,
+    "minimumDistinctTargetTransitions": 2,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumReaperBellJaccard": 0.55,
+    "maximumTargetTransferJaccard": 0.30,
+    "maximumBaselineFaultRows": 1,
+    "maximumSemanticFaultPairs": 0,
+    "provenance": "The 16-policy active/inactive, eight-policy viability and package-separation floors, 0.55 overlap ceiling and one immutable baseline-fault ceiling reuse the frozen 64-policy structural-capacity scale. Four cards per position, eight ordered pairs and two target transitions reject named-card or fixed-index aliases. Reaper Bell uses the same 0.55 one-sided ceiling because acquisition can only narrow its closed owner set. The four-policy target-transfer anchor uses a stricter 0.30 one-sided ceiling to require the death-produced route to add at least eight policy identities beyond the surviving-target route."
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1,
+    "firstLooks": 1
+  },
+  "claimBoundary": "Discovery-stage causal attribution, natural policy capacity and closed-family alias separation only; no gameplay implementation, realised payoff, causal, fresh-cohort, held-out, package-admission, detector, product or P9 claim.",
+  "decisionRules": {
+    "success": "Every immutable, source, trace, policy-identity, attribution, active, inactive, viability, exact-card breadth, target-transition breadth, Scoreline, Afterimage, Reaper Bell and target-transfer separation, semantic-validity, reliability, budget and zero-ledger check passes at the sole complete look.",
+    "successAuthority": "Apply boundary 1: freeze only the exact dusk-kill-relay-damage-two contract for a separately preregistered exact-null and direct-mediator identity prototype. Add no causal row before omitted/off path, RNG, result and policy identity plus direct producer, intervening-play expiry, consumer-death rejection, valid consumer, once-per-turn, Ash and scope-isolation controls pass. After identity, freeze fresh unprotected discovery and independent held-out cohorts before any efficacy claim.",
+    "futility": "Any declared attribution, active, inactive, viability, breadth, transition, separation, semantic-validity or reliability gate fails on the complete immutable trace.",
+    "futilityAuthority": "Apply boundary 2: close the exact direct-kill-to-next-single-target-Attack damage-two family without survivor, third-card, non-adjacent, card-subset, target-direction, payoff, carrier, acquisition, cohort, policy or method rescue and continue with the next evidence-backed minimal structural mechanism inside #421.",
+    "inconclusive": "An immutable input, source, trace, schema, policy identity, ledger or wall-time check prevents the complete deterministic decision.",
+    "inconclusiveAuthority": "Apply boundary 3: record the exact missing relevant gate at the frozen cap; add no repair, rerun, replacement trace, simulator row, method or protected seed, then follow the current human-authority contract for an unavailable or inconclusive relevant gate."
+  },
+  "executionAndStopping": {
+    "order": [
+      "Verify live task, current-main instructions, repository/archive refs, closed-family evidence, source, task capsule, helpers, trace identity and ledger identities.",
+      "Reconstruct the same 232 broad forced-death turns, then apply the no-intervening-PLAY attribution and consumer-survival rules deterministically.",
+      "Apply support, inactivity, viability, breadth, transition and four closed-family separation gates once.",
+      "Verify the ledger is byte-identical and apply exactly one decision boundary."
+    ],
+    "firstLook": "The complete 256-row cached rectangle is the sole look. No predicate, attribution interval, payoff value, threshold, cohort, anchor or endpoint may change after execution begins.",
+    "stagedConstraint": "This stage can reject or justify one exact-null and direct-mediator identity prototype only. The broad signal was already observed and this same cohort cannot serve as held-out efficacy evidence.",
+    "futureCrnConstraint": "Any later causal contrast must use the same frozen policy identities, simulation seed identities, baseline, first-look budget, estimator and stopping rule at every compared level. Fresh discovery and held-out cohorts must be separately frozen before execution and promising cells may not receive different support.",
+    "knobIdentityConstraint": "Before any future mechanism row, omitted and explicit-off settings must reproduce exact path, RNG identity and result, and deterministic direct controls must prove the knob affects only the declared kill-relay mediator and fixed bounded damage payoff.",
+    "methodConstraint": "Deterministic code owns construction, caching, fitting and stop/go. No ML, RL or optimiser is authorised unless a later comparable experiment isolates a remaining policy-repertoire bottleneck and measures decision value for the added method.",
+    "stopping": "One zero-row complete-cohort look; exactly one of success, futility or inconclusive is recorded. No sequential peeking, survivor rescue, third-card rescue, non-adjacent variant, target split, subset selection, payoff change, threshold relaxation, cohort replacement or endpoint addition."
+  }
+}

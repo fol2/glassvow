@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does the complete frozen trace contain reliable, viable, broad and functionally separated natural capacity for a same-turn duplicate-copy sequence in which two different CardInst uid values of one non-starter reward card ID are drawn and then both played?",
+  "hypothesis": "Same-ID, different-instance use is a directly observable duplicate-copy deckbuilding relation that can support a turn-local Dusk echo without reopening same-instance Honing replay, type cadence, named-card handshakes, draw-thread, target/death or acquisition-scalar families.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/heads/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/remotes/origin/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/heads/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+      "refs/remotes/origin/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v14.json",
+    "taskCapsuleSha256": "b6a5fa5a20d12ae76fed4253fc86e588e1b6d256ed9c945cc3a4254232813c49",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+      "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+      "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+      "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "observationSourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourcePatchSha256": "529930aa7e0ea74749467919928f4ea5d0b07fd7edc52408514d4e0e94d6bdbb",
+    "observationSourceSha256": {
+      "tools/balance_sim.gd": "28c05711875c5460da90d55b4bfe91788143456bba99ee1a2b96fbd9b3280654",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2"
+    },
+    "researchFileSha256": {
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_competing_structural_options.py": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+      "post_v38_cohand_opportunity_decomposition.py": "371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c",
+      "protocols/post-v38-target-switch-trace-identity-v1.json": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+      "summaries/post-v38-target-switch-trace-identity-v1.json": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+      "protocols/post-v38-honing-repeat-capacity-v1.json": "de389e1b27684ae5894333a90656e02e93f5b94781a5aa01ad577e13cb5bce71",
+      "summaries/post-v38-honing-repeat-capacity-v1.json": "090cf43a35e7cedf850e4f52f3adec5019423f92bc040c0453c43d6a591882c4",
+      "protocols/post-v38-dusk-cadence-capacity-v1.json": "cd0b14b0a5a8a5e0389cbf52aa6d0fd31380a8500b84b991b6186677dc961ddc",
+      "summaries/post-v38-dusk-cadence-capacity-v1.json": "563ea29e964d5f5ff2b6e42bc789cc938a362467359e429c4707765622c93cf2",
+      "protocols/post-v38-draw-thread-capacity-v1.json": "51907e74cbfffce551865672ee67758c0a39b2f6688732838ee4ffb38b2213c7",
+      "summaries/post-v38-draw-thread-capacity-v1.json": "33b3f0a10ee1151e526820f220af2068999bc56c33090bb67afaba1fbcaff3e9",
+      "protocols/post-v38-kill-consumer-topology-v1.json": "a5d0f447678f991fac3c55fb8e42fd55d8d62b28e4c4a9c74320bcf355f77eae",
+      "summaries/post-v38-kill-consumer-topology-v1.json": "49b3bf3f776480327558d0bbaa8d7c8568747de918954f0666d6b386a6888711"
+    },
+    "runnerSha256": "b2ec34e98be40b1e7205f104588569e33f810022135a96a8da83f8d39f0b3eb5"
+  },
+  "closedFamilyExclusions": {
+    "honing": "The closed Honing relation replays the same CardInst uid in one combat. Duplicate-copy requires the same card ID on two different uid values in one turn; the event units are disjoint.",
+    "cadence": "No Attack/Skill alternation, play-count threshold or card-type direction defines activation.",
+    "drawThread": "The closed draw-thread requires a producer draw effect and immediate use of a newly drawn uid. Duplicate-copy allows intervening plays, has no draw-effect producer and requires two copies of the same ID.",
+    "namedCards": "Scoreline and Afterimage exact-card handshakes remain closed; no individual repeated card is a level or subset.",
+    "targetAndDeath": "No target relation, target death, kill or post-kill consumer enters the mechanism.",
+    "otherClosedFamilies": "Do not reconstruct Ward, Kindle, Shatter, Cracked, Ember-reserve damage, action economy, heavy relay, acquisition scalar, private debt or historical scalar paths.",
+    "method": "No ML, RL, optimiser, policy remap, card subset or adaptive tuning is permitted."
+  },
+  "mechanismContract": {
+    "researchIdentity": "dusk-duplicate-copy-echo-ember-one",
+    "producer": "The first PLAY this player turn of any non-starter card ID in the complete natural reward catalogue records that exact ID and CardInst uid in the turn-local seen map.",
+    "mediatorState": "A player-turn-local map from seen natural reward card ID to its first played CardInst uid; it does not stack by ID and is cleared at turn or combat end.",
+    "consumer": "The first later PLAY in the same player turn whose natural reward card ID is already present with a different CardInst uid.",
+    "payoffOperation": "After that consumer's unchanged authored effects, gain exactly one Ember and prevent further duplicate-copy payoff that turn.",
+    "lifecycle": "Every first played reward ID enters the seen map. Same-uid replay is inert. The first different-uid same-ID consumer pays once; turn or combat end clears all turn-local state.",
+    "naturalCost": "Naturally acquire at least two copies of one reward card, draw both distinct instances in one turn, pay for and play both.",
+    "duskBoundary": "Existing Emberheart is the proposed Dusk gate. Ashwarden and mechanism-off are exact current-main paths.",
+    "separateFactors": "Scoreline and Afterimage remain separate closed factors fixed off and are never pooled with this endpoint.",
+    "interference": "Existing authored effects, costs, rewards, card identities, draw order and policy remain unchanged. Scoreline and Afterimage are repertoire anchors only.",
+    "nullPath": "Omitted and explicit zero reproduce exact path, RNG, result, policy, seed and trace before any enabled row.",
+    "rngAndPersistence": "No RNG call or cursor movement, RunState field, content ID, reward entry, acquisition UI or save version.",
+    "telemetry": "Research-only first-copy record, same-uid rejection, different-uid consume, payoff, once-per-turn rejection and expiry with exact card ID and uid values."
+  },
+  "frozenCausalFactors": {
+    "duplicateCopyPayoff": {
+      "definition": "The complete duplicate-copy mechanism contract.",
+      "levels": {"off": 0, "same-id-different-uid-ember-one": 1},
+      "status": "Fixed off here; the enabled level may be implemented only after capacity success in a separate identity preflight."
+    },
+    "scorelinePayoff": {"levels": ["off"], "definition": "Separate closed factor fixed absent."},
+    "afterimagePayoff": {"levels": ["off"], "definition": "Separate closed factor fixed absent."},
+    "acquisitionPriority": {"levels": ["current-main"], "definition": "Frozen exact reward policy."},
+    "variedCausalFactorCount": 0,
+    "independence": "This zero-row capacity screen is not a factorial or causal contrast."
+  },
+  "designMatrix": {
+    "identity-proved-current-main-trace": {
+      "duplicateCopyPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "acquisitionPriority": "current-main",
+      "rows": 256,
+      "status": "Sole immutable cached observation arm; deterministic exact-ID/uid reconstruction adds no row."
+    }
+  },
+  "design": {
+    "type": "Zero-new-row complete-cohort capacity, exact-instance, timing-value and alias audit; not a factorial and not a causal experiment.",
+    "sourceConstruction": "The reward catalogue is frozen before outcomes: union of every base common, uncommon and rare reward ID plus every deed-unlocked card ID. Starter and special non-reward cards are excluded mechanically.",
+    "eventConstruction": "Within each player turn, a co-draw exposure requires at least two distinct DRAW uid values for one reward card ID. Activation requires two PLAY events for that ID with different uid values, both drawn in that turn. The earliest second-copy PLAY is the sole once-per-turn event.",
+    "mechanisticallyJustifiedInteraction": "Same reward card ID by different CardInst identity by same-turn use defines the duplicate-copy conversion; none alone qualifies.",
+    "aliasStructure": "Same uid replay is explicitly inert. Exact card IDs are breadth witnesses, never candidate levels. Both adjacent and intervening-play witnesses are required to justify the frozen turn-long seen-map lifecycle.",
+    "omittedCells": "No starter copy, exact-card subset, adjacency level, same-instance variant, payoff value, acquisition priority, policy knob, Ash cell, RandomBuild cell, simulator row, joint package, ML, RL, optimiser or protected seed."
+  },
+  "rewardCards": ["aegis", "agility", "annihilate", "ashenChoir", "bastion", "bloodRite", "brace", "bulwark", "catalyst", "cleave", "cripple", "deflect", "devour", "emberdance", "empower", "executioner", "flawlessForm", "flurry", "fortify", "frenzy", "guardedStrike", "heavyBlow", "ironSkin", "leechBlade", "limitBreak", "lunge", "momentum", "nightSight", "novaflare", "oblivionStrike", "offering", "phantomBlades", "preparation", "pyreheart", "quakeblow", "quickSlash", "regrowth", "resonantLance", "risingLitany", "shardstorm", "sidestep", "surge", "tempest", "tithe", "toxicMist", "twinFangs", "uppercut", "venomStrike", "virulence", "warCry"],
+  "trace": {
+    "planSha256": "5e8e1e43af03508c3ec0ec5229003735333c81203d84a90cde47def48b18c90d",
+    "outputSha256": "3ccc833689b6cc93f62e2f6393934394392c180cfeb7538048eea97f1583719c",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identityProtocolSha256": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+    "identitySummarySha256": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+    "selectionRule": "Read all 256 rows once. No row, policy, seed, turn, card, uid relation, lifecycle, threshold, anchor or endpoint changes after execution."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "Every policy and seed in the complete frozen current-main rectangle is read exactly once; each policy has one exact snapshot across four seeds."
+  },
+  "anchors": {
+    "scoreline": {
+      "policies": [0, 7, 9, 10, 13, 14, 15, 17, 22, 23, 28, 31, 39, 41, 52, 56, 62, 63],
+      "status": "Immutable two-sided repertoire anchor only."
+    },
+    "afterimage": {
+      "policies": [0, 5, 11, 12, 14, 18, 24, 25, 27, 30, 33, 35, 41, 43, 44, 55, 62],
+      "status": "Immutable two-sided repertoire anchor only."
+    }
+  },
+  "estimands": {
+    "unit": "Policy identity over its complete four-seed rectangle.",
+    "active": "At least one same-turn same-ID/different-uid duplicate-copy event in at least two of four rows.",
+    "inactive": "No qualifying event in any of four rows.",
+    "exposureActive": "At least one same-turn co-draw of two distinct uid values for a reward ID in at least two rows.",
+    "exposureOnly": "Exposure-active but not active, witnessing play choice rather than acquisition and draw alone.",
+    "viable": "An active policy with at least one qualifying row that wins.",
+    "breadth": "Distinct repeated card IDs, authored types, targets, rarities and adjacent/non-adjacent event counts.",
+    "separation": "Two-sided candidate-only, anchor-only and Jaccard separation from Scoreline and Afterimage.",
+    "notEstimated": "Mediator identity under intervention, realised Ember, causal effect, complementarity, duration, Ash isolation, fresh-cohort reproducibility, held-out confirmation, package admission, detector, product balance or P9."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumExposureActivePolicies": 16,
+    "minimumExposureOnlyPolicies": 8,
+    "minimumDistinctRepeatedCards": 6,
+    "minimumDistinctTypes": 2,
+    "minimumDistinctTargets": 2,
+    "minimumDistinctRarities": 2,
+    "minimumAdjacentTurns": 8,
+    "minimumNonAdjacentTurns": 8,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumBaselineFaultRows": 1,
+    "maximumSemanticFaults": 0,
+    "provenance": "The 16-policy active/inactive/exposure, eight-policy viability/exposure-only/separation and 0.55 overlap thresholds reuse the frozen 64-policy structural-capacity scale. Six repeated IDs plus two types, targets and rarities reject a named-card or one-class alias. Eight adjacent and eight non-adjacent events establish measured value for the single turn-long hold."
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1,
+    "firstLooks": 1
+  },
+  "claimBoundary": "Discovery-stage exact duplicate-copy attribution, natural policy capacity, hold-value and anchor separation only; no implementation, realised payoff, causal, fresh-cohort, held-out, package, detector, product or P9 claim.",
+  "decisionRules": {
+    "success": "Every immutable, source, trace, exact-id/uid, active, inactive, viability, exposure, breadth, timing-value, separation, semantic, reliability, budget and zero-ledger gate passes at the sole look.",
+    "successAuthority": "Apply boundary 1: freeze only dusk-duplicate-copy-echo-ember-one for a separate exact-null and direct-mediator identity prototype. Before a causal row, omitted/off path, RNG, result, policy and seed identity plus direct first-copy, same-uid rejection, different-uid consume, adjacent/non-adjacent, once-per-turn, expiry, Ash and scope-isolation controls pass. Then freeze fresh unprotected discovery and independent held-out cohorts.",
+    "futility": "Any declared support, viability, exposure, breadth, timing-value, separation, semantic or reliability gate fails on the complete immutable trace.",
+    "futilityAuthority": "Apply boundary 2: close the exact duplicate-copy echo family without starter, card subset, adjacency, same-instance, payoff, acquisition, cohort, policy or method rescue; continue with the next evidence-backed minimal structural mechanism inside #421.",
+    "inconclusive": "An immutable input, source, trace, schema, ledger or wall-time check prevents the complete deterministic decision.",
+    "inconclusiveAuthority": "Apply boundary 3: record the exact missing relevant gate at the cap; add no repair, rerun, trace extension, simulator row, method or protected seed, then follow the current human-authority contract."
+  },
+  "executionAndStopping": {
+    "order": [
+      "Verify task, authority, refs, source, helpers, trace identity, closed evidence and ledger.",
+      "Derive and match the complete reward catalogue, then reconstruct exact same-ID/different-uid co-draw and play events over every row.",
+      "Apply all frozen support, exposure, viability, breadth, hold-value, separation, semantic and reliability gates once.",
+      "Verify byte-identical ledger identity and apply exactly one decision boundary."
+    ],
+    "firstLook": "The complete 256-row cached rectangle is the sole look; no predicate, lifecycle, source set, card subset, threshold, anchor or endpoint changes after execution begins.",
+    "stagedConstraint": "Capacity success can justify only one exact identity prototype. This discovery cohort cannot serve as held-out efficacy evidence.",
+    "futureCrnConstraint": "Every later contrast uses identical frozen policy identities, seed identities, baseline, first-look budget, estimator and stopping rule at all levels.",
+    "knobIdentityConstraint": "Omitted and explicit-off settings reproduce exact path, RNG identity and result before any enabled row; deterministic controls prove only the exact seen-map mediator and one-Ember payoff change.",
+    "methodConstraint": "Deterministic code owns construction, caching, fitting and stop/go. No ML, RL or optimiser unless a later comparable experiment identifies a remaining repertoire bottleneck and measures decision value.",
+    "stopping": "One zero-row complete-cohort look; exactly one of success, futility or inconclusive. No peeking, adjacency split, subset rescue, threshold relaxation, cohort replacement or endpoint addition."
+  }
+}

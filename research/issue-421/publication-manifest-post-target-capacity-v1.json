@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "archiveParent": "ff82d6084268633134597e8d64d35c485324fdac",
+  "preservedRefs": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+    "research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac"
+  },
+  "publicationRef": "research/issue-421-post-target-capacity-evidence",
+  "source": {
+    "main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "observationSourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "observationPatchSha256": "529930aa7e0ea74749467919928f4ea5d0b07fd7edc52408514d4e0e94d6bdbb",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "tracePlanSha256": "5e8e1e43af03508c3ec0ec5229003735333c81203d84a90cde47def48b18c90d",
+    "traceOutputSha256": "3ccc833689b6cc93f62e2f6393934394392c180cfeb7538048eea97f1583719c"
+  },
+  "results": {
+    "directKillRelayAttribution": {
+      "outcome": "FUTILITY",
+      "decision": "close-direct-kill-relay-at-attribution-boundary",
+      "activePolicies": 22,
+      "exactInactivePolicies": 10,
+      "viablePolicies": 4,
+      "attributableRows": 107,
+      "payoffEligibleTurns": 114,
+      "newSimulatorRows": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "315177c2a97c347f442e12e90b18b2ef178a48ea451baef8fbd43df5ee79309d",
+      "summarySha256": "71a4a9117b6a43c5d88ea8172e69bdf32553faccbc89254108812d412c7818b3"
+    },
+    "killConsumerTopology": {
+      "outcome": "FUTILITY",
+      "decision": "close-immediate-post-kill-consumer-topology",
+      "closedControlRows": 107,
+      "closedControlPolicies": 32,
+      "skillActivePolicies": 24,
+      "skillExactInactivePolicies": 17,
+      "skillViablePolicies": 7,
+      "powerActivePolicies": 13,
+      "allEnemyAttackActivePolicies": 0,
+      "newSimulatorRows": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "a5d0f447678f991fac3c55fb8e42fd55d8d62b28e4c4a9c74320bcf355f77eae",
+      "summarySha256": "49b3bf3f776480327558d0bbaa8d7c8568747de918954f0666d6b386a6888711"
+    },
+    "immediateDrawThread": {
+      "outcome": "FUTILITY",
+      "decision": "close-immediate-draw-thread-at-zero-row-capacity",
+      "activePolicies": 37,
+      "exactInactivePolicies": 11,
+      "viablePolicies": 9,
+      "producerActivePolicies": 48,
+      "exposureOnlyPolicies": 11,
+      "failedGates": ["inactiveSupport", "afterimageSeparation"],
+      "newSimulatorRows": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "51907e74cbfffce551865672ee67758c0a39b2f6688732838ee4ffb38b2213c7",
+      "summarySha256": "33b3f0a10ee1151e526820f220af2068999bc56c33090bb67afaba1fbcaff3e9"
+    },
+    "duplicateCopyEcho": {
+      "outcome": "FUTILITY",
+      "decision": "close-duplicate-copy-echo-at-zero-row-capacity",
+      "activePolicies": 37,
+      "exactInactivePolicies": 9,
+      "viablePolicies": 12,
+      "exposureActivePolicies": 54,
+      "exposureOnlyPolicies": 17,
+      "distinctRepeatedCards": 32,
+      "failedGates": ["inactiveSupport", "scorelineSeparation", "afterimageSeparation"],
+      "newSimulatorRows": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "95d22e02bf041e401267e409305b83b087590ab4aae8663f47de4b8cc13370f5",
+      "summarySha256": "72a850dd102994b0fc778ac7c057b19c4f505801c43997b0c815f07f07eebd86"
+    }
+  },
+  "decisionEvidence": {
+    "deathDisambiguation": "The exact kill-relay control reproduced 107 attributable rows and the topology partition had zero schema faults, but every post-kill consumer class missed at least one frozen gate.",
+    "broadSequenceAlias": "Draw-thread and duplicate-copy both retained viable support but were too broadly active and insufficiently separated from the closed package anchors. Neither may be narrowed by a posterior card subset, hold, threshold, cohort or policy rescue.",
+    "methodBoundary": "The failures identify broad correlated current-policy exposure, but each exact family is closed. They do not by themselves authorise ML, RL or an optimiser for a closed candidate."
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "verification": {
+    "cachedRowsReadPerAudit": 256,
+    "newSimulatorRowsAcrossFourAudits": 0,
+    "newLedgerRowsAcrossFourAudits": 0,
+    "semanticFaultsAcrossFourAudits": 0,
+    "protectedSeedRows": 0
+  },
+  "claimBoundary": "These are discovery-stage capacity, attribution and alias negatives only. No Dusk package, realised payoff, causal effect, detector, product, protected-seed or P9 claim follows."
+}

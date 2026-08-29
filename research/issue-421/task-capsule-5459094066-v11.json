@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "supersedes": {
+    "path": "task-capsule-5459094066-v10.json",
+    "sha256": "ade89434ce96fe46cc6a950d517486d5e71acb8ba2216d995316e0336851010e"
+  },
+  "taskSsotBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+  "authority": {
+    "commentId": 5459094066,
+    "bodySha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "authorAssociation": "OWNER"
+  },
+  "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "immutableArchiveHeads": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+    "research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+    "research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac"
+  },
+  "remoteEvidenceComment": {
+    "id": 5460390489,
+    "url": "https://github.com/fol2/glassvow/issues/421#issuecomment-5460390489"
+  },
+  "targetTransferDisposition": {
+    "protocolPath": "protocols/post-v38-target-switch-capacity-v1.json",
+    "protocolSha256": "97997ab6184f8391453430879cbb0f307b196c1e1488b0e66b7d99811f295913",
+    "runnerPath": "post_v38_target_switch_capacity_v1.py",
+    "runnerSha256": "c2e00c8a71a0490aa17726adbfdfb56571cef787eaf35f662488aacc3027b27d",
+    "summaryPath": "summaries/post-v38-target-switch-capacity-v1.json",
+    "summarySha256": "309f9266aca4a85840425c1bf036b99bf15e54923a02b003171060ec46a3b3e7",
+    "outcome": "FUTILITY boundary 2",
+    "decision": "close-target-transfer-at-zero-row-capacity",
+    "counts": {
+      "activePolicies": 4,
+      "exactInactivePolicies": 48,
+      "viablePolicies": 2,
+      "targetIndexChangePolicies": 49,
+      "deathAliasOnlyPolicies": 45,
+      "forcedDeathChangeTurns": 232,
+      "sameTargetTurns": 2143,
+      "semanticFaultPairs": 0
+    },
+    "rows": {
+      "cachedRead": 256,
+      "newSimulator": 0,
+      "newLedger": 0,
+      "protected": 0
+    },
+    "closure": "No third-Attack, adjacency, target-direction, card-subset, payoff, carrier, cohort, policy or method rescue is permitted."
+  },
+  "discoveryEvidence": {
+    "finding": "The death-disambiguation control rejected targetIdx-only as a material alias and exposed 232 forced-death-change turns. This is discovery evidence for a distinct death-produced relay question, not evidence that such a relay is causal or admissible.",
+    "reaperBellBoundary": "The immutable Reaper Bell family required acquiring a relic and paid immediate Energy plus draw on any non-final death. A direct-kill-to-next-card Dusk relay would instead use no reward acquisition, require an attributable single-target kill and a specific next single-target Attack consumer, and apply one fixed bounded damage operation. An explicit alias audit must pass before implementation.",
+    "method": "Deterministic exact enumeration remains selected. ML, RL and optimisation remain unauthorised because no policy-repertoire bottleneck with measured method decision value exists."
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "nextQuestion": "Within the 232 discovery-stage forced-death changes, does a preregistered direct attribution predicate identify a reliable, viable, selective and functionally separated Dusk kill relay in which a single-target Attack kills its selected target before any later PLAY and the next PLAY is a single-target Attack against another living enemy in the same turn?",
+  "nextAction": "Freeze and execute exactly one zero-new-row causal-attribution and alias audit over the complete identity-proved target/death trace. Only complete success may authorise an exact-null and direct-mediator research prototype; the existing target-transfer and Reaper Bell families remain closed.",
+  "boundaries": {
+    "researchOnly": true,
+    "discoveryEvidenceOnly": true,
+    "zeroProtectedSeeds": true,
+    "noResearchPrOrActions": true,
+    "noSuccessorTicket": true,
+    "closedFamiliesImmutable": true,
+    "noGameplayPrototypeBeforeAttributionSuccess": true,
+    "noAdaptiveCandidateByCandidateTuning": true,
+    "noMlRlOrOptimiserWithoutMeasuredDecisionValue": true,
+    "humanEscalationOnlyUnderCurrentContract": true
+  }
+}

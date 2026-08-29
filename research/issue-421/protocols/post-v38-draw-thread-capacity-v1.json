@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does the complete frozen trace contain reliable, viable, broad and functionally separated natural capacity for an immediate draw-thread sequence in which an authored reward-card draw effect produces exact CardInst uid values and the immediate next PLAY uses one of those newly drawn instances?",
+  "hypothesis": "The exact DRAW.uid to PLAY.uid link is an observable card-instance causal sequence that may provide policy-selective fight-local Dusk support without reopening a play-type cadence, exact named-card handshake, same-instance replay, Power-cycle, death relay, action-economy relic or Kindle-damage scalar.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/heads/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/remotes/origin/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/heads/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+      "refs/remotes/origin/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v13.json",
+    "taskCapsuleSha256": "a3f5f14e25f60f63e0b9088f792307212441838dc5d077ffe270982607b6e0e7",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+      "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+      "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+      "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "observationSourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourcePatchSha256": "529930aa7e0ea74749467919928f4ea5d0b07fd7edc52408514d4e0e94d6bdbb",
+    "observationSourceSha256": {
+      "tools/balance_sim.gd": "28c05711875c5460da90d55b4bfe91788143456bba99ee1a2b96fbd9b3280654",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2"
+    },
+    "researchFileSha256": {
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_competing_structural_options.py": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+      "post_v38_cohand_opportunity_decomposition.py": "371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c",
+      "protocols/post-v38-target-switch-trace-identity-v1.json": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+      "summaries/post-v38-target-switch-trace-identity-v1.json": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+      "protocols/post-v38-power-cycle-capacity-v1.json": "dfd47aea75b0662a048172ce83a0fb0db8e990667002ea0e79b11b2068d7e6cd",
+      "summaries/post-v38-power-cycle-capacity-v1.json": "bf3e927846079cf8e032ed82aac79be48a4249a02cbc49ea03a471fdde82ecd1",
+      "protocols/post-v38-dusk-cadence-capacity-v1.json": "cd0b14b0a5a8a5e0389cbf52aa6d0fd31380a8500b84b991b6186677dc961ddc",
+      "summaries/post-v38-dusk-cadence-capacity-v1.json": "563ea29e964d5f5ff2b6e42bc789cc938a362467359e429c4707765622c93cf2",
+      "protocols/post-v38-honing-repeat-capacity-v1.json": "de389e1b27684ae5894333a90656e02e93f5b94781a5aa01ad577e13cb5bce71",
+      "summaries/post-v38-honing-repeat-capacity-v1.json": "090cf43a35e7cedf850e4f52f3adec5019423f92bc040c0453c43d6a591882c4",
+      "protocols/post-v38-turn-state-economy-capacity-v1.json": "210491fd49f2c64e5166d9fef260ee2fa264e803304a3445bec917f61ffaa956",
+      "summaries/post-v38-turn-state-economy-capacity-v1.json": "7cd0edf36fcd011422ec99a94d84cc0a774307c1db6150fff3d830fdf1d7c842",
+      "protocols/post-v38-kill-consumer-topology-v1.json": "a5d0f447678f991fac3c55fb8e42fd55d8d62b28e4c4a9c74320bcf355f77eae",
+      "summaries/post-v38-kill-consumer-topology-v1.json": "49b3bf3f776480327558d0bbaa8d7c8568747de918954f0666d6b386a6888711"
+    },
+    "runnerSha256": "1afef4246f93e5ebf3907474f38626a439b54c6a855c5b496c6f20ed1b5d1029"
+  },
+  "closedFamilyExclusions": {
+    "cadence": "The closed alternating Attack/Skill cadence cannot be rescued by changing length or orientation. This mechanism instead requires exact causally drawn CardInst identity and does not use a type alternation predicate.",
+    "powerCycle": "The closed Power-cycle grammar requires two class-level readiness bits before a later generic Attack. Draw-thread has no Power, no two-bit readiness and requires the immediate next PLAY to use an exact newly drawn uid.",
+    "sameInstanceRepeat": "The closed Honing family replays one already-played CardInst. Draw-thread requires a different CardInst newly drawn after the producer PLAY.",
+    "actionEconomy": "No Energy discount, carry, gain or spend is a producer, mediator, consumer or payoff.",
+    "killAndTarget": "No target change, death or post-kill consumer enters the mechanism.",
+    "kindle": "Kindle is neither observed nor required; draw cards that also Kindle are not a Kindle subset and authored Kindle remains unchanged.",
+    "otherClosedFamilies": "Do not reconstruct Scoreline, Afterimage, Ward, Shatter, Cracked, Ember-reserve damage, relic, weak-mend, private-debt, acquisition scalar or historical scalar paths.",
+    "method": "No ML, RL, optimiser, policy remap, card subset or adaptive tuning is permitted."
+  },
+  "mechanismContract": {
+    "researchIdentity": "dusk-immediate-draw-thread-ember-one",
+    "producer": "A PLAY of any source-complete natural reward card with an authored immediate positive draw effect.",
+    "mediatorState": "The exact set of CardInst uid values emitted by DRAW after that producer PLAY and before the next PLAY; non-stacking and local to that immediate resolution interval.",
+    "consumer": "The immediate next PLAY in the same player turn, only when its exact uid is in the mediator set and its card ID equals the matching DRAW card ID.",
+    "payoffOperation": "After the consumer's unchanged authored effects, gain exactly one Ember, at most once in the player turn.",
+    "lifecycle": "The next PLAY consumes or clears the mediator whether it matches or not; turn or combat end clears it. A later eligible producer may arm it again only before the once-per-turn payoff has fired.",
+    "naturalCost": "Naturally acquire, draw and pay for an eligible reward draw card, then choose the newly drawn exact card instance as the immediate next play.",
+    "duskBoundary": "Existing Emberheart is the proposed Dusk gate. Ashwarden and mechanism-off are exact current-main paths.",
+    "separateFactors": "Scoreline and Afterimage remain separate closed factors fixed off; no endpoint is pooled.",
+    "interference": "Existing authored draw, card effects, Kindle, costs, rewards and policy are unchanged. Scoreline and Afterimage are shared repertoire anchors only.",
+    "nullPath": "Omitted and explicit zero must reproduce exact path, RNG, result, policy, seed and trace before an enabled row.",
+    "rngAndPersistence": "No RNG call or cursor movement, run-persistent field, new content ID, reward entry, acquisition UI or save version.",
+    "telemetry": "Direct research-only producer PLAY, resolution DRAW uid set, match or clear, consumer PLAY, payoff, once-per-turn rejection and expiry."
+  },
+  "frozenCausalFactors": {
+    "drawThreadPayoff": {
+      "definition": "The complete mechanism contract.",
+      "levels": {"off": 0, "immediate-exact-drawn-uid-ember-one": 1},
+      "status": "Fixed off here; the enabled level may be implemented only after capacity success in a separate identity preflight."
+    },
+    "scorelinePayoff": {"levels": ["off"], "definition": "Separate closed factor fixed absent."},
+    "afterimagePayoff": {"levels": ["off"], "definition": "Separate closed factor fixed absent."},
+    "acquisitionPriority": {"levels": ["current-main"], "definition": "Frozen exact reward policy."},
+    "variedCausalFactorCount": 0,
+    "independence": "This zero-row capacity screen is not a factorial or causal contrast."
+  },
+  "designMatrix": {
+    "identity-proved-current-main-trace": {
+      "drawThreadPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "acquisitionPriority": "current-main",
+      "rows": 256,
+      "status": "Sole immutable cached observation arm; deterministic exact-uid reconstruction adds no row."
+    }
+  },
+  "design": {
+    "type": "Zero-new-row complete-cohort capacity, exact-attribution and alias audit; not a factorial and not a causal experiment.",
+    "producerConstruction": "The source-complete producer set is frozen before outcome inspection: union of base reward-pool and deed-unlocked cards whose base authored effects contain positive immediate draw, including the existing Pyre Tithe special draw.",
+    "eventConstruction": "Within each player turn, collect DRAW events strictly after an eligible producer PLAY and before the immediate next PLAY. The sequence qualifies only when that next PLAY uid and card ID exactly match one collected DRAW event.",
+    "mechanisticallyJustifiedInteraction": "Eligible producer resolution by exact newly drawn uid by immediate consumer use is the sole future interaction; no component alone qualifies.",
+    "aliasStructure": "Start-of-turn draws occur before a producer and cannot qualify. A next PLAY of a pre-existing hand card is an exposed negative. Producer and consumer uid equality is a fault. Exact card IDs are breadth witnesses and never subset levels.",
+    "omittedCells": "No starter First Spark producer, non-immediate hold, exact-card subset, consumer-type split, payoff value, acquisition level, policy knob, Ash cell, RandomBuild cell, simulator row, joint package, ML, RL, optimiser or protected seed."
+  },
+  "producerCards": ["deflect", "offering", "preparation", "quickSlash", "sidestep", "surge", "tithe"],
+  "trace": {
+    "planSha256": "5e8e1e43af03508c3ec0ec5229003735333c81203d84a90cde47def48b18c90d",
+    "outputSha256": "3ccc833689b6cc93f62e2f6393934394392c180cfeb7538048eea97f1583719c",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identityProtocolSha256": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+    "identitySummarySha256": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+    "selectionRule": "Read all 256 rows once. No row, policy, seed, turn, producer, consumer, hold, card subset, threshold, anchor or endpoint changes after execution."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "Every policy and seed in the complete frozen current-main rectangle is read exactly once; each policy has one exact snapshot across four seeds."
+  },
+  "anchors": {
+    "scoreline": {
+      "policies": [0, 7, 9, 10, 13, 14, 15, 17, 22, 23, 28, 31, 39, 41, 52, 56, 62, 63],
+      "status": "Immutable two-sided repertoire anchor only."
+    },
+    "afterimage": {
+      "policies": [0, 5, 11, 12, 14, 18, 24, 25, 27, 30, 33, 35, 41, 43, 44, 55, 62],
+      "status": "Immutable two-sided repertoire anchor only."
+    }
+  },
+  "estimands": {
+    "unit": "Policy identity over its complete four-seed rectangle.",
+    "active": "At least one exact immediate draw-thread sequence in at least two of four rows.",
+    "inactive": "No qualifying sequence in any of four rows.",
+    "producerActive": "At least one eligible producer resolves one or more DRAW events in at least two of four rows.",
+    "exposureOnly": "Producer-active but not active, witnessing a policy choice rather than acquisition alone.",
+    "viable": "An active policy with at least one qualifying row that wins.",
+    "breadth": "Distinct producer cards, consumer cards, consumer authored types and ordered producer-consumer pairs.",
+    "separation": "Two-sided candidate-only, anchor-only and Jaccard separation from Scoreline and Afterimage.",
+    "notEstimated": "Mediator identity under intervention, realised Ember, causal effect, complementarity, duration, Ash isolation, fresh-cohort reproducibility, held-out confirmation, package admission, detector, product balance or P9."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumProducerActivePolicies": 24,
+    "minimumExposureOnlyPolicies": 8,
+    "minimumDistinctProducers": 4,
+    "minimumDistinctConsumers": 8,
+    "minimumDistinctConsumerTypes": 2,
+    "minimumDistinctPairs": 16,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumBaselineFaultRows": 1,
+    "maximumSemanticFaults": 0,
+    "provenance": "The 16-policy active/inactive, eight-policy viability and separation floors plus 0.55 overlap ceiling reuse the frozen 64-policy structural-capacity scale. Twenty-four producer-active and eight exposure-only policies require broad reach with a measurable play-choice dimension. Four producers, eight consumers, two authored types and sixteen pairs reject a named-card or single-type alias."
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1,
+    "firstLooks": 1
+  },
+  "claimBoundary": "Discovery-stage exact draw-to-use attribution, natural policy capacity and anchor separation only; no implementation, realised payoff, causal, fresh-cohort, held-out, package, detector, product or P9 claim.",
+  "decisionRules": {
+    "success": "Every immutable, source, trace, exact-uid, active, inactive, viability, producer-reachability, exposure-only, breadth, separation, semantic, reliability, budget and zero-ledger gate passes at the sole look.",
+    "successAuthority": "Apply boundary 1: freeze only dusk-immediate-draw-thread-ember-one for a separate exact-null and direct-mediator identity prototype. Before a causal row, omitted/off path, RNG, result, policy and seed identity plus direct producer, exact uid set, matching and non-matching next PLAY, once-per-turn, expiry, Ash and scope-isolation controls must pass. Then freeze fresh unprotected discovery and independent held-out cohorts.",
+    "futility": "Any declared support, viability, exposure, breadth, separation, semantic or reliability gate fails on the complete immutable trace.",
+    "futilityAuthority": "Apply boundary 2: close the exact immediate draw-thread family without starter, non-immediate hold, producer or consumer subset, consumer-type split, payoff, acquisition, cohort, policy or method rescue; continue with the next evidence-backed minimal structural mechanism inside #421.",
+    "inconclusive": "An immutable input, source, trace, schema, ledger or wall-time check prevents the complete deterministic decision.",
+    "inconclusiveAuthority": "Apply boundary 3: record the exact missing relevant gate at the cap; add no repair, rerun, trace extension, simulator row, method or protected seed, then follow the current human-authority contract."
+  },
+  "executionAndStopping": {
+    "order": [
+      "Verify task, authority, refs, source, helpers, trace identity, closed evidence and ledger.",
+      "Derive and match the source-complete producer set, then reconstruct exact DRAW.uid to immediate PLAY.uid sequences over every row.",
+      "Apply all frozen support, exposure, viability, breadth, separation, semantic and reliability gates once.",
+      "Verify byte-identical ledger identity and apply exactly one decision boundary."
+    ],
+    "firstLook": "The complete 256-row cached rectangle is the sole look; no predicate, hold, source set, card subset, threshold, anchor or endpoint changes after execution begins.",
+    "stagedConstraint": "Capacity success can justify only one exact identity prototype. This discovery cohort cannot serve as held-out efficacy evidence.",
+    "futureCrnConstraint": "Every later contrast uses identical frozen policy identities, seed identities, baseline, first-look budget, estimator and stopping rule at all levels.",
+    "knobIdentityConstraint": "Omitted and explicit-off settings reproduce exact path, RNG identity and result before any enabled row; deterministic controls prove only the exact mediator and one-Ember payoff change.",
+    "methodConstraint": "Deterministic code owns construction, caching, fitting and stop/go. No ML, RL or optimiser unless a later comparable experiment identifies a remaining repertoire bottleneck and measures decision value.",
+    "stopping": "One zero-row complete-cohort look; exactly one of success, futility or inconclusive. No peeking, hold extension, subset rescue, threshold relaxation, cohort replacement or endpoint addition."
+  }
+}

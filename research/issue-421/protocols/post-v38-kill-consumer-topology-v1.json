@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "After an attributable selected-target kill by the first single-target Attack in a player turn, does exactly one unclosed immediately-next-PLAY class among all-enemy Attack, Skill and Power have robust active, exact-inactive, viable, broad-card and closed-family-separated discovery capacity?",
+  "hypothesis": "The 79 intervening-PLAY aliases in the closed single-target kill relay may contain a broader fight-local causal sequencing unit. Exhaustively classifying the immediate next PLAY tests that finite repertoire without inventing a card subset, payoff variant, policy cohort or simulator row.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/heads/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/remotes/origin/research/issue-421-scoreline-commitment-evidence": "a1a16f4941b8fbef7832c1560c30d2647cc4d74b",
+      "refs/heads/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac",
+      "refs/remotes/origin/research/issue-421-target-switch-evidence": "ff82d6084268633134597e8d64d35c485324fdac"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v12.json",
+    "taskCapsuleSha256": "5b9d5e6e5cdbc68206c0f7e18fce923578b9e5c811562d812a443682cde2a26b",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+      "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+      "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+      "docs/agents/domain.md": "7603578dadaed082f3dc33de5bc06a9271361f1185aa839260a1a89b62e51b95",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "observationSourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourcePatchSha256": "529930aa7e0ea74749467919928f4ea5d0b07fd7edc52408514d4e0e94d6bdbb",
+    "observationSourceSha256": {
+      "tools/balance_sim.gd": "28c05711875c5460da90d55b4bfe91788143456bba99ee1a2b96fbd9b3280654",
+      "tools/research_421_null_harness_probe.gd": "09d8554a293722a1710a683602775a2b3068bd82702a6e830b986c47d8d9b18b",
+      "tools/research_421_null_harness_probe.gd.uid": "7ec0188cd36f8c81b90cd5742abaedd047bbd3125b5156336c66fadc74fd11c2"
+    },
+    "researchFileSha256": {
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_competing_structural_options.py": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+      "post_v38_cohand_opportunity_decomposition.py": "371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c",
+      "protocols/post-v38-target-switch-trace-identity-v1.json": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+      "summaries/post-v38-target-switch-trace-identity-v1.json": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+      "protocols/post-v38-target-switch-capacity-v1.json": "97997ab6184f8391453430879cbb0f307b196c1e1488b0e66b7d99811f295913",
+      "summaries/post-v38-target-switch-capacity-v1.json": "309f9266aca4a85840425c1bf036b99bf15e54923a02b003171060ec46a3b3e7",
+      "protocols/post-v38-kill-relay-attribution-v1.json": "315177c2a97c347f442e12e90b18b2ef178a48ea451baef8fbd43df5ee79309d",
+      "summaries/post-v38-kill-relay-attribution-v1.json": "71a4a9117b6a43c5d88ea8172e69bdf32553faccbc89254108812d412c7818b3",
+      "protocols/post-v38-reapers-bell-capacity-v1.json": "fc17c6eac833bb9a2951145f276928ea44c275a2d1ad50be8ebd0fbfdef4487d",
+      "summaries/post-v38-reapers-bell-capacity-v1.json": "0c8ed919c183c0a8255bbec2c1c24d0c78818d39005d5d0b07224d69dfe3ff05"
+    },
+    "runnerSha256": "55b943a205520f847b63868ab0f52e76391fec70d551a46557e6450a6879e2e8"
+  },
+  "closedFamilyExclusions": {
+    "attackEnemy": "The exact direct-kill-to-next-single-target-Attack family is an immutable reproduction control only and cannot be selected or rescued.",
+    "targetTransfer": "The closed target-transfer family requires the first target to survive; this census requires that target to die before the immediate next PLAY.",
+    "reaperBell": "The closed Reaper Bell family is acquisition-bound immediate Energy plus draw on death; it remains a one-sided natural-interference anchor only.",
+    "scorelineAndAfterimage": "Scoreline and Afterimage remain separate closed factors fixed off and are never pooled with this endpoint.",
+    "otherClosedFamilies": "Do not reconstruct Kindle, Ward, Ember-reserve, cadence, focused-to-sweep, action-economy, one-bit setup, heavy relay, same-instance repeat, acquisition scalar, private-debt or historical scalar paths.",
+    "method": "No ML, RL, optimiser, policy remap, grammar expansion or adaptive candidate-by-candidate tuning is permitted."
+  },
+  "futureMechanismTemplate": {
+    "producer": "The first authored type=attack,target=enemy PLAY in a multi-enemy player turn is followed by DIE for its exact selected target before the immediate next PLAY.",
+    "consumer": "Exactly one selected immediate-next-PLAY class: authored type=attack,target=allEnemies, type=skill, or type=power. Exact card IDs are breadth witnesses, not candidate levels.",
+    "mediator": "One Dusk-only player-turn-local kill hold consumed by the immediate next PLAY; no RunState or save field.",
+    "commonPayoff": "After the selected consumer resolves, grant exactly one bounded Ember, at most once in that player turn. This common payoff is a later identity-prototype contract only and is not implemented or estimated here.",
+    "payoffProvenance": "One Ember is the smallest positive unit of the existing Dusk fight-local resource and introduces no scalar level.",
+    "duskBoundary": "Existing Emberheart is the proposed Dusk gate; Ashwarden and mechanism-off remain exact current-main paths.",
+    "acquisition": "None; existing content, reward pools, rarities, policies and saves are unchanged.",
+    "rngAndPersistence": "No RNG call or cursor movement, new content ID, reward entry, save field or save version.",
+    "telemetry": "Research-only exact producer PLAY, target DIE, hold set/clear, consumer class/card, consume, payoff and turn expiry."
+  },
+  "frozenCausalFactors": {
+    "killConsumerPayoff": {
+      "definition": "The future mechanism template with one selected consumer class and the common one-Ember payoff.",
+      "levels": ["off", "attack-allEnemies", "skill", "power"],
+      "status": "All levels are fixed off here. At most one enabled level may survive this census; the other enabled levels close without prototype."
+    },
+    "scorelinePayoff": {
+      "definition": "Separate closed causal factor.",
+      "levels": ["off"]
+    },
+    "afterimagePayoff": {
+      "definition": "Separate closed causal factor.",
+      "levels": ["off"]
+    },
+    "reaperBellPath": {
+      "definition": "Unmodified current-main natural reward and death path.",
+      "levels": ["current-main-natural"]
+    },
+    "acquisitionPriority": {
+      "definition": "Frozen exact current-main policy.",
+      "levels": ["current-main"]
+    },
+    "variedCausalFactorCount": 0,
+    "independence": "This zero-row census is not a factorial or causal contrast; Scoreline and Afterimage remain separate factors."
+  },
+  "designMatrix": {
+    "identity-proved-current-main-target-death-trace": {
+      "killConsumerPayoff": "off",
+      "scorelinePayoff": "off",
+      "afterimagePayoff": "off",
+      "reaperBellPath": "current-main-natural",
+      "acquisitionPriority": "current-main",
+      "rows": 256,
+      "status": "Sole immutable cached observation arm; deterministic classification adds no simulator row."
+    }
+  },
+  "design": {
+    "type": "Zero-new-row complete-cohort mutually exclusive consumer-topology census; not a factorial and not a causal experiment.",
+    "construction": "For each multi-enemy player turn, locate the first authored single-target Attack. If its selected target dies before the immediate next PLAY, classify that next PLAY exactly once as attack-enemy, attack-allEnemies, skill, power or unclassified; record no-next-play when absent.",
+    "mechanisticallyJustifiedInteractions": [
+      "First selected-target kill by immediate next PLAY establishes the complete sequencing opportunity.",
+      "Producer death by one selected consumer class defines the sole future mediator; neither condition alone is sufficient.",
+      "Dusk identity by the selected consumer payoff is the sole future causal interaction and is not estimated here."
+    ],
+    "aliasStructure": "attack-enemy is the closed kill-relay reproduction control. no-next-play is an exhausted topology leaf. unclassified is a schema fault. Scoreline and Afterimage are two-sided repertoire anchors; Reaper Bell, target transfer and the closed kill relay are one-sided alias anchors.",
+    "omittedCells": "No exact-card subset, second/third consumer, consumer ordering, payoff value, duration, acquisition, rarity, policy knob, cohort replacement, simulator, held-out, joint package, ML, RL, optimiser or protected-seed cell."
+  },
+  "trace": {
+    "planSha256": "5e8e1e43af03508c3ec0ec5229003735333c81203d84a90cde47def48b18c90d",
+    "outputSha256": "3ccc833689b6cc93f62e2f6393934394392c180cfeb7538048eea97f1583719c",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identityProtocolSha256": "d3bf24f77598bd859449c872b816ffa2360d95640d03dfac70affa6676c5d17b",
+    "identitySummarySha256": "1ae859fd1867acaa8811038e7cb8333a7a63d54839fde654b50311c756df666d",
+    "selectionRule": "Read all 256 rows once. No row, policy, seed, fight, turn, class, card, threshold, anchor or endpoint is selected after execution."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "Every policy and seed in the complete frozen current-main rectangle is read exactly once; each policy has one exact snapshot across four seeds."
+  },
+  "completeConsumerPartition": [
+    "attack-enemy",
+    "attack-allEnemies",
+    "skill",
+    "power",
+    "no-next-play",
+    "unclassified"
+  ],
+  "sourceConsumerClasses": {
+    "attack-allEnemies": ["annihilate", "cleave", "shardstorm", "tempest"],
+    "skill": ["aegis", "ashenChoir", "bloodRite", "brace", "bulwark", "catalyst", "cripple", "defend", "deflect", "emberdance", "firstSpark", "flawlessForm", "fortify", "limitBreak", "offering", "preparation", "sidestep", "smother", "surge", "tithe", "toxicMist", "warCry"],
+    "power": ["agility", "bastion", "empower", "frenzy", "ironSkin", "nightSight", "pyreheart", "regrowth", "risingLitany", "virulence"]
+  },
+  "candidateClasses": [
+    {
+      "id": "attack-allEnemies",
+      "minimumDistinctConsumers": 3
+    },
+    {
+      "id": "skill",
+      "minimumDistinctConsumers": 4
+    },
+    {
+      "id": "power",
+      "minimumDistinctConsumers": 4
+    }
+  ],
+  "anchors": {
+    "scoreline": {
+      "policies": [0, 7, 9, 10, 13, 14, 15, 17, 22, 23, 28, 31, 39, 41, 52, 56, 62, 63],
+      "status": "Immutable two-sided anchor; Scoreline fixed off."
+    },
+    "afterimage": {
+      "policies": [0, 5, 11, 12, 14, 18, 24, 25, 27, 30, 33, 35, 41, 43, 44, 55, 62],
+      "status": "Immutable two-sided anchor; Afterimage fixed off."
+    },
+    "reaperBell": {
+      "policies": [6, 9, 19, 29, 30, 35, 42, 51, 55],
+      "status": "Immutable one-sided acquisition-bound death-family anchor."
+    },
+    "targetTransfer": {
+      "policies": [10, 23, 35, 39],
+      "status": "Immutable one-sided surviving-target anchor."
+    },
+    "closedKillRelay": {
+      "policies": [5, 9, 10, 15, 21, 23, 25, 28, 29, 31, 33, 34, 36, 38, 41, 43, 45, 58, 60, 61, 62, 63],
+      "status": "Immutable one-sided payoff-eligible closed-family anchor."
+    }
+  },
+  "closedControl": {
+    "id": "attack-enemy",
+    "qualifyingRows": 107,
+    "activePolicies": [5, 6, 7, 8, 9, 10, 11, 15, 16, 21, 23, 25, 26, 28, 29, 31, 33, 34, 36, 37, 38, 39, 41, 43, 44, 45, 48, 58, 60, 61, 62, 63],
+    "role": "Exact reconstruction control for attributable direct-kill rows and policy support; never selectable."
+  },
+  "estimands": {
+    "unit": "Policy identity over its complete four-seed rectangle.",
+    "active": "At least one class-specific immediate post-kill consumer event in at least two of four rows.",
+    "inactive": "No class-specific event in any of four rows.",
+    "viable": "An active policy with at least one qualifying row that wins.",
+    "breadth": "Distinct exact producer cards, consumer cards and ordered producer-consumer pairs.",
+    "separation": "Two-sided separation from Scoreline and Afterimage plus one-sided candidate-only separation from Reaper Bell, target transfer and the closed kill relay.",
+    "notEstimated": "Payoff identity, causal effect, complementarity, duration, Ash isolation, fresh-cohort reproducibility, held-out confirmation, package admission, detector score, product balance or P9 acceptance."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumDistinctProducers": 4,
+    "minimumDistinctPairs": 8,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumClosedFamilyJaccard": 0.55,
+    "maximumBaselineFaultRows": 1,
+    "maximumSemanticFaults": 0,
+    "provenance": "The 16-policy active/inactive, eight-policy viability, four-producer, eight-pair, eight-policy separation and 0.55 overlap thresholds reuse the preregistered 64-policy structural-capacity scale. Consumer breadth is class-specific: three of four all-enemy Attacks or four cards for larger classes."
+  },
+  "selectionRule": {
+    "eligible": "A class must pass every support, viability, breadth, separation, semantic and reliability gate.",
+    "order": [
+      "highest viable-policy count",
+      "highest minimum active/inactive support margin",
+      "highest ordered pair breadth",
+      "lowest maximum anchor Jaccard",
+      "lexicographically lowest class ID"
+    ],
+    "maximumSelections": 1
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 3,
+    "firstLooks": 1
+  },
+  "claimBoundary": "Discovery-stage immediate-consumer topology, natural policy capacity and closed-family alias separation only; no gameplay implementation, realised payoff, causal, fresh-cohort, held-out, package-admission, detector, product or P9 claim.",
+  "decisionRules": {
+    "success": "The closed attack-enemy control reproduces exactly, the complete partition is valid, and at least one candidate passes every frozen gate at the sole look.",
+    "successAuthority": "Apply boundary 1: freeze at most the first class under the deterministic selection order for a separate exact-null and direct-mediator identity prototype of the common one-Ember contract. The other classes close. Add no causal row before omitted/off path, RNG, result, policy and seed identity plus direct producer, hold, consume, expiry, Ash and scope-isolation controls pass. Then freeze fresh unprotected discovery and independently held-out cohorts before efficacy evidence.",
+    "futility": "The closed control reproduces and inputs are valid, but no candidate passes every frozen gate.",
+    "futilityAuthority": "Apply boundary 2: close the complete immediate post-kill consumer topology without exact-card subset, second/third consumer, ordering, payoff, duration, carrier, acquisition, cohort, policy or method rescue; continue with the next evidence-backed minimal structural mechanism inside #421.",
+    "inconclusive": "An immutable input, source, trace, schema, closed control, ledger or wall-time check prevents the complete deterministic decision.",
+    "inconclusiveAuthority": "Apply boundary 3: record the exact missing relevant gate at the cap; add no repair, rerun, replacement trace, simulator row, method or protected seed, then follow the current human-authority contract."
+  },
+  "executionAndStopping": {
+    "order": [
+      "Verify task, authority, refs, source, helpers, trace identity, closed evidence and ledger.",
+      "Reproduce the closed attack-enemy control and classify every qualifying immediate next PLAY once.",
+      "Apply all three candidate gate sets once and the deterministic at-most-one selection order.",
+      "Verify byte-identical ledger identity and apply exactly one decision boundary."
+    ],
+    "firstLook": "The complete 256-row cached rectangle is the sole look; no predicate, class, card subset, threshold, anchor or endpoint may change after execution begins.",
+    "stagedConstraint": "Success can justify only one exact identity prototype. This discovery cohort cannot serve as held-out efficacy evidence.",
+    "futureCrnConstraint": "Any later causal contrast uses the same frozen policy identities, seed identities, baseline, first-look budget, estimator and stopping rule at every compared level.",
+    "knobIdentityConstraint": "Before any future row, omitted and explicit-off settings reproduce exact path, RNG identity and result; deterministic controls prove only the selected mediator and one-Ember payoff change.",
+    "methodConstraint": "Deterministic code owns construction, caching, fitting and stop/go. No ML, RL or optimiser unless a later comparable experiment identifies a remaining repertoire bottleneck and measures decision value.",
+    "stopping": "One zero-row complete-cohort look; exactly one of success, futility or inconclusive. No peeking, threshold relaxation, subset rescue, cohort replacement or endpoint addition."
+  }
+}

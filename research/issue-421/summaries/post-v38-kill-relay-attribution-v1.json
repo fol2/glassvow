@@ -1,0 +1,494 @@
+{
+  "authority": "Apply boundary 2: close the exact direct-kill-to-next-single-target-Attack damage-two family without survivor, third-card, non-adjacent, card-subset, target-direction, payoff, carrier, acquisition, cohort, policy or method rescue and continue with the next evidence-backed minimal structural mechanism inside #421.",
+  "cachedObservationRowsRead": 256,
+  "checks": {
+    "activeSupport": true,
+    "afterimageSeparation": true,
+    "cardPairBreadth": true,
+    "firstCardBreadth": true,
+    "inactiveSupport": false,
+    "reaperBellSeparation": true,
+    "reliability": true,
+    "scorelineSeparation": true,
+    "secondCardBreadth": true,
+    "semanticValidity": true,
+    "targetTransferSeparation": true,
+    "targetTransitionBreadth": true,
+    "viableSupport": false
+  },
+  "claimBoundary": "Discovery-stage causal attribution, natural policy capacity and closed-family alias separation only; no gameplay implementation, realised payoff, causal, fresh-cohort, held-out, package-admission, detector, product or P9 claim.",
+  "counts": {
+    "activePolicies": 22,
+    "ambiguousPolicies": 32,
+    "attributableDirectKillPolicies": 32,
+    "attributableDirectKillRows": 107,
+    "baselineFaultRows": 0,
+    "broadForcedDeathPolicies": 49,
+    "broadForcedDeathRows": 155,
+    "broadForcedDeathTurns": 232,
+    "consumerDiedOnResolutionTurns": 39,
+    "distinctCardPairs": 47,
+    "distinctFirstCards": 12,
+    "distinctSecondCards": 16,
+    "distinctTargetTransitions": 2,
+    "exactInactivePolicies": 10,
+    "interveningPlayAliasTurns": 79,
+    "payoffEligibleRows": 84,
+    "payoffEligibleTurns": 114,
+    "semanticFaultPairs": 0,
+    "viablePolicies": 4
+  },
+  "decision": "close-direct-kill-relay-at-attribution-boundary",
+  "decisionBoundary": 2,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "futility",
+  "policySets": {
+    "active": [
+      5,
+      9,
+      10,
+      15,
+      21,
+      23,
+      25,
+      28,
+      29,
+      31,
+      33,
+      34,
+      36,
+      38,
+      41,
+      43,
+      45,
+      58,
+      60,
+      61,
+      62,
+      63
+    ],
+    "ambiguous": [
+      0,
+      1,
+      2,
+      4,
+      6,
+      7,
+      8,
+      11,
+      14,
+      16,
+      19,
+      20,
+      22,
+      24,
+      26,
+      27,
+      30,
+      32,
+      35,
+      37,
+      39,
+      40,
+      42,
+      44,
+      46,
+      47,
+      48,
+      50,
+      52,
+      56,
+      57,
+      59
+    ],
+    "attributableDirectKill": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      15,
+      16,
+      21,
+      23,
+      25,
+      26,
+      28,
+      29,
+      31,
+      33,
+      34,
+      36,
+      37,
+      38,
+      39,
+      41,
+      43,
+      44,
+      45,
+      48,
+      58,
+      60,
+      61,
+      62,
+      63
+    ],
+    "broadForcedDeath": [
+      0,
+      2,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      19,
+      20,
+      21,
+      22,
+      23,
+      25,
+      26,
+      28,
+      29,
+      30,
+      31,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      43,
+      44,
+      45,
+      46,
+      48,
+      52,
+      53,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63
+    ],
+    "exactInactive": [
+      3,
+      12,
+      13,
+      17,
+      18,
+      49,
+      51,
+      53,
+      54,
+      55
+    ],
+    "viable": [
+      5,
+      38,
+      61,
+      63
+    ]
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "315177c2a97c347f442e12e90b18b2ef178a48ea451baef8fbd43df5ee79309d",
+  "runnerSha256": "7735a4d0b572c9867825f0f15bfe8b052d5e32fef9c8fb3e783fa428bd0b3392",
+  "schemaVersion": 1,
+  "semanticFaults": [],
+  "separation": {
+    "afterimage": {
+      "anchorOnlyPolicies": 11,
+      "candidateOnlyPolicies": 16,
+      "crossActivePolicies": 6,
+      "jaccard": 0.18181818181818182
+    },
+    "reaperBell": {
+      "anchorOnlyPolicies": 7,
+      "candidateOnlyPolicies": 20,
+      "crossActivePolicies": 2,
+      "jaccard": 0.06896551724137931
+    },
+    "scoreline": {
+      "anchorOnlyPolicies": 9,
+      "candidateOnlyPolicies": 13,
+      "crossActivePolicies": 9,
+      "jaccard": 0.2903225806451613
+    },
+    "targetTransfer": {
+      "anchorOnlyPolicies": 2,
+      "candidateOnlyPolicies": 20,
+      "crossActivePolicies": 2,
+      "jaccard": 0.08333333333333333
+    }
+  },
+  "sourceBreadth": {
+    "observedCardPairs": [
+      [
+        "chisel",
+        "strike"
+      ],
+      [
+        "chisel",
+        "twinFangs"
+      ],
+      [
+        "eclipseSlash",
+        "chisel"
+      ],
+      [
+        "eclipseSlash",
+        "executioner"
+      ],
+      [
+        "eclipseSlash",
+        "guardedStrike"
+      ],
+      [
+        "eclipseSlash",
+        "lunge"
+      ],
+      [
+        "eclipseSlash",
+        "phantomBlades"
+      ],
+      [
+        "eclipseSlash",
+        "quickSlash"
+      ],
+      [
+        "eclipseSlash",
+        "strike"
+      ],
+      [
+        "eclipseSlash",
+        "twinFangs"
+      ],
+      [
+        "executioner",
+        "chisel"
+      ],
+      [
+        "executioner",
+        "eclipseSlash"
+      ],
+      [
+        "executioner",
+        "momentum"
+      ],
+      [
+        "executioner",
+        "oblivionStrike"
+      ],
+      [
+        "executioner",
+        "uppercut"
+      ],
+      [
+        "executioner",
+        "venomStrike"
+      ],
+      [
+        "flurry",
+        "heavyBlow"
+      ],
+      [
+        "flurry",
+        "strike"
+      ],
+      [
+        "guardedStrike",
+        "chisel"
+      ],
+      [
+        "guardedStrike",
+        "eclipseSlash"
+      ],
+      [
+        "guardedStrike",
+        "heavyBlow"
+      ],
+      [
+        "heavyBlow",
+        "chisel"
+      ],
+      [
+        "heavyBlow",
+        "guardedStrike"
+      ],
+      [
+        "heavyBlow",
+        "quickSlash"
+      ],
+      [
+        "heavyBlow",
+        "venomStrike"
+      ],
+      [
+        "oblivionStrike",
+        "chisel"
+      ],
+      [
+        "oblivionStrike",
+        "devour"
+      ],
+      [
+        "oblivionStrike",
+        "eclipseSlash"
+      ],
+      [
+        "oblivionStrike",
+        "lunge"
+      ],
+      [
+        "oblivionStrike",
+        "oblivionStrike"
+      ],
+      [
+        "oblivionStrike",
+        "strike"
+      ],
+      [
+        "quickSlash",
+        "strike"
+      ],
+      [
+        "strike",
+        "chisel"
+      ],
+      [
+        "strike",
+        "eclipseSlash"
+      ],
+      [
+        "strike",
+        "leechBlade"
+      ],
+      [
+        "strike",
+        "strike"
+      ],
+      [
+        "strike",
+        "venomStrike"
+      ],
+      [
+        "twinFangs",
+        "chisel"
+      ],
+      [
+        "twinFangs",
+        "eclipseSlash"
+      ],
+      [
+        "twinFangs",
+        "guardedStrike"
+      ],
+      [
+        "twinFangs",
+        "strike"
+      ],
+      [
+        "twinFangs",
+        "twinFangs"
+      ],
+      [
+        "twinFangs",
+        "venomStrike"
+      ],
+      [
+        "uppercut",
+        "chisel"
+      ],
+      [
+        "uppercut",
+        "strike"
+      ],
+      [
+        "uppercut",
+        "uppercut"
+      ],
+      [
+        "venomStrike",
+        "devour"
+      ]
+    ],
+    "observedFirstCards": [
+      "chisel",
+      "eclipseSlash",
+      "executioner",
+      "flurry",
+      "guardedStrike",
+      "heavyBlow",
+      "oblivionStrike",
+      "quickSlash",
+      "strike",
+      "twinFangs",
+      "uppercut",
+      "venomStrike"
+    ],
+    "observedSecondCards": [
+      "chisel",
+      "devour",
+      "eclipseSlash",
+      "executioner",
+      "guardedStrike",
+      "heavyBlow",
+      "leechBlade",
+      "lunge",
+      "momentum",
+      "oblivionStrike",
+      "phantomBlades",
+      "quickSlash",
+      "strike",
+      "twinFangs",
+      "uppercut",
+      "venomStrike"
+    ],
+    "observedTargetTransitions": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        0
+      ]
+    ],
+    "payoffDamage": 2
+  },
+  "wallTimeSeconds": 8.876849
+}

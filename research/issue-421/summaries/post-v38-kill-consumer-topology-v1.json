@@ -1,0 +1,931 @@
+{
+  "assessments": [
+    {
+      "checks": {
+        "activeSupport": false,
+        "afterimageSeparation": false,
+        "closedKillRelaySeparation": false,
+        "consumerBreadth": false,
+        "inactiveSupport": true,
+        "pairBreadth": false,
+        "producerBreadth": false,
+        "reaperBellSeparation": false,
+        "reliability": true,
+        "scorelineSeparation": false,
+        "semanticValidity": true,
+        "targetTransferSeparation": false,
+        "viableSupport": false
+      },
+      "counts": {
+        "activePolicies": 0,
+        "ambiguousPolicies": 4,
+        "distinctConsumers": 2,
+        "distinctPairs": 3,
+        "distinctProducers": 2,
+        "exactInactivePolicies": 60,
+        "qualifyingRows": 4,
+        "qualifyingTurns": 4,
+        "viablePolicies": 0
+      },
+      "eligible": false,
+      "id": "attack-allEnemies",
+      "policySets": {
+        "active": [],
+        "ambiguous": [
+          7,
+          54,
+          59,
+          60
+        ],
+        "exactInactive": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          55,
+          56,
+          57,
+          58,
+          61,
+          62,
+          63
+        ],
+        "viable": []
+      },
+      "selectionMetrics": {
+        "distinctPairs": 3,
+        "maximumAnchorJaccard": 0.0,
+        "supportMargin": -16,
+        "viablePolicies": 0
+      },
+      "separation": {
+        "afterimage": {
+          "anchorOnlyPolicies": 17,
+          "candidateOnlyPolicies": 0,
+          "crossActivePolicies": 0,
+          "jaccard": 0.0
+        },
+        "closedKillRelay": {
+          "anchorOnlyPolicies": 22,
+          "candidateOnlyPolicies": 0,
+          "crossActivePolicies": 0,
+          "jaccard": 0.0
+        },
+        "reaperBell": {
+          "anchorOnlyPolicies": 9,
+          "candidateOnlyPolicies": 0,
+          "crossActivePolicies": 0,
+          "jaccard": 0.0
+        },
+        "scoreline": {
+          "anchorOnlyPolicies": 18,
+          "candidateOnlyPolicies": 0,
+          "crossActivePolicies": 0,
+          "jaccard": 0.0
+        },
+        "targetTransfer": {
+          "anchorOnlyPolicies": 4,
+          "candidateOnlyPolicies": 0,
+          "crossActivePolicies": 0,
+          "jaccard": 0.0
+        }
+      },
+      "sourceBreadth": {
+        "consumerCards": [
+          "annihilate",
+          "tempest"
+        ],
+        "pairs": [
+          [
+            "momentum",
+            "annihilate"
+          ],
+          [
+            "strike",
+            "annihilate"
+          ],
+          [
+            "strike",
+            "tempest"
+          ]
+        ],
+        "producerCards": [
+          "momentum",
+          "strike"
+        ]
+      }
+    },
+    {
+      "checks": {
+        "activeSupport": true,
+        "afterimageSeparation": true,
+        "closedKillRelaySeparation": true,
+        "consumerBreadth": true,
+        "inactiveSupport": true,
+        "pairBreadth": true,
+        "producerBreadth": true,
+        "reaperBellSeparation": true,
+        "reliability": true,
+        "scorelineSeparation": true,
+        "semanticValidity": true,
+        "targetTransferSeparation": true,
+        "viableSupport": false
+      },
+      "counts": {
+        "activePolicies": 24,
+        "ambiguousPolicies": 23,
+        "distinctConsumers": 15,
+        "distinctPairs": 35,
+        "distinctProducers": 10,
+        "exactInactivePolicies": 17,
+        "qualifyingRows": 80,
+        "qualifyingTurns": 98,
+        "viablePolicies": 7
+      },
+      "eligible": false,
+      "id": "skill",
+      "policySets": {
+        "active": [
+          0,
+          5,
+          8,
+          10,
+          11,
+          12,
+          13,
+          16,
+          19,
+          20,
+          25,
+          30,
+          31,
+          38,
+          39,
+          48,
+          52,
+          53,
+          57,
+          59,
+          60,
+          61,
+          62,
+          63
+        ],
+        "ambiguous": [
+          2,
+          3,
+          6,
+          9,
+          14,
+          17,
+          21,
+          23,
+          24,
+          26,
+          28,
+          29,
+          32,
+          34,
+          36,
+          40,
+          41,
+          42,
+          44,
+          45,
+          46,
+          47,
+          54
+        ],
+        "exactInactive": [
+          1,
+          4,
+          7,
+          15,
+          18,
+          22,
+          27,
+          33,
+          35,
+          37,
+          43,
+          49,
+          50,
+          51,
+          55,
+          56,
+          58
+        ],
+        "viable": [
+          5,
+          8,
+          38,
+          48,
+          59,
+          61,
+          63
+        ]
+      },
+      "selectionMetrics": {
+        "distinctPairs": 35,
+        "maximumAnchorJaccard": 0.24324324324324326,
+        "supportMargin": 1,
+        "viablePolicies": 7
+      },
+      "separation": {
+        "afterimage": {
+          "anchorOnlyPolicies": 10,
+          "candidateOnlyPolicies": 17,
+          "crossActivePolicies": 7,
+          "jaccard": 0.20588235294117646
+        },
+        "closedKillRelay": {
+          "anchorOnlyPolicies": 13,
+          "candidateOnlyPolicies": 15,
+          "crossActivePolicies": 9,
+          "jaccard": 0.24324324324324326
+        },
+        "reaperBell": {
+          "anchorOnlyPolicies": 7,
+          "candidateOnlyPolicies": 22,
+          "crossActivePolicies": 2,
+          "jaccard": 0.06451612903225806
+        },
+        "scoreline": {
+          "anchorOnlyPolicies": 10,
+          "candidateOnlyPolicies": 16,
+          "crossActivePolicies": 8,
+          "jaccard": 0.23529411764705882
+        },
+        "targetTransfer": {
+          "anchorOnlyPolicies": 2,
+          "candidateOnlyPolicies": 22,
+          "crossActivePolicies": 2,
+          "jaccard": 0.07692307692307693
+        }
+      },
+      "sourceBreadth": {
+        "consumerCards": [
+          "aegis",
+          "bloodRite",
+          "brace",
+          "catalyst",
+          "cripple",
+          "defend",
+          "deflect",
+          "firstSpark",
+          "fortify",
+          "limitBreak",
+          "offering",
+          "preparation",
+          "sidestep",
+          "surge",
+          "warCry"
+        ],
+        "pairs": [
+          [
+            "chisel",
+            "brace"
+          ],
+          [
+            "chisel",
+            "fortify"
+          ],
+          [
+            "chisel",
+            "limitBreak"
+          ],
+          [
+            "chisel",
+            "warCry"
+          ],
+          [
+            "eclipseSlash",
+            "bloodRite"
+          ],
+          [
+            "eclipseSlash",
+            "brace"
+          ],
+          [
+            "eclipseSlash",
+            "catalyst"
+          ],
+          [
+            "eclipseSlash",
+            "limitBreak"
+          ],
+          [
+            "eclipseSlash",
+            "offering"
+          ],
+          [
+            "eclipseSlash",
+            "surge"
+          ],
+          [
+            "eclipseSlash",
+            "warCry"
+          ],
+          [
+            "executioner",
+            "aegis"
+          ],
+          [
+            "executioner",
+            "deflect"
+          ],
+          [
+            "executioner",
+            "firstSpark"
+          ],
+          [
+            "guardedStrike",
+            "warCry"
+          ],
+          [
+            "heavyBlow",
+            "limitBreak"
+          ],
+          [
+            "lunge",
+            "preparation"
+          ],
+          [
+            "oblivionStrike",
+            "aegis"
+          ],
+          [
+            "oblivionStrike",
+            "firstSpark"
+          ],
+          [
+            "oblivionStrike",
+            "limitBreak"
+          ],
+          [
+            "oblivionStrike",
+            "preparation"
+          ],
+          [
+            "strike",
+            "aegis"
+          ],
+          [
+            "strike",
+            "brace"
+          ],
+          [
+            "strike",
+            "cripple"
+          ],
+          [
+            "strike",
+            "deflect"
+          ],
+          [
+            "strike",
+            "firstSpark"
+          ],
+          [
+            "strike",
+            "offering"
+          ],
+          [
+            "strike",
+            "preparation"
+          ],
+          [
+            "strike",
+            "sidestep"
+          ],
+          [
+            "strike",
+            "surge"
+          ],
+          [
+            "strike",
+            "warCry"
+          ],
+          [
+            "twinFangs",
+            "brace"
+          ],
+          [
+            "twinFangs",
+            "defend"
+          ],
+          [
+            "uppercut",
+            "defend"
+          ],
+          [
+            "uppercut",
+            "warCry"
+          ]
+        ],
+        "producerCards": [
+          "chisel",
+          "eclipseSlash",
+          "executioner",
+          "guardedStrike",
+          "heavyBlow",
+          "lunge",
+          "oblivionStrike",
+          "strike",
+          "twinFangs",
+          "uppercut"
+        ]
+      }
+    },
+    {
+      "checks": {
+        "activeSupport": false,
+        "afterimageSeparation": true,
+        "closedKillRelaySeparation": true,
+        "consumerBreadth": true,
+        "inactiveSupport": true,
+        "pairBreadth": true,
+        "producerBreadth": true,
+        "reaperBellSeparation": true,
+        "reliability": true,
+        "scorelineSeparation": true,
+        "semanticValidity": true,
+        "targetTransferSeparation": true,
+        "viableSupport": false
+      },
+      "counts": {
+        "activePolicies": 13,
+        "ambiguousPolicies": 28,
+        "distinctConsumers": 8,
+        "distinctPairs": 35,
+        "distinctProducers": 13,
+        "exactInactivePolicies": 23,
+        "qualifyingRows": 57,
+        "qualifyingTurns": 64,
+        "viablePolicies": 4
+      },
+      "eligible": false,
+      "id": "power",
+      "policySets": {
+        "active": [
+          8,
+          12,
+          22,
+          26,
+          29,
+          35,
+          42,
+          49,
+          53,
+          54,
+          59,
+          60,
+          63
+        ],
+        "ambiguous": [
+          4,
+          5,
+          6,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          27,
+          28,
+          30,
+          31,
+          33,
+          39,
+          43,
+          45,
+          46,
+          48,
+          50,
+          56,
+          57,
+          61,
+          62
+        ],
+        "exactInactive": [
+          0,
+          1,
+          2,
+          3,
+          7,
+          9,
+          10,
+          16,
+          20,
+          24,
+          32,
+          34,
+          36,
+          37,
+          38,
+          40,
+          41,
+          44,
+          47,
+          51,
+          52,
+          55,
+          58
+        ],
+        "viable": [
+          8,
+          29,
+          35,
+          59
+        ]
+      },
+      "selectionMetrics": {
+        "distinctPairs": 35,
+        "maximumAnchorJaccard": 0.15789473684210525,
+        "supportMargin": -3,
+        "viablePolicies": 4
+      },
+      "separation": {
+        "afterimage": {
+          "anchorOnlyPolicies": 15,
+          "candidateOnlyPolicies": 11,
+          "crossActivePolicies": 2,
+          "jaccard": 0.07142857142857142
+        },
+        "closedKillRelay": {
+          "anchorOnlyPolicies": 19,
+          "candidateOnlyPolicies": 10,
+          "crossActivePolicies": 3,
+          "jaccard": 0.09375
+        },
+        "reaperBell": {
+          "anchorOnlyPolicies": 6,
+          "candidateOnlyPolicies": 10,
+          "crossActivePolicies": 3,
+          "jaccard": 0.15789473684210525
+        },
+        "scoreline": {
+          "anchorOnlyPolicies": 16,
+          "candidateOnlyPolicies": 11,
+          "crossActivePolicies": 2,
+          "jaccard": 0.06896551724137931
+        },
+        "targetTransfer": {
+          "anchorOnlyPolicies": 3,
+          "candidateOnlyPolicies": 12,
+          "crossActivePolicies": 1,
+          "jaccard": 0.0625
+        }
+      },
+      "sourceBreadth": {
+        "consumerCards": [
+          "agility",
+          "bastion",
+          "empower",
+          "frenzy",
+          "ironSkin",
+          "regrowth",
+          "risingLitany",
+          "virulence"
+        ],
+        "pairs": [
+          [
+            "chisel",
+            "frenzy"
+          ],
+          [
+            "chisel",
+            "ironSkin"
+          ],
+          [
+            "chisel",
+            "regrowth"
+          ],
+          [
+            "chisel",
+            "virulence"
+          ],
+          [
+            "eclipseSlash",
+            "agility"
+          ],
+          [
+            "eclipseSlash",
+            "bastion"
+          ],
+          [
+            "eclipseSlash",
+            "empower"
+          ],
+          [
+            "eclipseSlash",
+            "ironSkin"
+          ],
+          [
+            "eclipseSlash",
+            "regrowth"
+          ],
+          [
+            "executioner",
+            "frenzy"
+          ],
+          [
+            "executioner",
+            "regrowth"
+          ],
+          [
+            "executioner",
+            "risingLitany"
+          ],
+          [
+            "flurry",
+            "agility"
+          ],
+          [
+            "guardedStrike",
+            "bastion"
+          ],
+          [
+            "guardedStrike",
+            "empower"
+          ],
+          [
+            "heavyBlow",
+            "empower"
+          ],
+          [
+            "heavyBlow",
+            "ironSkin"
+          ],
+          [
+            "heavyBlow",
+            "regrowth"
+          ],
+          [
+            "lunge",
+            "frenzy"
+          ],
+          [
+            "lunge",
+            "ironSkin"
+          ],
+          [
+            "lunge",
+            "regrowth"
+          ],
+          [
+            "momentum",
+            "agility"
+          ],
+          [
+            "oblivionStrike",
+            "agility"
+          ],
+          [
+            "oblivionStrike",
+            "empower"
+          ],
+          [
+            "oblivionStrike",
+            "frenzy"
+          ],
+          [
+            "oblivionStrike",
+            "regrowth"
+          ],
+          [
+            "oblivionStrike",
+            "risingLitany"
+          ],
+          [
+            "strike",
+            "bastion"
+          ],
+          [
+            "strike",
+            "empower"
+          ],
+          [
+            "strike",
+            "frenzy"
+          ],
+          [
+            "strike",
+            "ironSkin"
+          ],
+          [
+            "strike",
+            "regrowth"
+          ],
+          [
+            "twinFangs",
+            "empower"
+          ],
+          [
+            "uppercut",
+            "ironSkin"
+          ],
+          [
+            "venomStrike",
+            "ironSkin"
+          ]
+        ],
+        "producerCards": [
+          "chisel",
+          "eclipseSlash",
+          "executioner",
+          "flurry",
+          "guardedStrike",
+          "heavyBlow",
+          "lunge",
+          "momentum",
+          "oblivionStrike",
+          "strike",
+          "twinFangs",
+          "uppercut",
+          "venomStrike"
+        ]
+      }
+    }
+  ],
+  "authority": "Apply boundary 2: close the complete immediate post-kill consumer topology without exact-card subset, second/third consumer, ordering, payoff, duration, carrier, acquisition, cohort, policy or method rescue; continue with the next evidence-backed minimal structural mechanism inside #421.",
+  "baselineFaultRows": 0,
+  "cachedObservationRowsRead": 256,
+  "claimBoundary": "Discovery-stage immediate-consumer topology, natural policy capacity and closed-family alias separation only; no gameplay implementation, realised payoff, causal, fresh-cohort, held-out, package-admission, detector, product or P9 claim.",
+  "closedControl": {
+    "activePolicies": 32,
+    "id": "attack-enemy",
+    "policySet": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      15,
+      16,
+      21,
+      23,
+      25,
+      26,
+      28,
+      29,
+      31,
+      33,
+      34,
+      36,
+      37,
+      38,
+      39,
+      41,
+      43,
+      44,
+      45,
+      48,
+      58,
+      60,
+      61,
+      62,
+      63
+    ],
+    "qualifyingRows": 107
+  },
+  "decision": "close-immediate-post-kill-consumer-topology",
+  "decisionBoundary": 2,
+  "eligibleClasses": [],
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "futility",
+  "partitionEventCounts": {
+    "attack-allEnemies": 4,
+    "attack-enemy": 153,
+    "no-next-play": 799,
+    "power": 64,
+    "skill": 98,
+    "unclassified": 0
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "a5d0f447678f991fac3c55fb8e42fd55d8d62b28e4c4a9c74320bcf355f77eae",
+  "runnerSha256": "55b943a205520f847b63868ab0f52e76391fec70d551a46557e6450a6879e2e8",
+  "schemaVersion": 1,
+  "selectedClass": null,
+  "semanticFaults": [],
+  "sourceConsumerClasses": {
+    "attack-allEnemies": [
+      "annihilate",
+      "cleave",
+      "shardstorm",
+      "tempest"
+    ],
+    "power": [
+      "agility",
+      "bastion",
+      "empower",
+      "frenzy",
+      "ironSkin",
+      "nightSight",
+      "pyreheart",
+      "regrowth",
+      "risingLitany",
+      "virulence"
+    ],
+    "skill": [
+      "aegis",
+      "ashenChoir",
+      "bloodRite",
+      "brace",
+      "bulwark",
+      "catalyst",
+      "cripple",
+      "defend",
+      "deflect",
+      "emberdance",
+      "firstSpark",
+      "flawlessForm",
+      "fortify",
+      "limitBreak",
+      "offering",
+      "preparation",
+      "sidestep",
+      "smother",
+      "surge",
+      "tithe",
+      "toxicMist",
+      "warCry"
+    ]
+  },
+  "wallTimeSeconds": 6.735459
+}
