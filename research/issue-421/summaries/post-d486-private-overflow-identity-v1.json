@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "outcomeClass": "inconclusive",
+  "decision": "record-private-overflow-identity-inconclusive-at-cap",
+  "decisionBoundary": 3,
+  "claimBoundary": "Pre-execution source-identity audit only. No direct mechanism observation, simulator row, natural support, capacity, policy, causal endpoint, balance, product, acceptance or P9 claim.",
+  "authority": "Record this identity preflight inconclusive at cap; do not rerun, alter the matrix or use protected seeds.",
+  "protocolSha256": "a87c2a125565cdee0a5d8982e79f4814fa17f88af27629bdcf57691853bbf58c",
+  "runnerSha256": "bc8f198aca339544ab0002753bf439936637b3d7d665cd8c2d414bd338449fb2",
+  "executionError": "immutable source identity drift",
+  "preExecutionAudit": {
+    "failedField": "candidateStatus[0]",
+    "protocolValue": " M domain/rules/combat.gd",
+    "runnerValue": "M domain/rules/combat.gd",
+    "rootCause": "The frozen protocol recorded raw git status --porcelain output. The runner's shared git helper applies str.strip() to the complete stdout before splitlines(), removing the first line's meaningful leading worktree-status space only. Raw status, file hashes, prototype diff, heads and repository refs did not drift.",
+    "scientificDisposition": "This is a frozen measurement-interface failure, not evidence for or against the Ember-overflow mediator. The preregistered no-rerun rule makes the exact representation unavailable for causal use."
+  },
+  "sourceGateFaults": [],
+  "directFaults": [],
+  "GodotProcesses": 0,
+  "directControlledObservations": 0,
+  "preregisteredDirectControlledObservations": 62,
+  "newSimulatorObservationRows": 0,
+  "newLedgerRows": 0,
+  "protectedSeedRows": 0,
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "replayForbidden": true,
+  "archiveHeadsPreserved": {
+    "843e899": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+    "d486289": "d48628913409375437a20a52e290d098cc20062e"
+  }
+}

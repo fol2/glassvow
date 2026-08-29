@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "stage": "post-d486-private-overflow-identity",
+  "question": "Does the sole zero-row-selected positive-Ember-overflow to Heavy Blow representation preserve exact current-main at omission and explicit off, preserve every mechanistic negative control at on, and isolate its producer, non-stacking private mediator, exact consumer, fixed payoff, comparator and lifecycle under direct A/B/AB controls?",
+  "hypothesis": "For Duskblade only, a positive post-quest Ember request whose realised clamp delta is smaller than the request can set one non-stacking combat-private mark. A later exact Heavy Blow in the same player turn consumes that mark and adds exactly three damage to its sole ordinary hit and preview. The mark otherwise expires at end turn, victory or loss.",
+  "claimBoundary": "Source, interface, direct A/B/AB, call-cardinality, comparator, exact-null and intended-mediator identity only. No natural support, capacity, policy choice, causal endpoint, balance, product, acceptance or P9 claim.",
+  "factorDefinitions": {
+    "emberOverflowHeavyBlow": {
+      "type": "one binary deterministic research factor",
+      "levels": ["off", "positive-overflow-one-bit-heavy-blow-plus-three"],
+      "null": "off",
+      "enabled": "For Duskblade only, after quest adjustment and before the unchanged Ember event, a positive gain_embers request with requested minus realised delta greater than zero sets one non-stacking private mark if none is set. A later exact heavyBlow play in the same player turn consumes it and adds three to the card's sole ordinary hit and preview.",
+      "producerMagnitude": "Any positive discarded amount sets exactly one bit. Discarded magnitude, gain source and repeated overflow while marked cannot scale or stack the mediator.",
+      "payoffMagnitude": 3,
+      "lifecycle": "Combat-private; expires unused at end turn, victory or loss and is omitted from the product projection and save surface."
+    },
+    "producerControl": {
+      "levels": [false, true],
+      "null": false,
+      "role": "Research-only mechanical A control; may set and expire only the one-bit mediator and telemetry."
+    },
+    "consumerControl": {
+      "levels": [false, true],
+      "null": false,
+      "role": "Research-only mechanical B control; without an A-created mark it must be exact null."
+    },
+    "scorelinePayoff": {"levels": ["off-closed"], "fixed": "Separate immutable causal factor; absent."},
+    "afterimagePayoff": {"levels": ["off-closed"], "fixed": "Separate immutable causal factor; absent."},
+    "acquisitionPriority": {"levels": ["current-main"], "fixed": "No acquisition surface or policy change."},
+    "wardSetupPriority": {"levels": ["current-main"], "fixed": "No Ward or setup surface."}
+  },
+  "design": {
+    "type": "One binary-factor direct identity preflight with internal A/B/AB controls; not a factorial or endpoint experiment.",
+    "matrix": {
+      "currentMain": 15,
+      "candidateOmitted": 15,
+      "candidateExplicitOff": 15,
+      "candidateAB": 15,
+      "componentControls": 2,
+      "totalDirectControlledObservations": 62
+    },
+    "order": "Within the candidate process, every omitted row executes before any configuration, followed by explicit off, AB, then the sole A-only and B-only component anchor.",
+    "anchors": {
+      "null": "Current-main, omitted and explicit false/false are canonically identical in all fifteen contexts after removing only probe labels.",
+      "positive": "Only Dusk positive clamp overflow followed later in the same turn by exact Heavy Blow emits the full chain and changes exactly one previewed and realised damage amount by three.",
+      "negative": "Uncapped, Ash, zero, negative, pre-overflow Heavy Blow, non-Heavy-Blow skill and Attack, next-turn Heavy Blow, victory and loss boundaries cannot receive the payoff.",
+      "component": "A-only sets one mark and expires it with no path change; B-only is exact null; AB preserves A's producer and mediator and adds only exact Heavy Blow consumption and plus-three payoff."
+    }
+  },
+  "estimands": {
+    "baselineIdentity": "Zero current-main versus omitted and current-main versus explicit-off mismatches across fifteen paired identities.",
+    "nullAliasIdentity": "Zero omitted versus explicit-off mismatches.",
+    "producerIdentity": "A-only emits one producer, one mediator-set and one end-turn expiry, while every non-research path, result and RNG value equals explicit off.",
+    "consumerIdentity": "B-only is exact null without an A-created mark.",
+    "abChain": "Eligible AB rows emit one ordered producer, mediator-set, consumer, mediator-consumed and payoff chain; repeated overflow remains one producer and one payoff.",
+    "payoffIsolation": "After removing research events and subtracting exactly three from the sole Heavy Blow preview, hit, target HP and damage statistic, the complete row equals explicit off.",
+    "lifecycleIdentity": "Unused marks clear at end turn, victory and loss before a later consumer can act.",
+    "notEstimated": "Natural frequency, support, outcome, policy sensitivity, balance, product or acceptance."
+  },
+  "mechanisticallyJustifiedInteractions": [
+    "emberOverflowHeavyBlow by aspect: only Duskblade can set or consume the mediator; Ashwarden is exact null.",
+    "emberOverflowHeavyBlow by clamp state: only requested positive gain above the realised delta sets the mark; uncapped, zero and negative gains are null.",
+    "emberOverflowHeavyBlow by action order: Heavy Blow must follow overflow in the same player turn; before-overflow and next-turn Heavy Blow are payoff-null.",
+    "emberOverflowHeavyBlow by consumer identity: exact heavyBlow consumes; defend and twinFangs leave the mark to expire.",
+    "emberOverflowHeavyBlow by lifecycle boundary: end turn, victory and loss clear an unused mark.",
+    "emberOverflowHeavyBlow by upgrade and target Ward: the fixed increment remains three for base, upgraded and blocked Heavy Blow; no scaling or threshold is introduced."
+  ],
+  "aliasStructure": {
+    "nullAliases": "Current-main absence, class-default omission and explicit false/false are exact aliases.",
+    "producerNulls": "Ash, requested non-positive gain and positive gain fully realised under the cap are exact enabled nulls.",
+    "consumerNulls": "Absent mark, wrong card, wrong order and expired mark are payoff-null; producer telemetry may remain where the producer itself was valid.",
+    "nonScalar": "Lost Ember magnitude is observed for attribution but cannot become a level, threshold, bin, selected subset or payoff scale.",
+    "closedFamilies": "Art, represented Ember reserve, Scoreline, Afterimage, Ward, draw, duplicate, reshuffle, cross-turn hold, kill, target transfer and terminal-hit families remain closed and absent.",
+    "jointCells": "No Scoreline, Afterimage, acquisition, Ward, ML, RL, optimiser or joint-factor cell exists in this preflight."
+  },
+  "componentControlScenario": "dusk-full-overflow-heavy",
+  "componentProducer": {"requested": 3, "realised": 0, "lost": 3, "totalBefore": 9, "cap": 9},
+  "directScenarios": [
+    {
+      "id": "dusk-full-overflow-heavy",
+      "row": {"seed": 347101, "aspect": "duskblade", "embers": 9, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "gain", "n": 3}, {"kind": "play", "card": "heavyBlow", "target": 0}, {"kind": "end"}]},
+      "expected": {"stages": ["producer", "mediator-set", "consumer", "mediator-consumed", "payoff"], "producer": {"requested": 3, "realised": 0, "lost": 3, "totalBefore": 9, "cap": 9}, "actionMarks": [1, 0, 0], "damageDelta": 3, "expiry": null}
+    },
+    {
+      "id": "dusk-partial-overflow-heavy",
+      "row": {"seed": 347102, "aspect": "duskblade", "embers": 8, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "gain", "n": 3}, {"kind": "play", "card": "heavyBlow", "target": 0}]},
+      "expected": {"stages": ["producer", "mediator-set", "consumer", "mediator-consumed", "payoff"], "producer": {"requested": 3, "realised": 1, "lost": 2, "totalBefore": 8, "cap": 9}, "actionMarks": [1, 0], "damageDelta": 3, "expiry": null}
+    },
+    {
+      "id": "dusk-uncapped-gain-heavy",
+      "row": {"seed": 347103, "aspect": "duskblade", "embers": 5, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "gain", "n": 3}, {"kind": "play", "card": "heavyBlow", "target": 0}]},
+      "expected": {"stages": [], "producer": null, "actionMarks": [0, 0], "damageDelta": 0, "expiry": null}
+    },
+    {
+      "id": "ash-full-overflow-heavy",
+      "row": {"seed": 347104, "aspect": "ashwarden", "embers": 9, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "gain", "n": 3}, {"kind": "play", "card": "heavyBlow", "target": 0}]},
+      "expected": {"stages": [], "producer": null, "actionMarks": [0, 0], "damageDelta": 0, "expiry": null}
+    },
+    {
+      "id": "dusk-heavy-before-overflow",
+      "row": {"seed": 347105, "aspect": "duskblade", "embers": 9, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "play", "card": "heavyBlow", "target": 0}, {"kind": "gain", "n": 3}, {"kind": "end"}]},
+      "expected": {"stages": ["producer", "mediator-set", "expiry"], "producer": {"requested": 3, "realised": 0, "lost": 3, "totalBefore": 9, "cap": 9}, "actionMarks": [0, 1, 0], "damageDelta": 0, "expiry": "end-turn"}
+    },
+    {
+      "id": "dusk-overflow-defend-expiry",
+      "row": {"seed": 347106, "aspect": "duskblade", "embers": 9, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "gain", "n": 3}, {"kind": "play", "card": "defend"}, {"kind": "end"}]},
+      "expected": {"stages": ["producer", "mediator-set", "expiry"], "producer": {"requested": 3, "realised": 0, "lost": 3, "totalBefore": 9, "cap": 9}, "actionMarks": [1, 1, 0], "damageDelta": 0, "expiry": "end-turn"}
+    },
+    {
+      "id": "dusk-overflow-twin-fangs-expiry",
+      "row": {"seed": 347107, "aspect": "duskblade", "embers": 9, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "gain", "n": 3}, {"kind": "play", "card": "twinFangs", "target": 0}, {"kind": "end"}]},
+      "expected": {"stages": ["producer", "mediator-set", "expiry"], "producer": {"requested": 3, "realised": 0, "lost": 3, "totalBefore": 9, "cap": 9}, "actionMarks": [1, 1, 0], "damageDelta": 0, "expiry": "end-turn"}
+    },
+    {
+      "id": "dusk-repeated-overflow-heavy",
+      "row": {"seed": 347108, "aspect": "duskblade", "embers": 9, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "gain", "n": 3}, {"kind": "gain", "n": 2}, {"kind": "play", "card": "heavyBlow", "target": 0}]},
+      "expected": {"stages": ["producer", "mediator-set", "consumer", "mediator-consumed", "payoff"], "producer": {"requested": 3, "realised": 0, "lost": 3, "totalBefore": 9, "cap": 9}, "actionMarks": [1, 1, 0], "damageDelta": 3, "expiry": null}
+    },
+    {
+      "id": "dusk-overflow-next-turn-heavy",
+      "row": {"seed": 347109, "aspect": "duskblade", "embers": 9, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "gain", "n": 3}, {"kind": "end"}, {"kind": "play", "card": "heavyBlow", "target": 0}]},
+      "expected": {"stages": ["producer", "mediator-set", "expiry"], "producer": {"requested": 3, "realised": 0, "lost": 3, "totalBefore": 9, "cap": 9}, "actionMarks": [1, 0, 0], "damageDelta": 0, "expiry": "end-turn"}
+    },
+    {
+      "id": "dusk-overflow-upgraded-heavy",
+      "row": {"seed": 347110, "aspect": "duskblade", "embers": 9, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "gain", "n": 3}, {"kind": "play", "card": "heavyBlow", "target": 0, "up": true}]},
+      "expected": {"stages": ["producer", "mediator-set", "consumer", "mediator-consumed", "payoff"], "producer": {"requested": 3, "realised": 0, "lost": 3, "totalBefore": 9, "cap": 9}, "actionMarks": [1, 0], "damageDelta": 3, "expiry": null}
+    },
+    {
+      "id": "dusk-overflow-blocked-heavy",
+      "row": {"seed": 347111, "aspect": "duskblade", "embers": 9, "emberCap": 9, "enemyHp": 60, "enemyBlock": 5, "actions": [{"kind": "gain", "n": 3}, {"kind": "play", "card": "heavyBlow", "target": 0}]},
+      "expected": {"stages": ["producer", "mediator-set", "consumer", "mediator-consumed", "payoff"], "producer": {"requested": 3, "realised": 0, "lost": 3, "totalBefore": 9, "cap": 9}, "actionMarks": [1, 0], "damageDelta": 3, "expiry": null}
+    },
+    {
+      "id": "dusk-zero-gain-heavy",
+      "row": {"seed": 347112, "aspect": "duskblade", "embers": 9, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "gain", "n": 0}, {"kind": "play", "card": "heavyBlow", "target": 0}]},
+      "expected": {"stages": [], "producer": null, "actionMarks": [0, 0], "damageDelta": 0, "expiry": null}
+    },
+    {
+      "id": "dusk-negative-gain-heavy",
+      "row": {"seed": 347113, "aspect": "duskblade", "embers": 9, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "gain", "n": -3}, {"kind": "play", "card": "heavyBlow", "target": 0}]},
+      "expected": {"stages": [], "producer": null, "actionMarks": [0, 0], "damageDelta": 0, "expiry": null}
+    },
+    {
+      "id": "dusk-overflow-victory-expiry",
+      "row": {"seed": 347114, "aspect": "duskblade", "embers": 9, "emberCap": 9, "enemyHp": 6, "enemyBlock": 0, "actions": [{"kind": "gain", "n": 3}, {"kind": "play", "card": "twinFangs", "target": 0}]},
+      "expected": {"stages": ["producer", "mediator-set", "expiry"], "producer": {"requested": 3, "realised": 0, "lost": 3, "totalBefore": 9, "cap": 9}, "actionMarks": [1, 0], "damageDelta": 0, "expiry": "victory"}
+    },
+    {
+      "id": "dusk-overflow-loss-expiry",
+      "row": {"seed": 347115, "aspect": "duskblade", "embers": 9, "emberCap": 9, "enemyHp": 60, "enemyBlock": 0, "actions": [{"kind": "gain", "n": 3}, {"kind": "lose"}]},
+      "expected": {"stages": ["producer", "mediator-set", "expiry"], "producer": {"requested": 3, "realised": 0, "lost": 3, "totalBefore": 9, "cap": 9}, "actionMarks": [1, 0], "damageDelta": 0, "expiry": "loss"}
+    }
+  ],
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/heads/research/issue-421-post-843e899-family-ladder-evidence": "d48628913409375437a20a52e290d098cc20062e",
+      "refs/remotes/origin/research/issue-421-post-843e899-family-ladder-evidence": "d48628913409375437a20a52e290d098cc20062e"
+    },
+    "baselineHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "baselineStatus": ["?? tools/research_421_ember_overflow_probe.gd", "?? tools/research_421_ember_overflow_probe.gd.uid"],
+    "candidateStatus": [" M domain/rules/combat.gd", " M domain/state/player_combatant.gd", "?? tools/research_421_ember_overflow_probe.gd", "?? tools/research_421_ember_overflow_probe.gd.uid"],
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_ember_overflow_probe.gd": "e8439a6178a6eff416e7187d2c78f13dadab0ed295e9be03611fc86fb455de40",
+      "tools/research_421_ember_overflow_probe.gd.uid": "d1d7411e2dfa566fc4c6cc571fec34a51f592976d342a6d369cedfedcfb0608e"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "a3f6f31c4503c573436faa7eccc9d6413d40b1da3aa17382f9848df6c3811edb",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "033f825df0106c5819663a80456c0c3696ce44ddb0f2af66ce48e330898d2be3",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_ember_overflow_probe.gd": "e8439a6178a6eff416e7187d2c78f13dadab0ed295e9be03611fc86fb455de40",
+      "tools/research_421_ember_overflow_probe.gd.uid": "d1d7411e2dfa566fc4c6cc571fec34a51f592976d342a6d369cedfedcfb0608e"
+    },
+    "candidatePrototypeDiffSha256": "3687dbebfef45bd4c28dbb4c0e7d2df41e9bfb7aa6cdd92174ebd4670273762c",
+    "godotBinaryPath": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "runnerSha256": "bc8f198aca339544ab0002753bf439936637b3d7d665cd8c2d414bd338449fb2",
+    "taskCapsulePath": "task-capsule-5460811702-v21.json",
+    "taskCapsuleSha256": "cdef3ea4ae0712ccb00ed0f496451bef4875ee3a43eb792b6fc9492701488d93",
+    "predecessorSha256": {
+      "post_d486_private_overflow_design_v1.py": "99c003ea8717b0c1958d90c5d85b7abb3cb9d422236d9d208727a639037a7db4",
+      "protocols/post-d486-private-overflow-design-v1.json": "44b6f7e0b3d2c36126690e4bc2e780796b0e9737f00aed87931e6e3d6908115f",
+      "summaries/post-d486-private-overflow-design-v1.json": "1a3bb6dc7c899a57467abf27385e379edcb4f081eb7b76266bbcd7e94758bf90",
+      "summaries/post-d486-private-overflow-primary-sources-v1.md": "2bee618ff9a186918e99c44482305fddbdb22dbc1b19d593d73eb63a1045ed54"
+    }
+  },
+  "ledgerFreeze": {"sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213", "records": 482036, "firstSequence": 1, "lastSequence": 482036, "protectedSeedRows": 0, "sqliteIntegrity": "ok"},
+  "budget": {"godotProcessExecutions": 2, "directControlledObservations": 62, "newScientificSimulatorObservationRows": 0, "newLedgerRows": 0, "maximumWallTimeSeconds": 120, "maximumModelContextTokensDuringExecutionAndDecision": 0, "protectedSeeds": 0},
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns the fixed matrix, two Godot processes, content-addressed caching, comparisons and decision.",
+    "order": "Verify immutable inputs and static cardinality; execute the complete current-main plan once; execute the complete candidate plan once; analyse the only look; verify byte-identical ledger.",
+    "firstLook": "The 62 direct observations are the only look. No source, row, gain, card, magnitude, comparator, threshold, cohort or cap changes after execution begins.",
+    "noRepair": "Any completed null, ordering, chain, cardinality, comparator, lifecycle, intended-mediator, RNG or ledger failure closes this exact representation without repair or rerun."
+  },
+  "decisionRules": {
+    "success": "All immutable and static gates pass; all 62 rows complete; current-main/omitted/off identity, A/B/AB isolation, exact producer, one-bit non-stacking mediator, exact consumer, fixed plus-three preview and realised payoff, upgrade, Ward, ordering, wrong-card, aspect, end-turn, victory, loss, RNG and ledger checks pass within 120 seconds.",
+    "successAuthority": "Apply boundary 1: freeze only positive-overflow-one-bit-heavy-blow-plus-three for a separately preregistered fresh existing-policy natural-capacity screen. Add no policy control, payoff level, endpoint row, protected seed, ML, RL or optimiser.",
+    "futility": "Any completed source, interface, null, A/B/AB, producer, non-stacking, consumer, payoff, comparator, lifecycle, isolation, RNG, row-count or ledger gate fails.",
+    "futilityAuthority": "Apply boundary 2: close this exact private-overflow to Heavy Blow representation without repair; continue serially with the next evidence-backed structural mechanism inside #421. Do not revive any closed family or claim all causal topologies exhausted from carrier evidence.",
+    "inconclusive": "A frozen input or process is unavailable, or the exact decision is unavailable at 120 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record this identity preflight inconclusive at cap; do not rerun, alter the matrix or use protected seeds."
+  },
+  "forbidden": [
+    "any natural support, capacity, policy, endpoint, balance, product, acceptance or P9 claim",
+    "any lost-amount threshold, bin, scaling, source subset, card subset or payoff level",
+    "any Scoreline, Afterimage, acquisition, Ward-priority or joint-factor variation",
+    "any product-tree mutation, repair, rerun, reserve row, protected seed, ML, RL or optimiser"
+  ]
+}

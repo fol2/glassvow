@@ -24,7 +24,41 @@ and is not intended to enter `main`.
 
 ## Current decision
 
-### Post-843e899 finite family ladder exhaustion and owner-authority boundary
+### Post-d486 private causal correction and exact overflow closure
+
+The archived private-state v1 result partitioned storage carriers, not causal
+producer-to-consumer topologies. Its inference that the complete private causal
+class was exhausted is therefore corrected; the files and every valid family
+disposition remain immutable evidence.
+
+A finite source-backed residual grammar selected one materially distinct
+contract: positive Dusk Ember overflow sets one non-stacking private mark, and a
+later same-turn Heavy Blow consumes it for the separately disabled three-damage
+payoff. The v1 identity process stopped before Godot because the first raw git
+status prefix was stripped by its provenance helper. This is immutable
+mechanical metadata failure and supplies no scientific observation. A separately
+versioned v2 changed only that raw-status encoding after a zero-row preflight;
+all 62 absent, omitted, off, A-only, B-only, AB, Ash, lifecycle, non-stacking,
+path, result and RNG controls then passed with zero faults.
+
+The preregistered fresh 512-row natural-capacity screen completed with exact
+paired identity, zero semantic faults and zero baseline faults. It found zero
+active or viable policies, 64 exact-inactive policies, one exposure-active
+policy and 12 marks; every mark expired at end turn before Heavy Blow. The exact
+overflow-to-Heavy-Blow representation is closed without threshold, card,
+policy, cohort, payoff, method or rerun rescue. This negative does not by itself
+close the complete private causal class; the next action is a zero-row
+source-backed causal-topology coverage audit. See
+`publication-manifest-post-d486-private-overflow-v1.json`.
+
+This continuation added 62 direct controlled observations and 512 simulator
+rows in four Godot processes. The ledger remains byte-identical at 482,036
+records and SHA-256
+`97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213`,
+with zero protected-seed rows. No product code, PR, Actions run, acceptance or P9
+receipt follows.
+
+### Archived post-843e899 carrier disposition (causal-exhaustion inference corrected above)
 
 Owner comment `5460811702` supplied a finite serial rule for the four unresolved
 fight-local classes. Exact-lethal terminal precision passed its 58-observation

@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "stage": "post-d486-private-counter-tag-transform-causal-topology-design",
+  "question": "Does the corrected finite residual-to-consumer grammar select exactly one complete, source-compatible Duskblade-only private-state contract without reopening an immutable closed family?",
+  "hypothesis": "Positive Ember overflow is the sole unrepresented, deterministic, naturally costly Dusk-specific residual, and exact Heavy Blow is the unique minimum consumer because its single hit gives stronger direct causal attribution than the two other legal reward-only plain Attacks.",
+  "claimBoundary": "Exact-source residual and consumer enumeration, closure non-aliasing, twelve-field completeness and zero-row selection only. No identity, behaviour, capacity, support, causal endpoint, complementarity, package, detector, product, protected-seed, #421 acceptance or P9 claim.",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "sourceHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "repositoryRefs": {
+      "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "origin/research/issue-421-post-843e899-family-ladder-evidence": "d48628913409375437a20a52e290d098cc20062e"
+    },
+    "archiveHeads": {
+      "research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "research/issue-421-post-843e899-family-ladder-evidence": "d48628913409375437a20a52e290d098cc20062e"
+    },
+    "sourceSha256": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a"
+    },
+    "taskCapsulePath": "task-capsule-5460811702-v21.json",
+    "taskCapsuleSha256": "cdef3ea4ae0712ccb00ed0f496451bef4875ee3a43eb792b6fc9492701488d93",
+    "primarySourceReportPath": "summaries/post-d486-private-overflow-primary-sources-v1.md",
+    "primarySourceReportSha256": "2bee618ff9a186918e99c44482305fddbdb22dbc1b19d593d73eb63a1045ed54",
+    "runnerSha256": "99c003ea8717b0c1958d90c5d85b7abb3cb9d422236d9d208727a639037a7db4",
+    "correctedEvidencePath": "summaries/post-843e899-private-state-design-v1.json",
+    "correctedEvidenceSha256": "047563a9e7f09172d8eb34e39485cbd29e870b87427afc78a41330449480ea3e"
+  },
+  "sourceAssertions": [
+    {
+      "id": "ember-clamp",
+      "path": "domain/rules/combat.gd",
+      "contains": "var next: int = clampi(cb.embers + n, 0, cb.ember_cap)"
+    },
+    {
+      "id": "ember-realised-delta",
+      "path": "domain/rules/combat.gd",
+      "contains": "var delta: int = next - cb.embers"
+    },
+    {
+      "id": "ember-return-delta",
+      "path": "domain/rules/combat.gd",
+      "contains": "return delta"
+    },
+    {
+      "id": "draw-hand-bound",
+      "path": "domain/rules/combat.gd",
+      "contains": "if cb.hand.size() >= 10:\n\t\t\tbreak"
+    },
+    {
+      "id": "player-heal-clamp",
+      "path": "domain/rules/combat.gd",
+      "contains": "cb.player.hp = clampi(cb.player.hp + n, 0, cb.player.max_hp)"
+    },
+    {
+      "id": "enemy-overheal-clamp",
+      "path": "domain/rules/combat.gd",
+      "contains": "e.hp = mini(e.max_hp, e.hp + _ji(mv[\"heal\"]))"
+    },
+    {
+      "id": "terminal-overkill-observation",
+      "path": "domain/rules/combat.gd",
+      "contains": "\"overkill\": 0 if handoff else maxi(0, -e.hp)"
+    },
+    {
+      "id": "no-current-overflow-state",
+      "path": "domain/state/combat_state.gd",
+      "absent": "ember_overflow"
+    },
+    {
+      "id": "existing-policy-preview",
+      "path": "tools/balance_pilot.gd",
+      "contains": "var preview_v: Variant = game.rules.preview_play(game.cb, card, target, game.run)"
+    },
+    {
+      "id": "existing-policy-loss-score",
+      "path": "tools/balance_pilot.gd",
+      "contains": "score += float(loss) * _w(\"combat\", \"loss\")"
+    },
+    {
+      "id": "ember-event-anchor",
+      "path": "domain/events/event_types.gd",
+      "contains": "const EMBER: StringName = &\"ember\""
+    }
+  ],
+  "priorEvidence": {
+    "private-v1-preserved": {
+      "path": "summaries/post-843e899-private-state-design-v1.json",
+      "sha256": "047563a9e7f09172d8eb34e39485cbd29e870b87427afc78a41330449480ea3e",
+      "decision": "close-private-counter-tag-transform-and-raise-owner-authority-package"
+    },
+    "action-grammar": {
+      "path": "summaries/post-v38-action-grammar-inventory-v1.json",
+      "sha256": "4eeda4d020539996106ea674d17acd7d0804a8181583c2cf4e856946febca3da",
+      "decision": "close-one-bit-setup-action-grammar"
+    },
+    "status-liability": {
+      "path": "summaries/post-v30-status-liability-capacity-v1.json",
+      "sha256": "34719303b15024f9db7ea463acc1b416d9797ad5bc9886fed79d928ac454c3f6",
+      "decision": "close-status-liability-at-capacity"
+    },
+    "lantern-art": {
+      "path": "summaries/post-v30-lantern-art-capacity-v1.json",
+      "sha256": "b029910d7f776f114a814885c2804f160c325d88b460b8f732c341ed9e619c1f",
+      "decision": "close-lantern-art-family-at-cap"
+    },
+    "existing-state": {
+      "path": "summaries/post-v30-combat-state-zone-frontier-audit-v1.json",
+      "sha256": "1415ee899fefc2087a1b3730dfb71610ff4a5c8ed8e93842007b4f28eee4d4ed",
+      "decision": "close-existing-combat-state-zone-grammar"
+    },
+    "scoreline": {
+      "path": "summaries/post-v38-scoreline-component-crn-v1.json",
+      "sha256": "1a56fca83591c593e90cdaf7731e41d43fbec47b9b447307b3c9e8c14acf8c83",
+      "decision": "close-scoreline-commitment-after-component-crn"
+    },
+    "afterimage": {
+      "path": "summaries/post-v38-afterimage-order-capacity-v1.json",
+      "sha256": "f9f9e632113c6c1737450f37f973ea8ba8370cc75e40a4c4ea34e583e92de140",
+      "decision": "close-afterimage-order-at-capacity"
+    },
+    "cross-turn": {
+      "path": "summaries/post-843e899-cross-turn-hold-coverage-audit-v1.json",
+      "sha256": "dbfccbae0faea8b3d2849661914672e2bac28c185ceed25767eb97f251693412",
+      "decision": "close-cross-turn-hold-representation-and-advance-to-intent-history"
+    },
+    "intent-history": {
+      "path": "summaries/post-843e899-intent-history-capacity-v1.json",
+      "sha256": "7dc4e73a5770c62b8c5fd5e46aeb19f0deaaca7fb159f14a863c98697f4363b8",
+      "decision": "close-intent-history-and-advance-to-private-counter-tag-transform"
+    },
+    "terminal-hit": {
+      "path": "summaries/post-843e899-positive-overkill-capacity-v1.json",
+      "sha256": "8e014d8df93e25f91f3c70fe4e1474d5021ae98dc6a0507f2bc738bce10189fb",
+      "decision": "close-positive-overkill-and-terminal-hit-precision-advance-to-cross-turn-hold"
+    },
+    "ember-reserve-damage": {
+      "path": "summaries/post-v38-novaflare-nonreward-capacity-v1.json",
+      "sha256": "53c2e858dbb59e6258eea0fdb11cabcc8e89b959df6455f41494fe63f1b57e23",
+      "decision": "close-deed-unlocked-ember-reserve-damage-family"
+    },
+    "ember-reserve-heal": {
+      "path": "summaries/post-v38-source-complete-exhaustion-audit-v1.json",
+      "sha256": "e782f220dfa44bee544322e8108c342e20a51cbb6baf85bf3f3b9e065be886bb",
+      "decision": "freeze-ember-reserve-postcombat-heal-for-zero-row-capacity-preregistration"
+    }
+  },
+  "expectedResidualIds": [
+    "enemy-positive-overkill",
+    "player-terminal-overkill",
+    "missed-draw-capacity",
+    "player-overheal",
+    "enemy-overheal",
+    "start-ember-clamp",
+    "positive-ember-overflow"
+  ],
+  "residualCandidates": [
+    {
+      "id": "enemy-positive-overkill",
+      "sourceBoundary": "hit_enemy HP floor",
+      "discarded": true,
+      "notRepresentedInState": false,
+      "duskSpecific": false,
+      "naturallyCostly": true,
+      "directlyObservable": true,
+      "closureAliases": ["terminal-hit precision/excess"]
+    },
+    {
+      "id": "player-terminal-overkill",
+      "sourceBoundary": "damage_player terminal HP loss",
+      "discarded": true,
+      "notRepresentedInState": true,
+      "duskSpecific": false,
+      "naturallyCostly": false,
+      "directlyObservable": true,
+      "closureAliases": ["terminal defeat context"]
+    },
+    {
+      "id": "missed-draw-capacity",
+      "sourceBoundary": "draw_cards hand or empty-zone stop",
+      "discarded": true,
+      "notRepresentedInState": true,
+      "duskSpecific": false,
+      "naturallyCostly": true,
+      "directlyObservable": true,
+      "closureAliases": ["draw-thread and card-zone grammar"]
+    },
+    {
+      "id": "player-overheal",
+      "sourceBoundary": "heal_player maximum-HP clamp",
+      "discarded": true,
+      "notRepresentedInState": true,
+      "duskSpecific": false,
+      "naturallyCostly": true,
+      "directlyObservable": true,
+      "closureAliases": ["generic recovery families"]
+    },
+    {
+      "id": "enemy-overheal",
+      "sourceBoundary": "enemy action maximum-HP clamp",
+      "discarded": true,
+      "notRepresentedInState": true,
+      "duskSpecific": false,
+      "naturallyCostly": false,
+      "directlyObservable": true,
+      "closureAliases": ["enemy-intent lifecycle"]
+    },
+    {
+      "id": "start-ember-clamp",
+      "sourceBoundary": "start_combat omen Ember clamp",
+      "discarded": true,
+      "notRepresentedInState": true,
+      "duskSpecific": true,
+      "naturallyCostly": false,
+      "directlyObservable": true,
+      "closureAliases": ["fixed encounter context and free start grant"]
+    },
+    {
+      "id": "positive-ember-overflow",
+      "sourceBoundary": "positive gain_embers request truncated by ember_cap",
+      "discarded": true,
+      "notRepresentedInState": true,
+      "duskSpecific": true,
+      "naturallyCostly": true,
+      "directlyObservable": true,
+      "closureAliases": []
+    }
+  ],
+  "consumerGrammar": {
+    "pool": "normal common, uncommon and rare cardPools",
+    "excludeStarters": "union of every aspect startDeck",
+    "requiredType": "attack",
+    "requiredTarget": "enemy",
+    "requiredEffects": "exactly one ordinary dmg effect",
+    "forbidden": [
+      "chip",
+      "special",
+      "status",
+      "exhaust"
+    ],
+    "selectionVector": [
+      "single-hit direct attribution before multi-hit",
+      "one new conditional semantic clause",
+      "one private mark plus combat and preview surfaces",
+      "one plus authored hit count as direct experiment cost",
+      "three candidates"
+    ],
+    "finalTieBreak": "canonical candidate SHA-256"
+  },
+  "expectedConsumerIds": [
+    "heavyBlow",
+    "twinFangs",
+    "flurry"
+  ],
+  "expectedOutcome": "success",
+  "expectedSelectedCandidateId": "positive-ember-overflow->heavyBlow",
+  "twelveFieldOrder": [
+    "producer",
+    "mediatorState",
+    "consumer",
+    "payoffOperation",
+    "lifecycleExpiry",
+    "naturalCost",
+    "duskBoundary",
+    "scorelineFactor",
+    "afterimageFactor",
+    "interferenceRule",
+    "nullPath",
+    "policyExposure"
+  ],
+  "selectedContract": {
+    "producer": "For mechanism-on Duskblade only, a positive gain_embers request with lost = requested gain - realised positive delta greater than zero; set once per player turn regardless of larger loss.",
+    "mediatorState": "One non-stacking combat-only player-private mark carrying exactly one lost Ember; legal levels are 0 and 1.",
+    "consumer": "A later exact heavyBlow play against its ordinary selected living enemy in the same player turn.",
+    "payoffOperation": "Consume the mark and add exactly 3 damage to Heavy Blow's single ordinary hit; legal factor levels are 0 off and 3 on, derived from current Flare 9 divided by cost 3.",
+    "lifecycleExpiry": "Set after realised overflow; consume on exact Heavy Blow; otherwise clear at player end turn, victory, loss or combat disposal. Never cross a turn.",
+    "naturalCost": "Reach the Ember cap, forfeit at least one positive Ember gain, acquire and draw Heavy Blow, pay its unchanged cost 2 and play it after the overflow.",
+    "duskBoundary": "Duskblade aspect index 0 only. Ashwarden, absent factor and factor off are exact current-main null paths.",
+    "scorelineFactor": "Fixed absent and off. Chisel, Executioner, enemy marks and Scoreline payoff remain closed and unchanged.",
+    "afterimageFactor": "Fixed absent and off. Defend, Guarded Strike, player Ward marks and Afterimage payoff remain closed and unchanged.",
+    "interferenceRule": "Current Ember reserve, cap, Art, Kindle, Shatter, kill, card effects, costs, rarities, pools, RNG and policy identities remain unchanged. No joint Scoreline or Afterimage cell before a later preregistered interference decision.",
+    "nullPath": "Omitted/off, non-positive gain, uncapped gain, absent mark, non-Heavy-Blow play, expired mark and Ashwarden must preserve path, RNG, events, comparator and result exactly after research-only telemetry removal.",
+    "policyExposure": "Use frozen existing card and enemy-target choice plus exact previewed loss first. At most one bounded timing control may be considered only after direct evidence proves that exact missing timing decision is the bottleneck."
+  },
+  "ledgerFreeze": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "budget": {
+    "maximumSourceFilesRead": 5,
+    "maximumEvidenceFilesRead": 12,
+    "maximumResidualCandidates": 7,
+    "maximumConsumerCandidates": 3,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "newScientificSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Exactly one residual is legal, exact content yields the frozen consumer set, one consumer has a unique best selection vector, the complete twelve-field contract matches, every identity passes, the ledger is byte-identical and execution completes within 30 seconds.",
+    "successAuthority": "Apply boundary 1: freeze only positive-ember-overflow to Heavy Blow for a separately preregistered research-only source/interface, call-cardinality, comparator, exact-null and direct A/B/AB preflight. Add no capacity row, protected seed, product mutation, ML, RL or optimiser.",
+    "futility": "No legal residual or consumer remains under the corrected finite grammar.",
+    "futilityAuthority": "Apply boundary 2: close the corrected private-state causal grammar at zero rows. Preserve every archive and only then reassess the all-four-classes human-authority trigger; do not create a successor or weaken acceptance.",
+    "inconclusive": "More than one legal residual or top-ranked consumer remains tied before canonical SHA, or exact source/evidence identity is unavailable at the frozen cap.",
+    "inconclusiveAuthority": "Apply boundary 3: record the exact tie or unavailable identity at the zero-row cap. Do not select by support, outcome, aesthetics, rerun, method or product mutation."
+  }
+}

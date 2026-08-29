@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "supersedes": {
+    "path": "task-capsule-5460811702-v20.json",
+    "sha256": "673d0ee27b3337fe69b21a6964097cf49ee2e173ed4f8dd56fd4ba6fbba31385"
+  },
+  "authority": {
+    "commentId": 5460811702,
+    "bodySha256": "58d71b9af60d811f40b489da19499b3dd113fd77fcb06bdf12fa6692fb5686f6",
+    "authorAssociation": "OWNER",
+    "updatedAt": "2026-08-29T07:31:07Z",
+    "decision": "Use the finite serial family order, let the owner agent freeze the complete contract, and escalate only after all four classes are validly exhausted."
+  },
+  "resolvedMain": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "activeInstructionSha256": {
+    "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+    ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+    "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+    "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+    "docs/agents/triage-labels.md": "4f53c9b40ce2651e3611aa090eaedbd6dbc9b71ef8c5f7e65eac0d8263190d0d"
+  },
+  "immutableArchiveHeads": {
+    "research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+    "research/issue-421-post-843e899-family-ladder-evidence": "d48628913409375437a20a52e290d098cc20062e"
+  },
+  "correction": {
+    "preservedEvidence": "The post-843e899 private-state v1 files and remote d486289 remain immutable evidence.",
+    "invalidatedInference": "The v1 runner verified six pre-labelled carrier records. It did not enumerate causal producer-to-consumer topologies, so carrier exhaustion does not establish family exhaustion and cannot activate the human-authority clause.",
+    "trackerConsequence": "The needs-info state is not supported unless a corrected finite causal enumeration also exhausts the fourth class."
+  },
+  "closedFamilyBoundary": {
+    "rule": "Every valid published family disposition remains immutable. No relabelling, subset, payoff, cohort, policy or method rescue is allowed.",
+    "mustRemainClosed": [
+      "Scoreline",
+      "Afterimage",
+      "existing Lantern-Art choice",
+      "existing Ember reserve damage, Ward and post-combat heal",
+      "RESHUFFLE to immediate next PLAY",
+      "complete post-kill immediate consumer topology",
+      "direct-kill to next single-target Attack",
+      "draw-thread and duplicate-copy",
+      "target transfer",
+      "turn-state action economy",
+      "same-instance repeat and cross-turn hold",
+      "intent-history lifecycle",
+      "private status liability"
+    ]
+  },
+  "currentClass": "private counter/tag/transform",
+  "currentQuestion": "Can one currently discarded, deterministic Dusk-only source residual and one existing-policy consumer freeze a complete private-state contract that is materially distinct from all immutable closures?",
+  "finiteDesignDomain": {
+    "producerRule": "Enumerate exact current-main bounded transitions whose attempted value is discarded, then retain only a Dusk-specific residual that is not current gameplay state and is not a closed family.",
+    "selectedProducerHypothesis": "A positive gain_embers call truncated by ember_cap exposes lost = requested positive gain - realised delta. Retain at most one lost Ember as a non-stacking player-private mark.",
+    "consumerRule": "Enumerate normal-pool, reward-only, single-target Attack cards with exactly one ordinary damage effect, no chip, special, status, exhaust or starter identity.",
+    "consumerCandidates": [
+      "twinFangs",
+      "heavyBlow",
+      "flurry"
+    ],
+    "selectionRule": "Prefer a single hit event over multi-hit effects for stronger direct attribution; apply the owner comment's remaining lexicographic fields and canonical SHA-256 only after that comparison.",
+    "selectedConsumerHypothesis": "heavyBlow",
+    "payoffRule": "Consume one mark on a later same-turn Heavy Blow for exactly three incremental damage, the exact current Flare damage-per-Ember rate on one target. Base and upgraded Heavy Blow remain otherwise unchanged.",
+    "expiryRule": "Expire unused state at player turn end or combat end; do not carry across turns."
+  },
+  "decisionRule": {
+    "success": "Exactly one complete twelve-field contract passes source, closure, exact-null, lifecycle, natural-cost, telemetry and existing-policy gates under the frozen lexicographic objective.",
+    "futility": "No complete contract passes; preserve the corrected zero-row evidence and only then reconsider whether all four classes are exhausted.",
+    "inconclusive": "Two legal contracts remain tied or exact source/closure identity cannot decide at the preregistered zero-row cap."
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "nextAction": "Run one deterministic zero-row design audit over the frozen residual and consumer domains. If it selects exactly one contract, preregister and prove exact-null and direct causal identity before any capacity row.",
+  "boundaries": {
+    "researchOutsideDevelopmentCheckout": true,
+    "singleOwner": true,
+    "zeroRowsUntilCompletePreregistration": true,
+    "zeroProtectedSeeds": true,
+    "noProductTruthMutation": true,
+    "noResearchOrProductPr": true,
+    "noActions": true,
+    "noSuccessorTicket": true,
+    "noMlRlOrOptimiser": true,
+    "archiveHead843e899Immutable": true,
+    "archiveHeadD486289Immutable": true,
+    "closedFamiliesImmutable": true
+  }
+}

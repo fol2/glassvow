@@ -1,0 +1,105 @@
+{
+  "GodotProcesses": 2,
+  "archiveHeadsPreserved": {
+    "843e899": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+    "d486289": "d48628913409375437a20a52e290d098cc20062e"
+  },
+  "authority": "Apply boundary 1: freeze only positive-overflow-one-bit-heavy-blow-plus-three for a separately preregistered fresh existing-policy natural-capacity screen. Add no policy control, payoff level, endpoint row, protected seed, ML, RL or optimiser.",
+  "claimBoundary": "The exact v1 source, interface, direct A/B/AB, call-cardinality, comparator, exact-null and intended-mediator identity contract only. No natural support, capacity, policy choice, causal endpoint, balance, product, acceptance or P9 claim.",
+  "decision": "freeze-private-overflow-heavy-blow-for-natural-capacity",
+  "decisionBoundary": 1,
+  "directControlledObservations": 62,
+  "directFaults": [],
+  "executionError": "",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "mechanicalPreflightSha256": "e666ab02e992bbf17d70a96e3973a0a8125269a587d2b3d8e0360ebb2db90dd8",
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "outputSha256": {
+    "baseline": "c4a3b31de8d7c9944e7a767525a5e3cb50efea024ee66141c78607d83a8d4bdb",
+    "candidate": "2939c115859667038f867f2d2ccb4a49f9e4c33e741e6eef8e07d645635bb4e3"
+  },
+  "parentProtocolSha256": "a87c2a125565cdee0a5d8982e79f4814fa17f88af27629bdcf57691853bbf58c",
+  "planSha256": {
+    "baseline": "361c7c0f29134c7ed9161cc424136bbd46b2093ad992ac6bb00744e0cabb6f39",
+    "candidate": "de0c92a4e7cdcb1410a7a783d8caa7f7be57e6b8fe5194453d93e177d7a41e33"
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "75d56e97fe20cfab3637bf0e00a1fe897281c98662b8f75274fd5d0390b363e1",
+  "runnerSha256": "6205081c349191965181cdeab232ec38b6861f667d34d60b0df8da0d39f1046f",
+  "schemaVersion": 2,
+  "sourceGateFaults": [],
+  "sourceIdentity": {
+    "baselineHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_ember_overflow_probe.gd": "e8439a6178a6eff416e7187d2c78f13dadab0ed295e9be03611fc86fb455de40",
+      "tools/research_421_ember_overflow_probe.gd.uid": "d1d7411e2dfa566fc4c6cc571fec34a51f592976d342a6d369cedfedcfb0608e"
+    },
+    "baselineStatus": [
+      "?? tools/research_421_ember_overflow_probe.gd",
+      "?? tools/research_421_ember_overflow_probe.gd.uid"
+    ],
+    "candidateHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidatePrototypeDiffSha256": "3687dbebfef45bd4c28dbb4c0e7d2df41e9bfb7aa6cdd92174ebd4670273762c",
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "a3f6f31c4503c573436faa7eccc9d6413d40b1da3aa17382f9848df6c3811edb",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "033f825df0106c5819663a80456c0c3696ce44ddb0f2af66ce48e330898d2be3",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_ember_overflow_probe.gd": "e8439a6178a6eff416e7187d2c78f13dadab0ed295e9be03611fc86fb455de40",
+      "tools/research_421_ember_overflow_probe.gd.uid": "d1d7411e2dfa566fc4c6cc571fec34a51f592976d342a6d369cedfedcfb0608e"
+    },
+    "candidateStatus": [
+      " M domain/rules/combat.gd",
+      " M domain/state/player_combatant.gd",
+      "?? tools/research_421_ember_overflow_probe.gd",
+      "?? tools/research_421_ember_overflow_probe.gd.uid"
+    ],
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "predecessorSha256": {
+      "post_d486_private_overflow_identity_v1.py": "bc8f198aca339544ab0002753bf439936637b3d7d665cd8c2d414bd338449fb2",
+      "post_d486_private_overflow_identity_v2_preflight.py": "524b25a613d943061d66273cb8629b1387a5a945a0dbe4757718ce94f6e83b93",
+      "protocols/post-d486-private-overflow-identity-v1.json": "a87c2a125565cdee0a5d8982e79f4814fa17f88af27629bdcf57691853bbf58c",
+      "summaries/post-d486-private-overflow-identity-v1.json": "3d8cdfac6cf00518a550d78ad582bd24518bc9bdb6cb5e4656a57af458b811f7"
+    },
+    "repositoryRefs": {
+      "refs/heads/research/issue-421-post-843e899-family-ladder-evidence": "d48628913409375437a20a52e290d098cc20062e",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/remotes/origin/research/issue-421-post-843e899-family-ladder-evidence": "d48628913409375437a20a52e290d098cc20062e",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9"
+    },
+    "runnerSha256": "6205081c349191965181cdeab232ec38b6861f667d34d60b0df8da0d39f1046f",
+    "taskCapsuleSha256": "cdef3ea4ae0712ccb00ed0f496451bef4875ee3a43eb792b6fc9492701488d93"
+  },
+  "wallTimeSeconds": 7.298751250025816
+}

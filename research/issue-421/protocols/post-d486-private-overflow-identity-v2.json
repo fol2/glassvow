@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 2,
+  "issue": 421,
+  "authorityComments": [5458109992, 5460811702],
+  "stage": "post-d486-private-overflow-identity-v2",
+  "parentProtocolPath": "protocols/post-d486-private-overflow-identity-v1.json",
+  "parentProtocolSha256": "a87c2a125565cdee0a5d8982e79f4814fa17f88af27629bdcf57691853bbf58c",
+  "question": "After the v1 raw-provenance comparator stopped before any observation, does the exact unchanged v1 scientific contract pass its first direct identity look under a mechanically validated status encoding?",
+  "hypothesis": "The v1 stop is limited to removal of the first raw porcelain-status leading space by the runner helper. With raw status lines preserved, the exact unchanged prototype, probe, 62-row matrix, factor definitions, estimands, controls and decision rules can receive their first scientific look.",
+  "claimBoundary": "The exact v1 source, interface, direct A/B/AB, call-cardinality, comparator, exact-null and intended-mediator identity contract only. No natural support, capacity, policy choice, causal endpoint, balance, product, acceptance or P9 claim.",
+  "scientificContract": {
+    "inheritance": "Every factor definition, level, design row, anchor, estimand, mechanistic interaction, alias, component control, expected chain, source prototype, probe, ledger freeze and forbidden action is inherited byte-exactly from the parent protocol identified above.",
+    "directScenariosCanonicalSha256": "749d04faef8a9e5408733e25321ae3a9688698fcaad036a7f91a24100af49a2c",
+    "matrix": {"currentMain": 15, "candidateOmitted": 15, "candidateExplicitOff": 15, "candidateAB": 15, "componentControls": 2, "total": 62},
+    "analyser": "The v2 runner calls the unchanged parent v1 direct_faults analyser with the parent protocol and uses the same arm_rows and run_probe implementations.",
+    "correctionOnly": "Use stdout.splitlines() directly for git status --porcelain provenance. Do not apply str.strip() to the complete status output.",
+    "notChanged": ["prototype source", "probe source or UID", "factor or level", "row or order", "seed", "action", "expected event", "normaliser", "estimand", "budget", "stopping rule", "ledger", "archive", "candidate"]
+  },
+  "v1Stop": {
+    "summaryPath": "summaries/post-d486-private-overflow-identity-v1.json",
+    "summarySha256": "3d8cdfac6cf00518a550d78ad582bd24518bc9bdb6cb5e4656a57af458b811f7",
+    "disposition": "record-private-overflow-identity-inconclusive-at-cap",
+    "observations": 0,
+    "replay": "V1 remains immutable and is never rerun. V2 is the first scientific observation panel after a separate zero-observation mechanical preflight."
+  },
+  "mechanicalPreflight": {
+    "runnerPath": "post_d486_private_overflow_identity_v2_preflight.py",
+    "summaryPath": "summaries/post-d486-private-overflow-identity-v2-preflight.json",
+    "maximumWallTimeSeconds": 30,
+    "requiredDecision": "authorise-first-scientific-v2-look",
+    "requirements": [
+      "reproduce the sole v1 mismatch as candidateStatus first-line whitespace loss",
+      "prove raw baseline and candidate statuses equal the parent frozen values",
+      "prove the v1 result contains zero direct and simulator observations",
+      "prove the exact inherited matrix contains 15 baseline and 47 candidate rows",
+      "prove baseline and candidate probes are byte-identical",
+      "prove the v2 runner uses raw splitlines and the unchanged v1 scientific analyser",
+      "prove static source gates and the ledger remain exact"
+    ]
+  },
+  "immutableInputs": {
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/heads/research/issue-421-post-843e899-family-ladder-evidence": "d48628913409375437a20a52e290d098cc20062e",
+      "refs/remotes/origin/research/issue-421-post-843e899-family-ladder-evidence": "d48628913409375437a20a52e290d098cc20062e"
+    },
+    "baselineHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "baselineStatus": ["?? tools/research_421_ember_overflow_probe.gd", "?? tools/research_421_ember_overflow_probe.gd.uid"],
+    "candidateStatus": [" M domain/rules/combat.gd", " M domain/state/player_combatant.gd", "?? tools/research_421_ember_overflow_probe.gd", "?? tools/research_421_ember_overflow_probe.gd.uid"],
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_ember_overflow_probe.gd": "e8439a6178a6eff416e7187d2c78f13dadab0ed295e9be03611fc86fb455de40",
+      "tools/research_421_ember_overflow_probe.gd.uid": "d1d7411e2dfa566fc4c6cc571fec34a51f592976d342a6d369cedfedcfb0608e"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "a3f6f31c4503c573436faa7eccc9d6413d40b1da3aa17382f9848df6c3811edb",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "033f825df0106c5819663a80456c0c3696ce44ddb0f2af66ce48e330898d2be3",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_ember_overflow_probe.gd": "e8439a6178a6eff416e7187d2c78f13dadab0ed295e9be03611fc86fb455de40",
+      "tools/research_421_ember_overflow_probe.gd.uid": "d1d7411e2dfa566fc4c6cc571fec34a51f592976d342a6d369cedfedcfb0608e"
+    },
+    "candidatePrototypeDiffSha256": "3687dbebfef45bd4c28dbb4c0e7d2df41e9bfb7aa6cdd92174ebd4670273762c",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "runnerSha256": "6205081c349191965181cdeab232ec38b6861f667d34d60b0df8da0d39f1046f",
+    "preflightRunnerSha256": "524b25a613d943061d66273cb8629b1387a5a945a0dbe4757718ce94f6e83b93",
+    "taskCapsuleSha256": "cdef3ea4ae0712ccb00ed0f496451bef4875ee3a43eb792b6fc9492701488d93",
+    "predecessorSha256": {
+      "post_d486_private_overflow_identity_v1.py": "bc8f198aca339544ab0002753bf439936637b3d7d665cd8c2d414bd338449fb2",
+      "protocols/post-d486-private-overflow-identity-v1.json": "a87c2a125565cdee0a5d8982e79f4814fa17f88af27629bdcf57691853bbf58c",
+      "summaries/post-d486-private-overflow-identity-v1.json": "3d8cdfac6cf00518a550d78ad582bd24518bc9bdb6cb5e4656a57af458b811f7",
+      "post_d486_private_overflow_identity_v2_preflight.py": "524b25a613d943061d66273cb8629b1387a5a945a0dbe4757718ce94f6e83b93"
+    }
+  },
+  "budget": {"godotProcessExecutions": 2, "directControlledObservations": 62, "newScientificSimulatorObservationRows": 0, "newLedgerRows": 0, "maximumWallTimeSeconds": 120, "maximumModelContextTokensDuringExecutionAndDecision": 0, "protectedSeeds": 0},
+  "decisionRules": {
+    "success": "The separate mechanical preflight is exact green; all unchanged parent immutable/static gates pass; all 62 inherited rows complete; every inherited null, A/B/AB, producer, non-stacking, consumer, payoff, comparator, lifecycle, isolation, RNG and ledger check passes within 120 seconds.",
+    "successAuthority": "Apply boundary 1: freeze only positive-overflow-one-bit-heavy-blow-plus-three for a separately preregistered fresh existing-policy natural-capacity screen. Add no policy control, payoff level, endpoint row, protected seed, ML, RL or optimiser.",
+    "futility": "After the green mechanical preflight, any completed inherited scientific gate fails.",
+    "futilityAuthority": "Apply boundary 2: close this exact private-overflow to Heavy Blow representation without repair or v3; continue under the current #421 automatic disposition without reviving a closed family.",
+    "inconclusive": "After the green mechanical preflight, a frozen input/process is unavailable or the exact decision is unavailable at 120 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record v2 inconclusive at cap; do not rerun, alter the inherited matrix or create a v3."
+  },
+  "forbidden": [
+    "any edit or reinterpretation of v1",
+    "any prototype, probe, matrix, factor, estimator, threshold, cohort or stopping-rule change",
+    "any support, capacity, endpoint, product, acceptance or P9 claim",
+    "any protected seed, ML, RL, optimiser, PR, Actions run or successor ticket"
+  ]
+}

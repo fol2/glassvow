@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5460811702,
+  "stage": "post-d486-private-overflow-capacity",
+  "question": "Under a complete fresh current-policy rectangle, does the directly identity-proved Dusk Ember-overflow mark naturally precede a later same-turn Heavy Blow often enough to support one equal-cohort causal first look without changing path, RNG or result?",
+  "hypothesis": "Current Dusk policies naturally create positive Ember overflow and later play Heavy Blow in the same turn for a robust active policy set, while a substantial exact-inactive set preserves causal contrast.",
+  "claimBoundary": "Fresh-cohort existing-policy producer exposure, payoff-capable same-turn Heavy Blow capacity, exact-inactive controls, viability and mechanical identity only. The payoff is disabled and no causal effect, endpoint, balance, product, acceptance or P9 claim is estimated.",
+  "directIdentitySummaryPath": "summaries/post-d486-private-overflow-identity-v2.json",
+  "mechanicalPreflight": {
+    "summaryPath": "summaries/post-d486-private-overflow-capacity-v1-preflight.json",
+    "runnerSha256": "e4545c30c9118cdfdef16a757b09900e9154c1e7d87ef729c926da27375bb776",
+    "requiredDecision": "authorise-first-scientific-capacity-look"
+  },
+  "scientificBasis": {
+    "entryGate": "The fixed source/interface/direct A/B/AB v2 preflight completed 62 of 62 controls with zero faults and froze only the Ember-overflow to Heavy Blow contract for natural-capacity measurement.",
+    "observationalArm": "Producer=true and consumer=false is the directly proved non-perturbing A-only instrument. It observes positive lost Ember, the private mark and its first naturally eligible same-turn Heavy Blow, but cannot add damage or consume the real mark.",
+    "capacityBoundary": "An eligible row has at least one Heavy Blow after a live overflow mark before that mark becomes unavailable. Exposure without such a Heavy Blow is measured separately and cannot count as active capacity.",
+    "noGuessing": "The complete 64-policy by four-seed rectangle, thresholds, metrics, source, identity comparator and stop rule are frozen before any whole-run row. No support-derived subset, adaptive candidate or policy control exists."
+  },
+  "factorDefinitions": {
+    "emberOverflowProducerObservation": {
+      "levels": ["absent-current-main", "producer-only-A"],
+      "meaning": "The candidate arm records a positive Dusk gain_embers residual discarded by ember_cap as one non-stacking private mark.",
+      "pathConstraint": "After removing only Ember-overflow research counters and probe labels, every candidate row must exactly equal its current-main pair, including policy snapshot, fights, outcome, deck, relics, economy, final RNG and existing package metrics."
+    },
+    "emberOverflowHeavyBlowPayoff": {
+      "levels": ["off"],
+      "fixed": "Consumer=false in both arms. The fixed plus-three Heavy Blow payoff is not executed or estimated in this stage."
+    },
+    "scorelinePayoff": {
+      "levels": ["off-closed"],
+      "fixed": "A separate immutable causal factor; absent from this experiment."
+    },
+    "afterimagePayoff": {
+      "levels": ["off-closed"],
+      "fixed": "A separate immutable causal factor; absent from this experiment."
+    },
+    "acquisitionPriority": {
+      "levels": ["current-main"],
+      "fixed": "Exact same sampled policy identity in each pair; no acquisition control."
+    },
+    "faultlineRarity": {
+      "levels": ["current-main"],
+      "fixed": "No rarity control."
+    },
+    "wardSetupPriority": {
+      "levels": ["current-main"],
+      "fixed": "No Ward or setup control."
+    }
+  },
+  "design": {
+    "type": "Two-arm paired non-causal natural-capacity observation; not a factorial and not the historical four-factor design.",
+    "matrix": [
+      {"arm": "current-main", "producer": "unavailable", "consumer": false, "payoff": "off", "rows": 256},
+      {"arm": "producer-only-A", "producer": true, "consumer": false, "payoff": "off", "rows": 256}
+    ],
+    "anchors": [
+      "Every producer-only row is paired to the exact current-main policy, seed, aspect, Vow, content, simulator and estimator row.",
+      "The immutable direct v2 identity panel is the structural anchor proving absent, explicit-off, A-only, B-only and AB isolation before this whole-run stage."
+    ],
+    "pairing": "Every arm uses policyRoot 563, policy indices 0 through 63, seeds 346638 through 346641, Duskblade, Vow 5, current content, current policy resolver, baseline, simulator and estimator in identical policy-major and seed-minor order.",
+    "mechanisticallyJustifiedInteractions": [
+      "Positive overflow by same-turn Heavy Blow: only a Heavy Blow after a live mark is payoff-capable under the frozen representation.",
+      "Mark lifecycle by turn or combat boundary: end-turn, victory and loss expiry separate unavailable exposure from eligible capacity.",
+      "Policy identity by simulation seed: a policy is robust-active only when eligibility occurs in at least two of its four fixed seeds."
+    ],
+    "aliasStructure": "The mark aliases neither stored Ember nor run, save, relic, selector or policy state. The exact consumer is Heavy Blow, so no any-Attack or card-subset alias exists. The A-only shadow records the first eligible Heavy Blow per live real mark; because producer-only leaves the real mark set, later post-consumption re-arm opportunities in that turn are conservatively uncounted, but this cannot change binary row eligibility because re-arm presupposes an earlier eligible consumption. Scoreline, Afterimage, acquisition, Faultline rarity and Ward setup are absent and cannot be inferred.",
+    "omittedCells": "No AB payoff arm, off-versus-on endpoint, policy control, card subset, seed subset, threshold search, Scoreline, Afterimage, acquisition, Faultline rarity, Ward setup, protected seed, held-out row, ML, RL or optimiser."
+  },
+  "cohort": {
+    "policyRoot": 563,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346638, 346639, 346640, 346641],
+    "minimumRowsPerRobustPolicy": 2,
+    "rowsPerArm": 256,
+    "identity": "Fresh and disjoint from every frozen #421 whole-run cohort. Each of 64 deterministic policy identities is evaluated on all four seeds in both arms; no identity may be selected, removed, replaced or added.",
+    "freshnessAudit": "A pre-freeze exact search found no policyRoot 563 and no seeds 346638 through 346641 in existing protocols, summaries, runners or the 482036-row append-only ledger."
+  },
+  "estimands": {
+    "unit": "Policy identity over its complete four-seed rectangle.",
+    "exposureActive": "A positive overflow mark occurs in at least two of four rows.",
+    "active": "At least one later same-turn Heavy Blow follows a live overflow mark in at least two of four rows.",
+    "exactInactive": "Zero eligible Heavy Blow consumers in all four rows.",
+    "ambiguous": "Eligibility in exactly one of four rows; reported and never promoted or subsetted.",
+    "viable": "An active policy has at least one eligible row whose unchanged current-main outcome is win.",
+    "identity": "Zero canonical mismatches between each current-main row and its A-only row after removing only probe labels and Ember-overflow research counters.",
+    "attribution": "For every row, producer equals mediator-set; every mediator partitions into eligible, unavailable-expiry or final-open; every expiry partitions into unavailable or after-eligible; eligible identity is exactly Heavy Blow; positive lost Ember is bounded by requested Ember; no duplicate mark, consumer, mediator-consumed or payoff telemetry occurs.",
+    "notEstimated": "Payoff effect, endpoint delta, acquisition value, cross-package interaction, balance, product value, acceptance or protected confirmation."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumExposureActivePolicies": 16,
+    "maximumBaselineFaultRows": 1,
+    "maximumSemanticFaults": 0,
+    "maximumIdentityMismatches": 0,
+    "provenance": "The 16 active and inactive, eight viable, two-of-four robustness and one baseline-fault limits reuse the frozen complete 64-policy structural-capacity scale. No card-breadth gate exists because the direct contract has exactly one preregistered consumer identity."
+  },
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/remotes/origin/research/issue-421-post-reshuffle-frontier-evidence": "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "refs/heads/research/issue-421-post-843e899-family-ladder-evidence": "d48628913409375437a20a52e290d098cc20062e",
+      "refs/remotes/origin/research/issue-421-post-843e899-family-ladder-evidence": "d48628913409375437a20a52e290d098cc20062e"
+    },
+    "baselineHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "baselineStatus": [
+      "?? tools/research_421_ember_overflow_capacity_probe.gd",
+      "?? tools/research_421_ember_overflow_capacity_probe.gd.uid",
+      "?? tools/research_421_ember_overflow_probe.gd",
+      "?? tools/research_421_ember_overflow_probe.gd.uid"
+    ],
+    "candidateStatus": [
+      " M domain/rules/combat.gd",
+      " M domain/state/player_combatant.gd",
+      " M tools/balance_sim.gd",
+      "?? tools/research_421_ember_overflow_capacity_probe.gd",
+      "?? tools/research_421_ember_overflow_capacity_probe.gd.uid",
+      "?? tools/research_421_ember_overflow_probe.gd",
+      "?? tools/research_421_ember_overflow_probe.gd.uid"
+    ],
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/research_421_ember_overflow_probe.gd": "e8439a6178a6eff416e7187d2c78f13dadab0ed295e9be03611fc86fb455de40",
+      "tools/research_421_ember_overflow_probe.gd.uid": "d1d7411e2dfa566fc4c6cc571fec34a51f592976d342a6d369cedfedcfb0608e",
+      "tools/research_421_ember_overflow_capacity_probe.gd": "b79cc02a86e3df00bc2fae9fc0cb855102ac5d28730341b7dde0166191c01a29",
+      "tools/research_421_ember_overflow_capacity_probe.gd.uid": "5b3cf396397a0f47c5472416bd9b70a7f03e496696c152d7dce3600c10b5bfe3"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "a3f6f31c4503c573436faa7eccc9d6413d40b1da3aa17382f9848df6c3811edb",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "033f825df0106c5819663a80456c0c3696ce44ddb0f2af66ce48e330898d2be3",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "c6d5f92623e28214ad5c8738b1e3c415e4174381ff1d303d4fdf79dfab6f1b10",
+      "tools/research_421_ember_overflow_probe.gd": "e8439a6178a6eff416e7187d2c78f13dadab0ed295e9be03611fc86fb455de40",
+      "tools/research_421_ember_overflow_probe.gd.uid": "d1d7411e2dfa566fc4c6cc571fec34a51f592976d342a6d369cedfedcfb0608e",
+      "tools/research_421_ember_overflow_capacity_probe.gd": "b79cc02a86e3df00bc2fae9fc0cb855102ac5d28730341b7dde0166191c01a29",
+      "tools/research_421_ember_overflow_capacity_probe.gd.uid": "5b3cf396397a0f47c5472416bd9b70a7f03e496696c152d7dce3600c10b5bfe3"
+    },
+    "candidateDiffSha256": {
+      "domain/rules/combat.gd": "8c33dd0e09a782d4897c73890a3d46f8a27937187845aad4515f7536455b6415",
+      "domain/state/player_combatant.gd": "c6b831842bea6b86b0e48608434f0609fee9d4c7b52a594008f2ab1960e6d2cb",
+      "tools/balance_sim.gd": "271f255bebb17f88f07ed67abe349cb6e66cfc140fb0b69239168b60b571c463"
+    },
+    "godotBinaryPath": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "runnerSha256": "fc82ae2a2f775e63839c5ed7aa1e8a471f95f7fc38ad32093b93ed4d6ffa83d9",
+    "probeSha256": "b79cc02a86e3df00bc2fae9fc0cb855102ac5d28730341b7dde0166191c01a29",
+    "taskCapsulePath": "task-capsule-5460811702-v21.json",
+    "taskCapsuleSha256": "cdef3ea4ae0712ccb00ed0f496451bef4875ee3a43eb792b6fc9492701488d93",
+    "predecessorSha256": {
+      "post_d486_private_overflow_design_v1.py": "99c003ea8717b0c1958d90c5d85b7abb3cb9d422236d9d208727a639037a7db4",
+      "post_d486_private_overflow_identity_v2.py": "6205081c349191965181cdeab232ec38b6861f667d34d60b0df8da0d39f1046f",
+      "post_d486_private_overflow_identity_v2_preflight.py": "524b25a613d943061d66273cb8629b1387a5a945a0dbe4757718ce94f6e83b93",
+      "protocols/post-d486-private-overflow-design-v1.json": "44b6f7e0b3d2c36126690e4bc2e780796b0e9737f00aed87931e6e3d6908115f",
+      "protocols/post-d486-private-overflow-identity-v2.json": "75d56e97fe20cfab3637bf0e00a1fe897281c98662b8f75274fd5d0390b363e1",
+      "summaries/post-d486-private-overflow-design-v1.json": "1a3bb6dc7c899a57467abf27385e379edcb4f081eb7b76266bbcd7e94758bf90",
+      "summaries/post-d486-private-overflow-identity-v2.json": "16126cea96483d2ac668ada9a97eef64679db04b62dccc17aa59164b6b903e59",
+      "summaries/post-d486-private-overflow-identity-v2-preflight.json": "e666ab02e992bbf17d70a96e3973a0a8125269a587d2b3d8e0360ebb2db90dd8",
+      "summaries/post-d486-private-overflow-primary-sources-v1.md": "2bee618ff9a186918e99c44482305fddbdb22dbc1b19d593d73eb63a1045ed54"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 2,
+    "newScientificSimulatorObservationRows": 512,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "candidateCount": 1,
+    "firstLooks": 1
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns complete cohort construction, two content-addressed plans, process execution, exact paired comparison, telemetry attribution, policy aggregation and stop/go.",
+    "order": "Verify immutable evidence, refs, source, Godot and ledger; pass source and cardinality gates; execute all 256 current-main rows once; execute all 256 A-only rows once; analyse the sole complete look; verify the byte-identical ledger.",
+    "firstLook": "All 512 observations are the only look. No source, row, policy, seed, gate, metric, threshold, subset or cap changes after execution begins.",
+    "stagedConstraint": "This capacity stage may authorise only a separately preregistered equal-cohort CRN first look. It cannot support a payoff or endpoint claim.",
+    "futureCrnConstraint": "Any later causal arms must use the same frozen 64 policy identities, four simulation seed identities, baseline, estimator, first-look budget and stopping rule across every compared level.",
+    "methodConstraint": "No policy control, ML, RL or optimiser is authorised unless this experiment identifies a remaining repertoire bottleneck and measured decision value justifies it."
+  },
+  "decisionRules": {
+    "success": "All immutable, source, exact-identity, attribution and reliability gates pass; at least 16 policies are robust-active, 16 exact-inactive, eight viable and 16 exposure-active; all 512 rows complete within 120 seconds; ledger is byte-identical.",
+    "successAuthority": "Apply boundary 1: freeze only the Ember-overflow to Heavy Blow representation and preregister the smallest equal-cohort current-main versus AB CRN first look on this exact cohort. Do not add a policy control, joint package, protected seed, ML, RL or optimiser.",
+    "futility": "Inputs and observations complete, but any source, identity, attribution, reliability, active, inactive, viable or exposure gate fails.",
+    "futilityAuthority": "Apply boundary 2: close only this exact Ember-overflow to Heavy Blow representation without threshold, policy, cohort, payoff or method rescue; continue the corrected deterministic causal enumeration inside the same private counter, tag or transform class.",
+    "inconclusive": "A frozen input or fixed process is unavailable, a process is incomplete, or the exact decision is unavailable at 120 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record this capacity experiment inconclusive at the preregistered cap. Do not rerun, alter the cohort, change a gate or spend a causal or protected row."
+  },
+  "forbidden": [
+    "any causal payoff or endpoint claim from producer-only telemetry",
+    "any policy control, Heavy Blow preference or candidate retuning",
+    "any row, policy, seed, outcome or support subset",
+    "any Scoreline, Afterimage, acquisition, Faultline rarity or Ward setup variation",
+    "any repair, rerun, reserve row or adaptive continuation after a completed failure",
+    "any append to the research ledger",
+    "any protected acceptance or reserve seed",
+    "any ML, RL or optimiser"
+  ]
+}
