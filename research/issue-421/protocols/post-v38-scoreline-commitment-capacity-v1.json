@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "With the frozen Scoreline payoff held at six and the exact no-Oath gate-control paired to the identity-safe existing-representation commitment, does the added existing Executioner create enough natural producer-consumer-payoff activation across the frozen policy repertoire to justify a smallest causal panel?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v2.json",
+    "taskCapsuleSha256": "007c8285d43212206002f18899309e4bc8789436c59a69b9a2085bca4c5e508f",
+    "identityProtocolSha256": "c6e2b95dbffa9c0e4fb3dc6bcc989d5415c38fb3f67e5b36d23bad094b10122c",
+    "identitySummarySha256": "93a63608ccd0b8c16e581ebf5077dac08b517e11fe5124427c738d4ef832afd2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinaryPath": "/opt/homebrew/bin/godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "2793c08d138812da95e3efa69b238ce9760e02fcc876e1593be809a5bc8f51ed",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "b40dc30abd77c3c8eeba73629212a1340532041d495909f0c5863ddcdd9eb1c4",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "domain/state/combat_state.gd": "25e1113ffe0fd48f7c8e921179ed3f1f364cf1bd7b18689e778d2d7881560a21",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "presentation/run/choice_screen.gd": "054c4969c1ab2505815a42c5676a0d20c0c059a4dfc8459bcf75d8a3a54c78ed",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "56c99d5c3162fdb6a3b6e5590aafc3eb3a64d13ece79ab24974c24b8c03a12f6",
+      "tools/research_421_scoreline_commitment_probe.gd": "be04038f9869fc3354e80742e82a028aba320606343af5fe6214c13eba7df2c8",
+      "tools/research_421_scoreline_commitment_probe.gd.uid": "1e8f29d8d500a81bc09d129af39b4750f23008bd4ca72fef982319737c6d9bfd"
+    }
+  },
+  "identityGate": {
+    "status": "passed",
+    "protocolSha256": "c6e2b95dbffa9c0e4fb3dc6bcc989d5415c38fb3f67e5b36d23bad094b10122c",
+    "observations": 1069,
+    "nullMismatchRows": 0,
+    "rngMismatchRows": 0,
+    "directFaults": 0,
+    "newLedgerRows": 0,
+    "authority": "Natural-capacity screen only; no endpoint, package, candidate or product claim."
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "fixedLevel": "faultline-bonus-6",
+      "meaning": "The frozen exact Chisel mark and later exact Executioner consume path with one separate bounded six-damage operation."
+    },
+    "scorelineCommitment": {
+      "none": "The exact no-Oath gate-control: no relic, no added card and no research event.",
+      "scoreline-oath": "The identity-safe Dusk-only assignment of one research Oath and one existing base Executioner deck copy."
+    },
+    "afterimagePayoff": {
+      "fixedLevel": "off",
+      "meaning": "Afterimage remains closed, absent and outside this design."
+    },
+    "factorSeparation": "Only Scoreline commitment varies. Scoreline payoff is fixed at six and Afterimage is fixed off. This is a two-arm single-factor capacity comparison, not a payoff factorial or cross-package joint design.",
+    "jointDisposition": "No Afterimage or joint cell. Frozen Afterimage capacity showed no acquisition-only fallback authority, and the zero-row disposition explicitly requires separation."
+  },
+  "design": {
+    "type": "two-arm natural-capacity census with shared policy and simulation-seed identities; not a causal endpoint panel",
+    "matrix": [
+      "Scoreline six plus commitment none",
+      "Scoreline six plus scoreline-oath"
+    ],
+    "sharedAnchors": "Both arms use the same root-557 policy identity, simulation seed, Duskblade Vow-5 baseline, content source, first-look budget, estimator and stopping rule.",
+    "policy": "The same frozen policy vector and current scoring code in both arms. The enabled arm changes only the admitted Oath plus existing Executioner assignment and the Oath-gated Scoreline branch.",
+    "rng": "Both arms start from the same frozen seed identity and assignment itself makes no RNG call. The current shuffle and draw path may consume the stream differently only as the intended consequence of the extra deck card; this screen estimates activation capacity, not an endpoint effect.",
+    "telemetry": "Frozen Scoreline producer, mediator-set, consumer, mediator-consume, payoff requested/realised and expiry counters plus existing Chisel and Executioner offer, draw and play counters.",
+    "reliability": "Every no-Oath row remains in the census. An enabled stall or error absent from its matched control fails integrity.",
+    "assignmentIntegrity": "Every control terminal row must lack the Oath and every enabled terminal row must contain exactly one. Identity preflight already proves exact initial relic/card assignment, uid and save roundtrip.",
+    "aliasStructure": "The no-Oath arm is the exact payoff-six gate-control frozen by identity. Both arms share one payoff level, so this screen estimates commitment-mediated activation support only and cannot estimate payoff magnitude or endpoint effect."
+  },
+  "cohort": {
+    "policyRoot": 557,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346616,
+      346617
+    ],
+    "rowsPerArm": 128,
+    "disjointness": "Root 557 and both seeds are absent from all closed identity and capacity cohorts and from protected acceptance and reserve ranges."
+  },
+  "estimands": {
+    "activeRow": "An enabled row with at least one exact Scoreline payoff event.",
+    "robustActivePolicy": "A fixed root-557 policy identity with at least one exact payoff event in both frozen simulation seeds.",
+    "progressionIntegrity": "Producer equals mediator-set and consumer equals mediator-consume equals payoff in every enabled row; the no-Oath arm emits zero Scoreline event.",
+    "valueIntegrity": "Every requested total equals six times payoff count and realised damage lies in the inclusive interval from zero to requested damage.",
+    "cardPathIntegrity": "Every active row records at least one exact Chisel play and one exact Executioner play.",
+    "assignmentIntegrity": "Oath count is zero in every no-Oath terminal row and exactly one in every enabled terminal row.",
+    "factorIsolation": "Afterimage emits zero research event in every row.",
+    "consumerReachability": "Existing Executioner offered, drawn and played row/event counts, plus Chisel played counts, are reported without becoming selection criteria.",
+    "policyIdentity": "Exact frozen policy snapshot equality between arms at every shared identity.",
+    "reliability": "Zero enabled stalls or errors absent from the matched no-Oath row.",
+    "notEstimated": "Win rate, HP, duration, economy, endpoint effect, complementarity, candidate feasibility, detector acceptance, product balance, shipping copy or protected confirmation."
+  },
+  "supportFloor": {
+    "robustActivePolicies": 8,
+    "activeRows": 16,
+    "payoffEvents": 16,
+    "rationale": "Eight is one eighth of the fixed 64-policy repertoire and requires activation in both seeds; sixteen rows and events prevent a few high-frequency identities from authorising a larger endpoint panel. This is a decision-value floor, not a significance threshold."
+  },
+  "ledgerFreeze": {
+    "sha256": "9279d2a77b43726760f825e15c6d1b1bacfc64cc2aad771e4accf0403aef2ba3",
+    "records": 481012,
+    "firstSequence": 1,
+    "lastSequence": 481012,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 1,
+    "maximumSimulatorRows": 256,
+    "maximumNewLedgerRows": 256,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python constructs both complete arm rectangles before execution, runs one Godot process, content-addresses the plan and output, computes exact gates and appends all 256 observations to the sole ledger in one transaction.",
+    "order": [
+      "Verify identity success, task capsule, repository and archive refs, source hashes, Godot and ledger freeze.",
+      "Execute the fixed 256-row plan once.",
+      "Evaluate telemetry, value, card-path, assignment, factor-isolation, policy, reliability and activation-support gates.",
+      "Atomically append the complete observation set, verify sequence growth, protected-row count and SQLite integrity, then apply exactly one disposition."
+    ],
+    "firstLook": "The complete 256-row design is the only look. No arm, policy, seed, floor or token changes after execution.",
+    "stagedConstraint": "This stage may admit the commitment factor to a smallest causal endpoint panel or close it at capacity. It cannot support an endpoint, package, candidate, detector, product or P9 claim.",
+    "protectedSeedsExcluded": {
+      "acceptance": "3000-5199",
+      "reserve": "5200-5399"
+    }
+  },
+  "decisionRules": {
+    "success": "All telemetry, value, card-path, assignment, factor-isolation, policy, reliability and ledger gates pass; at least eight robust active policies, sixteen active rows and sixteen payoff events are observed.",
+    "successAuthority": "Apply boundary 1: admit only this frozen commitment factor to one separately preregistered smallest sufficient common-random-number causal panel.",
+    "futility": "Any integrity, isolation, policy, reliability or ledger fault occurs, or any support floor is missed at the complete cap.",
+    "futilityAuthority": "Apply boundary 2: close this exact persistent fallback without rescue and continue with the next evidence-backed structural mechanism inside #421.",
+    "inconclusive": "A frozen input, output or atomic ledger receipt is unavailable, or the complete decision exceeds 120 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record at cap; do not rerun, alter the cohort, repair, infer an endpoint or use protected seeds."
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "archiveParent": "666c728e926e6f6a39528c7179e1c6330e20f221",
+  "preservedRefs": {
+    "research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+    "research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+    "research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221"
+  },
+  "publicationRef": "research/issue-421-scoreline-commitment-evidence",
+  "source": {
+    "main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "scorelineCommitmentHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "scorelineComponentHead": "45dbc463a2beb87b8ccae7f1225674454bf67f7b",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf"
+  },
+  "results": {
+    "commitmentIdentity": {
+      "outcome": "SUCCESS",
+      "observations": 1069,
+      "faults": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "c6e2b95dbffa9c0e4fb3dc6bcc989d5415c38fb3f67e5b36d23bad094b10122c",
+      "summarySha256": "93a63608ccd0b8c16e581ebf5077dac08b517e11fe5124427c738d4ef832afd2"
+    },
+    "naturalCapacity": {
+      "outcome": "SUCCESS",
+      "observations": 256,
+      "newLedgerRows": 256,
+      "activeRows": 96,
+      "robustActivePolicies": 34,
+      "scorelinePayoffEvents": 283,
+      "protocolSha256": "f36a775a489023c15f27c32969859d4f8ae508ad9bd469ab8f97ebc6691628f9",
+      "summarySha256": "3581ee690917c938888d3e39e8033a04c36813ce05fc771cdc69460cc0b938bc"
+    },
+    "componentDecomposition": {
+      "decision": "select-three-arm-scoreline-component-control",
+      "summarySha256": "dfede3e0939858da09c77b5784160b8dfaa6a147471aedc0cea3d0f8baf11f5c",
+      "alias": "Payoff-six without Oath equals base; the assignment-only cell isolates the added Executioner main effect."
+    },
+    "componentIdentity": {
+      "outcome": "SUCCESS",
+      "observations": 1064,
+      "faults": 0,
+      "newLedgerRows": 0,
+      "protocolSha256": "49ca75d91182c00ea529a95105bcd9be8c7136f5c5bfb203e394e9e9c8119e0c",
+      "summarySha256": "9aab65189056f429973b42ed817582b60de6af9ec490b1d81c47c72d0396b231"
+    },
+    "componentCrn": {
+      "outcome": "FUTILITY",
+      "decision": "close-scoreline-commitment-after-component-crn",
+      "decisionBoundary": 2,
+      "observations": 768,
+      "newLedgerRows": 768,
+      "faults": 0,
+      "protocolSha256": "5679a24d09fe4c1963f81b8f73d835bbbe03af1c90651633f45adab4bfef4496",
+      "summarySha256": "1a56fca83591c593e90cdaf7731e41d43fbec47b9b447307b3c9e8c14acf8c83"
+    }
+  },
+  "componentCrnDecisionEvidence": {
+    "fullVsBaseQuality": {
+      "point": 0.0915460120244797,
+      "p025": 0.03508390180087468,
+      "p975": 0.14959032192371904
+    },
+    "payoffAtAssignmentQuality": {
+      "point": 0.0188154541890681,
+      "p025": -0.0003902749775985658,
+      "p975": 0.04348192659330193
+    },
+    "payoffAtAssignmentEvents": {
+      "point": 1.9296875,
+      "p025": 1.671875,
+      "p975": 2.2110351562499986
+    },
+    "activePolicies": 62,
+    "viablePolicies": 17,
+    "positiveViablePolicies": 4,
+    "requiredPositiveViablePolicies": 8,
+    "nonPositivePolicies": 60,
+    "fullVow5WinRate": 0.07421875,
+    "addedStallOrErrorRows": 0,
+    "policyIdentityMismatchRows": 0,
+    "decision": "The total package moved quality, but the separately identified Scoreline payoff did not clear its positive lower bound or policy-sensitivity floor. The exact commitment family is closed without retuning."
+  },
+  "ledger": {
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "verification": {
+    "scorelineCommitmentScripts": "scripts OK (244 checked)",
+    "scorelineComponentScripts": "scripts OK (244 checked)",
+    "componentCrnPreflight": "PASS (18 checks; 768 unique rows; no existing protocol identity)"
+  },
+  "rawCacheObjectCount": 33,
+  "claimBoundary": "The exact Scoreline commitment is a valid discovery-stage negative. No held-out package admission, detector, product, protected-seed or P9 claim follows."
+}

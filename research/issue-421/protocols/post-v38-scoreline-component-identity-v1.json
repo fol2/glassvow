@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does the minimum three-arm Scoreline component grammar preserve every current and no-Oath null identity while proving that off plus Oath assigns the identical existing relic/card representation as the full package but emits no Scoreline mediator or payoff?",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v2.json",
+    "taskCapsuleSha256": "007c8285d43212206002f18899309e4bc8789436c59a69b9a2085bca4c5e508f",
+    "baselineHead": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateHead": "45dbc463a2beb87b8ccae7f1225674454bf67f7b",
+    "predecessorSha256": {
+      "protocols/post-v38-scoreline-commitment-identity-v1.json": "c6e2b95dbffa9c0e4fb3dc6bcc989d5415c38fb3f67e5b36d23bad094b10122c",
+      "summaries/post-v38-scoreline-commitment-identity-v1.json": "93a63608ccd0b8c16e581ebf5077dac08b517e11fe5124427c738d4ef832afd2",
+      "protocols/post-v38-scoreline-commitment-capacity-v1.json": "f36a775a489023c15f27c32969859d4f8ae508ad9bd469ab8f97ebc6691628f9",
+      "summaries/post-v38-scoreline-commitment-capacity-v1.json": "3581ee690917c938888d3e39e8033a04c36813ce05fc771cdc69460cc0b938bc",
+      "summaries/post-v38-scoreline-commitment-capacity-decomposition-v1.json": "dfede3e0939858da09c77b5784160b8dfaa6a147471aedc0cea3d0f8baf11f5c"
+    },
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinaryPath": "/opt/homebrew/bin/godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "fe35b967ca014b65a37561d83a9eeb257aeac905f200b8d8c344ff31b8feb6e5",
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/research_421_scoreline_commitment_baseline_probe.gd": "449f07ed3b4c73d8251ad3fea0ba5566ef7de3573af74d9607bf4dce115ba7ae",
+      "tools/research_421_scoreline_commitment_baseline_probe.gd.uid": "b39c1fba22d4967e9a81edaaa1b4bb48058212c5113ceb4325345afda2204895"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "b40dc30abd77c3c8eeba73629212a1340532041d495909f0c5863ddcdd9eb1c4",
+      "domain/state/combat_state.gd": "25e1113ffe0fd48f7c8e921179ed3f1f364cf1bd7b18689e778d2d7881560a21",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "f4b014cb2cc2b1cb8053c6f5d3c979a913a39ca4edc846e46bd579c0140bf716",
+      "tools/research_421_scoreline_commitment_probe.gd": "be04038f9869fc3354e80742e82a028aba320606343af5fe6214c13eba7df2c8",
+      "tools/research_421_scoreline_commitment_probe.gd.uid": "1e8f29d8d500a81bc09d129af39b4750f23008bd4ca72fef982319737c6d9bfd"
+    }
+  },
+  "closedPredecessorBoundary": {
+    "commitmentIdentity": "Frozen success for omitted, explicit, no-Oath, assignment, save and direct Scoreline semantics.",
+    "commitmentCapacity": "Frozen success with 34 robust active policies, 96 active rows and 283 payoff events.",
+    "decisionValue": "The zero-row decomposition shows that a two-arm endpoint panel would alias the generic added-card effect with Scoreline payoff. Exactly one assignment-only component cell is necessary.",
+    "noRescue": "This is not a capacity repair, payoff sweep or new mechanism. It preserves the frozen source and makes one previously illegal factor combination available solely as a component control."
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": {
+        "off": 0,
+        "faultline-bonus-6": 6
+      },
+      "meaning": "The frozen Oath-gated Chisel mark and Executioner consume payoff."
+    },
+    "scorelineCommitment": {
+      "levels": [
+        "none",
+        "scoreline-oath"
+      ],
+      "meaning": "The frozen existing-representation assignment of one research relic and one base Executioner."
+    },
+    "afterimagePayoff": {
+      "level": "off",
+      "status": "Fixed outside the design and absent from source."
+    },
+    "factorCount": 2,
+    "independence": "Payoff and commitment vary independently for component identification. Afterimage does not vary; this is not the old four-factor design."
+  },
+  "encodingGrammar": {
+    "schemaVersion": {
+      "type": "string",
+      "onlyLevel": "scoreline-component-v1"
+    },
+    "scorelinePayoff": {
+      "type": "string",
+      "required": true,
+      "levels": [
+        "off",
+        "faultline-bonus-6"
+      ]
+    },
+    "scorelineCommitment": {
+      "type": "string",
+      "required": true,
+      "levels": [
+        "none",
+        "scoreline-oath"
+      ]
+    },
+    "legalCells": [
+      "off plus none",
+      "faultline-bonus-6 plus none",
+      "off plus scoreline-oath",
+      "faultline-bonus-6 plus scoreline-oath"
+    ],
+    "rejection": "Unknown schema type/value, missing factor, unknown key, non-string factor, unknown token or non-dictionary settings terminates without output before RunState construction."
+  },
+  "design": {
+    "type": "component-control identity preflight with four common-random-number null arms and four mechanism-blocked direct cells; not an endpoint factorial",
+    "nullMatrix": [
+      "pristine current-main",
+      "candidate research421 omitted",
+      "candidate off plus none",
+      "candidate payoff six plus none no-Oath gate-control"
+    ],
+    "directMatrix": [
+      "Dusk assignment-only Chisel then Executioner",
+      "Dusk full Chisel then Executioner",
+      "Ash assignment-only shared joint path",
+      "Ash full shared joint path"
+    ],
+    "anchors": {
+      "assignment": "Assignment-only and full Dusk must have identical exact relic, deck, uid, save and assignment-RNG snapshots.",
+      "component": "Assignment-only emits zero Scoreline event; full emits the frozen producer, mediator, consumer and payoff-six sequence. Their policy snapshots and final RNG remain exact.",
+      "null": "Pristine, omitted, explicit off/none and payoff-six/none alias exactly across 265 identities.",
+      "ash": "Both enabled-setting Ash rows alias the matching no-Oath Ash path exactly."
+    },
+    "mechanisticallyJustifiedInteractions": [
+      "Payoff by commitment is the required component interaction. Payoff cannot operate without the Oath gate, while assignment-only identifies the added-card main effect.",
+      "Aspect by commitment is checked only at exact Ash direct anchors and is not an endpoint interaction."
+    ],
+    "aliasStructure": "Off/none aliases payoff-six/none exactly because no Oath is present. Those two cells form one base endpoint arm. Off/Oath is assignment-only and payoff-six/Oath is full, leaving three endpoint arms with no unidentified fourth cell.",
+    "omittedCells": "No whole-run assignment-only or full endpoint row, Afterimage, payoff sweep, additional commitment, rarity, policy control, RandomBuild, ML, RL, optimiser or protected seed is authorised by this identity protocol."
+  },
+  "cohort": {
+    "policyRoot": 558,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346618,
+      346619,
+      346620,
+      346621
+    ],
+    "scriptedSeed": 347604,
+    "wholeRunRowsPerNullArm": 256,
+    "scriptedNullRowsPerNullArm": 9,
+    "disjointness": "Root 558 and every seed are absent from all closed #421 protocols and protected ranges. All null arms share exact policy, seed, aspect, vow, baseline, estimator and stopping identities."
+  },
+  "estimands": {
+    "pristineIdentity": "Zero canonical mismatches for pristine versus omitted across 265 paired identities after removing only the candidate empty research-state observation.",
+    "explicitNullIdentity": "Zero mismatches for omitted versus off/none across all 265 identities.",
+    "noOathIdentity": "Zero mismatches for off/none versus payoff-six/none across all 265 identities.",
+    "nullRngIdentity": "Zero final RNG mismatches across all four null arms.",
+    "interfaceSafety": "All ten malformed, missing, mistyped or unknown settings fail for the preregistered reason without output.",
+    "assignmentIdentity": "Assignment-only and full use identical one-Oath, one-Executioner, uid, save and assignment-RNG changes.",
+    "componentIsolation": "Assignment-only emits zero Scoreline event; full emits the exact frozen five-stage AB sequence and realised six payoff while policy choices and RNG remain equal.",
+    "ashIdentity": "Both Oath settings remain exact current paths on Ash and receive no assignment or research event.",
+    "precision": "Every estimand is an exact equality, Boolean or count gate with required mismatch and fault count zero.",
+    "notEstimated": "Whole-run endpoint, complementarity, package admission, policy sensitivity, duration, RandomBuild, detector, product or protected confirmation."
+  },
+  "ledgerFreeze": {
+    "sha256": "ee277d9a8ebaf3eedd2fadcd825ee02b9fc0a5b49e302ae74e862095774309e9",
+    "records": 481268,
+    "firstSequence": 1,
+    "lastSequence": 481268,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "invalidConfigurationChecks": 10,
+    "godotProcessExecutions": 12,
+    "nullArms": 4,
+    "rowsPerNullArm": 265,
+    "directRows": 4,
+    "maximumSimulatorObservationRows": 1064,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 240,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns the four null arms, four direct cells, validation, content-addressed plans and outputs, exact comparisons and stop/go.",
+    "order": [
+      "Verify every frozen predecessor, repository and archive ref, source head, file hash, Godot identity and ledger.",
+      "Check schema, assignment, Scoreline and Afterimage source cardinalities.",
+      "Reject all ten malformed settings.",
+      "Execute the complete pristine null plan once.",
+      "Execute the candidate omitted, explicit, no-Oath and four-row component plan once.",
+      "Analyse the sole complete look and verify byte-identical ledger state."
+    ],
+    "firstLook": "The complete 1,064-observation design is the only look. No source, row, level, cohort or threshold changes after execution.",
+    "stagedConstraint": "This stage proves component-control identity only. It cannot support any endpoint or package claim.",
+    "protectedSeedsExcluded": {
+      "acceptance": "3000-5199",
+      "reserve": "5200-5399"
+    }
+  },
+  "decisionRules": {
+    "success": "All immutable, interface, source-cardinality, exact-null, RNG, assignment, save, component-isolation, full-AB, Ash and ledger gates pass; exactly 1,064 observations complete within 240 seconds and the ledger adds zero rows.",
+    "successAuthority": "Apply boundary 1: freeze the three-arm alias and separately preregister one smallest sufficient Scoreline component CRN endpoint panel.",
+    "futility": "Any completed immutable, interface, cardinality, null, RNG, assignment, save, component, Ash, row-count or ledger gate fails.",
+    "futilityAuthority": "Apply boundary 2: close this component control without rescue and continue with the next evidence-backed mechanism inside #421.",
+    "inconclusive": "A frozen input or fixed process is unavailable, output is incomplete, or the exact decision is unavailable by 240 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record at cap; do not rerun, alter the cohort, repair, infer an endpoint or use protected seeds."
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "Does the single owner-authorised existing-representation Scoreline commitment preserve every omitted, off and no-Oath current-main identity while assigning exactly one Dusk-only research relic and one existing Executioner without a new save field or RNG call, and gate only the frozen Scoreline mediator?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v2.json",
+    "taskCapsuleSha256": "007c8285d43212206002f18899309e4bc8789436c59a69b9a2085bca4c5e508f",
+    "predecessorSha256": {
+      "protocols/post-v38-fight-local-identity-v2.json": "08714f8b6034b2c71e633719c0350caca7c4e2cbdb8c4f267a5e178acfdc6b49",
+      "summaries/post-v38-fight-local-identity-v2.json": "058a5e953a465520b5893725e298cac74bb69e2ce42948bfdf5ba3cad09180de",
+      "protocols/post-v38-fight-local-capacity-v1.json": "156cadcfd94718f8074a16db4602832d2712bdbca71759302f2c32ce77999df2",
+      "summaries/post-v38-fight-local-capacity-v1.json": "580ee0fa49f94ef62bc2a983724b2bb83e80bf72f9085fa321dcbba09f12376c",
+      "summaries/post-v38-fight-local-capacity-decomposition-v1.json": "f4d8490c791b5a35f435fef42b71abf61c0779501a58ce3b8136a053be403ea5",
+      "protocols/post-v38-afterimage-order-identity-v1.json": "fd275e4610100562050fce4c59889caae644e93020e03e0e1b85c0c4147fff3d",
+      "summaries/post-v38-afterimage-order-identity-v1.json": "446b2ff0af2b5a98a0bf263d2caf9ea4f1c0b46b03cf4e82ae3aae2960331e6c",
+      "protocols/post-v38-afterimage-order-capacity-v1.json": "c2a2f6ad9eb07466f62a0ec16193462ae8ed1eb8dfc339bae515675304ea4947",
+      "summaries/post-v38-afterimage-order-capacity-v1.json": "f9f9e632113c6c1737450f37f973ea8ba8370cc75e40a4c4ea34e583e92de140",
+      "summaries/post-v38-afterimage-order-capacity-decomposition-v1.json": "376a19590d9fc44c262176d4042157e4bd2255d54c537cdeb4da168b4e57dcde"
+    },
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinaryPath": "/opt/homebrew/bin/godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "3da7cb704e69c3fad5d6270ff7ff51caae9025a1705653d98291bbcf1fe59232",
+    "baselineSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "presentation/run/choice_screen.gd": "054c4969c1ab2505815a42c5676a0d20c0c059a4dfc8459bcf75d8a3a54c78ed",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/research_421_scoreline_commitment_baseline_probe.gd": "449f07ed3b4c73d8251ad3fea0ba5566ef7de3573af74d9607bf4dce115ba7ae",
+      "tools/research_421_scoreline_commitment_baseline_probe.gd.uid": "b39c1fba22d4967e9a81edaaa1b4bb48058212c5113ceb4325345afda2204895"
+    },
+    "candidateSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "b40dc30abd77c3c8eeba73629212a1340532041d495909f0c5863ddcdd9eb1c4",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "domain/state/combat_state.gd": "25e1113ffe0fd48f7c8e921179ed3f1f364cf1bd7b18689e778d2d7881560a21",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "presentation/run/choice_screen.gd": "054c4969c1ab2505815a42c5676a0d20c0c059a4dfc8459bcf75d8a3a54c78ed",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "56c99d5c3162fdb6a3b6e5590aafc3eb3a64d13ece79ab24974c24b8c03a12f6",
+      "tools/research_421_scoreline_commitment_probe.gd": "be04038f9869fc3354e80742e82a028aba320606343af5fe6214c13eba7df2c8",
+      "tools/research_421_scoreline_commitment_probe.gd.uid": "1e8f29d8d500a81bc09d129af39b4750f23008bd4ca72fef982319737c6d9bfd"
+    }
+  },
+  "closedPredecessorBoundary": {
+    "fightLocalV2Identity": "Frozen success. Its Scoreline producer, mediator, consumer, payoff, expiry, telemetry, factor isolation and reliability are admitted mechanical evidence only.",
+    "fightLocalV2Capacity": "Frozen futility. Its Scoreline current-policy failure was solely deterministic acquisition and reachability support; no row is rerun or reinterpreted.",
+    "afterimageOrder": "Frozen capacity futility. The exact ward-before-edge family remains closed, its persistent fallback was not authorised, and it is absent from this experiment.",
+    "fallbackAuthority": "The zero-row decomposition and owner comment select exactly one existing additive-relic/deck commitment representation for Scoreline after Afterimage disposition.",
+    "noRescue": "This schema, representation, probe identity and disjoint cohort do not alter any closed family, previous row or conclusion."
+  },
+  "frozenCausalFactors": {
+    "scorelinePayoff": {
+      "definition": "Duskblade exact Chisel realised hit sets one target-local non-stacking mark; a later exact Executioner on that living target consumes it for one separate bounded raw-damage operation.",
+      "levels": {
+        "off": 0,
+        "faultline-bonus-6": 6
+      },
+      "status": "Frozen v2 factor restricted to the off and already admitted six-damage levels."
+    },
+    "scorelineCommitment": {
+      "definition": "A Dusk-only research assignment using the existing relic-list and deck representation: exact Scoreline Oath identity plus one base Executioner deck copy.",
+      "levels": [
+        "none",
+        "scoreline-oath"
+      ],
+      "status": "The only new factor. scoreline-oath is illegal while Scoreline payoff is off."
+    },
+    "afterimagePayoff": {
+      "level": "off",
+      "status": "Fixed outside the design, absent from source and not a causal factor or interaction in this experiment."
+    },
+    "factorCount": 2,
+    "independence": "Scoreline payoff and Scoreline commitment are separate causal factors. Afterimage is not varied, no cross-package cell exists, and this is not the old four-factor design."
+  },
+  "mechanismContract": {
+    "producer": "An exact Duskblade Chisel direct hit whose hit_enemy return is positive and whose target remains alive after that hit.",
+    "mediatorState": "One combat-local Boolean mark per target index. It is non-stacking on the same target and absent from save and fixture projections.",
+    "consumer": "A later exact Duskblade Executioner on the same marked living target, after its unchanged authored effect resolves while combat remains live.",
+    "payoffOperation": "Consume the mark, then call hit_enemy once for six with is_attack=false. The separate realised operation can be absorbed by enemy Ward and does not alter current Executioner execute behaviour.",
+    "lifecycle": "Until consumption, marked-target death or combat end; it survives turn boundaries and never persists in RunState.",
+    "naturalCost": "The commitment adds exactly one existing base Executioner to the existing deck. Current shuffle, draw, energy, target and sequence costs remain real; Chisel acquisition remains current. There is no free combat-hand grant.",
+    "duskBoundary": "Ashwarden, mechanism-off and no-Oath runs are exact current-main paths. Only Dusk receives the research relic and deck card.",
+    "scorelineFactor": "Only off and faultline-bonus-6 are legal; the latter can produce state and payoff only with the exact Oath identity.",
+    "afterimageFactor": "Fixed off and absent. No Scoreline operation reads Afterimage state, factor, policy or telemetry.",
+    "interferenceRule": "The no-Oath gate-control must equal explicit off for all 265 identities. The Ash shared anchor must equal its no-Oath counterpart exactly. No joint cross-package cell is authorised.",
+    "nullPath": "Omitted settings, explicit off/none, payoff-six/none, Ash scoreline-oath and absence of the exact Oath create no mediator, payoff, policy, RNG, content, state-projection or result change beyond the enabled Dusk assignment itself.",
+    "policyExposure": "Policy identities and scoring code remain frozen. The policy may naturally encounter the one added existing consumer through the current deck, shuffle and draw path but cannot read the Oath, mark or payoff level."
+  },
+  "commitmentRepresentation": {
+    "researchIdentity": "research421ScorelineOath; not shipping copy and not the closed dual-Oath or ChoiceScreen-selector family.",
+    "assignment": "After deterministic RunState construction and before simulation, enabled Dusk appends the exact special relic identity and one CardInst with the existing executioner ID and RunState.next_uid().",
+    "contentDefinition": "One research-only special relic definition is inserted dynamically only for enabled Dusk save validation. It is absent from full-content.json and every reward pool.",
+    "save": "Uses only player.relics, player.deck and the existing uid/save roundtrip. No field, version or migration is added.",
+    "rng": "Assignment makes no RNG call. Downstream current deck shuffle and draw operate normally on the deliberately changed deck.",
+    "choiceScreen": "The existing ChoiceScreen chosen signal is a source-feasibility anchor only. No UI or product-selection row is implemented before scientific admission.",
+    "idempotence": "Every row removes the dynamic definition before applying its frozen setting. Enabled Dusk rejects a pre-existing Oath rather than stacking it.",
+    "excluded": "No acquisition-weight scalar, rarity change, policy weight, card-content change, free hand injection, new effect family, optimiser, ML, RL, adaptive tuning or shipping copy."
+  },
+  "encodingGrammar": {
+    "schemaVersion": {
+      "type": "string",
+      "onlyLevel": "scoreline-commitment-v1"
+    },
+    "scorelinePayoff": {
+      "type": "string",
+      "levels": [
+        "off",
+        "faultline-bonus-6"
+      ],
+      "requiredWhenSettingsPresent": true
+    },
+    "scorelineCommitment": {
+      "type": "string",
+      "levels": [
+        "none",
+        "scoreline-oath"
+      ],
+      "requiredWhenSettingsPresent": true,
+      "constraint": "scoreline-oath is illegal when Scoreline payoff is off"
+    },
+    "nullEncodings": [
+      "research421 omitted",
+      "schemaVersion=scoreline-commitment-v1, scorelinePayoff=off, scorelineCommitment=none",
+      "schemaVersion=scoreline-commitment-v1, scorelinePayoff=faultline-bonus-6, scorelineCommitment=none"
+    ],
+    "rejection": "Unknown schema type/value, missing factor, unknown key, non-string factor, unknown token, Oath with payoff off or non-dictionary settings terminates without output before RunState construction."
+  },
+  "design": {
+    "type": "two-factor identity preflight with common-random-number null arms and mechanism-blocked direct controls; not an endpoint factorial",
+    "nullMatrix": [
+      "pristine current-main",
+      "candidate with research421 omitted",
+      "candidate explicit payoff off and commitment none",
+      "candidate payoff six and commitment none as the exact no-Oath gate-control"
+    ],
+    "directMatrix": [
+      "Dusk A producer only",
+      "Dusk B consumer only",
+      "Dusk AB at payoff six",
+      "Dusk BA reversal",
+      "Dusk wrong target",
+      "Dusk producer replacement",
+      "Dusk target-death expiry",
+      "Dusk combat-end expiry",
+      "Ash shared joint-path exact null"
+    ],
+    "anchors": {
+      "assignment": "Every enabled Dusk direct cell must receive the identical exact relic/card change, make zero assignment RNG calls and roundtrip through the unchanged save representation.",
+      "noOath": "All 265 payoff-six/none cells alias explicit off/none exactly, including RNG and result.",
+      "ash": "The enabled-setting Ash joint path aliases its matching no-Oath Ash path exactly and receives neither relic nor card.",
+      "source": "Relic and card append sites are singleton, the Oath is absent from content and rewards, and existing ChoiceScreen/save sources are byte-frozen."
+    },
+    "mechanisticallyJustifiedInteractions": [
+      "Scoreline payoff by Scoreline commitment is structural legality: payoff-six without the exact Oath is the preregistered gate-control null.",
+      "Aspect by commitment is a deterministic boundary checked by the shared Ash exact-null anchor, not an estimated endpoint interaction."
+    ],
+    "aliasStructure": "Pristine aliases omitted and explicit off/none. Payoff-six/none also aliases them because the Oath is the sole gate. scoreline-oath/off is illegal. Enabled Dusk changes exactly the commitment assignment and admitted Scoreline branch, so it has no null alias.",
+    "omittedCells": "No Afterimage, cross-package, payoff sweep, rarity, acquisition-weight, policy-priority, endpoint, held-out, protected-seed, product UI, ML, RL or optimiser cell is authorised."
+  },
+  "cohort": {
+    "policyRoot": 556,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346612,
+      346613,
+      346614,
+      346615
+    ],
+    "scriptedSeed": 347603,
+    "wholeRunRowsPerNullArm": 256,
+    "scriptedNullRowsPerNullArm": 9,
+    "disjointness": "Root 556 and every listed seed are absent from all closed #421 protocols. Every null arm uses the same resolved policy, seed, aspect, vow, baseline, probe plan, estimator and stopping rule."
+  },
+  "estimands": {
+    "pristineIdentity": "Zero canonical row mismatches after removing only the candidate probe empty research-state observation for pristine versus omitted across 265 paired identities.",
+    "explicitNullIdentity": "Zero mismatches after the same removal for omitted versus explicit off/none across all 265 identities.",
+    "noOathIdentity": "Zero mismatches after the same removal for explicit off/none versus payoff-six/none across all 265 identities.",
+    "nullRngIdentity": "Zero final RNG mismatches across all four null arms.",
+    "interfaceSafety": "All eleven malformed, missing, mistyped, unknown or illegal settings fail for the preregistered reason without output.",
+    "sourceCardinality": "One assignment relic append, one assignment card append, one Scoreline producer call site, one post-card consumer call site, six direct telemetry sites, zero assignment RNG calls and one existing ChoiceScreen signal anchor.",
+    "assignmentIdentity": "Every enabled Dusk direct cell adds exactly one Oath and one terminal base Executioner with one uid increment, leaves assignment RNG unchanged, and roundtrips exact relic, deck IDs, deck UIDs and next uid through the frozen save path.",
+    "scorelineSemantics": "Exact stage order and payoff six for A, B, AB, BA, wrong-target, replacement, target-death and combat-end controls.",
+    "ashIdentity": "Enabled-setting Ash is exact against the matching no-Oath path and receives no assignment or Scoreline event.",
+    "precision": "All estimands are exact Boolean, equality or count gates with required fault and mismatch count zero; no stochastic effect is fitted.",
+    "notEstimated": "Natural capacity, whole-run endpoint effect, policy sensitivity, detector acceptance, product feasibility, shipping copy, protected confirmation or P9 acceptance."
+  },
+  "ledgerFreeze": {
+    "sha256": "9279d2a77b43726760f825e15c6d1b1bacfc64cc2aad771e4accf0403aef2ba3",
+    "records": 481012,
+    "firstSequence": 1,
+    "lastSequence": 481012,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "invalidConfigurationChecks": 11,
+    "godotProcessExecutions": 13,
+    "nullArms": 4,
+    "rowsPerNullArm": 265,
+    "enabledDirectRows": 9,
+    "maximumNewSimulatorObservationRows": 1069,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 240,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns the fixed four-arm cohort, nine direct cells, validation, content-addressed plans and outputs, exact comparisons and stop/go.",
+    "order": [
+      "Verify every frozen predecessor, repository and archive ref, source head, file hash, Godot identity and ledger.",
+      "Check assignment, Scoreline, save and ChoiceScreen source cardinalities and absence of assignment RNG and Afterimage implementation.",
+      "Reject all eleven malformed or illegal settings.",
+      "Execute the complete pristine null plan once.",
+      "Execute the complete candidate omitted, explicit, no-Oath gate and nine-row direct plan once.",
+      "Analyse the sole complete look and verify byte-identical ledger state."
+    ],
+    "firstLook": "The complete 1,069-observation design is the only look. No fault may change a source, row, token, cohort, threshold or order under this protocol.",
+    "stagedConstraint": "This stage can establish source, null, assignment and direct mediator identity only. It contains no comparably evaluated whole-run enabled endpoint and cannot support a causal endpoint claim.",
+    "protectedSeedsExcluded": {
+      "acceptance": "3000-5199",
+      "reserve": "5200-5399"
+    }
+  },
+  "decisionRules": {
+    "success": "All immutable, predecessor, interface, source-cardinality, exact-null, no-Oath, RNG, assignment, save-roundtrip, direct Scoreline, Ash and ledger gates pass; exactly 1,069 observations complete within 240 seconds and the ledger adds zero rows.",
+    "successAuthority": "Apply boundary 1: freeze this single commitment representation and separately preregister the cheapest Scoreline natural-capacity comparison. Do not admit a package, add a factorial or use protected seeds.",
+    "futility": "Any completed immutable, interface, cardinality, null, RNG, assignment, save, direct-mediator, Ash, row-count or ledger gate fails.",
+    "futilityAuthority": "Apply boundary 2: close this exact persistent fallback without a rescue loop and continue with the next evidence-backed mechanism inside #421.",
+    "inconclusive": "A frozen input or fixed process is unavailable, output is incomplete, or the exact decision is unavailable by 240 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record at cap; do not rerun, alter the cohort, repair, infer an endpoint or use protected seeds."
+  }
+}

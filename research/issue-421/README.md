@@ -24,6 +24,39 @@ and is not intended to enter `main`.
 
 ## Current decision
 
+### Scoreline commitment identity success and component-causal closure
+
+The separately authorised existing-representation commitment passed its
+complete 1,069-observation identity preflight. All pristine, omitted and
+explicit null paths were exact, the Oath and one existing Executioner were
+added without RNG or a new save field, direct Scoreline staging and expiry were
+exact, malformed interfaces failed closed, Ash remained null and the ledger
+gained no row. A 256-row natural-capacity screen then found 34 robust active
+policies and 283 payoffs with zero reliability or policy-identity fault.
+
+Capacity did not identify the mechanism because the no-Oath and full arms
+aliased the generic benefit of adding Executioner with the Scoreline payoff.
+The zero-row decomposition therefore froze a three-arm common-random-number
+panel: exact current base, Oath-plus-Executioner assignment only, and the same
+assignment with the six-damage Scoreline payoff. A second 1,064-observation
+identity gate proved that control exact before the sole 768-row panel ran.
+
+The complete package moved quality against base by `0.09155` (95% policy-cluster
+bootstrap interval `0.03508` to `0.14959`), but the separately identified
+Scoreline payoff was only `0.01882` with interval `-0.00039` to `0.04348`.
+Only four positive viable policy witnesses remained against the frozen minimum
+of eight, while 60 policies were non-positive. Telemetry, factor isolation,
+reliability, duration and Vow-5 gates remained green. This is a valid
+discovery-stage futility result: the total movement is substantially explained
+by generic Executioner assignment, so the exact Scoreline commitment family is
+closed without payoff, assignment, policy or cohort retuning.
+
+The 1,024 capacity and component-panel observations were atomically appended to
+the sole ledger, now 482,036 records with SHA-256
+`97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213`,
+SQLite integrity `ok` and zero protected-seed rows. See
+`publication-manifest-scoreline-commitment-v1.json`.
+
 ### Afterimage order identity success and capacity closure
 
 The single evidence-triggered `ward-before-edge` policy control passed its

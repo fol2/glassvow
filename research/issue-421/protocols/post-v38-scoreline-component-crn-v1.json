@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5459094066,
+  "question": "On one fresh Duskblade Vow-5 policy rectangle, does the frozen six-damage Scoreline payoff improve whole-run quality beyond the identical Oath-plus-Executioner assignment, while the full commitment has a positive total effect, policy-sensitive viable witnesses, bounded duration, zero reliability regression and no Afterimage leakage?",
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "refs/heads/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/remotes/origin/research/issue-421-p9-recovery-evidence": "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "refs/heads/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/remotes/origin/research/issue-421-fight-local-evidence": "62c39b3bacbe8cacef5e8b419512844469e0cc34",
+      "refs/heads/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/remotes/origin/research/issue-421-fight-local-v2-evidence": "4de26171c6dbfc28fdcd736777250d1af5efb410",
+      "refs/heads/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221",
+      "refs/remotes/origin/research/issue-421-afterimage-order-evidence": "666c728e926e6f6a39528c7179e1c6330e20f221"
+    },
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "authorityCommentSha256": "154095caace4723ec7a2011454b5bba4c4c7b0ca229e78b953ec4ef5a106adf9",
+    "taskCapsulePath": "task-capsule-5459094066-v2.json",
+    "taskCapsuleSha256": "007c8285d43212206002f18899309e4bc8789436c59a69b9a2085bca4c5e508f",
+    "identityProtocolSha256": "49ca75d91182c00ea529a95105bcd9be8c7136f5c5bfb203e394e9e9c8119e0c",
+    "identitySummarySha256": "9aab65189056f429973b42ed817582b60de6af9ec490b1d81c47c72d0396b231",
+    "sourceHead": "45dbc463a2beb87b8ccae7f1225674454bf67f7b",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinaryPath": "/opt/homebrew/bin/godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "e5080facfc2f7c21dd3489b716e8de59f0f03c141f1e353f6a41f2b8ec685812",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "b40dc30abd77c3c8eeba73629212a1340532041d495909f0c5863ddcdd9eb1c4",
+      "domain/state/combat_state.gd": "25e1113ffe0fd48f7c8e921179ed3f1f364cf1bd7b18689e778d2d7881560a21",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "f4b014cb2cc2b1cb8053c6f5d3c979a913a39ca4edc846e46bd579c0140bf716",
+      "tools/research_421_scoreline_commitment_probe.gd": "be04038f9869fc3354e80742e82a028aba320606343af5fe6214c13eba7df2c8",
+      "tools/research_421_scoreline_commitment_probe.gd.uid": "1e8f29d8d500a81bc09d129af39b4750f23008bd4ca72fef982319737c6d9bfd"
+    }
+  },
+  "identityGate": {
+    "status": "passed",
+    "protocolSha256": "49ca75d91182c00ea529a95105bcd9be8c7136f5c5bfb203e394e9e9c8119e0c",
+    "observations": 1064,
+    "nullMismatchRows": 0,
+    "rngMismatchRows": 0,
+    "directFaults": 0,
+    "newLedgerRows": 0,
+    "authority": "One three-arm Scoreline component CRN panel only."
+  },
+  "frozenFactors": {
+    "scorelinePayoff": {
+      "levels": {
+        "off": 0,
+        "faultline-bonus-6": 6
+      },
+      "definition": "The admitted exact Chisel mark and later exact Executioner consume path; payoff is one separate raw-damage operation."
+    },
+    "scorelineCommitment": {
+      "levels": [
+        "none",
+        "scoreline-oath"
+      ],
+      "definition": "The admitted existing-representation assignment of one research Oath and one existing base Executioner deck copy."
+    },
+    "afterimagePayoff": {
+      "level": "off",
+      "status": "Fixed outside the design and absent."
+    },
+    "factorCount": 2,
+    "separation": "Scoreline payoff and commitment are separate causal factors. Afterimage does not vary and no cross-package cell is present."
+  },
+  "designMatrix": {
+    "base": {
+      "scorelinePayoff": "off",
+      "scorelineCommitment": "none",
+      "meaning": "Identity-proved exact current-main base."
+    },
+    "assignment-only": {
+      "scorelinePayoff": "off",
+      "scorelineCommitment": "scoreline-oath",
+      "meaning": "Identical Oath and Executioner assignment with zero Scoreline damage."
+    },
+    "full": {
+      "scorelinePayoff": "faultline-bonus-6",
+      "scorelineCommitment": "scoreline-oath",
+      "meaning": "The exact admitted commitment plus frozen six-damage Scoreline path."
+    }
+  },
+  "design": {
+    "type": "three-arm mechanism-blocked common-random-number discovery panel; not a full factorial",
+    "sharedIdentities": "All cells use the same root-559 policy vectors, four simulation seeds, Duskblade Vow-5 baseline, candidate executable, content, estimator and stopping rule.",
+    "primaryContrast": "Full minus assignment-only. Both cells have byte-identical initial assignment, deck size, uid and assignment RNG; the frozen Scoreline payoff is their only configured difference.",
+    "totalContrast": "Full minus base estimates the complete commitment package under its natural current shuffle, draw, combat and economy consequences.",
+    "assignmentContrast": "Assignment-only minus base is reported to expose generic existing-card movement but cannot admit Scoreline by itself.",
+    "interaction": "Full minus assignment-only is also the payoff-by-commitment difference-in-differences because payoff-six/no-Oath aliases base exactly by the 265-row identity gate.",
+    "rng": "Every cell starts from the same simulation-seed identity. Assignment-only and full begin with the same deck and RNG path; later divergence caused by realised Scoreline damage is mediated treatment behaviour. Full versus base may consume current shuffle RNG differently only because the intended assignment changes deck size.",
+    "policy": "Frozen BalancePolicy identity and current BalancePilot scoring in all cells. No policy weight, timing control, random mode or online adaptation is added.",
+    "mechanisticallyJustifiedInteractions": [
+      "Payoff by commitment is necessary because the payoff is Oath-gated and the assignment-only cell isolates the added-card main effect."
+    ],
+    "aliasStructure": "Payoff-six/no-Oath equals base exactly and is omitted. Three cells therefore identify total, assignment and payoff-at-assignment effects without spending a fourth Cartesian arm.",
+    "omittedCells": "No Afterimage, payoff level sweep, additional commitment, rarity, acquisition scalar, policy-priority, RandomBuild, Ash, held-out, ML, RL, optimiser or protected-seed cell is authorised."
+  },
+  "cohort": {
+    "policyRoot": 559,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346622,
+      346623,
+      346624,
+      346625
+    ],
+    "rowsPerCell": 256,
+    "minimumRowsPerActivePolicy": 2,
+    "disjointness": "Root 559 and all four seeds are absent from every closed identity, capacity and causal cohort and from protected acceptance and reserve ranges."
+  },
+  "estimands": {
+    "unit": "Policy identity. The four matched simulation-seed differences are averaged within each policy before inference.",
+    "quality": "Win indicator plus terminal HP divided by terminal maximum HP.",
+    "primary": "Cluster-mean full-minus-assignment-only quality and Scoreline payoff-event effects.",
+    "packageTotal": "Cluster-mean full-minus-base quality effect.",
+    "assignmentMainEffect": "Cluster-mean assignment-only-minus-base quality effect, reported but never sufficient for admission.",
+    "secondary": "Paired win, HP fraction, mean turns per completed fight, producer events, Executioner plays and Chisel plays for all three frozen contrasts.",
+    "activation": "A policy is active when at least two of four full-cell seeds have one or more exact Scoreline payoff events.",
+    "viability": "An active policy with at least one full-cell seed that both wins and records an exact Scoreline payoff.",
+    "policySensitivity": "Counts of policy-cluster full-minus-assignment-only quality values greater than zero, equal to zero and below zero; positive viable and non-positive sets are the gates.",
+    "reliability": "Exact stall/error rows, policy mismatches, Oath retention, Scoreline progression/value, card-path and Afterimage-isolation faults.",
+    "notEstimated": "RandomBuild/global-power movement, Ash aspect separation, independent replication, cross-package functional separation, detector score, candidate selection, product balance or protected confirmation."
+  },
+  "estimators": {
+    "point": "Unweighted arithmetic mean of 64 within-policy four-seed CRN means.",
+    "interval": "Percentile bootstrap over the 64 frozen policy-cluster values with 5,000 resamples.",
+    "bootstrapResamples": 5000,
+    "bootstrapSeed": 421559,
+    "confidence": 0.95,
+    "stopping": "One fixed complete-rectangle first look; no sequential peeking, extension, cohort replacement or endpoint addition."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumPositiveViablePolicies": 8,
+    "minimumNonPositivePolicies": 16,
+    "maximumDurationIncreaseTurnsPerFight": 0.25,
+    "maximumVow5WinRate": 0.9,
+    "telemetry": "Base and assignment-only emit zero Scoreline event; full has exact producer-set and consumer-consume-payoff equality, requested six per payoff, bounded realised damage and an exact Chisel/Executioner path for every payoff row.",
+    "assignment": "Base has no Oath; assignment-only and full retain exactly one Oath in every terminal row.",
+    "factorIsolation": "Every cell emits zero Afterimage event.",
+    "policyIdentity": "All three policy snapshots are equal for every policy-seed identity.",
+    "reliability": "Zero stall/error rows in the complete rectangle.",
+    "effect": "The lower 95% policy-cluster bounds for full-minus-base quality, full-minus-assignment-only quality and full-minus-assignment-only payoff events must all exceed zero.",
+    "sensitivity": "At least eight policies are both viable and have positive payoff quality contribution, while at least sixteen have zero or negative contribution. This detects exploitability without requiring failed activation from a deterministic commitment designed to solve reachability.",
+    "duration": "The upper 95% bounds of both full-minus-base and full-minus-assignment-only mean combat-turn changes are at most 0.25 turns per fight.",
+    "vow5": "Full-cell win rate is at most 0.90.",
+    "provenance": "The 16 active, eight viable/positive, sixteen non-positive, 0.25-turn and 0.90 Vow-5 limits reuse the current 64-policy package-support and commercial guardrail scale; no observed endpoint informed them."
+  },
+  "ledgerFreeze": {
+    "sha256": "ee277d9a8ebaf3eedd2fadcd825ee02b9fc0a5b49e302ae74e862095774309e9",
+    "records": 481268,
+    "firstSequence": 1,
+    "lastSequence": 481268,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "cells": 3,
+    "rowsPerCell": 256,
+    "godotProcessExecutions": 1,
+    "maximumSimulatorRows": 768,
+    "maximumNewLedgerRows": 768,
+    "bootstrapResamplesPerEstimand": 5000,
+    "maximumWallTimeSeconds": 180,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "additionalJointCells": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python constructs all three complete cells, runs one Godot process, content-addresses plan/output, fits only the frozen cluster bootstrap, appends all 768 observations atomically and applies stop/go.",
+    "order": [
+      "Verify component identity success, task capsule, repository and archive refs, source hashes, Godot and ledger freeze.",
+      "Execute the fixed 768-row rectangle once.",
+      "Verify assignment, telemetry, value, card-path, factor-isolation, policy and reliability identities.",
+      "Fit the three declared contrasts and frozen endpoints only.",
+      "Atomically append the complete rectangle and apply exactly one disposition."
+    ],
+    "successStop": "Stop at boundary 1 only when every exact, support, sensitivity, effect, activation, duration, reliability and Vow-5 gate passes.",
+    "futilityStop": "Stop at boundary 2 for any fixed exact/count/guardrail failure, any required effect upper bound at or below zero, or a duration lower bound above 0.25.",
+    "inconclusiveStop": "Stop at boundary 3 for an immutable, execution, schema, row, ledger or wall fault, or when no fixed failure exists but a required effect or duration interval straddles its boundary.",
+    "protectedSeedsExcluded": {
+      "acceptance": "3000-5199",
+      "reserve": "5200-5399"
+    }
+  },
+  "decisionRules": {
+    "success": "All preregistered checks pass at the sole complete look.",
+    "successAuthority": "Apply boundary 1: freeze at most the exact full Scoreline commitment for one independently preregistered held-out confirmation on fresh policy and research seeds with RandomBuild, Ash aspect, reachability, duration and reliability evidence. Do not tune payoff or assignment and do not use protected seeds.",
+    "futility": "Any fixed failure rule is met at the complete look.",
+    "futilityAuthority": "Apply boundary 2: close the exact Scoreline commitment family without rescue and continue with the next evidence-backed structural mechanism inside #421. Do not tune payoff, card count, policy or Oath; add a joint cell; or use ML, RL, an optimiser or protected seeds.",
+    "inconclusive": "Execution cannot produce a decision, or an otherwise admissible effect or duration interval straddles its boundary at the cap.",
+    "inconclusiveAuthority": "Apply boundary 3: record at cap; do not rerun, extend, replace cohorts, add a cell or method, or use protected seeds."
+  }
+}

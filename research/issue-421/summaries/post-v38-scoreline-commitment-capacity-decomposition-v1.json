@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "classification": "post-decision deterministic zero-row causal-identification decomposition",
+  "identityProtocolSha256": "c6e2b95dbffa9c0e4fb3dc6bcc989d5415c38fb3f67e5b36d23bad094b10122c",
+  "identitySummarySha256": "93a63608ccd0b8c16e581ebf5077dac08b517e11fe5124427c738d4ef832afd2",
+  "capacityProtocolSha256": "f36a775a489023c15f27c32969859d4f8ae508ad9bd469ab8f97ebc6691628f9",
+  "capacitySummarySha256": "3581ee690917c938888d3e39e8033a04c36813ce05fc771cdc69460cc0b938bc",
+  "capacityDisposition": "admit-scoreline-commitment-to-smallest-crn-panel",
+  "observations": {
+    "activeRows": 96,
+    "robustActivePolicies": 34,
+    "payoffEvents": 283,
+    "producerEvents": 1102,
+    "consumerEvents": 283,
+    "executionerDrawnRows": 128,
+    "executionerPlayedRows": 128,
+    "chiselPlayedRows": 128,
+    "additionalStallOrErrorRows": 0,
+    "policyIdentityMismatchRows": 0
+  },
+  "remainingIdentificationProblem": "A two-arm no-Oath versus full-Oath endpoint contrast aliases the generic effect of adding one existing Executioner with the incremental Scoreline payoff. It can establish package total effect but cannot establish that the admitted producer-mediator-consumer payoff contributes beyond the deterministic acquisition assignment.",
+  "minimumComponentControl": {
+    "factors": [
+      "Scoreline payoff: off versus faultline-bonus-6",
+      "Scoreline commitment: none versus scoreline-oath"
+    ],
+    "newLegalCell": "Scoreline payoff off plus scoreline-oath assigns the identical Oath and Executioner but leaves the frozen Scoreline damage at zero.",
+    "threeArmAlias": "Payoff-six plus no Oath is already exact against off plus none across all 265 identity rows. Therefore base, assignment-only and full are sufficient; a fourth whole-run arm has zero measured decision value.",
+    "requiredIdentity": "Before any endpoint row, a distinct schema must prove current null identity, identical assignment and save/RNG identity between assignment-only and full, zero research event for assignment-only, the frozen full AB mediator path and exact Ash null.",
+    "causalEstimands": "Full minus base is package total, assignment-only minus base is the existing-card assignment effect, and full minus assignment-only is the Scoreline payoff contribution and the identified interaction under the exact payoff-only alias."
+  },
+  "decision": "select-three-arm-scoreline-component-control",
+  "automaticNextAction": "Freeze one distinct component-control identity preflight. On success, run one smallest three-arm policy-cluster CRN endpoint panel. Do not add Afterimage, another commitment level, a payoff sweep, an optimiser, ML, RL or a Cartesian fourth arm.",
+  "claimBoundary": "Capacity and causal-design selection only. No endpoint, complementarity, package, candidate, detector, product or P9 claim.",
+  "newSimulatorRows": 0,
+  "newLedgerRows": 0,
+  "protectedSeedRows": 0
+}
