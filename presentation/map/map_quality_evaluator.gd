@@ -3,8 +3,25 @@ extends RefCounted
 ## Pure governed camera registry and geometric evaluator for Map Compiler v2 (#466).
 const VERSION: String = "map-quality-evaluator-v1"
 const EMPTY_MANIFEST: Dictionary = {"assets": [], "profile_defaults": {}, "profile_overrides": {}}
+const _Grade = preload("res://presentation/map/map_grade_separation.gd")
+const SELECTION_SCREEN_METRICS: PackedStringArray = [
+	"node_ink_clearance_px",
+	"node_touch_target_min_px",
+	"node_touch_overlap_area_px2",
+	"node_touch_hero_silhouette_overlap_area_px2",
+	"node_node_ink_overlap_area_px2",
+	"node_hero_silhouette_overlap_area_px2",
+	"focused_node_safe_frame_margin_px",
+]
+## Candidate-independent touch size and zero-area exclusions remain hard gates,
+## but cannot provide positive ordering slack between passing candidates.
+const SELECTION_PRIORITY_METRICS: PackedStringArray = [
+	"node_ink_clearance_px",
+	"focused_node_safe_frame_margin_px",
+]
 @warning_ignore_start("unsafe_call_argument")
-static func camera_registry(nodes: Array, quality: Dictionary) -> Dictionary:
+static func camera_registry(nodes: Array, quality: Dictionary,
+		edges: Array = []) -> Dictionary:
 	var chosen: Dictionary = {}
 	for value: Variant in nodes:
 		var node: Dictionary = value
@@ -21,22 +38,470 @@ static func camera_registry(nodes: Array, quality: Dictionary) -> Dictionary:
 	for pair: Array in [["pan-left", Vector2(lo.x, mid.y)], ["pan-right", Vector2(hi.x, mid.y)], ["pan-near", Vector2(mid.x, lo.y)], ["pan-far", Vector2(mid.x, hi.y)], ["pan-near-left", lo], ["pan-near-right", Vector2(hi.x, lo.y)], ["pan-far-left", Vector2(lo.x, hi.y)], ["pan-far-right", hi]]:
 		poses.append({"id": pair[0], "kind": "pan", "focus": "", "xz": pair[1]})
 	var profiles: Array = []
+	var errors: Array = []
+	var focus_inset: float = focused_touch_inset_px(quality)
+	var focus_envelopes: Dictionary = node_candidate_bounds(
+		nodes, edges, quality)
 	for shape: StringName in StageShape.SHIPPING:
 		var stage: Vector2i = StageShape.REFERENCES[shape]
-		var aspect: float = float(stage.x) / float(stage.y)
 		for zoom_i: int in range(MapCameraRig.ZOOM_STOPS.size()):
 			var zoom: float = MapCameraRig.ZOOM_STOPS[zoom_i]
 			for value: Variant in poses:
 				var pose: Dictionary = value
 				var xz: Vector2 = _v2(pose.get("xz", Vector2.ZERO))
+				var profile_id: String = "%s/z%d/%s" % [shape, zoom_i, pose["id"]]
 				if str(pose["kind"]) == "focus":
 					var world: Vector3 = _v3(pose["world"])
-					xz = Vector2(world.x + (0.5 - MapCameraRig.LEAD_X) * zoom * aspect, lerpf(world.z, 0.0, MapCameraRig.LANE_PULL) + MapCameraRig.look_dz())
+					var resolved: Dictionary = MapCameraRig.resolve_leading(world,
+						Vector2(stage), zoom, focus_inset,
+						focused_anchor_envelope(str(pose["focus"]), focus_envelopes))
+					var resolved_pose_v: Variant = resolved.get("pose", null)
+					if resolved.get("ok", false) != true or not resolved_pose_v is Vector2:
+						var failure: Dictionary = resolved.get("failure", {}).duplicate(true)
+						failure["profile_id"] = profile_id
+						failure["focus_node_id"] = pose["focus"]
+						errors.append(failure)
+						continue
+					xz = resolved_pose_v
 				xz = Vector2(clampf(xz.x, lo.x, hi.x), clampf(xz.y, lo.y, hi.y))
-				var entry: Dictionary = {"id": "%s/z%d/%s" % [shape, zoom_i, pose["id"]], "shape": str(shape), "stage": [stage.x, stage.y], "zoom": zoom, "tilt": MapCameraRig.TILT_DEGREES, "height": MapCameraRig.CAM_HEIGHT, "flex_cap": StageShape.FLEX_CAP, "pose": _a2(xz), "kind": pose["kind"], "focus": pose["focus"]}
+				var entry: Dictionary = {"id": profile_id, "shape": str(shape), "stage": [stage.x, stage.y], "zoom": zoom, "tilt": MapCameraRig.TILT_DEGREES, "height": MapCameraRig.CAM_HEIGHT, "flex_cap": StageShape.FLEX_CAP, "pose": _a2(xz), "kind": pose["kind"], "focus": pose["focus"]}
 				entry["digest"] = MapLayoutCanonical.digest(entry)
 				profiles.append(entry)
-	return {"schema_version": 1, "version": "map-camera-profiles-v1", "profiles": profiles, "digest": MapLayoutCanonical.digest(profiles)}
+	return {"schema_version": 1, "version": "map-camera-profiles-v2", "profiles": profiles,
+		"errors": errors, "digest": MapLayoutCanonical.digest(profiles)}
+
+
+static func focused_touch_inset_px(quality: Dictionary) -> float:
+	return _touch_size_px(quality) * 0.5 \
+		+ _limit(_index(quality["hard"]), "focused_node_safe_frame_margin_px")
+
+
+## Shared #467 legal bounds used by candidate generation and camera identity.
+static func node_candidate_bounds(nodes: Array, edges: Array,
+		quality: Dictionary) -> Dictionary:
+	var governed: Dictionary = quality["geometry"]["row_lane_envelope"]
+	var row_half: float = _f(governed["row_half_extent_m"])
+	var lane_half: float = _f(governed["lane_half_extent_m"])
+	var stage: Rect2 = MapPinProjection.lattice_footprint()
+	var initial: Dictionary = {}
+	for node: Dictionary in nodes:
+		var node_id: String = str(node["id"])
+		var base: Vector3 = _authored(node, quality)
+		var fixed: bool = str(node["type"]) in ["boss", "act4", "entrance"]
+		initial[node_id] = {
+			"base": base,
+			"min_x": base.x if fixed else maxf(stage.position.x, base.x - row_half),
+			"max_x": base.x if fixed else minf(stage.end.x, base.x + row_half),
+			"min_z": base.z if fixed else maxf(stage.position.y, base.z - lane_half),
+			"max_z": base.z if fixed else minf(stage.end.y, base.z + lane_half),
+		}
+	var out: Dictionary = initial.duplicate(true)
+	var progress: float = _f(governed["minimum_forward_progress_m"])
+	for edge: Dictionary in edges:
+		var from_id: String = str(edge["from"])
+		var to_id: String = str(edge["to"])
+		var from: Dictionary = out[from_id]
+		var to: Dictionary = out[to_id]
+		from["max_x"] = minf(_f(from["max_x"]),
+			_f(initial[to_id]["min_x"]) - progress)
+		to["min_x"] = maxf(_f(to["min_x"]),
+			_f(initial[from_id]["max_x"]) + progress)
+		out[from_id] = from
+		out[to_id] = to
+	return out
+
+
+static func focused_anchor_envelope(node_id: String,
+		envelopes: Dictionary) -> Rect2:
+	var limit: Dictionary = envelopes[node_id]
+	return Rect2(Vector2(_f(limit["min_x"]), _f(limit["min_z"])), Vector2(
+		_f(limit["max_x"]) - _f(limit["min_x"]),
+		_f(limit["max_z"]) - _f(limit["min_z"])))
+
+
+static func is_selection_screen_metric(metric_id: String) -> bool:
+	return metric_id in SELECTION_SCREEN_METRICS
+
+
+static func selection_screen_context(nodes: Array, edges: Array,
+		heroes: Dictionary, assets: Dictionary, quality: Dictionary) -> Dictionary:
+	var camera: Dictionary = camera_registry(nodes, quality, edges)
+	var obstacles: Dictionary = _obstacles({
+		"hero_placements": heroes,
+		"scenery_instances": {},
+	}, assets.get("profiles", {}))
+	var projected: Dictionary = {}
+	for profile_v: Variant in camera["profiles"]:
+		var profile: Dictionary = profile_v
+		var rows: Dictionary = {}
+		for obstacle_id: String in MapLayoutCanonical.sorted_keys(obstacles):
+			rows[obstacle_id] = _project_obstacle(obstacles[obstacle_id], profile)
+		projected[str(profile["id"])] = rows
+	return {
+		"camera": camera,
+		"hard": _index(quality["hard"]),
+		"epsilon": _f(quality["epsilon"]["screen_px"]),
+		"projected_obstacles": projected,
+	}
+
+
+static func selection_screen_feasibility(nodes: Array, edges: Array,
+		anchors: Dictionary, heroes: Dictionary, assets: Dictionary,
+		quality: Dictionary, local_node_ids: Array,
+		shared_context: Dictionary = {}) -> Dictionary:
+	var selected_ids: Array[String] = []
+	for node_id_v: Variant in local_node_ids:
+		var node_id: String = str(node_id_v)
+		if not node_id.is_empty() and node_id not in selected_ids:
+			selected_ids.append(node_id)
+	selected_ids.sort()
+	var local_nodes: Array = []
+	var local_anchors: Dictionary = {}
+	for node_v: Variant in nodes:
+		var node: Dictionary = node_v
+		var node_id: String = str(node["id"])
+		if node_id in selected_ids and anchors.has(node_id):
+			local_nodes.append(node)
+			local_anchors[node_id] = anchors[node_id]
+	if local_nodes.size() != selected_ids.size():
+		return {"hard_pass": false, "hard_values": {}, "hard_margins": {},
+			"weakest_signed_hard_margin": -1.0,
+			"rejection_reason": {"metric_id": "selection_screen_input",
+				"reason": "named local node or anchor is missing"},
+			"violations": []}
+	var context: Dictionary = shared_context
+	if context.is_empty():
+		context = selection_screen_context(nodes, edges, heroes, assets, quality)
+	var camera: Dictionary = context["camera"]
+	var hard: Dictionary = context["hard"]
+	var epsilon: float = _f(context["epsilon"])
+	if not shared_context.is_empty() and selected_ids.size() == 2:
+		return _cached_pair_feasibility(local_nodes, local_anchors,
+			selected_ids, quality, context)
+	var profiles: Dictionary = {}
+	var violations: Array = []
+	if shared_context.is_empty():
+		for profile_v: Variant in camera["profiles"]:
+			var profile: Dictionary = profile_v
+			var checked: Dictionary = _selection_screen(
+				profile, local_nodes, local_anchors, {}, quality, hard, epsilon,
+				context["projected_obstacles"][str(profile["id"])]
+			)
+			profiles[str(profile["id"])] = checked["values"]
+			violations.append_array(checked["violations"])
+	else:
+		var cached: Dictionary = _cached_selection_profiles(local_nodes,
+			local_anchors, selected_ids, quality, context)
+		profiles = cached["profiles"]
+		violations.assign(cached["violations"])
+	return _selection_screen_summary(
+		selected_ids, camera, hard, epsilon, profiles, violations)
+
+
+static func _selection_screen_summary(selected_ids: Array[String],
+		camera: Dictionary, hard: Dictionary, epsilon: float,
+		profiles: Dictionary, profile_violations: Array) -> Dictionary:
+	var violations: Array = profile_violations.duplicate(true)
+	for error_v: Variant in camera.get("errors", []):
+		var error: Dictionary = error_v
+		if str(error.get("focus_node_id", "")) in selected_ids:
+			violations.append(_violation("focused_node_safe_frame_margin_px",
+				str(error.get("profile_id", "camera-resolution")),
+				[str(error.get("focus_node_id", ""))], -1.0,
+				{"camera_resolution_failure": error}, {}))
+	var values: Dictionary = {}
+	var margins: Dictionary = {}
+	var weakest: float = INF
+	for metric_id: String in SELECTION_SCREEN_METRICS:
+		var value: float = _aggregate(metric_id, profiles)
+		if not is_finite(value):
+			continue
+		values[metric_id] = value
+		var row: Dictionary = hard[metric_id]
+		var margin: float = value - _f(row["limit"]) \
+			if str(row["op"]) == "gte" else _f(row["limit"]) - value
+		margins[metric_id] = margin
+		if metric_id in SELECTION_PRIORITY_METRICS:
+			weakest = minf(weakest, margin)
+		if not _passes(value, row, epsilon):
+			var already_named: bool = false
+			for violation: Dictionary in violations:
+				already_named = already_named \
+					or str(violation.get("metric_id", "")) == metric_id
+			if not already_named:
+				violations.append(_violation(metric_id, "selection", selected_ids,
+					value, {}, {}))
+	violations.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return MapLayoutCanonical.canonical_text(a) \
+			< MapLayoutCanonical.canonical_text(b)
+	)
+	return MapLayoutCanonical.ordered_dictionary({
+		"hard_pass": violations.is_empty(),
+		"local_node_ids": selected_ids,
+		"hard_values": MapLayoutCanonical.ordered_dictionary(values),
+		"hard_margins": MapLayoutCanonical.ordered_dictionary(margins),
+		"priority_metric_ids": SELECTION_PRIORITY_METRICS,
+		"weakest_signed_hard_margin": 0.0 if not is_finite(weakest) else weakest,
+		"rejection_reason": {} if violations.is_empty() else violations[0],
+		"violations": violations,
+	})
+
+
+static func _cached_selection_profiles(local_nodes: Array,
+		local_anchors: Dictionary, selected_ids: Array[String],
+		quality: Dictionary, context: Dictionary) -> Dictionary:
+	var rows: Array[Dictionary] = []
+	for node_id: String in selected_ids:
+		var node: Dictionary = {}
+		for node_v: Variant in local_nodes:
+			var candidate_node: Dictionary = node_v
+			if str(candidate_node["id"]) == node_id:
+				node = candidate_node
+				break
+		rows.append(_cached_candidate_profiles(
+			node, local_anchors[node_id], quality, context))
+	if rows.size() == 1:
+		var unary_profiles: Dictionary = {}
+		for profile_id: String in MapLayoutCanonical.sorted_keys(
+				rows[0]["profiles"]):
+			unary_profiles[profile_id] = rows[0]["profiles"][profile_id]["values"]
+		return {"profiles": unary_profiles,
+			"violations": rows[0]["violations"]}
+	var profiles: Dictionary = {}
+	var violations: Array = []
+	var calibration: Dictionary = quality["calibration"]["shipping_touch_waystone"]
+	var radius: float = _f(calibration["ink_radius_px"]) \
+		* _f(calibration["default_layout_scale"])
+	var touch: float = _touch_size_px(quality)
+	var hard: Dictionary = context["hard"]
+	var epsilon: float = _f(context["epsilon"])
+	for profile_v: Variant in context["camera"]["profiles"]:
+		var profile: Dictionary = profile_v
+		var profile_id: String = str(profile["id"])
+		var first: Dictionary = rows[0]["profiles"][profile_id]
+		var second: Dictionary = rows[1]["profiles"][profile_id]
+		var values: Dictionary = {}
+		for metric_id: String in SELECTION_SCREEN_METRICS:
+			values[metric_id] = _aggregate(metric_id, {
+				"first": first["values"], "second": second["values"]})
+		var a: Vector2 = first["point"]
+		var b: Vector2 = second["point"]
+		var gap: float = a.distance_to(b) - radius * 2.0
+		values["node_ink_clearance_px"] = minf(
+			_f(values["node_ink_clearance_px"]), gap)
+		var pair_violations: Array = []
+		if gap + epsilon < _limit(hard, "node_ink_clearance_px"):
+			pair_violations.append(_violation("node_ink_clearance_px",
+				profile_id, selected_ids, gap,
+				{"a": local_anchors[selected_ids[0]],
+					"b": local_anchors[selected_ids[1]]},
+				{"a": _a2(a), "b": _a2(b), "radius": radius}))
+		if a.distance_squared_to(b) < pow(radius * 2.0, 2.0):
+			_overlap("node_node_ink_overlap_area_px2", _circle(a, radius),
+				_circle(b, radius), profile, selected_ids, values,
+				pair_violations, epsilon)
+		if absf(a.x - b.x) < touch and absf(a.y - b.y) < touch:
+			_overlap("node_touch_overlap_area_px2",
+				_rect(a, Vector2.ONE * touch * 0.5),
+				_rect(b, Vector2.ONE * touch * 0.5), profile, selected_ids,
+				values, pair_violations, epsilon)
+		profiles[profile_id] = values
+		violations.append_array(first["violations"])
+		violations.append_array(second["violations"])
+		violations.append_array(pair_violations)
+	return {"profiles": profiles, "violations": violations}
+
+
+static func _cached_pair_feasibility(local_nodes: Array,
+		local_anchors: Dictionary, selected_ids: Array[String],
+		quality: Dictionary, context: Dictionary) -> Dictionary:
+	var rows: Array[Dictionary] = []
+	for node_id: String in selected_ids:
+		var node: Dictionary = {}
+		for node_v: Variant in local_nodes:
+			var candidate_node: Dictionary = node_v
+			if str(candidate_node["id"]) == node_id:
+				node = candidate_node
+				break
+		rows.append(_cached_candidate_profiles(
+			node, local_anchors[node_id], quality, context))
+	var values: Dictionary = {}
+	for metric_id: String in SELECTION_SCREEN_METRICS:
+		var minimum: bool = metric_id in ["node_ink_clearance_px",
+			"node_touch_target_min_px", "focused_node_safe_frame_margin_px"]
+		var first_value: float = _f(rows[0]["summary"]["hard_values"].get(
+			metric_id, INF if minimum else 0.0))
+		var second_value: float = _f(rows[1]["summary"]["hard_values"].get(
+			metric_id, INF if minimum else 0.0))
+		values[metric_id] = minf(first_value, second_value) \
+			if minimum else maxf(first_value, second_value)
+	var rejection: Dictionary = _first_reason([
+		rows[0]["summary"].get("rejection_reason", {}),
+		rows[1]["summary"].get("rejection_reason", {}),
+	])
+	var calibration: Dictionary = quality["calibration"]["shipping_touch_waystone"]
+	var radius: float = _f(calibration["ink_radius_px"]) \
+		* _f(calibration["default_layout_scale"])
+	var diameter: float = radius * 2.0
+	var touch: float = _touch_size_px(quality)
+	var hard: Dictionary = context["hard"]
+	var epsilon: float = _f(context["epsilon"])
+	for profile_v: Variant in context["camera"]["profiles"]:
+		var profile: Dictionary = profile_v
+		var profile_id: String = str(profile["id"])
+		var a: Vector2 = rows[0]["profiles"][profile_id]["point"]
+		var b: Vector2 = rows[1]["profiles"][profile_id]["point"]
+		var gap: float = a.distance_to(b) - diameter
+		values["node_ink_clearance_px"] = minf(
+			_f(values["node_ink_clearance_px"]), gap)
+		if gap + epsilon < _limit(hard, "node_ink_clearance_px"):
+			rejection = _first_reason([rejection, _violation(
+				"node_ink_clearance_px", profile_id, selected_ids, gap,
+				{"a": local_anchors[selected_ids[0]],
+					"b": local_anchors[selected_ids[1]]},
+				{"a": _a2(a), "b": _a2(b), "radius": radius})])
+		var pair_violations: Array = []
+		if a.distance_squared_to(b) < diameter * diameter:
+			_overlap("node_node_ink_overlap_area_px2", _circle(a, radius),
+				_circle(b, radius), profile, selected_ids, values,
+				pair_violations, epsilon)
+		if absf(a.x - b.x) < touch and absf(a.y - b.y) < touch:
+			_overlap("node_touch_overlap_area_px2",
+				_rect(a, Vector2.ONE * touch * 0.5),
+				_rect(b, Vector2.ONE * touch * 0.5), profile, selected_ids,
+				values, pair_violations, epsilon)
+		if not pair_violations.is_empty():
+			rejection = _first_reason([rejection, pair_violations[0]])
+	var margins: Dictionary = {}
+	var finite_values: Dictionary = {}
+	var weakest: float = INF
+	for metric_id: String in SELECTION_SCREEN_METRICS:
+		var value: float = _f(values[metric_id])
+		if not is_finite(value):
+			continue
+		finite_values[metric_id] = value
+		var row: Dictionary = hard[metric_id]
+		var margin: float = value - _f(row["limit"]) \
+			if str(row["op"]) == "gte" else _f(row["limit"]) - value
+		margins[metric_id] = margin
+		if metric_id in SELECTION_PRIORITY_METRICS:
+			weakest = minf(weakest, margin)
+		if not _passes(value, row, epsilon) and rejection.is_empty():
+			rejection = _violation(metric_id, "selection", selected_ids,
+				value, {}, {})
+	return MapLayoutCanonical.ordered_dictionary({
+		"hard_pass": rejection.is_empty(),
+		"local_node_ids": selected_ids,
+		"hard_values": MapLayoutCanonical.ordered_dictionary(finite_values),
+		"hard_margins": MapLayoutCanonical.ordered_dictionary(margins),
+		"priority_metric_ids": SELECTION_PRIORITY_METRICS,
+		"weakest_signed_hard_margin": 0.0 if not is_finite(weakest) else weakest,
+		"rejection_reason": rejection,
+		"violations": [] if rejection.is_empty() else [rejection],
+	})
+
+
+static func _first_reason(rows: Array) -> Dictionary:
+	var out: Dictionary = {}
+	for row_v: Variant in rows:
+		var row: Dictionary = row_v
+		if row.is_empty():
+			continue
+		if out.is_empty() or MapLayoutCanonical.canonical_text(row) \
+				< MapLayoutCanonical.canonical_text(out):
+			out = row
+	return out
+
+
+static func _cached_candidate_profiles(node: Dictionary, anchor: Variant,
+		quality: Dictionary, context: Dictionary) -> Dictionary:
+	var node_id: String = str(node["id"])
+	var key: String = MapLayoutCanonical.canonical_text(
+		{"node_id": node_id, "anchor": anchor})
+	var cache: Dictionary = context.get("candidate_cache", {})
+	if cache.has(key):
+		return cache[key]
+	var profiles: Dictionary = {}
+	var violations: Array = []
+	var anchors: Dictionary = {node_id: anchor}
+	var hard: Dictionary = context["hard"]
+	var epsilon: float = _f(context["epsilon"])
+	for profile_v: Variant in context["camera"]["profiles"]:
+		var profile: Dictionary = profile_v
+		var profile_id: String = str(profile["id"])
+		var checked: Dictionary = _selection_screen(profile, [node], anchors, {},
+			quality, hard, epsilon, context["projected_obstacles"][profile_id])
+		profiles[profile_id] = {
+			"values": checked["values"],
+			"violations": checked["violations"],
+			"point": _project(_v3(anchor), profile),
+		}
+		violations.append_array(checked["violations"])
+	var result: Dictionary = {"profiles": profiles, "violations": violations}
+	var profile_values: Dictionary = {}
+	for profile_id: String in MapLayoutCanonical.sorted_keys(profiles):
+		profile_values[profile_id] = profiles[profile_id]["values"]
+	result["summary"] = _selection_screen_summary([node_id], context["camera"],
+		hard, epsilon, profile_values, violations)
+	cache[key] = result
+	context["candidate_cache"] = cache
+	return result
+
+
+## Conservative #466 broad-phase for candidate pairs that can violate any
+## selection-only node/node screen rule in at least one governed profile.
+static func selection_screen_local_pairs(node_sets: Dictionary,
+		quality: Dictionary, shared_context: Dictionary) -> Array[Array]:
+	var calibration: Dictionary = quality["calibration"]["shipping_touch_waystone"]
+	var radius: float = _f(calibration["ink_radius_px"]) \
+		* _f(calibration["default_layout_scale"])
+	var touch: float = _touch_size_px(quality)
+	var hard: Dictionary = shared_context["hard"]
+	var reach: float = maxf(
+		radius * 2.0 + _limit(hard, "node_ink_clearance_px"),
+		touch * sqrt(2.0)
+	) + _f(shared_context["epsilon"])
+	var found: Dictionary = {}
+	for profile_v: Variant in shared_context["camera"]["profiles"]:
+		var profile: Dictionary = profile_v
+		var buckets: Dictionary = {}
+		for node_id: String in MapLayoutCanonical.sorted_keys(node_sets):
+			for candidate_v: Variant in node_sets[node_id]["candidates"]:
+				var candidate: Dictionary = candidate_v
+				var point: Vector2 = _project(_v3(candidate["anchor"]), profile)
+				var cell: Vector2i = Vector2i(floori(point.x / reach),
+					floori(point.y / reach))
+				for dx: int in range(-1, 2):
+					for dy: int in range(-1, 2):
+						for other_v: Variant in buckets.get(
+								cell + Vector2i(dx, dy), []):
+							var other: Dictionary = other_v
+							var other_id: String = str(other["node_id"])
+							if other_id == node_id:
+								continue
+							var other_point: Vector2 = other["point"]
+							var delta: Vector2 = point - other_point
+							var ink_fails: bool = delta.length() - radius * 2.0 \
+								+ _f(shared_context["epsilon"]) \
+								< _limit(hard, "node_ink_clearance_px")
+							var touch_overlap: float = maxf(0.0,
+								touch - absf(delta.x)) * maxf(0.0,
+								touch - absf(delta.y))
+							if not ink_fails and touch_overlap \
+									<= _f(shared_context["epsilon"]):
+								continue
+							var pair: Array[String] = [node_id, other_id]
+							pair.sort()
+							found[MapLayoutCanonical.canonical_text(pair)] = pair
+				var rows: Array = buckets.get(cell, [])
+				rows.append({"node_id": node_id, "point": point})
+				buckets[cell] = rows
+	var out: Array[Array] = []
+	for key: String in MapLayoutCanonical.sorted_keys(found):
+		out.append(found[key])
+	return out
+
+
 static func evaluate(input: MapLayoutInput, result: MapLayoutResult, assets: Dictionary, quality: Dictionary) -> Dictionary:
 	var source: Dictionary = input.to_dict()
 	var layout: Dictionary = result.identity_dict()
@@ -44,7 +509,7 @@ static func evaluate(input: MapLayoutInput, result: MapLayoutResult, assets: Dic
 	var topology: Array = input.edge_records()
 	var anchors: Dictionary = layout["node_anchors"]
 	var edges: Dictionary = layout["edges"]
-	var cameras: Dictionary = camera_registry(nodes, quality)
+	var cameras: Dictionary = camera_registry(nodes, quality, topology)
 	var hard_rows: Dictionary = _index(quality["hard"])
 	var ew: float = _f(quality["epsilon"]["world_m"])
 	var ep: float = _f(quality["epsilon"]["screen_px"])
@@ -53,6 +518,13 @@ static func evaluate(input: MapLayoutInput, result: MapLayoutResult, assets: Dic
 	var obstacles: Dictionary = _obstacles(layout, assets.get("profiles", {}))
 	var values: Dictionary = {"row_lane_envelope_excess_m": 0.0, "journey_order_reversal_count": 0, "edge_scenery_corridor_penetration_m": 0.0, "edge_nonendpoint_node_penetration_m": 0.0, "unrelated_edge_intersection_count": 0, "vigil_protected_zone_intrusion_count": 0, "terminus_protected_zone_intrusion_count": 0}
 	var violations: Array = []
+	var camera_errors: Array = cameras.get("errors", [])
+	for error_v: Variant in camera_errors:
+		var error: Dictionary = error_v
+		violations.append(_violation("focused_node_safe_frame_margin_px",
+			str(error.get("profile_id", "camera-resolution")),
+			[str(error.get("focus_node_id", ""))], -1.0,
+			{"camera_resolution_failure": error}, {}))
 	var raw: Array = []
 	var soft: Dictionary = {}
 	var envelope: Dictionary = geometry["row_lane_envelope"]
@@ -107,11 +579,19 @@ static func evaluate(input: MapLayoutInput, result: MapLayoutResult, assets: Dic
 			bends += 0.0 if u.is_zero_approx() or v.is_zero_approx() else rad_to_deg(acos(clampf(u.dot(v), -1.0, 1.0)))
 	soft["route_length_ratio"] = routed / maxf(direct, ew)
 	soft["bend_angle_deg_per_edge"] = bends / maxf(1.0, float(edges.size()))
-	var crossing: Dictionary = _crossings(edges, ew)
-	values["unrelated_edge_intersection_count"] = crossing["count"]
+	var crossing: Dictionary = _Grade.evaluate(edges, quality)
+	values.merge(crossing["hard_values"], true)
+	var minimum_xz: float = INF
+	for conflict: Dictionary in crossing["conflicts"]:
+		minimum_xz = minf(minimum_xz, _f(conflict["minimum_xz_m"]))
 	raw.append({"metric_id": "minimum_edge_separation_m", "profile_id": "world",
-		"value": 0.0 if _f(crossing["minimum"]) == INF else crossing["minimum"],
-		"status": "not_applicable" if _f(crossing["minimum"]) == INF else "measured"})
+		"value": 0.0 if minimum_xz == INF else minimum_xz,
+		"status": "not_applicable" if minimum_xz == INF else "measured"})
+	raw.append({"metric_id": "minimum_vertical_clearance_m", "profile_id": "world",
+		"value": values["minimum_vertical_clearance_m"],
+		"status": "not_applicable" if crossing["conflicts"].is_empty() else "measured"})
+	raw.append({"metric_id": "maximum_ramp_grade", "profile_id": "world",
+		"value": values["maximum_ramp_grade"], "status": "measured"})
 	violations.append_array(crossing["violations"])
 	var protected: Dictionary = _protected(source, obstacles, geometry, ew)
 	values.merge(protected["values"], true)
@@ -132,28 +612,61 @@ static func evaluate(input: MapLayoutInput, result: MapLayoutResult, assets: Dic
 	values["deterministic_identity_mismatch_count"] = 1 if identity_bad else 0
 	if identity_bad:
 		violations.append(_violation("deterministic_identity_mismatch_count", "identity", [], 1.0, {"input": input.digest(), "layout_input": layout["input_digest"]}, {"camera": cameras["digest"], "quality": MapLayoutCanonical.digest(quality), "assets": assets.get("digest", "")}))
-	var hard_pass: bool = true
+	var hard_pass: bool = camera_errors.is_empty() \
+		and crossing.get("hard_pass", false) == true
 	for value: Variant in quality["hard"]:
 		var hard: Dictionary = value
 		var id: String = str(hard["id"])
 		if not values.has(id) or not _passes(_f(values[id]), hard, ew if str(hard["unit"]) == "m" else ep):
 			hard_pass = false
-	var report: Dictionary = {"schema_version": 1, "version": VERSION, "input_digest": input.digest(), "layout_digest": result.digest(), "camera_profile_digest": cameras["digest"], "quality_registry_digest": MapLayoutCanonical.digest(quality), "asset_profile_digest": assets.get("digest", ""), "profiles": cameras["profiles"], "hard_values": values, "raw_measurements": raw, "soft_raw": soft, "violations": violations, "renderer_only": quality["renderer"], "hard_pass": hard_pass}
+	var report: Dictionary = {"schema_version": 1, "version": VERSION, "input_digest": input.digest(), "layout_digest": result.digest(), "camera_profile_digest": cameras["digest"], "quality_registry_digest": MapLayoutCanonical.digest(quality), "asset_profile_digest": assets.get("digest", ""), "profiles": cameras["profiles"], "grade_profile": crossing["profile"], "hard_values": values, "raw_measurements": raw, "soft_raw": soft, "violations": violations, "renderer_only": quality["renderer"], "hard_pass": hard_pass}
 	report["report_digest"] = MapLayoutCanonical.digest(report)
 	return MapLayoutCanonical.ordered_dictionary(report)
 static func _screen(profile: Dictionary, nodes: Array, topology: Array, anchors: Dictionary, edges: Dictionary, obstacles: Dictionary, quality: Dictionary, hard: Dictionary, epsilon: float) -> Dictionary:
+	var selection: Dictionary = _selection_screen(
+		profile, nodes, anchors, obstacles, quality, hard, epsilon
+	)
+	var values: Dictionary = selection["values"]
+	var violations: Array = selection["violations"].duplicate(true)
+	var projected_obstacles: Dictionary = selection["projected_obstacles"]
+	var focus: String = str(profile["focus"])
+	var fanout: Dictionary = _fanout(profile, topology, edges, quality, hard)
+	values["branch_fanout_separation_px"] = fanout["minimum"]
+	violations.append_array(fanout["violations"])
+	var exposure: Dictionary = _exposure(profile, edges, projected_obstacles)
+	values["route_state_exposure_ratio"] = exposure["ratio"]
+	var focus_row: Dictionary = {"metric_id": "focused_node_safe_frame_margin_px",
+		"profile_id": profile["id"], "value": 0.0, "focus_node_id": focus,
+		"status": "not_applicable"}
+	if not focus.is_empty():
+		focus_row["value"] = values["focused_node_safe_frame_margin_px"]
+		focus_row["status"] = "measured"
+	return {"values": values, "violations": violations, "raw": [
+		{"metric_id": "route_state_exposure_ratio", "profile_id": profile["id"],
+			"value": exposure["ratio"], "visible_length_px": exposure["visible"],
+			"total_length_px": exposure["total"],
+			"status": "not_applicable" if _f(exposure["total"]) <= 0.0 else "measured"},
+			{"metric_id": "branch_fanout_separation_px", "profile_id": profile["id"],
+				"value": fanout["minimum"], "status": fanout["status"]}, focus_row]}
+
+
+static func _selection_screen(profile: Dictionary, nodes: Array,
+		anchors: Dictionary, obstacles: Dictionary, quality: Dictionary,
+		hard: Dictionary, epsilon: float,
+		shared_projected_obstacles: Dictionary = {}) -> Dictionary:
 	var calibration: Dictionary = quality["calibration"]["shipping_touch_waystone"]
 	var radius: float = _f(calibration["ink_radius_px"]) * _f(calibration["default_layout_scale"])
-	var touch: float = maxf(_f(calibration["phone_touch_floor_px"]), radius * 2.0)
+	var touch: float = _touch_size_px(quality)
 	var values: Dictionary = {"node_ink_clearance_px": INF, "node_touch_target_min_px": touch, "node_touch_overlap_area_px2": 0.0, "node_touch_scenery_silhouette_overlap_area_px2": 0.0, "node_touch_hero_silhouette_overlap_area_px2": 0.0, "node_node_ink_overlap_area_px2": 0.0, "node_scenery_silhouette_overlap_area_px2": 0.0, "node_hero_silhouette_overlap_area_px2": 0.0, "branch_fanout_separation_px": INF, "focused_node_safe_frame_margin_px": INF, "route_state_exposure_ratio": 1.0}
 	var violations: Array = []
 	var projected_nodes: Dictionary = {}
 	for value: Variant in nodes:
 		var node: Dictionary = value
 		projected_nodes[str(node["id"])] = _project(_v3(anchors[str(node["id"])]), profile)
-	var projected_obstacles: Dictionary = {}
-	for id: String in MapLayoutCanonical.sorted_keys(obstacles):
-		projected_obstacles[id] = _project_obstacle(obstacles[id], profile)
+	var projected_obstacles: Dictionary = shared_projected_obstacles
+	if projected_obstacles.is_empty():
+		for id: String in MapLayoutCanonical.sorted_keys(obstacles):
+			projected_obstacles[id] = _project_obstacle(obstacles[id], profile)
 	var ids: Array[String] = MapLayoutCanonical.sorted_keys(projected_nodes)
 	for i: int in range(ids.size()):
 		var a_id: String = ids[i]
@@ -182,7 +695,7 @@ static func _screen(profile: Dictionary, nodes: Array, topology: Array, anchors:
 			_overlap("node_hero_silhouette_overlap_area_px2" if hero else "node_scenery_silhouette_overlap_area_px2", ink, obstacle["clipped"], profile, [a_id, obstacle_id], values, violations, epsilon, obstacle)
 			_overlap("node_touch_hero_silhouette_overlap_area_px2" if hero else "node_touch_scenery_silhouette_overlap_area_px2", hit, obstacle["clipped"], profile, [a_id, obstacle_id], values, violations, epsilon, obstacle)
 	var focus: String = str(profile["focus"])
-	if not focus.is_empty():
+	if not focus.is_empty() and projected_nodes.has(focus):
 		var c: Vector2 = projected_nodes[focus]
 		var stage: Vector2 = _v2(profile["stage"])
 		values["focused_node_safe_frame_margin_px"] = minf(minf(c.x, stage.x - c.x), minf(c.y, stage.y - c.y)) - touch * 0.5
@@ -190,24 +703,13 @@ static func _screen(profile: Dictionary, nodes: Array, topology: Array, anchors:
 			violations.append(_violation("focused_node_safe_frame_margin_px", str(profile["id"]), [focus],
 				_f(values["focused_node_safe_frame_margin_px"]), {"node": anchors[focus]},
 				{"touch": _plain(_rect(c, Vector2.ONE * touch * 0.5)), "stage": profile["stage"]}))
-	var fanout: Dictionary = _fanout(profile, topology, edges, quality, hard)
-	values["branch_fanout_separation_px"] = fanout["minimum"]
-	violations.append_array(fanout["violations"])
-	var exposure: Dictionary = _exposure(profile, edges, projected_obstacles)
-	values["route_state_exposure_ratio"] = exposure["ratio"]
-	var focus_row: Dictionary = {"metric_id": "focused_node_safe_frame_margin_px",
-		"profile_id": profile["id"], "value": 0.0, "focus_node_id": focus,
-		"status": "not_applicable"}
-	if not focus.is_empty():
-		focus_row["value"] = values["focused_node_safe_frame_margin_px"]
-		focus_row["status"] = "measured"
-	return {"values": values, "violations": violations, "raw": [
-		{"metric_id": "route_state_exposure_ratio", "profile_id": profile["id"],
-			"value": exposure["ratio"], "visible_length_px": exposure["visible"],
-			"total_length_px": exposure["total"],
-			"status": "not_applicable" if _f(exposure["total"]) <= 0.0 else "measured"},
-		{"metric_id": "branch_fanout_separation_px", "profile_id": profile["id"],
-			"value": fanout["minimum"], "status": fanout["status"]}, focus_row]}
+	return {"values": values, "violations": violations,
+		"projected_obstacles": projected_obstacles}
+static func _touch_size_px(quality: Dictionary) -> float:
+	var calibration: Dictionary = quality["calibration"]["shipping_touch_waystone"]
+	var diameter: float = _f(calibration["ink_radius_px"]) \
+		* _f(calibration["default_layout_scale"]) * 2.0
+	return maxf(_f(calibration["phone_touch_floor_px"]), diameter)
 static func _obstacles(data: Dictionary, profiles: Dictionary) -> Dictionary:
 	var helper: MapAssetProfiles = MapAssetProfiles.new(EMPTY_MANIFEST)
 	var out: Dictionary = {}
