@@ -198,6 +198,22 @@ static func _test_selection_screen_feasibility(fails: Array[String],
 	var passing_cached: Dictionary = MapQualityEvaluator.selection_screen_feasibility(
 		nodes, [], passing_anchors, heroes, assets, quality, ["A", "B"], shared
 	)
+	var near_hero: Dictionary = {
+		"vigil": _placement("hero", "hero", seat + Vector3(4.0, 0.0, 0.0)),
+	}
+	var far_hero: Dictionary = {
+		"vigil": _placement("hero", "hero", seat + Vector3(20.0, 0.0, 0.0)),
+	}
+	var near_context: Dictionary = MapQualityEvaluator.selection_screen_context(
+		nodes, [], near_hero, assets, quality)
+	var far_context: Dictionary = MapQualityEvaluator.selection_screen_context(
+		nodes, [], far_hero, assets, quality)
+	var near_clear: Dictionary = MapQualityEvaluator.selection_screen_feasibility(
+		nodes, [], {"A": _a3(seat)}, near_hero, assets, quality, ["A"],
+		near_context)
+	var far_clear: Dictionary = MapQualityEvaluator.selection_screen_feasibility(
+		nodes, [], {"A": _a3(seat)}, far_hero, assets, quality, ["A"],
+		far_context)
 	var passing_direct: Dictionary = _case(
 		nodes, passing_anchors, [], {}, quality, assets
 	)
@@ -215,6 +231,14 @@ static func _test_selection_screen_feasibility(fails: Array[String],
 			and MapLayoutCanonical.float_value(
 				passing.get("weakest_signed_hard_margin", -INF)) >= 0.0,
 		"selection precheck accepts the same screen-legal local anchors as #466")
+	_ok(fails, near_clear.get("hard_pass", false) == true
+			and far_clear.get("hard_pass", false) == true
+			and not is_equal_approx(_f(near_clear["hard_values"][
+				"node_ink_clearance_px"]), _f(far_clear["hard_values"][
+				"node_ink_clearance_px"]))
+			and is_equal_approx(_f(near_clear["weakest_signed_hard_margin"]),
+				_f(far_clear["weakest_signed_hard_margin"])),
+		"passed hero clearance remains hard evidence without reordering priority")
 	var exact_fields: Array[String] = ["hard_pass", "local_node_ids", "hard_values",
 		"hard_margins", "priority_metric_ids", "weakest_signed_hard_margin",
 		"rejection_reason"]

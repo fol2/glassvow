@@ -15,6 +15,7 @@ const SELECTION_SCREEN_METRICS: PackedStringArray = [
 ]
 ## Candidate-independent touch size and zero-area exclusions remain hard gates,
 ## but cannot provide positive ordering slack between passing candidates.
+## Passed hero clearance is likewise feasibility evidence, not candidate priority.
 const SELECTION_PRIORITY_METRICS: PackedStringArray = [
 	"node_ink_clearance_px",
 	"focused_node_safe_frame_margin_px",
@@ -180,6 +181,7 @@ static func selection_screen_feasibility(nodes: Array, edges: Array,
 		return _cached_pair_feasibility(local_nodes, local_anchors,
 			selected_ids, quality, context)
 	var profiles: Dictionary = {}
+	var priority_profiles: Dictionary = {}
 	var violations: Array = []
 	if shared_context.is_empty():
 		for profile_v: Variant in camera["profiles"]:
@@ -189,19 +191,23 @@ static func selection_screen_feasibility(nodes: Array, edges: Array,
 				context["projected_obstacles"][str(profile["id"])]
 			)
 			profiles[str(profile["id"])] = checked["values"]
+			priority_profiles[str(profile["id"])] = checked["priority_values"]
 			violations.append_array(checked["violations"])
 	else:
 		var cached: Dictionary = _cached_selection_profiles(local_nodes,
 			local_anchors, selected_ids, quality, context)
 		profiles = cached["profiles"]
+		priority_profiles = cached["priority_profiles"]
 		violations.assign(cached["violations"])
 	return _selection_screen_summary(
-		selected_ids, camera, hard, epsilon, profiles, violations)
+		selected_ids, camera, hard, epsilon, profiles, priority_profiles,
+		violations)
 
 
 static func _selection_screen_summary(selected_ids: Array[String],
 		camera: Dictionary, hard: Dictionary, epsilon: float,
-		profiles: Dictionary, profile_violations: Array) -> Dictionary:
+		profiles: Dictionary, priority_profiles: Dictionary,
+		profile_violations: Array) -> Dictionary:
 	var violations: Array = profile_violations.duplicate(true)
 	for error_v: Variant in camera.get("errors", []):
 		var error: Dictionary = error_v
@@ -212,7 +218,6 @@ static func _selection_screen_summary(selected_ids: Array[String],
 				{"camera_resolution_failure": error}, {}))
 	var values: Dictionary = {}
 	var margins: Dictionary = {}
-	var weakest: float = INF
 	for metric_id: String in SELECTION_SCREEN_METRICS:
 		var value: float = _aggregate(metric_id, profiles)
 		if not is_finite(value):
@@ -222,8 +227,6 @@ static func _selection_screen_summary(selected_ids: Array[String],
 		var margin: float = value - _f(row["limit"]) \
 			if str(row["op"]) == "gte" else _f(row["limit"]) - value
 		margins[metric_id] = margin
-		if metric_id in SELECTION_PRIORITY_METRICS:
-			weakest = minf(weakest, margin)
 		if not _passes(value, row, epsilon):
 			var already_named: bool = false
 			for violation: Dictionary in violations:
@@ -236,6 +239,7 @@ static func _selection_screen_summary(selected_ids: Array[String],
 		return MapLayoutCanonical.canonical_text(a) \
 			< MapLayoutCanonical.canonical_text(b)
 	)
+	var weakest: float = _selection_priority_margin(priority_profiles, hard)
 	return MapLayoutCanonical.ordered_dictionary({
 		"hard_pass": violations.is_empty(),
 		"local_node_ids": selected_ids,
@@ -263,12 +267,17 @@ static func _cached_selection_profiles(local_nodes: Array,
 			node, local_anchors[node_id], quality, context))
 	if rows.size() == 1:
 		var unary_profiles: Dictionary = {}
+		var unary_priority_profiles: Dictionary = {}
 		for profile_id: String in MapLayoutCanonical.sorted_keys(
 				rows[0]["profiles"]):
 			unary_profiles[profile_id] = rows[0]["profiles"][profile_id]["values"]
+			unary_priority_profiles[profile_id] = rows[0]["profiles"][
+				profile_id]["priority_values"]
 		return {"profiles": unary_profiles,
+			"priority_profiles": unary_priority_profiles,
 			"violations": rows[0]["violations"]}
 	var profiles: Dictionary = {}
+	var priority_profiles: Dictionary = {}
 	var violations: Array = []
 	var calibration: Dictionary = quality["calibration"]["shipping_touch_waystone"]
 	var radius: float = _f(calibration["ink_radius_px"]) \
@@ -282,14 +291,21 @@ static func _cached_selection_profiles(local_nodes: Array,
 		var first: Dictionary = rows[0]["profiles"][profile_id]
 		var second: Dictionary = rows[1]["profiles"][profile_id]
 		var values: Dictionary = {}
+		var priority_values: Dictionary = {}
 		for metric_id: String in SELECTION_SCREEN_METRICS:
 			values[metric_id] = _aggregate(metric_id, {
 				"first": first["values"], "second": second["values"]})
+		for metric_id: String in SELECTION_PRIORITY_METRICS:
+			priority_values[metric_id] = _aggregate(metric_id, {
+				"first": first["priority_values"],
+				"second": second["priority_values"]})
 		var a: Vector2 = first["point"]
 		var b: Vector2 = second["point"]
 		var gap: float = a.distance_to(b) - radius * 2.0
 		values["node_ink_clearance_px"] = minf(
 			_f(values["node_ink_clearance_px"]), gap)
+		priority_values["node_ink_clearance_px"] = minf(
+			_f(priority_values["node_ink_clearance_px"]), gap)
 		var pair_violations: Array = []
 		if gap + epsilon < _limit(hard, "node_ink_clearance_px"):
 			pair_violations.append(_violation("node_ink_clearance_px",
@@ -307,10 +323,12 @@ static func _cached_selection_profiles(local_nodes: Array,
 				_rect(b, Vector2.ONE * touch * 0.5), profile, selected_ids,
 				values, pair_violations, epsilon)
 		profiles[profile_id] = values
+		priority_profiles[profile_id] = priority_values
 		violations.append_array(first["violations"])
 		violations.append_array(second["violations"])
 		violations.append_array(pair_violations)
-	return {"profiles": profiles, "violations": violations}
+	return {"profiles": profiles, "priority_profiles": priority_profiles,
+		"violations": violations}
 
 
 static func _cached_pair_feasibility(local_nodes: Array,
@@ -347,14 +365,23 @@ static func _cached_pair_feasibility(local_nodes: Array,
 	var touch: float = _touch_size_px(quality)
 	var hard: Dictionary = context["hard"]
 	var epsilon: float = _f(context["epsilon"])
+	var priority_profiles: Dictionary = {}
 	for profile_v: Variant in context["camera"]["profiles"]:
 		var profile: Dictionary = profile_v
 		var profile_id: String = str(profile["id"])
 		var a: Vector2 = rows[0]["profiles"][profile_id]["point"]
 		var b: Vector2 = rows[1]["profiles"][profile_id]["point"]
+		var priority_values: Dictionary = {}
+		for metric_id: String in SELECTION_PRIORITY_METRICS:
+			priority_values[metric_id] = _aggregate(metric_id, {
+				"first": rows[0]["profiles"][profile_id]["priority_values"],
+				"second": rows[1]["profiles"][profile_id]["priority_values"]})
 		var gap: float = a.distance_to(b) - diameter
 		values["node_ink_clearance_px"] = minf(
 			_f(values["node_ink_clearance_px"]), gap)
+		priority_values["node_ink_clearance_px"] = minf(
+			_f(priority_values["node_ink_clearance_px"]), gap)
+		priority_profiles[profile_id] = priority_values
 		if gap + epsilon < _limit(hard, "node_ink_clearance_px"):
 			rejection = _first_reason([rejection, _violation(
 				"node_ink_clearance_px", profile_id, selected_ids, gap,
@@ -375,7 +402,6 @@ static func _cached_pair_feasibility(local_nodes: Array,
 			rejection = _first_reason([rejection, pair_violations[0]])
 	var margins: Dictionary = {}
 	var finite_values: Dictionary = {}
-	var weakest: float = INF
 	for metric_id: String in SELECTION_SCREEN_METRICS:
 		var value: float = _f(values[metric_id])
 		if not is_finite(value):
@@ -385,11 +411,10 @@ static func _cached_pair_feasibility(local_nodes: Array,
 		var margin: float = value - _f(row["limit"]) \
 			if str(row["op"]) == "gte" else _f(row["limit"]) - value
 		margins[metric_id] = margin
-		if metric_id in SELECTION_PRIORITY_METRICS:
-			weakest = minf(weakest, margin)
 		if not _passes(value, row, epsilon) and rejection.is_empty():
 			rejection = _violation(metric_id, "selection", selected_ids,
 				value, {}, {})
+	var weakest: float = _selection_priority_margin(priority_profiles, hard)
 	return MapLayoutCanonical.ordered_dictionary({
 		"hard_pass": rejection.is_empty(),
 		"local_node_ids": selected_ids,
@@ -435,16 +460,20 @@ static func _cached_candidate_profiles(node: Dictionary, anchor: Variant,
 			quality, hard, epsilon, context["projected_obstacles"][profile_id])
 		profiles[profile_id] = {
 			"values": checked["values"],
+			"priority_values": checked["priority_values"],
 			"violations": checked["violations"],
 			"point": _project(_v3(anchor), profile),
 		}
 		violations.append_array(checked["violations"])
 	var result: Dictionary = {"profiles": profiles, "violations": violations}
 	var profile_values: Dictionary = {}
+	var priority_profile_values: Dictionary = {}
 	for profile_id: String in MapLayoutCanonical.sorted_keys(profiles):
 		profile_values[profile_id] = profiles[profile_id]["values"]
+		priority_profile_values[profile_id] = profiles[profile_id][
+			"priority_values"]
 	result["summary"] = _selection_screen_summary([node_id], context["camera"],
-		hard, epsilon, profile_values, violations)
+		hard, epsilon, profile_values, priority_profile_values, violations)
 	cache[key] = result
 	context["candidate_cache"] = cache
 	return result
@@ -660,6 +689,8 @@ static func _selection_screen(profile: Dictionary, nodes: Array,
 	var radius: float = _f(calibration["ink_radius_px"]) * _f(calibration["default_layout_scale"])
 	var touch: float = _touch_size_px(quality)
 	var values: Dictionary = {"node_ink_clearance_px": INF, "node_touch_target_min_px": touch, "node_touch_overlap_area_px2": 0.0, "node_touch_scenery_silhouette_overlap_area_px2": 0.0, "node_touch_hero_silhouette_overlap_area_px2": 0.0, "node_node_ink_overlap_area_px2": 0.0, "node_scenery_silhouette_overlap_area_px2": 0.0, "node_hero_silhouette_overlap_area_px2": 0.0, "branch_fanout_separation_px": INF, "focused_node_safe_frame_margin_px": INF, "route_state_exposure_ratio": 1.0}
+	var priority_values: Dictionary = {"node_ink_clearance_px": INF,
+		"focused_node_safe_frame_margin_px": INF}
 	var violations: Array = []
 	var projected_nodes: Dictionary = {}
 	for value: Variant in nodes:
@@ -680,6 +711,8 @@ static func _selection_screen(profile: Dictionary, nodes: Array,
 			var b: Vector2 = projected_nodes[b_id]
 			var gap: float = a.distance_to(b) - radius * 2.0
 			values["node_ink_clearance_px"] = minf(_f(values["node_ink_clearance_px"]), gap)
+			priority_values["node_ink_clearance_px"] = minf(
+				_f(priority_values["node_ink_clearance_px"]), gap)
 			if gap + epsilon < _limit(hard, "node_ink_clearance_px"):
 				violations.append(_violation("node_ink_clearance_px", str(profile["id"]), [a_id, b_id], gap,
 					{"a": anchors[a_id], "b": anchors[b_id]}, {"a": _a2(a), "b": _a2(b), "radius": radius}))
@@ -690,6 +723,9 @@ static func _selection_screen(profile: Dictionary, nodes: Array,
 			var hero: bool = str(obstacle["group"]) == "hero_placements"
 			var gap: float = _signed_gap(a, obstacle["clipped"]) - radius
 			values["node_ink_clearance_px"] = minf(_f(values["node_ink_clearance_px"]), gap)
+			if not hero:
+				priority_values["node_ink_clearance_px"] = minf(
+					_f(priority_values["node_ink_clearance_px"]), gap)
 			if gap + epsilon < _limit(hard, "node_ink_clearance_px"):
 				violations.append(_violation("node_ink_clearance_px", str(profile["id"]), [a_id, obstacle_id], gap,
 					{"node": anchors[a_id], "obstacle": _plain(obstacles[obstacle_id]["world"])},
@@ -701,12 +737,29 @@ static func _selection_screen(profile: Dictionary, nodes: Array,
 		var c: Vector2 = projected_nodes[focus]
 		var stage: Vector2 = _v2(profile["stage"])
 		values["focused_node_safe_frame_margin_px"] = minf(minf(c.x, stage.x - c.x), minf(c.y, stage.y - c.y)) - touch * 0.5
+		priority_values["focused_node_safe_frame_margin_px"] = values[
+			"focused_node_safe_frame_margin_px"]
 		if _f(values["focused_node_safe_frame_margin_px"]) + epsilon < _limit(hard, "focused_node_safe_frame_margin_px"):
 			violations.append(_violation("focused_node_safe_frame_margin_px", str(profile["id"]), [focus],
 				_f(values["focused_node_safe_frame_margin_px"]), {"node": anchors[focus]},
 				{"touch": _plain(_rect(c, Vector2.ONE * touch * 0.5)), "stage": profile["stage"]}))
-	return {"values": values, "violations": violations,
+	return {"values": values, "priority_values": priority_values,
+		"violations": violations,
 		"projected_obstacles": projected_obstacles}
+
+
+static func _selection_priority_margin(profiles: Dictionary,
+		hard: Dictionary) -> float:
+	var weakest: float = INF
+	for metric_id: String in SELECTION_PRIORITY_METRICS:
+		var value: float = _aggregate(metric_id, profiles)
+		if not is_finite(value):
+			continue
+		var row: Dictionary = hard[metric_id]
+		var margin: float = value - _f(row["limit"]) \
+			if str(row["op"]) == "gte" else _f(row["limit"]) - value
+		weakest = minf(weakest, margin)
+	return 0.0 if not is_finite(weakest) else weakest
 static func _touch_size_px(quality: Dictionary) -> float:
 	var calibration: Dictionary = quality["calibration"]["shipping_touch_waystone"]
 	var diameter: float = _f(calibration["ink_radius_px"]) \

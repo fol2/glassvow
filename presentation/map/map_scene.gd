@@ -47,7 +47,9 @@ const SKY: Color = Color(0.018, 0.022, 0.045)
 ## More separation than this cannot come from moving the building. It needs the
 ## opening zoom stop, `LEAD_X`, or the `act1-vigil` profile scale to give.
 const THRESHOLD_XZ: Vector2 = Vector2(-41.3, 6.5)
-const TERMINUS_XZ: Vector2 = Vector2(40.0, 0.0)
+## Smallest one-decimal road-axis calibration whose real transformed silhouette
+## clears the fixed boss across every governed screen profile (#474).
+const TERMINUS_XZ: Vector2 = Vector2(40.4, 0.0)
 ## Turned so the gable is seen in three-quarter rather than edge-on. The hall
 ## is authored with its gable facing +X, down the road; the camera looks along
 ## -Z, so unturned the player sees the length of the flank and the end of the
@@ -1123,7 +1125,7 @@ func _first_mesh(root: Node) -> MeshInstance3D:
 
 
 ## The ground the scenery may stand on, along the journey. Clears the Vigil to
-## the west and the terminus at x = 40 to the east; it is the span the authored
+## the west and the terminus at x = 40.4 to the east; it is the span the authored
 ## set this replaced already used, so nothing downstream sees a wider field.
 const SCATTER_X: Vector2 = Vector2(-33.0, 31.5)
 ## How far off the centre line each family sits, as |z|. The lanes run

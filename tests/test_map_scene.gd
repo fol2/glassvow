@@ -328,6 +328,11 @@ static func _compiled_layout(fails: Array[String]) -> void:
 		"res://docs/map/map-quality-v2.json"))
 	var assets: Dictionary = scene.call(&"layout_asset_bundle")
 	var contract: Dictionary = scene.call(&"layout_hero_contract")
+	var terminus_anchor: Dictionary = contract.get("anchors", {}).get(
+		"terminus", {})
+	_check(fails, _v3(terminus_anchor.get("position", Vector3.ZERO))
+			.is_equal_approx(Vector3(40.4, 0.0, 0.0)),
+		"terminus keeps the selected one-decimal screen-feasibility calibration")
 	var candidates: PackedVector3Array = scene.prop_positions()
 	_check(fails, not assets.is_empty() and not contract.is_empty()
 			and candidates.size() > 2,
