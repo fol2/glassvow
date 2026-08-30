@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-c69b2752 persistent contract grammar v1",
+  "state": "FROZEN_BEFORE_BACKGROUND_AUDIT",
+  "identity": {
+    "taskSsotBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "authorityCommentId": 5468704389,
+    "authorityBodySha256": "fca3a0142f3a7e55457b448a7acecab69bb14407005bc1c6354e5b740c297dd7",
+    "taskCapsulePath": "task-capsule-5468704389-v48.json",
+    "taskCapsuleSha256": "3ee6bcc474d5f611d34f09dca504b9f104815ea92b6d176134a1006d53e4db89",
+    "archiveParent": "a5725e6",
+    "immutableClosureHead": "c69b2752f8a52c0d50151ba083a02948180a0846"
+  },
+  "sourceIdentity": {
+    "head": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "worktree": "/Users/jamesto/Research/glassvow-p9-421/persistent-option2-source-v1",
+    "status": [],
+    "compatibilityRange": "Godot stable 4.7.2+",
+    "selectedExperimentBinary": null,
+    "currentMainDeltaFromPriorClosure": {
+      "from": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+      "to": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+      "commits": 1,
+      "domainContentRewardCombatPolicyFilesChanged": 0,
+      "applicationMainChangeClass": "map-layout-cache only; verify independently"
+    },
+    "files": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/game.gd": "4eb3f416eef60797bc0cfdf9169250f07fccb3a05c0b16dcb9d7ef054898c824",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "presentation/run/run_hud.gd": "c52e7af394f09f2978366c2fb3ef4a8f8d0219c1ba756a60543713560380ea98",
+      "tests/test_save.gd": "2ab050bfe4a5a11299f355125fdba2aa9201de8adebfc65a2d900ff8f8454e38",
+      "tests/test_content.gd": "2de21479bf0fb857c8d158692bee904fc25d88f1a1d7e802eb042d7dd5bf1b56"
+    }
+  },
+  "question": "Which, if any, of three fully frozen persistent strategy contracts is source-reachable, non-breaking, materially distinct from every immutable closure and supported by an observable policy/capacity estimand strongly enough to justify one separate identity protocol?",
+  "competingHypotheses": {
+    "H1": "At least one frozen contract passes source, compatibility, alias, evidence, policy-exposure and pre-row capacity-estimand gates; freeze the minimum-ranked survivor only.",
+    "H0": "Every frozen contract aliases a closed family, lacks a complete non-breaking source path, or lacks evidence-backed decision value/policy exposure; close this finite grammar with zero rows.",
+    "HI": "The immutable inputs or reports cannot decide every gate at the frozen cap; record inconclusive and select nothing."
+  },
+  "sharedContract": {
+    "carrier": "One additive uncommon relic ID in the existing relic catalogue and ordinary pool. Ownership is the only acquisition identity; no existing ID changes.",
+    "aspectBoundary": "The effect is active only for Duskblade (run.aspect == 0). Ashwarden ownership is an exact inert negative control.",
+    "acquisition": "Fixed ownership is evaluated before the existing natural uncommon relic routes. Natural acquisition and payoff are separate factors.",
+    "presentation": "Reuse the generic relic art, HUD collection, tooltip and RELIC_PROC paths. No new choice screen or control is part of this grammar.",
+    "rng": "Every effect and null path is deterministic and adds no gameplay RNG call.",
+    "policy": "Ordinary policy exposure must be stated in the candidate. No trained policy, optimiser or adaptive score is permitted.",
+    "identity": "Omitted and explicit-off must reproduce exact current-main path, RNG, policy, result and reliability. Enabled may move only the frozen mediator before any endpoint claim.",
+    "promotion": "The additive research ID is not a product ID. At most one survivor may proceed to a separate identity protocol; none is shipping scope here."
+  },
+  "candidates": {
+    "mirror-reliquary-ownership-gate": {
+      "rank": 0,
+      "researchRelicId": "researchMirrorReliquary",
+      "playerFacingName": "Mirror Reliquary",
+      "playerFacingText": "As the Duskblade, gaining Ward creates one Afterimage. Warden's Edge consumes one Afterimage to reflect twice your current Ward as damage.",
+      "producer": "With the relic owned in Duskblade combat, each positive player Ward gain applies exactly one non-stacking Afterimage after the canonical Ward amount is known.",
+      "mediator": "One fight-local player Afterimage marker, absent at combat start and discarded at combat end.",
+      "consumer": "Warden's Edge with Afterimage consumes it after its authored damage and Ward effects resolve.",
+      "payoff": "Deal non-Attack damage equal to exactly two times current player Ward after Warden's Edge resolves; no Facet chip, status or RNG side effect.",
+      "expiry": "Consume once on Warden's Edge or discard at combat end.",
+      "naturalCost": "Opportunity cost of choosing one ordinary uncommon relic.",
+      "ordinaryPolicyExposure": "Only while the relic is owned, Warden's Edge is held and Afterimage is absent, the existing deterministic policy may value a legal Ward producer with the previously defined minimum non-zero setup cue; no other score changes.",
+      "saveAndUi": "Existing relic-ID save array and generic relic presentation only; no mutable run field.",
+      "separateFactors": [
+        "relic ownership/acquisition",
+        "Afterimage apply-consume payoff"
+      ],
+      "knownAliasRisk": "The exact apply-consume payoff and setup cue were previously evaluated without an ownership gate; ownership must create a materially new decision contract rather than relabel that closed family."
+    },
+    "emberglass-memory-one-carry": {
+      "rank": 1,
+      "researchRelicId": "researchEmberglassMemory",
+      "playerFacingName": "Emberglass Memory",
+      "playerFacingText": "As the Duskblade, preserve up to 1 unspent Ember after victory for the next combat.",
+      "producer": "After all canonical Duskblade victory and post-combat relic consumers have read the terminal Ember reserve, store min(terminal Embers, 1) when the relic is owned; loss and zero reserve store zero.",
+      "mediator": "One namespaced integer at run.quest_scratch['relic.emberglassMemory'], legal values 0 or 1, using the existing durable v2 dictionary and defaulting missing or invalid values to 0.",
+      "consumer": "At the end of canonical start-relic application in the next Duskblade combat, add the stored unit after any Ember-cap change, emit the existing Ember and RELIC_PROC events, then clear the stored unit.",
+      "payoff": "Exactly one additional starting Ember when charged, capped by the canonical current Ember cap; no direct damage, Ward, draw, Energy, Facet, status or RNG change.",
+      "expiry": "Consume at the next combat start; otherwise persist across save/resume until consumed or run end.",
+      "naturalCost": "Opportunity cost of choosing one ordinary uncommon relic plus foregoing terminal Art value needed to leave a residual unit.",
+      "ordinaryPolicyExposure": "Current deterministic play remains unchanged for the first fixed-ownership screen. Policy sensitivity is the natural variation in Dusk Ember production/spend and terminal residual; a new reserve policy is not authorised unless this gate later measures decision value.",
+      "saveAndUi": "No save-schema or new field: reuse questScratch's existing additive dictionary envelope and generic relic presentation. The existing RELIC_PROC event identifies charge and consume; no new control surface.",
+      "separateFactors": [
+        "relic ownership/acquisition",
+        "one-unit inter-combat Ember transfer"
+      ],
+      "knownAliasRisk": "Current Crown and Ember families read or add within-combat Embers, but no authorised family may already connect terminal reserve in one combat to the next combat through run persistence."
+    },
+    "shard-compass-reward-feedback": {
+      "rank": 2,
+      "researchRelicId": "researchShardCompass",
+      "playerFacingName": "Shard Compass",
+      "playerFacingText": "After a Duskblade victory with a Shatter, card rewards offer one additional Facet card.",
+      "producer": "A real SHATTER event in the just-won Duskblade combat while the relic is owned.",
+      "mediator": "One additional post-combat card-reward slot, present only for that reward and never saved separately.",
+      "consumer": "After the canonical reward list is complete, append the first current-pool, non-starter card in canonical pool order that is not already offered and has positive authored chip or a positive chip effect.",
+      "payoff": "The unchanged player or deterministic policy may select the extra Facet card; no card value, rarity, existing offer, shared RNG cursor or combat rule changes.",
+      "expiry": "The extra slot expires with the current reward screen.",
+      "naturalCost": "Opportunity cost of choosing one ordinary uncommon relic and first producing a real Shatter.",
+      "ordinaryPolicyExposure": "The existing card choice/decline rule evaluates the added card with its unchanged current score.",
+      "saveAndUi": "Pass the completed CombatState read-only to reward generation and reuse the existing reward row; no new saved field or choice screen.",
+      "separateFactors": [
+        "relic ownership/acquisition",
+        "post-Shatter extra reward slot"
+      ],
+      "knownAliasRisk": "Prior evidence found acquisition was not the immediate Afterimage bottleneck and closed native acquisition aliases; this new contract needs independent measured decision value rather than a new route label."
+    }
+  },
+  "immutableEvidence": {
+    "summaries/post-v38-exact-complementarity-v1-audit.json": "8630a5e6ab6559b7e98fa5947e865a11f26ee505879026450f73e95fcb468621",
+    "summaries/post-v38-hearth-capacity-v1.json": "71b47f449e0a396ae428874ee11624b77bb609d07df1f14cc35e6536200cb8eb",
+    "summaries/post-v30-hearth-qualified-crn-gate2-v1.json": "e7de2bcb35a4252222b30f83b75d79fa05ef33d30d7b95f3b83651b4edbade20",
+    "summaries/post-v38-package-commitment-capacity-v2.json": "ebd909bbd23bc403e18894637dcb3041d1c4a240bb0e2464ae5eaa39b55cb4f2",
+    "summaries/post-c3762813-autonomous-closure-envelope-v1.json": "7d88cbe842053d8338d716b31f26fd40f956f63139e5bb23ef53d21a9287773b"
+  },
+  "backgroundAudit": [
+    {
+      "hypothesis": "H1_CURRENT_MAIN_COMPATIBILITY",
+      "question": "For each exact candidate, does current main provide a complete, deterministic and non-breaking carrier-to-consumer implementation path using only the frozen save/ID/UI consequences?",
+      "reportPath": "reviews/post-c69b2752-persistent-contract-h1-source-v1.json"
+    },
+    {
+      "hypothesis": "H2_ALIAS_AND_CLOSURE",
+      "question": "For each exact candidate, is the full causal contract materially distinct from every immutable closure without reopening a payoff, acquisition, ordering, Ember, Crown or package-commitment family?",
+      "reportPath": "reviews/post-c69b2752-persistent-contract-h2-alias-v1.json"
+    },
+    {
+      "hypothesis": "H3_DECISION_VALUE_AND_POLICY_EXPOSURE",
+      "question": "For each exact candidate, is the direction evidence-backed, product-semantic-complete and testable through an ordinary policy plus a zero/new-row capacity estimand before any identity implementation?",
+      "reportPath": "reviews/post-c69b2752-persistent-contract-h3-policy-v1.json"
+    }
+  ],
+  "eligibilityGates": [
+    "sourceReachable",
+    "contractComplete",
+    "breakingBoundary == false",
+    "allClosuresPreserved",
+    "notClosedAlias",
+    "evidenceBacked",
+    "policyExposureTestable",
+    "preRowCapacityEstimandAvailable",
+    "productSemanticsComplete"
+  ],
+  "decisionRules": {
+    "success": "If all three reports are COMPLETE and one or more candidates pass every gate, freeze exactly the minimum-ranked candidate for a separate source/capacity/identity preregistration. Do not implement or run enabled rows here.",
+    "futility": "If all reports are COMPLETE and no candidate passes every gate, close this exact three-contract grammar with zero rows. Do not add a fourth contract after seeing reports.",
+    "inconclusive": "Any missing report, input mismatch, incomplete candidate set or non-COMPLETE verdict records inconclusive at cap and selects nothing.",
+    "tieBreak": "Ascending frozen integer rank, then candidate ID. Outcome magnitude and model preference never break a tie."
+  },
+  "executionCeilings": {
+    "maximumCandidates": 3,
+    "maximumBackgroundAgents": 3,
+    "maximumCitationsPerAgent": 24,
+    "maximumReportBytesPerAgent": 65536,
+    "maximumModelContextTokensPerAgent": 18000,
+    "maximumAggregateModelContextTokens": 54000,
+    "maximumWallTimeSecondsPerAgent": 600,
+    "maximumConsolidationProcesses": 1,
+    "maximumConsolidationWallTimeSeconds": 5,
+    "maximumMechanicalCorrections": 0,
+    "maximumGodotProcesses": 0,
+    "maximumSimulatorRows": 0,
+    "maximumLedgerReads": 0,
+    "maximumLedgerWrites": 0,
+    "maximumProtectedSeedRows": 0,
+    "maximumProductMutations": 0
+  },
+  "runner": {
+    "path": "tools/post_c69b2752_persistent_contract_grammar_v1.py",
+    "sha256": "04d80bc3f34120bcd9a87dc6fcd5bc27f9d89bce0e1435ae47a1661a4bf2c970",
+    "selfTest": "PASS (3 checks)"
+  },
+  "claimBoundary": "This zero-row gate can freeze at most one exact persistent contract for a separate preregistration, close the exact grammar or record inconclusive. It cannot establish capacity, identity, causality, package admission, detector admission, product scope, protected-seed authority, #421 acceptance or the #108 P9 receipt."
+}
