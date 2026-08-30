@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "protocolId": "post-43431456-target-acts-last-natural-identity-design-v1",
+  "preregisteredAtUtc": "2026-08-30T07:50:44Z",
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "question": "Does exact current main contain a repeated authored same-phase opportunity for TARGET_ACTS_LAST_THIS_PHASE, and can one minimal research-only prototype preserve a provable disabled path while exposing one exact direct-consume observable?",
+  "authorities": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "controllingCommentId": 5466985701,
+    "controllingCommentBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60",
+    "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2"
+  },
+  "parentEvidence": {
+    "archiveHead": "434314565a10064076f0f4ba45ac17713096b6ca",
+    "remoteRef": "research/issue-421-post-718ba823-enemy-action-transform-grammar-evidence",
+    "manifestSha256": "8a62f1323bffb63a56d7368a50aaa332fb2b7ac91fbba504e1bb6b0c919b0609",
+    "consolidationSha256": "cda96b9b91740abae65376a0646b2d489ebf04e276edaadc24adb8f62e7ea856",
+    "disposition": "SUCCESS_FREEZE_TARGET_ACTS_LAST_THIS_PHASE_ABSTRACT_CONTRACT"
+  },
+  "selectedAbstractContract": {
+    "id": "TARGET_ACTS_LAST_THIS_PHASE",
+    "definition": "Before the next enemy phase resolves any living enemy, stable-partition the existing living-enemy iteration so the marked enemy acts after every unmarked enemy. Preserve each enemy's exact move, internal effect order, action count, target, history update, RNG identity and post-phase intent recomputation; consume the marker after the phase.",
+    "carrier": "One research-only Duskblade Skill action, costing exactly one Energy and targeting one living enemy, applies one fight-local marker and has no bundled effect.",
+    "repeatRule": "A second application to the same target is idempotent; a later application to a different target replaces the pending target without stacking.",
+    "expiry": "The marker expires after the next enemy phase, marked-target death, combat end or aspect mismatch and never enters run state or a save.",
+    "preservesActionMultiset": true,
+    "preservesPlayerDamageTarget": true
+  },
+  "frozenCausalFactors": {
+    "scoreline": {
+      "definition": "Duskblade exact Chisel realised hit sets one target-local non-stacking mark; a later exact Executioner on that living target consumes it for one separate bounded raw damage operation.",
+      "level": "off",
+      "independence": "Separate causal factor; never pooled with the scheduler transform."
+    },
+    "afterimage": {
+      "definition": "Duskblade exact Defend realised Ward sets one player-local non-stacking bounded value; a later exact Warden's Edge in the same player turn consumes it for one separate mirrored-Ward operation.",
+      "level": "off",
+      "independence": "Separate causal factor; never pooled with the scheduler transform."
+    },
+    "interactionRule": "No interaction is estimated here. Any later joint cells require shared common-random-number transform-only, Scoreline-only and Afterimage-only interference anchors with measured decision value."
+  },
+  "sourceIdentity": {
+    "worktree": "/Users/jamesto/Research/glassvow-p9-421/current-main-delta-v1",
+    "head": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "requiredClean": true,
+    "files": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/rules/enemy_ai.gd": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "presentation/combat/combat_screen.gd": "312d66afa344c441724cc4abe1e87889fb0f9b66637dc8eed4f6ef44c6137542",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    }
+  },
+  "naturalOpportunityCensus": {
+    "unit": "One authored multi-enemy encounter definition whose first enemy is tidecaller and whose later enemy has only damaging possible first-turn moves.",
+    "firstTurnMoveDomains": {
+      "tidecaller": ["surge"],
+      "mirelurker": ["sting", "barb"],
+      "voltEel": ["shock"]
+    },
+    "producerPredicate": "tidecaller is first in authored encounter order; EnemyAi selects surge on turn 1; surge applies exactly +2 str to all living enemies after tidecaller's own action.",
+    "consumerPredicate": "Every possible first-turn move of every later enemy has authored dmg and at least one packet; damage_player reads attacker str before weak/vulnerable and block resolution.",
+    "contrast": "Baseline authored order versus stable-moving tidecaller to the last living slot, with the same enemies, move identities, RNG identity and internal move order.",
+    "estimands": {
+      "witnessEncounterDefinitions": "Count of distinct act/tier/index encounter definitions satisfying both predicates.",
+      "distinctLaterEnemyIds": "Count of distinct later enemy identities across witnesses.",
+      "guaranteedFirstTurnStrengthExposures": "Minimum number of later first-turn attack packets that receive tidecaller's +2 str in authored order and do not receive that same-phase increment when tidecaller acts last."
+    },
+    "requiredExactWitnesses": [
+      {"act": 2, "tier": "normal", "index": 1, "enemies": ["tidecaller", "mirelurker"]},
+      {"act": 2, "tier": "normal", "index": 5, "enemies": ["tidecaller", "voltEel"]}
+    ],
+    "successThresholds": {
+      "minimumWitnessEncounterDefinitions": 2,
+      "minimumDistinctLaterEnemyIds": 2,
+      "minimumGuaranteedFirstTurnStrengthExposures": 2
+    }
+  },
+  "minimalResearchPrototype": {
+    "productStatus": "Research-only source/content projection outside product truth; not a candidate or shipping scope.",
+    "configuration": "One configure_research421_target_acts_last(enabled: bool) switch defaults false. Current-main content contains no research card, so the disabled whole-run arm cannot activate the producer.",
+    "card": {
+      "id": "research421TargetActsLast",
+      "type": "skill",
+      "rarity": "special",
+      "cost": 1,
+      "target": "enemy",
+      "effect": {"kind": "special", "id": "research421TargetActsLast"},
+      "bundledEffects": 0,
+      "aspect": "Duskblade only by harness construction; invalid outside aspect 0"
+    },
+    "marker": {
+      "logicalFieldCount": 1,
+      "carrier": "EnemyCombatant.flags[research421TargetActsLast] on exactly one living target",
+      "newDeclaredCombatStateFields": 0,
+      "newDeclaredEnemyStateFields": 0,
+      "saveProjection": "omitted",
+      "producer": "Clear the key from every enemy, then set it on the selected living target only when enabled and aspect is Duskblade.",
+      "consumer": "Use a local phase-order array without mutating cb.enemies; erase the marker on all normal, death and combat-end exits before ordinary intent recomputation."
+    },
+    "gameplayHooks": [
+      "One _apply_special producer branch for the exact research special ID.",
+      "One enemy-phase order helper called only behind the default-false research switch."
+    ],
+    "event": {
+      "newEventTypeCount": 1,
+      "id": "RESEARCH421_TARGET_ACTS_LAST",
+      "fields": ["targetIdx", "beforeLivingPosition", "afterLivingPosition", "moved"],
+      "cardinality": "Exactly one event per eligible marker consumption; zero when disabled or no marker exists.",
+      "presentationHooks": 1
+    },
+    "policyBoundary": "Existing ordinary play/no-play and enemy-target enumeration is sufficient for direct identity work. No new policy score, target heuristic, oracle, acquisition override, ML or RL hook is authorised until a later measured gate identifies that bottleneck.",
+    "sourceFilesPermitted": [
+      "domain/rules/combat.gd",
+      "domain/events/event_types.gd",
+      "presentation/combat/combat_screen.gd"
+    ],
+    "researchFilesPermitted": [
+      "one deterministic content projection",
+      "one direct identity probe"
+    ]
+  },
+  "identityGateDesign": {
+    "wholeRunNull": "Compare exact-main source/content with prototype source configured false and exact-main content. Freeze identical policy identities, seeds, estimator and stopping rule; require byte-identical canonical outputs, RNG state, event sequence, result and all existing fields.",
+    "matchedDirectNull": "Within prototype source and identical research-card content, compare configured false versus configured true from the same constructed combat state and RNG identity. Playing the card, Energy cost, hand/discard movement and ordinary PLAY/ENERGY/TO_DISCARD events are common; only marker, order-consume event and resulting enemy action order may differ.",
+    "directPositiveScenarios": [
+      "Turn-1 tidecaller plus voltEel with zero player block/status/relic/vow modifiers: target tidecaller; enabled order must be voltEel then tidecaller and remove exactly one +2 same-phase str exposure from shock.",
+      "Turn-1 tidecaller plus mirelurker with a frozen RNG identity selecting either sting or barb: target tidecaller; enabled order must be mirelurker then tidecaller and remove exactly one +2 same-phase str exposure from that attack."
+    ],
+    "invalidOrExpiryScenarios": [
+      "Ashwarden activation is rejected.",
+      "Dead target produces no marker.",
+      "Same-target replay is idempotent.",
+      "Different-target replay replaces rather than stacks.",
+      "Already-last target consumes with moved=false and no action-order change.",
+      "Marked-target death and combat end clear the marker without save/run state."
+    ],
+    "futureExecutionCeilings": {
+      "maximumGodotProcesses": 12,
+      "maximumDirectScenarios": 8,
+      "maximumWholeRunNullRowsPerArm": 64,
+      "maximumSimulatorObservationRows": 128,
+      "maximumLedgerWrites": 0,
+      "maximumProtectedSeedRows": 0,
+      "maximumWallTimeSeconds": 180,
+      "maximumModelContextTokensDuringExecutionAndDecision": 0,
+      "mechanicalCorrectionCap": 1
+    },
+    "note": "These ceilings bind any immediate identity protocol; that protocol must freeze exact fresh unprotected identities and the selected compliant Godot binary provenance before execution."
+  },
+  "staticAudit": {
+    "implementation": "One Python standard-library runner; exact source/hash checks, authored opportunity enumeration and protocol completeness only.",
+    "outputByteCap": 40000,
+    "wallTimeSeconds": 30,
+    "liveRuns": 1,
+    "mechanicalCorrectionCap": 1,
+    "selfTest": "Prove encounter filtering, possible-move universal quantification, attack-packet counting, exact required-witness equality, cap enforcement and no-overwrite before the sole live audit."
+  },
+  "executionCeilings": {
+    "candidateCount": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "MLRLOptimiserRuns": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "maximumWallTimeSeconds": 30
+  },
+  "decision": {
+    "success": "All source identities, exact witnesses, thresholds and minimal prototype/identity-design fields pass. Authorise exactly one separately versioned research prototype and the bound identity gate; do not run capacity or whole-run causal rows here.",
+    "futility": "The audit is valid but any opportunity threshold or required witness fails. Close TARGET_ACTS_LAST_THIS_PHASE and continue inside #421 with the next distinct evidence-backed structural mechanism.",
+    "inconclusive": "Any source/hash/schema/cap/no-overwrite fault or exhausted mechanical correction records this gate inconclusive at cap."
+  },
+  "claimBoundary": "A success proves repeated authored opportunity and a complete bounded research design only. It is not prototype correctness, identity safety, natural capacity, policy sensitivity, complementarity, reachability, a candidate, product scope, #421 acceptance or the #108 P9 receipt."
+}

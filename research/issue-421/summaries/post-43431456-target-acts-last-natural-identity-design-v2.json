@@ -1,0 +1,127 @@
+{
+  "GodotProcesses": 0,
+  "authorisedResearchPrototypes": 1,
+  "cacheReads": 0,
+  "cacheWrites": 0,
+  "candidateCount": 0,
+  "claimBoundary": "A success proves repeated authored opportunity and a complete bounded research design only. It is not prototype correctness, identity safety, natural capacity, policy sensitivity, complementarity, reachability, a candidate, product scope, #421 acceptance or the #108 P9 receipt.",
+  "decision": "AUTHORISE_ONE_RESEARCH_PROTOTYPE_AND_IDENTITY_GATE",
+  "decisionBoundary": 1,
+  "estimands": {
+    "distinctLaterEnemyIds": 2,
+    "guaranteedFirstTurnStrengthExposures": 2,
+    "laterEnemyIds": [
+      "mirelurker",
+      "voltEel"
+    ],
+    "witnessEncounterDefinitions": 2
+  },
+  "issue": 421,
+  "ledgerReads": 0,
+  "ledgerWrites": 0,
+  "opportunityChecks": {
+    "exactRequiredWitnesses": true,
+    "minimumDistinctLaterEnemyIds": true,
+    "minimumGuaranteedFirstTurnStrengthExposures": true,
+    "minimumWitnessEncounterDefinitions": true
+  },
+  "outcome": "SUCCESS",
+  "protectedSeedRows": 0,
+  "protocolDesignChecks": {
+    "afterimageOffSeparate": true,
+    "boundedFutureIdentity": true,
+    "completeInvalidAndExpiryMatrix": true,
+    "completeMarkerLifecycle": true,
+    "completeMatchedDirectNull": true,
+    "completeWholeRunDisabledPath": true,
+    "defaultFalseExactContentConfiguration": true,
+    "exactDirectEventContract": true,
+    "exactMarkerCarrierAndProducer": true,
+    "exactPermittedProductFiles": true,
+    "exactPermittedResearchFiles": true,
+    "exactResearchCardContract": true,
+    "noPolicyOptimiserHook": true,
+    "oneEventTypeAndPresentationHook": true,
+    "oneLogicalMarker": true,
+    "scorelineOffSeparate": true,
+    "selectedContractBound": true,
+    "threeProductFilesMaximum": true,
+    "twoDirectPositiveScenarios": true,
+    "twoGameplayHooks": true,
+    "wholeRunAndMatchedNullsFrozen": true
+  },
+  "protocolSha256": "63b64bf656cc926f6f689946a4075a75ef3c733af6d934640072e065771f0859",
+  "runnerSha256": "65f4ae82b090ee73167eddc04544d650726d1692a124f4184f038c9d17756634",
+  "schemaVersion": 1,
+  "selectedAbstractContract": "TARGET_ACTS_LAST_THIS_PHASE",
+  "simulatorRows": 0,
+  "sourceHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "sourceSha256": {
+    "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+    "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+    "domain/rules/enemy_ai.gd": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417",
+    "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+    "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+    "presentation/combat/combat_screen.gd": "312d66afa344c441724cc4abe1e87889fb0f9b66637dc8eed4f6ef44c6137542",
+    "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+  },
+  "sourceStatus": [],
+  "sourceSurfaceChecks": {
+    "alliesEffectVisitsLivingEnemyArray": true,
+    "authoredEnemyOrderIsArrayOrder": true,
+    "canonicalEncounterSurfaceComplete": true,
+    "currentMainResearchMarkerAbsent": true,
+    "damageReadsStrengthBeforeWeakAndVulnerable": true,
+    "fightLocalFlagsCarrierExists": true,
+    "flagsOmittedFromEnemyProjection": true,
+    "mirelurkerFirstTurnDamageDomain": true,
+    "noRunOrCombatSaveFieldNeeded": true,
+    "oneEventAndPresentationSurfaceAvailable": true,
+    "ordinaryEnemyTargetEnumerationExists": true,
+    "tidecallerFirstTurnSurge": true,
+    "voltEelFirstTurnShock": true
+  },
+  "wallTimeSeconds": 0.039268,
+  "witnesses": [
+    {
+      "act": 2,
+      "enemies": [
+        "tidecaller",
+        "mirelurker"
+      ],
+      "guaranteedFirstTurnStrengthExposures": 1,
+      "index": 1,
+      "laterEnemies": [
+        {
+          "enemyId": "mirelurker",
+          "minimumAttackPackets": 1,
+          "possibleFirstTurnMoves": [
+            "sting",
+            "barb"
+          ]
+        }
+      ],
+      "tier": "normal"
+    },
+    {
+      "act": 2,
+      "enemies": [
+        "tidecaller",
+        "voltEel"
+      ],
+      "guaranteedFirstTurnStrengthExposures": 1,
+      "index": 5,
+      "laterEnemies": [
+        {
+          "enemyId": "voltEel",
+          "minimumAttackPackets": 1,
+          "possibleFirstTurnMoves": [
+            "shock"
+          ]
+        }
+      ],
+      "tier": "normal"
+    }
+  ]
+}

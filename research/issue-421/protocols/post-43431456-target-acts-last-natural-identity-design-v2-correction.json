@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "correctionId": "post-43431456-target-acts-last-natural-identity-design-v2-correction",
+  "recordedAtUtc": "2026-08-30T07:58:44Z",
+  "parentProtocolSha256": "63b64bf656cc926f6f689946a4075a75ef3c733af6d934640072e065771f0859",
+  "mechanicalCorrection": {
+    "used": 1,
+    "cap": 1,
+    "timing": "before any live static-audit output, prototype construction, Godot process or simulator row",
+    "preflightVerdict": "FAIL_INCOMPLETE_STATIC_PROOF",
+    "defects": [
+      "The v1 self-test counted witnesses but did not assert exact required-witness identity equality.",
+      "The v1 audit enumerated the top-level encounter array without proving that the duplicated theme encounter surfaces are exact mirrors of that canonical array.",
+      "The v1 protocol checks did not prove the exact marker lifecycle, direct-event schema/cardinality, permitted product/research file sets or disabled-path current-content exclusion.",
+      "The v1 presentation-surface string expected a handler shape not present in exact current main."
+    ],
+    "changes": [
+      "Bind v2 to the immutable v1 SHA and reuse its audited primitives.",
+      "Require top-level encounter cardinality to equal acts cardinality and every themeOrder encounter surface to equal its exact top-level act mirror before enumeration.",
+      "Test exact required-witness identities, extra-witness rejection, mirror drift, universal possible-move damage and caps/no-overwrite.",
+      "Validate the exact research card, one logical marker, producer/lifecycle, event fields/cardinality, permitted files, whole-run null, matched direct null and expiry matrix.",
+      "Match the actual current-main _handle_event presentation surface and include current content in the research-marker absence check."
+    ]
+  },
+  "runner": {
+    "v1Sha256": "edd97cb336242647443b0e1bed8f3f00d8ee7ca3de78f18091556c277080dea0",
+    "v2Sha256": "65f4ae82b090ee73167eddc04544d650726d1692a124f4184f038c9d17756634",
+    "v2SelfTest": "PASS_9_CHECKS"
+  },
+  "frozenUnchanged": [
+    "selected TARGET_ACTS_LAST_THIS_PHASE abstract contract",
+    "two required Act 2 witness encounters",
+    "first-turn move domains and universal consumer predicate",
+    "three opportunity estimands and thresholds",
+    "minimal prototype and identity-gate design",
+    "Scoreline and Afterimage separation and off levels",
+    "source identities",
+    "numeric ceilings and success/futility/inconclusive rules"
+  ],
+  "preLiveAccounting": {
+    "liveStaticAuditRuns": 0,
+    "auditOutputs": 0,
+    "prototypesConstructed": 0,
+    "candidatesConstructed": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0
+  }
+}

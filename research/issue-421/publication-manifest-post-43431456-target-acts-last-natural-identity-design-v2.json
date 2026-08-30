@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-research-evidence",
+  "recordedAtUtc": "2026-08-30T08:01:59Z",
+  "parentArchiveHead": "434314565a10064076f0f4ba45ac17713096b6ca",
+  "intendedRemoteRef": "research/issue-421-post-43431456-target-acts-last-natural-identity-design-evidence",
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "authority": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "commentId": 5466985701,
+    "commentBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "preregistrationAndCorrectionCommentId": 5467520940,
+  "disposition": "SUCCESS_AUTHORISE_ONE_RESEARCH_PROTOTYPE_AND_IDENTITY_GATE",
+  "selectedAbstractContract": "TARGET_ACTS_LAST_THIS_PHASE",
+  "scientificAccounting": {
+    "requiredWitnessEncounterDefinitions": 2,
+    "observedWitnessEncounterDefinitions": 2,
+    "distinctLaterEnemyIds": 2,
+    "guaranteedFirstTurnStrengthExposures": 2,
+    "staticAuditMechanicalCorrectionsUsed": 1,
+    "staticAuditMechanicalCorrectionCap": 1,
+    "liveStaticAuditRuns": 1,
+    "auditOutputBytes": 4554,
+    "authorisedResearchPrototypes": 1,
+    "candidatesConstructed": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "MLRLOptimiserRuns": 0
+  },
+  "files": [
+    {
+      "path": "research/issue-421/task-capsule-5466985701-v40.json",
+      "sha256": "b817b226c3e885289a82c83c91eaa1d922465adff2c853d90195a156c7b8cd07"
+    },
+    {
+      "path": "research/issue-421/protocols/post-43431456-target-acts-last-natural-identity-design-v1.json",
+      "sha256": "63b64bf656cc926f6f689946a4075a75ef3c733af6d934640072e065771f0859"
+    },
+    {
+      "path": "research/issue-421/tools/post_43431456_target_acts_last_natural_identity_design_v1.py",
+      "sha256": "edd97cb336242647443b0e1bed8f3f00d8ee7ca3de78f18091556c277080dea0"
+    },
+    {
+      "path": "research/issue-421/tools/post_43431456_target_acts_last_natural_identity_design_v2.py",
+      "sha256": "65f4ae82b090ee73167eddc04544d650726d1692a124f4184f038c9d17756634"
+    },
+    {
+      "path": "research/issue-421/protocols/post-43431456-target-acts-last-natural-identity-design-v2-correction.json",
+      "sha256": "06297d3451bf511b77799869c6a2f198dd10e68780380ed6241c3bdfaff6ceb6"
+    },
+    {
+      "path": "research/issue-421/summaries/post-43431456-target-acts-last-natural-identity-design-v2.json",
+      "sha256": "b2e382f0c2d958fdff6668bc23d3ea676523b4fde26ea0a4aea02e36c498c758"
+    },
+    {
+      "path": "research/issue-421/summaries/post-43431456-target-acts-last-natural-identity-design-v2.md",
+      "sha256": "35352fdfbf61a50fc6d3c5ca8407269e0911eabd620d6eb69efab7ca2acae5c7"
+    }
+  ],
+  "claims": [
+    "Exact current main contains two independently authored Act 2 encounters where moving turn-1 Tidecaller last removes one guaranteed same-phase +2 Strength exposure from a later attack.",
+    "The frozen default-off marker, event, permitted-file, whole-run null, matched direct-null and expiry design is complete enough to author exactly one research-only prototype.",
+    "No prototype correctness, identity, capacity, policy, causal, candidate, product, acceptance or P9 claim follows from this disposition."
+  ],
+  "nextGate": "Construct one research-only prototype and run the bound exact disabled-path and direct identity gate within the frozen ceilings before any capacity or causal row."
+}
