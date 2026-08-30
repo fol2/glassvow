@@ -5,8 +5,8 @@ extends Control
 ## Presentation only. It reads the WorldMap graph and animates; the map's own
 ## `enter()` gate decides what is legal. Fully built in _init (no tree
 ## dependency) so headless tests can drive it — see the M5 screens.
-## Paint order is child order: MapScene (world) → path overlay → waystones →
-## veil → chrome. Pins sit on `projected_seats()`. Chips, sealed-door (#217)
+## Paint order is child order: MapScene (world) → marker glow → waystones →
+## chips → chrome. Pins sit on `projected_seats()`. Chips, sealed-door (#217)
 ## and HUD stay 2D.
 
 signal node_chosen(index: int)
@@ -63,14 +63,13 @@ var _map_scene: MapScene = null
 var _path_band: MapBand.PathBand = null
 var _chip_band: MapBand.ChipBand = null
 var _layout_result: MapLayoutResult = null
+var _layout_data: Dictionary = {}
 var _layout_input_digest: String = ""
 var _layout_diagnostics: Dictionary = {}
 var _layout_failure: Dictionary = {}
 ## Focused tests replace only the pure compiler call; production leaves this empty.
 var _layout_compile: Callable = Callable()
-## Projection is shared by waystone layout, graph paint and marker queries.
-## The old path rebuilt all 65 seats for every edge endpoint, turning one
-## production frame into thousands of identical camera transforms (#447).
+## Projection is shared by waystone layout and marker queries.
 var _projected_seats_cache: PackedVector2Array = PackedVector2Array()
 var _projected_pose: Vector2 = Vector2(INF, INF)
 var _projected_zoom_stop: int = -1
@@ -90,12 +89,11 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	_trail_layout = LayoutBook.resolve(&"map", shape)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
-	# World → path overlay → waystones → veil → chrome: child order is paint order.
+	# World → marker glow → waystones → chips → chrome: child order is paint order.
 	_build_world_surface()
 	_build_bands()
 	_build_waystones()
-	# Between the stones and the weather: the chips label the play plane, so they
-	# sit on it, and the veil still drifts in front of them.
+	# Chips label the play plane and stay beneath the chrome.
 	_chip_band = MapBand.ChipBand.new()
 	_chip_band.host = self
 	add_child(_chip_band)
@@ -359,6 +357,7 @@ func refresh(run: RunState) -> void:
 		_waystones[i].set_state(live.has(i), map.is_cleared(i), i == map.at)
 		if first_live == null and live.has(i):
 			first_live = _waystones[i]
+	_sync_waylights()
 	if live.is_empty():
 		_hint_label.visible = true
 		_hint_label.text = Locale.active.t("ui.pilgrimage.roadEnds")
@@ -502,6 +501,7 @@ func _bind_compiled_layout() -> void:
 	if final_result == null:
 		return _fail_compiled_layout(_map_scene.layout_failure())
 	_layout_result = final_result
+	_layout_data = final_result.identity_dict()
 	_layout_failure.clear()
 	_layout_diagnostics["live_binding"] = _map_scene.layout_diagnostics()
 	_layout_diagnostics["layout_digest"] = final_result.digest()
@@ -510,6 +510,7 @@ func _bind_compiled_layout() -> void:
 
 func _fail_compiled_layout(failure: Dictionary) -> void:
 	_layout_result = null
+	_layout_data.clear()
 	_layout_failure = failure.duplicate(true)
 	if _layout_failure.is_empty():
 		_layout_failure = {
@@ -529,6 +530,37 @@ func _fail_compiled_layout(failure: Dictionary) -> void:
 func _quality_registry() -> Dictionary:
 	var value: Variant = _MAP_QUALITY.data
 	return value if typeof(value) == TYPE_DICTIONARY else {}
+
+
+func _sync_waylights() -> void:
+	if _map_scene == null or _layout_result == null:
+		return
+	if not _map_scene.set_waylight_states(_route_states()):
+		push_error("WorldMapScreen cannot bind complete depth-tested route states")
+
+
+func _route_states() -> Dictionary:
+	var out: Dictionary = {}
+	if _layout_result == null:
+		return out
+	var by_id: Dictionary = {}
+	for i: int in range(map.nodes.size()):
+		by_id[map.nodes[i].id] = i
+	var reachable: Array[int] = map.reachable()
+	var edges: Dictionary = _layout_data.get("edges", {})
+	for edge_id: String in MapLayoutCanonical.sorted_keys(edges):
+		var edge: Dictionary = edges[edge_id]
+		var from_i: int = MapLayoutCanonical.int_value(by_id.get(str(edge["from"]), -1))
+		var to_i: int = MapLayoutCanonical.int_value(by_id.get(str(edge["to"]), -1))
+		if from_i < 0 or to_i < 0:
+			return {}
+		var state: StringName = MapWaylightTracer.STATE_COLD
+		if map.is_cleared(from_i) and map.is_cleared(to_i):
+			state = MapWaylightTracer.STATE_WALKED
+		elif map.at == from_i and reachable.has(to_i):
+			state = MapWaylightTracer.STATE_OPEN
+		out[edge_id] = state
+	return out
 
 
 func _ordered_layout_anchors(result: MapLayoutResult = _layout_result) \
@@ -614,6 +646,7 @@ func _pin_hit() -> float:
 ## act in a run — domain map generation stays the run's act (scenery only).
 func set_act_scenery(stage_act: int) -> void:
 	_set_act_theme(stage_act)
+	_sync_waylights()
 	if content != null and _act < content.acts.size() and _title_label != null:
 		var act: Dictionary = content.acts[_act]
 		_title_label.text = _act_line(
@@ -694,6 +727,7 @@ func choose(i: int) -> bool:
 	var was_unlit: bool = map.nodes[i].unlit
 	if _travelling or not map.enter(i):
 		return false
+	_sync_waylights()
 	for ws: GlassWaystone in _waystones:
 		ws.set_state(false, ws.cleared)  # travel locks the road
 	if instant:
@@ -754,38 +788,33 @@ func _on_arrived(i: int) -> void:
 	node_chosen.emit(i)
 
 
-## The one control point for a trail edge, shared by the drawn dashes
-## (`MapBand.PathBand._draw_graph`) and by the marker gliding along them.
-##
-## Rising bows up, falling bows down so crossing paths pull apart rather than
-## stacking, SCALED by how far the edge actually climbs — a same-lane run is then
-## straight by construction. It used to be `signf(to.y - from.y) * 10.0`, which
-## is 0 only on an exact tie, and `node.jx * 6.0` jitter guarantees no tie, so
-## every "straight" edge took the full bow off a sub-pixel difference (#69).
-##
-## It lives here, in one place, because the same expression written twice is how
-## it went wrong: the marker's copy kept the old `signf` through the first draft
-## of that fix while its comment claimed it was "the same control the PathBand
-## edges use" (PR #78 PM R1). One function cannot disagree with itself.
-func edge_control(from: Vector2, to: Vector2) -> Vector2:
-	var lane_rise: float = clampf((to.y - from.y) / maxf(_lane_gap(), 1.0), -1.0, 1.0)
-	return (from + to) * 0.5 + Vector2(0.0, lane_rise * 10.0)
+## The traveller's world point. Travel samples the compiled centreline by arc
+## length; rest uses the same compiled node anchor as the waystone.
+func marker_world_position() -> Vector3:
+	if _layout_result == null or map.at < 0 or map.at >= map.nodes.size():
+		return Vector3.INF
+	if _travelling and _travel_from_i >= 0 and _travel_from_i < map.nodes.size():
+		var edge_id: String = MapLayoutInput.edge_id(
+			map.nodes[_travel_from_i].id, map.nodes[map.at].id)
+		var edges: Dictionary = _layout_data.get("edges", {})
+		var edge_v: Variant = edges.get(edge_id)
+		if typeof(edge_v) == TYPE_DICTIONARY:
+			var edge: Dictionary = edge_v
+			return MapWaylightTracer.point_at_progress(edge, _travel_t)
+	var anchors: Dictionary = _layout_data.get("node_anchors", {})
+	var anchor_v: Variant = anchors.get(map.nodes[map.at].id)
+	return _v3(anchor_v) if MapLayoutCanonical.vector(anchor_v, 3) else Vector3.INF
 
 
-## The glow's live screen point — bezier mid-glide, seated otherwise, stage
-## centre before any node. Recomputed each call so cam/drift stay coherent.
+## Project only after sampling in world space. The permitted overlay is the
+## traveller glow; it never reconstructs or paints route topology.
 func marker_screen_position() -> Vector2:
-	if map.at < 0 or map.at >= map.nodes.size():
+	var world: Vector3 = marker_world_position()
+	if not world.is_finite() or _map_scene == null:
 		return size * 0.5
-	var to: Vector2 = _node_pos(map.nodes[map.at])
-	if not _travelling or _travel_from_i < 0 \
-			or _travel_from_i >= map.nodes.size():
-		return to
-	var from: Vector2 = _node_pos(map.nodes[_travel_from_i])
-	var control: Vector2 = edge_control(from, to)
-	var t: float = _travel_t
-	var u: float = 1.0 - t
-	return from * u * u + control * 2.0 * u * t + to * t * t
+	var projected: PackedVector2Array = _map_scene.project_anchors(
+		PackedVector3Array([world]))
+	return projected[0] if not projected.is_empty() else size * 0.5
 
 
 # ---------------------------------------------------------------- frame
@@ -875,12 +904,6 @@ func _node_pos(node: MapNode) -> Vector2:
 	var i: int = map.nodes.find(node)
 	var seats: PackedVector2Array = projected_seats()
 	return seats[i] if i >= 0 and i < seats.size() else Vector2.ZERO
-
-
-## Lane spacing across the path. Col 3 is centre.
-func _lane_gap() -> float:
-	return clampf(size.y * _trail_num("laneRate", 0.06),
-		_trail_num("laneMin", 46.0), _trail_num("laneMax", 50.0))
 
 
 func _v3(value: Variant) -> Vector3:

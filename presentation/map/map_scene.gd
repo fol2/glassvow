@@ -114,6 +114,7 @@ var _road_profiles: Array[Dictionary] = []
 ## Flat list of segment endpoints (a, b, a, b, ...) in world XZ, handed down by
 ## the screen that owns the graph. MapScene stays instantiable without one.
 var _road_segments: PackedVector3Array = PackedVector3Array()
+var _waylights: Dictionary[String, MapWaylightTracer] = {}
 var _layout_result: MapLayoutResult = null
 var _layout_diagnostics: Dictionary = {}
 var _layout_failure: Dictionary = {}
@@ -275,6 +276,27 @@ func layout_failure() -> Dictionary:
 
 func road_segments() -> PackedVector3Array:
 	return _road_segments.duplicate()
+
+
+func set_waylight_states(states: Dictionary) -> bool:
+	var ids: Array[String] = MapLayoutCanonical.sorted_keys(_waylights)
+	if MapLayoutCanonical.sorted_keys(states) != ids:
+		return false
+	for edge_id: String in ids:
+		var tracer: MapWaylightTracer = _waylights[edge_id]
+		var state: StringName = StringName(str(states[edge_id]))
+		if not tracer.can_set_route_state(state):
+			return false
+	var changed: bool = false
+	for edge_id: String in ids:
+		var tracer: MapWaylightTracer = _waylights[edge_id]
+		var state: StringName = StringName(str(states[edge_id]))
+		changed = changed or tracer.route_state() != state
+		if not tracer.set_route_state(state):
+			return false
+	if changed:
+		_repaint()
+	return true
 
 
 func _add_hero_contract(anchors: Dictionary, zones: Dictionary, role: String,
@@ -910,9 +932,11 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 	var final_result: MapLayoutResult = MapLayoutResult.create(data)
 	if final_result == null:
 		return _fail_layout("filtered result is invalid")
+	var edges: Dictionary = data["edges"]
+	if not _bind_waylights(edges):
+		return _fail_layout("compiled edge cannot configure a bounded waylight")
 	_layout_result = final_result
 	_layout_failure.clear()
-	var edges: Dictionary = data["edges"]
 	_road_segments = _flatten_edges(edges)
 	_layout_diagnostics = {
 		"status": "BOUND",
@@ -937,6 +961,7 @@ func _fail_layout(reason: String) -> MapLayoutResult:
 	}
 	_layout_diagnostics = {"status": "FAILED", "failure": _layout_failure.duplicate(true)}
 	_road_segments = PackedVector3Array()
+	_clear_waylights()
 	_place_scenery({})
 	_build_road()
 	_repaint()
@@ -952,6 +977,29 @@ func _flatten_edges(edges: Dictionary) -> PackedVector3Array:
 			out.append(_v3(points[i]))
 			out.append(_v3(points[i + 1]))
 	return out
+
+
+func _bind_waylights(edges: Dictionary) -> bool:
+	_clear_waylights()
+	var index: int = 0
+	for edge_id: String in MapLayoutCanonical.sorted_keys(edges):
+		var edge: Dictionary = edges[edge_id]
+		var tracer: MapWaylightTracer = MapWaylightTracer.new()
+		tracer.name = "Waylight%03d" % index
+		if not tracer.configure_route(edge, MapWaylightTracer.STATE_COLD):
+			tracer.free()
+			_clear_waylights()
+			return false
+		_world.add_child(tracer)
+		_waylights[edge_id] = tracer
+		index += 1
+	return true
+
+
+func _clear_waylights() -> void:
+	for tracer: MapWaylightTracer in _waylights.values():
+		tracer.free()
+	_waylights.clear()
 
 
 func _scenery_rejection(footprint: PackedVector2Array,

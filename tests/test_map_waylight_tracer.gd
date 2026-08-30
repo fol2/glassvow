@@ -46,6 +46,12 @@ static func run(fails: Array[String]) -> void:
 	var walked_data: Color = tracer.instance_custom_data()[0]
 	_check(fails, cold_data[0] != open_data and open_data != walked_data
 		and cold_data[0] != walked_data, "cold/open/walked state payloads stay distinct")
+	var before_rejected_state: Array[Color] = tracer.instance_custom_data()
+	material.no_depth_test = true
+	_check(fails, not tracer.set_route_state(MapWaylightTracer.STATE_COLD)
+		and tracer.instance_custom_data() == before_rejected_state,
+		"state mutation fails closed when depth testing is disabled")
+	material.no_depth_test = false
 	var obstacle: Array[Dictionary] = [{"id": "box", "polygon": PackedVector2Array([
 		Vector2(-1.0, -1.0), Vector2(-1.0, 1.0), Vector2(1.0, 1.0), Vector2(1.0, -1.0)])}]
 	var routed: Dictionary = MapSingleEdgeRouter.route(

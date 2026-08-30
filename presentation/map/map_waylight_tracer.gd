@@ -57,11 +57,11 @@ func configure_route(edge_record: Dictionary, state: StringName = STATE_COLD) ->
 	return set_route_state(state)
 
 func set_route_state(state: StringName) -> bool:
-	if not is_route_state(state) or multimesh == null or _instance_transforms.is_empty():
+	if not can_set_route_state(state):
 		return false
 	var count: int = _instance_transforms.size()
-	if multimesh.instance_count != count:
-		return false
+	if state == _state and _instance_custom_data.size() == count:
+		return true
 	_state = state
 	_instance_custom_data.resize(count)
 	for i: int in range(count):
@@ -71,6 +71,11 @@ func set_route_state(state: StringName) -> bool:
 		multimesh.set_instance_color(i, route_state_color(state))
 		multimesh.set_instance_custom_data(i, data)
 	return true
+
+func can_set_route_state(state: StringName) -> bool:
+	return is_route_state(state) and _depth_test_enabled() \
+		and multimesh != null and not _instance_transforms.is_empty() \
+		and multimesh.instance_count == _instance_transforms.size()
 
 func geometry_digest() -> String:
 	return _geometry_digest
@@ -104,6 +109,17 @@ func overhead() -> Dictionary:
 static func is_route_state(state: StringName) -> bool:
 	return state == STATE_COLD or state == STATE_OPEN or state == STATE_WALKED
 
+static func point_at_progress(edge_record: Dictionary, progress: float) -> Vector3:
+	var points: Array[Vector3] = _route_points(edge_record)
+	if points.size() < 2:
+		return Vector3.INF
+	var total: float = 0.0
+	for i: int in range(points.size() - 1):
+		total += points[i].distance_to(points[i + 1])
+	if total <= WORLD_EPSILON_M:
+		return Vector3.INF
+	return _point_at_distance(points, total * clampf(progress, 0.0, 1.0))
+
 static func route_state_code(state: StringName) -> float:
 	match state:
 		STATE_OPEN:
@@ -135,6 +151,10 @@ func _rebuild(transforms: Array[Transform3D]) -> void:
 		next.set_instance_transform(i, _instance_transforms[i])
 	multimesh = next
 	_geometry_builds += 1
+
+func _depth_test_enabled() -> bool:
+	return _waylight_material != null and not _waylight_material.no_depth_test \
+		and _waylight_material.depth_draw_mode != BaseMaterial3D.DEPTH_DRAW_DISABLED
 
 static func _route_points(edge_record: Dictionary) -> Array[Vector3]:
 	var out: Array[Vector3] = []
