@@ -1,0 +1,401 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-7c8a3ee7 Emberglass Memory source identity v1",
+  "state": "FROZEN_BEFORE_EXECUTION",
+  "identity": {
+    "taskSsotBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "authorityCommentId": 5468704389,
+    "authorityBodySha256": "fca3a0142f3a7e55457b448a7acecab69bb14407005bc1c6354e5b740c297dd7",
+    "grammarResultCommentId": 5468805233,
+    "grammarResultBodySha256": "b50a212a57fb1c84b9c43ee512d09bdd70a749d6b3887401d13e46dd449d20af",
+    "archiveParent": "7c8a3ee7d3f297bec0d2888a9a5d3fefa25378ce",
+    "immutableClosureHead": "c69b2752f8a52c0d50151ba083a02948180a0846",
+    "selectedCandidate": "emberglass-memory-one-carry"
+  },
+  "immutableInputs": {
+    "task-capsule-5468704389-v48.json": "3ee6bcc474d5f611d34f09dca504b9f104815ea92b6d176134a1006d53e4db89",
+    "task-capsule-5468805233-v50.json": "3893c3a4b539d1c5eb9f64531073337f31f566b4ae0b57fc4107e8bfc6d6eb68",
+    "protocols/post-c69b2752-persistent-contract-grammar-v1.json": "9748055155e6e484d0486e0d696903a894992ff5b05877ca69c83cec63abca4c",
+    "summaries/post-c69b2752-persistent-contract-grammar-v1.json": "1c0b52ec2d8cab27ea69436a77dd22838b3f1b6ad1a2851246dc7e02fb897e7b",
+    "reviews/post-c69b2752-persistent-contract-h1-source-v1.json": "fc3348a6bcad8f17005e514908d2d1f585d587b79ff4c973e1248a0f64f14424",
+    "reviews/post-c69b2752-persistent-contract-h2-alias-v1.json": "e6ace34ecb697e6b12a8ada2fa554ad2d46c707fa6380bfc26f123361f232246",
+    "reviews/post-c69b2752-persistent-contract-h3-policy-v1.json": "15d54a78e2cf04a3641cad0ddcb432d68d379f8a5e3b91d334a6c93378cb0a42"
+  },
+  "sourceIdentity": {
+    "head": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "compatibilityRange": "Godot stable 4.7.2+",
+    "selectedExperimentBinaryVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinaryPath": "/opt/homebrew/bin/godot",
+    "godotBinaryResolvedPath": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "baselineWorktree": "/Users/jamesto/Research/glassvow-p9-421/persistent-emberglass-v1-baseline",
+    "candidateWorktree": "/Users/jamesto/Research/glassvow-p9-421/persistent-emberglass-v1-source",
+    "baselineStatus": [
+      "?? tools/research_421_emberglass_direct_probe.gd",
+      "?? tools/research_421_emberglass_direct_probe.gd.uid"
+    ],
+    "candidateStatus": [
+      " M domain/rules/combat.gd",
+      "?? tools/research_421_emberglass_direct_probe.gd"
+    ],
+    "baselineFiles": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/research_421_emberglass_direct_probe.gd": "0bbd454216c59935a4d63cdf5666d9a88715066edeedbb07d0cd2e29aea97e96"
+    },
+    "candidateFiles": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "40d210990a268c0638fc5541d5b35216e2aa25005cb5ce0be370ba1eb453b606",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/research_421_emberglass_direct_probe.gd": "0bbd454216c59935a4d63cdf5666d9a88715066edeedbb07d0cd2e29aea97e96"
+    },
+    "probeSha256": "0bbd454216c59935a4d63cdf5666d9a88715066edeedbb07d0cd2e29aea97e96"
+  },
+  "reproductionArtefacts": {
+    "tools/research_421_emberglass_direct_probe.gd": "0bbd454216c59935a4d63cdf5666d9a88715066edeedbb07d0cd2e29aea97e96",
+    "research/issue-421/source/post-7c8a3ee7-emberglass-combat-v1.patch": "d566de26c788c58aac1018f65ec7ae7cdd3481f6a06f1d0523598e4c2f67d90c"
+  },
+  "question": "Do the separately switchable Emberglass charge and consume research paths preserve exact current-main identity when null or inapplicable, and otherwise change only the frozen one-unit persistent mediator and its exact projection?",
+  "competingHypotheses": {
+    "H1": "Every frozen source, null, aspect, ownership, invalid-carrier, charge, consume, cap-order and save/resume gate passes exactly, authorising only a separate non-causal shadow-capacity preregistration.",
+    "H0": "At least one complete exact gate fails; close this exact one-carry contract without repair or an adaptive alternative.",
+    "HI": "A frozen input or process is unavailable, output is incomplete, or the deterministic decision is unavailable at the cap; record inconclusive without rerun."
+  },
+  "contract": {
+    "researchId": "researchEmberglassMemory",
+    "playerFacingName": "Emberglass Memory",
+    "playerFacingText": "As the Duskblade, preserve up to 1 unspent Ember after victory for the next combat.",
+    "carrier": "run.quest_scratch['relic.emberglassMemory'] with legal values 0 or 1 inside the existing save-v2 questScratch dictionary; no new save field or version.",
+    "ownership": "Fixed Duskblade ownership of one research-only uncommon relic. Ashwarden, unowned and missing-ID paths are exact null boundaries.",
+    "charge": "After every canonical victory and post-combat relic consumer has read terminal Embers, store min(terminal Embers, 1). Zero and loss store zero.",
+    "consume": "At the end of canonical start-relic application, after Ember-cap changes and start-Ember effects, clear and add the stored unit capped by the canonical current cap.",
+    "events": "Emit the canonical EMBER event only for a positive realised delta and RELIC_PROC whenever a valid carried unit is consumed. Research-only telemetry identifies charge, consume and loss-clear ordering.",
+    "rng": "Neither knob calls gameplay RNG. Every paired contrast freezes the same seed, source, content, baseline, probe, projection and estimator.",
+    "invalidCarrier": "Missing and integer zero remain byte-identical. Values other than integer zero or one canonicalise to zero without a proc, Ember event, RNG movement or neighbouring-state change.",
+    "excludedHelper": "CombatRules.gain_embers is deliberately not used because it invokes quest Ember tithe and would not preserve the exact carried unit.",
+    "acquisitionBoundary": "Ownership is fixed here. Natural acquisition and relic opportunity cost remain a separate causal factor and are not estimated or implemented."
+  },
+  "frozenFactors": {
+    "chargePath": {
+      "levels": [
+        "off",
+        "on"
+      ],
+      "mediator": "terminal winning Embers to one durable 0-or-1 carrier",
+      "notAnEndpointFactor": true
+    },
+    "consumePath": {
+      "levels": [
+        "off",
+        "on"
+      ],
+      "mediator": "one valid carrier to at most one realised starting Ember, then zero",
+      "notAnEndpointFactor": true
+    },
+    "ownership": {
+      "level": "fixed research ownership in enabled Dusk rows",
+      "status": "not varied as acquisition or rarity"
+    },
+    "payoff": {
+      "level": "mechanical one-unit projection only",
+      "status": "no whole-run causal endpoint is evaluated"
+    },
+    "factorCount": 2,
+    "description": "Charge and consume are separate identity-safe source knobs. This is not the old four-factor design and not a gameplay factorial."
+  },
+  "design": {
+    "type": "paired direct common-random-number source/identity gate with one complete look",
+    "seedIdentity": "Each row's literal signed-32-bit seed is used unchanged in baseline and candidate. Seeds are direct scenario identities, not ledger or protected acceptance cohorts.",
+    "exactNullRows": [
+      "omitted-carrier-start",
+      "omitted-win",
+      "explicit-off-carrier-start",
+      "explicit-off-win",
+      "wrong-aspect-start",
+      "wrong-aspect-win",
+      "unowned-start",
+      "missing-start",
+      "zero-start"
+    ],
+    "invalidRows": [
+      "invalid-negative-start",
+      "invalid-high-start",
+      "invalid-string-start",
+      "invalid-null-start"
+    ],
+    "activeRows": [
+      "producer-positive-win",
+      "producer-zero-win",
+      "producer-loss",
+      "consumer-ordinary-start",
+      "consumer-crown-order-start",
+      "consumer-saturated-manual-start",
+      "save-resume-composition"
+    ],
+    "rows": [
+      {
+        "id": "omitted-carrier-start",
+        "seed": 630421001,
+        "kind": "start",
+        "aspect": 0,
+        "owned": true,
+        "configured": false,
+        "carrier": 1
+      },
+      {
+        "id": "omitted-win",
+        "seed": 630421002,
+        "kind": "win",
+        "aspect": 0,
+        "owned": true,
+        "configured": false,
+        "terminalEmbers": 3
+      },
+      {
+        "id": "explicit-off-carrier-start",
+        "seed": 630421003,
+        "kind": "start",
+        "aspect": 0,
+        "owned": true,
+        "charge": false,
+        "consume": false,
+        "carrier": 1
+      },
+      {
+        "id": "explicit-off-win",
+        "seed": 630421004,
+        "kind": "win",
+        "aspect": 0,
+        "owned": true,
+        "charge": false,
+        "consume": false,
+        "terminalEmbers": 3
+      },
+      {
+        "id": "wrong-aspect-start",
+        "seed": 630421005,
+        "kind": "start",
+        "aspect": 1,
+        "owned": true,
+        "consume": true,
+        "carrier": 1
+      },
+      {
+        "id": "wrong-aspect-win",
+        "seed": 630421006,
+        "kind": "win",
+        "aspect": 1,
+        "owned": true,
+        "charge": true,
+        "terminalEmbers": 3
+      },
+      {
+        "id": "unowned-start",
+        "seed": 630421007,
+        "kind": "start",
+        "aspect": 0,
+        "owned": false,
+        "consume": true,
+        "carrier": 1
+      },
+      {
+        "id": "missing-start",
+        "seed": 630421008,
+        "kind": "start",
+        "aspect": 0,
+        "owned": true,
+        "consume": true
+      },
+      {
+        "id": "zero-start",
+        "seed": 630421009,
+        "kind": "start",
+        "aspect": 0,
+        "owned": true,
+        "consume": true,
+        "carrier": 0
+      },
+      {
+        "id": "invalid-negative-start",
+        "seed": 630421010,
+        "kind": "start",
+        "aspect": 0,
+        "owned": true,
+        "consume": true,
+        "carrier": -1
+      },
+      {
+        "id": "invalid-high-start",
+        "seed": 630421011,
+        "kind": "start",
+        "aspect": 0,
+        "owned": true,
+        "consume": true,
+        "carrier": 2
+      },
+      {
+        "id": "invalid-string-start",
+        "seed": 630421012,
+        "kind": "start",
+        "aspect": 0,
+        "owned": true,
+        "consume": true,
+        "carrier": "1"
+      },
+      {
+        "id": "invalid-null-start",
+        "seed": 630421013,
+        "kind": "start",
+        "aspect": 0,
+        "owned": true,
+        "consume": true,
+        "carrier": null
+      },
+      {
+        "id": "producer-positive-win",
+        "seed": 630421014,
+        "kind": "win",
+        "aspect": 0,
+        "owned": true,
+        "charge": true,
+        "terminalEmbers": 3,
+        "additionalRelics": [
+          "crownOfTheHearth"
+        ]
+      },
+      {
+        "id": "producer-zero-win",
+        "seed": 630421015,
+        "kind": "win",
+        "aspect": 0,
+        "owned": true,
+        "charge": true,
+        "carrier": 1,
+        "terminalEmbers": 0
+      },
+      {
+        "id": "producer-loss",
+        "seed": 630421016,
+        "kind": "loss",
+        "aspect": 0,
+        "owned": true,
+        "charge": true,
+        "carrier": 1,
+        "terminalEmbers": 3
+      },
+      {
+        "id": "consumer-ordinary-start",
+        "seed": 630421017,
+        "kind": "start",
+        "aspect": 0,
+        "owned": true,
+        "consume": true,
+        "carrier": 1
+      },
+      {
+        "id": "consumer-crown-order-start",
+        "seed": 630421018,
+        "kind": "start",
+        "aspect": 0,
+        "owned": true,
+        "consume": true,
+        "carrier": 1,
+        "omen": "emberWind",
+        "additionalRelics": [
+          "crownOfCinders"
+        ]
+      },
+      {
+        "id": "consumer-saturated-manual-start",
+        "seed": 630421019,
+        "kind": "manual-start",
+        "aspect": 0,
+        "owned": true,
+        "consume": true,
+        "carrier": 1,
+        "startEmbers": 9,
+        "startCap": 9
+      },
+      {
+        "id": "save-resume-composition",
+        "seed": 630421020,
+        "kind": "composition",
+        "aspect": 0,
+        "owned": true,
+        "charge": true,
+        "consume": true,
+        "terminalEmbers": 3
+      }
+    ],
+    "mechanisticallyJustifiedInteractions": [
+      "Charge by consume is checked only by uninterrupted versus save/resume composition and once-only clearing; no endpoint interaction is fitted.",
+      "Consume by canonical cap/start-Ember order is checked at ordinary, Ember Wind plus Crown of Cinders, and saturated-cap anchors.",
+      "Aspect by ownership is a deterministic inert boundary, not an estimated gameplay interaction."
+    ],
+    "aliasStructure": "Current-main, candidate omitted and candidate explicit-off alias exactly. Wrong aspect, unowned, missing carrier and integer-zero carrier also alias exactly. Invalid values may differ only by canonicalising the carrier to zero. Active charge and consume may differ only through the frozen carrier, realised Ember projection and exact candidate events.",
+    "normalisationWhitelist": [
+      "factorAvailable metadata differs false versus true and is removed from every cross-source comparison",
+      "the namespaced carrier is removed only for invalid or active comparisons",
+      "research421EmberglassMemory and adjacent researchEmberglassMemory RELIC_PROC events are removed only where the exact stage requires them",
+      "the immediately adjacent canonical EMBER event and realised Ember projection delta are removed only for positive consume"
+    ],
+    "forbiddenNormalisation": "No RNG, policy, content, save-envelope key, neighbouring questScratch key, HP, cap, draw, hand, enemy, result, canonical event, terminal Ember or non-candidate relic event may be removed or changed."
+  },
+  "estimands": {
+    "exactNullIdentity": "Zero byte mismatches across all nine null rows after removing factorAvailable metadata only.",
+    "invalidCarrierIsolation": "Each invalid carrier becomes integer zero, emits no candidate event and has zero remaining mismatch after removing only that carrier.",
+    "chargeProjection": "Positive win stores one after Crown of the Hearth and before VICTORY; zero and loss store zero without a payoff proc.",
+    "consumeProjection": "Ordinary 0 to 1, Ember Wind plus Crown of Cinders 4 to 5 at cap 12, and saturated 9 to 9 with once-only clearing.",
+    "saveComposition": "Uninterrupted and save/resume lanes are byte exact within source; charge once, consume once and a second start does not duplicate.",
+    "exhaustiveDifference": "After the frozen narrow whitelist, every invalid and active baseline/candidate row is byte exact, including RNG.",
+    "notEstimated": "Natural opportunity frequency, policy response, whole-run endpoint effect, acquisition, rarity, balance, product acceptance, protected confirmation or P9 acceptance."
+  },
+  "executionCeilings": {
+    "maximumRowsPerSource": 20,
+    "maximumControlledScenarioExecutions": 40,
+    "maximumGodotProcesses": 2,
+    "maximumSecondsPerGodotProcess": 45,
+    "maximumTotalWallTimeSeconds": 90,
+    "maximumMechanicalCorrectionsAfterFreeze": 0,
+    "maximumSimulatorRows": 0,
+    "maximumLedgerReads": 0,
+    "maximumLedgerWrites": 0,
+    "maximumProtectedSeedRows": 0,
+    "maximumProductMutations": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0
+  },
+  "executionAndStopping": {
+    "construction": "The frozen Python runner owns plan construction, both Godot invocations, content-addressed raw outputs, exact fitting and the stop/go result.",
+    "firstLook": "All 20 rows in both sources form the sole complete look. Every causal contrast uses the same literal seed, content, projection, baseline, probe and estimator.",
+    "order": [
+      "Verify immutable input, source, engine, worktree-status, runner, probe and reproduction hashes.",
+      "Write one canonical plan and invoke baseline once.",
+      "Invoke candidate once with the identical plan.",
+      "Apply the frozen exact gates and whitelist once, then write one decision summary."
+    ],
+    "stagedConstraint": "This cheap path/projection stage contains no simulator or comparably evaluated whole-run endpoint. Success may authorise only a separately preregistered non-causal shadow-capacity screen.",
+    "protectedSeedsExcluded": {
+      "acceptance": "3000-5199",
+      "reserve": "5200-5399"
+    },
+    "noRepair": "After this protocol is published, no source, row, seed, whitelist, threshold, process or order correction is permitted. A complete gate failure is futility; unavailable or incomplete execution is inconclusive."
+  },
+  "decisionRules": {
+    "success": "Exactly 40 controlled scenario executions complete in two Godot processes within 90 seconds, all exact gates pass, no fault occurs and simulator, ledger, protected-seed and product counts remain zero.",
+    "successAuthority": "Freeze this single source/identity representation and separately preregister the cheapest fixed-policy non-causal shadow-capacity screen. Do not add carried Ember to a whole-run arm, estimate payoff, vary acquisition or enter product code.",
+    "futility": "Any complete exact null, carrier, ordering, cap, event, save/resume, exhaustive-difference or RNG gate fails.",
+    "futilityAuthority": "Close this exact Emberglass one-carry contract without repair or a substituted value, then continue to the next evidence-backed structural mechanism inside #421.",
+    "inconclusive": "A frozen input or process is unavailable, an output is incomplete, or the deterministic result is unavailable by the preregistered cap.",
+    "inconclusiveAuthority": "Record inconclusive at cap without rerun, repair, endpoint inference or protected seeds."
+  },
+  "runner": {
+    "path": "tools/post_7c8a3ee7_emberglass_source_identity_v1.py",
+    "sha256": "17fe491b8ad2589b57f678754893d40dff033da52b10263c71c12dc04bde6ba6",
+    "selfTest": "PASS (4 checks)"
+  },
+  "claimBoundary": "This direct gate can establish only exact source, null, carrier, ordering, save/resume and RNG identity for the frozen research representation. It cannot establish natural capacity, causality, balance, product scope, package admission, protected-seed authority, #421 acceptance or the #108 P9 receipt."
+}

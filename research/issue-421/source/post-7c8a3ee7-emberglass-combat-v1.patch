@@ -1,0 +1,59 @@
+diff --git a/domain/rules/combat.gd b/domain/rules/combat.gd
+index 58c9b8c8..9879b599 100644
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -22,0 +23,4 @@ const POTION_IDS: Array[String] = [
++const RESEARCH421_EMBERGLASS_ID: String = "researchEmberglassMemory"
++const RESEARCH421_EMBERGLASS_KEY: String = "relic.emberglassMemory"
++static var _research421_emberglass_charge: bool = false
++static var _research421_emberglass_consume: bool = false
+@@ -29,0 +34,11 @@ func _init(content_db: ContentDB) -> void:
++static func configure_research421_emberglass_memory(
++	charge_enabled: bool, consume_enabled: bool
++) -> void:
++	_research421_emberglass_charge = charge_enabled
++	_research421_emberglass_consume = consume_enabled
++
++
++static func _research421_emberglass_owned(run: RunState) -> bool:
++	return run.aspect == 0 and run.has_relic(RESEARCH421_EMBERGLASS_ID)
++
++
+@@ -307,0 +323,21 @@ func _apply_start_relics(run: RunState, cb: CombatState) -> void:
++	if _research421_emberglass_consume and _research421_emberglass_owned(run):
++		var carried: int = 0
++		var has_carrier: bool = run.quest_scratch.has(RESEARCH421_EMBERGLASS_KEY)
++		var carried_v: Variant = run.quest_scratch.get(RESEARCH421_EMBERGLASS_KEY, 0)
++		if typeof(carried_v) == TYPE_INT and _ji(carried_v) == 1:
++			carried = 1
++		if carried == 1 or (has_carrier and (
++				typeof(carried_v) != TYPE_INT or _ji(carried_v) != 0)):
++			run.quest_scratch[RESEARCH421_EMBERGLASS_KEY] = 0
++		if carried == 1:
++			var before: int = cb.embers
++			cb.embers = clampi(cb.embers + 1, 0, cb.ember_cap)
++			var delta: int = cb.embers - before
++			if delta > 0:
++				cb.queue.append({"t": EventTypes.EMBER, "n": delta, "total": cb.embers})
++			_proc(cb, RESEARCH421_EMBERGLASS_ID)
++			cb.queue.append({
++				"t": &"research421EmberglassMemory", "stage": "consume",
++				"stored": carried, "realised": delta, "total": cb.embers,
++				"cap": cb.ember_cap,
++			})
+@@ -494,0 +531,5 @@ func lose_combat(run: RunState, cb: CombatState) -> void:
++	if _research421_emberglass_charge and _research421_emberglass_owned(run):
++		run.quest_scratch[RESEARCH421_EMBERGLASS_KEY] = 0
++		cb.queue.append({
++			"t": &"research421EmberglassMemory", "stage": "loss-clear", "stored": 0,
++		})
+@@ -512,0 +554,9 @@ func _win_combat(run: RunState, cb: CombatState) -> void:
++	if _research421_emberglass_charge and _research421_emberglass_owned(run):
++		var stored: int = mini(cb.embers, 1)
++		run.quest_scratch[RESEARCH421_EMBERGLASS_KEY] = stored
++		if stored == 1:
++			_proc(cb, RESEARCH421_EMBERGLASS_ID)
++			cb.queue.append({
++				"t": &"research421EmberglassMemory", "stage": "charge",
++				"terminal": cb.embers, "stored": stored,
++			})
