@@ -7,6 +7,7 @@ class FakeLayoutCompiler:
 	extends RefCounted
 	var calls: int = 0
 	var fail_next: bool = false
+	var drop_edge: bool = false
 
 	func compile(input: MapLayoutInput, _quality: Dictionary,
 			_assets: Dictionary) -> Dictionary:
@@ -41,6 +42,9 @@ class FakeLayoutCompiler:
 				"centerline": [_a3(from), _a3(bend), _a3(to)],
 				"corridor_width": 2.5,
 			}
+		if drop_edge and not edges.is_empty():
+			drop_edge = false
+			edges.erase(MapLayoutCanonical.sorted_keys(edges)[0])
 		var heroes: Dictionary = {}
 		var contract: Dictionary = source["hero_anchor_contract"]
 		var contract_anchors: Dictionary = contract["anchors"]
@@ -187,6 +191,14 @@ static func _compiled_result_binding(fails: Array[String]) -> void:
 			and screen._map_scene.road_segments().is_empty()
 			and screen.projected_seats().is_empty(),
 		"an invalid compile fails explicitly without legacy pin or road fallback")
+	compiler.drop_edge = true
+	run.seed += 1
+	screen.call(&"_bind_compiled_layout")
+	_check(fails, screen.layout_result() == null
+			and not screen.layout_failure().is_empty()
+			and screen._map_scene.road_segments().is_empty()
+			and screen.projected_seats().is_empty(),
+		"an incomplete compiled result fails closed")
 	tree.root.remove_child(screen)
 	screen.free()
 

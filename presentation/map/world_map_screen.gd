@@ -480,11 +480,27 @@ func _bind_compiled_layout() -> void:
 			}
 		return _fail_compiled_layout(compile_failure)
 	var compiled_result: MapLayoutResult = result_v
+	var result_data: Dictionary = compiled_result.identity_dict()
+	var result_nodes: Dictionary = result_data["node_anchors"]
+	var result_edges: Dictionary = result_data["edges"]
+	var expected_node_ids: Dictionary = {}
+	for node: Dictionary in nodes:
+		expected_node_ids[str(node["id"])] = true
+	var expected_edge_ids: Dictionary = {}
+	for edge: Dictionary in edges:
+		expected_edge_ids[str(edge["id"])] = true
+	if str(result_data["input_digest"]) != input_digest \
+			or MapLayoutCanonical.sorted_keys(result_nodes) \
+			!= MapLayoutCanonical.sorted_keys(expected_node_ids) \
+			or MapLayoutCanonical.sorted_keys(result_edges) \
+			!= MapLayoutCanonical.sorted_keys(expected_edge_ids):
+		return _fail_compiled_layout({
+			"kind": "compiler", "id": "result_coverage",
+			"reason": "compiled result does not exactly cover the live input",
+		})
 	var final_result: MapLayoutResult = _map_scene.bind_layout(compiled_result, quality)
-	if final_result == null or _ordered_layout_anchors(final_result).size() != map.nodes.size():
-		return _fail_compiled_layout(_map_scene.layout_failure() if final_result == null \
-			else {"kind": "compiler", "id": "node_anchors",
-				"reason": "compiled result does not cover the live graph"})
+	if final_result == null:
+		return _fail_compiled_layout(_map_scene.layout_failure())
 	_layout_result = final_result
 	_layout_failure.clear()
 	_layout_diagnostics["live_binding"] = _map_scene.layout_diagnostics()
