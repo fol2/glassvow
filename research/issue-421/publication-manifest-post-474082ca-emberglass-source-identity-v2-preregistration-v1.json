@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-research-preregistration",
+  "parentArchiveHead": "11eb6d60f1d74d1d2a047ed0351ee3db71b8c9b8",
+  "preregistrationHead": "474082ca9306b621643db50045890abc6190aef0",
+  "intendedRemoteRef": "research/issue-421-post-c69b2752-persistent-contract-evidence",
+  "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+  "frozenExperimentSource": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "authority": {
+    "decision": "AUTHORISE_ONE_EMBERGLASS_V2_MECHANICAL_CORRECTION",
+    "commentId": 5470097429,
+    "commentBodySha256": "c0e5587aaf3dd79473f3489b33b416e81d8eaabeb6b27587c62022b741e57df6"
+  },
+  "preregistration": {
+    "commentId": 5470131672,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5470131672",
+    "commentBodySha256": "71c080ca69960762394ebd66460ba990f860a4fe80929edfd0680aa0d9fb0537"
+  },
+  "files": [
+    {
+      "path": "research/issue-421/protocols/post-7c8a3ee7-emberglass-source-identity-v2.json",
+      "sha256": "28562ac99db14804cbe2c06748e2e22f511e74e36b951510d5cf2f792b573e82"
+    },
+    {
+      "path": "research/issue-421/tools/post_7c8a3ee7_emberglass_source_identity_v2.py",
+      "sha256": "b75e6524506d109426621df2d94ccb00811df554d1422e3b66d9b01eea60645e"
+    },
+    {
+      "path": "research/issue-421/audits/post-7c8a3ee7-emberglass-source-identity-v2-preregistration-v1.json",
+      "sha256": "e0ead68d49f0d11a39c0c12600eca4afd128425bb5ea8b6ced7a6078739ce294"
+    },
+    {
+      "path": "research/issue-421/comments/post-7c8a3ee7-emberglass-source-identity-v2-preregistration-v1.md",
+      "sha256": "71c080ca69960762394ebd66460ba990f860a4fe80929edfd0680aa0d9fb0537"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5470131672-v54.json",
+      "sha256": "ff4fb796cf92c4b13507657480218d3423631b84fd3e275f881ad9f2cafaa7b0"
+    }
+  ],
+  "correction": {
+    "version": 2,
+    "preserveV1": true,
+    "onlyScientificExecutionChange": "Resolve the frozen plan and output paths to absolute paths before both Godot invocations.",
+    "allScientificSectionsInheritedByHash": true,
+    "furtherCorrections": 0,
+    "candidateSubstitution": false,
+    "grammarWidening": false
+  },
+  "preExecutionAccounting": {
+    "GodotProcesses": 0,
+    "directControlledExecutions": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0
+  },
+  "claimBoundary": "This packet freezes the one authorised v2 mechanical correction before execution. It establishes no identity, capacity, causal, balance, product, #421-acceptance or #108-P9 claim."
+}

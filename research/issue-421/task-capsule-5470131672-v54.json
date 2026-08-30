@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "emberglass-v2-source-identity-preregistered",
+  "taskSsot": {
+    "issueBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "decision": "AUTHORISE_ONE_EMBERGLASS_V2_MECHANICAL_CORRECTION",
+    "commentId": 5470097429,
+    "bodySha256": "c0e5587aaf3dd79473f3489b33b416e81d8eaabeb6b27587c62022b741e57df6"
+  },
+  "sourceIdentities": {
+    "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+    "frozenExperimentSourceAndBaseline": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "authorityIntakeReceiptHead": "11eb6d60f1d74d1d2a047ed0351ee3db71b8c9b8",
+    "preregistrationHead": "474082ca9306b621643db50045890abc6190aef0"
+  },
+  "preregistration": {
+    "protocolPath": "protocols/post-7c8a3ee7-emberglass-source-identity-v2.json",
+    "protocolSha256": "28562ac99db14804cbe2c06748e2e22f511e74e36b951510d5cf2f792b573e82",
+    "runnerPath": "tools/post_7c8a3ee7_emberglass_source_identity_v2.py",
+    "runnerSha256": "b75e6524506d109426621df2d94ccb00811df554d1422e3b66d9b01eea60645e",
+    "auditPath": "audits/post-7c8a3ee7-emberglass-source-identity-v2-preregistration-v1.json",
+    "auditSha256": "e0ead68d49f0d11a39c0c12600eca4afd128425bb5ea8b6ced7a6078739ce294",
+    "commentId": 5470131672,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5470131672",
+    "commentBodySha256": "71c080ca69960762394ebd66460ba990f860a4fe80929edfd0680aa0d9fb0537"
+  },
+  "frozenExecution": {
+    "selectedContract": "emberglass-memory-one-carry",
+    "rowsPerSource": 20,
+    "plannedControlledScenarioExecutions": 40,
+    "GodotProcesses": 2,
+    "secondsPerProcess": 45,
+    "totalWallTimeSeconds": 90,
+    "furtherCorrections": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "modelContextTokensDuringExecutionAndDecision": 0,
+    "command": "python3 research/issue-421/tools/post_7c8a3ee7_emberglass_source_identity_v2.py --protocol research/issue-421/protocols/post-7c8a3ee7-emberglass-source-identity-v2.json --baseline-root /Users/jamesto/Research/glassvow-p9-421/persistent-emberglass-v1-baseline --candidate-root /Users/jamesto/Research/glassvow-p9-421/persistent-emberglass-v1-source --godot /opt/homebrew/bin/godot --evidence-dir research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v2 --out research/issue-421/summaries/post-7c8a3ee7-emberglass-source-identity-v2.json"
+  },
+  "safeState": {
+    "v1Mutated": false,
+    "v2GodotProcesses": 0,
+    "v2DirectControlledExecutions": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "nextAction": "Execute the frozen v2 command exactly once and apply only its inherited deterministic success, futility or inconclusive rule."
+}
