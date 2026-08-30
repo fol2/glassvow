@@ -60,8 +60,8 @@ const TERMINUS_XZ: Vector2 = Vector2(40.4, 0.0)
 ## 0.743) where the parametric one it replaced was authored at 10.9 m long and
 ## shrunk by 0.78. Matching that one's world height wanted 9.7, and at 9.7 the
 ## opening frame cuts the hall off at its left edge — the same failure
-## THRESHOLD_XZ was moved to fix. 7.0 keeps it whole: 6.9 m long, a 5.4 m ridge
-## and 6.5 m to the top of the smoke, so it stands among the 6.2 m ash trunks
+## THRESHOLD_XZ was moved to fix. 6.9 keeps it whole: 6.8 m long, a 5.3 m ridge
+## and 6.4 m to the top of the smoke, so it stands among the 6.2 m ash trunks
 ## rather than over them, and the doorway is legible at the played zoom.
 # World scale comes from the act1-vigil profile.
 ## Metres between paving slabs along a road segment.

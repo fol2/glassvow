@@ -330,9 +330,13 @@ static func _compiled_layout(fails: Array[String]) -> void:
 	var contract: Dictionary = scene.call(&"layout_hero_contract")
 	var terminus_anchor: Dictionary = contract.get("anchors", {}).get(
 		"terminus", {})
+	var vigil_anchor: Dictionary = contract.get("anchors", {}).get("vigil", {})
 	_check(fails, _v3(terminus_anchor.get("position", Vector3.ZERO))
 			.is_equal_approx(Vector3(40.4, 0.0, 0.0)),
 		"terminus keeps the selected one-decimal screen-feasibility calibration")
+	_check(fails, _v3(vigil_anchor.get("scale", Vector3.ZERO))
+			.is_equal_approx(Vector3.ONE * 6.9),
+		"Vigil keeps the shared two-seed screen-feasibility calibration")
 	var candidates: PackedVector3Array = scene.prop_positions()
 	_check(fails, not assets.is_empty() and not contract.is_empty()
 			and candidates.size() > 2,
