@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "protocolId": "post-29389311-blind-literal-topology-screen-v1",
+  "reports": {
+    "L1": {
+      "reportSha256": "b8bb6d2ab85ac69b59097ef0cffd9796ec5b597f998c871cc1652ae19995b969",
+      "sourceExposure": 0,
+      "lexicon": {
+        "CARD_PLAY": ["card play"],
+        "PRE_RESOLUTION_REACTION": ["pre resolution reaction"],
+        "POST_RESOLUTION_REACTION": ["post resolution reaction"],
+        "TURN_START": ["turn start"],
+        "TURN_END": ["turn end"],
+        "DAMAGE_DECLARED": ["damage declared"],
+        "DAMAGE_APPLIED": ["damage applied"],
+        "ENEMY_ACTION_DECLARED": ["enemy action declared"],
+        "ENEMY_ACTION_RESOLVED": ["enemy action resolved"],
+        "CARD_DRAWN": ["card drawn"],
+        "CARD_DISCARDED": ["card discarded"],
+        "CARD_EXHAUSTED": ["card exhausted"],
+        "NEXT_CARD_PLAY": ["next card play"],
+        "NEXT_ENEMY_ACTION": ["next enemy action"],
+        "PLAYER": ["player"],
+        "ENEMY": ["enemy"],
+        "ENEMY_ACTION": ["enemy action"],
+        "CARD_IN_PLAY": ["card in play"],
+        "NEXT_DRAW": ["next draw"],
+        "DRAW_PILE_TOP": ["draw pile top"],
+        "ACTION_QUEUE": ["action queue"],
+        "RESOURCE_POOL": ["resource pool"],
+        "DAMAGE_PACKET": ["damage packet"],
+        "STATUS": ["status"]
+      }
+    },
+    "L2": {
+      "reportSha256": "38f6b9ca7f676f7477dc11a63dfa291c1ec924424390a7cf5753791685cc206d",
+      "sourceExposure": 0,
+      "lexicon": {
+        "CREATE": ["create"],
+        "CANCEL": ["cancel"],
+        "DELAY": ["delay"],
+        "REDIRECT": ["redirect"],
+        "REPLACE": ["replace"],
+        "COPY": ["copy"],
+        "STORE": ["store"],
+        "RELEASE": ["release"],
+        "CONVERT": ["convert"],
+        "REORDER": ["reorder"],
+        "REVEAL": ["reveal"],
+        "PREPARE": ["prepare"]
+      }
+    }
+  }
+}

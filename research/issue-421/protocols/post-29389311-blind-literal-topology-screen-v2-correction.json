@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "correctionId": "post-29389311-blind-literal-topology-screen-v2-correction",
+  "recordedAtUtc": "2026-08-30T07:10:53Z",
+  "parentProtocolSha256": "cfea59dd85c897292e026a38cfed6002d6218543fb4f006d21ab4f35650e36d9",
+  "lexiconSha256": "e9d7b530439fd37af3abf4d1be0d8322ed4238aadc998fa0cf0075121adba7cc",
+  "mechanicalCorrection": {
+    "used": 1,
+    "cap": 1,
+    "timing": "before any live source-corpus run or output",
+    "reason": "Independent read-only preflight found that three required self-test claims were not isolated by the v1 synthetic cases.",
+    "changes": [
+      "Add a same-publisher two-source exclusion case.",
+      "Add an equal-source-count differing-publisher-count ranking case.",
+      "Move the duplicate identity assertion before the per-source cap can mask it.",
+      "Record one mechanical correction and write the sole live output to the v2 path."
+    ]
+  },
+  "frozenUnchanged": [
+    "source identities and hashes",
+    "blind lexicon phrases and order",
+    "topology codebook and key rule",
+    "passage definitions and normalisation",
+    "literal co-occurrence and support rules",
+    "deduplication, ranking and packet caps",
+    "wall-time and output ceilings",
+    "success, futility and inconclusive rules"
+  ],
+  "runner": {
+    "v1Sha256": "283765ebba518a660cf7c1842e299dad1dcbd739736006444d3c8eb77507027e",
+    "v2Sha256": "b012be440697424643345075f39b3399b9290c207c0d821ddf1cda26a1105ef5",
+    "v2SelfTest": "PASS"
+  },
+  "preLiveAccounting": {
+    "sourceCorpusReadsByVerifier": 0,
+    "liveRuns": 0,
+    "liveOutputs": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "simulatorRows": 0,
+    "protectedSeedRows": 0,
+    "candidatesConstructed": 0
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 5,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "blind-literal-topology-screen",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "parentArchiveHead": "293893110ba8d6337cca16df0ffdcad6aee17161",
+  "protocol": {
+    "path": "protocols/post-29389311-blind-literal-topology-screen-v1.json",
+    "sha256": "cfea59dd85c897292e026a38cfed6002d6218543fb4f006d21ab4f35650e36d9"
+  },
+  "execution": {
+    "blindBackgroundAgents": 2,
+    "sourceCorpusExposedToAgents": false,
+    "lexiconCorrectionCap": 0,
+    "runnerMechanicalCorrectionCap": 1,
+    "modelSourceCorpusTokens": 0,
+    "packetCapKeys": 12,
+    "packetCapPassagesPerKey": 20,
+    "outputByteCap": 200000,
+    "wallTimeSeconds": 60,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "candidatesConstructed": 0
+  },
+  "activeInvariants": [
+    "The five rules extracts are immutable source inputs, not semantic findings from the failed method.",
+    "L1 sees only timing and target labels; L2 sees only transform labels; neither sees source text.",
+    "The owner transcribes valid JSON once without phrase edits.",
+    "Only deterministic literal co-occurrence may build the bounded passage packet.",
+    "A packet match is not semantic validity, closure survival, a candidate, causal evidence or product fit.",
+    "Scoreline, Afterimage, closed families, protected identities and product truth remain untouched."
+  ],
+  "nextAction": "Publish the protocol, dispatch the two source-blind lexicon tasks, freeze their exact outputs, implement and self-test the minimal standard-library extractor, then execute one bounded live pass."
+}

@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-research-evidence",
+  "parentArchiveHead": "293893110ba8d6337cca16df0ffdcad6aee17161",
+  "intendedRemoteRef": "research/issue-421-post-29389311-blind-literal-topology-screen-evidence",
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "authority": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "commentId": 5466985701,
+    "commentBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "preregistrationCommentId": 5467285854,
+  "correctionCommentId": 5467323099,
+  "disposition": "FUTILITY_NO_TWO_SOURCE_TWO_PUBLISHER_LITERAL_SUPPORT",
+  "scientificAccounting": {
+    "blindAgents": 2,
+    "blindSourceExposures": 0,
+    "mechanicalCorrectionsUsed": 1,
+    "mechanicalCorrectionCap": 1,
+    "liveSourceCorpusRuns": 1,
+    "postRunOverwriteGuardRefusals": 1,
+    "sourceDocuments": 5,
+    "independentPublishers": 5,
+    "passagesScanned": 3012,
+    "observedLiteralKeys": 5,
+    "supportedLiteralKeys": 0,
+    "selectedKeys": 0,
+    "semanticReviews": 0,
+    "candidatesConstructed": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "MLRLOptimiserRuns": 0
+  },
+  "files": [
+    {
+      "path": "research/issue-421/protocols/post-29389311-blind-literal-topology-screen-v1.json",
+      "sha256": "cfea59dd85c897292e026a38cfed6002d6218543fb4f006d21ab4f35650e36d9"
+    },
+    {
+      "path": "research/issue-421/protocols/post-29389311-blind-literal-topology-screen-v2-correction.json",
+      "sha256": "06a080b3b7acc63609cbae7d2dfaf96f8b92cad6fc0b33b726dad68db7ea9183"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5466985701-v38.json",
+      "sha256": "31dcffbe0cfebb8bb9728e9f0a7945cff067e688352746ef875cb94f42ae5c4c"
+    },
+    {
+      "path": "research/issue-421/summaries/post-29389311-blind-literal-topology-lexicon-v1.json",
+      "sha256": "e9d7b530439fd37af3abf4d1be0d8322ed4238aadc998fa0cf0075121adba7cc"
+    },
+    {
+      "path": "research/issue-421/tools/post_29389311_blind_literal_topology_screen_v1.py",
+      "sha256": "283765ebba518a660cf7c1842e299dad1dcbd739736006444d3c8eb77507027e"
+    },
+    {
+      "path": "research/issue-421/tools/post_29389311_blind_literal_topology_screen_v2.py",
+      "sha256": "b012be440697424643345075f39b3399b9290c207c0d821ddf1cda26a1105ef5"
+    },
+    {
+      "path": "research/issue-421/summaries/post-29389311-blind-literal-topology-screen-v2.json",
+      "sha256": "804e2880a0d5b27e699e28c829a9fb0c5072e2f9537cb6aeb67c959e34957851"
+    },
+    {
+      "path": "research/issue-421/summaries/post-29389311-blind-literal-topology-screen-v2.md",
+      "sha256": "f937f0c831194e472d68ed82556c284cdf03a606c9d36a54cbfa7bfc9419bcb2"
+    }
+  ],
+  "copyrightBoundary": "The five source documents and complete extracted text remain temporary private inputs and are not archived. The result contains identities, hashes and owner-authored evidence only; no source passage text is published.",
+  "claims": [
+    "Both source-blind lexicons passed their frozen formal rules without adaptation.",
+    "The sole live source-corpus run hash-verified and scanned five sources and found no topology key with two-source, two-publisher literal support.",
+    "This closes only the literal-screen method; no semantic, causal, product, acceptance, P9 or broad mechanism conclusion follows."
+  ]
+}

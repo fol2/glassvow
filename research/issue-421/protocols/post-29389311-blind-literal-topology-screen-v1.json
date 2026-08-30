@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "protocolId": "post-29389311-blind-literal-topology-screen-v1",
+  "preregisteredAtUtc": "2026-08-30T07:01:15Z",
+  "repository": "fol2/glassvow",
+  "issue": 421,
+  "question": "Can a source-blind finite literal lexicon deterministically recover a bounded cross-publisher passage packet for one or more frozen combat topology keys without resuming failed full-rule model coding?",
+  "authorities": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "controllingCommentId": 5466985701,
+    "controllingCommentBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60",
+    "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2"
+  },
+  "parentEvidence": {
+    "archiveHead": "293893110ba8d6337cca16df0ffdcad6aee17161",
+    "failedMethodDisposition": "INCONCLUSIVE_PRIMARY_RULE_TOPOLOGY_CENSUS_AT_CORRECTION_CAP",
+    "retrievalRecordSha256": "c4fa11128c6769f59f744229cedf05f1f8414a94ba1e377b5b711dba6ea66d0c",
+    "semanticEndpointsReused": 0
+  },
+  "sourceIdentities": [
+    {
+      "id": "Q1",
+      "publisher": "Contention Games / Asmodee",
+      "extractedTextSha256": "b2cb3389cd4de128a63c5e6d36767661e1a0aa7c54932e0d1283631e73db3bd1"
+    },
+    {
+      "id": "Q3",
+      "publisher": "Wise Wizard Games",
+      "extractedTextSha256": "577c04d50b254b4f266dba56ddcdfc3b7661d884068143b5f2f5f824befe8032"
+    },
+    {
+      "id": "Q4",
+      "publisher": "Stone Blade Entertainment",
+      "extractedTextSha256": "a9c9ef6c682d8ad2c7ca6973d701d45d7cb5680693085746e5c34a26e9801ab7"
+    },
+    {
+      "id": "Q5",
+      "publisher": "Fantasy Flight Games",
+      "extractedTextSha256": "da30a765dde1a15e6acb5e68514a3d554a92851b1b5b408a22e69b5076b951dd"
+    },
+    {
+      "id": "Q6",
+      "publisher": "Legend Story Studios",
+      "extractedTextSha256": "10e3fb55eb0dd3c1fb22b4f415db6d14e5e329d118a2a9204355fda4d8c98a05"
+    }
+  ],
+  "topologyCodebook": {
+    "timings": [
+      "CARD_PLAY",
+      "PRE_RESOLUTION_REACTION",
+      "POST_RESOLUTION_REACTION",
+      "TURN_START",
+      "TURN_END",
+      "DAMAGE_DECLARED",
+      "DAMAGE_APPLIED",
+      "ENEMY_ACTION_DECLARED",
+      "ENEMY_ACTION_RESOLVED",
+      "CARD_DRAWN",
+      "CARD_DISCARDED",
+      "CARD_EXHAUSTED",
+      "NEXT_CARD_PLAY",
+      "NEXT_ENEMY_ACTION"
+    ],
+    "targetSurfaces": [
+      "PLAYER",
+      "ENEMY",
+      "ENEMY_ACTION",
+      "CARD_IN_PLAY",
+      "NEXT_DRAW",
+      "DRAW_PILE_TOP",
+      "ACTION_QUEUE",
+      "RESOURCE_POOL",
+      "DAMAGE_PACKET",
+      "STATUS"
+    ],
+    "transforms": [
+      "CREATE",
+      "CANCEL",
+      "DELAY",
+      "REDIRECT",
+      "REPLACE",
+      "COPY",
+      "STORE",
+      "RELEASE",
+      "CONVERT",
+      "REORDER",
+      "REVEAL",
+      "PREPARE"
+    ],
+    "keyRule": "producer timing|target surface|transform|consumer timing"
+  },
+  "blindLexicon": {
+    "backgroundAgents": 2,
+    "contextFork": "none",
+    "sourceExposure": 0,
+    "assignments": [
+      {
+        "id": "L1",
+        "labels": "all timings and targetSurfaces only"
+      },
+      {
+        "id": "L2",
+        "labels": "all transforms only"
+      }
+    ],
+    "phraseRule": "For every assigned label return one to three lower-case ASCII literal phrases, each one to four whitespace-separated words. The first phrase is the label lower-cased with underscores changed to spaces. Additional phrases may be ordinary rules-language surface forms. No regex, wildcard, stemming, game name, source claim or cross-label phrase reuse.",
+    "outputRule": "Strict JSON object keyed by every assigned uppercase label in protocol order. Values are arrays in proposed order. No missing or extra labels and no prose outside the JSON.",
+    "ownerRule": "The owner hash-verifies and transcribes each report once without adding, deleting, reordering or editing a phrase.",
+    "maximumSourceTokensPerAgent": 3000,
+    "maximumOutputTokensPerAgent": 4000,
+    "maximumWallTimeSecondsPerAgent": 300,
+    "correctionCap": 0,
+    "inconclusiveRule": "Any source-corpus access, malformed/missing/extra label, phrase-rule breach, cap breach or prohibited action makes the screen inconclusive."
+  },
+  "deterministicExtraction": {
+    "implementation": "One Python standard-library runner with an internal self-test; no dependency or model call.",
+    "normalisation": "Unicode NFKC, lower-case, collapse all whitespace to one ASCII space; literal substring match only.",
+    "pdfPassage": "Within each form-feed-delimited page, one or more consecutive non-empty extracted lines bounded by a blank line; preserve source ID, one-based page and passage index.",
+    "textPassage": "Each non-empty line is one passage; preserve source ID and one-based line number.",
+    "matchRule": "A key matches a passage only when at least one frozen literal for its producer timing, target surface, transform and consumer timing all occur in that same normalised passage.",
+    "deduplication": "One row per exact key, source and passage identity. Retain at most five passages per key/source in passage order.",
+    "supportRule": "A key is supported only in at least two sources from at least two publishers.",
+    "ranking": [
+      "source count descending",
+      "publisher count descending",
+      "total retained passage count ascending",
+      "exact key lexicographically ascending"
+    ],
+    "packetCapKeys": 12,
+    "packetCapPassagesPerKey": 20,
+    "outputByteCap": 200000,
+    "wallTimeSeconds": 60,
+    "selfTest": "Must prove NFKC/lower/whitespace normalisation, page and line passage identity, four-part co-occurrence, support threshold, deduplication/caps and frozen ranking before the sole live run.",
+    "mechanicalCorrectionCap": 1,
+    "correctionRule": "One separately versioned correction may repair code or input plumbing only before any live output is used; source identities, lexicon, passages, codebook, caps, support, ranking and decision rules remain unchanged."
+  },
+  "decision": {
+    "success": "At least one supported key fits every packet cap. Freeze the ranked packet only for a separately preregistered bounded semantic/closure review; no key is yet a mechanism candidate.",
+    "futility": "All identities and execution gates pass but no key reaches two-source/two-publisher literal support. Close only this literal screen.",
+    "inconclusive": "Any blind-lexicon fault, source/hash fault, self-test failure, live runner fault, output/wall cap breach or exhausted correction."
+  },
+  "executionCeilings": {
+    "modelSourceCorpusTokens": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "candidatesConstructed": 0,
+    "MLRLOptimiserRuns": 0
+  },
+  "prohibited": [
+    "Resume or mine the failed full-rule model-coding outputs.",
+    "Adapt lexicon phrases after any source match is observed.",
+    "Treat a lexical passage match as semantic validity, closure survival, causal evidence or product fit."
+  ]
+}
