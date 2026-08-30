@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-research-result-and-human-authority-boundary",
+  "parentPreregistrationReceiptHead": "0ad4b0abe728794093bed066db7174817529ae60",
+  "resultEvidenceHead": "e1ff9de6b33b992157332159d048098a4eafa545",
+  "intendedRemoteRef": "research/issue-421-post-c69b2752-persistent-contract-evidence",
+  "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+  "frozenExperimentSource": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "authority": {
+    "decision": "AUTHORISE_ONE_EMBERGLASS_V2_MECHANICAL_CORRECTION",
+    "commentId": 5470097429,
+    "commentBodySha256": "c0e5587aaf3dd79473f3489b33b416e81d8eaabeb6b27587c62022b741e57df6",
+    "optionAExhausted": true,
+    "optionBChosen": false,
+    "optionCChosen": false
+  },
+  "result": {
+    "commentId": 5470153869,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5470153869",
+    "commentBodySha256": "0fa5942a4187611be90f99b35aa85261b92315d7c78b2142600d7eec11a6e541",
+    "outcome": "INCONCLUSIVE_AT_FINAL_CORRECTION_CAP",
+    "fault": "ANALYSIS_LOADER_SCOPE_COLLISION_AFTER_COMPLETE_PROBE_OUTPUTS",
+    "sourceIdentityEstablished": false,
+    "scientificFutilityEstablished": false
+  },
+  "files": [
+    {
+      "path": "research/issue-421/summaries/post-7c8a3ee7-emberglass-source-identity-v2.json",
+      "sha256": "eca403d6e1f1a45dc0ca01cabdebc97efca76103a7e4aa79f7052a9a7f0bb53b"
+    },
+    {
+      "path": "research/issue-421/audits/post-7c8a3ee7-emberglass-source-identity-v2-execution-v1.json",
+      "sha256": "38616144ebef7ffe649256048e108df9a584a77724331c2e9ac0e6dc162a1041"
+    },
+    {
+      "path": "research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v2/plan.json",
+      "sha256": "df35ac85d12f55da95b22b134be1f01ccdc9d8fcbd7f29d84550c39387ccf8ce"
+    },
+    {
+      "path": "research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v2/baseline.json",
+      "sha256": "6b56900ab1cfdf6919d1a429bc9ab62e4cb0b905be6da022969493678aac5d91"
+    },
+    {
+      "path": "research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v2/candidate.json",
+      "sha256": "cfece8e320ea104c03ff9d52e02457a2cc8baafb6cb4006ca7037b5a0818f052"
+    },
+    {
+      "path": "research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v2/baseline.stdout.txt",
+      "sha256": "e7528eb7a0d35883bb19cfde922594011490e9c87052a5592fe5d160b550032d"
+    },
+    {
+      "path": "research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v2/baseline.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v2/candidate.stdout.txt",
+      "sha256": "e7528eb7a0d35883bb19cfde922594011490e9c87052a5592fe5d160b550032d"
+    },
+    {
+      "path": "research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v2/candidate.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/issue-421/comments/post-7c8a3ee7-emberglass-source-identity-v2-result-v1.md",
+      "sha256": "0fa5942a4187611be90f99b35aa85261b92315d7c78b2142600d7eec11a6e541"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5470153869-v55.json",
+      "sha256": "3944bf51a00a033afcbb9147e22543ceb57af4da3c04487a21af4c73b034d3c3"
+    }
+  ],
+  "scientificAccounting": {
+    "GodotProcessInvocations": 2,
+    "directControlledExecutions": 40,
+    "completedProbeOutputs": 2,
+    "analysisGatesEvaluated": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "reruns": 0
+  },
+  "disposition": {
+    "rawOutputs": "immutable non-decision evidence",
+    "endpointContentInspectedAfterFailure": false,
+    "offlineEndpointAnalysisAuthorised": false,
+    "repairOrRerunAuthorised": false,
+    "additionalCorrectedVersionAuthorised": false,
+    "currentEligibleAutonomousActions": 0,
+    "humanAuthorityConditionMet": true
+  },
+  "trackerState": {
+    "issue": "open",
+    "labels": [
+      "needs-info",
+      "wayfinder:task"
+    ]
+  },
+  "safeState": {
+    "productMainMutations": 0,
+    "developmentCheckoutMutations": 0,
+    "deliveryBranches": 0,
+    "pullRequests": 0,
+    "actionsRuns": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "claimBoundary": "The authorised v2 completed all direct probe outputs but its deterministic analysis was unavailable at the final correction cap. The packet makes no identity, scientific-futility, capacity, causal, balance, product, #421-acceptance or #108-P9 claim."
+}

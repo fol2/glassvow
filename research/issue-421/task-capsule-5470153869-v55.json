@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "emberglass-v2-inconclusive-at-final-correction-cap",
+  "taskSsot": {
+    "issueBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "state": "open",
+    "labels": [
+      "needs-info",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "decision": "AUTHORISE_ONE_EMBERGLASS_V2_MECHANICAL_CORRECTION",
+    "commentId": 5470097429,
+    "bodySha256": "c0e5587aaf3dd79473f3489b33b416e81d8eaabeb6b27587c62022b741e57df6",
+    "optionAExhausted": true,
+    "optionBChosen": false,
+    "optionCChosen": false
+  },
+  "sourceIdentities": {
+    "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+    "frozenExperimentSourceAndBaseline": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "preregistrationReceiptHead": "0ad4b0abe728794093bed066db7174817529ae60",
+    "resultEvidenceHead": "e1ff9de6b33b992157332159d048098a4eafa545"
+  },
+  "experiment": {
+    "selectedContract": "emberglass-memory-one-carry",
+    "protocolSha256": "28562ac99db14804cbe2c06748e2e22f511e74e36b951510d5cf2f792b573e82",
+    "runnerSha256": "b75e6524506d109426621df2d94ccb00811df554d1422e3b66d9b01eea60645e",
+    "summarySha256": "eca403d6e1f1a45dc0ca01cabdebc97efca76103a7e4aa79f7052a9a7f0bb53b",
+    "executionAuditSha256": "38616144ebef7ffe649256048e108df9a584a77724331c2e9ac0e6dc162a1041",
+    "outcome": "INCONCLUSIVE_AT_FINAL_CORRECTION_CAP",
+    "fault": "ANALYSIS_LOADER_SCOPE_COLLISION_AFTER_COMPLETE_PROBE_OUTPUTS",
+    "pathCorrectionWorked": true,
+    "GodotProcesses": 2,
+    "directControlledExecutions": 40,
+    "completedProbeOutputs": 2,
+    "analysisGatesEvaluated": 0,
+    "sourceIdentityEstablished": false,
+    "scientificFutilityEstablished": false
+  },
+  "resultComment": {
+    "commentId": 5470153869,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5470153869",
+    "bodySha256": "0fa5942a4187611be90f99b35aa85261b92315d7c78b2142600d7eec11a6e541"
+  },
+  "disposition": {
+    "rawOutputs": "immutable non-decision evidence",
+    "endpointContentInspectedAfterFailure": false,
+    "offlineEndpointAnalysisAuthorised": false,
+    "repairOrRerunAuthorised": false,
+    "additionalCorrectedVersionAuthorised": false,
+    "currentEligibleAutonomousActions": 0,
+    "humanAuthorityConditionMet": true
+  },
+  "smallestPotentialFutureAuthorityDelta": {
+    "authorisedNow": false,
+    "description": "One analysis-only separately versioned correction over the two immutable v2 outputs; no new Godot process, row, seed identity or endpoint inspection before freeze; scope overlay validation to the protocol only and apply the unchanged inherited v1 analysis and decision rules."
+  },
+  "safeState": {
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "deliveryBranches": 0,
+    "pullRequests": 0,
+    "actionsRuns": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "nextAction": "Wait only for an explicit owner decision on whether to authorise the exact analysis-only delta described in comment 5470153869. Do not infer it, inspect endpoints, rerun, repair, choose B or C, widen the grammar or create a successor."
+}
