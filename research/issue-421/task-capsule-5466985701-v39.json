@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 5,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "enemy-action-transform-grammar-audit",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": ["ready-for-agent", "wayfinder:task"]
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "developmentCheckout": {
+    "path": "/Users/jamesto/Coding/glassvow",
+    "branch": "work/421-h34",
+    "head": "7d1f6c0ff4d7534eb517ef57d1f547db140833fd",
+    "status": "clean-and-untouched"
+  },
+  "sourceWorktree": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/current-main-delta-v1",
+    "head": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "mode": "detached",
+    "status": "clean"
+  },
+  "parentArchiveHead": "718ba8238726eaa045a9aa22d6edb8461b15ec8b",
+  "protocol": {
+    "path": "protocols/post-718ba823-enemy-action-transform-grammar-v1.json",
+    "sha256": "b2af1f5f035925d11407524a96064f50e0cd6e7eea44179680a1937810baa488"
+  },
+  "ledgerLastVerified": {
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "protectedSeedRows": 0,
+    "note": "Immutable prior verification only; this stage performs zero ledger reads."
+  },
+  "finiteGrammar": {
+    "contracts": [
+      "CANCEL_NEXT_ACTION",
+      "DEFER_SAME_ACTION_ONE_ROUND",
+      "TARGET_ACTS_LAST_THIS_PHASE",
+      "REDIRECT_ATTACK_TO_OTHER_ENEMY"
+    ],
+    "carrier": "one-Energy research-only Duskblade targeted Skill action with no bundled effect",
+    "candidateCount": 0,
+    "selection": "deterministic eligibility and frozen minimum-complexity ranking only"
+  },
+  "execution": {
+    "backgroundReports": 3,
+    "projectionMechanicalCorrectionCap": 1,
+    "reportCorrectionCap": 0,
+    "maximumModelSourceTokens": 66000,
+    "maximumWallTimeSeconds": 1500,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "MLRLOptimiserRuns": 0
+  },
+  "activeInvariants": [
+    "The failed full-rule coding and literal screen are closed and will not be resumed, re-lexed or semantically mined.",
+    "Every valid closed family and archive head remains immutable evidence.",
+    "Scoreline and Afterimage are separate fixed causal factors and are both off in this zero-row audit.",
+    "No transform is a candidate; success freezes at most one abstract contract for another zero-row gate.",
+    "Deterministic code owns projection, report validation, eligibility, ranking and stop/go.",
+    "The development checkout, product truth, ledger, cache, protected identities, PRs and Actions remain untouched."
+  ],
+  "nextAction": "Publish the zero-row protocol, construct and self-test the bounded exact-main projection, dispatch the three independent no-fork reports, then apply the deterministic consolidation once."
+}

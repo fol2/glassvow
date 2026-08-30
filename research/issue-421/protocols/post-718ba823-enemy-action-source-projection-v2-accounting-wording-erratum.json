@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "erratumId": "post-718ba823-enemy-action-source-projection-v2-accounting-wording-erratum",
+  "recordedAtUtc": "2026-08-30T07:32:59Z",
+  "parentProtocolSha256": "b2af1f5f035925d11407524a96064f50e0cd6e7eea44179680a1937810baa488",
+  "parentCorrectionSha256": "d37d6ae4ce3ca1042656e997d1c73c3668f18607114f2a935073468aff9ccff5",
+  "runnerV2Sha256": "3ffee27420eeb1ee361a31f8541b669629b3e0cebd823795a7082721d0847154",
+  "correction": {
+    "incorrectWording": "Separate measured construction accounting from numeric execution ceilings.",
+    "replacementWording": "Separate static declared execution scope from numeric execution ceilings.",
+    "scope": "The runner executionAccounting object and the correction preLiveAccounting object are declared or owner-observed scope records, not dynamically instrumented measurements.",
+    "evidenceUse": "Background reports must not treat either accounting object as observed causal or runtime evidence. The runner code inspection, frozen source hashes, output caps and sole live construction remain the applicable controls."
+  },
+  "preflightDisposition": {
+    "initialVerdict": "FAIL_ACCOUNTING_WORDING_OVERCLAIM",
+    "boundedFollowUpVerdict": "PASS_WORDING_ERRATUM_SUFFICIENT",
+    "basis": "The frozen protocol requires static scope, zero ceilings and extraction/hash self-tests, but does not require dynamic process instrumentation or a measured-accounting output schema."
+  },
+  "executionDisclosure": {
+    "projectionOutputs": 0,
+    "liveProjectionConstructions": 0,
+    "sourceValidatingSelfTestsRunByOwner": 1,
+    "argumentValidationFailuresBeforeSourceRead": 1,
+    "independentPreflightSourceReads": 0,
+    "backgroundReportsStarted": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "candidatesConstructed": 0
+  },
+  "mechanicalCorrectionAccounting": {
+    "used": 1,
+    "cap": 1,
+    "thisErratumIsMechanicalCorrection": false,
+    "runnerChangedByErratum": false,
+    "protocolChangedByErratum": false
+  },
+  "frozenUnchanged": [
+    "source identities and hashes",
+    "four-transform partition and definitions",
+    "common twelve-field contract",
+    "report questions, inputs and schemas",
+    "eligibility, ranking and decision rules",
+    "numeric ceilings"
+  ]
+}

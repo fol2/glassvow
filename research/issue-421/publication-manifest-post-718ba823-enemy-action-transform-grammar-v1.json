@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-research-evidence",
+  "recordedAtUtc": "2026-08-30T07:43:15Z",
+  "parentArchiveHead": "718ba8238726eaa045a9aa22d6edb8461b15ec8b",
+  "intendedRemoteRef": "research/issue-421-post-718ba823-enemy-action-transform-grammar-evidence",
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "authority": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "commentId": 5466985701,
+    "commentBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "preregistrationCommentId": 5467375970,
+  "correctionAndErratumCommentId": 5467411542,
+  "disposition": "SUCCESS_FREEZE_TARGET_ACTS_LAST_THIS_PHASE_ABSTRACT_CONTRACT",
+  "selectedTransformId": "TARGET_ACTS_LAST_THIS_PHASE",
+  "closedTransforms": [
+    "CANCEL_NEXT_ACTION",
+    "DEFER_SAME_ACTION_ONE_ROUND",
+    "REDIRECT_ATTACK_TO_OTHER_ENEMY"
+  ],
+  "scientificAccounting": {
+    "finiteTransformContracts": 4,
+    "sourceFilesProjected": 10,
+    "sourceValidatingSelfTests": 2,
+    "liveProjectionConstructions": 1,
+    "projectionBytes": 48192,
+    "projectionMechanicalCorrectionsUsed": 1,
+    "projectionMechanicalCorrectionCap": 1,
+    "accountingWordingErrata": 1,
+    "independentBackgroundReports": 3,
+    "reportCorrectionsUsed": 0,
+    "reportCorrectionCap": 0,
+    "deterministicConsolidationRuns": 1,
+    "eligibleAbstractContracts": 1,
+    "candidatesConstructed": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "MLRLOptimiserRuns": 0
+  },
+  "files": [
+    {
+      "path": "research/issue-421/task-capsule-5466985701-v39.json",
+      "sha256": "64187de8fab642d104f19f50f2dbee86044d570cbbef29532921185ef9c9d3c6"
+    },
+    {
+      "path": "research/issue-421/protocols/post-718ba823-enemy-action-transform-grammar-v1.json",
+      "sha256": "b2af1f5f035925d11407524a96064f50e0cd6e7eea44179680a1937810baa488"
+    },
+    {
+      "path": "research/issue-421/tools/post_718ba823_enemy_action_source_projection_v1.py",
+      "sha256": "16f2b5fc718f8f22411cd4976170a23cc344a6ade9fdcfa271a648c04ef938a4"
+    },
+    {
+      "path": "research/issue-421/tools/post_718ba823_enemy_action_source_projection_v2.py",
+      "sha256": "3ffee27420eeb1ee361a31f8541b669629b3e0cebd823795a7082721d0847154"
+    },
+    {
+      "path": "research/issue-421/protocols/post-718ba823-enemy-action-source-projection-v2-correction.json",
+      "sha256": "d37d6ae4ce3ca1042656e997d1c73c3668f18607114f2a935073468aff9ccff5"
+    },
+    {
+      "path": "research/issue-421/protocols/post-718ba823-enemy-action-source-projection-v2-accounting-wording-erratum.json",
+      "sha256": "3dc801101176fc143675002c1d1100eab27467d2f16a40b1890a97d52952e4ca"
+    },
+    {
+      "path": "research/issue-421/summaries/post-718ba823-enemy-action-source-projection-v2-preflight.md",
+      "sha256": "502b83ce3cbf8ab107660f6a31f10e1e2d7ee512744a92e0acb28608142af354"
+    },
+    {
+      "path": "research/issue-421/summaries/post-718ba823-enemy-action-source-projection-v2.json",
+      "sha256": "3a904647359e2dd4654b9242577a24f1b1c66e84a8dbcafa806bc122ebdb547d"
+    },
+    {
+      "path": "research/issue-421/tools/post_718ba823_enemy_action_report_consolidation_v1.py",
+      "sha256": "f98bb865d400fa98b8fa81afc85e8161653174f39ac764b52fb1f459ec320fda"
+    },
+    {
+      "path": "research/issue-421/reports/post-718ba823-enemy-action-h1-source-feasibility-v1.json",
+      "sha256": "3090d80e537a944b48cace39d35c1bbb6ff6dae8be2fd60c663ea47ea3ae0f1c"
+    },
+    {
+      "path": "research/issue-421/reports/post-718ba823-enemy-action-h2-closure-adversary-v1.json",
+      "sha256": "a990c411ba9656eee3b22c08908f41e55ec6c0dad36e0ed76c4df98ead6d9754"
+    },
+    {
+      "path": "research/issue-421/reports/post-718ba823-enemy-action-h3-policy-commercial-v1.json",
+      "sha256": "fe17b18a5e84130b2dbe8fea094ac8446a481aa3ca6ecd2e1e5915804d6f1641"
+    },
+    {
+      "path": "research/issue-421/summaries/post-718ba823-enemy-action-consolidation-preflight-v1.md",
+      "sha256": "1d297cc91bacf80524b0056ee4d33496d9f2c718a74e0afe945185e1fd6d52cd"
+    },
+    {
+      "path": "research/issue-421/summaries/post-718ba823-enemy-action-transform-grammar-consolidation-v1.json",
+      "sha256": "cda96b9b91740abae65376a0646b2d489ebf04e276edaadc24adb8f62e7ea856"
+    },
+    {
+      "path": "research/issue-421/summaries/post-718ba823-enemy-action-transform-grammar-v1.md",
+      "sha256": "9328b43746cf6d1c09b575ea07464b892451c4e235f3c1278639701852487ca4"
+    }
+  ],
+  "claims": [
+    "The exact-main projection and all three independent reports passed their frozen structural gates without report correction.",
+    "Deterministic consolidation found TARGET_ACTS_LAST_THIS_PHASE to be the sole eligible abstract contract and closed the other three transform definitions under their exact alias or contract failures.",
+    "This authorises only the next zero-row natural-opportunity and identity-design gate; it establishes no candidate, capacity, causal, product, acceptance or P9 claim."
+  ],
+  "nextGate": "Preregister a zero-row natural multi-enemy opportunity, disabled-path identity and direct-consume observability design for TARGET_ACTS_LAST_THIS_PHASE before any research prototype or simulator row."
+}

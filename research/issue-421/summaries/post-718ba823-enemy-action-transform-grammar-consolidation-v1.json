@@ -1,0 +1,137 @@
+{
+  "GodotProcesses": 0,
+  "assessments": [
+    {
+      "eligibilityFailures": [
+        "no existing same transition",
+        "new semantic edge",
+        "no closure alias"
+      ],
+      "eligible": false,
+      "rankKey": [
+        2,
+        0,
+        0,
+        1,
+        0,
+        "CANCEL_NEXT_ACTION"
+      ],
+      "transformId": "CANCEL_NEXT_ACTION"
+    },
+    {
+      "eligibilityFailures": [
+        "new semantic edge",
+        "no closure alias"
+      ],
+      "eligible": false,
+      "rankKey": [
+        1,
+        0,
+        1,
+        2,
+        2,
+        "DEFER_SAME_ACTION_ONE_ROUND"
+      ],
+      "transformId": "DEFER_SAME_ACTION_ONE_ROUND"
+    },
+    {
+      "eligibilityFailures": [],
+      "eligible": true,
+      "rankKey": [
+        0,
+        0,
+        1,
+        2,
+        2,
+        "TARGET_ACTS_LAST_THIS_PHASE"
+      ],
+      "transformId": "TARGET_ACTS_LAST_THIS_PHASE"
+    },
+    {
+      "eligibilityFailures": [
+        "new semantic edge",
+        "no closure alias",
+        "no hard contract violation"
+      ],
+      "eligible": false,
+      "rankKey": [
+        0,
+        1,
+        1,
+        2,
+        2,
+        "REDIRECT_ATTACK_TO_OTHER_ENEMY"
+      ],
+      "transformId": "REDIRECT_ATTACK_TO_OTHER_ENEMY"
+    }
+  ],
+  "cacheReads": 0,
+  "cacheWrites": 0,
+  "candidateCount": 0,
+  "claimBoundary": "A success selects only an abstract mechanism contract for the next zero-row gate. It is not source support, natural capacity, identity safety, policy sensitivity, complementarity, reachability, a candidate, product scope, #421 acceptance or the #108 P9 receipt.",
+  "decision": "FREEZE_ONE_ABSTRACT_TRANSFORM_FOR_ZERO_ROW_GATE",
+  "decisionBoundary": 1,
+  "eligibleTransformIds": [
+    "TARGET_ACTS_LAST_THIS_PHASE"
+  ],
+  "issue": 421,
+  "ledgerReads": 0,
+  "ledgerWrites": 0,
+  "newSimulatorRows": 0,
+  "outcome": "SUCCESS",
+  "protectedSeedRows": 0,
+  "protocolSha256": "b2af1f5f035925d11407524a96064f50e0cd6e7eea44179680a1937810baa488",
+  "reportSha256": {
+    "H1_SOURCE_FEASIBILITY": "3090d80e537a944b48cace39d35c1bbb6ff6dae8be2fd60c663ea47ea3ae0f1c",
+    "H2_CLOSURE_ADVERSARY": "a990c411ba9656eee3b22c08908f41e55ec6c0dad36e0ed76c4df98ead6d9754",
+    "H3_POLICY_COMMERCIAL": "fe17b18a5e84130b2dbe8fea094ac8446a481aa3ca6ecd2e1e5915804d6f1641"
+  },
+  "runnerSha256": "f98bb865d400fa98b8fa81afc85e8161653174f39ac764b52fb1f459ec320fda",
+  "schemaVersion": 1,
+  "selectedAbstractContract": {
+    "common": {
+      "afterimageFactor": {
+        "definition": "Duskblade exact Defend realised Ward sets one player-local non-stacking bounded value; a later exact Warden's Edge in the same player turn consumes it for one separate mirrored-Ward operation.",
+        "independence": "Separate causal factor; never pooled with the action transform.",
+        "levels": {
+          "off": 0,
+          "ward-base-5": 5,
+          "ward-upgraded-8": 8,
+          "wardens-edge-4": 4
+        },
+        "zeroRowLevel": "off"
+      },
+      "boundedPayoff": "Only the frozen action transform occurs. No scalar damage, Ward, healing, status, Ember, reward, acquisition or global difficulty factor is varied.",
+      "consumer": "The next enemy phase consumes the marker at the exact transform-specific scheduling or damage boundary.",
+      "directActivationObjective": "Count only the exact transform-specific consume event and compare its before/after scheduling identity; whole-run endpoints cannot establish activation.",
+      "duskBoundary": "The research action is legal only for Duskblade. Ashwarden, RandomBuild content identity and every existing authored action remain unchanged.",
+      "exactNull": "With the research switch off, no field, event, branch, target order, move key, move history, RNG call/state, queue entry or result may differ byte-for-byte from frozen current main.",
+      "interferenceRule": "A later experiment must first compare the transform-only shared anchor against separate Scoreline-only and Afterimage-only anchors under common random numbers. Joint cells are permitted only if a preregistered anchor contrast measures decision value; this audit estimates no interaction.",
+      "lifecycle": "Marker expires on its first eligible enemy phase, marked-target death, combat end or aspect mismatch. It never enters run state or a save.",
+      "mediator": "One bounded fight-local target identity plus the transform-specific pending state. A repeated application to the same target before consumption is idempotent; a later application to a different target replaces the pending target without stacking.",
+      "naturalCost": "One Energy, one card play and one hand opportunity; the action has no fallback base effect when ineligible.",
+      "policyExposure": "The ordinary play/no-play and enemy-target interfaces expose the action. No hand-card selector, global oracle, online learner or acquisition override exists in this audit.",
+      "producer": "One research-only Duskblade Skill action, costing exactly one Energy and targeting one living enemy during the player turn, applies exactly one pending transform marker. No damage, Ward, draw, Ember, status or other effect is bundled.",
+      "scorelineFactor": {
+        "definition": "Duskblade exact Chisel realised hit sets one target-local non-stacking mark; a later exact Executioner on that living target consumes it for one separate bounded raw damage operation.",
+        "independence": "Separate causal factor; never pooled with the action transform.",
+        "levels": {
+          "chisel-base-4": 4,
+          "faultline-base-8": 8,
+          "faultline-bonus-6": 6,
+          "off": 0
+        },
+        "zeroRowLevel": "off"
+      }
+    },
+    "transform": {
+      "anticipatedAliasTest": "Reject if this is already covered by a closed player-card order, target-transfer, immediate-post-kill, intent-history or carrier-only family.",
+      "definition": "Before the next enemy phase resolves any living enemy, stable-partition the existing living-enemy iteration so the marked enemy acts after every unmarked enemy. Preserve each enemy's exact move, internal effect order, action count, target, history update, RNG identity and post-phase intent recomputation; consume the marker after the phase.",
+      "id": "TARGET_ACTS_LAST_THIS_PHASE",
+      "preservesActionMultiset": true,
+      "preservesPlayerDamageTarget": true
+    }
+  },
+  "selectedTransformId": "TARGET_ACTS_LAST_THIS_PHASE",
+  "wallTimeSeconds": 0.000453
+}

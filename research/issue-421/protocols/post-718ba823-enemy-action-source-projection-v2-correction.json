@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "correctionId": "post-718ba823-enemy-action-source-projection-v2-correction",
+  "recordedAtUtc": "2026-08-30T07:29:29Z",
+  "parentProtocolSha256": "b2af1f5f035925d11407524a96064f50e0cd6e7eea44179680a1937810baa488",
+  "mechanicalCorrection": {
+    "used": 1,
+    "cap": 1,
+    "timing": "before any live projection construction or background-report read",
+    "reason": "Independent static preflight found that v1 did not fail closed on unknown authored move keys and its self-test did not isolate cap or overwrite enforcement.",
+    "changes": [
+      "Assert the exact authored move-key schema and omit only the non-causal display name field.",
+      "Require every enemy to have a non-empty move object and every encounter to match the exact four-tier schema with known non-empty enemy groups.",
+      "Add negative self-tests for unknown move keys, byte and wall caps, and overwrite refusal.",
+      "Separate measured construction accounting from numeric execution ceilings and record correction 1/1."
+    ]
+  },
+  "frozenUnchanged": [
+    "ten source files, head and hashes",
+    "four-transform partition and exact definitions",
+    "common twelve-field contract",
+    "Scoreline and Afterimage factor definitions and independence",
+    "three report questions, inputs and schemas",
+    "eligibility, ranking and decision rules",
+    "all numeric model, process, row and identity ceilings"
+  ],
+  "runner": {
+    "v1Sha256": "16f2b5fc718f8f22411cd4976170a23cc344a6ade9fdcfa271a648c04ef938a4",
+    "v2Sha256": "3ffee27420eeb1ee361a31f8541b669629b3e0cebd823795a7082721d0847154",
+    "v2SelfTest": "PASS_12_CHECKS"
+  },
+  "preLiveAccounting": {
+    "liveProjectionConstructions": 0,
+    "projectionOutputs": 0,
+    "backgroundReportsStarted": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "candidatesConstructed": 0
+  }
+}

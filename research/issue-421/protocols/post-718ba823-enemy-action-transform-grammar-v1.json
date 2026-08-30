@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "protocolId": "post-718ba823-enemy-action-transform-grammar-v1",
+  "preregisteredAtUtc": "2026-08-30T07:22:31Z",
+  "repository": "fol2/glassvow",
+  "issue": 421,
+  "question": "Does the complete minimal next-enemy-action transform partition contain at least one mechanically feasible, commercially legible, policy-exposable and closure-surviving twelve-field Duskblade C5 contract before any prototype or simulator row?",
+  "authorities": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "controllingCommentId": 5466985701,
+    "controllingCommentBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60",
+    "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2"
+  },
+  "parentEvidence": {
+    "archiveHead": "718ba8238726eaa045a9aa22d6edb8461b15ec8b",
+    "literalScreenDisposition": "FUTILITY_NO_TWO_SOURCE_TWO_PUBLISHER_LITERAL_SUPPORT",
+    "literalScreenSummarySha256": "f937f0c831194e472d68ed82556c284cdf03a606c9d36a54cbfa7bfc9419bcb2",
+    "privateCausalCoverageSha256": "c5ae1f503bf8d6ce677473ec8aeb965b720390ce10e68115226f99f9d94def76",
+    "contractClosureEnvelopeSha256": "3d0c3f87a04345cc3d10169895dc95c5e4347b12d11fdcce650e1c1f881c949f",
+    "nextFrontierSummarySha256": "58324e9f4ac1b0ec420445cad83e0247a10b8084776b0fc8010a323b73d27535",
+    "scorelineAfterimageFactorSourceSha256": "fd275e4610100562050fce4c59889caae644e93020e03e0e1b85c0c4147fff3d"
+  },
+  "sourceIdentity": {
+    "worktree": "/Users/jamesto/Research/glassvow-p9-421/current-main-delta-v1",
+    "head": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "requiredClean": true,
+    "files": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "domain/rules/enemy_ai.gd": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "presentation/combat/combat_screen.gd": "312d66afa344c441724cc4abe1e87889fb0f9b66637dc8eed4f6ef44c6137542",
+      "presentation/combat/intent_chip.gd": "fc147f6b762d7bb1f9c9a1c0bfca32024bf60038e4f059474c8b017c0c5a4ac7",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "CONCEPTS.md": "463f986857c72cbeb6ce84e216c41c25d776502596294437f8213bf88c905ac5",
+      "docs/commercial-game-delivery.md": "00537bcdd314d884b318f0720c2a8a79cc1f3f4bc03452fa8ad75f46f2a08bec"
+    }
+  },
+  "commonTwelveFieldContract": {
+    "producer": "One research-only Duskblade Skill action, costing exactly one Energy and targeting one living enemy during the player turn, applies exactly one pending transform marker. No damage, Ward, draw, Ember, status or other effect is bundled.",
+    "mediator": "One bounded fight-local target identity plus the transform-specific pending state. A repeated application to the same target before consumption is idempotent; a later application to a different target replaces the pending target without stacking.",
+    "consumer": "The next enemy phase consumes the marker at the exact transform-specific scheduling or damage boundary.",
+    "boundedPayoff": "Only the frozen action transform occurs. No scalar damage, Ward, healing, status, Ember, reward, acquisition or global difficulty factor is varied.",
+    "lifecycle": "Marker expires on its first eligible enemy phase, marked-target death, combat end or aspect mismatch. It never enters run state or a save.",
+    "naturalCost": "One Energy, one card play and one hand opportunity; the action has no fallback base effect when ineligible.",
+    "duskBoundary": "The research action is legal only for Duskblade. Ashwarden, RandomBuild content identity and every existing authored action remain unchanged.",
+    "scorelineFactor": {
+      "definition": "Duskblade exact Chisel realised hit sets one target-local non-stacking mark; a later exact Executioner on that living target consumes it for one separate bounded raw damage operation.",
+      "levels": {"off": 0, "chisel-base-4": 4, "faultline-bonus-6": 6, "faultline-base-8": 8},
+      "zeroRowLevel": "off",
+      "independence": "Separate causal factor; never pooled with the action transform."
+    },
+    "afterimageFactor": {
+      "definition": "Duskblade exact Defend realised Ward sets one player-local non-stacking bounded value; a later exact Warden's Edge in the same player turn consumes it for one separate mirrored-Ward operation.",
+      "levels": {"off": 0, "wardens-edge-4": 4, "ward-base-5": 5, "ward-upgraded-8": 8},
+      "zeroRowLevel": "off",
+      "independence": "Separate causal factor; never pooled with the action transform."
+    },
+    "interferenceRule": "A later experiment must first compare the transform-only shared anchor against separate Scoreline-only and Afterimage-only anchors under common random numbers. Joint cells are permitted only if a preregistered anchor contrast measures decision value; this audit estimates no interaction.",
+    "exactNull": "With the research switch off, no field, event, branch, target order, move key, move history, RNG call/state, queue entry or result may differ byte-for-byte from frozen current main.",
+    "policyExposure": "The ordinary play/no-play and enemy-target interfaces expose the action. No hand-card selector, global oracle, online learner or acquisition override exists in this audit.",
+    "directActivationObjective": "Count only the exact transform-specific consume event and compare its before/after scheduling identity; whole-run endpoints cannot establish activation."
+  },
+  "finiteTransformPartition": [
+    {
+      "id": "CANCEL_NEXT_ACTION",
+      "definition": "At the marked enemy's next phase slot, suppress the complete current move, append its key to last_moves exactly once, consume the marker, and allow ordinary end-of-action ticks and later intent recomputation.",
+      "preservesActionMultiset": false,
+      "preservesPlayerDamageTarget": true,
+      "anticipatedAliasTest": "Existing Shatter stagger skips a move while recording it; reject if the only causal difference is the producer or storage carrier."
+    },
+    {
+      "id": "DEFER_SAME_ACTION_ONE_ROUND",
+      "definition": "At the marked enemy's next phase slot, resolve no part of its current move, do not append that move to history and do not recompute that enemy's intent. Consume the marker and retain the exact move key so it resolves at that enemy's following phase slot unless death or combat end clears it.",
+      "preservesActionMultiset": "conditional-until-combat-end",
+      "preservesPlayerDamageTarget": true,
+      "anticipatedAliasTest": "Reject if retaining a current intent is only a relabelled cross-turn hold, intent-history response or stagger rescue rather than a new scheduler transition."
+    },
+    {
+      "id": "TARGET_ACTS_LAST_THIS_PHASE",
+      "definition": "Before the next enemy phase resolves any living enemy, stable-partition the existing living-enemy iteration so the marked enemy acts after every unmarked enemy. Preserve each enemy's exact move, internal effect order, action count, target, history update, RNG identity and post-phase intent recomputation; consume the marker after the phase.",
+      "preservesActionMultiset": true,
+      "preservesPlayerDamageTarget": true,
+      "anticipatedAliasTest": "Reject if this is already covered by a closed player-card order, target-transfer, immediate-post-kill, intent-history or carrier-only family."
+    },
+    {
+      "id": "REDIRECT_ATTACK_TO_OTHER_ENEMY",
+      "definition": "If the marked enemy's current move has damage and another enemy is living at consume time, route every authored damage packet to the other living enemy with lowest HP, breaking ties by enemy index. Preserve the source move's non-damage effects and consume the marker. If no eligible recipient exists, consume with no effect.",
+      "preservesActionMultiset": true,
+      "preservesPlayerDamageTarget": false,
+      "anticipatedAliasTest": "Reject if enemy-to-enemy routing is a closed target-transfer or cross-enemy relay alias, or if deterministic recipient changes create an unbounded selector."
+    }
+  ],
+  "partitionExclusions": [
+    "REPLACE is excluded because choosing replacement content is an additional unfrozen product-semantic axis and calling EnemyAi again would change RNG or mutable AI flags.",
+    "COPY, STORE/RELEASE, CONVERT, PREPARE and REVEAL introduce a second action, payload or information semantic rather than one minimal next-action transform.",
+    "REORDER is represented completely by the smallest targeted stable-partition level TARGET_ACTS_LAST_THIS_PHASE; reverse-all and arbitrary permutations add no smaller policy choice.",
+    "No terminal-hit, Hearth, Ward-spend, named-card pair, action-cadence, Shatter, target-switch, draw, duplicate, reshuffle, private-debt/status, acquisition or scalar family is reopened."
+  ],
+  "deterministicProjection": {
+    "implementation": "One Python standard-library runner reusing the existing function extractor pattern; no dependency, Godot process, model call or ledger/cache access.",
+    "output": "A hash-verified bounded projection of exact scheduling, intent, policy, presentation and authored enemy-move/encounter surfaces. Full authored prose and unrelated source are omitted.",
+    "sourceFiles": 10,
+    "outputByteCap": 90000,
+    "wallTimeSeconds": 30,
+    "selfTest": "Prove function extraction, heading extraction, event-window extraction, authored enemy-move projection, multi-enemy encounter projection, canonical byte accounting and frozen source hashes before the sole live construction.",
+    "mechanicalCorrectionCap": 1,
+    "correctionRule": "One separately versioned correction may repair projection code or path plumbing before any report reads a projection output. Source identities, transform partition, report questions, consolidation and decision rules remain unchanged."
+  },
+  "backgroundReports": [
+    {
+      "id": "H1_SOURCE_FEASIBILITY",
+      "inputs": ["protocol", "deterministic projection"],
+      "question": "For each frozen transform only, identify exact producer/consume hooks, required new fields/events, null/RNG feasibility and any exact current-main mechanic that already implements the same transition.",
+      "requiredFieldsPerTransform": ["mechanicallyFeasible", "exactNullFeasible", "rngIdentityFeasible", "requiredGameplayHookCount", "requiredNewStateFieldCount", "requiredNewEventTypeCount", "existingSameTransition", "exactEvidence"],
+      "prohibited": "No source outside the projection, no variant, value, candidate, support estimate or selection."
+    },
+    {
+      "id": "H2_CLOSURE_ADVERSARY",
+      "inputs": ["protocol", "private causal coverage", "contract closure envelope", "next-frontier closure map"],
+      "question": "For each frozen transform only, apply C1-C4, C6, Ward-spend and every named closure; decide whether it is a genuinely new semantic edge and whether the common contract plus transform definition completes all twelve fields.",
+      "requiredFieldsPerTransform": ["newSemanticEdge", "completeTwelveFields", "closureAliases", "hardContractViolations", "exactEvidence"],
+      "prohibited": "No source code, support, variant, repair, candidate, preference or selection."
+    },
+    {
+      "id": "H3_POLICY_COMMERCIAL",
+      "inputs": ["protocol", "deterministic projection", "issue acceptance and factor source"],
+      "question": "For each frozen transform only, assess ordinary policy exposure, action-multiset and damage-target preservation, deterministic observability, intent legibility, save/internal-ID safety and minimum presentation surface.",
+      "requiredFieldsPerTransform": ["ordinaryPolicyTargetExposable", "commercialLegibilityFeasible", "saveInternalIdSafe", "actionMultisetPreserved", "playerDamageTargetPreserved", "requiredPresentationHookCount", "hardGuardrailViolations", "exactEvidence"],
+      "prohibited": "No source outside the projection, no product recommendation, variant, candidate, support estimate or selection."
+    }
+  ],
+  "reportContract": {
+    "agents": 3,
+    "contextFork": "none",
+    "independentNonOverlapping": true,
+    "strictJsonOnly": true,
+    "transformOrder": ["CANCEL_NEXT_ACTION", "DEFER_SAME_ACTION_ONE_ROUND", "TARGET_ACTS_LAST_THIS_PHASE", "REDIRECT_ATTACK_TO_OTHER_ENEMY"],
+    "maximumSourceTokensPerAgent": 22000,
+    "maximumOutputTokensPerAgent": 6000,
+    "maximumWallTimeSecondsPerAgent": 420,
+    "correctionCapPerReport": 0,
+    "inconclusiveRule": "A missing/extra transform, missing required field, prohibited source/action, cap breach or non-JSON report makes the complete audit inconclusive."
+  },
+  "deterministicConsolidation": {
+    "eligibility": [
+      "H1 mechanicallyFeasible, exactNullFeasible and rngIdentityFeasible are true.",
+      "H1 existingSameTransition is false.",
+      "H2 newSemanticEdge and completeTwelveFields are true.",
+      "H2 closureAliases and hardContractViolations are empty.",
+      "H3 ordinaryPolicyTargetExposable, commercialLegibilityFeasible and saveInternalIdSafe are true.",
+      "H3 hardGuardrailViolations is empty.",
+      "H3 actionMultisetPreserved and playerDamageTargetPreserved agree exactly with the frozen protocol declarations."
+    ],
+    "ranking": [
+      "action multiset preserved true before conditional before false",
+      "player damage target preserved true before false",
+      "required new state-field count ascending",
+      "required gameplay-hook count ascending",
+      "required new event-type plus presentation-hook count ascending",
+      "transform ID lexicographically ascending"
+    ],
+    "ownerRule": "The owner transcribes each valid report once without editing findings. Standard-library code validates, joins, applies eligibility and ranking, and freezes at most the first eligible contract. The owner does not override the output."
+  },
+  "decision": {
+    "success": "At least one transform is eligible. Freeze only the first ranked abstract contract for a separately preregistered zero-row natural-opportunity and identity design; do not prototype or simulate here.",
+    "futility": "All reports and gates pass but no transform is eligible. Close only this enemy-action transform partition and continue inside #421 with the next distinct evidence-backed structural mechanism.",
+    "inconclusive": "Any projection/report/consolidation fault, hash or cap breach, or exhausted mechanical correction."
+  },
+  "executionCeilings": {
+    "overallWallTimeSeconds": 1500,
+    "modelSourceTokens": 66000,
+    "grammarContracts": 4,
+    "candidatesConstructed": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "MLRLOptimiserRuns": 0
+  },
+  "claimBoundary": "A success selects only an abstract mechanism contract for the next zero-row gate. It is not source support, natural capacity, identity safety, policy sensitivity, complementarity, reachability, a candidate, product scope, #421 acceptance or the #108 P9 receipt."
+}
