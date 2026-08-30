@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-7c8a3ee7 Emberglass source identity analysis-only correction v1",
+  "kind": "ANALYSIS_ONLY_CORRECTION",
+  "state": "FROZEN_BEFORE_ANALYSIS",
+  "protocolPath": "research/issue-421/protocols/post-7c8a3ee7-emberglass-source-identity-analysis-only-v1.json",
+  "question": "Do all original frozen v1 exact source/identity gates pass when the original v1 deterministic _analyse function is applied once to the two immutable complete v2 probe outputs?",
+  "sourceHead": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "authority": {
+    "source": "Ash, Glassvow PM",
+    "decision": "AUTHORISE_ONE_ANALYSIS_ONLY_CORRECTION",
+    "commentId": 5470587102,
+    "commentPath": "comments/post-36b1eef-analysis-only-authority-intake-v1.md",
+    "commentBodySha256": "cbca146ef812fca7b3e50f03a7879bfc89d68f1a0c660e54b1e9a1ed99f0beea",
+    "authorityIntakeReceiptHead": "003f386830a26c86b2bb20f6c84dd285d3a06bf5"
+  },
+  "v1Protocol": {
+    "path": "protocols/post-7c8a3ee7-emberglass-source-identity-v1.json",
+    "sha256": "b08e185903bbd0fdbf3b4cc29b065b9483e91b6e835ef6239d079537c47e4ef2"
+  },
+  "v1Runner": {
+    "path": "tools/post_7c8a3ee7_emberglass_source_identity_v1.py",
+    "sha256": "17fe491b8ad2589b57f678754893d40dff033da52b10263c71c12dc04bde6ba6",
+    "analysisFunction": "_analyse"
+  },
+  "runner": {
+    "path": "tools/post_7c8a3ee7_emberglass_source_identity_analysis_only_v1.py",
+    "sha256": "fc739ddf2f875af64c6564a6623daaf56803c874a80841ab32517b227db336d6",
+    "selfTest": "PASS (3 checks)"
+  },
+  "immutableInputs": {
+    "v2Protocol": {
+      "path": "protocols/post-7c8a3ee7-emberglass-source-identity-v2.json",
+      "sha256": "28562ac99db14804cbe2c06748e2e22f511e74e36b951510d5cf2f792b573e82"
+    },
+    "v2Summary": {
+      "path": "summaries/post-7c8a3ee7-emberglass-source-identity-v2.json",
+      "sha256": "eca403d6e1f1a45dc0ca01cabdebc97efca76103a7e4aa79f7052a9a7f0bb53b"
+    },
+    "v2ExecutionAudit": {
+      "path": "audits/post-7c8a3ee7-emberglass-source-identity-v2-execution-v1.json",
+      "sha256": "38616144ebef7ffe649256048e108df9a584a77724331c2e9ac0e6dc162a1041"
+    },
+    "v2Plan": {
+      "path": "evidence/post-7c8a3ee7-emberglass-source-identity-v2/plan.json",
+      "sha256": "df35ac85d12f55da95b22b134be1f01ccdc9d8fcbd7f29d84550c39387ccf8ce"
+    },
+    "baselineOutput": {
+      "path": "evidence/post-7c8a3ee7-emberglass-source-identity-v2/baseline.json",
+      "sha256": "6b56900ab1cfdf6919d1a429bc9ab62e4cb0b905be6da022969493678aac5d91"
+    },
+    "candidateOutput": {
+      "path": "evidence/post-7c8a3ee7-emberglass-source-identity-v2/candidate.json",
+      "sha256": "cfece8e320ea104c03ff9d52e02457a2cc8baafb6cb4006ca7037b5a0818f052"
+    },
+    "v2PublicationManifest": {
+      "path": "publication-manifest-post-e1ff9de6-emberglass-source-identity-v2-result-v1.json",
+      "sha256": "90df62d0fc301c96a20cd5faff70990060e46c07b174fd27fe9f1bf13c6d7993"
+    },
+    "authorityTaskCapsule": {
+      "path": "task-capsule-5470587102-v56.json",
+      "sha256": "e51e772bc65c1a37b23fc6bdf1f31c0545e779d9927bebd1b9e0a2d04406cf57"
+    }
+  },
+  "inheritedSectionSha256": {
+    "question": "c8fc19401c71a793bb585d506bc959608f296ddd3374c1077ba24ac08eec1a3e",
+    "competingHypotheses": "fc3be6f6f5e2a251ee4c9077441794ee913ea7ba4d15bc57646071e69cf669cd",
+    "contract": "966c7ef88f1d22c5df45ead480d4c844f0960e0ac2bd61be17b1b7c845be24bd",
+    "frozenFactors": "677a8854cb2ff8c5dd89d709259ae875c095e4af809d9687dc2c0295ebe23b5c",
+    "design": "15100897bf76a67cccd78a059478bb1be8e1a9eceac6bc4b6cda4c53678d2e0f",
+    "estimands": "732789a78dd0eb7d9a3c60add29f4e0d07ba19c2a9a17723ed49efbb936d6003",
+    "identity": "1f110b464d7bacee38fde3c86a9e588c22146141337ad5336017c814adaec588",
+    "sourceIdentity": "1b42bff8ec8de376ff8eafe9f658d647b13b07dca7e0b5c37f94e2792dc74db4",
+    "reproductionArtefacts": "529f643ac073186078a497645f94977d3c68233c1b1d883f9fa6bc82731b758c",
+    "immutableInputs": "3e2cf4be49d344f7ed4eae25256dea5774c5b1c9a7ac1e295752760efe81030e",
+    "executionCeilings": "8aa86d66b722e248eae4b6abdbeb0bd1029ef51133e414b1774dbc9d1c6a433e",
+    "executionAndStopping": "32936cc4fc1aee706210e5eecea5a089ab4778c8b57a15eded80aa34034839d3",
+    "decisionRules": "076cc5565a795c9fcae21a6ac599f5c9678930bd92e2ac2f11517d0b735c4fab",
+    "claimBoundary": "9ebfed10ad47d660c3de079433f2c28084e1a0023e24f212079839c529ebc9bf"
+  },
+  "existingObservationAccounting": {
+    "frozenV2GodotProcesses": 2,
+    "frozenV2DirectControlledExecutions": 40,
+    "frozenV2CompletedProbeOutputs": 2
+  },
+  "ceilings": {
+    "maximumAnalysisExecutions": 1,
+    "maximumAnalysisSeconds": 5,
+    "maximumNewGodotProcesses": 0,
+    "maximumNewControlledScenarioExecutions": 0,
+    "maximumNewRows": 0,
+    "maximumNewSeedIdentities": 0,
+    "maximumNewCandidates": 0,
+    "maximumGrammarChanges": 0,
+    "maximumSimulatorRows": 0,
+    "maximumLedgerReads": 0,
+    "maximumLedgerWrites": 0,
+    "maximumProtectedSeedRows": 0,
+    "maximumProductMutations": 0,
+    "maximumFurtherCorrections": 0,
+    "maximumModelContextTokensDuringAnalysisAndDecision": 0
+  },
+  "decisionRules": {
+    "success": "Exactly one original v1 _analyse execution completes within five seconds, every original v1 exact gate passes, both immutable output hashes remain unchanged and every new-observation and product ceiling remains zero.",
+    "successAuthority": "Freeze this source/identity representation and continue only to a separately preregistered fixed-policy non-causal shadow-capacity screen, as authorised by the original v1 success rule.",
+    "futility": "The original v1 _analyse execution completes and any original v1 exact gate fails.",
+    "futilityAuthority": "Close this exact Emberglass one-carry contract without repair, rerun, substitution, option B or option C.",
+    "inconclusive": "An immutable input, inherited section, runner or analysis result is unavailable, invalid, mutated or incomplete at the frozen cap.",
+    "inconclusiveAuthority": "Record inconclusive without repair, rerun, endpoint reinterpretation, additional correction, option B or option C, and fail closed back to Ash."
+  },
+  "claimBoundary": "This analysis-only gate can establish only the original v1 exact source, null, carrier, ordering, save/resume and RNG identity result from the immutable v2 outputs. It cannot establish natural capacity, causality, balance, product scope, package admission, protected-seed authority, #421 acceptance or the #108 P9 receipt."
+}

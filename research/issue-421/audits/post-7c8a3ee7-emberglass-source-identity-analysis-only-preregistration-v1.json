@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-7c8a3ee7 Emberglass source identity analysis-only preregistration audit",
+  "state": "FROZEN_BEFORE_ANALYSIS",
+  "authority": {
+    "source": "Ash, Glassvow PM",
+    "decision": "AUTHORISE_ONE_ANALYSIS_ONLY_CORRECTION",
+    "commentId": 5470587102,
+    "commentBodySha256": "cbca146ef812fca7b3e50f03a7879bfc89d68f1a0c660e54b1e9a1ed99f0beea",
+    "authorityIntakeReceiptHead": "003f386830a26c86b2bb20f6c84dd285d3a06bf5"
+  },
+  "processAuthority": {
+    "currentMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+    "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+    "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a"
+  },
+  "analysisIdentity": {
+    "protocolPath": "protocols/post-7c8a3ee7-emberglass-source-identity-analysis-only-v1.json",
+    "protocolSha256": "3726136358dcbc055d3cc8fd4b15666f3f4e0a25326c65a2ace76255ac212c0b",
+    "runnerPath": "tools/post_7c8a3ee7_emberglass_source_identity_analysis_only_v1.py",
+    "runnerSha256": "fc739ddf2f875af64c6564a6623daaf56803c874a80841ab32517b227db336d6",
+    "runnerSelfTest": "PASS (3 checks)",
+    "preflight": "PASS",
+    "analysisFunction": "original v1 _analyse",
+    "v1RunnerSha256": "17fe491b8ad2589b57f678754893d40dff033da52b10263c71c12dc04bde6ba6",
+    "v1ProtocolSha256": "b08e185903bbd0fdbf3b4cc29b065b9483e91b6e835ef6239d079537c47e4ef2",
+    "allInheritedScientificSectionHashesMatchV1": true
+  },
+  "immutableInputs": {
+    "baselineOutput": "6b56900ab1cfdf6919d1a429bc9ab62e4cb0b905be6da022969493678aac5d91",
+    "candidateOutput": "cfece8e320ea104c03ff9d52e02457a2cc8baafb6cb4006ca7037b5a0818f052",
+    "v2Plan": "df35ac85d12f55da95b22b134be1f01ccdc9d8fcbd7f29d84550c39387ccf8ce",
+    "v2Protocol": "28562ac99db14804cbe2c06748e2e22f511e74e36b951510d5cf2f792b573e82",
+    "v2Summary": "eca403d6e1f1a45dc0ca01cabdebc97efca76103a7e4aa79f7052a9a7f0bb53b",
+    "v2ExecutionAudit": "38616144ebef7ffe649256048e108df9a584a77724331c2e9ac0e6dc162a1041",
+    "v2PublicationManifest": "90df62d0fc301c96a20cd5faff70990060e46c07b174fd27fe9f1bf13c6d7993"
+  },
+  "loaderSeparation": {
+    "analysisProtocolLoader": "dedicated analysis-only JSON loader",
+    "probeOutputLoader": "original v1 _load",
+    "overlayValidatorAppliedToProbeOutputs": false,
+    "globalMonkeyPatch": false
+  },
+  "frozenAccounting": {
+    "existingV2GodotProcesses": 2,
+    "existingV2DirectControlledExecutions": 40,
+    "existingV2CompletedProbeOutputs": 2,
+    "maximumAnalysisExecutions": 1,
+    "maximumAnalysisSeconds": 5,
+    "maximumNewGodotProcesses": 0,
+    "maximumNewRows": 0,
+    "maximumNewSeedIdentities": 0,
+    "maximumNewCandidates": 0,
+    "maximumGrammarChanges": 0,
+    "maximumSimulatorRows": 0,
+    "maximumLedgerReads": 0,
+    "maximumLedgerWrites": 0,
+    "maximumProtectedSeedRows": 0,
+    "maximumProductMutations": 0,
+    "maximumFurtherCorrections": 0,
+    "maximumModelContextTokensDuringAnalysisAndDecision": 0
+  },
+  "decisionBoundary": {
+    "success": "One original v1 _analyse execution completes, every original exact gate passes, immutable hashes remain unchanged and every new-observation ceiling remains zero; continue only to a separately preregistered fixed-policy non-causal shadow-capacity screen.",
+    "futility": "The original v1 _analyse execution completes and any original exact gate fails; close this exact one-carry contract without repair, rerun, substitution, B or C.",
+    "inconclusive": "An input, inherited section, runner or analysis result is unavailable, invalid, mutated or incomplete at cap; fail closed back to Ash without another correction, B or C.",
+    "adaptiveChoiceAfterResult": false
+  },
+  "preAnalysisState": {
+    "endpointContentReadUnderThisAuthority": false,
+    "analysisExecutions": 0,
+    "newGodotProcesses": 0,
+    "newRows": 0,
+    "simulatorRows": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0
+  },
+  "claimBoundary": "This audit freezes only the one authorised analysis-only correction before endpoint loading. It establishes no identity, capacity, causal, balance, product, #421-acceptance or #108-P9 claim."
+}
