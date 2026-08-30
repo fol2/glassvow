@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "emberglass-source-identity-inconclusive-at-cap",
+  "taskSsot": {
+    "issueBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "ownerDecision": "OPTION_2_APPROVED",
+    "commentId": 5468704389,
+    "bodySha256": "fca3a0142f3a7e55457b448a7acecab69bb14407005bc1c6354e5b740c297dd7"
+  },
+  "resolvedMain": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "developmentCheckout": {
+    "path": "/Users/jamesto/Coding/glassvow",
+    "branch": "work/421-h34",
+    "head": "7d1f6c0ff4d7534eb517ef57d1f547db140833fd",
+    "status": "clean-and-untouched"
+  },
+  "archive": {
+    "immutableClosureHead": "c69b2752f8a52c0d50151ba083a02948180a0846",
+    "grammarReceiptHead": "7c8a3ee7d3f297bec0d2888a9a5d3fefa25378ce",
+    "sourceIdentityPreregistrationHead": "c8156577de0905494a25ccb46b45acb665262e6f",
+    "sourceIdentityEvidenceHead": "7a877154ee2451ddea77ef867779c343a137ff60",
+    "ref": "research/issue-421-post-c69b2752-persistent-contract-evidence"
+  },
+  "experiment": {
+    "selectedContract": "emberglass-memory-one-carry",
+    "protocolPath": "protocols/post-7c8a3ee7-emberglass-source-identity-v1.json",
+    "protocolSha256": "b08e185903bbd0fdbf3b4cc29b065b9483e91b6e835ef6239d079537c47e4ef2",
+    "runnerPath": "tools/post_7c8a3ee7_emberglass_source_identity_v1.py",
+    "runnerSha256": "17fe491b8ad2589b57f678754893d40dff033da52b10263c71c12dc04bde6ba6",
+    "runnerSelfTest": "PASS (4 checks)",
+    "plannedControlledScenarioExecutions": 40,
+    "GodotProcessInvocations": 2,
+    "directControlledExecutions": 0,
+    "completedProbeOutputs": 0,
+    "outcome": "INCONCLUSIVE_AT_PREREGISTERED_CAP",
+    "decision": "record-source-identity-inconclusive-at-cap",
+    "fault": "FROZEN_PLAN_PATH_UNAVAILABLE_IN_BOTH_EXECUTION_WORKTREES",
+    "correctionsUsedAfterFreeze": 0,
+    "reruns": 0
+  },
+  "preregistrationComment": {
+    "commentId": 5469000459,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5469000459",
+    "bodySha256": "8bb844dc8b3cb1abe6c42e1cb1b3ef0644b9831db65c59002775c07f26159cc3"
+  },
+  "resultComment": {
+    "commentId": 5469013460,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5469013460",
+    "bodySha256": "5b491b33ef1b50db8b9b6ceb57a89b1e226bdadaddb7756ad2abfdc5dfd8624f"
+  },
+  "safeState": {
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "deliveryBranches": 0,
+    "pullRequests": 0,
+    "actionsRuns": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "disposition": {
+    "sourceIdentityEstablished": false,
+    "capacityAuthorised": false,
+    "causalClaimAuthorised": false,
+    "promotionAuthorised": false,
+    "repairOrRerunAuthorised": false,
+    "exactContractState": "immutable inconclusive non-decision evidence"
+  },
+  "nextAction": "Construct the next finite evidence-backed structural-mechanism grammar from current-main source and accepted #421 evidence, excluding every closed family and this exact contract; freeze it before any row."
+}

@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-research-evidence",
+  "parentArchiveHead": "7c8a3ee7d3f297bec0d2888a9a5d3fefa25378ce",
+  "preregistrationHead": "c8156577de0905494a25ccb46b45acb665262e6f",
+  "resultEvidenceHead": "7a877154ee2451ddea77ef867779c343a137ff60",
+  "intendedRemoteRef": "research/issue-421-post-c69b2752-persistent-contract-evidence",
+  "resolvedMain": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "authority": {
+    "issueBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "ownerDecision": "OPTION_2_APPROVED",
+    "commentId": 5468704389,
+    "commentBodySha256": "fca3a0142f3a7e55457b448a7acecab69bb14407005bc1c6354e5b740c297dd7"
+  },
+  "preregistration": {
+    "commentId": 5469000459,
+    "commentBodySha256": "8bb844dc8b3cb1abe6c42e1cb1b3ef0644b9831db65c59002775c07f26159cc3"
+  },
+  "result": {
+    "commentId": 5469013460,
+    "commentBodySha256": "5b491b33ef1b50db8b9b6ceb57a89b1e226bdadaddb7756ad2abfdc5dfd8624f",
+    "outcome": "INCONCLUSIVE_AT_PREREGISTERED_CAP",
+    "decision": "record-source-identity-inconclusive-at-cap",
+    "selectedContract": "emberglass-memory-one-carry",
+    "sourceIdentityEstablished": false
+  },
+  "scientificAccounting": {
+    "plannedControlledScenarioExecutions": 40,
+    "GodotProcessInvocations": 2,
+    "completedProbeOutputs": 0,
+    "directControlledExecutions": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "postFreezeCorrections": 0,
+    "reruns": 0
+  },
+  "files": [
+    {
+      "path": "research/issue-421/protocols/post-7c8a3ee7-emberglass-source-identity-v1.json",
+      "sha256": "b08e185903bbd0fdbf3b4cc29b065b9483e91b6e835ef6239d079537c47e4ef2"
+    },
+    {
+      "path": "research/issue-421/tools/post_7c8a3ee7_emberglass_source_identity_v1.py",
+      "sha256": "17fe491b8ad2589b57f678754893d40dff033da52b10263c71c12dc04bde6ba6"
+    },
+    {
+      "path": "tools/research_421_emberglass_direct_probe.gd",
+      "sha256": "0bbd454216c59935a4d63cdf5666d9a88715066edeedbb07d0cd2e29aea97e96"
+    },
+    {
+      "path": "research/issue-421/source/post-7c8a3ee7-emberglass-combat-v1.patch",
+      "sha256": "d566de26c788c58aac1018f65ec7ae7cdd3481f6a06f1d0523598e4c2f67d90c"
+    },
+    {
+      "path": "research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v1/plan.json",
+      "sha256": "ae9fb3988ac267102be79160a1b23c6bfbe2b199c456d5edae98827d8b9d4a32"
+    },
+    {
+      "path": "research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v1/baseline.stdout.txt",
+      "sha256": "cf17838058a5bf14bf5b23e8ab4bb06b2ad3d2aed9ea025003f9a2eeedf28479"
+    },
+    {
+      "path": "research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v1/baseline.stderr.txt",
+      "sha256": "43816f9961dc8522ab4f09bc85ca2a62fb6cb9eaeb1a1ceb5cebfab5fcd3cf2c"
+    },
+    {
+      "path": "research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v1/candidate.stdout.txt",
+      "sha256": "cf17838058a5bf14bf5b23e8ab4bb06b2ad3d2aed9ea025003f9a2eeedf28479"
+    },
+    {
+      "path": "research/issue-421/evidence/post-7c8a3ee7-emberglass-source-identity-v1/candidate.stderr.txt",
+      "sha256": "43816f9961dc8522ab4f09bc85ca2a62fb6cb9eaeb1a1ceb5cebfab5fcd3cf2c"
+    },
+    {
+      "path": "research/issue-421/summaries/post-7c8a3ee7-emberglass-source-identity-v1.json",
+      "sha256": "c943bacb14b4e739b58f212404e87014b040c24bb53e4af122bdd347be068c9d"
+    },
+    {
+      "path": "research/issue-421/audits/post-7c8a3ee7-emberglass-source-identity-execution-v1.json",
+      "sha256": "0bfbc895c968619e582008e38fc21d9ed199b34d728e2988945b46b490ec4866"
+    },
+    {
+      "path": "research/issue-421/comments/post-7c8a3ee7-emberglass-source-identity-preregistration-v1.md",
+      "sha256": "8bb844dc8b3cb1abe6c42e1cb1b3ef0644b9831db65c59002775c07f26159cc3"
+    },
+    {
+      "path": "research/issue-421/comments/post-7c8a3ee7-emberglass-source-identity-result-v1.md",
+      "sha256": "5b491b33ef1b50db8b9b6ceb57a89b1e226bdadaddb7756ad2abfdc5dfd8624f"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5469013460-v51.json",
+      "sha256": "282e5ceb6c6655aa92f96e65b59dc3db76077c04bb47d14b180d6bcc30729eba"
+    }
+  ],
+  "claims": [
+    "Both frozen Godot processes rejected the publication-relative plan path before iterating any row.",
+    "Zero direct scientific executions and zero simulator rows completed, so no identity gate or scientific contrast was evaluated.",
+    "The exact Emberglass one-carry contract is inconclusive non-decision evidence and cannot be repaired, rerun, substituted or promoted under this protocol.",
+    "No identity, capacity, causal, balance, product, acceptance or P9 claim follows."
+  ]
+}
