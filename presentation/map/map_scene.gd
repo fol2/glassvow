@@ -64,10 +64,14 @@ const TERMINUS_XZ: Vector2 = Vector2(40.4, 0.0)
 ## and 6.4 m to the top of the smoke, so it stands among the 6.2 m ash trunks
 ## rather than over them, and the doorway is legible at the played zoom.
 # World scale comes from the act1-vigil profile.
-## Metres between paving slabs along a road segment.
-## Denser and wider than the first pass. The paving is the map's main statement
-## of where the graph runs; the 2D dots over it are a route marker, not a road.
+## Metres between paving slabs along a road segment. Generated Acts I/II use
+## fewer, narrower, less regularly aligned slabs so their dense graph does not
+## read as one continuous woven lattice. The compiled centreline is unchanged.
 const ROAD_STEP: float = 0.95
+const EARLY_ROAD_STEP: float = 1.45
+const ROAD_WOBBLE: float = 0.045
+const EARLY_ROAD_WOBBLE: float = 0.11
+const EARLY_ROAD_WIDTH: float = 0.78
 # Road slab scale comes from the shared-road profiles.
 # The current camera-directional hide envelope is owned by MapAssetProfiles.
 
@@ -1073,11 +1077,13 @@ func _build_road() -> void:
 	var yaws: Array[PackedFloat32Array] = [PackedFloat32Array(), PackedFloat32Array()]
 	var pairs: int = _road_segments.size() / 2
 	var slab: int = 0
+	var early_act: bool = _act <= 1
+	var road_step: float = EARLY_ROAD_STEP if early_act else ROAD_STEP
 	for i: int in range(pairs):
 		var a: Vector3 = _road_segments[i * 2]
 		var b: Vector3 = _road_segments[i * 2 + 1]
 		var span: float = a.distance_to(b)
-		var steps: int = maxi(1, int(span / ROAD_STEP))
+		var steps: int = maxi(1, int(span / road_step))
 		var yaw: float = atan2(b.x - a.x, b.z - a.z)
 		for k: int in range(steps + 1):
 			var t: float = float(k) / float(steps)
@@ -1086,30 +1092,26 @@ func _build_road() -> void:
 			slab += 1
 	for m: int in range(2):
 		var node: MultiMeshInstance3D = _road_multimesh(
-				_road_meshes[m], laid[m], yaws[m], m, _road_profiles[m])
+				_road_meshes[m], laid[m], yaws[m], m, _road_profiles[m], early_act)
 		node.name = "AssetRoad%d" % m
 		_asset_geometry.add_child(node)
 
 
 func _road_multimesh(mesh: Mesh, positions: PackedVector3Array,
 		yaws: PackedFloat32Array, seed_index: int,
-		profile: Dictionary) -> MultiMeshInstance3D:
+		profile: Dictionary, early_act: bool) -> MultiMeshInstance3D:
 	var multimesh: MultiMesh = MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.use_custom_data = true
 	multimesh.mesh = mesh
 	multimesh.instance_count = positions.size()
+	var wobble_amplitude: float = EARLY_ROAD_WOBBLE if early_act else ROAD_WOBBLE
+	var width: float = EARLY_ROAD_WIDTH if early_act else 1.0
 	for i: int in range(positions.size()):
 		var index: int = seed_index * 131 + i
-		# Small: enough that the paving is not a stamped ribbon, little enough
-		# that consecutive slabs still read as one road rather than as rubble.
-		var wobble: float = 0.045 * sin(float(index) * 1.71)
 		var unit: float = _asset_profiles.default_scale(profile)
-		var scale: Vector3 = Vector3(
-				unit * (1.0 + wobble),
-				unit * 0.6,
-				unit * (1.0 - wobble))
-		var basis: Basis = Basis(Vector3.UP, yaws[i] + wobble).scaled(scale)
+		var basis: Basis = _road_slab_basis(
+				yaws[i], index, unit, width, wobble_amplitude)
 		multimesh.set_instance_transform(i, Transform3D(basis, positions[i]))
 		multimesh.set_instance_custom_data(i, Color(
 				fposmod(float(index) * 0.173, 1.0),
@@ -1120,6 +1122,16 @@ func _road_multimesh(mesh: Mesh, positions: PackedVector3Array,
 	instances.material_override = _materials.road
 	instances.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	return instances
+
+
+static func _road_slab_basis(yaw: float, index: int, unit: float,
+		width: float, wobble_amplitude: float) -> Basis:
+	var wobble: float = wobble_amplitude * sin(float(index) * 1.71)
+	var scale: Vector3 = Vector3(
+			unit * width * (1.0 + wobble),
+			unit * 0.6,
+			unit * (1.0 - wobble))
+	return Basis(Vector3.UP, yaw + wobble).scaled(scale)
 
 
 func _placeholders_visible() -> bool:
