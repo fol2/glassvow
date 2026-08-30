@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "persistent-option2-authority-intake",
+  "taskSsot": {
+    "issueBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "state": "open",
+    "labelsAfterIntake": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "ownerDecision": "OPTION_2_APPROVED",
+    "commentId": 5468704389,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5468704389",
+    "bodySha256": "fca3a0142f3a7e55457b448a7acecab69bb14407005bc1c6354e5b740c297dd7",
+    "precedingDecisionCommentId": 5467896178,
+    "precedingDecisionBodySha256": "cd8c64d0e32841a542fb6428d0ac3d890e9ac38252cf4e324a5ac1dde81bdf1e"
+  },
+  "resolvedMain": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "instructionIdentity": {
+    "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+    ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+    "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+    "docs/agents/issue-tracker.md": "e265ef56af12d48bc61f380731d7330cd6669072560ec5318eb68d03bb1a4c39",
+    "docs/agents/triage-labels.md": "4f53c9b40ce2651e3611aa090eaedbd6dbc9b71ef8c5f7e65eac0d8263190d0d"
+  },
+  "developmentCheckout": {
+    "path": "/Users/jamesto/Coding/glassvow",
+    "branch": "work/421-h34",
+    "head": "7d1f6c0ff4d7534eb517ef57d1f547db140833fd",
+    "status": "clean-and-untouched"
+  },
+  "researchSource": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/persistent-option2-source-v1",
+    "head": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "mode": "detached-current-main"
+  },
+  "archive": {
+    "parentHead": "c69b2752f8a52c0d50151ba083a02948180a0846",
+    "ref": "research/issue-421-post-c69b2752-persistent-contract-evidence"
+  },
+  "scope": {
+    "openedClass": "C5_NEW_PERSISTENT_RUN_OR_PRESENTATION_CONTRACT",
+    "maximumSelectedContracts": 1,
+    "persistentCarrierAndAcquisitionSeparatedFromCombatPayoff": true,
+    "deterministicZeroSimulationSelectionRequired": true,
+    "existingRelicRewardSaveAndGenericPresentationPathsPreferred": true,
+    "breakingSaveChangeAuthorised": false,
+    "changedExistingInternalIdAuthorised": false,
+    "newPersistentFieldAuthorised": false,
+    "bespokeUiAuthorised": false,
+    "researchOnlyAdditiveIdAuthorised": true,
+    "permanentProductIdConditionalOnPromotion": true,
+    "closedFamiliesReopened": 0,
+    "successorTicketsAuthorised": 0
+  },
+  "safeState": {
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "deliveryBranches": 0,
+    "pullRequests": 0,
+    "actionsRuns": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "nextAction": "Freeze and publish the finite zero-simulation persistent-contract grammar, exact immutable inputs, independent source/alias/policy questions, numeric ceilings and deterministic decision rules before any background audit or simulator observation."
+}
