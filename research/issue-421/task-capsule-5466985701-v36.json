@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 5,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "primary-rule-topology-census",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "parentArchiveHead": "c802be36510273481b6d0f865b92fac43abf6aff",
+  "protocol": {
+    "path": "protocols/post-c802be36-primary-rule-topology-census-v1.json",
+    "sha256": "059bca43f1fe60c8d51553ee85749e28617f7f658009463460057c55f59f3760"
+  },
+  "execution": {
+    "searchQueries": 6,
+    "searchResultInspectionCap": 30,
+    "eligibleDocumentCap": 6,
+    "minimumEligibleDocuments": 4,
+    "minimumIndependentPublishers": 3,
+    "backgroundAgents": 2,
+    "contextFork": "none",
+    "maximumWallTimeSeconds": 2100,
+    "ownerConsolidations": 1,
+    "retrievalCorrectionCap": 1,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "candidatesConstructed": 0,
+    "MLRLOptimiserRuns": 0
+  },
+  "activeInvariants": [
+    "Only the six frozen queries and first-five ranked results may supply sources.",
+    "Only official complete rules sources qualify; unavailable game slots cannot be substituted.",
+    "The exact finite topology codebook is immutable after retrieval.",
+    "A key needs exact support in two games from two publishers and must survive every existing closure.",
+    "At success, only one highest-ranked semantic direction is frozen for a later grammar; no candidate or row is produced here.",
+    "Scoreline and Afterimage remain separate factors; closed families remain immutable."
+  ],
+  "nextAction": "Publish the protocol hash, execute the six frozen searches, select official sources by rank, record retrieval identities, then dispatch the two non-overlapping read-only coding reports."
+}

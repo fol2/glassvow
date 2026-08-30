@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "protocolId": "post-c802be36-primary-rule-topology-census-v1",
+  "preregisteredAtUtc": "2026-08-30T06:49:49Z",
+  "repository": "fol2/glassvow",
+  "issue": 421,
+  "question": "Which player-controlled combat transition topologies absent from current-main Glassvow occur in at least two independent published rules systems and survive the immutable C1-C4, C6 and Ward-spend exclusions?",
+  "authorities": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "controllingCommentId": 5466985701,
+    "controllingCommentBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60",
+    "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2"
+  },
+  "parentEvidence": {
+    "archiveHead": "c802be36510273481b6d0f865b92fac43abf6aff",
+    "disposition": "FUTILITY_CURRENT_MAIN_PRODUCT_LANGUAGE",
+    "sourceProjectionSha256": "e28ed4b68e92834106adc8d4cbb3a3e0552fd8ea7d2d4ac5a9ced26ea445619f",
+    "closureEnvelopeSha256": "3d0c3f87a04345cc3d10169895dc95c5e4347b12d11fdcce650e1c1f881c949f"
+  },
+  "retrieval": {
+    "queriesInOrder": [
+      {
+        "id": "Q1",
+        "query": "Slay the Spire The Board Game official rulebook PDF"
+      },
+      {
+        "id": "Q2",
+        "query": "Aeon's End official rulebook PDF"
+      },
+      {
+        "id": "Q3",
+        "query": "Star Realms official rulebook PDF"
+      },
+      {
+        "id": "Q4",
+        "query": "Shards of Infinity official rulebook PDF"
+      },
+      {
+        "id": "Q5",
+        "query": "Marvel Champions official rules reference PDF"
+      },
+      {
+        "id": "Q6",
+        "query": "Flesh and Blood official comprehensive rules PDF"
+      }
+    ],
+    "resultCapPerQuery": 5,
+    "selectionRule": "For each query, inspect results in returned rank order and retain the first English complete rulebook, rules reference or comprehensive-rules document hosted by the named game's developer, publisher or an official CDN reached from that publisher. Reject stores, marketing pages without rules, news, reviews, wikis, forums, videos, community guides, mirrors and user uploads. Retain at most one document per game.",
+    "minimumEligibleDocuments": 4,
+    "minimumIndependentPublishers": 3,
+    "unavailableSlotRule": "A query with no eligible result in its first five ranks is unavailable and cannot be replaced by a different game or query.",
+    "archiveRule": "Record query rank, title, canonical URL, publisher, retrieval time, media type and SHA-256 of the retrieved bytes or extracted official text. Do not archive copyrighted full documents; preserve only hashes, locations, section/page citations and compliant short excerpts.",
+    "maximumWallTimeSeconds": 900,
+    "mechanicalCorrectionCap": 1,
+    "correctionRule": "One separately versioned correction may repair retrieval or text extraction for the same selected official URL without changing query, rank, game, source, inclusion rule or scientific coding. Source substitution is not a correction."
+  },
+  "topologyCodebook": {
+    "producerTiming": [
+      "CARD_PLAY",
+      "PRE_RESOLUTION_REACTION",
+      "POST_RESOLUTION_REACTION",
+      "TURN_START",
+      "TURN_END",
+      "DAMAGE_DECLARED",
+      "DAMAGE_APPLIED",
+      "ENEMY_ACTION_DECLARED",
+      "ENEMY_ACTION_RESOLVED",
+      "CARD_DRAWN",
+      "CARD_DISCARDED",
+      "CARD_EXHAUSTED"
+    ],
+    "targetSurface": [
+      "PLAYER",
+      "ENEMY",
+      "ENEMY_ACTION",
+      "CARD_IN_PLAY",
+      "NEXT_DRAW",
+      "DRAW_PILE_TOP",
+      "ACTION_QUEUE",
+      "RESOURCE_POOL",
+      "DAMAGE_PACKET",
+      "STATUS"
+    ],
+    "transform": [
+      "CREATE",
+      "CANCEL",
+      "DELAY",
+      "REDIRECT",
+      "REPLACE",
+      "COPY",
+      "STORE",
+      "RELEASE",
+      "CONVERT",
+      "REORDER",
+      "REVEAL",
+      "PREPARE"
+    ],
+    "consumerTiming": [
+      "CARD_PLAY",
+      "PRE_RESOLUTION_REACTION",
+      "POST_RESOLUTION_REACTION",
+      "TURN_START",
+      "TURN_END",
+      "DAMAGE_DECLARED",
+      "DAMAGE_APPLIED",
+      "ENEMY_ACTION_DECLARED",
+      "ENEMY_ACTION_RESOLVED",
+      "CARD_DRAWN",
+      "CARD_DISCARDED",
+      "CARD_EXHAUSTED",
+      "NEXT_CARD_PLAY",
+      "NEXT_ENEMY_ACTION"
+    ],
+    "keyRule": "producerTiming|targetSurface|transform|consumerTiming using the exact uppercase labels above",
+    "outOfCodebookRule": "A source mechanic that cannot be represented exactly is reported as out-of-codebook evidence and cannot survive or alter the codebook."
+  },
+  "sourceCoding": {
+    "backgroundAgents": 2,
+    "contextFork": "none",
+    "assignmentRule": "After deterministic retrieval, assign eligible documents in query-ID order by alternating odd positions to H1 and even positions to H2. Agents do not share documents or outputs.",
+    "perSourceTopologyLimit": 12,
+    "eligibleMechanic": "A rule-explicit, player-controlled, combat-local transition with an explicit opportunity or resource cost and deterministic timing. Pure numeric modifiers, flavour, presentation, deck construction outside combat and mandatory enemy-only rules are excluded.",
+    "requiredPerTopology": [
+      "exact codebook key",
+      "source game and publisher",
+      "section or page citation",
+      "paraphrased rule plus at most one short compliant excerpt",
+      "player choice and natural cost",
+      "lifecycle",
+      "strongest counterevidence"
+    ],
+    "maximumSourceTokensPerAgent": 70000,
+    "maximumOutputTokensPerAgent": 6000,
+    "maximumWallTimeSecondsPerAgent": 1200,
+    "prohibited": [
+      "Inspect the other agent's sources or output.",
+      "Add a source, query, codebook label or mechanic not present in the assigned official rules.",
+      "Construct or rank a Glassvow candidate, choose numeric levels, run code or simulator rows, fit results, or decide stop/go."
+    ]
+  },
+  "deterministicConsolidation": {
+    "normalisation": "Exact uppercase codebook key; no synonym or semantic-key merge after agent reports.",
+    "crossSourceSupport": "The same exact key must occur in at least two eligible games from at least two independent publishers.",
+    "filtersInOrder": [
+      "Reject any key already represented by the immutable current-main projection.",
+      "Reject C1 existing-transition state, C2 relation/history, C3 arithmetic residual, C4 carrier/replay alias, C6 selector/persistent carrier and Ward-spend aliases.",
+      "Reject a key that requires a hand-card/global selector, run persistence, save/internal-ID change or policy choice beyond legal card plus self/enemy target.",
+      "Reject a key without an explicit source-grounded natural cost, bounded fight-local lifecycle, direct activation objective and exact null.",
+      "Retain only keys meeting cross-source support."
+    ],
+    "ranking": [
+      "supporting game count descending",
+      "supporting publisher count descending",
+      "required new product-state field count ascending",
+      "required policy-interface addition count ascending",
+      "exact topology key lexicographically ascending"
+    ],
+    "ownerConsolidations": 1,
+    "success": "At least one key survives every filter. Freeze only the highest-ranked key as the semantic direction for a separately preregistered finite grammar; do not construct a candidate or run a simulator in this method.",
+    "futility": "Retrieval and both reports are admissible but no key survives. Close this external primary-rule topology corpus without a broad mechanism impossibility claim.",
+    "inconclusive": "Fewer than four eligible documents, fewer than three independent publishers, a hash/provenance/cap/prohibited-action fault, an uncorrected retrieval/extraction fault, or an irresolvable required-field omission."
+  },
+  "executionCeilings": {
+    "maximumSearchQueries": 6,
+    "maximumSearchResultsInspected": 30,
+    "maximumEligibleDocuments": 6,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "candidatesConstructed": 0,
+    "MLRLOptimiserRuns": 0
+  },
+  "preservedInvariants": [
+    "Scoreline payoff and Afterimage payoff remain separate frozen causal factors.",
+    "Every valid closed family and quarantined observation remains immutable.",
+    "This is mechanism-grammar evidence, not product truth, causal capacity, acceptance or a shipping decision."
+  ]
+}

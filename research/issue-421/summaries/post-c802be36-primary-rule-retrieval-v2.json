@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "retrievedAtUtc": "2026-08-30T06:54:28Z",
+  "baseProtocolSha256": "059bca43f1fe60c8d51553ee85749e28617f7f658009463460057c55f59f3760",
+  "correctionProtocolSha256": "cd333a8f3854355c18c1ab63684ed507af042f5c090bd0128d95836fab23706d",
+  "preregistrationCommentId": 5467242621,
+  "correctionCommentId": 5467251381,
+  "searchAccounting": {
+    "queriesExecuted": 6,
+    "resultsInspected": 10,
+    "resultInspectionCap": 30,
+    "eligibleDocuments": 5,
+    "eligibleDocumentCap": 6,
+    "independentPublishers": 5,
+    "minimumEligibleDocuments": 4,
+    "minimumIndependentPublishers": 3,
+    "retrievalCorrectionsUsed": 1,
+    "retrievalCorrectionCap": 1
+  },
+  "unavailableQueries": [
+    {
+      "queryId": "Q2",
+      "query": "Aeon's End official rulebook PDF",
+      "resultDispositionInRankOrder": [
+        "BoardGameGeek file listing: reject community host/user upload",
+        "wiki.gg rules page: reject wiki",
+        "Frosted Games downloads: reject German-only document",
+        "BoardGameGeek file/Dropbox pointer: reject community host/user upload",
+        "Fandom wiki: reject wiki"
+      ],
+      "status": "UNAVAILABLE_FIRST_FIVE_NO_SUBSTITUTION"
+    }
+  ],
+  "documents": [
+    {
+      "queryId": "Q1",
+      "rank": 1,
+      "game": "Slay the Spire: The Board Game",
+      "publisher": "Contention Games / Asmodee",
+      "url": "https://cdn.svc.asmodee.net/production-asmodeeca/uploads/2025/12/Slay_the_Spire_-_Rulebook_v2.30_Reprint_Web.pdf",
+      "mediaType": "application/pdf",
+      "sourceBytes": 14895421,
+      "sourceSha256": "50bfb512dc1ac982a483ea1d2e61bb5ba856d96f73636b47e4372d0fe5d587a9",
+      "extractedTextBytes": 63218,
+      "extractedTextSha256": "b2cb3389cd4de128a63c5e6d36767661e1a0aa7c54932e0d1283631e73db3bd1"
+    },
+    {
+      "queryId": "Q3",
+      "rank": 1,
+      "game": "Star Realms Box Set",
+      "publisher": "Wise Wizard Games",
+      "entrypoint": "https://www.starrealms.com/faq/",
+      "url": "https://files.wisewizardgames.com/wwg/rules/SRBOX_Rulebook_1.1E_WEB.pdf",
+      "mediaType": "application/pdf",
+      "sourceBytes": 16715453,
+      "sourceSha256": "4a17a34be5d283fa0eb728d4ba26d8e41c8f692d9cd7bd2785ca44ff00775a20",
+      "extractedTextBytes": 85759,
+      "extractedTextSha256": "577c04d50b254b4f266dba56ddcdfc3b7661d884068143b5f2f5f824befe8032"
+    },
+    {
+      "queryId": "Q4",
+      "rank": 1,
+      "game": "Shards of Infinity",
+      "publisher": "Stone Blade Entertainment",
+      "entrypoint": "https://stoneblade.com/pages/rules",
+      "url": "https://cdn.shopify.com/s/files/1/0691/8805/9412/files/SOI_Rules_v1-shards-of-infinity.pdf?v=1670526653",
+      "mediaType": "application/pdf",
+      "sourceBytes": 10912186,
+      "sourceSha256": "6d052c5b0ce48125ed646a38ee5bcd75c000e10e64441e2d012e8359e19cc994",
+      "extractedTextBytes": 23540,
+      "extractedTextSha256": "a9c9ef6c682d8ad2c7ca6973d701d45d7cb5680693085746e5c34a26e9801ab7"
+    },
+    {
+      "queryId": "Q5",
+      "rank": 1,
+      "game": "Marvel Champions: The Card Game",
+      "publisher": "Fantasy Flight Games",
+      "url": "https://images-cdn.fantasyflightgames.com/filer_public/11/9f/119fdb98-cabe-4de3-8be8-4c4dbcae9d7c/mc_rulesreference_v17-web.pdf",
+      "mediaType": "application/pdf",
+      "sourceBytes": 3625420,
+      "sourceSha256": "a797a293b19224ca5b955a60cd4185f2338750d956cad240f2d4fcd8895f739a",
+      "extractedTextBytes": 450521,
+      "extractedTextSha256": "da30a765dde1a15e6acb5e68514a3d554a92851b1b5b408a22e69b5076b951dd"
+    },
+    {
+      "queryId": "Q6",
+      "rank": 1,
+      "game": "Flesh and Blood",
+      "publisher": "Legend Story Studios",
+      "entrypoint": "https://rules.fabtcg.com/en/",
+      "url": "https://rules.fabtcg.com/txt/latest/en-fab-cr.txt",
+      "mediaType": "text/plain",
+      "sourceBytes": 322134,
+      "sourceSha256": "10e3fb55eb0dd3c1fb22b4f415db6d14e5e329d118a2a9204355fda4d8c98a05",
+      "extractedTextBytes": 322134,
+      "extractedTextSha256": "10e3fb55eb0dd3c1fb22b4f415db6d14e5e329d118a2a9204355fda4d8c98a05"
+    }
+  ],
+  "agentAssignment": {
+    "H1": [
+      "Q1",
+      "Q4",
+      "Q6"
+    ],
+    "H2": [
+      "Q3",
+      "Q5"
+    ]
+  },
+  "copyrightBoundary": "Raw source documents and full extracted text remain temporary private inputs and are not publication artefacts. Archive only this identity record, citations, paraphrases and compliant short excerpts."
+}

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "protocolId": "post-c802be36-primary-rule-topology-census-v2",
+  "correctedAtUtc": "2026-08-30T06:53:13Z",
+  "baseProtocol": {
+    "path": "protocols/post-c802be36-primary-rule-topology-census-v1.json",
+    "sha256": "059bca43f1fe60c8d51553ee85749e28617f7f658009463460057c55f59f3760"
+  },
+  "correctionAccounting": {
+    "used": 1,
+    "cap": 1,
+    "scientificQuestionChanged": false,
+    "queryOrRankChanged": false,
+    "gameOrSourceChanged": false,
+    "codebookOrDecisionRuleChanged": false,
+    "semanticEndpointObservedBeforeCorrection": false
+  },
+  "observedMechanicalFault": {
+    "stage": "official PDF extraction before source coding",
+    "rootCause": "The web PDF extractor rejected selected official PDFs at its content-length ceiling; Q1 returned an internal open error and Q3/Q4 reported lengths of 16,715,453 and 10,912,186 bytes respectively.",
+    "v1Disposition": "IMMUTABLE_NON_DECISION_RETRIEVAL_FAULT",
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "semanticTopologiesCoded": 0
+  },
+  "frozenSelection": [
+    {
+      "queryId": "Q1",
+      "rank": 1,
+      "game": "Slay the Spire: The Board Game",
+      "publisher": "Contention Games / Asmodee",
+      "url": "https://cdn.svc.asmodee.net/production-asmodeeca/uploads/2025/12/Slay_the_Spire_-_Rulebook_v2.30_Reprint_Web.pdf",
+      "mediaType": "application/pdf"
+    },
+    {
+      "queryId": "Q2",
+      "status": "UNAVAILABLE_FIRST_FIVE",
+      "reason": "No official English complete rules document qualified within the frozen first-five search results."
+    },
+    {
+      "queryId": "Q3",
+      "rank": 1,
+      "game": "Star Realms Box Set",
+      "publisher": "Wise Wizard Games",
+      "entrypoint": "https://www.starrealms.com/faq/",
+      "url": "https://files.wisewizardgames.com/wwg/rules/SRBOX_Rulebook_1.1E_WEB.pdf",
+      "mediaType": "application/pdf"
+    },
+    {
+      "queryId": "Q4",
+      "rank": 1,
+      "game": "Shards of Infinity",
+      "publisher": "Stone Blade Entertainment",
+      "entrypoint": "https://stoneblade.com/pages/rules",
+      "url": "https://cdn.shopify.com/s/files/1/0691/8805/9412/files/SOI_Rules_v1-shards-of-infinity.pdf?v=1670526653",
+      "mediaType": "application/pdf"
+    },
+    {
+      "queryId": "Q5",
+      "rank": 1,
+      "game": "Marvel Champions: The Card Game",
+      "publisher": "Fantasy Flight Games",
+      "url": "https://images-cdn.fantasyflightgames.com/filer_public/11/9f/119fdb98-cabe-4de3-8be8-4c4dbcae9d7c/mc_rulesreference_v17-web.pdf",
+      "mediaType": "application/pdf"
+    },
+    {
+      "queryId": "Q6",
+      "rank": 1,
+      "game": "Flesh and Blood",
+      "publisher": "Legend Story Studios",
+      "entrypoint": "https://rules.fabtcg.com/en/",
+      "url": "https://rules.fabtcg.com/txt/latest/en-fab-cr.txt",
+      "mediaType": "text/plain"
+    }
+  ],
+  "correctedExtraction": {
+    "pdfRetrieval": "curl -L --fail --silent --show-error using the exact selected URL",
+    "pdfExtraction": "pdftotext -layout to a private temporary directory",
+    "textRetrieval": "curl -L --fail --silent --show-error using the exact selected URL",
+    "identity": "Record byte length and SHA-256 for the retrieved source plus extracted-text length and SHA-256. Agents receive extracted text only; source binaries are deleted after reports and are never archived.",
+    "temporaryDirectory": "One mktemp-created path outside both the development checkout and archive tree.",
+    "noFurtherCorrection": true
+  },
+  "unchanged": "Every base-protocol authority, source eligibility rule, topology label, coding requirement, cap, filter, ranking, success/futility/inconclusive rule and prohibition remains unchanged."
+}

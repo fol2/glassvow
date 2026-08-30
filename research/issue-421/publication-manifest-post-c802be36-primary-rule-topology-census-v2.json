@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-research-evidence",
+  "parentArchiveHead": "c802be36510273481b6d0f865b92fac43abf6aff",
+  "intendedRemoteRef": "research/issue-421-post-c802be36-primary-rule-topology-census-evidence",
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "authority": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "commentId": 5466985701,
+    "commentBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "preregistrationCommentId": 5467242621,
+  "correctionCommentId": 5467251381,
+  "disposition": "INCONCLUSIVE_PRIMARY_RULE_TOPOLOGY_CENSUS_AT_CORRECTION_CAP",
+  "scientificAccounting": {
+    "searchQueries": 6,
+    "searchResultsInspected": 10,
+    "eligibleDocuments": 5,
+    "independentPublishers": 5,
+    "retrievalCorrectionsUsed": 1,
+    "retrievalCorrectionCap": 1,
+    "h1Status": "INCONCLUSIVE_SOURCE_CONTEXT_CAP",
+    "h2Status": "INTERRUPTED_NO_RESULT",
+    "ownerConsolidations": 0,
+    "admissibleTopologyKeys": 0,
+    "candidatesConstructed": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0
+  },
+  "files": [
+    {
+      "path": "research/issue-421/protocols/post-c802be36-primary-rule-topology-census-v1.json",
+      "sha256": "059bca43f1fe60c8d51553ee85749e28617f7f658009463460057c55f59f3760"
+    },
+    {
+      "path": "research/issue-421/protocols/post-c802be36-primary-rule-topology-census-v2.json",
+      "sha256": "cd333a8f3854355c18c1ab63684ed507af042f5c090bd0128d95836fab23706d"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5466985701-v36.json",
+      "sha256": "243d94cfaf006efe490547e25b15a4a7edf183678e56a09e33697bfd5ce9fa5e"
+    },
+    {
+      "path": "research/issue-421/summaries/post-c802be36-primary-rule-retrieval-v2.json",
+      "sha256": "c4fa11128c6769f59f744229cedf05f1f8414a94ba1e377b5b711dba6ea66d0c"
+    },
+    {
+      "path": "research/issue-421/summaries/post-c802be36-primary-rule-h1-cap-fault-v2.md",
+      "sha256": "747cb000cdac1de18024b654e4217ff635c29f9e967bc660e1a4d69e9c209f5a"
+    },
+    {
+      "path": "research/issue-421/summaries/post-c802be36-primary-rule-topology-census-v2.md",
+      "sha256": "7fbcb2ccbbad21cb4e35b9cdfafb0310dcbaa5bc4c509dda8873051c1e51fa31"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5466985701-v37.json",
+      "sha256": "9f95ef1067618052ccf25c120521a03eddbc79bacdbb049c1e8eb58c70b8a97a"
+    }
+  ],
+  "copyrightBoundary": "The five source documents and their complete extracted text are not archived. The retrieval record preserves official URLs, byte/text identities and provenance only.",
+  "claims": [
+    "The frozen retrieval qualified five official rules documents from five publishers.",
+    "The full-rule model-coding method produced no admissible topology because H1 exceeded its frozen source-context ceiling and H2 was stopped.",
+    "No semantic, causal, product, acceptance, P9 or broad mechanism conclusion follows."
+  ]
+}

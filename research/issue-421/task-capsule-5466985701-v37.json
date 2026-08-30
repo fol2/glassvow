@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 5,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "blind-literal-topology-screen-design",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "completedMethod": {
+    "baseProtocolSha256": "059bca43f1fe60c8d51553ee85749e28617f7f658009463460057c55f59f3760",
+    "correctionProtocolSha256": "cd333a8f3854355c18c1ab63684ed507af042f5c090bd0128d95836fab23706d",
+    "retrievalRecordSha256": "c4fa11128c6769f59f744229cedf05f1f8414a94ba1e377b5b711dba6ea66d0c",
+    "eligibleSources": 5,
+    "independentPublishers": 5,
+    "retrievalCorrectionsUsed": 1,
+    "retrievalCorrectionCap": 1,
+    "h1Status": "INCONCLUSIVE_SOURCE_CONTEXT_CAP",
+    "h2Status": "INTERRUPTED_NO_RESULT",
+    "ownerConsolidations": 0,
+    "admissibleTopologyKeys": 0,
+    "disposition": "INCONCLUSIVE_PRIMARY_RULE_TOPOLOGY_CENSUS_AT_CORRECTION_CAP"
+  },
+  "activeInvariants": [
+    "No semantic endpoint from the failed full-rule coding method may select or rank a topology.",
+    "The five retrieved source identities are immutable non-decision provenance only.",
+    "Any lexicon designers must be blind to the rule corpus and to one another.",
+    "Deterministic code alone may extract bounded passages from a separately frozen literal lexicon.",
+    "No candidate, simulator row, ML/RL method, protected identity or product mutation is authorised."
+  ],
+  "nextAction": "Archive the inconclusive method, then preregister a distinct blind literal topology screen whose lexicon, passage boundaries, source identities, budgets and stop rules are frozen before any deterministic extraction."
+}
