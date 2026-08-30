@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "kind": "separately-versioned-mechanical-correction",
+  "issue": 421,
+  "parentTaskCapsule": {
+    "path": "task-capsule-5466985701-v30.json",
+    "sha256": "49850c8bd435181da45e5e3834e48c86582a9b836eefc7ad6291e53b074f1077"
+  },
+  "correctionIndex": 1,
+  "correctionCap": 1,
+  "v30Disposition": "inconclusive",
+  "v30Faults": [
+    "H1's twelve-field question required separate Scoreline and Afterimage factors, but its allowed-input list omitted their immutable definitions.",
+    "H1 paginated historical comments instead of reading only the two exact live endpoints and exceeded the frozen 30,000 source-token ceiling.",
+    "H2's mandatory Ward-spend v3 disposition named a root-level path that does not exist; the exact immutable blob exists only at the published archive object."
+  ],
+  "nonDecisionEvidence": {
+    "H1": "Inconclusive; no schema or stop/go conclusion is admissible.",
+    "H2": "Inconclusive; no survivor or no-survivor conclusion is admissible.",
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0
+  },
+  "unchangedScientificContract": [
+    "stage",
+    "task SSOT and authority identities",
+    "resolved current-main identity",
+    "research question",
+    "twelve required fields",
+    "immutable closed-family policy",
+    "H1 and H2 questions",
+    "success, futility, inconclusive and after-success rules",
+    "all numeric ceilings",
+    "zero-row and non-goal boundaries",
+    "single consolidation rule"
+  ],
+  "correctedInputs": {
+    "H1-source-affordance": {
+      "liveEndpointsOnly": [
+        "GET /repos/fol2/glassvow/issues/421",
+        "GET /repos/fol2/glassvow/issues/comments/5466985701"
+      ],
+      "addedImmutableFactorProjection": {
+        "path": "protocols/post-v38-afterimage-order-identity-v1.json",
+        "sha256": "fd275e4610100562050fce4c59889caae644e93020e03e0e1b85c0c4147fff3d",
+        "selector": ".frozenCausalFactors | {scorelinePayoff, afterimagePayoff}",
+        "purpose": "Supply the two already-required separate factor definitions only; do not import its candidate, cohort, result or closed order-control path."
+      },
+      "boundedCurrentMainProjection": [
+        "Read AGENTS.md, .claude/skills/glassvow-godot/SKILL.md and docs/commercial-game-delivery.md without following historical links.",
+        "From content/full-content.json read only aspects, cardPools, and deterministic unique projections of card classes, targets, costs, effect kinds, special IDs and status IDs; do not emit full content.",
+        "Read domain/state/combat_state.gd, player_combatant.gd, enemy_combatant.gd, card_inst.gd and domain/events/event_types.gd in full.",
+        "From domain/rules/combat.gd read only lines 375-432, 520-734, 746-1009, 1014-1081 and 1142-1235.",
+        "From tools/balance_pilot.gd read only lines 88-224 and 274-438; from tools/balance_policy.gd read only lines 1-177."
+      ],
+      "forbidden": "Do not list, paginate or read any other issue comment, immutable outcome, H2 input or previous agent report."
+    },
+    "H2-closure-adversary": {
+      "replacedMissingInput": "summaries/post-3a234bae-ward-spend-v3-disposition.md",
+      "exactGitObject": "1a381d1228c2c7421f950b13bbfddf430e61aa09:research/issue-421/summaries/post-3a234bae-ward-spend-v3-disposition.md",
+      "repository": "/Users/jamesto/Research/glassvow-p9-421/source",
+      "blobSha256": "be7efa1c805b4c78e3e8c464fa948ead23e71d4c540a3d87735c24146944ec80",
+      "forbidden": "Do not substitute another path or inspect H1, the v30 agent report, source code, cache, ledger or simulator outcomes."
+    }
+  },
+  "execution": {
+    "agents": 2,
+    "contextFork": "none",
+    "maximumWallTimeSecondsPerAgent": 900,
+    "maximumPrimarySourceFilesPerAgent": 12,
+    "maximumImmutableDecisionSummariesPerAgent": 18,
+    "maximumSourceTokensPerAgent": 30000,
+    "maximumOutputTokensPerAgent": 6000,
+    "maximumConsolidationTokens": 24000,
+    "communication": "Each corrected agent returns one final read-only report to the accountable owner and does not see the other report or either v30 report.",
+    "nextAction": "Hash-verify this correction, then rerun corrected H1 and H2 once. Any further input, identity, ceiling or availability fault makes the audit inconclusive at cap."
+  }
+}
