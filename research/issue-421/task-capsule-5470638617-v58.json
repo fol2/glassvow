@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "emberglass-analysis-only-scientific-futility",
+  "taskSsot": {
+    "issueBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "state": "open",
+    "labels": [
+      "needs-info",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "source": "Ash, Glassvow PM",
+    "decision": "AUTHORISE_ONE_ANALYSIS_ONLY_CORRECTION",
+    "commentId": 5470587102,
+    "bodySha256": "cbca146ef812fca7b3e50f03a7879bfc89d68f1a0c660e54b1e9a1ed99f0beea",
+    "jamesDevelopmentAuthority": false,
+    "optionBChosen": false,
+    "optionCChosen": false
+  },
+  "sourceIdentities": {
+    "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+    "frozenExperimentSourceAndBaseline": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "preregistrationReceiptHead": "42477f2a7e7b65886d5b7f05d3f73ed6dba00eb4",
+    "resultEvidenceHead": "c2902d1905f39fb39c0e9c363934feff17d8d2a7"
+  },
+  "experiment": {
+    "selectedContract": "emberglass-memory-one-carry",
+    "analysisFunction": "original-v1-_analyse",
+    "protocolSha256": "3726136358dcbc055d3cc8fd4b15666f3f4e0a25326c65a2ace76255ac212c0b",
+    "runnerSha256": "fc739ddf2f875af64c6564a6623daaf56803c874a80841ab32517b227db336d6",
+    "summarySha256": "7517a39c0b6d6f77fae5f036f4b2ba484a3feef1725f64ef4ad947e76cf63aa9",
+    "executionAuditSha256": "1075993d5fcfc0860e28da9134db82f1526d670d9283ef6521f989cd53902301",
+    "outcome": "FUTILITY",
+    "decision": "close-exact-emberglass-one-carry-contract-without-repair",
+    "analysisExecutions": 1,
+    "analysisWallTimeSeconds": 0.017448,
+    "passedGates": 12,
+    "failedGates": [
+      "omitted-off-boundary-exact",
+      "consume-ordinary-exact-unit",
+      "consume-after-cap-and-start-ember-effects",
+      "consume-saturated-cap-clears-once"
+    ],
+    "sourceIdentityEstablished": false,
+    "scientificFutilityEstablishedForExactContract": true
+  },
+  "resultComment": {
+    "commentId": 5470638617,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5470638617",
+    "bodySha256": "2446262c0e5f7d7e4ba766ea011c12853c2dec6116be25063c949108fc4fd295"
+  },
+  "scientificAccounting": {
+    "reusedDirectControlledExecutions": 40,
+    "newGodotProcesses": 0,
+    "newControlledScenarioExecutions": 0,
+    "newRows": 0,
+    "newSeedIdentities": 0,
+    "newCandidates": 0,
+    "grammarChanges": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "identityGateRepairs": 0,
+    "identityGateReruns": 0,
+    "furtherCorrections": 0
+  },
+  "disposition": {
+    "exactEmberglassOneCarryContractClosed": true,
+    "shadowCapacityScreenUnlocked": false,
+    "capacityAuthorised": false,
+    "causalClaimAuthorised": false,
+    "promotionAuthorised": false,
+    "repairOrRerunAuthorised": false,
+    "currentEligibleAutonomousActions": 0,
+    "humanAuthorityConditionMet": true
+  },
+  "safeState": {
+    "productMainMutations": 0,
+    "developmentCheckoutMutations": 0,
+    "deliveryBranches": 0,
+    "pullRequests": 0,
+    "actionsRuns": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "nextAction": "Remain fail-closed to Ash. Any further #421 gate would widen the current authority and must not be inferred; do not repair, rerun, choose B or C, create a replacement mechanism or open a successor."
+}
