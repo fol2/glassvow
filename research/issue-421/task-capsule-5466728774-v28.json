@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 4,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "taskSsot": {
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ],
+    "outcome": "Complete the accepted #421 strategy-package, detector, RC and exact-SHA P9 outcome, then record the #108 receipt without a successor ticket."
+  },
+  "authority": {
+    "commentId": 5466728774,
+    "author": "fol2",
+    "authorAssociation": "OWNER",
+    "bodySha256": "db40553e2a576acdf33062993d54e1116595935614aecf5bd33fcf44e568876d",
+    "decision": "After the Ward-spend family closes, continue only with the next finite evidence-backed structural mechanism and do not introduce another routine checkpoint."
+  },
+  "resolvedMain": {
+    "sha": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "parent": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "title": "feat(map): compile bounded deterministic world layouts (#526)"
+  },
+  "wardSpendDisposition": {
+    "archiveHead": "1a381d1228c2c7421f950b13bbfddf430e61aa09",
+    "directOutcome": "74/74 identity-safe controlled observations",
+    "capacityOutcome": "Closed at the frozen parse-integrity gate with zero simulator rows; no capacity or causal conclusion.",
+    "dispositionSha256": "be7efa1c805b4c78e3e8c464fa948ead23e71d4c540a3d87735c24146944ec80"
+  },
+  "currentMainDeltaAudit": {
+    "question": "Did current main add a new exact combat, content, event, state or policy surface that can scientifically select the next pre-admission mechanism?",
+    "worktree": "/Users/jamesto/Research/glassvow-p9-421/current-main-delta-v1",
+    "protocolPath": "protocols/post-1a381d1-current-main-mechanism-delta-v1.json",
+    "protocolSha256": "1e76f102a5f49b58d2b400e536c4b9296238844c133269a00c4847d9c6310c16",
+    "runnerPath": "post_1a381d1_current_main_mechanism_delta_v1.py",
+    "runnerSha256": "15cba9e4d12dc34f63257632b6e9da32251b2e0f08847346a0709db2a4b6208c",
+    "preFreezeDisclosure": "The changed-path list was read exploratorily before freeze. The formal run confirms exact provenance and applies fixed path boundaries; it is not a blind or statistical preregistration.",
+    "maximumWallTimeSeconds": 30,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "ledgerRows": 0,
+    "protectedSeedRows": 0,
+    "supportMetrics": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0
+  },
+  "immutableEvidence": {
+    "archiveHeads": [
+      "004679a83894f151e95aeed35d2ecaab60a9d3f5",
+      "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+      "b7b509939ff0bd8f75ba2218309e09cb94808878",
+      "3a234baedbf4007bae3fdc1dd85e0478380825b5",
+      "1a381d1228c2c7421f950b13bbfddf430e61aa09"
+    ],
+    "quarantinedObservations": 82,
+    "decisionWeight": 0
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "nonGoals": [
+    "Do not reconstruct #524 or #525 or reopen any valid closed family.",
+    "Do not infer a mechanism from map-layout or acquisition-only changes.",
+    "Do not select a producer, consumer, payoff, ML/RL method or optimiser without a measured discriminator.",
+    "Do not run a simulator, use protected seeds, mutate product truth, create a successor or open a PR."
+  ],
+  "nextAction": "Execute the zero-row deterministic current-main mechanism-source delta audit once and apply its frozen disposition."
+}

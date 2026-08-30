@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 4,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "taskSsot": {
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ],
+    "outcome": "Complete the accepted #421 strategy-package, detector, RC and exact-SHA P9 outcome, then record the #108 receipt without a successor ticket."
+  },
+  "authority": {
+    "commentId": 5466728774,
+    "bodySha256": "db40553e2a576acdf33062993d54e1116595935614aecf5bd33fcf44e568876d",
+    "decision": "Continue only with the next finite evidence-backed structural mechanism after the Ward-spend family closes."
+  },
+  "resolvedMain": {
+    "sha": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "parent": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+  },
+  "immutableEvidence": {
+    "wardSpendArchiveHead": "1a381d1228c2c7421f950b13bbfddf430e61aa09",
+    "priorTaskCapsuleSha256": "c54ab3ddf4cbb1c36c6574257a033b18fc39237b7988a411502fde63b1e07278",
+    "v1ProtocolSha256": "1e76f102a5f49b58d2b400e536c4b9296238844c133269a00c4847d9c6310c16",
+    "v1SummarySha256": "805b4016b0402de250c2703111aaa5795936dc99007de16ea375433dc4dfa6e5",
+    "v1Disposition": "Inconclusive because the frozen expected triage-labels.md SHA-256 omitted its final character. The 26 map-only path classifications are non-decision evidence.",
+    "quarantinedObservations": 82,
+    "decisionWeight": 0
+  },
+  "v2MechanicalCorrection": {
+    "protocolPath": "protocols/post-1a381d1-current-main-mechanism-delta-v2.json",
+    "protocolSha256": "b8296aafedf0f0c5f434dd335a7cd6c7fa941c3fb357a58ff0fd5c53ff2456e2",
+    "runnerPath": "post_1a381d1_current_main_mechanism_delta_v1.py",
+    "runnerSha256": "15cba9e4d12dc34f63257632b6e9da32251b2e0f08847346a0709db2a4b6208c",
+    "onlyChange": "Replace expected triage-labels.md SHA-256 4f53c9b40ce2651e3611aa090eaedbd6dbc9b71ef8c5f7e65eac0d8263190d0 with exact current-main SHA-256 4f53c9b40ce2651e3611aa090eaedbd6dbc9b71ef8c5f7e65eac0d8263190d0d.",
+    "unchanged": "Question, source, evidence, changed paths, classification, budget and automatic decision rules.",
+    "maximumWallTimeSeconds": 30,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "ledgerRows": 0,
+    "protectedSeedRows": 0,
+    "supportMetrics": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "nonGoals": [
+    "Do not modify or rerun v1.",
+    "Do not change the path scope, inspect support, select semantics, add a method or run a simulator.",
+    "Do not use protected seeds, mutate product truth, create a successor, open a PR or run Actions."
+  ],
+  "nextAction": "Execute the separately versioned v2 zero-row provenance confirmation exactly once and apply its unchanged frozen disposition."
+}

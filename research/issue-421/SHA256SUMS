@@ -91,6 +91,8 @@ a4d2b7761091ad972e14d8ff471e82bda41632e698dde762b0b3dad5a8d754e2  ./protocols/co
 e71e38fcaf69b8950a2c25a1313b1b21e5af4a9331b65b1cfc8c37cb027ba76a  ./protocols/combined-finalist-v9.json
 abe0147b3d18d0a58c1ca66595eb3b1d3e59e2b4e07083840d5ef4f1b1b26292  ./protocols/cracked-tempo-v1.json
 30c208b2f43f0ca0e924774ae8d45332769ab75080ac6bd3df529b76742053ee  ./protocols/facet-focus-v1.json
+1e76f102a5f49b58d2b400e536c4b9296238844c133269a00c4847d9c6310c16  ./protocols/post-1a381d1-current-main-mechanism-delta-v1.json
+b8296aafedf0f0c5f434dd335a7cd6c7fa941c3fb357a58ff0fd5c53ff2456e2  ./protocols/post-1a381d1-current-main-mechanism-delta-v2.json
 04d113b2670bb163adf692736a853a2cedb472a7b6fd1c7c429fc7b278bc9708  ./protocols/post-3a234bae-ward-spend-capacity-v1.json
 7b0773f92ceae02f3303b07ba9aaca54439e2aa443466a69068c874cdc704d1f  ./protocols/post-3a234bae-ward-spend-identity-v3.json
 14915ec25ffb041c2ce3166e9cdaf3a3be0030bc2b3d6f3b34bd6cea9a449566  ./protocols/post-810264c-private-causal-coverage-v1.json
@@ -377,6 +379,7 @@ d77cf86b8f7e965cce9cb3cbad85d79f498aae3505f9eab0b1c9775018eb2e70  ./prototype/do
 3eb0c95e9429f2f072d490b6e840ed03c82d7bd6b4fc0f2934ca1d587b5b866b  ./publication-manifest-afterimage-order-v1.json
 38cb45e618204918e613c107ec6975a77e485c6aa80e93f603d0e8f808f613b9  ./publication-manifest-fight-local-v1.json
 74cc6a1f939accba8f00e80eded180f2f331620ca855b845dfe8910083e4e14c  ./publication-manifest-fight-local-v2-capacity-v1.json
+c44eb9da6d69a772897b66ba2738b99055028340c71f5df7fc3ac5c9284a1191  ./publication-manifest-post-1a381d1-current-main-delta-v1.json
 e5b9b9bf1fda3a9ff19c7664ffcbd162dbbd12686d6ba947bf52cf5ec03d3981  ./publication-manifest-post-3a234bae-ward-spend-v3-v1.json
 65de5c694dd93d06199fedbe05f15a447950c376a0fad1241ec4218d60c45dde  ./publication-manifest-post-810264c-private-causal-coverage-v1.json
 04cb054ae6afc731b9ca73da1194ff50be444349fac4c8ceeaa905f8a0daf736  ./publication-manifest-post-843e899-family-ladder-v1.json
@@ -920,6 +923,9 @@ aa695bd0818d164fd7cd7a4b34d63c88717ffba5fac9eff01623a4f4523929dc  ./summaries/co
 e9c6320a7b9742023495e5310d846e93e42de8dc80ab587bf974bd6096704b0c  ./summaries/combined-finalist-v9.json
 fa2d279bd61bf6dd41cdc1585d5590241b0d881493b2cb498f9663d1539c6dd1  ./summaries/cracked-tempo-v1.json
 fa11d04c131e10206ad9797cdf40c61ee2e17ba050113d68741bf5b3d10e6241  ./summaries/facet-focus-v1.json
+011a7d17751337240f4d1b79b7c97f07197f6e40ce6d5583cdd8ea675e753617  ./summaries/post-1a381d1-current-main-mechanism-delta-primary-sources-v1.md
+805b4016b0402de250c2703111aaa5795936dc99007de16ea375433dc4dfa6e5  ./summaries/post-1a381d1-current-main-mechanism-delta-v1.json
+67eba519155ab4940b854265e547aca998de145971cc653954366fb2c77ce57b  ./summaries/post-1a381d1-current-main-mechanism-delta-v2.json
 c8e22ec08c57bfe1103a1eee756ecf352ae8b1195e017ea2ae742b6eacbacd86  ./summaries/post-3a234bae-ward-spend-capacity-v1.json
 4e94c9fd3373fe5ef537e22815e933f2cc3649a9d3cc213ef3fd51ca4f98f4f7  ./summaries/post-3a234bae-ward-spend-identity-v3.json
 fb17ebfbc72a4e964880252924d16c858b2cb7f71e7c3ee939588e1f5f176e0e  ./summaries/post-3a234bae-ward-spend-primary-sources-v3.md
@@ -1171,8 +1177,11 @@ c02d98cdbccf70cffdb59cc870aa8406ff2ca0f8b01466506c114b9524f37b74  ./task-capsule
 a29f6df6b3524aef13666b2c0d570a3f1d862204a80f6eb418c684b8a4fb6589  ./task-capsule-5465170578-v25.json
 22cc84bb96f8d8221eeb7d51397b6d61dfc6117d332c65a583a250195d32e5cd  ./task-capsule-5466728774-v26.json
 ffd1f16de8c5d27757eb1b6ca72ef5258be3cd5c92289b8f90d5e13b7fac2440  ./task-capsule-5466728774-v27.json
+c54ab3ddf4cbb1c36c6574257a033b18fc39237b7988a411502fde63b1e07278  ./task-capsule-5466728774-v28.json
+afa1b864c2d47ceb0ade7e96f23585d93f9951b901eb47c26196407e157b8187  ./task-capsule-5466728774-v29.json
 6eb3e793a96be638e50ce8f4a99655ee3f9af5912ca042a56f77446b739f1ac0  ./task-capsule.json
 6eb56ed83e4ef28d46e9913554fac9438163993d8c6a8eb7c9a4e6771eff012a  ./tools/identify_v33_v38.py
+15cba9e4d12dc34f63257632b6e9da32251b2e0f08847346a0709db2a4b6208c  ./tools/post_1a381d1_current_main_mechanism_delta_v1.py
 f5c1c550c21f59f4e1c34ed0fd9326cb6c5e26f97d1f674864c914e484069ceb  ./tools/post_3a234bae_ward_spend_capacity_v1.py
 94ddbb49846fe08c8482ac7ec9afbb9bf53ec222b94e1968ad433ae8f6c5f5ee  ./tools/post_3a234bae_ward_spend_identity_v3.py
 c7c1e77911dd29f33c27551f031498b26e92cc22d6c30023cd9be33e925cd3a5  ./tools/post_810264c_private_causal_coverage_v1.py

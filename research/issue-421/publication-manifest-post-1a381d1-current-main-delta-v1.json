@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5466728774,
+  "archiveParent": "1a381d1228c2c7421f950b13bbfddf430e61aa09",
+  "immutableEvidencePreserved": [
+    "004679a83894f151e95aeed35d2ecaab60a9d3f5",
+    "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+    "b7b509939ff0bd8f75ba2218309e09cb94808878",
+    "3a234baedbf4007bae3fdc1dd85e0478380825b5",
+    "1a381d1228c2c7421f950b13bbfddf430e61aa09"
+  ],
+  "sourceAuditBaseline": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "currentMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "currentMainCommitTitle": "feat(map): compile bounded deterministic world layouts (#526)",
+  "question": "Did current main add a source surface that can scientifically select the next pre-admission structural mechanism after Ward-spend v3 closed?",
+  "v1MechanicalDisposition": {
+    "outcomeClass": "inconclusive",
+    "decision": "record-current-main-delta-identity-inconclusive",
+    "protocolSha256": "1e76f102a5f49b58d2b400e536c4b9296238844c133269a00c4847d9c6310c16",
+    "summarySha256": "805b4016b0402de250c2703111aaa5795936dc99007de16ea375433dc4dfa6e5",
+    "fault": "The frozen expected docs/agents/triage-labels.md SHA-256 omitted its final d.",
+    "scientificDecisionWeight": 0,
+    "rerun": false
+  },
+  "v2Correction": {
+    "protocolSha256": "b8296aafedf0f0c5f434dd335a7cd6c7fa941c3fb357a58ff0fd5c53ff2456e2",
+    "onlyChange": "Replace the truncated triage-labels.md expected SHA-256 with exact current-main SHA-256 4f53c9b40ce2651e3611aa090eaedbd6dbc9b71ef8c5f7e65eac0d8263190d0d.",
+    "unchanged": "Runner, question, source, evidence, changed-path identity, classification, budget and decision rules."
+  },
+  "result": {
+    "outcomeClass": "futility",
+    "decision": "record-no-current-main-mechanism-delta-and-raise-owner-family-selection",
+    "summarySha256": "67eba519155ab4940b854265e547aca998de145971cc653954366fb2c77ce57b",
+    "runnerSha256": "15cba9e4d12dc34f63257632b6e9da32251b2e0f08847346a0709db2a4b6208c",
+    "changedPaths": 26,
+    "mapOnlyPaths": 26,
+    "preAdmissionMechanismPaths": 0,
+    "unclassifiedPaths": 0,
+    "faults": 0,
+    "GodotProcesses": 0,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "supportMetricsInspected": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "wallTimeSeconds": 6.1211550830630586
+  },
+  "mechanismSourceIdentity": {
+    "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+    "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+    "domain/state/player_combatant.gd": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3",
+    "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+    "domain/state/card_inst.gd": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d",
+    "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+    "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+    "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "status": "Byte-identical at c4130163 and 5f53020f."
+  },
+  "humanAuthorityPackage": {
+    "required": true,
+    "decisionRequired": "Supply one additional finite product-semantic producer/consumer family direction, or explicitly relax one named closure or pre-admission constraint.",
+    "whyAutomationCannotDecide": "The last source-complete topology audit selected no unclosed contract, Ward-spend is immutably closed, and current main changed only map-layout surfaces. Choosing another producer, consumer or payoff would be product-semantic invention without a scientific discriminator.",
+    "recommendation": "Keep product truth, protected seeds and every closure unchanged; supply only the smallest additional finite producer/consumer direction.",
+    "safeState": "Keep #421 as the single needs-info task with no successor, product mutation, simulator row, method addition, PR, Actions run, acceptance claim or P9 receipt."
+  },
+  "ledger": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "artefacts": {
+    "protocols/post-1a381d1-current-main-mechanism-delta-v1.json": "1e76f102a5f49b58d2b400e536c4b9296238844c133269a00c4847d9c6310c16",
+    "protocols/post-1a381d1-current-main-mechanism-delta-v2.json": "b8296aafedf0f0c5f434dd335a7cd6c7fa941c3fb357a58ff0fd5c53ff2456e2",
+    "tools/post_1a381d1_current_main_mechanism_delta_v1.py": "15cba9e4d12dc34f63257632b6e9da32251b2e0f08847346a0709db2a4b6208c",
+    "summaries/post-1a381d1-current-main-mechanism-delta-v1.json": "805b4016b0402de250c2703111aaa5795936dc99007de16ea375433dc4dfa6e5",
+    "summaries/post-1a381d1-current-main-mechanism-delta-v2.json": "67eba519155ab4940b854265e547aca998de145971cc653954366fb2c77ce57b",
+    "summaries/post-1a381d1-current-main-mechanism-delta-primary-sources-v1.md": "011a7d17751337240f4d1b79b7c97f07197f6e40ce6d5583cdd8ea675e753617",
+    "task-capsule-5466728774-v28.json": "c54ab3ddf4cbb1c36c6574257a033b18fc39237b7988a411502fde63b1e07278",
+    "task-capsule-5466728774-v29.json": "afa1b864c2d47ceb0ade7e96f23585d93f9951b901eb47c26196407e157b8187"
+  },
+  "verification": {
+    "jsonSyntax": "pass",
+    "pythonSyntax": "pass",
+    "artefactHashes": "pass",
+    "sha256Sums": "pass",
+    "diffCheck": "pass",
+    "anchorCheck": "pass",
+    "benchmarkFreeze": "The archive parent and candidate each report the same 30 historical archive-copy citations; this continuation adds zero. The archive-only branch is not mergeable product truth."
+  },
+  "prohibitedClaimsAndActions": [
+    "complete impossibility of an autonomous P9 mechanism",
+    "reopening any valid closed family",
+    "selection of a producer, consumer or payoff without new owner semantics",
+    "ML, RL or optimiser method addition without a measured discriminator",
+    "product truth or protected-seed evidence",
+    "research or product pull request",
+    "GitHub Actions run",
+    "replacement or successor issue",
+    "#421 acceptance or #108 P9 receipt"
+  ],
+  "claimBoundary": "This publication proves only that current main changed no source input used by the preserved mechanism-selection audit and that its single intervening commit is map-only under the frozen path boundary. It does not prove broad mechanism impossibility."
+}
