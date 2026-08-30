@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "residual-action-trace-grammar-background-audit",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "developmentCheckout": {
+    "path": "/Users/jamesto/Coding/glassvow",
+    "branch": "work/421-h34",
+    "head": "7d1f6c0ff4d7534eb517ef57d1f547db140833fd",
+    "status": "clean-and-untouched"
+  },
+  "researchWorktree": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/current-main-delta-v1",
+    "head": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "mode": "detached",
+    "status": "clean"
+  },
+  "parentArchiveHead": "9cc1496d7105c99caf274d30cf440021a0ae3375",
+  "parentDisposition": "FUTILITY_CLOSE_TARGET_ACTS_LAST_REPRESENTATION_AT_IDENTITY_GATE",
+  "currentQuestion": "Does one source-backed, alias-free and unchanged-policy-expressible unary transform remain at the within-card or within-one-enemy-action trace seam?",
+  "protocol": {
+    "path": "protocols/post-9cc1496d-residual-action-trace-grammar-v1.json",
+    "sha256": "9b91ac435cc9e6248bc3acaf372348a30afb883e2d1e622b398ae276792ef6ab",
+    "state": "frozen before three non-overlapping read-only background audits"
+  },
+  "runner": {
+    "path": "post_9cc1496d_residual_action_trace_grammar_v1.py",
+    "sha256": "e6bd225fbe2627118c374cdf4e6e78e4ff90b5db653e3a524e427ec9637cd936",
+    "selfTest": "PASS (3 checks)"
+  },
+  "design": {
+    "seams": [
+      "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION",
+      "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION"
+    ],
+    "unaryOperatorLevels": 7,
+    "abstractCells": 14,
+    "jointTransforms": 0,
+    "simulatorRows": 0,
+    "ledgerAccess": 0,
+    "candidateCount": 0
+  },
+  "backgroundHypotheses": [
+    "H1_SOURCE_SEAM_FEASIBILITY",
+    "H2_IMMUTABLE_CLOSURE_ALIAS",
+    "H3_POLICY_OBSERVABILITY"
+  ],
+  "activeInvariants": [
+    "All archive heads and valid closed-family dispositions remain immutable.",
+    "TARGET_ACTS_LAST_THIS_PHASE remains closed at its exact representation gate and is not a rescue path.",
+    "Scoreline and Afterimage remain separate closed causal factors and are not pooled into this audit.",
+    "Background agents are read-only, non-overlapping, use immutable inputs and cannot construct candidates or decide stop/go.",
+    "Deterministic code alone enumerates the frozen 14-cell matrix, applies the rank and decides success, futility or inconclusive.",
+    "No simulator, ledger, protected seed, product checkout, PR, Actions or #108 surface is touched."
+  ],
+  "nextAction": "Publish the frozen preregistration, dispatch exactly three read-only agents with fork mode none, consolidate their exact reports once, and run the deterministic zero-row decision."
+}

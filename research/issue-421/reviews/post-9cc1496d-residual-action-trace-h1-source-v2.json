@@ -1,0 +1,80 @@
+{
+  "hypothesis": "H1_SOURCE_SEAM_FEASIBILITY",
+  "protocolSha256": "7afc67e8dbcaa63b9862587fc1818578933242a8d57fd224b5ca532992747c39",
+  "sourceHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "verdict": "COMPLETE",
+  "reportSha256": "d0232f6bb740088cb013e0eb0cbffbdee54feb9a5776d9e4309d7ddd920c6501",
+  "inconclusiveReasons": [],
+  "cells": {
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O1_PERMUTE_EXISTING_SUBEFFECTS": {
+      "sourceSupported": true,
+      "reason": "Authored card effects are ordered arrays with existing multi-subeffect traces, resolved in array order.",
+      "evidence": ["content/full-content.json:88", "domain/rules/combat.gd:806"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O2_DROP_ONE_EXISTING_SUBEFFECT": {
+      "sourceSupported": true,
+      "reason": "The card resolver dispatches each existing element of an authored multi-subeffect array independently.",
+      "evidence": ["content/full-content.json:88", "domain/rules/combat.gd:806"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O3_REPEAT_ONE_EXISTING_SUBEFFECT": {
+      "sourceSupported": true,
+      "reason": "A card effect has an existing repetition count and the resolver executes that primitive effect in its repetition loop.",
+      "evidence": ["content/full-content.json:249", "domain/rules/combat.gd:877"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY": {
+      "sourceSupported": true,
+      "reason": "An authored chip subeffect is settled in the post-effects card-resolution loop.",
+      "evidence": ["content/full-content.json:1234", "domain/rules/combat.gd:825"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O5_REMAP_ONE_SUBEFFECT_TARGET": {
+      "sourceSupported": true,
+      "reason": "A card status subeffect carries its own target field, and the resolver has target, self, and all-enemy status routes.",
+      "evidence": ["content/full-content.json:95", "domain/rules/combat.gd:899"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O6_CONVERT_ONE_REALISED_RESULT_TYPE": {
+      "sourceSupported": true,
+      "reason": "The per-effect kind dispatcher has distinct existing combat-result branches within one card resolution.",
+      "evidence": ["domain/rules/combat.gd:873", "domain/rules/combat.gd:888"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT": {
+      "sourceSupported": true,
+      "reason": "The existing leech primitive captures realised enemy loss and guards its following heal on that result.",
+      "evidence": ["content/full-content.json:574", "domain/rules/combat.gd:961"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O1_PERMUTE_EXISTING_SUBEFFECTS": {
+      "sourceSupported": true,
+      "reason": "Existing enemy moves contain compound primitive fields and the action resolver dispatches their ordered subeffects.",
+      "evidence": ["content/full-content.json:2262", "domain/rules/combat.gd:1091"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O2_DROP_ONE_EXISTING_SUBEFFECT": {
+      "sourceSupported": true,
+      "reason": "Existing compound enemy moves expose independently dispatched primitive fields.",
+      "evidence": ["content/full-content.json:2262", "domain/rules/combat.gd:1101"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O3_REPEAT_ONE_EXISTING_SUBEFFECT": {
+      "sourceSupported": true,
+      "reason": "An authored enemy damage primitive has an existing repetition count and is executed in the action repetition loop.",
+      "evidence": ["content/full-content.json:2839", "domain/rules/combat.gd:1093"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY": {
+      "sourceSupported": true,
+      "reason": "The enemy move’s final authored subeffect slot precedes an explicit enemy end-of-action settlement boundary.",
+      "evidence": ["domain/rules/combat.gd:1121", "domain/rules/combat.gd:1130"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O5_REMAP_ONE_SUBEFFECT_TARGET": {
+      "sourceSupported": true,
+      "reason": "An enemy fx subeffect carries an existing recipient and the action resolver routes player, self, and ally recipients.",
+      "evidence": ["content/full-content.json:2255", "domain/rules/combat.gd:1113"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O6_CONVERT_ONE_REALISED_RESULT_TYPE": {
+      "sourceSupported": true,
+      "reason": "Existing enemy moves contain distinct result fields and the resolver has separate existing result handlers.",
+      "evidence": ["content/full-content.json:2262", "domain/rules/combat.gd:1101"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT": {
+      "sourceSupported": true,
+      "reason": "Enemy damage returns realised loss and the same action has a later fx subeffect dispatch slot.",
+      "evidence": ["domain/rules/combat.gd:434", "domain/rules/combat.gd:1107"]
+    }
+  }
+}

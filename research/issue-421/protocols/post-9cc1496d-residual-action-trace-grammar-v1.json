@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-9cc1496d residual combat-local action-trace grammar audit v1",
+  "state": "FROZEN_BEFORE_BACKGROUND_AUDIT",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "authorityCommentId": 5466985701,
+    "authorityBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "sourceIdentity": {
+    "head": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "worktree": "/Users/jamesto/Research/glassvow-p9-421/current-main-delta-v1",
+    "status": "clean detached",
+    "instructionsSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+      "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a"
+    }
+  },
+  "parentArchive": {
+    "head": "9cc1496d7105c99caf274d30cf440021a0ae3375",
+    "ref": "research/issue-421-post-1127ed7e-target-acts-last-identity-futility-evidence",
+    "disposition": "FUTILITY_CLOSE_TARGET_ACTS_LAST_REPRESENTATION_AT_IDENTITY_GATE"
+  },
+  "question": "After preserving every valid closure, does either untested within-card or within-one-enemy-action trace seam support one source-backed, alias-free and policy-expressible unary structural transform worth a separate zero-row design gate?",
+  "competingHypotheses": {
+    "H1": "At least one frozen abstract cell is source-supported, closure-alias-free and expressible and observable through the unchanged policy surface.",
+    "H0": "Every frozen abstract cell lacks source support, aliases a valid closed family, or requires a new selector or unobservable mediator.",
+    "HI": "The exact bounded audit cannot decide at its context, citation or execution cap."
+  },
+  "design": {
+    "method": "mechanism-blocked zero-row audit; no simulator or ledger access",
+    "seamFactor": "owner of the exact primitive-effect trace being transformed",
+    "seamLevels": [
+      "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION",
+      "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION"
+    ],
+    "operatorFactor": "one unary transform applied in isolation to an already-present primitive subeffect trace",
+    "operatorLevels": [
+      "O1_PERMUTE_EXISTING_SUBEFFECTS",
+      "O2_DROP_ONE_EXISTING_SUBEFFECT",
+      "O3_REPEAT_ONE_EXISTING_SUBEFFECT",
+      "O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY",
+      "O5_REMAP_ONE_SUBEFFECT_TARGET",
+      "O6_CONVERT_ONE_REALISED_RESULT_TYPE",
+      "O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT"
+    ],
+    "designMatrix": "the exact 2 x 7 ordered Cartesian product, assessed without rows; no joint transforms",
+    "identityAnchors": [
+      "S1_IDENTITY preserves the authored within-card primitive trace",
+      "S4_IDENTITY preserves the authored within-enemy-action primitive trace"
+    ],
+    "closureAnchors": {
+      "S2_BETWEEN_PLAYER_ACTIONS_SAME_TURN": "existing action-order, Scoreline, Afterimage, repeat and private-state closures",
+      "S3_PLAYER_TO_ENEMY_PHASE_HANDOFF": "cross-turn hold and private-state closures",
+      "S5_BETWEEN_ENEMY_ACTIONS_SAME_PHASE": "TARGET_ACTS_LAST_THIS_PHASE representation closure at 9cc1496d",
+      "S6_ENEMY_TO_PLAYER_PHASE_HANDOFF": "intent-history and cross-turn lifecycle closures",
+      "S7_COMBAT_TERMINAL_SETTLEMENT": "terminal-hit precision and positive-overkill closures"
+    },
+    "interactions": [],
+    "interactionJustification": "The audit asks whether any single structural edge remains. Combining transforms would make aliases and attribution non-identifiable and is prohibited.",
+    "excludedTransforms": {
+      "identity": "anchor only, never a candidate",
+      "scalarRescale": "closed scalar family and not structural",
+      "multiOperatorComposition": "not identifiable in this gate",
+      "crossSeamComposition": "would reopen closed phase or ordering families",
+      "acquisitionOrRewardMutation": "outside this combat-local gate",
+      "newPersistentStateOrInternalId": "save and identity boundary",
+      "newPolicySelector": "policy-repertoire invention before a measured bottleneck",
+      "TARGET_ACTS_LAST_THIS_PHASE": "exact representation closed at the parent archive"
+    }
+  },
+  "operatorDefinitions": {
+    "O1_PERMUTE_EXISTING_SUBEFFECTS": "Change only the order of two or more already-authored primitive subeffects; preserve their multiset, values, targets and action boundary.",
+    "O2_DROP_ONE_EXISTING_SUBEFFECT": "Suppress exactly one already-authored primitive subeffect; preserve every remaining subeffect and order.",
+    "O3_REPEAT_ONE_EXISTING_SUBEFFECT": "Execute exactly one already-authored primitive subeffect one additional time; preserve every other subeffect and order.",
+    "O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY": "Move exactly one already-authored primitive subeffect from its action trace to the immediately adjacent post-action settlement boundary without changing its value or target.",
+    "O5_REMAP_ONE_SUBEFFECT_TARGET": "Route exactly one already-authored primitive subeffect to another already-addressable combat target; preserve value, type and timing.",
+    "O6_CONVERT_ONE_REALISED_RESULT_TYPE": "Replace exactly one realised primitive result with a bounded result of another already-existing combat type; no scalar level is selected here.",
+    "O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT": "Execute exactly one already-authored primitive subeffect only when another subeffect in the same action produced its exact realised result."
+  },
+  "backgroundAudit": {
+    "agentCount": 3,
+    "forkMode": "none",
+    "consolidateOnce": true,
+    "sharedMutableOutputs": false,
+    "H1_SOURCE_SEAM_FEASIBILITY": {
+      "question": "For every frozen cell, does exact current-main source contain the stated action trace and a mechanically real insertion seam, without judging closure or policy?",
+      "inputs": {
+        "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+        "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+        "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+        "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+      }
+    },
+    "H2_IMMUTABLE_CLOSURE_ALIAS": {
+      "question": "For every frozen cell, does the abstract transform remain distinct from all supplied immutable closures, without inspecting current source or policy?",
+      "inputs": {
+        "summaries/post-843e899-private-state-design-v1.json": "047563a9e7f09172d8eb34e39485cbd29e870b87427afc78a41330449480ea3e",
+        "summaries/post-37776ccc-product-semantic-background-audit-v1.md": "13426a580e947c44253e549d5793f7c6f79d28497c73550f2b1495356b06af5c",
+        "summaries/post-718ba823-enemy-action-transform-grammar-consolidation-v1.json": "cda96b9b91740abae65376a0646b2d489ebf04e276edaadc24adb8f62e7ea856",
+        "summaries/post-1127ed7e-target-acts-last-identity-v2.json": "e036eacd900dd6ceb7d26f6e5bc54ae09658aa057500c94ee1344f6653d7e3e6"
+      }
+    },
+    "H3_POLICY_OBSERVABILITY": {
+      "question": "For every frozen cell, can the unchanged frozen policy express the relevant player choice and can direct instrumentation observe the mediator without a new selector?",
+      "inputs": {
+        "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+        "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+        "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+        "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a"
+      }
+    }
+  },
+  "estimands": {
+    "perCell": "the conjunction sourceSupported AND aliasFree AND policyExpressible AND mediatorObservable AND NOT newSelectorRequired",
+    "family": "count of eligible abstract cells and the deterministic minimum rank among them"
+  },
+  "ranking": {
+    "seamRank": {
+      "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION": 0,
+      "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION": 1
+    },
+    "operatorRank": {
+      "O1_PERMUTE_EXISTING_SUBEFFECTS": 0,
+      "O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT": 1,
+      "O2_DROP_ONE_EXISTING_SUBEFFECT": 2,
+      "O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY": 3,
+      "O5_REMAP_ONE_SUBEFFECT_TARGET": 4,
+      "O3_REPEAT_ONE_EXISTING_SUBEFFECT": 5,
+      "O6_CONVERT_ONE_REALISED_RESULT_TYPE": 6
+    },
+    "justification": "Prefer direct player agency, an unchanged operation multiset and the smallest semantic and global-power disturbance; lexical cell id is the final tie-break."
+  },
+  "decisionRules": {
+    "success": "If all three reports are COMPLETE and at least one cell passes every gate, freeze exactly the minimum-ranked abstract cell for one separate zero-row natural-opportunity and identity-design gate.",
+    "futility": "If all three reports are COMPLETE and zero cells pass every gate, close this residual action-trace grammar and continue only if a distinct evidence-backed non-trace family remains.",
+    "inconclusive": "If any exact report is INCONCLUSIVE or the audit cannot complete at cap, record inconclusive and do not select a cell.",
+    "prohibited": "No agent or owner may adapt the matrix, operator definitions, ranks or gates after reading a report."
+  },
+  "executionCeilings": {
+    "maximumBackgroundAgents": 3,
+    "maximumCellsPerAgent": 14,
+    "maximumCitationsPerAgent": 28,
+    "maximumReportBytesPerAgent": 65536,
+    "maximumModelContextTokensPerAgent": 32000,
+    "maximumAggregateModelContextTokens": 96000,
+    "maximumWallTimeSecondsPerAgent": 900,
+    "maximumConsolidationProcesses": 1,
+    "maximumConsolidationWallTimeSeconds": 5,
+    "maximumSimulatorRows": 0,
+    "maximumGodotProcesses": 0,
+    "maximumLedgerReads": 0,
+    "maximumLedgerWrites": 0,
+    "maximumProtectedSeedRows": 0,
+    "maximumProductCandidates": 0,
+    "mechanicalCorrectionCap": 1
+  },
+  "runner": {
+    "path": "post_9cc1496d_residual_action_trace_grammar_v1.py",
+    "sha256": "e6bd225fbe2627118c374cdf4e6e78e4ff90b5db653e3a524e427ec9637cd936",
+    "selfTest": "PASS (3 checks)"
+  },
+  "claimBoundary": "A success selects one abstract action-trace cell for a later zero-row design gate only. It is not a card, relic, value, implementation, source identity proof, natural capacity, policy sensitivity, causal benefit, complementarity, reachability, detector, product, protected-seed, #421 acceptance or #108 P9 claim."
+}

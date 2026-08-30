@@ -1,0 +1,108 @@
+{
+  "hypothesis": "H3_POLICY_OBSERVABILITY",
+  "protocolSha256": "7afc67e8dbcaa63b9862587fc1818578933242a8d57fd224b5ca532992747c39",
+  "sourceHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "verdict": "COMPLETE",
+  "reportSha256": "04455fdfc035ca8d74c807c755444f0f33fe57d52ffb772274bc10c14bc479ea",
+  "inconclusiveReasons": [],
+  "cells": {
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O1_PERMUTE_EXISTING_SUBEFFECTS": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "The pilot selects whole-card plays, not an authored subeffect sequence; an automatic permutation is therefore not a policy-controlled choice. A subeffect selector would be new; the queued event sequence is directly traceable.",
+      "evidence": ["tools/balance_pilot.gd:101", "tools/balance_sim.gd:456"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O2_DROP_ONE_EXISTING_SUBEFFECT": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "The frozen policy has no choice to suppress one primitive within a selected card, so automatic dropping is not policy sensitivity. Selecting the dropped primitive would require a new subeffect selector; queued events permit direct counting.",
+      "evidence": ["tools/balance_pilot.gd:101", "tools/balance_sim.gd:456"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O3_REPEAT_ONE_EXISTING_SUBEFFECT": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "Whole-card selection does not select one primitive for an additional execution, so an automatic repeat is not an expressible policy choice. A new subeffect selector would be required; queued events permit direct repetition counts.",
+      "evidence": ["tools/balance_pilot.gd:101", "tools/balance_sim.gd:456"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "The pilot chooses card plays but no primitive or post-action settlement placement, so an automatic shift is not policy-controlled. Choosing the shifted primitive/boundary requires a new subeffect selector; the event queue supports a direct boundary trace.",
+      "evidence": ["tools/balance_pilot.gd:101", "tools/balance_sim.gd:456"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O5_REMAP_ONE_SUBEFFECT_TARGET": {
+      "policyExpressible": true,
+      "mediatorObservable": true,
+      "newSelectorRequired": false,
+      "reason": "The frozen pilot already selects an enemy target for targeted cards, providing the relevant exposure control without a new selector. The queued combat trace can directly record the resulting target-scoped mediator.",
+      "evidence": ["tools/balance_pilot.gd:195", "tools/balance_sim.gd:456"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O6_CONVERT_ONE_REALISED_RESULT_TYPE": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "The policy does not choose a primitive realised-result type within a card; an automatic conversion is not policy sensitivity. Selecting the converted primitive/result requires a new subeffect selector; queued typed events permit direct observation.",
+      "evidence": ["tools/balance_pilot.gd:101", "tools/balance_sim.gd:456"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "The pilot has no within-card choice over a guarded primitive or its realised-result condition, so an automatic guard is not policy-controlled. That linkage requires a new subeffect selector; the event queue can directly trace the condition and guarded emission.",
+      "evidence": ["tools/balance_pilot.gd:101", "tools/balance_sim.gd:456"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O1_PERMUTE_EXISTING_SUBEFFECTS": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "The pilot forecasts enemy damage but exposes no choice over an enemy action's primitive sequence. An enemy-move or subeffect selector would be new; ENEMY_ACT provides a direct action boundary for tracing order.",
+      "evidence": ["tools/balance_pilot.gd:224", "domain/events/event_types.gd:28"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O2_DROP_ONE_EXISTING_SUBEFFECT": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "No frozen policy choice suppresses one primitive inside an enemy action. An enemy-move or subeffect selector would be new; ENEMY_ACT provides a direct action boundary for counting the mediator.",
+      "evidence": ["tools/balance_pilot.gd:224", "domain/events/event_types.gd:28"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O3_REPEAT_ONE_EXISTING_SUBEFFECT": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "The frozen policy does not select an enemy primitive to execute again. An enemy-move or subeffect selector would be new; ENEMY_ACT supports a direct action-scoped repetition trace.",
+      "evidence": ["tools/balance_pilot.gd:224", "domain/events/event_types.gd:28"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "The policy has no control over an enemy primitive's action-boundary placement. An enemy-move or subeffect selector would be new; ENEMY_ACT provides the direct boundary needed for observation.",
+      "evidence": ["tools/balance_pilot.gd:224", "domain/events/event_types.gd:28"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O5_REMAP_ONE_SUBEFFECT_TARGET": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "Player targeting does not choose the target of an enemy primitive; the frozen policy exposes no such enemy-action choice. An enemy-move or subeffect selector would be new; ENEMY_ACT supports direct action-scoped tracing.",
+      "evidence": ["tools/balance_pilot.gd:224", "domain/events/event_types.gd:28"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O6_CONVERT_ONE_REALISED_RESULT_TYPE": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "The frozen policy only forecasts an enemy outcome and cannot choose a realised result type within the enemy action. An enemy-move or subeffect selector would be new; ENEMY_ACT makes the mediator directly traceable.",
+      "evidence": ["tools/balance_pilot.gd:224", "domain/events/event_types.gd:28"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT": {
+      "policyExpressible": false,
+      "mediatorObservable": true,
+      "newSelectorRequired": true,
+      "reason": "The pilot has no choice over an enemy primitive's realised-result guard. An enemy-move or subeffect selector would be new; ENEMY_ACT supports a direct trace of the guard and emitted effect.",
+      "evidence": ["tools/balance_pilot.gd:224", "domain/events/event_types.gd:28"]
+    }
+  }
+}

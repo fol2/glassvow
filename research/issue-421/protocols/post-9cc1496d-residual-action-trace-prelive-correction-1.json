@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "correctionId": "post-9cc1496d-residual-action-trace-prelive-correction-1",
+  "state": "FROZEN_BEFORE_ANY_BACKGROUND_REPORT",
+  "predecessorProtocol": {
+    "path": "protocols/post-9cc1496d-residual-action-trace-grammar-v1.json",
+    "sha256": "9b91ac435cc9e6248bc3acaf372348a30afb883e2d1e622b398ae276792ef6ab"
+  },
+  "fault": {
+    "class": "mechanical protocol serialisation ambiguity",
+    "detectedBy": "H1_SOURCE_SEAM_FEASIBILITY before returning any cell judgement",
+    "description": "The v1 protocol froze the two seam levels, seven operator levels and exact ordered Cartesian product, while the deterministic runner serialised cells with a colon. The protocol did not state that delimiter or list the 14 serialised cell IDs.",
+    "decisionRowsObserved": 0,
+    "backgroundReportsReturned": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "protectedSeedRows": 0
+  },
+  "correction": {
+    "cellIdFormat": "{seam}:{operator}",
+    "scope": "List all 14 exact serialised cell IDs in v2 and bind the unchanged runner behaviour.",
+    "changesScientificQuestion": false,
+    "changesSeams": false,
+    "changesOperators": false,
+    "changesDesignMatrix": false,
+    "changesEvidence": false,
+    "changesRanks": false,
+    "changesEstimands": false,
+    "changesDecisionRules": false,
+    "changesBudgets": false,
+    "changesClaimBoundary": false
+  },
+  "correctionBudget": {
+    "cap": 1,
+    "used": 1,
+    "remaining": 0
+  },
+  "restartRule": "The three interrupted read-only agents may resume under v2 because no report or decision endpoint was returned and the immutable evidence identities and scientific matrix are unchanged."
+}

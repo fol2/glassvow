@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "corrected-residual-action-trace-grammar-background-audit",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "developmentCheckout": {
+    "path": "/Users/jamesto/Coding/glassvow",
+    "branch": "work/421-h34",
+    "head": "7d1f6c0ff4d7534eb517ef57d1f547db140833fd",
+    "status": "clean-and-untouched"
+  },
+  "parentArchiveHead": "9cc1496d7105c99caf274d30cf440021a0ae3375",
+  "protocol": {
+    "path": "protocols/post-9cc1496d-residual-action-trace-grammar-v2.json",
+    "sha256": "7afc67e8dbcaa63b9862587fc1818578933242a8d57fd224b5ca532992747c39",
+    "predecessorPath": "protocols/post-9cc1496d-residual-action-trace-grammar-v1.json",
+    "predecessorSha256": "9b91ac435cc9e6248bc3acaf372348a30afb883e2d1e622b398ae276792ef6ab",
+    "state": "sole corrected protocol; exact colon-delimited 14-cell identities are explicit"
+  },
+  "preLiveCorrection": {
+    "path": "protocols/post-9cc1496d-residual-action-trace-prelive-correction-1.json",
+    "sha256": "903d788dee691eea95d76d834ee06ab9b9699c6d550fce432675bfd426328510",
+    "fault": "v1 omitted the serialised cell delimiter while the frozen runner used a colon",
+    "backgroundReportsReturnedBeforeCorrection": 0,
+    "used": 1,
+    "remaining": 0
+  },
+  "runner": {
+    "path": "post_9cc1496d_residual_action_trace_grammar_v1.py",
+    "sha256": "e6bd225fbe2627118c374cdf4e6e78e4ff90b5db653e3a524e427ec9637cd936",
+    "selfTest": "PASS (3 checks)",
+    "v2MatrixIdentityCheck": "PASS (v2 exact 14-cell identity)"
+  },
+  "activeInvariants": [
+    "The v1 protocol and pre-report ambiguity remain immutable non-decision evidence.",
+    "The correction changes only cell serialisation; the question, 2 x 7 matrix, inputs, ranks, budgets, estimands and decision rules are unchanged.",
+    "All archive heads and valid closures, including TARGET_ACTS_LAST_THIS_PHASE at 9cc1496d, remain immutable.",
+    "The three background hypotheses remain read-only and non-overlapping.",
+    "No simulator, Godot, ledger, protected seed, product candidate, product checkout, PR, Actions or #108 surface is touched."
+  ],
+  "nextAction": "Publish the sole mechanical correction, resume the three interrupted read-only hypotheses under v2, consolidate once and execute the deterministic zero-row decision."
+}

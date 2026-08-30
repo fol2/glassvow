@@ -1,0 +1,94 @@
+{
+  "hypothesis": "H2_IMMUTABLE_CLOSURE_ALIAS",
+  "protocolSha256": "7afc67e8dbcaa63b9862587fc1818578933242a8d57fd224b5ca532992747c39",
+  "sourceHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "verdict": "COMPLETE",
+  "reportSha256": "4046eede6150c234e022c77bc56c299c853111ccbde4c6259738d97db1c7ff68",
+  "inconclusiveReasons": [],
+  "cells": {
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O1_PERMUTE_EXISTING_SUBEFFECTS": {
+      "aliasFree": false,
+      "aliases": ["closed player-card order"],
+      "reason": "Within-card subeffect permutation is the closed player-card order topology.",
+      "evidence": ["summaries/post-718ba823-enemy-action-transform-grammar-consolidation-v1.json:128"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O2_DROP_ONE_EXISTING_SUBEFFECT": {
+      "aliasFree": true,
+      "aliases": [],
+      "reason": "The supplied action-economy closure concerns a producer-to-next-attack grammar, not suppression of one primitive within its authored card trace.",
+      "evidence": ["summaries/post-843e899-private-state-design-v1.json:10"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O3_REPEAT_ONE_EXISTING_SUBEFFECT": {
+      "aliasFree": false,
+      "aliases": ["Honing or Momentum same-instance repeat"],
+      "reason": "Repeating one already-authored card subeffect has the closed same-instance repeat topology.",
+      "evidence": ["summaries/post-843e899-private-state-design-v1.json:101"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY": {
+      "aliasFree": false,
+      "aliases": ["named and generic action sequencing"],
+      "reason": "Moving a subeffect to the adjacent settlement boundary is an action-sequencing topology already closed.",
+      "evidence": ["summaries/post-843e899-private-state-design-v1.json:34"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O5_REMAP_ONE_SUBEFFECT_TARGET": {
+      "aliasFree": false,
+      "aliases": ["target-transfer and intent-response topology"],
+      "reason": "Readdressing an authored subeffect is the supplied target-transfer topology.",
+      "evidence": ["summaries/post-843e899-private-state-design-v1.json:57"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O6_CONVERT_ONE_REALISED_RESULT_TYPE": {
+      "aliasFree": false,
+      "aliases": ["broken-facet conversion into Ember economy"],
+      "reason": "The supplied existing operator already has a realised-outcome conversion topology.",
+      "evidence": ["summaries/post-37776ccc-product-semantic-background-audit-v1.md:34"]
+    },
+    "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT": {
+      "aliasFree": true,
+      "aliases": [],
+      "reason": "No supplied closure names a same-card realised-result guard over one authored subeffect.",
+      "evidence": ["summaries/post-843e899-private-state-design-v1.json:34"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O1_PERMUTE_EXISTING_SUBEFFECTS": {
+      "aliasFree": true,
+      "aliases": [],
+      "reason": "The supplied enemy scheduling closure expressly preserves each enemy action’s internal effect order; it does not close an internal permutation.",
+      "evidence": ["summaries/post-718ba823-enemy-action-transform-grammar-consolidation-v1.json:129"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O2_DROP_ONE_EXISTING_SUBEFFECT": {
+      "aliasFree": true,
+      "aliases": [],
+      "reason": "The supplied cancellation assessment concerns an action transition and records no closure alias; it does not cover dropping one internal subeffect.",
+      "evidence": ["summaries/post-718ba823-enemy-action-transform-grammar-consolidation-v1.json:5"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O3_REPEAT_ONE_EXISTING_SUBEFFECT": {
+      "aliasFree": true,
+      "aliases": [],
+      "reason": "The supplied repeat closure is a card-instance and replay topology, not repetition inside one enemy action.",
+      "evidence": ["summaries/post-843e899-private-state-design-v1.json:89"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY": {
+      "aliasFree": true,
+      "aliases": [],
+      "reason": "The supplied enemy scheduling closure preserves the exact internal effect order and action count; it does not cover an enemy subeffect shift to post-action settlement.",
+      "evidence": ["summaries/post-718ba823-enemy-action-transform-grammar-consolidation-v1.json:129"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O5_REMAP_ONE_SUBEFFECT_TARGET": {
+      "aliasFree": false,
+      "aliases": ["target-transfer and intent-response topology"],
+      "reason": "Readdressing an authored enemy subeffect is the supplied target-transfer topology.",
+      "evidence": ["summaries/post-843e899-private-state-design-v1.json:57"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O6_CONVERT_ONE_REALISED_RESULT_TYPE": {
+      "aliasFree": false,
+      "aliases": ["broken-facet conversion into Ember economy"],
+      "reason": "The supplied existing operator already has a realised-outcome conversion topology.",
+      "evidence": ["summaries/post-37776ccc-product-semantic-background-audit-v1.md:34"]
+    },
+    "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT": {
+      "aliasFree": true,
+      "aliases": [],
+      "reason": "No supplied closure names a same-enemy-action realised-result guard over one authored subeffect.",
+      "evidence": ["summaries/post-718ba823-enemy-action-transform-grammar-consolidation-v1.json:129"]
+    }
+  }
+}

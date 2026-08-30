@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-9cc1496d residual combat-local action-trace grammar audit v2",
+  "state": "FROZEN_CORRECTED_BEFORE_ANY_BACKGROUND_REPORT",
+  "predecessorProtocol": {
+    "path": "protocols/post-9cc1496d-residual-action-trace-grammar-v1.json",
+    "sha256": "9b91ac435cc9e6248bc3acaf372348a30afb883e2d1e622b398ae276792ef6ab",
+    "effectiveRule": "Every v1 field remains binding except that v2 makes the already-runner-owned cell serialisation explicit."
+  },
+  "preLiveCorrection": {
+    "path": "protocols/post-9cc1496d-residual-action-trace-prelive-correction-1.json",
+    "sha256": "903d788dee691eea95d76d834ee06ab9b9699c6d550fce432675bfd426328510",
+    "used": 1,
+    "remaining": 0
+  },
+  "sourceIdentity": {
+    "head": "5f53020f588145ec5fbf803de32d82c7d29c06d2"
+  },
+  "design": {
+    "cellIdFormat": "{seam}:{operator}",
+    "seamLevels": [
+      "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION",
+      "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION"
+    ],
+    "operatorLevels": [
+      "O1_PERMUTE_EXISTING_SUBEFFECTS",
+      "O2_DROP_ONE_EXISTING_SUBEFFECT",
+      "O3_REPEAT_ONE_EXISTING_SUBEFFECT",
+      "O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY",
+      "O5_REMAP_ONE_SUBEFFECT_TARGET",
+      "O6_CONVERT_ONE_REALISED_RESULT_TYPE",
+      "O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT"
+    ],
+    "designMatrixCells": [
+      "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O1_PERMUTE_EXISTING_SUBEFFECTS",
+      "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O2_DROP_ONE_EXISTING_SUBEFFECT",
+      "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O3_REPEAT_ONE_EXISTING_SUBEFFECT",
+      "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY",
+      "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O5_REMAP_ONE_SUBEFFECT_TARGET",
+      "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O6_CONVERT_ONE_REALISED_RESULT_TYPE",
+      "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION:O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT",
+      "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O1_PERMUTE_EXISTING_SUBEFFECTS",
+      "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O2_DROP_ONE_EXISTING_SUBEFFECT",
+      "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O3_REPEAT_ONE_EXISTING_SUBEFFECT",
+      "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY",
+      "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O5_REMAP_ONE_SUBEFFECT_TARGET",
+      "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O6_CONVERT_ONE_REALISED_RESULT_TYPE",
+      "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION:O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT"
+    ]
+  },
+  "ranking": {
+    "seamRank": {
+      "S1_WITHIN_ONE_PLAYER_CARD_RESOLUTION": 0,
+      "S4_WITHIN_ONE_ENEMY_ACTION_RESOLUTION": 1
+    },
+    "operatorRank": {
+      "O1_PERMUTE_EXISTING_SUBEFFECTS": 0,
+      "O7_GUARD_ONE_SUBEFFECT_ON_ANOTHER_REALISED_RESULT": 1,
+      "O2_DROP_ONE_EXISTING_SUBEFFECT": 2,
+      "O4_SHIFT_ONE_SUBEFFECT_ACROSS_OWN_ACTION_BOUNDARY": 3,
+      "O5_REMAP_ONE_SUBEFFECT_TARGET": 4,
+      "O3_REPEAT_ONE_EXISTING_SUBEFFECT": 5,
+      "O6_CONVERT_ONE_REALISED_RESULT_TYPE": 6
+    }
+  },
+  "runner": {
+    "path": "post_9cc1496d_residual_action_trace_grammar_v1.py",
+    "sha256": "e6bd225fbe2627118c374cdf4e6e78e4ff90b5db653e3a524e427ec9637cd936",
+    "behaviourChangedFromV1": false
+  },
+  "claimBoundary": "A success selects one abstract action-trace cell for a later zero-row design gate only. It is not a card, relic, value, implementation, source identity proof, natural capacity, policy sensitivity, causal benefit, complementarity, reachability, detector, product, protected-seed, #421 acceptance or #108 P9 claim."
+}

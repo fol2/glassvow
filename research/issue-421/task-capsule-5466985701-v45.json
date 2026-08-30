@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "residual-action-trace-futility-and-policy-repertoire-boundary",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "developmentCheckout": {
+    "path": "/Users/jamesto/Coding/glassvow",
+    "branch": "work/421-h34",
+    "head": "7d1f6c0ff4d7534eb517ef57d1f547db140833fd",
+    "status": "clean-and-untouched"
+  },
+  "parentArchiveHead": "9cc1496d7105c99caf274d30cf440021a0ae3375",
+  "protocol": {
+    "path": "protocols/post-9cc1496d-residual-action-trace-grammar-v2.json",
+    "sha256": "7afc67e8dbcaa63b9862587fc1818578933242a8d57fd224b5ca532992747c39",
+    "predecessorSha256": "9b91ac435cc9e6248bc3acaf372348a30afb883e2d1e622b398ae276792ef6ab",
+    "correctionSha256": "903d788dee691eea95d76d834ee06ab9b9699c6d550fce432675bfd426328510",
+    "correctionBudgetRemaining": 0
+  },
+  "decision": {
+    "outcome": "FUTILITY",
+    "disposition": "FUTILITY_CLOSE_RESIDUAL_ACTION_TRACE_GRAMMAR",
+    "summaryPath": "summaries/post-9cc1496d-residual-action-trace-grammar-v2.json",
+    "summarySha256": "a77a4fa2a24380f861146d37ef69bd928f6cf11c79ccba2bda21f0761a162bfa",
+    "readoutPath": "summaries/post-9cc1496d-residual-action-trace-grammar-v2.md",
+    "readoutSha256": "72e89e8f89d2e912c3b801767a4ab08127b88d906609588399715fac18b24887"
+  },
+  "gateCounts": {
+    "sourceSupported": 14,
+    "mediatorObservable": 14,
+    "aliasFree": 7,
+    "policyExpressibleWithoutNewSelector": 1,
+    "eligible": 0,
+    "totalCells": 14
+  },
+  "execution": {
+    "backgroundReports": 3,
+    "consolidationProcesses": 1,
+    "consolidationWallTimeSecondsApproximate": 0.04,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productCandidates": 0
+  },
+  "activeInvariants": [
+    "All archive heads and valid closed families remain immutable.",
+    "The residual action-trace grammar and TARGET_ACTS_LAST_THIS_PHASE cannot be reopened as rescue paths.",
+    "The result identifies a policy-repertoire bottleneck but does not measure decision value for ML, RL or another optimiser.",
+    "No optimiser, simulator row, ledger access, protected identity, product mutation, PR, Actions or #108 claim is authorised by this result."
+  ],
+  "nextAction": "Archive and publish this bounded futility result, then freeze the cheapest deterministic policy-repertoire decision-value gate over immutable existing content and policies. Authorise no ML, RL or optimiser unless that distinct gate measures a decision-changing gap."
+}
