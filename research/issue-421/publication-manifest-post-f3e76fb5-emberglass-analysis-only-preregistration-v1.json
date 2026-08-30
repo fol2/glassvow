@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-analysis-preregistration",
+  "parentAuthorityReceiptHead": "003f386830a26c86b2bb20f6c84dd285d3a06bf5",
+  "preregistrationHead": "f3e76fb5b12d0ad85db0a643e605b5b6ed798489",
+  "intendedRemoteRef": "research/issue-421-post-c69b2752-persistent-contract-evidence",
+  "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+  "authority": {
+    "source": "Ash, Glassvow PM",
+    "decision": "AUTHORISE_ONE_ANALYSIS_ONLY_CORRECTION",
+    "commentId": 5470587102,
+    "commentBodySha256": "cbca146ef812fca7b3e50f03a7879bfc89d68f1a0c660e54b1e9a1ed99f0beea"
+  },
+  "preregistration": {
+    "commentId": 5470613352,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5470613352",
+    "commentBodySha256": "21abc2c65b7bdf321f7351de380ca82bdb1b6936698c3055218521c6b9636a88"
+  },
+  "files": [
+    {
+      "path": "research/issue-421/protocols/post-7c8a3ee7-emberglass-source-identity-analysis-only-v1.json",
+      "sha256": "3726136358dcbc055d3cc8fd4b15666f3f4e0a25326c65a2ace76255ac212c0b"
+    },
+    {
+      "path": "research/issue-421/tools/post_7c8a3ee7_emberglass_source_identity_analysis_only_v1.py",
+      "sha256": "fc739ddf2f875af64c6564a6623daaf56803c874a80841ab32517b227db336d6"
+    },
+    {
+      "path": "research/issue-421/audits/post-7c8a3ee7-emberglass-source-identity-analysis-only-preregistration-v1.json",
+      "sha256": "455d15b10abd41eb9f4a50157c05169e1e9212d37141790cb0d3277db444bb1b"
+    },
+    {
+      "path": "research/issue-421/comments/post-7c8a3ee7-emberglass-source-identity-analysis-only-preregistration-v1.md",
+      "sha256": "21abc2c65b7bdf321f7351de380ca82bdb1b6936698c3055218521c6b9636a88"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5470613352-v57.json",
+      "sha256": "e8272d9758cf97ddbcf870d716c9042dffacf96ee28582f5368db6ec2511d831"
+    }
+  ],
+  "frozenExecution": {
+    "analysisFunction": "original v1 _analyse",
+    "maximumAnalysisExecutions": 1,
+    "maximumAnalysisSeconds": 5,
+    "newGodotProcesses": 0,
+    "newRows": 0,
+    "newSeedIdentities": 0,
+    "newCandidates": 0,
+    "grammarChanges": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "furtherCorrections": 0
+  },
+  "preAnalysisState": {
+    "endpointContentReadUnderThisAuthority": false,
+    "analysisExecutions": 0
+  },
+  "claimBoundary": "This packet freezes the one authorised analysis-only correction before endpoint loading. It establishes no identity, capacity, causal, balance, product, #421-acceptance or #108-P9 claim."
+}

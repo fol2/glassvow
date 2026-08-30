@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "emberglass-analysis-only-gate-preregistered",
+  "taskSsot": {
+    "issueBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "source": "Ash, Glassvow PM",
+    "decision": "AUTHORISE_ONE_ANALYSIS_ONLY_CORRECTION",
+    "commentId": 5470587102,
+    "bodySha256": "cbca146ef812fca7b3e50f03a7879bfc89d68f1a0c660e54b1e9a1ed99f0beea"
+  },
+  "sourceIdentities": {
+    "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+    "frozenExperimentSource": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "authorityIntakeReceiptHead": "003f386830a26c86b2bb20f6c84dd285d3a06bf5",
+    "preregistrationHead": "f3e76fb5b12d0ad85db0a643e605b5b6ed798489"
+  },
+  "preregistration": {
+    "protocolPath": "protocols/post-7c8a3ee7-emberglass-source-identity-analysis-only-v1.json",
+    "protocolSha256": "3726136358dcbc055d3cc8fd4b15666f3f4e0a25326c65a2ace76255ac212c0b",
+    "runnerPath": "tools/post_7c8a3ee7_emberglass_source_identity_analysis_only_v1.py",
+    "runnerSha256": "fc739ddf2f875af64c6564a6623daaf56803c874a80841ab32517b227db336d6",
+    "auditSha256": "455d15b10abd41eb9f4a50157c05169e1e9212d37141790cb0d3277db444bb1b",
+    "commentId": 5470613352,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5470613352",
+    "commentBodySha256": "21abc2c65b7bdf321f7351de380ca82bdb1b6936698c3055218521c6b9636a88"
+  },
+  "frozenExecution": {
+    "analysisFunction": "original v1 _analyse",
+    "maximumAnalysisExecutions": 1,
+    "maximumAnalysisSeconds": 5,
+    "newGodotProcesses": 0,
+    "newRows": 0,
+    "newSeedIdentities": 0,
+    "newCandidates": 0,
+    "grammarChanges": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "furtherCorrections": 0,
+    "command": "python3 research/issue-421/tools/post_7c8a3ee7_emberglass_source_identity_analysis_only_v1.py --protocol research/issue-421/protocols/post-7c8a3ee7-emberglass-source-identity-analysis-only-v1.json --out research/issue-421/summaries/post-7c8a3ee7-emberglass-source-identity-analysis-only-v1.json"
+  },
+  "safeState": {
+    "endpointContentReadUnderThisAuthority": false,
+    "analysisExecutions": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "nextAction": "Execute the frozen analysis-only command exactly once and apply only its deterministic success, futility or inconclusive rule."
+}
