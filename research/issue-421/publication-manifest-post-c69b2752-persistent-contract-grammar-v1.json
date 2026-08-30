@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-research-evidence",
+  "parentArchiveHead": "c69b2752f8a52c0d50151ba083a02948180a0846",
+  "resultEvidenceHead": "7dd4716687846760373623dcfd8a9264e260edf3",
+  "intendedRemoteRef": "research/issue-421-post-c69b2752-persistent-contract-evidence",
+  "resolvedMain": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "authority": {
+    "issueBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "ownerDecision": "OPTION_2_APPROVED",
+    "commentId": 5468704389,
+    "commentBodySha256": "fca3a0142f3a7e55457b448a7acecab69bb14407005bc1c6354e5b740c297dd7"
+  },
+  "preregistration": {
+    "commentId": 5468760319,
+    "commentBodySha256": "661b8129ea31e91149b49a525b2f55ef8ef4351465c4d2fa73eb95688704f607"
+  },
+  "result": {
+    "commentId": 5468805233,
+    "commentBodySha256": "b50a212a57fb1c84b9c43ee512d09bdd70a749d6b3887401d13e46dd449d20af",
+    "outcome": "SUCCESS",
+    "decision": "freeze-one-persistent-contract-for-separate-preregistration",
+    "selectedCandidate": "emberglass-memory-one-carry"
+  },
+  "scientificAccounting": {
+    "frozenCandidates": 3,
+    "backgroundAgents": 3,
+    "completeReports": 3,
+    "eligibleCandidates": 1,
+    "ownerConsolidations": 1,
+    "correctionsUsed": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0
+  },
+  "files": [
+    {
+      "path": "research/issue-421/protocols/post-c69b2752-persistent-contract-grammar-v1.json",
+      "sha256": "9748055155e6e484d0486e0d696903a894992ff5b05877ca69c83cec63abca4c"
+    },
+    {
+      "path": "research/issue-421/tools/post_c69b2752_persistent_contract_grammar_v1.py",
+      "sha256": "04d80bc3f34120bcd9a87dc6fcd5bc27f9d89bce0e1435ae47a1661a4bf2c970"
+    },
+    {
+      "path": "research/issue-421/reviews/post-c69b2752-persistent-contract-h1-source-v1.json",
+      "sha256": "fc3348a6bcad8f17005e514908d2d1f585d587b79ff4c973e1248a0f64f14424"
+    },
+    {
+      "path": "research/issue-421/reviews/post-c69b2752-persistent-contract-h2-alias-v1.json",
+      "sha256": "e6ace34ecb697e6b12a8ada2fa554ad2d46c707fa6380bfc26f123361f232246"
+    },
+    {
+      "path": "research/issue-421/reviews/post-c69b2752-persistent-contract-h3-policy-v1.json",
+      "sha256": "15d54a78e2cf04a3641cad0ddcb432d68d379f8a5e3b91d334a6c93378cb0a42"
+    },
+    {
+      "path": "research/issue-421/summaries/post-c69b2752-persistent-contract-grammar-v1.json",
+      "sha256": "1c0b52ec2d8cab27ea69436a77dd22838b3f1b6ad1a2851246dc7e02fb897e7b"
+    },
+    {
+      "path": "research/issue-421/comments/post-c69b2752-persistent-contract-grammar-result-v1.md",
+      "sha256": "b50a212a57fb1c84b9c43ee512d09bdd70a749d6b3887401d13e46dd449d20af"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5468805233-v50.json",
+      "sha256": "3893c3a4b539d1c5eb9f64531073337f31f566b4ae0b57fc4107e8bfc6d6eb68"
+    }
+  ],
+  "claims": [
+    "The frozen three-candidate grammar selected exactly emberglass-memory-one-carry through the preregistered nine-gate deterministic rule.",
+    "The other two candidates remain rejected for their recorded closure, alias, evidence or testability failures and cannot be adaptively substituted.",
+    "The selected contract is frozen only for a separate source, capacity and identity preregistration.",
+    "No causal, acquisition, package, detector, product, acceptance or P9 claim follows from this zero-row selection."
+  ]
+}
