@@ -6,6 +6,7 @@ extends RefCounted
 const RUN_PATH: String = "user://test_opening_flow_run_v2.json"
 const VIGIL_PATH: String = "user://test_opening_flow_vigil_v2.json"
 const DEV_PATH: String = "user://test_opening_flow_dev_run_v2.json"
+const MapCompose: GDScript = preload("res://tests/test_map_compose.gd")
 
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
@@ -352,6 +353,7 @@ static func _main(content: ContentDB) -> Main:
 	SaveService.clear(RUN_PATH)
 	SaveService.clear_vigil(VIGIL_PATH)
 	var main: Main = Main.new()
+	main._map_layout_compile = MapCompose.fake_layout_compile()
 	main.content = content
 	main._run_save_path = RUN_PATH
 	main._vigil_save_path = VIGIL_PATH

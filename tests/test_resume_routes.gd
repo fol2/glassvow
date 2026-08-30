@@ -1,6 +1,7 @@
 extends RefCounted
 
 const SAVE_PATH: String = "user://test_resume_routes_v2.json"
+const MapCompose: GDScript = preload("res://tests/test_map_compose.gd")
 
 
 static func run(fails: Array[String]) -> void:
@@ -219,6 +220,7 @@ static func _route_run(content: ContentDB, route: String) -> RunState:
 
 static func _main(content: ContentDB) -> Main:
 	var main: Main = Main.new()
+	main._map_layout_compile = MapCompose.fake_layout_compile()
 	main.content = content
 	main._run_save_path = SAVE_PATH
 	main._vigil = VigilState.blank()

@@ -20,6 +20,7 @@ var _pending_language: StringName = &""
 var _route_checkpoint_quarantined: bool = false
 ## Exact live route constructor; durable resume reconstructs the initial route.
 var _route_rebuilder: Callable = Callable()
+var _map_layout_compile: Callable = Callable()
 var _map_screen: WorldMapScreen = null
 var _choice_screen: Control = null
 var _reward_screen: RewardScreen = null
@@ -1363,6 +1364,8 @@ func _show_map() -> void:
 		_transitions.wipe()
 	_clear_route()
 	_map_screen = WorldMapScreen.new(_map, content, _shape)
+	if _map_layout_compile.is_valid():
+		_map_screen._layout_compile = _map_layout_compile
 	_map_screen.node_chosen.connect(_on_node_chosen)
 	_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
 	_map_screen.before_pick = _on_map_before_pick

@@ -6,19 +6,18 @@ extends RefCounted
 class FakeLayoutCompiler:
 	extends RefCounted
 	var calls: int = 0
-	var input_digests: Array[String] = []
 	var fail_next: bool = false
 
 	func compile(input: MapLayoutInput, _quality: Dictionary,
 			_assets: Dictionary) -> Dictionary:
 		calls += 1
-		input_digests.append(input.digest())
+		var input_digest: String = input.digest()
 		if fail_next:
 			fail_next = false
 			return {
 				"status": MapLayoutCompiler.NO_FEASIBLE_NODE_ROUTE_LAYOUT,
 				"result": null,
-				"diagnostics": {"input_digest": input.digest()},
+				"diagnostics": {"input_digest": input_digest},
 				"failure": {
 					"kind": "test", "id": "invalid", "reason": "forced failure",
 				},
@@ -62,11 +61,11 @@ class FakeLayoutCompiler:
 			"hero_placements": MapLayoutCanonical.ordered_dictionary(heroes),
 			"scenery_instances": {}, "hard_measurements": {}, "soft_scores": {},
 			"selected_restart_id": 0, "selected_candidate_id": "test/live-binding",
-			"input_digest": input.digest(),
+			"input_digest": input_digest,
 		})
 		return {
 			"status": MapLayoutCompiler.COMPILED, "result": result,
-			"diagnostics": {"input_digest": input.digest()},
+			"diagnostics": {"input_digest": input_digest},
 			"report": {"hard_pass": true},
 		}
 
@@ -78,6 +77,13 @@ class FakeLayoutCompiler:
 		return Vector3(MapLayoutCanonical.float_value(row[0]),
 			MapLayoutCanonical.float_value(row[1]),
 			MapLayoutCanonical.float_value(row[2]))
+
+
+static var _shared_fake_layout_compiler: FakeLayoutCompiler = FakeLayoutCompiler.new()
+
+
+static func fake_layout_compile() -> Callable:
+	return Callable(_shared_fake_layout_compiler, "compile")
 
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:

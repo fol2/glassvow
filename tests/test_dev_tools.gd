@@ -1,6 +1,8 @@
 extends RefCounted
 ## DevTools gate, excluded boot parser, and Development-profile isolation.
 
+const MapCompose: GDScript = preload("res://tests/test_map_compose.gd")
+
 
 static func run(fails: Array[String]) -> void:
 	if not DevTools.available():
@@ -299,6 +301,7 @@ static func _has_text(root: Node, text: String) -> bool:
 
 static func _bare_main() -> Main:
 	var main: Main = Main.new()
+	main._map_layout_compile = MapCompose.fake_layout_compile()
 	main.content = ContentDB.load_full()
 	main._vigil = VigilState.blank()
 	main._music = MusicBus.new()
