@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-owner-authority-intake",
+  "parentArchiveHead": "fd59fab16ffc2ac767eda233b8f05e62f789de54",
+  "intendedRemoteRef": "research/issue-421-post-c69b2752-persistent-contract-evidence",
+  "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+  "frozenExperimentSource": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "authority": {
+    "decision": "AUTHORISE_ONE_EMBERGLASS_V2_MECHANICAL_CORRECTION",
+    "commentId": 5470097429,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5470097429",
+    "commentBodySha256": "c0e5587aaf3dd79473f3489b33b416e81d8eaabeb6b27587c62022b741e57df6"
+  },
+  "files": [
+    {
+      "path": "research/issue-421/comments/post-fd59fab-emberglass-v2-correction-authority-intake-v1.md",
+      "sha256": "c0e5587aaf3dd79473f3489b33b416e81d8eaabeb6b27587c62022b741e57df6"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5470097429-v53.json",
+      "sha256": "a91ad9625a17072d44fb1cf21347fdb4486f1ca3d2ac24825c543c986e658f75"
+    }
+  ],
+  "constraints": {
+    "preserveV1": true,
+    "onlyRunnerChange": "Resolve the already-frozen plan and output paths to absolute paths before both Godot invocations.",
+    "sameScientificContract": true,
+    "maximumCorrectedVersions": 1,
+    "furtherCorrections": 0,
+    "candidateSubstitution": false,
+    "grammarWidening": false,
+    "simulatorRows": 0,
+    "protectedSeedRows": 0
+  },
+  "safeState": {
+    "directControlledExecutionsAfterAuthority": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "claimBoundary": "This packet records only the owner authority to publish and execute one mechanical v2 correction of the frozen Emberglass source/identity gate. It establishes no identity, capacity, causal, balance, product, acceptance or P9 claim."
+}

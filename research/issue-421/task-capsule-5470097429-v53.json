@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "emberglass-v2-mechanical-correction-authorised",
+  "taskSsot": {
+    "issueBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "decision": "AUTHORISE_ONE_EMBERGLASS_V2_MECHANICAL_CORRECTION",
+    "commentId": 5470097429,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5470097429",
+    "bodySha256": "c0e5587aaf3dd79473f3489b33b416e81d8eaabeb6b27587c62022b741e57df6",
+    "precedingDecisionCommentId": 5469082028,
+    "precedingDecisionBodySha256": "eb5749735deb0d4bf90be941f0226d2c6c1e7717ee8012507b8ca72a44af7e9b"
+  },
+  "sourceIdentities": {
+    "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+    "frozenExperimentSourceAndBaseline": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "immutableV1ReceiptHead": "dcfebf9f56580a833453b36164c2a5327fb67210",
+    "authorityDecisionReceiptHead": "fd59fab16ffc2ac767eda233b8f05e62f789de54"
+  },
+  "developmentCheckout": {
+    "path": "/Users/jamesto/Coding/glassvow",
+    "branch": "work/421-h34",
+    "head": "7d1f6c0ff4d7534eb517ef57d1f547db140833fd",
+    "status": "clean-and-untouched"
+  },
+  "correctionContract": {
+    "version": 2,
+    "preserveV1": true,
+    "onlyChange": "Resolve the frozen plan and output paths to absolute paths before both Godot invocations.",
+    "preserve": [
+      "selected contract",
+      "source projection",
+      "design matrix",
+      "row, policy and seed identities",
+      "baseline",
+      "engine binary",
+      "estimands",
+      "budgets",
+      "gates",
+      "decision rules"
+    ],
+    "maximumCorrectedVersions": 1,
+    "furtherCorrections": 0,
+    "candidateSubstitution": false,
+    "grammarWidening": false,
+    "simulatorRows": 0,
+    "protectedSeeds": 0
+  },
+  "safeState": {
+    "v1Mutated": false,
+    "directControlledExecutionsAfterAuthority": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "nextAction": "Publish the separately versioned v2 correction protocol and runner, prove that only absolute path resolution changed, then execute its sole frozen first look once."
+}
