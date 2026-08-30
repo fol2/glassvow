@@ -77,7 +77,8 @@ static func _map_round_trip(fails: Array[String]) -> void:
 	var map: WorldMap = WorldMap.benchmark(run)
 	run.map = map.to_dict()
 	var main: Main = Main.new()
-	main._map_layout_compile = MapCompose.fake_layout_compile()
+	var compiler: MapCompose.FakeLayoutCompiler = MapCompose.FakeLayoutCompiler.new()
+	main._map_layout_compile = Callable(compiler, "compile")
 	main.content = content
 	main.game = game
 	main._map = map
@@ -91,6 +92,7 @@ static func _map_round_trip(fails: Array[String]) -> void:
 	main._show_map()
 	var english_map: WorldMapScreen = main._map_screen
 	var layout: MapLayoutResult = english_map.layout_result()
+	var input_digest: String = english_map.layout_input_digest()
 	if layout == null or str(layout.to_dict().get("selected_candidate_id", "")) \
 			!= "test/live-binding":
 		fails.append("live locale map: Main bypassed the injected layout compiler")
@@ -110,6 +112,10 @@ static func _map_round_trip(fails: Array[String]) -> void:
 		fails.append("live locale map: non-combat switch did not activate zh-Hant")
 	if main._map_screen == english_map or main._run_hud == english_hud:
 		fails.append("live locale map: map and RunHud were not rebuilt together")
+	if main._map_screen.layout_input_digest() != input_digest:
+		fails.append("live locale map: locale rebuild changed layout identity")
+	elif compiler.calls != 1:
+		fails.append("live locale map: unchanged layout recompiled across screen lifecycles")
 	if not _has_waystone_tip(main._map_screen, "爐火") \
 			or not main._run_hud._title.text.contains("灰燼樹林"):
 		fails.append("live locale map: rebuilt waystones or RunHud stayed English")
