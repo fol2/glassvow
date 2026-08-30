@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "auditId": "post-1127ed7e-target-acts-last-v1-v2-cohort-equivalence-v1",
+  "issue": 421,
+  "auditedAtUtc": "2026-08-30T08:44:00Z",
+  "question": "Does the exact hash-bound v1 predecessor contain the same frozen whole-run and direct identity cohort as corrected v2, so only that predecessor may be excluded from protocol-collision detection?",
+  "inputs": {
+    "predecessorProtocol": {
+      "path": "protocols/post-1127ed7e-target-acts-last-identity-v1.json",
+      "sha256": "c22af01ffce5986a782f185d133c489ec6f75cb981c723b5c8d34abedf95a020"
+    },
+    "correctedProtocolBeforeAuditBinding": {
+      "path": "protocols/post-1127ed7e-target-acts-last-identity-v2.json",
+      "sha256": "85af4b81c1ddafae83428b203f90bc8a24e08e89468124c6fd73f05880daccdb"
+    }
+  },
+  "projection": {
+    "wholeRunFields": [
+      "id",
+      "aspect",
+      "vow",
+      "seed",
+      "policyRoot",
+      "policyIndex"
+    ],
+    "directFields": [
+      "id",
+      "seed",
+      "aspect",
+      "enemies",
+      "deadTargets"
+    ],
+    "excludedFromCohortIdentity": [
+      "actions",
+      "expected",
+      "correction metadata",
+      "immutable hashes",
+      "wording"
+    ],
+    "predecessorWholeRun": [
+      {
+        "id": "whole-dusk-v0-p0-s4217600",
+        "aspect": "duskblade",
+        "vow": 0,
+        "seed": 4217600,
+        "policyRoot": 4217500,
+        "policyIndex": 0
+      },
+      {
+        "id": "whole-ash-v0-p0-s4217601",
+        "aspect": "ashwarden",
+        "vow": 0,
+        "seed": 4217601,
+        "policyRoot": 4217500,
+        "policyIndex": 0
+      },
+      {
+        "id": "whole-dusk-v3-p1-s4217602",
+        "aspect": "duskblade",
+        "vow": 3,
+        "seed": 4217602,
+        "policyRoot": 4217500,
+        "policyIndex": 1
+      },
+      {
+        "id": "whole-ash-v3-p1-s4217603",
+        "aspect": "ashwarden",
+        "vow": 3,
+        "seed": 4217603,
+        "policyRoot": 4217500,
+        "policyIndex": 1
+      }
+    ],
+    "correctedWholeRun": [
+      {
+        "id": "whole-dusk-v0-p0-s4217600",
+        "aspect": "duskblade",
+        "vow": 0,
+        "seed": 4217600,
+        "policyRoot": 4217500,
+        "policyIndex": 0
+      },
+      {
+        "id": "whole-ash-v0-p0-s4217601",
+        "aspect": "ashwarden",
+        "vow": 0,
+        "seed": 4217601,
+        "policyRoot": 4217500,
+        "policyIndex": 0
+      },
+      {
+        "id": "whole-dusk-v3-p1-s4217602",
+        "aspect": "duskblade",
+        "vow": 3,
+        "seed": 4217602,
+        "policyRoot": 4217500,
+        "policyIndex": 1
+      },
+      {
+        "id": "whole-ash-v3-p1-s4217603",
+        "aspect": "ashwarden",
+        "vow": 3,
+        "seed": 4217603,
+        "policyRoot": 4217500,
+        "policyIndex": 1
+      }
+    ],
+    "predecessorDirect": [
+      {
+        "id": "positive-tidecaller-volt-eel",
+        "seed": 4217700,
+        "aspect": "duskblade",
+        "enemies": [
+          "tidecaller",
+          "voltEel"
+        ],
+        "deadTargets": []
+      },
+      {
+        "id": "positive-tidecaller-mirelurker",
+        "seed": 4217701,
+        "aspect": "duskblade",
+        "enemies": [
+          "tidecaller",
+          "mirelurker"
+        ],
+        "deadTargets": []
+      },
+      {
+        "id": "null-ashwarden-rejection",
+        "seed": 4217702,
+        "aspect": "ashwarden",
+        "enemies": [
+          "tidecaller",
+          "voltEel"
+        ],
+        "deadTargets": []
+      },
+      {
+        "id": "null-dead-target-rejection",
+        "seed": 4217703,
+        "aspect": "duskblade",
+        "enemies": [
+          "tidecaller",
+          "voltEel"
+        ],
+        "deadTargets": [
+          0
+        ]
+      },
+      {
+        "id": "repeat-idempotent-and-replace",
+        "seed": 4217704,
+        "aspect": "duskblade",
+        "enemies": [
+          "tidecaller",
+          "voltEel"
+        ],
+        "deadTargets": []
+      },
+      {
+        "id": "already-last-consumption",
+        "seed": 4217705,
+        "aspect": "duskblade",
+        "enemies": [
+          "voltEel",
+          "tidecaller"
+        ],
+        "deadTargets": []
+      },
+      {
+        "id": "marked-target-death-expiry",
+        "seed": 4217706,
+        "aspect": "duskblade",
+        "enemies": [
+          "tidecaller",
+          "voltEel"
+        ],
+        "deadTargets": []
+      },
+      {
+        "id": "combat-end-expiry",
+        "seed": 4217707,
+        "aspect": "duskblade",
+        "enemies": [
+          "tidecaller",
+          "voltEel"
+        ],
+        "deadTargets": []
+      }
+    ],
+    "correctedDirect": [
+      {
+        "id": "positive-tidecaller-volt-eel",
+        "seed": 4217700,
+        "aspect": "duskblade",
+        "enemies": [
+          "tidecaller",
+          "voltEel"
+        ],
+        "deadTargets": []
+      },
+      {
+        "id": "positive-tidecaller-mirelurker",
+        "seed": 4217701,
+        "aspect": "duskblade",
+        "enemies": [
+          "tidecaller",
+          "mirelurker"
+        ],
+        "deadTargets": []
+      },
+      {
+        "id": "null-ashwarden-rejection",
+        "seed": 4217702,
+        "aspect": "ashwarden",
+        "enemies": [
+          "tidecaller",
+          "voltEel"
+        ],
+        "deadTargets": []
+      },
+      {
+        "id": "null-dead-target-rejection",
+        "seed": 4217703,
+        "aspect": "duskblade",
+        "enemies": [
+          "tidecaller",
+          "voltEel"
+        ],
+        "deadTargets": [
+          0
+        ]
+      },
+      {
+        "id": "repeat-idempotent-and-replace",
+        "seed": 4217704,
+        "aspect": "duskblade",
+        "enemies": [
+          "tidecaller",
+          "voltEel"
+        ],
+        "deadTargets": []
+      },
+      {
+        "id": "already-last-consumption",
+        "seed": 4217705,
+        "aspect": "duskblade",
+        "enemies": [
+          "voltEel",
+          "tidecaller"
+        ],
+        "deadTargets": []
+      },
+      {
+        "id": "marked-target-death-expiry",
+        "seed": 4217706,
+        "aspect": "duskblade",
+        "enemies": [
+          "tidecaller",
+          "voltEel"
+        ],
+        "deadTargets": []
+      },
+      {
+        "id": "combat-end-expiry",
+        "seed": 4217707,
+        "aspect": "duskblade",
+        "enemies": [
+          "tidecaller",
+          "voltEel"
+        ],
+        "deadTargets": []
+      }
+    ]
+  },
+  "checks": {
+    "wholeRunProjectionExact": true,
+    "directProjectionExact": true,
+    "predecessorSeeds": [
+      4217600,
+      4217601,
+      4217602,
+      4217603,
+      4217700,
+      4217701,
+      4217702,
+      4217703,
+      4217704,
+      4217705,
+      4217706,
+      4217707
+    ],
+    "correctedSeeds": [
+      4217600,
+      4217601,
+      4217602,
+      4217603,
+      4217700,
+      4217701,
+      4217702,
+      4217703,
+      4217704,
+      4217705,
+      4217706,
+      4217707
+    ],
+    "seedSequenceExact": true,
+    "protectedSeedCount": 0
+  },
+  "result": "PASS_EXACT_BOUND_PREDECESSOR_COHORT_ALIAS",
+  "claimBoundary": "This proves only v1-to-v2 frozen identity-cohort equivalence. It does not authorise another predecessor exemption, a source change, a simulator row or a scientific outcome.",
+  "accounting": {
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "mechanicalCorrections": 0
+  }
+}

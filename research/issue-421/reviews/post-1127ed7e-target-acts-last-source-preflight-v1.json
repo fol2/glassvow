@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "reviewId": "post-1127ed7e-target-acts-last-source-preflight-v1",
+  "reviewMode": "read-only independent pre-live source audit",
+  "verdict": "FAIL",
+  "prohibitedActionsObserved": [],
+  "findings": [
+    {
+      "id": "ASPECT_MISMATCH_EXPIRY_MISSING",
+      "protocolAnchor": "factorDefinitions.targetActsLast.expiry",
+      "sourceAnchors": [
+        "domain/rules/combat.gd:_mark_research421_target_acts_last",
+        "domain/rules/combat.gd:_research421_enemy_phase_order"
+      ],
+      "evidence": "A non-Duskblade producer call rejects without clearing a pre-existing marker, and the phase consumer has no aspect check. A stale marker can therefore reorder an aspect-mismatched enemy phase.",
+      "requiredCorrection": "Clear on aspect mismatch at producer and consumer boundaries and prove it in a matched direct control."
+    }
+  ]
+}

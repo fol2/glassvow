@@ -1,0 +1,392 @@
+{
+  "schemaVersion": 1,
+  "protocolId": "post-1127ed7e-target-acts-last-identity-v1",
+  "preregisteredAtUtc": "2026-08-30T08:19:00Z",
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "question": "Does one minimal research-only TARGET_ACTS_LAST_THIS_PHASE representation have an exact disabled whole-run path and affect only its frozen phase-order mediator in matched direct controls?",
+  "authorities": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "controllingCommentId": 5466985701,
+    "controllingCommentBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60",
+    "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2"
+  },
+  "parentEvidence": {
+    "archiveHead": "1127ed7ed05b1b5030cfe533379176b22507c11b",
+    "remoteRef": "research/issue-421-post-43431456-target-acts-last-natural-identity-design-evidence",
+    "manifestSha256": "f91e5bf402eac11d759a9902224e94f00ff0d9ee4fd1c0d3be68524ab9fb2202",
+    "disposition": "AUTHORISE_ONE_RESEARCH_PROTOTYPE_AND_IDENTITY_GATE"
+  },
+  "immutableEvidence": {
+    "archiveHeads": [
+      "93dea98437bfe0d8d6344d526e439eb903d4830c",
+      "843e899ca053b42b9c8b92486687a43eb1193eb9",
+      "b7b509939ff0bd8f75ba2218309e09cb94808878",
+      "004679a83894f151e95aeed35d2ecaab60a9d3f5",
+      "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+      "434314565a10064076f0f4ba45ac17713096b6ca",
+      "1127ed7ed05b1b5030cfe533379176b22507c11b"
+    ],
+    "quarantinedObservationCount": 82,
+    "quarantinedObservationsUsedForDecision": 0,
+    "closedFamilyRule": "Every prior valid closed-family disposition remains immutable and unavailable as a rescue path."
+  },
+  "engineIdentity": {
+    "path": "/opt/homebrew/bin/godot",
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "binarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "host": {
+      "kernel": "Darwin 27.0.0 arm64",
+      "osVersion": "27.0",
+      "hardwareModel": "MacBookPro18,2",
+      "cpu": "Apple M1 Max",
+      "logicalCpu": 10,
+      "memoryBytes": 68719476736
+    }
+  },
+  "factorDefinitions": {
+    "targetActsLast": {
+      "definition": "Before the next enemy phase resolves any living enemy, stable-partition the existing living-enemy iteration so the marked enemy acts after every unmarked enemy. Preserve each enemy's exact move, internal effect order, action count, player target, history update, RNG identity and post-phase intent recomputation; consume the marker at phase start.",
+      "levels": {
+        "off": "Prototype switch false; the research card cannot create or consume a marker.",
+        "on": "Prototype switch true; a Duskblade research Skill costing one Energy marks exactly one selected living enemy for the next enemy phase."
+      },
+      "carrier": "EnemyCombatant.flags[research421TargetActsLast] on at most one living enemy; omitted from CombatState, RunState and save projections.",
+      "repeatRule": "Same-target replay is idempotent; different-target replay replaces the marker without stacking.",
+      "expiry": "Marked-target death, combat end, aspect mismatch or the next enemy-phase consumption clears the marker.",
+      "event": {
+        "id": "research421TargetActsLast",
+        "fields": ["targetIdx", "beforeLivingPosition", "afterLivingPosition", "moved"],
+        "cardinality": "Exactly one event per eligible phase consumption and zero otherwise."
+      }
+    },
+    "scorelinePayoff": {
+      "definition": "Duskblade exact Chisel realised hit sets one target-local non-stacking mark; a later exact Executioner on that living target consumes it for one separate bounded raw damage operation.",
+      "level": "off",
+      "causalIndependence": "Separate causal factor; never pooled with targetActsLast."
+    },
+    "afterimagePayoff": {
+      "definition": "Duskblade exact Defend realised Ward sets one player-local non-stacking bounded value; a later exact Warden's Edge in the same player turn consumes it for one separate mirrored-Ward operation.",
+      "level": "off",
+      "causalIndependence": "Separate causal factor; never pooled with targetActsLast."
+    },
+    "acquisitionPriority": {
+      "definition": "The already identity-proved deterministic reward-value mediator from the earlier blocked package experiment.",
+      "level": "shipping null",
+      "role": "Frozen and not varied in this identity gate."
+    },
+    "interactionRule": "No interaction is estimated. Scoreline, Afterimage, acquisition and every prior package remain fixed at their null levels. Any later joint cell requires a new decision-valued interference preregistration."
+  },
+  "researchPrototype": {
+    "productStatus": "Research-only source/content projection; not product truth, a candidate or shipping scope.",
+    "configuration": {
+      "method": "configure_research421_target_acts_last(enabled: bool)",
+      "default": false,
+      "count": 1
+    },
+    "card": {
+      "id": "research421TargetActsLast",
+      "type": "skill",
+      "rarity": "special",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "ward",
+      "effects": [{"kind": "special", "id": "research421TargetActsLast"}],
+      "bundledEffects": 0,
+      "aspect": "Duskblade only"
+    },
+    "sourceFiles": [
+      "domain/rules/combat.gd",
+      "domain/events/event_types.gd",
+      "presentation/combat/combat_screen.gd"
+    ],
+    "researchProbe": "tools/research_421_target_acts_last_identity_probe_v1.gd",
+    "prohibitions": [
+      "No cb.enemies mutation",
+      "No new declared combat, enemy, run or save field",
+      "No policy score, target heuristic, acquisition override, ML or RL hook",
+      "No RNG call",
+      "No Scoreline or Afterimage code"
+    ]
+  },
+  "estimator": {
+    "wholeRun": "Current-main BalanceSim.simulate under a frozen BalancePolicy identity.",
+    "pathCapture": "The single research probe repeats the exact current-main orchestration through BalanceSim's existing helpers, records every selected node and complete combat event queue, and must reproduce the canonical BalanceSim.simulate row for the same identity before any arm comparison.",
+    "direct": "GlassvowGame.apply through the production startCombat, playCard and endTurn seams from one frozen constructed state per scenario.",
+    "canonicalisation": "UTF-8 JSON with sorted keys and compact separators plus one LF; equality is exact, not tolerant.",
+    "cache": "Deterministic SHA-256 content, plan and output objects only; no adaptive reuse or row selection."
+  },
+  "designMatrix": {
+    "wholeRunNull": {
+      "arms": [
+        "Exact current-main source plus exact current-main content",
+        "Prototype source at its default-false null plus exact current-main content"
+      ],
+      "pairedIdentities": 4,
+      "rowsPerArm": 4,
+      "estimands": [
+        "Complete canonical output equality",
+        "Selected-node path equality",
+        "Complete combat-event sequence equality",
+        "Final RNG state equality",
+        "Policy identity equality",
+        "Result and all existing field equality"
+      ],
+      "aliasStructure": "A success establishes exact-main and default-false prototype as one null equivalence class only."
+    },
+    "matchedDirect": {
+      "arms": ["Prototype explicit false", "Prototype explicit true"],
+      "pairedScenarios": 8,
+      "rowsPerArm": 8,
+      "commonConditions": "Same source, projected content, constructed state, actions, seed identity, RNG cursor, baseline, estimator and stopping rule.",
+      "estimands": [
+        "Two positive phase-order consumptions preserve action multiset and RNG while removing exactly one +2 same-phase Strength exposure each",
+        "Ashwarden rejection and dead-target rejection are exact nulls",
+        "Same-target replay is idempotent and different-target replay replaces",
+        "Already-last consumption has moved=false and an exact ordinary path",
+        "Marked-target death and combat end clear the marker with an exact ordinary path"
+      ],
+      "aliasStructure": "Ash rejection, dead-target rejection, expiry and already-last ordinary paths must alias explicit false after removing only the research marker/event surface. Positive moved=true rows must not alias because phase order and its exact damage mediator change."
+    },
+    "anchors": [
+      "Every whole-run identity is a shared common-random-number exact-main/default-false anchor.",
+      "Every direct scenario uses explicit false as its matched anchor.",
+      "No cross-package interference anchor is needed because no other payoff or acquisition factor varies."
+    ],
+    "mechanisticallyJustifiedInteractions": [],
+    "unjustifiedCartesianCells": 0
+  },
+  "wholeRunRows": [
+    {
+      "id": "whole-dusk-v0-p0-s4217600",
+      "aspect": "duskblade",
+      "vow": 0,
+      "seed": 4217600,
+      "policyRoot": 4217500,
+      "policyIndex": 0
+    },
+    {
+      "id": "whole-ash-v0-p0-s4217601",
+      "aspect": "ashwarden",
+      "vow": 0,
+      "seed": 4217601,
+      "policyRoot": 4217500,
+      "policyIndex": 0
+    },
+    {
+      "id": "whole-dusk-v3-p1-s4217602",
+      "aspect": "duskblade",
+      "vow": 3,
+      "seed": 4217602,
+      "policyRoot": 4217500,
+      "policyIndex": 1
+    },
+    {
+      "id": "whole-ash-v3-p1-s4217603",
+      "aspect": "ashwarden",
+      "vow": 3,
+      "seed": 4217603,
+      "policyRoot": 4217500,
+      "policyIndex": 1
+    }
+  ],
+  "directScenarios": [
+    {
+      "id": "positive-tidecaller-volt-eel",
+      "seed": 4217700,
+      "aspect": "duskblade",
+      "enemies": ["tidecaller", "voltEel"],
+      "actions": [{"kind": "play", "target": 0}, {"kind": "end"}],
+      "expected": {
+        "kind": "positive",
+        "targetIdx": 0,
+        "beforeLivingPosition": 0,
+        "afterLivingPosition": 1,
+        "moved": true,
+        "markersAfterSteps": [[0], []],
+        "baselineActionSequence": [[0, "surge"], [1, "shock"]],
+        "treatedActionSequence": [[1, "shock"], [0, "surge"]],
+        "playerDamageDelta": 2
+      }
+    },
+    {
+      "id": "positive-tidecaller-mirelurker",
+      "seed": 4217701,
+      "aspect": "duskblade",
+      "enemies": ["tidecaller", "mirelurker"],
+      "actions": [{"kind": "play", "target": 0}, {"kind": "end"}],
+      "expected": {
+        "kind": "positive",
+        "targetIdx": 0,
+        "beforeLivingPosition": 0,
+        "afterLivingPosition": 1,
+        "moved": true,
+        "markersAfterSteps": [[0], []],
+        "baselineActionSequence": [[0, "surge"], [1, "barb"]],
+        "treatedActionSequence": [[1, "barb"], [0, "surge"]],
+        "playerDamageDelta": 2
+      }
+    },
+    {
+      "id": "null-ashwarden-rejection",
+      "seed": 4217702,
+      "aspect": "ashwarden",
+      "enemies": ["tidecaller", "voltEel"],
+      "actions": [{"kind": "play", "target": 0}],
+      "expected": {
+        "kind": "ash-reject",
+        "markersAfterSteps": [[]],
+        "finalMarkers": []
+      }
+    },
+    {
+      "id": "null-dead-target-rejection",
+      "seed": 4217703,
+      "aspect": "duskblade",
+      "enemies": ["tidecaller", "voltEel"],
+      "deadTargets": [0],
+      "actions": [{"kind": "play", "target": 0}],
+      "expected": {
+        "kind": "dead-target",
+        "markersAfterSteps": [[]],
+        "finalMarkers": []
+      }
+    },
+    {
+      "id": "repeat-idempotent-and-replace",
+      "seed": 4217704,
+      "aspect": "duskblade",
+      "enemies": ["tidecaller", "voltEel"],
+      "actions": [
+        {"kind": "play", "target": 0},
+        {"kind": "play", "target": 0},
+        {"kind": "play", "target": 1}
+      ],
+      "expected": {
+        "kind": "replay",
+        "markersAfterSteps": [[0], [0], [1]],
+        "finalMarkers": [1]
+      }
+    },
+    {
+      "id": "already-last-consumption",
+      "seed": 4217705,
+      "aspect": "duskblade",
+      "enemies": ["voltEel", "tidecaller"],
+      "actions": [{"kind": "play", "target": 1}, {"kind": "end"}],
+      "expected": {
+        "kind": "already-last",
+        "targetIdx": 1,
+        "beforeLivingPosition": 1,
+        "afterLivingPosition": 1,
+        "moved": false,
+        "markersAfterSteps": [[1], []]
+      }
+    },
+    {
+      "id": "marked-target-death-expiry",
+      "seed": 4217706,
+      "aspect": "duskblade",
+      "enemies": ["tidecaller", "voltEel"],
+      "actions": [{"kind": "play", "target": 0}, {"kind": "hit", "target": 0, "n": 200}],
+      "expected": {
+        "kind": "target-death",
+        "markersAfterSteps": [[0], []],
+        "finalMarkers": []
+      }
+    },
+    {
+      "id": "combat-end-expiry",
+      "seed": 4217707,
+      "aspect": "duskblade",
+      "enemies": ["tidecaller", "voltEel"],
+      "actions": [{"kind": "play", "target": 0}, {"kind": "lose"}],
+      "expected": {
+        "kind": "combat-end",
+        "markersAfterSteps": [[0], []],
+        "finalMarkers": []
+      }
+    }
+  ],
+  "immutableInputs": {
+    "sourceHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "taskCapsulePath": "task-capsule-5466985701-v41.json",
+    "taskCapsuleSha256": "353c2da3f75b95b71813685f681955c775e66542730d4a2ffecb2914c6eff1c8",
+    "runnerSha256": "0341e1b491c70780b965570b3cb99d30637d371f5a603a86c4d59969f51a25b1",
+    "prototypeDiffSha256": "367d283fa8dbce4462201138011824262c3f0dbd5688a31e438896d9bb572790",
+    "projectedContentSha256": "45ecabb358952be0c6a0efafe9a42f919931834cfce108e2b3aea56acbac4206",
+    "baselineSha256": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "presentation/combat/combat_screen.gd": "312d66afa344c441724cc4abe1e87889fb0f9b66637dc8eed4f6ef44c6137542",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/game.gd": "4eb3f416eef60797bc0cfdf9169250f07fccb3a05c0b16dcb9d7ef054898c824",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "domain/state/world_map.gd": "b3f1beb4db34933fc7de0c2562749fbd9465f74c7d74bb1bd2c3598b0e984fe5",
+      "domain/state/map_node.gd": "f3947e2a476b037f1b76b843caa7ff5bd80019c28031350a7692b8144aa5ebed",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/vow_incentives.gd": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+    },
+    "candidateSha256": {
+      "domain/rules/combat.gd": "c30e3d314120f64e51706cd58ef2c1c10be9ae9fb42cb3c5ec5c1800e3b5dbb7",
+      "domain/events/event_types.gd": "b6ea9d77717b6b859689840f054f5eb768065f32224d9e930fc1de1ef787a73f",
+      "presentation/combat/combat_screen.gd": "437ff34fe122e50c8b11e40dc2808a4c46f936509f511558655d82382ef116cb",
+      "tools/research_421_target_acts_last_identity_probe_v1.gd": "e9718c40061f31dcc2571b5471c639f108894beae8d6f59dc137346d7e18b8cc",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/game.gd": "4eb3f416eef60797bc0cfdf9169250f07fccb3a05c0b16dcb9d7ef054898c824",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "domain/state/world_map.gd": "b3f1beb4db34933fc7de0c2562749fbd9465f74c7d74bb1bd2c3598b0e984fe5",
+      "domain/state/map_node.gd": "f3947e2a476b037f1b76b843caa7ff5bd80019c28031350a7692b8144aa5ebed",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/vow_incentives.gd": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumGodotProcesses": 12,
+    "expectedGodotProcessesWithoutCorrection": 8,
+    "maximumDirectScenarios": 8,
+    "plannedDirectControlledExecutions": 16,
+    "maximumWholeRunNullRowsPerArm": 64,
+    "plannedWholeRunRowsPerArm": 4,
+    "plannedWholeRunOutputRows": 8,
+    "maximumSimulatorObservationRows": 128,
+    "plannedSimulatorExecutionsIncludingEstimatorChecks": 16,
+    "maximumCacheObjectWrites": 9,
+    "maximumLedgerReadOnlyTransactions": 1,
+    "maximumLedgerWrites": 0,
+    "maximumProtectedSeedRows": 0,
+    "maximumWallTimeSeconds": 180,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "mechanicalCorrectionCap": 1,
+    "candidateCount": 0,
+    "MLRLOptimiserRuns": 0
+  },
+  "stoppingRule": {
+    "success": "All immutable inputs, fresh unprotected identities, parse checks, estimator-equivalence checks, whole-run null rows and direct mediator/lifecycle checks pass exactly.",
+    "futility": "A valid executable representation fails any parse, disabled identity, intended-mediator or lifecycle check. Close this representation/family and continue inside #421 with the next distinct evidence-backed structural mechanism.",
+    "inconclusive": "Any authority, source, engine, ledger, schema, process, cache, wall-time, row-cap or execution-validity fault prevents a scientific result and records this gate inconclusive at its cap.",
+    "noAdaptiveRescue": "No seed, scenario, policy, threshold, content, source or cohort may be replaced after execution starts."
+  },
+  "decision": {
+    "success": "Authorise only a separately preregistered natural-capacity screen for this exact representation. Do not produce causal, candidate, held-out or product rows here.",
+    "futility": "Close TARGET_ACTS_LAST_THIS_PHASE at this representation gate and continue inside #421 with the next distinct evidence-backed structural mechanism; no V39-style tuning.",
+    "inconclusive": "Record an inconclusive identity result at the preregistered cap and do not infer mechanism failure."
+  },
+  "claimBoundary": "A success proves exact disabled-path identity and direct representation/mediator isolation for the tested source, content, identities and Godot provenance only. It is not natural capacity, policy sensitivity, causal benefit, complementarity, reachability, a feasible candidate, product scope, held-out confirmation, #421 acceptance or the #108 P9 receipt."
+}

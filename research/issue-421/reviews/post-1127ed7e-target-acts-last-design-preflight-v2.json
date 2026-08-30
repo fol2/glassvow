@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "review": "scientific-design-and-authority",
+  "reviewedAtUtc": "2026-08-30T08:44:34Z",
+  "finalProtocolSha256": "20e2feee545379e6ec177ce50744873026dbfdd78a6c67a87b47664df5f9f405",
+  "controllingCommentId": 5466985701,
+  "scope": [
+    "factor definitions and aliases",
+    "Scoreline and Afterimage separation",
+    "CRN identities, cohorts, anchors and estimands",
+    "interaction claims",
+    "numeric ceilings and stopping rules",
+    "claim boundary",
+    "correction exhaustion",
+    "current-main AI-SDLC four rules"
+  ],
+  "verdict": "PASS",
+  "blockingFindings": [],
+  "constraints": {
+    "edits": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheAccess": 0,
+    "ledgerAccess": 0,
+    "networkAccess": 0
+  }
+}

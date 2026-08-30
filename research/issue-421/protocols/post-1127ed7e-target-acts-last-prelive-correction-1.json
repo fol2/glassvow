@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "correctionId": "post-1127ed7e-target-acts-last-prelive-correction-1",
+  "issue": 421,
+  "preregisteredAtUtc": "2026-08-30T08:28:00Z",
+  "preCorrectionProtocol": {
+    "path": "protocols/post-1127ed7e-target-acts-last-identity-v1.json",
+    "sha256": "c22af01ffce5986a782f185d133c489ec6f75cb981c723b5c8d34abedf95a020"
+  },
+  "preCorrectionRunner": {
+    "path": "post_1127ed7e_target_acts_last_identity_v1.py",
+    "sha256": "0341e1b491c70780b965570b3cb99d30637d371f5a603a86c4d59969f51a25b1"
+  },
+  "preCorrectionPrototypeDiffSha256": "367d283fa8dbce4462201138011824262c3f0dbd5688a31e438896d9bb572790",
+  "reviewInputs": [
+    "reviews/post-1127ed7e-target-acts-last-source-preflight-v1.json",
+    "reviews/post-1127ed7e-target-acts-last-runner-preflight-v1.json"
+  ],
+  "correctionCap": {
+    "permitted": 1,
+    "used": 1,
+    "remaining": 0
+  },
+  "authorisedCorrections": [
+    "Pass RunState into the phase-order consumer and clear the marker before returning whenever run.aspect is not Duskblade.",
+    "Clear a stale marker when the producer observes aspect mismatch.",
+    "Extend the existing repeat-control row with a deterministic aspect switch and end-turn action; do not add a ninth scenario or change any seed.",
+    "Compare ordered per-enemy action blocks exactly in positive rows, normalising only the frozen +2 player-damage fields.",
+    "Freeze and validate the exact candidate porcelain status, including absence of extra staged or untracked files.",
+    "Guard every fallible validity preflight and postflight so invalid execution always writes one inconclusive summary.",
+    "Bind typed local trace arrays in the probe to remove Variant-call ambiguity without changing the estimator or captured fields."
+  ],
+  "explicitNonCorrections": [
+    "Retain stable Godot >=4.7.2 and the selected exact 4.7.2 binary because the controlling owner authority and current Godot skill supersede the stale 4.7.1 text.",
+    "Do not change any seed, policy, factor, estimator, threshold, row count, wall-time cap, decision rule or claim boundary.",
+    "Do not execute Godot, simulator, cache or ledger work until a versioned corrected protocol passes independent read-only preflight."
+  ],
+  "executionSoFar": {
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0
+  }
+}

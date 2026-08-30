@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "reviewId": "post-1127ed7e-target-acts-last-runner-preflight-v1",
+  "reviewMode": "read-only independent pre-live protocol-runner-probe audit",
+  "verdict": "FAIL",
+  "prohibitedActionsObserved": [],
+  "findings": [
+    {
+      "id": "DIRECT_INTERNAL_EFFECT_ORDER_NOT_PROVED",
+      "evidence": "Positive rows compare enemyAct order and a multiset of ordinary events. A within-action event reorder with the same multiset and final state could pass.",
+      "requiredCorrection": "Compare each enemy's ordered action block exactly, normalising only the frozen +2 player-damage mediator."
+    },
+    {
+      "id": "CANDIDATE_STATUS_NOT_VALIDATED",
+      "evidence": "source_identity captures candidateStatus but static_faults does not compare it, so extra staged or untracked files outside the allow-list are not rejected.",
+      "requiredCorrection": "Freeze and validate the exact candidate porcelain status as well as changed-file and hash allow-lists."
+    },
+    {
+      "id": "INCONCLUSIVE_RECEIPT_NOT_TOTAL",
+      "evidence": "Fallible validity preflights and post-run ledger/source checks sit outside guarded exception handling and can terminate without the preregistered inconclusive summary.",
+      "requiredCorrection": "Guard every fallible validity operation and always emit the write-once inconclusive receipt when no scientific result is valid."
+    },
+    {
+      "id": "ENGINE_CONTRACT_FALSE_POSITIVE",
+      "evidence": "The reviewer reported 4.7.2 as conflicting with a stale 4.7.1 instruction.",
+      "disposition": "REJECTED",
+      "reason": "The controlling owner authority and current .claude/skills/glassvow-godot/SKILL.md bind stable Godot >=4.7.2; the selected 4.7.2 binary remains correct."
+    }
+  ]
+}

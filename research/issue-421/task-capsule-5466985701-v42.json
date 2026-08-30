@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "target-acts-last-corrected-research-prototype-and-identity-gate",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "developmentCheckout": {
+    "path": "/Users/jamesto/Coding/glassvow",
+    "branch": "work/421-h34",
+    "head": "7d1f6c0ff4d7534eb517ef57d1f547db140833fd",
+    "status": "clean-and-untouched"
+  },
+  "baselineWorktree": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/current-main-delta-v1",
+    "head": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "mode": "detached",
+    "status": "clean"
+  },
+  "prototypeWorktree": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/target-acts-last-identity-source-v1",
+    "head": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "mode": "detached research projection",
+    "productSourceFiles": [
+      "domain/rules/combat.gd",
+      "domain/events/event_types.gd",
+      "presentation/combat/combat_screen.gd"
+    ],
+    "researchProbe": "tools/research_421_target_acts_last_identity_probe_v1.gd"
+  },
+  "parentArchiveHead": "1127ed7ed05b1b5030cfe533379176b22507c11b",
+  "parentDisposition": "AUTHORISE_ONE_RESEARCH_PROTOTYPE_AND_IDENTITY_GATE",
+  "protocol": {
+    "path": "protocols/post-1127ed7e-target-acts-last-identity-v2.json",
+    "predecessorPath": "protocols/post-1127ed7e-target-acts-last-identity-v1.json",
+    "predecessorSha256": "c22af01ffce5986a782f185d133c489ec6f75cb981c723b5c8d34abedf95a020",
+    "state": "The v2 protocol binds this capsule, the sole correction and both immutable preflight findings."
+  },
+  "engine": {
+    "compatibility": "stable Godot >=4.7.2",
+    "selectedPath": "/opt/homebrew/bin/godot",
+    "selectedVersion": "4.7.2.stable.official.ed1daf0bf",
+    "selectedBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf"
+  },
+  "prototype": {
+    "configuration": "configure_research421_target_acts_last(enabled: bool), default false",
+    "cardId": "research421TargetActsLast",
+    "logicalMarker": "EnemyCombatant.flags[research421TargetActsLast]",
+    "eventId": "research421TargetActsLast",
+    "mutatesEnemyArray": false,
+    "saveFieldsAdded": 0,
+    "policyHooksAdded": 0,
+    "rngCallsAdded": 0,
+    "productCandidateCount": 0
+  },
+  "identityDesign": {
+    "wholeRunRowsPerArm": 4,
+    "wholeRunArms": [
+      "exact-main",
+      "prototype-default-false"
+    ],
+    "estimatorEquivalence": "Each captured path is required to reproduce the exact BalanceSim.simulate row for the same identity before arm comparison.",
+    "directScenarios": 8,
+    "directArms": [
+      "prototype-explicit-false",
+      "prototype-explicit-true"
+    ],
+    "scoreline": "off and separate",
+    "afterimage": "off and separate",
+    "aspectMismatchControl": "The existing replay row switches deterministically to Ashwarden before its enemy phase; the marked state must then clear without reordering or emitting a research event."
+  },
+  "ledgerLastVerified": {
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "protectedSeedRows": 0,
+    "note": "Prior immutable verification; the live protocol permits one read-only transaction for freeze and seed-freshness checks and zero writes."
+  },
+  "executionCeilings": {
+    "maximumGodotProcesses": 12,
+    "maximumDirectScenarios": 8,
+    "maximumWholeRunRowsPerArm": 64,
+    "maximumSimulatorObservationRows": 128,
+    "maximumLedgerReadOnlyTransactions": 1,
+    "maximumLedgerWrites": 0,
+    "maximumProtectedSeedRows": 0,
+    "maximumWallTimeSeconds": 180,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "mechanicalCorrectionCap": 1
+  },
+  "activeInvariants": [
+    "Archive head 1127ed7ed05b1b5030cfe533379176b22507c11b and every valid closed family remain immutable.",
+    "The trace wrapper is estimator instrumentation inside the one research probe; it must equal current BalanceSim.simulate for every whole-run identity.",
+    "Scoreline and Afterimage remain separate causal factors fixed off.",
+    "No capacity, causal, protected, candidate, held-out, product, PR or Actions row is authorised before the corrected identity gate succeeds.",
+    "The development checkout, product truth and append-only ledger remain untouched.",
+    "The exact v1 protocol and both failed read-only preflights remain immutable scientific evidence; v2 may apply only the sole enumerated pre-live correction."
+  ],
+  "nextAction": "Freeze and publish the exact corrected identity protocol, obtain two independent read-only PASS preflights, then execute the bounded identity gate once.",
+  "preLiveCorrection": {
+    "id": "post-1127ed7e-target-acts-last-prelive-correction-1",
+    "path": "protocols/post-1127ed7e-target-acts-last-prelive-correction-1.json",
+    "sha256": "181aa19cd4a655b70f686eb4725c064cb0be0e57bac4dcad71de3d054c4e32d6",
+    "used": 1,
+    "remainingUnderFrozenGateCap": 0,
+    "sourceReview": {
+      "path": "reviews/post-1127ed7e-target-acts-last-source-preflight-v1.json",
+      "sha256": "49ea60e49883abc2e6ef629a916b73d96c17d54b6a21c8d12b030d596555baa3"
+    },
+    "runnerReview": {
+      "path": "reviews/post-1127ed7e-target-acts-last-runner-preflight-v1.json",
+      "sha256": "4bf7347f87ef0c88eec401c68d957b7515e0b9021a31b406779e15ecba1ee067"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "review": "runner-validity",
+  "reviewedAtUtc": "2026-08-30T08:44:34Z",
+  "finalProtocolSha256": "20e2feee545379e6ec177ce50744873026dbfdd78a6c67a87b47664df5f9f405",
+  "runnerSha256": "169c8bb91a50e7217bc6fdc91288069752f92d886c85aaf1eb828439a123086d",
+  "initialFinding": {
+    "verdict": "FAIL",
+    "finding": "The bound v1 predecessor was hash-validated and excluded from collision scanning without an immutable proof that its identity cohort equalled v2."
+  },
+  "resolution": {
+    "kind": "zero-row evidence, not a mechanical correction",
+    "path": "reviews/post-1127ed7e-target-acts-last-v1-v2-cohort-equivalence-v1.json",
+    "sha256": "1ba423d70ad106f4892ee81c6a91e1e51d0678b7711afbabac777dd25a77cd05",
+    "binding": "immutableInputs.evidenceSha256; checked by source_identity before and after execution"
+  },
+  "scope": [
+    "immutable input validation",
+    "bound-predecessor seed alias",
+    "protected and fresh identities",
+    "CRN equality",
+    "wrapper and canonical estimator equivalence",
+    "ordered action-block checks",
+    "lifecycle null checks",
+    "numeric ceilings",
+    "deterministic cache and read-only ledger semantics",
+    "decision routing",
+    "write-once summary"
+  ],
+  "verdict": "PASS",
+  "blockingFindings": [],
+  "constraints": {
+    "edits": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheAccess": 0,
+    "ledgerAccess": 0,
+    "networkAccess": 0
+  }
+}

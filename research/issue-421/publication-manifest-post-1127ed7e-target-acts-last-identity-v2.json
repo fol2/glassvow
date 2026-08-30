@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-research-evidence",
+  "recordedAtUtc": "2026-08-30T08:48:07Z",
+  "parentArchiveHead": "1127ed7ed05b1b5030cfe533379176b22507c11b",
+  "intendedRemoteRef": "research/issue-421-post-1127ed7e-target-acts-last-identity-futility-evidence",
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "authority": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "commentId": 5466985701,
+    "commentBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "preregistration": {
+    "commentId": 5467707940,
+    "bodySha256": "787246393dfc13d09f13ecbbda5553378ebaab2d1ce290f185e1d55b36e4a39a"
+  },
+  "disposition": "FUTILITY_CLOSE_TARGET_ACTS_LAST_REPRESENTATION_AT_IDENTITY_GATE",
+  "protocolSha256": "20e2feee545379e6ec177ce50744873026dbfdd78a6c67a87b47664df5f9f405",
+  "resultSha256": "e036eacd900dd6ceb7d26f6e5bc54ae09658aa057500c94ee1344f6653d7e3e6",
+  "scientificAccounting": {
+    "preLiveMechanicalCorrectionsUsed": 1,
+    "preLiveMechanicalCorrectionCap": 1,
+    "liveRunnerExecutions": 1,
+    "GodotProcesses": 4,
+    "wholeRunOutputRows": 0,
+    "simulatorExecutionsIncludingEstimatorChecks": 0,
+    "directControlledExecutions": 0,
+    "cacheObjectWrites": 1,
+    "ledgerReadOnlyTransactions": 1,
+    "ledgerWrites": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "candidatesConstructed": 0,
+    "MLRLOptimiserRuns": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "wallTimeSeconds": 12.344582792022265
+  },
+  "ledgerFreeze": {
+    "beforeSha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "afterSha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "protectedSeedRows": 0
+  },
+  "archiveHeadsPreserved": [
+    "93dea98437bfe0d8d6344d526e439eb903d4830c",
+    "843e899ca053b42b9c8b92486687a43eb1193eb9",
+    "b7b509939ff0bd8f75ba2218309e09cb94808878",
+    "004679a83894f151e95aeed35d2ecaab60a9d3f5",
+    "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+    "434314565a10064076f0f4ba45ac17713096b6ca",
+    "1127ed7ed05b1b5030cfe533379176b22507c11b"
+  ],
+  "files": [
+    {
+      "path": "research/issue-421/task-capsule-5466985701-v41.json",
+      "sha256": "353c2da3f75b95b71813685f681955c775e66542730d4a2ffecb2914c6eff1c8"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5466985701-v42.json",
+      "sha256": "652b1ca5de8e269c6e3625c17f492a67fde8de247cba10e87963910ecaaf6390"
+    },
+    {
+      "path": "research/issue-421/protocols/post-1127ed7e-target-acts-last-identity-v1.json",
+      "sha256": "c22af01ffce5986a782f185d133c489ec6f75cb981c723b5c8d34abedf95a020"
+    },
+    {
+      "path": "research/issue-421/protocols/post-1127ed7e-target-acts-last-prelive-correction-1.json",
+      "sha256": "181aa19cd4a655b70f686eb4725c064cb0be0e57bac4dcad71de3d054c4e32d6"
+    },
+    {
+      "path": "research/issue-421/protocols/post-1127ed7e-target-acts-last-identity-v2.json",
+      "sha256": "20e2feee545379e6ec177ce50744873026dbfdd78a6c67a87b47664df5f9f405"
+    },
+    {
+      "path": "research/issue-421/tools/post_1127ed7e_target_acts_last_identity_v1.py",
+      "sha256": "169c8bb91a50e7217bc6fdc91288069752f92d886c85aaf1eb828439a123086d"
+    },
+    {
+      "path": "research/issue-421/reviews/post-1127ed7e-target-acts-last-source-preflight-v1.json",
+      "sha256": "49ea60e49883abc2e6ef629a916b73d96c17d54b6a21c8d12b030d596555baa3"
+    },
+    {
+      "path": "research/issue-421/reviews/post-1127ed7e-target-acts-last-runner-preflight-v1.json",
+      "sha256": "4bf7347f87ef0c88eec401c68d957b7515e0b9021a31b406779e15ecba1ee067"
+    },
+    {
+      "path": "research/issue-421/reviews/post-1127ed7e-target-acts-last-v1-v2-cohort-equivalence-v1.json",
+      "sha256": "1ba423d70ad106f4892ee81c6a91e1e51d0678b7711afbabac777dd25a77cd05"
+    },
+    {
+      "path": "research/issue-421/reviews/post-1127ed7e-target-acts-last-source-preflight-v2.json",
+      "sha256": "b3118af22523a17c223348457d9153dbddbfbe596f2c56b1b9c003edaa718da3"
+    },
+    {
+      "path": "research/issue-421/reviews/post-1127ed7e-target-acts-last-design-preflight-v2.json",
+      "sha256": "5109652b6c0bc513896db898255ad4cb04ad36759d97ba4de9ee2e2a34766b8e"
+    },
+    {
+      "path": "research/issue-421/reviews/post-1127ed7e-target-acts-last-runner-preflight-v2.json",
+      "sha256": "5218bc1606533c70881eff11fd385910b1165270eea4c8e964d0367621487704"
+    },
+    {
+      "path": "research/issue-421/prototype-target-acts-last-identity-v2/target-acts-last-identity-v2.patch.gz",
+      "sha256": "e1d74f799b64808c4526d35e74f73d82df9277e4d8cf82f0b0b0b4e0ff865b24",
+      "uncompressedSha256": "372a96cc70aa65132db1720c3354d597b3b798b7b8eabb6780255a4534c18d0e"
+    },
+    {
+      "path": "research/issue-421/summaries/post-1127ed7e-target-acts-last-identity-v2.json",
+      "sha256": "e036eacd900dd6ceb7d26f6e5bc54ae09658aa057500c94ee1344f6653d7e3e6"
+    },
+    {
+      "path": "research/issue-421/summaries/post-1127ed7e-target-acts-last-identity-v2.md",
+      "sha256": "e9fb3f49211c74481191ad16906a806ac3a8d302abb8a19d7e2fc1f2ffd3da01"
+    },
+    {
+      "path": "research/issue-421/comments/post-1127ed7e-target-acts-last-identity-v2-preregistration.md",
+      "sha256": "787246393dfc13d09f13ecbbda5553378ebaab2d1ce290f185e1d55b36e4a39a"
+    }
+  ],
+  "claims": [
+    "The exact corrected research representation failed its frozen warnings-as-errors parse preflight and produced no whole-run or direct simulator row.",
+    "The tested TARGET_ACTS_LAST_THIS_PHASE representation is closed without adaptive repair or rerun.",
+    "No capacity, causal, candidate, product, acceptance or P9 conclusion follows from this parse-gate futility."
+  ],
+  "nextGate": "Continue inside #421 with the next distinct evidence-backed structural mechanism without reopening this or any prior closed family."
+}
