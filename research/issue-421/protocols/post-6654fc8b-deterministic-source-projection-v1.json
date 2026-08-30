@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5466985701,
+  "question": "Can deterministic code produce one complete, hash-verified and bounded current-main source projection for finite C5 grammar judgement without model-directed source browsing?",
+  "decision": "Admit the projection for one separately frozen grammar judgement only if every identity, completeness, canonicalisation, size and non-mutation gate passes.",
+  "predecessor": {
+    "archiveHead": "6654fc8b5645a4e50f4287ad24cc596f4e0ce740",
+    "decision": "The v30/v31 model-read source-window method is inconclusive at its correction cap. Do not rerun or correct it."
+  },
+  "immutableInputs": {
+    "sourceCommit": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "authorityCommentSha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60",
+    "runnerSha256": "790637f288f0c42d0b94bff6cd3276e25c3524483b5b9f3710b9e62acec5d5d3",
+    "factorProtocolSha256": "fd275e4610100562050fce4c59889caae644e93020e03e0e1b85c0c4147fff3d",
+    "sourceSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8",
+      "docs/commercial-game-delivery.md": "00537bcdd314d884b318f0720c2a8a79cc1f3f4bc03452fa8ad75f46f2a08bec",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "domain/state/card_inst.gd": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    }
+  },
+  "construction": {
+    "runner": "post_6654fc8b_deterministic_source_projection_v1.py",
+    "sourcePath": "/Users/jamesto/Research/glassvow-p9-421/current-main-delta-v1",
+    "factorPath": "/Users/jamesto/Research/glassvow-p9-421/protocols/post-v38-afterimage-order-identity-v1.json",
+    "outputPath": "/Users/jamesto/Research/glassvow-p9-421/summaries/post-6654fc8b-deterministic-source-projection-v1.json",
+    "canonicalEncoding": "UTF-8 JSON, sorted keys, compact separators and one trailing newline.",
+    "contents": [
+      "hashes for the twelve exact current-main inputs",
+      "mechanical aspect, card-pool and presentation-free card definitions",
+      "top-level combat, player, enemy and card state declarations",
+      "canonical event constants",
+      "the thirteen frozen combat function bodies",
+      "the eight frozen policy function bodies",
+      "only the immutable Scoreline and Afterimage payoff definitions",
+      "the numeric execution and judgement ceilings"
+    ],
+    "modelSelectionDuringConstruction": "none",
+    "candidateConstruction": "none"
+  },
+  "budget": {
+    "executions": 1,
+    "maximumWallTimeSeconds": 30,
+    "sourceFiles": 12,
+    "maximumProjectionBytes": 60000,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "maximumModelContextTokensForLaterGrammarJudgement": 24000,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerHashReads": 2,
+    "ledgerRecordQueries": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "mechanicalCorrectionCap": 0
+  },
+  "ledgerFreeze": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "successRule": "The source is clean at the exact head; every immutable hash matches; all frozen declarations and function bodies are present; the output is canonical valid JSON at or below 60,000 bytes; its embedded byte count is exact; source and ledger identities remain unchanged; and the runner exits zero once.",
+  "futilityRule": "A complete canonical projection exceeds 60,000 bytes. Close this exact projection method without trimming after observation and continue with a smaller predeclared mechanical vocabulary method.",
+  "inconclusiveRule": "Any input identity mismatch, dirty source, missing declaration/function, parser or process fault, output collision, timeout, source mutation or ledger mutation yields no source-affordance conclusion. With correction cap zero, do not repair or rerun this protocol.",
+  "afterSuccess": "Freeze one finite-grammar judgement protocol that reads only the projection, live SSOT/authority and the minimum immutable closure evidence. It may define a bounded grammar but may not instantiate, rank or simulate a candidate until deterministic enumeration is separately frozen.",
+  "nonGoals": [
+    "Do not read a model-selected source window.",
+    "Do not infer a mechanism, closure, feasibility, activation or endpoint from projection construction.",
+    "Do not construct or rank a candidate, run Godot or the simulator, inspect cache outcomes, add ML/RL, use protected identities, mutate product truth, open a PR, run Actions or create a successor ticket."
+  ]
+}

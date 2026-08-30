@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5466985701,
+  "archiveParent": "6654fc8b5645a4e50f4287ad24cc596f4e0ce740",
+  "currentMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "question": "Can deterministic code produce one complete, hash-verified and bounded current-main source projection for finite C5 grammar judgement without model-directed source browsing?",
+  "result": {
+    "outcomeClass": "success",
+    "decision": "admit-deterministic-source-projection-for-separately-frozen-grammar-judgement",
+    "projectionSha256": "e28ed4b68e92834106adc8d4cbb3a3e0552fd8ea7d2d4ac5a9ced26ea445619f",
+    "projectionBytes": 54685,
+    "maximumProjectionBytes": 60000,
+    "wallTimeSeconds": 0.128663,
+    "sourceFiles": 12,
+    "cards": 61,
+    "eventConstants": 32,
+    "combatFunctions": 13,
+    "policyFunctions": 8,
+    "stateDeclarations": {
+      "domain/state/card_inst.gd": 4,
+      "domain/state/combat_state.gd": 25,
+      "domain/state/enemy_combatant.gd": 17,
+      "domain/state/player_combatant.gd": 6
+    }
+  },
+  "postSuccessDiagnostic": {
+    "fault": "A display-only jq count expression omitted grouping parentheses after all frozen success gates had passed.",
+    "effect": "No projection, input, ledger, protocol or decision mutation; the runner was not rerun and the output was not repaired.",
+    "readOnlyVerification": "Canonical JSON, source count parity, function counts, clean source and immutable ledger identity passed from the already-created output.",
+    "additionalLedgerHashReads": 1,
+    "decisionWeight": 0
+  },
+  "accounting": {
+    "projectionExecutions": 1,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "constructionLedgerHashReads": 2,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0
+  },
+  "ledger": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "artefacts": {
+    "task-capsule-5466985701-v32.json": "aca807c50d5c4973f9c57e8b8f03e9178e2d62602d13b4c932de35c32b5a24a1",
+    "protocols/post-6654fc8b-deterministic-source-projection-v1.json": "029b5c27ee0c35ea51917c73beadafa47d46d169b0b90457676f30f85a0cb635",
+    "tools/post_6654fc8b_deterministic_source_projection_v1.py": "790637f288f0c42d0b94bff6cd3276e25c3524483b5b9f3710b9e62acec5d5d3",
+    "summaries/post-6654fc8b-deterministic-source-projection-v1.json": "e28ed4b68e92834106adc8d4cbb3a3e0552fd8ea7d2d4ac5a9ced26ea445619f",
+    "summaries/post-6654fc8b-deterministic-source-projection-v1.md": "9730a6f2d0d5575ffd68e70efb9f5194f4b4f8ce5e81ea38a6b49b4a5d17f755"
+  },
+  "nextAction": "Freeze one finite-grammar judgement that reads only the immutable projection, live task authority and minimum closure evidence; do not instantiate or rank a candidate yet.",
+  "claimBoundary": "This publication proves only deterministic construction of the stated bounded source projection. It makes no source-affordance, mechanism, candidate, causal endpoint, package, product, #421 acceptance or #108 P9 claim.",
+  "prohibitedActions": [
+    "rerun or repair the projection",
+    "use model-directed source browsing in the grammar judgement",
+    "construct or rank a candidate before deterministic enumeration is frozen",
+    "run Godot or simulator rows",
+    "inspect cache outcomes or use protected identities",
+    "add ML, RL or another optimiser",
+    "mutate product truth, open a research PR, run Actions or create a successor ticket"
+  ]
+}

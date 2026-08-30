@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 5,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "deterministic-current-main-source-projection",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ],
+    "outcome": "Complete the accepted #421 strategy-package, detector, RC and exact-SHA P9 outcome, then record the #108 receipt without a successor ticket."
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "predecessorArchiveHead": "6654fc8b5645a4e50f4287ad24cc596f4e0ce740",
+  "predecessorDispositionComment": 5467077598,
+  "protocol": {
+    "path": "protocols/post-6654fc8b-deterministic-source-projection-v1.json",
+    "sha256": "029b5c27ee0c35ea51917c73beadafa47d46d169b0b90457676f30f85a0cb635"
+  },
+  "runner": {
+    "path": "post_6654fc8b_deterministic_source_projection_v1.py",
+    "sha256": "790637f288f0c42d0b94bff6cd3276e25c3524483b5b9f3710b9e62acec5d5d3",
+    "selfTest": "PASS (5 checks)"
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "execution": {
+    "executions": 1,
+    "maximumWallTimeSeconds": 30,
+    "maximumProjectionBytes": 60000,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "maximumModelContextTokensForLaterGrammarJudgement": 24000,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerHashReads": 2,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "mechanicalCorrectionCap": 0
+  },
+  "nonGoals": [
+    "Do not rerun or correct v30/v31.",
+    "Do not make model-directed source reads during projection construction.",
+    "Do not construct or rank a candidate, run Godot or the simulator, inspect cache outcomes, add ML/RL, use protected identities, mutate product truth, open a PR, run Actions or create a successor ticket."
+  ],
+  "nextAction": "Verify the live SSOT, authority, protocol, runner, source and ledger hashes; execute the projection runner exactly once; apply the protocol's frozen success, futility or inconclusive rule."
+}
