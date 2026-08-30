@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "option2-human-authority-decision-required",
+  "taskSsot": {
+    "issueBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "issueBodyRawApiSha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": [
+      "needs-info",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "ownerDecision": "OPTION_2_APPROVED",
+    "commentId": 5468704389,
+    "bodySha256": "fca3a0142f3a7e55457b448a7acecab69bb14407005bc1c6354e5b740c297dd7",
+    "currentBoundary": "Exactly one persistent strategy-enabling relic/run contract; negative or inconclusive at cap cannot create a successor, substitute the selected contract or widen the grammar."
+  },
+  "resolvedMain": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "developmentCheckout": {
+    "path": "/Users/jamesto/Coding/glassvow",
+    "branch": "work/421-h34",
+    "head": "7d1f6c0ff4d7534eb517ef57d1f547db140833fd",
+    "status": "clean-and-untouched"
+  },
+  "archive": {
+    "immutableClosureHead": "c69b2752f8a52c0d50151ba083a02948180a0846",
+    "sourceIdentityReceiptHead": "dcfebf9f56580a833453b36164c2a5327fb67210",
+    "authorityExhaustionEvidenceHead": "7f8107ab065c15f3f0f0b8bd09357255f6a1a91f",
+    "ref": "research/issue-421-post-c69b2752-persistent-contract-evidence"
+  },
+  "experiment": {
+    "selectedContract": "emberglass-memory-one-carry",
+    "outcome": "INCONCLUSIVE_AT_PREREGISTERED_CAP",
+    "fault": "FROZEN_PLAN_PATH_UNAVAILABLE_IN_BOTH_EXECUTION_WORKTREES",
+    "identityGateEvaluated": false,
+    "directControlledExecutions": 0,
+    "simulatorRows": 0,
+    "exactContractState": "immutable inconclusive non-decision evidence"
+  },
+  "authorityExhaustion": {
+    "auditPath": "audits/post-dcfebf9f-option2-authority-exhaustion-v1.json",
+    "auditSha256": "8cdbb1bff69116c098e69baca54108d89b50fb0f0ab707b019091e34717a93c2",
+    "protocolCorrectionCap": 0,
+    "correctionBudgetExhausted": true,
+    "safeClaimRelevantAlternativeCount": 0,
+    "eligibleAutonomousActionCount": 0,
+    "decision": "ESCALATE_ONE_CONCISE_HUMAN_AUTHORITY_PACKAGE"
+  },
+  "decisionComment": {
+    "commentId": 5469082028,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5469082028",
+    "bodySha256": "eb5749735deb0d4bf90be941f0226d2c6c1e7717ee8012507b8ca72a44af7e9b"
+  },
+  "recommendedAuthorityDelta": {
+    "id": "AUTHORISE_ONE_EMBERGLASS_V2_MECHANICAL_CORRECTION",
+    "change": "Resolve the frozen plan and output paths to absolute paths before both Godot invocations.",
+    "preserve": "v1, selected contract, source projection, design matrix, row/policy/seed identities, baseline, engine provenance, estimands, budgets, gates and decision rules",
+    "maximumCorrectedVersions": 1,
+    "furtherCorrections": 0,
+    "candidateSubstitution": false,
+    "grammarWidening": false,
+    "simulatorOrProtectedSeedAuthority": false
+  },
+  "safeState": {
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "deliveryBranches": 0,
+    "pullRequests": 0,
+    "actionsRuns": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "nextAction": "Wait only for the owner authority decision in comment 5469082028. If the recommended correction is authorised, preserve v1 and preregister one v2 mechanical path correction with no scientific change, then resume the same #421 task."
+}

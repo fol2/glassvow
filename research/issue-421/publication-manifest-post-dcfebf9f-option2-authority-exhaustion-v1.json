@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-human-authority-decision-packet",
+  "parentArchiveHead": "dcfebf9f56580a833453b36164c2a5327fb67210",
+  "authorityExhaustionEvidenceHead": "7f8107ab065c15f3f0f0b8bd09357255f6a1a91f",
+  "intendedRemoteRef": "research/issue-421-post-c69b2752-persistent-contract-evidence",
+  "resolvedMain": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "authority": {
+    "issueBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "ownerDecision": "OPTION_2_APPROVED",
+    "commentId": 5468704389,
+    "commentBodySha256": "fca3a0142f3a7e55457b448a7acecab69bb14407005bc1c6354e5b740c297dd7"
+  },
+  "immutableExperimentResult": {
+    "resultCommentId": 5469013460,
+    "outcome": "INCONCLUSIVE_AT_PREREGISTERED_CAP",
+    "selectedContract": "emberglass-memory-one-carry",
+    "sourceIdentityEstablished": false,
+    "scientificFutilityEstablished": false,
+    "directControlledExecutions": 0
+  },
+  "authorityDecision": {
+    "commentId": 5469082028,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5469082028",
+    "commentBodySha256": "eb5749735deb0d4bf90be941f0226d2c6c1e7717ee8012507b8ca72a44af7e9b",
+    "state": "HUMAN_AUTHORITY_DECISION_REQUIRED",
+    "recommendedOption": "AUTHORISE_ONE_EMBERGLASS_V2_MECHANICAL_CORRECTION"
+  },
+  "trackerState": {
+    "issue": "open",
+    "labels": [
+      "needs-info",
+      "wayfinder:task"
+    ]
+  },
+  "files": [
+    {
+      "path": "research/issue-421/audits/post-dcfebf9f-option2-authority-exhaustion-v1.json",
+      "sha256": "8cdbb1bff69116c098e69baca54108d89b50fb0f0ab707b019091e34717a93c2"
+    },
+    {
+      "path": "research/issue-421/reviews/post-dcfebf9f-option2-authority-h1-source-v1.json",
+      "sha256": "17d37af8726b40b00d2f78bcb9dd6564b7fc9d5ec7758a045e476bb1ef875718"
+    },
+    {
+      "path": "research/issue-421/reviews/post-dcfebf9f-option2-authority-h2-alias-v1.json",
+      "sha256": "700275dae2bbc236984589593f47b594a75443592c04323ae3c3d0d92712e793"
+    },
+    {
+      "path": "research/issue-421/reviews/post-dcfebf9f-option2-authority-h3-policy-v1.json",
+      "sha256": "97de75c1df8057d8038a935511d3f331a3a1bc5be7fd76d28d67b1c407e57aaa"
+    },
+    {
+      "path": "research/issue-421/comments/post-dcfebf9f-option2-authority-decision-required-v1.md",
+      "sha256": "eb5749735deb0d4bf90be941f0226d2c6c1e7717ee8012507b8ca72a44af7e9b"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5469082028-v52.json",
+      "sha256": "eca822c896f4a5123f97c71d462d90694f07cae6ecd82ee8ff922856267f7c87"
+    }
+  ],
+  "scientificAccounting": {
+    "plannedControlledScenarioExecutions": 40,
+    "GodotProcessInvocations": 2,
+    "completedProbeOutputs": 0,
+    "directControlledExecutions": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "postFreezeCorrections": 0,
+    "reruns": 0
+  },
+  "safeState": {
+    "productMainMutations": 0,
+    "developmentCheckoutMutations": 0,
+    "deliveryBranches": 0,
+    "pullRequests": 0,
+    "actionsRuns": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "claims": [
+    "The Emberglass identity result is immutable inconclusive non-decision evidence after zero direct controlled executions; it is not scientific futility.",
+    "The controlling Option 2 authority and v1 protocol exhaust the exact zero-correction cap and prohibit automatic repair, rerun, substitution or grammar widening.",
+    "Three distinct post-result read-only audits found no safe evidence-backed alternative or measured optimiser target; they are advisory and do not retrospectively alter the frozen protocol.",
+    "Current authority therefore contains zero eligible autonomous actions and requires one concise owner decision without a successor ticket.",
+    "No identity, capacity, causal, balance, product, acceptance or P9 claim follows."
+  ]
+}
