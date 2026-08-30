@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "emberglass-analysis-only-correction-authorised",
+  "taskSsot": {
+    "issueBodySha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "source": "Ash, Glassvow PM",
+    "decision": "AUTHORISE_ONE_ANALYSIS_ONLY_CORRECTION",
+    "commentId": 5470587102,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5470587102",
+    "bodySha256": "cbca146ef812fca7b3e50f03a7879bfc89d68f1a0c660e54b1e9a1ed99f0beea",
+    "jamesDevelopmentAuthority": false
+  },
+  "sourceIdentities": {
+    "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+    "frozenExperimentSource": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "immutableV2ResultReceiptHead": "36b1eef1a6daf1340bb140900c8d97957e19b419"
+  },
+  "analysisOnlyContract": {
+    "analysisFunction": "original v1 _analyse",
+    "baselineOutputSha256": "6b56900ab1cfdf6919d1a429bc9ab62e4cb0b905be6da022969493678aac5d91",
+    "candidateOutputSha256": "cfece8e320ea104c03ff9d52e02457a2cc8baafb6cb4006ca7037b5a0818f052",
+    "overlayValidatorScope": "protocol only",
+    "newGodotProcesses": 0,
+    "newRows": 0,
+    "newSeedIdentities": 0,
+    "newCandidates": 0,
+    "grammarWidening": false,
+    "simulatorRows": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "identityGateRepairOrRerun": false,
+    "optionB": false,
+    "optionC": false
+  },
+  "safeState": {
+    "endpointContentReadUnderThisAuthority": false,
+    "analysisExecutions": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "nextAction": "Freeze and publish one analysis-only protocol and deterministic runner before reading either output; then execute it once and continue only to the exact next gate unlocked by its result."
+}

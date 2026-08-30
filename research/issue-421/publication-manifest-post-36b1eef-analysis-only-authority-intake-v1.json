@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-pm-authority-intake",
+  "parentArchiveHead": "36b1eef1a6daf1340bb140900c8d97957e19b419",
+  "intendedRemoteRef": "research/issue-421-post-c69b2752-persistent-contract-evidence",
+  "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+  "authority": {
+    "source": "Ash, Glassvow PM",
+    "decision": "AUTHORISE_ONE_ANALYSIS_ONLY_CORRECTION",
+    "commentId": 5470587102,
+    "commentUrl": "https://github.com/fol2/glassvow/issues/421#issuecomment-5470587102",
+    "commentBodySha256": "cbca146ef812fca7b3e50f03a7879bfc89d68f1a0c660e54b1e9a1ed99f0beea",
+    "jamesDevelopmentAuthority": false
+  },
+  "files": [
+    {
+      "path": "research/issue-421/comments/post-36b1eef-analysis-only-authority-intake-v1.md",
+      "sha256": "cbca146ef812fca7b3e50f03a7879bfc89d68f1a0c660e54b1e9a1ed99f0beea"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5470587102-v56.json",
+      "sha256": "e51e772bc65c1a37b23fc6bdf1f31c0545e779d9927bebd1b9e0a2d04406cf57"
+    }
+  ],
+  "constraints": {
+    "analysisFunction": "original v1 _analyse",
+    "overlayValidatorScope": "protocol only",
+    "newGodotProcesses": 0,
+    "newRows": 0,
+    "newSeedIdentities": 0,
+    "newCandidates": 0,
+    "grammarWidening": false,
+    "simulatorRows": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "identityGateRepairOrRerun": false,
+    "optionB": false,
+    "optionC": false
+  },
+  "safeState": {
+    "endpointContentReadAfterAuthority": false,
+    "analysisExecutions": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "claimBoundary": "This packet records only Ash's authority to freeze and run one analysis-only correction over the immutable v2 outputs. It establishes no identity, capacity, causal, balance, product, #421-acceptance or #108-P9 claim."
+}
