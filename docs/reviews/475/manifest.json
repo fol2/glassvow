@@ -1,0 +1,603 @@
+{
+	"asset_manifest": {
+		"path": "res://assets/art/map/map-assets.json",
+		"sha256": "bd9f8566c8395113fd01a4be8a5b56ccf92e14218e83012ba547828c966dc0fd"
+	},
+	"capture_head": "762c39aa71e2290856eb4ca6d64032fc3f083215",
+	"compiler_input_count": 5,
+	"display_server": "macOS",
+	"expected_frame_count": 12,
+	"frame_count": 12,
+	"frames": [
+		{
+			"act": 1,
+			"act_index": 0,
+			"active_asset_paths": [
+				"res://assets/art/map/geometry/act1/ash-cairn-mass.glb",
+				"res://assets/art/map/geometry/act1/ash-trunk-fork.glb",
+				"res://assets/art/map/geometry/act1/charred-stump.glb",
+				"res://assets/art/map/geometry/act1/fallen-bough-arch.glb",
+				"res://assets/art/map/geometry/act1/root-wedge.glb",
+				"res://assets/art/map/geometry/act1/terminus-amber-window-tower.glb",
+				"res://assets/art/map/geometry/act1/vigil-hall.glb",
+				"res://assets/art/map/geometry/shared/road-slab-a.glb",
+				"res://assets/art/map/geometry/shared/road-slab-b.glb",
+				"res://assets/art/map/geometry/shared/standing-monument.glb",
+				"res://assets/art/map/grades/act1-grade.png",
+				"res://assets/art/map/materials/act1-ground-ash-loam.png",
+				"res://assets/art/map/materials/act1-prop-charred-bark.png"
+			],
+			"camera_xz": {
+				"x": -29.700000762939453,
+				"z": 21.450000762939453
+			},
+			"file": "raw/act-01_seed-00017634_shape-pad-landscape_zoom-02-20_pose-opening_locale-en.png",
+			"frame_id": "F001",
+			"generated_act": true,
+			"input_digest": "ba89d4669f611ff6bae64c56a20c477eb2dba645e9cc350873dbd622d878760d",
+			"layout_digest": "01a3f9fd73f1f45ccb1f589644f70d7a356ed4be7109666588151863033782d3",
+			"locale": "en",
+			"map_at": 1,
+			"map_region": "ashen_woods",
+			"node_count": 70,
+			"pose": "opening",
+			"reachable_count": 1,
+			"rng_state_after_map": -1301535206,
+			"route_state_counts": {
+				"cold": 74,
+				"open": 1,
+				"walked": 1
+			},
+			"seed": 17634,
+			"shape": "pad-landscape",
+			"viewport": {
+				"height": 820,
+				"width": 1180
+			},
+			"waylight_count": 76,
+			"zoom_size": 20.0,
+			"zoom_stop": 2
+		},
+		{
+			"act": 1,
+			"act_index": 0,
+			"active_asset_paths": [
+				"res://assets/art/map/geometry/act1/ash-cairn-mass.glb",
+				"res://assets/art/map/geometry/act1/ash-trunk-fork.glb",
+				"res://assets/art/map/geometry/act1/charred-stump.glb",
+				"res://assets/art/map/geometry/act1/fallen-bough-arch.glb",
+				"res://assets/art/map/geometry/act1/root-wedge.glb",
+				"res://assets/art/map/geometry/act1/terminus-amber-window-tower.glb",
+				"res://assets/art/map/geometry/act1/vigil-hall.glb",
+				"res://assets/art/map/geometry/shared/road-slab-a.glb",
+				"res://assets/art/map/geometry/shared/road-slab-b.glb",
+				"res://assets/art/map/geometry/shared/standing-monument.glb",
+				"res://assets/art/map/grades/act1-grade.png",
+				"res://assets/art/map/materials/act1-ground-ash-loam.png",
+				"res://assets/art/map/materials/act1-prop-charred-bark.png"
+			],
+			"camera_xz": {
+				"x": -25.358976364135742,
+				"z": 15.955141067504883
+			},
+			"file": "raw/act-01_seed-00017634_shape-pad-landscape_zoom-02-20_pose-focused_locale-en.png",
+			"frame_id": "F002",
+			"generated_act": true,
+			"input_digest": "ba89d4669f611ff6bae64c56a20c477eb2dba645e9cc350873dbd622d878760d",
+			"layout_digest": "01a3f9fd73f1f45ccb1f589644f70d7a356ed4be7109666588151863033782d3",
+			"locale": "en",
+			"map_at": 1,
+			"map_region": "ashen_woods",
+			"node_count": 70,
+			"pose": "focused",
+			"reachable_count": 1,
+			"rng_state_after_map": -1301535206,
+			"route_state_counts": {
+				"cold": 74,
+				"open": 1,
+				"walked": 1
+			},
+			"seed": 17634,
+			"shape": "pad-landscape",
+			"viewport": {
+				"height": 820,
+				"width": 1180
+			},
+			"waylight_count": 76,
+			"zoom_size": 20.0,
+			"zoom_stop": 2
+		},
+		{
+			"act": 1,
+			"act_index": 0,
+			"active_asset_paths": [
+				"res://assets/art/map/geometry/act1/ash-cairn-mass.glb",
+				"res://assets/art/map/geometry/act1/ash-trunk-fork.glb",
+				"res://assets/art/map/geometry/act1/charred-stump.glb",
+				"res://assets/art/map/geometry/act1/fallen-bough-arch.glb",
+				"res://assets/art/map/geometry/act1/root-wedge.glb",
+				"res://assets/art/map/geometry/act1/terminus-amber-window-tower.glb",
+				"res://assets/art/map/geometry/act1/vigil-hall.glb",
+				"res://assets/art/map/geometry/shared/road-slab-a.glb",
+				"res://assets/art/map/geometry/shared/road-slab-b.glb",
+				"res://assets/art/map/geometry/shared/standing-monument.glb",
+				"res://assets/art/map/grades/act1-grade.png",
+				"res://assets/art/map/materials/act1-ground-ash-loam.png",
+				"res://assets/art/map/materials/act1-prop-charred-bark.png"
+			],
+			"camera_xz": {
+				"x": -29.700000762939453,
+				"z": 21.450000762939453
+			},
+			"file": "raw/act-01_seed-00017634_shape-phone-landscape_zoom-02-20_pose-opening_locale-en.png",
+			"frame_id": "F003",
+			"generated_act": true,
+			"input_digest": "ba89d4669f611ff6bae64c56a20c477eb2dba645e9cc350873dbd622d878760d",
+			"layout_digest": "01a3f9fd73f1f45ccb1f589644f70d7a356ed4be7109666588151863033782d3",
+			"locale": "en",
+			"map_at": 1,
+			"map_region": "ashen_woods",
+			"node_count": 70,
+			"pose": "opening",
+			"reachable_count": 1,
+			"rng_state_after_map": -1301535206,
+			"route_state_counts": {
+				"cold": 74,
+				"open": 1,
+				"walked": 1
+			},
+			"seed": 17634,
+			"shape": "phone-landscape",
+			"viewport": {
+				"height": 390,
+				"width": 844
+			},
+			"waylight_count": 76,
+			"zoom_size": 20.0,
+			"zoom_stop": 2
+		},
+		{
+			"act": 1,
+			"act_index": 0,
+			"active_asset_paths": [
+				"res://assets/art/map/geometry/act1/ash-cairn-mass.glb",
+				"res://assets/art/map/geometry/act1/ash-trunk-fork.glb",
+				"res://assets/art/map/geometry/act1/charred-stump.glb",
+				"res://assets/art/map/geometry/act1/fallen-bough-arch.glb",
+				"res://assets/art/map/geometry/act1/root-wedge.glb",
+				"res://assets/art/map/geometry/act1/terminus-amber-window-tower.glb",
+				"res://assets/art/map/geometry/act1/vigil-hall.glb",
+				"res://assets/art/map/geometry/shared/road-slab-a.glb",
+				"res://assets/art/map/geometry/shared/road-slab-b.glb",
+				"res://assets/art/map/geometry/shared/standing-monument.glb",
+				"res://assets/art/map/grades/act1-grade.png",
+				"res://assets/art/map/materials/act1-ground-ash-loam.png",
+				"res://assets/art/map/materials/act1-prop-charred-bark.png"
+			],
+			"camera_xz": {
+				"x": -22.93721580505371,
+				"z": 14.81540584564209
+			},
+			"file": "raw/act-01_seed-00017634_shape-phone-landscape_zoom-02-20_pose-focused_locale-en.png",
+			"frame_id": "F004",
+			"generated_act": true,
+			"input_digest": "ba89d4669f611ff6bae64c56a20c477eb2dba645e9cc350873dbd622d878760d",
+			"layout_digest": "01a3f9fd73f1f45ccb1f589644f70d7a356ed4be7109666588151863033782d3",
+			"locale": "en",
+			"map_at": 1,
+			"map_region": "ashen_woods",
+			"node_count": 70,
+			"pose": "focused",
+			"reachable_count": 1,
+			"rng_state_after_map": -1301535206,
+			"route_state_counts": {
+				"cold": 74,
+				"open": 1,
+				"walked": 1
+			},
+			"seed": 17634,
+			"shape": "phone-landscape",
+			"viewport": {
+				"height": 390,
+				"width": 844
+			},
+			"waylight_count": 76,
+			"zoom_size": 20.0,
+			"zoom_stop": 2
+		},
+		{
+			"act": 1,
+			"act_index": 0,
+			"active_asset_paths": [
+				"res://assets/art/map/geometry/act1/ash-cairn-mass.glb",
+				"res://assets/art/map/geometry/act1/ash-trunk-fork.glb",
+				"res://assets/art/map/geometry/act1/charred-stump.glb",
+				"res://assets/art/map/geometry/act1/fallen-bough-arch.glb",
+				"res://assets/art/map/geometry/act1/root-wedge.glb",
+				"res://assets/art/map/geometry/act1/terminus-amber-window-tower.glb",
+				"res://assets/art/map/geometry/act1/vigil-hall.glb",
+				"res://assets/art/map/geometry/shared/road-slab-a.glb",
+				"res://assets/art/map/geometry/shared/road-slab-b.glb",
+				"res://assets/art/map/geometry/shared/standing-monument.glb",
+				"res://assets/art/map/grades/act1-grade.png",
+				"res://assets/art/map/materials/act1-ground-ash-loam.png",
+				"res://assets/art/map/materials/act1-prop-charred-bark.png"
+			],
+			"camera_xz": {
+				"x": -29.700000762939453,
+				"z": 21.450000762939453
+			},
+			"file": "raw/act-01_seed-00000717_shape-pad-landscape_zoom-02-20_pose-opening_locale-en.png",
+			"frame_id": "F005",
+			"generated_act": true,
+			"input_digest": "7e84a0f41fc582d2c5912880d9b6415412af546b968e3fc5cde6b390d34c3083",
+			"layout_digest": "d61f52a16c2668b7c814dec5bc42b045d9a2a3dd1298b89cbae66422a79df566",
+			"locale": "en",
+			"map_at": 1,
+			"map_region": "ashen_woods",
+			"node_count": 65,
+			"pose": "opening",
+			"reachable_count": 2,
+			"rng_state_after_map": 721837281,
+			"route_state_counts": {
+				"cold": 73,
+				"open": 2,
+				"walked": 1
+			},
+			"seed": 717,
+			"shape": "pad-landscape",
+			"viewport": {
+				"height": 820,
+				"width": 1180
+			},
+			"waylight_count": 76,
+			"zoom_size": 20.0,
+			"zoom_stop": 2
+		},
+		{
+			"act": 1,
+			"act_index": 0,
+			"active_asset_paths": [
+				"res://assets/art/map/geometry/act1/ash-cairn-mass.glb",
+				"res://assets/art/map/geometry/act1/ash-trunk-fork.glb",
+				"res://assets/art/map/geometry/act1/charred-stump.glb",
+				"res://assets/art/map/geometry/act1/fallen-bough-arch.glb",
+				"res://assets/art/map/geometry/act1/root-wedge.glb",
+				"res://assets/art/map/geometry/act1/terminus-amber-window-tower.glb",
+				"res://assets/art/map/geometry/act1/vigil-hall.glb",
+				"res://assets/art/map/geometry/shared/road-slab-a.glb",
+				"res://assets/art/map/geometry/shared/road-slab-b.glb",
+				"res://assets/art/map/geometry/shared/standing-monument.glb",
+				"res://assets/art/map/grades/act1-grade.png",
+				"res://assets/art/map/materials/act1-ground-ash-loam.png",
+				"res://assets/art/map/materials/act1-prop-charred-bark.png"
+			],
+			"camera_xz": {
+				"x": -26.9803466796875,
+				"z": 27.05698585510254
+			},
+			"file": "raw/act-01_seed-00000717_shape-pad-landscape_zoom-02-20_pose-focused_locale-en.png",
+			"frame_id": "F006",
+			"generated_act": true,
+			"input_digest": "7e84a0f41fc582d2c5912880d9b6415412af546b968e3fc5cde6b390d34c3083",
+			"layout_digest": "d61f52a16c2668b7c814dec5bc42b045d9a2a3dd1298b89cbae66422a79df566",
+			"locale": "en",
+			"map_at": 1,
+			"map_region": "ashen_woods",
+			"node_count": 65,
+			"pose": "focused",
+			"reachable_count": 2,
+			"rng_state_after_map": 721837281,
+			"route_state_counts": {
+				"cold": 73,
+				"open": 2,
+				"walked": 1
+			},
+			"seed": 717,
+			"shape": "pad-landscape",
+			"viewport": {
+				"height": 820,
+				"width": 1180
+			},
+			"waylight_count": 76,
+			"zoom_size": 20.0,
+			"zoom_stop": 2
+		},
+		{
+			"act": 1,
+			"act_index": 0,
+			"active_asset_paths": [
+				"res://assets/art/map/geometry/act1/ash-cairn-mass.glb",
+				"res://assets/art/map/geometry/act1/ash-trunk-fork.glb",
+				"res://assets/art/map/geometry/act1/charred-stump.glb",
+				"res://assets/art/map/geometry/act1/fallen-bough-arch.glb",
+				"res://assets/art/map/geometry/act1/root-wedge.glb",
+				"res://assets/art/map/geometry/act1/terminus-amber-window-tower.glb",
+				"res://assets/art/map/geometry/act1/vigil-hall.glb",
+				"res://assets/art/map/geometry/shared/road-slab-a.glb",
+				"res://assets/art/map/geometry/shared/road-slab-b.glb",
+				"res://assets/art/map/geometry/shared/standing-monument.glb",
+				"res://assets/art/map/grades/act1-grade.png",
+				"res://assets/art/map/materials/act1-ground-ash-loam.png",
+				"res://assets/art/map/materials/act1-prop-charred-bark.png"
+			],
+			"camera_xz": {
+				"x": -29.700000762939453,
+				"z": 21.450000762939453
+			},
+			"file": "raw/act-01_seed-00000717_shape-phone-landscape_zoom-02-20_pose-opening_locale-en.png",
+			"frame_id": "F007",
+			"generated_act": true,
+			"input_digest": "7e84a0f41fc582d2c5912880d9b6415412af546b968e3fc5cde6b390d34c3083",
+			"layout_digest": "d61f52a16c2668b7c814dec5bc42b045d9a2a3dd1298b89cbae66422a79df566",
+			"locale": "en",
+			"map_at": 1,
+			"map_region": "ashen_woods",
+			"node_count": 65,
+			"pose": "opening",
+			"reachable_count": 2,
+			"rng_state_after_map": 721837281,
+			"route_state_counts": {
+				"cold": 73,
+				"open": 2,
+				"walked": 1
+			},
+			"seed": 717,
+			"shape": "phone-landscape",
+			"viewport": {
+				"height": 390,
+				"width": 844
+			},
+			"waylight_count": 76,
+			"zoom_size": 20.0,
+			"zoom_stop": 2
+		},
+		{
+			"act": 1,
+			"act_index": 0,
+			"active_asset_paths": [
+				"res://assets/art/map/geometry/act1/ash-cairn-mass.glb",
+				"res://assets/art/map/geometry/act1/ash-trunk-fork.glb",
+				"res://assets/art/map/geometry/act1/charred-stump.glb",
+				"res://assets/art/map/geometry/act1/fallen-bough-arch.glb",
+				"res://assets/art/map/geometry/act1/root-wedge.glb",
+				"res://assets/art/map/geometry/act1/terminus-amber-window-tower.glb",
+				"res://assets/art/map/geometry/act1/vigil-hall.glb",
+				"res://assets/art/map/geometry/shared/road-slab-a.glb",
+				"res://assets/art/map/geometry/shared/road-slab-b.glb",
+				"res://assets/art/map/geometry/shared/standing-monument.glb",
+				"res://assets/art/map/grades/act1-grade.png",
+				"res://assets/art/map/materials/act1-ground-ash-loam.png",
+				"res://assets/art/map/materials/act1-prop-charred-bark.png"
+			],
+			"camera_xz": {
+				"x": -24.55858612060547,
+				"z": 28.087722778320313
+			},
+			"file": "raw/act-01_seed-00000717_shape-phone-landscape_zoom-02-20_pose-focused_locale-en.png",
+			"frame_id": "F008",
+			"generated_act": true,
+			"input_digest": "7e84a0f41fc582d2c5912880d9b6415412af546b968e3fc5cde6b390d34c3083",
+			"layout_digest": "d61f52a16c2668b7c814dec5bc42b045d9a2a3dd1298b89cbae66422a79df566",
+			"locale": "en",
+			"map_at": 1,
+			"map_region": "ashen_woods",
+			"node_count": 65,
+			"pose": "focused",
+			"reachable_count": 2,
+			"rng_state_after_map": 721837281,
+			"route_state_counts": {
+				"cold": 73,
+				"open": 2,
+				"walked": 1
+			},
+			"seed": 717,
+			"shape": "phone-landscape",
+			"viewport": {
+				"height": 390,
+				"width": 844
+			},
+			"waylight_count": 76,
+			"zoom_size": 20.0,
+			"zoom_stop": 2
+		},
+		{
+			"act": 1,
+			"act_index": 0,
+			"active_asset_paths": [
+				"res://assets/art/map/geometry/act1/ash-cairn-mass.glb",
+				"res://assets/art/map/geometry/act1/ash-trunk-fork.glb",
+				"res://assets/art/map/geometry/act1/charred-stump.glb",
+				"res://assets/art/map/geometry/act1/fallen-bough-arch.glb",
+				"res://assets/art/map/geometry/act1/root-wedge.glb",
+				"res://assets/art/map/geometry/act1/terminus-amber-window-tower.glb",
+				"res://assets/art/map/geometry/act1/vigil-hall.glb",
+				"res://assets/art/map/geometry/shared/road-slab-a.glb",
+				"res://assets/art/map/geometry/shared/road-slab-b.glb",
+				"res://assets/art/map/geometry/shared/standing-monument.glb",
+				"res://assets/art/map/grades/act1-grade.png",
+				"res://assets/art/map/materials/act1-ground-ash-loam.png",
+				"res://assets/art/map/materials/act1-prop-charred-bark.png"
+			],
+			"camera_xz": {
+				"x": -26.9803466796875,
+				"z": 27.05698585510254
+			},
+			"file": "raw/act-01_seed-00000717_shape-pad-landscape_zoom-02-20_pose-travel-midpoint_locale-en.png",
+			"frame_id": "F009",
+			"generated_act": true,
+			"input_digest": "7e84a0f41fc582d2c5912880d9b6415412af546b968e3fc5cde6b390d34c3083",
+			"layout_digest": "d61f52a16c2668b7c814dec5bc42b045d9a2a3dd1298b89cbae66422a79df566",
+			"locale": "en",
+			"map_at": 1,
+			"map_region": "ashen_woods",
+			"node_count": 65,
+			"pose": "travel-midpoint",
+			"reachable_count": 2,
+			"rng_state_after_map": 721837281,
+			"route_state_counts": {
+				"cold": 73,
+				"open": 2,
+				"walked": 1
+			},
+			"seed": 717,
+			"shape": "pad-landscape",
+			"travel_edge": "3:0,6>3:1,6",
+			"travel_progress": 0.5,
+			"travel_world": {
+				"x": -34.30389404296875,
+				"y": 0.0,
+				"z": 19.08635711669922
+			},
+			"viewport": {
+				"height": 820,
+				"width": 1180
+			},
+			"waylight_count": 76,
+			"zoom_size": 20.0,
+			"zoom_stop": 2
+		},
+		{
+			"act": 2,
+			"act_index": 1,
+			"active_asset_paths": [
+				"res://assets/art/map/geometry/act2/drowned-wall-corner.glb",
+				"res://assets/art/map/geometry/act2/library-arch.glb",
+				"res://assets/art/map/geometry/act2/lure-lantern-post.glb",
+				"res://assets/art/map/geometry/act2/silted-stair.glb",
+				"res://assets/art/map/geometry/act2/sunken-shelf-mass.glb",
+				"res://assets/art/map/geometry/act2/terminus-flooded-threshold.glb",
+				"res://assets/art/map/geometry/shared/road-slab-a.glb",
+				"res://assets/art/map/geometry/shared/road-slab-b.glb",
+				"res://assets/art/map/geometry/shared/standing-monument.glb",
+				"res://assets/art/map/grades/act2-grade.png"
+			],
+			"camera_xz": {
+				"x": -29.700000762939453,
+				"z": 21.450000762939453
+			},
+			"file": "raw/act-02_seed-00000717_shape-pad-landscape_zoom-02-20_pose-opening_locale-en.png",
+			"frame_id": "F010",
+			"generated_act": true,
+			"input_digest": "462940f071ac6274f281770ab3d049065965263847e5dffa58f36b4434b65e91",
+			"layout_digest": "6baecd112071235ba327ba555e8182e41b02c825e9eeaf60e0cc195cc70c33f9",
+			"locale": "en",
+			"map_at": 1,
+			"map_region": "sunken_city",
+			"node_count": 65,
+			"pose": "opening",
+			"reachable_count": 2,
+			"rng_state_after_map": 721837281,
+			"route_state_counts": {
+				"cold": 73,
+				"open": 2,
+				"walked": 1
+			},
+			"seed": 717,
+			"shape": "pad-landscape",
+			"viewport": {
+				"height": 820,
+				"width": 1180
+			},
+			"waylight_count": 76,
+			"zoom_size": 20.0,
+			"zoom_stop": 2
+		},
+		{
+			"act": 3,
+			"act_index": 2,
+			"active_asset_paths": [
+				"res://assets/art/map/geometry/act3/broken-halo.glb",
+				"res://assets/art/map/geometry/act3/court-plinth.glb",
+				"res://assets/art/map/geometry/act3/obsidian-blade.glb",
+				"res://assets/art/map/geometry/act3/shattered-wall-mass.glb",
+				"res://assets/art/map/geometry/act3/star-eye-mass.glb",
+				"res://assets/art/map/geometry/act3/terminus-broken-ring-arch.glb",
+				"res://assets/art/map/geometry/shared/road-slab-a.glb",
+				"res://assets/art/map/geometry/shared/road-slab-b.glb",
+				"res://assets/art/map/geometry/shared/standing-monument.glb",
+				"res://assets/art/map/grades/act3-grade.png"
+			],
+			"camera_xz": {
+				"x": -24.55858612060547,
+				"z": 28.087722778320313
+			},
+			"file": "raw/act-03_seed-00000717_shape-phone-landscape_zoom-02-20_pose-focused_locale-en.png",
+			"frame_id": "F011",
+			"generated_act": true,
+			"input_digest": "75db821ea51dbb185c3c847a198e98efb1a49fb21555d24a58fb9b66ac2569ef",
+			"layout_digest": "dd8b436deda61b800556d3d483cbff167917327c0659ba15a69e73a54ab879d6",
+			"locale": "en",
+			"map_at": 1,
+			"map_region": "obsidian_court",
+			"node_count": 65,
+			"pose": "focused",
+			"reachable_count": 2,
+			"rng_state_after_map": 721837281,
+			"route_state_counts": {
+				"cold": 73,
+				"open": 2,
+				"walked": 1
+			},
+			"seed": 717,
+			"shape": "phone-landscape",
+			"viewport": {
+				"height": 390,
+				"width": 844
+			},
+			"waylight_count": 76,
+			"zoom_size": 20.0,
+			"zoom_stop": 2
+		},
+		{
+			"act": 4,
+			"act_index": 3,
+			"active_asset_paths": [
+				"res://assets/art/map/geometry/act4/mirror-road-slab.glb",
+				"res://assets/art/map/geometry/act4/pale-fractured-mass.glb",
+				"res://assets/art/map/geometry/act4/reverse-hearth-arch.glb",
+				"res://assets/art/map/geometry/act4/standing-pair.glb",
+				"res://assets/art/map/geometry/act4/terminus-threshold.glb",
+				"res://assets/art/map/geometry/act4/threshold-buttress.glb",
+				"res://assets/art/map/geometry/shared/road-slab-a.glb",
+				"res://assets/art/map/geometry/shared/road-slab-b.glb",
+				"res://assets/art/map/geometry/shared/standing-monument.glb",
+				"res://assets/art/map/grades/act4-grade.png"
+			],
+			"camera_xz": {
+				"x": -10.622230529785156,
+				"z": 21.45156478881836
+			},
+			"file": "raw/act-04_seed-00000717_shape-pad-landscape_zoom-02-20_pose-focused_locale-en.png",
+			"frame_id": "F012",
+			"generated_act": false,
+			"input_digest": "0c05805a77a5b737d642378a245a10781e3284c0cfc2141abed9fd17f9bd35d1",
+			"layout_digest": "db60e0d0dfe76fa2bcf56bf4943ffa7c38de6e2f042d9f1426ad479597c43663",
+			"locale": "en",
+			"map_at": 1,
+			"map_region": "rose_window",
+			"node_count": 5,
+			"pose": "focused",
+			"reachable_count": 1,
+			"rng_state_after_map": 717,
+			"route_state_counts": {
+				"cold": 2,
+				"open": 1,
+				"walked": 1
+			},
+			"seed": 717,
+			"shape": "pad-landscape",
+			"viewport": {
+				"height": 820,
+				"width": 1180
+			},
+			"waylight_count": 4,
+			"zoom_size": 20.0,
+			"zoom_stop": 2
+		}
+	],
+	"godot": "4.7.2-stable (official)",
+	"issue": 475,
+	"locale": "en",
+	"schema": 1
+}
