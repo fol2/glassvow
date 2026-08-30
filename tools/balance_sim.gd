@@ -5,6 +5,7 @@ const Pilot: GDScript = preload("res://tools/balance_pilot.gd")
 const Policy: GDScript = preload("res://tools/balance_policy.gd")
 const Metrics: GDScript = preload("res://tools/balance_metrics.gd")
 const Incentives: GDScript = preload("res://tools/vow_incentives.gd")
+const EP4Readout: GDScript = preload("res://research/issue-421-ep4/tools/activation_readout.gd")
 const PROFILE: String = "mature-three-act-no-side-state-v1"
 static var _probe: Dictionary = {}
 func _initialize() -> void:
@@ -445,6 +446,9 @@ static func _bump(key: String, n: int = 1) -> void:
 
 
 static func _harvest_fight(game: GlassvowGame) -> void:
+	var ep4: Dictionary = EP4Readout.observe(game.cb.queue, game.content)
+	for key_v: Variant in ep4:
+		_bump(str(key_v), int(float(str(ep4[key_v]))))
 	var relics: Array[String] = game.run.player.relics
 	if relics.has("ashenCore"):
 		_bump("ashenCoreOwned")

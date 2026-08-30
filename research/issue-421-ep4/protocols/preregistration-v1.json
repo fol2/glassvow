@@ -1,0 +1,238 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "experiment": "EP4",
+  "registeredAtUtc": "2026-08-30T20:16:13Z",
+  "authority": {
+    "source": "Direct Ash (Glassvow PM) instruction relayed by the owner on 2026-08-30",
+    "scope": "One no-search composite of existing #524/#525 packages, deterministic zero-row composition preflight, then one Phase A of at most 4,000 runs",
+    "p9Bar": "unchanged",
+    "notNewFamily": true,
+    "forbidden": [
+      "Emberglass repair, rerun or reopening",
+      "Kindle/Branch",
+      "old route labels",
+      "issue #521",
+      "new relic, card, effect primitive or optimiser",
+      "candidate search or parameter rescue",
+      "second composite or second Phase A",
+      "product-main mutation, pull request, merge or successor issue"
+    ]
+  },
+  "source": {
+    "repository": "fol2/glassvow",
+    "originMain": "c28ae38824f7ba2168b573002ab8b90dadd5bde1",
+    "resolvedAtUtc": "2026-08-30T20:16:13Z",
+    "fullContentPath": "content/full-content.json",
+    "fullContentFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "issue421BodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "instructionFileSha256": {
+      "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+      "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+      ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8"
+    }
+  },
+  "archiveEvidence": [
+    {
+      "issue": 524,
+      "branch": "research/issue-524-causal-slate-evidence",
+      "commit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "disposition": "immutable scientific evidence; admitted hand-size-payoff only",
+      "files": {
+        "research/issue-524/publication-manifest-v1.json": "461051b1c724a61844fd66415db32526adca7721fd10520f2bfbc5cbe2593cb8",
+        "research/issue-524/immutable-manifest-v1.json": "f486ae4550cc06ceb96341eb78f2a53281bcea100bb493082d0e39243c515ebb",
+        "research/issue-524/artifacts/stage-b-mechanism-package-gate-v1.json": "c7f12c85998b86a345d84c28593256676731733e605a38fbb57b46db777e313a",
+        "research/issue-524/artifacts/scope-insufficiency-finding-v1.json": "acecbae3171e739aeae4fe71dde2d0635ce98c453c58400de9bde627b2368fa2"
+      }
+    },
+    {
+      "issue": 525,
+      "branch": "research/issue-525-mechanism-package-synthesis-evidence",
+      "commit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "disposition": "immutable scientific evidence; selected probe-promotable package definitions only",
+      "files": {
+        "research/issue-525/publication-manifest-v1.json": "f44605918c504df66d4358efa74fefdb9f96a4ce0c516258264f9ecb49527a0e",
+        "research/issue-525/immutable-manifest-v1.json": "d537981f9444de5804bf566a29c97e5f230bb834eef3e6b3f845feb80a72d3ae",
+        "research/issue-525/artifacts/design-grammar-v1.json": "2c2abdc114bc745d99e66b0875e5f501f797d016804648b11ef8c8700ef8766b",
+        "research/issue-525/artifacts/phase-c-positive-control-v1.json": "202eb434198aaa4df76a16c0577a804a88bfbbd7dc40973c445f85f1bd110374",
+        "research/issue-525/artifacts/phase-c-level2-candidate-freeze-v1.json": "a8a966663f260b9128376d332c173ae0944bd5f006099f96589f8fefa85ba351",
+        "research/issue-525/artifacts/phase-c-level2-validation-v1.json": "1655f9be631c2cff1791d004ff7940718f2fa5b5f47b9ea13b9017cd118ed436",
+        "research/issue-525/artifacts/terminal-stop-finding-v1.json": "46b10157cbc1d9abb60a2a2a5a68cbffe8b601088842cb6f7f02dae65953fa1c"
+      }
+    }
+  ],
+  "composition": {
+    "basePath": "content/full-content.json",
+    "baseFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "order": [
+      "ash-poison-catalyst",
+      "ward-mirror-edge"
+    ],
+    "identityOnlyDestinations": [
+      "direct-shatter",
+      "hand-size-payoff"
+    ],
+    "conflictRule": "Touched JSON pointers must be disjoint; each imported candidate must differ from current-main at exactly its frozen pointers; forward and reverse application must be byte-identical after deterministic rendering.",
+    "packages": [
+      {
+        "id": "ash-poison-catalyst",
+        "candidateId": "050f147606908274f412e849ea2a5279266fb0c81f629e915b64c14bde45607c",
+        "sourceIssue": 525,
+        "inputPath": "research/issue-421-ep4/inputs/ash-poison-catalyst-050f1476.json",
+        "inputFileSha256": "c7b1874467267931d71b66fa1dd753f6ab983ce2cd01d8e954c589ba4098eb06",
+        "mutations": [
+          {"pointer": "/cards/catalyst/effects/0/n", "before": 2, "after": 3},
+          {"pointer": "/cards/catalyst/up/effects/0/n", "before": 3, "after": 4},
+          {"pointer": "/cards/toxicMist/effects/0/n", "before": 3, "after": 5},
+          {"pointer": "/cards/toxicMist/up/effects/0/n", "before": 5, "after": 7}
+        ]
+      },
+      {
+        "id": "ward-mirror-edge",
+        "candidateId": "4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c",
+        "sourceIssue": 525,
+        "inputPath": "research/issue-421-ep4/inputs/ward-mirror-edge-4f02c9b7.json",
+        "inputFileSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb",
+        "mutations": [
+          {
+            "pointer": "/cardPools/common",
+            "before": ["twinFangs", "quickSlash", "heavyBlow", "cleave", "venomStrike", "lunge", "guardedStrike", "brace", "sidestep", "preparation", "deflect"],
+            "after": ["twinFangs", "quickSlash", "heavyBlow", "cleave", "venomStrike", "lunge", "guardedStrike", "brace", "sidestep", "preparation", "deflect", "mirrorEdge"]
+          },
+          {"pointer": "/cards/brace/effects/0/n", "before": 8, "after": 10},
+          {"pointer": "/cards/brace/up/effects/0/n", "before": 11, "after": 17},
+          {"pointer": "/cards/bulwark/cost", "before": 2, "after": 1},
+          {"pointer": "/cards/bulwark/effects/0/n", "before": 13, "after": 20},
+          {"pointer": "/cards/bulwark/up/effects/0/n", "before": 18, "after": 22},
+          {"pointer": "/cards/fortify/cost", "before": 2, "after": 1},
+          {
+            "pointer": "/cards/mirrorEdge",
+            "before": {"$missing": true},
+            "after": {
+              "cost": 1,
+              "effects": [
+                {"kind": "dmg", "n": 6},
+                {"kind": "block", "n": 11}
+              ],
+              "name": "Mirror Edge",
+              "rarity": "common",
+              "target": "enemy",
+              "text": "Deal @6@ damage. Gain #11# Ward.",
+              "type": "attack",
+              "up": {
+                "effects": [
+                  {"kind": "dmg", "n": 9},
+                  {"kind": "block", "n": 14}
+                ],
+                "text": "Deal @9@ damage. Gain #14# Ward."
+              },
+              "vfx": "slash"
+            }
+          }
+        ]
+      }
+    ],
+    "outputPath": "research/issue-421-ep4/inputs/ep4-composite-v1.json",
+    "compositeFileSha256": "ecbe896a96b8d93c2701c4fac872e1066df54a2c1274d3527e0f1b86ebdee3cb"
+  },
+  "identity": {
+    "H10": "apply_chips remains Dusk-only; zero Ash shatters required across every Phase A row",
+    "H11": "player-origin enemy Smolder remains Ash-only; zero Dusk enemy Smolder applications required across every Phase A row",
+    "godotBinary": "/opt/homebrew/bin/godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "pilotVersion": "p8-d0-v1",
+    "balanceDriverSha256": "6c3c37f72e86ba01d0fbc15b303d31205e85b9cd979400d13262b83cfd409050",
+    "fileSha256": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "docs/balance/421-content-search-seeds-v1.json": "4dcbc5e04c9e983007f9b8a9ff7628c7bd8db45169768d45f7d0607e66e7a011",
+      "tools/balance_sim.gd": "304ad12855cafaea51e5ef889a9067c034d083ea4a71f29f8c3827f09abedddf",
+      "tools/balance_sweep.gd": "6d78dcd3d00aa6300aaf32fc498c7a3c9fb4ffea1725f59e6fc8be7b5fa61ff0",
+      "tools/balance_catalogue.gd": "6e240546cd616a2518ee7a2b8fae41aa8a94078429155f89f6d9165eef1c20c0",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_metrics.gd": "6904043d83d9cc91265a60911b28f49a01074d185e353b2dccdad64293cd0deb",
+      "research/issue-421-ep4/tools/activation_readout.gd": "1618cfe2c2e5416e04a3dc9f9138a635dc6d46b704605e643909b1bcd0f6aa06",
+      "research/issue-421-ep4/tools/test_activation_readout.gd": "122c9f0781150a454e2940fe6a7566ca36bbed7c3c635eabcc3387b9391de158",
+      "research/issue-421-ep4/tools/ep4.py": "ee42a288f4066bd6496ef6b9aad2fd89e5841cf02c6f1b96bb4f20d01a671bbb"
+    },
+    "observationOnlyProof": {
+      "readoutInput": "completed combat event queue plus immutable ContentDB lookup",
+      "readoutOutput": "packageEvents only",
+      "gameStateWrites": 0,
+      "rngCalls": 0,
+      "outcomeDigestExcludes": "packageEvents",
+      "zeroRowSyntheticCheck": "research/issue-421-ep4/tools/test_activation_readout.gd"
+    }
+  },
+  "readouts": {
+    "directShatter": "A shatter event causally following a played attack before any source boundary",
+    "wardMirrorEdge": "Positive Brace or Mirror Edge Ward followed in the same turn by positive Fortify Ward",
+    "handSizePayoff": "A successful Tinder or Struck Match draw followed in the same turn by Phantom Blades",
+    "ashPoisonCatalyst": "Emberbite or Ashcloud applies positive Smolder to an enemy, followed later in the same fight by Bellows increasing Smolder on that enemy",
+    "reachabilityCohort": "arm 1 Planned build / competent play only, separately for each aspect and Vow 0/5",
+    "reachabilityRule": "Per destination, activation in at least 5% of the 200 frozen runs and two-sided 95% Clopper-Pearson lower bound greater than zero",
+    "separationRule": "Within each aspect/vow activation-set Jaccard between the two named destinations is at most 0.50"
+  },
+  "phaseA": {
+    "driver": "research/issue-421-ep4/tools/ep4.py phase-a",
+    "invocations": 1,
+    "maximumRuns": 4000,
+    "baseline": "No historical outcome baseline enters the decision; arm 1 and arm 2 are matched within the same composite, policy identities and common seed identities.",
+    "controls": {
+      "script": "res://tools/balance_sweep.gd",
+      "stage": "exam",
+      "seedCount": 200,
+      "seeds": [4000, 4199],
+      "aspects": ["duskblade", "ashwarden"],
+      "vows": [0, 5],
+      "arms": {
+        "1": "Planned build / competent play",
+        "2": "Random build / competent play",
+        "3": "Planned build / random play",
+        "4": "Random build / random play"
+      },
+      "rows": 3200
+    },
+    "holdout": {
+      "script": "res://tools/balance_sim.gd",
+      "stage": "exam",
+      "seedCount": 200,
+      "seeds": [5000, 5199],
+      "aspects": ["duskblade", "ashwarden"],
+      "vows": [0, 5],
+      "mix": "none",
+      "rows": 800
+    },
+    "verdictRules": {
+      "arm2MaximumExclusive": 0.5,
+      "plannedStrictlyAboveRandomBuild": true,
+      "reachabilityProbabilityMinimum": 0.05,
+      "activationSetJaccardMaximum": 0.5,
+      "vow5CeilingInclusive": 0.9,
+      "ashLeadMinimum": 0.0,
+      "ashLeadMaximum": 0.2,
+      "additionalStallsOrErrors": 0,
+      "H10AshShatters": 0,
+      "H11DuskEnemySmolderApplications": 0,
+      "GO": "Every rule passes; authorises exactly one full P9 landscape on this source/content SHA and is not a P9 claim.",
+      "NO-GO": "A scientific arm-2, Planned>RandomBuild, reachability or separation rule fails; stop with no rescue, second composite or landscape.",
+      "VETO": "Provenance, identity, reliability, Vow-5 ceiling, Ash-lead, execution or wall-time rule fails; stop with no rerun or landscape."
+    }
+  },
+  "budgets": {
+    "simulationRows": 4000,
+    "wallSeconds": 2700,
+    "holdoutJobTimeoutSeconds": 900,
+    "controlsJobTimeoutSeconds": 1800,
+    "modelCallsDuringCompositionSimulationFittingAndDecision": 0,
+    "modelContextBytesAtDecisionBoundary": 65536,
+    "phaseAReruns": 0,
+    "additionalCandidates": 0
+  },
+  "decisionBoundary": {
+    "onGO": "Publish evidence and report GO to Ash; exactly one full P9 landscape is then authorised on the same source/content SHA.",
+    "onNoGoOrVeto": "Publish evidence, report the verdict to Ash and stop. No parameter rescue, second composite, landscape, new family or successor issue.",
+    "merge": false
+  }
+}
