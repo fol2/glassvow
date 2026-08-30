@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "experiment": "EP4",
+  "verdict": "VETO",
+  "verdictChangedAfterExecution": false,
+  "source": {
+    "originMain": "c28ae38824f7ba2168b573002ab8b90dadd5bde1",
+    "executionHead": "4f58dda49fc912303ce454ecce5345c6c3dec067",
+    "baseContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "compositeContentSha256": "ecbe896a96b8d93c2701c4fac872e1066df54a2c1274d3527e0f1b86ebdee3cb",
+    "protocolSha256": "4bdb673cc3a88b00f9b13d2966cd35a93f10dada1969aef4a011c1a4f951a3a2",
+    "zeroRowPreflightSha256": "497e5570fe71540195b28f60c9aad751923c2bbe33aa1852434645fa2d68005e",
+    "phaseAResultSha256": "86f2bfbfda0ad44721341b45e532c2f4ce8b6d7726cc3abc63855869e9bcba7a"
+  },
+  "execution": {
+    "invocations": 1,
+    "simulationRows": 4000,
+    "maximumRuns": 4000,
+    "startedAtUtc": "2026-08-30T20:22:53.874369Z",
+    "finishedAtUtc": "2026-08-30T20:25:16.596595Z",
+    "wallSeconds": 142.363,
+    "wallLimitSeconds": 2700,
+    "jobExitCodes": [0, 0, 0],
+    "jobTimeouts": 0
+  },
+  "hardGates": {
+    "pass": false,
+    "reliability": {
+      "pass": false,
+      "stallsOrErrors": 1,
+      "registeredMaximum": 0,
+      "row": {
+        "arm": 1,
+        "aspect": "duskblade",
+        "vow": 0,
+        "seed": 4199,
+        "outcome": "stall",
+        "act": 2,
+        "enemy": "leviathan",
+        "turns": 30
+      }
+    },
+    "H10": {
+      "pass": true,
+      "ashShatters": 0,
+      "registeredMaximum": 0
+    },
+    "H11FrozenReadout": {
+      "pass": false,
+      "duskEnemySmolderApplications": 2419,
+      "registeredMaximum": 0,
+      "audit": "The frozen counter observes every positive enemy Smolder status event, while H11 names player-origin applications. Current-main also has non-player-origin enemy Smolder, including Ashfall enemyStartStatus, which can emit a later Smolder jump. The count therefore does not isolate player origin. It is preserved as a frozen analyser reason and is not used to claim a product identity defect."
+    },
+    "godotFrozenReadout": {
+      "pass": false,
+      "registeredCliVersion": "4.7.2.stable.official.ed1daf0bf",
+      "manifestDisplayVersion": "4.7.2-stable (official)",
+      "binaryPath": "/opt/homebrew/bin/godot",
+      "binarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+      "audit": "The job logs print the registered CLI version and the simulator manifests record Godot's shorter Engine.get_version_info display. The frozen analyser compared those representations literally. This is preserved as an analyser reason, not reported as binary drift."
+    }
+  },
+  "scientificGates": {
+    "pass": false,
+    "arm2Below50Percent": {
+      "pass": true,
+      "cells": {
+        "duskblade:v0": 0.38,
+        "duskblade:v5": 0.1,
+        "ashwarden:v0": 0.29,
+        "ashwarden:v5": 0.1
+      }
+    },
+    "plannedAboveRandomBuild": {
+      "pass": true,
+      "cells": {
+        "duskblade:v0": {"planned": 0.705, "randomBuild": 0.38},
+        "duskblade:v5": {"planned": 0.28, "randomBuild": 0.1},
+        "ashwarden:v0": {"planned": 0.84, "randomBuild": 0.29},
+        "ashwarden:v5": {"planned": 0.52, "randomBuild": 0.1}
+      }
+    },
+    "destinationReachabilityAndSeparation": {
+      "pass": false,
+      "cells": {
+        "duskblade:v0": {
+          "directShatter": 1.0,
+          "wardMirrorEdge": 0.005,
+          "wardMirrorEdgeLower95": 0.00012658102786701784,
+          "jaccard": 0.005,
+          "pass": false
+        },
+        "duskblade:v5": {
+          "directShatter": 1.0,
+          "wardMirrorEdge": 0.0,
+          "wardMirrorEdgeLower95": 0.0,
+          "jaccard": 0.0,
+          "pass": false
+        },
+        "ashwarden:v0": {
+          "handSizePayoff": 0.13,
+          "ashPoisonCatalyst": 0.755,
+          "jaccard": 0.11320754716981132,
+          "pass": true
+        },
+        "ashwarden:v5": {
+          "handSizePayoff": 0.165,
+          "ashPoisonCatalyst": 0.645,
+          "jaccard": 0.16546762589928057,
+          "pass": true
+        }
+      }
+    },
+    "holdout": {
+      "vow5CeilingPass": true,
+      "ashLeadPass": true,
+      "cells": {
+        "v0": {"duskblade": 0.71, "ashwarden": 0.83, "ashLead": 0.12},
+        "v5": {"duskblade": 0.315, "ashwarden": 0.44, "ashLead": 0.125}
+      }
+    }
+  },
+  "decision": {
+    "landscapeAuthorised": false,
+    "p9Claim": false,
+    "nextAction": "STOP",
+    "forbidden": [
+      "parameter rescue",
+      "second composite",
+      "second Phase A",
+      "full P9 landscape",
+      "new family",
+      "successor issue",
+      "product-main mutation",
+      "pull request",
+      "merge"
+    ]
+  }
+}

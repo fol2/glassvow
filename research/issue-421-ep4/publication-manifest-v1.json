@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "experiment": "EP4",
+  "purpose": "remote-review-only; do-not-merge",
+  "branch": "research/issue-421-ep4-existing-packages-v1",
+  "sourceCommit": "c28ae38824f7ba2168b573002ab8b90dadd5bde1",
+  "executionCommit": "4f58dda49fc912303ce454ecce5345c6c3dec067",
+  "verdict": "VETO",
+  "finalOutputSha256": "86f2bfbfda0ad44721341b45e532c2f4ce8b6d7726cc3abc63855869e9bcba7a",
+  "campaignManifestSha256": "8531d35fe55acb600ed9823f8175612d617713f2e62d0c5719f534ad0ad4cda2",
+  "files": {
+    "README.md": "b0cb0907470ae594dca7c8fd9783ccb2b129f5e6df9818edb7a6eac361e4f3e1",
+    "artifacts/phase-a-decision-v1.json": "7b96135a01e2073e21c98b0a9f7d59411aa25c6b5bb29089e162df2af0a169a2",
+    "artifacts/phase-a-result-v1.json": "86f2bfbfda0ad44721341b45e532c2f4ce8b6d7726cc3abc63855869e9bcba7a",
+    "artifacts/zero-row-preflight-v1.json": "497e5570fe71540195b28f60c9aad751923c2bbe33aa1852434645fa2d68005e",
+    "immutable-manifest-v1.json": "8531d35fe55acb600ed9823f8175612d617713f2e62d0c5719f534ad0ad4cda2",
+    "inputs/ash-poison-catalyst-050f1476.json": "c7b1874467267931d71b66fa1dd753f6ab983ce2cd01d8e954c589ba4098eb06",
+    "inputs/ep4-composite-v1.json": "ecbe896a96b8d93c2701c4fac872e1066df54a2c1274d3527e0f1b86ebdee3cb",
+    "inputs/ward-mirror-edge-4f02c9b7.json": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb",
+    "protocols/preregistration-v1.json": "4bdb673cc3a88b00f9b13d2966cd35a93f10dada1969aef4a011c1a4f951a3a2",
+    "raw/raw-evidence-v1.tar.gz": "9793adaffc80a2be8073d20419e6e64b0f94dcd90e455895c95ac8b2381692c2",
+    "summaries/final-report-v1.md": "4ac8300c9481a6a822fb81fc81774b92f1cf2e4de872c6463caa41d7ba752cef",
+    "tools/activation_readout.gd": "1618cfe2c2e5416e04a3dc9f9138a635dc6d46b704605e643909b1bcd0f6aa06",
+    "tools/ep4.py": "ee42a288f4066bd6496ef6b9aad2fd89e5841cf02c6f1b96bb4f20d01a671bbb",
+    "tools/test_activation_readout.gd": "122c9f0781150a454e2940fe6a7566ca36bbed7c3c635eabcc3387b9391de158",
+    "../../tools/balance_sim.gd": "304ad12855cafaea51e5ef889a9067c034d083ea4a71f29f8c3827f09abedddf"
+  },
+  "archive": {
+    "path": "raw/raw-evidence-v1.tar.gz",
+    "memberCount": 9,
+    "compressedBytes": 2060484,
+    "sha256": "9793adaffc80a2be8073d20419e6e64b0f94dcd90e455895c95ac8b2381692c2"
+  },
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421"
+  },
+  "omissions": [
+    "The loose generated work directory is represented byte-for-byte by the raw archive and is not duplicated in Git.",
+    "Generated Godot UID files and Python bytecode are not published."
+  ],
+  "disposition": "Stop: no parameter rescue, second composite, second Phase A, landscape, new family, successor issue, product-main mutation, pull request or merge."
+}

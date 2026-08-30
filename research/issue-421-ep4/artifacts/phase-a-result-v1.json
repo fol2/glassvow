@@ -1,0 +1,286 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "experiment": "EP4",
+  "verdict": "VETO",
+  "startedAtUtc": "2026-08-30T20:22:53.874369Z",
+  "finishedAtUtc": "2026-08-30T20:25:16.596595Z",
+  "wallSeconds": 142.363,
+  "simulationRows": 4000,
+  "maximumRuns": 4000,
+  "sourceHead": "4f58dda49fc912303ce454ecce5345c6c3dec067",
+  "contentSha256": "ecbe896a96b8d93c2701c4fac872e1066df54a2c1274d3527e0f1b86ebdee3cb",
+  "jobs": {
+    "holdout-v0": {
+      "command": [
+        "/opt/homebrew/bin/godot",
+        "--headless",
+        "-s",
+        "res://tools/balance_sim.gd",
+        "--",
+        "--vow=0",
+        "--runs=200",
+        "--seed0=5000",
+        "--aspect=all",
+        "--mix=none",
+        "--out=research/issue-421-ep4/work/phase-a-v1/holdout-vow0.json",
+        "--content=/Users/jamesto/Research/glassvow-p9-421-ep4/research/issue-421-ep4/inputs/ep4-composite-v1.json",
+        "--stage=exam"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 24.872,
+      "log": "research/issue-421-ep4/work/phase-a-v1/holdout-v0.log"
+    },
+    "holdout-v5": {
+      "command": [
+        "/opt/homebrew/bin/godot",
+        "--headless",
+        "-s",
+        "res://tools/balance_sim.gd",
+        "--",
+        "--vow=5",
+        "--runs=200",
+        "--seed0=5000",
+        "--aspect=all",
+        "--mix=none",
+        "--out=research/issue-421-ep4/work/phase-a-v1/holdout-vow5.json",
+        "--content=/Users/jamesto/Research/glassvow-p9-421-ep4/research/issue-421-ep4/inputs/ep4-composite-v1.json",
+        "--stage=exam"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 20.164,
+      "log": "research/issue-421-ep4/work/phase-a-v1/holdout-v5.log"
+    },
+    "controls": {
+      "command": [
+        "/opt/homebrew/bin/godot",
+        "--headless",
+        "-s",
+        "res://tools/balance_sweep.gd",
+        "--",
+        "--mode=controls",
+        "--seeds=200",
+        "--seed0=4000",
+        "--arms=1,2,3,4",
+        "--out=research/issue-421-ep4/work/phase-a-v1/controls.json",
+        "--content=/Users/jamesto/Research/glassvow-p9-421-ep4/research/issue-421-ep4/inputs/ep4-composite-v1.json",
+        "--stage=exam"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 117.49,
+      "log": "research/issue-421-ep4/work/phase-a-v1/controls.log"
+    }
+  },
+  "gates": {
+    "hard": {
+      "pass": false,
+      "reasons": [
+        "job 0 Godot identity mismatch",
+        "job 1 Godot identity mismatch",
+        "job 2 Godot identity mismatch",
+        "1 simulator stall/error outcomes",
+        "H11 failed: 2419 Dusk enemy Smolder applications"
+      ]
+    },
+    "scientific": {
+      "pass": false,
+      "reasons": [
+        "duskblade V0 wardMirrorEdgeActivations is not reachable at the frozen 5% floor",
+        "duskblade V5 wardMirrorEdgeActivations is not reachable at the frozen 5% floor"
+      ]
+    },
+    "identity": {
+      "H10AshShatters": 0,
+      "H11DuskEnemySmolderApplications": 2419,
+      "pass": false
+    }
+  },
+  "controls": {
+    "arm1:duskblade:v0": {
+      "runs": 200,
+      "wins": 141,
+      "winRate": 0.705
+    },
+    "arm1:duskblade:v5": {
+      "runs": 200,
+      "wins": 56,
+      "winRate": 0.28
+    },
+    "arm1:ashwarden:v0": {
+      "runs": 200,
+      "wins": 168,
+      "winRate": 0.84
+    },
+    "arm1:ashwarden:v5": {
+      "runs": 200,
+      "wins": 104,
+      "winRate": 0.52
+    },
+    "arm2:duskblade:v0": {
+      "runs": 200,
+      "wins": 76,
+      "winRate": 0.38
+    },
+    "arm2:duskblade:v5": {
+      "runs": 200,
+      "wins": 20,
+      "winRate": 0.1
+    },
+    "arm2:ashwarden:v0": {
+      "runs": 200,
+      "wins": 58,
+      "winRate": 0.29
+    },
+    "arm2:ashwarden:v5": {
+      "runs": 200,
+      "wins": 20,
+      "winRate": 0.1
+    },
+    "arm3:duskblade:v0": {
+      "runs": 200,
+      "wins": 82,
+      "winRate": 0.41
+    },
+    "arm3:duskblade:v5": {
+      "runs": 200,
+      "wins": 18,
+      "winRate": 0.09
+    },
+    "arm3:ashwarden:v0": {
+      "runs": 200,
+      "wins": 142,
+      "winRate": 0.71
+    },
+    "arm3:ashwarden:v5": {
+      "runs": 200,
+      "wins": 97,
+      "winRate": 0.485
+    },
+    "arm4:duskblade:v0": {
+      "runs": 200,
+      "wins": 18,
+      "winRate": 0.09
+    },
+    "arm4:duskblade:v5": {
+      "runs": 200,
+      "wins": 4,
+      "winRate": 0.02
+    },
+    "arm4:ashwarden:v0": {
+      "runs": 200,
+      "wins": 54,
+      "winRate": 0.27
+    },
+    "arm4:ashwarden:v5": {
+      "runs": 200,
+      "wins": 21,
+      "winRate": 0.105
+    }
+  },
+  "holdout": {
+    "duskblade:v0": {
+      "runs": 200,
+      "wins": 142,
+      "winRate": 0.71
+    },
+    "ashwarden:v0": {
+      "runs": 200,
+      "wins": 166,
+      "winRate": 0.83
+    },
+    "ashLead:v0": 0.12,
+    "duskblade:v5": {
+      "runs": 200,
+      "wins": 63,
+      "winRate": 0.315
+    },
+    "ashwarden:v5": {
+      "runs": 200,
+      "wins": 88,
+      "winRate": 0.44
+    },
+    "ashLead:v5": 0.125
+  },
+  "destinations": {
+    "duskblade:v0": {
+      "runs": 200,
+      "destinations": {
+        "directShatterActivations": {
+          "activatedRuns": 200,
+          "probability": 1.0,
+          "clopperPearsonLower95": 0.9817246596448638,
+          "pass": true
+        },
+        "wardMirrorEdgeActivations": {
+          "activatedRuns": 1,
+          "probability": 0.005,
+          "clopperPearsonLower95": 0.00012658102786701784,
+          "pass": false
+        }
+      },
+      "activationSetJaccard": 0.005,
+      "separationPass": true
+    },
+    "duskblade:v5": {
+      "runs": 200,
+      "destinations": {
+        "directShatterActivations": {
+          "activatedRuns": 200,
+          "probability": 1.0,
+          "clopperPearsonLower95": 0.9817246596448638,
+          "pass": true
+        },
+        "wardMirrorEdgeActivations": {
+          "activatedRuns": 0,
+          "probability": 0.0,
+          "clopperPearsonLower95": 0.0,
+          "pass": false
+        }
+      },
+      "activationSetJaccard": 0.0,
+      "separationPass": true
+    },
+    "ashwarden:v0": {
+      "runs": 200,
+      "destinations": {
+        "handSizePayoffActivations": {
+          "activatedRuns": 26,
+          "probability": 0.13,
+          "clopperPearsonLower95": 0.08670835276857528,
+          "pass": true
+        },
+        "ashPoisonCatalystActivations": {
+          "activatedRuns": 151,
+          "probability": 0.755,
+          "clopperPearsonLower95": 0.6893601341384014,
+          "pass": true
+        }
+      },
+      "activationSetJaccard": 0.11320754716981132,
+      "separationPass": true
+    },
+    "ashwarden:v5": {
+      "runs": 200,
+      "destinations": {
+        "handSizePayoffActivations": {
+          "activatedRuns": 33,
+          "probability": 0.165,
+          "clopperPearsonLower95": 0.11638311995805393,
+          "pass": true
+        },
+        "ashPoisonCatalystActivations": {
+          "activatedRuns": 129,
+          "probability": 0.645,
+          "clopperPearsonLower95": 0.5744138330734204,
+          "pass": true
+        }
+      },
+      "activationSetJaccard": 0.16546762589928057,
+      "separationPass": true
+    }
+  },
+  "nextAction": "STOP: no parameter rescue, second composite, landscape, new family or successor issue."
+}

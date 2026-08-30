@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "experiment": "EP4",
+  "status": "PASS",
+  "generatedAtUtc": "2026-08-30T20:22:16.200196Z",
+  "protocolSha256": "4bdb673cc3a88b00f9b13d2966cd35a93f10dada1969aef4a011c1a4f951a3a2",
+  "gitHead": "4f58dda49fc912303ce454ecce5345c6c3dec067",
+  "composition": {
+    "baseFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "compositeFileSha256": "ecbe896a96b8d93c2701c4fac872e1066df54a2c1274d3527e0f1b86ebdee3cb",
+    "compositionOrder": [
+      "ash-poison-catalyst",
+      "ward-mirror-edge"
+    ],
+    "reverseOrderIdentity": true,
+    "touchedPointers": [
+      "/cardPools/common",
+      "/cards/brace/effects/0/n",
+      "/cards/brace/up/effects/0/n",
+      "/cards/bulwark/cost",
+      "/cards/bulwark/effects/0/n",
+      "/cards/bulwark/up/effects/0/n",
+      "/cards/catalyst/effects/0/n",
+      "/cards/catalyst/up/effects/0/n",
+      "/cards/fortify/cost",
+      "/cards/mirrorEdge",
+      "/cards/toxicMist/effects/0/n",
+      "/cards/toxicMist/up/effects/0/n"
+    ]
+  },
+  "checks": [
+    {
+      "command": [
+        "tools/check_scripts.sh",
+        "tools/balance_sim.gd",
+        "research/issue-421-ep4/tools/activation_readout.gd",
+        "research/issue-421-ep4/tools/test_activation_readout.gd"
+      ],
+      "exitCode": 0,
+      "stdout": "scripts OK (3 checked)",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/opt/homebrew/bin/godot",
+        "--headless",
+        "-s",
+        "res://research/issue-421-ep4/tools/test_activation_readout.gd",
+        "--",
+        "--content=/Users/jamesto/Research/glassvow-p9-421-ep4/research/issue-421-ep4/inputs/ep4-composite-v1.json"
+      ],
+      "exitCode": 0,
+      "stdout": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nSentry: DEBUG: starting Sentry SDK version 2.1.1+d288ad9\nSentry: DEBUG: Automatic initialization is disabled in the project settings.\nSentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.\nPASS (2 EP4 readout checks)",
+      "stderr": ""
+    }
+  ],
+  "faults": [],
+  "simulationRows": 0
+}

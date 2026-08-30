@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "experiment": "EP4",
+  "purpose": "Immutable map of the one authorised zero-row preflight and Phase A outputs",
+  "sourceHead": "4f58dda49fc912303ce454ecce5345c6c3dec067",
+  "protocolSha256": "4bdb673cc3a88b00f9b13d2966cd35a93f10dada1969aef4a011c1a4f951a3a2",
+  "simulationRows": 4000,
+  "files": {
+    "work/zero-row-preflight-v1.json": "497e5570fe71540195b28f60c9aad751923c2bbe33aa1852434645fa2d68005e",
+    "work/phase-a-v1/phase-a-started-v1.json": "f5f3f52d93d9d11b25a04dece4f3688bcffa41a8d825721073d290674e7c8726",
+    "work/phase-a-v1/controls.json": "44b9ba52231829c47587016b472ce0aa698493710919608710fc92252f6982c8",
+    "work/phase-a-v1/controls.log": "5a3d2b792e6a94e6e192f21e4b3e719d4e61e412e82acb2d03e7d94a9983982e",
+    "work/phase-a-v1/holdout-vow0.json": "d3f98933f13e3d628daa11d41ac84ae34da2ff869102b62272ee7763a79eeaa6",
+    "work/phase-a-v1/holdout-v0.log": "645df92bb9cb656e8f14efc83bd8630a3d924b7e15d0eae177135c82a629b6db",
+    "work/phase-a-v1/holdout-vow5.json": "bca23b9fc6c1e7494fe8d1d3bae82d9a4cccb1d5650de1208f668902eac67632",
+    "work/phase-a-v1/holdout-v5.log": "017761df11159bde5a8258e1d952317e63c24d8c92589a0d47f39f4efdb76961",
+    "work/phase-a-v1/phase-a-result-v1.json": "86f2bfbfda0ad44721341b45e532c2f4ce8b6d7726cc3abc63855869e9bcba7a"
+  },
+  "rawArchive": {
+    "path": "raw/raw-evidence-v1.tar.gz",
+    "memberCount": 9,
+    "compressedBytes": 2060484,
+    "sha256": "9793adaffc80a2be8073d20419e6e64b0f94dcd90e455895c95ac8b2381692c2"
+  },
+  "verdict": "VETO",
+  "rerunsAuthorised": 0
+}
