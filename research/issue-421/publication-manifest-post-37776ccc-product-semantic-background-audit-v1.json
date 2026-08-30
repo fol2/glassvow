@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "archive-only-research-evidence",
+  "parentArchiveHead": "37776ccc6ceba448ab9effc0eb8550a2d3947b0f",
+  "intendedRemoteRef": "research/issue-421-post-37776ccc-product-semantic-background-audit-evidence",
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "authority": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "commentId": 5466985701,
+    "commentBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "preregistrationCommentId": 5467188996,
+  "disposition": "FUTILITY_CURRENT_MAIN_PRODUCT_LANGUAGE",
+  "scientificAccounting": {
+    "backgroundAgents": 2,
+    "h1Status": "SUPPORTED_ROOTS",
+    "h2Status": "ADMISSIBLE_ENVELOPE",
+    "reportedRootCount": 8,
+    "existingProjectedOperatorCount": 8,
+    "retainedRootCount": 0,
+    "ownerConsolidations": 1,
+    "correctionsUsed": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "candidatesConstructed": 0
+  },
+  "files": [
+    {
+      "path": "research/issue-421/protocols/post-37776ccc-product-semantic-background-audit-v1.json",
+      "sha256": "6c9f2f7b6f4c08dc6f5c91a2647b5663c658592862533a45ba7814c778e51070"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5466985701-v34.json",
+      "sha256": "a83282e5a424794e76ae92764a674e7311ff9a34d580967dbd3d0fa510533a62"
+    },
+    {
+      "path": "research/issue-421/summaries/post-37776ccc-product-semantic-h1-authored-content-roots-v1.md",
+      "sha256": "22d6c0bbdc9b1ffd7912f132e2ae0a6a04b4f120bac62112f12e6fd4e4364f1f"
+    },
+    {
+      "path": "research/issue-421/summaries/post-37776ccc-product-semantic-h2-contract-closure-envelope-v1.md",
+      "sha256": "3d0c3f87a04345cc3d10169895dc95c5e4347b12d11fdcce650e1c1f881c949f"
+    },
+    {
+      "path": "research/issue-421/summaries/post-37776ccc-product-semantic-background-audit-v1.md",
+      "sha256": "13426a580e947c44253e549d5793f7c6f79d28497c73550f2b1495356b06af5c"
+    },
+    {
+      "path": "research/issue-421/task-capsule-5466985701-v35.json",
+      "sha256": "cdcd9b8f7a852e2773fa31e0a8bd84eb623249c1827f40669a9bcc5448633d91"
+    }
+  ],
+  "claims": [
+    "The frozen current-main product-language corpus supplied eight supported Duskblade semantic roots.",
+    "All eight roots mapped to existing projected operators and therefore failed the preregistered absent-operator gate.",
+    "No root survived the single frozen consolidation; only this product-language lane is closed.",
+    "No causal capacity, product, acceptance, P9 or broad C5 impossibility claim follows."
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 5,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "product-semantic-background-audit",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "parentArchiveHead": "37776ccc6ceba448ab9effc0eb8550a2d3947b0f",
+  "protocol": {
+    "path": "protocols/post-37776ccc-product-semantic-background-audit-v1.json",
+    "sha256": "6c9f2f7b6f4c08dc6f5c91a2647b5663c658592862533a45ba7814c778e51070"
+  },
+  "execution": {
+    "backgroundAgents": 2,
+    "contextFork": "none",
+    "maximumWallTimeSecondsPerAgent": 900,
+    "maximumSourceTokensH1": 60000,
+    "maximumSourceTokensH2": 40000,
+    "maximumOutputTokensPerAgent": 5000,
+    "ownerConsolidations": 1,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "mechanicalCorrectionCap": 0
+  },
+  "activeInvariants": [
+    "Scoreline payoff and Afterimage payoff remain separate frozen causal factors.",
+    "C1-C4, C6, Ward-spend and every other valid closed-family disposition remain immutable.",
+    "Background agents are read-only, non-overlapping and cannot construct candidates or decide stop/go.",
+    "The accountable owner consolidates exactly once under the frozen exact-token rule.",
+    "Research remains outside product truth and protected identities remain unread."
+  ],
+  "nextAction": "Publish the zero-row protocol, dispatch the two no-fork read-only hypotheses, then apply the single frozen consolidation rule without adding sources, synonyms or corrections."
+}

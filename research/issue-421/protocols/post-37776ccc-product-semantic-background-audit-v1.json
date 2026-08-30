@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "protocolId": "post-37776ccc-product-semantic-background-audit-v1",
+  "preregisteredAtUtc": "2026-08-30T06:34:47Z",
+  "repository": "fol2/glassvow",
+  "issue": 421,
+  "question": "Can immutable current-main product language supply a finite, cited semantic root set for a genuinely new combat-local C5 producer/consumer grammar without selecting or instantiating a candidate?",
+  "authorities": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "controllingCommentId": 5466985701,
+    "controllingCommentBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60",
+    "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2"
+  },
+  "preservedEvidence": {
+    "parentArchiveHead": "37776ccc6ceba448ab9effc0eb8550a2d3947b0f",
+    "immutableArchiveHeads": [
+      "5ac060be65c3ff45ccc9180f2f6c0a9d0782f581",
+      "1a381d1228c2c7421f950b13bbfddf430e61aa09",
+      "3a234baedbf4007bae3fdc1dd85e0478380825b5",
+      "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+      "b7b509939ff0bd8f75ba2218309e09cb94808878",
+      "004679a83894f151e95aeed35d2ecaab60a9d3f5"
+    ],
+    "closedFamiliesRemainClosed": true,
+    "quarantinedObservationCount": 82
+  },
+  "commonInputs": [
+    {
+      "id": "issue-body",
+      "location": "https://api.github.com/repos/fol2/glassvow/issues/421",
+      "selector": ".body",
+      "sha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d"
+    },
+    {
+      "id": "controlling-authority",
+      "location": "https://api.github.com/repos/fol2/glassvow/issues/comments/5466985701",
+      "selector": ".body",
+      "sha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H1-authored-content-roots",
+      "independence": "May inspect only the two common inputs and H1 inputs. Must not inspect H2 inputs or another agent output.",
+      "inputs": [
+        {
+          "id": "current-main-content",
+          "location": "git:5f53020f588145ec5fbf803de32d82c7d29c06d2:content/full-content.json",
+          "sha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+        },
+        {
+          "id": "deterministic-source-projection",
+          "location": "/Users/jamesto/Research/glassvow-p9-421/summaries/post-6654fc8b-deterministic-source-projection-v1.json",
+          "sha256": "e28ed4b68e92834106adc8d4cbb3a3e0552fd8ea7d2d4ac5a9ced26ea445619f"
+        }
+      ],
+      "task": "Report at most twelve recurring authored semantic roots that are relevant to Duskblade combat identity. Each root must cite at least two distinct JSON paths, state whether the current projection already implements it as an operator, and name only possible C5 roles from producer, mediator, consumer, bounded payoff, natural cost and lifecycle. Do not choose field values, cards, relics, IDs, numeric levels or a candidate.",
+      "requiredResult": {
+        "statusValues": [
+          "SUPPORTED_ROOTS",
+          "NO_SUPPORTED_ROOTS",
+          "INCONCLUSIVE"
+        ],
+        "rootLimit": 12,
+        "requiredPerRoot": [
+          "normalised root",
+          "exact source phrases",
+          "at least two distinct content JSON paths",
+          "existing projected operator or absent",
+          "possible C5 roles",
+          "strongest counterevidence"
+        ]
+      },
+      "ceilings": {
+        "maximumInputFilesOrEndpoints": 4,
+        "maximumSourceTokens": 60000,
+        "maximumOutputTokens": 5000,
+        "maximumWallTimeSeconds": 900
+      }
+    },
+    {
+      "id": "H2-contract-and-closure-envelope",
+      "independence": "May inspect only the two common inputs and H2 inputs. Must not inspect current-main content, H1 inputs or another agent output.",
+      "inputs": [
+        {
+          "id": "concepts-vessel-and-combat-state",
+          "location": "git:5f53020f588145ec5fbf803de32d82c7d29c06d2:CONCEPTS.md",
+          "selector": "lines 390-499 inclusive",
+          "sha256": "22c892eb2ef40d352033fb111f9a07c1dc36ce4d8fa4f68bbcdaba821fb58e91"
+        },
+        {
+          "id": "concepts-player-combat-resources",
+          "location": "git:5f53020f588145ec5fbf803de32d82c7d29c06d2:CONCEPTS.md",
+          "selector": "lines 800-822 inclusive",
+          "sha256": "805f68faca9a68fc882def858b71707739b75d3d33b81258099f1f89c4d973ff"
+        },
+        {
+          "id": "commercial-combat-rubric",
+          "location": "git:5f53020f588145ec5fbf803de32d82c7d29c06d2:docs/commercial-rubric.md",
+          "selector": "lines 110-127 inclusive",
+          "sha256": "956c8c385a8ff79d9f8a5f2c4b45f4172d9ba021cea673a92dcaa7b4788cd269"
+        },
+        {
+          "id": "causal-coverage-primary-sources",
+          "location": "/Users/jamesto/Research/glassvow-p9-421/summaries/post-810264c-private-causal-coverage-primary-sources-v1.md",
+          "sha256": "c5ae1f503bf8d6ce677473ec8aeb965b720390ce10e68115226f99f9d94def76"
+        },
+        {
+          "id": "current-main-mechanism-equivalence",
+          "location": "/Users/jamesto/Research/glassvow-p9-421/summaries/post-1a381d1-current-main-mechanism-delta-primary-sources-v1.md",
+          "sha256": "011a7d17751337240f4d1b79b7c97f07197f6e40ce6d5583cdd8ea675e753617"
+        },
+        {
+          "id": "ward-spend-v3-disposition",
+          "location": "git:1a381d1228c2c7421f950b13bbfddf430e61aa09:research/issue-421/summaries/post-3a234bae-ward-spend-v3-disposition.md",
+          "sha256": "be7efa1c805b4c78e3e8c464fa948ead23e71d4c540a3d87735c24146944ec80"
+        }
+      ],
+      "task": "Derive a candidate-independent C5 admissibility envelope from product concepts and the commercial combat bar, then adversarially map every dimension against C1-C4, C6 and Ward-spend closure. Report canonical product terms that could constrain a new semantic edge, but do not inspect authored content, choose a semantic root, instantiate a candidate, or rank mechanisms.",
+      "requiredResult": {
+        "statusValues": [
+          "ADMISSIBLE_ENVELOPE",
+          "NO_ADMISSIBLE_ENVELOPE",
+          "INCONCLUSIVE"
+        ],
+        "requiredSections": [
+          "hash and input accounting",
+          "canonical product terms with exact citations",
+          "necessary C5 dimensions",
+          "closure and alias tests",
+          "commercial observability constraints",
+          "strongest counterevidence"
+        ]
+      },
+      "ceilings": {
+        "maximumInputFilesOrEndpoints": 8,
+        "maximumSourceTokens": 40000,
+        "maximumOutputTokens": 5000,
+        "maximumWallTimeSeconds": 900
+      }
+    }
+  ],
+  "ownerConsolidation": {
+    "count": 1,
+    "rule": "The owner may retain only roots with exact H1 citations that are independently present under the frozen H2 canonical product terms after deterministic lower-case token normalisation, are absent as an existing projected operator, and can satisfy every H2 C5 and closure constraint. No synonym substitution or post-result source expansion is permitted.",
+    "success": "Both reports are admissible and at least one root survives the frozen consolidation rule. This authorises only a separately preregistered deterministic lexicon census and grammar freeze, not a candidate or simulator row.",
+    "futility": "Both reports are admissible but no root survives the frozen consolidation rule. Close this current-main product-language lane without a broad impossibility claim.",
+    "inconclusive": "Any input/hash/provenance fault, ceiling breach, prohibited read/action or irresolvable report-format omission makes this audit inconclusive. No correction is authorised."
+  },
+  "executionCeilings": {
+    "backgroundAgents": 2,
+    "contextFork": "none",
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "mechanicalCorrectionCap": 0
+  },
+  "prohibited": [
+    "Historical #524/#525 programme reconstruction or any H1-H72 research replay.",
+    "Candidate construction, field values, card or relic selection, numeric factor levels or ranking.",
+    "Product, issue, cache, ledger or source mutation by a background agent.",
+    "Godot, simulator, fit, ML, RL, optimiser, protected identity, PR, Actions or successor-ticket use."
+  ]
+}
