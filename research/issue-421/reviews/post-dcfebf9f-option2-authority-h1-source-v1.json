@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "hypothesis": "H1_NEXT_STRUCTURAL_MECHANISM_SOURCE_AUDIT",
+  "sourceHead": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "archiveHead": "dcfebf9f56580a833453b36164c2a5327fb67210",
+  "candidateContracts": [],
+  "contractCount": 0,
+  "constraintConflict": "Producing 2-4 new contracts would require reopening a closed source class, substituting the immutable Emberglass contract, or introducing an unavailable external topology.",
+  "futilityReasons": [
+    "The relevant combat, reward, run-state and policy source files are unchanged from the source basis of the accepted structural closures.",
+    "Existing combat-state/operator, trace/history, arithmetic residue, local identity/transform and reward/acquisition paths are closed.",
+    "Option 2 authorised exactly one persistent contract; Emberglass was that selected tuple and is immutable INCONCLUSIVE_AT_CAP, with repair, rerun and substitution prohibited.",
+    "No source-and-evidence-selected external semantic producer/consumer/payoff tuple remains. Constructing one would be speculative."
+  ],
+  "rejectedSourceClasses": [
+    {
+      "class": "existing-combat-state-or-authored-effect",
+      "sourceSeams": [
+        "domain/rules/combat.gd:_apply_effect",
+        "domain/rules/combat.gd:add_status_player",
+        "domain/rules/combat.gd:heal_player",
+        "domain/rules/combat.gd:apply_chips"
+      ],
+      "reason": "Any new coupling over current statuses, healing, Ward, Ember, Facet or damage is an existing-state/operator or previously screened structural family; Weak-mend was the sole eligible residual and failed closed.",
+      "evidence": [
+        "source:domain/rules/combat.gd:394",
+        "source:domain/rules/combat.gd:422",
+        "source:domain/rules/combat.gd:520",
+        "source:domain/rules/combat.gd:667",
+        "archive:research/issue-421/summaries/progress-post-directive-competing-options-weak-mend-closure-v1.md#weak-mend-identity-preflight",
+        "archive:research/issue-421/summaries/post-c3762813-autonomous-closure-envelope-v1.json#classDispositions"
+      ]
+    },
+    {
+      "class": "action-order-zone-history-or-transform",
+      "sourceSeams": [
+        "domain/rules/combat.gd:play_card",
+        "domain/rules/combat.gd:_apply_effect"
+      ],
+      "reason": "Changing order, a transient marker, card-zone handling, target identity or same-fight lifecycle maps to immutable relation/history or identity-transform closures.",
+      "evidence": [
+        "source:domain/rules/combat.gd:764",
+        "source:domain/rules/combat.gd:861",
+        "archive:research/issue-421/publication-manifest-post-810264c-private-causal-coverage-v1.json#causalTopologyDisposition"
+      ]
+    },
+    {
+      "class": "native-reward-or-acquisition-relic-route",
+      "sourceSeams": [
+        "domain/rules/rewards.gd:relic_pool",
+        "domain/rules/rewards.gd:gain_relic"
+      ],
+      "reason": "An additive relic routed through ordinary pools or rewards is the closed native acquisition/reward class; post-Shatter reward feedback was expressly rejected as its alias.",
+      "evidence": [
+        "source:domain/rules/rewards.gd:57",
+        "source:domain/rules/rewards.gd:300",
+        "archive:research/issue-421/reviews/post-c69b2752-persistent-contract-h2-alias-v1.json#/candidates/shard-compass-reward-feedback",
+        "archive:research/issue-421/summaries/post-c3762813-autonomous-closure-envelope-v1.json#classDispositions"
+      ]
+    },
+    {
+      "class": "persistent-run-carrier",
+      "sourceSeams": [
+        "domain/state/run_state.gd:quest_scratch",
+        "domain/state/run_state.gd:to_save_dict",
+        "domain/rules/combat.gd:_apply_start_relics",
+        "domain/rules/combat.gd:_win_combat"
+      ],
+      "reason": "The only Option 2 tuple was Emberglass Memory. Its source-identity process completed no probe output and is immutable inconclusive non-decision evidence; a different carrier would be a prohibited substitution.",
+      "evidence": [
+        "source:domain/state/run_state.gd:49",
+        "source:domain/state/run_state.gd:126",
+        "source:domain/rules/combat.gd:273",
+        "source:domain/rules/combat.gd:498",
+        "github:issue-421-comment:5468704389",
+        "archive:research/issue-421/publication-manifest-post-7c8a3ee7-emberglass-source-identity-v1.json#claims",
+        "archive:research/issue-421/task-capsule-5469013460-v51.json#disposition"
+      ]
+    },
+    {
+      "class": "new-external-rule-topology",
+      "sourceSeams": [],
+      "reason": "A wholly new primitive has no accepted evidence-selected producer, consumer, bounded payoff or activation objective. Selecting one from source alone would guess rather than produce a non-alias contract.",
+      "evidence": [
+        "archive:research/issue-421/publication-manifest-post-810264c-private-causal-coverage-v1.json#causalTopologyDisposition",
+        "archive:research/issue-421/summaries/post-c3762813-autonomous-closure-envelope-v1.json#classDispositions"
+      ]
+    }
+  ],
+  "deterministicRankingRule": {
+    "filterOrder": [
+      "reject immutable closed source class",
+      "reject the selected Emberglass tuple and every substitute",
+      "reject unsupported external topology"
+    ],
+    "survivorOrder": "ascending changed source files, then new mutable state fields, then new event types, then gameplay RNG calls, then lexical contract ID",
+    "survivors": 0
+  },
+  "verdict": "FUTILITY"
+}

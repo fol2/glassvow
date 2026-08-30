@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "hypothesis": "H2_CLOSURE_ALIAS_LATTICE",
+  "archiveHead": "dcfebf9f56580a833453b36164c2a5327fb67210",
+  "sourceHead": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "verdict": "FUTILITY",
+  "reason": "The bounded accepted evidence and unchanged mechanism source establish no evidence-backed unoccupied causal topology. Broad persistent and external classes are not universally closed, but neither is an admissible unoccupied slot without a new semantic producer/consumer source.",
+  "inconclusiveReasons": [],
+  "lattice": {
+    "definitelyClosed": [
+      {
+        "id": "EXISTING_TRANSITION_STATE",
+        "topology": "An existing combat field, status, resource, card zone or authored transition produces state that an existing action consumes.",
+        "closure": "CLOSED"
+      },
+      {
+        "id": "RELATION_HISTORY_ORDER",
+        "topology": "Same-target, same-instance, immediate, post-kill, cross-turn, intent-history, target-transfer or action-order mediation.",
+        "closure": "CLOSED"
+      },
+      {
+        "id": "ARITHMETIC_DERIVATION",
+        "topology": "Threshold, precision, excess, overflow, residue or another arithmetic projection of an existing realised value.",
+        "closure": "CLOSED"
+      },
+      {
+        "id": "IDENTITY_REPLAY_CARRIER",
+        "topology": "Existing semantics moved among status, flag, UID table, CardInst mutation, trace, replay or another private carrier.",
+        "closure": "CLOSED"
+      },
+      {
+        "id": "ACTION_TRACE_TRANSFORM",
+        "topology": "Permuting, dropping, repeating, shifting, remapping, converting or guarding existing player-card or enemy-action subeffects, including TARGET_ACTS_LAST_THIS_PHASE.",
+        "closure": "CLOSED"
+      },
+      {
+        "id": "NATIVE_ACQUISITION_REWARD_PACKAGE",
+        "topology": "Relic ownership, acquisition priority, offer/reward routing, package commitment or policy priority supplies the apparent novelty.",
+        "closure": "CLOSED"
+      },
+      {
+        "id": "WARD_SPEND_V3",
+        "topology": "Any Ward-spend repair, threshold, method rescue, policy retune or representational restatement.",
+        "closure": "CLOSED"
+      }
+    ],
+    "labelAliases": [
+      {
+        "id": "CARRIER_RENAME",
+        "predicate": "The producer, consumer, payoff and lifecycle graph is unchanged after erasing carrier names and replacing status, flag, UID, questScratch, save field or event labels.",
+        "aliases": "IDENTITY_REPLAY_CARRIER"
+      },
+      {
+        "id": "SCALAR_RENAME",
+        "predicate": "Only a constant, cap, threshold, resource name or arithmetic encoding changes while the realised producer-to-consumer edge remains unchanged.",
+        "aliases": "ARITHMETIC_DERIVATION"
+      },
+      {
+        "id": "OWNERSHIP_WRAPPER",
+        "predicate": "Ownership merely gates a closed fight-local payoff or changes its acquisition route without adding a materially new producer and consumer edge.",
+        "aliases": "NATIVE_ACQUISITION_REWARD_PACKAGE"
+      },
+      {
+        "id": "MIRROR_RELIQUARY",
+        "predicate": "Ward gain produces the closed Afterimage marker and Warden's Edge consumes it for the closed mirrored-Ward payoff; adding relic ownership, text or cost does not alter that graph.",
+        "aliases": "RELATION_HISTORY_ORDER"
+      },
+      {
+        "id": "SHARD_COMPASS",
+        "predicate": "A combat Shatter adds an offer to the native post-combat reward route and the existing choice rule consumes it.",
+        "aliases": "NATIVE_ACQUISITION_REWARD_PACKAGE"
+      },
+      {
+        "id": "EMBERGLASS_TOPOLOGY_RENAME",
+        "predicate": "A positive Duskblade terminal Ember reserve, after existing victory consumers, writes one durable binary carry; the next combat consumes it after start-relic cap changes for one capped starting Ember. Changing ID, carrier name, value, cost or telemetry remains the same frozen topology.",
+        "aliases": "FROZEN_EMBERGLASS_NON_DECISION"
+      }
+    ],
+    "frozenNonDecision": [
+      {
+        "id": "emberglass-memory-one-carry",
+        "status": "INCONCLUSIVE_AT_PREREGISTERED_CAP",
+        "topology": "Combat-A terminal Ember reserve -> durable binary run mediator -> next Duskblade combat start after canonical start relics -> one capped Ember -> consume or clear.",
+        "constraints": [
+          "No source identity was established.",
+          "No gate or controlled scenario completed.",
+          "The exact contract cannot be repaired, rerun, substituted or promoted under its frozen protocol.",
+          "It is not converted into either a closure or an open slot."
+        ]
+      }
+    ],
+    "unavailableNotUnoccupied": [
+      {
+        "id": "EXTERNAL_PRIMARY_RULE_TOPOLOGY",
+        "status": "UNAVAILABLE_AT_CAP",
+        "reason": "Absence of an admitted external semantic source is not evidence of an unoccupied mechanism."
+      },
+      {
+        "id": "BROAD_PERSISTENT_OR_PRESENTATION_CLASS",
+        "status": "UNPROVEN",
+        "reason": "The class was outside autonomous authority and was not universally closed, but current source and accepted summaries supply no new complete producer/consumer/payoff/lifecycle topology beyond the frozen exact grammar."
+      }
+    ],
+    "genuinelyUnoccupied": []
+  },
+  "exclusionPredicates": [
+    {
+      "id": "X1_GRAPH_ISOMORPHISM",
+      "predicate": "REJECT if the candidate causal graph becomes any definitelyClosed graph after deleting names, numeric constants, presentation text and carrier encoding."
+    },
+    {
+      "id": "X2_EXISTING_EDGE",
+      "predicate": "REJECT if both producer and consumer are existing authored transitions and the only addition is a bit, mark, status, identity or ordering rule."
+    },
+       {
+      "id": "X3_HISTORY_OR_ORDER",
+      "predicate": "REJECT if novelty is only target relation, instance history, cross-turn hold, intent history, action scheduling or subeffect order."
+    },
+    {
+      "id": "X4_NUMERIC_RESIDUE",
+      "predicate": "REJECT if mediator or payoff is computed solely as threshold, excess, precision, overflow, residue, cap difference or scalar conversion of existing state."
+    },
+    {
+      "id": "X5_CARRIER_ONLY",
+      "predicate": "REJECT if replacing the proposed carrier with status, flag, UID, CardInst, trace, questScratch or save storage leaves producer, consumer, payoff and expiry unchanged."
+    },
+    {
+      "id": "X6_ROUTE_OR_POLICY",
+      "predicate": "REJECT if novelty depends on acquisition, ownership, offer/reward route, package assignment, selector, priority, optimiser or policy retuning rather than a new semantic transition."
+    },
+    {
+      "id": "X7_EXACT_EMBERGLASS",
+      "predicate": "REJECT AS NEW if producer is positive terminal Ember after canonical victory consumers, mediator is one durable carry, consumer is the next-combat post-start-relic boundary, payoff is one capped Ember and expiry is next start or run end."
+    },
+    {
+      "id": "X8_FROZEN_FAILURE",
+      "predicate": "REJECT if the work repairs, reruns, substitutes, extrapolates from or promotes emberglass-memory-one-carry after its zero-execution identity inconclusive."
+    },
+    {
+      "id": "X9_WARD_SPEND",
+      "predicate": "REJECT any Ward-spend threshold, policy, method, representation or rescue variant."
+    },
+    {
+      "id": "X10_UNOCCUPIED_ADMISSION",
+      "predicate": "Classify a slot as genuinely unoccupied only if accepted evidence supplies a complete materially new producer, mediator, consumer, payoff and lifecycle; current source supplies the required deterministic seams; and X1-X9 are all false. A storage or routing seam alone fails this predicate."
+    }
+  ],
+  "sourceFindings": [
+    {
+      "finding": "Combat start, victory, defeat, rewards, quests and durable questScratch already form authored transitions; their existence proves seams, not absent semantics.",
+      "effect": "They cannot independently establish an unoccupied slot."
+    },
+    {
+      "finding": "The mechanism-bearing content, domain combat, reward, quest, combat-state and run-state files retain the accepted hashes at current main; the intervening application change is map-layout caching.",
+      "effect": "Existing closure mappings remain source-relevant."
+    }
+  ],
+  "contractGaps": [],
+  "dissent": [
+    "Treating questScratch, pendingReward or another durable field as an open mechanism would confuse an available carrier with a new causal topology.",
+    "Treating C5 or an external-rule class as unoccupied would convert absence of admissible evidence into positive evidence.",
+    "Treating Emberglass as closed would overstate an identity run in which zero controlled scenarios completed."
+  ],
+  "nextSafeAction": {
+    "action": "Retain zero unoccupied slots under this bounded audit.",
+    "conditionForFurtherWork": "A new owner-authorised, frozen primary-semantic input must supply a materially new producer/consumer direction and complete causal topology before another zero-row closure audit.",
+    "prohibitedInference": "Do not derive that direction from source convenience, carrier availability, renamed values, optimiser output or the frozen Emberglass non-decision."
+  },
+  "claimBoundary": "This is futility for the present evidence-bounded slot census only. It does not universally close persistent mechanisms, select a product mechanic, relax a P9 gate, establish source identity, authorise rows, accept #421 or issue the #108 P9 receipt.",
+  "evidence": [
+    "archive:research/issue-421/summaries/post-810264c-private-causal-coverage-v1.json:3-28",
+    "archive:research/issue-421/summaries/post-810264c-private-causal-coverage-v1.json:44-142",
+    "archive:research/issue-421/summaries/post-810264c-private-causal-coverage-v1.json:143-228",
+    "archive:research/issue-421/summaries/post-810264c-private-causal-coverage-v1.json:252-275",
+    "archive:research/issue-421/summaries/post-37776ccc-product-semantic-h2-contract-closure-envelope-v1.md:35-61",
+    "archive:research/issue-421/summaries/post-37776ccc-product-semantic-background-audit-v1.md:41-79",
+    "archive:research/issue-421/summaries/post-9cc1496d-residual-action-trace-grammar-v2.json:1",
+    "archive:research/issue-421/summaries/post-c3762813-autonomous-closure-envelope-v1.json:1",
+    "archive:research/issue-421/summaries/post-c69b2752-persistent-contract-grammar-v1.json:1",
+    "archive:research/issue-421/protocols/post-c69b2752-persistent-contract-grammar-v1.json:78-95",
+    "archive:research/issue-421/summaries/post-7c8a3ee7-emberglass-source-identity-v1.json:2-20",
+    "archive:research/issue-421/publication-manifest-post-7c8a3ee7-emberglass-source-identity-v1.json:99-103",
+    "source:domain/rules/combat.gd:158-260",
+    "source:domain/rules/combat.gd:490-516",
+    "source:domain/state/run_state.gd:48-70",
+    "source:domain/state/run_state.gd:123-152",
+    "source:domain/rules/quests.gd:150-174",
+    "source:domain/rules/rewards.gd:80-109",
+    "source:application/main.gd:2223-2317",
+    "source:application/main.gd:2354-2448"
+  ]
+}

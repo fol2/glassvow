@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "kind": "post-inconclusive-authority-exhaustion-audit",
+  "state": "HUMAN_AUTHORITY_DECISION_REQUIRED",
+  "resolvedMain": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "currentMainInstructions": {
+    "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+    "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+    ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8"
+  },
+  "taskSsot": {
+    "issueBodyRawApiSha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "issueBodyWithTerminalLfSha256": "c1bfb91aacb7ae79f95428d822e554f06e910063d254d2889089a5d201ddcb42",
+    "state": "open",
+    "labelsBeforeDecisionPackage": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "controllingAuthority": {
+    "commentId": 5468704389,
+    "commentBodySha256": "fca3a0142f3a7e55457b448a7acecab69bb14407005bc1c6354e5b740c297dd7",
+    "selectedClass": "C5_NEW_PERSISTENT_RUN_OR_PRESENTATION_CONTRACT",
+    "maximumSelectedContracts": 1,
+    "negativeOrInconclusiveRule": "A negative gate closes this bounded Option 2 class or records inconclusive at cap; it does not create a successor, widen the grammar or return to adaptive candidate-by-candidate tuning."
+  },
+  "immutableResult": {
+    "selectedContract": "emberglass-memory-one-carry",
+    "protocolSha256": "b08e185903bbd0fdbf3b4cc29b065b9483e91b6e835ef6239d079537c47e4ef2",
+    "summarySha256": "c943bacb14b4e739b58f212404e87014b040c24bb53e4af122bdd347be068c9d",
+    "executionAuditSha256": "0bfbc895c968619e582008e38fc21d9ed199b34d728e2988945b46b490ec4866",
+    "resultCommentId": 5469013460,
+    "resultCommentBodySha256": "5b491b33ef1b50db8b9b6ceb57a89b1e226bdadaddb7756ad2abfdc5dfd8624f",
+    "outcome": "INCONCLUSIVE_AT_PREREGISTERED_CAP",
+    "fault": "FROZEN_PLAN_PATH_UNAVAILABLE_IN_BOTH_EXECUTION_WORKTREES",
+    "rootCause": "The runner supplied publication-relative plan and output paths while Godot resolved them from each execution worktree.",
+    "identityGateEvaluated": false,
+    "scientificClaimAvailable": false,
+    "exactContractState": "immutable inconclusive non-decision evidence"
+  },
+  "narrowerCorrectionRule": {
+    "currentIssueDefault": "A separately versioned pre-row mechanical correction is permitted only absent a narrower family rule.",
+    "familyRulePresent": true,
+    "protocolCorrectionCap": 0,
+    "postFreezeCorrectionsUsed": 0,
+    "correctionBudgetExhaustedAtCap": true,
+    "protocolNoRepairRule": "No source, row, seed, whitelist, threshold, process or order correction is permitted after publication.",
+    "resultDisposition": "No repair, rerun, substitution or promotion is authorised.",
+    "automaticCorrectionAuthorised": false
+  },
+  "postResultSafeAlternativeAudit": {
+    "role": "Advisory only; these read-only reports do not retrospectively alter the protocol or supply stop/go authority.",
+    "sourceAudit": {
+      "path": "reviews/post-dcfebf9f-option2-authority-h1-source-v1.json",
+      "sha256": "17d37af8726b40b00d2f78bcb9dd6564b7fc9d5ec7758a045e476bb1ef875718",
+      "verdict": "FUTILITY",
+      "eligibleContracts": 0
+    },
+    "aliasAudit": {
+      "path": "reviews/post-dcfebf9f-option2-authority-h2-alias-v1.json",
+      "sha256": "700275dae2bbc236984589593f47b594a75443592c04323ae3c3d0d92712e793",
+      "verdict": "FUTILITY",
+      "genuinelyUnoccupiedTopologies": 0
+    },
+    "policyAudit": {
+      "path": "reviews/post-dcfebf9f-option2-authority-h3-policy-v1.json",
+      "sha256": "97de75c1df8057d8038a935511d3f331a3a1bc5be7fd76d28d67b1c407e57aaa",
+      "verdict": "FUTILITY",
+      "eligibleTopologies": 0,
+      "mlRlAuthorised": false
+    },
+    "safeClaimRelevantAlternativeCount": 0
+  },
+  "deterministicDecision": {
+    "rule": "Require a human-authority decision when the relevant gate is inconclusive, its narrower correction cap is exhausted, exact-contract repair and rerun are prohibited, substitution and grammar widening are prohibited, and no safe evidence-backed alternative remains.",
+    "predicates": {
+      "relevantGateInconclusive": true,
+      "narrowerCorrectionCapExhausted": true,
+      "repairOrRerunAuthorised": false,
+      "substitutionOrWideningAuthorised": false,
+      "safeEvidenceBackedAlternatives": 0
+    },
+    "eligibleAutonomousActions": 0,
+    "outcome": "ESCALATE_ONE_CONCISE_HUMAN_AUTHORITY_PACKAGE"
+  },
+  "recommendedMinimumAuthorityDelta": {
+    "id": "AUTHORISE_ONE_EMBERGLASS_V2_MECHANICAL_CORRECTION",
+    "preserveV1": true,
+    "maximumCorrectedVersions": 1,
+    "onlyPermittedImplementationChange": "Resolve the already-frozen plan and output paths to absolute paths before each Godot invocation.",
+    "mustRemainIdentical": [
+      "scientific question",
+      "selected Emberglass contract",
+      "source and candidate projection",
+      "design matrix and row identities",
+      "baseline",
+      "policy and seed identities",
+      "Godot binary provenance",
+      "estimands",
+      "budgets",
+      "gates and thresholds",
+      "success, futility and inconclusive rules"
+    ],
+    "furtherCorrectionAllowance": 0,
+    "candidateSubstitution": false,
+    "grammarWidening": false,
+    "simulatorOrProtectedSeedAuthority": false
+  },
+  "scientificAccounting": {
+    "plannedControlledScenarioExecutions": 40,
+    "GodotProcessInvocations": 2,
+    "completedProbeOutputs": 0,
+    "directControlledExecutions": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "deliveryBranches": 0,
+    "pullRequests": 0,
+    "actionsRuns": 0
+  },
+  "safeState": {
+    "issue421Accepted": false,
+    "issue108P9Receipted": false,
+    "productMainMutated": false,
+    "developmentCheckoutMutated": false
+  },
+  "claimBoundary": "This audit proves only that current Option 2 authority contains no legal autonomous action after the immutable zero-execution Emberglass inconclusive. It does not establish source identity, close Emberglass scientifically, close all persistent mechanisms, select product scope, change P9, accept #421 or issue the #108 P9 receipt."
+}
