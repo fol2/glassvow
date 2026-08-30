@@ -7,7 +7,9 @@ const STATE_COLD: StringName = &"cold"
 const STATE_OPEN: StringName = &"open"
 const STATE_WALKED: StringName = &"walked"
 const SAMPLE_SPACING_M: float = 0.80
-const SURFACE_LIFT_M: float = 0.055
+## The shared production road crown reaches 0.383 m after its runtime scale;
+## 0.44 keeps this 0.065 m bead just above it while depth testing stays active.
+const SURFACE_LIFT_M: float = 0.44
 const BEAD_RADIUS_M: float = 0.10
 const BEAD_HEIGHT_M: float = 0.065
 const MAX_INSTANCES: int = 128
