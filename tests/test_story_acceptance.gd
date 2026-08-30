@@ -8,6 +8,7 @@ const VIGIL_PATH: String = "user://test_story_acceptance_vigil_v2.json"
 const DEV_RUN: String = "user://test_story_acceptance_dev_run_v2.json"
 const DEV_VIGIL: String = "user://test_story_acceptance_dev_vigil_v2.json"
 const DEV_REF: String = "user://test_story_acceptance_dev_scenario.json"
+const MapCompose: GDScript = preload("res://tests/test_map_compose.gd")
 const BUILD: String = "test-356-sha"
 const LOCALES: Array[StringName] = [Locale.CODE_EN, Locale.CODE_ZH_HANT]
 const ACT4_SCENES: PackedStringArray = [
@@ -705,6 +706,7 @@ static func _main(content: ContentDB) -> Main:
 	SaveService.clear(RUN_PATH)
 	SaveService.clear_vigil(VIGIL_PATH)
 	var main: Main = Main.new()
+	main._map_layout_compile = MapCompose.fake_layout_compile()
 	main.content = content
 	main._run_save_path = RUN_PATH
 	main._vigil_save_path = VIGIL_PATH

@@ -30,6 +30,7 @@ static func run(fails: Array[String]) -> void:
 	_input(fails)
 	_materials(fails)
 	_asset_binding(fails)
+	_compiled_layout(fails)
 	_palette(fails)
 
 
@@ -308,6 +309,179 @@ static func _asset_binding(fails: Array[String]) -> void:
 			and scene.find_child("MapAssetGeometry", true, false) is Node3D,
 			"act switch frees the prior geometry root before replacing it")
 	scene.free()
+
+
+static func _compiled_layout(fails: Array[String]) -> void:
+	var fake: FakeAssetLoader = FakeAssetLoader.new()
+	var scene: MapScene = MapScene.new({}, Callable(fake, "load_resource"))
+	scene.set_scatter_salt(814)
+	for method: StringName in [
+		&"layout_asset_bundle", &"layout_hero_contract", &"bind_layout",
+		&"layout_digest", &"layout_input_digest", &"road_segments",
+		&"layout_diagnostics", &"layout_failure",
+	]:
+		if not scene.has_method(method):
+			_check(fails, false, "MapScene supplies compiled-layout method %s" % method)
+			scene.free()
+			return
+	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
+		"res://docs/map/map-quality-v2.json"))
+	var assets: Dictionary = scene.call(&"layout_asset_bundle")
+	var contract: Dictionary = scene.call(&"layout_hero_contract")
+	var terminus_anchor: Dictionary = contract.get("anchors", {}).get(
+		"terminus", {})
+	var vigil_anchor: Dictionary = contract.get("anchors", {}).get("vigil", {})
+	_check(fails, _v3(terminus_anchor.get("position", Vector3.ZERO))
+			.is_equal_approx(Vector3(40.4, 0.0, 0.0)),
+		"terminus keeps the selected one-decimal screen-feasibility calibration")
+	_check(fails, _v3(vigil_anchor.get("scale", Vector3.ZERO))
+			.is_equal_approx(Vector3.ONE * 6.9),
+		"Vigil keeps the shared two-seed screen-feasibility calibration")
+	var candidates: PackedVector3Array = scene.prop_positions()
+	_check(fails, not assets.is_empty() and not contract.is_empty()
+			and candidates.size() > 2,
+		"live MapScene exposes the active profile and hero authority")
+	if assets.is_empty() or contract.is_empty() or candidates.size() <= 2:
+		scene.free()
+		return
+	var a: Vector3 = candidates[0]
+	var b: Vector3 = candidates[candidates.size() - 1]
+	var bend_a: Vector3 = a.lerp(b, 0.35) + Vector3(0.0, 2.0, 4.0)
+	var bend_b: Vector3 = a.lerp(b, 0.65) + Vector3(0.0, 2.0, 4.0)
+	var edge_id: String = MapLayoutInput.edge_id("A", "B")
+	var result: MapLayoutResult = MapLayoutResult.create({
+		"schema_version": MapLayoutResult.SCHEMA_VERSION,
+		"generator_version": MapLayoutCompiler.VERSION,
+		"node_anchors": {"A": _a3(a), "B": _a3(b)},
+		"edges": {edge_id: {
+			"from": "A", "to": "B",
+			"centerline": [_a3(a), _a3(bend_a), _a3(bend_b), _a3(b)],
+			"corridor_width": 2.5,
+		}},
+		"hero_placements": _hero_placements(contract),
+		"scenery_instances": {},
+		"hard_measurements": {}, "soft_scores": {},
+		"selected_restart_id": 0, "selected_candidate_id": "test/detour",
+		"input_digest": "a".repeat(64),
+	})
+	var live_v: Variant = scene.call(&"bind_layout", result, quality)
+	var live: MapLayoutResult = live_v if live_v is MapLayoutResult else null
+	_check(fails, live != null and str(scene.call(&"layout_digest")) == live.digest()
+			and str(scene.call(&"layout_input_digest")) == "a".repeat(64),
+		"MapScene binds one final live result and exposes its exact digests")
+	if live != null:
+		var segments: PackedVector3Array = scene.call(&"road_segments")
+		var has_grade: bool = false
+		var has_chord: bool = false
+		for i: int in range(0, segments.size(), 2):
+			has_grade = has_grade or not is_zero_approx(segments[i].y) \
+				or not is_zero_approx(segments[i + 1].y)
+			has_chord = has_chord or (segments[i].is_equal_approx(a) \
+				and segments[i + 1].is_equal_approx(b))
+		_check(fails, segments.size() == 6 and has_grade and not has_chord,
+			"road legs preserve canonical centreline Y and omit the forbidden chord")
+		var data: Dictionary = live.to_dict()
+		var accepted: Dictionary = data["scenery_instances"]
+		_check(fails, not accepted.is_empty() and accepted.size() < candidates.size(),
+			"existing deterministic seats are filtered rather than regenerated")
+		_check(fails, _scenery_clears(accepted, data, contract, assets, quality),
+			"every published scenery transform clears nodes, roads, heroes and peers")
+		var diagnostics: Dictionary = scene.call(&"layout_diagnostics")
+		var accepted_count: int = MapLayoutCanonical.int_value(
+			diagnostics.get("accepted_count", -1))
+		var candidate_count: int = MapLayoutCanonical.int_value(
+			diagnostics.get("candidate_count", -1))
+		var diagnostic_digest: String = str(diagnostics.get("layout_digest", ""))
+		var diagnostic_scenery: Dictionary = diagnostics.get("scenery_instances", {})
+		_check(fails, accepted_count == accepted.size()
+				and candidate_count == candidates.size()
+				and diagnostic_digest == live.digest()
+				and diagnostic_scenery == accepted,
+			"the live diagnostics publish the same accepted placement authority")
+	var rejected_v: Variant = scene.call(&"bind_layout", null, quality)
+	var cleared: PackedVector3Array = scene.call(&"road_segments")
+	var failure: Dictionary = scene.call(&"layout_failure")
+	_check(fails, rejected_v == null and cleared.is_empty() and not failure.is_empty(),
+		"an invalid compiled result fails explicitly and clears the compiled road")
+	scene.free()
+
+
+static func _hero_placements(contract: Dictionary) -> Dictionary:
+	var out: Dictionary = {}
+	var anchors: Dictionary = contract["anchors"]
+	for id: String in MapLayoutCanonical.sorted_keys(anchors):
+		var anchor: Dictionary = anchors[id]
+		out[id] = {
+			"asset_id": anchor["asset_id"], "profile_id": anchor["profile_id"],
+			"transform": {
+				"origin": anchor["position"], "yaw_radians": anchor["yaw_radians"],
+				"scale": anchor["scale"],
+			},
+		}
+	return out
+
+
+static func _scenery_clears(accepted: Dictionary, data: Dictionary,
+		contract: Dictionary, assets: Dictionary, quality: Dictionary) -> bool:
+	var footprints: Array[PackedVector2Array] = []
+	var epsilon: float = MapLayoutCanonical.float_value(quality["epsilon"]["world_m"])
+	var road_clearance: float = MapLayoutCanonical.float_value(
+		quality["geometry"]["road_corridor"]["world_clearance_m"])
+	var helper: MapAssetProfiles = MapAssetProfiles.new(MapQualityEvaluator.EMPTY_MANIFEST)
+	var profiles: Dictionary = assets["profiles"]
+	for id: String in MapLayoutCanonical.sorted_keys(accepted):
+		var row: Dictionary = accepted[id]
+		var transform: Dictionary = row["transform"]
+		var profile: Dictionary = profiles[row["profile_id"]]
+		var footprint: PackedVector2Array = helper.transformed_footprint(
+			profile, _v3(transform["origin"]),
+			rad_to_deg(MapLayoutCanonical.float_value(transform["yaw_radians"])),
+			_v3(transform["scale"]))
+		if footprint.is_empty():
+			return false
+		for anchor_v: Variant in data["node_anchors"].values():
+			if MapQualityEvaluator._polygon_distance(footprint,
+					MapQualityEvaluator._node_world(_v3(anchor_v), quality)) <= epsilon:
+				return false
+		for edge_v: Variant in data["edges"].values():
+			var edge: Dictionary = edge_v
+			var points: Array = edge["centerline"]
+			var reserve: float = MapLayoutCanonical.float_value(edge["corridor_width"]) \
+				* 0.5 + road_clearance
+			for i: int in range(points.size() - 1):
+				if MapQualityEvaluator._segment_polygon(_xz(points[i]), _xz(points[i + 1]),
+						footprint) < reserve - epsilon:
+					return false
+		var zones: Dictionary = contract["protected_zones"]
+		for zone_id: String in MapLayoutCanonical.sorted_keys(zones):
+			var zone: Dictionary = zones[zone_id]
+			var padding: float = MapLayoutCanonical.float_value(
+				quality["geometry"]["%s_protected_zone" % zone["role"]]["padding_m"])
+			if MapQualityEvaluator._polygon_distance(footprint,
+					MapQualityEvaluator._poly(zone["polygon"])) < padding - epsilon:
+				return false
+		for prior: PackedVector2Array in footprints:
+			if MapQualityEvaluator._polygon_distance(footprint, prior) <= epsilon:
+				return false
+		footprints.append(footprint)
+	return true
+
+
+static func _a3(value: Vector3) -> Array[float]:
+	return [value.x, value.y, value.z]
+
+
+static func _v3(value: Variant) -> Vector3:
+	if value is Vector3:
+		return value
+	var row: Array = value
+	return Vector3(MapLayoutCanonical.float_value(row[0]),
+		MapLayoutCanonical.float_value(row[1]), MapLayoutCanonical.float_value(row[2]))
+
+
+static func _xz(value: Variant) -> Vector2:
+	var point: Vector3 = _v3(value)
+	return Vector2(point.x, point.z)
 
 
 static func _override(scene: MapScene, node_name: String) -> ShaderMaterial:

@@ -20,6 +20,9 @@ var _pending_language: StringName = &""
 var _route_checkpoint_quarantined: bool = false
 ## Exact live route constructor; durable resume reconstructs the initial route.
 var _route_rebuilder: Callable = Callable()
+var _map_layout_compile: Callable = Callable()
+var _map_layout_input_digest: String = ""
+var _map_layout_packet: Variant = null
 var _map_screen: WorldMapScreen = null
 var _choice_screen: Control = null
 var _reward_screen: RewardScreen = null
@@ -1356,6 +1359,18 @@ func _quarantine_route() -> bool:
 	return false
 # ---------------------------------------------------------------- map
 
+func _compile_map_layout(input: MapLayoutInput, quality: Dictionary,
+		assets: Dictionary) -> Variant:
+	var input_digest: String = input.digest()
+	if input_digest == _map_layout_input_digest:
+		return _map_layout_packet
+	_map_layout_input_digest = input_digest
+	_map_layout_packet = _map_layout_compile.call(input, quality, assets) \
+		if _map_layout_compile.is_valid() \
+		else MapLayoutCompiler.compile(input, quality, assets)
+	return _map_layout_packet
+
+
 func _show_map() -> void:
 	_remember_route(_show_map)
 	_apply_pending_content_hydration()
@@ -1363,6 +1378,9 @@ func _show_map() -> void:
 		_transitions.wipe()
 	_clear_route()
 	_map_screen = WorldMapScreen.new(_map, content, _shape)
+	# ponytail: retain only the current identity; add a cache only if routes can
+	# revisit older semantic identities.
+	_map_screen._layout_compile = _compile_map_layout
 	_map_screen.node_chosen.connect(_on_node_chosen)
 	_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
 	_map_screen.before_pick = _on_map_before_pick

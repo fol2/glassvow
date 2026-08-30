@@ -47,6 +47,9 @@ const SKY: Color = Color(0.018, 0.022, 0.045)
 ## More separation than this cannot come from moving the building. It needs the
 ## opening zoom stop, `LEAD_X`, or the `act1-vigil` profile scale to give.
 const THRESHOLD_XZ: Vector2 = Vector2(-41.3, 6.5)
+## Smallest one-decimal road-axis calibration whose real transformed silhouette
+## clears the fixed boss across every governed screen profile (#474).
+const TERMINUS_XZ: Vector2 = Vector2(40.4, 0.0)
 ## Turned so the gable is seen in three-quarter rather than edge-on. The hall
 ## is authored with its gable facing +X, down the road; the camera looks along
 ## -Z, so unturned the player sees the length of the flank and the end of the
@@ -57,8 +60,8 @@ const THRESHOLD_XZ: Vector2 = Vector2(-41.3, 6.5)
 ## 0.743) where the parametric one it replaced was authored at 10.9 m long and
 ## shrunk by 0.78. Matching that one's world height wanted 9.7, and at 9.7 the
 ## opening frame cuts the hall off at its left edge — the same failure
-## THRESHOLD_XZ was moved to fix. 7.0 keeps it whole: 6.9 m long, a 5.4 m ridge
-## and 6.5 m to the top of the smoke, so it stands among the 6.2 m ash trunks
+## THRESHOLD_XZ was moved to fix. 6.9 keeps it whole: 6.8 m long, a 5.3 m ridge
+## and 6.4 m to the top of the smoke, so it stands among the 6.2 m ash trunks
 ## rather than over them, and the doorway is legible at the played zoom.
 # World scale comes from the act1-vigil profile.
 ## Metres between paving slabs along a road segment.
@@ -100,11 +103,20 @@ var _world: Node3D
 var _asset_geometry: Node3D
 var _asset_profiles: MapAssetProfiles
 var _active_profile_digest: String = ""
+var _active_profiles: Dictionary = {}
+var _kit_meshes: Array[Mesh] = []
+var _kit_profiles: Array[Dictionary] = []
+var _kit_ids: PackedStringArray = PackedStringArray()
+var _terminus_id: String = ""
+var _threshold_id: String = ""
 var _road_meshes: Array[Mesh] = []
 var _road_profiles: Array[Dictionary] = []
 ## Flat list of segment endpoints (a, b, a, b, ...) in world XZ, handed down by
 ## the screen that owns the graph. MapScene stays instantiable without one.
 var _road_segments: PackedVector3Array = PackedVector3Array()
+var _layout_result: MapLayoutResult = null
+var _layout_diagnostics: Dictionary = {}
+var _layout_failure: Dictionary = {}
 var _act: int = -1
 var _dragging: bool = false
 var _lock_input: bool = false
@@ -218,6 +230,73 @@ func asset_profile_digest() -> String:
 	return _active_profile_digest
 
 
+func layout_asset_bundle() -> Dictionary:
+	if _active_profile_digest.is_empty() or _active_profiles.is_empty():
+		return {}
+	return {
+		"profiles": _active_profiles.duplicate(true),
+		"digest": _active_profile_digest,
+	}
+
+
+func layout_hero_contract() -> Dictionary:
+	if _terminus_id.is_empty() or not _active_profiles.has(_terminus_id):
+		return {}
+	var anchors: Dictionary = {}
+	var zones: Dictionary = {}
+	_add_hero_contract(anchors, zones, "terminus", _terminus_id,
+		Vector3(TERMINUS_XZ.x, 0.0, TERMINUS_XZ.y))
+	if not _threshold_id.is_empty() and _active_profiles.has(_threshold_id):
+		_add_hero_contract(anchors, zones, "vigil", _threshold_id,
+			Vector3(THRESHOLD_XZ.x, 0.0, THRESHOLD_XZ.y))
+	return {
+		"schema_version": MapLayoutInput.HERO_ANCHOR_SCHEMA_VERSION,
+		"anchors": MapLayoutCanonical.ordered_dictionary(anchors),
+		"protected_zones": MapLayoutCanonical.ordered_dictionary(zones),
+	}
+
+
+func layout_digest() -> String:
+	return "" if _layout_result == null else _layout_result.digest()
+
+
+func layout_input_digest() -> String:
+	return "" if _layout_result == null else str(
+		_layout_result.to_dict().get("input_digest", ""))
+
+
+func layout_diagnostics() -> Dictionary:
+	return _layout_diagnostics.duplicate(true)
+
+
+func layout_failure() -> Dictionary:
+	return _layout_failure.duplicate(true)
+
+
+func road_segments() -> PackedVector3Array:
+	return _road_segments.duplicate()
+
+
+func _add_hero_contract(anchors: Dictionary, zones: Dictionary, role: String,
+		profile_id: String, position: Vector3) -> void:
+	var profile: Dictionary = _active_profiles[profile_id]
+	var yaw_degrees: float = _asset_profiles.fixed_yaw(profile)
+	var scale: Vector3 = Vector3.ONE * _asset_profiles.default_scale(profile)
+	var polygon: PackedVector2Array = _asset_profiles.transformed_footprint(
+		profile, position, yaw_degrees, scale)
+	if polygon.is_empty():
+		return
+	var plain: Array = []
+	for point: Vector2 in polygon:
+		plain.append([point.x, point.y])
+	anchors[role] = {
+		"asset_id": profile_id, "profile_id": profile_id,
+		"position": _a3(position), "yaw_radians": deg_to_rad(yaw_degrees),
+		"scale": _a3(scale),
+	}
+	zones["%s-zone" % role] = {"role": role, "polygon": plain}
+
+
 ## Bind this act's grade + ramp bands. `MapRegions.for_act` is the only
 ## palette source; content theme is not consulted. Re-arms freeze so the
 ## new look paints once.
@@ -249,6 +328,14 @@ func project_pins(nodes: Array[MapNode]) -> PackedVector2Array:
 	return _projection().seats(nodes)
 
 
+func project_anchors(anchors: PackedVector3Array) -> PackedVector2Array:
+	var out: PackedVector2Array = PackedVector2Array()
+	var projection: MapPinProjection = _projection()
+	for anchor: Vector3 in anchors:
+		out.append(projection.to_screen(anchor))
+	return out
+
+
 func hit_test(screen: Vector2) -> Vector3:
 	return _projection().hit_world(screen)
 
@@ -267,6 +354,21 @@ func pin_at(screen: Vector2, nodes: Array[MapNode], radius: float) -> int:
 		if d < best_d:
 			best = i
 			best_d = d
+	return best
+
+
+func anchor_at(screen: Vector2, anchors: PackedVector3Array, radius: float) -> int:
+	var seats: PackedVector2Array = project_anchors(anchors)
+	var world: Vector3 = hit_test(screen)
+	var best: int = -1
+	var best_d: float = INF
+	for i: int in range(anchors.size()):
+		if i >= seats.size() or seats[i].distance_to(screen) > radius:
+			continue
+		var distance: float = anchors[i].distance_to(world)
+		if distance < best_d:
+			best = i
+			best_d = distance
 	return best
 
 
@@ -489,30 +591,128 @@ func _add_multimesh(world: Node3D, node_name: String, mesh: Mesh,
 	multimesh.instance_count = positions.size()
 	for i: int in range(positions.size()):
 		var index: int = first_index + i
-		var angle: float = float(index) * 1.117
-		var scale: Vector3 = Vector3(
-				0.82 + 0.09 * float(index % 4),
-				0.86 + 0.08 * float((index + 2) % 3),
-				0.84 + 0.07 * float((index + 1) % 4))
-		if node_name == "StackedSlabs" and i % 2 == 1:
-			scale *= 0.76
-		# POC: every kit GLB is authored at unit scale -- an ash-trunk-fork is
-		# 0.9 x 1.0 x 0.48 metres. Placed raw into a frame the camera covers at
-		# ortho size 20, a tree is 5% of the frame height, which is the whole
-		# reason the map reads as empty ground with specks on it.
-		scale *= unit_scale
-		var basis: Basis = Basis(Vector3.UP, angle).scaled(scale)
-		multimesh.set_instance_transform(i, Transform3D(basis, positions[i]))
-		multimesh.set_instance_custom_data(i, Color(
-				fposmod(float(index) * 0.173, 1.0),
-				fposmod(float(index) * 0.317, 1.0),
-				fposmod(float(index) * 0.619, 1.0), 1.0))
+		multimesh.set_instance_transform(i, _dressed_transform(index, positions[i],
+			unit_scale, node_name == "StackedSlabs" and i % 2 == 1))
+		multimesh.set_instance_custom_data(i, _custom_data(index))
 	var instances: MultiMeshInstance3D = MultiMeshInstance3D.new()
 	instances.name = node_name
 	instances.multimesh = multimesh
 	instances.material_override = _materials.prop
 	instances.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	world.add_child(instances)
+
+
+func _dressed_transform(index: int, position: Vector3, unit_scale: float,
+		stacked: bool = false) -> Transform3D:
+	var scale: Vector3 = Vector3(
+		0.82 + 0.09 * float(index % 4),
+		0.86 + 0.08 * float((index + 2) % 3),
+		0.84 + 0.07 * float((index + 1) % 4))
+	if stacked:
+		scale *= 0.76
+	# Every kit GLB is unit-scale; the profile supplies its authored world size.
+	scale *= unit_scale
+	return Transform3D(Basis(Vector3.UP, float(index) * 1.117).scaled(scale), position)
+
+
+func _custom_data(index: int) -> Color:
+	return Color(
+		fposmod(float(index) * 0.173, 1.0),
+		fposmod(float(index) * 0.317, 1.0),
+		fposmod(float(index) * 0.619, 1.0), 1.0)
+
+
+func _scenery_candidates() -> Dictionary:
+	var out: Dictionary = {}
+	if _kit_meshes.size() < 3 or _kit_profiles.size() != _kit_meshes.size() \
+			or _kit_ids.size() != _kit_meshes.size():
+		return out
+	var local_counts: Dictionary = {}
+	var positions: PackedVector3Array = _all_prop_positions()
+	var kinds: int = _kit_meshes.size() - 2
+	for seat: int in range(positions.size()):
+		var kit: int = seat_kit(seat, kinds)
+		var local: int = MapLayoutCanonical.int_value(local_counts.get(kit, 0))
+		local_counts[kit] = local + 1
+		var dress_index: int = kit * 7 + _dress_salt() + local
+		var transform: Transform3D = _dressed_transform(dress_index, positions[seat],
+			_asset_profiles.default_scale(_kit_profiles[kit]))
+		var candidate_id: String = "seat-%03d" % seat
+		out[candidate_id] = {
+			"dress_index": dress_index,
+			"placement": {
+				"asset_id": _kit_ids[kit], "profile_id": _kit_ids[kit],
+				"transform": {
+					"origin": _a3(transform.origin),
+					"yaw_radians": float(dress_index) * 1.117,
+					"scale": _a3(transform.basis.get_scale()),
+				},
+				"semantic_zone": "existing-seat",
+			},
+		}
+	return MapLayoutCanonical.ordered_dictionary(out)
+
+
+func _placement_footprint(candidate: Dictionary) -> PackedVector2Array:
+	var placement: Dictionary = candidate["placement"]
+	var transform: Dictionary = placement["transform"]
+	var profile_id: String = str(placement["profile_id"])
+	if not _active_profiles.has(profile_id):
+		return PackedVector2Array()
+	var profile: Dictionary = _active_profiles[profile_id]
+	return _asset_profiles.transformed_footprint(
+		profile, _v3(transform["origin"]),
+		rad_to_deg(MapLayoutCanonical.float_value(transform["yaw_radians"])),
+		_v3(transform["scale"]))
+
+
+func _place_scenery(placements: Dictionary) -> void:
+	if _asset_geometry == null or _kit_meshes.size() < 3:
+		return
+	var candidates: Dictionary = _scenery_candidates()
+	for kit: int in range(2, _kit_meshes.size()):
+		var node_name: String = "AssetKit%02d" % kit
+		var stale: Node = _asset_geometry.find_child(node_name, false, false)
+		if stale != null:
+			_asset_geometry.remove_child(stale)
+			stale.free()
+		var records: Array[Dictionary] = []
+		for candidate_id: String in MapLayoutCanonical.sorted_keys(placements):
+			var placement: Dictionary = placements[candidate_id]
+			if str(placement["profile_id"]) != _kit_ids[kit]:
+				continue
+			var candidate: Dictionary = candidates.get(candidate_id, {})
+			if candidate.is_empty():
+				continue
+			records.append({
+				"placement": placement,
+				"dress_index": candidate["dress_index"],
+			})
+		_add_layout_multimesh(node_name, _kit_meshes[kit], records)
+
+
+func _add_layout_multimesh(node_name: String, mesh: Mesh,
+		records: Array[Dictionary]) -> void:
+	var multimesh: MultiMesh = MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.use_custom_data = true
+	multimesh.mesh = mesh
+	multimesh.instance_count = records.size()
+	for i: int in range(records.size()):
+		var placement: Dictionary = records[i]["placement"]
+		var transform: Dictionary = placement["transform"]
+		var yaw: float = MapLayoutCanonical.float_value(transform["yaw_radians"])
+		var basis: Basis = Basis(Vector3.UP, yaw).scaled(_v3(transform["scale"]))
+		multimesh.set_instance_transform(i,
+			Transform3D(basis, _v3(transform["origin"])))
+		multimesh.set_instance_custom_data(i,
+			_custom_data(MapLayoutCanonical.int_value(records[i]["dress_index"])))
+	var instances: MultiMeshInstance3D = MultiMeshInstance3D.new()
+	instances.name = node_name
+	instances.multimesh = multimesh
+	instances.material_override = _materials.prop
+	instances.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_asset_geometry.add_child(instances)
 
 
 ## Swap placeholder geometry only after all eight kits and the terminus resolve.
@@ -526,7 +726,17 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 		_asset_geometry = null
 	_road_meshes.clear()
 	_road_profiles.clear()
+	_kit_meshes.clear()
+	_kit_profiles.clear()
+	_kit_ids = PackedStringArray()
+	_active_profiles.clear()
 	_active_profile_digest = ""
+	_terminus_id = ""
+	_threshold_id = ""
+	_layout_result = null
+	_layout_diagnostics.clear()
+	_layout_failure.clear()
+	_road_segments = PackedVector3Array()
 	# Nothing is standing yet, so nothing is worth stepping aside for. An act
 	# whose geometry fails to resolve must not leave the previous act's
 	# footprints pushing this act's nodes around.
@@ -594,6 +804,13 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	_active_profile_digest = _asset_profiles.digest(active_profiles)
 	if _active_profile_digest.is_empty():
 		return
+	for profile: Dictionary in active_profiles:
+		_active_profiles[str(profile["asset_id"])] = profile
+	_kit_meshes.assign(meshes)
+	_kit_profiles.assign(profiles)
+	_kit_ids = kit_ids.duplicate()
+	_terminus_id = terminus_id
+	_threshold_id = str(assets.get("threshold_id", "")) if threshold_mesh != null else ""
 	_asset_geometry = Node3D.new()
 	_asset_geometry.name = "MapAssetGeometry"
 	_world.add_child(_asset_geometry)
@@ -623,7 +840,7 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	terminus.name = "AssetTerminus"
 	terminus.mesh = terminus_mesh
 	# Just past the boss, which is lattice row 14 col 3 = world (36, 0, 0).
-	terminus.position = Vector3(40.0, 0.0, 0.0)
+	terminus.position = Vector3(TERMINUS_XZ.x, 0.0, TERMINUS_XZ.y)
 	terminus.scale = Vector3.ONE * _asset_profiles.default_scale(terminus_profile)
 	terminus.material_override = _materials.prop
 	terminus.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -663,6 +880,122 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	_build_road()
 	_set_placeholders_visible(false)
 	_repaint()
+
+
+## Bind the compiler result at the renderer boundary. The existing dealt seats
+## remain the only candidate pool; this pass can only remove unsafe instances.
+func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutResult:
+	if compiled == null:
+		return _fail_layout("compiled result is null")
+	if _active_profiles.is_empty() or layout_hero_contract().is_empty():
+		return _fail_layout("active map asset profiles are incomplete")
+	var data: Dictionary = compiled.identity_dict()
+	var candidates: Dictionary = _scenery_candidates()
+	var accepted: Dictionary = {}
+	var accepted_footprints: Array[PackedVector2Array] = []
+	var rejections: Array[Dictionary] = []
+	var contract: Dictionary = layout_hero_contract()
+	for candidate_id: String in MapLayoutCanonical.sorted_keys(candidates):
+		var candidate: Dictionary = candidates[candidate_id]
+		var footprint: PackedVector2Array = _placement_footprint(candidate)
+		var rejection: Dictionary = _scenery_rejection(
+			footprint, accepted_footprints, data, contract, quality)
+		if not rejection.is_empty():
+			rejection["candidate_id"] = candidate_id
+			rejections.append(rejection)
+			continue
+		accepted[candidate_id] = candidate["placement"]
+		accepted_footprints.append(footprint)
+	data["scenery_instances"] = MapLayoutCanonical.ordered_dictionary(accepted)
+	var final_result: MapLayoutResult = MapLayoutResult.create(data)
+	if final_result == null:
+		return _fail_layout("filtered result is invalid")
+	_layout_result = final_result
+	_layout_failure.clear()
+	var edges: Dictionary = data["edges"]
+	_road_segments = _flatten_edges(edges)
+	_layout_diagnostics = {
+		"status": "BOUND",
+		"input_digest": str(data["input_digest"]),
+		"layout_digest": final_result.digest(),
+		"candidate_count": candidates.size(),
+		"accepted_count": accepted.size(),
+		"rejected_count": rejections.size(),
+		"scenery_instances": data["scenery_instances"],
+		"rejections": rejections,
+	}
+	_place_scenery(accepted)
+	_build_road()
+	_repaint()
+	return final_result
+
+
+func _fail_layout(reason: String) -> MapLayoutResult:
+	_layout_result = null
+	_layout_failure = {
+		"kind": "compiled_layout", "id": "live_map", "reason": reason,
+	}
+	_layout_diagnostics = {"status": "FAILED", "failure": _layout_failure.duplicate(true)}
+	_road_segments = PackedVector3Array()
+	_place_scenery({})
+	_build_road()
+	_repaint()
+	return null
+
+
+func _flatten_edges(edges: Dictionary) -> PackedVector3Array:
+	var out: PackedVector3Array = PackedVector3Array()
+	for edge_id: String in MapLayoutCanonical.sorted_keys(edges):
+		var edge: Dictionary = edges[edge_id]
+		var points: Array = edge["centerline"]
+		for i: int in range(points.size() - 1):
+			out.append(_v3(points[i]))
+			out.append(_v3(points[i + 1]))
+	return out
+
+
+func _scenery_rejection(footprint: PackedVector2Array,
+		accepted: Array[PackedVector2Array], data: Dictionary,
+		contract: Dictionary, quality: Dictionary) -> Dictionary:
+	if footprint.is_empty():
+		return {"reason": "invalid transformed footprint", "blocker_id": "profile"}
+	var epsilon: float = MapLayoutCanonical.float_value(quality["epsilon"]["world_m"])
+	var anchors: Dictionary = data["node_anchors"]
+	for node_id: String in MapLayoutCanonical.sorted_keys(anchors):
+		if MapQualityEvaluator._polygon_distance(footprint,
+				MapQualityEvaluator._node_world(_v3(anchors[node_id]), quality)) <= epsilon:
+			return {"reason": "node reserve", "blocker_id": node_id}
+	var road_clearance: float = MapLayoutCanonical.float_value(
+		quality["geometry"]["road_corridor"]["world_clearance_m"])
+	var edges: Dictionary = data["edges"]
+	for edge_id: String in MapLayoutCanonical.sorted_keys(edges):
+		var edge: Dictionary = edges[edge_id]
+		var reserve: float = MapLayoutCanonical.float_value(edge["corridor_width"]) \
+			* 0.5 + road_clearance
+		var points: Array = edge["centerline"]
+		for i: int in range(points.size() - 1):
+			if MapQualityEvaluator._segment_polygon(_xz(points[i]), _xz(points[i + 1]),
+					footprint) < reserve - epsilon:
+				return {"reason": "road and waylight corridor", "blocker_id": edge_id}
+	var zones: Dictionary = contract["protected_zones"]
+	for zone_id: String in MapLayoutCanonical.sorted_keys(zones):
+		var zone: Dictionary = zones[zone_id]
+		var geometry_id: String = "%s_protected_zone" % str(zone["role"])
+		var geometry: Dictionary = quality["geometry"]
+		if not geometry.has(geometry_id):
+			return {"reason": "unknown hero protected zone", "blocker_id": zone_id}
+		var rule: Dictionary = geometry[geometry_id]
+		var padding: float = MapLayoutCanonical.float_value(rule["padding_m"])
+		if MapQualityEvaluator._polygon_distance(footprint,
+				MapQualityEvaluator._poly(zone["polygon"])) < padding - epsilon:
+			return {"reason": "hero protected zone", "blocker_id": zone_id}
+	# `_dealt_seats` already preserves the existing SEAT_GAP centre floor. The
+	# polygon check removes the residual real-footprint overlaps without inventing
+	# a second placement or clearance threshold.
+	for prior: PackedVector2Array in accepted:
+		if MapQualityEvaluator._polygon_distance(footprint, prior) <= epsilon:
+			return {"reason": "accepted scenery footprint", "blocker_id": "scenery"}
+	return {}
 
 
 ## The graph, as road. Segments are world-space endpoint pairs; the screen that
@@ -792,7 +1125,7 @@ func _first_mesh(root: Node) -> MeshInstance3D:
 
 
 ## The ground the scenery may stand on, along the journey. Clears the Vigil to
-## the west and the terminus at x = 40 to the east; it is the span the authored
+## the west and the terminus at x = 40.4 to the east; it is the span the authored
 ## set this replaced already used, so nothing downstream sees a wider field.
 const SCATTER_X: Vector2 = Vector2(-33.0, 31.5)
 ## How far off the centre line each family sits, as |z|. The lanes run
@@ -1010,3 +1343,20 @@ func _dab_mesh() -> ArrayMesh:
 	return surface.commit()
 
 
+func _a3(value: Vector3) -> Array[float]:
+	return [value.x, value.y, value.z]
+
+
+func _v3(value: Variant) -> Vector3:
+	if value is Vector3:
+		return value
+	var row: Array = value
+	return Vector3(
+		MapLayoutCanonical.float_value(row[0]),
+		MapLayoutCanonical.float_value(row[1]),
+		MapLayoutCanonical.float_value(row[2]))
+
+
+func _xz(value: Variant) -> Vector2:
+	var point: Vector3 = _v3(value)
+	return Vector2(point.x, point.z)
