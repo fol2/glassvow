@@ -17,6 +17,8 @@ const STATE_DELTA: float = 0.04
 const MIN_FOREGROUND_RATIO: float = 0.05
 const MIN_STATE_DELTA_RATIO: float = 0.0005
 const MAX_NEAR_WHITE_RATIO: float = 0.01
+## Highest shared-road crown after the production 2.15 x 0.6Y transform.
+const PRODUCTION_ROAD_CROWN_M: float = 0.383
 
 var _output: String = ""
 var _head: String = ""
@@ -156,11 +158,14 @@ func _make_stage(size: Vector2i) -> Dictionary:
 	world.add_child(world_environment)
 	_box(world, Vector3(16.0, 0.18, 10.0), Vector3(0.0, -0.20, 0.0),
 		Color(0.07, 0.09, 0.14))
-	_box(world, Vector3(4.2, 0.14, 1.25), Vector3(-2.0, -0.07, -2.0),
+	_box(world, Vector3(4.2, PRODUCTION_ROAD_CROWN_M, 1.25),
+		Vector3(-2.0, PRODUCTION_ROAD_CROWN_M * 0.5, -2.0),
 		Color(0.27, 0.28, 0.31))
-	_box(world, Vector3(1.25, 0.14, 4.2), Vector3(0.0, -0.07, 0.0),
+	_box(world, Vector3(1.25, PRODUCTION_ROAD_CROWN_M, 4.2),
+		Vector3(0.0, PRODUCTION_ROAD_CROWN_M * 0.5, 0.0),
 		Color(0.27, 0.28, 0.31))
-	_box(world, Vector3(4.2, 0.14, 1.25), Vector3(2.0, -0.07, 2.0),
+	_box(world, Vector3(4.2, PRODUCTION_ROAD_CROWN_M, 1.25),
+		Vector3(2.0, PRODUCTION_ROAD_CROWN_M * 0.5, 2.0),
 		Color(0.27, 0.28, 0.31))
 	var tracer: MapWaylightTracer = MapWaylightTracer.new()
 	world.add_child(tracer)
