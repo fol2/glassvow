@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 5,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "finite-c5-grammar-judgement",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "projectionArchiveHead": "4abf21234a1b94e484c6039d2215ccfa4f77e4a0",
+  "projectionSha256": "e28ed4b68e92834106adc8d4cbb3a3e0552fd8ea7d2d4ac5a9ced26ea445619f",
+  "protocol": {
+    "path": "protocols/post-4abf2123-finite-c5-grammar-judgement-v1.json",
+    "sha256": "5a7dd106390ef7c5a9e0e5e32ae7373b822ca35386a12ac5263e12f62941e1b6"
+  },
+  "execution": {
+    "backgroundAgents": 1,
+    "contextFork": "none",
+    "maximumWallTimeSeconds": 900,
+    "maximumInputFilesOrEndpoints": 6,
+    "maximumSourceTokens": 24000,
+    "maximumOutputTokens": 5000,
+    "ownerConsolidations": 1,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "cacheReads": 0,
+    "cacheWrites": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "mechanicalCorrectionCap": 0
+  },
+  "nonGoals": [
+    "Do not read current-main source outside the immutable projection.",
+    "Do not instantiate, rank or select a candidate, card, relic, content ID or numeric payoff.",
+    "Do not prototype, run Godot or simulator rows, inspect cache/ledger outcomes, add ML/RL, use protected identities, mutate product truth, open a PR, run Actions or create a successor ticket."
+  ],
+  "nextAction": "Hash-verify the six scientific inputs and dispatch one no-fork read-only grammar report. The accountable owner applies the frozen rule once without altering reported dimensions or levels."
+}
