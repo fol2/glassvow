@@ -1,0 +1,30 @@
+{
+  "GodotProcesses": 2,
+  "claimBoundary": "This direct gate can establish only exact source, null, carrier, ordering, save/resume and RNG identity for the frozen research representation. It cannot establish natural capacity, causality, balance, product scope, package admission, protected-seed authority, #421 acceptance or the #108 P9 receipt.",
+  "controlledScenarioExecutions": 40,
+  "decision": "record-source-identity-inconclusive-at-cap",
+  "evidence": {
+    "baseline.json": "6b56900ab1cfdf6919d1a429bc9ab62e4cb0b905be6da022969493678aac5d91",
+    "baseline.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "baseline.stdout.txt": "e7528eb7a0d35883bb19cfde922594011490e9c87052a5592fe5d160b550032d",
+    "candidate.json": "cfece8e320ea104c03ff9d52e02457a2cc8baafb6cb4006ca7037b5a0818f052",
+    "candidate.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "candidate.stdout.txt": "e7528eb7a0d35883bb19cfde922594011490e9c87052a5592fe5d160b550032d",
+    "plan.json": "df35ac85d12f55da95b22b134be1f01ccdc9d8fcbd7f29d84550c39387ccf8ce"
+  },
+  "faults": [
+    "analysis-exception:ValueError:v2 overlay keys differ from the frozen correction schema"
+  ],
+  "gates": [],
+  "issue": 421,
+  "ledgerReads": 0,
+  "ledgerWrites": 0,
+  "outcome": "INCONCLUSIVE",
+  "productMutations": 0,
+  "protectedSeedRows": 0,
+  "protocolSha256": "28562ac99db14804cbe2c06748e2e22f511e74e36b951510d5cf2f792b573e82",
+  "schemaVersion": 1,
+  "simulatorRows": 0,
+  "sourceHead": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "wallTimeSeconds": 1.592823
+}

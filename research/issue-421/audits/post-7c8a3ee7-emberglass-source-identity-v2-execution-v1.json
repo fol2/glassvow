@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-7c8a3ee7 Emberglass source identity v2 execution audit",
+  "protocolSha256": "28562ac99db14804cbe2c06748e2e22f511e74e36b951510d5cf2f792b573e82",
+  "runnerSha256": "b75e6524506d109426621df2d94ccb00811df554d1422e3b66d9b01eea60645e",
+  "sourceHead": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "preregistrationHead": "474082ca9306b621643db50045890abc6190aef0",
+  "preregistrationReceiptHead": "0ad4b0abe728794093bed066db7174817529ae60",
+  "preregistrationCommentId": 5470131672,
+  "preregistrationCommentBodySha256": "71c080ca69960762394ebd66460ba990f860a4fe80929edfd0680aa0d9fb0537",
+  "deterministicSummary": {
+    "path": "summaries/post-7c8a3ee7-emberglass-source-identity-v2.json",
+    "sha256": "eca403d6e1f1a45dc0ca01cabdebc97efca76103a7e4aa79f7052a9a7f0bb53b",
+    "processExitCode": 2,
+    "outcome": "INCONCLUSIVE",
+    "decision": "record-source-identity-inconclusive-at-cap",
+    "faults": [
+      "analysis-exception:ValueError:v2 overlay keys differ from the frozen correction schema"
+    ],
+    "gateCount": 0,
+    "wallTimeSeconds": 1.592823
+  },
+  "rawEvidence": {
+    "evidence/post-7c8a3ee7-emberglass-source-identity-v2/plan.json": "df35ac85d12f55da95b22b134be1f01ccdc9d8fcbd7f29d84550c39387ccf8ce",
+    "evidence/post-7c8a3ee7-emberglass-source-identity-v2/baseline.json": "6b56900ab1cfdf6919d1a429bc9ab62e4cb0b905be6da022969493678aac5d91",
+    "evidence/post-7c8a3ee7-emberglass-source-identity-v2/candidate.json": "cfece8e320ea104c03ff9d52e02457a2cc8baafb6cb4006ca7037b5a0818f052",
+    "evidence/post-7c8a3ee7-emberglass-source-identity-v2/baseline.stdout.txt": "e7528eb7a0d35883bb19cfde922594011490e9c87052a5592fe5d160b550032d",
+    "evidence/post-7c8a3ee7-emberglass-source-identity-v2/baseline.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/post-7c8a3ee7-emberglass-source-identity-v2/candidate.stdout.txt": "e7528eb7a0d35883bb19cfde922594011490e9c87052a5592fe5d160b550032d",
+    "evidence/post-7c8a3ee7-emberglass-source-identity-v2/candidate.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "observedExecution": {
+    "absolutePlanPathReachedBothProcesses": true,
+    "absoluteOutputPathReachedBothProcesses": true,
+    "baselineExitCode": 0,
+    "candidateExitCode": 0,
+    "baselineProbeStatus": "PASS",
+    "candidateProbeStatus": "PASS",
+    "baselineCompletedRows": 20,
+    "candidateCompletedRows": 20,
+    "completedProbeOutputs": 2,
+    "directControlledExecutions": 40,
+    "analysisGatesEvaluated": 0
+  },
+  "observedFailure": {
+    "class": "ANALYSIS_LOADER_SCOPE_COLLISION_AFTER_COMPLETE_PROBE_OUTPUTS",
+    "rootCause": "The v2 wrapper globally replaced the inherited v1 _load function with the protocol-overlay validator. The inherited analysis then passed each valid probe-output JSON to that validator, which rejected its keys before _analyse could run.",
+    "pathCorrectionWorked": true,
+    "probeOutputsComplete": true,
+    "deterministicAnalysisCompleted": false,
+    "endpointOrGateResultAvailable": false,
+    "endpointContentInspectedAfterFailure": false
+  },
+  "scientificAccounting": {
+    "GodotProcessInvocations": 2,
+    "directControlledExecutions": 40,
+    "completedProbeOutputs": 2,
+    "analysisExecutions": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "postFreezeCorrections": 0,
+    "reruns": 0
+  },
+  "disposition": {
+    "outcome": "INCONCLUSIVE_AT_FINAL_CORRECTION_CAP",
+    "sourceIdentityEstablished": false,
+    "scientificFutilityEstablished": false,
+    "capacityAuthorised": false,
+    "causalClaimAuthorised": false,
+    "promotionAuthorised": false,
+    "offlineEndpointAnalysisAuthorised": false,
+    "repairOrRerunAuthorised": false,
+    "additionalCorrectedVersionAuthorised": false,
+    "optionAExhausted": true,
+    "optionBChosen": false,
+    "optionCChosen": false,
+    "currentEligibleAutonomousActions": 0,
+    "humanAuthorityConditionMet": true
+  },
+  "smallestPotentialFutureAuthorityDelta": {
+    "authorisedNow": false,
+    "description": "One analysis-only separately versioned correction over the two immutable v2 probe outputs, with no new Godot process, row, seed identity or endpoint inspection before freeze; scope the overlay loader to the protocol only and apply the unchanged inherited v1 analysis and decision rules.",
+    "newObservations": 0,
+    "newGodotProcesses": 0,
+    "newSimulatorRows": 0,
+    "newProtectedSeedRows": 0
+  },
+  "safeState": {
+    "v1Mutated": false,
+    "v2EvidenceMutated": false,
+    "productMainMutated": false,
+    "developmentCheckoutMutated": false,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "claimBoundary": "This audit proves that the authorised absolute-path correction allowed all 40 frozen direct executions to complete, but the deterministic analysis remained unavailable at the final correction cap. The raw outputs are immutable non-decision evidence. No source identity, scientific futility, capacity, causal, balance, product, #421-acceptance or #108-P9 claim follows."
+}
