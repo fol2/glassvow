@@ -14,7 +14,7 @@ const BEAD_RADIUS_M: float = 0.10
 const BEAD_HEIGHT_M: float = 0.065
 const MAX_INSTANCES: int = 128
 const WORLD_EPSILON_M: float = 0.001
-const COLD_COLOR: Color = Color(0.36, 0.44, 0.60, 1.0)
+const COLD_COLOR: Color = Color(0.10, 0.15, 0.26, 1.0)
 
 var _bead_mesh: CylinderMesh
 var _waylight_material: StandardMaterial3D

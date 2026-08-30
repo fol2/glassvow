@@ -46,6 +46,9 @@ static func run(fails: Array[String]) -> void:
 	var walked_data: Color = tracer.instance_custom_data()[0]
 	_check(fails, cold_data[0] != open_data and open_data != walked_data
 		and cold_data[0] != walked_data, "cold/open/walked state payloads stay distinct")
+	_check(fails, MapWaylightTracer.route_state_color(MapWaylightTracer.STATE_COLD)
+		.get_luminance() < MapMaterials.ROAD_VALUE * 0.25,
+		"cold beads keep dark contrast against the nominal pale road surface")
 	var before_rejected_state: Array[Color] = tracer.instance_custom_data()
 	material.no_depth_test = true
 	_check(fails, not tracer.set_route_state(MapWaylightTracer.STATE_COLD)

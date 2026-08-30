@@ -30,6 +30,7 @@ static func run(fails: Array[String]) -> void:
 	_input(fails)
 	_materials(fails)
 	_asset_binding(fails)
+	_road_presentation(fails)
 	_compiled_layout(fails)
 	_palette(fails)
 
@@ -309,6 +310,46 @@ static func _asset_binding(fails: Array[String]) -> void:
 			and scene.find_child("MapAssetGeometry", true, false) is Node3D,
 			"act switch frees the prior geometry root before replacing it")
 	scene.free()
+
+
+static func _road_presentation(fails: Array[String]) -> void:
+	var fake: FakeAssetLoader = FakeAssetLoader.new()
+	var scene: MapScene = MapScene.new({}, Callable(fake, "load_resource"))
+	var segments: PackedVector3Array = PackedVector3Array([
+		Vector3.ZERO, Vector3(0.0, 0.0, 9.5),
+	])
+	var counts: Array[int] = []
+	for act: int in range(4):
+		scene.set_act(act)
+		scene.lay_road(segments)
+		counts.append(_road_instance_count(scene))
+	_check(fails, counts == [7, 7, 11, 11],
+			"Acts I/II use sparse paving while Acts III/IV keep their presentation")
+	var early_basis: Basis = MapScene._road_slab_basis(0.0, 1, 1.0,
+			MapScene.EARLY_ROAD_WIDTH, MapScene.EARLY_ROAD_WOBBLE)
+	var late_basis: Basis = MapScene._road_slab_basis(0.0, 1, 1.0,
+			1.0, MapScene.ROAD_WOBBLE)
+	var early_scale: Vector3 = early_basis.get_scale().abs()
+	var late_scale: Vector3 = late_basis.get_scale().abs()
+	var early_yaw: float = atan2(early_basis.z.x, early_basis.z.z)
+	var late_yaw: float = atan2(late_basis.z.x, late_basis.z.z)
+	_check(fails, early_scale.x < late_scale.x and early_scale.z < late_scale.z,
+			"Acts I/II paving is narrower than the later-act presentation")
+	_check(fails, absf(early_yaw) > absf(late_yaw),
+			"Acts I/II paving keeps the larger bounded alignment variation")
+	_check(fails, scene.road_segments() == segments,
+			"presentation density preserves the exact supplied centreline")
+	scene.free()
+
+
+static func _road_instance_count(scene: MapScene) -> int:
+	var out: int = 0
+	for i: int in range(2):
+		var node: MultiMeshInstance3D = scene.find_child(
+				"AssetRoad%d" % i, true, false) as MultiMeshInstance3D
+		if node != null and node.multimesh != null:
+			out += node.multimesh.instance_count
+	return out
 
 
 static func _compiled_layout(fails: Array[String]) -> void:
