@@ -1,0 +1,99 @@
+{
+  "analysisExecutions": 1,
+  "analysisFunction": "original-v1-_analyse",
+  "analysisWallTimeSeconds": 0.017448,
+  "claimBoundary": "This analysis-only gate can establish only the original v1 exact source, null, carrier, ordering, save/resume and RNG identity result from the immutable v2 outputs. It cannot establish natural capacity, causality, balance, product scope, package admission, protected-seed authority, #421 acceptance or the #108 P9 receipt.",
+  "decision": "close-exact-emberglass-one-carry-contract-without-repair",
+  "decisionRules": {
+    "futility": "The original v1 _analyse execution completes and any original v1 exact gate fails.",
+    "futilityAuthority": "Close this exact Emberglass one-carry contract without repair, rerun, substitution, option B or option C.",
+    "inconclusive": "An immutable input, inherited section, runner or analysis result is unavailable, invalid, mutated or incomplete at the frozen cap.",
+    "inconclusiveAuthority": "Record inconclusive without repair, rerun, endpoint reinterpretation, additional correction, option B or option C, and fail closed back to Ash.",
+    "success": "Exactly one original v1 _analyse execution completes within five seconds, every original v1 exact gate passes, both immutable output hashes remain unchanged and every new-observation and product ceiling remains zero.",
+    "successAuthority": "Freeze this source/identity representation and continue only to a separately preregistered fixed-policy non-causal shadow-capacity screen, as authorised by the original v1 success rule."
+  },
+  "faults": [],
+  "gates": [
+    {
+      "name": "complete-fixed-row-set",
+      "passed": true
+    },
+    {
+      "name": "factor-availability",
+      "passed": true
+    },
+    {
+      "name": "plan-and-probe-identity",
+      "passed": true
+    },
+    {
+      "name": "save-envelope-and-neighbour-preservation",
+      "passed": true
+    },
+    {
+      "name": "baseline-has-no-candidate-events",
+      "passed": true
+    },
+    {
+      "name": "omitted-off-boundary-exact",
+      "passed": false
+    },
+    {
+      "name": "invalid-carrier-canonicalisation-only",
+      "passed": true
+    },
+    {
+      "name": "charge-positive-after-canonical-consumers",
+      "passed": true
+    },
+    {
+      "name": "charge-zero-clears-without-proc",
+      "passed": true
+    },
+    {
+      "name": "loss-clears-without-payoff",
+      "passed": true
+    },
+    {
+      "name": "consume-ordinary-exact-unit",
+      "passed": false
+    },
+    {
+      "name": "consume-after-cap-and-start-ember-effects",
+      "passed": false
+    },
+    {
+      "name": "consume-saturated-cap-clears-once",
+      "passed": false
+    },
+    {
+      "name": "save-resume-and-once-only-composition",
+      "passed": true
+    },
+    {
+      "name": "whitelist-exhausts-all-enabled-differences",
+      "passed": true
+    },
+    {
+      "name": "rng-identity-all-contrasts",
+      "passed": true
+    }
+  ],
+  "inputHashesAfterAnalysis": {
+    "baselineOutput": "6b56900ab1cfdf6919d1a429bc9ab62e4cb0b905be6da022969493678aac5d91",
+    "candidateOutput": "cfece8e320ea104c03ff9d52e02457a2cc8baafb6cb4006ca7037b5a0818f052"
+  },
+  "issue": 421,
+  "ledgerReads": 0,
+  "ledgerWrites": 0,
+  "newControlledScenarioExecutions": 0,
+  "newGodotProcesses": 0,
+  "outcome": "FUTILITY",
+  "productMutations": 0,
+  "protectedSeedRows": 0,
+  "protocolSha256": "3726136358dcbc055d3cc8fd4b15666f3f4e0a25326c65a2ace76255ac212c0b",
+  "reusedDirectControlledExecutions": 40,
+  "schemaVersion": 1,
+  "simulatorRows": 0,
+  "sourceHead": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1"
+}

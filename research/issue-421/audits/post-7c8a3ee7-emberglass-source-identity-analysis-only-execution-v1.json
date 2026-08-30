@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-7c8a3ee7 Emberglass source identity analysis-only execution audit",
+  "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+  "frozenExperimentSource": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "authority": {
+    "source": "Ash, Glassvow PM",
+    "decision": "AUTHORISE_ONE_ANALYSIS_ONLY_CORRECTION",
+    "commentId": 5470587102,
+    "commentBodySha256": "cbca146ef812fca7b3e50f03a7879bfc89d68f1a0c660e54b1e9a1ed99f0beea",
+    "jamesDevelopmentAuthority": false
+  },
+  "preregistration": {
+    "head": "f3e76fb5b12d0ad85db0a643e605b5b6ed798489",
+    "receiptHead": "42477f2a7e7b65886d5b7f05d3f73ed6dba00eb4",
+    "commentId": 5470613352,
+    "commentBodySha256": "21abc2c65b7bdf321f7351de380ca82bdb1b6936698c3055218521c6b9636a88",
+    "protocolSha256": "3726136358dcbc055d3cc8fd4b15666f3f4e0a25326c65a2ace76255ac212c0b",
+    "runnerSha256": "fc739ddf2f875af64c6564a6623daaf56803c874a80841ab32517b227db336d6"
+  },
+  "deterministicSummary": {
+    "path": "summaries/post-7c8a3ee7-emberglass-source-identity-analysis-only-v1.json",
+    "sha256": "7517a39c0b6d6f77fae5f036f4b2ba484a3feef1725f64ef4ad947e76cf63aa9",
+    "processExitCode": 1,
+    "outcome": "FUTILITY",
+    "decision": "close-exact-emberglass-one-carry-contract-without-repair",
+    "analysisFunction": "original-v1-_analyse",
+    "analysisExecutions": 1,
+    "analysisWallTimeSeconds": 0.017448,
+    "faults": [],
+    "gateCount": 16,
+    "passedGateCount": 12,
+    "failedGateCount": 4,
+    "failedGates": [
+      "omitted-off-boundary-exact",
+      "consume-ordinary-exact-unit",
+      "consume-after-cap-and-start-ember-effects",
+      "consume-saturated-cap-clears-once"
+    ]
+  },
+  "immutableInputs": {
+    "planSha256": "df35ac85d12f55da95b22b134be1f01ccdc9d8fcbd7f29d84550c39387ccf8ce",
+    "baselineOutputSha256": "6b56900ab1cfdf6919d1a429bc9ab62e4cb0b905be6da022969493678aac5d91",
+    "candidateOutputSha256": "cfece8e320ea104c03ff9d52e02457a2cc8baafb6cb4006ca7037b5a0818f052",
+    "baselineHashUnchangedAfterAnalysis": true,
+    "candidateHashUnchangedAfterAnalysis": true,
+    "reusedDirectControlledExecutions": 40
+  },
+  "scientificAccounting": {
+    "newGodotProcesses": 0,
+    "newControlledScenarioExecutions": 0,
+    "newRows": 0,
+    "newSeedIdentities": 0,
+    "newCandidates": 0,
+    "grammarChanges": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "identityGateRepairs": 0,
+    "identityGateReruns": 0,
+    "furtherCorrections": 0
+  },
+  "disposition": {
+    "exactEmberglassOneCarryContractClosed": true,
+    "sourceIdentityEstablished": false,
+    "shadowCapacityScreenUnlocked": false,
+    "capacityAuthorised": false,
+    "causalClaimAuthorised": false,
+    "promotionAuthorised": false,
+    "optionBChosen": false,
+    "optionCChosen": false,
+    "repairOrRerunAuthorised": false,
+    "currentEligibleAutonomousActions": 0,
+    "humanAuthorityConditionMet": true,
+    "reason": "The frozen success rule required all 16 original v1 gates to pass. Four failed, so only the futility rule applies; the success-only shadow-capacity gate is not unlocked and Ash prohibited options B and C."
+  },
+  "safeState": {
+    "v1EvidenceMutated": false,
+    "v2EvidenceMutated": false,
+    "productMainMutated": false,
+    "developmentCheckoutMutated": false,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "claimBoundary": "This audit establishes deterministic futility only for the exact preregistered Emberglass one-carry source/identity contract on the immutable v2 outputs. It does not establish natural capacity, causality, balance, product scope, package admission, protected-seed authority, #421 acceptance or the #108 P9 receipt."
+}
