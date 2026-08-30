@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-7c8a3ee7 Emberglass source identity v2 preregistration audit",
+  "state": "FROZEN_BEFORE_EXECUTION",
+  "authority": {
+    "decision": "AUTHORISE_ONE_EMBERGLASS_V2_MECHANICAL_CORRECTION",
+    "commentId": 5470097429,
+    "commentBodySha256": "c0e5587aaf3dd79473f3489b33b416e81d8eaabeb6b27587c62022b741e57df6",
+    "authorityIntakeReceiptHead": "11eb6d60f1d74d1d2a047ed0351ee3db71b8c9b8"
+  },
+  "processAuthority": {
+    "currentMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+    "AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+    "docs/agents/ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a",
+    ".claude/skills/glassvow-godot/SKILL.md": "993aa792bfe4c38d06d5c760e6942f262bb33c17f2f580e6e3303df9610b7fd8"
+  },
+  "versioning": {
+    "v1ProtocolPath": "protocols/post-7c8a3ee7-emberglass-source-identity-v1.json",
+    "v1ProtocolSha256": "b08e185903bbd0fdbf3b4cc29b065b9483e91b6e835ef6239d079537c47e4ef2",
+    "v1RunnerPath": "tools/post_7c8a3ee7_emberglass_source_identity_v1.py",
+    "v1RunnerSha256": "17fe491b8ad2589b57f678754893d40dff033da52b10263c71c12dc04bde6ba6",
+    "v1Result": "INCONCLUSIVE_AT_PREREGISTERED_CAP_WITH_ZERO_DIRECT_EXECUTIONS",
+    "v1PreservedUnchanged": true,
+    "v2ProtocolPath": "protocols/post-7c8a3ee7-emberglass-source-identity-v2.json",
+    "v2ProtocolSha256": "28562ac99db14804cbe2c06748e2e22f511e74e36b951510d5cf2f792b573e82",
+    "v2RunnerPath": "tools/post_7c8a3ee7_emberglass_source_identity_v2.py",
+    "v2RunnerSha256": "b75e6524506d109426621df2d94ccb00811df554d1422e3b66d9b01eea60645e"
+  },
+  "mechanicalDelta": {
+    "onlyScientificExecutionChange": "Before each inherited v1 Godot invocation, call Path.resolve() on the frozen plan path and that source's output path.",
+    "planPathAbsolute": true,
+    "outputPathAbsolute": true,
+    "bothGodotInvocations": true,
+    "v1ExecutionLogicReused": true,
+    "overlayAndSelfTestRole": "Validate authority, version, hashes and the absolute-path boundary; they do not construct or evaluate scientific rows.",
+    "furtherCorrections": 0
+  },
+  "inheritedScientificContract": {
+    "selectedContract": "emberglass-memory-one-carry",
+    "sourceHead": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "sectionCount": 14,
+    "allCanonicalSectionHashesMatchV1": true,
+    "sections": [
+      "question",
+      "competingHypotheses",
+      "contract",
+      "frozenFactors",
+      "design",
+      "estimands",
+      "identity",
+      "sourceIdentity",
+      "reproductionArtefacts",
+      "immutableInputs",
+      "executionCeilings",
+      "executionAndStopping",
+      "decisionRules",
+      "claimBoundary"
+    ],
+    "designRowsPerSource": 20,
+    "plannedControlledScenarioExecutions": 40,
+    "seedIdentityRange": [
+      630421001,
+      630421020
+    ]
+  },
+  "frozenSourcePreflight": {
+    "baselineHead": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "candidateHead": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "baselineStatusMatchesV1": true,
+    "candidateStatusMatchesV1": true,
+    "baselineFileHashesMatchV1": true,
+    "candidateFileHashesMatchV1": true,
+    "probeSha256": "0bbd454216c59935a4d63cdf5666d9a88715066edeedbb07d0cd2e29aea97e96",
+    "candidateCombatSha256": "40d210990a268c0638fc5541d5b35216e2aa25005cb5ce0be370ba1eb453b606"
+  },
+  "enginePreflight": {
+    "compatibilityRange": "Godot stable 4.7.2+",
+    "selectedBinaryVersion": "4.7.2.stable.official.ed1daf0bf",
+    "selectedBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "runnerSelfTest": [
+      "PASS (4 checks)",
+      "PASS (2 v2 absolute-path checks)"
+    ],
+    "overlayValidation": "PASS"
+  },
+  "executionCeilings": {
+    "maximumRowsPerSource": 20,
+    "maximumControlledScenarioExecutions": 40,
+    "maximumGodotProcesses": 2,
+    "maximumSecondsPerGodotProcess": 45,
+    "maximumTotalWallTimeSeconds": 90,
+    "maximumMechanicalCorrectionsAfterV2Freeze": 0,
+    "maximumSimulatorRows": 0,
+    "maximumLedgerReads": 0,
+    "maximumLedgerWrites": 0,
+    "maximumProtectedSeedRows": 0,
+    "maximumProductMutations": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0
+  },
+  "decisionBoundary": {
+    "success": "Apply the inherited v1 success rule and freeze this representation only for a separately preregistered fixed-policy non-causal shadow-capacity screen.",
+    "futility": "Apply the inherited v1 futility rule and close the exact Emberglass one-carry contract without repair or substitution.",
+    "inconclusive": "Apply the inherited v1 inconclusive rule at cap without rerun, repair, endpoint inference or protected seeds.",
+    "adaptiveChoiceAfterResult": false
+  },
+  "preExecutionAccounting": {
+    "v2GodotProcesses": 0,
+    "v2DirectControlledExecutions": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0
+  },
+  "claimBoundary": "This audit freezes and validates only the authorised v2 mechanical correction. It establishes no identity, capacity, causal, balance, product, #421-acceptance or #108-P9 claim."
+}

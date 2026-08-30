@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-7c8a3ee7 Emberglass source identity v2 mechanical correction",
+  "kind": "MECHANICAL_CORRECTION_OVERLAY",
+  "state": "FROZEN_BEFORE_EXECUTION",
+  "parentProtocol": {
+    "path": "protocols/post-7c8a3ee7-emberglass-source-identity-v1.json",
+    "sha256": "b08e185903bbd0fdbf3b4cc29b065b9483e91b6e835ef6239d079537c47e4ef2"
+  },
+  "authority": {
+    "decision": "AUTHORISE_ONE_EMBERGLASS_V2_MECHANICAL_CORRECTION",
+    "commentId": 5470097429,
+    "commentPath": "comments/post-fd59fab-emberglass-v2-correction-authority-intake-v1.md",
+    "commentBodySha256": "c0e5587aaf3dd79473f3489b33b416e81d8eaabeb6b27587c62022b741e57df6",
+    "currentProcessAuthorityMain": "a130c7b00c6961165ab80e83fac85e186a55bd1b",
+    "frozenExperimentSourceAndBaseline": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+    "authorityIntakeReceiptHead": "11eb6d60f1d74d1d2a047ed0351ee3db71b8c9b8"
+  },
+  "correction": {
+    "version": 2,
+    "preserveV1": true,
+    "onlyRunnerBoundaryChange": "Resolve the already-frozen plan and output paths to absolute paths before both Godot invocations.",
+    "maximumCorrectedVersions": 1,
+    "furtherCorrections": 0,
+    "candidateSubstitution": false,
+    "grammarWidening": false,
+    "simulatorRows": 0,
+    "protectedSeedRows": 0
+  },
+  "inheritedSectionSha256": {
+    "question": "c8fc19401c71a793bb585d506bc959608f296ddd3374c1077ba24ac08eec1a3e",
+    "competingHypotheses": "fc3be6f6f5e2a251ee4c9077441794ee913ea7ba4d15bc57646071e69cf669cd",
+    "contract": "966c7ef88f1d22c5df45ead480d4c844f0960e0ac2bd61be17b1b7c845be24bd",
+    "frozenFactors": "677a8854cb2ff8c5dd89d709259ae875c095e4af809d9687dc2c0295ebe23b5c",
+    "design": "15100897bf76a67cccd78a059478bb1be8e1a9eceac6bc4b6cda4c53678d2e0f",
+    "estimands": "732789a78dd0eb7d9a3c60add29f4e0d07ba19c2a9a17723ed49efbb936d6003",
+    "identity": "1f110b464d7bacee38fde3c86a9e588c22146141337ad5336017c814adaec588",
+    "sourceIdentity": "1b42bff8ec8de376ff8eafe9f658d647b13b07dca7e0b5c37f94e2792dc74db4",
+    "reproductionArtefacts": "529f643ac073186078a497645f94977d3c68233c1b1d883f9fa6bc82731b758c",
+    "immutableInputs": "3e2cf4be49d344f7ed4eae25256dea5774c5b1c9a7ac1e295752760efe81030e",
+    "executionCeilings": "8aa86d66b722e248eae4b6abdbeb0bd1029ef51133e414b1774dbc9d1c6a433e",
+    "executionAndStopping": "32936cc4fc1aee706210e5eecea5a089ab4778c8b57a15eded80aa34034839d3",
+    "decisionRules": "076cc5565a795c9fcae21a6ac599f5c9678930bd92e2ac2f11517d0b735c4fab",
+    "claimBoundary": "9ebfed10ad47d660c3de079433f2c28084e1a0023e24f212079839c529ebc9bf"
+  },
+  "runner": {
+    "path": "tools/post_7c8a3ee7_emberglass_source_identity_v2.py",
+    "sha256": "b75e6524506d109426621df2d94ccb00811df554d1422e3b66d9b01eea60645e",
+    "selfTest": "PASS (4 inherited checks); PASS (2 v2 absolute-path checks)"
+  }
+}
