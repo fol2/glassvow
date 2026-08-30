@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-7c8a3ee7 Emberglass source identity execution audit v1",
+  "protocolSha256": "b08e185903bbd0fdbf3b4cc29b065b9483e91b6e835ef6239d079537c47e4ef2",
+  "sourceHead": "7943e3c9360ed6920a8f4bba7a4c21d15ef4c1f1",
+  "publicationPreregistrationHead": "c8156577de0905494a25ccb46b45acb665262e6f",
+  "preregistrationCommentId": 5469000459,
+  "preregistrationCommentBodySha256": "8bb844dc8b3cb1abe6c42e1cb1b3ef0644b9831db65c59002775c07f26159cc3",
+  "deterministicSummary": {
+    "path": "summaries/post-7c8a3ee7-emberglass-source-identity-v1.json",
+    "sha256": "c943bacb14b4e739b58f212404e87014b040c24bb53e4af122bdd347be068c9d",
+    "outcome": "INCONCLUSIVE",
+    "decision": "record-source-identity-inconclusive-at-cap",
+    "reportedFaults": [
+      "baseline-process:2",
+      "candidate-process:2"
+    ]
+  },
+  "rawEvidence": {
+    "evidence/post-7c8a3ee7-emberglass-source-identity-v1/plan.json": "ae9fb3988ac267102be79160a1b23c6bfbe2b199c456d5edae98827d8b9d4a32",
+    "evidence/post-7c8a3ee7-emberglass-source-identity-v1/baseline.stdout.txt": "cf17838058a5bf14bf5b23e8ab4bb06b2ad3d2aed9ea025003f9a2eeedf28479",
+    "evidence/post-7c8a3ee7-emberglass-source-identity-v1/baseline.stderr.txt": "43816f9961dc8522ab4f09bc85ca2a62fb6cb9eaeb1a1ceb5cebfab5fcd3cf2c",
+    "evidence/post-7c8a3ee7-emberglass-source-identity-v1/candidate.stdout.txt": "cf17838058a5bf14bf5b23e8ab4bb06b2ad3d2aed9ea025003f9a2eeedf28479",
+    "evidence/post-7c8a3ee7-emberglass-source-identity-v1/candidate.stderr.txt": "43816f9961dc8522ab4f09bc85ca2a62fb6cb9eaeb1a1ceb5cebfab5fcd3cf2c"
+  },
+  "observedFailure": {
+    "class": "FROZEN_PLAN_PATH_UNAVAILABLE_IN_BOTH_EXECUTION_WORKTREES",
+    "baselineExitCode": 2,
+    "candidateExitCode": 2,
+    "sharedDiagnostic": "JSON.parse_string received an empty value because the publication-relative plan path was resolved from each execution worktree; the probe rejected the non-dictionary plan before iterating rows.",
+    "baselineOutputPresent": false,
+    "candidateOutputPresent": false,
+    "gateResultsPresent": false
+  },
+  "correctedCounts": {
+    "plannedControlledScenarioExecutions": 40,
+    "GodotProcessInvocations": 2,
+    "completedProbeOutputs": 0,
+    "directControlledExecutions": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0
+  },
+  "disposition": {
+    "outcome": "INCONCLUSIVE_AT_PREREGISTERED_CAP",
+    "sourceIdentityEstablished": false,
+    "capacityAuthorised": false,
+    "causalClaimAuthorised": false,
+    "promotionAuthorised": false,
+    "repairOrRerunAuthorised": false,
+    "familyState": "The exact Emberglass one-carry contract is preserved as inconclusive non-decision evidence and cannot be substituted, repaired, rerun or promoted under this protocol.",
+    "nextAction": "Continue with the next evidence-backed structural mechanism inside #421 under a new finite preregistration; do not reopen any closed family or this exact contract."
+  },
+  "claimBoundary": "This audit explains the deterministic inconclusive disposition and corrects planned-versus-completed execution accounting. It contains zero scientific observations and makes no identity, capacity, causal, balance, product, #421-acceptance or #108-P9 claim."
+}
