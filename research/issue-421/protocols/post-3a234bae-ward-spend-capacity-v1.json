@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5466728774,
+  "stage": "post-3a234bae-ward-spend-v3-natural-capacity",
+  "question": "Does the identity-safe Ward-spend surface naturally expose the frozen producer, research consumer and same-turn payable Ward often enough across the current policy repertoire to justify the smallest CRN endpoint panel?",
+  "hypotheses": {
+    "H0": "Neither the brace-first level nor its preregistered bulwark fallback meets the frozen producer, consumer, payable, inactive and viable support gates, or the capacity representation has an integrity fault.",
+    "H1": "At least one producer level has at least one spend level meeting every frozen capacity and integrity gate."
+  },
+  "claimBoundary": "Natural producer, consumer and same-turn payable-Ward capacity plus exact off/on path, policy and RNG identity only. No payoff magnitude, causal endpoint, package, candidate, detector, product, protected-seed, #421 acceptance or #108 P9 claim.",
+  "directGate": {
+    "status": "success",
+    "protocolSha256": "7b0773f92ceae02f3303b07ba9aaca54439e2aa443466a69068c874cdc704d1f",
+    "summarySha256": "4e94c9fd3373fe5ef537e22815e933f2cc3649a9d3cc213ef3fd51ca4f98f4f7",
+    "runnerSha256": "94ddbb49846fe08c8482ac7ec9afbb9bf53ec222b94e1968ad433ae8f6c5f5ee",
+    "observations": 74,
+    "faults": 0,
+    "authority": "Capacity only; no endpoint or candidate claim."
+  },
+  "engineIdentity": {
+    "path": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "binarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "hostFingerprint": {
+      "kernel": "Darwin 27.0.0 arm64",
+      "osVersion": "27.0",
+      "hardwareModel": "MacBookPro18,2",
+      "cpu": "Apple M1 Max",
+      "logicalCpu": 10,
+      "memoryBytes": 68719476736
+    },
+    "hostFingerprintCanonicalJsonWithLfSha256": "0be06e9f75ead434ac18f14b4b8eb8a126f8126ab4135dc9ca5cfbc11c26d8b6"
+  },
+  "factorDefinitions": {
+    "sharedOff": {
+      "producer": "off",
+      "consumerEffect": "off",
+      "surface": "The same research card is in the common pool, but no Ward source may create credit."
+    },
+    "brace": {
+      "producer": "brace",
+      "consumerEffect": "off",
+      "surface": "Only exact realised Ward from unchanged current-main brace may create or replace credit."
+    },
+    "bulwark": {
+      "producer": "bulwark",
+      "consumerEffect": "off",
+      "surface": "Only exact realised Ward from unchanged current-main bulwark may create or replace credit; this arm runs only after valid brace capacity futility."
+    },
+    "spendEstimands": [
+      4,
+      8
+    ],
+    "payoff": "Fixed absent. Payability is derived from exact source credit and current Ward; no Ward is spent and no damage operation executes.",
+    "aspect": "Duskblade Vow-5 only."
+  },
+  "design": {
+    "type": "Mechanism-blocked, common-random-number natural-capacity census with one shared off arm and a preregistered producer fallback.",
+    "initialMatrix": [
+      "shared off",
+      "brace observation"
+    ],
+    "fallbackMatrix": [
+      "bulwark observation compared with the same shared off rows"
+    ],
+    "fallbackRule": "Run the bulwark arm only when brace has zero feasible spend levels and zero integrity faults.",
+    "sharedAnchors": "All arms use the same content projection, root-252206084 policy index, simulation seed, Duskblade Vow-5 baseline, acquisition, draw, energy, play policy, estimator and stopping rule.",
+    "noCartesianSpend": "Spend 4 and 8 are derived from the same opportunity telemetry; no duplicate simulator rows are spent on aliased consumer-off levels.",
+    "factorIsolation": "Only the configured producer observation changes. Consumer effect is fixed off; Scoreline, Afterimage and every other closed package remain absent and off.",
+    "aliasStructure": "After removing wardSpend-prefixed private telemetry, every enabled row must equal its shared off row exactly, including policy snapshot, outcome, fights, deck, stats and RNG.",
+    "firstLook": "Brace is evaluated once on all 512 initial rows. Bulwark, if triggered, is evaluated once on 256 additional rows. There is no row, floor, cohort or analyser change."
+  },
+  "cohort": {
+    "policyRoot": 252206084,
+    "policyCount": 64,
+    "policyIndices": "0-63",
+    "policyIdentity": "Exact tools/balance_policy.gd SHA-256 8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026 plus root and index.",
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      280388614,
+      2021286877,
+      1406049338,
+      1123099595
+    ],
+    "rowsPerArm": 256,
+    "minimumRowsPerRobustPolicy": 2,
+    "identityDerivation": "Policy root and four seeds use 100000000 plus the first four SHA-256 bytes modulo 2047483648 of issue421|5466728774|ward-spend-v3-capacity|policy-root or seed-N.",
+    "freshness": "The five identities are unique, absent from predecessor protocols and the append-only ledger, and outside protected range 3000-5399."
+  },
+  "estimands": {
+    "producerExposure": "Policies with positive exact producer events in at least two of four matched seeds.",
+    "consumerExposure": "Policies that naturally acquire, draw and play the pooled research consumer in at least two of four matched seeds; exact play count must equal opportunity count.",
+    "payable4": "Policies with source credit and current Ward both at least 4 in at least two matched seeds.",
+    "payable8": "Policies with source credit and current Ward both at least 8 in at least two matched seeds.",
+    "exactInactive": "Policies with zero payable events for the spend level across all four matched seeds.",
+    "viable": "Policies with payable events in at least two seeds whose matched whole run does not stall or error.",
+    "identity": "Exact off/enabled equality after removing wardSpend-prefixed telemetry, plus zero spend/payoff events and exact policy/RNG identity.",
+    "notEstimated": "Payoff effect, quality effect, functional separation, reachability beyond this normal acquisition path, held-out replication, detector, RC, product or P9."
+  },
+  "gates": {
+    "minimumRowsPerRobustPolicy": 2,
+    "minimumProducerPolicies": 16,
+    "minimumConsumerPolicies": 16,
+    "minimumPayablePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "maximumIdentityFaultRows": 0,
+    "selectedSpendRule": "Retain every spend level meeting all gates. Do not select by an endpoint because no endpoint runs here."
+  },
+  "decisionRules": {
+    "success": "The exact engine, source, generated cache, direct evidence, policy identities and ledger match; capacity scripts parse; at least one producer and spend level meets every frozen support and integrity gate; all completed observations append atomically.",
+    "successAuthority": "Apply boundary 1: freeze only the feasible producer and spend levels for one separately preregistered smallest sufficient CRN causal panel.",
+    "futility": "A source, cache, parse, identity, path, policy, RNG, telemetry, reliability or ledger fault occurs, or brace and its conditional bulwark fallback both miss every spend-level support gate.",
+    "futilityAuthority": "Apply boundary 2: close this exact Ward-spend family without threshold, card, producer, payoff, cohort, policy, method, import, cache or rerun rescue, then continue inside #421.",
+    "inconclusive": "A required process, complete reached-stage output or atomic ledger receipt is unavailable, or the complete decision exceeds 240 seconds.",
+    "inconclusiveAuthority": "Apply boundary 3: record the result at cap without rerun, extra row, replacement cohort, endpoint inference or protected seeds."
+  },
+  "budget": {
+    "initialScientificSimulatorRows": 512,
+    "maximumScientificSimulatorRows": 768,
+    "maximumNewLedgerRows": 768,
+    "mechanicalParseGodotProcesses": 2,
+    "initialSimulatorGodotProcesses": 1,
+    "maximumFallbackSimulatorGodotProcesses": 1,
+    "maximumGodotProcesses": 4,
+    "maximumWallTimeSeconds": 240,
+    "maximumCacheObjects": 8,
+    "protectedSeedRows": 0,
+    "optimiserRows": 0,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0
+  },
+  "contentProjectionSha256": "908a4cfb2c002b1f6dc17414e570c77e5da451c40cf84b6bf19be36f502038f8",
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "quarantine": {
+    "v1Observations": 82,
+    "v2DecisionRows": 0,
+    "decisionWeight": 0,
+    "archiveHeads": [
+      "004679a83894f151e95aeed35d2ecaab60a9d3f5",
+      "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+      "3a234baedbf4007bae3fdc1dd85e0478380825b5"
+    ]
+  },
+  "immutableInputs": {
+    "repositoryPath": "/Users/jamesto/Coding/glassvow",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+      "refs/remotes/origin/research/issue-421-post-fb3deac5-ward-spend-v2-preflight-evidence": "3a234baedbf4007bae3fdc1dd85e0478380825b5",
+      "refs/remotes/origin/research/issue-421-post-b7b5099-ward-spend-futility-evidence": "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+      "refs/remotes/origin/research/issue-421-post-810264c-private-causal-coverage-evidence": "b7b509939ff0bd8f75ba2218309e09cb94808878"
+    },
+    "sourceHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "sourceStatus": [
+      " M domain/rules/combat.gd",
+      " M domain/state/player_combatant.gd",
+      " M tools/balance_sim.gd",
+      "?? tools/research_421_ward_spend_capacity_probe.gd"
+    ],
+    "classCacheSha256": "4937b0a7e7f4a10f3821d39ffd2e1c759ed79204ce37b8ddb53cce7af09ee8cd",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "4ebd0c76e4dd165b731e96453642b4a0fd4f707e5de7ef74187bdf676a377cf9",
+      "domain/state/player_combatant.gd": "12f15b50d1eb06c9871fb7bda5caa2f50cab114b0350f850157edad4f301428c",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_sim.gd": "18aafc7170230f508e1e32550b5f1fdd438fecea478024ad0c02aa97d24733ef",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/research_421_ward_spend_capacity_probe.gd": "6d06365748280ca87abcc17524e0747e426273cf43f2d2c7a7354440244d6641"
+    },
+    "mechanismDiffSha256": "27c753fbdebbf787be9a280e24529d1701218f048f4408f4f4a2b14f5c2f5291",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runnerSha256": "f5c1c550c21f59f4e1c34ed0fd9326cb6c5e26f97d1f674864c914e484069ceb",
+    "taskCapsulePath": "task-capsule-5466728774-v27.json",
+    "taskCapsuleSha256": "ffd1f16de8c5d27757eb1b6ca72ef5258be3cd5c92289b8f90d5e13b7fac2440",
+    "directProtocolPath": "protocols/post-3a234bae-ward-spend-identity-v3.json",
+    "directProtocolSha256": "7b0773f92ceae02f3303b07ba9aaca54439e2aa443466a69068c874cdc704d1f",
+    "directSummaryPath": "summaries/post-3a234bae-ward-spend-identity-v3.json",
+    "directSummarySha256": "4e94c9fd3373fe5ef537e22815e933f2cc3649a9d3cc213ef3fd51ca4f98f4f7",
+    "directRunnerPath": "post_3a234bae_ward_spend_identity_v3.py",
+    "directRunnerSha256": "94ddbb49846fe08c8482ac7ec9afbb9bf53ec222b94e1968ad433ae8f6c5f5ee"
+  }
+}

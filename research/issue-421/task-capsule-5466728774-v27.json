@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 4,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "taskSsot": {
+    "issueBodySha256": "32b565aac287d12ed98b858746158a5cc5136fbcdbe684485e43232172d58e17",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ],
+    "outcome": "Complete the accepted #421 strategy-package, detector, RC and exact-SHA P9 outcome, then record the #108 receipt without a successor ticket."
+  },
+  "authority": {
+    "commentId": 5466728774,
+    "author": "fol2",
+    "authorAssociation": "OWNER",
+    "bodySha256": "db40553e2a576acdf33062993d54e1116595935614aecf5bd33fcf44e568876d",
+    "decision": "Run exactly one separately versioned cache-correct continuation of the unchanged Ward-spend family and apply its automatic evidence ladder."
+  },
+  "resolvedMain": {
+    "sha": "5f53020f588145ec5fbf803de32d82c7d29c06d2"
+  },
+  "directGate": {
+    "outcome": "success",
+    "decision": "authorise-brace-first-natural-capacity-screen-v3",
+    "protocolSha256": "7b0773f92ceae02f3303b07ba9aaca54439e2aa443466a69068c874cdc704d1f",
+    "summarySha256": "4e94c9fd3373fe5ef537e22815e933f2cc3649a9d3cc213ef3fd51ca4f98f4f7",
+    "runnerSha256": "94ddbb49846fe08c8482ac7ec9afbb9bf53ec222b94e1968ad433ae8f6c5f5ee",
+    "observations": 74,
+    "GodotProcesses": 12,
+    "faults": 0,
+    "newSimulatorRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0
+  },
+  "capacitySource": {
+    "worktree": "/Users/jamesto/Research/glassvow-p9-421/ward-spend-finisher-v3-capacity-source",
+    "head": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "classCacheSha256": "4937b0a7e7f4a10f3821d39ffd2e1c759ed79204ce37b8ddb53cce7af09ee8cd",
+    "mechanismDiffSha256": "27c753fbdebbf787be9a280e24529d1701218f048f4408f4f4a2b14f5c2f5291",
+    "balanceSimSha256": "18aafc7170230f508e1e32550b5f1fdd438fecea478024ad0c02aa97d24733ef",
+    "probeSha256": "6d06365748280ca87abcc17524e0747e426273cf43f2d2c7a7354440244d6641",
+    "postFreezeImportOrRepairPermitted": false
+  },
+  "capacityDesign": {
+    "question": "Does the identity-safe Ward-spend surface naturally expose brace, the research consumer and same-turn payable Ward often enough across the frozen policy repertoire to justify a CRN endpoint panel?",
+    "arms": "One shared off arm and brace observation arm; add only the preregistered bulwark observation arm if brace has no feasible spend level.",
+    "policyRoot": 252206084,
+    "policyCount": 64,
+    "simulationSeeds": [
+      280388614,
+      2021286877,
+      1406049338,
+      1123099595
+    ],
+    "aspect": "duskblade",
+    "vow": 5,
+    "initialRows": 512,
+    "maximumRowsWithFallback": 768,
+    "maximumGodotProcesses": 4,
+    "maximumWallTimeSeconds": 240,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0
+  },
+  "immutableEvidence": {
+    "archiveHeads": [
+      "004679a83894f151e95aeed35d2ecaab60a9d3f5",
+      "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+      "3a234baedbf4007bae3fdc1dd85e0478380825b5"
+    ],
+    "quarantinedObservations": 82,
+    "v2DirectDecisionRows": 0,
+    "decisionWeight": 0
+  },
+  "ledgerFreeze": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "nonGoals": [
+    "No payoff retune, joint cell, policy control, optimiser or protected seed.",
+    "No capacity claim may be treated as an endpoint, package, product or P9 claim.",
+    "No successor, product PR, research PR or Actions run."
+  ],
+  "nextAction": "Freeze and execute the shared-off, brace-first natural-capacity census, using bulwark only under the frozen automatic fallback."
+}

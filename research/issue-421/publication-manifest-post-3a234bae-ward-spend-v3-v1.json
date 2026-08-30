@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "authorityComment": 5466728774,
+  "archiveParent": "3a234baedbf4007bae3fdc1dd85e0478380825b5",
+  "immutableEvidencePreserved": [
+    "004679a83894f151e95aeed35d2ecaab60a9d3f5",
+    "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+    "b7b509939ff0bd8f75ba2218309e09cb94808878",
+    "3a234baedbf4007bae3fdc1dd85e0478380825b5"
+  ],
+  "currentMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "engineIdentity": {
+    "compatibilityAuthority": "stable Godot >= 4.7.2",
+    "path": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "binarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "hostFingerprintCanonicalJsonWithLfSha256": "0be06e9f75ead434ac18f14b4b8eb8a126f8126ab4135dc9ca5cfbc11c26d8b6"
+  },
+  "preRowEnvironmentCorrection": {
+    "completedBeforeCandidateProbeProtocolAndResearchIdentityFreeze": true,
+    "GodotProcesses": 2,
+    "importedFileCountPerWorktree": 824,
+    "baselineClassCacheSha256": "4937b0a7e7f4a10f3821d39ffd2e1c759ed79204ce37b8ddb53cce7af09ee8cd",
+    "candidateClassCacheSha256": "4937b0a7e7f4a10f3821d39ffd2e1c759ed79204ce37b8ddb53cce7af09ee8cd",
+    "postFreezeImportOrRepair": false
+  },
+  "directGate": {
+    "outcomeClass": "success",
+    "decision": "authorise-brace-first-natural-capacity-screen-v3",
+    "protocolSha256": "7b0773f92ceae02f3303b07ba9aaca54439e2aa443466a69068c874cdc704d1f",
+    "runnerSha256": "94ddbb49846fe08c8482ac7ec9afbb9bf53ec222b94e1968ad433ae8f6c5f5ee",
+    "taskCapsuleSha256": "22cc84bb96f8d8221eeb7d51397b6d61dfc6117d332c65a583a250195d32e5cd",
+    "summarySha256": "4e94c9fd3373fe5ef537e22815e933f2cc3649a9d3cc213ef3fd51ca4f98f4f7",
+    "directControlledObservations": 74,
+    "GodotProcesses": 12,
+    "faults": 0,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "wallTimeSeconds": 14.593419500044547
+  },
+  "capacityGate": {
+    "outcomeClass": "futility",
+    "decision": "close-ward-spend-v3-family-at-capacity-integrity-gate",
+    "protocolSha256": "04d113b2670bb163adf692736a853a2cedb472a7b6fd1c7c429fc7b278bc9708",
+    "runnerSha256": "f5c1c550c21f59f4e1c34ed0fd9326cb6c5e26f97d1f674864c914e484069ceb",
+    "taskCapsuleSha256": "ffd1f16de8c5d27757eb1b6ca72ef5258be3cd5c92289b8f90d5e13b7fac2440",
+    "summarySha256": "c8e22ec08c57bfe1103a1eee756ecf352ae8b1195e017ea2ae742b6eacbacd86",
+    "plannedInitialSimulatorRows": 512,
+    "maximumScientificSimulatorRows": 768,
+    "mechanicalParseGodotProcesses": 2,
+    "GodotProcesses": 2,
+    "observedSimulatorRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "wallTimeSeconds": 6.86652020807378,
+    "rootCause": "The frozen tools/balance_sim.gd line 458 contained a literal plus token where its multiline schema guard required a boolean continuation.",
+    "notEstablished": [
+      "zero Ward activation",
+      "insufficient natural capacity",
+      "causal futility",
+      "functional non-separation",
+      "complete autonomous-P9 impossibility"
+    ],
+    "noRepairOrRerun": true
+  },
+  "ledger": {
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "records": 482036,
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "artefacts": {
+    "protocols/post-3a234bae-ward-spend-identity-v3.json": "7b0773f92ceae02f3303b07ba9aaca54439e2aa443466a69068c874cdc704d1f",
+    "protocols/post-3a234bae-ward-spend-capacity-v1.json": "04d113b2670bb163adf692736a853a2cedb472a7b6fd1c7c429fc7b278bc9708",
+    "tools/post_3a234bae_ward_spend_identity_v3.py": "94ddbb49846fe08c8482ac7ec9afbb9bf53ec222b94e1968ad433ae8f6c5f5ee",
+    "tools/post_3a234bae_ward_spend_capacity_v1.py": "f5c1c550c21f59f4e1c34ed0fd9326cb6c5e26f97d1f674864c914e484069ceb",
+    "task-capsule-5466728774-v26.json": "22cc84bb96f8d8221eeb7d51397b6d61dfc6117d332c65a583a250195d32e5cd",
+    "task-capsule-5466728774-v27.json": "ffd1f16de8c5d27757eb1b6ca72ef5258be3cd5c92289b8f90d5e13b7fac2440",
+    "summaries/post-3a234bae-ward-spend-identity-v3.json": "4e94c9fd3373fe5ef537e22815e933f2cc3649a9d3cc213ef3fd51ca4f98f4f7",
+    "summaries/post-3a234bae-ward-spend-capacity-v1.json": "c8e22ec08c57bfe1103a1eee756ecf352ae8b1195e017ea2ae742b6eacbacd86",
+    "summaries/post-3a234bae-ward-spend-primary-sources-v3.md": "fb17ebfbc72a4e964880252924d16c858b2cb7f71e7c3ee939588e1f5f176e0e",
+    "summaries/post-3a234bae-ward-spend-v3-disposition.md": "be7efa1c805b4c78e3e8c464fa948ead23e71d4c540a3d87735c24146944ec80",
+    "prototype-ward-spend-finisher-v3/ward-spend-finisher-v3.patch.gz": "3e8ea7ff5a27fff1ba6f42ea7d1cdafcaec4d958b651433ce239f12a726163b0",
+    "prototype-ward-spend-finisher-v3/tools/research_421_ward_spend_probe_v3.gd": "9c5fb571a5cbb6e682a9b2d7f7f556cd5c58c482eecfbc199f499d71e927c37a",
+    "prototype-ward-spend-capacity-v1/balance-sim-capacity-v1.patch.gz": "314f56c13c8336458ed634361d929b744c05814deedb1d3cafad1140ad9e38ae",
+    "prototype-ward-spend-capacity-v1/tools/research_421_ward_spend_capacity_probe.gd": "6d06365748280ca87abcc17524e0747e426273cf43f2d2c7a7354440244d6641"
+  },
+  "prototypePatchInflatedSha256": {
+    "wardSpendMechanism": "27c753fbdebbf787be9a280e24529d1701218f048f4408f4f4a2b14f5c2f5291",
+    "capacityHarness": "a99eaaa1c8594b18f2ea679882110552af01a517b43c415564077d95d9e8338f"
+  },
+  "rawDirectEvidence": {
+    "fileCount": 18,
+    "fileNameEqualsContentSha256": true,
+    "contentSha256": [
+      "07c39fb17d4fd40f73f5fde4c1e3cf387a3b84562620491079f5e263e3c5b7fa",
+      "325a9d4291c48db4d56c452c5ea8bbaac2924a75f3020fc4ac9cdd4516945a44",
+      "341e66856994fe7d9568feb87bc420afe1d4729ad9cc807683c320509f224d40",
+      "367929361d3f015097ec7a950d02bb055d07dc2baf09893d566b91278c55b1d8",
+      "3d75e60955f558f5755c447c3bbe30bd74d904a85339bac9d25c288c8e0dda46",
+      "70033c847a8caa4889a8b6bdd0c00b94be7f8bb66746fe927d2b8fee67203efd",
+      "7bbef56f429552d6564e7e25a753e40d01679d64e059b0f23ff0fe6088e1e110",
+      "82975472566a7c980e9f2e150d4ffc481a972f5990acac3c74a5826ba2bedde8",
+      "897597cd0eb8757d6c2ed9ef8cd929b439b4c54f83200442330809dd283e7e37",
+      "959bebc39ae975e30fe21e0a86cc9f9c70ce75a4c3f72dd2a576495f4aa5320e",
+      "95dd975cf025c38319878422a72148fc101b068b8e87825fee1cae669f9ae476",
+      "a036823db57a4c609747a3f0fb2553054fb967ebccc7ea40293a37164f905caf",
+      "a720ada4b916cfa13b99173425ee10e3ddb24e9782980d3077f171876be6c0ff",
+      "af1348477661552d32537025376dd3ded0c5d43e45f93def419bf02230968ce6",
+      "ba8f853455fb6534e74581406aeae4a26682808a3b23d8ee9359cb488941c224",
+      "c85ed07c6d2832c635e2da377e40cc32733ac6c35679fb6a0da1f91c3f8a30b6",
+      "d2f5797b6a1ebeec908707550dd2e6aff2e2e31d93cfcb746b9688fb780330bc",
+      "fa4d9cb7db647dbffec7ed98404406cd5a9fa1f0f6448920bb63634d9901f775"
+    ]
+  },
+  "verification": {
+    "jsonSyntax": "pass",
+    "pythonSyntax": "pass",
+    "gzipIntegrity": "pass",
+    "prototypeInflatedHashes": "pass",
+    "diffCheck": "pass",
+    "anchorCheck": "pass",
+    "sha256Sums": "pass",
+    "benchmarkFreeze": "The archive parent and candidate each report the same 30 historical archive-copy citations; this continuation adds zero. The archive-only branch is not mergeable product truth."
+  },
+  "prohibitedClaimsAndActions": [
+    "use of the quarantined 82 observations",
+    "Ward natural-capacity or causal conclusion",
+    "post-freeze repair or rerun of the exact Ward-spend v3 family",
+    "product truth or shipping-candidate selection",
+    "protected acceptance or reserve evidence",
+    "research or product pull request",
+    "GitHub Actions run",
+    "replacement or successor issue",
+    "#421 acceptance or #108 P9 receipt"
+  ],
+  "claimBoundary": "This publication proves a cache-correct 74-observation direct identity success and the exact Ward-spend v3 family's frozen zero-simulator-row capacity-integrity closure. It does not establish natural capacity or causal endpoint evidence."
+}

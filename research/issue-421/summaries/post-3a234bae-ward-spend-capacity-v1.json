@@ -1,0 +1,127 @@
+{
+  "GodotProcesses": 2,
+  "authority": "Apply boundary 2: close this exact Ward-spend family without threshold, card, producer, payoff, cohort, policy, method, import, cache or rerun rescue, then continue inside #421.",
+  "claimBoundary": "Natural producer, consumer and same-turn payable-Ward capacity plus exact off/on path, policy and RNG identity only. No payoff magnitude, causal endpoint, package, candidate, detector, product, protected-seed, #421 acceptance or #108 P9 claim.",
+  "contentProjectionSha256": "908a4cfb2c002b1f6dc17414e570c77e5da451c40cf84b6bf19be36f502038f8",
+  "decision": "close-ward-spend-v3-family-at-capacity-integrity-gate",
+  "decisionBoundary": 2,
+  "engineIdentity": {
+    "binarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "hostFingerprint": {
+      "cpu": "Apple M1 Max",
+      "hardwareModel": "MacBookPro18,2",
+      "kernel": "Darwin 27.0.0 arm64",
+      "logicalCpu": 10,
+      "memoryBytes": 68719476736,
+      "osVersion": "27.0"
+    },
+    "hostFingerprintCanonicalJsonWithLfSha256": "0be06e9f75ead434ac18f14b4b8eb8a126f8126ab4135dc9ca5cfbc11c26d8b6",
+    "path": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "version": "4.7.2.stable.official.ed1daf0bf"
+  },
+  "executionError": "",
+  "feasibleSpendLevels": [],
+  "immutableQuarantinedObservationCount": 82,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerAppendError": "",
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 482036,
+    "protectedSeedRows": 0,
+    "records": 482036,
+    "sha256": "97750ded8787049a62b0f6eac6bf157b682e0dd0bfc92db72eb373810807a213",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokensDuringExecutionAndDecision": 0,
+  "newLedgerRows": 0,
+  "observedRows": 0,
+  "outcomeClass": "futility",
+  "outputs": {},
+  "parseTranscript": "tools/balance_sim.gd:458  PARSE   Parse Error: Expected expression after \"+\" operator.\ntools/research_421_ward_spend_capacity_probe.gd:5  PARSE   Parse Error: Could not preload resource script \"res://tools/balance_sim.gd\".\ntools/research_421_ward_spend_capacity_probe.gd:5  PARSE   Parse Error: Could not resolve script \"res://tools/balance_sim.gd\".\n\n2 of 2 script check(s) failed.\n",
+  "postExecutionSourceIdentityFault": false,
+  "protectedSeedRows": 0,
+  "protocolSha256": "04d113b2670bb163adf692736a853a2cedb472a7b6fd1c7c429fc7b278bc9708",
+  "quarantinedObservationsUsedForDecision": 0,
+  "runnerSha256": "f5c1c550c21f59f4e1c34ed0fd9326cb6c5e26f97d1f674864c914e484069ceb",
+  "schemaVersion": 1,
+  "selectedProducer": "",
+  "sourceFaults": [
+    "capacity GDScript mechanical parse preflight"
+  ],
+  "sourceIdentity": {
+    "classCacheSha256": "4937b0a7e7f4a10f3821d39ffd2e1c759ed79204ce37b8ddb53cce7af09ee8cd",
+    "directProtocolSha256": "7b0773f92ceae02f3303b07ba9aaca54439e2aa443466a69068c874cdc704d1f",
+    "directRunnerSha256": "94ddbb49846fe08c8482ac7ec9afbb9bf53ec222b94e1968ad433ae8f6c5f5ee",
+    "directSummarySha256": "4e94c9fd3373fe5ef537e22815e933f2cc3649a9d3cc213ef3fd51ca4f98f4f7",
+    "mechanismDiffSha256": "27c753fbdebbf787be9a280e24529d1701218f048f4408f4f4a2b14f5c2f5291",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+      "refs/remotes/origin/research/issue-421-post-810264c-private-causal-coverage-evidence": "b7b509939ff0bd8f75ba2218309e09cb94808878",
+      "refs/remotes/origin/research/issue-421-post-b7b5099-ward-spend-futility-evidence": "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+      "refs/remotes/origin/research/issue-421-post-fb3deac5-ward-spend-v2-preflight-evidence": "3a234baedbf4007bae3fdc1dd85e0478380825b5"
+    },
+    "runnerSha256": "f5c1c550c21f59f4e1c34ed0fd9326cb6c5e26f97d1f674864c914e484069ceb",
+    "sourceHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "4ebd0c76e4dd165b731e96453642b4a0fd4f707e5de7ef74187bdf676a377cf9",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "12f15b50d1eb06c9871fb7bda5caa2f50cab114b0350f850157edad4f301428c",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "18aafc7170230f508e1e32550b5f1fdd438fecea478024ad0c02aa97d24733ef",
+      "tools/research_421_ward_spend_capacity_probe.gd": "6d06365748280ca87abcc17524e0747e426273cf43f2d2c7a7354440244d6641"
+    },
+    "sourceStatus": [
+      " M domain/rules/combat.gd",
+      " M domain/state/player_combatant.gd",
+      " M tools/balance_sim.gd",
+      "?? tools/research_421_ward_spend_capacity_probe.gd"
+    ],
+    "taskCapsuleSha256": "ffd1f16de8c5d27757eb1b6ca72ef5258be3cd5c92289b8f90d5e13b7fac2440"
+  },
+  "sourceIdentityAfterExecution": {
+    "classCacheSha256": "4937b0a7e7f4a10f3821d39ffd2e1c759ed79204ce37b8ddb53cce7af09ee8cd",
+    "directProtocolSha256": "7b0773f92ceae02f3303b07ba9aaca54439e2aa443466a69068c874cdc704d1f",
+    "directRunnerSha256": "94ddbb49846fe08c8482ac7ec9afbb9bf53ec222b94e1968ad433ae8f6c5f5ee",
+    "directSummarySha256": "4e94c9fd3373fe5ef537e22815e933f2cc3649a9d3cc213ef3fd51ca4f98f4f7",
+    "mechanismDiffSha256": "27c753fbdebbf787be9a280e24529d1701218f048f4408f4f4a2b14f5c2f5291",
+    "repositoryRefs": {
+      "refs/remotes/origin/main": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+      "refs/remotes/origin/research/issue-421-post-810264c-private-causal-coverage-evidence": "b7b509939ff0bd8f75ba2218309e09cb94808878",
+      "refs/remotes/origin/research/issue-421-post-b7b5099-ward-spend-futility-evidence": "fb3deac5d3624142faad20c6d2c89eb2c392eda7",
+      "refs/remotes/origin/research/issue-421-post-fb3deac5-ward-spend-v2-preflight-evidence": "3a234baedbf4007bae3fdc1dd85e0478380825b5"
+    },
+    "runnerSha256": "f5c1c550c21f59f4e1c34ed0fd9326cb6c5e26f97d1f674864c914e484069ceb",
+    "sourceHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "4ebd0c76e4dd165b731e96453642b4a0fd4f707e5de7ef74187bdf676a377cf9",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "domain/state/player_combatant.gd": "12f15b50d1eb06c9871fb7bda5caa2f50cab114b0350f850157edad4f301428c",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "18aafc7170230f508e1e32550b5f1fdd438fecea478024ad0c02aa97d24733ef",
+      "tools/research_421_ward_spend_capacity_probe.gd": "6d06365748280ca87abcc17524e0747e426273cf43f2d2c7a7354440244d6641"
+    },
+    "sourceStatus": [
+      " M domain/rules/combat.gd",
+      " M domain/state/player_combatant.gd",
+      " M tools/balance_sim.gd",
+      "?? tools/research_421_ward_spend_capacity_probe.gd"
+    ],
+    "taskCapsuleSha256": "ffd1f16de8c5d27757eb1b6ca72ef5258be3cd5c92289b8f90d5e13b7fac2440"
+  },
+  "stageResults": {},
+  "wallTimeSeconds": 6.86652020807378
+}
