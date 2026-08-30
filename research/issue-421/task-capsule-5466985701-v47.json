@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "unavailable-autonomous-mechanism-gate",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labelsBeforeDecisionPackage": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "developmentCheckout": {
+    "path": "/Users/jamesto/Coding/glassvow",
+    "branch": "work/421-h34",
+    "head": "7d1f6c0ff4d7534eb517ef57d1f547db140833fd",
+    "status": "clean-and-untouched"
+  },
+  "parentArchiveHead": "c3762813a38bbc2f5d30cf3e3973ae936a6bbfee",
+  "protocol": {
+    "path": "protocols/post-c3762813-autonomous-closure-envelope-v1.json",
+    "sha256": "ddddac4c0a4539f0dd10722cbe568c65548e605d333318547a54fbd4fda9f33f",
+    "correctionAllowance": 0
+  },
+  "decision": {
+    "outcome": "UNAVAILABLE",
+    "disposition": "ESCALATE_ONE_HUMAN_AUTHORITY_PACKAGE",
+    "summaryPath": "summaries/post-c3762813-autonomous-closure-envelope-v1.json",
+    "summarySha256": "7d88cbe842053d8338d716b31f26fd40f956f63139e5bb23ef53d21a9287773b",
+    "readoutPath": "summaries/post-c3762813-autonomous-closure-envelope-v1.md",
+    "readoutSha256": "a5e83ed46793f331721efd09e87ef3f662fd359f8a0a6503d606e998c238019d"
+  },
+  "classDispositions": {
+    "C1_EXISTING_COMBAT_STATE_ZONE_OR_AUTHORED_OPERATOR": "CLOSED",
+    "C2_NEW_FIGHT_LOCAL_STATE_CARRIER_OR_TRANSFORM": "CLOSED",
+    "C3_COMBAT_ACTION_SCHEDULING_OR_TRACE_TRANSFORM": "CLOSED",
+    "C4_NATIVE_RUN_ACQUISITION_OR_REWARD_ROUTE": "CLOSED",
+    "C5_NEW_PERSISTENT_RUN_OR_PRESENTATION_CONTRACT": "OUTSIDE_AUTONOMOUS_AUTHORITY",
+    "C6_EXTERNAL_PRIMARY_RULE_TOPOLOGY": "UNAVAILABLE_AT_CAP"
+  },
+  "methodBoundary": {
+    "policyBottleneckIdentified": true,
+    "openDecisionTargetExists": false,
+    "measuredDecisionValue": false,
+    "optimizerAuthorised": false
+  },
+  "safeState": {
+    "eligibleAutonomousClasses": 0,
+    "GodotProcesses": 0,
+    "simulatorRows": 0,
+    "ledgerReads": 0,
+    "ledgerWrites": 0,
+    "protectedSeedRows": 0,
+    "productMutations": 0,
+    "successorTickets": 0,
+    "issue421Accepted": false,
+    "issue108P9Receipted": false
+  },
+  "nextAction": "Publish the immutable closure-envelope archive and exactly one #421 human-authority decision package. Move #421 from ready-for-agent to needs-info. Make no further research, product, protected-seed or #108 change until the owner changes one binding authority."
+}

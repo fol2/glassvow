@@ -1,0 +1,67 @@
+{
+  "hypothesis": "H1_AUTONOMOUS_CLASS_CLOSURE",
+  "protocolSha256": "ddddac4c0a4539f0dd10722cbe568c65548e605d333318547a54fbd4fda9f33f",
+  "sourceHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "verdict": "COMPLETE",
+  "reportSha256": "d232e1ed97b9612232180c8306566b20ef8b01e616c92dec4a6d6539729c9e82",
+  "inconclusiveReasons": [],
+  "partitionComplete": true,
+  "missingClasses": [],
+  "classes": {
+    "C1_EXISTING_COMBAT_STATE_ZONE_OR_AUTHORED_OPERATOR": {
+      "disposition": "CLOSED",
+      "autonomouslyEligible": false,
+      "reason": "The prior partition maps immediate existing-state or zone consumers to immutable closures, and the later product-language audit found every retained root already projected.",
+      "evidence": [
+        "summaries/post-v30-post-acquisition-structural-boundary-v1.json:89",
+        "summaries/post-37776ccc-product-semantic-background-audit-v1.md:61"
+      ]
+    },
+    "C2_NEW_FIGHT_LOCAL_STATE_CARRIER_OR_TRANSFORM": {
+      "disposition": "CLOSED",
+      "autonomouslyEligible": false,
+      "reason": "The private-state audit records all serial classes exhausted and closes private counter, tag, and transform forms at the zero-row boundary.",
+      "evidence": [
+        "summaries/post-843e899-private-state-design-v1.json:3",
+        "summaries/post-843e899-private-state-design-v1.json:145"
+      ]
+    },
+    "C3_COMBAT_ACTION_SCHEDULING_OR_TRACE_TRANSFORM": {
+      "disposition": "CLOSED",
+      "autonomouslyEligible": false,
+      "reason": "The previously selected scheduling transform closed at its identity gate, and the later exact residual action-trace matrix has zero eligible cells and a futility disposition.",
+      "evidence": [
+        "summaries/post-1127ed7e-target-acts-last-identity-v2.json:13",
+        "summaries/post-9cc1496d-residual-action-trace-grammar-v2.json:1"
+      ]
+    },
+    "C4_NATIVE_RUN_ACQUISITION_OR_REWARD_ROUTE": {
+      "disposition": "CLOSED",
+      "autonomouslyEligible": false,
+      "reason": "Existing run-route surfaces are immutable closed aliases with no qualifying native route; the sole owner-bounded acquisition fallback also closed at identity.",
+      "evidence": [
+        "summaries/post-v30-post-acquisition-structural-boundary-v1.json:158",
+        "summaries/post-v30-post-acquisition-structural-boundary-v1.json:175"
+      ]
+    },
+    "C5_NEW_PERSISTENT_RUN_OR_PRESENTATION_CONTRACT": {
+      "disposition": "OUTSIDE_AUTONOMOUS_AUTHORITY",
+      "autonomouslyEligible": false,
+      "reason": "New persistent commitments and new presentation or acquisition contracts require unselected product semantics and human authority.",
+      "evidence": [
+        "summaries/post-v30-post-acquisition-structural-boundary-v1.json:192",
+        "summaries/post-v30-post-acquisition-structural-boundary-v1.json:209"
+      ]
+    },
+    "C6_EXTERNAL_PRIMARY_RULE_TOPOLOGY": {
+      "disposition": "UNAVAILABLE_AT_CAP",
+      "autonomouslyEligible": false,
+      "reason": "The primary-rule census stopped at its mandatory source-context cap after consuming its correction budget; the bounded blind literal screen then produced no supported topology key.",
+      "evidence": [
+        "summaries/post-c802be36-primary-rule-topology-census-v2.md:30",
+        "summaries/post-c802be36-primary-rule-topology-census-v2.md:40",
+        "summaries/post-29389311-blind-literal-topology-screen-v2.json:21"
+      ]
+    }
+  }
+}

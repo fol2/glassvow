@@ -1,0 +1,22 @@
+{
+  "hypothesis": "H2_POLICY_METHOD_DECISION_VALUE",
+  "protocolSha256": "ddddac4c0a4539f0dd10722cbe568c65548e605d333318547a54fbd4fda9f33f",
+  "sourceHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "verdict": "COMPLETE",
+  "reportSha256": "0f7a9630f44cdd3b2cb3b45edf59b70f65b3d6f870c39886f5b7a893f1757907",
+  "inconclusiveReasons": [],
+  "policyBottleneckIdentified": true,
+  "openDecisionTargetExists": false,
+  "measuredDecisionValue": false,
+  "optimizerAuthorised": false,
+  "priorMethodAlias": false,
+  "reason": "The residual action-trace result identifies a policy-repertoire bottleneck through failed policy expressibility, but closes every trace cell, leaving no decision-changing target. It is distinct from the earlier package-order method rather than an alias, yet no distinct measured method value exists; the prior boundary keeps optimisers prohibited.",
+  "evidence": [
+    "summaries/post-9cc1496d-residual-action-trace-grammar-v2.json:1",
+    "summaries/post-v38-policy-package-order-decision-value-v2.json:2",
+    "summaries/post-v38-policy-package-order-decision-value-v2.json:23",
+    "summaries/post-v38-policy-package-order-decision-value-v2.json:118",
+    "summaries/post-v30-method-boundary-audit-v1.json:27",
+    "summaries/post-v30-method-boundary-audit-v1.json:36"
+  ]
+}

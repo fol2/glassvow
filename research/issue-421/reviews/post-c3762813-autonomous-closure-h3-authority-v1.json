@@ -1,0 +1,30 @@
+{
+  "hypothesis": "H3_AUTHORITY_BOUNDARY",
+  "protocolSha256": "ddddac4c0a4539f0dd10722cbe568c65548e605d333318547a54fbd4fda9f33f",
+  "sourceHead": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "verdict": "COMPLETE",
+  "reportSha256": "adfe60975b2b8fa460555e55df6082421ccb23dcc3f4e07906065b39d9fc369a",
+  "inconclusiveReasons": [],
+  "unavailableGateRequiresEscalation": true,
+  "routineCheckpointProhibited": true,
+  "successorTicketProhibited": true,
+  "productAndProtectedStateMustRemainSafe": true,
+  "decisionPackageFields": [
+    "decision required",
+    "why automation cannot decide",
+    "options",
+    "evidence",
+    "recommendation",
+    "safe blocked state"
+  ],
+  "reason": "Conditionally, if no autonomous class and no decision-valued method remains, the relevant gate is unavailable and requires exactly one concise human-authority package inside #421. This is an escalation, not a routine approval checkpoint; no successor ticket is authorised, and the repository, product boundary, and protected identities remain safe.",
+  "evidence": [
+    "/tmp/glassvow-421-live.json:1",
+    "/tmp/glassvow-421-authority-live.json:1",
+    "/tmp/glassvow-main-AGENTS.md:39",
+    "/tmp/glassvow-main-AGENTS.md:41",
+    "/tmp/glassvow-main-AGENTS.md:73",
+    "/tmp/glassvow-main-ai-sdlc.md:29",
+    "/tmp/glassvow-main-ai-sdlc.md:77"
+  ]
+}

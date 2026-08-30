@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "name": "post-c3762813 autonomous mechanism closure-envelope audit v1",
+  "state": "FROZEN_BEFORE_BACKGROUND_AUDIT",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "authorityCommentId": 5466985701,
+    "authorityBodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "sourceIdentity": {
+    "head": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+    "archiveParent": "c3762813a38bbc2f5d30cf3e3973ae936a6bbfee"
+  },
+  "question": "After applying the expanded combat-local design authority to every new immutable closure through c3762813, does one distinct autonomous mechanism class or one decision-valued policy method remain, or is the relevant #421 package-support gate unavailable under the current authority contract?",
+  "competingHypotheses": {
+    "H1": "At least one exact class remains evidence-backed, materially distinct, within autonomous authority and not closed or unavailable at cap; or one policy method has a decision-changing open target and measured decision value.",
+    "H0": "Every exact class is closed, unavailable at its valid cap or outside current autonomous authority, and no policy method has a decision-changing open target with measured decision value.",
+    "HI": "The supplied immutable evidence or authority cannot establish partition completeness or the decision boundary at cap."
+  },
+  "classPartition": [
+    "C1_EXISTING_COMBAT_STATE_ZONE_OR_AUTHORED_OPERATOR",
+    "C2_NEW_FIGHT_LOCAL_STATE_CARRIER_OR_TRANSFORM",
+    "C3_COMBAT_ACTION_SCHEDULING_OR_TRACE_TRANSFORM",
+    "C4_NATIVE_RUN_ACQUISITION_OR_REWARD_ROUTE",
+    "C5_NEW_PERSISTENT_RUN_OR_PRESENTATION_CONTRACT",
+    "C6_EXTERNAL_PRIMARY_RULE_TOPOLOGY"
+  ],
+  "classDefinitions": {
+    "C1_EXISTING_COMBAT_STATE_ZONE_OR_AUTHORED_OPERATOR": "A mechanism composed only from current authored combat state, zones, effects or operator roots.",
+    "C2_NEW_FIGHT_LOCAL_STATE_CARRIER_OR_TRANSFORM": "A new combat-lifetime counter, tag, card token, status, target memory or state transform that never enters run/save identity.",
+    "C3_COMBAT_ACTION_SCHEDULING_OR_TRACE_TRANSFORM": "A unary structural change to card or enemy action order, multiplicity, timing, target, realised type or realised-result guard.",
+    "C4_NATIVE_RUN_ACQUISITION_OR_REWARD_ROUTE": "An existing reward, shop, event, deed, boss-relic, removal or other current run route reused without a new persistent or presentation contract.",
+    "C5_NEW_PERSISTENT_RUN_OR_PRESENTATION_CONTRACT": "A new save/internal-ID/relic ownership field, run-persistent selector, choice screen, choice timing, UI or acquisition contract.",
+    "C6_EXTERNAL_PRIMARY_RULE_TOPOLOGY": "A materially distinct combat topology selected from the preregistered official-rule evidence methods rather than invented from model preference."
+  },
+  "partitionJustification": "The prior structural boundary partitions mechanisms by existing combat semantics, new combat-lifetime representation, run/acquisition semantics and policy method. The expanded owner authority opened only deterministic combat-local representation. The later source, private-state, enemy-transform, within-action and primary-rule audits supply the exact delta required to subdivide and dispose that newly opened class. Policy method is assessed separately because it selects behaviour rather than defining product semantics.",
+  "classRank": {
+    "C1_EXISTING_COMBAT_STATE_ZONE_OR_AUTHORED_OPERATOR": 0,
+    "C2_NEW_FIGHT_LOCAL_STATE_CARRIER_OR_TRANSFORM": 1,
+    "C3_COMBAT_ACTION_SCHEDULING_OR_TRACE_TRANSFORM": 2,
+    "C4_NATIVE_RUN_ACQUISITION_OR_REWARD_ROUTE": 3,
+    "C6_EXTERNAL_PRIMARY_RULE_TOPOLOGY": 4,
+    "C5_NEW_PERSISTENT_RUN_OR_PRESENTATION_CONTRACT": 5
+  },
+  "backgroundAudit": {
+    "agentCount": 3,
+    "forkMode": "none",
+    "consolidateOnce": true,
+    "H1_AUTONOMOUS_CLASS_CLOSURE": {
+      "question": "Does every exact class have a complete immutable disposition, and is any class autonomously eligible?",
+      "inputs": {
+        "summaries/post-v30-post-acquisition-structural-boundary-v1.json": "ede9055ae709225ee08d297615a8f59628cc6f9bf4a531615f25a28d25b5899f",
+        "summaries/post-37776ccc-product-semantic-background-audit-v1.md": "13426a580e947c44253e549d5793f7c6f79d28497c73550f2b1495356b06af5c",
+        "summaries/post-843e899-private-state-design-v1.json": "047563a9e7f09172d8eb34e39485cbd29e870b87427afc78a41330449480ea3e",
+        "summaries/post-718ba823-enemy-action-transform-grammar-consolidation-v1.json": "cda96b9b91740abae65376a0646b2d489ebf04e276edaadc24adb8f62e7ea856",
+        "summaries/post-1127ed7e-target-acts-last-identity-v2.json": "e036eacd900dd6ceb7d26f6e5bc54ae09658aa057500c94ee1344f6653d7e3e6",
+        "summaries/post-9cc1496d-residual-action-trace-grammar-v2.json": "a77a4fa2a24380f861146d37ef69bd928f6cf11c79ccba2bda21f0761a162bfa",
+        "summaries/post-c802be36-primary-rule-topology-census-v2.md": "7fbcb2ccbbad21cb4e35b9cdfafb0310dcbaa5bc4c509dda8873051c1e51fa31",
+        "summaries/post-29389311-blind-literal-topology-screen-v2.json": "804e2880a0d5b27e699e28c829a9fb0c5072e2f9537cb6aeb67c959e34957851"
+      }
+    },
+    "H2_POLICY_METHOD_DECISION_VALUE": {
+      "question": "Does the newly observed policy-repertoire bottleneck have an open decision target and measured value distinct from the closed policyPackageOrder method gate?",
+      "inputs": {
+        "summaries/post-9cc1496d-residual-action-trace-grammar-v2.json": "a77a4fa2a24380f861146d37ef69bd928f6cf11c79ccba2bda21f0761a162bfa",
+        "summaries/post-v38-policy-package-order-decision-value-v2.json": "1e2e9c5cac149136d5be7d3d3c03e089ab07fa6e43ec33d5da15bbf2c85e713e",
+        "summaries/post-v30-method-boundary-audit-v1.json": "ca1d6ba8e4bc2b83b6619b30005c841c4d73efba7df3f6b846e2fd322e6f5078"
+      }
+    },
+    "H3_AUTHORITY_BOUNDARY": {
+      "question": "Under the exact current task and AI-SDLC authority, what decision follows if no autonomous class or decision-valued method remains?",
+      "inputs": {
+        "live-issue-421.json": "a7877bff1f15dab4044b49abc2eb9e421722ec2a2f25feb7c14e7c35f5aa91b2",
+        "live-authority-comment-5466985701.json": "917d784b046edd4a1e96720ee8834308d85ed9227ed945f0bc917ec765478c75",
+        "current-main-AGENTS.md": "3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee",
+        "current-main-ai-sdlc.md": "87effbc352c2b137afddaaf2eb7fd99c62bc1beb8bd099287dd6d6d73383b90a"
+      }
+    }
+  },
+  "estimands": {
+    "class": "autonomouslyEligible for each exact class after immutable closure, cap and authority mapping",
+    "method": "policyBottleneckIdentified AND openDecisionTargetExists AND measuredDecisionValue AND optimizerAuthorised",
+    "family": "number of eligible classes, whether one method is authorised, and the exact authority decision when both are zero"
+  },
+  "decisionRules": {
+    "successClass": "If every report is COMPLETE, the partition is complete and at least one class is autonomously eligible, freeze exactly the minimum-ranked class for a separate protocol.",
+    "successMethod": "If no class is eligible but all four method gates pass, freeze exactly one policy-method gate. Do not select an algorithm here.",
+    "unavailable": "If no class is eligible, the method conjunction fails and current authority requires escalation for an unavailable relevant gate, produce exactly one human-authority package inside #421 while preserving product and protected state.",
+    "inconclusive": "If any report or partition-completeness judgement is inconclusive, record inconclusive at cap and select nothing.",
+    "prohibited": "Do not widen the partition, reinterpret a closure, reopen an action-trace or package-order family, add rows or create a successor after seeing a report."
+  },
+  "executionCeilings": {
+    "maximumBackgroundAgents": 3,
+    "maximumClasses": 6,
+    "maximumCitationsPerAgent": 24,
+    "maximumReportBytesPerAgent": 65536,
+    "maximumModelContextTokensPerAgent": 24000,
+    "maximumAggregateModelContextTokens": 72000,
+    "maximumWallTimeSecondsPerAgent": 600,
+    "maximumConsolidationProcesses": 1,
+    "maximumConsolidationWallTimeSeconds": 5,
+    "maximumMechanicalCorrections": 0,
+    "maximumGodotProcesses": 0,
+    "maximumSimulatorRows": 0,
+    "maximumLedgerReads": 0,
+    "maximumLedgerWrites": 0,
+    "maximumProtectedSeedRows": 0,
+    "maximumProductMutations": 0
+  },
+  "runner": {
+    "path": "post_c3762813_autonomous_closure_envelope_v1.py",
+    "sha256": "d8e71984146a7f4e4b4845eb55354a878153c92b74db3172f32c0974566baf3f",
+    "selfTest": "PASS (3 checks)"
+  },
+  "claimBoundary": "This gate can freeze one abstract autonomous class, freeze one policy-method question, or establish that the relevant autonomous mechanism-selection gate is unavailable under the current authority. It cannot select product semantics, change a save/internal-ID/public contract, authorise an optimiser without measured value, accept #421, or issue the #108 P9 receipt."
+}

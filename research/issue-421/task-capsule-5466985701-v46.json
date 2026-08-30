@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 6,
+  "issue": 421,
+  "repository": "fol2/glassvow",
+  "stage": "autonomous-mechanism-closure-envelope",
+  "taskSsot": {
+    "issueBodySha256": "bac41ba7e3e77fce0ee8e8c5a72c0af07d2084ba86eba91ad80d3428e0e63a3d",
+    "state": "open",
+    "labels": [
+      "ready-for-agent",
+      "wayfinder:task"
+    ]
+  },
+  "authority": {
+    "commentId": 5466985701,
+    "bodySha256": "6bb1825a00037e5b7a0c1a1b30dec94d00d7c148259f179d9a042a811ce14b60"
+  },
+  "resolvedMain": "5f53020f588145ec5fbf803de32d82c7d29c06d2",
+  "developmentCheckout": {
+    "path": "/Users/jamesto/Coding/glassvow",
+    "branch": "work/421-h34",
+    "head": "7d1f6c0ff4d7534eb517ef57d1f547db140833fd",
+    "status": "clean-and-untouched"
+  },
+  "parentArchiveHead": "c3762813a38bbc2f5d30cf3e3973ae936a6bbfee",
+  "parentDisposition": "FUTILITY_CLOSE_RESIDUAL_ACTION_TRACE_GRAMMAR",
+  "currentQuestion": "Does any distinct autonomous mechanism class or decision-valued policy method remain after applying every new combat-local closure, or is the relevant gate unavailable under current authority?",
+  "protocol": {
+    "path": "protocols/post-c3762813-autonomous-closure-envelope-v1.json",
+    "sha256": "ddddac4c0a4539f0dd10722cbe568c65548e605d333318547a54fbd4fda9f33f",
+    "state": "frozen with zero correction allowance"
+  },
+  "runner": {
+    "path": "post_c3762813_autonomous_closure_envelope_v1.py",
+    "sha256": "d8e71984146a7f4e4b4845eb55354a878153c92b74db3172f32c0974566baf3f",
+    "selfTest": "PASS (3 checks)"
+  },
+  "classPartition": [
+    "existing combat state, zone or authored operator",
+    "new fight-local state carrier or transform",
+    "combat action scheduling or trace transform",
+    "native run acquisition or reward route",
+    "new persistent run or presentation contract",
+    "external primary-rule topology"
+  ],
+  "backgroundHypotheses": [
+    "H1_AUTONOMOUS_CLASS_CLOSURE",
+    "H2_POLICY_METHOD_DECISION_VALUE",
+    "H3_AUTHORITY_BOUNDARY"
+  ],
+  "activeInvariants": [
+    "All valid archive heads and family dispositions through c3762813 remain immutable.",
+    "The prior policyPackageOrder decision-value family is closed and cannot be renamed or rerun.",
+    "No closed action-trace, acquisition, private-state, primary-source or scalar family is reopened.",
+    "Background agents are read-only and non-overlapping; deterministic code alone decides.",
+    "No correction, Godot process, simulator row, ledger access, protected identity, product mutation, PR, Actions run, successor ticket, #421 acceptance or #108 receipt is authorised."
+  ],
+  "nextAction": "Publish the frozen zero-row closure-envelope preregistration, run the three exact read-only hypotheses, consolidate once, then either freeze one surviving abstract class or issue the single authority package required by an unavailable relevant gate."
+}
