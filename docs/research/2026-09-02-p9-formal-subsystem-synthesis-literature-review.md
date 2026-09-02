@@ -223,7 +223,7 @@ Hu, Q., Breck, J., Cyphert, J., D’Antoni, L. and Reps, T. (2019) ‘Proving un
 
 Kanellakis, P.C. and Smolka, S.A. (1990) ‘CCS expressions, finite state processes, and three problems of equivalence’, *Information and Computation*, 86(1), pp. 43–68. https://doi.org/10.1016/0890-5401(90)90025-D.
 
-Nelson, M.J. and Mateas, M. (2007) ‘Towards automated game design’, in Basili, R. and Pazienza, M.T. (eds.) *AI*IA 2007: Artificial Intelligence and Human-Oriented Computing*. Lecture Notes in Computer Science 4733. Berlin: Springer, pp. 626–637. https://doi.org/10.1007/978-3-540-74782-6_54.
+Nelson, M.J. and Mateas, M. (2007) ‘Towards automated game design’, in Basili, R. and Pazienza, M.T. (eds.) AI*IA 2007: Artificial Intelligence and Human-Oriented Computing. Lecture Notes in Computer Science 4733. Berlin: Springer, pp. 626–637. https://doi.org/10.1007/978-3-540-74782-6_54.
 
 Ochoa, G., Tomassini, M., Vérel, S. and Darabos, C. (2008) ‘A study of NK landscapes’ basins and local optima networks’, in *Proceedings of the 10th Annual Conference on Genetic and Evolutionary Computation*. New York: ACM, pp. 555–562. https://doi.org/10.1145/1389095.1389204.
 
