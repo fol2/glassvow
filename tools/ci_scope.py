@@ -43,7 +43,7 @@ CHECKS = (
     Check("run_scope_contract", "Test CI scope classifier", always=True),
     Check("run_agent_contracts", "Check AI-SDLC agent contracts", ("agent_config",)),
     Check("setup_godot", "Setup Godot", (
-        "godot_code", "map_code", "map_assets", "locale_content",
+        "godot_code", "map_code", "map_assets", "balance_ml", "locale_content",
         "release_platform", "presentation", "conservative_core")),
     Check("run_import_assets", "Import assets", (
         "godot_code", "map_code", "map_assets", "locale_content",
