@@ -143,7 +143,7 @@ This gate protects against a common failure mode: spending thousands of whole-ru
 
 The companion review establishes that quality-diversity methods can maintain a repertoire of locally strong candidates and that uncertain-QD methods are needed when fitness and descriptor membership are noisy. Those methods do not solve a representation failure. MAP-Elites can preserve candidates only in dimensions already defined; a poor descriptor can protect nominally different entries that enact the same strategy.
 
-Local optima networks represent optima and their basins as a graph, providing a way to study whether independent search starts converge to one attractor or remain distributed across distinct endpoints (Ochoa *et al.*, 2014). This is relevant to P9 retention, but only after the package descriptor has formal and causal validity.
+Local optima networks represent optima and their basins as a graph, providing a way to study whether independent search starts converge to one attractor or remain distributed across distinct endpoints (Ochoa *et al.*, 2008). This is relevant to P9 retention, but only after the package descriptor has formal and causal validity.
 
 The correct order is therefore:
 
@@ -215,7 +215,7 @@ Browne, C. and Maire, F. (2010) ‘Evolutionary game design’, *IEEE Transactio
 
 Caulfield, B., Rabe, M.N., Seshia, S.A. and Tripakis, S. (2015) ‘What’s decidable about syntax-guided synthesis?’, in *Automated Technology for Verification and Analysis*. Cham: Springer, pp. 134–148. https://doi.org/10.1007/978-3-319-24953-7_10.
 
-Cook, M., Colton, S. and Raad, A. (2018) ‘Inferring design constraints from game ruleset analysis’, in *Proceedings of the IEEE Conference on Computational Intelligence and Games*. IEEE.
+Cook, M., Colton, S. and Raad, A. (2018) ‘Inferring design constraints from game ruleset analysis’, in Browne, C. (ed.) *Proceedings of the 2018 IEEE Conference on Computational Intelligence and Games*. Piscataway, NJ: IEEE, pp. 17–24. https://doi.org/10.1109/CIG.2018.8490412.
 
 Hatchuel, A. and Weil, B. (2009) ‘C-K design theory: an advanced formulation’, *Research in Engineering Design*, 19, pp. 181–192. https://doi.org/10.1007/s00163-008-0043-4.
 
@@ -223,9 +223,9 @@ Hu, Q., Breck, J., Cyphert, J., D’Antoni, L. and Reps, T. (2019) ‘Proving un
 
 Kanellakis, P.C. and Smolka, S.A. (1990) ‘CCS expressions, finite state processes, and three problems of equivalence’, *Information and Computation*, 86(1), pp. 43–68. https://doi.org/10.1016/0890-5401(90)90025-D.
 
-Nelson, M.J. and Mateas, M. (2007) ‘Towards automated game design’, in *AI*IDE 2007*. Menlo Park, CA: AAAI Press.
+Nelson, M.J. and Mateas, M. (2007) ‘Towards automated game design’, in Basili, R. and Pazienza, M.T. (eds.) *AI*IA 2007: Artificial Intelligence and Human-Oriented Computing*. Lecture Notes in Computer Science 4733. Berlin: Springer, pp. 626–637. https://doi.org/10.1007/978-3-540-74782-6_54.
 
-Ochoa, G., Tomassini, M., Vérel, S. and Darabos, C. (2014) ‘A study of NK landscapes’ basins and local optima networks’, in *Proceedings of the Genetic and Evolutionary Computation Conference*. ACM, pp. 555–562.
+Ochoa, G., Tomassini, M., Vérel, S. and Darabos, C. (2008) ‘A study of NK landscapes’ basins and local optima networks’, in *Proceedings of the 10th Annual Conference on Genetic and Evolutionary Computation*. New York: ACM, pp. 555–562. https://doi.org/10.1145/1389095.1389204.
 
 Paige, R. and Tarjan, R.E. (1987) ‘Three partition refinement algorithms’, *SIAM Journal on Computing*, 16(6), pp. 973–989. https://doi.org/10.1137/0216062.
 
