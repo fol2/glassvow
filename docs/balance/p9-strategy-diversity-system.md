@@ -162,6 +162,8 @@ C2 RandomBuild separation, aspect identity, the Vow-5 ceiling, deterministic RNG
 
 Once the initial detector and package registry are admitted, every balance-relevant change receives one deterministic **P9 impact classification**. The change issue/PR owns its delta receipt; it does not create a P9 successor issue.
 
+For the current iOS release candidate, the scoped-reset table in [`docs/rc-bar.md`](../rc-bar.md) remains binding: until a validated change-impact classifier is implemented and explicitly integrated into release authority, any change for which that table requires a full P9 rerun still receives the full rerun. The classes below define the future reusable method and research/delivery evidence selection; they do not silently amend the release bar.
+
 | Class | Typical change | Minimum P9 action |
 |---|---|---|
 | `D0` | docs, copy or presentation with no gameplay/selection effect | carry P9 evidence; record no-impact classification |
