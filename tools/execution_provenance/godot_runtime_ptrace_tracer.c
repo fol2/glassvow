@@ -114,6 +114,9 @@ static char product_root[4096], packet_root[4096], home_root[4096], output_root[
 static char observation_path[4096], godot_log_path[4096], sentry_path[4096];
 static char identity_exception[4096];
 static const char *challenge;
+static int decode_syscall_fd(uint64_t raw) {
+    return (int32_t)(uint32_t)raw;
+}
 static void hex(const char *value) {
     static const char digits[] = "0123456789abcdef";
     for (const unsigned char *p = (const unsigned char *)value; *p; p += 1) {
@@ -408,10 +411,11 @@ static void syscall_exit(struct task *task, struct gv_syscall_info *info) {
                 (uintmax_t)object.inode);
             hex(object.path); fputc('\n', trace);
         }
-    } else if (task->number == SYS_mmap && returned >= 0 && (int64_t)task->args[4] >= 0) {
+    } else if (task->number == SYS_mmap && returned >= 0
+            && decode_syscall_fd(task->args[4]) >= 0) {
         if (++mmap_events > MAX_MMAP_EVENTS) { fail(task->pid, "MMAP_EVENT_CAP_EXCEEDED"); }
         struct gv_object_identity object;
-        if (!gv_fd_identity(task->pid, (int)task->args[4], &object))
+        if (!gv_fd_identity(task->pid, decode_syscall_fd(task->args[4]), &object))
             fail(task->pid, "MMAP_OBJECT_UNAVAILABLE");
         else {
             char category = classify(object.path);
@@ -568,6 +572,9 @@ int main(int argc, char **argv) {
         int landlock_abi = gv_landlock_abi();
         bool passed = sizeof(allowed_syscalls) / sizeof(*allowed_syscalls) == 61
             && lineage_ok
+            && decode_syscall_fd(UINT32_MAX) == -1
+            && decode_syscall_fd(UINT64_MAX) == -1
+            && decode_syscall_fd(3) == 3
             && landlock_abi >= 3
             && gv_kernel_admission_access_fs() == 32759
             && gv_resolve_path(getpid(), AT_FDCWD, "/.__glassvow_absent_path__",

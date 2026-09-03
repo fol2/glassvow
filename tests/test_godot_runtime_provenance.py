@@ -24,6 +24,7 @@ CONFIGURATION_ROOT = ROOT / "tools/execution_provenance/godot_runtime_configurat
 VERIFIER_PATH = ROOT / "tools/execution_provenance/godot_runtime_verify.py"
 RUNNER_PATH = ROOT / "tools/execution_provenance/godot_runtime_runner.py"
 CAMPAIGN_PATH = ROOT / "tools/execution_provenance/godot_runtime_campaign.py"
+TRACER_PATH = ROOT / "tools/execution_provenance/godot_runtime_ptrace_tracer.c"
 
 INERT_HASHES = {
     "tools/execution_provenance/protocol.json":
@@ -1328,6 +1329,14 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         self.assertEqual(policy, verified)
         self.assertEqual(counts, verified_counts)
 
+    def test_tracer_skips_zero_extended_anonymous_mmap_descriptor(self) -> None:
+        source = TRACER_PATH.read_text(encoding="utf-8")
+        self.assertIn("static int decode_syscall_fd(uint64_t raw)", source)
+        self.assertIn("decode_syscall_fd(UINT32_MAX) == -1", source)
+        self.assertIn("decode_syscall_fd(3) == 3", source)
+        self.assertIn("decode_syscall_fd(task->args[4]) >= 0", source)
+        self.assertNotIn("(int64_t)task->args[4] >= 0", source)
+
     def test_product_stage_contains_exact_commit_plus_only_frozen_configuration_roles(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-product-stage-") as temporary:
             root = Path(temporary)
@@ -1732,6 +1741,34 @@ class GodotRuntimeCampaignContractTests(unittest.TestCase):
             'tempfile.mkdtemp(prefix="glassvow-godot-runtime-input-")',
             CAMPAIGN_PATH.read_text(encoding="utf-8"),
         )
+
+    def test_mount_cleanup_removes_read_only_staged_configuration(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-cleanup-") as temporary:
+            mounts_root = Path(temporary) / "inputs"
+            product_stage = mounts_root / "product-stage"
+            generated = product_stage / ".godot"
+            generated.mkdir(parents=True)
+            role = generated / "global_script_class_cache.cfg"
+            role.write_bytes(b"frozen")
+            role.chmod(0o444)
+            generated.chmod(0o555)
+            self.campaign.remove_mounts_root(mounts_root, product_stage)
+            self.assertFalse(mounts_root.exists())
+
+    def test_cleanup_failure_preserves_primary_campaign_failure(self) -> None:
+        primary = self.campaign.CampaignError("G00 verifier failed")
+        cleanup = self.campaign.CampaignError("read-only input cleanup failed")
+        with mock.patch.object(self.campaign, "unmount_all"), \
+                mock.patch.object(
+                    self.campaign, "remove_mounts_root", side_effect=cleanup):
+            with self.assertRaisesRegex(
+                    self.campaign.CampaignError,
+                    "G00 verifier failed; cleanup also failed: "
+                    "read-only input cleanup failed",
+            ) as raised:
+                self.campaign.cleanup_campaign_inputs(
+                    [], Path("/unused"), Path("/unused"), primary)
+        self.assertIs(primary, raised.exception.__cause__)
 
     def test_a1_nonpass_still_publishes_a_terminal_admission_receipt(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-admission-") as temporary:

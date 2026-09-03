@@ -183,6 +183,33 @@ def unmount_all(targets: Sequence[Path]) -> None:
             "read-only input unmount failed: " + ", ".join(failures))
 
 
+def remove_mounts_root(mounts_root: Path, product_stage: Path) -> None:
+    generated = product_stage / ".godot"
+    if generated.is_symlink():
+        raise CampaignError("staged configuration cleanup target is a symlink")
+    try:
+        if generated.exists():
+            if not generated.is_dir():
+                raise CampaignError("staged configuration cleanup target differs")
+            generated.chmod(0o700)
+        shutil.rmtree(mounts_root)
+    except OSError as error:
+        raise CampaignError("read-only input cleanup failed") from error
+
+
+def cleanup_campaign_inputs(
+        mounted: Sequence[Path], mounts_root: Path, product_stage: Path,
+        primary_error: BaseException | None) -> None:
+    try:
+        unmount_all(mounted)
+        remove_mounts_root(mounts_root, product_stage)
+    except CampaignError as cleanup_error:
+        if primary_error is None:
+            raise
+        raise CampaignError(
+            f"{primary_error}; cleanup also failed: {cleanup_error}") from primary_error
+
+
 def mount_read_only(source: Path, target: Path) -> dict[str, Any]:
     target.mkdir(parents=True, exist_ok=False)
     bound = False
@@ -701,15 +728,8 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
             raise CampaignError("frozen case expectations did not all match")
         return result
     finally:
-        teardown_error: CampaignError | None = None
-        try:
-            unmount_all(mounted)
-        except CampaignError as error:
-            teardown_error = error
-        if teardown_error is None:
-            shutil.rmtree(mounts_root)
-        else:
-            raise teardown_error
+        cleanup_campaign_inputs(
+            mounted, mounts_root, product_stage, sys.exception())
 
 
 def main(argv: Sequence[str] | None = None) -> int:
