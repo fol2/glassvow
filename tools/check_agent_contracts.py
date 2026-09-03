@@ -34,6 +34,10 @@ REQUIRED_SNIPPETS = {
         "Do not manufacture `intent.md`, `spec.md`, or `plan.md`",
         "`agent_config`",
         ".claude/agents/ai-sdlc-reviewer.md",
+        "Preflight every required venue, tool, permission, and evidence channel before freezing",
+        "Freeze the finite decision graph once",
+        "A declared transition inside that accepted graph is execution authority",
+        "Escalate only when the finite graph and its safe capability ladder are exhausted",
     ),
     REVIEWER_PATH: (
         "name: ai-sdlc-reviewer",

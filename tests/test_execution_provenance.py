@@ -123,6 +123,11 @@ class ExecutionProvenancePreflightTests(unittest.TestCase):
         self.assertIn("tools/execution_provenance/**", text)
         self.assertIn("ImageVersion", text)
         self.assertNotIn("ubuntu-latest", text)
+        self.assertIn(
+            "actions/checkout@11d5960a326750d5838078e36cf38b85af677262", text)
+        self.assertIn(
+            "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+            text)
 
     def test_self_test_does_not_require_linux_or_sudo(self) -> None:
         with tempfile.TemporaryDirectory(prefix="glassvow-provenance-self-test-"):

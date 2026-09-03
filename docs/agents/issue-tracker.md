@@ -24,6 +24,10 @@ Before opening a new branch, search open issues and PRs for the same outcome and
 
 Legacy `wayfinder:*` maps may remain useful for genuinely uncertain programmes, but do not create a map and child hierarchy for a normal feature or a handful of experiments.
 
+## Pre-authorised finite programmes
+
+When an issue accepts a finite decision graph, record every node's immutable inputs, budget, correction limit, PASS/FAIL/INCONCLUSIVE transition, and terminal owner boundary in that issue before execution. Prove any required venue, permission, tool, or observation channel before freezing a dependent experiment. The assigned owner then follows already-authorised transitions without child issues or repeated approval comments. Escalate only after the declared graph and safe capability ladder are exhausted, or when the next transition crosses a credential, cost, regulated, irreversible, compatibility, product, or release-authority boundary.
+
 ## Basic operations
 
 - Read an issue with comments and labels before work.

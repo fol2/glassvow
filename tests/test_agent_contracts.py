@@ -33,6 +33,10 @@ A complete direct owner instruction or active issue is the intent artifact.
 Do not manufacture `intent.md`, `spec.md`, or `plan.md` for a bounded task.
 Agent instruction changes select the `agent_config` scope.
 Use `.claude/agents/ai-sdlc-reviewer.md`.
+Preflight every required venue, tool, permission, and evidence channel before freezing a dependent protocol.
+Freeze the finite decision graph once: nodes and transitions.
+A declared transition inside that accepted graph is execution authority.
+Escalate only when the finite graph and its safe capability ladder are exhausted.
 """
 
 CLAUDE = """# Claude entry point

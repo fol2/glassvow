@@ -10,6 +10,8 @@ on:
 
 permissions:
   contents: read
+  issues: read
+  pull-requests: read
 
 concurrency:
   group: execution-provenance-${{ github.event.pull_request.number || github.ref }}
@@ -22,7 +24,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Check out exact branch head
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
@@ -50,11 +52,44 @@ jobs:
           python3 -B tools/execution_provenance/preflight.py \
             --output artifacts/execution-provenance/b0-preflight.json
 
-      - name: Upload B0 receipt and raw diagnostics
+      - name: Check exact-head pre-execution review
+        id: review
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            echo "approved=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          protocol_sha="$(sha256sum tools/execution_provenance/protocol.json | cut -d' ' -f1)"
+          marker="EXECUTION_PROVENANCE_PREEXECUTION_APPROVE head=$HEAD_SHA protocol_sha256=$protocol_sha"
+          review_comments="$RUNNER_TEMP/execution-provenance-review-comments.txt"
+          gh api --paginate "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" \
+            --jq '.[].body' > "$review_comments"
+          if grep -Fq "$marker" "$review_comments"; then
+            echo "approved=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "approved=false" >> "$GITHUB_OUTPUT"
+            echo "B2 withheld: no independent exact-head pre-execution review marker."
+          fi
+
+      - name: Run frozen B1/B2 qualification campaign
+        if: steps.review.outputs.approved == 'true'
+        run: |
+          python3 -B tools/execution_provenance/campaign.py \
+            --protocol tools/execution_provenance/protocol.json \
+            --output artifacts/execution-provenance/b2
+
+      - name: Upload capability receipts and raw diagnostics
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: execution-provenance-b0-${{ github.event.pull_request.head.sha || github.sha }}
+          name: execution-provenance-${{ github.event.pull_request.head.sha || github.sha }}
           path: artifacts/execution-provenance
           if-no-files-found: error
           retention-days: 14

@@ -19,6 +19,7 @@ SCOPE_NAMES = (
     "map_code",
     "map_assets",
     "balance_ml",
+    "provenance_evidence",
     "locale_content",
     "agent_config",
     "docs",
@@ -64,6 +65,8 @@ CHECKS = (
     Check("run_balance_f0", "Test F0 evaluator protocol", ("balance_ml",)),
     Check("run_balance_tier1_f0", "Test Tier-1 F0 response contract", ("balance_ml",)),
     Check("run_balance_f1_f2", "Test F1/F2 racing and model adequacy rules", ("balance_ml",)),
+    Check("run_provenance_evidence", "Test execution-provenance capability", (
+        "provenance_evidence",)),
     Check("run_doc_anchors", "Check doc file:line anchors", ("docs",)),
     Check("run_benchmark_freeze", "Check no new web-reference citations", ("docs",)),
     Check("run_map_assets", "Check map tile and module assets", ("map_assets",)),
@@ -168,6 +171,10 @@ def _scope_matches(path: str) -> set[str]:
                 "docs/balance/")
             or lower in {"docs/p6-balance-ledger.md", "tools/requirements-balance-f2.txt"}):
         matches.add("balance_ml")
+
+    if (_starts(lower, "tools/execution_provenance/")
+            or lower == "tests/test_execution_provenance.py"):
+        matches.add("provenance_evidence")
 
     locale_named_test = _starts(lower, "tests/") and any(token in name for token in (
         "locale", "content", "line_table", "narrative"))
