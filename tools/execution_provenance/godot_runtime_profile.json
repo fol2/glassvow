@@ -654,7 +654,14 @@
             "statx"
           ],
           "paths": [
-            "/",
+            "/"
+          ]
+        },
+        {
+          "operations": [
+            "openat"
+          ],
+          "paths": [
             "/sys",
             "/sys/bus",
             "/sys/class",

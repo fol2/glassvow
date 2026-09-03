@@ -305,10 +305,13 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         }
 
         gaps = []
+        successful_statx = set()
         for record in closure["records"]:
             if not any(value >= 0 for value in record["returns"]):
                 continue
             operation, path = record["operation"], expand(record["path"])
+            if operation == "statx":
+                successful_statx.add((operation, path))
             if path in dynamic:
                 admitted = operation in dynamic[path]
             elif path == working_directory:
@@ -328,6 +331,14 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             if not admitted:
                 gaps.append((operation, path, record["parameter"], record["returns"]))
         self.assertEqual([], gaps)
+        declared_statx = {
+            (operation, path)
+            for path, allowed in directories.items()
+            for operation in allowed
+            if operation == "statx"
+        }
+        self.assertEqual({("statx", "/")}, successful_statx)
+        self.assertEqual(successful_statx, declared_statx)
 
     def test_fresh_g0_configuration_capture_is_the_only_fixture_byte_authority(self) -> None:
         capture = json.loads(CONFIGURATION_MANIFEST_PATH.read_text(encoding="utf-8"))
