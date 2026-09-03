@@ -1543,7 +1543,6 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         self.assertEqual(produced, verified)
         self.assertEqual({"fileRules": 169, "pathRules": 799}, produced_counts)
         self.assertEqual(produced_counts, verified_counts)
-        self.assertEqual(125719, len(produced))
         self.assertLessEqual(len(produced), self.profile["caps"]["maxAdmissionPolicyBytes"])
         self.assertEqual(393216, self.profile["caps"]["maxAdmissionPolicyBytes"])
 
@@ -1554,11 +1553,33 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
             self.assertNotIn("${", result)
             return os.path.normpath(result)
 
+        expected_file_rights: dict[str, set[str]] = {}
+        for section in ("semanticReadSet", "runtimeIdentitySet", "platformObservationSet"):
+            for record in manifest[section]:
+                path = str(Path(expand(record["path"])).resolve(strict=False))
+                expected_file_rights.setdefault(path, set()).add("R")
+        for collection in ("executeLeaves", "kernelInterpreterLeaves"):
+            for template in self.profile["kernelAdmission"][collection]:
+                path = str(Path(expand(template)).resolve(strict=False))
+                expected_file_rights.setdefault(path, set()).add("X")
+        expected_file_rules = {
+            f"F\t{''.join(sorted(rights))}\t{path.encode().hex()}"
+            for path, rights in expected_file_rights.items()
+        }
+        actual_file_rules = {
+            line for line in produced.decode("ascii").splitlines()
+            if line.startswith("F\t")
+        }
+        self.assertEqual(expected_file_rules, actual_file_rules)
+        self.assertEqual(len(expected_file_rules), produced_counts["fileRules"])
+
         expected_path_rules = {
             "\t".join((
                 "P", record["operation"],
                 "-" if record["parameter"] is None else str(record["parameter"]),
-                expand(record["path"]).encode().hex(),
+                (str(Path(expand(record["path"])).resolve(strict=False))
+                 if record["operation"] == "execve"
+                 else expand(record["path"])).encode().hex(),
             ))
             for record in manifest["pathOperationClosure"]["records"]
         }
@@ -1591,6 +1612,89 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
             {line for line in actual_path_rules
              if line.startswith("P\topenat\t") and line.endswith(font_path)},
         )
+
+    def test_file_and_execve_identity_resolve_the_same_symlink_target(self) -> None:
+        manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
+        profile = json.loads(PROFILE_PATH.read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory(prefix="godot-policy-symlink-") as temporary:
+            root = Path(temporary)
+            target, alias = root / "dash", root / "sh"
+            target.write_bytes(b"measured shell\n")
+            target.chmod(0o755)
+            alias.symlink_to(target.name)
+            godot_target, godot_alias = root / "godot-bin", root / "godot"
+            godot_target.write_bytes(b"measured Godot\n")
+            godot_target.chmod(0o755)
+            godot_alias.symlink_to(godot_target.name)
+
+            shell = next(
+                record for record in manifest["runtimeIdentitySet"]
+                if record["path"] == "/bin/sh")
+            shell["path"] = str(alias)
+            shell["size"] = target.stat().st_size
+            shell["sha256"] = sha256(target)
+            closure = manifest["pathOperationClosure"]
+            shell_exec = next(
+                record for record in closure["records"]
+                if record["operation"] == "execve" and record["path"] == "/bin/sh")
+            shell_exec["path"] = str(alias)
+            closure["records"].sort(key=lambda record: (
+                record["operation"], record["path"],
+                -1 if record["parameter"] is None else record["parameter"]))
+            closure["recordsCanonicalSha256"] = self.runner.sha256_bytes(
+                self.runner.canonical_bytes(closure["records"]))
+            profile["g0"]["pathOperationClosure"][
+                "recordsCanonicalSha256"] = closure["recordsCanonicalSha256"]
+            profile["kernelAdmission"]["executeLeaves"] = [
+                str(alias) if value == "/bin/sh" else value
+                for value in profile["kernelAdmission"]["executeLeaves"]
+            ]
+            roots = {
+                "GODOT": str(godot_alias),
+                "PRODUCT": str(root / "product"),
+                "PACKET": str(root / "packet"),
+                "HOME": str(root / "home"),
+                "OUTPUT": str(root / "output"),
+            }
+            produced, counts = self.runner.build_admission_policy(
+                profile, manifest, roots, root / "observer")
+            verified, verified_counts = self.verifier._build_admission_policy(
+                profile, manifest, roots, root / "observer")
+
+            lines = set(produced.decode("ascii").splitlines())
+            resolved_hex = str(target.resolve()).encode().hex()
+            alias_hex = str(alias).encode().hex()
+            self.assertIn(f"F\tRX\t{resolved_hex}", lines)
+            self.assertNotIn(f"F\tRX\t{alias_hex}", lines)
+            self.assertIn(f"P\texecve\t-\t{resolved_hex}", lines)
+            self.assertNotIn(f"P\texecve\t-\t{alias_hex}", lines)
+            godot_target_hex = str(godot_target.resolve()).encode().hex()
+            godot_alias_hex = str(godot_alias).encode().hex()
+            self.assertIn(f"P\texecve\t-\t{godot_target_hex}", lines)
+            self.assertNotIn(f"P\texecve\t-\t{godot_alias_hex}", lines)
+            self.assertIn(f"P\treadlink\t-\t{godot_alias_hex}", lines)
+            self.assertNotIn(f"P\treadlink\t-\t{godot_target_hex}", lines)
+            self.assertEqual(produced, verified)
+            self.assertEqual(counts, verified_counts)
+            statement = {
+                "caseId": "G00",
+                "admissionPolicy": {
+                    "schema": profile["kernelAdmission"]["policySchema"],
+                    "file": "admission-policy.tsv",
+                    "size": len(produced),
+                    "sha256": hashlib.sha256(produced).hexdigest(),
+                    **counts,
+                },
+            }
+            self.verifier._admission_policy(
+                statement, manifest, roots, profile,
+                {"admission-policy.tsv": produced},
+                {"events": [
+                    {"type": "POLICY", "byteCount": len(produced), **counts},
+                    {"type": "PATH_X", "operation": "execve", "returned": 0,
+                     "path": str(target.resolve()), "_arguments": [0] * 6},
+                ]},
+            )
 
     def test_frozen_closure_rejects_deleted_and_speculative_path_atoms(self) -> None:
         source_manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))

@@ -341,14 +341,19 @@ def _build_admission_policy(
             fail("PROVENANCE_INCOMPLETE", "invalid admission pathname rule")
         return posixpath.normpath(value)
 
+    def canonical_identity(value: str) -> str:
+        return str(Path(canonical_path(value)).resolve(strict=False))
+
     def add_path(operation: str, path: str, parameter: int | None = None) -> None:
         if operation not in _PATH_OPERATIONS or not path.startswith("/") or "\0" in path:
             fail("PROVENANCE_INCOMPLETE", "invalid admission pathname rule")
-        paths.add((canonical_path(path), operation, parameter))
+        effective = canonical_identity(path) if operation == "execve" \
+            else canonical_path(path)
+        paths.add((effective, operation, parameter))
 
     for section in ("semanticReadSet", "runtimeIdentitySet", "platformObservationSet"):
         for record in manifest[section]:
-            path = canonical_path(_expand(str(record["path"]), roots))
+            path = canonical_identity(_expand(str(record["path"]), roots))
             files.setdefault(path, set()).add("R")
 
     for record in closure["records"]:
@@ -357,12 +362,12 @@ def _build_admission_policy(
             record["parameter"])
 
     for template in profile["kernelAdmission"]["executeLeaves"]:
-        path = canonical_path(_expand(template, roots))
+        path = canonical_identity(_expand(template, roots))
         if path not in files:
             fail("PROVENANCE_INCOMPLETE", f"execute leaf is not frozen: {path}")
         files[path].add("X")
     for template in profile["kernelAdmission"]["kernelInterpreterLeaves"]:
-        path = canonical_path(_expand(template, roots))
+        path = canonical_identity(_expand(template, roots))
         if path not in files:
             fail("PROVENANCE_INCOMPLETE", f"kernel interpreter is not frozen: {path}")
         files[path].add("X")
@@ -1398,8 +1403,10 @@ def _admission_policy(
 
     allowed_results: dict[tuple[str, str, int | None], set[int]] = {}
     for record in g0["pathOperationClosure"]["records"]:
-        key = (record["operation"], _expand(record["path"], roots),
-               record["parameter"])
+        path = _expand(record["path"], roots)
+        if record["operation"] == "execve":
+            path = str(Path(path).resolve(strict=False))
+        key = (record["operation"], path, record["parameter"])
         allowed_results.setdefault(key, set()).update(record["returns"])
     for root in roots.values():
         candidate = Path(root).parent

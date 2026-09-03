@@ -570,14 +570,19 @@ def build_admission_policy(
             raise RunnerError("invalid admission pathname rule")
         return posixpath.normpath(value)
 
+    def canonical_identity(value: str) -> str:
+        return str(Path(canonical_path(value)).resolve(strict=False))
+
     def add_path(operation: str, path: str, parameter: int | None = None) -> None:
         if operation not in PATH_OPERATIONS or not path.startswith("/") or "\0" in path:
             raise RunnerError("invalid admission pathname rule")
-        paths.add((canonical_path(path), operation, parameter))
+        effective = canonical_identity(path) if operation == "execve" \
+            else canonical_path(path)
+        paths.add((effective, operation, parameter))
 
     for section in ("semanticReadSet", "runtimeIdentitySet", "platformObservationSet"):
         for record in manifest[section]:
-            path = canonical_path(expand(str(record["path"])))
+            path = canonical_identity(expand(str(record["path"])))
             files.setdefault(path, set()).add("R")
 
     for record in closure["records"]:
@@ -586,12 +591,12 @@ def build_admission_policy(
             record["parameter"])
 
     for template in profile["kernelAdmission"]["executeLeaves"]:
-        path = canonical_path(expand(template))
+        path = canonical_identity(expand(template))
         if path not in files:
             raise RunnerError(f"execute leaf is not a frozen file identity: {path}")
         files[path].add("X")
     for template in profile["kernelAdmission"]["kernelInterpreterLeaves"]:
-        path = canonical_path(expand(template))
+        path = canonical_identity(expand(template))
         if path not in files:
             raise RunnerError(f"kernel interpreter is not a frozen file identity: {path}")
         files[path].add("X")
