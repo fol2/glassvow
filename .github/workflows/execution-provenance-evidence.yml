@@ -304,8 +304,14 @@ jobs:
                       if executable:
                           paths.append(executable.group(1))
                   for raw_path in paths:
+                      if not raw_path.startswith("/"):
+                          continue
                       path = pathlib.Path(raw_path.split("<", 1)[0])
-                      if not path.is_file():
+                      try:
+                          is_file = path.is_file()
+                      except OSError:
+                          continue
+                      if not is_file:
                           continue
                       observed.setdefault(str(path), set()).add(call.group(1))
 
