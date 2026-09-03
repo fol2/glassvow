@@ -173,7 +173,12 @@ def _scope_matches(path: str) -> set[str]:
         matches.add("balance_ml")
 
     if (_starts(lower, "tools/execution_provenance/")
-            or lower == "tests/test_execution_provenance.py"):
+            or lower in {
+                "tests/test_execution_provenance.py",
+                "tests/test_godot_runtime_provenance.py",
+                "tests/test_godot_runtime_trace_binding.py",
+                "tests/test_godot_runtime_workflow.py",
+            }):
         matches.add("provenance_evidence")
 
     locale_named_test = _starts(lower, "tests/") and any(token in name for token in (

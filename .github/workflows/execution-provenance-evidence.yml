@@ -11,12 +11,14 @@ on:
         options:
           - inert
           - godot-g0
+          - godot-runtime
+          - godot-runtime-a1
       product_sha:
-        description: Exact product commit for a Godot G0 trace
+        description: Exact current-main product commit for a Godot run
         required: false
         type: string
       packet_sha:
-        description: Exact research-packet commit for a Godot G0 trace
+        description: Exact research-packet commit for a Godot run
         required: false
         type: string
       packet_root:
@@ -27,20 +29,35 @@ on:
         description: Issue-authority comment database id
         required: false
         type: string
+      request_index:
+        description: Exact packet-declared request index for an A1 invocation
+        required: false
+        type: string
+        default: '0'
+      capability_run:
+        description: Exact-main #535 qualification run required by A1 ingress
+        required: false
+        type: string
+      capability_receipt_sha256:
+        description: Exact-main #535 campaign receipt required by A1 ingress
+        required: false
+        type: string
   pull_request:
     paths:
       - '.github/workflows/execution-provenance-evidence.yml'
       - 'tools/execution_provenance/**'
       - 'tests/test_execution_provenance.py'
+      - 'tests/test_godot_runtime_*.py'
 
 permissions:
   contents: read
+  actions: read
   issues: read
   pull-requests: read
 
 concurrency:
-  group: execution-provenance-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: execution-provenance-${{ inputs.mode == 'godot-runtime' && 'godot-runtime' || inputs.mode == 'godot-runtime-a1' && 'godot-runtime-a1' || github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ inputs.mode != 'godot-runtime' && inputs.mode != 'godot-runtime-a1' }}
 
 jobs:
   qualify:
@@ -333,7 +350,7 @@ jobs:
                   "operations": sorted(operations),
               })
           pathlib.Path("artifacts/godot-g0/consumed-files.json").write_text(
-              json.dumps(records, indent=2, sort_keys=True) + "\\n", encoding="utf-8"
+              json.dumps(records, indent=2, sort_keys=True) + "\n", encoding="utf-8"
           )
           PY
           {
@@ -353,5 +370,393 @@ jobs:
         with:
           name: godot-g0-${{ github.sha }}-${{ github.run_attempt }}
           path: artifacts/godot-g0
+          if-no-files-found: error
+          retention-days: 14
+
+  godot-runtime:
+    if: github.event_name == 'workflow_dispatch' && (inputs.mode == 'godot-runtime' || inputs.mode == 'godot-runtime-a1')
+    name: ${{ inputs.mode == 'godot-runtime' && 'Qualify actual Godot runtime profile' || 'Execute admitted A1 Godot packet' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GODOT_VERSION: 4.7.2
+      GODOT_ZIP_SHA256: cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4
+      GODOT_BINARY_SHA256: 8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e
+      PRODUCT_SHA: ${{ inputs.product_sha }}
+      PACKET_SHA: ${{ inputs.packet_sha }}
+      PACKET_ROOT: ${{ inputs.packet_root }}
+      AUTHORITY_COMMENT: ${{ inputs.authority_comment }}
+      REQUEST_INDEX: ${{ inputs.request_index }}
+      EXECUTION_MODE: ${{ inputs.mode }}
+      CAPABILITY_RUN: ${{ inputs.capability_run }}
+      CAPABILITY_RECEIPT_SHA256: ${{ inputs.capability_receipt_sha256 }}
+    steps:
+      - name: Check out exact trusted observer
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Reserve finite remote qualification budget
+        if: inputs.mode == 'godot-runtime'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/godot-runtime
+          read -r max_attempts per_attempt max_minutes < <(python3 -B - <<'PY'
+          import json
+          profile = json.load(open(
+              "tools/execution_provenance/godot_runtime_profile.json",
+              encoding="utf-8"))
+          caps = profile["caps"]
+          print(caps["maxQualificationAttempts"],
+                caps["maxMinutesPerQualificationAttempt"],
+                caps["maxHostedMinutes"])
+          PY
+          )
+          test "$((max_attempts * per_attempt))" -eq "$max_minutes"
+          runs_file="$RUNNER_TEMP/godot-runtime-runs.txt"
+          jobs_file="$RUNNER_TEMP/godot-runtime-jobs.txt"
+          gh api --paginate \
+            "repos/$GITHUB_REPOSITORY/actions/workflows/execution-provenance-evidence.yml/runs?event=workflow_dispatch&per_page=100" \
+            --jq '.workflow_runs[].id' > "$runs_file"
+          mapfile -t runs < "$runs_file"
+          attempts=0
+          : > "$RUNNER_TEMP/godot-runtime-attempts.txt"
+          for run_id in "${runs[@]}"; do
+            gh api --paginate \
+              "repos/$GITHUB_REPOSITORY/actions/runs/$run_id/jobs?filter=all&per_page=100" \
+              --jq '.jobs[] | select(.name == "Qualify actual Godot runtime profile") | "\(.id):\(.run_attempt)"' \
+              > "$jobs_file"
+            mapfile -t jobs < "$jobs_file"
+            attempts=$((attempts + ${#jobs[@]}))
+            for job in "${jobs[@]}"; do
+              printf '%s:%s\n' "$run_id" "$job" \
+                >> "$RUNNER_TEMP/godot-runtime-attempts.txt"
+            done
+          done
+          current_count="$(gh api --paginate \
+            "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs?per_page=100" \
+            --jq '[.jobs[] | select(.name == "Qualify actual Godot runtime profile")] | length')"
+          test "$current_count" -eq 1
+          grep -Eq "^${GITHUB_RUN_ID}:[0-9]+:${GITHUB_RUN_ATTEMPT}$" \
+            "$RUNNER_TEMP/godot-runtime-attempts.txt"
+          test "$attempts" -ge 1
+          test "$attempts" -le "$max_attempts"
+          python3 -B - "$RUNNER_TEMP/godot-runtime-attempts.txt" \
+            "$attempts" "$max_attempts" "$per_attempt" "$max_minutes" <<'PY'
+          import json
+          import pathlib
+          import sys
+
+          identities = pathlib.Path(sys.argv[1]).read_text(
+              encoding="utf-8").splitlines()
+          receipt = {
+              "attemptIdentities": identities,
+              "attemptsReserved": int(sys.argv[2]),
+              "maxAttempts": int(sys.argv[3]),
+              "reservedMinutesPerAttempt": int(sys.argv[4]),
+              "maxHostedMinutes": int(sys.argv[5]),
+          }
+          pathlib.Path("artifacts/godot-runtime/budget.json").write_text(
+              json.dumps(receipt, sort_keys=True, separators=(",", ":")) + "\n",
+              encoding="utf-8")
+          PY
+
+      - name: Validate current-main product, packet and owner authority
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/godot-runtime
+          [[ "$PRODUCT_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$PACKET_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$AUTHORITY_COMMENT" =~ ^[0-9]+$ ]]
+          python3 -B - "$PACKET_ROOT" <<'PY'
+          from pathlib import PurePosixPath
+          import sys
+
+          raw = sys.argv[1]
+          path = PurePosixPath(raw)
+          if (not raw or path.as_posix() != raw or len(path.parts) < 2
+                  or path.parts[0] != "research_packets"
+                  or any(part in {"", ".", ".."} for part in path.parts)):
+              raise SystemExit("unsafe packet root")
+          PY
+          remote_main="$(git ls-remote origin refs/heads/main | cut -f1)"
+          test "$PRODUCT_SHA" = "$remote_main"
+          if [[ "$EXECUTION_MODE" == "godot-runtime-a1" ]]; then
+            test "$GITHUB_REF_NAME" = main
+            test "$(git rev-parse HEAD)" = "$PRODUCT_SHA"
+          fi
+          git fetch --no-tags origin "$PRODUCT_SHA" "$PACKET_SHA"
+          read -ra parents <<< "$(git rev-list --parents -n 1 "$PACKET_SHA")"
+          test "${#parents[@]}" -eq 2
+          test "${parents[1]}" = "$PRODUCT_SHA"
+          git diff --name-only -z "$PRODUCT_SHA" "$PACKET_SHA" -- . \
+            > "$RUNNER_TEMP/godot-runtime-changed-paths"
+          python3 -B - "$PACKET_ROOT" "$RUNNER_TEMP/godot-runtime-changed-paths" <<'PY'
+          import pathlib
+          import sys
+
+          root = sys.argv[1] + "/"
+          paths = pathlib.Path(sys.argv[2]).read_bytes().split(b"\0")
+          changed = [path.decode("utf-8") for path in paths if path]
+          if not changed or any(not path.startswith(root) for path in changed):
+              raise SystemExit("packet commit changes a path outside its declared root")
+          PY
+          git worktree add --detach "$RUNNER_TEMP/godot-product" "$PRODUCT_SHA"
+          mkdir "$RUNNER_TEMP/godot-packet"
+          git archive --format=tar "$PACKET_SHA" "$PACKET_ROOT" \
+            | tar -xf - -C "$RUNNER_TEMP/godot-packet"
+          python3 -B - "$RUNNER_TEMP/godot-packet/$PACKET_ROOT" \
+            "$PRODUCT_SHA" "$PACKET_ROOT" "$AUTHORITY_COMMENT" "$EXECUTION_MODE" <<'PY'
+          import importlib.util
+          import json
+          import pathlib
+          import sys
+
+          packet = pathlib.Path(sys.argv[1]).resolve()
+          product_sha, packet_root = sys.argv[2], sys.argv[3]
+          authority_comment, mode = int(sys.argv[4]), sys.argv[5]
+          source = pathlib.Path("tools/execution_provenance/godot_runtime_runner.py")
+          spec = importlib.util.spec_from_file_location("godot_runtime_runner", source)
+          if spec is None or spec.loader is None:
+              raise SystemExit("trusted packet validator unavailable")
+          runner = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(runner)
+          profile, _ = runner.validate_frozen_sources()
+          manifest = json.loads((packet / "manifest.json").read_text(encoding="utf-8"))
+          authority_issue = manifest.get("authorityIssue")
+          ingress_name = "qualification" if mode == "godot-runtime" else "research"
+          ingress = profile["packetIngress"][ingress_name]
+          if authority_issue != int(ingress["authorityIssue"]):
+              raise SystemExit(f"{ingress_name} packet authority issue mismatch")
+          if authority_comment != int(ingress["authorityComment"]):
+              raise SystemExit(f"{ingress_name} packet authority mismatch")
+          runner.validate_packet_manifest(
+              packet, manifest, profile, product_sha=product_sha,
+              packet_root=packet_root, authority_issue=authority_issue,
+              authority_comment=authority_comment)
+          request_index = __import__("os").environ["REQUEST_INDEX"]
+          if request_index not in manifest["requestIndices"]:
+              raise SystemExit("requested packet index is not declared")
+          pathlib.Path("artifacts/godot-runtime/ingress.json").write_text(
+              json.dumps({
+                  "authorityIssue": authority_issue,
+                  "authorityComment": authority_comment,
+                  "observerSha": __import__("subprocess").check_output(
+                      ["git", "rev-parse", "HEAD"], text=True).strip(),
+                  "productSha": product_sha,
+                  "packetSha": __import__("os").environ["PACKET_SHA"],
+                  "packetRoot": packet_root,
+                  "requestIndex": request_index,
+              }, sort_keys=True, separators=(",", ":")) + "\n",
+              encoding="utf-8")
+          PY
+          authority_issue="$(python3 -c \
+            'import json,sys; print(json.load(open(sys.argv[1]))["authorityIssue"])' \
+            artifacts/godot-runtime/ingress.json)"
+          comment_json="$RUNNER_TEMP/godot-runtime-authority.json"
+          gh api "repos/$GITHUB_REPOSITORY/issues/comments/$AUTHORITY_COMMENT" \
+            > "$comment_json"
+          python3 -B - "$comment_json" "$authority_issue" "$AUTHORITY_COMMENT" <<'PY'
+          import json
+          import sys
+
+          record = json.load(open(sys.argv[1], encoding="utf-8"))
+          issue, comment = int(sys.argv[2]), int(sys.argv[3])
+          if record.get("id") != comment or record.get("author_association") != "OWNER":
+              raise SystemExit("packet authority comment is not owner-authored")
+          if not record.get("issue_url", "").endswith(f"/issues/{issue}"):
+              raise SystemExit("packet authority comment belongs to another issue")
+          PY
+
+      - name: Check exact-main #535 capability prerequisite
+        if: inputs.mode == 'godot-runtime-a1'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          [[ "$CAPABILITY_RUN" =~ ^[0-9]+$ ]]
+          [[ "$CAPABILITY_RECEIPT_SHA256" =~ ^[0-9a-f]{64}$ ]]
+          profile_sha="$(sha256sum tools/execution_provenance/godot_runtime_profile.json | cut -d' ' -f1)"
+          manifest_sha="$(sha256sum tools/execution_provenance/godot_runtime_g0_manifest.json | cut -d' ' -f1)"
+          tree_sha="$(git rev-parse 'HEAD^{tree}')"
+          marker="GODOT_RUNTIME_EXACT_MAIN_PASS head=$PRODUCT_SHA tree=$tree_sha profile_sha256=$profile_sha manifest_sha256=$manifest_sha run=$CAPABILITY_RUN receipt_sha256=$CAPABILITY_RECEIPT_SHA256"
+          gh api --paginate "repos/$GITHUB_REPOSITORY/issues/535/comments" \
+            --jq '.[] | select(.author_association == "OWNER") | .body' \
+            | grep -Fxq "$marker"
+          run_json="$RUNNER_TEMP/godot-runtime-capability-run.json"
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$CAPABILITY_RUN" > "$run_json"
+          python3 -B - "$run_json" "$CAPABILITY_RUN" "$PRODUCT_SHA" <<'PY'
+          import json
+          import sys
+
+          run = json.load(open(sys.argv[1], encoding="utf-8"))
+          if run.get("id") != int(sys.argv[2]) or run.get("head_sha") != sys.argv[3]:
+              raise SystemExit("capability run identity differs")
+          if run.get("event") != "workflow_dispatch" or run.get("conclusion") != "success":
+              raise SystemExit("capability run did not complete successfully")
+          if run.get("head_branch") != "main" or not str(run.get("path", "")).startswith(
+                  ".github/workflows/execution-provenance-evidence.yml"):
+              raise SystemExit("capability run is not the exact-main specialist workflow")
+          PY
+          run_attempt="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["run_attempt"])' "$run_json")"
+          [[ "$run_attempt" =~ ^[1-9][0-9]*$ ]]
+          artifact_name="godot-runtime-${PRODUCT_SHA}-${run_attempt}"
+          capability="$RUNNER_TEMP/godot-runtime-capability"
+          gh run download "$CAPABILITY_RUN" --repo "$GITHUB_REPOSITORY" \
+            --name "$artifact_name" --dir "$capability"
+          prerequisite="$RUNNER_TEMP/godot-runtime-capability-prerequisite.json"
+          python3 -B - "$capability/qualification/campaign-receipt.json" \
+            "$CAPABILITY_RECEIPT_SHA256" "$prerequisite" "$CAPABILITY_RUN" \
+            "$run_attempt" "$artifact_name" "$PRODUCT_SHA" "$tree_sha" \
+            "$profile_sha" "$manifest_sha" <<'PY'
+          import pathlib
+          import sys
+          from tools.execution_provenance import godot_runtime_campaign as campaign
+
+          campaign.validate_capability_receipt(pathlib.Path(sys.argv[1]), sys.argv[2])
+          campaign.write_json(pathlib.Path(sys.argv[3]), {
+              "schema": campaign.CAPABILITY_SCHEMA,
+              "capabilityRun": int(sys.argv[4]),
+              "capabilityRunAttempt": int(sys.argv[5]),
+              "capabilityArtifact": sys.argv[6],
+              "capabilityReceiptSha256": sys.argv[2],
+              "observerSha": sys.argv[7], "productSha": sys.argv[7],
+              "treeSha": sys.argv[8], "profileSha256": sys.argv[9],
+              "g0ManifestSha256": sys.argv[10],
+          })
+          PY
+
+      - name: Install and identify exact Godot 4.7.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/godot"
+          curl --fail --location --retry 3 \
+            --output "$RUNNER_TEMP/godot/godot.zip" \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          echo "$GODOT_ZIP_SHA256  $RUNNER_TEMP/godot/godot.zip" | sha256sum --check --strict
+          unzip -q "$RUNNER_TEMP/godot/godot.zip" -d "$RUNNER_TEMP/godot"
+          mv "$RUNNER_TEMP/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64" \
+            "$RUNNER_TEMP/godot/godot"
+          chmod 0555 "$RUNNER_TEMP/godot/godot"
+          echo "$GODOT_BINARY_SHA256  $RUNNER_TEMP/godot/godot" | sha256sum --check --strict
+          {
+            printf 'observer_sha=%s\n' "$(git rev-parse HEAD)"
+            printf 'product_sha=%s\n' "$PRODUCT_SHA"
+            printf 'packet_sha=%s\n' "$PACKET_SHA"
+            printf 'packet_root=%s\n' "$PACKET_ROOT"
+            printf 'authority_comment=%s\n' "$AUTHORITY_COMMENT"
+            printf 'profile_sha256=%s\n' "$(sha256sum tools/execution_provenance/godot_runtime_profile.json | cut -d' ' -f1)"
+            printf 'g0_manifest_sha256=%s\n' "$(sha256sum tools/execution_provenance/godot_runtime_g0_manifest.json | cut -d' ' -f1)"
+            printf 'ImageOS=%s\n' "${ImageOS:-missing}"
+            printf 'ImageVersion=%s\n' "${ImageVersion:-missing}"
+            printf 'runner_os=%s\n' "$RUNNER_OS"
+            printf 'runner_arch=%s\n' "$RUNNER_ARCH"
+            printf 'uname=%s\n' "$(uname -a)"
+            printf 'ptrace_scope=%s\n' "$(cat /proc/sys/kernel/yama/ptrace_scope)"
+            printf 'godot_version=%s\n' "$("$RUNNER_TEMP/godot/godot" --version)"
+            printf 'godot_sha256=%s\n' "$(sha256sum "$RUNNER_TEMP/godot/godot" | cut -d' ' -f1)"
+          } > artifacts/godot-runtime/environment.txt
+
+      - name: Run focused profile regressions
+        run: |
+          python3 -B tests/test_execution_provenance.py
+          python3 -B tests/test_godot_runtime_provenance.py
+          python3 -B tests/test_godot_runtime_trace_binding.py
+          python3 -B tests/test_godot_runtime_workflow.py
+
+      - name: Check frozen exact-head or exact-main review
+        if: inputs.mode == 'godot-runtime'
+        id: review
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.sha }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          profile_sha="$(sha256sum tools/execution_provenance/godot_runtime_profile.json | cut -d' ' -f1)"
+          manifest_sha="$(sha256sum tools/execution_provenance/godot_runtime_g0_manifest.json | cut -d' ' -f1)"
+          tree_sha="$(git rev-parse 'HEAD^{tree}')"
+          head_marker="GODOT_RUNTIME_PREEXECUTION_APPROVE head=$HEAD_SHA tree=$tree_sha profile_sha256=$profile_sha manifest_sha256=$manifest_sha"
+          tree_marker="GODOT_RUNTIME_REVIEWED_TREE tree=$tree_sha profile_sha256=$profile_sha manifest_sha256=$manifest_sha"
+          comments="$RUNNER_TEMP/godot-runtime-review-comments.txt"
+          gh api --paginate "repos/$GITHUB_REPOSITORY/issues/535/comments" \
+            --jq '.[] | select(.author_association == "OWNER") | .body' > "$comments"
+          if [[ "$REF_NAME" == "main" ]] && grep -Fxq "$tree_marker" "$comments"; then
+            echo "approved=true" >> "$GITHUB_OUTPUT"
+          elif [[ "$REF_NAME" != "main" ]] && grep -Fxq "$head_marker" "$comments"; then
+            echo "approved=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "approved=false" >> "$GITHUB_OUTPUT"
+            echo "G2 withheld: no independent frozen exact-head or exact-main-tree marker."
+          fi
+
+      - name: Requalify unchanged inert profile
+        if: inputs.mode == 'godot-runtime' && steps.review.outputs.approved == 'true'
+        run: |
+          python3 -B tools/execution_provenance/campaign.py \
+            --protocol tools/execution_provenance/protocol.json \
+            --output artifacts/godot-runtime/inert
+
+      - name: Run frozen actual-Godot qualification
+        if: inputs.mode == 'godot-runtime' && steps.review.outputs.approved == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          authority_issue="$(python3 -c \
+            'import json; print(json.load(open("artifacts/godot-runtime/ingress.json"))["authorityIssue"])')"
+          python3 -B tools/execution_provenance/godot_runtime_campaign.py \
+            --product-source "$RUNNER_TEMP/godot-product" \
+            --packet-source "$RUNNER_TEMP/godot-packet" \
+            --godot "$RUNNER_TEMP/godot/godot" \
+            --output artifacts/godot-runtime/qualification \
+            --observer-sha "$GITHUB_SHA" \
+            --product-sha "$PRODUCT_SHA" \
+            --packet-sha "$PACKET_SHA" \
+            --packet-root "$PACKET_ROOT" \
+            --authority-issue "$authority_issue" \
+            --authority-comment "$AUTHORITY_COMMENT" \
+            --request-index "$REQUEST_INDEX"
+
+      - name: Execute one admitted A1 Godot invocation
+        if: inputs.mode == 'godot-runtime-a1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          authority_issue="$(python3 -c \
+            'import json; print(json.load(open("artifacts/godot-runtime/ingress.json"))["authorityIssue"])')"
+          python3 -B tools/execution_provenance/godot_runtime_campaign.py \
+            --admit-only \
+            --product-source "$RUNNER_TEMP/godot-product" \
+            --packet-source "$RUNNER_TEMP/godot-packet" \
+            --godot "$RUNNER_TEMP/godot/godot" \
+            --output artifacts/godot-runtime/admission \
+            --observer-sha "$GITHUB_SHA" \
+            --product-sha "$PRODUCT_SHA" \
+            --packet-sha "$PACKET_SHA" \
+            --packet-root "$PACKET_ROOT" \
+            --authority-issue "$authority_issue" \
+            --authority-comment "$AUTHORITY_COMMENT" \
+            --request-index "$REQUEST_INDEX" \
+            --capability-prerequisite \
+              "$RUNNER_TEMP/godot-runtime-capability-prerequisite.json" \
+            --capability-run "$CAPABILITY_RUN" \
+            --capability-receipt-sha256 "$CAPABILITY_RECEIPT_SHA256"
+
+      - name: Upload Godot capability receipts and raw evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ${{ inputs.mode }}-${{ github.sha }}-${{ github.run_attempt }}
+          path: artifacts/godot-runtime
           if-no-files-found: error
           retention-days: 14

@@ -80,6 +80,37 @@ failing halfway through one.
 | Editor scene inspection and mutation | Funplay editor plugin | Editor MCP only |
 | Music / SFX generation | `.claude/skills/glassvow-suno`, `.claude/skills/glassvow-elevenlabs`, `.cursor/mcp.json` | not a browser surface — ledgers `docs/music-ledger.md`, `docs/sfx-ledger.md` |
 
+### Hosted execution provenance
+
+The manual `Linux execution provenance evidence` workflow keeps its workload
+profiles separately gated. The original qualified inert profile remains fixed.
+The additive `godot-runtime` qualification mode is limited to the measured
+Godot 4.7.2 headless path: one exact current-main product, one external
+GDScript, one corpus, one request index, a fresh HOME, and a fresh output
+directory. It is a provenance capability, not a general executable sandbox or
+evidence that a research or balance claim is correct.
+
+A Godot run accepts an exact product commit, packet commit, packet root, and
+OWNER-authored authority comment. The packet commit must have current main as
+its sole parent and may add only the manifest-declared regular `.gd` and `.json`
+roles below that root. The trusted workflow, profile, runner, tracer, and
+verifier always come from the observer checkout. The declared GDScript executes
+only through the bound Godot invocation; packet content is never imported or
+executed as shell, Python, or workflow code. Product and packet inputs are
+mounted read-only. Full profile qualification re-runs the unchanged inert
+campaign before the frozen actual-Godot matrix and publishes only bounded
+capability evidence.
+
+The separate `godot-runtime-a1` mode admits one packet-declared request through
+the same qualified G00 path. It runs only from exact current `main`, requires
+the fixed #421 A1-v2 owner authority and an exact-main #535 PASS marker bound to
+the successful specialist run and independently rehashed campaign receipt. Its
+admission receipt also binds the exact capability run, receipt, and prerequisite
+record. A1 does not consume the #535 qualification-attempt budget, interpret
+mutation meaning, or replace A1's separately frozen scientific contract. The
+owning research run deletes its ephemeral packet ref after publishing the
+terminal receipt.
+
 Additional flags stay owned and parsed by their lab. The browser allow-list
 rejects another surface's selector and any flag that deliberately exits the live
 host. Temporal enemy strips therefore remain one-off captures:

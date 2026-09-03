@@ -1,0 +1,2100 @@
+{
+  "baselineOutputs": [
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "openat",
+        "write"
+      ],
+      "path": "${HOME}/.local/share/godot/app_userdata/Glassvow/logs/godot.log",
+      "sha256": "cf17838058a5bf14bf5b23e8ab4bb06b2ad3d2aed9ea025003f9a2eeedf28479",
+      "size": 309
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "openat",
+        "write"
+      ],
+      "path": "${HOME}/.local/share/godot/app_userdata/Glassvow/sentry.dat",
+      "sha256": "4f8dfbef0fc5c84560bd9fb4225f1d702d1a4d0e4bcfaa8610e8ee263cd44ad1",
+      "size": 63
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "openat",
+        "write"
+      ],
+      "path": "${OUTPUT}/run/observation.json",
+      "sha256": "8df7ba42b663e7bfe0a12b7ca9d817d6fd678f754e726b8cf6241d0c065ec435",
+      "size": 55432
+    },
+    {
+      "operations": [
+        "close",
+        "dup2",
+        "fcntl"
+      ],
+      "path": "${OUTPUT}/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "operations": [
+        "dup2",
+        "fstat",
+        "write"
+      ],
+      "path": "${OUTPUT}/stdout.txt",
+      "sha256": "cf17838058a5bf14bf5b23e8ab4bb06b2ad3d2aed9ea025003f9a2eeedf28479",
+      "size": 309
+    }
+  ],
+  "platformObservationSet": [
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/run/udev/data/c13:0",
+      "sha256": "18e1a5dbd85a425d59e0cd260c38b640826876a4fd83b57a7c5f6e96a66e7514",
+      "size": 67
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/run/udev/data/c13:32",
+      "sha256": "deb991476f82c9cf56730477013dc2842c482e12b0e20f9b3c041bf60b0776f2",
+      "size": 67
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/run/udev/data/c13:63",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/run/udev/data/c13:64",
+      "sha256": "961cd78de70b19785038b75c47d80bcc9504cca6e61295749c70c0cff559124a",
+      "size": 257
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/run/udev/data/c13:65",
+      "sha256": "de888cb4c2d8111aaa1a53998605f84574e8c1ccaec448f7b92da9fc6fea4466",
+      "size": 67
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/sys/devices/0006:045E:0621.0001/input/input1/event1/uevent",
+      "sha256": "c2fa643cd7913026e07d3597d8581dab46316df01bbd0256e445305ce29e11a8",
+      "size": 4096
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/sys/devices/0006:045E:0621.0001/input/input1/js0/uevent",
+      "sha256": "5e121d38bee44d037454110b29265501c5331d6bae4695914ea4528dde7200cc",
+      "size": 4096
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/sys/devices/0006:045E:0621.0001/input/input1/mouse0/uevent",
+      "sha256": "f8e6ee7d05dd73212ecdb0b9ddef0c55e1c66d7fb45b039b68562322a51f78b9",
+      "size": 4096
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/sys/devices/0006:045E:0621.0001/input/input1/uevent",
+      "sha256": "e1e1e17f9a36f449028bb9fb2f56a66f89c4084fa7b87bfba5c2419afb5ae8af",
+      "size": 4096
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0/uevent",
+      "sha256": "9de2dba9430be7b60cb21344d63d64ac9807e828cf106ebf4ca75c3c3f4d0dbd",
+      "size": 4096
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/uevent",
+      "sha256": "e9aa579962e1993e394a2eef0c469c8ea73f292f5a745960c1130f9f2d717347",
+      "size": 4096
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/sys/devices/system/cpu/online",
+      "sha256": "b2f03f42d35e331b1b8f8b03648dab495a27d703b10d8df4fe5c3346f34de4cc",
+      "size": 4096
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/sys/devices/virtual/input/mice/uevent",
+      "sha256": "c97ea05cecdceb3634f01a3f5795ebd158686048ab49190357b9fc48b7a4727b",
+      "size": 4096
+    }
+  ],
+  "runtimeIdentitySet": [
+    {
+      "operations": [
+        "execve"
+      ],
+      "path": "/bin/sh",
+      "sha256": "86d31f6fb799e91fa21bad341484564510ca287703a16e9e46c53338776f4f42",
+      "size": 129784
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/conf.avail/20-unhint-small-dejavu-lgc-sans-mono.conf",
+      "sha256": "0a6b0f1c1f5d1c06a811b517a3d2690700bba8e961cd55dd2c7648cde3605a21",
+      "size": 874
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/conf.avail/20-unhint-small-dejavu-lgc-sans.conf",
+      "sha256": "144619057c0a040de247c74cf09f230d737b9c1c534f3ba8804fdd3ddeded8b0",
+      "size": 864
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/conf.avail/20-unhint-small-dejavu-lgc-serif.conf",
+      "sha256": "977c24eb43f10d21263bbdb624649e5edf63147bd7bb4f84db97ce7d53bb9054",
+      "size": 866
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/conf.avail/20-unhint-small-dejavu-sans-mono.conf",
+      "sha256": "3e90c9c36beef46f10d1529251f8683b9c4ac900695adbb4a23a4b6036f938a5",
+      "size": 866
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/conf.avail/20-unhint-small-dejavu-sans.conf",
+      "sha256": "0d9c177b6a85daa9957ed6750d4eb26122604da18d340e7ba31e6f4d24f963ed",
+      "size": 856
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/conf.avail/20-unhint-small-dejavu-serif.conf",
+      "sha256": "68777b1705ec7a05a86430def4be093668e84e305cc7e11291df52403a7318cc",
+      "size": 858
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/conf.avail/57-dejavu-sans-mono.conf",
+      "sha256": "1f2ead86f8203d809abfc9d88d92b04316edd67b6291795ea74ea8a0c3c2e04d",
+      "size": 1201
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/conf.avail/57-dejavu-sans.conf",
+      "sha256": "f6285e2d336f93086acfa2ac7895ef75ef5ff34f833ba5a63c09fb2841aedc27",
+      "size": 1711
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/conf.avail/57-dejavu-serif.conf",
+      "sha256": "7c596f7e202090ded38fded904c4a17d5a189b6c9cc914a2e88554116f6474ca",
+      "size": 1357
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/conf.avail/58-dejavu-lgc-sans-mono.conf",
+      "sha256": "807e5222c6d11a72ad527ebc088f42daf2a807e7718c8f7ff227cbfecafd3d70",
+      "size": 1545
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/conf.avail/58-dejavu-lgc-sans.conf",
+      "sha256": "ecde2093f005c73d7da21cdd7b80c791910050609db36cb5eea84a4ba8da5cef",
+      "size": 2063
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/conf.avail/58-dejavu-lgc-serif.conf",
+      "sha256": "e685632c3edbb6868a7ca5275e7c71f25486a8cfd16113a478194a5631205619",
+      "size": 1689
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/fonts/fonts.conf",
+      "sha256": "93a23ba073996edb8b42d6c89ebc2ec5fd2101ce82cb65ba0db358dabf55ca22",
+      "size": 2940
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/gnutls/config",
+      "sha256": "1992812cf806f83c68a425ac832aa1198e2b9114ec3353e6ae3f0d8951a7cbc4",
+      "size": 119
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/etc/ld.so.cache",
+      "sha256": "672ccfe017cdbbf7ddded4a37ebb6101cebfa38f5c604d1f0ad8e73112ff8745",
+      "size": 38271
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/locale.alias",
+      "sha256": "c22cc401a22cb37b7f1c8766035bd4d599fa2d2da9d20bdd85be67711265d02b",
+      "size": 2996
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "/etc/ssl/certs/ca-certificates.crt",
+      "sha256": "ecd9dc38bc3efb7dbd6431f57e29d2f8d6a0f0d211e1464b3fef2cbfe266fcd2",
+      "size": 182140
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/addons/sentry/bin/linux/x86_64/libsentry.linux.debug.x86_64.so",
+      "sha256": "8acd58da962e8a449d0775dc1e3592b00ac0f18990b78418002d71e122e1ddc6",
+      "size": 4974456
+    },
+    {
+      "operations": [
+        "close",
+        "execve",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${GODOT}",
+      "sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+      "size": 146414384
+    },
+    {
+      "operations": [
+        "execve"
+      ],
+      "path": "/usr/bin/env",
+      "sha256": "0aefff8f912fb75716c5d4de3b6acde93edbe8fa280fc8ee895c1226d3e373ef",
+      "size": 48072
+    },
+    {
+      "operations": [
+        "close",
+        "execve",
+        "fcntl",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/bin/xdg-user-dir",
+      "sha256": "66f6896a88c333b2c3152617fd3be51d7e896481abc07028a064dad17e64f6b8",
+      "size": 234
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/C.utf8/LC_ADDRESS",
+      "sha256": "26e2800affab801cb36d4ff9625a95c3abceeda2b6553a7aecd0cfcf34c98099",
+      "size": 127
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/C.utf8/LC_COLLATE",
+      "sha256": "47a5f5359a8f324abc39d69a7f6241a2ac0e2fbbeae5b9c3a756e682b75d087b",
+      "size": 1406
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/C.utf8/LC_CTYPE",
+      "sha256": "59015993b1b671273461ef1167d7a9ad76dc090d521c91102e962217ed6b6dba",
+      "size": 360460
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/C.utf8/LC_IDENTIFICATION",
+      "sha256": "38a1d8e5271c86f48910d9c684f64271955335736e71cec35eeac942f90eb091",
+      "size": 258
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/C.utf8/LC_MEASUREMENT",
+      "sha256": "bb14a6f2cbd5092a755e8f272079822d3e842620dd4542a8dfa1e5e72fc6115b",
+      "size": 23
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/C.utf8/LC_MESSAGES/SYS_LC_MESSAGES",
+      "sha256": "f9ad02f1d8eba721d4cbd50c365b5c681c39aec008f90bfc2be2dc80bfbaddcb",
+      "size": 48
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/C.utf8/LC_MONETARY",
+      "sha256": "bfd9e9975443b834582493fe9a8d7aefcd989376789c17470a1e548aee76fd55",
+      "size": 270
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/C.utf8/LC_NAME",
+      "sha256": "14507aad9f806112e464b9ca94c93b2e4d759ddc612b5f87922d7cac7170697d",
+      "size": 62
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/C.utf8/LC_NUMERIC",
+      "sha256": "f5976e6b3e6b24dfe03caad6a5b98d894d8110d8bd15507e690fd60fd3e04ab2",
+      "size": 50
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/C.utf8/LC_PAPER",
+      "sha256": "cde048b81e2a026517cc707c906aebbd50f5ee3957b6f0c1c04699dffcb7c015",
+      "size": 34
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/C.utf8/LC_TELEPHONE",
+      "sha256": "f4caf0d12844219b65ba42edc7ec2f5ac1b2fc36a3c88c28887457275daca1ee",
+      "size": 47
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/C.utf8/LC_TIME",
+      "sha256": "0910b595d1d5d4e52cc0f415bbb1ff07c015d6860d34aae02505dd9973a63154",
+      "size": 3360
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/locale/locale-archive",
+      "sha256": "7a31de159ded19d74c73126489d3f714c1684d5b9262cddae10bbe4fd8581a2b",
+      "size": 3055776
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache",
+      "sha256": "52c227df9d53248238602c1ddaccd2c8ddc4cc6a61aa45d7c425af590b8806a5",
+      "size": 27028
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.1.0",
+      "sha256": "a91ead095d2c80520c55a89057bbe10b031a075340442e63f44b310f93883a1b",
+      "size": 141640
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.1.0",
+      "sha256": "64d8a5019d4c294b89fde1193343ea324bbd8603652554e5545f0a01595fa2c5",
+      "size": 51512
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+      "sha256": "218c4abdabce31161f3c2778762986d1fe06633705c7eb004a740946a5ccdfff",
+      "size": 78944
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "pread64",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "8db37cf3f2169f59a0f07ef1fea308c35656668c64c8ff294e1860f4121eb161",
+      "size": 2125328
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libcap.so.2.66",
+      "sha256": "6ac6abc86ac891c6e13486470e26f1d939f47fda9e6b5d5508a7f5ec881adc84",
+      "size": 51536
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1",
+      "sha256": "022943b3b11c860b049bce41342f1c2594941b7b401d95dfdf235521099fee08",
+      "size": 18504
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+      "sha256": "1451aceec262c3338052fa77542eb971d4ba311c6bf12d9aa70d0b56aca942f9",
+      "size": 5309400
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libcurl.so.4.8.0",
+      "sha256": "74e155383609f6b42288970c26149e9deac0b545bdfc1a79f02a6b8ecaca2464",
+      "size": 786336
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libdbus-1.so.3.32.4",
+      "sha256": "a6ae7b4ef48562b40d7b9ba8efd2e49f6528b7cc6364bea382dcee4b473b5413",
+      "size": 317752
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libdl.so.2",
+      "sha256": "292d5f5af2e7360b3e18c56591a4960115373ecf40627660f9149b6c68a33f80",
+      "size": 14408
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "sha256": "c42ff317838b4b4639e2ea801905f0317177c6df7e31b2f0d0240e3c3ac0cfde",
+      "size": 174336
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+      "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153",
+      "size": 47672
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.12.1",
+      "sha256": "a94b4059b27766f563894c8f7e61762b6f6b2e25c59ef36b730164d4b75c6c98",
+      "size": 325712
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libfreetype.so.6.20.1",
+      "sha256": "c14c53c5baff12afafb610c6312fb879e9bb77e80dd42e27504d52d6d8bcd059",
+      "size": 833608
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libgcrypt.so.20.4.3",
+      "sha256": "9f872b8956edfa11a3ad093f509cf312e8d135dd801ca548c990daa214c03bd4",
+      "size": 1340976
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libgmp.so.10.5.0",
+      "sha256": "0ccdfb6d6f5c039465f6d002cf7e4c072d48ac6a2cffc8dd6c748dec31592804",
+      "size": 534896
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libgnutls.so.30.37.1",
+      "sha256": "ddbae2995750875c07bc218d12a062d73f8250678f54dedda7e9be5068781c98",
+      "size": 2065824
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libgpg-error.so.0.34.0",
+      "sha256": "6cb18a007bfcb623029f4528a36b46578fea7dc34c2b505b8e6e0d99e6348cd1",
+      "size": 149760
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2",
+      "sha256": "6c1b81696044d79a47d6f0f494ee60aaf641c525c46a11da0c6e4a041a782d3c",
+      "size": 338696
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libhogweed.so.6.8",
+      "sha256": "c3c606139d4f7776efa4dbd4a6b62e30c916b07a0cafd8c3ef173d6f093607e3",
+      "size": 288920
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libidn2.so.0.4.0",
+      "sha256": "6e632fd9a3125db60bbc623719bbc17b0470330321c5b1c57f1ff7190e5551ad",
+      "size": 133192
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1",
+      "sha256": "73bc9d72c0c684d6149a3c38f96aab891d178375415c05954fdda587685936f5",
+      "size": 178648
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.10",
+      "sha256": "f48214417757f18793ed6e180cc14ee1d6f04252a518fc7270e8ca1d0b4260fe",
+      "size": 22600
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3",
+      "sha256": "9615a2841f0783c410eec7fae005a951282551cfedd377737ad8431c8c8cde64",
+      "size": 823488
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1",
+      "sha256": "0aa43578471faecbd642ed2ee6ab92b6682a2b676644193e956fc59d18ca24bb",
+      "size": 47904
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/liblber.so.2.0.200",
+      "sha256": "ddf14275b1fb70ba06510094071adcc1462e675f15ae6cdcadbf40c1dabe5a03",
+      "size": 59888
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libldap.so.2.0.200",
+      "sha256": "a9829b999c95452eb0a34cc7b5349427b76dbf3e5d5c8672a5ca69e454c1b151",
+      "size": 372400
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/liblz4.so.1.9.4",
+      "sha256": "40bffd0a098387368b16b992abd5f7cf43c0fa2f05cabe5a6d483719554adfda",
+      "size": 137440
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+      "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb",
+      "size": 202904
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "sha256": "e9c4b28d340e415b8137480ec442662f981e1399386c5931dae0e886e3639e91",
+      "size": 952616
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libnettle.so.8.8",
+      "sha256": "a245ed916229583d6fe0b07657b3ed945bc148c28cc08b5266295f620d2b91cc",
+      "size": 342280
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.26.0",
+      "sha256": "46764ab5b6ca7e353a322054f0bee45d9158a27f3e6a82a2fa4447f2ba9ba268",
+      "size": 170352
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.1",
+      "sha256": "c6b469a006685ebf2075e200180c3b21f41b88ad722c5697d736ea558cfe3ea1",
+      "size": 1714008
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libpng16.so.16.43.0",
+      "sha256": "eac265b3506df0d9110dd9143e1d0503e2daabafe1d98b23fac8ca17b71d1f6b",
+      "size": 223304
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.4",
+      "sha256": "ae6c5a9aecc249fc66e03c16ec6c4385d09d7e12e0ea7694bb831ab4fee8133c",
+      "size": 75768
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libpthread.so.0",
+      "sha256": "a27ffa9bf233d61a5f02ddb0cf770dd6579021afc1aa8aec0fb58ee4a965281a",
+      "size": 14408
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libresolv.so.2",
+      "sha256": "4086b12d3b95ef6f02373b30b88444e7d79fb8693ed1cfeaa5162e6959878912",
+      "size": 64008
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/librt.so.1",
+      "sha256": "c6e6288545e24b0b3cfbf33320bda9236521625d8c3d628f3444f1ed40e5c7c5",
+      "size": 14624
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/librtmp.so.1",
+      "sha256": "15a2a75e8c437b9c99971b5ee10278ab110beef1a56d1d9e5d6759ea140e98ac",
+      "size": 121848
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25",
+      "sha256": "a0f410ad093236856eee59c4ff2838dc04d932ea0993400f23ed77d67d85af34",
+      "size": 101200
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libssh.so.4.9.6",
+      "sha256": "ad1513debc90c2662c2c63b587cd815b118b03b3a983f7fdbd89968354674d63",
+      "size": 462360
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libssl.so.3",
+      "sha256": "55869549f4c7d7221e311121696f135390a7172755459ad04aef831f855eb214",
+      "size": 696512
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libsystemd.so.0.38.0",
+      "sha256": "bdf59c828b547bcdbe7b3576c0810d9d9d2e982d8b61b365812542da6a4c4a99",
+      "size": 910592
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.3",
+      "sha256": "59994414d0cdec4f678ef91eaaafc44b26b00bca507e4cc7978caaf79f584173",
+      "size": 88216
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libudev.so.1.7.8",
+      "sha256": "4298228175fa62a36af88b1afd4406cdd8b1bf166621f957d0dbbde45a698fe5",
+      "size": 207288
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libunistring.so.5.0.0",
+      "sha256": "7bcf825cd449892db5105ad2aed91dcf94a27b796426600c765720c584c54dd1",
+      "size": 1755312
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+      "sha256": "9b64150b28505a33d6bc3ecf709c279f6de97a1c184dbda65d06ee4537f6d286",
+      "size": 113000
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "mmap",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+      "sha256": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb",
+      "size": 755864
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/05-reset-dirs-sample.conf",
+      "sha256": "7dae5045441ce7ab4ce9ee0ccbee84e2ae90daee9cfd2ac64cd887ee85c528df",
+      "size": 213
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/09-autohint-if-no-hinting.conf",
+      "sha256": "f04d1737c2a85925a6294f4b966597d03a30c9e4c551c7a8c270eaad514b2689",
+      "size": 717
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-autohint.conf",
+      "sha256": "9ae4308a18941969ea42f5881c202be052fe12da3fb1fb4fc4b940642ec74db0",
+      "size": 630
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-hinting-full.conf",
+      "sha256": "aa01699d6a43a1be2996233e67daf1570b9000bd1a59763463d3a12b852cdc3a",
+      "size": 616
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-hinting-medium.conf",
+      "sha256": "f0eaec3db6879f3460bd0e1ef3e09dd965168ca460a79d098eb0648c6740095d",
+      "size": 620
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-hinting-none.conf",
+      "sha256": "5970fa53c69874ee51349300ef3412592e46e7f133c06074befcf6ab2a3ef6e2",
+      "size": 616
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-hinting-slight.conf",
+      "sha256": "d138eca2bac3f78d45ff7cfb649ad792caa4a6e61f73cea7cf0ea54b091f1ef4",
+      "size": 620
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-no-antialias.conf",
+      "sha256": "75412c70f3a78ad090c79a9dc63cce6aae41b2cfc2f67f4a1a1b533526216d2e",
+      "size": 260
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-scale-bitmap-fonts.conf",
+      "sha256": "df8e99abb6f82384c61978906a45a95794940545da95790d87f01d9391e0894b",
+      "size": 2068
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-sub-pixel-bgr.conf",
+      "sha256": "719006f7887a958da8efe5ad010a2cde689313074607ae20f0be4cd9e8bfffad",
+      "size": 672
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-sub-pixel-none.conf",
+      "sha256": "0f00b5cf0ce07062ec65b9b340aa888f6c5fbc215aafebd26781be2d5a13ff6a",
+      "size": 647
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf",
+      "sha256": "e4cfc04f5fc5093d2ba20c40f8709c9dfc099997313d0f96bc8256597a15d057",
+      "size": 672
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-sub-pixel-vbgr.conf",
+      "sha256": "15178eb45f3206433bace02053214d5750b9d74a4ece727f48c7fbc8f8c9adb3",
+      "size": 682
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-sub-pixel-vrgb.conf",
+      "sha256": "049680ed134d34c560be493a47301bf6542050e7e89c27d3df25145b41f8133e",
+      "size": 682
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-unhinted.conf",
+      "sha256": "dca27a149268da3aeaa3416dc236fd1d76e2f997b1ba91e1292297e78c9281d4",
+      "size": 625
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/10-yes-antialias.conf",
+      "sha256": "e6d82a642d1b37f7d24dc37f938b999f00ff7aa4303b2602d04164d53f221005",
+      "size": 258
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf",
+      "sha256": "76aec9d8dac48faabe1bbde9e887cfb09fa45f30be5f8826e945a394a0097e48",
+      "size": 695
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/11-lcdfilter-legacy.conf",
+      "sha256": "0768fd57ae0a50d54f2f2e5efae98437ae8623573b652f246ac22e574d5f38b0",
+      "size": 692
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/11-lcdfilter-light.conf",
+      "sha256": "0708443f97406b100a5ccfa67ea8a1c1473ff60ff03848e536bc62e2b2ddcea3",
+      "size": 689
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/11-lcdfilter-none.conf",
+      "sha256": "8c2b7c2db7bf8e54fb4f449e726ad97d824195085f97a5c19d75914ad7b4b074",
+      "size": 686
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/20-unhint-small-vera.conf",
+      "sha256": "278732c68c16177f2aa3c7e4ea318b9f720aee13a433c32eb15ba626806c609d",
+      "size": 1377
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/25-unhint-nonlatin.conf",
+      "sha256": "8b8c05318fb3f4893a9522e7989dd9280d14233adbc21be867bd173add4a0d5c",
+      "size": 3329
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/30-metric-aliases.conf",
+      "sha256": "3baf25c82e1a14c606d45c212296852be06ae9795d60e84aab573226151450a2",
+      "size": 13610
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/35-lang-normalize.conf",
+      "sha256": "fb06f0e9206cc711a68719940e670a3756ae6656ea9b73197f3bbc0c921ee433",
+      "size": 48373
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/40-nonlatin.conf",
+      "sha256": "9c56aeed6490db1d29602d7f8e028742b5e7a0268eaaa60de2fde582c6403715",
+      "size": 7981
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/45-generic.conf",
+      "sha256": "24de9f68189d544bb4cc084d9bd8f3a59d8b988a9dc44b11e9877d5add5fc948",
+      "size": 3490
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/45-latin.conf",
+      "sha256": "807638284032d8d8f6ed8b014a0edae79a4d4f3c4e70317fdb0bfa8edd66779e",
+      "size": 7159
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/48-spacing.conf",
+      "sha256": "99d839cd8aa28854e8f54f26e7200b6e57951f39f56791a0ed473662488bcef6",
+      "size": 441
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/49-sansserif.conf",
+      "sha256": "7849a11ce5243e8bb3d06bcad558737a8682e5122e73c8e427f4c011a2054818",
+      "size": 639
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/50-user.conf",
+      "sha256": "449137ccce57d60bca178d57519ba54e1942d757ad171f3a88cd78df2161c970",
+      "size": 751
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/51-local.conf",
+      "sha256": "dca9d917e1f66f73bfa495943b4d1eaab2d93810a51bc8e600cf4d4e9df03e67",
+      "size": 263
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/53-monospace-lcd-filter.conf",
+      "sha256": "c04ec3f2b651d31f3968fd725787d10c8bc2eab02203979b6b961477de3fdbd5",
+      "size": 943
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/60-generic.conf",
+      "sha256": "195bc8605dd23289d42c10d79cc13a5ce4a4b3cf965df5b30ecc0b7149bb951f",
+      "size": 1911
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/60-latin.conf",
+      "sha256": "2de7c687e03b1fedf9fd016aa14ed8088f52578896a73f06158dda8acd264f09",
+      "size": 2166
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/65-fonts-persian.conf",
+      "sha256": "c675fab143a3638346874798be45f51f6878ebec591b4362d83cfffb828ec4ca",
+      "size": 10132
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/65-khmer.conf",
+      "sha256": "0bc1c077ef01cb409f51f95218b97b144278c0568b5de03683047b2a1963c590",
+      "size": 304
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/65-nonlatin.conf",
+      "sha256": "e309e38d7fb47cc3f639f4313b19e72c9be4d1f2db92d7d892ea65bfdd0cbd30",
+      "size": 9876
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/69-unifont.conf",
+      "sha256": "fa97c0cf5f79d70e2dc3dc48155d4c9220cd7c6a8bc95b89c4ebcc517f97479e",
+      "size": 687
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/70-force-bitmaps.conf",
+      "sha256": "46fb68f9ec27605f880379b753c1afcc1cacfc75021e3a288f4cf62c945e394f",
+      "size": 326
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/70-no-bitmaps-and-emoji.conf",
+      "sha256": "313260028904353a026faa457bacea58df88ceff7dc97b269e526130dc797a7e",
+      "size": 373
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/70-no-bitmaps-except-emoji.conf",
+      "sha256": "bb5df65896bf3011b2f2935b63ab12db1ecf078674ff73a533123445f122a92b",
+      "size": 429
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/70-no-bitmaps.conf",
+      "sha256": "5994ce306887448ec29b2d6624696bb2dd7e333dd51cc5818f9ebe72abc077da",
+      "size": 304
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/70-yes-bitmaps.conf",
+      "sha256": "87228113c2e8ffbf5565ffaa80d5e5fde33b14f0725accf69e1e31c80df398c0",
+      "size": 77
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/80-delicious.conf",
+      "sha256": "34f27b7fe9cd83b2b6d46f16ef9c477412f2d7ef63634f86b9b38b79bc4f81ad",
+      "size": 437
+    },
+    {
+      "operations": [
+        "close",
+        "openat",
+        "read"
+      ],
+      "path": "/usr/share/fontconfig/conf.avail/90-synthetic.conf",
+      "sha256": "cdd0aac7840c664a7127b64db66bdfe8dc22be3774d10bc22f4a41c98de5d85e",
+      "size": 1757
+    },
+    {
+      "operations": [
+        "close",
+        "fadvise64",
+        "fstat",
+        "fstatfs",
+        "mmap",
+        "openat"
+      ],
+      "path": "/var/cache/fontconfig/0bd3dc0958fa2205aaaa8ebb13e2872b-le64.cache-9",
+      "sha256": "97b8c934e56cf9124ac4a0ee8e6e3ac994d3ab07c88953f3133f3653932d5a63",
+      "size": 2960
+    },
+    {
+      "operations": [
+        "close",
+        "fadvise64",
+        "fstat",
+        "fstatfs",
+        "mmap",
+        "openat"
+      ],
+      "path": "/var/cache/fontconfig/3047814df9a2f067bd2d96a2b9c36e5a-le64.cache-9",
+      "sha256": "7fabc24324845dd523c1450210d9eef5c0e3fc645c519b7b2b233c8190389a39",
+      "size": 23056
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "fstatfs",
+        "openat",
+        "read"
+      ],
+      "path": "/var/cache/fontconfig/3830d5c3ddfd5cd38a049b759396e72e-le64.cache-9",
+      "sha256": "b3d06d927d2b33d3032982e08f37ab13465c223906b9b58c1b463f054be47ddf",
+      "size": 144
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "fstatfs",
+        "openat",
+        "read"
+      ],
+      "path": "/var/cache/fontconfig/4c599c202bc5c08e2d34565a40eac3b2-le64.cache-9",
+      "sha256": "0f7de18def911dea2d98610983e586bcc56a916e56274ced416a08d8d4d340ec",
+      "size": 104
+    },
+    {
+      "operations": [
+        "close",
+        "fstat",
+        "fstatfs",
+        "openat",
+        "read"
+      ],
+      "path": "/var/cache/fontconfig/7ef2298fde41cc6eeb7af42e48b7d293-le64.cache-9",
+      "sha256": "e2882372591e6cf1d409d2caca87663dc33ec68ee61ad3e3c9efbfcf620006e2",
+      "size": 288
+    },
+    {
+      "operations": [
+        "close",
+        "fadvise64",
+        "fstat",
+        "fstatfs",
+        "mmap",
+        "openat"
+      ],
+      "path": "/var/cache/fontconfig/bf3b770c553c462765856025a94f1ce6-le64.cache-9",
+      "sha256": "3112d4e6a743065b2c39157139b592ff222b0d84b7fcc5ca300721fc3c25186d",
+      "size": 33112
+    },
+    {
+      "operations": [
+        "close",
+        "fadvise64",
+        "fstat",
+        "fstatfs",
+        "mmap",
+        "openat"
+      ],
+      "path": "/var/cache/fontconfig/d589a48862398ed80a3d6066f4f56f4c-le64.cache-9",
+      "sha256": "7e14c53b666dc42dfe583cc454cdf5fb3a06fe7d7bf7b6e3a63bc2e6c88f47f0",
+      "size": 51736
+    }
+  ],
+  "schema": "glassvow.godot-runtime-provenance.g0-manifest/v1",
+  "semanticReadSet": [
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PACKET}/corpus.json",
+      "sha256": "ffaa165e59ee5cd59df3f7476932ec30938d27abf8a85f8f41667f4de5ee696a",
+      "size": 11660084
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PACKET}/p9_v5_runtime_oracle.gd",
+      "sha256": "37fe74e4c2319e393f963139e3db300353956a025e6d3724cb4f83d8265f56e7",
+      "size": 21331
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/.godot/extension_list.cfg",
+      "sha256": "0f0671bfe90ff29cae184a8ad2279be2f3b49bfd865f0503df20df678ea282c8",
+      "size": 39
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/.godot/global_script_class_cache.cfg",
+      "sha256": "4937b0a7e7f4a10f3821d39ffd2e1c759ed79204ce37b8ddb53cce7af09ee8cd",
+      "size": 26209
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/.godot/uid_cache.bin",
+      "sha256": "e5c94eeba77c931da64b56a553c1eb9ebc6871c7fd6b61e64afed3c1f25f2904",
+      "size": 36045
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/addons/sentry/sentry.gdextension",
+      "sha256": "b87a3ca2d1bd7f5833881333bdd58234abfa5fd4e18a5046747fef2a9d54ac11",
+      "size": 3688
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/assets/art/title/splash.png",
+      "sha256": "ae4ebab2dfc6023b448e6a9af70c6af12fa37e6ff92b0767dbb7bccf1c588ce6",
+      "size": 614437
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/content/content_db.gd",
+      "sha256": "e1d0c2291ed50f820ba7ea202e16b46eb318f26244f37d37c294f5cb073cef6d",
+      "size": 23151
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/content/full-content.json",
+      "sha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "size": 135282
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/content/line-table.json",
+      "sha256": "772a7a2539dea6f5d24a1ca93ff0178f70b52546a55268d6ec9b8b5d763709cf",
+      "size": 57600
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/content/mob-overrides.json",
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+      "size": 3
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/default_bus_layout.tres",
+      "sha256": "3a43ddd3d3bdfc1f1c2d424ff274c57d0406a8d05b618524360fbe1d714662cd",
+      "size": 443
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/events/event_types.gd",
+      "sha256": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "size": 1762
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/game.gd",
+      "sha256": "4eb3f416eef60797bc0cfdf9169250f07fccb3a05c0b16dcb9d7ef054898c824",
+      "size": 2764
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/rng/rng.gd",
+      "sha256": "279665ca2dd8d26bc4e81d1c86bf5a23a80ad582f5c0ed4cb5cc222387a9adf8",
+      "size": 1105
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/rules/combat.gd",
+      "sha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "size": 49036
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/rules/counterfactual_self.gd",
+      "sha256": "de02e57c8ea2fe41c6806dade8f786a1c8e2d0282c8cb9f4b3defddbe4db8e98",
+      "size": 4999
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/rules/enemy_ai.gd",
+      "sha256": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417",
+      "size": 8551
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/rules/line_table.gd",
+      "sha256": "ed5a9e4461ffd28607c4afc14293430413ac368289b18d7a4e98577d187a76b3",
+      "size": 12231
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/rules/quests.gd",
+      "sha256": "fede1a189d0f21c0e75b0d4779f36478b43971d0eab7a88c08396daadcf59aae",
+      "size": 9532
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/rules/rewards.gd",
+      "sha256": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "size": 23820
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/state/card_inst.gd",
+      "sha256": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d",
+      "size": 740
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/state/combat_state.gd",
+      "sha256": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "size": 2118
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/state/enemy_combatant.gd",
+      "sha256": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "size": 1149
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/state/map_node.gd",
+      "sha256": "f3947e2a476b037f1b76b843caa7ff5bd80019c28031350a7692b8144aa5ebed",
+      "size": 2570
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/state/player_combatant.gd",
+      "sha256": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3",
+      "size": 513
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/state/run_state.gd",
+      "sha256": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "size": 18728
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/domain/state/world_map.gd",
+      "sha256": "b3f1beb4db34933fc7de0c2562749fbd9465f74c7d74bb1bd2c3598b0e984fe5",
+      "size": 11955
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/project.godot",
+      "sha256": "458619f45e53a0acde22facbe4727db0fd6d7f18b07e3bffd8f2f3d1307683c0",
+      "size": 2179
+    },
+    {
+      "operations": [
+        "close",
+        "fcntl",
+        "fstat",
+        "lseek",
+        "openat",
+        "read"
+      ],
+      "path": "${PRODUCT}/tools/vow_incentives.gd",
+      "sha256": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e",
+      "size": 5342
+    }
+  ],
+  "source": {
+    "observerHead": "19cd1093c928400adc760e0a2525626c74825f54",
+    "packetSha": "15ea4d3af4b592c7015b4fd3569cf59d7ef93d77",
+    "productSha": "5c5f2d325725b0a04e060c1ffe0b40a76f2e0928",
+    "run": 33747777071
+  }
+}
