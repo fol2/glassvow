@@ -181,9 +181,9 @@ jobs:
           [[ "$PACKET_SHA" =~ ^[0-9a-f]{40}$ ]]
           git fetch --no-tags origin "$PRODUCT_SHA" "$PACKET_SHA"
           test "$(git rev-parse "$PACKET_SHA^")" = "$PRODUCT_SHA"
-          test -z "$(git diff --name-only "$PRODUCT_SHA" "$PACKET_SHA" -- . \
+          test -z "$(git diff --no-renames --name-only "$PRODUCT_SHA" "$PACKET_SHA" -- . \
             | grep -Ev "^${PACKET_ROOT}/" || true)"
-          changed="$(git diff --name-only "$PRODUCT_SHA" "$PACKET_SHA" -- "$PACKET_ROOT")"
+          changed="$(git diff --no-renames --name-only "$PRODUCT_SHA" "$PACKET_SHA" -- "$PACKET_ROOT")"
           test "$changed" = "${PACKET_ROOT}/corpus.json
           ${PACKET_ROOT}/manifest.json
           ${PACKET_ROOT}/p9_v5_runtime_oracle.gd"
@@ -572,7 +572,7 @@ jobs:
           read -ra parents <<< "$(git rev-list --parents -n 1 "$PACKET_SHA")"
           test "${#parents[@]}" -eq 2
           test "${parents[1]}" = "$PRODUCT_SHA"
-          git diff --name-only -z "$PRODUCT_SHA" "$PACKET_SHA" -- . \
+          git diff --no-renames --name-only -z "$PRODUCT_SHA" "$PACKET_SHA" -- . \
             > "$RUNNER_TEMP/godot-runtime-changed-paths"
           python3 -B - "$PACKET_ROOT" "$RUNNER_TEMP/godot-runtime-changed-paths" <<'PY'
           import pathlib

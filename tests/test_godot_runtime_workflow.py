@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import hashlib
 import importlib.util
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -23,6 +24,53 @@ PROFILE = json.loads((ROOT / "tools/execution_provenance/godot_runtime_profile.j
 
 
 class GodotRuntimeWorkflowTests(unittest.TestCase):
+    def test_packet_boundary_exposes_outside_to_inside_rename(self) -> None:
+        self.assertEqual(3, WORKFLOW.count("git diff --no-renames --name-only"))
+        self.assertNotIn("git diff --name-only", WORKFLOW)
+        with tempfile.TemporaryDirectory(prefix="godot-packet-rename-") as temporary:
+            repository = Path(temporary)
+            subprocess.run(["git", "init", "-q"], cwd=repository, check=True)
+            subprocess.run(
+                ["git", "config", "diff.renames", "true"],
+                cwd=repository, check=True)
+            outside = repository / "outside.gd"
+            outside.write_text("extends SceneTree\n", encoding="utf-8")
+            subprocess.run(["git", "add", "."], cwd=repository, check=True)
+            subprocess.run([
+                "git", "-c", "user.name=Test", "-c",
+                "user.email=test@example.invalid", "commit", "-qm", "base",
+            ], cwd=repository, check=True)
+            base = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=repository, check=True,
+                capture_output=True, text=True).stdout.strip()
+            packet_root = "research_packets/issue-421-a1-v2-g0"
+            destination = repository / packet_root / "oracle.gd"
+            destination.parent.mkdir(parents=True)
+            subprocess.run(
+                ["git", "mv", str(outside), str(destination)],
+                cwd=repository, check=True)
+            subprocess.run([
+                "git", "-c", "user.name=Test", "-c",
+                "user.email=test@example.invalid", "commit", "-qm", "packet",
+            ], cwd=repository, check=True)
+            head = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=repository, check=True,
+                capture_output=True, text=True).stdout.strip()
+            rename_detected = subprocess.run([
+                "git", "diff", "--name-only", "-z", base, head, "--", ".",
+            ], cwd=repository, check=True, capture_output=True).stdout.split(b"\0")
+            self.assertEqual(
+                {f"{packet_root}/oracle.gd"},
+                {path.decode("utf-8") for path in rename_detected if path})
+            changed = subprocess.run([
+                "git", "diff", "--no-renames", "--name-only", "-z",
+                base, head, "--", ".",
+            ], cwd=repository, check=True, capture_output=True).stdout.split(b"\0")
+            paths = {path.decode("utf-8") for path in changed if path}
+            self.assertEqual({"outside.gd", f"{packet_root}/oracle.gd"}, paths)
+            self.assertTrue(any(
+                not path.startswith(f"{packet_root}/") for path in paths))
+
     def test_remote_budget_listing_fails_closed_before_mapfile(self) -> None:
         self.assertNotIn("mapfile -t runs < <(gh api", WORKFLOW)
         self.assertNotIn("mapfile -t jobs < <(gh api", WORKFLOW)

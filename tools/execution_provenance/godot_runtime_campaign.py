@@ -599,7 +599,7 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
     try:
         runner.materialise_product_stage(
             args.product_source.resolve(), args.product_sha, product_stage,
-            CONFIGURATION_ROOT, CONFIGURATION_MANIFEST_PATH, profile["caps"])
+            CONFIGURATION_ROOT, CONFIGURATION_MANIFEST_PATH, profile)
         product_stage_receipt = workspace / "product-stage-receipt.json"
         run([
             sys.executable, str(VERIFIER_PATH), "stage",

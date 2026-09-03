@@ -1360,19 +1360,38 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 path.write_bytes(data)
                 roles[name] = {"size": len(data), "sha256": sha256(path)}
             manifest = root / "configuration.json"
+            historical_product_sha = "1" * 40
             manifest_value = {
                 "schema": "glassvow.godot-runtime-configuration-capture/v1",
-                "source": {"productSha": product_sha},
+                "source": {"productSha": historical_product_sha},
                 "capture": {"kind": "test-fixture"},
                 "roles": roles,
                 "stagingRule": "exact commit plus only the three captured roles",
             }
             manifest.write_text(json.dumps(manifest_value), encoding="utf-8")
 
+            stage_profile = json.loads(json.dumps(self.profile))
+            stage_profile["g0"]["configurationCapture"] = {
+                "path": str(manifest.relative_to(root)),
+                "sha256": sha256(manifest),
+                "fixtureRoot": str(fixtures.relative_to(root)),
+                "roleCount": 3,
+            }
             record = self.runner.materialise_product_stage(
                 source, product_sha, stage, fixtures, manifest,
-                self.profile["caps"])
+                stage_profile)
+            self.assertNotEqual(historical_product_sha, product_sha)
             self.assertEqual(product_sha, record["productSha"])
+            manifest_bytes = manifest.read_bytes()
+            manifest.write_bytes(manifest_bytes + b"\n")
+            try:
+                with self.assertRaisesRegex(
+                        self.runner.RunnerError, "profile binding differs"):
+                    self.runner.materialise_product_stage(
+                        source, product_sha, root / "unbound-stage", fixtures,
+                        manifest, stage_profile)
+            finally:
+                manifest.write_bytes(manifest_bytes)
             self.assertEqual(
                 sum(path.stat().st_size for path in (
                     source / "project.godot", source / "tracked.txt",
@@ -1388,33 +1407,26 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 self.assertTrue(path.is_file() and not path.is_symlink())
                 self.assertEqual(binding["sha256"], sha256(path))
 
-            verify_profile = json.loads(json.dumps(self.profile))
-            verify_profile["g0"]["configurationCapture"] = {
-                "path": str(manifest.relative_to(root)),
-                "sha256": sha256(manifest),
-                "fixtureRoot": str(fixtures.relative_to(root)),
-                "roleCount": 3,
-            }
             with mock.patch.multiple(
                     self.verifier, OBSERVER_ROOT=root,
                     CONFIGURATION_ROOT=fixtures,
                     CONFIGURATION_MANIFEST_PATH=manifest):
                 verified = self.verifier.verify_product_stage(
-                    source, product_sha, stage, verify_profile)
+                    source, product_sha, stage, stage_profile)
                 self.assertEqual(record["trackedBytes"], verified["trackedBytes"])
                 tracked = stage / "tracked.txt"
                 tracked.write_text("tampered\n", encoding="utf-8")
                 with self.assertRaisesRegex(
                         self.verifier.VerificationFailure, "trusted command failed"):
                     self.verifier.verify_product_stage(
-                        source, product_sha, stage, verify_profile)
+                        source, product_sha, stage, stage_profile)
                 tracked.write_text("tracked\n", encoding="utf-8")
                 generated = stage / ".godot" / "uid_cache.bin"
                 generated.chmod(0o644); generated.write_bytes(b"tampered")
                 with self.assertRaisesRegex(
                         self.verifier.VerificationFailure, "staged configuration differs"):
                     self.verifier.verify_product_stage(
-                        source, product_sha, stage, verify_profile)
+                        source, product_sha, stage, stage_profile)
                 generated.write_bytes((fixtures / "uid_cache.bin").read_bytes())
                 injected = stage / "injected-regular"
                 injected.write_text("not in the product tree\n", encoding="utf-8")
@@ -1422,7 +1434,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                         self.verifier.VerificationFailure,
                         "product stage additive inventory differs"):
                     self.verifier.verify_product_stage(
-                        source, product_sha, stage, verify_profile)
+                        source, product_sha, stage, stage_profile)
                 injected.unlink()
                 extra_configuration = stage / ".godot" / "extra-role.cfg"
                 extra_configuration.parent.chmod(0o755)
@@ -1431,7 +1443,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                         self.verifier.VerificationFailure,
                         "product stage additive inventory differs"):
                     self.verifier.verify_product_stage(
-                        source, product_sha, stage, verify_profile)
+                        source, product_sha, stage, stage_profile)
                 extra_configuration.unlink()
                 extra_configuration.parent.chmod(0o555)
 
@@ -1445,13 +1457,11 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
             generated_sha = subprocess.run(
                 ["git", "rev-parse", "HEAD"], cwd=source, check=True,
                 capture_output=True, text=True).stdout.strip()
-            manifest_value["source"]["productSha"] = generated_sha
-            manifest.write_text(json.dumps(manifest_value), encoding="utf-8")
             with self.assertRaisesRegex(
                     self.runner.RunnerError, "already contains generated configuration"):
                 self.runner.materialise_product_stage(
                     source, generated_sha, root / "forbidden-stage", fixtures,
-                    manifest, self.profile["caps"])
+                    manifest, stage_profile)
 
     def test_packet_manifest_binds_regular_role_bytes(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-packet-") as temporary:

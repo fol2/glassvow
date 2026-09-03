@@ -257,13 +257,20 @@ def validate_product_semantics(
 def materialise_product_stage(
         product_source: Path, product_sha: str, destination: Path,
         configuration_root: Path, configuration_manifest_path: Path,
-        caps: Mapping[str, Any]) -> dict[str, Any]:
+        profile: Mapping[str, Any]) -> dict[str, Any]:
     if destination.exists():
         raise RunnerError("product stage must be a fresh path")
     manifest = read_json(configuration_manifest_path)
+    capture = profile.get("g0", {}).get("configurationCapture", {})
+    if capture.get("sha256") != sha256_file(configuration_manifest_path) or \
+            capture.get("roleCount") != 3:
+        raise RunnerError("configuration capture profile binding differs")
+    source = manifest.get("source")
+    source_sha = source.get("productSha") if isinstance(source, dict) else None
     if manifest.get("schema") != "glassvow.godot-runtime-configuration-capture/v1" or \
-            manifest.get("source", {}).get("productSha") != product_sha:
-        raise RunnerError("configuration capture product binding differs")
+            not isinstance(source_sha, str) or len(source_sha) != 40 or \
+            any(character not in "0123456789abcdef" for character in source_sha):
+        raise RunnerError("configuration capture schema differs")
     roles = manifest.get("roles")
     required = {
         "extension_list.cfg", "global_script_class_cache.cfg", "uid_cache.bin"}
@@ -304,8 +311,8 @@ def materialise_product_stage(
                             for record in sized_inventory.split(b"\0") if record)
     except (IndexError, ValueError) as error:
         raise RunnerError("product tree contains an unsupported member") from error
-    if tracked_count > caps["maxProjectFiles"] or \
-            tracked_bytes > caps["maxProjectBytes"]:
+    if tracked_count > profile["caps"]["maxProjectFiles"] or \
+            tracked_bytes > profile["caps"]["maxProjectBytes"]:
         raise RunnerError("product stage cap exceeded")
     destination.mkdir(parents=True)
     index_path = destination.parent / f".{destination.name}.index"

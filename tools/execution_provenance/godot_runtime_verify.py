@@ -1118,8 +1118,11 @@ def verify_product_stage(
     if source_head != product_sha or not source_clean:
         fail("PROVENANCE_INCOMPLETE", "product source differs before staging")
     manifest, manifest_bytes = _configuration_capture(profile)
-    if manifest.get("source", {}).get("productSha") != product_sha:
-        fail("PROVENANCE_INCOMPLETE", "configuration product binding differs")
+    source = manifest.get("source")
+    source_sha = source.get("productSha") if isinstance(source, dict) else None
+    if not isinstance(source_sha, str) or len(source_sha) != 40 or \
+            any(character not in "0123456789abcdef" for character in source_sha):
+        fail("PROVENANCE_INCOMPLETE", "configuration capture source differs")
     if (stage / ".git").exists() or (stage / ".git").is_symlink():
         fail("PROVENANCE_INCOMPLETE", "product stage contains Git administration")
     common = _checked([
