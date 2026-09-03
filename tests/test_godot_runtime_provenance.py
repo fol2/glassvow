@@ -6,7 +6,9 @@ import hashlib
 import importlib.util
 import json
 import os
+import shutil
 import subprocess
+import sys
 import tempfile
 import types
 import unittest
@@ -17,6 +19,8 @@ from unittest import mock
 ROOT = Path(__file__).resolve().parents[1]
 PROFILE_PATH = ROOT / "tools/execution_provenance/godot_runtime_profile.json"
 G0_MANIFEST_PATH = ROOT / "tools/execution_provenance/godot_runtime_g0_manifest.json"
+CONFIGURATION_MANIFEST_PATH = ROOT / "tools/execution_provenance/godot_runtime_configuration_manifest.json"
+CONFIGURATION_ROOT = ROOT / "tools/execution_provenance/godot_runtime_configuration"
 VERIFIER_PATH = ROOT / "tools/execution_provenance/godot_runtime_verify.py"
 RUNNER_PATH = ROOT / "tools/execution_provenance/godot_runtime_runner.py"
 CAMPAIGN_PATH = ROOT / "tools/execution_provenance/godot_runtime_campaign.py"
@@ -122,6 +126,7 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             "glassvow.godot-runtime-provenance.profile/v1",
             self.profile["schema"],
         )
+        self.assertEqual(sha256(PROFILE_PATH), self.verifier.FROZEN_PROFILE_SHA256)
         self.assertEqual(535, self.profile["authority"]["issue"])
         self.assertEqual(5524343289, self.profile["authority"]["comment"])
         self.assertEqual(
@@ -167,7 +172,7 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             "6fe2a93c98907e2d40c21db6666ab5fede769098a9233fc8bb887bf66ca806de",
             manifest["source"]["artifactSha256"],
         )
-        self.assertEqual((30, 125, 13), (
+        self.assertEqual((30, 126, 13), (
             len(manifest["semanticReadSet"]), len(manifest["runtimeIdentitySet"]),
             len(manifest["platformObservationSet"]),
         ))
@@ -181,6 +186,37 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             "/run/udev/data/c13:0", "/run/udev/data/c13:32",
             "/run/udev/data/c13:64", "/run/udev/data/c13:65",
         }, dynamic)
+
+    def test_fresh_g0_configuration_capture_is_the_only_fixture_byte_authority(self) -> None:
+        capture = json.loads(CONFIGURATION_MANIFEST_PATH.read_text(encoding="utf-8"))
+        binding = self.profile["g0"]["configurationCapture"]
+        self.assertEqual(
+            binding["sha256"], hashlib.sha256(CONFIGURATION_MANIFEST_PATH.read_bytes()).hexdigest())
+        self.assertEqual(33768343626, capture["source"]["run"])
+        self.assertEqual(9898578469, capture["source"]["artifactId"])
+        self.assertEqual(
+            "28835d178a13fdee58a5cdc7bd0a98e8688e1e6f0a86d5d470972ea9b858c44d",
+            capture["source"]["artifactSha256"],
+        )
+        self.assertEqual(3, binding["roleCount"])
+        self.assertEqual(set(capture["roles"]), {
+            "extension_list.cfg", "global_script_class_cache.cfg", "uid_cache.bin"})
+        g0 = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
+        g0_roles = {
+            Path(record["path"]).name: record
+            for record in g0["semanticReadSet"] if "/.godot/" in record["path"]
+        }
+        for name, record in capture["roles"].items():
+            fixture = CONFIGURATION_ROOT / name
+            self.assertTrue(fixture.is_file() and not fixture.is_symlink())
+            self.assertEqual(record["size"], fixture.stat().st_size)
+            self.assertEqual(record["sha256"], sha256(fixture))
+            self.assertEqual(
+                (record["size"], record["sha256"]),
+                (g0_roles[name]["size"], g0_roles[name]["sha256"]),
+            )
+            self.assertEqual(record["size"], sum(
+                value for value in record["runtimeReadReturns"] if value > 0))
 
     def test_attack_matrix_has_one_reason_per_new_trust_boundary(self) -> None:
         actual = {
