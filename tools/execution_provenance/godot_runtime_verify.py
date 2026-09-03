@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Independent verifier for the frozen actual-Godot provenance profile."""
 from __future__ import annotations
-import argparse, fnmatch, hashlib, importlib.util, json, os, re, secrets, stat, subprocess, sys
+import argparse, hashlib, importlib.util, json, os, re, secrets, stat, subprocess, sys
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -24,8 +24,8 @@ PACKET_SCHEMA = "glassvow.godot-runtime-packet/v1"
 STATEMENT_SCHEMA = "glassvow.godot-runtime-provenance.statement/v1"
 RECEIPT_SCHEMA = "glassvow.godot-runtime-provenance.receipt/v1"
 CAMPAIGN_SCHEMA = "glassvow.godot-runtime-provenance.campaign-receipt/v1"
-# Rebound once after exact-profile review and before any qualification case.
-FROZEN_PROFILE_SHA256 = "PROFILE_SHA256_TO_BE_FROZEN"
+# Bound to the independently reviewed profile before any qualification case.
+FROZEN_PROFILE_SHA256 = "aa575f3a677fbd778b39d1757ee1006c3cf05547ef13ffa21974e4c694780f03"
 _REASONS = (
     "ADMITTED GODOT_EXECUTABLE_MISMATCH RUNTIME_DEPENDENCY_MISMATCH ARGV_MISMATCH "
     "ENVIRONMENT_MISMATCH PROJECT_SEMANTIC_BYTES_MISMATCH GENERATED_CACHE_BYTES_MISMATCH "
@@ -84,14 +84,6 @@ def _canonical(value: Any) -> bytes:
     return (json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n").encode()
 
 
-def _json(path: Path) -> dict[str, Any]:
-    try: value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeError, json.JSONDecodeError) as error:
-        fail("PROVENANCE_INCOMPLETE", f"cannot read {path.name}: {error}")
-    if not isinstance(value, dict): fail("PROVENANCE_INCOMPLETE", f"{path.name} is not an object")
-    return value
-
-
 def _limit(caps: Mapping[str, Any], name: str) -> int:
     hard = _HARD_FILE_CAPS[name]
     value = caps.get(name)
@@ -100,7 +92,8 @@ def _limit(caps: Mapping[str, Any], name: str) -> int:
 
 def _bounded_bytes(
         path: Path, maximum: int, reason: str = "PROVENANCE_INCOMPLETE") -> bytes:
-    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | \
+        getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0)
     try: descriptor = os.open(path, flags)
     except OSError as error: fail(reason, f"cannot open bounded {path.name}: {error}")
     try:
@@ -122,11 +115,11 @@ def _bounded_bytes(
         os.close(descriptor)
 
 
-def _json_bounded(path: Path, maximum: int) -> dict[str, Any]:
-    try: value = json.loads(_bounded_bytes(path, maximum).decode("utf-8"))
+def _json_bytes(data: bytes, path: Path, reason: str = "PROVENANCE_INCOMPLETE") -> dict[str, Any]:
+    try: value = json.loads(data.decode("utf-8"))
     except (UnicodeError, json.JSONDecodeError) as error:
-        fail("PROVENANCE_INCOMPLETE", f"cannot read {path.name}: {error}")
-    if not isinstance(value, dict): fail("PROVENANCE_INCOMPLETE", f"{path.name} is not an object")
+        fail(reason, f"cannot read {path.name}: {error}")
+    if not isinstance(value, dict): fail(reason, f"{path.name} is not an object")
     return value
 
 
@@ -172,12 +165,16 @@ def _expand(template: str, roots: Mapping[str, str]) -> str:
 def _packet_members(
         packet: Path, manifest_path: Path,
         profile: Mapping[str, Any]) -> dict[str, Path]:
-    if manifest_path.resolve() != packet.resolve() / "manifest.json":
+    if Path(os.path.abspath(manifest_path.parent)) != Path(os.path.abspath(packet)) or \
+            manifest_path.name != "manifest.json":
         fail("PROVENANCE_INCOMPLETE", "packet manifest path differs")
     caps = profile["caps"]
     members: dict[str, Path] = {}
     total = 0
     try:
+        root = packet.lstat()
+        if not stat.S_ISDIR(root.st_mode) or stat.S_ISLNK(root.st_mode):
+            fail("PROVENANCE_INCOMPLETE", "packet root must be a direct non-symlink directory")
         with os.scandir(packet) as entries:
             for entry in entries:
                 if len(members) >= caps["maxPacketMembers"]:
@@ -202,14 +199,29 @@ def _packet_members(
     return members
 
 
-def _load_sources(profile_path: Path, g0_path: Path, packet_path: Path) -> tuple[dict, dict, dict]:
-    if _file_sha(profile_path) != FROZEN_PROFILE_SHA256: fail("PROFILE_MISMATCH", "profile bytes differ")
-    profile, g0 = _json(profile_path), _json(g0_path)
+def _load_sources(
+        profile_path: Path, g0_path: Path, packet_path: Path,
+        cache: dict[str, bytes] | None = None) -> tuple[dict, dict, dict]:
+    source_bytes = cache if cache is not None else {}
+    if "profile" not in source_bytes:
+        source_bytes["profile"] = _bounded_bytes(
+            profile_path, _HARD_FILE_CAPS["maxProfileBytes"], "PROFILE_MISMATCH")
+    if _sha(source_bytes["profile"]) != FROZEN_PROFILE_SHA256:
+        fail("PROFILE_MISMATCH", "profile bytes differ")
+    profile = _json_bytes(source_bytes["profile"], profile_path, "PROFILE_MISMATCH")
     if profile.get("schema") != PROFILE_SCHEMA: fail("PROFILE_MISMATCH", "profile schema differs")
-    if g0.get("schema") != G0_SCHEMA or _file_sha(g0_path) != profile.get("g0", {}).get("manifest", {}).get("sha256"):
+    if "g0Manifest" not in source_bytes:
+        source_bytes["g0Manifest"] = _bounded_bytes(
+            g0_path, _limit(profile["caps"], "maxG0ManifestBytes"), "MANIFEST_MISMATCH")
+    g0 = _json_bytes(source_bytes["g0Manifest"], g0_path, "MANIFEST_MISMATCH")
+    if g0.get("schema") != G0_SCHEMA or _sha(source_bytes["g0Manifest"]) != \
+            profile.get("g0", {}).get("manifest", {}).get("sha256"):
         fail("MANIFEST_MISMATCH", "G0 manifest bytes differ")
     members = _packet_members(packet_path.parent, packet_path, profile)
-    packet = _json(packet_path)
+    if "packetManifest" not in source_bytes:
+        source_bytes["packetManifest"] = _bounded_bytes(
+            members["manifest.json"], _limit(profile["caps"], "maxPacketManifestBytes"))
+    packet = _json_bytes(source_bytes["packetManifest"], packet_path)
     if packet.get("schema") != PACKET_SCHEMA or set(packet) != {"schema", "productSha", "packetRoot", "authorityIssue", "authorityComment", "requestIndices", "roles"}:
         fail("PACKET_MANIFEST_MISMATCH", "packet schema or fields differ")
     roles = packet.get("roles")
@@ -225,27 +237,100 @@ def _absolute(value: Any, label: str) -> str:
     return value
 
 
-def _live(record: Mapping[str, Any], reason: str, no_symlink: bool = False) -> bytes:
+def _live(
+        record: Mapping[str, Any], reason: str, maximum: int,
+        no_symlink: bool = False) -> bytes:
     path = Path(_absolute(record.get("path"), "identity path"))
+    expected_size = record.get("size")
+    if not isinstance(expected_size, int) or not 0 <= expected_size <= maximum:
+        fail(reason, f"identity size exceeds cap for {path}")
+    descriptor = -1
     try:
-        metadata = path.lstat()
-        if no_symlink and stat.S_ISLNK(metadata.st_mode): fail(reason, f"symlink role {path}")
-        current, data = path.stat(), path.read_bytes()
-        if not stat.S_ISREG(current.st_mode): fail(reason, f"non-regular role {path}")
+        logical_before = path.lstat()
+        if no_symlink and stat.S_ISLNK(logical_before.st_mode):
+            fail(reason, f"symlink role {path}")
+        target = path if no_symlink else path.resolve(strict=True)
+        descriptor = os.open(
+            target, os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) |
+            getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0))
+        before = os.fstat(descriptor)
+        if not stat.S_ISREG(before.st_mode) or \
+                (before.st_size, before.st_dev, before.st_ino) != \
+                (expected_size, record.get("device"), record.get("inode")):
+            fail(reason, f"current identity differs for {path}")
+        blocks: list[bytes] = []; count = 0
+        while True:
+            block = os.read(descriptor, min(1024 * 1024, maximum + 1 - count))
+            if not block: break
+            blocks.append(block); count += len(block)
+            if count > maximum: fail(reason, f"identity exceeds cap for {path}")
+        after = os.fstat(descriptor)
+        logical_after = path.lstat()
+        if (before.st_dev, before.st_ino, before.st_size) != \
+                (after.st_dev, after.st_ino, after.st_size) or \
+                (logical_before.st_dev, logical_before.st_ino, logical_before.st_size,
+                 logical_before.st_mode) != \
+                (logical_after.st_dev, logical_after.st_ino, logical_after.st_size,
+                 logical_after.st_mode) or \
+                (not no_symlink and path.resolve(strict=True) != target) or count != expected_size:
+            fail(reason, f"identity changed during bounded read for {path}")
     except OSError as error: fail(reason, f"identity unavailable {path}: {error}")
-    if (current.st_size, _sha(data), current.st_dev, current.st_ino) != \
-            (record.get("size"), record.get("sha256"), record.get("device"), record.get("inode")):
+    finally:
+        if descriptor >= 0: os.close(descriptor)
+    data = b"".join(blocks)
+    if _sha(data) != record.get("sha256"):
         fail(reason, f"current identity differs for {path}")
     return data
 
 
-def _frozen_live(record: Mapping[str, Any], roots: Mapping[str, str], reason: str) -> dict[str, Any]:
+def _platform_live(
+        record: Mapping[str, Any], roots: Mapping[str, str],
+        maximum: int) -> tuple[str, dict[str, Any], bytes]:
     path = Path(_expand(str(record.get("path")), roots))
-    try: current, data = path.stat(), path.read_bytes()
-    except OSError as error: fail(reason, f"frozen object unavailable {path}: {error}")
-    if current.st_size != record.get("size") or _sha(data) != record.get("sha256"):
-        fail(reason, f"frozen object bytes differ {path}")
-    return {**record, "path": str(path), "device": current.st_dev, "inode": current.st_ino}
+    descriptor = -1
+    try:
+        descriptor = os.open(
+            path, os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) |
+            getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0))
+        before = os.fstat(descriptor)
+        if not stat.S_ISREG(before.st_mode) or before.st_size > maximum:
+            fail("UNDECLARED_INPUT_PATH", f"platform object is not regular: {path}")
+        blocks: list[bytes] = []; count = 0
+        while True:
+            block = os.read(descriptor, min(4096, maximum + 1 - count))
+            if not block: break
+            blocks.append(block); count += len(block)
+            if count > maximum:
+                fail("UNDECLARED_INPUT_PATH", f"platform object exceeds cap: {path}")
+        after = os.fstat(descriptor)
+    except OSError as error:
+        fail("UNDECLARED_INPUT_PATH", f"platform object unavailable {path}: {error}")
+    finally:
+        if descriptor >= 0: os.close(descriptor)
+    if (before.st_dev, before.st_ino, before.st_mode, before.st_size) != \
+            (after.st_dev, after.st_ino, after.st_mode, after.st_size):
+        fail("UNDECLARED_INPUT_PATH", f"platform object changed during read: {path}")
+    data = b"".join(blocks)
+    normalisation = record.get("contentNormalisation")
+    if normalisation is None:
+        if before.st_size != record.get("size") or _sha(data) != record.get("sha256"):
+            fail("UNDECLARED_INPUT_PATH", f"platform object bytes differ: {path}")
+    elif normalisation == "udev-initialisation-usec-decimal-v1":
+        member_cap = record.get("maximumBytes")
+        if not isinstance(member_cap, int) or not 1 <= member_cap <= maximum or \
+                before.st_size > member_cap or len(data) != before.st_size:
+            fail("UNDECLARED_INPUT_PATH", f"variable platform cap differs: {path}")
+        normalised, replacements = re.subn(
+            rb"(?m)^I:(?:0|[1-9][0-9]*)\n", b"I:<decimal>\n", data)
+        if replacements != 1 or _sha(normalised) != record.get("normalisedSha256"):
+            fail("UNDECLARED_INPUT_PATH", f"variable platform grammar differs: {path}")
+    else:
+        fail("UNDECLARED_INPUT_PATH", f"unknown platform normalisation: {path}")
+    current = {
+        **record, "path": str(path), "size": before.st_size,
+        "sha256": _sha(data), "device": before.st_dev, "inode": before.st_ino,
+    }
+    return str(path), current, data
 
 
 def _records(value: Any, label: str) -> dict[str, Mapping[str, Any]]:
@@ -293,8 +378,10 @@ def _identity_set(g0: Mapping[str, Any], roots: Mapping[str, str], key: str) -> 
     return result
 
 
-def _authority(statement: Mapping[str, Any], packet: Mapping[str, Any], profile: Mapping[str, Any],
-               args: argparse.Namespace) -> None:
+def _authority(
+        statement: Mapping[str, Any], packet: Mapping[str, Any],
+        profile: Mapping[str, Any], args: argparse.Namespace,
+        source_bytes: Mapping[str, bytes]) -> None:
     for name in ("observer_sha", "product_sha", "packet_sha"):
         value = getattr(args, name)
         if len(value) != 40 or any(char not in "0123456789abcdef" for char in value):
@@ -303,9 +390,9 @@ def _authority(statement: Mapping[str, Any], packet: Mapping[str, Any], profile:
              "packetRoot": args.packet_root, "authorityIssue": args.authority_issue,
              "authorityComment": args.authority_comment, "requestIndex": args.request_index,
              "workingDirectory": str(OBSERVER_ROOT),
-             "profileSha256": _file_sha(args.profile),
-             "g0ManifestSha256": _file_sha(args.g0_manifest),
-             "packetManifestSha256": _file_sha(args.packet_manifest)}
+             "profileSha256": _sha(source_bytes["profile"]),
+             "g0ManifestSha256": _sha(source_bytes["g0Manifest"]),
+             "packetManifestSha256": _sha(source_bytes["packetManifest"])}
     if any(statement.get(key) != value for key, value in exact.items()):
         fail("PROVENANCE_INCOMPLETE", "statement differs from independent workflow inputs")
     expected_case_root = args.expected_runtime_root.resolve() / args.case_id
@@ -595,9 +682,28 @@ def _runtime_mappings(trace: Mapping[str, Any], roots: Mapping[str, str],
         fail("RUNTIME_DEPENDENCY_MISMATCH", "runtime mapping multiset differs from G0")
 
 
+def _platform_access_witnesses(
+        events: Sequence[Mapping[str, Any]],
+        platform: Mapping[str, Mapping[str, Any]]) -> None:
+    for path, record in platform.items():
+        identity = (record.get("device"), record.get("inode"))
+        opened = any(event.get("type") == "OPEN" and event.get("path") == path and
+                     (event.get("device"), event.get("inode")) == identity
+                     for event in events)
+        closed = any(event.get("type") == "CLOSE" and event.get("path") == path and
+                     (event.get("device"), event.get("inode")) == identity
+                     for event in events)
+        read_witness = any(event.get("type") == "SYSCALL_X" and
+                           event.get("name") in {"read", "pread64"} and
+                           event.get("returned", -1) >= 0 and event.get("_fdPath") == path
+                           for event in events)
+        if not opened or not closed or not read_witness:
+            fail("UNDECLARED_INPUT_PATH", f"platform access witness missing {path}")
+
+
 def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], runtime: Mapping[str, Mapping[str, Any]],
              platform: Mapping[str, Mapping[str, Any]], outputs: Mapping[str, Mapping[str, Any]],
-             role_bytes: Mapping[str, bytes], sidecar: bytes, roots: Mapping[str, str], profile: Mapping[str, Any]) -> None:
+             consumed_bytes: Mapping[str, bytes], sidecar: bytes, roots: Mapping[str, str], profile: Mapping[str, Any]) -> None:
     objects: dict[str, Mapping[str, Any]] = {**roles, **platform, **outputs}
     for logical, record in runtime.items():
         resolved = str(Path(logical).resolve())
@@ -613,12 +719,23 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
     internal_pipes = _validate_internal_pipe(
         trace["events"], sidecar, expected_pipe_bytes, pipe_contract)
     _validate_failed_paths(trace["events"], known, set(roles), roots, grammar["failedPathGrammar"])
-    directories = {_expand(path, roots) for path in grammar["successfulDirectories"]}
-    dynamic_directories = {
-        _expand(path, roots): set(record["operations"])
-        for record in grammar["successfulDynamicDirectoryOperations"]
-        for path in record["paths"]
-    }
+    directory_operations: dict[str, set[str]] = {}
+    for record in grammar["successfulDirectoryOperations"]:
+        for path in record["paths"]:
+            directory_operations.setdefault(_expand(path, roots), set()).update(record["operations"])
+    dynamic_directories: dict[str, set[str]] = {}
+    for record in grammar["successfulDynamicDirectoryOperations"]:
+        for path in record["paths"]:
+            dynamic_directories.setdefault(_expand(path, roots), set()).update(record["operations"])
+    successful_probes: dict[str, set[str]] = {}
+    for record in grammar["successfulProbeOperations"]:
+        for path in record["paths"]:
+            successful_probes.setdefault(_expand(path, roots), set()).update(record["operations"])
+    directory_aliases = {
+        record["path"]: record["target"] for record in grammar["successfulDirectoryAliases"]}
+    named_operations = {
+        record["path"]: record for record in grammar["successfulNamedPathOperations"]}
+    working_directory_operations = set(grammar["successfulWorkingDirectoryOperations"])
     for event in trace["events"]:
         if event["type"] not in {"OPEN", "CLOSE", "READ", "WRITE", "MMAP", "PATH_X"}: continue
         path = event.get("path")
@@ -633,13 +750,43 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
             if event.get("classification") != "I":
                 fail("PROCESS_LINEAGE_MISMATCH", "pipe classification differs")
             continue
-        is_directory = path in directories
         if path in dynamic_directories:
             if event["type"] != "PATH_X" or event.get("operation") not in dynamic_directories[path]:
                 fail("UNDECLARED_INPUT_PATH", f"dynamic directory operation differs {path}")
-            is_directory = True
-        named = any(fnmatch.fnmatch(path, pattern) for pattern in grammar["declaredDevicePaths"] + grammar["declaredProcPaths"])
-        if path == "/dev/null" or is_directory or named:
+            continue
+        if path == str(OBSERVER_ROOT):
+            if event["type"] != "PATH_X" or event.get("operation") not in working_directory_operations:
+                fail("UNDECLARED_INPUT_PATH", "working-directory operation differs")
+            continue
+        if path in successful_probes:
+            if event["type"] != "PATH_X" or event.get("operation") not in successful_probes[path]:
+                fail("UNDECLARED_INPUT_PATH", f"successful probe operation differs {path}")
+            try: Path(path).lstat()
+            except OSError as error: fail("UNDECLARED_INPUT_PATH", f"successful probe unavailable: {error}")
+            continue
+        if path in directory_aliases:
+            target = directory_aliases[path]
+            try:
+                logical, current = Path(path).lstat(), Path(path).stat()
+                resolved = str(Path(path).resolve(strict=True))
+            except OSError as error:
+                fail("UNDECLARED_INPUT_PATH", f"directory alias unavailable: {error}")
+            if event["type"] not in {"OPEN", "CLOSE"} or not stat.S_ISLNK(logical.st_mode) or \
+                    not stat.S_ISDIR(current.st_mode) or resolved != target or \
+                    (event.get("device"), event.get("inode")) != (current.st_dev, current.st_ino):
+                fail("UNDECLARED_INPUT_PATH", f"directory alias differs {path}")
+            continue
+        if path in directory_operations:
+            if event["type"] == "PATH_X" and event.get("operation") not in directory_operations[path] or \
+                    event["type"] not in {"PATH_X", "OPEN", "CLOSE"}:
+                fail("UNDECLARED_INPUT_PATH", f"directory operation differs {path}")
+            try: current = Path(path).stat()
+            except OSError as error: fail("UNDECLARED_INPUT_PATH", f"directory unavailable: {error}")
+            if not stat.S_ISDIR(current.st_mode) or event["type"] != "PATH_X" and \
+                    (event.get("device"), event.get("inode")) != (current.st_dev, current.st_ino):
+                fail("UNDECLARED_INPUT_PATH", f"directory identity differs {path}")
+            continue
+        if path == "/dev/null":
             try: current = Path(path).stat()
             except OSError as error: fail("UNDECLARED_INPUT_PATH", f"named path unavailable: {error}")
             if event["type"] != "PATH_X" and (event.get("device"), event.get("inode")) != (current.st_dev, current.st_ino):
@@ -647,19 +794,36 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
             if path == "/dev/null" and event["type"] == "OPEN" and event["flags"] != 0o1101:
                 fail("OUTPUT_WRITE_DENIED", "unexpected /dev/null open mode")
             continue
+        if path in named_operations:
+            record = named_operations[path]
+            try: current = Path(path).stat()
+            except OSError as error:
+                fail("UNDECLARED_INPUT_PATH", f"named path unavailable: {error}")
+            if event["type"] != "PATH_X" or event.get("operation") not in record["operations"] or \
+                    record.get("fileType") != "character-device" or not stat.S_ISCHR(current.st_mode) or \
+                    (os.major(current.st_rdev), os.minor(current.st_rdev)) != \
+                    (record.get("major"), record.get("minor")):
+                fail("UNDECLARED_INPUT_PATH", f"named path operation differs {path}")
+            continue
         if path not in known:
             reason = "UNDECLARED_CACHE_ACCESS" if isinstance(path, str) and path.startswith(roots["HOME"] + "/") else "UNDECLARED_INPUT_PATH"
             fail(reason, f"unknown successful object {path}")
         record = objects[path]
+        if event["type"] == "PATH_X":
+            operations = {"openat"} if path in outputs else set(record.get("operations", []))
+            if event.get("operation") not in operations:
+                fail("UNDECLARED_INPUT_PATH", f"object operation differs {path}")
+            continue
         expected_class = "S" if path in roles else "W" if path in outputs else "I"
-        if event["type"] != "PATH_X" and event.get("classification") != expected_class:
+        if event.get("classification") != expected_class:
             fail("UNDECLARED_INPUT_PATH", f"object classification differs {path}")
-        if event["type"] != "PATH_X" and (event.get("device"), event.get("inode")) != \
+        if (event.get("device"), event.get("inode")) != \
                 (record.get("device"), record.get("inode")):
             fail("RUNTIME_DEPENDENCY_MISMATCH", f"device/inode differs for {path}")
     reads = [e for e in trace["events"] if e["type"] == "READ"]
-    for path, data in role_bytes.items():
+    for path, data in consumed_bytes.items():
         validate_complete_role_reads([e for e in reads if e["path"] == path], data, sidecar)
+    _platform_access_witnesses(trace["events"], platform)
     actual_directories: dict[str, list[int]] = {}
     for event in trace["events"]:
         if event.get("type") == "SYSCALL_X" and event.get("name") == "getdents64":
@@ -754,12 +918,12 @@ def _trusted_setup(statement: Mapping[str, Any], roots: Mapping[str, str], case_
 
 def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, statement: dict,
               trace: dict, sidecar: bytes, challenge: str,
-              case_members: Mapping[str, bytes]) -> None:
+              case_members: Mapping[str, bytes], source_bytes: Mapping[str, bytes]) -> None:
     if statement.get("schema") != STATEMENT_SCHEMA or statement.get("caseId") != args.case_id:
         fail("PROVENANCE_INCOMPLETE", "statement schema/case differs")
     if statement.get("challenge") != challenge or trace["challenge"] != challenge or statement.get("clock") != "CLOCK_MONOTONIC_RAW":
         fail("INVOCATION_CHALLENGE_MISMATCH", "fresh challenge differs")
-    _authority(statement, packet, profile, args)
+    _authority(statement, packet, profile, args, source_bytes)
     roots = statement.get("roots")
     if not isinstance(roots, dict) or set(roots) != {"GODOT", "PRODUCT", "PACKET", "HOME", "OUTPUT"}:
         fail("PROVENANCE_INCOMPLETE", "root set differs")
@@ -784,11 +948,14 @@ def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, s
         actual = roles[path]; reason = "GENERATED_CACHE_BYTES_MISMATCH" if path in generated else "PROJECT_SEMANTIC_BYTES_MISMATCH"
         if path.startswith(roots["PACKET"] + "/"): reason = "EXTERNAL_SCRIPT_BYTES_MISMATCH" if path.endswith(".gd") else "CORPUS_BYTES_MISMATCH"
         if any(actual.get(key) != expected.get(key) for key in ("path", "size", "sha256")): fail(reason, f"role differs {path}")
-        role_bytes[path] = _live(actual, reason, True)
+        role_bytes[path] = _live(
+            actual, reason, profile["caps"]["maxSingleReadBytes"], True)
     executable = statement.get("executable", {})
     if executable.get("path") != roots["GODOT"] or executable.get("sha256") != profile["runtime"]["godotSha256"]:
         fail("GODOT_EXECUTABLE_MISMATCH", "Godot differs")
-    _live(executable, "GODOT_EXECUTABLE_MISMATCH")
+    _live(
+        executable, "GODOT_EXECUTABLE_MISMATCH",
+        profile["caps"]["maxGodotBytes"])
     expected_runtime = _identity_set(g0, roots, "runtimeIdentitySet")
     expected_platform = _identity_set(g0, roots, "platformObservationSet")
     if len(expected_roles) > profile["caps"]["maxSemanticFiles"] or \
@@ -800,9 +967,15 @@ def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, s
     if set(runtime) != set(expected_runtime): fail("RUNTIME_DEPENDENCY_MISMATCH", "runtime set differs")
     for path, expected in expected_runtime.items():
         if any(runtime[path].get(key) != expected.get(key) for key in ("path", "size", "sha256")): fail("RUNTIME_DEPENDENCY_MISMATCH", path)
-        _live(runtime[path], "RUNTIME_DEPENDENCY_MISMATCH")
-    platform = {path: _frozen_live(expected, roots, "UNDECLARED_CACHE_ACCESS")
-                for path, expected in expected_platform.items()}
+        _live(
+            runtime[path], "RUNTIME_DEPENDENCY_MISMATCH",
+            profile["caps"]["maxGodotBytes"])
+    platform: dict[str, Mapping[str, Any]] = {}
+    platform_bytes: dict[str, bytes] = {}
+    for expected in expected_platform.values():
+        path, current, data = _platform_live(
+            expected, roots, profile["caps"]["maxPlatformObservationBytes"])
+        platform[path], platform_bytes[path] = current, data
     values = {**roots, "EXTERNAL_SCRIPT": packet["roles"]["externalScript"]["path"],
               "CORPUS": packet["roles"]["corpus"]["path"], "INDEX": args.request_index}
     argv = [_expand(item, values) for item in profile["invocation"]["godotArgvTemplate"]]
@@ -823,7 +996,9 @@ def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, s
     if (diagnostic and (statement["tracer"]["returncode"] != 40 or trace["end"]["rootExit"] == 0)) or \
             (not diagnostic and (statement["tracer"]["returncode"] != 0 or trace["end"]["rootExit"] != 0)):
         fail("PROVENANCE_INCOMPLETE", "tracer/root exit contract differs")
-    _objects(trace, roles, runtime, platform, output_records, role_bytes, sidecar, roots, profile)
+    _objects(
+        trace, roles, runtime, platform, output_records,
+        {**role_bytes, **platform_bytes}, sidecar, roots, profile)
     if trace["end"]["dropped"] or trace["end"]["violation"] not in {"", "-"}:
         fail("PROVENANCE_INCOMPLETE", f"tracer violation {trace['end']['violation']}")
     _outputs(
@@ -942,16 +1117,19 @@ def _receipt_details(statement: Mapping[str, Any], trace: Mapping[str, Any] | No
 def verify_case(
         args: argparse.Namespace, *,
         frozen_case_members: Mapping[str, bytes] | None = None,
-        frozen_challenge_bytes: bytes | None = None) -> dict[str, Any]:
+        frozen_challenge_bytes: bytes | None = None,
+        frozen_source_bytes: Mapping[str, bytes] | None = None) -> dict[str, Any]:
     statement_path = args.case_dir / "statement.json"
     statement: dict[str, Any] = {}; trace_path = args.case_dir / "trace.tsv"; sidecar_path = args.case_dir / "sidecar.bin"
     trace: dict[str, Any] | None = None; trace_bytes = b""; sidecar = b""
     profile: dict[str, Any] = {}; g0: dict[str, Any] = {}; packet: dict[str, Any] = {}
+    source_bytes = dict(frozen_source_bytes) if frozen_source_bytes is not None else {}
     case_members = dict(frozen_case_members) if frozen_case_members is not None else {}
     challenge_bytes = frozen_challenge_bytes or b""
     challenge_value: str | None = None; trusted_inputs_ready = False
     try:
-        profile, g0, packet = _load_sources(args.profile, args.g0_manifest, args.packet_manifest)
+        profile, g0, packet = _load_sources(
+            args.profile, args.g0_manifest, args.packet_manifest, source_bytes)
         matrix = {case["id"]: (case["expectedVerdict"], case["expectedReason"])
                   for case in profile["cases"]}
         if args.case_id not in CASE_RESULTS or matrix.get(args.case_id) != CASE_RESULTS[args.case_id]:
@@ -983,7 +1161,7 @@ def verify_case(
         validate_syscall_grammar(trace, profile["accessGrammar"]["allowedSyscalls"])
         _complete(
             args, profile, g0, packet, statement, trace, sidecar,
-            challenge_value, case_members)
+            challenge_value, case_members, source_bytes)
         outcome = ("PASS", "ADMITTED")
     except (OSError, UnicodeError, IndexError, KeyError, TypeError, ValueError):
         outcome = ("INCONCLUSIVE", "PROVENANCE_INCOMPLETE")
@@ -996,10 +1174,16 @@ def verify_case(
     tracer = tracer_value if isinstance(tracer_value, dict) else {}
     caps = profile.get("caps", {}) if isinstance(profile, dict) else {}
     source_records = {
-        "profile": _capture_record(args.profile, _limit(caps, "maxProfileBytes")),
-        "g0Manifest": _capture_record(args.g0_manifest, _limit(caps, "maxG0ManifestBytes")),
-        "packetManifest": _capture_record(
-            args.packet_manifest, _limit(caps, "maxPacketManifestBytes")),
+        "profile": (_capture_bytes(args.profile.name, source_bytes["profile"])
+                    if "profile" in source_bytes else
+                    _capture_record(args.profile, _limit(caps, "maxProfileBytes"))),
+        "g0Manifest": (_capture_bytes(args.g0_manifest.name, source_bytes["g0Manifest"])
+                       if "g0Manifest" in source_bytes else
+                       _capture_record(args.g0_manifest, _limit(caps, "maxG0ManifestBytes"))),
+        "packetManifest": (_capture_bytes(
+            args.packet_manifest.name, source_bytes["packetManifest"])
+            if "packetManifest" in source_bytes else
+            _capture_record(args.packet_manifest, _limit(caps, "maxPacketManifestBytes"))),
         "challenge": (_capture_bytes(args.challenge.name, challenge_bytes)
                       if challenge_bytes else
                       _capture_record(args.challenge, _limit(caps, "maxChallengeBytes"))),
@@ -1070,17 +1254,27 @@ def _case(args: argparse.Namespace) -> int:
 
 
 def _campaign(args: argparse.Namespace) -> int:
-    profile, _, _ = _load_sources(args.profile, args.g0_manifest, args.packet_manifest)
+    source_bytes: dict[str, bytes] = {}
+    profile, _, _ = _load_sources(
+        args.profile, args.g0_manifest, args.packet_manifest, source_bytes)
     expected_cases = {case["id"] for case in profile["cases"]}
     try:
         for directory in (args.campaign_dir, args.challenges_dir):
             metadata = directory.lstat()
             if not stat.S_ISDIR(metadata.st_mode) or stat.S_ISLNK(metadata.st_mode):
                 fail("PROVENANCE_INCOMPLETE", "campaign root must be a direct non-symlink directory")
+        case_entries = []
         with os.scandir(args.campaign_dir) as entries:
-            case_entries = list(entries)
+            for entry in entries:
+                if len(case_entries) >= len(expected_cases):
+                    fail("PROVENANCE_INCOMPLETE", "campaign case count exceeds cap")
+                case_entries.append(entry)
+        raw_challenges = []
         with os.scandir(args.challenges_dir) as entries:
-            raw_challenges = list(entries)
+            for entry in entries:
+                if len(raw_challenges) >= len(expected_cases):
+                    fail("PROVENANCE_INCOMPLETE", "campaign challenge count exceeds cap")
+                raw_challenges.append(entry)
     except OSError as error:
         fail("PROVENANCE_INCOMPLETE", f"campaign directory unavailable: {error}")
     challenge_entries = {entry.name: Path(entry.path) for entry in raw_challenges}
@@ -1108,7 +1302,8 @@ def _campaign(args: argparse.Namespace) -> int:
         current.challenge = args.challenges_dir / f"{case['id']}.txt"
         receipts.append(verify_case(
             current, frozen_case_members=frozen_cases[case["id"]],
-            frozen_challenge_bytes=frozen_challenges[case["id"]]))
+            frozen_challenge_bytes=frozen_challenges[case["id"]],
+            frozen_source_bytes=source_bytes))
     passed = all((item["verdict"], item["reason"]) == CASE_RESULTS[item["caseId"]] for item in receipts)
     result = {"schema": CAMPAIGN_SCHEMA, "verdict": "PASS" if passed else "FAIL", "receipts": receipts}
     result["receiptSha256"] = _sha(_canonical(result)); _exclusive(args.receipt_out, _canonical(result)); print(json.dumps(result, sort_keys=True))

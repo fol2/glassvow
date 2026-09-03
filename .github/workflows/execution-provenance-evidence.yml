@@ -363,7 +363,7 @@ jobs:
             printf 'external_script_events=%s\n' "$(grep -hF 'p9_v5_runtime_oracle.gd' artifacts/godot-g0/raw/trace.* | wc -l || true)"
             printf 'corpus_events=%s\n' "$(grep -hF 'corpus.json' artifacts/godot-g0/raw/trace.* | wc -l || true)"
             printf 'project_events=%s\n' "$(grep -hF "$RUNNER_TEMP/g0-product" artifacts/godot-g0/raw/trace.* | wc -l || true)"
-            printf 'network_events=%s\n' "$(grep -hE ' (socket|connect|accept|bind|listen|sendto|recvfrom)\\(' artifacts/godot-g0/raw/trace.* | wc -l || true)"
+            printf 'network_syscall_events=%s\n' "$(grep -hE ' (socket|connect|accept|bind|listen|sendto|recvfrom)\(' artifacts/godot-g0/raw/trace.* | wc -l || true)"
           } > artifacts/godot-g0/summary.txt
           grep -hE 'p9_v5_runtime_oracle\.gd|corpus\.json|full-content\.json|mob-overrides\.json|line-table\.json|global_script_class_cache\.cfg' \
             artifacts/godot-g0/raw/trace.* > artifacts/godot-g0/semantic-events.txt || true

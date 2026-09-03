@@ -16,6 +16,7 @@ from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 PROFILE_PATH = ROOT / "tools/execution_provenance/godot_runtime_profile.json"
+G0_MANIFEST_PATH = ROOT / "tools/execution_provenance/godot_runtime_g0_manifest.json"
 VERIFIER_PATH = ROOT / "tools/execution_provenance/godot_runtime_verify.py"
 RUNNER_PATH = ROOT / "tools/execution_provenance/godot_runtime_runner.py"
 CAMPAIGN_PATH = ROOT / "tools/execution_provenance/godot_runtime_campaign.py"
@@ -131,7 +132,11 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             "fb6c497c45ad5c283176e7d25c2bc861aae17033",
             self.profile["authority"]["profileFreezeMainSha"],
         )
-        self.assertEqual(33747777071, self.profile["authority"]["g0Run"])
+        self.assertEqual(33762926632, self.profile["authority"]["g0Run"])
+        self.assertEqual(
+            "5c3a5ccdb120c18a5a52ecdacf95972d88322f5f",
+            self.profile["authority"]["g0ObserverHead"],
+        )
         self.assertEqual(
             "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
             self.profile["runtime"]["godotSha256"],
@@ -148,6 +153,34 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         )
         self.assertEqual(61, len(self.profile["accessGrammar"]["allowedSyscalls"]))
         self.assertEqual("default-deny", self.profile["accessGrammar"]["unknown"])
+
+    def test_corrected_g0_artifact_is_the_only_profile_measurement_authority(self) -> None:
+        manifest_bytes = G0_MANIFEST_PATH.read_bytes()
+        manifest = json.loads(manifest_bytes)
+        self.assertEqual(
+            self.profile["g0"]["manifest"]["sha256"],
+            hashlib.sha256(manifest_bytes).hexdigest(),
+        )
+        self.assertEqual(33762926632, manifest["source"]["run"])
+        self.assertEqual(9896305893, manifest["source"]["artifactId"])
+        self.assertEqual(
+            "6fe2a93c98907e2d40c21db6666ab5fede769098a9233fc8bb887bf66ca806de",
+            manifest["source"]["artifactSha256"],
+        )
+        self.assertEqual((30, 125, 13), (
+            len(manifest["semanticReadSet"]), len(manifest["runtimeIdentitySet"]),
+            len(manifest["platformObservationSet"]),
+        ))
+        self.assertEqual(
+            self.profile["runtime"]["identitySet"]["canonicalSha256"],
+            self.verifier._sha(self.verifier._canonical(manifest["runtimeIdentitySet"])),
+        )
+        dynamic = {record["path"] for record in manifest["platformObservationSet"]
+                   if "contentNormalisation" in record}
+        self.assertEqual({
+            "/run/udev/data/c13:0", "/run/udev/data/c13:32",
+            "/run/udev/data/c13:64", "/run/udev/data/c13:65",
+        }, dynamic)
 
     def test_attack_matrix_has_one_reason_per_new_trust_boundary(self) -> None:
         actual = {
@@ -184,6 +217,7 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         self.assertEqual(8, caps["maxQualificationAttempts"])
         self.assertEqual(120, caps["maxHostedMinutes"])
         self.assertEqual(15, caps["maxMinutesPerQualificationAttempt"])
+        self.assertEqual(1024, caps["maxCampaignMembers"])
         self.assertEqual(
             caps["maxHostedMinutes"],
             caps["maxQualificationAttempts"]
@@ -279,11 +313,6 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             ("mkdir", "${HOME}/.local/share/godot/app_userdata/Glassvow"),
             ("mkdir", "${HOME}/.local/share/godot/app_userdata/Glassvow/logs"),
             ("newfstatat", "${PRODUCT}/addons/sentry/bin/linux/x86_64"),
-            ("readlinkat", "/sys/devices/virtual/input/mice"),
-            ("readlinkat", "/sys/devices/0006:045E:0621.0001/input/input1/js0"),
-            ("readlinkat", "/sys/devices/0006:045E:0621.0001/input/input1/event1"),
-            ("readlinkat", "/sys/devices/0006:045E:0621.0001/input/input1/mouse0"),
-            ("readlinkat", "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"),
             ("readlinkat", "/sys/bus/hid"),
             ("readlinkat", "/sys/bus/serio"),
             ("readlinkat", "/sys/bus/vmbus"),
@@ -291,12 +320,48 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         }, actual)
         self.assertNotIn(("openat", "/sys/bus/hid"), actual)
         self.assertNotIn(("readlinkat", "/sys/bus/pci"), actual)
+        self.assertEqual(
+            {"chdir", "mkdir"},
+            {operation for operation, path in actual
+             if path == "${HOME}/.local/share/godot/app_userdata/Glassvow"},
+        )
         verifier = VERIFIER_PATH.read_text(encoding="utf-8")
         tracer = (ROOT / "tools/execution_provenance/godot_runtime_ptrace_tracer.c").read_text(
             encoding="utf-8")
         self.assertNotIn('any(item.startswith(path.rstrip("/") + "/") for item in known)', verifier)
         self.assertIn("gv_path_within(task->resolved, home_root)", tracer)
         self.assertIn("gv_path_within(task->resolved, output_root)", tracer)
+
+    def test_successful_system_path_grammar_is_exact_and_alias_bound(self) -> None:
+        paths = self.profile["accessGrammar"]["paths"]
+        directory_pairs = {(operation, path) for record in paths["successfulDirectoryOperations"]
+                           for operation in record["operations"] for path in record["paths"]}
+        self.assertEqual(37, len({path for _, path in directory_pairs}))
+        self.assertIn(("openat", "/sys/dev/char"), directory_pairs)
+        self.assertIn(("readlinkat", "/sys/devices/virtual/input/mice"), directory_pairs)
+        self.assertNotIn(("mkdir", "/sys/devices"), directory_pairs)
+        aliases = {record["path"]: record["target"]
+                   for record in paths["successfulDirectoryAliases"]}
+        self.assertEqual(9, len(aliases))
+        self.assertEqual(
+            "/sys/devices/0006:045E:0621.0001/input/input1/event1",
+            aliases["/sys/dev/char/13:65"],
+        )
+        probes = {(operation, path) for record in paths["successfulProbeOperations"]
+                  for operation in record["operations"] for path in record["paths"]}
+        self.assertEqual(14, len(probes))
+        self.assertEqual(
+            {"chdir", "newfstatat"},
+            set(paths["successfulWorkingDirectoryOperations"]),
+        )
+        named = {record["path"]: record for record in paths["successfulNamedPathOperations"]}
+        self.assertEqual({"/dev/input/event0", "/dev/input/event1"}, set(named))
+        self.assertEqual(
+            ("character-device", 13, 64, ["stat"]),
+            tuple(named["/dev/input/event0"][key]
+                  for key in ("fileType", "major", "minor", "operations")),
+        )
+        self.assertNotIn("declaredProcPaths", paths)
 
     def test_clone3_vfork_is_preserved_as_a_clone_process(self) -> None:
         tracer = (ROOT / "tools/execution_provenance/godot_runtime_ptrace_tracer.c").read_text(
@@ -323,6 +388,124 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
         ])
         with self.assertRaisesRegex(self.verifier.VerificationFailure, "sequence"):
             self.verifier.parse_trace_lines(lines, max_events=16)
+
+    def test_platform_normalisation_preserves_complete_raw_bytes(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "c13:0"
+            first = b"I:3296751\nE:ID_INPUT=1\nE:ID_INPUT_MOUSE=1\nE:ID_SERIAL=noserial\nV:1\n"
+            normalised = b"I:<decimal>\nE:ID_INPUT=1\nE:ID_INPUT_MOUSE=1\nE:ID_SERIAL=noserial\nV:1\n"
+            path.write_bytes(first)
+            contract = {
+                "path": str(path), "operations": ["read"],
+                "contentNormalisation": "udev-initialisation-usec-decimal-v1",
+                "maximumBytes": 512,
+                "normalisedSha256": hashlib.sha256(normalised).hexdigest(),
+            }
+            logical, current, raw = self.verifier._platform_live(contract, {}, 4096)
+            self.assertEqual(str(path), logical)
+            self.assertEqual(first, raw)
+            self.assertEqual(hashlib.sha256(first).hexdigest(), current["sha256"])
+            path.write_bytes(first.replace(b"I:3296751", b"I:03296751"))
+            with self.assertRaisesRegex(
+                    self.verifier.VerificationFailure, "platform grammar differs"):
+                self.verifier._platform_live(contract, {}, 4096)
+
+    def test_bounded_reader_rejects_oversized_symlink_and_fifo_sources(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            oversized = root / "oversized.json"
+            oversized.write_bytes(b"12345")
+            target = root / "target.json"
+            target.write_bytes(b"{}")
+            symlink = root / "symlink.json"
+            symlink.symlink_to(target)
+            fifo = root / "fifo.json"
+            os.mkfifo(fifo)
+            for path, maximum in ((oversized, 4), (symlink, 16), (fifo, 16)):
+                with self.subTest(path=path.name), self.assertRaises(
+                        self.verifier.VerificationFailure):
+                    self.verifier._bounded_bytes(path, maximum)
+
+    def test_runtime_alias_is_bounded_but_semantic_alias_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            target = root / "runtime.bin"
+            target.write_bytes(b"runtime")
+            alias = root / "alias.bin"
+            alias.symlink_to(target)
+            metadata = target.stat()
+            record = {
+                "path": str(alias), "size": metadata.st_size,
+                "sha256": sha256(target), "device": metadata.st_dev,
+                "inode": metadata.st_ino,
+            }
+            self.assertEqual(
+                b"runtime", self.verifier._live(
+                    record, "RUNTIME_DEPENDENCY_MISMATCH", 16))
+            with self.assertRaisesRegex(
+                    self.verifier.VerificationFailure, "symlink role"):
+                self.verifier._live(
+                    record, "PROJECT_SEMANTIC_BYTES_MISMATCH", 16, True)
+            with self.assertRaisesRegex(
+                    self.verifier.VerificationFailure, "size exceeds cap"):
+                self.verifier._live(
+                    record, "RUNTIME_DEPENDENCY_MISMATCH", 4)
+
+    def test_empty_platform_object_requires_current_zero_read_lifecycle(self) -> None:
+        path = "/run/udev/data/c13:63"
+        platform = {path: {"device": 13, "inode": 63}}
+        events = [
+            {"type": "OPEN", "path": path, "device": 13, "inode": 63},
+            {"type": "SYSCALL_X", "name": "read", "returned": 0,
+             "_fdPath": path},
+            {"type": "CLOSE", "path": path, "device": 13, "inode": 63},
+        ]
+        self.verifier._platform_access_witnesses(events, platform)
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "access witness missing"):
+            self.verifier._platform_access_witnesses(
+                [event for event in events if event["type"] != "SYSCALL_X"],
+                platform,
+            )
+
+    def test_frozen_source_cache_reuses_the_exact_parsed_bytes(self) -> None:
+        original = self.verifier.FROZEN_PROFILE_SHA256
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            profile = root / "profile.json"
+            g0 = root / "g0.json"
+            profile.write_bytes(PROFILE_PATH.read_bytes())
+            g0.write_bytes((ROOT / "tools/execution_provenance/godot_runtime_g0_manifest.json").read_bytes())
+            packet = root / "packet"
+            packet.mkdir()
+            (packet / "oracle.gd").write_bytes(b"extends SceneTree\n")
+            (packet / "corpus.json").write_bytes(b"{}\n")
+            manifest = packet / "manifest.json"
+            manifest.write_text(json.dumps({
+                "schema": "glassvow.godot-runtime-packet/v1",
+                "productSha": "a" * 40,
+                "packetRoot": "research_packets/frozen",
+                "authorityIssue": 535,
+                "authorityComment": 5524343289,
+                "requestIndices": ["0"],
+                "roles": {
+                    "externalScript": {"path": "oracle.gd"},
+                    "corpus": {"path": "corpus.json"},
+                },
+            }), encoding="utf-8")
+            cache: dict[str, bytes] = {}
+            try:
+                self.verifier.FROZEN_PROFILE_SHA256 = sha256(profile)
+                first = self.verifier._load_sources(profile, g0, manifest, cache)
+                profile.unlink()
+                g0.unlink()
+                manifest.write_text("{}", encoding="utf-8")
+                second = self.verifier._load_sources(profile, g0, manifest, cache)
+                self.assertEqual(first, second)
+                self.assertEqual(
+                    {"profile", "g0Manifest", "packetManifest"}, set(cache))
+            finally:
+                self.verifier.FROZEN_PROFILE_SHA256 = original
 
     def test_legacy_trace_envelopes_fail_closed(self) -> None:
         with self.assertRaisesRegex(
@@ -921,6 +1104,9 @@ class GodotRuntimeCampaignContractTests(unittest.TestCase):
                 len(b"evidence"),
                 self.campaign.campaign_evidence_bytes(output, mounts),
             )
+            with self.assertRaisesRegex(self.campaign.CampaignError, "member cap exceeded"):
+                self.campaign.campaign_evidence_bytes(
+                    output, mounts, maximum_members=1)
             with self.assertRaisesRegex(self.campaign.CampaignError, "byte cap exceeded"):
                 self.campaign.campaign_evidence_bytes(
                     output, mounts, len(b"evidence") - 1)

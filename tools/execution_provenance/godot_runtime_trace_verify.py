@@ -381,6 +381,8 @@ def validate_trace_accounting(trace: Mapping[str, Any], caps: Mapping[str, int],
                 if args[2] != caps["directoryReadBufferBytes"] or not 0 <= returned <= args[2]:
                     fail("PROVENANCE_INCOMPLETE", "getdents64 grammar differs")
                 event["_fdPath"] = fd_entry(tid, fd_arg)["object"].get("path")
+            if name in {"read", "pread64"}:
+                event["_fdPath"] = fd_entry(tid, fd_arg)["object"].get("path")
             if name == "chdir" and returned == 0: cwds[tid][0] = call["path"]
             if call["path"] is not None: pending.append(("PATH_X", call))
             if name in {"read", "pread64", "write"} and returned > 0: pending.append(("WRITE" if name == "write" else "READ", call))

@@ -108,24 +108,29 @@ def validate_capability_prerequisite(
 
 def campaign_evidence_bytes(
         output: Path, mounts_root: Path, maximum: int | None = None,
-        label: str = "campaign") -> int:
-    total = 0; pending = [output]
+        label: str = "campaign", maximum_members: int = 1024) -> int:
+    total = 0; members = 0; pending = [output]
     while pending:
         directory = pending.pop()
-        try: entries = list(os.scandir(directory))
-        except OSError as error: raise CampaignError(f"{label} evidence unavailable: {error}") from error
-        for entry in entries:
-            path = Path(entry.path)
-            if path == mounts_root or mounts_root in path.parents:
-                continue
-            metadata = entry.stat(follow_symlinks=False)
-            if stat.S_ISDIR(metadata.st_mode):
-                pending.append(path); continue
-            if not stat.S_ISREG(metadata.st_mode):
-                raise CampaignError(f"{label} evidence contains a non-regular member")
-            total += metadata.st_size
-            if maximum is not None and total > maximum:
-                raise CampaignError(f"{label} byte cap exceeded")
+        try:
+            with os.scandir(directory) as entries:
+                for entry in entries:
+                    path = Path(entry.path)
+                    if path == mounts_root or mounts_root in path.parents:
+                        continue
+                    members += 1
+                    if members > maximum_members:
+                        raise CampaignError(f"{label} member cap exceeded")
+                    metadata = entry.stat(follow_symlinks=False)
+                    if stat.S_ISDIR(metadata.st_mode):
+                        pending.append(path); continue
+                    if not stat.S_ISREG(metadata.st_mode):
+                        raise CampaignError(f"{label} evidence contains a non-regular member")
+                    total += metadata.st_size
+                    if maximum is not None and total > maximum:
+                        raise CampaignError(f"{label} byte cap exceeded")
+        except OSError as error:
+            raise CampaignError(f"{label} evidence unavailable: {error}") from error
     return total
 
 
@@ -565,13 +570,13 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
             args.capability_prerequisite, args.capability_run,
             args.capability_receipt_sha256)):
         raise CampaignError("qualification cannot import an A1 capability prerequisite")
-    project_files = [
-        path for path in args.product_source.resolve().rglob("*") if path.is_file()
-    ]
-    if len(project_files) > profile["caps"]["maxProjectFiles"] \
-            or sum(path.stat().st_size for path in project_files) \
-            > profile["caps"]["maxProjectBytes"]:
-        raise CampaignError("product checkout exceeds its frozen cap")
+    project_files = 0; project_bytes = 0
+    for path in args.product_source.resolve().rglob("*"):
+        if not path.is_file(): continue
+        project_files += 1; project_bytes += path.stat().st_size
+        if project_files > profile["caps"]["maxProjectFiles"] or \
+                project_bytes > profile["caps"]["maxProjectBytes"]:
+            raise CampaignError("product checkout exceeds its frozen cap")
     if args.godot.stat().st_size > profile["caps"]["maxGodotBytes"]:
         raise CampaignError("Godot executable exceeds its frozen cap")
     runner = _load_runner()
@@ -633,7 +638,8 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
             if not args.admit_only:
                 apply_attack(case_dir, case_id, prior, statement["roots"])
             campaign_evidence_bytes(
-                case_dir, mounts_root, profile["caps"]["maxCasePacketBytes"], case_id)
+                case_dir, mounts_root, profile["caps"]["maxCasePacketBytes"], case_id,
+                profile["caps"]["maxCaseMembers"])
             receipt = case_dir / "receipt.json"
             replay = case_dir / "receipt-replay.json"
             common = _verifier_common(
@@ -647,13 +653,15 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
             if receipt.read_bytes() != replay.read_bytes():
                 raise CampaignError(f"{case_id} verifier replay differs")
             campaign_evidence_bytes(
-                case_dir, mounts_root, profile["caps"]["maxCasePacketBytes"], case_id)
+                case_dir, mounts_root, profile["caps"]["maxCasePacketBytes"], case_id,
+                profile["caps"]["maxCaseMembers"])
             prior[case_id] = case_dir
         if args.admit_only:
             assert capability is not None
             result = write_admission_receipt(output, args, capability)
             campaign_evidence_bytes(
-                output, mounts_root, profile["caps"]["maxCampaignBytes"])
+                output, mounts_root, profile["caps"]["maxCampaignBytes"],
+                maximum_members=profile["caps"]["maxCampaignMembers"])
             if (result["verdict"], result["reason"]) != ("PASS", "ADMITTED"):
                 raise CampaignError("admitted G00 invocation did not pass")
             return result
@@ -665,7 +673,8 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
             "--receipt-out", str(campaign_receipt),
         ])
         campaign_evidence_bytes(
-            output, mounts_root, profile["caps"]["maxCampaignBytes"])
+            output, mounts_root, profile["caps"]["maxCampaignBytes"],
+            maximum_members=profile["caps"]["maxCampaignMembers"])
         result = read_json(campaign_receipt)
         if result.get("verdict") != "PASS":
             raise CampaignError("frozen case expectations did not all match")

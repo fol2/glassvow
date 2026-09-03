@@ -18,15 +18,15 @@
     "productCommitRule": "The workflow supplies and the verifier binds the exact product main commit; every frozen semantic product role must still match and the packet commit must have this commit as its sole parent.",
     "g0ProductSha": "5c5f2d325725b0a04e060c1ffe0b40a76f2e0928",
     "g0PacketSha": "15ea4d3af4b592c7015b4fd3569cf59d7ef93d77",
-    "g0ObserverHead": "19cd1093c928400adc760e0a2525626c74825f54",
-    "g0Run": 33747777071,
+    "g0ObserverHead": "5c3a5ccdb120c18a5a52ecdacf95972d88322f5f",
+    "g0Run": 33762926632,
     "selectedVenue": "github-hosted-ubuntu-24.04",
     "selectedBackend": "purpose-built-ptrace-synchronous-stop-godot-v1"
   },
   "g0": {
     "runnerImage": {
       "ImageOS": "ubuntu24",
-      "ImageVersion": "20260823.283.1",
+      "ImageVersion": "20260831.293.1",
       "architecture": "X64",
       "kernel": "6.17.0-1022-azure"
     },
@@ -34,37 +34,38 @@
     "processes": 3,
     "threads": 7,
     "uniqueSyscalls": 61,
-    "syscallEvents": 9019,
+    "syscallEvents": 8945,
     "execveEvents": 4,
     "clone3Events": 8,
     "vforkEvents": 1,
-    "diagnosticTraceBytes": 2041208,
+    "diagnosticTraceBytes": 2028198,
     "netlinkKobjectSockets": 2,
     "netlinkKobjectBinds": 2,
     "externalNetworkEvents": 0,
+    "diagnosticSummaryDefect": "The immutable G0 summary reports network_events=0 because its grep escaped the opening parenthesis twice. The raw trace is authoritative and contains exactly two AF_NETLINK KOBJECT sockets plus two binds and no external network operation; the workflow summariser is corrected for future diagnostics.",
     "uniqueSemanticBytes": 12737406,
     "returnedSemanticReadBytes": 13476426,
     "observationBytes": 55432,
     "stdoutBytes": 309,
     "stderrBytes": 0,
-    "tracedWallNsApproximate": 1656000000,
-    "conservativeMmapRequestedBytes": 798076765,
+    "tracedWallNsApproximate": 1615000000,
+    "conservativeMmapRequestedBytes": 794628296,
     "conservativePositiveBrkGrowthBytes": 134316032,
-    "syscallAccountedAddressSpaceOvercountBytes": 932392797,
+    "syscallAccountedAddressSpaceOvercountBytes": 928944328,
     "godotElfPtLoadPageBytes": 149110784,
     "smallElfAndInterpreterAllowanceBytes": 8388608,
     "initialStackReservation": {"processes": 4, "bytesEach": 16777216},
     "vdsoVvarReservation": {"processes": 4, "bytesEach": 1048576},
-    "conservativeAddressSpaceContractBytes": 1161195357,
-    "addressSpaceCapHeadroomBytes": 46764195,
-    "addressSpaceCapBasis": "The 1,152 MiB inherited RLIMIT_AS is a per-process fail-closed ceiling, not an observed peak. G0's 932,392,797-byte syscall-accounted total deliberately overcounts successful mmap requests and positive brk growth across all ten tasks without subtracting releases, repeated mappings or shared mappings. The fixed allowance also covers the exact Godot PT_LOAD page spans, bounded small executable and interpreter space, four exact G0 16 MiB initial-stack ceilings, and four conservative 1 MiB vDSO/vvar reservations.",
+    "conservativeAddressSpaceContractBytes": 1157746888,
+    "addressSpaceCapHeadroomBytes": 50212664,
+    "addressSpaceCapBasis": "The 1,152 MiB inherited RLIMIT_AS is a per-process fail-closed ceiling, not an observed peak. G0's 928,944,328-byte syscall-accounted total deliberately overcounts successful mmap requests and positive brk growth across all ten tasks without subtracting releases, repeated mappings or shared mappings. The fixed allowance also covers the exact Godot PT_LOAD page spans, bounded small executable and interpreter space, four exact G0 16 MiB initial-stack ceilings, and four conservative 1 MiB vDSO/vvar reservations.",
     "semanticMechanism": "Every declared semantic role was consumed by read or pread64. No declared semantic role was mmaped.",
     "identityMechanism": "Executable and runtime objects were executed, read or mmaped and are content-bound separately from semantic roles.",
     "manifest": {
       "path": "tools/execution_provenance/godot_runtime_g0_manifest.json",
-      "sha256": "07f1f36c13015c80f819245c075a7696f0b6351148cafc22ab6178328544cba9",
+      "sha256": "6477457c7712940030bfba6e6bc214e4295aa8af0306357f70adffc40c721621",
       "semanticReadSetCount": 30,
-      "runtimeIdentitySetCount": 136,
+      "runtimeIdentitySetCount": 125,
       "platformObservationSetCount": 13
     }
   },
@@ -135,6 +136,7 @@
     "maxSemanticFiles": 32,
     "maxIdentityDependencies": 160,
     "maxPlatformObservations": 16,
+    "maxPlatformObservationBytes": 4096,
     "maxSemanticReadBytes": 16777216,
     "maxGodotBytes": 167772160,
     "maxPathBytes": 4096,
@@ -157,6 +159,7 @@
     "maxProjectBytes": 805306368,
     "maxCasePacketBytes": 83886080,
     "maxCampaignBytes": 536870912,
+    "maxCampaignMembers": 1024,
     "judgementWallNs": 5000000000,
     "timingAttackMinimumNs": 7500000000,
     "supervisorKillWallNs": 15000000000,
@@ -211,15 +214,15 @@
     "download": "https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip",
     "identitySet": {
       "source": "g0.manifest.runtimeIdentitySet",
-      "count": 136,
-      "canonicalSha256": "79bbc6daeda3e86491d8474de178ebb6fd0ab8e40e44ca35d8daec7117d2e016",
+      "count": 125,
+      "canonicalSha256": "b10363b153894ebc1c2175412225f9218047ac98ac8adb878fb9a3a65c1838a5",
       "rule": "Every executed, opened or mapped regular runtime object must match one path, size and SHA-256 record. Device and inode are bound in the current receipt."
     },
     "identityOnlyProductObject": "${PRODUCT}/addons/sentry/bin/linux/x86_64/libsentry.linux.debug.x86_64.so"
   },
   "invocation": {
     "launcherEnvironment": [],
-    "launcherEnvironmentRule": "The trusted tracer starts /usr/bin/env with an empty inherited environment. The historical G0 host supplied 120 semantically irrelevant outer variables; G1 removes that host authority before env -i establishes the exact three-entry Godot environment.",
+    "launcherEnvironmentRule": "The corrected G0 tracer starts /usr/bin/env with an empty inherited environment. G1 retains that boundary before env -i establishes the exact three-entry Godot environment.",
     "launcherArgvTemplate": [
       "/usr/bin/env",
       "-i",
@@ -333,7 +336,7 @@
         "${PRODUCT}/.godot/global_script_class_cache.cfg",
         "${PRODUCT}/.godot/uid_cache.bin"
       ],
-      "derivation": "Generated once before the traced invocation by the exact Godot binary against the exact read-only product, then content-checked against the frozen G0 manifest before the product is made read-only.",
+      "derivation": "A trusted preflight runs the exact Godot binary once against the exact product checkout before the attested invocation. The tracked checkout identity and cleanliness are then bound, these exact measured generated roles are content-bound and current-read-covered, and the complete resulting product tree is mounted read-only for the attested invocation.",
       "coverage": "complete current read coverage required"
     },
     "externalScript": {
@@ -487,35 +490,54 @@
         "${HOME}/.local/share/godot/app_userdata/Glassvow/sentry.dat"
       ],
       "writableDirectoryRule": "mkdir is limited to ancestors of the three path-named outputs below the two fresh exclusive roots; no other file creation or write is admitted.",
-      "declaredDevicePaths": [
-        "/dev/null",
-        "/dev/input",
-        "/dev/input/event0",
-        "/dev/input/event1"
+      "successfulNamedPathOperations": [
+        {"path": "/dev/input/event0", "operations": ["stat"], "fileType": "character-device", "major": 13, "minor": 64},
+        {"path": "/dev/input/event1", "operations": ["stat"], "fileType": "character-device", "major": 13, "minor": 65}
       ],
-      "declaredProcPaths": [
-        "/proc/self/exe",
-        "/proc/self/fd/*"
+      "platformObservationRule": "Only the thirteen exact G0 manifest records are admitted; four named udev records normalise only one decimal initialisation timestamp under a 512-byte member cap, and every other byte and path remains exact.",
+      "successfulDirectoryOperations": [
+        {"operations": ["openat"], "paths": [
+          "/", "/sys", "/sys/bus", "/sys/class", "/sys/class/hidraw", "/sys/dev",
+          "/sys/dev/char", "/sys/devices", "/sys/devices/0006:045E:0621.0001",
+          "/sys/devices/0006:045E:0621.0001/input", "/sys/devices/virtual",
+          "/sys/devices/virtual/input", "/sys/devices/LNXSYSTM:00",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input"
+        ]},
+        {"operations": ["stat", "openat"], "paths": ["/dev/input"]},
+        {"operations": ["access", "newfstatat", "openat"], "paths": [
+          "/etc/fonts/conf.d", "/usr/share/fontconfig/conf.avail"
+        ]},
+        {"operations": ["newfstatat", "openat"], "paths": [
+          "/usr/local/share/fonts", "/usr/share/fonts", "/usr/share/fonts/truetype",
+          "/usr/share/fonts/truetype/dejavu", "/usr/share/fonts/truetype/lato",
+          "/usr/share/fonts/truetype/liberation", "/usr/share/fonts/truetype/noto"
+        ]},
+        {"operations": ["openat", "readlinkat"], "paths": [
+          "/sys/class/input",
+          "/sys/devices/virtual/input/mice",
+          "/sys/devices/0006:045E:0621.0001/input/input1",
+          "/sys/devices/0006:045E:0621.0001/input/input1/js0",
+          "/sys/devices/0006:045E:0621.0001/input/input1/event1",
+          "/sys/devices/0006:045E:0621.0001/input/input1/mouse0",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"
+        ]}
       ],
-      "platformObservationPatterns": [
-        "/run/udev/data/c13:*",
-        "/sys/devices/**/input/**/uevent",
-        "/sys/devices/system/cpu/online",
-        "/sys/devices/virtual/input/mice/uevent"
-      ],
-      "successfulDirectories": [
-        "/",
-        "/dev/input",
-        "/etc/fonts/conf.d",
-        "/sys",
-        "/sys/bus",
-        "/sys/class",
-        "/sys/class/hidraw",
-        "/sys/class/input",
-        "/sys/dev",
-        "/sys/devices/0006:045E:0621.0001/input/input1",
-        "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0",
-        "/usr/share/fontconfig/conf.avail"
+      "successfulDirectoryAliases": [
+        {"path": "/sys/class/input/mice", "target": "/sys/devices/virtual/input/mice"},
+        {"path": "/sys/class/input/js0", "target": "/sys/devices/0006:045E:0621.0001/input/input1/js0"},
+        {"path": "/sys/class/input/input1", "target": "/sys/devices/0006:045E:0621.0001/input/input1"},
+        {"path": "/sys/class/input/event1", "target": "/sys/devices/0006:045E:0621.0001/input/input1/event1"},
+        {"path": "/sys/class/input/mouse0", "target": "/sys/devices/0006:045E:0621.0001/input/input1/mouse0"},
+        {"path": "/sys/class/input/input0", "target": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0"},
+        {"path": "/sys/class/input/event0", "target": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"},
+        {"path": "/sys/dev/char/13:65", "target": "/sys/devices/0006:045E:0621.0001/input/input1/event1"},
+        {"path": "/sys/dev/char/13:64", "target": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"}
       ],
       "successfulDynamicDirectoryOperations": [
         {"operations": ["chdir"], "paths": [
@@ -534,15 +556,33 @@
           "${PRODUCT}/addons/sentry/bin/linux/x86_64"
         ]},
         {"operations": ["readlinkat"], "paths": [
-          "/sys/devices/virtual/input/mice",
-          "/sys/devices/0006:045E:0621.0001/input/input1/js0",
-          "/sys/devices/0006:045E:0621.0001/input/input1/event1",
-          "/sys/devices/0006:045E:0621.0001/input/input1/mouse0",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0",
           "/sys/bus/hid",
           "/sys/bus/serio",
           "/sys/bus/vmbus",
           "/sys/bus/acpi"
+        ]}
+      ],
+      "successfulWorkingDirectoryOperations": ["chdir", "newfstatat"],
+      "successfulProbeOperations": [
+        {"operations": ["access"], "paths": [
+          "${PRODUCT}/addons/sentry/bin/linux/arm64/crashpad_handler",
+          "${PRODUCT}/addons/sentry/bin/linux/x86_32/crashpad_handler",
+          "${PRODUCT}/addons/sentry/bin/linux/x86_64/crashpad_handler",
+          "/run/udev/control"
+        ]},
+        {"operations": ["stat"], "paths": [
+          "${PRODUCT}/addons/sentry/bin/linux/arm64/crashpad_handler",
+          "${PRODUCT}/addons/sentry/bin/linux/x86_32/crashpad_handler",
+          "${PRODUCT}/addons/sentry/bin/linux/x86_64/crashpad_handler"
+        ]},
+        {"operations": ["faccessat2"], "paths": [
+          "/sys/devices/0006:045E:0621.0001/uevent",
+          "/sys/devices/LNXSYSTM:00/uevent",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/uevent",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/uevent",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/uevent",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/uevent",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/uevent"
         ]}
       ],
       "directoryEnumerations": [
@@ -645,12 +685,7 @@
             "${PRODUCT}/addons/sentry/bin/linux/x86_64/glibc-hwcaps/x86-64-v2/libcurl.so.4",
             "${PRODUCT}/addons/sentry/bin/linux/x86_64/glibc-hwcaps/x86-64-v3/libcurl.so.4",
             "${PRODUCT}/addons/sentry/bin/linux/x86_64/libcurl.so.4",
-            "/usr/lib/locale/C.UTF-8/LC_ADDRESS", "/usr/lib/locale/C.UTF-8/LC_COLLATE",
-            "/usr/lib/locale/C.UTF-8/LC_CTYPE", "/usr/lib/locale/C.UTF-8/LC_IDENTIFICATION",
-            "/usr/lib/locale/C.UTF-8/LC_MEASUREMENT", "/usr/lib/locale/C.UTF-8/LC_MESSAGES",
-            "/usr/lib/locale/C.UTF-8/LC_MONETARY", "/usr/lib/locale/C.UTF-8/LC_NAME",
-            "/usr/lib/locale/C.UTF-8/LC_NUMERIC", "/usr/lib/locale/C.UTF-8/LC_PAPER",
-            "/usr/lib/locale/C.UTF-8/LC_TELEPHONE", "/usr/lib/locale/C.UTF-8/LC_TIME",
+            "/usr/lib/locale/C.UTF-8/LC_CTYPE",
             "/usr/local/share/fonts/.uuid", "/usr/share/fonts/.uuid",
             "/usr/share/fonts/truetype/.uuid", "/usr/share/fonts/truetype/dejavu/.uuid",
             "/usr/share/fonts/truetype/lato/.uuid", "/usr/share/fonts/truetype/liberation/.uuid",
@@ -676,8 +711,8 @@
     "mappings": {
       "anonymous": "permitted only within the inherited 1,152 MiB RLIMIT_AS, the inherited 16 MiB RLIMIT_STACK and measured syscall/event caps",
       "runtimeIdentity": {
-        "count": 237,
-        "canonicalMultisetSha256": "70846479b09bfac72610416e6c12f910600e0374de639cdd2740de8095d2ea3e",
+        "count": 223,
+        "canonicalMultisetSha256": "f91d076bcd7f245b2b14e8cc6ed2dcfdfd313b11b8fe4e64f183a0ece7980612",
         "normalisation": "Sort path, file offset, length, protection and flags after replacing the exact product mount prefix with ${PRODUCT}; omit ASLR addresses and task ids.",
         "protectionValues": [1, 3, 5],
         "flagValues": [1, 2, 2050, 2066],
