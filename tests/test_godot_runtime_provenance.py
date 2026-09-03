@@ -304,6 +304,112 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             sentry,
         ))
 
+    def test_kernel_admission_contract_closes_read_exec_and_inherited_fd_boundaries(self) -> None:
+        admission = self.profile["kernelAdmission"]
+        self.assertEqual("GODOTACCESSv1", admission["policySchema"])
+        self.assertEqual(32759, admission["handledAccessFs"])
+        self.assertEqual(
+            ["/usr/bin/env", "${GODOT}", "/bin/sh", "/usr/bin/xdg-user-dir"],
+            admission["executeLeaves"],
+        )
+        self.assertEqual(
+            ["/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"],
+            admission["kernelInterpreterLeaves"],
+        )
+        capture = self.profile["g0"]["kernelInterpreterCapture"]
+        self.assertEqual(33778025696, capture["run"])
+        self.assertEqual(9902474984, capture["artifactId"])
+        self.assertEqual(
+            "cd4df4f3c7b83673d61189bf2eaebd33ca4f2853ab9772b8a25e025ef99b1e81",
+            capture["sha256"],
+        )
+        manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
+        loader = [record for record in manifest["runtimeIdentitySet"]
+                  if record["path"] == capture["canonicalPath"]]
+        self.assertEqual([{
+            "operations": ["kernel-interpreter"],
+            "path": capture["canonicalPath"],
+            "sha256": capture["sha256"],
+            "size": capture["size"],
+        }], loader)
+        self.assertEqual({0, 1, 2}, {
+            admission["initialDescriptors"][name]["fd"]
+            for name in ("stdin", "stdout", "stderr")
+        })
+        grammar = self.profile["accessGrammar"]
+        self.assertEqual(577, grammar["paths"]["failedPathGrammar"]
+                         ["successfulOutputOpenFlags"])
+        self.assertEqual(524288, grammar["internalPipe"]["pipe2Flags"])
+        self.assertEqual(11, self.profile["caps"]["maxCaseMembers"])
+
+    def test_independent_verifier_rejects_changed_successful_open_flags(self) -> None:
+        output = "/tmp/fresh-output/observation.json"
+        events = [
+            {"type": "PATH_X", "operation": "openat", "returned": 3,
+             "path": output, "_arguments": [-100, 0, 577, 0, 0, 0]},
+            {"type": "PATH_X", "operation": "openat", "returned": 4,
+             "path": "/tmp/frozen-input", "_arguments": [-100, 0, 524288, 0, 0, 0]},
+        ]
+        self.verifier._successful_open_flags(events, {output}, self.profile)
+        events[0]["_arguments"][2] = 1
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "successful open flags differ"):
+            self.verifier._successful_open_flags(events, {output}, self.profile)
+        events[0]["_arguments"][2] = 577
+        events[1]["_arguments"][2] = 1
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "successful open flags differ"):
+            self.verifier._successful_open_flags(events, {output}, self.profile)
+
+    def test_research_output_policy_transports_current_diagnostic_bytes_without_g0_substitution(self) -> None:
+        streams = {
+            "stdout": {"size": 17, "sha256": "1" * 64},
+            "stderr": {"size": 29, "sha256": "2" * 64},
+        }
+        outputs = {
+            "homeLog": {"present": True, "size": 41, "sha256": "3" * 64},
+            "sentry": {"present": True},
+        }
+        research = self.profile["packetIngress"]["research"]
+        statement = {
+            "authorityIssue": research["authorityIssue"],
+            "authorityComment": research["authorityComment"],
+        }
+        self.verifier._validate_stable_output_policy(
+            statement, streams, outputs, self.profile)
+
+        qualification = self.profile["packetIngress"]["qualification"]
+        statement.update({
+            "authorityIssue": qualification["authorityIssue"],
+            "authorityComment": qualification["authorityComment"],
+        })
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "stable stdout differs"):
+            self.verifier._validate_stable_output_policy(
+                statement, streams, outputs, self.profile)
+
+    def test_research_output_policy_is_exact_and_fail_closed(self) -> None:
+        research = self.profile["packetIngress"]["research"]
+        self.assertEqual({
+            "mode": "bounded-current-raw-channel",
+            "channels": ["stdout", "stderr", "homeLog"],
+            "interpretation": "none",
+            "downstreamOwner": "unchanged A1-v2 diagnostic validator",
+        }, research["outputPolicy"])
+        profile = json.loads(json.dumps(self.profile))
+        profile["packetIngress"]["research"]["outputPolicy"]["interpretation"] = "verifier"
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "research output policy differs"):
+            self.verifier._validate_stable_output_policy(
+                {
+                    "authorityIssue": research["authorityIssue"],
+                    "authorityComment": research["authorityComment"],
+                },
+                {"stdout": {}, "stderr": {}},
+                {"homeLog": {"present": True}},
+                profile,
+            )
+
     def test_address_space_limit_is_inherited_before_tracee_exec(self) -> None:
         g0 = self.profile["g0"]
         expected = (
@@ -724,7 +830,9 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
                       for index in range(8))
         events.extend((
             {"type": "SYSCALL_E", "sequence": 98, "tid": shell, "name": "vfork"},
-            {"type": "SYSCALL_E", "sequence": 99, "tid": root, "name": "pipe2"},
+            {"type": "SYSCALL_E", "sequence": 99, "tid": root, "name": "pipe2",
+             "arguments": [3, profile["accessGrammar"]["internalPipe"]["pipe2Flags"],
+                           0, 0, 0, 0]},
         ))
         events.extend({"type": "SYSCALL_E", "sequence": 100 + index,
                        "tid": shell, "name": "dup2"}
@@ -738,6 +846,16 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
         signals[0]["sequence"] = 59
         with self.assertRaisesRegex(
                 self.verifier.VerificationFailure, "SIGCHLD process ordering"):
+            self.verifier._lineage(trace, profile, diagnostic=False)
+
+    def test_process_lineage_requires_exact_pipe_flags(self) -> None:
+        trace, profile = self._measured_lineage_fixture()
+        pipe = next(event for event in trace["events"]
+                    if event.get("name") == "pipe2")
+        self.verifier._lineage(trace, profile, diagnostic=False)
+        pipe["arguments"][1] = 0
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "internal pipe syscall shape"):
             self.verifier._lineage(trace, profile, diagnostic=False)
 
     def test_runtime_mapping_contract_is_exact_but_allows_measured_shared_and_eof_span(self) -> None:
@@ -802,6 +920,8 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
             packet_root="research_packets/frozen", authority_issue=535,
             authority_comment=5524343289, request_index="0",
             expected_godot=root / "godot", expected_product_source=root / "product-source",
+            expected_product_stage=root / "product-stage",
+            expected_product_stage_receipt=root / "product-stage-receipt.json",
             expected_packet_source=root / "packet-source", expected_product_mount=root / "product",
             expected_packet_mount=root / "packet", expected_runtime_root=root / "runtime")
 
@@ -881,6 +1001,272 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
                 self.verifier.FROZEN_PROFILE_SHA256 = original_profile_hash
 
 
+@unittest.skipUnless(sys.platform.startswith("linux"), "Landlock is Linux-only")
+class GodotRuntimeKernelAdmissionTests(unittest.TestCase):
+    def test_exact_reads_execs_descriptors_and_writes_are_kernel_enforced(self) -> None:
+        compiler = shutil.which("cc")
+        if compiler is None:
+            self.skipTest("C compiler unavailable")
+        source_root = ROOT / "tools/execution_provenance"
+        harness_source = r'''
+#define _GNU_SOURCE
+#include "godot_runtime_ptrace_io.h"
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/prctl.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+static int write_new(const char *directory, const char *name) {
+    char path[4096];
+    if (snprintf(path, sizeof(path), "%s/%s", directory, name) >= (int)sizeof(path)) return 30;
+    int fd = open(path, O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, 0600);
+    if (fd < 0) return 31;
+    int result = write(fd, "allowed", 7) == 7 ? 0 : 32;
+    close(fd); return result;
+}
+
+static int exec_result(const char *path, int expected) {
+    pid_t child = fork();
+    if (child < 0) return 40;
+    if (child == 0) {
+        execl(path, path, NULL);
+        _exit(errno == EACCES || errno == EPERM ? 90 : 91);
+    }
+    int status;
+    if (waitpid(child, &status, 0) != child || !WIFEXITED(status)
+            || WEXITSTATUS(status) != expected) return 41;
+    return 0;
+}
+
+int main(int argc, char **argv) {
+    if (argc < 10) return 9;
+    int abi = gv_landlock_abi();
+    if (abi < 3) { fprintf(stderr, "Landlock ABI %d is below 3\n", abi); return 10; }
+    struct gv_admission_policy policy;
+    if (!gv_load_admission_policy(argv[1], 393216, &policy)) return 11;
+    int inherited = atoi(argv[8]);
+    if (!gv_sanitise_descriptors()) return 12;
+    char stdin_byte;
+    if (read(STDIN_FILENO, &stdin_byte, 1) != 0) return 13;
+    errno = 0;
+    if (fcntl(inherited, F_GETFD) != -1 || errno != EBADF) return 14;
+    if (!gv_restrict_access(argv[2], argv[3], &policy)) return 15;
+    if (prctl(PR_GET_NO_NEW_PRIVS, 0, 0, 0, 0) != 1) return 12;
+    int allowed = open(argv[4], O_RDONLY | O_CLOEXEC);
+    char bytes[7];
+    if (allowed < 0 || read(allowed, bytes, sizeof(bytes)) != sizeof(bytes)
+            || memcmp(bytes, "allowed", sizeof(bytes))) return 15;
+    close(allowed);
+    errno = 0;
+    int secret = open(argv[5], O_RDONLY | O_CLOEXEC);
+    if (secret >= 0 || (errno != EACCES && errno != EPERM)) return 16;
+    if (exec_result(argv[6], 0) || exec_result(argv[7], 90)) return 17;
+    for (int index = 9; index < argc; index += 1) {
+        errno = 0;
+        int fd = open(argv[index], O_WRONLY | O_TRUNC | O_CLOEXEC);
+        if (fd >= 0) { write(fd, "changed", 7); close(fd); return 18; }
+        if (errno != EACCES && errno != EPERM) return 19;
+    }
+    if (write_new(argv[2], "home-write") != 0) return 20;
+    if (write_new(argv[3], "output-write") != 0) return 21;
+    int sink = open("/dev/null", O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0666);
+    if (sink < 0 || write(sink, "sink", 4) != 4) return 22;
+    close(sink); gv_free_admission_policy(&policy); return 0;
+}
+'''
+        with tempfile.TemporaryDirectory(prefix="godot-landlock-test-") as temporary:
+            root = Path(temporary)
+            home, output = root / "home", root / "output"
+            home.mkdir(); output.mkdir()
+            allowed_read, secret_read = root / "allowed-read", root / "secret-read"
+            allowed_read.write_bytes(b"allowed"); secret_read.write_bytes(b"secret!")
+            assembly = root / "probe.S"
+            assembly.write_text(
+                ".global _start\n_start:\nmov $60, %rax\nxor %rdi, %rdi\nsyscall\n",
+                encoding="ascii")
+            allowed_exec, secret_exec = root / "allowed-exec", root / "secret-exec"
+            probe_result = subprocess.run([
+                compiler, "-nostdlib", "-static", "-Wl,--build-id=none",
+                str(assembly), "-o", str(allowed_exec),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, probe_result.returncode, probe_result.stderr)
+            shutil.copyfile(allowed_exec, secret_exec)
+            allowed_exec.chmod(0o555); secret_exec.chmod(0o555)
+            policy = root / "policy.tsv"
+            rules = [
+                f"F\tR\t{str(allowed_read.resolve()).encode().hex()}",
+                f"F\tRX\t{str(allowed_exec.resolve()).encode().hex()}",
+                f"P\topenat\t0\t{str(allowed_read.resolve()).encode().hex()}",
+            ]
+            policy.write_text("GODOTACCESSv1\n" + "\n".join(sorted(rules)) + "\n",
+                              encoding="ascii")
+            protected = [root / name for name in (
+                "verifier.py", "build.json", "trace.tsv", "prior-receipt.json")]
+            for path in protected:
+                path.write_bytes((path.name + "-original").encode())
+            harness = root / "admission_harness.c"
+            binary = root / "admission_harness"
+            harness.write_text(harness_source, encoding="utf-8")
+            compile_result = subprocess.run([
+                compiler, "-std=c17", "-O2", "-Wall", "-Wextra", "-Werror",
+                "-I", str(source_root), str(harness),
+                str(source_root / "godot_runtime_ptrace_io.c"), "-o", str(binary),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, compile_result.returncode, compile_result.stderr)
+            inherited = os.open(secret_read, os.O_RDONLY)
+            try:
+                with secret_read.open("rb") as standard_input:
+                    result = subprocess.run([
+                        str(binary), str(policy), str(home), str(output),
+                        str(allowed_read), str(secret_read), str(allowed_exec),
+                        str(secret_exec), str(inherited),
+                        str(policy), *(str(path) for path in protected),
+                    ], check=False, capture_output=True, text=True,
+                        stdin=standard_input, pass_fds=(inherited,))
+            finally:
+                os.close(inherited)
+            self.assertEqual(0, result.returncode, result.stderr or result.stdout)
+            self.assertTrue(policy.read_bytes().startswith(b"GODOTACCESSv1\n"))
+            for path in protected:
+                self.assertEqual((path.name + "-original").encode(), path.read_bytes())
+            self.assertEqual(b"allowed", (home / "home-write").read_bytes())
+            self.assertEqual(b"allowed", (output / "output-write").read_bytes())
+
+    def test_dynamic_exec_requires_the_exact_kernel_interpreter_leaf(self) -> None:
+        compiler, readelf, ldd = (shutil.which(name) for name in ("cc", "readelf", "ldd"))
+        if compiler is None or readelf is None or ldd is None:
+            self.skipTest("dynamic-linker test tools unavailable")
+        source_root = ROOT / "tools/execution_provenance"
+        harness_source = r'''
+#define _GNU_SOURCE
+#include "godot_runtime_ptrace_io.h"
+#include <errno.h>
+#include <unistd.h>
+int main(int argc, char **argv) {
+    if (argc != 5) return 2;
+    struct gv_admission_policy policy;
+    if (!gv_load_admission_policy(argv[1], 393216, &policy)) return 3;
+    if (!gv_sanitise_descriptors()) return 4;
+    if (!gv_restrict_access(argv[2], argv[3], &policy)) return 5;
+    execl(argv[4], argv[4], NULL);
+    return errno == EACCES || errno == EPERM ? 90 : 91;
+}
+'''
+        with tempfile.TemporaryDirectory(prefix="godot-dynamic-landlock-") as temporary:
+            root = Path(temporary)
+            home, output = root / "home", root / "output"
+            home.mkdir(); output.mkdir()
+            probe_source = root / "dynamic-probe.c"
+            probe_source.write_text("int main(void) { return 0; }\n", encoding="ascii")
+            probe = root / "dynamic-probe"
+            subprocess.run([compiler, str(probe_source), "-o", str(probe)], check=True)
+            elf = subprocess.run(
+                [readelf, "-l", str(probe)], check=True,
+                capture_output=True, text=True).stdout
+            interpreter_lines = [line for line in elf.splitlines()
+                                 if "Requesting program interpreter:" in line]
+            self.assertEqual(1, len(interpreter_lines))
+            requested = interpreter_lines[0].split("[", 1)[1].split("]", 1)[0]
+            interpreter = Path(requested).resolve(strict=True)
+            dependencies = set()
+            linked = subprocess.run(
+                [ldd, str(probe)], check=True, capture_output=True, text=True).stdout
+            for line in linked.splitlines():
+                for token in line.replace("=>", " ").split():
+                    candidate = token.split("(", 1)[0]
+                    if candidate.startswith("/") and Path(candidate).exists():
+                        dependencies.add(Path(candidate).resolve(strict=True))
+            dependencies.discard(interpreter)
+            cache = Path("/etc/ld.so.cache")
+            if cache.is_file():
+                dependencies.add(cache.resolve(strict=True))
+
+            harness = root / "dynamic-exec-harness.c"
+            harness.write_text(harness_source, encoding="utf-8")
+            binary = root / "dynamic-exec-harness"
+            compile_result = subprocess.run([
+                compiler, "-std=c17", "-O2", "-Wall", "-Wextra", "-Werror",
+                "-I", str(source_root), str(harness),
+                str(source_root / "godot_runtime_ptrace_io.c"), "-o", str(binary),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, compile_result.returncode, compile_result.stderr)
+
+            def write_policy(path: Path, include_interpreter: bool) -> None:
+                rights = {str(probe.resolve()): "RX"}
+                rights.update({str(item): "R" for item in dependencies})
+                if include_interpreter:
+                    rights[str(interpreter)] = "RX"
+                lines = [f"F\t{value}\t{key.encode().hex()}"
+                         for key, value in rights.items()]
+                lines.append(f"P\texecve\t-\t{str(probe.resolve()).encode().hex()}")
+                path.write_text(
+                    "GODOTACCESSv1\n" + "\n".join(sorted(lines)) + "\n",
+                    encoding="ascii")
+
+            complete, missing = root / "complete.tsv", root / "missing-loader.tsv"
+            write_policy(complete, True); write_policy(missing, False)
+            admitted = subprocess.run([
+                str(binary), str(complete), str(home), str(output), str(probe),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, admitted.returncode, admitted.stderr or admitted.stdout)
+            denied = subprocess.run([
+                str(binary), str(missing), str(home), str(output), str(probe),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(90, denied.returncode, denied.stderr or denied.stdout)
+
+    def test_policy_parser_rejects_broad_alias_duplicate_and_nul_rules(self) -> None:
+        compiler = shutil.which("cc")
+        if compiler is None:
+            self.skipTest("C compiler unavailable")
+        source_root = ROOT / "tools/execution_provenance"
+        parser_source = r'''
+#include "godot_runtime_ptrace_io.h"
+int main(int argc, char **argv) {
+    if (argc != 2) return 2;
+    struct gv_admission_policy policy;
+    if (!gv_load_admission_policy(argv[1], 393216, &policy)) return 1;
+    gv_free_admission_policy(&policy); return 0;
+}
+'''
+        with tempfile.TemporaryDirectory(prefix="godot-policy-parser-") as temporary:
+            root = Path(temporary)
+            leaf = root / "leaf"; leaf.write_bytes(b"leaf")
+            alias = root / "alias"; alias.symlink_to(leaf)
+            harness = root / "parser.c"; harness.write_text(parser_source, encoding="utf-8")
+            binary = root / "parser"
+            compile_result = subprocess.run([
+                compiler, "-std=c17", "-O2", "-Wall", "-Wextra", "-Werror",
+                "-I", str(source_root), str(harness),
+                str(source_root / "godot_runtime_ptrace_io.c"), "-o", str(binary),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, compile_result.returncode, compile_result.stderr)
+
+            def payload(file_rules: list[tuple[str, str]]) -> bytes:
+                lines = [f"F\t{rights}\t{path.encode().hex()}"
+                         for rights, path in file_rules]
+                lines.append(f"P\topenat\t0\t{str(leaf).encode().hex()}")
+                return ("GODOTACCESSv1\n" + "\n".join(sorted(lines)) + "\n").encode()
+
+            valid = root / "valid.tsv"; valid.write_bytes(payload([("R", str(leaf))]))
+            self.assertEqual(0, subprocess.run([str(binary), str(valid)]).returncode)
+            invalid_payloads = {
+                "broad": payload([("R", "/")]),
+                "alias": payload([("R", str(alias))]),
+                "dot": payload([("R", f"{root}/missing/../leaf")]),
+                "duplicate": payload([("R", str(leaf)), ("RX", str(leaf))]),
+                "nul": payload([("R", str(leaf))]).replace(b"GODOTACCESSv1\n", b"GODOTACCESSv1\0\n"),
+            }
+            for name, data in invalid_payloads.items():
+                candidate = root / f"{name}.tsv"; candidate.write_bytes(data)
+                self.assertNotEqual(
+                    0, subprocess.run([str(binary), str(candidate)]).returncode,
+                    name)
+
+
 class GodotRuntimeRunnerContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -889,7 +1275,182 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         assert spec and spec.loader
         cls.runner = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(cls.runner)
+        verify_spec = importlib.util.spec_from_file_location(
+            "godot_runtime_verify_stage", VERIFIER_PATH)
+        assert verify_spec and verify_spec.loader
+        cls.verifier = importlib.util.module_from_spec(verify_spec)
+        verify_spec.loader.exec_module(cls.verifier)
         cls.profile = json.loads(PROFILE_PATH.read_text(encoding="utf-8"))
+
+    @unittest.skipUnless(sys.platform.startswith("linux"), "hosted policy paths are Linux-only")
+    def test_complete_hosted_policy_fits_the_frozen_caps_and_both_builders_agree(self) -> None:
+        manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
+        runtime = "/home/runner/work/glassvow/glassvow/artifacts/godot-runtime/qualification/runtime/G00"
+        mounts = "/tmp/glassvow-godot-runtime-input-abcdefgh"
+        roots = {
+            "GODOT": "/home/runner/work/_temp/godot/godot",
+            "PRODUCT": f"{mounts}/product",
+            "PACKET": f"{mounts}/packet",
+            "HOME": f"{runtime}/home",
+            "OUTPUT": f"{runtime}/output",
+        }
+        working = Path("/home/runner/work/glassvow/glassvow")
+        produced, produced_counts = self.runner.build_admission_policy(
+            self.profile, manifest, roots, working)
+        verified, verified_counts = self.verifier._build_admission_policy(
+            self.profile, manifest, roots, working)
+        self.assertEqual(produced, verified)
+        self.assertEqual({"fileRules": 169, "pathRules": 2146}, produced_counts)
+        self.assertEqual(produced_counts, verified_counts)
+        self.assertGreater(len(produced), 300000)
+        self.assertLessEqual(len(produced), self.profile["caps"]["maxAdmissionPolicyBytes"])
+        self.assertEqual(393216, self.profile["caps"]["maxAdmissionPolicyBytes"])
+
+    def test_kernel_interpreter_is_rx_without_becoming_a_fifth_execve(self) -> None:
+        manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
+        root = "/tmp/glassvow-kernel-interpreter-contract"
+        roots = {
+            "GODOT": f"{root}/godot", "PRODUCT": f"{root}/product",
+            "PACKET": f"{root}/packet", "HOME": f"{root}/home",
+            "OUTPUT": f"{root}/output",
+        }
+        policy, counts = self.runner.build_admission_policy(
+            self.profile, manifest, roots, Path(root) / "observer")
+        verified, verified_counts = self.verifier._build_admission_policy(
+            self.profile, manifest, roots, Path(root) / "observer")
+        loader = str(Path(
+            self.profile["kernelAdmission"]["kernelInterpreterLeaves"][0]
+        ).resolve(strict=False)).encode().hex()
+        lines = set(policy.decode("ascii").splitlines())
+        self.assertIn(f"F\tRX\t{loader}", lines)
+        self.assertNotIn(f"P\texecve\t-\t{loader}", lines)
+        self.assertEqual(policy, verified)
+        self.assertEqual(counts, verified_counts)
+
+    def test_product_stage_contains_exact_commit_plus_only_frozen_configuration_roles(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-product-stage-") as temporary:
+            root = Path(temporary)
+            source, stage = root / "source", root / "stage"
+            source.mkdir()
+            subprocess.run(["git", "init", "-q"], cwd=source, check=True)
+            (source / "project.godot").write_text("[application]\n", encoding="utf-8")
+            (source / "tracked.txt").write_text("tracked\n", encoding="utf-8")
+            (source / "AGENTS.md").write_text("contract\n", encoding="utf-8")
+            (source / "CLAUDE.md").symlink_to("AGENTS.md")
+            subprocess.run(["git", "add", "."], cwd=source, check=True)
+            subprocess.run([
+                "git", "-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+                "commit", "-qm", "fixture",
+            ], cwd=source, check=True)
+            product_sha = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=source, check=True,
+                capture_output=True, text=True).stdout.strip()
+            (source / "untracked-secret").write_text("must not enter\n", encoding="utf-8")
+
+            fixtures = root / "fixtures"
+            fixtures.mkdir()
+            roles = {}
+            for name, data in {
+                    "extension_list.cfg": b"extension\n",
+                    "global_script_class_cache.cfg": b"classes\n",
+                    "uid_cache.bin": b"\x00uid\xff",
+            }.items():
+                path = fixtures / name
+                path.write_bytes(data)
+                roles[name] = {"size": len(data), "sha256": sha256(path)}
+            manifest = root / "configuration.json"
+            manifest_value = {
+                "schema": "glassvow.godot-runtime-configuration-capture/v1",
+                "source": {"productSha": product_sha},
+                "capture": {"kind": "test-fixture"},
+                "roles": roles,
+                "stagingRule": "exact commit plus only the three captured roles",
+            }
+            manifest.write_text(json.dumps(manifest_value), encoding="utf-8")
+
+            record = self.runner.materialise_product_stage(
+                source, product_sha, stage, fixtures, manifest,
+                self.profile["caps"])
+            self.assertEqual(product_sha, record["productSha"])
+            self.assertEqual(
+                sum(path.stat().st_size for path in (
+                    source / "project.godot", source / "tracked.txt",
+                    source / "AGENTS.md", source / "CLAUDE.md")),
+                record["trackedBytes"])
+            self.assertEqual("tracked\n", (stage / "tracked.txt").read_text())
+            self.assertTrue((stage / "CLAUDE.md").is_symlink())
+            self.assertFalse((stage / "untracked-secret").exists())
+            self.assertEqual(set(roles), {
+                path.name for path in (stage / ".godot").iterdir()})
+            for name, binding in roles.items():
+                path = stage / ".godot" / name
+                self.assertTrue(path.is_file() and not path.is_symlink())
+                self.assertEqual(binding["sha256"], sha256(path))
+
+            verify_profile = json.loads(json.dumps(self.profile))
+            verify_profile["g0"]["configurationCapture"] = {
+                "path": str(manifest.relative_to(root)),
+                "sha256": sha256(manifest),
+                "fixtureRoot": str(fixtures.relative_to(root)),
+                "roleCount": 3,
+            }
+            with mock.patch.multiple(
+                    self.verifier, OBSERVER_ROOT=root,
+                    CONFIGURATION_ROOT=fixtures,
+                    CONFIGURATION_MANIFEST_PATH=manifest):
+                verified = self.verifier.verify_product_stage(
+                    source, product_sha, stage, verify_profile)
+                self.assertEqual(record["trackedBytes"], verified["trackedBytes"])
+                tracked = stage / "tracked.txt"
+                tracked.write_text("tampered\n", encoding="utf-8")
+                with self.assertRaisesRegex(
+                        self.verifier.VerificationFailure, "trusted command failed"):
+                    self.verifier.verify_product_stage(
+                        source, product_sha, stage, verify_profile)
+                tracked.write_text("tracked\n", encoding="utf-8")
+                generated = stage / ".godot" / "uid_cache.bin"
+                generated.chmod(0o644); generated.write_bytes(b"tampered")
+                with self.assertRaisesRegex(
+                        self.verifier.VerificationFailure, "staged configuration differs"):
+                    self.verifier.verify_product_stage(
+                        source, product_sha, stage, verify_profile)
+                generated.write_bytes((fixtures / "uid_cache.bin").read_bytes())
+                injected = stage / "injected-regular"
+                injected.write_text("not in the product tree\n", encoding="utf-8")
+                with self.assertRaisesRegex(
+                        self.verifier.VerificationFailure,
+                        "product stage additive inventory differs"):
+                    self.verifier.verify_product_stage(
+                        source, product_sha, stage, verify_profile)
+                injected.unlink()
+                extra_configuration = stage / ".godot" / "extra-role.cfg"
+                extra_configuration.parent.chmod(0o755)
+                extra_configuration.write_text("not frozen\n", encoding="utf-8")
+                with self.assertRaisesRegex(
+                        self.verifier.VerificationFailure,
+                        "product stage additive inventory differs"):
+                    self.verifier.verify_product_stage(
+                        source, product_sha, stage, verify_profile)
+                extra_configuration.unlink()
+                extra_configuration.parent.chmod(0o555)
+
+            (source / ".godot").mkdir()
+            (source / ".godot/tracked.cfg").write_text("forbidden\n", encoding="utf-8")
+            subprocess.run(["git", "add", ".godot/tracked.cfg"], cwd=source, check=True)
+            subprocess.run([
+                "git", "-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+                "commit", "-qm", "tracked generated configuration",
+            ], cwd=source, check=True)
+            generated_sha = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=source, check=True,
+                capture_output=True, text=True).stdout.strip()
+            manifest_value["source"]["productSha"] = generated_sha
+            manifest.write_text(json.dumps(manifest_value), encoding="utf-8")
+            with self.assertRaisesRegex(
+                    self.runner.RunnerError, "already contains generated configuration"):
+                self.runner.materialise_product_stage(
+                    source, generated_sha, root / "forbidden-stage", fixtures,
+                    manifest, self.profile["caps"])
 
     def test_packet_manifest_binds_regular_role_bytes(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-packet-") as temporary:
@@ -1254,25 +1815,31 @@ class GodotRuntimeCampaignContractTests(unittest.TestCase):
             original.write_bytes(b"runtime")
             corpus.write_bytes(b"semantic")
             metadata = original.stat()
+            null_identity = Path("/dev/null").stat()
             original_hex = str(original).encode().hex()
             lines = [
                 "GODOTTRACEv1",
                 "\t".join(["START", "1", "100", TRACE_CHALLENGE, *limits]),
-                "SYSCALL_E\t2\t100\t257\topenat\t18446744073709551516\t0\t0\t0\t0\t0",
-                f"PATH\t3\t100\topenat\t{original_hex}\t{original_hex}",
-                "SYSCALL_X\t4\t100\t257\topenat\t3\t0\t0",
-                f"PATH_X\t5\t100\topenat\t3\t{original_hex}",
-                f"OPEN\t6\t100\t3\t0\tI\t{metadata.st_dev}\t{metadata.st_ino}\t{original_hex}",
-                "SYSCALL_E\t7\t100\t9\tmmap\t0\t4096\t1\t2\t3\t0",
-                "SYSCALL_X\t8\t100\t9\tmmap\t4096\t0\t0",
-                f"MMAP\t9\t100\t4096\t4096\t1\t2\t3\t0\tI\t{metadata.st_dev}\t{metadata.st_ino}\t{original_hex}",
-                "SYSCALL_E\t10\t100\t3\tclose\t3\t0\t0\t0\t0\t0",
-                "SYSCALL_X\t11\t100\t3\tclose\t0\t0\t0",
-                f"CLOSE\t12\t100\t3\tI\t{metadata.st_dev}\t{metadata.st_ino}\t{original_hex}",
-                "SYSCALL_E\t13\t100\t231\texit_group\t0\t0\t0\t0\t0\t0",
-                "EXIT\t14\t100\t0",
+                "POLICY\t2\t100\t1\t1\t1",
+                f"INITIAL_FD\t3\t100\t0\t0\t{null_identity.st_dev}\t"
+                f"{null_identity.st_ino}\t2f6465762f6e756c6c",
+                "INITIAL_FD\t4\t100\t1\t1\t1\t11\t706970653a5b31315d",
+                "INITIAL_FD\t5\t100\t2\t1\t1\t12\t706970653a5b31325d",
+                "SYSCALL_E\t6\t100\t257\topenat\t18446744073709551516\t0\t0\t0\t0\t0",
+                f"PATH\t7\t100\topenat\t{original_hex}\t{original_hex}",
+                "SYSCALL_X\t8\t100\t257\topenat\t3\t0\t0",
+                f"PATH_X\t9\t100\topenat\t3\t{original_hex}",
+                f"OPEN\t10\t100\t3\t0\tI\t{metadata.st_dev}\t{metadata.st_ino}\t{original_hex}",
+                "SYSCALL_E\t11\t100\t9\tmmap\t0\t4096\t1\t2\t3\t0",
+                "SYSCALL_X\t12\t100\t9\tmmap\t4096\t0\t0",
+                f"MMAP\t13\t100\t4096\t4096\t1\t2\t3\t0\tI\t{metadata.st_dev}\t{metadata.st_ino}\t{original_hex}",
+                "SYSCALL_E\t14\t100\t3\tclose\t3\t0\t0\t0\t0\t0",
+                "SYSCALL_X\t15\t100\t3\tclose\t0\t0\t0",
+                f"CLOSE\t16\t100\t3\tI\t{metadata.st_dev}\t{metadata.st_ino}\t{original_hex}",
+                "SYSCALL_E\t17\t100\t231\texit_group\t0\t0\t0\t0\t0\t0",
+                "EXIT\t18\t100\t0",
                 "\t".join([
-                    "END", "15", "100", "200", "100",
+                    "END", "19", "100", "200", "100",
                     "0", "1", "0", "4", "3", "0", "0", "1", "0", "0",
                     "1", "1", "1", "0", "0", "0", "0", "0", "0", "-",
                     TRACE_CHALLENGE,
