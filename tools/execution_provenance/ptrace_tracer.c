@@ -539,6 +539,7 @@ int main(int argc, char **argv) {
             continue;
         }
         int deliver = (signal_number == SIGSTOP || signal_number == SIGTRAP
+                || signal_number == (SIGTRAP | 0x80)
                 || signal_number == SIGCHLD)
             ? 0 : signal_number;
         if (ptrace(PTRACE_SYSCALL, pid, 0, deliver) != 0) {
