@@ -2,6 +2,31 @@ name: Linux execution provenance evidence
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: Evidence mode
+        required: true
+        type: choice
+        default: inert
+        options:
+          - inert
+          - godot-g0
+      product_sha:
+        description: Exact product commit for a Godot G0 trace
+        required: false
+        type: string
+      packet_sha:
+        description: Exact research-packet commit for a Godot G0 trace
+        required: false
+        type: string
+      packet_root:
+        description: Declared research-packet directory
+        required: false
+        type: string
+      authority_comment:
+        description: Issue-authority comment database id
+        required: false
+        type: string
   pull_request:
     paths:
       - '.github/workflows/execution-provenance-evidence.yml'
@@ -19,6 +44,7 @@ concurrency:
 
 jobs:
   qualify:
+    if: github.event_name != 'workflow_dispatch' || inputs.mode == 'inert'
     name: Qualify bounded ptrace evidence
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -95,5 +121,176 @@ jobs:
         with:
           name: execution-provenance-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
           path: artifacts/execution-provenance
+          if-no-files-found: error
+          retention-days: 14
+
+  godot-g0:
+    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'godot-g0'
+    name: Measure actual Godot path (G0 only)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GODOT_VERSION: 4.7.2
+      GODOT_ZIP_SHA256: cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4
+      GODOT_BINARY_SHA256: 8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e
+      EXPECTED_PRODUCT_SHA: 5c5f2d325725b0a04e060c1ffe0b40a76f2e0928
+      EXPECTED_AUTHORITY_COMMENT: '5524343289'
+      EXPECTED_PACKET_ROOT: research_packets/issue-421-a1-v2-g0
+    steps:
+      - name: Check out exact observer head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Validate immutable product and packet ingress
+        shell: bash
+        env:
+          PRODUCT_SHA: ${{ inputs.product_sha }}
+          PACKET_SHA: ${{ inputs.packet_sha }}
+          PACKET_ROOT: ${{ inputs.packet_root }}
+          AUTHORITY_COMMENT: ${{ inputs.authority_comment }}
+        run: |
+          set -euo pipefail
+          test "$PRODUCT_SHA" = "$EXPECTED_PRODUCT_SHA"
+          test "$AUTHORITY_COMMENT" = "$EXPECTED_AUTHORITY_COMMENT"
+          test "$PACKET_ROOT" = "$EXPECTED_PACKET_ROOT"
+          [[ "$PACKET_SHA" =~ ^[0-9a-f]{40}$ ]]
+          git fetch --no-tags origin "$PRODUCT_SHA" "$PACKET_SHA"
+          test "$(git rev-parse "$PACKET_SHA^")" = "$PRODUCT_SHA"
+          test -z "$(git diff --name-only "$PRODUCT_SHA" "$PACKET_SHA" -- . \
+            | grep -Ev "^${PACKET_ROOT}/" || true)"
+          changed="$(git diff --name-only "$PRODUCT_SHA" "$PACKET_SHA" -- "$PACKET_ROOT")"
+          test "$changed" = "${PACKET_ROOT}/corpus.json
+          ${PACKET_ROOT}/manifest.json
+          ${PACKET_ROOT}/p9_v5_runtime_oracle.gd"
+          git worktree add --detach "$RUNNER_TEMP/g0-product" "$PRODUCT_SHA"
+          git worktree add --detach "$RUNNER_TEMP/g0-packet" "$PACKET_SHA"
+          python3 -B - "$RUNNER_TEMP/g0-packet/$PACKET_ROOT/manifest.json" \
+            "$PRODUCT_SHA" "$PACKET_SHA" "$AUTHORITY_COMMENT" <<'PY'
+          import hashlib
+          import json
+          import pathlib
+          import sys
+
+          manifest_path = pathlib.Path(sys.argv[1])
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          expected = {
+              "schema": "glassvow.p9-a1-v2-g0-packet/v1",
+              "productSha": sys.argv[2],
+              "authorityIssue": 535,
+              "authorityComment": int(sys.argv[4]),
+          }
+          for key, value in expected.items():
+              if manifest.get(key) != value:
+                  raise SystemExit(f"packet manifest {key} mismatch")
+          root = manifest_path.parent
+          roles = manifest.get("roles")
+          if not isinstance(roles, dict) or set(roles) != {"externalScript", "corpus"}:
+              raise SystemExit("packet role set mismatch")
+          expected_roles = {
+              "externalScript": ("p9_v5_runtime_oracle.gd", "37fe74e4c2319e393f963139e3db300353956a025e6d3724cb4f83d8265f56e7"),
+              "corpus": ("corpus.json", "ffaa165e59ee5cd59df3f7476932ec30938d27abf8a85f8f41667f4de5ee696a"),
+          }
+          for role, (path, digest) in expected_roles.items():
+              if roles[role] != {"path": path, "sha256": digest}:
+                  raise SystemExit(f"packet role mismatch: {role}")
+              actual = hashlib.sha256((root / path).read_bytes()).hexdigest()
+              if actual != digest:
+                  raise SystemExit(f"packet bytes mismatch: {role}")
+          PY
+
+      - name: Install and identify exact Godot 4.7.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/godot" artifacts/godot-g0
+          curl --fail --location --retry 3 \
+            --output "$RUNNER_TEMP/godot/godot.zip" \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          echo "$GODOT_ZIP_SHA256  $RUNNER_TEMP/godot/godot.zip" | sha256sum --check --strict
+          unzip -q "$RUNNER_TEMP/godot/godot.zip" -d "$RUNNER_TEMP/godot"
+          mv "$RUNNER_TEMP/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64" "$RUNNER_TEMP/godot/godot"
+          chmod 0555 "$RUNNER_TEMP/godot/godot"
+          echo "$GODOT_BINARY_SHA256  $RUNNER_TEMP/godot/godot" | sha256sum --check --strict
+          {
+            printf 'observer_head=%s\n' "$(git rev-parse HEAD)"
+            printf 'product_sha=%s\n' '${{ inputs.product_sha }}'
+            printf 'packet_sha=%s\n' '${{ inputs.packet_sha }}'
+            printf 'packet_root=%s\n' '${{ inputs.packet_root }}'
+            printf 'authority_comment=%s\n' '${{ inputs.authority_comment }}'
+            printf 'ImageOS=%s\n' "${ImageOS:-missing}"
+            printf 'ImageVersion=%s\n' "${ImageVersion:-missing}"
+            printf 'runner_os=%s\n' "$RUNNER_OS"
+            printf 'runner_arch=%s\n' "$RUNNER_ARCH"
+            printf 'uname=%s\n' "$(uname -a)"
+            printf 'ptrace_scope=%s\n' "$(cat /proc/sys/kernel/yama/ptrace_scope)"
+            printf 'strace=%s\n' "$(strace --version | head -n 1)"
+            printf 'godot_version=%s\n' "$("$RUNNER_TEMP/godot/godot" --version)"
+            printf 'godot_sha256=%s\n' "$(sha256sum "$RUNNER_TEMP/godot/godot" | cut -d' ' -f1)"
+          } > artifacts/godot-g0/environment.txt
+
+      - name: Generate measured Godot cache outside the traced invocation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/g0-home" artifacts/godot-g0/cache-preflight
+          env -i HOME="$RUNNER_TEMP/g0-home" PATH=/usr/bin:/bin LANG=C.UTF-8 \
+            "$RUNNER_TEMP/godot/godot" --headless --editor \
+            --path "$RUNNER_TEMP/g0-product" --quit \
+            > artifacts/godot-g0/cache-preflight/stdout.txt \
+            2> artifacts/godot-g0/cache-preflight/stderr.txt
+          test -f "$RUNNER_TEMP/g0-product/.godot/global_script_class_cache.cfg"
+          sha256sum "$RUNNER_TEMP/g0-product/.godot/global_script_class_cache.cfg" \
+            > artifacts/godot-g0/cache-preflight/global-script-cache.sha256
+          chmod -R a-w "$RUNNER_TEMP/g0-product" "$RUNNER_TEMP/g0-packet"
+
+      - name: Trace one actual baseline Godot invocation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/godot-g0/raw artifacts/godot-g0/run "$RUNNER_TEMP/g0-runtime-home"
+          product="$RUNNER_TEMP/g0-product"
+          packet="$RUNNER_TEMP/g0-packet/${{ inputs.packet_root }}"
+          output="$GITHUB_WORKSPACE/artifacts/godot-g0/run/observation.json"
+          strace -ff -qq -ttt -T -yy -s 4096 \
+            -o artifacts/godot-g0/raw/trace \
+            -e trace=%process,%file,%network,%memory,read,readv,pread64,preadv,preadv2,write,writev,pwrite64,pwritev,pwritev2,lseek,fcntl,dup,dup2,dup3,close \
+            /usr/bin/env -i HOME="$RUNNER_TEMP/g0-runtime-home" PATH=/usr/bin:/bin LANG=C.UTF-8 \
+            "$RUNNER_TEMP/godot/godot" --headless --path "$product" \
+            -s "$packet/p9_v5_runtime_oracle.gd" -- \
+            --input "$packet/corpus.json" --index 0 --output "$output" \
+            > artifacts/godot-g0/stdout.txt \
+            2> artifacts/godot-g0/stderr.txt
+          test -s "$output"
+          test ! -s artifacts/godot-g0/stderr.txt
+          sha256sum "$output" > artifacts/godot-g0/output.sha256
+          test "$(cut -d' ' -f1 artifacts/godot-g0/output.sha256)" = \
+            '8df7ba42b663e7bfe0a12b7ca9d817d6fd678f754e726b8cf6241d0c065ec435'
+
+      - name: Summarise actual access mechanisms
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if compgen -G 'artifacts/godot-g0/raw/trace.*' > /dev/null; then
+            {
+              printf 'trace_files=%s\n' "$(find artifacts/godot-g0/raw -type f -name 'trace.*' | wc -l)"
+              printf 'trace_bytes=%s\n' "$(du -cb artifacts/godot-g0/raw/trace.* | tail -n 1 | cut -f1)"
+              printf 'external_script_events=%s\n' "$(grep -hF 'p9_v5_runtime_oracle.gd' artifacts/godot-g0/raw/trace.* | wc -l || true)"
+              printf 'corpus_events=%s\n' "$(grep -hF 'corpus.json' artifacts/godot-g0/raw/trace.* | wc -l || true)"
+              printf 'project_events=%s\n' "$(grep -hF "$RUNNER_TEMP/g0-product" artifacts/godot-g0/raw/trace.* | wc -l || true)"
+              printf 'network_events=%s\n' "$(grep -hE ' (socket|connect|accept|bind|listen|sendto|recvfrom)\\(' artifacts/godot-g0/raw/trace.* | wc -l || true)"
+            } > artifacts/godot-g0/summary.txt
+            grep -hE 'p9_v5_runtime_oracle\.gd|corpus\.json|full-content\.json|mob-overrides\.json|line-table\.json|global_script_class_cache\.cfg' \
+              artifacts/godot-g0/raw/trace.* > artifacts/godot-g0/semantic-events.txt || true
+          fi
+
+      - name: Upload non-authoritative G0 diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: godot-g0-${{ github.sha }}-${{ github.run_attempt }}
+          path: artifacts/godot-g0
           if-no-files-found: error
           retention-days: 14
