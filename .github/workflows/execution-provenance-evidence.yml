@@ -273,6 +273,62 @@ jobs:
         run: |
           set -euo pipefail
           if compgen -G 'artifacts/godot-g0/raw/trace.*' > /dev/null; then
+            python3 -B - "$RUNNER_TEMP/g0-product" \
+              "$RUNNER_TEMP/g0-packet/${{ inputs.packet_root }}" \
+              "$RUNNER_TEMP/godot/godot" \
+              "$RUNNER_TEMP/g0-runtime-home" <<'PY'
+            import hashlib
+            import json
+            import pathlib
+            import re
+            import sys
+
+            roots = {
+                "${PRODUCT}": pathlib.Path(sys.argv[1]),
+                "${PACKET}": pathlib.Path(sys.argv[2]),
+                "${GODOT}": pathlib.Path(sys.argv[3]),
+                "${HOME}": pathlib.Path(sys.argv[4]),
+                "${OUTPUT}": pathlib.Path.cwd() / "artifacts/godot-g0",
+            }
+            observed = {}
+            for trace in sorted(pathlib.Path("artifacts/godot-g0/raw").glob("trace.*")):
+                for line in trace.read_text(encoding="utf-8", errors="replace").splitlines():
+                    call = re.match(r"[0-9.]+ ([A-Za-z0-9_]+)\\(", line)
+                    if not call:
+                        continue
+                    paths = re.findall(r"[0-9]+<([^>]+)>", line)
+                    if call.group(1) == "execve":
+                        executable = re.search(r'execve\\("([^"\\n]+)"', line)
+                        if executable:
+                            paths.append(executable.group(1))
+                    for raw_path in paths:
+                        path = pathlib.Path(raw_path.split("<", 1)[0])
+                        if not path.is_file():
+                            continue
+                        entry = observed.setdefault(str(path), set())
+                        entry.add(call.group(1))
+
+            records = []
+            for raw_path, operations in sorted(observed.items()):
+                path = pathlib.Path(raw_path)
+                normalised = raw_path
+                for label, root in roots.items():
+                    try:
+                        suffix = path.relative_to(root)
+                    except ValueError:
+                        continue
+                    normalised = label if str(suffix) == "." else f"{label}/{suffix}"
+                    break
+                records.append({
+                    "path": normalised,
+                    "size": path.stat().st_size,
+                    "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                    "operations": sorted(operations),
+                })
+            pathlib.Path("artifacts/godot-g0/consumed-files.json").write_text(
+                json.dumps(records, indent=2, sort_keys=True) + "\\n", encoding="utf-8"
+            )
+            PY
             {
               printf 'trace_files=%s\n' "$(find artifacts/godot-g0/raw -type f -name 'trace.*' | wc -l)"
               printf 'trace_bytes=%s\n' "$(du -cb artifacts/godot-g0/raw/trace.* | tail -n 1 | cut -f1)"
