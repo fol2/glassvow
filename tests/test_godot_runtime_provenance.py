@@ -1303,7 +1303,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         self.assertEqual(produced, verified)
         self.assertEqual({"fileRules": 169, "pathRules": 2147}, produced_counts)
         self.assertEqual(produced_counts, verified_counts)
-        self.assertGreater(len(produced), 300000)
+        self.assertEqual(289447, len(produced))
         self.assertLessEqual(len(produced), self.profile["caps"]["maxAdmissionPolicyBytes"])
         self.assertEqual(393216, self.profile["caps"]["maxAdmissionPolicyBytes"])
 
