@@ -255,7 +255,6 @@ jobs:
           output="$GITHUB_WORKSPACE/artifacts/godot-g0/run/observation.json"
           strace -ff -qq -ttt -T -yy -s 4096 \
             -o artifacts/godot-g0/raw/trace \
-            -e trace=%process,%file,%network,%memory,read,readv,pread64,preadv,preadv2,write,writev,pwrite64,pwritev,pwritev2,lseek,fcntl,dup,dup2,dup3,close \
             /usr/bin/env -i HOME="$RUNNER_TEMP/g0-runtime-home" PATH=/usr/bin:/bin LANG=C.UTF-8 \
             "$RUNNER_TEMP/godot/godot" --headless --path "$product" \
             -s "$packet/p9_v5_runtime_oracle.gd" -- \
