@@ -69,12 +69,13 @@ jobs:
           tree_marker="EXECUTION_PROVENANCE_REVIEWED_TREE tree=$tree_sha protocol_sha256=$protocol_sha"
           review_comments="$RUNNER_TEMP/execution-provenance-review-comments.txt"
           gh api --paginate "repos/$GITHUB_REPOSITORY/issues/$authority_issue/comments" \
-            --jq '.[].body' > "$review_comments"
+            --jq '.[] | select(.author_association == "OWNER") | .body' \
+            > "$review_comments"
           if [[ "$EVENT_NAME" == "pull_request" ]] \
-              && grep -Fq "$head_marker" "$review_comments"; then
+              && grep -Fxq "$head_marker" "$review_comments"; then
             echo "approved=true" >> "$GITHUB_OUTPUT"
           elif [[ "$EVENT_NAME" == "workflow_dispatch" && "$REF_NAME" == "main" ]] \
-              && grep -Fq "$tree_marker" "$review_comments"; then
+              && grep -Fxq "$tree_marker" "$review_comments"; then
             echo "approved=true" >> "$GITHUB_OUTPUT"
           else
             echo "approved=false" >> "$GITHUB_OUTPUT"

@@ -14,6 +14,8 @@ from typing import Any, Sequence
 
 
 PROTOCOL_SCHEMA = "glassvow.execution-provenance.protocol/v1"
+FROZEN_PROTOCOL_SHA256 = \
+    "07f19e5d6d9872727258f247d94f4189f2e6fee2b3fb9899182cf3e6df519d2b"
 CAPSULE_SCHEMA = "glassvow.execution-provenance.capsule/v1"
 CHALLENGE_SCHEMA = "glassvow.execution-provenance.challenge/v1"
 CASE_SCHEMA = "glassvow.execution-provenance.case-verdict/v1"
@@ -82,6 +84,11 @@ def read_json(path: Path, cap: int = 1024 * 1024) -> dict[str, Any]:
 
 
 def validate_protocol(protocol: dict[str, Any]) -> None:
+    frozen_path = Path(__file__).with_name("protocol.json")
+    if sha256_file(frozen_path) != FROZEN_PROTOCOL_SHA256:
+        raise VerificationError("frozen protocol bytes drifted")
+    if protocol != read_json(frozen_path):
+        raise VerificationError("protocol differs from the complete frozen contract")
     if protocol.get("schema") != PROTOCOL_SCHEMA:
         raise VerificationError("protocol schema is unsupported")
     caps = protocol.get("caps")
@@ -133,6 +140,14 @@ def validate_protocol(protocol: dict[str, Any]) -> None:
         raise VerificationError("venue, backend or clock authority drifted")
 
 
+def load_protocol(protocol_path: Path) -> dict[str, Any]:
+    if sha256_file(protocol_path) != FROZEN_PROTOCOL_SHA256:
+        raise VerificationError("supplied protocol bytes differ from the frozen contract")
+    protocol = read_json(protocol_path)
+    validate_protocol(protocol)
+    return protocol
+
+
 def policy_verdict(
         protocol: dict[str, Any], case: dict[str, Any],
         observation: dict[str, Any]) -> dict[str, str]:
@@ -172,8 +187,7 @@ def policy_verdict(
 
 
 def issue_challenge(protocol_path: Path, case_id: str, output: Path) -> None:
-    protocol = read_json(protocol_path)
-    validate_protocol(protocol)
+    protocol = load_protocol(protocol_path)
     if case_id not in EXPECTED_CASES:
         raise VerificationError("unknown challenge case")
     body = {
@@ -296,7 +310,9 @@ def parse_trace(path: Path, caps: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
-def _capsule(capsule: Path, protocol: dict[str, Any]) -> dict[str, Any]:
+def _capsule(
+        capsule: Path, protocol: dict[str, Any],
+        protocol_path: Path) -> dict[str, Any]:
     manifest = read_json(capsule / "manifest.json")
     payload = {"schema": manifest.get("schema"), "members": manifest.get("members")}
     root = sha256_bytes(canonical_bytes(payload))
@@ -329,6 +345,8 @@ def _capsule(capsule: Path, protocol: dict[str, Any]) -> dict[str, Any]:
         | {f"requests/{case_id}.txt" for case_id in EXPECTED_CASES}
     if seen != wanted:
         raise VerificationError("capsule role membership drifted")
+    if (capsule / "protocol.json").read_bytes() != protocol_path.read_bytes():
+        raise VerificationError("embedded protocol bytes differ from supplied protocol")
     if total > protocol["caps"]["maxCapsuleBytes"] \
             or f"{capsule.stat().st_mode & 0o777:04o}" != "0555" \
             or f"{(capsule / 'requests').stat().st_mode & 0o777:04o}" != "0555" \
@@ -421,6 +439,8 @@ def _observed_capsule(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
         "actualRoot": sha256_bytes(canonical_bytes(payload)),
         "members": members,
         "manifest": manifest,
+        "manifestBytes": (root / "manifest.json").stat().st_size,
+        "manifestMode": f"{(root / 'manifest.json').stat().st_mode & 0o777:04o}",
         "manifestSha256": sha256_file(root / "manifest.json"),
         "rootMode": f"{root.stat().st_mode & 0o777:04o}",
         "directoryModes": directories,
@@ -444,9 +464,8 @@ def _safe_evidence_path(root: Path, relative: str) -> Path:
 def attest_runtime_capsule(
         protocol_path: Path, capsule: Path, supplied: Path,
         packet: Path) -> dict[str, Any]:
-    protocol = read_json(protocol_path)
-    validate_protocol(protocol)
-    canonical = _capsule(capsule, protocol)
+    protocol = load_protocol(protocol_path)
+    canonical = _capsule(capsule, protocol, protocol_path)
     runtime = packet / "runtime-capsule"
     mount = read_json(packet / "mount.json")
     supplied_observation = _observed_capsule(supplied, protocol)
@@ -490,6 +509,8 @@ def attest_runtime_capsule(
         "actualRoot": canonical["root"],
         "members": canonical["manifest"]["members"],
         "manifest": canonical["manifest"],
+        "manifestBytes": (capsule / "manifest.json").stat().st_size,
+        "manifestMode": "0444",
         "manifestSha256": sha256_file(capsule / "manifest.json"),
         "rootMode": "0555",
         "directoryModes": expected_directories,
@@ -532,13 +553,13 @@ def attest_runtime_capsule(
 
 def _runtime_attestation(
         protocol_path: Path, capsule: Path, packet: Path) -> dict[str, Any]:
-    protocol = read_json(protocol_path)
+    protocol = load_protocol(protocol_path)
     record = read_json(packet / "runtime-capsule-attestation.json")
     supplied_digest = record.pop("attestationSha256", None)
     if supplied_digest != sha256_bytes(canonical_bytes(record)):
         raise VerificationError("runtime capsule attestation digest is invalid")
     record["attestationSha256"] = supplied_digest
-    canonical = _capsule(capsule, protocol)
+    canonical = _capsule(capsule, protocol, protocol_path)
     if record.get("schema") != RUNTIME_CAPSULE_ATTESTATION_SCHEMA \
             or record.get("protocolSha256") != sha256_file(protocol_path) \
             or record.get("frozenCapsuleRoot") != canonical["root"] \
@@ -560,6 +581,8 @@ def _runtime_attestation(
         "actualRoot": canonical["root"],
         "members": canonical["manifest"]["members"],
         "manifest": canonical["manifest"],
+        "manifestBytes": (capsule / "manifest.json").stat().st_size,
+        "manifestMode": "0444",
         "manifestSha256": sha256_file(capsule / "manifest.json"),
         "rootMode": "0555",
         "directoryModes": {"requests": "0555"},
@@ -635,8 +658,7 @@ def _statement_integrity(statement: dict[str, Any], packet: Path) -> bool:
 def verify_case(
         protocol_path: Path, capsule: Path, challenge_path: Path,
         packet: Path) -> dict[str, Any]:
-    protocol = read_json(protocol_path)
-    validate_protocol(protocol)
+    protocol = load_protocol(protocol_path)
     case_id = packet.name
     cases = {case["id"]: case for case in protocol["cases"]}
     if case_id not in cases:
@@ -644,7 +666,7 @@ def verify_case(
     if sum(path.stat().st_size for path in packet.rglob("*") if path.is_file()) \
             > protocol["caps"]["maxCasePacketBytes"]:
         raise VerificationError("case packet byte cap exceeded")
-    capsule_record = _capsule(capsule, protocol)
+    capsule_record = _capsule(capsule, protocol, protocol_path)
     challenge = read_json(challenge_path)
     if challenge.get("schema") != CHALLENGE_SCHEMA \
             or challenge.get("case") != case_id \
@@ -806,9 +828,8 @@ def verify_case(
 
 def verify_campaign(
         protocol_path: Path, capsule: Path, results: Path) -> dict[str, Any]:
-    protocol = read_json(protocol_path)
-    validate_protocol(protocol)
-    capsule_record = _capsule(capsule, protocol)
+    protocol = load_protocol(protocol_path)
+    capsule_record = _capsule(capsule, protocol, protocol_path)
     cases = []
     for case_id in EXPECTED_CASES:
         primary = (results / case_id / "verdict.json").read_bytes()

@@ -2,6 +2,7 @@
 """Focused tests for the Linux execution-provenance capability."""
 from __future__ import annotations
 
+import copy
 import importlib.util
 import hashlib
 import json
@@ -148,6 +149,9 @@ class ExecutionProvenancePreflightTests(unittest.TestCase):
             text)
         self.assertIn("tree=$tree_sha protocol_sha256=$protocol_sha", text)
         self.assertIn("issues/$authority_issue/comments", text)
+        self.assertIn('author_association == "OWNER"', text)
+        self.assertIn('grep -Fxq "$head_marker"', text)
+        self.assertIn('grep -Fxq "$tree_marker"', text)
         self.assertNotIn(
             'if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then\n'
             '            echo "approved=true"', text)
@@ -193,6 +197,24 @@ class ExecutionProvenancePolicyTests(unittest.TestCase):
         self.assertEqual(
             len(self.cases),
             len({case["expectedReason"] for case in self.protocol["cases"]}))
+
+    def test_protocol_rejects_every_complete_contract_drift_probe(self) -> None:
+        mutations = {
+            "authority issue": lambda value: value["authority"].__setitem__(
+                "issue", 421),
+            "missing bounded workload": lambda value: value.pop("boundedWorkload"),
+            "threat exclusion": lambda value: value["trustMap"][
+                "excludedClaims"].__setitem__(0, "changed exclusion"),
+            "unknown top-level binding": lambda value: value.__setitem__(
+                "unexpected", True),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(probe=label):
+                changed = copy.deepcopy(self.protocol)
+                mutate(changed)
+                with self.assertRaisesRegex(
+                        VERIFIER.VerificationError, "complete frozen contract"):
+                    VERIFIER.validate_protocol(changed)
 
     def test_common_policy_accepts_only_the_complete_valid_observation(self) -> None:
         self.assertEqual(
@@ -251,6 +273,37 @@ class ExecutionProvenancePolicyTests(unittest.TestCase):
             self.assertEqual(0o555, os.stat(capsule).st_mode & 0o777)
             observed = VERIFIER._observed_capsule(capsule, self.protocol)
             self.assertEqual(manifest["root"], observed["actualRoot"])
+            self.assertEqual("0444", observed["manifestMode"])
+            self.assertEqual(
+                (capsule / "manifest.json").stat().st_size,
+                observed["manifestBytes"])
+
+            mode_tamper = root / "manifest-mode-tamper"
+            shutil.copytree(capsule, mode_tamper)
+            os.chmod(mode_tamper / "manifest.json", 0o777)
+            mode_observed = VERIFIER._observed_capsule(
+                mode_tamper, self.protocol)
+            self.assertEqual("0777", mode_observed["manifestMode"])
+            self.assertNotEqual(observed, mode_observed)
+
+            size_tamper = root / "manifest-size-tamper"
+            shutil.copytree(capsule, size_tamper)
+            os.chmod(size_tamper / "manifest.json", 0o644)
+            with (size_tamper / "manifest.json").open("ab") as handle:
+                handle.write(b"\n")
+            os.chmod(size_tamper / "manifest.json", 0o444)
+            size_observed = VERIFIER._observed_capsule(
+                size_tamper, self.protocol)
+            self.assertNotEqual(
+                observed["manifestBytes"], size_observed["manifestBytes"])
+            self.assertNotEqual(observed, size_observed)
+
+            alternate_protocol = root / "alternate-protocol.json"
+            alternate_protocol.write_bytes(PROTOCOL_PATH.read_bytes() + b"\n")
+            with self.assertRaisesRegex(
+                    VERIFIER.VerificationError, "embedded protocol bytes"):
+                VERIFIER._capsule(
+                    capsule, self.protocol, alternate_protocol)
             supplied = root / "supplied"
             shutil.copytree(capsule, supplied)
             os.chmod(supplied, 0o755)
