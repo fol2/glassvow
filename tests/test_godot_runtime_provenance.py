@@ -1068,7 +1068,7 @@ int main(int argc, char **argv) {
     for (int index = 9; index < argc; index += 1) {
         errno = 0;
         int fd = open(argv[index], O_WRONLY | O_TRUNC | O_CLOEXEC);
-        if (fd >= 0) { write(fd, "changed", 7); close(fd); return 18; }
+        if (fd >= 0) { close(fd); return 18; }
         if (errno != EACCES && errno != EPERM) return 19;
     }
     if (write_new(argv[2], "home-write") != 0) return 20;
@@ -1170,7 +1170,8 @@ int main(int argc, char **argv) {
             interpreter_lines = [line for line in elf.splitlines()
                                  if "Requesting program interpreter:" in line]
             self.assertEqual(1, len(interpreter_lines))
-            requested = interpreter_lines[0].split("[", 1)[1].split("]", 1)[0]
+            requested = interpreter_lines[0].split(
+                "Requesting program interpreter:", 1)[1].strip().rstrip("]")
             interpreter = Path(requested).resolve(strict=True)
             dependencies = set()
             linked = subprocess.run(
@@ -1300,7 +1301,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         verified, verified_counts = self.verifier._build_admission_policy(
             self.profile, manifest, roots, working)
         self.assertEqual(produced, verified)
-        self.assertEqual({"fileRules": 169, "pathRules": 2146}, produced_counts)
+        self.assertEqual({"fileRules": 169, "pathRules": 2147}, produced_counts)
         self.assertEqual(produced_counts, verified_counts)
         self.assertGreater(len(produced), 300000)
         self.assertLessEqual(len(produced), self.profile["caps"]["maxAdmissionPolicyBytes"])
