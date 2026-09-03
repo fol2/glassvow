@@ -27,10 +27,11 @@ class TraceBindingTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.verifier = load_verifier()
-        cls.contract = json.loads(PROFILE.read_text(encoding="utf-8"))["accessGrammar"]["internalPipe"]
+        cls.profile = json.loads(PROFILE.read_text(encoding="utf-8"))
+        cls.contract = cls.profile["accessGrammar"]["internalPipe"]
 
     def accounting_fixture(self, raw_events: list[str]) -> tuple[dict, dict]:
-        start = "\t".join(["START", "1", "100", CHALLENGE, *(["1"] * 17)])
+        start = "\t".join(["START", "1", "100", CHALLENGE, *(["1"] * 20)])
         end = "\t".join(["END", str(len(raw_events) + 2), "100", "200", "100",
                           *(["0"] * 18), "0", "-", CHALLENGE])
         trace = self.verifier.parse_trace_lines(["GODOTTRACEv1", start, *raw_events, end], 32)
@@ -42,46 +43,108 @@ class TraceBindingTests(unittest.TestCase):
                             "socketEvents": "SOCKET", "bindEvents": "BIND",
                             "execEvents": "EXEC", "lineageEvents": "LINEAGE"}.items():
             trace["end"][field] = kinds.count(kind)
-        trace["end"]["taskCount"] = 1
-        order = ["hardTaskCapacity", "maxSingleReadBytes", "maxCapturedBytes", "maxSyscalls",
+        trace["end"]["resumedExits"] = sum(
+            event.get("resumed") == 1 for event in trace["events"])
+        tasks = {event["tid"] for event in trace["events"]}
+        tasks.update(event["childTid"] for event in trace["events"]
+                     if event["type"] == "LINEAGE")
+        trace["end"]["taskCount"] = len(tasks)
+        order = ["hardTaskCapacity", "maxAddressSpaceBytes", "maxInitialStackBytes",
+                 "maxSingleReadBytes", "maxCapturedBytes", "maxSyscalls",
                  "maxPathEvents", "maxReadEvents", "maxWriteEvents", "maxMmapEvents",
                  "maxOpenFds", "maxSemanticReadBytes", "maxTraceBytes", "maxOpenEvents",
                  "maxCloseEvents", "maxSocketEvents", "maxBindEvents", "maxExecve",
-                 "validLineageEvents"]
-        caps = {key: 1 for key in order}
-        caps.update(tracerStartLimitOrder=order, maxTasks=1, maxEvents=32,
+                 "maxDupEvents", "validLineageEvents"]
+        caps = {key: 64 for key in order}
+        caps.update(tracerStartLimitOrder=order, maxTasks=16, maxEvents=64,
+                    maxOpenFds=8,
                     maxObservedPaths=8, maxPathBytes=4096)
+        trace["limits"] = [caps[key] for key in order]
         return trace, caps
 
     def test_missing_or_inserted_derived_event_fails_closed(self) -> None:
-        entered = "SYSCALL_E\t2\t1001\t257\topenat\t0\t0\t0\t0\t0\t0"
-        exited = "SYSCALL_X\t3\t1001\t257\topenat\t5\t0\t0"
-        opened = "OPEN\t4\t1001\t5\t0\tI\t1\t2\t2f746d702f78"
-        trace, caps = self.accounting_fixture([entered, exited, opened])
+        entered = "SYSCALL_E\t2\t1001\t257\topenat\t18446744073709551516\t0\t0\t0\t0\t0"
+        path = "PATH\t3\t1001\topenat\t2f746d702f78\t2f746d702f78"
+        exited = "SYSCALL_X\t4\t1001\t257\topenat\t5\t0\t0"
+        path_exit = "PATH_X\t5\t1001\topenat\t5\t2f746d702f78"
+        opened = "OPEN\t6\t1001\t5\t0\tI\t1\t2\t2f746d702f78"
+        trace, caps = self.accounting_fixture([entered, path, exited, path_exit, opened])
         self.verifier.validate_trace_accounting(trace, caps, 1, 0)
-        trace, caps = self.accounting_fixture([entered, exited])
+        trace, caps = self.accounting_fixture([entered, path, exited, path_exit])
         with self.assertRaisesRegex(self.verifier.VerificationFailure, "missing|unmatched"):
             self.verifier.validate_trace_accounting(trace, caps, 1, 0)
-        trace, caps = self.accounting_fixture([opened.replace("\t4\t", "\t2\t", 1)])
+        trace, caps = self.accounting_fixture([opened.replace("\t6\t", "\t2\t", 1)])
         with self.assertRaisesRegex(self.verifier.VerificationFailure, "extra"):
             self.verifier.validate_trace_accounting(trace, caps, 1, 0)
 
+    @staticmethod
+    def opened_fd_events() -> list[str]:
+        path = "2f746d702f78"
+        return [
+            "SYSCALL_E\t2\t100\t257\topenat\t18446744073709551516\t0\t0\t0\t0\t0",
+            f"PATH\t3\t100\topenat\t{path}\t{path}",
+            "SYSCALL_X\t4\t100\t257\topenat\t5\t0\t0",
+            f"PATH_X\t5\t100\topenat\t5\t{path}",
+            f"OPEN\t6\t100\t5\t0\tI\t1\t2\t{path}",
+        ]
+
+    def test_fcntl_duplicate_and_close_on_exec_state_are_descriptor_bound(self) -> None:
+        path = "2f746d702f78"
+        events = self.opened_fd_events() + [
+            "SYSCALL_E\t7\t100\t72\tfcntl\t5\t0\t10\t0\t0\t0",
+            "SYSCALL_X\t8\t100\t72\tfcntl\t10\t0\t0",
+            f"DUP\t9\t100\tfcntl\t5\t10\t0\tI\t1\t2\t{path}",
+            "SYSCALL_E\t10\t100\t72\tfcntl\t10\t2\t1\t0\t0\t0",
+            "SYSCALL_X\t11\t100\t72\tfcntl\t0\t0\t0",
+            "SYSCALL_E\t12\t100\t72\tfcntl\t10\t1\t0\t0\t0\t0",
+            "SYSCALL_X\t13\t100\t72\tfcntl\t1\t0\t0",
+        ]
+        trace, caps = self.accounting_fixture(events)
+        self.verifier.validate_trace_accounting(trace, caps, 1, 0)
+        events[7] = events[7].replace("\t10\t0\tI", "\t9\t0\tI")
+        trace, caps = self.accounting_fixture(events)
+        with self.assertRaisesRegex(self.verifier.VerificationFailure, "descriptor"):
+            self.verifier.validate_trace_accounting(trace, caps, 1, 0)
+
+    def test_clone_files_child_close_removes_the_parent_descriptor(self) -> None:
+        path = "2f746d702f78"
+        shared = self.opened_fd_events() + [
+            "SYSCALL_E\t7\t100\t435\tclone3\t0\t8\t0\t0\t0\t0",
+            "LINEAGE\t8\t100\t200\tclone_thread\t66560",
+            "SYSCALL_X\t9\t100\t435\tclone3\t200\t0\t0",
+            "SYSCALL_X\t10\t200\t435\tclone3\t0\t0\t1",
+            "SYSCALL_E\t11\t200\t3\tclose\t5\t0\t0\t0\t0\t0",
+            "SYSCALL_X\t12\t200\t3\tclose\t0\t0\t0",
+            f"CLOSE\t13\t200\t5\tI\t1\t2\t{path}",
+        ]
+        trace, caps = self.accounting_fixture(shared)
+        self.verifier.validate_trace_accounting(trace, caps, 1, 0)
+        reused = shared + [
+            "SYSCALL_E\t14\t100\t72\tfcntl\t5\t1\t0\t0\t0\t0",
+            "SYSCALL_X\t15\t100\t72\tfcntl\t0\t0\t0",
+        ]
+        trace, caps = self.accounting_fixture(reused)
+        with self.assertRaisesRegex(self.verifier.VerificationFailure, "unknown fd"):
+            self.verifier.validate_trace_accounting(trace, caps, 1, 0)
     def pipe_events(self) -> tuple[list[dict], bytes]:
         payload = b"/fresh/home/Desktop\n"
         identity = {"classification": "I", "device": 1, "inode": 42, "path": "pipe:[42]"}
         events = [
             {"type": "PIPE", "sequence": 1, "tid": 100, "readerFd": 3, "writerFd": 4,
              "device": 1, "inode": 42, "path": "pipe:[42]"},
-            {"type": "SYSCALL_E", "sequence": 2, "tid": 200, "name": "dup2",
+            {"type": "LINEAGE", "sequence": 2, "tid": 100, "childTid": 200},
+            {"type": "SYSCALL_E", "sequence": 3, "tid": 200, "name": "dup2",
              "arguments": [4, 1, 0, 0, 0, 0]},
-            {"type": "SYSCALL_X", "sequence": 3, "tid": 200, "name": "dup2", "returned": 1},
-            {"type": "EXEC", "sequence": 4, "tid": 200, "path": "/usr/bin/xdg-user-dir"},
-            {**identity, "type": "WRITE", "sequence": 5, "tid": 200, "fd": 1,
+            {"type": "SYSCALL_X", "sequence": 4, "tid": 200, "name": "dup2", "returned": 1},
+            {"type": "EXEC", "sequence": 5, "tid": 200,
+             "path": str(Path("/bin/sh").resolve()),
+             "_requestedPath": "/usr/bin/xdg-user-dir"},
+            {**identity, "type": "WRITE", "sequence": 6, "tid": 200, "fd": 1,
              "returned": len(payload), "sidecarOffset": 0},
-            {**identity, "type": "READ", "sequence": 6, "tid": 100, "fd": 3,
+            {**identity, "type": "READ", "sequence": 7, "tid": 100, "fd": 3,
              "returned": len(payload), "sidecarOffset": len(payload)},
-            {**identity, "type": "CLOSE", "sequence": 7, "tid": 100, "fd": 4},
-            {**identity, "type": "CLOSE", "sequence": 8, "tid": 100, "fd": 3},
+            {**identity, "type": "CLOSE", "sequence": 8, "tid": 100, "fd": 4},
+            {**identity, "type": "CLOSE", "sequence": 9, "tid": 100, "fd": 3},
         ]
         return events, payload
 
@@ -94,7 +157,10 @@ class TraceBindingTests(unittest.TestCase):
         events[0]["path"] = "pipe:[43]"
         with self.assertRaisesRegex(self.verifier.VerificationFailure, "PROCESS_LINEAGE_MISMATCH"):
             self.verifier._validate_internal_pipe(events, payload * 2, payload, self.contract)
-        events[0]["path"] = "pipe:[42]"; events[1]["arguments"][0] = 5
+        events[0]["path"] = "pipe:[42]"; events[1]["childTid"] = 201
+        with self.assertRaisesRegex(self.verifier.VerificationFailure, "PROCESS_LINEAGE_MISMATCH"):
+            self.verifier._validate_internal_pipe(events, payload * 2, payload, self.contract)
+        events[1]["childTid"] = 200; events[2]["arguments"][0] = 5
         with self.assertRaisesRegex(self.verifier.VerificationFailure, "PROCESS_LINEAGE_MISMATCH"):
             self.verifier._validate_internal_pipe(events, payload * 2, payload, self.contract)
 
@@ -119,6 +185,40 @@ class TraceBindingTests(unittest.TestCase):
                     self.verifier.VerificationFailure, "binarySha256 differs"):
                 self.verifier._TRACE.validate_tracer_identity(
                     tracer, root, paths["binarySha256"])
+
+    def test_case_members_are_bounded_before_parse_or_receipt_capture(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-case-cap-") as temporary:
+            case = Path(temporary) / "G00"; case.mkdir()
+            for name in ("statement.json", "trace.tsv", "sidecar.bin", "stdout.bin"):
+                (case / name).write_bytes(b"{}" if name == "statement.json" else b"")
+            members, _ = self.verifier._preflight_case_members(
+                case, self.profile["caps"])
+            self.assertEqual(4, len(members))
+            statement = case / "statement.json"
+            statement.write_bytes(b"x" * (self.profile["caps"]["maxStatementBytes"] + 1))
+            with self.assertRaisesRegex(self.verifier.VerificationFailure, "exceeds its cap"):
+                self.verifier._preflight_case_members(case, self.profile["caps"])
+            capture = self.verifier._capture_record(
+                statement, self.profile["caps"]["maxStatementBytes"])
+            self.assertFalse(capture["bounded"]); self.assertNotIn("sha256", capture)
+            statement.write_bytes(b"{}")
+            sidecar = case / "sidecar.bin"; sidecar.unlink()
+            sidecar.symlink_to(statement)
+            with self.assertRaisesRegex(self.verifier.VerificationFailure, "regular and non-symlink"):
+                self.verifier._preflight_case_members(case, self.profile["caps"])
+
+    def test_challenge_read_is_bounded_and_rejects_symlinks(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-challenge-cap-") as temporary:
+            root = Path(temporary); challenge = root / "challenge.txt"
+            challenge.write_bytes(b"a" * (self.profile["caps"]["maxChallengeBytes"] + 1))
+            with self.assertRaisesRegex(self.verifier.VerificationFailure, "exceeds its cap"):
+                self.verifier._read_challenge(
+                    challenge, self.profile["caps"]["maxChallengeBytes"])
+            target = root / "target.txt"; target.write_text(CHALLENGE + "\n", encoding="ascii")
+            challenge.unlink(); challenge.symlink_to(target)
+            with self.assertRaises(self.verifier.VerificationFailure):
+                self.verifier._read_challenge(
+                    challenge, self.profile["caps"]["maxChallengeBytes"])
 
 
 if __name__ == "__main__":

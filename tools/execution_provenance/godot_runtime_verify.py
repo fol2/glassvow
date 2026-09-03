@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Independent verifier for the frozen actual-Godot provenance profile."""
 from __future__ import annotations
-import argparse, fnmatch, hashlib, importlib.util, json, os, secrets, stat, sys
+import argparse, fnmatch, hashlib, importlib.util, json, os, secrets, stat, subprocess, sys
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 _HELPER_PATH = Path(__file__).with_name("godot_runtime_trace_verify.py")
+OBSERVER_ROOT = Path(__file__).resolve().parents[2]
 _SPEC = importlib.util.spec_from_file_location("_godot_runtime_trace_verify", _HELPER_PATH)
 if _SPEC is None or _SPEC.loader is None: raise RuntimeError("independent trace verifier unavailable")
 _TRACE = importlib.util.module_from_spec(_SPEC); _SPEC.loader.exec_module(_TRACE)
@@ -16,6 +17,7 @@ validate_trace_accounting = _TRACE.validate_trace_accounting
 _pipe_path, _internal_pipe_paths = _TRACE.pipe_path, _TRACE.internal_pipe_paths
 _validate_internal_pipe = _TRACE.validate_internal_pipe
 _validate_request_indices = _TRACE.validate_request_indices
+_validate_failed_paths = _TRACE.validate_failed_paths
 PROFILE_SCHEMA = "glassvow.godot-runtime-provenance.profile/v1"
 G0_SCHEMA = "glassvow.godot-runtime-provenance.g0-manifest/v1"
 PACKET_SCHEMA = "glassvow.godot-runtime-packet/v1"
@@ -35,6 +37,27 @@ _REASONS = (
     "PROVENANCE_INCOMPLETE SEMANTIC_MAPPING_DENIED").split()
 CASE_RESULTS = {f"G{i:02d}": ("PASS" if i == 0 else "INCONCLUSIVE" if i == 24 else "REJECT", reason)
                 for i, reason in enumerate(_REASONS)}
+_HARD_FILE_CAPS = {
+    "maxStatementBytes": 4 * 1024 * 1024,
+    "maxCaseReceiptBytes": 4 * 1024 * 1024,
+    "maxChallengeBytes": 65,
+    "maxProfileBytes": 1024 * 1024,
+    "maxG0ManifestBytes": 4 * 1024 * 1024,
+    "maxPacketManifestBytes": 64 * 1024,
+    "maxTraceBytes": 64 * 1024 * 1024,
+    "maxCapturedBytes": 32 * 1024 * 1024,
+    "maxStdoutBytes": 4096,
+    "maxStderrBytes": 4096,
+    "maxObservationBytes": 64 * 1024,
+    "maxHomeOutputBytes": 4096,
+}
+_CASE_MEMBER_LIMITS = {
+    "statement.json": "maxStatementBytes", "trace.tsv": "maxTraceBytes",
+    "sidecar.bin": "maxCapturedBytes", "stdout.bin": "maxStdoutBytes",
+    "stderr.bin": "maxStderrBytes", "observation.json": "maxObservationBytes",
+    "home-godot.log": "maxHomeOutputBytes", "home-sentry.dat": "maxHomeOutputBytes",
+    "receipt.json": "maxCaseReceiptBytes", "receipt-replay.json": "maxCaseReceiptBytes",
+}
 
 
 def _sha(data: bytes) -> str: return hashlib.sha256(data).hexdigest()
@@ -61,6 +84,75 @@ def _json(path: Path) -> dict[str, Any]:
     return value
 
 
+def _limit(caps: Mapping[str, Any], name: str) -> int:
+    hard = _HARD_FILE_CAPS[name]
+    value = caps.get(name)
+    return value if isinstance(value, int) and 0 < value <= hard else hard
+
+
+def _bounded_bytes(
+        path: Path, maximum: int, reason: str = "PROVENANCE_INCOMPLETE") -> bytes:
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try: descriptor = os.open(path, flags)
+    except OSError as error: fail(reason, f"cannot open bounded {path.name}: {error}")
+    try:
+        before = os.fstat(descriptor)
+        if not stat.S_ISREG(before.st_mode) or before.st_size > maximum:
+            fail(reason, f"{path.name} is non-regular or exceeds its cap")
+        blocks: list[bytes] = []; count = 0
+        while True:
+            block = os.read(descriptor, min(1024 * 1024, maximum + 1 - count))
+            if not block: break
+            blocks.append(block); count += len(block)
+            if count > maximum: fail(reason, f"{path.name} exceeds its cap")
+        after = os.fstat(descriptor)
+        if (before.st_dev, before.st_ino, before.st_size) != \
+                (after.st_dev, after.st_ino, after.st_size) or count != after.st_size:
+            fail(reason, f"{path.name} changed during bounded read")
+        return b"".join(blocks)
+    finally:
+        os.close(descriptor)
+
+
+def _json_bounded(path: Path, maximum: int) -> dict[str, Any]:
+    try: value = json.loads(_bounded_bytes(path, maximum).decode("utf-8"))
+    except (UnicodeError, json.JSONDecodeError) as error:
+        fail("PROVENANCE_INCOMPLETE", f"cannot read {path.name}: {error}")
+    if not isinstance(value, dict): fail("PROVENANCE_INCOMPLETE", f"{path.name} is not an object")
+    return value
+
+
+def _preflight_case_members(
+        case_dir: Path, caps: Mapping[str, Any]) -> tuple[dict[str, Path], int]:
+    members: dict[str, Path] = {}; total = 0
+    maximum_members = caps.get("maxCaseMembers")
+    if not isinstance(maximum_members, int) or not 1 <= maximum_members <= len(_CASE_MEMBER_LIMITS):
+        fail("PROVENANCE_INCOMPLETE", "invalid case member cap")
+    try:
+        root = case_dir.lstat()
+        if not stat.S_ISDIR(root.st_mode) or stat.S_ISLNK(root.st_mode):
+            fail("PROVENANCE_INCOMPLETE", "case root must be a direct non-symlink directory")
+        with os.scandir(case_dir) as entries:
+            for entry in entries:
+                if len(members) >= maximum_members or entry.name not in _CASE_MEMBER_LIMITS:
+                    fail("PROVENANCE_INCOMPLETE", "case member grammar or count differs")
+                metadata = entry.stat(follow_symlinks=False)
+                if not stat.S_ISREG(metadata.st_mode):
+                    fail("PROVENANCE_INCOMPLETE", "case member must be regular and non-symlink")
+                maximum = _limit(caps, _CASE_MEMBER_LIMITS[entry.name])
+                if metadata.st_size > maximum:
+                    fail("PROVENANCE_INCOMPLETE", f"{entry.name} exceeds its cap")
+                total += metadata.st_size
+                if total > caps.get("maxCasePacketBytes", 0):
+                    fail("PROVENANCE_INCOMPLETE", "case cap exceeded")
+                members[entry.name] = Path(entry.path)
+    except OSError as error:
+        fail("PROVENANCE_INCOMPLETE", f"case directory unavailable: {error}")
+    if not {"statement.json", "trace.tsv", "sidecar.bin", "stdout.bin"}.issubset(members):
+        fail("PROVENANCE_INCOMPLETE", "case core member set differs")
+    return members, total
+
+
 def _expand(template: str, roots: Mapping[str, str]) -> str:
     result = template
     for key, value in roots.items(): result = result.replace("${" + key + "}", value)
@@ -68,14 +160,54 @@ def _expand(template: str, roots: Mapping[str, str]) -> str:
     return result
 
 
+def _packet_members(
+        packet: Path, manifest_path: Path,
+        profile: Mapping[str, Any]) -> dict[str, Path]:
+    if manifest_path.resolve() != packet.resolve() / "manifest.json":
+        fail("PROVENANCE_INCOMPLETE", "packet manifest path differs")
+    caps = profile["caps"]
+    members: dict[str, Path] = {}
+    total = 0
+    try:
+        with os.scandir(packet) as entries:
+            for entry in entries:
+                if len(members) >= caps["maxPacketMembers"]:
+                    fail("PROVENANCE_INCOMPLETE", "packet member cap exceeded")
+                metadata = entry.stat(follow_symlinks=False)
+                if not stat.S_ISREG(metadata.st_mode):
+                    fail("PROVENANCE_INCOMPLETE", "packet member must be regular and non-symlink")
+                total += metadata.st_size
+                if total > caps["maxPacketBytes"]:
+                    fail("PROVENANCE_INCOMPLETE", "packet byte cap exceeded")
+                members[entry.name] = Path(entry.path)
+    except OSError as error:
+        fail("PROVENANCE_INCOMPLETE", f"packet directory unavailable: {error}")
+    if len(members) != 3 or "manifest.json" not in members:
+        fail("PROVENANCE_INCOMPLETE", "packet must contain exactly three direct members")
+    try:
+        manifest_size = members["manifest.json"].stat().st_size
+    except OSError as error:
+        fail("PROVENANCE_INCOMPLETE", f"packet manifest unavailable: {error}")
+    if manifest_size > caps["maxPacketManifestBytes"]:
+        fail("PROVENANCE_INCOMPLETE", "packet manifest cap exceeded")
+    return members
+
+
 def _load_sources(profile_path: Path, g0_path: Path, packet_path: Path) -> tuple[dict, dict, dict]:
     if _file_sha(profile_path) != FROZEN_PROFILE_SHA256: fail("PROFILE_MISMATCH", "profile bytes differ")
-    profile, g0, packet = _json(profile_path), _json(g0_path), _json(packet_path)
+    profile, g0 = _json(profile_path), _json(g0_path)
     if profile.get("schema") != PROFILE_SCHEMA: fail("PROFILE_MISMATCH", "profile schema differs")
     if g0.get("schema") != G0_SCHEMA or _file_sha(g0_path) != profile.get("g0", {}).get("manifest", {}).get("sha256"):
         fail("MANIFEST_MISMATCH", "G0 manifest bytes differ")
+    members = _packet_members(packet_path.parent, packet_path, profile)
+    packet = _json(packet_path)
     if packet.get("schema") != PACKET_SCHEMA or set(packet) != {"schema", "productSha", "packetRoot", "authorityIssue", "authorityComment", "requestIndices", "roles"}:
         fail("PACKET_MANIFEST_MISMATCH", "packet schema or fields differ")
+    roles = packet.get("roles")
+    role_names = {record.get("path") for record in roles.values()} \
+        if isinstance(roles, dict) and all(isinstance(record, dict) for record in roles.values()) else set()
+    if set(members) != {"manifest.json", *role_names}:
+        fail("PROVENANCE_INCOMPLETE", "packet direct member set differs")
     return profile, g0, packet
 
 def _absolute(value: Any, label: str) -> str:
@@ -161,11 +293,22 @@ def _authority(statement: Mapping[str, Any], packet: Mapping[str, Any], profile:
     exact = {"observerSha": args.observer_sha, "productSha": args.product_sha, "packetSha": args.packet_sha,
              "packetRoot": args.packet_root, "authorityIssue": args.authority_issue,
              "authorityComment": args.authority_comment, "requestIndex": args.request_index,
+             "workingDirectory": str(OBSERVER_ROOT),
              "profileSha256": _file_sha(args.profile),
              "g0ManifestSha256": _file_sha(args.g0_manifest),
              "packetManifestSha256": _file_sha(args.packet_manifest)}
     if any(statement.get(key) != value for key, value in exact.items()):
         fail("PROVENANCE_INCOMPLETE", "statement differs from independent workflow inputs")
+    expected_case_root = args.expected_runtime_root.resolve() / args.case_id
+    expected_roots = {
+        "GODOT": str(args.expected_godot.resolve()),
+        "PRODUCT": str(args.expected_product_mount.resolve()),
+        "PACKET": str(args.expected_packet_mount.resolve()),
+        "HOME": str((expected_case_root / "home").resolve()),
+        "OUTPUT": str((expected_case_root / "output").resolve()),
+    }
+    if statement.get("roots") != expected_roots:
+        fail("PROVENANCE_INCOMPLETE", "statement roots differ from trusted workflow paths")
     expected = {"productSha": args.product_sha, "packetRoot": args.packet_root,
                 "authorityIssue": args.authority_issue, "authorityComment": args.authority_comment}
     if any(packet.get(key) != value for key, value in expected.items()):
@@ -200,29 +343,46 @@ def _nul(sidecar: bytes, offset: int, length: int, label: str) -> list[str]:
     except UnicodeError: fail("PROVENANCE_INCOMPLETE", f"non-UTF-8 {label}")
 
 
+def _environment(entries: Sequence[str]) -> dict[str, str]:
+    result: dict[str, str] = {}
+    for entry in entries:
+        if "=" not in entry or not entry.split("=", 1)[0] or entry.split("=", 1)[0] in result:
+            fail("ENVIRONMENT_MISMATCH", "environment name or uniqueness differs")
+        name, value = entry.split("=", 1); result[name] = value
+    return result
+
+
 def _exec(trace: Mapping[str, Any], sidecar: bytes, profile: Mapping[str, Any], roots: Mapping[str, str],
           runtime: Mapping[str, Mapping[str, Any]], argv: list[str], environment: list[str]) -> None:
     events = [event for event in trace["events"] if event["type"] == "EXEC"]
-    values = {**roots, "EXTERNAL_SCRIPT": Path(argv[5]).name, "CORPUS": Path(argv[8]).name, "INDEX": argv[10]}
-    expected = [("/usr/bin/env", [_expand(item, values) for item in profile["invocation"]["launcherArgvTemplate"]], [])]
-    expected += [(roots["GODOT"], argv, environment)]
-    expected += [(item["path"], item["argv"], environment) for item in profile["invocation"]["permittedDescendantExecs"]]
+    values = {**roots, "EXTERNAL_SCRIPT": Path(argv[5]).name, "CORPUS": Path(argv[8]).name,
+              "INDEX": argv[10], "WORKING_DIRECTORY": str(OBSERVER_ROOT)}
+    expected = [("/usr/bin/env", "/usr/bin/env",
+                 [_expand(item, values) for item in profile["invocation"]["launcherArgvTemplate"]],
+                 [_expand(item, values) for item in profile["invocation"]["launcherEnvironment"]])]
+    expected += [(roots["GODOT"], roots["GODOT"], argv, environment)]
+    expected += [(item["requestedPath"], item["effectivePath"], item["argv"],
+                  [_expand(value, values) for value in item["environment"]])
+                 for item in profile["invocation"]["permittedDescendantExecs"]]
     if len(events) != len(expected): fail("PROCESS_LINEAGE_MISMATCH", "exec count differs")
-    for event, (path, wanted_argv, wanted_env) in zip(events, expected):
+    for event, (requested, effective, wanted_argv, wanted_env) in zip(events, expected):
         if _nul(sidecar, event["argvOffset"], event["argvLength"], "argv") != wanted_argv:
-            fail("ARGV_MISMATCH", f"exec argv differs for {path}")
-        if _nul(sidecar, event["envOffset"], event["envLength"], "environment") != wanted_env:
-            fail("ENVIRONMENT_MISMATCH", f"exec environment differs for {path}")
-        identity = runtime.get(path)
+            fail("ARGV_MISMATCH", f"exec argv differs for {requested}")
+        if _environment(_nul(sidecar, event["envOffset"], event["envLength"], "environment")) != \
+                _environment(wanted_env):
+            fail("ENVIRONMENT_MISMATCH", f"exec environment differs for {requested}")
+        identity = runtime.get(effective)
         if identity is None or (identity.get("device"), identity.get("inode")) != (event["device"], event["inode"]) or \
-                event["path"] != str(Path(path).resolve()):
-            fail("RUNTIME_DEPENDENCY_MISMATCH", f"exec identity differs for {path}")
+                event["path"] != str(Path(effective).resolve()) or event.get("_requestedPath") != requested:
+            fail("RUNTIME_DEPENDENCY_MISMATCH", f"exec identity differs for {requested}")
 
 
 def _lineage(trace: Mapping[str, Any], profile: Mapping[str, Any], diagnostic: bool) -> None:
     events, end, caps = trace["events"], trace["end"], profile["caps"]
-    pipe_contract = profile["accessGrammar"]["internalPipe"]
+    pipe_contract, graph = profile["accessGrammar"]["internalPipe"], profile["processGraph"]
     lines = [e for e in events if e["type"] == "LINEAGE"]; exits = [e for e in events if e["type"] == "EXIT"]
+    execs = [e for e in events if e["type"] == "EXEC"]
+    signals = [e for e in events if e["type"] == "SIGNAL"]
     tasks = {e["tid"] for e in events} | {e["childTid"] for e in lines}; kinds = [e["kind"] for e in lines]
     names = [e["name"] for e in events if e["type"] == "SYSCALL_E"]
     children = {e["childTid"] for e in lines}; roots = tasks - children
@@ -237,9 +397,54 @@ def _lineage(trace: Mapping[str, Any], profile: Mapping[str, Any], diagnostic: b
             sum(k.endswith("process") for k in kinds) + 1 != caps["validProcesses"] or \
             names.count("clone3") != caps["maxClone3"] or names.count("vfork") != caps["maxVfork"]:
         fail("PROCESS_LINEAGE_MISMATCH", "exact process/thread lineage differs")
+    if len(execs) != 4: fail("PROCESS_LINEAGE_MISMATCH", "exec topology differs")
+    root, shell, xdg = execs[0]["tid"], execs[2]["tid"], execs[3]["tid"]
+    process = [line for line in lines if line["tid"] == root and line["childTid"] == shell
+               and line["kind"] == graph["rootToShellKind"] and line["cloneFlags"] == graph["rootToShellFlags"]]
+    vfork = [line for line in lines if line["tid"] == shell and line["childTid"] == xdg
+             and line["kind"] == graph["shellToXdgKind"] and line["cloneFlags"] == graph["shellToXdgFlags"]]
+    threads = [line for line in lines if line["tid"] == root and line["kind"] == graph["rootThreadKind"]
+               and line["cloneFlags"] == graph["rootThreadFlags"]]
+    if execs[1]["tid"] != root or len({root, shell, xdg}) != 3 or any(
+            event["tgid"] != event["tid"] for event in execs) or len(process) != 1 or len(vfork) != 1 or \
+            len(threads) != graph["rootThreadCount"] or set(map(id, process + vfork + threads)) != set(map(id, lines)):
+        fail("PROCESS_LINEAGE_MISMATCH", "parent/child process graph differs")
+    signal_contract = graph["signalGrammar"]
+    expected_signals = []
+    for parent, child in ((shell, xdg), (root, shell)):
+        child_exits = [event for event in exits if event["tid"] == child]
+        deliveries = [event for event in signals if event["tid"] == parent
+                      and event["signal"] == signal_contract["number"]]
+        if len(child_exits) != 1 or len(deliveries) != 1 or \
+                child_exits[0]["sequence"] >= deliveries[0]["sequence"]:
+            fail("PROCESS_LINEAGE_MISMATCH", "SIGCHLD process ordering differs")
+        expected_signals.extend(deliveries)
+    if len(signals) != caps["validSignalEvents"] or len(signals) != signal_contract["count"] or \
+            set(map(id, signals)) != set(map(id, expected_signals)):
+        fail("PROCESS_LINEAGE_MISMATCH", "signal delivery grammar differs")
     if names.count("pipe2") != pipe_contract["pipe2Count"] or \
             names.count("dup2") != pipe_contract["dup2Count"]:
         fail("PROCESS_LINEAGE_MISMATCH", "internal pipe syscall shape differs")
+    duplicates = [event for event in events if event["type"] == "DUP"]
+    internal = _internal_pipe_paths(events)
+    producer = [item for item in duplicates if item["operation"] == "dup2" and item["targetFd"] == 1
+                and item["path"] in internal]
+    redirect = [item for item in duplicates if item["operation"] == "dup2" and item["targetFd"] == 2
+                and item["path"] == "/dev/null"]
+    restore = [item for item in duplicates if item["operation"] == "dup2" and item["sourceFd"] == 10
+               and item["targetFd"] == 2 and _pipe_path(item["path"]) and item["path"] not in internal]
+    saved = [item for item in duplicates if item["operation"] == "fcntl" and item["tid"] == shell
+             and item["sourceFd"] == 2 and item["targetFd"] == 10]
+    xdg_saved = [item for item in duplicates if item["operation"] == "fcntl" and item["tid"] == xdg
+                 and item["sourceFd"] == 3 and item["targetFd"] == 10
+                 and item["path"] == "/usr/bin/xdg-user-dir"]
+    if len(duplicates) != profile["accessGrammar"]["descriptorGrammar"]["successfulDuplicates"] or \
+            any(item["closeOnExec"] != 0 for item in duplicates) or any(len(group) != 1 for group in
+            (producer, redirect, restore, saved, xdg_saved)) or saved[0]["path"] != restore[0]["path"] or \
+            not producer[0]["sequence"] < execs[2]["sequence"] or \
+            not saved[0]["sequence"] < redirect[0]["sequence"] < vfork[0]["sequence"] < restore[0]["sequence"] or \
+            not execs[3]["sequence"] < xdg_saved[0]["sequence"]:
+        fail("PROCESS_LINEAGE_MISMATCH", "descriptor/redirect topology differs")
 
 
 def _output_records(statement: Mapping[str, Any], case_dir: Path) -> dict[str, Mapping[str, Any]]:
@@ -283,7 +488,8 @@ def _outputs(statement: Mapping[str, Any], trace: Mapping[str, Any], sidecar: by
     stderr = streams.get("stderr")
     if not isinstance(stderr, dict) or not (case_dir / "stderr.bin").is_file():
         fail("STDERR_CAPTURE_MISSING", "stderr capture missing")
-    stderr_data = (case_dir / "stderr.bin").read_bytes()
+    stderr_data = _bounded_bytes(
+        case_dir / "stderr.bin", _limit(profile["caps"], "maxStderrBytes"))
     if len(stderr_data) != stderr.get("size") or _sha(stderr_data) != stderr.get("sha256"):
         fail("STDERR_CAPTURE_MISMATCH", "stderr bytes differ")
     if stderr.get("challenge") != challenge: fail("STDERR_INVOCATION_MISMATCH", "stderr challenge differs")
@@ -291,7 +497,8 @@ def _outputs(statement: Mapping[str, Any], trace: Mapping[str, Any], sidecar: by
         fail("STDERR_CAPTURE_MISMATCH", "stderr captured writes differ")
     stdout = streams.get("stdout")
     if not isinstance(stdout, dict) or not (case_dir / "stdout.bin").is_file(): fail("OUTPUT_NOT_CURRENT", "stdout missing")
-    stdout_data = (case_dir / "stdout.bin").read_bytes()
+    stdout_data = _bounded_bytes(
+        case_dir / "stdout.bin", _limit(profile["caps"], "maxStdoutBytes"))
     if len(stdout_data) != stdout.get("size") or _sha(stdout_data) != stdout.get("sha256") or \
             stdout.get("challenge") != challenge or _stream_bytes(trace["events"], 1, sidecar) != stdout_data:
         fail("OUTPUT_NOT_CURRENT", "stdout differs")
@@ -302,13 +509,29 @@ def _outputs(statement: Mapping[str, Any], trace: Mapping[str, Any], sidecar: by
                      e["returned"] == -13 for e in trace["events"])
         if not stderr_data or observation.get("present") or not denied:
             fail("OUTPUT_WRITE_DENIED", "observation open was not genuinely denied")
-        return
-    if observation.get("challenge") != challenge: fail("OUTPUT_NOT_CURRENT", "observation challenge differs")
+        fail("OUTPUT_WRITE_DENIED", "genuine diagnostic observation denial")
+    if not observation.get("present") or observation.get("challenge") != challenge:
+        fail("OUTPUT_NOT_CURRENT", "current observation missing or challenge differs")
+    for name in ("stdout", "stderr"):
+        expected, actual = profile["roles"][name]["qualificationBaseline"], streams.get(name, {})
+        if any(actual.get(key) != expected[key] for key in ("size", "sha256")):
+            fail("OUTPUT_NOT_CURRENT", f"stable {name} differs from G0 baseline")
+    output_baselines = profile["roles"]["output"]["qualificationBaseline"]
+    stable_outputs = ("homeLog", "sentry")
+    for name in stable_outputs:
+        expected, actual = output_baselines[name], outputs.get(name, {})
+        if not actual.get("present") or any(
+                actual.get(key) != expected[key] for key in ("size", "sha256")):
+            fail("OUTPUT_NOT_CURRENT", f"stable {name} differs from G0 baseline")
+    if statement.get("authorityIssue") == profile["packetIngress"]["qualification"]["authorityIssue"]:
+        expected = output_baselines["observation"]
+        if any(observation.get(key) != expected[key] for key in ("size", "sha256")):
+            fail("OUTPUT_NOT_CURRENT", "qualification observation differs from G0 baseline")
     for path, record in _output_records(statement, case_dir).items():
         file_path = case_dir / record["file"]
         reason = "STDERR_CAPTURE_MISMATCH" if file_path.name == "stderr.bin" else "OUTPUT_NOT_CURRENT"
-        try: data = file_path.read_bytes()
-        except OSError as error: fail(reason, f"output copy unavailable: {error}")
+        cap_name = "maxObservationBytes" if path.endswith("/observation.json") else "maxHomeOutputBytes"
+        data = _bounded_bytes(file_path, _limit(profile["caps"], cap_name), reason)
         if len(data) != record.get("size") or _sha(data) != record.get("sha256"): fail(reason, "output copy differs")
         live_path = Path(path); live = live_path.stat()
         _live(record, reason)
@@ -317,10 +540,33 @@ def _outputs(statement: Mapping[str, Any], trace: Mapping[str, Any], sidecar: by
         if not any(e["type"] == "CLOSE" and e["path"] == path and
                    e["device"] == live.st_dev and e["inode"] == live.st_ino for e in trace["events"]):
             fail("OUTPUT_NOT_CURRENT", f"close missing for {path}")
-        maximum = profile["caps"]["maxObservationBytes" if path.endswith("/observation.json") else "maxHomeOutputBytes"]
-        if len(data) > maximum: fail("PROVENANCE_INCOMPLETE", f"output cap exceeded for {path}")
-    if len((case_dir / "stdout.bin").read_bytes()) > profile["caps"]["maxStdoutBytes"] or \
-            len(stderr_data) > profile["caps"]["maxStderrBytes"]: fail("PROVENANCE_INCOMPLETE", "stream cap exceeded")
+        if len(data) > profile["caps"][cap_name]:
+            fail("PROVENANCE_INCOMPLETE", f"output cap exceeded for {path}")
+
+
+def _runtime_mappings(trace: Mapping[str, Any], roots: Mapping[str, str],
+                      profile: Mapping[str, Any]) -> None:
+    contract = profile["accessGrammar"]["mappings"]["runtimeIdentity"]
+    mappings = []
+    for event in trace["events"]:
+        if event["type"] != "MMAP": continue
+        path = event["path"]
+        if path == roots["PRODUCT"] or path.startswith(roots["PRODUCT"] + "/"):
+            path = "${PRODUCT}" + path[len(roots["PRODUCT"]):]
+        mappings.append({key: value for key, value in (
+            ("path", path), ("offset", event["offset"]), ("length", event["length"]),
+            ("protection", event["protection"]), ("flags", event["flags"]))})
+        if event["protection"] not in contract["protectionValues"] or \
+                event["flags"] not in contract["flagValues"] or \
+                event["flags"] & 1 and event["protection"] & 2:
+            fail("RUNTIME_DEPENDENCY_MISMATCH", "unsafe runtime mapping mode")
+        if event["flags"] & 1 and path not in contract["sharedReadOnlyPaths"]:
+            fail("RUNTIME_DEPENDENCY_MISMATCH", "undeclared shared runtime mapping")
+    mappings.sort(key=lambda item: (
+        item["path"], item["offset"], item["length"], item["protection"], item["flags"]))
+    if len(mappings) != contract["count"] or \
+            _sha(_canonical(mappings)) != contract["canonicalMultisetSha256"]:
+        fail("RUNTIME_DEPENDENCY_MISMATCH", "runtime mapping multiset differs from G0")
 
 
 def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], runtime: Mapping[str, Mapping[str, Any]],
@@ -335,10 +581,18 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
     known = set(objects)
     grammar = profile["accessGrammar"]["paths"]
     reject_semantic_mappings([e for e in trace["events"] if e["type"] == "MMAP"], set(roles))
+    _runtime_mappings(trace, roots, profile)
     pipe_contract = profile["accessGrammar"]["internalPipe"]
     expected_pipe_bytes = _expand(pipe_contract["payloadTemplate"], roots).encode()
     internal_pipes = _validate_internal_pipe(
         trace["events"], sidecar, expected_pipe_bytes, pipe_contract)
+    _validate_failed_paths(trace["events"], known, set(roles), roots, grammar["failedPathGrammar"])
+    directories = {_expand(path, roots) for path in grammar["successfulDirectories"]}
+    dynamic_directories = {
+        _expand(path, roots): set(record["operations"])
+        for record in grammar["successfulDynamicDirectoryOperations"]
+        for path in record["paths"]
+    }
     for event in trace["events"]:
         if event["type"] not in {"OPEN", "CLOSE", "READ", "WRITE", "MMAP", "PATH_X"}: continue
         path = event.get("path")
@@ -353,14 +607,18 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
             if event.get("classification") != "I":
                 fail("PROCESS_LINEAGE_MISMATCH", "pipe classification differs")
             continue
-        is_directory = isinstance(path, str) and any(item.startswith(path.rstrip("/") + "/") for item in known)
+        is_directory = path in directories
+        if path in dynamic_directories:
+            if event["type"] != "PATH_X" or event.get("operation") not in dynamic_directories[path]:
+                fail("UNDECLARED_INPUT_PATH", f"dynamic directory operation differs {path}")
+            is_directory = True
         named = any(fnmatch.fnmatch(path, pattern) for pattern in grammar["declaredDevicePaths"] + grammar["declaredProcPaths"])
         if path == "/dev/null" or is_directory or named:
             try: current = Path(path).stat()
             except OSError as error: fail("UNDECLARED_INPUT_PATH", f"named path unavailable: {error}")
             if event["type"] != "PATH_X" and (event.get("device"), event.get("inode")) != (current.st_dev, current.st_ino):
                 fail("UNDECLARED_INPUT_PATH", f"named path identity differs {path}")
-            if path == "/dev/null" and event["type"] == "OPEN" and event["flags"] & 0o3103 != 1:
+            if path == "/dev/null" and event["type"] == "OPEN" and event["flags"] != 0o1101:
                 fail("OUTPUT_WRITE_DENIED", "unexpected /dev/null open mode")
             continue
         if path not in known:
@@ -373,20 +631,30 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
         if event["type"] != "PATH_X" and (event.get("device"), event.get("inode")) != \
                 (record.get("device"), record.get("inode")):
             fail("RUNTIME_DEPENDENCY_MISMATCH", f"device/inode differs for {path}")
-        if event["type"] == "MMAP" and (event["offset"] + event["length"] > record["size"] or
-                event["flags"] & 3 != 2 or (event["protection"] & 2 and event["flags"] & 1)):
-            fail("RUNTIME_DEPENDENCY_MISMATCH", f"unsafe mapping for {path}")
     reads = [e for e in trace["events"] if e["type"] == "READ"]
     for path, data in role_bytes.items():
         validate_complete_role_reads([e for e in reads if e["path"] == path], data, sidecar)
+    actual_directories: dict[str, list[int]] = {}
+    for event in trace["events"]:
+        if event.get("type") == "SYSCALL_X" and event.get("name") == "getdents64":
+            actual_directories.setdefault(event.get("_fdPath"), []).append(event["returned"])
+    expected_directories = {_expand(item["path"], roots): item["returns"]
+                            for item in grammar["directoryEnumerations"]}
+    if actual_directories != expected_directories or sum(map(len, actual_directories.values())) != profile["caps"]["validGetdents64Events"] or \
+            sum(sum(values) for values in actual_directories.values()) != profile["caps"]["validGetdents64Bytes"]:
+        fail("UNDECLARED_INPUT_PATH", "directory enumeration differs from frozen G0 grammar")
 
 
 def _network(trace: Mapping[str, Any], profile: Mapping[str, Any]) -> None:
     sockets = [e for e in trace["events"] if e["type"] == "SOCKET"]
     binds = [e for e in trace["events"] if e["type"] == "BIND"]
+    network = profile["accessGrammar"]["network"]
     if len(sockets) != profile["caps"]["allowedNetlinkSockets"] or len(binds) != profile["caps"]["allowedNetlinkBinds"] or \
-            any(e["family"] != 16 or e["protocol"] != 15 or e["fd"] < 0 for e in sockets) or \
-            any(e["family"] != 16 or e["returned"] != 0 for e in binds) or \
+            any((e["family"], e["socketType"], e["protocol"]) !=
+                (network["family"], network["socketType"], network["protocol"]) or e["fd"] < 0 for e in sockets) or \
+            any((e["family"], e["pid"], e["groups"], e["addressLength"], e["returned"]) !=
+                (network["family"], network["bindPid"], network["bindGroups"], network["bindAddressLength"], 0)
+                for e in binds) or \
             sorted(e["fd"] for e in binds) != sorted(e["fd"] for e in sockets):
         fail("FORBIDDEN_NETWORK_FAMILY", "network differs from exact KOBJECT netlink use")
 
@@ -408,21 +676,51 @@ def _timing(statement: Mapping[str, Any], trace: Mapping[str, Any], profile: Map
     if elapsed > caps["judgementWallNs"]: fail("EXTERNAL_WALL_CAP_EXCEEDED", "judgement cap exceeded")
 
 
-def _trusted_setup(statement: Mapping[str, Any], roots: Mapping[str, str], case_dir: Path) -> None:
+def _checkout_identity(path: Path) -> tuple[str, bool]:
+    try:
+        head = subprocess.run(
+            ["git", "-C", str(path), "rev-parse", "HEAD"], check=True,
+            capture_output=True, text=True, timeout=5).stdout.strip()
+        clean = subprocess.run(
+            ["git", "-C", str(path), "diff", "--quiet", "HEAD", "--"],
+            check=False, timeout=5).returncode == 0
+    except (OSError, subprocess.SubprocessError) as error:
+        fail("PROVENANCE_INCOMPLETE", f"checkout identity unavailable: {error}")
+    return head, clean
+
+
+def _trusted_setup(statement: Mapping[str, Any], roots: Mapping[str, str], case_dir: Path,
+                   args: argparse.Namespace) -> None:
     mounts = statement.get("mounts")
     if not isinstance(mounts, dict) or set(mounts) != {"product", "packet"}:
         fail("PROVENANCE_INCOMPLETE", "mount evidence differs")
+    expected_sources = {
+        "product": str(args.expected_product_source.resolve()),
+        "packet": str(args.expected_packet_source.resolve()),
+    }
     for name, root in (("product", "PRODUCT"), ("packet", "PACKET")):
         record = mounts[name]
         options = record.get("options", "") if isinstance(record, dict) else ""
         option_list = options.split(",") if isinstance(options, str) else options
         if not isinstance(record, dict) or record.get("target") != roots[root] or not record.get("writeRejected") or \
                 not isinstance(option_list, list) or "ro" not in option_list or \
-                not isinstance(record.get("source"), str):
+                record.get("source") != expected_sources[name]:
             fail("PROVENANCE_INCOMPLETE", f"{name} read-only mount differs")
         try: read_only = bool(os.statvfs(roots[root]).f_flag & os.ST_RDONLY)
         except OSError as error: fail("PROVENANCE_INCOMPLETE", f"cannot inspect {name} mount: {error}")
         if not read_only: fail("PROVENANCE_INCOMPLETE", f"{name} live mount is writable")
+    for name in ("HOME", "OUTPUT"):
+        path = Path(roots[name])
+        try: metadata = path.lstat()
+        except OSError as error: fail("PROVENANCE_INCOMPLETE", f"fresh {name} root unavailable: {error}")
+        if not stat.S_ISDIR(metadata.st_mode) or path.is_symlink() or metadata.st_uid != os.getuid():
+            fail("PROVENANCE_INCOMPLETE", f"fresh {name} root ownership differs")
+    observer_head, observer_clean = _checkout_identity(OBSERVER_ROOT)
+    product_head, product_clean = _checkout_identity(args.expected_product_source.resolve())
+    if observer_head != args.observer_sha or not observer_clean:
+        fail("PROVENANCE_INCOMPLETE", "observer checkout does not match its bound commit")
+    if product_head != args.product_sha or not product_clean:
+        fail("PROVENANCE_INCOMPLETE", "product checkout does not match its bound commit")
     tracer = statement.get("tracer")
     _TRACE.validate_tracer_identity(
         tracer, Path(__file__).parent, case_dir.parent.parent / "workspace/godot-runtime-tracer")
@@ -430,7 +728,8 @@ def _trusted_setup(statement: Mapping[str, Any], roots: Mapping[str, str], case_
 
 def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, statement: dict,
               trace: dict, sidecar: bytes) -> None:
-    challenge = _read_challenge(args.challenge)
+    challenge = _read_challenge(
+        args.challenge, _limit(profile["caps"], "maxChallengeBytes"))
     if statement.get("schema") != STATEMENT_SCHEMA or statement.get("caseId") != args.case_id:
         fail("PROVENANCE_INCOMPLETE", "statement schema/case differs")
     if statement.get("challenge") != challenge or trace["challenge"] != challenge or statement.get("clock") != "CLOCK_MONOTONIC_RAW":
@@ -444,10 +743,8 @@ def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, s
             left.startswith(right.rstrip("/") + "/") or right.startswith(left.rstrip("/") + "/")
             for index, left in enumerate(roots.values()) for right in list(roots.values())[index + 1:]):
         fail("PROVENANCE_INCOMPLETE", "roots overlap")
-    _trusted_setup(statement, roots, args.case_dir)
-    members = [p for p in Path(roots["PACKET"]).iterdir() if p.is_file() or p.is_symlink()]
-    if len(members) > profile["caps"]["maxPacketMembers"] or sum(p.stat().st_size for p in members) > profile["caps"]["maxPacketBytes"]:
-        fail("PROVENANCE_INCOMPLETE", "packet cap exceeded")
+    _trusted_setup(statement, roots, args.case_dir, args)
+    _packet_members(Path(roots["PACKET"]), args.packet_manifest, profile)
     expected_roles, roles = _roles(g0, packet, roots, profile, args), _records(statement.get("roles"), "roles")
     if set(roles) != set(expected_roles):
         expected_script = next(path for path in expected_roles if path.startswith(roots["PACKET"] + "/") and path.endswith(".gd"))
@@ -507,15 +804,127 @@ def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, s
         fail("PROVENANCE_INCOMPLETE", f"tracer violation {trace['end']['violation']}")
 
 
+def _identity_summary(value: Any) -> dict[str, Any]:
+    records = value if isinstance(value, list) else []
+    return {
+        "count": len(records),
+        "declaredBytes": sum(item.get("size", 0) for item in records
+                             if isinstance(item, dict) and isinstance(item.get("size"), int)),
+        "canonicalSha256": _sha(_canonical(records)),
+    }
+
+
+def _capture_record(path: Path, maximum: int) -> dict[str, Any]:
+    try: metadata = path.lstat()
+    except OSError: return {"file": path.name, "present": False}
+    record: dict[str, Any] = {
+        "file": path.name, "present": True, "size": metadata.st_size}
+    if stat.S_ISLNK(metadata.st_mode) or not stat.S_ISREG(metadata.st_mode) \
+            or metadata.st_size > maximum:
+        return record | {"bounded": False}
+    try: data = _bounded_bytes(path, maximum)
+    except VerificationFailure: return record | {"bounded": False}
+    return record | {"sha256": _sha(data)}
+
+
+def _receipt_details(statement: Mapping[str, Any], trace: Mapping[str, Any] | None,
+                     sidecar: bytes, case_dir: Path,
+                     profile: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    events = trace.get("events", []) if isinstance(trace, dict) else []
+    semantic = []
+    for event in events:
+        if event.get("type") != "READ" or event.get("classification") != "S": continue
+        offset, count = event.get("sidecarOffset"), event.get("returned")
+        captured = sidecar[offset:offset + count] if isinstance(offset, int) and isinstance(count, int) else b""
+        semantic.append({key: event.get(key) for key in (
+            "sequence", "tid", "operation", "fd", "offset", "requested", "returned",
+            "device", "inode", "path") } | {
+                "capturedComplete": isinstance(count, int) and len(captured) == count,
+                "capturedSha256": _sha(captured),
+            })
+    mappings = [{key: event.get(key) for key in (
+        "sequence", "tid", "address", "length", "protection", "flags", "fd",
+        "offset", "classification", "device", "inode", "path")}
+        for event in events if event.get("type") == "MMAP"]
+    topology = [event for event in events
+                if event.get("type") in {"EXEC", "LINEAGE", "SIGNAL", "EXIT"}]
+    caps = profile.get("caps", {}) if isinstance(profile, Mapping) else {}
+    captures = {name: _capture_record(case_dir / filename, _limit(caps, cap_name))
+                for name, (filename, cap_name) in {
+                    "stdout": ("stdout.bin", "maxStdoutBytes"),
+                    "stderr": ("stderr.bin", "maxStderrBytes"),
+                    "observation": ("observation.json", "maxObservationBytes"),
+                    "homeLog": ("home-godot.log", "maxHomeOutputBytes"),
+                    "sentry": ("home-sentry.dat", "maxHomeOutputBytes"),
+                }.items()}
+    end = trace.get("end", {}) if isinstance(trace, dict) else {}
+    return {
+        "invocation": {
+            "argv": statement.get("argv"), "environment": statement.get("environment"),
+            "workingDirectory": statement.get("workingDirectory"),
+            "executable": statement.get("executable"),
+        },
+        "semanticSupply": _identity_summary(statement.get("roles")),
+        "semanticConsumption": {
+            "readEvents": len(semantic),
+            "returnedBytes": sum(item.get("returned", 0) for item in semantic),
+            "uniquePaths": len({item.get("path") for item in semantic}),
+            "canonicalSha256": _sha(_canonical(semantic)),
+        },
+        "runtimeEvidence": {
+            "identities": _identity_summary(statement.get("runtimeIdentities")),
+            "mappingEvents": len(mappings),
+            "mappedBytes": sum(item.get("length", 0) for item in mappings),
+            "canonicalMappingSha256": _sha(_canonical(mappings)),
+        },
+        "processEvidence": {
+            "taskCount": end.get("taskCount"),
+            "lineageEvents": end.get("lineageEvents"),
+            "execEvents": end.get("execEvents"),
+            "signalEvents": sum(item.get("type") == "SIGNAL" for item in topology),
+            "canonicalSha256": _sha(_canonical(topology)),
+        },
+        "streamOutputEvidence": {
+            "declaredSha256": _sha(_canonical({
+                "streams": statement.get("streams"), "outputs": statement.get("outputs")})),
+            "captures": captures,
+        },
+        "timing": {
+            "clock": statement.get("clock"), "external": statement.get("timing"),
+            "traceStartNs": trace.get("startNs") if isinstance(trace, dict) else None,
+            "traceFinishNs": end.get("finishNs"),
+        },
+        "eventEnvelope": {
+            "eventCount": len(events), "firstSequence": events[0].get("sequence") if events else None,
+            "lastSequence": events[-1].get("sequence") if events else None,
+            "dropped": end.get("dropped"), "violation": end.get("violation"),
+            "endSequence": end.get("sequence"),
+        },
+    }
+
+
 def verify_case(args: argparse.Namespace) -> dict[str, Any]:
-    profile, g0, packet = _load_sources(args.profile, args.g0_manifest, args.packet_manifest)
-    matrix = {case["id"]: (case["expectedVerdict"], case["expectedReason"]) for case in profile["cases"]}
-    if args.case_id not in CASE_RESULTS or matrix.get(args.case_id) != CASE_RESULTS[args.case_id]: fail("PROVENANCE_INCOMPLETE", "matrix differs")
-    statement = _json(args.case_dir / "statement.json"); trace_path = args.case_dir / "trace.tsv"; sidecar_path = args.case_dir / "sidecar.bin"
-    case_size = sum(path.stat().st_size for path in args.case_dir.rglob("*") if path.is_file())
+    statement_path = args.case_dir / "statement.json"
+    statement: dict[str, Any] = {}; trace_path = args.case_dir / "trace.tsv"; sidecar_path = args.case_dir / "sidecar.bin"
+    trace: dict[str, Any] | None = None; trace_bytes = b""; sidecar = b""
+    profile: dict[str, Any] = {}; g0: dict[str, Any] = {}; packet: dict[str, Any] = {}
+    challenge_value: str | None = None; trusted_inputs_ready = False
     try:
-        if case_size > profile["caps"]["maxCasePacketBytes"]: fail("PROVENANCE_INCOMPLETE", "case cap exceeded")
-        trace_bytes, sidecar = trace_path.read_bytes(), sidecar_path.read_bytes()
+        profile, g0, packet = _load_sources(args.profile, args.g0_manifest, args.packet_manifest)
+        matrix = {case["id"]: (case["expectedVerdict"], case["expectedReason"])
+                  for case in profile["cases"]}
+        if args.case_id not in CASE_RESULTS or matrix.get(args.case_id) != CASE_RESULTS[args.case_id]:
+            fail("PROVENANCE_INCOMPLETE", "matrix differs")
+        challenge_value = _read_challenge(
+            args.challenge, _limit(profile["caps"], "maxChallengeBytes"))
+        trusted_inputs_ready = True
+        members, _ = _preflight_case_members(args.case_dir, profile["caps"])
+        statement = _json_bounded(
+            members["statement.json"], _limit(profile["caps"], "maxStatementBytes"))
+        trace_bytes = _bounded_bytes(
+            members["trace.tsv"], _limit(profile["caps"], "maxTraceBytes"))
+        sidecar = _bounded_bytes(
+            members["sidecar.bin"], _limit(profile["caps"], "maxCapturedBytes"))
         for name, data, record in (("trace", trace_bytes, statement.get("trace")),
                                    ("sidecar", sidecar, statement.get("sidecar"))):
             if not isinstance(record, dict) or record.get("file") != f"{name}.{'tsv' if name == 'trace' else 'bin'}" or \
@@ -523,23 +932,62 @@ def verify_case(args: argparse.Namespace) -> dict[str, Any]:
                 fail("PROVENANCE_INCOMPLETE", f"{name} binding differs")
         trace = parse_trace_lines(trace_bytes.decode().splitlines(), profile["caps"]["maxEvents"])
         _early_unknown_reads(statement, trace)
-        validate_trace_accounting(trace, profile["caps"], len(trace_bytes), len(sidecar))
+        validate_trace_accounting(
+            trace, profile["caps"], len(trace_bytes), len(sidecar),
+            str(OBSERVER_ROOT))
         validate_syscall_grammar(trace, profile["accessGrammar"]["allowedSyscalls"])
         _complete(args, profile, g0, packet, statement, trace, sidecar); outcome = ("PASS", "ADMITTED")
-    except (OSError, UnicodeError): outcome = ("INCONCLUSIVE", "PROVENANCE_INCOMPLETE")
-    except VerificationFailure as error: outcome = ("INCONCLUSIVE" if error.reason == "PROVENANCE_INCOMPLETE" else "REJECT", error.reason)
-    tracer = statement.get("tracer", {})
-    receipt = {"schema": RECEIPT_SCHEMA, "caseId": args.case_id, "challenge": _read_challenge(args.challenge),
-               "verdict": outcome[0], "reason": outcome[1], "profileSha256": _file_sha(args.profile),
-               "g0ManifestSha256": _file_sha(args.g0_manifest), "packetManifestSha256": _file_sha(args.packet_manifest),
-               "verifierSha256": _file_sha(Path(__file__)), "traceVerifierSha256": _file_sha(_HELPER_PATH),
-               "tracerIdentitySha256": _sha(_canonical(tracer)), "ioHeaderSha256": tracer.get("ioHeaderSha256")}
+    except (OSError, UnicodeError, IndexError, KeyError, TypeError, ValueError):
+        outcome = ("INCONCLUSIVE", "PROVENANCE_INCOMPLETE")
+    except VerificationFailure as error:
+        if not trusted_inputs_ready or error.reason == "PROVENANCE_INCOMPLETE":
+            outcome = ("INCONCLUSIVE", "PROVENANCE_INCOMPLETE")
+        else:
+            outcome = ("REJECT", error.reason)
+    tracer_value = statement.get("tracer", {})
+    tracer = tracer_value if isinstance(tracer_value, dict) else {}
+    caps = profile.get("caps", {}) if isinstance(profile, dict) else {}
+    source_records = {
+        "profile": _capture_record(args.profile, _limit(caps, "maxProfileBytes")),
+        "g0Manifest": _capture_record(args.g0_manifest, _limit(caps, "maxG0ManifestBytes")),
+        "packetManifest": _capture_record(
+            args.packet_manifest, _limit(caps, "maxPacketManifestBytes")),
+        "challenge": _capture_record(args.challenge, _limit(caps, "maxChallengeBytes")),
+    }
+    receipt = {
+        "schema": RECEIPT_SCHEMA, "caseId": args.case_id,
+        "challenge": challenge_value, "verdict": outcome[0], "reason": outcome[1],
+        "authority": {
+            "observerSha": args.observer_sha, "productSha": args.product_sha,
+            "packetSha": args.packet_sha, "packetRoot": args.packet_root,
+            "authorityIssue": args.authority_issue, "authorityComment": args.authority_comment,
+            "requestIndex": args.request_index, "workingDirectory": str(OBSERVER_ROOT),
+            "godot": str(args.expected_godot.resolve()),
+            "productSource": str(args.expected_product_source.resolve()),
+            "packetSource": str(args.expected_packet_source.resolve()),
+            "productMount": str(args.expected_product_mount.resolve()),
+            "packetMount": str(args.expected_packet_mount.resolve()),
+            "runtimeRoot": str(args.expected_runtime_root.resolve()),
+        },
+        "profileSha256": source_records["profile"].get("sha256"),
+        "g0ManifestSha256": source_records["g0Manifest"].get("sha256"),
+        "packetManifestSha256": source_records["packetManifest"].get("sha256"),
+        "sourceEvidence": source_records,
+        "statement": _capture_record(
+            statement_path, _limit(caps, "maxStatementBytes")),
+        "trace": _capture_record(trace_path, _limit(caps, "maxTraceBytes")),
+        "sidecar": _capture_record(sidecar_path, _limit(caps, "maxCapturedBytes")),
+        "verifierSha256": _file_sha(Path(__file__)), "traceVerifierSha256": _file_sha(_HELPER_PATH),
+        "tracerIdentitySha256": _sha(_canonical(tracer)), "ioHeaderSha256": tracer.get("ioHeaderSha256"),
+        **_receipt_details(statement, trace, sidecar, args.case_dir, profile),
+    }
     receipt["receiptSha256"] = _sha(_canonical(receipt)); return receipt
 
 
-def _read_challenge(path: Path) -> str:
-    try: value = path.read_text(encoding="ascii").rstrip("\n")
-    except (OSError, UnicodeError) as error: fail("INVOCATION_CHALLENGE_MISMATCH", str(error))
+def _read_challenge(path: Path, maximum: int) -> str:
+    try: value = _bounded_bytes(
+        path, maximum, "INVOCATION_CHALLENGE_MISMATCH").decode("ascii").rstrip("\n")
+    except UnicodeError as error: fail("INVOCATION_CHALLENGE_MISMATCH", str(error))
     if len(value) != 64 or any(char not in "0123456789abcdef" for char in value): fail("INVOCATION_CHALLENGE_MISMATCH", "bad challenge")
     return value
 
@@ -563,8 +1011,32 @@ def _case(args: argparse.Namespace) -> int:
 
 def _campaign(args: argparse.Namespace) -> int:
     profile, _, _ = _load_sources(args.profile, args.g0_manifest, args.packet_manifest)
-    total = sum(path.stat().st_size for path in args.campaign_dir.rglob("*") if path.is_file())
-    if total > profile["caps"]["maxCampaignBytes"]: fail("PROVENANCE_INCOMPLETE", "campaign cap exceeded")
+    expected_cases = {case["id"] for case in profile["cases"]}
+    try:
+        with os.scandir(args.campaign_dir) as entries:
+            case_entries = list(entries)
+        with os.scandir(args.challenges_dir) as entries:
+            raw_challenges = list(entries)
+    except OSError as error:
+        fail("PROVENANCE_INCOMPLETE", f"campaign directory unavailable: {error}")
+    challenge_entries = {entry.name: Path(entry.path) for entry in raw_challenges}
+    if len(case_entries) != len(expected_cases) or \
+            {entry.name for entry in case_entries} != expected_cases or \
+            any(not entry.is_dir(follow_symlinks=False) for entry in case_entries) or \
+            len(challenge_entries) != len(expected_cases) or \
+            set(challenge_entries) != {f"{case_id}.txt" for case_id in expected_cases} or \
+            any(not entry.is_file(follow_symlinks=False) for entry in raw_challenges):
+        fail("PROVENANCE_INCOMPLETE", "campaign case or challenge set differs")
+    total = 0
+    for case_id in sorted(expected_cases):
+        _, case_total = _preflight_case_members(
+            args.campaign_dir / case_id, profile["caps"])
+        challenge = challenge_entries[f"{case_id}.txt"]
+        challenge_bytes = _bounded_bytes(
+            challenge, _limit(profile["caps"], "maxChallengeBytes"))
+        total += case_total + len(challenge_bytes)
+        if total > profile["caps"]["maxCampaignBytes"]:
+            fail("PROVENANCE_INCOMPLETE", "campaign cap exceeded")
     receipts = []
     for case in profile["cases"]:
         current = argparse.Namespace(**vars(args)); current.case_id = case["id"]; current.case_dir = args.campaign_dir / case["id"]
@@ -583,6 +1055,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         common.add_argument("--" + option, dest=destination, type=Path, required=True)
     for option in ("observer-sha", "product-sha", "packet-sha", "packet-root"):
         common.add_argument("--" + option, dest=option.replace("-", "_"), required=True)
+    for option in ("expected-godot", "expected-product-source", "expected-packet-source",
+                   "expected-product-mount", "expected-packet-mount", "expected-runtime-root"):
+        common.add_argument("--" + option, dest=option.replace("-", "_"), type=Path, required=True)
     common.add_argument("--request-index", required=True)
     common.add_argument("--authority-issue", type=int, required=True); common.add_argument("--authority-comment", type=int, required=True)
     case = commands.add_parser("case", parents=[common]); case.add_argument("--case-id", choices=CASE_RESULTS)

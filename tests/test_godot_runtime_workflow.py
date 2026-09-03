@@ -66,6 +66,83 @@ class GodotRuntimeWorkflowTests(unittest.TestCase):
                 "--admit-only"):
             self.assertIn(required, WORKFLOW)
 
+    def test_a1_packet_ref_is_exactly_bound_before_archive_ingress(self) -> None:
+        runtime = WORKFLOW.split("\n  godot-runtime:\n", 1)[1].split(
+            "\n  cleanup-a1-packet-ref:\n", 1)[0]
+        self.assertIn("packet_ref:", WORKFLOW.split("\n  pull_request:\n", 1)[0])
+        self.assertIn(
+            "Ephemeral A1-v2 packet branch bound to packet_sha",
+            WORKFLOW.split("\n  pull_request:\n", 1)[0],
+        )
+        for required in (
+                'test -z "$PACKET_REF"',
+                'git ls-remote --refs origin "$PACKET_REF"',
+                'test "$packet_ref_sha" = "$PACKET_SHA"',
+                'test "$packet_ref_name" = "$PACKET_REF"',
+                'git fetch --no-tags origin "$PACKET_REF"',
+                'test "$(git rev-parse FETCH_HEAD)" = "$PACKET_SHA"'):
+            self.assertIn(required, runtime)
+        self.assertLess(
+            runtime.index('git ls-remote --refs origin "$PACKET_REF"'),
+            runtime.index('git archive --format=tar "$PACKET_SHA" "$PACKET_ROOT"'),
+        )
+
+    def test_packet_tree_is_capped_before_archive_and_json_parse(self) -> None:
+        tree = 'git ls-tree -r -z -l "$PACKET_SHA" -- "$PACKET_ROOT"'
+        archive = 'git archive --format=tar "$PACKET_SHA" "$PACKET_ROOT"'
+        parse = "manifest = runner.read_packet_manifest(packet, profile)"
+        self.assertIn(tree, WORKFLOW)
+        self.assertIn('caps["maxPacketManifestBytes"]', WORKFLOW)
+        self.assertLess(WORKFLOW.index(tree), WORKFLOW.index(archive))
+        self.assertLess(WORKFLOW.index(archive), WORKFLOW.index(parse))
+
+    def test_packet_ref_cleanup_is_separate_least_privilege_job(self) -> None:
+        cleanup = WORKFLOW.split("\n  cleanup-a1-packet-ref:\n", 1)[1]
+        header = cleanup.split("\n    steps:\n", 1)[0]
+        self.assertIn("needs: godot-runtime", header)
+        self.assertIn("actions: read", header)
+        self.assertIn("contents: write", header)
+        self.assertNotIn("issues: write", header)
+        self.assertNotIn("pull-requests: write", header)
+        self.assertIn("godot-runtime-a1-cleanup-${{ github.sha }}", cleanup)
+
+    def test_packet_ref_deletion_requires_published_terminal_receipt(self) -> None:
+        cleanup = WORKFLOW.split("\n  cleanup-a1-packet-ref:\n", 1)[1]
+        receipt_download = cleanup.index('gh run download "$GITHUB_RUN_ID"')
+        case_receipt = cleanup.index(
+            'case_receipt="$published/admission/cases/G00/receipt.json"')
+        receipt_validation = cleanup.index(
+            'record.get("verdict") not in {"PASS", "REJECT", "INCONCLUSIVE"}')
+        case_binding = cleanup.index(
+            'record.get("caseReceiptSha256") != case_claimed')
+        self.assertIn('separators=(",", ":")).encode() + b"\\n"', cleanup)
+        remote_binding = cleanup.index('git ls-remote --refs origin "$PACKET_REF"')
+        deletion = cleanup.index(
+            'git push --force-with-lease="$PACKET_REF:$PACKET_SHA"')
+        absence = cleanup.index('test ! -s "$packet_ref_rows"')
+        self.assertLess(receipt_download, case_receipt)
+        self.assertLess(case_receipt, receipt_validation)
+        self.assertLess(receipt_validation, case_binding)
+        self.assertLess(case_binding, remote_binding)
+        self.assertLess(receipt_validation, remote_binding)
+        self.assertLess(remote_binding, deletion)
+        self.assertLess(deletion, absence)
+        self.assertIn(
+            '"schema": "glassvow.godot-runtime-provenance.packet-cleanup/v1"',
+            cleanup,
+        )
+
+    def test_profile_freezes_research_ref_and_cleanup_policy(self) -> None:
+        research = PROFILE["packetIngress"]["research"]
+        self.assertEqual(
+            "refs/heads/p9-packet-421-a1-v2-<lowercase safe token>",
+            research["packetRefPattern"],
+        )
+        rule = research["packetRefRule"]
+        self.assertIn("same-repository branch", rule)
+        self.assertIn("immediately before fetch", rule)
+        self.assertIn("immediately before deletion", rule)
+
     def test_copied_receipt_hash_cannot_authorise_changed_content(self) -> None:
         payload = {
             "schema": campaign.CAPABILITY_CAMPAIGN_SCHEMA,

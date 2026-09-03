@@ -21,6 +21,10 @@ on:
         description: Exact research-packet commit for a Godot run
         required: false
         type: string
+      packet_ref:
+        description: Ephemeral A1-v2 packet branch bound to packet_sha
+        required: false
+        type: string
       packet_root:
         description: Declared research-packet directory
         required: false
@@ -270,7 +274,7 @@ jobs:
           product="$RUNNER_TEMP/g0-product"
           packet="$RUNNER_TEMP/g0-packet/${{ inputs.packet_root }}"
           output="$GITHUB_WORKSPACE/artifacts/godot-g0/run/observation.json"
-          strace -ff -qq -ttt -T -yy -s 4096 \
+          /usr/bin/env -i /usr/bin/strace -ff -qq -ttt -T -yy -s 4096 \
             -o artifacts/godot-g0/raw/trace \
             /usr/bin/env -i HOME="$RUNNER_TEMP/g0-runtime-home" PATH=/usr/bin:/bin LANG=C.UTF-8 \
             "$RUNNER_TEMP/godot/godot" --headless --path "$product" \
@@ -384,6 +388,7 @@ jobs:
       GODOT_BINARY_SHA256: 8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e
       PRODUCT_SHA: ${{ inputs.product_sha }}
       PACKET_SHA: ${{ inputs.packet_sha }}
+      PACKET_REF: ${{ inputs.packet_ref }}
       PACKET_ROOT: ${{ inputs.packet_root }}
       AUTHORITY_COMMENT: ${{ inputs.authority_comment }}
       REQUEST_INDEX: ${{ inputs.request_index }}
@@ -492,7 +497,32 @@ jobs:
             test "$GITHUB_REF_NAME" = main
             test "$(git rev-parse HEAD)" = "$PRODUCT_SHA"
           fi
-          git fetch --no-tags origin "$PRODUCT_SHA" "$PACKET_SHA"
+          git fetch --no-tags origin "$PRODUCT_SHA"
+          if [[ "$EXECUTION_MODE" == "godot-runtime-a1" ]]; then
+            python3 -B - "$PACKET_REF" <<'PY'
+          import re
+          import sys
+
+          value = sys.argv[1]
+          prefix = "refs/heads/p9-packet-421-a1-v2-"
+          suffix = value.removeprefix(prefix)
+          if (not value.startswith(prefix)
+                  or not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,63}", suffix)
+                  or ".." in value or value.endswith(".")):
+              raise SystemExit("unsafe A1-v2 packet ref")
+          PY
+            packet_ref_rows="$RUNNER_TEMP/godot-runtime-packet-ref.txt"
+            git ls-remote --refs origin "$PACKET_REF" > "$packet_ref_rows"
+            test "$(wc -l < "$packet_ref_rows")" -eq 1
+            read -r packet_ref_sha packet_ref_name < "$packet_ref_rows"
+            test "$packet_ref_sha" = "$PACKET_SHA"
+            test "$packet_ref_name" = "$PACKET_REF"
+            git fetch --no-tags origin "$PACKET_REF"
+            test "$(git rev-parse FETCH_HEAD)" = "$PACKET_SHA"
+          else
+            test -z "$PACKET_REF"
+            git fetch --no-tags origin "$PACKET_SHA"
+          fi
           read -ra parents <<< "$(git rev-list --parents -n 1 "$PACKET_SHA")"
           test "${#parents[@]}" -eq 2
           test "${parents[1]}" = "$PRODUCT_SHA"
@@ -507,6 +537,42 @@ jobs:
           changed = [path.decode("utf-8") for path in paths if path]
           if not changed or any(not path.startswith(root) for path in changed):
               raise SystemExit("packet commit changes a path outside its declared root")
+          PY
+          packet_tree="$RUNNER_TEMP/godot-runtime-packet-tree"
+          git ls-tree -r -z -l "$PACKET_SHA" -- "$PACKET_ROOT" > "$packet_tree"
+          python3 -B - "$PACKET_ROOT" "$packet_tree" \
+            tools/execution_provenance/godot_runtime_profile.json <<'PY'
+          import json
+          import pathlib
+          import sys
+
+          root = sys.argv[1].encode("utf-8") + b"/"
+          records = [record for record in pathlib.Path(sys.argv[2]).read_bytes().split(b"\0") if record]
+          caps = json.loads(pathlib.Path(sys.argv[3]).read_text(encoding="utf-8"))["caps"]
+          members = {}
+          total = 0
+          for record in records:
+              try:
+                  metadata, path = record.split(b"\t", 1)
+                  mode, kind, _object, size = metadata.split()
+                  if not path.startswith(root):
+                      raise ValueError
+                  relative = path[len(root):].decode("utf-8")
+                  length = int(size)
+              except (UnicodeError, ValueError):
+                  raise SystemExit("malformed packet tree record")
+              if mode != b"100644" or kind != b"blob" or not relative or "/" in relative:
+                  raise SystemExit("packet tree contains a non-direct regular data member")
+              if relative in members:
+                  raise SystemExit("packet tree contains a duplicate member")
+              members[relative] = length
+              total += length
+          if len(members) != 3 or "manifest.json" not in members:
+              raise SystemExit("packet tree must contain exactly three direct members")
+          if len(members) > caps["maxPacketMembers"] or total > caps["maxPacketBytes"]:
+              raise SystemExit("packet tree exceeds its frozen cap")
+          if members["manifest.json"] > caps["maxPacketManifestBytes"]:
+              raise SystemExit("packet manifest exceeds its frozen cap")
           PY
           git worktree add --detach "$RUNNER_TEMP/godot-product" "$PRODUCT_SHA"
           mkdir "$RUNNER_TEMP/godot-packet"
@@ -529,7 +595,7 @@ jobs:
           runner = importlib.util.module_from_spec(spec)
           spec.loader.exec_module(runner)
           profile, _ = runner.validate_frozen_sources()
-          manifest = json.loads((packet / "manifest.json").read_text(encoding="utf-8"))
+          manifest = runner.read_packet_manifest(packet, profile)
           authority_issue = manifest.get("authorityIssue")
           ingress_name = "qualification" if mode == "godot-runtime" else "research"
           ingress = profile["packetIngress"][ingress_name]
@@ -758,5 +824,124 @@ jobs:
         with:
           name: ${{ inputs.mode }}-${{ github.sha }}-${{ github.run_attempt }}
           path: artifacts/godot-runtime
+          if-no-files-found: error
+          retention-days: 14
+
+  cleanup-a1-packet-ref:
+    if: ${{ always() && github.event_name == 'workflow_dispatch' && inputs.mode == 'godot-runtime-a1' }}
+    needs: godot-runtime
+    name: Delete terminal A1-v2 packet ref
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      contents: write
+    env:
+      PRODUCT_SHA: ${{ inputs.product_sha }}
+      PACKET_SHA: ${{ inputs.packet_sha }}
+      PACKET_REF: ${{ inputs.packet_ref }}
+      PACKET_ROOT: ${{ inputs.packet_root }}
+      AUTHORITY_COMMENT: ${{ inputs.authority_comment }}
+      REQUEST_INDEX: ${{ inputs.request_index }}
+    steps:
+      - name: Check out exact trusted main tooling
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+
+      - name: Verify published terminal receipt and delete exact packet ref
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$PRODUCT_SHA"
+          [[ "$PACKET_REF" =~ ^refs/heads/p9-packet-421-a1-v2-[a-z0-9][a-z0-9._-]{0,63}$ ]]
+          [[ "$PACKET_REF" != *..* && "$PACKET_REF" != *. ]]
+          artifact_name="godot-runtime-a1-${GITHUB_SHA}-${GITHUB_RUN_ATTEMPT}"
+          published="$RUNNER_TEMP/published-a1"
+          gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" \
+            --name "$artifact_name" --dir "$published"
+          receipt="$published/admission/admission-receipt.json"
+          case_receipt="$published/admission/cases/G00/receipt.json"
+          python3 -B - "$receipt" "$case_receipt" "$PRODUCT_SHA" "$PACKET_SHA" "$PACKET_ROOT" \
+            "$AUTHORITY_COMMENT" "$REQUEST_INDEX" <<'PY'
+          import hashlib
+          import json
+          import pathlib
+          import sys
+
+          path = pathlib.Path(sys.argv[1])
+          record = json.loads(path.read_text(encoding="utf-8"))
+          claimed = record.pop("receiptSha256", None)
+          canonical = json.dumps(record, sort_keys=True, separators=(",", ":")).encode()
+          case_path = pathlib.Path(sys.argv[2])
+          case = json.loads(case_path.read_text(encoding="utf-8"))
+          case_claimed = case.pop("receiptSha256", None)
+          case_canonical = json.dumps(
+              case, sort_keys=True, separators=(",", ":")).encode() + b"\n"
+          expected = {
+              "schema": "glassvow.godot-runtime-provenance.admission-receipt/v1",
+              "observerSha": sys.argv[3], "productSha": sys.argv[3],
+              "packetSha": sys.argv[4], "packetRoot": sys.argv[5],
+              "authorityIssue": 421, "authorityComment": int(sys.argv[6]),
+              "requestIndex": sys.argv[7],
+          }
+          case_authority = case.get("authority")
+          if any(record.get(key) != value for key, value in expected.items()):
+              raise SystemExit("published A1 receipt binding differs")
+          if (claimed != hashlib.sha256(canonical).hexdigest()
+                  or record.get("verdict") not in {"PASS", "REJECT", "INCONCLUSIVE"}
+                  or not isinstance(record.get("reason"), str)
+                  or case.get("schema") != "glassvow.godot-runtime-provenance.receipt/v1"
+                  or case.get("caseId") != "G00"
+                  or case_claimed != hashlib.sha256(case_canonical).hexdigest()
+                  or record.get("caseReceiptSha256") != case_claimed
+                  or (case.get("verdict"), case.get("reason")) !=
+                     (record.get("verdict"), record.get("reason"))
+                  or not isinstance(case_authority, dict)
+                  or any(case_authority.get(key) != value for key, value in {
+                      "observerSha": sys.argv[3], "productSha": sys.argv[3],
+                      "packetSha": sys.argv[4], "packetRoot": sys.argv[5],
+                      "authorityIssue": 421, "authorityComment": int(sys.argv[6]),
+                      "requestIndex": sys.argv[7]}.items())):
+              raise SystemExit("published A1 receipt is not a terminal content-bound receipt")
+          PY
+          packet_ref_rows="$RUNNER_TEMP/a1-delete-ref.txt"
+          git ls-remote --refs origin "$PACKET_REF" > "$packet_ref_rows"
+          test "$(wc -l < "$packet_ref_rows")" -eq 1
+          read -r remote_sha remote_ref < "$packet_ref_rows"
+          test "$remote_sha" = "$PACKET_SHA"
+          test "$remote_ref" = "$PACKET_REF"
+          git push --force-with-lease="$PACKET_REF:$PACKET_SHA" origin ":$PACKET_REF"
+          git ls-remote --refs origin "$PACKET_REF" > "$packet_ref_rows"
+          test ! -s "$packet_ref_rows"
+          mkdir -p artifacts/godot-runtime-a1-cleanup
+          python3 -B - "$PACKET_REF" "$PACKET_SHA" "$receipt" <<'PY'
+          import hashlib
+          import json
+          import pathlib
+          import sys
+
+          receipt = pathlib.Path(sys.argv[3]).read_bytes()
+          result = {
+              "schema": "glassvow.godot-runtime-provenance.packet-cleanup/v1",
+              "packetRef": sys.argv[1], "packetSha": sys.argv[2],
+              "admissionReceiptSha256": hashlib.sha256(receipt).hexdigest(),
+              "deleted": True,
+          }
+          body = json.dumps(result, sort_keys=True, separators=(",", ":")).encode()
+          result["receiptSha256"] = hashlib.sha256(body).hexdigest()
+          pathlib.Path("artifacts/godot-runtime-a1-cleanup/receipt.json").write_text(
+              json.dumps(result, sort_keys=True, separators=(",", ":")) + "\n",
+              encoding="utf-8")
+          PY
+
+      - name: Upload A1-v2 packet cleanup receipt
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: godot-runtime-a1-cleanup-${{ github.sha }}-${{ github.run_attempt }}
+          path: artifacts/godot-runtime-a1-cleanup
           if-no-files-found: error
           retention-days: 14

@@ -38,6 +38,9 @@
 #define MAX_BIND_EVENTS 2U
 #define MAX_EXEC_EVENTS 4U
 #define MAX_LINEAGE_EVENTS 9U
+#define MAX_DUP_EVENTS 5U
+#define MAX_ADDRESS_SPACE (1152ULL * 1024ULL * 1024ULL)
+#define MAX_INITIAL_STACK (16ULL * 1024ULL * 1024ULL)
 #define MAX_SEMANTIC_READ_BYTES (16U * 1024U * 1024U)
 #define MAX_TRACE_BYTES (64U * 1024U * 1024U)
 #define TRACE_END_RESERVE 32768U
@@ -83,12 +86,14 @@ struct task {
     pid_t pid;
     bool active, options_set, have_entry, resumed_entry, expected_attach_stop;
     long number;
-    uint64_t args[6], clone_flags;
+    uint64_t args[6], clone_flags, clone_exit_signal;
     int64_t read_offset;
     char path[4096], resolved[4096];
     struct gv_object_identity closing_object;
     bool have_closing_object;
     sa_family_t bind_family;
+    uint32_t bind_pid, bind_groups;
+    socklen_t bind_length;
 };
 static FILE *trace;
 static int sidecar_fd = -1;
@@ -97,7 +102,7 @@ static size_t task_count, active_count, captured_bytes;
 static uint64_t sequence, stops, entries, exits, resumed_exits, lineage_events;
 static uint64_t path_events, read_events, write_events, mmap_events, open_events;
 static uint64_t close_events, socket_events, bind_events, exec_events;
-static uint64_t semantic_read_bytes;
+static uint64_t semantic_read_bytes, dup_events;
 static uint64_t start_ns;
 static pid_t root_pid;
 static int root_exit = 255;
@@ -223,11 +228,13 @@ static void path_entry(struct task *task, const char *name) {
         uint64_t flags = task->args[2];
         writes = (flags & (O_WRONLY | O_RDWR | O_CREAT | O_TRUNC | O_APPEND)) != 0;
         stderr_sink_open = !strcmp(task->resolved, "/dev/null")
-            && (flags & O_ACCMODE) == O_WRONLY
-            && (flags & (O_CREAT | O_TRUNC | O_APPEND)) == 0;
+            && flags == (O_WRONLY | O_CREAT | O_TRUNC);
     }
     if (!strcmp(name, "mkdir")) {
-        if (!named_output_ancestor(task->resolved)) fail(task->pid, "UNDECLARED_MKDIR_PATH");
+        if ((!gv_path_within(task->resolved, home_root)
+                && !gv_path_within(task->resolved, output_root))
+                || !named_output_ancestor(task->resolved))
+            fail(task->pid, "UNDECLARED_MKDIR_PATH");
     } else if (writes && !named_write_path(task->resolved) && !stderr_sink_open)
         fail(task->pid, "UNDECLARED_WRITE_PATH");
 }
@@ -250,19 +257,30 @@ static void syscall_entry(struct task *task, struct gv_syscall_info *info) {
             fail(task->pid, "CLONE3_ARGUMENTS_UNAVAILABLE"); return;
         }
         task->clone_flags = clone.flags;
+        task->clone_exit_signal = clone.exit_signal;
         if ((clone.flags & CLONE_UNTRACED) != 0) fail(task->pid, "UNTRACEABLE_CLONE_FLAG");
     }
     if (task->number == SYS_socket) {
-        if ((int)task->args[0] != AF_NETLINK || (int)task->args[2] != NETLINK_KOBJECT_UEVENT)
+        if ((int)task->args[0] != AF_NETLINK
+                || (int)task->args[1] != (SOCK_RAW | SOCK_CLOEXEC | SOCK_NONBLOCK)
+                || (int)task->args[2] != NETLINK_KOBJECT_UEVENT)
             fail(task->pid, "EXTERNAL_NETWORK_SOCKET");
     }
     if (task->number == SYS_bind) {
-        task->bind_family = 0;
-        if (task->args[2] < sizeof(task->bind_family)
-                || !gv_copy_memory(task->pid, task->args[1], &task->bind_family,
-                                   sizeof(task->bind_family))
-                || task->bind_family != AF_NETLINK) fail(task->pid, "EXTERNAL_NETWORK_BIND");
+        struct sockaddr_nl address = {0}; task->bind_length = (socklen_t)task->args[2];
+        if (task->args[2] != sizeof(address)
+                || !gv_copy_memory(task->pid, task->args[1], &address, sizeof(address))
+                || address.nl_family != AF_NETLINK) fail(task->pid, "EXTERNAL_NETWORK_BIND");
+        task->bind_family = address.nl_family; task->bind_pid = address.nl_pid;
+        task->bind_groups = address.nl_groups;
     }
+    if (task->number == SYS_fcntl && task->args[1] != F_GETFD
+            && task->args[1] != F_SETFD && task->args[1] != F_DUPFD)
+        fail(task->pid, "UNSUPPORTED_FCNTL_COMMAND");
+    if (task->number == SYS_fcntl && ((task->args[1] == F_SETFD
+            && task->args[2] != 0 && task->args[2] != FD_CLOEXEC)
+            || (task->args[1] == F_DUPFD && task->args[2] != 10)))
+        fail(task->pid, "UNSUPPORTED_FCNTL_ARGUMENT");
     if (task->number == SYS_close)
         task->have_closing_object = gv_fd_identity(
             task->pid, (int)task->args[0], &task->closing_object);
@@ -331,7 +349,8 @@ static void syscall_exit(struct task *task, struct gv_syscall_info *info) {
         hex(task->resolved); fputc('\n', trace);
     }
     if (returned >= 0 && (task->number == SYS_openat || task->number == SYS_pipe2
-            || task->number == SYS_dup2 || task->number == SYS_socket)) {
+            || task->number == SYS_dup2 || task->number == SYS_socket
+            || (task->number == SYS_fcntl && task->args[1] == F_DUPFD))) {
         size_t open_fds;
         if (!gv_fd_count(task->pid, &open_fds)) fail(task->pid, "OPEN_FD_COUNT_UNAVAILABLE");
         else if (open_fds > MAX_OPEN_FDS) fail(task->pid, "OPEN_FD_CAP_EXCEEDED");
@@ -395,8 +414,23 @@ static void syscall_exit(struct task *task, struct gv_syscall_info *info) {
     } else if (task->number == SYS_bind) {
         if (++bind_events > MAX_BIND_EVENTS)
             fail(task->pid, "BIND_EVENT_CAP_EXCEEDED");
-        else fprintf(trace, "BIND\t%" PRIu64 "\t%d\t%" PRIu64 "\t%u\t%" PRId64 "\n",
-            ++sequence, task->pid, task->args[0], task->bind_family, returned);
+        else fprintf(trace, "BIND\t%" PRIu64 "\t%d\t%" PRIu64 "\t%u\t%u\t%u\t%u\t%" PRId64 "\n",
+            ++sequence, task->pid, task->args[0], task->bind_family, task->bind_pid,
+            task->bind_groups, task->bind_length, returned);
+    } else if (returned >= 0 && (task->number == SYS_dup2
+            || (task->number == SYS_fcntl && task->args[1] == F_DUPFD))) {
+        struct gv_object_identity object;
+        if (++dup_events > MAX_DUP_EVENTS) fail(task->pid, "DUP_EVENT_CAP_EXCEEDED");
+        else if (!gv_fd_identity(task->pid, (int)returned, &object))
+            fail(task->pid, "DUP_OBJECT_UNAVAILABLE");
+        else {
+            fprintf(trace, "DUP\t%" PRIu64 "\t%d\t%s\t%" PRIu64 "\t%" PRId64
+                "\t0\t%c\t%ju\t%ju\t", ++sequence, task->pid,
+                task->number == SYS_dup2 ? "dup2" : "fcntl", task->args[0],
+                returned, classify(object.path), (uintmax_t)object.device,
+                (uintmax_t)object.inode);
+            hex(object.path); fputc('\n', trace);
+        }
     }
     task->have_entry = false;
 }
@@ -414,6 +448,30 @@ static void handle_syscall(struct task *task) {
     else if (info.op == GV_SYSCALL_INFO_EXIT) syscall_exit(task, &info);
     else fail(task->pid, "UNKNOWN_SYSCALL_STOP");
 }
+static bool decode_lineage(const struct task *parent, unsigned int event,
+                           const char **kind, uint64_t *flags) {
+    *flags = 0;
+    if (parent->number == SYS_clone3) {
+        unsigned int expected_event;
+        if ((parent->clone_flags & CLONE_VFORK) != 0)
+            expected_event = PTRACE_EVENT_VFORK;
+        else if ((parent->clone_flags & CLONE_THREAD) != 0
+                || parent->clone_exit_signal != SIGCHLD)
+            expected_event = PTRACE_EVENT_CLONE;
+        else
+            expected_event = PTRACE_EVENT_FORK;
+        if (event != expected_event) return false;
+        *kind = (parent->clone_flags & CLONE_THREAD) != 0
+            ? "clone_thread" : "clone_process";
+        *flags = parent->clone_flags;
+        return true;
+    }
+    if (parent->number == SYS_vfork && event == PTRACE_EVENT_VFORK) {
+        *kind = "vfork_process";
+        return true;
+    }
+    return false;
+}
 static void handle_event(struct task *parent, unsigned int event) {
     if (event == PTRACE_EVENT_EXEC) { capture_exec(parent->pid); return; }
     if (event != PTRACE_EVENT_FORK && event != PTRACE_EVENT_VFORK
@@ -424,12 +482,13 @@ static void handle_event(struct task *parent, unsigned int event) {
     }
     struct task *child = add_task((pid_t)child_value);
     if (child == NULL) { fail(parent->pid, "TASK_CAP_EXCEEDED"); return; }
-    const char *kind = event == PTRACE_EVENT_FORK ? "fork_process"
-        : event == PTRACE_EVENT_VFORK ? "vfork_process"
-        : (parent->clone_flags & CLONE_THREAD) ? "clone_thread" : "clone_process";
+    const char *kind;
+    uint64_t flags;
+    if (!decode_lineage(parent, event, &kind, &flags)) {
+        fail(parent->pid, "LINEAGE_EVENT_MISMATCH"); return;
+    }
     child->number = parent->number; memcpy(child->args, parent->args, sizeof(child->args));
     child->have_entry = true; child->resumed_entry = true; child->expected_attach_stop = true;
-    uint64_t flags = event == PTRACE_EVENT_CLONE ? parent->clone_flags : 0;
     if (lineage_events >= MAX_LINEAGE_EVENTS) {
         fail(parent->pid, "LINEAGE_EVENT_CAP_EXCEEDED"); return;
     }
@@ -445,7 +504,27 @@ static void usage(const char *program) {
 }
 int main(int argc, char **argv) {
     if (argc == 2 && !strcmp(argv[1], "--self-test")) {
-        return sizeof(allowed_syscalls) / sizeof(*allowed_syscalls) == 61 ? 0 : 1;
+        char resolved[64];
+        const char *kind = NULL;
+        uint64_t flags = 0;
+        struct task process = {.number = SYS_clone3,
+            .clone_flags = CLONE_VM | CLONE_VFORK | CLONE_CLEAR_SIGHAND,
+            .clone_exit_signal = SIGCHLD};
+        struct task thread = {.number = SYS_clone3,
+            .clone_flags = CLONE_VM | CLONE_THREAD, .clone_exit_signal = 0};
+        struct task vfork = {.number = SYS_vfork};
+        bool lineage_ok = decode_lineage(&process, PTRACE_EVENT_VFORK, &kind, &flags)
+            && !strcmp(kind, "clone_process") && flags == process.clone_flags
+            && decode_lineage(&thread, PTRACE_EVENT_CLONE, &kind, &flags)
+            && !strcmp(kind, "clone_thread") && flags == thread.clone_flags
+            && decode_lineage(&vfork, PTRACE_EVENT_VFORK, &kind, &flags)
+            && !strcmp(kind, "vfork_process") && flags == 0
+            && !decode_lineage(&process, PTRACE_EVENT_CLONE, &kind, &flags);
+        return sizeof(allowed_syscalls) / sizeof(*allowed_syscalls) == 61
+            && lineage_ok
+            && gv_resolve_path(getpid(), AT_FDCWD, "/.__glassvow_absent_path__",
+                               resolved, sizeof(resolved))
+            && !strcmp(resolved, "/.__glassvow_absent_path__") ? 0 : 1;
     }
     const char *trace_path = NULL, *sidecar_path = NULL;
     char godot_path[4096] = "", script_path[4096] = "", corpus_path[4096] = "";
@@ -526,19 +605,23 @@ int main(int argc, char **argv) {
     root_pid = fork();
     if (root_pid < 0) { perror("fork tracee"); return 2; }
     if (root_pid == 0) {
+        if (!gv_limit_address_space(MAX_ADDRESS_SPACE)
+                || !gv_limit_initial_stack(MAX_INITIAL_STACK)) _exit(125);
         if (ptrace(PTRACE_TRACEME, 0, 0, 0) != 0) _exit(126);
         raise(SIGSTOP);
         execve("/usr/bin/env", launch_arguments, launch_environment);
         _exit(127);
     }
     fprintf(trace, "START\t%" PRIu64 "\t%" PRIu64 "\t%s"
-        "\t16\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u"
-        "\t%u\t%u\t%u\t%u\t%u\t%u\n",
-        ++sequence, start_ns, challenge, MAX_CAPTURE, MAX_TOTAL_CAPTURE, MAX_SYSCALLS,
+        "\t16\t%" PRIu64 "\t%" PRIu64 "\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u"
+        "\t%u\t%u\t%u\t%u\t%u\t%u\t%u\n",
+        ++sequence, start_ns, challenge, (uint64_t)MAX_ADDRESS_SPACE,
+        (uint64_t)MAX_INITIAL_STACK,
+        MAX_CAPTURE, MAX_TOTAL_CAPTURE, MAX_SYSCALLS,
         MAX_PATH_EVENTS, MAX_READ_EVENTS, MAX_WRITE_EVENTS, MAX_MMAP_EVENTS,
         MAX_OPEN_FDS, MAX_SEMANTIC_READ_BYTES, MAX_TRACE_BYTES, MAX_OPEN_EVENTS,
         MAX_CLOSE_EVENTS, MAX_SOCKET_EVENTS, MAX_BIND_EVENTS, MAX_EXEC_EVENTS,
-        MAX_LINEAGE_EVENTS);
+        MAX_DUP_EVENTS, MAX_LINEAGE_EVENTS);
     int status;
     if (waitpid(root_pid, &status, 0) != root_pid || !WIFSTOPPED(status)) return 2;
     struct task *root = add_task(root_pid);
@@ -559,15 +642,16 @@ int main(int argc, char **argv) {
         if (!WIFSTOPPED(status)) { fail(pid, "UNKNOWN_WAIT_STATE"); continue; }
         if (!set_options(task)) continue;
         int signal_number = WSTOPSIG(status); unsigned int event = (unsigned int)status >> 16;
+        bool attach_stop = signal_number == SIGSTOP && task->expected_attach_stop;
         if (signal_number == (SIGTRAP | 0x80)) handle_syscall(task);
         else if (signal_number == SIGTRAP && event != 0) handle_event(task, event);
-        else fprintf(trace, "SIGNAL\t%" PRIu64 "\t%d\t%d\n", ++sequence, pid, signal_number);
+        else if (!attach_stop)
+            fprintf(trace, "SIGNAL\t%" PRIu64 "\t%d\t%d\n", ++sequence, pid, signal_number);
         long current_trace_bytes = ftell(trace);
         if (current_trace_bytes < 0
                 || (uint64_t)current_trace_bytes > MAX_TRACE_BYTES - TRACE_END_RESERVE)
             fail(pid, "TRACE_SIZE_CAP_EXCEEDED");
         if (terminating) { ptrace(PTRACE_CONT, pid, 0, SIGKILL); continue; }
-        bool attach_stop = signal_number == SIGSTOP && task->expected_attach_stop;
         if (attach_stop) task->expected_attach_stop = false;
         int deliver = attach_stop || signal_number == (SIGTRAP | 0x80)
             || (signal_number == SIGTRAP && event != 0) ? 0 : signal_number;

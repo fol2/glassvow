@@ -16,6 +16,7 @@ from typing import Any, Mapping, Sequence
 
 
 SOURCE_ROOT = Path(__file__).resolve().parent
+OBSERVER_ROOT = SOURCE_ROOT.parents[1]
 PROFILE_PATH = SOURCE_ROOT / "godot_runtime_profile.json"
 G0_MANIFEST_PATH = SOURCE_ROOT / "godot_runtime_g0_manifest.json"
 TRACER_SOURCE = SOURCE_ROOT / "godot_runtime_ptrace_tracer.c"
@@ -103,10 +104,42 @@ def _safe_role_path(packet: Path, raw: object, suffix: str) -> Path:
     return path
 
 
+def preflight_packet_members(
+        packet: Path, profile: Mapping[str, Any]) -> dict[str, Path]:
+    caps = profile["caps"]
+    members: dict[str, Path] = {}
+    total = 0
+    try:
+        with os.scandir(packet) as entries:
+            for entry in entries:
+                if len(members) >= caps["maxPacketMembers"]:
+                    raise RunnerError("packet member cap exceeded")
+                metadata = entry.stat(follow_symlinks=False)
+                if not stat.S_ISREG(metadata.st_mode):
+                    raise RunnerError("packet member must be a regular non-symlink file")
+                total += metadata.st_size
+                if total > caps["maxPacketBytes"]:
+                    raise RunnerError("packet byte cap exceeded")
+                members[entry.name] = Path(entry.path)
+    except OSError as error:
+        raise RunnerError("packet directory is unavailable") from error
+    if len(members) != 3 or "manifest.json" not in members:
+        raise RunnerError("packet must contain exactly three direct members")
+    if members["manifest.json"].stat().st_size > caps["maxPacketManifestBytes"]:
+        raise RunnerError("packet manifest cap exceeded")
+    return members
+
+
+def read_packet_manifest(packet: Path, profile: Mapping[str, Any]) -> dict[str, Any]:
+    members = preflight_packet_members(packet, profile)
+    return read_json(members["manifest.json"])
+
+
 def validate_packet_manifest(
         packet: Path, manifest: Mapping[str, Any], profile: Mapping[str, Any], *,
         product_sha: str, packet_root: str, authority_issue: int,
         authority_comment: int) -> dict[str, Path]:
+    members = preflight_packet_members(packet, profile)
     if set(manifest) != {
             "schema", "productSha", "packetRoot", "authorityIssue",
             "authorityComment", "requestIndices", "roles"}:
@@ -156,16 +189,10 @@ def validate_packet_manifest(
             binding = roles[role]
             if any(binding.get(key) != expected[key] for key in ("size", "sha256")):
                 raise RunnerError(f"qualification packet {role} differs from G0")
-    members = list(packet.iterdir())
-    if any(path.is_symlink() or not path.is_file() for path in members):
-        raise RunnerError("packet contains a non-regular member")
-    if set(path.name for path in members) != {
+    if set(members) != {
             "manifest.json", resolved["externalScript"].name,
             resolved["corpus"].name}:
         raise RunnerError("packet contains an undeclared member")
-    total += (packet / "manifest.json").stat().st_size
-    if len(members) > caps["maxPacketMembers"] or total > caps["maxPacketBytes"]:
-        raise RunnerError("packet cap exceeded")
     return resolved
 
 
@@ -257,6 +284,7 @@ def compile_tracer(workspace: Path) -> dict[str, Any]:
     ]
     checked(command)
     os.chmod(binary, 0o555)
+    checked([str(binary), "--self-test"])
     return {
         "compiler": compiler,
         "compilerVersion": checked([compiler, "--version"]).stdout.decode().splitlines()[0],
@@ -363,9 +391,12 @@ def build_command(args: argparse.Namespace) -> dict[str, Any]:
 def run_case(args: argparse.Namespace) -> dict[str, Any]:
     profile, g0_manifest = validate_frozen_sources(
         args.profile.resolve(), args.g0_manifest.resolve())
-    packet_manifest = read_json(args.packet_manifest.resolve())
+    packet = args.packet.resolve()
+    if args.packet_manifest.resolve() != packet / "manifest.json":
+        raise RunnerError("packet manifest path differs")
+    packet_manifest = read_packet_manifest(packet, profile)
     roles = validate_packet_manifest(
-        args.packet.resolve(), packet_manifest, profile,
+        packet, packet_manifest, profile,
         product_sha=args.product_sha, packet_root=args.packet_root,
         authority_issue=args.authority_issue,
         authority_comment=args.authority_comment)
@@ -413,10 +444,12 @@ def run_case(args: argparse.Namespace) -> dict[str, Any]:
         "--corpus", str(roles["corpus"]),
         "--index", args.index,
     ]
+    working_directory = OBSERVER_ROOT.resolve()
     start_ns = time.clock_gettime_ns(time.CLOCK_MONOTONIC_RAW)
     try:
         result = subprocess.run(
             tracer_command, check=False, capture_output=True,
+            cwd=working_directory,
             timeout=profile["caps"]["supervisorKillWallNs"] / 1_000_000_000)
     except subprocess.TimeoutExpired as error:
         raise RunnerError("supervisor kill wall cap exceeded") from error
@@ -476,6 +509,7 @@ def run_case(args: argparse.Namespace) -> dict[str, Any]:
         "g0ManifestSha256": sha256_file(args.g0_manifest),
         "packetManifestSha256": sha256_file(args.packet_manifest),
         "clock": "CLOCK_MONOTONIC_RAW", "roots": roots,
+        "workingDirectory": str(working_directory),
         "argv": godot_argv, "environment": environment,
         "executable": _identity(args.godot.resolve()),
         "runtimeIdentities": runtime_records, "roles": semantic_records,
@@ -507,7 +541,7 @@ def run_case(args: argparse.Namespace) -> dict[str, Any]:
 def validate_command(args: argparse.Namespace) -> dict[str, Any]:
     profile, g0_manifest = validate_frozen_sources(
         args.profile.resolve(), args.g0_manifest.resolve())
-    packet_manifest = read_json(args.packet / "manifest.json")
+    packet_manifest = read_packet_manifest(args.packet.resolve(), profile)
     roles = validate_packet_manifest(
         args.packet.resolve(), packet_manifest, profile,
         product_sha=args.product_sha, packet_root=args.packet_root,

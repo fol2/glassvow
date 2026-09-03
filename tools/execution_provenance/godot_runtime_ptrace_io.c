@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/resource.h>
 #include <sys/uio.h>
 #include <time.h>
 #include <unistd.h>
@@ -138,6 +139,19 @@ bool gv_process_tgid(pid_t pid, pid_t *tgid) {
     return found;
 }
 
+static bool limit_resource(int resource, uint64_t bytes) {
+    struct rlimit limit = {.rlim_cur = (rlim_t)bytes, .rlim_max = (rlim_t)bytes};
+    return (uint64_t)limit.rlim_cur == bytes && setrlimit(resource, &limit) == 0;
+}
+
+bool gv_limit_address_space(uint64_t bytes) {
+    return limit_resource(RLIMIT_AS, bytes);
+}
+
+bool gv_limit_initial_stack(uint64_t bytes) {
+    return limit_resource(RLIMIT_STACK, bytes);
+}
+
 static bool proc_link(pid_t pid, const char *leaf, char *value, size_t capacity) {
     char proc_path[96];
     snprintf(proc_path, sizeof(proc_path), "/proc/%d/%s", pid, leaf);
@@ -184,26 +198,27 @@ bool gv_resolve_path(pid_t pid, int dirfd, const char *path,
         }
         if (path[0] == '\0') strcpy(combined, base);
     }
-    char canonical[PATH_MAX];
-    if (realpath(combined, canonical) != NULL) {
-        if (strlen(canonical) >= capacity) {
-            return false;
+    char probe[PATH_MAX], canonical[PATH_MAX], suffix[PATH_MAX] = "";
+    strcpy(probe, combined);
+    size_t probe_length = strlen(probe);
+    while (probe_length > 1 && probe[probe_length - 1] == '/')
+        probe[--probe_length] = '\0';
+    for (;;) {
+        if (realpath(probe, canonical) != NULL) {
+            const char *separator = !strcmp(canonical, "/") || !suffix[0] ? "" : "/";
+            return snprintf(resolved, capacity, "%s%s%s", canonical, separator, suffix)
+                < (int)capacity;
         }
-        strcpy(resolved, canonical);
-        return true;
+        char *slash = strrchr(probe, '/');
+        if (slash == NULL || !slash[1] || !strcmp(slash + 1, ".")
+                || !strcmp(slash + 1, "..")) return false;
+        char next[PATH_MAX];
+        if (snprintf(next, sizeof(next), "%s%s%s", slash + 1,
+                     suffix[0] ? "/" : "", suffix) >= (int)sizeof(next)) return false;
+        strcpy(suffix, next);
+        if (slash == probe) strcpy(probe, "/");
+        else *slash = '\0';
     }
-    char parent[PATH_MAX];
-    char *slash = strrchr(combined, '/');
-    if (slash == NULL || slash == combined) {
-        return false;
-    }
-    *slash = '\0';
-    if (realpath(combined, parent) == NULL
-            || snprintf(resolved, capacity, "%s/%s", parent, slash + 1)
-                >= (int)capacity) {
-        return false;
-    }
-    return true;
 }
 
 bool gv_path_within(const char *path, const char *root) {

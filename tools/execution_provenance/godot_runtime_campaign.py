@@ -8,8 +8,10 @@ import importlib.util
 import json
 import os
 import shutil
+import stat
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -104,26 +106,82 @@ def validate_capability_prerequisite(
     return record
 
 
-def campaign_evidence_bytes(output: Path, mounts_root: Path) -> int:
-    return sum(
-        path.stat().st_size for path in output.rglob("*")
-        if path.is_file() and mounts_root not in path.parents)
+def campaign_evidence_bytes(
+        output: Path, mounts_root: Path, maximum: int | None = None,
+        label: str = "campaign") -> int:
+    total = 0; pending = [output]
+    while pending:
+        directory = pending.pop()
+        try: entries = list(os.scandir(directory))
+        except OSError as error: raise CampaignError(f"{label} evidence unavailable: {error}") from error
+        for entry in entries:
+            path = Path(entry.path)
+            if path == mounts_root or mounts_root in path.parents:
+                continue
+            metadata = entry.stat(follow_symlinks=False)
+            if stat.S_ISDIR(metadata.st_mode):
+                pending.append(path); continue
+            if not stat.S_ISREG(metadata.st_mode):
+                raise CampaignError(f"{label} evidence contains a non-regular member")
+            total += metadata.st_size
+            if maximum is not None and total > maximum:
+                raise CampaignError(f"{label} byte cap exceeded")
+    return total
 
 
-def run(command: Sequence[str], *, timeout: float = 30) -> subprocess.CompletedProcess[bytes]:
+def run(
+        command: Sequence[str], *, timeout: float = 30,
+        allowed_returncodes: Sequence[int] = (0,)) -> subprocess.CompletedProcess[bytes]:
     result = subprocess.run(
         list(command), check=False, capture_output=True, timeout=timeout)
-    if result.returncode != 0:
+    if result.returncode not in allowed_returncodes:
         detail = (result.stderr or result.stdout).decode("utf-8", errors="replace")
         raise CampaignError(
             f"command failed ({result.returncode}): {command[0]}: {detail.strip()}")
     return result
 
 
+def write_admission_receipt(
+        output: Path, args: argparse.Namespace,
+        capability: Mapping[str, Any]) -> dict[str, Any]:
+    case_receipt = read_json(output / "cases/G00/receipt.json")
+    capability_path = output / "capability-prerequisite.json"
+    result = {
+        "schema": ADMISSION_SCHEMA, "verdict": case_receipt["verdict"],
+        "reason": case_receipt["reason"], "requestIndex": args.request_index,
+        "observerSha": args.observer_sha, "productSha": args.product_sha,
+        "packetSha": args.packet_sha, "packetRoot": args.packet_root,
+        "authorityIssue": args.authority_issue,
+        "authorityComment": args.authority_comment,
+        "caseReceiptSha256": case_receipt["receiptSha256"],
+        "capabilityRun": capability["capabilityRun"],
+        "capabilityReceiptSha256": capability["capabilityReceiptSha256"],
+        "capabilityPrerequisiteSha256": sha256_file(capability_path),
+    }
+    result["receiptSha256"] = hashlib.sha256(canonical_bytes(result)).hexdigest()
+    write_json(output / "admission-receipt.json", result)
+    return result
+
+
+def unmount_all(targets: Sequence[Path]) -> None:
+    failures: list[str] = []
+    for target in reversed(targets):
+        result = subprocess.run(
+            ["sudo", "-n", "umount", str(target)], check=False,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if result.returncode != 0:
+            failures.append(str(target))
+    if failures:
+        raise CampaignError(
+            "read-only input unmount failed: " + ", ".join(failures))
+
+
 def mount_read_only(source: Path, target: Path) -> dict[str, Any]:
     target.mkdir(parents=True, exist_ok=False)
+    bound = False
     try:
         run(["sudo", "-n", "mount", "--bind", str(source), str(target)])
+        bound = True
         run(["sudo", "-n", "mount", "-o", "remount,bind,ro", str(target)])
         options = run([
             "findmnt", "--noheadings", "--output", "OPTIONS", "--target", str(target),
@@ -142,9 +200,8 @@ def mount_read_only(source: Path, target: Path) -> dict[str, Any]:
             "options": option_list, "writeRejected": rejected,
         }
     except BaseException:
-        subprocess.run(
-            ["sudo", "-n", "umount", str(target)], check=False,
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if bound:
+            unmount_all([target])
         raise
 
 
@@ -259,6 +316,103 @@ def _mutate_io_path(
     return True
 
 
+def _mutate_mapping_object(
+        case_dir: Path, statement: dict[str, Any], target: Path) -> None:
+    trace_path = case_dir / "trace.tsv"
+    lines = trace_path.read_text(encoding="utf-8").splitlines()
+    target = target.resolve()
+    target_stat = target.stat()
+    target_hex = str(target).encode("utf-8").hex()
+
+    candidate: tuple[int, list[str], str] | None = None
+    for index, raw in enumerate(lines):
+        fields = raw.split("\t")
+        if fields[0] != "MMAP" or len(fields) != 13 or int(fields[7]) < 0:
+            continue
+        path = bytes.fromhex(fields[12]).decode("utf-8")
+        if path != str(target):
+            candidate = (index, fields, path)
+            break
+    if candidate is None:
+        raise CampaignError("G25 lacks a file-backed runtime mapping")
+    mapping_index, mapping, original_path = candidate
+    tid, fd = mapping[2], mapping[7]
+    device, inode = mapping[10], mapping[11]
+
+    open_index: int | None = None
+    for index in range(mapping_index - 1, 1, -1):
+        fields = lines[index].split("\t")
+        if fields[0] == "OPEN" and len(fields) == 9 and fields[2] == tid \
+                and fields[3] == fd and fields[6:8] == [device, inode] \
+                and bytes.fromhex(fields[8]).decode("utf-8") == original_path:
+            open_index = index
+            break
+    if open_index is None:
+        raise CampaignError("G25 mapping lacks its bound open")
+
+    path_index = path_exit_index = None
+    for index in range(open_index - 1, max(1, open_index - 8), -1):
+        fields = lines[index].split("\t")
+        if fields[2] != tid:
+            continue
+        if fields[0] == "PATH_X" and len(fields) == 6 and fields[3] == "openat" \
+                and bytes.fromhex(fields[5]).decode("utf-8") == original_path:
+            path_exit_index = index
+        elif fields[0] == "PATH" and len(fields) == 6 and fields[3] == "openat" \
+                and bytes.fromhex(fields[5]).decode("utf-8") == original_path:
+            path_index = index
+    if path_index is None or path_exit_index is None:
+        raise CampaignError("G25 mapping open lacks its path binding")
+
+    close_index: int | None = None
+    for index in range(mapping_index + 1, len(lines) - 1):
+        fields = lines[index].split("\t")
+        if fields[0] == "OPEN" and len(fields) == 9 \
+                and fields[2] == tid and fields[3] == fd:
+            break
+        if fields[0] == "CLOSE" and len(fields) == 8 and fields[2] == tid \
+                and fields[3] == fd and fields[5:7] == [device, inode] \
+                and bytes.fromhex(fields[7]).decode("utf-8") == original_path:
+            close_index = index
+            break
+    if close_index is None:
+        raise CampaignError("G25 mapping object lacks its close")
+
+    lines[path_index] = "\t".join(
+        [*lines[path_index].split("\t")[:4], target_hex, target_hex])
+    path_exit = lines[path_exit_index].split("\t")
+    path_exit[5] = target_hex
+    lines[path_exit_index] = "\t".join(path_exit)
+
+    object_shapes = {
+        "OPEN": (5, 6, 7, 8),
+        "IO": (8, 9, 10, 12),
+        "MMAP": (9, 10, 11, 12),
+        "CLOSE": (4, 5, 6, 7),
+        "DUP": (7, 8, 9, 10),
+    }
+    changed_mapping = False
+    for index in range(open_index, close_index + 1):
+        fields = lines[index].split("\t")
+        shape = object_shapes.get(fields[0])
+        if shape is None:
+            continue
+        classification_index, device_index, inode_index, path_index_in_event = shape
+        if fields[device_index] != device or fields[inode_index] != inode \
+                or bytes.fromhex(fields[path_index_in_event]).decode("utf-8") != original_path:
+            continue
+        fields[classification_index] = "S"
+        fields[device_index] = str(target_stat.st_dev)
+        fields[inode_index] = str(target_stat.st_ino)
+        fields[path_index_in_event] = target_hex
+        lines[index] = "\t".join(fields)
+        changed_mapping = changed_mapping or fields[0] == "MMAP"
+    if not changed_mapping:
+        raise CampaignError("G25 did not mutate a complete mapping object")
+    trace_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    _refresh_trace_record(case_dir, statement)
+
+
 def apply_attack(
         case_dir: Path, case_id: str, prior: Mapping[str, Path], roots: Mapping[str, str]) -> None:
     if case_id in {"G00", "G15", "G23"}:
@@ -304,19 +458,31 @@ def apply_attack(
                 original=corpus if case_id == "G12" else None,
                 original_prefix=generated_cache if case_id == "G13" else None))
     elif case_id == "G14":
-        def mutate_socket(fields: list[str]) -> bool:
-            if len(fields) != 7:
+        def mutate_family(
+                fields: list[str], *, length: int, index: int,
+                syscall: bool = False) -> bool:
+            if len(fields) != length or (syscall and fields[4] != "socket"):
                 return False
-            fields[4] = "2"
+            fields[index] = "2"
             return True
-        _mutate_trace_line(case_dir, statement, "SOCKET", mutate_socket)
+        _mutate_trace_line(
+            case_dir, statement, "SYSCALL_E",
+            lambda fields: mutate_family(
+                fields, length=11, index=5, syscall=True))
+        _mutate_trace_line(
+            case_dir, statement, "SOCKET",
+            lambda fields: mutate_family(fields, length=7, index=4))
+        _mutate_trace_line(
+            case_dir, statement, "BIND",
+            lambda fields: mutate_family(fields, length=9, index=4))
     elif case_id == "G16":
         (case_dir / "stderr.bin").unlink()
     elif case_id == "G17":
         (case_dir / "stderr.bin").write_bytes(b"replacement diagnostic\n")
     elif case_id == "G18":
-        statement["streams"]["stderr"]["challenge"] = read_json(
-            prior["G15"] / "statement.json")["challenge"]
+        replay_statement = read_json(prior["G15"] / "statement.json")
+        shutil.copyfile(prior["G15"] / "stderr.bin", case_dir / "stderr.bin")
+        statement["streams"]["stderr"] = replay_statement["streams"]["stderr"]
     elif case_id == "G19":
         baseline = read_json(prior["G00"] / "statement.json")
         _strip_current_semantic_reads(case_dir, statement)
@@ -326,9 +492,10 @@ def apply_attack(
         statement["challenge"] = read_json(prior["G00"] / "statement.json")["challenge"]
     elif case_id == "G21":
         def mutate_lineage(fields: list[str]) -> bool:
-            if len(fields) < 6:
+            if len(fields) != 6 or fields[4] != "clone_thread":
                 return False
-            fields[3] = str(int(fields[3]) + 1000000)
+            fields[4] = "clone_process"
+            fields[5] = str(int(fields[5]) & ~0x10000)
             return True
         _mutate_trace_line(case_dir, statement, "LINEAGE", mutate_lineage)
     elif case_id == "G22":
@@ -344,22 +511,14 @@ def apply_attack(
         target = Path(next(
             item["path"] for item in statement["roles"]
             if item.get("role") == "corpus"))
-        target_stat = target.stat()
-        def mutate_mapping(fields: list[str]) -> bool:
-            if len(fields) != 13:
-                return False
-            fields[9] = "S"
-            fields[10] = str(target_stat.st_dev)
-            fields[11] = str(target_stat.st_ino)
-            fields[12] = str(target).encode("utf-8").hex()
-            return True
-        _mutate_trace_line(case_dir, statement, "MMAP", mutate_mapping)
+        _mutate_mapping_object(case_dir, statement, target)
     else:
         raise CampaignError(f"no frozen attack implementation for {case_id}")
     write_json(case_dir / "statement.json", statement)
 
 
-def _verifier_common(args: argparse.Namespace, packet_manifest: Path) -> list[str]:
+def _verifier_common(args: argparse.Namespace, packet_manifest: Path, product: Path,
+                     packet: Path, runtime: Path) -> list[str]:
     return [
         "--profile", str(args.profile.resolve()),
         "--g0-manifest", str(args.g0_manifest.resolve()),
@@ -371,6 +530,13 @@ def _verifier_common(args: argparse.Namespace, packet_manifest: Path) -> list[st
         "--authority-issue", str(args.authority_issue),
         "--authority-comment", str(args.authority_comment),
         "--request-index", args.request_index,
+        "--expected-godot", str(args.godot.resolve()),
+        "--expected-product-source", str(args.product_source.resolve()),
+        "--expected-packet-source", str(
+            (args.packet_source.resolve() / args.packet_root).resolve()),
+        "--expected-product-mount", str(product.resolve()),
+        "--expected-packet-mount", str(packet.resolve()),
+        "--expected-runtime-root", str(runtime.resolve()),
     ]
 
 
@@ -416,8 +582,7 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
     runner.generate_godot_configuration(
         args.godot.resolve(), args.product_source.resolve(), workspace,
         profile, read_json(args.g0_manifest.resolve()))
-    mounts_root = output / "input-mounts"
-    mounts_root.mkdir()
+    mounts_root = Path(tempfile.mkdtemp(prefix="glassvow-godot-runtime-input-"))
     product = mounts_root / "product"
     packet = mounts_root / "packet"
     packet_source = args.packet_source.resolve() / args.packet_root
@@ -467,62 +632,54 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
                 raise CampaignError("real Godot diagnostic baseline was not produced")
             if not args.admit_only:
                 apply_attack(case_dir, case_id, prior, statement["roots"])
-            case_bytes = sum(
-                path.stat().st_size for path in case_dir.rglob("*") if path.is_file())
-            if case_bytes > profile["caps"]["maxCasePacketBytes"]:
-                raise CampaignError(f"{case_id} evidence exceeds its frozen cap")
+            campaign_evidence_bytes(
+                case_dir, mounts_root, profile["caps"]["maxCasePacketBytes"], case_id)
             receipt = case_dir / "receipt.json"
             replay = case_dir / "receipt-replay.json"
-            common = _verifier_common(args, packet_manifest)
+            common = _verifier_common(
+                args, packet_manifest, product, packet, runtime)
             for destination in (receipt, replay):
                 run([
                     sys.executable, str(VERIFIER_PATH), "case", *common,
                     "--challenge", str(challenge), "--case-dir", str(case_dir),
                     "--receipt-out", str(destination),
-                ])
+                ], allowed_returncodes=(0, 1) if args.admit_only else (0,))
             if receipt.read_bytes() != replay.read_bytes():
                 raise CampaignError(f"{case_id} verifier replay differs")
+            campaign_evidence_bytes(
+                case_dir, mounts_root, profile["caps"]["maxCasePacketBytes"], case_id)
             prior[case_id] = case_dir
         if args.admit_only:
-            case_receipt = read_json(cases_root / "G00" / "receipt.json")
-            capability_path = output / "capability-prerequisite.json"
             assert capability is not None
-            result = {
-                "schema": ADMISSION_SCHEMA, "verdict": case_receipt["verdict"],
-                "reason": case_receipt["reason"], "requestIndex": args.request_index,
-                "observerSha": args.observer_sha, "productSha": args.product_sha,
-                "packetSha": args.packet_sha, "packetRoot": args.packet_root,
-                "authorityIssue": args.authority_issue,
-                "authorityComment": args.authority_comment,
-                "caseReceiptSha256": case_receipt["receiptSha256"],
-                "capabilityRun": capability["capabilityRun"],
-                "capabilityReceiptSha256": capability["capabilityReceiptSha256"],
-                "capabilityPrerequisiteSha256": sha256_file(capability_path),
-            }
-            result["receiptSha256"] = hashlib.sha256(canonical_bytes(result)).hexdigest()
-            write_json(output / "admission-receipt.json", result)
+            result = write_admission_receipt(output, args, capability)
+            campaign_evidence_bytes(
+                output, mounts_root, profile["caps"]["maxCampaignBytes"])
             if (result["verdict"], result["reason"]) != ("PASS", "ADMITTED"):
                 raise CampaignError("admitted G00 invocation did not pass")
             return result
         campaign_receipt = output / "campaign-receipt.json"
         run([
             sys.executable, str(VERIFIER_PATH), "campaign",
-            *_verifier_common(args, packet_manifest),
+            *_verifier_common(args, packet_manifest, product, packet, runtime),
             "--challenges-dir", str(challenges), "--campaign-dir", str(cases_root),
             "--receipt-out", str(campaign_receipt),
         ])
-        total = campaign_evidence_bytes(output, mounts_root)
-        if total > profile["caps"]["maxCampaignBytes"]:
-            raise CampaignError("campaign byte cap exceeded")
+        campaign_evidence_bytes(
+            output, mounts_root, profile["caps"]["maxCampaignBytes"])
         result = read_json(campaign_receipt)
         if result.get("verdict") != "PASS":
             raise CampaignError("frozen case expectations did not all match")
         return result
     finally:
-        for target in reversed(mounted):
-            subprocess.run(
-                ["sudo", "-n", "umount", str(target)], check=False,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        teardown_error: CampaignError | None = None
+        try:
+            unmount_all(mounted)
+        except CampaignError as error:
+            teardown_error = error
+        if teardown_error is None:
+            shutil.rmtree(mounts_root)
+        else:
+            raise teardown_error
 
 
 def main(argv: Sequence[str] | None = None) -> int:

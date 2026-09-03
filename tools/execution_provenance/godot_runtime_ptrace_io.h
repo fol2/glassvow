@@ -20,6 +20,8 @@ bool gv_pipe_identity(pid_t pid, uint64_t address, int fds[2],
 bool gv_fd_offset(pid_t pid, int fd, int64_t *offset);
 bool gv_fd_count(pid_t pid, size_t *count);
 bool gv_process_tgid(pid_t pid, pid_t *tgid);
+bool gv_limit_address_space(uint64_t bytes);
+bool gv_limit_initial_stack(uint64_t bytes);
 bool gv_resolve_path(pid_t pid, int dirfd, const char *path,
                      char *resolved, size_t capacity);
 bool gv_path_within(const char *path, const char *root);

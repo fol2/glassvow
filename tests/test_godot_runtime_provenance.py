@@ -6,10 +6,12 @@ import hashlib
 import importlib.util
 import json
 import os
+import subprocess
 import tempfile
 import types
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -85,7 +87,7 @@ TRACE_CHALLENGE = "a" * 64
 
 def strict_trace_envelope(events: list[str]) -> list[str]:
     start = "\t".join([
-        "START", "1", "100", TRACE_CHALLENGE, *(["1"] * 17),
+        "START", "1", "100", TRACE_CHALLENGE, *(["1"] * 20),
     ])
     end = "\t".join([
         "END", str(len(events) + 2), "100", "200", "100",
@@ -166,6 +168,11 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         self.assertEqual(2048, caps["maxCloseEvents"])
         self.assertEqual(2, caps["maxSocketEvents"])
         self.assertEqual(2, caps["maxBindEvents"])
+        self.assertEqual(1207959552, caps["maxAddressSpaceBytes"])
+        self.assertEqual(16777216, caps["maxInitialStackBytes"])
+        self.assertEqual(5, caps["maxDupEvents"])
+        self.assertEqual(65536, caps["maxPacketManifestBytes"])
+        self.assertEqual(2, caps["validSignalEvents"])
         self.assertEqual(8, caps["maxQualificationAttempts"])
         self.assertEqual(120, caps["maxHostedMinutes"])
         self.assertEqual(15, caps["maxMinutesPerQualificationAttempt"])
@@ -175,12 +182,13 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             * caps["maxMinutesPerQualificationAttempt"],
         )
         self.assertEqual([
-            "hardTaskCapacity", "maxSingleReadBytes", "maxCapturedBytes",
+            "hardTaskCapacity", "maxAddressSpaceBytes", "maxInitialStackBytes",
+            "maxSingleReadBytes", "maxCapturedBytes",
             "maxSyscalls", "maxPathEvents", "maxReadEvents",
             "maxWriteEvents", "maxMmapEvents", "maxOpenFds",
             "maxSemanticReadBytes", "maxTraceBytes", "maxOpenEvents",
             "maxCloseEvents", "maxSocketEvents", "maxBindEvents",
-            "maxExecve", "validLineageEvents",
+            "maxExecve", "maxDupEvents", "validLineageEvents",
         ], caps["tracerStartLimitOrder"])
 
     def test_verifier_source_has_no_producer_dependency(self) -> None:
@@ -192,6 +200,95 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         )
         for token in forbidden:
             self.assertNotIn(token, source)
+
+    def test_profile_separates_requested_xdg_script_from_effective_interpreter(self) -> None:
+        self.assertEqual([], self.profile["invocation"]["launcherEnvironment"])
+        xdg = self.profile["invocation"]["permittedDescendantExecs"][1]
+        self.assertEqual("/usr/bin/xdg-user-dir", xdg["requestedPath"])
+        self.assertEqual("/bin/sh", xdg["effectivePath"])
+        self.assertEqual(["/bin/sh", "/usr/bin/xdg-user-dir", "DESKTOP"], xdg["argv"])
+
+    def test_profile_binds_every_measured_baseline_side_effect(self) -> None:
+        roles = self.profile["roles"]
+        self.assertEqual(309, roles["stdout"]["qualificationBaseline"]["size"])
+        self.assertEqual(0, roles["stderr"]["qualificationBaseline"]["size"])
+        self.assertEqual(
+            {"observation", "homeLog", "sentry"},
+            set(roles["output"]["qualificationBaseline"]),
+        )
+
+    def test_address_space_limit_is_inherited_before_tracee_exec(self) -> None:
+        g0 = self.profile["g0"]
+        expected = (
+            g0["syscallAccountedAddressSpaceOvercountBytes"]
+            + g0["godotElfPtLoadPageBytes"]
+            + g0["smallElfAndInterpreterAllowanceBytes"]
+            + g0["initialStackReservation"]["processes"]
+            * g0["initialStackReservation"]["bytesEach"]
+            + g0["vdsoVvarReservation"]["processes"]
+            * g0["vdsoVvarReservation"]["bytesEach"]
+        )
+        self.assertEqual(expected, g0["conservativeAddressSpaceContractBytes"])
+        self.assertEqual(
+            self.profile["caps"]["maxAddressSpaceBytes"] - expected,
+            g0["addressSpaceCapHeadroomBytes"],
+        )
+        tracer = (ROOT / "tools/execution_provenance/godot_runtime_ptrace_tracer.c").read_text(
+            encoding="utf-8")
+        io_source = (ROOT / "tools/execution_provenance/godot_runtime_ptrace_io.c").read_text(
+            encoding="utf-8")
+        self.assertIn("MAX_ADDRESS_SPACE (1152ULL * 1024ULL * 1024ULL)", tracer)
+        self.assertIn("MAX_INITIAL_STACK (16ULL * 1024ULL * 1024ULL)", tracer)
+        self.assertLess(tracer.index("gv_limit_address_space(MAX_ADDRESS_SPACE)"),
+                        tracer.index('execve("/usr/bin/env"'))
+        self.assertLess(tracer.index("gv_limit_initial_stack(MAX_INITIAL_STACK)"),
+                        tracer.index('execve("/usr/bin/env"'))
+        self.assertIn("setrlimit(resource, &limit)", io_source)
+        self.assertIn("limit_resource(RLIMIT_AS, bytes)", io_source)
+        self.assertIn("limit_resource(RLIMIT_STACK, bytes)", io_source)
+
+    def test_dynamic_directory_grammar_is_operation_specific(self) -> None:
+        records = self.profile["accessGrammar"]["paths"][
+            "successfulDynamicDirectoryOperations"]
+        actual = {(operation, path) for record in records
+                  for operation in record["operations"] for path in record["paths"]}
+        self.assertEqual({
+            ("chdir", "${PRODUCT}"),
+            ("chdir", "${HOME}/.local/share/godot/app_userdata/Glassvow"),
+            ("mkdir", "${HOME}/.local"),
+            ("mkdir", "${HOME}/.local/share"),
+            ("mkdir", "${HOME}/.local/share/godot"),
+            ("mkdir", "${HOME}/.local/share/godot/app_userdata"),
+            ("mkdir", "${HOME}/.local/share/godot/app_userdata/Glassvow"),
+            ("mkdir", "${HOME}/.local/share/godot/app_userdata/Glassvow/logs"),
+            ("newfstatat", "${PRODUCT}/addons/sentry/bin/linux/x86_64"),
+            ("readlinkat", "/sys/devices/virtual/input/mice"),
+            ("readlinkat", "/sys/devices/0006:045E:0621.0001/input/input1/js0"),
+            ("readlinkat", "/sys/devices/0006:045E:0621.0001/input/input1/event1"),
+            ("readlinkat", "/sys/devices/0006:045E:0621.0001/input/input1/mouse0"),
+            ("readlinkat", "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"),
+            ("readlinkat", "/sys/bus/hid"),
+            ("readlinkat", "/sys/bus/serio"),
+            ("readlinkat", "/sys/bus/vmbus"),
+            ("readlinkat", "/sys/bus/acpi"),
+        }, actual)
+        self.assertNotIn(("openat", "/sys/bus/hid"), actual)
+        self.assertNotIn(("readlinkat", "/sys/bus/pci"), actual)
+        verifier = VERIFIER_PATH.read_text(encoding="utf-8")
+        tracer = (ROOT / "tools/execution_provenance/godot_runtime_ptrace_tracer.c").read_text(
+            encoding="utf-8")
+        self.assertNotIn('any(item.startswith(path.rstrip("/") + "/") for item in known)', verifier)
+        self.assertIn("gv_path_within(task->resolved, home_root)", tracer)
+        self.assertIn("gv_path_within(task->resolved, output_root)", tracer)
+
+    def test_clone3_vfork_is_preserved_as_a_clone_process(self) -> None:
+        tracer = (ROOT / "tools/execution_provenance/godot_runtime_ptrace_tracer.c").read_text(
+            encoding="utf-8")
+        runner = RUNNER_PATH.read_text(encoding="utf-8")
+        self.assertIn("parent->number == SYS_clone3", tracer)
+        self.assertIn("parent->clone_flags & CLONE_VFORK", tracer)
+        self.assertIn('!strcmp(kind, "clone_process") && flags == process.clone_flags', tracer)
+        self.assertIn('checked([str(binary), "--self-test"])', runner)
 
 
 class GodotRuntimeVerifierParserTests(unittest.TestCase):
@@ -276,6 +373,277 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
             profile, args)
         self.assertEqual(30, len(roles))
 
+    def test_environment_is_an_exact_unique_map_not_an_unmeasured_order(self) -> None:
+        expected = ["HOME=/fresh", "PATH=/usr/bin:/bin", "LANG=C.UTF-8", "PWD=/observer"]
+        self.assertEqual(
+            self.verifier._environment(expected),
+            self.verifier._environment(list(reversed(expected))),
+        )
+        with self.assertRaisesRegex(self.verifier.VerificationFailure, "ENVIRONMENT_MISMATCH"):
+            self.verifier._environment(expected + ["HOME=/other"])
+
+    def test_failed_path_grammar_binds_error_path_operation_and_arguments(self) -> None:
+        profile = json.loads(PROFILE_PATH.read_text(encoding="utf-8"))
+        grammar = profile["accessGrammar"]["paths"]["failedPathGrammar"]
+        roots = {"GODOT": "/runtime/godot", "PRODUCT": "/product", "PACKET": "/packet",
+                 "HOME": "/fresh/home", "OUTPUT": "/fresh/output"}
+        known, roles = {"/product/role.gd"}, {"/product/role.gd"}
+        valid = [
+            {"type": "PATH_X", "operation": "openat", "returned": -13,
+             "path": "/fresh/output/observation.json", "_arguments": [0, 0, 577]},
+            {"type": "PATH_X", "operation": "mkdir", "returned": -17,
+             "path": "/fresh/home", "_arguments": [0, 509]},
+            {"type": "PATH_X", "operation": "readlink", "returned": -22,
+             "path": "/product", "_arguments": [0, 0]},
+            {"type": "PATH_X", "operation": "openat", "returned": -2,
+             "path": "/product/role.gd.import", "_arguments": [0, 0, 0]},
+        ]
+        self.verifier._validate_failed_paths(valid, known, roles, roots, grammar)
+        for changed in (
+                {**valid[0], "_arguments": [0, 0, 0]},
+                {**valid[1], "_arguments": [0, 508]},
+                {**valid[1], "path": "/fresh"},
+                {"type": "PATH_X", "operation": "readlink", "returned": -22,
+                 "path": "/product/addons/sentry/bin", "_arguments": [0, 0]},
+                {"type": "PATH_X", "operation": "stat", "returned": -2,
+                 "path": "/packet/undeclared", "_arguments": [0]}):
+            with self.assertRaises(self.verifier.VerificationFailure):
+                self.verifier._validate_failed_paths([changed], known, roles, roots, grammar)
+        ancestor_roots = {**roots, "PRODUCT": "/mount/product"}
+        self.verifier._validate_failed_paths([{
+            "type": "PATH_X", "operation": "readlink", "returned": -22,
+            "path": "/mount", "_arguments": [0, 0],
+        }], known, roles, ancestor_roots, grammar)
+
+    def test_network_contract_binds_socket_and_sockaddr_tuple(self) -> None:
+        profile = json.loads(PROFILE_PATH.read_text(encoding="utf-8"))
+        sockets = [{"type": "SOCKET", "fd": fd, "family": 16,
+                    "socketType": 526339, "protocol": 15} for fd in (5, 6)]
+        binds = [{"type": "BIND", "fd": fd, "family": 16, "pid": 0,
+                  "groups": 2, "addressLength": 12, "returned": 0} for fd in (5, 6)]
+        self.verifier._network({"events": sockets + binds}, profile)
+        binds[0]["groups"] = 1
+        with self.assertRaisesRegex(self.verifier.VerificationFailure, "FORBIDDEN_NETWORK_FAMILY"):
+            self.verifier._network({"events": sockets + binds}, profile)
+
+    def test_checkout_identity_binds_head_and_tracked_cleanliness(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-checkout-") as temporary:
+            repository = Path(temporary) / "repository"
+            subprocess.run(["git", "init", "-q", str(repository)], check=True)
+            tracked = repository / "tracked.txt"
+            tracked.write_text("frozen\n", encoding="utf-8")
+            subprocess.run(["git", "-C", str(repository), "add", "tracked.txt"], check=True)
+            subprocess.run([
+                "git", "-C", str(repository), "-c", "user.name=Glassvow test",
+                "-c", "user.email=glassvow@example.invalid", "commit", "-qm", "freeze",
+            ], check=True)
+            expected = subprocess.check_output(
+                ["git", "-C", str(repository), "rev-parse", "HEAD"], text=True).strip()
+            self.assertEqual((expected, True), self.verifier._checkout_identity(repository))
+            tracked.write_text("changed\n", encoding="utf-8")
+            self.assertEqual((expected, False), self.verifier._checkout_identity(repository))
+
+    def _measured_lineage_fixture(self) -> tuple[dict, dict]:
+        profile = json.loads(PROFILE_PATH.read_text(encoding="utf-8"))
+        graph = profile["processGraph"]
+        root, shell, xdg = 100, 200, 300
+        threads = list(range(101, 108))
+        events: list[dict] = [
+            {"type": "EXEC", "sequence": 1, "tid": root, "tgid": root},
+            {"type": "EXEC", "sequence": 2, "tid": root, "tgid": root},
+            {"type": "PIPE", "sequence": 10, "tid": root, "path": "pipe:[111]"},
+            {"type": "DUP", "sequence": 20, "tid": root, "operation": "dup2",
+             "sourceFd": 4, "targetFd": 1, "path": "pipe:[111]", "closeOnExec": 0},
+            {"type": "LINEAGE", "sequence": 29, "tid": root, "childTid": shell,
+             "kind": graph["rootToShellKind"], "cloneFlags": graph["rootToShellFlags"]},
+            {"type": "EXEC", "sequence": 30, "tid": shell, "tgid": shell},
+            {"type": "DUP", "sequence": 40, "tid": shell, "operation": "fcntl",
+             "sourceFd": 2, "targetFd": 10, "path": "pipe:[900]", "closeOnExec": 0},
+            {"type": "DUP", "sequence": 41, "tid": shell, "operation": "dup2",
+             "sourceFd": 5, "targetFd": 2, "path": "/dev/null", "closeOnExec": 0},
+            {"type": "LINEAGE", "sequence": 44, "tid": shell, "childTid": xdg,
+             "kind": graph["shellToXdgKind"], "cloneFlags": graph["shellToXdgFlags"]},
+            {"type": "DUP", "sequence": 45, "tid": shell, "operation": "dup2",
+             "sourceFd": 10, "targetFd": 2, "path": "pipe:[900]", "closeOnExec": 0},
+            {"type": "EXEC", "sequence": 50, "tid": xdg, "tgid": xdg},
+            {"type": "DUP", "sequence": 51, "tid": xdg, "operation": "fcntl",
+             "sourceFd": 3, "targetFd": 10, "path": "/usr/bin/xdg-user-dir",
+             "closeOnExec": 0},
+            {"type": "EXIT", "sequence": 60, "tid": xdg, "status": 0},
+            {"type": "SIGNAL", "sequence": 61, "tid": shell, "signal": 17},
+            {"type": "EXIT", "sequence": 62, "tid": shell, "status": 0},
+            {"type": "SIGNAL", "sequence": 63, "tid": root, "signal": 17},
+        ]
+        events.extend({
+            "type": "LINEAGE", "sequence": 3 + index, "tid": root,
+            "childTid": tid, "kind": graph["rootThreadKind"],
+            "cloneFlags": graph["rootThreadFlags"],
+        } for index, tid in enumerate(threads))
+        events.extend({"type": "EXIT", "sequence": 70 + index,
+                       "tid": tid, "status": 0}
+                      for index, tid in enumerate(threads))
+        events.append({"type": "EXIT", "sequence": 80, "tid": root, "status": 0})
+        events.extend({"type": "SYSCALL_E", "sequence": 90 + index,
+                       "tid": root, "name": "clone3"}
+                      for index in range(8))
+        events.extend((
+            {"type": "SYSCALL_E", "sequence": 98, "tid": shell, "name": "vfork"},
+            {"type": "SYSCALL_E", "sequence": 99, "tid": root, "name": "pipe2"},
+        ))
+        events.extend({"type": "SYSCALL_E", "sequence": 100 + index,
+                       "tid": shell, "name": "dup2"}
+                      for index in range(3))
+        return {"events": events, "end": {"taskCount": 10, "rootExit": 0}}, profile
+
+    def test_process_signal_grammar_requires_each_sigchld_after_its_child_exit(self) -> None:
+        trace, profile = self._measured_lineage_fixture()
+        self.verifier._lineage(trace, profile, diagnostic=False)
+        signals = [event for event in trace["events"] if event["type"] == "SIGNAL"]
+        signals[0]["sequence"] = 59
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "SIGCHLD process ordering"):
+            self.verifier._lineage(trace, profile, diagnostic=False)
+
+    def test_runtime_mapping_contract_is_exact_but_allows_measured_shared_and_eof_span(self) -> None:
+        roots = {"PRODUCT": "/product"}
+        events = [
+            {"type": "MMAP", "path": "/runtime/cache", "offset": 0, "length": 27028,
+             "protection": 1, "flags": 1},
+            {"type": "MMAP", "path": "/product/lib.so", "offset": 0, "length": 5000,
+             "protection": 1, "flags": 2050},
+        ]
+        normal = [
+            {"path": "${PRODUCT}/lib.so", "offset": 0, "length": 5000,
+             "protection": 1, "flags": 2050},
+            {"path": "/runtime/cache", "offset": 0, "length": 27028,
+             "protection": 1, "flags": 1},
+        ]
+        contract = {
+            "count": 2, "canonicalMultisetSha256": self.verifier._sha(
+                self.verifier._canonical(normal)),
+            "protectionValues": [1, 3, 5], "flagValues": [1, 2, 2050, 2066],
+            "sharedReadOnlyPaths": ["/runtime/cache"],
+        }
+        profile = {"accessGrammar": {"mappings": {"runtimeIdentity": contract}}}
+        self.verifier._runtime_mappings({"events": events}, roots, profile)
+        events[1]["length"] += 1
+        with self.assertRaisesRegex(self.verifier.VerificationFailure, "multiset"):
+            self.verifier._runtime_mappings({"events": events}, roots, profile)
+
+    def test_receipt_semantic_digest_binds_the_captured_sidecar_bytes(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-receipt-") as temporary:
+            case = Path(temporary)
+            statement = {"roles": [{"path": "/packet/corpus.json", "size": 3}]}
+            trace = {
+                "events": [{
+                    "type": "READ", "classification": "S", "sequence": 1,
+                    "tid": 100, "operation": "read", "fd": 7, "offset": 0,
+                    "requested": 3, "returned": 3, "device": 1, "inode": 2,
+                    "path": "/packet/corpus.json", "sidecarOffset": 0,
+                }],
+                "end": {},
+            }
+            first = self.verifier._receipt_details(statement, trace, b"abc", case)
+            second = self.verifier._receipt_details(statement, trace, b"abd", case)
+            self.assertNotEqual(
+                first["semanticConsumption"]["canonicalSha256"],
+                second["semanticConsumption"]["canonicalSha256"],
+            )
+
+    def _incomplete_case_args(self, root: Path, case_dir: Path) -> types.SimpleNamespace:
+        challenge = root / "challenge.txt"
+        challenge.write_text(TRACE_CHALLENGE + "\n", encoding="ascii")
+        packet_manifest = root / "manifest.json"
+        packet_manifest.write_text(json.dumps({
+            "schema": "glassvow.godot-runtime-packet/v1", "productSha": "a" * 40,
+            "packetRoot": "research_packets/frozen", "authorityIssue": 535,
+            "authorityComment": 5524343289, "requestIndices": ["0"], "roles": {},
+        }), encoding="utf-8")
+        return types.SimpleNamespace(
+            profile=PROFILE_PATH, g0_manifest=ROOT / "tools/execution_provenance/godot_runtime_g0_manifest.json",
+            packet_manifest=packet_manifest, case_id="G24", case_dir=case_dir, challenge=challenge,
+            observer_sha="c" * 40, product_sha="a" * 40, packet_sha="b" * 40,
+            packet_root="research_packets/frozen", authority_issue=535,
+            authority_comment=5524343289, request_index="0",
+            expected_godot=root / "godot", expected_product_source=root / "product-source",
+            expected_packet_source=root / "packet-source", expected_product_mount=root / "product",
+            expected_packet_mount=root / "packet", expected_runtime_root=root / "runtime")
+
+    def test_missing_malformed_statement_and_trace_return_inconclusive_receipts(self) -> None:
+        self.verifier.FROZEN_PROFILE_SHA256 = sha256(PROFILE_PATH)
+        with tempfile.TemporaryDirectory(prefix="godot-incomplete-") as temporary:
+            root = Path(temporary)
+            for name in ("missing", "bad-statement", "bad-trace"):
+                case = root / name; case.mkdir()
+                args = self._incomplete_case_args(root, case)
+                if name == "bad-statement":
+                    (case / "statement.json").write_text("{", encoding="utf-8")
+                elif name == "bad-trace":
+                    sidecar = b""; (case / "sidecar.bin").write_bytes(sidecar)
+                    trace = ("\n".join(strict_trace_envelope([
+                        "UNKNOWN\t2\t100",
+                    ])) + "\n").encode()
+                    (case / "trace.tsv").write_bytes(trace)
+                    (case / "statement.json").write_text(json.dumps({
+                        "trace": {"file": "trace.tsv", "size": len(trace),
+                                  "sha256": hashlib.sha256(trace).hexdigest()},
+                        "sidecar": {"file": "sidecar.bin", "size": 0,
+                                    "sha256": hashlib.sha256(sidecar).hexdigest()},
+                    }), encoding="utf-8")
+                receipt = self.verifier.verify_case(args)
+                self.assertEqual(("INCONCLUSIVE", "PROVENANCE_INCOMPLETE"),
+                                 (receipt["verdict"], receipt["reason"]))
+                self.assertEqual(64, len(receipt["receiptSha256"]))
+
+    def test_missing_challenge_or_malformed_frozen_source_still_returns_receipt(self) -> None:
+        original_profile_hash = self.verifier.FROZEN_PROFILE_SHA256
+        with tempfile.TemporaryDirectory(prefix="godot-source-incomplete-") as temporary:
+            root = Path(temporary)
+            try:
+                cases: list[tuple[str, types.SimpleNamespace]] = []
+
+                def arguments(label: str) -> types.SimpleNamespace:
+                    base = root / label
+                    case = base / "case"
+                    case.mkdir(parents=True)
+                    return self._incomplete_case_args(base, case)
+
+                missing_args = arguments("missing-challenge")
+                missing_args.challenge.unlink()
+                self.verifier.FROZEN_PROFILE_SHA256 = sha256(PROFILE_PATH)
+                cases.append(("challenge", missing_args))
+
+                packet_args = arguments("bad-packet")
+                packet_args.packet_manifest.write_text("{", encoding="utf-8")
+                cases.append(("packetManifest", packet_args))
+
+                g0_args = arguments("bad-g0")
+                g0_args.g0_manifest = root / "bad-g0.json"
+                g0_args.g0_manifest.write_text("{", encoding="utf-8")
+                cases.append(("g0Manifest", g0_args))
+
+                profile_args = arguments("bad-profile")
+                profile_args.profile = root / "bad-profile.json"
+                profile_args.profile.write_text("{", encoding="utf-8")
+
+                for source, args in cases:
+                    self.verifier.FROZEN_PROFILE_SHA256 = sha256(PROFILE_PATH)
+                    receipt = self.verifier.verify_case(args)
+                    self.assertEqual(
+                        ("INCONCLUSIVE", "PROVENANCE_INCOMPLETE"),
+                        (receipt["verdict"], receipt["reason"]), source)
+                    self.assertEqual(64, len(receipt["receiptSha256"]))
+                    self.assertIn(source, receipt["sourceEvidence"])
+
+                self.verifier.FROZEN_PROFILE_SHA256 = sha256(profile_args.profile)
+                receipt = self.verifier.verify_case(profile_args)
+                self.assertEqual(
+                    ("INCONCLUSIVE", "PROVENANCE_INCOMPLETE"),
+                    (receipt["verdict"], receipt["reason"]))
+                self.assertTrue(receipt["sourceEvidence"]["profile"]["present"])
+            finally:
+                self.verifier.FROZEN_PROFILE_SHA256 = original_profile_hash
+
 
 class GodotRuntimeRunnerContractTests(unittest.TestCase):
     @classmethod
@@ -323,6 +691,23 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 authority_comment=1)
             self.assertEqual(script.resolve(), result["externalScript"])
             self.assertEqual(corpus.resolve(), result["corpus"])
+
+    def test_packet_preflight_caps_and_rejects_directories_before_json_read(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-packet-preflight-") as temporary:
+            packet = Path(temporary) / "packet"
+            packet.mkdir()
+            (packet / "manifest.json").write_text("{}", encoding="utf-8")
+            (packet / "oracle.gd").write_text("extends SceneTree\n", encoding="utf-8")
+            (packet / "nested").mkdir()
+            with self.assertRaisesRegex(
+                    self.runner.RunnerError, "regular non-symlink"):
+                self.runner.read_packet_manifest(packet, self.profile)
+            (packet / "nested").rmdir()
+            (packet / "corpus.json").write_text("{}\n", encoding="utf-8")
+            capped = json.loads(json.dumps(self.profile))
+            capped["caps"]["maxPacketManifestBytes"] = 1
+            with self.assertRaisesRegex(self.runner.RunnerError, "manifest cap"):
+                self.runner.read_packet_manifest(packet, capped)
 
     def test_packet_manifest_rejects_symlink_role(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-packet-") as temporary:
@@ -449,6 +834,11 @@ class GodotRuntimeCampaignContractTests(unittest.TestCase):
         assert spec and spec.loader
         cls.campaign = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(cls.campaign)
+        verifier_spec = importlib.util.spec_from_file_location(
+            "godot_runtime_verify_campaign", VERIFIER_PATH)
+        assert verifier_spec and verifier_spec.loader
+        cls.verifier = importlib.util.module_from_spec(verifier_spec)
+        verifier_spec.loader.exec_module(cls.verifier)
 
     def test_campaign_covers_the_complete_frozen_matrix_once(self) -> None:
         self.assertEqual(
@@ -514,6 +904,156 @@ class GodotRuntimeCampaignContractTests(unittest.TestCase):
                 len(b"evidence"),
                 self.campaign.campaign_evidence_bytes(output, mounts),
             )
+            with self.assertRaisesRegex(self.campaign.CampaignError, "byte cap exceeded"):
+                self.campaign.campaign_evidence_bytes(
+                    output, mounts, len(b"evidence") - 1)
+            (output / "cases/replay-link").symlink_to(output / "cases/receipt.json")
+            with self.assertRaisesRegex(self.campaign.CampaignError, "non-regular"):
+                self.campaign.campaign_evidence_bytes(output, mounts)
+
+    def test_unmount_failure_attempts_every_target_and_fails_closed(self) -> None:
+        failed = subprocess.CompletedProcess(["umount"], 32)
+        with mock.patch.object(self.campaign.subprocess, "run", return_value=failed) as invoked:
+            with self.assertRaisesRegex(self.campaign.CampaignError, "unmount failed"):
+                self.campaign.unmount_all([Path("/outside/product"), Path("/outside/packet")])
+        self.assertEqual(2, invoked.call_count)
+        self.assertIn(
+            'tempfile.mkdtemp(prefix="glassvow-godot-runtime-input-")',
+            CAMPAIGN_PATH.read_text(encoding="utf-8"),
+        )
+
+    def test_a1_nonpass_still_publishes_a_terminal_admission_receipt(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-admission-") as temporary:
+            output = Path(temporary)
+            (output / "cases/G00").mkdir(parents=True)
+            self.campaign.write_json(output / "cases/G00/receipt.json", {
+                "verdict": "INCONCLUSIVE", "reason": "PROVENANCE_INCOMPLETE",
+                "receiptSha256": "a" * 64,
+            })
+            self.campaign.write_json(output / "capability-prerequisite.json", {
+                "schema": "test-prerequisite",
+            })
+            args = types.SimpleNamespace(
+                request_index="0", observer_sha="b" * 40, product_sha="c" * 40,
+                packet_sha="d" * 40, packet_root="research_packets/a1-v2",
+                authority_issue=421, authority_comment=5524340839,
+            )
+            result = self.campaign.write_admission_receipt(output, args, {
+                "capabilityRun": 123,
+                "capabilityReceiptSha256": "e" * 64,
+            })
+            published = self.campaign.read_json(output / "admission-receipt.json")
+            self.assertEqual("INCONCLUSIVE", result["verdict"])
+            self.assertEqual(result, published)
+            self.assertEqual("a" * 64, published["caseReceiptSha256"])
+        self.assertIn(
+            "allowed_returncodes=(0, 1) if args.admit_only else (0,)",
+            CAMPAIGN_PATH.read_text(encoding="utf-8"),
+        )
+
+    def test_g14_mutates_socket_syscall_event_and_address_consistently(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-g14-") as temporary:
+            case = Path(temporary)
+            (case / "trace.tsv").write_text("\n".join((
+                "SYSCALL_E\t1\t100\t0\tsocket\t16\t526339\t15\t0\t0\t0",
+                "SOCKET\t2\t100\t5\t16\t526339\t15",
+                "BIND\t3\t100\t5\t16\t0\t2\t12\t0",
+            )) + "\n", encoding="utf-8")
+            self.campaign.write_json(case / "statement.json", {
+                "caseId": "G14", "trace": {},
+            })
+            self.campaign.apply_attack(case, "G14", {}, {})
+            lines = [line.split("\t") for line in
+                     (case / "trace.tsv").read_text(encoding="utf-8").splitlines()]
+            self.assertEqual(("2", "2", "2"),
+                             (lines[0][5], lines[1][4], lines[2][4]))
+            self.assertEqual(("526339", "15", "2", "12"),
+                             (lines[1][5], lines[1][6], lines[2][6], lines[2][7]))
+
+    def test_g18_replays_both_prior_stderr_bytes_and_declaration(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-g18-") as temporary:
+            root = Path(temporary); case = root / "G18"; prior = root / "G15"
+            case.mkdir(); prior.mkdir()
+            prior_stderr = b"current diagnostic\n"
+            (prior / "stderr.bin").write_bytes(prior_stderr)
+            prior_record = {"path": "/prior/stderr.bin", "size": len(prior_stderr),
+                            "sha256": hashlib.sha256(prior_stderr).hexdigest()}
+            self.campaign.write_json(prior / "statement.json", {
+                "streams": {"stderr": prior_record},
+            })
+            (case / "stderr.bin").write_bytes(b"different\n")
+            self.campaign.write_json(case / "statement.json", {
+                "caseId": "G18", "streams": {"stderr": {"sha256": "0" * 64}},
+            })
+            self.campaign.apply_attack(case, "G18", {"G15": prior}, {})
+            mutated = self.campaign.read_json(case / "statement.json")
+            self.assertEqual(prior_stderr, (case / "stderr.bin").read_bytes())
+            self.assertEqual(prior_record, mutated["streams"]["stderr"])
+
+    def test_g21_changes_one_thread_edge_to_a_process_edge(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-g21-") as temporary:
+            case = Path(temporary); flags = 4001536
+            (case / "trace.tsv").write_text(
+                f"LINEAGE\t1\t100\t101\tclone_thread\t{flags}\n",
+                encoding="utf-8")
+            self.campaign.write_json(case / "statement.json", {
+                "caseId": "G21", "trace": {},
+            })
+            self.campaign.apply_attack(case, "G21", {}, {})
+            fields = (case / "trace.tsv").read_text(encoding="utf-8").split("\t")
+            self.assertEqual("clone_process", fields[4])
+            self.assertEqual(flags & ~0x10000, int(fields[5]))
+
+    def test_g25_reaches_semantic_mapping_reason_after_fd_accounting(self) -> None:
+        profile = json.loads(PROFILE_PATH.read_text(encoding="utf-8"))
+        caps = profile["caps"]
+        limits = [str(caps[key]) for key in caps["tracerStartLimitOrder"]]
+        with tempfile.TemporaryDirectory(prefix="godot-g25-") as temporary:
+            case = Path(temporary)
+            original = (case / "runtime-object").resolve()
+            corpus = (case / "corpus.json").resolve()
+            original.write_bytes(b"runtime")
+            corpus.write_bytes(b"semantic")
+            metadata = original.stat()
+            original_hex = str(original).encode().hex()
+            lines = [
+                "GODOTTRACEv1",
+                "\t".join(["START", "1", "100", TRACE_CHALLENGE, *limits]),
+                "SYSCALL_E\t2\t100\t257\topenat\t18446744073709551516\t0\t0\t0\t0\t0",
+                f"PATH\t3\t100\topenat\t{original_hex}\t{original_hex}",
+                "SYSCALL_X\t4\t100\t257\topenat\t3\t0\t0",
+                f"PATH_X\t5\t100\topenat\t3\t{original_hex}",
+                f"OPEN\t6\t100\t3\t0\tI\t{metadata.st_dev}\t{metadata.st_ino}\t{original_hex}",
+                "SYSCALL_E\t7\t100\t9\tmmap\t0\t4096\t1\t2\t3\t0",
+                "SYSCALL_X\t8\t100\t9\tmmap\t4096\t0\t0",
+                f"MMAP\t9\t100\t4096\t4096\t1\t2\t3\t0\tI\t{metadata.st_dev}\t{metadata.st_ino}\t{original_hex}",
+                "SYSCALL_E\t10\t100\t3\tclose\t3\t0\t0\t0\t0\t0",
+                "SYSCALL_X\t11\t100\t3\tclose\t0\t0\t0",
+                f"CLOSE\t12\t100\t3\tI\t{metadata.st_dev}\t{metadata.st_ino}\t{original_hex}",
+                "SYSCALL_E\t13\t100\t231\texit_group\t0\t0\t0\t0\t0\t0",
+                "EXIT\t14\t100\t0",
+                "\t".join([
+                    "END", "15", "100", "200", "100",
+                    "0", "1", "0", "4", "3", "0", "0", "1", "0", "0",
+                    "1", "1", "1", "0", "0", "0", "0", "0", "0", "-",
+                    TRACE_CHALLENGE,
+                ]),
+            ]
+            (case / "trace.tsv").write_text("\n".join(lines) + "\n", encoding="utf-8")
+            self.campaign.write_json(case / "statement.json", {
+                "caseId": "G25", "trace": {},
+                "roles": [{"role": "corpus", "path": str(corpus)}],
+            })
+            self.campaign.apply_attack(case, "G25", {}, {})
+            trace_bytes = (case / "trace.tsv").read_bytes()
+            trace = self.verifier.parse_trace_lines(
+                trace_bytes.decode().splitlines(), caps["maxEvents"])
+            self.verifier.validate_trace_accounting(
+                trace, caps, len(trace_bytes), 0, str(ROOT))
+            with self.assertRaisesRegex(
+                    self.verifier.VerificationFailure, "SEMANTIC_MAPPING_DENIED"):
+                self.verifier.reject_semantic_mappings(
+                    trace["events"], {str(corpus)})
 
     def test_g19_replay_packet_removes_current_semantic_read_evidence(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-g19-") as temporary:
