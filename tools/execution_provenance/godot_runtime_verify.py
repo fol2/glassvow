@@ -123,8 +123,8 @@ def _json_bounded(path: Path, maximum: int) -> dict[str, Any]:
 
 
 def _preflight_case_members(
-        case_dir: Path, caps: Mapping[str, Any]) -> tuple[dict[str, Path], int]:
-    members: dict[str, Path] = {}; total = 0
+        case_dir: Path, caps: Mapping[str, Any]) -> tuple[dict[str, bytes], int]:
+    members: dict[str, bytes] = {}; total = 0
     maximum_members = caps.get("maxCaseMembers")
     if not isinstance(maximum_members, int) or not 1 <= maximum_members <= len(_CASE_MEMBER_LIMITS):
         fail("PROVENANCE_INCOMPLETE", "invalid case member cap")
@@ -142,10 +142,11 @@ def _preflight_case_members(
                 maximum = _limit(caps, _CASE_MEMBER_LIMITS[entry.name])
                 if metadata.st_size > maximum:
                     fail("PROVENANCE_INCOMPLETE", f"{entry.name} exceeds its cap")
-                total += metadata.st_size
+                data = _bounded_bytes(Path(entry.path), maximum)
+                total += len(data)
                 if total > caps.get("maxCasePacketBytes", 0):
                     fail("PROVENANCE_INCOMPLETE", "case cap exceeded")
-                members[entry.name] = Path(entry.path)
+                members[entry.name] = data
     except OSError as error:
         fail("PROVENANCE_INCOMPLETE", f"case directory unavailable: {error}")
     if not {"statement.json", "trace.tsv", "sidecar.bin", "stdout.bin"}.issubset(members):
@@ -450,10 +451,19 @@ def _lineage(trace: Mapping[str, Any], profile: Mapping[str, Any], diagnostic: b
 def _output_records(statement: Mapping[str, Any], case_dir: Path) -> dict[str, Mapping[str, Any]]:
     streams, outputs = statement.get("streams"), statement.get("outputs")
     if not isinstance(streams, dict) or not isinstance(outputs, dict): fail("PROVENANCE_INCOMPLETE", "outputs missing")
+    roots = statement.get("roots")
+    if not isinstance(roots, dict): fail("PROVENANCE_INCOMPLETE", "output roots missing")
+    expected = {
+        "observation": (str(Path(str(roots.get("OUTPUT"))) / "observation.json"), "observation.json"),
+        "homeLog": (str(Path(str(roots.get("HOME"))) / ".local/share/godot/app_userdata/Glassvow/logs/godot.log"), "home-godot.log"),
+        "sentry": (str(Path(str(roots.get("HOME"))) / ".local/share/godot/app_userdata/Glassvow/sentry.dat"), "home-sentry.dat"),
+    }
     result: dict[str, Mapping[str, Any]] = {}
     for name in ("observation", "homeLog", "sentry"):
         record = outputs.get(name)
         if not isinstance(record, dict): fail("PROVENANCE_INCOMPLETE", f"{name} missing")
+        if (record.get("path"), record.get("file")) != expected[name]:
+            fail("PROVENANCE_INCOMPLETE", f"{name} output binding differs")
         if record.get("present"): result[_absolute(record.get("path"), name)] = record
     return result
 
@@ -483,22 +493,21 @@ def _written(events: Sequence[Mapping[str, Any]], path: str, sidecar: bytes, siz
 
 
 def _outputs(statement: Mapping[str, Any], trace: Mapping[str, Any], sidecar: bytes, case_dir: Path,
-             challenge: str, profile: Mapping[str, Any]) -> None:
+             challenge: str, profile: Mapping[str, Any],
+             case_members: Mapping[str, bytes]) -> None:
     case_id, streams, outputs = statement["caseId"], statement.get("streams", {}), statement.get("outputs", {})
     stderr = streams.get("stderr")
-    if not isinstance(stderr, dict) or not (case_dir / "stderr.bin").is_file():
+    if not isinstance(stderr, dict) or "stderr.bin" not in case_members:
         fail("STDERR_CAPTURE_MISSING", "stderr capture missing")
-    stderr_data = _bounded_bytes(
-        case_dir / "stderr.bin", _limit(profile["caps"], "maxStderrBytes"))
+    stderr_data = case_members["stderr.bin"]
     if len(stderr_data) != stderr.get("size") or _sha(stderr_data) != stderr.get("sha256"):
         fail("STDERR_CAPTURE_MISMATCH", "stderr bytes differ")
     if stderr.get("challenge") != challenge: fail("STDERR_INVOCATION_MISMATCH", "stderr challenge differs")
     if _stream_bytes(trace["events"], 2, sidecar) != stderr_data:
         fail("STDERR_CAPTURE_MISMATCH", "stderr captured writes differ")
     stdout = streams.get("stdout")
-    if not isinstance(stdout, dict) or not (case_dir / "stdout.bin").is_file(): fail("OUTPUT_NOT_CURRENT", "stdout missing")
-    stdout_data = _bounded_bytes(
-        case_dir / "stdout.bin", _limit(profile["caps"], "maxStdoutBytes"))
+    if not isinstance(stdout, dict) or "stdout.bin" not in case_members: fail("OUTPUT_NOT_CURRENT", "stdout missing")
+    stdout_data = case_members["stdout.bin"]
     if len(stdout_data) != stdout.get("size") or _sha(stdout_data) != stdout.get("sha256") or \
             stdout.get("challenge") != challenge or _stream_bytes(trace["events"], 1, sidecar) != stdout_data:
         fail("OUTPUT_NOT_CURRENT", "stdout differs")
@@ -531,10 +540,15 @@ def _outputs(statement: Mapping[str, Any], trace: Mapping[str, Any], sidecar: by
         file_path = case_dir / record["file"]
         reason = "STDERR_CAPTURE_MISMATCH" if file_path.name == "stderr.bin" else "OUTPUT_NOT_CURRENT"
         cap_name = "maxObservationBytes" if path.endswith("/observation.json") else "maxHomeOutputBytes"
-        data = _bounded_bytes(file_path, _limit(profile["caps"], cap_name), reason)
+        data = case_members.get(record["file"])
+        if data is None: fail(reason, f"output copy unavailable: {record['file']}")
         if len(data) != record.get("size") or _sha(data) != record.get("sha256"): fail(reason, "output copy differs")
-        live_path = Path(path); live = live_path.stat()
-        _live(record, reason)
+        live_path = Path(path); live_data = _bounded_bytes(
+            live_path, _limit(profile["caps"], cap_name), reason)
+        live = live_path.stat()
+        if (len(live_data), _sha(live_data), live.st_dev, live.st_ino) != \
+                (record.get("size"), record.get("sha256"), record.get("device"), record.get("inode")):
+            fail(reason, f"current output identity differs for {path}")
         if record.get("challenge") != challenge or _written(trace["events"], path, sidecar, len(data)) != data:
             fail(reason, f"current output differs for {path}")
         if not any(e["type"] == "CLOSE" and e["path"] == path and
@@ -727,9 +741,8 @@ def _trusted_setup(statement: Mapping[str, Any], roots: Mapping[str, str], case_
 
 
 def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, statement: dict,
-              trace: dict, sidecar: bytes) -> None:
-    challenge = _read_challenge(
-        args.challenge, _limit(profile["caps"], "maxChallengeBytes"))
+              trace: dict, sidecar: bytes, challenge: str,
+              case_members: Mapping[str, bytes]) -> None:
     if statement.get("schema") != STATEMENT_SCHEMA or statement.get("caseId") != args.case_id:
         fail("PROVENANCE_INCOMPLETE", "statement schema/case differs")
     if statement.get("challenge") != challenge or trace["challenge"] != challenge or statement.get("clock") != "CLOCK_MONOTONIC_RAW":
@@ -795,7 +808,9 @@ def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, s
     read_paths = {event["path"] for event in trace["events"] if event["type"] == "READ"}
     if statement["caseId"] == "G19" and any(path not in read_paths for path in roles):
         fail("OUTPUT_NOT_CURRENT", "output replay lacks current semantic consumption")
-    _outputs(statement, trace, sidecar, args.case_dir, challenge, profile)
+    _outputs(
+        statement, trace, sidecar, args.case_dir, challenge, profile,
+        case_members)
     if (diagnostic and (statement["tracer"]["returncode"] != 40 or trace["end"]["rootExit"] == 0)) or \
             (not diagnostic and (statement["tracer"]["returncode"] != 0 or trace["end"]["rootExit"] != 0)):
         fail("PROVENANCE_INCOMPLETE", "tracer/root exit contract differs")
@@ -824,12 +839,18 @@ def _capture_record(path: Path, maximum: int) -> dict[str, Any]:
         return record | {"bounded": False}
     try: data = _bounded_bytes(path, maximum)
     except VerificationFailure: return record | {"bounded": False}
-    return record | {"sha256": _sha(data)}
+    return record | {"size": len(data), "sha256": _sha(data)}
+
+
+def _capture_bytes(filename: str, data: bytes | None) -> dict[str, Any]:
+    if data is None: return {"file": filename, "present": False}
+    return {"file": filename, "present": True, "size": len(data), "sha256": _sha(data)}
 
 
 def _receipt_details(statement: Mapping[str, Any], trace: Mapping[str, Any] | None,
                      sidecar: bytes, case_dir: Path,
-                     profile: Mapping[str, Any] | None = None) -> dict[str, Any]:
+                     profile: Mapping[str, Any] | None = None,
+                     case_members: Mapping[str, bytes] | None = None) -> dict[str, Any]:
     events = trace.get("events", []) if isinstance(trace, dict) else []
     semantic = []
     for event in events:
@@ -849,7 +870,10 @@ def _receipt_details(statement: Mapping[str, Any], trace: Mapping[str, Any] | No
     topology = [event for event in events
                 if event.get("type") in {"EXEC", "LINEAGE", "SIGNAL", "EXIT"}]
     caps = profile.get("caps", {}) if isinstance(profile, Mapping) else {}
-    captures = {name: _capture_record(case_dir / filename, _limit(caps, cap_name))
+    cached = case_members if isinstance(case_members, Mapping) else {}
+    captures = {name: (_capture_bytes(filename, cached[filename])
+                       if filename in cached else
+                       _capture_record(case_dir / filename, _limit(caps, cap_name)))
                 for name, (filename, cap_name) in {
                     "stdout": ("stdout.bin", "maxStdoutBytes"),
                     "stderr": ("stderr.bin", "maxStderrBytes"),
@@ -908,6 +932,7 @@ def verify_case(args: argparse.Namespace) -> dict[str, Any]:
     statement: dict[str, Any] = {}; trace_path = args.case_dir / "trace.tsv"; sidecar_path = args.case_dir / "sidecar.bin"
     trace: dict[str, Any] | None = None; trace_bytes = b""; sidecar = b""
     profile: dict[str, Any] = {}; g0: dict[str, Any] = {}; packet: dict[str, Any] = {}
+    case_members: dict[str, bytes] = {}; challenge_bytes = b""
     challenge_value: str | None = None; trusted_inputs_ready = False
     try:
         profile, g0, packet = _load_sources(args.profile, args.g0_manifest, args.packet_manifest)
@@ -915,16 +940,16 @@ def verify_case(args: argparse.Namespace) -> dict[str, Any]:
                   for case in profile["cases"]}
         if args.case_id not in CASE_RESULTS or matrix.get(args.case_id) != CASE_RESULTS[args.case_id]:
             fail("PROVENANCE_INCOMPLETE", "matrix differs")
-        challenge_value = _read_challenge(
-            args.challenge, _limit(profile["caps"], "maxChallengeBytes"))
+        challenge_bytes = _bounded_bytes(
+            args.challenge, _limit(profile["caps"], "maxChallengeBytes"),
+            "INVOCATION_CHALLENGE_MISMATCH")
+        challenge_value = _decode_challenge(challenge_bytes)
         trusted_inputs_ready = True
-        members, _ = _preflight_case_members(args.case_dir, profile["caps"])
-        statement = _json_bounded(
-            members["statement.json"], _limit(profile["caps"], "maxStatementBytes"))
-        trace_bytes = _bounded_bytes(
-            members["trace.tsv"], _limit(profile["caps"], "maxTraceBytes"))
-        sidecar = _bounded_bytes(
-            members["sidecar.bin"], _limit(profile["caps"], "maxCapturedBytes"))
+        case_members, _ = _preflight_case_members(args.case_dir, profile["caps"])
+        statement = json.loads(case_members["statement.json"].decode("utf-8"))
+        if not isinstance(statement, dict):
+            fail("PROVENANCE_INCOMPLETE", "statement.json is not an object")
+        trace_bytes, sidecar = case_members["trace.tsv"], case_members["sidecar.bin"]
         for name, data, record in (("trace", trace_bytes, statement.get("trace")),
                                    ("sidecar", sidecar, statement.get("sidecar"))):
             if not isinstance(record, dict) or record.get("file") != f"{name}.{'tsv' if name == 'trace' else 'bin'}" or \
@@ -936,7 +961,10 @@ def verify_case(args: argparse.Namespace) -> dict[str, Any]:
             trace, profile["caps"], len(trace_bytes), len(sidecar),
             str(OBSERVER_ROOT))
         validate_syscall_grammar(trace, profile["accessGrammar"]["allowedSyscalls"])
-        _complete(args, profile, g0, packet, statement, trace, sidecar); outcome = ("PASS", "ADMITTED")
+        _complete(
+            args, profile, g0, packet, statement, trace, sidecar,
+            challenge_value, case_members)
+        outcome = ("PASS", "ADMITTED")
     except (OSError, UnicodeError, IndexError, KeyError, TypeError, ValueError):
         outcome = ("INCONCLUSIVE", "PROVENANCE_INCOMPLETE")
     except VerificationFailure as error:
@@ -952,7 +980,9 @@ def verify_case(args: argparse.Namespace) -> dict[str, Any]:
         "g0Manifest": _capture_record(args.g0_manifest, _limit(caps, "maxG0ManifestBytes")),
         "packetManifest": _capture_record(
             args.packet_manifest, _limit(caps, "maxPacketManifestBytes")),
-        "challenge": _capture_record(args.challenge, _limit(caps, "maxChallengeBytes")),
+        "challenge": (_capture_bytes(args.challenge.name, challenge_bytes)
+                      if challenge_bytes else
+                      _capture_record(args.challenge, _limit(caps, "maxChallengeBytes"))),
     }
     receipt = {
         "schema": RECEIPT_SCHEMA, "caseId": args.case_id,
@@ -973,23 +1003,33 @@ def verify_case(args: argparse.Namespace) -> dict[str, Any]:
         "g0ManifestSha256": source_records["g0Manifest"].get("sha256"),
         "packetManifestSha256": source_records["packetManifest"].get("sha256"),
         "sourceEvidence": source_records,
-        "statement": _capture_record(
-            statement_path, _limit(caps, "maxStatementBytes")),
-        "trace": _capture_record(trace_path, _limit(caps, "maxTraceBytes")),
-        "sidecar": _capture_record(sidecar_path, _limit(caps, "maxCapturedBytes")),
+        "statement": (_capture_bytes("statement.json", case_members["statement.json"])
+                      if "statement.json" in case_members else
+                      _capture_record(statement_path, _limit(caps, "maxStatementBytes"))),
+        "trace": (_capture_bytes("trace.tsv", case_members["trace.tsv"])
+                  if "trace.tsv" in case_members else
+                  _capture_record(trace_path, _limit(caps, "maxTraceBytes"))),
+        "sidecar": (_capture_bytes("sidecar.bin", case_members["sidecar.bin"])
+                    if "sidecar.bin" in case_members else
+                    _capture_record(sidecar_path, _limit(caps, "maxCapturedBytes"))),
         "verifierSha256": _file_sha(Path(__file__)), "traceVerifierSha256": _file_sha(_HELPER_PATH),
         "tracerIdentitySha256": _sha(_canonical(tracer)), "ioHeaderSha256": tracer.get("ioHeaderSha256"),
-        **_receipt_details(statement, trace, sidecar, args.case_dir, profile),
+        **_receipt_details(
+            statement, trace, sidecar, args.case_dir, profile, case_members),
     }
     receipt["receiptSha256"] = _sha(_canonical(receipt)); return receipt
 
 
-def _read_challenge(path: Path, maximum: int) -> str:
-    try: value = _bounded_bytes(
-        path, maximum, "INVOCATION_CHALLENGE_MISMATCH").decode("ascii").rstrip("\n")
+def _decode_challenge(data: bytes) -> str:
+    try: value = data.decode("ascii").rstrip("\n")
     except UnicodeError as error: fail("INVOCATION_CHALLENGE_MISMATCH", str(error))
     if len(value) != 64 or any(char not in "0123456789abcdef" for char in value): fail("INVOCATION_CHALLENGE_MISMATCH", "bad challenge")
     return value
+
+
+def _read_challenge(path: Path, maximum: int) -> str:
+    return _decode_challenge(_bounded_bytes(
+        path, maximum, "INVOCATION_CHALLENGE_MISMATCH"))
 
 
 def _exclusive(path: Path, data: bytes) -> None:
@@ -1013,6 +1053,10 @@ def _campaign(args: argparse.Namespace) -> int:
     profile, _, _ = _load_sources(args.profile, args.g0_manifest, args.packet_manifest)
     expected_cases = {case["id"] for case in profile["cases"]}
     try:
+        for directory in (args.campaign_dir, args.challenges_dir):
+            metadata = directory.lstat()
+            if not stat.S_ISDIR(metadata.st_mode) or stat.S_ISLNK(metadata.st_mode):
+                fail("PROVENANCE_INCOMPLETE", "campaign root must be a direct non-symlink directory")
         with os.scandir(args.campaign_dir) as entries:
             case_entries = list(entries)
         with os.scandir(args.challenges_dir) as entries:

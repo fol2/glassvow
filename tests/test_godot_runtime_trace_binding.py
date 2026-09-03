@@ -195,6 +195,8 @@ class TraceBindingTests(unittest.TestCase):
                 case, self.profile["caps"])
             self.assertEqual(4, len(members))
             statement = case / "statement.json"
+            statement.write_bytes(b"replacement")
+            self.assertEqual(b"{}", members["statement.json"])
             statement.write_bytes(b"x" * (self.profile["caps"]["maxStatementBytes"] + 1))
             with self.assertRaisesRegex(self.verifier.VerificationFailure, "exceeds its cap"):
                 self.verifier._preflight_case_members(case, self.profile["caps"])
@@ -219,6 +221,24 @@ class TraceBindingTests(unittest.TestCase):
             with self.assertRaises(self.verifier.VerificationFailure):
                 self.verifier._read_challenge(
                     challenge, self.profile["caps"]["maxChallengeBytes"])
+        complete_body = VERIFY.read_text(encoding="utf-8").split(
+            "def _complete", 1)[1].split("def _identity_summary", 1)[0]
+        self.assertNotIn("_read_challenge(", complete_body)
+
+    def test_output_records_are_bound_to_exact_live_and_case_paths(self) -> None:
+        statement = {
+            "roots": {"HOME": "/fresh/home", "OUTPUT": "/fresh/output"},
+            "streams": {},
+            "outputs": {
+                "observation": {"present": False, "path": "/fresh/output/observation.json", "file": "observation.json"},
+                "homeLog": {"present": False, "path": "/fresh/home/.local/share/godot/app_userdata/Glassvow/logs/godot.log", "file": "home-godot.log"},
+                "sentry": {"present": False, "path": "/fresh/home/.local/share/godot/app_userdata/Glassvow/sentry.dat", "file": "home-sentry.dat"},
+            },
+        }
+        self.assertEqual({}, self.verifier._output_records(statement, Path("/case")))
+        statement["outputs"]["observation"]["file"] = "../outside"
+        with self.assertRaisesRegex(self.verifier.VerificationFailure, "binding differs"):
+            self.verifier._output_records(statement, Path("/case"))
 
 
 if __name__ == "__main__":
