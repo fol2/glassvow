@@ -63,10 +63,29 @@
     "identityMechanism": "Executable and runtime objects were executed, read or mmaped and are content-bound separately from semantic roles.",
     "manifest": {
       "path": "tools/execution_provenance/godot_runtime_g0_manifest.json",
-      "sha256": "6477457c7712940030bfba6e6bc214e4295aa8af0306357f70adffc40c721621",
+      "sha256": "a735c8e43d81c9e96ba28db1aa867e0a4f2116ce97ac6d29c598ec0951656018",
       "semanticReadSetCount": 30,
-      "runtimeIdentitySetCount": 125,
+      "runtimeIdentitySetCount": 126,
       "platformObservationSetCount": 13
+    },
+    "configurationCapture": {
+      "path": "tools/execution_provenance/godot_runtime_configuration_manifest.json",
+      "sha256": "ec1b31b5cc7568b5babaf34adff4536d930b16744a005393db88bf65d99d4d5c",
+      "fixtureRoot": "tools/execution_provenance/godot_runtime_configuration",
+      "roleCount": 3,
+      "rule": "Run 33762926632 remains the invocation, platform and semantic-mechanism measurement authority. Fresh G0 diagnostic run 33768343626 is the sole byte authority for the three genuine Godot-generated configuration roles that its subsequent actual baseline invocation completely consumed without mutation."
+    },
+    "kernelInterpreterCapture": {
+      "run": 33778025696,
+      "artifactId": 9902474984,
+      "artifactSha256": "7c96470fc45ae40eb9c0b078c5d99085ac712d456d8775663fefbd707dd4cb47",
+      "captureSha256": "3923ffbb8ed2535db92bb38f28c0878676d79fab44eba24de07c437cdf48c35d",
+      "observerHead": "4a194d70829cef4da2769800fa5ae4a616cd92f7",
+      "requestedPath": "/lib64/ld-linux-x86-64.so.2",
+      "canonicalPath": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "size": 236616,
+      "sha256": "cd4df4f3c7b83673d61189bf2eaebd33ca4f2853ab9772b8a25e025ef99b1e81",
+      "rule": "The fresh exact-observer G0 diagnostic captures PT_INTERP from the actual Godot, env and shell executables, resolves it to one canonical regular file and binds that kernel-loaded executable identity separately from the four requested execve leaves."
     }
   },
   "trustMap": {
@@ -75,6 +94,7 @@
       "pinned GitHub Actions and exact-main workflow tooling",
       "packet ingester, capsule builder and Godot profile supervisor",
       "purpose-built synchronous ptrace tracer",
+      "Landlock ABI 3 or newer pre-exec kernel admission boundary",
       "external CLOCK_MONOTONIC_RAW observation",
       "frozen Godot runtime profile",
       "standalone independent Godot profile verifier"
@@ -86,7 +106,7 @@
       "attack injector",
       "statement, trace, byte sidecar, streams, output and replay packet supplied to the verifier"
     ],
-    "separation": "The independent verifier imports or calls none of the supervisor, campaign, tracer, Godot driver, external GDScript or diagnostic validator.",
+    "separation": "Before the untrusted tracee enters ptrace or exec, the exact tracer replaces stdin with /dev/null, closes every inherited descriptor above stderr, then installs no_new_privs and a kernel-enforced Landlock read, execute and write domain inherited by all descendants. Exact frozen file leaves are the only readable inputs, exactly four requested executables plus their one G0-attested kernel interpreter may run, and only the two fresh roots plus the measured /dev/null sink are writable. The independent verifier imports or calls none of the supervisor, campaign, tracer, Godot driver, external GDScript or diagnostic validator.",
     "excludedClaims": [
       "malicious kernel, GitHub runner administrator or compiler resistance",
       "hardware or TEE attestation",
@@ -94,6 +114,36 @@
       "semantic interpretation of stderr diagnostics",
       "M07-M10, Gate O, E0, E1, balance, strategy, P9 or product evidence"
     ]
+  },
+  "kernelAdmission": {
+    "schema": "glassvow.godot-runtime-kernel-admission/v1",
+    "policySchema": "GODOTACCESSv1",
+    "policyByteCapacity": 393216,
+    "mechanism": "Linux Landlock exact-leaf read and execute rules plus fresh-root write rules, inherited across fork and exec under PR_SET_NO_NEW_PRIVS",
+    "minimumAbi": 3,
+    "handledAccessFs": 32759,
+    "handledRights": [
+      "EXECUTE", "WRITE_FILE", "READ_FILE", "REMOVE_DIR", "REMOVE_FILE", "MAKE_CHAR", "MAKE_DIR",
+      "MAKE_REG", "MAKE_SOCK", "MAKE_FIFO", "MAKE_BLOCK", "MAKE_SYM",
+      "REFER", "TRUNCATE"
+    ],
+    "readLeaves": ["g0.semanticReadSet", "g0.runtimeIdentitySet", "g0.platformObservationSet"],
+    "executeLeaves": ["/usr/bin/env", "${GODOT}", "/bin/sh", "/usr/bin/xdg-user-dir"],
+    "kernelInterpreterLeaves": ["/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"],
+    "writeSubtrees": ["${HOME}", "${OUTPUT}"],
+    "namedWriteFiles": ["/dev/null"],
+    "pathPolicy": "One sorted duplicate-free GODOTACCESSv1 file binds every exact pathname operation before the tracer may emit PATH or pathname bytes, or resume it. The independent verifier reconstructs the same bytes from the frozen G0 and profile inputs.",
+    "installation": "The tracee child applies resource limits, replaces fd 0 with read-only /dev/null, closes every fd >= 3, and installs the ruleset before PTRACE_TRACEME, the initial stop or any exec. Failure exits 124 without launching Godot.",
+    "privilegeRule": "PR_SET_NO_NEW_PRIVS is mandatory before restriction, so an exec or set-user-ID helper cannot escape the inherited read, execute and write domain.",
+    "initialDescriptors": {
+      "stdin": {"fd": 0, "path": "/dev/null", "accessMode": 0},
+      "stdout": {"fd": 1, "object": "distinct-outer-pipe", "accessMode": 1},
+      "stderr": {"fd": 2, "object": "distinct-outer-pipe", "accessMode": 1},
+      "higher": "closed-before-restriction"
+    },
+    "descriptorRule": "No inherited readable descriptor survives: fd 0 is read-only /dev/null, fd 1 and fd 2 are distinct output-only outer pipes, and every fd >= 3 is closed before restriction. Later anonymous pipes remain within the exact ptrace descriptor grammar.",
+    "selfTest": "The exact compiled tracer must report ABI >= 3, the fixed 32759 mask, policy schema and descriptor sanitisation support. Independent Linux regressions require exact allowed reads, static execs and dynamic execs with the attested interpreter to succeed; secret reads, secret execs, dynamic exec without its interpreter leaf and inherited readable descriptors to fail; stdin to become EOF /dev/null; and evidence/tooling writes to remain byte-for-byte unchanged.",
+    "failure": "Unavailable Landlock, rule installation failure or differing self-test metadata is pre-execution PROVENANCE_INCOMPLETE; no qualification case can pass."
   },
   "caps": {
     "caseCount": 26,
@@ -133,6 +183,9 @@
     "maxObservationBytes": 65536,
     "maxHomeOutputBytes": 4096,
     "maxFileIdentities": 192,
+    "maxAdmissionFileRules": 192,
+    "maxAdmissionPathRules": 2304,
+    "maxAdmissionPolicyBytes": 393216,
     "maxSemanticFiles": 32,
     "maxIdentityDependencies": 160,
     "maxPlatformObservations": 16,
@@ -149,7 +202,7 @@
     "maxPacketManifestBytes": 65536,
     "maxPacketRequests": 16,
     "maxRequestIndex": 65535,
-    "maxCaseMembers": 10,
+    "maxCaseMembers": 11,
     "maxStatementBytes": 4194304,
     "maxCaseReceiptBytes": 4194304,
     "maxChallengeBytes": 65,
@@ -214,8 +267,8 @@
     "download": "https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip",
     "identitySet": {
       "source": "g0.manifest.runtimeIdentitySet",
-      "count": 125,
-      "canonicalSha256": "b10363b153894ebc1c2175412225f9218047ac98ac8adb878fb9a3a65c1838a5",
+      "count": 126,
+      "canonicalSha256": "908160f569e8ffb401ab590350ff6993bb5900b1e557cac04f4e6c7ee2525b60",
       "rule": "Every executed, opened or mapped regular runtime object must match one path, size and SHA-256 record. Device and inode are bound in the current receipt."
     },
     "identityOnlyProductObject": "${PRODUCT}/addons/sentry/bin/linux/x86_64/libsentry.linux.debug.x86_64.so"
@@ -399,6 +452,12 @@
     "research": {
       "authorityIssue": 421,
       "authorityComment": 5524340839,
+      "outputPolicy": {
+        "mode": "bounded-current-raw-channel",
+        "channels": ["stdout", "stderr", "homeLog"],
+        "interpretation": "none",
+        "downstreamOwner": "unchanged A1-v2 diagnostic validator"
+      },
       "packetRefPattern": "refs/heads/p9-packet-421-a1-v2-<lowercase safe token>",
       "packetRefRule": "The workflow independently resolves exactly one ephemeral same-repository branch under the fixed A1-v2 prefix to the supplied packet commit immediately before fetch and again immediately before deletion.",
       "authorityRule": "The exact bound owner comment authorises A1-v2 only after an exact-main #535 PASS marker. A later packet-freeze comment may narrow the experiment but cannot replace this execution authority.",
@@ -631,6 +690,8 @@
           ".remap": ["stat"]
         },
         "readOnlyOpenFlags": [0, 524288],
+        "successfulReadOnlyOpenFlags": [0, 524288, 524544, 591872, 2621440, 2686976, 2752512, 2818048],
+        "successfulOutputOpenFlags": 577,
         "deviceOpenFlags": 524288,
         "deniedOutputOpenFlags": 577,
         "mkdirMode": 509,
@@ -754,6 +815,7 @@
     "internalPipe": {
       "count": 1,
       "pipe2Count": 1,
+      "pipe2Flags": 524288,
       "dup2Count": 3,
       "producerDup2Count": 1,
       "producer": "stdout of the /bin/sh interpreter requested through /usr/bin/xdg-user-dir",

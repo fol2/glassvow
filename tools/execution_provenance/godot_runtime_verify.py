@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Independent verifier for the frozen actual-Godot provenance profile."""
 from __future__ import annotations
-import argparse, hashlib, importlib.util, json, os, re, secrets, stat, subprocess, sys
+import argparse, hashlib, importlib.util, json, os, re, secrets, stat, subprocess, sys, tempfile
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -24,8 +24,12 @@ PACKET_SCHEMA = "glassvow.godot-runtime-packet/v1"
 STATEMENT_SCHEMA = "glassvow.godot-runtime-provenance.statement/v1"
 RECEIPT_SCHEMA = "glassvow.godot-runtime-provenance.receipt/v1"
 CAMPAIGN_SCHEMA = "glassvow.godot-runtime-provenance.campaign-receipt/v1"
+PRODUCT_STAGE_SCHEMA = "glassvow.godot-runtime-product-stage/v1"
+CONFIGURATION_MANIFEST_PATH = Path(__file__).with_name(
+    "godot_runtime_configuration_manifest.json")
+CONFIGURATION_ROOT = Path(__file__).with_name("godot_runtime_configuration")
 # Bound to the independently reviewed profile before any qualification case.
-FROZEN_PROFILE_SHA256 = "aa575f3a677fbd778b39d1757ee1006c3cf05547ef13ffa21974e4c694780f03"
+FROZEN_PROFILE_SHA256 = "f09c54b8d10b7bbaf44ad4ae3bbe989e970c088917045d253debb65709c1e6c2"
 _REASONS = (
     "ADMITTED GODOT_EXECUTABLE_MISMATCH RUNTIME_DEPENDENCY_MISMATCH ARGV_MISMATCH "
     "ENVIRONMENT_MISMATCH PROJECT_SEMANTIC_BYTES_MISMATCH GENERATED_CACHE_BYTES_MISMATCH "
@@ -50,12 +54,14 @@ _HARD_FILE_CAPS = {
     "maxStderrBytes": 4096,
     "maxObservationBytes": 64 * 1024,
     "maxHomeOutputBytes": 4096,
+    "maxAdmissionPolicyBytes": 384 * 1024,
 }
 _CASE_MEMBER_LIMITS = {
     "statement.json": "maxStatementBytes", "trace.tsv": "maxTraceBytes",
     "sidecar.bin": "maxCapturedBytes", "stdout.bin": "maxStdoutBytes",
     "stderr.bin": "maxStderrBytes", "observation.json": "maxObservationBytes",
     "home-godot.log": "maxHomeOutputBytes", "home-sentry.dat": "maxHomeOutputBytes",
+    "admission-policy.tsv": "maxAdmissionPolicyBytes",
     "receipt.json": "maxCaseReceiptBytes", "receipt-replay.json": "maxCaseReceiptBytes",
 }
 _SENTRY_OUTPUT = re.compile(
@@ -78,6 +84,20 @@ def _file_sha(path: Path) -> str:
             for block in iter(lambda: handle.read(1024 * 1024), b""): digest.update(block)
     except OSError as error: fail("PROVENANCE_INCOMPLETE", f"cannot hash {path}: {error}")
     return digest.hexdigest()
+
+
+def _checked(command: Sequence[str], *, environment: Mapping[str, str] | None = None,
+             timeout: float = 120) -> bytes:
+    try:
+        result = subprocess.run(
+            list(command), check=False, capture_output=True,
+            env=None if environment is None else dict(environment), timeout=timeout)
+    except (OSError, subprocess.SubprocessError) as error:
+        fail("PROVENANCE_INCOMPLETE", f"trusted command unavailable: {error}")
+    if result.returncode != 0:
+        detail = (result.stderr or result.stdout).decode(errors="replace").strip()
+        fail("PROVENANCE_INCOMPLETE", f"trusted command failed: {detail}")
+    return result.stdout
 
 
 def _canonical(value: Any) -> bytes:
@@ -150,7 +170,8 @@ def _preflight_case_members(
                 members[entry.name] = data
     except OSError as error:
         fail("PROVENANCE_INCOMPLETE", f"case directory unavailable: {error}")
-    if not {"statement.json", "trace.tsv", "sidecar.bin", "stdout.bin"}.issubset(members):
+    if not {"statement.json", "trace.tsv", "sidecar.bin", "stdout.bin",
+            "admission-policy.tsv"}.issubset(members):
         fail("PROVENANCE_INCOMPLETE", "case core member set differs")
     return members, total
 
@@ -160,6 +181,137 @@ def _expand(template: str, roots: Mapping[str, str]) -> str:
     for key, value in roots.items(): result = result.replace("${" + key + "}", value)
     if "${" in result: fail("PROVENANCE_INCOMPLETE", f"unresolved template {template}")
     return result
+
+
+_PATH_OPERATIONS = {
+    "access", "chdir", "execve", "faccessat2", "lstat", "mkdir",
+    "newfstatat", "openat", "readlink", "readlinkat", "stat", "statx",
+}
+
+
+def _build_admission_policy(
+        profile: Mapping[str, Any], manifest: Mapping[str, Any],
+        roots: Mapping[str, str], working_directory: Path) -> tuple[bytes, dict[str, int]]:
+    grammar = profile["accessGrammar"]["paths"]
+    failed = grammar["failedPathGrammar"]
+    successful_read_flags = failed["successfulReadOnlyOpenFlags"]
+    failed_read_flags = failed["readOnlyOpenFlags"]
+    files: dict[str, set[str]] = {}
+    paths: set[tuple[str, str, int | None]] = set()
+
+    def canonical_path(value: str) -> str:
+        return str(Path(value).resolve(strict=False))
+
+    def add_path(operation: str, path: str, parameter: int | None = None) -> None:
+        if operation not in _PATH_OPERATIONS or not path.startswith("/") or "\0" in path:
+            fail("PROVENANCE_INCOMPLETE", "invalid admission pathname rule")
+        paths.add((canonical_path(path), operation, parameter))
+
+    def add_operation(operation: str, path: str, flags: Sequence[int]) -> None:
+        if operation == "openat":
+            for value in flags:
+                add_path(operation, path, value)
+        elif operation == "mkdir":
+            add_path(operation, path, failed["mkdirMode"])
+        else:
+            add_path(operation, path)
+
+    for section in ("semanticReadSet", "runtimeIdentitySet", "platformObservationSet"):
+        for record in manifest[section]:
+            path = canonical_path(_expand(str(record["path"]), roots))
+            files.setdefault(path, set()).add("R")
+            for operation in record["operations"]:
+                if operation in _PATH_OPERATIONS:
+                    add_operation(operation, path, successful_read_flags)
+
+    for template in profile["kernelAdmission"]["executeLeaves"]:
+        path = canonical_path(_expand(template, roots))
+        if path not in files:
+            fail("PROVENANCE_INCOMPLETE", f"execute leaf is not frozen: {path}")
+        files[path].add("X")
+        add_path("execve", path)
+    for template in profile["kernelAdmission"]["kernelInterpreterLeaves"]:
+        path = canonical_path(_expand(template, roots))
+        if path not in files:
+            fail("PROVENANCE_INCOMPLETE", f"kernel interpreter is not frozen: {path}")
+        files[path].add("X")
+
+    for collection in ("successfulDirectoryOperations",
+                       "successfulDynamicDirectoryOperations",
+                       "successfulProbeOperations"):
+        for record in grammar[collection]:
+            for template in record["paths"]:
+                path = _expand(template, roots)
+                for operation in record["operations"]:
+                    add_operation(operation, path, successful_read_flags)
+    for record in grammar["successfulNamedPathOperations"]:
+        for operation in record["operations"]:
+            add_operation(
+                operation, _expand(record["path"], roots), successful_read_flags)
+    for operation in grammar["successfulWorkingDirectoryOperations"]:
+        add_operation(operation, str(working_directory.resolve()), successful_read_flags)
+
+    output_paths = {
+        f"{roots['OUTPUT']}/observation.json",
+        f"{roots['HOME']}/.local/share/godot/app_userdata/Glassvow/logs/godot.log",
+        f"{roots['HOME']}/.local/share/godot/app_userdata/Glassvow/sentry.dat",
+    }
+    for path in output_paths:
+        add_path("openat", path, failed["successfulOutputOpenFlags"])
+    add_path("openat", "/dev/null", failed["successfulOutputOpenFlags"])
+
+    for record in failed["exact"]:
+        for template in record["paths"]:
+            path = _expand(template, roots)
+            for operation in record["operations"]:
+                if operation == "openat":
+                    flags = ([failed["deniedOutputOpenFlags"]]
+                             if path == f"{roots['OUTPUT']}/observation.json" else
+                             [failed["deviceOpenFlags"]]
+                             if path in {"/dev/input/event0", "/dev/input/event1"} else
+                             failed_read_flags)
+                    add_operation(operation, path, flags)
+                else:
+                    add_operation(operation, path, failed_read_flags)
+    semantic_paths = {
+        _expand(str(record["path"]), roots)
+        for record in manifest["semanticReadSet"]}
+    for role in semantic_paths:
+        for suffix, operations in failed["roleSuffixOperations"].items():
+            for operation in operations:
+                add_operation(operation, role + suffix, failed_read_flags)
+    for directory in failed["fontCacheDirectories"]:
+        for name in failed["fontCacheBasenames"]:
+            add_operation(
+                "openat", f"{_expand(directory, roots)}/{name}", failed_read_flags)
+
+    readlink_paths = {
+        _expand(path, roots) for path in failed["readlinkKnownDirectories"]}
+    readlink_paths.update(files)
+    for root in roots.values():
+        candidate = Path(root).parent
+        while str(candidate) != candidate.parent.as_posix():
+            readlink_paths.add(str(candidate)); candidate = candidate.parent
+        readlink_paths.add(str(candidate))
+    for path in readlink_paths:
+        add_path("readlink", path)
+    add_path("mkdir", roots["HOME"], failed["mkdirMode"])
+
+    if len(files) > profile["caps"]["maxAdmissionFileRules"] or \
+            len(paths) > profile["caps"]["maxAdmissionPathRules"]:
+        fail("PROVENANCE_INCOMPLETE", "admission policy rule cap exceeded")
+    lines = [
+        f"F\t{''.join(sorted(rights))}\t{path.encode().hex()}"
+        for path, rights in files.items()
+    ] + [
+        f"P\t{operation}\t{'-' if parameter is None else parameter}\t{path.encode().hex()}"
+        for path, operation, parameter in paths
+    ]
+    lines.sort()
+    data = ("GODOTACCESSv1\n" + "\n".join(lines) + "\n").encode("ascii")
+    if len(data) > profile["caps"]["maxAdmissionPolicyBytes"]:
+        fail("PROVENANCE_INCOMPLETE", "admission policy byte cap exceeded")
+    return data, {"fileRules": len(files), "pathRules": len(paths)}
 
 
 def _packet_members(
@@ -518,7 +670,12 @@ def _lineage(trace: Mapping[str, Any], profile: Mapping[str, Any], diagnostic: b
     if len(signals) != caps["validSignalEvents"] or len(signals) != signal_contract["count"] or \
             set(map(id, signals)) != set(map(id, expected_signals)):
         fail("PROCESS_LINEAGE_MISMATCH", "signal delivery grammar differs")
+    pipe_entries = [event for event in events
+                    if event["type"] == "SYSCALL_E" and event["name"] == "pipe2"]
     if names.count("pipe2") != pipe_contract["pipe2Count"] or \
+            any(len(event.get("arguments", [])) < 2 or
+                event["arguments"][1] != pipe_contract["pipe2Flags"]
+                for event in pipe_entries) or \
             names.count("dup2") != pipe_contract["dup2Count"]:
         fail("PROCESS_LINEAGE_MISMATCH", "internal pipe syscall shape differs")
     duplicates = [event for event in events if event["type"] == "DUP"]
@@ -587,6 +744,38 @@ def _written(events: Sequence[Mapping[str, Any]], path: str, sidecar: bytes, siz
     return bytes(output)
 
 
+def _validate_stable_output_policy(
+        statement: Mapping[str, Any], streams: Mapping[str, Any],
+        outputs: Mapping[str, Any], profile: Mapping[str, Any]) -> None:
+    ingress = profile.get("packetIngress", {})
+    qualification, research = ingress.get("qualification", {}), ingress.get("research", {})
+    authority = (statement.get("authorityIssue"), statement.get("authorityComment"))
+    if authority == (qualification.get("authorityIssue"), qualification.get("authorityComment")):
+        for name in ("stdout", "stderr"):
+            expected, actual = profile["roles"][name]["qualificationBaseline"], streams.get(name, {})
+            if any(actual.get(key) != expected[key] for key in ("size", "sha256")):
+                fail("OUTPUT_NOT_CURRENT", f"stable {name} differs from G0 baseline")
+        expected = profile["roles"]["output"]["qualificationBaseline"]["homeLog"]
+        actual = outputs.get("homeLog", {})
+        if not actual.get("present") or any(
+                actual.get(key) != expected[key] for key in ("size", "sha256")):
+            fail("OUTPUT_NOT_CURRENT", "stable homeLog differs from G0 baseline")
+        return
+    if authority == (research.get("authorityIssue"), research.get("authorityComment")):
+        expected = {
+            "mode": "bounded-current-raw-channel",
+            "channels": ["stdout", "stderr", "homeLog"],
+            "interpretation": "none",
+            "downstreamOwner": "unchanged A1-v2 diagnostic validator",
+        }
+        if research.get("outputPolicy") != expected:
+            fail("PROVENANCE_INCOMPLETE", "research output policy differs")
+        if not outputs.get("homeLog", {}).get("present"):
+            fail("OUTPUT_NOT_CURRENT", "current homeLog missing")
+        return
+    fail("PACKET_MANIFEST_MISMATCH", "output authority differs")
+
+
 def _outputs(statement: Mapping[str, Any], trace: Mapping[str, Any], sidecar: bytes, case_dir: Path,
              challenge: str, profile: Mapping[str, Any],
              case_members: Mapping[str, bytes]) -> None:
@@ -616,16 +805,8 @@ def _outputs(statement: Mapping[str, Any], trace: Mapping[str, Any], sidecar: by
         fail("OUTPUT_WRITE_DENIED", "genuine diagnostic observation denial")
     if not observation.get("present") or observation.get("challenge") != challenge:
         fail("OUTPUT_NOT_CURRENT", "current observation missing or challenge differs")
-    for name in ("stdout", "stderr"):
-        expected, actual = profile["roles"][name]["qualificationBaseline"], streams.get(name, {})
-        if any(actual.get(key) != expected[key] for key in ("size", "sha256")):
-            fail("OUTPUT_NOT_CURRENT", f"stable {name} differs from G0 baseline")
+    _validate_stable_output_policy(statement, streams, outputs, profile)
     output_baselines = profile["roles"]["output"]["qualificationBaseline"]
-    for name in ("homeLog",):
-        expected, actual = output_baselines[name], outputs.get(name, {})
-        if not actual.get("present") or any(
-                actual.get(key) != expected[key] for key in ("size", "sha256")):
-            fail("OUTPUT_NOT_CURRENT", f"stable {name} differs from G0 baseline")
     sentry = outputs.get("sentry", {})
     sentry_data = case_members.get("home-sentry.dat")
     if not sentry.get("present") or sentry_data is None or \
@@ -701,6 +882,26 @@ def _platform_access_witnesses(
             fail("UNDECLARED_INPUT_PATH", f"platform access witness missing {path}")
 
 
+def _successful_open_flags(
+        events: Sequence[Mapping[str, Any]], outputs: set[str],
+        profile: Mapping[str, Any]) -> None:
+    grammar = profile["accessGrammar"]["paths"]["failedPathGrammar"]
+    read_flags = set(grammar["successfulReadOnlyOpenFlags"])
+    output_flags = grammar["successfulOutputOpenFlags"]
+    for event in events:
+        if event.get("type") != "PATH_X" or event.get("operation") != "openat" or \
+                event.get("returned", -1) < 0:
+            continue
+        arguments = event.get("_arguments")
+        if not isinstance(arguments, list) or len(arguments) < 3:
+            fail("PROVENANCE_INCOMPLETE", "successful open flags are unavailable")
+        expected = {output_flags} if event.get("path") in outputs | {"/dev/null"} \
+            else read_flags
+        if arguments[2] not in expected:
+            fail("OUTPUT_WRITE_DENIED" if event.get("path") in outputs else
+                 "UNDECLARED_INPUT_PATH", "successful open flags differ")
+
+
 def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], runtime: Mapping[str, Mapping[str, Any]],
              platform: Mapping[str, Mapping[str, Any]], outputs: Mapping[str, Mapping[str, Any]],
              consumed_bytes: Mapping[str, bytes], sidecar: bytes, roots: Mapping[str, str], profile: Mapping[str, Any]) -> None:
@@ -719,6 +920,7 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
     internal_pipes = _validate_internal_pipe(
         trace["events"], sidecar, expected_pipe_bytes, pipe_contract)
     _validate_failed_paths(trace["events"], known, set(roles), roots, grammar["failedPathGrammar"])
+    _successful_open_flags(trace["events"], set(outputs), profile)
     directory_operations: dict[str, set[str]] = {}
     for record in grammar["successfulDirectoryOperations"]:
         for path in record["paths"]:
@@ -879,13 +1081,144 @@ def _checkout_identity(path: Path) -> tuple[str, bool]:
     return head, clean
 
 
+def _configuration_capture(profile: Mapping[str, Any]) -> tuple[dict[str, Any], bytes]:
+    binding = profile.get("g0", {}).get("configurationCapture", {})
+    expected_path = str(CONFIGURATION_MANIFEST_PATH.relative_to(OBSERVER_ROOT))
+    data = _bounded_bytes(CONFIGURATION_MANIFEST_PATH, 65536)
+    if binding.get("path") != expected_path or binding.get("sha256") != _sha(data) or \
+            binding.get("fixtureRoot") != str(CONFIGURATION_ROOT.relative_to(OBSERVER_ROOT)) or \
+            binding.get("roleCount") != 3:
+        fail("PROVENANCE_INCOMPLETE", "configuration capture binding differs")
+    manifest = _json_bytes(data, CONFIGURATION_MANIFEST_PATH)
+    if set(manifest) != {"schema", "source", "capture", "roles", "stagingRule"} or \
+            manifest.get("schema") != "glassvow.godot-runtime-configuration-capture/v1":
+        fail("PROVENANCE_INCOMPLETE", "configuration capture schema differs")
+    roles = manifest.get("roles")
+    required = {"extension_list.cfg", "global_script_class_cache.cfg", "uid_cache.bin"}
+    if not isinstance(roles, dict) or set(roles) != required:
+        fail("PROVENANCE_INCOMPLETE", "configuration capture roles differ")
+    try: fixture_members = {entry.name: entry for entry in os.scandir(CONFIGURATION_ROOT)}
+    except OSError as error: fail("PROVENANCE_INCOMPLETE", f"configuration fixture unavailable: {error}")
+    if set(fixture_members) != required:
+        fail("PROVENANCE_INCOMPLETE", "configuration fixture inventory differs")
+    for name, record in roles.items():
+        entry = fixture_members[name]
+        metadata = entry.stat(follow_symlinks=False)
+        if not stat.S_ISREG(metadata.st_mode) or entry.is_symlink() or \
+                metadata.st_size != record.get("size") or \
+                _file_sha(Path(entry.path)) != record.get("sha256"):
+            fail("PROVENANCE_INCOMPLETE", f"configuration fixture differs: {name}")
+    return manifest, data
+
+
+def verify_product_stage(
+        product_source: Path, product_sha: str, stage: Path,
+        profile: Mapping[str, Any]) -> dict[str, Any]:
+    source_head, source_clean = _checkout_identity(product_source)
+    if source_head != product_sha or not source_clean:
+        fail("PROVENANCE_INCOMPLETE", "product source differs before staging")
+    manifest, manifest_bytes = _configuration_capture(profile)
+    if manifest.get("source", {}).get("productSha") != product_sha:
+        fail("PROVENANCE_INCOMPLETE", "configuration product binding differs")
+    if (stage / ".git").exists() or (stage / ".git").is_symlink():
+        fail("PROVENANCE_INCOMPLETE", "product stage contains Git administration")
+    common = _checked([
+        "git", "-C", str(product_source), "rev-parse",
+        "--path-format=absolute", "--git-common-dir",
+    ]).decode().strip()
+    tree_sha = _checked([
+        "git", "--git-dir", common, "rev-parse", f"{product_sha}^{{tree}}",
+    ]).decode().strip()
+    inventory = _checked([
+        "git", "--git-dir", common, "ls-tree", "-r", "-z", product_sha,
+    ])
+    inventory_records = [record for record in inventory.split(b"\0") if record]
+    if any(record.split(b"\t", 1)[1].startswith(b".godot/")
+           for record in inventory_records):
+        fail("PROVENANCE_INCOMPLETE", "product commit contains generated configuration")
+    sized_inventory = _checked([
+        "git", "--git-dir", common, "ls-tree", "-r", "-l", "-z", product_sha,
+    ])
+    project_bytes = 0
+    for record in (item for item in sized_inventory.split(b"\0") if item):
+        try:
+            metadata, _ = record.split(b"\t", 1)
+            size = metadata.split()[-1]
+            project_bytes += int(size)
+        except (IndexError, ValueError):
+            fail("PROVENANCE_INCOMPLETE", "product tree contains an unsupported member")
+    if len(inventory_records) > profile["caps"]["maxProjectFiles"] or \
+            project_bytes > profile["caps"]["maxProjectBytes"]:
+        fail("PROVENANCE_INCOMPLETE", "product stage exceeds its frozen cap")
+    with tempfile.TemporaryDirectory(prefix="glassvow-product-stage-verify-") as temporary:
+        index = Path(temporary) / "index"
+        environment = dict(os.environ)
+        environment.update({"GIT_INDEX_FILE": str(index), "GIT_WORK_TREE": str(stage)})
+        repository = ["git", "--git-dir", common, "--work-tree", str(stage)]
+        _checked([*repository, "read-tree", product_sha],
+                 environment=environment)
+        _checked([*repository, "update-index", "--refresh"],
+                 environment=environment)
+        _checked([*repository, "diff-index", "--quiet", product_sha, "--"],
+                 environment=environment)
+        untracked = _checked(
+            [*repository, "ls-files", "--others", "-z", "--"],
+            environment=environment).split(b"\0")
+    actual_untracked = {item.decode() for item in untracked if item}
+    expected_untracked = {f".godot/{name}" for name in manifest["roles"]}
+    if actual_untracked != expected_untracked:
+        fail("PROVENANCE_INCOMPLETE", "product stage additive inventory differs")
+    generated = stage / ".godot"
+    try: members = {entry.name: entry for entry in os.scandir(generated)}
+    except OSError as error: fail("PROVENANCE_INCOMPLETE", f"staged configuration unavailable: {error}")
+    if set(members) != set(manifest["roles"]):
+        fail("PROVENANCE_INCOMPLETE", "staged configuration inventory differs")
+    for name, record in manifest["roles"].items():
+        entry = members[name]
+        metadata = entry.stat(follow_symlinks=False)
+        if not stat.S_ISREG(metadata.st_mode) or entry.is_symlink() or \
+                metadata.st_size != record.get("size") or \
+                _file_sha(Path(entry.path)) != record.get("sha256"):
+            fail("PROVENANCE_INCOMPLETE", f"staged configuration differs: {name}")
+    return {
+        "schema": PRODUCT_STAGE_SCHEMA,
+        "productSha": product_sha,
+        "productTreeSha": tree_sha,
+        "trackedMembers": len(inventory_records),
+        "trackedBytes": project_bytes,
+        "trackedInventorySha256": _sha(inventory),
+        "configurationManifestSha256": _sha(manifest_bytes),
+        "configurationRoles": {
+            name: {"size": manifest["roles"][name]["size"],
+                   "sha256": manifest["roles"][name]["sha256"]}
+            for name in sorted(manifest["roles"])
+        },
+        "stage": str(stage.resolve()),
+        "verifierSha256": _file_sha(Path(__file__)),
+    }
+
+
+def _stage(args: argparse.Namespace) -> int:
+    profile_bytes = _bounded_bytes(args.profile, _HARD_FILE_CAPS["maxProfileBytes"])
+    if _sha(profile_bytes) != FROZEN_PROFILE_SHA256:
+        fail("PROVENANCE_INCOMPLETE", "profile is not the frozen candidate")
+    profile = _json_bytes(profile_bytes, args.profile)
+    result = verify_product_stage(
+        args.product_source.resolve(), args.product_sha,
+        args.product_stage.resolve(), profile)
+    result["receiptSha256"] = _sha(_canonical(result))
+    _exclusive(args.output, _canonical(result))
+    print(json.dumps(result, sort_keys=True))
+    return 0
+
+
 def _trusted_setup(statement: Mapping[str, Any], roots: Mapping[str, str], case_dir: Path,
-                   args: argparse.Namespace) -> None:
+                   args: argparse.Namespace, profile: Mapping[str, Any]) -> None:
     mounts = statement.get("mounts")
     if not isinstance(mounts, dict) or set(mounts) != {"product", "packet"}:
         fail("PROVENANCE_INCOMPLETE", "mount evidence differs")
     expected_sources = {
-        "product": str(args.expected_product_source.resolve()),
+        "product": str(args.expected_product_stage.resolve()),
         "packet": str(args.expected_packet_source.resolve()),
     }
     for name, root in (("product", "PRODUCT"), ("packet", "PACKET")):
@@ -899,6 +1232,21 @@ def _trusted_setup(statement: Mapping[str, Any], roots: Mapping[str, str], case_
         try: read_only = bool(os.statvfs(roots[root]).f_flag & os.ST_RDONLY)
         except OSError as error: fail("PROVENANCE_INCOMPLETE", f"cannot inspect {name} mount: {error}")
         if not read_only: fail("PROVENANCE_INCOMPLETE", f"{name} live mount is writable")
+    stage_receipt_bytes = _bounded_bytes(args.expected_product_stage_receipt, 1024 * 1024)
+    stage_receipt = _json_bytes(stage_receipt_bytes, args.expected_product_stage_receipt)
+    claimed = stage_receipt.pop("receiptSha256", None)
+    source_stage = verify_product_stage(
+        args.expected_product_source.resolve(), args.product_sha,
+        args.expected_product_stage.resolve(), profile)
+    mounted_stage = verify_product_stage(
+        args.expected_product_source.resolve(), args.product_sha,
+        Path(roots["PRODUCT"]), profile)
+    comparable_mount = dict(mounted_stage)
+    comparable_mount["stage"] = source_stage["stage"]
+    if mounts["product"].get("stageReceiptFileSha256") != _sha(stage_receipt_bytes) or \
+            claimed != _sha(_canonical(stage_receipt)) or \
+            stage_receipt != source_stage or comparable_mount != source_stage:
+        fail("PROVENANCE_INCOMPLETE", "product stage receipt differs")
     for name in ("HOME", "OUTPUT"):
         path = Path(roots[name])
         try: metadata = path.lstat()
@@ -913,7 +1261,35 @@ def _trusted_setup(statement: Mapping[str, Any], roots: Mapping[str, str], case_
         fail("PROVENANCE_INCOMPLETE", "product checkout does not match its bound commit")
     tracer = statement.get("tracer")
     _TRACE.validate_tracer_identity(
-        tracer, Path(__file__).parent, case_dir.parent.parent / "workspace/godot-runtime-tracer")
+        tracer, Path(__file__).parent,
+        case_dir.parent.parent / "workspace/godot-runtime-tracer",
+        profile["kernelAdmission"])
+
+
+def _admission_policy(
+        statement: Mapping[str, Any], g0: Mapping[str, Any],
+        roots: Mapping[str, str], profile: Mapping[str, Any],
+        case_members: Mapping[str, bytes],
+        trace: Mapping[str, Any]) -> tuple[bytes, dict[str, int]]:
+    actual = case_members.get("admission-policy.tsv")
+    if actual is None:
+        fail("PROVENANCE_INCOMPLETE", "admission policy is missing")
+    expected, counts = _build_admission_policy(
+        profile, g0, roots, OBSERVER_ROOT)
+    record = statement.get("admissionPolicy")
+    wanted = {
+        "schema": profile["kernelAdmission"]["policySchema"],
+        "file": "admission-policy.tsv", "size": len(expected),
+        "sha256": _sha(expected), **counts,
+    }
+    policy_events = [event for event in trace.get("events", [])
+                     if event.get("type") == "POLICY"]
+    traced = ({"byteCount": len(expected), **counts}
+              if len(policy_events) == 1 else None)
+    if actual != expected or record != wanted or traced is None or any(
+            policy_events[0].get(key) != value for key, value in traced.items()):
+        fail("PROVENANCE_INCOMPLETE", "admission policy differs")
+    return expected, counts
 
 
 def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, statement: dict,
@@ -932,7 +1308,8 @@ def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, s
             left.startswith(right.rstrip("/") + "/") or right.startswith(left.rstrip("/") + "/")
             for index, left in enumerate(roots.values()) for right in list(roots.values())[index + 1:]):
         fail("PROVENANCE_INCOMPLETE", "roots overlap")
-    _trusted_setup(statement, roots, args.case_dir, args)
+    _admission_policy(statement, g0, roots, profile, case_members, trace)
+    _trusted_setup(statement, roots, args.case_dir, args, profile)
     _packet_members(Path(roots["PACKET"]), args.packet_manifest, profile)
     expected_roles, roles = _roles(g0, packet, roots, profile, args), _records(statement.get("roles"), "roles")
     if set(roles) != set(expected_roles):
@@ -1198,6 +1575,8 @@ def verify_case(
             "requestIndex": args.request_index, "workingDirectory": str(OBSERVER_ROOT),
             "godot": str(args.expected_godot.resolve()),
             "productSource": str(args.expected_product_source.resolve()),
+            "productStage": str(args.expected_product_stage.resolve()),
+            "productStageReceipt": str(args.expected_product_stage_receipt.resolve()),
             "packetSource": str(args.expected_packet_source.resolve()),
             "productMount": str(args.expected_product_mount.resolve()),
             "packetMount": str(args.expected_packet_mount.resolve()),
@@ -1318,7 +1697,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         common.add_argument("--" + option, dest=destination, type=Path, required=True)
     for option in ("observer-sha", "product-sha", "packet-sha", "packet-root"):
         common.add_argument("--" + option, dest=option.replace("-", "_"), required=True)
-    for option in ("expected-godot", "expected-product-source", "expected-packet-source",
+    for option in ("expected-godot", "expected-product-source", "expected-product-stage",
+                   "expected-product-stage-receipt", "expected-packet-source",
                    "expected-product-mount", "expected-packet-mount", "expected-runtime-root"):
         common.add_argument("--" + option, dest=option.replace("-", "_"), type=Path, required=True)
     common.add_argument("--request-index", required=True)
@@ -1327,6 +1707,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     case.add_argument("--case-dir", type=Path, required=True); case.add_argument("--challenge", type=Path, required=True); case.set_defaults(function=_case)
     campaign = commands.add_parser("campaign", parents=[common]); campaign.add_argument("--campaign-dir", type=Path, required=True)
     campaign.add_argument("--challenges-dir", type=Path, required=True); campaign.set_defaults(function=_campaign)
+    stage = commands.add_parser("stage")
+    stage.add_argument("--profile", type=Path, required=True)
+    stage.add_argument("--product-source", type=Path, required=True)
+    stage.add_argument("--product-sha", required=True)
+    stage.add_argument("--product-stage", type=Path, required=True)
+    stage.add_argument("--output", type=Path, required=True)
+    stage.set_defaults(function=_stage)
     args = parser.parse_args(argv)
     try: return args.function(args)
     except (VerificationFailure, OSError, KeyError, ValueError) as error: print(str(error), file=sys.stderr); return 2

@@ -53,6 +53,13 @@ def read_json(path: Path) -> dict[str, Any]:
     return value
 
 
+def read_json_bytes(data: bytes) -> dict[str, Any]:
+    value = json.loads(data.decode("utf-8"))
+    if not isinstance(value, dict):
+        raise RunnerError("JSON object required from tracer self-test")
+    return value
+
+
 def write_json(path: Path, value: Mapping[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(canonical_bytes(value) + b"\n")
@@ -247,29 +254,97 @@ def validate_product_semantics(
     return verified
 
 
-def generate_godot_configuration(
-        godot: Path, product: Path, workspace: Path,
-        profile: Mapping[str, Any], manifest: Mapping[str, Any]) -> dict[str, Any]:
-    if sha256_file(godot) != profile["runtime"]["godotSha256"]:
-        raise RunnerError("Godot executable hash mismatch")
-    home = workspace / "configuration-home"
-    home.mkdir(parents=True, exist_ok=False)
-    result = checked(
-        [str(godot), "--headless", "--editor", "--path", str(product),
-         "--quit"],
-        timeout=profile["caps"]["supervisorKillWallNs"] / 1_000_000_000,
-        environment={"HOME": str(home), "PATH": "/usr/bin:/bin", "LANG": "C.UTF-8"},
-    )
-    verified = validate_product_semantics(product, manifest)
-    record = {
-        "generatorSha256": sha256_file(godot),
-        "product": str(product.resolve()),
-        "stdoutSha256": sha256_bytes(result.stdout),
-        "stderrSha256": sha256_bytes(result.stderr),
-        "semanticRoles": verified,
+def materialise_product_stage(
+        product_source: Path, product_sha: str, destination: Path,
+        configuration_root: Path, configuration_manifest_path: Path,
+        caps: Mapping[str, Any]) -> dict[str, Any]:
+    if destination.exists():
+        raise RunnerError("product stage must be a fresh path")
+    manifest = read_json(configuration_manifest_path)
+    if manifest.get("schema") != "glassvow.godot-runtime-configuration-capture/v1" or \
+            manifest.get("source", {}).get("productSha") != product_sha:
+        raise RunnerError("configuration capture product binding differs")
+    roles = manifest.get("roles")
+    required = {
+        "extension_list.cfg", "global_script_class_cache.cfg", "uid_cache.bin"}
+    if not isinstance(roles, dict) or set(roles) != required:
+        raise RunnerError("configuration role set differs")
+    try:
+        members = {entry.name: entry for entry in os.scandir(configuration_root)}
+    except OSError as error:
+        raise RunnerError("configuration fixture root is unavailable") from error
+    if set(members) != required:
+        raise RunnerError("configuration fixture inventory differs")
+    for name, binding in roles.items():
+        entry = members[name]
+        metadata = entry.stat(follow_symlinks=False)
+        if not stat.S_ISREG(metadata.st_mode) or entry.is_symlink() or \
+                not isinstance(binding, dict) or metadata.st_size != binding.get("size") or \
+                sha256_file(Path(entry.path)) != binding.get("sha256"):
+            raise RunnerError(f"configuration fixture differs: {name}")
+    common = checked([
+        "git", "-C", str(product_source.resolve()), "rev-parse",
+        "--path-format=absolute", "--git-common-dir",
+    ]).stdout.decode().strip()
+    tree_sha = checked([
+        "git", "--git-dir", common, "rev-parse", f"{product_sha}^{{tree}}",
+    ]).stdout.decode().strip()
+    tree_inventory = checked([
+        "git", "--git-dir", common, "ls-tree", "-r", "-z", product_sha,
+    ], timeout=60).stdout
+    if any(path.startswith(b".godot/") for path in (
+            record.split(b"\t", 1)[1] for record in tree_inventory.split(b"\0") if record)):
+        raise RunnerError("product commit already contains generated configuration")
+    tracked_count = tree_inventory.count(b"\0")
+    sized_inventory = checked([
+        "git", "--git-dir", common, "ls-tree", "-r", "-l", "-z", product_sha,
+    ], timeout=60).stdout
+    try:
+        tracked_bytes = sum(int(record.split(b"\t", 1)[0].split()[-1])
+                            for record in sized_inventory.split(b"\0") if record)
+    except (IndexError, ValueError) as error:
+        raise RunnerError("product tree contains an unsupported member") from error
+    if tracked_count > caps["maxProjectFiles"] or \
+            tracked_bytes > caps["maxProjectBytes"]:
+        raise RunnerError("product stage cap exceeded")
+    destination.mkdir(parents=True)
+    index_path = destination.parent / f".{destination.name}.index"
+    environment = dict(os.environ)
+    environment["GIT_INDEX_FILE"] = str(index_path)
+    try:
+        checked(["git", "--git-dir", common, "read-tree", product_sha],
+                environment=environment)
+        checked([
+            "git", "--git-dir", common, "checkout-index", "--all", "--force",
+            f"--prefix={destination.resolve()}{os.sep}",
+        ], timeout=120, environment=environment)
+    finally:
+        try: index_path.unlink()
+        except FileNotFoundError: pass
+    generated = destination / ".godot"
+    if generated.exists():
+        raise RunnerError("product stage generated directory is not fresh")
+    generated.mkdir(mode=0o755)
+    for name in sorted(required):
+        source, target = configuration_root / name, generated / name
+        with source.open("rb") as reader, target.open("xb") as writer:
+            shutil.copyfileobj(reader, writer)
+        os.chmod(target, 0o444)
+    os.chmod(generated, 0o555)
+    return {
+        "schema": "glassvow.godot-runtime-product-stage/v1",
+        "productSha": product_sha,
+        "productTreeSha": tree_sha,
+        "trackedMembers": tracked_count,
+        "trackedBytes": tracked_bytes,
+        "trackedInventorySha256": sha256_bytes(tree_inventory),
+        "configurationManifestSha256": sha256_file(configuration_manifest_path),
+        "configurationRoles": {
+            name: {"size": roles[name]["size"], "sha256": roles[name]["sha256"]}
+            for name in sorted(required)
+        },
+        "stage": str(destination.resolve()),
     }
-    write_json(workspace / "generated-configuration.json", record)
-    return record
 
 
 def compile_tracer(workspace: Path) -> dict[str, Any]:
@@ -284,7 +359,20 @@ def compile_tracer(workspace: Path) -> dict[str, Any]:
     ]
     checked(command)
     os.chmod(binary, 0o555)
-    checked([str(binary), "--self-test"])
+    probe = read_json_bytes(checked([str(binary), "--self-test"]).stdout)
+    expected_probe = {
+        "schema": "glassvow.godot-runtime-kernel-admission/v1",
+        "minimumAbi": 3, "handledAccessFs": 32759,
+        "policySchema": "GODOTACCESSv1",
+        "fileRuleCapacity": 192, "pathRuleCapacity": 2304,
+        "policyByteCapacity": 393216,
+        "writeSubtrees": 2, "namedWriteFiles": 1,
+        "descriptorSanitisation": True,
+        "noNewPrivileges": True,
+    }
+    if probe.get("landlockAbi", 0) < 3 or any(
+            probe.get(key) != value for key, value in expected_probe.items()):
+        raise RunnerError("kernel admission self-test differs")
     return {
         "compiler": compiler,
         "compilerVersion": checked([compiler, "--version"]).stdout.decode().splitlines()[0],
@@ -294,11 +382,142 @@ def compile_tracer(workspace: Path) -> dict[str, Any]:
         "sourceSha256": sha256_file(TRACER_SOURCE),
         "ioSourceSha256": sha256_file(TRACER_IO_SOURCE),
         "ioHeaderSha256": sha256_file(TRACER_IO_HEADER),
+        "kernelAdmission": probe,
     }
 
 
 def _expand_path(template: str, roots: Mapping[str, str]) -> str:
     return _substitute(template, roots)
+
+
+_PATH_OPERATIONS = {
+    "access", "chdir", "execve", "faccessat2", "lstat", "mkdir",
+    "newfstatat", "openat", "readlink", "readlinkat", "stat", "statx",
+}
+
+
+def build_admission_policy(
+        profile: Mapping[str, Any], manifest: Mapping[str, Any],
+        roots: Mapping[str, str], working_directory: Path) -> tuple[bytes, dict[str, int]]:
+    grammar = profile["accessGrammar"]["paths"]
+    failed = grammar["failedPathGrammar"]
+    successful_read_flags = failed["successfulReadOnlyOpenFlags"]
+    failed_read_flags = failed["readOnlyOpenFlags"]
+    files: dict[str, set[str]] = {}
+    paths: set[tuple[str, str, int | None]] = set()
+
+    def expand(value: str) -> str:
+        return _expand_path(value, roots)
+
+    def canonical_path(value: str) -> str:
+        return str(Path(value).resolve(strict=False))
+
+    def add_path(operation: str, path: str, parameter: int | None = None) -> None:
+        if operation not in _PATH_OPERATIONS or not path.startswith("/") or "\0" in path:
+            raise RunnerError("invalid admission pathname rule")
+        paths.add((canonical_path(path), operation, parameter))
+
+    def add_operation(operation: str, path: str, flags: Sequence[int]) -> None:
+        if operation == "openat":
+            for value in flags:
+                add_path(operation, path, value)
+        elif operation == "mkdir":
+            add_path(operation, path, failed["mkdirMode"])
+        else:
+            add_path(operation, path)
+
+    for section in ("semanticReadSet", "runtimeIdentitySet", "platformObservationSet"):
+        for record in manifest[section]:
+            path = canonical_path(expand(str(record["path"])))
+            files.setdefault(path, set()).add("R")
+            for operation in record["operations"]:
+                if operation in _PATH_OPERATIONS:
+                    add_operation(operation, path, successful_read_flags)
+
+    for template in profile["kernelAdmission"]["executeLeaves"]:
+        path = canonical_path(expand(template))
+        if path not in files:
+            raise RunnerError(f"execute leaf is not a frozen file identity: {path}")
+        files[path].add("X")
+        add_path("execve", path)
+    for template in profile["kernelAdmission"]["kernelInterpreterLeaves"]:
+        path = canonical_path(expand(template))
+        if path not in files:
+            raise RunnerError(f"kernel interpreter is not a frozen file identity: {path}")
+        files[path].add("X")
+
+    for collection in ("successfulDirectoryOperations",
+                       "successfulDynamicDirectoryOperations",
+                       "successfulProbeOperations"):
+        for record in grammar[collection]:
+            for template in record["paths"]:
+                path = expand(template)
+                for operation in record["operations"]:
+                    add_operation(operation, path, successful_read_flags)
+    for record in grammar["successfulNamedPathOperations"]:
+        for operation in record["operations"]:
+            add_operation(operation, expand(record["path"]), successful_read_flags)
+    for operation in grammar["successfulWorkingDirectoryOperations"]:
+        add_operation(operation, str(working_directory.resolve()), successful_read_flags)
+
+    output_paths = {
+        f"{roots['OUTPUT']}/observation.json",
+        f"{roots['HOME']}/.local/share/godot/app_userdata/Glassvow/logs/godot.log",
+        f"{roots['HOME']}/.local/share/godot/app_userdata/Glassvow/sentry.dat",
+    }
+    for path in output_paths:
+        add_path("openat", path, failed["successfulOutputOpenFlags"])
+    add_path("openat", "/dev/null", failed["successfulOutputOpenFlags"])
+
+    for record in failed["exact"]:
+        for template in record["paths"]:
+            path = expand(template)
+            for operation in record["operations"]:
+                if operation == "openat":
+                    flags = ([failed["deniedOutputOpenFlags"]]
+                             if path == f"{roots['OUTPUT']}/observation.json" else
+                             [failed["deviceOpenFlags"]]
+                             if path in {"/dev/input/event0", "/dev/input/event1"} else
+                             failed_read_flags)
+                    add_operation(operation, path, flags)
+                else:
+                    add_operation(operation, path, failed_read_flags)
+    semantic_paths = {
+        expand(str(record["path"])) for record in manifest["semanticReadSet"]}
+    for role in semantic_paths:
+        for suffix, operations in failed["roleSuffixOperations"].items():
+            for operation in operations:
+                add_operation(operation, role + suffix, failed_read_flags)
+    for directory in failed["fontCacheDirectories"]:
+        for name in failed["fontCacheBasenames"]:
+            add_operation("openat", f"{expand(directory)}/{name}", failed_read_flags)
+
+    readlink_paths = {expand(path) for path in failed["readlinkKnownDirectories"]}
+    readlink_paths.update(files)
+    for root in roots.values():
+        candidate = Path(root).parent
+        while str(candidate) != candidate.parent.as_posix():
+            readlink_paths.add(str(candidate)); candidate = candidate.parent
+        readlink_paths.add(str(candidate))
+    for path in readlink_paths:
+        add_path("readlink", path)
+    add_path("mkdir", roots["HOME"], failed["mkdirMode"])
+
+    if len(files) > profile["caps"]["maxAdmissionFileRules"] or \
+            len(paths) > profile["caps"]["maxAdmissionPathRules"]:
+        raise RunnerError("admission policy rule cap exceeded")
+    lines = [
+        f"F\t{''.join(sorted(rights))}\t{path.encode().hex()}"
+        for path, rights in files.items()
+    ] + [
+        f"P\t{operation}\t{'-' if parameter is None else parameter}\t{path.encode().hex()}"
+        for path, operation, parameter in paths
+    ]
+    lines.sort()
+    data = ("GODOTACCESSv1\n" + "\n".join(lines) + "\n").encode("ascii")
+    if len(data) > profile["caps"]["maxAdmissionPolicyBytes"]:
+        raise RunnerError("admission policy byte cap exceeded")
+    return data, {"fileRules": len(files), "pathRules": len(paths)}
 
 
 def _identity(path: Path, *, logical_path: str | None = None) -> dict[str, Any]:
@@ -419,6 +638,11 @@ def run_case(args: argparse.Namespace) -> dict[str, Any]:
         "HOME": str(home),
         "OUTPUT": str(output),
     }
+    policy_bytes, policy_counts = build_admission_policy(
+        profile, g0_manifest, roots, OBSERVER_ROOT)
+    policy_path = case_dir / "admission-policy.tsv"
+    with policy_path.open("xb") as policy_file:
+        policy_file.write(policy_bytes)
     godot_argv = [
         _substitute(str(item), roots | {
             "EXTERNAL_SCRIPT": roles["externalScript"].name,
@@ -435,6 +659,7 @@ def run_case(args: argparse.Namespace) -> dict[str, Any]:
         "--challenge", challenge,
         "--trace", str(trace_path),
         "--sidecar", str(sidecar_path),
+        "--policy", str(policy_path),
         "--product-root", roots["PRODUCT"],
         "--packet-root", roots["PACKET"],
         "--home-root", roots["HOME"],
@@ -518,11 +743,17 @@ def run_case(args: argparse.Namespace) -> dict[str, Any]:
             "tracerStartNs": tracer_start, "tracerFinishNs": tracer_finish,
         },
         "streams": streams, "outputs": output_records, "mounts": mounts,
+        "admissionPolicy": {
+            "schema": profile["kernelAdmission"]["policySchema"],
+            "file": policy_path.name, "size": len(policy_bytes),
+            "sha256": sha256_bytes(policy_bytes), **policy_counts,
+        },
         "tracer": {
             "sourceSha256": build["tracer"]["sourceSha256"],
             "ioSourceSha256": build["tracer"]["ioSourceSha256"],
             "ioHeaderSha256": build["tracer"]["ioHeaderSha256"],
             "binarySha256": build["tracer"]["binarySha256"],
+            "kernelAdmission": build["tracer"]["kernelAdmission"],
             "returncode": result.returncode,
         },
         "trace": {

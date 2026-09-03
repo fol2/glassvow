@@ -43,6 +43,7 @@
 #define MAX_INITIAL_STACK (16ULL * 1024ULL * 1024ULL)
 #define MAX_SEMANTIC_READ_BYTES (16U * 1024U * 1024U)
 #define MAX_TRACE_BYTES (64U * 1024U * 1024U)
+#define MAX_ADMISSION_POLICY_BYTES (384U * 1024U)
 #define TRACE_END_RESERVE 32768U
 #define GV_PTRACE_GET_SYSCALL_INFO 0x420e
 #define GV_SYSCALL_INFO_ENTRY 1
@@ -97,6 +98,7 @@ struct task {
 };
 static FILE *trace;
 static int sidecar_fd = -1;
+static struct gv_admission_policy admission_policy;
 static struct task tasks[MAX_TASKS];
 static size_t task_count, active_count, captured_bytes;
 static uint64_t sequence, stops, entries, exits, resumed_exits, lineage_events;
@@ -208,7 +210,6 @@ static void capture_exec(pid_t pid) {
     hex(object.path); fputc('\n', trace); free(buffer);
 }
 static void path_entry(struct task *task, const char *name) {
-    if (++path_events > MAX_PATH_EVENTS) { fail(task->pid, "PATH_EVENT_CAP_EXCEEDED"); return; }
     int dirfd = AT_FDCWD; uint64_t address = task->args[0];
     if (!strcmp(name,"openat") || !strcmp(name,"newfstatat")
             || !strcmp(name,"faccessat2") || !strcmp(name,"readlinkat")
@@ -220,6 +221,13 @@ static void path_entry(struct task *task, const char *name) {
                                task->resolved, sizeof(task->resolved))) {
         fail(task->pid, "PATH_RESOLUTION_FAILED"); return;
     }
+    bool has_parameter = !strcmp(name, "openat") || !strcmp(name, "mkdir");
+    uint64_t parameter = !strcmp(name, "openat") ? task->args[2] : task->args[1];
+    if (!gv_policy_allows_path(
+            &admission_policy, name, task->resolved, has_parameter, parameter)) {
+        fail(task->pid, "UNDECLARED_PATH_PRE_EFFECT"); return;
+    }
+    if (++path_events > MAX_PATH_EVENTS) { fail(task->pid, "PATH_EVENT_CAP_EXCEEDED"); return; }
     fprintf(trace, "PATH\t%" PRIu64 "\t%d\t%s\t", ++sequence, task->pid, name);
     hex(task->path); fputc('\t', trace); hex(task->resolved); fputc('\n', trace);
     bool writes = !strcmp(name, "mkdir");
@@ -281,6 +289,8 @@ static void syscall_entry(struct task *task, struct gv_syscall_info *info) {
             && task->args[2] != 0 && task->args[2] != FD_CLOEXEC)
             || (task->args[1] == F_DUPFD && task->args[2] != 10)))
         fail(task->pid, "UNSUPPORTED_FCNTL_ARGUMENT");
+    if (task->number == SYS_pipe2 && task->args[1] != O_CLOEXEC)
+        fail(task->pid, "UNDECLARED_PIPE_FLAGS");
     if (task->number == SYS_close)
         task->have_closing_object = gv_fd_identity(
             task->pid, (int)task->args[0], &task->closing_object);
@@ -370,16 +380,24 @@ static void syscall_exit(struct task *task, struct gv_syscall_info *info) {
         }
     }
     else if (task->number == SYS_openat && returned >= 0) {
-        if (++open_events > MAX_OPEN_EVENTS) fail(task->pid, "OPEN_EVENT_CAP_EXCEEDED");
         struct gv_object_identity object;
-        if (!gv_fd_identity(task->pid, (int)returned, &object))
-            fail(task->pid, "OPEN_OBJECT_UNAVAILABLE");
-        else {
-            fprintf(trace, "OPEN\t%" PRIu64 "\t%d\t%" PRId64 "\t%" PRIu64
-                "\t%c\t%ju\t%ju\t", ++sequence, task->pid, returned, task->args[2],
-                classify(object.path), (uintmax_t)object.device, (uintmax_t)object.inode);
-            hex(object.path); fputc('\n', trace);
+        char actual_path[4096];
+        if (!gv_fd_identity(task->pid, (int)returned, &object)
+                || realpath(object.path, actual_path) == NULL) {
+            fail(task->pid, "OPEN_OBJECT_UNAVAILABLE"); return;
         }
+        if (strcmp(actual_path, task->resolved)
+                || !gv_policy_allows_path(
+                    &admission_policy, "openat", actual_path, true, task->args[2])) {
+            fail(task->pid, "OPEN_IDENTITY_PATH_MISMATCH"); return;
+        }
+        if (++open_events > MAX_OPEN_EVENTS) {
+            fail(task->pid, "OPEN_EVENT_CAP_EXCEEDED"); return;
+        }
+        fprintf(trace, "OPEN\t%" PRIu64 "\t%d\t%" PRId64 "\t%" PRIu64
+            "\t%c\t%ju\t%ju\t", ++sequence, task->pid, returned, task->args[2],
+            classify(actual_path), (uintmax_t)object.device, (uintmax_t)object.inode);
+        hex(actual_path); fputc('\n', trace);
     } else if (task->number == SYS_pipe2 && returned == 0) {
         int fds[2]; struct gv_object_identity object;
         if (!gv_pipe_identity(task->pid, task->args[0], fds, &object))
@@ -497,8 +515,35 @@ static void handle_event(struct task *parent, unsigned int event) {
     lineage_events += 1;
 }
 static bool canonical_root(const char *input, char *output) { return realpath(input, output) != NULL; }
+static bool canonical_pipe(const struct gv_object_identity *object) {
+    char expected[64];
+    int count = snprintf(expected, sizeof(expected), "pipe:[%ju]", (uintmax_t)object->inode);
+    return count > 0 && (size_t)count < sizeof(expected) && !strcmp(object->path, expected);
+}
+static bool record_initial_fds(pid_t pid) {
+    struct gv_object_identity objects[3];
+    int modes[3];
+    size_t count;
+    if (!gv_fd_count(pid, &count) || count != 3) return false;
+    for (int fd = 0; fd <= 2; fd += 1) {
+        if (!gv_fd_identity(pid, fd, &objects[fd])
+                || !gv_fd_access_mode(pid, fd, &modes[fd])) return false;
+    }
+    if (strcmp(objects[0].path, "/dev/null") || modes[0] != O_RDONLY
+            || !canonical_pipe(&objects[1]) || modes[1] != O_WRONLY
+            || !canonical_pipe(&objects[2]) || modes[2] != O_WRONLY
+            || (objects[1].device == objects[2].device
+                && objects[1].inode == objects[2].inode)) return false;
+    for (int fd = 0; fd <= 2; fd += 1) {
+        fprintf(trace, "INITIAL_FD\t%" PRIu64 "\t%d\t%d\t%d\t%ju\t%ju\t",
+                ++sequence, pid, fd, modes[fd],
+                (uintmax_t)objects[fd].device, (uintmax_t)objects[fd].inode);
+        hex(objects[fd].path); fputc('\n', trace);
+    }
+    return true;
+}
 static void usage(const char *program) {
-    fprintf(stderr, "usage: %s --challenge 64_HEX --trace FILE --sidecar FILE --product-root DIR "
+    fprintf(stderr, "usage: %s --challenge 64_HEX --trace FILE --sidecar FILE --policy FILE --product-root DIR "
         "--packet-root DIR --home-root DIR --output-root DIR "
         "--godot FILE --script FILE --corpus FILE --index DECIMAL\n", program);
 }
@@ -520,13 +565,28 @@ int main(int argc, char **argv) {
             && decode_lineage(&vfork, PTRACE_EVENT_VFORK, &kind, &flags)
             && !strcmp(kind, "vfork_process") && flags == 0
             && !decode_lineage(&process, PTRACE_EVENT_CLONE, &kind, &flags);
-        return sizeof(allowed_syscalls) / sizeof(*allowed_syscalls) == 61
+        int landlock_abi = gv_landlock_abi();
+        bool passed = sizeof(allowed_syscalls) / sizeof(*allowed_syscalls) == 61
             && lineage_ok
+            && landlock_abi >= 3
+            && gv_kernel_admission_access_fs() == 32759
             && gv_resolve_path(getpid(), AT_FDCWD, "/.__glassvow_absent_path__",
                                resolved, sizeof(resolved))
-            && !strcmp(resolved, "/.__glassvow_absent_path__") ? 0 : 1;
+            && !strcmp(resolved, "/.__glassvow_absent_path__");
+        if (passed) {
+            printf("{\"schema\":\"glassvow.godot-runtime-kernel-admission/v1\","
+                "\"landlockAbi\":%d,\"minimumAbi\":3,\"handledAccessFs\":32759,"
+                "\"policySchema\":\"GODOTACCESSv1\","
+                "\"fileRuleCapacity\":192,\"pathRuleCapacity\":2304,"
+                "\"policyByteCapacity\":393216,"
+                "\"writeSubtrees\":2,\"namedWriteFiles\":1,"
+                "\"descriptorSanitisation\":true,"
+                "\"noNewPrivileges\":true}\n", landlock_abi);
+        }
+        return passed ? 0 : 1;
     }
     const char *trace_path = NULL, *sidecar_path = NULL;
+    char policy_path[4096] = "";
     char godot_path[4096] = "", script_path[4096] = "", corpus_path[4096] = "";
     const char *index_value = NULL;
     for (int i = 1; i < argc; i += 1) {
@@ -535,6 +595,9 @@ int main(int argc, char **argv) {
         if (!strcmp(argv[i - 1], "--challenge")) challenge = value;
         else if (!strcmp(argv[i - 1], "--trace")) trace_path = value;
         else if (!strcmp(argv[i - 1], "--sidecar")) sidecar_path = value;
+        else if (!strcmp(argv[i - 1], "--policy")) {
+            if (!canonical_root(value, policy_path)) return 64;
+        }
         else if (!strcmp(argv[i - 1], "--product-root")) {
             if (!canonical_root(value, product_root)) return 64;
         } else if (!strcmp(argv[i - 1], "--packet-root")) {
@@ -555,7 +618,8 @@ int main(int argc, char **argv) {
     }
     if (challenge == NULL || strlen(challenge) != 64
             || strspn(challenge, "0123456789abcdef") != 64
-            || trace_path == NULL || sidecar_path == NULL || !product_root[0] || !packet_root[0]
+            || trace_path == NULL || sidecar_path == NULL || !policy_path[0]
+            || !product_root[0] || !packet_root[0]
             || !home_root[0] || !output_root[0] || !godot_path[0] || !script_path[0]
             || !corpus_path[0] || index_value == NULL || !index_value[0]
             || strlen(index_value) > 20 || strspn(index_value, "0123456789") != strlen(index_value)
@@ -572,6 +636,8 @@ int main(int argc, char **argv) {
             || gv_path_within(home_root, output_root) || gv_path_within(output_root, home_root)) {
         usage(argv[0]); return 64;
     }
+    if (!gv_load_admission_policy(
+            policy_path, MAX_ADMISSION_POLICY_BYTES, &admission_policy)) return 64;
     char identity_raw[4096];
     if (snprintf(observation_path, sizeof(observation_path), "%s/observation.json", output_root)
             >= (int)sizeof(observation_path)
@@ -607,6 +673,8 @@ int main(int argc, char **argv) {
     if (root_pid == 0) {
         if (!gv_limit_address_space(MAX_ADDRESS_SPACE)
                 || !gv_limit_initial_stack(MAX_INITIAL_STACK)) _exit(125);
+        if (!gv_sanitise_descriptors()
+                || !gv_restrict_access(home_root, output_root, &admission_policy)) _exit(124);
         if (ptrace(PTRACE_TRACEME, 0, 0, 0) != 0) _exit(126);
         raise(SIGSTOP);
         execve("/usr/bin/env", launch_arguments, launch_environment);
@@ -622,10 +690,14 @@ int main(int argc, char **argv) {
         MAX_OPEN_FDS, MAX_SEMANTIC_READ_BYTES, MAX_TRACE_BYTES, MAX_OPEN_EVENTS,
         MAX_CLOSE_EVENTS, MAX_SOCKET_EVENTS, MAX_BIND_EVENTS, MAX_EXEC_EVENTS,
         MAX_DUP_EVENTS, MAX_LINEAGE_EVENTS);
+    fprintf(trace, "POLICY\t%" PRIu64 "\t%d\t%zu\t%zu\t%zu\n",
+            ++sequence, root_pid, admission_policy.byte_count,
+            admission_policy.file_count, admission_policy.path_count);
     int status;
     if (waitpid(root_pid, &status, 0) != root_pid || !WIFSTOPPED(status)) return 2;
     struct task *root = add_task(root_pid);
-    if (root == NULL || !set_options(root) || ptrace(PTRACE_SYSCALL, root_pid, 0, 0) != 0)
+    if (root == NULL || !set_options(root) || !record_initial_fds(root_pid)
+            || ptrace(PTRACE_SYSCALL, root_pid, 0, 0) != 0)
         return 2;
     while (active_count > 0) {
         pid_t pid = waitpid(-1, &status, __WALL);
@@ -678,6 +750,6 @@ int main(int argc, char **argv) {
     if (fflush(trace) != 0 || fsync(fileno(trace)) != 0 || fsync(sidecar_fd) != 0) {
         perror("flush trace outputs"); return 2;
     }
-    fclose(trace); close(sidecar_fd);
+    fclose(trace); close(sidecar_fd); gv_free_admission_policy(&admission_policy);
     return violation == NULL && root_exit == 0 ? 0 : 40;
 }

@@ -481,6 +481,14 @@
     },
     {
       "operations": [
+        "kernel-interpreter"
+      ],
+      "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "sha256": "cd4df4f3c7b83673d61189bf2eaebd33ca4f2853ab9772b8a25e025ef99b1e81",
+      "size": 236616
+    },
+    {
+      "operations": [
         "close",
         "fstat",
         "mmap",
@@ -1986,6 +1994,14 @@
   "source": {
     "artifactId": 9896305893,
     "artifactSha256": "6fe2a93c98907e2d40c21db6666ab5fede769098a9233fc8bb887bf66ca806de",
+    "kernelInterpreterCapture": {
+      "artifactId": 9902474984,
+      "artifactSha256": "7c96470fc45ae40eb9c0b078c5d99085ac712d456d8775663fefbd707dd4cb47",
+      "captureSha256": "3923ffbb8ed2535db92bb38f28c0878676d79fab44eba24de07c437cdf48c35d",
+      "observerHead": "4a194d70829cef4da2769800fa5ae4a616cd92f7",
+      "requestedPath": "/lib64/ld-linux-x86-64.so.2",
+      "run": 33778025696
+    },
     "observerHead": "5c3a5ccdb120c18a5a52ecdacf95972d88322f5f",
     "operationCompletion": "The raw trace's two successful /proc/self/exe readlink calls resolve to ${GODOT}; the frozen ${GODOT} operation set includes readlink because the diagnostic consumed-file extractor does not attribute returned readlink targets.",
     "packetSha": "15ea4d3af4b592c7015b4fd3569cf59d7ef93d77",

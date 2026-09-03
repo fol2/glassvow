@@ -12,6 +12,29 @@ struct gv_object_identity {
     char path[4096];
 };
 
+#define GV_MAX_ADMISSION_FILE_RULES 192
+#define GV_MAX_ADMISSION_PATH_RULES 2304
+
+struct gv_admission_file_rule {
+    uint64_t allowed_access;
+    char *path;
+};
+
+struct gv_admission_path_rule {
+    char operation[16];
+    uint64_t parameter;
+    bool has_parameter;
+    char *path;
+};
+
+struct gv_admission_policy {
+    size_t byte_count;
+    size_t file_count;
+    size_t path_count;
+    struct gv_admission_file_rule files[GV_MAX_ADMISSION_FILE_RULES];
+    struct gv_admission_path_rule paths[GV_MAX_ADMISSION_PATH_RULES];
+};
+
 bool gv_copy_memory(pid_t pid, uint64_t address, void *destination, size_t count);
 bool gv_copy_string(pid_t pid, uint64_t address, char *destination, size_t capacity);
 bool gv_fd_identity(pid_t pid, int fd, struct gv_object_identity *identity);
@@ -22,6 +45,19 @@ bool gv_fd_count(pid_t pid, size_t *count);
 bool gv_process_tgid(pid_t pid, pid_t *tgid);
 bool gv_limit_address_space(uint64_t bytes);
 bool gv_limit_initial_stack(uint64_t bytes);
+int gv_landlock_abi(void);
+uint64_t gv_kernel_admission_access_fs(void);
+bool gv_load_admission_policy(
+    const char *path, size_t maximum_bytes, struct gv_admission_policy *policy);
+void gv_free_admission_policy(struct gv_admission_policy *policy);
+bool gv_policy_allows_path(
+    const struct gv_admission_policy *policy, const char *operation,
+    const char *path, bool has_parameter, uint64_t parameter);
+bool gv_sanitise_descriptors(void);
+bool gv_restrict_access(
+    const char *home_root, const char *output_root,
+    const struct gv_admission_policy *policy);
+bool gv_fd_access_mode(pid_t pid, int fd, int *access_mode);
 bool gv_resolve_path(pid_t pid, int dirfd, const char *path,
                      char *resolved, size_t capacity);
 bool gv_path_within(const char *path, const char *root);

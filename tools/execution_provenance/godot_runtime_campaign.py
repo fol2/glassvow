@@ -21,6 +21,8 @@ RUNNER_PATH = SOURCE_ROOT / "godot_runtime_runner.py"
 VERIFIER_PATH = SOURCE_ROOT / "godot_runtime_verify.py"
 PROFILE_PATH = SOURCE_ROOT / "godot_runtime_profile.json"
 G0_MANIFEST_PATH = SOURCE_ROOT / "godot_runtime_g0_manifest.json"
+CONFIGURATION_MANIFEST_PATH = SOURCE_ROOT / "godot_runtime_configuration_manifest.json"
+CONFIGURATION_ROOT = SOURCE_ROOT / "godot_runtime_configuration"
 CASE_IDS = [f"G{index:02d}" for index in range(26)]
 DIAGNOSTIC_CASES = {"G15", "G16", "G17", "G18"}
 ADMISSION_SCHEMA = "glassvow.godot-runtime-provenance.admission-receipt/v1"
@@ -522,8 +524,10 @@ def apply_attack(
     write_json(case_dir / "statement.json", statement)
 
 
-def _verifier_common(args: argparse.Namespace, packet_manifest: Path, product: Path,
-                     packet: Path, runtime: Path) -> list[str]:
+def _verifier_common(
+        args: argparse.Namespace, packet_manifest: Path, product_stage: Path,
+        product_stage_receipt: Path, product: Path, packet: Path,
+        runtime: Path) -> list[str]:
     return [
         "--profile", str(args.profile.resolve()),
         "--g0-manifest", str(args.g0_manifest.resolve()),
@@ -537,6 +541,8 @@ def _verifier_common(args: argparse.Namespace, packet_manifest: Path, product: P
         "--request-index", args.request_index,
         "--expected-godot", str(args.godot.resolve()),
         "--expected-product-source", str(args.product_source.resolve()),
+        "--expected-product-stage", str(product_stage.resolve()),
+        "--expected-product-stage-receipt", str(product_stage_receipt.resolve()),
         "--expected-packet-source", str(
             (args.packet_source.resolve() / args.packet_root).resolve()),
         "--expected-product-mount", str(product.resolve()),
@@ -584,18 +590,30 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
     build_args = argparse.Namespace(
         workspace=workspace, profile=args.profile, g0_manifest=args.g0_manifest)
     runner.build_command(build_args)
-    runner.generate_godot_configuration(
-        args.godot.resolve(), args.product_source.resolve(), workspace,
-        profile, read_json(args.g0_manifest.resolve()))
     mounts_root = Path(tempfile.mkdtemp(prefix="glassvow-godot-runtime-input-"))
+    product_stage = mounts_root / "product-stage"
     product = mounts_root / "product"
     packet = mounts_root / "packet"
     packet_source = args.packet_source.resolve() / args.packet_root
     mounted: list[Path] = []
     try:
+        runner.materialise_product_stage(
+            args.product_source.resolve(), args.product_sha, product_stage,
+            CONFIGURATION_ROOT, CONFIGURATION_MANIFEST_PATH, profile["caps"])
+        product_stage_receipt = workspace / "product-stage-receipt.json"
+        run([
+            sys.executable, str(VERIFIER_PATH), "stage",
+            "--profile", str(args.profile.resolve()),
+            "--product-source", str(args.product_source.resolve()),
+            "--product-sha", args.product_sha,
+            "--product-stage", str(product_stage),
+            "--output", str(product_stage_receipt),
+        ], timeout=120)
         mount_records = {
-            "product": mount_read_only(args.product_source.resolve(), product),
+            "product": mount_read_only(product_stage, product),
         }
+        mount_records["product"]["stageReceiptFileSha256"] = \
+            sha256_file(product_stage_receipt)
         mounted.append(product)
         mount_records["packet"] = mount_read_only(packet_source, packet)
         mounted.append(packet)
@@ -643,7 +661,8 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
             receipt = case_dir / "receipt.json"
             replay = case_dir / "receipt-replay.json"
             common = _verifier_common(
-                args, packet_manifest, product, packet, runtime)
+                args, packet_manifest, product_stage, product_stage_receipt,
+                product, packet, runtime)
             for destination in (receipt, replay):
                 run([
                     sys.executable, str(VERIFIER_PATH), "case", *common,
@@ -668,7 +687,9 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
         campaign_receipt = output / "campaign-receipt.json"
         run([
             sys.executable, str(VERIFIER_PATH), "campaign",
-            *_verifier_common(args, packet_manifest, product, packet, runtime),
+            *_verifier_common(
+                args, packet_manifest, product_stage, product_stage_receipt,
+                product, packet, runtime),
             "--challenges-dir", str(challenges), "--campaign-dir", str(cases_root),
             "--receipt-out", str(campaign_receipt),
         ])

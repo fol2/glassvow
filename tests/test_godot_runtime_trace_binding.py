@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import os
 import tempfile
 import types
 import unittest
@@ -33,6 +34,21 @@ class TraceBindingTests(unittest.TestCase):
         cls.contract = cls.profile["accessGrammar"]["internalPipe"]
 
     def accounting_fixture(self, raw_events: list[str]) -> tuple[dict, dict]:
+        root_tid = raw_events[0].split("\t")[2] if raw_events else "100"
+        null_identity = os.stat("/dev/null")
+        preamble = [
+            f"POLICY\t2\t{root_tid}\t1\t1\t1",
+            f"INITIAL_FD\t3\t{root_tid}\t0\t0\t{null_identity.st_dev}\t"
+            f"{null_identity.st_ino}\t2f6465762f6e756c6c",
+            f"INITIAL_FD\t4\t{root_tid}\t1\t1\t1\t11\t706970653a5b31315d",
+            f"INITIAL_FD\t5\t{root_tid}\t2\t1\t1\t12\t706970653a5b31325d",
+        ]
+        shifted = []
+        for raw in raw_events:
+            fields = raw.split("\t")
+            fields[1] = str(int(fields[1]) + 4)
+            shifted.append("\t".join(fields))
+        raw_events = preamble + shifted
         start = "\t".join(["START", "1", "100", CHALLENGE, *(["1"] * 20)])
         end = "\t".join(["END", str(len(raw_events) + 2), "100", "200", "100",
                           *(["0"] * 18), "0", "-", CHALLENGE])
@@ -60,9 +76,25 @@ class TraceBindingTests(unittest.TestCase):
         caps = {key: 64 for key in order}
         caps.update(tracerStartLimitOrder=order, maxTasks=16, maxEvents=64,
                     maxOpenFds=8,
-                    maxObservedPaths=8, maxPathBytes=4096)
+                    maxObservedPaths=8, maxPathBytes=4096,
+                    maxAdmissionPolicyBytes=64, maxAdmissionFileRules=64,
+                    maxAdmissionPathRules=64)
         trace["limits"] = [caps[key] for key in order]
         return trace, caps
+
+    def test_initial_descriptors_bind_live_null_and_three_distinct_objects(self) -> None:
+        trace, caps = self.accounting_fixture(self.opened_fd_events())
+        self.verifier.validate_trace_accounting(trace, caps, 1, 0)
+        trace["events"][1]["inode"] += 1
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "initial descriptor boundary"):
+            self.verifier.validate_trace_accounting(trace, caps, 1, 0)
+        trace, caps = self.accounting_fixture(self.opened_fd_events())
+        trace["events"][1]["device"] = trace["events"][2]["device"]
+        trace["events"][1]["inode"] = trace["events"][2]["inode"]
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "initial descriptor boundary"):
+            self.verifier.validate_trace_accounting(trace, caps, 1, 0)
 
     def test_missing_or_inserted_derived_event_fails_closed(self) -> None:
         entered = "SYSCALL_E\t2\t1001\t257\topenat\t18446744073709551516\t0\t0\t0\t0\t0"
@@ -180,22 +212,37 @@ class TraceBindingTests(unittest.TestCase):
             tracer = {key: hashlib.sha256(path.read_bytes()).hexdigest()
                       for key, path in paths.items()}
             tracer["returncode"] = 0
+            contract = self.profile["kernelAdmission"]
+            tracer["kernelAdmission"] = {
+                "schema": contract["schema"], "landlockAbi": 6,
+                "minimumAbi": contract["minimumAbi"],
+                "handledAccessFs": contract["handledAccessFs"],
+                "writeSubtrees": len(contract["writeSubtrees"]),
+                "namedWriteFiles": len(contract["namedWriteFiles"]),
+                "policySchema": contract["policySchema"],
+                "fileRuleCapacity": self.profile["caps"]["maxAdmissionFileRules"],
+                "pathRuleCapacity": self.profile["caps"]["maxAdmissionPathRules"],
+                "policyByteCapacity": contract["policyByteCapacity"],
+                "descriptorSanitisation": True,
+                "noNewPrivileges": True,
+            }
             self.verifier._TRACE.validate_tracer_identity(
-                tracer, root, paths["binarySha256"])
+                tracer, root, paths["binarySha256"], contract)
             tracer["binarySha256"] = "0" * 64
             with self.assertRaisesRegex(
-                    self.verifier.VerificationFailure, "binarySha256 differs"):
+                self.verifier.VerificationFailure, "binarySha256 differs"):
                 self.verifier._TRACE.validate_tracer_identity(
-                    tracer, root, paths["binarySha256"])
+                    tracer, root, paths["binarySha256"], contract)
 
     def test_case_members_are_bounded_before_parse_or_receipt_capture(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-case-cap-") as temporary:
             case = Path(temporary) / "G00"; case.mkdir()
-            for name in ("statement.json", "trace.tsv", "sidecar.bin", "stdout.bin"):
+            for name in ("statement.json", "trace.tsv", "sidecar.bin", "stdout.bin",
+                         "admission-policy.tsv"):
                 (case / name).write_bytes(b"{}" if name == "statement.json" else b"")
             members, _ = self.verifier._preflight_case_members(
                 case, self.profile["caps"])
-            self.assertEqual(4, len(members))
+            self.assertEqual(5, len(members))
             statement = case / "statement.json"
             statement.write_bytes(b"replacement")
             self.assertEqual(b"{}", members["statement.json"])
@@ -261,7 +308,8 @@ class TraceBindingTests(unittest.TestCase):
             "invocation": {"godotArgvTemplate": [], "environment": []},
             "roles": {"generatedGodotCache": {"paths": []}},
             "caps": {"maxSemanticFiles": 1, "maxIdentityDependencies": 1,
-                     "maxPlatformObservations": 1, "maxFileIdentities": 3},
+                     "maxPlatformObservations": 1, "maxFileIdentities": 3,
+                     "maxGodotBytes": 1},
         }
         packet = {"roles": {"externalScript": {"path": "oracle.gd"},
                              "corpus": {"path": "corpus.json"}}}
@@ -271,7 +319,8 @@ class TraceBindingTests(unittest.TestCase):
         object_failure = self.verifier.VerificationFailure(
             "UNDECLARED_INPUT_PATH", "injected successful object")
         with mock.patch.multiple(
-                self.verifier, _authority=no_op, _trusted_setup=no_op,
+                self.verifier, _authority=no_op, _admission_policy=no_op,
+                _trusted_setup=no_op,
                 _packet_members=no_op, _roles=mock.Mock(return_value={}),
                 _records=mock.Mock(return_value={}), _live=no_op,
                 _identity_set=mock.Mock(return_value={}),
@@ -284,7 +333,7 @@ class TraceBindingTests(unittest.TestCase):
                     self.verifier.VerificationFailure, "UNDECLARED_INPUT_PATH"):
                 self.verifier._complete(
                     args, profile, {}, packet, statement, trace, b"",
-                    CHALLENGE, {})
+                    CHALLENGE, {}, {})
             self.verifier._outputs.assert_not_called()
 
 

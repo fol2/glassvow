@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import stat
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -34,7 +35,8 @@ def integer(value: Any, label: str, minimum: int = 0) -> int:
 
 
 def validate_tracer_identity(
-        tracer: Any, source_root: Path, binary: Path) -> None:
+        tracer: Any, source_root: Path, binary: Path,
+        admission_contract: Mapping[str, Any]) -> None:
     paths = {
         "sourceSha256": source_root / "godot_runtime_ptrace_tracer.c",
         "ioSourceSha256": source_root / "godot_runtime_ptrace_io.c",
@@ -50,6 +52,26 @@ def validate_tracer_identity(
             fail("PROVENANCE_INCOMPLETE", f"tracer identity unavailable: {error}")
         if tracer.get(key) != digest:
             fail("PROVENANCE_INCOMPLETE", f"tracer {key} differs")
+    admission = tracer.get("kernelAdmission")
+    expected = {
+        "schema": admission_contract.get("schema"),
+        "minimumAbi": admission_contract.get("minimumAbi"),
+        "handledAccessFs": admission_contract.get("handledAccessFs"),
+        "policySchema": admission_contract.get("policySchema"),
+        "fileRuleCapacity": 192,
+        "pathRuleCapacity": 2304,
+        "policyByteCapacity": admission_contract.get("policyByteCapacity"),
+        "writeSubtrees": len(admission_contract.get("writeSubtrees", [])),
+        "namedWriteFiles": len(admission_contract.get("namedWriteFiles", [])),
+        "descriptorSanitisation": True,
+        "noNewPrivileges": True,
+    }
+    if not isinstance(admission, dict) or set(admission) != {*expected, "landlockAbi"} or \
+            not isinstance(admission.get("landlockAbi"), int) or \
+            isinstance(admission.get("landlockAbi"), bool) or \
+            admission["landlockAbi"] < admission_contract.get("minimumAbi", 0) or any(
+                admission.get(key) != value for key, value in expected.items()):
+        fail("PROVENANCE_INCOMPLETE", "tracer kernel admission differs")
 
 
 def signed(value: Any, label: str) -> int:
@@ -73,7 +95,17 @@ def _event(parts: Sequence[str]) -> dict[str, Any]:
     kind, sequence, tid, fields = parts[0], integer(parts[1], "sequence", 1), \
         integer(parts[2], "tid", 1), parts[3:]
     event: dict[str, Any] = {"type": kind, "sequence": sequence, "tid": tid}
-    if kind == "SYSCALL_E" and len(fields) == 8:
+    if kind == "POLICY" and len(fields) == 3:
+        event.update(byteCount=integer(fields[0], "policy byte count", 1),
+                     fileRules=integer(fields[1], "policy file rules", 1),
+                     pathRules=integer(fields[2], "policy path rules", 1))
+    elif kind == "INITIAL_FD" and len(fields) == 5:
+        event.update(fd=integer(fields[0], "initial fd"),
+                     accessMode=integer(fields[1], "initial fd access mode"),
+                     device=integer(fields[2], "initial fd device"),
+                     inode=integer(fields[3], "initial fd inode"),
+                     path=unhex(fields[4], "initial fd path"))
+    elif kind == "SYSCALL_E" and len(fields) == 8:
         event.update(number=integer(fields[0], "syscall number"), name=fields[1],
                      arguments=[integer(item, "syscall argument") for item in fields[2:]])
     elif kind == "SYSCALL_X" and len(fields) == 5:
@@ -222,6 +254,35 @@ def validate_trace_accounting(trace: Mapping[str, Any], caps: Mapping[str, int],
               "lineageEvents": "LINEAGE"}
     if any(end[field] != sum(event["type"] == kind for event in events) for field, kind in counts.items()):
         fail("PROVENANCE_INCOMPLETE", "END accounting differs")
+    if len(events) < 4 or events[0].get("type") != "POLICY" or \
+            [event.get("type") for event in events[1:4]] != ["INITIAL_FD"] * 3 or \
+            sum(event.get("type") == "POLICY" for event in events) != 1 or \
+            sum(event.get("type") == "INITIAL_FD" for event in events) != 3:
+        fail("PROVENANCE_INCOMPLETE", "kernel admission preamble differs")
+    policy_event, initial_events = events[0], events[1:4]
+    root_tid = policy_event["tid"]
+    try:
+        null_identity = os.stat("/dev/null")
+    except OSError as error:
+        fail("PROVENANCE_INCOMPLETE", f"live /dev/null identity unavailable: {error}")
+    initial_identities = {
+        (event.get("device"), event.get("inode")) for event in initial_events}
+    if policy_event.get("byteCount", 0) > caps["maxAdmissionPolicyBytes"] or \
+            policy_event.get("fileRules", 0) > caps["maxAdmissionFileRules"] or \
+            policy_event.get("pathRules", 0) > caps["maxAdmissionPathRules"] or \
+            [event.get("fd") for event in initial_events] != [0, 1, 2] or \
+            any(event.get("tid") != root_tid for event in initial_events) or \
+            initial_events[0].get("path") != "/dev/null" or \
+            initial_events[0].get("accessMode") != 0 or \
+            not stat.S_ISCHR(null_identity.st_mode) or \
+            (initial_events[0].get("device"), initial_events[0].get("inode")) != \
+            (null_identity.st_dev, null_identity.st_ino) or \
+            len(initial_identities) != 3 or any(
+                not pipe_path(event.get("path")) or event.get("accessMode") != 1
+                for event in initial_events[1:]) or \
+            (initial_events[1].get("device"), initial_events[1].get("inode")) == \
+            (initial_events[2].get("device"), initial_events[2].get("inode")):
+        fail("PROVENANCE_INCOMPLETE", "initial descriptor boundary differs")
     resumed = sum(event["type"] == "SYSCALL_X" and event["resumed"] == 1 for event in events)
     semantic = sum(event["returned"] for event in events
                    if event["type"] == "READ" and event["classification"] == "S")
@@ -244,9 +305,15 @@ def validate_trace_accounting(trace: Mapping[str, Any], caps: Mapping[str, int],
         if offset != cursor or length < 0: fail("PROVENANCE_INCOMPLETE", "sidecar range differs")
         cursor += length
     if cursor != sidecar_size: fail("PROVENANCE_INCOMPLETE", "sidecar coverage differs")
-    active: dict[int, dict[str, Any]] = {}; known: set[int] = set(); children: set[int] = set()
-    pending: list[tuple[str, dict[str, Any]]] = []; fds: dict[int, dict[int, dict[str, Any]]] = {}
-    cwds: dict[int, list[str]] = {}; executables: dict[int, str] = {}
+    active: dict[int, dict[str, Any]] = {}; known: set[int] = {root_tid}; children: set[int] = set()
+    pending: list[tuple[str, dict[str, Any]]] = []
+    fds: dict[int, dict[int, dict[str, Any]]] = {root_tid: {
+        event["fd"]: {"object": {
+            "classification": "I", "device": event["device"],
+            "inode": event["inode"], "path": event["path"],
+        }, "cloexec": False} for event in initial_events
+    }}
+    cwds: dict[int, list[str]] = {root_tid: [initial_cwd or "/"]}; executables: dict[int, str] = {}
     path_calls = {"access", "chdir", "execve", "lstat", "mkdir", "readlink", "stat",
                   "faccessat2", "newfstatat", "openat", "readlinkat", "statx"}
     at_calls = {"faccessat2", "newfstatat", "openat", "readlinkat", "statx"}
@@ -341,11 +408,9 @@ def validate_trace_accounting(trace: Mapping[str, Any], caps: Mapping[str, int],
     for event in events:
         if pending: require_derived(event, pending.pop(0)); continue
         event_type, tid = event["type"], event["tid"]
-        if not known:
-            known.add(tid); fds[tid] = {fd: {"object": {"token": f"initial-{fd}"}, "cloexec": False}
-                                      for fd in (0, 1, 2)}
-            cwds[tid] = [initial_cwd or "/"]
-        elif tid not in known: fail("PROVENANCE_INCOMPLETE", "task event precedes observed lineage")
+        if event_type in {"POLICY", "INITIAL_FD"}:
+            continue
+        if tid not in known: fail("PROVENANCE_INCOMPLETE", "task event precedes observed lineage")
         if event_type == "SYSCALL_E":
             if tid in active: fail("PROVENANCE_INCOMPLETE", "nested syscall entry")
             active[tid] = {**event, "path": None, "supplied": None, "exec": False,
