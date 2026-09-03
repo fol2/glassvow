@@ -295,12 +295,12 @@ jobs:
           observed = {}
           for trace in sorted(pathlib.Path("artifacts/godot-g0/raw").glob("trace.*")):
               for line in trace.read_text(encoding="utf-8", errors="replace").splitlines():
-                  call = re.match(r"[0-9.]+ ([A-Za-z0-9_]+)\\(", line)
+                  call = re.match(r"[0-9.]+ ([A-Za-z0-9_]+)\(", line)
                   if not call:
                       continue
                   paths = re.findall(r"[0-9]+<([^>]+)>", line)
                   if call.group(1) == "execve":
-                      executable = re.search(r'execve\\("([^"\\n]+)"', line)
+                      executable = re.search(r'execve\("([^"\n]+)"', line)
                       if executable:
                           paths.append(executable.group(1))
                   for raw_path in paths:
