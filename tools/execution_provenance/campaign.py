@@ -56,6 +56,15 @@ def make_writable(root: Path) -> None:
     os.chmod(root, 0o755)
 
 
+def seal_supplied(root: Path) -> None:
+    for path in sorted(root.rglob("*"), reverse=True):
+        if path.is_dir():
+            os.chmod(path, 0o555)
+        else:
+            os.chmod(path, 0o555 if path.name == "expected-executable" else 0o444)
+    os.chmod(root, 0o555)
+
+
 def refresh_statement(packet: Path) -> None:
     statement = read_json(packet / "statement.json")
     files = {
@@ -135,6 +144,7 @@ def run_campaign(protocol_path: Path, output: Path) -> dict[str, Any]:
                 alternative = attack / "undeclared-role.bin"
                 alternative.write_bytes(b"undeclared")
                 extra = str(alternative.resolve())
+            seal_supplied(supplied)
             run_command = [
                 sys.executable, str(RUNNER), "run",
                 "--protocol", str(protocol_path), "--workspace", str(workspace),
@@ -147,6 +157,11 @@ def run_campaign(protocol_path: Path, output: Path) -> dict[str, Any]:
             run(run_command, timeout=15)
             mounted.append(runtime)
             if case_id == "N05":
+                current = packet / "attack-current"
+                current.mkdir()
+                for name in ("trace.tsv", "subject.bin", "stdout.bin",
+                             "stderr.bin", "statement.json"):
+                    shutil.copyfile(packet / name, current / name)
                 copy_replay(results / "V00", packet)
             elif case_id == "N06":
                 shutil.copyfile(results / "V00" / "subject.bin", packet / "subject.bin")

@@ -31,6 +31,19 @@ EXPECTED_OUTCOMES = {
     "N09": ("REJECT", "UNDECLARED_INPUT_PATH"),
     "N10": ("INCONCLUSIVE", "PROVENANCE_INCOMPLETE"),
 }
+EXPECTED_CAPS = {
+    "caseCount": 11, "attemptsPerCase": 1, "mechanicalCorrections": 1,
+    "maxProcesses": 4, "maxEvents": 128, "maxTraceBytes": 262144,
+    "maxStdoutBytes": 4096, "maxStderrBytes": 4096,
+    "maxOutputBytes": 4096, "maxInputRoleBytes": 65536,
+    "maxCapsuleMembers": 16, "maxCapsuleBytes": 2097152,
+    "maxCasePacketBytes": 1048576, "maxCampaignBytes": 16777216,
+    "maxPathBytes": 4096, "judgementWallNs": 200000000,
+    "supervisorKillWallNs": 5000000000,
+    "timingAttackMinimumNs": 500000000,
+    "permittedDroppedEvents": 0, "permittedNetworkSyscalls": 0,
+    "validProcessCount": 2, "requiredConsumedBytes": 32,
+}
 
 
 class VerificationError(RuntimeError):
@@ -72,10 +85,8 @@ def validate_protocol(protocol: dict[str, Any]) -> None:
     cases = protocol.get("cases")
     if not isinstance(caps, dict) or not isinstance(cases, list):
         raise VerificationError("protocol caps or cases are missing")
-    if caps.get("caseCount") != 11 or caps.get("attemptsPerCase") != 1:
-        raise VerificationError("case and attempt caps are not exact")
-    if caps.get("mechanicalCorrections") != 1:
-        raise VerificationError("mechanical correction cap is not exact")
+    if caps != EXPECTED_CAPS:
+        raise VerificationError("numeric caps drifted from the frozen values")
     ids = [case.get("id") for case in cases if isinstance(case, dict)]
     if ids != EXPECTED_CASES:
         raise VerificationError("case order or identity drifted")
@@ -111,6 +122,12 @@ def validate_protocol(protocol: dict[str, Any]) -> None:
             or capsule.get("executableFileMode") != "0555" \
             or capsule.get("directoryMode") != "0555":
         raise VerificationError("capsule permission freeze drifted")
+    if protocol.get("clock", {}).get("name") != "CLOCK_MONOTONIC_RAW" \
+            or protocol.get("authority", {}).get("selectedVenue") \
+            != "github-hosted-ubuntu-24.04" \
+            or protocol.get("authority", {}).get("selectedBackend") \
+            != "purpose-built-ptrace-synchronous-stop-v1":
+        raise VerificationError("venue, backend or clock authority drifted")
 
 
 def policy_verdict(
@@ -284,10 +301,14 @@ def _capsule(capsule: Path, protocol: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(members, list) or len(members) > protocol["caps"]["maxCapsuleMembers"]:
         raise VerificationError("capsule member cap exceeded")
     total = 0
+    seen: set[str] = set()
     for member in members:
         relative = member.get("path") if isinstance(member, dict) else None
         if not isinstance(relative, str) or relative.startswith("/") or ".." in Path(relative).parts:
             raise VerificationError("capsule member path is unsafe")
+        if relative in seen:
+            raise VerificationError("capsule member path is duplicated")
+        seen.add(relative)
         path = capsule / relative
         if not path.is_file() or path.is_symlink() or sha256_file(path) != member.get("sha256"):
             raise VerificationError(f"capsule member binding failed: {relative}")
@@ -296,7 +317,14 @@ def _capsule(capsule: Path, protocol: dict[str, Any]) -> dict[str, Any]:
                 or f"{path.stat().st_mode & 0o777:04o}" != wanted_mode:
             raise VerificationError(f"capsule member mode drifted: {relative}")
         total += path.stat().st_size
-    if total > protocol["caps"]["maxCapsuleBytes"]:
+    wanted = {"protocol.json", "opaque-role.bin", "expected-executable"} \
+        | {f"requests/{case_id}.txt" for case_id in EXPECTED_CASES}
+    if seen != wanted:
+        raise VerificationError("capsule role membership drifted")
+    if total > protocol["caps"]["maxCapsuleBytes"] \
+            or f"{capsule.stat().st_mode & 0o777:04o}" != "0555" \
+            or f"{(capsule / 'requests').stat().st_mode & 0o777:04o}" != "0555" \
+            or f"{(capsule / 'manifest.json').stat().st_mode & 0o777:04o}" != "0444":
         raise VerificationError("capsule byte cap exceeded")
     return {"root": root, "manifest": manifest}
 
@@ -322,6 +350,10 @@ def _lineage(trace: dict[str, Any], cap: int) -> tuple[bool, list[int]]:
     exits = [event for event in trace["events"] if event["type"] == "exit"]
     valid &= {event["pid"] for event in exits} == pids
     valid &= len(exits) == len(pids) and len(pids) <= cap
+    valid &= all(event.get("pid") in pids for event in trace["events"]
+                 if "pid" in event)
+    valid &= all(event["kind"] in {"fork", "vfork", "clone"}
+                 for event in trace["events"] if event["type"] == "fork")
     return valid, sorted(pids)
 
 
@@ -404,6 +436,9 @@ def verify_case(
     writes = [event for event in trace["events"] if event["type"] == "write"]
     written_subject = b"".join(event["bytes"] for event in writes if event["fd"] == 4)
     written_stdout = b"".join(event["bytes"] for event in writes if event["fd"] == 1)
+    writes_valid = all(event["returned"] == len(event["bytes"])
+                       and event["returned"] <= event["requested"]
+                       and event["fd"] in {1, 2, 4} for event in writes)
     expected_input = (capsule / "opaque-role.bin").read_bytes()
     expected_exec = capsule / "expected-executable"
     expected_request = (capsule / "requests" / f"{case_id}.txt").read_text(
@@ -421,7 +456,14 @@ def verify_case(
                   if event["type"] == "violation"]
     violation_matches = (not violations and trace["violation"] is None) \
         or violations == [trace["violation"]]
-    provenance_complete = lineage_valid and violation_matches \
+    statement_authority = statement.get("protocolSha256") == sha256_file(protocol_path) \
+        and statement.get("capsuleRoot") == capsule_record["root"]
+    paths = [trace["input"]["path"], str(command.get("executable", "")),
+             str(command.get("extra", "")), str(execution.get("path", ""))]
+    provenance_complete = lineage_valid and violation_matches and writes_valid \
+        and statement_authority \
+        and all(len(path.encode("utf-8")) <= protocol["caps"]["maxPathBytes"]
+                for path in paths) \
         and _mount_is_read_only(packet / "runtime-capsule") \
         and _statement_integrity(statement, packet) \
         and trace["dropped"] == protocol["caps"]["permittedDroppedEvents"]
@@ -446,7 +488,10 @@ def verify_case(
     }
     decision = policy_verdict(protocol, cases[case_id], observation)
     witnesses = {
-        "V00": trace["root_exit"] == 0 and len(lineage) == protocol["caps"]["validProcessCount"],
+        "V00": trace["root_exit"] == 0
+        and all(event["code"] == 0 for event in trace["events"]
+                if event["type"] == "exit")
+        and len(lineage) == protocol["caps"]["validProcessCount"],
         "N01": trace["input"]["path"] == str(runtime_input) and consumed != expected_input,
         "N02": Path(trace["input"]["path"]).name == "opaque-role.bin"
         and trace["input"]["path"] != str(runtime_input) and consumed != expected_input,
@@ -500,13 +545,19 @@ def verify_campaign(
     for case_id in EXPECTED_CASES:
         primary = (results / case_id / "verdict.json").read_bytes()
         replay = (results / case_id / "verdict-replay.json").read_bytes()
-        if primary != replay:
+        recomputed = canonical_bytes(verify_case(
+            protocol_path, capsule, results.parent / "challenges" / f"{case_id}.json",
+            results / case_id)) + b"\n"
+        if primary != replay or primary != recomputed:
             raise VerificationError(f"verification replay drifted: {case_id}")
         verdict = json.loads(primary)
         cases.append({"case": case_id, "verdict": verdict["verdict"],
                       "reason": verdict["reason"],
                       "matchesExpectation": verdict["matchesExpectation"],
+                      "challenge": verdict["challenge"],
                       "receiptSha256": sha256_bytes(primary)})
+    if len({case["challenge"] for case in cases}) != len(cases):
+        raise VerificationError("verifier challenges are not unique")
     total = sum(path.stat().st_size for path in results.parent.rglob("*") if path.is_file())
     if total > protocol["caps"]["maxCampaignBytes"]:
         raise VerificationError("campaign byte cap exceeded")
@@ -522,6 +573,19 @@ def verify_campaign(
     run_id = os.environ.get("GITHUB_RUN_ID")
     run_url = f"{server}/{repository}/actions/runs/{run_id}" \
         if server and repository and run_id else None
+    build = read_json(results.parent / "workspace" / "build.json")
+    binaries = build.get("build", {})
+    executable_identities = {
+        "supervisorSha256": sha256_file(Path(binaries["tracer"])),
+        "workloadSha256": sha256_file(Path(binaries["workload"])),
+        "compiler": binaries.get("compiler"),
+        "compilerVersion": binaries.get("compilerVersion"),
+        "commands": binaries.get("commands"),
+    }
+    if executable_identities["supervisorSha256"] != binaries.get("tracerSha256") \
+            or executable_identities["workloadSha256"] != binaries.get("workloadSha256") \
+            or build.get("capsuleRoot") != capsule_record["root"]:
+        raise VerificationError("compiled execution identity drifted")
     return {
         "schema": CAMPAIGN_SCHEMA,
         "campaign": protocol["campaign"],
@@ -546,6 +610,7 @@ def verify_campaign(
         "cases": cases,
         "campaignBytes": total,
         "sourceSha256": sources,
+        "build": executable_identities,
         "verifierSha256": sha256_file(Path(__file__)),
         "excludedClaims": protocol["trustMap"]["excludedClaims"],
     }
