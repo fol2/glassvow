@@ -10,7 +10,7 @@
   },
   "authority": {
     "issue": 535,
-    "comment": 5524343289,
+    "comment": 5530338723,
     "blockedConsumerIssue": 421,
     "acceptedIntentMainSha": "5c5f2d325725b0a04e060c1ffe0b40a76f2e0928",
     "profileFreezeMainSha": "fb6c497c45ad5c283176e7d25c2bc861aae17033",
@@ -54,8 +54,14 @@
     "syscallAccountedAddressSpaceOvercountBytes": 928944328,
     "godotElfPtLoadPageBytes": 149110784,
     "smallElfAndInterpreterAllowanceBytes": 8388608,
-    "initialStackReservation": {"processes": 4, "bytesEach": 16777216},
-    "vdsoVvarReservation": {"processes": 4, "bytesEach": 1048576},
+    "initialStackReservation": {
+      "processes": 4,
+      "bytesEach": 16777216
+    },
+    "vdsoVvarReservation": {
+      "processes": 4,
+      "bytesEach": 1048576
+    },
     "conservativeAddressSpaceContractBytes": 1157746888,
     "addressSpaceCapHeadroomBytes": 50212664,
     "addressSpaceCapBasis": "The 1,152 MiB inherited RLIMIT_AS is a per-process fail-closed ceiling, not an observed peak. G0's 928,944,328-byte syscall-accounted total deliberately overcounts successful mmap requests and positive brk growth across all ten tasks without subtracting releases, repeated mappings or shared mappings. The fixed allowance also covers the exact Godot PT_LOAD page spans, bounded small executable and interpreter space, four exact G0 16 MiB initial-stack ceilings, and four conservative 1 MiB vDSO/vvar reservations.",
@@ -63,10 +69,22 @@
     "identityMechanism": "Executable and runtime objects were executed, read or mmaped and are content-bound separately from semantic roles.",
     "manifest": {
       "path": "tools/execution_provenance/godot_runtime_g0_manifest.json",
-      "sha256": "a735c8e43d81c9e96ba28db1aa867e0a4f2116ce97ac6d29c598ec0951656018",
+      "sha256": "c19b5035aa6da5e8d66e425963ccb33931e14959da78df9ae18c52779ac74669",
       "semanticReadSetCount": 30,
       "runtimeIdentitySetCount": 126,
       "platformObservationSetCount": 13
+    },
+    "pathOperationClosure": {
+      "schema": "glassvow.godot-runtime-provenance.g0-path-operations/v1",
+      "traceSetCanonicalSha256": "f753a45a611f48173c5e25345107010c75e663ad53067cd3b348632d9ce8f7ec",
+      "recordsCanonicalSha256": "c0402265354894e66193fb82514630e6ed03cd5c0c1b6f1aee97d4f0c728ccc2",
+      "traceFiles": 10,
+      "traceBytes": 2028198,
+      "eventCount": 4097,
+      "recordCount": 782,
+      "uniqueOperationPathPairs": 760,
+      "symlinkTargetsCanonicalSha256": "c3e4d9de8bcac1a540ebc865dfee18e51c600a72aed703ee7df89a1d19f411ec",
+      "symlinkCount": 57
     },
     "configurationCapture": {
       "path": "tools/execution_provenance/godot_runtime_configuration_manifest.json",
@@ -86,7 +104,8 @@
       "size": 236616,
       "sha256": "cd4df4f3c7b83673d61189bf2eaebd33ca4f2853ab9772b8a25e025ef99b1e81",
       "rule": "The fresh exact-observer G0 diagnostic captures PT_INTERP from the actual Godot, env and shell executables, resolves it to one canonical regular file and binds that kernel-loaded executable identity separately from the four requested execve leaves."
-    }
+    },
+    "pathSummaryDefect": "The historical G0 consumed-file summariser extracted only descriptor annotations and execve arguments, so it omitted direct pathname arguments and no-follow aliases. The corrected closure is derived mechanically from all 4,097 pathname events in the same immutable raw artifact and is independently reconciled to both admission-policy implementations."
   },
   "trustMap": {
     "trusted": [
@@ -123,22 +142,61 @@
     "minimumAbi": 3,
     "handledAccessFs": 32759,
     "handledRights": [
-      "EXECUTE", "WRITE_FILE", "READ_FILE", "REMOVE_DIR", "REMOVE_FILE", "MAKE_CHAR", "MAKE_DIR",
-      "MAKE_REG", "MAKE_SOCK", "MAKE_FIFO", "MAKE_BLOCK", "MAKE_SYM",
-      "REFER", "TRUNCATE"
+      "EXECUTE",
+      "WRITE_FILE",
+      "READ_FILE",
+      "REMOVE_DIR",
+      "REMOVE_FILE",
+      "MAKE_CHAR",
+      "MAKE_DIR",
+      "MAKE_REG",
+      "MAKE_SOCK",
+      "MAKE_FIFO",
+      "MAKE_BLOCK",
+      "MAKE_SYM",
+      "REFER",
+      "TRUNCATE"
     ],
-    "readLeaves": ["g0.semanticReadSet", "g0.runtimeIdentitySet", "g0.platformObservationSet"],
-    "executeLeaves": ["/usr/bin/env", "${GODOT}", "/bin/sh", "/usr/bin/xdg-user-dir"],
-    "kernelInterpreterLeaves": ["/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"],
-    "writeSubtrees": ["${HOME}", "${OUTPUT}"],
-    "namedWriteFiles": ["/dev/null"],
-    "pathPolicy": "One sorted duplicate-free GODOTACCESSv1 file binds every exact pathname operation before the tracer may emit PATH or pathname bytes, or resume it. The independent verifier reconstructs the same bytes from the frozen G0 and profile inputs.",
+    "readLeaves": [
+      "g0.semanticReadSet",
+      "g0.runtimeIdentitySet",
+      "g0.platformObservationSet"
+    ],
+    "executeLeaves": [
+      "/usr/bin/env",
+      "${GODOT}",
+      "/bin/sh",
+      "/usr/bin/xdg-user-dir"
+    ],
+    "kernelInterpreterLeaves": [
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+    ],
+    "writeSubtrees": [
+      "${HOME}",
+      "${OUTPUT}"
+    ],
+    "namedWriteFiles": [
+      "/dev/null"
+    ],
+    "pathPolicy": "One sorted duplicate-free GODOTACCESSv1 file is derived from the exact operation, resolved path and open-or-mkdir parameter closure of every immutable G0 pathname event. Only relocation of the five declared roots, readlink probes of their ancestors and G0-observed mkdir(0775) probes of existing HOME ancestors are permitted. The independent verifier separately reconstructs the same bytes and checks every traced pathname event against them before deciding a case.",
     "installation": "The tracee child applies resource limits, replaces fd 0 with read-only /dev/null, closes every fd >= 3, and installs the ruleset before PTRACE_TRACEME, the initial stop or any exec. Failure exits 124 without launching Godot.",
     "privilegeRule": "PR_SET_NO_NEW_PRIVS is mandatory before restriction, so an exec or set-user-ID helper cannot escape the inherited read, execute and write domain.",
     "initialDescriptors": {
-      "stdin": {"fd": 0, "path": "/dev/null", "accessMode": 0},
-      "stdout": {"fd": 1, "object": "distinct-outer-pipe", "accessMode": 1},
-      "stderr": {"fd": 2, "object": "distinct-outer-pipe", "accessMode": 1},
+      "stdin": {
+        "fd": 0,
+        "path": "/dev/null",
+        "accessMode": 0
+      },
+      "stdout": {
+        "fd": 1,
+        "object": "distinct-outer-pipe",
+        "accessMode": 1
+      },
+      "stderr": {
+        "fd": 2,
+        "object": "distinct-outer-pipe",
+        "accessMode": 1
+      },
       "higher": "closed-before-restriction"
     },
     "descriptorRule": "No inherited readable descriptor survives: fd 0 is read-only /dev/null, fd 1 and fd 2 are distinct output-only outer pipes, and every fd >= 3 is closed before restriction. Later anonymous pipes remain within the exact ptrace descriptor grammar.",
@@ -268,7 +326,7 @@
     "identitySet": {
       "source": "g0.manifest.runtimeIdentitySet",
       "count": 126,
-      "canonicalSha256": "908160f569e8ffb401ab590350ff6993bb5900b1e557cac04f4e6c7ee2525b60",
+      "canonicalSha256": "6ec134798ee9d3e17d23af6344b1929ba82887d469b5ef14d43fef15db0a89aa",
       "rule": "Every executed, opened or mapped regular runtime object must match one path, size and SHA-256 record. Device and inode are bound in the current receipt."
     },
     "identityOnlyProductObject": "${PRODUCT}/addons/sentry/bin/linux/x86_64/libsentry.linux.debug.x86_64.so"
@@ -414,21 +472,36 @@
     "stdout": {
       "fd": 1,
       "binding": "actual write bytes, current file identity and final file bytes",
-      "qualificationBaseline": {"size": 309, "sha256": "cf17838058a5bf14bf5b23e8ab4bb06b2ad3d2aed9ea025003f9a2eeedf28479"}
+      "qualificationBaseline": {
+        "size": 309,
+        "sha256": "cf17838058a5bf14bf5b23e8ab4bb06b2ad3d2aed9ea025003f9a2eeedf28479"
+      }
     },
     "stderr": {
       "fd": 2,
       "binding": "actual write bytes, current file identity and final raw bytes",
-      "qualificationBaseline": {"size": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "qualificationBaseline": {
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
       "semanticPolicy": "The profile verifier does not interpret diagnostic meaning."
     },
     "output": {
       "path": "${OUTPUT}/observation.json",
       "binding": "fresh exclusive inode, actual write bytes, close, final size and SHA-256",
       "qualificationBaseline": {
-        "observation": {"size": 55432, "sha256": "8df7ba42b663e7bfe0a12b7ca9d817d6fd678f754e726b8cf6241d0c065ec435"},
-        "homeLog": {"size": 309, "sha256": "cf17838058a5bf14bf5b23e8ab4bb06b2ad3d2aed9ea025003f9a2eeedf28479"},
-        "sentry": {"size": 63, "format": "sentry-ini-installation-uuid-v4-lowercase"}
+        "observation": {
+          "size": 55432,
+          "sha256": "8df7ba42b663e7bfe0a12b7ca9d817d6fd678f754e726b8cf6241d0c065ec435"
+        },
+        "homeLog": {
+          "size": 309,
+          "sha256": "cf17838058a5bf14bf5b23e8ab4bb06b2ad3d2aed9ea025003f9a2eeedf28479"
+        },
+        "sentry": {
+          "size": 63,
+          "format": "sentry-ini-installation-uuid-v4-lowercase"
+        }
       }
     }
   },
@@ -436,7 +509,7 @@
     "hash": "sha256",
     "qualification": {
       "authorityIssue": 535,
-      "authorityComment": 5524343289,
+      "authorityComment": 5530338723,
       "historicalG0DiagnosticPacketSha": "15ea4d3af4b592c7015b4fd3569cf59d7ef93d77",
       "baselineRoles": {
         "externalScript": {
@@ -454,7 +527,11 @@
       "authorityComment": 5524340839,
       "outputPolicy": {
         "mode": "bounded-current-raw-channel",
-        "channels": ["stdout", "stderr", "homeLog"],
+        "channels": [
+          "stdout",
+          "stderr",
+          "homeLog"
+        ],
         "interpretation": "none",
         "downstreamOwner": "unchanged A1-v2 diagnostic validator"
       },
@@ -550,221 +627,332 @@
       ],
       "writableDirectoryRule": "mkdir is limited to ancestors of the three path-named outputs below the two fresh exclusive roots; no other file creation or write is admitted.",
       "successfulNamedPathOperations": [
-        {"path": "/dev/input/event0", "operations": ["stat"], "fileType": "character-device", "major": 13, "minor": 64},
-        {"path": "/dev/input/event1", "operations": ["stat"], "fileType": "character-device", "major": 13, "minor": 65}
+        {
+          "path": "/dev/input/event0",
+          "operations": [
+            "stat"
+          ],
+          "fileType": "character-device",
+          "major": 13,
+          "minor": 64
+        },
+        {
+          "path": "/dev/input/event1",
+          "operations": [
+            "stat"
+          ],
+          "fileType": "character-device",
+          "major": 13,
+          "minor": 65
+        }
       ],
       "platformObservationRule": "Only the thirteen exact G0 manifest records are admitted; four named udev records normalise only one decimal initialisation timestamp under a 512-byte member cap, and every other byte and path remains exact.",
       "successfulDirectoryOperations": [
-        {"operations": ["openat"], "paths": [
-          "/", "/sys", "/sys/bus", "/sys/class", "/sys/class/hidraw", "/sys/dev",
-          "/sys/dev/char", "/sys/devices", "/sys/devices/0006:045E:0621.0001",
-          "/sys/devices/0006:045E:0621.0001/input", "/sys/devices/virtual",
-          "/sys/devices/virtual/input", "/sys/devices/LNXSYSTM:00",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input"
-        ]},
-        {"operations": ["stat", "openat"], "paths": ["/dev/input"]},
-        {"operations": ["access", "newfstatat", "openat"], "paths": [
-          "/etc/fonts/conf.d", "/usr/share/fontconfig/conf.avail"
-        ]},
-        {"operations": ["newfstatat", "openat"], "paths": [
-          "/usr/local/share/fonts", "/usr/share/fonts", "/usr/share/fonts/truetype",
-          "/usr/share/fonts/truetype/dejavu", "/usr/share/fonts/truetype/lato",
-          "/usr/share/fonts/truetype/liberation", "/usr/share/fonts/truetype/noto"
-        ]},
-        {"operations": ["openat", "readlinkat"], "paths": [
-          "/sys/class/input",
-          "/sys/devices/virtual/input/mice",
-          "/sys/devices/0006:045E:0621.0001/input/input1",
-          "/sys/devices/0006:045E:0621.0001/input/input1/js0",
-          "/sys/devices/0006:045E:0621.0001/input/input1/event1",
-          "/sys/devices/0006:045E:0621.0001/input/input1/mouse0",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"
-        ]}
+        {
+          "operations": [
+            "openat"
+          ],
+          "paths": [
+            "/",
+            "/sys",
+            "/sys/bus",
+            "/sys/class",
+            "/sys/class/hidraw",
+            "/sys/dev",
+            "/sys/dev/char",
+            "/sys/devices",
+            "/sys/devices/0006:045E:0621.0001",
+            "/sys/devices/0006:045E:0621.0001/input",
+            "/sys/devices/virtual",
+            "/sys/devices/virtual/input",
+            "/sys/devices/LNXSYSTM:00",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input"
+          ]
+        },
+        {
+          "operations": [
+            "stat",
+            "openat"
+          ],
+          "paths": [
+            "/dev/input"
+          ]
+        },
+        {
+          "operations": [
+            "access",
+            "newfstatat",
+            "openat"
+          ],
+          "paths": [
+            "/etc/fonts/conf.d",
+            "/usr/share/fontconfig/conf.avail"
+          ]
+        },
+        {
+          "operations": [
+            "newfstatat",
+            "openat"
+          ],
+          "paths": [
+            "/usr/local/share/fonts",
+            "/usr/share/fonts",
+            "/usr/share/fonts/truetype",
+            "/usr/share/fonts/truetype/dejavu",
+            "/usr/share/fonts/truetype/lato",
+            "/usr/share/fonts/truetype/liberation",
+            "/usr/share/fonts/truetype/noto"
+          ]
+        },
+        {
+          "operations": [
+            "openat",
+            "readlinkat"
+          ],
+          "paths": [
+            "/sys/class/input",
+            "/sys/devices/virtual/input/mice",
+            "/sys/devices/0006:045E:0621.0001/input/input1",
+            "/sys/devices/0006:045E:0621.0001/input/input1/js0",
+            "/sys/devices/0006:045E:0621.0001/input/input1/event1",
+            "/sys/devices/0006:045E:0621.0001/input/input1/mouse0",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"
+          ]
+        }
       ],
       "successfulDirectoryAliases": [
-        {"path": "/sys/class/input/mice", "target": "/sys/devices/virtual/input/mice"},
-        {"path": "/sys/class/input/js0", "target": "/sys/devices/0006:045E:0621.0001/input/input1/js0"},
-        {"path": "/sys/class/input/input1", "target": "/sys/devices/0006:045E:0621.0001/input/input1"},
-        {"path": "/sys/class/input/event1", "target": "/sys/devices/0006:045E:0621.0001/input/input1/event1"},
-        {"path": "/sys/class/input/mouse0", "target": "/sys/devices/0006:045E:0621.0001/input/input1/mouse0"},
-        {"path": "/sys/class/input/input0", "target": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0"},
-        {"path": "/sys/class/input/event0", "target": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"},
-        {"path": "/sys/dev/char/13:65", "target": "/sys/devices/0006:045E:0621.0001/input/input1/event1"},
-        {"path": "/sys/dev/char/13:64", "target": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"}
+        {
+          "path": "/sys/class/input/mice",
+          "target": "/sys/devices/virtual/input/mice"
+        },
+        {
+          "path": "/sys/class/input/js0",
+          "target": "/sys/devices/0006:045E:0621.0001/input/input1/js0"
+        },
+        {
+          "path": "/sys/class/input/input1",
+          "target": "/sys/devices/0006:045E:0621.0001/input/input1"
+        },
+        {
+          "path": "/sys/class/input/event1",
+          "target": "/sys/devices/0006:045E:0621.0001/input/input1/event1"
+        },
+        {
+          "path": "/sys/class/input/mouse0",
+          "target": "/sys/devices/0006:045E:0621.0001/input/input1/mouse0"
+        },
+        {
+          "path": "/sys/class/input/input0",
+          "target": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0"
+        },
+        {
+          "path": "/sys/class/input/event0",
+          "target": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"
+        },
+        {
+          "path": "/sys/dev/char/13:65",
+          "target": "/sys/devices/0006:045E:0621.0001/input/input1/event1"
+        },
+        {
+          "path": "/sys/dev/char/13:64",
+          "target": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"
+        }
       ],
       "successfulDynamicDirectoryOperations": [
-        {"operations": ["chdir"], "paths": [
-          "${PRODUCT}",
-          "${HOME}/.local/share/godot/app_userdata/Glassvow"
-        ]},
-        {"operations": ["mkdir"], "paths": [
-          "${HOME}/.local",
-          "${HOME}/.local/share",
-          "${HOME}/.local/share/godot",
-          "${HOME}/.local/share/godot/app_userdata",
-          "${HOME}/.local/share/godot/app_userdata/Glassvow",
-          "${HOME}/.local/share/godot/app_userdata/Glassvow/logs"
-        ]},
-        {"operations": ["newfstatat"], "paths": [
-          "${PRODUCT}/addons/sentry/bin/linux/x86_64"
-        ]},
-        {"operations": ["readlinkat"], "paths": [
-          "/sys/bus/hid",
-          "/sys/bus/serio",
-          "/sys/bus/vmbus",
-          "/sys/bus/acpi"
-        ]}
+        {
+          "operations": [
+            "chdir"
+          ],
+          "paths": [
+            "${PRODUCT}",
+            "${HOME}/.local/share/godot/app_userdata/Glassvow"
+          ]
+        },
+        {
+          "operations": [
+            "mkdir"
+          ],
+          "paths": [
+            "${HOME}/.local",
+            "${HOME}/.local/share",
+            "${HOME}/.local/share/godot",
+            "${HOME}/.local/share/godot/app_userdata",
+            "${HOME}/.local/share/godot/app_userdata/Glassvow",
+            "${HOME}/.local/share/godot/app_userdata/Glassvow/logs"
+          ]
+        },
+        {
+          "operations": [
+            "newfstatat"
+          ],
+          "paths": [
+            "${PRODUCT}/addons/sentry/bin/linux/x86_64"
+          ]
+        },
+        {
+          "operations": [
+            "readlinkat"
+          ],
+          "paths": [
+            "/sys/bus/hid",
+            "/sys/bus/serio",
+            "/sys/bus/vmbus",
+            "/sys/bus/acpi"
+          ]
+        }
       ],
-      "successfulWorkingDirectoryOperations": ["chdir", "newfstatat"],
+      "successfulWorkingDirectoryOperations": [
+        "chdir",
+        "newfstatat"
+      ],
       "successfulProbeOperations": [
-        {"operations": ["access"], "paths": [
-          "${PRODUCT}/addons/sentry/bin/linux/arm64/crashpad_handler",
-          "${PRODUCT}/addons/sentry/bin/linux/x86_32/crashpad_handler",
-          "${PRODUCT}/addons/sentry/bin/linux/x86_64/crashpad_handler",
-          "/run/udev/control"
-        ]},
-        {"operations": ["stat"], "paths": [
-          "${PRODUCT}/addons/sentry/bin/linux/arm64/crashpad_handler",
-          "${PRODUCT}/addons/sentry/bin/linux/x86_32/crashpad_handler",
-          "${PRODUCT}/addons/sentry/bin/linux/x86_64/crashpad_handler"
-        ]},
-        {"operations": ["faccessat2"], "paths": [
-          "/sys/devices/0006:045E:0621.0001/uevent",
-          "/sys/devices/LNXSYSTM:00/uevent",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/uevent",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/uevent",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/uevent",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/uevent",
-          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/uevent"
-        ]}
+        {
+          "operations": [
+            "access"
+          ],
+          "paths": [
+            "${PRODUCT}/addons/sentry/bin/linux/arm64/crashpad_handler",
+            "${PRODUCT}/addons/sentry/bin/linux/x86_32/crashpad_handler",
+            "${PRODUCT}/addons/sentry/bin/linux/x86_64/crashpad_handler",
+            "/run/udev/control"
+          ]
+        },
+        {
+          "operations": [
+            "stat"
+          ],
+          "paths": [
+            "${PRODUCT}/addons/sentry/bin/linux/arm64/crashpad_handler",
+            "${PRODUCT}/addons/sentry/bin/linux/x86_32/crashpad_handler",
+            "${PRODUCT}/addons/sentry/bin/linux/x86_64/crashpad_handler"
+          ]
+        },
+        {
+          "operations": [
+            "faccessat2"
+          ],
+          "paths": [
+            "/sys/devices/0006:045E:0621.0001/uevent",
+            "/sys/devices/LNXSYSTM:00/uevent",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/uevent",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/uevent",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/uevent",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/uevent",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/uevent"
+          ]
+        }
       ],
       "directoryEnumerations": [
-        {"path": "/dev/input", "returns": [224, 0, 224, 0]},
-        {"path": "/etc/fonts/conf.d", "returns": [1664, 0]},
-        {"path": "/sys/bus", "returns": [1128, 0, 1128, 0, 1128, 0]},
-        {"path": "/sys/class", "returns": [2160, 0, 2160, 0, 2160, 0]},
-        {"path": "/sys/class/hidraw", "returns": [48, 0]},
-        {"path": "/sys/class/input", "returns": [256, 0, 256, 0]},
-        {"path": "/sys/devices/0006:045E:0621.0001/input/input1", "returns": [488, 0, 488, 0]},
-        {"path": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0", "returns": [432, 0, 432, 0]},
-        {"path": "/usr/share/fontconfig/conf.avail", "returns": [2048, 0]}
-      ],
-      "failedPathGrammar": {
-        "readlinkKnownReturn": -22,
-        "readlinkRootAncestorRule": "readlink EINVAL may probe only an exact declared root ancestor, an exact frozen regular object, or one of the measured directories below; it is not an allow rule for arbitrary ancestors of known files.",
-        "readlinkKnownDirectories": [
-          "${HOME}",
-          "${HOME}/.local",
-          "${HOME}/.local/share",
-          "${HOME}/.local/share/godot",
-          "${HOME}/.local/share/godot/app_userdata",
-          "${HOME}/.local/share/godot/app_userdata/Glassvow",
-          "${PACKET}",
-          "${PRODUCT}",
-          "${PRODUCT}/.godot",
-          "${PRODUCT}/addons",
-          "${PRODUCT}/addons/sentry",
-          "${PRODUCT}/assets",
-          "${PRODUCT}/assets/art",
-          "${PRODUCT}/assets/art/title",
-          "${PRODUCT}/content",
-          "${PRODUCT}/domain",
-          "${PRODUCT}/domain/events",
-          "${PRODUCT}/domain/rng",
-          "${PRODUCT}/domain/rules",
-          "${PRODUCT}/domain/state",
-          "${PRODUCT}/tools",
-          "/etc",
-          "/etc/ssl",
-          "/etc/ssl/certs",
-          "/usr/share/fontconfig/conf.avail"
-        ],
-        "roleSuffixOperations": {
-          ".import": ["openat", "readlink", "stat"],
-          ".remap": ["stat"]
+        {
+          "path": "/dev/input",
+          "returns": [
+            224,
+            0,
+            224,
+            0
+          ]
         },
-        "readOnlyOpenFlags": [0, 524288],
-        "successfulReadOnlyOpenFlags": [0, 524288, 524544, 591872, 2621440, 2686976, 2752512, 2818048],
-        "successfulOutputOpenFlags": 577,
-        "deviceOpenFlags": 524288,
-        "deniedOutputOpenFlags": 577,
-        "mkdirMode": 509,
-        "fontCacheDirectories": [
-          "${HOME}/.cache/fontconfig",
-          "${HOME}/.fontconfig"
-        ],
-        "fontCacheBasenames": [
-          "0bd3dc0958fa2205aaaa8ebb13e2872b-le64.cache-9",
-          "3047814df9a2f067bd2d96a2b9c36e5a-le64.cache-9",
-          "3830d5c3ddfd5cd38a049b759396e72e-le64.cache-9",
-          "4c599c202bc5c08e2d34565a40eac3b2-le64.cache-9",
-          "7ef2298fde41cc6eeb7af42e48b7d293-le64.cache-9",
-          "bf3b770c553c462765856025a94f1ce6-le64.cache-9",
-          "d589a48862398ed80a3d6066f4f56f4c-le64.cache-9"
-        ],
-        "exact": [
-          {"operations": ["access"], "returned": -2, "paths": [
-            "${HOME}/.config/fontconfig/conf.d", "${HOME}/.config/fontconfig/fonts.conf",
-            "${HOME}/.fonts.conf", "${HOME}/.fonts.conf.d", "/.flatpak-info",
-            "/etc/fonts/70-no-bitmaps-except-emoji.conf", "/etc/fonts/local.conf",
-            "/etc/ld.so.preload", "/run/host/container-manager"
-          ]},
-          {"operations": ["chdir"], "returned": -2, "paths": [
-            "${HOME}/.local/share/godot/app_userdata/Glassvow"
-          ]},
-          {"operations": ["lstat"], "returned": -2, "paths": [
-            "${HOME}/.local/share/godot/app_userdata/Glassvow/.recovery_mode_lock"
-          ]},
-          {"operations": ["newfstatat"], "returned": -2, "paths": [
-            "${HOME}/.config/fontconfig/conf.d", "${HOME}/.config/fontconfig/fonts.conf",
-            "${HOME}/.config/user-dirs.dirs", "${HOME}/.fonts", "${HOME}/.local/share/fonts",
-            "${PRODUCT}/addons/sentry/bin/linux/x86_64/glibc-hwcaps/x86-64-v2",
-            "${PRODUCT}/addons/sentry/bin/linux/x86_64/glibc-hwcaps/x86-64-v3",
-            "/sys/devices/virtual/input/mice/capabilities/ev"
-          ]},
-          {"operations": ["faccessat2"], "returned": -2, "paths": [
-            "/sys/devices/uevent", "/sys/devices/virtual/uevent",
-            "/sys/devices/virtual/input/uevent",
-            "/sys/devices/0006:045E:0621.0001/input/uevent",
-            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/uevent"
-          ]},
-          {"operations": ["openat"], "returned": -13, "paths": [
-            "/dev/input/event0", "/dev/input/event1"
-          ]},
-          {"operations": ["openat", "readlink", "stat"], "returned": -2, "paths": [
-            "${PRODUCT}/.godot/scene_groups_cache.cfg", "${PRODUCT}/godot.pck",
-            "${PRODUCT}/override.cfg", "${PRODUCT}/project.binary", "${GODOT}.pck"
-          ]},
-          {"operations": ["openat"], "returned": -2, "paths": [
-            "${HOME}/.local/share/godot/app_userdata/Glassvow/sentry.dat",
-            "${PRODUCT}/addons/sentry/bin/linux/x86_64/glibc-hwcaps/x86-64-v2/libcurl.so.4",
-            "${PRODUCT}/addons/sentry/bin/linux/x86_64/glibc-hwcaps/x86-64-v3/libcurl.so.4",
-            "${PRODUCT}/addons/sentry/bin/linux/x86_64/libcurl.so.4",
-            "/usr/lib/locale/C.UTF-8/LC_CTYPE",
-            "/usr/local/share/fonts/.uuid", "/usr/share/fonts/.uuid",
-            "/usr/share/fonts/truetype/.uuid", "/usr/share/fonts/truetype/dejavu/.uuid",
-            "/usr/share/fonts/truetype/lato/.uuid", "/usr/share/fonts/truetype/liberation/.uuid",
-            "/usr/share/fonts/truetype/noto/.uuid"
-          ]},
-          {"operations": ["readlink"], "returned": -2, "paths": [
-            "${HOME}/.local/share/godot/app_userdata/Glassvow/sentry.dat"
-          ]},
-          {"operations": ["stat"], "returned": -2, "paths": [
-            "${HOME}/.local/share/godot/app_userdata/Glassvow/logs/godot.log",
-            "${HOME}/.local/share/godot/app_userdata/Glassvow/sentry.dat",
-            "${OUTPUT}/observation.json", "${PRODUCT}/default_bus_layout.tres.remap",
-            "${PRODUCT}/addons/sentry/bin/linux/arm32/crashpad_handler",
-            "${PRODUCT}/addons/sentry/bin/macos/crashpad_handler"
-          ]},
-          {"operations": ["readlink"], "returned": -22, "paths": ["/etc/fonts/conf.d"]},
-          {"operations": ["openat"], "returned": -13, "paths": ["${OUTPUT}/observation.json"]}
-        ]
+        {
+          "path": "/etc/fonts/conf.d",
+          "returns": [
+            1664,
+            0
+          ]
+        },
+        {
+          "path": "/sys/bus",
+          "returns": [
+            1128,
+            0,
+            1128,
+            0,
+            1128,
+            0
+          ]
+        },
+        {
+          "path": "/sys/class",
+          "returns": [
+            2160,
+            0,
+            2160,
+            0,
+            2160,
+            0
+          ]
+        },
+        {
+          "path": "/sys/class/hidraw",
+          "returns": [
+            48,
+            0
+          ]
+        },
+        {
+          "path": "/sys/class/input",
+          "returns": [
+            256,
+            0,
+            256,
+            0
+          ]
+        },
+        {
+          "path": "/sys/devices/0006:045E:0621.0001/input/input1",
+          "returns": [
+            488,
+            0,
+            488,
+            0
+          ]
+        },
+        {
+          "path": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0",
+          "returns": [
+            432,
+            0,
+            432,
+            0
+          ]
+        },
+        {
+          "path": "/usr/share/fontconfig/conf.avail",
+          "returns": [
+            2048,
+            0
+          ]
+        }
+      ],
+      "pathResultPolicy": {
+        "closureRule": "Every PATH_X operation, resolved path and open-or-mkdir parameter must be present in the frozen G0 pathOperationClosure or one of the two declared root translations. Exact negative returns and non-open positive returns remain bound; a successful openat return is an opaque non-negative descriptor.",
+        "rootAncestorReadlink": {
+          "operation": "readlink",
+          "parameter": null,
+          "returned": -22
+        },
+        "existingHomeAncestorMkdir": {
+          "operation": "mkdir",
+          "parameter": 509,
+          "returned": -17
+        },
+        "diagnosticOutputDenial": {
+          "caseIds": [
+            "G15",
+            "G16",
+            "G17",
+            "G18"
+          ],
+          "operation": "openat",
+          "path": "${OUTPUT}/observation.json",
+          "parameter": 577,
+          "returned": -13
+        }
       },
       "unknownFailedPath": "default-deny",
       "unknown": "default-deny"
@@ -775,8 +963,17 @@
         "count": 223,
         "canonicalMultisetSha256": "f91d076bcd7f245b2b14e8cc6ed2dcfdfd313b11b8fe4e64f183a0ece7980612",
         "normalisation": "Sort path, file offset, length, protection and flags after replacing the exact product mount prefix with ${PRODUCT}; omit ASLR addresses and task ids.",
-        "protectionValues": [1, 3, 5],
-        "flagValues": [1, 2, 2050, 2066],
+        "protectionValues": [
+          1,
+          3,
+          5
+        ],
+        "flagValues": [
+          1,
+          2,
+          2050,
+          2066
+        ],
         "maximumMeasuredEofOverrunBytes": 109320,
         "sharedReadOnlyPaths": [
           "/usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache",
@@ -822,7 +1019,10 @@
       "producerFd": 1,
       "consumer": "Godot parent",
       "consumerFd": 3,
-      "closedFds": [3, 4],
+      "closedFds": [
+        3,
+        4
+      ],
       "payloadTemplate": "${HOME}/Desktop\n",
       "binding": "Exactly one anonymous pipe carries this byte-exact payload once from the measured xdg-user-dir descendant to Godot; both positive write and read bytes are captured, share one device/inode identity and the pipe is closed at both ends. Outer stdout/stderr pipes are output transports, never semantic inputs."
     }

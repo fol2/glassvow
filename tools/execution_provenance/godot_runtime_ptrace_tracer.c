@@ -219,8 +219,19 @@ static void path_entry(struct task *task, const char *name) {
             || !strcmp(name,"statx")) {
         dirfd = (int)task->args[0]; address = task->args[1];
     }
+    bool follow_final = true;
+    if (!strcmp(name, "lstat") || !strcmp(name, "mkdir")
+            || !strcmp(name, "readlink") || !strcmp(name, "readlinkat"))
+        follow_final = false;
+    else if (!strcmp(name, "openat") && (task->args[2] & O_NOFOLLOW))
+        follow_final = false;
+    else if ((!strcmp(name, "newfstatat") || !strcmp(name, "faccessat2"))
+            && (task->args[3] & AT_SYMLINK_NOFOLLOW))
+        follow_final = false;
+    else if (!strcmp(name, "statx") && (task->args[2] & AT_SYMLINK_NOFOLLOW))
+        follow_final = false;
     if (!gv_copy_string(task->pid, address, task->path, sizeof(task->path))
-            || !gv_resolve_path(task->pid, dirfd, task->path,
+            || !gv_resolve_path(task->pid, dirfd, task->path, follow_final,
                                task->resolved, sizeof(task->resolved))) {
         fail(task->pid, "PATH_RESOLUTION_FAILED"); return;
     }
@@ -242,9 +253,14 @@ static void path_entry(struct task *task, const char *name) {
             && flags == (O_WRONLY | O_CREAT | O_TRUNC);
     }
     if (!strcmp(name, "mkdir")) {
-        if ((!gv_path_within(task->resolved, home_root)
-                && !gv_path_within(task->resolved, output_root))
-                || !named_output_ancestor(task->resolved))
+        bool named_fresh_ancestor =
+            (gv_path_within(task->resolved, home_root)
+                || gv_path_within(task->resolved, output_root))
+            && named_output_ancestor(task->resolved);
+        bool existing_home_ancestor =
+            gv_path_is_strict_ancestor(task->resolved, home_root)
+            && gv_existing_directory(task->resolved);
+        if (!named_fresh_ancestor && !existing_home_ancestor)
             fail(task->pid, "UNDECLARED_MKDIR_PATH");
     } else if (writes && !named_write_path(task->resolved) && !stderr_sink_open)
         fail(task->pid, "UNDECLARED_WRITE_PATH");
@@ -385,8 +401,11 @@ static void syscall_exit(struct task *task, struct gv_syscall_info *info) {
     else if (task->number == SYS_openat && returned >= 0) {
         struct gv_object_identity object;
         char actual_path[4096];
+        bool follow_final = (task->args[2] & O_NOFOLLOW) == 0;
         if (!gv_fd_identity(task->pid, (int)returned, &object)
-                || realpath(object.path, actual_path) == NULL) {
+                || !gv_resolve_path(
+                    task->pid, AT_FDCWD, object.path, follow_final,
+                    actual_path, sizeof(actual_path))) {
             fail(task->pid, "OPEN_OBJECT_UNAVAILABLE"); return;
         }
         if (strcmp(actual_path, task->resolved)
@@ -577,7 +596,7 @@ int main(int argc, char **argv) {
             && decode_syscall_fd(3) == 3
             && landlock_abi >= 3
             && gv_kernel_admission_access_fs() == 32759
-            && gv_resolve_path(getpid(), AT_FDCWD, "/.__glassvow_absent_path__",
+            && gv_resolve_path(getpid(), AT_FDCWD, "/.__glassvow_absent_path__", true,
                                resolved, sizeof(resolved))
             && !strcmp(resolved, "/.__glassvow_absent_path__");
         if (passed) {

@@ -58,10 +58,11 @@ bool gv_restrict_access(
     const char *home_root, const char *output_root,
     const struct gv_admission_policy *policy);
 bool gv_fd_access_mode(pid_t pid, int fd, int *access_mode);
-bool gv_resolve_path(pid_t pid, int dirfd, const char *path,
+bool gv_resolve_path(pid_t pid, int dirfd, const char *path, bool follow_final,
                      char *resolved, size_t capacity);
 bool gv_path_within(const char *path, const char *root);
 bool gv_path_is_strict_ancestor(const char *path, const char *descendant);
+bool gv_existing_directory(const char *path);
 bool gv_path_has_suffix(const char *path, const char *suffix);
 bool gv_regular_file(const char *path, bool executable);
 char gv_path_category(

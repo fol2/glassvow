@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Independent verifier for the frozen actual-Godot provenance profile."""
 from __future__ import annotations
-import argparse, hashlib, importlib.util, json, os, re, secrets, stat, subprocess, sys, tempfile
+import argparse, hashlib, importlib.util, json, os, posixpath, re, secrets, stat, subprocess, sys, tempfile
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -17,9 +17,9 @@ validate_trace_accounting = _TRACE.validate_trace_accounting
 _pipe_path, _internal_pipe_paths = _TRACE.pipe_path, _TRACE.internal_pipe_paths
 _validate_internal_pipe = _TRACE.validate_internal_pipe
 _validate_request_indices = _TRACE.validate_request_indices
-_validate_failed_paths = _TRACE.validate_failed_paths
 PROFILE_SCHEMA = "glassvow.godot-runtime-provenance.profile/v1"
 G0_SCHEMA = "glassvow.godot-runtime-provenance.g0-manifest/v1"
+G0_PATH_OPERATION_SCHEMA = "glassvow.godot-runtime-provenance.g0-path-operations/v1"
 PACKET_SCHEMA = "glassvow.godot-runtime-packet/v1"
 STATEMENT_SCHEMA = "glassvow.godot-runtime-provenance.statement/v1"
 RECEIPT_SCHEMA = "glassvow.godot-runtime-provenance.receipt/v1"
@@ -29,7 +29,7 @@ CONFIGURATION_MANIFEST_PATH = Path(__file__).with_name(
     "godot_runtime_configuration_manifest.json")
 CONFIGURATION_ROOT = Path(__file__).with_name("godot_runtime_configuration")
 # Bound to the independently reviewed profile before any qualification case.
-FROZEN_PROFILE_SHA256 = "f09c54b8d10b7bbaf44ad4ae3bbe989e970c088917045d253debb65709c1e6c2"
+FROZEN_PROFILE_SHA256 = "96a6588e18cb6af9f20c6ea0b2c39e4aa300172ce7e3ece2169702407564d6c2"
 _REASONS = (
     "ADMITTED GODOT_EXECUTABLE_MISMATCH RUNTIME_DEPENDENCY_MISMATCH ARGV_MISMATCH "
     "ENVIRONMENT_MISMATCH PROJECT_SEMANTIC_BYTES_MISMATCH GENERATED_CACHE_BYTES_MISMATCH "
@@ -189,113 +189,195 @@ _PATH_OPERATIONS = {
 }
 
 
+def _value_sha(value: Any) -> str:
+    return _sha(json.dumps(value, sort_keys=True, separators=(",", ":")).encode())
+
+
+def _validate_g0_path_operation_closure(
+        profile: Mapping[str, Any], manifest: Mapping[str, Any]) -> dict[str, Any]:
+    closure = manifest.get("pathOperationClosure")
+    binding = profile.get("g0", {}).get("pathOperationClosure")
+    fields = {"schema", "source", "traceMembers", "traceSetCanonicalSha256",
+              "records", "recordsCanonicalSha256", "eventCount", "recordCount",
+              "uniqueOperationPathPairs", "symlinkTargets",
+              "symlinkTargetsCanonicalSha256", "symlinkCount"}
+    if not isinstance(closure, dict) or set(closure) != fields or \
+            closure.get("schema") != G0_PATH_OPERATION_SCHEMA or \
+            not isinstance(binding, dict):
+        fail("MANIFEST_MISMATCH", "G0 path-operation closure schema differs")
+    source = closure.get("source")
+    manifest_source = manifest.get("source", {})
+    source_fields = {"run", "artifactId", "artifactSha256", "observerHead",
+                     "initialWorkingDirectory", "roots"}
+    if not isinstance(source, dict) or set(source) != source_fields or any(
+            source.get(key) != manifest_source.get(key)
+            for key in ("run", "artifactId", "artifactSha256", "observerHead")):
+        fail("MANIFEST_MISMATCH", "G0 path-operation source differs")
+    roots, working = source.get("roots"), source.get("initialWorkingDirectory")
+    if not isinstance(roots, dict) or set(roots) != {
+            "GODOT", "PRODUCT", "PACKET", "HOME", "OUTPUT"} or any(
+                not isinstance(path, str) or not path.startswith("/")
+                or posixpath.normpath(path) != path for path in roots.values()) or \
+            not isinstance(working, str) or not working.startswith("/") \
+            or posixpath.normpath(working) != working:
+        fail("MANIFEST_MISMATCH", "G0 path-operation root binding differs")
+    members = closure.get("traceMembers")
+    if not isinstance(members, list) or not members or members != sorted(
+            members, key=lambda item: item.get("name", "")):
+        fail("MANIFEST_MISMATCH", "G0 trace-member order differs")
+    seen_members: set[str] = set()
+    for member in members:
+        valid = isinstance(member, dict) and set(member) == {"name", "size", "sha256"}
+        name = member.get("name") if valid else None
+        if not valid or not isinstance(name, str) or not re.fullmatch(r"trace\.[0-9]+", name) \
+                or name in seen_members or not isinstance(member.get("size"), int) \
+                or member["size"] <= 0 or not re.fullmatch(
+                    r"[0-9a-f]{64}", str(member.get("sha256", ""))):
+            fail("MANIFEST_MISMATCH", "G0 trace-member binding differs")
+        seen_members.add(name)
+    if _value_sha(members) != closure.get("traceSetCanonicalSha256"):
+        fail("MANIFEST_MISMATCH", "G0 trace-set digest differs")
+    records = closure.get("records")
+    if not isinstance(records, list) or not records:
+        fail("MANIFEST_MISMATCH", "G0 path-operation records are missing")
+    triples: set[tuple[str, str, int | None]] = set()
+    closure_operations: dict[str, set[str]] = {}
+    identities = {str(item["path"]): item
+                  for group in ("semanticReadSet", "runtimeIdentitySet",
+                                "platformObservationSet")
+                  for item in manifest.get(group, [])}
+    for item in records:
+        if not isinstance(item, dict) or set(item) != {
+                "operation", "path", "parameter", "returns", "count"}:
+            fail("MANIFEST_MISMATCH", "G0 path-operation record fields differ")
+        operation, path, parameter = item["operation"], item["path"], item["parameter"]
+        returns, count = item["returns"], item["count"]
+        logical = isinstance(path, str) and (
+            path.startswith("/") and posixpath.normpath(path) == path
+            or re.fullmatch(r"\$\{(?:GODOT|PRODUCT|PACKET|HOME|OUTPUT)\}(?:/.*)?", path)
+            is not None)
+        parameter_ok = (operation in {"openat", "mkdir"}
+                        and isinstance(parameter, int) and parameter >= 0) or \
+            (operation not in {"openat", "mkdir"} and parameter is None)
+        if operation not in _PATH_OPERATIONS or not logical or not parameter_ok \
+                or not isinstance(returns, list) or not returns \
+                or returns != sorted(set(returns)) \
+                or any(not isinstance(value, int) for value in returns) \
+                or not isinstance(count, int) or count <= 0 \
+                or (operation, path, parameter) in triples:
+            fail("MANIFEST_MISMATCH", "G0 path-operation record differs")
+        triples.add((operation, path, parameter))
+        if path in identities:
+            closure_operations.setdefault(path, set()).add(operation)
+    ordered = sorted(records, key=lambda item: (
+        item["operation"], item["path"],
+        -1 if item["parameter"] is None else item["parameter"]))
+    if ordered != records or _value_sha(records) != closure.get("recordsCanonicalSha256") \
+            or closure.get("eventCount") != sum(item["count"] for item in records) \
+            or closure.get("recordCount") != len(records) \
+            or closure.get("uniqueOperationPathPairs") != len({
+                (item["operation"], item["path"]) for item in records}):
+        fail("MANIFEST_MISMATCH", "G0 path-operation accounting differs")
+    symlinks = closure.get("symlinkTargets")
+    if not isinstance(symlinks, list) or symlinks != sorted(
+            symlinks, key=lambda item: item.get("path", "")):
+        fail("MANIFEST_MISMATCH", "G0 symlink-target order differs")
+    link_paths: set[str] = set()
+    for link in symlinks:
+        path, target = (link.get("path"), link.get("target")) \
+            if isinstance(link, dict) else (None, None)
+        valid_path = lambda value: isinstance(value, str) and (
+            value.startswith("/") and posixpath.normpath(value) == value
+            or re.fullmatch(
+                r"\$\{(?:GODOT|PRODUCT|PACKET|HOME|OUTPUT)\}(?:/.*)?", value)
+            is not None)
+        if not isinstance(link, dict) or set(link) != {"path", "target"} \
+                or not valid_path(path) or not valid_path(target) or path == target \
+                or path in link_paths:
+            fail("MANIFEST_MISMATCH", "G0 symlink-target record differs")
+        link_paths.add(path)
+    observed_links = {item["path"] for item in records
+                      if item["operation"] in {"readlink", "readlinkat"}
+                      and any(value >= 0 for value in item["returns"])}
+    observed_links.discard("${GODOT}")
+    if link_paths != observed_links or closure.get("symlinkCount") != len(symlinks) \
+            or _value_sha(symlinks) != closure.get("symlinkTargetsCanonicalSha256"):
+        fail("MANIFEST_MISMATCH", "G0 symlink-target accounting differs")
+    for path, identity in identities.items():
+        if set(identity.get("operations", [])) & _PATH_OPERATIONS != \
+                closure_operations.get(path, set()):
+            fail("MANIFEST_MISMATCH", f"G0 identity operations differ: {path}")
+    expected = {
+        "schema": closure["schema"],
+        "traceSetCanonicalSha256": closure["traceSetCanonicalSha256"],
+        "recordsCanonicalSha256": closure["recordsCanonicalSha256"],
+        "traceFiles": len(members),
+        "traceBytes": sum(member["size"] for member in members),
+        "eventCount": closure["eventCount"],
+        "recordCount": closure["recordCount"],
+        "uniqueOperationPathPairs": closure["uniqueOperationPathPairs"],
+        "symlinkTargetsCanonicalSha256": closure["symlinkTargetsCanonicalSha256"],
+        "symlinkCount": closure["symlinkCount"],
+    }
+    if binding != expected:
+        fail("PROFILE_MISMATCH", "G0 path-operation profile binding differs")
+    return closure
+
+
 def _build_admission_policy(
         profile: Mapping[str, Any], manifest: Mapping[str, Any],
         roots: Mapping[str, str], working_directory: Path) -> tuple[bytes, dict[str, int]]:
-    grammar = profile["accessGrammar"]["paths"]
-    failed = grammar["failedPathGrammar"]
-    successful_read_flags = failed["successfulReadOnlyOpenFlags"]
-    failed_read_flags = failed["readOnlyOpenFlags"]
+    closure = _validate_g0_path_operation_closure(profile, manifest)
+    translations = profile["accessGrammar"]["paths"].get("pathResultPolicy", {})
+    mkdir_translation = translations.get("existingHomeAncestorMkdir", {})
+    if mkdir_translation != {
+            "operation": "mkdir", "parameter": 509, "returned": -17}:
+        fail("PROFILE_MISMATCH", "HOME-ancestor mkdir translation differs")
     files: dict[str, set[str]] = {}
     paths: set[tuple[str, str, int | None]] = set()
 
     def canonical_path(value: str) -> str:
-        return str(Path(value).resolve(strict=False))
+        if not value.startswith("/") or "\0" in value:
+            fail("PROVENANCE_INCOMPLETE", "invalid admission pathname rule")
+        return posixpath.normpath(value)
 
     def add_path(operation: str, path: str, parameter: int | None = None) -> None:
         if operation not in _PATH_OPERATIONS or not path.startswith("/") or "\0" in path:
             fail("PROVENANCE_INCOMPLETE", "invalid admission pathname rule")
         paths.add((canonical_path(path), operation, parameter))
 
-    def add_operation(operation: str, path: str, flags: Sequence[int]) -> None:
-        if operation == "openat":
-            for value in flags:
-                add_path(operation, path, value)
-        elif operation == "mkdir":
-            add_path(operation, path, failed["mkdirMode"])
-        else:
-            add_path(operation, path)
-
     for section in ("semanticReadSet", "runtimeIdentitySet", "platformObservationSet"):
         for record in manifest[section]:
             path = canonical_path(_expand(str(record["path"]), roots))
             files.setdefault(path, set()).add("R")
-            for operation in record["operations"]:
-                if operation in _PATH_OPERATIONS:
-                    add_operation(operation, path, successful_read_flags)
+
+    for record in closure["records"]:
+        add_path(
+            str(record["operation"]), _expand(str(record["path"]), roots),
+            record["parameter"])
 
     for template in profile["kernelAdmission"]["executeLeaves"]:
         path = canonical_path(_expand(template, roots))
         if path not in files:
             fail("PROVENANCE_INCOMPLETE", f"execute leaf is not frozen: {path}")
         files[path].add("X")
-        add_path("execve", path)
     for template in profile["kernelAdmission"]["kernelInterpreterLeaves"]:
         path = canonical_path(_expand(template, roots))
         if path not in files:
             fail("PROVENANCE_INCOMPLETE", f"kernel interpreter is not frozen: {path}")
         files[path].add("X")
 
-    for collection in ("successfulDirectoryOperations",
-                       "successfulDynamicDirectoryOperations",
-                       "successfulProbeOperations"):
-        for record in grammar[collection]:
-            for template in record["paths"]:
-                path = _expand(template, roots)
-                for operation in record["operations"]:
-                    add_operation(operation, path, successful_read_flags)
-    for record in grammar["successfulNamedPathOperations"]:
-        for operation in record["operations"]:
-            add_operation(
-                operation, _expand(record["path"], roots), successful_read_flags)
-    for operation in grammar["successfulWorkingDirectoryOperations"]:
-        add_operation(operation, str(working_directory.resolve()), successful_read_flags)
-
-    output_paths = {
-        f"{roots['OUTPUT']}/observation.json",
-        f"{roots['HOME']}/.local/share/godot/app_userdata/Glassvow/logs/godot.log",
-        f"{roots['HOME']}/.local/share/godot/app_userdata/Glassvow/sentry.dat",
-    }
-    for path in output_paths:
-        add_path("openat", path, failed["successfulOutputOpenFlags"])
-    add_path("openat", "/dev/null", failed["successfulOutputOpenFlags"])
-
-    for record in failed["exact"]:
-        for template in record["paths"]:
-            path = _expand(template, roots)
-            for operation in record["operations"]:
-                if operation == "openat":
-                    flags = ([failed["deniedOutputOpenFlags"]]
-                             if path == f"{roots['OUTPUT']}/observation.json" else
-                             [failed["deviceOpenFlags"]]
-                             if path in {"/dev/input/event0", "/dev/input/event1"} else
-                             failed_read_flags)
-                    add_operation(operation, path, flags)
-                else:
-                    add_operation(operation, path, failed_read_flags)
-    semantic_paths = {
-        _expand(str(record["path"]), roots)
-        for record in manifest["semanticReadSet"]}
-    for role in semantic_paths:
-        for suffix, operations in failed["roleSuffixOperations"].items():
-            for operation in operations:
-                add_operation(operation, role + suffix, failed_read_flags)
-    for directory in failed["fontCacheDirectories"]:
-        for name in failed["fontCacheBasenames"]:
-            add_operation(
-                "openat", f"{_expand(directory, roots)}/{name}", failed_read_flags)
-
-    readlink_paths = {
-        _expand(path, roots) for path in failed["readlinkKnownDirectories"]}
-    readlink_paths.update(files)
     for root in roots.values():
         candidate = Path(root).parent
         while str(candidate) != candidate.parent.as_posix():
-            readlink_paths.add(str(candidate)); candidate = candidate.parent
-        readlink_paths.add(str(candidate))
-    for path in readlink_paths:
-        add_path("readlink", path)
-    add_path("mkdir", roots["HOME"], failed["mkdirMode"])
+            add_path("readlink", str(candidate)); candidate = candidate.parent
+        add_path("readlink", str(candidate))
+    home_ancestor = Path(roots["HOME"]).parent
+    while home_ancestor != home_ancestor.parent:
+        add_path(
+            mkdir_translation["operation"], str(home_ancestor),
+            mkdir_translation["parameter"])
+        home_ancestor = home_ancestor.parent
 
     if len(files) > profile["caps"]["maxAdmissionFileRules"] or \
             len(paths) > profile["caps"]["maxAdmissionPathRules"]:
@@ -369,6 +451,7 @@ def _load_sources(
     if g0.get("schema") != G0_SCHEMA or _sha(source_bytes["g0Manifest"]) != \
             profile.get("g0", {}).get("manifest", {}).get("sha256"):
         fail("MANIFEST_MISMATCH", "G0 manifest bytes differ")
+    _validate_g0_path_operation_closure(profile, g0)
     members = _packet_members(packet_path.parent, packet_path, profile)
     if "packetManifest" not in source_bytes:
         source_bytes["packetManifest"] = _bounded_bytes(
@@ -882,29 +965,10 @@ def _platform_access_witnesses(
             fail("UNDECLARED_INPUT_PATH", f"platform access witness missing {path}")
 
 
-def _successful_open_flags(
-        events: Sequence[Mapping[str, Any]], outputs: set[str],
-        profile: Mapping[str, Any]) -> None:
-    grammar = profile["accessGrammar"]["paths"]["failedPathGrammar"]
-    read_flags = set(grammar["successfulReadOnlyOpenFlags"])
-    output_flags = grammar["successfulOutputOpenFlags"]
-    for event in events:
-        if event.get("type") != "PATH_X" or event.get("operation") != "openat" or \
-                event.get("returned", -1) < 0:
-            continue
-        arguments = event.get("_arguments")
-        if not isinstance(arguments, list) or len(arguments) < 3:
-            fail("PROVENANCE_INCOMPLETE", "successful open flags are unavailable")
-        expected = {output_flags} if event.get("path") in outputs | {"/dev/null"} \
-            else read_flags
-        if arguments[2] not in expected:
-            fail("OUTPUT_WRITE_DENIED" if event.get("path") in outputs else
-                 "UNDECLARED_INPUT_PATH", "successful open flags differ")
-
-
 def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], runtime: Mapping[str, Mapping[str, Any]],
              platform: Mapping[str, Mapping[str, Any]], outputs: Mapping[str, Mapping[str, Any]],
-             consumed_bytes: Mapping[str, bytes], sidecar: bytes, roots: Mapping[str, str], profile: Mapping[str, Any]) -> None:
+             consumed_bytes: Mapping[str, bytes], sidecar: bytes, roots: Mapping[str, str],
+             profile: Mapping[str, Any], g0: Mapping[str, Any]) -> None:
     objects: dict[str, Mapping[str, Any]] = {**roles, **platform, **outputs}
     for logical, record in runtime.items():
         resolved = str(Path(logical).resolve())
@@ -919,8 +983,6 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
     expected_pipe_bytes = _expand(pipe_contract["payloadTemplate"], roots).encode()
     internal_pipes = _validate_internal_pipe(
         trace["events"], sidecar, expected_pipe_bytes, pipe_contract)
-    _validate_failed_paths(trace["events"], known, set(roles), roots, grammar["failedPathGrammar"])
-    _successful_open_flags(trace["events"], set(outputs), profile)
     directory_operations: dict[str, set[str]] = {}
     for record in grammar["successfulDirectoryOperations"]:
         for path in record["paths"]:
@@ -935,6 +997,12 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
             successful_probes.setdefault(_expand(path, roots), set()).update(record["operations"])
     directory_aliases = {
         record["path"]: record["target"] for record in grammar["successfulDirectoryAliases"]}
+    symlink_targets = {
+        _expand(record["path"], roots): _expand(record["target"], roots)
+        for record in g0["pathOperationClosure"]["symlinkTargets"]}
+    if any(symlink_targets.get(path) != target
+           for path, target in directory_aliases.items()):
+        fail("MANIFEST_MISMATCH", "legacy directory aliases differ from G0 closure")
     named_operations = {
         record["path"]: record for record in grammar["successfulNamedPathOperations"]}
     working_directory_operations = set(grammar["successfulWorkingDirectoryOperations"])
@@ -966,17 +1034,22 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
             try: Path(path).lstat()
             except OSError as error: fail("UNDECLARED_INPUT_PATH", f"successful probe unavailable: {error}")
             continue
-        if path in directory_aliases:
-            target = directory_aliases[path]
+        if path in symlink_targets:
+            target = symlink_targets[path]
             try:
                 logical, current = Path(path).lstat(), Path(path).stat()
                 resolved = str(Path(path).resolve(strict=True))
             except OSError as error:
-                fail("UNDECLARED_INPUT_PATH", f"directory alias unavailable: {error}")
-            if event["type"] not in {"OPEN", "CLOSE"} or not stat.S_ISLNK(logical.st_mode) or \
-                    not stat.S_ISDIR(current.st_mode) or resolved != target or \
-                    (event.get("device"), event.get("inode")) != (current.st_dev, current.st_ino):
-                fail("UNDECLARED_INPUT_PATH", f"directory alias differs {path}")
+                fail("UNDECLARED_INPUT_PATH", f"symlink target unavailable: {error}")
+            if not stat.S_ISLNK(logical.st_mode) or resolved != target:
+                fail("UNDECLARED_INPUT_PATH", f"symlink target differs {path}")
+            if event["type"] == "PATH_X":
+                continue
+            if event["type"] not in {"OPEN", "CLOSE"} or \
+                    (event.get("device"), event.get("inode")) != \
+                    (logical.st_dev, logical.st_ino) or \
+                    event["type"] == "OPEN" and not event.get("flags", 0) & 0x20000:
+                fail("UNDECLARED_INPUT_PATH", f"no-follow symlink identity differs {path}")
             continue
         if path in directory_operations:
             if event["type"] == "PATH_X" and event.get("operation") not in directory_operations[path] or \
@@ -1292,6 +1365,81 @@ def _admission_policy(
     if actual != expected or record != wanted or traced is None or any(
             policy_events[0].get(key) != value for key, value in traced.items()):
         fail("PROVENANCE_INCOMPLETE", "admission policy differs")
+    path_rules: set[tuple[str, str, int | None]] = set()
+    for line in expected.decode("ascii").splitlines()[1:]:
+        fields = line.split("\t")
+        if fields[0] != "P":
+            continue
+        try:
+            parameter = None if fields[2] == "-" else int(fields[2])
+            path = bytes.fromhex(fields[3]).decode("utf-8")
+        except (IndexError, ValueError, UnicodeDecodeError):
+            fail("PROVENANCE_INCOMPLETE", "admission path rule is malformed")
+        path_rules.add((fields[1], path, parameter))
+
+    result_policy = profile["accessGrammar"]["paths"].get("pathResultPolicy")
+    if not isinstance(result_policy, dict) or set(result_policy) != {
+            "closureRule", "rootAncestorReadlink", "existingHomeAncestorMkdir",
+            "diagnosticOutputDenial"} or not isinstance(
+                result_policy.get("closureRule"), str):
+        fail("PROFILE_MISMATCH", "path-result policy shape differs")
+    readlink_translation = result_policy.get("rootAncestorReadlink")
+    mkdir_translation = result_policy.get("existingHomeAncestorMkdir")
+    diagnostic = result_policy.get("diagnosticOutputDenial")
+    if readlink_translation != {
+            "operation": "readlink", "parameter": None, "returned": -22} or \
+            mkdir_translation != {
+                "operation": "mkdir", "parameter": 509, "returned": -17} or \
+            diagnostic != {
+                "caseIds": ["G15", "G16", "G17", "G18"],
+                "operation": "openat", "path": "${OUTPUT}/observation.json",
+                "parameter": 577, "returned": -13}:
+        fail("PROFILE_MISMATCH", "path-result translations differ")
+
+    allowed_results: dict[tuple[str, str, int | None], set[int]] = {}
+    for record in g0["pathOperationClosure"]["records"]:
+        key = (record["operation"], _expand(record["path"], roots),
+               record["parameter"])
+        allowed_results.setdefault(key, set()).update(record["returns"])
+    for root in roots.values():
+        candidate = Path(root).parent
+        while str(candidate) != candidate.parent.as_posix():
+            allowed_results.setdefault(
+                ("readlink", str(candidate), None), set()).add(-22)
+            candidate = candidate.parent
+        allowed_results.setdefault(
+            ("readlink", str(candidate), None), set()).add(-22)
+    home_ancestor = Path(roots["HOME"]).parent
+    while home_ancestor != home_ancestor.parent:
+        allowed_results.setdefault(
+            ("mkdir", str(home_ancestor), 509), set()).add(-17)
+        home_ancestor = home_ancestor.parent
+
+    diagnostic_key = (
+        diagnostic["operation"], _expand(diagnostic["path"], roots),
+        diagnostic["parameter"])
+    for event in trace.get("events", []):
+        if event.get("type") != "PATH_X":
+            continue
+        arguments = event.get("_arguments")
+        operation = event.get("operation")
+        if not isinstance(arguments, list) or operation not in _PATH_OPERATIONS:
+            fail("PROVENANCE_INCOMPLETE", "traced admission arguments are missing")
+        parameter = arguments[2] if operation == "openat" else \
+            arguments[1] if operation == "mkdir" else None
+        key = (operation, event.get("path"), parameter)
+        if key not in path_rules:
+            fail("PROVENANCE_INCOMPLETE", "traced pathname was not admitted")
+        returned = event.get("returned")
+        expected_results = allowed_results.get(key, set())
+        admitted_result = returned in expected_results or (
+            operation == "openat" and isinstance(returned, int)
+            and returned >= 0 and any(value >= 0 for value in expected_results))
+        if key == diagnostic_key and statement.get("caseId") in diagnostic["caseIds"] \
+                and returned == diagnostic["returned"]:
+            admitted_result = True
+        if not admitted_result:
+            fail("PROVENANCE_INCOMPLETE", "traced pathname result differs")
     return expected, counts
 
 
@@ -1378,7 +1526,7 @@ def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, s
         fail("PROVENANCE_INCOMPLETE", "tracer/root exit contract differs")
     _objects(
         trace, roles, runtime, platform, output_records,
-        {**role_bytes, **platform_bytes}, sidecar, roots, profile)
+        {**role_bytes, **platform_bytes}, sidecar, roots, profile, g0)
     if trace["end"]["dropped"] or trace["end"]["violation"] not in {"", "-"}:
         fail("PROVENANCE_INCOMPLETE", f"tracer violation {trace['end']['violation']}")
     _outputs(

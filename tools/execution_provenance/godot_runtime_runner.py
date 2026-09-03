@@ -6,6 +6,8 @@ import argparse
 import hashlib
 import json
 import os
+import posixpath
+import re
 import shutil
 import stat
 import subprocess
@@ -24,6 +26,12 @@ TRACER_IO_SOURCE = SOURCE_ROOT / "godot_runtime_ptrace_io.c"
 TRACER_IO_HEADER = SOURCE_ROOT / "godot_runtime_ptrace_io.h"
 PACKET_SCHEMA = "glassvow.godot-runtime-packet/v1"
 STATEMENT_SCHEMA = "glassvow.godot-runtime-provenance.statement/v1"
+G0_PATH_OPERATION_SCHEMA = \
+    "glassvow.godot-runtime-provenance.g0-path-operations/v1"
+PATH_OPERATIONS = {
+    "access", "chdir", "execve", "faccessat2", "lstat", "mkdir",
+    "newfstatat", "openat", "readlink", "readlinkat", "stat", "statx",
+}
 
 
 class RunnerError(RuntimeError):
@@ -79,6 +87,150 @@ def checked(
     return result
 
 
+def validate_path_operation_closure(
+        profile: Mapping[str, Any], manifest: Mapping[str, Any]) -> dict[str, Any]:
+    closure = manifest.get("pathOperationClosure")
+    binding = profile.get("g0", {}).get("pathOperationClosure")
+    if not isinstance(closure, dict) or not isinstance(binding, dict):
+        raise RunnerError("frozen G0 path-operation closure is missing")
+    if set(closure) != {
+            "schema", "source", "traceMembers", "traceSetCanonicalSha256",
+            "records", "recordsCanonicalSha256", "eventCount", "recordCount",
+            "uniqueOperationPathPairs", "symlinkTargets",
+            "symlinkTargetsCanonicalSha256", "symlinkCount"} or closure.get("schema") != \
+            G0_PATH_OPERATION_SCHEMA:
+        raise RunnerError("frozen G0 path-operation closure schema mismatch")
+    source = closure.get("source")
+    expected_source = manifest.get("source", {})
+    if not isinstance(source, dict) or set(source) != {
+            "run", "artifactId", "artifactSha256", "observerHead",
+            "initialWorkingDirectory", "roots"} or any(
+                source.get(key) != expected_source.get(key)
+                for key in ("run", "artifactId", "artifactSha256", "observerHead")):
+        raise RunnerError("frozen G0 path-operation source mismatch")
+    roots = source.get("roots")
+    if not isinstance(roots, dict) or set(roots) != {
+            "GODOT", "PRODUCT", "PACKET", "HOME", "OUTPUT"} or any(
+                not isinstance(value, str) or not value.startswith("/")
+                or posixpath.normpath(value) != value for value in roots.values()):
+        raise RunnerError("frozen G0 path-operation roots mismatch")
+    working = source.get("initialWorkingDirectory")
+    if not isinstance(working, str) or not working.startswith("/") \
+            or posixpath.normpath(working) != working:
+        raise RunnerError("frozen G0 working directory mismatch")
+
+    members = closure.get("traceMembers")
+    if not isinstance(members, list) or not members or members != sorted(
+            members, key=lambda item: item.get("name", "")):
+        raise RunnerError("frozen G0 trace member order mismatch")
+    names: set[str] = set()
+    for member in members:
+        if not isinstance(member, dict) or set(member) != {"name", "size", "sha256"} \
+                or not re.fullmatch(r"trace\.[0-9]+", str(member.get("name", ""))) \
+                or member["name"] in names or not isinstance(member.get("size"), int) \
+                or member["size"] <= 0 or not re.fullmatch(
+                    r"[0-9a-f]{64}", str(member.get("sha256", ""))):
+            raise RunnerError("frozen G0 trace member mismatch")
+        names.add(member["name"])
+    if sha256_bytes(canonical_bytes(members)) != closure["traceSetCanonicalSha256"]:
+        raise RunnerError("frozen G0 trace-set hash mismatch")
+
+    records = closure.get("records")
+    if not isinstance(records, list) or not records:
+        raise RunnerError("frozen G0 path-operation records are missing")
+    triples: set[tuple[str, str, int | None]] = set()
+    identity_operations: dict[str, set[str]] = {}
+    identity_paths = {
+        str(record["path"]): record
+        for section in ("semanticReadSet", "runtimeIdentitySet", "platformObservationSet")
+        for record in manifest.get(section, [])
+    }
+    for record in records:
+        if not isinstance(record, dict) or set(record) != {
+                "operation", "path", "parameter", "returns", "count"}:
+            raise RunnerError("frozen G0 path-operation record schema mismatch")
+        operation, path = record.get("operation"), record.get("path")
+        parameter, returns, count = (
+            record.get("parameter"), record.get("returns"), record.get("count"))
+        logical = isinstance(path, str) and (
+            path.startswith("/") and posixpath.normpath(path) == path
+            or re.fullmatch(r"\$\{(?:GODOT|PRODUCT|PACKET|HOME|OUTPUT)\}(?:/.*)?", path)
+            is not None)
+        parameter_valid = (
+            operation in {"openat", "mkdir"}
+            and isinstance(parameter, int) and parameter >= 0
+            or operation not in {"openat", "mkdir"} and parameter is None)
+        if operation not in PATH_OPERATIONS or not logical or not parameter_valid \
+                or not isinstance(returns, list) or not returns \
+                or returns != sorted(set(returns)) \
+                or any(not isinstance(value, int) for value in returns) \
+                or not isinstance(count, int) or count <= 0:
+            raise RunnerError("frozen G0 path-operation record mismatch")
+        triple = (operation, path, parameter)
+        if triple in triples:
+            raise RunnerError("duplicate frozen G0 path-operation record")
+        triples.add(triple)
+        if path in identity_paths:
+            identity_operations.setdefault(path, set()).add(operation)
+    expected_records = sorted(records, key=lambda item: (
+        item["operation"], item["path"],
+        -1 if item["parameter"] is None else item["parameter"]))
+    if records != expected_records or \
+            sha256_bytes(canonical_bytes(records)) != closure["recordsCanonicalSha256"]:
+        raise RunnerError("frozen G0 path-operation record hash mismatch")
+    if closure.get("eventCount") != sum(record["count"] for record in records) \
+            or closure.get("recordCount") != len(records) \
+            or closure.get("uniqueOperationPathPairs") != len({
+                (record["operation"], record["path"]) for record in records}):
+        raise RunnerError("frozen G0 path-operation accounting mismatch")
+    symlinks = closure.get("symlinkTargets")
+    if not isinstance(symlinks, list) or symlinks != sorted(
+            symlinks, key=lambda item: item.get("path", "")):
+        raise RunnerError("frozen G0 symlink-target order mismatch")
+    link_paths: set[str] = set()
+    for record in symlinks:
+        path, target = (record.get("path"), record.get("target")) \
+            if isinstance(record, dict) else (None, None)
+        valid_path = lambda value: isinstance(value, str) and (
+            value.startswith("/") and posixpath.normpath(value) == value
+            or re.fullmatch(
+                r"\$\{(?:GODOT|PRODUCT|PACKET|HOME|OUTPUT)\}(?:/.*)?", value)
+            is not None)
+        if not isinstance(record, dict) or set(record) != {"path", "target"} \
+                or not valid_path(path) or not valid_path(target) or path == target \
+                or path in link_paths:
+            raise RunnerError("frozen G0 symlink-target record mismatch")
+        link_paths.add(path)
+    observed_links = {
+        record["path"] for record in records
+        if record["operation"] in {"readlink", "readlinkat"}
+        and any(value >= 0 for value in record["returns"])}
+    observed_links.discard("${GODOT}")
+    if link_paths != observed_links or closure.get("symlinkCount") != len(symlinks) \
+            or sha256_bytes(canonical_bytes(symlinks)) != \
+            closure.get("symlinkTargetsCanonicalSha256"):
+        raise RunnerError("frozen G0 symlink-target accounting mismatch")
+    for path, record in identity_paths.items():
+        recorded = set(record.get("operations", [])) & PATH_OPERATIONS
+        if recorded != identity_operations.get(path, set()):
+            raise RunnerError(f"G0 identity path operations differ: {path}")
+    expected_binding = {
+        "schema": closure["schema"],
+        "traceSetCanonicalSha256": closure["traceSetCanonicalSha256"],
+        "recordsCanonicalSha256": closure["recordsCanonicalSha256"],
+        "traceFiles": len(members),
+        "traceBytes": sum(member["size"] for member in members),
+        "eventCount": closure["eventCount"],
+        "recordCount": closure["recordCount"],
+        "uniqueOperationPathPairs": closure["uniqueOperationPathPairs"],
+        "symlinkTargetsCanonicalSha256": closure["symlinkTargetsCanonicalSha256"],
+        "symlinkCount": closure["symlinkCount"],
+    }
+    if binding != expected_binding:
+        raise RunnerError("frozen G0 path-operation profile binding mismatch")
+    return closure
+
+
 def validate_frozen_sources(
         profile_path: Path = PROFILE_PATH,
         manifest_path: Path = G0_MANIFEST_PATH) -> tuple[dict[str, Any], dict[str, Any]]:
@@ -90,6 +242,7 @@ def validate_frozen_sources(
     if manifest.get("schema") != \
             "glassvow.godot-runtime-provenance.g0-manifest/v1":
         raise RunnerError("frozen G0 manifest schema mismatch")
+    validate_path_operation_closure(profile, manifest)
     cases = profile.get("cases")
     if not isinstance(cases, list) or len(cases) != profile["caps"]["caseCount"]:
         raise RunnerError("frozen case count mismatch")
@@ -397,19 +550,15 @@ def _expand_path(template: str, roots: Mapping[str, str]) -> str:
     return _substitute(template, roots)
 
 
-_PATH_OPERATIONS = {
-    "access", "chdir", "execve", "faccessat2", "lstat", "mkdir",
-    "newfstatat", "openat", "readlink", "readlinkat", "stat", "statx",
-}
-
-
 def build_admission_policy(
         profile: Mapping[str, Any], manifest: Mapping[str, Any],
         roots: Mapping[str, str], working_directory: Path) -> tuple[bytes, dict[str, int]]:
-    grammar = profile["accessGrammar"]["paths"]
-    failed = grammar["failedPathGrammar"]
-    successful_read_flags = failed["successfulReadOnlyOpenFlags"]
-    failed_read_flags = failed["readOnlyOpenFlags"]
+    closure = validate_path_operation_closure(profile, manifest)
+    translations = profile["accessGrammar"]["paths"].get("pathResultPolicy", {})
+    mkdir_translation = translations.get("existingHomeAncestorMkdir", {})
+    if mkdir_translation != {
+            "operation": "mkdir", "parameter": 509, "returned": -17}:
+        raise RunnerError("HOME-ancestor mkdir translation differs")
     files: dict[str, set[str]] = {}
     paths: set[tuple[str, str, int | None]] = set()
 
@@ -417,98 +566,47 @@ def build_admission_policy(
         return _expand_path(value, roots)
 
     def canonical_path(value: str) -> str:
-        return str(Path(value).resolve(strict=False))
+        if not value.startswith("/") or "\0" in value:
+            raise RunnerError("invalid admission pathname rule")
+        return posixpath.normpath(value)
 
     def add_path(operation: str, path: str, parameter: int | None = None) -> None:
-        if operation not in _PATH_OPERATIONS or not path.startswith("/") or "\0" in path:
+        if operation not in PATH_OPERATIONS or not path.startswith("/") or "\0" in path:
             raise RunnerError("invalid admission pathname rule")
         paths.add((canonical_path(path), operation, parameter))
-
-    def add_operation(operation: str, path: str, flags: Sequence[int]) -> None:
-        if operation == "openat":
-            for value in flags:
-                add_path(operation, path, value)
-        elif operation == "mkdir":
-            add_path(operation, path, failed["mkdirMode"])
-        else:
-            add_path(operation, path)
 
     for section in ("semanticReadSet", "runtimeIdentitySet", "platformObservationSet"):
         for record in manifest[section]:
             path = canonical_path(expand(str(record["path"])))
             files.setdefault(path, set()).add("R")
-            for operation in record["operations"]:
-                if operation in _PATH_OPERATIONS:
-                    add_operation(operation, path, successful_read_flags)
+
+    for record in closure["records"]:
+        add_path(
+            str(record["operation"]), expand(str(record["path"])),
+            record["parameter"])
 
     for template in profile["kernelAdmission"]["executeLeaves"]:
         path = canonical_path(expand(template))
         if path not in files:
             raise RunnerError(f"execute leaf is not a frozen file identity: {path}")
         files[path].add("X")
-        add_path("execve", path)
     for template in profile["kernelAdmission"]["kernelInterpreterLeaves"]:
         path = canonical_path(expand(template))
         if path not in files:
             raise RunnerError(f"kernel interpreter is not a frozen file identity: {path}")
         files[path].add("X")
 
-    for collection in ("successfulDirectoryOperations",
-                       "successfulDynamicDirectoryOperations",
-                       "successfulProbeOperations"):
-        for record in grammar[collection]:
-            for template in record["paths"]:
-                path = expand(template)
-                for operation in record["operations"]:
-                    add_operation(operation, path, successful_read_flags)
-    for record in grammar["successfulNamedPathOperations"]:
-        for operation in record["operations"]:
-            add_operation(operation, expand(record["path"]), successful_read_flags)
-    for operation in grammar["successfulWorkingDirectoryOperations"]:
-        add_operation(operation, str(working_directory.resolve()), successful_read_flags)
-
-    output_paths = {
-        f"{roots['OUTPUT']}/observation.json",
-        f"{roots['HOME']}/.local/share/godot/app_userdata/Glassvow/logs/godot.log",
-        f"{roots['HOME']}/.local/share/godot/app_userdata/Glassvow/sentry.dat",
-    }
-    for path in output_paths:
-        add_path("openat", path, failed["successfulOutputOpenFlags"])
-    add_path("openat", "/dev/null", failed["successfulOutputOpenFlags"])
-
-    for record in failed["exact"]:
-        for template in record["paths"]:
-            path = expand(template)
-            for operation in record["operations"]:
-                if operation == "openat":
-                    flags = ([failed["deniedOutputOpenFlags"]]
-                             if path == f"{roots['OUTPUT']}/observation.json" else
-                             [failed["deviceOpenFlags"]]
-                             if path in {"/dev/input/event0", "/dev/input/event1"} else
-                             failed_read_flags)
-                    add_operation(operation, path, flags)
-                else:
-                    add_operation(operation, path, failed_read_flags)
-    semantic_paths = {
-        expand(str(record["path"])) for record in manifest["semanticReadSet"]}
-    for role in semantic_paths:
-        for suffix, operations in failed["roleSuffixOperations"].items():
-            for operation in operations:
-                add_operation(operation, role + suffix, failed_read_flags)
-    for directory in failed["fontCacheDirectories"]:
-        for name in failed["fontCacheBasenames"]:
-            add_operation("openat", f"{expand(directory)}/{name}", failed_read_flags)
-
-    readlink_paths = {expand(path) for path in failed["readlinkKnownDirectories"]}
-    readlink_paths.update(files)
     for root in roots.values():
         candidate = Path(root).parent
         while str(candidate) != candidate.parent.as_posix():
-            readlink_paths.add(str(candidate)); candidate = candidate.parent
-        readlink_paths.add(str(candidate))
-    for path in readlink_paths:
-        add_path("readlink", path)
-    add_path("mkdir", roots["HOME"], failed["mkdirMode"])
+            add_path("readlink", str(candidate)); candidate = candidate.parent
+        add_path("readlink", str(candidate))
+    home_ancestor = Path(roots["HOME"]).parent
+    while home_ancestor != home_ancestor.parent:
+        add_path(
+            mkdir_translation["operation"], str(home_ancestor),
+            mkdir_translation["parameter"])
+        home_ancestor = home_ancestor.parent
 
     if len(files) > profile["caps"]["maxAdmissionFileRules"] or \
             len(paths) > profile["caps"]["maxAdmissionPathRules"]:

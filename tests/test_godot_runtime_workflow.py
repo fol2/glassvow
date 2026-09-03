@@ -90,7 +90,7 @@ class GodotRuntimeWorkflowTests(unittest.TestCase):
 
     def test_execution_authorities_and_request_index_are_frozen(self) -> None:
         self.assertEqual(
-            (535, 5524343289),
+            (535, 5530338723),
             (PROFILE["packetIngress"]["qualification"]["authorityIssue"],
              PROFILE["packetIngress"]["qualification"]["authorityComment"]),
         )
@@ -209,6 +209,27 @@ class GodotRuntimeWorkflowTests(unittest.TestCase):
 
     def test_focused_regressions_include_trace_binding(self) -> None:
         self.assertIn("python3 -B tests/test_godot_runtime_trace_binding.py", WORKFLOW)
+
+    def test_g0_diagnostic_captures_every_path_operation_from_raw_trace(self) -> None:
+        g0 = WORKFLOW.split("\n  godot-g0:\n", 1)[1].split(
+            "\n  godot-runtime:\n", 1)[0]
+        required = (
+            "python3 -B tools/execution_provenance/godot_runtime_g0_trace.py",
+            "--trace-directory artifacts/godot-g0/raw",
+            '--working-directory "$GITHUB_WORKSPACE"',
+            '--root "PRODUCT=$RUNNER_TEMP/g0-product"',
+            '--root "PACKET=$RUNNER_TEMP/g0-packet/${{ inputs.packet_root }}"',
+            '--root "GODOT=$RUNNER_TEMP/godot/godot"',
+            '--root "HOME=$RUNNER_TEMP/g0-runtime-home"',
+            '--root "OUTPUT=$GITHUB_WORKSPACE/artifacts/godot-g0/run"',
+            "--output artifacts/godot-g0/path-operation-closure.json",
+        )
+        for value in required:
+            self.assertIn(value, g0)
+        self.assertLess(
+            g0.index(required[0]),
+            g0.index("Upload non-authoritative G0 diagnostics"),
+        )
 
 
 if __name__ == "__main__":

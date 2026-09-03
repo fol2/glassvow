@@ -350,7 +350,18 @@ def validate_trace_accounting(trace: Mapping[str, Any], caps: Mapping[str, int],
             if not isinstance(base, str) or not base.startswith("/"):
                 fail("PROVENANCE_INCOMPLETE", "relative path base unavailable")
             combined = os.path.join(base, supplied)
-        return os.path.realpath(combined)
+        name, arguments = call["name"], call["arguments"]
+        follow_final = name not in {"lstat", "mkdir", "readlink", "readlinkat"}
+        if name == "openat" and arguments[2] & 0x20000:
+            follow_final = False
+        elif name in {"faccessat2", "newfstatat"} and arguments[3] & 0x100:
+            follow_final = False
+        elif name == "statx" and arguments[2] & 0x100:
+            follow_final = False
+        if follow_final or combined == "/":
+            return os.path.realpath(combined)
+        return os.path.join(os.path.realpath(os.path.dirname(combined)),
+                            os.path.basename(combined))
 
     def require_derived(event: dict[str, Any], expected: tuple[str, dict[str, Any]]) -> None:
         kind, call = expected; args, returned, name = call["arguments"], call["returned"], call["name"]
@@ -565,51 +576,6 @@ def validate_request_indices(indices: Any, caps: Mapping[str, int], requested: s
             or str(int(value)) != value or int(value) > caps["maxRequestIndex"] for value in indices) or \
             len(set(indices)) != len(indices) or requested not in indices:
         fail("REQUEST_INDEX_MISMATCH", "packet request index contract differs")
-
-
-def validate_failed_paths(events: Sequence[Mapping[str, Any]], known: set[str],
-                          role_paths: set[str], roots: Mapping[str, str],
-                          grammar: Mapping[str, Any]) -> None:
-    def expand(template: str) -> str:
-        result = template
-        for key, value in roots.items(): result = result.replace("${" + key + "}", value)
-        return result
-
-    exact = {(operation, record.get("returned"), expand(path))
-             for record in grammar.get("exact", []) if isinstance(record, dict)
-             for operation in record.get("operations", []) for path in record.get("paths", [])}
-    suffixes = grammar.get("roleSuffixOperations", {})
-    cache_dirs = {expand(path) for path in grammar.get("fontCacheDirectories", [])}
-    cache_names = set(grammar.get("fontCacheBasenames", []))
-    readlink_directories = {
-        expand(path) for path in grammar.get("readlinkKnownDirectories", [])}
-    for event in events:
-        if event.get("type") != "PATH_X" or event.get("returned", 0) >= 0: continue
-        operation, returned, path = event.get("operation"), event.get("returned"), event.get("path")
-        arguments = event.get("_arguments", [])
-        admitted = (operation, returned, path) in exact
-        if operation == "readlink" and returned == grammar.get("readlinkKnownReturn"):
-            root_ancestor = any(
-                isinstance(root, str) and path != root
-                and root.startswith(path.rstrip("/") + "/")
-                for root in roots.values())
-            admitted = admitted or path in known or path in readlink_directories or root_ancestor
-        if returned == -2:
-            admitted = admitted or any(path == role + suffix and operation in operations
-                                       for role in role_paths for suffix, operations in suffixes.items())
-            admitted = admitted or Path(path).parent.as_posix() in cache_dirs \
-                and Path(path).name in cache_names and operation == "openat"
-        if operation == "mkdir" and returned == -17:
-            home = roots.get("HOME", ""); admitted = bool(home) and path == home \
-                and len(arguments) > 1 and arguments[1] == grammar.get("mkdirMode")
-        if admitted and operation == "openat":
-            flags = arguments[2] if len(arguments) > 2 else None
-            if path == f"{roots.get('OUTPUT')}/observation.json": admitted = flags == grammar.get("deniedOutputOpenFlags")
-            elif path in {"/dev/input/event0", "/dev/input/event1"}: admitted = flags == grammar.get("deviceOpenFlags")
-            else: admitted = flags in grammar.get("readOnlyOpenFlags", [])
-        if not admitted:
-            reason = "UNDECLARED_CACHE_ACCESS" if path.startswith(roots.get("HOME", "") + "/") else "UNDECLARED_INPUT_PATH"
-            fail(reason, f"unfrozen failed path {operation} {returned} {path}")
 
 
 def validate_complete_role_reads(events: Sequence[Mapping[str, Any]], expected: bytes, sidecar: bytes) -> None:

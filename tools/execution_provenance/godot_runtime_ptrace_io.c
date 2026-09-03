@@ -457,16 +457,19 @@ static bool proc_link(pid_t pid, const char *leaf, char *value, size_t capacity)
     return true;
 }
 
-bool gv_resolve_path(pid_t pid, int dirfd, const char *path,
+bool gv_resolve_path(pid_t pid, int dirfd, const char *path, bool follow_final,
                      char *resolved, size_t capacity) {
     char combined[PATH_MAX];
+    bool proc_magic = false;
     if (path[0] == '/') {
         if (!strncmp(path, "/proc/self/", 11)) {
+            proc_magic = true;
             if (snprintf(combined, sizeof(combined), "/proc/%d/%s", pid, path + 11)
                     >= (int)sizeof(combined)) {
                 return false;
             }
         } else if (!strncmp(path, "/proc/thread-self/", 18)) {
+            proc_magic = true;
             if (snprintf(combined, sizeof(combined), "/proc/%d/%s", pid, path + 18)
                     >= (int)sizeof(combined)) {
                 return false;
@@ -497,6 +500,13 @@ bool gv_resolve_path(pid_t pid, int dirfd, const char *path,
     size_t probe_length = strlen(probe);
     while (probe_length > 1 && probe[probe_length - 1] == '/')
         probe[--probe_length] = '\0';
+    if (!follow_final && !proc_magic && strcmp(probe, "/")) {
+        char *slash = strrchr(probe, '/');
+        if (slash == NULL || !slash[1]) return false;
+        strcpy(suffix, slash + 1);
+        if (slash == probe) strcpy(probe, "/");
+        else *slash = '\0';
+    }
     for (;;) {
         if (realpath(probe, canonical) != NULL) {
             const char *separator = !strcmp(canonical, "/") || !suffix[0] ? "" : "/";
@@ -525,6 +535,11 @@ bool gv_path_is_strict_ancestor(const char *path, const char *descendant) {
     size_t length = strlen(path);
     return length < strlen(descendant) && strncmp(path, descendant, length) == 0
         && descendant[length] == '/';
+}
+
+bool gv_existing_directory(const char *path) {
+    struct stat status;
+    return lstat(path, &status) == 0 && S_ISDIR(status.st_mode);
 }
 
 bool gv_path_has_suffix(const char *path, const char *suffix) {

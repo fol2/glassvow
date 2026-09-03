@@ -25,6 +25,8 @@ VERIFIER_PATH = ROOT / "tools/execution_provenance/godot_runtime_verify.py"
 RUNNER_PATH = ROOT / "tools/execution_provenance/godot_runtime_runner.py"
 CAMPAIGN_PATH = ROOT / "tools/execution_provenance/godot_runtime_campaign.py"
 TRACER_PATH = ROOT / "tools/execution_provenance/godot_runtime_ptrace_tracer.c"
+G0_TRACE_SUMMARISER_PATH = (
+    ROOT / "tools/execution_provenance/godot_runtime_g0_trace.py")
 
 INERT_HASHES = {
     "tools/execution_provenance/protocol.json":
@@ -106,6 +108,57 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+class GodotRuntimeG0TraceSummariserTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        spec = importlib.util.spec_from_file_location(
+            "godot_runtime_g0_trace", G0_TRACE_SUMMARISER_PATH)
+        assert spec and spec.loader
+        cls.summariser = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.summariser)
+
+    def test_direct_and_symlinked_path_operations_survive_summary(self) -> None:
+        lines = [
+            '1.000 access("/etc/fonts/conf.d/a.conf", R_OK) = 0 <0.000001>',
+            '1.001 readlink("/etc/fonts/conf.d/a.conf", '
+            '"../conf.avail/a.conf", 4095) = 20 <0.000001>',
+            '1.002 newfstatat(AT_FDCWD</work>, '
+            '"/etc/fonts/conf.d/a.conf", {st_mode=S_IFREG|0644}, 0) = 0 <0.000001>',
+            '1.003 openat(AT_FDCWD</work>, "/etc/fonts/conf.d/a.conf", '
+            'O_RDONLY|O_CLOEXEC) = 3</etc/fonts/conf.avail/a.conf> <0.000001>',
+            '1.004 mkdir("/work", 0775)  = -1 EEXIST (File exists) <0.000001>',
+            '1.005 openat(AT_FDCWD</work>, "/lib/libexample.so.1", '
+            'O_RDONLY|O_CLOEXEC) = 4</usr/lib/libexample.so.1.2> <0.000001>',
+            '1.006 openat(AT_FDCWD</work>, "/sys/class/input/mice", '
+            'O_RDONLY|O_NOFOLLOW|O_CLOEXEC|O_PATH) = '
+            '5</sys/class/input/mice> <0.000001>',
+        ]
+        records = self.summariser.path_operation_closure(
+            {"trace.1": lines}, roots={}, initial_working_directory="/work")
+        _, symlinks = self.summariser.path_observation_closure(
+            {"trace.1": lines}, roots={}, initial_working_directory="/work")
+        actual = {
+            (record["operation"], record["path"], record["parameter"]):
+                (record["returns"], record["count"])
+            for record in records
+        }
+        target = "/etc/fonts/conf.avail/a.conf"
+        self.assertEqual(([0], 1), actual[("access", target, None)])
+        self.assertEqual(
+            ([20], 1), actual[("readlink", "/etc/fonts/conf.d/a.conf", None)])
+        self.assertEqual(([0], 1), actual[("newfstatat", target, None)])
+        self.assertEqual(([3], 1), actual[("openat", target, 524288)])
+        self.assertEqual(([-17], 1), actual[("mkdir", "/work", 509)])
+        self.assertEqual(
+            ([4], 1), actual[("openat", "/usr/lib/libexample.so.1.2", 524288)])
+        self.assertEqual(
+            ([5], 1), actual[("openat", "/sys/class/input/mice", 2752512)])
+        self.assertEqual([{
+            "path": "/etc/fonts/conf.d/a.conf",
+            "target": "/etc/fonts/conf.avail/a.conf",
+        }], symlinks)
+
+
 class GodotRuntimeProfileContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -129,7 +182,7 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         )
         self.assertEqual(sha256(PROFILE_PATH), self.verifier.FROZEN_PROFILE_SHA256)
         self.assertEqual(535, self.profile["authority"]["issue"])
-        self.assertEqual(5524343289, self.profile["authority"]["comment"])
+        self.assertEqual(5530338723, self.profile["authority"]["comment"])
         self.assertEqual(
             "5c5f2d325725b0a04e060c1ffe0b40a76f2e0928",
             self.profile["authority"]["g0ProductSha"],
@@ -187,6 +240,29 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             "/run/udev/data/c13:0", "/run/udev/data/c13:32",
             "/run/udev/data/c13:64", "/run/udev/data/c13:65",
         }, dynamic)
+
+    def test_g0_manifest_preserves_direct_path_operations(self) -> None:
+        manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
+        records = {
+            record["path"]: record
+            for section in ("semanticReadSet", "runtimeIdentitySet",
+                            "platformObservationSet")
+            for record in manifest[section]
+        }
+        self.assertTrue(
+            {"access", "newfstatat", "openat", "read", "close"}
+            <= set(records["/etc/fonts/fonts.conf"]["operations"]),
+        )
+        closure = manifest["pathOperationClosure"]
+        self.assertEqual(4097, closure["eventCount"])
+        self.assertEqual(782, closure["recordCount"])
+        self.assertEqual(760, closure["uniqueOperationPathPairs"])
+        self.assertEqual(57, closure["symlinkCount"])
+        self.assertEqual(
+            closure["recordsCanonicalSha256"],
+            self.profile["g0"]["pathOperationClosure"][
+                "recordsCanonicalSha256"],
+        )
 
     def test_fresh_g0_configuration_capture_is_the_only_fixture_byte_authority(self) -> None:
         capture = json.loads(CONFIGURATION_MANIFEST_PATH.read_text(encoding="utf-8"))
@@ -338,29 +414,31 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             for name in ("stdin", "stdout", "stderr")
         })
         grammar = self.profile["accessGrammar"]
-        self.assertEqual(577, grammar["paths"]["failedPathGrammar"]
-                         ["successfulOutputOpenFlags"])
+        self.assertEqual(
+            {
+                "caseIds": ["G15", "G16", "G17", "G18"],
+                "operation": "openat",
+                "path": "${OUTPUT}/observation.json",
+                "parameter": 577,
+                "returned": -13,
+            },
+            grammar["paths"]["pathResultPolicy"]["diagnosticOutputDenial"],
+        )
         self.assertEqual(524288, grammar["internalPipe"]["pipe2Flags"])
         self.assertEqual(11, self.profile["caps"]["maxCaseMembers"])
 
-    def test_independent_verifier_rejects_changed_successful_open_flags(self) -> None:
-        output = "/tmp/fresh-output/observation.json"
-        events = [
-            {"type": "PATH_X", "operation": "openat", "returned": 3,
-             "path": output, "_arguments": [-100, 0, 577, 0, 0, 0]},
-            {"type": "PATH_X", "operation": "openat", "returned": 4,
-             "path": "/tmp/frozen-input", "_arguments": [-100, 0, 524288, 0, 0, 0]},
-        ]
-        self.verifier._successful_open_flags(events, {output}, self.profile)
-        events[0]["_arguments"][2] = 1
-        with self.assertRaisesRegex(
-                self.verifier.VerificationFailure, "successful open flags differ"):
-            self.verifier._successful_open_flags(events, {output}, self.profile)
-        events[0]["_arguments"][2] = 577
-        events[1]["_arguments"][2] = 1
-        with self.assertRaisesRegex(
-                self.verifier.VerificationFailure, "successful open flags differ"):
-            self.verifier._successful_open_flags(events, {output}, self.profile)
+    def test_path_result_policy_replaces_the_historical_projection(self) -> None:
+        paths = self.profile["accessGrammar"]["paths"]
+        self.assertNotIn("historicalFailedPathGrammar", paths)
+        self.assertNotIn("failedPathGrammar", paths)
+        self.assertEqual(
+            {"operation": "readlink", "parameter": None, "returned": -22},
+            paths["pathResultPolicy"]["rootAncestorReadlink"],
+        )
+        self.assertEqual(
+            {"operation": "mkdir", "parameter": 509, "returned": -17},
+            paths["pathResultPolicy"]["existingHomeAncestorMkdir"],
+        )
 
     def test_research_output_policy_transports_current_diagnostic_bytes_without_g0_substitution(self) -> None:
         streams = {
@@ -629,7 +707,7 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
                 "productSha": "a" * 40,
                 "packetRoot": "research_packets/frozen",
                 "authorityIssue": 535,
-                "authorityComment": 5524343289,
+                "authorityComment": 5530338723,
                 "requestIndices": ["0"],
                 "roles": {
                     "externalScript": {"path": "oracle.gd"},
@@ -709,7 +787,7 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
             for index in range(28)
         ]}
         args = types.SimpleNamespace(
-            authority_issue=535, authority_comment=5524343289,
+            authority_issue=535, authority_comment=5530338723,
             packet_sha="f" * 40)
         roles = self.verifier._roles(
             g0, packet, {"PRODUCT": "/product", "PACKET": "/packet"},
@@ -725,38 +803,72 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
         with self.assertRaisesRegex(self.verifier.VerificationFailure, "ENVIRONMENT_MISMATCH"):
             self.verifier._environment(expected + ["HOME=/other"])
 
-    def test_failed_path_grammar_binds_error_path_operation_and_arguments(self) -> None:
+    def test_path_result_policy_binds_operation_path_arguments_and_return(self) -> None:
         profile = json.loads(PROFILE_PATH.read_text(encoding="utf-8"))
-        grammar = profile["accessGrammar"]["paths"]["failedPathGrammar"]
-        roots = {"GODOT": "/runtime/godot", "PRODUCT": "/product", "PACKET": "/packet",
-                 "HOME": "/fresh/home", "OUTPUT": "/fresh/output"}
-        known, roles = {"/product/role.gd"}, {"/product/role.gd"}
-        valid = [
-            {"type": "PATH_X", "operation": "openat", "returned": -13,
-             "path": "/fresh/output/observation.json", "_arguments": [0, 0, 577]},
-            {"type": "PATH_X", "operation": "mkdir", "returned": -17,
-             "path": "/fresh/home", "_arguments": [0, 509]},
-            {"type": "PATH_X", "operation": "readlink", "returned": -22,
-             "path": "/product", "_arguments": [0, 0]},
-            {"type": "PATH_X", "operation": "openat", "returned": -2,
-             "path": "/product/role.gd.import", "_arguments": [0, 0, 0]},
-        ]
-        self.verifier._validate_failed_paths(valid, known, roles, roots, grammar)
-        for changed in (
-                {**valid[0], "_arguments": [0, 0, 0]},
-                {**valid[1], "_arguments": [0, 508]},
-                {**valid[1], "path": "/fresh"},
-                {"type": "PATH_X", "operation": "readlink", "returned": -22,
-                 "path": "/product/addons/sentry/bin", "_arguments": [0, 0]},
-                {"type": "PATH_X", "operation": "stat", "returned": -2,
-                 "path": "/packet/undeclared", "_arguments": [0]}):
-            with self.assertRaises(self.verifier.VerificationFailure):
-                self.verifier._validate_failed_paths([changed], known, roles, roots, grammar)
-        ancestor_roots = {**roots, "PRODUCT": "/mount/product"}
-        self.verifier._validate_failed_paths([{
+        manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
+        roots = {
+            "GODOT": "/home/runner/work/_temp/godot/godot",
+            "PRODUCT": "/tmp/frozen/product",
+            "PACKET": "/tmp/frozen/packet",
+            "HOME": "/tmp/runtime/G00/home",
+            "OUTPUT": "/tmp/runtime/G00/output",
+        }
+        policy, counts = self.verifier._build_admission_policy(
+            profile, manifest, roots, ROOT)
+        statement = {
+            "caseId": "G00",
+            "admissionPolicy": {
+                "schema": profile["kernelAdmission"]["policySchema"],
+                "file": "admission-policy.tsv",
+                "size": len(policy),
+                "sha256": hashlib.sha256(policy).hexdigest(),
+                **counts,
+            },
+        }
+        policy_event = {
+            "type": "POLICY", "byteCount": len(policy), **counts}
+
+        def verify(event: dict, case_id: str = "G00") -> None:
+            statement["caseId"] = case_id
+            self.verifier._admission_policy(
+                statement, manifest, roots, profile,
+                {"admission-policy.tsv": policy},
+                {"events": [policy_event, event]},
+            )
+
+        output = f'{roots["OUTPUT"]}/observation.json'
+        verify({
+            "type": "PATH_X", "operation": "openat", "returned": 91,
+            "path": output, "_arguments": [-100, 0, 577, 0, 0, 0],
+        })
+        verify({
+            "type": "PATH_X", "operation": "openat", "returned": 91,
+            "path": "/sys/devices/0006:045E:0621.0001",
+            "_arguments": [-100, 0, 2621696, 0, 0, 0],
+        })
+        verify({
+            "type": "PATH_X", "operation": "mkdir", "returned": -17,
+            "path": "/tmp/runtime/G00", "_arguments": [0, 509, 0, 0, 0, 0],
+        })
+        verify({
             "type": "PATH_X", "operation": "readlink", "returned": -22,
-            "path": "/mount", "_arguments": [0, 0],
-        }], known, roles, ancestor_roots, grammar)
+            "path": "/tmp/frozen", "_arguments": [0, 0, 0, 0, 0, 0],
+        })
+        verify({
+            "type": "PATH_X", "operation": "openat", "returned": -13,
+            "path": output, "_arguments": [-100, 0, 577, 0, 0, 0],
+        }, "G15")
+        for changed in (
+                {"type": "PATH_X", "operation": "openat", "returned": 91,
+                 "path": output, "_arguments": [-100, 0, 1, 0, 0, 0]},
+                {"type": "PATH_X", "operation": "openat", "returned": -2,
+                 "path": output, "_arguments": [-100, 0, 577, 0, 0, 0]},
+                {"type": "PATH_X", "operation": "mkdir", "returned": -17,
+                 "path": "/tmp/runtime/G00", "_arguments": [0, 508, 0, 0, 0, 0]},
+                {"type": "PATH_X", "operation": "readlink", "returned": -2,
+                 "path": "/tmp/frozen", "_arguments": [0, 0, 0, 0, 0, 0]}):
+            with self.assertRaises(self.verifier.VerificationFailure):
+                verify(changed)
 
     def test_network_contract_binds_socket_and_sockaddr_tuple(self) -> None:
         profile = json.loads(PROFILE_PATH.read_text(encoding="utf-8"))
@@ -912,14 +1024,14 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
         packet_manifest.write_text(json.dumps({
             "schema": "glassvow.godot-runtime-packet/v1", "productSha": "a" * 40,
             "packetRoot": "research_packets/frozen", "authorityIssue": 535,
-            "authorityComment": 5524343289, "requestIndices": ["0"], "roles": {},
+            "authorityComment": 5530338723, "requestIndices": ["0"], "roles": {},
         }), encoding="utf-8")
         return types.SimpleNamespace(
             profile=PROFILE_PATH, g0_manifest=ROOT / "tools/execution_provenance/godot_runtime_g0_manifest.json",
             packet_manifest=packet_manifest, case_id="G24", case_dir=case_dir, challenge=challenge,
             observer_sha="c" * 40, product_sha="a" * 40, packet_sha="b" * 40,
             packet_root="research_packets/frozen", authority_issue=535,
-            authority_comment=5524343289, request_index="0",
+            authority_comment=5530338723, request_index="0",
             expected_godot=root / "godot", expected_product_source=root / "product-source",
             expected_product_stage=root / "product-stage",
             expected_product_stage_receipt=root / "product-stage-receipt.json",
@@ -1004,6 +1116,58 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
 
 @unittest.skipUnless(sys.platform.startswith("linux"), "Landlock is Linux-only")
 class GodotRuntimeKernelAdmissionTests(unittest.TestCase):
+    def test_no_follow_path_and_fd_identity_preserve_the_final_symlink(self) -> None:
+        compiler = shutil.which("cc")
+        if compiler is None:
+            self.skipTest("C compiler unavailable")
+        source_root = ROOT / "tools/execution_provenance"
+        harness_source = r'''
+#define _GNU_SOURCE
+#include "godot_runtime_ptrace_io.h"
+#include <fcntl.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
+int main(int argc, char **argv) {
+    if (argc != 3) return 2;
+    char followed[4096], nofollow[4096];
+    if (!gv_resolve_path(getpid(), AT_FDCWD, argv[1], true,
+                         followed, sizeof(followed))) return 3;
+    if (!gv_resolve_path(getpid(), AT_FDCWD, argv[1], false,
+                         nofollow, sizeof(nofollow))) return 4;
+    if (strcmp(followed, argv[2]) || strcmp(nofollow, argv[1])) return 5;
+    int descriptor = open(argv[1], O_PATH | O_NOFOLLOW | O_CLOEXEC);
+    if (descriptor < 0) return 6;
+    struct gv_object_identity object;
+    struct stat link;
+    if (!gv_fd_identity(getpid(), descriptor, &object)
+            || lstat(argv[1], &link) != 0) return 7;
+    close(descriptor);
+    if (strcmp(object.path, argv[1]) || object.device != link.st_dev
+            || object.inode != link.st_ino) return 8;
+    if (!gv_existing_directory(argv[2]) || gv_existing_directory(argv[1])) return 9;
+    return 0;
+}
+'''
+        with tempfile.TemporaryDirectory(prefix="godot-nofollow-test-") as temporary:
+            root = Path(temporary)
+            target, alias = root / "target", root / "alias"
+            target.mkdir()
+            alias.symlink_to(target, target_is_directory=True)
+            source = root / "nofollow.c"
+            binary = root / "nofollow"
+            source.write_text(harness_source, encoding="utf-8")
+            compiled = subprocess.run([
+                compiler, "-std=c17", "-O2", "-Wall", "-Wextra", "-Werror",
+                "-I", str(source_root), str(source),
+                str(source_root / "godot_runtime_ptrace_io.c"), "-o", str(binary),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, compiled.returncode, compiled.stderr)
+            result = subprocess.run([
+                str(binary), str(alias), str(target.resolve()),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, result.returncode, result.stderr or result.stdout)
+
     def test_exact_reads_execs_descriptors_and_writes_are_kernel_enforced(self) -> None:
         compiler = shutil.which("cc")
         if compiler is None:
@@ -1284,7 +1448,6 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         verify_spec.loader.exec_module(cls.verifier)
         cls.profile = json.loads(PROFILE_PATH.read_text(encoding="utf-8"))
 
-    @unittest.skipUnless(sys.platform.startswith("linux"), "hosted policy paths are Linux-only")
     def test_complete_hosted_policy_fits_the_frozen_caps_and_both_builders_agree(self) -> None:
         manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
         runtime = "/home/runner/work/glassvow/glassvow/artifacts/godot-runtime/qualification/runtime/G00"
@@ -1302,11 +1465,130 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         verified, verified_counts = self.verifier._build_admission_policy(
             self.profile, manifest, roots, working)
         self.assertEqual(produced, verified)
-        self.assertEqual({"fileRules": 169, "pathRules": 2147}, produced_counts)
+        self.assertEqual({"fileRules": 169, "pathRules": 799}, produced_counts)
         self.assertEqual(produced_counts, verified_counts)
-        self.assertEqual(289447, len(produced))
+        self.assertEqual(125719, len(produced))
         self.assertLessEqual(len(produced), self.profile["caps"]["maxAdmissionPolicyBytes"])
         self.assertEqual(393216, self.profile["caps"]["maxAdmissionPolicyBytes"])
+
+        def expand(template: str) -> str:
+            result = template
+            for name, value in roots.items():
+                result = result.replace("${" + name + "}", value)
+            self.assertNotIn("${", result)
+            return os.path.normpath(result)
+
+        expected_path_rules = {
+            "\t".join((
+                "P", record["operation"],
+                "-" if record["parameter"] is None else str(record["parameter"]),
+                expand(record["path"]).encode().hex(),
+            ))
+            for record in manifest["pathOperationClosure"]["records"]
+        }
+        for root in roots.values():
+            candidate = Path(root).parent
+            while str(candidate) != candidate.parent.as_posix():
+                expected_path_rules.add(
+                    f"P\treadlink\t-\t{str(candidate).encode().hex()}")
+                candidate = candidate.parent
+            expected_path_rules.add(
+                f"P\treadlink\t-\t{str(candidate).encode().hex()}")
+        home_ancestor = Path(roots["HOME"]).parent
+        mkdir_mode = self.profile["accessGrammar"]["paths"][
+            "pathResultPolicy"]["existingHomeAncestorMkdir"]["parameter"]
+        while home_ancestor != home_ancestor.parent:
+            expected_path_rules.add(
+                f"P\tmkdir\t{mkdir_mode}\t{str(home_ancestor).encode().hex()}")
+            home_ancestor = home_ancestor.parent
+        actual_path_rules = {
+            line for line in produced.decode("ascii").splitlines()
+            if line.startswith("P\t")
+        }
+        self.assertEqual(expected_path_rules, actual_path_rules)
+        font_path = "/etc/fonts/fonts.conf".encode().hex()
+        self.assertIn(f"P\taccess\t-\t{font_path}", actual_path_rules)
+        self.assertIn(f"P\tnewfstatat\t-\t{font_path}", actual_path_rules)
+        self.assertIn(f"P\topenat\t524288\t{font_path}", actual_path_rules)
+        self.assertEqual(
+            {f"P\topenat\t524288\t{font_path}"},
+            {line for line in actual_path_rules
+             if line.startswith("P\topenat\t") and line.endswith(font_path)},
+        )
+
+    def test_frozen_closure_rejects_deleted_and_speculative_path_atoms(self) -> None:
+        source_manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
+
+        def identity(manifest: dict, path: str) -> dict:
+            matches = [
+                record
+                for section in ("semanticReadSet", "runtimeIdentitySet",
+                                "platformObservationSet")
+                for record in manifest[section]
+                if record["path"] == path
+            ]
+            self.assertEqual(1, len(matches))
+            return matches[0]
+
+        def refresh(manifest: dict) -> None:
+            closure = manifest["pathOperationClosure"]
+            closure["records"].sort(key=lambda record: (
+                record["operation"], record["path"],
+                -1 if record["parameter"] is None else record["parameter"]))
+            closure["recordsCanonicalSha256"] = self.runner.sha256_bytes(
+                self.runner.canonical_bytes(closure["records"]))
+            closure["eventCount"] = sum(
+                record["count"] for record in closure["records"])
+            closure["recordCount"] = len(closure["records"])
+            closure["uniqueOperationPathPairs"] = len({
+                (record["operation"], record["path"])
+                for record in closure["records"]})
+
+        deleted = json.loads(json.dumps(source_manifest))
+        deleted["pathOperationClosure"]["records"] = [
+            record for record in deleted["pathOperationClosure"]["records"]
+            if not (record["operation"] == "access"
+                    and record["path"] == "/etc/fonts/fonts.conf")
+        ]
+        deleted_identity = identity(deleted, "/etc/fonts/fonts.conf")
+        deleted_identity["operations"].remove("access")
+        refresh(deleted)
+
+        speculative = json.loads(json.dumps(source_manifest))
+        speculative["pathOperationClosure"]["records"].append({
+            "operation": "statx", "path": "/etc/fonts/fonts.conf",
+            "parameter": None, "returns": [-2], "count": 1,
+        })
+        speculative_identity = identity(speculative, "/etc/fonts/fonts.conf")
+        speculative_identity["operations"] = sorted(
+            {*speculative_identity["operations"], "statx"})
+        refresh(speculative)
+
+        for label, manifest in (("deleted", deleted), ("speculative", speculative)):
+            with self.subTest(label=label, implementation="runner"):
+                with self.assertRaisesRegex(
+                        self.runner.RunnerError, "profile binding mismatch"):
+                    self.runner.validate_path_operation_closure(
+                        self.profile, manifest)
+            with self.subTest(label=label, implementation="verifier"):
+                with self.assertRaisesRegex(
+                        self.verifier.VerificationFailure, "PROFILE_MISMATCH"):
+                    self.verifier._validate_g0_path_operation_closure(
+                        self.profile, manifest)
+
+    def test_identity_path_operations_must_equal_the_frozen_closure(self) -> None:
+        manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
+        font = next(
+            record for record in manifest["runtimeIdentitySet"]
+            if record["path"] == "/etc/fonts/fonts.conf")
+        font["operations"].remove("access")
+        with self.assertRaisesRegex(
+                self.runner.RunnerError, "identity path operations differ"):
+            self.runner.validate_path_operation_closure(self.profile, manifest)
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "identity operations differ"):
+            self.verifier._validate_g0_path_operation_closure(
+                self.profile, manifest)
 
     def test_kernel_interpreter_is_rx_without_becoming_a_fifth_execve(self) -> None:
         manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
@@ -1540,7 +1822,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 "productSha": "a" * 40,
                 "packetRoot": "research_packets/frozen",
                 "authorityIssue": 535,
-                "authorityComment": 5524343289,
+                "authorityComment": 5530338723,
                 "requestIndices": ["0"],
                 "roles": {
                     "externalScript": {
@@ -1558,7 +1840,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 self.runner.validate_packet_manifest(
                     packet, manifest, self.profile, product_sha="a" * 40,
                     packet_root="research_packets/frozen", authority_issue=535,
-                    authority_comment=5524343289)
+                    authority_comment=5530338723)
 
     def test_qualification_packet_cannot_replace_the_measured_m09_bytes(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-packet-") as temporary:
@@ -1572,7 +1854,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 "productSha": "a" * 40,
                 "packetRoot": "research_packets/frozen",
                 "authorityIssue": 535,
-                "authorityComment": 5524343289,
+                "authorityComment": 5530338723,
                 "requestIndices": ["0"],
                 "roles": {
                     "externalScript": {
@@ -1592,7 +1874,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 self.runner.validate_packet_manifest(
                     packet, manifest, self.profile, product_sha="a" * 40,
                     packet_root="research_packets/frozen", authority_issue=535,
-                    authority_comment=5524343289)
+                    authority_comment=5530338723)
 
     def test_canonical_invocation_contains_only_frozen_environment(self) -> None:
         roots = {
@@ -1677,7 +1959,7 @@ class GodotRuntimeCampaignContractTests(unittest.TestCase):
                 "productSha": "a" * 40,
                 "packetRoot": "research_packets/frozen",
                 "authorityIssue": 535,
-                "authorityComment": 5524343289,
+                "authorityComment": 5530338723,
                 "requestIndices": ["0"],
                 "roles": {
                     "externalScript": {
@@ -1873,11 +2155,11 @@ class GodotRuntimeCampaignContractTests(unittest.TestCase):
                 f"{null_identity.st_ino}\t2f6465762f6e756c6c",
                 "INITIAL_FD\t4\t100\t1\t1\t1\t11\t706970653a5b31315d",
                 "INITIAL_FD\t5\t100\t2\t1\t1\t12\t706970653a5b31325d",
-                "SYSCALL_E\t6\t100\t257\topenat\t18446744073709551516\t0\t0\t0\t0\t0",
+                "SYSCALL_E\t6\t100\t257\topenat\t18446744073709551516\t0\t524288\t0\t0\t0",
                 f"PATH\t7\t100\topenat\t{original_hex}\t{original_hex}",
                 "SYSCALL_X\t8\t100\t257\topenat\t3\t0\t0",
                 f"PATH_X\t9\t100\topenat\t3\t{original_hex}",
-                f"OPEN\t10\t100\t3\t0\tI\t{metadata.st_dev}\t{metadata.st_ino}\t{original_hex}",
+                f"OPEN\t10\t100\t3\t524288\tI\t{metadata.st_dev}\t{metadata.st_ino}\t{original_hex}",
                 "SYSCALL_E\t11\t100\t9\tmmap\t0\t4096\t1\t2\t3\t0",
                 "SYSCALL_X\t12\t100\t9\tmmap\t4096\t0\t0",
                 f"MMAP\t13\t100\t4096\t4096\t1\t2\t3\t0\tI\t{metadata.st_dev}\t{metadata.st_ino}\t{original_hex}",
@@ -1904,6 +2186,13 @@ class GodotRuntimeCampaignContractTests(unittest.TestCase):
                 trace_bytes.decode().splitlines(), caps["maxEvents"])
             self.verifier.validate_trace_accounting(
                 trace, caps, len(trace_bytes), 0, str(ROOT))
+            open_entry = next(
+                event for event in trace["events"]
+                if event["type"] == "SYSCALL_E" and event["name"] == "openat")
+            opened = next(
+                event for event in trace["events"] if event["type"] == "OPEN")
+            self.assertEqual(0, open_entry["arguments"][2])
+            self.assertEqual(0, opened["flags"])
             with self.assertRaisesRegex(
                     self.verifier.VerificationFailure, "SEMANTIC_MAPPING_DENIED"):
                 self.verifier.reject_semantic_mappings(

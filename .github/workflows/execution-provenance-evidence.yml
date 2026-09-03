@@ -341,6 +341,15 @@ jobs:
           if ! compgen -G 'artifacts/godot-g0/raw/trace.*' > /dev/null; then
             exit 0
           fi
+          python3 -B tools/execution_provenance/godot_runtime_g0_trace.py \
+            --trace-directory artifacts/godot-g0/raw \
+            --working-directory "$GITHUB_WORKSPACE" \
+            --root "PRODUCT=$RUNNER_TEMP/g0-product" \
+            --root "PACKET=$RUNNER_TEMP/g0-packet/${{ inputs.packet_root }}" \
+            --root "GODOT=$RUNNER_TEMP/godot/godot" \
+            --root "HOME=$RUNNER_TEMP/g0-runtime-home" \
+            --root "OUTPUT=$GITHUB_WORKSPACE/artifacts/godot-g0/run" \
+            --output artifacts/godot-g0/path-operation-closure.json
           python3 -B - "$RUNNER_TEMP/g0-product" \
             "$RUNNER_TEMP/g0-packet/${{ inputs.packet_root }}" \
             "$RUNNER_TEMP/godot/godot" \

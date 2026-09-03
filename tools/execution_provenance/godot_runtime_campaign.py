@@ -397,6 +397,11 @@ def _mutate_mapping_object(
             path_index = index
     if path_index is None or path_exit_index is None:
         raise CampaignError("G25 mapping open lacks its path binding")
+    syscall_index = path_index - 1
+    syscall_entry = lines[syscall_index].split("\t")
+    if len(syscall_entry) != 11 or syscall_entry[0] != "SYSCALL_E" \
+            or syscall_entry[2] != tid or syscall_entry[4] != "openat":
+        raise CampaignError("G25 mapping open lacks its syscall entry")
 
     close_index: int | None = None
     for index in range(mapping_index + 1, len(lines) - 1):
@@ -417,6 +422,11 @@ def _mutate_mapping_object(
     path_exit = lines[path_exit_index].split("\t")
     path_exit[5] = target_hex
     lines[path_exit_index] = "\t".join(path_exit)
+    syscall_entry[7] = "0"
+    lines[syscall_index] = "\t".join(syscall_entry)
+    opened = lines[open_index].split("\t")
+    opened[4] = "0"
+    lines[open_index] = "\t".join(opened)
 
     object_shapes = {
         "OPEN": (5, 6, 7, 8),
