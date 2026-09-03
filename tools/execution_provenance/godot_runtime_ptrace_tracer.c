@@ -96,11 +96,19 @@ struct task {
     uint32_t bind_pid, bind_groups;
     socklen_t bind_length;
 };
+enum lineage_preparation {
+    LINEAGE_PREPARE_INVALID,
+    LINEAGE_PREPARE_TASK_CAP,
+    LINEAGE_WAITING_ATTACH,
+    LINEAGE_HELD_ATTACH,
+};
 static FILE *trace;
 static int sidecar_fd = -1;
 static struct gv_admission_policy admission_policy;
 static struct task tasks[MAX_TASKS];
+static pid_t pending_attach[MAX_LINEAGE_EVENTS];
 static size_t task_count, active_count, captured_bytes;
+static size_t pending_attach_count;
 static uint64_t sequence, stops, entries, exits, resumed_exits, lineage_events;
 static uint64_t path_events, read_events, write_events, mmap_events, open_events;
 static uint64_t close_events, socket_events, bind_events, exec_events;
@@ -137,6 +145,10 @@ static void fail(pid_t pid, const char *reason) {
             ptrace(PTRACE_CONT, tasks[i].pid, 0, SIGKILL);
         }
     }
+    for (size_t i = 0; i < pending_attach_count; i += 1) {
+        kill(pending_attach[i], SIGKILL);
+        ptrace(PTRACE_CONT, pending_attach[i], 0, SIGKILL);
+    }
 }
 static const char *syscall_name(long number) {
     for (size_t i = 0; i < sizeof(allowed_syscalls) / sizeof(*allowed_syscalls); i += 1)
@@ -155,6 +167,31 @@ static struct task *add_task(pid_t pid) {
     memset(task, 0, sizeof(*task));
     task->pid = pid; task->active = true; active_count += 1;
     return task;
+}
+static bool defer_attach_stop(pid_t pid, int status) {
+    if (pid <= 0 || !WIFSTOPPED(status) || WSTOPSIG(status) != SIGSTOP
+            || (unsigned int)status >> 16 != 0
+            || task_count + pending_attach_count >= MAX_TASKS
+            || lineage_events + pending_attach_count >= MAX_LINEAGE_EVENTS) return false;
+    for (size_t i = 0; i < pending_attach_count; i += 1)
+        if (pending_attach[i] == pid) return false;
+    pending_attach[pending_attach_count++] = pid;
+    return true;
+}
+static bool take_pending_attach(pid_t pid) {
+    for (size_t i = 0; i < pending_attach_count; i += 1) {
+        if (pending_attach[i] != pid) continue;
+        pending_attach[i] = pending_attach[--pending_attach_count];
+        return true;
+    }
+    return false;
+}
+static bool consume_expected_attach_stop(
+        struct task *task, int signal_number, unsigned int event) {
+    if (!task->expected_attach_stop || signal_number != SIGSTOP || event != 0)
+        return false;
+    task->expected_attach_stop = false;
+    return true;
 }
 static bool set_options(struct task *task) {
     if (task->options_set) return true;
@@ -513,6 +550,88 @@ static bool decode_lineage(const struct task *parent, unsigned int event,
     }
     return false;
 }
+static enum lineage_preparation prepare_lineage(
+        struct task *parent, unsigned int event, pid_t child_pid,
+        struct task **child, const char **kind, uint64_t *flags) {
+    if (!decode_lineage(parent, event, kind, flags)) return LINEAGE_PREPARE_INVALID;
+    *child = add_task(child_pid);
+    if (*child == NULL) return LINEAGE_PREPARE_TASK_CAP;
+    bool attach_stop_received = take_pending_attach((*child)->pid);
+    (*child)->number = parent->number;
+    memcpy((*child)->args, parent->args, sizeof((*child)->args));
+    (*child)->have_entry = true;
+    (*child)->resumed_entry = true;
+    (*child)->expected_attach_stop = !attach_stop_received;
+    return attach_stop_received ? LINEAGE_HELD_ATTACH : LINEAGE_WAITING_ATTACH;
+}
+static void reset_lineage_self_test_state(void) {
+    memset(tasks, 0, sizeof(tasks));
+    task_count = 0;
+    active_count = 0;
+    pending_attach_count = 0;
+    lineage_events = 0;
+}
+static bool pending_attach_self_test(void) {
+    const pid_t parent_pid = 7000, child_pid = 7001;
+    int stop_status = (SIGSTOP << 8) | 0x7f;
+    int trap_status = (SIGTRAP << 8) | 0x7f;
+    int event_status = stop_status | (PTRACE_EVENT_VFORK << 16);
+    struct task parent = {.pid = parent_pid, .number = SYS_vfork,
+        .have_entry = true, .args = {11, 12, 13, 14, 15, 16}};
+    struct task *child = NULL;
+    const char *kind = NULL;
+    uint64_t flags = UINT64_MAX;
+
+    reset_lineage_self_test_state();
+    bool child_first = defer_attach_stop(child_pid, stop_status)
+        && prepare_lineage(&parent, PTRACE_EVENT_VFORK, child_pid,
+                           &child, &kind, &flags) == LINEAGE_HELD_ATTACH
+        && pending_attach_count == 0 && task_count == 1 && active_count == 1
+        && child != NULL && child->active && child->number == SYS_vfork
+        && child->have_entry && child->resumed_entry && !child->expected_attach_stop
+        && !memcmp(child->args, parent.args, sizeof(child->args))
+        && !strcmp(kind, "vfork_process") && flags == 0;
+
+    reset_lineage_self_test_state(); child = NULL; kind = NULL; flags = UINT64_MAX;
+    enum lineage_preparation parent_first = prepare_lineage(
+        &parent, PTRACE_EVENT_VFORK, child_pid, &child, &kind, &flags);
+    bool parent_first_once = parent_first == LINEAGE_WAITING_ATTACH
+        && child != NULL && child->expected_attach_stop
+        && consume_expected_attach_stop(child, SIGSTOP, 0)
+        && !child->expected_attach_stop
+        && !consume_expected_attach_stop(child, SIGSTOP, 0);
+
+    reset_lineage_self_test_state(); child = NULL; kind = NULL; flags = UINT64_MAX;
+    bool wrong_event = defer_attach_stop(child_pid, stop_status)
+        && prepare_lineage(&parent, PTRACE_EVENT_CLONE, child_pid,
+                           &child, &kind, &flags) == LINEAGE_PREPARE_INVALID
+        && child == NULL && pending_attach_count == 1 && task_count == 0;
+
+    reset_lineage_self_test_state(); child = NULL; kind = NULL; flags = UINT64_MAX;
+    bool wrong_pid = defer_attach_stop(child_pid, stop_status)
+        && prepare_lineage(&parent, PTRACE_EVENT_VFORK, child_pid + 1,
+                           &child, &kind, &flags) == LINEAGE_WAITING_ATTACH
+        && pending_attach_count == 1 && child != NULL
+        && child->expected_attach_stop;
+
+    reset_lineage_self_test_state();
+    bool malformed = !defer_attach_stop(child_pid, trap_status)
+        && !defer_attach_stop(child_pid, event_status)
+        && defer_attach_stop(child_pid, stop_status)
+        && !defer_attach_stop(child_pid, stop_status)
+        && pending_attach_count == 1;
+
+    reset_lineage_self_test_state();
+    bool filled = true;
+    for (size_t i = 0; i < MAX_LINEAGE_EVENTS; i += 1)
+        filled = filled && defer_attach_stop(child_pid + (pid_t)i, stop_status);
+    bool capped = filled
+        && !defer_attach_stop(child_pid + MAX_LINEAGE_EVENTS, stop_status)
+        && pending_attach_count == MAX_LINEAGE_EVENTS;
+    reset_lineage_self_test_state();
+    return child_first && parent_first_once && wrong_event && wrong_pid
+        && malformed && capped;
+}
 static void handle_event(struct task *parent, unsigned int event) {
     if (event == PTRACE_EVENT_EXEC) { capture_exec(parent->pid); return; }
     if (event != PTRACE_EVENT_FORK && event != PTRACE_EVENT_VFORK
@@ -521,21 +640,28 @@ static void handle_event(struct task *parent, unsigned int event) {
     if (ptrace(PTRACE_GETEVENTMSG, parent->pid, 0, &child_value) != 0) {
         fail(parent->pid, "DESCENDANT_IDENTITY_UNAVAILABLE"); return;
     }
-    struct task *child = add_task((pid_t)child_value);
-    if (child == NULL) { fail(parent->pid, "TASK_CAP_EXCEEDED"); return; }
-    const char *kind;
-    uint64_t flags;
-    if (!decode_lineage(parent, event, &kind, &flags)) {
+    const char *kind = NULL;
+    uint64_t flags = 0;
+    struct task *child = NULL;
+    enum lineage_preparation preparation = prepare_lineage(
+        parent, event, (pid_t)child_value, &child, &kind, &flags);
+    if (preparation == LINEAGE_PREPARE_INVALID) {
         fail(parent->pid, "LINEAGE_EVENT_MISMATCH"); return;
     }
-    child->number = parent->number; memcpy(child->args, parent->args, sizeof(child->args));
-    child->have_entry = true; child->resumed_entry = true; child->expected_attach_stop = true;
+    if (preparation == LINEAGE_PREPARE_TASK_CAP) {
+        fail(parent->pid, "TASK_CAP_EXCEEDED"); return;
+    }
     if (lineage_events >= MAX_LINEAGE_EVENTS) {
         fail(parent->pid, "LINEAGE_EVENT_CAP_EXCEEDED"); return;
     }
     fprintf(trace, "LINEAGE\t%" PRIu64 "\t%d\t%d\t%s\t%" PRIu64 "\n",
             ++sequence, parent->pid, child->pid, kind, flags);
     lineage_events += 1;
+    if (preparation == LINEAGE_HELD_ATTACH) {
+        if (!set_options(child)) return;
+        if (ptrace(PTRACE_SYSCALL, child->pid, 0, 0) != 0)
+            fail(child->pid, "TRACE_RESUME_FAILED");
+    }
 }
 static bool canonical_root(const char *input, char *output) { return realpath(input, output) != NULL; }
 static bool canonical_pipe(const struct gv_object_identity *object) {
@@ -591,6 +717,7 @@ int main(int argc, char **argv) {
         int landlock_abi = gv_landlock_abi();
         bool passed = sizeof(allowed_syscalls) / sizeof(*allowed_syscalls) == 61
             && lineage_ok
+            && pending_attach_self_test()
             && decode_syscall_fd(UINT32_MAX) == -1
             && decode_syscall_fd(UINT64_MAX) == -1
             && decode_syscall_fd(3) == 3
@@ -729,7 +856,11 @@ int main(int argc, char **argv) {
         pid_t pid = waitpid(-1, &status, __WALL);
         if (pid < 0) { if (errno == EINTR) continue; fail(root_pid, "WAIT_FAILED"); break; }
         stops += 1; struct task *task = find_task(pid);
-        if (task == NULL) { fail(root_pid, "UNMATCHED_TASK"); kill(pid, SIGKILL); continue; }
+        if (task == NULL) {
+            if (!terminating && defer_attach_stop(pid, status)) continue;
+            fail(root_pid, "UNMATCHED_TASK");
+            kill(pid, SIGKILL); ptrace(PTRACE_CONT, pid, 0, SIGKILL); continue;
+        }
         if (WIFEXITED(status) || WIFSIGNALED(status)) {
             int code = WIFEXITED(status) ? WEXITSTATUS(status) : 128 + WTERMSIG(status);
             fprintf(trace, "EXIT\t%" PRIu64 "\t%d\t%d\n", ++sequence, pid, code);
@@ -740,7 +871,7 @@ int main(int argc, char **argv) {
         if (!WIFSTOPPED(status)) { fail(pid, "UNKNOWN_WAIT_STATE"); continue; }
         if (!set_options(task)) continue;
         int signal_number = WSTOPSIG(status); unsigned int event = (unsigned int)status >> 16;
-        bool attach_stop = signal_number == SIGSTOP && task->expected_attach_stop;
+        bool attach_stop = consume_expected_attach_stop(task, signal_number, event);
         if (signal_number == (SIGTRAP | 0x80)) handle_syscall(task);
         else if (signal_number == SIGTRAP && event != 0) handle_event(task, event);
         else if (!attach_stop)
@@ -750,11 +881,11 @@ int main(int argc, char **argv) {
                 || (uint64_t)current_trace_bytes > MAX_TRACE_BYTES - TRACE_END_RESERVE)
             fail(pid, "TRACE_SIZE_CAP_EXCEEDED");
         if (terminating) { ptrace(PTRACE_CONT, pid, 0, SIGKILL); continue; }
-        if (attach_stop) task->expected_attach_stop = false;
         int deliver = attach_stop || signal_number == (SIGTRAP | 0x80)
             || (signal_number == SIGTRAP && event != 0) ? 0 : signal_number;
         if (ptrace(PTRACE_SYSCALL, pid, 0, deliver) != 0) fail(pid, "TRACE_RESUME_FAILED");
     }
+    if (pending_attach_count != 0) fail(root_pid, "UNMATCHED_TASK");
     for (size_t i = 0; i < task_count; i += 1)
         if (tasks[i].have_entry && tasks[i].active) fail(tasks[i].pid, "UNMATCHED_SYSCALL_ENTRY");
     uint64_t end_ns = gv_monotonic_raw_ns();

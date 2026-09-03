@@ -669,6 +669,25 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         self.assertIn('!strcmp(kind, "clone_process") && flags == process.clone_flags', tracer)
         self.assertIn('checked([str(binary), "--self-test"])', runner)
 
+    def test_child_first_attach_stop_waits_for_exact_lineage_event(self) -> None:
+        tracer = (ROOT / "tools/execution_provenance/godot_runtime_ptrace_tracer.c").read_text(
+            encoding="utf-8")
+        self.assertIn("pending_attach_self_test()", tracer)
+        self.assertIn("defer_attach_stop(pid, status)", tracer)
+        self.assertIn(
+            "enum lineage_preparation preparation = prepare_lineage(",
+            tracer,
+        )
+        self.assertIn("if (preparation == LINEAGE_HELD_ATTACH) {", tracer)
+        self.assertIn(
+            "consume_expected_attach_stop(task, signal_number, event)",
+            tracer,
+        )
+        self.assertIn(
+            'if (pending_attach_count != 0) fail(root_pid, "UNMATCHED_TASK");',
+            tracer,
+        )
+
 
 class GodotRuntimeVerifierParserTests(unittest.TestCase):
     @classmethod
