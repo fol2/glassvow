@@ -400,7 +400,10 @@ def run_preflight(output: Path) -> dict[str, Any]:
                 compiled["tracer"], compiled["workload"], input_path, cases, "valid")
             if valid["returncode"] != 0:
                 raise PreflightError(
-                    f"valid ptrace probe exited {valid['returncode']}: {valid['stderr'].strip()}")
+                    f"valid ptrace probe exited {valid['returncode']}; "
+                    f"trace reason={valid['trace']['violation']}; "
+                    f"root exit={valid['trace']['root_exit']}; "
+                    f"stderr={valid['stderr'].strip()}")
             valid_result = validate_valid_trace(
                 valid["trace"], expected_bytes=EXPECTED_INPUT,
                 expected_device=input_identity.st_dev,
@@ -459,6 +462,10 @@ def run_preflight(output: Path) -> dict[str, Any]:
                 "artifacts": artifacts,
             }
         finally:
+            for directory in (build, cases):
+                for source in directory.iterdir():
+                    if source.is_file():
+                        shutil.copy2(source, evidence_dir / source.name)
             if mounted_active:
                 subprocess.run(
                     ["sudo", "-n", "umount", str(mounted)], check=False,

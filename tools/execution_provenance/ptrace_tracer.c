@@ -538,7 +538,8 @@ int main(int argc, char **argv) {
             ptrace(PTRACE_CONT, pid, 0, SIGKILL);
             continue;
         }
-        int deliver = (signal_number == SIGSTOP || signal_number == SIGTRAP)
+        int deliver = (signal_number == SIGSTOP || signal_number == SIGTRAP
+                || signal_number == SIGCHLD)
             ? 0 : signal_number;
         if (ptrace(PTRACE_SYSCALL, pid, 0, deliver) != 0) {
             fail_policy(pid, "TRACE_RESUME_FAILED");
