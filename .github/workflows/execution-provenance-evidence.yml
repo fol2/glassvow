@@ -75,6 +75,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Record runner image and exact source
         shell: bash
@@ -163,6 +164,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Validate immutable product and packet ingress
         shell: bash
@@ -255,8 +257,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/g0-home" artifacts/godot-g0/cache-preflight
-          env -i HOME="$RUNNER_TEMP/g0-home" PATH=/usr/bin:/bin LANG=C.UTF-8 \
+          mkdir -p "$RUNNER_TEMP/g0-home" artifacts/godot-g0/cache-preflight/raw
+          /usr/bin/env -i /usr/bin/strace -ff -qq -ttt -T -yy -s 4096 \
+            -o artifacts/godot-g0/cache-preflight/raw/trace \
+            /usr/bin/env -i HOME="$RUNNER_TEMP/g0-home" PATH=/usr/bin:/bin LANG=C.UTF-8 \
             "$RUNNER_TEMP/godot/godot" --headless --editor \
             --path "$RUNNER_TEMP/g0-product" --quit \
             > artifacts/godot-g0/cache-preflight/stdout.txt \
@@ -401,6 +405,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Reserve finite remote qualification budget
         if: inputs.mode == 'godot-runtime'
@@ -849,6 +854,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 1
+          persist-credentials: false
 
       - name: Verify published terminal receipt and delete exact packet ref
         shell: bash
