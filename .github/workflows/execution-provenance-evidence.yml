@@ -1,0 +1,60 @@
+name: Linux execution provenance evidence
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/execution-provenance-evidence.yml'
+      - 'tools/execution_provenance/**'
+      - 'tests/test_execution_provenance.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: execution-provenance-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualify:
+    name: Qualify bounded ptrace evidence
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out exact branch head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Record runner image and exact source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/execution-provenance
+          {
+            printf 'git_head=%s\n' "$(git rev-parse HEAD)"
+            printf 'ImageOS=%s\n' "${ImageOS:-missing}"
+            printf 'ImageVersion=%s\n' "${ImageVersion:-missing}"
+            printf 'runner_os=%s\n' "$RUNNER_OS"
+            printf 'runner_arch=%s\n' "$RUNNER_ARCH"
+            printf 'uname=%s\n' "$(uname -a)"
+            printf 'ptrace_scope=%s\n' "$(cat /proc/sys/kernel/yama/ptrace_scope)"
+          } > artifacts/execution-provenance/environment.txt
+
+      - name: Test deterministic preflight validation
+        run: python3 -B tests/test_execution_provenance.py
+
+      - name: Measure B0 on the actual runner
+        run: |
+          python3 -B tools/execution_provenance/preflight.py \
+            --output artifacts/execution-provenance/b0-preflight.json
+
+      - name: Upload B0 receipt and raw diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: execution-provenance-b0-${{ github.event.pull_request.head.sha || github.sha }}
+          path: artifacts/execution-provenance
+          if-no-files-found: error
+          retention-days: 14
