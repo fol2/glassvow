@@ -36,6 +36,13 @@ assert RUNNER_SPEC and RUNNER_SPEC.loader
 RUNNER = importlib.util.module_from_spec(RUNNER_SPEC)
 RUNNER_SPEC.loader.exec_module(RUNNER)
 
+CAMPAIGN_PATH = ROOT / "tools/execution_provenance/campaign.py"
+CAMPAIGN_SPEC = importlib.util.spec_from_file_location(
+    "execution_provenance_campaign", CAMPAIGN_PATH)
+assert CAMPAIGN_SPEC and CAMPAIGN_SPEC.loader
+CAMPAIGN = importlib.util.module_from_spec(CAMPAIGN_SPEC)
+CAMPAIGN_SPEC.loader.exec_module(CAMPAIGN)
+
 PROTOCOL_PATH = ROOT / "tools/execution_provenance/protocol.json"
 
 
@@ -65,6 +72,68 @@ def build_test_capsule(root: Path) -> Path:
     with mock.patch.object(RUNNER, "compile_components", return_value=fake_build):
         record = RUNNER.build_capsule(PROTOCOL_PATH, workspace)
     return Path(record["capsule"])
+
+
+class ExecutionProvenanceCampaignTests(unittest.TestCase):
+    def test_n05_replay_uses_a_fresh_packet_and_preserves_sealed_evidence(
+            self) -> None:
+        with tempfile.TemporaryDirectory(
+                prefix="glassvow-campaign-replay-test-") as temporary:
+            output = Path(temporary) / "campaign"
+
+            def fake_run(command: object, *, timeout: int = 30) -> None:
+                del timeout
+                arguments = list(command)
+                program = Path(arguments[1]).name if len(arguments) > 1 else ""
+                operation = arguments[2] if len(arguments) > 2 else ""
+                if program == "runner.py" and operation == "build":
+                    workspace = Path(arguments[arguments.index("--workspace") + 1])
+                    capsule = workspace / "capsule-under-test"
+                    capsule.mkdir()
+                    (capsule / "opaque-role.bin").write_bytes(b"input")
+                    (capsule / "expected-executable").write_bytes(b"executable")
+                    CAMPAIGN.write_json(
+                        workspace / "build.json", {"capsule": str(capsule)})
+                elif program == "verify.py" and operation == "challenge":
+                    destination = Path(arguments[arguments.index("--output") + 1])
+                    case_id = arguments[arguments.index("--case") + 1]
+                    CAMPAIGN.write_json(
+                        destination, {"case": case_id, "challenge": case_id})
+                elif program == "runner.py" and operation == "run":
+                    packet = Path(arguments[arguments.index("--packet") + 1])
+                    packet.mkdir()
+                    (packet / "runtime-capsule").mkdir()
+                    for name in (
+                            "trace.tsv", "subject.bin", "stdout.bin", "stderr.bin",
+                            "statement.json", "mount.json",
+                            "executed-executable.bin"):
+                        (packet / name).write_bytes(packet.name.encode("ascii"))
+                    os.chmod(packet / "executed-executable.bin", 0o444)
+                elif program == "verify.py" and operation == "mount":
+                    destination = Path(arguments[arguments.index("--output") + 1])
+                    destination.write_bytes(b"attestation")
+                elif program == "verify.py" and operation == "case":
+                    destination = Path(arguments[arguments.index("--output") + 1])
+                    CAMPAIGN.write_json(destination, {"matchesExpectation": True})
+                elif program == "verify.py" and operation == "campaign":
+                    destination = Path(arguments[arguments.index("--output") + 1])
+                    CAMPAIGN.write_json(
+                        destination, {"verdict": "PASS", "gitHead": "test-head"})
+
+            with mock.patch.object(CAMPAIGN, "CASE_IDS", ["V00", "N05"]), \
+                    mock.patch.object(CAMPAIGN, "run", side_effect=fake_run):
+                result = CAMPAIGN.run_campaign(PROTOCOL_PATH, output)
+
+            preserved = output / "cases/N05-current"
+            self.assertEqual("PASS", result["verdict"])
+            self.assertEqual(
+                b"N05", (preserved / "executed-executable.bin").read_bytes())
+            self.assertEqual(
+                0o444,
+                os.stat(preserved / "executed-executable.bin").st_mode & 0o777)
+            self.assertEqual(
+                b"V00",
+                (output / "cases/N05/executed-executable.bin").read_bytes())
 
 
 class ExecutionProvenancePreflightTests(unittest.TestCase):

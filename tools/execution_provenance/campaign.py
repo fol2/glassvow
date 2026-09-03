@@ -168,9 +168,9 @@ def run_campaign(protocol_path: Path, output: Path) -> dict[str, Any]:
             run(["sudo", "-n", "umount", str(runtime)])
             mounted.remove(runtime)
             if case_id == "N05":
-                current = packet / "attack-current"
-                current.mkdir()
-                copy_replay(packet, current)
+                current = packet.with_name(f"{case_id}-current")
+                packet.rename(current)
+                packet.mkdir()
                 copy_replay(results / "V00", packet)
             elif case_id == "N06":
                 shutil.copyfile(results / "V00" / "subject.bin", packet / "subject.bin")
