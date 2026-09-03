@@ -508,6 +508,9 @@ bool gv_resolve_path(pid_t pid, int dirfd, const char *path, bool follow_final,
         else *slash = '\0';
     }
     for (;;) {
+        probe_length = strlen(probe);
+        while (probe_length > 1 && probe[probe_length - 1] == '/')
+            probe[--probe_length] = '\0';
         if (realpath(probe, canonical) != NULL) {
             const char *separator = !strcmp(canonical, "/") || !suffix[0] ? "" : "/";
             return snprintf(resolved, capacity, "%s%s%s", canonical, separator, suffix)

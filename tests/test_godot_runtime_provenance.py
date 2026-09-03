@@ -1244,6 +1244,46 @@ int main(int argc, char **argv) {
             ], check=False, capture_output=True, text=True)
             self.assertEqual(0, result.returncode, result.stderr or result.stdout)
 
+    def test_missing_path_with_repeated_separators_is_canonicalised(self) -> None:
+        compiler = shutil.which("cc")
+        if compiler is None:
+            self.skipTest("C compiler unavailable")
+        source_root = ROOT / "tools/execution_provenance"
+        harness_source = r'''
+#define _GNU_SOURCE
+#include "godot_runtime_ptrace_io.h"
+#include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
+int main(int argc, char **argv) {
+    if (argc != 3) return 2;
+    char followed[4096], nofollow[4096];
+    if (!gv_resolve_path(getpid(), AT_FDCWD, argv[1], true,
+                         followed, sizeof(followed))) return 3;
+    if (!gv_resolve_path(getpid(), AT_FDCWD, argv[1], false,
+                         nofollow, sizeof(nofollow))) return 4;
+    if (strcmp(followed, argv[2]) || strcmp(nofollow, argv[2])) return 5;
+    return 0;
+}
+'''
+        with tempfile.TemporaryDirectory(prefix="godot-path-test-") as temporary:
+            root = Path(temporary).resolve()
+            unresolved = f"{root}//.cache/fontconfig//cache-9"
+            expected = root / ".cache/fontconfig/cache-9"
+            source = root / "path.c"
+            binary = root / "path"
+            source.write_text(harness_source, encoding="utf-8")
+            compiled = subprocess.run([
+                compiler, "-std=c17", "-O2", "-Wall", "-Wextra", "-Werror",
+                "-I", str(source_root), str(source),
+                str(source_root / "godot_runtime_ptrace_io.c"), "-o", str(binary),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, compiled.returncode, compiled.stderr)
+            result = subprocess.run([
+                str(binary), unresolved, str(expected),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, result.returncode, result.stderr or result.stdout)
+
     def test_exact_reads_execs_descriptors_and_writes_are_kernel_enforced(self) -> None:
         compiler = shutil.which("cc")
         if compiler is None:
