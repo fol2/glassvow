@@ -1,0 +1,99 @@
+name: Linux execution provenance evidence
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/execution-provenance-evidence.yml'
+      - 'tools/execution_provenance/**'
+      - 'tests/test_execution_provenance.py'
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+concurrency:
+  group: execution-provenance-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualify:
+    name: Qualify bounded ptrace evidence
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out exact branch head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Record runner image and exact source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/execution-provenance
+          {
+            printf 'git_head=%s\n' "$(git rev-parse HEAD)"
+            printf 'ImageOS=%s\n' "${ImageOS:-missing}"
+            printf 'ImageVersion=%s\n' "${ImageVersion:-missing}"
+            printf 'runner_os=%s\n' "$RUNNER_OS"
+            printf 'runner_arch=%s\n' "$RUNNER_ARCH"
+            printf 'uname=%s\n' "$(uname -a)"
+            printf 'ptrace_scope=%s\n' "$(cat /proc/sys/kernel/yama/ptrace_scope)"
+          } > artifacts/execution-provenance/environment.txt
+
+      - name: Test deterministic preflight validation
+        run: python3 -B tests/test_execution_provenance.py
+
+      - name: Measure B0 on the actual runner
+        run: |
+          python3 -B tools/execution_provenance/preflight.py \
+            --output artifacts/execution-provenance/b0-preflight.json
+
+      - name: Check exact-head pre-execution review
+        id: review
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          protocol_sha="$(sha256sum tools/execution_provenance/protocol.json | cut -d' ' -f1)"
+          tree_sha="$(git rev-parse 'HEAD^{tree}')"
+          authority_issue="$(python3 -c 'import json; print(json.load(open("tools/execution_provenance/protocol.json"))["authority"]["issue"])')"
+          head_marker="EXECUTION_PROVENANCE_PREEXECUTION_APPROVE head=$HEAD_SHA tree=$tree_sha protocol_sha256=$protocol_sha"
+          tree_marker="EXECUTION_PROVENANCE_REVIEWED_TREE tree=$tree_sha protocol_sha256=$protocol_sha"
+          review_comments="$RUNNER_TEMP/execution-provenance-review-comments.txt"
+          gh api --paginate "repos/$GITHUB_REPOSITORY/issues/$authority_issue/comments" \
+            --jq '.[] | select(.author_association == "OWNER") | .body' \
+            > "$review_comments"
+          if [[ "$EVENT_NAME" == "pull_request" ]] \
+              && grep -Fxq "$head_marker" "$review_comments"; then
+            echo "approved=true" >> "$GITHUB_OUTPUT"
+          elif [[ "$EVENT_NAME" == "workflow_dispatch" && "$REF_NAME" == "main" ]] \
+              && grep -Fxq "$tree_marker" "$review_comments"; then
+            echo "approved=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "approved=false" >> "$GITHUB_OUTPUT"
+            echo "B2 withheld: no independent exact-head or exact-main-tree review marker."
+          fi
+
+      - name: Run frozen B1/B2 qualification campaign
+        if: steps.review.outputs.approved == 'true'
+        run: |
+          python3 -B tools/execution_provenance/campaign.py \
+            --protocol tools/execution_provenance/protocol.json \
+            --output artifacts/execution-provenance/b2
+
+      - name: Upload capability receipts and raw diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: execution-provenance-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
+          path: artifacts/execution-provenance
+          if-no-files-found: error
+          retention-days: 14

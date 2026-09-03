@@ -114,6 +114,17 @@ class ScopeFixtureTests(unittest.TestCase):
             self.assertTrue(selection.checks[check], check)
         self.assertFalse(selection.checks["run_import_assets"])
 
+    def test_execution_provenance_isolated_scope(self) -> None:
+        selection = CI.classify_paths([
+            "tools/execution_provenance/verify.py",
+            "tests/test_execution_provenance.py",
+        ])
+        self.assert_scopes(selection, "provenance_evidence")
+        self.assertTrue(selection.checks["run_provenance_evidence"])
+        self.assertFalse(selection.checks["setup_godot"])
+        self.assertFalse(selection.checks["run_godot_tests"])
+        self.assertFalse(selection.checks["run_balance_doe"])
+
     def test_locale_and_font_only(self) -> None:
         selection = CI.classify_paths([
             "locale/zh-Hant.json", "assets/fonts/NotoSerifTC-Regular.woff2"])
@@ -268,6 +279,7 @@ class WorkflowContractTests(unittest.TestCase):
             "tests/test_balance_tier1_f0.py",
             "tests/test_balance_f1_f2.py",
             "tests/test_balance_f1_evidence.py",
+            "tests/test_execution_provenance.py",
             "tools/check_anchors.py",
             "tools/check_benchmark_freeze.py",
             "tools/check_map_assets.py --self-test",

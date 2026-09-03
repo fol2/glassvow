@@ -24,6 +24,12 @@ Before opening a new branch, search open issues and PRs for the same outcome and
 
 Legacy `wayfinder:*` maps may remain useful for genuinely uncertain programmes, but do not create a map and child hierarchy for a normal feature or a handful of experiments.
 
+## Pre-authorised finite programmes
+
+When an issue accepts a finite decision graph, record every node's immutable inputs, budget, correction limit, PASS/FAIL/INCONCLUSIVE transition, and terminal owner boundary in that issue before execution. Prove any required venue, permission, tool, or observation channel before freezing a dependent experiment. The assigned owner then follows already-authorised transitions without child issues or repeated approval comments. Escalate only after the declared graph and safe capability ladder are exhausted, or when the next transition crosses a credential, cost, regulated, irreversible, compatibility, product, or release-authority boundary.
+
+A routine test failure inside an unchanged delivery contract is not an owner approval gate. The assigned owner adds the focused regression, repairs the implementation, and reruns invalidated evidence within the issue's finite delivery budget. Return to the owner only when the repair would change the scientific contract or acceptance, the evidence proves an architecture failure, the budget is exhausted, or a named human-authority boundary is reached.
+
 ## Basic operations
 
 - Read an issue with comments and labels before work.

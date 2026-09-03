@@ -83,6 +83,12 @@ Before running anything, record a compact research contract:
 - budget for runs, wall time, and context;
 - success, stop, and inconclusive criteria.
 
+Preflight every required venue, tool, permission, and evidence channel before freezing a dependent protocol. Use one bounded capability ladder in declared order; record each measured rejection once, and freeze only after a venue can observe the claims the experiment will make. A capability preflight is not a scientific result and must not be relabelled as one.
+
+Freeze the finite decision graph once: nodes, immutable inputs, budgets, correction limits, and PASS/FAIL/INCONCLUSIVE transitions. A declared transition inside that accepted graph is execution authority; continue without a new owner message. Escalate only when the finite graph and its safe capability ladder are exhausted, or a true human-authority boundary is reached.
+
+Keep scientific-contract corrections separate from delivery implementation repairs. A scientific-contract correction changes the frozen question or acceptance; changes to immutable inputs, threat model, protocol cases, expected outcomes, or the semantic claim are in that category and follow the graph's authority rule. A delivery implementation repair changes code or focused tests only to satisfy unchanged acceptance. Fix reproducible delivery defects autonomously within the declared delivery budget; they neither consume nor renew a scientific correction limit. Stop only when the evidence invalidates the architecture or contract, the finite delivery budget is exhausted, or a genuine human-authority boundary is reached.
+
 Run independent experiments in isolation. Reuse deterministic harnesses and immutable inputs. Do not modify production content to try a candidate, do not open a PR per run, and do not trigger product CI for pure research. An experiment may fail or remain inconclusive without becoming a delivery failure.
 
 The output is a decision record: evidence, caveats, rejected alternatives, and the selected candidate—or an explicit stop. Raw exploration is not production truth.
@@ -115,6 +121,7 @@ Promote only the selected decision, required data, and reproducible acceptance i
 | `agent_config` | `AGENTS.md`, `docs/agents/`, `.claude/skills/`, `.claude/agents/`, `.claude/workflows/`, `.grok/workflows/`, agent-contract checker/tests | fast active-instruction and active-automation structural regression; no Godot by default |
 | `docs` | Markdown, instructions, docs, anchor/freeze tooling | document anchors and detached-reference freeze; no Godot by default |
 | `balance_ml` | `tools/balance_*`, balance tests/protocols and governed balance docs | balance/ML self-tests; no Godot unless another scope also requires it |
+| `provenance_evidence` | bounded execution-provenance tools, protocol and focused tests | deterministic policy/capsule fixtures; no Godot or live evidence campaign |
 | `godot_code` | `.gd`, `.tscn`, `.tres`, project resources | import, changed-file parse, complete discovered Godot regression suite |
 | `map_code` | map compiler, layout, routing, waylight, map tests/tools | map quality contract and shared profile probe; not the expensive asset gate |
 | `map_assets` | map GLBs, textures, shaders, manifest, landing/checker tools | complete map asset/module validation and import |
