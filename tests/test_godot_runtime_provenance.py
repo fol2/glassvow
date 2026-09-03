@@ -688,6 +688,21 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             tracer,
         )
 
+    def test_denied_path_is_recorded_before_the_default_deny_stop(self) -> None:
+        tracer = TRACER_PATH.read_text(encoding="utf-8")
+        path_entry = tracer[
+            tracer.index("static void path_entry("):
+            tracer.index("static void syscall_entry(")
+        ]
+        self.assertLess(
+            path_entry.index('fprintf(trace, "PATH'),
+            path_entry.index("gv_policy_allows_path("),
+        )
+        self.assertLess(
+            path_entry.index("PATH_EVENT_CAP_EXCEEDED"),
+            path_entry.index("gv_policy_allows_path("),
+        )
+
 
 class GodotRuntimeVerifierParserTests(unittest.TestCase):
     @classmethod
@@ -704,6 +719,46 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
         ])
         with self.assertRaisesRegex(self.verifier.VerificationFailure, "sequence"):
             self.verifier.parse_trace_lines(lines, max_events=16)
+
+    def test_declared_runtime_read_does_not_mask_a_later_tracer_violation(self) -> None:
+        statement = {
+            "roots": {
+                "PRODUCT": "/product", "PACKET": "/packet", "HOME": "/home",
+            },
+            "roles": [{"path": "/packet/corpus.json"}],
+            "runtimeIdentities": [{"path": "/product/addons/runtime.so"}],
+            "outputs": {},
+        }
+        declared_runtime_trace = {
+            "events": [{
+                "type": "READ", "classification": "S",
+                "path": "/product/addons/runtime.so",
+            }],
+        }
+        self.verifier._early_unknown_reads(statement, declared_runtime_trace)
+
+        undeclared_product_trace = {
+            "events": [{
+                "type": "READ", "classification": "S",
+                "path": "/product/addons/undeclared.so",
+            }],
+        }
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "UNDECLARED_INPUT_PATH"):
+            self.verifier._early_unknown_reads(statement, undeclared_product_trace)
+
+    def test_rejected_path_trace_retains_the_denied_path_evidence(self) -> None:
+        supplied = "/product/missing/runtime.so"
+        resolved = "/product/missing/runtime.so"
+        trace = self.verifier.parse_trace_lines(strict_trace_envelope([
+            "SYSCALL_E\t2\t1001\t257\topenat\t18446744073709551516\t0\t524288\t0\t0\t0",
+            f"PATH\t3\t1001\topenat\t{supplied.encode().hex()}\t{resolved.encode().hex()}",
+            "VIOLATION\t4\t1001\tUNDECLARED_PATH_PRE_EFFECT",
+        ]), max_events=16)
+        self.assertEqual(supplied, trace["events"][1]["supplied"])
+        self.assertEqual(resolved, trace["events"][1]["path"])
+        self.assertEqual(
+            "UNDECLARED_PATH_PRE_EFFECT", trace["events"][2]["reason"])
 
     def test_platform_normalisation_preserves_complete_raw_bytes(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

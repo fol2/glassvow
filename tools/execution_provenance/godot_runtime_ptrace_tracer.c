@@ -272,15 +272,15 @@ static void path_entry(struct task *task, const char *name) {
                                task->resolved, sizeof(task->resolved))) {
         fail(task->pid, "PATH_RESOLUTION_FAILED"); return;
     }
+    if (++path_events > MAX_PATH_EVENTS) { fail(task->pid, "PATH_EVENT_CAP_EXCEEDED"); return; }
+    fprintf(trace, "PATH\t%" PRIu64 "\t%d\t%s\t", ++sequence, task->pid, name);
+    hex(task->path); fputc('\t', trace); hex(task->resolved); fputc('\n', trace);
     bool has_parameter = !strcmp(name, "openat") || !strcmp(name, "mkdir");
     uint64_t parameter = !strcmp(name, "openat") ? task->args[2] : task->args[1];
     if (!gv_policy_allows_path(
             &admission_policy, name, task->resolved, has_parameter, parameter)) {
         fail(task->pid, "UNDECLARED_PATH_PRE_EFFECT"); return;
     }
-    if (++path_events > MAX_PATH_EVENTS) { fail(task->pid, "PATH_EVENT_CAP_EXCEEDED"); return; }
-    fprintf(trace, "PATH\t%" PRIu64 "\t%d\t%s\t", ++sequence, task->pid, name);
-    hex(task->path); fputc('\t', trace); hex(task->resolved); fputc('\n', trace);
     bool writes = !strcmp(name, "mkdir");
     bool stderr_sink_open = false;
     if (!strcmp(name, "openat")) {

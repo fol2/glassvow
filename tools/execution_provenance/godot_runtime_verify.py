@@ -660,6 +660,9 @@ def _early_unknown_reads(statement: Mapping[str, Any], trace: Mapping[str, Any])
     roots = statement.get("roots", {})
     if not isinstance(roots, dict): return
     roles = {record.get("path") for record in statement.get("roles", []) if isinstance(record, dict)}
+    runtime = {record.get("path") for record in statement.get("runtimeIdentities", [])
+               if isinstance(record, dict)}
+    declared_reads = roles | runtime
     outputs = {record.get("path") for record in statement.get("outputs", {}).values()
                if isinstance(record, dict) and record.get("present")}
     for event in trace["events"]:
@@ -668,7 +671,7 @@ def _early_unknown_reads(statement: Mapping[str, Any], trace: Mapping[str, Any])
         if isinstance(roots.get("HOME"), str) and path.startswith(roots["HOME"] + "/") and path not in outputs:
             fail("UNDECLARED_CACHE_ACCESS", f"unknown cache read {path}")
         if any(isinstance(roots.get(key), str) and path.startswith(roots[key] + "/")
-               for key in ("PRODUCT", "PACKET")) and path not in roles:
+               for key in ("PRODUCT", "PACKET")) and path not in declared_reads:
             fail("UNDECLARED_INPUT_PATH", f"unknown semantic read {path}")
 
 
