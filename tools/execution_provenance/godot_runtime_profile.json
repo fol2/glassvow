@@ -650,7 +650,8 @@
       "successfulDirectoryOperations": [
         {
           "operations": [
-            "openat"
+            "openat",
+            "statx"
           ],
           "paths": [
             "/",

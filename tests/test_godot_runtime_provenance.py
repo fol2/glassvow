@@ -264,6 +264,71 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
                 "recordsCanonicalSha256"],
         )
 
+    def test_every_successful_closure_path_survives_post_admission_projection(self) -> None:
+        manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
+        closure = manifest["pathOperationClosure"]
+        roots = closure["source"]["roots"]
+        grammar = self.profile["accessGrammar"]["paths"]
+
+        def expand(value: str) -> str:
+            for name, root in roots.items():
+                value = value.replace("${" + name + "}", root)
+            return value
+
+        def operations(records: list[dict]) -> dict[str, set[str]]:
+            result: dict[str, set[str]] = {}
+            for record in records:
+                for path in record["paths"]:
+                    result.setdefault(expand(path), set()).update(
+                        record["operations"])
+            return result
+
+        dynamic = operations(grammar["successfulDynamicDirectoryOperations"])
+        probes = operations(grammar["successfulProbeOperations"])
+        directories = operations(grammar["successfulDirectoryOperations"])
+        working = set(grammar["successfulWorkingDirectoryOperations"])
+        working_directory = closure["source"]["initialWorkingDirectory"]
+        symlinks = {expand(record["path"])
+                    for record in closure["symlinkTargets"]}
+        named = {record["path"]: set(record["operations"])
+                 for record in grammar["successfulNamedPathOperations"]}
+        known = {
+            expand(record["path"]): set(record.get("operations", []))
+            for section in (
+                "semanticReadSet", "runtimeIdentitySet", "platformObservationSet")
+            for record in manifest[section]
+        }
+        output_paths = {
+            expand(grammar["pathResultPolicy"]["diagnosticOutputDenial"]["path"]),
+            *(expand(record["path"])
+              for record in manifest["baselineOutputs"][:2]),
+        }
+
+        gaps = []
+        for record in closure["records"]:
+            if not any(value >= 0 for value in record["returns"]):
+                continue
+            operation, path = record["operation"], expand(record["path"])
+            if path in dynamic:
+                admitted = operation in dynamic[path]
+            elif path == working_directory:
+                admitted = operation in working
+            elif path in probes:
+                admitted = operation in probes[path]
+            elif path in symlinks or path == "/dev/null":
+                admitted = True
+            elif path in directories:
+                admitted = operation in directories[path]
+            elif path in named:
+                admitted = operation in named[path]
+            elif path in known:
+                admitted = operation in known[path]
+            else:
+                admitted = path in output_paths and operation == "openat"
+            if not admitted:
+                gaps.append((operation, path, record["parameter"], record["returns"]))
+        self.assertEqual([], gaps)
+
     def test_fresh_g0_configuration_capture_is_the_only_fixture_byte_authority(self) -> None:
         capture = json.loads(CONFIGURATION_MANIFEST_PATH.read_text(encoding="utf-8"))
         binding = self.profile["g0"]["configurationCapture"]
