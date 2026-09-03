@@ -252,6 +252,40 @@ jobs:
             printf 'godot_version=%s\n' "$("$RUNNER_TEMP/godot/godot" --version)"
             printf 'godot_sha256=%s\n' "$(sha256sum "$RUNNER_TEMP/godot/godot" | cut -d' ' -f1)"
           } > artifacts/godot-g0/environment.txt
+          python3 -B - "$RUNNER_TEMP/godot/godot" /usr/bin/env /bin/sh <<'PY'
+          import hashlib
+          import json
+          import pathlib
+          import re
+          import subprocess
+          import sys
+
+          interpreters = {}
+          for executable in map(pathlib.Path, sys.argv[1:]):
+              output = subprocess.run(
+                  ["readelf", "--program-headers", str(executable)],
+                  check=True, capture_output=True, text=True).stdout
+              match = re.search(r"Requesting program interpreter:\s*([^\]]+)\]", output)
+              if match is None:
+                  raise SystemExit(f"missing PT_INTERP for {executable}")
+              requested = pathlib.Path(match.group(1))
+              resolved = requested.resolve(strict=True)
+              data = resolved.read_bytes()
+              identity = {
+                  "path": str(resolved), "size": len(data),
+                  "sha256": hashlib.sha256(data).hexdigest(),
+              }
+              existing = interpreters.setdefault(
+                  str(resolved), {**identity, "requestedPaths": set()})
+              if any(existing[key] != value for key, value in identity.items()):
+                  raise SystemExit("interpreter identity differs between executables")
+              existing["requestedPaths"].add(str(requested))
+          records = [{**record, "requestedPaths": sorted(record["requestedPaths"])}
+                     for record in interpreters.values()]
+          pathlib.Path("artifacts/godot-g0/elf-interpreters.json").write_text(
+              json.dumps(records, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8")
+          PY
 
       - name: Generate measured Godot cache outside the traced invocation
         shell: bash
