@@ -808,15 +808,15 @@ def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, s
     read_paths = {event["path"] for event in trace["events"] if event["type"] == "READ"}
     if statement["caseId"] == "G19" and any(path not in read_paths for path in roles):
         fail("OUTPUT_NOT_CURRENT", "output replay lacks current semantic consumption")
-    _outputs(
-        statement, trace, sidecar, args.case_dir, challenge, profile,
-        case_members)
     if (diagnostic and (statement["tracer"]["returncode"] != 40 or trace["end"]["rootExit"] == 0)) or \
             (not diagnostic and (statement["tracer"]["returncode"] != 0 or trace["end"]["rootExit"] != 0)):
         fail("PROVENANCE_INCOMPLETE", "tracer/root exit contract differs")
     _objects(trace, roles, runtime, platform, output_records, role_bytes, sidecar, roots, profile)
     if trace["end"]["dropped"] or trace["end"]["violation"] not in {"", "-"}:
         fail("PROVENANCE_INCOMPLETE", f"tracer violation {trace['end']['violation']}")
+    _outputs(
+        statement, trace, sidecar, args.case_dir, challenge, profile,
+        case_members)
 
 
 def _identity_summary(value: Any) -> dict[str, Any]:

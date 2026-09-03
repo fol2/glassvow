@@ -6,8 +6,10 @@ import hashlib
 import importlib.util
 import json
 import tempfile
+import types
 import unittest
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 VERIFY = ROOT / "tools/execution_provenance/godot_runtime_verify.py"
@@ -239,6 +241,51 @@ class TraceBindingTests(unittest.TestCase):
         statement["outputs"]["observation"]["file"] = "../outside"
         with self.assertRaisesRegex(self.verifier.VerificationFailure, "binding differs"):
             self.verifier._output_records(statement, Path("/case"))
+
+    def test_diagnostic_reason_cannot_hide_an_invalid_object_boundary(self) -> None:
+        args = types.SimpleNamespace(
+            case_id="G15", case_dir=Path("/case"), packet_manifest=Path("/packet/manifest.json"),
+            request_index="0")
+        roots = {"GODOT": "/godot", "PRODUCT": "/product", "PACKET": "/packet",
+                 "HOME": "/home", "OUTPUT": "/output"}
+        statement = {
+            "schema": self.verifier.STATEMENT_SCHEMA, "caseId": "G15",
+            "challenge": CHALLENGE, "clock": "CLOCK_MONOTONIC_RAW", "roots": roots,
+            "roles": [], "runtimeIdentities": [],
+            "executable": {"path": "/godot", "sha256": "g"},
+            "argv": [], "environment": [],
+            "tracer": {"returncode": 40},
+        }
+        profile = {
+            "runtime": {"godotSha256": "g"},
+            "invocation": {"godotArgvTemplate": [], "environment": []},
+            "roles": {"generatedGodotCache": {"paths": []}},
+            "caps": {"maxSemanticFiles": 1, "maxIdentityDependencies": 1,
+                     "maxPlatformObservations": 1, "maxFileIdentities": 3},
+        }
+        packet = {"roles": {"externalScript": {"path": "oracle.gd"},
+                             "corpus": {"path": "corpus.json"}}}
+        trace = {"challenge": CHALLENGE, "events": [],
+                 "end": {"rootExit": 1, "dropped": 0, "violation": ""}}
+        no_op = mock.Mock()
+        object_failure = self.verifier.VerificationFailure(
+            "UNDECLARED_INPUT_PATH", "injected successful object")
+        with mock.patch.multiple(
+                self.verifier, _authority=no_op, _trusted_setup=no_op,
+                _packet_members=no_op, _roles=mock.Mock(return_value={}),
+                _records=mock.Mock(return_value={}), _live=no_op,
+                _identity_set=mock.Mock(return_value={}),
+                _output_records=mock.Mock(return_value={}), _exec=no_op,
+                _lineage=no_op, _network=no_op, _timing=no_op,
+                _objects=mock.Mock(side_effect=object_failure),
+                _outputs=mock.Mock(side_effect=self.verifier.VerificationFailure(
+                    "OUTPUT_WRITE_DENIED", "expected diagnostic"))):
+            with self.assertRaisesRegex(
+                    self.verifier.VerificationFailure, "UNDECLARED_INPUT_PATH"):
+                self.verifier._complete(
+                    args, profile, {}, packet, statement, trace, b"",
+                    CHALLENGE, {})
+            self.verifier._outputs.assert_not_called()
 
 
 if __name__ == "__main__":
