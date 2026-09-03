@@ -101,6 +101,14 @@ def sha256(path: Path) -> str:
 
 
 class GodotRuntimeProfileContractTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        spec = importlib.util.spec_from_file_location(
+            "godot_runtime_profile_verify", VERIFIER_PATH)
+        assert spec and spec.loader
+        cls.verifier = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.verifier)
+
     def setUp(self) -> None:
         self.profile = json.loads(PROFILE_PATH.read_text(encoding="utf-8"))
 
@@ -216,6 +224,15 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             {"observation", "homeLog", "sentry"},
             set(roles["output"]["qualificationBaseline"]),
         )
+        sentry = roles["output"]["qualificationBaseline"]["sentry"]
+        self.assertTrue(self.verifier._valid_sentry_output(
+            b'[main]\n\ninstallation_id="5df99ee6-04bf-46fa-ac33-b60bab3b4468"\n',
+            sentry,
+        ))
+        self.assertFalse(self.verifier._valid_sentry_output(
+            b'[main]\n\ninstallation_id="5df99ee6-04bf-36fa-ac33-b60bab3b4468"\n',
+            sentry,
+        ))
 
     def test_address_space_limit_is_inherited_before_tracee_exec(self) -> None:
         g0 = self.profile["g0"]

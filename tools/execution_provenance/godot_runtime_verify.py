@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Independent verifier for the frozen actual-Godot provenance profile."""
 from __future__ import annotations
-import argparse, fnmatch, hashlib, importlib.util, json, os, secrets, stat, subprocess, sys
+import argparse, fnmatch, hashlib, importlib.util, json, os, re, secrets, stat, subprocess, sys
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -58,9 +58,17 @@ _CASE_MEMBER_LIMITS = {
     "home-godot.log": "maxHomeOutputBytes", "home-sentry.dat": "maxHomeOutputBytes",
     "receipt.json": "maxCaseReceiptBytes", "receipt-replay.json": "maxCaseReceiptBytes",
 }
+_SENTRY_OUTPUT = re.compile(
+    rb'\[main\]\n\ninstallation_id="[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-'
+    rb'[89ab][0-9a-f]{3}-[0-9a-f]{12}"\n')
 
 
 def _sha(data: bytes) -> str: return hashlib.sha256(data).hexdigest()
+
+
+def _valid_sentry_output(data: bytes, contract: Mapping[str, Any]) -> bool:
+    return contract.get("format") == "sentry-ini-installation-uuid-v4-lowercase" and \
+        len(data) == contract.get("size") and _SENTRY_OUTPUT.fullmatch(data) is not None
 
 
 def _file_sha(path: Path) -> str:
@@ -526,12 +534,16 @@ def _outputs(statement: Mapping[str, Any], trace: Mapping[str, Any], sidecar: by
         if any(actual.get(key) != expected[key] for key in ("size", "sha256")):
             fail("OUTPUT_NOT_CURRENT", f"stable {name} differs from G0 baseline")
     output_baselines = profile["roles"]["output"]["qualificationBaseline"]
-    stable_outputs = ("homeLog", "sentry")
-    for name in stable_outputs:
+    for name in ("homeLog",):
         expected, actual = output_baselines[name], outputs.get(name, {})
         if not actual.get("present") or any(
                 actual.get(key) != expected[key] for key in ("size", "sha256")):
             fail("OUTPUT_NOT_CURRENT", f"stable {name} differs from G0 baseline")
+    sentry = outputs.get("sentry", {})
+    sentry_data = case_members.get("home-sentry.dat")
+    if not sentry.get("present") or sentry_data is None or \
+            not _valid_sentry_output(sentry_data, output_baselines["sentry"]):
+        fail("OUTPUT_NOT_CURRENT", "Sentry output grammar differs from G0 contract")
     if statement.get("authorityIssue") == profile["packetIngress"]["qualification"]["authorityIssue"]:
         expected = output_baselines["observation"]
         if any(observation.get(key) != expected[key] for key in ("size", "sha256")):
