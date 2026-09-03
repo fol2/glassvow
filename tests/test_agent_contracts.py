@@ -37,6 +37,13 @@ Preflight every required venue, tool, permission, and evidence channel before fr
 Freeze the finite decision graph once: nodes and transitions.
 A declared transition inside that accepted graph is execution authority.
 Escalate only when the finite graph and its safe capability ladder are exhausted.
+A scientific-contract correction changes the frozen question or acceptance.
+A delivery implementation repair changes code or focused tests only to satisfy unchanged acceptance.
+"""
+
+ISSUE_TRACKER = """# Issue Tracker
+
+A routine test failure inside an unchanged delivery contract is not an owner approval gate.
 """
 
 CLAUDE = """# Claude entry point
@@ -116,6 +123,8 @@ class AgentContractTests(unittest.TestCase):
         (root / "AGENTS.md").write_text(KERNEL, encoding="utf-8")
         (root / "CLAUDE.md").write_text(CLAUDE, encoding="utf-8")
         (root / "docs/agents/ai-sdlc.md").write_text(SDLC, encoding="utf-8")
+        (root / "docs/agents/issue-tracker.md").write_text(
+            ISSUE_TRACKER, encoding="utf-8")
         (root / ".claude/skills/fixture/SKILL.md").write_text(SKILL, encoding="utf-8")
         (root / ".claude/skills/glassvow-suno/SKILL.md").write_text(
             SUNO_SKILL, encoding="utf-8")
@@ -140,6 +149,28 @@ class AgentContractTests(unittest.TestCase):
         temporary, root = self.make_fixture()
         self.addCleanup(temporary.cleanup)
         self.assertEqual([], CONTRACTS.validate_repository(root))
+
+    def test_scientific_and_delivery_corrections_stay_distinct(self) -> None:
+        temporary, root = self.make_fixture()
+        self.addCleanup(temporary.cleanup)
+        path = root / "docs/agents/ai-sdlc.md"
+        path.write_text(
+            SDLC.replace(
+                "A delivery implementation repair changes code or focused tests only "
+                "to satisfy unchanged acceptance.\n",
+                ""),
+            encoding="utf-8")
+        errors = CONTRACTS.validate_repository(root)
+        self.assertTrue(any("delivery implementation repair" in error
+                            for error in errors), errors)
+
+    def test_routine_delivery_bug_is_not_an_owner_gate(self) -> None:
+        temporary, root = self.make_fixture()
+        self.addCleanup(temporary.cleanup)
+        path = root / "docs/agents/issue-tracker.md"
+        path.write_text("# Issue Tracker\n", encoding="utf-8")
+        errors = CONTRACTS.validate_repository(root)
+        self.assertTrue(any("owner approval gate" in error for error in errors), errors)
 
     def test_claude_entrypoint_imports_the_kernel(self) -> None:
         temporary, root = self.make_fixture()

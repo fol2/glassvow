@@ -87,6 +87,8 @@ Preflight every required venue, tool, permission, and evidence channel before fr
 
 Freeze the finite decision graph once: nodes, immutable inputs, budgets, correction limits, and PASS/FAIL/INCONCLUSIVE transitions. A declared transition inside that accepted graph is execution authority; continue without a new owner message. Escalate only when the finite graph and its safe capability ladder are exhausted, or a true human-authority boundary is reached.
 
+Keep scientific-contract corrections separate from delivery implementation repairs. A scientific-contract correction changes the frozen question or acceptance; changes to immutable inputs, threat model, protocol cases, expected outcomes, or the semantic claim are in that category and follow the graph's authority rule. A delivery implementation repair changes code or focused tests only to satisfy unchanged acceptance. Fix reproducible delivery defects autonomously within the declared delivery budget; they neither consume nor renew a scientific correction limit. Stop only when the evidence invalidates the architecture or contract, the finite delivery budget is exhausted, or a genuine human-authority boundary is reached.
+
 Run independent experiments in isolation. Reuse deterministic harnesses and immutable inputs. Do not modify production content to try a candidate, do not open a PR per run, and do not trigger product CI for pure research. An experiment may fail or remain inconclusive without becoming a delivery failure.
 
 The output is a decision record: evidence, caveats, rejected alternatives, and the selected candidate—or an explicit stop. Raw exploration is not production truth.

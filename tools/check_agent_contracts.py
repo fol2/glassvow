@@ -12,6 +12,7 @@ KERNEL_PATH = Path("AGENTS.md")
 CLAUDE_PATH = Path("CLAUDE.md")
 COPILOT_PATH = Path(".github/copilot-instructions.md")
 SDLC_PATH = Path("docs/agents/ai-sdlc.md")
+ISSUE_TRACKER_PATH = Path("docs/agents/issue-tracker.md")
 REVIEWER_PATH = Path(".claude/agents/ai-sdlc-reviewer.md")
 SUNO_PATH = Path(".claude/skills/glassvow-suno/SKILL.md")
 ELEVENLABS_PATH = Path(".claude/skills/glassvow-elevenlabs/SKILL.md")
@@ -38,6 +39,11 @@ REQUIRED_SNIPPETS = {
         "Freeze the finite decision graph once",
         "A declared transition inside that accepted graph is execution authority",
         "Escalate only when the finite graph and its safe capability ladder are exhausted",
+        "A scientific-contract correction changes the frozen question or acceptance",
+        "A delivery implementation repair changes code or focused tests only to satisfy unchanged acceptance",
+    ),
+    ISSUE_TRACKER_PATH: (
+        "A routine test failure inside an unchanged delivery contract is not an owner approval gate",
     ),
     REVIEWER_PATH: (
         "name: ai-sdlc-reviewer",
