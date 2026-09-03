@@ -927,12 +927,16 @@ def _receipt_details(statement: Mapping[str, Any], trace: Mapping[str, Any] | No
     }
 
 
-def verify_case(args: argparse.Namespace) -> dict[str, Any]:
+def verify_case(
+        args: argparse.Namespace, *,
+        frozen_case_members: Mapping[str, bytes] | None = None,
+        frozen_challenge_bytes: bytes | None = None) -> dict[str, Any]:
     statement_path = args.case_dir / "statement.json"
     statement: dict[str, Any] = {}; trace_path = args.case_dir / "trace.tsv"; sidecar_path = args.case_dir / "sidecar.bin"
     trace: dict[str, Any] | None = None; trace_bytes = b""; sidecar = b""
     profile: dict[str, Any] = {}; g0: dict[str, Any] = {}; packet: dict[str, Any] = {}
-    case_members: dict[str, bytes] = {}; challenge_bytes = b""
+    case_members = dict(frozen_case_members) if frozen_case_members is not None else {}
+    challenge_bytes = frozen_challenge_bytes or b""
     challenge_value: str | None = None; trusted_inputs_ready = False
     try:
         profile, g0, packet = _load_sources(args.profile, args.g0_manifest, args.packet_manifest)
@@ -940,12 +944,16 @@ def verify_case(args: argparse.Namespace) -> dict[str, Any]:
                   for case in profile["cases"]}
         if args.case_id not in CASE_RESULTS or matrix.get(args.case_id) != CASE_RESULTS[args.case_id]:
             fail("PROVENANCE_INCOMPLETE", "matrix differs")
-        challenge_bytes = _bounded_bytes(
-            args.challenge, _limit(profile["caps"], "maxChallengeBytes"),
-            "INVOCATION_CHALLENGE_MISMATCH")
+        if frozen_challenge_bytes is None:
+            challenge_bytes = _bounded_bytes(
+                args.challenge, _limit(profile["caps"], "maxChallengeBytes"),
+                "INVOCATION_CHALLENGE_MISMATCH")
+        elif len(challenge_bytes) > _limit(profile["caps"], "maxChallengeBytes"):
+            fail("INVOCATION_CHALLENGE_MISMATCH", "challenge exceeds its cap")
         challenge_value = _decode_challenge(challenge_bytes)
         trusted_inputs_ready = True
-        case_members, _ = _preflight_case_members(args.case_dir, profile["caps"])
+        if frozen_case_members is None:
+            case_members, _ = _preflight_case_members(args.case_dir, profile["caps"])
         statement = json.loads(case_members["statement.json"].decode("utf-8"))
         if not isinstance(statement, dict):
             fail("PROVENANCE_INCOMPLETE", "statement.json is not an object")
@@ -1071,20 +1079,24 @@ def _campaign(args: argparse.Namespace) -> int:
             set(challenge_entries) != {f"{case_id}.txt" for case_id in expected_cases} or \
             any(not entry.is_file(follow_symlinks=False) for entry in raw_challenges):
         fail("PROVENANCE_INCOMPLETE", "campaign case or challenge set differs")
-    total = 0
+    total = 0; frozen_cases: dict[str, dict[str, bytes]] = {}
+    frozen_challenges: dict[str, bytes] = {}
     for case_id in sorted(expected_cases):
-        _, case_total = _preflight_case_members(
+        frozen_cases[case_id], case_total = _preflight_case_members(
             args.campaign_dir / case_id, profile["caps"])
         challenge = challenge_entries[f"{case_id}.txt"]
-        challenge_bytes = _bounded_bytes(
+        frozen_challenges[case_id] = _bounded_bytes(
             challenge, _limit(profile["caps"], "maxChallengeBytes"))
-        total += case_total + len(challenge_bytes)
+        total += case_total + len(frozen_challenges[case_id])
         if total > profile["caps"]["maxCampaignBytes"]:
             fail("PROVENANCE_INCOMPLETE", "campaign cap exceeded")
     receipts = []
     for case in profile["cases"]:
         current = argparse.Namespace(**vars(args)); current.case_id = case["id"]; current.case_dir = args.campaign_dir / case["id"]
-        current.challenge = args.challenges_dir / f"{case['id']}.txt"; receipts.append(verify_case(current))
+        current.challenge = args.challenges_dir / f"{case['id']}.txt"
+        receipts.append(verify_case(
+            current, frozen_case_members=frozen_cases[case["id"]],
+            frozen_challenge_bytes=frozen_challenges[case["id"]]))
     passed = all((item["verdict"], item["reason"]) == CASE_RESULTS[item["caseId"]] for item in receipts)
     result = {"schema": CAMPAIGN_SCHEMA, "verdict": "PASS" if passed else "FAIL", "receipts": receipts}
     result["receiptSha256"] = _sha(_canonical(result)); _exclusive(args.receipt_out, _canonical(result)); print(json.dumps(result, sort_keys=True))
