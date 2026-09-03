@@ -76,7 +76,7 @@ def refresh_statement(packet: Path) -> None:
     names = (
         "protocolSha256", "capsuleRoot", "case", "challenge", "command",
         "traceSha256", "subjectSha256", "stdoutSha256", "stderrSha256",
-        "externalTiming",
+        "externalTiming", "runtimeMount", "actualExecutable",
     )
     statement["invocation"] = sha256_bytes(canonical_bytes(
         {name: statement.get(name) for name in names}))
@@ -84,7 +84,10 @@ def refresh_statement(packet: Path) -> None:
 
 
 def copy_replay(source: Path, destination: Path) -> None:
-    for name in ("trace.tsv", "subject.bin", "stdout.bin", "stderr.bin", "statement.json"):
+    for name in (
+            "trace.tsv", "subject.bin", "stdout.bin", "stderr.bin",
+            "statement.json", "mount.json", "executed-executable.bin",
+            "runtime-capsule-attestation.json"):
         shutil.copyfile(source / name, destination / name)
 
 
@@ -113,7 +116,9 @@ def run_campaign(protocol_path: Path, output: Path) -> dict[str, Any]:
             run([sys.executable, str(VERIFIER), "challenge",
                  "--protocol", str(protocol_path), "--case", case_id,
                  "--output", str(challenge)])
-            supplied = supplied_root / case_id
+            supplied_base = supplied_root / case_id
+            supplied_base.mkdir()
+            supplied = supplied_base / capsule.name
             shutil.copytree(capsule, supplied)
             make_writable(supplied)
             packet = results / case_id
@@ -156,12 +161,16 @@ def run_campaign(protocol_path: Path, output: Path) -> dict[str, Any]:
                 run_command.extend(["--extra", extra])
             run(run_command, timeout=15)
             mounted.append(runtime)
+            run([sys.executable, str(VERIFIER), "mount",
+                 "--protocol", str(protocol_path), "--capsule", str(capsule),
+                 "--supplied", str(supplied), "--packet", str(packet),
+                 "--output", str(packet / "runtime-capsule-attestation.json")])
+            run(["sudo", "-n", "umount", str(runtime)])
+            mounted.remove(runtime)
             if case_id == "N05":
                 current = packet / "attack-current"
                 current.mkdir()
-                for name in ("trace.tsv", "subject.bin", "stdout.bin",
-                             "stderr.bin", "statement.json"):
-                    shutil.copyfile(packet / name, current / name)
+                copy_replay(packet, current)
                 copy_replay(results / "V00", packet)
             elif case_id == "N06":
                 shutil.copyfile(results / "V00" / "subject.bin", packet / "subject.bin")

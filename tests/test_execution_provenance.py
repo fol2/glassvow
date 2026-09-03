@@ -6,6 +6,7 @@ import importlib.util
 import hashlib
 import json
 import os
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -46,6 +47,23 @@ def trace_lines(*events: str, count: int | None = None) -> list[str]:
         *events,
         f"END\t{event_count}\t100\t250\t150\t0\t0\t-",
     ]
+
+
+def build_test_capsule(root: Path) -> Path:
+    workspace = root / "workspace"
+    workspace.mkdir()
+    fake_executable = root / "fake-executable"
+    fake_executable.write_bytes(b"bounded executable")
+    digest = hashlib.sha256(fake_executable.read_bytes()).hexdigest()
+    fake_build = {
+        "compiler": "/usr/bin/cc", "compilerVersion": "test",
+        "commands": [], "tracer": str(fake_executable),
+        "tracerSha256": digest, "workload": str(fake_executable),
+        "workloadSha256": digest,
+    }
+    with mock.patch.object(RUNNER, "compile_components", return_value=fake_build):
+        record = RUNNER.build_capsule(PROTOCOL_PATH, workspace)
+    return Path(record["capsule"])
 
 
 class ExecutionProvenancePreflightTests(unittest.TestCase):
@@ -128,6 +146,11 @@ class ExecutionProvenancePreflightTests(unittest.TestCase):
         self.assertIn(
             "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
             text)
+        self.assertIn("tree=$tree_sha protocol_sha256=$protocol_sha", text)
+        self.assertIn("issues/$authority_issue/comments", text)
+        self.assertNotIn(
+            'if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then\n'
+            '            echo "approved=true"', text)
 
     def test_self_test_does_not_require_linux_or_sudo(self) -> None:
         with tempfile.TemporaryDirectory(prefix="glassvow-provenance-self-test-"):
@@ -142,6 +165,7 @@ class ExecutionProvenancePolicyTests(unittest.TestCase):
             "provenance_complete": True,
             "trace_violation": None,
             "challenge_matches": True,
+            "runtime_capsule_matches": True,
             "input_path_matches": True,
             "input_bytes_match": True,
             "executable_matches": True,
@@ -175,7 +199,7 @@ class ExecutionProvenancePolicyTests(unittest.TestCase):
             {"verdict": "PASS", "reason": "ADMITTED"},
             self.verdict("V00"))
         cases = {
-            "N01": {"input_bytes_match": False},
+            "N01": {"runtime_capsule_matches": False},
             "N02": {"input_path_matches": False, "input_bytes_match": False},
             "N03": {"executable_matches": False},
             "N04": {"request_matches": False},
@@ -211,21 +235,7 @@ class ExecutionProvenancePolicyTests(unittest.TestCase):
     def test_capsule_builder_binds_all_frozen_roles_and_permissions(self) -> None:
         with tempfile.TemporaryDirectory(prefix="glassvow-capsule-test-") as temporary:
             root = Path(temporary)
-            workspace = root / "workspace"
-            workspace.mkdir()
-            fake_executable = root / "fake-executable"
-            fake_executable.write_bytes(b"bounded executable")
-            fake_build = {
-                "compiler": "/usr/bin/cc", "compilerVersion": "test",
-                "commands": [], "tracer": str(fake_executable),
-                "tracerSha256": hashlib.sha256(fake_executable.read_bytes()).hexdigest(),
-                "workload": str(fake_executable),
-                "workloadSha256": hashlib.sha256(fake_executable.read_bytes()).hexdigest(),
-            }
-            with mock.patch.object(
-                    RUNNER, "compile_components", return_value=fake_build):
-                record = RUNNER.build_capsule(PROTOCOL_PATH, workspace)
-            capsule = Path(record["capsule"])
+            capsule = build_test_capsule(root)
             manifest = json.loads(
                 (capsule / "manifest.json").read_text(encoding="utf-8"))
             payload = {"schema": manifest["schema"], "members": manifest["members"]}
@@ -239,6 +249,90 @@ class ExecutionProvenancePolicyTests(unittest.TestCase):
                 mode == "0444" for path, mode in modes.items()
                 if path != "expected-executable"))
             self.assertEqual(0o555, os.stat(capsule).st_mode & 0o777)
+            observed = VERIFIER._observed_capsule(capsule, self.protocol)
+            self.assertEqual(manifest["root"], observed["actualRoot"])
+            supplied = root / "supplied"
+            shutil.copytree(capsule, supplied)
+            os.chmod(supplied, 0o755)
+            os.chmod(supplied / "opaque-role.bin", 0o644)
+            with (supplied / "opaque-role.bin").open("ab") as handle:
+                handle.write(b"trailing bytes must change the root")
+            self.assertNotEqual(
+                manifest["root"],
+                VERIFIER._observed_capsule(supplied, self.protocol)["actualRoot"])
+            (supplied / "opaque-role.bin").write_bytes(
+                (capsule / "opaque-role.bin").read_bytes())
+            os.chmod(supplied / "opaque-role.bin", 0o444)
+            (supplied / "undeclared.bin").write_bytes(b"undeclared")
+            os.chmod(supplied / "undeclared.bin", 0o444)
+            self.assertNotEqual(
+                manifest["root"],
+                VERIFIER._observed_capsule(supplied, self.protocol)["actualRoot"])
+
+    def test_saved_mount_attestation_replays_without_a_live_mount(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="glassvow-replay-test-") as temporary:
+            root = Path(temporary).resolve()
+            capsule = build_test_capsule(root)
+            campaign = root / "campaign"
+            packet = campaign / "cases" / "V00"
+            packet.mkdir(parents=True)
+            supplied = campaign / "supplied-capsules" / "V00" / capsule.name
+            supplied.parent.mkdir(parents=True)
+            shutil.copytree(capsule, supplied)
+            (packet / "trace.tsv").write_bytes(b"portable raw trace")
+            (packet / "executed-executable.bin").write_bytes(b"bounded executable")
+            runtime_target = "/detached/original/runtime-capsule"
+            mount = {
+                "source": "/detached/original/supplied-capsule",
+                "target": runtime_target,
+                "options": "ro,relatime",
+                "writeRejected": True,
+            }
+            VERIFIER.write_json(packet / "mount.json", mount)
+            observed = VERIFIER._observed_capsule(supplied, self.protocol)
+            input_stat = (supplied / "opaque-role.bin").stat()
+            attestation = {
+                "schema": VERIFIER.RUNTIME_CAPSULE_ATTESTATION_SCHEMA,
+                "protocolSha256": VERIFIER.sha256_file(PROTOCOL_PATH),
+                "frozenCapsuleRoot": observed["actualRoot"],
+                "suppliedEvidence": supplied.relative_to(campaign).as_posix(),
+                "runtimeTarget": runtime_target,
+                "runtimeInput": {
+                    "path": f"{runtime_target}/opaque-role.bin",
+                    "device": input_stat.st_dev,
+                    "inode": input_stat.st_ino,
+                    "bytes": input_stat.st_size,
+                    "sameSourceObject": True,
+                },
+                "mountBound": True,
+                "matchesFrozenRoot": True,
+                "suppliedObservation": observed,
+                "runtimeObservation": observed,
+                "osMount": {
+                    "source": "/dev/root[/detached/original/supplied-capsule]",
+                    "target": runtime_target,
+                    "options": "ro,relatime",
+                },
+                "writeRejectedByVerifier": True,
+                "evidence": {
+                    "traceSha256": VERIFIER.sha256_file(packet / "trace.tsv"),
+                    "mountSha256": VERIFIER.sha256_file(packet / "mount.json"),
+                    "executedExecutableSha256": VERIFIER.sha256_file(
+                        packet / "executed-executable.bin"),
+                    "verifierSha256": VERIFIER.sha256_file(VERIFIER_PATH),
+                },
+            }
+            attestation["attestationSha256"] = VERIFIER.sha256_bytes(
+                VERIFIER.canonical_bytes(attestation))
+            VERIFIER.write_json(
+                packet / "runtime-capsule-attestation.json", attestation)
+            self.assertFalse(Path(runtime_target).exists())
+            with mock.patch.object(
+                    VERIFIER.subprocess, "run",
+                    side_effect=AssertionError("offline replay called findmnt")):
+                replay = VERIFIER._runtime_attestation(
+                    PROTOCOL_PATH, capsule, packet)
+            self.assertTrue(replay["matchesFrozenRoot"])
 
     def test_native_surfaces_name_every_frozen_control(self) -> None:
         workload = (ROOT / "tools/execution_provenance/inert_workload.c").read_text(

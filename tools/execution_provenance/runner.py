@@ -190,6 +190,9 @@ def run_invocation(
         raise RunnerError("supervisor kill wall cap exceeded") from error
     (packet / "stdout.bin").write_bytes(result.stdout)
     (packet / "stderr.bin").write_bytes(result.stderr)
+    executable_evidence = packet / "executed-executable.bin"
+    shutil.copyfile(executable, executable_evidence)
+    os.chmod(executable_evidence, 0o444)
     if not output.exists():
         output.write_bytes(b"")
     if not trace.is_file():
@@ -202,6 +205,14 @@ def run_invocation(
         "startedNs": int(end[2]), "finishedNs": int(end[3]),
         "durationNs": int(end[4]),
     }
+    executable_stat = executable.stat()
+    executable_binding = {
+        "path": str(executable),
+        "device": executable_stat.st_dev,
+        "inode": executable_stat.st_ino,
+        "sha256": sha256_file(executable),
+        "evidenceSha256": sha256_file(executable_evidence),
+    }
     bindings = {
         "protocolSha256": sha256_file(protocol_path),
         "capsuleRoot": build["capsuleRoot"],
@@ -212,11 +223,13 @@ def run_invocation(
         "stdoutSha256": sha256_bytes(result.stdout),
         "stderrSha256": sha256_bytes(result.stderr),
         "externalTiming": timing,
+        "runtimeMount": mount,
+        "actualExecutable": executable_binding,
     }
     statement = {
         "schema": STATEMENT_SCHEMA, **bindings,
         "invocation": sha256_bytes(canonical_bytes(bindings)),
-        "actualInput": str(input_path), "actualExecutable": str(executable),
+        "actualInput": str(input_path),
         "actualRequest": request, "returncode": result.returncode,
         "runtimeMount": mount,
         "tracerSha256": build["build"]["tracerSha256"],

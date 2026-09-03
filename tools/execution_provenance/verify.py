@@ -14,9 +14,12 @@ from typing import Any, Sequence
 
 
 PROTOCOL_SCHEMA = "glassvow.execution-provenance.protocol/v1"
+CAPSULE_SCHEMA = "glassvow.execution-provenance.capsule/v1"
 CHALLENGE_SCHEMA = "glassvow.execution-provenance.challenge/v1"
 CASE_SCHEMA = "glassvow.execution-provenance.case-verdict/v1"
 CAMPAIGN_SCHEMA = "glassvow.execution-provenance.campaign-receipt/v1"
+RUNTIME_CAPSULE_ATTESTATION_SCHEMA = \
+    "glassvow.execution-provenance.runtime-capsule-attestation/v1"
 EXPECTED_CASES = ["V00"] + [f"N{index:02d}" for index in range(1, 11)]
 EXPECTED_OUTCOMES = {
     "V00": ("PASS", "ADMITTED"),
@@ -142,6 +145,8 @@ def policy_verdict(
         return {"verdict": "REJECT", "reason": str(violation)}
     if not observation.get("challenge_matches"):
         return {"verdict": "REJECT", "reason": "INVOCATION_CHALLENGE_MISMATCH"}
+    if not observation.get("runtime_capsule_matches"):
+        return {"verdict": "REJECT", "reason": "POST_FREEZE_CORPUS_REPLACEMENT"}
     if not observation.get("input_path_matches"):
         return {"verdict": "REJECT", "reason": "SAME_NAME_DIFFERENT_BYTES"}
     if not observation.get("input_bytes_match"):
@@ -295,7 +300,8 @@ def _capsule(capsule: Path, protocol: dict[str, Any]) -> dict[str, Any]:
     manifest = read_json(capsule / "manifest.json")
     payload = {"schema": manifest.get("schema"), "members": manifest.get("members")}
     root = sha256_bytes(canonical_bytes(payload))
-    if manifest.get("root") != root or capsule.name != f"sha256-{root}":
+    if manifest.get("schema") != CAPSULE_SCHEMA \
+            or manifest.get("root") != root or capsule.name != f"sha256-{root}":
         raise VerificationError("canonical capsule root is invalid")
     members = manifest.get("members")
     if not isinstance(members, list) or len(members) > protocol["caps"]["maxCapsuleMembers"]:
@@ -312,6 +318,8 @@ def _capsule(capsule: Path, protocol: dict[str, Any]) -> dict[str, Any]:
         path = capsule / relative
         if not path.is_file() or path.is_symlink() or sha256_file(path) != member.get("sha256"):
             raise VerificationError(f"capsule member binding failed: {relative}")
+        if member.get("bytes") != path.stat().st_size:
+            raise VerificationError(f"capsule member size drifted: {relative}")
         wanted_mode = "0555" if relative == "expected-executable" else "0444"
         if member.get("mode") != wanted_mode \
                 or f"{path.stat().st_mode & 0o777:04o}" != wanted_mode:
@@ -378,11 +386,222 @@ def _covered_reads(trace: dict[str, Any]) -> tuple[bool, bytes]:
     return operations == {"read", "pread64"}, bytes(consumed)
 
 
-def _mount_is_read_only(target: Path) -> bool:
+def _observed_capsule(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
+    if not root.is_dir() or root.is_symlink():
+        raise VerificationError("observed capsule root is unavailable or unsafe")
+    members: list[dict[str, Any]] = []
+    directories: dict[str, str] = {}
+    manifest: dict[str, Any] | None = None
+    for path in sorted(root.rglob("*")):
+        relative = path.relative_to(root).as_posix()
+        if path.is_symlink():
+            raise VerificationError(f"observed capsule symlink is forbidden: {relative}")
+        if path.is_dir():
+            directories[relative] = f"{path.stat().st_mode & 0o777:04o}"
+        elif path.is_file():
+            if relative == "manifest.json":
+                manifest = read_json(path)
+            else:
+                members.append({
+                    "path": relative,
+                    "bytes": path.stat().st_size,
+                    "sha256": sha256_file(path),
+                    "mode": f"{path.stat().st_mode & 0o777:04o}",
+                })
+        else:
+            raise VerificationError(f"observed capsule member is not regular: {relative}")
+    if manifest is None:
+        raise VerificationError("observed capsule manifest is missing")
+    if len(members) > protocol["caps"]["maxCapsuleMembers"] \
+            or sum(member["bytes"] for member in members) \
+            > protocol["caps"]["maxCapsuleBytes"]:
+        raise VerificationError("observed capsule exceeds a frozen cap")
+    payload = {"schema": CAPSULE_SCHEMA, "members": members}
+    return {
+        "actualRoot": sha256_bytes(canonical_bytes(payload)),
+        "members": members,
+        "manifest": manifest,
+        "manifestSha256": sha256_file(root / "manifest.json"),
+        "rootMode": f"{root.stat().st_mode & 0o777:04o}",
+        "directoryModes": directories,
+    }
+
+
+def _safe_evidence_path(root: Path, relative: str) -> Path:
+    path = Path(relative)
+    if path.is_absolute() or not path.parts or ".." in path.parts:
+        raise VerificationError("runtime capsule evidence path is unsafe")
+    candidate = root / path
+    try:
+        resolved = candidate.resolve(strict=True)
+    except OSError as error:
+        raise VerificationError("runtime capsule evidence is unavailable") from error
+    if not candidate.is_relative_to(root) or resolved != candidate:
+        raise VerificationError("runtime capsule evidence escaped its campaign")
+    return candidate
+
+
+def attest_runtime_capsule(
+        protocol_path: Path, capsule: Path, supplied: Path,
+        packet: Path) -> dict[str, Any]:
+    protocol = read_json(protocol_path)
+    validate_protocol(protocol)
+    canonical = _capsule(capsule, protocol)
+    runtime = packet / "runtime-capsule"
+    mount = read_json(packet / "mount.json")
+    supplied_observation = _observed_capsule(supplied, protocol)
+    runtime_observation = _observed_capsule(runtime, protocol)
     result = subprocess.run(
-        ["findmnt", "--noheadings", "--output", "OPTIONS", "--target", str(target)],
+        ["findmnt", "--json", "--output", "SOURCE,TARGET,OPTIONS",
+         "--target", str(runtime)],
         check=False, capture_output=True, text=True)
-    return result.returncode == 0 and "ro" in result.stdout.strip().split(",")
+    if result.returncode != 0:
+        raise VerificationError("runtime capsule mount is not OS-observable")
+    try:
+        filesystems = json.loads(result.stdout).get("filesystems", [])
+    except (AttributeError, json.JSONDecodeError) as error:
+        raise VerificationError("runtime capsule mount record is malformed") from error
+    if len(filesystems) != 1 or not isinstance(filesystems[0], dict):
+        raise VerificationError("runtime capsule mount is not uniquely identified")
+    observed_mount = filesystems[0]
+    options = str(observed_mount.get("options", ""))
+    try:
+        (runtime / ".independent-write-probe").write_bytes(b"must fail")
+    except OSError:
+        write_rejected = True
+    else:
+        write_rejected = False
+        (runtime / ".independent-write-probe").unlink(missing_ok=True)
+    source_stat = supplied.stat()
+    runtime_stat = runtime.stat()
+    source_input_stat = (supplied / "opaque-role.bin").stat()
+    runtime_input_stat = (runtime / "opaque-role.bin").stat()
+    mount_bound = mount == {
+        "source": str(supplied), "target": str(runtime),
+        "options": options, "writeRejected": True,
+    } and observed_mount.get("target") == str(runtime) \
+        and "ro" in options.split(",") and write_rejected \
+        and (source_stat.st_dev, source_stat.st_ino) \
+        == (runtime_stat.st_dev, runtime_stat.st_ino)
+    if not mount_bound:
+        raise VerificationError("runtime capsule mount binding is incomplete")
+    expected_directories = {"requests": "0555"}
+    expected_observation = {
+        "actualRoot": canonical["root"],
+        "members": canonical["manifest"]["members"],
+        "manifest": canonical["manifest"],
+        "manifestSha256": sha256_file(capsule / "manifest.json"),
+        "rootMode": "0555",
+        "directoryModes": expected_directories,
+    }
+    supplied_relative = supplied.relative_to(packet.parents[1]).as_posix()
+    record = {
+        "schema": RUNTIME_CAPSULE_ATTESTATION_SCHEMA,
+        "protocolSha256": sha256_file(protocol_path),
+        "frozenCapsuleRoot": canonical["root"],
+        "suppliedEvidence": supplied_relative,
+        "runtimeTarget": str(runtime),
+        "runtimeInput": {
+            "path": str(runtime / "opaque-role.bin"),
+            "device": runtime_input_stat.st_dev,
+            "inode": runtime_input_stat.st_ino,
+            "bytes": runtime_input_stat.st_size,
+            "sameSourceObject": (
+                source_input_stat.st_dev, source_input_stat.st_ino)
+            == (runtime_input_stat.st_dev, runtime_input_stat.st_ino),
+        },
+        "mountBound": mount_bound,
+        "matchesFrozenRoot": supplied.name == capsule.name
+        and supplied_observation == expected_observation
+        and runtime_observation == expected_observation,
+        "suppliedObservation": supplied_observation,
+        "runtimeObservation": runtime_observation,
+        "osMount": observed_mount,
+        "writeRejectedByVerifier": write_rejected,
+        "evidence": {
+            "traceSha256": sha256_file(packet / "trace.tsv"),
+            "mountSha256": sha256_file(packet / "mount.json"),
+            "executedExecutableSha256": sha256_file(
+                packet / "executed-executable.bin"),
+            "verifierSha256": sha256_file(Path(__file__)),
+        },
+    }
+    record["attestationSha256"] = sha256_bytes(canonical_bytes(record))
+    return record
+
+
+def _runtime_attestation(
+        protocol_path: Path, capsule: Path, packet: Path) -> dict[str, Any]:
+    protocol = read_json(protocol_path)
+    record = read_json(packet / "runtime-capsule-attestation.json")
+    supplied_digest = record.pop("attestationSha256", None)
+    if supplied_digest != sha256_bytes(canonical_bytes(record)):
+        raise VerificationError("runtime capsule attestation digest is invalid")
+    record["attestationSha256"] = supplied_digest
+    canonical = _capsule(capsule, protocol)
+    if record.get("schema") != RUNTIME_CAPSULE_ATTESTATION_SCHEMA \
+            or record.get("protocolSha256") != sha256_file(protocol_path) \
+            or record.get("frozenCapsuleRoot") != canonical["root"] \
+            or record.get("mountBound") is not True \
+            or record.get("writeRejectedByVerifier") is not True \
+            or not isinstance(record.get("runtimeTarget"), str) \
+            or not isinstance(record.get("runtimeInput"), dict) \
+            or record["runtimeInput"].get("sameSourceObject") is not True:
+        raise VerificationError("runtime capsule attestation authority is invalid")
+    relative = record.get("suppliedEvidence")
+    if not isinstance(relative, str):
+        raise VerificationError("runtime capsule evidence path is missing")
+    supplied = _safe_evidence_path(packet.parents[1], relative)
+    supplied_observation = _observed_capsule(supplied, protocol)
+    if supplied_observation != record.get("suppliedObservation") \
+            or record.get("runtimeObservation") != supplied_observation:
+        raise VerificationError("persisted runtime capsule evidence drifted")
+    expected_observation = {
+        "actualRoot": canonical["root"],
+        "members": canonical["manifest"]["members"],
+        "manifest": canonical["manifest"],
+        "manifestSha256": sha256_file(capsule / "manifest.json"),
+        "rootMode": "0555",
+        "directoryModes": {"requests": "0555"},
+    }
+    expected_match = supplied.name == capsule.name \
+        and supplied_observation == expected_observation
+    if record.get("matchesFrozenRoot") is not expected_match:
+        raise VerificationError("runtime capsule root decision drifted")
+    runtime_input = record["runtimeInput"]
+    runtime_target = record["runtimeTarget"]
+    mount = read_json(packet / "mount.json")
+    os_mount = record.get("osMount")
+    if not isinstance(os_mount, dict) \
+            or not Path(runtime_target).is_absolute() \
+            or len(runtime_target.encode("utf-8")) > protocol["caps"]["maxPathBytes"] \
+            or mount.get("target") != runtime_target \
+            or mount.get("options") != os_mount.get("options") \
+            or os_mount.get("target") != runtime_target \
+            or mount.get("writeRejected") is not True \
+            or "ro" not in str(mount.get("options", "")).split(",") \
+            or runtime_input.get("path") \
+            != str(Path(runtime_target) / "opaque-role.bin") \
+            or not isinstance(runtime_input.get("device"), int) \
+            or isinstance(runtime_input.get("device"), bool) \
+            or not isinstance(runtime_input.get("inode"), int) \
+            or isinstance(runtime_input.get("inode"), bool) \
+            or not isinstance(runtime_input.get("bytes"), int) \
+            or isinstance(runtime_input.get("bytes"), bool) \
+            or runtime_input.get("bytes") < 0 \
+            or runtime_input.get("bytes") > protocol["caps"]["maxInputRoleBytes"]:
+        raise VerificationError("runtime capsule mount evidence is malformed")
+    evidence = record.get("evidence")
+    expected_evidence = {
+        "traceSha256": sha256_file(packet / "trace.tsv"),
+        "mountSha256": sha256_file(packet / "mount.json"),
+        "executedExecutableSha256": sha256_file(
+            packet / "executed-executable.bin"),
+        "verifierSha256": sha256_file(Path(__file__)),
+    }
+    if evidence != expected_evidence:
+        raise VerificationError("runtime capsule attestation evidence drifted")
+    return record
 
 
 def _statement_integrity(statement: dict[str, Any], packet: Path) -> bool:
@@ -391,10 +610,23 @@ def _statement_integrity(statement: dict[str, Any], packet: Path) -> bool:
     if any(statement.get(key) != sha256_file(packet / name)
            for name, key in zip(names, keys)):
         return False
+    executable = statement.get("actualExecutable")
+    if not isinstance(executable, dict) \
+            or not isinstance(executable.get("path"), str) \
+            or not isinstance(executable.get("device"), int) \
+            or isinstance(executable.get("device"), bool) \
+            or not isinstance(executable.get("inode"), int) \
+            or isinstance(executable.get("inode"), bool) \
+            or executable.get("sha256") \
+            != sha256_file(packet / "executed-executable.bin") \
+            or executable.get("evidenceSha256") \
+            != sha256_file(packet / "executed-executable.bin") \
+            or statement.get("runtimeMount") != read_json(packet / "mount.json"):
+        return False
     binding_names = (
         "protocolSha256", "capsuleRoot", "case", "challenge", "command",
         "traceSha256", "subjectSha256", "stdoutSha256", "stderrSha256",
-        "externalTiming",
+        "externalTiming", "runtimeMount", "actualExecutable",
     )
     bindings = {name: statement.get(name) for name in binding_names}
     return statement.get("invocation") == sha256_bytes(canonical_bytes(bindings))
@@ -423,10 +655,13 @@ def verify_case(
     if supplied_challenge != sha256_bytes(canonical_bytes(challenge_body)):
         raise VerificationError("challenge digest is invalid")
     statement = read_json(packet / "statement.json")
+    runtime_attestation = _runtime_attestation(protocol_path, capsule, packet)
     trace = parse_trace(packet / "trace.tsv", protocol["caps"])
     subject = _read_capped(packet / "subject.bin", protocol["caps"]["maxOutputBytes"])
     stdout = _read_capped(packet / "stdout.bin", protocol["caps"]["maxStdoutBytes"])
-    _read_capped(packet / "stderr.bin", protocol["caps"]["maxStderrBytes"])
+    stderr = _read_capped(packet / "stderr.bin", protocol["caps"]["maxStderrBytes"])
+    executable_snapshot = _read_capped(
+        packet / "executed-executable.bin", protocol["caps"]["maxCapsuleBytes"])
     commands = [event for event in trace["events"] if event["type"] == "command"]
     executions = [event for event in trace["events"] if event["type"] == "exec"]
     command = commands[0] if len(commands) == 1 else {}
@@ -436,6 +671,7 @@ def verify_case(
     writes = [event for event in trace["events"] if event["type"] == "write"]
     written_subject = b"".join(event["bytes"] for event in writes if event["fd"] == 4)
     written_stdout = b"".join(event["bytes"] for event in writes if event["fd"] == 1)
+    written_stderr = b"".join(event["bytes"] for event in writes if event["fd"] == 2)
     writes_valid = all(event["returned"] == len(event["bytes"])
                        and event["returned"] <= event["requested"]
                        and event["fd"] in {1, 2, 4} for event in writes)
@@ -443,8 +679,26 @@ def verify_case(
     expected_exec = capsule / "expected-executable"
     expected_request = (capsule / "requests" / f"{case_id}.txt").read_text(
         encoding="utf-8").rstrip("\n")
-    actual_exec = Path(str(execution.get("path", "/missing")))
-    runtime_input = (packet / "runtime-capsule" / "opaque-role.bin").resolve()
+    executable_binding = statement.get("actualExecutable")
+    if not isinstance(executable_binding, dict):
+        executable_binding = {}
+    executable_snapshot_sha = sha256_bytes(executable_snapshot)
+    executable_identity_complete = bool(execution) \
+        and execution.get("path") == executable_binding.get("path") \
+        and execution.get("device") == executable_binding.get("device") \
+        and execution.get("inode") == executable_binding.get("inode") \
+        and executable_binding.get("sha256") == executable_snapshot_sha \
+        and executable_binding.get("evidenceSha256") == executable_snapshot_sha
+    runtime_input_identity = runtime_attestation.get("runtimeInput")
+    if not isinstance(runtime_input_identity, dict):
+        runtime_input_identity = {}
+    runtime_input = str(runtime_input_identity.get("path", "/missing"))
+    input_identity_matches = trace["input"] == {
+        "device": runtime_input_identity.get("device"),
+        "inode": runtime_input_identity.get("inode"),
+        "size": runtime_input_identity.get("bytes"),
+        "path": runtime_input,
+    }
     timing = statement.get("externalTiming")
     timing_matches = timing == {
         "clock": protocol["clock"]["name"],
@@ -456,32 +710,38 @@ def verify_case(
                   if event["type"] == "violation"]
     violation_matches = (not violations and trace["violation"] is None) \
         or violations == [trace["violation"]]
-    statement_authority = statement.get("protocolSha256") == sha256_file(protocol_path) \
+    statement_authority = statement.get("schema") \
+        == "glassvow.execution-provenance.statement/v1" \
+        and statement.get("protocolSha256") == sha256_file(protocol_path) \
         and statement.get("capsuleRoot") == capsule_record["root"]
     paths = [trace["input"]["path"], str(command.get("executable", "")),
              str(command.get("extra", "")), str(execution.get("path", ""))]
     provenance_complete = lineage_valid and violation_matches and writes_valid \
-        and statement_authority \
+        and statement_authority and executable_identity_complete \
         and all(len(path.encode("utf-8")) <= protocol["caps"]["maxPathBytes"]
                 for path in paths) \
-        and _mount_is_read_only(packet / "runtime-capsule") \
+        and runtime_attestation.get("mountBound") is True \
         and _statement_integrity(statement, packet) \
         and trace["dropped"] == protocol["caps"]["permittedDroppedEvents"]
+    runtime_capsule_matches = runtime_attestation.get("matchesFrozenRoot") is True
     observation = {
         "provenance_complete": provenance_complete,
         "trace_violation": trace["violation"],
         "challenge_matches": command.get("challenge") == challenge["challenge"]
-        and statement.get("challenge") == challenge["challenge"],
-        "input_path_matches": trace["input"]["path"] == str(runtime_input),
-        "input_bytes_match": consumed == expected_input,
-        "executable_matches": actual_exec.is_file()
-        and sha256_file(actual_exec) == sha256_file(expected_exec),
+        and statement.get("challenge") == challenge["challenge"]
+        and statement.get("case") == challenge["case"],
+        "runtime_capsule_matches": runtime_capsule_matches,
+        "input_path_matches": input_identity_matches,
+        "input_bytes_match": trace["input"]["size"] == len(expected_input)
+        and (consumed == expected_input
+             or (not consumed and runtime_capsule_matches and input_identity_matches)),
+        "executable_matches": executable_snapshot_sha == sha256_file(expected_exec),
         "request_matches": command.get("request") == expected_request,
         "timing_present_and_matches": timing_matches,
         "current_consumption_complete": reads_complete
         and len(consumed) == protocol["caps"]["requiredConsumedBytes"],
         "subject_is_current_output": written_subject == subject
-        and written_stdout == stdout,
+        and written_stdout == stdout and written_stderr == stderr,
         "output_matches": subject == expected_input,
         "external_duration_ns": trace["duration_ns"],
         "child_claim_ns": 1 if stdout == b"CHILD_ELAPSED_NS=1\n" else None,
@@ -491,11 +751,13 @@ def verify_case(
         "V00": trace["root_exit"] == 0
         and all(event["code"] == 0 for event in trace["events"]
                 if event["type"] == "exit")
-        and len(lineage) == protocol["caps"]["validProcessCount"],
-        "N01": trace["input"]["path"] == str(runtime_input) and consumed != expected_input,
+        and len(lineage) == protocol["caps"]["validProcessCount"]
+        and runtime_capsule_matches,
+        "N01": trace["input"]["path"] == runtime_input
+        and not runtime_capsule_matches,
         "N02": Path(trace["input"]["path"]).name == "opaque-role.bin"
-        and trace["input"]["path"] != str(runtime_input) and consumed != expected_input,
-        "N03": actual_exec.is_file() and sha256_file(actual_exec) != sha256_file(expected_exec),
+        and not input_identity_matches and consumed != expected_input,
+        "N03": executable_snapshot_sha != sha256_file(expected_exec),
         "N04": command.get("request") != expected_request,
         "N05": command.get("challenge") != challenge["challenge"],
         "N06": not reads_complete and subject == expected_input and written_subject != subject,
@@ -508,10 +770,13 @@ def verify_case(
     }
     witness_complete = witnesses[case_id]
     files = {}
-    for name in ("trace.tsv", "subject.bin", "stdout.bin", "stderr.bin", "statement.json"):
+    for name in (
+            "trace.tsv", "subject.bin", "stdout.bin", "stderr.bin",
+            "statement.json", "mount.json", "executed-executable.bin",
+            "runtime-capsule-attestation.json"):
         path = packet / name
         files[name] = {"bytes": path.stat().st_size, "sha256": sha256_file(path)}
-    return {
+    result = {
         "schema": CASE_SCHEMA,
         "case": case_id,
         "protocolSha256": sha256_file(protocol_path),
@@ -530,10 +795,13 @@ def verify_case(
                         "actualInputPath": trace["input"]["path"],
                         "actualInputSha256": sha256_bytes(consumed),
                         "actualExecutablePath": str(execution.get("path", "")),
-                        "actualExecutableSha256": sha256_file(actual_exec)
-                        if actual_exec.is_file() else None},
+                        "actualExecutableSha256": executable_snapshot_sha,
+                        "runtimeCapsuleRoot": runtime_attestation.get(
+                            "runtimeObservation", {}).get("actualRoot")},
         "artifacts": files,
     }
+    result["caseIdentity"] = sha256_bytes(canonical_bytes(result))
+    return result
 
 
 def verify_campaign(
@@ -555,6 +823,7 @@ def verify_campaign(
                       "reason": verdict["reason"],
                       "matchesExpectation": verdict["matchesExpectation"],
                       "challenge": verdict["challenge"],
+                      "caseIdentity": verdict["caseIdentity"],
                       "receiptSha256": sha256_bytes(primary)})
     if len({case["challenge"] for case in cases}) != len(cases):
         raise VerificationError("verifier challenges are not unique")
@@ -575,9 +844,11 @@ def verify_campaign(
         if server and repository and run_id else None
     build = read_json(results.parent / "workspace" / "build.json")
     binaries = build.get("build", {})
+    built_supervisor = results.parent / "workspace" / "build" / "trace-supervisor"
+    built_workload = results.parent / "workspace" / "build" / "expected-executable"
     executable_identities = {
-        "supervisorSha256": sha256_file(Path(binaries["tracer"])),
-        "workloadSha256": sha256_file(Path(binaries["workload"])),
+        "supervisorSha256": sha256_file(built_supervisor),
+        "workloadSha256": sha256_file(built_workload),
         "compiler": binaries.get("compiler"),
         "compilerVersion": binaries.get("compilerVersion"),
         "commands": binaries.get("commands"),
@@ -606,6 +877,7 @@ def verify_campaign(
             "workflowAttempt": os.environ.get("GITHUB_RUN_ATTEMPT"),
         },
         "deterministicVerificationReplay": True,
+        "mechanicalCorrectionsUsed": 1,
         "caseCount": len(cases),
         "cases": cases,
         "campaignBytes": total,
@@ -628,6 +900,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     challenge_parser.add_argument("--protocol", type=Path, required=True)
     challenge_parser.add_argument("--case", required=True)
     challenge_parser.add_argument("--output", type=Path, required=True)
+    mount_parser = subparsers.add_parser("mount")
+    mount_parser.add_argument("--protocol", type=Path, required=True)
+    mount_parser.add_argument("--capsule", type=Path, required=True)
+    mount_parser.add_argument("--supplied", type=Path, required=True)
+    mount_parser.add_argument("--packet", type=Path, required=True)
+    mount_parser.add_argument("--output", type=Path, required=True)
     case_parser = subparsers.add_parser("case")
     case_parser.add_argument("--protocol", type=Path, required=True)
     case_parser.add_argument("--capsule", type=Path, required=True)
@@ -643,6 +921,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.command == "challenge":
             issue_challenge(args.protocol.resolve(), args.case, args.output.resolve())
+        elif args.command == "mount":
+            write_json(args.output.resolve(), attest_runtime_capsule(
+                args.protocol.resolve(), args.capsule.resolve(),
+                args.supplied.resolve(), args.packet.resolve()))
         elif args.command == "case":
             write_json(args.output.resolve(), verify_case(
                 args.protocol.resolve(), args.capsule.resolve(),
@@ -650,7 +932,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         else:
             write_json(args.output.resolve(), verify_campaign(
                 args.protocol.resolve(), args.capsule.resolve(), args.results.resolve()))
-    except (OSError, subprocess.SubprocessError, VerificationError) as error:
+    except (OSError, ValueError, subprocess.SubprocessError, VerificationError) as error:
         print(f"execution provenance verification failed: {error}", file=sys.stderr)
         return 1
     return 0
