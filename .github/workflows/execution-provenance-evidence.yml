@@ -268,6 +268,13 @@ jobs:
           test -f "$RUNNER_TEMP/g0-product/.godot/global_script_class_cache.cfg"
           sha256sum "$RUNNER_TEMP/g0-product/.godot/global_script_class_cache.cfg" \
             > artifacts/godot-g0/cache-preflight/global-script-cache.sha256
+          mkdir artifacts/godot-g0/cache-preflight/roles
+          for role in extension_list.cfg global_script_class_cache.cfg uid_cache.bin; do
+            install -m 0444 "$RUNNER_TEMP/g0-product/.godot/$role" \
+              "artifacts/godot-g0/cache-preflight/roles/$role"
+          done
+          sha256sum artifacts/godot-g0/cache-preflight/roles/* \
+            > artifacts/godot-g0/cache-preflight/roles.sha256
           chmod -R a-w "$RUNNER_TEMP/g0-product" "$RUNNER_TEMP/g0-packet"
 
       - name: Trace one actual baseline Godot invocation
