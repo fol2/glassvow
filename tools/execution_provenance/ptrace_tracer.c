@@ -23,7 +23,7 @@
 #error "The ptrace backend supports Linux x86_64 only."
 #endif
 
-#define MAX_PROCESSES 64
+#define MAX_PROCESSES 4
 #define MAX_READ_BYTES 4096
 #define INPUT_FD 3
 #define OUTPUT_FD 4
@@ -72,6 +72,11 @@ static int root_exit_code = 255;
 static int input_fd = -1;
 static struct stat input_stat;
 static char expected_executable[4096];
+static const char *selected_mode;
+static const char *selected_challenge;
+static const char *selected_extra;
+static uint64_t dropped_events;
+static bool deliberate_drop;
 
 static uint64_t monotonic_raw_ns(void) {
     struct timespec value;
@@ -211,6 +216,25 @@ static void log_exit(pid_t pid, int code) {
     flush_trace();
 }
 
+static bool copy_tracee_bytes(
+        pid_t pid, uint64_t address, size_t count, unsigned char *bytes) {
+    size_t copied = 0;
+    while (copied < count) {
+        errno = 0;
+        long word = ptrace(
+            PTRACE_PEEKDATA, pid, (void *)(uintptr_t)(address + copied), 0);
+        if (word == -1 && errno != 0) {
+            fail_policy(pid, "ACTUAL_BYTES_UNAVAILABLE");
+            return false;
+        }
+        size_t remaining = count - copied;
+        size_t width = remaining < sizeof(word) ? remaining : sizeof(word);
+        memcpy(bytes + copied, &word, width);
+        copied += width;
+    }
+    return true;
+}
+
 static void record_read(
         struct process_state *state,
         const char *operation,
@@ -223,21 +247,14 @@ static void record_read(
         fail_policy(state->pid, "READ_SIZE_UNSUPPORTED");
         return;
     }
+    if (deliberate_drop && dropped_events == 0) {
+        dropped_events = 1;
+        return;
+    }
     unsigned char bytes[MAX_READ_BYTES];
-    size_t copied = 0;
-    while (copied < (size_t)returned) {
-        errno = 0;
-        long word = ptrace(
-            PTRACE_PEEKDATA, state->pid,
-            (void *)(uintptr_t)(state->arguments[1] + copied), 0);
-        if (word == -1 && errno != 0) {
-            fail_policy(state->pid, "ACTUAL_BYTES_UNAVAILABLE");
-            return;
-        }
-        size_t remaining = (size_t)returned - copied;
-        size_t width = remaining < sizeof(word) ? remaining : sizeof(word);
-        memcpy(bytes + copied, &word, width);
-        copied += width;
+    if (!copy_tracee_bytes(
+            state->pid, state->arguments[1], (size_t)returned, bytes)) {
+        return;
     }
 
     char proc_path[64];
@@ -283,6 +300,29 @@ static void record_read(
     flush_trace();
 }
 
+static void record_write(struct process_state *state, int64_t returned) {
+    if (returned <= 0) {
+        return;
+    }
+    uint64_t requested = state->arguments[2];
+    if ((uint64_t)returned > requested || returned > MAX_READ_BYTES) {
+        fail_policy(state->pid, "WRITE_SIZE_UNSUPPORTED");
+        return;
+    }
+    unsigned char bytes[MAX_READ_BYTES];
+    if (!copy_tracee_bytes(
+            state->pid, state->arguments[1], (size_t)returned, bytes)) {
+        return;
+    }
+    sequence_number += 1;
+    fprintf(trace_file,
+            "WRITE\t%" PRIu64 "\t%d\t%" PRIu64 "\t%" PRIu64 "\t%" PRId64 "\t",
+            sequence_number, state->pid, state->arguments[0], requested, returned);
+    print_hex(bytes, (size_t)returned);
+    fputc('\n', trace_file);
+    flush_trace();
+}
+
 static bool syscall_allowed(struct process_state *state) {
     long number = state->syscall_number;
     if (!state->after_exec) {
@@ -308,6 +348,21 @@ static bool syscall_allowed(struct process_state *state) {
                     (int64_t)state->arguments[4] >= 0
                         ? "UNSUPPORTED_MMAP_INPUT"
                         : "UNSUPPORTED_SYSCALL");
+        return false;
+    }
+    if (number == SYS_open || number == SYS_openat
+#ifdef SYS_openat2
+            || number == SYS_openat2
+#endif
+            || number == SYS_creat) {
+        fail_policy(state->pid, "UNDECLARED_INPUT_PATH");
+        return false;
+    }
+    if (number == SYS_nanosleep) {
+        if (strcmp(selected_mode, "slow-claim") == 0) {
+            return true;
+        }
+        fail_policy(state->pid, "UNSUPPORTED_SYSCALL");
         return false;
     }
     if (number == SYS_clone) {
@@ -360,6 +415,8 @@ static void handle_syscall_stop(struct process_state *state) {
         record_read(state, "read", returned);
     } else if (state->syscall_number == SYS_pread64) {
         record_read(state, "pread64", returned);
+    } else if (state->syscall_number == SYS_write) {
+        record_write(state, returned);
     }
     state->have_entry = false;
 }
@@ -394,12 +451,13 @@ static void handle_ptrace_event(
 
 static void usage(const char *program) {
     fprintf(stderr,
-            "usage: %s --input PATH --output PATH --trace PATH --exec PATH MODE\n",
+            "usage: %s --input PATH --output PATH --trace PATH --exec PATH MODE "
+            "[--challenge TOKEN] [--extra PATH]\n",
             program);
 }
 
 int main(int argc, char **argv) {
-    if (argc != 10 || strcmp(argv[1], "--input") != 0
+    if (argc < 10 || strcmp(argv[1], "--input") != 0
             || strcmp(argv[3], "--output") != 0
             || strcmp(argv[5], "--trace") != 0
             || strcmp(argv[7], "--exec") != 0) {
@@ -411,6 +469,27 @@ int main(int argc, char **argv) {
     const char *trace_path = argv[6];
     const char *executable_path = argv[8];
     const char *mode = argv[9];
+    selected_mode = mode;
+    selected_challenge = "b0";
+    selected_extra = "";
+    for (int index = 10; index < argc; index += 2) {
+        if (index + 1 >= argc) {
+            usage(argv[0]);
+            return 64;
+        }
+        if (strcmp(argv[index], "--challenge") == 0) {
+            selected_challenge = argv[index + 1];
+        } else if (strcmp(argv[index], "--extra") == 0) {
+            selected_extra = argv[index + 1];
+        } else {
+            usage(argv[0]);
+            return 64;
+        }
+    }
+    if (strlen(selected_challenge) > 128 || strlen(selected_extra) >= 4096) {
+        return 64;
+    }
+    deliberate_drop = strcmp(mode, "drop-event") == 0;
     if (realpath(executable_path, expected_executable) == NULL) {
         perror("realpath executable");
         return 2;
@@ -444,6 +523,16 @@ int main(int argc, char **argv) {
     }
     print_text_hex(resolved_input);
     fputc('\n', trace_file);
+    sequence_number += 1;
+    fprintf(trace_file, "COMMAND\t%" PRIu64 "\t", sequence_number);
+    print_text_hex(selected_challenge);
+    fputc('\t', trace_file);
+    print_text_hex(expected_executable);
+    fputc('\t', trace_file);
+    print_text_hex(selected_mode);
+    fputc('\t', trace_file);
+    print_text_hex(selected_extra);
+    fputc('\n', trace_file);
     flush_trace();
 
     root_pid = fork();
@@ -474,7 +563,8 @@ int main(int argc, char **argv) {
         }
         raise(SIGSTOP);
         char *const child_arguments[] = {
-            expected_executable, (char *)mode, NULL};
+            expected_executable, (char *)mode,
+            selected_extra[0] == '\0' ? NULL : (char *)selected_extra, NULL};
         char *const child_environment[] = {NULL};
         execve(expected_executable, child_arguments, child_environment);
         _exit(127);
@@ -547,12 +637,15 @@ int main(int argc, char **argv) {
         }
     }
 
+    if (dropped_events > 0 && violation_reason == NULL) {
+        log_violation(root_pid, "PROVENANCE_INCOMPLETE");
+    }
     uint64_t finished_ns = monotonic_raw_ns();
     fprintf(trace_file,
             "END\t%" PRIu64 "\t%" PRIu64 "\t%" PRIu64
-            "\t%" PRIu64 "\t0\t%d\t%s\n",
+            "\t%" PRIu64 "\t%" PRIu64 "\t%d\t%s\n",
             sequence_number, started_ns, finished_ns,
-            finished_ns - started_ns, root_exit_code,
+            finished_ns - started_ns, dropped_events, root_exit_code,
             violation_reason == NULL ? "-" : violation_reason);
     flush_trace();
     fclose(trace_file);

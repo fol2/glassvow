@@ -82,7 +82,15 @@ def parse_trace_lines(lines: Sequence[str]) -> dict[str, Any]:
     for expected_sequence, line in enumerate(clean[3:-1], start=1):
         fields = line.split("\t")
         tag = fields[0]
-        if tag == "EXEC" and len(fields) == 6:
+        if tag == "COMMAND" and len(fields) == 6:
+            event = {
+                "type": "command", "sequence": _integer(fields[1], "sequence", minimum=1),
+                "challenge": _hex_text(fields[2], "challenge"),
+                "executable": _hex_text(fields[3], "executable"),
+                "request": _hex_text(fields[4], "request"),
+                "extra": _hex_text(fields[5], "extra"),
+            }
+        elif tag == "EXEC" and len(fields) == 6:
             event = {
                 "type": "exec", "sequence": _integer(fields[1], "sequence", minimum=1),
                 "pid": _integer(fields[2], "exec pid", minimum=1),
@@ -114,6 +122,15 @@ def parse_trace_lines(lines: Sequence[str]) -> dict[str, Any]:
                 "inode": _integer(fields[9], "actual input inode"),
                 "path": _hex_text(fields[10], "actual input path"),
                 "bytes": _hex_bytes(fields[11], "actual read bytes"),
+            }
+        elif tag == "WRITE" and len(fields) == 7:
+            event = {
+                "type": "write", "sequence": _integer(fields[1], "sequence", minimum=1),
+                "pid": _integer(fields[2], "write pid", minimum=1),
+                "fd": _integer(fields[3], "write fd"),
+                "requested": _integer(fields[4], "requested bytes"),
+                "returned": _integer(fields[5], "returned bytes"),
+                "bytes": _hex_bytes(fields[6], "actual written bytes"),
             }
         elif tag == "EXIT" and len(fields) == 4:
             event = {

@@ -1,0 +1,196 @@
+{
+  "schema": "glassvow.execution-provenance.protocol/v1",
+  "campaign": "p9-qualified-linux-provenance-b1-b2-v1",
+  "authority": {
+    "issue": 533,
+    "blockedConsumerIssue": 421,
+    "baseGitSha": "c7b4c8280e95cb8b925477b82450dd8b927a64f5",
+    "selectedVenue": "github-hosted-ubuntu-24.04",
+    "selectedBackend": "purpose-built-ptrace-synchronous-stop-v1",
+    "qualifyingB0Run": "https://github.com/fol2/glassvow/actions/runs/33701733641",
+    "qualifyingB0ReceiptSha256": "397fd617c4f810b947c95a2e3d508a26d315f9eb4a8f7419edf4d0f425f730b0"
+  },
+  "trustMap": {
+    "trusted": [
+      "github-hosted Linux VM kernel and runner boundary",
+      "capsule builder and external campaign supervisor",
+      "purpose-built ptrace tracer",
+      "independent policy verifier"
+    ],
+    "untrusted": [
+      "inert bounded workload",
+      "attack injector",
+      "statement, trace, output and replay packet supplied to the verifier"
+    ],
+    "separation": "The verifier is a standalone source file and imports or calls none of the builder, runner, tracer, workload or preflight implementation.",
+    "excludedClaims": [
+      "malicious kernel, runner administrator or compiler resistance",
+      "hardware or TEE attestation",
+      "arbitrary executable or arbitrary input-mechanism coverage",
+      "game, balance, strategy, P9 or product evidence"
+    ]
+  },
+  "caps": {
+    "caseCount": 11,
+    "attemptsPerCase": 1,
+    "mechanicalCorrections": 1,
+    "maxProcesses": 4,
+    "maxEvents": 128,
+    "maxTraceBytes": 262144,
+    "maxStdoutBytes": 4096,
+    "maxStderrBytes": 4096,
+    "maxOutputBytes": 4096,
+    "maxInputRoleBytes": 65536,
+    "maxCapsuleMembers": 16,
+    "maxCapsuleBytes": 2097152,
+    "maxCasePacketBytes": 1048576,
+    "maxCampaignBytes": 16777216,
+    "maxPathBytes": 4096,
+    "judgementWallNs": 200000000,
+    "supervisorKillWallNs": 5000000000,
+    "timingAttackMinimumNs": 500000000,
+    "permittedDroppedEvents": 0,
+    "permittedNetworkSyscalls": 0,
+    "validProcessCount": 2,
+    "requiredConsumedBytes": 32
+  },
+  "clock": {
+    "name": "CLOCK_MONOTONIC_RAW",
+    "startBoundary": "immediately before root child creation",
+    "finishBoundary": "after every traced descendant is reaped",
+    "comparison": "integer nanoseconds with no tolerance"
+  },
+  "capsule": {
+    "hash": "sha256",
+    "rootRule": "sha256 of canonical UTF-8 member manifest bytes",
+    "directoryRule": "sha256-<root>",
+    "dataFileMode": "0444",
+    "executableFileMode": "0555",
+    "directoryMode": "0555",
+    "runtimeMount": "read-only bind mount verified by findmnt and a rejected write",
+    "roles": [
+      "protocol",
+      "opaque-corpus",
+      "case-request",
+      "expected-executable"
+    ]
+  },
+  "boundedWorkload": {
+    "platform": "Linux x86_64",
+    "inputFds": {"opaque-corpus": 3},
+    "outputFds": [1, 2, 4],
+    "environment": [],
+    "allowedAfterExec": [
+      "read(fd=3)",
+      "pread64(fd=3)",
+      "write(fd in 1,2,4)",
+      "fork",
+      "wait4",
+      "exit",
+      "exit_group"
+    ],
+    "conditional": [
+      "nanosleep only for N08",
+      "clone only without CLONE_UNTRACED; B0 qualification only"
+    ],
+    "failClosed": [
+      "mmap",
+      "open, openat, openat2 and creat",
+      "readv and preadv variants",
+      "sendfile, splice and vmsplice",
+      "AIO and io_uring",
+      "socket and network receive mechanisms",
+      "descriptor duplication",
+      "tracee ptrace",
+      "credential or namespace change",
+      "clone3",
+      "unknown syscall or input mechanism"
+    ]
+  },
+  "cases": [
+    {
+      "id": "V00",
+      "requestToken": "valid",
+      "attack": "none",
+      "expectedVerdict": "PASS",
+      "expectedReason": "ADMITTED"
+    },
+    {
+      "id": "N01",
+      "requestToken": "post-freeze-replacement",
+      "attack": "overlay different bytes at the frozen corpus member after capsule-root computation",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "POST_FREEZE_CORPUS_REPLACEMENT"
+    },
+    {
+      "id": "N02",
+      "requestToken": "same-name-different-bytes",
+      "attack": "supply an outside corpus with the same basename and different bytes",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "SAME_NAME_DIFFERENT_BYTES"
+    },
+    {
+      "id": "N03",
+      "requestToken": "different-executable",
+      "attack": "retain the expected executable but execute a byte-distinct valid ELF",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "EXECUTED_SCRIPT_MISMATCH"
+    },
+    {
+      "id": "N04",
+      "requestToken": "request-expected",
+      "actualRequestToken": "request-substitute",
+      "attack": "execute a byte-distinct request token with otherwise valid behaviour",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "REQUEST_SUBSTITUTION"
+    },
+    {
+      "id": "N05",
+      "requestToken": "replay",
+      "attack": "supply V00 statement, trace and output under a fresh verifier challenge",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "INVOCATION_CHALLENGE_MISMATCH"
+    },
+    {
+      "id": "N06",
+      "requestToken": "no-io",
+      "attack": "supply cached V00 output while the current process performs no required reads",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "CACHE_WITHOUT_CURRENT_CONSUMPTION"
+    },
+    {
+      "id": "N07",
+      "requestToken": "timing-replaced",
+      "attack": "replace the current external timing fields with V00 timing",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "EXTERNAL_TIMING_MISSING_OR_REPLACED"
+    },
+    {
+      "id": "N08",
+      "requestToken": "slow-claim",
+      "attack": "emit an in-cap child timing claim while external elapsed time exceeds the judgement cap",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "EXTERNAL_WALL_CAP_EXCEEDED"
+    },
+    {
+      "id": "N09",
+      "requestToken": "alternative-path",
+      "attack": "attempt to open a supplied undeclared alternative input path",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "UNDECLARED_INPUT_PATH"
+    },
+    {
+      "id": "N10",
+      "requestToken": "drop-event",
+      "attack": "run valid consumption while the backend deliberately omits one read event and reports one drop",
+      "expectedVerdict": "INCONCLUSIVE",
+      "expectedReason": "PROVENANCE_INCOMPLETE"
+    }
+  ],
+  "decision": {
+    "pass": "V00 is ADMITTED; N01-N09 are REJECT for their exact expected reasons; N10 is INCONCLUSIVE for PROVENANCE_INCOMPLETE; all eleven use one unchanged verifier and all caps hold.",
+    "fail": "Complete evidence admits any negative, rejects V00, gives a negative the wrong reason, or exceeds the single correction allowance.",
+    "inconclusive": "Actual-byte, lineage, invocation, event completeness or external timing binding is ambiguous outside the deliberate N10 control.",
+    "correction": "After this protocol is frozen, at most one batched implementation-only correction may retain the venue, backend, trust map, syscall grammar, attack matrix, caps and acceptance. It invalidates every earlier case and requires a complete eleven-case rerun."
+  }
+}
