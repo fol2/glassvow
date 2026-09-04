@@ -1358,6 +1358,61 @@ int main(int argc, char **argv) {
             ], check=False, capture_output=True, text=True)
             self.assertEqual(0, result.returncode, result.stderr or result.stdout)
 
+    def test_no_follow_navigation_components_are_canonicalised_from_dirfd(self) -> None:
+        compiler = shutil.which("cc")
+        if compiler is None:
+            self.skipTest("C compiler unavailable")
+        source_root = ROOT / "tools/execution_provenance"
+        harness_source = r'''
+#define _GNU_SOURCE
+#include "godot_runtime_ptrace_io.h"
+#include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
+int main(int argc, char **argv) {
+    if (argc != 4) return 2;
+    int descriptor = open(argv[1], O_PATH | O_DIRECTORY | O_CLOEXEC);
+    if (descriptor < 0) return 3;
+    char current[4096], parent[4096], escaped[4096];
+    if (!gv_resolve_path(getpid(), descriptor, ".", false,
+                         current, sizeof(current))) return 4;
+    if (!gv_resolve_path(getpid(), descriptor, "..", false,
+                         parent, sizeof(parent))) return 5;
+    if (!gv_resolve_path(getpid(), descriptor, "../undeclared", false,
+                         escaped, sizeof(escaped))) return 6;
+    close(descriptor);
+    if (strcmp(current, argv[1]) || strcmp(parent, argv[2])
+            || strcmp(escaped, argv[3])) return 7;
+    struct gv_admission_policy policy = {0};
+    policy.path_count = 1;
+    strcpy(policy.paths[0].operation, "openat");
+    policy.paths[0].has_parameter = true;
+    policy.paths[0].parameter = 7;
+    policy.paths[0].path = argv[2];
+    if (!gv_policy_allows_path(&policy, "openat", parent, true, 7)
+            || gv_policy_allows_path(&policy, "openat", escaped, true, 7)) return 8;
+    return 0;
+}
+'''
+        with tempfile.TemporaryDirectory(prefix="godot-dirfd-path-test-") as temporary:
+            root = Path(temporary).resolve()
+            parent = root / "parent"
+            child = parent / "child"
+            child.mkdir(parents=True)
+            source = root / "path.c"
+            binary = root / "path"
+            source.write_text(harness_source, encoding="utf-8")
+            compiled = subprocess.run([
+                compiler, "-std=c17", "-O2", "-Wall", "-Wextra", "-Werror",
+                "-I", str(source_root), str(source),
+                str(source_root / "godot_runtime_ptrace_io.c"), "-o", str(binary),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, compiled.returncode, compiled.stderr)
+            result = subprocess.run([
+                str(binary), str(child), str(parent), str(parent / "undeclared"),
+            ], check=False, capture_output=True, text=True)
+            self.assertEqual(0, result.returncode, result.stderr or result.stdout)
+
     def test_exact_reads_execs_descriptors_and_writes_are_kernel_enforced(self) -> None:
         compiler = shutil.which("cc")
         if compiler is None:

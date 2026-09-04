@@ -503,9 +503,12 @@ bool gv_resolve_path(pid_t pid, int dirfd, const char *path, bool follow_final,
     if (!follow_final && !proc_magic && strcmp(probe, "/")) {
         char *slash = strrchr(probe, '/');
         if (slash == NULL || !slash[1]) return false;
-        strcpy(suffix, slash + 1);
-        if (slash == probe) strcpy(probe, "/");
-        else *slash = '\0';
+        const char *leaf = slash + 1;
+        if (strcmp(leaf, ".") && strcmp(leaf, "..")) {
+            strcpy(suffix, leaf);
+            if (slash == probe) strcpy(probe, "/");
+            else *slash = '\0';
+        }
     }
     for (;;) {
         probe_length = strlen(probe);
