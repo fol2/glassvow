@@ -119,7 +119,9 @@ class TraceBindingTests(unittest.TestCase):
             leaf = child / "leaf"
             leaf.write_bytes(b"leaf")
             child_hex = str(child).encode().hex()
-            for supplied, resolved in ((".", child), ("..", parent), ("leaf", leaf)):
+            for supplied, resolved in (
+                    (".", child), ("./", child), ("..", parent), ("../", parent),
+                    ("leaf", leaf), ("leaf/", leaf)):
                 with self.subTest(supplied=supplied):
                     supplied_hex = supplied.encode().hex()
                     resolved_hex = str(resolved).encode().hex()
@@ -139,7 +141,7 @@ class TraceBindingTests(unittest.TestCase):
                     self.verifier.validate_trace_accounting(
                         trace, caps, 1, 0, initial_cwd=str(parent))
                     trace["events"][10]["path"] = (
-                        f"{child}/./leaf" if supplied == "leaf"
+                        f"{child}/./leaf" if supplied.rstrip("/") == "leaf"
                         else f"{child}/{supplied}")
                     with self.assertRaisesRegex(
                             self.verifier.VerificationFailure,

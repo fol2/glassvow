@@ -358,10 +358,11 @@ def validate_trace_accounting(trace: Mapping[str, Any], caps: Mapping[str, int],
             follow_final = False
         elif name == "statx" and arguments[2] & 0x100:
             follow_final = False
-        if follow_final or combined == "/" or os.path.basename(combined) in {".", ".."}:
-            return os.path.realpath(combined)
-        return os.path.join(os.path.realpath(os.path.dirname(combined)),
-                            os.path.basename(combined))
+        probe = combined.rstrip("/") or "/"
+        if follow_final or probe == "/" or os.path.basename(probe) in {".", ".."}:
+            return os.path.realpath(probe)
+        return os.path.join(os.path.realpath(os.path.dirname(probe)),
+                            os.path.basename(probe))
 
     def require_derived(event: dict[str, Any], expected: tuple[str, dict[str, Any]]) -> None:
         kind, call = expected; args, returned, name = call["arguments"], call["returned"], call["name"]

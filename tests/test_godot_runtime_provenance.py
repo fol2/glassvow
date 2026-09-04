@@ -1373,16 +1373,22 @@ int main(int argc, char **argv) {
     if (argc != 4) return 2;
     int descriptor = open(argv[1], O_PATH | O_DIRECTORY | O_CLOEXEC);
     if (descriptor < 0) return 3;
-    char current[4096], parent[4096], escaped[4096];
+    char current[4096], current_slash[4096], parent[4096], parent_slash[4096];
+    char escaped[4096];
     if (!gv_resolve_path(getpid(), descriptor, ".", false,
                          current, sizeof(current))) return 4;
+    if (!gv_resolve_path(getpid(), descriptor, "./", false,
+                         current_slash, sizeof(current_slash))) return 5;
     if (!gv_resolve_path(getpid(), descriptor, "..", false,
-                         parent, sizeof(parent))) return 5;
+                         parent, sizeof(parent))) return 6;
+    if (!gv_resolve_path(getpid(), descriptor, "../", false,
+                         parent_slash, sizeof(parent_slash))) return 7;
     if (!gv_resolve_path(getpid(), descriptor, "../undeclared", false,
-                         escaped, sizeof(escaped))) return 6;
+                         escaped, sizeof(escaped))) return 8;
     close(descriptor);
-    if (strcmp(current, argv[1]) || strcmp(parent, argv[2])
-            || strcmp(escaped, argv[3])) return 7;
+    if (strcmp(current, argv[1]) || strcmp(current_slash, argv[1])
+            || strcmp(parent, argv[2]) || strcmp(parent_slash, argv[2])
+            || strcmp(escaped, argv[3])) return 9;
     struct gv_admission_policy policy = {0};
     policy.path_count = 1;
     strcpy(policy.paths[0].operation, "openat");
@@ -1390,7 +1396,7 @@ int main(int argc, char **argv) {
     policy.paths[0].parameter = 7;
     policy.paths[0].path = argv[2];
     if (!gv_policy_allows_path(&policy, "openat", parent, true, 7)
-            || gv_policy_allows_path(&policy, "openat", escaped, true, 7)) return 8;
+            || gv_policy_allows_path(&policy, "openat", escaped, true, 7)) return 10;
     return 0;
 }
 '''
