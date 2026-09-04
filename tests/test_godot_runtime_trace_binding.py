@@ -111,6 +111,42 @@ class TraceBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(self.verifier.VerificationFailure, "extra"):
             self.verifier.validate_trace_accounting(trace, caps, 1, 0)
 
+    def test_no_follow_navigation_path_binds_to_canonical_dirfd_parent(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-trace-dirfd-") as temporary:
+            parent = Path(temporary).resolve()
+            child = parent / "child"
+            child.mkdir()
+            leaf = child / "leaf"
+            leaf.write_bytes(b"leaf")
+            child_hex = str(child).encode().hex()
+            for supplied, resolved in ((".", child), ("..", parent), ("leaf", leaf)):
+                with self.subTest(supplied=supplied):
+                    supplied_hex = supplied.encode().hex()
+                    resolved_hex = str(resolved).encode().hex()
+                    events = [
+                        "SYSCALL_E\t2\t100\t257\topenat\t18446744073709551516\t0\t0\t0\t0\t0",
+                        f"PATH\t3\t100\topenat\t{child_hex}\t{child_hex}",
+                        "SYSCALL_X\t4\t100\t257\topenat\t5\t0\t0",
+                        f"PATH_X\t5\t100\topenat\t5\t{child_hex}",
+                        f"OPEN\t6\t100\t5\t0\tI\t1\t21\t{child_hex}",
+                        "SYSCALL_E\t7\t100\t257\topenat\t5\t0\t2818048\t0\t0\t0",
+                        f"PATH\t8\t100\topenat\t{supplied_hex}\t{resolved_hex}",
+                        "SYSCALL_X\t9\t100\t257\topenat\t6\t0\t0",
+                        f"PATH_X\t10\t100\topenat\t6\t{resolved_hex}",
+                        f"OPEN\t11\t100\t6\t2818048\tI\t1\t20\t{resolved_hex}",
+                    ]
+                    trace, caps = self.accounting_fixture(events)
+                    self.verifier.validate_trace_accounting(
+                        trace, caps, 1, 0, initial_cwd=str(parent))
+                    trace["events"][10]["path"] = (
+                        f"{child}/./leaf" if supplied == "leaf"
+                        else f"{child}/{supplied}")
+                    with self.assertRaisesRegex(
+                            self.verifier.VerificationFailure,
+                            "supplied/resolved path differs"):
+                        self.verifier.validate_trace_accounting(
+                            trace, caps, 1, 0, initial_cwd=str(parent))
+
     @staticmethod
     def opened_fd_events() -> list[str]:
         path = "2f746d702f78"

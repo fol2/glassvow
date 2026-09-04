@@ -358,7 +358,7 @@ def validate_trace_accounting(trace: Mapping[str, Any], caps: Mapping[str, int],
             follow_final = False
         elif name == "statx" and arguments[2] & 0x100:
             follow_final = False
-        if follow_final or combined == "/":
+        if follow_final or combined == "/" or os.path.basename(combined) in {".", ".."}:
             return os.path.realpath(combined)
         return os.path.join(os.path.realpath(os.path.dirname(combined)),
                             os.path.basename(combined))
