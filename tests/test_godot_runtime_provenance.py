@@ -1193,6 +1193,30 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
         with self.assertRaisesRegex(self.verifier.VerificationFailure, "multiset"):
             self.verifier._runtime_mappings({"events": events}, roots, profile)
 
+    def test_path_x_execve_uses_g0_runtime_operations_when_statement_is_hash_only(self) -> None:
+        path = "/usr/bin/env"
+        env = next(
+            record for record in json.loads(G0_MANIFEST_PATH.read_text())["runtimeIdentitySet"]
+            if record["path"] == path)
+        self.assertEqual(["execve"], env["operations"])
+        g0_runtime = {path: {"operations": env["operations"]}}
+        statement_identity = {
+            "path": path, "size": 48072, "sha256": "ab", "device": 1, "inode": 2,
+        }
+        self.assertEqual(
+            {"execve"},
+            self.verifier._path_x_operations(path, statement_identity, {}, g0_runtime),
+        )
+        self.assertEqual(
+            {"openat"},
+            self.verifier._path_x_operations(
+                path, statement_identity, {path: {}}, g0_runtime),
+        )
+        self.assertEqual(
+            set(),
+            self.verifier._path_x_operations(path, statement_identity, {}, {}),
+        )
+
     def test_receipt_semantic_digest_binds_the_captured_sidecar_bytes(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-receipt-") as temporary:
             case = Path(temporary)

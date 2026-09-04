@@ -1021,11 +1021,23 @@ def _platform_access_witnesses(
             fail("UNDECLARED_INPUT_PATH", f"platform access witness missing {path}")
 
 
+def _path_x_operations(
+        path: str, record: Mapping[str, Any], outputs: Mapping[str, Mapping[str, Any]],
+        g0_runtime: Mapping[str, Mapping[str, Any]]) -> set[str]:
+    if path in outputs:
+        return {"openat"}
+    operations = set(record.get("operations") or [])
+    if operations:
+        return operations
+    return set(g0_runtime.get(path, {}).get("operations") or [])
+
+
 def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], runtime: Mapping[str, Mapping[str, Any]],
              platform: Mapping[str, Mapping[str, Any]], outputs: Mapping[str, Mapping[str, Any]],
              consumed_bytes: Mapping[str, bytes], sidecar: bytes, roots: Mapping[str, str],
              profile: Mapping[str, Any], g0: Mapping[str, Any]) -> None:
     objects: dict[str, Mapping[str, Any]] = {**roles, **platform, **outputs}
+    g0_runtime = _identity_set(g0, roots, "runtimeIdentitySet")
     for logical, record in runtime.items():
         resolved = str(Path(logical).resolve())
         if resolved in objects and objects[resolved] != record:
@@ -1143,7 +1155,7 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
             fail(reason, f"unknown successful object {path}")
         record = objects[path]
         if event["type"] == "PATH_X":
-            operations = {"openat"} if path in outputs else set(record.get("operations", []))
+            operations = _path_x_operations(path, record, outputs, g0_runtime)
             if event.get("operation") not in operations:
                 fail("UNDECLARED_INPUT_PATH", f"object operation differs {path}")
             continue
