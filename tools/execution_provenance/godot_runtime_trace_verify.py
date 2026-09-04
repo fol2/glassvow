@@ -22,6 +22,12 @@ def fail(reason: str, detail: str) -> None:
     raise VerificationFailure(reason, detail)
 
 
+def decode_syscall_fd(raw: int) -> int:
+    """Match the tracer's (int32_t)(uint32_t) ABI truncation."""
+    narrowed = raw & 0xFFFFFFFF
+    return narrowed - 0x100000000 if narrowed >= 0x80000000 else narrowed
+
+
 def integer(value: Any, label: str, minimum: int = 0) -> int:
     if isinstance(value, bool):
         fail("PROVENANCE_INCOMPLETE", f"{label} is not an integer")
@@ -318,7 +324,8 @@ def validate_trace_accounting(trace: Mapping[str, Any], caps: Mapping[str, int],
                   "faccessat2", "newfstatat", "openat", "readlinkat", "statx"}
     at_calls = {"faccessat2", "newfstatat", "openat", "readlinkat", "statx"}
 
-    def signed_fd(value: int) -> int: return value - 2 ** 64 if value >= 2 ** 63 else value
+    def signed_fd(value: int) -> int:
+        return decode_syscall_fd(value)
 
     def fd_entry(tid: int, fd: int) -> dict[str, Any]:
         entry = fds.get(tid, {}).get(fd)

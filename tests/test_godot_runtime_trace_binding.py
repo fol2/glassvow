@@ -96,6 +96,23 @@ class TraceBindingTests(unittest.TestCase):
                 self.verifier.VerificationFailure, "initial descriptor boundary"):
             self.verifier.validate_trace_accounting(trace, caps, 1, 0)
 
+    def test_zero_extended_anonymous_mmap_fd_does_not_require_mmap_event(self) -> None:
+        self.assertEqual(-1, self.verifier._TRACE.decode_syscall_fd(0xFFFFFFFF))
+        self.assertEqual(-1, self.verifier._TRACE.decode_syscall_fd(0xFFFFFFFFFFFFFFFF))
+        self.assertEqual(-100, self.verifier._TRACE.decode_syscall_fd(0xFFFFFF9C))
+        self.assertEqual(-100, self.verifier._TRACE.decode_syscall_fd(0xFFFFFFFFFFFFFF9C))
+        self.assertEqual(3, self.verifier._TRACE.decode_syscall_fd(3))
+        entered = (
+            "SYSCALL_E\t2\t1001\t9\tmmap\t0\t8192\t3\t34\t4294967295\t0")
+        exited = "SYSCALL_X\t3\t1001\t9\tmmap\t4096\t0\t0"
+        trace, caps = self.accounting_fixture([entered, exited])
+        self.verifier.validate_trace_accounting(trace, caps, 1, 0)
+        entered64 = (
+            "SYSCALL_E\t2\t1001\t9\tmmap\t0\t8192\t3\t34\t"
+            "18446744073709551615\t0")
+        trace, caps = self.accounting_fixture([entered64, exited])
+        self.verifier.validate_trace_accounting(trace, caps, 1, 0)
+
     def test_missing_or_inserted_derived_event_fails_closed(self) -> None:
         entered = "SYSCALL_E\t2\t1001\t257\topenat\t18446744073709551516\t0\t0\t0\t0\t0"
         path = "PATH\t3\t1001\topenat\t2f746d702f78\t2f746d702f78"
