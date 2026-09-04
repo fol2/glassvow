@@ -98,9 +98,9 @@ class GodotRuntimeWorkflowTests(unittest.TestCase):
 
     def test_budget_epoch_is_frozen_to_the_owner_authority(self) -> None:
         caps = PROFILE["caps"]
-        self.assertEqual(5535398605, caps["budgetEpochComment"])
+        self.assertEqual(5546895429, caps["budgetEpochComment"])
         self.assertEqual(PROFILE["authority"]["comment"], caps["budgetEpochComment"])
-        self.assertEqual((8, 120, 15), (
+        self.assertEqual((4, 60, 15), (
             caps["maxQualificationAttempts"], caps["maxHostedMinutes"],
             caps["maxMinutesPerQualificationAttempt"],
         ))

@@ -183,7 +183,7 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         )
         self.assertEqual(sha256(PROFILE_PATH), self.verifier.FROZEN_PROFILE_SHA256)
         self.assertEqual(535, self.profile["authority"]["issue"])
-        self.assertEqual(5535398605, self.profile["authority"]["comment"])
+        self.assertEqual(5546895429, self.profile["authority"]["comment"])
         self.assertEqual(
             "5c5f2d325725b0a04e060c1ffe0b40a76f2e0928",
             self.profile["authority"]["g0ProductSha"],
@@ -429,8 +429,8 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         self.assertEqual(5, caps["maxDupEvents"])
         self.assertEqual(65536, caps["maxPacketManifestBytes"])
         self.assertEqual(2, caps["validSignalEvents"])
-        self.assertEqual(8, caps["maxQualificationAttempts"])
-        self.assertEqual(120, caps["maxHostedMinutes"])
+        self.assertEqual(4, caps["maxQualificationAttempts"])
+        self.assertEqual(60, caps["maxHostedMinutes"])
         self.assertEqual(15, caps["maxMinutesPerQualificationAttempt"])
         self.assertEqual(1024, caps["maxObservedPaths"])
         self.assertLess(caps["maxObservedPaths"], caps["maxPathEvents"])
