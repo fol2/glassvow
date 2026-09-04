@@ -371,6 +371,8 @@ def _build_admission_policy(
     for section in ("semanticReadSet", "runtimeIdentitySet", "platformObservationSet"):
         for record in manifest[section]:
             path = canonical_identity(_expand(str(record["path"]), roots))
+            if section == "platformObservationSet" and not Path(path).is_file():
+                continue
             files.setdefault(path, set()).add("R")
 
     for record in closure["records"]:
@@ -1569,6 +1571,9 @@ def _complete(args: argparse.Namespace, profile: dict, g0: dict, packet: dict, s
     platform: dict[str, Mapping[str, Any]] = {}
     platform_bytes: dict[str, bytes] = {}
     for expected in expected_platform.values():
+        live_path = Path(_expand(str(expected.get("path")), roots))
+        if not live_path.is_file():
+            continue
         path, current, data = _platform_live(
             expected, roots, profile["caps"]["maxPlatformObservationBytes"])
         platform[path], platform_bytes[path] = current, data

@@ -1762,7 +1762,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         verified, verified_counts = self.verifier._build_admission_policy(
             self.profile, manifest, roots, working)
         self.assertEqual(produced, verified)
-        self.assertEqual({"fileRules": 169, "pathRules": 801}, produced_counts)
+        self.assertEqual(801, produced_counts["pathRules"])
         self.assertEqual(produced_counts, verified_counts)
         self.assertLessEqual(len(produced), self.profile["caps"]["maxAdmissionPolicyBytes"])
         self.assertEqual(393216, self.profile["caps"]["maxAdmissionPolicyBytes"])
@@ -1778,6 +1778,8 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         for section in ("semanticReadSet", "runtimeIdentitySet", "platformObservationSet"):
             for record in manifest[section]:
                 path = str(Path(expand(record["path"])).resolve(strict=False))
+                if section == "platformObservationSet" and not Path(path).is_file():
+                    continue
                 expected_file_rights.setdefault(path, set()).add("R")
         for collection in ("executeLeaves", "kernelInterpreterLeaves"):
             for template in self.profile["kernelAdmission"][collection]:
@@ -1793,6 +1795,11 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         }
         self.assertEqual(expected_file_rules, actual_file_rules)
         self.assertEqual(len(expected_file_rules), produced_counts["fileRules"])
+        for record in manifest["platformObservationSet"]:
+            path = str(Path(expand(record["path"])).resolve(strict=False))
+            encoded = path.encode().hex()
+            listed = any(line.split("\t")[-1] == encoded for line in actual_file_rules)
+            self.assertEqual(Path(path).is_file(), listed)
 
         expected_path_rules = {
             "\t".join((

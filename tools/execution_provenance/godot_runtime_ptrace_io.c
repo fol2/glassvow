@@ -192,10 +192,16 @@ bool gv_load_admission_policy(
             rule->path = decode_path(hex_path);
             char canonical[PATH_MAX];
             struct stat status;
-            if (rule->path == NULL || !canonical_absolute_path(rule->path)
-                    || realpath(rule->path, canonical) == NULL
-                    || strcmp(rule->path, canonical)
-                    || lstat(rule->path, &status) != 0 || !S_ISREG(status.st_mode)) {
+            if (rule->path == NULL || !canonical_absolute_path(rule->path)) {
+                free(rule->path); rule->path = NULL; goto invalid_line;
+            }
+            if (realpath(rule->path, canonical) == NULL || lstat(rule->path, &status) != 0) {
+                int saved = errno;
+                free(rule->path); rule->path = NULL;
+                if (saved == ENOENT) continue;
+                goto invalid_line;
+            }
+            if (strcmp(rule->path, canonical) || !S_ISREG(status.st_mode)) {
                 free(rule->path); rule->path = NULL; goto invalid_line;
             }
             for (size_t index = 0; index < policy->file_count; index += 1)

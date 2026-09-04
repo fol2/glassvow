@@ -600,6 +600,8 @@ def build_admission_policy(
     for section in ("semanticReadSet", "runtimeIdentitySet", "platformObservationSet"):
         for record in manifest[section]:
             path = canonical_identity(expand(str(record["path"])))
+            if section == "platformObservationSet" and not Path(path).is_file():
+                continue
             files.setdefault(path, set()).add("R")
 
     for record in closure["records"]:
@@ -823,7 +825,9 @@ def run_case(args: argparse.Namespace) -> dict[str, Any]:
     (case_dir / "stdout.bin").write_bytes(result.stdout)
     (case_dir / "stderr.bin").write_bytes(result.stderr)
     if not trace_path.is_file() or not sidecar_path.is_file():
-        raise RunnerError("tracer did not produce complete evidence files")
+        raise RunnerError(
+            "tracer did not produce complete evidence files "
+            f"(returncode={result.returncode})")
     observation = output / "observation.json"
     home_log = home / ".local/share/godot/app_userdata/Glassvow/logs/godot.log"
     sentry = home / ".local/share/godot/app_userdata/Glassvow/sentry.dat"
