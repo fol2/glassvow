@@ -1029,7 +1029,20 @@ def _path_x_operations(
     operations = set(record.get("operations") or [])
     if operations:
         return operations
-    return set(g0_runtime.get(path, {}).get("operations") or [])
+    frozen = g0_runtime.get(path) or {}
+    return set(frozen.get("operations") or [])
+
+
+def _g0_runtime_by_observed_path(
+        g0: Mapping[str, Any], roots: Mapping[str, str]) -> dict[str, Mapping[str, Any]]:
+    indexed: dict[str, Mapping[str, Any]] = {}
+    for logical, record in _identity_set(g0, roots, "runtimeIdentitySet").items():
+        indexed[logical] = record
+        try:
+            indexed[str(Path(logical).resolve())] = record
+        except OSError:
+            continue
+    return indexed
 
 
 def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], runtime: Mapping[str, Mapping[str, Any]],
@@ -1037,7 +1050,7 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
              consumed_bytes: Mapping[str, bytes], sidecar: bytes, roots: Mapping[str, str],
              profile: Mapping[str, Any], g0: Mapping[str, Any]) -> None:
     objects: dict[str, Mapping[str, Any]] = {**roles, **platform, **outputs}
-    g0_runtime = _identity_set(g0, roots, "runtimeIdentitySet")
+    g0_runtime = _g0_runtime_by_observed_path(g0, roots)
     for logical, record in runtime.items():
         resolved = str(Path(logical).resolve())
         if resolved in objects and objects[resolved] != record:

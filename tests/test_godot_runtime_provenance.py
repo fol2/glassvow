@@ -1217,6 +1217,22 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
             self.verifier._path_x_operations(path, statement_identity, {}, {}),
         )
 
+    def test_path_x_operations_follow_g0_logical_path_to_resolved_interpreter(self) -> None:
+        logical = "/bin/sh"
+        observed = "/usr/bin/dash"
+        g0_runtime = {
+            logical: {"operations": ["execve"]},
+            observed: {"operations": ["execve"]},
+        }
+        statement_identity = {
+            "path": logical, "size": 1, "sha256": "ab", "device": 1, "inode": 2,
+        }
+        self.assertEqual(
+            {"execve"},
+            self.verifier._path_x_operations(
+                observed, statement_identity, {}, g0_runtime),
+        )
+
     def test_receipt_semantic_digest_binds_the_captured_sidecar_bytes(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-receipt-") as temporary:
             case = Path(temporary)
