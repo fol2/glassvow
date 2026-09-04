@@ -10,7 +10,7 @@
   },
   "authority": {
     "issue": 535,
-    "comment": 5530338723,
+    "comment": 5535398605,
     "blockedConsumerIssue": 421,
     "acceptedIntentMainSha": "5c5f2d325725b0a04e060c1ffe0b40a76f2e0928",
     "profileFreezeMainSha": "fb6c497c45ad5c283176e7d25c2bc861aae17033",
@@ -178,7 +178,7 @@
     "namedWriteFiles": [
       "/dev/null"
     ],
-    "pathPolicy": "One sorted duplicate-free GODOTACCESSv1 file is derived from the exact operation, resolved path and open-or-mkdir parameter closure of every immutable G0 pathname event. Only relocation of the five declared roots, readlink probes of their ancestors and G0-observed mkdir(0775) probes of existing HOME ancestors are permitted. The independent verifier separately reconstructs the same bytes and checks every traced pathname event against them before deciding a case.",
+    "pathPolicy": "One sorted duplicate-free GODOTACCESSv1 file is derived from the exact operation, resolved path and open-or-mkdir parameter closure of every immutable G0 pathname event, the two declared root translations and the frozen hwcapsProbeGrammar expansion. Only relocation of the five declared roots, readlink probes of their ancestors, G0-observed mkdir(0775) probes of existing HOME ancestors and sibling substitution across the three declared glibc HWCAP levels are permitted. The independent verifier separately reconstructs the same bytes and checks every traced pathname event against them before deciding a case.",
     "installation": "The tracee child applies resource limits, replaces fd 0 with read-only /dev/null, closes every fd >= 3, and installs the ruleset before PTRACE_TRACEME, the initial stop or any exec. Failure exits 124 without launching Godot.",
     "privilegeRule": "PR_SET_NO_NEW_PRIVS is mandatory before restriction, so an exec or set-user-ID helper cannot escape the inherited read, execute and write domain.",
     "initialDescriptors": {
@@ -209,6 +209,7 @@
     "maxQualificationAttempts": 8,
     "maxHostedMinutes": 120,
     "maxMinutesPerQualificationAttempt": 15,
+    "budgetEpochComment": 5535398605,
     "validTasks": 10,
     "validProcesses": 3,
     "validThreads": 7,
@@ -304,7 +305,7 @@
   },
   "budgetAccounting": {
     "authority": "GitHub Actions API for this repository and workflow",
-    "attemptIdentity": "every run attempt containing the exact job name Qualify actual Godot runtime profile, including the current attempt",
+    "attemptIdentity": "every run attempt containing the exact job name Qualify actual Godot runtime profile whose started_at is at or after the created_at of caps.budgetEpochComment, including the current attempt",
     "reservationRule": "Each admitted specialist attempt reserves its full 15-minute job timeout even if it finishes earlier.",
     "hostedMinuteEquation": "8 attempts * 15 reserved minutes = 120 maximum hosted minutes",
     "concurrency": "All godot-runtime qualification dispatches share one non-cancelling concurrency group so the remote count cannot race.",
@@ -509,7 +510,7 @@
     "hash": "sha256",
     "qualification": {
       "authorityIssue": 535,
-      "authorityComment": 5530338723,
+      "authorityComment": 5535398605,
       "historicalG0DiagnosticPacketSha": "15ea4d3af4b592c7015b4fd3569cf59d7ef93d77",
       "baselineRoles": {
         "externalScript": {
@@ -937,8 +938,16 @@
           ]
         }
       ],
+      "hwcapsProbeGrammar": {
+        "schema": "glassvow.godot-runtime-provenance.hwcaps-probe-grammar/v1",
+        "loader": "glibc-ld.so-x86-64-hwcaps-subdirs",
+        "levels": ["x86-64-v4", "x86-64-v3", "x86-64-v2"],
+        "identityClass": "identity-only-runtime-probe",
+        "fileIdentity": "none-unless-present-in-g0-identity-sets",
+        "rule": "If a frozen G0 pathOperationClosure record's logical path contains /glibc-hwcaps/<level>/ or ends at /glibc-hwcaps/<level>, and <level> is one of the frozen levels, both independent policy builders also admit the same operation, parameter and expected returns against every frozen level, substituting only that path segment. Missing higher levels remain ENOENT identity probes. Do not add Landlock file identities, semantic inputs, other libraries, or undocumented levels."
+      },
       "pathResultPolicy": {
-        "closureRule": "Every PATH_X operation, resolved path and open-or-mkdir parameter must be present in the frozen G0 pathOperationClosure or one of the two declared root translations. Exact negative returns and non-open positive returns remain bound; a successful openat return is an opaque non-negative descriptor.",
+        "closureRule": "Every PATH_X operation, resolved path and open-or-mkdir parameter must be present in the frozen G0 pathOperationClosure, one of the two declared root translations or the frozen hwcapsProbeGrammar expansion. Exact negative returns and non-open positive returns remain bound; a successful openat return is an opaque non-negative descriptor.",
         "rootAncestorReadlink": {
           "operation": "readlink",
           "parameter": null,

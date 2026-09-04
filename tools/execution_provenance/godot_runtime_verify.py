@@ -29,7 +29,7 @@ CONFIGURATION_MANIFEST_PATH = Path(__file__).with_name(
     "godot_runtime_configuration_manifest.json")
 CONFIGURATION_ROOT = Path(__file__).with_name("godot_runtime_configuration")
 # Bound to the independently reviewed profile before any qualification case.
-FROZEN_PROFILE_SHA256 = "450931e1d40176653b83acd5209f965d6e072ccb567da2505d4e9d2f7af4ed6c"
+FROZEN_PROFILE_SHA256 = "63869fe0173b019ac62b625d9a04305f888bed14329515e64dbc9c9b6f9f77ae"
 _REASONS = (
     "ADMITTED GODOT_EXECUTABLE_MISMATCH RUNTIME_DEPENDENCY_MISMATCH ARGV_MISMATCH "
     "ENVIRONMENT_MISMATCH PROJECT_SEMANTIC_BYTES_MISMATCH GENERATED_CACHE_BYTES_MISMATCH "
@@ -333,6 +333,23 @@ def _build_admission_policy(
     if mkdir_translation != {
             "operation": "mkdir", "parameter": 509, "returned": -17}:
         fail("PROFILE_MISMATCH", "HOME-ancestor mkdir translation differs")
+    hwcaps_grammar = profile["accessGrammar"]["paths"].get(
+        "hwcapsProbeGrammar")
+    if not isinstance(hwcaps_grammar, Mapping) or set(hwcaps_grammar) != {
+            "schema", "loader", "levels", "identityClass", "fileIdentity",
+            "rule"} or hwcaps_grammar.get("schema") != \
+            "glassvow.godot-runtime-provenance.hwcaps-probe-grammar/v1" or \
+            hwcaps_grammar.get("loader") != \
+            "glibc-ld.so-x86-64-hwcaps-subdirs" or \
+            hwcaps_grammar.get("levels") != [
+                "x86-64-v4", "x86-64-v3", "x86-64-v2"] or \
+            hwcaps_grammar.get("identityClass") != \
+            "identity-only-runtime-probe" or \
+            hwcaps_grammar.get("fileIdentity") != \
+            "none-unless-present-in-g0-identity-sets" or \
+            not isinstance(hwcaps_grammar.get("rule"), str) or \
+            not hwcaps_grammar["rule"]:
+        fail("PROFILE_MISMATCH", "HWCAP probe grammar differs")
     files: dict[str, set[str]] = {}
     paths: set[tuple[str, str, int | None]] = set()
 
@@ -357,9 +374,21 @@ def _build_admission_policy(
             files.setdefault(path, set()).add("R")
 
     for record in closure["records"]:
-        add_path(
-            str(record["operation"]), _expand(str(record["path"]), roots),
-            record["parameter"])
+        operation = str(record["operation"])
+        logical_path = str(record["path"])
+        parameter = record["parameter"]
+        add_path(operation, _expand(logical_path, roots), parameter)
+        match = re.search(
+            r"/glibc-hwcaps/(x86-64-v\d+)(?:/|$)", logical_path)
+        if match is None:
+            continue
+        if match.group(1) not in hwcaps_grammar["levels"]:
+            fail("MANIFEST_MISMATCH", "G0 HWCAP probe level is not frozen")
+        for level in hwcaps_grammar["levels"]:
+            sibling = (
+                logical_path[:match.start(1)] + level
+                + logical_path[match.end(1):])
+            add_path(operation, _expand(sibling, roots), parameter)
 
     for template in profile["kernelAdmission"]["executeLeaves"]:
         path = canonical_identity(_expand(template, roots))
@@ -1404,13 +1433,42 @@ def _admission_policy(
                 "parameter": 577, "returned": -13}:
         fail("PROFILE_MISMATCH", "path-result translations differ")
 
+    hwcaps_grammar = profile["accessGrammar"]["paths"].get(
+        "hwcapsProbeGrammar")
+    if not isinstance(hwcaps_grammar, Mapping) or set(hwcaps_grammar) != {
+            "schema", "loader", "levels", "identityClass", "fileIdentity",
+            "rule"} or hwcaps_grammar.get("schema") != \
+            "glassvow.godot-runtime-provenance.hwcaps-probe-grammar/v1" or \
+            hwcaps_grammar.get("loader") != \
+            "glibc-ld.so-x86-64-hwcaps-subdirs" or \
+            hwcaps_grammar.get("levels") != [
+                "x86-64-v4", "x86-64-v3", "x86-64-v2"] or \
+            hwcaps_grammar.get("identityClass") != \
+            "identity-only-runtime-probe" or \
+            hwcaps_grammar.get("fileIdentity") != \
+            "none-unless-present-in-g0-identity-sets" or \
+            not isinstance(hwcaps_grammar.get("rule"), str) or \
+            not hwcaps_grammar["rule"]:
+        fail("PROFILE_MISMATCH", "HWCAP probe grammar differs")
     allowed_results: dict[tuple[str, str, int | None], set[int]] = {}
     for record in g0["pathOperationClosure"]["records"]:
-        path = _expand(record["path"], roots)
-        if record["operation"] == "execve":
-            path = str(Path(path).resolve(strict=False))
-        key = (record["operation"], path, record["parameter"])
-        allowed_results.setdefault(key, set()).update(record["returns"])
+        logical_path = str(record["path"])
+        logical_paths = [logical_path]
+        match = re.search(
+            r"/glibc-hwcaps/(x86-64-v\d+)(?:/|$)", logical_path)
+        if match is not None:
+            if match.group(1) not in hwcaps_grammar["levels"]:
+                fail("MANIFEST_MISMATCH", "G0 HWCAP probe level is not frozen")
+            logical_paths.extend(
+                logical_path[:match.start(1)] + level
+                + logical_path[match.end(1):]
+                for level in hwcaps_grammar["levels"])
+        for candidate in logical_paths:
+            path = _expand(candidate, roots)
+            if record["operation"] == "execve":
+                path = str(Path(path).resolve(strict=False))
+            key = (record["operation"], path, record["parameter"])
+            allowed_results.setdefault(key, set()).update(record["returns"])
     for root in roots.values():
         candidate = Path(root).parent
         while str(candidate) != candidate.parent.as_posix():

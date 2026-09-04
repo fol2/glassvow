@@ -6,6 +6,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -182,7 +183,7 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         )
         self.assertEqual(sha256(PROFILE_PATH), self.verifier.FROZEN_PROFILE_SHA256)
         self.assertEqual(535, self.profile["authority"]["issue"])
-        self.assertEqual(5530338723, self.profile["authority"]["comment"])
+        self.assertEqual(5535398605, self.profile["authority"]["comment"])
         self.assertEqual(
             "5c5f2d325725b0a04e060c1ffe0b40a76f2e0928",
             self.profile["authority"]["g0ProductSha"],
@@ -263,6 +264,31 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
             self.profile["g0"]["pathOperationClosure"][
                 "recordsCanonicalSha256"],
         )
+
+    def test_hwcaps_probe_grammar_expands_only_the_measured_v2_and_v3_paths(self) -> None:
+        paths = self.profile["accessGrammar"]["paths"]
+        self.assertEqual({
+            "schema": "glassvow.godot-runtime-provenance.hwcaps-probe-grammar/v1",
+            "loader": "glibc-ld.so-x86-64-hwcaps-subdirs",
+            "levels": ["x86-64-v4", "x86-64-v3", "x86-64-v2"],
+            "identityClass": "identity-only-runtime-probe",
+            "fileIdentity": "none-unless-present-in-g0-identity-sets",
+            "rule": "If a frozen G0 pathOperationClosure record's logical path contains /glibc-hwcaps/<level>/ or ends at /glibc-hwcaps/<level>, and <level> is one of the frozen levels, both independent policy builders also admit the same operation, parameter and expected returns against every frozen level, substituting only that path segment. Missing higher levels remain ENOENT identity probes. Do not add Landlock file identities, semantic inputs, other libraries, or undocumented levels.",
+        }, paths["hwcapsProbeGrammar"])
+        manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
+        records = {
+            (record["operation"], record["parameter"], record["path"])
+            for record in manifest["pathOperationClosure"]["records"]
+            if "/glibc-hwcaps/" in record["path"]
+        }
+        base = "${PRODUCT}/addons/sentry/bin/linux/x86_64/glibc-hwcaps"
+        self.assertEqual({
+            ("newfstatat", None, f"{base}/x86-64-v2"),
+            ("newfstatat", None, f"{base}/x86-64-v3"),
+            ("openat", 524288, f"{base}/x86-64-v2/libcurl.so.4"),
+            ("openat", 524288, f"{base}/x86-64-v3/libcurl.so.4"),
+        }, records)
+        self.assertFalse(any("x86-64-v4" in path for _, _, path in records))
 
     def test_every_successful_closure_path_survives_post_admission_projection(self) -> None:
         manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
@@ -857,7 +883,7 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
                 "productSha": "a" * 40,
                 "packetRoot": "research_packets/frozen",
                 "authorityIssue": 535,
-                "authorityComment": 5530338723,
+                "authorityComment": 5535398605,
                 "requestIndices": ["0"],
                 "roles": {
                     "externalScript": {"path": "oracle.gd"},
@@ -937,7 +963,7 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
             for index in range(28)
         ]}
         args = types.SimpleNamespace(
-            authority_issue=535, authority_comment=5530338723,
+            authority_issue=535, authority_comment=5535398605,
             packet_sha="f" * 40)
         roles = self.verifier._roles(
             g0, packet, {"PRODUCT": "/product", "PACKET": "/packet"},
@@ -1008,6 +1034,18 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
             "type": "PATH_X", "operation": "openat", "returned": -13,
             "path": output, "_arguments": [-100, 0, 577, 0, 0, 0],
         }, "G15")
+        v4_curl = (
+            f'{roots["PRODUCT"]}/addons/sentry/bin/linux/x86_64/'
+            "glibc-hwcaps/x86-64-v4/libcurl.so.4")
+        v4_directory = v4_curl.rsplit("/", 1)[0]
+        verify({
+            "type": "PATH_X", "operation": "newfstatat", "returned": -2,
+            "path": v4_directory, "_arguments": [0, 0, 0, 0, 0, 0],
+        })
+        verify({
+            "type": "PATH_X", "operation": "openat", "returned": -2,
+            "path": v4_curl, "_arguments": [-100, 0, 524288, 0, 0, 0],
+        })
         for changed in (
                 {"type": "PATH_X", "operation": "openat", "returned": 91,
                  "path": output, "_arguments": [-100, 0, 1, 0, 0, 0]},
@@ -1016,7 +1054,13 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
                 {"type": "PATH_X", "operation": "mkdir", "returned": -17,
                  "path": "/tmp/runtime/G00", "_arguments": [0, 508, 0, 0, 0, 0]},
                 {"type": "PATH_X", "operation": "readlink", "returned": -2,
-                 "path": "/tmp/frozen", "_arguments": [0, 0, 0, 0, 0, 0]}):
+                 "path": "/tmp/frozen", "_arguments": [0, 0, 0, 0, 0, 0]},
+                {"type": "PATH_X", "operation": "openat", "returned": 0,
+                 "path": v4_curl,
+                 "_arguments": [-100, 0, 524288, 0, 0, 0]},
+                {"type": "PATH_X", "operation": "newfstatat", "returned": 0,
+                 "path": v4_directory,
+                 "_arguments": [0, 0, 0, 0, 0, 0]}):
             with self.assertRaises(self.verifier.VerificationFailure):
                 verify(changed)
 
@@ -1174,14 +1218,14 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
         packet_manifest.write_text(json.dumps({
             "schema": "glassvow.godot-runtime-packet/v1", "productSha": "a" * 40,
             "packetRoot": "research_packets/frozen", "authorityIssue": 535,
-            "authorityComment": 5530338723, "requestIndices": ["0"], "roles": {},
+            "authorityComment": 5535398605, "requestIndices": ["0"], "roles": {},
         }), encoding="utf-8")
         return types.SimpleNamespace(
             profile=PROFILE_PATH, g0_manifest=ROOT / "tools/execution_provenance/godot_runtime_g0_manifest.json",
             packet_manifest=packet_manifest, case_id="G24", case_dir=case_dir, challenge=challenge,
             observer_sha="c" * 40, product_sha="a" * 40, packet_sha="b" * 40,
             packet_root="research_packets/frozen", authority_issue=535,
-            authority_comment=5530338723, request_index="0",
+            authority_comment=5535398605, request_index="0",
             expected_godot=root / "godot", expected_product_source=root / "product-source",
             expected_product_stage=root / "product-stage",
             expected_product_stage_receipt=root / "product-stage-receipt.json",
@@ -1716,7 +1760,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         verified, verified_counts = self.verifier._build_admission_policy(
             self.profile, manifest, roots, working)
         self.assertEqual(produced, verified)
-        self.assertEqual({"fileRules": 169, "pathRules": 799}, produced_counts)
+        self.assertEqual({"fileRules": 169, "pathRules": 801}, produced_counts)
         self.assertEqual(produced_counts, verified_counts)
         self.assertLessEqual(len(produced), self.profile["caps"]["maxAdmissionPolicyBytes"])
         self.assertEqual(393216, self.profile["caps"]["maxAdmissionPolicyBytes"])
@@ -1758,6 +1802,23 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
             ))
             for record in manifest["pathOperationClosure"]["records"]
         }
+        grammar = self.profile["accessGrammar"]["paths"]["hwcapsProbeGrammar"]
+        for record in manifest["pathOperationClosure"]["records"]:
+            match = re.search(
+                r"/glibc-hwcaps/(x86-64-v\d+)(?:/|$)", record["path"])
+            if match is None:
+                continue
+            for level in grammar["levels"]:
+                sibling = (
+                    record["path"][:match.start(1)] + level
+                    + record["path"][match.end(1):])
+                path = expand(sibling)
+                expected_path_rules.add("\t".join((
+                    "P", record["operation"],
+                    "-" if record["parameter"] is None
+                    else str(record["parameter"]),
+                    path.encode().hex(),
+                )))
         for root in roots.values():
             candidate = Path(root).parent
             while str(candidate) != candidate.parent.as_posix():
@@ -1778,6 +1839,23 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
             if line.startswith("P\t")
         }
         self.assertEqual(expected_path_rules, actual_path_rules)
+        hwcaps = f"{roots['PRODUCT']}/addons/sentry/bin/linux/x86_64/glibc-hwcaps"
+        self.assertIn(
+            f"P\tnewfstatat\t-\t{f'{hwcaps}/x86-64-v4'.encode().hex()}",
+            actual_path_rules,
+        )
+        self.assertIn(
+            f"P\topenat\t524288\t{f'{hwcaps}/x86-64-v4/libcurl.so.4'.encode().hex()}",
+            actual_path_rules,
+        )
+        self.assertNotIn(
+            f"P\tnewfstatat\t-\t{f'{hwcaps}/x86-64-v5'.encode().hex()}",
+            actual_path_rules,
+        )
+        self.assertNotIn(
+            f"P\topenat\t524288\t{f'{hwcaps}/x86-64-v5/libcurl.so.4'.encode().hex()}",
+            actual_path_rules,
+        )
         font_path = "/etc/fonts/fonts.conf".encode().hex()
         self.assertIn(f"P\taccess\t-\t{font_path}", actual_path_rules)
         self.assertIn(f"P\tnewfstatat\t-\t{font_path}", actual_path_rules)
@@ -1944,6 +2022,42 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 self.verifier.VerificationFailure, "identity operations differ"):
             self.verifier._validate_g0_path_operation_closure(
                 self.profile, manifest)
+
+    def test_policy_builders_reject_changed_hwcaps_grammar_and_undocumented_level(self) -> None:
+        manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
+        roots = manifest["pathOperationClosure"]["source"]["roots"]
+        working = Path(
+            manifest["pathOperationClosure"]["source"]["initialWorkingDirectory"])
+        changed_grammar = json.loads(json.dumps(self.profile))
+        changed_grammar["accessGrammar"]["paths"]["hwcapsProbeGrammar"][
+            "loader"] = "different-loader"
+        with self.assertRaises(self.runner.RunnerError):
+            self.runner.build_admission_policy(
+                changed_grammar, manifest, roots, working)
+        with self.assertRaises(self.verifier.VerificationFailure):
+            self.verifier._build_admission_policy(
+                changed_grammar, manifest, roots, working)
+
+        changed_manifest = json.loads(json.dumps(manifest))
+        closure = changed_manifest["pathOperationClosure"]
+        record = next(
+            record for record in closure["records"]
+            if "/glibc-hwcaps/x86-64-v3" in record["path"])
+        record["path"] = record["path"].replace("x86-64-v3", "x86-64-v5")
+        closure["records"].sort(key=lambda item: (
+            item["operation"], item["path"],
+            -1 if item["parameter"] is None else item["parameter"]))
+        closure["recordsCanonicalSha256"] = self.runner.sha256_bytes(
+            self.runner.canonical_bytes(closure["records"]))
+        changed_profile = json.loads(json.dumps(self.profile))
+        changed_profile["g0"]["pathOperationClosure"][
+            "recordsCanonicalSha256"] = closure["recordsCanonicalSha256"]
+        with self.assertRaises(self.runner.RunnerError):
+            self.runner.build_admission_policy(
+                changed_profile, changed_manifest, roots, working)
+        with self.assertRaises(self.verifier.VerificationFailure):
+            self.verifier._build_admission_policy(
+                changed_profile, changed_manifest, roots, working)
 
     def test_kernel_interpreter_is_rx_without_becoming_a_fifth_execve(self) -> None:
         manifest = json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8"))
@@ -2177,7 +2291,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 "productSha": "a" * 40,
                 "packetRoot": "research_packets/frozen",
                 "authorityIssue": 535,
-                "authorityComment": 5530338723,
+                "authorityComment": 5535398605,
                 "requestIndices": ["0"],
                 "roles": {
                     "externalScript": {
@@ -2195,7 +2309,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 self.runner.validate_packet_manifest(
                     packet, manifest, self.profile, product_sha="a" * 40,
                     packet_root="research_packets/frozen", authority_issue=535,
-                    authority_comment=5530338723)
+                    authority_comment=5535398605)
 
     def test_qualification_packet_cannot_replace_the_measured_m09_bytes(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-packet-") as temporary:
@@ -2209,7 +2323,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 "productSha": "a" * 40,
                 "packetRoot": "research_packets/frozen",
                 "authorityIssue": 535,
-                "authorityComment": 5530338723,
+                "authorityComment": 5535398605,
                 "requestIndices": ["0"],
                 "roles": {
                     "externalScript": {
@@ -2229,7 +2343,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 self.runner.validate_packet_manifest(
                     packet, manifest, self.profile, product_sha="a" * 40,
                     packet_root="research_packets/frozen", authority_issue=535,
-                    authority_comment=5530338723)
+                    authority_comment=5535398605)
 
     def test_canonical_invocation_contains_only_frozen_environment(self) -> None:
         roots = {
@@ -2314,7 +2428,7 @@ class GodotRuntimeCampaignContractTests(unittest.TestCase):
                 "productSha": "a" * 40,
                 "packetRoot": "research_packets/frozen",
                 "authorityIssue": 535,
-                "authorityComment": 5530338723,
+                "authorityComment": 5535398605,
                 "requestIndices": ["0"],
                 "roles": {
                     "externalScript": {

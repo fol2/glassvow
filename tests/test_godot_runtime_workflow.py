@@ -72,11 +72,38 @@ class GodotRuntimeWorkflowTests(unittest.TestCase):
                 not path.startswith(f"{packet_root}/") for path in paths))
 
     def test_remote_budget_listing_fails_closed_before_mapfile(self) -> None:
+        budget = WORKFLOW.split(
+            "      - name: Reserve finite remote qualification budget\n", 1
+        )[1].split("\n      - name:", 1)[0]
         self.assertNotIn("mapfile -t runs < <(gh api", WORKFLOW)
         self.assertNotIn("mapfile -t jobs < <(gh api", WORKFLOW)
         self.assertIn('> "$runs_file"\n          mapfile -t runs < "$runs_file"', WORKFLOW)
         self.assertIn('> "$jobs_file"\n            mapfile -t jobs < "$jobs_file"', WORKFLOW)
         self.assertIn('test "$attempts" -le "$max_attempts"', WORKFLOW)
+        self.assertIn('caps["budgetEpochComment"]', budget)
+        self.assertIn(
+            'repos/$GITHUB_REPOSITORY/issues/comments/$budget_epoch_comment',
+            budget,
+        )
+        self.assertIn(".created_at", budget)
+        self.assertIn(".started_at", budget)
+        self.assertIn('iso_second() {', budget)
+        self.assertIn('([.][0-9]+)?Z$', budget)
+        self.assertIn('"$job_started_at" < "$epoch_created_at"', budget)
+        self.assertNotIn(
+            '| "\\(.id):\\(.run_attempt)"',
+            budget,
+        )
+        self.assertNotIn('attempts=$((attempts + ${#jobs[@]}))', budget)
+
+    def test_budget_epoch_is_frozen_to_the_owner_authority(self) -> None:
+        caps = PROFILE["caps"]
+        self.assertEqual(5535398605, caps["budgetEpochComment"])
+        self.assertEqual(PROFILE["authority"]["comment"], caps["budgetEpochComment"])
+        self.assertEqual((8, 120, 15), (
+            caps["maxQualificationAttempts"], caps["maxHostedMinutes"],
+            caps["maxMinutesPerQualificationAttempt"],
+        ))
 
     def test_qualification_and_a1_have_distinct_non_cancelling_slots(self) -> None:
         self.assertIn("inputs.mode == 'godot-runtime-a1' && 'godot-runtime-a1'", WORKFLOW)
@@ -90,7 +117,7 @@ class GodotRuntimeWorkflowTests(unittest.TestCase):
 
     def test_execution_authorities_and_request_index_are_frozen(self) -> None:
         self.assertEqual(
-            (535, 5530338723),
+            (535, 5535398605),
             (PROFILE["packetIngress"]["qualification"]["authorityIssue"],
              PROFILE["packetIngress"]["qualification"]["authorityComment"]),
         )
@@ -209,6 +236,18 @@ class GodotRuntimeWorkflowTests(unittest.TestCase):
 
     def test_focused_regressions_include_trace_binding(self) -> None:
         self.assertIn("python3 -B tests/test_godot_runtime_trace_binding.py", WORKFLOW)
+
+    def test_runtime_environment_records_cpu_auxv_and_glibc_hwcaps(self) -> None:
+        runtime = WORKFLOW.split("\n  godot-runtime:\n", 1)[1].split(
+            "\n  cleanup-a1-packet-ref:\n", 1)[0]
+        environment = runtime.split(
+            "      - name: Install and identify exact Godot 4.7.2\n", 1
+        )[1].split("\n      - name:", 1)[0]
+        for required in (
+                "/proc/cpuinfo", "model name", "flags",
+                "LD_SHOW_AUXV=1 /bin/true",
+                "/usr/lib/x86_64-linux-gnu/glibc-hwcaps"):
+            self.assertIn(required, environment)
 
     def test_g0_diagnostic_captures_every_path_operation_from_raw_trace(self) -> None:
         g0 = WORKFLOW.split("\n  godot-g0:\n", 1)[1].split(

@@ -559,6 +559,23 @@ def build_admission_policy(
     if mkdir_translation != {
             "operation": "mkdir", "parameter": 509, "returned": -17}:
         raise RunnerError("HOME-ancestor mkdir translation differs")
+    hwcaps_grammar = profile["accessGrammar"]["paths"].get(
+        "hwcapsProbeGrammar")
+    if not isinstance(hwcaps_grammar, Mapping) or set(hwcaps_grammar) != {
+            "schema", "loader", "levels", "identityClass", "fileIdentity",
+            "rule"} or hwcaps_grammar.get("schema") != \
+            "glassvow.godot-runtime-provenance.hwcaps-probe-grammar/v1" or \
+            hwcaps_grammar.get("loader") != \
+            "glibc-ld.so-x86-64-hwcaps-subdirs" or \
+            hwcaps_grammar.get("levels") != [
+                "x86-64-v4", "x86-64-v3", "x86-64-v2"] or \
+            hwcaps_grammar.get("identityClass") != \
+            "identity-only-runtime-probe" or \
+            hwcaps_grammar.get("fileIdentity") != \
+            "none-unless-present-in-g0-identity-sets" or \
+            not isinstance(hwcaps_grammar.get("rule"), str) or \
+            not hwcaps_grammar["rule"]:
+        raise RunnerError("HWCAP probe grammar differs")
     files: dict[str, set[str]] = {}
     paths: set[tuple[str, str, int | None]] = set()
 
@@ -586,9 +603,21 @@ def build_admission_policy(
             files.setdefault(path, set()).add("R")
 
     for record in closure["records"]:
-        add_path(
-            str(record["operation"]), expand(str(record["path"])),
-            record["parameter"])
+        operation = str(record["operation"])
+        logical_path = str(record["path"])
+        parameter = record["parameter"]
+        add_path(operation, expand(logical_path), parameter)
+        match = re.search(
+            r"/glibc-hwcaps/(x86-64-v\d+)(?:/|$)", logical_path)
+        if match is None:
+            continue
+        if match.group(1) not in hwcaps_grammar["levels"]:
+            raise RunnerError("G0 HWCAP probe level is not frozen")
+        for level in hwcaps_grammar["levels"]:
+            sibling = (
+                logical_path[:match.start(1)] + level
+                + logical_path[match.end(1):])
+            add_path(operation, expand(sibling), parameter)
 
     for template in profile["kernelAdmission"]["executeLeaves"]:
         path = canonical_identity(expand(template))
