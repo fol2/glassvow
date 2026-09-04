@@ -215,6 +215,29 @@ class TraceBindingTests(unittest.TestCase):
         trace, caps = self.accounting_fixture(reused)
         with self.assertRaisesRegex(self.verifier.VerificationFailure, "unknown fd"):
             self.verifier.validate_trace_accounting(trace, caps, 1, 0)
+
+    def test_clone_process_child_may_enter_a_fresh_syscall_before_parent_exit(self) -> None:
+        events = [
+            "SYSCALL_E\t2\t100\t435\tclone3\t0\t8\t0\t0\t0\t0",
+            "LINEAGE\t3\t100\t200\tclone_process\t16640",
+            "SYSCALL_E\t4\t200\t14\trt_sigprocmask\t0\t0\t0\t0\t0\t0",
+            "SYSCALL_X\t5\t200\t14\trt_sigprocmask\t0\t0\t0",
+            "SYSCALL_X\t6\t100\t435\tclone3\t200\t0\t0",
+        ]
+        trace, caps = self.accounting_fixture(events)
+        self.verifier.validate_trace_accounting(trace, caps, 1, 0)
+
+    def test_clone_thread_child_may_enter_a_fresh_syscall_after_parent_exit(self) -> None:
+        events = [
+            "SYSCALL_E\t2\t100\t435\tclone3\t0\t8\t0\t0\t0\t0",
+            "LINEAGE\t3\t100\t200\tclone_thread\t65536",
+            "SYSCALL_X\t4\t100\t435\tclone3\t200\t0\t0",
+            "SYSCALL_E\t5\t200\t334\trseq\t0\t0\t0\t0\t0\t0",
+            "SYSCALL_X\t6\t200\t334\trseq\t0\t0\t0",
+        ]
+        trace, caps = self.accounting_fixture(events)
+        self.verifier.validate_trace_accounting(trace, caps, 1, 0)
+
     def pipe_events(self) -> tuple[list[dict], bytes]:
         payload = b"/fresh/home/Desktop\n"
         identity = {"classification": "I", "device": 1, "inode": 42, "path": "pipe:[42]"}

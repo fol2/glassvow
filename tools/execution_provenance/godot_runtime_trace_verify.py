@@ -431,6 +431,9 @@ def validate_trace_accounting(trace: Mapping[str, Any], caps: Mapping[str, int],
             continue
         if tid not in known: fail("PROVENANCE_INCOMPLETE", "task event precedes observed lineage")
         if event_type == "SYSCALL_E":
+            inherited = active.get(tid)
+            if inherited is not None and inherited.get("resumedChild"):
+                active.pop(tid)
             if tid in active: fail("PROVENANCE_INCOMPLETE", "nested syscall entry")
             active[tid] = {**event, "path": None, "supplied": None, "exec": False,
                            "lineage": None, "resumedChild": False}
