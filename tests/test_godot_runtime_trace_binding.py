@@ -241,22 +241,27 @@ class TraceBindingTests(unittest.TestCase):
     def pipe_events(self) -> tuple[list[dict], bytes]:
         payload = b"/fresh/home/Desktop\n"
         identity = {"classification": "I", "device": 1, "inode": 42, "path": "pipe:[42]"}
+        interpreter = str(Path("/bin/sh").resolve())
         events = [
             {"type": "PIPE", "sequence": 1, "tid": 100, "readerFd": 3, "writerFd": 4,
              "device": 1, "inode": 42, "path": "pipe:[42]"},
-            {"type": "LINEAGE", "sequence": 2, "tid": 100, "childTid": 200},
+            {"type": "LINEAGE", "sequence": 2, "tid": 100, "childTid": 200,
+             "kind": "clone_process"},
             {"type": "SYSCALL_E", "sequence": 3, "tid": 200, "name": "dup2",
              "arguments": [4, 1, 0, 0, 0, 0]},
             {"type": "SYSCALL_X", "sequence": 4, "tid": 200, "name": "dup2", "returned": 1},
-            {"type": "EXEC", "sequence": 5, "tid": 200,
-             "path": str(Path("/bin/sh").resolve()),
+            {"type": "EXEC", "sequence": 5, "tid": 200, "path": interpreter,
+             "_requestedPath": "/bin/sh"},
+            {"type": "LINEAGE", "sequence": 6, "tid": 200, "childTid": 300,
+             "kind": "vfork_process"},
+            {"type": "EXEC", "sequence": 7, "tid": 300, "path": interpreter,
              "_requestedPath": "/usr/bin/xdg-user-dir"},
-            {**identity, "type": "WRITE", "sequence": 6, "tid": 200, "fd": 1,
+            {**identity, "type": "WRITE", "sequence": 8, "tid": 300, "fd": 1,
              "returned": len(payload), "sidecarOffset": 0},
-            {**identity, "type": "READ", "sequence": 7, "tid": 100, "fd": 3,
+            {**identity, "type": "READ", "sequence": 9, "tid": 100, "fd": 3,
              "returned": len(payload), "sidecarOffset": len(payload)},
-            {**identity, "type": "CLOSE", "sequence": 8, "tid": 100, "fd": 4},
-            {**identity, "type": "CLOSE", "sequence": 9, "tid": 100, "fd": 3},
+            {**identity, "type": "CLOSE", "sequence": 10, "tid": 100, "fd": 4},
+            {**identity, "type": "CLOSE", "sequence": 11, "tid": 100, "fd": 3},
         ]
         return events, payload
 
@@ -267,14 +272,32 @@ class TraceBindingTests(unittest.TestCase):
                  "sidecarOffset": len(payload) * 2}
         self.assertEqual(b"outer", self.verifier._stream_bytes(events + [outer], 1, payload * 2 + b"outer"))
         events[0]["path"] = "pipe:[43]"
-        with self.assertRaisesRegex(self.verifier.VerificationFailure, "PROCESS_LINEAGE_MISMATCH"):
+        with self.assertRaisesRegex(self.verifier.VerificationFailure, "internal pipe evidence differs"):
             self.verifier._validate_internal_pipe(events, payload * 2, payload, self.contract)
         events[0]["path"] = "pipe:[42]"; events[1]["childTid"] = 201
-        with self.assertRaisesRegex(self.verifier.VerificationFailure, "PROCESS_LINEAGE_MISMATCH"):
+        with self.assertRaisesRegex(self.verifier.VerificationFailure, "internal pipe evidence differs"):
             self.verifier._validate_internal_pipe(events, payload * 2, payload, self.contract)
         events[1]["childTid"] = 200; events[2]["arguments"][0] = 5
-        with self.assertRaisesRegex(self.verifier.VerificationFailure, "PROCESS_LINEAGE_MISMATCH"):
+        with self.assertRaisesRegex(self.verifier.VerificationFailure, "internal pipe evidence differs"):
             self.verifier._validate_internal_pipe(events, payload * 2, payload, self.contract)
+
+    def test_writer_dup2_without_shell_is_process_lineage_mismatch(self) -> None:
+        events, payload = self.pipe_events()
+        for event in events:
+            if event.get("name") == "dup2":
+                event["tid"] = 300
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "internal pipe evidence differs"):
+            self.verifier._validate_internal_pipe(
+                events, payload * 2, payload, self.contract)
+
+    def test_outer_stdout_pipe_close_is_not_undeclared_internal_pipe(self) -> None:
+        events, payload = self.pipe_events()
+        events.append({
+            "type": "CLOSE", "sequence": 12, "tid": 100, "fd": 1,
+            "classification": "I", "device": 2, "inode": 99, "path": "pipe:[99]",
+        })
+        self.verifier._validate_internal_pipe(events, payload * 2, payload, self.contract)
 
     def test_tracer_identity_is_recomputed_from_live_sources_and_binary(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-tracer-identity-") as temporary:

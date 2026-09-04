@@ -28,6 +28,7 @@ DIAGNOSTIC_CASES = {"G15", "G16", "G17", "G18"}
 ADMISSION_SCHEMA = "glassvow.godot-runtime-provenance.admission-receipt/v1"
 CAPABILITY_SCHEMA = "glassvow.godot-runtime-provenance.capability-prerequisite/v1"
 CAPABILITY_CAMPAIGN_SCHEMA = "glassvow.godot-runtime-provenance.campaign-receipt/v1"
+VENUE_ELIGIBILITY_SCHEMA = "glassvow.godot-runtime-provenance.venue-eligibility/v1"
 
 
 class CampaignError(RuntimeError):
@@ -64,6 +65,72 @@ def sha256_file(path: Path) -> str:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def _expand_runtime_path(path: str, godot: Path, product: Path) -> Path | None:
+    if path.startswith("${HOME}") or path.startswith("${OUTPUT}"):
+        return None
+    if path.startswith("${GODOT}"):
+        return Path(str(godot) + path[len("${GODOT}"):])
+    if path.startswith("${PRODUCT}"):
+        return Path(str(product) + path[len("${PRODUCT}"):])
+    return Path(path)
+
+
+def hash_regular_file(path: Path) -> tuple[int, str]:
+    digest = hashlib.sha256()
+    size = 0
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+            size += len(block)
+    return size, digest.hexdigest()
+
+
+def evaluate_venue_eligibility(
+        identities: Sequence[Mapping[str, Any]], godot: Path, product: Path,
+        image_os: str | None, image_version: str | None,
+        frozen_image_version: str | None) -> dict[str, Any]:
+    mismatches: list[dict[str, Any]] = []
+    checked = 0
+    for record in identities:
+        logical = record.get("path")
+        if not isinstance(logical, str):
+            mismatches.append({"path": str(logical), "reason": "RUNTIME_DEPENDENCY_MISMATCH"})
+            checked += 1
+            continue
+        live = _expand_runtime_path(logical, godot, product)
+        if live is None:
+            continue
+        expected_size, expected_sha = record.get("size"), record.get("sha256")
+        checked += 1
+        try:
+            target = live.resolve(strict=True)
+            metadata = target.stat()
+            if not stat.S_ISREG(metadata.st_mode):
+                raise OSError("not a regular file")
+            size, digest = hash_regular_file(target)
+        except OSError:
+            mismatches.append({
+                "path": logical, "livePath": str(live),
+                "reason": "RUNTIME_DEPENDENCY_MISMATCH",
+            })
+            continue
+        if size != expected_size or digest != expected_sha:
+            mismatches.append({
+                "path": logical, "livePath": str(live),
+                "reason": "RUNTIME_DEPENDENCY_MISMATCH",
+                "expectedSize": expected_size, "actualSize": size,
+                "expectedSha256": expected_sha, "actualSha256": digest,
+            })
+    return {
+        "schema": VENUE_ELIGIBILITY_SCHEMA,
+        "imageOS": image_os, "imageVersion": image_version,
+        "frozenImageVersion": frozen_image_version,
+        "checked": checked, "mismatchCount": len(mismatches),
+        "mismatches": mismatches,
+        "verdict": "INELIGIBLE" if mismatches else "ELIGIBLE",
+    }
 
 
 def validate_capability_receipt(path: Path, expected_sha256: str) -> dict[str, Any]:
@@ -656,6 +723,20 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
         mounted.append(packet)
         mounts_path = output / "mounts.json"
         write_json(mounts_path, mount_records)
+        g0 = read_json(args.g0_manifest.resolve())
+        eligibility = evaluate_venue_eligibility(
+            g0.get("runtimeIdentitySet", []),
+            args.godot.resolve(), product_stage,
+            os.environ.get("ImageOS"), os.environ.get("ImageVersion"),
+            profile.get("g0", {}).get("runnerImage", {}).get("ImageVersion"),
+        )
+        write_json(output / "venue-eligibility.json", eligibility)
+        if eligibility["verdict"] != "ELIGIBLE":
+            first = eligibility["mismatches"][0] if eligibility["mismatches"] else {
+                "path": "runtimeIdentitySet"}
+            raise CampaignError(
+                "RUNTIME_DEPENDENCY_MISMATCH: venue identity differs for "
+                f"{first.get('path')}")
         packet_manifest = packet / "manifest.json"
         cases_root = output / "cases"
         challenges = output / "challenges"

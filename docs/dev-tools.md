@@ -99,7 +99,11 @@ only through the bound Godot invocation; packet content is never imported or
 executed as shell, Python, or workflow code. Product and packet inputs are
 mounted read-only. Full profile qualification re-runs the unchanged inert
 campaign before the frozen actual-Godot matrix and publishes only bounded
-capability evidence.
+capability evidence. Newly produced case receipts hash a bounded failure
+check/detail (and an exception category for unexpected errors) without using
+that text to decide admission. The Godot campaign hashes frozen runtime
+path/size/sha256 identities before launching Godot; an image label is
+observation only.
 
 The separate `godot-runtime-a1` mode admits one packet-declared request through
 the same qualified G00 path. It runs only from exact current `main`, requires

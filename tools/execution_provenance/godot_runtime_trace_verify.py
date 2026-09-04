@@ -10,16 +10,36 @@ from typing import Any, Iterable, Mapping, Sequence
 
 
 class VerificationFailure(Exception):
-    def __init__(self, reason: str, detail: str) -> None:
+    def __init__(
+            self, reason: str, detail: str, check: str | None = None,
+            sequence: int | None = None) -> None:
         super().__init__(reason, detail)
         self.reason, self.detail = reason, detail
+        self.check = check
+        self.sequence = sequence if isinstance(sequence, int) else None
 
     def __str__(self) -> str:
         return f"{self.reason}: {self.detail}"
 
 
-def fail(reason: str, detail: str) -> None:
-    raise VerificationFailure(reason, detail)
+def sanitise_diagnostic(value: str, maximum: int) -> str:
+    text = "".join(ch if ch.isprintable() and ch != "\x00" else " " for ch in value)
+    return " ".join(text.split())[:maximum]
+
+
+def _check_id(check: str | None, detail: str) -> str:
+    if check:
+        return sanitise_diagnostic(check, 64)
+    slug = "".join(ch.lower() if ch.isalnum() else "_" for ch in detail)
+    slug = "_".join(part for part in slug.split("_") if part)
+    return sanitise_diagnostic(slug, 64) or "unnamed"
+
+
+def fail(
+        reason: str, detail: str, check: str | None = None,
+        sequence: int | None = None) -> None:
+    raise VerificationFailure(
+        reason, detail, check=_check_id(check, detail), sequence=sequence)
 
 
 def decode_syscall_fd(raw: int) -> int:
@@ -532,7 +552,10 @@ def validate_internal_pipe(events: Sequence[Mapping[str, Any]], sidecar: bytes,
     pipes = [event for event in events if event.get("type") == "PIPE"]
     internal = internal_pipe_paths(events)
     if len(pipes) != contract["count"] or len(internal) != contract["count"]:
-        fail("PROCESS_LINEAGE_MISMATCH", "internal pipe count differs")
+        fail("PROCESS_LINEAGE_MISMATCH", "internal pipe count differs",
+             check="internal_pipe.count")
+    parents = {event["childTid"]: event["tid"] for event in events
+               if event.get("type") == "LINEAGE"}
     for pipe in pipes:
         path = pipe["path"]
         related = [event for event in events if event.get("path") == path]
@@ -540,21 +563,26 @@ def validate_internal_pipe(events: Sequence[Mapping[str, Any]], sidecar: bytes,
         writes = [event for event in related if event["type"] == "WRITE"]
         closes = [event for event in related if event["type"] == "CLOSE"]
         producer_execs = [event for event in events if event.get("type") == "EXEC"
-                          and event.get("_requestedPath") == "/usr/bin/xdg-user-dir"
-                          and event.get("path") == str(Path("/bin/sh").resolve())]
+                          and event.get("_requestedPath") == "/usr/bin/xdg-user-dir"]
+        writer_tid = writes[0].get("tid") if len(writes) == 1 else None
+        shell_tid = parents.get(writer_tid) if writer_tid is not None else None
         dup2_exits = [event for event in events if event.get("type") == "SYSCALL_X"
-                      and event.get("tid") == (writes[0].get("tid") if writes else None)
-                      and event.get("name") == "dup2" and event.get("returned") == contract["producerFd"]]
+                      and event.get("tid") == shell_tid
+                      and event.get("name") == "dup2"
+                      and event.get("returned") == contract["producerFd"]]
         dup2_entries = [event for event in events if event.get("type") == "SYSCALL_E"
-                        and event.get("tid") == (writes[0].get("tid") if writes else None)
+                        and event.get("tid") == shell_tid
                         and event.get("name") == "dup2"
-                        and event.get("arguments", [])[:2] == [pipe["writerFd"], contract["producerFd"]]]
-        parents = {event["childTid"]: event["tid"] for event in events
-                   if event.get("type") == "LINEAGE"}
-        ancestor = writes[0].get("tid") if len(writes) == 1 else None
+                        and event.get("arguments", [])[:2] == [
+                            pipe["writerFd"], contract["producerFd"]]]
+        current = writer_tid
         ancestry: set[int] = set()
-        while ancestor in parents and ancestor not in ancestry:
-            ancestor = parents[ancestor]; ancestry.add(ancestor)
+        while current in parents:
+            parent = parents[current]
+            if parent in ancestry:
+                break
+            ancestry.add(parent)
+            current = parent
         identities = {(event.get("device"), event.get("inode")) for event in reads + writes + closes}
         identity = (pipe.get("device"), pipe.get("inode"))
         if pipe.get("readerFd") != contract["consumerFd"] or \
@@ -574,10 +602,26 @@ def validate_internal_pipe(events: Sequence[Mapping[str, Any]], sidecar: bytes,
                 any(event.get("classification") != "I" for event in reads + writes + closes) or any(
                     sidecar[event["sidecarOffset"]:event["sidecarOffset"] + event["returned"]] != expected
                     for event in reads + writes):
-            fail("PROCESS_LINEAGE_MISMATCH", "internal pipe evidence differs")
-    if any(event.get("type") == "CLOSE" and pipe_path(event.get("path"))
-           and event.get("path") not in internal for event in events):
-        fail("PROCESS_LINEAGE_MISMATCH", "undeclared pipe close")
+            fail("PROCESS_LINEAGE_MISMATCH", "internal pipe evidence differs",
+                 check="internal_pipe.evidence",
+                 sequence=pipe.get("sequence") if isinstance(pipe.get("sequence"), int) else None)
+    for event in events:
+        if event.get("type") != "CLOSE" or not pipe_path(event.get("path")) \
+                or event.get("path") in internal:
+            continue
+        related = [item for item in events if item.get("path") == event["path"]]
+        reads = [item for item in related if item["type"] == "READ"]
+        writes = [item for item in related if item["type"] == "WRITE"]
+        if not reads or not writes:
+            continue
+        if any(
+                isinstance(item.get("sidecarOffset"), int) and
+                isinstance(item.get("returned"), int) and
+                sidecar[item["sidecarOffset"]:item["sidecarOffset"] + item["returned"]] == expected
+                for item in reads + writes):
+            fail("PROCESS_LINEAGE_MISMATCH", "undeclared pipe close",
+                 check="internal_pipe.undeclared_close",
+                 sequence=event.get("sequence") if isinstance(event.get("sequence"), int) else None)
     return internal
 
 

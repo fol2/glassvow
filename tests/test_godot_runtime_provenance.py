@@ -1309,6 +1309,54 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
             finally:
                 self.verifier.FROZEN_PROFILE_SHA256 = original_profile_hash
 
+    def test_receipt_persists_sanitised_failure_without_changing_verdict(self) -> None:
+        original_profile_hash = self.verifier.FROZEN_PROFILE_SHA256
+        with tempfile.TemporaryDirectory(prefix="godot-failure-receipt-") as temporary:
+            root = Path(temporary)
+            case = root / "case"
+            case.mkdir()
+            args = self._incomplete_case_args(root, case)
+            (case / "statement.json").write_text("{", encoding="utf-8")
+            try:
+                self.verifier.FROZEN_PROFILE_SHA256 = sha256(PROFILE_PATH)
+                receipt = self.verifier.verify_case(args)
+            finally:
+                self.verifier.FROZEN_PROFILE_SHA256 = original_profile_hash
+            self.assertEqual(
+                ("INCONCLUSIVE", "PROVENANCE_INCOMPLETE"),
+                (receipt["verdict"], receipt["reason"]))
+            failure = receipt["failure"]
+            self.assertTrue(failure["check"])
+            self.assertTrue(failure["detail"])
+            self.assertLessEqual(len(failure["check"]), 64)
+            self.assertLessEqual(len(failure["detail"]), 240)
+            self.assertNotIn("exceptionCategory", failure)
+            mutated = dict(receipt)
+            mutated.pop("receiptSha256")
+            mutated["failure"] = dict(failure, detail=failure["detail"] + "x")
+            self.assertNotEqual(
+                receipt["receiptSha256"],
+                self.verifier._sha(self.verifier._canonical(mutated)))
+
+    def test_verification_failure_record_binds_check_and_sequence(self) -> None:
+        try:
+            self.verifier.fail(
+                "PROCESS_LINEAGE_MISMATCH", "internal pipe evidence differs",
+                check="internal_pipe.evidence", sequence=3160)
+        except self.verifier.VerificationFailure as error:
+            first = self.verifier.failure_record(error)
+        second = self.verifier.failure_record(self.verifier.VerificationFailure(
+            "PROCESS_LINEAGE_MISMATCH", "internal pipe evidence differs!",
+            check="internal_pipe.evidence", sequence=3160))
+        self.assertEqual("internal_pipe.evidence", first["check"])
+        self.assertEqual(3160, first["sequence"])
+        self.assertNotEqual(first["detail"], second["detail"])
+        self.assertNotIn("exceptionCategory", first)
+        unexpected = self.verifier.failure_record(ValueError("boom"))
+        self.assertEqual("unexpected_exception", unexpected["check"])
+        self.assertEqual("ValueError", unexpected["exceptionCategory"])
+        self.assertEqual("boom", unexpected["detail"])
+
 
 @unittest.skipUnless(sys.platform.startswith("linux"), "Landlock is Linux-only")
 class GodotRuntimeKernelAdmissionTests(unittest.TestCase):

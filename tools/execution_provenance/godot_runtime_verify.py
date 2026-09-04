@@ -17,6 +17,7 @@ validate_trace_accounting = _TRACE.validate_trace_accounting
 _pipe_path, _internal_pipe_paths = _TRACE.pipe_path, _TRACE.internal_pipe_paths
 _validate_internal_pipe = _TRACE.validate_internal_pipe
 _validate_request_indices = _TRACE.validate_request_indices
+sanitise_diagnostic = _TRACE.sanitise_diagnostic
 PROFILE_SCHEMA = "glassvow.godot-runtime-provenance.profile/v1"
 G0_SCHEMA = "glassvow.godot-runtime-provenance.g0-manifest/v1"
 G0_PATH_OPERATION_SCHEMA = "glassvow.godot-runtime-provenance.g0-path-operations/v1"
@@ -70,6 +71,22 @@ _SENTRY_OUTPUT = re.compile(
 
 
 def _sha(data: bytes) -> str: return hashlib.sha256(data).hexdigest()
+
+
+def failure_record(error: BaseException) -> dict[str, Any]:
+    if isinstance(error, VerificationFailure):
+        record: dict[str, Any] = {
+            "check": sanitise_diagnostic(error.check or error.detail, 64),
+            "detail": sanitise_diagnostic(error.detail, 240),
+        }
+        if isinstance(error.sequence, int):
+            record["sequence"] = error.sequence
+        return record
+    return {
+        "check": "unexpected_exception",
+        "detail": sanitise_diagnostic(str(error), 240),
+        "exceptionCategory": type(error).__name__,
+    }
 
 
 def _valid_sentry_output(data: bytes, contract: Mapping[str, Any]) -> bool:
@@ -1057,7 +1074,9 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
             continue
         if path in internal_pipes or (event["type"] == "CLOSE" and _pipe_path(path)):
             if event.get("classification") != "I":
-                fail("PROCESS_LINEAGE_MISMATCH", "pipe classification differs")
+                fail("PROCESS_LINEAGE_MISMATCH", "pipe classification differs",
+                     check="internal_pipe.classification",
+                     sequence=event.get("sequence") if isinstance(event.get("sequence"), int) else None)
             continue
         if path in dynamic_directories:
             if event["type"] != "PATH_X" or event.get("operation") not in dynamic_directories[path]:
@@ -1728,6 +1747,7 @@ def verify_case(
     case_members = dict(frozen_case_members) if frozen_case_members is not None else {}
     challenge_bytes = frozen_challenge_bytes or b""
     challenge_value: str | None = None; trusted_inputs_ready = False
+    failure: dict[str, Any] | None = None
     try:
         profile, g0, packet = _load_sources(
             args.profile, args.g0_manifest, args.packet_manifest, source_bytes)
@@ -1764,13 +1784,15 @@ def verify_case(
             args, profile, g0, packet, statement, trace, sidecar,
             challenge_value, case_members, source_bytes)
         outcome = ("PASS", "ADMITTED")
-    except (OSError, UnicodeError, IndexError, KeyError, TypeError, ValueError):
+    except (OSError, UnicodeError, IndexError, KeyError, TypeError, ValueError) as error:
         outcome = ("INCONCLUSIVE", "PROVENANCE_INCOMPLETE")
+        failure = failure_record(error)
     except VerificationFailure as error:
         if not trusted_inputs_ready or error.reason == "PROVENANCE_INCOMPLETE":
             outcome = ("INCONCLUSIVE", "PROVENANCE_INCOMPLETE")
         else:
             outcome = ("REJECT", error.reason)
+        failure = failure_record(error)
     tracer_value = statement.get("tracer", {})
     tracer = tracer_value if isinstance(tracer_value, dict) else {}
     caps = profile.get("caps", {}) if isinstance(profile, dict) else {}
@@ -1824,6 +1846,8 @@ def verify_case(
         **_receipt_details(
             statement, trace, sidecar, args.case_dir, profile, case_members),
     }
+    if failure is not None:
+        receipt["failure"] = failure
     receipt["receiptSha256"] = _sha(_canonical(receipt)); return receipt
 
 

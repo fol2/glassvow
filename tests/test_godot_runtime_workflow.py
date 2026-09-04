@@ -270,6 +270,42 @@ class GodotRuntimeWorkflowTests(unittest.TestCase):
             g0.index("Upload non-authoritative G0 diagnostics"),
         )
 
+    def test_campaign_hashes_runtime_identities_before_godot_cases(self) -> None:
+        source = CAMPAIGN_PATH.read_text(encoding="utf-8")
+        self.assertLess(
+            source.index("evaluate_venue_eligibility"),
+            source.index("runner.run_case"),
+        )
+        self.assertIn("venue-eligibility.json", source)
+        self.assertIn("RUNTIME_DEPENDENCY_MISMATCH: venue identity differs", source)
+
+    def test_venue_eligibility_uses_bytes_not_image_label(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-venue-") as temporary:
+            root = Path(temporary)
+            godot = root / "godot"
+            product = root / "product"
+            product.mkdir()
+            payload = b"runtime-bytes"
+            godot.write_bytes(payload)
+            digest = hashlib.sha256(payload).hexdigest()
+            identities = [{
+                "path": "${GODOT}", "size": len(payload), "sha256": digest,
+            }]
+            eligible = campaign.evaluate_venue_eligibility(
+                identities, godot, product, "ubuntu24", "other-image",
+                "20260831.293.1")
+            self.assertEqual("ELIGIBLE", eligible["verdict"])
+            self.assertEqual(0, eligible["mismatchCount"])
+            self.assertEqual("other-image", eligible["imageVersion"])
+            identities[0]["sha256"] = "0" * 64
+            ineligible = campaign.evaluate_venue_eligibility(
+                identities, godot, product, "ubuntu24", "20260831.293.1",
+                "20260831.293.1")
+            self.assertEqual("INELIGIBLE", ineligible["verdict"])
+            self.assertEqual(
+                "RUNTIME_DEPENDENCY_MISMATCH",
+                ineligible["mismatches"][0]["reason"])
+
 
 if __name__ == "__main__":
     unittest.main()
