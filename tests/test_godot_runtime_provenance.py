@@ -432,6 +432,8 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         self.assertEqual(8, caps["maxQualificationAttempts"])
         self.assertEqual(120, caps["maxHostedMinutes"])
         self.assertEqual(15, caps["maxMinutesPerQualificationAttempt"])
+        self.assertEqual(1024, caps["maxObservedPaths"])
+        self.assertLess(caps["maxObservedPaths"], caps["maxPathEvents"])
         self.assertEqual(1024, caps["maxCampaignMembers"])
         self.assertEqual(
             caps["maxHostedMinutes"],
