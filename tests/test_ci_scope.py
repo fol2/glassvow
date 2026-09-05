@@ -118,6 +118,9 @@ class ScopeFixtureTests(unittest.TestCase):
         selection = CI.classify_paths([
             "tools/execution_provenance/verify.py",
             "tests/test_execution_provenance.py",
+            "tests/test_godot_runtime_provenance.py",
+            "tests/test_godot_runtime_trace_binding.py",
+            "tests/test_godot_runtime_workflow.py",
         ])
         self.assert_scopes(selection, "provenance_evidence")
         self.assertTrue(selection.checks["run_provenance_evidence"])
@@ -280,6 +283,9 @@ class WorkflowContractTests(unittest.TestCase):
             "tests/test_balance_f1_f2.py",
             "tests/test_balance_f1_evidence.py",
             "tests/test_execution_provenance.py",
+            "tests/test_godot_runtime_provenance.py",
+            "tests/test_godot_runtime_trace_binding.py",
+            "tests/test_godot_runtime_workflow.py",
             "tools/check_anchors.py",
             "tools/check_benchmark_freeze.py",
             "tools/check_map_assets.py --self-test",

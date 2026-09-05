@@ -1,0 +1,50 @@
+{
+  "schema": "glassvow.godot-runtime-configuration-capture/v1",
+  "source": {
+    "run": 33768343626,
+    "attempt": 1,
+    "artifactId": 9898578469,
+    "artifactName": "godot-g0-58027162cef059d9662b690c15f89d4a16318855-1",
+    "artifactSizeBytes": 168884300,
+    "artifactSha256": "28835d178a13fdee58a5cdc7bd0a98e8688e1e6f0a86d5d470972ea9b858c44d",
+    "observerHead": "58027162cef059d9662b690c15f89d4a16318855",
+    "productSha": "5c5f2d325725b0a04e060c1ffe0b40a76f2e0928",
+    "packetSha": "15ea4d3af4b592c7015b4fd3569cf59d7ef93d77",
+    "packetRoot": "research_packets/issue-421-a1-v2-g0",
+    "authorityComment": 5524343289,
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotSha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e"
+  },
+  "capture": {
+    "memberRoot": "cache-preflight/roles",
+    "memberInventorySha256": "22b897c44d19339371d0f56d1645ad51a9596dfaa42511ef1fe36329cf7a6dda",
+    "preflightTraceCount": 184,
+    "preflightTraceBytes": 434542332,
+    "preflightTraceInventorySha256": "57dba4863f877f52308ab3d14e7797a8030e27dc704611f8635a9540561e2180",
+    "runtimeTraceCount": 10,
+    "runtimeTraceBytes": 2028655,
+    "runtimeTraceInventorySha256": "0a58d94de041e9622d14ff98a88fd2e354a25e8e7f8bdde6595e6ee3a9c121ed",
+    "postRunConsumedFilesSha256": "259a46f8b24164a198a0efbce5740689c707845ec6118081f5ad8ad89fe970d0"
+  },
+  "roles": {
+    "extension_list.cfg": {
+      "artifactMember": "cache-preflight/roles/extension_list.cfg",
+      "size": 39,
+      "sha256": "0f0671bfe90ff29cae184a8ad2279be2f3b49bfd865f0503df20df678ea282c8",
+      "runtimeReadReturns": [39, 0]
+    },
+    "global_script_class_cache.cfg": {
+      "artifactMember": "cache-preflight/roles/global_script_class_cache.cfg",
+      "size": 26209,
+      "sha256": "4937b0a7e7f4a10f3821d39ffd2e1c759ed79204ce37b8ddb53cce7af09ee8cd",
+      "runtimeReadReturns": [4096, 4096, 4096, 4096, 4096, 4096, 1633, 0]
+    },
+    "uid_cache.bin": {
+      "artifactMember": "cache-preflight/roles/uid_cache.bin",
+      "size": 36045,
+      "sha256": "e5c94eeba77c931da64b56a553c1eb9ebc6871c7fd6b61e64afed3c1f25f2904",
+      "runtimeReadReturns": [4096, 4096, 4096, 4096, 4096, 4096, 4096, 4096, 3277]
+    }
+  },
+  "stagingRule": "Materialise the exact tracked product commit, add only these three exact regular non-symlink roles below .godot, verify the complete inventory, then bind-mount the resulting product stage read-only. No Godot editor or other untrusted executable runs before the qualified invocation."
+}
