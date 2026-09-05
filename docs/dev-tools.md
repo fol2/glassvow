@@ -173,23 +173,32 @@ godot --headless -s res://tools/balance_sim.gd -- --aspect=all --runs=200 \
   --seed0=1000 --vow=0 --out=/tmp/balance.json [--mobs=path.json]
 ```
 
-Map layout is measured the same way, over seeds rather than shapes. The probe
-deals the scenery for each seed and prints rates — overlapping waystone pairs,
-nodes hidden behind scenery, scenery fouling scenery, the largest shove the node
-solver applied — so a layout change is judged by a before/after number instead
-of by six screenshots:
+The map profile probe checks all four runtime catalogues against independently
+loaded mesh bounds, then checks repeatable cosmetic placement over the requested
+seeds. It fails on missing geometry, another act's assets or non-determinism.
+Complete compiled-layout quality is measured separately through the native preview:
 
 ```bash
-godot --headless -s res://tools/probe_map_seeds.gd -- --seeds=200
+godot --headless -s res://tools/probe_map_seeds.gd -- --seeds=20
+godot -s res://tools/preview_map.gd -- --act-index=0 --seed=717 \
+  --shape=phone-landscape --pose=opening --output=/tmp/map.png
+godot --headless -s res://tools/preview_map.gd -- --act-index=0 --seed=717 \
+  --compile-only --quality=/tmp/map-quality.json
 ```
 
-**`tools/probe_map_seeds.gd` reports a rate, never a verdict, and its
-thresholds are its own.** The clumping counter it ships with fires at `gap <
-1.0` — footprints just touching. Figures quoted elsewhere in the repo are
-sometimes taken at half or three-quarter reach; instrument for the threshold you
-mean to quote rather than assuming the shipped one matches. Its footprint radius
-and hide-depth arithmetic is duplicated from `MapScene._bind_asset_geometry`,
-which has already drifted once — the probe's own header carries that warning.
+Omit `--output` for native drag, zoom and keyboard inspection. The preview mounts
+the production `WorldMapScreen`, compiler, assets and HUD. It prepares map state
+without playing opening boons or encounters; it does not run the main game's
+encounter transition. `--cache=/tmp/map-preview-cache` optionally reuses a pure
+compiler result keyed by the complete input digest; production never reads this cache.
+A cache hit still binds current scenery and evaluates its final geometry when
+`--quality` is supplied. `--steps=N`, `--pose=middle|terminus|focused` and
+`--zoom-stop=0..3` expose travelled and distant views. `--exercise` injects
+native viewport wheel, drag and keyboard events and verifies animated arrival,
+one selection hand-off and subsequent render freeze. The standard game-flow
+tests cover the main application separately. `--measure` reports 120 warmed pan
+frames on the current host, including an explicit GPU-timer availability flag;
+it does not qualify release-device performance.
 
 **`tools/probe_layout.gd` reads the composition back rather than photographing
 it.** A capture shows where something LOOKS like it is; on a 390px phone that is

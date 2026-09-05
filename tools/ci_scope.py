@@ -157,11 +157,12 @@ def _scope_matches(path: str) -> set[str]:
         "tools/check_map_assets.py",
         "tools/land_map_glb.py",
         "tools/map_asset_checks.py",
+        "tools/map_landscape_checks.py",
         "tools/map_asset_self_test.py",
         "tools/bench_map_assets.gd",
         "tools/bench_map_assets.gd.uid",
     }
-    if (_starts(lower, "assets/art/map/")
+    if (_starts(lower, "assets/art/map/", "assets/art/map-atelier/", "tools/map_atelier/")
             or (_starts(lower, "presentation/map/") and lower.endswith((
                 ".gdshader", ".gdshader.uid", ".gdshaderinc")))
             or lower in map_asset_tools):

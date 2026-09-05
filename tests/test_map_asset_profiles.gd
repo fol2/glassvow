@@ -179,14 +179,8 @@ static func _geometry_contract(fails: Array[String]) -> void:
 
 
 static func _runtime_digest(fails: Array[String]) -> void:
-	var registry: MapAssetProfiles = MapAssetProfiles.new()
-	var active: Array[Dictionary] = []
-	for asset_id: String in registry.ids_for_act(0):
-		var resource: Resource = load(registry.resource_path(asset_id))
-		var value: Dictionary = registry.profile(asset_id, _mesh(resource))
-		if not value.is_empty():
-			active.append(value)
-	var headless_digest: String = registry.digest(active)
+	var catalogue: MapLandscapeAssets = MapLandscapeAssets.new(0)
+	var headless_digest: String = catalogue.digest
 	var scene: MapScene = MapScene.new()
 	_check(fails, not headless_digest.is_empty()
 			and scene.asset_profile_digest() == headless_digest,

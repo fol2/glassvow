@@ -17,8 +17,6 @@ const STATE_DELTA: float = 0.04
 const MIN_FOREGROUND_RATIO: float = 0.05
 const MIN_STATE_DELTA_RATIO: float = 0.0005
 const MAX_NEAR_WHITE_RATIO: float = 0.01
-## Highest shared-road crown after the production 2.15 x 0.6Y transform.
-const PRODUCTION_ROAD_CROWN_M: float = 0.383
 
 var _output: String = ""
 var _head: String = ""
@@ -43,6 +41,12 @@ func _initialize() -> void:
 
 
 func _capture_all() -> void:
+	var road_crown: float = _production_road_crown()
+	if road_crown <= 0.0 or road_crown >= MapWaylightTracer.SURFACE_LIFT_M \
+			- MapWaylightTracer.BEAD_HEIGHT_M * 0.5:
+		printerr("capture_map_waylight_harness: production road buries the tracer")
+		quit(1)
+		return
 	var frames: Array[Dictionary] = []
 	var profile_deltas: Array[Dictionary] = []
 	var route_digest: String = ""
@@ -50,7 +54,7 @@ func _capture_all() -> void:
 	for profile_index: int in range(PROFILE_NAMES.size()):
 		var profile: String = PROFILE_NAMES[profile_index]
 		var size: Vector2i = PROFILE_SIZES[profile_index]
-		var stage: Dictionary = _make_stage(size)
+		var stage: Dictionary = _make_stage(size, road_crown)
 		var viewport_v: Variant = stage.get("viewport")
 		if not (viewport_v is SubViewport):
 			printerr("capture_map_waylight_harness: viewport creation failed for %s" % profile)
@@ -118,6 +122,7 @@ func _capture_all() -> void:
 		await process_frame
 	var manifest: Dictionary = {"schema": 2, "issue": 473, "capture_head": _head,
 		"godot": Engine.get_version_info()["string"], "route_digest": route_digest,
+		"production_road_crown_m": road_crown,
 		"overhead": overhead, "frames": frames, "profile_state_deltas": profile_deltas,
 		"validation": {"sample_stride": SAMPLE_STRIDE,
 			"minimum_foreground_ratio": MIN_FOREGROUND_RATIO,
@@ -134,7 +139,23 @@ func _capture_all() -> void:
 	quit(0)
 
 
-func _make_stage(size: Vector2i) -> Dictionary:
+func _production_road_crown() -> float:
+	# Read the real flagstone mesh instead of retaining a retired kit's height.
+	var road: MapLandscape = MapLandscape.new()
+	var line: PackedVector3Array = []
+	for point: Array in EDGE["centerline"]:
+		line.append(MapLandscape.v3(point))
+	road.paths.append(line)
+	road.mineral = ShaderMaterial.new()
+	road.mineral.shader = load("res://presentation/map/map_mineral.gdshader") as Shader
+	road.road()
+	var stones: MeshInstance3D = road.get_node("Worn flagstones") as MeshInstance3D
+	var crown: float = stones.mesh.get_aabb().end.y
+	road.free()
+	return crown
+
+
+func _make_stage(size: Vector2i, road_crown: float) -> Dictionary:
 	var viewport: SubViewport = SubViewport.new()
 	viewport.name = "WaylightEvidenceViewport"
 	viewport.size = size
@@ -158,14 +179,14 @@ func _make_stage(size: Vector2i) -> Dictionary:
 	world.add_child(world_environment)
 	_box(world, Vector3(16.0, 0.18, 10.0), Vector3(0.0, -0.20, 0.0),
 		Color(0.07, 0.09, 0.14))
-	_box(world, Vector3(4.2, PRODUCTION_ROAD_CROWN_M, 1.25),
-		Vector3(-2.0, PRODUCTION_ROAD_CROWN_M * 0.5, -2.0),
+	_box(world, Vector3(4.2, road_crown, 1.25),
+		Vector3(-2.0, road_crown * 0.5, -2.0),
 		Color(0.27, 0.28, 0.31))
-	_box(world, Vector3(1.25, PRODUCTION_ROAD_CROWN_M, 4.2),
-		Vector3(0.0, PRODUCTION_ROAD_CROWN_M * 0.5, 0.0),
+	_box(world, Vector3(1.25, road_crown, 4.2),
+		Vector3(0.0, road_crown * 0.5, 0.0),
 		Color(0.27, 0.28, 0.31))
-	_box(world, Vector3(4.2, PRODUCTION_ROAD_CROWN_M, 1.25),
-		Vector3(2.0, PRODUCTION_ROAD_CROWN_M * 0.5, 2.0),
+	_box(world, Vector3(4.2, road_crown, 1.25),
+		Vector3(2.0, road_crown * 0.5, 2.0),
 		Color(0.27, 0.28, 0.31))
 	var tracer: MapWaylightTracer = MapWaylightTracer.new()
 	world.add_child(tracer)

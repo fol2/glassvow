@@ -21,11 +21,15 @@ tags: [code-review, adjudication, measurement, methodology, regression, seeded-p
 
 ## Context
 
+Historical snapshot: the map renderer described here was retired during the
+September 2026 reassembly. Source links below retain the measured implementation
+at commit `659669b`; the recorded results and conclusions are unchanged.
+
 `MapScene` deals the map's 25 scenery seats per run instead of standing them in
 the same holes every time (PR #453). The three follow-up commits quoted below
 landed directly on `main` by fast-forward rather than through a PR of their own;
 their record is in #453's comments. Three families draw on three independent
-RNG streams — `_band_seats` at `presentation/map/map_scene.gd:829`, called once
+RNG streams — `_band_seats` at [presentation/map/map_scene.gd, line 829](https://github.com/fol2/glassvow/blob/659669b41df5c0b5e1005e5f6fdd84e142e0aebc/presentation/map/map_scene.gd#L829), called once
 each for nine wedges, four slabs and eight dabs — and no stream can see the
 other two. `WEDGE_Z` (8.5..11.7) and `DAB_Z` (7.4..11.8) overlap outright, so
 two pieces from different families can land in the same metre. The commit that
@@ -37,14 +41,14 @@ against 0.00 for the hand-authored set it replaced.
 > at *half* combined reach, by a throwaway script that seeded `MapScene` and
 > compared the dealt layout against the authored one. `tools/probe_map_seeds.gd`
 > as shipped counts a wider band — `gap < 1.0`, footprints merely touching
-> (`tools/probe_map_seeds.gd:100`) — and the `SEAT_GAP` trade table at
-> `presentation/map/map_scene.gd:797-802` records a third, `< 0.75` reach. The
+> ([tools/probe_map_seeds.gd, line 100](https://github.com/fol2/glassvow/blob/659669b41df5c0b5e1005e5f6fdd84e142e0aebc/tools/probe_map_seeds.gd#L100)) — and the `SEAT_GAP` trade table at
+> [presentation/map/map_scene.gd, lines 797–802](https://github.com/fol2/glassvow/blob/659669b41df5c0b5e1005e5f6fdd84e142e0aebc/presentation/map/map_scene.gd#L797-L802) records a third, `< 0.75` reach. The
 > three are consistent with each other (the authored set is 0.00 at half reach
 > and 1.00 at 0.75) but they are **not interchangeable**, and running the probe
 > as shipped will not reproduce the figures quoted here. Instrument for the
 > threshold you mean to quote.
 
-`_separate` (`presentation/map/map_scene.gd:871`) relaxes the whole 25-seat list
+`_separate` ([presentation/map/map_scene.gd, line 871](https://github.com/fol2/glassvow/blob/659669b41df5c0b5e1005e5f6fdd84e142e0aebc/presentation/map/map_scene.gd#L871)) relaxes the whole 25-seat list
 apart along X only — the z bands carry the design — and skips pairs that are
 *coincident*, within 0.001 in both x and z:
 
@@ -53,7 +57,7 @@ if absf(dx) < 0.001 and absf(dz) < 0.001:
     continue
 ```
 
-The skip exists because `_slab_seats` (`presentation/map/map_scene.gd:920`)
+The skip exists because `_slab_seats` ([presentation/map/map_scene.gd, line 920](https://github.com/fol2/glassvow/blob/659669b41df5c0b5e1005e5f6fdd84e142e0aebc/presentation/map/map_scene.gd#L920))
 deliberately emits two entries at one (x, z) so the real kits, flattened to
 y = 0, stack. That stack is the family's whole point.
 
@@ -76,7 +80,7 @@ distributions; two independent floats agreeing to a millimetre in *both* axes is
 not an event that distribution produces.
 
 The distance test stayed, and both numbers went into the comment at
-`presentation/map/map_scene.gd:878-895` so the next reader does not re-try the
+[presentation/map/map_scene.gd, lines 878–895](https://github.com/fol2/glassvow/blob/659669b41df5c0b5e1005e5f6fdd84e142e0aebc/presentation/map/map_scene.gd#L878-L895) so the next reader does not re-try the
 more precise version blind. The settling commit is `659669b`, two commits on
 from `2decfdc`, which added the separation pass.
 
@@ -170,7 +174,7 @@ solver ... depend[s] on moves." Positions were untouched. The radius and the
 depth are per-species and moved with the salt. That finding needed no rate
 measurement at all — it was demonstrable by reading eleven lines — and the fix
 routed both loops plus the probe through one function, `seat_kit`
-(`presentation/map/map_scene.gd:469`).
+([presentation/map/map_scene.gd, line 469](https://github.com/fol2/glassvow/blob/659669b41df5c0b5e1005e5f6fdd84e142e0aebc/presentation/map/map_scene.gd#L469)).
 
 Two findings, one afternoon, one file. One was a fact and the right move was to
 fix it immediately. One was a probability and the right move was to measure it
@@ -233,7 +237,7 @@ the other 21 seats. Measured on the same 200 seeds, pairs closer than half their
 combined footprint: 0.00 → 0.95 per seed. For scale, the pass was added because
 the unseparated deal ran at 1.30 against a hand-authored 0.00.
 
-**Where the answer lives now.** `presentation/map/map_scene.gd:878-895`, at the
+**Where the answer lives now.** [presentation/map/map_scene.gd, lines 878–895](https://github.com/fol2/glassvow/blob/659669b41df5c0b5e1005e5f6fdd84e142e0aebc/presentation/map/map_scene.gd#L878-L895), at the
 branch, carrying both numbers and the reason:
 
 ```gdscript

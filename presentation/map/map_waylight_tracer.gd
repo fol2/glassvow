@@ -7,14 +7,13 @@ const STATE_COLD: StringName = &"cold"
 const STATE_OPEN: StringName = &"open"
 const STATE_WALKED: StringName = &"walked"
 const SAMPLE_SPACING_M: float = 0.80
-## The shared production road crown reaches 0.383 m after its runtime scale;
-## 0.44 keeps this 0.065 m bead just above it while depth testing stays active.
-const SURFACE_LIFT_M: float = 0.44
-const BEAD_RADIUS_M: float = 0.10
-const BEAD_HEIGHT_M: float = 0.065
+## Follow the new trail surface closely, with depth testing through bridge rails.
+const SURFACE_LIFT_M: float = 0.07
+const BEAD_RADIUS_M: float = 0.065
+const BEAD_HEIGHT_M: float = 0.015
 const MAX_INSTANCES: int = 128
 const WORLD_EPSILON_M: float = 0.001
-const COLD_COLOR: Color = Color(0.10, 0.15, 0.26, 1.0)
+const COLD_COLOR: Color = Color(0.026, 0.042, 0.050, 1.0)
 
 var _bead_mesh: CylinderMesh
 var _waylight_material: StandardMaterial3D
