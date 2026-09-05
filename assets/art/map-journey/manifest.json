@@ -1,0 +1,398 @@
+{
+  "status": "Step 3 sample; awaiting native visual review",
+  "generator": "tools/map_atelier/journey/build_kit.py",
+  "seed": 7403,
+  "assets": [
+    {
+      "id": "amber-arch",
+      "file": "amber-arch.glb",
+      "source": "tools/map_atelier/journey/sources/amber-arch.blend",
+      "description": "Tall ashlar gateway with engaged shafts, recessed trefoil and paired amber lamps",
+      "triangles": 7064,
+      "materials": 7,
+      "blender_xyz_bounds": [
+        [
+          -2.5263,
+          2.5263
+        ],
+        [
+          -0.6863,
+          0.625
+        ],
+        [
+          0.0,
+          5.397
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "conifer",
+      "file": "conifer.glb",
+      "source": "tools/map_atelier/journey/sources/conifer.blend",
+      "description": "Sparse asymmetrical charcoal conifer with curved painted twig cards",
+      "triangles": 2472,
+      "materials": 2,
+      "blender_xyz_bounds": [
+        [
+          -1.439,
+          1.8188
+        ],
+        [
+          -1.6977,
+          1.6965
+        ],
+        [
+          0.0,
+          6.327
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "ash-copse",
+      "file": "ash-copse.glb",
+      "source": "tools/map_atelier/journey/sources/ash-copse.blend",
+      "description": "Open ash-red shrub with woody stems and layered painted leaf sprays",
+      "triangles": 960,
+      "materials": 2,
+      "blender_xyz_bounds": [
+        [
+          -1.2048,
+          1.2585
+        ],
+        [
+          -1.0607,
+          1.0615
+        ],
+        [
+          0.0,
+          1.2862
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "slate-bank",
+      "file": "slate-bank.glb",
+      "source": "tools/map_atelier/journey/sources/slate-bank.blend",
+      "description": "Leaning slate masses with broad sloping crowns and irregular fractured shoulders",
+      "triangles": 420,
+      "materials": 4,
+      "blender_xyz_bounds": [
+        [
+          -1.577,
+          1.6173
+        ],
+        [
+          -0.9768,
+          0.9227
+        ],
+        [
+          0.0,
+          1.6622
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "memorial",
+      "file": "memorial.glb",
+      "source": "tools/map_atelier/journey/sources/memorial.blend",
+      "description": "Carved Gothic memorial with a deep leaded amber niche",
+      "triangles": 660,
+      "materials": 6,
+      "blender_xyz_bounds": [
+        [
+          -0.425,
+          0.425
+        ],
+        [
+          -0.3374,
+          0.275
+        ],
+        [
+          0.0,
+          1.9334
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "waystone",
+      "file": "waystone.glb",
+      "source": "tools/map_atelier/journey/sources/waystone.blend",
+      "description": "Low grounded stone; encounter identity remains a screen-space overlay",
+      "triangles": 272,
+      "materials": 3,
+      "blender_xyz_bounds": [
+        [
+          -0.3723,
+          0.3723
+        ],
+        [
+          -0.3723,
+          0.3723
+        ],
+        [
+          0.0,
+          0.7868
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "bridge-bay",
+      "file": "bridge-bay.glb",
+      "source": "tools/map_atelier/journey/sources/bridge-bay.blend",
+      "description": "Stone bridge bay for material, thickness and parapet-scale review",
+      "triangles": 924,
+      "materials": 3,
+      "blender_xyz_bounds": [
+        [
+          -1.065,
+          1.065
+        ],
+        [
+          -1.605,
+          1.605
+        ],
+        [
+          0.0,
+          1.025
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "lamp-pair",
+      "file": "lamp-pair.glb",
+      "source": "tools/map_atelier/journey/sources/lamp-pair.blend",
+      "description": "Separate bronze and amber lamps for the generated gateway",
+      "triangles": 488,
+      "materials": 2,
+      "blender_xyz_bounds": [
+        [
+          -2.5263,
+          2.5263
+        ],
+        [
+          -0.6863,
+          -0.2337
+        ],
+        [
+          1.85,
+          3.5846
+        ]
+      ],
+      "grounded": false
+    },
+    {
+      "id": "conifer-spire",
+      "file": "conifer-spire.glb",
+      "source": "tools/map_atelier/journey/sources/conifer-spire.blend",
+      "description": "Sparse asymmetrical charcoal conifer with curved painted twig cards",
+      "triangles": 1592,
+      "materials": 2,
+      "blender_xyz_bounds": [
+        [
+          -0.861,
+          1.2171
+        ],
+        [
+          -0.9578,
+          1.0095
+        ],
+        [
+          0.0,
+          6.327
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "ash-heath",
+      "file": "ash-heath.glb",
+      "source": "tools/map_atelier/journey/sources/ash-heath.blend",
+      "description": "Open ash-red shrub with woody stems and layered painted leaf sprays",
+      "triangles": 1440,
+      "materials": 2,
+      "blender_xyz_bounds": [
+        [
+          -1.3897,
+          1.5726
+        ],
+        [
+          -1.2369,
+          1.2928
+        ],
+        [
+          0.0,
+          0.9607
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "slate-ridge",
+      "file": "slate-ridge.glb",
+      "source": "tools/map_atelier/journey/sources/slate-ridge.blend",
+      "description": "Leaning slate masses with broad sloping crowns and irregular fractured shoulders",
+      "triangles": 422,
+      "materials": 4,
+      "blender_xyz_bounds": [
+        [
+          -1.5786,
+          1.8634
+        ],
+        [
+          -0.6491,
+          0.5999
+        ],
+        [
+          0.0,
+          0.9936
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "conifer-wind",
+      "file": "conifer-wind.glb",
+      "source": "tools/map_atelier/journey/sources/conifer-wind.blend",
+      "description": "Leaning pine with a swept one-sided crown and exposed windward trunk",
+      "triangles": 1196,
+      "materials": 2,
+      "blender_xyz_bounds": [
+        [
+          -0.2918,
+          2.1407
+        ],
+        [
+          -1.5731,
+          1.5502
+        ],
+        [
+          0.0,
+          5.4346
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "conifer-snag",
+      "file": "conifer-snag.glb",
+      "source": "tools/map_atelier/journey/sources/conifer-snag.blend",
+      "description": "Forked leafless woodland snag with exposed roots and angular limbs",
+      "triangles": 628,
+      "materials": 1,
+      "blender_xyz_bounds": [
+        [
+          -1.3124,
+          1.8239
+        ],
+        [
+          -1.5398,
+          1.5455
+        ],
+        [
+          0.0,
+          5.2301
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "ash-bramble",
+      "file": "ash-bramble.glb",
+      "source": "tools/map_atelier/journey/sources/ash-bramble.blend",
+      "description": "Open arching thorn canes with sparse trailing ash-red leaves",
+      "triangles": 476,
+      "materials": 2,
+      "blender_xyz_bounds": [
+        [
+          -1.4708,
+          1.4865
+        ],
+        [
+          -1.3628,
+          1.5395
+        ],
+        [
+          0.0,
+          0.8363
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "ash-fern",
+      "file": "ash-fern.glb",
+      "source": "tools/map_atelier/journey/sources/ash-fern.blend",
+      "description": "Low radial fern with divided sculpted fronds and an open centre",
+      "triangles": 1260,
+      "materials": 2,
+      "blender_xyz_bounds": [
+        [
+          -0.9333,
+          0.8862
+        ],
+        [
+          -0.8241,
+          0.6757
+        ],
+        [
+          0.0,
+          0.5515
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "slate-shard",
+      "file": "slate-shard.glb",
+      "source": "tools/map_atelier/journey/sources/slate-shard.blend",
+      "description": "Narrow upright split slate blade with a low fractured foot",
+      "triangles": 112,
+      "materials": 2,
+      "blender_xyz_bounds": [
+        [
+          -0.9755,
+          0.994
+        ],
+        [
+          -0.5813,
+          0.3655
+        ],
+        [
+          0.0,
+          2.1448
+        ]
+      ],
+      "grounded": true
+    },
+    {
+      "id": "slate-scree",
+      "file": "slate-scree.glb",
+      "source": "tools/map_atelier/journey/sources/slate-scree.blend",
+      "description": "Loose part-buried flat fragments in an irregular low fan",
+      "triangles": 468,
+      "materials": 4,
+      "blender_xyz_bounds": [
+        [
+          -1.2242,
+          1.7638
+        ],
+        [
+          -1.4467,
+          1.3219
+        ],
+        [
+          0.0,
+          0.4757
+        ]
+      ],
+      "grounded": true
+    }
+  ]
+}

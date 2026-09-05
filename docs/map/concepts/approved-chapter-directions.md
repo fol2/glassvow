@@ -2,8 +2,11 @@
 
 Status: all four individual chapter directions and their combined review approved,
 including Act III v5 after its architecture, colour and ground revision. These
-files are the current review references. Step 1 remains in progress for
-game-camera composition and navigation design; implementation has not started.
+files are the current art references. The subsequent approved camera and
+navigation study closed Step 1. James has now approved the Act I native sample
+for Step 3 after Review 10. Remaining production follows the
+[renovation plan](../visual-renovation-rough-plan.md); the other chapter concepts
+do not yet establish their native implementation quality.
 
 | Act I — The Ashen Woods | Act II — The Sunken City |
 | --- | --- |
@@ -45,6 +48,7 @@ These are mood, material and architectural references with approval status
 specified above. They are not
 literal graph layouts, runtime screenshots or proof of camera projection,
 navigation, five-node Act IV placement, phone readability or performance.
-The next Step 1 study must use real generated route density and account for
-HUD space, waystone identity, current/available/history states and reference
-screen shapes. Complete and agree that brief before autonomous Steps 2–8.
+Native production must continue to use real generated route density and
+account for HUD space, waystone identity, current/available/history states and
+reference screen shapes. Approval of these paintings does not replace those
+runtime checks or the comparison of each chapter with its combat environment.

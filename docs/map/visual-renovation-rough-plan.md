@@ -1,7 +1,38 @@
 # Map visual renovation — initial rough plan
 
-Status: Step 1 approved by James, including the four-act direction and Journey /
-Whole act composition study. Steps 2–8 are authorised for autonomous delivery.
+Status: James has approved the Act I native sample for Step 3 after Review 10,
+while explicitly noting that it is not perfect. This clears the agreed owner
+checkpoint for progression into Step 4; it is not final commercial acceptance.
+Step 1 is also approved, including the four-act direction and Journey / Whole
+act composition study. Steps 2–3 produced the native greybox and coherent
+asset review sample. The revision history below records how that sample evolved.
+James prefers Review 03's fuller woodland and Review 04's roads. He authorised
+restoring the earlier vegetation balance with newer forms as occasional accents.
+James found the balance better and asked where the new assets were. Review 06
+now places all twelve natural forms, retains all 460 main scenery transforms,
+and provides six marked native close-ups of the additions. The revised
+composition led to a new owner request: focus on unnatural and broken roads,
+with freedom to revise their rendering and provide another page. After Review 07,
+James identified flat terrain, insufficient bridge clearance and rough bridgeheads.
+Review 08 now derives physical terrain elevations from the generated topology,
+with rolling woodland, an incised river, dry underpasses and supported arched
+bridges. The revised page compares six locations with Review 07 and adds adult
+scale references, two lower inspection cameras and a closest-zoom bridgehead.
+Mesh contacts, clearance, source-road coverage, navigation framing, native input
+exercises and the revised captures are checked. Broader production remains after
+this Step 3 discussion; this revision does not close commercial acceptance.
+James subsequently asked for the still-visible road/bridge material joint to be
+fixed. Review 09 replaces the translucent paving fade with partly buried stone
+flags and a shared world-space pattern. It also fixes ground intersections that
+centreline contact probes missed, using land-aligned deck tessellation and a
+surface height floor. The review starts at the bridgehead and compares 09/08.
+James then requested a fully filled river with the best water presentation.
+Review 10 raises and confines the water to the channel, adds depth tint,
+refraction, a restrained moving sky sheen, shore wash and wakes at five immersed
+supports. Two native eight-second films and six 09/10 comparisons form the
+new review page. Water coverage, bed alignment, dry routes, loop continuity and
+native reference-shape interactions are checked. The remaining delivery plan is
+unchanged.
 
 ## Goal
 
@@ -17,14 +48,54 @@ saved baseline, not an accepted visual target. Asset reuse is optional.
 
 - James and the agent jointly develop and agree Step 1: the visual brief,
   composition, camera, asset language and acceptance criteria.
-- Once that agreement is explicit, the agent completes Steps 2–8 autonomously:
-  production, iteration, visual inspection, integration, validation, independent
-  review, PR, CI, merge and cleanup.
+- The agent completes Steps 2–3 autonomously and resolves known defects before
+  inviting James to inspect the native asset sample. James has now approved
+  Act I at this checkpoint. Steps 4–8 proceed autonomously and cover production,
+  iteration, visual inspection, integration, validation, independent review,
+  PR, CI, merge and cleanup.
 - Step 5 is an agent-owned acceptance gate against the agreed brief. It does
   not introduce another routine owner-approval requirement.
 - Report meaningful results and actual blockers. Escalate a material departure
   from the agreed direction, an unresolved incompatibility, or an unavailable
   required capability or gate; do not silently weaken acceptance.
+
+### Carry-forward standards and chapter reviews
+
+James authorises applying the lessons from Act I to the remaining chapters.
+Their approved concepts remain the art authority; no new concept-approval
+round is needed unless the intended direction materially changes.
+
+- Compose substantial landscape and architectural masses first. Asset variety
+  must support believable scale, clustering and silhouette; adding more small
+  props must not regress the successful density or leave a decorated blank plane.
+- Keep open ground crisp and quiet, with broad material planes and local detail.
+  Avoid stretched textures, all-over brush noise and blur used to hide repetition.
+- Build purposeful relief, grounded approaches and supported bridges. Inspect
+  route turns, merges, crossing levels and the whole bridgehead surface, not
+  only centreline contacts. Preserve generated nodes and route meaning.
+- Integrate water with its banks and structures. Verify depth, waterlines,
+  movement and reflections in native footage as well as still images. Adapt
+  these effects to the chapter rather than copying the woodland river wholesale.
+- Align architecture, floor, materials, palette and lighting with combat.
+  Inspect close, default and whole-act views with navigation both visible and
+  hidden. Resolve known failures before presenting a candidate to James.
+
+Keep the agreed production order: finish and inspect the common section in
+Steps 4–5, then prove its generator rules in Step 6. Extend that foundation
+through Act II, III and IV in Step 7. The agent's review format is one coherent
+native scene per chapter, followed by a four-act comparison; these are useful
+owner feedback opportunities, not additional routine stop-and-wait gates.
+The chapter checks focus on the following distinct experiences:
+
+| Chapter | Native scene must establish |
+| --- | --- |
+| II — The Sunken City | A drowned Gothic library, blue glass, jade light, clear waterlines and dry supported causeways; quiet submerged forms rather than a busy reef. |
+| III — The Obsidian Court | An intact, severe obsidian precinct, legible court and hall hierarchy, broad black-violet floors and concentrated magenta light; no return to rubble or grey masonry. |
+| IV — The Mirrored Road | Grand, empty, sad and dark space, expressed through structural scale and depth, sparse meaningful monuments and the small unsettling hearth; preserve the fixed journey. |
+
+The combined review checks shared scale, surface restraint, navigation and the
+emotional sequence across all four acts. It does not require equal density:
+Act III's enclosure and Act IV's emptiness are deliberate differences.
 
 ## Concept anchor
 
@@ -118,9 +189,9 @@ approved Act I v2, Act II v3, obsidian Act III v5 and grand-empty Act IV v6.
 All four individual directions are approved; Act III's earlier
 spatial composition remains the reference, but its ruined condition does not. The
 [earlier combined review](concepts/four-act-review.md) records the set that
-prompted this correction. Step 1 still needs the representative
-game-camera composition and waystone/navigation study. Individual art approval
-does not begin implementation. The earlier triptych is a superseded
+prompted this correction. The subsequent accepted camera-composition study closed Step 1.
+The Act I native asset sample has passed the agreed Step 3 owner checkpoint.
+The earlier triptych is a superseded
 discussion study, not the approved chapter direction.
 
 ### Preserved earlier anchor
@@ -144,7 +215,8 @@ to plan the wider route. This settles the intended experience, not the exact
 camera tilt, zoom distances or visible node count. Those remain subject to
 composition studies with real generated routes and the reference screen shapes.
 James subsequently accepted composition study 01 and authorised progression.
-Steps 2–8 now proceed autonomously under this brief.
+Steps 2–3 proceeded autonomously under this brief, with James joining at
+the end of Step 3 before Step 4.
 
 The choices below are implementation starting points governed by the accepted
 experience. Exact geometry and exposure remain adjustable through native proof.
@@ -213,12 +285,16 @@ active product contract rather than hiding it in implementation.
 
 ## Next action
 
-Review [Journey and survey study 01](studies/camera-composition/index.html)
-with James. It uses complete-input-validated seed-717 compiled layouts for all
-four acts and compares 40°/55° projection on phone, pad and desktop. The proposal
-is a close view that automatically fits immediate choices, plus a whole-act
-planning view with encounter identity. See the [study findings and limits](studies/camera-composition/README.md).
+Proceed into Step 4 using the approved Act I sample and the carry-forward
+standards above. Close the remaining production gaps in the representative
+playable section, including route gradients, waystone integration and scenery
+composition, then inspect it before generalising to other generated layouts.
+The [native asset review page](studies/step3-review/index.html) and its
+[assessment](studies/step3-review/assessment.md) preserve the approved Step 3
+baseline. Act II is the next chapter presentation after the common foundation
+passes its production and generator checks. The complete map visualisation
+goal remains active.
 
-James accepted this study and authorised Steps 2–8. Build the playable greybox
-next. The study does not certify new 3D assets, the changed camera profile or
-the previous visual delivery.
+The workshop remains an isolated preview with immediate encounter resolution.
+Campaign integration, complete scenery composition, all-act production and
+commercial delivery validation remain in the later agreed steps.

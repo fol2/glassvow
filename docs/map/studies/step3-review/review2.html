@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glassvow · Act I scale and landscape</title>
+<style>
+:root{color-scheme:dark;--bg:#19181d;--panel:#242229;--ink:#ebe5dc;--muted:#aaa1a0;--gold:#d7b477;--line:#49414a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,sans-serif}main{max-width:1280px;margin:auto;padding:48px 24px 80px}header{max-width:850px;margin-bottom:36px}.eyebrow{color:var(--gold);letter-spacing:.14em;text-transform:uppercase;font-size:12px;font-weight:700}h1{font:500 clamp(30px,5vw,54px)/1.12 Georgia,serif;margin:16px 0}h2{font:500 27px/1.25 Georgia,serif;margin:0 0 12px}p{margin:12px 0;color:var(--muted)}nav{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}a{color:var(--gold);text-underline-offset:4px}nav a{padding:8px 16px;border:1px solid var(--line);border-radius:6px;text-decoration:none}a:focus-visible{outline:2px solid var(--gold);outline-offset:4px}section{margin:48px 0}figure{margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}img,video{display:block;width:100%;height:auto}figcaption{padding:14px 18px;font-size:14px;color:var(--muted)}.pair{display:grid;grid-template-columns:1fr 1fr;gap:20px}.pair figure{margin:0}.note{border-left:3px solid var(--gold);padding:4px 20px;margin-top:24px}.note p{color:var(--ink)}details{border-top:1px solid var(--line);padding:20px 0}summary{cursor:pointer;font-weight:600}.checks{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.checks figure{margin:16px 0}.checks figcaption{font-size:12px}footer{border-top:1px solid var(--line);padding-top:24px;color:var(--muted);font-size:13px}@media(max-width:720px){main{padding:28px 16px 48px}.pair,.checks{grid-template-columns:1fr}section{margin:36px 0}}
+.switch{display:flex;gap:10px;margin:20px 0}.switch button{font:inherit;padding:10px 18px;border:1px solid var(--line);border-radius:6px;color:var(--ink);background:var(--panel);cursor:pointer}.switch button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}.switch button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+</style>
+</head>
+<body><main>
+<header><div class="eyebrow">Glassvow · Review 02 · scale and placement</div>
+<h1>A fuller Ashen Woods.</h1>
+<p>The models are accepted. This revision responds to the smaller scenery scale and sparse placement: larger trees, bushes and stone masses, with the gateway kept at its previous size.</p>
+<p>The comparison below uses the same native camera framing. Earth paths now belong to the terrain surface, with quieter colour and irregular edges.</p>
+<nav aria-label="Review sections"><a href="#comparison">Compare before and after</a><a href="#models">See the 3D models</a><a href="#concept">Compare the concept</a><a href="#placement">See route placement</a></nav></header>
+<section id="comparison"><h2>Same viewpoint. More substantial scenery.</h2>
+<p>The gateway is unchanged in scale. Trees now use roughly 0.95–1.35× the authored model size, instead of 0.45–0.85×; larger bushes and rocks build out the surroundings. Placement prioritises the larger forms before filling the undergrowth.</p>
+<div class="switch" role="group" aria-label="Composition comparison"><button type="button" data-version="after" aria-pressed="true">Revised scene</button><button type="button" data-version="before" aria-pressed="false">Previous scene</button></div>
+<figure><a id="comparison-link" href="../native-workshop/review2-final-banks.png"><img id="comparison-image" src="../native-workshop/review2-final-banks.png" alt="Revised scene with larger trees, bushes and stone banks, keeping the gateway scale"></a><figcaption id="comparison-caption">Revised scene · same 1458 × 820 native camera framing. Click the image to inspect at full size.</figcaption></figure>
+<p>Review focus: whether the surrounding landscape now has enough scale and presence, and whether the earth path feels more at home in it.</p></section>
+<section id="models"><h2>Turn the models around</h2>
+<p>An unretouched Godot recording, using the 55° map camera and shared dynamic lighting. The gateway includes its separately modelled lamps; all models turn through 360°.</p>
+<figure><video controls loop muted playsinline preload="metadata" poster="../native-workshop/step3-assets-front.png" aria-label="Eight-second native asset turntable"><source src="../native-workshop/step3-turntable.mp4" type="video/mp4"></video><figcaption>Native render · 1458 × 820 · gateway, conifer, copse, slate bank, memorial, waystone and bridge bay.</figcaption></figure>
+<div class="note"><p>Review focus: the substantial stone forms, the balance of broad surfaces and smaller details, and how the vegetation and amber accents belong to the same world.</p></div></section>
+<section id="concept"><h2>The accepted language and its asset translation</h2>
+<div class="pair"><figure><a href="../../concepts/act1-combat-aligned-v2.png"><img loading="lazy" src="../../concepts/act1-combat-aligned-v2.png" alt="Approved Act I painted concept, showing an amber-lit gateway among charcoal trees and ash-red woods"></a><figcaption>Approved Act I concept. This defines the finished atmosphere and composition target.</figcaption></figure>
+<figure><a href="../native-workshop/step3-assets-front.png"><img loading="lazy" src="../native-workshop/step3-assets-front.png" alt="The new asset group rendered inside Godot"></a><figcaption>Step 3 asset study under shared light. Open either image to inspect at its native size.</figcaption></figure></div></section>
+<section id="placement"><h2>A passage on the generated route</h2>
+<p>The gateway follows a real compiled centreline. Its stone piers sit beside the road, with a memorial, rock bank and trees arranged nearby. All 65 nodes and 76 connections remain in the sample.</p>
+<figure><a href="../native-workshop/review2-final-banks.png"><img loading="lazy" src="../native-workshop/review2-final-banks.png" alt="The gateway and neighbouring assets placed around the actual generated routes"></a><figcaption>Revised native placement study. The generated route is blended into the land surface; supported crossings retain their bridge geometry.</figcaption></figure>
+<p>The route connections and node positions remain unchanged. Fuller land relief, detailed bridge assembly and integrated waystones remain part of the complete section production.</p></section>
+<section><h2>What happens after this review</h2><p>The models are accepted. After this placement discussion, Step 4 continues assembling the finished playable section: terrain relief, banks, road wear, grounded bridges, deliberate vegetation groups, lighting and waystones. Step 5 checks the complete scene against the approved concept before expansion to varied layouts and the other acts.</p></section>
+<details><summary>Reference-shape and grounding checks</summary><p>Native desktop renders at three reference dimensions pass drag, wheel zoom, node selection and legal preview travel. These captures show the resulting frame after the input exercise. They are desktop viewport checks; physical-device performance remains for later qualification.</p>
+<div class="checks"><figure><a href="../native-workshop/review2-phone.png"><img loading="lazy" src="../native-workshop/review2-phone.png" alt="Native phone-shaped interaction check"></a><figcaption>Phone shape · 844 × 390</figcaption></figure><figure><a href="../native-workshop/review2-pad.png"><img loading="lazy" src="../native-workshop/review2-pad.png" alt="Native pad-shaped interaction check"></a><figcaption>Pad shape · 1180 × 820</figcaption></figure><figure><a href="../native-workshop/review2-desktop.png"><img loading="lazy" src="../native-workshop/review2-desktop.png" alt="Native desktop interaction check"></a><figcaption>Desktop · 1458 × 820</figcaption></figure></div>
+<p>Contact heights were compared with 200 physics rays against the actual terrain mesh. The maximum difference is below 0.001 world units. Additional mesh probes confirm clearance across the gateway's route passage.</p></details>
+<footer>Placement review 02 · 5 September 2026 · Native captures are unretouched. Concept art remains the approved visual target. Awaiting James’s view on the revised scale and composition.</footer>
+</main><script>
+const images={after:'../native-workshop/review2-final-banks.png',before:'../native-workshop/gateway-contacts-v12.png'};
+document.querySelectorAll('[data-version]').forEach(button=>button.addEventListener('click',()=>{
+ const version=button.dataset.version;
+ document.querySelectorAll('[data-version]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+ document.getElementById('comparison-image').src=images[version];
+ document.getElementById('comparison-image').alt=version==='after'?'Revised scene with larger trees, bushes and stone banks':'Previous scene with smaller scattered scenery';
+ document.getElementById('comparison-link').href=images[version];
+ document.getElementById('comparison-caption').textContent=(version==='after'?'Revised':'Previous')+' scene · same 1458 × 820 native camera framing. Click the image to inspect at full size.';
+}));
+</script></body></html>
