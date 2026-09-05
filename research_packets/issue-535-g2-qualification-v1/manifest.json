@@ -1,0 +1,22 @@
+{
+  "schema": "glassvow.godot-runtime-packet/v1",
+  "productSha": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "packetRoot": "research_packets/issue-535-g2-qualification-v1",
+  "authorityIssue": 535,
+  "authorityComment": 5535398605,
+  "requestIndices": [
+    "0"
+  ],
+  "roles": {
+    "externalScript": {
+      "path": "p9_v5_runtime_oracle.gd",
+      "size": 21331,
+      "sha256": "37fe74e4c2319e393f963139e3db300353956a025e6d3724cb4f83d8265f56e7"
+    },
+    "corpus": {
+      "path": "corpus.json",
+      "size": 11660084,
+      "sha256": "ffaa165e59ee5cd59df3f7476932ec30938d27abf8a85f8f41667f4de5ee696a"
+    }
+  }
+}
