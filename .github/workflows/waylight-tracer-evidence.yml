@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/waylight-tracer-evidence.yml'
       - 'presentation/map/map_waylight_tracer.gd'
+      - 'presentation/map/map_landscape.gd'
       - 'tests/test_map_waylight_tracer.gd'
       - 'tests/run_all.gd'
       - 'tools/capture_map_waylight_harness.gd'
@@ -37,6 +38,7 @@ jobs:
         run: |
           tools/check_scripts.sh \
             presentation/map/map_waylight_tracer.gd \
+            presentation/map/map_landscape.gd \
             tests/test_map_waylight_tracer.gd \
             tools/capture_map_waylight_harness.gd
       - name: Prove malformed test filters fail closed

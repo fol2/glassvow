@@ -9,7 +9,7 @@ const STATE_WALKED: StringName = &"walked"
 const SAMPLE_SPACING_M: float = 0.80
 ## Follow the new trail surface closely, with depth testing through bridge rails.
 const SURFACE_LIFT_M: float = 0.07
-const BEAD_RADIUS_M: float = 0.045
+const BEAD_RADIUS_M: float = 0.065
 const BEAD_HEIGHT_M: float = 0.015
 const MAX_INSTANCES: int = 128
 const WORLD_EPSILON_M: float = 0.001
