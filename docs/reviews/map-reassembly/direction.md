@@ -65,9 +65,10 @@ excluded from production.
 ## Native captures
 
 Captured from production `WorldMapScreen` and `RunHud` at code commit
-`92888c39fbd9e0da786822c3e4e99955b78d7892`, seed 717, zoom stop 2.
+`a85a1f05a23a06ab30c9e49c6819bf7cb418eb19`, seed 717, zoom stop 2.
 The preview stages travelled map state without playing encounters; the HUD's
 waystone counter therefore remains at its initial value in these staged views.
+Travelled previews retire the introductory survey copy, as the main hint guide does.
 These are runtime images; the direction study above is a separate concept.
 
 Act I opening, desktop 1458 × 820 and phone 844 × 390:
