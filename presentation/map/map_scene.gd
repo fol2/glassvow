@@ -102,24 +102,17 @@ var _stage: SubViewport
 var _display: TextureRect
 var _rig: MapCameraRig
 var _key: DirectionalLight3D
-var _materials: MapMaterials
 var _world: Node3D
 var _landscape_assets: MapLandscapeAssets
 var _landscape: MapLandscape
 var _live: bool = false
 var _settle_frames: int = 0
 var _selection_half: Vector2 = Vector2.ZERO
-var _asset_geometry: Node3D
 var _asset_profiles: MapAssetProfiles
 var _active_profile_digest: String = ""
 var _active_profiles: Dictionary = {}
-var _kit_meshes: Array[Mesh] = []
-var _kit_profiles: Array[Dictionary] = []
-var _kit_ids: PackedStringArray = PackedStringArray()
 var _terminus_id: String = ""
 var _threshold_id: String = ""
-var _road_meshes: Array[Mesh] = []
-var _road_profiles: Array[Dictionary] = []
 ## Flat list of segment endpoints (a, b, a, b, ...) in world XZ, handed down by
 ## the screen that owns the graph. MapScene stays instantiable without one.
 var _road_segments: PackedVector3Array = PackedVector3Array()
@@ -135,7 +128,7 @@ var _fling: Vector2 = Vector2.ZERO
 var _last_velocity: Vector2 = Vector2.ZERO
 
 
-func _init(_manifest: Dictionary = {}, _resource_loader: Callable = Callable()) -> void:
+func _init() -> void:
 	name = "MapScene"
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -325,7 +318,7 @@ func set_act(act_i: int) -> void:
 ## would leave the new run standing in the previous run's wood.
 func _deal_act(_region: MapRegions) -> void:
 	_salt_dirty = false
-	_bind_asset_geometry({})
+	_bind_asset_geometry()
 	_repaint()
 
 
@@ -541,125 +534,12 @@ func _add_environment(world: Node3D) -> void:
 	world.add_child(world_environment)
 
 
-func _add_ground(world: Node3D) -> void:
-	var plane: PlaneMesh = PlaneMesh.new()
-	plane.size = GROUND_SIZE
-	var ground: MeshInstance3D = MeshInstance3D.new()
-	ground.name = "TerrainPlaceholder"
-	ground.mesh = plane
-	ground.material_override = _materials.ground
-	ground.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	world.add_child(ground)
-
-
-func _add_props(world: Node3D) -> void:
-	var wedge: PrismMesh = PrismMesh.new()
-	wedge.size = Vector3(2.3, 3.4, 1.25)
-	_add_multimesh(world, "FlatWedges", wedge, _wedge_positions(), 0)
-	var slab: BoxMesh = BoxMesh.new()
-	slab.size = Vector3(2.5, 0.62, 1.7)
-	_add_multimesh(world, "StackedSlabs", slab, _slab_positions(), 9)
-	_add_multimesh(world, "DabMasses", _dab_mesh(), _dab_positions(), 17)
-
-
-## The salt, folded small, for the instance index `_add_multimesh` dresses from.
-##
-## That index becomes a yaw by `index * 1.117` radians and a scale by
-## `index % 4` and `% 3`. A raw run seed near 2^31 still yields a yaw, but it
-## leaves the fractional part of the product carrying it only a handful of
-## digits. 997 is prime and larger than any period in the dressing, so folding
-## here still reaches every yaw phase and every scale combination.
-## Which kit stands at seat `j` this run. THE ONE PLACE THAT DECIDES IT.
-##
-## Public because `tools/probe_map_seeds.gd` has to reach the same answer, and
-## it previously reached it by repeating the arithmetic -- which is how the two
-## drifted apart in the first place.
-##
-## Two loops need the answer -- the one that places the mesh and the one that
-## publishes its footprint to `MapPinProjection` -- and they must not disagree.
-## They did: the salt landed on the placement loop alone, and a footprint list
-## built from the other rotation is worse than no list at all, because the node
-## solver believes it.
 func seat_kit(j: int, kinds: int) -> int:
 	return 2 + posmod(j + _scatter_salt, kinds)
 
 
 func _dress_salt() -> int:
 	return posmod(_scatter_salt, 997)
-
-
-## INSTANCE_CUSTOM.xyz phase copied from MapSceneProxy._add_multimesh
-## (#207 repair 4). Do not parent or subclass the proxy.
-func _add_multimesh(world: Node3D, node_name: String, mesh: Mesh,
-		positions: PackedVector3Array, first_index: int,
-		unit_scale: float = 1.0) -> void:
-	var multimesh: MultiMesh = MultiMesh.new()
-	multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	multimesh.use_custom_data = true
-	multimesh.mesh = mesh
-	multimesh.instance_count = positions.size()
-	for i: int in range(positions.size()):
-		var index: int = first_index + i
-		multimesh.set_instance_transform(i, _dressed_transform(index, positions[i],
-			unit_scale, node_name == "StackedSlabs" and i % 2 == 1))
-		multimesh.set_instance_custom_data(i, _custom_data(index))
-	var instances: MultiMeshInstance3D = MultiMeshInstance3D.new()
-	instances.name = node_name
-	instances.multimesh = multimesh
-	instances.material_override = _materials.prop
-	instances.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	world.add_child(instances)
-
-
-func _dressed_transform(index: int, position: Vector3, unit_scale: float,
-		stacked: bool = false) -> Transform3D:
-	var scale: Vector3 = Vector3(
-		0.82 + 0.09 * float(index % 4),
-		0.86 + 0.08 * float((index + 2) % 3),
-		0.84 + 0.07 * float((index + 1) % 4))
-	if stacked:
-		scale *= 0.76
-	# Every kit GLB is unit-scale; the profile supplies its authored world size.
-	scale *= unit_scale
-	return Transform3D(Basis(Vector3.UP, float(index) * 1.117).scaled(scale), position)
-
-
-func _custom_data(index: int) -> Color:
-	return Color(
-		fposmod(float(index) * 0.173, 1.0),
-		fposmod(float(index) * 0.317, 1.0),
-		fposmod(float(index) * 0.619, 1.0), 1.0)
-
-
-func _scenery_candidates() -> Dictionary:
-	var out: Dictionary = {}
-	if _kit_meshes.size() < 3 or _kit_profiles.size() != _kit_meshes.size() \
-			or _kit_ids.size() != _kit_meshes.size():
-		return out
-	var local_counts: Dictionary = {}
-	var positions: PackedVector3Array = _all_prop_positions()
-	var kinds: int = _kit_meshes.size() - 2
-	for seat: int in range(positions.size()):
-		var kit: int = seat_kit(seat, kinds)
-		var local: int = MapLayoutCanonical.int_value(local_counts.get(kit, 0))
-		local_counts[kit] = local + 1
-		var dress_index: int = kit * 7 + _dress_salt() + local
-		var transform: Transform3D = _dressed_transform(dress_index, positions[seat],
-			_asset_profiles.default_scale(_kit_profiles[kit]))
-		var candidate_id: String = "seat-%03d" % seat
-		out[candidate_id] = {
-			"dress_index": dress_index,
-			"placement": {
-				"asset_id": _kit_ids[kit], "profile_id": _kit_ids[kit],
-				"transform": {
-					"origin": _a3(transform.origin),
-					"yaw_radians": float(dress_index) * 1.117,
-					"scale": _a3(transform.basis.get_scale()),
-				},
-				"semantic_zone": "existing-seat",
-			},
-		}
-	return MapLayoutCanonical.ordered_dictionary(out)
 
 
 func _placement_footprint(candidate: Dictionary) -> PackedVector2Array:
@@ -675,60 +555,7 @@ func _placement_footprint(candidate: Dictionary) -> PackedVector2Array:
 		_v3(transform["scale"]))
 
 
-func _place_scenery(placements: Dictionary) -> void:
-	if _asset_geometry == null or _kit_meshes.size() < 3:
-		return
-	var candidates: Dictionary = _scenery_candidates()
-	for kit: int in range(2, _kit_meshes.size()):
-		var node_name: String = "AssetKit%02d" % kit
-		var stale: Node = _asset_geometry.find_child(node_name, false, false)
-		if stale != null:
-			_asset_geometry.remove_child(stale)
-			stale.free()
-		var records: Array[Dictionary] = []
-		for candidate_id: String in MapLayoutCanonical.sorted_keys(placements):
-			var placement: Dictionary = placements[candidate_id]
-			if str(placement["profile_id"]) != _kit_ids[kit]:
-				continue
-			var candidate: Dictionary = candidates.get(candidate_id, {})
-			if candidate.is_empty():
-				continue
-			records.append({
-				"placement": placement,
-				"dress_index": candidate["dress_index"],
-			})
-		_add_layout_multimesh(node_name, _kit_meshes[kit], records)
-
-
-func _add_layout_multimesh(node_name: String, mesh: Mesh,
-		records: Array[Dictionary]) -> void:
-	var multimesh: MultiMesh = MultiMesh.new()
-	multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	multimesh.use_custom_data = true
-	multimesh.mesh = mesh
-	multimesh.instance_count = records.size()
-	for i: int in range(records.size()):
-		var placement: Dictionary = records[i]["placement"]
-		var transform: Dictionary = placement["transform"]
-		var yaw: float = MapLayoutCanonical.float_value(transform["yaw_radians"])
-		var basis: Basis = Basis(Vector3.UP, yaw).scaled(_v3(transform["scale"]))
-		multimesh.set_instance_transform(i,
-			Transform3D(basis, _v3(transform["origin"])))
-		multimesh.set_instance_custom_data(i,
-			_custom_data(MapLayoutCanonical.int_value(records[i]["dress_index"])))
-	var instances: MultiMeshInstance3D = MultiMeshInstance3D.new()
-	instances.name = node_name
-	instances.multimesh = multimesh
-	instances.material_override = _materials.prop
-	instances.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	_asset_geometry.add_child(instances)
-
-
-## Swap placeholder geometry only after all eight kits and the terminus resolve.
-## Partial asset deliveries may exercise checker/runtime loading without creating
-## a half-authored frame. Removing the prior root synchronously releases its mesh
-## references before the next act is attached.
-func _bind_asset_geometry(_assets: Dictionary) -> void:
+func _bind_asset_geometry() -> void:
 	if _landscape != null:
 		_landscape.free()
 		_landscape = null
@@ -902,140 +729,6 @@ func _scenery_rejection(footprint: PackedVector2Array,
 		if MapQualityEvaluator._polygon_distance(footprint, prior) <= epsilon:
 			return {"reason": "accepted scenery footprint", "blocker_id": "scenery"}
 	return {}
-
-
-## The graph, as road. Segments are world-space endpoint pairs; the screen that
-## owns the WorldMap supplies them, so MapScene never learns the graph type.
-func lay_road(segments: PackedVector3Array) -> void:
-	_road_segments = segments
-	_build_road()
-	_repaint()
-
-
-func _build_road() -> void:
-	if _asset_geometry == null or _road_meshes.size() < 2 \
-			or _road_profiles.size() < 2:
-		return
-	# This runs twice on a normal boot: once from `_bind_asset_geometry` while
-	# `_road_segments` is still empty, and again when the screen hands the graph
-	# down through `lay_road`. Without this the second pass ADDS a second pair
-	# and Godot renames it, leaving the empty pair holding the AssetRoad names —
-	# so the road would draw correctly while anything looking the nodes up by
-	# name found nothing on them.
-	for m: int in range(2):
-		var stale: Node = _asset_geometry.find_child("AssetRoad%d" % m, false, false)
-		if stale != null:
-			_asset_geometry.remove_child(stale)
-			stale.free()
-	var laid: Array[PackedVector3Array] = [PackedVector3Array(), PackedVector3Array()]
-	var yaws: Array[PackedFloat32Array] = [PackedFloat32Array(), PackedFloat32Array()]
-	var pairs: int = _road_segments.size() / 2
-	var slab: int = 0
-	var early_act: bool = _act <= 1
-	var road_step: float = EARLY_ROAD_STEP if early_act else ROAD_STEP
-	for i: int in range(pairs):
-		var a: Vector3 = _road_segments[i * 2]
-		var b: Vector3 = _road_segments[i * 2 + 1]
-		var span: float = a.distance_to(b)
-		var steps: int = maxi(1, int(span / road_step))
-		var yaw: float = atan2(b.x - a.x, b.z - a.z)
-		for k: int in range(steps + 1):
-			var t: float = float(k) / float(steps)
-			laid[slab & 1].append(a.lerp(b, t))
-			yaws[slab & 1].append(yaw)
-			slab += 1
-	for m: int in range(2):
-		var node: MultiMeshInstance3D = _road_multimesh(
-				_road_meshes[m], laid[m], yaws[m], m, _road_profiles[m], early_act)
-		node.name = "AssetRoad%d" % m
-		_asset_geometry.add_child(node)
-
-
-func _road_multimesh(mesh: Mesh, positions: PackedVector3Array,
-		yaws: PackedFloat32Array, seed_index: int,
-		profile: Dictionary, early_act: bool) -> MultiMeshInstance3D:
-	var multimesh: MultiMesh = MultiMesh.new()
-	multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	multimesh.use_custom_data = true
-	multimesh.mesh = mesh
-	multimesh.instance_count = positions.size()
-	var wobble_amplitude: float = EARLY_ROAD_WOBBLE if early_act else ROAD_WOBBLE
-	var width: float = EARLY_ROAD_WIDTH if early_act else 1.0
-	for i: int in range(positions.size()):
-		var index: int = seed_index * 131 + i
-		var unit: float = _asset_profiles.default_scale(profile)
-		var basis: Basis = _road_slab_basis(
-				yaws[i], index, unit, width, wobble_amplitude)
-		multimesh.set_instance_transform(i, Transform3D(basis, positions[i]))
-		multimesh.set_instance_custom_data(i, Color(
-				fposmod(float(index) * 0.173, 1.0),
-				fposmod(float(index) * 0.317, 1.0),
-				fposmod(float(index) * 0.619, 1.0), 1.0))
-	var instances: MultiMeshInstance3D = MultiMeshInstance3D.new()
-	instances.multimesh = multimesh
-	instances.material_override = _materials.road
-	instances.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	return instances
-
-
-static func _road_slab_basis(yaw: float, index: int, unit: float,
-		width: float, wobble_amplitude: float) -> Basis:
-	var wobble: float = wobble_amplitude * sin(float(index) * 1.71)
-	var scale: Vector3 = Vector3(
-			unit * width * (1.0 + wobble),
-			unit * 0.6,
-			unit * (1.0 - wobble))
-	return Basis(Vector3.UP, yaw + wobble).scaled(scale)
-
-
-func _placeholders_visible() -> bool:
-	var node: Node = _world.find_child("FlatWedges", false, false)
-	return node is GeometryInstance3D and (node as GeometryInstance3D).visible
-
-
-func _set_placeholders_visible(on: bool) -> void:
-	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
-		var node: Node = _world.find_child(node_name, false, false)
-		if node is GeometryInstance3D:
-			var geometry: GeometryInstance3D = node
-			geometry.visible = on
-
-
-func _mesh_from(resource: Resource) -> Mesh:
-	if resource is Mesh:
-		return resource as Mesh
-	if not (resource is PackedScene):
-		return null
-	var instance: Node = (resource as PackedScene).instantiate()
-	var mesh_node: MeshInstance3D = _first_mesh(instance)
-	var mesh: Mesh = null
-	if mesh_node != null:
-		mesh = mesh_node.mesh
-	instance.free()
-	return mesh
-
-
-## The Vigil is the one asset whose texture ships inside its GLB rather than as
-## a manifest row of its own, so it is read back off the imported surface
-## material. Everything else on the map is surfaced by projection and has no
-## material of its own to read.
-func _baked_albedo(mesh: Mesh) -> Texture2D:
-	if mesh == null or mesh.get_surface_count() < 1:
-		return null
-	var material: Material = mesh.surface_get_material(0)
-	if material is BaseMaterial3D:
-		return (material as BaseMaterial3D).albedo_texture
-	return null
-
-
-func _first_mesh(root: Node) -> MeshInstance3D:
-	if root is MeshInstance3D:
-		return root as MeshInstance3D
-	for child: Node in root.get_children():
-		var found: MeshInstance3D = _first_mesh(child)
-		if found != null:
-			return found
-	return null
 
 
 ## The ground the scenery may stand on, along the journey. Clears the Vigil to

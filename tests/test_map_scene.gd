@@ -30,7 +30,6 @@ static func run(fails: Array[String]) -> void:
 	_input(fails)
 	_materials(fails)
 	_asset_binding(fails)
-	_road_presentation(fails)
 	_compiled_layout(fails)
 	_palette(fails)
 
@@ -84,60 +83,21 @@ static func _rig(fails: Array[String]) -> void:
 
 static func _scene(fails: Array[String]) -> void:
 	var scene: MapScene = MapScene.new()
-	_check(fails, scene.get_stage().own_world_3d,
-			"stage owns its World3D")
-	_check(fails, not scene.is_live()
-			and scene.get_stage().render_target_update_mode
-				== SubViewport.UPDATE_ONCE,
-			"rest is frozen via UPDATE_ONCE, not a disabled viewport")
+	_check(fails, scene.get_stage().own_world_3d, "stage owns its World3D")
+	_check(fails, not scene.is_live(), "scene starts at logical rest")
 	scene.set_live(true)
-	_check(fails, scene.is_live()
-			and scene.get_stage().render_target_update_mode
-				== SubViewport.UPDATE_ALWAYS,
-			"set_live(true) is UPDATE_ALWAYS")
+	_check(fails, scene.is_live() and scene.get_stage().render_target_update_mode == SubViewport.UPDATE_ALWAYS,
+		"pan renders continuously")
 	scene.set_live(false)
-	_check(fails, not scene.is_live()
-			and scene.get_stage().render_target_update_mode
-				== SubViewport.UPDATE_ONCE,
-			"set_live(false) re-arms UPDATE_ONCE")
-	_check(fails, scene.get_key().shadow_enabled == false,
-			"key light casts no shadow")
-	var ground: Node = scene.find_child("TerrainPlaceholder", true, false)
-	_check(fails, ground is MeshInstance3D, "placeholder ground is a MeshInstance3D")
-	if ground is MeshInstance3D:
-		var mesh_i: MeshInstance3D = ground as MeshInstance3D
-		_check(fails, mesh_i.material_override is ShaderMaterial,
-				"ground carries map_ground ShaderMaterial")
-		_check(fails, mesh_i.cast_shadow
-				== GeometryInstance3D.SHADOW_CASTING_SETTING_OFF,
-				"ground does not cast shadows")
-	_check(fails, scene.get_rig().get_camera().current,
-			"act camera is current inside the stage")
-	var slab: String = "res://assets/art/map/geometry/shared/road-slab-a.glb"
-	var terminus_path: String = "res://assets/art/map/geometry/act1/terminus-amber-window-tower.glb"
-	var paths: PackedStringArray = scene.active_asset_paths()
-	var complete: bool = ResourceLoader.exists(slab) and ResourceLoader.exists(terminus_path)
-	if complete:
-		_check(fails, scene.find_child("MapAssetGeometry", true, false) is Node3D,
-				"complete eight-kit + terminus set replaces placeholder geometry")
-		_check(fails, scene.find_child("AssetTerminus", true, false) is MeshInstance3D,
-				"active terminus is attached")
-		_check(fails, paths.has(slab) and paths.has(terminus_path),
-				"present shared-road-slab-a and terminus bind through MapMaterials")
-	else:
-		_check(fails, scene.find_child("MapAssetGeometry", true, false) == null,
-				"partial or absent payload keeps placeholder geometry")
-		if ResourceLoader.exists(slab):
-			_check(fails, paths.has(slab) and paths.size() < 12,
-					"present shared-road-slab-a binds through MapMaterials, not a second loader")
-		else:
-			_check(fails, paths.is_empty(),
-					"declared-but-absent assets keep the current placeholder geometry")
-	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
-		var placeholder: Node = scene.find_child(node_name, true, false)
-		_check(fails, placeholder is GeometryInstance3D
-				and (placeholder as GeometryInstance3D).visible == not complete,
-				"%s visibility follows whether the full eight-kit act set resolved" % node_name)
+	for frame: int in range(3):
+		scene._process(0.0)
+	_check(fails, not scene.is_live() and scene.get_stage().render_target_update_mode == SubViewport.UPDATE_ONCE,
+		"rest freezes after the bounded material warm-up")
+	_check(fails, scene.get_key().shadow_enabled, "terrain has real depth-tested shadows")
+	_check(fails, scene.get_rig().get_camera().current, "the act camera is current")
+	_check(fails, not scene.layout_asset_bundle().is_empty(), "active geometry authority exists before compilation")
+	_check(fails, scene.find_child("FlatWedges", true, false) == null,
+		"the retired composition is not a fallback layer")
 	scene.free()
 
 
@@ -172,55 +132,16 @@ static func _input(fails: Array[String]) -> void:
 
 
 static func _materials(fails: Array[String]) -> void:
-	var scene: MapScene = MapScene.new()
-	var rig: MapCameraRig = scene.get_rig()
-	var sun: Vector3 = scene.get_key().basis.z.normalized()
-	var ground_mat: ShaderMaterial = _override(scene, "TerrainPlaceholder")
-	_check(fails, ground_mat != null and ground_mat.shader != null
-			and ground_mat.shader.resource_path.ends_with("map_ground.gdshader"),
-			"ground is ShaderMaterial on map_ground.gdshader")
-	if ground_mat != null:
-		_check(fails, is_equal_approx(_as_float(ground_mat.get_shader_parameter(
-				"surface_value")), MapMaterials.GROUND_VALUE),
-				"ground surface_value is linearised 0.420")
-		_sun_matches(fails, ground_mat, sun, "ground")
-		_check(fails, ground_mat.get_shader_parameter("surface_tex") is Texture2D
-				and ground_mat.get_shader_parameter("grade") is Texture2D,
-				"ground surface_tex and grade are bound, not silently null")
-		_check(fails, int(_as_float(ground_mat.get_shader_parameter("tex_stop")))
-					== rig.zoom_stop,
-				"ground tex_stop starts at the rig's zoom stop, not the shader default")
-	var prop_names: PackedStringArray = ["FlatWedges", "StackedSlabs", "DabMasses"]
-	for node_name: String in prop_names:
-		var prop_mat: ShaderMaterial = _override(scene, node_name)
-		_check(fails, prop_mat != null and prop_mat.shader != null
-				and prop_mat.shader.resource_path.ends_with("map_prop.gdshader"),
-				"%s is ShaderMaterial on map_prop.gdshader" % node_name)
-		if prop_mat == null:
-			continue
-		_check(fails, is_equal_approx(_as_float(prop_mat.get_shader_parameter(
-				"surface_value")), MapMaterials.PROP_VALUE),
-				"%s surface_value is linearised 0.100" % node_name)
-		_check(fails, not _as_bool(prop_mat.get_shader_parameter("second_octave")),
-				"%s second_octave defaults off" % node_name)
-		_sun_matches(fails, prop_mat, sun, node_name)
-		var geom: Node = scene.find_child(node_name, true, false)
-		if geom is GeometryInstance3D:
-			var gi: GeometryInstance3D = geom as GeometryInstance3D
-			_check(fails, gi.cast_shadow
-					== GeometryInstance3D.SHADOW_CASTING_SETTING_OFF,
-					"%s does not cast shadows" % node_name)
-	var wedges: Node = scene.find_child("FlatWedges", true, false)
-	if wedges is MultiMeshInstance3D:
-		var mm: MultiMesh = (wedges as MultiMeshInstance3D).multimesh
-		_check(fails, mm.use_custom_data and mm.instance_count > 0,
-				"INSTANCE_CUSTOM phase channel is enabled")
-	for stop: int in range(MapCameraRig.ZOOM_STOPS.size()):
-		rig.set_zoom_stop(stop)
-		_tex_stop_follows(fails, scene, stop)
-	rig.set_zoom_stop(99)
-	_tex_stop_follows(fails, scene, 3)
-	scene.free()
+	# The retained source asset library has its own fallback material contract.
+	var materials: MapMaterials = MapMaterials.new(Vector3.UP, 1)
+	for material: ShaderMaterial in [materials.ground, materials.prop, materials.road]:
+		_check(fails, material.shader != null and material.get_shader_parameter("surface_tex") is Texture2D,
+			"source-library material always has a texture")
+		_sun_matches(fails, material, Vector3.UP, "source-library material")
+	for stop: int in range(4):
+		materials.set_tex_stop(stop)
+		_check(fails, _as_int(materials.ground.get_shader_parameter("tex_stop")) == stop,
+			"source-library mip stop follows calibration")
 
 
 static func _asset_binding(fails: Array[String]) -> void:
@@ -270,91 +191,26 @@ static func _asset_binding(fails: Array[String]) -> void:
 	_check(fails, bound_shade.is_equal_approx(act1.band_shade),
 			"MapRegions, not manifest metadata, remains palette authority")
 
-	var scene_loader: FakeAssetLoader = FakeAssetLoader.new()
-	var scene: MapScene = MapScene.new({}, Callable(scene_loader, "load_resource"))
-	var first_root: Node = scene.find_child("MapAssetGeometry", true, false)
-	_check(fails, first_root is Node3D and scene.active_asset_paths().size() == 13,
-			"complete active set replaces placeholders through MapScene binding")
-	# Kits 0 and 1 are shared-road-slab-a/b and are laid along the graph as the
-	# ROAD (#156 direction B), not scattered as scenery, so they have no
-	# AssetKit node at all. The remaining six share every scenery seat between
-	# them. Counting the sum rather than each kit's share is the check that
-	# matters: it fails if a seat is dropped or served twice, and it does not
-	# re-break every time the seat list is retuned.
-	for i: int in range(2):
-		_check(fails, scene.find_child("AssetKit%02d" % i, true, false) == null,
-				"road kit %d is not scattered as scenery" % i)
-	var seated: int = 0
-	for i: int in range(2, 8):
-		var kit: Node = scene.find_child("AssetKit%02d" % i, true, false)
-		_check(fails, kit is MultiMeshInstance3D,
-				"asset kit %d is bound as a multimesh" % i)
-		if kit is MultiMeshInstance3D:
-			seated += (kit as MultiMeshInstance3D).multimesh.instance_count
-	_check(fails, seated == scene._all_prop_positions().size(),
-			"the six scenery kits between them fill every seat exactly once")
-	for i: int in range(2):
-		_check(fails, scene.find_child("AssetRoad%d" % i, true, false) is MultiMeshInstance3D,
-				"road slab %d is laid along the graph" % i)
-	_check(fails, scene.find_child("AssetTerminus", true, false) is MeshInstance3D,
-			"active terminus is attached")
-	_check(fails, scene.find_child("AssetVigil", true, false) is MeshInstance3D,
-			"the Vigil is seated at the west end")
-	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
-		var placeholder: Node = scene.find_child(node_name, true, false)
-		_check(fails, placeholder is GeometryInstance3D
-				and not (placeholder as GeometryInstance3D).visible,
-				"%s hides only after the full real geometry set resolves" % node_name)
+	var scene: MapScene = MapScene.new()
+	var first_digest: String = scene.asset_profile_digest()
+	var first_landscape_paths: PackedStringArray = scene.active_asset_paths()
 	scene.set_act(1)
-	_check(fails, not is_instance_valid(first_root)
-			and scene.find_child("MapAssetGeometry", true, false) is Node3D,
-			"act switch frees the prior geometry root before replacing it")
+	_check(fails, scene.asset_profile_digest() != first_digest,
+		"changing region changes the complete asset authority")
+	_check(fails, first_landscape_paths.has(MapLandscapeAssets.ROOT + "vigil-painted.png")
+		and not scene.active_asset_paths().has(MapLandscapeAssets.ROOT + "vigil-painted.png"),
+		"the next act releases the Vigil")
 	scene.free()
 
 
-static func _road_presentation(fails: Array[String]) -> void:
-	var fake: FakeAssetLoader = FakeAssetLoader.new()
-	var scene: MapScene = MapScene.new({}, Callable(fake, "load_resource"))
-	var segments: PackedVector3Array = PackedVector3Array([
-		Vector3.ZERO, Vector3(0.0, 0.0, 9.5),
-	])
-	var counts: Array[int] = []
-	for act: int in range(4):
-		scene.set_act(act)
-		scene.lay_road(segments)
-		counts.append(_road_instance_count(scene))
-	_check(fails, counts == [7, 7, 11, 11],
-			"Acts I/II use sparse paving while Acts III/IV keep their presentation")
-	var early_basis: Basis = MapScene._road_slab_basis(0.0, 1, 1.0,
-			MapScene.EARLY_ROAD_WIDTH, MapScene.EARLY_ROAD_WOBBLE)
-	var late_basis: Basis = MapScene._road_slab_basis(0.0, 1, 1.0,
-			1.0, MapScene.ROAD_WOBBLE)
-	var early_scale: Vector3 = early_basis.get_scale().abs()
-	var late_scale: Vector3 = late_basis.get_scale().abs()
-	var early_yaw: float = atan2(early_basis.z.x, early_basis.z.z)
-	var late_yaw: float = atan2(late_basis.z.x, late_basis.z.z)
-	_check(fails, early_scale.x < late_scale.x and early_scale.z < late_scale.z,
-			"Acts I/II paving is narrower than the later-act presentation")
-	_check(fails, absf(early_yaw) > absf(late_yaw),
-			"Acts I/II paving keeps the larger bounded alignment variation")
-	_check(fails, scene.road_segments() == segments,
-			"presentation density preserves the exact supplied centreline")
-	scene.free()
 
 
-static func _road_instance_count(scene: MapScene) -> int:
-	var out: int = 0
-	for i: int in range(2):
-		var node: MultiMeshInstance3D = scene.find_child(
-				"AssetRoad%d" % i, true, false) as MultiMeshInstance3D
-		if node != null and node.multimesh != null:
-			out += node.multimesh.instance_count
-	return out
+
+
 
 
 static func _compiled_layout(fails: Array[String]) -> void:
-	var fake: FakeAssetLoader = FakeAssetLoader.new()
-	var scene: MapScene = MapScene.new({}, Callable(fake, "load_resource"))
+	var scene: MapScene = MapScene.new()
 	scene.set_scatter_salt(814)
 	for method: StringName in [
 		&"layout_asset_bundle", &"layout_hero_contract", &"bind_layout",
@@ -373,20 +229,18 @@ static func _compiled_layout(fails: Array[String]) -> void:
 		"terminus", {})
 	var vigil_anchor: Dictionary = contract.get("anchors", {}).get("vigil", {})
 	_check(fails, _v3(terminus_anchor.get("position", Vector3.ZERO))
-			.is_equal_approx(Vector3(40.4, 0.0, 0.0)),
-		"terminus keeps the selected one-decimal screen-feasibility calibration")
+			.is_equal_approx(Vector3(43.0, 0.0, 0.0)),
+		"new terminus is east of the boss, with room for its complete silhouette")
 	_check(fails, _v3(vigil_anchor.get("scale", Vector3.ZERO))
-			.is_equal_approx(Vector3.ONE * 6.9),
-		"Vigil keeps the shared two-seed screen-feasibility calibration")
-	var candidates: PackedVector3Array = scene.prop_positions()
-	_check(fails, not assets.is_empty() and not contract.is_empty()
-			and candidates.size() > 2,
-		"live MapScene exposes the active profile and hero authority")
-	if assets.is_empty() or contract.is_empty() or candidates.size() <= 2:
+			.is_equal_approx(Vector3.ONE),
+		"Vigil geometry is already authored at world scale")
+	_check(fails, not assets.is_empty() and not contract.is_empty(),
+		"live map exposes the active profile and hero authority")
+	if assets.is_empty() or contract.is_empty():
 		scene.free()
 		return
-	var a: Vector3 = candidates[0]
-	var b: Vector3 = candidates[candidates.size() - 1]
+	var a: Vector3 = Vector3(-28, 0, 0)
+	var b: Vector3 = Vector3(-12, 0, 0)
 	var bend_a: Vector3 = a.lerp(b, 0.35) + Vector3(0.0, 2.0, 4.0)
 	var bend_b: Vector3 = a.lerp(b, 0.65) + Vector3(0.0, 2.0, 4.0)
 	var edge_id: String = MapLayoutInput.edge_id("A", "B")
@@ -423,8 +277,8 @@ static func _compiled_layout(fails: Array[String]) -> void:
 			"road legs preserve canonical centreline Y and omit the forbidden chord")
 		var data: Dictionary = live.to_dict()
 		var accepted: Dictionary = data["scenery_instances"]
-		_check(fails, not accepted.is_empty() and accepted.size() < candidates.size(),
-			"existing deterministic seats are filtered rather than regenerated")
+		_check(fails, not accepted.is_empty(),
+			"the new candidate pool retains safe scenery")
 		_check(fails, _scenery_clears(accepted, data, contract, assets, quality),
 			"every published scenery transform clears nodes, roads, heroes and peers")
 		var diagnostics: Dictionary = scene.call(&"layout_diagnostics")
@@ -434,8 +288,9 @@ static func _compiled_layout(fails: Array[String]) -> void:
 			diagnostics.get("candidate_count", -1))
 		var diagnostic_digest: String = str(diagnostics.get("layout_digest", ""))
 		var diagnostic_scenery: Dictionary = diagnostics.get("scenery_instances", {})
+		var diagnostic_rejections: Array = diagnostics["rejections"]
 		_check(fails, accepted_count == accepted.size()
-				and candidate_count == candidates.size()
+				and candidate_count == accepted_count + diagnostic_rejections.size()
 				and diagnostic_digest == live.digest()
 				and diagnostic_scenery == accepted,
 			"the live diagnostics publish the same accepted placement authority")
@@ -641,60 +496,13 @@ static func _palette(fails: Array[String]) -> void:
 			and act3.weather == &"dawn"
 			and not act3.sky.is_equal_approx(MapRegions.FALLBACK_SKIES[2]),
 			"act 3 has its own ramp and 2D dawn row")
-	var scene: MapScene = MapScene.new()
-	_check(fails, scene.get_act() == 0, "MapScene starts on act 0")
+	var materials: MapMaterials = MapMaterials.new(Vector3.UP, 1)
 	var seen: Array[Texture2D] = []
-	var surface: Variant = null
-	var g_val: float = NAN
 	for act: int in range(4):
-		scene.set_act(act)
-		var ground: ShaderMaterial = _override(scene, "TerrainPlaceholder")
-		var prop: ShaderMaterial = _override(scene, "FlatWedges")
-		if ground == null or prop == null:
-			_check(fails, false, "act %d materials missing" % act)
-			continue
-		if act == 0:
-			surface = ground.get_shader_parameter("surface_tex")
-			g_val = _as_float(ground.get_shader_parameter("surface_value"))
-		_check(fails, scene.get_act() == act, "set_act(%d) sticks" % act)
-		var grade: Variant = ground.get_shader_parameter("grade")
-		var shade: Color = _as_color(ground.get_shader_parameter("band_shade"))
-		_check(fails, grade is Texture2D and is_same(grade, prop.get_shader_parameter("grade")),
-				"act %d ground and prop share one grade" % act)
-		_check(fails, shade.is_equal_approx(_as_color(prop.get_shader_parameter("band_shade")))
-				and not shade.is_equal_approx(_as_color(ground.get_shader_parameter("band_key"))),
-				"act %d ground and prop ramps match and are distinct ends" % act)
-		if grade is Texture2D:
-			var tex: Texture2D = grade
-			for prior: Texture2D in seen:
-				_check(fails, not is_same(tex, prior),
-						"act %d grade is not a previous act's texture" % act)
-			seen.append(tex)
-			if act == 0:
-				if tex is ImageTexture:
-					_grade_recipe(fails, tex)
-				else:
-					_check(fails, tex.get_width() == 512 and tex.get_height() == 256,
-							"painted act 0 grade is the declared 512×256 row")
-	var ground_end: ShaderMaterial = _override(scene, "TerrainPlaceholder")
-	# `surface_tex` used to be asserted IDENTICAL across every act, which held
-	# only while no act had a real tile and all four shared the one in-memory
-	# fallback. Act I now binds `materials/act1-ground-ash-loam.png` while the
-	# other three still fall back, so identity is the wrong invariant — and
-	# keeping it would mean the gate fails the moment any act's tile lands.
-	# What the check is really for is that an act switch never retints the
-	# GROUND: the value lock holds and no albedo uniform appears. Hue lives in
-	# the ramp ends and the grade, never in the surface.
-	_check(fails, ground_end != null
-			and is_equal_approx(g_val, MapMaterials.GROUND_VALUE)
-			and is_equal_approx(_as_float(ground_end.get_shader_parameter("surface_value")),
-				MapMaterials.GROUND_VALUE)
-			and ground_end.get_shader_parameter("surface_tex") != null
-			and ground_end.get_shader_parameter("albedo") == null,
-			"act switch does not retint albedo / surface_value")
-	_check(fails, surface != null,
-			"act 0 binds a surface texture")
-	scene.free()
+		materials.bind_act(MapRegions.for_act(act), PackedVector3Array())
+		var grade: Texture2D = materials.ground.get_shader_parameter("grade")
+		_check(fails, grade != null and not seen.has(grade), "source grades are distinct per act")
+		seen.append(grade)
 
 
 static func _grade_recipe(fails: Array[String], tex: Texture2D) -> void:
