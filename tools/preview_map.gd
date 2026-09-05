@@ -87,6 +87,7 @@ func _run() -> void:
 	screen.size = Vector2(dimensions)
 	var start: int = Time.get_ticks_msec()
 	screen.refresh(run)
+	screen.set_survey_retired(_steps > 0)
 	if screen.layout_result() == null:
 		printerr(JSON.stringify(screen.layout_failure()))
 		quit(1)
