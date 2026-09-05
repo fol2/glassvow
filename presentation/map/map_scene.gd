@@ -1,97 +1,16 @@
 class_name MapScene
 extends Control
-## Standalone 3D map surface for one act (#234 slice 7b).
-##
-## Instantiable without a WorldMap. `project_pins` takes a node list when the
-## caller has one; construction does not. Owns pan / fling / wheel for the
-## world surface; pin pick is `pin_at` (screen rect ∩ hit-test). Ground and
-## manifest assets replace the placeholder MultiMesh modules only when a full
-## active-act geometry set is available; otherwise wedge / slab / dab carry the #255
-## cel/triplanar pair. Freeze is a switch, not a scene-graph assumption
-## (#207 decision 10). Rest is `UPDATE_ONCE` (one paint, then sleep). Call
-## `set_live(true)` while the camera moves; `set_live(false)` re-arms a
-## single frame at the new pose — same contract as `card_view.gd` `_set_live`.
+## Compiled 3D landscape, projected waystones and camera input for one act.
+## The generator owns every node, route and landmark transform. Rest allows
+## three render warm-up frames, then freezes until input or content changes.
 
 const OVERSAMPLE: float = 1.0
 const VP_MAX: int = 2048
-## The plane must outsize what the camera can EVER see, not the lattice: a
-## legal seat at the pan bounds' corner (the seed-717 start node puts the
-## camera at z≈26.6) looks past a 48×34 plane into void — measured on the
-## live screen as the world filling only ~71%×63% of the frame. Widest case:
-## bounds extent (39×28.8) plus the max zoom stop's frustum on every side
-## (ortho 28 × wide-phone aspect, /sin 55° along Z). One quad, world-XZ
-## triplanar — oversizing is free.
-const GROUND_SIZE: Vector2 = Vector2(128.0, 96.0)
-const SUN_TO: Vector3 = Vector3(-0.35, 0.78, 0.52)
-const SKY: Color = Color(0.018, 0.022, 0.045)
-## Mesh scale, yaw policy, semantic class, footprint and occlusion facts
-## are owned by MapAssetProfiles and keyed by manifest asset ID.
-## Where the Vigil stands: short of the entrance row, mirroring the terminus
-## past the boss. The screen reads this too, to run the road out from its door
-## to the first waystones.
-##
-## x is pinned by the opening frame, and the budget is tight enough to write
-## down. The camera seats the focused node at `MapCameraRig.LEAD_X` = 1/3 of
-## the frame width, so at the played zoom stop (20) and the narrowest shipping
-## aspect (pad-landscape, 1180x820) there are 28.8 / 3 = 9.59 units of ground
-## west of row 0 before the frame ends. The hall's rotated footprint is 8.50 of
-## them. Everything left over — 1.09 units — is the whole available gap between
-## the Vigil and the first wave of nodes.
-##
-## -41.3 spends it: the west wall lands just inside the frame edge at -45.6 and
-## the east wall at -37.1, a clear 1.1 short of row 0's x = -36. It was -38.4,
-## which put the hall 1.85 units PAST row 0 — the first wave stood on its roof.
-## An earlier note here claimed x = -41 cut the hall in half; that was measured
-## against the parametric hall before the Tripo one halved its footprint.
-##
-## More separation than this cannot come from moving the building. It needs the
-## opening zoom stop, `LEAD_X`, or the `act1-vigil` profile scale to give.
 const THRESHOLD_XZ: Vector2 = Vector2(-41.3, 6.5)
-## Smallest one-decimal road-axis calibration whose real transformed silhouette
-## clears the fixed boss across every governed screen profile (#474).
+## Clears the fixed boss with the new landmark silhouettes at every zoom.
 const TERMINUS_XZ: Vector2 = Vector2(43.0, 0.0)
-## Turned so the gable is seen in three-quarter rather than edge-on. The hall
-## is authored with its gable facing +X, down the road; the camera looks along
-## -Z, so unturned the player sees the length of the flank and the end of the
-## building disappears into the frame edge. Turned, the doorway in the gable
-## faces the road, which is the whole point of putting it at the start of one.
-# Fixed yaw comes from the act1-vigil profile.
-## Metres, like KIT_SCALE: the Tripo hall arrives unit-scale (0.979 x 0.933 x
-## 0.743) where the parametric one it replaced was authored at 10.9 m long and
-## shrunk by 0.78. Matching that one's world height wanted 9.7, and at 9.7 the
-## opening frame cuts the hall off at its left edge — the same failure
-## THRESHOLD_XZ was moved to fix. 6.9 keeps it whole: 6.8 m long, a 5.3 m ridge
-## and 6.4 m to the top of the smoke, so it stands among the 6.2 m ash trunks
-## rather than over them, and the doorway is legible at the played zoom.
-# World scale comes from the act1-vigil profile.
-## Metres between paving slabs along a road segment. Generated Acts I/II use
-## fewer, narrower, less regularly aligned slabs so their dense graph does not
-## read as one continuous woven lattice. The compiled centreline is unchanged.
-const ROAD_STEP: float = 0.95
-const EARLY_ROAD_STEP: float = 1.45
-const ROAD_WOBBLE: float = 0.045
-const EARLY_ROAD_WOBBLE: float = 0.11
-const EARLY_ROAD_WIDTH: float = 0.78
-# Road slab scale comes from the shared-road profiles.
-# The current camera-directional hide envelope is owned by MapAssetProfiles.
-
-## The run's own number, dealt into the landscape. 0 is a legal value and is
-## what every construction that never sees a run gets, so a bare `MapScene.new()`
-## is still deterministic.
 var _scatter_salt: int = 0
-## Set when the salt moves, cleared by the next bind. `set_act` no-ops on an
-## unchanged act, and a second run also starts in Act I, so without this the
-## new run stands in the old run's wood.
 var _salt_dirty: bool = false
-## The dealt seats, and the salt they were dealt from. `_dealt_seats` is asked
-## five times per bind -- once by `_all_prop_positions` and once by each of the
-## three slice functions, twice over -- and re-running six relaxation passes over
-## 25 seats each time is waste. Cached rather than merely deterministic: while
-## the two agree today, nothing structural made them agree, and a grade painted
-## from one deal over geometry placed from another is a bug with no symptom
-## until someone looks at a contact shadow.
-var _seats_cache: PackedVector3Array = PackedVector3Array()
-var _seats_cache_salt: int = -1
 const TAP_SLOP: float = 12.0
 const FLING_DAMP: float = 0.06
 const FLING_MAX: float = 48.0
@@ -185,13 +104,7 @@ func get_act() -> int:
 	return _act
 
 
-## Deal this run's landscape. Call BEFORE `set_act`, which is what rebinds the
-## geometry that reads it.
-##
-## The placeholders are rebuilt here rather than left alone. They are what shows
-## if an act's real assets fail to load, and the grade's contact shadows are
-## painted from these same seats -- a fallback standing somewhere the shadows
-## are not is worse than a fallback that is merely grey.
+## Cosmetic seed; the next bind rebuilds scenery without advancing game RNG.
 func set_scatter_salt(salt: int) -> void:
 	if salt == _scatter_salt:
 		return
@@ -534,14 +447,6 @@ func _add_environment(world: Node3D) -> void:
 	world.add_child(world_environment)
 
 
-func seat_kit(j: int, kinds: int) -> int:
-	return 2 + posmod(j + _scatter_salt, kinds)
-
-
-func _dress_salt() -> int:
-	return posmod(_scatter_salt, 997)
-
-
 func _placement_footprint(candidate: Dictionary) -> PackedVector2Array:
 	var placement: Dictionary = candidate["placement"]
 	var transform: Dictionary = placement["transform"]
@@ -606,13 +511,13 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 			continue
 		var selection: PackedVector2Array = _selection_footprint(candidate, footprint)
 		var rejection: Dictionary = _scenery_rejection(
-			selection, accepted_footprints, data, contract, quality)
+			selection, footprint, accepted_footprints, data, contract, quality)
 		if not rejection.is_empty():
 			rejection["candidate_id"] = candidate_id
 			rejections.append(rejection)
 			continue
 		accepted[candidate_id] = candidate["placement"]
-		accepted_footprints.append(selection)
+		accepted_footprints.append(footprint)
 	data["scenery_instances"] = MapLayoutCanonical.ordered_dictionary(accepted)
 	var final_result: MapLayoutResult = MapLayoutResult.create(data)
 	if final_result == null:
@@ -687,7 +592,7 @@ func _clear_waylights() -> void:
 	_waylights.clear()
 
 
-func _scenery_rejection(footprint: PackedVector2Array,
+func _scenery_rejection(footprint: PackedVector2Array, physical: PackedVector2Array,
 		accepted: Array[PackedVector2Array], data: Dictionary,
 		contract: Dictionary, quality: Dictionary) -> Dictionary:
 	if footprint.is_empty():
@@ -722,232 +627,12 @@ func _scenery_rejection(footprint: PackedVector2Array,
 		if MapQualityEvaluator._polygon_distance(footprint,
 				MapQualityEvaluator._poly(zone["polygon"])) < padding - epsilon:
 			return {"reason": "hero protected zone", "blocker_id": zone_id}
-	# `_dealt_seats` already preserves the existing SEAT_GAP centre floor. The
-	# polygon check removes the residual real-footprint overlaps without inventing
-	# a second placement or clearance threshold.
+	# Canopies may overlap one another, as in a grove. Physical footprints
+	# remain disjoint; the full projected reserve above protects all gameplay.
 	for prior: PackedVector2Array in accepted:
-		if MapQualityEvaluator._polygon_distance(footprint, prior) <= epsilon:
+		if MapQualityEvaluator._polygon_distance(physical, prior) <= epsilon:
 			return {"reason": "accepted scenery footprint", "blocker_id": "scenery"}
 	return {}
-
-
-## The ground the scenery may stand on, along the journey. Clears the Vigil to
-## the west and the terminus at x = 40.4 to the east; it is the span the authored
-## set this replaced already used, so nothing downstream sees a wider field.
-const SCATTER_X: Vector2 = Vector2(-33.0, 31.5)
-## How far off the centre line each family sits, as |z|. The lanes run
-## z = -18..18 in 6-unit steps, so these bands put scenery INSIDE the node
-## field rather than on its banks -- nodes step around it, which is
-## `MapPinProjection.resolve`'s job, and the corridor down z = 0 stays open.
-const WEDGE_Z: Vector2 = Vector2(8.5, 11.7)
-const SLAB_Z: Vector2 = Vector2(5.6, 6.9)
-const DAB_Z: Vector2 = Vector2(7.4, 11.8)
-## How much of its own band a piece may wander in. At 1.0 two neighbours could
-## meet on the shared edge and the stratification would buy nothing.
-const BAND_INSET: float = 0.7
-## How many pieces each family seats. `_add_props` slices the dealt list by
-## these, so they are the one statement of the bill.
-const WEDGE_N: int = 9
-const SLAB_N: int = 4
-const DAB_N: int = 8
-## Metres two seats must keep between them once every family is on the ground.
-##
-## Stratification only spaces a family against ITSELF -- three independent
-## streams cannot see each other, and `WEDGE_Z` and `DAB_Z` overlap outright. A
-## person placing 25 pieces sees all 25 at once, and it showed: measured over
-## 200 seeds, the hand-authored set had ZERO pairs closer than half their
-## combined footprint radius and the first dealt version had 1.30 per seed.
-## 3.4 is the widest kit pair on this map (two 6.2-scaled ash trunks) at about
-## half their combined reach, and it is a BALANCE POINT rather than an optimum.
-## The trade is monotone, measured over 200 seeds with
-## `tools/probe_map_seeds.gd` -- a wider gap buys less clumping and fewer
-## overlapping medallions, and pays for both by pushing more nodes behind
-## scenery, because spreading the pieces along X covers more lanes:
-##
-##   gap   pairs <0.75 reach   overlapping nodes   nodes behind
-##   2.8         1.88            27 / 24 seeds        4.8%
-##   3.4         0.28            19 / 17 seeds        5.3%
-##   4.0         0.06            18 / 18 seeds        5.7%
-##   (authored)  1.00            51 / 50 seeds        3.9%
-##
-## Move this one number to re-weigh it; do not re-derive the mechanism.
-const SEAT_GAP: float = 3.4
-
-
-## One RNG per family, so adding a piece to one does not reshuffle the others.
-##
-## Deliberately NOT `RunState.rng`. That stream belongs to the domain, and
-## drawing from it here would advance it and change what the map generator
-## rolls next -- the scenery would silently move the graph.
-func _scatter_rng(stream: int) -> RandomNumberGenerator:
-	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-	rng.seed = _scatter_salt ^ (stream * 0x9E3779B9)
-	return rng
-
-
-## Seats for one family: stratified along the journey, alternating sides.
-##
-## Stratified rather than free, and that is what makes a dealt landscape read
-## like the authored one it replaces. Each family cuts the journey into as many
-## bands as it has pieces and draws one piece inside each, so neighbour spacing
-## stays in a narrow range. Nine uniform draws over the same 64 units put
-## neighbours anywhere from touching to twenty apart, which reads as three
-## thickets and a desert rather than as a wood.
-##
-## The side flips every piece, from a start the run picks. That is what keeps
-## the middle open without anything having to test for it.
-func _band_seats(count: int, z_band: Vector2, height: float,
-		stream: int) -> PackedVector3Array:
-	var rng: RandomNumberGenerator = _scatter_rng(stream)
-	var out: PackedVector3Array = PackedVector3Array()
-	var span: float = (SCATTER_X.y - SCATTER_X.x) / float(count)
-	var side: float = 1.0 if rng.randf() < 0.5 else -1.0
-	for i: int in range(count):
-		var centre: float = SCATTER_X.x + (float(i) + 0.5) * span
-		out.append(Vector3(
-				centre + rng.randf_range(-0.5, 0.5) * span * BAND_INSET,
-				height,
-				side * rng.randf_range(z_band.x, z_band.y)))
-		side = -side
-	return out
-
-
-## Every seat this run, in one list, spaced against each other.
-##
-## The separation has to happen HERE and cannot move into `_band_seats`: a
-## family drawing on its own stream has no idea where the other two families
-## went. This is the only point where all 25 exist at once.
-func _dealt_seats() -> PackedVector3Array:
-	if _seats_cache_salt == _scatter_salt:
-		return _seats_cache
-	var seats: PackedVector3Array = _band_seats(WEDGE_N, WEDGE_Z, 1.7, 1)
-	seats.append_array(_slab_seats())
-	seats.append_array(_band_seats(DAB_N, DAB_Z, 0.0, 3))
-	_seats_cache = _separate(seats)
-	_seats_cache_salt = _scatter_salt
-	return _seats_cache
-
-
-## Push crowded seats apart ALONG X ONLY.
-##
-## X because the z bands carry the design: which side of the road a piece sits
-## on, how far off the centre line, and the open corridor down the middle are
-## all statements `_band_seats` makes in z, and a relaxation free to move in z
-## would quietly undo them. X has room -- a wedge band is 7.2 m wide and the gap
-## wanted is 3.4.
-##
-## Coincident seats are skipped rather than separated: the slab family seats two
-## kits at one point on purpose, and that stack is the family's whole point.
-func _separate(seats: PackedVector3Array) -> PackedVector3Array:
-	var out: PackedVector3Array = seats
-	for _pass: int in range(6):
-		for a: int in range(out.size()):
-			for b: int in range(a + 1, out.size()):
-				var dx: float = out[b].x - out[a].x
-				var dz: float = out[b].z - out[a].z
-				# Coincident seats are left alone: the slab family stacks two
-				# kits on one point deliberately.
-				#
-				# A reviewer flagged that testing by DISTANCE rather than by
-				# identity could also exempt two pieces from different families
-				# that happened to collide exactly -- the one case this pass
-				# exists to fix, excusing itself by being bad enough. Measured
-				# over 200 seeds: that fires ZERO times. Every skip is a slab
-				# stack, which is what the continuous draws in `_band_seats`
-				# predict, since two independent floats matching to a
-				# millimetre in BOTH axes is not something a uniform
-				# distribution does.
-				#
-				# It was tried the other way -- skip by index, `b == a + 1`
-				# inside the slab range -- and that is NOT equivalent: it welds
-				# each stack against its own halves permanently, and pairs
-				# closer than half their combined footprint went from 0.00 per
-				# seed to 0.95. Distance stays.
-				if absf(dx) < 0.001 and absf(dz) < 0.001:
-					continue
-				var gap: float = Vector2(dx, dz).length()
-				if gap >= SEAT_GAP:
-					continue
-				# Along X, away from each other, half the shortfall each. A pair
-				# that happens to share an x takes an arbitrary but stable side
-				# so the pass cannot stall on a division by zero.
-				var push: float = (SEAT_GAP - gap) * 0.5
-				var dir: float = signf(dx) if absf(dx) > 0.001 else 1.0
-				out[a] = Vector3(clampf(out[a].x - dir * push,
-						SCATTER_X.x, SCATTER_X.y), out[a].y, out[a].z)
-				out[b] = Vector3(clampf(out[b].x + dir * push,
-						SCATTER_X.x, SCATTER_X.y), out[b].y, out[b].z)
-	return out
-
-
-func _wedge_positions() -> PackedVector3Array:
-	return _dealt_seats().slice(0, WEDGE_N)
-
-
-## Two entries per seat, at the two heights the placeholder prism stacks at.
-## The real kits flatten y to 0 in `_all_prop_positions`, so a pair becomes two
-## kits sharing one footprint -- which is the stack this family is named for.
-func _slab_seats() -> PackedVector3Array:
-	var out: PackedVector3Array = PackedVector3Array()
-	for base: Vector3 in _band_seats(SLAB_N, SLAB_Z, 0.0, 2):
-		out.append(Vector3(base.x, 0.31, base.z))
-		out.append(Vector3(base.x, 0.86, base.z))
-	return out
-
-
-func _slab_positions() -> PackedVector3Array:
-	return _dealt_seats().slice(WEDGE_N, WEDGE_N + SLAB_N * 2)
-
-
-func _dab_positions() -> PackedVector3Array:
-	return _dealt_seats().slice(WEDGE_N + SLAB_N * 2)
-
-
-## Ground level, for the real kits and for the grade's contact shadows.
-##
-## Every kit GLB is authored grounded -- measured, all six AABBs start at
-## y = 0 -- while the seat lists carry the centre offset their PLACEHOLDER
-## primitive needs, and the prism's half-height is exactly 1.7. Passing those
-## through unchanged floated the whole scenery set 1.7 m, with the grade's
-## contact shadows still painted on the ground beneath it.
-## The dealt seats, for anything that has to measure them without standing up
-## a viewport -- `tools/probe_map_seeds.gd` is the caller this exists for.
-func prop_positions() -> PackedVector3Array:
-	return _all_prop_positions()
-
-
-func _all_prop_positions() -> PackedVector3Array:
-	var seats: PackedVector3Array = _dealt_seats()
-	var grounded: PackedVector3Array = PackedVector3Array()
-	for seat: Vector3 in seats:
-		grounded.append(Vector3(seat.x, 0.0, seat.z))
-	return grounded
-
-
-func _dab_mesh() -> ArrayMesh:
-	var top: Vector3 = Vector3(0.05, 1.45, -0.08)
-	var bottom: Vector3 = Vector3(-0.08, 0.0, 0.05)
-	var east: Vector3 = Vector3(0.95, 0.56, 0.02)
-	var north: Vector3 = Vector3(0.02, 0.62, -0.78)
-	var west: Vector3 = Vector3(-0.82, 0.48, -0.04)
-	var south: Vector3 = Vector3(-0.03, 0.58, 0.86)
-	var triangles: PackedVector3Array = PackedVector3Array([
-		top, east, north, top, south, east,
-		top, west, south, top, north, west,
-		bottom, north, east, bottom, east, south,
-		bottom, south, west, bottom, west, north,
-	])
-	var surface: SurfaceTool = SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for i: int in range(0, triangles.size(), 3):
-		var a: Vector3 = triangles[i]
-		var b: Vector3 = triangles[i + 1]
-		var c: Vector3 = triangles[i + 2]
-		var normal: Vector3 = (b - a).cross(c - a).normalized()
-		for vertex: Vector3 in [a, b, c]:
-			surface.set_normal(normal)
-			surface.add_vertex(vertex)
-	return surface.commit()
 
 
 func _a3(value: Vector3) -> Array[float]:
