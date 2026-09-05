@@ -1,0 +1,35 @@
+name: P9 pinned stable engine transport
+on:
+  push:
+    branches: ['research/p9-engine-transport-20260906']
+    paths: ['.github/workflows/p9-engine-transport.yml']
+permissions:
+  contents: read
+jobs:
+  transport:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Retrieve and verify the existing pinned engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p engine
+          curl --fail --location --retry 2 \
+            'https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' \
+            --output engine/official.zip
+          echo 'cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4  engine/official.zip' | sha256sum --check --strict
+          unzip -q engine/official.zip -d engine
+          echo '8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  engine/Godot_v4.7.2-stable_linux.x86_64' | sha256sum --check --strict
+          chmod 0555 engine/Godot_v4.7.2-stable_linux.x86_64
+          engine/Godot_v4.7.2-stable_linux.x86_64 --headless --version | tee engine/version.txt
+          grep -Fxq '4.7.2.stable.official.ed1daf0bf' engine/version.txt
+          sha256sum engine/official.zip engine/Godot_v4.7.2-stable_linux.x86_64 > engine/SHA256SUMS
+          printf 'Purpose: transport pinned public engine bytes only; no game, qualification, simulation or P9 claim.\nWorkflow commit: %s\nRun: %s\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" > engine/PROVENANCE.txt
+      - name: Publish verified engine archive
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p9-official-godot-4.7.2-linux-x86_64
+          path: engine/
+          if-no-files-found: error
+          retention-days: 7
