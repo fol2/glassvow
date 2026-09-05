@@ -598,7 +598,13 @@ def apply_attack(
         baseline = read_json(prior["G00"] / "statement.json")
         _strip_current_semantic_reads(case_dir, statement)
         shutil.copyfile(prior["G00"] / "observation.json", case_dir / "observation.json")
-        statement["outputs"]["observation"] = baseline["outputs"]["observation"]
+        replay = dict(baseline["outputs"]["observation"])
+        current = statement["outputs"]["observation"]
+        replay["path"] = current["path"]
+        replay["file"] = current["file"]
+        replay["device"] = current["device"]
+        replay["inode"] = current["inode"]
+        statement["outputs"]["observation"] = replay
     elif case_id == "G20":
         statement["challenge"] = read_json(prior["G00"] / "statement.json")["challenge"]
     elif case_id == "G21":

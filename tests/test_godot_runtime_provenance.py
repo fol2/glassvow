@@ -3212,6 +3212,98 @@ class GodotRuntimeCampaignContractTests(unittest.TestCase):
             self.assertEqual("0", end[13])
             self.assertEqual("0", end[21])
 
+    def test_g19_replay_keeps_the_current_observation_path_binding(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-g19-bind-") as temporary:
+            root = Path(temporary)
+            g00, g19 = root / "G00", root / "G19"
+            g00.mkdir()
+            g19.mkdir()
+            prior_obs = b'{"from":"G00"}\n'
+            current_obs = b'{"from":"G19"}\n'
+            (g00 / "observation.json").write_bytes(prior_obs)
+            sidecar = b"a\0b\0SEMOK"
+            (g19 / "sidecar.bin").write_bytes(sidecar)
+            semantic = "/packet/corpus.json".encode().hex()
+            pipe = "pipe:[1]".encode().hex()
+            (g19 / "trace.tsv").write_text("\n".join([
+                "GODOTTRACEv1",
+                "START\t1\t100\t" + "a" * 64,
+                "EXEC\t2\t100\t100\t0\t2\t2\t2\t1\t2\t2f62696e2f7368",
+                "SYSCALL_E\t3\t100\t0\tread\t7\t0\t3\t0\t0\t0",
+                "SYSCALL_X\t4\t100\t0\tread\t3\t0\t0",
+                f"IO\t5\t100\tread\t7\t0\t3\t3\tS\t1\t2\t4\t{semantic}",
+                f"IO\t6\t100\twrite\t1\t-1\t2\t2\tU\t0\t0\t7\t{pipe}",
+                "END\t7\t100\t200\t100\t1\t1\t0\t2\t2\t0\t9\t0\t1\t1\t0\t0\t0\t0\t0\t1\t3\t0\t0\t-\t" + "a" * 64,
+            ]) + "\n", encoding="utf-8")
+            baseline = {
+                "outputs": {
+                    "observation": {
+                        "path": "/runtime/G00/output/observation.json",
+                        "file": "observation.json",
+                        "present": True,
+                        "size": len(prior_obs),
+                        "sha256": hashlib.sha256(prior_obs).hexdigest(),
+                        "device": 1,
+                        "inode": 11,
+                        "challenge": "old-challenge",
+                    }
+                }
+            }
+            statement = {
+                "trace": {"size": 0, "sha256": ""},
+                "sidecar": {"size": len(sidecar), "sha256": ""},
+                "outputs": {
+                    "observation": {
+                        "path": "/runtime/G19/output/observation.json",
+                        "file": "observation.json",
+                        "present": True,
+                        "size": len(current_obs),
+                        "sha256": hashlib.sha256(current_obs).hexdigest(),
+                        "device": 2,
+                        "inode": 22,
+                        "challenge": "new-challenge",
+                    }
+                },
+            }
+            self.campaign.write_json(g00 / "statement.json", baseline)
+            self.campaign.write_json(g19 / "statement.json", statement)
+            self.campaign.apply_attack(g19, "G19", {"G00": g00}, {})
+            updated = json.loads((g19 / "statement.json").read_text(encoding="utf-8"))
+            observation = updated["outputs"]["observation"]
+            self.assertEqual("/runtime/G19/output/observation.json", observation["path"])
+            self.assertEqual("observation.json", observation["file"])
+            self.assertEqual(2, observation["device"])
+            self.assertEqual(22, observation["inode"])
+            self.assertEqual(hashlib.sha256(prior_obs).hexdigest(), observation["sha256"])
+            self.assertEqual("old-challenge", observation["challenge"])
+            self.assertEqual(prior_obs, (g19 / "observation.json").read_bytes())
+            with self.assertRaisesRegex(
+                    self.verifier.VerificationFailure,
+                    "observation output binding differs"):
+                self.verifier._output_records({
+                    "streams": {},
+                    "outputs": {
+                        "observation": {
+                            **observation,
+                            "path": "/runtime/G00/output/observation.json",
+                        },
+                        "homeLog": {
+                            "path": "/runtime/G19/home/.local/share/godot/app_userdata/Glassvow/logs/godot.log",
+                            "file": "home-godot.log",
+                            "present": False,
+                        },
+                        "sentry": {
+                            "path": "/runtime/G19/home/.local/share/godot/app_userdata/Glassvow/sentry.dat",
+                            "file": "home-sentry.dat",
+                            "present": False,
+                        },
+                    },
+                    "roots": {
+                        "OUTPUT": "/runtime/G19/output",
+                        "HOME": "/runtime/G19/home",
+                    },
+                }, g19)
+
 
 if __name__ == "__main__":
     unittest.main()
