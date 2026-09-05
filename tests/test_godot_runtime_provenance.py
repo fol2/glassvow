@@ -299,18 +299,23 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         class_input = "/sys/class/input"
         self.assertEqual({
             "schema": "glassvow.godot-runtime-provenance.hid-input-probe-grammar/v1",
-            "authorityComment": 5548573721,
+            "authorityComment": 5549035179,
             "parents": [hid, serio],
             "measuredChildren": {hid: "input1", serio: "input0"},
             "childIndices": ["0", "1", "2", "3"],
             "leafKinds": ["event", "js", "mouse"],
             "leafIndices": ["0", "1", "2", "3"],
+            "classParent": class_input,
+            "classKinds": ["event", "input", "js", "mouse"],
+            "charPrefix": "/sys/dev/char/13:",
+            "charMinors": ["64", "65", "66", "67"],
+            "expandedNegativeReturns": [-13, -2],
             "identityClass": "identity-only-runtime-probe",
             "fileIdentity": "none-unless-present-in-g0-identity-sets",
             "rule": paths["hidInputProbeGrammar"]["rule"],
         }, paths["hidInputProbeGrammar"])
         self.assertIn("hidInputProbeGrammar expansion", paths["pathResultPolicy"]["closureRule"])
-        self.assertIn("frozen hidInputProbeGrammar parents", self.profile["kernelAdmission"]["pathPolicy"])
+        self.assertIn("class aliases and char minors", self.profile["kernelAdmission"]["pathPolicy"])
         produced, _ = self.verifier._build_admission_policy(
             self.profile, json.loads(G0_MANIFEST_PATH.read_text(encoding="utf-8")),
             {"HOME": "/home", "PRODUCT": "/product", "PACKET": "/packet",
@@ -324,12 +329,24 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         self.assertIn(
             f"P\topenat\t2621696\t{f'{serio}/input2/event3'.encode().hex()}",
             actual)
+        self.assertIn(
+            f"P\topenat\t2752512\t{f'{class_input}/input2'.encode().hex()}",
+            actual)
+        self.assertIn(
+            f"P\treadlinkat\t-\t{f'{class_input}/input2'.encode().hex()}",
+            actual)
+        self.assertIn(
+            f"P\treadlinkat\t-\t{'/sys/dev/char/13:66'.encode().hex()}",
+            actual)
         self.assertNotIn(
             f"P\topenat\t2752512\t{f'{hid}/input4'.encode().hex()}", actual)
         self.assertNotIn(
             f"P\topenat\t2752512\t{f'{serio}/input4'.encode().hex()}", actual)
         self.assertNotIn(
-            f"P\topenat\t2752512\t{f'{class_input}/input2'.encode().hex()}",
+            f"P\topenat\t2752512\t{f'{class_input}/input4'.encode().hex()}",
+            actual)
+        self.assertNotIn(
+            f"P\topenat\t2752512\t{f'{class_input}/mice1'.encode().hex()}",
             actual)
 
     def test_every_successful_closure_path_survives_post_admission_projection(self) -> None:
@@ -2150,7 +2167,7 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         verified, verified_counts = self.verifier._build_admission_policy(
             self.profile, manifest, roots, working)
         self.assertEqual(produced, verified)
-        self.assertEqual(1137, produced_counts["pathRules"])
+        self.assertEqual(1161, produced_counts["pathRules"])
         self.assertLessEqual(
             produced_counts["pathRules"],
             self.profile["caps"]["maxAdmissionPathRules"])
@@ -2204,8 +2221,6 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
         }
         grammar = self.profile["accessGrammar"]["paths"]["hwcapsProbeGrammar"]
         hid_grammar = self.profile["accessGrammar"]["paths"]["hidInputProbeGrammar"]
-        hid_child_name = re.compile(r"^input(\d+)((?:/.*)?)$")
-        hid_leaf = re.compile(r"^/(event|js|mouse)(\d+)((?:/.*)?)$")
         for record in manifest["pathOperationClosure"]["records"]:
             match = re.search(
                 r"/glibc-hwcaps/(x86-64-v\d+)(?:/|$)", record["path"])
@@ -2221,26 +2236,8 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                         else str(record["parameter"]),
                         path.encode().hex(),
                     )))
-            siblings: list[str] = []
-            for parent in hid_grammar["parents"]:
-                prefix = parent + "/"
-                if not record["path"].startswith(prefix):
-                    continue
-                hid = hid_child_name.match(record["path"][len(prefix):])
-                if hid is None:
-                    continue
-                rest = hid.group(2)
-                leaf = hid_leaf.match(rest)
-                siblings = (
-                    [f"{prefix}input{idx}{rest}"
-                     for idx in hid_grammar["childIndices"]]
-                    if leaf is None else [
-                        f"{prefix}input{idx}/{leaf.group(1)}{other}{leaf.group(3)}"
-                        for idx in hid_grammar["childIndices"]
-                        for other in hid_grammar["leafIndices"]
-                    ])
-                break
-            for sibling in siblings:
+            for sibling in self.verifier._hid_probe_paths(
+                    record["path"], hid_grammar):
                 expected_path_rules.add("\t".join((
                     "P", record["operation"],
                     "-" if record["parameter"] is None

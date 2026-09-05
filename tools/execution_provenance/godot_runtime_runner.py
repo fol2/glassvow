@@ -34,6 +34,7 @@ PATH_OPERATIONS = {
 }
 _HID_INPUT_CHILD_NAME = re.compile(r"^input(\d+)((?:/.*)?)$")
 _HID_INPUT_LEAF = re.compile(r"^/(event|js|mouse)(\d+)((?:/.*)?)$")
+_HID_CLASS_LEAF = re.compile(r"^(event|input|js|mouse)(\d+)$")
 _HID_INPUT_INDICES = ["0", "1", "2", "3"]
 _FROZEN_HID_PARENTS = [
     "/sys/devices/0006:045E:0621.0001/input",
@@ -44,6 +45,11 @@ _FROZEN_HID_MEASURED_CHILDREN = {
     _FROZEN_HID_PARENTS[0]: "input1",
     _FROZEN_HID_PARENTS[1]: "input0",
 }
+_FROZEN_HID_CLASS_PARENT = "/sys/class/input"
+_FROZEN_HID_CLASS_KINDS = ["event", "input", "js", "mouse"]
+_FROZEN_HID_CHAR_PREFIX = "/sys/dev/char/13:"
+_FROZEN_HID_CHAR_MINORS = ["64", "65", "66", "67"]
+_FROZEN_HID_EXPANDED_NEGATIVES = [-13, -2]
 
 
 class RunnerError(RuntimeError):
@@ -53,16 +59,24 @@ class RunnerError(RuntimeError):
 def _require_hid_input_probe_grammar(grammar: Any) -> Mapping[str, Any]:
     if (not isinstance(grammar, Mapping) or set(grammar) != {
             "schema", "authorityComment", "parents", "measuredChildren",
-            "childIndices", "leafKinds", "leafIndices", "identityClass",
-            "fileIdentity", "rule"}
+            "childIndices", "leafKinds", "leafIndices", "classParent",
+            "classKinds", "charPrefix", "charMinors",
+            "expandedNegativeReturns", "identityClass", "fileIdentity",
+            "rule"}
             or grammar.get("schema") !=
             "glassvow.godot-runtime-provenance.hid-input-probe-grammar/v1"
-            or grammar.get("authorityComment") != 5548573721
+            or grammar.get("authorityComment") != 5549035179
             or grammar.get("parents") != _FROZEN_HID_PARENTS
             or grammar.get("measuredChildren") != _FROZEN_HID_MEASURED_CHILDREN
             or grammar.get("childIndices") != _HID_INPUT_INDICES
             or grammar.get("leafKinds") != ["event", "js", "mouse"]
             or grammar.get("leafIndices") != _HID_INPUT_INDICES
+            or grammar.get("classParent") != _FROZEN_HID_CLASS_PARENT
+            or grammar.get("classKinds") != _FROZEN_HID_CLASS_KINDS
+            or grammar.get("charPrefix") != _FROZEN_HID_CHAR_PREFIX
+            or grammar.get("charMinors") != _FROZEN_HID_CHAR_MINORS
+            or grammar.get("expandedNegativeReturns") !=
+            _FROZEN_HID_EXPANDED_NEGATIVES
             or grammar.get("identityClass") != "identity-only-runtime-probe"
             or grammar.get("fileIdentity") !=
             "none-unless-present-in-g0-identity-sets"
@@ -95,6 +109,40 @@ def _hid_input_probe_paths(
             for other in grammar["leafIndices"]
         ]
     return []
+
+
+def _hid_class_probe_paths(
+        logical_path: str, grammar: Mapping[str, Any]) -> list[str]:
+    prefix = grammar["classParent"] + "/"
+    if not logical_path.startswith(prefix):
+        return []
+    match = _HID_CLASS_LEAF.match(logical_path[len(prefix):])
+    if match is None:
+        return []
+    kind, idx = match.group(1), match.group(2)
+    if kind not in grammar["classKinds"] or idx not in grammar["childIndices"]:
+        raise RunnerError("G0 class input leaf is not frozen")
+    return [f"{prefix}{kind}{other}" for other in grammar["childIndices"]]
+
+
+def _hid_char_probe_paths(
+        logical_path: str, grammar: Mapping[str, Any]) -> list[str]:
+    prefix = grammar["charPrefix"]
+    if not logical_path.startswith(prefix):
+        return []
+    minor = logical_path[len(prefix):]
+    if minor not in grammar["charMinors"]:
+        raise RunnerError("G0 char input minor is not frozen")
+    return [f"{prefix}{other}" for other in grammar["charMinors"]]
+
+
+def _hid_probe_paths(
+        logical_path: str, grammar: Mapping[str, Any]) -> list[str]:
+    return (
+        _hid_input_probe_paths(logical_path, grammar)
+        + _hid_class_probe_paths(logical_path, grammar)
+        + _hid_char_probe_paths(logical_path, grammar)
+    )
 
 
 def canonical_bytes(value: Any) -> bytes:
@@ -680,7 +728,7 @@ def build_admission_policy(
                     logical_path[:match.start(1)] + level
                     + logical_path[match.end(1):])
                 add_path(operation, expand(sibling), parameter)
-        for sibling in _hid_input_probe_paths(logical_path, hid_grammar):
+        for sibling in _hid_probe_paths(logical_path, hid_grammar):
             add_path(operation, expand(sibling), parameter)
 
     for template in profile["kernelAdmission"]["executeLeaves"]:

@@ -31,9 +31,10 @@ CONFIGURATION_MANIFEST_PATH = Path(__file__).with_name(
     "godot_runtime_configuration_manifest.json")
 CONFIGURATION_ROOT = Path(__file__).with_name("godot_runtime_configuration")
 # Bound to the independently reviewed profile before any qualification case.
-FROZEN_PROFILE_SHA256 = "a27b00e450e284c523b3fa2493385fdd6513f8a1b815686efd60037a6afa5e93"
+FROZEN_PROFILE_SHA256 = "6ac1a54b3027519c4a7867c6327cd3fc3da46829c278e588d62042123742a169"
 _HID_INPUT_CHILD_NAME = re.compile(r"^input(\d+)((?:/.*)?)$")
 _HID_INPUT_LEAF = re.compile(r"^/(event|js|mouse)(\d+)((?:/.*)?)$")
+_HID_CLASS_LEAF = re.compile(r"^(event|input|js|mouse)(\d+)$")
 _HID_INPUT_INDICES = ["0", "1", "2", "3"]
 _FROZEN_HID_PARENTS = [
     "/sys/devices/0006:045E:0621.0001/input",
@@ -44,21 +45,34 @@ _FROZEN_HID_MEASURED_CHILDREN = {
     _FROZEN_HID_PARENTS[0]: "input1",
     _FROZEN_HID_PARENTS[1]: "input0",
 }
+_FROZEN_HID_CLASS_PARENT = "/sys/class/input"
+_FROZEN_HID_CLASS_KINDS = ["event", "input", "js", "mouse"]
+_FROZEN_HID_CHAR_PREFIX = "/sys/dev/char/13:"
+_FROZEN_HID_CHAR_MINORS = ["64", "65", "66", "67"]
+_FROZEN_HID_EXPANDED_NEGATIVES = [-13, -2]
 
 
 def _require_hid_input_probe_grammar(grammar: Any) -> Mapping[str, Any]:
     if (not isinstance(grammar, Mapping) or set(grammar) != {
             "schema", "authorityComment", "parents", "measuredChildren",
-            "childIndices", "leafKinds", "leafIndices", "identityClass",
-            "fileIdentity", "rule"}
+            "childIndices", "leafKinds", "leafIndices", "classParent",
+            "classKinds", "charPrefix", "charMinors",
+            "expandedNegativeReturns", "identityClass", "fileIdentity",
+            "rule"}
             or grammar.get("schema") !=
             "glassvow.godot-runtime-provenance.hid-input-probe-grammar/v1"
-            or grammar.get("authorityComment") != 5548573721
+            or grammar.get("authorityComment") != 5549035179
             or grammar.get("parents") != _FROZEN_HID_PARENTS
             or grammar.get("measuredChildren") != _FROZEN_HID_MEASURED_CHILDREN
             or grammar.get("childIndices") != _HID_INPUT_INDICES
             or grammar.get("leafKinds") != ["event", "js", "mouse"]
             or grammar.get("leafIndices") != _HID_INPUT_INDICES
+            or grammar.get("classParent") != _FROZEN_HID_CLASS_PARENT
+            or grammar.get("classKinds") != _FROZEN_HID_CLASS_KINDS
+            or grammar.get("charPrefix") != _FROZEN_HID_CHAR_PREFIX
+            or grammar.get("charMinors") != _FROZEN_HID_CHAR_MINORS
+            or grammar.get("expandedNegativeReturns") !=
+            _FROZEN_HID_EXPANDED_NEGATIVES
             or grammar.get("identityClass") != "identity-only-runtime-probe"
             or grammar.get("fileIdentity") !=
             "none-unless-present-in-g0-identity-sets"
@@ -91,6 +105,40 @@ def _hid_input_probe_paths(
             for other in grammar["leafIndices"]
         ]
     return []
+
+
+def _hid_class_probe_paths(
+        logical_path: str, grammar: Mapping[str, Any]) -> list[str]:
+    prefix = grammar["classParent"] + "/"
+    if not logical_path.startswith(prefix):
+        return []
+    match = _HID_CLASS_LEAF.match(logical_path[len(prefix):])
+    if match is None:
+        return []
+    kind, idx = match.group(1), match.group(2)
+    if kind not in grammar["classKinds"] or idx not in grammar["childIndices"]:
+        fail("MANIFEST_MISMATCH", "G0 class input leaf is not frozen")
+    return [f"{prefix}{kind}{other}" for other in grammar["childIndices"]]
+
+
+def _hid_char_probe_paths(
+        logical_path: str, grammar: Mapping[str, Any]) -> list[str]:
+    prefix = grammar["charPrefix"]
+    if not logical_path.startswith(prefix):
+        return []
+    minor = logical_path[len(prefix):]
+    if minor not in grammar["charMinors"]:
+        fail("MANIFEST_MISMATCH", "G0 char input minor is not frozen")
+    return [f"{prefix}{other}" for other in grammar["charMinors"]]
+
+
+def _hid_probe_paths(
+        logical_path: str, grammar: Mapping[str, Any]) -> list[str]:
+    return (
+        _hid_input_probe_paths(logical_path, grammar)
+        + _hid_class_probe_paths(logical_path, grammar)
+        + _hid_char_probe_paths(logical_path, grammar)
+    )
 _REASONS = (
     "ADMITTED GODOT_EXECUTABLE_MISMATCH RUNTIME_DEPENDENCY_MISMATCH ARGV_MISMATCH "
     "ENVIRONMENT_MISMATCH PROJECT_SEMANTIC_BYTES_MISMATCH GENERATED_CACHE_BYTES_MISMATCH "
@@ -469,7 +517,7 @@ def _build_admission_policy(
                     logical_path[:match.start(1)] + level
                     + logical_path[match.end(1):])
                 add_path(operation, _expand(sibling, roots), parameter)
-        for sibling in _hid_input_probe_paths(logical_path, hid_grammar):
+        for sibling in _hid_probe_paths(logical_path, hid_grammar):
             add_path(operation, _expand(sibling, roots), parameter)
 
     for template in profile["kernelAdmission"]["executeLeaves"]:
@@ -1593,13 +1641,15 @@ def _admission_policy(
                 logical_path[:match.start(1)] + level
                 + logical_path[match.end(1):]
                 for level in hwcaps_grammar["levels"])
-        logical_paths.extend(_hid_input_probe_paths(logical_path, hid_grammar))
+        logical_paths.extend(_hid_probe_paths(logical_path, hid_grammar))
         for candidate in logical_paths:
             path = _expand(candidate, roots)
             if record["operation"] == "execve":
                 path = str(Path(path).resolve(strict=False))
             key = (record["operation"], path, record["parameter"])
             allowed_results.setdefault(key, set()).update(record["returns"])
+            if candidate != logical_path:
+                allowed_results[key].update(hid_grammar["expandedNegativeReturns"])
     for root in roots.values():
         candidate = Path(root).parent
         while str(candidate) != candidate.parent.as_posix():
