@@ -157,7 +157,11 @@ boons. `--cache=/tmp/map-preview-cache` optionally reuses a pure compiler result
 keyed by the complete input digest; production never reads this preview cache.
 A cache hit still binds current scenery and evaluates its final geometry when
 `--quality` is supplied. `--steps=N`, `--pose=middle|terminus|focused` and
-`--zoom-stop=0..3` expose travelled and distant views.
+`--zoom-stop=0..3` expose travelled and distant views. `--exercise` injects
+native viewport wheel, drag and keyboard events and verifies animated arrival
+and subsequent render freeze. `--measure` reports 120 warmed pan frames on the
+current host, including an explicit GPU-timer availability flag; it does not
+qualify release-device performance.
 
 
 **`tools/probe_map_seeds.gd` reports a rate, never a verdict, and its

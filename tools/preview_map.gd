@@ -9,6 +9,8 @@ var _cache: String = ""
 var _no_shadows: bool = false
 var _continuous: bool = false
 var _steps: int = 0
+var _exercise: bool = false
+var _measure: bool = false
 var _compile_only: bool = false
 var _zoom: int = 2
 var _quality_path: String = ""
@@ -38,6 +40,10 @@ func _run() -> void:
 			_compile_only = true
 		elif arg.begins_with("--zoom-stop="):
 			_zoom = int(arg.get_slice("=", 1))
+		elif arg == "--measure":
+			_measure = true
+		elif arg == "--exercise":
+			_exercise = true
 		elif arg == "--continuous":
 			_continuous = true
 		elif arg == "--no-shadows":
@@ -115,7 +121,7 @@ func _run() -> void:
 		rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3(33.0, 0.0, 0.0)))
 	screen._layout_waystones()
 	screen._push_bands(true)
-	if not _output.is_empty():
+	if not _output.is_empty() and not _exercise:
 		if _continuous:
 			screen.set_process(false)
 		for stone: GlassWaystone in screen._waystones:
@@ -123,6 +129,12 @@ func _run() -> void:
 	screen._map_scene.set_live(_continuous)
 	for frame: int in range(12):
 		await process_frame
+	if _measure:
+		await _measure_pan(screen)
+	if _exercise and not await _exercise_input(screen):
+		push_error("Native map input exercise failed")
+		quit(1)
+		return
 	print("MAP_PREVIEW ", JSON.stringify({"act_index": act, "seed": seed_value,
 		"input_digest": screen.layout_input_digest(), "layout_digest": screen.layout_digest(),
 		"bind_ms": Time.get_ticks_msec() - start,
@@ -162,3 +174,107 @@ func _compile(input: MapLayoutInput, quality: Dictionary, assets: Dictionary) ->
 		if file != null:
 			file.store_var(compiled["result"].to_dict(), false)
 	return compiled
+
+
+## Actual viewport event routing, camera movement and animated hand-off.
+func _exercise_input(screen: WorldMapScreen) -> bool:
+	var scene: MapScene = screen._map_scene
+	var rig: MapCameraRig = scene.get_rig()
+	var point: Vector2 = Vector2(70, screen.size.y * 0.5)
+	for y: int in range(3, 7):
+		for x: int in range(1, 9):
+			var candidate: Vector2 = Vector2(screen.size.x * x / 10.0, screen.size.y * y / 10.0)
+			var clear: bool = true
+			for stone: GlassWaystone in screen._waystones:
+				if stone.visible and stone.get_global_rect().grow(70).has_point(candidate):
+					clear = false
+			if clear:
+				point = candidate
+	var old_zoom: int = rig.zoom_stop
+	var wheel: InputEventMouseButton = InputEventMouseButton.new()
+	wheel.button_index = MOUSE_BUTTON_WHEEL_UP
+	wheel.pressed = true
+	wheel.position = point
+	root.push_input(wheel)
+	await process_frame
+	var receipt: Dictionary = {"wheel": rig.zoom_stop == maxi(0, old_zoom - 1)}
+	var pose: Vector2 = rig.camera_xz()
+	var press: InputEventMouseButton = InputEventMouseButton.new()
+	press.button_index = MOUSE_BUTTON_LEFT
+	press.pressed = true
+	press.position = point
+	root.push_input(press)
+	var drag: InputEventMouseMotion = InputEventMouseMotion.new()
+	drag.position = point + Vector2(50, 0)
+	drag.relative = Vector2(50, 0)
+	drag.button_mask = MOUSE_BUTTON_MASK_LEFT
+	root.push_input(drag)
+	var release: InputEventMouseButton = press.duplicate() as InputEventMouseButton
+	release.pressed = false
+	release.position = drag.position
+	root.push_input(release)
+	await process_frame
+	receipt["drag"] = not rig.camera_xz().is_equal_approx(pose)
+	var reachable: Array[int] = screen.map.reachable()
+	if reachable.is_empty():
+		return false
+	var index: int = reachable[0]
+	rig.set_camera_xz(screen._focus_xz(index))
+	screen._layout_waystones()
+	var chosen: Array[int] = []
+	screen.node_chosen.connect(func(value: int) -> void: chosen.append(value))
+	screen._waystones[index].grab_focus()
+	var key: InputEventKey = InputEventKey.new()
+	key.keycode = KEY_ENTER
+	key.pressed = true
+	root.push_input(key)
+	receipt["keyboard"] = screen.map.at == index
+	receipt["travel_started"] = screen._travelling and scene.is_live()
+	await create_timer(0.8).timeout
+	for frame: int in range(8):
+		await process_frame
+	receipt["arrived_once"] = chosen == [index] and not screen._travelling
+	receipt["frozen_after_arrival"] = not scene.is_live() and scene.get_stage().render_target_update_mode == SubViewport.UPDATE_ONCE
+	print("MAP_INPUT ", JSON.stringify(receipt))
+	return not receipt.values().has(false)
+
+
+## Local renderer observation, not a substitute for the release-device gate.
+func _measure_pan(screen: WorldMapScreen) -> void:
+	var scene: MapScene = screen._map_scene
+	var rig: MapCameraRig = scene.get_rig()
+	var pose: Vector2 = rig.camera_xz()
+	var rid: RID = scene.get_stage().get_viewport_rid()
+	RenderingServer.viewport_set_measure_render_time(rid, true)
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	screen.set_process(false)
+	scene.set_live(true)
+	var intervals: Array[float] = []
+	var cpu: Array[float] = []
+	var gpu: Array[float] = []
+	var before: int = Time.get_ticks_usec()
+	for frame: int in range(150):
+		rig.set_camera_xz(pose + Vector2(sin(frame * 0.02) * 3.0, 0))
+		screen._layout_waystones()
+		await process_frame
+		var now: int = Time.get_ticks_usec()
+		if frame >= 30:
+			intervals.append((now - before) / 1000.0)
+			cpu.append(RenderingServer.viewport_get_measured_render_time_cpu(rid))
+			gpu.append(RenderingServer.viewport_get_measured_render_time_gpu(rid))
+		before = now
+	intervals.sort()
+	cpu.sort()
+	gpu.sort()
+	print("MAP_RENDER ", JSON.stringify({"adapter": RenderingServer.get_video_adapter_name(),
+		"renderer": RenderingServer.get_current_rendering_method(), "samples": intervals.size(),
+		"frame_p95_ms": intervals[113], "viewport_cpu_p95_ms": cpu[113],
+		"viewport_gpu_p95_ms": gpu[113], "gpu_timer_available": gpu[-1] > 0,
+		"renderer_mib": Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0,
+		"draw_calls": Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)}))
+	rig.set_camera_xz(pose)
+	screen.set_process(true)
+	scene.set_live(false)
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
+	for frame: int in range(8):
+		await process_frame

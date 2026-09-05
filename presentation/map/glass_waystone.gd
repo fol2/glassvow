@@ -26,6 +26,7 @@ const CHIP_H: float = 21.0
 const CHIP_ICON: float = 13.0
 const CHIP_FONT_SIZE: int = 27
 const DRAG_SLOP: float = 12.0
+const GLYPH_KINDS: Array[String] = ["monster", "elite", "rest", "shop", "treasure", "event", "unlit", "monument", "boss"]
 
 var index: int = 0
 var kind: String = "monster"
@@ -96,7 +97,9 @@ func set_state(is_reachable: bool, is_cleared: bool, is_current: bool = false) -
 	current = is_current
 	focus_mode = Control.FOCUS_ALL if reachable else Control.FOCUS_NONE
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if reachable else Control.CURSOR_ARROW
-	var art_tint: Color = Color(0.68, 0.70, 0.76, 0.76) if cleared else Color.WHITE
+	var art_tint: Color = Color("edce91") if reachable or current else Color("9caeae")
+	if cleared:
+		art_tint.a = 0.5
 	_frame_art.modulate = art_tint
 	_glyph_art.modulate = art_tint
 	var text_col: Color = GlassStyle.TEXT if reachable else GlassStyle.TEXT_DIM
@@ -204,10 +207,12 @@ func _draw() -> void:
 	if reachable or current:
 		draw_circle(Vector2(cx, cy), radius + 12.0,
 			Color(GlassStyle.EMBER.r, GlassStyle.EMBER.g, GlassStyle.EMBER.b, 0.08 + glow * 0.05))
-	draw_circle(Vector2(cx, cy), radius, Color(0.04, 0.05, 0.10, 0.55 if cleared else 0.86))
-	if reachable:
+	draw_circle(Vector2(cx, cy), radius, Color(0.025, 0.044, 0.047, 0.75 if cleared else 0.96))
+	draw_arc(Vector2(cx, cy), radius - 1.0, 0.0, TAU, 48,
+		Color(0.57, 0.60, 0.51, 0.65 if reachable or current else 0.36), 1.2, true)
+	if reachable or current:
 		draw_arc(Vector2(cx, cy), radius + 5.0, 0.0, TAU, 32,
-			Color(1.0, 0.96, 0.88, 0.78 + glow * 0.2), 3.0)
+			Color(0.94, 0.78, 0.48, 0.72 + glow * 0.22), 2.0, true)
 	# Keyboard focus speaks the game's own focus language: GOLD corner
 	# brackets (GlassStyle.focus_ring's hue), boxed rather than ringed, so it
 	# cannot be confused with the warm reachable ring, the glass edge dashes,
@@ -239,7 +244,7 @@ func _draw() -> void:
 
 func _art(name: String) -> TextureRect:
 	var image: TextureRect = TextureRect.new()
-	image.texture = load("res://assets/art/ui/%s.png" % name) as Texture2D
+	image.texture = _glyph_texture(name.trim_prefix("node-")) if name != "node-frame" else null
 	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	image.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -256,7 +261,7 @@ func _seat_art() -> void:
 	var centre: Vector2 = _pad + Vector2(WIDTH, EMBLEM_H) * 0.5
 	_frame_art.position = centre - Vector2.ONE * frame_side * 0.5
 	_frame_art.size = Vector2.ONE * frame_side
-	var glyph_side: float = frame_side * 1.28
+	var glyph_side: float = frame_side * 1.12
 	_glyph_art.position = centre - Vector2.ONE * glyph_side * 0.5
 	_glyph_art.size = Vector2.ONE * glyph_side
 
@@ -474,8 +479,16 @@ func _on_kindle_done() -> void:
 
 func _apply_kindle_art(true_kind: String) -> void:
 	kind = true_kind
-	_glyph_art.texture = load("res://assets/art/ui/node-%s.png" % _art_kind()) as Texture2D
+	_glyph_art.texture = _glyph_texture(_art_kind())
 	_seat_art()
 	queue_redraw()
 	# The bounty is paid the moment the stone kindles, so `has_chip` goes false
 	# with the dark lantern it labelled and `ChipBand` stops drawing it.
+
+
+func _glyph_texture(glyph: String) -> AtlasTexture:
+	var texture: AtlasTexture = AtlasTexture.new()
+	texture.atlas = load("res://assets/art/ui/map-glyphs.svg") as Texture2D
+	texture.region = Rect2(maxi(GLYPH_KINDS.find(glyph), 0) * 96, 0, 96, 96)
+	texture.filter_clip = true
+	return texture

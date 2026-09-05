@@ -230,6 +230,9 @@ func set_act(act_i: int) -> void:
 ## starts in Act I. `set_act` no-ops on an unchanged act, so on its own it
 ## would leave the new run standing in the previous run's wood.
 func _deal_act(_region: MapRegions) -> void:
+	_key.light_color = MapRegions.LAND_KEY[_act]
+	var setting: WorldEnvironment = _world.get_node("MapEnvironment") as WorldEnvironment
+	setting.environment.ambient_light_color = MapRegions.LAND_AMBIENT[_act]
 	_salt_dirty = false
 	_bind_asset_geometry()
 	_repaint()

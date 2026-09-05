@@ -1009,3 +1009,27 @@ concept prompts live in `docs/map-kit/` (per-act direction + per-kit ledgers).
 
 Operator: `python3 tools/land_map_glb.py --asset <id> --src <dest> --concept <jpg>
 --accept-signed-capture docs/reviews/292/<id>-20.png --reviewer fol2`.
+
+
+### Reassembled landscape (5 September 2026)
+
+`assets/art/map-atelier/` is the active map renderer's new asset set: thirteen
+original painted images and one original Blender slate outcrop. Its
+`provenance.json` records each final payload SHA-256, dimensions, generation
+source and final authoring brief. No Tripo generation was performed in this
+reassembly. The previous library remains available to other tools.
+
+Painted landmarks and vegetation are real transparent RGBA, mounted on
+camera-aligned two-triangle meshes at the fixed 40-degree view. Terrain images
+are opaque RGB. All textures have runtime mipmaps; mirrored world coordinates
+keep tile boundaries continuous. Each PNG is limited to 4 MiB and 1536 pixels
+per side, and the complete package to 40 MiB. Only the current act's resources
+are held. The new slate is one closed connected mesh, 1,228 triangles and
+61,064 bytes, with a grounded Y-up pivot and one material. Rebuild it with
+`blender --background --python tools/map_atelier/build_slate.py`.
+
+`assets/art/ui/map-glyphs.svg` is original native vector artwork: nine consistent
+waystone symbols. It carries no generated raster or external icon dependency.
+The Vigil's rose window remains concealed; the visible rose threshold belongs
+to Act IV. Native captures and final validation are recorded in
+`docs/reviews/map-reassembly/direction.md`; the concept image is not game proof.

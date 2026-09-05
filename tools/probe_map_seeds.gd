@@ -13,6 +13,14 @@ func _initialize() -> void:
 	if seeds < 1 or seeds > 1000:
 		_fail("Seed count must be 1–1000")
 		return
+	var provenance: Variant = JSON.parse_string(FileAccess.get_file_as_string(MapLandscapeAssets.ROOT + "provenance.json"))
+	if not provenance is Dictionary or not provenance.get("assets") is Array:
+		_fail("Missing landscape provenance")
+		return
+	var declared: Array[String] = []
+	for row: Dictionary in provenance["assets"]:
+		declared.append(MapLandscapeAssets.ROOT + str(row["file"]))
+	var loaded: Array[String] = []
 	var total: int = 0
 	for act: int in range(4):
 		var assets: MapLandscapeAssets = MapLandscapeAssets.new(act)
@@ -24,6 +32,20 @@ func _initialize() -> void:
 		if not matches:
 			_fail("Act %d runtime/catalogue profile mismatch: %s" % [act, assets.failure])
 			return
+		var texture_bytes: int = 0
+		for resource: Resource in assets.resources:
+			if resource is Texture2D:
+				texture_bytes += (resource as Texture2D).get_image().get_data_size()
+		if texture_bytes > 64 * 1024 * 1024:
+			_fail("Act %d exceeds the 64 MiB resident texture budget" % act)
+			return
+		for path: String in assets.paths:
+			if path not in declared:
+				_fail("Runtime loaded an asset without provenance: " + path)
+				return
+			if path not in loaded:
+				loaded.append(path)
+		print("Act %d mipmapped texture bytes: %d" % [act + 1, texture_bytes])
 		var previous: String = ""
 		for seed_value: int in range(1, seeds + 1):
 			var first: Dictionary = _candidates(assets, seed_value)
@@ -50,6 +72,9 @@ func _initialize() -> void:
 					return
 			total += first.size()
 		print("Act %d profiles %s: %d cosmetic seeds repeat exactly" % [act + 1, assets.digest, seeds])
+	if loaded.size() != declared.size():
+		_fail("Declared landscape payload is unused by all runtime acts")
+		return
 	print("map profiles OK (4 acts, %d candidate transforms; complete-layout proof is separate)" % total)
 	quit(0)
 

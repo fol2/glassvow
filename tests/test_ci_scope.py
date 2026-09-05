@@ -104,6 +104,16 @@ class ScopeFixtureTests(unittest.TestCase):
         self.assertFalse(selection.checks["run_balance_doe"])
         self.assertFalse(selection.checks["run_locale_font"])
 
+    def test_reassembled_landscape_assets_select_the_asset_gate(self) -> None:
+        for path in ["assets/art/map-atelier/ash-copse.png",
+                     "assets/art/map-atelier/provenance.json",
+                     "tools/map_atelier/build_slate.py", "tools/map_landscape_checks.py"]:
+            with self.subTest(path=path):
+                selected = CI.classify_paths([path])
+                self.assertTrue(selected.checks["run_map_assets"])
+                self.assertTrue(selected.checks["run_map_profiles"])
+                self.assertTrue(selected.checks["run_import_assets"])
+
     def test_balance_ml_only(self) -> None:
         selection = CI.classify_paths(["tools/balance_f1_f2.py"])
         self.assert_scopes(selection, "balance_ml")

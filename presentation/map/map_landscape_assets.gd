@@ -6,12 +6,14 @@ extends RefCounted
 const ROOT: String = "res://assets/art/map-atelier/"
 const GATES: Array[String] = ["amber-tower", "drowned-gate", "obsidian-ring", "rose-gate"]
 const SCENERY: Array[Array] = [
-	["ash-tree", "slate-cluster"],
-	["drowned-cloister", "slate-cluster"],
+	["ash-copse", "ash-tree", "heath-tuft", "slate-cluster"],
+	["drowned-cloister", "heath-tuft", "slate-cluster"],
 	["obsidian-blades", "slate-cluster"],
-	["memorials", "ash-tree", "slate-cluster"],
+	["memorials", "ash-tree", "heath-tuft", "slate-cluster"],
 ]
 
+var ground: Texture2D
+var stone: Texture2D
 var meshes: Dictionary[String, Mesh] = {}
 var profiles: Dictionary = {}
 var registry: MapAssetProfiles
@@ -24,6 +26,11 @@ var act: int = 0
 
 func _init(act_index: int = 0) -> void:
 	act = clampi(act_index, 0, 3)
+	stone = _terrain("slate-heath.png")
+	ground = stone if act == 2 else _terrain("forest-floor.png")
+	if ground == null or stone == null:
+		failure = "Cannot load landscape terrain"
+		return
 	var rows: Array = []
 	var defaults: Dictionary = {}
 	var ids: Array = SCENERY[act].duplicate()
@@ -76,6 +83,10 @@ static func _spec(id: String) -> Dictionary:
 	match id:
 		"slate-cluster":
 			return {"file": "slate-cluster.glb"}
+		"ash-copse":
+			return {"file": "ash-copse.png", "height": 4.4}
+		"heath-tuft":
+			return {"file": "heath-tuft.png", "height": 0.85}
 		"ash-tree":
 			return {"file": "ash-tree-painted.png", "height": 3.6}
 		"vigil":
@@ -92,7 +103,6 @@ func _card(path: String, spec: Dictionary) -> Mesh:
 	var texture: Texture2D = load(path) as Texture2D
 	if texture == null:
 		return null
-	resources.append(texture)
 	var image: Image = texture.get_image()
 	if image.detect_alpha() == Image.ALPHA_NONE:
 		return null
@@ -103,6 +113,8 @@ func _card(path: String, spec: Dictionary) -> Mesh:
 	image.generate_mipmaps()
 	var material: StandardMaterial3D = StandardMaterial3D.new()
 	material.albedo_texture = ImageTexture.create_from_image(image)
+	resources.append(material.albedo_texture)
+	material.albedo_color = Color("b4c6ca") if str(spec["file"]) == "ash-tree-painted.png" else Color("ced4d2")
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
 	material.alpha_scissor_threshold = 0.3
@@ -119,6 +131,22 @@ func _card(path: String, spec: Dictionary) -> Mesh:
 	var mesh: ArrayMesh = surface.commit()
 	mesh.surface_set_material(0, material)
 	return mesh
+
+
+func _terrain(file: String) -> Texture2D:
+	var path: String = ROOT + file
+	if not ResourceLoader.exists(path):
+		return null
+	var source: Texture2D = load(path) as Texture2D
+	if source == null:
+		return null
+	var image: Image = source.get_image()
+	image.generate_mipmaps()
+	var texture: ImageTexture = ImageTexture.create_from_image(image)
+	if not paths.has(path):
+		paths.append(path)
+	resources.append(texture)
+	return texture
 
 
 static func _first_mesh(node: Node) -> Mesh:

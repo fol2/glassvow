@@ -14,7 +14,8 @@ static func run(fails: Array[String]) -> void:
 			var bounds: AABB = assets.meshes[id].get_aabb()
 			_check(fails, bounds.size.x > 0 and bounds.size.y > 0 and bounds.size.z > 0,
 				id + " carries its real three-dimensional silhouette")
-			_check(fails, bounds.position.y >= -0.001, id + " is grounded")
+			_check(fails, absf(bounds.position.y) <= 0.001, id + " is grounded")
+	_check_concave_shore(fails)
 	var scene: MapScene = MapScene.new()
 	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
 		"res://docs/map/map-quality-v2.json"))
@@ -72,6 +73,33 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, scene.find_child("Waystone plinths", true, false) == null,
 		"failed binding does not retain a navigable old landscape")
 	scene.free()
+
+
+static func _check_concave_shore(fails: Array[String]) -> void:
+	var land: MapLandscape = MapLandscape.new()
+	land.prepare({"node_anchors": {"pier": [-20.5, 0.0, 0.0]}, "edges": {}},
+		MapLandscapeAssets.new(0), 1)
+	var shore: PackedVector2Array = PackedVector2Array([
+		Vector2(-3, -3), Vector2(3, -3), Vector2(3, 3), Vector2(2, 3),
+		Vector2(2, -2), Vector2(-2, -2), Vector2(-2, 3), Vector2(-3, 3)])
+	land.land(shore)
+	var terrain: MeshInstance3D = land.get_node("Slate heath") as MeshInstance3D
+	var faces: PackedVector3Array = terrain.mesh.get_faces()
+	var contained: bool = not faces.is_empty()
+	for i: int in range(0, faces.size(), 3):
+		var triangle: PackedVector2Array = []
+		for corner: int in range(3):
+			triangle.append(Vector2(faces[i + corner].x, faces[i + corner].z))
+		contained = contained and Geometry2D.clip_polygons(triangle, shore).is_empty()
+	_check(fails, contained, "no ground triangle crosses a concave shoreline")
+	# The dummy renderer returns identity from MultiMesh readback. Measure the
+	# exact transform supplied to the batch, and inspect the headed pier too.
+	var pier: Transform3D = land.plinth_transform(Vector3(-20.5, 0, 0))
+	var top: Vector3 = pier * (Vector3.UP * MapLandscape.PLINTH_HEIGHT * 0.5)
+	var bottom: Vector3 = pier * (Vector3.DOWN * MapLandscape.PLINTH_HEIGHT * 0.5)
+	_check(fails, is_equal_approx(top.y, 0.045) and bottom.y < -6.0,
+		"a ravine waystone keeps its deck height and extends a pier to the basin")
+	land.free()
 
 
 static func _check_projection(fails: Array[String], scene: MapScene) -> void:
