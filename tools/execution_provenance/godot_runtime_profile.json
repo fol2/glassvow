@@ -10,7 +10,7 @@
   },
   "authority": {
     "issue": 535,
-    "comment": 5546895429,
+    "comment": 5547979544,
     "blockedConsumerIssue": 421,
     "acceptedIntentMainSha": "5c5f2d325725b0a04e060c1ffe0b40a76f2e0928",
     "profileFreezeMainSha": "fb6c497c45ad5c283176e7d25c2bc861aae17033",
@@ -206,10 +206,8 @@
   "caps": {
     "caseCount": 26,
     "attemptsPerCase": 1,
-    "maxQualificationAttempts": 4,
-    "maxHostedMinutes": 60,
     "maxMinutesPerQualificationAttempt": 15,
-    "budgetEpochComment": 5546895429,
+    "budgetEpochComment": 5547979544,
     "validTasks": 10,
     "validProcesses": 3,
     "validThreads": 7,
@@ -307,9 +305,9 @@
     "authority": "GitHub Actions API for this repository and workflow",
     "attemptIdentity": "every run attempt containing the exact job name Qualify actual Godot runtime profile whose started_at is at or after the created_at of caps.budgetEpochComment, including the current attempt",
     "reservationRule": "Each admitted specialist attempt reserves its full 15-minute job timeout even if it finishes earlier.",
-    "hostedMinuteEquation": "4 attempts * 15 reserved minutes = 60 maximum hosted minutes",
+    "hostedMinuteEquation": "recorded reserved minutes = observed attempts * caps.maxMinutesPerQualificationAttempt",
     "concurrency": "All godot-runtime qualification dispatches share one non-cancelling concurrency group so the remote count cannot race.",
-    "failureRule": "Missing current-job evidence, an incomplete remote listing or a fifth attempt fails closed before packet ingestion or any case."
+    "failureRule": "Missing current-job evidence or an incomplete remote listing fails closed before packet ingestion or any case. Cumulative attempt count is recorded and does not reject."
   },
   "clock": {
     "name": "CLOCK_MONOTONIC_RAW",
@@ -1230,8 +1228,8 @@
   ],
   "decision": {
     "pass": "G00 is ADMITTED; G01-G23 and G25 fail closed for their exact predeclared reasons; G24 is INCONCLUSIVE for PROVENANCE_INCOMPLETE; every case uses the same independent verifier; the unchanged inert campaign also passes.",
-    "fail": "Complete evidence admits any negative, rejects G00, gives a negative the wrong reason, weakens a bound or exceeds either finite delivery budget.",
+    "fail": "Complete evidence admits any negative, rejects G00, gives a negative the wrong reason or weakens a bound.",
     "inconclusive": "Actual semantic bytes, executable or runtime identity, process lineage, raw stderr, fresh output, zero-loss accounting or external time remains ambiguous outside the deliberate G24 control.",
-    "repair": "An implementation-only correction may retain every profile, trust, attack, cap and decision field, but invalidates the complete prior Godot campaign and consumes one of four qualification attempts. A scientific, trust-boundary or acceptance change closes the profile rather than repairing it."
+    "repair": "An implementation-only correction may retain every profile, trust, attack, cap and decision field, but invalidates the complete prior Godot campaign. A scientific, trust-boundary or acceptance change closes the profile rather than repairing it."
   }
 }

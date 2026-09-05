@@ -465,7 +465,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p artifacts/godot-runtime
-          read -r max_attempts per_attempt max_minutes budget_epoch_comment < <(python3 -B - <<'PY'
+          read -r per_attempt budget_epoch_comment < <(python3 -B - <<'PY'
           import json
           profile = json.load(open(
               "tools/execution_provenance/godot_runtime_profile.json",
@@ -473,12 +473,12 @@ jobs:
           caps = profile["caps"]
           if caps["budgetEpochComment"] != profile["authority"]["comment"]:
               raise SystemExit("budget epoch authority differs")
-          print(caps["maxQualificationAttempts"],
-                caps["maxMinutesPerQualificationAttempt"],
-                caps["maxHostedMinutes"], caps["budgetEpochComment"])
+          if "maxQualificationAttempts" in caps or "maxHostedMinutes" in caps:
+              raise SystemExit("retired cumulative delivery caps remain")
+          print(caps["maxMinutesPerQualificationAttempt"],
+                caps["budgetEpochComment"])
           PY
           )
-          test "$((max_attempts * per_attempt))" -eq "$max_minutes"
           runs_file="$RUNNER_TEMP/godot-runtime-runs.txt"
           jobs_file="$RUNNER_TEMP/godot-runtime-jobs.txt"
           epoch_file="$RUNNER_TEMP/godot-runtime-budget-epoch.txt"
@@ -526,21 +526,21 @@ jobs:
           grep -Eq "^${GITHUB_RUN_ID}:[0-9]+:${GITHUB_RUN_ATTEMPT}$" \
             "$RUNNER_TEMP/godot-runtime-attempts.txt"
           test "$attempts" -ge 1
-          test "$attempts" -le "$max_attempts"
           python3 -B - "$RUNNER_TEMP/godot-runtime-attempts.txt" \
-            "$attempts" "$max_attempts" "$per_attempt" "$max_minutes" <<'PY'
+            "$attempts" "$per_attempt" <<'PY'
           import json
           import pathlib
           import sys
 
           identities = pathlib.Path(sys.argv[1]).read_text(
               encoding="utf-8").splitlines()
+          attempts = int(sys.argv[2])
+          per_attempt = int(sys.argv[3])
           receipt = {
               "attemptIdentities": identities,
-              "attemptsReserved": int(sys.argv[2]),
-              "maxAttempts": int(sys.argv[3]),
-              "reservedMinutesPerAttempt": int(sys.argv[4]),
-              "maxHostedMinutes": int(sys.argv[5]),
+              "attemptsReserved": attempts,
+              "reservedMinutesPerAttempt": per_attempt,
+              "reservedMinutes": attempts * per_attempt,
           }
           pathlib.Path("artifacts/godot-runtime/budget.json").write_text(
               json.dumps(receipt, sort_keys=True, separators=(",", ":")) + "\n",

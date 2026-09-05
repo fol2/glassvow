@@ -79,7 +79,18 @@ class GodotRuntimeWorkflowTests(unittest.TestCase):
         self.assertNotIn("mapfile -t jobs < <(gh api", WORKFLOW)
         self.assertIn('> "$runs_file"\n          mapfile -t runs < "$runs_file"', WORKFLOW)
         self.assertIn('> "$jobs_file"\n            mapfile -t jobs < "$jobs_file"', WORKFLOW)
-        self.assertIn('test "$attempts" -le "$max_attempts"', WORKFLOW)
+        self.assertIn('test "$attempts" -ge 1', budget)
+        self.assertNotIn('test "$attempts" -le "$max_attempts"', WORKFLOW)
+        self.assertNotIn("max_attempts", budget)
+        self.assertIn(
+            'if "maxQualificationAttempts" in caps or "maxHostedMinutes" in caps:',
+            budget,
+        )
+        self.assertIn('retired cumulative delivery caps remain', budget)
+        self.assertIn('"attemptsReserved": attempts', budget)
+        self.assertIn('"reservedMinutes": attempts * per_attempt', budget)
+        self.assertNotIn('"maxAttempts":', budget)
+        self.assertNotIn('"maxHostedMinutes":', budget)
         self.assertIn('caps["budgetEpochComment"]', budget)
         self.assertIn(
             'repos/$GITHUB_REPOSITORY/issues/comments/$budget_epoch_comment',
@@ -98,12 +109,15 @@ class GodotRuntimeWorkflowTests(unittest.TestCase):
 
     def test_budget_epoch_is_frozen_to_the_owner_authority(self) -> None:
         caps = PROFILE["caps"]
-        self.assertEqual(5546895429, caps["budgetEpochComment"])
+        self.assertEqual(5547979544, caps["budgetEpochComment"])
         self.assertEqual(PROFILE["authority"]["comment"], caps["budgetEpochComment"])
-        self.assertEqual((4, 60, 15), (
-            caps["maxQualificationAttempts"], caps["maxHostedMinutes"],
-            caps["maxMinutesPerQualificationAttempt"],
-        ))
+        self.assertNotIn("maxQualificationAttempts", caps)
+        self.assertNotIn("maxHostedMinutes", caps)
+        self.assertEqual(15, caps["maxMinutesPerQualificationAttempt"])
+        self.assertNotEqual(
+            PROFILE["packetIngress"]["qualification"]["authorityComment"],
+            caps["budgetEpochComment"],
+        )
 
     def test_qualification_and_a1_have_distinct_non_cancelling_slots(self) -> None:
         self.assertIn("inputs.mode == 'godot-runtime-a1' && 'godot-runtime-a1'", WORKFLOW)
@@ -127,6 +141,69 @@ class GodotRuntimeWorkflowTests(unittest.TestCase):
              PROFILE["packetIngress"]["research"]["authorityComment"]),
         )
         self.assertIn('request_index not in manifest["requestIndices"]', WORKFLOW)
+        self.assertNotEqual(
+            PROFILE["packetIngress"]["qualification"]["authorityComment"],
+            PROFILE["caps"]["budgetEpochComment"],
+        )
+        runtime = WORKFLOW.split("\n  godot-runtime:\n", 1)[1].split(
+            "\n  cleanup-a1-packet-ref:\n", 1)[0]
+        self.assertNotIn(
+            "EXPECTED_PACKET_ROOT: research_packets/issue-421-a1-v2-g0",
+            runtime,
+        )
+        self.assertIn("${{ inputs.packet_root }}", runtime)
+        self.assertIn(
+            "packet commit changes a path outside its declared root",
+            runtime,
+        )
+
+    def test_packet_manifest_rejects_a_mismatched_dispatch_root(self) -> None:
+        spec = importlib.util.spec_from_file_location(
+            "godot_runtime_runner_workflow",
+            ROOT / "tools/execution_provenance/godot_runtime_runner.py")
+        assert spec and spec.loader
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        product = "fb6c497c45ad5c283176e7d25c2bc861aae17033"
+        declared = "research_packets/issue-535-g2-qualification-v1"
+        wrong = "research_packets/issue-421-a1-v2-g0"
+        script = b"extends SceneTree\n"
+        corpus = b"{}\n"
+        with tempfile.TemporaryDirectory(prefix="godot-packet-root-") as temporary:
+            packet = Path(temporary)
+            (packet / "oracle.gd").write_bytes(script)
+            (packet / "corpus.json").write_bytes(corpus)
+            manifest = {
+                "schema": "glassvow.godot-runtime-packet/v1",
+                "productSha": product,
+                "packetRoot": declared,
+                "authorityIssue": 1,
+                "authorityComment": 1,
+                "requestIndices": ["0"],
+                "roles": {
+                    "externalScript": {
+                        "path": "oracle.gd",
+                        "size": len(script),
+                        "sha256": hashlib.sha256(script).hexdigest(),
+                    },
+                    "corpus": {
+                        "path": "corpus.json",
+                        "size": len(corpus),
+                        "sha256": hashlib.sha256(corpus).hexdigest(),
+                    },
+                },
+            }
+            (packet / "manifest.json").write_text(
+                json.dumps(manifest, sort_keys=True), encoding="utf-8")
+            loaded = runner.read_packet_manifest(packet, PROFILE)
+            runner.validate_packet_manifest(
+                packet, loaded, PROFILE, product_sha=product,
+                packet_root=declared, authority_issue=1, authority_comment=1)
+            with self.assertRaisesRegex(
+                    runner.RunnerError, "packet manifest packetRoot mismatch"):
+                runner.validate_packet_manifest(
+                    packet, loaded, PROFILE, product_sha=product,
+                    packet_root=wrong, authority_issue=1, authority_comment=1)
 
     def test_a1_requires_exact_main_capability_artifact(self) -> None:
         for required in (

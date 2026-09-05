@@ -183,7 +183,7 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         )
         self.assertEqual(sha256(PROFILE_PATH), self.verifier.FROZEN_PROFILE_SHA256)
         self.assertEqual(535, self.profile["authority"]["issue"])
-        self.assertEqual(5546895429, self.profile["authority"]["comment"])
+        self.assertEqual(5547979544, self.profile["authority"]["comment"])
         self.assertEqual(
             "5c5f2d325725b0a04e060c1ffe0b40a76f2e0928",
             self.profile["authority"]["g0ProductSha"],
@@ -429,17 +429,20 @@ class GodotRuntimeProfileContractTests(unittest.TestCase):
         self.assertEqual(5, caps["maxDupEvents"])
         self.assertEqual(65536, caps["maxPacketManifestBytes"])
         self.assertEqual(2, caps["validSignalEvents"])
-        self.assertEqual(4, caps["maxQualificationAttempts"])
-        self.assertEqual(60, caps["maxHostedMinutes"])
+        self.assertNotIn("maxQualificationAttempts", caps)
+        self.assertNotIn("maxHostedMinutes", caps)
         self.assertEqual(15, caps["maxMinutesPerQualificationAttempt"])
+        self.assertEqual(5547979544, caps["budgetEpochComment"])
         self.assertEqual(1024, caps["maxObservedPaths"])
         self.assertLess(caps["maxObservedPaths"], caps["maxPathEvents"])
         self.assertEqual(1024, caps["maxCampaignMembers"])
-        self.assertEqual(
-            caps["maxHostedMinutes"],
-            caps["maxQualificationAttempts"]
-            * caps["maxMinutesPerQualificationAttempt"],
-        )
+        accounting = self.profile["budgetAccounting"]
+        self.assertIn("does not reject", accounting["failureRule"])
+        self.assertNotIn("fifth attempt", accounting["failureRule"])
+        self.assertNotIn(
+            "finite delivery budget", self.profile["decision"]["fail"])
+        self.assertNotIn(
+            "four qualification attempts", self.profile["decision"]["repair"])
         self.assertEqual([
             "hardTaskCapacity", "maxAddressSpaceBytes", "maxInitialStackBytes",
             "maxSingleReadBytes", "maxCapturedBytes",
@@ -1217,21 +1220,171 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
             self.verifier._path_x_operations(path, statement_identity, {}, {}),
         )
 
+    def _empty_path_x_objects_profile(self) -> dict:
+        empty_canonical = self.verifier._sha(self.verifier._canonical([]))
+        return {
+            "caps": {
+                "maxPathBytes": 4096,
+                "validGetdents64Events": 0,
+                "validGetdents64Bytes": 0,
+            },
+            "accessGrammar": {
+                "mappings": {
+                    "runtimeIdentity": {
+                        "count": 0,
+                        "canonicalMultisetSha256": empty_canonical,
+                        "protectionValues": [1],
+                        "flagValues": [1],
+                        "sharedReadOnlyPaths": [],
+                    },
+                },
+                "internalPipe": {"count": 0, "payloadTemplate": ""},
+                "paths": {
+                    "successfulDirectoryOperations": [],
+                    "successfulDynamicDirectoryOperations": [],
+                    "successfulProbeOperations": [],
+                    "successfulDirectoryAliases": [],
+                    "successfulNamedPathOperations": [],
+                    "successfulWorkingDirectoryOperations": [],
+                    "directoryEnumerations": [],
+                },
+            },
+        }
+
+    def _path_x_objects(
+            self, logical: str, observed: str, operation: str, *,
+            path: str | None = None, roots: dict | None = None,
+            runtime: dict | None = None, index=None) -> None:
+        profile = self._empty_path_x_objects_profile()
+        if roots is None:
+            roots = {
+                "HOME": str(Path(logical).parent / "home"),
+                "PRODUCT": "/product",
+                "PACKET": "/packet",
+            }
+        g0 = {
+            "runtimeIdentitySet": [{
+                "path": logical,
+                "operations": ["execve"],
+                "size": 1,
+                "sha256": "ab",
+                "device": 1,
+                "inode": 2,
+            }],
+            "pathOperationClosure": {"symlinkTargets": []},
+        }
+        if runtime is None:
+            # Statement runtime is hash-only and keyed by the observed path.
+            runtime = {
+                observed: {
+                    "path": observed,
+                    "size": 1,
+                    "sha256": "ab",
+                    "device": 1,
+                    "inode": 2,
+                },
+            }
+        trace = {
+            "events": [{
+                "type": "PATH_X",
+                "path": observed if path is None else path,
+                "operation": operation,
+                "returned": 0,
+            }],
+        }
+
+        def invoke() -> None:
+            self.verifier._objects(
+                trace, {}, runtime, {}, {}, {}, b"", roots, profile, g0)
+
+        if index is None:
+            invoke()
+            return
+        with mock.patch.object(
+                self.verifier, "_g0_runtime_by_observed_path", index):
+            invoke()
+
     def test_path_x_operations_follow_g0_logical_path_to_resolved_interpreter(self) -> None:
-        logical = "/bin/sh"
-        observed = "/usr/bin/dash"
-        g0_runtime = {
-            logical: {"operations": ["execve"]},
-            observed: {"operations": ["execve"]},
-        }
-        statement_identity = {
-            "path": logical, "size": 1, "sha256": "ab", "device": 1, "inode": 2,
-        }
-        self.assertEqual(
-            {"execve"},
-            self.verifier._path_x_operations(
-                observed, statement_identity, {}, g0_runtime),
-        )
+        with tempfile.TemporaryDirectory(prefix="godot-path-x-alias-") as temporary:
+            root = Path(temporary)
+            target, alias = root / "dash", root / "sh"
+            target.write_bytes(b"measured shell\n")
+            target.chmod(0o755)
+            alias.symlink_to(target.name)
+            logical = str(alias)
+            observed = str(Path(logical).resolve())
+            self.assertEqual(str(target.resolve()), observed)
+            self.assertNotEqual(logical, observed)
+            roots = {
+                "HOME": str(root / "home"),
+                "PRODUCT": "/product",
+                "PACKET": "/packet",
+            }
+            g0 = {
+                "runtimeIdentitySet": [{
+                    "path": logical,
+                    "operations": ["execve"],
+                    "size": 1,
+                    "sha256": "ab",
+                    "device": 1,
+                    "inode": 2,
+                }],
+                "pathOperationClosure": {"symlinkTargets": []},
+            }
+
+            # Calling only _path_x_operations with a logical-only g0_runtime dict would miss
+            # the predecessor indexer bug: the observed key is absent, so ops are empty.
+            hash_only = {
+                "path": observed, "size": 1, "sha256": "ab", "device": 1, "inode": 2,
+            }
+            self.assertEqual(
+                set(),
+                self.verifier._path_x_operations(
+                    observed, hash_only, {}, {logical: {"operations": ["execve"]}}),
+            )
+
+            indexed = self.verifier._g0_runtime_by_observed_path(g0, roots)
+            self.assertEqual({logical, observed}, set(indexed))
+            self.assertEqual(["execve"], indexed[observed]["operations"])
+
+            # Red: predecessor logical-only indexer rejects resolved PATH_X execve.
+            # Witness must be VerificationFailure, not AttributeError/missing symbol.
+            with mock.patch.object(
+                    self.verifier, "_g0_runtime_by_observed_path",
+                    lambda g0, roots: self.verifier._identity_set(
+                        g0, roots, "runtimeIdentitySet"),
+            ):
+                with self.assertRaisesRegex(
+                        self.verifier.VerificationFailure,
+                        r"UNDECLARED_INPUT_PATH: object operation differs"):
+                    self._path_x_objects(
+                        logical, observed, "execve", roots=roots)
+
+            # Green: real indexer admits the same execve PATH_X.
+            self._path_x_objects(logical, observed, "execve", roots=roots)
+
+            # Negative controls preserve admission semantics.
+            with self.assertRaisesRegex(
+                    self.verifier.VerificationFailure,
+                    r"object operation differs"):
+                self._path_x_objects(
+                    logical, observed, "openat", roots=roots)
+            with self.assertRaisesRegex(
+                    self.verifier.VerificationFailure,
+                    r"unknown successful object"):
+                self._path_x_objects(
+                    logical, observed, "execve",
+                    path=str(root / "undeclared"), roots=roots)
+
+            other = root / "other"
+            other.write_bytes(b"substituted target\n")
+            alias.unlink()
+            alias.symlink_to(other.name)
+            self.assertNotEqual(observed, str(Path(logical).resolve()))
+            with self.assertRaisesRegex(
+                    self.verifier.VerificationFailure,
+                    r"object operation differs"):
+                self._path_x_objects(logical, observed, "execve", roots=roots)
 
     def test_receipt_semantic_digest_binds_the_captured_sidecar_bytes(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-receipt-") as temporary:
@@ -2319,6 +2472,86 @@ class GodotRuntimeRunnerContractTests(unittest.TestCase):
                 self.runner.materialise_product_stage(
                     source, generated_sha, root / "forbidden-stage", fixtures,
                     manifest, stage_profile)
+
+    def test_dispatch_packet_root_preflight_binds_manifest_and_changed_prefix(self) -> None:
+        product_sha = "fb6c497c45ad5c283176e7d25c2bc861aae17033"
+        packet_sha = "df12f886d02e17a2908a20354df261e76b886d67"
+        packet_root = "research_packets/issue-535-g2-qualification-v1"
+        wrong_root = "research_packets/issue-421-a1-v2-g0"
+        authority_issue = 535
+        authority_comment = 5535398605
+
+        for sha in (product_sha, packet_sha):
+            kind = subprocess.run(
+                ["git", "cat-file", "-t", sha], cwd=ROOT,
+                capture_output=True, text=True, check=False)
+            self.assertEqual(
+                0, kind.returncode, f"missing git object {sha}: {kind.stderr}")
+            self.assertEqual("commit", kind.stdout.strip())
+
+        parents = subprocess.run(
+            ["git", "rev-list", "--parents", "-n", "1", packet_sha], cwd=ROOT,
+            check=True, capture_output=True, text=True).stdout.split()
+        self.assertEqual([packet_sha, product_sha], parents)
+
+        changed = subprocess.run(
+            ["git", "diff", "--no-renames", "--name-only", product_sha, packet_sha],
+            cwd=ROOT, check=True, capture_output=True, text=True).stdout.splitlines()
+        self.assertTrue(changed)
+        self.assertTrue(all(path.startswith(packet_root + "/") for path in changed))
+        self.assertFalse(all(path.startswith(wrong_root + "/") for path in changed))
+
+        direct = subprocess.run(
+            ["git", "ls-tree", f"{packet_sha}:{packet_root}"], cwd=ROOT,
+            check=True, capture_output=True, text=True).stdout.splitlines()
+        regular = [
+            line.split("\t", 1)[1]
+            for line in direct
+            if line.startswith("100644 ") or line.startswith("100755 ")
+        ]
+        self.assertEqual(3, len(regular))
+        self.assertEqual(
+            {"manifest.json", "p9_v5_runtime_oracle.gd", "corpus.json"},
+            set(regular))
+
+        baseline = self.profile["packetIngress"]["qualification"]["baselineRoles"]
+        with tempfile.TemporaryDirectory(prefix="godot-dispatch-preflight-") as temporary:
+            packet_dir = Path(temporary) / "packet"
+            packet_dir.mkdir()
+            archive = subprocess.run(
+                ["git", "archive", packet_sha, packet_root], cwd=ROOT,
+                check=True, capture_output=True)
+            subprocess.run(
+                ["tar", "-x"], cwd=packet_dir, input=archive.stdout, check=True)
+            extracted = packet_dir / packet_root
+            manifest = self.runner.read_packet_manifest(extracted, self.profile)
+            self.assertEqual(packet_root, manifest["packetRoot"])
+            self.assertEqual(product_sha, manifest["productSha"])
+            self.assertEqual(authority_comment, manifest["authorityComment"])
+            self.assertEqual(
+                "p9_v5_runtime_oracle.gd",
+                manifest["roles"]["externalScript"]["path"])
+            self.assertEqual("corpus.json", manifest["roles"]["corpus"]["path"])
+            for name, expected in baseline.items():
+                role = manifest["roles"][name]
+                self.assertEqual(expected["size"], role["size"])
+                self.assertEqual(expected["sha256"], role["sha256"])
+            roles = self.runner.validate_packet_manifest(
+                extracted, manifest, self.profile,
+                product_sha=product_sha, packet_root=packet_root,
+                authority_issue=authority_issue,
+                authority_comment=authority_comment)
+            self.assertEqual({"externalScript", "corpus"}, set(roles))
+            self.assertEqual(
+                "p9_v5_runtime_oracle.gd", roles["externalScript"].name)
+            self.assertEqual("corpus.json", roles["corpus"].name)
+            with self.assertRaisesRegex(
+                    self.runner.RunnerError, "packetRoot mismatch"):
+                self.runner.validate_packet_manifest(
+                    extracted, manifest, self.profile,
+                    product_sha=product_sha, packet_root=wrong_root,
+                    authority_issue=authority_issue,
+                    authority_comment=authority_comment)
 
     def test_packet_manifest_binds_regular_role_bytes(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-packet-") as temporary:

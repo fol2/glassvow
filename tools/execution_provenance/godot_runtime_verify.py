@@ -30,7 +30,7 @@ CONFIGURATION_MANIFEST_PATH = Path(__file__).with_name(
     "godot_runtime_configuration_manifest.json")
 CONFIGURATION_ROOT = Path(__file__).with_name("godot_runtime_configuration")
 # Bound to the independently reviewed profile before any qualification case.
-FROZEN_PROFILE_SHA256 = "24c2a62f43c3e92911d03409a76f8dded7709062c92672fa91a0aa5b96081ca8"
+FROZEN_PROFILE_SHA256 = "8e7d58c949aec80d4bb7feabd97c57fe6eb6f4b8cd235bee588408f50d18e57b"
 _REASONS = (
     "ADMITTED GODOT_EXECUTABLE_MISMATCH RUNTIME_DEPENDENCY_MISMATCH ARGV_MISMATCH "
     "ENVIRONMENT_MISMATCH PROJECT_SEMANTIC_BYTES_MISMATCH GENERATED_CACHE_BYTES_MISMATCH "
