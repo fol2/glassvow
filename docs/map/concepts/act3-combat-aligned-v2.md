@@ -1,0 +1,32 @@
+# Act III — combat-aligned concept v2
+
+Status: approved by James in Step 1. Include in the later four-act comparison.
+
+Subsequent combined review reopened this composition as monotonous. Preserved
+as history; superseded by the recomposed court v3, pending owner review.
+
+Output: [concept image](act3-combat-aligned-v2.png).
+Generated and refined with the built-in imagegen tool; concept art only,
+not native runtime or generator-derived layout evidence.
+
+## References and inspection
+
+Approved Acts I v2 and II v3 provide surface restraint, sculpted form and map
+camera references. The Act III native combat bench at `2ed6cdb0`, captured with
+`--fight=duskfang --act=2 --vp=1458x820 --seed=7 --settle=4`, provides obsidian,
+violet-magenta glass, the broken floating halo and suspended crystal.
+
+The first draft had excessive ground marks. A targeted edit reduced small
+pavement cracks and scattered rubble while retaining the court composition.
+The agent visually checked readable connected paths, quiet broad ground,
+landmark hierarchy, localised emissive accents and retained combat motifs.
+The revised concept passes this art-direction review. Native phone readability,
+projection and generated layout compatibility remain later implementation checks.
+
+## Initial generation prompt
+
+Use case: stylized-concept. Create the revised ACT III THE OBSIDIAN COURT top-down map concept for Glassvow. Image 1 and image 2 are approved map painting-language references ONLY: calm broad painted ground planes, sculpted architectural thickness, highly readable branching routes, disciplined detail and elevated orthographic-like camera. Image 3 is the ACT III COMBAT WORLD reference: obsidian dark purple stone, jagged tall Gothic stained-glass windows lit violet and magenta, a broken levitating halo with suspended faceted purple crystal, and restrained rose-violet stormlight. Translate those recognisable shapes and materials into a TERRESTRIAL COURT approached horizontally. No tower climb. No forest, flooded city, twin hanging lamps, generic golden palace, or blue recolouring of Act II. One full-bleed wide 16:9 landscape, elevated top-down three-quarter view at intimate map journey distance, no visible sky or horizon. Ground fills the scene; not floating platforms over a void. Composition: an old processional road of broad matte lilac-grey flagstones enters lower-left and branches around a recessed ceremonial courtyard towards two distinct passages, rejoining at a substantial landing beside the main black-glass hall on the right-middle. Large irregular but intentional slate flagstones with simple clean broad interiors and sparse widely separated seams, NO fine hairline cracks or mottled surface noise. The ceremonial courtyard has a low round dais off the walking corridor bearing a broken dark-stone floating halo, lit only along its inner broken edge in muted violet-magenta, with one suspended elongated faceted crystal. Make levitation and its shadow clear, keep halo below skyline of main hall so hierarchy remains legible. Main hall is a low, heavy ruined court building with jagged Gothic buttresses, three tall lancet stained-glass windows in restrained plum and violet, and a dark open portal reached by only three broad steps. Small groups of standing memorial stones and broken column bases echo a court that has waited for centuries. Stony terrain around courts uses few massive charcoal-black glass rock faces with satin violet edge highlights, not thin stacked cliff bands, no mountain spire centrepiece. Vegetation almost absent. Foreground and peripheral ground are broad quiet smoky-violet painted planes. Light is cool silver-lavender storm fill revealing shape and open midtones. Small rose-violet light pools beneath selected glass windows, halo and crystal ONLY, no neon ribbons running through every road or rock crack. Approximately ninety percent subdued mineral palette, concentrated chromatic accents at landmarks. Shared grounded shadows, readable depth, controlled illustrated edge creases like the combat art, painterly gouache modelling like approved maps. Clearly differentiate navigable lighter pavement from darker rock, and ensure every branch is physically connected with no occluding foreground props. Solemn, arrested grandeur, oppressive stillness and supernatural royal ritual. Dense details confined to glass tracery, halo and main entrance; ground stays calm. Never use blur to hide texture: crisp silhouettes and simple painted planes. Avoid photorealism, realistic gritty PBR, gravel carpet, many small brush dabs, marble veins, overexposed magenta, glowing gameplay-looking route markings, gold crowns, lava, ocean, sky, UI, text, labels, graph circles, dotted connectors, characters or watermarks. This is a chapter art-direction concept, not a runtime screenshot or actual generated game layout.
+
+## Material correction prompt
+
+Edit only surface treatment of this Obsidian Court map concept. Preserve exact composition, camera, all route geometry, Gothic hall, violet stained glass, floating broken halo and crystal, stairways, memorial stones, slate rock masses, palette and lighting. Make the walking paths and open terrain QUIET broad matte painterly colour planes. On pathways, replace the fine dense network of jagged little cracks and mosaic-shaped paving with large widely spaced irregular flagstones, each containing only one or two very broad soft painted tonal strokes. No tiny inner cracks, marble veins, mottled noise, flecks or all-over grit. Smooth continuous large ash-lilac stone planes remain sharp-edged, not blurred or plastic. Retain occasional large joints as worn masonry, no perfectly uniform square grid. On surrounding open ground, remove eighty percent of the tiny scattered rubble and stippled colour patches; repaint as broad subdued smoky purple and charcoal earth planes. Keep detail clustered tightly at building feet, memorial bases and the halo dais only. Quiet negative space is intentional. Keep crisp edges and contact shadows for buildings and rocks, strong dark illustrated structural creases, halo and glass tracery unchanged. Maintain readable cool shadow detail. Do not change architecture, add props, alter light colour, add neon path lines, brighten into daytime, move stones, remove branches, add text, UI or watermarks. This is a precise material simplification edit to match a premium hand-painted miniature art direction, not a blur pass.
