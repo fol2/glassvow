@@ -65,7 +65,7 @@ excluded from production.
 ## Native captures
 
 Captured from production `WorldMapScreen` and `RunHud` at code commit
-`7331ce7a00efbb7a796b5c28c3382df207ad72cf`, seed 717, zoom stop 2.
+`92888c39fbd9e0da786822c3e4e99955b78d7892`, seed 717, zoom stop 2.
 The preview stages travelled map state without playing encounters; the HUD's
 waystone counter therefore remains at its initial value in these staged views.
 These are runtime images; the direction study above is a separate concept.
