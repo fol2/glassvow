@@ -1084,13 +1084,22 @@ def _path_x_operations(
 
 def _g0_runtime_by_observed_path(
         g0: Mapping[str, Any], roots: Mapping[str, str]) -> dict[str, Mapping[str, Any]]:
+    return _g0_identities_by_observed_path(g0, roots, ("runtimeIdentitySet",))
+
+
+def _g0_identities_by_observed_path(
+        g0: Mapping[str, Any], roots: Mapping[str, str],
+        keys: Sequence[str] = (
+            "runtimeIdentitySet", "semanticReadSet", "platformObservationSet",
+        )) -> dict[str, Mapping[str, Any]]:
     indexed: dict[str, Mapping[str, Any]] = {}
-    for logical, record in _identity_set(g0, roots, "runtimeIdentitySet").items():
-        indexed[logical] = record
-        try:
-            indexed[str(Path(logical).resolve())] = record
-        except OSError:
-            continue
+    for key in keys:
+        for logical, record in _identity_set(g0, roots, key).items():
+            indexed[logical] = record
+            try:
+                indexed[str(Path(logical).resolve())] = record
+            except OSError:
+                continue
     return indexed
 
 
@@ -1099,7 +1108,11 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
              consumed_bytes: Mapping[str, bytes], sidecar: bytes, roots: Mapping[str, str],
              profile: Mapping[str, Any], g0: Mapping[str, Any]) -> None:
     objects: dict[str, Mapping[str, Any]] = {**roles, **platform, **outputs}
-    g0_runtime = _g0_runtime_by_observed_path(g0, roots)
+    g0_runtime = {
+        **_g0_identities_by_observed_path(
+            g0, roots, ("semanticReadSet", "platformObservationSet")),
+        **_g0_runtime_by_observed_path(g0, roots),
+    }
     for logical, record in runtime.items():
         resolved = str(Path(logical).resolve())
         if resolved in objects and objects[resolved] != record:

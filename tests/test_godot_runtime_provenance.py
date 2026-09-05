@@ -1420,6 +1420,59 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
                     r"object operation differs"):
                 self._path_x_objects(logical, observed, "execve", roots=roots)
 
+    def test_path_x_uses_g0_semantic_operations_when_statement_role_is_hash_only(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="godot-path-x-semantic-") as temporary:
+            root = Path(temporary)
+            product = root / "project.godot"
+            product.write_bytes(b"[gd]\n")
+            path = str(product)
+            roots = {
+                "HOME": str(root / "home"),
+                "PRODUCT": str(root),
+                "PACKET": "/packet",
+            }
+            profile = self._empty_path_x_objects_profile()
+            g0 = {
+                "runtimeIdentitySet": [],
+                "semanticReadSet": [{
+                    "path": path,
+                    "operations": ["openat", "stat", "readlink", "read", "close"],
+                    "size": 5,
+                    "sha256": "ab",
+                    "device": 1,
+                    "inode": 2,
+                }],
+                "pathOperationClosure": {"symlinkTargets": []},
+            }
+            roles = {
+                path: {
+                    "path": path, "size": 5, "sha256": "ab", "device": 1, "inode": 2,
+                },
+            }
+
+            def invoke(operation: str, identities=g0) -> None:
+                self.verifier._objects(
+                    {"events": [{
+                        "type": "PATH_X", "path": path, "operation": operation,
+                        "returned": 0,
+                    }]},
+                    roles, {}, {}, {}, {}, b"", roots, profile, identities)
+
+            invoke("openat")
+            invoke("stat")
+            invoke("readlink")
+            with self.assertRaisesRegex(
+                    self.verifier.VerificationFailure,
+                    r"object operation differs"):
+                invoke("execve")
+            with self.assertRaisesRegex(
+                    self.verifier.VerificationFailure,
+                    r"object operation differs"):
+                invoke("openat", {
+                    "runtimeIdentitySet": [],
+                    "pathOperationClosure": {"symlinkTargets": []},
+                })
+
     def test_receipt_semantic_digest_binds_the_captured_sidecar_bytes(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-receipt-") as temporary:
             case = Path(temporary)
