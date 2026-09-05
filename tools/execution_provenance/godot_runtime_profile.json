@@ -178,7 +178,7 @@
     "namedWriteFiles": [
       "/dev/null"
     ],
-    "pathPolicy": "One sorted duplicate-free GODOTACCESSv1 file is derived from the exact operation, resolved path and open-or-mkdir parameter closure of every immutable G0 pathname event, the two declared root translations and the frozen hwcapsProbeGrammar expansion. Only relocation of the five declared roots, readlink probes of their ancestors, G0-observed mkdir(0775) probes of existing HOME ancestors and sibling substitution across the three declared glibc HWCAP levels are permitted. The independent verifier separately reconstructs the same bytes and checks every traced pathname event against them before deciding a case.",
+    "pathPolicy": "One sorted duplicate-free GODOTACCESSv1 file is derived from the exact operation, resolved path and open-or-mkdir parameter closure of every immutable G0 pathname event, the two declared root translations, the frozen hwcapsProbeGrammar expansion and the frozen hidInputProbeGrammar expansion. Only relocation of the five declared roots, readlink probes of their ancestors, G0-observed mkdir(0775) probes of existing HOME ancestors, sibling substitution across the three declared glibc HWCAP levels, and identity-only inputN/eventN/jsN/mouseN substitution under /sys/devices/0006:045E:0621.0001/input for frozen indices 0-3 are permitted. The independent verifier separately reconstructs the same bytes and checks every traced pathname event against them before deciding a case.",
     "installation": "The tracee child applies resource limits, replaces fd 0 with read-only /dev/null, closes every fd >= 3, and installs the ruleset before PTRACE_TRACEME, the initial stop or any exec. Failure exits 124 without launching Godot.",
     "privilegeRule": "PR_SET_NO_NEW_PRIVS is mandatory before restriction, so an exec or set-user-ID helper cannot escape the inherited read, execute and write domain.",
     "initialDescriptors": {
@@ -944,8 +944,20 @@
         "fileIdentity": "none-unless-present-in-g0-identity-sets",
         "rule": "If a frozen G0 pathOperationClosure record's logical path contains /glibc-hwcaps/<level>/ or ends at /glibc-hwcaps/<level>, and <level> is one of the frozen levels, both independent policy builders also admit the same operation, parameter and expected returns against every frozen level, substituting only that path segment. Missing higher levels remain ENOENT identity probes. Do not add Landlock file identities, semantic inputs, other libraries, or undocumented levels."
       },
+      "hidInputProbeGrammar": {
+        "schema": "glassvow.godot-runtime-provenance.hid-input-probe-grammar/v1",
+        "authorityComment": 5548360789,
+        "parent": "/sys/devices/0006:045E:0621.0001/input",
+        "measuredChild": "input1",
+        "childIndices": ["0", "1", "2", "3"],
+        "leafKinds": ["event", "js", "mouse"],
+        "leafIndices": ["0", "1", "2", "3"],
+        "identityClass": "identity-only-runtime-probe",
+        "fileIdentity": "none-unless-present-in-g0-identity-sets",
+        "rule": "If a frozen G0 pathOperationClosure record's logical path is under /sys/devices/0006:045E:0621.0001/input/input<N> or is that child, and <N> is one of the frozen childIndices, both independent policy builders also admit the same operation and parameter against every frozen child index, substituting only that input<N> segment. If the remainder is /<kind><M> or /<kind><M>/..., and <kind> is event, js or mouse and <M> is a frozen leaf index, they also substitute that leaf index across the frozen leafIndices. Missing nodes remain ENOENT identity probes. Do not add Landlock file identities, semantic inputs, other /sys trees, ACPI/serio parents or undocumented indices."
+      },
       "pathResultPolicy": {
-        "closureRule": "Every PATH_X operation, resolved path and open-or-mkdir parameter must be present in the frozen G0 pathOperationClosure, one of the two declared root translations or the frozen hwcapsProbeGrammar expansion. Exact negative returns and non-open positive returns remain bound; a successful openat return is an opaque non-negative descriptor.",
+        "closureRule": "Every PATH_X operation, resolved path and open-or-mkdir parameter must be present in the frozen G0 pathOperationClosure, one of the two declared root translations, the frozen hwcapsProbeGrammar expansion or the frozen hidInputProbeGrammar expansion. Exact negative returns and non-open positive returns remain bound; a successful openat return is an opaque non-negative descriptor.",
         "rootAncestorReadlink": {
           "operation": "readlink",
           "parameter": null,

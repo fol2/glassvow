@@ -32,10 +32,56 @@ PATH_OPERATIONS = {
     "access", "chdir", "execve", "faccessat2", "lstat", "mkdir",
     "newfstatat", "openat", "readlink", "readlinkat", "stat", "statx",
 }
+_HID_INPUT_CHILD = re.compile(
+    r"^(/sys/devices/0006:045E:0621\.0001/input/)input(\d+)((?:/.*)?)$")
+_HID_INPUT_LEAF = re.compile(r"^/(event|js|mouse)(\d+)((?:/.*)?)$")
+_HID_INPUT_INDICES = ["0", "1", "2", "3"]
 
 
 class RunnerError(RuntimeError):
     """The trusted Godot profile supervisor could not complete."""
+
+
+def _require_hid_input_probe_grammar(grammar: Any) -> Mapping[str, Any]:
+    if (not isinstance(grammar, Mapping) or set(grammar) != {
+            "schema", "authorityComment", "parent", "measuredChild",
+            "childIndices", "leafKinds", "leafIndices", "identityClass",
+            "fileIdentity", "rule"}
+            or grammar.get("schema") !=
+            "glassvow.godot-runtime-provenance.hid-input-probe-grammar/v1"
+            or grammar.get("authorityComment") != 5548360789
+            or grammar.get("parent") != "/sys/devices/0006:045E:0621.0001/input"
+            or grammar.get("measuredChild") != "input1"
+            or grammar.get("childIndices") != _HID_INPUT_INDICES
+            or grammar.get("leafKinds") != ["event", "js", "mouse"]
+            or grammar.get("leafIndices") != _HID_INPUT_INDICES
+            or grammar.get("identityClass") != "identity-only-runtime-probe"
+            or grammar.get("fileIdentity") !=
+            "none-unless-present-in-g0-identity-sets"
+            or not isinstance(grammar.get("rule"), str) or not grammar["rule"]):
+        raise RunnerError("HID input probe grammar differs")
+    return grammar
+
+
+def _hid_input_probe_paths(
+        logical_path: str, grammar: Mapping[str, Any]) -> list[str]:
+    match = _HID_INPUT_CHILD.match(logical_path)
+    if match is None:
+        return []
+    prefix, child, rest = match.group(1), match.group(2), match.group(3)
+    if child not in grammar["childIndices"]:
+        raise RunnerError("G0 HID input child is not frozen")
+    leaf = _HID_INPUT_LEAF.match(rest)
+    if leaf is None:
+        return [f"{prefix}input{idx}{rest}" for idx in grammar["childIndices"]]
+    kind, leaf_idx, tail = leaf.group(1), leaf.group(2), leaf.group(3)
+    if kind not in grammar["leafKinds"] or leaf_idx not in grammar["leafIndices"]:
+        raise RunnerError("G0 HID input leaf is not frozen")
+    return [
+        f"{prefix}input{idx}/{kind}{other}{tail}"
+        for idx in grammar["childIndices"]
+        for other in grammar["leafIndices"]
+    ]
 
 
 def canonical_bytes(value: Any) -> bytes:
@@ -576,6 +622,8 @@ def build_admission_policy(
             not isinstance(hwcaps_grammar.get("rule"), str) or \
             not hwcaps_grammar["rule"]:
         raise RunnerError("HWCAP probe grammar differs")
+    hid_grammar = _require_hid_input_probe_grammar(
+        profile["accessGrammar"]["paths"].get("hidInputProbeGrammar"))
     files: dict[str, set[str]] = {}
     paths: set[tuple[str, str, int | None]] = set()
 
@@ -611,14 +659,15 @@ def build_admission_policy(
         add_path(operation, expand(logical_path), parameter)
         match = re.search(
             r"/glibc-hwcaps/(x86-64-v\d+)(?:/|$)", logical_path)
-        if match is None:
-            continue
-        if match.group(1) not in hwcaps_grammar["levels"]:
-            raise RunnerError("G0 HWCAP probe level is not frozen")
-        for level in hwcaps_grammar["levels"]:
-            sibling = (
-                logical_path[:match.start(1)] + level
-                + logical_path[match.end(1):])
+        if match is not None:
+            if match.group(1) not in hwcaps_grammar["levels"]:
+                raise RunnerError("G0 HWCAP probe level is not frozen")
+            for level in hwcaps_grammar["levels"]:
+                sibling = (
+                    logical_path[:match.start(1)] + level
+                    + logical_path[match.end(1):])
+                add_path(operation, expand(sibling), parameter)
+        for sibling in _hid_input_probe_paths(logical_path, hid_grammar):
             add_path(operation, expand(sibling), parameter)
 
     for template in profile["kernelAdmission"]["executeLeaves"]:

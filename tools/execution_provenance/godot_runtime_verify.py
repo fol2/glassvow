@@ -30,7 +30,53 @@ CONFIGURATION_MANIFEST_PATH = Path(__file__).with_name(
     "godot_runtime_configuration_manifest.json")
 CONFIGURATION_ROOT = Path(__file__).with_name("godot_runtime_configuration")
 # Bound to the independently reviewed profile before any qualification case.
-FROZEN_PROFILE_SHA256 = "8e7d58c949aec80d4bb7feabd97c57fe6eb6f4b8cd235bee588408f50d18e57b"
+FROZEN_PROFILE_SHA256 = "0054c936c6f769aada5da197e3a9dcea693a95386fcf953761f0b41ce87c912e"
+_HID_INPUT_CHILD = re.compile(
+    r"^(/sys/devices/0006:045E:0621\.0001/input/)input(\d+)((?:/.*)?)$")
+_HID_INPUT_LEAF = re.compile(r"^/(event|js|mouse)(\d+)((?:/.*)?)$")
+_HID_INPUT_INDICES = ["0", "1", "2", "3"]
+
+
+def _require_hid_input_probe_grammar(grammar: Any) -> Mapping[str, Any]:
+    if (not isinstance(grammar, Mapping) or set(grammar) != {
+            "schema", "authorityComment", "parent", "measuredChild",
+            "childIndices", "leafKinds", "leafIndices", "identityClass",
+            "fileIdentity", "rule"}
+            or grammar.get("schema") !=
+            "glassvow.godot-runtime-provenance.hid-input-probe-grammar/v1"
+            or grammar.get("authorityComment") != 5548360789
+            or grammar.get("parent") != "/sys/devices/0006:045E:0621.0001/input"
+            or grammar.get("measuredChild") != "input1"
+            or grammar.get("childIndices") != _HID_INPUT_INDICES
+            or grammar.get("leafKinds") != ["event", "js", "mouse"]
+            or grammar.get("leafIndices") != _HID_INPUT_INDICES
+            or grammar.get("identityClass") != "identity-only-runtime-probe"
+            or grammar.get("fileIdentity") !=
+            "none-unless-present-in-g0-identity-sets"
+            or not isinstance(grammar.get("rule"), str) or not grammar["rule"]):
+        fail("PROFILE_MISMATCH", "HID input probe grammar differs")
+    return grammar
+
+
+def _hid_input_probe_paths(
+        logical_path: str, grammar: Mapping[str, Any]) -> list[str]:
+    match = _HID_INPUT_CHILD.match(logical_path)
+    if match is None:
+        return []
+    prefix, child, rest = match.group(1), match.group(2), match.group(3)
+    if child not in grammar["childIndices"]:
+        fail("MANIFEST_MISMATCH", "G0 HID input child is not frozen")
+    leaf = _HID_INPUT_LEAF.match(rest)
+    if leaf is None:
+        return [f"{prefix}input{idx}{rest}" for idx in grammar["childIndices"]]
+    kind, leaf_idx, tail = leaf.group(1), leaf.group(2), leaf.group(3)
+    if kind not in grammar["leafKinds"] or leaf_idx not in grammar["leafIndices"]:
+        fail("MANIFEST_MISMATCH", "G0 HID input leaf is not frozen")
+    return [
+        f"{prefix}input{idx}/{kind}{other}{tail}"
+        for idx in grammar["childIndices"]
+        for other in grammar["leafIndices"]
+    ]
 _REASONS = (
     "ADMITTED GODOT_EXECUTABLE_MISMATCH RUNTIME_DEPENDENCY_MISMATCH ARGV_MISMATCH "
     "ENVIRONMENT_MISMATCH PROJECT_SEMANTIC_BYTES_MISMATCH GENERATED_CACHE_BYTES_MISMATCH "
@@ -367,6 +413,8 @@ def _build_admission_policy(
             not isinstance(hwcaps_grammar.get("rule"), str) or \
             not hwcaps_grammar["rule"]:
         fail("PROFILE_MISMATCH", "HWCAP probe grammar differs")
+    hid_grammar = _require_hid_input_probe_grammar(
+        profile["accessGrammar"]["paths"].get("hidInputProbeGrammar"))
     files: dict[str, set[str]] = {}
     paths: set[tuple[str, str, int | None]] = set()
 
@@ -399,14 +447,15 @@ def _build_admission_policy(
         add_path(operation, _expand(logical_path, roots), parameter)
         match = re.search(
             r"/glibc-hwcaps/(x86-64-v\d+)(?:/|$)", logical_path)
-        if match is None:
-            continue
-        if match.group(1) not in hwcaps_grammar["levels"]:
-            fail("MANIFEST_MISMATCH", "G0 HWCAP probe level is not frozen")
-        for level in hwcaps_grammar["levels"]:
-            sibling = (
-                logical_path[:match.start(1)] + level
-                + logical_path[match.end(1):])
+        if match is not None:
+            if match.group(1) not in hwcaps_grammar["levels"]:
+                fail("MANIFEST_MISMATCH", "G0 HWCAP probe level is not frozen")
+            for level in hwcaps_grammar["levels"]:
+                sibling = (
+                    logical_path[:match.start(1)] + level
+                    + logical_path[match.end(1):])
+                add_path(operation, _expand(sibling, roots), parameter)
+        for sibling in _hid_input_probe_paths(logical_path, hid_grammar):
             add_path(operation, _expand(sibling, roots), parameter)
 
     for template in profile["kernelAdmission"]["executeLeaves"]:
@@ -1496,6 +1545,8 @@ def _admission_policy(
             not isinstance(hwcaps_grammar.get("rule"), str) or \
             not hwcaps_grammar["rule"]:
         fail("PROFILE_MISMATCH", "HWCAP probe grammar differs")
+    hid_grammar = _require_hid_input_probe_grammar(
+        profile["accessGrammar"]["paths"].get("hidInputProbeGrammar"))
     allowed_results: dict[tuple[str, str, int | None], set[int]] = {}
     for record in g0["pathOperationClosure"]["records"]:
         logical_path = str(record["path"])
@@ -1509,6 +1560,7 @@ def _admission_policy(
                 logical_path[:match.start(1)] + level
                 + logical_path[match.end(1):]
                 for level in hwcaps_grammar["levels"])
+        logical_paths.extend(_hid_input_probe_paths(logical_path, hid_grammar))
         for candidate in logical_paths:
             path = _expand(candidate, roots)
             if record["operation"] == "execve":
