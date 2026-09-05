@@ -30,23 +30,31 @@ CONFIGURATION_MANIFEST_PATH = Path(__file__).with_name(
     "godot_runtime_configuration_manifest.json")
 CONFIGURATION_ROOT = Path(__file__).with_name("godot_runtime_configuration")
 # Bound to the independently reviewed profile before any qualification case.
-FROZEN_PROFILE_SHA256 = "0054c936c6f769aada5da197e3a9dcea693a95386fcf953761f0b41ce87c912e"
-_HID_INPUT_CHILD = re.compile(
-    r"^(/sys/devices/0006:045E:0621\.0001/input/)input(\d+)((?:/.*)?)$")
+FROZEN_PROFILE_SHA256 = "a27b00e450e284c523b3fa2493385fdd6513f8a1b815686efd60037a6afa5e93"
+_HID_INPUT_CHILD_NAME = re.compile(r"^input(\d+)((?:/.*)?)$")
 _HID_INPUT_LEAF = re.compile(r"^/(event|js|mouse)(\d+)((?:/.*)?)$")
 _HID_INPUT_INDICES = ["0", "1", "2", "3"]
+_FROZEN_HID_PARENTS = [
+    "/sys/devices/0006:045E:0621.0001/input",
+    "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/"
+    "d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input",
+]
+_FROZEN_HID_MEASURED_CHILDREN = {
+    _FROZEN_HID_PARENTS[0]: "input1",
+    _FROZEN_HID_PARENTS[1]: "input0",
+}
 
 
 def _require_hid_input_probe_grammar(grammar: Any) -> Mapping[str, Any]:
     if (not isinstance(grammar, Mapping) or set(grammar) != {
-            "schema", "authorityComment", "parent", "measuredChild",
+            "schema", "authorityComment", "parents", "measuredChildren",
             "childIndices", "leafKinds", "leafIndices", "identityClass",
             "fileIdentity", "rule"}
             or grammar.get("schema") !=
             "glassvow.godot-runtime-provenance.hid-input-probe-grammar/v1"
-            or grammar.get("authorityComment") != 5548360789
-            or grammar.get("parent") != "/sys/devices/0006:045E:0621.0001/input"
-            or grammar.get("measuredChild") != "input1"
+            or grammar.get("authorityComment") != 5548573721
+            or grammar.get("parents") != _FROZEN_HID_PARENTS
+            or grammar.get("measuredChildren") != _FROZEN_HID_MEASURED_CHILDREN
             or grammar.get("childIndices") != _HID_INPUT_INDICES
             or grammar.get("leafKinds") != ["event", "js", "mouse"]
             or grammar.get("leafIndices") != _HID_INPUT_INDICES
@@ -60,23 +68,28 @@ def _require_hid_input_probe_grammar(grammar: Any) -> Mapping[str, Any]:
 
 def _hid_input_probe_paths(
         logical_path: str, grammar: Mapping[str, Any]) -> list[str]:
-    match = _HID_INPUT_CHILD.match(logical_path)
-    if match is None:
-        return []
-    prefix, child, rest = match.group(1), match.group(2), match.group(3)
-    if child not in grammar["childIndices"]:
-        fail("MANIFEST_MISMATCH", "G0 HID input child is not frozen")
-    leaf = _HID_INPUT_LEAF.match(rest)
-    if leaf is None:
-        return [f"{prefix}input{idx}{rest}" for idx in grammar["childIndices"]]
-    kind, leaf_idx, tail = leaf.group(1), leaf.group(2), leaf.group(3)
-    if kind not in grammar["leafKinds"] or leaf_idx not in grammar["leafIndices"]:
-        fail("MANIFEST_MISMATCH", "G0 HID input leaf is not frozen")
-    return [
-        f"{prefix}input{idx}/{kind}{other}{tail}"
-        for idx in grammar["childIndices"]
-        for other in grammar["leafIndices"]
-    ]
+    for parent in grammar["parents"]:
+        prefix = parent + "/"
+        if not logical_path.startswith(prefix):
+            continue
+        match = _HID_INPUT_CHILD_NAME.match(logical_path[len(prefix):])
+        if match is None:
+            continue
+        child, rest = match.group(1), match.group(2)
+        if child not in grammar["childIndices"]:
+            fail("MANIFEST_MISMATCH", "G0 HID input child is not frozen")
+        leaf = _HID_INPUT_LEAF.match(rest)
+        if leaf is None:
+            return [f"{prefix}input{idx}{rest}" for idx in grammar["childIndices"]]
+        kind, leaf_idx, tail = leaf.group(1), leaf.group(2), leaf.group(3)
+        if kind not in grammar["leafKinds"] or leaf_idx not in grammar["leafIndices"]:
+            fail("MANIFEST_MISMATCH", "G0 HID input leaf is not frozen")
+        return [
+            f"{prefix}input{idx}/{kind}{other}{tail}"
+            for idx in grammar["childIndices"]
+            for other in grammar["leafIndices"]
+        ]
+    return []
 _REASONS = (
     "ADMITTED GODOT_EXECUTABLE_MISMATCH RUNTIME_DEPENDENCY_MISMATCH ARGV_MISMATCH "
     "ENVIRONMENT_MISMATCH PROJECT_SEMANTIC_BYTES_MISMATCH GENERATED_CACHE_BYTES_MISMATCH "
