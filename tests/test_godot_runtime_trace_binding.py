@@ -33,6 +33,13 @@ class TraceBindingTests(unittest.TestCase):
         cls.profile = json.loads(PROFILE.read_text(encoding="utf-8"))
         cls.contract = cls.profile["accessGrammar"]["internalPipe"]
 
+    def test_socket_path_matches_kernel_sockfs_names_only(self) -> None:
+        self.assertTrue(self.verifier._socket_path("socket:[17896]"))
+        self.assertFalse(self.verifier._socket_path("socket:[abc]"))
+        self.assertFalse(self.verifier._socket_path("socket:17896"))
+        self.assertFalse(self.verifier._socket_path("pipe:[17896]"))
+        self.assertFalse(self.verifier._socket_path("/tmp/socket:[17896]"))
+
     def accounting_fixture(self, raw_events: list[str]) -> tuple[dict, dict]:
         root_tid = raw_events[0].split("\t")[2] if raw_events else "100"
         null_identity = os.stat("/dev/null")

@@ -1122,6 +1122,33 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
         with self.assertRaisesRegex(self.verifier.VerificationFailure, "FORBIDDEN_NETWORK_FAMILY"):
             self.verifier._network({"events": sockets + binds}, profile)
 
+    def test_objects_admits_close_of_declared_netlink_socket_identity(self) -> None:
+        profile = self._empty_path_x_objects_profile()
+        roots = {"HOME": "/home", "PRODUCT": "/product", "PACKET": "/packet"}
+        g0 = {
+            "runtimeIdentitySet": [],
+            "pathOperationClosure": {"symlinkTargets": []},
+        }
+        close = {
+            "type": "CLOSE", "fd": 5, "classification": "I",
+            "device": 9, "inode": 17896, "path": "socket:[17896]",
+        }
+
+        def invoke(event: dict) -> None:
+            self.verifier._objects(
+                {"events": [event]}, {}, {}, {}, {}, {}, b"", roots, profile, g0)
+
+        invoke(close)
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "netlink socket classification differs"):
+            invoke({**close, "classification": "S"})
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "unknown successful object"):
+            invoke({**close, "type": "PATH_X", "operation": "openat", "returned": 0})
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "unknown successful object"):
+            invoke({**close, "path": "socket:[abc]"})
+
     def test_checkout_identity_binds_head_and_tracked_cleanliness(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-checkout-") as temporary:
             repository = Path(temporary) / "repository"

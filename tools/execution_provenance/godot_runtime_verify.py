@@ -15,6 +15,7 @@ validate_syscall_grammar, validate_complete_role_reads = _TRACE.validate_syscall
 reject_semantic_mappings, fail, integer = _TRACE.reject_semantic_mappings, _TRACE.fail, _TRACE.integer
 validate_trace_accounting = _TRACE.validate_trace_accounting
 _pipe_path, _internal_pipe_paths = _TRACE.pipe_path, _TRACE.internal_pipe_paths
+_socket_path = _TRACE.socket_path
 _validate_internal_pipe = _TRACE.validate_internal_pipe
 _validate_request_indices = _TRACE.validate_request_indices
 sanitise_diagnostic = _TRACE.sanitise_diagnostic
@@ -1177,6 +1178,10 @@ def _objects(trace: Mapping[str, Any], roles: Mapping[str, Mapping[str, Any]], r
                 fail("PROCESS_LINEAGE_MISMATCH", "pipe classification differs",
                      check="internal_pipe.classification",
                      sequence=event.get("sequence") if isinstance(event.get("sequence"), int) else None)
+            continue
+        if event["type"] == "CLOSE" and _socket_path(path):
+            if event.get("classification") != "I":
+                fail("FORBIDDEN_NETWORK_FAMILY", "netlink socket classification differs")
             continue
         if path in dynamic_directories:
             if event["type"] != "PATH_X" or event.get("operation") not in dynamic_directories[path]:

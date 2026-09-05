@@ -542,6 +542,11 @@ def pipe_path(path: Any) -> bool:
         and path[6:-1].isdigit()
 
 
+def socket_path(path: Any) -> bool:
+    return isinstance(path, str) and path.startswith("socket:[") and path.endswith("]") \
+        and path[8:-1].isdigit()
+
+
 def internal_pipe_paths(events: Sequence[Mapping[str, Any]]) -> set[str]:
     return {event["path"] for event in events
             if event.get("type") == "PIPE" and pipe_path(event.get("path"))}
