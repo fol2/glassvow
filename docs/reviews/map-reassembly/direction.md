@@ -61,3 +61,28 @@ results are recorded with the delivery PR. Desktop renderer timings are local
 observations, not release-device qualification. The map compiler's pre-existing
 fresh-layout cost is outside this presentation change; the preview cache is
 excluded from production.
+
+## Native captures
+
+Captured from production `WorldMapScreen` and `RunHud` at code commit
+`7331ce7a00efbb7a796b5c28c3382df207ad72cf`, seed 717, zoom stop 2.
+The preview stages travelled map state without playing encounters; the HUD's
+waystone counter therefore remains at its initial value in these staged views.
+These are runtime images; the direction study above is a separate concept.
+
+Act I opening, desktop 1458 × 820 and phone 844 × 390:
+
+![Act I desktop opening](map-act1-desktop.png)
+![Act I phone opening](map-act1-phone.png)
+
+Act II middle, desktop, four prepared steps:
+
+![Act II middle](map-act2-desktop.png)
+
+Act III terminus, desktop, seven prepared steps:
+
+![Act III terminus](map-act3-desktop.png)
+
+Act IV terminus, desktop, eight prepared steps:
+
+![Act IV terminus](map-act4-desktop.png)

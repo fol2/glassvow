@@ -151,26 +151,19 @@ godot --headless -s res://tools/preview_map.gd -- --act-index=0 --seed=717 \
   --compile-only --quality=/tmp/map-quality.json
 ```
 
-Omit `--output` for native drag, zoom and keyboard inspection. The preview uses
-the production `WorldMapScreen`, compiler, assets and HUD, bypassing only opening
-boons. `--cache=/tmp/map-preview-cache` optionally reuses a pure compiler result
-keyed by the complete input digest; production never reads this preview cache.
+Omit `--output` for native drag, zoom and keyboard inspection. The preview mounts
+the production `WorldMapScreen`, compiler, assets and HUD. It prepares map state
+without playing opening boons or encounters; it does not run the main game's
+encounter transition. `--cache=/tmp/map-preview-cache` optionally reuses a pure
+compiler result keyed by the complete input digest; production never reads this cache.
 A cache hit still binds current scenery and evaluates its final geometry when
 `--quality` is supplied. `--steps=N`, `--pose=middle|terminus|focused` and
 `--zoom-stop=0..3` expose travelled and distant views. `--exercise` injects
-native viewport wheel, drag and keyboard events and verifies animated arrival
-and subsequent render freeze. `--measure` reports 120 warmed pan frames on the
-current host, including an explicit GPU-timer availability flag; it does not
-qualify release-device performance.
-
-
-**`tools/probe_map_seeds.gd` reports a rate, never a verdict, and its
-thresholds are its own.** The clumping counter it ships with fires at `gap <
-1.0` — footprints just touching. Figures quoted elsewhere in the repo are
-sometimes taken at half or three-quarter reach; instrument for the threshold you
-mean to quote rather than assuming the shipped one matches. Its footprint radius
-and hide-depth arithmetic is duplicated from `MapScene._bind_asset_geometry`,
-which has already drifted once — the probe's own header carries that warning.
+native viewport wheel, drag and keyboard events and verifies animated arrival,
+one selection hand-off and subsequent render freeze. The standard game-flow
+tests cover the main application separately. `--measure` reports 120 warmed pan
+frames on the current host, including an explicit GPU-timer availability flag;
+it does not qualify release-device performance.
 
 **`tools/probe_layout.gd` reads the composition back rather than photographing
 it.** A capture shows where something LOOKS like it is; on a 390px phone that is
