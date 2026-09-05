@@ -31,9 +31,11 @@ var _rows: Dictionary[String, Dictionary] = {}
 var _ordered_ids: PackedStringArray = PackedStringArray()
 var _defaults: Dictionary[String, Dictionary] = {}
 var _overrides: Dictionary[String, Dictionary] = {}
+var _asset_root: String = ASSET_ROOT
 
 
-func _init(manifest: Dictionary = {}) -> void:
+func _init(manifest: Dictionary = {}, asset_root: String = ASSET_ROOT) -> void:
+	_asset_root = asset_root
 	var source: Dictionary = manifest.duplicate(true)
 	if source.is_empty():
 		source = _read_manifest()
@@ -89,7 +91,7 @@ func resource_path(asset_id: String) -> String:
 	if not _rows.has(asset_id):
 		return ""
 	var row: Dictionary = _rows[asset_id]
-	return ASSET_ROOT + _string_value(row, "path")
+	return _asset_root + _string_value(row, "path")
 
 
 func profile(asset_id: String, mesh: Mesh) -> Dictionary:

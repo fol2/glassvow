@@ -49,7 +49,7 @@ const SKY: Color = Color(0.018, 0.022, 0.045)
 const THRESHOLD_XZ: Vector2 = Vector2(-41.3, 6.5)
 ## Smallest one-decimal road-axis calibration whose real transformed silhouette
 ## clears the fixed boss across every governed screen profile (#474).
-const TERMINUS_XZ: Vector2 = Vector2(40.4, 0.0)
+const TERMINUS_XZ: Vector2 = Vector2(43.0, 0.0)
 ## Turned so the gable is seen in three-quarter rather than edge-on. The hall
 ## is authored with its gable facing +X, down the road; the camera looks along
 ## -Z, so unturned the player sees the length of the flank and the end of the
@@ -104,6 +104,11 @@ var _rig: MapCameraRig
 var _key: DirectionalLight3D
 var _materials: MapMaterials
 var _world: Node3D
+var _landscape_assets: MapLandscapeAssets
+var _landscape: MapLandscape
+var _live: bool = false
+var _settle_frames: int = 0
+var _selection_half: Vector2 = Vector2.ZERO
 var _asset_geometry: Node3D
 var _asset_profiles: MapAssetProfiles
 var _active_profile_digest: String = ""
@@ -130,7 +135,7 @@ var _fling: Vector2 = Vector2.ZERO
 var _last_velocity: Vector2 = Vector2.ZERO
 
 
-func _init(manifest: Dictionary = {}, resource_loader: Callable = Callable()) -> void:
+func _init(_manifest: Dictionary = {}, _resource_loader: Callable = Callable()) -> void:
 	name = "MapScene"
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -139,6 +144,7 @@ func _init(manifest: Dictionary = {}, resource_loader: Callable = Callable()) ->
 	_stage.own_world_3d = true
 	_stage.transparent_bg = false
 	_stage.size = Vector2i(64, 64)
+	_stage.msaa_3d = Viewport.MSAA_4X
 	_stage.render_target_update_mode = SubViewport.UPDATE_ONCE
 	add_child(_stage)
 	_world = Node3D.new()
@@ -148,11 +154,6 @@ func _init(manifest: Dictionary = {}, resource_loader: Callable = Callable()) ->
 	_world.add_child(_rig)
 	_add_key(_world)
 	_add_environment(_world)
-	_asset_profiles = MapAssetProfiles.new(manifest)
-	_materials = MapMaterials.new(_key.basis.z, _rig.zoom_stop, manifest, resource_loader)
-	_rig.zoom_stop_changed.connect(_materials.set_tex_stop)
-	_add_ground(_world)
-	_add_props(_world)
 	_display = TextureRect.new()
 	_display.name = "MapDisplay"
 	_display.texture = _stage.get_texture()
@@ -202,33 +203,15 @@ func set_scatter_salt(salt: int) -> void:
 	if salt == _scatter_salt:
 		return
 	_scatter_salt = salt
-	# `_add_props` builds them visible, which is right at boot and wrong here:
-	# a rebuild that forgets they were down paints the placeholder prisms
-	# straight over the real kits, and they are dark enough to read as flat
-	# black plates lying on the ground. Measured, not guessed -- three of six
-	# review seeds showed them before this line existed.
-	var showing: bool = _placeholders_visible()
-	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
-		var stale: Node = _world.find_child(node_name, false, false)
-		if stale != null:
-			_world.remove_child(stale)
-			stale.queue_free()
-	_add_props(_world)
-	_set_placeholders_visible(showing)
-	# Anything already standing was dealt from the old salt, but do NOT re-deal
-	# here: `_init` ends on Act I, so a save resumed in Act III would bind Act I
-	# in full -- eight kits, a terminus, the Vigil and a grade repaint -- purely
-	# to throw it away when the real act arrives a moment later. Flag it instead
-	# and let the next `set_act` do exactly one bind, of the right act.
-	_salt_dirty = _asset_geometry != null
+	_salt_dirty = true
 
 
 func active_asset_paths() -> PackedStringArray:
-	return _materials.active_asset_paths()
+	return _landscape_assets.paths.duplicate() if _landscape_assets != null else PackedStringArray()
 
 
 func active_asset_resources() -> Array[Resource]:
-	return _materials.active_asset_resources()
+	return _landscape_assets.resources.duplicate() if _landscape_assets != null else []
 
 
 func asset_profile_digest() -> String:
@@ -340,16 +323,12 @@ func set_act(act_i: int) -> void:
 ## and that is the ordinary case rather than an odd one: a second run also
 ## starts in Act I. `set_act` no-ops on an unchanged act, so on its own it
 ## would leave the new run standing in the previous run's wood.
-func _deal_act(region: MapRegions) -> void:
+func _deal_act(_region: MapRegions) -> void:
 	_salt_dirty = false
-	var assets: Dictionary = _materials.bind_act(region, _all_prop_positions())
-	_bind_asset_geometry(assets)
-	if not is_live():
-		set_live(false)
+	_bind_asset_geometry({})
+	_repaint()
 
 
-## Screen seats for 2D pins, in this Control's pixel space. Empty list is
-## legal — MapScene does not own a WorldMap.
 func project_pins(nodes: Array[MapNode]) -> PackedVector2Array:
 	return _projection().seats(nodes)
 
@@ -415,29 +394,18 @@ func _projection() -> MapPinProjection:
 
 
 func is_live() -> bool:
-	return _stage.render_target_update_mode == SubViewport.UPDATE_ALWAYS
+	return _live
 
 
 func set_live(on: bool) -> void:
-	_stage.render_target_update_mode = (
-			SubViewport.UPDATE_ALWAYS if on else SubViewport.UPDATE_ONCE)
+	_live = on
+	_settle_frames = 0 if on else 3
+	_stage.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 
 
-## Re-arm one paint after the 3D content changes.
-##
-## The stage sleeps after its single frame, so ANY change to the world made
-## after that paint is invisible: Godot flips `UPDATE_ONCE` to
-## `UPDATE_DISABLED` once it has rendered. Ground and placeholders survive only
-## because they are built in the constructor, before the first paint. The act's
-## real geometry is not — it binds when the manifest resolves, several frames
-## later — so without this the map showed placeholder wedges and slabs forever
-## and no kit, terminus or road ever reached the screen.
-##
-## Never downgrade a live stage: while the camera moves the screen holds
-## `UPDATE_ALWAYS`, and re-arming a single frame there would freeze the pan.
 func _repaint() -> void:
-	if _stage.render_target_update_mode != SubViewport.UPDATE_ALWAYS:
-		_stage.render_target_update_mode = SubViewport.UPDATE_ONCE
+	if not _live:
+		set_live(false)
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -506,6 +474,10 @@ func _screen_to_world(delta_px: Vector2) -> Vector2:
 
 
 func _process(delta: float) -> void:
+	if not _live and _settle_frames > 0:
+		_settle_frames -= 1
+		if _settle_frames == 0:
+			_stage.render_target_update_mode = SubViewport.UPDATE_ONCE
 	if _dragging or _lock_input:
 		return
 	if _fling.length() > 0.02:
@@ -542,16 +514,27 @@ func _view_height() -> float:
 func _add_key(world: Node3D) -> void:
 	_key = DirectionalLight3D.new()
 	_key.name = "MapKey"
-	_key.shadow_enabled = false
-	_key.basis = Basis.looking_at(-SUN_TO.normalized(), Vector3.UP)
+	_key.rotation_degrees = Vector3(-47, -34, 0)
+	_key.light_color = Color("f2e7cd")
+	_key.light_energy = 1.1
+	_key.shadow_enabled = true
+	_key.directional_shadow_max_distance = 110
+	_key.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
 	world.add_child(_key)
 
 
 func _add_environment(world: Node3D) -> void:
 	var environment: Environment = Environment.new()
 	environment.background_mode = Environment.BG_COLOR
-	environment.background_color = SKY
-	environment.ambient_light_source = Environment.AMBIENT_SOURCE_DISABLED
+	environment.background_color = Color("11242c")
+	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	environment.ambient_light_color = Color("98b1c2")
+	environment.ambient_light_energy = 0.35
+	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	environment.fog_enabled = true
+	environment.fog_light_color = Color("304852")
+	environment.fog_light_energy = 0.45
+	environment.fog_density = 0.0015
 	var world_environment: WorldEnvironment = WorldEnvironment.new()
 	world_environment.name = "MapEnvironment"
 	world_environment.environment = environment
@@ -745,178 +728,45 @@ func _add_layout_multimesh(node_name: String, mesh: Mesh,
 ## Partial asset deliveries may exercise checker/runtime loading without creating
 ## a half-authored frame. Removing the prior root synchronously releases its mesh
 ## references before the next act is attached.
-func _bind_asset_geometry(assets: Dictionary) -> void:
-	if _asset_geometry != null:
-		_world.remove_child(_asset_geometry)
-		_asset_geometry.free()
-		_asset_geometry = null
-	_road_meshes.clear()
-	_road_profiles.clear()
-	_kit_meshes.clear()
-	_kit_profiles.clear()
-	_kit_ids = PackedStringArray()
+func _bind_asset_geometry(_assets: Dictionary) -> void:
+	if _landscape != null:
+		_landscape.free()
+		_landscape = null
+	_clear_waylights()
+	_layout_result = null
+	_layout_diagnostics.clear()
+	_layout_failure.clear()
+	_road_segments.clear()
 	_active_profiles.clear()
 	_active_profile_digest = ""
 	_terminus_id = ""
 	_threshold_id = ""
-	_layout_result = null
-	_layout_diagnostics.clear()
-	_layout_failure.clear()
-	_road_segments = PackedVector3Array()
-	# Nothing is standing yet, so nothing is worth stepping aside for. An act
-	# whose geometry fails to resolve must not leave the previous act's
-	# footprints pushing this act's nodes around.
 	MapPinProjection.set_scenery([])
-	_set_placeholders_visible(true)
-	var raw_kits: Variant = assets.get("kits", [])
-	var raw_kit_ids: Variant = assets.get("kit_ids", PackedStringArray())
-	var raw_terminus: Variant = assets.get("terminus", null)
-	var terminus_id: String = str(assets.get("terminus_id", ""))
-	if not (raw_kits is Array) or not (raw_kit_ids is PackedStringArray) \
-			or not (raw_terminus is Resource):
+	_landscape_assets = MapLandscapeAssets.new(_act)
+	if not _landscape_assets.failure.is_empty():
+		_fail_layout(_landscape_assets.failure)
 		return
-	var kit_resources: Array = raw_kits
-	if kit_resources.size() != 8:
-		# Keeping the placeholders on a partial set is deliberate (see above).
-		# Doing it silently is not: the previous act's geometry has ALREADY been
-		# freed and the placeholders re-shown by the time we get here, so the
-		# frame is indistinguishable from a broken renderer. Act N's kits live
-		# under manifest `act: N-1` — an off-by-one in the caller lands here.
-		push_warning("map: act %d resolved %d of 8 kits; keeping placeholders"
-				% [_act, kit_resources.size()])
-		return
-	var kit_ids: PackedStringArray = raw_kit_ids
-	if kit_ids.size() != 8:
-		return
-	var meshes: Array[Mesh] = []
-	var profiles: Array[Dictionary] = []
-	for i: int in range(kit_resources.size()):
-		var raw: Variant = kit_resources[i]
-		if not (raw is Resource):
-			return
-		var resource: Resource = raw
-		var mesh: Mesh = _mesh_from(resource)
-		if mesh == null:
-			return
-		var value: Dictionary = _asset_profiles.profile(kit_ids[i], mesh)
-		if value.is_empty():
-			return
-		meshes.append(mesh)
-		profiles.append(value)
-	var terminus_resource: Resource = raw_terminus
-	var terminus_mesh: Mesh = _mesh_from(terminus_resource)
-	if terminus_mesh == null:
-		return
-	var terminus_profile: Dictionary = _asset_profiles.profile(
-			terminus_id, terminus_mesh)
-	if terminus_profile.is_empty():
-		return
-	var active_profiles: Array[Dictionary] = []
-	active_profiles.assign(profiles)
-	active_profiles.append(terminus_profile)
-	var raw_threshold: Variant = assets.get("threshold", null)
-	var threshold_mesh: Mesh = null
-	var threshold_profile: Dictionary = {}
-	if raw_threshold is Resource:
-		var threshold_resource: Resource = raw_threshold
-		threshold_mesh = _mesh_from(threshold_resource)
-		if threshold_mesh == null:
-			return
-		threshold_profile = _asset_profiles.profile(
-				str(assets.get("threshold_id", "")), threshold_mesh)
-		if threshold_profile.is_empty():
-			return
-		active_profiles.append(threshold_profile)
-	_active_profile_digest = _asset_profiles.digest(active_profiles)
-	if _active_profile_digest.is_empty():
-		return
-	for profile: Dictionary in active_profiles:
-		_active_profiles[str(profile["asset_id"])] = profile
-	_kit_meshes.assign(meshes)
-	_kit_profiles.assign(profiles)
-	_kit_ids = kit_ids.duplicate()
-	_terminus_id = terminus_id
-	_threshold_id = str(assets.get("threshold_id", "")) if threshold_mesh != null else ""
-	_asset_geometry = Node3D.new()
-	_asset_geometry.name = "MapAssetGeometry"
-	_world.add_child(_asset_geometry)
-	# Kits 0 and 1 are shared-road-slab-a/b. They ARE the road. Handing them to
-	# the scenery scatter is what left a pilgrimage map with no road on it, and
-	# left the graph to be carried by a 2 px dashed line drawn over the top.
-	_road_meshes = [meshes[0], meshes[1]]
-	_road_profiles = [profiles[0], profiles[1]]
-	var positions: PackedVector3Array = _all_prop_positions()
-	var kinds: int = meshes.size() - 2
-	for i: int in range(2, meshes.size()):
-		var placements: PackedVector3Array = PackedVector3Array()
-		for j: int in range(positions.size()):
-			if seat_kit(j, kinds) == i:
-				placements.append(positions[j])
-		_add_multimesh(_asset_geometry, "AssetKit%02d" % i, meshes[i], placements,
-				i * 7 + _dress_salt(), _asset_profiles.default_scale(profiles[i]))
-	# Publish the build-4-compatible directional envelope from the same
-	# profiles whose polygons the compiler will consume. No second formula lives here.
-	var pieces: Array[Vector4] = []
-	for j: int in range(positions.size()):
-		var kit: int = seat_kit(j, kinds)
-		pieces.append(_asset_profiles.directional_envelope(
-				profiles[kit], positions[j]))
-	MapPinProjection.set_scenery(pieces)
-	var terminus: MeshInstance3D = MeshInstance3D.new()
-	terminus.name = "AssetTerminus"
-	terminus.mesh = terminus_mesh
-	# Just past the boss, which is lattice row 14 col 3 = world (36, 0, 0).
-	terminus.position = Vector3(TERMINUS_XZ.x, 0.0, TERMINUS_XZ.y)
-	terminus.scale = Vector3.ONE * _asset_profiles.default_scale(terminus_profile)
-	terminus.material_override = _materials.prop
-	terminus.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	_asset_geometry.add_child(terminus)
-	# The Vigil, at the west end of the road, seen from outside: a gabled hall
-	# end-on with its chimney. The rose window is on the far side, turned in at
-	# the fire, and stays there — it is the L3 reveal (docs/story/01-world.md).
-	# Only Act I has one, so a null here seats nothing rather than failing the
-	# bind -- the other three acts are not missing an asset, they never had one.
-	if threshold_mesh != null and not threshold_profile.is_empty():
-		var gate_mesh: Mesh = threshold_mesh
-		var gate: MeshInstance3D = MeshInstance3D.new()
-		gate.name = "AssetVigil"
-		gate.mesh = gate_mesh
-		# Just short of the entrance, which is lattice row 0 = world x -36,
-		# mirroring the terminus four metres past the boss at the far end.
-		gate.position = Vector3(THRESHOLD_XZ.x, 0.0, THRESHOLD_XZ.y)
-		gate.rotation_degrees = Vector3(
-			0.0, _asset_profiles.fixed_yaw(threshold_profile), 0.0)
-		gate.scale = Vector3.ONE * _asset_profiles.default_scale(threshold_profile)
-		# Its own material once its baked albedo is in hand; the prop shader
-		# otherwise, so a mesh that arrives without one degrades to projected
-		# stone rather than to a building painted with nothing.
-		var dressed: bool = _materials.bind_vigil_albedo(_baked_albedo(gate_mesh))
-		if not dressed:
-			# The whole point of this asset is that it is textured. Falling
-			# back to projected stone is survivable; doing it silently is
-			# not, because the building still renders and nothing looks
-			# broken enough to investigate.
-			push_warning("Vigil has no baked albedo; falling back to the prop shader")
-		gate.material_override = _materials.vigil if dressed else _materials.prop
-		gate.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		_asset_geometry.add_child(gate)
-	# Seat the road pair now, empty, so anything resolving them by name finds
-	# them before the screen has a graph to hand down. `lay_road` rebuilds
-	# them in place once it does.
-	_build_road()
-	_set_placeholders_visible(false)
+	_asset_profiles = _landscape_assets.registry
+	_active_profiles = _landscape_assets.profiles
+	_active_profile_digest = _landscape_assets.digest
+	_terminus_id = MapLandscapeAssets.GATES[_act]
+	_threshold_id = "vigil" if _act == 0 else ""
 	_repaint()
 
 
-## Bind the compiler result at the renderer boundary. The existing dealt seats
-## remain the only candidate pool; this pass can only remove unsafe instances.
 func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutResult:
 	if compiled == null:
 		return _fail_layout("compiled result is null")
 	if _active_profiles.is_empty() or layout_hero_contract().is_empty():
 		return _fail_layout("active map asset profiles are incomplete")
 	var data: Dictionary = compiled.identity_dict()
-	var candidates: Dictionary = _scenery_candidates()
+	if _landscape != null:
+		_landscape.free()
+	_landscape = MapLandscape.new()
+	_world.add_child(_landscape)
+	_landscape.prepare(data, _landscape_assets, _scatter_salt)
+	_selection_half = _selection_reserve(quality)
+	var candidates: Dictionary = _landscape.candidates()
 	var accepted: Dictionary = {}
 	var accepted_footprints: Array[PackedVector2Array] = []
 	var rejections: Array[Dictionary] = []
@@ -924,14 +774,18 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 	for candidate_id: String in MapLayoutCanonical.sorted_keys(candidates):
 		var candidate: Dictionary = candidates[candidate_id]
 		var footprint: PackedVector2Array = _placement_footprint(candidate)
+		if not _landscape.supports(footprint):
+			rejections.append({"candidate_id": candidate_id, "reason": "land edge", "blocker_id": "terrain"})
+			continue
+		var selection: PackedVector2Array = _selection_footprint(candidate, footprint)
 		var rejection: Dictionary = _scenery_rejection(
-			footprint, accepted_footprints, data, contract, quality)
+			selection, accepted_footprints, data, contract, quality)
 		if not rejection.is_empty():
 			rejection["candidate_id"] = candidate_id
 			rejections.append(rejection)
 			continue
 		accepted[candidate_id] = candidate["placement"]
-		accepted_footprints.append(footprint)
+		accepted_footprints.append(selection)
 	data["scenery_instances"] = MapLayoutCanonical.ordered_dictionary(accepted)
 	var final_result: MapLayoutResult = MapLayoutResult.create(data)
 	if final_result == null:
@@ -952,8 +806,7 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 		"scenery_instances": data["scenery_instances"],
 		"rejections": rejections,
 	}
-	_place_scenery(accepted)
-	_build_road()
+	_landscape.build(data)
 	_repaint()
 	return final_result
 
@@ -966,8 +819,9 @@ func _fail_layout(reason: String) -> MapLayoutResult:
 	_layout_diagnostics = {"status": "FAILED", "failure": _layout_failure.duplicate(true)}
 	_road_segments = PackedVector3Array()
 	_clear_waylights()
-	_place_scenery({})
-	_build_road()
+	if _landscape != null:
+		_landscape.free()
+		_landscape = null
 	_repaint()
 	return null
 
@@ -1015,7 +869,7 @@ func _scenery_rejection(footprint: PackedVector2Array,
 	var anchors: Dictionary = data["node_anchors"]
 	for node_id: String in MapLayoutCanonical.sorted_keys(anchors):
 		if MapQualityEvaluator._polygon_distance(footprint,
-				MapQualityEvaluator._node_world(_v3(anchors[node_id]), quality)) <= epsilon:
+				MapQualityEvaluator._rect(_xz(anchors[node_id]), _selection_half)) <= epsilon:
 			return {"reason": "node reserve", "blocker_id": node_id}
 	var road_clearance: float = MapLayoutCanonical.float_value(
 		quality["geometry"]["road_corridor"]["world_clearance_m"])
@@ -1420,3 +1274,42 @@ func _v3(value: Variant) -> Vector3:
 func _xz(value: Variant) -> Vector2:
 	var point: Vector3 = _v3(value)
 	return Vector2(point.x, point.z)
+
+
+func set_node_states(states: Dictionary) -> void:
+	if _landscape != null:
+		_landscape.set_node_states(states)
+		_repaint()
+
+
+func _selection_footprint(candidate: Dictionary, footprint: PackedVector2Array) -> PackedVector2Array:
+	var placement: Dictionary = candidate["placement"]
+	var profile: Dictionary = _active_profiles[str(placement["profile_id"])]
+	var transform: Dictionary = placement["transform"]
+	var height: float = MapLayoutCanonical.float_value(profile["grounded_height"]) * _v3(transform["scale"]).y
+	# AABB extrusion is the evaluator's conservative silhouette. Project it back
+	# onto Y=0: all camera poses differ only by translation and uniform scale.
+	var offset: Vector2 = Vector2(0, -height / tan(deg_to_rad(absf(MapCameraRig.TILT_DEGREES))))
+	var points: PackedVector2Array = footprint.duplicate()
+	for point: Vector2 in footprint:
+		points.append(point + offset)
+	var hull: PackedVector2Array = Geometry2D.convex_hull(points)
+	if hull.size() > 1 and hull[0].is_equal_approx(hull[-1]):
+		hull.remove_at(hull.size() - 1)
+	return hull
+
+
+static func _selection_reserve(quality: Dictionary) -> Vector2:
+	var calibration: Dictionary = quality["calibration"]["shipping_touch_waystone"]
+	var radius: float = MapLayoutCanonical.float_value(calibration["ink_radius_px"]) * MapLayoutCanonical.float_value(calibration["default_layout_scale"])
+	for rule: Dictionary in quality["hard"]:
+		if str(rule["id"]) == "node_ink_clearance_px":
+			radius += MapLayoutCanonical.float_value(rule["limit"])
+	radius = maxf(radius, MapQualityEvaluator._touch_size_px(quality) * 0.5)
+	var pixels_per_metre: float = INF
+	var shapes: Dictionary = quality["profiles"]["shapes"]
+	for shape: Array in shapes.values():
+		for zoom: float in quality["profiles"]["zoom_stops_m"]:
+			pixels_per_metre = minf(pixels_per_metre, MapLayoutCanonical.float_value(shape[1]) / zoom)
+	var half: float = radius / pixels_per_metre
+	return Vector2(half, half / sin(deg_to_rad(absf(MapCameraRig.TILT_DEGREES))))

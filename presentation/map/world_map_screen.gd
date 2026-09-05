@@ -537,6 +537,12 @@ func _sync_waylights() -> void:
 		return
 	if not _map_scene.set_waylight_states(_route_states()):
 		push_error("WorldMapScreen cannot bind complete depth-tested route states")
+	var states: Dictionary = {}
+	var reachable: Array[int] = map.reachable()
+	for i: int in range(map.nodes.size()):
+		states[map.nodes[i].id] = "current" if map.at == i else (
+			"open" if reachable.has(i) else ("walked" if map.is_cleared(i) else "cold"))
+	_map_scene.set_node_states(states)
 
 
 func _route_states() -> Dictionary:
