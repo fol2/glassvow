@@ -25,6 +25,7 @@ CONFIGURATION_MANIFEST_PATH = SOURCE_ROOT / "godot_runtime_configuration_manifes
 CONFIGURATION_ROOT = SOURCE_ROOT / "godot_runtime_configuration"
 CASE_IDS = [f"G{index:02d}" for index in range(26)]
 DIAGNOSTIC_CASES = {"G15", "G16", "G17", "G18"}
+CAMPAIGN_VERIFY_TIMEOUT_S = 300
 ADMISSION_SCHEMA = "glassvow.godot-runtime-provenance.admission-receipt/v1"
 CAPABILITY_SCHEMA = "glassvow.godot-runtime-provenance.capability-prerequisite/v1"
 CAPABILITY_CAMPAIGN_SCHEMA = "glassvow.godot-runtime-provenance.campaign-receipt/v1"
@@ -816,7 +817,7 @@ def run_campaign(args: argparse.Namespace) -> dict[str, Any]:
                 product, packet, runtime),
             "--challenges-dir", str(challenges), "--campaign-dir", str(cases_root),
             "--receipt-out", str(campaign_receipt),
-        ])
+        ], timeout=CAMPAIGN_VERIFY_TIMEOUT_S)
         campaign_evidence_bytes(
             output, mounts_root, profile["caps"]["maxCampaignBytes"],
             maximum_members=profile["caps"]["maxCampaignMembers"])

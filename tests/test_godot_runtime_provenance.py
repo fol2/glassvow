@@ -2926,6 +2926,20 @@ class GodotRuntimeCampaignContractTests(unittest.TestCase):
             self.campaign.DIAGNOSTIC_CASES,
         )
 
+    def test_campaign_verifier_timeout_covers_the_complete_matrix(self) -> None:
+        self.assertGreaterEqual(self.campaign.CAMPAIGN_VERIFY_TIMEOUT_S, 180)
+        self.assertLessEqual(self.campaign.CAMPAIGN_VERIFY_TIMEOUT_S, 900)
+        source = CAMPAIGN_PATH.read_text(encoding="utf-8")
+        self.assertIn("timeout=CAMPAIGN_VERIFY_TIMEOUT_S", source)
+        self.assertGreater(
+            source.find('str(VERIFIER_PATH), "campaign"'),
+            0,
+        )
+        self.assertGreater(
+            source.find("timeout=CAMPAIGN_VERIFY_TIMEOUT_S"),
+            source.find('str(VERIFIER_PATH), "campaign"'),
+        )
+
     def test_packet_commit_is_bound_outside_its_manifest(self) -> None:
         with tempfile.TemporaryDirectory(prefix="godot-packet-") as temporary:
             root = Path(temporary)
