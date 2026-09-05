@@ -767,13 +767,15 @@ def _authority(
         fail("REQUEST_INDEX_MISMATCH", "qualification request index differs")
 
 
-def _early_unknown_reads(statement: Mapping[str, Any], trace: Mapping[str, Any]) -> None:
+def _early_unknown_reads(
+        statement: Mapping[str, Any], trace: Mapping[str, Any],
+        expected_reads: set[str] | None = None) -> None:
     roots = statement.get("roots", {})
     if not isinstance(roots, dict): return
     roles = {record.get("path") for record in statement.get("roles", []) if isinstance(record, dict)}
     runtime = {record.get("path") for record in statement.get("runtimeIdentities", [])
                if isinstance(record, dict)}
-    declared_reads = roles | runtime
+    declared_reads = roles | runtime | (expected_reads or set())
     outputs = {record.get("path") for record in statement.get("outputs", {}).values()
                if isinstance(record, dict) and record.get("present")}
     for event in trace["events"]:
@@ -1883,7 +1885,18 @@ def verify_case(
                     record.get("size") != len(data) or record.get("sha256") != _sha(data):
                 fail("PROVENANCE_INCOMPLETE", f"{name} binding differs")
         trace = parse_trace_lines(trace_bytes.decode().splitlines(), profile["caps"]["maxEvents"])
-        _early_unknown_reads(statement, trace)
+        expected_reads: set[str] = set()
+        roots_value = statement.get("roots")
+        if isinstance(roots_value, dict):
+            expanded = {
+                key: _absolute(str(value), key)
+                for key, value in roots_value.items()
+                if isinstance(value, str)
+            }
+            if {"PRODUCT", "PACKET"} <= set(expanded):
+                expected_reads = set(_roles(g0, packet, expanded, profile, args))
+                expected_reads |= set(_identity_set(g0, expanded, "runtimeIdentitySet"))
+        _early_unknown_reads(statement, trace, expected_reads)
         validate_trace_accounting(
             trace, profile["caps"], len(trace_bytes), len(sidecar),
             str(OBSERVER_ROOT))

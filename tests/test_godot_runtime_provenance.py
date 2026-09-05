@@ -820,6 +820,31 @@ class GodotRuntimeVerifierParserTests(unittest.TestCase):
                 self.verifier.VerificationFailure, "UNDECLARED_INPUT_PATH"):
             self.verifier._early_unknown_reads(statement, undeclared_product_trace)
 
+        alternate = {
+            "roots": {
+                "PRODUCT": "/product", "PACKET": "/packet", "HOME": "/home",
+            },
+            "roles": [{"path": "/packet/p9_v5_runtime_oracle.gd.alternate"}],
+            "runtimeIdentities": [],
+            "outputs": {},
+        }
+        expected_script = "/packet/p9_v5_runtime_oracle.gd"
+        executed = {
+            "events": [{"type": "READ", "path": expected_script}],
+        }
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "unknown semantic read"):
+            self.verifier._early_unknown_reads(alternate, executed)
+        self.verifier._early_unknown_reads(
+            alternate, executed, {expected_script})
+        undeclared_packet = {
+            "events": [{"type": "READ", "path": "/packet/undeclared.json"}],
+        }
+        with self.assertRaisesRegex(
+                self.verifier.VerificationFailure, "unknown semantic read"):
+            self.verifier._early_unknown_reads(
+                alternate, undeclared_packet, {expected_script})
+
     def test_rejected_path_trace_retains_the_denied_path_evidence(self) -> None:
         supplied = "/product/missing/runtime.so"
         resolved = "/product/missing/runtime.so"
