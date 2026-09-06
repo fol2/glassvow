@@ -8,7 +8,10 @@ func _initialize() -> void:
 func _run() -> void:
 	terrain = Terrain.new()
 	root.add_child(terrain)
-	var sample: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/studies/camera-composition/act1-seed717.json"))
+	var sample: Dictionary = preload("res://tools/map_workshop/sample.gd").read()
+	if sample.is_empty():
+		quit(2)
+		return
 	terrain.build(sample,false)
 	for name: String in ["Quiet sculpted ground","Continuous bridge decks","Joined bridge masonry"]:
 		var item: MeshInstance3D = terrain.get_node(name) as MeshInstance3D
@@ -26,6 +29,7 @@ func _run() -> void:
 	var probes: int = 0
 	var maximum_step: float = 0
 	var maximum_grade: float = 0
+	var steep: Array[Dictionary] = []
 	for source_line: PackedVector3Array in terrain.lines:
 		var line: PackedVector3Array = preload("res://tools/map_workshop/road_paths.gd").sample(source_line,.1)
 		var previous: Dictionary = {}
@@ -57,6 +61,8 @@ func _run() -> void:
 							failures.append({"step":jump,"at":str(contact),"before":str(before)})
 						if offset==0 and distance>.03:
 							maximum_grade = maxf(maximum_grade,jump/distance)
+							if jump/distance>.5:
+								steep.append({"grade":jump/distance,"at":str(contact),"before":str(before),"upper":upper})
 					previous[offset] = contact
 	var headrooms: Array = []
 	var body_probes: int = 0
@@ -90,6 +96,12 @@ func _run() -> void:
 		if minimum<2.2:
 			failures.append({"headroom":minimum,"at":str(at)})
 		headrooms.append({"at":str(at),"minimum":minimum})
+	if not steep.is_empty():
+		steep.sort_custom(func(a: Dictionary,b: Dictionary) -> bool:
+			var first: float = a["grade"]
+			var second: float = b["grade"]
+			return first>second)
+		failures.append({"steep_sections":steep.size(),"limit":.5,"worst":steep.slice(0,12)})
 	print("PHYSICAL_ROUTES_AUDIT ",JSON.stringify({"probes":probes,"maximum_step":maximum_step,"maximum_grade":maximum_grade,"headrooms":headrooms,"adult_body_probes":body_probes,"failure_count":failures.size(),"failures":failures.slice(0,40)}))
 	quit(0 if failures.is_empty() else 1)
 func _ray(a: Vector3,b: Vector3,mask: int) -> Dictionary:

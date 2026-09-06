@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glassvow · A road through the ash</title>
+<style>
+:root{color-scheme:dark;--bg:#18171c;--panel:#242128;--ink:#eee7da;--muted:#b4aaa9;--gold:#d8b77f;--line:#4d4149}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,sans-serif}main{max-width:1360px;margin:auto;padding:54px 28px 80px}header{max-width:880px;margin-bottom:32px}.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}h1,h2{font-family:Georgia,serif;font-weight:400;line-height:1.15}h1{font-size:clamp(36px,5.5vw,64px);margin:18px 0}h2{font-size:30px;margin:0 0 14px}p{color:var(--muted);margin:12px 0}a{color:var(--gold);text-underline-offset:4px}nav{display:flex;gap:22px;flex-wrap:wrap;margin:26px 0}section{margin:52px 0}figure{margin:22px 0;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}img,video{display:block;width:100%;height:auto}figcaption{font-size:14px;color:var(--muted);padding:14px 18px}.notes{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:30px}.notes h3{font-size:17px;margin:0}.notes p{font-size:14px}.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}button{background:transparent;color:var(--muted);border:1px solid var(--line);padding:11px 17px;border-radius:5px;font:inherit;font-size:14px;cursor:pointer}button[aria-pressed="true"]{background:var(--panel);color:var(--gold);border-color:var(--gold)}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:4px}.scope{border-left:2px solid var(--gold);padding:4px 20px;max-width:900px}.scope p{color:var(--ink)}details{border-top:1px solid var(--line);padding:22px 0}summary{cursor:pointer;color:var(--ink)}.pair{display:grid;grid-template-columns:1fr 1fr;gap:20px}.pair figure{margin:16px 0}.small{font-size:14px}footer{font-size:13px;border-top:1px solid var(--line);padding-top:24px;color:var(--muted)}@media(max-width:720px){main{padding:28px 16px 48px}.notes,.pair{grid-template-columns:1fr;gap:16px}section{margin:36px 0}figcaption{font-size:12px}nav{gap:14px}.tabs button{flex:1 1 auto}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body><main>
+<header>
+<div class="eyebrow">Glassvow · Act I · Playable section study</div>
+<h1>A road through the ash.</h1>
+<p>A carried ember, worn waystones and a path through the woods. This next section brings the approved landscape into motion, with clearer encounter markers and room to walk around them.</p>
+<nav aria-label="Study sections"><a href="#journey">Watch the journey</a><a href="#views">Near and far</a><a href="#another">Another landscape</a><a href="#scope">Progress and scope</a></nav>
+</header>
+<section id="journey">
+<figure><video id="journey-film" controls muted loop playsinline preload="metadata" width="1458" height="820" poster="journey-poster.png"><source src="journey.mp4" type="video/mp4"></video><figcaption>14 seconds · native Godot footage · inspect a waystone, walk the route, pull back to plan, then return to the journey. <a href="journey.mp4">Open video</a></figcaption></figure>
+<div class="notes"><div><h3>Waystones in the world</h3><p>Encounter engravings sit over grounded stone bases. Warm marks identify the current position and available choices; cleared stones keep a quiet tick.</p></div><div><h3>A visible journey</h3><p>The traveller follows the generated road and steps around the stones. Gentle slopes and small bridge landings keep the route connected.</p></div><div><h3>Space to plan</h3><p>The whole-act view retains encounter symbols. Selecting an area brings it closer before an encounter can be chosen.</p></div></div>
+<details><summary>Watch a journey beneath the bridge</summary><figure><video controls muted loop playsinline preload="metadata" width="1458" height="820" poster="underpass-poster.png"><source src="underpass.mp4" type="video/mp4"></video><figcaption>The lower road passes beneath the upper stone deck. This view replays a legal route to the crossing before recording the next walk. <a href="underpass.mp4">Open video</a></figcaption></figure></details>
+</section>
+<section id="views">
+<h2>Near enough to feel the place.</h2>
+<p>Switch between native views. The phone and pad examples use their reference screen proportions; each also exercises navigation and travel.</p>
+<div class="tabs" role="group" aria-label="Native views"><button type="button" data-view="desktop" aria-pressed="true">Journey</button><button type="button" data-view="whole-act" aria-pressed="false">Whole act</button><button type="button" data-view="phone" aria-pressed="false">Phone</button><button type="button" data-view="pad" aria-pressed="false">Pad</button></div>
+<figure><a id="view-link" href="desktop.png"><img id="view-image" src="desktop.png" width="1458" height="820" alt="A cloaked traveller and the next waystone between the woodland gate and river bridge"></a><figcaption id="view-caption" aria-live="polite">Journey · 1458 × 820 · open the image at full resolution.</figcaption></figure>
+</section>
+<section id="another">
+<h2>The same rules, another landscape.</h2>
+<p>A separately generated map brings different branches, crossings and banks. The shared terrain, road, water and placement rules build this scene from its own routes.</p>
+<figure><a href="seed17634-desktop.png"><img loading="lazy" src="seed17634-desktop.png" width="1458" height="820" alt="A different generated landscape with joined stone bridges over a winding teal river"></a><figcaption>Second generated layout · 70 waystones and 76 connections · native view after legal travel.</figcaption></figure>
+</section>
+<section id="scope">
+<h2>From sample to playable section.</h2>
+<div class="scope"><p>Act I's asset sample is approved for Step 3. This is the next playable-section candidate. The other three chapters retain their approved art directions and will follow the common foundation.</p></div>
+<p class="small">This is a recorded native preview, rather than a playable browser build. Preview encounters resolve on arrival and progress is not saved. Campaign integration and commercial delivery checks are still ahead.</p>
+<details><summary>What has been checked</summary><p>Both landscapes pass the measured road, bridgehead, walking-clearance, camera, grounding and river checks. The closest checked dry bridge opening is 2.26 m high. All 152 generated connections across the two samples were walked by the geometry audit.</p><p>Desktop, pad and phone reference views pass native selection, keyboard input, travel timing and repeat-activation checks. Reduced motion removes the walking transition, camera easing and water animation. These reference views are rendered on the desktop; physical mobile-device performance remains to be qualified.</p><p>A denser third map failed the existing generator's old screen-layout profile before this scene could be built. That failure is preserved. The new camera and navigation profiles still need to be integrated and qualified, so this page does not claim general generator acceptance.</p><p><a href="README.md">Implementation scope and evidence</a> · <a href="../step3-review/?v=10#water">Approved Step 3 water review</a></p></details>
+</section>
+<footer>Native section study · 6 September 2026 · Approved concepts remain the art authority. <a href="../../concepts/approved-chapter-directions.md">Four chapter directions</a></footer>
+</main>
+<script>
+const views={desktop:{label:'Journey',width:1458,height:820,alt:'A cloaked traveller and the next waystone between the woodland gate and river bridge'},'whole-act':{label:'Whole act',width:1458,height:820,alt:'The entire generated act with encounter symbols and the river crossing its woodland'},phone:{label:'Phone reference',width:844,height:390,alt:'Journey navigation at the phone reference shape'},pad:{label:'Pad reference',width:1180,height:820,alt:'Journey navigation at the pad reference shape'}};
+document.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>{
+const key=button.dataset.view,item=views[key],picture=document.getElementById('view-image');
+document.querySelectorAll('[data-view]').forEach(other=>other.setAttribute('aria-pressed',String(other===button)));
+picture.src=key+'.png';picture.width=item.width;picture.height=item.height;picture.alt=item.alt;
+document.getElementById('view-link').href=key+'.png';document.getElementById('view-caption').textContent=item.label+' · '+item.width+' × '+item.height+' · open the image at full resolution.';
+}));
+const film=document.getElementById('journey-film');
+if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){film.autoplay=true;film.play().catch(()=>{});}
+</script>
+</body></html>

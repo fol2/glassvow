@@ -285,10 +285,18 @@ active product contract rather than hiding it in implementation.
 
 ## Next action
 
-Proceed into Step 4 using the approved Act I sample and the carry-forward
-standards above. Close the remaining production gaps in the representative
-playable section, including route gradients, waystone integration and scenery
-composition, then inspect it before generalising to other generated layouts.
+The [playable section candidate](studies/production-section/index.html) now adds
+grounded waystones, visible legal travel, gentler continuous grades and a
+distinct whole-act area-inspection mode. Two generated layouts pass the focused
+native terrain, bridgehead, walking, water, grounding and camera checks. The
+[task capsule](studies/production-section/README.md) records selected evidence
+and the limits of those claims.
+
+Continue Step 5 inspection and Step 6 profile integration. A dense seed 4
+experiment fails the existing shipping screen-selection preflight before native
+construction. Its exact failure is preserved; a passing second seed is not a
+substitute. Qualify a state-aware camera and asset profile matching the new
+experience, then repeat the same dense input without weakening hard requirements.
 The [native asset review page](studies/step3-review/index.html) and its
 [assessment](studies/step3-review/assessment.md) preserve the approved Step 3
 baseline. Act II is the next chapter presentation after the common foundation

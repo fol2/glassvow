@@ -5,8 +5,11 @@ const CELL: float = .5
 var cuts: Array[Dictionary] = []
 var ground_cells: Dictionary = {}
 var abutments: PackedVector2Array = []
+var terrace_centre: Vector2 = Vector2(-19.565,14.756)
 
 func setup(lines: Array[PackedVector3Array]) -> void:
+	cuts.clear()
+	abutments.clear()
 	for upper: PackedVector3Array in lines:
 		for p: Vector3 in upper:
 			if p.y>.3:
@@ -28,7 +31,10 @@ func setup(lines: Array[PackedVector3Array]) -> void:
 					if intersection is Vector2:
 						cuts.append({"at":intersection,"direction":(d-c).normalized()})
 
-	_grade_roads(lines)
+	var roads: Array[PackedVector3Array] = []
+	for line: PackedVector3Array in lines:
+		roads.append(preload("res://tools/map_workshop/road_paths.gd").sample(line))
+	_grade_roads(roads)
 
 func upland(x: float, z: float) -> float:
 	# Long, calm ridges carry the roads too. No global flat route plane.
@@ -36,7 +42,7 @@ func upland(x: float, z: float) -> float:
 	h += 1.45*exp(-pow((x+28)/11,2)-pow((z+10)/13,2))
 	h += .75*exp(-pow((x-24)/10,2)-pow((z-18)/9,2))
 	# A broad level saddle supports the already-approved gateway.
-	var terrace: float = 1.0-smoothstep(3.1,6.5,Vector2(x,z).distance_to(Vector2(-19.565,14.756)))
+	var terrace: float = 1.0-smoothstep(3.1,6.5,Vector2(x,z).distance_to(terrace_centre))
 	return lerpf(h,.32,terrace)
 
 func cut_depth(x: float, z: float) -> float:
@@ -67,20 +73,26 @@ func height(x: float, z: float) -> float:
 	var at: Vector2 = Vector2(x,z)
 	var best: float = 2.2
 	var reference: float = h
+	var total: float = 0
+	var weight_sum: float = 0
 	var candidates: Array = ground_cells.get(Vector2i(floori(x/4),floori(z/4)),[])
 	for segment: Array in candidates:
 		var a: Vector2 = segment[0]
 		var b: Vector2 = segment[1]
 		var nearest: Vector2 = Geometry2D.get_closest_point_to_segment(at,a,b)
 		var distance: float = at.distance_to(nearest)
-		if distance<best:
-			best = distance
-			var ha: float = segment[2]
-			var hb: float = segment[3]
-			var t: float = clampf((nearest-a).dot(b-a)/maxf(.000001,a.distance_squared_to(b)),0,1)
-			reference = lerpf(ha,hb,t)
+		best = minf(best,distance)
+		# A length-weighted field remains continuous across a bend's bisector.
+		var ha: float = segment[2]
+		var hb: float = segment[3]
+		var t: float = clampf((nearest-a).dot(b-a)/maxf(.000001,a.distance_squared_to(b)),0,1)
+		var weight: float = exp(-distance*distance/.40)*a.distance_to(b)
+		total += lerpf(ha,hb,t)*weight
+		weight_sum += weight
+	if weight_sum>.00001:
+		reference = total/weight_sum
 	# Shape the crossfall locally, while following each road's real elevation.
-	h = lerpf(h,reference,1.0-smoothstep(.65,2.2,best))
+	h = lerpf(h,reference,1.0-smoothstep(1.15,2.2,best))
 	return h
 
 func _grade_roads(lines: Array[PackedVector3Array]) -> void:
@@ -118,7 +130,7 @@ func _grade_roads(lines: Array[PackedVector3Array]) -> void:
 					pieces.append(Vector2i(previous,index))
 				previous = index
 	# Propagate excavation along the real road graph. Every adjacent centreline
-	# pair has at most a 0.42 rise/run, so nearby branches get a usable approach.
+	# pair has at most a 0.34 rise/run, so nearby branches get a usable approach.
 	var queue: Array[int] = []
 	for i: int in range(points.size()):
 		queue.append(i)
@@ -129,7 +141,7 @@ func _grade_roads(lines: Array[PackedVector3Array]) -> void:
 		for neighbour: int in links[index]:
 			var a: Vector3 = points[index]
 			var b: Vector3 = points[neighbour]
-			var limit: float = a.y+Vector2(a.x-b.x,a.z-b.z).length()*.42
+			var limit: float = a.y+Vector2(a.x-b.x,a.z-b.z).length()*.34
 			if b.y>limit+.0001:
 				points[neighbour].y = limit
 				queue.append(neighbour)
@@ -152,7 +164,7 @@ func _grade_roads(lines: Array[PackedVector3Array]) -> void:
 		for neighbour: int in links[index]:
 			var a: Vector3 = points[index]
 			var b: Vector3 = points[neighbour]
-			var limit: float = lower_bound[index]-Vector2(a.x-b.x,a.z-b.z).length()*.32
+			var limit: float = lower_bound[index]-Vector2(a.x-b.x,a.z-b.z).length()*.27
 			if lower_bound[neighbour]<limit-.0001:
 				lower_bound[neighbour] = limit
 				queue.append(neighbour)

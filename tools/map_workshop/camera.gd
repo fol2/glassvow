@@ -7,6 +7,7 @@ var centre: Vector2 = Vector2.ZERO
 var goal_centre: Vector2 = Vector2.ZERO
 var goal_size: float = 16.0
 var moving: bool = false
+var reduced_motion: bool = false
 
 func _init() -> void:
 	projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -52,7 +53,7 @@ func zoom_by(factor: float) -> void:
 	goal_size = clampf(goal_size * factor, 10, 85)
 
 func _process(delta: float) -> void:
-	var rate: float = 1 - exp(-delta * 12)
+	var rate: float = 1.0 if reduced_motion else 1 - exp(-delta * 12)
 	centre = centre.lerp(goal_centre, rate)
 	size = lerpf(size, goal_size, rate)
 	moving = centre.distance_to(goal_centre) > 0.003 or absf(size - goal_size) > 0.003

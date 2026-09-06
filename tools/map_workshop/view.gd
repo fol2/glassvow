@@ -4,6 +4,8 @@ const Terrain = preload("res://tools/map_workshop/terrain.gd")
 const Rig = preload("res://tools/map_workshop/camera.gd")
 const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
 const Kit = preload("res://tools/map_workshop/kit.gd")
+const Pin = preload("res://tools/map_workshop/journey_pin.gd")
+const Journey = preload("res://tools/map_workshop/journey.gd")
 const TYPES: Dictionary = {"monster": "×", "elite": "✦", "event": "?", "rest": "⌂", "shop": "¤", "treasure": "◇", "boss": "♜", "monument": "†"}
 var sample: Dictionary
 var world_map: WorldMap
@@ -13,6 +15,7 @@ var terrain: Terrain
 var world: Node3D
 var stones: Array[Button] = []
 var anchors: PackedVector3Array = []
+var source_anchors: PackedVector3Array = []
 var selected: int = -1
 var whole: bool = false
 var show_stones: bool = true
@@ -26,8 +29,12 @@ var journey_button: Button
 var survey_button: Button
 var kit: Kit
 var step_count: int = 0
-var marker: MeshInstance3D
+var journey: Journey
+var travelling: bool = false
+var reduced_motion: bool = false
 var hero_override: String = ""
+var motion_button: Button
+var hint_label: Label
 
 func setup(data: Dictionary, map: WorldMap, grey: bool) -> void:
 	sample = data
@@ -36,6 +43,7 @@ func setup(data: Dictionary, map: WorldMap, grey: bool) -> void:
 	for node: MapNode in world_map.nodes:
 		var value: Array = data["anchors"][node.id]
 		anchors.append(Meshes.v3(value))
+		source_anchors.append(Meshes.v3(value))
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -45,6 +53,7 @@ func _ready() -> void:
 	resized.connect(_resize)
 	_resize()
 	focus_journey(true)
+	_apply_motion()
 	_sync()
 
 func _build_world() -> void:
@@ -94,13 +103,10 @@ func _build_world() -> void:
 	display.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	display.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(display)
-	var lantern: SphereMesh = SphereMesh.new()
-	lantern.radius = 0.15
-	lantern.height = 0.3
-	var mat: StandardMaterial3D = Meshes.material(Color("f1d09a"))
-	mat.emission_enabled = true
-	mat.emission = Color("f1b75b")
-	marker = Meshes.node(world, lantern, mat, "Current traveller")
+	journey = Journey.new()
+	world.add_child(journey)
+	journey.reduced_motion = reduced_motion
+	journey.build(terrain,anchors,source_anchors)
 
 func _build_hud() -> void:
 	var top: Panel = Panel.new()
@@ -111,16 +117,19 @@ func _build_hud() -> void:
 	title_label = Label.new()
 	title_label.text = "ACT I  /  THE ASHEN WOODS"
 	title_label.position = Vector2(18, 10)
-	title_label.add_theme_font_size_override("font_size", 18)
+	title_label.add_theme_font_size_override("font_size", 19)
+	title_label.add_theme_font_override("font",preload("res://assets/fonts/Cinzel-500.woff2"))
+	title_label.add_theme_color_override("font_color",Color("e8d6b9"))
 	top.add_child(title_label)
 	var hint: Label = Label.new()
-	hint.text = "Native %s · drag to explore · wheel / pinch to zoom" % ("greybox" if greybox else "asset workshop")
+	hint_label = hint
+	hint.text = "A road through the ash · drag to explore · scroll to see further"
 	hint.position = Vector2(18, 35)
 	hint.add_theme_font_size_override("font_size", 12)
 	top.add_child(hint)
 	var controls: HBoxContainer = HBoxContainer.new()
 	controls.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
-	controls.offset_left = -278
+	controls.offset_left = -374
 	controls.offset_right = -12
 	controls.offset_top = 8
 	controls.offset_bottom = 52
@@ -129,6 +138,7 @@ func _build_hud() -> void:
 	survey_button = _button("Whole act", controls, focus_all)
 	_button("−", controls, func() -> void: rig.zoom_by(1.2))
 	_button("+", controls, func() -> void: rig.zoom_by(0.84))
+	motion_button = _button("Motion",controls,_toggle_motion)
 	var bottom: Panel = Panel.new()
 	bottom.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	bottom.offset_top = -72
@@ -139,7 +149,7 @@ func _build_hud() -> void:
 	detail.add_theme_font_size_override("font_size", 15)
 	bottom.add_child(detail)
 	var footer: Label = Label.new()
-	footer.text = "Preview journey only · encounters resolve immediately · no save is changed"
+	footer.text = "Journey study · encounters resolve on arrival · progress is not saved"
 	footer.position = Vector2(18, 40)
 	footer.add_theme_font_size_override("font_size", 11)
 	bottom.add_child(footer)
@@ -153,7 +163,9 @@ func _build_hud() -> void:
 
 func _style_panel(panel: Panel) -> void:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.bg_color = Color(0.055, 0.054, 0.073, 0.96)
+	style.bg_color = Color(0.065, 0.059, 0.073, 0.96)
+	style.border_color = Color("4b4143")
+	style.border_width_bottom = 1
 	panel.add_theme_stylebox_override("panel", style)
 
 func _button(label: String, parent: Node, action: Callable) -> Button:
@@ -161,13 +173,20 @@ func _button(label: String, parent: Node, action: Callable) -> Button:
 	button.text = label
 	button.custom_minimum_size = Vector2(44, 44)
 	button.add_theme_font_size_override("font_size", 14)
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	style.bg_color = Color("29232b")
+	style.border_color = Color("5c4d45")
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(4)
+	button.add_theme_stylebox_override("normal",style)
+	button.add_theme_color_override("font_color",Color("e7d6bb"))
 	button.pressed.connect(action)
 	parent.add_child(button)
 	return button
 
 func _make_stones() -> void:
 	for i: int in range(world_map.nodes.size()):
-		var button: Button = Button.new()
+		var button: Pin = Pin.new()
 		button.size = Vector2(48, 48)
 		button.add_theme_font_size_override("font_size", 21)
 		button.tooltip_text = world_map.nodes[i].type.capitalize()
@@ -175,43 +194,27 @@ func _make_stones() -> void:
 		add_child(button)
 		stones.append(button)
 
-func _style_stone(button: Button, active: bool, current: bool, visited: bool) -> void:
-	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.bg_color = Color("24232c") if not current else Color("63533b")
-	style.border_color = Color("f2d5a0") if active or current else Color("777180")
-	style.set_border_width_all(2 if active or current else 1)
-	style.set_corner_radius_all(22)
-	style.shadow_color = Color(0, 0, 0, 0.35)
-	style.shadow_size = 3
-	button.add_theme_stylebox_override("normal", style)
-	var hover: StyleBoxFlat = style.duplicate() as StyleBoxFlat
-	hover.border_color = Color("fff2d4")
-	button.add_theme_stylebox_override("hover", hover)
-	button.add_theme_stylebox_override("pressed", hover)
-	button.modulate = Color(1, 1, 1, 0.58 if visited and not current else 1.0)
-
 func _sync() -> void:
 	var reachable: Array[int] = world_map.reachable()
 	for i: int in range(stones.size()):
 		var node: MapNode = world_map.nodes[i]
 		var visited: bool = world_map.is_cleared(i)
-		stones[i].text = "✓" if visited and i != world_map.at else str(TYPES.get("event" if node.unlit else node.type, "?"))
-		stones[i].focus_mode = Control.FOCUS_ALL if reachable.has(i) else Control.FOCUS_NONE
-		_style_stone(stones[i], reachable.has(i), i == world_map.at, visited)
-	if world_map.at >= 0:
-		marker.position = anchors[world_map.at] + Vector3.UP * 0.65
+		var pin: Pin = stones[i] as Pin
+		pin.configure(node,reachable.has(i),i==world_map.at,visited,i==selected)
+		pin.disabled = travelling
+	journey.sync(world_map,selected)
 	var chosen: String = "Select a stone to inspect your next step"
 	if selected >= 0:
 		var node: MapNode = world_map.nodes[selected]
 		chosen = "%s · stage %d" % ["Unknown encounter" if node.unlit else node.type.capitalize(), node.row + 1]
 		if node.unlit:
 			chosen += " · bounty %d" % node.bounty
-	detail.text = chosen
-	travel.disabled = selected < 0 or not reachable.has(selected)
-	travel.text = "Walk here · preview" if not travel.disabled else "Choose a next stone"
+	detail.text = "Whole act · select an area to look closer" if whole else chosen
+	travel.disabled = whole or travelling or selected < 0 or not reachable.has(selected)
+	travel.text = "Walking…" if travelling else ("Walk here" if not travel.disabled else "Choose a next stone")
 
 func _select(index: int) -> void:
-	if drag_distance > 8:
+	if travelling or drag_distance > 8:
 		return
 	selected = index
 	if whole:
@@ -224,12 +227,28 @@ func _select(index: int) -> void:
 	_sync()
 
 func _travel() -> void:
-	if selected < 0 or not world_map.enter(selected):
+	if travelling or selected<0 or not world_map.reachable().has(selected):
+		return
+	var target: int = selected
+	var route: PackedVector3Array = []
+	if world_map.at>=0:
+		route = journey.path(world_map.nodes[world_map.at].id,world_map.nodes[target].id)
+		if route.size()<2:
+			push_error("A reachable journey is missing its compiled route")
+			return
+	travelling = true
+	_sync()
+	await journey.walk(route,anchors[target])
+	if not world_map.enter(target):
+		push_error("Preview route changed during travel")
+		travelling = false
+		_sync()
 		return
 	world_map.clear_current()
 	step_count += 1
 	selected = -1
-	focus_journey()
+	travelling = false
+	focus_journey(reduced_motion)
 	_sync()
 
 func focus_journey(immediate: bool = false) -> void:
@@ -240,6 +259,8 @@ func focus_journey(immediate: bool = false) -> void:
 	for i: int in world_map.reachable():
 		points.append(anchors[i])
 	rig.frame(points, size, false, immediate)
+	if journey!=null:
+		_sync()
 
 func focus_all() -> void:
 	whole = true
@@ -248,8 +269,11 @@ func focus_all() -> void:
 		for raw: Array in edge["centerline"]:
 			points.append(terrain.present(Meshes.v3(raw)))
 	rig.frame(points, size, true)
+	_sync()
 
 func _resize() -> void:
+	if hint_label!=null:
+		hint_label.text = "Drag to explore · scroll to zoom" if size.x<1000 else "A road through the ash · drag to explore · scroll to see further"
 	stage.size = Vector2i(size)
 	if whole:
 		focus_all()
@@ -260,14 +284,24 @@ func _process(_delta: float) -> void:
 	if rig == null:
 		return
 	for i: int in range(stones.size()):
-		var pos: Vector2 = rig.unproject_position(anchors[i] + Vector3.UP * 0.3)
-		var extent: float = 20 if whole else 48
+		var pos: Vector2 = rig.unproject_position(journey.bases[i].position + Vector3(0,.48,.14))
+		var pin: Pin = stones[i] as Pin
+		if pin.overview!=whole:
+			pin.overview = whole
+			pin.queue_redraw()
+		# The overview is an inspection surface; dense symbols are not tiny
+		# encounter buttons with overlapping, misleading touch rectangles.
+		pin.mouse_filter = Control.MOUSE_FILTER_IGNORE if whole else Control.MOUSE_FILTER_STOP
+		pin.focus_mode = Control.FOCUS_NONE if whole else Control.FOCUS_ALL
+		var extent: float = 48
 		stones[i].size = Vector2.ONE * extent
 		stones[i].position = pos - Vector2.ONE * extent * 0.5
 		stones[i].add_theme_font_size_override("font_size", 12 if whole else 21)
 		stones[i].visible = show_stones and pos.x >= extent * 0.5 and pos.x <= size.x - extent * 0.5 and pos.y > 60 + extent * 0.5 and pos.y < size.y - 72 - extent * 0.5
 
 func _gui_input(event: InputEvent) -> void:
+	if travelling:
+		return
 	if event is InputEventMouseButton:
 		var mouse: InputEventMouseButton = event
 		if mouse.pressed and mouse.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -278,6 +312,8 @@ func _gui_input(event: InputEvent) -> void:
 			dragging = mouse.pressed
 			if dragging:
 				drag_distance = 0
+			elif whole and drag_distance<8:
+				_inspect_area(mouse.position)
 	elif event is InputEventMouseMotion and dragging:
 		var mouse: InputEventMouseMotion = event
 		drag_distance += mouse.relative.length()
@@ -287,6 +323,8 @@ func _gui_input(event: InputEvent) -> void:
 		dragging = touch.pressed
 		if dragging:
 			drag_distance = 0
+		elif whole and drag_distance<8:
+			_inspect_area(touch.position)
 	elif event is InputEventScreenDrag:
 		var drag: InputEventScreenDrag = event
 		drag_distance += drag.relative.length()
@@ -294,3 +332,34 @@ func _gui_input(event: InputEvent) -> void:
 	elif event is InputEventMagnifyGesture:
 		var magnify: InputEventMagnifyGesture = event
 		rig.zoom_by(1.0 / magnify.factor)
+
+func _toggle_motion() -> void:
+	if travelling:
+		return
+	reduced_motion = not reduced_motion
+	_apply_motion()
+
+func _apply_motion() -> void:
+	journey.reduced_motion = reduced_motion
+	rig.reduced_motion = reduced_motion
+	var river: Node = terrain.get_node("Stream")
+	river.animate = not reduced_motion
+	motion_button.text = "Motion: off" if reduced_motion else "Motion: on"
+
+func _inspect_area(point: Vector2) -> void:
+	var nearest: int = -1
+	var distance: float = INF
+	for i: int in range(stones.size()):
+		var candidate: float = point.distance_squared_to(stones[i].position+stones[i].size*.5)
+		if candidate<distance:
+			distance = candidate
+			nearest = i
+	if nearest<0:
+		return
+	whole = false
+	var points: PackedVector3Array = [anchors[nearest]]
+	for to_id: String in world_map.nodes[nearest].next:
+		var raw: Array = sample["anchors"][to_id]
+		points.append(terrain.present(Meshes.v3(raw)))
+	rig.frame(points,size,false)
+	_sync()

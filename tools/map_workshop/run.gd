@@ -21,6 +21,10 @@ var detail: String = ""
 var locate: String = ""
 var located: Dictionary = {}
 var water_loop: bool = false
+var reduced_motion: bool = false
+var journey_film: bool = false
+var sample_path: String = preload("res://tools/map_workshop/sample.gd").DEFAULT
+var visit_node: String = ""
 
 func _initialize() -> void:
 	_run.call_deferred()
@@ -37,6 +41,8 @@ func _run() -> void:
 			gallery = true
 		elif arg == "--turntable":
 			turntable = true
+		elif arg == "--journey-film":
+			journey_film = true
 		elif arg == "--water-loop":
 			water_loop = true
 		elif arg.begins_with("--frames="):
@@ -45,6 +51,12 @@ func _run() -> void:
 			rotation = float(arg.trim_prefix("--rotation="))
 		elif arg.begins_with("--trial="):
 			trial = arg.trim_prefix("--trial=")
+		elif arg == "--reduced-motion":
+			reduced_motion = true
+		elif arg.begins_with("--sample="):
+			sample_path = arg.trim_prefix("--sample=")
+		elif arg.begins_with("--visit="):
+			visit_node = arg.trim_prefix("--visit=")
 		elif arg == "--assets":
 			grey = false
 		elif arg == "--phone":
@@ -78,10 +90,20 @@ func _run() -> void:
 	Locale.active = Locale.new(&"en")
 	var content: ContentDB = ContentDB.load_full()
 	Locale.active.hydrate_content(content)
-	var run: RunState = RunState.new_run(content, 717)
-	var world: WorldMap = WorldMap.for_run(run, content)
-	var sample: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/studies/camera-composition/act1-seed717.json"))
-	var bound: Dictionary = MapLayoutInputBinding.bind(world, 0)
+	var sample: Dictionary = preload("res://tools/map_workshop/sample.gd").read(sample_path)
+	if sample.is_empty():
+		quit(2)
+		return
+	var seed_value: int = int(str(sample["seed"]))
+	var act_index: int = int(str(sample["act"]))-1
+	if act_index!=0:
+		push_error("This native renderer currently owns Act I only")
+		quit(2)
+		return
+	var run: RunState = RunState.new_run(content,seed_value)
+	run.act = act_index
+	var world: WorldMap = WorldMap.for_run(run,content)
+	var bound: Dictionary = MapLayoutInputBinding.bind(world,act_index)
 	if sample["nodes"].size() != world.nodes.size() or sample["edges"].size() != bound["edges"].size():
 		push_error("Workshop sample no longer covers the generated graph")
 		quit(1)
@@ -98,11 +120,18 @@ func _run() -> void:
 			push_error("Missing or mismatched generated edge: " + id)
 			quit(1)
 			return
-	for step: int in range(steps):
-		var reachable: Array[int] = world.reachable()
-		world.enter(reachable[0])
-		world.clear_current()
+	if not visit_node.is_empty():
+		if not preload("res://tools/map_workshop/sample.gd").visit(world,visit_node):
+			push_error("Cannot reach the declared inspection node: "+visit_node)
+			quit(2)
+			return
+	else:
+		for step: int in range(steps):
+			var reachable: Array[int] = world.reachable()
+			world.enter(reachable[0])
+			world.clear_current()
 	view = View.new()
+	view.reduced_motion = reduced_motion
 	view.hero_override = trial
 	view.setup(sample, world, grey)
 	root.add_child(view)
@@ -175,6 +204,17 @@ func _run() -> void:
 			return
 		for frame: int in range(60):
 			await process_frame
+	if journey_film:
+		if frames_directory.is_empty():
+			push_error("Journey capture needs a frame directory")
+			quit(2)
+			return
+		var recorded: bool = await preload("res://tools/map_workshop/journey_capture.gd").record(view,self,frames_directory)
+		view.queue_free()
+		for frame: int in range(8):
+			await process_frame
+		quit(0 if recorded else 1)
+		return
 	if water_loop:
 		if frames_directory.is_empty():
 			push_error("River motion capture requires a frame directory")
@@ -246,12 +286,62 @@ func _exercise() -> bool:
 	await _click(view.stones[expected].get_global_rect().get_center())
 	await process_frame
 	var select_pass: bool = view.selected == expected
+	var origin: int = view.world_map.at
+	var start_position: Vector3 = view.journey.walker.position
 	await _click(view.travel.get_global_rect().get_center())
 	await process_frame
-	var travel_pass: bool = view.world_map.at == expected and view.step_count == 1
-	print("WORKSHOP_EXERCISE ", JSON.stringify({"pan": pan_pass, "wheel_zoom": zoom_pass,
-		"native_selection": select_pass, "legal_preview_travel": travel_pass}))
-	return pan_pass and zoom_pass and select_pass and travel_pass
+	var deferred_arrival: bool = view.world_map.at==origin if not reduced_motion else view.world_map.at==expected
+	view._travel() # A second activation while walking must not enter twice.
+	var deadline: int = Time.get_ticks_msec()+6500
+	while view.travelling and Time.get_ticks_msec()<deadline:
+		await process_frame
+	var travel_pass: bool = view.world_map.at==expected and view.step_count==1
+	var moved: bool = view.journey.walker.position.distance_to(start_position)>.5
+	var legal: Array[int] = view.world_map.reachable()
+	var keyboard_pass: bool = not legal.is_empty()
+	if keyboard_pass:
+		view.focus_journey(true)
+		await process_frame
+		view.stones[legal[0]].grab_focus()
+		var key: InputEventKey = InputEventKey.new()
+		key.keycode = KEY_SPACE
+		key.pressed = true
+		root.push_input(key)
+		await process_frame
+		key = key.duplicate() as InputEventKey
+		key.pressed = false
+		root.push_input(key)
+		await process_frame
+		keyboard_pass = view.selected==legal[0]
+	var previously_selected: int = view.selected
+	view.focus_all()
+	await process_frame
+	var overview_pass: bool = view.travel.disabled
+	for pin: Button in view.stones:
+		overview_pass = overview_pass and pin.mouse_filter==Control.MOUSE_FILTER_IGNORE and pin.focus_mode==Control.FOCUS_NONE
+	await _click(view.size*.5)
+	await process_frame
+	overview_pass = overview_pass and not view.whole and view.selected==previously_selected and view.world_map.at==expected
+	view.focus_journey(true)
+	view._select(view.world_map.at)
+	var blocked_revisit: bool = view.travel.disabled
+	view._travel()
+	blocked_revisit = blocked_revisit and view.world_map.at==expected and view.step_count==1
+	view._select(previously_selected)
+	var pins_pass: bool = true
+	for i: int in range(view.stones.size()):
+		var pin: Button = view.stones[i]
+		var node: MapNode = view.world_map.nodes[i]
+		pins_pass = pins_pass and pin.kind==("unlit" if node.unlit else node.type)
+		pins_pass = pins_pass and pin.bounty==(node.bounty if node.unlit else 0)
+		pins_pass = pins_pass and pin.size.x>=44 and pin.size.y>=44
+	var river: TerrainRiver = view.terrain.get_node("Stream") as TerrainRiver
+	var motion_pass: bool = view.journey.reduced_motion==reduced_motion and view.rig.reduced_motion==reduced_motion and river.animate!=reduced_motion
+	print("WORKSHOP_EXERCISE ",JSON.stringify({"pan":pan_pass,"wheel_zoom":zoom_pass,
+		"native_selection":select_pass,"legal_preview_travel":travel_pass,"arrival_after_walk":deferred_arrival,
+		"traveller_moved":moved,"keyboard_selection":keyboard_pass,"overview_inspects_without_entering":overview_pass,"blocked_revisit":blocked_revisit,
+		"identities_bounties_targets":pins_pass,"motion_setting":motion_pass,"reduced_motion":reduced_motion}))
+	return pan_pass and zoom_pass and select_pass and travel_pass and deferred_arrival and moved and keyboard_pass and overview_pass and blocked_revisit and pins_pass and motion_pass
 
 func _click(at: Vector2) -> void:
 	var move: InputEventMouseMotion = InputEventMouseMotion.new()

@@ -9,7 +9,10 @@ func _initialize() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
-	var sample: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/studies/camera-composition/act1-seed717.json"))
+	var sample: Dictionary = preload("res://tools/map_workshop/sample.gd").read()
+	if sample.is_empty():
+		quit(2)
+		return
 	var terrain: Terrain = Terrain.new()
 	root.add_child(terrain)
 	terrain.build(sample,false)
@@ -20,6 +23,10 @@ func _run() -> void:
 	rig.set_process(false)
 	var failures: Array[String] = []
 	var contexts: int = 0
+	var seats: Dictionary = {}
+	for raw: Array in sample["anchors"].values():
+		var source: Vector3 = Meshes.v3(raw)
+		seats[terrain.present(source)] = preload("res://tools/map_workshop/journey.gd").seat(terrain,source)
 	for shape: Vector2i in SHAPES:
 		stage.size = shape
 		await process_frame
@@ -34,7 +41,8 @@ func _run() -> void:
 			var rects: Array[Rect2] = []
 			var safe: Rect2 = Rect2(0,60,shape.x,shape.y-132)
 			for p: Vector3 in points:
-				var rect: Rect2 = Rect2(rig.unproject_position(p + Vector3.UP * 0.3)-Vector2(24,24),Vector2(48,48))
+				var seat: Vector3 = seats[p]
+				var rect: Rect2 = Rect2(rig.unproject_position(seat+Vector3(0,.48,.14))-Vector2(24,24),Vector2(48,48))
 				if not safe.encloses(rect):
 					failures.append("Clipped target at %s, %s: %s" % [id,shape,rect])
 				for other: Rect2 in rects:

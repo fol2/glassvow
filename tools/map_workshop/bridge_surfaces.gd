@@ -19,8 +19,11 @@ func setup(source: Array[Dictionary], height: Callable, deck_profile: Callable =
 	for span: Dictionary in spans:
 		var a: Vector3 = span["a"]
 		var b: Vector3 = span["b"]
-		var lo: Vector2 = Vector2(minf(a.x,b.x),minf(a.z,b.z))-Vector2.ONE*(HALF+CELL*2)
-		var hi: Vector2 = Vector2(maxf(a.x,b.x),maxf(a.z,b.z))+Vector2.ONE*(HALF+CELL*2)
+		var half_a: float = span.get("half_a",HALF)
+		var half_b: float = span.get("half_b",HALF)
+		var half_width: float = maxf(half_a,half_b)
+		var lo: Vector2 = Vector2(minf(a.x,b.x),minf(a.z,b.z))-Vector2.ONE*(half_width+CELL*2)
+		var hi: Vector2 = Vector2(maxf(a.x,b.x),maxf(a.z,b.z))+Vector2.ONE*(half_width+CELL*2)
 		for x: int in range(floori(lo.x/CELL),ceili(hi.x/CELL)+1):
 			for z: int in range(floori(lo.y/CELL),ceili(hi.y/CELL)+1):
 				var key: Vector2i = Vector2i(x,z)
@@ -31,6 +34,9 @@ func setup(source: Array[Dictionary], height: Callable, deck_profile: Callable =
 func field(at: Vector2) -> Dictionary:
 	var candidates: Array = cells.get(Vector2i(floori(at.x/CELL),floori(at.y/CELL)),[])
 	var best: float = INF
+	var rise_sum: float = 0
+	var rise_weight: float = 0
+	var highest_rise: float = 0
 	var result: Dictionary = {"distance":INF,"height":0.0,"blend":0.0,"bottom":0.0,"uv":Vector2.ZERO}
 	for span: Dictionary in candidates:
 		var a3: Vector3 = span["a"]
@@ -39,21 +45,35 @@ func field(at: Vector2) -> Dictionary:
 		var b: Vector2 = Vector2(b3.x,b3.z)
 		var t: float = clampf((at-a).dot(b-a)/maxf(.000001,a.distance_squared_to(b)),0,1)
 		var distance: float = at.distance_to(a.lerp(b,t))
-		if distance >= best:
+		var wa: float = span.get("raise_a",span["wa"])
+		var wb: float = span.get("raise_b",span["wb"])
+		var rise: float = lerpf(wa,wb,t)
+		var weight: float = exp(-distance*distance/.15)*a.distance_to(b)
+		rise_sum += rise*weight
+		rise_weight += weight
+		highest_rise = maxf(highest_rise,rise)
+		var half_a: float = span.get("half_a",HALF)
+		var half_b: float = span.get("half_b",HALF)
+		var boundary: float = distance-lerpf(half_a,half_b,t)
+		if boundary >= best:
 			continue
-		best = distance
+		best = boundary
 		var blend: float = lerpf(_number(span,"wa"),_number(span,"wb"),t)
 		var direction: Vector2 = (b-a).normalized()
 		var low_a: float = span.get("bottom_a",a3.y-.18)
 		var low_b: float = span.get("bottom_b",b3.y-.18)
-		result = {"distance":distance-HALF,"height":lerpf(a3.y,b3.y,t)+.022,
+		result = {"distance":boundary,"height":lerpf(a3.y,b3.y,t)+.022,
 			"blend":blend,"bottom":lerpf(low_a,low_b,t),"uv":Vector2(direction.cross(at-a),_number(span,"s")+a.distance_to(b)*t)}
 	if best < INF:
 		if profile.is_valid():
 			var deck_height: float = profile.call(at.x,at.y)
 			result["height"] = deck_height+.022
 		var ground_height: float = ground.call(at.x,at.y)
-		result["height"] = lerpf(ground_height+.012,_number(result,"height"),_number(result,"blend"))
+		var rise: float = rise_sum/maxf(.000001,rise_weight)
+		# At a true opening the deck is structural. Ground-side material spans
+		# beneath it must not pull its height down towards the lower road.
+		rise = lerpf(rise,highest_rise,smoothstep(.6,1.2,_number(result,"height")-ground_height))
+		result["height"] = lerpf(ground_height+.012,_number(result,"height"),rise)
 		# A hillside can rise above the nominal bridge profile at an approach.
 		# Keep the complete top surface above it, not just the route centre.
 		result["height"] = maxf(ground_height+.012,_number(result,"height"))

@@ -23,6 +23,13 @@ func build(sample: Dictionary, grey: bool) -> void:
 		for point: Array in edge["centerline"]:
 			points.append(Meshes.v3(point))
 		lines.append(points)
+	var source_points: PackedVector3Array = []
+	for raw: Array in anchors.values():
+		source_points.append(Meshes.v3(raw))
+	var gateway: Dictionary = preload("res://tools/map_workshop/gateway_sites.gd").choose(self,source_points,false)
+	if not gateway.is_empty():
+		var at: Vector3 = gateway["position"]
+		landform.terrace_centre = Vector2(at.x,at.z)
 	landform.setup(lines)
 	_land()
 	_roads()
@@ -70,7 +77,7 @@ func bridge_height(x: float, z: float) -> float:
 	var crown: float = 0
 	for cut: Dictionary in landform.cuts:
 		var centre: Vector2 = cut["at"]
-		crown = maxf(crown,.45*(1.0-smoothstep(1.2,4.0,centre.distance_to(Vector2(x,z)))))
+		crown = maxf(crown,.75*(1.0-smoothstep(1.2,4.0,centre.distance_to(Vector2(x,z)))))
 	return height+crown
 
 func route_height(p: Vector3) -> float:
@@ -104,8 +111,8 @@ func is_elevated(p: Vector3) -> bool:
 func _land() -> void:
 	var surface: SurfaceTool = SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for ix: int in range(192):
-		for iz: int in range(120):
+	for ix: int in range(int(96/CELL)):
+		for iz: int in range(int(60/CELL)):
 			var x: float = -48 + ix * CELL
 			var z: float = -30 + iz * CELL
 			var corners: Array[Vector3] = []

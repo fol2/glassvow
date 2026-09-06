@@ -6,7 +6,10 @@ func _initialize() -> void:
 func _run() -> void:
 	var terrain: Terrain = Terrain.new()
 	root.add_child(terrain)
-	var sample: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/studies/camera-composition/act1-seed717.json"))
+	var sample: Dictionary = preload("res://tools/map_workshop/sample.gd").read()
+	if sample.is_empty():
+		quit(2)
+		return
 	terrain.build(sample, false)
 	var land: MeshInstance3D = terrain.get_node("Quiet sculpted ground") as MeshInstance3D
 	var raw: Variant = land.material_override.get_meta("distance_image")

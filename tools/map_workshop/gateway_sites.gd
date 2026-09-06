@@ -1,6 +1,6 @@
 extends RefCounted
 ## Select a straight, dry route passage; piers and projected body stay clear.
-static func choose(terrain: Node3D, anchors: PackedVector3Array) -> Dictionary:
+static func choose(terrain: Node3D, anchors: PackedVector3Array, resolve_height: bool = true) -> Dictionary:
 	var best: Dictionary = {}
 	var score: float = INF
 	for line: PackedVector3Array in terrain.lines:
@@ -37,6 +37,6 @@ static func choose(terrain: Node3D, anchors: PackedVector3Array) -> Dictionary:
 				var candidate: float = p.distance_to(Vector3(-20, 0, 14)) + absf(yaw) * 2
 				if candidate < score:
 					score = candidate
-					p.y = terrain.surface_height(p.x, p.z)
+					p.y = terrain.surface_height(p.x,p.z) if resolve_height else 0.0
 					best = {"position": p, "yaw": yaw}
 	return best

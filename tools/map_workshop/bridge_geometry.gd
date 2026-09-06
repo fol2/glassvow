@@ -29,6 +29,7 @@ static func build(parent: Node3D, lines: Array[PackedVector3Array], elevated: Ca
 		var weights: PackedFloat32Array = []
 		for distance: float in distances:
 			weights.append(1.0-smoothstep(0,2.2,distance))
+		var rises: PackedFloat32Array = weights.duplicate()
 		# The bank transition also follows adjoining earth roads. Otherwise a
 		# deck ending on a graph junction leaves an unsupported side entrance.
 		for i: int in range(points.size()):
@@ -47,7 +48,12 @@ static func build(parent: Node3D, lines: Array[PackedVector3Array], elevated: Ca
 		for i: int in range(points.size()-1):
 			if maxf(weights[i],weights[i+1])<.001:
 				continue
-			spans.append({"a":points[i],"b":points[i+1],"wa":weights[i],"wb":weights[i+1],"s":lengths[i],"bottom_a":soffit[i],"bottom_b":soffit[i+1]})
+			# A small shared landing leaves room to walk around each waystone.
+			# Burial-only remnants already sit within usable ground; widening
+			# those almost-invisible spans would create stray lips on earth roads.
+			var half_a: float = .8+.5*weights[i]*(1-smoothstep(.5,1.7,minf(lengths[i],lengths[-1]-lengths[i])))
+			var half_b: float = .8+.5*weights[i+1]*(1-smoothstep(.5,1.7,minf(lengths[i+1],lengths[-1]-lengths[i+1])))
+			spans.append({"a":points[i],"b":points[i+1],"wa":weights[i],"wb":weights[i+1],"raise_a":rises[i],"raise_b":rises[i+1],"half_a":half_a,"half_b":half_b,"s":lengths[i],"bottom_a":soffit[i],"bottom_b":soffit[i+1]})
 		chains.append({"points":points,"lengths":lengths,"weights":weights})
 	if spans.is_empty():
 		return 0
@@ -88,7 +94,7 @@ static func _stonework(masonry: SurfaceTool, chains: Array[Dictionary], surface:
 			var side: Vector3 = forward.cross(Vector3.UP).normalized()
 			var join: bool = false
 			for line: PackedVector3Array in lines:
-				if minf(Vector2(middle.x,middle.z).distance_to(Vector2(line[0].x,line[0].z)),Vector2(middle.x,middle.z).distance_to(Vector2(line[-1].x,line[-1].z)))<1.05:
+				if minf(Vector2(middle.x,middle.z).distance_to(Vector2(line[0].x,line[0].z)),Vector2(middle.x,middle.z).distance_to(Vector2(line[-1].x,line[-1].z)))<1.7:
 					join = true
 			if join:
 				continue
