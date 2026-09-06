@@ -1,0 +1,239 @@
+{
+  "bridge_walkway": {
+    "body_samples": 20470,
+    "decoration_hits": 71,
+    "examples": [
+      {
+        "at": [
+          12.5200204849243,
+          8.26332664489746
+        ],
+        "edge": "3:8,4>3:9,3",
+        "field_distances": [
+          -0.420688225030899,
+          1e99999
+        ],
+        "floor": 4.11700010299683,
+        "obstacle": 5.59730005264282,
+        "offset": 0.5,
+        "part": 0
+      },
+      {
+        "at": [
+          12.762734413147,
+          8.32324123382568
+        ],
+        "edge": "3:8,4>3:9,3",
+        "field_distances": [
+          -0.171032769680023,
+          1e99999
+        ],
+        "floor": 4.11700010299683,
+        "obstacle": 5.59384632110596,
+        "offset": 0.75,
+        "part": 0
+      },
+      {
+        "at": [
+          11.4296979904175,
+          7.55763053894043
+        ],
+        "edge": "3:8,4>3:9,3",
+        "field_distances": [
+          -0.170000298023224,
+          1e99999
+        ],
+        "floor": 3.95009994506836,
+        "obstacle": 5.5419282913208,
+        "offset": -0.75,
+        "part": 0
+      },
+      {
+        "at": [
+          11.6646604537964,
+          7.64302635192871
+        ],
+        "edge": "3:8,4>3:9,3",
+        "field_distances": [
+          -0.41999988079071,
+          1e99999
+        ],
+        "floor": 3.95009994506836,
+        "obstacle": 5.59730005264282,
+        "offset": -0.5,
+        "part": 0
+      },
+      {
+        "at": [
+          12.1345863342285,
+          7.81381797790527
+        ],
+        "edge": "3:8,4>3:9,3",
+        "field_distances": [
+          -0.92,
+          1e99999
+        ],
+        "floor": 3.95009994506836,
+        "obstacle": 5.59730005264282,
+        "offset": 0.0,
+        "part": 0
+      },
+      {
+        "at": [
+          12.6045122146606,
+          7.98460960388184
+        ],
+        "edge": "3:8,4>3:9,3",
+        "field_distances": [
+          -0.420769764184952,
+          1e99999
+        ],
+        "floor": 3.95009994506836,
+        "obstacle": 5.59730005264282,
+        "offset": 0.5,
+        "part": 0
+      },
+      {
+        "at": [
+          12.8394746780396,
+          8.07000541687012
+        ],
+        "edge": "3:8,4>3:9,3",
+        "field_distances": [
+          -0.171154839992523,
+          1e99999
+        ],
+        "floor": 3.95009994506836,
+        "obstacle": 5.59730005264282,
+        "offset": 0.75,
+        "part": 0
+      },
+      {
+        "at": [
+          11.5948534011841,
+          7.17153930664062
+        ],
+        "edge": "3:8,4>3:9,3",
+        "field_distances": [
+          -0.170000059604645,
+          1e99999
+        ],
+        "floor": 3.78309988975525,
+        "obstacle": 5.51789283752441,
+        "offset": -0.75,
+        "part": 0
+      },
+      {
+        "at": [
+          11.8187894821167,
+          7.28268098831177
+        ],
+        "edge": "3:8,4>3:9,3",
+        "field_distances": [
+          -0.419999821186066,
+          1e99999
+        ],
+        "floor": 3.78309988975525,
+        "obstacle": 5.58929538726807,
+        "offset": -0.5,
+        "part": 0
+      },
+      {
+        "at": [
+          12.2666625976562,
+          7.50496435165405
+        ],
+        "edge": "3:8,4>3:9,3",
+        "field_distances": [
+          -0.92,
+          1e99999
+        ],
+        "floor": 3.78309988975525,
+        "obstacle": 5.59730005264282,
+        "offset": 0.0,
+        "part": 0
+      },
+      {
+        "at": [
+          12.7145357131958,
+          7.72724771499634
+        ],
+        "edge": "3:8,4>3:9,3",
+        "field_distances": [
+          -0.420821560621262,
+          1e99999
+        ],
+        "floor": 3.78309988975525,
+        "obstacle": 5.59730005264282,
+        "offset": 0.5,
+        "part": 0
+      },
+      {
+        "at": [
+          12.9384717941284,
+          7.83838939666748
+        ],
+        "edge": "3:8,4>3:9,3",
+        "field_distances": [
+          -0.171232743263245,
+          1e99999
+        ],
+        "floor": 3.78309988975525,
+        "obstacle": 5.59730005264282,
+        "offset": 0.75,
+        "part": 0
+      }
+    ],
+    "scope": "Actual rail and pier triangles over rendered treads; five lateral samples across a 1.5 m corridor, 2.12 m body height."
+  },
+  "clearance": {
+    "architecture": {
+      "architecture_meshes": 2347,
+      "body_samples": 12282,
+      "bounds_hits": 0,
+      "first_hits": [],
+      "scope": "Conservative mesh AABBs, 0.5 m body width / 2.12 m above boots, centre and +/-0.5 m route offsets. Positive hits need triangle-level diagnosis."
+    },
+    "first_hits": [],
+    "scope": "Rendered ground triangles at seven offsets across 1.5 m; all source and decorative routes. Building bounds use the shared conservative body probe.",
+    "terrain_body_hits": 0,
+    "terrain_samples": 28658
+  },
+  "destination_count": 1,
+  "destination_owner": "14,3",
+  "edges": 76,
+  "nodes": 65,
+  "rendered_deck": {
+    "first_failures": [],
+    "maximum_height_difference_from_route": 0.479940011978149,
+    "maximum_rendered_triangle_grade": 9.82073648894458,
+    "missing": 0,
+    "samples": 28658,
+    "scope": "Actual deck triangles, all route samples at seven offsets across 1.2 m; triangle grade across both complete decks",
+    "steepest_at": [
+      13.0004997253418,
+      3.8219997882843,
+      8.12769985198975
+    ],
+    "steepest_projected_area": 0.0000049499976739753,
+    "steepest_vertices": [
+      [
+        13.0,
+        3.80629992485046,
+        8.125
+      ],
+      [
+        13.0015001296997,
+        3.8066999912262,
+        8.12650012969971
+      ],
+      [
+        13.0,
+        3.8529999256134,
+        8.13159942626953
+      ]
+    ]
+  },
+  "scope": "Seed 717 native rendered routes; architectural and terrain clearance require separate proof",
+  "source_digest": "1ca42389e05c9caa15b47496a6fbc91cf7f8a7049de04575ffe4d4f2a99b1168"
+}
