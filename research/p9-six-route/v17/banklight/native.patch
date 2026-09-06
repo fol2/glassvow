@@ -1,0 +1,31 @@
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -15,7 +15,7 @@
+ 
+ const SPECIAL_IDS: Array[String] = [
+ 	"leech", "execute", "momentum", "doubleBlock", "phantom", "devour",
+-	"pyreTithe", "catalyst", "shatterEcho", "flawless", "emberNova", "emberdance",
++	"pyreTithe", "catalyst", "shatterEcho", "flawless", "emberNova", "emberdance", "heldEmberWard",
+ ]
+ const POTION_IDS: Array[String] = [
+ 	"healing", "strength", "swift", "block", "fire", "venom", "energy",
+@@ -968,6 +968,9 @@
+ 		"momentum":
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) + inst.bonus, true, damage_mult)
+ 			inst.bonus += _ji(fx.get("grow", 0))
++		"heldEmberWard":
++			var held: int = maxi(0, cb.embers - _ji(fx.get("reserve", 4)))
++			gain_block_player(cb, _ji(fx["n"]) + _ji(fx["per"]) * held, true, run)
+ 		"doubleBlock":
+ 			gain_block_player(cb, cb.player.block, false, run)
+ 		"phantom":
+@@ -1359,6 +1362,9 @@
+ 				var stock: int = maxi(0, cb.hand.size() - 1) if sid == "phantom" else cb.embers
+ 				var raw_damage: int = _ji(fx["n"]) * maxi(0, stock - _ji(fx["reserve"]))
+ 				hits.append({"dmg": _preview_hit(p, target, raw_damage), "times": 1})
++			elif sid == "heldEmberWard":
++				var held: int = maxi(0, cb.embers - _ji(fx.get("reserve", 4)))
++				block += preview_block(cb, _ji(fx["n"]) + _ji(fx["per"]) * held, run)
+ 			elif sid == "doubleBlock":
+ 				block += p.block
+ 	var fx_chips: int = 0
