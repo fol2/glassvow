@@ -1,0 +1,26 @@
+{
+  "status":"RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "engine":"4.7.2.stable.official.ed1daf0bf",
+  "content":"v11 reserve4_access, fixed throughout this experiment",
+  "seed_range":[11020000,11020031],
+  "cells":20,"rows_per_cell":32,"rows":640,
+  "wins":397,"losses":243,"stalls":0,"errors":0,
+  "freeze_sha256":"e4d3f8b02bff540339315858133ef4917980ee66b706829547d12640770ade13",
+  "cycle_wins_v0_v5":{
+    "h4_fit1":[20,16],"h6_fit1":[21,17],"h8_fit1":[20,18],
+    "h6_fit1.5":[23,13],"h6_fit0.5":[22,18],"h8_fit1.5":[25,15]
+  },
+  "ember_wins_v0_v5":{
+    "discount0":[28,14],"discount0.35":[28,14],"discount0.65":[28,13],"discount1":[29,15]
+  },
+  "interpretation":"Small exploratory comparisons, not corrected evidence of parameter superiority. Reducing the bank discount did not improve the sampled outcome. Retain discount 1. For the next content screen use cycle horizon 6 and fit 0.5 (best minimum-vow win count, then sum), with observed grown-Momentum use retained. No route is certified by its label.",
+  "next_content_design":{
+    "purpose":"Separate affordable reserve payoff, starter tempo and unconditional Ash support; no general difficulty reduction or hidden route-specific runtime bonuses.",
+    "fixed_controller":"v11 reserve-corrected score; exposed finite cycle_horizon parameter; bank_mode=current-plus-next; cycle horizon6/fit0.5; other routes retain defaults",
+    "variants":["base","nova1","payoff","payoff_ash3","payoff_dusk1","payoff_both","payoff_core1","payoff_both_core1"],
+    "atomic_changes":{"nova1":"Nova cost 2 to 1","hand7":"Phantom coefficient 5/6 to 7/8, reserve 3 unchanged","ash3":"Ashfall poison 4 to 3","dusk1":"Eclipse Slash cost 2 to 1","core1":"Ashen Core startSmolder 3 to 1"},
+    "seeds":[11030000,11030031],"assigned_cells":128,"assigned_rows":4096,
+    "controls":"balanced RandomBuild screens only; route-matched and signed acceptance remain separate"
+  },
+  "remaining":"Six-package causal admission, corrected confirmation, unrestricted retention, detector validation, hard guardrails, lifecycle and exact-SHA integration remain open. No P9 pass, merge or human review is claimed."
+}
