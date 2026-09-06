@@ -1,0 +1,19 @@
+{
+  "crossing_centres": 3,
+  "edges": 76,
+  "expected_edges": 76,
+  "expected_nodes": 65,
+  "maximum_endpoint_height_error": 0.0763842315673831,
+  "maximum_sampled_grade": 0.420725498900198,
+  "minimum_centre_headroom": 1.82979199423221,
+  "minimum_dry_margin": 0.618815369606018,
+  "missing_route_samples": [],
+  "nodes": 65,
+  "remaining_checks": [
+    "whole-width bridge clearance",
+    "library footprint and route obstruction",
+    "reference-shape readability",
+    "water motion and depth",
+    "owner review"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "architecture_meshes": 4617,
+  "body_samples": 13305,
+  "bounds_hits": 0,
+  "first_hits": [],
+  "scenery": {
+    "families": {
+      "driftwood": 13,
+      "floating_leaves": 29,
+      "kelp": 66,
+      "reeds": 24,
+      "slate": 29,
+      "snag": 9
+    },
+    "instances": 170,
+    "shared_meshes": 18
+  },
+  "scope": "Conservative mesh AABBs, 0.5 m body width / 2.12 m above boots, centre and +/-0.5 m route offsets. Positive hits need triangle-level diagnosis."
+}

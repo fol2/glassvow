@@ -1,0 +1,38 @@
+{
+  "scope": "Step 3 shared-water study; not production qualification",
+  "source_sha256": {
+    "tools/map_workshop/act2/run.gd": "77f80ecbbfb7ea1029afb522327dcde422532e84a46d9763c7c8640c856a5fdd",
+    "tools/map_workshop/water/presets.gd": "d17e04a8af4b4180a22e951c7279739306fcb22e8768a499e9518c5457bf13c6",
+    "tools/map_workshop/water/surface.gd": "92a8089063a448234b5dd7a1a0323134dd5be77e912eaf114f1c8e89b2d5f95a",
+    "tools/map_workshop/water/surface.gdshader": "3418b551b3bdc606ffb6fdf402b01496962b426477816d35c4fa87f7dc9773dc",
+    "tools/map_workshop/water/verify.gd": "c6ea594bf746507ea18dd634ebf31f094dde32653f850ee5554411b7f285c9cd"
+  },
+  "resource_contract": "PASS: shared ready textures, independent materials and capture clocks",
+  "renderer": "Godot 4.7.2 Mobile",
+  "act_i_migrated": false,
+  "planar_reflection_active": false,
+  "visual_review": {
+    "views": [
+      "library",
+      "precinct",
+      "bridge",
+      "whole",
+      "phone",
+      "pad"
+    ],
+    "film_seconds": 8,
+    "tailnet_playback_seconds": 1.742801,
+    "tailnet_media_error": null,
+    "owner_approval": "pending"
+  },
+  "assets_sha256": {
+    "v6-bridge.png": "41e62760bc7beb8fa39360eb7c571f30f6c9397594a4d1f7024a86585c46bdce",
+    "v6-library.png": "dc9921f381cfd89120005ed57df8f93db4470f40f21ff84534e1f7b1ed97a3af",
+    "v6-pad.png": "85ef9511320cd7f359a7d0884360577ba925d45aa19e8f6ea0e90228b8708f00",
+    "v6-phone.png": "bbc05df6420eb2a367d93e07d21e8bbf15e86f5d7f6a64d98fbbda205d343fe7",
+    "v6-precinct.png": "3ac144a5c2c9d322005a4f03ee2b7eac81ffd1d4aaac1db557efeced15d6978c",
+    "v6-water.png": "71bc697ed2cd7a40d37c08aa47883a6adbf7222578bbb2166ac0757bfff69678",
+    "v6-whole.png": "c5aac6127cbfbaf2b09d2aac935e8b9f117e69fd3a8649dc6855678a85a0fea4",
+    "v6-water.mp4": "f1428c1401cfdc9802365754a53b54c450ad8ced6e49beeebe21a174f8d6fe6b"
+  }
+}

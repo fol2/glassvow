@@ -1,8 +1,13 @@
 # Map visual renovation — initial rough plan
 
+Current owner instruction: complete and review Step 3 for Act II, then Act III,
+then Act IV. Review the four native chapters together after their individual
+approvals. Only then enter Step 4. The Act I journey-section work is preserved
+in `ac1e3abb` for that later phase; it does not change this sequence.
+
 Status: James has approved the Act I native sample for Step 3 after Review 10,
-while explicitly noting that it is not perfect. This clears the agreed owner
-checkpoint for progression into Step 4; it is not final commercial acceptance.
+while explicitly noting that it is not perfect. This clears Act I's Step 3 owner checkpoint; Step 4 waits until all four acts
+are approved. It is not final commercial acceptance.
 Step 1 is also approved, including the four-act direction and Journey / Whole
 act composition study. Steps 2–3 produced the native greybox and coherent
 asset review sample. The revision history below records how that sample evolved.
@@ -34,6 +39,23 @@ new review page. Water coverage, bed alignment, dry routes, loop continuity and
 native reference-shape interactions are checked. The remaining delivery plan is
 unchanged.
 
+The current Act II Step 3 work also establishes a shared top-down water module,
+following James's corrected water research. Chapter-specific colour, motion and
+shore settings remain separate from the renderer. Act II is the first consumer;
+the approved Act I study remains preserved during this review. James approved
+the water milestone, saved in commit `5df1de0c`, then requested a shared stone
+bridge kit with substantial arches, piers, parapets and fitted stairs. This is
+the current Act II revision; chapter approval and the remaining Step 3 order
+are unchanged.
+
+The owner subsequently selected parapet option B and requested that every ruin
+attach to exactly one generated node, with the largest ruin attached to the boss.
+Smaller sunken ruins retain their submerged positions; their approach roads are
+decorative and may descend underwater. These attachments do not add gameplay
+edges. The current sample binds the largest library to boss node `14,3`.
+The owner then requested an Act I-style scenery pass: grouped, varied aquatic
+assets around the Act II foundations, while retaining clear routes and open water.
+
 ## Goal
 
 Create a cohesive, commercially credible top-down pilgrimage landscape. The
@@ -50,7 +72,10 @@ saved baseline, not an accepted visual target. Asset reuse is optional.
   composition, camera, asset language and acceptance criteria.
 - The agent completes Steps 2–3 autonomously and resolves known defects before
   inviting James to inspect the native asset sample. James has now approved
-  Act I at this checkpoint. Steps 4–8 proceed autonomously and cover production,
+  Act I at this checkpoint. Complete Act II, then Act III, then Act IV at
+  Step 3, obtaining James's approval of each before proceeding to the next.
+  Review all four together before entering Step 4. After that, Steps 4–8
+  proceed autonomously and cover production,
   iteration, visual inspection, integration, validation, independent review,
   PR, CI, merge and cleanup.
 - Step 5 is an agent-owned acceptance gate against the agreed brief. It does
@@ -80,11 +105,11 @@ round is needed unless the intended direction materially changes.
   Inspect close, default and whole-act views with navigation both visible and
   hidden. Resolve known failures before presenting a candidate to James.
 
-Keep the agreed production order: finish and inspect the common section in
-Steps 4–5, then prove its generator rules in Step 6. Extend that foundation
-through Act II, III and IV in Step 7. The agent's review format is one coherent
-native scene per chapter, followed by a four-act comparison; these are useful
-owner feedback opportunities, not additional routine stop-and-wait gates.
+Complete Step 3 in chapter order: Act II, Act III, then Act IV. Present one
+coherent native scene per chapter and obtain James's approval before starting
+the next chapter. Follow individual approvals with a four-act comparison.
+Only then resume the saved common section in Steps 4–5, prove its generator
+rules in Step 6 and extend production integration across chapters in Step 7.
 The chapter checks focus on the following distinct experiences:
 
 | Chapter | Native scene must establish |
@@ -285,6 +310,17 @@ active product contract rather than hiding it in implementation.
 
 ## Next action
 
+**Active objective: Act III Step 3. Act II Step 3 is approved.** Build the intact obsidian court from the approved Act III v5 concept and actual generated routes.
+Inspect architecture, quiet slabs, jade light, blue glass, waterlines, supported
+causeways, scale and reference screen shapes before presenting the chapter page.
+Wait for Act III owner approval before proceeding to Act IV. All four
+chapters must pass Step 3 before the saved Step 4 work resumes.
+
+### Preserved earlier sequence — superseded
+
+The following notes record the earlier sequence; they do not authorise
+resuming Step 4 before the chapter approvals above:
+
 The [playable section candidate](studies/production-section/index.html) now adds
 grounded waystones, visible legal travel, gentler continuous grades and a
 distinct whole-act area-inspection mode. Two generated layouts pass the focused
@@ -306,3 +342,10 @@ goal remains active.
 The workshop remains an isolated preview with immediate encounter resolution.
 Campaign integration, complete scenery composition, all-act production and
 commercial delivery validation remain in the later agreed steps.
+
+## Act II Step 3 approval and reuse
+
+James approved the scenery-v2 Act II native scene. The accepted chapter, model
+gallery and capture receipts are retained. Shared techniques and lessons are
+consolidated in [the workshop reuse guide](workshop-reuse.md). Act III Step 3
+is authorised next; this does not advance Step 4.

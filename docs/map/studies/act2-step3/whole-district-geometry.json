@@ -1,0 +1,57 @@
+{
+  "crossing_centres": 3,
+  "crossings": [
+    {
+      "at": [
+        -17.4219570159912,
+        -0.81306266784668
+      ],
+      "clearance": 3.49135034597497,
+      "floor": 1.79864965402503,
+      "soffit": 5.29
+    },
+    {
+      "at": [
+        8.22707557678223,
+        2.99505996704102
+      ],
+      "clearance": 2.7798182000239,
+      "floor": 2.5101817999761,
+      "soffit": 5.29
+    },
+    {
+      "at": [
+        33.475227355957,
+        10.3379402160645
+      ],
+      "clearance": 2.86293297451623,
+      "floor": 2.42706702548377,
+      "soffit": 5.29
+    }
+  ],
+  "edges": 76,
+  "expected_edges": 76,
+  "expected_nodes": 65,
+  "maximum_endpoint_height_error": 0.000000164031986216173,
+  "maximum_sampled_grade": 0.553596217500378,
+  "minimum_centre_headroom": 2.7798182000239,
+  "minimum_dry_margin": 0.618815488815308,
+  "missing_route_samples": [],
+  "nodes": 65,
+  "remaining_checks": [
+    "whole-width bridge clearance",
+    "library footprint and route obstruction",
+    "reference-shape readability",
+    "water motion and depth",
+    "owner review"
+  ],
+  "steepest": {
+    "at": [
+      27.9132747650146,
+      4.48291301727295,
+      11.7183437347412
+    ],
+    "edge": "4:12,5>4:13,5",
+    "upper": false
+  }
+}
