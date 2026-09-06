@@ -1,0 +1,49 @@
+{
+  "status": "RAW_RECONCILED_CONTROLLER_EXPLORATION_NOT_P9",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "content_sha256": "de41f69c9cd28cbd09e16880450957b80675f21b53125cd68a42594e41fbf747",
+  "freeze_sha256": "d60dafdbac38407b4d7a4740837555f5b27dc96422b190b3d6a181e1b73b9f54",
+  "native_isolation_assertions": 16,
+  "smoke_rows": 8,
+  "comparison_rows": 384,
+  "outcomes": {"win":248,"loss":136,"stall":0,"error":0},
+  "seeds": [14010000,14010015],
+  "denominator_per_procedure": 192,
+  "greedy_wins": 110,
+  "rollout_wins": 138,
+  "average_paired_difference": 0.14583333333333331,
+  "columns": ["aspect","route","vow","n","greedy_wins","rollout_wins","rescued","harmed"],
+  "cells": [
+    [0,"cycle",0,16,9,13,6,2],
+    [0,"cycle",5,16,5,8,6,3],
+    [0,"facet",0,16,11,15,5,1],
+    [0,"facet",5,16,3,7,6,2],
+    [0,"fervor",0,16,12,11,2,3],
+    [0,"fervor",5,16,5,8,5,2],
+    [1,"ember",0,16,13,14,2,1],
+    [1,"ember",5,16,8,10,4,2],
+    [1,"hand",0,16,13,14,3,2],
+    [1,"hand",5,16,7,11,4,0],
+    [1,"smolder",0,16,15,14,1,2],
+    [1,"smolder",5,16,9,13,5,1]
+  ],
+  "interpretation": "Every Vow-5 cell improved in this small fixed paired exploration; improvement was not universal at Vow 0. Per-cell wall cost was approximately 20-34 times greedy. This supports further diagnostic use, not a P9 pass or optimality claim.",
+  "mechanism_observation": "At Vow 5, the sampled Fervor controller acquired Empower in 12/16 and Flurry in 14/16 runs; cycle acquired Momentum in 15/16 with 130 grown casts; Ember acquired Nova in 16/16 and Pyreheart in 15/16. Enactment alone is not causal package admission. Recorded card_damage is raw event damage and can include overkill, so it must not be presented as effective-health causal contribution.",
+  "backup": {
+    "filename": "glassvow-p9-v14-completed-study.zip",
+    "bytes": 856554,
+    "sha256": "6de20f0f056297c2d89da220dd9fe34e26f1638086f5bb29ef725e61aab8aa87",
+    "contents": "181 source/config/raw-output/log/receipt/analysis files plus SHA256 manifest. Includes complete recovered native project and all 384 comparison and eight smoke rows. Engine excluded.",
+    "location": "Delivered chat artifact, not a GitHub blob",
+    "local_source_commit": "ce063978ac4665f34be537840a78a992ec5f1230"
+  },
+  "limitations": [
+    "Exploratory fixed comparison, not selection-corrected confirmation.",
+    "Paired seed blocks are shared across routes; condition rows are not all statistically independent.",
+    "Common initial seeds do not imply identical downstream RNG paths.",
+    "No RandomBuild, causal package, detector, retention or ceiling admission.",
+    "No product merge, independent final-candidate review or exact-SHA P9 receipt."
+  ],
+  "next": "Measure semantics-preserving runtime improvements, then mechanism interventions and route-matched controls. Do not choose content or declare six strategies from names alone."
+}
