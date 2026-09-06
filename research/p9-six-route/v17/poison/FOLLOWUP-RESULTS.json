@@ -1,0 +1,32 @@
+{
+  "status":"RAW_RECONCILED_EXPLORATORY_FOLLOWUP_NOT_P9",
+  "selection":"consumer_only, selected by the preregistered minimum-margin rule on the complete 512-row screen",
+  "followup_rows":1024,
+  "cells":16,
+  "runs_per_cell":64,
+  "seeds":[18020000,18020063],
+  "counts":{"win":725,"loss":299,"stall":0,"error":0},
+  "native_diagnostic_failures":0,
+  "route_order":["smolder","hand","ember","balanced_random"],
+  "vow_order":[0,5],
+  "wins_out_of_64":{
+    "control":[[52,48],[46,43],[52,31],[41,16]],
+    "consumer_only":[[53,52],[57,51],[62,54],[43,24]]
+  },
+  "selected_v0_descriptors":{
+    "smolder":{"poison_hp_fraction":0.698,"catalyst_acquired_runs":39},
+    "hand":{"poison_hp_fraction":0.668,"catalyst_acquired_runs":46},
+    "ember":{"poison_hp_fraction":0.715,"nova_hp_fraction":0.026,"catalyst_acquired_runs":53},
+    "balanced_random":{"poison_hp_fraction":0.534,"catalyst_acquired_runs":17}
+  },
+  "decision":"Do not promote stronger Catalyst as a six-route solution. It raises planned quality, but Vow0 RandomBuild43/64 remains above50%, and sampled top62/64 minus43/64 is29.6875pp. The nominal Ember controller gets about71.5% of health removal through poison and only2.6% through Nova; high win rates do not prove its claimed identity.",
+  "limitations":["Generic balanced RandomBuild is not the signed P9 arm.","New comparative seeds after a fixed exploratory selection are not final corrected confirmation.","Shared seed clusters and route results are dependent.","Damage/source fractions are descriptive, not isolated mechanism causality."],
+  "full_recovery_packet":{
+    "name":"glassvow-p9-v17-complete-recovery-r2.zip",
+    "bytes":12931478,
+    "sha256":"03417dfb56220f80a2a5b22a0b02aeb8067f79c704f793b09a8ff612092f6318",
+    "verified_files":1779,
+    "local_commit":"9197f329a0ee45f1427437dc2c253d6474318edd",
+    "scope":"All current source and eight complete audited studies. Active Banked Light screen excluded. ZIP delivered in chat, not claimed hosted in this repository."
+  }
+}
