@@ -26,6 +26,6 @@ func field(at: Vector2) -> Dictionary:
 		else:
 			# A continuous cut boundary leaves the stair approach open to the sky.
 			result["distance"] = maxf(distance,minf(1.1-lower_distance,(2.65-gap)*2.0))
-			bottom = minf(height-.08,lower_height+2.32)
+			bottom = lerpf(-1.8,height-.16,1.0-smoothstep(0.0,.55,lower_distance))
 	result["bottom"] = bottom
 	return result

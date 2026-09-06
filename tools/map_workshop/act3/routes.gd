@@ -31,6 +31,7 @@ func build(sample: Dictionary) -> void:
 	var body: SurfaceTool = SurfaceTool.new()
 	top.begin(Mesh.PRIMITIVE_TRIANGLES)
 	body.begin(Mesh.PRIMITIVE_TRIANGLES)
+	body.set_smooth_group(-1)
 	foundations.append(top,body)
 	for surface: SurfaceTool in [top,body]:
 		var mesh: ArrayMesh = M.finish(surface)
