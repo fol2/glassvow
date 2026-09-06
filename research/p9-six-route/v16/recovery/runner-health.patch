@@ -1,0 +1,61 @@
+--- a/lab_runner.gd
++++ b/lab_runner.gd
+@@ -1,4 +1,5 @@
+ extends SceneTree
++const HealthAccounting: GDScript=preload("res://health_accounting.gd")
+ const Policy: GDScript=preload("res://lab_policy.gd")
+ const RandomShop: GDScript=preload("res://random_shop_control.gd")
+ var policy: RefCounted
+@@ -10,6 +11,16 @@
+ var action_diagnostics: Array=[]
+ var mechanism: Dictionary={}
+ var fight_mechanism: Dictionary={}
++func observed_apply(g: GlassvowGame,command: Dictionary,source: String) -> Array[Dictionary]:
++ var before: Dictionary=HealthAccounting.snapshot(g.cb)
++ var events: Array[Dictionary]=g.apply(command)
++ var result: Dictionary=HealthAccounting.fold(before,events,HealthAccounting.snapshot(g.cb))
++ if not result.ok:push_error("LAB_HEALTH_ACCOUNT "+str(result.reason));return events
++ measure("actual_hp_removed:"+source,int(result.removed))
++ measure("actual_hp_removed_total",int(result.removed))
++ measure("poison_hp_removed",int(result.poison_removed))
++ measure("enemy_healing",int(result.healed))
++ return events
+ func measure(key: String,n: int=1) -> void:
+  bump(mechanism,key,n);bump(fight_mechanism,key,n)
+ func ji(v: Variant) -> int:return int(float(str(v)))
+@@ -82,7 +93,7 @@
+ func finish(g: GlassvowGame,seed: int,result: String) -> Dictionary:
+  var deck: Array=[]
+  for c: CardInst in g.run.player.deck:deck.append(String(c.id)+("+" if c.up else ""))
+- return {"kind":"row","seed":seed,"aspect":g.run.aspect,"vow":g.run.vow,"route":policy.route,"result":result,"act":g.run.act+1,"hp":g.run.player.hp,"max_hp":g.run.player.max_hp,"deck":deck,"relics":g.run.player.relics,"stats":g.run.stats,"played":played,"offered":offered,"picked":picked,"fights":fights,"action_diagnostics":action_diagnostics,"mechanism":mechanism}
++ return {"kind":"row","seed":seed,"aspect":g.run.aspect,"vow":g.run.vow,"route":policy.route,"random_build":policy.random_build,"random_play":policy.random_play,"result":result,"act":g.run.act+1,"hp":g.run.player.hp,"max_hp":g.run.player.max_hp,"deck":deck,"relics":g.run.player.relics,"stats":g.run.stats,"played":played,"offered":offered,"picked":picked,"fights":fights,"action_diagnostics":action_diagnostics,"mechanism":mechanism}
+ func fight(g: GlassvowGame,enemies: Array,kind: String) -> String:
+  fight_mechanism={}
+  g.apply({"t":"startCombat","enemies":enemies,"kind":kind})
+@@ -105,7 +116,7 @@
+     cast_str=ji(g.cb.player.statuses.get("str",0));cast_hand=maxi(0,g.cb.hand.size()-1);cast_embers=g.cb.embers
+     var target_v: Variant=action.get("target")
+     if target_v!=null:cast_poison=ji(g.cb.enemies[ji(target_v)].statuses.get("poison",0))
+-   var events: Array[Dictionary]=g.apply(action)
++   var events: Array[Dictionary]=observed_apply(g,action,cast_id if cast_id!="" else str(action["t"]))
+    if cast_id!="" and g.last_ret==true:
+     var hits: int=0;var damage: int=0;var shatters: int=0
+     for ev: Dictionary in events:
+@@ -132,7 +143,7 @@
+   if g.cb.over:break
+   if g.cb.turn>=30:
+    g.run.player.hp=maxi(0,g.cb.player.hp);break
+-  g.apply({"t":"endTurn"})
++  observed_apply(g,{"t":"endTurn"},"endTurn")
+  var result: String=g.cb.result if g.cb.over else "stall";var delta: Dictionary={}
+  for key: Variant in played:
+   var n: int=ji(played[key])-ji(before.get(key,0))
+@@ -153,7 +164,7 @@
+    target=living[0].idx
+    for e: EnemyCombatant in living:
+     if (id=="venom" and e.hp>g.cb.enemies[target].hp) or (id=="fire" and e.hp<g.cb.enemies[target].hp):target=e.idx
+-  g.apply({"t":"usePotion","slot":i,"target":target})
++  observed_apply(g,{"t":"usePotion","slot":i,"target":target},"potion:"+id)
+ func add_card(g: GlassvowGame,id: String,up: bool=false) -> void:
+  if id.is_empty():return
+  g.run.player.deck.append(CardInst.new(g.run.next_uid(),StringName(id),up));bump(picked,id)
