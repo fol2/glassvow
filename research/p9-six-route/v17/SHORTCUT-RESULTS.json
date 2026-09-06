@@ -1,0 +1,32 @@
+{
+  "status": "RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "rows": 1536,
+  "cells": 48,
+  "runs_per_cell": 32,
+  "counts": {"win": 946, "loss": 590, "stall": 0, "error": 0},
+  "native_diagnostic_failures": 0,
+  "freeze_sha256": "6c1ffc3fb8bd57c43416c8fb03c9430cbe8365039cc30da82cacec004155f881",
+  "audit_sha256": "8a2dfc3b2a452d4dcc288cdf0b27af8c7c663fd2132b944d0106f230f5f34aa5",
+  "seeds": [16021000,16021031],
+  "route_order": {"dusk":["facet","fervor","cycle","balanced_random"],"ash":["smolder","hand","ember","balanced_random"]},
+  "vow_order": [0,5],
+  "wins_out_of_32": {
+    "control":{"dusk":[[28,18],[28,17],[30,20],[18,10]],"ash":[[29,21],[27,16],[28,13],[19,7]]},
+    "lighter_finisher":{"dusk":[[23,13],[26,16],[29,22],[14,9]],"ash":[[29,23],[29,19],[27,16],[21,9]]},
+    "lighter_ashfall":{"ash":[[29,21],[22,11],[26,9],[18,6]]},
+    "both":{"ash":[[31,20],[24,13],[27,13],[18,4]]}
+  },
+  "dusk_ashfall_null_preflight": {"parsed_row_equal_pairs":16,"total_pairs":16},
+  "decision":"No P9 candidate selected. Lower Bellstrike reduced Dusk random wins but also harmed facet planned wins. Lower Ashfall reduced hand/Ember viability more than Smolder and barely changed Vow-0 random wins. Do not describe blanket generic weakening as established plurality.",
+  "next":"The separately frozen same-content off/on terminal-extension comparison follows; these completed rows are immutable.",
+  "limitations":["Exploratory nominal comparisons, not corrected confirmation.","Same seed indices are not identical downstream RNG.","Balanced RandomBuild screen is not the signed C2 arm.","Source-attributed health removal is descriptive, not isolated mediator causality."],
+  "complete_recovery_packet":{
+    "name":"glassvow-p9-v17-checkpoint-complete-studies.zip",
+    "sha256":"27990f89be3d76fbb59587a44b2f80f923182fb70f832f79fc9d747e97e216a8",
+    "bytes":5716130,
+    "verified_files":866,
+    "local_commit":"e6726fc8a53975da0928efd89c43074dc1c5986b",
+    "scope":"Full assembled source and raw completed shortcut smoke/screen plus terminal smoke. Running terminal comparison excluded. ZIP delivered in chat, not claimed to be stored in GitHub."
+  },
+  "not_established":["six whole-run causally admitted packages","signed C2","seven-direction detector","unrestricted retention","corrected confirmation","exact product integration"]
+}
