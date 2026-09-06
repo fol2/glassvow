@@ -1,0 +1,31 @@
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -971,7 +971,7 @@
+ 		"doubleBlock":
+ 			gain_block_player(cb, cb.player.block, false, run)
+ 		"phantom":
+-			hit_enemy(run, cb, target, _ji(fx["n"]) * cb.hand.size(), true, damage_mult)
++			hit_enemy(run, cb, target, _ji(fx["n"]) * maxi(0, cb.hand.size() - _ji(fx.get("reserve", 0))), true, damage_mult)
+ 		"devour":
+ 			hit_enemy(run, cb, target, _ji(fx["n"]), true, damage_mult)
+ 			if target.hp <= 0:
+@@ -988,7 +988,7 @@
+ 			var echo: int = 2 if target.staggered or _sget(target.statuses, "vulnerable") > 0 else 1
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) * echo, true, damage_mult)
+ 		"emberNova":
+-			hit_enemy(run, cb, target, _ji(fx["n"]) * cb.embers, true, damage_mult)
++			hit_enemy(run, cb, target, _ji(fx["n"]) * maxi(0, cb.embers - _ji(fx.get("reserve", 0))), true, damage_mult)
+ 		"pyreTithe":
+ 			for held: CardInst in cb.hand.duplicate():
+ 				cb.hand.erase(held)
+@@ -1355,6 +1355,10 @@
+ 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + bonus), "times": 1})
+ 			elif sid == "momentum":
+ 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + inst.bonus), "times": 1})
++			elif sid in ["phantom", "emberNova"] and fx.has("reserve"):
++				var stock: int = maxi(0, cb.hand.size() - 1) if sid == "phantom" else cb.embers
++				var raw_damage: int = _ji(fx["n"]) * maxi(0, stock - _ji(fx["reserve"]))
++				hits.append({"dmg": _preview_hit(p, target, raw_damage), "times": 1})
+ 			elif sid == "doubleBlock":
+ 				block += p.block
+ 	var fx_chips: int = 0
