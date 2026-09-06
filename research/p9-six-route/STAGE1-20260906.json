@@ -1,0 +1,24 @@
+{
+  "status": "RESEARCH_NOT_P9_CERTIFIED",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "local_source_commit": "12d32d3f0ca8de85cb143575baa403bb6b5d5ea4",
+  "source_publication": "The recovery note was published. The subsequent policy_v6.gd write was blocked by the connector safety check; the policy is preserved locally, not claimed remotely available.",
+  "v6_policy_sha256": "66560acbaf9c99b6bee3ec378085116a26e58e0269f9d392e954e35cd7c8d28d",
+  "native_tests": {"recovered_instrument_assertions": 7, "source_shaped_random_shop_assertions": 207, "new_decision_assertions": 6},
+  "smoke_rows": 192,
+  "stage1": {"cells": 80, "rows_per_cell": 24, "rows": 1920, "numeric_seeds": [3001000,3001023], "errors": 0, "stalls": 0},
+  "interpretation": "Predeclared discovery only. Seed pairing is by run index; downstream RNG consumption can differ. Generic balanced RandomBuild controls are screening controls, not the signed P9 arm or a substitute for route-matched confirmation.",
+  "route_order": {"dusk": ["facet","fervor","cycle","balanced_random"], "ash": ["smolder","hand","ember","balanced_random"]},
+  "wins_out_of_24_by_route_v0_v5": {
+    "reference": {"dusk": [[18,11],[16,9],[20,11],[11,3]], "ash": [[24,21],[24,21],[23,18],[16,12]]},
+    "synergy_only": {"dusk": [[21,18],[21,14],[20,14],[17,9]], "ash": [[24,19],[23,23],[22,19],[17,12]]},
+    "synergy_ash4": {"dusk": [[21,18],[21,14],[20,14],[17,9]], "ash": [[22,18],[23,21],[19,15],[13,4]]},
+    "synergy_ash3": {"dusk": [[21,18],[21,14],[20,14],[17,9]], "ash": [[22,19],[23,15],[21,14],[12,4]]},
+    "synergy_ash3_access": {"dusk": [[23,17],[24,16],[24,15],[15,9]], "ash": [[22,13],[22,15],[22,16],[12,6]]}
+  },
+  "decision": "No P9 candidate selected. Setup support improved planned play but cheap unconditional support also benefited RandomBuild. Next discovery tests weak-alone/strong-in-combination designs rather than further general buffs.",
+  "method_correction_for_next_design": "The first screening heuristic required a 35pp gap for every route. That is stricter than the signed C2 top-cell gap and is not P9 acceptance. Preserve this freeze; future designs must distinguish top-cell separation, per-package viability floor, and the original C1 four-cell requirement. Three named controllers do not prove four viable descriptor cells.",
+  "not_established": ["six causally admitted packages", "detector admission", "fresh optimisation retention", "protected exact-SHA P9", "product merge", "independent final-candidate review"]
+}
