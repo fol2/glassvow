@@ -1,0 +1,23 @@
+{
+  "status": "RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "cells": 64,
+  "runs_per_cell": 16,
+  "rows": 1024,
+  "wins": 659,
+  "losses": 365,
+  "errors": 0,
+  "stalls": 0,
+  "seeds": [16010000,16010015],
+  "freeze_sha256": "8a3307d4acaef8c576287d4ae82b0f44b481a9a8b5022e63ff2fca822892dada",
+  "route_order": {"dusk":["facet","fervor","cycle","balanced"],"ash":["smolder","hand","ember","balanced"]},
+  "vow_order": [0,5],
+  "wins_out_of_16": {
+    "available_reference":{"dusk":[[13,6],[14,7],[13,10],[11,3]],"ash":[[15,12],[13,11],[12,10],[13,10]]},
+    "available_conditional":{"dusk":[[12,9],[13,8],[15,13],[9,3]],"ash":[[15,13],[9,8],[14,9],[11,3]]},
+    "scarce_reference":{"dusk":[[12,9],[11,10],[13,10],[10,2]],"ash":[[13,10],[12,8],[12,8],[11,5]]},
+    "scarce_conditional":{"dusk":[[14,10],[13,8],[13,9],[10,3]],"ash":[[15,10],[12,11],[11,9],[9,9]]}
+  },
+  "scope": "All assigned rows reconciled against raw NDJSON, configuration, pre-row content identities and native diagnostics. Actual HP loss accounting checked. A balanced RandomBuild screen is not the signed acceptance arm. Rates and intervals are exploratory, not corrected confirmation; no selective early-loss exclusion.",
+  "not_established": ["six admitted strategies","signed C2","seven-direction detector","fresh unrestricted retention","corrected confirmation","product integration/P9 receipt"],
+  "decision": "No P9 candidate selected. Every recipe retains above-50-percent sampled Vow-0 balanced-RandomBuild rates. Continue to a separately frozen targeted generic-shortcut experiment, not an extension of these cohorts."
+}
