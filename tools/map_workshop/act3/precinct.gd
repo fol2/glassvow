@@ -6,6 +6,8 @@ const Stonework = preload("res://tools/map_workshop/act3/stonework.gd")
 var kit: Stonework = Stonework.new()
 var halo: Node3D
 var crystal: MeshInstance3D
+var manual_time: bool = false
+var elapsed: float = 0.0
 
 func build() -> void:
 	# The complete plinth carries the court; the centre is a deliberate recess.
@@ -84,3 +86,8 @@ func _halo() -> void:
 func set_capture_time(seconds: float) -> void:
 	halo.rotation.y = seconds*.065
 	crystal.position.y = 2.75+sin(seconds*.7)*.09
+
+func _process(delta: float) -> void:
+	if not manual_time and is_instance_valid(halo):
+		elapsed += delta
+		set_capture_time(elapsed)

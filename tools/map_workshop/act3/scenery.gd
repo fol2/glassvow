@@ -47,14 +47,20 @@ func build(routes: Node3D,ground: Node3D) -> void:
 		M.box(group,Vector3(0,-1.5,0),Vector3(7,3.88,5),kit.stone,"IntactCeremonialPlatform")
 		if ordinal%3==0:
 			# One complete empty portal, with a heavy continuous lintel.
-			kit.arch(group,Vector3(0,.44,0),3.8,5.8,.8)
+			kit.arch(group,Vector3(0,.44,1.95),3.8,5.8,.8)
 			for side: int in [-1,1]:
-				kit.pier(group,Vector3(side*2.6,.44,0),1.05,6.1)
+				kit.pier(group,Vector3(side*2.6,.44,1.55),1.05,6.1)
+				M.box(group,Vector3(side*2.48,3.1,1.60),Vector3(.65,5.3,.50),kit.stone,"CompleteEntranceWing")
+				M.box(group,Vector3(side*2.85,3.1,-.15),Vector3(.6,5.3,3.8),kit.stone,"CompletePavilionSide")
+			kit.arch(group,Vector3(0,.44,-1.8),3.8,5.8,.65)
+			kit.roof(group,Vector3(0,6.0,-.15),6.5,4.2,2.5)
 		elif ordinal%3==1:
 			# A short intact gallery, not a broken length of wall.
 			for side: int in [-1,1]:
 				kit.arch(group,Vector3(side*1.65,.44,0),2.4,3.6,.6)
-			M.box(group,Vector3(0,4.28,0),Vector3(6.7,.4,1.3),kit.stone,"CompleteGalleryCoping")
+			M.box(group,Vector3(0,2.25,-1.6),Vector3(6.7,3.6,.4),kit.stone,"CompleteGalleryRear")
+			M.box(group,Vector3(0,4.28,-.65),Vector3(6.7,.4,2.8),kit.stone,"CompleteGalleryCoping")
+			kit.roof(group,Vector3(0,4.48,-.65),6.7,3.0,1.5)
 		else:
 			# An empty raised dais retains generous quiet space.
 			for step: int in range(3):

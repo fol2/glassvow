@@ -311,8 +311,8 @@ active product contract rather than hiding it in implementation.
 ## Next action
 
 **Active objective: Act III Step 3. Act II Step 3 is approved.** Build the intact obsidian court from the approved Act III v5 concept and actual generated routes.
-Inspect architecture, quiet slabs, jade light, blue glass, waterlines, supported
-causeways, scale and reference screen shapes before presenting the chapter page.
+Inspect intact architecture, quiet black-violet slabs, concentrated magenta light, supported
+approaches, scale and reference screen shapes before presenting the chapter page.
 Wait for Act III owner approval before proceeding to Act IV. All four
 chapters must pass Step 3 before the saved Step 4 work resumes.
 

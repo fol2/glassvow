@@ -21,3 +21,9 @@ Failed intermediate candidates remain recorded. Raising the landform exposed a d
 The exterior gallery is continuous; the main hall uses a complete faceted vault and Gothic tracery, and its stair now rises from the recessed court on solid treads. Composition remains under development, especially nearby journey scenery and material/shape refinement. Halo animation, tablet proof, a complete final capture set, independent final-candidate review and the owner review page are still outstanding. No Step 3 completion or owner approval is claimed.
 
 Next: inspect the native trial, refine the silhouette and terrain, verify actual route and staircase clearance, then publish a fresh complete review set. Act IV follows owner approval of Act III. Step 4 remains parked until all four acts pass Step 3.
+
+## Current candidate work
+
+The later `journey-v11` set adds native halo animation, tablet proof, warmed host rendering measurements and a working Tailnet page. Its six-second film has been played in the browser. The page remains labelled **Internal review**.
+
+`pavilions-v12` passed its phone geometry/input checks and supplied a scenery close-up. Inspection found the entry arch recessed behind the new pavilion frontage. The next source candidate moves that arch to the actual entrance and closes the small side gaps. A fresh coherent capture set is required before final independent review or owner presentation. Existing receipt files are historical observations of their recorded source hashes, not approval of later source edits.

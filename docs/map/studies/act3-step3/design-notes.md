@@ -20,3 +20,11 @@ The whole route network is still too close to a road diagram on a rectangular sl
 - Maintain combat alignment: near-black violet broad planes, controlled edge contrast, magenta concentrated at focal glass and the halo. The map must remain legible without a pale purple daylight wash.
 
 Capture each coherent candidate under a new prefix with hashes of all study source, profile and fixture. A partial or failed capture receipt is not a review-ready candidate.
+
+## Native review expansion
+
+`journey-v11` passed both phone and tablet input and geometry checks. It also produced a six-second, 180-frame native halo film; the Tailnet page was opened in the in-app browser, its phone image switch resolved to 844 × 390 pixels, and actual film playback was inspected using the native video controls. A warmed phone-shaped render sample recorded 120 frames in 1.049076 seconds, 469 draw calls and 6,365,642 reported primitives on the current Mac. This is a host observation, not mobile hardware qualification.
+
+The page remains an internal candidate. Side-by-side inspection against the approved concept still showed the scattered architectural groups as isolated openings. The next `pavilions-v12` trial adds complete roofs and side/rear walls to those groups and a dedicated scenery close-up. Its source has changed from `journey-v11`, so the older capture receipts do not qualify these additions. Do not request owner approval until the new forms and clearances have been inspected.
+
+Next: wait for the existing `pavilions-v12` capture process, inspect its scenery image and phone geometry/input receipt, then decide whether the candidate is ready for a coherent final capture set and the required independent review. No Act IV or Step 4 work is authorised by these internal captures.

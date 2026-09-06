@@ -8,8 +8,9 @@ import time
 
 ROOT = Path(__file__).resolve().parents[3]
 DEST = ROOT / 'docs/map/studies/act3-step3'
-VIEWS = {'court': ['--clean'], 'whole': ['--whole'],
-         'phone': ['--phone', '--journey', '--exercise']}
+VIEWS = {'scenery': ['--scenery', '--clean'], 'court': ['--clean'], 'whole': ['--whole'],
+         'phone': ['--phone', '--journey', '--exercise'],
+         'pad': ['--pad', '--journey', '--exercise']}
 
 
 def source_identity():
@@ -41,7 +42,7 @@ def capture(prefix, views):
             raise RuntimeError(f'Native {view} capture failed')
         if source_identity() != source:
             raise RuntimeError('Study source changed during capture; discard this candidate')
-        if view == 'phone':
+        if view in ('phone', 'pad'):
             geometry = json.loads(image.with_name(image.stem + '-geometry.json').read_text())
             assert geometry['nodes'] == 65 and geometry['edges'] == 76
             assert geometry['rendered_deck']['missing'] == 0

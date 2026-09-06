@@ -12,9 +12,16 @@ func _run() -> void:
 	var exercise: bool = false
 	var journey: bool = false
 	var clean: bool = false
+	var pad: bool = false
+	var scenery_view: bool = false
+	var frames_directory: String = ""
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")
+		if arg.begins_with("--frames="):
+			frames_directory = arg.trim_prefix("--frames=")
+		pad = pad or arg=="--pad"
+		scenery_view = scenery_view or arg=="--scenery"
 		whole = whole or arg=="--whole"
 		phone = phone or arg=="--phone"
 		inspection = inspection or arg=="--inspect"
@@ -22,6 +29,8 @@ func _run() -> void:
 		journey = journey or arg=="--journey"
 		clean = clean or arg=="--clean"
 	root.size = Vector2i(844,390) if phone else Vector2i(1458,820)
+	if pad:
+		root.size = Vector2i(1180,820)
 	DisplayServer.window_set_size(root.size)
 	root.content_scale_size = root.size
 	root.msaa_3d = Viewport.MSAA_4X
@@ -69,6 +78,7 @@ func _run() -> void:
 	var palace: Node3D = preload("res://tools/map_workshop/act3/precinct.gd").new()
 	world.add_child(palace)
 	palace.build()
+	palace.manual_time = not frames_directory.is_empty()
 	var site: Dictionary = routes.ruin_plan.sites[0]
 	palace.position = site["centre"]
 	palace.rotation.y = site["yaw"]
@@ -100,6 +110,12 @@ func _run() -> void:
 			inspector.focus_journey()
 		else:
 			inspector.focus_library()
+	if scenery_view and not scenery.placed.is_empty():
+		var place: Vector2 = scenery.placed[0]["at"]
+		var at: Vector3 = ground._point(place.x,place.y)+Vector3.UP*3
+		camera.position = at+Vector3(16,24,22)
+		camera.look_at(at)
+		camera.size = 27
 	if clean and is_instance_valid(inspector):
 		inspector.visible = false
 		camera.size *= .80
@@ -115,8 +131,21 @@ func _run() -> void:
 			var inputs: Dictionary = await inspector.exercise()
 			var input_file: FileAccess = FileAccess.open(output.get_basename()+"-input.json",FileAccess.WRITE)
 			input_file.store_string(JSON.stringify(inputs,"  ")+"\n")
-	for frame: int in range(40):
+	var started: int = Time.get_ticks_usec()
+	for frame: int in range(120):
 		await process_frame
+	print("ACT_III_RENDER_SAMPLE ",JSON.stringify({"frames":120,"seconds":(Time.get_ticks_usec()-started)/1000000.0,"draw_calls":Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),"primitives":Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),"scope":"Native host, warmed steady scene; not target-device qualification"}))
+	if not frames_directory.is_empty():
+		DirAccess.make_dir_recursive_absolute(frames_directory)
+		for frame: int in range(180):
+			palace.set_capture_time(frame/30.0)
+			await process_frame
+			await RenderingServer.frame_post_draw
+			var frame_error: Error = root.get_texture().get_image().save_png(frames_directory.path_join("%04d.png" % frame))
+			if frame_error!=OK:
+				push_error("Could not save halo frame")
+				quit(1)
+				return
 	await RenderingServer.frame_post_draw
 	if not output.is_empty():
 		var result: Error = root.get_texture().get_image().save_png(output)

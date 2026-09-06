@@ -29,4 +29,25 @@ func build(ground: Node3D) -> void:
 			if bays%4==0:
 				kit.arch(group,Vector3(-width*.5,.65,.40),.4,3.5,.12,true)
 			bays += 1
+	_near_boundary(ground,kit)
 	print("ACT_III_ENCLOSURE bays=",bays)
+
+func _near_boundary(ground: Node3D,kit: Kit) -> void:
+	var hull: PackedVector2Array = ground.footprint
+	for i: int in range(hull.size()):
+		var a: Vector2 = hull[i]
+		var b: Vector2 = hull[(i+1)%hull.size()]
+		if minf(a.y,b.y)<18 or a.distance_to(b)<8:
+			continue
+		var count: int = maxi(1,floori(a.distance_to(b)/13))
+		for j: int in range(count):
+			var point: Vector2 = a.lerp(b,(j+.5)/count)
+			point.y -= 2.0
+			var at: Vector3 = ground._point(point.x,point.y)
+			var group: Node3D = Node3D.new()
+			add_child(group)
+			group.position = at
+			# Low, broad guards establish the near edge without a wall across the view.
+			M.box(group,Vector3(0,-.4,0),Vector3(2.2,1.1,2.2),kit.stone,"BoundaryGuardFoot")
+			kit.pier(group,Vector3(0,.15,0),1.2,3.7)
+			kit.arch(group,Vector3(0,.55,.62),.6,2.6,.12,true)
