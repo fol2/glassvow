@@ -1,0 +1,34 @@
+{
+  "status": "RAW_RECONCILED_NOT_P9",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "local_source_commit": "f7868db3218c3f28c46718b2a900615c6834eff4",
+  "cells": 64,
+  "rows_per_cell": 32,
+  "rows": 2048,
+  "wins": 1111,
+  "losses": 937,
+  "stalls": 0,
+  "errors": 0,
+  "native_diagnostics": 0,
+  "seeds": [11010000,11010031],
+  "freeze_sha256": "44f262ef891e02c4b8109e51e1cb6fa9325e7226d4c2bc032661c5ed3b38c622",
+  "route_order": {"dusk":["facet","fervor","cycle","balanced_random"],"ash":["smolder","hand","ember","balanced_random"]},
+  "wins_out_of_32_v0_v5": {
+    "finite_access":{"dusk":[[23,13],[23,11],[18,12],[11,2]],"ash":[[29,27],[30,19],[31,20],[22,16]]},
+    "combo3":{"dusk":[[24,13],[24,13],[14,9],[16,3]],"ash":[[24,20],[25,16],[22,12],[16,8]]},
+    "reserve3":{"dusk":[[24,12],[24,13],[15,10],[15,4]],"ash":[[24,20],[27,16],[22,12],[18,11]]},
+    "reserve4_access":{"dusk":[[22,14],[24,12],[18,12],[14,5]],"ash":[[32,20],[28,13],[26,12],[23,3]]}
+  },
+  "interpretation": "Exploratory screen on distinct assigned research seeds. No content is selected as P9-passing. Balanced RandomBuild is not the signed acceptance arm. The original four-cell descriptor requirement is not inferred from three policy names. Same seed indices are not identical downstream RNG paths.",
+  "trace_findings": {
+    "reserve4_access_dusk_cycle_v0": {"mean_grown_momentum_casts":14.625,"mean_momentum_casts":36.625,"momentum_acquisitions_total":67,"flurry_acquisitions_total":0},
+    "reserve4_access_dusk_fervor_v0": {"empower_acquisitions_total":68,"flurry_acquisitions_total":82,"momentum_acquisitions_total":7},
+    "reserve4_access_ash_ember_v5": {"nova_acquisitions_total":30,"mean_nova_casts":1.25,"mean_nova_embers_sum":9.21875,"losses_to_sovereign":11}
+  },
+  "next_predeclared_question": "On fixed reserve4_access, compare cycle horizons 4/6/8 and limited fit variants; compare held-Ember spending discounts 0/.35/.65/1. Twenty cells of 32 seeds 11020000..11020031. This tests controller hypotheses, not free content retuning or confirmation.",
+  "complete_chat_backup": {"name":"glassvow-p9-r11-phase1-complete.zip","bytes":3790003,"sha256":"c90f6163fe136d468ccdebbcc30ae6f03f359d80108116060ec76ed07b17a184","contains":"full native research project, restored dependencies, patches, source tests, raw rows, configs, logs, receipts, verifier and source hashes; engine excluded"},
+  "remote_boundary": "The policy delta and this summary are published. The complete raw/source ZIP is a delivered chat artifact, not claimed stored as GitHub bytes.",
+  "remaining": ["six causally admitted viable reachable packages on one candidate","detector admission","untouched corrected confirmation","fresh unrestricted retention and ceilings","all guardrails","lifecycle implementation","independent review and exact-SHA integration receipt"]
+}
