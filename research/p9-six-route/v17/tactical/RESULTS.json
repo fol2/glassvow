@@ -1,0 +1,32 @@
+{
+  "status":"RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "rows":768,
+  "cells":48,
+  "runs_per_cell":16,
+  "counts":{"win":429,"loss":339,"stall":0,"error":0},
+  "native_diagnostic_failures":0,
+  "freeze_sha256":"20bd084a0ec7a44744de4e0a69ddb63591145598a01d2c99bb609a310692fc3e",
+  "seeds":[17010000,17010015],
+  "baseline_extended_wins_out_of_16":{
+    "dusk_facet_v0_planned":[13,15],"dusk_facet_v0_random":[10,9],
+    "dusk_facet_v5_planned":[9,7],"dusk_facet_v5_random":[2,5],
+    "dusk_fervor_v0_planned":[12,14],"dusk_fervor_v0_random":[10,12],
+    "dusk_fervor_v5_planned":[8,8],"dusk_fervor_v5_random":[4,1],
+    "dusk_cycle_v0_planned":[15,14],"dusk_cycle_v0_random":[9,8],
+    "dusk_cycle_v5_planned":[9,10],"dusk_cycle_v5_random":[2,2],
+    "ash_smolder_v0_planned":[15,14],"ash_smolder_v0_random":[11,8],
+    "ash_smolder_v5_planned":[14,9],"ash_smolder_v5_random":[4,8],
+    "ash_hand_v0_planned":[13,9],"ash_hand_v0_random":[9,6],
+    "ash_hand_v5_planned":[10,9],"ash_hand_v5_random":[6,6],
+    "ash_ember_v0_planned":[11,12],"ash_ember_v0_random":[9,7],
+    "ash_ember_v5_planned":[11,10],"ash_ember_v5_random":[5,5]
+  },
+  "aggregate_descriptive":{
+    "planned":{"runs_per_arm":192,"baseline_wins":140,"extended_wins":131,"mean_change":-0.046875,"seed_cluster_bootstrap_nominal95":[-0.15625,0.057291666666666664]},
+    "random":{"runs_per_arm":192,"baseline_wins":81,"extended_wins":77,"mean_change":-0.020833333333333332,"seed_cluster_bootstrap_nominal95":[-0.125,0.08333333333333333]},
+    "shared_seed_clusters":16,
+    "summed_native_elapsed_ratio":1.1092689581655426
+  },
+  "decision":"Leave optional terminal extension disabled by default. A native horizon witness was repaired, but this small whole-run comparison establishes no portfolio benefit. The separate native-persistent-health correctness repair is not selected from these outcomes.",
+  "limitations":["Nominal exploration with 16 shared seed clusters, not 768 independent trials.","Cost measured during concurrent interleaved execution, not isolated benchmarking.","Route-matched RandomBuild controls here do not themselves replace signed acceptance arms.","No causal package/detector/retention/ceiling/integration certification."]
+}
