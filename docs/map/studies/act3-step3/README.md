@@ -1,4 +1,4 @@
-# Act III — Step 3, in progress
+# Act III — Step 3, awaiting owner review
 
 Act II Step 3 was approved by the owner. Shared technology and the approved study were preserved at `a671aed6a2d00f4eafea0f335f197c7f8598bcc1`; see [the reuse guide](../../workshop-reuse.md).
 
@@ -18,7 +18,9 @@ The coherent set includes scenery, court, whole journey, phone and tablet views,
 
 Bounded checks passed: 28,658 covered deck samples, 20,470 rail/pier body samples without obstruction, 28,658 terrain samples without body hits, and 12,282 conservative architectural body samples without hits across 2,347 meshes. Supplemental checks cover 609 crossing-width samples with 2.3596 m minimum headroom, 2,153 bridgehead overlap samples with effectively zero separation, and 20,322 actual terrain/tread comparisons with no intersections. Native input passes at 844 × 390 and 1180 × 820.
 
-The Tailnet page now presents only `candidate-v14` media and remains labelled **Internal review** pending the final independent candidate review. James's chapter approval is still outstanding. This is a seed-717 native asset/composition study, not campaign integration, an all-seed guarantee or target-device performance qualification. Act IV follows owner approval; Step 4 remains parked until all four chapters pass Step 3.
+The Tailnet page presents only `candidate-v14` media and is labelled **Awaiting your review**. The independent final-candidate review returned **APPROVE** at exact head `133388a5749dd7ff77a78c5047d0fe8620b8291f`, with no blocking findings. The reviewer independently inspected all five native images, verified all 120 source hashes and media hashes, confirmed boss ownership and geometry receipts, and watched the six-second film complete through Tailnet. The only subsequent changes record that verdict and update review status; runtime and media remain unchanged.
+
+The reviewer noted that phone/tablet input evidence uses desktop mouse events at reference viewport sizes: it does not establish physical touch gestures or mobile-device performance. James's chapter approval is still outstanding. This is a seed-717 native asset/composition study, not campaign integration, an all-seed guarantee or target-device performance qualification. Act IV follows owner approval; Step 4 remains parked until all four chapters pass Step 3.
 
 ## Earlier trials and retained evidence
 
