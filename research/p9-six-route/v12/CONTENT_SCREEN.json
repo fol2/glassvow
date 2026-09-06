@@ -1,0 +1,23 @@
+{
+  "status":"RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "product_reference":"2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "engine":"4.7.2.stable.official.ed1daf0bf",
+  "seeds":[11030000,11030031],"cells":128,"rows_per_cell":32,"rows":4096,
+  "wins":2254,"losses":1842,"stalls":0,"errors":0,
+  "freeze_sha256":"bbb411ed75e610a381e92a6c6febdbfbff616577d991f32d7297636ad735d293",
+  "route_order":{"dusk":["facet","fervor","cycle","balanced_random"],"ash":["smolder","hand","ember","balanced_random"]},
+  "wins_out_of_32_v0_v5":{
+    "base":{"dusk":[[24,18],[22,9],[26,10],[14,2]],"ash":[[26,23],[25,14],[22,12],[21,11]]},
+    "nova1":{"dusk":[[24,18],[22,9],[26,10],[15,2]],"ash":[[26,23],[25,14],[23,17],[20,10]]},
+    "payoff":{"dusk":[[24,18],[22,9],[24,10],[14,2]],"ash":[[27,23],[26,16],[24,17],[20,10]]},
+    "payoff_ash3":{"dusk":[[24,18],[22,9],[24,10],[14,2]],"ash":[[25,20],[25,21],[22,9],[12,7]]},
+    "payoff_dusk1":{"dusk":[[23,12],[22,16],[29,17],[19,5]],"ash":[[27,23],[26,16],[24,17],[20,10]]},
+    "payoff_both":{"dusk":[[23,12],[22,16],[29,17],[19,5]],"ash":[[25,20],[25,21],[22,9],[12,7]]},
+    "payoff_core1":{"dusk":[[24,18],[22,9],[24,10],[14,2]],"ash":[[23,14],[27,17],[19,17],[18,6]]},
+    "payoff_both_core1":{"dusk":[[23,12],[22,16],[29,17],[19,5]],"ash":[[29,19],[24,14],[22,13],[17,6]]}
+  },
+  "interpretation":"No content is selected as P9-passing. Nova cost reduction improved the sampled Ember V5 result. The starter-cost change helped sampled Fervor/cycle while harming facet V5 and raising Dusk V0 RandomBuild, so it is not a general solution. These small frozen discovery cohorts guide next falsifying tests, not corrected confirmation. No selective omission of early losses.",
+  "backup":{"filename":"glassvow-p9-r12-content-and-controller-complete.zip","bytes":7739904,"sha256":"1b178f02b5037a7bb28f502c9f312ea763289f79a6cf8f420d7ab34080f66777","location":"Delivered chat artifact, not GitHub blob","contains":"693 native source/study/evidence files plus per-file SHA256 manifest; controller screen and targeted content raw rows, configs, logs and receipts; engine excluded"},
+  "next":"Diagnose native action-order competence and cross-route dependence rather than add another blind scalar buff. Keep fixed content and separately register any controller comparison before rows.",
+  "not_established":["six admitted packages on one content","seven-direction detector","corrected untouched confirmation","unrestricted optimisation retention/ceiling","signed C2","lifecycle","reviewed product integration and exact-SHA P9"]
+}
