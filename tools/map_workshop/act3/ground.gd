@@ -1,5 +1,5 @@
 extends Node3D
-## One broad obsidian terrace with actual lowered passages around the generated routes.
+## Continuous court foundations, with recessed passages at route crossings.
 const M = preload("res://tools/map_workshop/mesh_tools.gd")
 var samples: Dictionary = {}
 var footprint: PackedVector2Array = []
@@ -18,9 +18,13 @@ func build(causeways: Node3D) -> void:
 			if not samples.has(cell):
 				samples[cell] = []
 			samples[cell].append(p)
-	# Decorative palace arrivals also grade the land; they do not expand its footprint.
+	# The royal approach belongs to the same solid precinct, rather than a bridge to an island.
 	for line: PackedVector3Array in causeways.ruin_links.values():
 		for p: Vector3 in line:
+			low = low.min(Vector2(p.x,p.z))
+			high = high.max(Vector2(p.x,p.z))
+			for offset: Vector2 in [Vector2(-3,-3),Vector2(3,-3),Vector2(3,3),Vector2(-3,3)]:
+				outline_points.append(Vector2(p.x,p.z)+offset)
 			var cell: Vector2i = Vector2i(floori(p.x/6),floori(p.z/6))
 			if not samples.has(cell):
 				samples[cell] = []
@@ -63,14 +67,14 @@ func build(causeways: Node3D) -> void:
 	M.node(self,M.finish(surface),preload("res://tools/map_workshop/act3/materials.gd").obsidian(Color("191521"),.045),"ContinuousFacetedPrecinct")
 
 func _point(x: float,z: float) -> Vector3:
-	var height: float = 6.2
+	var height: float = 4.52
 	var cell: Vector2i = Vector2i(floori(x/6),floori(z/6))
 	for dx: int in range(-1,2):
 		for dz: int in range(-1,2):
 			for p: Vector3 in samples.get(cell+Vector2i(dx,dz),[]):
 				var distance: float = Vector2(x-p.x,z-p.z).length()
 				if distance<5.5:
-					height = minf(height,p.y-.28+maxf(0,distance-2.2)*.65)
+					height = minf(height,p.y-.28+maxf(0,distance-2.2)*.9)
 	return Vector3(x,height,z)
 
 func _wall(surface: SurfaceTool,a: Vector3,b: Vector3) -> void:

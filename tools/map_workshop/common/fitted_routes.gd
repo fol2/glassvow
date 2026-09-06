@@ -159,7 +159,7 @@ func build(sample: Dictionary) -> void:
 	for site: Dictionary in ruin_plan.sites:
 		edge_style["openings"].append(site["door"])
 	for i: int in range(fields.size()):
-		decoration_meshes.append_array(preload("res://tools/map_workshop/stone_bridge/edges.gd").new().build(self,deck_meshes[i],fields[i],fields,stone,trim,edge_style))
+		_build_edges(i,trim,edge_style)
 	for i: int in range(fields.size()):
 		var steps: ArrayMesh = preload("res://tools/map_workshop/stone_bridge/stairs.gd").new().build(self,fields[i],trim,{"openings":stair_exclusions,"tread_width":bridge_style["tread_width"]})
 		if steps!=null:
@@ -169,8 +169,14 @@ func build(sample: Dictionary) -> void:
 			combined.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,deck_meshes[i].surface_get_arrays(0))
 			combined.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,steps.surface_get_arrays(0))
 			deck_meshes[i] = combined
-	decoration_meshes.append_array(preload("res://tools/map_workshop/stone_bridge/piers.gd").build(self,fields,stone,trim,edge_style))
+	_build_piers(trim,edge_style)
 	print("FITTED_ROUTE_ASSEMBLY nodes=",anchors.size()," edges=",sampled_routes.size()," layers=",fields.size())
 
 func _soffit(height: float,s: float,total: float,raised: bool) -> float:
 	return preload("res://tools/map_workshop/stone_bridge/profile.gd").soffit(height,s,total,raised,bridge_style)
+
+func _build_edges(index: int,trim: Material,settings: Dictionary) -> void:
+	decoration_meshes.append_array(preload("res://tools/map_workshop/stone_bridge/edges.gd").new().build(self,deck_meshes[index],fields[index],fields,stone,trim,settings))
+
+func _build_piers(trim: Material,settings: Dictionary) -> void:
+	decoration_meshes.append_array(preload("res://tools/map_workshop/stone_bridge/piers.gd").build(self,fields,stone,trim,settings))

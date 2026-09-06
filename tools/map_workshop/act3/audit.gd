@@ -10,4 +10,6 @@ static func measure(routes: Node3D,sample: Dictionary) -> Dictionary:
 		"destination_owner":routes.ruin_plan.sites[0]["node"],
 		"scope":"Seed 717 native rendered routes; architectural and terrain clearance require separate proof"
 	}
+	# Retain the receipt key for shared tooling; the obstacle geometry is chapter-specific.
+	result["bridge_walkway"]["scope"] = "Actual solid terrace triangles over rendered treads; five lateral samples across a 1.5 m corridor, 2.12 m body height."
 	return result

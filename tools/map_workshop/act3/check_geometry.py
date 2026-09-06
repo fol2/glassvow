@@ -12,7 +12,7 @@ func _initialize() -> void:
 	_run.call_deferred()
 func _run() -> void:
 	var sample: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/studies/camera-composition/act3-seed717.json"))
-	var routes: Node3D = preload("res://tools/map_workshop/common/fitted_routes.gd").new()
+	var routes: Node3D = preload("res://tools/map_workshop/act3/routes.gd").new()
 	routes.levels = preload("res://tools/map_workshop/common/terrace_levels.gd").new()
 	routes.ruin_plan = preload("res://tools/map_workshop/act3/destination.gd").new()
 	routes.bridge_style = preload("res://tools/map_workshop/stone_bridge/presets.gd").drowned_city()
@@ -64,7 +64,7 @@ func _run() -> void:
 						hits += 1
 						if examples.size()<12:
 							examples.append({"edge":key,"at":[at.x,at.y],"terrain":height,"deck":floor_height})
-	var result: Dictionary = {"crossings":preload("res://tools/map_workshop/act2/audit.gd")._width(routes),"joints":preload("res://tools/map_workshop/act2/audit.gd")._joints(routes),"terrain_vs_treads":{"samples":tested,"hits":hits,"maximum_terrain_above_deck":worst,"examples":examples}}
+	var result: Dictionary = {"court_structure":preload("res://tools/map_workshop/act2/bridge_walkway_audit.gd").measure(routes),"crossings":preload("res://tools/map_workshop/act2/audit.gd")._width(routes),"joints":preload("res://tools/map_workshop/act2/audit.gd")._joints(routes),"terrain_vs_treads":{"samples":tested,"hits":hits,"maximum_terrain_above_deck":worst,"examples":examples}}
 	print("ACT_III_SUPPLEMENTAL_GEOMETRY ",JSON.stringify(result))
 	quit()
 '''
@@ -87,6 +87,7 @@ def check(prefix):
     assert len(lines) == 1
     result = json.loads(lines[0])
     (dest / f'{prefix}-supplemental.json').write_text(json.dumps(result, indent=2)+'\n')
+    assert result['court_structure']['decoration_hits'] == 0, result['court_structure']
     assert result['crossings']['sample_count'] > 0 and not result['crossings']['failures']
     assert result['joints']['maximum_surface_separation'] < .001
     assert result['terrain_vs_treads']['samples'] > 0 and result['terrain_vs_treads']['hits'] == 0

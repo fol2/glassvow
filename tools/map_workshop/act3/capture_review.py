@@ -8,7 +8,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[3]
 DEST = ROOT / 'docs/map/studies/act3-step3'
-VIEWS = {'scenery': ['--scenery', '--clean'], 'court': ['--clean'], 'whole': ['--whole'],
+VIEWS = {'passage': ['--passage', '--clean'], 'scenery': ['--scenery', '--clean'], 'court': ['--clean'], 'whole': ['--whole'],
          'phone': ['--phone', '--journey', '--exercise'],
          'pad': ['--pad', '--journey', '--exercise']}
 

@@ -14,6 +14,7 @@ func _run() -> void:
 	var clean: bool = false
 	var pad: bool = false
 	var scenery_view: bool = false
+	var passage_view: bool = false
 	var frames_directory: String = ""
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--output="):
@@ -22,6 +23,7 @@ func _run() -> void:
 			frames_directory = arg.trim_prefix("--frames=")
 		pad = pad or arg=="--pad"
 		scenery_view = scenery_view or arg=="--scenery"
+		passage_view = passage_view or arg=="--passage"
 		whole = whole or arg=="--whole"
 		phone = phone or arg=="--phone"
 		inspection = inspection or arg=="--inspect"
@@ -53,7 +55,7 @@ func _run() -> void:
 	sun.shadow_enabled = true
 	sun.directional_shadow_max_distance = 160
 	var sample: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/studies/camera-composition/act3-seed717.json"))
-	var routes: Node3D = preload("res://tools/map_workshop/common/fitted_routes.gd").new()
+	var routes: Node3D = preload("res://tools/map_workshop/act3/routes.gd").new()
 	routes.levels = preload("res://tools/map_workshop/common/terrace_levels.gd").new()
 	routes.ruin_plan = preload("res://tools/map_workshop/act3/destination.gd").new()
 	routes.bridge_style = preload("res://tools/map_workshop/stone_bridge/presets.gd").drowned_city()
@@ -116,6 +118,15 @@ func _run() -> void:
 		camera.position = at+Vector3(16,24,22)
 		camera.look_at(at)
 		camera.size = 27
+	if passage_view:
+		var cut: Dictionary = routes.levels.cuts[1]
+		var at: Vector2 = cut["at"]
+		var direction: Vector2 = cut["direction"]
+		var side: Vector2 = Vector2(-direction.y,direction.x)
+		var focus: Vector3 = Vector3(at.x,3.4,at.y)
+		camera.position = focus+Vector3(-direction.x*20+side.x*13,19,-direction.y*20+side.y*13)
+		camera.look_at(focus)
+		camera.size = 25
 	if clean and is_instance_valid(inspector):
 		inspector.visible = false
 		camera.size *= .80
