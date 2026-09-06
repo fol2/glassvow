@@ -1,0 +1,17 @@
+--- a/lab_policy.gd
++++ b/lab_policy.gd
+@@ -50,11 +50,13 @@
+  var samples: int=clampi(ji(params.get("rollout_samples",2)),1,4)
+  var steps: int=clampi(ji(params.get("rollout_steps",16)),1,32)
+  var best: Dictionary={};var value: float=-INF;last_alternatives=[]
++ var driver: RefCounted=Greedy.new();driver.route=route;driver.params=params.duplicate()
+  for action: Dictionary in candidates:
+   var total: float=0
+   for s: int in range(samples):
+    var model: GlassvowGame=Cloner.clone_public(g,s)
+-   var driver: RefCounted=Greedy.new();driver.route=route;driver.params=params.duplicate()
++   # Reset action memory exactly as a fresh driver; retain only pure feature memoization.
++   driver._turn_key="";driver._draw_seen.clear();driver.repeat_draw_avoided=0
+    model.apply(action);rollout_count+=1
+    if action.t!="endTurn":
+     for j: int in range(steps):
