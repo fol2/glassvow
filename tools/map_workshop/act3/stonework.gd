@@ -29,7 +29,7 @@ func arch(parent: Node3D,at: Vector3,width: float,height: float,depth: float,gla
 		var last: Vector3 = Vector3(side*half,spring,0)
 		for i: int in range(1,9):
 			var t: float = i/8.0
-			var next: Vector3 = Vector3(side*half*(1-t),spring+(height-spring)*sin(t*PI*.5),0)
+			var next: Vector3 = Vector3(side*half*(1-t),spring+(height-spring)*sin(t*PI*.35)/sin(PI*.35),0)
 			_beam(root,last,next,.32,depth,trim)
 			last = next
 	if glazed:
@@ -38,10 +38,10 @@ func arch(parent: Node3D,at: Vector3,width: float,height: float,depth: float,gla
 		var outline: PackedVector3Array = [Vector3(-half,0,0),Vector3(half,0,0),Vector3(half,spring,0)]
 		for i: int in range(1,9):
 			var t: float = i/8.0
-			outline.append(Vector3(half*(1-t),spring+(height-spring)*sin(t*PI*.5),0))
+			outline.append(Vector3(half*(1-t),spring+(height-spring)*sin(t*PI*.35)/sin(PI*.35),0))
 		for i: int in range(1,9):
 			var t: float = 1-i/8.0
-			outline.append(Vector3(-half*(1-t),spring+(height-spring)*sin(t*PI*.5),0))
+			outline.append(Vector3(-half*(1-t),spring+(height-spring)*sin(t*PI*.35)/sin(PI*.35),0))
 		for i: int in range(outline.size()):
 			M.triangle(surface,Vector3(0,spring*.5,0),outline[(i+1)%outline.size()],outline[i])
 		M.node(root,M.finish(surface),glass,"MagentaLancet")
