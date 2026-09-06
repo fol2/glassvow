@@ -1,0 +1,16 @@
+--- a/lab_policy.gd
++++ b/lab_policy.gd
+@@ -28,10 +28,12 @@
+   model.apply(command);terminal_probes+=1
+   if model.last_ret==true and model.cb.over and model.cb.result=="win" and model.cb.player.hp>0:
+    terminal_hits+=1
+-   return {"command":command,"value":1000000.0+10.0*model.cb.player.hp}
++   return {"command":command,"value":1000000.0+10.0*model.run.player.hp}
+  return {}
+ func future_value(g: GlassvowGame) -> float:
+- if g.cb.over or not params.get("leaf_terminal",false):return super.future_value(g)
++ if g.cb.over:
++  return 1000000.0+10.0*g.run.player.hp if g.cb.result=="win" and g.run.player.hp>0 else -1000000.0
++ if not params.get("leaf_terminal",false):return super.future_value(g)
+  var terminal: Dictionary=one_action_terminal(g)
+  return float(terminal.value) if not terminal.is_empty() else super.future_value(g)
