@@ -1,0 +1,36 @@
+{
+  "status": "RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "cells": 64, "runs_per_cell": 32, "rows": 2048,
+  "counts": {"win": 1327, "loss": 721, "stall": 0, "error": 0},
+  "native_diagnostic_failures": 0,
+  "seeds": [23010000,23010031],
+  "route_order": {"dusk": ["facet","fervor","cycle","balanced_random"], "ash": ["smolder","hand","ember","balanced_random"]},
+  "vow_order": [0,5],
+  "wins_out_of_32": {
+    "hard_consumer_hard_ward": {"dusk": [[29,13],[29,18],[27,20],[15,12]], "ash": [[27,21],[26,14],[28,18],[22,9]]},
+    "hard_consumer_smooth_ward": {"dusk": [[29,13],[29,18],[27,20],[15,10]], "ash": [[27,21],[26,14],[28,18],[22,9]]},
+    "smooth_consumer_hard_ward": {"dusk": [[29,14],[29,19],[28,20],[15,15]], "ash": [[27,21],[25,16],[27,23],[22,9]]},
+    "smooth_consumer_smooth_ward": {"dusk": [[29,14],[29,19],[28,20],[16,13]], "ash": [[27,21],[25,16],[25,21],[22,9]]}
+  },
+  "ember_actual_health_source_fractions_v0_v5": {
+    "hard_consumer_hard_ward": {"nova": [0.040,0.028], "poison": [0.590,0.601]},
+    "hard_consumer_smooth_ward": {"nova": [0.042,0.026], "poison": [0.588,0.591]},
+    "smooth_consumer_hard_ward": {"nova": [0.089,0.054], "poison": [0.563,0.588]},
+    "smooth_consumer_smooth_ward": {"nova": [0.085,0.053], "poison": [0.567,0.569]}
+  },
+  "actual_preflight": {"stock_assertions":4582,"public_information_assertions":16,"random_shop_assertions":207,"smoke_rows":64,"smoke_counts":{"win":40,"loss":24}},
+  "decision": "No P9 candidate selected. Smoother damage improved some Ember results and its Nova contribution, but Ash V0 balanced-RandomBuild remains22/32 in all four arms. Dusk V5 facet remains weak. Equal stock-eight output is not global power neutrality; stock8 is not the native9/12 cap. Continue the independently specified producer/fuel-demand experiment, not a partly observed winner.",
+  "recovery": {
+    "file":"glassvow-p9-v19-complete.zip",
+    "bytes":6302377,
+    "sha256":"7ad94bb4431c2af67cf59824aafacaa1959dc607a2f813ff331e4156c09bdcc3",
+    "files":622,
+    "local_commit":"4ce4340024759cf1a26deb73736a49801a77d671",
+    "scope":"Complete assembled source and both audited smoke/screen raw studies, without engine. Includes configs, frozen identities, receipts, logs and a per-file hash manifest. Chat-delivered ZIP, not a claim that its raw bytes are hosted in this repository."
+  },
+  "limitations":["32 shared seed clusters, not2048 independent seeds","balanced RandomBuild is not signed C2","nominal intervals/factor effects are exploratory, not corrected confirmation","source health fractions are descriptive, not causal admission","no six admitted packages, detector admission, unrestricted retention, lifecycle or product integration"],
+  "historical_boundary":"This is newly observed recovery execution. It does not reinstate the withdrawn original v19 assertion counts or pretend the missing old cohort was recovered."
+}
