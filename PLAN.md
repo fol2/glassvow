@@ -396,3 +396,51 @@ assertions pass. Neither is accepted as complete native campaign evidence.
 Full local core is running on the staged checkpoint so the draft branch can be
 saved with explicit incomplete status. Source/compiler failures and the fake
 layout binding failure block integration acceptance and merge.
+
+
+### Conflict-learning result and next discriminating experiment
+
+The isolated unit-propagation trial preserves all 16 feasible synthetic answers,
+reduces first-solution assignments from 36 to 6, and passes the existing iterator
+regressions. Fresh complete-map trials no longer exhaust assignment work: seed
+717 uses 2,242 assignments, seed 4 uses 2,906. Both instead reach the existing 64
+local-substitution limit with no qualified route result. Thus the original three
+spatial variants and subsequent causal repair checks have a negative conclusion;
+none is promoted as a production spatial recipe. The trial remains outside the
+production compiler until the frozen checkpoint core finishes.
+
+Next hypothesis: the original candidate displacement envelope, inherited from the
+small proxy lattice, allows route portals to consume the entire inter-row channel.
+One analytical candidate reserves the existing full portal/inflation dimensions
+against authored jitter and the maximum candidate offset. Candidate movements are
+bounded to 0.6 m longitudinally and 0.8 m laterally; physical road clearances and
+camera/touch criteria do not change. Exact derivation and input are retained in
+/tmp/glassvow-steps4-8/woodland-analytic-port-trial.json. This is a new explicitly
+bounded geometry experiment after the earlier negative decision, not an
+undeclared fourth random tuning trial. Budget: one first-attempt grade-aware
+probe per preserved seed, followed by a complete compile only for a passing
+probe. Failure is retained with its named geometry; do not increase search limits.
+A source pass still needs dynamic landscape bounds, actual surface proof, visual
+inspection and runtime/performance qualification before promotion.
+
+
+Frozen checkpoint core (code head 7c640c704c503bdb17abc605f7593c5ff36fc1ef):
+Godot 4.7.2, imports and the 457-script sweep pass. The complete suite finishes
+with five assertions failing in live locale switching, map composition and
+mid-glide shape changes. The locale failure exposes a real cache invalidation
+requirement: a language transaction must rebuild map chrome as well as RunHud.
+The elevated fake layout/gateway failure remains separately recorded. Log:
+/tmp/glassvow-steps4-8/integration-checkpoint-core.log. This checkpoint is safe to
+retain as an explicitly unfinished draft backup, not a qualified release/merge.
+
+The analytic spacing probe reaches grade separation. Its first failure identifies
+missing approach room: the actual terrace fitter reserves landing plus half the
+road width at each turn. Including that footprint, authored jitter and candidate
+movement in the existing crossing interval makes the physical probe pass. The
+remaining first-attempt failures are branch fanout and a small legacy terminus
+silhouette overlap. No complete compile is launched for that failing probe.
+An isolated fork regression proves that aiming both exits directly towards two
+same-side destinations can make them nearly parallel; angular exit repair passes
+that fixture while leaving already-readable forks unchanged. Final source input
+must describe the actual production assets; unused legacy landmarks cannot be
+carried forward as real surface qualification.
