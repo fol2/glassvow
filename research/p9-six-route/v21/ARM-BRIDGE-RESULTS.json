@@ -1,0 +1,15 @@
+{
+  "status":"ORIGINAL_ARM_DIAGNOSTIC_NOT_P9",
+  "rows":1024,"cells":32,"runs_per_cell":32,
+  "seeds":[31510000,31510031],"seed_clusters":32,
+  "counts":{"win":195,"loss":829,"stall":0,"error":0},
+  "arm_order":[1,2,3,4],
+  "arm_meaning":["original planned build/planned play","original random build/planned play","original planned build/random play","original random build/random play"],
+  "wins_out_of_32":{
+    "original_catalogue":{"dusk_v0":[21,9,8,2],"dusk_v5":[6,3,3,0],"ash_v0":[22,3,21,7],"ash_v5":[14,2,9,0]},
+    "production1_capped":{"dusk_v0":[15,6,5,2],"dusk_v5":[6,3,3,0],"ash_v0":[8,4,8,2],"ash_v5":[1,1,1,0]}
+  },
+  "method":"The original BalanceSim and four arm definitions execute unchanged on the exploratory runtime. Original-catalogue optional research fields are absent. Fresh non-protected seeds are used; these are not the signed acceptance cohorts or a main qualification. Research source/default-law equivalence and content identities remain explicit. Both content catalogues are fixed before rows. Mob overrides are empty.",
+  "finding":"Do not equate the stronger native-planning balanced RandomBuild screen with original arm2. Original control samples are much lower here. This does not establish P9: original planned pilots also perform poorly on the experimental catalogue, and newer mechanics require adequate measurement coverage. The bridge is not a reason to weaken C2 or pretend either controller family is optimal.",
+  "limits":["Not signed C2/PhaseA/landscape or a protected-seed PASS","Research native-controller samples use a different cohort; cross-study rates are not a paired causal contrast","Original pilots may not understand optional new mechanics","No package, detector, retention or integration admission"]
+}
