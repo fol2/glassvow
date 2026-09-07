@@ -326,3 +326,73 @@ Next: make the production assembly contract truthful, qualify the camera against
 actual terrain, reduce measured construction cost without degrading the approved
 surfaces, and save the resulting coherent section checkpoint. All known failing
 binding assertions and the elevated gateway fixture remain unresolved.
+
+### Surface identity and dense-layout experiment — 13:46 UTC
+
+Saved navigation checkpoint: 7384b910 (local, not yet pushed; coherent core gate
+still pending). Native balanced input passes with indexed terrain and the quieter
+navigation panel. Ground equivalence covers 138,240 triangle corners: zero
+position, normal and colour error; 23,353 shared vertices. A separate arithmetic
+micro-optimisation gave no meaningful gain and was discarded.
+
+The final surface stage now records actual supported waystone heights, sampled
+roads and every instantiated scenery transform in the returned MapLayoutResult.
+The upstream proposal remains immutable and its digest is retained separately.
+No graph IDs or connections change. The surface stage belongs to compilation;
+it must finish and qualify before the scene becomes navigable. Upstream hard
+measurements are explicitly removed from this derived result, rather than
+misrepresented as surface proof. Real imported geometry supplies the surface asset
+profiles. The regression checks actual instances, not an unrelated legacy list.
+The former scenery filter described 201 objects while the actual approved recipe
+contained 487 scenery objects and one gateway. Removing this unused filter reduces
+observed construction from about 6.2 to 5.4 seconds, still outside acceptance.
+
+Dense-layout question: can the shared current/successor camera contract qualify
+seed 4 without changing its topology, and does the already-maintained layered
+ordering remove its physical congestion? Inputs are seed 4, current generator and
+existing physical clearances. The unchanged failure certificate is preserved.
+The first journey-camera trial gets past the old empty screen domain but exhausts
+the bounded selection search at an obstructed route endpoint near rows 12–13.
+Do not increase search limits or substitute another seed.
+
+Cheapest next experiment: apply the existing layered-order DP to the same 96×60 m
+woodland footprint, retaining lane spacing, terrain scale and all graph edges.
+Budget: at most three declared first-attempt spatial variants, then one bounded
+full compile of the selected candidate. Success requires passing source physical
+and camera gates, followed by actual surface/contact/camera qualification; source
+pass alone cannot complete Step 6. If ordering alone fails, inspect its named
+geometric blocker before selecting wider row reservations. Trial recipes stay
+under /tmp/glassvow-steps4-8 and do not become production authority.
+
+
+### Integration checkpoint — 14:36 UTC, 7 September
+
+The ordinary long run continues with Goal off. The accepted denominator remains
+4%; navigation, actual surface identity and scene residency are implemented but
+not yet complete-section acceptance. No completion or merge claim is made.
+
+The local journey source recipe still fails bounded compilation. Fresh seed 717
+and seed 4 runs both returned SELECTION_WORK_EXHAUSTED after the measured-fanout,
+blocked-guide diagnosis, direct-route and minimum-node-reserve repairs. The final
+seed-717 obstruction was reproduced from its actual selected candidate IDs,
+not from an earlier ground attempt. Its stone marker was clear but its swept road
+portal blocked another route's source. A regression now covers those coordinates.
+Candidate-domain bounds provide a conservative minimum two-sided portal envelope;
+this is a necessary physical constraint, not extra aesthetic spacing. Script
+validation and the regression pass. An earlier attempted run had parser errors
+and is not compilation evidence, even though the dynamic test runner exited zero.
+
+The corrected full seed-717 run still exhausts selection work, now at
+12,2 -> 13,1 blocked by node 12,1. It is preserved at
+/tmp/glassvow-steps4-8/seed717-swept-port-qualified.json.failure.json.
+The selected seed-4 spatial variant is being rechecked after the same causal
+repair; no fourth spatial trial, search-limit increase or seed substitution has
+been introduced. This unresolved source gate remains critical-path work.
+
+The component suite reports one real failure: test_map_compose's elevated fake
+layout has no eligible gateway site under the new woodland recipe. Several
+resume-route cases also log that failed assembly although their route-state
+assertions pass. Neither is accepted as complete native campaign evidence.
+Full local core is running on the staged checkpoint so the draft branch can be
+saved with explicit incomplete status. Source/compiler failures and the fake
+layout binding failure block integration acceptance and merge.

@@ -551,7 +551,9 @@ func _fail_compiled_layout(failure: Dictionary) -> void:
 
 func _quality_registry() -> Dictionary:
 	var value: Variant = _MAP_QUALITY.data
-	return value if typeof(value) == TYPE_DICTIONARY else {}
+	if not value is Dictionary: return {}
+	var quality: Dictionary = value
+	return preload("res://presentation/map/map_journey_camera_registry.gd").quality(quality) if _act==0 else quality
 
 
 func _sync_waylights() -> void:

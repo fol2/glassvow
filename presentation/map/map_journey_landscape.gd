@@ -12,6 +12,7 @@ var journey: Journey
 var failure: String = ""
 var timings_ms: Dictionary = {}
 var _walking_routes: Dictionary = {}
+var _resolved_seats: Dictionary = {}
 var _travel_curves: Dictionary = {}
 var _travel_distance: float = 0.0
 var _was_moving: bool = false
@@ -43,12 +44,14 @@ func build(data: Dictionary) -> void:
 	journey.build(terrain, resolved, anchors)
 	# Campaign owns travel timing and legal commands. The shared figure receives
 	# sampled positions below instead of running the isolated preview clock.
+	for i: int in range(anchors.size()):
+		_resolved_seats[Vector2(anchors[i].x,anchors[i].z)] = journey.bases[i].position
 	journey.set_process(false)
 	journey.walker.visible = false
 	timings_ms["waystones"] = Time.get_ticks_msec()-started
 
 func resolved_anchor(source: Vector3) -> Vector3:
-	return Journey.seat(terrain, source) if terrain != null else source
+	return _resolved_seats.get(Vector2(source.x,source.z),source)
 
 func walking_route(from_id: String, to_id: String) -> PackedVector3Array:
 	var key: String = MapLayoutInput.edge_id(from_id, to_id)

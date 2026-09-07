@@ -10,6 +10,7 @@ const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 var tree_envelopes: Dictionary = {}
 var contacts: GroundContacts
 var placed: Array[Dictionary] = []
+var placed_nodes: Array[Node3D] = []
 var terrain: Terrain
 var anchors: PackedVector3Array
 var failure: String = ""
@@ -299,4 +300,5 @@ func _place(kind: String, p: Vector3, scale_value: float, yaw: float, grey: bool
 	if not grey:
 		contacts.place(kind, p, scale_value, yaw)
 	var footprint: Vector2 = PROFILES[kind]
+	placed_nodes.append(item)
 	placed.append({"kind": kind, "position": p, "radius": footprint.x * scale_value, "height": footprint.y * scale_value, "scale":scale_value, "yaw":yaw})

@@ -6,6 +6,7 @@ var output: String = ""
 var spatial_recipe: String = ""
 var first_attempt_only: bool = false
 var diagnostic_grade: bool = false
+var journey_camera: bool = false
 func _initialize() -> void:
 	_run.call_deferred()
 func _run() -> void:
@@ -18,6 +19,8 @@ func _run() -> void:
 			output = argument.trim_prefix("--output=")
 		elif argument.begins_with("--spatial-recipe="):
 			spatial_recipe = argument.trim_prefix("--spatial-recipe=")
+		elif argument == "--journey-camera":
+			journey_camera = true
 		elif argument == "--diagnostic-grade":
 			diagnostic_grade = true
 		elif argument == "--first-attempt":
@@ -60,6 +63,8 @@ func _sample(content: ContentDB, act: int, seed_value: int) -> Dictionary:
 	var nodes: Array = bound["nodes"]
 	var edges: Array = bound["edges"]
 	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	if journey_camera:
+		quality = preload("res://presentation/map/map_journey_camera_registry.gd").quality(quality)
 	var heroes: Dictionary = scene.layout_hero_contract()
 	if not spatial_recipe.is_empty():
 		var recipe_raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(spatial_recipe))

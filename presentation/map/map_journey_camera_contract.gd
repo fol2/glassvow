@@ -9,7 +9,7 @@ const HEIGHT: float = 36.0
 const TOUCH_DESIGN_PX: float = 60.0
 const TOUCH_FLOOR_PX: float = 48.0
 const INK_RADIUS_PX: float = 38.0
-const INK_GAP_PX: float = 4.0
+const INK_GAP_PX: float = 8.0
 
 static func touch_size(stage: Vector2) -> float:
 	return maxf(TOUCH_FLOOR_PX, TOUCH_DESIGN_PX*stage.y/820.0)
@@ -58,3 +58,22 @@ static func screen_point(point: Vector3, resolved: Dictionary, stage: Vector2) -
 	var local: Vector2 = projected_plane(point)-centre
 	var zoom: float = resolved["zoom"]
 	return stage*.5+local*stage.y/zoom
+
+static func audit_surface(anchors: Dictionary, edges: Dictionary) -> Dictionary:
+	var groups: Dictionary = {}
+	for id: String in MapLayoutCanonical.sorted_keys(anchors): groups[id] = [id]
+	for edge: Dictionary in edges.values(): groups[str(edge["from"])].append(str(edge["to"]))
+	var failures: Array = []
+	var checked: int = 0
+	for id: String in groups:
+		var points: PackedVector3Array = []
+		for member: String in groups[id]:
+			var raw: Array = anchors[member]
+			points.append(Vector3(float(str(raw[0])),float(str(raw[1])),float(str(raw[2]))))
+		for shape: StringName in StageShape.SHIPPING:
+			var stage: Vector2i = StageShape.REFERENCES[shape]
+			var pose: Dictionary = resolve(points,Vector2(stage))
+			checked += 1
+			if not pose["ok"]:
+				failures.append({"focus":id,"shape":str(shape),"members":groups[id].duplicate(),"reason":pose["reason"]})
+	return {"ok":failures.is_empty(),"version":VERSION,"checked_contexts":checked,"failures":failures}

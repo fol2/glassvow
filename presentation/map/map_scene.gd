@@ -4,6 +4,8 @@ extends Control
 ## The generator owns every node, route and landmark transform. Rest allows
 ## three render warm-up frames, then freezes until input or content changes.
 
+const JourneyRegistry = preload("res://presentation/map/map_journey_camera_registry.gd")
+const JourneyRealisation = preload("res://presentation/map/map_journey_realisation.gd")
 const JourneyLandscape = preload("res://presentation/map/map_journey_landscape.gd")
 const OVERSAMPLE: float = 1.0
 const VP_MAX: int = 2048
@@ -41,6 +43,9 @@ var _waylights: Dictionary[String, MapWaylightTracer] = {}
 var _layout_result: MapLayoutResult = null
 var _layout_diagnostics: Dictionary = {}
 var _layout_failure: Dictionary = {}
+var _realised_assets: Dictionary = {}
+var _bound_source_digest: String = ""
+var _bound_quality_digest: String = ""
 var _act: int = -1
 var _motion_setting: int = -1
 var _dragging: bool = false
@@ -89,6 +94,22 @@ func _ready() -> void:
 	_rig.get_camera().current = true
 	_fit()
 	resized.connect(_fit)
+	visibility_changed.connect(_on_visibility_changed)
+
+
+func _on_visibility_changed() -> void:
+	if not is_visible_in_tree():
+		_stage.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	else:
+		set_live(false)
+
+
+func _notification(what: int) -> void:
+	if _stage == null: return
+	if what == NOTIFICATION_DISABLED:
+		_stage.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	elif what == NOTIFICATION_ENABLED and is_inside_tree():
+		_on_visibility_changed()
 
 
 func get_rig() -> MapCameraRig:
@@ -503,6 +524,9 @@ func _bind_asset_geometry() -> void:
 		_landscape = null
 	_clear_waylights()
 	_layout_result = null
+	_realised_assets.clear()
+	_bound_source_digest = ""
+	_bound_quality_digest = ""
 	_layout_diagnostics.clear()
 	_layout_failure.clear()
 	_road_segments.clear()
@@ -524,16 +548,26 @@ func _bind_asset_geometry() -> void:
 
 
 func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutResult:
+	if quality.has("journey_camera") and not JourneyRegistry.enabled(quality):
+		return _fail_layout("Unsupported journey camera contract")
 	if compiled == null:
 		return _fail_layout("compiled result is null")
 	if _active_profiles.is_empty() or layout_hero_contract().is_empty():
 		return _fail_layout("active map asset profiles are incomplete")
+	var quality_digest: String = MapLayoutCanonical.digest(quality)
+	if _layout_result != null and _landscape != null and _bound_source_digest == compiled.digest() and _bound_quality_digest == quality_digest:
+		_layout_diagnostics["assembly_reused"] = true
+		return _layout_result
+	_bound_source_digest = compiled.digest()
+	_bound_quality_digest = quality_digest
 	var data: Dictionary = compiled.identity_dict()
 	if _landscape != null:
 		_landscape.free()
-	_landscape = JourneyLandscape.new() if _act == 0 else MapLandscape.new()
+	_landscape = JourneyLandscape.new() if _act == 0 and JourneyRegistry.enabled(quality) else MapLandscape.new()
 	_world.add_child(_landscape)
 	_landscape.prepare(data, _landscape_assets, _scatter_salt)
+	if _landscape is JourneyLandscape:
+		return _bind_journey(compiled)
 	_selection_half = _selection_reserve(quality)
 	var candidates: Dictionary = _landscape.candidates()
 	var accepted: Dictionary = {}
@@ -584,8 +618,43 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 	return final_result
 
 
+func realised_asset_bundle() -> Dictionary:
+	return _realised_assets.duplicate(true) if not _realised_assets.is_empty() else layout_asset_bundle()
+
+
+func _bind_journey(source: MapLayoutResult) -> MapLayoutResult:
+	_landscape.build(source.identity_dict())
+	_motion_setting = -1
+	if not str(_landscape.failure).is_empty():
+		return _fail_layout(str(_landscape.failure))
+	var realised: Dictionary = JourneyRealisation.finish(source,_landscape)
+	if not realised.get("ok",false):
+		return _fail_layout(str(realised.get("reason","Surface realisation failed")))
+	_layout_result = realised["result"]
+	_realised_assets = realised["assets"]
+	var data: Dictionary = _layout_result.identity_dict()
+	_layout_failure.clear()
+	_clear_waylights()
+	var edges: Dictionary = data["edges"]
+	_road_segments = _flatten_edges(edges)
+	_layout_diagnostics = {
+		"status":"BOUND", "input_digest":data["input_digest"],
+		"layout_digest":_layout_result.digest(), "source_layout_digest":source.digest(),
+		"surface_version":realised["version"], "surface_asset_digest":_realised_assets["digest"],
+		"accepted_count":data["scenery_instances"].size(),
+		"scenery_instances":data["scenery_instances"], "hero_placements":data["hero_placements"],
+		"assembly_ms":_landscape.timings_ms,
+		"surface_qualification":"pending", "rejections":[],
+	}
+	_repaint()
+	return _layout_result
+
+
 func _fail_layout(reason: String) -> MapLayoutResult:
 	_layout_result = null
+	_realised_assets.clear()
+	_bound_source_digest = ""
+	_bound_quality_digest = ""
 	_layout_failure = {
 		"kind": "compiled_layout", "id": "live_map", "reason": reason,
 	}

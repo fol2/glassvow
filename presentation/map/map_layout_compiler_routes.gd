@@ -118,7 +118,10 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 	)
 	if not is_finite(half_width) or half_width <= 0.0:
 		return _plan_failure("quality", "physical road half-width must be finite and positive")
-	if quality.has("spatial_profile"):
+	# Local journey cameras retain measured fanout repair above. The older
+	# global view also imposed a fixed four-metre fork on every branch, even
+	# when its directions were already clear and that guide hit another road.
+	if quality.has("spatial_profile") and not preload("res://presentation/map/map_journey_camera_registry.gd").enabled(quality):
 		for edge: Dictionary in order:
 			var guide: Variant = _spatial_branch_guide(edge, order, anchors, ports, sample)
 			if guide is Vector2:
@@ -223,6 +226,11 @@ static func route_planned(edge: Dictionary, plan: Dictionary,
 			if quality.has("spatial_profile"):
 				diagnostics["router_diagnostics"]["ordinary"] = _router_evidence(ordinary)
 				diagnostics["required_branch_egress_rejected"] = true
+				var guide: Vector2 = port["branch_egress"]
+				var blockers: Array[String] = _endpoint_blocking_obstacle_ids(source,guide,obstacles,radius)
+				blockers.append_array(_endpoint_blocking_obstacle_ids(guide,target,obstacles,radius))
+				blockers.sort()
+				diagnostics["first_blocker"] = _blocked(blockers[0],[str(edge["from"]),str(edge["to"])]) if not blockers.is_empty() else blocking_binding(edge,plan,obstacles,radius)
 				return _attach_plan(ordinary, diagnostics)
 			ordinary = MapSingleEdgeRouter.route(
 				source, target, obstacles, half_width, safety, channel

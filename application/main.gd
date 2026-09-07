@@ -24,6 +24,8 @@ var _map_layout_compile: Callable = Callable()
 var _map_layout_input_digest: String = ""
 var _map_layout_packet: Variant = null
 var _map_screen: WorldMapScreen = null
+## Retain one current-act surface across encounters; hidden viewports are stopped.
+var _parked_map_screen: WorldMapScreen = null
 var _choice_screen: Control = null
 var _reward_screen: RewardScreen = null
 var _route_screen: Control = null
@@ -689,6 +691,14 @@ func _clear_route() -> void:
 	_thaw_surfaces()
 	if _hints != null:
 		_hints.hide_callout()
+	if game == null or game.run == null:
+		_discard_parked_map()
+	elif _map_screen != null:
+		_discard_parked_map()
+		_parked_map_screen = _map_screen
+		_parked_map_screen.hide()
+		_parked_map_screen.process_mode = Node.PROCESS_MODE_DISABLED
+		_map_screen = null
 	for screen: Control in [
 		_screen, _map_screen, _choice_screen, _reward_screen,
 		_route_screen, _run_hud, _modal,
@@ -702,6 +712,12 @@ func _clear_route() -> void:
 	_route_screen = null
 	_run_hud = null
 	_modal = null
+
+
+func _discard_parked_map() -> void:
+	if _parked_map_screen != null:
+		_parked_map_screen.queue_free()
+		_parked_map_screen = null
 
 
 func _freeze_under_modal() -> void:
@@ -1377,14 +1393,20 @@ func _show_map() -> void:
 	if game != null and game.run != null:
 		_transitions.wipe()
 	_clear_route()
-	_map_screen = WorldMapScreen.new(_map, content, _shape)
-	# ponytail: retain only the current identity; add a cache only if routes can
-	# revisit older semantic identities.
-	_map_screen._layout_compile = _compile_map_layout
-	_map_screen.node_chosen.connect(_on_node_chosen)
-	_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
-	_map_screen.before_pick = _on_map_before_pick
-	add_child(_map_screen)
+	if _parked_map_screen != null and _parked_map_screen.map == _map and _parked_map_screen.content == content:
+		_map_screen = _parked_map_screen
+		_parked_map_screen = null
+		_map_screen.process_mode = Node.PROCESS_MODE_INHERIT
+		_map_screen.set_shape(_shape)
+		_map_screen.show()
+	else:
+		_discard_parked_map()
+		_map_screen = WorldMapScreen.new(_map, content, _shape)
+		_map_screen._layout_compile = _compile_map_layout
+		_map_screen.node_chosen.connect(_on_node_chosen)
+		_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
+		_map_screen.before_pick = _on_map_before_pick
+		add_child(_map_screen)
 	_map_screen.refresh(game.run)
 	# --map --act=N: dress scenery only (domain map stays the run's act).
 	if _forced_act >= 0:
