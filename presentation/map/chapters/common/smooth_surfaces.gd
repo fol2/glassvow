@@ -25,6 +25,7 @@ func setup(source: Array[Dictionary],height: Callable,deck_profile: Callable = C
 func field(at: Vector2) -> Dictionary:
 	var result: Dictionary = super.field(at)
 	var candidates: Array = cells.get(Vector2i(floori(at.x/CELL),floori(at.y/CELL)),[])
+	var flights: Dictionary = {}
 	var height_sum: float = 0
 	var weight_sum: float = 0
 	for span: Dictionary in candidates:
@@ -37,14 +38,18 @@ func field(at: Vector2) -> Dictionary:
 		var d2: float = at.distance_squared_to(start+delta*t)
 		var kernel: float = maxf(0,1.0-d2/2.25)
 		var weight: float = kernel*kernel*kernel*delta.length()/(.02+d2)
-		height_sum += lerpf(a.y,b.y,t)*weight
+		var height: float = lerpf(a.y,b.y,t)
+		if stair_profile!=null and weight>0:
+			var owner: String = str(span.get("edge",""))
+			if not flights.has(owner): flights[owner]=stair_profile.sample(at,owner)
+			var fitted: Vector2 = flights[owner]
+			height=lerpf(height,fitted.x-.022,fitted.y)
+		height_sum += height*weight
 		weight_sum += weight
 	if weight_sum>.000000001:
 		result["height"] = height_sum/weight_sum+.022
 		# Keep the nearest arch profile: averaging it pinches the solid piers.
 		# Deck heights still use the smooth multi-span blend above.
-	if stair_profile!=null:
-		result["height"] = stair_profile.height(at,result["height"])
 	return result
 
 func _position(item: Dictionary) -> Vector3:

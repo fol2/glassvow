@@ -30,7 +30,7 @@ func prepare(field: RefCounted,settings: Dictionary) -> void:
 			var sign_value: float = signf(delta.y)
 			if excluded or grade<.09 or grade>.52 or (direction!=0 and direction!=sign_value):
 				if steep:
-					_store(points)
+					_store(points,str(spans[0]["edge"]))
 				points = []
 				steep = false
 				direction = 0
@@ -43,10 +43,10 @@ func prepare(field: RefCounted,settings: Dictionary) -> void:
 				steep = steep or grade>=trigger
 			previous = Vector3.INF if excluded else point
 		if steep:
-			_store(points)
+			_store(points,str(spans[0]["edge"]))
 	print("STONE_BRIDGE_GRADED_FLIGHTS ",flight_count)
 
-func _store(points: Array[Vector3]) -> void:
+func _store(points: Array[Vector3],owner: String) -> void:
 	if points.size()<3 or absf(points[-1].y-points[0].y)<.45:
 		return
 	var lengths: Array[float] = [0.0]
@@ -62,7 +62,7 @@ func _store(points: Array[Vector3]) -> void:
 	for i: int in range(points.size()-1):
 		var a: Vector2 = Vector2(points[i].x,points[i].z)
 		var b: Vector2 = Vector2(points[i+1].x,points[i+1].z)
-		var segment: Dictionary = {"a":a,"b":b,
+		var segment: Dictionary = {"edge":owner,"a":a,"b":b,
 			"low":lerpf(points[0].y,points[-1].y,lengths[i]/total),
 			"high":lerpf(points[0].y,points[-1].y,lengths[i+1]/total),
 			"start":Vector2(points[0].x,points[0].z),"finish":Vector2(points[-1].x,points[-1].z),
@@ -78,10 +78,15 @@ func _store(points: Array[Vector3]) -> void:
 				cells[key].append(segment)
 	flight_count += 1
 
-func height(at: Vector2,original: float) -> float:
+func height(at: Vector2,original: float,owner: String) -> float:
+	var fitted: Vector2 = sample(at,owner)
+	return lerpf(original,fitted.x,fitted.y)
+
+func sample(at: Vector2,owner: String) -> Vector2:
 	var nearest: float = 1.5*1.5
-	var result: float = original
+	var result: Vector2 = Vector2.ZERO
 	for segment: Dictionary in cells.get(Vector2i(floori(at.x/CELL),floori(at.y/CELL)),[]):
+		if str(segment["edge"])!=owner: continue
 		var a: Vector2 = segment["a"]
 		var delta: Vector2 = segment["b"]-a
 		var t: float = (at-a).dot(delta)/maxf(.000001,delta.length_squared())
@@ -97,5 +102,6 @@ func height(at: Vector2,original: float) -> float:
 			nearest = distance
 			var low: float = segment["low"]
 			var high: float = segment["high"]
-			result = lerpf(low,high,t)
+			var shoulder: float = smoothstep(0,.5,(at-start).dot(start_dir.normalized()))*smoothstep(0,.5,(finish-at).dot(end_dir.normalized()))
+			result = Vector2(lerpf(low,high,t),shoulder)
 	return result

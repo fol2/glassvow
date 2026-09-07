@@ -79,7 +79,8 @@ func build(sample: Dictionary) -> void:
 			points[i].y = 4.8 if raised else levels.height(points[i].x,points[i].z)
 		if raised:
 			for i: int in range(points.size()):
-				var run: float = minf(lengths[i],lengths[-1]-lengths[i])
+				var landing_run: float = bridge_style.get("approach_landing",0.0)
+				var run: float = maxf(0,minf(lengths[i],lengths[-1]-lengths[i])-landing_run)
 				var rise: float = .44*(run-.15*(1.0-exp(-run/.15)))
 				if rise>.7:
 					var ease: float = clampf((rise-.7)/.5,0,1)

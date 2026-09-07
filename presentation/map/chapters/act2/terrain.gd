@@ -8,6 +8,8 @@ func build(sample: Dictionary, _grey: bool, extent: Rect2 = Rect2(-48,-30,96,60)
 	anchors=sample["anchors"]
 	source_edges=sample["edges"]
 	causeways=Causeways.new()
+	# Keep the complete shared node landing level before the raised approach.
+	causeways.bridge_style["approach_landing"]=3.2
 	causeways.height_profile=preload("res://presentation/map/chapters/act2/generated_profile.gd").new()
 	var preferred: PackedVector3Array = []
 	for uv: Vector2 in [Vector2(1,.5),Vector2(.25,.1),Vector2(.55,.1),Vector2(.8,.5),Vector2(.12,.8),Vector2(.38,.7),Vector2(.66,.85),Vector2(.86,.7)]:

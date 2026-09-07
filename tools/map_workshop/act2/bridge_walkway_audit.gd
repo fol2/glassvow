@@ -43,7 +43,7 @@ static func measure(causeways: Node3D) -> Dictionary:
 								var distances: Array = []
 								for field: RefCounted in causeways.fields:
 									distances.append(field.field(at)["distance"])
-								examples.append({"edge":key,"at":[at.x,at.y],"floor":floor_height,"obstacle":height,"part":part,"offset":offset,"field_distances":distances})
+								examples.append({"edge":key,"at":[at.x,at.y],"floor":floor_height,"obstacle":height,"part":part,"offset":offset,"field_distances":distances,"triangles":_faces_at(obstacles[part],at,floor_height)})
 							break
 					if obstruction_found:
 						break
@@ -52,3 +52,20 @@ static func measure(causeways: Node3D) -> Dictionary:
 
 	return {"body_samples":tested,"decoration_hits":hits,"examples":examples,
 		"scope":"Actual rail and pier triangles over rendered treads; five lateral samples across a 1.5 m corridor, 2.12 m body height."}
+
+static func _faces_at(probe: Probe,at: Vector2,floor_height: float) -> Array:
+	var result: Array = []
+	for triangle: Array[Vector3] in probe.cells.get(Vector2i(floori(at.x),floori(at.y)),[]):
+		var a: Vector3 = triangle[0]
+		var b: Vector3 = triangle[1]
+		var c: Vector3 = triangle[2]
+		var ab: Vector2 = Vector2(b.x-a.x,b.z-a.z)
+		var ac: Vector2 = Vector2(c.x-a.x,c.z-a.z)
+		var delta: Vector2 = at-Vector2(a.x,a.z)
+		var u: float = delta.cross(ac)/ab.cross(ac)
+		var v: float = ab.cross(delta)/ab.cross(ac)
+		var height: float = a.y*(1-u-v)+b.y*u+c.y*v
+		if u>=-.00001 and v>=-.00001 and u+v<=1.00001 and height>floor_height+.04 and height<floor_height+2.12:
+			result.append([[a.x,a.y,a.z],[b.x,b.y,b.z],[c.x,c.y,c.z]])
+			if result.size()==3: break
+	return result

@@ -861,3 +861,32 @@ This checkpoint preserves an incomplete integration; it is not a final core,
 performance, independent-review or delivery claim. Continue through the geometry
 fixes and remaining chapters. The prior conditional forecast remains provisional
 until this Act II generated-geometry gap is measured and retired.
+
+### Act II geometry/performance correction — 7 September, 20:06 UTC
+
+The generated city's stair field was affecting neighbouring routes. Restricting
+ownership alone exposed a discontinuous ownership boundary (bounded regression
+reproduced a 0.763m jump). Stair heights are now blended per route before the
+shared surface interpolation, with eased longitudinal shoulders. The regression
+passes together with ownership, boundary-cache and landing-cull cases. A 3.2m
+level approach in the production city recipe removes the measured 0.584m shared
+bridgehead separation; the repeated actual-mesh audit now measures only floating
+point noise. Study callers retain their existing approach default.
+
+The first headless box-append benchmark was not representative. Native measurement
+of 3,000 stones reports append_from 3,838ms versus pre-read primitive arrays 37ms,
+with identical triangles. The selected shared box batch compares rendered vertex,
+UV and normal attributes against the original method (index deduplication may
+differ). Actual native city bind falls from 102.3s to 46.5s; lower parapet assembly
+falls from 48.2s to 8.2s. These remain cold-construction measurements, not qualified
+save-load or device budgets. Avoid further headless substitutes for renderer costs.
+
+Full-height rail clearance checks reduce actual body collisions from 61 to 6;
+53,774 deck samples remain covered and 423 crossing samples retain minimum 2.642m
+headroom. Remaining six coping collisions occur at bends and are not waived.
+The runtime preview now exits non-zero for failed city geometry checks after
+saving its review image. Continue with actual offending triangles, then qualify
+other generated cases and reference shapes. Progress remains 51%; no new final
+core or acceptance claim. Evidence: act2-rail-clearance717.*, box-append-native-
+benchmark.log, stair-blend-red.log/green.log and rail-batch-tests.log in the same
+/tmp/glassvow-steps4-8 directory.

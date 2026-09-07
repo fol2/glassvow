@@ -17,6 +17,7 @@ var _exercise: bool = false
 var _measure: bool = false
 var _compile_only: bool = false
 var _chapter_audit: bool = false
+var _chapter_failures: Array[String] = []
 var _zoom: int = 2
 var _quality_path: String = ""
 var _input: MapLayoutInput
@@ -135,6 +136,8 @@ func _run() -> void:
 		var city: Node3D = screen._map_scene._landscape.terrain.causeways
 		var report: Dictionary = preload("res://tools/map_workshop/act2/audit.gd").measure(city,{"anchors":city.anchors,"edges":screen._map_scene._landscape.terrain.source_edges})
 		print("MAP_CHAPTER_AUDIT ",JSON.stringify(report))
+		_chapter_failures=preload("res://tools/map_workshop/act2/runtime_audit.gd").failures(report)
+		print("MAP_CHAPTER_FAILURES ",JSON.stringify(_chapter_failures))
 		var steep: Array = report["rendered_deck"]["steepest_vertices"]
 		for raw: Array in steep:
 			var point: Vector3 = MapLandscape.v3(raw)
@@ -229,7 +232,7 @@ func _run() -> void:
 	var error: Error = root.get_texture().get_image().save_png(_output)
 	if error != OK:
 		printerr(error_string(error))
-	quit(0 if error == OK else 1)
+	quit(0 if error == OK and _chapter_failures.is_empty() else 1)
 
 ## Preview-only reuse of a pure compiler result. The input digest includes all
 ## geometry authorities; runtime production never reads or writes this cache.
