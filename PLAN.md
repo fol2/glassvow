@@ -236,3 +236,33 @@ All implementation acceptance percentages remain 0% until the relevant gates pas
   regression passes all three reference shapes and rejects coincident targets.
   It is not wired into the compiler/runtime yet. Next decisive check: actual
   native projection and full current/successor groups from the preserved seed 4.
+
+### Camera experiment decision
+
+The native Godot projection agrees with the shared 55-degree equation to
+0.000184 px. Of 603 authored current/successor shape contexts across seeds 4,
+717 and 17634, 598 fit the strict local ink/touch contract. The five failures are
+all the initial spread of alternative entrances, before any current node exists;
+all ordinary journey choice groups fit. This is authored-anchor evidence only.
+
+Decision: opening entrance selection needs an explicit area-inspection state.
+Overview selects an area and frames its entrance; it must not directly enter an
+encounter or pretend that tiny global icons are valid touch targets. Local
+confirmation remains a distinct legal action. Keep the full entrance set available
+through overview/area navigation. Do not shrink glyphs or touch sizes to force the
+wide opening group to pass. Qualify this state in the compiler camera identity and
+native input before claiming seed 4 or Step 6 completion.
+Evidence: /tmp/glassvow-steps4-8/camera-groups.json.
+
+### Saved checkpoint qualification
+
+- Exact 7f10a4df isolated local core passes: Godot 4.7.2; complete import;
+  scripts OK (442 checked); PASS (102 tests). Log:
+  /tmp/glassvow-steps4-8/promotion-core.log. No implementation changed in that
+  verification worktree during the run.
+- The subsequent unused camera contract and its focused test at 9ddf20c3 pass
+  their explicit parser/test gate. They do not yet replace the live compiler.
+- Native confirmation in isolation succeeds through real mouse events and
+  requests the correct node. The remaining combined input failure depends on
+  preceding drag/wheel actions, so investigation is narrowed to that sequence;
+  direct method calls are not substituted for actual input.
