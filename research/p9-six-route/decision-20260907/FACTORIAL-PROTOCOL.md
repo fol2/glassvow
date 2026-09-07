@@ -1,0 +1,13 @@
+# Fervor selectivity: same source, component controls and unforced acquisition
+
+EXPLORATION_NOT_P9. Continues the fixed existing-policy transfer question, not a selected partial winner. Control content is production2_demand3, SHA2563c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa. Native source/controller equals the ongoing transfer screen byte-for-byte; only independent copied content changes.
+
+Four same-ID/cost/rarity/pool arms cross Empower's3/4 Fervor against0 with Flurry's five hits against one hit preserving total base damage0/5. All other effects, implicit chips, starting decks, encounters and rules are unchanged. No null is proposed as player content. Existing Smolder,hand,Fervor,cycle controllers are compared; this tests whether the mechanism is selective, not just whether an arbitrary debuff lowers wins. Removal effects include the same algorithm's behavioral/build response and are not fixed-action direct effects.
+
+Native controlled experiment actually executed118 assertions with zero failures: paid producer/consumer,real status,preview/health removal,discard,once-per-card/aspect chips. P0C0/P0C1/P1C0/P1C1 base payoffs0/0/3/15; upgraded5/5/9/25; interactions12/16 raw-health units. No claim that this alone establishes natural acquisition, whole-run efficacy or P9.
+
+After the complete transfer screen and raw audit, run32 smoke cells on41000100. Eight unmodified P1C1 rows must equal their transfer-smoke records exactly. Only after complete native capture and parity,32cells x16 assigned exploratory seeds41020000..41020015=512 evaluations. Four workers,1200s per cell. Freeze sources,contents and assignments before rows; preserve all losses/stalls/errors; no source edits mid-batch. This is separate exploration, not corrected confirmation or repeated old cohorts. No protected seeds.
+
+Report the full matrix,paired outcome vectors and nominal seed-cluster uncertainty,actual acquisition and enactment. Distinguish controlled mechanism payoff from whole-run replacement by other routes. A non-positive whole-run result does not invalidate the controlled algebra, but neither does the algebra override a failed whole-run requirement. Missing primary evidence never becomes a pass. This does not change any acceptance threshold or admit any package.
+
+No new gameplay production law,main edit,PR,review approval or receipt. Retain required Ash hand-size work,all six aspect-scoped package obligations,detector/retention/guardrails/lifecycle and exact reviewed integration. Failed fuel-route evidence remains immutable; do not resume generic Nova buffs merely to preserve its name.
