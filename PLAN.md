@@ -66,7 +66,7 @@ or enclosing walls. Reflection is not required; do not reintroduce a mirror floo
 | 2. Whole-place blockout | All five stops on generated geometry; window, void, bend and hearth read at close/whole views; verify stairs and structural thickness | 100% |
 | 3. Finished representative section | Window-to-path entry and one level change with final stone/glass/surface treatment; native close and travel inspection | 100% |
 | 4. Complete chapter composition | Sparse reverse-act echoes, path-bound stelae, small hearth, supported scenery and coherent light; full uncut journey | 100% |
-| 5. Navigation, regression and delivery | Actual node/input/travel tests, all routes supported, three reference proportions, performance, selected gates and exact-head independent review; tailnet page/report | 80% — independent review and delivery pending |
+| 5. Navigation, regression and delivery | Actual node/input/travel tests, all routes supported, three reference proportions, performance, selected gates and exact-head independent review; tailnet page/report | 100% — local gates and independent review passed |
 
 Resolve blockout before producing detailed assets. At each internal stage inspect
 the running result and fix failures before presenting it to the owner. Do not
@@ -156,3 +156,12 @@ The 28.77-second native film reaches the hearth through actual Walk all input;
 Tailnet playback, comparisons and 390 px responsive layout are verified. Source
 candidate: c0570e4ba664a7d531d19e52ce6216540d41cb87. The final independent review
 is next; no runtime edits have been made while the core gate was running.
+
+
+Final local acceptance: Act IV Step 3 engineering is complete. Independent review
+APPROVE at ac4a3d8dd4ad2a533cb472d87ddb85b78382338c has no findings. Implementation
+and native media remain unchanged from the measured source candidate. The report,
+reusable lessons and private Tailnet page are delivered. A draft review PR is
+scoped from the accepted Act III checkpoint; its hosted CI state is recorded live
+in that PR, without adding another status-only push that reruns unchanged code.
+The remaining human boundary is Act IV art approval. Step 4 is not started.

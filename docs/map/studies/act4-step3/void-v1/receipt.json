@@ -93,7 +93,7 @@
   "act": 4,
   "owner_approval": "pending",
   "step4_started": false,
-  "final_gates": "local core 102, script sweep 442 and selected specialists passed; independent review pending",
+  "final_gates": "local core 102, script sweep 442 and selected specialists passed; independent APPROVE",
   "samples": {
     "717": {
       "sha256": "1dca8e66ee434039bb54b670b4e10c19117070ba031201127d3a97ef54b818d9",
@@ -113,5 +113,10 @@
       "layout_digest": "dd575ba862a6a1386757214af9307fee0d98c79b525edfe6fa5bc6fca07843e8",
       "compiler_hard_pass": true
     }
+  },
+  "independent_review": {
+    "head": "ac4a3d8dd4ad2a533cb472d87ddb85b78382338c",
+    "verdict": "APPROVE",
+    "record": "independent-review.md"
   }
 }

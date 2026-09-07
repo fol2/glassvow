@@ -1,11 +1,15 @@
 # Act IV Step 3 — delivery evidence
 
-Status: the chapter implementation and native inspection are complete; local core and specialist gates pass;
-final independent review and the delivery record are still pending.
-This report will be closed after those gates. Owner chapter approval remains a
-separate Step 3 boundary. Step 4 campaign-map integration is excluded.
-Act I–III already have owner Step 3 approval; this report measures Act IV Step 3,
-not the completion percentage of the entire eight-step renovation.
+Status: **Act IV Step 3 engineering acceptance is complete (100%)**. Native
+inspection, the full local core/specialist gates and the final independent review
+pass. The chapter is delivered for owner art approval; that approval and Step 4
+campaign-map integration remain outstanding, separate boundaries. Act I–III
+already have owner Step 3 approval. This is not 100% of the eight-step renovation.
+
+The review PR is scoped from the accepted Act III checkpoint, rather than folding
+its accumulated historical study changes into this chapter's review. It remains
+a draft for the chapter gate. Hosted CI has its live status in the PR; the exact
+local commands and results are recorded below.
 
 ## Delivered chapter
 
@@ -30,10 +34,10 @@ stelae, canvas modulation, actors, layout and encounter behaviour.
 | Complete spatial composition | 100% | Native close/whole frames at 1458×820, 1180×820 and 844×390 |
 | Finished section and architectural kit | 100% | Thick rose-window, stone path/stairs, stelae, small hearth; inspected native close views |
 | Full journey and chapter atmosphere | 100% | 28.77-second uncut recording, five stops, 661 travel frames, unchanged snapshot |
-| Verification, independent review and delivery | 80% | Local checks complete; independent review and delivery record pending |
+| Verification, independent review and delivery | 100% | Core 102, scripts 442, selected specialists and independent APPROVE; native review page delivered |
 
-Weighted completion is 95% at this checkpoint (weights 10/20/20/25/25).
-No missing gate is counted as complete.
+Weighted engineering completion is 100% (weights 10/20/20/25/25).
+Owner art approval is not counted as an engineering pass.
 
 ## Native proof and limits
 
@@ -88,7 +92,9 @@ pass, including scope classification, repaired documentation anchors, reference
 freeze, map-quality self-tests/current registry, performance replay, 20-seed asset
 profile probing and the four selected UI containment checks. The complete core suite passes all 102 suites in 1,430.59 seconds on this
 coherent candidate. Expected negative-case and headless shutdown diagnostics are
-retained in the log. Final independent review is still outstanding.
+retained in the log. Independent review **APPROVE** at ac4a3d8dd4ad2a533cb472d87ddb85b78382338c,
+with no blocking or non-blocking findings. The subsequent status/usage record
+changes documentation only; implementation and media fingerprints are unchanged.
 
 This follows the repository's AI-SDLC contract; it is not an external Anthropic
 certification. Effectiveness comes from reusing proven geometry and measuring
@@ -110,3 +116,27 @@ godot --path . --resolution 1180x820 --fixed-fps 30 --write-movie /tmp/act4-tour
 
 The default sample is the committed seed 717 export. The MovieMaker viewport and
 study viewport must both remain 1180×820 for this recording configuration.
+
+
+## Time and token checkpoint
+
+Implementation instruction received at 2026-09-07T09:42:20.427Z. Root counters below
+are measured through 2026-09-07T10:57:53.597Z before the final hosted-CI wait. The final
+PR delivery comment records the closing checkpoint without triggering a second
+unchanged-code CI run. This avoids repeating the complete PR-diff gate merely
+to record its own result.
+
+| Root counter | Measured delta |
+| --- | ---: |
+| Input tokens | 19,985,080 |
+| Cached input tokens | 19,626,368 |
+| Uncached input tokens | 358,712 |
+| Output tokens, including reasoning | 91,300 |
+| Input cache hit | 98.205% |
+
+Reviewer/provider usage is not separately observable in these root counters.
+Reasoning is already included in output and is not added again. These counters
+cannot attribute Pro allowance or billing to this task. Goal remains off.
+The initial 4–6-hour forecast was conditional; native/local acceptance completed
+within approximately 80 minutes. Final hosted review checks remain subject to
+runner availability; use the PR's live gate state for the final publication time.
