@@ -667,7 +667,7 @@
       ]
     }
   ],
-  "status": "native matrix complete; visual inspection and independent review reported separately",
+  "status": "Step 3 engineering complete; core102 PASS, parser431 PASS, independent APPROVE5e3e864; owner chapter art acceptance separate",
   "media_sha256": {
     "combat-1180x820-after.png": "33c232ac374b1dda18a9a025bfc9fd6d9608098444d4c188b6831d816a1d7f80",
     "combat-1180x820-before.png": "10fde87a435851efd1d4dc80dfd4e018c1901444658df3533ed368a8be7cc3cb",
@@ -779,5 +779,13 @@
     "fps": 30,
     "seconds": 21.266016,
     "scope": "Actual selection of both available branches, complete Travel, whole network; source unchanged."
+  },
+  "independent_review_head": "5e3e86429470eec07f2b545fff303f2519adaf11",
+  "core": {
+    "tests": 102,
+    "exit_code": 0,
+    "script_errors": 0,
+    "log": "core.log",
+    "scope": "Game and route runtime unchanged during run; isolated later canvas modulation fix verified by native probe, three combat captures and final parser."
   }
 }

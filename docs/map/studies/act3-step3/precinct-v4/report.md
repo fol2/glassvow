@@ -3,8 +3,9 @@
 Runtime candidate: `0b02886a16ac4929f8218d7277f68b5728a9c6dc`.
 
 The complete precinct composition is retained. This extension completes native
-route reading and aligns the actual Act III combat ground. Final core validation
-and independent review are running; this report will record their results before delivery.
+route reading and aligns the actual Act III combat ground. Engineering delivery is complete. Final core validation passes 102 tests, parser
+passes 431 scripts, and independent review approves candidate 5e3e864.
+Owner chapter art acceptance is a separate checkpoint.
 
 | Workstream | Implementation | Decisive evidence |
 |---|---:|---|
@@ -14,7 +15,7 @@ and independent review are running; this report will record their results before
 | Ground support and game-truth preservation | 100% | 112,656 surface samples; source unchanged in every run |
 | Shared obsidian finish and actual combat ground | 100% | Three native proportions; 294,912 alpha samples across 0.8/0.9/1.0 modulation, zero changes |
 | Native presentation and interaction recording | 100% | Wide/tablet/phone proportions; 638-frame uninterrupted movie |
-| Final regression and independent review | Pending | Full core running; exact-candidate review follows |
+| Final regression and independent review | 100% | Core 102 PASS, parser 431 PASS, independent APPROVE |
 
 ## Behaviour and scope
 
@@ -79,11 +80,10 @@ suites is not a substitute for visual inspection.
 
 Imports and 431-script parsing pass. All 11 scope-selected checks now pass,
 including six repaired documentation line anchors. Map-asset and store-exclusion
-checks pass. Full core and the independent exact-candidate review remain pending.
+checks pass. Full core and the independent exact-candidate review are complete.
 
-Final delivery time, core verdict, independent review and measured token deltas
-will be added when those gates finish. Raw token totals include cached context;
-they are not the account's Pro quota or a monetary bill.
+Measured completion time and token deltas are recorded below. Raw totals include
+cached context; they are not the account's Pro quota or a monetary bill.
 
 ## Independent review correction
 
@@ -99,3 +99,60 @@ The ongoing core run remains valid for unchanged game logic and route tests.
 The only subsequent runtime edit is this isolated canvas shader; its invalidated
 evidence is replaced by native modulation checks, actual scene recapture and
 a complete parser sweep. No interrupted core attempt is counted as a pass.
+
+## Final delivery result
+
+**Act III Step 3 engineering: 100%.** Act I/II Step 3 remain approved. Act III is
+delivered for the existing chapter checkpoint; owner art approval is not presumed.
+Act IV Step 3 is 0%; Step 4 has not begun. Across four equally counted chapter
+engineering deliveries, Step 3 is 3/4 complete (75%); this is not a cost-weighted
+estimate of the whole game.
+
+- Full core: `godot --headless -s res://tests/run_all.gd` — PASS (102 tests),
+  exit 0, zero SCRIPT ERROR. New route-guidance test included.
+- Final script sweep: `tools/check_scripts.sh` — PASS (431 checked), exit 0.
+- Imports, 11 selected checks, map-assets and store-exclusion checks pass.
+- Independent review: APPROVE at `5e3e86429470eec07f2b545fff303f2519adaf11`.
+  Subsequent changes are reports, evidence links and task status only.
+- Tailnet page loaded; controls and images inspected, native movie played to
+  completion without media error. Final modulated combat images are the defaults.
+
+The full core retains 31 null-material and 50 null-tree diagnostics already
+recorded in the preceding baseline, intentional negative-case errors, and
+shutdown resource/RID warnings. It is a passing test run, not an error-free log.
+No engine/resource-cleanup claim is made. The shader-only review fix received
+new native alpha proof, all three real-combat captures and the final parser sweep;
+it did not alter the game/route code exercised by the ongoing core run.
+
+This delivery is saved on the owned review branch at the Step 3 chapter boundary,
+not merged campaign integration. The tailnet page serves native evidence, not a
+web replacement for the Godot game. Act IV and Step 4 remain outside this delivery.
+
+## Timing, tokens and process assessment
+
+Completion gate time: 2026-09-07 09:24 UTC (10:24 BST).
+This continuation took approximately 58.5 minutes. Act III Step 3 has no
+remaining engineering ETA. No committed date is claimed for Act IV or Step 4.
+
+Measured root-session tokens through 2026-09-07T09:23:45.669Z:
+
+| Token category | Count |
+|---|---:|
+| Uncached input | 173,343 |
+| Cached input | 13,354,496 |
+| Output, including reasoning | 45,574 |
+| Reasoning subset of output | 22,935 |
+
+Input cache hit ratio: 98.72%. This is observed caching,
+not proof that turning Goal off caused a saving. It excludes unreported reviewer
+usage and later report/final-response tokens, and cannot be converted into Pro
+quota consumption or monetary cost from the available telemetry.
+
+AI-SDLC: applied the owned scope, deterministic proof, native inspection and
+independent review with one batched correction. Quality was not traded for speed
+or tokens. Efficiency was imperfect: two premature core starts were superseded,
+and the first alpha probe missed authored modulation. Both are retained as
+process costs; the report does not claim optimal time or token use. The final
+core ran to completion while the narrow shader correction was verified, avoiding
+another duplicate core run. Future material probes should inherit actual layout
+modulation before the first review.

@@ -317,18 +317,29 @@ combat ground with the original complete alpha footprint. Preserve game truth,
 all generated edges, prior chapter styles and the native precinct composition.
 Step 4 campaign-map integration and Act IV remain later work.
 
-Master native interaction passes both selected branches, current-node clearing,
-complete overview, source immutability and 10,991 precise surface samples.
-Native ground coverage comparison passes all 98,304 pixels with no alpha change.
-Remaining: three seeds × three shapes, final combat comparisons, risk-selected
-checks and core suite, one exact-head independent review, published review page
-and updated delivery report. No Goal recreation and no unmeasured token claim.
+Implementation and native verification are complete. Nine seed/shape runs pass
+15 actual next-event selections, full-network presentation, source immutability
+and 112,656 floor samples. Final combat comparisons cover all three proportions;
+294,912 alpha samples preserve authored opacity at 0.8/0.9/1.0. The native 21.266 s
+movie was played to completion through the tailnet page. Host Metal overview
+active GPU P95 is 4.359 ms across 503 complete frames; no physical-device claim.
+
+Independent review APPROVE: `5e3e86429470eec07f2b545fff303f2519adaf11`, after
+one batch corrected an actual CanvasItem-modulation regression and a report seed
+label. All 11 scope-selected checks, imports, map-assets and store exclusion pass.
+Final delivery gates complete: core PASS (102 tests), exit 0, zero SCRIPT ERROR;
+parser PASS (431 scripts). Final report records known headless diagnostics,
+completion percentages, measured time and root-session token deltas.
+Final documentation and evidence are saved with the delivery on the owned branch.
 
 ## Current execution capsule
 
-Owner review page: `https://jamess-macbook-pro.tail55e87e.ts.net/docs/map/studies/act3-step3/precinct-v2.html`.
-Implementation and required study verification are complete; Act III owner
-approval is the next action. No Act IV work or Step 4 integration has started.
+Owner review page:
+`https://jamess-macbook-pro.tail55e87e.ts.net/docs/map/studies/act3-step3/precinct-v4/`.
+Act III Step 3 engineering is complete. Save the final report and stop at the
+agreed chapter checkpoint. Do not begin Act IV or Step 4.
+Previous precinct-v2 receipts below are retained historical evidence; they do not
+replace the current extension's final gates or the owner's chapter art judgement.
 
 ### Review correction in progress — 7 September
 
