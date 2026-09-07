@@ -1,0 +1,25 @@
+{
+  "status":"RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "engine":"4.7.2.stable.official.ed1daf0bf",
+  "cells":64,"rows":1024,"runs_per_cell":16,
+  "counts":{"win":683,"loss":341,"stall":0,"error":0},
+  "native_diagnostic_failures":0,
+  "seeds":[22010000,22010015],
+  "freeze_sha256":"39c55a99e780ee7744531b48a5f1e9d33c02c9605db4906812f81f17a8d68cea",
+  "route_order":{"dusk":["facet","fervor","cycle","balanced_random"],"ash":["smolder","hand","ember","balanced_random"]},
+  "vow_order":[0,5],
+  "wins_out_of_16":{
+    "hard_consumer_hard_ward":{"dusk":[[15,9],[15,13],[16,10],[10,4]],"ash":[[14,13],[12,5],[15,7],[8,3]]},
+    "hard_consumer_smooth_ward":{"dusk":[[15,9],[15,13],[16,10],[11,4]],"ash":[[14,13],[12,5],[14,12],[8,4]]},
+    "smooth_consumer_hard_ward":{"dusk":[[14,9],[15,12],[16,10],[12,3]],"ash":[[13,13],[14,3],[15,7],[10,4]]},
+    "smooth_consumer_smooth_ward":{"dusk":[[14,9],[15,12],[16,10],[12,3]],"ash":[[13,13],[14,3],[14,7],[10,4]]}
+  },
+  "selective_findings":{
+    "earlier_ward_ember_v5":{"reference_wins":7,"treatment_wins":12,"paired_new_wins":5,"paired_new_losses":0,"n":16},
+    "hand_v5_regrowth":{"offered_runs":13,"acquired_runs":0,"n":16,"legacy_base_draft_score":8,"initial_decline_threshold":12},
+    "interpretation":"Earlier Ward activation is promising for the banked controller, but a resource-slope placebo remains necessary: improved upgraded flat Ward can contribute. Consumer smoothing increases some source-health fractions but does not produce joint viability. A same-content controller test addresses demonstrably low recurring-heal valuation before more card buffs."
+  },
+  "anchor_correction":"Stock8 is an equal-payoff anchor, not the native cap. Native cap9, Crown12; see ANCHOR-CORRECTION.md. No frozen formula or sample was changed.",
+  "complete_recovery":{"name":"glassvow-p9-20260907-complete.zip","bytes":7010871,"sha256":"4869f1c7c0d7bdb724bf86e3e740247bbc006505f3491135f0bab125eaa97c68","files":1509,"local_commit":"66c2fc9672d3cef78ac9c0d714fcb9c01aac5a47","scope":"Complete assembled source and completed raw studies; engine excluded. Chat download, not claimed stored in GitHub."},
+  "limitations":["16 shared seed clusters, not1024 independent seeds","balanced RandomBuild is not signedC2","source fractions are descriptive","no six-package admission, detector validation, unrestricted retention, corrected confirmation or product promotion"]
+}
