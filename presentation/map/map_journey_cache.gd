@@ -2,7 +2,7 @@ extends Resource
 ## Disposable derived presentation data. Gameplay saves never depend on this file.
 ## Bump this epoch whenever the derived mesh/placement format or recipe semantics
 ## change without a corresponding recipe/surface version. Shader resources remain external.
-const VERSION: String = "journey-cache-v5"
+const VERSION: String = "journey-cache-v6"
 const ROOT: String = "user://map-journey-cache"
 @export var cache_key: String = ""
 @export var quality: Dictionary = {}
@@ -12,6 +12,8 @@ const ROOT: String = "user://map-journey-cache"
 @export var bridge_spans: Array[Dictionary] = []
 @export var placements: Array[Dictionary] = []
 @export var hero_roles: Dictionary = {}
+@export var chapter_data: Dictionary = {}
+@export var recipe_assets: Dictionary = {}
 
 static func read(key: String, directory: String = ROOT) -> Resource:
 	var path: String = directory.path_join(key+".res")
@@ -56,6 +58,9 @@ func save_cache(directory: String = ROOT) -> Error:
 	return OK
 
 func capture(landscape: Node3D) -> void:
+	if landscape.has_method("capture_chapter"):
+		chapter_data=landscape.capture_chapter()
+		return
 	meshes.clear()
 	for child: Node in landscape.terrain.get_children():
 		if not child is MeshInstance3D: continue

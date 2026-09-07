@@ -16,51 +16,55 @@ func build(data: Dictionary) -> void:
 	var started: int = Time.get_ticks_msec()
 	terrain=CityTerrain.new()
 	add_child(terrain)
-	terrain.build({"anchors":data["node_anchors"],"edges":data["edges"],"nodes":source_nodes,"layout_digest":data["layout_digest"] if data.has("layout_digest") else ""},false,map_bounds)
+	terrain.build({"anchors":data["node_anchors"],"edges":data["edges"],"nodes":source_nodes,"layout_digest":data["layout_digest"] if data.has("layout_digest") else ""},false,map_bounds,cache)
 	if not terrain.failure.is_empty():
 		failure=terrain.failure
 		return
 	var city: CityTerrain = terrain as CityTerrain
 	timings_ms["terrain"]=Time.get_ticks_msec()-started
 	started=Time.get_ticks_msec()
-	for site: Dictionary in city.causeways.ruin_plan.sites:
-		var item: Node3D
-		var ordinal: int = site["ordinal"]
-		var kind: String = site["kind"]
-		if kind=="library":
-			var library: Library = Library.new()
-			library.connected_forecourt=true
-			var at: Vector3 = site["centre"]
-			library.build(1.18-at.y)
-			item=library
-		elif kind=="ward":
-			var ward: Node3D = preload("res://presentation/map/chapters/act2/ward.gd").new()
-			ward.build_ward(6.6 if ordinal==1 else 5.4,ordinal%2==0)
-			item=ward
-		else:
-			var quarter: Node3D = preload("res://presentation/map/chapters/act2/sunken_quarter.gd").new()
-			quarter.build(ordinal-4)
-			item=quarter
-		add_child(item)
-		item.position=site["centre"]
-		item.rotation.y=site["yaw"]
-		_record("ruin-%d"%ordinal,"city-"+kind+str(ordinal),item,ordinal==0)
-	var scenery: Node3D = preload("res://presentation/map/chapters/act2/scenery.gd").new()
-	add_child(scenery)
-	scenery.build(city.causeways)
-	var index: int = 0
-	for child: Node in scenery.get_children():
-		if not child is MeshInstance3D: continue
-		var mesh_item: MeshInstance3D = child
-		var variant: String = ""
-		var meshes: Dictionary = scenery.assets.meshes
-		for id: String in meshes:
-			if meshes[id]==mesh_item.mesh: variant=id
-		if variant.is_empty():
-			failure="Unidentified city scenery mesh"
-			return
-		_record("scenery-%d"%index,"city-"+variant,mesh_item,false,"res://presentation/map/chapters/act2/scenery_assets.gd")
-		index+=1
+	if terrain.restored:
+		var stored: Dictionary = cache.get("chapter_data")
+		preload("res://presentation/map/chapters/act2/cache.gd").restore_architecture(self,stored)
+	else:
+		for site: Dictionary in city.causeways.ruin_plan.sites:
+			var item: Node3D
+			var ordinal: int = site["ordinal"]
+			var kind: String = site["kind"]
+			if kind=="library":
+				var library: Library = Library.new()
+				library.connected_forecourt=true
+				var at: Vector3 = site["centre"]
+				library.build(1.18-at.y)
+				item=library
+			elif kind=="ward":
+				var ward: Node3D = preload("res://presentation/map/chapters/act2/ward.gd").new()
+				ward.build_ward(6.6 if ordinal==1 else 5.4,ordinal%2==0)
+				item=ward
+			else:
+				var quarter: Node3D = preload("res://presentation/map/chapters/act2/sunken_quarter.gd").new()
+				quarter.build(ordinal-4)
+				item=quarter
+			add_child(item)
+			item.position=site["centre"]
+			item.rotation.y=site["yaw"]
+			_record("ruin-%d"%ordinal,"city-"+kind+str(ordinal),item,ordinal==0)
+		var scenery: Node3D = preload("res://presentation/map/chapters/act2/scenery.gd").new()
+		add_child(scenery)
+		scenery.build(city.causeways)
+		var index: int = 0
+		for child: Node in scenery.get_children():
+			if not child is MeshInstance3D: continue
+			var mesh_item: MeshInstance3D = child
+			var variant: String = ""
+			var meshes: Dictionary = scenery.assets.meshes
+			for id: String in meshes:
+				if meshes[id]==mesh_item.mesh: variant=id
+			if variant.is_empty():
+				failure="Unidentified city scenery mesh"
+				return
+			_record("scenery-%d"%index,"city-"+variant,mesh_item,false,"res://presentation/map/chapters/act2/scenery_assets.gd")
+			index+=1
 	timings_ms["architecture"]=Time.get_ticks_msec()-started
 	var water: MeshInstance3D = preload("res://presentation/map/chapters/water/surface.gd").new()
 	var plane: PlaneMesh = PlaneMesh.new()
@@ -92,3 +96,6 @@ func _record(id: String, asset_id: String, item: Node3D, terminal: bool, source:
 
 func realise(source: MapLayoutResult) -> Dictionary:
 	return preload("res://presentation/map/chapters/act2/realisation.gd").finish(source,self)
+
+func capture_chapter() -> Dictionary:
+	return preload("res://presentation/map/chapters/act2/cache.gd").capture(self)

@@ -3,7 +3,7 @@ extends "res://presentation/map/landscape/terrain.gd"
 const Causeways = preload("res://presentation/map/chapters/act2/causeways.gd")
 var causeways: Causeways
 
-func build(sample: Dictionary, _grey: bool, extent: Rect2 = Rect2(-48,-30,96,60), _cache: Resource = null) -> void:
+func build(sample: Dictionary, _grey: bool, extent: Rect2 = Rect2(-48,-30,96,60), cache: Resource = null) -> void:
 	bounds=extent
 	anchors=sample["anchors"]
 	source_edges=sample["edges"]
@@ -21,7 +21,12 @@ func build(sample: Dictionary, _grey: bool, extent: Rect2 = Rect2(-48,-30,96,60)
 			preferred[0]=Meshes.v3(raw)+Vector3(18,0,0)
 	causeways.ruin_plan.preferred_centres=preferred
 	add_child(causeways)
-	causeways.build(sample)
+	if cache!=null and cache.get("chapter_data").get("kind","")=="drowned-city":
+		var stored: Dictionary = cache.get("chapter_data")
+		preload("res://presentation/map/chapters/act2/cache.gd").restore_roads(causeways,stored)
+		restored=true
+	else:
+		causeways.build(sample)
 	failure=causeways.failure
 	landform=causeways.levels
 	lines=causeways.lines

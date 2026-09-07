@@ -19,10 +19,12 @@ static func run(fails: Array[String]) -> void:
 		var cache: Cache = Cache.new()
 		cache.cache_key = ("cache-test-%d"%i).sha256_text()
 		cache.quality = {"test":i}
+		cache.recipe_assets={"profile":{"local_aabb":AABB(Vector3(-2,0,-1),Vector3(4,7,2))}}
+		cache.chapter_data={"kind":"fixture","route":PackedVector3Array([Vector3(1,2,3),Vector3(4,5,6)])}
 		newest = cache.cache_key
 		if cache.save_cache(directory)!=OK: fails.append("journey cache: cannot save derived test data")
 		var restored: Cache = Cache.read(newest,directory) as Cache
-		if restored == null or restored.quality!=cache.quality:
+		if restored == null or restored.quality!=cache.quality or restored.recipe_assets!=cache.recipe_assets or restored.chapter_data!=cache.chapter_data:
 			fails.append("journey cache: newest entry was lost or changed")
 	var count: int = 0
 	for name: String in DirAccess.get_files_at(directory):

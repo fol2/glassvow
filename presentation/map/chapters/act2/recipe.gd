@@ -1,6 +1,7 @@
 extends RefCounted
 ## Generated city corridors reserve the measured library, not a woodland proxy.
-const VERSION: String = "drowned-city-journey-v1"
+const VERSION: String = "drowned-city-journey-v2"
+const Cache = preload("res://presentation/map/map_journey_cache.gd")
 const Library = preload("res://presentation/map/chapters/act2/library.gd")
 const Spatial = preload("res://presentation/map/map_spatial_profile.gd")
 var measured: Dictionary = {}
@@ -8,6 +9,13 @@ var measured: Dictionary = {}
 func build(nodes: Array, edges: Array, base: Dictionary) -> Dictionary:
 	var quality: Dictionary = preload("res://presentation/map/map_journey_camera_registry.gd").quality(base)
 	quality["routing_strategy"]="grade-priority-v1"
+	var key: String = MapLayoutCanonical.digest({"recipe":VERSION,"cache":Cache.VERSION,
+		"surface":preload("res://presentation/map/chapters/act2/realisation.gd").VERSION,
+		"engine":Engine.get_version_info()["string"],"app":ProjectSettings.get_setting("application/config/version"),
+		"nodes":nodes,"edges":edges,"quality":quality})
+	var stored: Cache = Cache.read(key) as Cache
+	if stored!=null and not stored.quality.is_empty() and not stored.heroes.is_empty() and not stored.recipe_assets.is_empty():
+		return {"ok":true,"quality":stored.quality,"assets":stored.recipe_assets,"heroes":stored.heroes,"version":VERSION,"cache":stored}
 	var spatial: Dictionary = preload("res://presentation/map/map_journey_spatial.gd").configure(nodes,edges,quality,1,VERSION,"drowned-city")
 	if spatial.get("ok")!=true: return spatial
 	if measured.is_empty():
@@ -30,4 +38,9 @@ func build(nodes: Array, edges: Array, base: Dictionary) -> Dictionary:
 		"asset_id":"drowned-library","profile_id":"drowned-library","position":[at.x,at.y,at.z],"yaw_radians":-PI*.5,"scale":[1.0,1.0,1.0]}},
 		"protected_zones":{"terminus-zone":{"role":"terminus","polygon":polygon}}}
 	var profiles: Array[Dictionary] = [profile]
-	return {"ok":true,"quality":quality,"assets":{"profiles":{"drowned-library":profile},"digest":registry.digest(profiles)},"heroes":heroes,"version":VERSION}
+	stored=Cache.new()
+	stored.cache_key=key
+	stored.quality=quality
+	stored.heroes=heroes
+	stored.recipe_assets={"profiles":{"drowned-library":profile},"digest":registry.digest(profiles)}
+	return {"ok":true,"quality":quality,"assets":stored.recipe_assets,"heroes":heroes,"version":VERSION,"cache":stored}

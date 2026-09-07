@@ -890,3 +890,33 @@ other generated cases and reference shapes. Progress remains 51%; no new final
 core or acceptance claim. Evidence: act2-rail-clearance717.*, box-append-native-
 benchmark.log, stair-blend-red.log/green.log and rail-batch-tests.log in the same
 /tmp/glassvow-steps4-8 directory.
+
+### Act II first complete native geometry pass and cache replay — 7 September, 20:29 UTC
+
+Reduced the remaining coping defect to a five-node/four-edge fixture. A narrow
+fork notch was narrower than the coping itself; the rendered rail could therefore
+enter the adjacent walking corridor despite a valid deck outline. The new full-
+width coping reservation passes the previously failing triangle/body regression.
+Full seed 717 native qualification now passes: 38,410 body samples, zero masonry
+hits; 53,774 deck samples, zero missing; bridgehead separation at floating-point
+noise; 423 crossing samples with minimum headroom 2.642m. The native close view was
+inspected. Evidence: coping-fork-red.log/green.log, act2-fork-qualified717.*.
+
+City recipe v2 and shared cache v6 preserve compiled source, fitted fields, exact
+static geometry, measured profiles and placements. Water and actors remain live
+runtime objects. Replaying the cache retains the exact realised digest
+9f293b1202ff9217b66d5e92328d7fb90084be33505fd001ba654c4b30366200 and repeats the full
+geometry pass. Build/replay/reindexed replay measured 49.986/4.068/2.060s on this
+Mac. A query-only coarser index reduces field reconstruction from 2.341s to .239s;
+its contact-value regression passes. This does not lower mesh resolution.
+Shared cache v6 deliberately invalidates the prior cache epoch; old Act I cold-
+load numbers remain historical evidence until the final v6 campaign check.
+
+All twelve seed 717 reference views (opening, middle, terminus and overview on
+three shipping shapes) were captured and visually inspected. Phone native input
+exercise passes wheel, drag, keyboard inspection, confirmation, exactly-once
+arrival and idle rendering. A local M1 Max journey pan reports p95 8.664ms,
+95 draw calls and 353.7MiB renderer memory; GPU timings are unavailable. It does
+not qualify governed/mobile performance or the maximum-landmark pose. Continue
+with the latter and additional generated geometry cases before Act II completion.
+Progress remains 51%; final recipe/transition/device/core/review gates remain open.

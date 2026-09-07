@@ -56,6 +56,16 @@ func build(parent: Node3D, mesh: ArrayMesh, field: RefCounted,
 		var openings: Array = settings.get("openings",[])
 		for opening: Vector3 in openings:
 			shared_join = shared_join or (Vector2(at.x-opening.x,at.z-opening.z).length()<1.6 and absf(at.y-opening.y)<.25)
+		# The full coping must fit in the gap between branches. A valid deck
+		# outline alone can surround a notch narrower than the rail itself.
+		var rail_width: float = settings.get("parapet_width",.20)
+		var outer: float = .14+(rail_width+.12)*.5
+		for endpoint: Vector3 in [a,at,b]:
+			var probe_at: Vector3 = endpoint+outward*outer
+			var own: Dictionary = field.field(Vector2(probe_at.x,probe_at.z))
+			var own_distance: float = own["distance"]
+			var own_height: float = own["height"]
+			shared_join=shared_join or (own_distance<-.025 and _rail_obstructs(own_height,endpoint.y,settings))
 		for other: RefCounted in other_fields:
 			if other==field:
 				continue

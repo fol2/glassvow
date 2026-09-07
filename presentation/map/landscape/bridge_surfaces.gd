@@ -6,6 +6,7 @@ const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
 # can cut through a land triangle between otherwise sound contact vertices.
 const CELL: float = .125
 const HALF: float = .80
+var query_cell_size: float = CELL
 var spans: Array[Dictionary] = []
 var cells: Dictionary = {}
 var vertices: Dictionary = {}
@@ -24,15 +25,15 @@ func setup(source: Array[Dictionary], height: Callable, deck_profile: Callable =
 		var half_width: float = maxf(half_a,half_b)
 		var lo: Vector2 = Vector2(minf(a.x,b.x),minf(a.z,b.z))-Vector2.ONE*(half_width+CELL*2)
 		var hi: Vector2 = Vector2(maxf(a.x,b.x),maxf(a.z,b.z))+Vector2.ONE*(half_width+CELL*2)
-		for x: int in range(floori(lo.x/CELL),ceili(hi.x/CELL)+1):
-			for z: int in range(floori(lo.y/CELL),ceili(hi.y/CELL)+1):
+		for x: int in range(floori(lo.x/query_cell_size),ceili(hi.x/query_cell_size)+1):
+			for z: int in range(floori(lo.y/query_cell_size),ceili(hi.y/query_cell_size)+1):
 				var key: Vector2i = Vector2i(x,z)
 				if not cells.has(key):
 					cells[key] = []
 				cells[key].append(span)
 
 func field(at: Vector2) -> Dictionary:
-	var candidates: Array = cells.get(Vector2i(floori(at.x/CELL),floori(at.y/CELL)),[])
+	var candidates: Array = cells.get(Vector2i(floori(at.x/query_cell_size),floori(at.y/query_cell_size)),[])
 	var best: float = INF
 	var rise_sum: float = 0
 	var rise_weight: float = 0
@@ -89,6 +90,7 @@ func _vertex(key: Vector2i) -> Dictionary:
 	return vertices[key]
 
 func append(top: SurfaceTool, masonry: SurfaceTool) -> void:
+	assert(is_equal_approx(query_cell_size,CELL),"Meshing requires the reference grid; coarse indices are query-only")
 	for key: Vector2i in cells:
 		var corners: Array[Dictionary] = [_vertex(key),_vertex(key+Vector2i(0,1)),
 			_vertex(key+Vector2i(1,1)),_vertex(key+Vector2i(1,0))]

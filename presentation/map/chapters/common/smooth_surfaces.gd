@@ -15,8 +15,8 @@ func setup(source: Array[Dictionary],height: Callable,deck_profile: Callable = C
 		var b: Vector3 = span["b"]
 		var low: Vector2 = Vector2(minf(a.x,b.x),minf(a.z,b.z))-Vector2.ONE*1.65
 		var high: Vector2 = Vector2(maxf(a.x,b.x),maxf(a.z,b.z))+Vector2.ONE*1.65
-		for x: int in range(floori(low.x/CELL),ceili(high.x/CELL)+1):
-			for z: int in range(floori(low.y/CELL),ceili(high.y/CELL)+1):
+		for x: int in range(floori(low.x/query_cell_size),ceili(high.x/query_cell_size)+1):
+			for z: int in range(floori(low.y/query_cell_size),ceili(high.y/query_cell_size)+1):
 				var key: Vector2i = Vector2i(x,z)
 				if not cells.has(key):
 					cells[key] = []
@@ -24,7 +24,7 @@ func setup(source: Array[Dictionary],height: Callable,deck_profile: Callable = C
 
 func field(at: Vector2) -> Dictionary:
 	var result: Dictionary = super.field(at)
-	var candidates: Array = cells.get(Vector2i(floori(at.x/CELL),floori(at.y/CELL)),[])
+	var candidates: Array = cells.get(Vector2i(floori(at.x/query_cell_size),floori(at.y/query_cell_size)),[])
 	var flights: Dictionary = {}
 	var height_sum: float = 0
 	var weight_sum: float = 0
