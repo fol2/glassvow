@@ -920,3 +920,29 @@ arrival and idle rendering. A local M1 Max journey pan reports p95 8.664ms,
 not qualify governed/mobile performance or the maximum-landmark pose. Continue
 with the latter and additional generated geometry cases before Act II completion.
 Progress remains 51%; final recipe/transition/device/core/review gates remain open.
+
+### City batching and generated approach clearance — 7 September, 20:54 UTC
+
+Native spatial batching preserves 4,600 source parts in 330 draws. The independent
+renderer readback checks source bounds against actual submitted instances; moving
+one actual instance deliberately is detected. The maximum-landmark pose falls
+from 5,338 to 501 draw calls and p95 14.073 to 10.140ms on this M1 Max. The native
+image matches the unbatched composition. Unit checks also compare expanded box
+triangles; headless dummy rendering cannot read MultiMesh transforms, so native
+readback is required for that claim. Static cache snapshots retain source visibility.
+
+Additional city seeds 14 and 17634 pass actual geometry and batching; the latter
+has no raised crossings. Seed 4 exposed one protruding arch voussoir above a rising
+route before the crossing. A nine-node/seven-edge fixture reproduces the hit.
+The full decorative-stone extent now respects the adjacent route's headroom;
+actual seed 4 passes 43,110 body probes with no masonry hits and 60,354 deck probes
+with no missing deck. Conservative architecture clearance also reports zero hits
+across 25,620 body samples and 4,630 mesh parts. The surface epoch advances to v2;
+repeat the other cases against this final geometry before claiming that matrix.
+
+Focused coping/approach, batching, visibility snapshot and rail-clearance tests
+pass. Native reference images for the additional cases were inspected. Evidence:
+act2-batched-terminus717.*, arch-approach-regression.log, act2-arch-qualified4.*,
+act2-architecture4.*, city-batch-final-tests.log. This is an incremental checkpoint,
+not final core, governed hardware, independent review or completed Step 7.
+Progress remains 51%. Continue Act III using precinct-v4, not its older bridge study.

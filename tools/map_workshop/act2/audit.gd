@@ -60,6 +60,8 @@ static func measure(causeways: Node3D, sample: Dictionary) -> Dictionary:
 		"remaining_checks":["whole-width bridge clearance","library footprint and route obstruction","reference-shape readability","water motion and depth","owner review"]}
 
 static func _width(causeways: Node3D) -> Dictionary:
+	if causeways.fields.size()<2:
+		return {"sample_count":0,"minimum_headroom":INF,"failures":[],"sampling":"No raised crossing in this generated graph"}
 	var floor_probe: Probe = Probe.new()
 	var soffit_probe: Probe = Probe.new()
 	var floor_mesh: Mesh = causeways.deck_meshes[0]
@@ -92,7 +94,7 @@ static func _width(causeways: Node3D) -> Dictionary:
 				if clearance<2.2 and failures.size()<8:
 					failures.append({"at":[at.x,at.y],"clearance":clearance})
 	return {"sample_count":count,"minimum_headroom":minimum,"failures":failures,
-		"sampling":"Rendered lower top and upper underside triangles, 0.125 m along / 0.15 m across, +/-0.9 m width at all three crossings"}
+		"sampling":"Rendered lower top and upper underside triangles, 0.125 m along / 0.15 m across, +/-0.9 m width at every generated crossing"}
 
 static func _joints(causeways: Node3D) -> Dictionary:
 	var count: int = 0

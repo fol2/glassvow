@@ -79,7 +79,7 @@ func build(parent: Node3D, mesh: ArrayMesh, field: RefCounted,
 			continue
 		accepted.append({"a":a,"b":b,"outward":outward})
 		_piece(arch_stones,a,b,outward*.04-Vector3.UP*.16,.34,.16)
-		_arch_band(a,b,outward,field)
+		_arch_band(a,b,outward,field,other_fields)
 		count += 1
 	_mark("boundary_masonry")
 	print("STONE_EDGE_PARTS query_ms=",_query_us/1000.0," piece_ms=",_piece_us/1000.0)
@@ -95,7 +95,7 @@ func build(parent: Node3D, mesh: ArrayMesh, field: RefCounted,
 	print("STONE_BRIDGE_BOUNDARY_PIECES ",count)
 	return result
 
-func _arch_band(a: Vector3,b: Vector3,outward: Vector3,field: RefCounted) -> void:
+func _arch_band(a: Vector3,b: Vector3,outward: Vector3,field: RefCounted,other_fields: Array) -> void:
 	# The deck outline can be straight above an entire arch. Sample the
 	# intrados separately; joining only deck endpoints draws a false diagonal.
 	var divisions: int = maxi(1,ceili(a.distance_to(b)/.20))
@@ -110,6 +110,18 @@ func _arch_band(a: Vector3,b: Vector3,outward: Vector3,field: RefCounted) -> voi
 		var low_b: float = qb["bottom"]
 		if minf(low_a,low_b)<=1.0 or absf(low_a-low_b)>.65:
 			continue
+		# Voussoirs project beyond the structural underside. Keep their full
+		# width clear of a neighbouring rising route, including before crossings.
+		var obstructs: bool = false
+		for endpoint: Vector3 in [pa,(pa+pb)*.5,pb]:
+			for offset: float in [-.075,.04,.155]:
+				var at: Vector3 = endpoint+outward*offset
+				for other: RefCounted in other_fields:
+					if other==field: continue
+					var query: Dictionary = other.field(Vector2(at.x,at.z))
+					var floor_height: float = query["height"]
+					obstructs=obstructs or (query["distance"]<=.025 and minf(low_a,low_b)-.01<floor_height+2.45 and maxf(low_a,low_b)+.25>floor_height+.04)
+		if obstructs: continue
 		pa.y = low_a+.12
 		pb.y = low_b+.12
 		_piece(arch_stones,pa,pb,outward*.04,.23,.26,-.012)

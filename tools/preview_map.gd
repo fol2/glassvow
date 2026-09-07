@@ -12,6 +12,7 @@ var _continuous: bool = false
 var _overlays: bool = true
 var _batches: bool = true
 var _audit_batches: bool = false
+var _audit_procedural: bool = false
 var _steps: int = 0
 var _exercise: bool = false
 var _measure: bool = false
@@ -54,6 +55,8 @@ func _run() -> void:
 			_measure = true
 		elif arg == "--exercise":
 			_exercise = true
+		elif arg == "--procedural-batches":
+			_audit_procedural=true
 		elif arg == "--static-batches":
 			_batches=true
 			_audit_batches=true
@@ -135,6 +138,10 @@ func _run() -> void:
 			return
 		var city: Node3D = screen._map_scene._landscape.terrain.causeways
 		var report: Dictionary = preload("res://tools/map_workshop/act2/audit.gd").measure(city,{"anchors":city.anchors,"edges":screen._map_scene._landscape.terrain.source_edges})
+		var architecture: Array[Node3D] = []
+		for placement: Dictionary in screen._map_scene._landscape.measured_placements:
+			architecture.append(placement["node"])
+		report["architecture"]=preload("res://tools/map_workshop/act2/placement_audit.gd").new().measure(architecture,city)
 		print("MAP_CHAPTER_AUDIT ",JSON.stringify(report))
 		_chapter_failures=preload("res://tools/map_workshop/act2/runtime_audit.gd").failures(report)
 		print("MAP_CHAPTER_FAILURES ",JSON.stringify(_chapter_failures))
@@ -203,6 +210,14 @@ func _run() -> void:
 	screen._map_scene.set_live(_continuous)
 	for frame: int in range(12):
 		await process_frame
+	if _audit_procedural:
+		var batch: Node3D = screen._map_scene._landscape.get("draw_batches")
+		var audit: Dictionary = preload("res://tools/map_workshop/audit_procedural_batches.gd").audit(batch)
+		var canary: bool = preload("res://tools/map_workshop/audit_procedural_batches.gd").negative_canary(batch)
+		print("PROCEDURAL_DRAW_AUDIT ",JSON.stringify(audit)," negative_canary=",canary)
+		if not audit["ok"] or not canary:
+			quit(1)
+			return
 	if _audit_batches:
 		var kit: Node3D = screen._map_scene._landscape.get("kit")
 		var batch_audit: Dictionary = preload("res://tools/map_workshop/audit_static_scenery.gd").audit(kit)

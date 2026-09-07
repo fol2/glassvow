@@ -10,7 +10,7 @@ static func _collect(node: Node3D,parent: Transform3D,rows: Array[Dictionary]) -
 	if node is MeshInstance3D:
 		var item: MeshInstance3D = node
 		rows.append({"name":str(item.name),"mesh":item.mesh,"material":item.material_override,"transform":pose,
-			"layers":item.layers,"shadows":item.cast_shadow,"visible":item.visible})
+			"layers":item.layers,"shadows":item.cast_shadow,"visible":item.get_meta("unbatched_visible",item.visible)})
 	for child: Node in node.get_children():
 		if child is Node3D: _collect(child as Node3D,pose,rows)
 

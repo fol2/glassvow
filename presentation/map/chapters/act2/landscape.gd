@@ -7,6 +7,7 @@ var source_nodes: Array = []
 var measured_profiles: Dictionary = {}
 var measured_placements: Array[Dictionary] = []
 var profile_registry: MapAssetProfiles
+var draw_batches: Node3D
 
 func _init() -> void:
 	node_lit_colour=Color("96dec7")
@@ -82,6 +83,13 @@ func build(data: Dictionary) -> void:
 	for i: int in range(anchors.size()): _resolved_seats[Vector2(anchors[i].x,anchors[i].z)]=journey.bases[i].position
 	journey.set_process(false)
 	journey.walker.visible=false
+	if static_batching:
+		draw_batches=preload("res://presentation/map/chapters/common/procedural_batches.gd").new()
+		add_child(draw_batches)
+		var roots: Array[Node3D] = []
+		for row: Dictionary in measured_placements: roots.append(row["node"])
+		var world_shaders: Array[Shader] = [preload("res://presentation/map/chapters/act2/masonry.gdshader")]
+		draw_batches.build(roots,world_shaders)
 
 func _record(id: String, asset_id: String, item: Node3D, terminal: bool, source: String = "") -> void:
 	if not measured_profiles.has(asset_id):

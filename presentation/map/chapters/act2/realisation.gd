@@ -1,6 +1,6 @@
 extends RefCounted
 ## Publish measured city contacts and model transforms after native assembly.
-const VERSION: String = "drowned-city-surface-v1"
+const VERSION: String = "drowned-city-surface-v2"
 static func finish(source: MapLayoutResult, landscape: Node3D) -> Dictionary:
 	var data: Dictionary = source.identity_dict()
 	for id: String in data["node_anchors"]:
