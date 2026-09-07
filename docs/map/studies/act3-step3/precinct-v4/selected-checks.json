@@ -1,0 +1,128 @@
+[
+  {
+    "name": "ci-scope",
+    "command": [
+      "python3",
+      "-B",
+      "tests/test_ci_scope.py"
+    ],
+    "exit_code": 0,
+    "ok": true,
+    "log": "/tmp/act3-followup-check-ci-scope.log"
+  },
+  {
+    "name": "anchors",
+    "command": [
+      "python3",
+      "tools/check_anchors.py"
+    ],
+    "exit_code": 0,
+    "ok": true,
+    "log": "/tmp/act3-delivery-anchors.log",
+    "note": "Six documentation line references were re-anchored after combat_screen insertion; original failure retained in /tmp/act3-followup-check-anchors.log."
+  },
+  {
+    "name": "freeze",
+    "command": [
+      "python3",
+      "tools/check_benchmark_freeze.py"
+    ],
+    "exit_code": 0,
+    "ok": true,
+    "log": "/tmp/act3-followup-check-freeze.log"
+  },
+  {
+    "name": "quality-self",
+    "command": [
+      "python3",
+      "tools/check_map_quality_v2.py",
+      "--self-test"
+    ],
+    "exit_code": 0,
+    "ok": true,
+    "log": "/tmp/act3-followup-check-quality-self.log"
+  },
+  {
+    "name": "quality",
+    "command": [
+      "python3",
+      "tools/check_map_quality_v2.py"
+    ],
+    "exit_code": 0,
+    "ok": true,
+    "log": "/tmp/act3-followup-check-quality.log"
+  },
+  {
+    "name": "performance",
+    "command": [
+      "python3",
+      "-B",
+      "tests/test_performance_budget.py"
+    ],
+    "exit_code": 0,
+    "ok": true,
+    "log": "/tmp/act3-followup-check-performance.log"
+  },
+  {
+    "name": "profiles",
+    "command": [
+      "godot",
+      "--headless",
+      "-s",
+      "res://tools/probe_map_seeds.gd",
+      "--",
+      "--seeds=20"
+    ],
+    "exit_code": 0,
+    "ok": true,
+    "log": "/tmp/act3-followup-check-profiles.log"
+  },
+  {
+    "name": "scroll",
+    "command": [
+      "godot",
+      "--headless",
+      "-s",
+      "res://tests/choice_scroll_reachability.gd"
+    ],
+    "exit_code": 0,
+    "ok": true,
+    "log": "/tmp/act3-followup-check-scroll.log"
+  },
+  {
+    "name": "boss-relic",
+    "command": [
+      "godot",
+      "--headless",
+      "-s",
+      "res://tests/boss_relic_choice_containment.gd"
+    ],
+    "exit_code": 0,
+    "ok": true,
+    "log": "/tmp/act3-followup-check-boss-relic.log"
+  },
+  {
+    "name": "dawn",
+    "command": [
+      "godot",
+      "--headless",
+      "-s",
+      "res://tests/dawn_phone_containment.gd"
+    ],
+    "exit_code": 0,
+    "ok": true,
+    "log": "/tmp/act3-followup-check-dawn.log"
+  },
+  {
+    "name": "hud",
+    "command": [
+      "godot",
+      "--headless",
+      "-s",
+      "res://tests/measure_hud_location.gd"
+    ],
+    "exit_code": 0,
+    "ok": true,
+    "log": "/tmp/act3-followup-check-hud.log"
+  }
+]

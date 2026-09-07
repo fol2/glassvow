@@ -60,6 +60,12 @@ Frame interval includes synchronisation; these are host measurements, not physic
 phone/tablet certification. Overview antialiased polylines increase draw calls;
 retain this counter for Step 4 device qualification. The engine reports no GPU
 timestamps here; zero values are unavailable measurements, not zero GPU cost.
+A separate five-second Metal trace of the actual whole-network view supplies
+503 complete GPU-frame samples: active GPU median 2.499 ms, P95 4.359 ms, maximum
+6.606 ms. Concurrent GPU intervals are unioned, and partial edge frames excluded.
+The first attach failed because its observed process had already exited; a fresh
+observed PID succeeded. Raw trace metadata remains local; only filtered numbers
+are published. Active GPU time is not frame latency or device certification.
 
 ## AI-SDLC and four rules
 
@@ -70,6 +76,10 @@ they are not passing receipts. The final coherent candidate owns the core result
 Native capture found and removed edge banding and stale capture aliases before
 owner delivery. No acceptance tolerance was weakened. Running extra unrelated
 suites is not a substitute for visual inspection.
+
+Imports and 431-script parsing pass. All 11 scope-selected checks now pass,
+including six repaired documentation line anchors. Map-asset and store-exclusion
+checks pass. Full core and the independent exact-candidate review remain pending.
 
 Final delivery time, core verdict, independent review and measured token deltas
 will be added when those gates finish. Raw token totals include cached context;
