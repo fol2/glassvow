@@ -59,8 +59,8 @@ from completed checklist items and change it only with an explained scope change
 | Step | Weight | Deliverable and completion gate | Accepted progress |
 | --- | ---: | --- | ---: |
 | 4 — Finished playable section | 20% | Promote a representative generated section through the production presentation seam. Integrate relief, surfaces, banks, stairs/bridges where relevant, scenery, light and node interaction. Inspect close/journey/overview and moving camera; no broken joins, floating assets, clipping or stretched ground. | 80% |
-| 5 — Visual acceptance | 10% | Judge the running section against approved chapter evidence, at all reference proportions, with navigation visible and hidden. Fix known defects before expanding. Record the actual visual verdict and rejected defects. Agent-owned gate; no routine owner approval. | 0% |
-| 6 — Generator generalisation | 25% | Generalise placement and chapter profiles over the maintained map corpus plus explicit dense branches, merges, crossing levels, long routes and edge cases. Retain node/edge truth, repeatability and walkable geometry. Resolve the preserved dense seed 4 failure rather than substitute an easier seed. | 0% |
+| 5 — Visual acceptance | 10% | Judge the running section against approved chapter evidence, at all reference proportions, with navigation visible and hidden. Fix known defects before expanding. Record the actual visual verdict and rejected defects. Agent-owned gate; no routine owner approval. | 100% |
+| 6 — Generator generalisation | 25% | Generalise placement and chapter profiles over the maintained map corpus plus explicit dense branches, merges, crossing levels, long routes and edge cases. Retain node/edge truth, repeatability and walkable geometry. Resolve the preserved dense seed 4 failure rather than substitute an easier seed. | 100% |
 | 7 — Four-act production | 25% | Integrate all four approved identities into runtime assembly using qualified shared modules and chapter recipes. Verify per-chapter composition, combat alignment and transitions across the whole journey. No preview-only paths or palette-swap substitute. | 0% |
 | 8 — Integration and delivery | 20% | Real campaign entry/travel/encounter return/save-load, shapes/input/accessibility/performance, selected gates and independent review pass. Deliver review surface, merge the final reviewed outcome, observe integrated checks and clean only safely saved task branches. | 0% |
 
@@ -279,12 +279,12 @@ partial implementation does not receive fractional credit.
   grounded traversal; [x] local inspection/confirmation and overview throughout
   the section; [ ] scene construction and lifecycle within the applicable budget;
   [x] complete playable section inspected in all required poses.
-- Step 5: [ ] desktop composition; [ ] tablet composition; [ ] phone composition;
-  [ ] moving camera and overlays on/off; [ ] all observed material visual defects
+- Step 5: [x] desktop composition; [x] tablet composition; [x] phone composition;
+  [x] moving camera and overlays on/off; [x] all observed material visual defects
   resolved and accepted against the approved woodland reference.
-- Step 6: [ ] camera and physical presentation share the compiler contract;
-  [ ] preserved seed 4 qualified; [ ] maintained corpus repeatability/truth;
-  [ ] dense branches/merges/long routes; [ ] crossing levels, contacts and bounds.
+- Step 6: [x] camera and physical presentation share the compiler contract;
+  [x] preserved seed 4 qualified; [x] maintained corpus repeatability/truth;
+  [x] dense branches/merges/long routes; [x] crossing levels, contacts and bounds.
 - Step 7: [ ] Act I final recipe; [ ] Act II final recipe; [ ] Act III final recipe;
   [ ] Act IV final recipe; [ ] whole-journey/combat alignment and transitions.
 - Step 8: [ ] actual campaign/encounter/save-load; [ ] input/accessibility and
@@ -724,7 +724,7 @@ Files: woodland-route-input.avi/.mp4 and route-motion-*.png under the current
 /tmp/glassvow-steps4-8 evidence directory.
 
 
-### Local crossing repair and retained generalisation failures — 7 September, 19:05 UTC
+### Local crossing repair and retained generalisation failures — 7 September, 18:55 UTC
 
 The angle-reserve v7 research is rejected: source seeds 1–9 pass but seed 10
 still fails; seed 1's actual surface also fails at the fixed river with a 1.894m
@@ -762,3 +762,54 @@ acceptance of seed 10/14. Remaining forecast remains conditional 13–23 enginee
 hours plus external waits; source generalisation and actual terrain conflicts
 remain on the critical path. Final core, physical devices, four recipes, final
 independent review and integration have not passed.
+
+
+### Woodland generalisation qualified — 7 September, 19:10 UTC
+
+The second local chord candidate balances the crossing along the unchanged lower
+route when the original intersection leaves insufficient approach length. It is
+tried only after the original chord orientations fail. Seed 14's complete quality
+report passes before promotion. Recipe woodland-journey-v9 preserves the default
+compiler and the accepted source geometry of the prior passing cases.
+
+One river-centre value now drives production river mesh, bathymetry, bank shader,
+land carving, bridge approaches and cached restoration. It is selected outside
+the complete dry-passage excavation and river/meander envelopes. Legacy study
+callers retain their exact default centre. A no-fit course fails explicitly.
+The first adaptive trial exposed bridge_geometry's remaining fixed-centre bank
+weight; its failed native and physical evidence is retained. After correcting
+that dependency, surface woodland-surface-v5 passes the actual seed 10 opening:
+48,609 rays, 153 adult probes, zero failures, minimum headroom 3.3731m. Seven
+native cases (1,4,10,14,39,717,17634) total 324,996 surface rays and 867 adult-body
+probes with zero failures; minimum headroom is 3.2544m. Lowest imported scenery
+contacts pass in every case. All seven native overview/crossing images inspected.
+Source seeds 1–40 plus maintained 717/17634 (42 cases) compile normally and
+repeat with exact JSON equality. v9-corpus-status.json and v9-repeat-status.json
+record these outcomes under /tmp/glassvow-steps4-8. Four focused modules pass,
+including the three retained crossing seeds, river/bed alignment, absent-course
+rejection, fork visibility and frozen default routing. Thirteen affected scripts
+parse. Source graph IDs and run truth remain unchanged.
+
+Step 5 is accepted for the representative woodland section: desktop, tablet,
+phone, all four poses, corrected terminal framing, overlays and moving native
+input footage have been inspected; known observed joins and grade/river defects
+are resolved. Step 6 is accepted for the common woodland generator seam and the
+frozen corpus/stress denominator above. These do not count as four-act production
+or physical-device acceptance. Step 4 remains 80% because construction/performance
+is not fully closed: four quiet native cold-process Continue observations are
+1987.484, 1971.025, 1929.556 and 1949.809ms on M1 Max, with unchanged saved run and
+normal compiler/cache binding. This local result passes 2s but has little margin;
+uncached full construction still takes roughly 10–13s and final governed hardware
+remains untested. Carry this shared loading item into the four-recipe integration
+rather than block independent chapter work or claim it is complete.
+
+Current accepted progress: Step 4 80%, Step 5 100%, Step 6 100%, Steps 7/8 0%;
+weighted overall 51%. Step 7 proceeds with qualified geometry/camera/navigation,
+while shared load/lifecycle and actual campaign return remain explicit open work.
+Current device preflight reports both paired iPhone and iPad unavailable. Owner
+has been notified asynchronously; continue independent implementation. This is
+not a passed physical-device gate. No new final-candidate/core/CI/merge claim.
+Remaining conditional forecast: 10–18 active engineering hours plus external
+waits (four recipes 4–7h, shared loading/flow 2–4h, final validation/review/integration
+4–7h). The prior 13–23h range was deliberately conditional; geometry qualification
+has retired its largest known source-failure risk. Reforecast after Act II.

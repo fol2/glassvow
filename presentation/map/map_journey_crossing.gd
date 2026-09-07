@@ -11,7 +11,9 @@ static func repair(routes: Dictionary, quality: Dictionary, failed: Dictionary) 
 		return failed
 	var profile: Dictionary = MapGradeSeparation.physical_profile(quality)
 	var landing: float = F.float_value(profile.get("landing_m",0.0))
-	for mask: int in range(1<<conflicts.size()):
+	for trial: int in range(2*(1<<conflicts.size())):
+		var mask: int = trial % (1<<conflicts.size())
+		var balance: bool = trial >= (1<<conflicts.size())
 		var proposal: Dictionary = routes.duplicate(true)
 		var valid: bool = true
 		for i: int in range(conflicts.size()):
@@ -20,15 +22,15 @@ static func repair(routes: Dictionary, quality: Dictionary, failed: Dictionary) 
 			var selected: int = (mask>>i)&1
 			var upper: Dictionary = proposal[ids[selected]]
 			var lower: Dictionary = proposal[ids[1-selected]]
-			valid = _chord(upper,lower,landing) and valid
+			valid = _chord(upper,lower,landing,balance) and valid
 		if not valid: continue
 		var graded: Dictionary = MapGradeSeparation.apply(proposal,quality)
 		if graded.get("ok")==true:
-			graded["receipt"]["crossing_proposal"]={"version":"perpendicular-chord-v1","mask":mask}
+			graded["receipt"]["crossing_proposal"]={"version":"perpendicular-chord-v1","mask":mask,"balanced":balance}
 			return graded
 	return failed
 
-static func _chord(upper: Dictionary, lower: Dictionary, landing: float) -> bool:
+static func _chord(upper: Dictionary, lower: Dictionary, landing: float, balance: bool) -> bool:
 	var line: Array = upper["centerline"]
 	var ground: Array = lower["centerline"]
 	var reach: float = (F.float_value(upper["corridor_width"])+F.float_value(lower["corridor_width"]))/2+landing*.5
@@ -41,6 +43,9 @@ static func _chord(upper: Dictionary, lower: Dictionary, landing: float) -> bool
 			var intersection: Variant = Geometry2D.segment_intersects_segment(a,b,c,d)
 			if not intersection is Vector2: continue
 			var centre: Vector2 = intersection
+			if balance and absf(d.x-c.x)>.0001:
+				var t: float = clampf(((a.x+b.x)*.5-c.x)/(d.x-c.x),.1,.9)
+				centre=c.lerp(d,t)
 			var direction: Vector2 = (d-c).normalized().orthogonal()
 			if direction.dot(b-a)<0: direction=-direction
 			var before: Vector2 = centre-direction*reach

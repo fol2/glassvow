@@ -1,7 +1,7 @@
 extends RefCounted
 ## Preserved seeds need local crossing decks without stretching the whole map.
 static func run(fails: Array[String]) -> void:
-	for seed: int in [1,10]:
+	for seed: int in [1,10,14]:
 		_case(seed,fails)
 
 static func _case(seed: int, fails: Array[String]) -> void:

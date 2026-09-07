@@ -29,7 +29,13 @@ func _run() -> void:
 				push_error("Derived cache and declared sample describe different geometry")
 				quit(2)
 				return
+	var spatial_profile: Dictionary = sample.get("spatial_profile",{})
+	terrain.adaptive_river = str(spatial_profile.get("id","")).begins_with("woodland-journey-")
 	terrain.build(sample,false,bounds,cached)
+	if not terrain.failure.is_empty():
+		push_error(terrain.failure)
+		quit(2)
+		return
 	for name: String in ["Quiet sculpted ground","Continuous bridge decks","Joined bridge masonry"]:
 		var item: MeshInstance3D = terrain.get_node(name) as MeshInstance3D
 		var shape: ConcavePolygonShape3D = ConcavePolygonShape3D.new()

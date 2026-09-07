@@ -138,7 +138,8 @@ func _run() -> void:
 			screen._journey_navigation.area=focus
 			screen._frame_journey()
 		elif _pose=="river":
-			var focus: PackedVector3Array = [Vector3(-5.0,0.0,0.0)]
+			var landscape: MapJourneyLandscape = screen._map_scene._landscape as MapJourneyLandscape
+			var focus: PackedVector3Array = [Vector3(landscape.terrain.river_centre_x,0.0,0.0)]
 			rig.apply_journey_pose(MapJourneyCameraContract.resolve(focus,Vector2(dimensions)))
 		elif _pose=="crossing":
 			var landscape: MapJourneyLandscape = screen._map_scene._landscape as MapJourneyLandscape

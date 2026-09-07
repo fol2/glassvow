@@ -34,7 +34,7 @@ static func build(parent: Node3D, lines: Array[PackedVector3Array], elevated: Ca
 		# deck ending on a graph junction leaves an unsupported side entrance.
 		for i: int in range(points.size()):
 			var p: Vector3 = points[i]
-			var bank: float = absf(p.x+5.0-sin(p.z*.12)*2.2)
+			var bank: float = parent.stream_distance(p.x,p.z)
 			weights[i] = maxf(weights[i],1.0-smoothstep(3.8,5.8,bank))
 		# A bridgehead is one shared landing across every incident road. Its
 		# paved approach reaches into each branch, so none enters a raised side.

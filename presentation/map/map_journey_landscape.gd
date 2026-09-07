@@ -25,8 +25,12 @@ var _was_moving: bool = false
 func build(data: Dictionary) -> void:
 	var started: int = Time.get_ticks_msec()
 	terrain = Terrain.new()
+	terrain.adaptive_river=true
 	add_child(terrain)
 	terrain.build({"anchors": data["node_anchors"], "edges": data["edges"]}, false, map_bounds, cache)
+	if not terrain.failure.is_empty():
+		failure=terrain.failure
+		return
 	timings_ms["terrain"] = Time.get_ticks_msec()-started
 	timings_ms["terrain_parts"] = terrain.build_timings_ms
 	started = Time.get_ticks_msec()

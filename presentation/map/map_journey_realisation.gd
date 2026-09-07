@@ -1,7 +1,7 @@
 extends RefCounted
 ## Final surface stage of map compilation. Preserve topology and X/Z anchors,
 ## but record the real supported heights, paths and imported scenery transforms.
-const VERSION: String = "woodland-surface-v3"
+const VERSION: String = "woodland-surface-v5"
 const Assets = preload("res://presentation/map/map_journey_assets.gd")
 const Paths = preload("res://presentation/map/landscape/road_paths.gd")
 

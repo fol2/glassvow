@@ -5,20 +5,22 @@ const HALF_WIDTH: float = 4.0
 const HALF_LENGTH: float = 35.0
 const FIELD_SIZE: Vector2i = Vector2i(256,1120)
 var half_length: float = HALF_LENGTH
+var centre_x: float = -5.0
 var field_size: Vector2i = FIELD_SIZE
 var clock_time: float = 0
 var animate: bool = true
 var field_image: Image
 
-static func centre(z: float) -> float:
-	return -5.0+sin(z*.12)*2.2
+static func centre(z: float, origin_x: float = -5.0) -> float:
+	return origin_x+sin(z*.12)*2.2
 
-static func contains(x: float,z: float, length_half: float = HALF_LENGTH) -> bool:
-	return absf(x-centre(z))<HALF_WIDTH and absf(z)<length_half
+static func contains(x: float,z: float, length_half: float = HALF_LENGTH, origin_x: float = -5.0) -> bool:
+	return absf(x-centre(z,origin_x))<HALF_WIDTH and absf(z)<length_half
 
 func build(land: Node3D) -> void:
 	name = "Stream"
 	half_length = land.river_half_length
+	centre_x = land.river_centre_x
 	var rows: int = ceili(half_length*2/.25)
 	field_size = Vector2i(FIELD_SIZE.x,ceili(half_length*2*16))
 	layers = 2
@@ -30,7 +32,7 @@ func build(land: Node3D) -> void:
 			for corner: Vector2i in [Vector2i(0,0),Vector2i(1,1),Vector2i(0,1),Vector2i(0,0),Vector2i(1,0),Vector2i(1,1)]:
 				var uv: Vector2 = Vector2(ix+corner.x,iz+corner.y)/Vector2(32,rows)
 				var z: float = lerpf(-half_length,half_length,uv.y)
-				var x: float = centre(z)+lerpf(-HALF_WIDTH,HALF_WIDTH,uv.x)
+				var x: float = centre(z,centre_x)+lerpf(-HALF_WIDTH,HALF_WIDTH,uv.x)
 				top.set_uv(uv)
 				top.set_normal(Vector3.UP)
 				top.add_vertex(Vector3(x,LEVEL,z))
@@ -39,19 +41,20 @@ func build(land: Node3D) -> void:
 	for iz: int in range(field_size.y):
 		var z: float = lerpf(-half_length,half_length,(iz+.5)/field_size.y)
 		for ix: int in range(field_size.x):
-			var x: float = centre(z)+lerpf(-HALF_WIDTH,HALF_WIDTH,(ix+.5)/field_size.x)
+			var x: float = centre(z,centre_x)+lerpf(-HALF_WIDTH,HALF_WIDTH,(ix+.5)/field_size.x)
 			var ground: float = land.surface_height(x,z)
 			field_image.set_pixel(ix,iz,Color(LEVEL-ground,0,0))
 	var water: ShaderMaterial = ShaderMaterial.new()
 	water.shader = preload("res://presentation/map/landscape/river.gdshader")
 	water.set_shader_parameter("river_length_m",half_length*2)
+	water.set_shader_parameter("river_centre_x",centre_x)
 	water.set_shader_parameter("bathymetry",ImageTexture.create_from_image(field_image))
 	var piers: PackedVector4Array = []
 	var deck: RefCounted = land.get_meta("bridge_field") if land.has_meta("bridge_field") else null
 	if deck!=null:
 		for value: Array in land.anchors.values():
 			var p: Vector3 = preload("res://presentation/map/landscape/mesh_tools.gd").v3(value)
-			if absf(p.x-centre(p.z))>2.7:
+			if absf(p.x-centre(p.z,centre_x))>2.7:
 				continue
 			var contact: Dictionary = deck.field(Vector2(p.x,p.z))
 			var distance: float = contact["distance"]

@@ -6,6 +6,9 @@ const River = preload("res://presentation/map/landscape/river.gd")
 var bounds: Rect2 = Rect2(-48,-30,96,60)
 var river_half_length: float = 35.0
 var restored: bool = false
+var adaptive_river: bool = false
+var river_centre_x: float = -5.0
+var failure: String = ""
 var lines: Array[PackedVector3Array] = []
 var source_edges: Dictionary = {}
 var anchors: Dictionary = {}
@@ -32,6 +35,15 @@ func build(sample: Dictionary, grey: bool, extent: Rect2 = Rect2(-48,-30,96,60),
 		for point: Array in edge["centerline"]:
 			points.append(Meshes.v3(point))
 		lines.append(points)
+	if adaptive_river:
+		landform.identify_passages(lines)
+		var cuts: Array[Dictionary] = landform.cuts
+		var course: Dictionary = preload("res://presentation/map/landscape/river_course.gd").choose(cuts,bounds)
+		if course["ok"]!=true:
+			failure="No river course clears the physical dry passages"
+			return
+		river_centre_x=course["centre_x"]
+		landform.river_centre_x=river_centre_x
 	var source_points: PackedVector3Array = []
 	for raw: Array in anchors.values():
 		source_points.append(Meshes.v3(raw))
@@ -71,7 +83,7 @@ func distance_to_roads(p: Vector3) -> float:
 	return best
 
 func stream_distance(x: float, z: float) -> float:
-	return absf(x + 5.0 - sin(z * 0.12) * 2.2)
+	return absf(x - river_centre_x - sin(z * 0.12) * 2.2)
 
 func height_at(x: float, z: float) -> float:
 	var key: Vector2 = Vector2(x,z)
@@ -126,7 +138,7 @@ func present(p: Vector3, upper: bool = false) -> Vector3:
 	return Vector3(p.x,height,p.z)
 
 func is_dry(p: Vector3) -> bool:
-	return not River.contains(p.x,p.z,river_half_length) or surface_height(p.x,p.z)>WATER+.20
+	return not River.contains(p.x,p.z,river_half_length,river_centre_x) or surface_height(p.x,p.z)>WATER+.20
 
 func is_elevated(p: Vector3) -> bool:
 	return p.y > 0.015 or stream_distance(p.x, p.z) < 3.8
@@ -155,6 +167,8 @@ func _land() -> void:
 	mat.vertex_color_use_as_albedo = true
 	mat.vertex_color_is_srgb = true
 	var ground_mat: Material = mat if greybox else Paint.create(lines, is_elevated, bounds)
+	if ground_mat is ShaderMaterial:
+		ground_mat.set_shader_parameter("river_centre_x",river_centre_x)
 	Meshes.node(self, Meshes.finish(surface), ground_mat, "Quiet sculpted ground")
 
 func _roads() -> void:
@@ -235,5 +249,6 @@ func _restore(cache: Resource) -> void:
 		if item is River:
 			item.field_image = row["field"]
 			item.half_length = river_half_length
+			item.centre_x = river_centre_x
 			item.field_size = item.field_image.get_size()
 			item.set_time(0)
