@@ -5,6 +5,7 @@ extends SceneTree
 
 var _output: String = ""
 var _pose: String = "focused"
+var _focus_id: String = ""
 var _cache: String = ""
 var _no_shadows: bool = false
 var _continuous: bool = false
@@ -35,6 +36,8 @@ func _run() -> void:
 			seed_value = int(arg.get_slice("=", 1))
 		elif arg.begins_with("--shape="):
 			shape = StringName(arg.get_slice("=", 1))
+		elif arg.begins_with("--focus-node="):
+			_focus_id=arg.trim_prefix("--focus-node=")
 		elif arg.begins_with("--pose="):
 			_pose = arg.get_slice("=", 1)
 		elif arg.begins_with("--output="):
@@ -69,7 +72,7 @@ func _run() -> void:
 			quit(2)
 			return
 	if act < 0 or act > 3 or not StageShape.SHIPPING.has(shape) \
-			or _pose not in ["focused", "opening", "middle", "terminus", "crossing", "overview"] \
+			or _pose not in ["focused", "opening", "middle", "terminus", "crossing", "river", "overview"] \
 			or (DisplayServer.get_name() == "headless" and not _compile_only) or _zoom not in range(4):
 		push_error("Preview needs a headed renderer, act index 0–3 and a shipping shape/pose")
 		quit(2)
@@ -134,6 +137,9 @@ func _run() -> void:
 				if (_pose=="terminus" and world_map.nodes[i].type=="boss") or (_pose=="middle" and world_map.nodes[i].row==7): focus=i
 			screen._journey_navigation.area=focus
 			screen._frame_journey()
+		elif _pose=="river":
+			var focus: PackedVector3Array = [Vector3(-5.0,0.0,0.0)]
+			rig.apply_journey_pose(MapJourneyCameraContract.resolve(focus,Vector2(dimensions)))
 		elif _pose=="crossing":
 			var landscape: MapJourneyLandscape = screen._map_scene._landscape as MapJourneyLandscape
 			if landscape == null or landscape.terrain.landform.cuts.is_empty():
@@ -150,6 +156,16 @@ func _run() -> void:
 		elif _pose == "terminus": rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3(43,0,0)))
 	screen._layout_waystones()
 	screen._push_bands(true)
+	if not _focus_id.is_empty():
+		var found: int = -1
+		for i: int in range(world_map.nodes.size()):
+			if world_map.nodes[i].id==_focus_id: found=i
+		if found<0 or not screen._map_scene.is_journey_layout():
+			push_error("Preview focus does not identify a journey node")
+			quit(2)
+			return
+		screen._journey_navigation.area=found
+		screen._frame_journey()
 	if not _output.is_empty() and not _exercise:
 		if _continuous:
 			screen.set_process(false)
@@ -180,6 +196,7 @@ func _run() -> void:
 		return
 	print("MAP_PREVIEW ", JSON.stringify({"act_index": act, "seed": seed_value, "overlays":_overlays, "pose":_pose, "shape":str(shape),
 		"input_digest": screen.layout_input_digest(), "layout_digest": screen.layout_digest(),
+		"derived_cache_key":screen._map_scene.journey_cache.get("cache_key") if screen._map_scene.journey_cache!=null else "",
 		"bind_ms": bind_ms, "derived_cache_hit":screen._map_scene.layout_diagnostics().get("derived_cache_hit",false),
 		"assembly_ms": screen._map_scene.layout_diagnostics().get("assembly_ms", {}),
 		"binding_ms":screen.layout_diagnostics().get("binding_stages_ms",{}),

@@ -1,5 +1,6 @@
 extends SceneTree
 ## Rendered collision probes prove continuity, slope and adult-sized openings.
+const Kit = preload("res://presentation/map/landscape/kit.gd")
 const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 var failures: Array = []
 var terrain: Terrain
@@ -119,6 +120,14 @@ func _run() -> void:
 			var second: float = b["grade"]
 			return first>second)
 		failures.append({"steep_sections":steep.size(),"limit":.5,"worst":steep.slice(0,12)})
+	var scenery: Dictionary = {}
+	if "--scenery-contacts" in OS.get_cmdline_user_args():
+		if cached==null:
+			push_error("Scenery contacts require the matching actual derived placements")
+			quit(2)
+			return
+		scenery = await _scenery_contacts(cached)
+	print("SCENERY_CONTACTS_AUDIT ",JSON.stringify(scenery))
 	print("PHYSICAL_ROUTES_AUDIT ",JSON.stringify({"derived_cache":terrain.restored,"probes":probes,"maximum_step":maximum_step,"maximum_grade":maximum_grade,"headrooms":headrooms,"adult_body_probes":body_probes,"failure_count":failures.size(),"failures":failures.slice(0,40)}))
 	quit(0 if failures.is_empty() else 1)
 func _ray(a: Vector3,b: Vector3,mask: int) -> Dictionary:
@@ -140,3 +149,53 @@ func _same_json_geometry(a: Variant, b: Variant) -> bool:
 			if not b.has(key) or not _same_json_geometry(a[key],b[key]): return false
 		return true
 	return a==b
+
+func _scenery_contacts(cached: Resource) -> Dictionary:
+	var kit: Kit = Kit.new()
+	kit.use_static_batches=true
+	terrain.add_child(kit)
+	kit.build(terrain,PackedVector3Array(),false,{},cached)
+	if not kit.build_complete or not kit.failure.is_empty():
+		failures.append({"scenery_build":kit.failure})
+		return {"ok":false}
+	for item: MeshInstance3D in kit.contacts.find_children("*","MeshInstance3D",true,false):
+		var shape: ConcavePolygonShape3D = ConcavePolygonShape3D.new()
+		shape.set_faces(item.mesh.get_faces())
+		var body: StaticBody3D = StaticBody3D.new()
+		body.transform=terrain.global_transform.affine_inverse()*item.global_transform
+		body.collision_layer=1
+		var collision: CollisionShape3D = CollisionShape3D.new()
+		collision.shape=shape
+		body.add_child(collision)
+		terrain.add_child(body)
+	await physics_frame
+	await physics_frame
+	var feet: Dictionary = {}
+	var count: int = 0
+	var maximum_gap: float = -INF
+	for i: int in range(kit.placed.size()):
+		var kind: String = kit.placed[i]["kind"]
+		if not feet.has(kind):
+			var scene: PackedScene = load("res://assets/art/map-journey/"+kind+".glb") as PackedScene
+			var source: Node3D = scene.instantiate() as Node3D
+			var vertices: PackedVector3Array = []
+			preload("res://presentation/map/map_journey_assets.gd")._collect(source,source.transform.affine_inverse(),vertices)
+			source.free()
+			var minimum: float = INF
+			for point: Vector3 in vertices: minimum=minf(minimum,point.y)
+			var unique: Dictionary = {}
+			for point: Vector3 in vertices:
+				if point.y<=minimum+.025: unique[point]=true
+			feet[kind]=unique.keys()
+		var anchor: Node3D = kit.placed_nodes[i]
+		var closest: float = INF
+		for foot: Vector3 in feet[kind]:
+			var point: Vector3 = anchor.global_transform*foot
+			var hit: Dictionary = _ray(point+Vector3.UP*2,point-Vector3.UP*4,1)
+			if not hit.is_empty():
+				var contact: Vector3 = hit["position"]
+				closest=minf(closest,point.y-contact.y)
+		maximum_gap=maxf(maximum_gap,closest)
+		if closest>.05: failures.append({"floating_scenery":kind,"placement":i,"gap_m":closest,"at":str(anchor.position)})
+		count+=1
+	return {"placements":count,"maximum_lowest_contact_gap_m":maximum_gap,"limit_m":.05}

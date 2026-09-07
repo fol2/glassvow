@@ -493,6 +493,8 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 		routes = terrace["routes"]
 	if deferred_grade:
 		var graded: Dictionary = _Grade.apply(routes, quality)
+		if graded.get("ok")!=true and quality.get("routing_strategy")=="grade-priority-v1":
+			graded = preload("res://presentation/map/map_journey_crossing.gd").repair(routes,quality,graded)
 		if graded.get("ok", false) != true:
 			var failure: Dictionary = _attempt_failure(chosen_ids, route_rows,
 				graded.get("binding", {}), plan_diagnostics)

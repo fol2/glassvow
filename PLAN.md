@@ -58,7 +58,7 @@ from completed checklist items and change it only with an explained scope change
 
 | Step | Weight | Deliverable and completion gate | Accepted progress |
 | --- | ---: | --- | ---: |
-| 4 — Finished playable section | 20% | Promote a representative generated section through the production presentation seam. Integrate relief, surfaces, banks, stairs/bridges where relevant, scenery, light and node interaction. Inspect close/journey/overview and moving camera; no broken joins, floating assets, clipping or stretched ground. | 20% |
+| 4 — Finished playable section | 20% | Promote a representative generated section through the production presentation seam. Integrate relief, surfaces, banks, stairs/bridges where relevant, scenery, light and node interaction. Inspect close/journey/overview and moving camera; no broken joins, floating assets, clipping or stretched ground. | 80% |
 | 5 — Visual acceptance | 10% | Judge the running section against approved chapter evidence, at all reference proportions, with navigation visible and hidden. Fix known defects before expanding. Record the actual visual verdict and rejected defects. Agent-owned gate; no routine owner approval. | 0% |
 | 6 — Generator generalisation | 25% | Generalise placement and chapter profiles over the maintained map corpus plus explicit dense branches, merges, crossing levels, long routes and edge cases. Retain node/edge truth, repeatability and walkable geometry. Resolve the preserved dense seed 4 failure rather than substitute an easier seed. | 0% |
 | 7 — Four-act production | 25% | Integrate all four approved identities into runtime assembly using qualified shared modules and chapter recipes. Verify per-chapter composition, combat alignment and transitions across the whole journey. No preview-only paths or palette-swap substitute. | 0% |
@@ -275,10 +275,10 @@ weighted items within each step. An item passes only with its complete evidence;
 partial implementation does not receive fractional credit.
 
 - Step 4: [x] approved shared woodland geometry promotion with native comparison
-  and exact-commit core; [ ] truthful production geometry/asset identity and
-  grounded traversal; [ ] local inspection/confirmation and overview throughout
+  and exact-commit core; [x] truthful production geometry/asset identity and
+  grounded traversal; [x] local inspection/confirmation and overview throughout
   the section; [ ] scene construction and lifecycle within the applicable budget;
-  [ ] complete playable section inspected in all required poses.
+  [x] complete playable section inspected in all required poses.
 - Step 5: [ ] desktop composition; [ ] tablet composition; [ ] phone composition;
   [ ] moving camera and overlays on/off; [ ] all observed material visual defects
   resolved and accepted against the approved woodland reference.
@@ -722,3 +722,43 @@ were inspected: figure, lane and camera remain aligned. This is presentation
 motion evidence, not a gameplay encounter-completion or performance benchmark.
 Files: woodland-route-input.avi/.mp4 and route-motion-*.png under the current
 /tmp/glassvow-steps4-8 evidence directory.
+
+
+### Local crossing repair and retained generalisation failures — 7 September, 19:05 UTC
+
+The angle-reserve v7 research is rejected: source seeds 1–9 pass but seed 10
+still fails; seed 1's actual surface also fails at the fixed river with a 1.894m
+step. Preserved in /tmp/glassvow-steps4-8/rejected-angle-recipe-v7.gd and v7 logs.
+Do not promote global map stretching as a solution.
+
+Selected v8 instead inserts a local perpendicular crossing chord only after a
+named two_level_infeasible failure in the opt-in journey strategy. Original node
+anchors, ports and default compiler strategy remain unchanged. The existing
+complete quality evaluator still accepts or rejects the proposal. The unchanged
+seed 1 first attempt fails before repair; after repair seeds 1 and 10 pass normal
+compilation and complete evaluation. Three focused regression modules pass and
+seven affected scripts parse. The bounded sweep passes 1–13 plus 717 and 17634,
+but stops at seed 14 after 45s; its retained first-attempt certificate is still
+two_level_infeasible. Generalisation remains open.
+
+Seed 1 actual native surface: 47,265 rays, 153 adult-body probes, zero failures,
+minimum headroom 3.3758m, maximum step .06038m. All 3,992 imported scenery/hero
+lowest contacts pass .05m (maximum .005564m). Seed 10 native inspection reveals
+a different river/grade crossing conflict: dry grade-separated routes are being
+assembled as joined water bridges near the fixed river. This is an observed
+visual defect and is not waived by the source quality pass. Its physical probe
+is retained separately. Next bounded work: balance the off-centre seed 14
+crossing, then move the river course away from dry grade passages using one shared
+terrain/water coordinate rather than patching each mesh independently.
+
+Seed 4/717/17634 v8 anchors, edges and heroes exactly equal their qualified v6
+geometry. Step 4 now records 4/5 accepted items (80%): production identity and
+physical traversal, local inspection/confirmation, and complete reference poses
+have actual evidence from the preceding checkpoints. Construction/lifecycle
+performance remains unaccepted (latest real Continue 2063.896ms vs 2000ms).
+Other step percentages remain unchanged pending their complete gates; overall
+weighted acceptance is 16%. This is accounting for completed evidence, not an
+acceptance of seed 10/14. Remaining forecast remains conditional 13–23 engineering
+hours plus external waits; source generalisation and actual terrain conflicts
+remain on the critical path. Final core, physical devices, four recipes, final
+independent review and integration have not passed.

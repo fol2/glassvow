@@ -9,6 +9,7 @@ var diagnostic_grade: bool = false
 var journey_camera: bool = false
 var production_journey: bool = false
 var fresh: bool = false
+var candidate_overrides: Dictionary = {}
 func _initialize() -> void:
 	_run.call_deferred()
 func _run() -> void:
@@ -29,13 +30,19 @@ func _run() -> void:
 			journey_camera = true
 		elif argument == "--diagnostic-grade":
 			diagnostic_grade = true
+		elif argument.begins_with("--candidate="):
+			var parts: PackedStringArray = argument.trim_prefix("--candidate=").rsplit(":",true,1)
+			if parts.size()!=2 or not parts[1].is_valid_int():
+				quit(2)
+				return
+			candidate_overrides[parts[0]]=parts[1].to_int()
 		elif argument == "--first-attempt":
 			first_attempt_only = true
 		else:
 			push_error("Unexpected export argument: "+argument)
 			quit(2)
 			return
-	if act<0 or act>3 or output.is_empty() or (production_journey and act!=0):
+	if act<0 or act>3 or output.is_empty() or (production_journey and act!=0) or (not candidate_overrides.is_empty() and not first_attempt_only):
 		quit(2)
 		return
 	Locale.active = Locale.new(&"en")
@@ -174,6 +181,14 @@ func _sample(content: ContentDB, act: int, seed_value: int) -> Dictionary:
 			var selection: Dictionary = {}
 			for node_id: String in generated["node_sets"]:
 				selection[node_id] = 0
+			for node_id: String in candidate_overrides:
+				var chosen: int = candidate_overrides[node_id]
+				if not selection.has(node_id) or chosen<0 or chosen>=generated["node_sets"][node_id]["candidates"].size():
+					push_error("Invalid declared candidate override: "+node_id)
+					scene.free()
+					return {}
+				selection[node_id]=chosen
+			print("CANDIDATE_OVERRIDES ",JSON.stringify(candidate_overrides))
 			var hero_report: Dictionary = MapLayoutCompiler._hero_placements(input.to_dict(), assets)
 			if hero_report.get("ok") != true:
 				push_error(JSON.stringify(hero_report))
