@@ -5,7 +5,7 @@ const SpatialFixtures = preload("res://tests/test_map_spatial_profile.gd")
 
 static func run(fails: Array[String]) -> void:
 	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
-		"res://docs/map/map-quality-v2.json"))
+		"res://content/map-quality-v2.json"))
 	var routes: Dictionary = {
 		"a": {"from": "a0", "to": "a1", "corridor_width": 2.5,
 			"centerline": [[-15.0,0.0,0.0],[15.0,0.0,0.0]]},

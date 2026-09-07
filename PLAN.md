@@ -61,7 +61,7 @@ from completed checklist items and change it only with an explained scope change
 | 4 — Finished playable section | 20% | Promote a representative generated section through the production presentation seam. Integrate relief, surfaces, banks, stairs/bridges where relevant, scenery, light and node interaction. Inspect close/journey/overview and moving camera; no broken joins, floating assets, clipping or stretched ground. | 80% |
 | 5 — Visual acceptance | 10% | Judge the running section against approved chapter evidence, at all reference proportions, with navigation visible and hidden. Fix known defects before expanding. Record the actual visual verdict and rejected defects. Agent-owned gate; no routine owner approval. | 100% |
 | 6 — Generator generalisation | 25% | Generalise placement and chapter profiles over the maintained map corpus plus explicit dense branches, merges, crossing levels, long routes and edge cases. Retain node/edge truth, repeatability and walkable geometry. Resolve the preserved dense seed 4 failure rather than substitute an easier seed. | 100% |
-| 7 — Four-act production | 25% | Integrate all four approved identities into runtime assembly using qualified shared modules and chapter recipes. Verify per-chapter composition, combat alignment and transitions across the whole journey. No preview-only paths or palette-swap substitute. | 80% |
+| 7 — Four-act production | 25% | Integrate all four approved identities into runtime assembly using qualified shared modules and chapter recipes. Verify per-chapter composition, combat alignment and transitions across the whole journey. No preview-only paths or palette-swap substitute. | 100% |
 | 8 — Integration and delivery | 20% | Real campaign entry/travel/encounter return/save-load, shapes/input/accessibility/performance, selected gates and independent review pass. Deliver review surface, merge the final reviewed outcome, observe integrated checks and clean only safely saved task branches. | 0% |
 
 Overall implementation acceptance starts at 0% for Steps 4–8; Step 3 is 100%
@@ -286,7 +286,7 @@ partial implementation does not receive fractional credit.
   [x] preserved seed 4 qualified; [x] maintained corpus repeatability/truth;
   [x] dense branches/merges/long routes; [x] crossing levels, contacts and bounds.
 - Step 7: [x] Act I final recipe; [x] Act II final recipe; [x] Act III final recipe;
-  [x] Act IV final recipe; [ ] whole-journey/combat alignment and transitions.
+  [x] Act IV final recipe; [x] whole-journey/combat alignment and transitions.
 - Step 8: [ ] actual campaign/encounter/save-load; [ ] input/accessibility and
   physical-device evidence; [ ] performance/lifecycle and selected local gates;
   [ ] exact-head independent review and PR CI; [ ] integrated checks, review
@@ -1178,3 +1178,37 @@ focused map/locale tests pass, with existing headless teardown diagnostics.
 Parser checks and diff whitespace checks pass. Next: isolate remaining main-thread
 publication/source costs, native cancellation/shape checks, then fixed-head device
 and complete delivery gates. This checkpoint is not Step 4 or Step 8 completion.
+
+### Export qualification and current position — 7 September, 23:15 UTC
+
+All three native next-chapter transitions, Act IV first-entry story, four actual
+campaign map/combat/return sequences and their images have been inspected. These
+close Step 7's final checklist item: Steps 4/5/6/7/8 are now 80/100/100/100/0%;
+weighted acceptance is 76%. No hardware or merge acceptance is inferred.
+
+537 tracked scripts pass. Scope-selected checks pass for locale coverage, store
+exclusion and its failure fixtures, developer registry, benchmark freeze, map
+asset/GLB checker fixtures, quality contract/mutations and performance replay.
+Font coverage caught two missing navigation characters (局, 細); the existing
+SHA-pinned font pipeline now includes them, and coverage passes. Two moved source
+anchors were repaired. A native editor import crashed once during font reimport
+(SIGSEGV); its unchanged-input replay passes. Both records are retained.
+
+The first release-app canary failed: docs/.gdignore excludes the quality JSON
+that WorldMapScreen preloads. Move the exact unchanged registry into content/,
+update production/tools/tests and the authority link, then re-export before
+claiming a release works. The incomplete full core run was deliberately stopped
+for this known candidate change; it is not a passing run.
+
+M4 16 GiB is accessible and iPad 8's tunnel is connected. Both review release
+exports succeeded. iPad Xcode compilation reaches signing, which fails with
+errSecInternalComponent accessing the Apple Development identity. The owner has
+been asked to unlock the M4 login keychain locally; no password was requested or
+handled. The separate io.fol2.glassvow.mapevidence identifier protects the existing
+player installation. Continue all independent validation while access is pending.
+
+Forecast: 6–10 remaining active engineering hours, conditional on release canary
+repair and no further structural performance failure, plus device/signing/CI
+waits. Roughly 11 wall-clock hours have elapsed since 12:19 UTC, including validation waits. This revises the
+previous remaining-work forecast using completed four-chapter/native flow work;
+it is not a committed finish time while signing and floor-phone access are open.

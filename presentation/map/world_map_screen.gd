@@ -21,7 +21,7 @@ var _journey_navigation: JourneyNavigation
 
 const TRAVEL_TIME: float = 0.4
 const SCENERY_SEED_OFFSET: int = 97
-const _MAP_QUALITY: JSON = preload("res://docs/map/map-quality-v2.json")
+const _MAP_QUALITY: JSON = preload("res://content/map-quality-v2.json")
 const _InputBinding = preload("res://domain/map_layout/map_layout_input_binding.gd")
 
 const HINT_PT: float = 13.0

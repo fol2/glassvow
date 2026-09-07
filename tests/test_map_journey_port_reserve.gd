@@ -1,7 +1,7 @@
 extends RefCounted
 const Reserve = preload("res://presentation/map/map_journey_port_reserve.gd")
 static func run(fails: Array[String]) -> void:
-	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content/map-quality-v2.json"))
 	var nodes: Array = [{"id":"A"},{"id":"B"},{"id":"C"}]
 	var edges: Array = [{"from":"A","to":"C"},{"from":"B","to":"C"}]
 	var authority: Dictionary = Reserve.context(nodes,edges,quality)

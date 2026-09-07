@@ -2,7 +2,7 @@ extends RefCounted
 ## An opt-in priority cannot silently drop the complete ground fallback.
 const Fixtures = preload("res://tests/test_map_layout_compiler.gd")
 static func run(fails: Array[String]) -> void:
-	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content/map-quality-v2.json"))
 	var assets: Dictionary = Fixtures._assets()
 	var nodes: Array = [Fixtures._node("A",2,3),Fixtures._node("B",3,3)]
 	var edges: Array = [Fixtures._edge("A","B")]

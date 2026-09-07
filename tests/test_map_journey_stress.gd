@@ -10,7 +10,7 @@ static func _case(seed: int, fails: Array[String]) -> void:
 	var world: WorldMap = WorldMap.for_run(run,content)
 	var before: Dictionary = run.to_dict()
 	var bound: Dictionary = preload("res://presentation/map/map_journey_input.gd").bind(world,0)
-	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content/map-quality-v2.json"))
 	var nodes: Array = bound["nodes"]
 	var edges: Array = bound["edges"]
 	var recipe: Dictionary = preload("res://presentation/map/map_journey_recipe.gd").build(nodes,edges,base)

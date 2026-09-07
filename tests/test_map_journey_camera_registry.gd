@@ -2,7 +2,7 @@ extends RefCounted
 const Registry = preload("res://presentation/map/map_journey_camera_registry.gd")
 const Contract = preload("res://presentation/map/map_journey_camera_contract.gd")
 static func run(fails: Array[String]) -> void:
-	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content/map-quality-v2.json"))
 	var before: String = MapLayoutCanonical.digest(base)
 	var quality: Dictionary = Registry.quality(base)
 	var nodes: Array = [

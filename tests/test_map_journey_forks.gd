@@ -4,7 +4,7 @@ const Routes = preload("res://presentation/map/map_layout_compiler_routes.gd")
 static func run(fails: Array[String]) -> void:
 	_test_lateral_exit(fails)
 	_test_three_way_phone(fails)
-	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content/map-quality-v2.json"))
 	var quality: Dictionary = Registry.quality(base)
 	var rows: Array = []
 	for i: int in range(15): rows.append({"station_m":i*5.0,"height_m":0.0,"centre_z_m":0.0,"lane_spacing_m":6.0,"region":"woodland"})
@@ -40,7 +40,7 @@ static func run(fails: Array[String]) -> void:
 		fails.append("journey forks: rejected guide did not identify the actual obstructing node")
 
 static func _test_lateral_exit(fails: Array[String]) -> void:
-	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content/map-quality-v2.json"))
 	var q: Dictionary = Registry.quality(base)
 	var rows: Array = []
 	for i: int in range(15): rows.append({"station_m":i*15.0,"height_m":0.0,"centre_z_m":35.0 if i>0 else 0.0,"lane_spacing_m":5.0,"region":"woodland"})
@@ -61,7 +61,7 @@ static func _test_lateral_exit(fails: Array[String]) -> void:
 static func _test_three_way_phone(fails: Array[String]) -> void:
 	# Preserved seed 17634 failure: 70-degree guides yielded only 29.847px.
 	var fixture: GDScript = preload("res://tests/test_map_layout_compiler.gd")
-	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content/map-quality-v2.json"))
 	var quality: Dictionary = Registry.quality(base)
 	var hard_rows: Array = quality["hard"]
 	var hard: Dictionary = MapQualityEvaluator._index(hard_rows)

@@ -14,7 +14,7 @@ static func run(fails: Array[String]) -> void:
 		return
 	var original: String = source.digest()
 	var scene: MapScene = MapScene.new()
-	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content/map-quality-v2.json"))
 	quality = preload("res://presentation/map/map_journey_camera_registry.gd").quality(quality)
 	var result: MapLayoutResult = scene.bind_layout(source,quality)
 	if result == null:

@@ -75,7 +75,7 @@ func _sample(content: ContentDB, act: int, seed_value: int) -> Dictionary:
 	var assets: Dictionary = scene.layout_asset_bundle()
 	var nodes: Array = bound["nodes"]
 	var edges: Array = bound["edges"]
-	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content/map-quality-v2.json"))
 	if journey_camera:
 		quality = preload("res://presentation/map/map_journey_camera_registry.gd").quality(quality)
 	var heroes: Dictionary = scene.layout_hero_contract()

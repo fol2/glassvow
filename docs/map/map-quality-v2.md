@@ -1,7 +1,7 @@
 # Map Compiler v2 quality contract
 
 Status: **version 2.0.0, #462 visual baseline bound; quantitative owner calibration pending**  
-Machine authority: [`map-quality-v2.json`](map-quality-v2.json)  
+Machine authority: [`content/map-quality-v2.json`](../../content/map-quality-v2.json)
 Validator: `python3 -B tools/check_map_quality_v2.py`
 
 This contract turns the owner direction in #461 into measurable rules for every later Map Compiler v2 ticket. It defines feasibility, composition scoring, and visual hierarchy only. It does not place a node, route an edge, move a camera, change an asset, or switch production rendering.

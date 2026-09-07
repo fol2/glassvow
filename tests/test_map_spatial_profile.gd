@@ -7,7 +7,7 @@ const Profile = preload("res://presentation/map/map_spatial_profile.gd")
 
 static func run(fails: Array[String]) -> void:
 	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
-		"res://docs/map/map-quality-v2.json"))
+		"res://content/map-quality-v2.json"))
 	var calibration: Dictionary = quality["calibration"]["stage_zoom_geometry"]
 	for row: int in range(15):
 		for col: int in range(7):

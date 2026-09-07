@@ -6,7 +6,7 @@ const Grade = preload("res://presentation/map/map_grade_separation.gd")
 static func _ok(fails: Array[String], value: bool, text: String) -> void:
 	if not value: fails.append("test_map_quality_evaluator: " + text)
 static func run(fails: Array[String]) -> void:
-	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content/map-quality-v2.json"))
 	var assets: Dictionary = _assets()
 	_test_registry(fails, quality)
 	_test_focused_camera_binding(fails, quality, assets)
