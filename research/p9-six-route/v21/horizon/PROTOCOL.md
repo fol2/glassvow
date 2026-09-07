@@ -1,0 +1,9 @@
+# Rolling remaining horizon: fixed controller contrast
+
+EXPLORATION_NOT_P9. Independent of partial capped-fuel outcomes. Common content is the already-declared production1_demand3 recipe, SHA256 ab4b8a3f6d5d4cbf87b9a8f7e92560246b00503ff2d1e584c834066a78681d6a. No content values, acquisition priors, game limits or acceptance are changed.
+
+The original leaf estimate subtracts elapsed fight age from a new lookahead. In the recovered two-card, one-energy, 7HP/21HP native fixture, Momentum has a winning three-turn continuation and Strike has none. At turn16 the original estimate wrongly selects Strike; the optional rolling_growth factor restores the same finite future window used at turn1. The recovered bounded search visits 27/40 states and all nine assertions pass in each mode. The corrected mode also passes all16 public-information assertions. This is a fixture, not proof of whole-run benefit or optimality. The optional effect defaults off and only changes the valuation of remaining card-instance growth.
+
+Before rows: compare off/on on the same content, both aspects, vows0/5, three planned routes plus balancedRandomBuild. Smoke32cells on exposed seed31000100; eight off-mode Ash records must equal corresponding completed capped_smoke_r2 records as parsed rows. Screen32cells x16 assigned new seeds31210000..31210015 =512 evaluations. Two public determinizations/twelve continuations; leaf_terminal false. Retain every assigned outcome. Four workers only after the capped study finishes, unchanged1200s per-invocation containment. No post-peek sample extension, protected seeds or source changes during execution.
+
+Report all paired cells, growth enactment and mechanism patterns, controls and adverse outcomes. Greater value of a bounded witness is not proof of improved game balance. No candidate, causal package, detector, retention or final P9 is admitted by this test alone.
