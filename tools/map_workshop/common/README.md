@@ -30,3 +30,21 @@ local generation outputs; generated samples are copied into the review artefacts
 Evidence limits matter: sampled width and visibility do not prove every point of
 a continuous surface; a desktop viewport does not qualify a physical phone; a
 zero GPU timer does not mean zero GPU work. Keep these distinctions in delivery.
+
+Court stair assembly is opt-in through `stair_version: transverse-court-v1`.
+The spatial recipe determines one transverse stair axis per changing row level;
+normal compiler evaluation still checks the resulting approach geometry. Shared
+assembly combines nearby parallel flights, removes their original walking faces,
+and reserves the complete wider stair footprint against architectural placement.
+Merge distance and minimum width are explicit parameters. Retaining walls leave
+that complete footprint open. Existing chapters do not adopt this automatically.
+
+The optional obsidian shader treatment supplies broad face variation, restrained
+edge glints and chapter-selected structural seam heights. Stone defaults remain
+unchanged. Court paving and routes must use the same material coordinates to
+avoid revealing route cut-outs as a patchwork of conflicting slab patterns.
+
+Use `summarise_metal_trace.py` to reduce an exported `metal-gpu-intervals` table for
+one Godot PID. It unions overlapping GPU intervals per complete frame, excluding
+other processes. Raw traces can contain environment metadata and stay outside
+Git; publish only the filtered timing summary and command provenance.

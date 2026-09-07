@@ -51,7 +51,7 @@ static func validate(quality: Dictionary, act: int = -1) -> Array[String]:
 	if not raw is Dictionary:
 		return ["spatial_profile must be a Dictionary"]
 	var profile: Dictionary = raw
-	F.fields(profile, ["schema_version", "id", "act", "bounds_xz_m", "rows"], ["jitter_scale", "passage", "ordering_version", "lane_assignments", "spacing_version"],
+	F.fields(profile, ["schema_version", "id", "act", "bounds_xz_m", "rows"], ["jitter_scale", "passage", "ordering_version", "lane_assignments", "spacing_version", "stair_version"],
 		"spatial_profile", errors)
 	F.validate(profile, "spatial_profile", errors)
 	if not errors.is_empty():
@@ -76,6 +76,8 @@ static func validate(quality: Dictionary, act: int = -1) -> Array[String]:
 			if errors.is_empty() and (F.float_value(passage["headroom_m"]) < 2.4 or
 					F.float_value(passage["maximum_grade"]) > .17 / .28 or F.float_value(passage["landing_m"]) < .28):
 				errors.append("passage must preserve headroom and stair rise/run limits")
+	if profile.has("stair_version") and profile["stair_version"] != "transverse-court-v1":
+		errors.append("unsupported court stair version")
 	if profile.has("spacing_version") and profile["spacing_version"] != "physical-reservations-v1":
 		errors.append("spatial_profile has unsupported spacing_version")
 	if profile.has("ordering_version"):

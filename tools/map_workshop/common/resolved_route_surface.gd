@@ -88,7 +88,9 @@ static func _simplified(source: PackedVector3Array) -> PackedVector3Array:
 		while out.size() > 1:
 			var a: Vector3 = out[-1]-out[-2]
 			var b: Vector3 = point-out[-1]
-			if a.normalized().dot(b.normalized()) < .999999:
+			# An angular threshold alone trims measurable corridor width on long runs.
+			var deviation: float = a.cross(b).length()/maxf((a+b).length(),.00001)
+			if a.normalized().dot(b.normalized()) < .999999 or deviation > .00001:
 				break
 			out.remove_at(out.size()-1)
 		out.append(point)

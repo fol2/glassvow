@@ -3,6 +3,7 @@ extends SceneTree
 const Inspector = preload("res://tools/map_workshop/act3/precinct_inspection.gd")
 const M = preload("res://tools/map_workshop/mesh_tools.gd")
 const Envelope = preload("res://tools/map_workshop/common/precinct_envelope.gd")
+const CourtStairs = preload("res://tools/map_workshop/common/court_stair_assembly.gd")
 const Occupancy = preload("res://tools/map_workshop/common/architectural_occupancy.gd")
 var buildings: Array[Node3D] = []
 var world: Node3D
@@ -13,7 +14,7 @@ func _initialize() -> void:
 func _run() -> void:
 	var build_started: int = Time.get_ticks_usec()
 	var viewport_size: Vector2i = Vector2i(1458,820)
-	var sample_path: String = "res://docs/map/studies/act3-step3/precinct-v1-seed717.json"
+	var sample_path: String = "res://docs/map/studies/act3-step3/precinct-v2-seed717.json"
 	for argument: String in OS.get_cmdline_user_args():
 		if argument.begins_with("--viewport="):
 			var parts: PackedStringArray = argument.trim_prefix("--viewport=").split("x")
@@ -53,6 +54,7 @@ func _run() -> void:
 	sun.rotation_degrees = Vector3(-48,-30,0)
 	sun.light_color = Color("d1cbe0")
 	sun.light_energy = 1.5
+	sun.light_specular = .16
 	sun.shadow_enabled = "--diagnostic-no-shadows" not in OS.get_cmdline_user_args()
 	sun.directional_shadow_max_distance = 240
 	world.add_child(sun)
@@ -60,11 +62,11 @@ func _run() -> void:
 	rim.rotation_degrees = Vector3(-22,145,0)
 	rim.light_color = Color("9c8bc5")
 	rim.light_energy = .4
-	rim.light_specular = 0.0
+	rim.light_specular = .2
 	rim.shadow_enabled = false
 	world.add_child(rim)
-	stone = _stone_material(Color("252531"),Vector2(4.8,3.2),.25,.20)
-	var paving: ShaderMaterial = _stone_material(Color("282733"),Vector2(3.6,2.4),.35,.22)
+	stone = _stone_material(Color("191c26"),Vector2(8.4,6.2),.22,.18)
+	var paving: ShaderMaterial = stone as ShaderMaterial
 	# All graph routes remain visible: no discarded edges to rescue composition.
 	var edges: Dictionary = sample["edges"]
 	var region_stations: Array[float] = [west,divisions[0],divisions[1],divisions[2],east]
@@ -86,6 +88,18 @@ func _run() -> void:
 			return
 		route_plans.append(plan)
 		plans_by_id[id] = plan
+	var architecture_routes: Dictionary = edges.duplicate(true)
+	var stair_groups: Array[Dictionary] = []
+	if spatial.get("stair_version", "") == "transverse-court-v1":
+		var assembly: Dictionary = CourtStairs.resolve(route_plans,divisions)
+		if assembly.get("ok") != true:
+			push_error(str(assembly))
+			quit(1)
+			return
+		route_plans = assembly["plans"]
+		stair_groups = assembly["groups"]
+		var reserves: Dictionary = assembly["reserves"]
+		architecture_routes.merge(reserves)
 	var union_start: int = Time.get_ticks_usec()
 	var joined: Dictionary = preload("res://tools/map_workshop/common/walking_surface_union.gd").resolve(route_plans)
 	if joined.get("ok") != true:
@@ -205,7 +219,7 @@ func _run() -> void:
 					for inset: float in [0.0,1.5,3.0]:
 						bay.position.z = edge_z+inward*inset
 						var box: AABB = Occupancy.bounds(bay)
-						if Envelope.supports(box,envelopes,landscape_openings) and is_equal_approx(_court_height(box.position.x,rows),_court_height(box.end.x,rows)) and Occupancy.conflicts(box,edges).is_empty() and not Occupancy.overlaps_buildings(bay,buildings):
+						if Envelope.supports(box,envelopes,landscape_openings) and is_equal_approx(_court_height(box.position.x,rows),_court_height(box.end.x,rows)) and Occupancy.conflicts(box,architecture_routes).is_empty() and not Occupancy.overlaps_buildings(bay,buildings):
 							placed = true
 							break
 					if placed:
@@ -235,7 +249,7 @@ func _run() -> void:
 			for offset: float in [0.0,-2.0,2.0,-4.0,4.0,-6.0,6.0]:
 				bay.position.x = x+offset
 				var box: AABB = Occupancy.bounds(bay)
-				if Envelope.supports(box,envelopes,landscape_openings) and Occupancy.conflicts(box,edges).is_empty() and not Occupancy.overlaps_buildings(bay,buildings):
+				if Envelope.supports(box,envelopes,landscape_openings) and Occupancy.conflicts(box,architecture_routes).is_empty() and not Occupancy.overlaps_buildings(bay,buildings):
 					placed = true
 					break
 			if not placed:
@@ -252,7 +266,7 @@ func _run() -> void:
 			bay.position = Vector3(royal_x,boss.y,royal_z)
 			bay.rotation.y = 0.0 if side == -1 else PI
 			var box: AABB = Occupancy.bounds(bay)
-			var clear: bool = Envelope.supports(box,envelopes) and Occupancy.conflicts(box,edges).is_empty() and not Occupancy.overlaps_buildings(bay,buildings)
+			var clear: bool = Envelope.supports(box,envelopes) and Occupancy.conflicts(box,architecture_routes).is_empty() and not Occupancy.overlaps_buildings(bay,buildings)
 			# Keep the near half of the foreground court open, not a screen of walls.
 			if not clear or (side == 1 and royal_x < boss.x+5.0):
 				buildings.erase(bay)
@@ -273,7 +287,7 @@ func _run() -> void:
 			push_error("Building footprint leaves its supporting court: "+str(building.name))
 			quit(1)
 			return
-		var clashes: Array[String] = Occupancy.conflicts(box,edges)
+		var clashes: Array[String] = Occupancy.conflicts(box,architecture_routes)
 		collision_count += clashes.size()
 		occupancy_report.append({"asset":building.name,"position":[building.position.x,building.position.y,building.position.z],
 			"bounds_position":[box.position.x,box.position.y,box.position.z],
@@ -282,18 +296,25 @@ func _run() -> void:
 	receipt.store_string(JSON.stringify({"buildings":occupancy_report,"route_conflicts":collision_count},"\t"))
 	receipt.close()
 	print("ARCHITECTURE_OCCUPANCY conflicts=",collision_count)
-	var trim_material: StandardMaterial3D = M.material(Color("393644"),.65)
+	var trim_material: StandardMaterial3D = M.material(Color("323544"),.38)
+	trim_material.emission_enabled = true
+	trim_material.emission = Color(.07,.002,.04)
 	var thresholds: Array = []
 	var threshold_roots: Array[Node3D] = []
 	for threshold_x: float in divisions:
 		var local_bounds: Vector2 = Envelope.at_x(envelopes,threshold_x)
 		var threshold: Dictionary = preload("res://tools/map_workshop/common/precinct_threshold.gd").plan(edges,threshold_x,local_bounds.x,local_bounds.y)
+		if not stair_groups.is_empty():
+			threshold = CourtStairs.threshold(stair_groups,threshold_x,local_bounds.x,local_bounds.y)
 		if threshold.get("ok") != true:
 			push_error(str(threshold))
 			quit(1)
 			return
 		# Internal court stairs are open-air; pointed vaults belong to the galleries.
-		threshold_roots.append(preload("res://tools/map_workshop/common/precinct_threshold.gd").build(world,threshold,stone,trim_material,0.0))
+		if not stair_groups.is_empty():
+			threshold_roots.append(CourtStairs.build_retaining(world,threshold,stone,trim_material))
+		else:
+			threshold_roots.append(preload("res://tools/map_workshop/common/precinct_threshold.gd").build(world,threshold,stone,trim_material,0.0))
 		thresholds.append(threshold)
 	var threshold_file: FileAccess = FileAccess.open("/tmp/act3-thresholds.json",FileAccess.WRITE)
 	threshold_file.store_string(JSON.stringify(thresholds,"\t"))
@@ -484,9 +505,11 @@ func _asset(asset_name: String, source_path: String = "") -> Node3D:
 			if not roof and not source.resource_name.begins_with("Obsidian broad"):
 				continue
 			var standard: StandardMaterial3D = source
-			var dressed: ShaderMaterial = _stone_material(standard.albedo_color,Vector2(3.2,2.8) if roof else Vector2(3.6,1.2),.6,.4)
+			var dressed: ShaderMaterial = _stone_material(standard.albedo_color,Vector2(6.4,5.6) if roof else Vector2(6.0,2.4),.20,.20)
 			dressed.set_shader_parameter("architectural_mapping",true)
-			dressed.set_shader_parameter("roughness_range",Vector2(.42,.56))
+			if asset_name in ["obsidian-great-hall","glazed-gallery-bay"]:
+				dressed.set_shader_parameter("structural_joint_height",.32)
+			dressed.set_shader_parameter("roughness_range",Vector2(.22,.40))
 			mesh_instance.set_surface_override_material(surface,dressed)
 	instance.set_meta("asset_name",asset_name)
 	var template: PackedScene = PackedScene.new()
@@ -533,7 +556,8 @@ func _stone_material(colour: Color, slab: Vector2, coverage: float, strength: fl
 		material.shader = Shader.new()
 		material.shader.code = "shader_type spatial; render_mode unshaded; void fragment() { ALBEDO = abs((INV_VIEW_MATRIX * vec4(NORMAL,0.0)).xyz)*0.7+vec3(0.1); }"
 		return material
-	material.set_shader_parameter("roughness_range",Vector2(.60,.72))
+	material.set_shader_parameter("roughness_range",Vector2(.42,.58))
+	material.set_shader_parameter("obsidian_facets",true)
 	material.set_shader_parameter("stone_colour",colour)
 	material.set_shader_parameter("slab_size",slab)
 	material.set_shader_parameter("joint_coverage",coverage)

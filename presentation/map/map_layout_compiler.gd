@@ -466,6 +466,9 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 		routes[edge_id] = routed_edge["route"]
 	if quality.has("spatial_profile"):
 		var terrace: Dictionary = preload("res://presentation/map/map_terrace_route.gd").apply(routes, anchors)
+		if quality["spatial_profile"].get("stair_version", "") == "transverse-court-v1":
+			var court_rows: Array = quality["spatial_profile"]["rows"]
+			terrace = preload("res://presentation/map/map_court_stair_route.gd").apply(routes, anchors, court_rows)
 		if terrace.get("ok") != true:
 			return _attempt_failure(chosen_ids, route_rows, {
 				"kind":"terrace_surface", "id":"terrace_infeasible", "node_id":"",

@@ -308,6 +308,62 @@ an unretouched continuous tour. Act IV and Step 4 remain outside this delivery.
 
 ## Current execution capsule
 
+### Review correction in progress — 7 September
+
+The corrected normal exports pass for all three seeds (65/66/54 nodes,
+76/74/74 edges), preserving complete node records and edge IDs. All nine native
+runs pass: 555 node focus/click checks and 30,927 route-camera samples, with
+full-width support, foundation and covered-passage checks on each seed. The
+shared surface simplifier now bounds positional deviation after a reproduced
+0.24 mm corridor loss; the audit tolerance remains unchanged.
+
+The 57.6-second native movie contains an uninterrupted 14-edge entrance-to-boss
+walk (1,675 travel frames, zero measured occlusions). The tailnet page was opened
+and the movie played to completion without a media error. Act I/II native visual
+and input regressions pass. Final host Metal tracing measures 632 complete
+frames: active GPU median 1.024 ms, P95 1.468 ms, maximum 6.289 ms. An initial
+recorder crash was rejected; the successful five-second retry supplies the data.
+Native frame-interval P95 is 8.49–8.564 ms and renderer allocation peaks at
+131.78 MiB in the measured master views; these do not qualify physical devices.
+
+Imports and 424-script parsing pass. The first corrected core run printed
+PASS (101 tests), but a pre-existing Dawn fixture aborted before its assertions.
+Its missing Vigil quest profile is now initialised exactly as application boot;
+the unchanged focused assertions pass without errors. A complete rerun is active.
+All 11 selected checks, map asset validation and store exclusions pass. Final independent review must bind the corrected commit; owner chapter
+approval remains pending. The last conditional forecast was 45–75 minutes from
+the start of final qualification if no new material finding emerged. Task token
+accounting is unavailable without Goal; no cache-saving claim is made.
+
+Candidate `221113500882cee35ab158c799aa386e212a1da1` received
+`REQUEST_CHANGES` from the isolated final-candidate reviewer: patchwork stairs
+and matte, undifferentiated masonry remain blocking visual findings. Do not
+present `precinct-v1` as finished or silently relabel its existing evidence.
+
+- Its core runner printed PASS (99 tests), exit 0, but retrospective log
+  inspection found the same Dawn fixture abort; this was not a complete pass.
+  Dummy-renderer material and shutdown resource/RID diagnostics were also present.
+- A new opt-in transverse court stair mode and shared flight assembly replace
+  narrow oblique flights/tall piers with complete grouped stairs and low retaining
+  edges. Trial native support probes pass; these trial coordinates are explicitly
+  diagnostic, not a compiler receipt. Formal samples must be regenerated.
+- Initial formal export failed; a reduced regression exposed missing height
+  normalisation for level routes and raw endpoints. Both failures were reproduced
+  and fixed. Three focused regressions and a retained-route grade probe now pass.
+  The corrected normal master export is in progress. Do not expand search limits.
+- Obsidian material trials add selected cold glints and structural magenta seams.
+  The excessive specular trial was rejected; floors/routes now share the same
+  mapping to prevent mismatched slabs exposing route cut-outs.
+- Separate Metal tracing works: the old candidate's 1,261 complete sampled frames
+  show active GPU union median 1.684 ms / P95 3.183 ms on this M1 Max host. Other
+  applications can contend; these are not device-floor qualification or final
+  candidate measurements. Raw traces contain environment metadata and stay local.
+- Next: complete formal exports, inspect the corrected native master, then repeat
+  the affected seed/shape/contact/travel matrix and final checks; obtain the
+  required review of the corrected head and deliver the review page. Chapter
+  approval remains pending. No first-push, PR or merge has occurred.
+
+
 - Ordinary run resumed after the owner confirmed Goal shutdown. The `precinct-v1`
   candidate adds sovereign side galleries, open foreground arcades, quieter route
   contrast, restrained architectural courses and faceted exterior relief. Native

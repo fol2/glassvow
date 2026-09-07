@@ -34,9 +34,10 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, Profile.anchor(node, custom) == Profile.anchor(node, custom), "determinism")
 	_check(fails, MapLayoutCanonical.digest(custom) != MapLayoutCanonical.digest(quality),
 		"profile participates in quality identity")
-	for defect: String in ["version", "station", "finite", "lanes", "missing", "bounds", "jitter", "passage"]:
+	for defect: String in ["version", "station", "finite", "lanes", "missing", "bounds", "jitter", "passage", "stairs"]:
 		var broken: Dictionary = custom.duplicate(true)
 		match defect:
+			"stairs": broken["spatial_profile"]["stair_version"] = "unknown"
 			"version": broken["spatial_profile"]["schema_version"] = 99
 			"station": broken["spatial_profile"]["rows"][4]["station_m"] = -100.0
 			"finite": broken["spatial_profile"]["rows"][4]["height_m"] = NAN
@@ -46,6 +47,11 @@ static func run(fails: Array[String]) -> void:
 			"jitter": broken["spatial_profile"]["jitter_scale"] = -0.1
 			"bounds": broken["spatial_profile"]["bounds_xz_m"] = [0, 0, 1, 1]
 		_check(fails, not Profile.validate(broken, 2).is_empty(), "reject " + defect)
+
+	var transverse: Dictionary = custom.duplicate(true)
+	transverse["spatial_profile"]["stair_version"] = "transverse-court-v1"
+	_check(fails, Profile.validate(transverse,2).is_empty(), "transverse stairs opt in")
+	_check(fails, MapLayoutCanonical.digest(transverse) != MapLayoutCanonical.digest(custom), "stair version changes identity")
 
 	var restrained: Dictionary = custom.duplicate(true)
 	restrained["spatial_profile"]["jitter_scale"] = .4

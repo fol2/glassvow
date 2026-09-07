@@ -9,8 +9,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[3]
 DEST = ROOT / 'docs/map/studies/act3-step3'
-SAMPLES = {717: '/tmp/act3-glazed717-full.json', 4: '/tmp/act3-current4-full.json',
-           2026: '/tmp/act3-current2026-full.json'}
+SAMPLES = {seed: DEST / f'precinct-v1-seed{seed}.json' for seed in [717, 4, 2026]}
 
 
 def identity():
@@ -27,7 +26,7 @@ def records(log, label):
             if line.startswith(label)]
 
 
-def capture(prefix, seeds, shapes):
+def capture(prefix, seeds, shapes, samples):
     receipt_path = DEST / f'{prefix}-receipt.json'
     if receipt_path.exists():
         raise RuntimeError('Use a fresh capture prefix')
@@ -36,7 +35,7 @@ def capture(prefix, seeds, shapes):
     receipt_path.write_text(json.dumps(receipt, indent=2) + '\n')
     for seed in seeds:
         sample = DEST / f'{prefix}-seed{seed}.json'
-        shutil.copyfile(SAMPLES[seed], sample)
+        shutil.copyfile(samples[seed], sample)
         for index, shape in enumerate(shapes):
             name = f'{prefix}-{seed}-{shape}'
             command = ['godot', '--path', str(ROOT), '-s',
@@ -85,5 +84,11 @@ if __name__ == '__main__':
     parser.add_argument('--seeds', type=int, nargs='+', choices=SAMPLES, default=[717, 4, 2026])
     parser.add_argument('--shapes', nargs='+', choices=['844x390', '1180x820', '1458x820'],
                         default=['844x390', '1180x820', '1458x820'])
+    parser.add_argument('--sample', action='append', nargs=2, metavar=('SEED', 'PATH'), default=[])
     args = parser.parse_args()
-    capture(args.prefix, args.seeds, args.shapes)
+    samples = dict(SAMPLES)
+    for seed, path in args.sample:
+        if int(seed) not in samples or not Path(path).is_file():
+            parser.error('Each sample needs a supported seed and existing JSON file')
+        samples[int(seed)] = Path(path)
+    capture(args.prefix, args.seeds, args.shapes, samples)
