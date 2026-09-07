@@ -1,0 +1,32 @@
+{
+  "status": "RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "rows": 512,
+  "cells": 32,
+  "runs_per_cell": 16,
+  "seeds": [25010000,25010015],
+  "counts": {"win":329,"loss":183,"stall":0,"error":0},
+  "native_diagnostic_failures":0,
+  "route_order":["smolder","hand","ember","balanced_random"],
+  "vow_order":[0,5],
+  "wins_out_of_16":{
+    "production1_demand0":[[12,10],[9,9],[14,10],[8,7]],
+    "production1_demand3":[[12,10],[9,9],[14,9],[9,7]],
+    "production2_demand0":[[14,12],[12,7],[13,12],[8,8]],
+    "production2_demand3":[[13,12],[12,8],[12,11],[9,8]]
+  },
+  "ember_nova_health_fraction_v0_v5":{
+    "production1_demand0":[0.049,0.058],
+    "production1_demand3":[0.023,0.014],
+    "production2_demand0":[0.113,0.082],
+    "production2_demand3":[0.067,0.058]
+  },
+  "ember_win_interaction":{
+    "v0":{"estimate":-0.0625,"nominal_cluster_bootstrap95":[-0.25,0.125]},
+    "v5":{"estimate":0.0,"nominal_cluster_bootstrap95":[-0.1875,0.1875]}
+  },
+  "actual_native_checks":{"stock":4582,"public_information":16,"random_shop":207,"fuel":3465,"four_turn_raw_payoffs":[128,50,152,152],"four_turn_interaction":78},
+  "decision":"No P9 candidate selected. The isolated interaction does not establish a whole-run win interaction. Increased production raises Nova enactment; demand3 reduces it. Continue with a capped low-stock paid payoff rather than increasing the full-bank peak.",
+  "complete_recovery":{"file":"glassvow-p9-fuel-complete-20260907.zip","bytes":2451143,"sha256":"004222b2d2aecc13c5c535e4fcd3c64d80dbea086e29783449e61445347edd36","files":386,"local_commit":"0b0c2f1e983bd7942fd5c8b9ed97600ed416ec2d","scope":"Complete assembled source, tests, all raw smoke/screen rows, receipts and readouts. Delivered as a sandbox file, not claimed stored as a GitHub artifact."},
+  "limitations":["16 shared seed clusters, not512 independent seeds","Nominal exploration, not corrected confirmation","BalancedRandomBuild is not signed C2","Health-source shares are descriptive, not isolated causality","Six-package admission,detector,retention,lifecycle and exact integration remain unestablished"]
+}
