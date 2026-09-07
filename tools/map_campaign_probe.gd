@@ -8,6 +8,8 @@ var main: Main
 var output: String = ""
 var travel: bool = false
 var act: int = 0
+var seed: int = 4
+var cancel_loading: bool = false
 var return_to_map: bool = false
 func _initialize() -> void:
 	_run.call_deferred()
@@ -16,6 +18,8 @@ func _run() -> void:
 	for argument: String in OS.get_cmdline_user_args():
 		if argument=="--prepare": prepare=true
 		elif argument=="--travel": travel=true
+		elif argument=="--cancel-loading": cancel_loading=true
+		elif argument.begins_with("--seed="): seed=argument.trim_prefix("--seed=").to_int()
 		elif argument=="--return":
 			travel=true
 			return_to_map=true
@@ -37,7 +41,7 @@ func _run() -> void:
 				vigil.quests[id]["state"]="complete"
 				vigil.shards.append(id)
 			profile={"quests":vigil.quests.duplicate(true),"shards":vigil.shards.duplicate()}
-		var run: RunState = RunState.new_run(content,4,"map-delivery-probe",profile)
+		var run: RunState = RunState.new_run(content,seed,"map-delivery-probe",profile)
 		run.act=act
 		run.map = WorldMap.for_run(run,content).to_dict()
 		vigil.guidance_skipped = true
@@ -85,6 +89,9 @@ func _run() -> void:
 	var load_deadline: int = Time.get_ticks_msec()+180000
 	while main._map_loading:
 		loading_frames+=1
+		if cancel_loading and loading_frames==20:
+			await _cancel_preparation(before)
+			return
 		var now: int = Time.get_ticks_usec()
 		loading_max_gap_ms=maxf(loading_max_gap_ms,(now-loading_tick)/1000.0)
 		loading_tick=now
@@ -198,3 +205,29 @@ func _click(point: Vector2) -> void:
 func _fail(reason: String) -> void:
 	push_error(reason)
 	quit(1)
+
+func _cancel_preparation(before: Dictionary) -> void:
+	var screen: WorldMapScreen = main._map_screen
+	var landscape: Node3D = screen._map_scene._landscape
+	var terrain: Node3D = landscape.terrain
+	var geometry: Node3D = terrain.causeways
+	if geometry.get_parent()!=null or not geometry.defer_instances:
+		_fail("Cancellation requires a live unpublished geometry job")
+		return
+	var lifetime: WeakRef = weakref(geometry)
+	geometry=null
+	var began: int = Time.get_ticks_usec()
+	main._show_title()
+	var deadline: int = Time.get_ticks_msec()+5000
+	while lifetime.get_ref()!=null and Time.get_ticks_msec()<deadline:
+		await process_frame
+	var receipt: Dictionary = {"geometry_released":lifetime.get_ref()==null,
+		"loading_cleared":not main._map_loading,"map_released":main._map_screen==null,
+		"title_restored":main._choice_screen!=null,"run_unchanged":main.game.run.to_dict()==before,
+		"cancel_ms":(Time.get_ticks_usec()-began)/1000.0}
+	print("CAMPAIGN_CANCEL ",JSON.stringify(receipt))
+	var passed: bool = receipt["geometry_released"] and receipt["loading_cleared"] and receipt["map_released"] and receipt["title_restored"] and receipt["run_unchanged"]
+	main.queue_free()
+	main=null
+	for i: int in range(3): await process_frame
+	quit(0 if passed else 1)
