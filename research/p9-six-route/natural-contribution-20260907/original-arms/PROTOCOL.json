@@ -1,0 +1,35 @@
+{
+  "purpose": "Original signed arm DEFINITIONS, nonprotected diagnostic cohort, not signed Phase A/C2 admission",
+  "arms": {
+    "1": "original planned build/planned play",
+    "2": "original random build/planned play",
+    "3": "original planned build/random play",
+    "4": "original random build/random play"
+  },
+  "catalogues": {
+    "original": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "candidate": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa"
+  },
+  "sources": {
+    "balance_catalogue.gd": "6e240546cd616a2518ee7a2b8fae41aa8a94078429155f89f6d9165eef1c20c0",
+    "balance_metrics.gd": "6904043d83d9cc91265a60911b28f49a01074d185e353b2dccdad64293cd0deb",
+    "balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+    "balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+    "vow_incentives.gd": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+  },
+  "source_change": "none in original six balance tools; optional research laws are in the copied game, absent on original catalogue",
+  "smoke": {
+    "cells": 32,
+    "seed0": 45000100,
+    "runs_per_cell": 1
+  },
+  "screen": {
+    "cells": 32,
+    "seed0": 45010000,
+    "runs_per_cell": 64,
+    "total": 2048
+  },
+  "constraint": "No content/policy adaptation; all original controls reported; no published old cohort is rerun or relabelled; no protected seeds; no replacement of native controller validation; tools may not understand optional new mechanics",
+  "scheduling": "execute after the active native replication, max four native workers"
+}
