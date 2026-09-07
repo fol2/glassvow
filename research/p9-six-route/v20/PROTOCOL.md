@@ -1,0 +1,13 @@
+# v20 — same-content recurring-heal valuation, not a product buff
+
+Exploration only. Six desired routes are not yet admitted. Follows the complete v19 1024-row screen; no old sample is extended or reclassified.
+
+Content is fixed at b25087484725e62f77b2c3da565b26bcf1e081993038e640f5a8b34c468ab7e9, hard consumer/smooth Ward. It is the instrument-comparison basis, not a final P9 candidate. In v19 Ash-hand/Vow5, Regrowth was offered in13/16 runs and acquired in0; its base draft score8 lies below the initial threshold12. These are diagnostic facts, not proof that every offer should have been selected.
+
+Factor: regeneration_horizon0 versus6. The latter replaces the inherited five-value coefficient per regen with2HP-value times six anticipated ticks. This is a fixed heuristic forecast, not known future healing or claimed optimality. It affects draft-value consumers including acquisition, removal/upgrade and sacrifice valuation; it is not acquisition-only. No product healing, energy, encounters, resources, RNG, other card scores, action limits or acceptance change. Both Planned and corresponding RandomBuild use the same factor. Existing random draft/shop/route semantics remain.
+
+Preflight:28 native score/choice/no-mutation assertions and16 public-information assertions passed. Factor0 reproduced all16 previously exposed first-seed v19 full-run records exactly. Those replay pairs are identity evidence, not new quality observations. Local freeze commit c4b7dd8 (complete SHA retained locally).
+
+Fixed design:2factors x2aspects x3routes x2vows xPlanned/route-matchedRandomBuild=48cells. Smoke:one seed24000100 each. After valid smoke,16 fresh seeds24010000..24010015 each=768run-condition evaluations. Exploratory, not protected acceptance or signedC2. Pairing by seed index does not make downstream RNG identical. Source/config/content frozen before rows; no edits while running; four bounded workers; invalid capture stops new dispatch and retains started work.
+
+Report every cell, acquisition, actual health/source traces, paired changes, reliability and duration. Shared healing uplift does not prove plurality; RandomBuild may improve too. No incomplete winner selection or post-peek sample extension. Resource-slope placebo, mechanism-specific interventions, independent confirmation and unrestricted retention remain necessary. Main, historical terminals, protected identities and numerical acceptance untouched; no final independent-review or product-promotion claim. Complete assembled sources/raw studies are preserved in the chat recovery archive; remote publication claims only the actual written files.
