@@ -4,7 +4,7 @@ const Terrace = preload("res://presentation/map/map_terrace_route.gd")
 const F = preload("res://domain/map_layout/map_layout_canonical.gd")
 
 static func resolve(edge: Dictionary, spans: Array, clearance: float,
-		grade: float, landing: float) -> Dictionary:
+		grade: float, landing: float, compact: bool = false) -> Dictionary:
 	var line: PackedVector3Array = []
 	var arcs: Array[float] = [0.0]
 	for value: Array in edge["centerline"]:
@@ -24,9 +24,9 @@ static func resolve(edge: Dictionary, spans: Array, clearance: float,
 		if index+1 < spans.size():
 			next_start = (end+F.float_value(spans[index+1]["deck_start_m"]))*.5
 		var up: Dictionary = Terrace.resolve(_slice(line,arcs,cursor,start),
-			baseline,baseline+clearance,width,grade,landing)
+			baseline,baseline+clearance,width,grade,landing,1.0 if compact else .5)
 		var down: Dictionary = Terrace.resolve(_slice(line,arcs,end,next_start),
-			baseline+clearance,baseline,width,grade,landing)
+			baseline+clearance,baseline,width,grade,landing,0.0 if compact else .5)
 		if up.get("ok") != true or down.get("ok") != true:
 			return {"ok":false,"reason":"passage approach cannot fit level turns and flights",
 				"span_index":index,"up":up,"down":down}

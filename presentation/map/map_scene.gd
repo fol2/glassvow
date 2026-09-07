@@ -275,8 +275,10 @@ func set_act(act_i: int) -> void:
 ## starts in Act I. `set_act` no-ops on an unchanged act, so on its own it
 ## would leave the new run standing in the previous run's wood.
 func _deal_act(_region: MapRegions) -> void:
+	_key.light_specular=1.0
 	_key.light_color = MapRegions.LAND_KEY[_act]
 	var setting: WorldEnvironment = _world.get_node("MapEnvironment") as WorldEnvironment
+	setting.environment.tonemap_exposure=1.0
 	setting.environment.ambient_light_color = MapRegions.LAND_AMBIENT[_act]
 	if _act == 0:
 		_key.rotation_degrees = Vector3(-52, -32, 0)
@@ -298,6 +300,18 @@ func _deal_act(_region: MapRegions) -> void:
 		setting.environment.ambient_light_color=Color("85a9c4")
 		setting.environment.ambient_light_energy=.65
 		setting.environment.tonemap_mode=Environment.TONE_MAPPER_FILMIC
+		setting.environment.fog_enabled=false
+	elif _act==2:
+		_key.rotation_degrees=Vector3(-48,-30,0)
+		_key.light_color=Color("d1cbe0")
+		_key.light_energy=1.5
+		_key.light_specular=.16
+		_key.shadow_opacity=1.0
+		_key.directional_shadow_max_distance=240
+		setting.environment.background_color=Color("121019")
+		setting.environment.ambient_light_color=Color("b9b5d2")
+		setting.environment.ambient_light_energy=.20
+		setting.environment.tonemap_exposure=.70
 		setting.environment.fog_enabled=false
 	_salt_dirty = false
 	_bind_asset_geometry()
@@ -591,6 +605,12 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary, node_records: A
 		_landscape.free()
 		_landscape=preload("res://presentation/map/chapters/act2/landscape.gd").new()
 		_landscape.source_nodes=node_records
+	if _act==2 and JourneyRegistry.enabled(quality):
+		_landscape.free()
+		var courts: Node3D = preload("res://presentation/map/chapters/act3/landscape.gd").new()
+		courts.source_nodes=node_records
+		courts.source_quality=quality
+		_landscape=courts
 	_world.add_child(_landscape)
 	_landscape.prepare(data, _landscape_assets, _scatter_salt)
 	if _landscape is JourneyLandscape:

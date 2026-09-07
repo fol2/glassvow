@@ -42,3 +42,11 @@ static func run(fails: Array[String]) -> void:
 	for edge: Dictionary in raw_result["routes"].values():
 		if edge["centerline"][-1][1] != 1.8:
 			fails.append("court stair: raw route endpoint lost anchor height")
+
+	var fork: Dictionary = {"branch":{"from":"0,0","to":"1,0","corridor_width":2.5,
+		"centerline":[[-15,0,0],[-14.37,0,0],[-11.54,0,2.83],[14.37,0,-8],[15,0,-8]]}}
+	var fork_result: Dictionary = Route.apply(fork,{"0,0":[-15,0,0],"1,0":[15,2.4,-8]},[{"station_m":-15},{"station_m":15}])
+	if fork_result.get("ok")!=true: fails.append("court stair: clear branch launch rejected")
+	else:
+		var fork_line: Array = fork_result["routes"]["branch"]["centerline"]
+		if fork_line[2]!=[-11.54,0.0,2.83]: fails.append("court stair: erased the compiler's branch departure guide")

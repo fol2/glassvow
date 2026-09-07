@@ -52,9 +52,13 @@ static func _chord(upper: Dictionary, lower: Dictionary, landing: float, balance
 			var after: Vector2 = centre+direction*reach
 			# Journey station order stays monotone; endpoints and branch ports remain.
 			if before.x<a.x or after.x<before.x or after.x>b.x: return false
+			var height: float = F.float_value(line[i][1])
+			# A perpendicular turn belongs on the existing level platform.
+			# Introducing zero-height points breaks elevated court approaches.
+			if absf(F.float_value(line[i+1][1])-height)>.00001: return false
 			var changed: Array = line.slice(0,i+1)
-			changed.append([before.x,0.0,before.y])
-			changed.append([after.x,0.0,after.y])
+			changed.append([before.x,height,before.y])
+			changed.append([after.x,height,after.y])
 			changed.append_array(line.slice(i+1))
 			upper["centerline"]=changed
 			return true

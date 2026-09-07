@@ -47,6 +47,8 @@ func _run() -> void:
 			_output = arg.trim_prefix("--output=")
 		elif arg == "--chapter-audit":
 			_chapter_audit = true
+		elif arg == "--audit-canary":
+			_chapter_audit = true
 		elif arg == "--compile-only":
 			_compile_only = true
 		elif arg.begins_with("--zoom-stop="):
@@ -131,7 +133,15 @@ func _run() -> void:
 		print("MAP_COMPILE_OK ", screen.layout_input_digest(), " ", screen.layout_digest())
 		quit(0)
 		return
-	if _chapter_audit:
+	if _chapter_audit and act==2:
+		var report: Dictionary = preload("res://tools/map_workshop/act3/runtime_audit.gd").measure(screen._map_scene._landscape)
+		print("MAP_COURT_AUDIT ",JSON.stringify(report))
+		if not report["ok"]: _chapter_failures.append("Court geometry qualification failed")
+		if "--audit-canary" in OS.get_cmdline_user_args():
+			var canary: Dictionary = preload("res://tools/map_workshop/act3/runtime_audit.gd").negative_canary(screen._map_scene._landscape)
+			print("MAP_COURT_CANARY ",JSON.stringify(canary))
+			if not canary["ok"]: _chapter_failures.append("Court audit failed to detect injected obstruction")
+	elif _chapter_audit:
 		if act!=1:
 			push_error("Chapter geometry audit currently supports the drowned city")
 			quit(2)

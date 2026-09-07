@@ -42,7 +42,7 @@ func _run() -> void:
 			push_error("Unexpected export argument: "+argument)
 			quit(2)
 			return
-	if act<0 or act>3 or output.is_empty() or (production_journey and act not in [0,1]) or (not candidate_overrides.is_empty() and not first_attempt_only):
+	if act<0 or act>3 or output.is_empty() or (production_journey and act not in [0,1,2]) or (not candidate_overrides.is_empty() and not first_attempt_only):
 		quit(2)
 		return
 	Locale.active = Locale.new(&"en")
@@ -137,7 +137,7 @@ func _sample(content: ContentDB, act: int, seed_value: int) -> Dictionary:
 			push_error("Production journey cannot be mixed with a trial spatial recipe")
 			scene.free()
 			return {}
-		var prepared: Dictionary = preload("res://presentation/map/map_journey_recipe.gd").build(nodes,edges,quality) if act==0 else preload("res://presentation/map/chapters/act2/recipe.gd").new().build(nodes,edges,quality)
+		var prepared: Dictionary = preload("res://presentation/map/map_journey_recipe.gd").build(nodes,edges,quality) if act==0 else preload("res://presentation/map/chapters/act2/recipe.gd").new().build(nodes,edges,quality) if act==1 else preload("res://presentation/map/chapters/act3/recipe.gd").new().build(nodes,edges,quality)
 		if prepared.get("ok")!=true:
 			push_error(str(prepared))
 			scene.free()

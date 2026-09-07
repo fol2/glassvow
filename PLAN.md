@@ -61,7 +61,7 @@ from completed checklist items and change it only with an explained scope change
 | 4 — Finished playable section | 20% | Promote a representative generated section through the production presentation seam. Integrate relief, surfaces, banks, stairs/bridges where relevant, scenery, light and node interaction. Inspect close/journey/overview and moving camera; no broken joins, floating assets, clipping or stretched ground. | 80% |
 | 5 — Visual acceptance | 10% | Judge the running section against approved chapter evidence, at all reference proportions, with navigation visible and hidden. Fix known defects before expanding. Record the actual visual verdict and rejected defects. Agent-owned gate; no routine owner approval. | 100% |
 | 6 — Generator generalisation | 25% | Generalise placement and chapter profiles over the maintained map corpus plus explicit dense branches, merges, crossing levels, long routes and edge cases. Retain node/edge truth, repeatability and walkable geometry. Resolve the preserved dense seed 4 failure rather than substitute an easier seed. | 100% |
-| 7 — Four-act production | 25% | Integrate all four approved identities into runtime assembly using qualified shared modules and chapter recipes. Verify per-chapter composition, combat alignment and transitions across the whole journey. No preview-only paths or palette-swap substitute. | 0% |
+| 7 — Four-act production | 25% | Integrate all four approved identities into runtime assembly using qualified shared modules and chapter recipes. Verify per-chapter composition, combat alignment and transitions across the whole journey. No preview-only paths or palette-swap substitute. | 40% |
 | 8 — Integration and delivery | 20% | Real campaign entry/travel/encounter return/save-load, shapes/input/accessibility/performance, selected gates and independent review pass. Deliver review surface, merge the final reviewed outcome, observe integrated checks and clean only safely saved task branches. | 0% |
 
 Overall implementation acceptance starts at 0% for Steps 4–8; Step 3 is 100%
@@ -285,7 +285,7 @@ partial implementation does not receive fractional credit.
 - Step 6: [x] camera and physical presentation share the compiler contract;
   [x] preserved seed 4 qualified; [x] maintained corpus repeatability/truth;
   [x] dense branches/merges/long routes; [x] crossing levels, contacts and bounds.
-- Step 7: [ ] Act I final recipe; [ ] Act II final recipe; [ ] Act III final recipe;
+- Step 7: [x] Act I final recipe; [x] Act II final recipe; [ ] Act III final recipe;
   [ ] Act IV final recipe; [ ] whole-journey/combat alignment and transitions.
 - Step 8: [ ] actual campaign/encounter/save-load; [ ] input/accessibility and
   physical-device evidence; [ ] performance/lifecycle and selected local gates;
@@ -946,3 +946,68 @@ act2-batched-terminus717.*, arch-approach-regression.log, act2-arch-qualified4.*
 act2-architecture4.*, city-batch-final-tests.log. This is an incremental checkpoint,
 not final core, governed hardware, independent review or completed Step 7.
 Progress remains 51%. Continue Act III using precinct-v4, not its older bridge study.
+
+
+### Two qualified production recipes; court integration — 7 September, 21:19 UTC
+
+Act I final recipe retains the completed 42-source replay/7-geometry-case proof
+and inspected reference matrix. A fresh cache-v6 native phone seed 4 build was
+inspected again: input cd51328963868aec696c0fe71343b87fe9c58fe19488490d46157d28c34a2632,
+realised 167a520674a6297f87728f7ab9711d48c8ccc07fca8d687bce295250c02c1aa1.
+Act II final recipe now passes four actual generated cases (4,14,717,17634),
+including zero crossings. All actual architecture bounds are clear of sampled
+body corridors: 25,620/28,839/22,797/18,924 samples respectively. The twelve native
+reference views and input exercise remain the visual/interaction evidence. The
+new shared measured-realisation extraction repeats seed 717 geometry, batch
+readback and negative canary successfully, with an inspected native terminal view.
+
+These complete the two chapter-recipe items, not whole-campaign or device gates.
+Step 7 is 2/5 = 40%; Steps 4/5/6/8 remain 80/100/100/0%; overall is 61%.
+Cold construction/loading, physical-device evidence, chapter transitions,
+complete local core, independent review and delivery remain open.
+
+Act III promotes 13 approved shared court modules, their shader and four original
+models. All 13 focused geometry tests pass. Runtime assembly now has separate
+court, architecture, contact and cache modules, preserving per-surface dressing
+and window lights. Initial compilation exposed two inherited defects: crossing
+repair inserted zero-height points on elevated courts, and transverse stair
+conversion erased the compiler's departure guides. Both have reproduced failing
+regressions and passing fixes. Court spacing now reserves complete departure
+samples, level turns, the actual 0.40-grade stair and jitter; the approved 0.55
+physical upper grade remains. The first complete candidate (65 nodes/76 edges,
+seed 717) passes all source hard checks. Native assembly/visual inspection is next;
+this is not an Act III acceptance claim. Negative cases remain in act3-source-
+first717.*, act3-source-shared717.*, court-crossing-height-red.log and court-launch-
+red.log. Selected candidate: act3-grade-launch717.json.
+
+Usage checkpoint event 21:07:41 UTC (relative to the 12:19 baseline): input
+158,360,078, cached input 156,473,472 (98.809%), uncached input 1,886,606, output
+587,043. Reasoning 306,776 is included in output, not added again. These are
+model-reported tokens, not a billing or Pro-allowance measurement. The remaining
+10–18 active-hour forecast plus external waits stays conditional while the court
+and void enter runtime; actual governed hardware remains unavailable. Continue
+without a routine approval or milestone stop.
+
+### Court runtime geometry checkpoint — 7 September, 21:42 UTC
+
+The actual native seed 717 court now passes 43,736 full-width walking probes,
+with no missing support, obstructions or contact disagreements. Minimum measured
+headroom is 2.4500000477 m. A real stair overlap was corrected by placing passage
+approach flights next to their high deck, retaining long level ground merges.
+This is opt-in for transverse courts; the other chapters keep their existing
+centred flight arithmetic. Separate sub-millimetre compressed-triangle boundary
+errors use a stated 0.25 mm world-distance tolerance, not a normalised barycentric
+allowance. Six focused contact, stair, crossing and snapshot regressions pass.
+
+Fresh native assembly took 4.227 s; cache replay took 0.538 s and repeated every
+geometry probe with identical input and realised digests. The replay overview
+was inspected. Input: 7c5a7edbc17223808e429de7a418e6834dc640fdb5ffa62d3e75e9efaf53942c.
+Realised: dff3dcfd6332e992589f24c67f42c4b5db886abd5183d1aeff73075dfc40abb9.
+Evidence: act3-compact-body717.*, act3-compact-replay717.*,
+court-checkpoint-tests.log. This remains one case, not the completed chapter
+matrix, campaign acceptance or governed-device performance. Progress stays 61%.
+
+The native obstruction canary detects ten blocked probes after inserting a real
+mesh above a generated endpoint. The phone input exercise passes wheel, drag,
+keyboard, inspection isolation, travel start, single arrival and idle rendering.
+Evidence: act3-input-canary717.*.

@@ -135,12 +135,12 @@ static func floor_index(walking: MeshInstance3D) -> Dictionary:
 	var triangles: Array[Dictionary] = []
 	_collect(walking,triangles)
 	return _index(triangles)
-static func floor_height(index: Dictionary,p: Vector3) -> float:
+static func floor_height(index: Dictionary,p: Vector3,tolerance: float = .0001) -> float:
 	var result: float = -INF
 	var bucket: Vector2i = Vector2i(floori(p.x/4.0),floori(p.z/4.0))
 	var candidates: Array = index.get(bucket,[])
 	for triangle: Dictionary in candidates:
-		var y: float = _height(p,triangle,.0001)
+		var y: float = _height(p,triangle,tolerance)
 		if is_finite(y) and y<=p.y+.18 and y>=p.y-.18:
 			result = maxf(result,y)
 	return result

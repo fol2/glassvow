@@ -13,6 +13,9 @@ static func run(fails: Array[String]) -> void:
 	item.scale=Vector3(2,3,.5)
 	item.layers=2
 	item.material_override=StandardMaterial3D.new()
+	var dressed: StandardMaterial3D = StandardMaterial3D.new()
+	dressed.albedo_color=Color("d52348")
+	item.set_surface_override_material(0,dressed)
 	group.add_child(item)
 	var restored: Node3D = Node3D.new()
 	restored.transform=source.transform
@@ -32,5 +35,6 @@ static func run(fails: Array[String]) -> void:
 	var replay: MeshInstance3D = restored.get_child(0) as MeshInstance3D
 	if replay.layers!=2 or replay.material_override!=item.material_override:
 		fails.append("Static snapshot changes material or visibility layers")
+	if replay.get_surface_override_material(0)!=dressed: fails.append("Static snapshot loses per-surface architectural dressing")
 	source.free()
 	restored.free()

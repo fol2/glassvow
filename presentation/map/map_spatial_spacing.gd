@@ -61,6 +61,11 @@ static func apply(profile: Dictionary,nodes: Array,edges: Array) -> Dictionary:
 		if rise > .00001:
 			# Two branch guides, two level approaches and a discrete stair run.
 			required = maxf(required,10.0+2*landing+maxf(rise/grade,ceili(rise/.17)*.28))
+			if profile.get("stair_version","")=="transverse-court-v1":
+				# Preserve 4 m departure sampling, the port and a complete level turn
+				# on both sides of the court's actual 0.40-grade stair. Include jitter.
+				var jitter: float = MapLayoutCanonical.float_value(profile.get("jitter_scale",0.0))
+				required=maxf(required,(2*(4.0+.63+1.5)+rise/.40+1.2)/(1-2*jitter*.4))
 		if crossings.has(i-1):
 			required = maxf(maxf(required,crossing_interval),2*(deck_rise/grade+2*landing)+2*4.0+2*2.5+.8)
 		added += required-gap

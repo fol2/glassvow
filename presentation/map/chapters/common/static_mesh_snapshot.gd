@@ -9,8 +9,10 @@ static func _collect(node: Node3D,parent: Transform3D,rows: Array[Dictionary]) -
 	var pose: Transform3D = parent*node.transform
 	if node is MeshInstance3D:
 		var item: MeshInstance3D = node
+		var overrides: Array[Material] = []
+		for surface: int in range(item.mesh.get_surface_count()): overrides.append(item.get_surface_override_material(surface))
 		rows.append({"name":str(item.name),"mesh":item.mesh,"material":item.material_override,"transform":pose,
-			"layers":item.layers,"shadows":item.cast_shadow,"visible":item.get_meta("unbatched_visible",item.visible)})
+			"overrides":overrides,"layers":item.layers,"shadows":item.cast_shadow,"visible":item.get_meta("unbatched_visible",item.visible)})
 	for child: Node in node.get_children():
 		if child is Node3D: _collect(child as Node3D,pose,rows)
 
@@ -20,6 +22,10 @@ static func restore(root: Node3D,rows: Array) -> void:
 		item.name=row["name"]
 		item.mesh=row["mesh"]
 		item.material_override=row["material"]
+		var overrides: Array = row.get("overrides",[])
+		for surface: int in range(overrides.size()):
+			var material: Material = overrides[surface]
+			item.set_surface_override_material(surface,material)
 		item.transform=row["transform"]
 		item.layers=row["layers"]
 		item.cast_shadow=row["shadows"]

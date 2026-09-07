@@ -84,10 +84,11 @@ static func apply(routes: Dictionary, quality: Dictionary) -> Dictionary:
 			for edge_id: String in MapLayoutCanonical.sorted_keys(merged_rows):
 				var edge: Dictionary = routes[edge_id]
 				var spans: Array = merged_rows[edge_id]
+				var compact: bool = quality["spatial_profile"].get("stair_version","")=="transverse-court-v1"
 				var physical: Dictionary = preload("res://presentation/map/map_passage_route.gd").resolve(
 					edge,spans,MapLayoutCanonical.float_value(governed["minimum_vertical_clearance_m"]),
 					MapLayoutCanonical.float_value(governed["maximum_ramp_grade"]),
-					MapLayoutCanonical.float_value(governed["landing_m"]))
+					MapLayoutCanonical.float_value(governed["landing_m"]),compact)
 				if physical.get("ok") != true:
 					approach_failures.append({"edge_id":edge_id,"details":physical})
 					feasible = false

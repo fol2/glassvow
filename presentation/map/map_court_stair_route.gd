@@ -37,7 +37,18 @@ static func apply(routes: Dictionary, anchors: Dictionary, rows: Array) -> Dicti
 				break
 		if not is_finite(z):
 			return {"ok":false,"edge_id":id,"reason":"route does not cross its court boundary"}
-		out[id]["centerline"] = [[line[0][0],low,line[0][2]],[line[1][0],low,line[1][2]],
-			[start-1.5,low,z],[start,low,z],[end,high,z],[end+1.5,high,z],
-			[line[-2][0],high,line[-2][2]],[line[-1][0],high,line[-1][2]]]
+		# Retain the compiler's departure/arrival guides before fitting stairs.
+		# Replacing them with a diagonal towards the stair axis folds branches together.
+		var fitted: Array = []
+		for index: int in range(line.size()-1):
+			var point: Array = line[index]
+			if MapLayoutCanonical.float_value(point[0])>=start-1.5: break
+			fitted.append([point[0],low,point[2]])
+		fitted.append_array([[start-1.5,low,z],[start,low,z],[end,high,z],[end+1.5,high,z]])
+		for index: int in range(1,line.size()):
+			var point: Array = line[index]
+			if MapLayoutCanonical.float_value(point[0])<=end+1.5: continue
+			fitted.append([point[0],high,point[2]])
+		out[id]["centerline"] = fitted
+
 	return {"ok":true,"routes":out}

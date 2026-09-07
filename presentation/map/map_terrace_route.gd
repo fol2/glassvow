@@ -3,11 +3,11 @@ extends RefCounted
 ## Resolve one terrace transition on a straight run, preserving the routed XZ path.
 ## Corners and node approaches stay level; infeasible routes fail explicitly.
 static func resolve(source: PackedVector3Array, from_height: float, to_height: float,
-		width: float, maximum_grade: float = .55, landing: float = 1.0) -> Dictionary:
+		width: float, maximum_grade: float = .55, landing: float = 1.0, placement: float = .5) -> Dictionary:
 	if source.size() < 2 or not is_finite(from_height) or not is_finite(to_height) \
 			or not is_finite(width) or width <= 0 or maximum_grade <= 0 \
 			or not is_finite(maximum_grade) or not is_finite(landing) \
-			or maximum_grade > .17/.28 or landing < .28:
+			or maximum_grade > .17/.28 or landing < .28 or not is_finite(placement) or placement<0 or placement>1:
 		return {"ok":false,"reason":"invalid terrace parameters"}
 	var line: PackedVector3Array = []
 	for p: Vector3 in source:
@@ -42,7 +42,7 @@ static func resolve(source: PackedVector3Array, from_height: float, to_height: f
 		out.append(p)
 		if i == best:
 			var direction: Vector3 = (line[i+1]-line[i]).normalized()
-			var offset: float = (best_length-run)*.5
+			var offset: float = (best_length-run)*.5 if placement==.5 else lerpf(reserve,best_length-run-reserve,placement)
 			var first: Vector3 = p+direction*offset
 			var last: Vector3 = first+direction*run
 			last.y = to_height
