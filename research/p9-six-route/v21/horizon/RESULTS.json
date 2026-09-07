@@ -1,0 +1,22 @@
+{
+  "status":"RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "rows":512,"cells":32,"runs_per_cell":16,"seed_clusters":16,
+  "seed_range":[31210000,31210015],
+  "counts":{"win":360,"loss":152,"stall":0,"error":0},
+  "native_diagnostic_failures":0,
+  "freeze_sha256":"e2f55e576f04cadaaf8a9c013ac41aa54f591296f83bd7d7d953036811bab206",
+  "off_on_wins":{
+    "dusk_facet_v0":[15,15],"dusk_facet_v5":[13,13],
+    "dusk_fervor_v0":[14,14],"dusk_fervor_v5":[14,13],
+    "dusk_cycle_v0":[15,14],"dusk_cycle_v5":[13,12],
+    "dusk_balanced_random_v0":[5,5],"dusk_balanced_random_v5":[1,2],
+    "ash_smolder_v0":[15,15],"ash_smolder_v5":[12,12],
+    "ash_hand_v0":[11,11],"ash_hand_v5":[9,9],
+    "ash_ember_v0":[16,14],"ash_ember_v5":[7,7],
+    "ash_balanced_random_v0":[14,15],"ash_balanced_random_v5":[8,7]
+  },
+  "descriptive_planned_total":{"rows_per_arm":192,"off_wins":154,"on_wins":149},
+  "preflight":{"off_ash_parsed_row_parity":8,"public_information_assertions_on":16,"bounded_native_fixture_assertions_per_mode":9},
+  "decision":"Do not select rolling_growth as default from these results. It repairs the late-horizon controlled witness but this complete small comparison does not establish portfolio benefit. It remains an explicit experimental option, not proven optimal play.",
+  "limitations":["16 shared seed clusters, not512 independent trials","Nominal exploration; no corrected confirmation","No content changes, new route or P9 admission","No six causal packages, detector, retention, ceiling or integration claim"]
+}
