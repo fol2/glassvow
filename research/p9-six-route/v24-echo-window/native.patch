@@ -1,0 +1,23 @@
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -995,7 +995,7 @@
+ 			if poison > 0:
+ 				add_status_enemy(cb, target, "poison", poison * (_ji(fx["n"]) - 1), run)
+ 		"shatterEcho":
+-			var echo: int = 2 if target.staggered or _sget(target.statuses, "vulnerable") > 0 else 1
++			var echo: int = _ji(fx.get("staggeredMult", 2)) if target.staggered else (2 if _sget(target.statuses, "vulnerable") > 0 else 1)
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) * echo, true, damage_mult)
+ 		"emberNova":
+ 			var nova_raw: int = resource_payoff(cb.embers, fx)
+@@ -1369,6 +1369,11 @@
+ 				if target != null and _sget(target.statuses, "vulnerable") > 0:
+ 					bonus = _ji(fx.get("bonus", 0))
+ 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + bonus), "times": 1})
++			elif sid == "shatterEcho":
++				var echo: int = 1
++				if target != null:
++					echo = _ji(fx.get("staggeredMult", 2)) if target.staggered else (2 if _sget(target.statuses, "vulnerable") > 0 else 1)
++				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) * echo), "times": 1})
+ 			elif sid == "momentum":
+ 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + inst.bonus), "times": 1})
+ 			elif sid in ["phantom", "emberNova"] and fx.has("reserve"):
