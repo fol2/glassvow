@@ -35,7 +35,12 @@ def decode(envelope):
     size = envelope['uncompressed_bytes']
     if type(size) is not int or not 0 < size <= LIMIT:
         raise ValueError('Invalid declared byte length')
-    compressed = base64.b64decode(envelope['payload'], validate=True)
+    payload = envelope['payload']
+    if isinstance(payload, list):
+        if not payload or not all(isinstance(s, str) and 0 < len(s) <= 64 for s in payload):
+            raise ValueError('Invalid transport chunks')
+        payload = ''.join(payload)
+    compressed = base64.b64decode(payload, validate=True)
     d = zlib.decompressobj()
     data = d.decompress(compressed, size + 1)
     if len(data) != size or not d.eof or d.unused_data or d.unconsumed_tail:
