@@ -1,6 +1,6 @@
 extends Node3D
 ## Complete royal architecture: entry, recessed audience court and raised hall.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 const Palette = preload("res://tools/map_workshop/act3/materials.gd")
 const Stonework = preload("res://tools/map_workshop/act3/stonework.gd")
 var kit: Stonework = Stonework.new()

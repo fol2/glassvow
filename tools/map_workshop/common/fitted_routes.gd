@@ -1,8 +1,8 @@
 extends Node3D
 ## Complete sample routes become fitted masonry. Upper and lower decks stay separate.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
-const Paths = preload("res://tools/map_workshop/road_paths.gd")
-const Surfaces = preload("res://tools/map_workshop/bridge_surfaces.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
+const Paths = preload("res://presentation/map/landscape/road_paths.gd")
+const Surfaces = preload("res://presentation/map/landscape/bridge_surfaces.gd")
 var levels: RefCounted
 var material_factory: Callable
 var lines: Array[PackedVector3Array] = []

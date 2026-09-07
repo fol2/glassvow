@@ -1,6 +1,6 @@
 extends CanvasLayer
 ## Read-only chapter inspection. Snapshot states come from the compiled sample.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 const SYMBOLS: Dictionary = {"monster":"×","elite":"!","event":"?","rest":"⌂","shop":"¤","treasure":"◇","boss":"♜","monument":"†"}
 var chapter_heading: String = "  II  /  THE SUNKEN CITY"
 var landmark_label: String = "Library"

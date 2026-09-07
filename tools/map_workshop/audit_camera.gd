@@ -1,8 +1,8 @@
 extends SceneTree
 ## Native projection audit of every seed-717 journey context, without game mutation.
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 const Rig = preload("res://tools/map_workshop/camera.gd")
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
 const SHAPES: Array[Vector2i] = [Vector2i(844,390), Vector2i(1180,820), Vector2i(1458,820)]
 
 func _initialize() -> void:
@@ -26,7 +26,7 @@ func _run() -> void:
 	var seats: Dictionary = {}
 	for raw: Array in sample["anchors"].values():
 		var source: Vector3 = Meshes.v3(raw)
-		seats[terrain.present(source)] = preload("res://tools/map_workshop/journey.gd").seat(terrain,source)
+		seats[terrain.present(source)] = preload("res://presentation/map/landscape/journey.gd").seat(terrain,source)
 	for shape: Vector2i in SHAPES:
 		stage.size = shape
 		await process_frame

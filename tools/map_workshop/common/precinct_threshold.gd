@@ -1,6 +1,6 @@
 extends RefCounted
 ## Route-derived transverse masonry: a swept opening for every crossing.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 static func plan(routes: Dictionary, x: float, near_z: float, far_z: float,
 		depth: float = 1.6, clearance: float = 3.0) -> Dictionary:
 	var openings: Array[Dictionary] = []

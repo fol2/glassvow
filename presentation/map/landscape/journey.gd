@@ -1,9 +1,9 @@
 extends Node3D
 ## Visible journey state consumes WorldMap; it never invents legal connections.
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
-const Paths = preload("res://tools/map_workshop/road_paths.gd")
-const Pilgrim = preload("res://tools/map_workshop/pilgrim.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
+const Paths = preload("res://presentation/map/landscape/road_paths.gd")
+const Pilgrim = preload("res://presentation/map/landscape/pilgrim.gd")
 var terrain: Terrain
 var anchors: PackedVector3Array
 var walker: Pilgrim
@@ -115,7 +115,7 @@ func path(from_id: String, to_id: String) -> PackedVector3Array:
 		var route: PackedVector3Array = []
 		for point: Vector3 in Paths.sample(raw,.12):
 			route.append(terrain.present(point,upper))
-		return preload("res://tools/map_workshop/journey_routes.gd").around_stones(terrain,route)
+		return preload("res://presentation/map/landscape/journey_routes.gd").around_stones(terrain,route)
 	return []
 
 func walk(route: PackedVector3Array, destination: Vector3) -> void:

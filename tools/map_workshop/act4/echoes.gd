@@ -1,6 +1,6 @@
 extends RefCounted
 ## Small reverse-chapter memories supported by the processional way, never a ground plane.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 static func build(parent: Node3D, anchors: Dictionary) -> Array[Node3D]:
 	var roots: Array[Node3D] = []
 	var obsidian: Node3D = Node3D.new()

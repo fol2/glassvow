@@ -1,7 +1,7 @@
 extends RefCounted
 ## Continuous edge masonry follows the actual fitted deck, including bends.
 ## Takes surface queries rather than chapter IDs or generated game state.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 var blocks: SurfaceTool
 var caps: SurfaceTool
 var arch_stones: SurfaceTool

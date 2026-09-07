@@ -9,7 +9,7 @@ func _initialize() -> void:
 	for key: String in profile["routes"]:
 		var points: PackedVector3Array = []
 		for raw: Array in profile["routes"][key]:
-			points.append(preload("res://tools/map_workshop/mesh_tools.gd").v3(raw))
+			points.append(preload("res://presentation/map/landscape/mesh_tools.gd").v3(raw))
 		routes[key] = points
 		anchors[sample["edges"][key]["from"]] = points[0]+Vector3.UP*.022
 		anchors[sample["edges"][key]["to"]] = points[-1]+Vector3.UP*.022

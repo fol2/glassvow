@@ -1,7 +1,7 @@
 extends SceneTree
 ## Native contact sheet of all shared aquatic models under the chapter lighting.
 const Assets = preload("res://tools/map_workshop/act2/scenery_assets.gd")
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 func _initialize() -> void:
 	_build.call_deferred()
 

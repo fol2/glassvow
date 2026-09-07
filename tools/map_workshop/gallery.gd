@@ -1,8 +1,8 @@
 extends Control
 ## Native material and form review under the same camera/light as the workshop.
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
-const AssetLights = preload("res://tools/map_workshop/asset_lights.gd")
-const AssetSurfaces = preload("res://tools/map_workshop/asset_surfaces.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
+const AssetLights = preload("res://presentation/map/landscape/asset_lights.gd")
+const AssetSurfaces = preload("res://presentation/map/landscape/asset_surfaces.gd")
 var IDS: Array[String] = ["amber-arch", "conifer", "ash-copse", "slate-bank", "memorial", "waystone", "bridge-bay"]
 var LABELS: Array[String] = ["Paired-lamp arch", "Charcoal conifer", "Ash-red copse", "Slate bank", "Memorial", "Waystone", "Bridge bay"]
 var POSITIONS: Array[Vector3] = [Vector3(-7,0,-2.5),Vector3(0,0,-2.5),Vector3(5.5,0,-2.5),Vector3(-7,0,3.3),Vector3(-2.3,0,3.3),Vector3(1.1,0,3.3),Vector3(6.0,0,3.3)]

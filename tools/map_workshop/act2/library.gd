@@ -1,6 +1,6 @@
 extends Node3D
 ## Reusable roofless library assembly for the isolated Act II asset study.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 var stone: ShaderMaterial = ShaderMaterial.new()
 var trim: StandardMaterial3D = M.material(Color("4c586a"))
 var dark: StandardMaterial3D = M.material(Color("202d3c"))

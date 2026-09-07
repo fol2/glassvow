@@ -1,7 +1,7 @@
 extends RefCounted
 ## Approved B language: complete two-opening bays fitted to continuous edges.
 ## Distances belong to the boundary run, never a nearest-route UV lookup.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 var points: Array[Vector3] = []
 var normals: Array[Vector3] = []
 var stations: Array[float] = []

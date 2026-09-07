@@ -1,6 +1,6 @@
 extends RefCounted
 ## A 1.75 m review figure; a scale reference rather than a final character asset.
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
 static func place(parent: Node3D, at: Vector3, yaw: float = 0) -> void:
 	var person: Node3D = Node3D.new()
 	person.name = "Adult scale reference 1.75 m"

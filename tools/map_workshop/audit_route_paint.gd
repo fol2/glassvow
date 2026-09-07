@@ -1,6 +1,6 @@
 extends SceneTree
 ## Check every generated earth-road centreline against the uploaded mask source.
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 func _initialize() -> void:
 	_run.call_deferred()
 func _run() -> void:

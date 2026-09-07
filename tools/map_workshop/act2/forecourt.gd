@@ -1,4 +1,4 @@
-extends "res://tools/map_workshop/bridge_surfaces.gd"
+extends "res://presentation/map/landscape/bridge_surfaces.gd"
 ## A single entrance apron, clipped against the actual causeway footprint.
 var road: RefCounted
 var origin: Vector3

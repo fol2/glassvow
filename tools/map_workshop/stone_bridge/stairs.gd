@@ -1,7 +1,7 @@
 extends RefCounted
 ## Detect whole monotonic inclines, then divide their height into equal risers.
 ## Contour stations follow the fitted road; no tread is placed independently.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 var count: int = 0
 var maximum_riser: float = 0
 var flights: int = 0

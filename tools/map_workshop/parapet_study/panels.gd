@@ -1,6 +1,6 @@
 extends RefCounted
 ## Isolated design comparison. Complete bays, never holes sampled from a wall.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 static func panel(parent: Node3D,kind: String,left: float,right: float,z: float,stone: Material,trim: Material) -> void:
 	var centre: float = (left+right)*.5
 	var length: float = right-left

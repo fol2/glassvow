@@ -1,6 +1,6 @@
 extends Node3D
 ## Continuous court foundations, with recessed passages at route crossings.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 var samples: Dictionary = {}
 var footprint: PackedVector2Array = []
 func build(causeways: Node3D) -> void:

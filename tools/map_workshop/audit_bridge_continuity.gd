@@ -1,6 +1,6 @@
 extends SceneTree
 ## Independent ray probes of every elevated centreline and its walking width.
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 func _initialize() -> void:
 	_run.call_deferred()
 func _run() -> void:

@@ -38,13 +38,13 @@ func build(land: Node3D) -> void:
 			var ground: float = land.surface_height(x,z)
 			field_image.set_pixel(ix,iz,Color(LEVEL-ground,0,0))
 	var water: ShaderMaterial = ShaderMaterial.new()
-	water.shader = preload("res://tools/map_workshop/river.gdshader")
+	water.shader = preload("res://presentation/map/landscape/river.gdshader")
 	water.set_shader_parameter("bathymetry",ImageTexture.create_from_image(field_image))
 	var piers: PackedVector4Array = []
 	var deck: RefCounted = land.get_meta("bridge_field") if land.has_meta("bridge_field") else null
 	if deck!=null:
 		for value: Array in land.anchors.values():
-			var p: Vector3 = preload("res://tools/map_workshop/mesh_tools.gd").v3(value)
+			var p: Vector3 = preload("res://presentation/map/landscape/mesh_tools.gd").v3(value)
 			if absf(p.x-centre(p.z))>2.7:
 				continue
 			var contact: Dictionary = deck.field(Vector2(p.x,p.z))

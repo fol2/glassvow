@@ -1,6 +1,6 @@
 extends SceneTree
 ## Probe actual approach triangles against the rendered land, including edges.
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 
 func _initialize() -> void:
 	_run.call_deferred()

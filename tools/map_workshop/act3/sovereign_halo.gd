@@ -1,6 +1,6 @@
 extends Node3D
 ## The court's sole fragmented structure: a restrained ceremonial apparition.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 func _ready() -> void:
 	var material: StandardMaterial3D = StandardMaterial3D.new()
 	material.albedo_color = Color("50334d")

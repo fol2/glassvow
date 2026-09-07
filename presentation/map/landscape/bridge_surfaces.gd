@@ -1,7 +1,7 @@
 extends RefCounted
 ## A single clipped surface for decks and ramps, including bends and joins.
 ## Shared grid vertices give adjacent pieces identical contact heights.
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
 # Subdivide the land's .5 m cells using the same diagonal. An unrelated grid
 # can cut through a land triangle between otherwise sound contact vertices.
 const CELL: float = .125

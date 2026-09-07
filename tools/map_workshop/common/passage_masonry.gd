@@ -1,7 +1,7 @@
 extends RefCounted
 ## Side masonry is clipped to the actual upper deck and stays outside the lower route.
 const F = preload("res://domain/map_layout/map_layout_canonical.gd")
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 static func build(parent: Node3D, upper: Dictionary, lower: Dictionary, material: Material, continuous_foundation: bool = false, deck_depth: float = .65) -> Node3D:
 	var root: Node3D = Node3D.new()
 	root.name = "PassageMasonry"

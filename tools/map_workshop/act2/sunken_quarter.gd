@@ -1,6 +1,6 @@
 extends Node3D
 ## Broad submerged civic forms: a city beneath the flood, not scattered debris.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 
 func build(kind: int) -> void:
 	var stone: ShaderMaterial = ShaderMaterial.new()

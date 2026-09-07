@@ -1,7 +1,7 @@
 extends SceneTree
 ## Plants beside rocks/under canopies must not depend on insertion order.
-const Kit = preload("res://tools/map_workshop/kit.gd")
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
+const Kit = preload("res://presentation/map/landscape/kit.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 func _initialize() -> void:
 	var kit: Kit = Kit.new()
 	var terrain: Terrain = Terrain.new()

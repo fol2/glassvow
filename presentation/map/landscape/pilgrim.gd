@@ -1,6 +1,6 @@
 extends Node3D
 ## Small anonymous cloaked traveller, with a carried light and a grounded hem.
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
 var cloak: Node3D
 var lamp: Node3D
 var boots: Array[Node3D] = []

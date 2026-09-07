@@ -1,7 +1,7 @@
 extends RefCounted
 ## Probe the added rail/pier geometry, not just the unchanged route surface.
 const Probe = preload("res://tools/map_workshop/act2/mesh_probe.gd")
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 
 static func measure(causeways: Node3D) -> Dictionary:
 	var obstacles: Array[Probe] = []

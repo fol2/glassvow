@@ -1,12 +1,12 @@
 extends Node3D
 ## Placement study shared by grey masses and their authored asset replacements.
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
-const AssetLights = preload("res://tools/map_workshop/asset_lights.gd")
-const AssetSurfaces = preload("res://tools/map_workshop/asset_surfaces.gd")
-const Envelope = preload("res://tools/map_workshop/foliage_envelope.gd")
-const GroundContacts = preload("res://tools/map_workshop/ground_contacts.gd")
-const GatewaySites = preload("res://tools/map_workshop/gateway_sites.gd")
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
+const AssetLights = preload("res://presentation/map/landscape/asset_lights.gd")
+const AssetSurfaces = preload("res://presentation/map/landscape/asset_surfaces.gd")
+const Envelope = preload("res://presentation/map/landscape/foliage_envelope.gd")
+const GroundContacts = preload("res://presentation/map/landscape/ground_contacts.gd")
+const GatewaySites = preload("res://presentation/map/landscape/gateway_sites.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 var tree_envelopes: Dictionary = {}
 var contacts: GroundContacts
 var placed: Array[Dictionary] = []
@@ -84,7 +84,7 @@ func build(surface: Terrain, points: PackedVector3Array, grey: bool) -> void:
 	_accents(grey)
 	contacts.finish()
 	if not grey:
-		preload("res://tools/map_workshop/terrain_paint.gd").bind_habitat(terrain,placed,terrain.lines,terrain.is_elevated)
+		preload("res://presentation/map/landscape/terrain_paint.gd").bind_habitat(terrain,placed,terrain.lines,terrain.is_elevated)
 	var counts: Dictionary = {}
 	for item: Dictionary in placed:
 		counts[item["kind"]] = int(str(counts.get(item["kind"],0))) + 1

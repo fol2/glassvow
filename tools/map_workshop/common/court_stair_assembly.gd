@@ -2,7 +2,7 @@ extends RefCounted
 ## Combine parallel court flights into one physical stair per nearby route group.
 ## Input routes are already generated and evaluated. No route or node is removed.
 const Flight = preload("res://tools/map_workshop/common/resolved_flight.gd")
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 static func resolve(plans: Array[Dictionary], boundaries: Array[float], gap: float = 8.0, minimum_width: float = 4.0) -> Dictionary:
 	if not is_finite(gap) or gap < 0 or not is_finite(minimum_width) or minimum_width <= 0:
 		return {"ok":false,"reason":"invalid court stair assembly dimensions"}

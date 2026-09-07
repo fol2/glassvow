@@ -1,8 +1,8 @@
 extends Node3D
 ## Native land and roads derived from the compiled route topology.
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
-const Paint = preload("res://tools/map_workshop/terrain_paint.gd")
-const River = preload("res://tools/map_workshop/river.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
+const Paint = preload("res://presentation/map/landscape/terrain_paint.gd")
+const River = preload("res://presentation/map/landscape/river.gd")
 var lines: Array[PackedVector3Array] = []
 var source_edges: Dictionary = {}
 var anchors: Dictionary = {}
@@ -10,7 +10,7 @@ var road_segments: int = 0
 var bridge_spans: int = 0
 var greybox: bool = true
 var height_cache: Dictionary = {}
-var landform: RefCounted = preload("res://tools/map_workshop/landform.gd").new()
+var landform: RefCounted = preload("res://presentation/map/landscape/landform.gd").new()
 const CELL: float = .5
 const WATER: float = River.LEVEL
 
@@ -26,7 +26,7 @@ func build(sample: Dictionary, grey: bool) -> void:
 	var source_points: PackedVector3Array = []
 	for raw: Array in anchors.values():
 		source_points.append(Meshes.v3(raw))
-	var gateway: Dictionary = preload("res://tools/map_workshop/gateway_sites.gd").choose(self,source_points,false)
+	var gateway: Dictionary = preload("res://presentation/map/landscape/gateway_sites.gd").choose(self,source_points,false)
 	if not gateway.is_empty():
 		var at: Vector3 = gateway["position"]
 		landform.terrace_centre = Vector2(at.x,at.z)
@@ -134,7 +134,7 @@ func _land() -> void:
 func _roads() -> void:
 	if not greybox:
 		var ground: MeshInstance3D = get_node("Quiet sculpted ground") as MeshInstance3D
-		bridge_spans = preload("res://tools/map_workshop/bridge_geometry.gd").build(self,lines,is_elevated,ground.material_override as ShaderMaterial)
+		bridge_spans = preload("res://presentation/map/landscape/bridge_geometry.gd").build(self,lines,is_elevated,ground.material_override as ShaderMaterial)
 		for line: PackedVector3Array in lines:
 			road_segments += line.size()-1
 		return

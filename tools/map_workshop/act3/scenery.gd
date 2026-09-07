@@ -1,6 +1,6 @@
 extends Node3D
 ## Sparse intact architectural groups, placed in measured gaps in the route network.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 const Kit = preload("res://tools/map_workshop/act3/stonework.gd")
 var placed: Array[Dictionary] = []
 func build(routes: Node3D,ground: Node3D) -> void:

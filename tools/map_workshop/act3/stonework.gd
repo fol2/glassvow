@@ -1,6 +1,6 @@
 extends RefCounted
 ## Angular obsidian architecture, with complete openings and restrained lancet glass.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 const Palette = preload("res://tools/map_workshop/act3/materials.gd")
 var stone: Material = Palette.obsidian()
 var trim: Material = Palette.obsidian(Color("46354f"),.04)

@@ -1,7 +1,7 @@
 extends SceneTree
 ## Private whole-place composition experiment. Reserves are not yet certified.
 const Inspector = preload("res://tools/map_workshop/act3/precinct_inspection.gd")
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 const Envelope = preload("res://tools/map_workshop/common/precinct_envelope.gd")
 const CourtStairs = preload("res://tools/map_workshop/common/court_stair_assembly.gd")
 const Occupancy = preload("res://tools/map_workshop/common/architectural_occupancy.gd")

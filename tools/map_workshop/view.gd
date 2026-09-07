@@ -1,11 +1,11 @@
 extends Control
 ## Native isolated workshop. Domain WorldMap controls legal preview steps.
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 const Rig = preload("res://tools/map_workshop/camera.gd")
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
-const Kit = preload("res://tools/map_workshop/kit.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
+const Kit = preload("res://presentation/map/landscape/kit.gd")
 const Pin = preload("res://tools/map_workshop/journey_pin.gd")
-const Journey = preload("res://tools/map_workshop/journey.gd")
+const Journey = preload("res://presentation/map/landscape/journey.gd")
 const TYPES: Dictionary = {"monster": "×", "elite": "✦", "event": "?", "rest": "⌂", "shop": "¤", "treasure": "◇", "boss": "♜", "monument": "†"}
 var sample: Dictionary
 var world_map: WorldMap
@@ -95,7 +95,7 @@ func _build_world() -> void:
 	world.add_child(kit)
 	kit.build(terrain, anchors, greybox)
 	if not greybox and kit.build_complete:
-		preload("res://tools/map_workshop/road_details.gd").build(terrain)
+		preload("res://presentation/map/landscape/road_details.gd").build(terrain)
 	var display: TextureRect = TextureRect.new()
 	display.texture = stage.get_texture()
 	display.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

@@ -1,4 +1,4 @@
-extends "res://tools/map_workshop/bridge_surfaces.gd"
+extends "res://presentation/map/landscape/bridge_surfaces.gd"
 ## Broad solid terraces, excavated only where a lower ceremonial passage crosses.
 var lower: RefCounted
 var upper: RefCounted

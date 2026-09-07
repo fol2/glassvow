@@ -33,7 +33,7 @@ func setup(lines: Array[PackedVector3Array]) -> void:
 
 	var roads: Array[PackedVector3Array] = []
 	for line: PackedVector3Array in lines:
-		roads.append(preload("res://tools/map_workshop/road_paths.gd").sample(line))
+		roads.append(preload("res://presentation/map/landscape/road_paths.gd").sample(line))
 	_grade_roads(roads)
 
 func upland(x: float, z: float) -> float:

@@ -1,7 +1,7 @@
 extends SceneTree
 ## Geometric regressions: joined branches, a closed loop and a sloping bend.
-const Surfaces = preload("res://tools/map_workshop/bridge_surfaces.gd")
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
+const Surfaces = preload("res://presentation/map/landscape/bridge_surfaces.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
 func _initialize() -> void:
 	_run.call_deferred()
 func _run() -> void:

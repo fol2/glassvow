@@ -1,8 +1,8 @@
 extends RefCounted
 ## Decks continue over conformed approaches instead of stopping at a threshold.
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
-const Paths = preload("res://tools/map_workshop/road_paths.gd")
-const Surfaces = preload("res://tools/map_workshop/bridge_surfaces.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
+const Paths = preload("res://presentation/map/landscape/road_paths.gd")
+const Surfaces = preload("res://presentation/map/landscape/bridge_surfaces.gd")
 
 static func build(parent: Node3D, lines: Array[PackedVector3Array], elevated: Callable, paint: ShaderMaterial) -> int:
 	var top: SurfaceTool = SurfaceTool.new()
@@ -44,7 +44,7 @@ static func build(parent: Node3D, lines: Array[PackedVector3Array], elevated: Ca
 				weights[i] = maxf(weights[i],1.0-smoothstep(.5,3.5,distance))
 		for i: int in range(points.size()):
 			points[i].y = parent.bridge_height(points[i].x,points[i].z)
-		var soffit: PackedFloat32Array = preload("res://tools/map_workshop/bridge_structure.gd").profile(parent,points,weights)
+		var soffit: PackedFloat32Array = preload("res://presentation/map/landscape/bridge_structure.gd").profile(parent,points,weights)
 		for i: int in range(points.size()-1):
 			if maxf(weights[i],weights[i+1])<.001:
 				continue
@@ -70,7 +70,7 @@ static func build(parent: Node3D, lines: Array[PackedVector3Array], elevated: Ca
 	deck_paint.set_shader_parameter("bridge_surface",true)
 	Meshes.node(parent,Meshes.finish(top),deck_paint,"Continuous bridge decks")
 	var stone: ShaderMaterial = ShaderMaterial.new()
-	stone.shader = preload("res://tools/map_workshop/bridge_stone.gdshader")
+	stone.shader = preload("res://presentation/map/landscape/bridge_stone.gdshader")
 	Meshes.node(parent,Meshes.finish(masonry),stone,"Joined bridge masonry")
 	return spans.size()
 

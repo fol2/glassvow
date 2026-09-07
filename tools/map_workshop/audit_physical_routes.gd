@@ -1,6 +1,6 @@
 extends SceneTree
 ## Rendered collision probes prove continuity, slope and adult-sized openings.
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 var failures: Array = []
 var terrain: Terrain
 func _initialize() -> void:
@@ -31,7 +31,7 @@ func _run() -> void:
 	var maximum_grade: float = 0
 	var steep: Array[Dictionary] = []
 	for source_line: PackedVector3Array in terrain.lines:
-		var line: PackedVector3Array = preload("res://tools/map_workshop/road_paths.gd").sample(source_line,.1)
+		var line: PackedVector3Array = preload("res://presentation/map/landscape/road_paths.gd").sample(source_line,.1)
 		var previous: Dictionary = {}
 		var upper: bool = false
 		for p: Vector3 in line:

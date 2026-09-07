@@ -1,4 +1,4 @@
-extends "res://tools/map_workshop/bridge_surfaces.gd"
+extends "res://presentation/map/landscape/bridge_surfaces.gd"
 ## An upper deck delegates shared bridgehead pavement to the lower landing.
 ## Genuine grade-separated crossings remain two independent surfaces.
 var landing: RefCounted

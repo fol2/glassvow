@@ -1,4 +1,4 @@
-extends "res://tools/map_workshop/bridge_surfaces.gd"
+extends "res://presentation/map/landscape/bridge_surfaces.gd"
 ## Evaluate clipped boundaries on their actual route, not an outside grid sample.
 func _position(item: Dictionary) -> Vector3:
 	var result: Vector3 = super._position(item)

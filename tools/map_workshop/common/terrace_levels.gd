@@ -1,4 +1,4 @@
-extends "res://tools/map_workshop/landform.gd"
+extends "res://presentation/map/landscape/landform.gd"
 ## City terraces use the proven graph grading, without Act I's river incision.
 func upland(_x: float, _z: float) -> float:
 	return 4.8

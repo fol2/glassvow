@@ -1,7 +1,7 @@
 extends Node3D
 ## Habitat groups around waterborne architecture, with measured footprint exclusion.
 const Assets = preload("res://tools/map_workshop/act2/scenery_assets.gd")
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 var assets: Assets = Assets.new()
 var placed: Array[Dictionary] = []
 var routes: Array[Vector3] = []

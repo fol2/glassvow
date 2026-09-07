@@ -1,6 +1,6 @@
 extends SceneTree
 ## Six controlled native captures; the approved chapter scene is untouched.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 const Panels = preload("res://tools/map_workshop/parapet_study/panels.gd")
 const DEST: String = "res://docs/map/studies/parapet-language/"
 func _initialize() -> void:
@@ -61,7 +61,7 @@ func capture() -> void:
 			M.box(world,Vector3(side*(6.25+i*.5),height-.025,0),Vector3(.5,.05,2.6),paving)
 		M.box(world,Vector3(side*9.5,1.015,0),Vector3(1,2.63,3.1),stone)
 		M.box(world,Vector3(side*9.5,2.355,0),Vector3(1,.05,3.1),paving)
-	var figure: Node3D = preload("res://tools/map_workshop/pilgrim.gd").new()
+	var figure: Node3D = preload("res://presentation/map/landscape/pilgrim.gd").new()
 	world.add_child(figure)
 	figure.position = Vector3(.6,3.4,0)
 	var camera: Camera3D = Camera3D.new()

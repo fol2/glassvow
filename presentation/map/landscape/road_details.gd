@@ -1,8 +1,8 @@
 extends RefCounted
 ## Sparse embedded fragments and fallen leaves, grouped along worn verges.
 ## These are local surface details, not another large-prop distribution pass.
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
-const Paths = preload("res://tools/map_workshop/road_paths.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
+const Paths = preload("res://presentation/map/landscape/road_paths.gd")
 
 static func build(terrain: Node3D) -> void:
 	var land: MeshInstance3D = terrain.get_node("Quiet sculpted ground") as MeshInstance3D

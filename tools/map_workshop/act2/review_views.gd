@@ -45,7 +45,7 @@ static func apply(name_value: String,camera: Camera3D,library: Node3D,causeways:
 		var floor_value: Dictionary = field.field(at)
 		var height: float = floor_value["height"]
 		var target: Vector3 = Vector3(at.x,height+1,at.y)
-		var figure: Node3D = preload("res://tools/map_workshop/pilgrim.gd").new()
+		var figure: Node3D = preload("res://presentation/map/landscape/pilgrim.gd").new()
 		world.add_child(figure)
 		figure.position = Vector3(at.x,height,at.y)
 		camera.position = target+Vector3(direction.x*36,16,direction.y*36)

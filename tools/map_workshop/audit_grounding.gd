@@ -1,6 +1,6 @@
 extends SceneTree
 ## Compare contact heights with independent physics rays against rendered land.
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 
 func _initialize() -> void:
 	_run.call_deferred()

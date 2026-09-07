@@ -1,7 +1,7 @@
 extends Node3D
 ## Physical stone footings follow the rendered land; no baked contact shadows.
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 var stone: SurfaceTool = SurfaceTool.new()
 var stone_count: int = 0
 var terrain: Terrain

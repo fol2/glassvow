@@ -1,7 +1,7 @@
 extends SceneTree
 ## Headed, isolated native architecture study. No campaign or save mutation.
 const Library = preload("res://tools/map_workshop/act2/library.gd")
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 const SharedWater = preload("res://tools/map_workshop/water/surface.gd")
 var output: String = ""
 var chapter: bool = false

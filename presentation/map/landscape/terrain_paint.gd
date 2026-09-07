@@ -2,8 +2,8 @@ extends RefCounted
 ## A world-sized distance field integrates earth roads into the actual land.
 const WIDTH: int = 1536
 const HEIGHT: int = 960
-const ShaderSource: Shader = preload("res://tools/map_workshop/terrain_paint.gdshader")
-const Paths = preload("res://tools/map_workshop/road_paths.gd")
+const ShaderSource: Shader = preload("res://presentation/map/landscape/terrain_paint.gdshader")
+const Paths = preload("res://presentation/map/landscape/road_paths.gd")
 
 static func create(lines: Array[PackedVector3Array], _elevated: Callable) -> ShaderMaterial:
 	var values: PackedFloat32Array = []

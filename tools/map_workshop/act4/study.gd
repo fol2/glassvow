@@ -1,7 +1,7 @@
 extends SceneTree
 ## Native Act IV assembly; the compiled snapshot is the only route authority.
 const Inspector = preload("res://tools/map_workshop/act4/inspection.gd")
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 const Surface = preload("res://tools/map_workshop/common/resolved_route_surface.gd")
 const Union = preload("res://tools/map_workshop/common/walking_surface_union.gd")
 const FlightMesh = preload("res://tools/map_workshop/common/flight_mesh.gd")
@@ -133,7 +133,7 @@ func _run() -> void:
 		marker.rotation.y = atan2(side.x,side.z)
 		structures.append(marker)
 		edge_index += 1
-	var pilgrim: Node3D = preload("res://tools/map_workshop/pilgrim.gd").new()
+	var pilgrim: Node3D = preload("res://presentation/map/landscape/pilgrim.gd").new()
 	world.add_child(pilgrim)
 	pilgrim.position = anchors[sample["current"]]
 	camera = Camera3D.new()

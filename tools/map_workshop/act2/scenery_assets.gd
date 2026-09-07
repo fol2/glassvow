@@ -1,6 +1,6 @@
 extends RefCounted
 ## Small reusable vertex-coloured aquatic silhouettes; three shapes per family.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 const KINDS: Array[String] = ["slate","reeds","kelp","floating_leaves","driftwood","snag"]
 var surface: SurfaceTool
 var meshes: Dictionary = {}

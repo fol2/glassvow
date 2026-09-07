@@ -1,6 +1,6 @@
 extends RefCounted
 ## One batched dressed foundation around exposed court boundaries only.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 const F = preload("res://domain/map_layout/map_layout_canonical.gd")
 static func build(parent: Node3D, regions: Array[Dictionary], heights: Array[float], material: Material) -> MeshInstance3D:
 	var surface: SurfaceTool = SurfaceTool.new()

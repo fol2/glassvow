@@ -3,7 +3,7 @@ extends SceneTree
 const Locator = preload("res://tools/map_workshop/asset_locator.gd")
 const Gallery = preload("res://tools/map_workshop/gallery.gd")
 const View = preload("res://tools/map_workshop/view.gd")
-const TerrainRiver = preload("res://tools/map_workshop/river.gd")
+const TerrainRiver = preload("res://presentation/map/landscape/river.gd")
 var view: View
 var output: String = ""
 var grey: bool = true

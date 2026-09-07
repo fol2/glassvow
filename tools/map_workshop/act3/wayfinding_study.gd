@@ -1,6 +1,6 @@
 extends RefCounted
 ## Read-only design experiment. Routes and choices come from the compiled graph.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 static func run(tree: SceneTree, world: Node3D, camera: Camera3D, data: Dictionary) -> void:
 	var before: String = JSON.stringify(data)
 	var anchors: Dictionary = data["anchors"]

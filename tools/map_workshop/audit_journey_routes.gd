@@ -1,8 +1,8 @@
 extends SceneTree
 ## Walk every legal edge: real support, stone clearance and adult body space.
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
-const Journey = preload("res://tools/map_workshop/journey.gd")
-const Meshes = preload("res://tools/map_workshop/mesh_tools.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
+const Journey = preload("res://presentation/map/landscape/journey.gd")
+const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
 
 func _initialize() -> void:
 	_run.call_deferred()

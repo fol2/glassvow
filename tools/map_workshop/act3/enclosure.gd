@@ -1,6 +1,6 @@
 extends Node3D
 ## Continuous intact outer gallery gives the journey a shared architectural boundary.
-const M = preload("res://tools/map_workshop/mesh_tools.gd")
+const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 const Kit = preload("res://tools/map_workshop/act3/stonework.gd")
 var bays: int = 0
 func build(ground: Node3D) -> void:

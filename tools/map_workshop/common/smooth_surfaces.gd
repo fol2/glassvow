@@ -1,4 +1,4 @@
-extends "res://tools/map_workshop/bridge_surfaces.gd"
+extends "res://presentation/map/landscape/bridge_surfaces.gd"
 var stair_profile: RefCounted
 ## Compact interpolation removes nearest-segment creases on the outside of bends.
 func setup(source: Array[Dictionary],height: Callable,deck_profile: Callable = Callable()) -> void:

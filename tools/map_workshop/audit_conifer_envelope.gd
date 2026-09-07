@@ -11,7 +11,7 @@ func _run() -> void:
 	var scene: PackedScene = load("res://assets/art/map-journey/%s.glb" % kind) as PackedScene
 	var tree: Node3D = scene.instantiate() as Node3D
 	root.add_child(tree)
-	var hull: PackedVector2Array = preload("res://tools/map_workshop/foliage_envelope.gd").load_conifer(kind)
+	var hull: PackedVector2Array = preload("res://presentation/map/landscape/foliage_envelope.gd").load_conifer(kind)
 	if hull.is_empty():
 		quit(1)
 		return

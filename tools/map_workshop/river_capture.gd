@@ -1,6 +1,6 @@
 extends RefCounted
 ## Fixed-timestep native frames expose the real material motion for review.
-const River = preload("res://tools/map_workshop/river.gd")
+const River = preload("res://presentation/map/landscape/river.gd")
 static func record(view: Control, tree: SceneTree, directory: String) -> bool:
 	var land: Node3D = view.terrain
 	var river: River = land.get_node("Stream") as River

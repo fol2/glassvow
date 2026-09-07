@@ -1,7 +1,7 @@
 extends SceneTree
 ## Cover the whole channel, compare the bed field and guard dry route heights.
-const Terrain = preload("res://tools/map_workshop/terrain.gd")
-const River = preload("res://tools/map_workshop/river.gd")
+const Terrain = preload("res://presentation/map/landscape/terrain.gd")
+const River = preload("res://presentation/map/landscape/river.gd")
 func _initialize() -> void:
 	_run.call_deferred()
 func _run() -> void:
@@ -57,7 +57,7 @@ func _run() -> void:
 		var upper: bool = false
 		for p: Vector3 in source:
 			upper = upper or p.y>.015
-		for p: Vector3 in preload("res://tools/map_workshop/road_paths.gd").sample(source,.15):
+		for p: Vector3 in preload("res://presentation/map/landscape/road_paths.gd").sample(source,.15):
 			if not River.contains(p.x,p.z):
 				continue
 			var at: Vector3 = terrain.present(p,upper)
