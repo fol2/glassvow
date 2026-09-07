@@ -1102,3 +1102,47 @@ are available through that host; the iPhone SE 2 floor device is unavailable.
 Use an isolated fixed-commit copy, not the other host's active checkout, for
 remaining hardware work. Physical access does not yet constitute device proof.
 Overall remains 71% pending complete coherence/loading/final gates.
+
+
+### Bounded city construction experiment — 7 September, 22:30 UTC
+
+M4 dc7903d5 native cold-process Continue: cache hits I 1360.488 ms, II 2073.697 ms,
+III 699.851 ms; IV rebuild 511.584 ms. Cache misses were 12.600/54.962/4.887/2.975 s.
+These are editor-template diagnostics on macOS 26.6.2, not the signed release
+matrix. They isolate the city as both the major construction cost and marginal
+cached-resume failure. Record source evidence under /tmp/glassvow-map-delivery-m4
+on the named host; archive it locally before final handover.
+
+Question: can a longer straight-segment sampling interval reduce the dominant
+city field-query cost while retaining every curve vertex, landing and topology?
+Candidate: 0.8 m instead of 0.2 m between existing softened-polyline vertices;
+never remove a turn/elevation vertex and retain the 0.125 m rendered mesh grid.
+Budget: first seed 717 plus four existing physical stress cases, at most 45 min.
+Promote only with decisive speed improvement, all actual geometry/ownership
+checks and inspected close/native views. Any visual or geometric regression
+rejects the candidate; no budget or test weakening. The small independent index
+construction change already passes exact mesh-byte and query regressions; native
+city seed 2026 also passes geometry. Trial changes remain uncommitted until selected.
+
+
+### City sampling selected — 7 September, 22:38 UTC
+
+The 0.8 m maximum interpolation interval is selected as city surface v3. Every
+softened turn and elevation vertex remains; the rendered 0.125 m grid is unchanged.
+Fixed independent 0.2 m audits pass seeds 717/4/14/17634/2026: respectively
+58,044/65,177/73,178/48,846/75,320 deck probes and
+41,460/46,555/52,270/34,890/53,800 body probes, with no missing deck, rail/pier
+obstruction or architectural bound hit. Maximum tread-versus-route difference
+is 0.11041 m (actual procedural risers), with no endpoint drift above 0.000001 m.
+The five overviews and focused phone crossing are the visual comparison set.
+Cold seed 717 binding is 30.227 s versus 43.632 s; cached replay is 1.647 s.
+Source graph/input remains identical. Scenery contact rejection can change a
+few accepted props, so the realised cache version changes explicitly.
+Evidence: city-sampling-trial717.*, city-sampling-fixed-audit{717,4,14,17634,2026}.*.
+This reduces cost but does not clear initial construction responsiveness.
+
+Next bounded implementation: keep all visible Nodes and scene publication on the
+main thread, isolate owned geometry calculation, and show an honest loading state.
+Do not run MeshInstance3D creation off-thread: Godot's thread-safety documentation
+explicitly rejects that shortcut. First prove the data/instance separation on one
+native city case before touching campaign asynchronous lifecycle.

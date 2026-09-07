@@ -21,7 +21,8 @@ static func measure(causeways: Node3D) -> Dictionary:
 	var links: Dictionary = causeways.ruin_links
 	corridors.merge(links)
 	for key: String in corridors:
-		var points: PackedVector3Array = corridors[key]
+		var source: PackedVector3Array = corridors[key]
+		var points: PackedVector3Array = preload("res://tools/map_workshop/common/probe_stations.gd").sample(source)
 		for i: int in range(points.size()):
 			var point: Vector3 = points[i]
 			var delta: Vector3 = points[mini(i+1,points.size()-1)]-points[maxi(0,i-1)]

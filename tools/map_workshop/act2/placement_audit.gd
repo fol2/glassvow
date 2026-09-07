@@ -13,7 +13,8 @@ func measure(architecture: Array[Node3D],causeways: Node3D) -> Dictionary:
 	var links: Dictionary = causeways.ruin_links
 	corridors.merge(links)
 	for key: String in corridors:
-		var points: PackedVector3Array = corridors[key]
+		var source: PackedVector3Array = corridors[key]
+		var points: PackedVector3Array = preload("res://tools/map_workshop/common/probe_stations.gd").sample(source)
 		for i: int in range(points.size()):
 			var p: Vector3 = points[i]+Vector3.UP*.022
 			# Decorative submerged arrivals are not playable body corridors.

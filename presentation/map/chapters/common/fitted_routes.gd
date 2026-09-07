@@ -71,7 +71,8 @@ func build(sample: Dictionary) -> void:
 		var raised: bool = false
 		for p: Vector3 in line:
 			raised = raised or p.y>.3
-		var points: PackedVector3Array = Paths.sample(line)
+		var sampling: float = bridge_style.get("sample_spacing",.2)
+		var points: PackedVector3Array = Paths.sample(line,sampling)
 		var lengths: PackedFloat32Array = [0]
 		for i: int in range(points.size()):
 			if i>0:

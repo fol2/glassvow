@@ -6,10 +6,12 @@ func setup(source: Array[Dictionary],height: Callable,deck_profile: Callable = C
 	_boundary_positions.clear()
 	cells.clear()
 	vertices.clear()
-	super.setup(source,height,deck_profile)
+	spans=source
+	ground=height
+	profile=deck_profile
 	# Include the entire interpolation support around widened node landings.
 	# Reusing the narrower outline index made that support change at cell edges.
-	cells.clear()
+	# Build this complete index once; the narrower parent index was discarded.
 	for span: Dictionary in spans:
 		var a: Vector3 = span["a"]
 		var b: Vector3 = span["b"]
