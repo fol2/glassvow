@@ -1,0 +1,23 @@
+{
+  "status": "PREFLIGHT_OBSERVED_EXPLORATION_NOT_P9",
+  "source_snapshot": "e3e5a7312049e8ce167c503c9d65db7a15bf992b",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "transport_run": 34122710918,
+  "transport_artifact": 10018828702,
+  "transport_sha256": "665b0bb199ba320b9c35c146abc19b5a3a23f52901be9d0094d123cf0eec6529",
+  "verified_git_files": 821,
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "actually_observed_tests": {"public_information": 16, "price": 4084, "failures": 0},
+  "local_source_commit": "ae07e7e7a272baa3dd2d98f760e280e89dc1ecb7",
+  "complete_source_backup": {
+    "file": "glassvow-p9-price-source-current.zip",
+    "sha256": "b5d256c29e6f98b2bc28188618bdc388b6e6ad5b9bd39801052ce5530e8ff412",
+    "bytes": 891443,
+    "files_verified": 218,
+    "scope": "Complete assembled source, recipes and observed test logs; no engine or active scientific rows. Chat-delivered, not claimed hosted by this repository."
+  },
+  "execution": "Existing v25 smoke executing; no full-smoke or screen completion claimed here. After complete valid smoke, continue the published 2048-row price comparison, then the already specified component experiment.",
+  "recovery_boundary": "The previous local directory was absent. Published source is recovered and verified; unavailable old raw captures are not claimed recovered. Existing assigned seeds are protocol continuation/reproduction, not fresh final confirmation.",
+  "not_established": ["six admitted packages", "detector admission", "unrestricted retention", "signed P9 guardrails", "lifecycle", "reviewed exact integration"]
+}
