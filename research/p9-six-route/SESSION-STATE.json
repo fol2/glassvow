@@ -1,0 +1,50 @@
+{
+  "status": "SESSION_HANDOFF_P9_UNFINISHED",
+  "audit_scope": "storage/source/statistical reconstruction only; no new gameplay execution",
+  "branch": "research/p9-six-route-local-20260905",
+  "pre_handoff_head": "e4ace6829a333f3d7b02e0e0dc5b4c9100db9f5a",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "source_archive": {
+    "name": "p9-source-6217709e.zip",
+    "sha256": "89c4d00a84da7dbd95695b444e184dcfb584d10348cd19a99321679f1a5deaed",
+    "verified_git_blobs": 892
+  },
+  "validation": {
+    "assigned_rows": 1024,
+    "assigned_chunks": 64,
+    "rows_per_chunk": 16,
+    "seeds": [
+      44010000,
+      44010063
+    ],
+    "durable_primary_chunks": 20,
+    "durable_primary_rows": 320,
+    "not_recovered_chunks": 44,
+    "not_recovered_rows": 704,
+    "parts_used": [
+      "PRIMARY-01.json",
+      "PRIMARY-02.json",
+      "PRIMARY-03.json",
+      "PRIMARY-04.json",
+      "PRIMARY-05.json"
+    ],
+    "quarantined": [
+      "PRIMARY-06.json"
+    ],
+    "original_raw_and_receipts_recovered": false
+  },
+  "training_reconstruction": {
+    "retained_records": 288,
+    "training_records": 192,
+    "frozen_model_exact_equal": true,
+    "descriptor_sha256": "2cfe1d8ff00d5ff695664c597be3a93e3960f39732fa049eac82b9397184bab7"
+  },
+  "absent_in_current_runtime": [
+    "/mnt/data/p9_validation_finish",
+    "/mnt/data/p9-validation-preserved-current.zip"
+  ],
+  "previous_21_receipt_report": "historical readback only; unavailable now; not counted as recovered",
+  "active_research_processes_seen_in_current_runtime": 0,
+  "p9_certified": false,
+  "primary_boundary": "Retained compact records and recorded raw hashes are not original native captures; no partial-panel outcome inference."
+}
