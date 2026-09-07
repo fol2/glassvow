@@ -1,0 +1,45 @@
+{
+  "status": "OBSERVED_RECOVERY_AND_PARITY_NOT_P9",
+  "source_snapshot": "6b78f24ef1608be1f3633900a1ec0442c0bd44be",
+  "source_transport": {
+    "run": 34163803920,
+    "artifact": 10033482556,
+    "sha256": "d00e8dc16f04c1e852d38681d5e6b35e68a0f7f06d845adc0f12397db276c5a6",
+    "git_blobs_verified": 883
+  },
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "content_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "driver_sha256": "6315c0665d8da22cd9c3d3f585acbf8cb416e9d73744493e6522c96327a62b0c",
+  "frozen_model_sha256": "2cfe1d8ff00d5ff695664c597be3a93e3960f39732fa049eac82b9397184bab7",
+  "native_assertions": {
+    "causal_observer": 291,
+    "producer_chains": 204,
+    "public_information": 16,
+    "failures": 0
+  },
+  "statistical_reconstruction": {
+    "run_records": 288,
+    "training_records": 192,
+    "exact_frozen_model_reproduced": true
+  },
+  "whole_run_probe_on_off": {
+    "equal_pairs": 18,
+    "rows": 36,
+    "counts": {
+      "win": 22,
+      "loss": 14
+    },
+    "freeze_sha256": "327e6256d8b7fe06260fa2c37dd657ab2424f40a4be3fe7db53fa4d226eaf543"
+  },
+  "continuation": {
+    "assigned_rows": 1024,
+    "seed_range": [
+      44010000,
+      44010063
+    ],
+    "state": "running_no_complete_result_claim",
+    "changed_content_or_policy": false,
+    "model_refit_on_validation": false
+  },
+  "boundary": "Original training native raw captures and their old freeze are unavailable. Their remotely preserved per-run sufficient statistics reproduce the model. Current source and probe parity are newly bound; this is continuation/reproduction of the published diagnostic assignment, not final corrected P9 confirmation. No main mutation or acceptance relaxation."
+}
