@@ -46,6 +46,8 @@ var _layout_failure: Dictionary = {}
 var _realised_assets: Dictionary = {}
 var _bound_source_digest: String = ""
 var _bound_quality_digest: String = ""
+var journey_cache: Resource
+var journey_assets: Dictionary = {}
 var _act: int = -1
 var _motion_setting: int = -1
 var _dragging: bool = false
@@ -567,6 +569,8 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 	_world.add_child(_landscape)
 	_landscape.prepare(data, _landscape_assets, _scatter_salt)
 	if _landscape is JourneyLandscape:
+		_landscape.asset_bundle = journey_assets
+		_landscape.cache = journey_cache
 		_landscape.map_bounds = preload("res://presentation/map/map_spatial_profile.gd").footprint(quality) if quality.has("spatial_profile") else Rect2(-48,-30,96,60)
 		if str(quality.get("spatial_profile",{}).get("id","")) == preload("res://presentation/map/map_journey_recipe.gd").VERSION:
 			_landscape.source_heroes = data["hero_placements"].duplicate(true)
@@ -630,13 +634,24 @@ func realised_asset_bundle() -> Dictionary:
 
 
 func _bind_journey(source: MapLayoutResult) -> MapLayoutResult:
+	if journey_cache != null:
+		var stored_source: Dictionary = journey_cache.get("source_result")
+		if not stored_source.is_empty() and str(stored_source.get("layout_digest","")) != source.digest():
+			_landscape.cache = null
 	_landscape.build(source.identity_dict())
 	_motion_setting = -1
 	if not str(_landscape.failure).is_empty():
 		return _fail_layout(str(_landscape.failure))
+	var realised_started: int = Time.get_ticks_msec()
 	var realised: Dictionary = JourneyRealisation.finish(source,_landscape)
+	_landscape.timings_ms["realisation"] = Time.get_ticks_msec()-realised_started
 	if not realised.get("ok",false):
 		return _fail_layout(str(realised.get("reason","Surface realisation failed")))
+	if journey_cache != null and not _landscape.terrain.restored:
+		journey_cache.set("source_result",source.to_dict())
+		journey_cache.call("capture",_landscape)
+		var cache_error: Error = journey_cache.call("save_cache")
+		if cache_error != OK: push_warning("Derived journey cache was not saved: "+error_string(cache_error))
 	_layout_result = realised["result"]
 	_realised_assets = realised["assets"]
 	var data: Dictionary = _layout_result.identity_dict()
@@ -651,7 +666,7 @@ func _bind_journey(source: MapLayoutResult) -> MapLayoutResult:
 		"accepted_count":data["scenery_instances"].size(),
 		"scenery_instances":data["scenery_instances"], "hero_placements":data["hero_placements"],
 		"assembly_ms":_landscape.timings_ms,
-		"surface_qualification":"pending", "rejections":[],
+		"surface_qualification":"pending", "rejections":[], "derived_cache_hit":_landscape.terrain.restored,
 	}
 	_repaint()
 	return _layout_result

@@ -5,6 +5,7 @@ const Paint = preload("res://presentation/map/landscape/terrain_paint.gd")
 const River = preload("res://presentation/map/landscape/river.gd")
 var bounds: Rect2 = Rect2(-48,-30,96,60)
 var river_half_length: float = 35.0
+var restored: bool = false
 var lines: Array[PackedVector3Array] = []
 var source_edges: Dictionary = {}
 var anchors: Dictionary = {}
@@ -17,7 +18,7 @@ var landform: RefCounted = preload("res://presentation/map/landscape/landform.gd
 const CELL: float = .5
 const WATER: float = River.LEVEL
 
-func build(sample: Dictionary, grey: bool, extent: Rect2 = Rect2(-48,-30,96,60)) -> void:
+func build(sample: Dictionary, grey: bool, extent: Rect2 = Rect2(-48,-30,96,60), cache: Resource = null) -> void:
 	var lo: Vector2 = (extent.position/CELL).floor()*CELL
 	var hi: Vector2 = (extent.end/CELL).ceil()*CELL
 	bounds = Rect2(lo,hi-lo)
@@ -41,6 +42,12 @@ func build(sample: Dictionary, grey: bool, extent: Rect2 = Rect2(-48,-30,96,60))
 	var started: int = Time.get_ticks_msec()
 	landform.setup(lines)
 	build_timings_ms["landform"] = Time.get_ticks_msec()-started
+	if cache != null and not cache.get("meshes").is_empty():
+		started = Time.get_ticks_msec()
+		_restore(cache)
+		build_timings_ms["cache_restore"] = Time.get_ticks_msec()-started
+		restored = true
+		return
 	started = Time.get_ticks_msec()
 	_land()
 	build_timings_ms["ground"] = Time.get_ticks_msec()-started
@@ -205,3 +212,28 @@ func _roads() -> void:
 	Meshes.node(self, Meshes.finish(top), mat, "Compiled roads").cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	if bridge_spans > 0:
 		Meshes.node(self, Meshes.finish(bridge), Meshes.material(Color("65616b")), "Supported bridge spans")
+
+func _restore(cache: Resource) -> void:
+	var spans: Array[Dictionary] = []
+	var saved_spans: Array = cache.get("bridge_spans")
+	spans.assign(saved_spans)
+	if not spans.is_empty():
+		var field: RefCounted = preload("res://presentation/map/landscape/bridge_surfaces.gd").new()
+		field.setup(spans,surface_height,bridge_height)
+		set_meta("bridge_field",field)
+	var rows: Array = cache.get("meshes")
+	for row: Dictionary in rows:
+		var item: MeshInstance3D = River.new() if row["water"] else MeshInstance3D.new()
+		item.name = row["name"]
+		item.mesh = row["mesh"]
+		var material: Material = row["material"]
+		item.material_override = material.duplicate() as Material
+		item.transform = row["transform"]
+		item.layers = row["layers"]
+		item.cast_shadow = row["shadows"]
+		add_child(item)
+		if item is River:
+			item.field_image = row["field"]
+			item.half_length = river_half_length
+			item.field_size = item.field_image.get_size()
+			item.set_time(0)

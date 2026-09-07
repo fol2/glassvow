@@ -1,6 +1,6 @@
 extends RefCounted
 ## Foliage uses cut-out depth and coverage rather than order-dependent blending.
-static func prepare(root: Node3D) -> int:
+static func prepare(root: Node3D, pool: Variant = null) -> int:
 	var count: int = 0
 	for child: Node in root.find_children("*", "MeshInstance3D", true, false):
 		var instance: MeshInstance3D = child as MeshInstance3D
@@ -10,6 +10,13 @@ static func prepare(root: Node3D) -> int:
 			var original: StandardMaterial3D = instance.get_active_material(index) as StandardMaterial3D
 			if original == null or not original.resource_name.begins_with("Foliage /"):
 				continue
+			var materials: Dictionary = pool if pool is Dictionary else {}
+			var key: int = original.get_instance_id()
+			if materials.has(key):
+				var shared: Material = materials[key]
+				instance.set_surface_override_material(index,shared)
+				count += 1
+				continue
 			var material: StandardMaterial3D = original.duplicate() as StandardMaterial3D
 			material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
 			material.alpha_scissor_threshold = 0.3
@@ -17,6 +24,7 @@ static func prepare(root: Node3D) -> int:
 			material.cull_mode = BaseMaterial3D.CULL_DISABLED
 			material.roughness = 0.96
 			material.metallic = 0
+			materials[key] = material
 			instance.set_surface_override_material(index, material)
 			count += 1
 	return count

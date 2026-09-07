@@ -552,3 +552,38 @@ Full bind still takes 10.841 s; cold save-load and first assembly remain open.
 The host also now uses one explicit sizing authority, removing the conflicting
 full-rect/manual-size warning. Preview terminus/crossing views target generated
 geometry rather than obsolete fixed coordinates.
+
+### Derived surface reuse and actual camera inspection — 7 September, 16:53 UTC
+
+A disposable, bounded presentation cache now retains terrain meshes, bridge-field
+inputs and deterministic scenery placements. Its key includes canonical graph,
+quality, actual asset geometry and export-safe appearance fingerprints, engine,
+recipe/surface and cache versions. A checksum manifest rejects changed bytes;
+only four entries survive. Source results still validate their full identities,
+and the realised record is rebuilt from actual instances on every construction.
+Gameplay saves and RNG do not depend on this cache.
+
+Native new-process seed 4: fresh 11,987 ms; reload 2,389 ms. Both produce the same
+surface digest 4e86e0e102cb4b4fcd03af2f0533a0a47282458865ae8351c7f92d8bd8a032af
+and 3,205 scenery instances. The cached actual meshes pass 44,463 contact probes,
+102 adult-body probes, minimum 3.366 m headroom, no discontinuities/collisions.
+The regenerated source identity matches the preserved dense seed. Three focused
+cache/realisation/canonical tests and three cache/canonical/live-locale tests pass.
+Resource pooling and native packed-array vertex transforms preserve geometry.
+
+Rejected experiments: caching the final result merely moved validation cost;
+packing all scenery reduced instantiation but increased load cost and leaked
+3,207 renderer instances on exit. Both experiments are removed. Cache v5 returns
+to individual source-asset instances; successful native reload has no exit leak.
+The production wrapper now only overrides compilation when explicitly injected,
+so the normal campaign can use the same validated cache path as the preview.
+A full Continue timing is still required: 2,389 ms component binding is not a
+passing two-second cold save-load receipt.
+
+Corrected preview inspection uses the actual journey camera and generated node
+contexts, including the whole-act view. Terminus/crossing/overview captures have
+been inspected. The straight outer ground cut remains a visual defect at the
+periphery; close bridge/road continuity is present. Next: soften the world edge
+without altering routes or approved asset scale, finish all shape/pose inspection,
+then qualify the maintained corpus. Section construction/whole-stage acceptance
+remain open. Overall accepted progress stays 4%; no unobserved gates are credited.

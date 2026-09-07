@@ -1405,7 +1405,8 @@ func _show_map() -> void:
 	else:
 		_discard_parked_map()
 		_map_screen = WorldMapScreen.new(_map, content, _shape)
-		_map_screen._layout_compile = _compile_map_layout
+		if _map_layout_compile.is_valid():
+			_map_screen._layout_compile = _compile_map_layout
 		_map_screen._layout_quality_override = _map_quality_override
 		_map_screen_language = language
 		_map_screen.node_chosen.connect(_on_node_chosen)

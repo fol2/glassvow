@@ -1,6 +1,8 @@
 extends RefCounted
 ## Production woodland inputs: actual imported kit, physical space and local view.
-const VERSION: String = "woodland-journey-v2"
+const VERSION: String = "woodland-journey-v3"
+const Fingerprints: JSON = preload("res://assets/art/map-journey/runtime-fingerprints.json")
+const Cache = preload("res://presentation/map/map_journey_cache.gd")
 const Registry = preload("res://presentation/map/map_journey_camera_registry.gd")
 const Assets = preload("res://presentation/map/map_journey_assets.gd")
 const Kit = preload("res://presentation/map/landscape/kit.gd")
@@ -12,6 +14,17 @@ const F = preload("res://domain/map_layout/map_layout_canonical.gd")
 static func build(nodes: Array, edges: Array, base: Dictionary) -> Dictionary:
 	var quality: Dictionary = Registry.quality(base)
 	quality["routing_strategy"] = "grade-priority-v1"
+	var kinds: Array[String] = []
+	kinds.assign(Kit.PROFILES.keys())
+	kinds.sort()
+	var library: Assets = Assets.new(kinds)
+	if not library.failure.is_empty(): return {"ok":false,"reason":library.failure}
+	var key: String = F.digest({"recipe":VERSION,"surface":preload("res://presentation/map/map_journey_realisation.gd").VERSION,
+		"cache":Cache.VERSION,"engine":Engine.get_version_info()["string"],"app":ProjectSettings.get_setting("application/config/version"),
+		"nodes":nodes,"edges":edges,"quality":quality,"assets":library.digest,"appearance":Fingerprints.data})
+	var stored: Cache = Cache.read(key) as Cache
+	if stored != null and not stored.quality.is_empty() and not stored.heroes.is_empty():
+		return {"ok":true,"quality":stored.quality,"assets":library.bundle(),"heroes":stored.heroes,"version":VERSION,"cache":stored}
 	var order: Dictionary = Ordering.generate(nodes,edges)
 	if order.get("ok")!=true: return {"ok":false,"reason":"Cannot order the woodland graph","details":order}
 	var road: Dictionary = quality["geometry"]["road_corridor"]
@@ -43,11 +56,6 @@ static func build(nodes: Array, edges: Array, base: Dictionary) -> Dictionary:
 	quality["geometry"]["row_lane_envelope"]["lane_half_extent_m"] = lane_move
 	var errors: Array[String] = Spatial.validate(quality,0)
 	if not errors.is_empty(): return {"ok":false,"reason":"Invalid woodland spatial recipe","details":errors}
-	var kinds: Array[String] = []
-	kinds.assign(Kit.PROFILES.keys())
-	kinds.sort()
-	var library: Assets = Assets.new(kinds)
-	if not library.failure.is_empty(): return {"ok":false,"reason":library.failure}
 	var boss: Dictionary = {}
 	for node: Dictionary in nodes:
 		if str(node["type"])=="boss": boss = node
@@ -63,4 +71,8 @@ static func build(nodes: Array, edges: Array, base: Dictionary) -> Dictionary:
 	var heroes: Dictionary = {"schema_version":1,"anchors":{"terminus":{
 		"asset_id":"memorial","profile_id":"memorial","position":[at.x,at.y,at.z],"yaw_radians":0.0,
 		"scale":[scale_value,scale_value,scale_value]}},"protected_zones":{"terminus-zone":{"role":"terminus","polygon":polygon}}}
-	return {"ok":true,"quality":quality,"assets":library.bundle(),"heroes":heroes,"version":VERSION}
+	stored = Cache.new()
+	stored.cache_key = key
+	stored.quality = quality
+	stored.heroes = heroes
+	return {"ok":true,"quality":quality,"assets":library.bundle(),"heroes":heroes,"version":VERSION,"cache":stored}

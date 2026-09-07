@@ -48,7 +48,8 @@ static func _collect(node: Node, parent: Transform3D, vertices: PackedVector3Arr
 	if node is MeshInstance3D:
 		var mesh: Mesh = (node as MeshInstance3D).mesh
 		if mesh != null:
-			for vertex: Vector3 in mesh.get_faces(): vertices.append(pose*vertex)
+			var transformed: PackedVector3Array = pose*mesh.get_faces()
+			vertices.append_array(transformed)
 	for child: Node in node.get_children(): _collect(child,pose,vertices)
 
 func bundle() -> Dictionary:

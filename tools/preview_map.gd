@@ -59,7 +59,7 @@ func _run() -> void:
 			quit(2)
 			return
 	if act < 0 or act > 3 or not StageShape.SHIPPING.has(shape) \
-			or _pose not in ["focused", "opening", "middle", "terminus", "crossing"] \
+			or _pose not in ["focused", "opening", "middle", "terminus", "crossing", "overview"] \
 			or (DisplayServer.get_name() == "headless" and not _compile_only) or _zoom not in range(4):
 		push_error("Preview needs a headed renderer, act index 0–3 and a shipping shape/pose")
 		quit(2)
@@ -81,7 +81,7 @@ func _run() -> void:
 			world_map.enter(next[0])
 			world_map.clear_current()
 	var screen: WorldMapScreen = WorldMapScreen.new(world_map, content, shape)
-	screen._layout_compile = _compile
+	if not _cache.is_empty() or not _quality_path.is_empty(): screen._layout_compile = _compile
 	root.add_child(screen)
 	screen.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	screen.size = Vector2(dimensions)
@@ -114,30 +114,28 @@ func _run() -> void:
 	if _no_shadows:
 		screen._map_scene.get_key().shadow_enabled = false
 	var rig: MapCameraRig = screen._map_scene.get_rig()
-	rig.set_zoom_stop(_zoom)
-	if _pose == "opening":
-		rig.set_camera_xz(MapCameraRig.DEFAULT_XZ)
-	elif _pose == "middle":
-		rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3.ZERO))
-	elif _pose == "terminus":
-		var anchors: Dictionary = screen.layout_result().identity_dict()["node_anchors"]
-		var boss_id: String = ""
-		for node: MapNode in world_map.nodes:
-			if node.type == "boss": boss_id = node.id
-		if not anchors.has(boss_id):
-			push_error("Preview has no generated terminus")
-			quit(2)
-			return
-		var raw: Array = anchors[boss_id]
-		rig.set_camera_xz(MapCameraRig.pose_for_world(MapLandscape.v3(raw)))
-	elif _pose == "crossing":
-		var landscape: MapJourneyLandscape = screen._map_scene._landscape as MapJourneyLandscape
-		if landscape == null or landscape.terrain.landform.cuts.is_empty():
-			push_error("Preview has no physical woodland crossing")
-			quit(2)
-			return
-		var at: Vector2 = landscape.terrain.landform.cuts[0]["at"]
-		rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3(at.x,landscape.terrain.surface_height(at.x,at.y),at.y)))
+	if screen._map_scene.is_journey_layout():
+		if _pose=="overview": screen._journey_navigation.show_overview()
+		elif _pose in ["opening","middle","terminus"]:
+			var focus: int = world_map.reachable()[0]
+			for i: int in range(world_map.nodes.size()):
+				if (_pose=="terminus" and world_map.nodes[i].type=="boss") or (_pose=="middle" and world_map.nodes[i].row==7): focus=i
+			screen._journey_navigation.area=focus
+			screen._frame_journey()
+		elif _pose=="crossing":
+			var landscape: MapJourneyLandscape = screen._map_scene._landscape as MapJourneyLandscape
+			if landscape == null or landscape.terrain.landform.cuts.is_empty():
+				push_error("Preview has no physical woodland crossing")
+				quit(2)
+				return
+			var at: Vector2 = landscape.terrain.landform.cuts[0]["at"]
+			var focus: PackedVector3Array = [Vector3(at.x,landscape.terrain.surface_height(at.x,at.y),at.y)]
+			rig.apply_journey_pose(MapJourneyCameraContract.resolve(focus,Vector2(dimensions)))
+	else:
+		rig.set_zoom_stop(_zoom)
+		if _pose == "opening": rig.set_camera_xz(MapCameraRig.DEFAULT_XZ)
+		elif _pose == "middle": rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3.ZERO))
+		elif _pose == "terminus": rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3(43,0,0)))
 	screen._layout_waystones()
 	screen._push_bands(true)
 	if not _output.is_empty() and not _exercise:
@@ -156,8 +154,9 @@ func _run() -> void:
 		return
 	print("MAP_PREVIEW ", JSON.stringify({"act_index": act, "seed": seed_value,
 		"input_digest": screen.layout_input_digest(), "layout_digest": screen.layout_digest(),
-		"bind_ms": bind_ms,
+		"bind_ms": bind_ms, "derived_cache_hit":screen._map_scene.layout_diagnostics().get("derived_cache_hit",false),
 		"assembly_ms": screen._map_scene.layout_diagnostics().get("assembly_ms", {}),
+		"binding_ms":screen.layout_diagnostics().get("binding_stages_ms",{}),
 		"scenery": screen._map_scene.layout_diagnostics().get("accepted_count", 0)}))
 	if _output.is_empty():
 		return

@@ -15,13 +15,27 @@ func _run() -> void:
 	var bounds: Rect2 = Rect2(-48,-30,96,60)
 	if sample.has("spatial_profile"):
 		bounds = preload("res://presentation/map/map_spatial_profile.gd").footprint({"spatial_profile":sample["spatial_profile"]})
-	terrain.build(sample,false,bounds)
+	var cached: Resource
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with("--derived-cache-key="):
+			cached = preload("res://presentation/map/map_journey_cache.gd").read(argument.trim_prefix("--derived-cache-key="))
+			if cached == null:
+				push_error("Declared derived cache is missing or invalid")
+				quit(2)
+				return
+			var source: Dictionary = cached.get("source_result")
+			if source.get("input_digest") != sample["input_digest"] or source.get("layout_digest") != sample["layout_digest"] or not _same_json_geometry(source["node_anchors"],sample["anchors"]) or not _same_json_geometry(source["edges"],sample["edges"]):
+				push_error("Derived cache and declared sample describe different geometry")
+				quit(2)
+				return
+	terrain.build(sample,false,bounds,cached)
 	for name: String in ["Quiet sculpted ground","Continuous bridge decks","Joined bridge masonry"]:
 		var item: MeshInstance3D = terrain.get_node(name) as MeshInstance3D
 		var shape: ConcavePolygonShape3D = ConcavePolygonShape3D.new()
 		shape.set_faces(item.mesh.get_faces())
 		shape.backface_collision = true
 		var body: StaticBody3D = StaticBody3D.new()
+		body.transform = item.transform
 		body.collision_layer = 2 if name=="Joined bridge masonry" else 1
 		var collision: CollisionShape3D = CollisionShape3D.new()
 		collision.shape = shape
@@ -105,8 +119,24 @@ func _run() -> void:
 			var second: float = b["grade"]
 			return first>second)
 		failures.append({"steep_sections":steep.size(),"limit":.5,"worst":steep.slice(0,12)})
-	print("PHYSICAL_ROUTES_AUDIT ",JSON.stringify({"probes":probes,"maximum_step":maximum_step,"maximum_grade":maximum_grade,"headrooms":headrooms,"adult_body_probes":body_probes,"failure_count":failures.size(),"failures":failures.slice(0,40)}))
+	print("PHYSICAL_ROUTES_AUDIT ",JSON.stringify({"derived_cache":terrain.restored,"probes":probes,"maximum_step":maximum_step,"maximum_grade":maximum_grade,"headrooms":headrooms,"adult_body_probes":body_probes,"failure_count":failures.size(),"failures":failures.slice(0,40)}))
 	quit(0 if failures.is_empty() else 1)
 func _ray(a: Vector3,b: Vector3,mask: int) -> Dictionary:
 	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(a,b,mask)
 	return terrain.get_world_3d().direct_space_state.intersect_ray(query)
+
+# The declared JSON sample rounds binary64 values; allow only sub-nanometre loss.
+func _same_json_geometry(a: Variant, b: Variant) -> bool:
+	if (a is float or a is int) and (b is float or b is int):
+		return absf(float(str(a))-float(str(b)))<0.000000001
+	if a is Array and b is Array:
+		if a.size()!=b.size(): return false
+		for i: int in range(a.size()):
+			if not _same_json_geometry(a[i],b[i]): return false
+		return true
+	if a is Dictionary and b is Dictionary:
+		if a.size()!=b.size(): return false
+		for key: Variant in a:
+			if not b.has(key) or not _same_json_geometry(a[key],b[key]): return false
+		return true
+	return a==b

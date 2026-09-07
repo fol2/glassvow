@@ -8,6 +8,8 @@ const GroundContacts = preload("res://presentation/map/landscape/ground_contacts
 const GatewaySites = preload("res://presentation/map/landscape/gateway_sites.gd")
 const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 var tree_envelopes: Dictionary = {}
+var material_pool: Dictionary = {}
+var asset_scenes: Dictionary = {}
 var planting_bounds: Rect2 = Rect2(-43,-23,86,46)
 var query_us: int = 0
 var road_query_us: int = 0
@@ -39,7 +41,7 @@ const PROFILES: Dictionary = {
 	"amber-arch": Vector2(2.65, 5.50),
 }
 
-func build(surface: Terrain, points: PackedVector3Array, grey: bool, heroes: Dictionary = {}) -> void:
+func build(surface: Terrain, points: PackedVector3Array, grey: bool, heroes: Dictionary = {}, cache: Resource = null) -> void:
 	for kind: String in ["conifer","conifer-spire","conifer-wind","conifer-snag"]:
 		var envelope: PackedVector2Array = Envelope.load_conifer(kind)
 		if envelope.is_empty():
@@ -51,6 +53,22 @@ func build(surface: Terrain, points: PackedVector3Array, grey: bool, heroes: Dic
 	contacts = GroundContacts.new()
 	add_child(contacts)
 	contacts.begin(terrain)
+	if cache != null and not cache.get("placements").is_empty():
+		var rows: Array = cache.get("placements")
+		var roles: Dictionary = cache.get("hero_roles")
+		for i: int in range(rows.size()):
+			var row: Dictionary = rows[i]
+			var kind: String = row["kind"]
+			if not PROFILES.has(kind):
+				failure = "Unknown cached woodland asset: "+kind
+				return
+			var at: Vector3 = row["position"]
+			_place(kind,at,float(str(row["scale"])),float(str(row["yaw"])),grey)
+			if not failure.is_empty(): return
+			if roles.has(str(i)): placed_nodes[-1].set_meta("hero_role",roles[str(i)])
+		contacts.finish()
+		build_complete = true
+		return
 	_landmark(grey)
 	if not failure.is_empty(): return
 	for role: String in heroes:
@@ -298,20 +316,23 @@ func _place(kind: String, p: Vector3, scale_value: float, yaw: float, grey: bool
 	if kind == "amber-arch" and not hero_override.is_empty():
 		path = hero_override
 	if not grey:
-		if not ResourceLoader.exists(path):
-			failure = "Missing imported workshop asset: " + path
-			push_error(failure)
-			return
-		var resource: PackedScene = load(path) as PackedScene
-		if resource == null:
-			failure = "Cannot load workshop asset: " + path
-			push_error(failure)
-			return
+		if not asset_scenes.has(path):
+			if not ResourceLoader.exists(path):
+				failure = "Missing imported workshop asset: " + path
+				push_error(failure)
+				return
+			var loaded: PackedScene = load(path) as PackedScene
+			if loaded == null:
+				failure = "Cannot load workshop asset: " + path
+				push_error(failure)
+				return
+			asset_scenes[path] = loaded
+		var resource: PackedScene = asset_scenes[path]
 		item = resource.instantiate() as Node3D
-		add_child(item)
-		var foliage_surfaces: int = AssetSurfaces.prepare(item)
+		var foliage_surfaces: int = AssetSurfaces.prepare(item,material_pool)
 		if (kind.begins_with("conifer") or kind.begins_with("ash-")) and kind not in ["conifer-snag","ash-fern"] and foliage_surfaces == 0:
 			failure = "No cut-out foliage surface prepared: " + kind
+			item.free()
 			return
 		if kind == "amber-arch" and not hero_override.is_empty():
 			if not AssetLights.attach_trial(item):
@@ -330,6 +351,9 @@ func _place(kind: String, p: Vector3, scale_value: float, yaw: float, grey: bool
 	item.scale = Vector3.ONE * scale_value
 	item.rotation.y = yaw
 	if not grey:
+		# Configure imported subtrees before entering the live world. This avoids
+		# submitting every intermediate transform/material to the renderer.
+		add_child(item)
 		contacts.place(kind, p, scale_value, yaw)
 	var footprint: Vector2 = PROFILES[kind]
 	placed_nodes.append(item)

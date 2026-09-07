@@ -1,7 +1,7 @@
 extends RefCounted
 ## Final surface stage of map compilation. Preserve topology and X/Z anchors,
 ## but record the real supported heights, paths and imported scenery transforms.
-const VERSION: String = "woodland-surface-v1"
+const VERSION: String = "woodland-surface-v2"
 const Assets = preload("res://presentation/map/map_journey_assets.gd")
 const Paths = preload("res://presentation/map/landscape/road_paths.gd")
 
@@ -12,8 +12,13 @@ static func finish(source: MapLayoutResult, landscape: Node3D) -> Dictionary:
 		var kind: String = item["kind"]
 		if not kinds.has(kind): kinds.append(kind)
 	kinds.sort()
-	var assets: Assets = Assets.new(kinds)
-	if not assets.failure.is_empty(): return {"ok":false,"reason":assets.failure}
+	var bundle: Dictionary = landscape.asset_bundle
+	if bundle.is_empty():
+		var assets: Assets = Assets.new(kinds)
+		if not assets.failure.is_empty(): return {"ok":false,"reason":assets.failure}
+		bundle = assets.bundle()
+	for kind: String in kinds:
+		if not bundle["profiles"].has(kind): return {"ok":false,"reason":"Unqualified journey asset: "+kind}
 	for id: String in data["node_anchors"]:
 		var at: Vector3 = landscape.resolved_anchor(MapLandscape.v3(data["node_anchors"][id]))
 		data["node_anchors"][id] = [at.x,at.y,at.z]
@@ -35,9 +40,9 @@ static func finish(source: MapLayoutResult, landscape: Node3D) -> Dictionary:
 		var kind: String = item["kind"]
 		var placed: Node3D = landscape.kit.placed_nodes[i]
 		var at: Vector3 = placed.position
-		var size: Vector3 = placed.scale
+		var size: Vector3 = placed.transform.basis.get_scale()
 		var row: Dictionary = {"asset_id":kind,"profile_id":kind,"transform":{
-			"origin":[at.x,at.y,at.z],"scale":[size.x,size.y,size.z],"yaw_radians":placed.rotation.y}}
+			"origin":[at.x,at.y,at.z],"scale":[size.x,size.y,size.z],"yaw_radians":placed.transform.basis.get_euler().y}}
 		if placed.has_meta("hero_role"):
 			data["hero_placements"][str(placed.get_meta("hero_role"))] = row
 		elif kind == "amber-arch":
@@ -57,4 +62,4 @@ static func finish(source: MapLayoutResult, landscape: Node3D) -> Dictionary:
 	data["generator_version"] += "/"+VERSION
 	var result: MapLayoutResult = MapLayoutResult.create(data)
 	return {"ok":result!=null,"reason":"Invalid realised surface record" if result==null else "",
-		"result":result,"assets":assets.bundle(),"source_layout_digest":source.digest(),"version":VERSION}
+		"result":result,"assets":bundle,"source_layout_digest":source.digest(),"version":VERSION}

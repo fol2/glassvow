@@ -443,9 +443,13 @@ func layout_failure() -> Dictionary:
 
 
 func _bind_compiled_layout() -> void:
+	var checkpoint: int = Time.get_ticks_msec()
+	var stages: Dictionary = {}
 	if _run == null or _map_scene == null:
 		return
 	var quality: Dictionary = _quality_registry()
+	stages["recipe"] = Time.get_ticks_msec()-checkpoint
+	checkpoint = Time.get_ticks_msec()
 	if quality.is_empty():
 		return _fail_compiled_layout({
 			"kind": "authority", "id": "quality_registry",
@@ -460,6 +464,8 @@ func _bind_compiled_layout() -> void:
 	if _layout_quality_override.is_empty() and _act == 0 and _journey_recipe.get("ok") == true:
 		assets = _journey_recipe["assets"]
 		heroes = _journey_recipe["heroes"]
+		_map_scene.journey_cache = _journey_recipe.get("cache")
+		_map_scene.journey_assets = assets
 	if assets.is_empty() or heroes.is_empty():
 		return _fail_compiled_layout({
 			"kind": "authority", "id": "active_map_assets",
@@ -489,9 +495,20 @@ func _bind_compiled_layout() -> void:
 	if input_digest == _layout_input_digest:
 		return
 	_layout_input_digest = input_digest
-	var compiled_v: Variant = _layout_compile.call(input, quality, assets) \
-		if _layout_compile.is_valid() \
-		else MapLayoutCompiler.compile(input, quality, assets)
+	stages["input"] = Time.get_ticks_msec()-checkpoint
+	checkpoint = Time.get_ticks_msec()
+	var cached_result: MapLayoutResult
+	if _map_scene.journey_cache != null:
+		var cached_data: Dictionary = _map_scene.journey_cache.get("source_result")
+		if cached_data.get("input_digest") == input_digest:
+			cached_result = MapLayoutResult.from_dict(cached_data)
+	var compiled_v: Variant
+	if _layout_compile.is_valid():
+		compiled_v = _layout_compile.call(input,quality,assets)
+	elif cached_result != null:
+		compiled_v = {"status":MapLayoutCompiler.COMPILED,"result":cached_result,"diagnostics":{"derived_cache":true}}
+	else:
+		compiled_v = MapLayoutCompiler.compile(input,quality,assets)
 	if typeof(compiled_v) != TYPE_DICTIONARY:
 		return _fail_compiled_layout({
 			"kind": "compiler", "id": "live_map",
@@ -529,12 +546,16 @@ func _bind_compiled_layout() -> void:
 			"kind": "compiler", "id": "result_coverage",
 			"reason": "compiled result does not exactly cover the live input",
 		})
+	stages["source"] = Time.get_ticks_msec()-checkpoint
+	checkpoint = Time.get_ticks_msec()
 	var final_result: MapLayoutResult = _map_scene.bind_layout(compiled_result, quality)
 	if final_result == null:
 		return _fail_compiled_layout(_map_scene.layout_failure())
+	stages["surface"] = Time.get_ticks_msec()-checkpoint
 	_layout_result = final_result
 	_layout_data = final_result.identity_dict()
 	_layout_failure.clear()
+	_layout_diagnostics["binding_stages_ms"] = stages
 	_layout_diagnostics["live_binding"] = _map_scene.layout_diagnostics()
 	_layout_diagnostics["layout_digest"] = final_result.digest()
 	_invalidate_projection()
