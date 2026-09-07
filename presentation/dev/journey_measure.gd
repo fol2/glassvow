@@ -32,7 +32,11 @@ func _run() -> void:
 	var ready_ms: float = (Time.get_ticks_usec()-started)/1000.0
 	var stage: SubViewport = screen._map_scene.get_stage()
 	RenderingServer.viewport_set_measure_render_time(stage.get_viewport_rid(),true)
-	for i: int in range(300): await get_tree().process_frame
+	var warmup_started: int = Time.get_ticks_msec()
+	var warmup_frames: int = 0
+	while warmup_frames<300 or Time.get_ticks_msec()-warmup_started<6000:
+		warmup_frames+=1
+		await get_tree().process_frame
 	await RenderingServer.frame_post_draw
 	get_viewport().get_texture().get_image().save_png(output.get_basename()+"-journey.png")
 	var last: int = Time.get_ticks_usec()
