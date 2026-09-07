@@ -455,7 +455,7 @@ func _bind_compiled_layout() -> void:
 			"kind": "authority", "id": "quality_registry",
 			"reason": "governed map quality registry is unavailable",
 		})
-	var bound: Dictionary = _InputBinding.bind(map, _run.act)
+	var bound: Dictionary = _bind_graph(_run.act)
 	if bound.get("ok", false) != true:
 		var binding_error: Dictionary = bound.get("error", {})
 		return _fail_compiled_layout(binding_error)
@@ -586,7 +586,7 @@ func _quality_registry() -> Dictionary:
 	if not value is Dictionary: return {}
 	var quality: Dictionary = value
 	if _act != 0 or _run == null: return quality
-	var bound: Dictionary = _InputBinding.bind(map,_run.act)
+	var bound: Dictionary = _bind_graph(_run.act)
 	if bound.get("ok") != true: return {}
 	var key: String = MapLayoutCanonical.digest(bound)
 	if key != _journey_recipe_key:
@@ -780,7 +780,7 @@ func _focus_xz(i: int) -> Vector2:
 	else:
 		push_error("WorldMapScreen cannot focus without the compiled node anchors")
 		return MapCameraRig.DEFAULT_XZ
-	var bound: Dictionary = _InputBinding.bind(map, _act)
+	var bound: Dictionary = _bind_graph(_act)
 	if bound.get("ok", false) != true:
 		push_error("WorldMapScreen cannot bind the focused candidate envelope")
 		return MapCameraRig.DEFAULT_XZ
@@ -1004,6 +1004,7 @@ func _layout_waystones() -> void:
 		var ws: GlassWaystone = _waystones[i]
 		var node_scale: float = k
 		if _journey_navigation != null and _journey_navigation.visible:
+			node_scale = 1.0
 			ws.visible = context.has(i)
 			ws.focus_mode = Control.FOCUS_ALL if ws.visible else Control.FOCUS_NONE
 			ws.set_journey_presentation(_journey_navigation.overview, _journey_navigation.selected == i)
@@ -1079,3 +1080,8 @@ func _journey_focus_pose(index: int) -> Dictionary:
 		if map.nodes[index].next.has(map.nodes[node_index].id):
 			points.append(anchors[node_index])
 	return JourneyCamera.resolve(points, Vector2(StageShape.REFERENCES[shape]))
+
+func _bind_graph(act: int) -> Dictionary:
+	if act==0 and _layout_quality_override.is_empty():
+		return preload("res://presentation/map/map_journey_input.gd").bind(map,act)
+	return _InputBinding.bind(map,act)

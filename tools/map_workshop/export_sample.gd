@@ -58,7 +58,7 @@ func _sample(content: ContentDB, act: int, seed_value: int) -> Dictionary:
 	var run: RunState = RunState.new_run(content, seed_value)
 	run.act = act
 	var world: WorldMap = WorldMap.for_run(run, content)
-	var bound: Dictionary = MapLayoutInputBinding.bind(world, act)
+	var bound: Dictionary = preload("res://presentation/map/map_journey_input.gd").bind(world,act) if production_journey else MapLayoutInputBinding.bind(world,act)
 	if bound.get("ok") != true:
 		push_error(str(bound))
 		return {}

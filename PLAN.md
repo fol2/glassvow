@@ -587,3 +587,44 @@ periphery; close bridge/road continuity is present. Next: soften the world edge
 without altering routes or approved asset scale, finish all shape/pose inspection,
 then qualify the maintained corpus. Section construction/whole-stage acceptance
 remain open. Overall accepted progress stays 4%; no unobserved gates are credited.
+
+### Actual targets, save identity and campaign entry — 7 September, 17:23 UTC
+
+The native camera audit exposed a footer collision: an in-frame target centre did
+not imply its full hit area was clear of navigation. It also exposed legacy
+waystone scaling: the old Control footprint differed from the declared journey
+hit envelope. Journey controls now have a real 60×60 target at all reference
+shapes, with centred, legible engravings and restrained focus brackets. Native
+raster measurement covers 27 glyph/state combinations: maximum painted radius
+29.707 px inside the declared 30 px envelope. The camera reserves full targets
+above the 88 px footer and below the HUD, with the same projection in compiler
+and runtime. Dragging now uses the actual camera pitch. The native peripheral
+haze removes the hard landscape cut without changing geometry or route truth.
+
+The initial chrome-only experiment failed both retained source compiles; the
+certificates remain under /tmp/glassvow-steps4-8/chrome-v2-source-*. After binding
+the actual controls/paint envelope and seating the terminus clear of it, the v4
+recipe passes both complete source compiles and native assembly. Four focused
+camera/target/catalogue tests pass. The shipped 3.6 KiB geometry catalogue matches
+all actual imported model measurements; the corresponding native reload falls
+from 2,389 to 1,924 ms with identical surface identity.
+
+The actual application probe uses application/main.tscn and only its own v2 test
+profile. Real title Continue, native inspection, explicit Travel and real combat
+entry pass, with one current node and the parked map viewport stopped. The first
+probe also catches save-round-trip identity loss: JSON changes jitter by about
+5.5e-15, causing an unnecessary cache miss. A regression reproduces the failure.
+Only the selected journey presentation input now rounds jitter to 1e-9 lane units;
+legacy input binding, domain records, IDs, RNG and the save schema are unchanged.
+The regression passes four acts × seven seeds × three JSON round-trips, including
+unchanged game truth and a maximum 5.01e-10 jitter deviation. Existing binding and
+locale tests also pass. The production recipe is now woodland-journey-v5.
+
+Actual fresh-process application receipts: first build without derived data
+11,909 ms; subsequent cold-process Continue with derived data 2,353 ms. Both keep
+the entire restored RunState unchanged and use the normal compiler path. The
+second run has matching input/surface identities and enters combat successfully.
+The two-second application load budget is still NOT passed. Next: reduce repeated
+static scenery instantiation/draw submission with a bounded native comparison,
+then finish section poses and corpus coverage. No scene, seed or quality gate is
+omitted to turn this negative timing into a pass.

@@ -196,7 +196,7 @@ static func look_dz() -> float:
 ## is `size / sin(|tilt|)`, the same identity the #255 bench asserts.
 func pan_screen(delta_px: Vector2, view_height: float) -> void:
 	var k: float = _camera.size / maxf(view_height, 1.0)
-	var tilt: float = deg_to_rad(absf(TILT_DEGREES))
+	var tilt: float = absf(_camera.rotation.x)
 	pan_world(Vector2(-delta_px.x * k, -delta_px.y * k / sin(tilt)))
 
 

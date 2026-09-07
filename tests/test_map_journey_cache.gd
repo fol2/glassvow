@@ -6,6 +6,13 @@ static func run(fails: Array[String]) -> void:
 		if not fingerprints.has(kind): fails.append("journey cache: missing appearance identity: "+kind)
 		elif OS.has_feature("editor") and fingerprints[kind] != FileAccess.get_sha256("res://assets/art/map-journey/"+kind+".glb"):
 			fails.append("journey cache: stale appearance identity: "+kind)
+	var kinds: Array[String] = []
+	kinds.assign(preload("res://presentation/map/landscape/kit.gd").PROFILES.keys())
+	kinds.sort()
+	var baked: MapJourneyAssets = MapJourneyAssets.new(kinds)
+	var measured: MapJourneyAssets = MapJourneyAssets.new(kinds,true)
+	if not baked.failure.is_empty() or not measured.failure.is_empty() or baked.digest!=measured.digest or baked.profiles!=measured.profiles:
+		fails.append("journey catalogue: imported mesh measurements differ from shipped profiles")
 	var directory: String = "user://test-journey-cache-"+str(Time.get_ticks_usec())
 	var newest: String = ""
 	for i: int in range(6):

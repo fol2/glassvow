@@ -1,6 +1,6 @@
 extends RefCounted
 ## Production woodland inputs: actual imported kit, physical space and local view.
-const VERSION: String = "woodland-journey-v3"
+const VERSION: String = "woodland-journey-v5"
 const Fingerprints: JSON = preload("res://assets/art/map-journey/runtime-fingerprints.json")
 const Cache = preload("res://presentation/map/map_journey_cache.gd")
 const Registry = preload("res://presentation/map/map_journey_camera_registry.gd")
@@ -46,7 +46,7 @@ static func build(nodes: Array, edges: Array, base: Dictionary) -> Dictionary:
 	for i: int in range(15):
 		rows.append({"station_m":-36+i*row_gap,"height_m":0.0,"centre_z_m":0.0,"lane_spacing_m":lane_gap,"region":"woodland"})
 	var profile: Dictionary = {"schema_version":1,"id":VERSION,"act":0,
-		"bounds_xz_m":[-48.0,-3*lane_gap-12,-36+14*row_gap+12,3*lane_gap+12],
+		"bounds_xz_m":[-48.0,-3*lane_gap-12,-36+14*row_gap+16,3*lane_gap+12],
 		"ordering_version":"layered-order-dp-v1","lane_assignments":order["assignments"],
 		"spacing_version":"physical-reservations-v1","jitter_scale":jitter,"rows":rows,
 		"passage":{"headroom_m":2.45,"deck_depth_m":.65,"maximum_grade":grade,"landing_m":landing,
@@ -62,7 +62,7 @@ static func build(nodes: Array, edges: Array, base: Dictionary) -> Dictionary:
 	if boss.is_empty(): return {"ok":false,"reason":"Woodland graph has no terminus"}
 	# A larger memorial in the final grove uses the approved woodland kit.
 	# The early arch remains a route-dependent placement in the surface stage.
-	var at: Vector3 = Spatial.anchor(boss,quality)+Vector3(7,0,0)
+	var at: Vector3 = Spatial.anchor(boss,quality)+Vector3(8,0,0)
 	var scale_value: float = 1.6
 	var memorial: Dictionary = library.profiles["memorial"]
 	var shape: PackedVector2Array = library.registry.transformed_footprint(memorial,at,0.0,Vector3.ONE*scale_value)

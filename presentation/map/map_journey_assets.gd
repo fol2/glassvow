@@ -2,13 +2,15 @@ class_name MapJourneyAssets
 extends RefCounted
 ## Imported geometry profiles for the scenery actually used by a journey recipe.
 ## Root-relative transforms include every mesh in a glTF scene, not one child.
+const Catalogue: Resource = preload("res://assets/art/map-journey/geometry-catalogue.res")
+const Fingerprints: JSON = preload("res://assets/art/map-journey/runtime-fingerprints.json")
 const ROOT: String = "res://assets/art/map-journey/"
 var profiles: Dictionary = {}
 var registry: MapAssetProfiles
 var failure: String = ""
 var digest: String = ""
 
-func _init(kinds: Array[String]) -> void:
+func _init(kinds: Array[String], measure_source: bool = false) -> void:
 	var rows: Array = []
 	var defaults: Dictionary = {}
 	for kind: String in kinds:
@@ -16,6 +18,19 @@ func _init(kinds: Array[String]) -> void:
 		defaults[kind] = {"scale":1.0,"semantic_class":"arch_passable" if kind=="amber-arch" else "scenery","yaw_mode":"free","yaw_degrees":0.0}
 	registry = MapAssetProfiles.new({"assets":rows,"profile_defaults":defaults},ROOT)
 	var values: Array[Dictionary] = []
+	if not measure_source:
+		if Catalogue.get("schema_version")!=1 or Catalogue.get("profile_version")!=MapAssetProfiles.PROFILE_SCHEMA_VERSION or Catalogue.get("fingerprints")!=Fingerprints.data:
+			failure = "Journey geometry catalogue does not match the imported kit"
+			return
+		var stored: Dictionary = Catalogue.get("profiles")
+		for kind: String in kinds:
+			if not stored.has(kind):
+				failure = "Journey geometry catalogue is missing: "+kind
+				return
+			profiles[kind] = stored[kind].duplicate(true)
+			values.append(profiles[kind])
+		digest = registry.digest(values)
+		return
 	for kind: String in kinds:
 		var resource: PackedScene = load(ROOT+kind+".glb") as PackedScene
 		if resource == null:

@@ -177,10 +177,10 @@ func _gui_input(event: InputEvent) -> void:
 ## node fewer per waystone across 105 of them, and it cannot drift out of
 ## alignment with the thing it is standing in front of.
 func set_touch_min(min_px: float, draw_scale: float) -> void:
-	var base: Vector2 = Vector2(WIDTH, EMBLEM_H + CAPTION_H)
+	var base: Vector2 = _face_size()
 	var want: Vector2 = Vector2.ONE * (min_px / maxf(0.01, draw_scale))
 	var pad: Vector2 = ((want - base) * 0.5).max(Vector2.ZERO)
-	if pad.is_equal_approx(_pad):
+	if pad.is_equal_approx(_pad) and size.is_equal_approx(base+pad*2.0):
 		return
 	_caption.offset_top = _pad.y + EMBLEM_H - 2 + (pad.y - _pad.y)
 	_caption.offset_bottom = _caption.offset_top + CAPTION_H + 2
@@ -266,7 +266,7 @@ func _seat_art() -> void:
 		else (64.0 if kind in ["elite", "treasure"] else 54.0)
 	if journey_mode:
 		frame_side = 48.0
-	var centre: Vector2 = _pad + Vector2(WIDTH, EMBLEM_H) * 0.5
+	var centre: Vector2 = _pad + _face_size() * 0.5
 	_frame_art.position = centre - Vector2.ONE * frame_side * 0.5
 	_frame_art.size = Vector2.ONE * frame_side
 	var glyph_side: float = frame_side * 1.12
@@ -320,7 +320,7 @@ func chip_rect(flip: bool = false) -> Rect2:
 		HORIZONTAL_ALIGNMENT_LEFT, -1.0, CHIP_FONT_SIZE).x
 	var w: float = CHIP_ICON + 4.0 + tw + 16.0
 	var side: float = -1.0 if flip else 1.0
-	var centre: Vector2 = _pad + Vector2(WIDTH, EMBLEM_H) * 0.5
+	var centre: Vector2 = _pad + _face_size() * 0.5
 	return Rect2(centre.x + side * (pane_radius() + CHIP_GAP + w * 0.5) - w * 0.5,
 		centre.y - CHIP_H * 0.5, w, CHIP_H)
 
@@ -515,7 +515,7 @@ func set_journey_presentation(overview: bool, selected: bool) -> void:
 
 
 func _draw_engraving() -> void:
-	var centre: Vector2 = _pad + Vector2(WIDTH, EMBLEM_H)*.5
+	var centre: Vector2 = _pad + _face_size()*.5
 	var tint: Color = GlassStyle.GOLD if reachable or current else GlassStyle.TEXT_DIM
 	if journey_overview:
 		draw_circle(centre, 5.0 if current else 2.5, tint)
@@ -526,8 +526,11 @@ func _draw_engraving() -> void:
 	if journey_selected or has_focus() or _pressed:
 		for sx: float in [-1,1]:
 			for sy: float in [-1,1]:
-				var corner: Vector2 = centre+Vector2(26*sx,27*sy)
+				var corner: Vector2 = centre+Vector2(20*sx,21*sy)
 				draw_line(corner,corner-Vector2(7*sx,0),tint,1.7,true)
 				draw_line(corner,corner-Vector2(0,7*sy),tint,1.7,true)
 	if quest_marked:
-		draw_circle(centre+Vector2(22,-22),3.0,Color("afe0dc"))
+		draw_circle(centre+Vector2(18,-18),3.0,Color("afe0dc"))
+
+func _face_size() -> Vector2:
+	return Vector2(60,60) if journey_mode else Vector2(WIDTH,EMBLEM_H+CAPTION_H)

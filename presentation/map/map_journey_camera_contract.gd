@@ -3,12 +3,12 @@ extends RefCounted
 ## Shared projection contract for local decisions and non-interactive overview.
 ## Fitting the group is insufficient: the same pose must preserve distinct ink
 ## and touch rectangles. Infeasible groups are reported to the layout solver.
-const VERSION: String = "journey-camera-v1"
+const VERSION: String = "journey-camera-v2"
 const PITCH: float = 55.0
 const HEIGHT: float = 36.0
 const TOUCH_DESIGN_PX: float = 60.0
-const TOUCH_FLOOR_PX: float = 48.0
-const INK_RADIUS_PX: float = 38.0
+const TOUCH_FLOOR_PX: float = 60.0
+const INK_RADIUS_PX: float = 30.0
 const INK_GAP_PX: float = 8.0
 
 static func touch_size(stage: Vector2) -> float:
@@ -20,8 +20,9 @@ static func projected_plane(point: Vector3) -> Vector2:
 static func resolve(points: PackedVector3Array, stage: Vector2, overview: bool = false) -> Dictionary:
 	if points.is_empty() or stage.x <= 0.0 or stage.y <= 0.0:
 		return {"ok": false, "reason": "empty group or invalid viewport"}
-	var inset: Vector2 = Vector2(42.0, 88.0)
-	var usable: Vector2 = stage-inset*2.0
+	# Reserve complete touch/ink extents above the 88 px navigation panel.
+	var safe: Rect2 = Rect2(Vector2(42,106),stage-Vector2(84,236))
+	var usable: Vector2 = safe.size
 	if usable.x <= 0.0 or usable.y <= 0.0:
 		return {"ok": false, "reason": "viewport has no safe decision area"}
 	var minimum: Vector2 = Vector2(INF, INF)
@@ -46,7 +47,7 @@ static func resolve(points: PackedVector3Array, stage: Vector2, overview: bool =
 	if zoom > maximum_zoom+.0001:
 		return {"ok": false, "reason": "group cannot fit without overlapping targets",
 			"minimum_zoom": zoom, "maximum_zoom": maximum_zoom}
-	var centre: Vector2 = (minimum+maximum)*.5
+	var centre: Vector2 = (minimum+maximum)*.5+(stage*.5-safe.get_center())*zoom/stage.y
 	var position: Vector3 = Vector3(centre.x, HEIGHT,
 		centre.y/sin(deg_to_rad(PITCH))+HEIGHT/tan(deg_to_rad(PITCH)))
 	return {"ok": true, "zoom": zoom, "position": position, "pitch": PITCH,

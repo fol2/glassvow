@@ -8,6 +8,7 @@ var _pose: String = "focused"
 var _cache: String = ""
 var _no_shadows: bool = false
 var _continuous: bool = false
+var _overlays: bool = true
 var _steps: int = 0
 var _exercise: bool = false
 var _measure: bool = false
@@ -44,6 +45,8 @@ func _run() -> void:
 			_measure = true
 		elif arg == "--exercise":
 			_exercise = true
+		elif arg == "--overlays-off":
+			_overlays = false
 		elif arg == "--continuous":
 			_continuous = true
 		elif arg == "--no-shadows":
@@ -110,7 +113,8 @@ func _run() -> void:
 		print("MAP_COMPILE_OK ", screen.layout_input_digest(), " ", screen.layout_digest())
 		quit(0)
 		return
-	root.add_child(RunHud.new(run, content, shape))
+	var hud: RunHud = RunHud.new(run, content, shape)
+	root.add_child(hud)
 	if _no_shadows:
 		screen._map_scene.get_key().shadow_enabled = false
 	var rig: MapCameraRig = screen._map_scene.get_rig()
@@ -143,6 +147,10 @@ func _run() -> void:
 			screen.set_process(false)
 		for stone: GlassWaystone in screen._waystones:
 			stone.set_process(false)
+	if not _overlays:
+		hud.hide()
+		for child: Node in screen.get_children():
+			if child is CanvasItem and child != screen._map_scene: (child as CanvasItem).hide()
 	screen._map_scene.set_live(_continuous)
 	for frame: int in range(12):
 		await process_frame
@@ -152,7 +160,7 @@ func _run() -> void:
 		push_error("Native map input exercise failed")
 		quit(1)
 		return
-	print("MAP_PREVIEW ", JSON.stringify({"act_index": act, "seed": seed_value,
+	print("MAP_PREVIEW ", JSON.stringify({"act_index": act, "seed": seed_value, "overlays":_overlays, "pose":_pose, "shape":str(shape),
 		"input_digest": screen.layout_input_digest(), "layout_digest": screen.layout_digest(),
 		"bind_ms": bind_ms, "derived_cache_hit":screen._map_scene.layout_diagnostics().get("derived_cache_hit",false),
 		"assembly_ms": screen._map_scene.layout_diagnostics().get("assembly_ms", {}),

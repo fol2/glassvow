@@ -46,6 +46,7 @@ var _layout_failure: Dictionary = {}
 var _realised_assets: Dictionary = {}
 var _bound_source_digest: String = ""
 var _bound_quality_digest: String = ""
+var _horizon: RefCounted
 var journey_cache: Resource
 var journey_assets: Dictionary = {}
 var _act: int = -1
@@ -97,6 +98,11 @@ func _ready() -> void:
 	_fit()
 	resized.connect(_fit)
 	visibility_changed.connect(_on_visibility_changed)
+	RenderingServer.frame_pre_draw.connect(_update_horizon)
+
+
+func _update_horizon() -> void:
+	if _horizon != null and is_visible_in_tree(): _horizon.call("update",_rig.get_camera(),Vector2(_stage.size))
 
 
 func _on_visibility_changed() -> void:
@@ -256,6 +262,8 @@ func set_act(act_i: int) -> void:
 	if region.act == _act and not _salt_dirty:
 		return
 	_act = region.act
+	_horizon = null
+	_display.material = null
 	_deal_act(region)
 
 
@@ -575,6 +583,8 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 		if str(quality.get("spatial_profile",{}).get("id","")) == preload("res://presentation/map/map_journey_recipe.gd").VERSION:
 			_landscape.source_heroes = data["hero_placements"].duplicate(true)
 		return _bind_journey(compiled)
+	_horizon = null
+	_display.material = null
 	_selection_half = _selection_reserve(quality)
 	var candidates: Dictionary = _landscape.candidates()
 	var accepted: Dictionary = {}
@@ -634,6 +644,9 @@ func realised_asset_bundle() -> Dictionary:
 
 
 func _bind_journey(source: MapLayoutResult) -> MapLayoutResult:
+	var horizon_bounds: Rect2 = _landscape.map_bounds
+	_horizon = preload("res://presentation/map/map_horizon.gd").new(horizon_bounds)
+	_display.material = _horizon.get("material")
 	if journey_cache != null:
 		var stored_source: Dictionary = journey_cache.get("source_result")
 		if not stored_source.is_empty() and str(stored_source.get("layout_digest","")) != source.digest():
@@ -673,6 +686,8 @@ func _bind_journey(source: MapLayoutResult) -> MapLayoutResult:
 
 
 func _fail_layout(reason: String) -> MapLayoutResult:
+	_horizon = null
+	_display.material = null
 	_layout_result = null
 	_realised_assets.clear()
 	_bound_source_digest = ""
