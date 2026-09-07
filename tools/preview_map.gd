@@ -9,6 +9,8 @@ var _cache: String = ""
 var _no_shadows: bool = false
 var _continuous: bool = false
 var _overlays: bool = true
+var _batches: bool = true
+var _audit_batches: bool = false
 var _steps: int = 0
 var _exercise: bool = false
 var _measure: bool = false
@@ -45,6 +47,11 @@ func _run() -> void:
 			_measure = true
 		elif arg == "--exercise":
 			_exercise = true
+		elif arg == "--static-batches":
+			_batches=true
+			_audit_batches=true
+		elif arg == "--no-static-batches":
+			_batches=false
 		elif arg == "--overlays-off":
 			_overlays = false
 		elif arg == "--continuous":
@@ -88,6 +95,7 @@ func _run() -> void:
 	root.add_child(screen)
 	screen.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	screen.size = Vector2(dimensions)
+	screen._map_scene.set_meta("static_batches",_batches)
 	var start: int = Time.get_ticks_msec()
 	screen.refresh(run)
 	var bind_ms: int = Time.get_ticks_msec()-start
@@ -154,7 +162,17 @@ func _run() -> void:
 	screen._map_scene.set_live(_continuous)
 	for frame: int in range(12):
 		await process_frame
+	if _audit_batches:
+		var kit: Node3D = screen._map_scene._landscape.get("kit")
+		var batch_audit: Dictionary = preload("res://tools/map_workshop/audit_static_scenery.gd").audit(kit)
+		print("STATIC_DRAW_AUDIT ",JSON.stringify(batch_audit))
+		var canary: bool = preload("res://tools/map_workshop/audit_static_scenery.gd").negative_canary(kit)
+		print("STATIC_DRAW_NEGATIVE_CANARY ",canary)
+		if batch_audit["failure_count"]!=0 or not canary:
+			quit(1)
+			return
 	if _measure:
+		_profile_record(screen.layout_result())
 		await _measure_pan(screen)
 	if _exercise and not await _exercise_input(screen):
 		push_error("Native map input exercise failed")
@@ -345,3 +363,18 @@ func _measure_pan(screen: WorldMapScreen) -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
 	for frame: int in range(8):
 		await process_frame
+
+func _profile_record(result: MapLayoutResult) -> void:
+	var data: Dictionary = result.identity_dict()
+	var timings: Dictionary = {}
+	var started: int = Time.get_ticks_usec()
+	var errors: Array[String] = MapLayoutResult.validate_identity(data)
+	timings["validate_ms"]=(Time.get_ticks_usec()-started)/1000.0
+	started=Time.get_ticks_usec()
+	var ordered: Dictionary = MapLayoutCanonical.ordered_dictionary(data)
+	timings["order_ms"]=(Time.get_ticks_usec()-started)/1000.0
+	started=Time.get_ticks_usec()
+	var digest: String = MapLayoutCanonical.digest(ordered)
+	timings["digest_ms"]=(Time.get_ticks_usec()-started)/1000.0
+	timings["same_digest"]=digest==result.digest() and errors.is_empty()
+	print("MAP_RECORD_PROFILE ",JSON.stringify(timings))

@@ -6,6 +6,8 @@ const Assets = preload("res://presentation/map/map_journey_assets.gd")
 const Paths = preload("res://presentation/map/landscape/road_paths.gd")
 
 static func finish(source: MapLayoutResult, landscape: Node3D) -> Dictionary:
+	var part_started: int = Time.get_ticks_usec()
+	var timings: Dictionary = {}
 	var data: Dictionary = source.identity_dict()
 	var kinds: Array[String] = []
 	for item: Dictionary in landscape.kit.placed:
@@ -19,6 +21,8 @@ static func finish(source: MapLayoutResult, landscape: Node3D) -> Dictionary:
 		bundle = assets.bundle()
 	for kind: String in kinds:
 		if not bundle["profiles"].has(kind): return {"ok":false,"reason":"Unqualified journey asset: "+kind}
+	timings["inputs"]=(Time.get_ticks_usec()-part_started)/1000.0
+	part_started=Time.get_ticks_usec()
 	for id: String in data["node_anchors"]:
 		var at: Vector3 = landscape.resolved_anchor(MapLandscape.v3(data["node_anchors"][id]))
 		data["node_anchors"][id] = [at.x,at.y,at.z]
@@ -33,6 +37,8 @@ static func finish(source: MapLayoutResult, landscape: Node3D) -> Dictionary:
 		line[0] = data["node_anchors"][edge["from"]].duplicate()
 		line[-1] = data["node_anchors"][edge["to"]].duplicate()
 		edge["centerline"] = line
+	timings["routes"]=(Time.get_ticks_usec()-part_started)/1000.0
+	part_started=Time.get_ticks_usec()
 	data["hero_placements"] = {}
 	data["scenery_instances"] = {}
 	for i: int in range(landscape.kit.placed.size()):
@@ -52,6 +58,8 @@ static func finish(source: MapLayoutResult, landscape: Node3D) -> Dictionary:
 			data["scenery_instances"]["woodland-%04d"%i] = row
 	# Upstream measurements qualify the source proposal. They cannot be carried
 	# forward as if they measured the newly realised three-dimensional surface.
+	timings["scenery"]=(Time.get_ticks_usec()-part_started)/1000.0
+	part_started=Time.get_ticks_usec()
 	var surface_anchors: Dictionary = data["node_anchors"]
 	var surface_edges: Dictionary = data["edges"]
 	var camera: Dictionary = preload("res://presentation/map/map_journey_camera_contract.gd").audit_surface(surface_anchors,surface_edges)
@@ -60,6 +68,9 @@ static func finish(source: MapLayoutResult, landscape: Node3D) -> Dictionary:
 	data["hard_measurements"] = {"journey_camera":camera}
 	data["soft_scores"] = {}
 	data["generator_version"] += "/"+VERSION
+	timings["camera"]=(Time.get_ticks_usec()-part_started)/1000.0
+	part_started=Time.get_ticks_usec()
 	var result: MapLayoutResult = MapLayoutResult.create(data)
+	timings["record"]=(Time.get_ticks_usec()-part_started)/1000.0
 	return {"ok":result!=null,"reason":"Invalid realised surface record" if result==null else "",
-		"result":result,"assets":bundle,"source_layout_digest":source.digest(),"version":VERSION}
+		"result":result,"assets":bundle,"source_layout_digest":source.digest(),"version":VERSION,"timings_ms":timings}

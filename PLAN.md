@@ -628,3 +628,46 @@ The two-second application load budget is still NOT passed. Next: reduce repeate
 static scenery instantiation/draw submission with a bounded native comparison,
 then finish section poses and corpus coverage. No scene, seed or quality gate is
 omitted to turn this negative timing into a pass.
+
+
+### Static drawing and real Continue checkpoint — 7 September, 17:56 UTC
+
+- Spatial MultiMesh batches retain all original placement anchors and source
+  mesh/material properties. The native independent source-scene comparison
+  passes 3,214 draw instances across 13 mesh templates with zero transform error.
+  A deliberately displaced GPU instance is rejected; the original transform is
+  restored before capture. Native phone crossing inspected; no geometry or
+  palette change from batching. Source and surface identities remain a220a66a…
+  and 761b5397… respectively.
+- The title requests only immutable resources for the saved woodland chapter.
+  Scene construction remains on the main thread; abandoned requests are drained.
+  The isolated real Continue probe confirms unchanged run data, normal compiler
+  routing and the matching derived cache. The latest instrumented measurement is
+  2,063.896ms on M1 Max: still above the 2s cold-save-load requirement. The earlier
+  uncached construction took 11.9s. Neither is credited as passed. The title probe
+  now waits for its actual visible entrance rather than an arbitrary frame count.
+- Component moving-camera p95 was 9.94–10.96ms, approximately 326MiB renderer
+  memory. This does not establish physical-device or whole-campaign performance.
+  All ten changed scripts pass the diagnostic-aware parser check. Logs and
+  native images: /tmp/glassvow-steps4-8/batching-final.*,
+  batching-checkpoint-parse.log and campaign-profile.*.
+- The bounded load experiment has produced decisive component gains and a
+  remaining failure. Stop repeated load-only tuning at this checkpoint: complete
+  current-surface geometry, visual and corpus qualification next, then address
+  the common load path with the four chapter recipes in view.
+- Accepted percentages remain 20/0/0/0/0 (overall 4%). Do not turn partial
+  engineering into accepted sections. Current conditional remaining allowance:
+  Step 4 2–4h, Step 5 1–2h, Step 6 3–5h, Step 7 4–7h, Step 8 3–5h: 13–23 active
+  hours plus external gates. This replaces the earlier remaining forecast.
+  The increase reflects actual load/save identity/camera contract repairs and
+  unqualified chapter-specific assembly, not a change to accepted art scope.
+- Usage counter at 17:34 UTC versus the 12:19 start: input 97,527,208; cached
+  input 96,432,640; uncached input 1,094,568; output 356,997. Reasoning 197,026
+  is included in output, not added again. Cache fraction 98.88%; these are API
+  counters, not a claim about Pro allowance or billing. Keep subsequent context
+  reads bounded and stop profile experiments once their decision is made.
+
+Current v5 seed 4 actual restored geometry also passes 44,463 contact rays and
+102 adult-body probes, minimum bridge headroom 3.366m, maximum local step 0.046m
+and maximum grade 0.461. No failures; journey-v5-physical-4.log. This supersedes
+older-input physical evidence for this seed, without claiming a full corpus pass.

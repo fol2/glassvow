@@ -577,6 +577,7 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 	_world.add_child(_landscape)
 	_landscape.prepare(data, _landscape_assets, _scatter_salt)
 	if _landscape is JourneyLandscape:
+		_landscape.static_batching=get_meta("static_batches",true)
 		_landscape.asset_bundle = journey_assets
 		_landscape.cache = journey_cache
 		_landscape.map_bounds = preload("res://presentation/map/map_spatial_profile.gd").footprint(quality) if quality.has("spatial_profile") else Rect2(-48,-30,96,60)
@@ -658,6 +659,7 @@ func _bind_journey(source: MapLayoutResult) -> MapLayoutResult:
 	var realised_started: int = Time.get_ticks_msec()
 	var realised: Dictionary = JourneyRealisation.finish(source,_landscape)
 	_landscape.timings_ms["realisation"] = Time.get_ticks_msec()-realised_started
+	_landscape.timings_ms["realisation_parts"] = realised.get("timings_ms",{})
 	if not realised.get("ok",false):
 		return _fail_layout(str(realised.get("reason","Surface realisation failed")))
 	if journey_cache != null and not _landscape.terrain.restored:

@@ -40,7 +40,15 @@ func _run() -> void:
 	main._run_save_path=RUN
 	main._vigil_save_path=VIGIL
 	root.add_child(main)
-	for i: int in range(35): await process_frame
+	var title_deadline: int = Time.get_ticks_msec()+15000
+	while main._choice_screen==null or not main._choice_screen.is_visible_in_tree() or main._choice_screen.modulate.a<0.999:
+		if Time.get_ticks_msec()>title_deadline:
+			_fail("Title did not finish its visible entrance")
+			return
+		await process_frame
+	await RenderingServer.frame_post_draw
+	var title_ms: int = Time.get_ticks_msec()
+	var preloaded: int = main._map_asset_preload.get("completed") if main._map_asset_preload!=null else 0
 	var saved: RunState = SaveService.load_run(main.content,RUN)
 	if saved==null or main._choice_screen==null:
 		_fail("Prepared title checkpoint is unavailable")
@@ -60,8 +68,9 @@ func _run() -> void:
 		_fail("Continue did not construct the production map")
 		return
 	var same_run: bool = main.game.run.to_dict()==before
-	var receipt: Dictionary = {"cold_continue_to_render_ms":restored_ms,"run_unchanged":same_run,
+	var receipt: Dictionary = {"engine_elapsed_to_title_ms":title_ms,"preloaded_assets":preloaded,"cold_continue_to_render_ms":restored_ms,"run_unchanged":same_run,
 		"input_digest":screen.layout_input_digest(),"layout_digest":screen.layout_digest(),
+		"binding":screen.layout_diagnostics().get("binding_stages_ms",{}),"assembly":screen._map_scene.layout_diagnostics().get("assembly_ms",{}),
 		"source_override":screen._layout_compile.is_valid(),"derived_cache":screen._map_scene.layout_diagnostics().get("derived_cache_hit",false)}
 	if not same_run:
 		_fail("Presentation changed the restored run")

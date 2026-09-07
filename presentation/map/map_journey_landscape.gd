@@ -7,6 +7,7 @@ const Kit = preload("res://presentation/map/landscape/kit.gd")
 const Journey = preload("res://presentation/map/landscape/journey.gd")
 const Details = preload("res://presentation/map/landscape/road_details.gd")
 var asset_bundle: Dictionary = {}
+var static_batching: bool = false
 var cache: Resource
 var map_bounds: Rect2 = Rect2(-48,-30,96,60)
 var source_heroes: Dictionary = {}
@@ -33,12 +34,14 @@ func build(data: Dictionary) -> void:
 	for point: Vector3 in anchors:
 		resolved.append(terrain.present(point))
 	kit = Kit.new()
+	kit.use_static_batches=static_batching
 	add_child(kit)
 	kit.build(terrain, resolved, false, source_heroes, cache)
 	if not kit.build_complete or not kit.failure.is_empty():
 		failure = kit.failure if not kit.failure.is_empty() else "Woodland assembly incomplete"
 		return
 	timings_ms["scenery"] = Time.get_ticks_msec()-started
+	timings_ms["scenery_replay"] = kit.replay_timings
 	timings_ms["placement_queries"] = {"count":kit.query_count,"total_ms":kit.query_us/1000.0,"road_ms":kit.road_query_us/1000.0}
 	started = Time.get_ticks_msec()
 	if not terrain.restored: Details.build(terrain)

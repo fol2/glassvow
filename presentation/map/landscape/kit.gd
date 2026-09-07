@@ -10,6 +10,8 @@ const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 var tree_envelopes: Dictionary = {}
 var material_pool: Dictionary = {}
 var asset_scenes: Dictionary = {}
+var use_static_batches: bool = false
+var static_scenery: Node3D
 var planting_bounds: Rect2 = Rect2(-43,-23,86,46)
 var query_us: int = 0
 var road_query_us: int = 0
@@ -22,6 +24,7 @@ var terrain: Terrain
 var anchors: PackedVector3Array
 var failure: String = ""
 var build_complete: bool = false
+var replay_timings: Dictionary = {}
 var hero_override: String = ""
 # Conservative circles enclosing the exported X/Z bounds at every yaw.
 const PROFILES: Dictionary = {
@@ -53,7 +56,11 @@ func build(surface: Terrain, points: PackedVector3Array, grey: bool, heroes: Dic
 	contacts = GroundContacts.new()
 	add_child(contacts)
 	contacts.begin(terrain)
+	if use_static_batches and not grey:
+		static_scenery=preload("res://presentation/map/landscape/static_scenery.gd").new()
+		add_child(static_scenery)
 	if cache != null and not cache.get("placements").is_empty():
+		var replay_start: int = Time.get_ticks_usec()
 		var rows: Array = cache.get("placements")
 		var roles: Dictionary = cache.get("hero_roles")
 		for i: int in range(rows.size()):
@@ -66,7 +73,13 @@ func build(surface: Terrain, points: PackedVector3Array, grey: bool, heroes: Dic
 			_place(kind,at,float(str(row["scale"])),float(str(row["yaw"])),grey)
 			if not failure.is_empty(): return
 			if roles.has(str(i)): placed_nodes[-1].set_meta("hero_role",roles[str(i)])
+		replay_timings["placements"]=(Time.get_ticks_usec()-replay_start)/1000.0
+		replay_start=Time.get_ticks_usec()
 		contacts.finish()
+		replay_timings["contacts"]=(Time.get_ticks_usec()-replay_start)/1000.0
+		replay_start=Time.get_ticks_usec()
+		if static_scenery!=null: static_scenery.call("finish")
+		replay_timings["batches"]=(Time.get_ticks_usec()-replay_start)/1000.0
 		build_complete = true
 		return
 	_landmark(grey)
@@ -124,6 +137,7 @@ func build(surface: Terrain, points: PackedVector3Array, grey: bool, heroes: Dic
 	_verges(grey)
 	_accents(grey)
 	contacts.finish()
+	if static_scenery!=null: static_scenery.call("finish")
 	if not grey:
 		preload("res://presentation/map/landscape/terrain_paint.gd").bind_habitat(terrain,placed,terrain.lines,terrain.is_elevated)
 	var counts: Dictionary = {}
@@ -315,7 +329,13 @@ func _place(kind: String, p: Vector3, scale_value: float, yaw: float, grey: bool
 	var path: String = "res://assets/art/map-journey/%s.glb" % kind
 	if kind == "amber-arch" and not hero_override.is_empty():
 		path = hero_override
-	if not grey:
+	var batched: bool = static_scenery!=null and kind!="amber-arch"
+	if batched:
+		item=static_scenery.call("prepare",path,kind)
+		if item==null:
+			failure=static_scenery.get("failure")
+			return
+	elif not grey:
 		if not asset_scenes.has(path):
 			if not ResourceLoader.exists(path):
 				failure = "Missing imported workshop asset: " + path
@@ -354,6 +374,7 @@ func _place(kind: String, p: Vector3, scale_value: float, yaw: float, grey: bool
 		# Configure imported subtrees before entering the live world. This avoids
 		# submitting every intermediate transform/material to the renderer.
 		add_child(item)
+		if batched: static_scenery.call("register",item)
 		contacts.place(kind, p, scale_value, yaw)
 	var footprint: Vector2 = PROFILES[kind]
 	placed_nodes.append(item)

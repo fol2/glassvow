@@ -23,6 +23,7 @@ var _route_rebuilder: Callable = Callable()
 var _map_layout_compile: Callable = Callable()
 var _map_quality_override: Dictionary = {}
 var _map_screen_language: StringName = &""
+var _map_asset_preload: Node
 var _map_layout_input_digest: String = ""
 var _map_layout_packet: Variant = null
 var _map_screen: WorldMapScreen = null
@@ -885,6 +886,7 @@ func _show_title() -> void:
 	_remember_route(_show_title)
 	_apply_pending_content_hydration()
 	var saved: RunState = _load_run()
+	_prepare_saved_map_assets(saved)
 	var choices: Array[Dictionary] = []
 	if saved != null:
 		choices.append({"id": "continue", "label": Locale.active.t("ui.menu.backToRoad")})
@@ -1414,6 +1416,7 @@ func _show_map() -> void:
 		_map_screen.before_pick = _on_map_before_pick
 		add_child(_map_screen)
 	_map_screen.refresh(game.run)
+	_release_map_asset_preload()
 	# --map --act=N: dress scenery only (domain map stays the run's act).
 	if _forced_act >= 0:
 		_map_screen.set_act_scenery(_forced_act)
@@ -3443,3 +3446,21 @@ func _on_lamplighter_confirmed(boon_id: String, art_id: StringName) -> void:
 static func _combat_encounter_header(route_kind: String, act_number: int) -> String:
 	var kind: String = Locale.active.t("ui.combat.encounterKind.%s" % route_kind)
 	return Locale.active.t("ui.combat.encounterHeader", {"kind": kind, "act": act_number})
+
+func _prepare_saved_map_assets(saved: RunState) -> void:
+	if not is_inside_tree() or DisplayServer.get_name()=="headless": return
+	if saved==null or saved.act!=0:
+		_release_map_asset_preload()
+		return
+	if _map_asset_preload!=null: return
+	_map_asset_preload=preload("res://presentation/map/map_asset_preload.gd").new()
+	add_child(_map_asset_preload)
+	var paths: Array[String] = []
+	var profiles: Dictionary = preload("res://assets/art/map-journey/geometry-catalogue.res").get("profiles")
+	for profile: Dictionary in profiles.values(): paths.append(str(profile["source_path"]))
+	_map_asset_preload.call("begin",paths)
+
+func _release_map_asset_preload() -> void:
+	if _map_asset_preload!=null:
+		_map_asset_preload.call("release")
+		_map_asset_preload=null
