@@ -297,16 +297,18 @@ Never mark the unfinished objective complete or blocked merely to disable Goal.
   Reforecast at the next substantive checkpoint, including elapsed time, remaining
   work and cost where measurable. Do not silently roll the delivery window forward.
 
-Current delivery boundary: the hall and taller glazed returns are built, and the
-new master sample passes the sampled route audit. This does not certify all
-seeds, continuous whole-chapter travel, full-width contacts or final art quality.
-Next: improve whole-place composition and architectural surface treatment against
-the approved v5 concept; then regenerate affected samples, inspect the full
-reference matrix and cross-act compatibility, measure performance, complete the
-required gates and independent review, and deliver the updated review page with
-an unretouched continuous tour. Act IV and Step 4 remain outside this delivery.
+Current delivery boundary: corrected Act III Step 3 native study and review page
+are complete. Full-core validation completed: PASS (101 tests), exit 0, no
+SCRIPT ERROR; retained headless diagnostics are documented in the verification report. Independent semantic review
+approved candidate `0315abe3f07f7ad7b8885abb737ce10a1a23bd5d` with no blockers,
+explicitly retaining the full-core delivery gate and owner chapter checkpoint.
+Act IV and Step 4 remain outside this delivery.
 
 ## Current execution capsule
+
+Owner review page: `https://jamess-macbook-pro.tail55e87e.ts.net/docs/map/studies/act3-step3/precinct-v2.html`.
+Implementation and required study verification are complete; Act III owner
+approval is the next action. No Act IV work or Step 4 integration has started.
 
 ### Review correction in progress — 7 September
 
@@ -329,9 +331,11 @@ Native frame-interval P95 is 8.49–8.564 ms and renderer allocation peaks at
 Imports and 424-script parsing pass. The first corrected core run printed
 PASS (101 tests), but a pre-existing Dawn fixture aborted before its assertions.
 Its missing Vigil quest profile is now initialised exactly as application boot;
-the unchanged focused assertions pass without errors. A complete rerun is active.
-All 11 selected checks, map asset validation and store exclusions pass. Final independent review must bind the corrected commit; owner chapter
-approval remains pending. The last conditional forecast was 45–75 minutes from
+the unchanged focused assertions pass without errors. The complete rerun passes
+101 tests, exit 0, with no SCRIPT ERROR. Existing headless material/tree and
+shutdown diagnostics remain; see `docs/map/studies/act3-step3/precinct-v2-verification.md`.
+All 11 selected checks, map asset validation and store exclusions pass. Independent review APPROVE binds corrected commit
+`0315abe3f07f7ad7b8885abb737ce10a1a23bd5d`; owner chapter approval remains pending. The last conditional forecast was 45–75 minutes from
 the start of final qualification if no new material finding emerged. Task token
 accounting is unavailable without Goal; no cache-saving claim is made.
 
