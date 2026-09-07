@@ -1,6 +1,6 @@
 extends RefCounted
 const Passage = preload("res://presentation/map/map_passage_route.gd")
-const Surface = preload("res://tools/map_workshop/common/resolved_route_surface.gd")
+const Surface = preload("res://presentation/map/chapters/common/resolved_route_surface.gd")
 static func run(fails: Array[String]) -> void:
 	var edge: Dictionary = {"centerline":[[0,0,0],[3,0,3],[23,0,3],[43,0,3],[46,0,0]],"corridor_width":2.5}
 	var result: Dictionary = Passage.resolve(edge,[{"deck_start_m":21.0,"deck_end_m":27.0}],3.1,.55,1.0)

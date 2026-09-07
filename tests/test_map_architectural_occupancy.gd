@@ -1,5 +1,5 @@
 extends RefCounted
-const Occupancy = preload("res://tools/map_workshop/common/architectural_occupancy.gd")
+const Occupancy = preload("res://presentation/map/chapters/common/architectural_occupancy.gd")
 static func run(fails: Array[String]) -> void:
 	var box: AABB = AABB(Vector3(0,0,0),Vector3(2,5,2))
 	var routes: Dictionary = {

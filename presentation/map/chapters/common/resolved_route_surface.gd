@@ -1,6 +1,6 @@
 extends RefCounted
 ## Exact shared cross-sections for level landings; straight inclines become flights.
-const Flight = preload("res://tools/map_workshop/common/resolved_flight.gd")
+const Flight = preload("res://presentation/map/chapters/common/resolved_flight.gd")
 
 static func resolve(source: PackedVector3Array, width: float,
 		foundation: float, deck_depth: float) -> Dictionary:

@@ -1,5 +1,5 @@
 extends RefCounted
-const Surface = preload("res://tools/map_workshop/common/resolved_route_surface.gd")
+const Surface = preload("res://presentation/map/chapters/common/resolved_route_surface.gd")
 static func run(fails: Array[String]) -> void:
 	var good: Dictionary = Surface.resolve(PackedVector3Array([Vector3(0,0,0),
 		Vector3(2,0,0),Vector3(8,3,0),Vector3(10,3,0),Vector3(10,3,4)]),2.5,-1,.65)
@@ -16,7 +16,7 @@ static func run(fails: Array[String]) -> void:
 	for point: Array in raw:
 		line.append(Vector3(MapLayoutCanonical.float_value(point[0]),MapLayoutCanonical.float_value(point[1]),MapLayoutCanonical.float_value(point[2])))
 	var plan: Dictionary = Surface.resolve(line,2.5,-1,.65)
-	var mesh: ArrayMesh = preload("res://tools/map_workshop/common/flight_mesh.gd").build(plan)
+	var mesh: ArrayMesh = preload("res://presentation/map/chapters/common/flight_mesh.gd").build(plan)
 	var faces: PackedVector3Array = mesh.get_faces()
 	var floors: Array[Dictionary] = []
 	for index: int in range(0,faces.size(),3):

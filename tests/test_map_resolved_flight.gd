@@ -1,8 +1,8 @@
 extends RefCounted
 @warning_ignore_start("unsafe_call_argument")
 
-const FlightMesh = preload("res://tools/map_workshop/common/flight_mesh.gd")
-const Flight = preload("res://tools/map_workshop/common/resolved_flight.gd")
+const FlightMesh = preload("res://presentation/map/chapters/common/flight_mesh.gd")
+const Flight = preload("res://presentation/map/chapters/common/resolved_flight.gd")
 
 static func run(fails: Array[String]) -> void:
 	var plan: Dictionary = Flight.resolve(Vector3(0, 0, 0), Vector3(10, 1.02, 0), 2.5, -2.0, 1.0)

@@ -1,6 +1,6 @@
 extends RefCounted
 ## Bounded landscape reserves carved from court paving and its solid foundation.
-const Occupancy = preload("res://tools/map_workshop/common/architectural_occupancy.gd")
+const Occupancy = preload("res://presentation/map/chapters/common/architectural_occupancy.gd")
 const F = preload("res://domain/map_layout/map_layout_canonical.gd")
 
 static func select(regions: Array[Dictionary], routes: Dictionary) -> Array[Rect2]:

@@ -2,9 +2,9 @@ extends SceneTree
 ## Native Act IV assembly; the compiled snapshot is the only route authority.
 const Inspector = preload("res://tools/map_workshop/act4/inspection.gd")
 const M = preload("res://presentation/map/landscape/mesh_tools.gd")
-const Surface = preload("res://tools/map_workshop/common/resolved_route_surface.gd")
-const Union = preload("res://tools/map_workshop/common/walking_surface_union.gd")
-const FlightMesh = preload("res://tools/map_workshop/common/flight_mesh.gd")
+const Surface = preload("res://presentation/map/chapters/common/resolved_route_surface.gd")
+const Union = preload("res://presentation/map/chapters/common/walking_surface_union.gd")
+const FlightMesh = preload("res://presentation/map/chapters/common/flight_mesh.gd")
 var world: Node3D
 var camera: Camera3D
 var walking: MeshInstance3D

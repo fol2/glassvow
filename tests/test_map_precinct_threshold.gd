@@ -1,5 +1,5 @@
 extends RefCounted
-const Threshold = preload("res://tools/map_workshop/common/precinct_threshold.gd")
+const Threshold = preload("res://presentation/map/chapters/common/precinct_threshold.gd")
 static func run(fails: Array[String]) -> void:
 	var routes: Dictionary = {"a":{"corridor_width":2.5,"centerline":[[-10,.9,-4],[10,.9,4]]}}
 	var result: Dictionary = Threshold.plan(routes,0,-20,20)

@@ -1,5 +1,5 @@
 extends RefCounted
-const Envelope = preload("res://tools/map_workshop/common/precinct_envelope.gd")
+const Envelope = preload("res://presentation/map/chapters/common/precinct_envelope.gd")
 static func run(fails: Array[String]) -> void:
 	var regions: Array[Dictionary] = [{"west":0.0,"east":10.0,"near":-10.0,"far":10.0},
 		{"west":10.0,"east":20.0,"near":-5.0,"far":5.0}]

@@ -2,7 +2,7 @@ extends RefCounted
 ## Sample actual foundation triangles against all roads, and conservatively
 ## compare each solid piece with model bounds rather than the whole tunnel box.
 const Probe = preload("res://tools/map_workshop/common/threshold_mesh_audit.gd")
-const Occupancy = preload("res://tools/map_workshop/common/architectural_occupancy.gd")
+const Occupancy = preload("res://presentation/map/chapters/common/architectural_occupancy.gd")
 static func run(foundations: Array[Node3D], walking: MeshInstance3D, routes: Dictionary, buildings: Array[Node3D]) -> Dictionary:
 	var report: Dictionary = Probe.run(foundations,walking,routes)
 	var failures: Array = report["failures"]

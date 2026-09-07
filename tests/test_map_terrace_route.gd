@@ -1,6 +1,6 @@
 extends RefCounted
 const Terrace = preload("res://presentation/map/map_terrace_route.gd")
-const Surface = preload("res://tools/map_workshop/common/resolved_route_surface.gd")
+const Surface = preload("res://presentation/map/chapters/common/resolved_route_surface.gd")
 static func run(fails: Array[String]) -> void:
 	var source: PackedVector3Array = [Vector3.ZERO,Vector3(2,0,0),Vector3(14,0,0),Vector3(14,0,5)]
 	for heights: Vector2 in [Vector2(0,2),Vector2(2,0),Vector2(-2,-2),Vector2(0,.9),Vector2(.9,0)]:

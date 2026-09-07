@@ -1,5 +1,5 @@
 extends RefCounted
-const Union = preload("res://tools/map_workshop/common/walking_surface_union.gd")
+const Union = preload("res://presentation/map/chapters/common/walking_surface_union.gd")
 static func run(fails: Array[String]) -> void:
 	var merged: Dictionary = Union.resolve([_square(0,0,0),_square(1,1,0)])
 	if absf(_area(merged)-7.0) > .0001:

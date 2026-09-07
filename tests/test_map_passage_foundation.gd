@@ -1,5 +1,5 @@
 extends RefCounted
-const Masonry = preload("res://tools/map_workshop/common/passage_masonry.gd")
+const Masonry = preload("res://presentation/map/chapters/common/passage_masonry.gd")
 static func run(fails: Array[String]) -> void:
 	var surface: SurfaceTool = SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)

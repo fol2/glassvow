@@ -1,6 +1,6 @@
 extends RefCounted
-const Assembly = preload("res://tools/map_workshop/common/court_stair_assembly.gd")
-const Surface = preload("res://tools/map_workshop/common/resolved_route_surface.gd")
+const Assembly = preload("res://presentation/map/chapters/common/court_stair_assembly.gd")
+const Surface = preload("res://presentation/map/chapters/common/resolved_route_surface.gd")
 static func run(fails: Array[String]) -> void:
 	for descending: bool in [false,true]:
 		var plans: Array[Dictionary] = []

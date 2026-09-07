@@ -2,9 +2,9 @@ extends SceneTree
 ## Private whole-place composition experiment. Reserves are not yet certified.
 const Inspector = preload("res://tools/map_workshop/act3/precinct_inspection.gd")
 const M = preload("res://presentation/map/landscape/mesh_tools.gd")
-const Envelope = preload("res://tools/map_workshop/common/precinct_envelope.gd")
-const CourtStairs = preload("res://tools/map_workshop/common/court_stair_assembly.gd")
-const Occupancy = preload("res://tools/map_workshop/common/architectural_occupancy.gd")
+const Envelope = preload("res://presentation/map/chapters/common/precinct_envelope.gd")
+const CourtStairs = preload("res://presentation/map/chapters/common/court_stair_assembly.gd")
+const Occupancy = preload("res://presentation/map/chapters/common/architectural_occupancy.gd")
 var buildings: Array[Node3D] = []
 var world: Node3D
 var stone: Material
@@ -82,7 +82,7 @@ func _run() -> void:
 		var line: PackedVector3Array = []
 		for point: Variant in edge["centerline"]:
 			line.append(_point(point))
-		var plan: Dictionary = preload("res://tools/map_workshop/common/resolved_route_surface.gd").resolve(line,2.5,-1,.65)
+		var plan: Dictionary = preload("res://presentation/map/chapters/common/resolved_route_surface.gd").resolve(line,2.5,-1,.65)
 		if plan.get("ok") != true:
 			push_error("Unresolved route "+id+": "+str(plan))
 			quit(1)
@@ -102,7 +102,7 @@ func _run() -> void:
 		var reserves: Dictionary = assembly["reserves"]
 		architecture_routes.merge(reserves)
 	var union_start: int = Time.get_ticks_usec()
-	var joined: Dictionary = preload("res://tools/map_workshop/common/walking_surface_union.gd").resolve(route_plans)
+	var joined: Dictionary = preload("res://presentation/map/chapters/common/walking_surface_union.gd").resolve(route_plans)
 	if joined.get("ok") != true:
 		push_error(str(joined))
 		quit(1)
@@ -110,12 +110,12 @@ func _run() -> void:
 	print("WALKING_UNION removed_m2=",joined["removed_overlap_m2"]," build_ms=",(Time.get_ticks_usec()-union_start)/1000.0)
 	var instance: MeshInstance3D = MeshInstance3D.new()
 	instance.name = "ResolvedWalking"
-	instance.mesh = preload("res://tools/map_workshop/common/flight_mesh.gd").build(joined)
+	instance.mesh = preload("res://presentation/map/chapters/common/flight_mesh.gd").build(joined)
 	instance.material_override = paving
 	world.add_child(instance)
 	var landscape_openings: Array[Rect2] = []
 	if "--landscape-openings" in OS.get_cmdline_user_args():
-		landscape_openings = preload("res://tools/map_workshop/common/court_landscape_openings.gd").select(envelopes,edges)
+		landscape_openings = preload("res://presentation/map/chapters/common/court_landscape_openings.gd").select(envelopes,edges)
 	print("LANDSCAPE_OPENINGS count=",landscape_openings.size())
 	var patches: Array[Dictionary] = []
 	var court_heights: Array[float] = []
@@ -128,7 +128,7 @@ func _run() -> void:
 		court_heights.append(height)
 		patches.append({"height":height,"outline":PackedVector2Array([
 			Vector2(x0,z0),Vector2(x1,z0),Vector2(x1,z1),Vector2(x0,z1)])})
-		for piece: Rect2 in preload("res://tools/map_workshop/common/court_landscape_openings.gd").subtract(Rect2(x0,z0,x1-x0,z1-z0),landscape_openings):
+		for piece: Rect2 in preload("res://presentation/map/chapters/common/court_landscape_openings.gd").subtract(Rect2(x0,z0,x1-x0,z1-z0),landscape_openings):
 			_box(Vector3(piece.get_center().x,-1.05,piece.get_center().y),Vector3(piece.size.x,2,piece.size.y),stone)
 	var plinth_material: StandardMaterial3D = M.material(Color("373441"),.7)
 	var terrain_reserves: Array[Rect2] = []
@@ -138,25 +138,25 @@ func _run() -> void:
 		terrain_reserves.append(reserve.grow(2.0))
 		terrain_bounds = terrain_bounds.merge(reserve)
 	var terrain_profile: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tools/map_workshop/act3/terrain-profile.json"))
-	terrain_profile = preload("res://tools/map_workshop/common/landscape_relief.gd").resolve_profile(terrain_profile,terrain_reserves)
+	terrain_profile = preload("res://presentation/map/chapters/common/landscape_relief.gd").resolve_profile(terrain_profile,terrain_reserves)
 	var terrain_contact_reserves: Array[Rect2] = []
 	for reserve: Rect2 in terrain_reserves:
-		terrain_contact_reserves.append_array(preload("res://tools/map_workshop/common/court_landscape_openings.gd").subtract(reserve,landscape_openings))
-	var terrain_mesh: MeshInstance3D = preload("res://tools/map_workshop/common/landscape_relief.gd").build(terrain_bounds.grow(32),terrain_profile,terrain_contact_reserves,M.material(Color("24232e"),.95))
+		terrain_contact_reserves.append_array(preload("res://presentation/map/chapters/common/court_landscape_openings.gd").subtract(reserve,landscape_openings))
+	var terrain_mesh: MeshInstance3D = preload("res://presentation/map/chapters/common/landscape_relief.gd").build(terrain_bounds.grow(32),terrain_profile,terrain_contact_reserves,M.material(Color("24232e"),.95))
 	world.add_child(terrain_mesh)
 	plinth_material.vertex_color_use_as_albedo = true
-	preload("res://tools/map_workshop/common/precinct_plinth.gd").build(world,envelopes,court_heights,plinth_material)
+	preload("res://presentation/map/chapters/common/precinct_plinth.gd").build(world,envelopes,court_heights,plinth_material)
 	var court_masks: Array[Dictionary] = route_plans.duplicate()
 	for opening: Rect2 in landscape_openings:
-		court_masks.append(preload("res://tools/map_workshop/common/court_landscape_openings.gd").mask(opening,-.1))
-	var court: Dictionary = preload("res://tools/map_workshop/common/court_surface.gd").resolve(patches,court_masks)
+		court_masks.append(preload("res://presentation/map/chapters/common/court_landscape_openings.gd").mask(opening,-.1))
+	var court: Dictionary = preload("res://presentation/map/chapters/common/court_surface.gd").resolve(patches,court_masks)
 	if court.get("ok") != true:
 		push_error(str(court))
 		quit(1)
 		return
 	var court_mesh: MeshInstance3D = MeshInstance3D.new()
 	court_mesh.name = "CourtSurface"
-	court_mesh.mesh = preload("res://tools/map_workshop/common/flight_mesh.gd").build(court)
+	court_mesh.mesh = preload("res://presentation/map/chapters/common/flight_mesh.gd").build(court)
 	court_mesh.material_override = stone
 	world.add_child(court_mesh)
 	print("COURT_SURFACE triangles=",court["tops"].size())
@@ -304,7 +304,7 @@ func _run() -> void:
 	var threshold_roots: Array[Node3D] = []
 	for threshold_x: float in divisions:
 		var local_bounds: Vector2 = Envelope.at_x(envelopes,threshold_x)
-		var threshold: Dictionary = preload("res://tools/map_workshop/common/precinct_threshold.gd").plan(edges,threshold_x,local_bounds.x,local_bounds.y)
+		var threshold: Dictionary = preload("res://presentation/map/chapters/common/precinct_threshold.gd").plan(edges,threshold_x,local_bounds.x,local_bounds.y)
 		if not stair_groups.is_empty():
 			threshold = CourtStairs.threshold(stair_groups,threshold_x,local_bounds.x,local_bounds.y)
 		if threshold.get("ok") != true:
@@ -315,7 +315,7 @@ func _run() -> void:
 		if not stair_groups.is_empty():
 			threshold_roots.append(CourtStairs.build_retaining(world,threshold,stone,trim_material))
 		else:
-			threshold_roots.append(preload("res://tools/map_workshop/common/precinct_threshold.gd").build(world,threshold,stone,trim_material,0.0))
+			threshold_roots.append(preload("res://presentation/map/chapters/common/precinct_threshold.gd").build(world,threshold,stone,trim_material,0.0))
 		thresholds.append(threshold)
 	var threshold_file: FileAccess = FileAccess.open("/tmp/act3-thresholds.json",FileAccess.WRITE)
 	threshold_file.store_string(JSON.stringify(thresholds,"\t"))
@@ -338,7 +338,7 @@ func _run() -> void:
 	for pair: Array in _passage_pairs(edges):
 		var upper: Dictionary = edges[pair[0]]
 		var lower: Dictionary = edges[pair[1]]
-		masonry.append(preload("res://tools/map_workshop/common/passage_masonry.gd").build(world,upper,lower,stone,true))
+		masonry.append(preload("res://presentation/map/chapters/common/passage_masonry.gd").build(world,upper,lower,stone,true))
 	if "--audit-obstruct-foundation" in OS.get_cmdline_user_args():
 		var at: Vector3 = _point(anchors[sample["current"]])
 		M.box(masonry[0],at+Vector3(0,.6,0),Vector3(4,.2,4),stone,"AuditOnlyFoundationObstruction")
@@ -356,7 +356,7 @@ func _run() -> void:
 		for passage_pair: Array in _passage_pairs(edges):
 			var passage_mesh: MeshInstance3D = MeshInstance3D.new()
 			var passage_plan: Dictionary = plans_by_id[passage_pair[0]]
-			passage_mesh.mesh = preload("res://tools/map_workshop/common/flight_mesh.gd").build(passage_plan)
+			passage_mesh.mesh = preload("res://presentation/map/chapters/common/flight_mesh.gd").build(passage_plan)
 			passage_mesh.visible = false
 			world.add_child(passage_mesh)
 			var passage_roots: Array[Node3D] = [passage_mesh,masonry[passage_index]]
@@ -561,7 +561,7 @@ func _passage_pairs(edges: Dictionary) -> Array[Array]:
 
 func _stone_material(colour: Color, slab: Vector2, coverage: float, strength: float) -> ShaderMaterial:
 	var material: ShaderMaterial = ShaderMaterial.new()
-	material.shader = load("res://tools/map_workshop/common/precinct_stone.gdshader")
+	material.shader = load("res://presentation/map/chapters/common/precinct_stone.gdshader")
 	if "--diagnostic-unlit" in OS.get_cmdline_user_args():
 		material.shader = Shader.new()
 		material.shader.code = "shader_type spatial; render_mode unshaded; void fragment() { ALBEDO = abs((INV_VIEW_MATRIX * vec4(NORMAL,0.0)).xyz)*0.7+vec3(0.1); }"

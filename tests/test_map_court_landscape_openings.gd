@@ -1,6 +1,6 @@
 extends RefCounted
-const Openings = preload("res://tools/map_workshop/common/court_landscape_openings.gd")
-const Envelope = preload("res://tools/map_workshop/common/precinct_envelope.gd")
+const Openings = preload("res://presentation/map/chapters/common/court_landscape_openings.gd")
+const Envelope = preload("res://presentation/map/chapters/common/precinct_envelope.gd")
 static func run(fails: Array[String]) -> void:
 	var holes: Array[Rect2] = [Rect2(3,2,4,6)]
 	var pieces: Array[Rect2] = Openings.subtract(Rect2(0,0,10,10),holes)

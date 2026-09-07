@@ -1,5 +1,5 @@
 extends RefCounted
-const Court = preload("res://tools/map_workshop/common/court_surface.gd")
+const Court = preload("res://presentation/map/chapters/common/court_surface.gd")
 static func run(fails: Array[String]) -> void:
 	var patches: Array[Dictionary] = [{"height":2.0,"outline":PackedVector2Array([
 		Vector2(0,0),Vector2(10,0),Vector2(10,10),Vector2(0,10)])}]

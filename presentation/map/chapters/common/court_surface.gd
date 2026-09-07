@@ -1,7 +1,7 @@
 extends RefCounted
 ## Court paving excludes every route footprint, including lower passage surfaces.
 ## The walking route owns those areas; a terrace can never cover a stair tread.
-const Union = preload("res://tools/map_workshop/common/walking_surface_union.gd")
+const Union = preload("res://presentation/map/chapters/common/walking_surface_union.gd")
 static func resolve(patches: Array[Dictionary], routes: Array[Dictionary]) -> Dictionary:
 	var masks: Array[PackedVector2Array] = []
 	var mask_heights: Array[float] = []

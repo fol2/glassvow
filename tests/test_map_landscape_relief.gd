@@ -1,5 +1,5 @@
 extends RefCounted
-const Relief = preload("res://tools/map_workshop/common/landscape_relief.gd")
+const Relief = preload("res://presentation/map/chapters/common/landscape_relief.gd")
 static func run(fails: Array[String]) -> void:
 	var profile: Dictionary = {"base_height":-3.0,"contact_height":-.1,"shoulder_width":10.0,
 		"landforms":[{"x":30.0,"z":0.0,"radius_x":20.0,"radius_z":20.0,"height":8.0}]}
