@@ -24,7 +24,8 @@ func build_async(data: Dictionary) -> void:
 	var sample: Dictionary = _prepare_terrain(data)
 	var city: CityTerrain = terrain as CityTerrain
 	await city.build_async(sample,map_bounds,cache)
-	_finish_build(started)
+	await get_tree().process_frame
+	await _finish_build(started,true)
 
 func _prepare_terrain(data: Dictionary) -> Dictionary:
 	terrain=CityTerrain.new()
@@ -32,7 +33,7 @@ func _prepare_terrain(data: Dictionary) -> Dictionary:
 	return {"anchors":data["node_anchors"],"edges":data["edges"],"nodes":source_nodes,
 		"layout_digest":data.get("layout_digest","")}
 
-func _finish_build(started: int) -> void:
+func _finish_build(started: int, progressive: bool = false) -> void:
 	if not terrain.failure.is_empty():
 		failure=terrain.failure
 		return
@@ -44,6 +45,7 @@ func _finish_build(started: int) -> void:
 		preload("res://presentation/map/chapters/act2/cache.gd").restore_architecture(self,stored)
 	else:
 		for site: Dictionary in city.causeways.ruin_plan.sites:
+			if progressive: await get_tree().process_frame
 			var item: Node3D
 			var ordinal: int = site["ordinal"]
 			var kind: String = site["kind"]
@@ -65,6 +67,7 @@ func _finish_build(started: int) -> void:
 			item.position=site["centre"]
 			item.rotation.y=site["yaw"]
 			_record("ruin-%d"%ordinal,"city-"+kind+str(ordinal),item,ordinal==0)
+		if progressive: await get_tree().process_frame
 		var scenery: Node3D = preload("res://presentation/map/chapters/act2/scenery.gd").new()
 		add_child(scenery)
 		scenery.build(city.causeways)
@@ -82,6 +85,7 @@ func _finish_build(started: int) -> void:
 			_record("scenery-%d"%index,"city-"+variant,mesh_item,false,"res://presentation/map/chapters/act2/scenery_assets.gd")
 			index+=1
 	timings_ms["architecture"]=Time.get_ticks_msec()-started
+	if progressive: await get_tree().process_frame
 	var water: MeshInstance3D = preload("res://presentation/map/chapters/water/surface.gd").new()
 	var plane: PlaneMesh = PlaneMesh.new()
 	plane.size=map_bounds.size+Vector2(180,180)
