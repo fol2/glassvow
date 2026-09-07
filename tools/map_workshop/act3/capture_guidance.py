@@ -7,7 +7,7 @@ import shutil
 import subprocess
 import time
 ROOT = Path(__file__).resolve().parents[3]
-OUT = ROOT / 'docs/map/studies/act3-step3/precinct-v3'
+OUT = ROOT / 'docs/map/studies/act3-step3/precinct-v4'
 SHAPES = ['1458x820', '1180x820', '844x390']
 def run(command, name):
     started = time.monotonic()

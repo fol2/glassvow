@@ -116,6 +116,8 @@ func _open_group(value: Variant) -> void:
 
 func focus_journey() -> void:
 	whole = false
+	if detail != null:
+		detail.text = "  Select a next waystone to reveal its approach · Travel previews your choice"
 	var points: Array[Vector3] = [anchors[data["current"]]]
 	for id: String in data["reachable"]:
 		points.append(anchors[id])
@@ -510,3 +512,8 @@ func _style_target(button: Button) -> void:
 func _select(id: String,type: String) -> void:
 	super._select(id,type)
 	if guidance != null: guidance.show_state(id,whole,markers_visible)
+
+func focus_whole() -> void:
+	super.focus_whole()
+	if detail != null:
+		detail.text = "  Gold: travelled · Lilac: available next · Grey: later · Select a group to zoom"

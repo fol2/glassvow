@@ -48,3 +48,23 @@ Use `summarise_metal_trace.py` to reduce an exported `metal-gpu-intervals` table
 one Godot PID. It unions overlapping GPU intervals per complete frame, excluding
 other processes. Raw traces can contain environment metadata and stay outside
 Git; publish only the filtered timing summary and command provenance.
+
+### Route guidance and Act III surface finish
+
+`route_guidance.gd` is an opt-in, read-only presentation layer. Its input is the
+compiled snapshot (edges, current node, reachable nodes and history), the actual
+walking mesh and a camera. It caches height samples using the precise threshold
+floor audit, draws only the selected available edge in the close view, and
+projects the full graph as an overview overlay. It never advances game state.
+The visual trace sits 0.20 m above the sampled floor so interpolation cannot cut
+through a 0.18 m stair riser. It remains depth-tested against architecture.
+`selection()` also resolves the exact edge used by the precinct Travel preview.
+Do not infer reachability from geometry or from a selected future node.
+
+`presentation/stage/obsidian_finish.gd` owns the shared Act III material recipe.
+The lit map and painted combat perspective use different renderers; colour,
+quiet slab scale, restricted joints and finish authority are shared. Combat's
+original ledge retains alpha/placement ownership. Its material applies only to
+Act III ledges, leaving other chapters unchanged. `verify_ground_alpha.gd`
+performs the native coverage comparison, and `capture_guidance.py` exercises the
+three-seed, three-shape guidance matrix and same-scene combat before/after pairs.
