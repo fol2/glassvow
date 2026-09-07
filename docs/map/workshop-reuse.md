@@ -1,6 +1,6 @@
 # Native map workshop: reusable technology and art decisions
 
-Act I and Act II have owner approval at Step 3. Preserve their approved captures
+Act I, Act II and Act III have owner approval at Step 3. Preserve their approved captures
 and source compatibility entry points. This is a reusable study toolkit, not a
 claim of completed campaign integration or all-seed qualification.
 
@@ -47,12 +47,15 @@ rendering, input or media playback; observe the native result and review page.
 
 ## Next chapter
 
-Act III uses `concepts/act3-obsidian-court-v5.png` and the actual combat art as
-its visual authority: an intact obsidian precinct, recessed audience court,
-raised sovereign hall, sharp Gothic forms and restrained magenta light.
-Water, aquatic plants and Act II's broken condition are not default ingredients.
-Act IV follows Act III approval. Step 4 starts only after all four Step 3 approvals.
+Act III Step 3 was approved on 7 September after precinct-v4 delivery, with optional
+later polish. Act IV now uses `concepts/act4-grand-empty-v6.png` and its actual
+combat art: grand, empty, sad and dark; structural relief; a fixed five-stop
+journey towards the small unsettling hearth. Shared modules support construction
+and verification; the obsidian precinct composition is not an Act IV template.
+The active plan is `/PLAN.md`. Step 4 remains later, after Act IV Step 3 approval.
 
-Consolidation proof: the focused 11-script gate passed, followed by the native
-`shared-kit-check` phone capture with full route geometry and input checks.
-The accepted Act II media remains the scenery-v2 packet.
+The Act III extension also contributes opt-in route guidance and exact selected
+Travel through `common/route_guidance.gd`, plus a chapter-owned ObsidianFinish
+recipe. Canvas shaders must preserve actual authored modulation; test real
+layout opacity values rather than only 1.0. Complete core 102 and parser 431 passed
+at the Act III delivery; these receipts do not qualify new Act IV changes.

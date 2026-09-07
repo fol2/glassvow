@@ -310,11 +310,12 @@ active product contract rather than hiding it in implementation.
 
 ## Next action
 
-**Active objective: Act III Step 3. Act II Step 3 is approved.** Build the intact obsidian court from the approved Act III v5 concept and actual generated routes.
-Inspect intact architecture, quiet black-violet slabs, concentrated magenta light, supported
-approaches, scale and reference screen shapes before presenting the chapter page.
-Wait for Act III owner approval before proceeding to Act IV. All four
-chapters must pass Step 3 before the saved Step 4 work resumes.
+**Active objective: Act IV Step 3.** James approved Act III Step 3 on 7 September,
+with optional later polish. Act I–III now have Step 3 approval. Implement the
+approved Act IV grand-empty v6 direction through its fixed five-stop journey.
+The active task capsule and delivery forecast are in `/PLAN.md`. Complete the
+native chapter and its evidence before requesting chapter review. Step 4 remains
+later, after all four chapter approvals.
 
 ### Preserved earlier sequence — superseded
 

@@ -1,0 +1,249 @@
+{
+	"act": 4,
+	"anchors": {
+		"n0": [
+			-36.0,
+			0.0,
+			0.0
+		],
+		"n1": [
+			-15.4285717010498,
+			0.0,
+			0.0
+		],
+		"n2": [
+			-0.000000476837158203125,
+			0.0,
+			0.0
+		],
+		"n3": [
+			15.4285707473755,
+			0.0,
+			0.0
+		],
+		"n4": [
+			36.0,
+			0.0,
+			0.0
+		]
+	},
+	"asset_profile_digest": "f3f3e8659193a101439a3eb7b1548a6406e96c67fde6b73285010a18401779d9",
+	"compiler_hard_pass": true,
+	"current": "n1",
+	"edges": {
+		"2:n0>2:n1": {
+			"centerline": [
+				[
+					-36.0,
+					0.0,
+					0.0
+				],
+				[
+					-35.370002746582,
+					0.0,
+					0.0
+				],
+				[
+					-16.0585708618164,
+					0.0,
+					0.0
+				],
+				[
+					-15.4285717010498,
+					0.0,
+					0.0
+				]
+			],
+			"corridor_width": 2.5,
+			"from": "n0",
+			"to": "n1"
+		},
+		"2:n1>2:n2": {
+			"centerline": [
+				[
+					-15.4285717010498,
+					0.0,
+					0.0
+				],
+				[
+					-14.7985715866089,
+					0.0,
+					0.0
+				],
+				[
+					-0.630000472068787,
+					0.0,
+					0.0
+				],
+				[
+					-0.000000476837158203125,
+					0.0,
+					0.0
+				]
+			],
+			"corridor_width": 2.5,
+			"from": "n1",
+			"to": "n2"
+		},
+		"2:n2>2:n3": {
+			"centerline": [
+				[
+					-0.000000476837158203125,
+					0.0,
+					0.0
+				],
+				[
+					0.62999951839447,
+					0.0,
+					0.0
+				],
+				[
+					14.7985706329346,
+					0.0,
+					0.0
+				],
+				[
+					15.4285707473755,
+					0.0,
+					0.0
+				]
+			],
+			"corridor_width": 2.5,
+			"from": "n2",
+			"to": "n3"
+		},
+		"2:n3>2:n4": {
+			"centerline": [
+				[
+					15.4285707473755,
+					0.0,
+					0.0
+				],
+				[
+					16.0585708618164,
+					0.0,
+					0.0
+				],
+				[
+					35.3699989318848,
+					0.0,
+					0.0
+				],
+				[
+					36.0,
+					0.0,
+					0.0
+				]
+			],
+			"corridor_width": 2.5,
+			"from": "n3",
+			"to": "n4"
+		}
+	},
+	"hero_placements": {
+		"terminus": {
+			"asset_id": "rose-gate",
+			"profile_id": "rose-gate",
+			"transform": {
+				"origin": [
+					43.0,
+					0.0,
+					0.0
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"yaw_radians": 0.0
+			}
+		}
+	},
+	"hero_sources": {
+		"rose-gate": {
+			"path": "res://assets/art/map-atelier/sanctuary-painted.png",
+			"sha256": "2719d72954813e95b24e0196c4e3119b4f40c1ec06f1f33eb324f87eb123305c"
+		}
+	},
+	"history": [
+		"n0",
+		"n1"
+	],
+	"input_digest": "35048613f0972ad75a496cdd9ae3df2741674156cc08f899c7f4510678147424",
+	"layout_digest": "fd00533475aa175f49e3912efe1e4f99116d593801b19ff10d4776013411fb2c",
+	"nodes": [
+		{
+			"col": 0,
+			"enemies": [
+				"unopenedSelf"
+			],
+			"id": "n0",
+			"jx": 0.0,
+			"jy": 0.0,
+			"next": [
+				"n1"
+			],
+			"row": 0,
+			"type": "monster"
+		},
+		{
+			"col": 0,
+			"enemies": [
+				"unobsidianSelf",
+				"unwalkedSelf"
+			],
+			"id": "n1",
+			"jx": 0.0,
+			"jy": 0.0,
+			"next": [
+				"n2"
+			],
+			"row": 1,
+			"type": "monster"
+		},
+		{
+			"col": 0,
+			"enemies": [
+				"uncrossedSelf",
+				"unsunkSelf"
+			],
+			"id": "n2",
+			"jx": 0.0,
+			"jy": 0.0,
+			"next": [
+				"n3"
+			],
+			"row": 2,
+			"type": "elite"
+		},
+		{
+			"col": 0,
+			"id": "n3",
+			"jx": 0.0,
+			"jy": 0.0,
+			"next": [
+				"n4"
+			],
+			"row": 3,
+			"type": "rest"
+		},
+		{
+			"col": 0,
+			"enemies": [
+				"eternalKeeper"
+			],
+			"id": "n4",
+			"jx": 0.0,
+			"jy": 0.0,
+			"next": [],
+			"row": 4,
+			"type": "boss"
+		}
+	],
+	"quality_registry_digest": "790ee03acc75abf9fc87e44c4ba0791db096a544b7af0562536813974d778dc5",
+	"reachable": [
+		"n2"
+	],
+	"seed": 717,
+	"spatial_profile": {}
+}
