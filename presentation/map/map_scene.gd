@@ -107,6 +107,8 @@ func _update_horizon() -> void:
 
 
 func _on_visibility_changed() -> void:
+	if _landscape is JourneyLandscape:
+		_landscape.set_ambient_motion(is_visible_in_tree() and not Preferences.active.reduce_motion)
 	if not is_visible_in_tree():
 		_stage.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	else:
@@ -279,6 +281,7 @@ func _deal_act(_region: MapRegions) -> void:
 	_key.light_color = MapRegions.LAND_KEY[_act]
 	var setting: WorldEnvironment = _world.get_node("MapEnvironment") as WorldEnvironment
 	setting.environment.tonemap_exposure=1.0
+	setting.environment.background_mode=Environment.BG_COLOR
 	setting.environment.ambient_light_color = MapRegions.LAND_AMBIENT[_act]
 	if _act == 0:
 		_key.rotation_degrees = Vector3(-52, -32, 0)
@@ -312,6 +315,19 @@ func _deal_act(_region: MapRegions) -> void:
 		setting.environment.ambient_light_color=Color("b9b5d2")
 		setting.environment.ambient_light_energy=.20
 		setting.environment.tonemap_exposure=.70
+		setting.environment.fog_enabled=false
+	elif _act==3:
+		_key.rotation_degrees=Vector3(-48,-30,0)
+		_key.light_color=Color("bfc5dc")
+		_key.light_energy=1.2
+		_key.shadow_opacity=1.0
+		_key.directional_shadow_max_distance=210
+		setting.environment.background_mode=Environment.BG_CANVAS
+		setting.environment.background_canvas_max_layer=-1
+		setting.environment.background_color=Color("111319")
+		setting.environment.ambient_light_color=Color("b1b9ce")
+		setting.environment.ambient_light_energy=.24
+		setting.environment.tonemap_mode=Environment.TONE_MAPPER_FILMIC
 		setting.environment.fog_enabled=false
 	_salt_dirty = false
 	_bind_asset_geometry()
@@ -468,6 +484,7 @@ func _screen_to_world(delta_px: Vector2) -> Vector2:
 func _process(delta: float) -> void:
 	if _landscape is JourneyLandscape and _landscape.terrain != null and _motion_setting != int(Preferences.active.reduce_motion):
 		_motion_setting = int(Preferences.active.reduce_motion)
+		_landscape.set_ambient_motion(is_visible_in_tree() and not Preferences.active.reduce_motion)
 		set_live(_live)
 		var stream: Node = _landscape.terrain.get_node_or_null("Stream")
 		if stream != null:
@@ -611,6 +628,9 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary, node_records: A
 		courts.source_nodes=node_records
 		courts.source_quality=quality
 		_landscape=courts
+	if _act==3 and JourneyRegistry.enabled(quality):
+		_landscape.free()
+		_landscape=preload("res://presentation/map/chapters/act4/landscape.gd").new()
 	_world.add_child(_landscape)
 	_landscape.prepare(data, _landscape_assets, _scatter_salt)
 	if _landscape is JourneyLandscape:

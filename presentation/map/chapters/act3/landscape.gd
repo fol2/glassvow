@@ -90,3 +90,6 @@ func realise(source: MapLayoutResult) -> Dictionary:
 
 func capture_chapter() -> Dictionary:
 	return preload("res://presentation/map/chapters/act3/cache.gd").capture(self)
+
+func set_ambient_motion(enabled: bool) -> void:
+	if halo!=null: halo.set_process(enabled)

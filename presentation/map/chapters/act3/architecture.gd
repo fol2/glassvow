@@ -21,7 +21,7 @@ func build(courts: Node3D,boss: Vector3) -> void:
 	var landscape_openings: Array[Rect2] = []
 	# Hall front faces the sovereign forecourt; the terminal node stays generated.
 	var hall: Node3D = _asset("obsidian-great-hall")
-	hall.position=boss+Vector3(18,0,0)
+	hall.position=boss+Vector3(20,0,0)
 	hall.rotation.y=-PI*.5
 	var hall_box: AABB = Occupancy.bounds(hall)
 	_box(Vector3(hall_box.get_center().x,boss.y*.5-.5,hall_box.get_center().z),

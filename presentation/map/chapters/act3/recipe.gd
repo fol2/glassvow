@@ -1,6 +1,6 @@
 extends RefCounted
 ## The approved four court levels bind to the live graph and measured hall.
-const VERSION: String = "obsidian-court-journey-v2"
+const VERSION: String = "obsidian-court-journey-v4"
 const Cache = preload("res://presentation/map/map_journey_cache.gd")
 const Kit = preload("res://presentation/map/chapters/act3/kit.gd")
 const Spatial = preload("res://presentation/map/map_spatial_profile.gd")
@@ -20,9 +20,17 @@ func build(nodes: Array, edges: Array, base: Dictionary) -> Dictionary:
 	if configured.get("ok")!=true: return configured
 	var spatial: Dictionary = quality["spatial_profile"]
 	var approved: Dictionary = preload("res://presentation/map/chapters/act3/spatial-profile.json").data
+	var targets: Array[int] = [3,9,12]
+	var assignments: Dictionary = spatial["lane_assignments"]
+	var boundaries: Dictionary = preload("res://presentation/map/chapters/common/terrace_boundaries.gd").resolve(nodes,edges,assignments,targets,15)
+	if boundaries.get("ok")!=true: return boundaries
+	var cuts: Array = boundaries["cuts"]
+	var representatives: Array[int] = [0,4,10,13]
+	var level: int = 0
 	for index: int in range(spatial["rows"].size()):
-		spatial["rows"][index]["height_m"]=approved["rows"][index]["height_m"]
-		spatial["rows"][index]["region"]=approved["rows"][index]["region"]
+		if level<cuts.size() and index>int(MapLayoutCanonical.float_value(cuts[level])): level+=1
+		spatial["rows"][index]["height_m"]=approved["rows"][representatives[level]]["height_m"]
+		spatial["rows"][index]["region"]=approved["rows"][representatives[level]]["region"]
 	spatial["stair_version"]="transverse-court-v1"
 	# Court stairs retain their approved physical grade; shared spacing remains conservative.
 	spatial["passage"]["maximum_grade"]=approved["passage"]["maximum_grade"]
@@ -39,7 +47,7 @@ func build(nodes: Array, edges: Array, base: Dictionary) -> Dictionary:
 	for node: Dictionary in nodes:
 		if str(node["type"])=="boss": boss=node
 	if boss.is_empty(): return {"ok":false,"reason":"The court requires its generated boss"}
-	var at: Vector3 = Spatial.anchor(boss,quality)+Vector3(18,0,0)
+	var at: Vector3 = Spatial.anchor(boss,quality)+Vector3(20,0,0)
 	var registry: MapAssetProfiles = measured["registry"]
 	var profile: Dictionary = measured["profile"]
 	var polygon: Array = []

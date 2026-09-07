@@ -125,3 +125,6 @@ func select_route(from_id: String, to_id: String) -> void:
 		journey.clear_route()
 		return
 	journey.show_route(from_id,to_id,resolved_anchor(v3(terrain.anchors[from_id])),resolved_anchor(v3(terrain.anchors[to_id])))
+
+func set_ambient_motion(_enabled: bool) -> void:
+	pass

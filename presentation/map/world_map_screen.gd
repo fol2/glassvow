@@ -461,7 +461,7 @@ func _bind_compiled_layout() -> void:
 		return _fail_compiled_layout(binding_error)
 	var assets: Dictionary = _map_scene.layout_asset_bundle()
 	var heroes: Dictionary = _map_scene.layout_hero_contract()
-	if _layout_quality_override.is_empty() and _act in [0,1,2] and _journey_recipe.get("ok") == true:
+	if _layout_quality_override.is_empty() and _act in [0,1,2,3] and _journey_recipe.get("ok") == true:
 		assets = _journey_recipe["assets"]
 		heroes = _journey_recipe["heroes"]
 		_map_scene.journey_cache = _journey_recipe.get("cache")
@@ -585,7 +585,7 @@ func _quality_registry() -> Dictionary:
 	var value: Variant = _MAP_QUALITY.data
 	if not value is Dictionary: return {}
 	var quality: Dictionary = value
-	if _act not in [0,1,2] or _run == null: return quality
+	if _act not in [0,1,2,3] or _run == null: return quality
 	var bound: Dictionary = _bind_graph(_run.act)
 	if bound.get("ok") != true: return {}
 	var key: String = MapLayoutCanonical.digest(bound)
@@ -593,7 +593,7 @@ func _quality_registry() -> Dictionary:
 		_journey_recipe_key = key
 		var nodes: Array = bound["nodes"]
 		var edges: Array = bound["edges"]
-		_journey_recipe = preload("res://presentation/map/map_journey_recipe.gd").build(nodes,edges,quality) if _act==0 else preload("res://presentation/map/chapters/act2/recipe.gd").new().build(nodes,edges,quality) if _act==1 else preload("res://presentation/map/chapters/act3/recipe.gd").new().build(nodes,edges,quality)
+		_journey_recipe = preload("res://presentation/map/map_journey_recipe.gd").build(nodes,edges,quality) if _act==0 else preload("res://presentation/map/chapters/act2/recipe.gd").new().build(nodes,edges,quality) if _act==1 else preload("res://presentation/map/chapters/act3/recipe.gd").new().build(nodes,edges,quality) if _act==2 else preload("res://presentation/map/chapters/act4/recipe.gd").new().build(nodes,edges,quality)
 	return _journey_recipe["quality"] if _journey_recipe.get("ok") == true else {}
 
 

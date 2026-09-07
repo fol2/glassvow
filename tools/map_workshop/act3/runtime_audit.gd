@@ -67,9 +67,10 @@ static func measure(landscape: Node3D) -> Dictionary:
 						# Ignore the walking face and a single adjacent 17 cm riser.
 						if is_finite(y) and y>floor_y+.18: overhead=minf(overhead,y)
 					if is_finite(overhead): minimum=minf(minimum,overhead-floor_y)
-					if overhead-floor_y<2.45:
+					# Sub-micrometre binary32 subtraction error is not a headroom loss.
+					if overhead-floor_y<2.45-.000001:
 						obstructions+=1
 						if examples.size()<40: examples.append({"edge":id,"reason":"solid in walking headroom","at":[at.x,at.y,at.z],"clearance":overhead-floor_y})
 	return {"ok":samples>0 and missing==0 and obstructions==0 and contact_errors==0,"samples":samples,
-		"floor_edge_tolerance_m":.00025,"missing":missing,"obstructions":obstructions,"contact_errors":contact_errors,"minimum_headroom":minimum,
+		"headroom_arithmetic_tolerance_m":.000001,"floor_edge_tolerance_m":.00025,"missing":missing,"obstructions":obstructions,"contact_errors":contact_errors,"minimum_headroom":minimum,
 		"examples":examples,"scope":"Actual walking/solid triangles, 0.25 m stations, seven full-width lanes, 2.45 m headroom"}

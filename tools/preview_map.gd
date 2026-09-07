@@ -141,6 +141,15 @@ func _run() -> void:
 			var canary: Dictionary = preload("res://tools/map_workshop/act3/runtime_audit.gd").negative_canary(screen._map_scene._landscape)
 			print("MAP_COURT_CANARY ",JSON.stringify(canary))
 			if not canary["ok"]: _chapter_failures.append("Court audit failed to detect injected obstruction")
+	elif _chapter_audit and act==3:
+		var void_landscape: Node3D = screen._map_scene._landscape
+		var roots: Array[Node3D] = void_landscape.structures
+		var walking: MeshInstance3D = void_landscape.terrain.walking
+		var routes: Dictionary = void_landscape.terrain.source_edges
+		var support: Dictionary = preload("res://tools/map_workshop/common/threshold_mesh_audit.gd").run(roots,walking,routes,false)
+		var feet: Dictionary = preload("res://tools/map_workshop/act4/audit.gd").feet(roots,walking)
+		print("MAP_VOID_AUDIT ",JSON.stringify({"support":support,"feet":feet}))
+		if not support["ok"] or not feet["ok"]: _chapter_failures.append("Void support qualification failed")
 	elif _chapter_audit:
 		if act!=1:
 			push_error("Chapter geometry audit currently supports the drowned city")

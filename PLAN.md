@@ -1011,3 +1011,36 @@ The native obstruction canary detects ten blocked probes after inserting a real
 mesh above a generated endpoint. The phone input exercise passes wheel, drag,
 keyboard, inspection isolation, travel start, single arrival and idle rendering.
 Evidence: act3-input-canary717.*.
+
+### Void integration and generated court boundaries — 7 September, 21:52 UTC
+
+Act IV now runs through the production map screen and shared navigation. The
+approved three models, shaders, sparse instanced embers and three chapter echoes
+are runtime-owned. Its five nodes/four edges still come from the game binding.
+The high window moves one metre away from the arrival node to satisfy shipping
+phone ink clearance; its supporting platform extends accordingly. The shared
+framing module now includes an entry hero, preventing the tall window from being
+cropped in the overview. Native overview and phone travel images were inspected.
+Actual support passes 2,240 probes; all 189 lowest model vertices contact the
+walking mesh. The normal input/travel exercise passes every reported field.
+Cold first native binding was 416 ms, source-cache rebuild 349 ms on this M1 Max;
+these are preview measurements, not the governed Continue/device gate.
+
+Court seed 4 exposed a terminal-window silhouette overlap. Moving the hall from
+18 to 20 m beside the boss resolves it without moving game nodes. Native seed 4
+passes 48,307 full-width probes. Its nominal 2.45 m subtraction produces
+2.449999988 m in binary32; the audit explicitly permits one micrometre arithmetic
+error, separately from its stated floor boundary tolerance. Seed 14 crosses at
+the old row 9 height boundary. A shared bounded graph-cut resolver selects the
+nearest crossing-free cuts while retaining all four court levels and every game
+edge. The focused fixture requires only row 9 to move to row 8; source seed 14
+then passes on its first candidate. Native seed 14 remains next.
+
+Reduced-motion handling reaches the court halo and both void shaders, including
+visibility changes. Three focused motion/framing/residency tests and the new
+boundary regression pass. Evidence: void-framed717.*, void-body-input717.*,
+court-qualified-final4.*, court-safe-cut14.*, chapter-motion-tests.log,
+court-boundary-tests.log. An opening timing capture overlapped a headless source
+compile and is not used as performance evidence. Full chapter reference matrices,
+actual campaign transitions, loading, hardware, final core/review/CI remain open;
+overall remains 61%. Continue, without a milestone stop.

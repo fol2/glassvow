@@ -23,7 +23,8 @@ static func finish(source: MapLayoutResult, landscape: Node3D,version: String,zo
 		var size: Vector3 = pose.basis.get_scale()
 		var row: Dictionary = {"asset_id":measured["asset_id"],"profile_id":measured["asset_id"],"transform":{
 			"origin":[pose.origin.x,pose.origin.y,pose.origin.z],"scale":[size.x,size.y,size.z],"yaw_radians":pose.basis.get_euler().y}}
-		if measured["terminal"]: data["hero_placements"]["terminus"]=row
+		if measured.has("role"): data["hero_placements"][measured["role"]]=row
+		elif measured["terminal"]: data["hero_placements"]["terminus"]=row
 		else:
 			row["semantic_zone"]=zone
 			data["scenery_instances"][measured["id"]]=row
