@@ -1,0 +1,27 @@
+{
+  "status":"RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "rows":320,"cells":10,"runs_per_cell":32,
+  "counts":{"win":210,"loss":110,"stall":0,"error":0},
+  "native_diagnostic_failures":0,
+  "freeze_sha256":"5861c1f6d9a3b7d696336706238596232bd143e3a3a024c816a3b56a4cb5d5760",
+  "content_sha256":"3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "seeds":[36010000,36010031],"seed_clusters":32,
+  "route_order":["smolder","hand","ember","fervor","balanced_random"],
+  "vow_order":[0,5],
+  "wins_out_of_32":[[28,23],[25,20],[24,14],[26,14],[23,13]],
+  "primary":[
+    {"id":"ash-balanced-v0","outcomes":"WWWLWLWLWWWLLWLWWWWWLWWLWWLWWWWLW","raw_sha256":"4ce1c00de572f042cc54076a889d29e7bf9f6d2cf08e6f8cfa612b6f5d66d74fbd"},
+    {"id":"ash-balanced-v5","outcomes":"LLLWLLWLLWLLWWLWWLLLLWLLWLLWWLWWL","raw_sha256":"8c8d0792985795fce5a44a3c2090042291b179e985a627c0c3d872166840e87f"},
+    {"id":"ash-ember-v0","outcomes":"WLWWLWWWLWWLLLWWWWWWWLWWLWWWWWWW","raw_sha256":"3996994b10996f09d2f8f19e1f7ea618fe91f30af8a9b8d2d3561d72296cebdd"},
+    {"id":"ash-ember-v5","outcomes":"LLLLLLLLWWWWWLWWLWLWWLWLLWLWLWLL","raw_sha256":"7db9cbbef43da895b5728c957c8c36531b240b6224ab8a3722fbf0ef6746d8bd"},
+    {"id":"ash-fervor-v0","outcomes":"WWLWWWWWLWWLWLWWWWWWWWWWWWWLLWWW","raw_sha256":"5776930bc3cfc28859a4709fdb9837c8cb68f9392216f914772f32b9f5f0948d37"},
+    {"id":"ash-fervor-v5","outcomes":"LLLLWWLLLWWWLWWLWLLLWWWWLLWLLLWL","raw_sha256":"d4c1bdcb9dc97f88a4a50321b45699659d57ba1b7f91abef66481a7ac02f84fe"},
+    {"id":"ash-hand-v0","outcomes":"WLWLWWLWWWWWWWWLWWLWLWWWWWWLWWWW","raw_sha256":"3e2f485c8e4a09e33cdd0e009ae597ab55c75e2d8f2b3f2f910b8b0ba4c9376f"},
+    {"id":"ash-hand-v5","outcomes":"LWLWLWLWWLWWWLWWLWWLWWLWWWWLLLWW","raw_sha256":"dbb1bf6b7bfa861c625cc9829a0b3ff9942ce54aceca3b6b43a4f7e3d21636ab5"},
+    {"id":"ash-smolder-v0","outcomes":"WLWWWWWWWWWWWLWWWWWWLWLWWWWWWWWW","raw_sha256":"c2c27c3c47d9d0390e4184f58d9c291db7d05e5ab9e6732358436876077f45cc"},
+    {"id":"ash-smolder-v5","outcomes":"LWLWWWWWLLWWWLWWLWWWWWWWWLLLWWWL","raw_sha256":"68f28724f0e6a99ae6e3ea951ff15a7f6b0b181b1b3d6e7a62b341b8bff00c66"}
+  ],
+  "fervor_enactment_v0_v5":{"empower_acquired_runs":[29,28],"flurry_acquired_runs":[27,19],"any_strength_multihit_runs":[31,26],"flurry_actual_health_fraction":[0.179161,0.194698],"poison_actual_health_fraction":[0.384659,0.365212]},
+  "decision":"Transfer enacts multi-hit play but does not yet establish three viable Ash routes. Fervor V5 is14/32 versus Smolder23/32 and Hand20/32. Proceed with the separately frozen component-specificity test, not product promotion or an untested generic buff.",
+  "limits":["32 shared seed clusters; the first16 numeric indices overlap the completed different-content fuel component panel, so this is not untouched final confirmation.","Health-source fractions and co-occurrence are descriptive, not producer attribution.","Balanced native-planning control is not signed arm2.","No package,detector,unrestricted retention,lifecycle,reviewed integration or P9 PASS."]
+}
