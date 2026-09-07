@@ -17,7 +17,7 @@ jobs:
       - name: Check out exact published checkpoint
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: b813e352f988363bf1c14a4eb12827543608f9ba
+          ref: e3e5a7312049e8ce167c503c9d65db7a15bf992b
           fetch-depth: 1
           persist-credentials: false
           lfs: false
@@ -40,7 +40,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = b813e352f988363bf1c14a4eb12827543608f9ba
+          test "$(git rev-parse HEAD)" = e3e5a7312049e8ce167c503c9d65db7a15bf992b
           mkdir -p bundle
           git archive --format=tar HEAD domain content tools locale tests port_fixtures research/p9-six-route docs/agents docs/balance docs/rc-bar.md .claude/skills/glassvow-godot AGENTS.md project.godot | gzip -n > bundle/source.tar.gz
           git ls-tree -r HEAD > bundle/source-tree.txt
@@ -52,7 +52,7 @@ jobs:
       - name: Upload recoverable checkpoint
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: p9-published-checkpoint-b813e352
+          name: p9-published-checkpoint-e3e5a731
           path: bundle/
           if-no-files-found: error
           retention-days: 7
