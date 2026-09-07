@@ -1,0 +1,30 @@
+{
+  "status": "RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "cells": 32, "rows": 1024, "runs_per_cell": 32,
+  "seeds": [31010000,31010031],
+  "counts": {"win":669,"loss":355,"stall":0,"error":0},
+  "native_diagnostic_failures":0,
+  "freeze_sha256":"ef8b159b3f54917f78eeffefada004136da70e5403ff8f7f13db6c5148223cf3",
+  "route_order":["smolder","hand","ember","balanced_random"],
+  "vow_order":[0,5],
+  "wins_out_of_32":{
+    "production1_demand3":[[29,28],[27,16],[24,14],[23,7]],
+    "production1_capped":[[29,25],[25,15],[24,12],[21,7]],
+    "production2_demand3":[[30,27],[27,20],[26,21],[20,7]],
+    "production2_capped":[[29,27],[23,20],[24,15],[20,7]]
+  },
+  "ember_nova_health_fraction_v0_v5":{
+    "production1_demand3":[0.029,0.027],"production1_capped":[0.057,0.048],
+    "production2_demand3":[0.077,0.057],"production2_capped":[0.054,0.056]
+  },
+  "paired_ember_capped_minus_demand3":{
+    "production1_v0":{"improved":4,"worsened":4,"delta":0.0},
+    "production1_v5":{"improved":1,"worsened":3,"delta":-0.0625},
+    "production2_v0":{"improved":2,"worsened":4,"delta":-0.0625},
+    "production2_v5":{"improved":1,"worsened":7,"delta":-0.1875,"unadjusted_discordance_p":0.0703125}
+  },
+  "verification":"Independent raw audit reconciles every assigned row, configuration, frozen content/source, output/log hashes, native diagnostics, whole-run victory conditions and health-attribution totals. Full raw source/receipts remain in the recovery archive, not implied by this compact JSON.",
+  "decision":"Do not select capped Nova as a P9 solution. Low-bank use improved in some settings but Ember win rate did not improve here. Next test actual producer/consumer selectivity before further scalar changes. The production2_demand3 basis is a diagnostic candidate, not an admitted P9 winner.",
+  "limitations":["32 shared seed clusters, not1024 independent seeds","Exploratory/adaptive research; no corrected confirmation claim","Balanced research control is not the signed P9 arm","Health-source fractions are descriptive, not causal proof","No six-package admission, detector, retention, guardrails or exact integration"]
+}
