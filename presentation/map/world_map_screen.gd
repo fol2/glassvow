@@ -133,6 +133,9 @@ func _notification(what: int) -> void:
 
 func _build_world_surface() -> void:
 	_map_scene = MapScene.new()
+	# This host sizes the surface synchronously before projection; do not also
+	# let parent-relative anchors overwrite it at the next layout notification.
+	_map_scene.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	_map_scene.surface_tapped.connect(_on_surface_tapped)
 	add_child(_map_scene)
 	# Construction-only callers have no RunState yet. Live refresh replaces these
@@ -615,7 +618,8 @@ func _ordered_layout_anchors(result: MapLayoutResult = _layout_result) \
 	var out: PackedVector3Array = PackedVector3Array()
 	if result == null:
 		return out
-	var anchors: Dictionary = result.to_dict()["node_anchors"]
+	var anchors: Dictionary = _layout_data.get("node_anchors",{}) if result == _layout_result \
+		else result.identity_dict()["node_anchors"]
 	for node: MapNode in map.nodes:
 		if not anchors.has(node.id):
 			return PackedVector3Array()

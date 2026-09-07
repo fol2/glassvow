@@ -1,6 +1,6 @@
 extends RefCounted
 ## Production woodland inputs: actual imported kit, physical space and local view.
-const VERSION: String = "woodland-journey-v1"
+const VERSION: String = "woodland-journey-v2"
 const Registry = preload("res://presentation/map/map_journey_camera_registry.gd")
 const Assets = preload("res://presentation/map/map_journey_assets.gd")
 const Kit = preload("res://presentation/map/landscape/kit.gd")
@@ -11,6 +11,7 @@ const F = preload("res://domain/map_layout/map_layout_canonical.gd")
 
 static func build(nodes: Array, edges: Array, base: Dictionary) -> Dictionary:
 	var quality: Dictionary = Registry.quality(base)
+	quality["routing_strategy"] = "grade-priority-v1"
 	var order: Dictionary = Ordering.generate(nodes,edges)
 	if order.get("ok")!=true: return {"ok":false,"reason":"Cannot order the woodland graph","details":order}
 	var road: Dictionary = quality["geometry"]["road_corridor"]

@@ -49,6 +49,9 @@ static func compile(input: MapLayoutInput, quality: Dictionary,
 	var hero_report: Dictionary = _hero_placements(source, assets)
 	if hero_report.get("ok", false) != true:
 		return _failure(diagnostics, hero_report.get("binding", {}))
+	var strategy: String = str(quality.get("routing_strategy","ground-first-v1"))
+	if strategy not in ["ground-first-v1","grade-priority-v1"]:
+		return _failure(diagnostics,_binding("routing_strategy",strategy,"Unsupported routing strategy"))
 	var heroes: Dictionary = hero_report["placements"]
 	var candidate_report: Dictionary = MapNodeCandidateGenerator.generate(input, quality, 0)
 	diagnostics["candidate_digest"] = candidate_report.get("candidate_digest", "")
@@ -79,6 +82,18 @@ static func compile(input: MapLayoutInput, quality: Dictionary,
 				"node_candidate", node_id, "candidate set is empty", node_id
 			))
 		selection[node_id] = 0
+	# Explicit opt-in changes search priority, never the acceptance rules. A
+	# rejected grade candidate falls through to the complete legacy search.
+	if strategy == "grade-priority-v1":
+		var priority: Dictionary = _build_attempt(input,source,quality,assets,heroes,node_sets,selection,true)
+		diagnostics["priority_attempts"] = [priority["diagnostics"]]
+		if priority.get("ok",false) == true:
+			for key: String in ["route_order","inversion_components","access_lengths","route_calls",
+					"chosen_bypass_sides","selected_bypass_owners","rejected_route_plans","component_route_plans"]:
+				diagnostics[key] = priority["diagnostics"].get(key,diagnostics[key])
+			diagnostics["chosen_candidate_ids"] = priority.get("chosen_candidate_ids",{})
+			diagnostics["selected_strategy"] = strategy
+			return _success(diagnostics,priority["result"],priority["report"])
 	var queue: Array = [{"selection": selection.duplicate(true), "substitution": {}}]
 	var seen: Dictionary = {MapLayoutCanonical.digest(selection): true}
 	var last_binding: Dictionary = {}

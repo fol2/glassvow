@@ -59,7 +59,7 @@ func _run() -> void:
 			quit(2)
 			return
 	if act < 0 or act > 3 or not StageShape.SHIPPING.has(shape) \
-			or _pose not in ["focused", "opening", "middle", "terminus"] \
+			or _pose not in ["focused", "opening", "middle", "terminus", "crossing"] \
 			or (DisplayServer.get_name() == "headless" and not _compile_only) or _zoom not in range(4):
 		push_error("Preview needs a headed renderer, act index 0–3 and a shipping shape/pose")
 		quit(2)
@@ -120,7 +120,24 @@ func _run() -> void:
 	elif _pose == "middle":
 		rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3.ZERO))
 	elif _pose == "terminus":
-		rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3(33.0, 0.0, 0.0)))
+		var anchors: Dictionary = screen.layout_result().identity_dict()["node_anchors"]
+		var boss_id: String = ""
+		for node: MapNode in world_map.nodes:
+			if node.type == "boss": boss_id = node.id
+		if not anchors.has(boss_id):
+			push_error("Preview has no generated terminus")
+			quit(2)
+			return
+		var raw: Array = anchors[boss_id]
+		rig.set_camera_xz(MapCameraRig.pose_for_world(MapLandscape.v3(raw)))
+	elif _pose == "crossing":
+		var landscape: MapJourneyLandscape = screen._map_scene._landscape as MapJourneyLandscape
+		if landscape == null or landscape.terrain.landform.cuts.is_empty():
+			push_error("Preview has no physical woodland crossing")
+			quit(2)
+			return
+		var at: Vector2 = landscape.terrain.landform.cuts[0]["at"]
+		rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3(at.x,landscape.terrain.surface_height(at.x,at.y),at.y)))
 	screen._layout_waystones()
 	screen._push_bands(true)
 	if not _output.is_empty() and not _exercise:
@@ -289,24 +306,29 @@ func _measure_pan(screen: WorldMapScreen) -> void:
 	scene.set_live(true)
 	var intervals: Array[float] = []
 	var cpu: Array[float] = []
+	var projection: Array[float] = []
 	var gpu: Array[float] = []
 	var before: int = Time.get_ticks_usec()
 	for frame: int in range(150):
 		rig.set_camera_xz(pose + Vector2(sin(frame * 0.02) * 3.0, 0))
+		var update_started: int = Time.get_ticks_usec()
 		screen._layout_waystones()
+		var update_ms: float = (Time.get_ticks_usec()-update_started)/1000.0
 		await process_frame
 		var now: int = Time.get_ticks_usec()
 		if frame >= 30:
+			projection.append(update_ms)
 			intervals.append((now - before) / 1000.0)
 			cpu.append(RenderingServer.viewport_get_measured_render_time_cpu(rid))
 			gpu.append(RenderingServer.viewport_get_measured_render_time_gpu(rid))
 		before = now
+	projection.sort()
 	intervals.sort()
 	cpu.sort()
 	gpu.sort()
 	print("MAP_RENDER ", JSON.stringify({"adapter": RenderingServer.get_video_adapter_name(),
 		"renderer": RenderingServer.get_current_rendering_method(), "samples": intervals.size(),
-		"frame_p95_ms": intervals[113], "viewport_cpu_p95_ms": cpu[113],
+		"frame_p95_ms": intervals[113], "waystone_update_p95_ms":projection[113], "viewport_cpu_p95_ms": cpu[113],
 		"viewport_gpu_p95_ms": gpu[113], "gpu_timer_available": gpu[-1] > 0,
 		"renderer_mib": Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0,
 		"draw_calls": Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)}))

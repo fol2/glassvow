@@ -3,6 +3,17 @@ extends RefCounted
 ## owns world input. Seed-717 projection↔hit-test agreement stays in test_map_pins.
 
 
+class SnapshotProbe:
+	extends MapLayoutResult
+	var full_reads: int = 0
+	func to_dict() -> Dictionary:
+		full_reads += 1
+		return super.to_dict()
+	func identity_dict() -> Dictionary:
+		full_reads += 1
+		return super.identity_dict()
+
+
 class FakeLayoutCompiler:
 	extends RefCounted
 	var calls: int = 0
@@ -141,6 +152,13 @@ static func _compiled_result_binding(fails: Array[String]) -> void:
 	_check(fails, seats == direct and not seats.is_empty()
 			and not seats[0].is_equal_approx(legacy[0]),
 		"waystones project the compiled anchors rather than the legacy lattice")
+	# Camera updates must not serialise the entire scenery record per frame.
+	var probe: SnapshotProbe = SnapshotProbe.new(result.identity_dict(),result.digest())
+	screen._layout_result = probe
+	for frame: int in range(10):
+		_check(fails,screen._ordered_layout_anchors()==anchors,"moving-camera anchor snapshot changed")
+	_check(fails,probe.full_reads==0,"camera anchor lookup repeatedly serialised full scenery")
+	screen._layout_result = result
 	var reachable: Array[int] = screen.map.reachable()
 	for i: int in reachable:
 		_check(fails, screen.pick_node_at(seats[i]) == i,

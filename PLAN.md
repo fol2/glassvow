@@ -523,3 +523,32 @@ or body collisions; minimum crossing headroom 3.402 m, maximum measured grade
 visual junction or all seeds. Seed 4 and an explicitly fresh source compilation
 are next, followed by isolated native timing and visual inspection of the later
 crossing and final grove.
+
+### Search priority and moving-frame repair — 7 September, 15:55 UTC
+
+A fresh original-order woodland source compilation takes 121.65 s. The bounded
+priority experiment runs the existing grade-aware candidate through every hard
+criterion first: both preserved seeds pass in 5.24/5.59 s including asset/input
+and report work. Its anchors differ from the earlier deferred-search result, so
+old physical receipts are not reused as acceptance for this candidate.
+
+Promoted opt-in `grade-priority-v1` under woodland recipe v2: one fully evaluated
+grade candidate precedes the unchanged complete ground/deferred fallback. Default
+recipes retain their old order; unknown strategies fail closed. The fallback and
+unknown-policy regression passes. Fresh complete recipe-v2 runs pass both seeds
+in 7.08/7.82 s with concurrent test work. Their physical replays pass respectively
+38,850/44,463 contact probes and 51/102 adult-body probes. Minimum headroom is
+3.395/3.366 m, maximum grade 0.4041/0.4604; no contact or body failures.
+
+A separate actual frame bottleneck was whole-record serialisation in the camera
+anchor lookup. Every moving frame copied and canonicalised all scenery merely to
+read node positions. It now reads the immutable binding snapshot. The targeted
+snapshot regression plus map/composition/locale tests pass. Matched native seed-4
+phone crossing: identical surface digest, 3,205 scenery instances, 896 draw calls,
+326.08 MiB renderer memory; frame p95 falls from 87.612 to 9.637 ms. Waystone update
+p95 is 0.610 ms, viewport CPU p95 1.158 ms. This is an isolated desktop/native
+component performance result, not physical mobile or full-campaign qualification.
+Full bind still takes 10.841 s; cold save-load and first assembly remain open.
+The host also now uses one explicit sizing authority, removing the conflicting
+full-rect/manual-size warning. Preview terminus/crossing views target generated
+geometry rather than obsolete fixed coordinates.
