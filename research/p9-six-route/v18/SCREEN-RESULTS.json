@@ -1,0 +1,29 @@
+{
+  "status": "RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "cells": 32,
+  "rows": 512,
+  "counts": {"win": 306, "loss": 206, "stall": 0, "error": 0},
+  "native_diagnostic_failures": 0,
+  "freeze_sha256": "618ee36c40a4db4a3ccb7dc5bda1adbbfb30af1c9031ac66b2574a85ddd6a0e5",
+  "route_order": ["smolder", "hand", "ember", "balanced_random"],
+  "vow_order": [0, 5],
+  "runs_per_cell": 16,
+  "seeds": [21010000, 21010015],
+  "wins_out_of_16": {
+    "control": [[16,11],[11,12],[13,7],[7,4]],
+    "placebo": [[16,11],[11,6],[11,5],[12,2]],
+    "banklight": [[16,11],[11,6],[11,5],[12,2]],
+    "affine": [[15,11],[11,7],[14,8],[7,4]]
+  },
+  "banklight_vs_placebo": {"same_pool_paired_assignments":128,"win_loss_flips":0,"interpretation":"No observed whole-run win effect in this small dependent screen; not proof of a universal zero effect."},
+  "banklight_ember_enactment": {
+    "v0":{"acquired_runs":6,"used_runs":6,"casts":21,"above_reserve_casts":6,"nova_casts":131,"nova_held_stock_sum":614,"nova_actual_health_fraction":0.043,"poison_actual_health_fraction":0.608},
+    "v5":{"acquired_runs":4,"used_runs":4,"casts":19,"above_reserve_casts":6,"nova_casts":56,"nova_held_stock_sum":216,"nova_actual_health_fraction":0.016,"poison_actual_health_fraction":0.519}
+  },
+  "draft_probe":{"flow_producer_copies":[0,1,2,3],"expected_embers":[1.85,3.85,5.85,7.85],"banklight_draft_score":[11.8,11.8,16.3,21.7],"decline_threshold":12},
+  "decision":"No P9 candidate selected. The banked mechanic activates but often below its payoff threshold. Test fixed-full-stock-peak payoff shapes next rather than increasing every payoff. The no-card comparison changes the reward-pool mapping; use the same-pool placebo for the resource-slope contrast.",
+  "complete_recovery":{"file":"glassvow-p9-v18-complete.zip","bytes":2185560,"sha256":"016c7223f0ce2b5f018a891613a295fc0fdfcce1b9251890c2b9e068e6049121","files":384,"local_commit":"40688940d6cf30c5ce86829420df74b806bfee66","scope":"Complete assembled source and all current raw smoke/screen studies, without engine. Delivered as a chat file, not claimed stored in this repository."},
+  "limitations":["16 shared seed clusters, not 512 independent seeds","balanced RandomBuild is not signed C2","damage fractions are descriptive, not causal package proof","no six-package admission, detector validation, unrestricted retention, lifecycle or product integration"],
+  "publication_boundary":"legacy_policy.gd publication was blocked by the connector safety check; it remains in the complete local ZIP and was not retried by another endpoint or encoding."
+}
