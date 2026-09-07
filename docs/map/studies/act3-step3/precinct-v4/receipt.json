@@ -681,6 +681,12 @@
     "combat-final-1458x820-before.png": "20f8f3f42955a5f97f0c54420201b027bd61720c56fe61ac19eec27960e0d642",
     "combat-final-844x390-after.png": "40a6cecd337e638aeab03b868496d703b2c021337ab9021bd0e4664024e96ab7",
     "combat-final-844x390-before.png": "90e57dce0b5b96b09287e7acefaa1c872c23b0b733faf21d075883ed3c064afb",
+    "combat-modulated-1180x820-after.png": "b860a2e1be7fedca53bebf75d4364980c6f48d72e4459a0ee5a7be4b9cb78a59",
+    "combat-modulated-1180x820-before.png": "50844de766218897fc379f3a45e9c72489a697da0ff1aea93875c19bf14bbae8",
+    "combat-modulated-1458x820-after.png": "23657212659b01c63862f8079e7034ca44aefbf1c4b0370d86b5c73160abf3dc",
+    "combat-modulated-1458x820-before.png": "fb1f7fa99f771587b5fed115f1ab929b65ffbced26f14da95ceb0b70cabec723",
+    "combat-modulated-844x390-after.png": "18b7d6c416eacf3642435b6d1dfb4890565ea677b3c29049958d7713a1b03735",
+    "combat-modulated-844x390-before.png": "b6a426a8e462143b1e0c4e05d5ba7d74652c56d99152f975505d5a3fb6b51e92",
     "guidance-tour.mp4": "564ed6841956882ed21a5c7ea1e2a9253a8b164e85d097beb7a19a512a26be73",
     "map-2026-1180x820-arrival.png": "d7920ae1404c0a59a356f047732adcf3e57bafe2c057209219a03e92f33502e8",
     "map-2026-1180x820-choice-0.png": "7e826649d86f6a9c2d23f30758822c70a7eda9ca55b7f8279ffd64e4c91712cc",
@@ -761,11 +767,11 @@
     "map-717-844x390-threshold.png": "8b36f7431e9a92a7017cecc61ae09b08dc467ab6a9f05830defe4229c6ef2541",
     "map-717-844x390-whole.png": "09195d5b325051dc1c864f67e3c6a8edcedd26263405539e6de3e29e06c85d54"
   },
-  "capture_hygiene": "Seed 2026 has one available next node. Three stale second-choice copies from the initial capture loop were rejected; only its real first-choice images are retained. Capture tool now uses actual choice count and rejects stale file timestamps.",
-  "final_runtime_head": "494090808c56932651ad6e0e340880b08310fdf5",
+  "capture_hygiene": "Seed 4 has one available next node. Three stale second-choice copies from the initial capture loop were rejected; only its real first-choice images are retained. Capture tool now uses actual choice count and rejects stale file timestamps.",
+  "final_runtime_head": "0b02886a16ac4929f8218d7277f68b5728a9c6dc",
   "component_provenance": {
     "map": "Captured at 091aed5; map runtime unchanged at final runtime head.",
-    "combat": "combat-final-* captured at 4940908. Earlier combat-* files retain the superseded stepped-sampling candidate and are not final evidence."
+    "combat": "combat-modulated-* are final at runtime0b02886. combat-final-* are the superseded unmodulated candidate; earlier combat-* also retain rejected stepped sampling. Final shader preserves original texture coverage and authored0.8/0.9/1.0 modulation."
   },
   "movie": {
     "file": "guidance-tour.mp4",

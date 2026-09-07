@@ -1,6 +1,6 @@
 # Act III Step 3 delivery report
 
-Runtime candidate: `494090808c56932651ad6e0e340880b08310fdf5`.
+Runtime candidate: `0b02886a16ac4929f8218d7277f68b5728a9c6dc`.
 
 The complete precinct composition is retained. This extension completes native
 route reading and aligns the actual Act III combat ground. Final core validation
@@ -12,7 +12,7 @@ and independent review are running; this report will record their results before
 | Selected approach and exact-branch Travel | 100% | Nine native runs; 15 actual next-node selections |
 | Whole-network planning | 100% | All 76/74/74 edges retained for seeds 717/4/2026 |
 | Ground support and game-truth preservation | 100% | 112,656 surface samples; source unchanged in every run |
-| Shared obsidian finish and actual combat ground | 100% | Three native proportions; 98,304 alpha samples, zero changes |
+| Shared obsidian finish and actual combat ground | 100% | Three native proportions; 294,912 alpha samples across 0.8/0.9/1.0 modulation, zero changes |
 | Native presentation and interaction recording | 100% | Wide/tablet/phone proportions; 638-frame uninterrupted movie |
 | Final regression and independent review | Pending | Full core running; exact-candidate review follows |
 
@@ -33,15 +33,15 @@ Act I/II composition and ground selection remain unchanged. Act IV is not starte
 ## Native evidence
 
 The matrix covers seeds 717, 4 and 2026 at 1458×820, 1180×820 and 844×390.
-Seed 2026 has one available next event; the other seeds have two. Three stale
+Seed 4 has one available next event; the other seeds have two. Three stale
 second-choice copies were rejected and the capture tool now checks actual choice
 count and freshness. See `receipt.json` for component provenance and media hashes.
 
 The actual combat scene is frozen for each before/after pair. Final images are
-`combat-final-*-before.png` and `combat-final-*-after.png`. Earlier `combat-*`
-files are superseded evidence of a rejected edge-banding candidate. Final shading
-blends smoothly into the original platform edge and preserves its alpha exactly.
-All three final proportions were visually inspected.
+`combat-modulated-*-before.png` and `combat-modulated-*-after.png`. Earlier `combat-*` and `combat-final-*` files retain the superseded edge-banding
+and unmodulated candidates, respectively. Final shading
+blends smoothly into the original platform edge and preserves its alpha and authored modulation exactly.
+All three final proportions were visually inspected after the modulation fix.
 
 The native movie records real control inputs, both complete selected approaches
 and the overview, at 30 fps, 21.266 seconds. Encoding changes only the container
@@ -84,3 +84,18 @@ checks pass. Full core and the independent exact-candidate review remain pending
 Final delivery time, core verdict, independent review and measured token deltas
 will be added when those gates finish. Raw token totals include cached context;
 they are not the account's Pro quota or a monetary bill.
+
+## Independent review correction
+
+The first review of `41cf16e00935423037154f6d61c02c400e314d2f` returned
+REQUEST_CHANGES: the shader preserved texture coverage but discarded authored
+CanvasItem opacity. The expanded native probe reproduced 94,929 and 94,922
+changed alpha pixels at opacity 0.8 and 0.9. Runtime `0b02886` carries vertex
+modulation through the shader; all three opacity cases now pass with zero
+changed pixels. Actual combat comparisons have been recaptured. The reviewer
+also corrected the single-choice seed label to 4; source evidence was correct.
+
+The ongoing core run remains valid for unchanged game logic and route tests.
+The only subsequent runtime edit is this isolated canvas shader; its invalidated
+evidence is replaced by native modulation checks, actual scene recapture and
+a complete parser sweep. No interrupted core attempt is counted as a pass.
