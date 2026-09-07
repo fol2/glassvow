@@ -1,0 +1,32 @@
+{
+  "status": "BOUNDED_NATIVE_POLICY_COUNTEREXAMPLE_NOT_P9",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "fixture": {
+    "aspect": "Duskblade", "vow": 0,
+    "player_hp": 7, "energy_per_turn": 1,
+    "deck": ["momentum", "strike"],
+    "enemy_hp": 21, "enemy_damage_per_turn": 3,
+    "enemy_facet_max": 1000,
+    "omens": [], "relics": [], "starting_embers": 0,
+    "notes": "Controlled state, not a naturally acquired full-run deck. Both Sporeling move keys are explicitly assigned identical three-damage moves. Current-turn Kindle/Art already used. Later legal Kindle/Art alternatives are included in the bounded search. Every remaining card fits into each native draw, so hidden order cannot alter this witness."
+  },
+  "bounded_native_search": {
+    "horizon": "three consecutive player turns",
+    "momentum_first": {"winning_continuation": true, "states_visited_before_witness": 27},
+    "strike_first": {"winning_continuation": false, "states_exhausted": 40},
+    "same_outcomes_at_initial_turns": [1, 16]
+  },
+  "original_policy": {
+    "turn_1": {"end_turn_value": 11.0, "momentum_value": 33.4, "strike_value": 17.0, "choice": "momentum"},
+    "turn_16": {"end_turn_value": 11.0, "momentum_value": 11.0, "strike_value": 17.0, "choice": "strike"}
+  },
+  "rolling_horizon_prototype": {
+    "turn_1_choice": "momentum", "turn_16_choice": "momentum",
+    "turn_16_momentum_value": 33.4,
+    "changes": "Stop subtracting elapsed fight age from a fresh fixed lookahead; retain bounded circulation and native terminal dominance. Optional flag defaults off. No native gameplay change.",
+    "native_fixture_assertions_per_mode": 9, "failures": 0,
+    "public_information_assertions_off": 16, "public_information_assertions_on": 16,
+    "whole_run_benefit": "NOT_EVALUATED"
+  },
+  "claim_boundary": "The old heuristic chooses a losing first action in this finite controlled state. A winning continuation is found; every bounded legal continuation after Strike loses. This neither proves general optimality of the repair nor establishes natural exposure, route independence or P9. The initial 20-HP diagnostic had winning continuations after both choices and is retained separately, not presented as a counterexample."
+}
