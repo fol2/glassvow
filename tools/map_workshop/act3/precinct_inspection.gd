@@ -1,6 +1,18 @@
 extends "res://tools/map_workshop/act3/inspect.gd"
 ## Precinct-scale adaptation of the shared, read-only Step 3 inspector.
 const Sightlines = preload("res://tools/map_workshop/common/precinct_sightlines.gd")
+const Guidance = preload("res://tools/map_workshop/common/route_guidance.gd")
+var guidance: Guidance
+var walking: MeshInstance3D
+func _ready() -> void:
+	super._ready()
+	for button: Button in markers.values():
+		_style_target(button)
+	guidance = Guidance.new()
+	world.add_child(guidance)
+	if not guidance.configure(data,walking,camera):
+		get_tree().quit(1)
+
 var sightlines: Sightlines = Sightlines.new()
 var sightline_report: Dictionary = {}
 const Travel = preload("res://tools/map_workshop/common/route_travel.gd")
@@ -25,6 +37,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	super._unhandled_input(event)
 
 func _process(_delta: float) -> void:
+	if guidance != null:
+		guidance.show_state(selected,whole,markers_visible)
 	if travel.active:
 		var pose: Dictionary = travel.advance(_delta)
 		if not pose.is_empty():
@@ -73,6 +87,7 @@ func _process(_delta: float) -> void:
 			style.set_border_width_all(1)
 			style.set_corner_radius_all(int(marker_extent*.5))
 			button.add_theme_stylebox_override("normal",style)
+			_style_target(button)
 			canvas.add_child(button)
 			button.pressed.connect(func() -> void: _open_group(button.get_meta("ids")))
 			cluster_buttons.append(button)
@@ -306,11 +321,12 @@ func _action(action: String) -> void:
 	if action != "Travel":
 		super._action(action)
 		return
-	var origin: String = selected if not selected.is_empty() else str(data["current"])
+	var chosen_edge: String = Guidance.selection(data,selected)
+	var origin: String = str(data["current"]) if not chosen_edge.is_empty() else (selected if not selected.is_empty() else str(data["current"]))
 	var edges: Dictionary = data["edges"]
 	for id: String in MapLayoutCanonical.sorted_keys(edges):
 		var edge: Dictionary = data["edges"][id]
-		if str(edge["from"]) != origin:
+		if str(edge["from"]) != origin or (not chosen_edge.is_empty() and id != chosen_edge):
 			continue
 		var plan: Dictionary = _plan_travel(id)
 		if plan["ok"] != true:
@@ -433,3 +449,64 @@ func exercise_travel() -> Dictionary:
 	return {"ok":completed and cancelled and occlusions==0 and turn_speed<=40.02 and before==str(data["current"]),
 		"completed":completed,"cancelled":cancelled,"frames":frames,"occlusions":occlusions,"maximum_turn_degrees_per_second":turn_speed,
 		"current_unchanged":before==str(data["current"]),"scope":"actual Travel button, current first outgoing road, rendered interpolation and Escape"}
+
+func exercise_guidance() -> Dictionary:
+	var before: String = JSON.stringify(data)
+	var failures: Array[String] = []
+	var choices: Array = data["reachable"]
+	selected = ""
+	focus_journey()
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	get_viewport().get_texture().get_image().save_png("/tmp/act3-guidance-arrival.png")
+	for index: int in range(choices.size()):
+		var id: String = str(choices[index])
+		focus_journey()
+		await get_tree().process_frame
+		var choice_button: Button = markers[id]
+		await _click(choice_button.get_global_rect().get_center())
+		await get_tree().process_frame
+		var edge: String = Guidance.selection(data,id)
+		if selected != id or guidance.selected_edge != edge or edge.is_empty():
+			failures.append("Selection did not reveal the actual available edge: "+id)
+		await RenderingServer.frame_post_draw
+		get_viewport().get_texture().get_image().save_png("/tmp/act3-guidance-choice-"+str(index)+".png")
+		var travel_button: Button = controls["Travel"]
+		await _click(travel_button.get_global_rect().get_center())
+		await get_tree().process_frame
+		var source_at: Vector3 = anchors[data["current"]]
+		var target_at: Vector3 = anchors[id]
+		if not travel.active or travel.points.is_empty() or travel.points[0].distance_to(source_at)>.01 or travel.points[-1].distance_to(target_at)>.01:
+			failures.append("Travel did not follow selected current-to-destination edge: "+id)
+		travel.cancel()
+	focus_whole()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if not guidance.overview.visible or guidance.paths.size()!=data["edges"].size():
+		failures.append("Overview did not expose the complete graph")
+	await RenderingServer.frame_post_draw
+	get_viewport().get_texture().get_image().save_png("/tmp/act3-guidance-overview.png")
+	focus_journey()
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var current_button: Button = markers[data["current"]]
+	await _click(current_button.get_global_rect().get_center())
+	await get_tree().process_frame
+	if not guidance.selected_edge.is_empty(): failures.append("Current node incorrectly previews an outgoing choice")
+	if JSON.stringify(data)!=before: failures.append("Read-only guidance mutated game data")
+	return {"ok":failures.is_empty(),"failures":failures,"choices_clicked":choices.size(),"edges":guidance.paths.size(),"surface_samples":guidance.sampled_points,"source_unchanged":JSON.stringify(data)==before}
+
+func _style_target(button: Button) -> void:
+	var normal: StyleBoxFlat = button.get_theme_stylebox("normal").duplicate() as StyleBoxFlat
+	var hover: StyleBoxFlat = normal.duplicate() as StyleBoxFlat
+	hover.bg_color = normal.bg_color.lightened(.12)
+	for state: String in ["hover","pressed","hover_pressed"]:
+		button.add_theme_stylebox_override(state,hover)
+	var focus: StyleBoxFlat = normal.duplicate() as StyleBoxFlat
+	focus.draw_center = false
+	focus.border_color = Color("e4c6e7")
+	focus.set_border_width_all(2)
+	button.add_theme_stylebox_override("focus",focus)
+func _select(id: String,type: String) -> void:
+	super._select(id,type)
+	if guidance != null: guidance.show_state(id,whole,markers_visible)

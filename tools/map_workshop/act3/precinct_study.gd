@@ -65,7 +65,8 @@ func _run() -> void:
 	rim.light_specular = .2
 	rim.shadow_enabled = false
 	world.add_child(rim)
-	stone = _stone_material(Color("191c26"),Vector2(8.4,6.2),.22,.18)
+	stone = _stone_material(ObsidianFinish.STONE,ObsidianFinish.SLAB_METRES,ObsidianFinish.JOINT_COVERAGE,ObsidianFinish.JOINT_STRENGTH)
+	ObsidianFinish.apply_world(stone as ShaderMaterial)
 	var paving: ShaderMaterial = stone as ShaderMaterial
 	# All graph routes remain visible: no discarded edges to rescue composition.
 	var edges: Dictionary = sample["edges"]
@@ -378,6 +379,10 @@ func _run() -> void:
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	camera.far = 500
 	camera.make_current()
+	if "--wayfinding-study" in OS.get_cmdline_user_args():
+		await preload("res://tools/map_workshop/act3/wayfinding_study.gd").run(self,world,camera,sample)
+		quit()
+		return
 	var views: Array[Dictionary] = [
 		{"name":"whole","target":Vector3((west+east)*.5,2,0),"size":(east-west)*.63},
 		{"name":"journey","target":Vector3((divisions[0]+divisions[1])*.5,2,0),"size":45.0},
@@ -423,6 +428,7 @@ func _run() -> void:
 		inspector.landmark_label = "Court"
 		inspector.camera = camera
 		inspector.world = world
+		inspector.walking = instance
 		inspector.data = sample
 		for id: String in anchors:
 			inspector.anchors[id] = _point(anchors[id])
@@ -440,6 +446,8 @@ func _run() -> void:
 			for frame: int in range(4):
 				await process_frame
 			var input_report: Dictionary = await inspector.exercise()
+			if "--exercise-guidance" in OS.get_cmdline_user_args():
+				input_report["guidance"] = await inspector.exercise_guidance()
 			input_report["sightlines"] = inspector.sightline_report
 			input_report["overview"] = await inspector.measure_overview()
 			if "--exercise-all-nodes" in OS.get_cmdline_user_args():
@@ -462,6 +470,8 @@ func _run() -> void:
 			var overview: Dictionary = input_report["overview"]
 			var overlaps: Array = overview["overlaps"]
 			input_ok = input_ok and overview["target_sizes_pass"] == true and overview["represented"] == overview["nodes"] and overlaps.is_empty() and overview["cluster_open"] == true and overview["single_select"] == true
+			if input_report.has("guidance"):
+				input_ok = input_ok and input_report["guidance"]["ok"] == true
 			if input_report.has("all_nodes"):
 				var all_nodes: Dictionary = input_report["all_nodes"]
 				input_ok = input_ok and all_nodes.get("ok",false) == true

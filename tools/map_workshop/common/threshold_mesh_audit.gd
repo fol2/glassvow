@@ -128,3 +128,19 @@ static func _nearest_edge(p: Vector3,expected_y: float,triangles: Array[Dictiona
 		for i: int in range(3):
 			minimum = minf(minimum,sample.distance_to(Geometry2D.get_closest_point_to_segment(sample,points[i],points[(i+1)%3])))
 	return minimum if is_finite(minimum) else -1.0
+
+## Shared precise floor lookup for geometry-bound presentation, using the same
+## positional tolerance and riser envelope as the full-width support audit.
+static func floor_index(walking: MeshInstance3D) -> Dictionary:
+	var triangles: Array[Dictionary] = []
+	_collect(walking,triangles)
+	return _index(triangles)
+static func floor_height(index: Dictionary,p: Vector3) -> float:
+	var result: float = -INF
+	var bucket: Vector2i = Vector2i(floori(p.x/4.0),floori(p.z/4.0))
+	var candidates: Array = index.get(bucket,[])
+	for triangle: Dictionary in candidates:
+		var y: float = _height(p,triangle,.0001)
+		if is_finite(y) and y<=p.y+.18 and y>=p.y-.18:
+			result = maxf(result,y)
+	return result

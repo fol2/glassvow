@@ -1033,3 +1033,22 @@ waystone symbols. It carries no generated raster or external icon dependency.
 The Vigil's rose window remains concealed; the visible rose threshold belongs
 to Act IV. Native captures and final validation are recorded in
 `docs/reviews/map-reassembly/direction.md`; the concept image is not game proof.
+
+## Act III court ground — 7 September 2026
+
+`assets/art/stage/act3-court-floor.png` is a newly generated obsidian surface,
+created with the built-in image generator from the existing Act III ledge and
+native Obsidian Court material reference. Direction: large intact sombre slabs,
+quiet top faces, restrained cold edge glints and sparse violet accents; no busy
+magenta crack network. A second edit replaced the generator's baked checkerboard
+surround with pure black. Original generated source: `exec-360883ec-6415-4886-8914-7cc00ec9dd1b.png`.
+
+The black surround is not treated as alpha. `ObsidianFinish` binds the candidate
+to the combat ground shader; the existing ledge supplies the exact silhouette,
+with nearby stone projected into the candidate surround. Native transparent
+viewport verification compares all 98,304 alpha samples and requires identical
+coverage within one 8-bit alpha step. The original ledge remains the coverage
+source and comparison asset. The same finish authority defines the precinct
+stone colour, slab scale, joint treatment and roughness. Combat uses a painted
+perspective plate; the map uses lit three-dimensional surfaces. Other acts retain
+their existing materials.

@@ -304,6 +304,26 @@ approved candidate `0315abe3f07f7ad7b8885abb737ce10a1a23bd5d` with no blockers,
 explicitly retaining the full-core delivery gate and owner chapter checkpoint.
 Act IV and Step 4 remain outside this delivery.
 
+## Act III Step 3 follow-up completion — 7 September
+
+The owner clarified that route reading and combat alignment belong to this same
+complete Step 3 delivery. No separate direction approval is required. Continue
+until implementation, native validation, core checks, independent review and
+report are complete. Do not stop at an intermediate comparison page.
+
+Scope: opt-in shared route guidance wired to actual precinct node selection,
+selected-branch travel and overview; shared Act III finish authority; quieter
+combat ground with the original complete alpha footprint. Preserve game truth,
+all generated edges, prior chapter styles and the native precinct composition.
+Step 4 campaign-map integration and Act IV remain later work.
+
+Master native interaction passes both selected branches, current-node clearing,
+complete overview, source immutability and 10,991 precise surface samples.
+Native ground coverage comparison passes all 98,304 pixels with no alpha change.
+Remaining: three seeds × three shapes, final combat comparisons, risk-selected
+checks and core suite, one exact-head independent review, published review page
+and updated delivery report. No Goal recreation and no unmeasured token claim.
+
 ## Current execution capsule
 
 Owner review page: `https://jamess-macbook-pro.tail55e87e.ts.net/docs/map/studies/act3-step3/precinct-v2.html`.

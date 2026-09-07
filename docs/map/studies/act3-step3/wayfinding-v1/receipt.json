@@ -1,0 +1,57 @@
+{
+  "scope": "isolated native direction studies; not gameplay or production asset promotion",
+  "base": "a4d4417",
+  "source_and_media_sha256": {
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-combat-844-before.png": "025a9a441ebbec66fc6f1dd370333be9f077039cddee573caaedb08c34f024ff",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-wayfinding-1458-arrival.png": "d79c71c0289081ce857a2cebfba3da63c64f51679b1a5699ebb8e9598b552c76",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-combat-844-after.png": "48d99a9cd333d3d1670e0bdd12c9a85f4c94a1107bfa67c6166f6448da3a145d",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-wayfinding-1458-overview.png": "01f1b6a6855fb88d6291904df61a1cb35f67ebd73ee21a2fbf5d9cacffe7f1f7",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-wayfinding-1458-choice-a.png": "40c9119b5255ed5b8158c83f29ae4cef9cfc436ad0a1af25c561b65176f54464",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-combat-1458-before.png": "56ce49f55b4c2ea06ed5dadfe5887488f4ba479e6d1c203d113706559c71b961",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-wayfinding-1458-choice-b.png": "4bf22ae4218ee5c512241ded27f08edf0a287d7903f916cff903df1c5980ab8a",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-wayfinding-844-choice-b.png": "45ad6cb718fa0ba8a547a4af54804b3c215cd5beea17e1accee56e90a5ca909e",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-wayfinding-844-choice-a.png": "39b31b1d940b4d89830987ffd440069d4970a7adad7ae3f2ccd8694f05ffdb85",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-wayfinding-844-overview.png": "26a67105c524ec7334c7e4ec653801c8de04ae3ca192867be40193b33561b227",
+    "docs/map/studies/act3-step3/wayfinding-v1/ground-candidate.png": "02c6920cb3818cfeec6e0ac313b235fbd3551026644c96c0753b2bd70999acab",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-wayfinding-844-arrival.png": "5a364f121798235abcea2511fa18133b144b80591db540efffbf915f66013cbf",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-combat-1458-after.png": "bc57467c7294244d493720066bf72977936b6fc83c1b0098f75b176a4fabdd5d",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-combat-pair-phone.log": "6d36e885176d382f9a0509e6f8a717c61facb93a6f8ad369c4af69af03bacdd9",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-wayfinding-phone.log": "755e015571bff09f938382c4bfbc27fcdf304034a3eeed4ac41d54dbd1d4e092",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-wayfinding-wide.log": "fc15a3c418743117d1619ab33ccb6d57ad29a810c1a83cdc2b195338a582a773",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-combat-pair-wide.log": "08d0915d2a1f10eea50ad99102027b5f2a17c02c56a23e0f363b58ec393f3d7b",
+    "docs/map/studies/act3-step3/wayfinding-v1/act3-comparison-parse.log": "abfd600ff21ef5aa23517b4a9d50d5914f276aa3518d079edb4b75093ed9dbdc",
+    "tools/map_workshop/act3/wayfinding_study.gd": "7fc60e5f484f950879f588f8098a859a4d04d31cf4f3cd0b53fc0de2049cda75",
+    "tools/map_workshop/act3/combat_ground_study.gd": "c0727cc75df3d8c598c0b94100ba2c5cbcd74f149d0626d1a7ce526ee81cc2db",
+    "tools/map_workshop/act3/ground_study_mask.gdshader": "5acc866912053be635222f64477e7eb30f6391aabe5d3ee73e5878e74238bf99",
+    "tools/map_workshop/act3/precinct_study.gd": "07ffefb24bb53fa8496126f21014a0ffcada78c60e7d8e01e25e206a61620054",
+    "docs/map/studies/act3-step3/precinct-v2-seed717.json": "c9653e2281513a3d2349cb4eb4a5486e502000ed7129755d7bc81ec9ef717a7d",
+    "docs/map/studies/act3-step3/wayfinding-v1/index.html": "b7ccbdcdbcd743c872184463286b241b6eff96b2eb2b30bdc3d54d7e2396161c"
+  },
+  "paired_combat_comparison": {
+    "1458": {
+      "size": [
+        1458,
+        820
+      ],
+      "difference_bbox": [
+        0,
+        493,
+        1458,
+        820
+      ]
+    },
+    "844": {
+      "size": [
+        844,
+        390
+      ],
+      "difference_bbox": [
+        0,
+        192,
+        844,
+        390
+      ]
+    },
+    "parse": "scripts OK (3 checked)"
+  }
+}

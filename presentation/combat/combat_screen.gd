@@ -1271,6 +1271,8 @@ func _plate(art: String, is_ledge: bool = false) -> void:
 	r.art = art
 	r.is_ledge = is_ledge
 	r.tex = tex
+	if is_ledge and act == 2:
+		r.material = ObsidianFinish.combat()
 	r.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	r.anchor_left = 0.5
