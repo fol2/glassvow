@@ -44,6 +44,7 @@ var _layout_result: MapLayoutResult = null
 var _layout_diagnostics: Dictionary = {}
 var _layout_failure: Dictionary = {}
 var _realised_assets: Dictionary = {}
+var _journey_framing: Dictionary = {}
 var _bound_source_digest: String = ""
 var _bound_quality_digest: String = ""
 var _horizon: RefCounted
@@ -535,6 +536,7 @@ func _bind_asset_geometry() -> void:
 	_clear_waylights()
 	_layout_result = null
 	_realised_assets.clear()
+	_journey_framing.clear()
 	_bound_source_digest = ""
 	_bound_quality_digest = ""
 	_layout_diagnostics.clear()
@@ -669,6 +671,7 @@ func _bind_journey(source: MapLayoutResult) -> MapLayoutResult:
 		if cache_error != OK: push_warning("Derived journey cache was not saved: "+error_string(cache_error))
 	_layout_result = realised["result"]
 	_realised_assets = realised["assets"]
+	_journey_framing = realised["framing"]
 	var data: Dictionary = _layout_result.identity_dict()
 	_layout_failure.clear()
 	_clear_waylights()
@@ -687,11 +690,16 @@ func _bind_journey(source: MapLayoutResult) -> MapLayoutResult:
 	return _layout_result
 
 
+func journey_landmarks(id: String) -> PackedVector3Array:
+	return _journey_framing.get(id,PackedVector3Array()).duplicate()
+
+
 func _fail_layout(reason: String) -> MapLayoutResult:
 	_horizon = null
 	_display.material = null
 	_layout_result = null
 	_realised_assets.clear()
+	_journey_framing.clear()
 	_bound_source_digest = ""
 	_bound_quality_digest = ""
 	_layout_failure = {

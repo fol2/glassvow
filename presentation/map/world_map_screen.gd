@@ -1050,7 +1050,10 @@ func _frame_journey() -> void:
 	var points: PackedVector3Array = []
 	for index: int in _journey_navigation.context_indices():
 		points.append(all_points[index])
-	var pose: Dictionary = JourneyCamera.resolve(points, Vector2(StageShape.REFERENCES[shape]), _journey_navigation.overview)
+	var landmarks: PackedVector3Array = []
+	for index: int in _journey_navigation.context_indices():
+		landmarks.append_array(_map_scene.journey_landmarks(map.nodes[index].id))
+	var pose: Dictionary = JourneyCamera.resolve(points, Vector2(StageShape.REFERENCES[shape]), _journey_navigation.overview, landmarks)
 	var lo: Vector2 = Vector2(INF, INF)
 	var hi: Vector2 = Vector2(-INF, -INF)
 	for point: Vector3 in all_points:
@@ -1079,7 +1082,7 @@ func _journey_focus_pose(index: int) -> Dictionary:
 	for node_index: int in range(map.nodes.size()):
 		if map.nodes[index].next.has(map.nodes[node_index].id):
 			points.append(anchors[node_index])
-	return JourneyCamera.resolve(points, Vector2(StageShape.REFERENCES[shape]))
+	return JourneyCamera.resolve(points, Vector2(StageShape.REFERENCES[shape]),false,_map_scene.journey_landmarks(map.nodes[index].id))
 
 func _bind_graph(act: int) -> Dictionary:
 	if act==0 and _layout_quality_override.is_empty():

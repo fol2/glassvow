@@ -1,7 +1,7 @@
 extends RefCounted
 ## Final surface stage of map compilation. Preserve topology and X/Z anchors,
 ## but record the real supported heights, paths and imported scenery transforms.
-const VERSION: String = "woodland-surface-v2"
+const VERSION: String = "woodland-surface-v3"
 const Assets = preload("res://presentation/map/map_journey_assets.gd")
 const Paths = preload("res://presentation/map/landscape/road_paths.gd")
 
@@ -62,7 +62,8 @@ static func finish(source: MapLayoutResult, landscape: Node3D) -> Dictionary:
 	part_started=Time.get_ticks_usec()
 	var surface_anchors: Dictionary = data["node_anchors"]
 	var surface_edges: Dictionary = data["edges"]
-	var camera: Dictionary = preload("res://presentation/map/map_journey_camera_contract.gd").audit_surface(surface_anchors,surface_edges)
+	var framing: Dictionary = preload("res://presentation/map/map_journey_framing.gd").terminals(data,bundle)
+	var camera: Dictionary = preload("res://presentation/map/map_journey_camera_contract.gd").audit_surface(surface_anchors,surface_edges,framing)
 	if not camera["ok"]:
 		return {"ok":false,"reason":"Surface camera cannot frame its legal choices: "+JSON.stringify(camera["failures"])}
 	data["hard_measurements"] = {"journey_camera":camera}
@@ -73,4 +74,4 @@ static func finish(source: MapLayoutResult, landscape: Node3D) -> Dictionary:
 	var result: MapLayoutResult = MapLayoutResult.create(data)
 	timings["record"]=(Time.get_ticks_usec()-part_started)/1000.0
 	return {"ok":result!=null,"reason":"Invalid realised surface record" if result==null else "",
-		"result":result,"assets":bundle,"source_layout_digest":source.digest(),"version":VERSION,"timings_ms":timings}
+		"result":result,"framing":framing,"assets":bundle,"source_layout_digest":source.digest(),"version":VERSION,"timings_ms":timings}

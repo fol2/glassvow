@@ -671,3 +671,24 @@ Current v5 seed 4 actual restored geometry also passes 44,463 contact rays and
 102 adult-body probes, minimum bridge headroom 3.366m, maximum local step 0.046m
 and maximum grade 0.461. No failures; journey-v5-physical-4.log. This supersedes
 older-input physical evidence for this seed, without claiming a full corpus pass.
+
+
+### Framing and corpus findings — 7 September, 18:04 UTC
+
+The native 12-view seed 4 sweep exposed a clipped terminus memorial on tablet.
+A regression reproduced that exact framing failure before repair. Terminal
+framing now includes the actual imported landmark AABB transformed by its final
+placement, while only waystones participate in target-separation constraints.
+The same framing inputs feed the realised-surface camera audit and runtime focus,
+including travel arrival. Surface version is woodland-surface-v3; topology and
+all placement transforms remain unchanged. Tablet native recapture now includes
+the complete memorial. Camera and realisation tests pass (2); six-script parse
+passes. Desktop and phone native recaptures also retain the complete landmark.
+
+The maintained second seed 17634 fails current production compilation. Preserve
+journey-v5-source-17634.json.failure.json: the opt-in grade-priority candidate
+produces ALL_GROUND, but the deferred-only guard rejects it before quality
+measurement; ground fallback also exhausts 64 substitutions on a phone branch
+fan-out measurement. Next experiment: distinguish the inappropriate deferred
+search guard from an actual geometric failure. Do not relax fan-out clearance
+or claim the seed passes merely because a guard was removed.

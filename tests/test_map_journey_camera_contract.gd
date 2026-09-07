@@ -26,6 +26,13 @@ static func run(fails: Array[String]) -> void:
 	if Contract.resolve([],Vector2(844,390)).get("ok",false):
 		fails.append("journey camera: empty graph accepted")
 
+	var landmark: PackedVector3Array = [Vector3(7.1,0,-.6),Vector3(8.9,3.2,.6)]
+	var terminal_stage: Vector2 = Vector2(1180,820)
+	var terminal_pose: Dictionary = Contract.resolve([Vector3.ZERO],terminal_stage,false,landmark)
+	for corner: Vector3 in landmark:
+		if not Rect2(Vector2(42,106),terminal_stage-Vector2(84,236)).grow(.001).has_point(Contract.screen_point(corner,terminal_pose,terminal_stage)):
+			fails.append("journey camera: terminus landmark clipped by the tablet frame")
+
 	var rig: MapCameraRig = MapCameraRig.new()
 	var stage: Vector2 = Vector2(844,390)
 	var pose: Dictionary = Contract.resolve([Vector3.ZERO],stage)

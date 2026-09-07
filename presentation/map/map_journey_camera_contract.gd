@@ -17,7 +17,7 @@ static func touch_size(stage: Vector2) -> float:
 static func projected_plane(point: Vector3) -> Vector2:
 	return Vector2(point.x, point.z*sin(deg_to_rad(PITCH))-point.y*cos(deg_to_rad(PITCH)))
 
-static func resolve(points: PackedVector3Array, stage: Vector2, overview: bool = false) -> Dictionary:
+static func resolve(points: PackedVector3Array, stage: Vector2, overview: bool = false, landmarks: PackedVector3Array = []) -> Dictionary:
 	if points.is_empty() or stage.x <= 0.0 or stage.y <= 0.0:
 		return {"ok": false, "reason": "empty group or invalid viewport"}
 	# Reserve complete touch/ink extents above the 88 px navigation panel.
@@ -35,6 +35,11 @@ static func resolve(points: PackedVector3Array, stage: Vector2, overview: bool =
 		plane.append(projected)
 		minimum = minimum.min(projected)
 		maximum = maximum.max(projected)
+	for point: Vector3 in landmarks:
+		if not point.is_finite(): return {"ok":false,"reason":"non-finite landmark"}
+		var projected: Vector2 = projected_plane(point)
+		minimum=minimum.min(projected)
+		maximum=maximum.max(projected)
 	var span: Vector2 = maximum-minimum
 	var zoom: float = maxf(12.0, maxf(span.x*stage.y/usable.x, span.y*stage.y/usable.y))
 	var maximum_zoom: float = INF
@@ -60,7 +65,7 @@ static func screen_point(point: Vector3, resolved: Dictionary, stage: Vector2) -
 	var zoom: float = resolved["zoom"]
 	return stage*.5+local*stage.y/zoom
 
-static func audit_surface(anchors: Dictionary, edges: Dictionary) -> Dictionary:
+static func audit_surface(anchors: Dictionary, edges: Dictionary, framing: Dictionary = {}) -> Dictionary:
 	var groups: Dictionary = {}
 	for id: String in MapLayoutCanonical.sorted_keys(anchors): groups[id] = [id]
 	for edge: Dictionary in edges.values(): groups[str(edge["from"])].append(str(edge["to"]))
@@ -73,7 +78,8 @@ static func audit_surface(anchors: Dictionary, edges: Dictionary) -> Dictionary:
 			points.append(Vector3(float(str(raw[0])),float(str(raw[1])),float(str(raw[2]))))
 		for shape: StringName in StageShape.SHIPPING:
 			var stage: Vector2i = StageShape.REFERENCES[shape]
-			var pose: Dictionary = resolve(points,Vector2(stage))
+			var landmarks: PackedVector3Array = framing.get(id,PackedVector3Array())
+			var pose: Dictionary = resolve(points,Vector2(stage),false,landmarks)
 			checked += 1
 			if not pose["ok"]:
 				failures.append({"focus":id,"shape":str(shape),"members":groups[id].duplicate(),"reason":pose["reason"]})
