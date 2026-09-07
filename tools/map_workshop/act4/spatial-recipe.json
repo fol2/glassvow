@@ -1,0 +1,155 @@
+{
+  "spatial_profile": {
+    "schema_version": 1,
+    "id": "act4-mirrored-procession-v1",
+    "act": 3,
+    "bounds_xz_m": [
+      -55,
+      -42,
+      55,
+      45
+    ],
+    "rows": [
+      {
+        "station_m": -36.0,
+        "height_m": 3.6,
+        "centre_z_m": -18.0,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": -31.5,
+        "height_m": 3.3,
+        "centre_z_m": -13.5,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": -27.0,
+        "height_m": 3.0,
+        "centre_z_m": -9.0,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": -22.5,
+        "height_m": 2.7,
+        "centre_z_m": -4.5,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": -18.0,
+        "height_m": 2.4,
+        "centre_z_m": 0.0,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": -12.0,
+        "height_m": 2.0,
+        "centre_z_m": 6.0,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": -6.0,
+        "height_m": 1.6,
+        "centre_z_m": 12.0,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": 0.0,
+        "height_m": 1.2,
+        "centre_z_m": 18.0,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": 6.0,
+        "height_m": 1.5999999999999999,
+        "centre_z_m": 12.0,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": 12.0,
+        "height_m": 2.0,
+        "centre_z_m": 6.0,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": 18.0,
+        "height_m": 2.4,
+        "centre_z_m": 0.0,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": 22.5,
+        "height_m": 2.7,
+        "centre_z_m": -4.5,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": 27.0,
+        "height_m": 3.0,
+        "centre_z_m": -9.0,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": 31.5,
+        "height_m": 3.3,
+        "centre_z_m": -13.5,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      },
+      {
+        "station_m": 36.0,
+        "height_m": 3.6,
+        "centre_z_m": -18.0,
+        "lane_spacing_m": 1,
+        "region": "mirror-court"
+      }
+    ],
+    "jitter_scale": 0,
+    "passage": {
+      "headroom_m": 2.45,
+      "deck_depth_m": 0.65,
+      "maximum_grade": 0.55,
+      "landing_m": 1.0,
+      "crossing_lane_spacing_m": 20.0,
+      "crossing_interval_m": 45.0
+    }
+  },
+  "hero_assets": {
+    "terminus": {
+      "asset_id": "act4-other-side-hearth",
+      "path": "res://tools/map_workshop/act4/kit/other-side-hearth.glb",
+      "node_id": "n4",
+      "offset": [
+        0,
+        0,
+        -9
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    "vigil": {
+      "asset_id": "act4-threshold-window",
+      "path": "res://tools/map_workshop/act4/kit/threshold-window.glb",
+      "node_id": "n0",
+      "offset": [
+        0,
+        0,
+        -7
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    }
+  }
+}

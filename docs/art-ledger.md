@@ -1052,3 +1052,20 @@ source and comparison asset. The same finish authority defines the precinct
 stone colour, slab scale, joint treatment and roughness. Combat uses a painted
 perspective plate; the map uses lit three-dimensional surfaces. Other acts retain
 their existing materials.
+
+## Act IV path-in-void study — 7 September 2026
+
+`tools/map_workshop/act4/kit/` contains three original procedural glTF assets:
+`threshold-window.glb`, `memory-stele.glb` and `other-side-hearth.glb`. The inspected
+local Blender 5.2.1 builder is `tools/map_workshop/act4/build_kit.py`; it uses only
+metre-scale geometry and original materials, with no downloaded model or texture.
+The native study adds subordinate reverse-chapter echoes, real stair flights and
+an unbounded background of quiet cosmic haze and 42 instanced embers. No ground
+plane, surrounding court or reflection sheet is included.
+
+`MirroredFinish` shares the Act IV stone palette between the world shader and the
+actual combat ledge. The combat shader preserves the original texture's alpha,
+painted stelae and inherited canvas modulation. A generated alternate ledge was
+rejected because its checkerboard was baked into RGB; that candidate is not a
+runtime asset. Native three-shape comparisons, alpha verification and the kit's
+source/media fingerprints are in `docs/map/studies/act4-step3/void-v1/`.

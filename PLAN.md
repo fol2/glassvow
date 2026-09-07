@@ -27,32 +27,45 @@ without a concrete need. Goal stays off. No Ponytail hook or reviewer.
   edges. Preserve IDs/types, game RNG, reachability and save truth.
 - AGENTS.md, Godot skill, AI-SDLC and executable CI scope selection.
 
-## Composition and emotional sequence
+## Owner direction update — unbounded space
 
-Grand, empty, sad and dark. Massive visibly thick rose-window wall and only a
-few structural piers enclose a recessed mirror court. A bent raised procession
-connects the arrival window to a modest hearth. The hearth is familiar and
-unsettling, not a glorious palace reward. Warm light travels back towards us;
-cool open shadow and restrained glass accents connect it to combat.
+The owner rejected the bounded courtyard/ground treatment during blockout.
+This instruction supersedes v6's floor and enclosure. Act IV must read as an
+unlimited/infinite visual space: no ground plane, no perimeter, only the path.
+Keep the fixed five-stop journey. Height variation belongs to the processional
+way, stairs and destination structures. Remove detached court piers and enclosing
+walls; monuments stand on the way. Grandeur comes from the surrounding absence,
+the enormous arrival window and the distant intimate hearth. No visible floor,
+water sheet, landscape silhouette, horizon or rectangular display base.
+
+Align the actual combat spatial language too where needed; the owner explicitly
+permits a combat presentation update. Preserve combat behaviour, actors and UI.
+The previous v6 enclosure is a historical input, not authority to restore ground.
+First decisive new experiment: native path-in-void composition and combat pair.
+
+## Composition and emotional sequence — revised
+
+
+Grand, empty, sad and dark. A massive visibly thick rose-window wall marks the
+arrival into an unbounded dark space. One supported-looking sculpted path travels
+through five stops towards a modest hearth. Its underside disappears into the
+void without a surrounding floor. Warm light travels backwards; cool stone,
+restrained teal/amber glass and absence preserve the combat world's identity.
 
 The five stops follow the settled reverse journey: threshold, obsidian court,
-sunken city, ash woods, hearth. Echoes are subordinate spatial/material marks,
-not five furnished rooms. Sparse stelae carry meaning; do not fill unused space
-with repeated scenery. Grandeur must read from structure and human scale.
-
-Relief is architectural: broad recessed court, thick perimeter, measured
-platform heights and short supported stair transitions. No flat prop sheet;
-no unnecessary bridge kit. Keep one legible generated route. Mirror-ground is
-quiet polished stone, not an ocean; reflection should reinforce space and light.
+sunken city, ash woods, hearth. Echoes remain subordinate marks on the path,
+not five furnished rooms. Sparse stelae accompany the traveller. Height changes
+are expressed through platforms and short complete flights, with no ground plane
+or enclosing walls. Reflection is not required; do not reintroduce a mirror floor.
 
 ## Ordered execution and proof
 
 | Work package | Result and acceptance | Initial progress |
 |---|---|---:|
 | 1. Bind chapter and establish native baseline | Actual five-node/four-edge input validated; current wide combat captured and inspected; blockout will establish human scale | Baseline complete |
-| 2. Whole-place blockout | All five stops on generated geometry; window, court, bend and hearth read at close/whole views; verify stairs and structural thickness | 0% |
-| 3. Finished representative section | Window-to-court entry and one level change with final stone/glass/reflection treatment; native close and travel inspection | 0% |
-| 4. Complete chapter composition | Sparse reverse-act echoes, piers, stelae, small hearth, grounded scenery and coherent light; full uncut journey | 0% |
+| 2. Whole-place blockout | All five stops on generated geometry; window, void, bend and hearth read at close/whole views; verify stairs and structural thickness | 0% |
+| 3. Finished representative section | Window-to-path entry and one level change with final stone/glass/surface treatment; native close and travel inspection | 0% |
+| 4. Complete chapter composition | Sparse reverse-act echoes, path-bound stelae, small hearth, supported scenery and coherent light; full uncut journey | 0% |
 | 5. Navigation, regression and delivery | Actual node/input/travel tests, all routes supported, three reference proportions, performance, selected gates and exact-head independent review; tailnet page/report | 0% |
 
 Resolve blockout before producing detailed assets. At each internal stage inspect
@@ -63,7 +76,7 @@ No routine additional owner approval is needed within the accepted direction.
 ## Reuse and ownership
 
 Act IV owns `tools/map_workshop/act4/`: spatial recipe, local assembly, architectural
-kit, palette, reflection settings and capture entry point. Use the generator's
+kit, palette, void atmosphere and capture entry point. Use the generator's
 existing spatial/profile seam; do not move final nodes manually after compilation.
 First inspect the fixed-journey compiler constraints before designing a profile.
 
@@ -71,9 +84,8 @@ Reuse `common/` walking surfaces, resolved stairs, relief, occupancy/footprint
 checks, floor/headroom audit, camera/input inspection, route Travel/guidance and
 capture/profiling tools. Keep chapter style opt-in. Water and bridge modules are
 available only if actual composition calls for them; neither is the default.
-For reflection, test the cheapest convincing option first: static/cached mirrored
-landmark geometry with restrained fade; add a render pass only if native evidence
-shows it necessary. No SSR or water distortion by default.
+The void uses one slow canvas haze shader and 42 instanced drifting embers.
+No reflection buffer, floor, horizon, SSR or particle simulation is required.
 
 Godot remains the final visual authority. Existing Blender tooling may produce
 new architectural assets after its current source is checked. Shared improvements
@@ -84,8 +96,8 @@ with a batched correction review only for concrete blockers.
 ## Discovery budget and delivery forecast
 
 First discriminating experiment: native five-stop blockout, judged against v6
-at journey/whole cameras. Hypothesis: an enclosed recessed court and a single
-bent raised route can deliver grandeur without dense scenery or heavy reflection.
+at journey/whole cameras. Hypothesis: an unbounded void and a single
+bent raised route can deliver grandeur without ground or dense scenery.
 Success: all five stops and four edges preserved; window/hearth hierarchy and
 relief read; one usable close journey and overview; no unsupported joins.
 Stop/redesign internally if framing needs hidden edges, invented stops, filler
@@ -121,5 +133,18 @@ Current branch: `jamesto/map-journey-rebuild`.
 Baseline evidence: `docs/map/studies/act4-step3/`. Godot 4.7.2 native combat
 captured at 1458×820. Seed 717 exports five nodes/four edges with hard_pass=true
 through validated current-input cache reuse; this qualifies the existing input,
-not the future Act IV recipe. No production code has changed.
-Next action: prove the whole-place spatial recipe and native blockout.
+not the future Act IV recipe.
+
+Checkpoint 10:18 UTC: the replacement path-in-void candidate preserves all five
+stops/four routes. Native wide input/guidance passes; 2,240 floor/headroom probes
+and 189 lowest asset-vertex contacts pass. Phone input also passes; its final
+material/capture matrix remains due. Native combat ground comparison is inspected
+at 1458×820 with original alpha/modulation retained. The image-generated alternate
+had a baked checkerboard and was rejected. Orthographic sky radiating artefacts
+and an obstructing echo foot were also rejected and corrected before delivery.
+Remaining: final three-shape inspection, uncut tour, profiling, core, independent
+review and review page/report. Working remaining forecast: 90–150 minutes,
+conditional on the final gates; not a committed delivery time.
+
+The owner's background addition is binding: restrained cosmic haze and slow
+sparse embers give the absence intentional atmosphere without filling the void.
