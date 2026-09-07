@@ -1,0 +1,11 @@
+# v22 readout contract
+
+Positive removal effect means control wins minus component-null wins on the same assigned seed index. Also report both directions of win flips. The specificity contrast is the intended-route removal effect minus the mean removal effect of the other two planned routes within the same aspect/vow. It is a diagnostic, not a fixed threshold used to announce admission.
+
+Seed-cluster bootstrap resamples the joint contrast vector so cross-route dependence is retained. Intervals are nominal exploratory95% intervals, not corrected selection, familywise error or P9 confirmation. Report all components, not only a largest positive contrast. Six components and two vows are multiple dependent comparisons. All losses/stalls/errors remain denominators; engine faults invalidate captures rather than turning into hidden missing values.
+
+Consumer removal can change drafting and tactical actions, so this is a total component-removal effect under an endogenous fixed controller. A null win effect can reflect substitution, low acquisition, inadequate sample support or an unnecessary mechanism; it is not by itself proof of universal equivalence. Source-attributed health removal does not isolate one direct mechanic. Independently reproduce actual-state mediator/consumer consequences where needed before a package claim.
+
+The original arm bridge already showed why strong native-planning RandomBuild screens cannot be relabelled as signed arm2. Do not use those screens to claim either a formal C2 PASS or a stricter owner requirement. Final P9 requires its exact accepted controls plus validated package/detector/retention evidence. A high sampled win rate or three policy names is not that evidence.
+
+Execution checkpoint: Ash preflight56/56 rows independently reconciled,32wins24losses,zero errors/stalls. Ash main comparison is still running; no partial matrix is selected. Dusk preflight implementation has132 native checks passing; whole-run dispatch is queued only after the Ash sequence completes and audits. Separate exploratory clone micro-optimisation passed30 state/continuation checks, but a noisy concurrent benchmark showed median ratio1.0083 and summed ratio0.9805; no reliable gain, so the baseline cloner is retained. No gameplay observer was changed during the live batch.
