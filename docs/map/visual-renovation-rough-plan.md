@@ -312,7 +312,10 @@ active product contract rather than hiding it in implementation.
 
 **Active objective: Act IV Step 3.** James approved Act III Step 3 on 7 September,
 with optional later polish. Act I–III now have Step 3 approval. Implement the
-approved Act IV grand-empty v6 direction through its fixed five-stop journey.
+owner-revised Act IV direction through its fixed five-stop journey: visually
+unbounded space, no ground or enclosing court, only a raised processional path,
+quiet cosmic haze and sparse embers. This supersedes the v6 floor/enclosure.
+The map and actual combat retain coherent stone, glass and light.
 The active task capsule and delivery forecast are in `/PLAN.md`. Complete the
 native chapter and its evidence before requesting chapter review. Step 4 remains
 later, after all four chapter approvals.

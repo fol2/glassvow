@@ -48,9 +48,10 @@ rendering, input or media playback; observe the native result and review page.
 ## Next chapter
 
 Act III Step 3 was approved on 7 September after precinct-v4 delivery, with optional
-later polish. Act IV now uses `concepts/act4-grand-empty-v6.png` and its actual
-combat art: grand, empty, sad and dark; structural relief; a fixed five-stop
-journey towards the small unsettling hearth. Shared modules support construction
+later polish. The owner's later Act IV direction supersedes the v6 floor and
+court: visually unbounded space, no surrounding ground, only the path, quiet
+cosmic haze and sparse embers. It remains grand, empty, sad and dark, with
+structural relief and a fixed five-stop journey towards the small hearth. Shared modules support construction
 and verification; the obsidian precinct composition is not an Act IV template.
 The active plan is `/PLAN.md`. Step 4 remains later, after Act IV Step 3 approval.
 
@@ -59,3 +60,33 @@ Travel through `common/route_guidance.gd`, plus a chapter-owned ObsidianFinish
 recipe. Canvas shaders must preserve actual authored modulation; test real
 layout opacity values rather than only 1.0. Complete core 102 and parser 431 passed
 at the Act III delivery; these receipts do not qualify new Act IV changes.
+
+
+## Act IV reuse and evidence
+
+- `common/resolved_route_surface.gd`, `walking_surface_union.gd` and
+  `flight_mesh.gd` construct the route, complete stair flights and adjoining
+  widenings with one owner for each coplanar walking surface.
+- `common/threshold_mesh_audit.gd` probes actual walking triangles across all
+  seven usable corridor lanes. `act4/audit.gd` adds lowest-vertex asset contact
+  checks and rejects stale hero source hashes before rendering.
+- Compiler-exported hero transforms place the window and hearth; the spatial
+  recipe uses the existing Act IV row binding. Three seeds preserve the same
+  five-stop/four-edge geometry. No post-compile node movement is applied.
+- `presentation/stage/mirrored_finish.gd` shares the chapter's stone authority
+  between lit map surfaces and the actual combat ledge. Its native alpha test
+  includes inherited and local translucent modulation, not only opacity 1.0.
+- `act4/void_background.gdshader` and `embers.gd` are opt-in atmosphere examples:
+  one canvas haze layer, 42 instanced quads, no extra reflection pass. They do
+  not silently change earlier acts or replace their water/terrain.
+- Orthographic camera rays made the rejected sky material radiate like a fan.
+  A camera-independent canvas layer avoids that failure for the distant void.
+- glTF glass can be two-sided. Replacing its material must retain that coverage;
+  native inspection exposed missing triangle wedges when default culling was used.
+- MovieMaker starts from its initial viewport. Changing the study viewport after
+  recording begins can crop a valid scene. Keep both at the recorded 1180×820;
+  a window-size command alone did not fix this. Inspect the encoded film itself.
+
+Current native media, comparisons and the delivery gate status are in
+[the Act IV report](studies/act4-step3/void-v1/report.md). Chapter engineering
+proof does not substitute for the owner's final Step 3 art approval.

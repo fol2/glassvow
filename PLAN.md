@@ -60,13 +60,13 @@ or enclosing walls. Reflection is not required; do not reintroduce a mirror floo
 
 ## Ordered execution and proof
 
-| Work package | Result and acceptance | Initial progress |
+| Work package | Result and acceptance | Current progress |
 |---|---|---:|
-| 1. Bind chapter and establish native baseline | Actual five-node/four-edge input validated; current wide combat captured and inspected; blockout will establish human scale | Baseline complete |
-| 2. Whole-place blockout | All five stops on generated geometry; window, void, bend and hearth read at close/whole views; verify stairs and structural thickness | 0% |
-| 3. Finished representative section | Window-to-path entry and one level change with final stone/glass/surface treatment; native close and travel inspection | 0% |
-| 4. Complete chapter composition | Sparse reverse-act echoes, path-bound stelae, small hearth, supported scenery and coherent light; full uncut journey | 0% |
-| 5. Navigation, regression and delivery | Actual node/input/travel tests, all routes supported, three reference proportions, performance, selected gates and exact-head independent review; tailnet page/report | 0% |
+| 1. Bind chapter and establish native baseline | Actual five-node/four-edge input validated; current wide combat captured and inspected; blockout will establish human scale | 100% |
+| 2. Whole-place blockout | All five stops on generated geometry; window, void, bend and hearth read at close/whole views; verify stairs and structural thickness | 100% |
+| 3. Finished representative section | Window-to-path entry and one level change with final stone/glass/surface treatment; native close and travel inspection | 100% |
+| 4. Complete chapter composition | Sparse reverse-act echoes, path-bound stelae, small hearth, supported scenery and coherent light; full uncut journey | 100% |
+| 5. Navigation, regression and delivery | Actual node/input/travel tests, all routes supported, three reference proportions, performance, selected gates and exact-head independent review; tailnet page/report | 80% — independent review and delivery pending |
 
 Resolve blockout before producing detailed assets. At each internal stage inspect
 the running result and fix failures before presenting it to the owner. Do not
@@ -148,3 +148,11 @@ conditional on the final gates; not a committed delivery time.
 
 The owner's background addition is binding: restrained cosmic haze and slow
 sparse embers give the absence intentional atmosphere without filling the void.
+
+
+Checkpoint after candidate validation: core 102 suites passed (1,430.59 seconds),
+complete parser sweep 442 passed, imports and selected specialist gates passed.
+The 28.77-second native film reaches the hearth through actual Walk all input;
+Tailnet playback, comparisons and 390 px responsive layout are verified. Source
+candidate: c0570e4ba664a7d531d19e52ce6216540d41cb87. The final independent review
+is next; no runtime edits have been made while the core gate was running.
