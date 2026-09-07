@@ -99,6 +99,9 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 	var sample: float = MapLayoutCanonical.float_value(
 		quality["geometry"]["branch_fanout"]["sample_distance_m"]
 	)
+	var journey_spreads: Dictionary = {}
+	if preload("res://presentation/map/map_journey_camera_registry.gd").enabled(quality):
+		journey_spreads = _journey_branch_spreads(egress_sources,order,anchors,ports,sample,camera_registry,quality,hard)
 	for edge: Dictionary in order:
 		var from_id: String = str(edge["from"])
 		var edge_id: String = str(edge["id"])
@@ -111,7 +114,7 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 			minf(source.x + sample, ports[edge_id]["target"].x), target.y
 		)
 		if preload("res://presentation/map/map_journey_camera_registry.gd").enabled(quality):
-			guide = _spatial_branch_guide(edge,order,anchors,ports,sample)
+			guide = _spatial_branch_guide(edge,order,anchors,ports,sample,journey_spreads.get(from_id,-1.0))
 		if guide.distance_to(ports[edge_id]["source"]) \
 				> MapSingleEdgeRouter.WORLD_EPSILON_M \
 				and guide.distance_to(ports[edge_id]["target"]) \
@@ -171,7 +174,7 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 ## New spatial profiles reserve a readable fork before turning towards destinations.
 ## This changes routing, never game connectivity or candidate node coordinates.
 static func _spatial_branch_guide(edge: Dictionary, edges: Array, anchors: Dictionary,
-		ports: Dictionary, distance: float) -> Variant:
+		ports: Dictionary, distance: float, spread_override: float = -1.0) -> Variant:
 	var siblings: Array[Dictionary] = []
 	for other: Dictionary in edges:
 		if other["from"] == edge["from"]:
@@ -186,10 +189,39 @@ static func _spatial_branch_guide(edge: Dictionary, edges: Array, anchors: Dicti
 	for index: int in range(siblings.size()):
 		if siblings[index]["id"] == edge["id"]:
 			rank = index
-	var spread: float = 45.0 if siblings.size() == 2 else 70.0
+	var spread: float = spread_override if spread_override>0 else (45.0 if siblings.size() == 2 else 70.0)
 	var angle: float = deg_to_rad(lerpf(-spread, spread, float(rank) / (siblings.size() - 1)))
 	var source: Vector2 = ports[str(edge["id"])]["source"]
 	return source + Vector2.from_angle(angle) * distance
+
+
+static func _journey_branch_spreads(sources: Dictionary, edges: Array, anchors: Dictionary,
+		ports: Dictionary, sample: float, registry: Dictionary, quality: Dictionary, hard: Dictionary) -> Dictionary:
+	# A fixed angle is not a fixed pixel gap at a local three-choice camera.
+	# Choose the smallest bounded widening that the unchanged evaluator accepts.
+	var result: Dictionary = {}
+	for source: String in sources:
+		var siblings: Array = []
+		for edge: Dictionary in edges:
+			if edge["from"]==source: siblings.append(edge)
+		var spread: float = 45.0 if siblings.size()==2 else 70.0
+		while spread<=85.0:
+			var trial: Dictionary = {}
+			for edge: Dictionary in siblings:
+				var id: String = edge["id"]
+				var guide: Vector2 = _spatial_branch_guide(edge,edges,anchors,ports,sample,spread)
+				trial[id]={"from":source,"to":edge["to"],"centerline":[anchors[source],
+					_a3(ports[id]["source"]),_a3(guide),_a3(ports[id]["target"]),anchors[edge["to"]]]}
+			var accepted: bool = true
+			for raw: Dictionary in registry["profiles"]:
+				if raw.get("focus")!=source: continue
+				var profile: Dictionary = preload("res://presentation/map/map_journey_camera_registry.gd").resolve(raw,anchors)
+				var measured: Dictionary = MapQualityEvaluator._fanout(profile,siblings,trial,quality,hard)
+				if not measured["violations"].is_empty(): accepted=false
+			result[source]=spread
+			if accepted: break
+			spread+=5.0
+	return result
 
 
 static func route_planned(edge: Dictionary, plan: Dictionary,

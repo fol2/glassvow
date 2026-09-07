@@ -27,6 +27,8 @@ static func run(fails: Array[String]) -> void:
 	var diagnostics: Dictionary = compiled["diagnostics"]
 	if not diagnostics.has("priority_attempts") or diagnostics.has("ground_exhaustion"):
 		fails.append("routing strategy: receipt hides the attempt or invents ground exhaustion")
+	if diagnostics.get("selected_strategy")!="grade-priority-v1":
+		fails.append("routing strategy: valid flat priority candidate discarded before quality evaluation")
 	quality["routing_strategy"] = "unknown"
 	input = Fixtures._input(nodes,edges,717,0,Fixtures._hero(),quality,assets)
 	compiled = MapLayoutCompiler.compile(input,quality,assets)

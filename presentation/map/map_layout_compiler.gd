@@ -500,8 +500,10 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 				failure["rejected_geometry"] = {"node_anchors":anchors,"edges":routes}
 			return failure
 		plan_diagnostics["grade_receipt"] = graded["receipt"]
+		# This guard freezes the default deferred search, not the opt-in
+		# priority trial. A flat priority trial still faces every quality gate.
 		if MapLayoutCanonical.int_value(
-				graded["receipt"].get("bridge_span_count", 0)) == 0:
+				graded["receipt"].get("bridge_span_count", 0)) == 0 and quality.get("routing_strategy","ground-first-v1")!="grade-priority-v1":
 			return _attempt_failure(chosen_ids, route_rows, {
 				"kind": "grade_separation",
 				"id": "deferred_without_grade",

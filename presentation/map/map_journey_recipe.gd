@@ -1,6 +1,6 @@
 extends RefCounted
 ## Production woodland inputs: actual imported kit, physical space and local view.
-const VERSION: String = "woodland-journey-v5"
+const VERSION: String = "woodland-journey-v6"
 const Fingerprints: JSON = preload("res://assets/art/map-journey/runtime-fingerprints.json")
 const Cache = preload("res://presentation/map/map_journey_cache.gd")
 const Registry = preload("res://presentation/map/map_journey_camera_registry.gd")

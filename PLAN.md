@@ -692,3 +692,33 @@ measurement; ground fallback also exhausts 64 substitutions on a phone branch
 fan-out measurement. Next experiment: distinguish the inappropriate deferred
 search guard from an actual geometric failure. Do not relax fan-out clearance
 or claim the seed passes merely because a guard was removed.
+
+
+### Measured forks and normal corpus compilation — 7 September, 18:11 UTC
+
+The all-ground priority guard was an inappropriate pre-evaluation rejection for
+this explicitly selected strategy. Its default deferred-search restriction is
+preserved. A valid flat priority regression failed before repair and now passes;
+full geometry/quality evaluation remains mandatory. Removing the guard alone
+still rejected seed 17634 at 29.847px fork separation, as recorded in
+flat-priority-17634.json.failure.json. This negative result prevented a false fix.
+
+Journey fork guides now widen only a measured failing branch, selecting the
+smallest 5-degree increment (bounded at 85 degrees) that passes the unchanged
+fan-out evaluator at every shipping shape. Default non-journey routing is
+unchanged. The preserved three-way phone case and existing short/lateral forks
+pass; five changed scripts parse and two focused test modules pass.
+Recipe woodland-journey-v6 invalidates derived caches for the changed route
+selection. Normal fresh compilation now passes all three seeds 4, 717 and 17634,
+not just the first-attempt diagnostic. Source anchors, edges and hero placements
+for 4 and 717 compare exactly to v5. Actual native v6 assemblies of 717 and 17634
+also succeed; physical probes are running. No corpus percentage is awarded until
+those actual surfaces, determinism and retained graph truth are checked.
+
+The production input/travel film uses native Godot movie recording, 170 frames
+at fixed 30fps. The --steps=1 capture travels a real edge, unlike the first-entry
+capture whose arrival starts at the initial stop. Three sampled moving frames
+were inspected: figure, lane and camera remain aligned. This is presentation
+motion evidence, not a gameplay encounter-completion or performance benchmark.
+Files: woodland-route-input.avi/.mp4 and route-motion-*.png under the current
+/tmp/glassvow-steps4-8 evidence directory.

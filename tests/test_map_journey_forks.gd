@@ -3,6 +3,7 @@ const Registry = preload("res://presentation/map/map_journey_camera_registry.gd"
 const Routes = preload("res://presentation/map/map_layout_compiler_routes.gd")
 static func run(fails: Array[String]) -> void:
 	_test_lateral_exit(fails)
+	_test_three_way_phone(fails)
 	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
 	var quality: Dictionary = Registry.quality(base)
 	var rows: Array = []
@@ -56,3 +57,32 @@ static func _test_lateral_exit(fails: Array[String]) -> void:
 		var first: Vector2 = p["branch_egress"]-p["source"]
 		var second: Vector2 = r["branch_egress"]-r["source"]
 		if first.normalized().dot(second.normalized())>.75: fails.append("same-side destinations still produce parallel fork exits")
+
+static func _test_three_way_phone(fails: Array[String]) -> void:
+	# Preserved seed 17634 failure: 70-degree guides yielded only 29.847px.
+	var fixture: GDScript = preload("res://tests/test_map_layout_compiler.gd")
+	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	var quality: Dictionary = Registry.quality(base)
+	var hard_rows: Array = quality["hard"]
+	var hard: Dictionary = MapQualityEvaluator._index(hard_rows)
+	var nodes: Array = [fixture._node("0,5",0,5),fixture._node("1,4",1,4),fixture._node("1,5",1,5),fixture._node("1,6",1,6)]
+	var edges: Array = [fixture._edge("0,5","1,4"),fixture._edge("0,5","1,5"),fixture._edge("0,5","1,6")]
+	var anchors: Dictionary = {"0,5":[-35.5456466674805,0.0,20.2646484375],
+		"1,4":[-25.5432872772217,0.0,9.80974197387695],"1,5":[-24.723560333252,0.0,21.0255908966064],
+		"1,6":[-25.7525196075439,0.0,31.3053207397461]}
+	var plan: Dictionary = Routes.route_plan(nodes,edges,anchors,quality)
+	var routes: Dictionary = {}
+	for edge: Dictionary in edges:
+		var port: Dictionary = plan["ports"][edge["id"]]
+		if not port["branch_egress"] is Vector2:
+			fails.append("journey forks: dense three-way branch has no measured guide")
+			return
+		var line: Array = [anchors[edge["from"]]]
+		for point: Vector2 in [port["source"],port["branch_egress"],port["target"]]: line.append([point.x,0.0,point.y])
+		line.append(anchors[edge["to"]])
+		routes[edge["id"]]={"from":edge["from"],"to":edge["to"],"centerline":line}
+	var registry: Dictionary = MapQualityEvaluator.camera_registry(nodes,quality,edges)
+	for raw: Dictionary in registry["profiles"]:
+		var profile: Dictionary = Registry.resolve(raw,anchors)
+		var result: Dictionary = MapQualityEvaluator._fanout(profile,edges,routes,quality,hard)
+		if not result["violations"].is_empty(): fails.append("journey forks: preserved three-way branch is unreadable at "+str(profile["id"]))
