@@ -208,3 +208,31 @@ commits and pushes. Goal remains off. No routine stage relaunch is required.
 Next: finish baseline reproduction and runtime dependency audit; promote the
 representative Act I section without importing workshop capture or fixture logic.
 All implementation acceptance percentages remain 0% until the relevant gates pass.
+
+### Initial implementation evidence (not a stage acceptance)
+
+- Saved shared-module promotion: 7f10a4df. Twenty-two existing woodland modules
+  now live under presentation/map/landscape; maintained study callers use the
+  same code. Pure relocation and reference updates preserve rendering behaviour.
+- Native relocation capture inspected: /tmp/glassvow-steps4-8/promoted-act1.png.
+- Running full core on isolated exact commit 7f10a4df in
+  /tmp/glassvow-map-promotion-check before its first push; implementation continues
+  in the owned checkout. This prevents moving code from invalidating the check.
+- Unchanged seed 4 reproduces NO_FEASIBLE_NODE_ROUTE_LAYOUT, input
+  dc9ce44058f18539d75337c5420b5348cb0a21d19790b228ff59c3167e5e673c,
+  selection_screen_preflight/domain_empty. Full certificate is retained under
+  /tmp/glassvow-steps4-8/act1-seed4-baseline.json.failure.json.
+- First production assembly renders the approved woodland in WorldMapScreen.
+  Native phone input exercise passes drag, wheel, keyboard, travel start,
+  exactly one arrival and frozen return. This is component navigation evidence,
+  not actual encounter/save-load acceptance.
+- Current assembly has known defects: old circular UI and old camera contract;
+  6.4–7.6 s construction; the small elevated synthetic fixture cannot place the
+  study's mandatory gateway; old plinth/bridge-node-name assertions need to be
+  replaced by equivalent actual geometry observations once the production
+  assembly contract is settled. These failures are not waived or marked passed.
+- Camera experiment: shared 55-degree local framing must fit raised choices AND
+  keep ink/touch regions separate; overview is non-interactive. Initial pure
+  regression passes all three reference shapes and rejects coincident targets.
+  It is not wired into the compiler/runtime yet. Next decisive check: actual
+  native projection and full current/successor groups from the preserved seed 4.

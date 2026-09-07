@@ -1,0 +1,60 @@
+class_name MapJourneyCameraContract
+extends RefCounted
+## Shared projection contract for local decisions and non-interactive overview.
+## Fitting the group is insufficient: the same pose must preserve distinct ink
+## and touch rectangles. Infeasible groups are reported to the layout solver.
+const VERSION: String = "journey-camera-v1"
+const PITCH: float = 55.0
+const HEIGHT: float = 36.0
+const TOUCH_DESIGN_PX: float = 60.0
+const TOUCH_FLOOR_PX: float = 48.0
+const INK_RADIUS_PX: float = 38.0
+const INK_GAP_PX: float = 4.0
+
+static func touch_size(stage: Vector2) -> float:
+	return maxf(TOUCH_FLOOR_PX, TOUCH_DESIGN_PX*stage.y/820.0)
+
+static func projected_plane(point: Vector3) -> Vector2:
+	return Vector2(point.x, point.z*sin(deg_to_rad(PITCH))-point.y*cos(deg_to_rad(PITCH)))
+
+static func resolve(points: PackedVector3Array, stage: Vector2, overview: bool = false) -> Dictionary:
+	if points.is_empty() or stage.x <= 0.0 or stage.y <= 0.0:
+		return {"ok": false, "reason": "empty group or invalid viewport"}
+	var inset: Vector2 = Vector2(42.0, 88.0)
+	var usable: Vector2 = stage-inset*2.0
+	if usable.x <= 0.0 or usable.y <= 0.0:
+		return {"ok": false, "reason": "viewport has no safe decision area"}
+	var minimum: Vector2 = Vector2(INF, INF)
+	var maximum: Vector2 = Vector2(-INF, -INF)
+	var plane: PackedVector2Array = []
+	for point: Vector3 in points:
+		if not point.is_finite():
+			return {"ok": false, "reason": "non-finite anchor"}
+		var projected: Vector2 = projected_plane(point)
+		plane.append(projected)
+		minimum = minimum.min(projected)
+		maximum = maximum.max(projected)
+	var span: Vector2 = maximum-minimum
+	var zoom: float = maxf(12.0, maxf(span.x*stage.y/usable.x, span.y*stage.y/usable.y))
+	var maximum_zoom: float = INF
+	if not overview:
+		for i: int in range(plane.size()):
+			for j: int in range(i+1, plane.size()):
+				var delta: Vector2 = (plane[i]-plane[j]).abs()
+				maximum_zoom = minf(maximum_zoom, maxf(delta.x, delta.y)*stage.y/touch_size(stage))
+				maximum_zoom = minf(maximum_zoom, delta.length()*stage.y/(INK_RADIUS_PX*2.0+INK_GAP_PX))
+	if zoom > maximum_zoom+.0001:
+		return {"ok": false, "reason": "group cannot fit without overlapping targets",
+			"minimum_zoom": zoom, "maximum_zoom": maximum_zoom}
+	var centre: Vector2 = (minimum+maximum)*.5
+	var position: Vector3 = Vector3(centre.x, HEIGHT,
+		centre.y/sin(deg_to_rad(PITCH))+HEIGHT/tan(deg_to_rad(PITCH)))
+	return {"ok": true, "zoom": zoom, "position": position, "pitch": PITCH,
+		"touch_size": touch_size(stage), "overview": overview, "version": VERSION}
+
+static func screen_point(point: Vector3, resolved: Dictionary, stage: Vector2) -> Vector2:
+	var position: Vector3 = resolved["position"]
+	var centre: Vector2 = projected_plane(position)
+	var local: Vector2 = projected_plane(point)-centre
+	var zoom: float = resolved["zoom"]
+	return stage*.5+local*stage.y/zoom
