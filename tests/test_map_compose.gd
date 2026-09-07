@@ -109,6 +109,7 @@ static func _compiled_result_binding(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full()
 	var run: RunState = RunState.new_run(content, 717, "run-map-live-layout")
 	var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.benchmark(run), content)
+	screen._layout_quality_override = legacy_quality()
 	if not screen.has_method(&"layout_result"):
 		_check(fails, false, "WorldMapScreen exposes the final compiled result")
 		screen.free()
@@ -347,6 +348,7 @@ static func _five_shapes(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_slice()
 	var walk: WorldMap = WorldMap.slice()
 	var screen: WorldMapScreen = WorldMapScreen.new(walk, content)
+	screen._layout_quality_override = legacy_quality()
 	screen.instant = true
 	var seen: Array[int] = []
 	screen.node_chosen.connect(func(i: int) -> void: seen.append(i))
@@ -393,6 +395,7 @@ static func _five_shapes(fails: Array[String]) -> void:
 static func _act_and_live(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_slice()
 	var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), content)
+	screen._layout_quality_override = legacy_quality()
 	var scene: MapScene = screen._map_scene
 	_check(fails, scene != null and scene.get_act() == 0,
 			"composed MapScene starts on act 0")
@@ -448,6 +451,7 @@ static func _seats(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_slice()
 	var run: RunState = RunState.new_run(content, 717, "run-map-compose")
 	var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.benchmark(run), content)
+	screen._layout_quality_override = legacy_quality()
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	tree.root.add_child(screen)
 	for shape_name: StringName in StageShape.REFERENCES:
@@ -482,6 +486,7 @@ static func _pin_select(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_slice()
 	var run: RunState = RunState.new_run(content, 717, "run-map-pin-select")
 	var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.benchmark(run), content)
+	screen._layout_quality_override = legacy_quality()
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	tree.root.add_child(screen)
 	_mount(screen, StageShape.IDENTITY)
@@ -513,6 +518,7 @@ static func _projection_cache(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_slice()
 	var run: RunState = RunState.new_run(content, 717, "run-map-projection-cache")
 	var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.benchmark(run), content)
+	screen._layout_quality_override = legacy_quality()
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	tree.root.add_child(screen)
 	_mount(screen, StageShape.IDENTITY)
@@ -560,3 +566,10 @@ static func _v3(value: Variant) -> Vector3:
 	return Vector3(MapLayoutCanonical.float_value(row[0]),
 		MapLayoutCanonical.float_value(row[1]),
 		MapLayoutCanonical.float_value(row[2]))
+
+
+static func legacy_quality() -> Dictionary:
+	# These fixtures deliberately contain proxy anchors and assets. Keep their
+	# recipe explicit; production woodland has its own actual-surface tests.
+	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	return quality

@@ -75,6 +75,8 @@ var _layout_diagnostics: Dictionary = {}
 var _layout_failure: Dictionary = {}
 ## Focused tests replace only the pure compiler call; production leaves this empty.
 var _layout_compile: Callable = Callable()
+## Explicit recipe injection shares the same input/quality identity checks.
+var _layout_quality_override: Dictionary = {}
 ## Projection is shared by waystone layout and marker queries.
 var _projected_seats_cache: PackedVector2Array = PackedVector2Array()
 var _projected_pose: Vector2 = Vector2(INF, INF)
@@ -373,7 +375,7 @@ func refresh(run: RunState) -> void:
 			first_live = _waystones[i]
 	_sync_waylights()
 	if _journey_navigation != null:
-		_journey_navigation.visible = _act == 0 and _layout_result != null
+		_journey_navigation.visible = _map_scene != null and _map_scene.is_journey_layout()
 		_journey_navigation.synchronise(map)
 		_path_band.visible = not _journey_navigation.visible
 		_chip_band.visible = not _journey_navigation.visible
@@ -550,6 +552,7 @@ func _fail_compiled_layout(failure: Dictionary) -> void:
 
 
 func _quality_registry() -> Dictionary:
+	if not _layout_quality_override.is_empty(): return _layout_quality_override.duplicate(true)
 	var value: Variant = _MAP_QUALITY.data
 	if not value is Dictionary: return {}
 	var quality: Dictionary = value

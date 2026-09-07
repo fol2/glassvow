@@ -89,6 +89,8 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 	)
 	var hard: Dictionary = MapQualityEvaluator._index(quality["hard"])
 	for profile: Dictionary in camera_registry["profiles"]:
+		if preload("res://presentation/map/map_journey_camera_registry.gd").enabled(quality):
+			profile = preload("res://presentation/map/map_journey_camera_registry.gd").resolve(profile,anchors)
 		var fanout: Dictionary = MapQualityEvaluator._fanout(
 			profile, order, preview_edges, quality, hard
 		)
@@ -101,13 +103,15 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 		var from_id: String = str(edge["from"])
 		var edge_id: String = str(edge["id"])
 		if not egress_sources.has(from_id) \
-				or inversion["edge_components"].has(edge_id):
+				or (inversion["edge_components"].has(edge_id) and not preload("res://presentation/map/map_journey_camera_registry.gd").enabled(quality)):
 			continue
 		var source: Vector2 = _xz(anchors[from_id])
 		var target: Vector2 = _xz(anchors[str(edge["to"])])
 		var guide: Vector2 = Vector2(
 			minf(source.x + sample, ports[edge_id]["target"].x), target.y
 		)
+		if preload("res://presentation/map/map_journey_camera_registry.gd").enabled(quality):
+			guide = _spatial_branch_guide(edge,order,anchors,ports,sample)
 		if guide.distance_to(ports[edge_id]["source"]) \
 				> MapSingleEdgeRouter.WORLD_EPSILON_M \
 				and guide.distance_to(ports[edge_id]["target"]) \

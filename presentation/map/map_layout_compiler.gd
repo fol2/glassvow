@@ -5,7 +5,7 @@ extends RefCounted
 const COMPILED: String = "COMPILED"
 const NO_FEASIBLE_NODE_ROUTE_LAYOUT: String = "NO_FEASIBLE_NODE_ROUTE_LAYOUT"
 const ALL_GROUND_EXHAUSTED: String = "ALL_GROUND_EXHAUSTED"
-const VERSION: String = "map-layout-compiler-v1"
+const VERSION: String = "map-layout-compiler-v2"
 const MAX_LOCAL_SUBSTITUTIONS: int = 64
 const _Routes = preload("res://presentation/map/map_layout_compiler_routes.gd")
 const _Grade = preload("res://presentation/map/map_grade_separation.gd")

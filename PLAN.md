@@ -444,3 +444,28 @@ same-side destinations can make them nearly parallel; angular exit repair passes
 that fixture while leaving already-readable forks unchanged. Final source input
 must describe the actual production assets; unused legacy landmarks cannot be
 carried forward as real surface qualification.
+
+
+### Qualified component promotion — 7 September, after frozen core
+
+The locale-cache fix and explicit proxy-recipe fixtures pass the six affected
+lifecycle/composition/locale/realisation tests. The five frozen-core assertions
+are resolved in that focused rerun; no final whole-game pass is claimed. The new
+map-residency test covers retention, inactivity, bounded replacement and release
+at run end.
+
+Known-conflict unit propagation and measured angular fork exits are promoted from
+the isolated trials. Their five focused iterator/fork/router regressions pass,
+including exhaustive feasible-set preservation. Iterator version advances to v2
+and compiler version to v2 so old cached results cannot silently represent a new
+algorithm. Limits and gameplay identities remain unchanged.
+
+The analytic approach/fork trial passes a complete seed-717 compilation with all
+65 nodes and 76 edges and zero hard violations. Artifact:
+/tmp/glassvow-steps4-8/seed717-analytic-full.json. This is a source result from the
+recorded isolated trial, not a production surface/native acceptance receipt.
+Seed 4 now fails only legacy-hero silhouette checks in the first-attempt probe.
+Next: construct the production recipe from the actual approved assets, bind its
+spatial bounds to terrain/paint/planting, qualify seed 4 and inspect the native
+section. The ordinary unqualified default input must not be mistaken for this
+selected analytic recipe.

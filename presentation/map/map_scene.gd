@@ -618,6 +618,10 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 	return final_result
 
 
+func is_journey_layout() -> bool:
+	return _layout_result != null and _landscape is JourneyLandscape
+
+
 func realised_asset_bundle() -> Dictionary:
 	return _realised_assets.duplicate(true) if not _realised_assets.is_empty() else layout_asset_bundle()
 

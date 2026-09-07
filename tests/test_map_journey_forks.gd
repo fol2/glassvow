@@ -2,6 +2,7 @@ extends RefCounted
 const Registry = preload("res://presentation/map/map_journey_camera_registry.gd")
 const Routes = preload("res://presentation/map/map_layout_compiler_routes.gd")
 static func run(fails: Array[String]) -> void:
+	_test_lateral_exit(fails)
 	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
 	var quality: Dictionary = Registry.quality(base)
 	var rows: Array = []
@@ -36,3 +37,22 @@ static func run(fails: Array[String]) -> void:
 	var blocker: Dictionary = diagnostic.get("first_blocker",{})
 	if routed.get("status")!=MapSingleEdgeRouter.NO_ROUTE or blocker.get("obstacle_id")!="node:C":
 		fails.append("journey forks: rejected guide did not identify the actual obstructing node")
+
+static func _test_lateral_exit(fails: Array[String]) -> void:
+	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/map-quality-v2.json"))
+	var q: Dictionary = Registry.quality(base)
+	var rows: Array = []
+	for i: int in range(15): rows.append({"station_m":i*15.0,"height_m":0.0,"centre_z_m":35.0 if i>0 else 0.0,"lane_spacing_m":5.0,"region":"woodland"})
+	q["spatial_profile"] = {"schema_version":1,"id":"lateral-fork","act":0,"bounds_xz_m":[-10.0,-30.0,225.0,65.0],"rows":rows}
+	var nodes: Array = [{"id":"A","type":"monster","row":0,"col":3,"jitter":[0.0,0.0]},{"id":"B","type":"monster","row":1,"col":2,"jitter":[0.0,0.0]},{"id":"C","type":"monster","row":1,"col":4,"jitter":[0.0,0.0]}]
+	var edges: Array = [{"id":"AB","from":"A","to":"B"},{"id":"AC","from":"A","to":"C"}]
+	var a: Dictionary = {"A":[0.0,0.0,0.0],"B":[15.0,0.0,30.0],"C":[15.0,0.0,40.0]}
+	var plan: Dictionary = Routes.route_plan(nodes,edges,a,q)
+	var p: Dictionary = plan["ports"]["AB"]
+	var r: Dictionary = plan["ports"]["AC"]
+	if not p["branch_egress"] is Vector2 or not r["branch_egress"] is Vector2:
+		fails.append("lateral fork not repaired")
+	else:
+		var first: Vector2 = p["branch_egress"]-p["source"]
+		var second: Vector2 = r["branch_egress"]-r["source"]
+		if first.normalized().dot(second.normalized())>.75: fails.append("same-side destinations still produce parallel fork exits")

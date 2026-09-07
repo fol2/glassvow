@@ -21,6 +21,8 @@ var _route_checkpoint_quarantined: bool = false
 ## Exact live route constructor; durable resume reconstructs the initial route.
 var _route_rebuilder: Callable = Callable()
 var _map_layout_compile: Callable = Callable()
+var _map_quality_override: Dictionary = {}
+var _map_screen_language: StringName = &""
 var _map_layout_input_digest: String = ""
 var _map_layout_packet: Variant = null
 var _map_screen: WorldMapScreen = null
@@ -1393,7 +1395,8 @@ func _show_map() -> void:
 	if game != null and game.run != null:
 		_transitions.wipe()
 	_clear_route()
-	if _parked_map_screen != null and _parked_map_screen.map == _map and _parked_map_screen.content == content:
+	var language: StringName = Locale.active.code if Locale.active != null else Locale.CODE_EN
+	if _parked_map_screen != null and _parked_map_screen.map == _map and _parked_map_screen.content == content and _map_screen_language == language:
 		_map_screen = _parked_map_screen
 		_parked_map_screen = null
 		_map_screen.process_mode = Node.PROCESS_MODE_INHERIT
@@ -1403,6 +1406,8 @@ func _show_map() -> void:
 		_discard_parked_map()
 		_map_screen = WorldMapScreen.new(_map, content, _shape)
 		_map_screen._layout_compile = _compile_map_layout
+		_map_screen._layout_quality_override = _map_quality_override
+		_map_screen_language = language
 		_map_screen.node_chosen.connect(_on_node_chosen)
 		_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
 		_map_screen.before_pick = _on_map_before_pick
