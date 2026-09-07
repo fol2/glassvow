@@ -1,0 +1,43 @@
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -946,6 +946,13 @@
+ 			push_error("CombatRules: unknown effect kind %s" % kind)
+ 
+ 
++## Research-only two-slope payoff. Missing floor_per is exactly the prior law.
++func resource_payoff(stock: int, fx: Dictionary) -> int:
++	var q: int = maxi(0, stock)
++	var reserve: int = maxi(0, _ji(fx.get("reserve", 0)))
++	return _ji(fx["n"]) * maxi(0, q - reserve) + _ji(fx.get("floor_per", 0)) * mini(q, reserve)
++
++
+ func _apply_special(
+ 	run: RunState,
+ 	cb: CombatState,
+@@ -974,7 +981,7 @@
+ 		"doubleBlock":
+ 			gain_block_player(cb, cb.player.block, false, run)
+ 		"phantom":
+-			hit_enemy(run, cb, target, _ji(fx["n"]) * maxi(0, cb.hand.size() - _ji(fx.get("reserve", 0))), true, damage_mult)
++			hit_enemy(run, cb, target, resource_payoff(cb.hand.size(), fx), true, damage_mult)
+ 		"devour":
+ 			hit_enemy(run, cb, target, _ji(fx["n"]), true, damage_mult)
+ 			if target.hp <= 0:
+@@ -991,7 +998,7 @@
+ 			var echo: int = 2 if target.staggered or _sget(target.statuses, "vulnerable") > 0 else 1
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) * echo, true, damage_mult)
+ 		"emberNova":
+-			hit_enemy(run, cb, target, _ji(fx["n"]) * maxi(0, cb.embers - _ji(fx.get("reserve", 0))), true, damage_mult)
++			hit_enemy(run, cb, target, resource_payoff(cb.embers, fx), true, damage_mult)
+ 		"pyreTithe":
+ 			for held: CardInst in cb.hand.duplicate():
+ 				cb.hand.erase(held)
+@@ -1360,7 +1367,7 @@
+ 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + inst.bonus), "times": 1})
+ 			elif sid in ["phantom", "emberNova"] and fx.has("reserve"):
+ 				var stock: int = maxi(0, cb.hand.size() - 1) if sid == "phantom" else cb.embers
+-				var raw_damage: int = _ji(fx["n"]) * maxi(0, stock - _ji(fx["reserve"]))
++				var raw_damage: int = resource_payoff(stock, fx)
+ 				hits.append({"dmg": _preview_hit(p, target, raw_damage), "times": 1})
+ 			elif sid == "heldEmberWard":
+ 				var held: int = maxi(0, cb.embers - _ji(fx.get("reserve", 4)))
