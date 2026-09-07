@@ -1,0 +1,45 @@
+{
+  "status": "PREREGISTERED_VALIDATION_NOT_P9",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "content_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "training_cohort": [
+    43010000,
+    43010015
+  ],
+  "validation_cohort": [
+    44010000,
+    44010063
+  ],
+  "contexts": 16,
+  "runs_per_context": 64,
+  "assigned_runs": 1024,
+  "fixed_chunks_per_context": 4,
+  "core_routes": {
+    "0": [
+      "facet",
+      "fervor",
+      "cycle"
+    ],
+    "1": [
+      "smolder",
+      "hand",
+      "cycle"
+    ]
+  },
+  "controls": "same balanced research controller; not the signed original arm2",
+  "model_sha256": "2cfe1d8ff00d5ff695664c597be3a93e3960f39732fa049eac82b9397184bab7",
+  "readout": [
+    "all assigned win/loss/stall/error and natural acquisition",
+    "held-out fixed fingerprint confusion with unresolved counted incorrect; descriptive prediction only",
+    "per-run signed causal contribution vectors and mechanism reachability",
+    "simultaneous binomial 95% confidence intervals over 12 core quality cells, no new P9 threshold",
+    "paired seed-cluster gaps versus recorded balanced controls"
+  ],
+  "not_allowed": [
+    "no changes inside a running batch",
+    "no selection on partial chunks",
+    "no post-peek extension",
+    "no replacement of signed controls or detector admission",
+    "no protected acceptance cohort"
+  ]
+}
