@@ -23,7 +23,7 @@ validation, independent review, PR, CI, merge and safe branch cleanup. Provide a
 playable review surface and a concise final completion/usage report.
 
 Non-goals: new story, encounter rules, node IDs, save schema, a replacement map
-generator, a web implementation, store release, new native plugins, unrelated
+generator, a web implementation, public App Store release, new native plugins, unrelated
 cleanup or reopening approved art direction. No Ponytail hook. Execution uses normal long-running mode, as explicitly requested by James.
 Goal remains off; do not create a goal or a continuation automation. Continue
 within the active run through completion, retaining this capsule across compaction.
@@ -1212,3 +1212,21 @@ repair and no further structural performance failure, plus device/signing/CI
 waits. Roughly 11 wall-clock hours have elapsed since 12:19 UTC, including validation waits. This revises the
 previous remaining-work forecast using completed four-chapter/native flow work;
 it is not a committed finish time while signing and floor-phone access are open.
+
+### Owner-directed TestFlight delivery — 7 September, 23:23 UTC
+
+The owner requests TestFlight instead of tethered installation. Use the existing
+Glassvow app (io.fol2.glassvow) and internal RC Beta group. Current processed build
+is 1.0.0 (4); reserve build 5 in both iOS presets. The internal review uses the
+existing iOS Dev Review release-template preset, retaining its chapter catalogue
+for quick four-act inspection; no hard-coded measurement scenario on boot.
+Complete relevant gates before upload, retain archive/symbols, inspect processing
+and group availability, and supply focused test notes. No public store submission.
+
+The local Apple Development identity passes a disposable signing canary; the
+existing team API key is present locally and remote API authentication succeeds.
+This provides a route without the M4 signing failure. No new credentials or
+passwords are needed. TestFlight availability is not physical-device performance
+proof; preserve that distinction in the report. The corrected M4 release canary
+(99e11e3e) passes Act II: p95 4.426 ms, renderer peak 401.344 MiB, 2,380 raw frame
+samples, stable realised/source identity; its native journey image was inspected.
