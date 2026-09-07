@@ -35,7 +35,7 @@ jobs:
             .claude/skills/glassvow-godot
             AGENTS.md
             project.godot
-          sparse-checkout-cone-mode-mode: false
+          sparse-checkout-cone-mode: false
       - name: Archive tracked sources without executing them
         shell: bash
         run: |
