@@ -28,15 +28,15 @@ func capture() -> void:
 	sun.shadow_enabled = true
 	sun.shadow_opacity = .65
 	sun.shadow_normal_bias = .5
-	var mats: Dictionary = preload("res://tools/map_workshop/stone_bridge/presets.gd").materials(preload("res://tools/map_workshop/stone_bridge/presets.gd").drowned_city())
+	var mats: Dictionary = preload("res://presentation/map/chapters/stone_bridge/presets.gd").materials(preload("res://presentation/map/chapters/stone_bridge/presets.gd").drowned_city())
 	var stone: Material = mats["body"]
 	var trim: Material = mats["trim"]
 	var paving: Material = mats["deck"]
 	M.box(world,Vector3(0,-.5,0),Vector3(90,.5,90),M.material(Color("233641")))
-	var water: MeshInstance3D = preload("res://tools/map_workshop/water/surface.gd").new()
+	var water: MeshInstance3D = preload("res://presentation/map/chapters/water/surface.gd").new()
 	var plane: PlaneMesh = PlaneMesh.new()
 	plane.size = Vector2(90,90)
-	water.configure(plane,preload("res://tools/map_workshop/water/presets.gd").drowned_city())
+	water.configure(plane,preload("res://presentation/map/chapters/water/presets.gd").drowned_city())
 	water.set_capture_time(2)
 	water.position.y = .35
 	world.add_child(water)

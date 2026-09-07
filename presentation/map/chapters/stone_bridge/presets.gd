@@ -15,7 +15,7 @@ static func woodland() -> Dictionary:
 
 static func materials(settings: Dictionary) -> Dictionary:
 	var body: ShaderMaterial = ShaderMaterial.new()
-	body.shader = preload("res://tools/map_workshop/stone_bridge/masonry.gdshader")
+	body.shader = preload("res://presentation/map/chapters/stone_bridge/masonry.gdshader")
 	body.set_shader_parameter("stone_colour",settings["stone_colour"])
 	body.set_shader_parameter("water_level",settings["water_level"])
 	var trim: StandardMaterial3D = StandardMaterial3D.new()
@@ -23,6 +23,6 @@ static func materials(settings: Dictionary) -> Dictionary:
 	trim.roughness = .95
 	trim.metallic_specular = .20
 	var deck: ShaderMaterial = ShaderMaterial.new()
-	deck.shader = preload("res://tools/map_workshop/stone_bridge/paving.gdshader")
+	deck.shader = preload("res://presentation/map/chapters/stone_bridge/paving.gdshader")
 	deck.set_shader_parameter("stone_colour",settings["paving_colour"])
 	return {"body":body,"trim":trim,"deck":deck}

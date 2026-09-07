@@ -1,6 +1,6 @@
 extends SceneTree
 ## Ray probes distinguish real full-depth openings from dark surface marks.
-const Kit = preload("res://tools/map_workshop/stone_bridge/pointed_parapets.gd")
+const Kit = preload("res://presentation/map/chapters/stone_bridge/pointed_parapets.gd")
 const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 func _initialize() -> void:
 	for backwards: bool in [false,true]:

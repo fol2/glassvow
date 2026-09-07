@@ -22,9 +22,9 @@ func build(parent: Node3D, library_at: Vector3, causeways: Node3D) -> Node3D:
 	apron.name = "FittedLibraryForecourt"
 	parent.add_child(apron)
 	var paving: ShaderMaterial = ShaderMaterial.new()
-	paving.shader = preload("res://tools/map_workshop/stone_bridge/paving.gdshader")
+	paving.shader = preload("res://presentation/map/chapters/stone_bridge/paving.gdshader")
 	var stone: ShaderMaterial = ShaderMaterial.new()
-	stone.shader = preload("res://tools/map_workshop/act2/masonry.gdshader")
+	stone.shader = preload("res://presentation/map/chapters/act2/masonry.gdshader")
 	Meshes.node(apron,Meshes.finish(top),paving,"ForecourtSurface")
 	Meshes.node(apron,Meshes.finish(walls),stone,"ForecourtFoundation")
 	return apron

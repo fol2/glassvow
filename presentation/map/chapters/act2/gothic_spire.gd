@@ -1,8 +1,8 @@
-extends "res://tools/map_workshop/act2/library.gd"
+extends "res://presentation/map/chapters/act2/library.gd"
 ## Faceted stained-glass civic tower, echoing the Act II combat skyline.
 func build_spire(height: float = 5.4) -> void:
-	stone.shader = preload("res://tools/map_workshop/act2/masonry.gdshader")
-	glass.shader = preload("res://tools/map_workshop/act2/glass.gdshader")
+	stone.shader = preload("res://presentation/map/chapters/act2/masonry.gdshader")
+	glass.shader = preload("res://presentation/map/chapters/act2/glass.gdshader")
 	var base: CylinderMesh = CylinderMesh.new()
 	base.top_radius = 1.5
 	base.bottom_radius = 1.7

@@ -1,4 +1,4 @@
-extends "res://tools/map_workshop/common/smooth_surfaces.gd"
+extends "res://presentation/map/chapters/common/smooth_surfaces.gd"
 ## Exact-height landing ownership. Unlike the rejected experiment, never warps heights.
 var lower: RefCounted
 var pads: PackedVector2Array = []

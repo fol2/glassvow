@@ -1,2 +1,2 @@
-extends "res://tools/map_workshop/common/landing_surfaces.gd"
+extends "res://presentation/map/chapters/common/landing_surfaces.gd"
 ## Approved Act II compatibility entry point.

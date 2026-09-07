@@ -18,7 +18,7 @@ func build(parent: Node3D, mesh: ArrayMesh, field: RefCounted,
 	var count: int = 0
 	var accepted: Array[Dictionary] = []
 	var boundary: Array[Dictionary] = []
-	for edge: Dictionary in preload("res://tools/map_workshop/stone_bridge/outline.gd").segments(mesh):
+	for edge: Dictionary in preload("res://presentation/map/chapters/stone_bridge/outline.gd").segments(mesh):
 		var a: Vector3 = edge["a"]
 		var b: Vector3 = edge["b"]
 		var divisions: int = maxi(1,ceili(a.distance_to(b)/.20))
@@ -55,7 +55,7 @@ func build(parent: Node3D, mesh: ArrayMesh, field: RefCounted,
 		_piece(arch_stones,a,b,outward*.04-Vector3.UP*.16,.34,.16)
 		_arch_band(a,b,outward,field)
 		count += 1
-	preload("res://tools/map_workshop/stone_bridge/pointed_parapets.gd").new().build(accepted,blocks,caps,other_fields,settings)
+	preload("res://presentation/map/chapters/stone_bridge/pointed_parapets.gd").new().build(accepted,blocks,caps,other_fields,settings)
 	var result: Array[ArrayMesh] = []
 	if count>0:
 		for surface: SurfaceTool in [blocks,caps,arch_stones]:

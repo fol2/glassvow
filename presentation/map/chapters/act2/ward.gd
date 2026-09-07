@@ -1,8 +1,8 @@
-extends "res://tools/map_workshop/act2/library.gd"
+extends "res://presentation/map/chapters/act2/library.gd"
 ## A connected civic group: glass tower, reading wings and flooded courtyard.
 func build_ward(tower_height: float, mirrored: bool) -> void:
-	stone.shader = preload("res://tools/map_workshop/act2/masonry.gdshader")
-	glass.shader = preload("res://tools/map_workshop/act2/glass.gdshader")
+	stone.shader = preload("res://presentation/map/chapters/act2/masonry.gdshader")
+	glass.shader = preload("res://presentation/map/chapters/act2/glass.gdshader")
 	M.box(self,Vector3(0,-.05,0),Vector3(9.4,2.1,6.4),stone,"WardFoundation")
 	# The low precinct is overtopped by the flood. Only its coping and aisles emerge.
 	for sign_value: int in [-1,1]:
@@ -13,7 +13,7 @@ func build_ward(tower_height: float, mirrored: bool) -> void:
 		_shelf(Vector3(sign_value*3.8,1.22,-1.2),-sign_value*PI*.5)
 		for i: int in range(4):
 			M.box(self,Vector3(sign_value*3.25,1.13-i*.19,2.15+i*.22),Vector3(2.4,.24,.28),stone,"DrownedWingStair")
-	var tower: Node3D = preload("res://tools/map_workshop/act2/gothic_spire.gd").new()
+	var tower: Node3D = preload("res://presentation/map/chapters/act2/gothic_spire.gd").new()
 	add_child(tower)
 	tower.position = Vector3(.6 if mirrored else -.6,0,-.7)
 	tower.build_spire(tower_height)

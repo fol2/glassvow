@@ -1,6 +1,6 @@
 extends SceneTree
 ## Geometry-level checks on the complete generated flight, not its counters.
-const Stairs = preload("res://tools/map_workshop/stone_bridge/stairs.gd")
+const Stairs = preload("res://presentation/map/chapters/stone_bridge/stairs.gd")
 class Ramp extends RefCounted:
 	var spans: Array[Dictionary] = []
 	var slope: float
@@ -26,7 +26,7 @@ func _initialize() -> void:
 	assert(gentle==null,"A gentle slope must remain a paved ramp")
 	for ramp: Ramp in [Ramp.new(.3),Ramp.new(-.3),Ramp.new(.18,.01)]:
 		if ramp.curvature!=0:
-			var grading: RefCounted = preload("res://tools/map_workshop/stone_bridge/flight_grade.gd").new()
+			var grading: RefCounted = preload("res://presentation/map/chapters/stone_bridge/flight_grade.gd").new()
 			grading.prepare(ramp,{})
 			ramp.fitted = grading
 			var top_height: float = grading.height(Vector2(10,0),2.8)

@@ -1,6 +1,6 @@
 extends SceneTree
 ## Native contact sheet of all shared aquatic models under the chapter lighting.
-const Assets = preload("res://tools/map_workshop/act2/scenery_assets.gd")
+const Assets = preload("res://presentation/map/chapters/act2/scenery_assets.gd")
 const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 func _initialize() -> void:
 	_build.call_deferred()
@@ -36,8 +36,8 @@ func _build() -> void:
 	M.box(world,Vector3(0,-1,0),Vector3(70,1,70),M.material(Color("112b32")),"FloodBed")
 	var plane: PlaneMesh = PlaneMesh.new()
 	plane.size = Vector2(70,70)
-	var water: Node3D = preload("res://tools/map_workshop/water/surface.gd").new()
-	water.configure(plane,preload("res://tools/map_workshop/water/presets.gd").drowned_city())
+	var water: Node3D = preload("res://presentation/map/chapters/water/surface.gd").new()
+	water.configure(plane,preload("res://presentation/map/chapters/water/presets.gd").drowned_city())
 	world.add_child(water)
 	water.position.y = 1.18
 	water.set_capture_time(2.0)

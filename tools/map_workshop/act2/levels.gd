@@ -1,2 +1,2 @@
-extends "res://tools/map_workshop/common/terrace_levels.gd"
+extends "res://presentation/map/chapters/common/terrace_levels.gd"
 ## Approved Act II compatibility entry point.

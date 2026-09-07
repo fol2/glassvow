@@ -1,7 +1,7 @@
 extends SceneTree
 ## Bounded resource contract; native captures separately qualify shader output.
-const Water = preload("res://tools/map_workshop/water/surface.gd")
-const Presets = preload("res://tools/map_workshop/water/presets.gd")
+const Water = preload("res://presentation/map/chapters/water/surface.gd")
+const Presets = preload("res://presentation/map/chapters/water/presets.gd")
 
 func _initialize() -> void:
 	var city: Water = Water.new()

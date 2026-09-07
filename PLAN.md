@@ -813,3 +813,23 @@ Remaining conditional forecast: 10–18 active engineering hours plus external
 waits (four recipes 4–7h, shared loading/flow 2–4h, final validation/review/integration
 4–7h). The prior 13–23h range was deliberately conditional; geometry qualification
 has retired its largest known source-failure risk. Reforecast after Act II.
+
+
+### Act II shared-module promotion — 7 September, 19:17 UTC
+
+Moved the 28 runtime dependencies of the accepted Act II architecture, causeways,
+scenery, water and stone-bridge kit into presentation/map/chapters. Updated their
+tracked source callers, including Act III study consumers, so studies and runtime
+will use the same implementation. A deterministic comparison confirms every
+promoted body is unchanged except resource paths; 41 affected scripts parse.
+The native accepted-profile reconstruction runs successfully and its bridge/water
+close composition was inspected against scenery-v2. It retains 65 nodes,
+76 routes, 127 scenery placements, zero missing deck samples, zero added masonry
+body hits and zero architecture bounds hits in the existing study probes.
+This is relocation evidence, not a production Act II acceptance or new performance
+claim. The reconstruction camera is closer than the accepted whole-act reference.
+Next: bind generated Act II source geometry to the shared fitted stone kit and
+production journey navigation, measure actual procedural asset profiles, and
+qualify arbitrary-node ruin ownership. Do not ship the study fixture or its saved
+optimisation profile as campaign truth. First compare the generated physical
+levels with the approved 1.18m waterline and substantial raised city structures.

@@ -13,8 +13,8 @@ var connected_forecourt: bool = false
 
 func build(flood_level: float = 1.18) -> void:
 	flood = flood_level
-	stone.shader = preload("res://tools/map_workshop/act2/masonry.gdshader")
-	glass.shader = preload("res://tools/map_workshop/act2/glass.gdshader")
+	stone.shader = preload("res://presentation/map/chapters/act2/masonry.gdshader")
+	glass.shader = preload("res://presentation/map/chapters/act2/glass.gdshader")
 	jade.emission_enabled = true
 	jade.emission = Color("66d4aa")
 	jade.emission_energy_multiplier = 1.4

@@ -5,7 +5,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var source: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/studies/camera-composition/act2-seed717.json"))
-	var map: Node3D = preload("res://tools/map_workshop/act2/causeways.gd").new()
+	var map: Node3D = preload("res://presentation/map/chapters/act2/causeways.gd").new()
 	root.add_child(map)
 	map.build(source)
 	var routes: Dictionary = {}

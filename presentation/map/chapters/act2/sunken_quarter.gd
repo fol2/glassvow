@@ -4,7 +4,7 @@ const M = preload("res://presentation/map/landscape/mesh_tools.gd")
 
 func build(kind: int) -> void:
 	var stone: ShaderMaterial = ShaderMaterial.new()
-	stone.shader = preload("res://tools/map_workshop/act2/masonry.gdshader")
+	stone.shader = preload("res://presentation/map/chapters/act2/masonry.gdshader")
 	var floor_material: StandardMaterial3D = M.material(Color("344652"))
 	M.box(self,Vector3(0,.2,0),Vector3(12,1,8),stone,"SubmergedCityBlock")
 	if kind%3==0:
@@ -28,7 +28,7 @@ func build(kind: int) -> void:
 		M.box(self,Vector3(0,.73,0),Vector3(9,.3,5.5),floor_material,"DrownedSquare")
 		for side: int in [-1,1]:
 			M.box(self,Vector3(side*4.7,.92,0),Vector3(.6,.45,6),stone,"SquareParapet")
-	var spire: Node3D = preload("res://tools/map_workshop/act2/gothic_spire.gd").new()
+	var spire: Node3D = preload("res://presentation/map/chapters/act2/gothic_spire.gd").new()
 	add_child(spire)
 	spire.build_spire(5.4)
 	spire.scale = Vector3.ONE*(.62 if kind%2==0 else .5)

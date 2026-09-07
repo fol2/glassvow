@@ -1,8 +1,8 @@
 extends SceneTree
 ## Headed, isolated native architecture study. No campaign or save mutation.
-const Library = preload("res://tools/map_workshop/act2/library.gd")
+const Library = preload("res://presentation/map/chapters/act2/library.gd")
 const M = preload("res://presentation/map/landscape/mesh_tools.gd")
-const SharedWater = preload("res://tools/map_workshop/water/surface.gd")
+const SharedWater = preload("res://presentation/map/chapters/water/surface.gd")
 var output: String = ""
 var chapter: bool = false
 var clean: bool = false
@@ -87,7 +87,7 @@ func _run() -> void:
 	architecture.append(library)
 	if chapter:
 		var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/studies/camera-composition/act2-seed717.json"))
-		var causeways: Node3D = preload("res://tools/map_workshop/act2/causeways.gd").new()
+		var causeways: Node3D = preload("res://presentation/map/chapters/act2/causeways.gd").new()
 		world.add_child(causeways)
 		causeways.build(data)
 		if not causeways.failure.is_empty():
@@ -116,12 +116,12 @@ func _run() -> void:
 			if kind=="library":
 				building = library
 			elif kind=="ward":
-				building = preload("res://tools/map_workshop/act2/ward.gd").new()
+				building = preload("res://presentation/map/chapters/act2/ward.gd").new()
 				world.add_child(building)
 				building.build_ward(6.6 if site["ordinal"]==1 else 5.4,ordinal%2==0)
 				architecture.append(building)
 			else:
-				building = preload("res://tools/map_workshop/act2/sunken_quarter.gd").new()
+				building = preload("res://presentation/map/chapters/act2/sunken_quarter.gd").new()
 				world.add_child(building)
 				building.build(ordinal-4)
 				architecture.append(building)
@@ -130,7 +130,7 @@ func _run() -> void:
 	library.connected_forecourt = chapter
 	library.build(1.18-library.position.y)
 	if chapter:
-		var scenery: Node3D = preload("res://tools/map_workshop/act2/scenery.gd").new()
+		var scenery: Node3D = preload("res://presentation/map/chapters/act2/scenery.gd").new()
 		world.add_child(scenery)
 		scenery.build(study_causeways)
 		architecture.append(scenery)
@@ -144,7 +144,7 @@ func _run() -> void:
 	var plane: PlaneMesh = PlaneMesh.new()
 	plane.size = Vector2(240,240)
 	var water_mesh: SharedWater = SharedWater.new()
-	water_mesh.configure(plane,preload("res://tools/map_workshop/water/presets.gd").drowned_city())
+	water_mesh.configure(plane,preload("res://presentation/map/chapters/water/presets.gd").drowned_city())
 	water_mesh.name = "FloodWater"
 	world.add_child(water_mesh)
 	water_mesh.position.y = 1.18

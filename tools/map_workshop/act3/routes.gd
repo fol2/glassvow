@@ -1,4 +1,4 @@
-extends "res://tools/map_workshop/common/fitted_routes.gd"
+extends "res://presentation/map/chapters/common/fitted_routes.gd"
 ## Court paving reuses fitted routes and real stairs, without bridge furniture.
 func _build_edges(_index: int,_trim: Material,_settings: Dictionary) -> void:
 	pass

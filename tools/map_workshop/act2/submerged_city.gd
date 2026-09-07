@@ -1,6 +1,6 @@
 extends Node3D
 ## Deterministic whole-act grouping in the actual generated route-free spaces.
-const Quarter = preload("res://tools/map_workshop/act2/sunken_quarter.gd")
+const Quarter = preload("res://presentation/map/chapters/act2/sunken_quarter.gd")
 var sites: Array[Vector3] = []
 
 func build(causeways: Node3D, precincts: Node3D, library_at: Vector3) -> void:

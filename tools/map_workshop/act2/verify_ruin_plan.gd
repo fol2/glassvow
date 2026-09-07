@@ -13,7 +13,7 @@ func _initialize() -> void:
 		routes[key] = points
 		anchors[sample["edges"][key]["from"]] = points[0]+Vector3.UP*.022
 		anchors[sample["edges"][key]["to"]] = points[-1]+Vector3.UP*.022
-	var plan: RefCounted = preload("res://tools/map_workshop/act2/ruin_plan.gd").new()
+	var plan: RefCounted = preload("res://presentation/map/chapters/act2/ruin_plan.gd").new()
 	plan.build(sample,anchors,routes)
 	if not plan.failure.is_empty():
 		push_error(plan.failure)

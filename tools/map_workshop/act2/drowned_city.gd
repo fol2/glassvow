@@ -1,6 +1,6 @@
 extends Node3D
 ## Precincts occupy verified empty rectangles in the generated city route plan.
-const Ward = preload("res://tools/map_workshop/act2/ward.gd")
+const Ward = preload("res://presentation/map/chapters/act2/ward.gd")
 var sites: Array[Vector3] = []
 var failure: String = ""
 var placement_evidence: Array[Dictionary] = []

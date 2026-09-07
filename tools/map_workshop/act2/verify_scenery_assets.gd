@@ -1,7 +1,7 @@
 extends SceneTree
 ## Geometry contract for the shared scenery library, without rendering the map.
 func _initialize() -> void:
-	var kit: RefCounted = preload("res://tools/map_workshop/act2/scenery_assets.gd").new()
+	var kit: RefCounted = preload("res://presentation/map/chapters/act2/scenery_assets.gd").new()
 	kit.build()
 	assert(kit.meshes.size()==18)
 	assert(kit.material.vertex_color_use_as_albedo and kit.material.vertex_color_is_srgb)

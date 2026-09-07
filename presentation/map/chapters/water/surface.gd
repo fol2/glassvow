@@ -1,7 +1,7 @@
 extends MeshInstance3D
 ## Shared Step 3 water surface. Call configure before adding it to the scene.
 ## One horizontal mesh per body; callers own its footprint and water level.
-const WATER_SHADER: Shader = preload("res://tools/map_workshop/water/surface.gdshader")
+const WATER_SHADER: Shader = preload("res://presentation/map/chapters/water/surface.gdshader")
 static var textures: Array[Texture2D] = []
 
 func configure(footprint: Mesh, preset: Dictionary = {}) -> void:

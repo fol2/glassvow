@@ -15,7 +15,7 @@ var sampled_routes: Dictionary = {}
 var failure: String = ""
 var ruin_plan: RefCounted
 var ruin_links: Dictionary = {}
-var height_profile: RefCounted = preload("res://tools/map_workshop/common/profile.gd").new()
+var height_profile: RefCounted = preload("res://presentation/map/chapters/common/profile.gd").new()
 var bridge_style: Dictionary = {}
 var stone: ShaderMaterial = ShaderMaterial.new()
 var deck: ShaderMaterial = ShaderMaterial.new()
@@ -28,7 +28,7 @@ func build(sample: Dictionary) -> void:
 	if not height_profile.failure.is_empty():
 		failure = height_profile.failure
 		return
-	var materials: Dictionary = material_factory.call(bridge_style) if material_factory.is_valid() else preload("res://tools/map_workshop/stone_bridge/presets.gd").materials(bridge_style)
+	var materials: Dictionary = material_factory.call(bridge_style) if material_factory.is_valid() else preload("res://presentation/map/chapters/stone_bridge/presets.gd").materials(bridge_style)
 	stone = materials["body"]
 	deck = materials["deck"]
 	for edge: Dictionary in sample["edges"].values():
@@ -128,16 +128,16 @@ func build(sample: Dictionary) -> void:
 			continue
 		var field: Surfaces = Surfaces.new()
 		if not height_profile.routes.is_empty():
-			field = preload("res://tools/map_workshop/common/smooth_surfaces.gd").new()
+			field = preload("res://presentation/map/chapters/common/smooth_surfaces.gd").new()
 		if spans == upper and not height_profile.routes.is_empty():
-			var landing: Surfaces = preload("res://tools/map_workshop/common/landing_surfaces.gd").new()
+			var landing: Surfaces = preload("res://presentation/map/chapters/common/landing_surfaces.gd").new()
 			landing.lower = fields[0]
 			landing.pads = levels.abutments
 			field = landing
 		var profile: Callable = Callable(levels,"height") if spans == lower and height_profile.routes.is_empty() else Callable()
 		field.setup(spans,func(_x: float,_z: float) -> float: return -2.0,profile)
 		if not height_profile.routes.is_empty():
-			var grading: RefCounted = preload("res://tools/map_workshop/stone_bridge/flight_grade.gd").new()
+			var grading: RefCounted = preload("res://presentation/map/chapters/stone_bridge/flight_grade.gd").new()
 			grading.prepare(field,{"openings":stair_exclusions})
 			field.set("stair_profile",grading)
 		fields.append(field)
@@ -161,7 +161,7 @@ func build(sample: Dictionary) -> void:
 	for i: int in range(fields.size()):
 		_build_edges(i,trim,edge_style)
 	for i: int in range(fields.size()):
-		var steps: ArrayMesh = preload("res://tools/map_workshop/stone_bridge/stairs.gd").new().build(self,fields[i],trim,{"openings":stair_exclusions,"tread_width":bridge_style["tread_width"]})
+		var steps: ArrayMesh = preload("res://presentation/map/chapters/stone_bridge/stairs.gd").new().build(self,fields[i],trim,{"openings":stair_exclusions,"tread_width":bridge_style["tread_width"]})
 		if steps!=null:
 			# Keep indexed treads and the unindexed deck in separate surfaces.
 			# A mixed append would leave the deck outside the index buffer.
@@ -173,10 +173,10 @@ func build(sample: Dictionary) -> void:
 	print("FITTED_ROUTE_ASSEMBLY nodes=",anchors.size()," edges=",sampled_routes.size()," layers=",fields.size())
 
 func _soffit(height: float,s: float,total: float,raised: bool) -> float:
-	return preload("res://tools/map_workshop/stone_bridge/profile.gd").soffit(height,s,total,raised,bridge_style)
+	return preload("res://presentation/map/chapters/stone_bridge/profile.gd").soffit(height,s,total,raised,bridge_style)
 
 func _build_edges(index: int,trim: Material,settings: Dictionary) -> void:
-	decoration_meshes.append_array(preload("res://tools/map_workshop/stone_bridge/edges.gd").new().build(self,deck_meshes[index],fields[index],fields,stone,trim,settings))
+	decoration_meshes.append_array(preload("res://presentation/map/chapters/stone_bridge/edges.gd").new().build(self,deck_meshes[index],fields[index],fields,stone,trim,settings))
 
 func _build_piers(trim: Material,settings: Dictionary) -> void:
-	decoration_meshes.append_array(preload("res://tools/map_workshop/stone_bridge/piers.gd").build(self,fields,stone,trim,settings))
+	decoration_meshes.append_array(preload("res://presentation/map/chapters/stone_bridge/piers.gd").build(self,fields,stone,trim,settings))

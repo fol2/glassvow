@@ -63,9 +63,9 @@ func _run() -> void:
 	sun.directional_shadow_max_distance = 160
 	var sample: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/map/studies/camera-composition/act3-seed717.json"))
 	var routes: Node3D = preload("res://tools/map_workshop/act3/routes.gd").new()
-	routes.levels = preload("res://tools/map_workshop/common/terrace_levels.gd").new()
+	routes.levels = preload("res://presentation/map/chapters/common/terrace_levels.gd").new()
 	routes.ruin_plan = preload("res://tools/map_workshop/act3/destination.gd").new()
-	routes.bridge_style = preload("res://tools/map_workshop/stone_bridge/presets.gd").drowned_city()
+	routes.bridge_style = preload("res://presentation/map/chapters/stone_bridge/presets.gd").drowned_city()
 	routes.bridge_style["water_level"] = -10.0
 	routes.bridge_style["foundation_level"] = -1.8
 	routes.material_factory = func(settings: Dictionary) -> Dictionary: return Palette.bridge(settings)
