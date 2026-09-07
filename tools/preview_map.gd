@@ -87,6 +87,7 @@ func _run() -> void:
 	screen.size = Vector2(dimensions)
 	var start: int = Time.get_ticks_msec()
 	screen.refresh(run)
+	var bind_ms: int = Time.get_ticks_msec()-start
 	screen.set_survey_retired(_steps > 0)
 	if screen.layout_result() == null:
 		printerr(JSON.stringify(screen.layout_failure()))
@@ -138,7 +139,8 @@ func _run() -> void:
 		return
 	print("MAP_PREVIEW ", JSON.stringify({"act_index": act, "seed": seed_value,
 		"input_digest": screen.layout_input_digest(), "layout_digest": screen.layout_digest(),
-		"bind_ms": Time.get_ticks_msec() - start,
+		"bind_ms": bind_ms,
+		"assembly_ms": screen._map_scene.layout_diagnostics().get("assembly_ms", {}),
 		"scenery": screen._map_scene.layout_diagnostics().get("accepted_count", 0)}))
 	if _output.is_empty():
 		return
@@ -191,36 +193,45 @@ func _exercise_input(screen: WorldMapScreen) -> bool:
 					clear = false
 			if clear:
 				point = candidate
+	var journey_mode: bool = screen._journey_navigation != null and screen._journey_navigation.visible
 	var old_zoom: int = rig.zoom_stop
 	var wheel: InputEventMouseButton = InputEventMouseButton.new()
 	wheel.button_index = MOUSE_BUTTON_WHEEL_UP
 	wheel.pressed = true
 	wheel.position = point
-	root.push_input(wheel)
+	root.push_input(wheel, true)
+	# Hardware scroll is a press/release pair. Leaving its synthetic button
+	# held captures subsequent GUI clicks on the map instead of the controls.
+	var wheel_release: InputEventMouseButton = wheel.duplicate() as InputEventMouseButton
+	wheel_release.pressed = false
+	root.push_input(wheel_release, true)
 	await process_frame
-	var receipt: Dictionary = {"wheel": rig.zoom_stop == maxi(0, old_zoom - 1)}
+	var receipt: Dictionary = {"wheel": (not screen._journey_navigation.overview and rig.journey_mode) if journey_mode else rig.zoom_stop == maxi(0, old_zoom - 1)}
 	var pose: Vector2 = rig.camera_xz()
 	var press: InputEventMouseButton = InputEventMouseButton.new()
 	press.button_index = MOUSE_BUTTON_LEFT
 	press.pressed = true
 	press.position = point
-	root.push_input(press)
+	root.push_input(press, true)
 	var drag: InputEventMouseMotion = InputEventMouseMotion.new()
 	drag.position = point + Vector2(50, 0)
 	drag.relative = Vector2(50, 0)
 	drag.button_mask = MOUSE_BUTTON_MASK_LEFT
-	root.push_input(drag)
+	root.push_input(drag, true)
 	var release: InputEventMouseButton = press.duplicate() as InputEventMouseButton
 	release.pressed = false
 	release.position = drag.position
-	root.push_input(release)
+	root.push_input(release, true)
 	await process_frame
 	receipt["drag"] = not rig.camera_xz().is_equal_approx(pose)
 	var reachable: Array[int] = screen.map.reachable()
 	if reachable.is_empty():
 		return false
 	var index: int = reachable[0]
-	rig.set_camera_xz(screen._focus_xz(index))
+	if journey_mode:
+		screen._journey_navigation.return_to_journey()
+	else:
+		rig.set_camera_xz(screen._focus_xz(index))
 	screen._layout_waystones()
 	var chosen: Array[int] = []
 	screen.node_chosen.connect(func(value: int) -> void: chosen.append(value))
@@ -228,14 +239,40 @@ func _exercise_input(screen: WorldMapScreen) -> bool:
 	var key: InputEventKey = InputEventKey.new()
 	key.keycode = KEY_ENTER
 	key.pressed = true
-	root.push_input(key)
+	var before_inspection: int = screen.map.at
+	root.push_input(key, true)
+	if journey_mode:
+		receipt["inspection_preserves_current"] = screen.map.at == before_inspection and screen._journey_navigation.selected == index
+		var key_release: InputEventKey = key.duplicate() as InputEventKey
+		key_release.pressed = false
+		root.push_input(key_release, true)
+		await process_frame
+		var target: Vector2 = screen._journey_navigation._travel.get_global_rect().get_center()
+		var hover: InputEventMouseMotion = InputEventMouseMotion.new()
+		hover.position = target
+		hover.global_position = target
+		root.push_input(hover, true)
+		await process_frame
+		var confirm: InputEventMouseButton = InputEventMouseButton.new()
+		confirm.button_index = MOUSE_BUTTON_LEFT
+		confirm.position = target
+		confirm.global_position = target
+		confirm.pressed = true
+		root.push_input(confirm, true)
+		await process_frame
+		var confirm_release: InputEventMouseButton = confirm.duplicate() as InputEventMouseButton
+		confirm_release.pressed = false
+		root.push_input(confirm_release, true)
+		# A second confirmation during motion cannot enter or arrive again.
+		root.push_input(confirm, true)
+		root.push_input(confirm_release, true)
 	receipt["keyboard"] = screen.map.at == index
 	receipt["travel_started"] = screen._travelling and scene.is_live()
-	await create_timer(0.8).timeout
+	await create_timer(4.8 if journey_mode else 0.8).timeout
 	for frame: int in range(8):
 		await process_frame
 	receipt["arrived_once"] = chosen == [index] and not screen._travelling
-	receipt["frozen_after_arrival"] = not scene.is_live() and scene.get_stage().render_target_update_mode == SubViewport.UPDATE_ONCE
+	receipt["idle_render_policy"] = not scene.is_live() and scene.get_stage().render_target_update_mode == (SubViewport.UPDATE_ALWAYS if scene.has_ambient_motion() else SubViewport.UPDATE_ONCE)
 	print("MAP_INPUT ", JSON.stringify(receipt))
 	return not receipt.values().has(false)
 

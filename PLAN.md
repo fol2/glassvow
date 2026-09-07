@@ -58,7 +58,7 @@ from completed checklist items and change it only with an explained scope change
 
 | Step | Weight | Deliverable and completion gate | Accepted progress |
 | --- | ---: | --- | ---: |
-| 4 — Finished playable section | 20% | Promote a representative generated section through the production presentation seam. Integrate relief, surfaces, banks, stairs/bridges where relevant, scenery, light and node interaction. Inspect close/journey/overview and moving camera; no broken joins, floating assets, clipping or stretched ground. | 0% |
+| 4 — Finished playable section | 20% | Promote a representative generated section through the production presentation seam. Integrate relief, surfaces, banks, stairs/bridges where relevant, scenery, light and node interaction. Inspect close/journey/overview and moving camera; no broken joins, floating assets, clipping or stretched ground. | 20% |
 | 5 — Visual acceptance | 10% | Judge the running section against approved chapter evidence, at all reference proportions, with navigation visible and hidden. Fix known defects before expanding. Record the actual visual verdict and rejected defects. Agent-owned gate; no routine owner approval. | 0% |
 | 6 — Generator generalisation | 25% | Generalise placement and chapter profiles over the maintained map corpus plus explicit dense branches, merges, crossing levels, long routes and edge cases. Retain node/edge truth, repeatability and walkable geometry. Resolve the preserved dense seed 4 failure rather than substitute an easier seed. | 0% |
 | 7 — Four-act production | 25% | Integrate all four approved identities into runtime assembly using qualified shared modules and chapter recipes. Verify per-chapter composition, combat alignment and transitions across the whole journey. No preview-only paths or palette-swap substitute. | 0% |
@@ -266,3 +266,63 @@ Evidence: /tmp/glassvow-steps4-8/camera-groups.json.
   requests the correct node. The remaining combined input failure depends on
   preceding drag/wheel actions, so investigation is narrowed to that sequence;
   direct method calls are not substituted for actual input.
+
+
+### First-hour audit — 13:24 UTC, 7 September
+
+The following finite checklist fixes the acceptance denominator: five equally
+weighted items within each step. An item passes only with its complete evidence;
+partial implementation does not receive fractional credit.
+
+- Step 4: [x] approved shared woodland geometry promotion with native comparison
+  and exact-commit core; [ ] truthful production geometry/asset identity and
+  grounded traversal; [ ] local inspection/confirmation and overview throughout
+  the section; [ ] scene construction and lifecycle within the applicable budget;
+  [ ] complete playable section inspected in all required poses.
+- Step 5: [ ] desktop composition; [ ] tablet composition; [ ] phone composition;
+  [ ] moving camera and overlays on/off; [ ] all observed material visual defects
+  resolved and accepted against the approved woodland reference.
+- Step 6: [ ] camera and physical presentation share the compiler contract;
+  [ ] preserved seed 4 qualified; [ ] maintained corpus repeatability/truth;
+  [ ] dense branches/merges/long routes; [ ] crossing levels, contacts and bounds.
+- Step 7: [ ] Act I final recipe; [ ] Act II final recipe; [ ] Act III final recipe;
+  [ ] Act IV final recipe; [ ] whole-journey/combat alignment and transitions.
+- Step 8: [ ] actual campaign/encounter/save-load; [ ] input/accessibility and
+  physical-device evidence; [ ] performance/lifecycle and selected local gates;
+  [ ] exact-head independent review and PR CI; [ ] integrated checks, review
+  surface, safe cleanup and final usage/completion report.
+
+Accepted progress: Step 4 20%; Steps 5–8 0%; overall 4%. This credits the
+qualified shared-module promotion, not the unfinished production renderer.
+
+Native combined input now passes on phone and tablet reference shapes, including
+balanced wheel events, drag, inspection before confirmation, and exactly one
+arrival despite repeated travel input. The earlier failure was the preview
+harness retaining wheel-button capture; the fix sends the missing release rather
+than bypassing the real button. Current navigation remains a component result.
+
+Measured on Apple M1 Max, Metal Mobile renderer, phone reference viewport:
+construction 6249 ms; terrain 3533 ms (ground 1183, roads 1977, river 327), scenery
+1197 ms. Runtime frame p95 16.687 ms, 336 draw calls, renderer 312.72 MiB; GPU timer
+unavailable. This does not pass the governed 16 ms frame ceiling or establish
+physical-mobile performance. Logs: /tmp/glassvow-steps4-8/journey-phone-profile.log.
+Paired physical iPhone 16 Pro Max and iPad 8th generation are available; neither
+has yet provided this candidate's device evidence.
+
+Remaining forecast: 12–20 further active engineering hours plus external gates,
+conditional on compiler/camera and terrain integration and physical-device access.
+The first hour exposed real production seams absent from the studies, including
+per-return reconstruction and obsolete asset/geometry metadata. The forecast is
+not a committed completion time. Re-estimate after the representative section and
+seed 4 are qualified; do not defer these risks to the last stage.
+
+Usage checkpoint at 13:07 UTC, relative to 12:19 start: 16,832,292 input tokens,
+16,621,824 cached input, 210,468 uncached input; 60,397 output tokens, including
+30,002 reasoning tokens. These are platform counters, not a price or Pro allowance
+conversion; reasoning is not added twice. Keep subsequent reporting at stage or
+material forecast checkpoints, with focused reads and no overlapping reviewers.
+
+Next: make the production assembly contract truthful, qualify the camera against
+actual terrain, reduce measured construction cost without degrading the approved
+surfaces, and save the resulting coherent section checkpoint. All known failing
+binding assertions and the elevated gateway fixture remain unresolved.

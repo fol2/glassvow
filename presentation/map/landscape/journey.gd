@@ -75,7 +75,16 @@ func sync(map: WorldMap, selected: int) -> void:
 		trace = null
 	if selected<0 or not reachable.has(selected) or map.at<0:
 		return
-	var route: PackedVector3Array = path(map.nodes[map.at].id,map.nodes[selected].id)
+	show_route(map.nodes[map.at].id,map.nodes[selected].id,anchors[map.at],anchors[selected])
+
+func clear_route() -> void:
+	if trace != null:
+		trace.queue_free()
+		trace = null
+
+func show_route(from_id: String, to_id: String, start: Vector3, finish: Vector3) -> void:
+	clear_route()
+	var route: PackedVector3Array = path(from_id,to_id)
 	if route.size()<2:
 		return
 	var ribbon: SurfaceTool = SurfaceTool.new()
@@ -86,8 +95,6 @@ func sync(map: WorldMap, selected: int) -> void:
 		var b: Vector3 = route[i+1]
 		# Let the waystone itself mark the destination; avoid drawing a dotted
 		# ring around the local footpath used to walk past its physical base.
-		var start: Vector3 = anchors[map.at]
-		var finish: Vector3 = anchors[selected]
 		if Vector2(a.x-start.x,a.z-start.z).length()<1.1 or Vector2(b.x-finish.x,b.z-finish.z).length()<1.1:
 			continue
 		length += a.distance_to(b)

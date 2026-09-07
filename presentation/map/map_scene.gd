@@ -4,6 +4,7 @@ extends Control
 ## The generator owns every node, route and landmark transform. Rest allows
 ## three render warm-up frames, then freezes until input or content changes.
 
+const JourneyLandscape = preload("res://presentation/map/map_journey_landscape.gd")
 const OVERSAMPLE: float = 1.0
 const VP_MAX: int = 2048
 const THRESHOLD_XZ: Vector2 = Vector2(-41.3, 6.5)
@@ -16,6 +17,7 @@ const FLING_DAMP: float = 0.06
 const FLING_MAX: float = 48.0
 
 signal surface_tapped(screen: Vector2)
+signal journey_zoom_requested(outward: bool)
 
 var _stage: SubViewport
 var _display: TextureRect
@@ -40,6 +42,7 @@ var _layout_result: MapLayoutResult = null
 var _layout_diagnostics: Dictionary = {}
 var _layout_failure: Dictionary = {}
 var _act: int = -1
+var _motion_setting: int = -1
 var _dragging: bool = false
 var _lock_input: bool = false
 var _dragged: float = 0.0
@@ -172,6 +175,16 @@ func road_segments() -> PackedVector3Array:
 
 
 func set_waylight_states(states: Dictionary) -> bool:
+	if _landscape is JourneyLandscape:
+		if _layout_result == null:
+			return false
+		var edges: Dictionary = _layout_result.identity_dict()["edges"]
+		if MapLayoutCanonical.sorted_keys(states) != MapLayoutCanonical.sorted_keys(edges):
+			return false
+		for value: String in states.values():
+			if value not in ["cold", "open", "walked"]:
+				return false
+		return true
 	var ids: Array[String] = MapLayoutCanonical.sorted_keys(_waylights)
 	if MapLayoutCanonical.sorted_keys(states) != ids:
 		return false
@@ -233,6 +246,16 @@ func _deal_act(_region: MapRegions) -> void:
 	_key.light_color = MapRegions.LAND_KEY[_act]
 	var setting: WorldEnvironment = _world.get_node("MapEnvironment") as WorldEnvironment
 	setting.environment.ambient_light_color = MapRegions.LAND_AMBIENT[_act]
+	if _act == 0:
+		_key.rotation_degrees = Vector3(-52, -32, 0)
+		_key.light_color = Color("ddd7d2")
+		_key.light_energy = .95
+		_key.shadow_opacity = .68
+		_key.directional_shadow_max_distance = 130
+		setting.environment.background_color = Color("252530")
+		setting.environment.ambient_light_color = Color("a19caa")
+		setting.environment.ambient_light_energy = .50
+		setting.environment.fog_enabled = false
 	_salt_dirty = false
 	_bind_asset_geometry()
 	_repaint()
@@ -326,7 +349,10 @@ func _gui_input(event: InputEvent) -> void:
 		if button.pressed and button.button_index in [
 				MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
 			var inward: int = -1 if button.button_index == MOUSE_BUTTON_WHEEL_UP else 1
-			_rig.nudge_zoom(inward)
+			if _rig.journey_mode:
+				journey_zoom_requested.emit(inward > 0)
+			else:
+				_rig.nudge_zoom(inward)
 			set_live(false)
 			accept_event()
 		elif button.button_index == MOUSE_BUTTON_LEFT:
@@ -378,14 +404,22 @@ func _on_drag(relative: Vector2, velocity: Vector2) -> void:
 
 func _screen_to_world(delta_px: Vector2) -> Vector2:
 	var k: float = _rig.get_camera().size / maxf(_view_height(), 1.0)
-	var tilt: float = deg_to_rad(absf(MapCameraRig.TILT_DEGREES))
+	var tilt: float = deg_to_rad(absf(_rig.get_camera().rotation_degrees.x))
 	return Vector2(-delta_px.x * k, -delta_px.y * k / sin(tilt))
 
 
 func _process(delta: float) -> void:
+	if _landscape is JourneyLandscape and _landscape.terrain != null and _motion_setting != int(Preferences.active.reduce_motion):
+		_motion_setting = int(Preferences.active.reduce_motion)
+		set_live(_live)
+		var stream: Node = _landscape.terrain.get_node_or_null("Stream")
+		if stream != null:
+			stream.set("animate", not Preferences.active.reduce_motion)
+	if has_ambient_motion():
+		_stage.render_target_update_mode = SubViewport.UPDATE_ALWAYS if is_visible_in_tree() else SubViewport.UPDATE_DISABLED
 	if not _live and _settle_frames > 0:
 		_settle_frames -= 1
-		if _settle_frames == 0:
+		if _settle_frames == 0 and not has_ambient_motion():
 			_stage.render_target_update_mode = SubViewport.UPDATE_ONCE
 	if _dragging or _lock_input:
 		return
@@ -497,7 +531,7 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 	var data: Dictionary = compiled.identity_dict()
 	if _landscape != null:
 		_landscape.free()
-	_landscape = MapLandscape.new()
+	_landscape = JourneyLandscape.new() if _act == 0 else MapLandscape.new()
 	_world.add_child(_landscape)
 	_landscape.prepare(data, _landscape_assets, _scatter_salt)
 	_selection_half = _selection_reserve(quality)
@@ -525,6 +559,10 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 	var final_result: MapLayoutResult = MapLayoutResult.create(data)
 	if final_result == null:
 		return _fail_layout("filtered result is invalid")
+	_landscape.build(data)
+	_motion_setting = -1
+	if _landscape is JourneyLandscape and not _landscape.failure.is_empty():
+		return _fail_layout(str(_landscape.failure))
 	var edges: Dictionary = data["edges"]
 	if not _bind_waylights(edges):
 		return _fail_layout("compiled edge cannot configure a bounded waylight")
@@ -540,8 +578,8 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 		"rejected_count": rejections.size(),
 		"scenery_instances": data["scenery_instances"],
 		"rejections": rejections,
+		"assembly_ms": _landscape.timings_ms if _landscape is JourneyLandscape else {},
 	}
-	_landscape.build(data)
 	_repaint()
 	return final_result
 
@@ -574,6 +612,8 @@ func _flatten_edges(edges: Dictionary) -> PackedVector3Array:
 
 func _bind_waylights(edges: Dictionary) -> bool:
 	_clear_waylights()
+	if _landscape is JourneyLandscape:
+		return true
 	var index: int = 0
 	for edge_id: String in MapLayoutCanonical.sorted_keys(edges):
 		var edge: Dictionary = edges[edge_id]
@@ -694,3 +734,41 @@ static func _selection_reserve(quality: Dictionary) -> Vector2:
 			pixels_per_metre = minf(pixels_per_metre, MapLayoutCanonical.float_value(shape[1]) / zoom)
 	var half: float = radius / pixels_per_metre
 	return Vector2(half, half / sin(deg_to_rad(absf(MapCameraRig.TILT_DEGREES))))
+
+
+func resolved_anchor(source: Vector3) -> Vector3:
+	return _landscape.resolved_anchor(source) if _landscape is JourneyLandscape else source
+
+
+func walking_route(from_id: String, to_id: String) -> PackedVector3Array:
+	return _landscape.walking_route(from_id, to_id) if _landscape is JourneyLandscape else PackedVector3Array()
+
+
+func travel_position(from_id: String, to_id: String, progress: float) -> Vector3:
+	return _landscape.travel_position(from_id, to_id, progress) if _landscape is JourneyLandscape else Vector3.INF
+
+
+func travel_duration(from_id: String, to_id: String) -> float:
+	return _landscape.travel_duration(from_id, to_id) if _landscape is JourneyLandscape else 0.0
+
+
+func set_traveller(at: Vector3, ahead: Vector3, moving: bool) -> void:
+	if _landscape is JourneyLandscape:
+		_landscape.set_traveller(at, ahead, moving)
+		_repaint()
+
+
+func parked_position(source: Vector3) -> Vector3:
+	if _landscape is JourneyLandscape and _landscape.journey != null:
+		return _landscape.journey.parked(_landscape.resolved_anchor(source))
+	return source
+
+
+func has_ambient_motion() -> bool:
+	return _landscape is JourneyLandscape and _landscape.terrain != null and not Preferences.active.reduce_motion
+
+
+func select_journey_route(from_id: String, to_id: String) -> void:
+	if _landscape is JourneyLandscape:
+		_landscape.select_route(from_id,to_id)
+		_repaint()

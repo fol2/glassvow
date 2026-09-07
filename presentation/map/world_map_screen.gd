@@ -15,6 +15,10 @@ signal sealed_door_requested
 ## Vigil flush cannot let the lantern walk before the record is on disk.
 var before_pick: Callable = Callable()
 
+const JourneyNavigation = preload("res://presentation/map/map_journey_navigation.gd")
+const JourneyCamera = preload("res://presentation/map/map_journey_camera_contract.gd")
+var _journey_navigation: JourneyNavigation
+
 const TRAVEL_TIME: float = 0.4
 const SCENERY_SEED_OFFSET: int = 97
 const _MAP_QUALITY: JSON = preload("res://docs/map/map-quality-v2.json")
@@ -43,6 +47,8 @@ var _travelling: bool = false
 ## run starts with no prior seat (path then collapses to the target).
 var _travel_from_i: int = -1
 var _travel_t: float = 0.0
+var _travel_from_zoom: float = 20.0
+var _travel_to_zoom: float = 20.0
 var _travel_from_xz: Vector2 = MapCameraRig.DEFAULT_XZ
 var _travel_to_xz: Vector2 = MapCameraRig.DEFAULT_XZ
 var _waystones: Array[GlassWaystone] = []
@@ -73,6 +79,7 @@ var _layout_compile: Callable = Callable()
 var _projected_seats_cache: PackedVector2Array = PackedVector2Array()
 var _projected_pose: Vector2 = Vector2(INF, INF)
 var _projected_zoom_stop: int = -1
+var _projected_camera_size: float = -1.0
 var _projected_control_size: Vector2 = Vector2(-1.0, -1.0)
 var _projected_view_size: Vector2i = Vector2i(-1, -1)
 ## Test-visible count of actual whole-map projection passes. It is deliberately
@@ -100,6 +107,13 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	# Theme after the bands exist so apply_region reaches them.
 	_set_act_theme(0)
 	_build_chrome()
+	_journey_navigation = JourneyNavigation.new()
+	_journey_navigation.visible = false
+	_journey_navigation.caption_resolver = _node_caption
+	_journey_navigation.travel_requested.connect(choose)
+	_journey_navigation.view_changed.connect(_frame_journey)
+	add_child(_journey_navigation)
+	_map_scene.journey_zoom_requested.connect(_journey_zoom)
 	_seat_marker()
 	_push_bands(true)
 	set_process(true)
@@ -358,6 +372,11 @@ func refresh(run: RunState) -> void:
 		if first_live == null and live.has(i):
 			first_live = _waystones[i]
 	_sync_waylights()
+	if _journey_navigation != null:
+		_journey_navigation.visible = _act == 0 and _layout_result != null
+		_journey_navigation.synchronise(map)
+		_path_band.visible = not _journey_navigation.visible
+		_chip_band.visible = not _journey_navigation.visible
 	if live.is_empty():
 		_hint_label.visible = true
 		_hint_label.text = Locale.active.t("ui.pilgrimage.roadEnds")
@@ -371,6 +390,9 @@ func refresh(run: RunState) -> void:
 	_seat_marker()
 	_push_bands(true)
 	_sync_sealed_door(run)
+	if _journey_navigation != null and _journey_navigation.visible:
+		_hint_label.visible = false
+		_frame_journey()
 
 
 func _sync_sealed_door(run: RunState) -> void:
@@ -578,7 +600,7 @@ func _ordered_layout_anchors(result: MapLayoutResult = _layout_result) \
 	for node: MapNode in map.nodes:
 		if not anchors.has(node.id):
 			return PackedVector3Array()
-		out.append(_v3(anchors[node.id]))
+		out.append(_map_scene.resolved_anchor(_v3(anchors[node.id])))
 	return out
 
 
@@ -603,6 +625,7 @@ func projected_seats() -> PackedVector2Array:
 	if _projected_seats_cache.size() != map.nodes.size() \
 			or not _projected_pose.is_equal_approx(pose) \
 			or _projected_zoom_stop != rig.zoom_stop \
+			or not is_equal_approx(_projected_camera_size, rig.get_camera().size) \
 			or not _projected_control_size.is_equal_approx(size) \
 			or _projected_view_size != view_size:
 		var anchors: PackedVector3Array = _ordered_layout_anchors()
@@ -612,6 +635,7 @@ func projected_seats() -> PackedVector2Array:
 				else PackedVector2Array())
 		_projected_pose = pose
 		_projected_zoom_stop = rig.zoom_stop
+		_projected_camera_size = rig.get_camera().size
 		_projected_control_size = size
 		_projected_view_size = view_size
 		_seat_projection_passes += 1
@@ -678,6 +702,8 @@ func _seat_marker() -> void:
 	if _map_scene != null:
 		_map_scene.set_lock_input(false)
 		_map_scene.get_rig().set_camera_xz(seat)
+		var at: Vector3 = marker_world_position()
+		_map_scene.set_traveller(at, at, false)
 		_map_scene.set_live(false)
 
 
@@ -691,6 +717,12 @@ func _focus_xz(i: int) -> Vector2:
 	# reproduce, which is exactly what test_map's re-aim gate is watching for.
 	# The shape is known without a frame.
 	var reference: Vector2 = Vector2(StageShape.REFERENCES[shape])
+	if _journey_navigation != null and _journey_navigation.visible:
+		var pose: Dictionary = _journey_focus_pose(i)
+		if pose.get("ok", false):
+			var position: Vector3 = pose["position"]
+			return Vector2(position.x, position.z)
+		return _map_scene.get_rig().camera_xz()
 	var quality: Dictionary = _quality_registry()
 	if quality.is_empty():
 		push_error("WorldMapScreen cannot resolve the governed map quality registry")
@@ -718,7 +750,10 @@ func _focus_xz(i: int) -> Vector2:
 
 
 func _on_waystone_chosen(i: int) -> void:
-	choose(i)
+	if _journey_navigation != null and _journey_navigation.visible:
+		_journey_navigation.inspect(i)
+	else:
+		choose(i)
 
 
 ## Glide the lantern to node `i`, then hand off. False = not selectable now.
@@ -727,6 +762,8 @@ func _on_waystone_chosen(i: int) -> void:
 ## after node_chosen, so the ceremony covers the same-screen window between
 ## click and route swap.
 func choose(i: int) -> bool:
+	if i < 0 or i >= map.nodes.size():
+		return false
 	if before_pick.is_valid() and not before_pick.call():
 		return false
 	var from_i: int = map.at
@@ -742,6 +779,8 @@ func choose(i: int) -> bool:
 	_travel_from_i = from_i
 	_travel_t = 0.0
 	_travelling = true
+	if _journey_navigation != null:
+		_journey_navigation.set_locked(true)
 	# The only instruction on screen names three things the walk has just taken
 	# away — scroll, drag and choose are all refused for its duration. Half alpha
 	# says "not now" without the label vanishing and re-appearing (PR #79 DL R1).
@@ -749,6 +788,10 @@ func choose(i: int) -> bool:
 	_travel_from_xz = _map_scene.get_rig().camera_xz() if _map_scene != null \
 		else MapCameraRig.DEFAULT_XZ
 	_travel_to_xz = _focus_xz(i)
+	if _map_scene != null:
+		_travel_from_zoom = _map_scene.get_rig().get_camera().size
+		var destination_pose: Dictionary = _journey_focus_pose(i)
+		_travel_to_zoom = destination_pose.get("zoom", _travel_from_zoom)
 	if _map_scene != null:
 		_map_scene.set_lock_input(true)
 		_map_scene.set_live(true)
@@ -769,12 +812,23 @@ func _glide(i: int, was_unlit: bool) -> void:
 		_waystones[i].kindle_reveal(map.nodes[i].type)
 	# Hold the glide so the 0.45s bloom lands before the route swap.
 	var dur: float = maxf(TRAVEL_TIME, 0.5) if was_unlit else TRAVEL_TIME
+	if _map_scene != null and _travel_from_i >= 0:
+		dur = maxf(dur, _map_scene.travel_duration(map.nodes[_travel_from_i].id, map.nodes[i].id))
 	Motion.bez(self, _set_travel_t, dur, Motion.CSS_EASE) \
 		.finished.connect(_on_arrived.bind(i))
 
 
 func _set_travel_t(v: float) -> void:
 	_travel_t = v
+	if _map_scene != null and _map_scene.get_rig().journey_mode:
+		_map_scene.get_rig().get_camera().size = lerpf(_travel_from_zoom, _travel_to_zoom, v)
+	if _map_scene != null:
+		var at: Vector3 = marker_world_position()
+		var ahead: Vector3 = at
+		if _travel_from_i >= 0:
+			ahead = _map_scene.travel_position(map.nodes[_travel_from_i].id,
+				map.nodes[map.at].id, minf(1.0, v+.005))
+		_map_scene.set_traveller(at, ahead, true)
 	if _map_scene != null:
 		_map_scene.get_rig().set_camera_xz(
 			_travel_from_xz.lerp(_travel_to_xz, v))
@@ -786,6 +840,8 @@ func _set_travel_t(v: float) -> void:
 
 func _on_arrived(i: int) -> void:
 	_travelling = false
+	if _journey_navigation != null:
+		_journey_navigation.set_locked(true)
 	_travel_from_i = -1
 	_hint_label.modulate.a = 1.0
 	if _map_scene != null:
@@ -806,10 +862,12 @@ func marker_world_position() -> Vector3:
 		var edge_v: Variant = edges.get(edge_id)
 		if typeof(edge_v) == TYPE_DICTIONARY:
 			var edge: Dictionary = edge_v
-			return MapWaylightTracer.point_at_progress(edge, _travel_t)
+			var physical: Vector3 = _map_scene.travel_position(
+				map.nodes[_travel_from_i].id, map.nodes[map.at].id, _travel_t)
+			return physical if physical.is_finite() else MapWaylightTracer.point_at_progress(edge, _travel_t)
 	var anchors: Dictionary = _layout_data.get("node_anchors", {})
 	var anchor_v: Variant = anchors.get(map.nodes[map.at].id)
-	return _v3(anchor_v) if MapLayoutCanonical.vector(anchor_v, 3) else Vector3.INF
+	return _map_scene.parked_position(_v3(anchor_v)) if MapLayoutCanonical.vector(anchor_v, 3) else Vector3.INF
 
 
 ## Project only after sampling in world space. The permitted overlay is the
@@ -864,7 +922,7 @@ func _on_surface_tapped(screen: Vector2) -> void:
 		return
 	var i: int = pick_node_at(screen)
 	if i >= 0:
-		choose(i)
+		_on_waystone_chosen(i)
 
 
 ## The `map` scope's own numbers. `bar` hangs off it as a sub-dict.
@@ -895,9 +953,17 @@ func _layout_waystones() -> void:
 	var k: float = _trail_num("scale", 0.36)
 	var touch: float = _trail_num("touch", 0.0)
 	var seats: PackedVector2Array = projected_seats()
+	var context: Array[int] = []
+	if _journey_navigation != null and _journey_navigation.visible:
+		context = _journey_navigation.context_indices()
 	for i: int in range(_waystones.size()):
 		var ws: GlassWaystone = _waystones[i]
 		var node_scale: float = k
+		if _journey_navigation != null and _journey_navigation.visible:
+			ws.visible = context.has(i)
+			ws.focus_mode = Control.FOCUS_ALL if ws.visible else Control.FOCUS_NONE
+			ws.set_journey_presentation(_journey_navigation.overview, _journey_navigation.selected == i)
+			touch = JourneyCamera.touch_size(Vector2(StageShape.REFERENCES[shape]))
 		ws.scale = Vector2.ONE * node_scale
 		ws.set_depth_alpha(1.0)
 		ws.set_touch_min(touch, node_scale)
@@ -919,3 +985,53 @@ func _v3(value: Variant) -> Vector3:
 	return Vector3(MapLayoutCanonical.float_value(row[0]),
 		MapLayoutCanonical.float_value(row[1]),
 		MapLayoutCanonical.float_value(row[2]))
+
+
+func _journey_zoom(outward: bool) -> void:
+	if _journey_navigation == null or not _journey_navigation.visible:
+		return
+	if outward:
+		_journey_navigation.show_overview()
+	else:
+		_journey_navigation.return_to_journey()
+
+
+func _frame_journey() -> void:
+	if _journey_navigation == null or not _journey_navigation.visible or _travelling:
+		return
+	var all_points: PackedVector3Array = _ordered_layout_anchors()
+	if all_points.size() != map.nodes.size():
+		return
+	var points: PackedVector3Array = []
+	for index: int in _journey_navigation.context_indices():
+		points.append(all_points[index])
+	var pose: Dictionary = JourneyCamera.resolve(points, Vector2(StageShape.REFERENCES[shape]), _journey_navigation.overview)
+	var lo: Vector2 = Vector2(INF, INF)
+	var hi: Vector2 = Vector2(-INF, -INF)
+	for point: Vector3 in all_points:
+		lo = lo.min(Vector2(point.x,point.z))
+		hi = hi.max(Vector2(point.x,point.z))
+	var look: float = JourneyCamera.HEIGHT/tan(deg_to_rad(JourneyCamera.PITCH))
+	pose["pan_bounds"] = Rect2(lo-Vector2.ONE*18.0+Vector2(0,look),hi-lo+Vector2.ONE*36.0)
+	if not _map_scene.get_rig().apply_journey_pose(pose):
+		_layout_diagnostics["journey_camera_failure"] = pose
+		return
+	_map_scene.select_journey_route(map.nodes[map.at].id if map.at >= 0 else "",
+		map.nodes[_journey_navigation.selected].id if _journey_navigation.selected >= 0 and not _journey_navigation.overview else "")
+	_invalidate_projection()
+	_layout_waystones()
+	_map_scene.set_live(false)
+	_push_bands(true)
+
+
+func _journey_focus_pose(index: int) -> Dictionary:
+	if _journey_navigation == null or not _journey_navigation.visible:
+		return {}
+	var anchors: PackedVector3Array = _ordered_layout_anchors()
+	if anchors.size() != map.nodes.size() or index < 0 or index >= anchors.size():
+		return {}
+	var points: PackedVector3Array = [anchors[index]]
+	for node_index: int in range(map.nodes.size()):
+		if map.nodes[index].next.has(map.nodes[node_index].id):
+			points.append(anchors[node_index])
+	return JourneyCamera.resolve(points, Vector2(StageShape.REFERENCES[shape]))

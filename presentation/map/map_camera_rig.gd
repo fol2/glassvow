@@ -31,6 +31,7 @@ const CAM_FAR: float = 80.0
 
 signal zoom_stop_changed(index: int)
 
+var journey_mode: bool = false
 var zoom_stop: int = DEFAULT_STOP
 var pan_bounds: Rect2
 
@@ -65,7 +66,8 @@ func camera_xz() -> Vector2:
 
 func set_zoom_stop(index: int) -> void:
 	zoom_stop = clampi(index, 0, ZOOM_STOPS.size() - 1)
-	_camera.size = ZOOM_STOPS[zoom_stop]
+	if not journey_mode:
+		_camera.size = ZOOM_STOPS[zoom_stop]
 	zoom_stop_changed.emit(zoom_stop)
 
 
@@ -212,7 +214,23 @@ func _apply_pose(xz: Vector2) -> void:
 	var hi: Vector2 = pan_bounds.end
 	var pos: Vector3 = _camera.position
 	pos.x = clampf(xz.x, lo.x, hi.x)
-	pos.y = CAM_HEIGHT
+	pos.y = _camera.position.y if journey_mode else CAM_HEIGHT
 	pos.z = clampf(xz.y, lo.y, hi.y)
 	_camera.position = pos
-	_camera.size = ZOOM_STOPS[zoom_stop]
+	if not journey_mode:
+		_camera.size = ZOOM_STOPS[zoom_stop]
+
+
+func apply_journey_pose(pose: Dictionary) -> bool:
+	if not pose.get("ok", false):
+		return false
+	journey_mode = true
+	if pose.has("pan_bounds"):
+		pan_bounds = pose["pan_bounds"]
+	_camera.rotation_degrees.x = -pose["pitch"]
+	_camera.position = pose["position"]
+	_camera.size = pose["zoom"]
+	_camera.far = 1200.0
+	zoom_stop = 3 if pose.get("overview", false) else 0
+	zoom_stop_changed.emit(zoom_stop)
+	return true

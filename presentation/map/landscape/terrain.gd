@@ -10,6 +10,7 @@ var road_segments: int = 0
 var bridge_spans: int = 0
 var greybox: bool = true
 var height_cache: Dictionary = {}
+var build_timings_ms: Dictionary = {}
 var landform: RefCounted = preload("res://presentation/map/landscape/landform.gd").new()
 const CELL: float = .5
 const WATER: float = River.LEVEL
@@ -30,12 +31,20 @@ func build(sample: Dictionary, grey: bool) -> void:
 	if not gateway.is_empty():
 		var at: Vector3 = gateway["position"]
 		landform.terrace_centre = Vector2(at.x,at.z)
+	var started: int = Time.get_ticks_msec()
 	landform.setup(lines)
+	build_timings_ms["landform"] = Time.get_ticks_msec()-started
+	started = Time.get_ticks_msec()
 	_land()
+	build_timings_ms["ground"] = Time.get_ticks_msec()-started
+	started = Time.get_ticks_msec()
 	_roads()
+	build_timings_ms["roads"] = Time.get_ticks_msec()-started
+	started = Time.get_ticks_msec()
 	var river: River = River.new()
 	add_child(river)
 	river.build(self)
+	build_timings_ms["river"] = Time.get_ticks_msec()-started
 
 func distance_to_roads(p: Vector3) -> float:
 	var best: float = INF
@@ -111,20 +120,23 @@ func is_elevated(p: Vector3) -> bool:
 func _land() -> void:
 	var surface: SurfaceTool = SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for ix: int in range(int(96/CELL)):
-		for iz: int in range(int(60/CELL)):
-			var x: float = -48 + ix * CELL
-			var z: float = -30 + iz * CELL
-			var corners: Array[Vector3] = []
-			for offset: Vector2 in [Vector2.ZERO, Vector2(0, CELL), Vector2(CELL, CELL), Vector2(CELL, 0)]:
-				var p: Vector2 = Vector2(x, z) + offset
-				corners.append(Vector3(p.x, height_at(p.x, p.y), p.y))
-			for index: int in [0, 2, 1, 0, 3, 2]:
-				var p: Vector3 = corners[index]
-				var shade: float = 0.96 + 0.05 * sin(p.x * 0.22 + p.z * 0.15)
-				var colour: Color = Color("555663") if greybox else Color("302b30")
-				surface.set_color(colour * shade)
-				surface.add_vertex(p)
+	# Share exact grid vertices. SurfaceTool preserves the original smooth
+	# normals and winding, without uploading each corner six times.
+	var columns: int = int(96/CELL)+1
+	var rows: int = int(60/CELL)+1
+	for ix: int in range(columns):
+		for iz: int in range(rows):
+			var x: float = -48+ix*CELL
+			var z: float = -30+iz*CELL
+			var shade: float = .96+.05*sin(x*.22+z*.15)
+			var colour: Color = Color("555663") if greybox else Color("302b30")
+			surface.set_color(colour*shade)
+			surface.add_vertex(Vector3(x,height_at(x,z),z))
+	for ix: int in range(columns-1):
+		for iz: int in range(rows-1):
+			var first: int = ix*rows+iz
+			for index: int in [first,first+rows+1,first+1,first,first+rows,first+rows+1]:
+				surface.add_index(index)
 	var mat: StandardMaterial3D = Meshes.material(Color.WHITE)
 	mat.vertex_color_use_as_albedo = true
 	mat.vertex_color_is_srgb = true

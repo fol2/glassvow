@@ -28,6 +28,9 @@ const CHIP_FONT_SIZE: int = 27
 const DRAG_SLOP: float = 12.0
 const GLYPH_KINDS: Array[String] = ["monster", "elite", "rest", "shop", "treasure", "event", "unlit", "monument", "boss"]
 
+var journey_mode: bool = false
+var journey_overview: bool = false
+var journey_selected: bool = false
 var index: int = 0
 var kind: String = "monster"
 var hue: float = 210.0
@@ -130,7 +133,7 @@ func _gui_input(event: InputEvent) -> void:
 	var mb: InputEventMouseButton = event as InputEventMouseButton
 	var st: InputEventScreenTouch = event as InputEventScreenTouch
 	var key: InputEventKey = event as InputEventKey
-	if key != null and reachable and key.pressed and not key.echo \
+	if key != null and (reachable or journey_mode) and key.pressed and not key.echo \
 			and key.keycode in [KEY_ENTER, KEY_SPACE]:
 		accept_event()
 		chosen.emit(index)
@@ -200,6 +203,9 @@ func set_depth_alpha(a: float) -> void:
 
 
 func _draw() -> void:
+	if journey_mode:
+		_draw_engraving()
+		return
 	var cx: float = _pad.x + WIDTH * 0.5
 	var cy: float = _pad.y + EMBLEM_H * 0.5
 	var glow: float = (0.5 + 0.5 * sin(_pulse * 2.2)) if reachable else 0.0
@@ -258,6 +264,8 @@ func _art_kind() -> String:
 func _seat_art() -> void:
 	var frame_side: float = 86.0 if kind == "boss" \
 		else (64.0 if kind in ["elite", "treasure"] else 54.0)
+	if journey_mode:
+		frame_side = 48.0
 	var centre: Vector2 = _pad + Vector2(WIDTH, EMBLEM_H) * 0.5
 	_frame_art.position = centre - Vector2.ONE * frame_side * 0.5
 	_frame_art.size = Vector2.ONE * frame_side
@@ -283,7 +291,7 @@ func pane_radius() -> float:
 
 ## Whether this stone has a bounty left to promise. False the moment it kindles.
 func has_chip() -> bool:
-	return kind == "unlit" and bounty > 0
+	return not journey_mode and kind == "unlit" and bounty > 0
 
 
 ## One label source for both geometry and paint. The coin already says gold is
@@ -492,3 +500,34 @@ func _glyph_texture(glyph: String) -> AtlasTexture:
 	texture.region = Rect2(maxi(GLYPH_KINDS.find(glyph), 0) * 96, 0, 96, 96)
 	texture.filter_clip = true
 	return texture
+
+
+func set_journey_presentation(overview: bool, selected: bool) -> void:
+	if journey_mode and journey_overview == overview and journey_selected == selected:
+		return
+	journey_mode = true
+	journey_overview = overview
+	journey_selected = selected
+	_frame_art.visible = false
+	_glyph_art.visible = not overview
+	_seat_art()
+	queue_redraw()
+
+
+func _draw_engraving() -> void:
+	var centre: Vector2 = _pad + Vector2(WIDTH, EMBLEM_H)*.5
+	var tint: Color = GlassStyle.GOLD if reachable or current else GlassStyle.TEXT_DIM
+	if journey_overview:
+		draw_circle(centre, 5.0 if current else 2.5, tint)
+		if current: draw_arc(centre,9,0,TAU,24,tint,1.2,true)
+		return
+	if reachable or current:
+		draw_line(centre+Vector2(-8,23),centre+Vector2(8,23),tint,1.8,true)
+	if journey_selected or has_focus() or _pressed:
+		for sx: float in [-1,1]:
+			for sy: float in [-1,1]:
+				var corner: Vector2 = centre+Vector2(26*sx,27*sy)
+				draw_line(corner,corner-Vector2(7*sx,0),tint,1.7,true)
+				draw_line(corner,corner-Vector2(0,7*sy),tint,1.7,true)
+	if quest_marked:
+		draw_circle(centre+Vector2(22,-22),3.0,Color("afe0dc"))
