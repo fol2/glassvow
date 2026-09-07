@@ -1045,7 +1045,7 @@ surround with pure black. Original generated source: `exec-360883ec-6415-4886-89
 
 The black surround is not treated as alpha. `ObsidianFinish` binds the candidate
 to the combat ground shader; the existing ledge supplies the exact silhouette,
-with nearby stone projected into the candidate surround. Native transparent
+with smoothly desaturated original edge shading blended into the candidate surround. Native transparent
 viewport verification compares all 98,304 alpha samples and requires identical
 coverage within one 8-bit alpha step. The original ledge remains the coverage
 source and comparison asset. The same finish authority defines the precinct

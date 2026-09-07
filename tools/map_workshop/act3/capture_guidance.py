@@ -30,12 +30,16 @@ def main():
                        f'--sample=res://docs/map/studies/act3-step3/precinct-v2-seed{seed}.json',
                        '--viewport='+shape,'--exercise-input','--exercise-guidance']
             if seed == 717: command.append('--profile-native')
+            capture_started = time.time()
             log, seconds = run(command,name)
             checks = [json.loads(line.removeprefix('PRECINCT_INPUT ')) for line in log.splitlines() if line.startswith('PRECINCT_INPUT ')]
             assert len(checks)==1 and checks[0]['guidance']['ok']
             images = []
-            for view in ['arrival','choice-0','choice-1','overview']:
+            views = ['arrival','overview'] + ['choice-'+str(i) for i in range(checks[0]['guidance']['choices_clicked'])]
+            for view in views:
                 source = Path('/tmp/act3-guidance-'+view+'.png')
+                if source.stat().st_mtime < capture_started:
+                    raise RuntimeError('Stale capture: '+str(source))
                 target = OUT/(name+'-'+view+'.png')
                 shutil.copyfile(source,target)
                 images.append(target.name)
