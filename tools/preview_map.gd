@@ -184,7 +184,7 @@ func _run() -> void:
 		elif _pose in ["opening","middle","terminus"]:
 			var focus: int = world_map.reachable()[0]
 			for i: int in range(world_map.nodes.size()):
-				if (_pose=="terminus" and world_map.nodes[i].type=="boss") or (_pose=="middle" and world_map.nodes[i].row==7): focus=i
+				if (_pose=="terminus" and world_map.nodes[i].type=="boss") or (_pose=="middle" and ((act==3 and world_map.nodes[i].id=="n2") or (act!=3 and world_map.nodes[i].row==7))): focus=i
 			screen._journey_navigation.area=focus
 			screen._frame_journey()
 		elif _pose=="river":

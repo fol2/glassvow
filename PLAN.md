@@ -61,7 +61,7 @@ from completed checklist items and change it only with an explained scope change
 | 4 — Finished playable section | 20% | Promote a representative generated section through the production presentation seam. Integrate relief, surfaces, banks, stairs/bridges where relevant, scenery, light and node interaction. Inspect close/journey/overview and moving camera; no broken joins, floating assets, clipping or stretched ground. | 80% |
 | 5 — Visual acceptance | 10% | Judge the running section against approved chapter evidence, at all reference proportions, with navigation visible and hidden. Fix known defects before expanding. Record the actual visual verdict and rejected defects. Agent-owned gate; no routine owner approval. | 100% |
 | 6 — Generator generalisation | 25% | Generalise placement and chapter profiles over the maintained map corpus plus explicit dense branches, merges, crossing levels, long routes and edge cases. Retain node/edge truth, repeatability and walkable geometry. Resolve the preserved dense seed 4 failure rather than substitute an easier seed. | 100% |
-| 7 — Four-act production | 25% | Integrate all four approved identities into runtime assembly using qualified shared modules and chapter recipes. Verify per-chapter composition, combat alignment and transitions across the whole journey. No preview-only paths or palette-swap substitute. | 40% |
+| 7 — Four-act production | 25% | Integrate all four approved identities into runtime assembly using qualified shared modules and chapter recipes. Verify per-chapter composition, combat alignment and transitions across the whole journey. No preview-only paths or palette-swap substitute. | 80% |
 | 8 — Integration and delivery | 20% | Real campaign entry/travel/encounter return/save-load, shapes/input/accessibility/performance, selected gates and independent review pass. Deliver review surface, merge the final reviewed outcome, observe integrated checks and clean only safely saved task branches. | 0% |
 
 Overall implementation acceptance starts at 0% for Steps 4–8; Step 3 is 100%
@@ -285,8 +285,8 @@ partial implementation does not receive fractional credit.
 - Step 6: [x] camera and physical presentation share the compiler contract;
   [x] preserved seed 4 qualified; [x] maintained corpus repeatability/truth;
   [x] dense branches/merges/long routes; [x] crossing levels, contacts and bounds.
-- Step 7: [x] Act I final recipe; [x] Act II final recipe; [ ] Act III final recipe;
-  [ ] Act IV final recipe; [ ] whole-journey/combat alignment and transitions.
+- Step 7: [x] Act I final recipe; [x] Act II final recipe; [x] Act III final recipe;
+  [x] Act IV final recipe; [ ] whole-journey/combat alignment and transitions.
 - Step 8: [ ] actual campaign/encounter/save-load; [ ] input/accessibility and
   physical-device evidence; [ ] performance/lifecycle and selected local gates;
   [ ] exact-head independent review and PR CI; [ ] integrated checks, review
@@ -1044,3 +1044,38 @@ court-boundary-tests.log. An opening timing capture overlapped a headless source
 compile and is not used as performance evidence. Full chapter reference matrices,
 actual campaign transitions, loading, hardware, final core/review/CI remain open;
 overall remains 61%. Continue, without a milestone stop.
+
+
+### Four production recipes and native encounter return — 7 September, 22:13 UTC
+
+Act III now passes native generated cases 717, 4, 14 and 17634, including the
+crossing-free adaptive terrace cut and the zero-overhead case. Current final
+reference matrices for Acts III and IV were inspected at all three proportions,
+opening, middle, terminus and overview. The Act IV middle capture now explicitly
+selects n2; the previous row-7 fallback incorrectly repeated its opening view.
+Act IV support repeats on seeds 4 and 2026 with 2,240 support/189 foot probes.
+These complete the remaining two chapter-recipe items: Step 7 80%, overall 71%.
+Whole-journey/combat alignment, chapter transitions and Step 8 remain open.
+
+All four real campaign probes pass native Continue, inspection, travel, encounter,
+reward return, retained surface identity, stopped parked viewport, cleared node,
+unchanged layout and persisted map/reward/combat state. The win callback is
+explicitly injected: this proves result routing, not combat balance or victory.
+All twelve initial/encounter/return images were inspected. Save comparison uses
+SaveService's actual JSON-serialised precision rather than binary64 memory tails.
+Evidence: campaign-qualified0/1/2/3.*. Continue times on this M1 Max were 1.757 s
+(cached I), 49.655 s (uncached II), 5.292 s (uncached III), 0.731 s (IV).
+These do not establish the governed device gate. A repeat IV probe is 0.677 s.
+Verbose shutdown isolates the two retained resources to hover.mp3/click.mp3 and
+MP3 playback objects, not map geometry. Explicit main cleanup does not remove
+that warning; diagnosis remains open (campaign-cleanup3.log).
+
+Flight queries now index candidates by their owning route while retaining the
+original per-owner order and arithmetic. Focused tests compare 450 interleaved
+queries exactly and exercise index invalidation; three focused tests pass.
+Native Act II seed 717 repeats the complete geometry audit and the unchanged
+realised digest e5637454edd2d7de5a8598cdc321fe49a0743388bc34be1a7de014d27562f2cc.
+Cold binding is 43.632 s against the earlier 48.679 s observation; this is a modest
+local improvement, not acceptable loading or a controlled benchmark claim.
+Evidence: flight-owner-index-tests.log, city-owner-index717.*.
+Continue loading, chapter transitions and final delivery without a milestone stop.

@@ -7,6 +7,8 @@ const VIGIL: String = "user://glassvow_map_delivery_probe_vigil.json"
 var main: Main
 var output: String = ""
 var travel: bool = false
+var act: int = 0
+var return_to_map: bool = false
 func _initialize() -> void:
 	_run.call_deferred()
 func _run() -> void:
@@ -14,17 +16,33 @@ func _run() -> void:
 	for argument: String in OS.get_cmdline_user_args():
 		if argument=="--prepare": prepare=true
 		elif argument=="--travel": travel=true
+		elif argument=="--return":
+			travel=true
+			return_to_map=true
+		elif argument.begins_with("--act="): act=argument.trim_prefix("--act=").to_int()
 		elif argument.begins_with("--output="): output=argument.trim_prefix("--output=")
 		else:
 			push_error("Unknown campaign probe argument: "+argument)
 			quit(2)
 			return
+	if act<0 or act>3:
+		_fail("Invalid chapter index")
+		return
 	if prepare:
 		var content: ContentDB = ContentDB.load_full()
-		var run: RunState = RunState.new_run(content,4,"map-delivery-probe")
-		run.map = WorldMap.for_run(run,content).to_dict()
 		var vigil: VigilState = VigilState.blank()
+		var profile: Dictionary = {}
+		if act==3:
+			for id: String in VigilState.QUEST_IDS:
+				vigil.quests[id]["state"]="complete"
+				vigil.shards.append(id)
+			profile={"quests":vigil.quests.duplicate(true),"shards":vigil.shards.duplicate()}
+		var run: RunState = RunState.new_run(content,4,"map-delivery-probe",profile)
+		run.act=act
+		run.map = WorldMap.for_run(run,content).to_dict()
 		vigil.guidance_skipped = true
+		# A repeat-visit profile isolates map/combat routing from first-arrival story beats.
+		for id: String in ["act4-node1","act4-node2","act4-node3","act4-node4","act4-node5"]: vigil.scenes_seen.append(id)
 		var stored: bool = SaveService.store(run,RUN) and SaveService.store_vigil(vigil,VIGIL)
 		print("CAMPAIGN_PROBE_PREPARED ",stored)
 		quit(0 if stored else 1)
@@ -68,7 +86,7 @@ func _run() -> void:
 		_fail("Continue did not construct the production map")
 		return
 	var same_run: bool = main.game.run.to_dict()==before
-	var receipt: Dictionary = {"engine_elapsed_to_title_ms":title_ms,"preloaded_assets":preloaded,"cold_continue_to_render_ms":restored_ms,"run_unchanged":same_run,
+	var receipt: Dictionary = {"act":saved.act,"engine_elapsed_to_title_ms":title_ms,"preloaded_assets":preloaded,"cold_continue_to_render_ms":restored_ms,"run_unchanged":same_run,
 		"input_digest":screen.layout_input_digest(),"layout_digest":screen.layout_digest(),
 		"binding":screen.layout_diagnostics().get("binding_stages_ms",{}),"assembly":screen._map_scene.layout_diagnostics().get("assembly_ms",{}),
 		"source_override":screen._layout_compile.is_valid(),"derived_cache":screen._map_scene.layout_diagnostics().get("derived_cache_hit",false)}
@@ -112,7 +130,45 @@ func _run() -> void:
 		if not output.is_empty():
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(output.get_basename()+"-encounter.png")
+		if return_to_map:
+			# Exercise the real result callback, not a simulated victory claim.
+			main._on_combat_over("win")
+			for i: int in range(90): await process_frame
+			if main._reward_screen==null:
+				_fail("Encounter result callback did not show rewards")
+				return
+			_click(main._reward_screen._continue.get_global_rect().get_center())
+			await process_frame
+			var leave: Button
+			for child: Node in main._reward_screen.find_children("*","Button",true,false):
+				var candidate: Button = child
+				if candidate.text==Locale.active.t("ui.reward.leaveConfirmYes") and candidate.is_visible_in_tree(): leave=candidate
+			if leave==null:
+				_fail("Reward leave confirmation unavailable")
+				return
+			_click(leave.get_global_rect().get_center())
+			for i: int in range(90): await process_frame
+			var returned: WorldMapScreen = main._map_screen
+			receipt["returned_same_surface"]=returned==screen
+			receipt["cleared_node"]=main._map.is_cleared(index)
+			receipt["layout_unchanged_after_return"]=returned!=null and returned.layout_digest()==receipt["layout_digest"]
+			var disk: RunState = SaveService.load_run(main.content,RUN)
+			# Save JSON intentionally quantises binary64 tails. Compare the actual
+			# serialised map representation, not an impossible in-memory bit match.
+			var expected_map: Variant = JSON.parse_string(JSON.stringify(main.game.run.map))
+			receipt["return_persisted"]=disk!=null and disk.map==expected_map and disk.pending_reward==null and disk.pending_combat==null
+			receipt["result_source"]="Injected win callback; combat balance and victory not claimed"
+			if not receipt["returned_same_surface"] or not receipt["cleared_node"] or not receipt["layout_unchanged_after_return"] or not receipt["return_persisted"]:
+				print("CAMPAIGN_RETURN_FAILURE ",JSON.stringify(receipt))
+				_fail("Reward return changed or lost the retained map/save")
+				return
+			if not output.is_empty():
+				await RenderingServer.frame_post_draw
+				root.get_texture().get_image().save_png(output.get_basename()+"-returned.png")
 	print("CAMPAIGN_PROBE ",JSON.stringify(receipt))
+	main.queue_free()
+	main=null
+	for i: int in range(3): await process_frame
 	quit(0)
 func _click(point: Vector2) -> void:
 	var press: InputEventMouseButton = InputEventMouseButton.new()

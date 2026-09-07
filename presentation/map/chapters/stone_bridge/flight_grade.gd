@@ -1,7 +1,11 @@
 extends RefCounted
 ## Fit complete sustained inclines before meshing their structural deck.
 ## End heights and route footprints remain fixed; grade becomes uniform.
-var cells: Dictionary = {}
+var _owner_cells: Dictionary = {}
+var cells: Dictionary = {}:
+	set(value):
+		cells=value
+		_owner_cells.clear()
 var flight_count: int = 0
 const CELL: float = 4.0
 
@@ -47,6 +51,7 @@ func prepare(field: RefCounted,settings: Dictionary) -> void:
 	print("STONE_BRIDGE_GRADED_FLIGHTS ",flight_count)
 
 func _store(points: Array[Vector3],owner: String) -> void:
+	_owner_cells.clear()
 	if points.size()<3 or absf(points[-1].y-points[0].y)<.45:
 		return
 	var lengths: Array[float] = [0.0]
@@ -83,9 +88,21 @@ func height(at: Vector2,original: float,owner: String) -> float:
 	return lerpf(original,fitted.x,fitted.y)
 
 func sample(at: Vector2,owner: String) -> Vector2:
+	var cell: Vector2i = Vector2i(floori(at.x/CELL),floori(at.y/CELL))
+	if not _owner_cells.has(cell):
+		var grouped: Dictionary = {}
+		for segment: Dictionary in cells.get(cell,[]):
+			var id: String = str(segment["edge"])
+			if not grouped.has(id): grouped[id]=[]
+			grouped[id].append(segment)
+		_owner_cells[cell]=grouped
+	var candidates: Array = _owner_cells[cell].get(owner,[])
+	return _sample_candidates(at,owner,candidates)
+
+func _sample_candidates(at: Vector2,owner: String,candidates: Array) -> Vector2:
 	var nearest: float = 1.5*1.5
 	var result: Vector2 = Vector2.ZERO
-	for segment: Dictionary in cells.get(Vector2i(floori(at.x/CELL),floori(at.y/CELL)),[]):
+	for segment: Dictionary in candidates:
 		if str(segment["edge"])!=owner: continue
 		var a: Vector2 = segment["a"]
 		var delta: Vector2 = segment["b"]-a
