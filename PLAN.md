@@ -1,167 +1,210 @@
-# Act IV Step 3 — The Mirrored Road
+# Map visual renovation — Steps 4–8
 
 ## Task capsule — 7 September 2026
 
-Act III Step 3 was explicitly approved by James after delivery 462b66e5, with
-optional later polish. Act I/II approvals remain intact. The owner now authorises
-Act IV Step 3. This plan records the next chapter before implementation; it does
-not reopen the approved concept or require routine permission to proceed.
-The preceding Act III plan is preserved in
-[accepted-plan.md](docs/map/studies/act3-step3/accepted-plan.md).
+Owner: James. Execution: one agent and one owned worktree. All four chapters are
+owner-approved at Step 3, including Act IV on 7 September. The owner authorises
+moving forward autonomously; this document is the execution contract for Steps
+4–8, expanding the agreed visual-renovation-rough-plan.md sequence.
+The preceding chapter plan is preserved at
+`docs/map/studies/act4-step3/accepted-plan.md`.
 
-Goal: translate the approved grand-empty v6 concept into a convincing native,
-interactive five-stop journey, coherent with the other chapters and actual Act IV
-combat. Complete Step 3, report the evidence and present the chapter review page.
-Non-goals: Step 4 campaign integration, new story/canon, encounter/save changes,
-revisiting approved Act I–III, cinematic ocean simulation or new visual systems
-without a concrete need. Goal stays off. No Ponytail hook or reviewer.
+Starting HEAD: `8ac26a91d3c5a54715bf94938cd8973063e6c7cf`.
+Starting branch: `jamesto/map-journey-rebuild`.
+Known delivery topology: draft PR #540 is based on the Act III checkpoint branch,
+not main. Refresh actual refs, PR state, ownership and prerequisite ancestry before
+integration. Never merge an incomplete prerequisite chain or delete unsaved work.
+Preserve unrelated untracked Act II/III experiments and sidecars.
 
-## Binding art and gameplay inputs
+Goal: deliver the approved four-act top-down map experience inside the real Godot
+campaign, driven by the map generator, with coherent production visuals, reliable
+navigation and encounters, stable saves and relevant performance evidence. Finish
+validation, independent review, PR, CI, merge and safe branch cleanup. Provide a
+playable review surface and a concise final completion/usage report.
 
-- `docs/map/concepts/act4-grand-empty-v6.png`, inspected again this turn.
-  Earlier flat v2 and crowded sanctuary v4 are historical, not active targets.
-- `docs/story/00-truth.md` sections 1, 2.4, 2.6 and `03-acts.md` Act IV.
-- Actual `assets/art/stage/act4-{backdrop,mid,ledge}.png` and native combat
-  capture, not concept colour sampling alone.
-- `MapLayoutInputBinding`: exactly five established nodes and four ordered
-  edges. Preserve IDs/types, game RNG, reachability and save truth.
-- AGENTS.md, Godot skill, AI-SDLC and executable CI scope selection.
+Non-goals: new story, encounter rules, node IDs, save schema, a replacement map
+generator, a web implementation, store release, new native plugins, unrelated
+cleanup or reopening approved art direction. No Ponytail hook. Execution uses normal long-running mode, as explicitly requested by James.
+Goal remains off; do not create a goal or a continuation automation. Continue
+within the active run through completion, retaining this capsule across compaction.
 
-## Owner direction update — unbounded space
+## Authority and chapter identity
 
-The owner rejected the bounded courtyard/ground treatment during blockout.
-This instruction supersedes v6's floor and enclosure. Act IV must read as an
-unlimited/infinite visual space: no ground plane, no perimeter, only the path.
-Keep the fixed five-stop journey. Height variation belongs to the processional
-way, stairs and destination structures. Remove detached court piers and enclosing
-walls; monuments stand on the way. Grandeur comes from the surrounding absence,
-the enormous arrival window and the distant intimate hearth. No visible floor,
-water sheet, landscape silhouette, horizon or rectangular display base.
+Follow AGENTS.md, docs/agents/ai-sdlc.md, the Godot skill and tools/ci_scope.py.
+The user's accepted chapter direction overrides older concepts or status notes.
+Use current native approved evidence, not obsolete root review pages:
 
-Align the actual combat spatial language too where needed; the owner explicitly
-permits a combat presentation update. Preserve combat behaviour, actors and UI.
-The previous v6 enclosure is a historical input, not authority to restore ground.
-First decisive new experiment: native path-in-void composition and combat pair.
+- I: `docs/map/studies/step3-review/`, Review 10; substantial ash woodland,
+  natural grouping and relief, crisp quiet ground, integrated river and bridges.
+- II: `docs/map/studies/act2-step3/`, scenery-v2; drowned architecture, restrained
+  water, supported stone crossings, meaningful node-linked ruins and scenery.
+- III: `docs/map/studies/act3-step3/precinct-v4/`; intact obsidian precinct,
+  terraced courts and stairs, severe architecture and concentrated magenta light.
+  Preserve accepted contextual navigation; do not restore arbitrary road ribbons.
+- IV: `docs/map/studies/act4-step3/void-v1/`; visually unbounded void, only the
+  raised processional path, five existing stops/four edges, immense arrival window,
+  sparse echoes, small hearth, quiet cosmic haze and embers. No surrounding floor.
 
-## Composition and emotional sequence — revised
+Shared quality does not require equal density or identical structures. Water,
+bridges, roads and vegetation appear only where the chapter calls for them.
+Preserve combat/map material alignment, including real shader alpha/modulation.
 
+## Ordered delivery and acceptance
 
-Grand, empty, sad and dark. A massive visibly thick rose-window wall marks the
-arrival into an unbounded dark space. One supported-looking sculpted path travels
-through five stops towards a modest hearth. Its underside disappears into the
-void without a surrounding floor. Warm light travels backwards; cool stone,
-restrained teal/amber glass and absence preserve the combat world's identity.
+Percentages measure accepted deliverables, not elapsed time, code volume or an
+agent's confidence. Existing studies are reuse inputs, not completed production.
+Freeze a finite acceptance checklist during the initial audit; assign progress
+from completed checklist items and change it only with an explained scope change.
 
-The five stops follow the settled reverse journey: threshold, obsidian court,
-sunken city, ash woods, hearth. Echoes remain subordinate marks on the path,
-not five furnished rooms. Sparse stelae accompany the traveller. Height changes
-are expressed through platforms and short complete flights, with no ground plane
-or enclosing walls. Reflection is not required; do not reintroduce a mirror floor.
+| Step | Weight | Deliverable and completion gate | Accepted progress |
+| --- | ---: | --- | ---: |
+| 4 — Finished playable section | 20% | Promote a representative generated section through the production presentation seam. Integrate relief, surfaces, banks, stairs/bridges where relevant, scenery, light and node interaction. Inspect close/journey/overview and moving camera; no broken joins, floating assets, clipping or stretched ground. | 0% |
+| 5 — Visual acceptance | 10% | Judge the running section against approved chapter evidence, at all reference proportions, with navigation visible and hidden. Fix known defects before expanding. Record the actual visual verdict and rejected defects. Agent-owned gate; no routine owner approval. | 0% |
+| 6 — Generator generalisation | 25% | Generalise placement and chapter profiles over the maintained map corpus plus explicit dense branches, merges, crossing levels, long routes and edge cases. Retain node/edge truth, repeatability and walkable geometry. Resolve the preserved dense seed 4 failure rather than substitute an easier seed. | 0% |
+| 7 — Four-act production | 25% | Integrate all four approved identities into runtime assembly using qualified shared modules and chapter recipes. Verify per-chapter composition, combat alignment and transitions across the whole journey. No preview-only paths or palette-swap substitute. | 0% |
+| 8 — Integration and delivery | 20% | Real campaign entry/travel/encounter return/save-load, shapes/input/accessibility/performance, selected gates and independent review pass. Deliver review surface, merge the final reviewed outcome, observe integrated checks and clean only safely saved task branches. | 0% |
 
-## Ordered execution and proof
+Overall implementation acceptance starts at 0% for Steps 4–8; Step 3 is 100%
+owner-approved separately. Overall = sum(weight × accepted step fraction).
+Steps 4/5 establish the common section; Step 6 proves generalisation before Step 7
+expands it. Run narrow integration checks as seams change rather than defer all
+runtime failures to Step 8. Reuse already-qualified work after checking its inputs.
 
-| Work package | Result and acceptance | Current progress |
-|---|---|---:|
-| 1. Bind chapter and establish native baseline | Actual five-node/four-edge input validated; current wide combat captured and inspected; blockout will establish human scale | 100% |
-| 2. Whole-place blockout | All five stops on generated geometry; window, void, bend and hearth read at close/whole views; verify stairs and structural thickness | 100% |
-| 3. Finished representative section | Window-to-path entry and one level change with final stone/glass/surface treatment; native close and travel inspection | 100% |
-| 4. Complete chapter composition | Sparse reverse-act echoes, path-bound stelae, small hearth, supported scenery and coherent light; full uncut journey | 100% |
-| 5. Navigation, regression and delivery | Actual node/input/travel tests, all routes supported, three reference proportions, performance, selected gates and exact-head independent review; tailnet page/report | 100% — local gates and independent review passed |
+## First execution checkpoint and owned surfaces
 
-Resolve blockout before producing detailed assets. At each internal stage inspect
-the running result and fix failures before presenting it to the owner. Do not
-stop at a single asset, still image, successful probe or provisional page.
-No routine additional owner approval is needed within the accepted direction.
+First 60–90 minutes: refresh Git/PR topology, inspect runtime map assembly and the
+saved production-section candidate, reproduce its recorded dense-layout failure,
+map workshop-to-production dependencies and preflight native capture/input and
+available device evidence. Produce a bounded file ownership list, acceptance
+checklist, applicable performance thresholds and an evidence-based delivery ETA.
+This is execution within the plan, not another approval round.
 
-## Reuse and ownership
+Likely surfaces: presentation/map/, relevant application composition, chapter
+assets/materials and tools/map_workshop/ shared modules/profiles; focused tests
+and docs/map/ evidence. Verify actual paths before editing. Keep domain logic pure;
+commands enter through GlassvowGame.apply and presentation only consumes truth.
+Promote reusable runtime modules without shipping capture tools or fixture-only
+assumptions as runtime dependencies. Avoid a second parallel renderer or framework.
 
-Act IV owns `tools/map_workshop/act4/`: spatial recipe, local assembly, architectural
-kit, palette, void atmosphere and capture entry point. Use the generator's
-existing spatial/profile seam; do not move final nodes manually after compilation.
-First inspect the fixed-journey compiler constraints before designing a profile.
+Prefer one independently mergeable production outcome and ordinary PR. Reconcile
+already-approved prerequisite work once; record its actual integration boundary.
+Do not create PRs, CI runs or permanent infrastructure per visual experiment.
 
-Reuse `common/` walking surfaces, resolved stairs, relief, occupancy/footprint
-checks, floor/headroom audit, camera/input inspection, route Travel/guidance and
-capture/profiling tools. Keep chapter style opt-in. Water and bridge modules are
-available only if actual composition calls for them; neither is the default.
-The void uses one slow canvas haze shader and 42 instanced drifting embers.
-No reflection buffer, floor, horizon, SSR or particle simulation is required.
+## Evidence map
 
-Godot remains the final visual authority. Existing Blender tooling may produce
-new architectural assets after its current source is checked. Shared improvements
-must preserve Act I–III entry points and receive affected-chapter regression.
-One owner and worktree; exactly one required independent final-candidate review,
-with a batched correction review only for concrete blockers.
+| Claim | Cheapest decisive evidence |
+| --- | --- |
+| Generator truth and determinism | Compare node IDs/types/edges and RNG/save state before/after presentation; deterministic profile replay over maintained corpus and named stress cases. No silent omissions or post-compile node relocation. |
+| Supported routes and scenery | Probe actual rendered walking width, landings, stair flights, headroom and lowest asset contacts; inspect native turns, merges, banks and bridge approaches. Reproduce failures unchanged before repair. |
+| Commercial visual coherence | Native unretouched captures at 1458×820, 1180×820 and 844×390; close/default/overview, overlays on/off, plus actual pan/zoom/travel footage. Compare all chapters and combat. Numeric gates do not replace seeing the result. |
+| Navigation and real flow | Actual legal selection/travel/current-next-visited states, encounter entry and return, chapter transition and save/resume in application/main.tscn. Include unavailable actions and input containment. No immediate-resolution workshop shortcut as campaign proof. |
+| Performance and memory | Record renderer/hardware, frame intervals and CPU where available, draw calls, memory and repeated chapter entry/exit. Use existing governed budgets and a matched baseline; establish any missing target before claiming a pass. Desktop viewport sizes do not prove physical touch or mobile performance. |
+| Shared module safety | Focused affected-chapter regression when a shared material, geometry or camera contract changes; actual authored alpha/modulation checks where relevant. |
+| Delivery correctness | Complete local core once on coherent candidate, classifier-selected specialists, one exact-head independent review, hosted and integrated CI results. Preserve negative and inconclusive evidence. |
 
-## Discovery budget and delivery forecast
+Use existing geometry probes, capture, profile and test harnesses where they
+observe these claims. Add focused regression tests for real defects; do not write
+implementation-mirroring tests or build a new evidence system without necessity.
+Preflight physical-device requirements early. If a relevant mandated gate cannot
+be observed, report the missing evidence and do not label it passed or 100%.
 
-First discriminating experiment: native five-stop blockout, judged against v6
-at journey/whole cameras. Hypothesis: an unbounded void and a single
-bent raised route can deliver grandeur without ground or dense scenery.
-Success: all five stops and four edges preserved; window/hearth hierarchy and
-relief read; one usable close journey and overview; no unsupported joins.
-Stop/redesign internally if framing needs hidden edges, invented stops, filler
-assets or a stronger reflection system merely to make the space understandable.
+## AI-SDLC and the four rules in practice
 
-Working forecast, not a committed finish time: first native composition 45–75
-minutes; complete Step 3 approximately 4–6 hours if the spatial seam and shared
-geometry fit. Reforecast from the blockout, rather than repeating an untested ETA.
-Time checkpoint after each package and at most 90 minutes without a design
-verdict. Batch captures and run narrow checks during iteration. Run the full core
-once on the coherent delivery candidate, after native inspection has removed
-visible defects. Preserve failed experiments without counting them as passes.
-Record real wall time, measured root-session cached/uncached/output token deltas,
-reviewer availability limits and any repeated work in the delivery report.
+1. Anthropic DNA: accepted owner intent → this design/plan capsule → bounded
+   build experiments → progressive tests → independent review/integration →
+   final handover and maintained regression coverage. Do not duplicate intent/spec
+   documents or reopen settled art choices.
+2. Minimise wall time / maximise effectiveness: diagnose upstream, batch native
+   captures, run independent read-only checks together where safe, reuse modules
+   and stop investigating once evidence decides. One writer; no shared mutations.
+3. Minimise tokens: targeted reads, concise tool output, one current capsule,
+   deterministic mechanical checks and one non-fork final reviewer. No repeated
+   transcript scans, overlapping reviews, heartbeat polling or status-only pushes.
+4. No quality compromise: every material claim retains decisive evidence. Failed
+   visuals, dense seeds, save compatibility and required performance gates cannot
+   be waived to fit a forecast. Do not call a study or PR merge a shipped campaign.
 
-## Acceptance and final boundary
+For each unresolved design question record hypothesis, immutable input, cheapest
+experiment, 30–60 minute initial budget and a decision/stop rule. At budget expiry,
+record what was learned and narrow the next experiment or expose the blocker;
+never repeat the same failed attempt without new evidence. Routine repairs proceed
+without owner permission. Do not create artificial stopping points at small wins.
 
-Native 1458×820, 1180×820 and 844×390, plus uninterrupted window-to-hearth travel.
-Check every stop and complete walking width, ground contacts, stairs and camera
-occlusion. Inspect current/next/visited readability without decorating a permanent
-graph across the court. Qualify actual shader modulation and alpha at authored
-layout values before final review; the Act III regression must not recur.
+## Validation and integration sequence
 
-Measure native CPU/frame interval, draw calls and renderer allocation, plus GPU
-where tooling supports it. Desktop proportions are not physical-device evidence.
-Core and selected tests must pass; retain expected headless diagnostics honestly.
-Presentation evidence must be native and unretouched. Update the chapter report
-and all-act comparison. Stop after delivering Act IV Step 3 for its chapter approval;
-Step 4 begins only after all four Step 3 approvals.
+During iteration: targeted parse/test/probe, then native inspection for affected
+visuals. Stage new .gd files before the full tracked-file parser sweep.
+At the coherent production candidate, before first production push:
 
-Current base: `462b66e517ad0ad6e5dd10038f802f7737a8d28b`.
-Current branch: `jamesto/map-journey-rebuild`.
-Baseline evidence: `docs/map/studies/act4-step3/`. Godot 4.7.2 native combat
-captured at 1458×820. Seed 717 exports five nodes/four edges with hard_pass=true
-through validated current-input cache reuse; this qualifies the existing input,
-not the future Act IV recipe.
+- godot --version
+- tools/check_imports.sh
+- tools/check_scripts.sh
+- godot --headless -s res://tests/run_all.gd
+- Specialists selected by tools/ci_scope.py for the complete intended PR diff.
 
-Checkpoint 10:18 UTC: the replacement path-in-void candidate preserves all five
-stops/four routes. Native wide input/guidance passes; 2,240 floor/headroom probes
-and 189 lowest asset-vertex contacts pass. Phone input also passes; its final
-material/capture matrix remains due. Native combat ground comparison is inspected
-at 1458×820 with original alpha/modulation retained. The image-generated alternate
-had a baked checkerboard and was rejected. Orthographic sky radiating artefacts
-and an obstructing echo foot were also rejected and corrected before delivery.
-Remaining: final three-shape inspection, uncut tour, profiling, core, independent
-review and review page/report. Working remaining forecast: 90–150 minutes,
-conditional on the final gates; not a committed delivery time.
+Run exactly one final-candidate independent review using
+`.claude/agents/ai-sdlc-reviewer.md`, non-fork, read-only and isolated. Supply task
+contract, base/head, constraints and produced evidence. Batch concrete findings;
+rerun invalidated checks and review the corrected head if required. INCONCLUSIVE
+means name the missing evidence, not manufacture approval. Never approve our own
+PR through the author's identity. Observe relevant PR and integrated-main checks;
+merge when authorised and green. Delete only task-owned branches with saved work.
 
-The owner's background addition is binding: restrained cosmic haze and slow
-sparse embers give the absence intentional atmosphere without filling the void.
+## Delivery forecast and resource controls
 
+Initial planning allowance: 12–20 active engineering hours plus required CI and
+any external gate wait. This is a low-confidence conditional forecast, not a
+committed completion time or a token entitlement; production seam/device access
+and dense-layout qualification are not yet audited. Replace it at the first
+60–90 minute checkpoint with a bottom-up estimate, without a new approval request.
 
-Checkpoint after candidate validation: core 102 suites passed (1,430.59 seconds),
-complete parser sweep 442 passed, imports and selected specialist gates passed.
-The 28.77-second native film reaches the hearth through actual Walk all input;
-Tailnet playback, comparisons and 390 px responsive layout are verified. Source
-candidate: c0570e4ba664a7d531d19e52ce6216540d41cb87. The final independent review
-is next; no runtime edits have been made while the core gate was running.
+Initial allocation: Step 4 2–3h, Step 5 1–2h, Step 6 3–5h, Step 7 3–5h,
+Step 8 3–5h. These are planning ranges; shared work is counted once.
+At each step completion or 90 minutes of active work, whichever comes first,
+update this capsule with evidence, accepted percentages, elapsed time, remaining
+range and the cause of any change. Provide concise meaningful progress during
+execution; do not leave the user without an update for more than 60 seconds.
+Forecast overruns trigger diagnosis/reforecast, not lower quality or routine pauses.
 
+Capture platform-provided usage at execution start and stage boundaries only:
+input, cached input, uncached input, output and elapsed wall time when available.
+Do not add reasoning tokens twice or equate cache hit rate with monetary/Pro-quota
+savings. No numeric token budget has been authorised; do not invent one or create
+a token-estimation system. If usage is unavailable say so. Investigate repeated
+context reloads or reruns when they occur; do not burn tokens measuring tokens.
 
-Final local acceptance: Act IV Step 3 engineering is complete. Independent review
-APPROVE at ac4a3d8dd4ad2a533cb472d87ddb85b78382338c has no findings. Implementation
-and native media remain unchanged from the measured source candidate. The report,
-reusable lessons and private Tailnet page are delivered. A draft review PR is
-scoped from the accepted Act III checkpoint; its hosted CI state is recorded live
-in that PR, without adding another status-only push that reruns unchanged code.
-The remaining human boundary is Act IV art approval. Step 4 is not started.
+## Completion and exceptions
+
+100% means all five gates above pass, the real four-act campaign presentation is
+integrated, independent review and relevant CI pass, the deliverable can be
+reviewed, and final status/limits/usage are reported. No routine human review at
+Step 4 or Step 5. James may give steering at any time without becoming a dependency.
+
+Escalate only a material unresolvable departure from approved art, conflicting
+binding authority, breaking save/ID changes, native platform integration, provider
+access/terms, or an unavailable/inconclusive required gate. Observe the repository
+600-line per-code-file per-commit stop; design bounded modules, not artificial
+commit slicing to evade it. Preserve evidence and state the precise decision.
+
+## Execution checkpoint — started 7 September 2026
+
+Owner explicitly starts normal long-running execution, including regular coherent
+commits and pushes. Goal remains off. No routine stage relaunch is required.
+
+- Verified engine: 4.7.2.stable.official.ed1daf0bf.
+- Fetched origin: main is 2ed6cdb0302ba3aab5845a18d862841165e8aaf7,
+  also the merge base; the current branch contains 29 additional commits.
+- PR #540 remains open against the Act III checkpoint. The complete approved
+  prerequisite chain is present in this branch; integration will target main
+  once the complete production outcome has passed its gates.
+- Production still uses MapScene/WorldMapScreen and the previous landscape.
+  Approved workshop assets have not yet been promoted into campaign assembly.
+- Started the unchanged Act I seed 4 exporter before any code edits. Evidence:
+  /tmp/glassvow-steps4-8/seed4-baseline.log and associated result/certificate.
+- Initial ownership: presentation/map runtime assembly, promoted geometry and
+  materials, affected application composition, focused map tests and this capsule.
+  Unrelated untracked experiments and generated sidecars remain untouched.
+
+Next: finish baseline reproduction and runtime dependency audit; promote the
+representative Act I section without importing workshop capture or fixture logic.
+All implementation acceptance percentages remain 0% until the relevant gates pass.
