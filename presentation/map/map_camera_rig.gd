@@ -101,7 +101,7 @@ const LANE_PULL: float = 0.7
 func pose_leading(world: Vector3, stage: Vector2, focus_inset_px: float,
 		focus_envelope_xz: Rect2) -> Vector2:
 	var resolved: Dictionary = resolve_leading(
-		world, stage, _camera.size, focus_inset_px, focus_envelope_xz)
+		world, stage, _camera.size, focus_inset_px, focus_envelope_xz, pan_bounds)
 	var pose_v: Variant = resolved.get("pose", null)
 	if resolved.get("ok", false) == true and pose_v is Vector2:
 		return pose_v
@@ -114,8 +114,9 @@ func pose_leading(world: Vector3, stage: Vector2, focus_inset_px: float,
 ## the stage after the normal pan clamp. The inset already includes the touch
 ## half-size and its safe-frame floor; this resolver does not duplicate either.
 static func resolve_leading(world: Vector3, stage: Vector2, zoom: float,
-		focus_inset_px: float, focus_envelope_xz: Rect2) -> Dictionary:
-	var bounds: Rect2 = bounds_from_lattice()
+		focus_inset_px: float, focus_envelope_xz: Rect2,
+		pan_bounds_xz: Rect2 = Rect2()) -> Dictionary:
+	var bounds: Rect2 = bounds_from_lattice() if pan_bounds_xz == Rect2() else pan_bounds_xz
 	var geometry: Dictionary = {
 		"stage": _a2(stage),
 		"zoom": zoom,
@@ -127,7 +128,9 @@ static func resolve_leading(world: Vector3, stage: Vector2, zoom: float,
 		"pan_bounds_xz": [bounds.position.x, bounds.position.y,
 			bounds.end.x, bounds.end.y],
 	}
-	if not is_finite(world.x) or not is_finite(world.y) or not is_finite(world.z) \
+	if not bounds.position.is_finite() or not bounds.end.is_finite() or \
+			bounds.size.x <= 0.0 or bounds.size.y <= 0.0 or \
+			not is_finite(world.x) or not is_finite(world.y) or not is_finite(world.z) \
 			or not is_finite(focus_envelope_xz.position.x) \
 			or not is_finite(focus_envelope_xz.position.y) \
 			or not is_finite(focus_envelope_xz.end.x) \
@@ -146,16 +149,17 @@ static func resolve_leading(world: Vector3, stage: Vector2, zoom: float,
 	if horizontal < 0.0 or safe_x.x > safe_x.y \
 			or pose_x < safe_x.x or pose_x > safe_x.y:
 		return _focus_failure(geometry, "horizontal_focus_envelope")
+	var elevation_offset: float = world.y / tan(deg_to_rad(absf(TILT_DEGREES)))
 	var sine: float = sin(deg_to_rad(absf(TILT_DEGREES)))
 	var vertical: float = zoom * (0.5 - focus_inset_px / stage.y) / sine
 	var safe_z: Vector2 = Vector2(maxf(
-		focus_envelope_xz.end.y + look_dz() - vertical, bounds.position.y), minf(
-		focus_envelope_xz.position.y + look_dz() + vertical, bounds.end.y))
+		focus_envelope_xz.end.y + look_dz() - elevation_offset - vertical, bounds.position.y), minf(
+		focus_envelope_xz.position.y + look_dz() - elevation_offset + vertical, bounds.end.y))
 	geometry["legal_camera_z"] = _a2(safe_z)
 	if vertical < 0.0 or safe_z.x > safe_z.y:
 		return _focus_failure(geometry, "vertical_focus_envelope")
-	var raw_start: float = world.z + look_dz()
-	var raw_end: float = lerpf(world.z, 0.0, LANE_PULL) + look_dz()
+	var raw_start: float = world.z + look_dz() - elevation_offset
+	var raw_end: float = lerpf(world.z, 0.0, LANE_PULL) + look_dz() - elevation_offset
 	var pose_z: float = clampf(raw_end, bounds.position.y, bounds.end.y)
 	var pull: float = LANE_PULL
 	if pose_z < safe_z.x or pose_z > safe_z.y:
@@ -166,7 +170,7 @@ static func resolve_leading(world: Vector3, stage: Vector2, zoom: float,
 		if pull < 0.0 or pull > LANE_PULL:
 			geometry["required_pull"] = pull
 			return _focus_failure(geometry, "no_legal_lane_pull")
-		pose_z = clampf(lerpf(world.z, 0.0, pull) + look_dz(),
+		pose_z = clampf(lerpf(world.z, 0.0, pull) + look_dz() - elevation_offset,
 			bounds.position.y, bounds.end.y)
 	return {"ok": true, "pose": Vector2(pose_x, pose_z), "effective_pull": pull}
 

@@ -2,6 +2,7 @@ class_name MapNodeCandidateGenerator
 extends RefCounted
 ## #467 pure, bounded per-node alternatives. It never selects a map combination.
 @warning_ignore_start("unsafe_call_argument")
+const _Spatial = preload("res://presentation/map/map_spatial_profile.gd")
 const SCHEMA_VERSION: int = 1
 const VERSION: String = "map-node-candidates-v1"
 const MAX_CANDIDATES_PER_NODE: int = 9
@@ -36,6 +37,9 @@ static func generate(input: MapLayoutInput, quality: Dictionary, restart_id: int
 		errors.append("restart_id must be non-negative")
 	if str(source["quality_registry_digest"]) != str(report["quality_registry_digest"]):
 		errors.append("quality_registry_digest mismatch")
+	errors.append_array(_Spatial.validate(quality, int(source["act"])))
+	if errors.is_empty():
+		errors.append_array(_Spatial.validate_nodes(quality, input.node_records()))
 	var calibration: Dictionary = quality["calibration"]["stage_zoom_geometry"]
 	if not _v2(calibration["cell_m"]).is_equal_approx(MapPinProjection.CELL):
 		errors.append("quality cell_m disagrees with MapPinProjection")
@@ -45,7 +49,7 @@ static func generate(input: MapLayoutInput, quality: Dictionary, restart_id: int
 		errors.append("quality jitter bounds disagree with WorldMap")
 	if not errors.is_empty():
 		return _finish(report)
-	var stage: Rect2 = MapPinProjection.lattice_footprint()
+	var stage: Rect2 = _Spatial.footprint(quality)
 	var bounds: Dictionary = _bounds(nodes, edges, quality)
 	var sets: Dictionary = {}
 	var impossible: Array = report["impossibilities"]
@@ -95,7 +99,12 @@ static func refine(input: MapLayoutInput, quality: Dictionary,
 	if selected.is_empty():
 		errors.append("deletion certificate has no refinement nodes")
 	var source: Dictionary = input.to_dict()
-	var stage: Rect2 = MapPinProjection.lattice_footprint()
+	errors.append_array(_Spatial.validate(quality, int(source["act"])))
+	if errors.is_empty():
+		errors.append_array(_Spatial.validate_nodes(quality, input.node_records()))
+	if not errors.is_empty():
+		return _finish_refinement(receipt, augmented)
+	var stage: Rect2 = _Spatial.footprint(quality)
 	var nodes: Array = input.node_records()
 	var edges: Array = input.edge_records()
 	var bounds: Dictionary = _bounds(nodes, edges, quality)

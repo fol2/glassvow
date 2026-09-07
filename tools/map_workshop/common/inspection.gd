@@ -13,9 +13,13 @@ var ruin_owners: Dictionary = {}
 var library_at: Vector3
 var markers: Dictionary = {}
 var controls: Dictionary = {}
+var extra_controls: Array[String] = []
 var canvas: Control
 var detail: Label
+var marker_extent: float = 44.0
+var control_extent: float = 48.0
 var drag: bool = false
+var pan_motion_events: int = 0
 var markers_visible: bool = true
 var selected: String = ""
 var focus_at: Vector3 = Vector3.ZERO
@@ -37,10 +41,10 @@ func _ready() -> void:
 	title.text = chapter_heading+"\n  Native asset study · Step 3"
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(title)
-	for name_value: String in ["Library","Journey","Whole act","Markers"]:
+	for name_value: String in ["Library","Journey","Whole act","Markers"]+extra_controls:
 		var button: Button = Button.new()
 		button.text = landmark_label if name_value=="Library" else name_value
-		button.custom_minimum_size = Vector2(80,48)
+		button.custom_minimum_size = Vector2(maxf(80,control_extent),control_extent)
 		row.add_child(button)
 		controls[name_value] = button
 		button.pressed.connect(func() -> void: _action(name_value))
@@ -69,12 +73,12 @@ func _ready() -> void:
 		var marker: Button = Button.new()
 		marker.text = SYMBOLS.get(type,"·")
 		marker.tooltip_text = type.capitalize()+" · "+id
-		marker.size = Vector2(44,44)
+		marker.size = Vector2.ONE*marker_extent
 		marker.add_theme_color_override("font_color",tint)
-		marker.add_theme_font_size_override("font_size",23)
+		marker.add_theme_font_size_override("font_size",int(23*marker_extent/44.0))
 		var style: StyleBoxFlat = StyleBoxFlat.new()
 		style.bg_color = Color(.04,.075,.10,.94)
-		style.set_corner_radius_all(22)
+		style.set_corner_radius_all(int(marker_extent*.5))
 		style.set_border_width_all(1)
 		style.border_color = tint.darkened(.35)
 		marker.add_theme_stylebox_override("normal",style)
@@ -165,8 +169,33 @@ func _process(_delta: float) -> void:
 		var marker: Button = markers[id]
 		var at: Vector3 = anchors[id]
 		var screen: Vector2 = camera.unproject_position(at+Vector3.UP*.65)
-		marker.position = screen-Vector2(22,22)
-		marker.visible = markers_visible and (not whole or ruin_owners.has(id)) and not camera.is_position_behind(at) and screen.x>24 and screen.x<dimensions.x-24 and screen.y>102 and screen.y<dimensions.y-64
+		marker.position = screen-Vector2.ONE*marker_extent*.5
+		marker.visible = markers_visible and (not whole or ruin_owners.has(id)) and not camera.is_position_behind(at) and screen.x>marker_extent*.5+2 and screen.x<dimensions.x-marker_extent*.5-2 and screen.y>80+marker_extent*.5 and screen.y<dimensions.y-42-marker_extent*.5
+
+func _input(event: InputEvent) -> void:
+	# Once a background drag begins, UI markers cannot steal its motion/release.
+	# Presses originating on controls still use ordinary GUI selection.
+	if not drag:
+		return
+	if event is InputEventMouseMotion:
+		var motion: InputEventMouseMotion = event
+		_pan(motion)
+		get_viewport().set_input_as_handled()
+	elif event is InputEventMouseButton:
+		var mouse: InputEventMouseButton = event
+		if mouse.button_index == MOUSE_BUTTON_LEFT and not mouse.pressed:
+			drag = false
+			get_viewport().set_input_as_handled()
+
+func _pan(event: InputEventMouseMotion) -> void:
+	pan_motion_events += 1
+	var motion: InputEventMouseMotion = event
+	var dimensions: Vector2 = get_viewport().get_visible_rect().size
+	var right: Vector3 = camera.global_basis.x
+	var forward: Vector3 = Vector3(camera.global_basis.z.x,0,camera.global_basis.z.z).normalized()
+	var movement: Vector3 = -(right*motion.relative.x+forward*motion.relative.y/sin(deg_to_rad(55)))*camera.size/dimensions.y
+	camera.position += movement
+	focus_at += movement
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -176,14 +205,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif mouse.pressed and mouse.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:
 			camera.size = clampf(camera.size*(.9 if mouse.button_index==MOUSE_BUTTON_WHEEL_UP else 1.1),12,90)
 			whole = camera.size>45
-	elif event is InputEventMouseMotion and drag:
-		var motion: InputEventMouseMotion = event
-		var dimensions: Vector2 = get_viewport().get_visible_rect().size
-		var right: Vector3 = camera.global_basis.x
-		var forward: Vector3 = Vector3(camera.global_basis.z.x,0,camera.global_basis.z.z).normalized()
-		var movement: Vector3 = -(right*motion.relative.x+forward*motion.relative.y/sin(deg_to_rad(55)))*camera.size/dimensions.y
-		camera.position += movement
-		focus_at += movement
 
 func exercise() -> Dictionary:
 	var dimensions: Vector2 = get_viewport().get_visible_rect().size
@@ -199,25 +220,42 @@ func exercise() -> Dictionary:
 	var current_visible: bool = marker.visible
 	await _click(marker.get_global_rect().get_center())
 	var selection_pass: bool = selected==current_id and detail.text.contains("Current location")
+	var motion_events_before: int = pan_motion_events
 	var camera_before: Vector3 = camera.position
-	var origin: Vector2 = Vector2(12,dimensions.y*.5)
+	var origin: Vector2 = _drag_probe_origin(dimensions)
+	var approach: InputEventMouseMotion = InputEventMouseMotion.new()
+	approach.position = origin
+	approach.global_position = origin
+	Input.parse_input_event(approach)
+	Input.flush_buffered_events()
+	await get_tree().process_frame
 	var down: InputEventMouseButton = InputEventMouseButton.new()
 	down.button_index = MOUSE_BUTTON_LEFT
 	down.pressed = true
 	down.position = origin
+	down.global_position = origin
 	Input.parse_input_event(down)
 	await get_tree().process_frame
+	var drag_after_down: bool = drag
 	var motion: InputEventMouseMotion = InputEventMouseMotion.new()
 	motion.position = origin+Vector2(30,10)
+	motion.global_position = motion.position
 	motion.relative = Vector2(30,10)
 	motion.button_mask = MOUSE_BUTTON_MASK_LEFT
+	var target_markers: Array[String] = []
+	for id: String in markers:
+		if markers[id].visible and markers[id].get_global_rect().has_point(motion.position):
+			target_markers.append(id)
 	Input.parse_input_event(motion)
 	await get_tree().process_frame
 	var up: InputEventMouseButton = down.duplicate() as InputEventMouseButton
 	up.pressed = false
 	Input.parse_input_event(up)
 	await get_tree().process_frame
-	var pan_pass: bool = camera.position.distance_to(camera_before)>.1
+	var pan_distance: float = camera.position.distance_to(camera_before)
+	var hovered: Control = get_viewport().gui_get_hovered_control()
+	var pan_pass: bool = pan_distance>.1
+	var drag_selection_pass: bool = selected==current_id and not drag
 	var previous_size: float = camera.size
 	var wheel: InputEventMouseButton = InputEventMouseButton.new()
 	wheel.button_index = MOUSE_BUTTON_WHEEL_UP
@@ -227,10 +265,14 @@ func exercise() -> Dictionary:
 	await get_tree().process_frame
 	var zoom_pass: bool = camera.size<previous_size
 	await _click(journey_button.get_global_rect().get_center())
+	var target_sizes_pass: bool = true
+	for button: Button in markers.values()+controls.values():
+		target_sizes_pass = target_sizes_pass and minf(button.size.x,button.size.y)>=marker_extent-.1
 	return {"dimensions":[dimensions.x,dimensions.y],"viewport_matches_pixels":actual_pixels,
 		"whole_button":whole_pass,"journey_button":journey_pass,"current_visible":current_visible,
-		"select_current":selection_pass,"drag_pan":pan_pass,"wheel_zoom":zoom_pass,
-		"marker_target":[marker.size.x,marker.size.y],"source_current_unchanged":data["current"]==current_id}
+		"select_current":selection_pass,"drag_pan":pan_pass,"drag_preserves_selection":drag_selection_pass,"wheel_zoom":zoom_pass,
+		"drag_probe":{"origin":origin,"target":motion.position,"received_down":drag_after_down,"camera_delta":pan_distance,"target_markers":target_markers,"motion_events":pan_motion_events-motion_events_before,"hovered":str(hovered.get_path()) if hovered != null else "none"},
+		"target_sizes_pass":target_sizes_pass,"required_target":marker_extent,"marker_target":[marker.size.x,marker.size.y],"source_current_unchanged":data["current"]==current_id}
 
 func _click(at: Vector2) -> void:
 	# Move the pointer before pressing, and finish a rendered frame before
@@ -251,3 +293,6 @@ func _click(at: Vector2) -> void:
 		Input.flush_buffered_events()
 		await get_tree().process_frame
 	await RenderingServer.frame_post_draw
+
+func _drag_probe_origin(dimensions: Vector2) -> Vector2:
+	return Vector2(12,dimensions.y*.5)

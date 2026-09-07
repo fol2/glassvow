@@ -1,6 +1,7 @@
 class_name MapQualityEvaluator
 extends RefCounted
 ## Pure governed camera registry and geometric evaluator for Map Compiler v2 (#466).
+const _Spatial = preload("res://presentation/map/map_spatial_profile.gd")
 const VERSION: String = "map-quality-evaluator-v1"
 const EMPTY_MANIFEST: Dictionary = {"assets": [], "profile_defaults": {}, "profile_overrides": {}}
 const _Grade = preload("res://presentation/map/map_grade_separation.gd")
@@ -23,6 +24,12 @@ const SELECTION_PRIORITY_METRICS: PackedStringArray = [
 @warning_ignore_start("unsafe_call_argument")
 static func camera_registry(nodes: Array, quality: Dictionary,
 		edges: Array = []) -> Dictionary:
+	var spatial_errors: Array[String] = _Spatial.validate(quality)
+	if spatial_errors.is_empty():
+		spatial_errors.append_array(_Spatial.validate_nodes(quality, nodes))
+	if not spatial_errors.is_empty():
+		return {"schema_version": 1, "version": "map-camera-profiles-v2",
+			"profiles": [], "errors": spatial_errors, "digest": ""}
 	var chosen: Dictionary = {}
 	for value: Variant in nodes:
 		var node: Dictionary = value
@@ -35,6 +42,12 @@ static func camera_registry(nodes: Array, quality: Dictionary,
 		var row: int = int(row_v)
 		poses.append({"id": "row-%02d" % row, "kind": "focus", "focus": str(chosen[row]["id"]), "world": _a3(_authored(chosen[row], quality))})
 	var bounds: Rect2 = MapCameraRig.bounds_from_lattice()
+	if quality.has("spatial_profile"):
+		var foot: Rect2 = _Spatial.footprint(quality)
+		bounds = Rect2(foot.position + Vector2(0, MapCameraRig.look_dz()), foot.size)
+		if not rows.is_empty():
+			var opening: Vector3 = _authored(chosen[rows[0]], quality)
+			poses[0]["xz"] = Vector2(opening.x, opening.z + MapCameraRig.look_dz())
 	var lo: Vector2 = bounds.position; var hi: Vector2 = bounds.end; var mid: Vector2 = (lo + hi) * 0.5
 	for pair: Array in [["pan-left", Vector2(lo.x, mid.y)], ["pan-right", Vector2(hi.x, mid.y)], ["pan-near", Vector2(mid.x, lo.y)], ["pan-far", Vector2(mid.x, hi.y)], ["pan-near-left", lo], ["pan-near-right", Vector2(hi.x, lo.y)], ["pan-far-left", Vector2(lo.x, hi.y)], ["pan-far-right", hi]]:
 		poses.append({"id": pair[0], "kind": "pan", "focus": "", "xz": pair[1]})
@@ -55,7 +68,7 @@ static func camera_registry(nodes: Array, quality: Dictionary,
 					var world: Vector3 = _v3(pose["world"])
 					var resolved: Dictionary = MapCameraRig.resolve_leading(world,
 						Vector2(stage), zoom, focus_inset,
-						focused_anchor_envelope(str(pose["focus"]), focus_envelopes))
+						focused_anchor_envelope(str(pose["focus"]), focus_envelopes), bounds)
 					var resolved_pose_v: Variant = resolved.get("pose", null)
 					if resolved.get("ok", false) != true or not resolved_pose_v is Vector2:
 						var failure: Dictionary = resolved.get("failure", {}).duplicate(true)
@@ -83,7 +96,7 @@ static func node_candidate_bounds(nodes: Array, edges: Array,
 	var governed: Dictionary = quality["geometry"]["row_lane_envelope"]
 	var row_half: float = _f(governed["row_half_extent_m"])
 	var lane_half: float = _f(governed["lane_half_extent_m"])
-	var stage: Rect2 = MapPinProjection.lattice_footprint()
+	var stage: Rect2 = _Spatial.footprint(quality)
 	var initial: Dictionary = {}
 	for node: Dictionary in nodes:
 		var node_id: String = str(node["id"])
@@ -922,11 +935,7 @@ static func _point_at(points: Array, distance: float) -> Vector3:
 		distance -= length
 	return _v3(points[-1])
 static func _authored(node: Dictionary, quality: Dictionary) -> Vector3:
-	var stage: Dictionary = quality["calibration"]["stage_zoom_geometry"]
-	var cell: Vector2 = _v2(stage["cell_m"])
-	var origin: Vector2 = _v2(stage["origin_xz_m"])
-	var jitter: Vector2 = _v2(node["jitter"])
-	return Vector3(origin.x + (_f(node["row"]) + jitter.y) * cell.x, 0.0, origin.y + (_f(node["col"]) + jitter.x) * cell.y)
+	return _Spatial.anchor(node, quality)
 static func _node_world(center: Vector3, quality: Dictionary) -> PackedVector2Array:
 	return _rect(_xz(center), _v2(quality["calibration"]["shipping_touch_waystone"]["node_pair_half_extent_m"]))
 static func _circle(center: Vector2, radius: float) -> PackedVector2Array:

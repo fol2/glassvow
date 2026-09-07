@@ -247,6 +247,11 @@ static func _deferred_compile(input: MapLayoutInput, source: Dictionary,
 
 static func _validate_authorities(source: Dictionary, input: MapLayoutInput,
 		quality: Dictionary, assets: Dictionary) -> Dictionary:
+	var spatial_errors: Array[String] = preload(
+		"res://presentation/map/map_spatial_profile.gd").validate(
+			quality, MapLayoutCanonical.int_value(source["act"]))
+	if not spatial_errors.is_empty():
+		return _binding("spatial_profile", "quality", "; ".join(spatial_errors))
 	var quality_digest: String = MapLayoutCanonical.digest(quality)
 	if quality_digest != str(source["quality_registry_digest"]):
 		return _digest_binding("quality_registry_digest",
@@ -323,7 +328,7 @@ static func _hero_placements(source: Dictionary, assets: Dictionary) -> Dictiona
 static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 		quality: Dictionary, assets: Dictionary, heroes: Dictionary,
 		node_sets: Dictionary, selection: Dictionary,
-		deferred_grade: bool = false) -> Dictionary:
+		deferred_grade: bool = false, retain_rejected: bool = false) -> Dictionary:
 	var anchors: Dictionary = {}
 	var chosen_ids: Dictionary = {}
 	for node_id: String in MapLayoutCanonical.sorted_keys(node_sets):
@@ -459,11 +464,23 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 		if not routed_edge.get("row", {}).is_empty():
 			route_rows.append(routed_edge["row"])
 		routes[edge_id] = routed_edge["route"]
+	if quality.has("spatial_profile"):
+		var terrace: Dictionary = preload("res://presentation/map/map_terrace_route.gd").apply(routes, anchors)
+		if terrace.get("ok") != true:
+			return _attempt_failure(chosen_ids, route_rows, {
+				"kind":"terrace_surface", "id":"terrace_infeasible", "node_id":"",
+				"edge_id":terrace.get("edge_id", ""), "profile_id":"world",
+				"reason":terrace.get("reason", "terrace resolution failed"),
+				"details":terrace}, plan_diagnostics)
+		routes = terrace["routes"]
 	if deferred_grade:
 		var graded: Dictionary = _Grade.apply(routes, quality)
 		if graded.get("ok", false) != true:
-			return _attempt_failure(chosen_ids, route_rows,
+			var failure: Dictionary = _attempt_failure(chosen_ids, route_rows,
 				graded.get("binding", {}), plan_diagnostics)
+			if retain_rejected:
+				failure["rejected_geometry"] = {"node_anchors":anchors,"edges":routes}
+			return failure
 		plan_diagnostics["grade_receipt"] = graded["receipt"]
 		if MapLayoutCanonical.int_value(
 				graded["receipt"].get("bridge_span_count", 0)) == 0:
@@ -512,12 +529,17 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 	if second.get("hard_pass", false) != true:
 		var binding: Dictionary = _quality_binding(second, input)
 		attempt_diagnostics["first_binding_violation"] = binding
-		return {
+		var rejected: Dictionary = {
 			"ok": false,
 			"binding": binding,
 			"chosen_candidate_ids": chosen_ids,
 			"diagnostics": attempt_diagnostics,
 		}
+		if retain_rejected:
+			# Study-only diagnostics never enter compiled results or caches.
+			rejected["rejected_geometry"] = final_result.to_dict()
+			rejected["quality_violations"] = second.get("violations", [])
+		return rejected
 	return {
 		"ok": true,
 		"result": final_result,

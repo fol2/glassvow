@@ -36,6 +36,13 @@ func _run() -> void:
 	DisplayServer.window_set_size(root.size)
 	root.content_scale_size = root.size
 	root.msaa_3d = Viewport.MSAA_4X
+	for arg: String in OS.get_cmdline_user_args():
+		if arg == "--debug-wireframe":
+			RenderingServer.set_debug_generate_wireframes(true)
+			root.debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
+		elif arg == "--debug-unshaded":
+			root.debug_draw = Viewport.DEBUG_DRAW_UNSHADED
+
 	var world: Node3D = Node3D.new()
 	root.add_child(world)
 	var env: Environment = Environment.new()
@@ -84,6 +91,11 @@ func _run() -> void:
 	var site: Dictionary = routes.ruin_plan.sites[0]
 	palace.position = site["centre"]
 	palace.rotation.y = site["yaw"]
+	if "--debug-depth" in OS.get_cmdline_user_args():
+		var depth: ShaderMaterial = ShaderMaterial.new()
+		depth.shader = Shader.new()
+		depth.shader.code = "shader_type spatial; render_mode unshaded; void fragment(){ ALBEDO = vec3(1.0-clamp((-VERTEX.z-5.0)/80.0,0.0,1.0)); }"
+		_apply_depth_material(world, depth)
 	var camera: Camera3D = Camera3D.new()
 	world.add_child(camera)
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -163,3 +175,10 @@ func _run() -> void:
 		print("ACT_III_TRIAL_CAPTURE ",result," ",output)
 		quit(0 if result==OK else 1)
 
+
+func _apply_depth_material(node: Node, material: Material) -> void:
+	if node is MeshInstance3D:
+		var mesh: MeshInstance3D = node
+		mesh.material_override = material
+	for child: Node in node.get_children():
+		_apply_depth_material(child, material)

@@ -3,6 +3,7 @@ extends RefCounted
 
 @warning_ignore_start("unsafe_call_argument")
 
+const _Spatial = preload("res://presentation/map/map_spatial_profile.gd")
 const MAX_BYPASSED_EDGES: int = 8
 
 static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
@@ -117,6 +118,11 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 	)
 	if not is_finite(half_width) or half_width <= 0.0:
 		return _plan_failure("quality", "physical road half-width must be finite and positive")
+	if quality.has("spatial_profile"):
+		for edge: Dictionary in order:
+			var guide: Variant = _spatial_branch_guide(edge, order, anchors, ports, sample)
+			if guide is Vector2:
+				ports[str(edge["id"])]["branch_egress"] = guide
 	var reservations: Dictionary = {}
 	for node_id: String in MapLayoutCanonical.sorted_keys(nodes_by_id):
 		var incoming: float = MapLayoutCanonical.float_value(access[node_id]["incoming_m"])
@@ -134,6 +140,8 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 	return {
 		"ok": true,
 		"route_order": order,
+		"spatial_footprint": _Spatial.footprint(quality),
+		"keep_forward_bounds": quality.has("spatial_profile"),
 		"anchors": anchors,
 		"ports": ports,
 		"portal_reservations": reservations,
@@ -153,6 +161,30 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 	}
 
 
+## New spatial profiles reserve a readable fork before turning towards destinations.
+## This changes routing, never game connectivity or candidate node coordinates.
+static func _spatial_branch_guide(edge: Dictionary, edges: Array, anchors: Dictionary,
+		ports: Dictionary, distance: float) -> Variant:
+	var siblings: Array[Dictionary] = []
+	for other: Dictionary in edges:
+		if other["from"] == edge["from"]:
+			siblings.append(other)
+	if siblings.size() < 2:
+		return null
+	siblings.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var az: float = _xz(anchors[str(a["to"])]).y
+		var bz: float = _xz(anchors[str(b["to"])]).y
+		return az < bz if az != bz else str(a["id"]) < str(b["id"]))
+	var rank: int = 0
+	for index: int in range(siblings.size()):
+		if siblings[index]["id"] == edge["id"]:
+			rank = index
+	var spread: float = 45.0 if siblings.size() == 2 else 70.0
+	var angle: float = deg_to_rad(lerpf(-spread, spread, float(rank) / (siblings.size() - 1)))
+	var source: Vector2 = ports[str(edge["id"])]["source"]
+	return source + Vector2.from_angle(angle) * distance
+
+
 static func route_planned(edge: Dictionary, plan: Dictionary,
 		obstacles: Array[Dictionary], half_width: float, safety: float,
 		quality: Dictionary, channel: PackedVector2Array,
@@ -162,6 +194,11 @@ static func route_planned(edge: Dictionary, plan: Dictionary,
 	var source: Vector2 = port["source"]
 	var target: Vector2 = port["target"]
 	var radius: float = half_width + safety
+	if quality.has("spatial_profile"):
+		var channel_bounds: Rect2 = _bounds(channel)
+		channel = _rectangle(maxf(source.x, channel_bounds.position.x),
+			minf(target.x, channel_bounds.end.x),
+			channel_bounds.position.y, channel_bounds.end.y)
 	var diagnostics: Dictionary = {
 		"normal_calls": 1,
 		"bypass_calls": 0,
@@ -178,11 +215,15 @@ static func route_planned(edge: Dictionary, plan: Dictionary,
 	if port["branch_egress"] is Vector2:
 		ordinary = _route_through(
 			source, port["branch_egress"], target,
-			obstacles, half_width, safety, radius
+			obstacles, half_width, safety, radius, quality.has("spatial_profile")
 		)
 		diagnostics["normal_calls"] = 2
 		diagnostics["router_calls"]["ordinary"] = 2
 		if str(ordinary.get("status", "")) != MapSingleEdgeRouter.ROUTED:
+			if quality.has("spatial_profile"):
+				diagnostics["router_diagnostics"]["ordinary"] = _router_evidence(ordinary)
+				diagnostics["required_branch_egress_rejected"] = true
+				return _attach_plan(ordinary, diagnostics)
 			ordinary = MapSingleEdgeRouter.route(
 				source, target, obstacles, half_width, safety, channel
 			)
@@ -348,7 +389,7 @@ static func route_channel(edge: Dictionary, plan: Dictionary,
 	var port: Dictionary = plan["ports"][str(edge["id"])]
 	var source: Vector2 = port["source"]
 	var target: Vector2 = port["target"]
-	var stage: Rect2 = MapPinProjection.lattice_footprint().grow(padding)
+	var stage: Rect2 = Rect2(plan.get("spatial_footprint", MapPinProjection.lattice_footprint())).grow(padding)
 	var left: float = maxf(stage.position.x, minf(source.x, target.x) - padding)
 	var right: float = minf(stage.end.x, maxf(source.x, target.x) + padding)
 	return PackedVector2Array([
@@ -522,17 +563,25 @@ static func _route_bypass(edge: Dictionary, plan: Dictionary,
 	var source: Vector2 = port["source"]
 	var target: Vector2 = port["target"]
 	var z: float = MapLayoutCanonical.float_value(side["z"])
-	var points: Array[Vector2] = [source,
-		Vector2(MapLayoutCanonical.float_value(side["west_x"]), z),
-		Vector2(MapLayoutCanonical.float_value(side["east_x"]), z), target]
+	var west_x: float = MapLayoutCanonical.float_value(side["west_x"])
+	var east_x: float = MapLayoutCanonical.float_value(side["east_x"])
+	if plan.get("keep_forward_bounds",false):
+		west_x = maxf(west_x,source.x+2*radius)
+		east_x = minf(east_x,target.x-2*radius)
+	if plan.get("keep_forward_bounds",false) and west_x > east_x:
+		return {"ok":false,"calls":0,"reason":"forward bypass turning stations do not fit",
+			"leg_diagnostics":[],"route":{"status":MapSingleEdgeRouter.NO_ROUTE,
+			"reason":"forward bypass turning stations do not fit"}}
+	var points: Array[Vector2] = [source,Vector2(west_x,z),Vector2(east_x,z),target]
 	var planned_blocking_ids: Dictionary = {}
 	for i: int in range(points.size() - 1):
 		for obstacle_id: String in _endpoint_blocking_obstacle_ids(
 				points[i], points[i + 1], obstacles, radius):
 			planned_blocking_ids[obstacle_id] = true
-	var stage: Rect2 = MapPinProjection.lattice_footprint().grow(radius)
+	var stage: Rect2 = Rect2(plan.get("spatial_footprint", MapPinProjection.lattice_footprint())).grow(radius)
 	var channel: PackedVector2Array = _rectangle(
-		stage.position.x, stage.end.x,
+		source.x if plan.get("keep_forward_bounds",false) else stage.position.x,
+		target.x if plan.get("keep_forward_bounds",false) else stage.end.x,
 		minf(z, minf(source.y, target.y)) - radius,
 		maxf(z, maxf(source.y, target.y)) + radius
 	)
@@ -597,14 +646,21 @@ static func _router_evidence(route: Dictionary) -> Dictionary:
 
 static func _route_through(source: Vector2, guide: Vector2, target: Vector2,
 		obstacles: Array[Dictionary], half_width: float, safety: float,
-		radius: float) -> Dictionary:
+		radius: float, keep_forward_bounds: bool = false) -> Dictionary:
+	if keep_forward_bounds and (guide.x < source.x or guide.x > target.x):
+		return {"status": MapSingleEdgeRouter.NO_ROUTE,
+			"reason": "branch guide leaves its forward row interval"}
 	var centreline: Array = []
 	var digests: Array[String] = []
 	var points: Array[Vector2] = [source, guide, target]
 	for i: int in range(points.size() - 1):
+		var leg_channel: PackedVector2Array = _leg_channel(points[i], points[i + 1], radius)
+		if keep_forward_bounds:
+			leg_channel = _rectangle(source.x, target.x,
+				minf(points[i].y, points[i + 1].y) - radius,
+				maxf(points[i].y, points[i + 1].y) + radius)
 		var routed: Dictionary = MapSingleEdgeRouter.route(
-			points[i], points[i + 1], obstacles, half_width, safety,
-			_leg_channel(points[i], points[i + 1], radius)
+			points[i], points[i + 1], obstacles, half_width, safety, leg_channel
 		)
 		if str(routed.get("status", "")) != MapSingleEdgeRouter.ROUTED:
 			return routed
