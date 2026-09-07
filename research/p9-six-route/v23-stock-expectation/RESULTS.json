@@ -1,0 +1,23 @@
+{
+  "status":"RAW_RECONCILED_EXPLORATION_NOT_P9",
+  "engine":"4.7.2.stable.official.ed1daf0bf",
+  "content_sha256":"3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "freeze_sha256":"6b223ff140b4b4c98cf2fe68ee410d44755310d8bd2805e0fd261d482f943e6a",
+  "cells":48,"rows":1536,"runs_per_cell":32,
+  "seeds":[33010000,33010031],
+  "counts":{"win":900,"loss":636,"stall":0,"error":0},
+  "native_diagnostic_failures":0,
+  "column_order":["route","vow","mean_planned_wins","expectation_planned_wins","mean_random_wins","expectation_random_wins"],
+  "wins_out_of_32":{
+    "dusk":[["facet",0,27,27,22,22],["facet",5,15,15,9,9],["fervor",0,27,27,20,20],["fervor",5,18,19,10,9],["cycle",0,27,27,17,17],["cycle",5,15,15,10,10]],
+    "ash":[["smolder",0,29,30,19,19],["smolder",5,22,22,12,13],["hand",0,24,25,19,19],["hand",5,16,17,5,6],["ember",0,30,29,23,23],["ember",5,19,22,12,11]]
+  },
+  "aggregate_descriptive":{
+    "planned":{"assignments_per_arm":384,"mean_wins":269,"expectation_wins":275,"improved_pairs":10,"worsened_pairs":4,"mean_change":0.015625,"nominal_seed_cluster_bootstrap95":[0.0,0.033854166666666664]},
+    "random":{"assignments_per_arm":384,"mean_wins":178,"expectation_wins":178,"improved_pairs":2,"worsened_pairs":2,"mean_change":0.0,"nominal_seed_cluster_bootstrap95":[-0.010416666666666666,0.010416666666666666]},
+    "shared_seed_clusters":32
+  },
+  "verification":"All assigned raw rows,configs,source/content/engine bindings,receipt/log hashes,whole-run victory conditions and source-health totals reconciled. The native driver and separate readout agree. No loss exclusion.",
+  "decision":"Do not promote the assumed PMF as a P9 solution. It changed real choices and produced six additional Planned wins, with unchanged aggregate RandomBuild wins. The improvement is small and the distribution remains an uncalibrated sensitivity model. Preserve the reference in the independent content experiments; no final-quality or optimality claim.",
+  "limitations":["32 shared seed clusters,not1536 independent seeds","Nominal exploration,not corrected confirmation","Empirical bootstrap intervals can degenerate at zero without proving population zero effect","Route-matched native RandomBuild is not signed original arm2","No six-package admission,detector,unrestricted retention,lifecycle or exact integration"]
+}
