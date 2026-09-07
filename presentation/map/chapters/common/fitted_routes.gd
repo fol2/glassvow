@@ -19,8 +19,18 @@ var height_profile: RefCounted = preload("res://presentation/map/chapters/common
 var bridge_style: Dictionary = {}
 var stone: ShaderMaterial = ShaderMaterial.new()
 var deck: ShaderMaterial = ShaderMaterial.new()
+var build_timings_ms: Dictionary = {}
+var _stage_started: int = 0
+
+func _mark(stage: String) -> void:
+	var now: int = Time.get_ticks_msec()
+	build_timings_ms[stage] = now-_stage_started
+	_stage_started = now
+	print("FITTED_ROUTE_TIMING ",stage,"=",build_timings_ms[stage])
 
 func build(sample: Dictionary) -> void:
+	_stage_started = Time.get_ticks_msec()
+	build_timings_ms.clear()
 	if levels==null or ruin_plan==null or bridge_style.is_empty():
 		failure = "Fitted routes require caller-owned grading, destination plan and bridge style"
 		return
@@ -95,6 +105,7 @@ func build(sample: Dictionary) -> void:
 				upper.append(span)
 			else:
 				lower.append(span)
+	_mark("route_profiles")
 	ruin_plan.build(sample,anchors,sampled_routes)
 	if not ruin_plan.failure.is_empty():
 		failure = ruin_plan.failure
@@ -123,6 +134,7 @@ func build(sample: Dictionary) -> void:
 	for cut: Dictionary in levels.cuts:
 		var at: Vector2 = cut["at"]
 		stair_exclusions.append(Vector3(at.x,0,at.y))
+	_mark("destination_links")
 	for spans: Array[Dictionary] in [lower,upper]:
 		if spans.is_empty():
 			continue
@@ -136,22 +148,26 @@ func build(sample: Dictionary) -> void:
 			field = landing
 		var profile: Callable = Callable(levels,"height") if spans == lower and height_profile.routes.is_empty() else Callable()
 		field.setup(spans,func(_x: float,_z: float) -> float: return -2.0,profile)
+		_mark("field_%d_setup" % fields.size())
 		if not height_profile.routes.is_empty():
 			var grading: RefCounted = preload("res://presentation/map/chapters/stone_bridge/flight_grade.gd").new()
 			grading.prepare(field,{"openings":stair_exclusions})
 			field.set("stair_profile",grading)
+		_mark("field_%d_grading" % fields.size())
 		fields.append(field)
 		var top: SurfaceTool = SurfaceTool.new()
 		var sides: SurfaceTool = SurfaceTool.new()
 		top.begin(Mesh.PRIMITIVE_TRIANGLES)
 		sides.begin(Mesh.PRIMITIVE_TRIANGLES)
 		field.append(top,sides)
+		_mark("field_%d_meshing" % (fields.size()-1))
 		var deck_mesh: ArrayMesh = M.finish(top)
 		var underside_mesh: ArrayMesh = M.finish(sides)
 		deck_meshes.append(deck_mesh)
 		underside_meshes.append(underside_mesh)
 		M.node(self,deck_mesh,deck,"FittedCausewayDeck")
 		M.node(self,underside_mesh,stone,"ArchedCausewayStructure")
+		_mark("field_%d_normals" % (fields.size()-1))
 
 	var trim: Material = materials["trim"]
 	var edge_style: Dictionary = bridge_style.duplicate()
@@ -160,6 +176,7 @@ func build(sample: Dictionary) -> void:
 		edge_style["openings"].append(site["door"])
 	for i: int in range(fields.size()):
 		_build_edges(i,trim,edge_style)
+		_mark("field_%d_parapets" % i)
 	for i: int in range(fields.size()):
 		var steps: ArrayMesh = preload("res://presentation/map/chapters/stone_bridge/stairs.gd").new().build(self,fields[i],trim,{"openings":stair_exclusions,"tread_width":bridge_style["tread_width"]})
 		if steps!=null:
@@ -169,7 +186,9 @@ func build(sample: Dictionary) -> void:
 			combined.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,deck_meshes[i].surface_get_arrays(0))
 			combined.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,steps.surface_get_arrays(0))
 			deck_meshes[i] = combined
+	_mark("stairs")
 	_build_piers(trim,edge_style)
+	_mark("piers")
 	print("FITTED_ROUTE_ASSEMBLY nodes=",anchors.size()," edges=",sampled_routes.size()," layers=",fields.size())
 
 func _soffit(height: float,s: float,total: float,raised: bool) -> float:

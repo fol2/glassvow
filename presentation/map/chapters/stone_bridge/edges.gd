@@ -6,9 +6,18 @@ var blocks: SurfaceTool
 var caps: SurfaceTool
 var arch_stones: SurfaceTool
 var box: BoxMesh = BoxMesh.new()
+var timings_ms: Dictionary = {}
+var _stage_started: int = 0
+
+func _mark(stage: String) -> void:
+	var now: int = Time.get_ticks_msec()
+	timings_ms[stage]=now-_stage_started
+	_stage_started=now
+	print("STONE_EDGE_TIMING ",stage,"=",timings_ms[stage])
 
 func build(parent: Node3D, mesh: ArrayMesh, field: RefCounted,
 		other_fields: Array, stone: Material, trim: Material, settings: Dictionary = {}) -> Array[ArrayMesh]:
+	_stage_started=Time.get_ticks_msec()
 	blocks = SurfaceTool.new()
 	caps = SurfaceTool.new()
 	arch_stones = SurfaceTool.new()
@@ -24,6 +33,7 @@ func build(parent: Node3D, mesh: ArrayMesh, field: RefCounted,
 		var divisions: int = maxi(1,ceili(a.distance_to(b)/.20))
 		for i: int in range(divisions):
 			boundary.append({"a":a.lerp(b,float(i)/divisions),"b":a.lerp(b,float(i+1)/divisions)})
+	_mark("outline")
 	for edge: Dictionary in boundary:
 		var a: Vector3 = edge["a"]
 		var b: Vector3 = edge["b"]
@@ -55,13 +65,16 @@ func build(parent: Node3D, mesh: ArrayMesh, field: RefCounted,
 		_piece(arch_stones,a,b,outward*.04-Vector3.UP*.16,.34,.16)
 		_arch_band(a,b,outward,field)
 		count += 1
+	_mark("boundary_masonry")
 	preload("res://presentation/map/chapters/stone_bridge/pointed_parapets.gd").new().build(accepted,blocks,caps,other_fields,settings)
+	_mark("parapets")
 	var result: Array[ArrayMesh] = []
 	if count>0:
 		for surface: SurfaceTool in [blocks,caps,arch_stones]:
 			var finished: ArrayMesh = M.finish(surface)
 			result.append(finished)
 			M.node(parent,finished,stone if surface==blocks else trim,"BridgeEdgeMasonry")
+	_mark("normals")
 	print("STONE_BRIDGE_BOUNDARY_PIECES ",count)
 	return result
 

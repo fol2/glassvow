@@ -4,6 +4,7 @@ var sites: Array[Dictionary] = []
 var failure: String = ""
 var route_points: Array[Vector3] = []
 var used: Dictionary = {}
+var preferred_centres: PackedVector3Array = []
 
 func build(sample: Dictionary, anchors: Dictionary, routes: Dictionary) -> void:
 	for line: PackedVector3Array in routes.values():
@@ -18,6 +19,7 @@ func build(sample: Dictionary, anchors: Dictionary, routes: Dictionary) -> void:
 		return
 	var kinds: Array[String] = ["library","ward","ward","ward","quarter","quarter","quarter","quarter"]
 	var preferred: Array[Vector3] = [anchors[boss]+Vector3(18,0,0),Vector3(-11,0,-49),Vector3(32,0,-45),Vector3(47,0,0),Vector3(-40,0,15),Vector3(-15,0,10),Vector3(12,0,15),Vector3(38,0,20)]
+	if preferred_centres.size()==kinds.size(): preferred.assign(preferred_centres)
 	for ordinal: int in range(kinds.size()):
 		var kind: String = kinds[ordinal]
 		var half: Vector2 = Vector2(7.1,5.8) if kind=="library" else (Vector2(5.0,3.5) if kind=="ward" else Vector2(6.3,4.3))

@@ -288,6 +288,17 @@ func _deal_act(_region: MapRegions) -> void:
 		setting.environment.ambient_light_color = Color("a19caa")
 		setting.environment.ambient_light_energy = .50
 		setting.environment.fog_enabled = false
+	elif _act==1:
+		_key.rotation_degrees=Vector3(-48,-35,0)
+		_key.light_color=Color("bacdda")
+		_key.light_energy=1.1
+		_key.shadow_opacity=.65
+		_key.directional_shadow_max_distance=130
+		setting.environment.background_color=Color("10252f")
+		setting.environment.ambient_light_color=Color("85a9c4")
+		setting.environment.ambient_light_energy=.65
+		setting.environment.tonemap_mode=Environment.TONE_MAPPER_FILMIC
+		setting.environment.fog_enabled=false
 	_salt_dirty = false
 	_bind_asset_geometry()
 	_repaint()
@@ -559,7 +570,7 @@ func _bind_asset_geometry() -> void:
 	_repaint()
 
 
-func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutResult:
+func bind_layout(compiled: MapLayoutResult, quality: Dictionary, node_records: Array = []) -> MapLayoutResult:
 	if quality.has("journey_camera") and not JourneyRegistry.enabled(quality):
 		return _fail_layout("Unsupported journey camera contract")
 	if compiled == null:
@@ -576,6 +587,10 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 	if _landscape != null:
 		_landscape.free()
 	_landscape = JourneyLandscape.new() if _act == 0 and JourneyRegistry.enabled(quality) else MapLandscape.new()
+	if _act==1 and JourneyRegistry.enabled(quality):
+		_landscape.free()
+		_landscape=preload("res://presentation/map/chapters/act2/landscape.gd").new()
+		_landscape.source_nodes=node_records
 	_world.add_child(_landscape)
 	_landscape.prepare(data, _landscape_assets, _scatter_salt)
 	if _landscape is JourneyLandscape:
@@ -648,8 +663,8 @@ func realised_asset_bundle() -> Dictionary:
 
 func _bind_journey(source: MapLayoutResult) -> MapLayoutResult:
 	var horizon_bounds: Rect2 = _landscape.map_bounds
-	_horizon = preload("res://presentation/map/map_horizon.gd").new(horizon_bounds)
-	_display.material = _horizon.get("material")
+	_horizon = preload("res://presentation/map/map_horizon.gd").new(horizon_bounds) if _act==0 else null
+	_display.material = _horizon.get("material") if _horizon!=null else null
 	if journey_cache != null:
 		var stored_source: Dictionary = journey_cache.get("source_result")
 		if not stored_source.is_empty() and str(stored_source.get("layout_digest","")) != source.digest():
@@ -659,7 +674,7 @@ func _bind_journey(source: MapLayoutResult) -> MapLayoutResult:
 	if not str(_landscape.failure).is_empty():
 		return _fail_layout(str(_landscape.failure))
 	var realised_started: int = Time.get_ticks_msec()
-	var realised: Dictionary = JourneyRealisation.finish(source,_landscape)
+	var realised: Dictionary = _landscape.realise(source)
 	_landscape.timings_ms["realisation"] = Time.get_ticks_msec()-realised_started
 	_landscape.timings_ms["realisation_parts"] = realised.get("timings_ms",{})
 	if not realised.get("ok",false):

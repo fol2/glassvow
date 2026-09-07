@@ -16,6 +16,7 @@ var _steps: int = 0
 var _exercise: bool = false
 var _measure: bool = false
 var _compile_only: bool = false
+var _chapter_audit: bool = false
 var _zoom: int = 2
 var _quality_path: String = ""
 var _input: MapLayoutInput
@@ -42,6 +43,8 @@ func _run() -> void:
 			_pose = arg.get_slice("=", 1)
 		elif arg.begins_with("--output="):
 			_output = arg.trim_prefix("--output=")
+		elif arg == "--chapter-audit":
+			_chapter_audit = true
 		elif arg == "--compile-only":
 			_compile_only = true
 		elif arg.begins_with("--zoom-stop="):
@@ -124,6 +127,24 @@ func _run() -> void:
 		print("MAP_COMPILE_OK ", screen.layout_input_digest(), " ", screen.layout_digest())
 		quit(0)
 		return
+	if _chapter_audit:
+		if act!=1:
+			push_error("Chapter geometry audit currently supports the drowned city")
+			quit(2)
+			return
+		var city: Node3D = screen._map_scene._landscape.terrain.causeways
+		var report: Dictionary = preload("res://tools/map_workshop/act2/audit.gd").measure(city,{"anchors":city.anchors,"edges":screen._map_scene._landscape.terrain.source_edges})
+		print("MAP_CHAPTER_AUDIT ",JSON.stringify(report))
+		var steep: Array = report["rendered_deck"]["steepest_vertices"]
+		for raw: Array in steep:
+			var point: Vector3 = MapLandscape.v3(raw)
+			for field: RefCounted in city.fields:
+				var with_grade: Dictionary = field.field(Vector2(point.x,point.z))
+				var grade: RefCounted = field.stair_profile
+				field.stair_profile=null
+				var without_grade: Dictionary = field.field(Vector2(point.x,point.z))
+				field.stair_profile=grade
+				print("MAP_SURFACE_DISCONTINUITY ",JSON.stringify({"point":raw,"fitted":with_grade,"ungraded":without_grade}))
 	var hud: RunHud = RunHud.new(run, content, shape)
 	root.add_child(hud)
 	if _no_shadows:

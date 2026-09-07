@@ -833,3 +833,31 @@ production journey navigation, measure actual procedural asset profiles, and
 qualify arbitrary-node ruin ownership. Do not ship the study fixture or its saved
 optimisation profile as campaign truth. First compare the generated physical
 levels with the approved 1.18m waterline and substantial raised city structures.
+
+### Act II runtime qualification in progress — 7 September, 19:49 UTC
+
+The actual generated Act II seed 717 now mounts through the shared production
+journey/camera/navigation with measured procedural profiles and eight single-node
+ruin destinations. It does not load the accepted study fixture or optimisation
+profile. The shared spacing extraction preserves the woodland seed 4 source
+exactly. First native city assembly is 102.3s, including 92.7s causeways and 5.5s
+architecture. Stage timings isolate lower deck meshing (35.6s) and lower parapets
+(48.2s). This is unacceptable cold construction; Step 4 loading stays open.
+
+Caching repeated clipped-boundary heights reduces lower meshing to 20.5s and upper
+meshing from 2.1s to 1.2s. A bounded regression compares all vertex/index/normal
+arrays with the uncached implementation and checks repeated setup invalidation.
+It passes. The first complete generated-city geometry audit reports 53,774 deck
+samples with no missing deck and 423 whole-width crossing samples with minimum
+headroom 2.642m. However, 61 of 38,410 body samples hit added masonry, and bridgehead
+overlap reaches 0.584m. A narrow triangle also has excessive grade. These are
+recorded failures, not accepted production results. The source identity is
+37ba4a689624efc8f0aef2cd058077c51455546b834097ab0e170306650cb259; native logs and
+images are under /tmp/glassvow-steps4-8/act2-boundary-cache717.*. Investigate actual
+surface and stair-field values at the failing triangle before changing grading.
+
+No stage completion increment: Steps 4/5/6/7/8 remain 80/100/100/0/0%, overall 51%.
+This checkpoint preserves an incomplete integration; it is not a final core,
+performance, independent-review or delivery claim. Continue through the geometry
+fixes and remaining chapters. The prior conditional forecast remains provisional
+until this Act II generated-geometry gap is measured and retired.

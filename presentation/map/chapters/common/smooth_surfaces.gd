@@ -1,7 +1,11 @@
 extends "res://presentation/map/landscape/bridge_surfaces.gd"
 var stair_profile: RefCounted
+var _boundary_positions: Dictionary = {}
 ## Compact interpolation removes nearest-segment creases on the outside of bends.
 func setup(source: Array[Dictionary],height: Callable,deck_profile: Callable = Callable()) -> void:
+	_boundary_positions.clear()
+	cells.clear()
+	vertices.clear()
 	super.setup(source,height,deck_profile)
 	# Include the entire interpolation support around widened node landings.
 	# Reusing the narrower outline index made that support change at cell edges.
@@ -50,6 +54,8 @@ func _position(item: Dictionary) -> Vector3:
 		# A clipping edge lies between an inside sample and an outside sample.
 		# The outside sample can belong to another leg of a tight bend; do not
 		# interpolate that unrelated height into the road's actual boundary.
-		var sampled: Dictionary = field(Vector2(result.x,result.z))
-		result.y = sampled["height"]
+		var key: Vector2 = Vector2(result.x,result.z)
+		if not _boundary_positions.has(key):
+			_boundary_positions[key] = field(key)["height"]
+		result.y = _boundary_positions[key]
 	return result

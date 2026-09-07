@@ -21,6 +21,8 @@ var _resolved_seats: Dictionary = {}
 var _travel_curves: Dictionary = {}
 var _travel_distance: float = 0.0
 var _was_moving: bool = false
+var node_lit_colour: Color = Color("b38d57")
+var node_emission_colour: Color = Color("aa7841")
 
 func build(data: Dictionary) -> void:
 	var started: int = Time.get_ticks_msec()
@@ -77,8 +79,11 @@ func set_node_states(states: Dictionary) -> void:
 	for i: int in range(node_ids.size()):
 		var state: String = str(states.get(node_ids[i], "cold"))
 		var lit: bool = state in ["current", "open"]
-		journey.glasses[i].albedo_color = Color("b38d57") if lit else Color("49424f")
-		journey.glasses[i].emission = Color("aa7841") if lit else Color.BLACK
+		journey.glasses[i].albedo_color = node_lit_colour if lit else Color("49424f")
+		journey.glasses[i].emission = node_emission_colour if lit else Color.BLACK
+
+func realise(source: MapLayoutResult) -> Dictionary:
+	return preload("res://presentation/map/map_journey_realisation.gd").finish(source,self)
 
 func set_traveller(at: Vector3, ahead: Vector3, moving: bool) -> void:
 	if journey == null:

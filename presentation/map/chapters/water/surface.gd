@@ -3,6 +3,10 @@ extends MeshInstance3D
 ## One horizontal mesh per body; callers own its footprint and water level.
 const WATER_SHADER: Shader = preload("res://presentation/map/chapters/water/surface.gdshader")
 static var textures: Array[Texture2D] = []
+var animate: bool = true:
+	set(value):
+		animate=value
+		if material_override!=null: set_capture_time(-1.0 if value else 0.0)
 
 func configure(footprint: Mesh, preset: Dictionary = {}) -> void:
 	if textures.is_empty():
