@@ -77,6 +77,8 @@ var _layout_failure: Dictionary = {}
 var _layout_compile: Callable = Callable()
 ## Explicit recipe injection shares the same input/quality identity checks.
 var _layout_quality_override: Dictionary = {}
+var _journey_recipe: Dictionary = {}
+var _journey_recipe_key: String = ""
 ## Projection is shared by waystone layout and marker queries.
 var _projected_seats_cache: PackedVector2Array = PackedVector2Array()
 var _projected_pose: Vector2 = Vector2(INF, INF)
@@ -452,6 +454,9 @@ func _bind_compiled_layout() -> void:
 		return _fail_compiled_layout(binding_error)
 	var assets: Dictionary = _map_scene.layout_asset_bundle()
 	var heroes: Dictionary = _map_scene.layout_hero_contract()
+	if _layout_quality_override.is_empty() and _act == 0 and _journey_recipe.get("ok") == true:
+		assets = _journey_recipe["assets"]
+		heroes = _journey_recipe["heroes"]
 	if assets.is_empty() or heroes.is_empty():
 		return _fail_compiled_layout({
 			"kind": "authority", "id": "active_map_assets",
@@ -556,7 +561,16 @@ func _quality_registry() -> Dictionary:
 	var value: Variant = _MAP_QUALITY.data
 	if not value is Dictionary: return {}
 	var quality: Dictionary = value
-	return preload("res://presentation/map/map_journey_camera_registry.gd").quality(quality) if _act==0 else quality
+	if _act != 0 or _run == null: return quality
+	var bound: Dictionary = _InputBinding.bind(map,_run.act)
+	if bound.get("ok") != true: return {}
+	var key: String = MapLayoutCanonical.digest(bound)
+	if key != _journey_recipe_key:
+		_journey_recipe_key = key
+		var nodes: Array = bound["nodes"]
+		var edges: Array = bound["edges"]
+		_journey_recipe = preload("res://presentation/map/map_journey_recipe.gd").build(nodes,edges,quality)
+	return _journey_recipe["quality"] if _journey_recipe.get("ok") == true else {}
 
 
 func _sync_waylights() -> void:

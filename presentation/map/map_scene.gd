@@ -567,6 +567,9 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary) -> MapLayoutRes
 	_world.add_child(_landscape)
 	_landscape.prepare(data, _landscape_assets, _scatter_salt)
 	if _landscape is JourneyLandscape:
+		_landscape.map_bounds = preload("res://presentation/map/map_spatial_profile.gd").footprint(quality) if quality.has("spatial_profile") else Rect2(-48,-30,96,60)
+		if str(quality.get("spatial_profile",{}).get("id","")) == preload("res://presentation/map/map_journey_recipe.gd").VERSION:
+			_landscape.source_heroes = data["hero_placements"].duplicate(true)
 		return _bind_journey(compiled)
 	_selection_half = _selection_reserve(quality)
 	var candidates: Dictionary = _landscape.candidates()

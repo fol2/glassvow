@@ -38,7 +38,9 @@ static func finish(source: MapLayoutResult, landscape: Node3D) -> Dictionary:
 		var size: Vector3 = placed.scale
 		var row: Dictionary = {"asset_id":kind,"profile_id":kind,"transform":{
 			"origin":[at.x,at.y,at.z],"scale":[size.x,size.y,size.z],"yaw_radians":placed.rotation.y}}
-		if kind == "amber-arch":
+		if placed.has_meta("hero_role"):
+			data["hero_placements"][str(placed.get_meta("hero_role"))] = row
+		elif kind == "amber-arch":
 			data["hero_placements"]["woodland-gateway"] = row
 		else:
 			row["semantic_zone"] = "woodland-surround"

@@ -7,6 +7,7 @@ var spatial_recipe: String = ""
 var first_attempt_only: bool = false
 var diagnostic_grade: bool = false
 var journey_camera: bool = false
+var production_journey: bool = false
 func _initialize() -> void:
 	_run.call_deferred()
 func _run() -> void:
@@ -19,6 +20,8 @@ func _run() -> void:
 			output = argument.trim_prefix("--output=")
 		elif argument.begins_with("--spatial-recipe="):
 			spatial_recipe = argument.trim_prefix("--spatial-recipe=")
+		elif argument == "--production-journey":
+			production_journey = true
 		elif argument == "--journey-camera":
 			journey_camera = true
 		elif argument == "--diagnostic-grade":
@@ -29,7 +32,7 @@ func _run() -> void:
 			push_error("Unexpected export argument: "+argument)
 			quit(2)
 			return
-	if act<0 or act>3 or output.is_empty():
+	if act<0 or act>3 or output.is_empty() or (production_journey and act!=0):
 		quit(2)
 		return
 	Locale.active = Locale.new(&"en")
@@ -119,6 +122,19 @@ func _sample(content: ContentDB, act: int, seed_value: int) -> Dictionary:
 				push_error(str(hero_binding))
 				scene.free()
 				return {}
+	if production_journey:
+		if not spatial_recipe.is_empty():
+			push_error("Production journey cannot be mixed with a trial spatial recipe")
+			scene.free()
+			return {}
+		var prepared: Dictionary = preload("res://presentation/map/map_journey_recipe.gd").build(nodes,edges,quality)
+		if prepared.get("ok")!=true:
+			push_error(str(prepared))
+			scene.free()
+			return {}
+		quality = prepared["quality"]
+		assets = prepared["assets"]
+		heroes = prepared["heroes"]
 	var input: MapLayoutInput = MapLayoutInput.from_dict({
 		"schema_version": MapLayoutInput.SCHEMA_VERSION,
 		"generator_schema": "map-compiler-v2", "generator_version": MapLayoutCompiler.VERSION,

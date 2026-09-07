@@ -3,6 +3,8 @@ extends Node3D
 const Meshes = preload("res://presentation/map/landscape/mesh_tools.gd")
 const Paint = preload("res://presentation/map/landscape/terrain_paint.gd")
 const River = preload("res://presentation/map/landscape/river.gd")
+var bounds: Rect2 = Rect2(-48,-30,96,60)
+var river_half_length: float = 35.0
 var lines: Array[PackedVector3Array] = []
 var source_edges: Dictionary = {}
 var anchors: Dictionary = {}
@@ -15,7 +17,12 @@ var landform: RefCounted = preload("res://presentation/map/landscape/landform.gd
 const CELL: float = .5
 const WATER: float = River.LEVEL
 
-func build(sample: Dictionary, grey: bool) -> void:
+func build(sample: Dictionary, grey: bool, extent: Rect2 = Rect2(-48,-30,96,60)) -> void:
+	var lo: Vector2 = (extent.position/CELL).floor()*CELL
+	var hi: Vector2 = (extent.end/CELL).ceil()*CELL
+	bounds = Rect2(lo,hi-lo)
+	river_half_length = maxf(absf(lo.y),absf(hi.y))+5.0
+	set_meta("world_bounds",bounds)
 	greybox = grey
 	source_edges = sample["edges"]
 	anchors = sample["anchors"]
@@ -70,8 +77,8 @@ func height_at(x: float, z: float) -> float:
 func surface_height(x: float, z: float) -> float:
 	# Match the actual two triangles of each land cell, not the curved source
 	# function between vertices. Asset contacts must use the rendered surface.
-	var base_x: float = -48 + floorf((x + 48) / CELL) * CELL
-	var base_z: float = -30 + floorf((z + 30) / CELL) * CELL
+	var base_x: float = bounds.position.x + floorf((x - bounds.position.x) / CELL) * CELL
+	var base_z: float = bounds.position.y + floorf((z - bounds.position.y) / CELL) * CELL
 	var u: float = (x - base_x) / CELL
 	var v: float = (z - base_z) / CELL
 	var h0: float = height_at(base_x, base_z)
@@ -112,7 +119,7 @@ func present(p: Vector3, upper: bool = false) -> Vector3:
 	return Vector3(p.x,height,p.z)
 
 func is_dry(p: Vector3) -> bool:
-	return not River.contains(p.x,p.z) or surface_height(p.x,p.z)>WATER+.20
+	return not River.contains(p.x,p.z,river_half_length) or surface_height(p.x,p.z)>WATER+.20
 
 func is_elevated(p: Vector3) -> bool:
 	return p.y > 0.015 or stream_distance(p.x, p.z) < 3.8
@@ -122,12 +129,12 @@ func _land() -> void:
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	# Share exact grid vertices. SurfaceTool preserves the original smooth
 	# normals and winding, without uploading each corner six times.
-	var columns: int = int(96/CELL)+1
-	var rows: int = int(60/CELL)+1
+	var columns: int = int(bounds.size.x/CELL)+1
+	var rows: int = int(bounds.size.y/CELL)+1
 	for ix: int in range(columns):
 		for iz: int in range(rows):
-			var x: float = -48+ix*CELL
-			var z: float = -30+iz*CELL
+			var x: float = bounds.position.x+ix*CELL
+			var z: float = bounds.position.y+iz*CELL
 			var shade: float = .96+.05*sin(x*.22+z*.15)
 			var colour: Color = Color("555663") if greybox else Color("302b30")
 			surface.set_color(colour*shade)
@@ -140,7 +147,7 @@ func _land() -> void:
 	var mat: StandardMaterial3D = Meshes.material(Color.WHITE)
 	mat.vertex_color_use_as_albedo = true
 	mat.vertex_color_is_srgb = true
-	var ground_mat: Material = mat if greybox else Paint.create(lines, is_elevated)
+	var ground_mat: Material = mat if greybox else Paint.create(lines, is_elevated, bounds)
 	Meshes.node(self, Meshes.finish(surface), ground_mat, "Quiet sculpted ground")
 
 func _roads() -> void:

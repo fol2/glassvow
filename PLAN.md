@@ -469,3 +469,31 @@ Next: construct the production recipe from the actual approved assets, bind its
 spatial bounds to terrain/paint/planting, qualify seed 4 and inspect the native
 section. The ordinary unqualified default input must not be mistaken for this
 selected analytic recipe.
+
+
+### Production recipe and extended landscape — 7 September, 15:37 UTC
+
+The actual-asset woodland recipe passes both retained complete source compiles:
+seed 717 (65 nodes, 76 edges, input 658e5078f526a35ec649b19b022fdf33f8e2baacf75dde67f2b2402ca4160914)
+and seed 4 (66 nodes, 74 edges, input 6ef91f706fe7b92fb2a768c65de24d82e51c4a470eae5952fc5440aee32f8c29).
+Both reports have all hard criteria passing. Runtime now consumes that same
+recipe and actual imported asset bundle; the terminus memorial is instantiated
+and recorded, not replaced by an unrelated legacy landmark.
+
+Terrain, road-distance paint, habitat, planting and river coverage follow generated
+world bounds. Metre-scale mesh and texture sampling remains unchanged. The new
+translation/extent/contact regression and four affected runtime tests pass.
+The original approved fixture remains valid with default bounds.
+
+Native phone-landscape evidence: journey-production-v1.png/log under
+/tmp/glassvow-steps4-8. Actual source input matches the qualified seed-717 input.
+Drag, wheel, keyboard inspection, explicit travel and exactly-one arrival pass.
+Visually inspected: the local woodland journey renders, but full section visual
+acceptance is still open. 2,612 scenery instances, 264 visible draw calls and
+336.56 MiB renderer memory. Bind 18,142 ms, scenery 11,376 ms, terrain 4,879 ms.
+Frame p95 72.275 ms was captured while background tests ran and is not an isolated
+performance verdict. The cold assembly time is nonetheless unacceptable and must
+be reduced without reducing accepted asset scale or replacing the approved art.
+Next: finish compiler regression, retain this draft checkpoint, profile expensive
+placement queries, then inspect crossings and later journey positions. No further
+Step 4-8 acceptance percentage is awarded from a source-only pass.

@@ -6,6 +6,8 @@ const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 const Kit = preload("res://presentation/map/landscape/kit.gd")
 const Journey = preload("res://presentation/map/landscape/journey.gd")
 const Details = preload("res://presentation/map/landscape/road_details.gd")
+var map_bounds: Rect2 = Rect2(-48,-30,96,60)
+var source_heroes: Dictionary = {}
 var terrain: Terrain
 var kit: Kit
 var journey: Journey
@@ -21,7 +23,7 @@ func build(data: Dictionary) -> void:
 	var started: int = Time.get_ticks_msec()
 	terrain = Terrain.new()
 	add_child(terrain)
-	terrain.build({"anchors": data["node_anchors"], "edges": data["edges"]}, false)
+	terrain.build({"anchors": data["node_anchors"], "edges": data["edges"]}, false, map_bounds)
 	timings_ms["terrain"] = Time.get_ticks_msec()-started
 	timings_ms["terrain_parts"] = terrain.build_timings_ms
 	started = Time.get_ticks_msec()
@@ -30,7 +32,7 @@ func build(data: Dictionary) -> void:
 		resolved.append(terrain.present(point))
 	kit = Kit.new()
 	add_child(kit)
-	kit.build(terrain, resolved, false)
+	kit.build(terrain, resolved, false, source_heroes)
 	if not kit.build_complete or not kit.failure.is_empty():
 		failure = kit.failure if not kit.failure.is_empty() else "Woodland assembly incomplete"
 		return

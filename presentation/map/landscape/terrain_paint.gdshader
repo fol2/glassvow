@@ -1,4 +1,5 @@
 shader_type spatial;
+uniform vec4 world_bounds = vec4(-48,-30,96,60);
 uniform sampler2D route_distance : filter_linear, repeat_disable;
 uniform sampler2D habitat : filter_linear, repeat_disable;
 uniform bool bridge_surface = false;
@@ -28,7 +29,7 @@ void vertex() {
 }
 void fragment() {
  vec2 p=world_at.xz;
- vec2 uv=(p+vec2(48,30))/vec2(96,60);
+ vec2 uv=(p-world_bounds.xy)/world_bounds.zw;
  float d=texture(route_distance,uv).r;
  vec3 setting=texture(habitat,uv).rgb;
  float broad=noise(p*.48);

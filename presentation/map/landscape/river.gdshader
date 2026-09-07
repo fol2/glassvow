@@ -1,4 +1,5 @@
 shader_type spatial;
+uniform float river_length_m = 70.0;
 render_mode cull_disabled, diffuse_burley, specular_schlick_ggx;
 uniform sampler2D bathymetry : filter_linear, repeat_disable;
 uniform sampler2D scene_colour : hint_screen_texture, filter_linear_mipmap, repeat_disable;
@@ -12,7 +13,7 @@ float noise(vec2 p) {
  vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);
  return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);
 }
-vec2 river_uv(vec2 p) { return vec2((p.x+5.0-sin(p.y*.12)*2.2)/8.0+.5,p.y/70.0+.5); }
+vec2 river_uv(vec2 p) { return vec2((p.x+5.0-sin(p.y*.12)*2.2)/8.0+.5,p.y/river_length_m+.5); }
 vec2 current(vec2 p) {
  vec2 q=vec2(p.x+5.0-sin(p.y*.12)*2.2,p.y);
  // Streamlines bend around the immersed support footprints.

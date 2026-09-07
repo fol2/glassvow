@@ -34,7 +34,7 @@ const PROFILES: Dictionary = {
 	"amber-arch": Vector2(2.65, 5.50),
 }
 
-func build(surface: Terrain, points: PackedVector3Array, grey: bool) -> void:
+func build(surface: Terrain, points: PackedVector3Array, grey: bool, heroes: Dictionary = {}) -> void:
 	for kind: String in ["conifer","conifer-spire","conifer-wind","conifer-snag"]:
 		var envelope: PackedVector2Array = Envelope.load_conifer(kind)
 		if envelope.is_empty():
@@ -47,15 +47,31 @@ func build(surface: Terrain, points: PackedVector3Array, grey: bool) -> void:
 	add_child(contacts)
 	contacts.begin(terrain)
 	_landmark(grey)
+	if not failure.is_empty(): return
+	for role: String in heroes:
+		var hero: Dictionary = heroes[role]
+		var kind: String = hero["asset_id"]
+		if not PROFILES.has(kind):
+			failure = "Unknown woodland hero: "+kind
+			return
+		var transform_data: Dictionary = hero["transform"]
+		var origin: Array = transform_data["origin"]
+		var at: Vector3 = Meshes.v3(origin)
+		at.y = terrain.surface_height(at.x,at.z)
+		_place(kind,at,float(str(transform_data["scale"][0])),float(str(transform_data["yaw_radians"])),grey)
+		if not failure.is_empty(): return
+		placed_nodes[-1].set_meta("hero_role",role)
+	var planting: Rect2 = Rect2(terrain.bounds.position+Vector2(5,7),terrain.bounds.size-Vector2(10,14))
+	var area_ratio: float = planting.get_area()/(86.0*46.0)
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.seed = 7401
 	for family: String in ["conifer", "slate-bank", "ash-copse", "memorial"]:
-		for i: int in range(1000):
+		for i: int in range(ceili(1000*area_ratio)):
 			# Establish the six substantial forms before any accent can occupy a gap.
 			var kind: String = family
 			if i % 2 == 1:
 				kind = {"conifer":"conifer-spire", "slate-bank":"slate-ridge", "ash-copse":"ash-heath"}.get(family, family)
-			var p: Vector3 = Vector3(rng.randf_range(-43, 43), 0, rng.randf_range(-23, 23))
+			var p: Vector3 = Vector3(rng.randf_range(planting.position.x, planting.end.x), 0, rng.randf_range(planting.position.y, planting.end.y))
 			var scale_value: float = rng.randf_range(0.65, 1.05)
 			if kind.begins_with("conifer"):
 				scale_value = rng.randf_range(0.95, 1.35)
@@ -63,7 +79,7 @@ func build(surface: Terrain, points: PackedVector3Array, grey: bool) -> void:
 				scale_value = rng.randf_range(0.85, 1.25)
 			elif kind.begins_with("slate-"):
 				scale_value = rng.randf_range(1.0, 1.45)
-			elif kind == "memorial" and i > 200:
+			elif kind == "memorial" and i > ceili(200*area_ratio):
 				continue
 			# Broad groves leave breathing space between groups, rather than an
 			# even carpet of individually spaced decorative objects.
