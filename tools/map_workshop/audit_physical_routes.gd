@@ -12,7 +12,10 @@ func _run() -> void:
 	if sample.is_empty():
 		quit(2)
 		return
-	terrain.build(sample,false)
+	var bounds: Rect2 = Rect2(-48,-30,96,60)
+	if sample.has("spatial_profile"):
+		bounds = preload("res://presentation/map/map_spatial_profile.gd").footprint({"spatial_profile":sample["spatial_profile"]})
+	terrain.build(sample,false,bounds)
 	for name: String in ["Quiet sculpted ground","Continuous bridge decks","Joined bridge masonry"]:
 		var item: MeshInstance3D = terrain.get_node(name) as MeshInstance3D
 		var shape: ConcavePolygonShape3D = ConcavePolygonShape3D.new()

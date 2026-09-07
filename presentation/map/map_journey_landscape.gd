@@ -37,6 +37,7 @@ func build(data: Dictionary) -> void:
 		failure = kit.failure if not kit.failure.is_empty() else "Woodland assembly incomplete"
 		return
 	timings_ms["scenery"] = Time.get_ticks_msec()-started
+	timings_ms["placement_queries"] = {"count":kit.query_count,"total_ms":kit.query_us/1000.0,"road_ms":kit.road_query_us/1000.0}
 	started = Time.get_ticks_msec()
 	Details.build(terrain)
 	timings_ms["road_details"] = Time.get_ticks_msec()-started

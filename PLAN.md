@@ -497,3 +497,29 @@ be reduced without reducing accepted asset scale or replacing the approved art.
 Next: finish compiler regression, retain this draft checkpoint, profile expensive
 placement queries, then inspect crossings and later journey positions. No further
 Step 4-8 acceptance percentage is awarded from a source-only pass.
+
+### Placement cost and physical qualification — 7 September, 15:42 UTC
+
+The complete compiler regression passes at the v2 algorithm checkpoint. Draft
+906d342e is committed and pushed. The extended default ground remains exactly
+identical to the approved original: zero position, normal or colour error over
+138,240 corners (23,353 indexed vertices).
+
+A missed old accent boundary is corrected before the performance comparison;
+this produces 2,617 placements. Instrumentation measures 20,773 clearance queries:
+9,668.029 ms total, only 746.236 ms in road distances. A conservative spatial index
+now supplies nearby scenery to the unchanged exact overlap rules. The exhaustive
+boundary/negative-coordinate/late-large-object regression passes. Native replay
+keeps the exact complete surface digest
+965bfcaca01711c910c509b5897f6fb7eb8c571e6fe1fba05d7b096bae04768c
+and all 2,617 placements. Query time falls to 1,105.692 ms; scenery assembly falls
+from 12,362 to 3,228 ms. Full bind is still 10,632 ms and not accepted as final
+performance. No asset reduction or spacing change is hidden in this optimisation.
+
+The existing physical triangle/capsule probe now accepts generated bounds. Seed
+717 passes 39,072 road contact probes and 51 adult-body probes, no discontinuities
+or body collisions; minimum crossing headroom 3.402 m, maximum measured grade
+0.3985, maximum 0.03975 m step. This proves those physical criteria, not every
+visual junction or all seeds. Seed 4 and an explicitly fresh source compilation
+are next, followed by isolated native timing and visual inspection of the later
+crossing and final grove.

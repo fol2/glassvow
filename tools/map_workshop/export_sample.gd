@@ -8,6 +8,7 @@ var first_attempt_only: bool = false
 var diagnostic_grade: bool = false
 var journey_camera: bool = false
 var production_journey: bool = false
+var fresh: bool = false
 func _initialize() -> void:
 	_run.call_deferred()
 func _run() -> void:
@@ -20,6 +21,8 @@ func _run() -> void:
 			output = argument.trim_prefix("--output=")
 		elif argument.begins_with("--spatial-recipe="):
 			spatial_recipe = argument.trim_prefix("--spatial-recipe=")
+		elif argument == "--fresh":
+			fresh = true
 		elif argument == "--production-journey":
 			production_journey = true
 		elif argument == "--journey-camera":
@@ -151,7 +154,7 @@ func _sample(content: ContentDB, act: int, seed_value: int) -> Dictionary:
 	print("STUDY_INPUT act=", act + 1, " seed=", seed_value, " digest=", input.digest())
 	var cache_path: String = "/tmp/glassvow-map-preview-cache/".path_join(input.digest() + ".bin")
 	var compiled: Dictionary = {}
-	if not first_attempt_only and spatial_recipe.is_empty() and FileAccess.file_exists(cache_path):
+	if not fresh and not first_attempt_only and spatial_recipe.is_empty() and FileAccess.file_exists(cache_path):
 		var file: FileAccess = FileAccess.open(cache_path, FileAccess.READ)
 		var raw: Variant = file.get_var(false)
 		if raw is Dictionary and str(raw.get("input_digest", "")) == input.digest():

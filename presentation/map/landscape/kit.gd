@@ -8,8 +8,13 @@ const GroundContacts = preload("res://presentation/map/landscape/ground_contacts
 const GatewaySites = preload("res://presentation/map/landscape/gateway_sites.gd")
 const Terrain = preload("res://presentation/map/landscape/terrain.gd")
 var tree_envelopes: Dictionary = {}
+var planting_bounds: Rect2 = Rect2(-43,-23,86,46)
+var query_us: int = 0
+var road_query_us: int = 0
+var query_count: int = 0
 var contacts: GroundContacts
 var placed: Array[Dictionary] = []
+var neighbours: RefCounted = preload("res://presentation/map/landscape/placement_neighbours.gd").new()
 var placed_nodes: Array[Node3D] = []
 var terrain: Terrain
 var anchors: PackedVector3Array
@@ -61,7 +66,8 @@ func build(surface: Terrain, points: PackedVector3Array, grey: bool, heroes: Dic
 		_place(kind,at,float(str(transform_data["scale"][0])),float(str(transform_data["yaw_radians"])),grey)
 		if not failure.is_empty(): return
 		placed_nodes[-1].set_meta("hero_role",role)
-	var planting: Rect2 = Rect2(terrain.bounds.position+Vector2(5,7),terrain.bounds.size-Vector2(10,14))
+	planting_bounds = Rect2(terrain.bounds.position+Vector2(5,7),terrain.bounds.size-Vector2(10,14))
+	var planting: Rect2 = planting_bounds
 	var area_ratio: float = planting.get_area()/(86.0*46.0)
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.seed = 7401
@@ -228,7 +234,7 @@ func _accents(grey: bool) -> void:
 				if kind.begins_with("conifer"):
 					scale_value = rng.randf_range(.90,1.05)
 				var profile: Vector2 = PROFILES[kind]*scale_value
-				if absf(p.x)>43 or absf(p.z)>23 or not terrain.is_dry(p) or not clear(p,profile.x,profile.y,kind):
+				if not planting_bounds.has_point(Vector2(p.x,p.z)) or not terrain.is_dry(p) or not clear(p,profile.x,profile.y,kind):
 					continue
 				_place(kind,p,scale_value,angle,grey)
 				counts[kind] = count+1
@@ -236,13 +242,23 @@ func _accents(grey: bool) -> void:
 	print("WORKSHOP_ACCENTS ",JSON.stringify(counts))
 
 func clear(p: Vector3, radius: float, height: float, kind: String = "") -> bool:
+	var started: int = Time.get_ticks_usec()
+	var result: bool = _clear(p,radius,height,kind)
+	query_us += Time.get_ticks_usec()-started
+	query_count += 1
+	return result
+
+func _clear(p: Vector3, radius: float, height: float, kind: String) -> bool:
 	# Canopies may reach the shoulder; woody roots stay off the walking lane.
 	var road_radius: float = radius
 	if kind.begins_with("conifer"):
 		road_radius *= 0.38
 	elif kind.begins_with("ash-"):
 		road_radius *= 0.65
-	if terrain.distance_to_roads(p) < road_radius + 0.85:
+	var road_started: int = Time.get_ticks_usec()
+	var near_road: bool = terrain.distance_to_roads(p) < road_radius + 0.85
+	road_query_us += Time.get_ticks_usec()-road_started
+	if near_road:
 		return false
 	var silhouette: PackedVector2Array = []
 	if kind.begins_with("conifer"):
@@ -259,7 +275,7 @@ func clear(p: Vector3, radius: float, height: float, kind: String = "") -> bool:
 			var reserve: PackedVector2Array = [projected + Vector2(-1.2,-1.3), projected + Vector2(1.2,-1.3), projected + Vector2(1.2,1.3), projected + Vector2(-1.2,1.3)]
 			if not Geometry2D.intersect_polygons(silhouette, reserve).is_empty():
 				return false
-	for placement: Dictionary in placed:
+	for placement: Dictionary in neighbours.query(p,radius):
 		var other: Vector3 = placement["position"]
 		var separation: float = radius + float(str(placement["radius"]))
 		# The same undergrowth overlap applies whichever member was placed first.
@@ -318,3 +334,4 @@ func _place(kind: String, p: Vector3, scale_value: float, yaw: float, grey: bool
 	var footprint: Vector2 = PROFILES[kind]
 	placed_nodes.append(item)
 	placed.append({"kind": kind, "position": p, "radius": footprint.x * scale_value, "height": footprint.y * scale_value, "scale":scale_value, "yaw":yaw})
+	neighbours.add(placed[-1])
