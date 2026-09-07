@@ -1,0 +1,26 @@
+{
+  "status": "CHECKED_PORTABLE_HANDOFF_NOT_P9",
+  "file": "p9-session-handoff-20260908.zip",
+  "bytes": 105453338,
+  "sha256": "8a1a52f33cab5ee03a9d05e35c089d581a8ee530f86e7deec29a9431ff02b165",
+  "manifest_files_verified": 14,
+  "zip_members": 15,
+  "handoff_documents_commit": "4f453683ee6c00827e2ad144b39a3d6b08a1e885",
+  "delivery": "Chat sandbox attachment; this JSON does not upload the ZIP to GitHub.",
+  "includes": [
+    "checked source-export archive at 6217709e",
+    "exact legacy dependency ZIP",
+    "decision-source backup",
+    "official Godot 4.7.2 ZIP with checked executable identity",
+    "handoff and restart prompt",
+    "20-chunk compact primary cache and storage audit",
+    "published-statistics frozen-model reconstruction audit",
+    "per-file manifest and read-only verifier"
+  ],
+  "missing": [
+    "latest p9-validation-preserved-current.zip",
+    "original validation raw NDJSON and receipts for the retained compact records",
+    "verified recovery of the previously reported 21 further local receipts"
+  ],
+  "boundary": "Preserves available source and statistics. Not a complete latest native-evidence archive, new simulation, candidate selection, or P9 certificate. Attach the ZIP to the new session rather than assuming the old filesystem survives."
+}
