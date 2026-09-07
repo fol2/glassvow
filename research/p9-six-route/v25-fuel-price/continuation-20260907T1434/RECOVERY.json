@@ -1,0 +1,19 @@
+{
+  "status": "OBSERVED_PREFLIGHT_NOT_P9",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "remote_head_inspected": "847baf748908d2611bc47a0a262a267d814bf94b",
+  "source_snapshot": "e3e5a7312049e8ce167c503c9d65db7a15bf992b",
+  "source_archive_sha256": "665b0bb199ba320b9c35c146abc19b5a3a23f52901be9d0094d123cf0eec6529",
+  "git_blobs_verified": 821,
+  "legacy_archive_sha256": "76041bfc907164e0c5b5252d48c4bb0aac7b29223a011eee9f03fef17f180e65",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "actually_observed_native_tests": {"public_information":16,"price":4084,"failures":0},
+  "finite_native_optimal_health_removal": {"zero_stock":{"energy0":18,"energy1":18},"two_stock":{"energy0":34,"energy1":28}},
+  "source_checkpoint": {"local_commit":"d3e81a773a9120ee324b84809c0152718148922c","file":"p9-resume-source-20260907.zip","bytes":260194,"sha256":"9d665215fb25919f7bded697a29ecfff46210d2535333608d9da6a339b758912","verified_files":112},
+  "execution": "Continuing the existing fixed v25 price protocol. Smoke35000100 precedes the35010000..35010031 comparison. No full smoke or scientific result claimed at this commit.",
+  "recovery_boundary": "The previous p9_session workspace and its latest closed-capture ZIP are not mounted. Published sources and immutable archives were checked; missing raw captures were not pretended recovered. Re-execution of assigned indices is protocol continuation/reproduction, not newly independent confirmation. No prior completed accessible study is overwritten.",
+  "persistence": "This commit stores the recovery record only. Full source ZIP is a separate chat artifact; blocked legacy-source publication is not bypassed. Subsequent closed evidence is saved incrementally.",
+  "unchanged": ["main","signed P9 acceptance","protected cohorts","historical negatives"],
+  "not_established": ["six admitted packages","accepted detector","unrestricted retention","signed guardrails","lifecycle","reviewed exact integration"]
+}
