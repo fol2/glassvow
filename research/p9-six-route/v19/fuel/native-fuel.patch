@@ -1,0 +1,17 @@
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -998,7 +998,13 @@
+ 			var echo: int = 2 if target.staggered or _sget(target.statuses, "vulnerable") > 0 else 1
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) * echo, true, damage_mult)
+ 		"emberNova":
+-			hit_enemy(run, cb, target, resource_payoff(cb.embers, fx), true, damage_mult)
++			var nova_raw: int = resource_payoff(cb.embers, fx)
++			var nova_spent: int = mini(cb.embers, maxi(0, _ji(fx.get("consumeEmbers", 0))))
++			if nova_spent > 0:
++				# Consume before the hit: a lethal action must still pay its resource cost.
++				gain_embers(run, cb, -nova_spent)
++				run.stats["embersSpent"] = _ji(run.stats.get("embersSpent", 0)) + nova_spent
++			hit_enemy(run, cb, target, nova_raw, true, damage_mult)
+ 		"pyreTithe":
+ 			for held: CardInst in cb.hand.duplicate():
+ 				cb.hand.erase(held)
