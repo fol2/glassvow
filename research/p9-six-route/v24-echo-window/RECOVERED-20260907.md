@@ -1,0 +1,11 @@
+# Observable continuation of the published echo experiment
+
+Research only; no P9 or product-promotion claim. Main remains the separate frozen product reference 2ed6cdb0302ba3aab5845a18d862841165e8aaf7.
+
+This continuation reused transport run34108036270/artifact10013172119, exporting snapshot25a9bcbf907a315499f01d8cbaaf648b4628df0c. All795 exported files matched Git blob hashes. The newer v24 source files were read from aa3c3dd44e4787ae0ad84ee45ba93b1dc1496ad3 and independently matched their published Git blob hashes. No missing raw result is represented as recovered, and the completed v23 stock-expectation comparison is not rerun or adopted as a calibrated model.
+
+Actually executed in this continuation: official Godot4.7.2.stable.official.ed1daf0bf, executable SHA2568d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e; recovered public-information16, RandomBuild-shop207, stock4582 and fuel3465 assertions all passed. After the existing v24 changes, echo1158 and public16 assertions passed. Actual native two-card factorial health losses were [15,15,29,39] base and [21,21,41,56] upgraded. These constructed checks do not establish whole-run viability or selectivity.
+
+Complete assembled source was committed locally at5448672b8a83155a8efdce71a2b18086cde7a4cb and archived as glassvow-p9-echo-source-20260907.zip:849760 bytes,SHA256ebe19e801e7e86af72340a443ca6181cd3984569261fa7b7eb1b06d3c4b1a337,238 internally verified files. The ZIP includes full study/echo source without the engine; it is a local/chat recovery artifact, not a claim that its bytes are hosted in this repository. Earlier blocked legacy-source publication is not bypassed.
+
+The published64-cell smoke is currently executing. No complete smoke/screen outcome is claimed by this checkpoint. Only after raw/cohort/hash/diagnostic verification may the existing32-cell,1024-row Dusk screen proceed. All assigned losses/stalls/errors remain visible; no edits to a running observer. Existing named cohorts are labelled protocol continuation/reproduction, never fresh final confirmation. Final P9 still needs six admitted packages, detector/guardrails, unrestricted retention, lifecycle, independent review and exact integration.
