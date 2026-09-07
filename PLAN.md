@@ -1079,3 +1079,26 @@ Cold binding is 43.632 s against the earlier 48.679 s observation; this is a mod
 local improvement, not acceptable loading or a controlled benchmark claim.
 Evidence: flight-owner-index-tests.log, city-owner-index717.*.
 Continue loading, chapter transitions and final delivery without a milestone stop.
+
+
+### Native chapter transitions and hardware access — 7 September, 22:23 UTC
+
+Prepared valid cleared-boss checkpoints now resume into the real relic choice,
+use its native decline action and enter the next production chapter. All three
+transitions pass theme matching, complete depth-tested route states, persisted
+next-map identity, old-surface release and completed pending scenes. The first
+Act IV entry story is advanced through native taps and recorded as seen. All
+three arrival screenshots were inspected. Evidence:
+chapter-qualified-transition0/1/2.*. The earlier probe used --act, colliding with
+Main's scenery-only capture override; chapter-transition0/1/2.* are rejected
+for visual/state qualification. The corrected probe uses --from-act and adds
+explicit theme/route-state checks. No production workaround was needed.
+
+Existing SSH access reaches macm4.tail55e87e.ts.net: Mac16,10, Apple M4, 16 GiB,
+Godot 4.7.2.ed1daf0bf, console user jamesto, no running Godot process. macOS is
+26.6.2 (25G83), newer than the performance tool's frozen 26.6.1 environment;
+do not relabel it as the old signed matrix. Both iPad 8 and iPhone 16 Pro Max
+are available through that host; the iPhone SE 2 floor device is unavailable.
+Use an isolated fixed-commit copy, not the other host's active checkout, for
+remaining hardware work. Physical access does not yet constitute device proof.
+Overall remains 71% pending complete coherence/loading/final gates.
