@@ -67,7 +67,7 @@ func _run() -> void:
 	_click(decline.get_global_rect().get_center())
 	var scenes: Array[String] = []
 	deadline=Time.get_ticks_msec()+180000
-	while main._map_screen==null:
+	while main._map_screen==null or main._map_loading:
 		if Time.get_ticks_msec()>deadline:
 			_fail("Chapter arrival timed out")
 			return

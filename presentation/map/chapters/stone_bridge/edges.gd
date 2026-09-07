@@ -36,7 +36,9 @@ func build(parent: Node3D, mesh: ArrayMesh, field: RefCounted,
 		for i: int in range(divisions):
 			boundary.append({"a":a.lerp(b,float(i)/divisions),"b":a.lerp(b,float(i+1)/divisions)})
 	_mark("outline")
+	var cancellation: RefCounted = settings.get("cancel_token")
 	for edge: Dictionary in boundary:
+		if cancellation!=null and cancellation.cancelled(): return []
 		var a: Vector3 = edge["a"]
 		var b: Vector3 = edge["b"]
 		if a.distance_to(b)<.002:
@@ -90,7 +92,7 @@ func build(parent: Node3D, mesh: ArrayMesh, field: RefCounted,
 		for surface: SurfaceTool in [blocks,caps,arch_stones]:
 			var finished: ArrayMesh = M.finish(surface)
 			result.append(finished)
-			M.node(parent,finished,stone if surface==blocks else trim,"BridgeEdgeMasonry")
+			if parent!=null: M.node(parent,finished,stone if surface==blocks else trim,"BridgeEdgeMasonry")
 	_mark("normals")
 	print("STONE_BRIDGE_BOUNDARY_PIECES ",count)
 	return result

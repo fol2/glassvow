@@ -27,6 +27,8 @@ var _map_asset_preload: Node
 var _map_layout_input_digest: String = ""
 var _map_layout_packet: Variant = null
 var _map_screen: WorldMapScreen = null
+var _map_loading: bool = false
+var _map_preparation: Control
 ## Retain one current-act surface across encounters; hidden viewports are stopped.
 var _parked_map_screen: WorldMapScreen = null
 var _choice_screen: Control = null
@@ -688,6 +690,12 @@ func _onboard_arm_target() -> void:
 
 
 func _clear_route() -> void:
+	if _map_loading:
+		_map_loading=false
+		if is_instance_valid(_map_preparation): _map_preparation.queue_free()
+		_map_preparation=null
+		if is_instance_valid(_map_screen): _map_screen.queue_free()
+		_map_screen=null
 	# Everything below is about to be freed: drop the whole freeze stack, not
 	# one level of it, so no count survives into the next surface.
 	_freeze_count = 0
@@ -1392,6 +1400,7 @@ func _compile_map_layout(input: MapLayoutInput, quality: Dictionary,
 
 
 func _show_map() -> void:
+	if _map_loading: return
 	_remember_route(_show_map)
 	_apply_pending_content_hydration()
 	if game != null and game.run != null:
@@ -1415,7 +1424,23 @@ func _show_map() -> void:
 		_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
 		_map_screen.before_pick = _on_map_before_pick
 		add_child(_map_screen)
-	_map_screen.refresh(game.run)
+	if game.run.act==1 and DisplayServer.get_name()!="headless" and _map_screen.layout_result()==null:
+		_map_loading=true
+		var pending: WorldMapScreen = _map_screen
+		pending.hide()
+		var chapter: Dictionary = content.acts[game.run.act]
+		_map_preparation=preload("res://presentation/map/map_preparation.gd").new(str(chapter.get("name","")))
+		add_child(_map_preparation)
+		await RenderingServer.frame_post_draw
+		if not is_instance_valid(pending) or pending.is_queued_for_deletion() or _map_screen!=pending: return
+		await pending.refresh_async(game.run)
+		if not is_instance_valid(pending) or pending.is_queued_for_deletion() or _map_screen!=pending: return
+		_map_loading=false
+		if is_instance_valid(_map_preparation): _map_preparation.queue_free()
+		_map_preparation=null
+		pending.show()
+	else:
+		_map_screen.refresh(game.run)
 	_release_map_asset_preload()
 	# --map --act=N: dress scenery only (domain map stays the run's act).
 	if _forced_act >= 0:
@@ -2534,7 +2559,7 @@ func _on_boss_relic_chosen(id: String) -> void:
 			# act plate stays on the sceneless path only.
 			_route_run()
 			return
-		_show_map()
+		await _show_map()
 		# The act-change plate rides over the arriving map, concurrent rather
 		# than awaited (reward.js:181 fires it on the boss-reward continue).
 		var act_name: String = "ACT %d" % (game.run.act + 1)

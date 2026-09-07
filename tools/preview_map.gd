@@ -16,6 +16,7 @@ var _audit_procedural: bool = false
 var _steps: int = 0
 var _exercise: bool = false
 var _measure: bool = false
+var _async_build: bool = false
 var _compile_only: bool = false
 var _chapter_audit: bool = false
 var _chapter_failures: Array[String] = []
@@ -53,6 +54,8 @@ func _run() -> void:
 			_compile_only = true
 		elif arg.begins_with("--zoom-stop="):
 			_zoom = int(arg.get_slice("=", 1))
+		elif arg == "--async-build":
+			_async_build=true
 		elif arg == "--measure":
 			_measure = true
 		elif arg == "--exercise":
@@ -109,7 +112,8 @@ func _run() -> void:
 	screen.size = Vector2(dimensions)
 	screen._map_scene.set_meta("static_batches",_batches)
 	var start: int = Time.get_ticks_msec()
-	screen.refresh(run)
+	if _async_build: await screen.refresh_async(run)
+	else: screen.refresh(run)
 	var bind_ms: int = Time.get_ticks_msec()-start
 	screen.set_survey_retired(_steps > 0)
 	if screen.layout_result() == null:

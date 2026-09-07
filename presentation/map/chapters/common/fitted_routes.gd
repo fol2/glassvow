@@ -21,6 +21,28 @@ var stone: ShaderMaterial = ShaderMaterial.new()
 var deck: ShaderMaterial = ShaderMaterial.new()
 var build_timings_ms: Dictionary = {}
 var _stage_started: int = 0
+## Geometry jobs retain meshes; only the main thread publishes visible instances.
+var defer_instances: bool = false
+var instance_rows: Array[Dictionary] = []
+var cancel_token: RefCounted
+
+func _cancelled() -> bool:
+	if cancel_token==null or not cancel_token.cancelled(): return false
+	failure="Geometry construction cancelled"
+	return true
+
+func publish_instances() -> void:
+	for row: Dictionary in instance_rows:
+		var mesh: Mesh = row["mesh"]
+		var material: Material = row["material"]
+		M.node(self,mesh,material,str(row["name"]))
+	instance_rows.clear()
+
+func _instance(mesh: Mesh,material: Material,label: String) -> void:
+	if defer_instances:
+		instance_rows.append({"mesh":mesh,"material":material,"name":label})
+	else:
+		M.node(self,mesh,material,label)
 
 func _mark(stage: String) -> void:
 	var now: int = Time.get_ticks_msec()
@@ -108,6 +130,7 @@ func build(sample: Dictionary) -> void:
 			else:
 				lower.append(span)
 	_mark("route_profiles")
+	if _cancelled(): return
 	ruin_plan.build(sample,anchors,sampled_routes)
 	if not ruin_plan.failure.is_empty():
 		failure = ruin_plan.failure
@@ -137,6 +160,7 @@ func build(sample: Dictionary) -> void:
 		var at: Vector2 = cut["at"]
 		stair_exclusions.append(Vector3(at.x,0,at.y))
 	_mark("destination_links")
+	if _cancelled(): return
 	for spans: Array[Dictionary] in [lower,upper]:
 		if spans.is_empty():
 			continue
@@ -150,12 +174,15 @@ func build(sample: Dictionary) -> void:
 			field = landing
 		var profile: Callable = Callable(levels,"height") if spans == lower and height_profile.routes.is_empty() else Callable()
 		field.setup(spans,func(_x: float,_z: float) -> float: return -2.0,profile)
+		field.cancel_token=cancel_token
 		_mark("field_%d_setup" % fields.size())
+		if _cancelled(): return
 		if not height_profile.routes.is_empty():
 			var grading: RefCounted = preload("res://presentation/map/chapters/stone_bridge/flight_grade.gd").new()
 			grading.prepare(field,{"openings":stair_exclusions})
 			field.set("stair_profile",grading)
 		_mark("field_%d_grading" % fields.size())
+		if _cancelled(): return
 		fields.append(field)
 		var top: SurfaceTool = SurfaceTool.new()
 		var sides: SurfaceTool = SurfaceTool.new()
@@ -163,25 +190,30 @@ func build(sample: Dictionary) -> void:
 		sides.begin(Mesh.PRIMITIVE_TRIANGLES)
 		field.append(top,sides)
 		_mark("field_%d_meshing" % (fields.size()-1))
+		if _cancelled(): return
 		var deck_mesh: ArrayMesh = M.finish(top)
 		var underside_mesh: ArrayMesh = M.finish(sides)
 		deck_meshes.append(deck_mesh)
 		underside_meshes.append(underside_mesh)
-		M.node(self,deck_mesh,deck,"FittedCausewayDeck")
-		M.node(self,underside_mesh,stone,"ArchedCausewayStructure")
+		_instance(deck_mesh,deck,"FittedCausewayDeck")
+		_instance(underside_mesh,stone,"ArchedCausewayStructure")
 		_mark("field_%d_normals" % (fields.size()-1))
+		if _cancelled(): return
 
 	var trim: Material = materials["trim"]
 	var edge_style: Dictionary = bridge_style.duplicate()
+	edge_style["cancel_token"]=cancel_token
 	edge_style["openings"] = []
 	for site: Dictionary in ruin_plan.sites:
 		edge_style["openings"].append(site["door"])
 	for i: int in range(fields.size()):
 		_build_edges(i,trim,edge_style)
 		_mark("field_%d_parapets" % i)
+		if _cancelled(): return
 	for i: int in range(fields.size()):
-		var steps: ArrayMesh = preload("res://presentation/map/chapters/stone_bridge/stairs.gd").new().build(self,fields[i],trim,{"openings":stair_exclusions,"tread_width":bridge_style["tread_width"]})
+		var steps: ArrayMesh = preload("res://presentation/map/chapters/stone_bridge/stairs.gd").new().build(null if defer_instances else self,fields[i],trim,{"openings":stair_exclusions,"tread_width":bridge_style["tread_width"]})
 		if steps!=null:
+			if defer_instances: _instance(steps,trim,"StoneBridgeStairTreads")
 			# Keep indexed treads and the unindexed deck in separate surfaces.
 			# A mixed append would leave the deck outside the index buffer.
 			var combined: ArrayMesh = ArrayMesh.new()
@@ -189,15 +221,23 @@ func build(sample: Dictionary) -> void:
 			combined.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,steps.surface_get_arrays(0))
 			deck_meshes[i] = combined
 	_mark("stairs")
+	if _cancelled(): return
 	_build_piers(trim,edge_style)
 	_mark("piers")
+	if _cancelled(): return
 	print("FITTED_ROUTE_ASSEMBLY nodes=",anchors.size()," edges=",sampled_routes.size()," layers=",fields.size())
 
 func _soffit(height: float,s: float,total: float,raised: bool) -> float:
 	return preload("res://presentation/map/chapters/stone_bridge/profile.gd").soffit(height,s,total,raised,bridge_style)
 
 func _build_edges(index: int,trim: Material,settings: Dictionary) -> void:
-	decoration_meshes.append_array(preload("res://presentation/map/chapters/stone_bridge/edges.gd").new().build(self,deck_meshes[index],fields[index],fields,stone,trim,settings))
+	var meshes: Array[ArrayMesh] = preload("res://presentation/map/chapters/stone_bridge/edges.gd").new().build(null if defer_instances else self,deck_meshes[index],fields[index],fields,stone,trim,settings)
+	decoration_meshes.append_array(meshes)
+	if defer_instances:
+		for i: int in range(meshes.size()): _instance(meshes[i],stone if i==0 else trim,"BridgeEdgeMasonry")
 
 func _build_piers(trim: Material,settings: Dictionary) -> void:
-	decoration_meshes.append_array(preload("res://presentation/map/chapters/stone_bridge/piers.gd").build(self,fields,stone,trim,settings))
+	var meshes: Array[ArrayMesh] = preload("res://presentation/map/chapters/stone_bridge/piers.gd").build(null if defer_instances else self,fields,stone,trim,settings)
+	decoration_meshes.append_array(meshes)
+	if defer_instances:
+		for i: int in range(meshes.size()): _instance(meshes[i],stone if i==0 else trim,"BridgePierButtresses")

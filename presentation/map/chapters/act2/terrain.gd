@@ -4,6 +4,26 @@ const Causeways = preload("res://presentation/map/chapters/act2/causeways.gd")
 var causeways: Causeways
 
 func build(sample: Dictionary, _grey: bool, extent: Rect2 = Rect2(-48,-30,96,60), cache: Resource = null) -> void:
+	_prepare_city(sample,extent)
+	add_child(causeways)
+	if not _restore_city(cache): causeways.build(sample)
+	_finish_city()
+
+func build_async(sample: Dictionary,extent: Rect2,cache: Resource) -> void:
+	_prepare_city(sample,extent)
+	if _restore_city(cache):
+		add_child(causeways)
+	else:
+		var lease: RefCounted = preload("res://presentation/map/chapters/common/geometry_job.gd").new()
+		await lease.run(causeways,sample,get_tree(),self)
+		if not causeways.failure.is_empty():
+			failure=causeways.failure
+			return
+		add_child(causeways)
+		causeways.publish_instances()
+	_finish_city()
+
+func _prepare_city(sample: Dictionary,extent: Rect2) -> void:
 	bounds=extent
 	anchors=sample["anchors"]
 	source_edges=sample["edges"]
@@ -20,13 +40,15 @@ func build(sample: Dictionary, _grey: bool, extent: Rect2 = Rect2(-48,-30,96,60)
 			var raw: Array = anchors[node["id"]]
 			preferred[0]=Meshes.v3(raw)+Vector3(18,0,0)
 	causeways.ruin_plan.preferred_centres=preferred
-	add_child(causeways)
-	if cache!=null and cache.get("chapter_data").get("kind","")=="drowned-city":
-		var stored: Dictionary = cache.get("chapter_data")
-		preload("res://presentation/map/chapters/act2/cache.gd").restore_roads(causeways,stored)
-		restored=true
-	else:
-		causeways.build(sample)
+
+func _restore_city(cache: Resource) -> bool:
+	if cache==null or cache.get("chapter_data").get("kind","")!="drowned-city": return false
+	var stored: Dictionary = cache.get("chapter_data")
+	preload("res://presentation/map/chapters/act2/cache.gd").restore_roads(causeways,stored)
+	restored=true
+	return true
+
+func _finish_city() -> void:
 	failure=causeways.failure
 	landform=causeways.levels
 	lines=causeways.lines

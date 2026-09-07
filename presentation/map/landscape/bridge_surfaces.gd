@@ -12,6 +12,7 @@ var cells: Dictionary = {}
 var vertices: Dictionary = {}
 var ground: Callable
 var profile: Callable
+var cancel_token: RefCounted
 
 func setup(source: Array[Dictionary], height: Callable, deck_profile: Callable = Callable()) -> void:
 	spans = source
@@ -91,7 +92,10 @@ func _vertex(key: Vector2i) -> Dictionary:
 
 func append(top: SurfaceTool, masonry: SurfaceTool) -> void:
 	assert(is_equal_approx(query_cell_size,CELL),"Meshing requires the reference grid; coarse indices are query-only")
+	var visited: int = 0
 	for key: Vector2i in cells:
+		if visited%128==0 and cancel_token!=null and cancel_token.cancelled(): return
+		visited+=1
 		var corners: Array[Dictionary] = [_vertex(key),_vertex(key+Vector2i(0,1)),
 			_vertex(key+Vector2i(1,1)),_vertex(key+Vector2i(1,0))]
 		_clip(top,masonry,[corners[0],corners[2],corners[1]])

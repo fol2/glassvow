@@ -602,45 +602,10 @@ func _bind_asset_geometry() -> void:
 
 
 func bind_layout(compiled: MapLayoutResult, quality: Dictionary, node_records: Array = []) -> MapLayoutResult:
-	if quality.has("journey_camera") and not JourneyRegistry.enabled(quality):
-		return _fail_layout("Unsupported journey camera contract")
-	if compiled == null:
-		return _fail_layout("compiled result is null")
-	if _active_profiles.is_empty() or layout_hero_contract().is_empty():
-		return _fail_layout("active map asset profiles are incomplete")
-	var quality_digest: String = MapLayoutCanonical.digest(quality)
-	if _layout_result != null and _landscape != null and _bound_source_digest == compiled.digest() and _bound_quality_digest == quality_digest:
-		_layout_diagnostics["assembly_reused"] = true
-		return _layout_result
-	_bound_source_digest = compiled.digest()
-	_bound_quality_digest = quality_digest
-	var data: Dictionary = compiled.identity_dict()
-	if _landscape != null:
-		_landscape.free()
-	_landscape = JourneyLandscape.new() if _act == 0 and JourneyRegistry.enabled(quality) else MapLandscape.new()
-	if _act==1 and JourneyRegistry.enabled(quality):
-		_landscape.free()
-		_landscape=preload("res://presentation/map/chapters/act2/landscape.gd").new()
-		_landscape.source_nodes=node_records
-	if _act==2 and JourneyRegistry.enabled(quality):
-		_landscape.free()
-		var courts: Node3D = preload("res://presentation/map/chapters/act3/landscape.gd").new()
-		courts.source_nodes=node_records
-		courts.source_quality=quality
-		_landscape=courts
-	if _act==3 and JourneyRegistry.enabled(quality):
-		_landscape.free()
-		_landscape=preload("res://presentation/map/chapters/act4/landscape.gd").new()
-	_world.add_child(_landscape)
-	_landscape.prepare(data, _landscape_assets, _scatter_salt)
-	if _landscape is JourneyLandscape:
-		_landscape.static_batching=get_meta("static_batches",true)
-		_landscape.asset_bundle = journey_assets
-		_landscape.cache = journey_cache
-		_landscape.map_bounds = preload("res://presentation/map/map_spatial_profile.gd").footprint(quality) if quality.has("spatial_profile") else Rect2(-48,-30,96,60)
-		if str(quality.get("spatial_profile",{}).get("id","")) == preload("res://presentation/map/map_journey_recipe.gd").VERSION:
-			_landscape.source_heroes = data["hero_placements"].duplicate(true)
-		return _bind_journey(compiled)
+	var prepared: Dictionary = _prepare_binding(compiled,quality,node_records)
+	if prepared.has("result"): return prepared["result"]
+	if _landscape is JourneyLandscape: return _bind_journey(compiled)
+	var data: Dictionary = prepared["data"]
 	_horizon = null
 	_display.material = null
 	_selection_half = _selection_reserve(quality)
@@ -693,6 +658,56 @@ func bind_layout(compiled: MapLayoutResult, quality: Dictionary, node_records: A
 	return final_result
 
 
+func bind_layout_async(compiled: MapLayoutResult,quality: Dictionary,node_records: Array = []) -> MapLayoutResult:
+	if _act!=1 or not JourneyRegistry.enabled(quality): return bind_layout(compiled,quality,node_records)
+	var prepared: Dictionary = _prepare_binding(compiled,quality,node_records)
+	if prepared.has("result"): return prepared["result"]
+	_prepare_journey(compiled)
+	await _landscape.call("build_async",compiled.identity_dict())
+	return _finish_journey(compiled)
+
+func _prepare_binding(compiled: MapLayoutResult,quality: Dictionary,node_records: Array) -> Dictionary:
+	if quality.has("journey_camera") and not JourneyRegistry.enabled(quality):
+		return {"result":_fail_layout("Unsupported journey camera contract")}
+	if compiled == null:
+		return {"result":_fail_layout("compiled result is null")}
+	if _active_profiles.is_empty() or layout_hero_contract().is_empty():
+		return {"result":_fail_layout("active map asset profiles are incomplete")}
+	var quality_digest: String = MapLayoutCanonical.digest(quality)
+	if _layout_result != null and _landscape != null and _bound_source_digest == compiled.digest() and _bound_quality_digest == quality_digest:
+		_layout_diagnostics["assembly_reused"] = true
+		return {"result":_layout_result}
+	_bound_source_digest = compiled.digest()
+	_bound_quality_digest = quality_digest
+	var data: Dictionary = compiled.identity_dict()
+	if _landscape != null:
+		_landscape.free()
+	_landscape = JourneyLandscape.new() if _act == 0 and JourneyRegistry.enabled(quality) else MapLandscape.new()
+	if _act==1 and JourneyRegistry.enabled(quality):
+		_landscape.free()
+		_landscape=preload("res://presentation/map/chapters/act2/landscape.gd").new()
+		_landscape.source_nodes=node_records
+	if _act==2 and JourneyRegistry.enabled(quality):
+		_landscape.free()
+		var courts: Node3D = preload("res://presentation/map/chapters/act3/landscape.gd").new()
+		courts.source_nodes=node_records
+		courts.source_quality=quality
+		_landscape=courts
+	if _act==3 and JourneyRegistry.enabled(quality):
+		_landscape.free()
+		_landscape=preload("res://presentation/map/chapters/act4/landscape.gd").new()
+	_world.add_child(_landscape)
+	_landscape.prepare(data, _landscape_assets, _scatter_salt)
+	if _landscape is JourneyLandscape:
+		_landscape.static_batching=get_meta("static_batches",true)
+		_landscape.asset_bundle = journey_assets
+		_landscape.cache = journey_cache
+		_landscape.map_bounds = preload("res://presentation/map/map_spatial_profile.gd").footprint(quality) if quality.has("spatial_profile") else Rect2(-48,-30,96,60)
+		if str(quality.get("spatial_profile",{}).get("id","")) == preload("res://presentation/map/map_journey_recipe.gd").VERSION:
+			_landscape.source_heroes = data["hero_placements"].duplicate(true)
+	return {"data":data}
+
+
 func is_journey_layout() -> bool:
 	return _layout_result != null and _landscape is JourneyLandscape
 
@@ -702,6 +717,11 @@ func realised_asset_bundle() -> Dictionary:
 
 
 func _bind_journey(source: MapLayoutResult) -> MapLayoutResult:
+	_prepare_journey(source)
+	_landscape.build(source.identity_dict())
+	return _finish_journey(source)
+
+func _prepare_journey(source: MapLayoutResult) -> void:
 	var horizon_bounds: Rect2 = _landscape.map_bounds
 	_horizon = preload("res://presentation/map/map_horizon.gd").new(horizon_bounds) if _act==0 else null
 	_display.material = _horizon.get("material") if _horizon!=null else null
@@ -709,7 +729,8 @@ func _bind_journey(source: MapLayoutResult) -> MapLayoutResult:
 		var stored_source: Dictionary = journey_cache.get("source_result")
 		if not stored_source.is_empty() and str(stored_source.get("layout_digest","")) != source.digest():
 			_landscape.cache = null
-	_landscape.build(source.identity_dict())
+
+func _finish_journey(source: MapLayoutResult) -> MapLayoutResult:
 	_motion_setting = -1
 	if not str(_landscape.failure).is_empty():
 		return _fail_layout(str(_landscape.failure))

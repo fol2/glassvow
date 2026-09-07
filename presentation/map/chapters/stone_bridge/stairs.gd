@@ -54,7 +54,7 @@ func build(parent: Node3D,field: RefCounted,material: Material,
 	if count==0:
 		return null
 	var mesh: ArrayMesh = M.finish(surface)
-	M.node(parent,mesh,material,"StoneBridgeStairTreads")
+	if parent!=null: M.node(parent,mesh,material,"StoneBridgeStairTreads")
 	print("STONE_BRIDGE_FLIGHTS flights=",flights," treads=",count," maximum_rise=",maximum_riser)
 	return mesh
 

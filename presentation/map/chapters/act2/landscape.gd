@@ -15,9 +15,24 @@ func _init() -> void:
 
 func build(data: Dictionary) -> void:
 	var started: int = Time.get_ticks_msec()
+	var sample: Dictionary = _prepare_terrain(data)
+	terrain.build(sample,false,map_bounds,cache)
+	_finish_build(started)
+
+func build_async(data: Dictionary) -> void:
+	var started: int = Time.get_ticks_msec()
+	var sample: Dictionary = _prepare_terrain(data)
+	var city: CityTerrain = terrain as CityTerrain
+	await city.build_async(sample,map_bounds,cache)
+	_finish_build(started)
+
+func _prepare_terrain(data: Dictionary) -> Dictionary:
 	terrain=CityTerrain.new()
 	add_child(terrain)
-	terrain.build({"anchors":data["node_anchors"],"edges":data["edges"],"nodes":source_nodes,"layout_digest":data["layout_digest"] if data.has("layout_digest") else ""},false,map_bounds,cache)
+	return {"anchors":data["node_anchors"],"edges":data["edges"],"nodes":source_nodes,
+		"layout_digest":data.get("layout_digest","")}
+
+func _finish_build(started: int) -> void:
 	if not terrain.failure.is_empty():
 		failure=terrain.failure
 		return

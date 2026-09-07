@@ -1146,3 +1146,35 @@ main thread, isolate owned geometry calculation, and show an honest loading stat
 Do not run MeshInstance3D creation off-thread: Godot's thread-safety documentation
 explicitly rejects that shortcut. First prove the data/instance separation on one
 native city case before touching campaign asynchronous lifecycle.
+
+
+Usage checkpoint 22:38:23 UTC, relative to 12:19: input 197,999,948;
+cached 195,632,128 (98.804%); uncached 2,367,820; output 686,119.
+Reasoning 341,506 is already included in output. These are model-reported tokens,
+not the account allowance or a billing claim. Elapsed active run is about 10h20m.
+Remaining conditional forecast stays 10–18 active hours plus external waits:
+responsive construction and real floor-device/runtime qualification now dominate;
+the four recipe/transition deliveries are implemented. iPad 8 has an actual
+connected development tunnel (iPadOS 26.1, developer mode enabled); its paired
+listing alone was not counted as connectivity. The floor iPhone SE remains absent.
+
+### Background geometry checkpoint — 7 September, 23:01 UTC
+
+A scoped, cancellable geometry job now keeps Act II route mesh calculation off
+the main thread. Rendering nodes are published on the main thread. The native
+small-canary comparison proves exact mesh-array bytes, no rendering nodes in the
+worker, identical published instances, and cancellation releasing unpublished
+geometry. The full seed 717 native async city passes 58,044 rendered deck samples,
+41,460 body samples, crossing clearance and architectural obstruction checks;
+the overview was visually inspected. First construction takes 32.305 s.
+
+The production Continue/encounter/return probe also passes with the actual async
+Main path: seed 4 takes 36.128 s, yields 3,436 loading frames and retains source,
+save and realised-map identities across return. The loading screen was inspected.
+Maximum observed loading frame gap is still 2,837.57 ms: responsiveness and
+performance acceptance remain OPEN. Native shutdown still reports the previously
+isolated two audio resources; no new map-lifetime clearance is claimed. Four
+focused map/locale tests pass, with existing headless teardown diagnostics.
+Parser checks and diff whitespace checks pass. Next: isolate remaining main-thread
+publication/source costs, native cancellation/shape checks, then fixed-head device
+and complete delivery gates. This checkpoint is not Step 4 or Step 8 completion.

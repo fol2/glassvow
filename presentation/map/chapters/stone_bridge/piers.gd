@@ -79,6 +79,6 @@ static func build(parent: Node3D,fields: Array,stone: Material,trim: Material,
 		for surface: SurfaceTool in [body,caps]:
 			var mesh: ArrayMesh = M.finish(surface)
 			result.append(mesh)
-			M.node(parent,mesh,stone if surface==body else trim,"BridgePierButtresses")
+			if parent!=null: M.node(parent,mesh,stone if surface==body else trim,"BridgePierButtresses")
 	print("STONE_BRIDGE_PIER_PAIRS ",placed.size())
 	return result

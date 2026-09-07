@@ -79,6 +79,22 @@ func _run() -> void:
 	var started: int = Time.get_ticks_usec()
 	_click(button.get_global_rect().get_center())
 	await process_frame
+	var loading_frames: int = 0
+	var loading_max_gap_ms: float = 0.0
+	var loading_tick: int = Time.get_ticks_usec()
+	var load_deadline: int = Time.get_ticks_msec()+180000
+	while main._map_loading:
+		loading_frames+=1
+		var now: int = Time.get_ticks_usec()
+		loading_max_gap_ms=maxf(loading_max_gap_ms,(now-loading_tick)/1000.0)
+		loading_tick=now
+		if loading_frames==8 and not output.is_empty():
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png(output.get_basename()+"-loading.png")
+		if Time.get_ticks_msec()>load_deadline:
+			_fail("Production map loading timed out")
+			return
+		await process_frame
 	await RenderingServer.frame_post_draw
 	var restored_ms: float = (Time.get_ticks_usec()-started)/1000.0
 	var screen: WorldMapScreen = main._map_screen
@@ -86,7 +102,7 @@ func _run() -> void:
 		_fail("Continue did not construct the production map")
 		return
 	var same_run: bool = main.game.run.to_dict()==before
-	var receipt: Dictionary = {"act":saved.act,"engine_elapsed_to_title_ms":title_ms,"preloaded_assets":preloaded,"cold_continue_to_render_ms":restored_ms,"run_unchanged":same_run,
+	var receipt: Dictionary = {"act":saved.act,"engine_elapsed_to_title_ms":title_ms,"preloaded_assets":preloaded,"cold_continue_to_render_ms":restored_ms,"loading_frames":loading_frames,"loading_max_gap_ms":loading_max_gap_ms,"run_unchanged":same_run,
 		"input_digest":screen.layout_input_digest(),"layout_digest":screen.layout_digest(),
 		"binding":screen.layout_diagnostics().get("binding_stages_ms",{}),"assembly":screen._map_scene.layout_diagnostics().get("assembly_ms",{}),
 		"source_override":screen._layout_compile.is_valid(),"derived_cache":screen._map_scene.layout_diagnostics().get("derived_cache_hit",false)}

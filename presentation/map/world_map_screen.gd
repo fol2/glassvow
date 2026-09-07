@@ -358,20 +358,37 @@ func _act_line(region: String, boss: String) -> String:
 
 
 ## Re-seat and re-light after a run change or a return from combat.
+var _binding_in_progress: bool = false
+
 func refresh(run: RunState) -> void:
+	if _binding_in_progress: return
+	_refresh_metadata(run,true)
+	_finish_refresh(run)
+
+func refresh_async(run: RunState) -> void:
+	if _binding_in_progress: return
+	_binding_in_progress=true
+	_refresh_metadata(run,false)
+	await _bind_compiled_layout_async()
+	_binding_in_progress=false
+	_finish_refresh(run)
+
+func _refresh_metadata(run: RunState,bind_layout: bool) -> void:
 	if run != null:
 		_run = run
 		# Before the act binds: the salt is what the scenery is dealt from, and
 		# `_set_act_theme` is what rebinds the geometry that reads it.
 		if _map_scene != null:
 			_map_scene.set_scatter_salt(run.seed + SCENERY_SEED_OFFSET)
-		_set_act_theme(run.act)
+		_set_act_theme(run.act,bind_layout)
 		var act: Dictionary = content.acts[_act]
 		var act_name: String = Locale.active.t("ui.pilgrimage.roseWindow") \
 			if map.region == "rose_window" \
 			else str(act.get("name", REGION_NAME))
 		_title_label.text = _act_line(act_name.to_upper(),
 			str(act.get("bossName", "")).to_upper())
+
+func _finish_refresh(run: RunState) -> void:
 	var live: Array[int] = map.reachable()
 	var first_live: GlassWaystone = null
 	for i: int in range(_waystones.size()):
@@ -409,7 +426,7 @@ func _sync_sealed_door(run: RunState) -> void:
 		and run.act + 1 == run.final_act()
 
 
-func _set_act_theme(stage_act: int) -> void:
+func _set_act_theme(stage_act: int,bind_layout: bool = true) -> void:
 	_region = MapRegions.for_act(stage_act, content)
 	_act = _region.act
 	if content != null and not content.acts.is_empty():
@@ -418,7 +435,7 @@ func _set_act_theme(stage_act: int) -> void:
 	# The 3D ramp binds band_shade/band_key on MapScene.
 	if _map_scene != null:
 		_map_scene.set_act(stage_act)
-		_bind_compiled_layout()
+		if bind_layout: _bind_compiled_layout()
 
 
 func layout_result() -> MapLayoutResult:
@@ -443,22 +460,44 @@ func layout_failure() -> Dictionary:
 
 
 func _bind_compiled_layout() -> void:
+	var packet: Dictionary = _compile_bound_layout()
+	if packet.is_empty(): return
+	var compiled: MapLayoutResult = packet["compiled"]
+	var quality: Dictionary = packet["quality"]
+	var nodes: Array = packet["nodes"]
+	var final_result: MapLayoutResult = _map_scene.bind_layout(compiled,quality,nodes)
+	_accept_compiled_layout(final_result,packet)
+
+func _bind_compiled_layout_async() -> void:
+	var packet: Dictionary = _compile_bound_layout()
+	if packet.is_empty(): return
+	var compiled: MapLayoutResult = packet["compiled"]
+	var quality: Dictionary = packet["quality"]
+	var nodes: Array = packet["nodes"]
+	var final_result: MapLayoutResult = await _map_scene.bind_layout_async(compiled,quality,nodes)
+	_accept_compiled_layout(final_result,packet)
+
+func _binding_failure(failure: Dictionary) -> Dictionary:
+	_fail_compiled_layout(failure)
+	return {}
+
+func _compile_bound_layout() -> Dictionary:
 	var checkpoint: int = Time.get_ticks_msec()
 	var stages: Dictionary = {}
 	if _run == null or _map_scene == null:
-		return
+		return {}
 	var quality: Dictionary = _quality_registry()
 	stages["recipe"] = Time.get_ticks_msec()-checkpoint
 	checkpoint = Time.get_ticks_msec()
 	if quality.is_empty():
-		return _fail_compiled_layout({
+		return _binding_failure({
 			"kind": "authority", "id": "quality_registry",
 			"reason": "governed map quality registry is unavailable",
 		})
 	var bound: Dictionary = _bind_graph(_run.act)
 	if bound.get("ok", false) != true:
 		var binding_error: Dictionary = bound.get("error", {})
-		return _fail_compiled_layout(binding_error)
+		return _binding_failure(binding_error)
 	var assets: Dictionary = _map_scene.layout_asset_bundle()
 	var heroes: Dictionary = _map_scene.layout_hero_contract()
 	if _layout_quality_override.is_empty() and _act in [0,1,2,3] and _journey_recipe.get("ok") == true:
@@ -467,7 +506,7 @@ func _bind_compiled_layout() -> void:
 		_map_scene.journey_cache = _journey_recipe.get("cache")
 		_map_scene.journey_assets = assets
 	if assets.is_empty() or heroes.is_empty():
-		return _fail_compiled_layout({
+		return _binding_failure({
 			"kind": "authority", "id": "active_map_assets",
 			"reason": "active map asset profiles or hero anchors are unavailable",
 		})
@@ -487,13 +526,13 @@ func _bind_compiled_layout() -> void:
 		"quality_registry_digest": MapLayoutCanonical.digest(quality),
 	})
 	if input == null:
-		return _fail_compiled_layout({
+		return _binding_failure({
 			"kind": "input", "id": "live_map",
 			"reason": "canonical live map input is invalid",
 		})
 	var input_digest: String = input.digest()
 	if input_digest == _layout_input_digest:
-		return
+		return {}
 	_layout_input_digest = input_digest
 	stages["input"] = Time.get_ticks_msec()-checkpoint
 	checkpoint = Time.get_ticks_msec()
@@ -510,7 +549,7 @@ func _bind_compiled_layout() -> void:
 	else:
 		compiled_v = MapLayoutCompiler.compile(input,quality,assets)
 	if typeof(compiled_v) != TYPE_DICTIONARY:
-		return _fail_compiled_layout({
+		return _binding_failure({
 			"kind": "compiler", "id": "live_map",
 			"reason": "compiler returned a non-dictionary result",
 		})
@@ -526,7 +565,7 @@ func _bind_compiled_layout() -> void:
 			== TYPE_DICTIONARY else {
 				"kind": "compiler", "id": "live_map", "reason": "compile failed",
 			}
-		return _fail_compiled_layout(compile_failure)
+		return _binding_failure(compile_failure)
 	var compiled_result: MapLayoutResult = result_v
 	var result_data: Dictionary = compiled_result.identity_dict()
 	var result_nodes: Dictionary = result_data["node_anchors"]
@@ -542,13 +581,17 @@ func _bind_compiled_layout() -> void:
 			!= MapLayoutCanonical.sorted_keys(expected_node_ids) \
 			or MapLayoutCanonical.sorted_keys(result_edges) \
 			!= MapLayoutCanonical.sorted_keys(expected_edge_ids):
-		return _fail_compiled_layout({
+		return _binding_failure({
 			"kind": "compiler", "id": "result_coverage",
 			"reason": "compiled result does not exactly cover the live input",
 		})
 	stages["source"] = Time.get_ticks_msec()-checkpoint
 	checkpoint = Time.get_ticks_msec()
-	var final_result: MapLayoutResult = _map_scene.bind_layout(compiled_result, quality, nodes)
+	return {"compiled":compiled_result,"quality":quality,"nodes":nodes,"stages":stages,"checkpoint":checkpoint}
+
+func _accept_compiled_layout(final_result: MapLayoutResult,packet: Dictionary) -> void:
+	var stages: Dictionary = packet["stages"]
+	var checkpoint: int = packet["checkpoint"]
 	if final_result == null:
 		return _fail_compiled_layout(_map_scene.layout_failure())
 	stages["surface"] = Time.get_ticks_msec()-checkpoint
