@@ -14,14 +14,14 @@ concurrency:
 
 jobs:
   bundle:
-    name: Preserve exact Hand preflight - no population sample
+    name: Fixed natural Hand support - all evidence preserved
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 8
+    timeout-minutes: 120
     permissions:
       contents: write
     steps:
-      - name: Check out exact committed Hand sources
+      - name: Check out exact frozen support implementation
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
@@ -33,77 +33,48 @@ jobs:
             content
             tools
             research/p9-six-route
-      - name: Bind frozen question and the existing official engine
+      - name: Verify fixed scientific inputs and delivery-only slicing
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,json,pathlib
-          p=json.loads(pathlib.Path('research/p9-six-route/hand-admission-20260908/PROTOCOL.json').read_bytes())
-          assert hashlib.sha256(json.dumps(p,sort_keys=True,separators=(',',':')).encode()).hexdigest()=='2efdcd710530db15b3d76aea0a9fa8b0930d01242b42d989e17873ca59f01b62'
+          r=pathlib.Path('research/p9-six-route/hand-admission-20260908/support-v1')
+          p=json.loads((r/'PROTOCOL.json').read_bytes())
+          sha=lambda b:hashlib.sha256(b).hexdigest()
+          assert sha(json.dumps(p,sort_keys=True,separators=(',',':')).encode())=='9f7b3ccc6e9560fa8df7a60e29382c57c53da46bcf09d2be616fb76430e62ca2'
+          for name,digest in p['source_sha256'].items():
+              assert sha((r/name).read_bytes())==digest,name
+          assert sha((r/'execute_support.py').read_bytes())=='a484844a3f5da58278aeea37dd199f3b2702cf5e6e759cf403c2d1e898e69ae8'
           PY
+          cd research/p9-six-route/hand-admission-20260908/support-v1
+          python3 -m unittest -v test_support
+      - name: Obtain the already-authorised pinned official engine
+        shell: bash
+        run: |
+          set -euo pipefail
           mkdir -p "$RUNNER_TEMP/p9-engine"
           curl --fail --location --max-time 120 --output "$RUNNER_TEMP/p9-engine/engine.zip" https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
           echo "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4  $RUNNER_TEMP/p9-engine/engine.zip" | sha256sum -c -
           unzip -q "$RUNNER_TEMP/p9-engine/engine.zip" -d "$RUNNER_TEMP/p9-engine"
           chmod +x "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64"
-      - name: Replay once and require equality with every local native byte
-        id: gate
-        continue-on-error: true
-        shell: bash
-        run: python3 research/p9-six-route/hand-admission-20260908/publish_gate.py "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64"
-      - name: Preserve successful or failed available capture without force
-        id: publish
-        if: always() && steps.gate.outcome != 'skipped'
+      - name: Validate integration then execute fixed V5 and conditional V0
         shell: bash
         run: |
           set -euo pipefail
-          branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$GITHUB_SHA"
-          root=research/p9-six-route/hand-admission-20260908/native-1
-          test -f "$root/EXECUTION.json"
-          git add "$root"
-          python3 - <<'PY'
-          import subprocess
-          paths=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
-          assert paths and all(p.startswith('research/p9-six-route/hand-admission-20260908/native-1/') for p in paths)
-          PY
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): preserve complete Hand preflight execution and raw'
-          git push origin "HEAD:refs/heads/$branch"
-          echo "head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-      - name: Fetch published capture into a separate checkout
-        if: steps.publish.outputs.head != ''
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        with:
-          ref: ${{ steps.publish.outputs.head }}
-          path: readback
-          fetch-depth: 1
-          persist-credentials: false
-          lfs: false
-          sparse-checkout: research/p9-six-route/hand-admission-20260908
-      - name: Verify remote bytes and reproduce the readout without an engine
-        if: steps.publish.outputs.head != ''
+          root=research/p9-six-route/hand-admission-20260908/support-v1
+          python3 -u "$root/execute_support.py" . "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64" "$root/capture-1" --push
+      - name: Verify terminal state without promoting a scientific negative
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,json,lzma,pathlib,subprocess,sys
-          r=pathlib.Path('research/p9-six-route/hand-admission-20260908'); cold=pathlib.Path('readback')/r
-          checked=[]
-          for rec in subprocess.check_output(['git','-C','readback','ls-tree','-r','-z','HEAD','--',str(r)]).split(b'\0'):
-              if not rec:continue
-              meta,name=rec.split(b'\t',1);kind=meta.decode().split()[1];want=meta.decode().split()[2];p=pathlib.Path(name.decode());b=(pathlib.Path('readback')/p).read_bytes()
-              assert kind=='blob' and b==p.read_bytes()
-              assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==want
-              checked.append(str(p))
-          receipt=json.loads((cold/'native-1/EXECUTION.json').read_bytes())
-          print('REMOTE_READBACK='+json.dumps({'source_head':receipt['source_head'],'published_head':subprocess.check_output(['git','-C','readback','rev-parse','HEAD']).decode().strip(),'files_byte_equal':len(checked),'raw_sha256':receipt.get('raw_sha256'),'status':receipt['status'],'p9_certified':False},sort_keys=True))
-          assert receipt['status']=='HAND_PREFLIGHT_PASS_WITH_EXACT_LOCAL_REMOTE_BYTES'
-          raw=lzma.decompress((cold/'native-1/raw.ndjson.xz').read_bytes())
-          assert len(raw)==8768376 and hashlib.sha256(raw).hexdigest()=='46f1e8720060a925306cb07eb376cd40972b95114ba53e1377ad750cb38df267'
-          sys.path.insert(0,str(cold));from read_preflight import analyze
-          result=(json.dumps(analyze(raw,json.loads((cold/'PROTOCOL.json').read_bytes())),indent=2)+'\n').encode()
-          assert result==(cold/'native-1/RESULTS.json').read_bytes()
+          import json,pathlib
+          p=pathlib.Path('research/p9-six-route/hand-admission-20260908/support-v1/capture-1/TERMINAL.json')
+          assert p.exists(),'No complete terminal: do not report support or P9 PASS.'
+          r=json.loads(p.read_bytes())
+          print(json.dumps({k:v for k,v in r.items() if k!='readbacks'},sort_keys=True))
+          assert not r['p9_certified'] and r['packages_admitted']==0
+          assert r['status']!='INCONCLUSIVE',r.get('failure')
           PY
