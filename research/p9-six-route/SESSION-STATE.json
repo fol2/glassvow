@@ -1,53 +1,87 @@
 {
-  "status": "P9_UNFINISHED_DIAGNOSTICS_COMPLETE_RAW_STORAGE_BOUNDARY",
+  "status": "P9_UNFINISHED_ENACTMENT_CAPTURE_CLOSED_INDEPENDENT_REVIEW_NOT_OBTAINED",
   "branch": "research/p9-six-route-local-20260905",
   "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
-  "verified_source_snapshot": "a7791720ec51a01f89ae24e32e6290bf25431bd4",
+  "verified_measurement_head": "46401783b39ada692ce9b990f9deda342b79e7dd",
   "candidate_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
   "descriptor_sha256": "2cfe1d8ff00d5ff695664c597be3a93e3960f39732fa049eac82b9397184bab7",
   "validation": {
     "assigned_rows": 1024,
-    "assigned_chunks": 64,
-    "durable_primary_rows": 1024,
-    "durable_primary_chunks": 64,
+    "durable_compact_rows": 1024,
     "missing_compact_rows": 0,
-    "old_primary_rows": 320,
-    "later_primary_rows": 704,
     "original_raw_recovered": false,
-    "frozen_model_refit": false,
-    "rerun_for_orientation": false,
-    "report": "natural-contribution-20260907/replication/continuation-20260908/PUBLISHED-VALIDATION.json",
-    "report_sha256": "8a96ea161f8e4324b6c65e882d2b6cee8239061e368ed743d94397df02a7fa83"
+    "rerun_or_refit": false
   },
   "original_arms": {
-    "assigned_rows": 2048,
     "completed_rows": 2048,
-    "primary": "natural-contribution-20260907/replication/continuation-20260908/ORIGINAL-PRIMARY.json",
-    "primary_sha256": "5c6220adc9433c45dec016fb1025f28712026d2b0b80c1c151d7339bb73888d5",
     "exposed_assignment_reproduction_not_fresh_confirmation": true,
-    "rerun_for_orientation": false,
-    "native_archive_name": "p9-original-arms-native-20260908.tar.xz",
-    "native_archive_sha256": "b866d60d7d9dad9bbd83610c145e242ed026bf046806ca5c7cab83f4b58d326c",
-    "native_archive_remote_verified": false
+    "raw_archive_bytes": 518348,
+    "raw_archive_sha256": "b866d60d7d9dad9bbd83610c145e242ed026bf046806ca5c7cab83f4b58d326c",
+    "raw_archive_remote_complete": false
   },
-  "recovery_exposures": {
-    "interrupted_duplicate_validation_rows": 13,
-    "all_equal_to_preserved_primary": true,
-    "additional_independent_samples": 0
+  "prior_finite_audit": {
+    "native_assertions": 677,
+    "complete_raw_remote_verified": true,
+    "receipt": "source-package-audit-20260908/AUDIT-REMOTE-READBACK.json"
   },
-  "storage": {
-    "github_code_and_compact_data": "write/readback available",
-    "google_drive_raw_upload": "403 ACCESS_TOKEN_SCOPE_INSUFFICIENT",
-    "notion_raw_upload": "upload handle created; binary POST failed because runtime host cannot be resolved; no bytes uploaded",
-    "local_archive_is_remote_backup": false
+  "followup": {
+    "locality_cases": 60,
+    "omitted_field_mutations": 17,
+    "native_assertions_reexamined": 677,
+    "complete_raw_remote_verified": true,
+    "reader_tests_passed": 12,
+    "archive_sha256": "b3705b716d6c5597b216d6ed56f0fb2349a17dd9d2a43896397cd2a89e18dfea",
+    "receipt": "source-package-audit-20260908/FOLLOWUP-REMOTE-READBACK.json"
+  },
+  "enactment": {
+    "runs_reproduced": 9,
+    "requested_contexts": 12,
+    "temporal_witnesses": 10,
+    "factual_matches": 10,
+    "counterfactual_actions": 40,
+    "dormant_exact_null_pairs": 10,
+    "new_independent_samples": 0,
+    "complete_emitted_raw_remote_verified": true,
+    "raw_archive_bytes": 29328,
+    "raw_archive_sha256": "61af4dc208880364c668ec724519e0bc639c44e447f1e106c4fad3893a3ca31b",
+    "results_sha256": "8778d516aee84d08f1a316655b3e05899041579ca63c19746a6496e3b816eb1d",
+    "receipt": "natural-enactment-20260908/REMOTE-READBACK.json",
+    "absent_contexts": [
+      {
+        "aspect": "ashwarden",
+        "vow": 0,
+        "route": "hand",
+        "seed": 45010004
+      },
+      {
+        "aspect": "ashwarden",
+        "vow": 5,
+        "route": "cycle",
+        "seed": 45010000
+      }
+    ]
+  },
+  "review": {
+    "status": "NOT_OBTAINED",
+    "scope": "Independent semantic review of the frozen measurement/observer candidate before relying on it for package admission; not owner self-approval or a new P9 threshold.",
+    "capsule": "natural-enactment-20260908/REVIEW-CAPSULE.json",
+    "executables_checked": {
+      "codex": null,
+      "claude": null,
+      "grok": null
+    },
+    "available_connector": "GitHub PR review submit/list/request actions do not execute the isolated reviewer.",
+    "plugin_search": "Uninstalled candidates found; no new provider or credentials approved or installed.",
+    "no_fabricated_verdict": true
   },
   "no_active_research_processes": true,
   "p9_certified": false,
   "packages_admitted": 0,
   "remaining_milestones": [
-    "Six complete viable/reachable/distinct package certificates and admitted detector",
-    "Corrected independent confirmation, unrestricted endpoints, signed controls, ceilings and hard guardrails",
-    "Minimum lifecycle, independent review, governed exact-product integration and #108 receipt"
+    "Six complete viable/reachable/distinct package certificates, including canonical and proper-subset obligations",
+    "Seven-direction detector admission",
+    "Corrected independent confirmation, unrestricted endpoint retention, signed controls, ceilings and hard guardrails",
+    "Minimum lifecycle, independent review, exact-product integration and #108 receipt"
   ],
-  "exact_next_action": "After approved raw-file write access is available, upload p9-original-arms-native-20260908.tar.xz, fetch it as bytes and require SHA256 b866d60d7d9dad9bbd83610c145e242ed026bf046806ca5c7cab83f4b58d326c. Then finish source-level canonical/null/subset package obligations before freezing new admission rows. Do not rerun either completed diagnostic."
+  "exact_next_action": "Use the repository-defined fresh-context read-only reviewer on REVIEW-CAPSULE.json, base 7c3d09fd and exact head 46401783. No implementation delegation or routine quota renewal. After resolving material findings, complete the missing canonical/producer-subset/population-policy proof as one acceptance-mapped package stage; do not add another selected-witness study or repeat completed panels."
 }

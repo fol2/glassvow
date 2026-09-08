@@ -1,0 +1,61 @@
+{
+  "task": "Review the exact research measurement candidate for the fixed nine preserved-run temporal-enactment replay; do not implement missing P9 research.",
+  "base_sha": "7c3d09fd8fd2fd1bba5081ca15e51e33059c6c0b",
+  "head_sha": "46401783b39ada692ce9b990f9deda342b79e7dd",
+  "acceptance_contract": "research/p9-six-route/natural-enactment-20260908/PROTOCOL.json at 4d74478bd067299c05cb5b63933b4f884e6813e8",
+  "outcome": "Determine whether the implementation and retained evidence support only the preregistered observation and reconciliation claims, including reported absences and the separation of payoff units.",
+  "non_goals": [
+    "No P9/package/detector admission or production merge",
+    "No new native runs, refit, retune, seed search, protected-cohort exposure or edits"
+  ],
+  "authorities": {
+    "main_sha": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+    "files": [
+      "AGENTS.md",
+      "docs/agents/ai-sdlc.md",
+      ".claude/skills/glassvow-godot/SKILL.md",
+      ".claude/agents/ai-sdlc-reviewer.md"
+    ],
+    "programme": "fol2/glassvow#421 and direct owner three-strategies-per-aspect scope"
+  },
+  "constraints": [
+    "Fresh context; read-only; worktree isolated; do not invoke another reviewer",
+    "Do not use the author transcript, README conclusions or confidence as evidence",
+    "Preserve core law, coupled Stun/Shatter, IDs, catalogue order/RNG and save contracts",
+    "Existing nine assignments are selected historical witnesses, not independent or population evidence",
+    "No retrospective changes to frozen validation or original-arm diagnostic"
+  ],
+  "deterministic_evidence": {
+    "head": "46401783b39ada692ce9b990f9deda342b79e7dd",
+    "source_export_commit": "5991d81f9f32a67d6a66e05a6928d2e1e573e881",
+    "readback_receipt": "research/p9-six-route/natural-enactment-20260908/REMOTE-READBACK.json",
+    "raw_archive_sha256": "61af4dc208880364c668ec724519e0bc639c44e447f1e106c4fad3893a3ca31b",
+    "results_sha256": "8778d516aee84d08f1a316655b3e05899041579ca63c19746a6496e3b816eb1d",
+    "commands": [
+      {
+        "cwd": "research/p9-six-route/source-package-audit-20260908",
+        "command": "python read_followup.py",
+        "returncode": 0
+      },
+      {
+        "cwd": "research/p9-six-route/source-package-audit-20260908",
+        "command": "python test_read_followup.py",
+        "returncode": 0
+      },
+      {
+        "cwd": "research/p9-six-route/natural-enactment-20260908",
+        "command": "python read_enactment.py",
+        "returncode": 0
+      },
+      {
+        "cwd": "research/p9-six-route/natural-enactment-20260908",
+        "command": "python test_read_enactment.py",
+        "returncode": 0
+      }
+    ],
+    "locality_test_count": 12,
+    "enactment_test_count": 9,
+    "executable_source": "All executed observation/assembly scripts are in the committed raw archive under source/; reconstruct using RAW-MANIFEST.json and read_followup.unpack, without executing a new cohort."
+  },
+  "return_contract": "Exact-head APPROVE / REQUEST_CHANGES / INCONCLUSIVE under .claude/agents/ai-sdlc-reviewer.md. Approval covers only this measurement task, not a package or P9."
+}
