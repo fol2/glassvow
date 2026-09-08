@@ -1,0 +1,92 @@
+name: P9 research runtime bundle
+
+on:
+  push:
+    branches: [research/p9-six-route-local-20260905]
+    paths: [.github/workflows/p9-research-runtime-bundle.yml]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p9-six-route-research-writer
+  cancel-in-progress: false
+
+jobs:
+  bundle:
+    name: Reconcile known history and preserve divergent bytes - no engine
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: write
+    steps:
+      - name: Check out exact reunion candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: true
+          lfs: false
+          sparse-checkout: |
+            research/p9-six-route
+            .github/workflows
+      - name: Read ancestry, test mechanical classifications and preserve differences
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --filter=blob:none --deepen=250 origin "$GITHUB_SHA"
+          root=research/p9-six-route/reunion-20260908
+          (cd "$root" && python3 -m unittest -v test_reunion) > "$root/TESTS-remote.log" 2>&1
+          python3 "$root/audit_reunion.py"
+      - name: Publish only reunion outputs without overwriting another writer
+        id: publish
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$GITHUB_SHA"
+          root=research/p9-six-route/reunion-20260908
+          git add "$root/RESULTS.json" "$root/SUMMARY.json" "$root/TESTS-remote.log"
+          if [ -d "$root/divergent" ]; then git add "$root/divergent"; fi
+          python3 - <<'PY'
+          import subprocess
+          r='research/p9-six-route/reunion-20260908/'
+          names=set(subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines())
+          fixed={r+'RESULTS.json',r+'SUMMARY.json',r+'TESTS-remote.log'}
+          if not fixed.issubset(names) or any(n not in fixed and not n.startswith(r+'divergent/') for n in names):
+              raise RuntimeError('STAGED_SCOPE')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'research(p9): preserve reunion audit and unapplied divergent checkpoint bytes'
+          git push origin "HEAD:refs/heads/$branch"
+          echo "head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Fetch published result again into a fresh directory
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ steps.publish.outputs.head }}
+          path: readback
+          fetch-depth: 1
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: research/p9-six-route/reunion-20260908
+      - name: Compare every published reunion byte with the executed candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,pathlib,subprocess
+          r=pathlib.Path('research/p9-six-route/reunion-20260908')
+          sha=lambda b:hashlib.sha256(b).hexdigest()
+          blob=lambda b:hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+          observed=[]
+          for rec in subprocess.check_output(['git','-C','readback','ls-tree','-r','-z','HEAD','--',str(r)]).split(b'\0'):
+              if not rec:continue
+              meta,name=rec.split(b'\t',1);mode,kind,want=meta.decode().split();p=pathlib.Path(name.decode())
+              b=(pathlib.Path('readback')/p).read_bytes()
+              if b!=p.read_bytes() or blob(b)!=want:raise RuntimeError('READBACK_MISMATCH:'+str(p))
+              observed.append({'path':str(p),'bytes':len(b),'sha256':sha(b),'git_blob':want})
+          receipt={'published_head':subprocess.check_output(['git','-C','readback','rev-parse','HEAD']).decode().strip(),'files_matched':len(observed),'files':observed,'new_native_runs':0,'p9_certified':False}
+          print('REUNION_READBACK='+json.dumps(receipt,sort_keys=True))
+          PY

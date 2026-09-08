@@ -1,0 +1,1976 @@
+{
+  "status": "NAMED_FACET_ALIASES_REFUTED_AND_CYCLE_UNROLL_CONFIRMED",
+  "raw_bytes": 1861970,
+  "raw_sha256": "70176a36ba032b4434bb4baee35e3963112c63d8b42f7aa96b74de1f12a59b09",
+  "native_run_outcomes": 0,
+  "constructed_traces": 128,
+  "facet_common_contexts": 16,
+  "facet_traces": 48,
+  "cycle_full_trace_equalities": 40,
+  "cycle_traces": 80,
+  "facet": [
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": false,
+      "environment": "fresh",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 2,
+          "cracked": 0,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 236,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 1,
+          "cracked": 1,
+          "energy": 1,
+          "facet_max": 6,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 233,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 1,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 240,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 1
+        }
+      ],
+      "pre_consumer_echo": [
+        false,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": false,
+      "environment": "two_short",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 2,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 236,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": true,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 5,
+          "cracked": 1,
+          "energy": 1,
+          "facet_max": 6,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 233,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 4,
+          "cracked": 1,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 240,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 1
+        }
+      ],
+      "pre_consumer_echo": [
+        true,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": true,
+      "environment": "fresh",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 2,
+          "cracked": 0,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 233,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 1,
+          "cracked": 2,
+          "energy": 1,
+          "facet_max": 6,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 231,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 2,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 240,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 2
+        }
+      ],
+      "pre_consumer_echo": [
+        false,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": true,
+      "environment": "two_short",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 2,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 233,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": true,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 5,
+          "cracked": 2,
+          "energy": 1,
+          "facet_max": 6,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 231,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 4,
+          "cracked": 2,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 240,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 2
+        }
+      ],
+      "pre_consumer_echo": [
+        true,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": false,
+      "environment": "fresh",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 2,
+          "cracked": 0,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 265,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 1,
+          "cracked": 1,
+          "energy": 1,
+          "facet_max": 7,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 262,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 1,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 269,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 1
+        }
+      ],
+      "pre_consumer_echo": [
+        false,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": false,
+      "environment": "two_short",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 2,
+          "energy": 2,
+          "facet_max": 8,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 265,
+          "over": false,
+          "rng": 552033277,
+          "staggered": true,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 6,
+          "cracked": 1,
+          "energy": 1,
+          "facet_max": 7,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 262,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 5,
+          "cracked": 1,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 269,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 1
+        }
+      ],
+      "pre_consumer_echo": [
+        true,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": true,
+      "environment": "fresh",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 2,
+          "cracked": 0,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 262,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 1,
+          "cracked": 2,
+          "energy": 1,
+          "facet_max": 7,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 260,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 2,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 269,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 2
+        }
+      ],
+      "pre_consumer_echo": [
+        false,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": true,
+      "environment": "two_short",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 2,
+          "energy": 2,
+          "facet_max": 8,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 262,
+          "over": false,
+          "rng": 552033277,
+          "staggered": true,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 6,
+          "cracked": 2,
+          "energy": 1,
+          "facet_max": 7,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 260,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 5,
+          "cracked": 2,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 269,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 2
+        }
+      ],
+      "pre_consumer_echo": [
+        true,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": false,
+      "environment": "fresh",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 0,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 236,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 1,
+          "energy": 1,
+          "facet_max": 6,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 233,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 1,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 240,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 1
+        }
+      ],
+      "pre_consumer_echo": [
+        false,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": false,
+      "environment": "two_short",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 4,
+          "cracked": 0,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 236,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 4,
+          "cracked": 1,
+          "energy": 1,
+          "facet_max": 6,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 233,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 4,
+          "cracked": 1,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 240,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 1
+        }
+      ],
+      "pre_consumer_echo": [
+        false,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": true,
+      "environment": "fresh",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 0,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 233,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 2,
+          "energy": 1,
+          "facet_max": 6,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 231,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 2,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 240,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 2
+        }
+      ],
+      "pre_consumer_echo": [
+        false,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": true,
+      "environment": "two_short",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 4,
+          "cracked": 0,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 233,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 4,
+          "cracked": 2,
+          "energy": 1,
+          "facet_max": 6,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 231,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 4,
+          "cracked": 2,
+          "energy": 2,
+          "facet_max": 6,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 240,
+          "over": false,
+          "rng": -1279532536,
+          "staggered": false,
+          "weak": 2
+        }
+      ],
+      "pre_consumer_echo": [
+        false,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": false,
+      "environment": "fresh",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 0,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 265,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 1,
+          "energy": 1,
+          "facet_max": 7,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 262,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 1,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 269,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 1
+        }
+      ],
+      "pre_consumer_echo": [
+        false,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": false,
+      "environment": "two_short",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 5,
+          "cracked": 0,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 265,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 5,
+          "cracked": 1,
+          "energy": 1,
+          "facet_max": 7,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 262,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 5,
+          "cracked": 1,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 269,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 1
+        }
+      ],
+      "pre_consumer_echo": [
+        false,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": true,
+      "environment": "fresh",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 0,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 262,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 2,
+          "energy": 1,
+          "facet_max": 7,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 260,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 0,
+          "cracked": 2,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 269,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 2
+        }
+      ],
+      "pre_consumer_echo": [
+        false,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": true,
+      "environment": "two_short",
+      "producer_views": [
+        {
+          "block": 0,
+          "chips": 5,
+          "cracked": 0,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            901,
+            902,
+            903
+          ],
+          "hp": 262,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 5,
+          "cracked": 2,
+          "energy": 1,
+          "facet_max": 7,
+          "hand": [
+            900,
+            902,
+            903
+          ],
+          "hp": 260,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 0
+        },
+        {
+          "block": 0,
+          "chips": 5,
+          "cracked": 2,
+          "energy": 2,
+          "facet_max": 7,
+          "hand": [
+            900,
+            901,
+            903
+          ],
+          "hp": 269,
+          "over": false,
+          "rng": 552033277,
+          "staggered": false,
+          "weak": 2
+        }
+      ],
+      "pre_consumer_echo": [
+        false,
+        true,
+        true
+      ],
+      "full_state_initial_equal": true
+    }
+  ],
+  "cycle": [
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": false,
+      "environment": "empty",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [],
+        "hp": 240,
+        "over": false,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": false,
+      "environment": "stock",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [
+          1000
+        ],
+        "hp": 240,
+        "over": false,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": false,
+      "environment": "reshuffle",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [
+          1000
+        ],
+        "hp": 240,
+        "over": false,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": false,
+      "environment": "lethal",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [],
+        "hp": 0,
+        "over": true,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": false,
+      "environment": "thorns",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [],
+        "hp": 226,
+        "over": true,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": true,
+      "environment": "empty",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 1,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [],
+        "hp": 239,
+        "over": false,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": true,
+      "environment": "stock",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 1,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [
+          1000
+        ],
+        "hp": 239,
+        "over": false,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": true,
+      "environment": "reshuffle",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 1,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [
+          1000
+        ],
+        "hp": 239,
+        "over": false,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": true,
+      "environment": "lethal",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [],
+        "hp": 0,
+        "over": true,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 0,
+      "up": true,
+      "environment": "thorns",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [],
+        "hp": 225,
+        "over": true,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": false,
+      "environment": "empty",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [],
+        "hp": 269,
+        "over": false,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": false,
+      "environment": "stock",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [
+          1000
+        ],
+        "hp": 269,
+        "over": false,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": false,
+      "environment": "reshuffle",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [
+          1000
+        ],
+        "hp": 269,
+        "over": false,
+        "rng": -1911368206,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": false,
+      "environment": "lethal",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [],
+        "hp": 0,
+        "over": true,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": false,
+      "environment": "thorns",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [],
+        "hp": 255,
+        "over": true,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": true,
+      "environment": "empty",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 1,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [],
+        "hp": 268,
+        "over": false,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": true,
+      "environment": "stock",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 1,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [
+          1000
+        ],
+        "hp": 268,
+        "over": false,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": true,
+      "environment": "reshuffle",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 1,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [
+          1000
+        ],
+        "hp": 268,
+        "over": false,
+        "rng": -1911368206,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": true,
+      "environment": "lethal",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [],
+        "hp": 0,
+        "over": true,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 0,
+      "vow": 5,
+      "up": true,
+      "environment": "thorns",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [],
+        "hp": 254,
+        "over": true,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": false,
+      "environment": "empty",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [],
+        "hp": 240,
+        "over": false,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": false,
+      "environment": "stock",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [
+          1000
+        ],
+        "hp": 240,
+        "over": false,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": false,
+      "environment": "reshuffle",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [
+          1000
+        ],
+        "hp": 240,
+        "over": false,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": false,
+      "environment": "lethal",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [],
+        "hp": 0,
+        "over": true,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": false,
+      "environment": "thorns",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [],
+        "hp": 226,
+        "over": true,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": true,
+      "environment": "empty",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [],
+        "hp": 239,
+        "over": false,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": true,
+      "environment": "stock",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [
+          1000
+        ],
+        "hp": 239,
+        "over": false,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": true,
+      "environment": "reshuffle",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [
+          1000
+        ],
+        "hp": 239,
+        "over": false,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": true,
+      "environment": "lethal",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [],
+        "hp": 0,
+        "over": true,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 0,
+      "up": true,
+      "environment": "thorns",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 6,
+        "hand": [],
+        "hp": 225,
+        "over": true,
+        "rng": -1279532536,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": false,
+      "environment": "empty",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [],
+        "hp": 269,
+        "over": false,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": false,
+      "environment": "stock",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [
+          1000
+        ],
+        "hp": 269,
+        "over": false,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": false,
+      "environment": "reshuffle",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [
+          1000
+        ],
+        "hp": 269,
+        "over": false,
+        "rng": -1911368206,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": false,
+      "environment": "lethal",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [],
+        "hp": 0,
+        "over": true,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": false,
+      "environment": "thorns",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [],
+        "hp": 255,
+        "over": true,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": true,
+      "environment": "empty",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [],
+        "hp": 268,
+        "over": false,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": true,
+      "environment": "stock",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [
+          1000
+        ],
+        "hp": 268,
+        "over": false,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": true,
+      "environment": "reshuffle",
+      "full_trace_equal": true,
+      "steps": 2,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [
+          1000
+        ],
+        "hp": 268,
+        "over": false,
+        "rng": -1911368206,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": true,
+      "environment": "lethal",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [],
+        "hp": 0,
+        "over": true,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    },
+    {
+      "aspect": 1,
+      "vow": 5,
+      "up": true,
+      "environment": "thorns",
+      "full_trace_equal": true,
+      "steps": 1,
+      "same_action_self_draw": false,
+      "first_view": {
+        "block": 0,
+        "chips": 0,
+        "cracked": 0,
+        "energy": 2,
+        "facet_max": 7,
+        "hand": [],
+        "hp": 254,
+        "over": true,
+        "rng": 552033277,
+        "staggered": false,
+        "weak": 0
+      }
+    }
+  ],
+  "limits": [
+    "Refutes exact old-producer aliases in the declared common context, not every closed-family union.",
+    "Counterexamples plus exact source loop expansion, not a newly trained abstract transition model.",
+    "All full states, native events, costs, ordering and RNG are retained in raw.",
+    "No claim that constructed initial chip states occur with adequate natural population support.",
+    "No closed experiment is rerun; no prior terminal or admission metric is changed."
+  ],
+  "packages_admitted": 0,
+  "p9_certified": false
+}

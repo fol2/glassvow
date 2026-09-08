@@ -1,0 +1,88 @@
+{
+  "kind": "REUNION_LINEAGE_AND_COLD_BYTE_AUDIT_NOT_NEW_RESEARCH",
+  "observed_scientific_frontier": "0726f9e4eecd84ede09ae587befd1d216c038ab1",
+  "verified_checkout": "14f0add90ac7c157f186b5558cbba1918f6c1312",
+  "scope": "Known checkpoints in this conversation and mounted recovery inventory; not every unobserved conversation or machine.",
+  "known_checkpoint_count": 28,
+  "ancestor_count": 24,
+  "unresolved_references": [],
+  "divergent_files_preserved": [
+    {
+      "path": "research/p9-six-route/SESSION-HANDOFF.md",
+      "git_blob": "e1d4e0bc2d8570f2aeafe063749eb0f38d2b74c1",
+      "status": "PRESERVE_DIVERGENT_BYTES",
+      "archived_path": "research/p9-six-route/reunion-20260908/divergent/a9bda8e938c011a36e254ca7b8198bdfeed8988d/research/p9-six-route/SESSION-HANDOFF.md",
+      "bytes": 6205,
+      "sha256": "6fe0786d42f1d27ae5d02424c6973b4580cab985b2890e7b6f6fca659964ea5d"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-STATE.json",
+      "git_blob": "85f22216e0fb09c272ba7d980260210ce2bb9677",
+      "status": "PRESERVE_DIVERGENT_BYTES",
+      "archived_path": "research/p9-six-route/reunion-20260908/divergent/a9bda8e938c011a36e254ca7b8198bdfeed8988d/research/p9-six-route/SESSION-STATE.json",
+      "bytes": 5515,
+      "sha256": "7d6f58e1be59c60d1fab534bf62bdc90ee2005241fdf14d72eaf39cb42eba63f"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-HANDOFF.md",
+      "git_blob": "6ee5294340a874d9071ff1b2b4f69a7547fa4874",
+      "status": "PRESERVE_DIVERGENT_BYTES",
+      "archived_path": "research/p9-six-route/reunion-20260908/divergent/a0e15b238ea21002d208b63aecebd7f95fc6dc31/research/p9-six-route/SESSION-HANDOFF.md",
+      "bytes": 4592,
+      "sha256": "4a37781a11b07b254d8ac7513d0fde1163293892bf2995fb51aece355f7deabc"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-STATE.json",
+      "git_blob": "c5fd42215d32cc1856f55141d5dbc9459a85eb34",
+      "status": "PRESERVE_DIVERGENT_BYTES",
+      "archived_path": "research/p9-six-route/reunion-20260908/divergent/a0e15b238ea21002d208b63aecebd7f95fc6dc31/research/p9-six-route/SESSION-STATE.json",
+      "bytes": 3075,
+      "sha256": "ac805bec3326f674f79c3189fa1e8c02a06e2cc14eb1e7286c6b46a88152a35e"
+    },
+    {
+      "path": "research/p9-six-route/command-chain-20260908/recovery-v1/REMOTE-READBACK.json",
+      "git_blob": "4b1e03f8e608a579e057d43d28d3c90c7dbb01ca",
+      "status": "PRESERVE_DIVERGENT_BYTES",
+      "archived_path": "research/p9-six-route/reunion-20260908/divergent/a0e15b238ea21002d208b63aecebd7f95fc6dc31/research/p9-six-route/command-chain-20260908/recovery-v1/REMOTE-READBACK.json",
+      "bytes": 1397,
+      "sha256": "2269426950c7f14f591f5909c2036aed18840f81c61fcce6e418d3421824dff2"
+    },
+    {
+      "path": ".github/workflows/p9-research-runtime-bundle.yml",
+      "git_blob": "172d31e2df2a9d00498ac1635e11033807680b15",
+      "status": "PRESERVE_DIVERGENT_BYTES",
+      "archived_path": "research/p9-six-route/reunion-20260908/divergent/1aeddb842fe31ce00001b43bfb22521aad6a8281/.github/workflows/p9-research-runtime-bundle.yml",
+      "bytes": 2388,
+      "sha256": "dc9c01ac06240cf416a5a206131969db520dafdc370bf56f4939db272cd411f3"
+    },
+    {
+      "path": ".github/workflows/p9-research-runtime-bundle.yml",
+      "git_blob": "f9281dcaaf0fc6e4a98e6ec94ff8b80511165c84",
+      "status": "PRESERVE_DIVERGENT_BYTES",
+      "archived_path": "research/p9-six-route/reunion-20260908/divergent/4e2c72d760beb78683e540f114250989e20e5f0a/.github/workflows/p9-research-runtime-bundle.yml",
+      "bytes": 4241,
+      "sha256": "104ced5fb69c49ef88e6c9761a012c93581a9a6897187cee66b78569227b940f"
+    }
+  ],
+  "cold_checkout_file_count": 370,
+  "product_domain_content_diff_from_main": [],
+  "scientific_state_sha256": "bc9660411fda26f15cbd737509092de8522b43cf66a49d40f33228675b49b9a2",
+  "raw_gap_not_repaired": {
+    "completed_rows": 2048,
+    "exposed_assignment_reproduction_not_fresh_confirmation": true,
+    "raw_archive_bytes": 518348,
+    "raw_archive_sha256": "b866d60d7d9dad9bbd83610c145e242ed026bf046806ca5c7cab83f4b58d326c",
+    "raw_archive_remote_complete": false
+  },
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "scientific_readers_rerun": false,
+  "decision": "Keep newest accumulated scientific state. Archive divergent bytes without applying obsolete handoff/workflow instructions. No destructive rebase or product merge.",
+  "result_identity": {
+    "bytes": 118679,
+    "sha256": "eac378be547583729ec666ac3ab41d23f0529d9179d3977c760545a0e0f38c49",
+    "git_blob": "2ef6f2485690904610449647c58f616ca47d7a8d"
+  }
+}

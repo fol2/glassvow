@@ -1,0 +1,112 @@
+{
+  "status": "P9_UNFINISHED_COMMAND_NEGATIVE_AND_EXACT_SOURCE_SCOPE_VERIFIED",
+  "branch": "research/p9-six-route-local-20260905",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "verified_measurement_head": "46401783b39ada692ce9b990f9deda342b79e7dd",
+  "candidate_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "descriptor_sha256": "2cfe1d8ff00d5ff695664c597be3a93e3960f39732fa049eac82b9397184bab7",
+  "validation": {
+    "assigned_rows": 1024,
+    "durable_compact_rows": 1024,
+    "missing_compact_rows": 0,
+    "original_raw_recovered": false,
+    "rerun_or_refit": false
+  },
+  "original_arms": {
+    "completed_rows": 2048,
+    "exposed_assignment_reproduction_not_fresh_confirmation": true,
+    "raw_archive_bytes": 518348,
+    "raw_archive_sha256": "b866d60d7d9dad9bbd83610c145e242ed026bf046806ca5c7cab83f4b58d326c",
+    "raw_archive_remote_complete": false
+  },
+  "prior_finite_audit": {
+    "native_assertions": 677,
+    "complete_raw_remote_verified": true,
+    "receipt": "source-package-audit-20260908/AUDIT-REMOTE-READBACK.json"
+  },
+  "followup": {
+    "locality_cases": 60,
+    "omitted_field_mutations": 17,
+    "native_assertions_reexamined": 677,
+    "complete_raw_remote_verified": true,
+    "reader_tests_passed": 12,
+    "archive_sha256": "b3705b716d6c5597b216d6ed56f0fb2349a17dd9d2a43896397cd2a89e18dfea",
+    "receipt": "source-package-audit-20260908/FOLLOWUP-REMOTE-READBACK.json"
+  },
+  "enactment": {
+    "runs_reproduced": 9,
+    "requested_contexts": 12,
+    "temporal_witnesses": 10,
+    "factual_matches": 10,
+    "counterfactual_actions": 40,
+    "dormant_exact_null_pairs": 10,
+    "new_independent_samples": 0,
+    "complete_emitted_raw_remote_verified": true,
+    "raw_archive_bytes": 29328,
+    "raw_archive_sha256": "61af4dc208880364c668ec724519e0bc639c44e447f1e106c4fad3893a3ca31b",
+    "results_sha256": "8778d516aee84d08f1a316655b3e05899041579ca63c19746a6496e3b816eb1d",
+    "receipt": "natural-enactment-20260908/REMOTE-READBACK.json",
+    "absent_contexts": [
+      {
+        "aspect": "ashwarden",
+        "vow": 0,
+        "route": "hand",
+        "seed": 45010004
+      },
+      {
+        "aspect": "ashwarden",
+        "vow": 5,
+        "route": "cycle",
+        "seed": 45010000
+      }
+    ]
+  },
+  "review": {
+    "status": "SELF_REVIEW_ACCEPT_LIMITED_CAPTURE_WITH_CHECKED_READER",
+    "kind": "SELF_REVIEW_NOT_INDEPENDENT",
+    "owner_authority_comment": 5586269454,
+    "record": "self-review-20260908/REVIEW.json",
+    "independent_approval": false,
+    "scope": "Owner-authorised author review permits continuation, not relaxed scientific independence, altered release protection or P9 admission."
+  },
+  "no_active_research_processes": true,
+  "p9_certified": false,
+  "packages_admitted": 0,
+  "remaining_milestones": [
+    "Six complete viable/reachable/distinct package certificates, including canonical and proper-subset obligations",
+    "Seven-direction detector admission",
+    "Corrected independent confirmation, unrestricted endpoint retention, signed controls, ceilings and hard guardrails",
+    "Minimum lifecycle, exact-head review under current owner authority, exact-product integration and #108 receipt"
+  ],
+  "exact_next_action": "Complete the full observable package comparison for Chisel/coupled-Shatter/Echo against the exact two Cracked/Echo contracts and relevant closed Shatter contracts, and the growth-plus-draw composition. Preserve the 672-row negative, source-only limitations and historical scopes. Require a checkable equivalence/decomposition witness or distinguishing trace before new admission observations; no repeated selected-witness study, v25, frozen model refit or completed-panel replay.",
+  "command_chain": {
+    "source_freeze": "7b39ebd148bdc7ee23c7e3a4abff4cab79040d71",
+    "verified_source_head": "dada9b6b4a069b6478362e104cb0701ff11aecd1",
+    "status": "COMMAND_CONTRACT_FAIL",
+    "rows": 672,
+    "fixtures": 80,
+    "states": 822,
+    "checks": 312,
+    "failed_checks": 64,
+    "all_failed_checks_explained": 64,
+    "raw_bytes": 4374339,
+    "raw_sha256": "62ae02bd4fda08381ce61a4a40b88a98391d7476b6b33d090bc896b622663785",
+    "result_sha256": "81f5261c118eced66482a78857e3d1335beed80abc5e83d97215c5b9e6289e8f",
+    "raw_remote_complete": true,
+    "readback": "command-chain-20260908/recovery-v1/REMOTE-READBACK.json",
+    "new_native_runs_this_continuation": 0,
+    "new_independent_samples": 0,
+    "scope": "The fixed whole-command zero-interaction controls are falsified; not global Facet futility. Positive health interaction can be block-only and post-consumer Shatter cannot enable the preceding hit. Do not edit the frozen fixture, signs or treatment to rescue this terminal."
+  },
+  "source_scope": {
+    "source_head": "d364e49d310ebcb354d808ea952fab283c165a53",
+    "published_evidence_head": "9be033490c4f4b7ac6ccdcf466571289c2cf31f6",
+    "result_sha256": "9c6e0b83e28568fa4029e01d4a31b89653a9950be1499c746994f02c852d4d0a",
+    "tests_passed": 8,
+    "new_native_runs": 0,
+    "complete_closed_family_quotient_established": false,
+    "readback": "source-scope-20260908/REMOTE-READBACK.json",
+    "exact_closure_scope": "source-scope-20260908/EXACT-CLOSURE-SCOPE.json",
+    "decision": "Echo intrinsic law is inherited; old rejected Resonance used eclipseSlash/warCry, not Chisel. Same consumer is insufficient for a full-package alias conclusion. Cycle retains growth but adds draw; full union/decomposition proof is unresolved."
+  }
+}

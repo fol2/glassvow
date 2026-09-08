@@ -1,0 +1,35 @@
+{
+  "kind": "COLD_CHECKOUT_COMPLETE_CAPTURE_AND_OFFLINE_READBACK",
+  "source_head": "14f0add90ac7c157f186b5558cbba1918f6c1312",
+  "freeze_head": "0726f9e4eecd84ede09ae587befd1d216c038ab1",
+  "workflow_run": 34265519152,
+  "parts_matched": 6,
+  "archive_bytes": 32596,
+  "archive_sha256": "ddc8773e258fdc75dcadea24e01de9e6b8fa9895282b810f7a754c2651fbd703",
+  "original_files": 24,
+  "raw_bytes": 1861970,
+  "raw_sha256": "70176a36ba032b4434bb4baee35e3963112c63d8b42f7aa96b74de1f12a59b09",
+  "derived": {
+    "COMPOSITION.json": {
+      "bytes": 14831,
+      "sha256": "da5a355f05294c4e400e6c6e8fc1b83d134c370ad76d320d83b13bc22da0952c",
+      "git_blob": "f711e2c5ea26c79212ae4e0157b5b0a969de6bf8"
+    },
+    "NATIVE.json": {
+      "bytes": 40219,
+      "sha256": "c7530f9c5368b3783a504aefa33a724d3b320ba1b073ff0b60078b7b1fa4478d",
+      "git_blob": "6318a0133c487c6d5e1a90d7b196abbd306db27a"
+    },
+    "CAPTURE-REVIEW.json": {
+      "bytes": 445,
+      "sha256": "b3ec0df99047aafacc423ba0d67319e2abf0f3d0a3e678e781e291e517929290",
+      "git_blob": "b9b31f5b453a6e1aafe56b8b9d0957093c937dcf"
+    }
+  },
+  "tests_passed": 29,
+  "native_runs_in_this_workflow": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "scope": "Full capture reconstructed, source identities and original readout bytes matched. This is byte/readout verification, not independent semantic or P9 approval."
+}

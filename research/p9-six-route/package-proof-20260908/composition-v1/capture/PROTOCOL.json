@@ -1,0 +1,95 @@
+{
+  "status": "FROZEN_NATIVE_DISTINGUISHING_TRACE_QUERY_NOT_PACKAGE_COHORT",
+  "question": "Resolve the named full-observable Facet alias comparison and validate exact guarded Cycle decomposition, without redoing the completed shortest-word/subsequence study.",
+  "source_reference": "58e8a73b6679516c6166bb85e16c9446230f9fe5",
+  "candidate_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "source_sha256": {
+    "read_native.py": "836a269b833d191a8004cda81e52215313fa1e27e682bf4b7bd4f5c1daae3244",
+    "test_compose.py": "5224f55217c323ea770df93aca1efc5f0982d65308f940f79a35adebf86f26ff",
+    "compose.py": "c2a8c21a2b324c968ef4b0a6c387e592d0a00527e538e8649fc260994e40e649",
+    "expanded_rules.gd": "b74bfae62200dbb3d22062afa4eb3e0ca9485ab579f328e4c01f228b1615286d",
+    "probe.gd": "20a696eda64ea35f4d9e840bf447f4e3b9e016f285d6e3d3ea390ceaa5effeb6"
+  },
+  "dependency_sha256": {
+    "domain/rules/combat.gd": "a6fd99eb53030d3cf1401153bdeceec8b86ccc2af8b7643481855c681906f2ba",
+    "causal_probe.gd": "c6aa9a9075b11e2e35015fe379088caa8f4ea61ce4b271164aea8160ab4bdc7e",
+    "diagnostic_rules.gd": "c168a2d6741284db419429537b83dcfae20832029644b3fd67944bf709104144",
+    "health_accounting.gd": "61168bfeb608dcb0f417a69356b0a147ff8fca5e70a924cd9bdbc521bc497d5f"
+  },
+  "native_traces": 128,
+  "facet": {
+    "contexts": 16,
+    "producers": [
+      "chisel",
+      "eclipseSlash",
+      "warCry"
+    ],
+    "consumer": "resonantLance",
+    "aspects": [
+      0,
+      1
+    ],
+    "vows": [
+      0,
+      5
+    ],
+    "upgrades": [
+      false,
+      true
+    ],
+    "environments": [
+      "fresh",
+      "two_short"
+    ],
+    "commands": [
+      "producer",
+      "consumer",
+      "endTurn"
+    ],
+    "initial": "Exact native rootheart start; common cleared status/block and declared hand/deck. two_short sets only initial chips=facet_max-2. No intervening edits."
+  },
+  "cycle": {
+    "contexts": 40,
+    "compared": [
+      "exact_candidate",
+      "mechanical_two_effect_loop_expansion"
+    ],
+    "environments": [
+      "empty",
+      "stock",
+      "reshuffle",
+      "lethal",
+      "thorns"
+    ],
+    "aspects": [
+      0,
+      1
+    ],
+    "vows": [
+      0,
+      5
+    ],
+    "upgrades": [
+      false,
+      true
+    ],
+    "commands": [
+      "momentum",
+      "endTurn only when combat remains active"
+    ]
+  },
+  "seed": 48080001,
+  "watchdog_seconds": 120,
+  "new_independent_samples": 0,
+  "new_whole_runs": 0,
+  "decision": "Any unexpected mismatch or native diagnostic blocks this measurement; retain complete raw and stop before admission. Alias refutation is only versus exact declared producer-role comparisons, not every closed union. Cycle decomposition neither erases parameters nor equates one-card play to two separate card plays.",
+  "forbidden": [
+    "prior 672-row replay or expected-sign changes",
+    "new population or protected cohorts",
+    "candidate tuning",
+    "old closure relabelling",
+    "new independent-review claim"
+  ],
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT under #421 comment 5586269454"
+}

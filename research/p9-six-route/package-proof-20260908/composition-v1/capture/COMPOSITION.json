@@ -1,0 +1,497 @@
+{
+  "status": "GUARDED_COMPOSITION_PROVED_NOT_FULL_CLOSED_PACKAGE_EQUIVALENCE",
+  "inputs": {
+    "base/content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "base/domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+    "candidate/content/full-content.json": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+    "candidate/domain/rules/combat.gd": "a6fd99eb53030d3cf1401153bdeceec8b86ccc2af8b7643481855c681906f2ba"
+  },
+  "exact_common_blocks": {
+    "play_card": "ac772a2f84cc0488d83016b987a2cb56fe6c257d024d189d0852e0ff600e7b44",
+    "_apply_effect": "e32ed3b81921862ebddb641d2fc0769fd67863782f56cad196cc2224dec2222e",
+    "draw_cards": "2d866b75392b4496057bebb1d19f9a37ff2e6aed4b3d328ea7ffbadfb2955b92",
+    "hit_enemy": "2d76b587e295f51820f6e34ad85761d8cfbf800dc57b5ec798fefe57c80f7456",
+    "apply_chips": "f95a7b8f8be947ae37c581a39cbd13ad5ba76083f4a17f959613023b388bb0d2",
+    "_shatter_enemy": "c813b67e2e3b8bddfd5292422ea452a9f2a710f64d2ebe27c3f047318fd2f876",
+    "eff_cost": "360d56cfe50b27d9ae431e1554c6ce2aff47d3983420c4119bf851c02ec5fa47",
+    "can_play": "962758af73a7caa4c8c809e816eac9647d269e9a659eb4abcbec4265922481c4",
+    "end_turn": "a85e813a6df286c1cc8b03fe813500742cd915ed91a2a581e601b23c3d53455c",
+    "start_combat": "f0b1f4cddf43b39922b9690a9030d7c23e61c54911da64a5ccd1a2a0aca81a1d",
+    "momentum": "684077a5d2fda798114df8448af7752ad1c0b1caad55ec21b288508851acfe91",
+    "shatterEcho": "1fd264453e143cd2066dfc54102a34dd9d0d4099572badb7a1865f08e09daad9"
+  },
+  "cards": {
+    "chisel": [
+      {
+        "upgraded": false,
+        "old": {
+          "type": "attack",
+          "rarity": "starter",
+          "cost": 1,
+          "target": "enemy",
+          "chip": 1,
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 4
+            }
+          ],
+          "name": "Chisel",
+          "text": "Deal @4@ damage. Chip 1 extra Facet."
+        },
+        "candidate": {
+          "type": "attack",
+          "rarity": "starter",
+          "cost": 1,
+          "target": "enemy",
+          "chip": 1,
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 4
+            }
+          ],
+          "name": "Chisel",
+          "text": "Deal @4@ damage. Chip 1 extra Facet."
+        },
+        "exact_changed_keys": []
+      },
+      {
+        "upgraded": true,
+        "old": {
+          "type": "attack",
+          "rarity": "starter",
+          "cost": 1,
+          "target": "enemy",
+          "chip": 1,
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 7
+            }
+          ],
+          "name": "Chisel",
+          "text": "Deal @7@ damage. Chip 1 extra Facet."
+        },
+        "candidate": {
+          "type": "attack",
+          "rarity": "starter",
+          "cost": 1,
+          "target": "enemy",
+          "chip": 1,
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 7
+            }
+          ],
+          "name": "Chisel",
+          "text": "Deal @7@ damage. Chip 1 extra Facet."
+        },
+        "exact_changed_keys": []
+      }
+    ],
+    "resonantLance": [
+      {
+        "upgraded": false,
+        "old": {
+          "type": "attack",
+          "rarity": "rare",
+          "cost": 1,
+          "target": "enemy",
+          "locked": "paneBreaker",
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "special",
+              "id": "shatterEcho",
+              "n": 7
+            }
+          ],
+          "name": "Resonant Lance",
+          "text": "Deal @7@ damage. Deals double to Staggered or Cracked glass."
+        },
+        "candidate": {
+          "type": "attack",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "enemy",
+          "locked": "paneBreaker",
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "special",
+              "id": "shatterEcho",
+              "n": 7
+            }
+          ],
+          "name": "Resonant Lance",
+          "text": "Deal @7@ damage. Deals double to Staggered or Cracked glass."
+        },
+        "exact_changed_keys": [
+          "rarity"
+        ]
+      },
+      {
+        "upgraded": true,
+        "old": {
+          "type": "attack",
+          "rarity": "rare",
+          "cost": 1,
+          "target": "enemy",
+          "locked": "paneBreaker",
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "special",
+              "id": "shatterEcho",
+              "n": 10
+            }
+          ],
+          "name": "Resonant Lance",
+          "text": "Deal @10@ damage. Deals double to Staggered or Cracked glass."
+        },
+        "candidate": {
+          "type": "attack",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "enemy",
+          "locked": "paneBreaker",
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "special",
+              "id": "shatterEcho",
+              "n": 10
+            }
+          ],
+          "name": "Resonant Lance",
+          "text": "Deal @10@ damage. Deals double to Staggered or Cracked glass."
+        },
+        "exact_changed_keys": [
+          "rarity"
+        ]
+      }
+    ],
+    "momentum": [
+      {
+        "upgraded": false,
+        "old": {
+          "type": "attack",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "slash",
+          "effects": [
+            {
+              "kind": "special",
+              "id": "momentum",
+              "n": 6,
+              "grow": 4
+            }
+          ],
+          "name": "Honing Edge",
+          "text": "Deal @6@ damage. Each play, this card gains +4 damage this combat."
+        },
+        "candidate": {
+          "type": "attack",
+          "rarity": "common",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "slash",
+          "effects": [
+            {
+              "kind": "special",
+              "id": "momentum",
+              "n": 0,
+              "grow": 14
+            },
+            {
+              "kind": "draw",
+              "n": 1
+            }
+          ],
+          "name": "Honing Edge",
+          "text": "Deal @0@ damage. Each play, this card gains +14 damage this combat. Draw 1 card."
+        },
+        "exact_changed_keys": [
+          "effects",
+          "rarity",
+          "text"
+        ]
+      },
+      {
+        "upgraded": true,
+        "old": {
+          "type": "attack",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "slash",
+          "effects": [
+            {
+              "kind": "special",
+              "id": "momentum",
+              "n": 8,
+              "grow": 6
+            }
+          ],
+          "name": "Honing Edge",
+          "text": "Deal @8@ damage. Each play, this card gains +6 damage this combat."
+        },
+        "candidate": {
+          "type": "attack",
+          "rarity": "common",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "slash",
+          "effects": [
+            {
+              "kind": "special",
+              "id": "momentum",
+              "n": 1,
+              "grow": 17
+            },
+            {
+              "kind": "draw",
+              "n": 1
+            }
+          ],
+          "name": "Honing Edge",
+          "text": "Deal @1@ damage. Each play, this card gains +17 damage this combat. Draw 1 card."
+        },
+        "exact_changed_keys": [
+          "effects",
+          "rarity",
+          "text"
+        ]
+      }
+    ],
+    "eclipseSlash": [
+      {
+        "upgraded": false,
+        "old": {
+          "type": "attack",
+          "rarity": "starter",
+          "cost": 2,
+          "target": "enemy",
+          "vfx": "slash",
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 7
+            },
+            {
+              "kind": "status",
+              "who": "target",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "Eclipse Slash",
+          "text": "Deal @7@ damage. Apply 1 Cracked."
+        },
+        "candidate": {
+          "type": "attack",
+          "rarity": "starter",
+          "cost": 2,
+          "target": "enemy",
+          "vfx": "slash",
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 7
+            },
+            {
+              "kind": "status",
+              "who": "target",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "Eclipse Slash",
+          "text": "Deal @7@ damage. Apply 1 Cracked."
+        },
+        "exact_changed_keys": []
+      },
+      {
+        "upgraded": true,
+        "old": {
+          "type": "attack",
+          "rarity": "starter",
+          "cost": 2,
+          "target": "enemy",
+          "vfx": "slash",
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 9
+            },
+            {
+              "kind": "status",
+              "who": "target",
+              "id": "vulnerable",
+              "n": 2
+            }
+          ],
+          "name": "Eclipse Slash",
+          "text": "Deal @9@ damage. Apply 2 Cracked."
+        },
+        "candidate": {
+          "type": "attack",
+          "rarity": "starter",
+          "cost": 2,
+          "target": "enemy",
+          "vfx": "slash",
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 9
+            },
+            {
+              "kind": "status",
+              "who": "target",
+              "id": "vulnerable",
+              "n": 2
+            }
+          ],
+          "name": "Eclipse Slash",
+          "text": "Deal @9@ damage. Apply 2 Cracked."
+        },
+        "exact_changed_keys": []
+      }
+    ],
+    "warCry": [
+      {
+        "upgraded": false,
+        "old": {
+          "type": "skill",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "allEnemies",
+          "vfx": "void",
+          "effects": [
+            {
+              "kind": "status",
+              "who": "allEnemies",
+              "id": "weak",
+              "n": 1
+            },
+            {
+              "kind": "status",
+              "who": "allEnemies",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "Shatterhymn",
+          "text": "Apply 1 Dimmed and 1 Cracked to ALL enemies."
+        },
+        "candidate": {
+          "type": "skill",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "allEnemies",
+          "vfx": "void",
+          "effects": [
+            {
+              "kind": "status",
+              "who": "allEnemies",
+              "id": "weak",
+              "n": 1
+            },
+            {
+              "kind": "status",
+              "who": "allEnemies",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "Shatterhymn",
+          "text": "Apply 1 Dimmed and 1 Cracked to ALL enemies."
+        },
+        "exact_changed_keys": []
+      },
+      {
+        "upgraded": true,
+        "old": {
+          "type": "skill",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "allEnemies",
+          "vfx": "void",
+          "effects": [
+            {
+              "kind": "status",
+              "who": "allEnemies",
+              "id": "weak",
+              "n": 2
+            },
+            {
+              "kind": "status",
+              "who": "allEnemies",
+              "id": "vulnerable",
+              "n": 2
+            }
+          ],
+          "name": "Shatterhymn",
+          "text": "Apply 2 Dimmed and 2 Cracked to ALL enemies."
+        },
+        "candidate": {
+          "type": "skill",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "allEnemies",
+          "vfx": "void",
+          "effects": [
+            {
+              "kind": "status",
+              "who": "allEnemies",
+              "id": "weak",
+              "n": 2
+            },
+            {
+              "kind": "status",
+              "who": "allEnemies",
+              "id": "vulnerable",
+              "n": 2
+            }
+          ],
+          "name": "Shatterhymn",
+          "text": "Apply 2 Dimmed and 2 Cracked to ALL enemies."
+        },
+        "exact_changed_keys": []
+      }
+    ]
+  },
+  "witness": {
+    "prefix_sha256": "d5abf8a8b542cb523ec54c161bd73e792f51ab7c633108de4ae1cc099570d586",
+    "suffix_sha256": "4c45cd26a4202da6ca4cb3649735d96a1b05dad571695c7c7c54f873f02bc8fb",
+    "loop_sha256": "a6a556b33d1e31d83f0cc4efe98201315ed0a16bc60a73235a241542b2355b48",
+    "unrolled_sha256": "1fbd3f67b7dd4a5f66dc48d06e6257d5cea9124b45e2afd8307808425737668e",
+    "transformed_combat_sha256": "09dabdd01a2ba4ec98bc9573a4591e5f5ee79573b89bae71463c55bee14cbec9"
+  },
+  "theorem": {
+    "cycle": "Pre; G(n,grow); if not over then Draw(1); Post. Every event, RNG change, cost, CardInst identity and shared hook is preserved. The loop checks over before G as well.",
+    "proof": "For length two, guarded loop expansion executes exactly the same ordered calls with the same object arguments; prefix and suffix bytes are identical. Other lengths use the original loop. Step identity implies equality of finite command traces from identical complete states and content.",
+    "domain": "Well-typed immutable resolved effect arrays and engine semantics of the pinned candidate; no total-correctness claim for malformed runtime objects.",
+    "self_draw": "In a valid single-zone state, the currently played instance is outside hand/draw/discard during Draw(1), so this draw cannot return that same instance. Subsequent ordinary turn/draw transitions can return it.",
+    "termination": "The common over guard is retained. Draw may be skipped after lethal damage; chip flush follows the draw, not vice versa.",
+    "historical_limit": "This proves composition of inherited operators, not equivalence to the frozen old Honing card, the old repeat-extra-chip proposal, or a two-card player sequence. Acquisition, costs, card-play triggers and numeric parameters are NOT erased."
+  },
+  "decisions": {
+    "cycle_new_independent_effect_operator": false,
+    "cycle_exact_guarded_effect_composition": true,
+    "cycle_identical_to_old_whole_card": false,
+    "cycle_self_redraw_inside_own_action": false,
+    "facet_whole_acquisition_equivalent_to_old_card": false,
+    "all_closed_package_comparisons_complete": false,
+    "authorises_new_cohort": false,
+    "packages_admitted": 0,
+    "p9_certified": false
+  }
+}

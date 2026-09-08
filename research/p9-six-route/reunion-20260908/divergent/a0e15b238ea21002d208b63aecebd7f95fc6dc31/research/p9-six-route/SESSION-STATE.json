@@ -1,0 +1,61 @@
+{
+  "status": "P9_UNFINISHED_COMMAND_CONTRACT_FAIL_CLOSED_CANONICAL_PACKAGE_GATE_NEXT",
+  "branch": "research/p9-six-route-local-20260905",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "candidate_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "descriptor_sha256": "2cfe1d8ff00d5ff695664c597be3a93e3960f39732fa049eac82b9397184bab7",
+  "review": {
+    "status": "SELF_REVIEW_ACCEPT_LIMITED_CAPTURE_WITH_CHECKED_READER",
+    "kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+    "owner_exception_comment": 5586269454,
+    "receipt": "self-review-20260908/REVIEW.json",
+    "independent_review_obtained": false,
+    "independent_reviewer_not_an_execution_stop": true
+  },
+  "validation": {
+    "assigned_rows": 1024,
+    "durable_compact_rows": 1024,
+    "missing_compact_rows": 0,
+    "original_full_events_recovered": false,
+    "rerun_or_refit": false
+  },
+  "original_arms": {
+    "completed_rows": 2048,
+    "exposed_assignment_reproduction_not_fresh_confirmation": true,
+    "raw_archive_bytes": 518348,
+    "raw_archive_sha256": "b866d60d7d9dad9bbd83610c145e242ed026bf046806ca5c7cab83f4b58d326c",
+    "raw_archive_remote_complete": false
+  },
+  "prior_evidence": {
+    "finite_audit": "source-package-audit-20260908/AUDIT-REMOTE-READBACK.json",
+    "followup": "source-package-audit-20260908/FOLLOWUP-REMOTE-READBACK.json",
+    "selected_enactment": "natural-enactment-20260908/REMOTE-READBACK.json",
+    "measurement_head": "46401783b39ada692ce9b990f9deda342b79e7dd",
+    "selected_enactment_contexts": 12,
+    "observed_selected_contexts": 10,
+    "selected_absences": ["Ash Hand V0 seed45010004", "Ash Cycle V5 seed45010000"],
+    "new_independent_samples": 0
+  },
+  "command_chain": {
+    "status": "COMMAND_CONTRACT_FAIL",
+    "source_freeze": "7b39ebd148bdc7ee23c7e3a4abff4cab79040d71",
+    "evidence_head": "dada9b6b4a069b6478362e104cb0701ff11aecd1",
+    "rows": 672,
+    "fixtures": 80,
+    "failed_checks": 64,
+    "complete_raw_remote_verified": true,
+    "receipt": "command-chain-20260908/recovery-v1/REMOTE-READBACK.json",
+    "do_not_rerun": true,
+    "not_global_futility": true
+  },
+  "no_active_research_processes": true,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "remaining_milestones": [
+    "Six complete viable, reachable, distinct package certificates: canonical equivalence scope, complete native chain and subsets, population/policy support",
+    "Seven-direction detector admission",
+    "Corrected independent confirmation, unrestricted endpoint retention, signed controls, ceilings and hard guardrails",
+    "Minimum lifecycle, truthful review, exact-product integration and #108 receipt"
+  ],
+  "exact_next_action": "Complete the acceptance-mapped canonical/package gate against exact historical closure scopes and current source. First recover the actual historical law identifiers, not guessed paths. No native rerun of completed panels or 672 fixtures, no new selected-witness gallery, no sign relabelling, no refit. Continue under the existing author-self-review exception."
+}

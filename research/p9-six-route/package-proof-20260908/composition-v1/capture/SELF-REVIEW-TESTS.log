@@ -1,0 +1,28 @@
+test_absent_and_null_not_equal (test_compose.Tests.test_absent_and_null_not_equal) ... ok
+test_acquisition_retained (test_compose.Tests.test_acquisition_retained) ... ok
+test_body_changes_not_erased (test_compose.Tests.test_body_changes_not_erased) ... ok
+test_draw_not_scalar_erased (test_compose.Tests.test_draw_not_scalar_erased) ... ok
+test_duplicate_functions_rejected (test_compose.Tests.test_duplicate_functions_rejected) ... ok
+test_indented_comments_not_removed (test_compose.Tests.test_indented_comments_not_removed) ... ok
+test_other_special_arms_not_mixed (test_compose.Tests.test_other_special_arms_not_mixed) ... ok
+test_parameters_retained (test_compose.Tests.test_parameters_retained) ... ok
+test_unknown_null_is_not_ignored (test_compose.Tests.test_unknown_null_is_not_ignored) ... ok
+test_unrecognised_loop_fails (test_compose.Tests.test_unrecognised_loop_fails) ... ok
+test_unroll_keeps_two_death_guards (test_compose.Tests.test_unroll_keeps_two_death_guards) ... ok
+test_upgrade_overrides (test_compose.Tests.test_upgrade_overrides) ... ok
+test_complete_capture (test_native_reader.ReaderTests.test_complete_capture) ... ok
+test_duplicate_identity (test_native_reader.ReaderTests.test_duplicate_identity) ... ok
+test_event_loss_not_ignored (test_native_reader.ReaderTests.test_event_loss_not_ignored) ... ok
+test_false_terminal (test_native_reader.ReaderTests.test_false_terminal) ... ok
+test_illegal_consumer (test_native_reader.ReaderTests.test_illegal_consumer) ... ok
+test_initial_state_not_ignored (test_native_reader.ReaderTests.test_initial_state_not_ignored) ... ok
+test_intercommand_mutation (test_native_reader.ReaderTests.test_intercommand_mutation) ... ok
+test_missing_row (test_native_reader.ReaderTests.test_missing_row) ... ok
+test_other_aspect_stun (test_native_reader.ReaderTests.test_other_aspect_stun) ... ok
+test_rng_difference_not_erased (test_native_reader.ReaderTests.test_rng_difference_not_erased) ... ok
+test_stagger_discriminator_not_names (test_native_reader.ReaderTests.test_stagger_discriminator_not_names) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 2.591s
+
+OK

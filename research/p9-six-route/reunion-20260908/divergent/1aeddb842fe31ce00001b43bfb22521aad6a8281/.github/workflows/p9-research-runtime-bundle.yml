@@ -1,0 +1,62 @@
+name: P9 research runtime bundle
+
+on:
+  push:
+    branches: [research/p9-six-route-local-20260905]
+    paths: [.github/workflows/p9-research-runtime-bundle.yml]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p9-six-route-research-writer
+  cancel-in-progress: false
+
+jobs:
+  bundle:
+    name: Preserve exact composition capture and reproduce readers - no engine
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    permissions:
+      contents: write
+    steps:
+      - name: Check out exact committed source and evidence
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: true
+          lfs: false
+          sparse-checkout: |
+            domain
+            content
+            tools
+            research/p9-six-route
+      - name: Reconstruct and verify complete capture without native reruns
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 research/p9-six-route/package-proof-20260908/composition-v1/publish_capture.py
+      - name: Publish only the verified capture and readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$GITHUB_SHA"
+          root=research/p9-six-route/package-proof-20260908/composition-v1
+          git add -f "$root/capture" "$root/REMOTE-READBACK.json"
+          python3 - <<'PY'
+          import pathlib,subprocess
+          root='research/p9-six-route/package-proof-20260908/composition-v1/'
+          expected={str(p) for p in pathlib.Path(root+'capture').iterdir() if p.is_file()}|{root+'REMOTE-READBACK.json'}
+          actual=set(subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines())
+          if actual!=expected or len(actual)!=26:raise RuntimeError('STAGED_SCOPE')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'research(p9): publish full composition capture and exact cold readback'
+          git push origin "HEAD:refs/heads/$branch"
+          printf 'PUBLISHED_HEAD=%s\n' "$(git rev-parse HEAD)"
