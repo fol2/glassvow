@@ -5,13 +5,21 @@ extends SceneTree
 
 var _output: String = ""
 var _pose: String = "focused"
+var _focus_id: String = ""
 var _cache: String = ""
 var _no_shadows: bool = false
 var _continuous: bool = false
+var _overlays: bool = true
+var _batches: bool = true
+var _audit_batches: bool = false
+var _audit_procedural: bool = false
 var _steps: int = 0
 var _exercise: bool = false
 var _measure: bool = false
+var _async_build: bool = false
 var _compile_only: bool = false
+var _chapter_audit: bool = false
+var _chapter_failures: Array[String] = []
 var _zoom: int = 2
 var _quality_path: String = ""
 var _input: MapLayoutInput
@@ -32,18 +40,35 @@ func _run() -> void:
 			seed_value = int(arg.get_slice("=", 1))
 		elif arg.begins_with("--shape="):
 			shape = StringName(arg.get_slice("=", 1))
+		elif arg.begins_with("--focus-node="):
+			_focus_id=arg.trim_prefix("--focus-node=")
 		elif arg.begins_with("--pose="):
 			_pose = arg.get_slice("=", 1)
 		elif arg.begins_with("--output="):
 			_output = arg.trim_prefix("--output=")
+		elif arg == "--chapter-audit":
+			_chapter_audit = true
+		elif arg == "--audit-canary":
+			_chapter_audit = true
 		elif arg == "--compile-only":
 			_compile_only = true
 		elif arg.begins_with("--zoom-stop="):
 			_zoom = int(arg.get_slice("=", 1))
+		elif arg == "--async-build":
+			_async_build=true
 		elif arg == "--measure":
 			_measure = true
 		elif arg == "--exercise":
 			_exercise = true
+		elif arg == "--procedural-batches":
+			_audit_procedural=true
+		elif arg == "--static-batches":
+			_batches=true
+			_audit_batches=true
+		elif arg == "--no-static-batches":
+			_batches=false
+		elif arg == "--overlays-off":
+			_overlays = false
 		elif arg == "--continuous":
 			_continuous = true
 		elif arg == "--no-shadows":
@@ -59,7 +84,7 @@ func _run() -> void:
 			quit(2)
 			return
 	if act < 0 or act > 3 or not StageShape.SHIPPING.has(shape) \
-			or _pose not in ["focused", "opening", "middle", "terminus"] \
+			or _pose not in ["focused", "opening", "middle", "terminus", "crossing", "river", "overview"] \
 			or (DisplayServer.get_name() == "headless" and not _compile_only) or _zoom not in range(4):
 		push_error("Preview needs a headed renderer, act index 0–3 and a shipping shape/pose")
 		quit(2)
@@ -81,12 +106,15 @@ func _run() -> void:
 			world_map.enter(next[0])
 			world_map.clear_current()
 	var screen: WorldMapScreen = WorldMapScreen.new(world_map, content, shape)
-	screen._layout_compile = _compile
+	if not _cache.is_empty() or not _quality_path.is_empty(): screen._layout_compile = _compile
 	root.add_child(screen)
 	screen.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	screen.size = Vector2(dimensions)
+	screen._map_scene.set_meta("static_batches",_batches)
 	var start: int = Time.get_ticks_msec()
-	screen.refresh(run)
+	if _async_build: await screen.refresh_async(run)
+	else: screen.refresh(run)
+	var bind_ms: int = Time.get_ticks_msec()-start
 	screen.set_survey_retired(_steps > 0)
 	if screen.layout_result() == null:
 		printerr(JSON.stringify(screen.layout_failure()))
@@ -109,36 +137,132 @@ func _run() -> void:
 		print("MAP_COMPILE_OK ", screen.layout_input_digest(), " ", screen.layout_digest())
 		quit(0)
 		return
-	root.add_child(RunHud.new(run, content, shape))
+	if _chapter_audit and act==2:
+		var report: Dictionary = preload("res://tools/map_workshop/act3/runtime_audit.gd").measure(screen._map_scene._landscape)
+		print("MAP_COURT_AUDIT ",JSON.stringify(report))
+		if not report["ok"]: _chapter_failures.append("Court geometry qualification failed")
+		if "--audit-canary" in OS.get_cmdline_user_args():
+			var canary: Dictionary = preload("res://tools/map_workshop/act3/runtime_audit.gd").negative_canary(screen._map_scene._landscape)
+			print("MAP_COURT_CANARY ",JSON.stringify(canary))
+			if not canary["ok"]: _chapter_failures.append("Court audit failed to detect injected obstruction")
+	elif _chapter_audit and act==3:
+		var void_landscape: Node3D = screen._map_scene._landscape
+		var roots: Array[Node3D] = void_landscape.structures
+		var walking: MeshInstance3D = void_landscape.terrain.walking
+		var routes: Dictionary = void_landscape.terrain.source_edges
+		var support: Dictionary = preload("res://tools/map_workshop/common/threshold_mesh_audit.gd").run(roots,walking,routes,false)
+		var feet: Dictionary = preload("res://tools/map_workshop/act4/audit.gd").feet(roots,walking)
+		print("MAP_VOID_AUDIT ",JSON.stringify({"support":support,"feet":feet}))
+		if not support["ok"] or not feet["ok"]: _chapter_failures.append("Void support qualification failed")
+	elif _chapter_audit:
+		if act!=1:
+			push_error("Chapter geometry audit currently supports the drowned city")
+			quit(2)
+			return
+		var city: Node3D = screen._map_scene._landscape.terrain.causeways
+		var report: Dictionary = preload("res://tools/map_workshop/act2/audit.gd").measure(city,{"anchors":city.anchors,"edges":screen._map_scene._landscape.terrain.source_edges})
+		var architecture: Array[Node3D] = []
+		for placement: Dictionary in screen._map_scene._landscape.measured_placements:
+			architecture.append(placement["node"])
+		report["architecture"]=preload("res://tools/map_workshop/act2/placement_audit.gd").new().measure(architecture,city)
+		print("MAP_CHAPTER_AUDIT ",JSON.stringify(report))
+		_chapter_failures=preload("res://tools/map_workshop/act2/runtime_audit.gd").failures(report)
+		print("MAP_CHAPTER_FAILURES ",JSON.stringify(_chapter_failures))
+		var steep: Array = report["rendered_deck"]["steepest_vertices"]
+		for raw: Array in steep:
+			var point: Vector3 = MapLandscape.v3(raw)
+			for field: RefCounted in city.fields:
+				var with_grade: Dictionary = field.field(Vector2(point.x,point.z))
+				var grade: RefCounted = field.stair_profile
+				field.stair_profile=null
+				var without_grade: Dictionary = field.field(Vector2(point.x,point.z))
+				field.stair_profile=grade
+				print("MAP_SURFACE_DISCONTINUITY ",JSON.stringify({"point":raw,"fitted":with_grade,"ungraded":without_grade}))
+	var hud: RunHud = RunHud.new(run, content, shape)
+	root.add_child(hud)
 	if _no_shadows:
 		screen._map_scene.get_key().shadow_enabled = false
 	var rig: MapCameraRig = screen._map_scene.get_rig()
-	rig.set_zoom_stop(_zoom)
-	if _pose == "opening":
-		rig.set_camera_xz(MapCameraRig.DEFAULT_XZ)
-	elif _pose == "middle":
-		rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3.ZERO))
-	elif _pose == "terminus":
-		rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3(33.0, 0.0, 0.0)))
+	if screen._map_scene.is_journey_layout():
+		if _pose=="overview": screen._journey_navigation.show_overview()
+		elif _pose in ["opening","middle","terminus"]:
+			var focus: int = world_map.reachable()[0]
+			for i: int in range(world_map.nodes.size()):
+				if (_pose=="terminus" and world_map.nodes[i].type=="boss") or (_pose=="middle" and ((act==3 and world_map.nodes[i].id=="n2") or (act!=3 and world_map.nodes[i].row==7))): focus=i
+			screen._journey_navigation.area=focus
+			screen._frame_journey()
+		elif _pose=="river":
+			var landscape: MapJourneyLandscape = screen._map_scene._landscape as MapJourneyLandscape
+			var focus: PackedVector3Array = [Vector3(landscape.terrain.river_centre_x,0.0,0.0)]
+			rig.apply_journey_pose(MapJourneyCameraContract.resolve(focus,Vector2(dimensions)))
+		elif _pose=="crossing":
+			var landscape: MapJourneyLandscape = screen._map_scene._landscape as MapJourneyLandscape
+			if landscape == null or landscape.terrain.landform.cuts.is_empty():
+				push_error("Preview has no physical woodland crossing")
+				quit(2)
+				return
+			var at: Vector2 = landscape.terrain.landform.cuts[0]["at"]
+			var focus: PackedVector3Array = [Vector3(at.x,landscape.terrain.surface_height(at.x,at.y),at.y)]
+			rig.apply_journey_pose(MapJourneyCameraContract.resolve(focus,Vector2(dimensions)))
+	else:
+		rig.set_zoom_stop(_zoom)
+		if _pose == "opening": rig.set_camera_xz(MapCameraRig.DEFAULT_XZ)
+		elif _pose == "middle": rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3.ZERO))
+		elif _pose == "terminus": rig.set_camera_xz(MapCameraRig.pose_for_world(Vector3(43,0,0)))
 	screen._layout_waystones()
 	screen._push_bands(true)
+	if not _focus_id.is_empty():
+		var found: int = -1
+		for i: int in range(world_map.nodes.size()):
+			if world_map.nodes[i].id==_focus_id: found=i
+		if found<0 or not screen._map_scene.is_journey_layout():
+			push_error("Preview focus does not identify a journey node")
+			quit(2)
+			return
+		screen._journey_navigation.area=found
+		screen._frame_journey()
 	if not _output.is_empty() and not _exercise:
 		if _continuous:
 			screen.set_process(false)
 		for stone: GlassWaystone in screen._waystones:
 			stone.set_process(false)
+	if not _overlays:
+		hud.hide()
+		for child: Node in screen.get_children():
+			if child is CanvasItem and child != screen._map_scene: (child as CanvasItem).hide()
 	screen._map_scene.set_live(_continuous)
 	for frame: int in range(12):
 		await process_frame
+	if _audit_procedural:
+		var batch: Node3D = screen._map_scene._landscape.get("draw_batches")
+		var audit: Dictionary = preload("res://tools/map_workshop/audit_procedural_batches.gd").audit(batch)
+		var canary: bool = preload("res://tools/map_workshop/audit_procedural_batches.gd").negative_canary(batch)
+		print("PROCEDURAL_DRAW_AUDIT ",JSON.stringify(audit)," negative_canary=",canary)
+		if not audit["ok"] or not canary:
+			quit(1)
+			return
+	if _audit_batches:
+		var kit: Node3D = screen._map_scene._landscape.get("kit")
+		var batch_audit: Dictionary = preload("res://tools/map_workshop/audit_static_scenery.gd").audit(kit)
+		print("STATIC_DRAW_AUDIT ",JSON.stringify(batch_audit))
+		var canary: bool = preload("res://tools/map_workshop/audit_static_scenery.gd").negative_canary(kit)
+		print("STATIC_DRAW_NEGATIVE_CANARY ",canary)
+		if batch_audit["failure_count"]!=0 or not canary:
+			quit(1)
+			return
 	if _measure:
+		_profile_record(screen.layout_result())
 		await _measure_pan(screen)
 	if _exercise and not await _exercise_input(screen):
 		push_error("Native map input exercise failed")
 		quit(1)
 		return
-	print("MAP_PREVIEW ", JSON.stringify({"act_index": act, "seed": seed_value,
+	print("MAP_PREVIEW ", JSON.stringify({"act_index": act, "seed": seed_value, "overlays":_overlays, "pose":_pose, "shape":str(shape),
 		"input_digest": screen.layout_input_digest(), "layout_digest": screen.layout_digest(),
-		"bind_ms": Time.get_ticks_msec() - start,
+		"derived_cache_key":screen._map_scene.journey_cache.get("cache_key") if screen._map_scene.journey_cache!=null else "",
+		"bind_ms": bind_ms, "derived_cache_hit":screen._map_scene.layout_diagnostics().get("derived_cache_hit",false),
+		"assembly_ms": screen._map_scene.layout_diagnostics().get("assembly_ms", {}),
+		"binding_ms":screen.layout_diagnostics().get("binding_stages_ms",{}),
 		"scenery": screen._map_scene.layout_diagnostics().get("accepted_count", 0)}))
 	if _output.is_empty():
 		return
@@ -146,7 +270,7 @@ func _run() -> void:
 	var error: Error = root.get_texture().get_image().save_png(_output)
 	if error != OK:
 		printerr(error_string(error))
-	quit(0 if error == OK else 1)
+	quit(0 if error == OK and _chapter_failures.is_empty() else 1)
 
 ## Preview-only reuse of a pure compiler result. The input digest includes all
 ## geometry authorities; runtime production never reads or writes this cache.
@@ -191,36 +315,45 @@ func _exercise_input(screen: WorldMapScreen) -> bool:
 					clear = false
 			if clear:
 				point = candidate
+	var journey_mode: bool = screen._journey_navigation != null and screen._journey_navigation.visible
 	var old_zoom: int = rig.zoom_stop
 	var wheel: InputEventMouseButton = InputEventMouseButton.new()
 	wheel.button_index = MOUSE_BUTTON_WHEEL_UP
 	wheel.pressed = true
 	wheel.position = point
-	root.push_input(wheel)
+	root.push_input(wheel, true)
+	# Hardware scroll is a press/release pair. Leaving its synthetic button
+	# held captures subsequent GUI clicks on the map instead of the controls.
+	var wheel_release: InputEventMouseButton = wheel.duplicate() as InputEventMouseButton
+	wheel_release.pressed = false
+	root.push_input(wheel_release, true)
 	await process_frame
-	var receipt: Dictionary = {"wheel": rig.zoom_stop == maxi(0, old_zoom - 1)}
+	var receipt: Dictionary = {"wheel": (not screen._journey_navigation.overview and rig.journey_mode) if journey_mode else rig.zoom_stop == maxi(0, old_zoom - 1)}
 	var pose: Vector2 = rig.camera_xz()
 	var press: InputEventMouseButton = InputEventMouseButton.new()
 	press.button_index = MOUSE_BUTTON_LEFT
 	press.pressed = true
 	press.position = point
-	root.push_input(press)
+	root.push_input(press, true)
 	var drag: InputEventMouseMotion = InputEventMouseMotion.new()
 	drag.position = point + Vector2(50, 0)
 	drag.relative = Vector2(50, 0)
 	drag.button_mask = MOUSE_BUTTON_MASK_LEFT
-	root.push_input(drag)
+	root.push_input(drag, true)
 	var release: InputEventMouseButton = press.duplicate() as InputEventMouseButton
 	release.pressed = false
 	release.position = drag.position
-	root.push_input(release)
+	root.push_input(release, true)
 	await process_frame
 	receipt["drag"] = not rig.camera_xz().is_equal_approx(pose)
 	var reachable: Array[int] = screen.map.reachable()
 	if reachable.is_empty():
 		return false
 	var index: int = reachable[0]
-	rig.set_camera_xz(screen._focus_xz(index))
+	if journey_mode:
+		screen._journey_navigation.return_to_journey()
+	else:
+		rig.set_camera_xz(screen._focus_xz(index))
 	screen._layout_waystones()
 	var chosen: Array[int] = []
 	screen.node_chosen.connect(func(value: int) -> void: chosen.append(value))
@@ -228,14 +361,40 @@ func _exercise_input(screen: WorldMapScreen) -> bool:
 	var key: InputEventKey = InputEventKey.new()
 	key.keycode = KEY_ENTER
 	key.pressed = true
-	root.push_input(key)
+	var before_inspection: int = screen.map.at
+	root.push_input(key, true)
+	if journey_mode:
+		receipt["inspection_preserves_current"] = screen.map.at == before_inspection and screen._journey_navigation.selected == index
+		var key_release: InputEventKey = key.duplicate() as InputEventKey
+		key_release.pressed = false
+		root.push_input(key_release, true)
+		await process_frame
+		var target: Vector2 = screen._journey_navigation._travel.get_global_rect().get_center()
+		var hover: InputEventMouseMotion = InputEventMouseMotion.new()
+		hover.position = target
+		hover.global_position = target
+		root.push_input(hover, true)
+		await process_frame
+		var confirm: InputEventMouseButton = InputEventMouseButton.new()
+		confirm.button_index = MOUSE_BUTTON_LEFT
+		confirm.position = target
+		confirm.global_position = target
+		confirm.pressed = true
+		root.push_input(confirm, true)
+		await process_frame
+		var confirm_release: InputEventMouseButton = confirm.duplicate() as InputEventMouseButton
+		confirm_release.pressed = false
+		root.push_input(confirm_release, true)
+		# A second confirmation during motion cannot enter or arrive again.
+		root.push_input(confirm, true)
+		root.push_input(confirm_release, true)
 	receipt["keyboard"] = screen.map.at == index
 	receipt["travel_started"] = screen._travelling and scene.is_live()
-	await create_timer(0.8).timeout
+	await create_timer(4.8 if journey_mode else 0.8).timeout
 	for frame: int in range(8):
 		await process_frame
 	receipt["arrived_once"] = chosen == [index] and not screen._travelling
-	receipt["frozen_after_arrival"] = not scene.is_live() and scene.get_stage().render_target_update_mode == SubViewport.UPDATE_ONCE
+	receipt["idle_render_policy"] = not scene.is_live() and scene.get_stage().render_target_update_mode == (SubViewport.UPDATE_ALWAYS if scene.has_ambient_motion() else SubViewport.UPDATE_ONCE)
 	print("MAP_INPUT ", JSON.stringify(receipt))
 	return not receipt.values().has(false)
 
@@ -252,24 +411,29 @@ func _measure_pan(screen: WorldMapScreen) -> void:
 	scene.set_live(true)
 	var intervals: Array[float] = []
 	var cpu: Array[float] = []
+	var projection: Array[float] = []
 	var gpu: Array[float] = []
 	var before: int = Time.get_ticks_usec()
 	for frame: int in range(150):
 		rig.set_camera_xz(pose + Vector2(sin(frame * 0.02) * 3.0, 0))
+		var update_started: int = Time.get_ticks_usec()
 		screen._layout_waystones()
+		var update_ms: float = (Time.get_ticks_usec()-update_started)/1000.0
 		await process_frame
 		var now: int = Time.get_ticks_usec()
 		if frame >= 30:
+			projection.append(update_ms)
 			intervals.append((now - before) / 1000.0)
 			cpu.append(RenderingServer.viewport_get_measured_render_time_cpu(rid))
 			gpu.append(RenderingServer.viewport_get_measured_render_time_gpu(rid))
 		before = now
+	projection.sort()
 	intervals.sort()
 	cpu.sort()
 	gpu.sort()
 	print("MAP_RENDER ", JSON.stringify({"adapter": RenderingServer.get_video_adapter_name(),
 		"renderer": RenderingServer.get_current_rendering_method(), "samples": intervals.size(),
-		"frame_p95_ms": intervals[113], "viewport_cpu_p95_ms": cpu[113],
+		"frame_p95_ms": intervals[113], "waystone_update_p95_ms":projection[113], "viewport_cpu_p95_ms": cpu[113],
 		"viewport_gpu_p95_ms": gpu[113], "gpu_timer_available": gpu[-1] > 0,
 		"renderer_mib": Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0,
 		"draw_calls": Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)}))
@@ -279,3 +443,18 @@ func _measure_pan(screen: WorldMapScreen) -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
 	for frame: int in range(8):
 		await process_frame
+
+func _profile_record(result: MapLayoutResult) -> void:
+	var data: Dictionary = result.identity_dict()
+	var timings: Dictionary = {}
+	var started: int = Time.get_ticks_usec()
+	var errors: Array[String] = MapLayoutResult.validate_identity(data)
+	timings["validate_ms"]=(Time.get_ticks_usec()-started)/1000.0
+	started=Time.get_ticks_usec()
+	var ordered: Dictionary = MapLayoutCanonical.ordered_dictionary(data)
+	timings["order_ms"]=(Time.get_ticks_usec()-started)/1000.0
+	started=Time.get_ticks_usec()
+	var digest: String = MapLayoutCanonical.digest(ordered)
+	timings["digest_ms"]=(Time.get_ticks_usec()-started)/1000.0
+	timings["same_digest"]=digest==result.digest() and errors.is_empty()
+	print("MAP_RECORD_PROFILE ",JSON.stringify(timings))

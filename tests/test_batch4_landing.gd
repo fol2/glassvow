@@ -132,7 +132,9 @@ static func _dawn_feed(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full()
 	SaveService.clear(RUN_PATH)
 	SaveService.clear_vigil(VIGIL_PATH)
-	var run: RunState = RunState.new_run(content, 35501, "run-batch4-dawn")
+	# Match the application boot: run quests originate in the Vigil profile.
+	var run: RunState = RunState.new_run(content, 35501, "run-batch4-dawn",
+		{"quests": VigilState.blank().quests})
 	run.pending_run_end = {"outcome": "win", "bequestAnswered": true}
 	run.quests["paleOnes"]["state"] = "revealed"
 	run.quests["paleOnes"]["progress"] = 1

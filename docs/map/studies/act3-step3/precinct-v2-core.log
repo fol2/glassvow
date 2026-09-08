@@ -1,0 +1,1433 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+Sentry: DEBUG: starting Sentry SDK version 2.1.1+d288ad9
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+ok   res://tests/test_act4_catalogue.gd
+ok   res://tests/test_act4_map.gd
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _dawn_weather (res://tests/test_act4_region_visuals.gd:78)
+         [1] run (res://tests/test_act4_region_visuals.gd:15)
+         [2] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_act4_region_visuals.gd
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_act4_scene_wiring.gd:307)
+       [1] _arrival_fronts_the_fight (res://tests/test_act4_scene_wiring.gd:77)
+       [2] run (res://tests/test_act4_scene_wiring.gd:19)
+       [3] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_act4_scene_wiring.gd
+ok   res://tests/test_arch.gd
+ok   res://tests/test_aspect_shatter.gd
+ok   res://tests/test_balance_catalogue.gd
+event-score library[0]=27.027562267492 [1]=11.0225191369631  forgottenShrine[0]=13.2005810453923 [1]=5.8280882841675
+ok   res://tests/test_balance_sim.gd
+ok   res://tests/test_batch4_landing.gd
+ok   res://tests/test_bespoke_staging.gd
+ok   res://tests/test_checkpoint_validation.gd
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _teardown (res://tests/test_coarse_pointer.gd:223)
+       [1] _first_tap_without_synthetic_hover (res://tests/test_coarse_pointer.gd:108)
+       [2] run (res://tests/test_coarse_pointer.gd:17)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _teardown (res://tests/test_coarse_pointer.gd:223)
+       [1] _first_tap_with_synthetic_hover (res://tests/test_coarse_pointer.gd:136)
+       [2] run (res://tests/test_coarse_pointer.gd:18)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _teardown (res://tests/test_coarse_pointer.gd:223)
+       [1] _first_tap_fine_pointer_arms (res://tests/test_coarse_pointer.gd:158)
+       [2] run (res://tests/test_coarse_pointer.gd:19)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _teardown (res://tests/test_coarse_pointer.gd:223)
+       [1] _double_press_absorption (res://tests/test_coarse_pointer.gd:216)
+       [2] run (res://tests/test_coarse_pointer.gd:21)
+       [3] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_coarse_pointer.gd
+  probes: 136 covered, 0 pending
+ok   res://tests/test_combat_probes.gd
+  trace seed-101: 83 rows replayed to end
+  trace seed-202: 82 rows replayed to end
+  trace seed-303: 67 rows replayed to end
+  trace seed-404: 89 rows replayed to end
+ok   res://tests/test_combat_traces.gd
+ok   res://tests/test_content.gd
+ERROR: CounterfactualSelf: unsupported kit noSuchKit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _with_counterfactual (res://domain/rules/combat.gd:135)
+       [1] _resolved_enemy (res://domain/rules/combat.gd:79)
+       [2] start_combat (res://domain/rules/combat.gd:189)
+       [3] apply (res://domain/game.gd:47)
+       [4] _fail_closed (res://tests/test_counterfactual_self.gd:164)
+       [5] run (res://tests/test_counterfactual_self.gd:32)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: EnemyAi.decide: unwalkedSelf missing kit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _counterfactual_cycle (res://domain/rules/enemy_ai.gd:208)
+       [1] decide (res://domain/rules/enemy_ai.gd:135)
+       [2] _ai_cycle (res://tests/test_counterfactual_self.gd:228)
+       [3] run (res://tests/test_counterfactual_self.gd:34)
+       [4] _initialize (res://tests/run_all.gd:17)
+ERROR: CounterfactualSelf: unsupported kit noSuchKit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _with_counterfactual (res://domain/rules/combat.gd:135)
+       [1] _resolved_enemy (res://domain/rules/combat.gd:79)
+       [2] start_combat (res://domain/rules/combat.gd:189)
+       [3] apply (res://domain/game.gd:47)
+       [4] _uncrossed_fail_closed (res://tests/test_counterfactual_self.gd:341)
+       [5] run (res://tests/test_counterfactual_self.gd:39)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: EnemyAi.decide: uncrossedSelf missing kit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _counterfactual_cycle (res://domain/rules/enemy_ai.gd:208)
+       [1] decide (res://domain/rules/enemy_ai.gd:140)
+       [2] _uncrossed_ai (res://tests/test_counterfactual_self.gd:404)
+       [3] run (res://tests/test_counterfactual_self.gd:41)
+       [4] _initialize (res://tests/run_all.gd:17)
+ERROR: CounterfactualSelf: unsupported kit noSuchKit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _with_counterfactual (res://domain/rules/combat.gd:135)
+       [1] _resolved_enemy (res://domain/rules/combat.gd:79)
+       [2] start_combat (res://domain/rules/combat.gd:189)
+       [3] apply (res://domain/game.gd:47)
+       [4] _unopened_fail_closed (res://tests/test_counterfactual_self.gd:509)
+       [5] run (res://tests/test_counterfactual_self.gd:46)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: EnemyAi.decide: unopenedSelf missing kit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _counterfactual_cycle (res://domain/rules/enemy_ai.gd:208)
+       [1] decide (res://domain/rules/enemy_ai.gd:145)
+       [2] _unopened_ai (res://tests/test_counterfactual_self.gd:572)
+       [3] run (res://tests/test_counterfactual_self.gd:48)
+       [4] _initialize (res://tests/run_all.gd:17)
+ERROR: CounterfactualSelf: unsupported kit noSuchKit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _with_counterfactual (res://domain/rules/combat.gd:135)
+       [1] _resolved_enemy (res://domain/rules/combat.gd:79)
+       [2] start_combat (res://domain/rules/combat.gd:189)
+       [3] apply (res://domain/game.gd:47)
+       [4] _unlit_fail_closed (res://tests/test_counterfactual_self.gd:705)
+       [5] run (res://tests/test_counterfactual_self.gd:53)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: EnemyAi.decide: unlitSelf missing kit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _counterfactual_cycle (res://domain/rules/enemy_ai.gd:208)
+       [1] decide (res://domain/rules/enemy_ai.gd:150)
+       [2] _unlit_ai (res://tests/test_counterfactual_self.gd:768)
+       [3] run (res://tests/test_counterfactual_self.gd:55)
+       [4] _initialize (res://tests/run_all.gd:17)
+ERROR: CounterfactualSelf: unsupported kit noSuchKit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _with_counterfactual (res://domain/rules/combat.gd:135)
+       [1] _resolved_enemy (res://domain/rules/combat.gd:79)
+       [2] start_combat (res://domain/rules/combat.gd:189)
+       [3] apply (res://domain/game.gd:47)
+       [4] _unsunk_fail_closed (res://tests/test_counterfactual_self.gd:910)
+       [5] run (res://tests/test_counterfactual_self.gd:60)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: EnemyAi.decide: unsunkSelf missing kit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _counterfactual_cycle (res://domain/rules/enemy_ai.gd:208)
+       [1] decide (res://domain/rules/enemy_ai.gd:155)
+       [2] _unsunk_ai (res://tests/test_counterfactual_self.gd:977)
+       [3] run (res://tests/test_counterfactual_self.gd:62)
+       [4] _initialize (res://tests/run_all.gd:17)
+ERROR: CounterfactualSelf: unsupported kit noSuchKit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _with_counterfactual (res://domain/rules/combat.gd:135)
+       [1] _resolved_enemy (res://domain/rules/combat.gd:79)
+       [2] start_combat (res://domain/rules/combat.gd:189)
+       [3] apply (res://domain/game.gd:47)
+       [4] _uncarved_fail_closed (res://tests/test_counterfactual_self.gd:1145)
+       [5] run (res://tests/test_counterfactual_self.gd:67)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: EnemyAi.decide: uncarvedSelf missing kit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _counterfactual_cycle (res://domain/rules/enemy_ai.gd:208)
+       [1] decide (res://domain/rules/enemy_ai.gd:160)
+       [2] _uncarved_ai (res://tests/test_counterfactual_self.gd:1212)
+       [3] run (res://tests/test_counterfactual_self.gd:69)
+       [4] _initialize (res://tests/run_all.gd:17)
+ERROR: CounterfactualSelf: unsupported kit noSuchKit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _with_counterfactual (res://domain/rules/combat.gd:135)
+       [1] _resolved_enemy (res://domain/rules/combat.gd:79)
+       [2] start_combat (res://domain/rules/combat.gd:189)
+       [3] apply (res://domain/game.gd:47)
+       [4] _unobsidian_fail_closed (res://tests/test_counterfactual_self.gd:1377)
+       [5] run (res://tests/test_counterfactual_self.gd:74)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: EnemyAi.decide: unobsidianSelf missing kit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _counterfactual_cycle (res://domain/rules/enemy_ai.gd:208)
+       [1] decide (res://domain/rules/enemy_ai.gd:165)
+       [2] _unobsidian_ai (res://tests/test_counterfactual_self.gd:1440)
+       [3] run (res://tests/test_counterfactual_self.gd:76)
+       [4] _initialize (res://tests/run_all.gd:17)
+ERROR: CounterfactualSelf: unsupported kit noSuchKit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _with_counterfactual (res://domain/rules/combat.gd:135)
+       [1] _resolved_enemy (res://domain/rules/combat.gd:79)
+       [2] start_combat (res://domain/rules/combat.gd:189)
+       [3] apply (res://domain/game.gd:47)
+       [4] _unwooded_fail_closed (res://tests/test_counterfactual_self.gd:1593)
+       [5] run (res://tests/test_counterfactual_self.gd:81)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: EnemyAi.decide: unwoodedSelf missing kit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _counterfactual_cycle (res://domain/rules/enemy_ai.gd:208)
+       [1] decide (res://domain/rules/enemy_ai.gd:170)
+       [2] _unwooded_ai (res://tests/test_counterfactual_self.gd:1656)
+       [3] run (res://tests/test_counterfactual_self.gd:83)
+       [4] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_counterfactual_self.gd
+ok   res://tests/test_dawn_screen.gd
+ok   res://tests/test_dev_tools.gd
+ok   res://tests/test_enemy_ai.gd
+ok   res://tests/test_eternal_keeper.gd
+check_fracture: the next few ERROR lines are expected — testing rejects
+ERROR: CrackNet.commit: a strand needs at least two points
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] commit (res://presentation/combat/fracture/crack_net.gd:55)
+       [1] _check_net_rejects (res://tools/check_fracture.gd:202)
+       [2] run (res://tools/check_fracture.gd:67)
+       [3] run (res://tests/test_fracture.gd:8)
+       [4] _initialize (res://tests/run_all.gd:17)
+ERROR: CrackNet.commit: unknown terminus Q
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] commit (res://presentation/combat/fracture/crack_net.gd:59)
+       [1] _check_net_rejects (res://tools/check_fracture.gd:204)
+       [2] run (res://tools/check_fracture.gd:67)
+       [3] run (res://tests/test_fracture.gd:8)
+       [4] _initialize (res://tests/run_all.gd:17)
+ERROR: CrackNet.commit: strand is not a Dictionary
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] commit (res://presentation/combat/fracture/crack_net.gd:50)
+       [1] _check_net_rejects (res://tools/check_fracture.gd:206)
+       [2] run (res://tools/check_fracture.gd:67)
+       [3] run (res://tests/test_fracture.gd:8)
+       [4] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_fracture.gd
+ok   res://tests/test_hint_system.gd
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _runtime_hydrated_combat_chrome (res://tests/test_i2_combat_chrome_locale.gd:195)
+       [1] run (res://tests/test_i2_combat_chrome_locale.gd:28)
+       [2] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_i2_combat_chrome_locale.gd
+ok   res://tests/test_ios_plist_privacy.gd
+ok   res://tests/test_layout_book.gd
+ok   res://tests/test_line_table.gd
+ok   res://tests/test_live_locale_switch.gd
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_choice (res://application/main.gd:863)
+       [2] <anonymous lambda> (res://application/main.gd:1426)
+       [3] _dialog_shells (res://tests/test_locale.gd:448)
+       [4] run (res://tests/test_locale.gd:214)
+       [5] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_choice (res://application/main.gd:863)
+       [2] _show_save_error (res://application/main.gd:1088)
+       [3] _persistence_calls_and_shell (res://tests/test_locale.gd:511)
+       [4] run (res://tests/test_locale.gd:215)
+       [5] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_locale.gd
+ok   res://tests/test_locale_hydration.gd
+ok   res://tests/test_locale_hydration_catalogue.gd
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _cleanup (res://tests/test_locale_hydration_main.gd:305)
+       [1] _combat_latest_request_wins (res://tests/test_locale_hydration_main.gd:128)
+       [2] run (res://tests/test_locale_hydration_main.gd:10)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _cleanup (res://tests/test_locale_hydration_main.gd:305)
+       [1] _combat_defer_and_card_consumer (res://tests/test_locale_hydration_main.gd:235)
+       [2] run (res://tests/test_locale_hydration_main.gd:11)
+       [3] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_locale_hydration_main.gd
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] projected_seats (res://presentation/map/world_map_screen.gd:598)
+         [1] _layout_waystones (res://presentation/map/world_map_screen.gd:897)
+         [2] run (res://tests/test_map.gd:304)
+         [3] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] projected_seats (res://presentation/map/world_map_screen.gd:598)
+         [1] _layout_waystones (res://presentation/map/world_map_screen.gd:897)
+         [2] set_shape (res://presentation/map/world_map_screen.gd:890)
+         [3] run (res://tests/test_map.gd:331)
+         [4] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] projected_seats (res://presentation/map/world_map_screen.gd:598)
+         [1] _layout_waystones (res://presentation/map/world_map_screen.gd:897)
+         [2] set_shape (res://presentation/map/world_map_screen.gd:890)
+         [3] run (res://tests/test_map.gd:454)
+         [4] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] projected_seats (res://presentation/map/world_map_screen.gd:598)
+         [1] _layout_waystones (res://presentation/map/world_map_screen.gd:897)
+         [2] set_shape (res://presentation/map/world_map_screen.gd:890)
+         [3] run (res://tests/test_map.gd:464)
+         [4] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_map.gd
+ok   res://tests/test_map_architectural_occupancy.gd
+ok   res://tests/test_map_asset_profiles.gd
+ok   res://tests/test_map_compatibility_selection_iterator.gd
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _mount (res://tests/test_map_compose.gd:554)
+         [1] _compiled_result_binding (res://tests/test_map_compose.gd:120)
+         [2] run (res://tests/test_map_compose.gd:99)
+         [3] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] projected_seats (res://presentation/map/world_map_screen.gd:598)
+         [1] _layout_waystones (res://presentation/map/world_map_screen.gd:897)
+         [2] set_shape (res://presentation/map/world_map_screen.gd:890)
+         [3] _mount (res://tests/test_map_compose.gd:550)
+         [4] _waylight_and_travel (res://tests/test_map_compose.gd:315)
+         [5] _compiled_result_binding (res://tests/test_map_compose.gd:163)
+         [6] run (res://tests/test_map_compose.gd:99)
+         [7] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _mount (res://tests/test_map_compose.gd:554)
+         [1] _waylight_and_travel (res://tests/test_map_compose.gd:315)
+         [2] _compiled_result_binding (res://tests/test_map_compose.gd:163)
+         [3] run (res://tests/test_map_compose.gd:99)
+         [4] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] projected_seats (res://presentation/map/world_map_screen.gd:598)
+         [1] _layout_waystones (res://presentation/map/world_map_screen.gd:897)
+         [2] set_shape (res://presentation/map/world_map_screen.gd:890)
+         [3] _mount (res://tests/test_map_compose.gd:550)
+         [4] _waylight_and_travel (res://tests/test_map_compose.gd:315)
+         [5] _compiled_result_binding (res://tests/test_map_compose.gd:163)
+         [6] run (res://tests/test_map_compose.gd:99)
+         [7] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _mount (res://tests/test_map_compose.gd:554)
+         [1] _waylight_and_travel (res://tests/test_map_compose.gd:315)
+         [2] _compiled_result_binding (res://tests/test_map_compose.gd:163)
+         [3] run (res://tests/test_map_compose.gd:99)
+         [4] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _mount (res://tests/test_map_compose.gd:554)
+         [1] _waylight_and_travel (res://tests/test_map_compose.gd:342)
+         [2] _compiled_result_binding (res://tests/test_map_compose.gd:163)
+         [3] run (res://tests/test_map_compose.gd:99)
+         [4] _initialize (res://tests/run_all.gd:17)
+ERROR: WorldMapScreen compiled layout failed: test/invalid: forced failure
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail_compiled_layout (res://presentation/map/world_map_screen.gd:523)
+       [1] _bind_compiled_layout (res://presentation/map/world_map_screen.gd:480)
+       [2] _compiled_result_binding (res://tests/test_map_compose.gd:189)
+       [3] run (res://tests/test_map_compose.gd:99)
+       [4] _initialize (res://tests/run_all.gd:17)
+ERROR: WorldMapScreen compiled layout failed: compiler/result_coverage: compiled result does not exactly cover the live input
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail_compiled_layout (res://presentation/map/world_map_screen.gd:523)
+       [1] _bind_compiled_layout (res://presentation/map/world_map_screen.gd:496)
+       [2] _compiled_result_binding (res://tests/test_map_compose.gd:198)
+       [3] run (res://tests/test_map_compose.gd:99)
+       [4] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _mount (res://tests/test_map_compose.gd:554)
+         [1] _five_shapes (res://tests/test_map_compose.gd:356)
+         [2] run (res://tests/test_map_compose.gd:100)
+         [3] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] projected_seats (res://presentation/map/world_map_screen.gd:598)
+         [1] _layout_waystones (res://presentation/map/world_map_screen.gd:897)
+         [2] set_shape (res://presentation/map/world_map_screen.gd:890)
+         [3] _mount (res://tests/test_map_compose.gd:550)
+         [4] _five_shapes (res://tests/test_map_compose.gd:356)
+         [5] run (res://tests/test_map_compose.gd:100)
+         [6] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _mount (res://tests/test_map_compose.gd:554)
+         [1] _five_shapes (res://tests/test_map_compose.gd:356)
+         [2] run (res://tests/test_map_compose.gd:100)
+         [3] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] projected_seats (res://presentation/map/world_map_screen.gd:598)
+         [1] _layout_waystones (res://presentation/map/world_map_screen.gd:897)
+         [2] set_shape (res://presentation/map/world_map_screen.gd:890)
+         [3] _mount (res://tests/test_map_compose.gd:550)
+         [4] _five_shapes (res://tests/test_map_compose.gd:356)
+         [5] run (res://tests/test_map_compose.gd:100)
+         [6] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _mount (res://tests/test_map_compose.gd:554)
+         [1] _five_shapes (res://tests/test_map_compose.gd:356)
+         [2] run (res://tests/test_map_compose.gd:100)
+         [3] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _mount (res://tests/test_map_compose.gd:554)
+         [1] _seats (res://tests/test_map_compose.gd:454)
+         [2] run (res://tests/test_map_compose.gd:103)
+         [3] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] projected_seats (res://presentation/map/world_map_screen.gd:598)
+         [1] _layout_waystones (res://presentation/map/world_map_screen.gd:897)
+         [2] set_shape (res://presentation/map/world_map_screen.gd:890)
+         [3] _mount (res://tests/test_map_compose.gd:550)
+         [4] _seats (res://tests/test_map_compose.gd:454)
+         [5] run (res://tests/test_map_compose.gd:103)
+         [6] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _mount (res://tests/test_map_compose.gd:554)
+         [1] _seats (res://tests/test_map_compose.gd:454)
+         [2] run (res://tests/test_map_compose.gd:103)
+         [3] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] projected_seats (res://presentation/map/world_map_screen.gd:598)
+         [1] _layout_waystones (res://presentation/map/world_map_screen.gd:897)
+         [2] set_shape (res://presentation/map/world_map_screen.gd:890)
+         [3] _mount (res://tests/test_map_compose.gd:550)
+         [4] _seats (res://tests/test_map_compose.gd:454)
+         [5] run (res://tests/test_map_compose.gd:103)
+         [6] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _mount (res://tests/test_map_compose.gd:554)
+         [1] _seats (res://tests/test_map_compose.gd:454)
+         [2] run (res://tests/test_map_compose.gd:103)
+         [3] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _mount (res://tests/test_map_compose.gd:554)
+         [1] _pin_select (res://tests/test_map_compose.gd:487)
+         [2] run (res://tests/test_map_compose.gd:104)
+         [3] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _mount (res://tests/test_map_compose.gd:554)
+         [1] _projection_cache (res://tests/test_map_compose.gd:518)
+         [2] run (res://tests/test_map_compose.gd:105)
+         [3] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_map_compose.gd
+ok   res://tests/test_map_court_landscape_openings.gd
+ok   res://tests/test_map_court_stair_assembly.gd
+ok   res://tests/test_map_court_stair_route.gd
+ok   res://tests/test_map_court_surface.gd
+ok   res://tests/test_map_elevated_focus.gd
+ok   res://tests/test_map_forward_bypass.gd
+ok   res://tests/test_map_landscape.gd
+ok   res://tests/test_map_landscape_relief.gd
+ok   res://tests/test_map_layout_compiler.gd
+ok   res://tests/test_map_layout_contract.gd
+ok   res://tests/test_map_layout_input_binding.gd
+ok   res://tests/test_map_layout_single_node.gd
+ok   res://tests/test_map_mesh_probe_precision.gd
+ok   res://tests/test_map_node_candidate_generator.gd
+ok   res://tests/test_map_overview_groups.gd
+ok   res://tests/test_map_passage_foundation.gd
+ok   res://tests/test_map_passage_route.gd
+ok   res://tests/test_map_pins.gd
+ok   res://tests/test_map_precinct_sightlines.gd
+ok   res://tests/test_map_precinct_support.gd
+ok   res://tests/test_map_precinct_threshold.gd
+ok   res://tests/test_map_quality_evaluator.gd
+ok   res://tests/test_map_resolved_flight.gd
+ok   res://tests/test_map_route_camera_heading.gd
+ok   res://tests/test_map_route_surface.gd
+ok   res://tests/test_map_route_travel.gd
+ok   res://tests/test_map_scene.gd
+ok   res://tests/test_map_single_edge_router.gd
+ok   res://tests/test_map_spatial_egress.gd
+ok   res://tests/test_map_spatial_grade.gd
+ok   res://tests/test_map_spatial_ordering.gd
+ok   res://tests/test_map_spatial_profile.gd
+ok   res://tests/test_map_spatial_spacing.gd
+ok   res://tests/test_map_terrace_route.gd
+ok   res://tests/test_map_threshold_mesh_audit.gd
+ok   res://tests/test_map_walking_union.gd
+ok   res://tests/test_map_waylight_tracer.gd
+ok   res://tests/test_map_workshop_hero_geometry.gd
+ok   res://tests/test_narrative_planting.gd
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departure_stages_without_opening (res://tests/test_opening_flow.gd:141)
+       [5] run (res://tests/test_opening_flow.gd:24)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_choice (res://application/main.gd:863)
+       [2] _show_save_error (res://application/main.gd:1088)
+       [3] _new_run (res://application/main.gd:1169)
+       [4] _new_run_retry_restages (res://tests/test_opening_flow.gd:263)
+       [5] run (res://tests/test_opening_flow.gd:29)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _on_save_error_choice (res://application/main.gd:1120)
+       [4] _new_run_retry_restages (res://tests/test_opening_flow.gd:268)
+       [5] run (res://tests/test_opening_flow.gd:29)
+       [6] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_opening_flow.gd
+ok   res://tests/test_performance_probe.gd
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_pool_callers.gd:233)
+       [5] _hearth_start_once (res://tests/test_pool_callers.gd:35)
+       [6] run (res://tests/test_pool_callers.gd:18)
+       [7] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_map (res://application/main.gd:1393)
+       [2] _route_run (res://application/main.gd:1279)
+       [3] _continue_after_pool (res://application/main.gd:3023)
+       [4] _on_pool_finished (res://application/main.gd:2999)
+       [5] _complete (res://presentation/story/departure_staging.gd:197)
+       [6] _tap (res://presentation/story/departure_staging.gd:190)
+       [7] _hearth_start_once (res://tests/test_pool_callers.gd:48)
+       [8] run (res://tests/test_pool_callers.gd:18)
+       [9] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_pool_callers.gd:233)
+       [5] _hearth_resume_holds_row (res://tests/test_pool_callers.gd:58)
+       [6] run (res://tests/test_pool_callers.gd:19)
+       [7] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _show_pending_pool (res://application/main.gd:2974)
+       [4] _route_run (res://application/main.gd:1256)
+       [5] _continue_run (res://application/main.gd:1246)
+       [6] _hearth_resume_holds_row (res://tests/test_pool_callers.gd:66)
+       [7] run (res://tests/test_pool_callers.gd:19)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_pool_callers.gd:233)
+       [5] _on_map (res://tests/test_pool_callers.gd:239)
+       [6] _waystone_once (res://tests/test_pool_callers.gd:84)
+       [7] run (res://tests/test_pool_callers.gd:20)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_map (res://application/main.gd:1393)
+       [2] _route_run (res://application/main.gd:1279)
+       [3] _continue_after_pool (res://application/main.gd:3023)
+       [4] _on_pool_finished (res://application/main.gd:2999)
+       [5] _complete (res://presentation/story/departure_staging.gd:197)
+       [6] _tap (res://presentation/story/departure_staging.gd:190)
+       [7] _on_map (res://tests/test_pool_callers.gd:242)
+       [8] _waystone_once (res://tests/test_pool_callers.gd:84)
+       [9] run (res://tests/test_pool_callers.gd:20)
+       [10] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_pending_pool (res://application/main.gd:2987)
+       [3] _on_node_chosen (res://application/main.gd:1625)
+       [4] choose (res://presentation/map/world_map_screen.gd:740)
+       [5] _pick_first (res://tests/test_pool_callers.gd:253)
+       [6] _waystone_once (res://tests/test_pool_callers.gd:85)
+       [7] run (res://tests/test_pool_callers.gd:20)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_pool_callers.gd:233)
+       [5] _on_map (res://tests/test_pool_callers.gd:239)
+       [6] _waystone_resume_holds_row (res://tests/test_pool_callers.gd:109)
+       [7] run (res://tests/test_pool_callers.gd:21)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_map (res://application/main.gd:1393)
+       [2] _route_run (res://application/main.gd:1279)
+       [3] _continue_after_pool (res://application/main.gd:3023)
+       [4] _on_pool_finished (res://application/main.gd:2999)
+       [5] _complete (res://presentation/story/departure_staging.gd:197)
+       [6] _tap (res://presentation/story/departure_staging.gd:190)
+       [7] _on_map (res://tests/test_pool_callers.gd:242)
+       [8] _waystone_resume_holds_row (res://tests/test_pool_callers.gd:109)
+       [9] run (res://tests/test_pool_callers.gd:21)
+       [10] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_pending_pool (res://application/main.gd:2987)
+       [3] _on_node_chosen (res://application/main.gd:1625)
+       [4] choose (res://presentation/map/world_map_screen.gd:740)
+       [5] _pick_first (res://tests/test_pool_callers.gd:253)
+       [6] _waystone_resume_holds_row (res://tests/test_pool_callers.gd:110)
+       [7] run (res://tests/test_pool_callers.gd:21)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_pending_pool (res://application/main.gd:2987)
+       [3] _route_run (res://application/main.gd:1256)
+       [4] _continue_run (res://application/main.gd:1246)
+       [5] _waystone_resume_holds_row (res://tests/test_pool_callers.gd:118)
+       [6] run (res://tests/test_pool_callers.gd:21)
+       [7] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_pool_callers.gd:233)
+       [5] _on_map (res://tests/test_pool_callers.gd:239)
+       [6] _idle_does_not_draw (res://tests/test_pool_callers.gd:135)
+       [7] run (res://tests/test_pool_callers.gd:22)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_map (res://application/main.gd:1393)
+       [2] _route_run (res://application/main.gd:1279)
+       [3] _continue_after_pool (res://application/main.gd:3023)
+       [4] _on_pool_finished (res://application/main.gd:2999)
+       [5] _complete (res://presentation/story/departure_staging.gd:197)
+       [6] _tap (res://presentation/story/departure_staging.gd:190)
+       [7] _on_map (res://tests/test_pool_callers.gd:242)
+       [8] _idle_does_not_draw (res://tests/test_pool_callers.gd:135)
+       [9] run (res://tests/test_pool_callers.gd:22)
+       [10] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_pool_callers.gd:233)
+       [5] _on_map (res://tests/test_pool_callers.gd:239)
+       [6] _rebuild_does_not_redraw (res://tests/test_pool_callers.gd:151)
+       [7] run (res://tests/test_pool_callers.gd:23)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_map (res://application/main.gd:1393)
+       [2] _route_run (res://application/main.gd:1279)
+       [3] _continue_after_pool (res://application/main.gd:3023)
+       [4] _on_pool_finished (res://application/main.gd:2999)
+       [5] _complete (res://presentation/story/departure_staging.gd:197)
+       [6] _tap (res://presentation/story/departure_staging.gd:190)
+       [7] _on_map (res://tests/test_pool_callers.gd:242)
+       [8] _rebuild_does_not_redraw (res://tests/test_pool_callers.gd:151)
+       [9] run (res://tests/test_pool_callers.gd:23)
+       [10] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_pending_pool (res://application/main.gd:2987)
+       [3] _on_node_chosen (res://application/main.gd:1625)
+       [4] choose (res://presentation/map/world_map_screen.gd:740)
+       [5] _pick_first (res://tests/test_pool_callers.gd:253)
+       [6] _rebuild_does_not_redraw (res://tests/test_pool_callers.gd:152)
+       [7] run (res://tests/test_pool_callers.gd:23)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_pending_pool (res://application/main.gd:2987)
+       [3] _rebuild_active_route (res://application/main.gd:143)
+       [4] _rebuild_does_not_redraw (res://tests/test_pool_callers.gd:156)
+       [5] run (res://tests/test_pool_callers.gd:23)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_pool_callers.gd:233)
+       [5] _on_map (res://tests/test_pool_callers.gd:239)
+       [6] _h57_same_run (res://tests/test_pool_callers.gd:166)
+       [7] run (res://tests/test_pool_callers.gd:24)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_map (res://application/main.gd:1393)
+       [2] _route_run (res://application/main.gd:1279)
+       [3] _continue_after_pool (res://application/main.gd:3023)
+       [4] _on_pool_finished (res://application/main.gd:2999)
+       [5] _complete (res://presentation/story/departure_staging.gd:197)
+       [6] _tap (res://presentation/story/departure_staging.gd:190)
+       [7] _on_map (res://tests/test_pool_callers.gd:242)
+       [8] _h57_same_run (res://tests/test_pool_callers.gd:166)
+       [9] run (res://tests/test_pool_callers.gd:24)
+       [10] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _show_pending_pool (res://application/main.gd:2974)
+       [4] _h57_same_run (res://tests/test_pool_callers.gd:184)
+       [5] run (res://tests/test_pool_callers.gd:24)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_pool_callers.gd:233)
+       [5] _on_map (res://tests/test_pool_callers.gd:239)
+       [6] _shop_is_not_the_hearth (res://tests/test_pool_callers.gd:200)
+       [7] run (res://tests/test_pool_callers.gd:25)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_map (res://application/main.gd:1393)
+       [2] _route_run (res://application/main.gd:1279)
+       [3] _continue_after_pool (res://application/main.gd:3023)
+       [4] _on_pool_finished (res://application/main.gd:2999)
+       [5] _complete (res://presentation/story/departure_staging.gd:197)
+       [6] _tap (res://presentation/story/departure_staging.gd:190)
+       [7] _on_map (res://tests/test_pool_callers.gd:242)
+       [8] _shop_is_not_the_hearth (res://tests/test_pool_callers.gd:200)
+       [9] run (res://tests/test_pool_callers.gd:25)
+       [10] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_shop (res://application/main.gd:1952)
+       [3] _shop_is_not_the_hearth (res://tests/test_pool_callers.gd:212)
+       [4] run (res://tests/test_pool_callers.gd:25)
+       [5] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _show_pending_pool (res://application/main.gd:2974)
+       [4] _on_shop_choice (res://application/main.gd:1979)
+       [5] _shop_is_not_the_hearth (res://tests/test_pool_callers.gd:220)
+       [6] run (res://tests/test_pool_callers.gd:25)
+       [7] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_pool_callers.gd
+ok   res://tests/test_preferences.gd
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/test_presentation.gd:247)
+       [1] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_presentation.gd
+ok   res://tests/test_profile_isolation.gd
+ok   res://tests/test_quests.gd
+ok   res://tests/test_release_identity.gd
+ok   res://tests/test_reloadable_abandon.gd
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_resume_routes.gd:240)
+       [1] _ordinary_roundtrip (res://tests/test_resume_routes.gd:40)
+       [2] run (res://tests/test_resume_routes.gd:11)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_resume_routes.gd:240)
+       [1] _ordinary_roundtrip (res://tests/test_resume_routes.gd:47)
+       [2] run (res://tests/test_resume_routes.gd:11)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_resume_routes.gd:240)
+       [1] _event_pending_roundtrip (res://tests/test_resume_routes.gd:76)
+       [2] run (res://tests/test_resume_routes.gd:13)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_resume_routes.gd:240)
+       [1] _event_pending_roundtrip (res://tests/test_resume_routes.gd:85)
+       [2] run (res://tests/test_resume_routes.gd:13)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_resume_routes.gd:240)
+       [1] _event_pending_roundtrip (res://tests/test_resume_routes.gd:76)
+       [2] run (res://tests/test_resume_routes.gd:13)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_resume_routes.gd:240)
+       [1] _event_pending_roundtrip (res://tests/test_resume_routes.gd:85)
+       [2] run (res://tests/test_resume_routes.gd:13)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_resume_routes.gd:240)
+       [1] _event_pending_roundtrip (res://tests/test_resume_routes.gd:76)
+       [2] run (res://tests/test_resume_routes.gd:13)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_resume_routes.gd:240)
+       [1] _event_pending_roundtrip (res://tests/test_resume_routes.gd:85)
+       [2] run (res://tests/test_resume_routes.gd:13)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_resume_routes.gd:240)
+       [1] _hollow_roundtrip (res://tests/test_resume_routes.gd:110)
+       [2] run (res://tests/test_resume_routes.gd:15)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_resume_routes.gd:240)
+       [1] _hollow_roundtrip (res://tests/test_resume_routes.gd:117)
+       [2] run (res://tests/test_resume_routes.gd:15)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_resume_routes.gd:240)
+       [1] _hollow_roundtrip (res://tests/test_resume_routes.gd:110)
+       [2] run (res://tests/test_resume_routes.gd:15)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_resume_routes.gd:240)
+       [1] _hollow_roundtrip (res://tests/test_resume_routes.gd:117)
+       [2] run (res://tests/test_resume_routes.gd:15)
+       [3] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_resume_routes.gd
+ok   res://tests/test_rng.gd
+ok   res://tests/test_run_hud.gd
+ok   res://tests/test_save.gd
+ok   res://tests/test_scenario.gd
+ok   res://tests/test_scenario_catalogue.gd
+ok   res://tests/test_scene_player.gd
+ERROR: scenes: empty has no beats
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://presentation/story/scene_script.gd:140)
+       [1] parse_scene (res://presentation/story/scene_script.gd:46)
+       [2] _rejects (res://tests/test_scene_script.gd:168)
+       [3] _validation (res://tests/test_scene_script.gd:150)
+       [4] run (res://tests/test_scene_script.gd:34)
+       [5] _initialize (res://tests/run_all.gd:17)
+ERROR: scenes: mute beat 0 has no lines
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://presentation/story/scene_script.gd:140)
+       [1] _beat (res://presentation/story/scene_script.gd:106)
+       [2] parse_scene (res://presentation/story/scene_script.gd:50)
+       [3] _rejects (res://tests/test_scene_script.gd:168)
+       [4] _validation (res://tests/test_scene_script.gd:151)
+       [5] run (res://tests/test_scene_script.gd:34)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: scenes: zoom beat 0 has unknown motion 'zoom'
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://presentation/story/scene_script.gd:140)
+       [1] _beat (res://presentation/story/scene_script.gd:100)
+       [2] parse_scene (res://presentation/story/scene_script.gd:50)
+       [3] _rejects (res://tests/test_scene_script.gd:168)
+       [4] _validation (res://tests/test_scene_script.gd:152)
+       [5] run (res://tests/test_scene_script.gd:34)
+       [6] _initialize (res://tests/run_all.gd:17)
+ERROR: scenes: blank beat 0 line 0 has no key
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://presentation/story/scene_script.gd:140)
+       [1] _line (res://presentation/story/scene_script.gd:131)
+       [2] _beat (res://presentation/story/scene_script.gd:109)
+       [3] parse_scene (res://presentation/story/scene_script.gd:50)
+       [4] _rejects (res://tests/test_scene_script.gd:168)
+       [5] _validation (res://tests/test_scene_script.gd:154)
+       [6] run (res://tests/test_scene_script.gd:34)
+       [7] _initialize (res://tests/run_all.gd:17)
+ERROR: scenes: empty-key beat 0 line 0 has no key
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://presentation/story/scene_script.gd:140)
+       [1] _line (res://presentation/story/scene_script.gd:131)
+       [2] _beat (res://presentation/story/scene_script.gd:109)
+       [3] parse_scene (res://presentation/story/scene_script.gd:50)
+       [4] _rejects (res://tests/test_scene_script.gd:168)
+       [5] _validation (res://tests/test_scene_script.gd:155)
+       [6] run (res://tests/test_scene_script.gd:34)
+       [7] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_scene_script.gd
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _hearth_plant_is_departure_only (res://tests/test_scene_wiring.gd:239)
+       [5] run (res://tests/test_scene_wiring.gd:26)
+       [6] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_scene_wiring.gd
+ok   res://tests/test_sealed_door.gd
+ok   res://tests/test_sentry_release.gd
+ok   res://tests/test_stage_plates.gd
+ok   res://tests/test_stage_shape.gd
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] run (res://tests/test_stall_layout.gd:52)
+         [1] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] run (res://tests/test_stall_layout.gd:52)
+         [1] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] run (res://tests/test_stall_layout.gd:52)
+         [1] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] run (res://tests/test_stall_layout.gd:52)
+         [1] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] run (res://tests/test_stall_layout.gd:52)
+         [1] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _state_grammar (res://tests/test_stall_layout.gd:261)
+         [1] run (res://tests/test_stall_layout.gd:55)
+         [2] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/test_stall_layout.gd:56)
+       [1] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _zh_screen_holds (res://tests/test_stall_layout.gd:77)
+         [1] run (res://tests/test_stall_layout.gd:59)
+         [2] _initialize (res://tests/run_all.gd:17)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] _zh_screen_holds (res://tests/test_stall_layout.gd:77)
+         [1] run (res://tests/test_stall_layout.gd:59)
+         [2] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _zh_screen_holds (res://tests/test_stall_layout.gd:80)
+       [1] run (res://tests/test_stall_layout.gd:59)
+       [2] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_stall_layout.gd
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_story_acceptance.gd:627)
+       [5] _journey_a (res://tests/test_story_acceptance.gd:177)
+       [6] run (res://tests/test_story_acceptance.gd:51)
+       [7] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_story_acceptance.gd:627)
+       [5] _on_map (res://tests/test_story_acceptance.gd:633)
+       [6] _journey_a (res://tests/test_story_acceptance.gd:184)
+       [7] run (res://tests/test_story_acceptance.gd:51)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_map (res://application/main.gd:1393)
+       [2] _route_run (res://application/main.gd:1279)
+       [3] _continue_after_pool (res://application/main.gd:3023)
+       [4] _on_pool_finished (res://application/main.gd:2999)
+       [5] _complete (res://presentation/story/departure_staging.gd:197)
+       [6] _tap (res://presentation/story/departure_staging.gd:190)
+       [7] _on_map (res://tests/test_story_acceptance.gd:636)
+       [8] _journey_a (res://tests/test_story_acceptance.gd:184)
+       [9] run (res://tests/test_story_acceptance.gd:51)
+       [10] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_pending_pool (res://application/main.gd:2987)
+       [3] _on_node_chosen (res://application/main.gd:1625)
+       [4] choose (res://presentation/map/world_map_screen.gd:740)
+       [5] _pick_first (res://tests/test_story_acceptance.gd:647)
+       [6] _journey_a (res://tests/test_story_acceptance.gd:185)
+       [7] run (res://tests/test_story_acceptance.gd:51)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_story_acceptance.gd:627)
+       [5] _journey_b (res://tests/test_story_acceptance.gd:222)
+       [6] run (res://tests/test_story_acceptance.gd:52)
+       [7] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _show_pending_pool (res://application/main.gd:2974)
+       [4] _route_run (res://application/main.gd:1256)
+       [5] _continue_run (res://application/main.gd:1246)
+       [6] _journey_b (res://tests/test_story_acceptance.gd:229)
+       [7] run (res://tests/test_story_acceptance.gd:52)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_story_acceptance.gd:727)
+       [1] _journey_d (res://tests/test_story_acceptance.gd:323)
+       [2] run (res://tests/test_story_acceptance.gd:54)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_story_acceptance.gd:727)
+       [1] _journey_d (res://tests/test_story_acceptance.gd:323)
+       [2] run (res://tests/test_story_acceptance.gd:54)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_story_acceptance.gd:727)
+       [1] _journey_d (res://tests/test_story_acceptance.gd:323)
+       [2] run (res://tests/test_story_acceptance.gd:54)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_story_acceptance.gd:727)
+       [1] _journey_d (res://tests/test_story_acceptance.gd:323)
+       [2] run (res://tests/test_story_acceptance.gd:54)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_story_acceptance.gd:627)
+       [5] _on_map (res://tests/test_story_acceptance.gd:633)
+       [6] _journey_f (res://tests/test_story_acceptance.gd:384)
+       [7] run (res://tests/test_story_acceptance.gd:56)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_map (res://application/main.gd:1393)
+       [2] _route_run (res://application/main.gd:1279)
+       [3] _continue_after_pool (res://application/main.gd:3023)
+       [4] _on_pool_finished (res://application/main.gd:2999)
+       [5] _complete (res://presentation/story/departure_staging.gd:197)
+       [6] _tap (res://presentation/story/departure_staging.gd:190)
+       [7] _on_map (res://tests/test_story_acceptance.gd:636)
+       [8] _journey_f (res://tests/test_story_acceptance.gd:384)
+       [9] run (res://tests/test_story_acceptance.gd:56)
+       [10] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_pending_pool (res://application/main.gd:2987)
+       [3] _on_node_chosen (res://application/main.gd:1625)
+       [4] choose (res://presentation/map/world_map_screen.gd:740)
+       [5] _pick_first (res://tests/test_story_acceptance.gd:647)
+       [6] _journey_f (res://tests/test_story_acceptance.gd:385)
+       [7] run (res://tests/test_story_acceptance.gd:56)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_pending_pool (res://application/main.gd:2987)
+       [3] _route_run (res://application/main.gd:1256)
+       [4] _continue_run (res://application/main.gd:1246)
+       [5] _journey_f (res://tests/test_story_acceptance.gd:393)
+       [6] run (res://tests/test_story_acceptance.gd:56)
+       [7] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_story_acceptance.gd:627)
+       [5] _journey_a (res://tests/test_story_acceptance.gd:177)
+       [6] run (res://tests/test_story_acceptance.gd:51)
+       [7] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_story_acceptance.gd:627)
+       [5] _on_map (res://tests/test_story_acceptance.gd:633)
+       [6] _journey_a (res://tests/test_story_acceptance.gd:184)
+       [7] run (res://tests/test_story_acceptance.gd:51)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_map (res://application/main.gd:1393)
+       [2] _route_run (res://application/main.gd:1279)
+       [3] _continue_after_pool (res://application/main.gd:3023)
+       [4] _on_pool_finished (res://application/main.gd:2999)
+       [5] _complete (res://presentation/story/departure_staging.gd:197)
+       [6] _tap (res://presentation/story/departure_staging.gd:190)
+       [7] _on_map (res://tests/test_story_acceptance.gd:636)
+       [8] _journey_a (res://tests/test_story_acceptance.gd:184)
+       [9] run (res://tests/test_story_acceptance.gd:51)
+       [10] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_pending_pool (res://application/main.gd:2987)
+       [3] _on_node_chosen (res://application/main.gd:1625)
+       [4] choose (res://presentation/map/world_map_screen.gd:740)
+       [5] _pick_first (res://tests/test_story_acceptance.gd:647)
+       [6] _journey_a (res://tests/test_story_acceptance.gd:185)
+       [7] run (res://tests/test_story_acceptance.gd:51)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_story_acceptance.gd:627)
+       [5] _journey_b (res://tests/test_story_acceptance.gd:222)
+       [6] run (res://tests/test_story_acceptance.gd:52)
+       [7] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _show_pending_pool (res://application/main.gd:2974)
+       [4] _route_run (res://application/main.gd:1256)
+       [5] _continue_run (res://application/main.gd:1246)
+       [6] _journey_b (res://tests/test_story_acceptance.gd:229)
+       [7] run (res://tests/test_story_acceptance.gd:52)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_story_acceptance.gd:727)
+       [1] _journey_d (res://tests/test_story_acceptance.gd:323)
+       [2] run (res://tests/test_story_acceptance.gd:54)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_story_acceptance.gd:727)
+       [1] _journey_d (res://tests/test_story_acceptance.gd:323)
+       [2] run (res://tests/test_story_acceptance.gd:54)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_story_acceptance.gd:727)
+       [1] _journey_d (res://tests/test_story_acceptance.gd:323)
+       [2] run (res://tests/test_story_acceptance.gd:54)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+   GDScript backtrace (most recent call first):
+       [0] _dispose (res://tests/test_story_acceptance.gd:727)
+       [1] _journey_d (res://tests/test_story_acceptance.gd:323)
+       [2] run (res://tests/test_story_acceptance.gd:54)
+       [3] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_departure_staging (res://application/main.gd:2938)
+       [3] _new_run (res://application/main.gd:1165)
+       [4] _departing (res://tests/test_story_acceptance.gd:627)
+       [5] _on_map (res://tests/test_story_acceptance.gd:633)
+       [6] _journey_f (res://tests/test_story_acceptance.gd:384)
+       [7] run (res://tests/test_story_acceptance.gd:56)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_map (res://application/main.gd:1393)
+       [2] _route_run (res://application/main.gd:1279)
+       [3] _continue_after_pool (res://application/main.gd:3023)
+       [4] _on_pool_finished (res://application/main.gd:2999)
+       [5] _complete (res://presentation/story/departure_staging.gd:197)
+       [6] _tap (res://presentation/story/departure_staging.gd:190)
+       [7] _on_map (res://tests/test_story_acceptance.gd:636)
+       [8] _journey_f (res://tests/test_story_acceptance.gd:384)
+       [9] run (res://tests/test_story_acceptance.gd:56)
+       [10] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_pending_pool (res://application/main.gd:2987)
+       [3] _on_node_chosen (res://application/main.gd:1625)
+       [4] choose (res://presentation/map/world_map_screen.gd:740)
+       [5] _pick_first (res://tests/test_story_acceptance.gd:647)
+       [6] _journey_f (res://tests/test_story_acceptance.gd:385)
+       [7] run (res://tests/test_story_acceptance.gd:56)
+       [8] _initialize (res://tests/run_all.gd:17)
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:559)
+   GDScript backtrace (most recent call first):
+       [0] screen_in (res://presentation/stage/transition_layer.gd:282)
+       [1] _show_route (res://application/main.gd:790)
+       [2] _show_pending_pool (res://application/main.gd:2987)
+       [3] _route_run (res://application/main.gd:1256)
+       [4] _continue_run (res://application/main.gd:1246)
+       [5] _journey_f (res://tests/test_story_acceptance.gd:393)
+       [6] run (res://tests/test_story_acceptance.gd:56)
+       [7] _initialize (res://tests/run_all.gd:17)
+ok   res://tests/test_story_acceptance.gd
+cell ladder v0 strong mix=none n=2 dusk=0.000 ash=1.000
+cell iso v1 strong mix=none n=2 dusk=0.000 ash=1.000
+ok   res://tests/test_vow_ladder_bakeoff.gd
+ok   res://tests/test_ware_tag.gd
+PASS (101 tests)
+WARNING: 2 RIDs of type "Canvas" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 108 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+ERROR: Pages in use exist at exit in PagedAllocator: N20RasterizerSceneDummy21GeometryInstanceDummyE
+   at: ~PagedAllocator (./core/templates/paged_allocator.h:170)
+WARNING: 1320 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 11 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+ERROR: Pages in use exist at exit in PagedAllocator: N12VariantPools12BucketMediumE
+   at: ~PagedAllocator (./core/templates/paged_allocator.h:170)
+ERROR: 7 RID allocations of type 'N13RendererDummy15MaterialStorage13DummyMaterialE' were leaked at exit.
+ERROR: 5 RID allocations of type 'N13RendererDummy15MaterialStorage11DummyShaderE' were leaked at exit.
+ERROR: 3 RID allocations of type 'N13RendererDummy11MeshStorage14DummyMultiMeshE' were leaked at exit.
+ERROR: 3 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.
+ERROR: 225 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 3 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.
+ERROR: 86 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 7 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+ERROR: 8 RID allocations of type 'PN18TextServerAdvanced27FontAdvancedLinkedVariationE' were leaked at exit.

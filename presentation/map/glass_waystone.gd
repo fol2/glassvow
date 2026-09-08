@@ -28,6 +28,9 @@ const CHIP_FONT_SIZE: int = 27
 const DRAG_SLOP: float = 12.0
 const GLYPH_KINDS: Array[String] = ["monster", "elite", "rest", "shop", "treasure", "event", "unlit", "monument", "boss"]
 
+var journey_mode: bool = false
+var journey_overview: bool = false
+var journey_selected: bool = false
 var index: int = 0
 var kind: String = "monster"
 var hue: float = 210.0
@@ -130,7 +133,7 @@ func _gui_input(event: InputEvent) -> void:
 	var mb: InputEventMouseButton = event as InputEventMouseButton
 	var st: InputEventScreenTouch = event as InputEventScreenTouch
 	var key: InputEventKey = event as InputEventKey
-	if key != null and reachable and key.pressed and not key.echo \
+	if key != null and (reachable or journey_mode) and key.pressed and not key.echo \
 			and key.keycode in [KEY_ENTER, KEY_SPACE]:
 		accept_event()
 		chosen.emit(index)
@@ -174,10 +177,10 @@ func _gui_input(event: InputEvent) -> void:
 ## node fewer per waystone across 105 of them, and it cannot drift out of
 ## alignment with the thing it is standing in front of.
 func set_touch_min(min_px: float, draw_scale: float) -> void:
-	var base: Vector2 = Vector2(WIDTH, EMBLEM_H + CAPTION_H)
+	var base: Vector2 = _face_size()
 	var want: Vector2 = Vector2.ONE * (min_px / maxf(0.01, draw_scale))
 	var pad: Vector2 = ((want - base) * 0.5).max(Vector2.ZERO)
-	if pad.is_equal_approx(_pad):
+	if pad.is_equal_approx(_pad) and size.is_equal_approx(base+pad*2.0):
 		return
 	_caption.offset_top = _pad.y + EMBLEM_H - 2 + (pad.y - _pad.y)
 	_caption.offset_bottom = _caption.offset_top + CAPTION_H + 2
@@ -200,6 +203,9 @@ func set_depth_alpha(a: float) -> void:
 
 
 func _draw() -> void:
+	if journey_mode:
+		_draw_engraving()
+		return
 	var cx: float = _pad.x + WIDTH * 0.5
 	var cy: float = _pad.y + EMBLEM_H * 0.5
 	var glow: float = (0.5 + 0.5 * sin(_pulse * 2.2)) if reachable else 0.0
@@ -258,7 +264,9 @@ func _art_kind() -> String:
 func _seat_art() -> void:
 	var frame_side: float = 86.0 if kind == "boss" \
 		else (64.0 if kind in ["elite", "treasure"] else 54.0)
-	var centre: Vector2 = _pad + Vector2(WIDTH, EMBLEM_H) * 0.5
+	if journey_mode:
+		frame_side = 48.0
+	var centre: Vector2 = _pad + _face_size() * 0.5
 	_frame_art.position = centre - Vector2.ONE * frame_side * 0.5
 	_frame_art.size = Vector2.ONE * frame_side
 	var glyph_side: float = frame_side * 1.12
@@ -283,7 +291,7 @@ func pane_radius() -> float:
 
 ## Whether this stone has a bounty left to promise. False the moment it kindles.
 func has_chip() -> bool:
-	return kind == "unlit" and bounty > 0
+	return not journey_mode and kind == "unlit" and bounty > 0
 
 
 ## One label source for both geometry and paint. The coin already says gold is
@@ -312,7 +320,7 @@ func chip_rect(flip: bool = false) -> Rect2:
 		HORIZONTAL_ALIGNMENT_LEFT, -1.0, CHIP_FONT_SIZE).x
 	var w: float = CHIP_ICON + 4.0 + tw + 16.0
 	var side: float = -1.0 if flip else 1.0
-	var centre: Vector2 = _pad + Vector2(WIDTH, EMBLEM_H) * 0.5
+	var centre: Vector2 = _pad + _face_size() * 0.5
 	return Rect2(centre.x + side * (pane_radius() + CHIP_GAP + w * 0.5) - w * 0.5,
 		centre.y - CHIP_H * 0.5, w, CHIP_H)
 
@@ -492,3 +500,37 @@ func _glyph_texture(glyph: String) -> AtlasTexture:
 	texture.region = Rect2(maxi(GLYPH_KINDS.find(glyph), 0) * 96, 0, 96, 96)
 	texture.filter_clip = true
 	return texture
+
+
+func set_journey_presentation(overview: bool, selected: bool) -> void:
+	if journey_mode and journey_overview == overview and journey_selected == selected:
+		return
+	journey_mode = true
+	journey_overview = overview
+	journey_selected = selected
+	_frame_art.visible = false
+	_glyph_art.visible = not overview
+	_seat_art()
+	queue_redraw()
+
+
+func _draw_engraving() -> void:
+	var centre: Vector2 = _pad + _face_size()*.5
+	var tint: Color = GlassStyle.GOLD if reachable or current else GlassStyle.TEXT_DIM
+	if journey_overview:
+		draw_circle(centre, 5.0 if current else 2.5, tint)
+		if current: draw_arc(centre,9,0,TAU,24,tint,1.2,true)
+		return
+	if reachable or current:
+		draw_line(centre+Vector2(-8,23),centre+Vector2(8,23),tint,1.8,true)
+	if journey_selected or has_focus() or _pressed:
+		for sx: float in [-1,1]:
+			for sy: float in [-1,1]:
+				var corner: Vector2 = centre+Vector2(20*sx,21*sy)
+				draw_line(corner,corner-Vector2(7*sx,0),tint,1.7,true)
+				draw_line(corner,corner-Vector2(0,7*sy),tint,1.7,true)
+	if quest_marked:
+		draw_circle(centre+Vector2(18,-18),3.0,Color("afe0dc"))
+
+func _face_size() -> Vector2:
+	return Vector2(60,60) if journey_mode else Vector2(WIDTH,EMBLEM_H+CAPTION_H)

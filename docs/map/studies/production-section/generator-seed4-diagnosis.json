@@ -1,0 +1,195 @@
+{
+  "input_digest": "dc9ce44058f18539d75337c5420b5348cb0a21d19790b228ff59c3167e5e673c",
+  "first_empty_node_ids": [
+    "0,4",
+    "1,4"
+  ],
+  "first_empty_iteration": 3,
+  "unary_empty_domains": 0,
+  "certificate_digest": "5e3f03e89bb7e2437939c6a39c8164b4313dd8147236056aa06574c570d909f0",
+  "pairs": [
+    {
+      "id": "2/0,3+0,4",
+      "survivors": 19,
+      "combinations": 45,
+      "rejections": [
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z3/row-00",
+          "count": 24
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z2/row-00",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "2/0,3+1,4",
+      "survivors": 13,
+      "combinations": 27,
+      "rejections": [
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z3/row-00",
+          "count": 12
+        },
+        {
+          "metric": "node_touch_overlap_area_px2",
+          "profile": "phone-landscape/z3/row-00",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "2/0,4+0,5",
+      "survivors": 191,
+      "combinations": 465,
+      "rejections": [
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z3/row-00",
+          "count": 153
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z2/row-00",
+          "count": 40
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z1/row-00",
+          "count": 30
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "pad-landscape/z3/row-00",
+          "count": 28
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "pad-landscape/z2/row-00",
+          "count": 8
+        },
+        {
+          "metric": "node_touch_overlap_area_px2",
+          "profile": "phone-landscape/z3/row-00",
+          "count": 5
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "pad-landscape/z1/row-00",
+          "count": 5
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "pad-landscape/z0/row-00",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "id": "2/0,4+1,4",
+      "survivors": 57,
+      "combinations": 135,
+      "rejections": [
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z3/row-00",
+          "count": 36
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z2/row-00",
+          "count": 21
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "pad-landscape/z3/row-00",
+          "count": 10
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z1/row-00",
+          "count": 8
+        },
+        {
+          "metric": "node_touch_overlap_area_px2",
+          "profile": "phone-landscape/z3/row-00",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "id": "2/1,3+1,4",
+      "survivors": 59,
+      "combinations": 81,
+      "rejections": [
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z3/row-00",
+          "count": 13
+        },
+        {
+          "metric": "node_touch_overlap_area_px2",
+          "profile": "phone-landscape/z3/row-00",
+          "count": 4
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z2/row-00",
+          "count": 3
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z1/row-00",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "2/1,4+1,5",
+      "survivors": 26,
+      "combinations": 81,
+      "rejections": [
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z3/row-00",
+          "count": 24
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z2/row-00",
+          "count": 13
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "pad-landscape/z3/row-00",
+          "count": 8
+        },
+        {
+          "metric": "node_touch_overlap_area_px2",
+          "profile": "phone-landscape/z3/row-00",
+          "count": 4
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "phone-landscape/z1/row-00",
+          "count": 3
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "pad-landscape/z0/row-00",
+          "count": 2
+        },
+        {
+          "metric": "node_ink_clearance_px",
+          "profile": "pad-landscape/z1/row-00",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "conclusion": "Pairwise screen compatibility empties the domains under the shipping camera and waystone calibration. This is not a native terrain failure. No new camera contract has been qualified."
+}

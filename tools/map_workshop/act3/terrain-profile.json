@@ -1,0 +1,13 @@
+{
+  "base_height": -3.0,
+  "contact_height": -0.1,
+  "shoulder_width": 12.0,
+  "mesh_pitch": 3.5,
+  "faceted": true,
+  "landforms": [
+    {"reserve_index": 0, "along": 0.3, "side": "near", "offset": 16, "radius_x": 32, "radius_z": 22, "height": 15},
+    {"reserve_index": 1, "along": 0.7, "side": "far", "offset": 18, "radius_x": 42, "radius_z": 26, "height": 12},
+    {"reserve_index": 3, "along": 0.5, "side": "near", "offset": 20, "radius_x": 40, "radius_z": 28, "height": 18},
+    {"reserve_index": 2, "along": 0.2, "side": "far", "offset": 17, "radius_x": 28, "radius_z": 20, "height": -3}
+  ]
+}

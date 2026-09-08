@@ -1,0 +1,119 @@
+{
+  "bridge_walkway": {
+    "body_samples": 20470,
+    "decoration_hits": 0,
+    "examples": [],
+    "scope": "Actual rail and pier triangles over rendered treads; five lateral samples across a 1.5 m corridor, 2.12 m body height."
+  },
+  "clearance": {
+    "architecture": {
+      "architecture_meshes": 1580,
+      "body_samples": 12282,
+      "bounds_hits": 0,
+      "first_hits": [],
+      "scope": "Conservative mesh AABBs, 0.5 m body width / 2.12 m above boots, centre and +/-0.5 m route offsets. Positive hits need triangle-level diagnosis."
+    },
+    "first_hits": [
+      {
+        "at": "(67.27576, 4.8, -2.420811)",
+        "edge": "ruin_0",
+        "height": 4.92662715911865
+      },
+      {
+        "at": "(67.27576, 4.8, -2.420811)",
+        "edge": "ruin_0",
+        "height": 4.88001823425293
+      },
+      {
+        "at": "(67.27576, 4.8, -2.420811)",
+        "edge": "ruin_0",
+        "height": 4.88404130935669
+      },
+      {
+        "at": "(67.27576, 4.8, -2.420811)",
+        "edge": "ruin_0",
+        "height": 4.89362478256226
+      },
+      {
+        "at": "(67.27576, 4.8, -2.420811)",
+        "edge": "ruin_0",
+        "height": 4.90320777893066
+      },
+      {
+        "at": "(67.27576, 4.8, -2.420811)",
+        "edge": "ruin_0",
+        "height": 4.91279125213623
+      },
+      {
+        "at": "(67.27576, 4.8, -2.420811)",
+        "edge": "ruin_0",
+        "height": 4.9223747253418
+      },
+      {
+        "at": "(67.52576, 4.8, -2.420811)",
+        "edge": "ruin_0",
+        "height": 5.0042839050293
+      },
+      {
+        "at": "(67.52576, 4.8, -2.420811)",
+        "edge": "ruin_0",
+        "height": 4.9628472328186
+      },
+      {
+        "at": "(67.52576, 4.8, -2.420811)",
+        "edge": "ruin_0",
+        "height": 4.97243070602417
+      },
+      {
+        "at": "(67.52576, 4.8, -2.420811)",
+        "edge": "ruin_0",
+        "height": 4.98201370239258
+      },
+      {
+        "at": "(67.52576, 4.8, -2.420811)",
+        "edge": "ruin_0",
+        "height": 4.99159717559814
+      }
+    ],
+    "scope": "Rendered ground triangles at seven offsets across 1.5 m; all source and decorative routes. Building bounds use the shared conservative body probe.",
+    "terrain_body_hits": 70,
+    "terrain_samples": 28658
+  },
+  "destination_count": 1,
+  "destination_owner": "14,3",
+  "edges": 76,
+  "nodes": 65,
+  "rendered_deck": {
+    "first_failures": [],
+    "maximum_height_difference_from_route": 0.479940011978149,
+    "maximum_rendered_triangle_grade": 9.82073648894458,
+    "missing": 0,
+    "samples": 28658,
+    "scope": "Actual deck triangles, all route samples at seven offsets across 1.2 m; triangle grade across both complete decks",
+    "steepest_at": [
+      13.0004997253418,
+      3.8219997882843,
+      8.12769985198975
+    ],
+    "steepest_projected_area": 0.0000049499976739753,
+    "steepest_vertices": [
+      [
+        13.0,
+        3.80629992485046,
+        8.125
+      ],
+      [
+        13.0015001296997,
+        3.8066999912262,
+        8.12650012969971
+      ],
+      [
+        13.0,
+        3.8529999256134,
+        8.13159942626953
+      ]
+    ]
+  },
+  "scope": "Seed 717 native rendered routes; architectural and terrain clearance require separate proof",
+  "source_digest": "1ca42389e05c9caa15b47496a6fbc91cf7f8a7049de04575ffe4d4f2a99b1168"
+}

@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "id": "obsidian-court-journey-v1",
+  "act": 2,
+  "bounds_xz_m": [
+    -80,
+    -34,
+    102,
+    34
+  ],
+  "rows": [
+    {
+      "station_m": -72.0,
+      "height_m": 0,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "outer-entrance"
+    },
+    {
+      "station_m": -61.5,
+      "height_m": 0,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "outer-entrance"
+    },
+    {
+      "station_m": -51.0,
+      "height_m": 0,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "outer-entrance"
+    },
+    {
+      "station_m": -40.5,
+      "height_m": 0,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "outer-entrance"
+    },
+    {
+      "station_m": -30.0,
+      "height_m": 1.8,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "cloister-courts"
+    },
+    {
+      "station_m": -19.5,
+      "height_m": 1.8,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "cloister-courts"
+    },
+    {
+      "station_m": -9.0,
+      "height_m": 1.8,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.5,
+      "region": "cloister-courts"
+    },
+    {
+      "station_m": 1.5,
+      "height_m": 1.8,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.5,
+      "region": "cloister-courts"
+    },
+    {
+      "station_m": 12.0,
+      "height_m": 1.8,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "cloister-courts"
+    },
+    {
+      "station_m": 22.5,
+      "height_m": 1.8,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "cloister-courts"
+    },
+    {
+      "station_m": 33.0,
+      "height_m": 0.6,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "audience-court"
+    },
+    {
+      "station_m": 43.5,
+      "height_m": 0.6,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "audience-court"
+    },
+    {
+      "station_m": 54.0,
+      "height_m": 0.6,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "audience-court"
+    },
+    {
+      "station_m": 64.5,
+      "height_m": 3.0,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "sovereign-forecourt"
+    },
+    {
+      "station_m": 75.0,
+      "height_m": 3.0,
+      "centre_z_m": 0.0,
+      "lane_spacing_m": 8.0,
+      "region": "sovereign-forecourt"
+    }
+  ],
+  "jitter_scale": 0.35,
+  "ordering_version": "layered-order-dp-v1",
+  "passage": {
+    "headroom_m": 2.45,
+    "deck_depth_m": 0.65,
+    "maximum_grade": 0.55,
+    "landing_m": 1.0,
+    "crossing_lane_spacing_m": 20.0,
+    "crossing_interval_m": 45.0
+  },
+  "spacing_version": "physical-reservations-v1",
+  "stair_version": "transverse-court-v1"
+}

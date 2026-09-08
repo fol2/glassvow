@@ -8,13 +8,21 @@ const PHYSICAL_PRECISION_M: float = 0.001
 const MAX_ORIENTATION_CONFLICTS: int = 8
 
 
-static func physical_profile() -> Dictionary:
-	return {
+static func physical_profile(quality: Dictionary = {}) -> Dictionary:
+	var out: Dictionary = {
 		"minimum_vertical_clearance_m": MINIMUM_VERTICAL_CLEARANCE_M,
 		"maximum_ramp_grade": MAXIMUM_RAMP_GRADE,
 		"physical_precision_m": PHYSICAL_PRECISION_M,
 		"levels": 2,
 	}
+	var spatial: Dictionary = quality.get("spatial_profile", {})
+	var passage: Dictionary = spatial.get("passage", {})
+	if not passage.is_empty():
+		out["minimum_vertical_clearance_m"] = MapLayoutCanonical.float_value(passage["headroom_m"]) \
+			+ MapLayoutCanonical.float_value(passage["deck_depth_m"])
+		out["maximum_ramp_grade"] = MapLayoutCanonical.float_value(passage["maximum_grade"])
+		out["landing_m"] = MapLayoutCanonical.float_value(passage.get("landing_m", 0.0))
+	return out
 
 
 static func apply(routes: Dictionary, quality: Dictionary) -> Dictionary:
@@ -24,7 +32,7 @@ static func apply(routes: Dictionary, quality: Dictionary) -> Dictionary:
 	var conflicts: Array[Dictionary] = _xz_conflicts(routes, epsilon)
 	if conflicts.is_empty():
 		return {"ok": true, "routes": routes.duplicate(true), "receipt": _receipt(
-			conflicts, [], 0, 0.0, 0.0, routes
+			conflicts, [], 0, 0.0, 0.0, routes, quality
 		)}
 	if conflicts.size() > MAX_ORIENTATION_CONFLICTS:
 		return _failure("orientation_bound",
@@ -40,11 +48,12 @@ static func apply(routes: Dictionary, quality: Dictionary) -> Dictionary:
 		var second_route: Dictionary = routes[str(edge_ids[1])]
 		options.append([
 			_span_option(str(edge_ids[0]), first_route,
-				str(edge_ids[1]), second_route),
+				str(edge_ids[1]), second_route, quality),
 			_span_option(str(edge_ids[1]), second_route,
-				str(edge_ids[0]), first_route),
+				str(edge_ids[0]), first_route, quality),
 		])
 	var best: Dictionary = {}
+	var approach_failures: Array[Dictionary] = []
 	var combination_count: int = 1 << conflicts.size()
 	for mask: int in range(combination_count):
 		var spans_by_edge: Dictionary = {}
@@ -64,11 +73,31 @@ static func apply(routes: Dictionary, quality: Dictionary) -> Dictionary:
 			orientations.append(option["receipt"])
 		if not feasible:
 			continue
-		var merged: Dictionary = _merged_spans(spans_by_edge)
+		var merged: Dictionary = _merged_spans(spans_by_edge, quality)
 		if merged.get("ok", false) != true:
 			continue
 		var merged_rows: Dictionary = merged["spans"]
-		var graded_routes: Dictionary = _apply_spans(routes, merged_rows)
+		var graded_routes: Dictionary
+		if quality.has("spatial_profile"):
+			graded_routes = routes.duplicate(true)
+			var governed: Dictionary = physical_profile(quality)
+			for edge_id: String in MapLayoutCanonical.sorted_keys(merged_rows):
+				var edge: Dictionary = routes[edge_id]
+				var spans: Array = merged_rows[edge_id]
+				var compact: bool = quality["spatial_profile"].get("stair_version","")=="transverse-court-v1"
+				var physical: Dictionary = preload("res://presentation/map/map_passage_route.gd").resolve(
+					edge,spans,MapLayoutCanonical.float_value(governed["minimum_vertical_clearance_m"]),
+					MapLayoutCanonical.float_value(governed["maximum_ramp_grade"]),
+					MapLayoutCanonical.float_value(governed["landing_m"]),compact)
+				if physical.get("ok") != true:
+					approach_failures.append({"edge_id":edge_id,"details":physical})
+					feasible = false
+					break
+				graded_routes[edge_id]["centerline"] = physical["line"]
+			if not feasible:
+				continue
+		else:
+			graded_routes = _apply_spans(routes, merged_rows, quality)
 		var evaluation: Dictionary = evaluate(graded_routes, quality)
 		if evaluation.get("hard_pass", false) != true:
 			continue
@@ -96,18 +125,21 @@ static func apply(routes: Dictionary, quality: Dictionary) -> Dictionary:
 	if best.is_empty():
 		return _failure("two_level_infeasible",
 			"neither bounded orientation yields a governed two-level result",
-			{"conflicts": conflicts, "options": options}, routes)
+			{"conflicts": conflicts, "options": options, "approach_failures": approach_failures}, routes)
 	var best_routes: Dictionary = best["routes"]
 	var best_orientations: Array = best["orientations"]
 	return {"ok": true, "routes": best_routes, "receipt": _receipt(
 		conflicts, best_orientations, MapLayoutCanonical.int_value(
 			best["span_count"]),
 		MapLayoutCanonical.float_value(best["elevated_length_m"]),
-		MapLayoutCanonical.float_value(best["ramp_burden"]), best_routes
+		MapLayoutCanonical.float_value(best["ramp_burden"]), best_routes, quality
 	)}
 
 
 static func evaluate(routes: Dictionary, quality: Dictionary) -> Dictionary:
+	var governed: Dictionary = physical_profile(quality)
+	var required_clearance: float = MapLayoutCanonical.float_value(governed["minimum_vertical_clearance_m"])
+	var maximum_allowed_grade: float = MapLayoutCanonical.float_value(governed["maximum_ramp_grade"])
 	var epsilon: float = MapLayoutCanonical.float_value(
 		quality["epsilon"]["world_m"]
 	)
@@ -123,18 +155,18 @@ static func evaluate(routes: Dictionary, quality: Dictionary) -> Dictionary:
 			var grade: float = INF if run <= epsilon and rise > epsilon else \
 				(0.0 if run <= epsilon else rise / run)
 			maximum_grade = maxf(maximum_grade, grade)
-			if grade > MAXIMUM_RAMP_GRADE + epsilon:
+			if grade > maximum_allowed_grade + epsilon:
 				grade_violations.append({
 					"metric_id": "maximum_ramp_grade",
 					"profile_id": "world",
 					"entities": [edge_id],
 					"value": grade,
 					"world": {"segment_index": index,
-						"limit": MAXIMUM_RAMP_GRADE},
+						"limit": maximum_allowed_grade},
 					"projected": {},
 				})
 	var conflicts: Array[Dictionary] = _xz_conflicts(routes, epsilon)
-	var minimum_clearance: float = MINIMUM_VERTICAL_CLEARANCE_M
+	var minimum_clearance: float = required_clearance
 	var invalid: int = 0
 	var crossing_violations: Array[Dictionary] = []
 	if not conflicts.is_empty():
@@ -150,7 +182,7 @@ static func evaluate(routes: Dictionary, quality: Dictionary) -> Dictionary:
 		minimum_clearance = minf(minimum_clearance, clearance)
 		var proper: bool = MapLayoutCanonical.int_value(
 			conflict["proper_crossing_count"]) == 1
-		if proper and clearance + epsilon >= MINIMUM_VERTICAL_CLEARANCE_M:
+		if proper and clearance + epsilon >= required_clearance:
 			continue
 		invalid += 1
 		var reason: String = "insufficient_vertical_clearance" if proper else \
@@ -163,7 +195,7 @@ static func evaluate(routes: Dictionary, quality: Dictionary) -> Dictionary:
 			"world": {
 				"minimum_separation_m": conflict["minimum_xz_m"],
 				"minimum_vertical_clearance_m": clearance,
-				"required_vertical_clearance_m": MINIMUM_VERTICAL_CLEARANCE_M,
+				"required_vertical_clearance_m": required_clearance,
 				"reason": reason,
 			},
 			"projected": {},
@@ -174,7 +206,7 @@ static func evaluate(routes: Dictionary, quality: Dictionary) -> Dictionary:
 				"profile_id": "world",
 				"entities": edge_ids,
 				"value": clearance,
-				"world": {"limit": MINIMUM_VERTICAL_CLEARANCE_M},
+				"world": {"limit": required_clearance},
 				"projected": {},
 			})
 	var violations: Array = grade_violations.duplicate(true)
@@ -188,17 +220,27 @@ static func evaluate(routes: Dictionary, quality: Dictionary) -> Dictionary:
 		},
 		"violations": violations,
 		"conflicts": conflicts,
-		"profile": physical_profile(),
+		"profile": physical_profile(quality),
 	}
 
 
 static func _span_option(elevated_id: String, elevated: Dictionary,
-		ground_id: String, ground: Dictionary) -> Dictionary:
+		ground_id: String, ground: Dictionary, quality: Dictionary = {}) -> Dictionary:
+	var governed: Dictionary = physical_profile(quality)
+	var required_clearance: float = MapLayoutCanonical.float_value(governed["minimum_vertical_clearance_m"])
+	var maximum_allowed_grade: float = MapLayoutCanonical.float_value(governed["maximum_ramp_grade"])
 	var line: Array = elevated["centerline"]
 	var ground_line: Array = ground["centerline"]
+	var baseline: float = _v3(line[0]).y
+	var spatial: Dictionary = quality.get("spatial_profile", {})
+	if spatial.is_empty() and absf(baseline) > PHYSICAL_PRECISION_M:
+		return {"ok": false, "reason": "input route is not all-ground"}
 	for point_v: Variant in line:
-		if absf(_v3(point_v).y) > PHYSICAL_PRECISION_M:
-			return {"ok": false, "reason": "input route is not all-ground"}
+		if absf(_v3(point_v).y-baseline) > PHYSICAL_PRECISION_M:
+			return {"ok": false, "reason": "passage needs a level elevated approach"}
+	for point_v: Variant in ground_line:
+		if absf(_v3(point_v).y-baseline) > PHYSICAL_PRECISION_M:
+			return {"ok": false, "reason": "crossing routes need a shared terrace baseline"}
 	var length: float = _path_length(line)
 	var limit: float = (
 		MapLayoutCanonical.float_value(elevated["corridor_width"])
@@ -211,7 +253,8 @@ static func _span_option(elevated_id: String, elevated: Dictionary,
 		overlap.x - PHYSICAL_PRECISION_M)
 	var deck_end: float = minf(length,
 		overlap.y + PHYSICAL_PRECISION_M)
-	var ramp_length: float = MINIMUM_VERTICAL_CLEARANCE_M / MAXIMUM_RAMP_GRADE
+	var ramp_length: float = required_clearance / maximum_allowed_grade \
+		+ 2.0 * MapLayoutCanonical.float_value(governed.get("landing_m", 0.0))
 	if deck_start + PHYSICAL_PRECISION_M < ramp_length \
 			or length - deck_end + PHYSICAL_PRECISION_M < ramp_length:
 		return {"ok": false, "reason": "bounded ramps do not fit",
@@ -222,7 +265,7 @@ static func _span_option(elevated_id: String, elevated: Dictionary,
 		"deck_start_m": deck_start,
 		"deck_end_m": deck_end,
 		"ramp_end_m": minf(length, deck_end + ramp_length),
-		"ramp_grade": MINIMUM_VERTICAL_CLEARANCE_M / ramp_length,
+		"ramp_grade": required_clearance / (ramp_length - 2.0 * MapLayoutCanonical.float_value(governed.get("landing_m", 0.0))),
 	}
 	return {"ok": true, "elevated_edge_id": elevated_id,
 		"ground_edge_id": ground_id, "span": span,
@@ -230,7 +273,10 @@ static func _span_option(elevated_id: String, elevated: Dictionary,
 			"ground_edge_id": ground_id, "span": span}}
 
 
-static func _merged_spans(spans_by_edge: Dictionary) -> Dictionary:
+static func _merged_spans(spans_by_edge: Dictionary, quality: Dictionary = {}) -> Dictionary:
+	var governed: Dictionary = physical_profile(quality)
+	var required_clearance: float = MapLayoutCanonical.float_value(governed["minimum_vertical_clearance_m"])
+	var maximum_allowed_grade: float = MapLayoutCanonical.float_value(governed["maximum_ramp_grade"])
 	var out: Dictionary = {}
 	for edge_id: String in MapLayoutCanonical.sorted_keys(spans_by_edge):
 		var spans: Array = spans_by_edge[edge_id].duplicate(true)
@@ -253,19 +299,21 @@ static func _merged_spans(spans_by_edge: Dictionary) -> Dictionary:
 			var deck_end: float = maxf(
 				MapLayoutCanonical.float_value(previous["deck_end_m"]),
 				MapLayoutCanonical.float_value(span["deck_end_m"]))
-			var ramp_length: float = MINIMUM_VERTICAL_CLEARANCE_M \
-				/ MAXIMUM_RAMP_GRADE
+			var ramp_length: float = required_clearance / maximum_allowed_grade \
+				+ 2.0 * MapLayoutCanonical.float_value(governed.get("landing_m", 0.0))
 			previous["ramp_start_m"] = maxf(0.0, deck_start - ramp_length)
 			previous["deck_start_m"] = deck_start
 			previous["deck_end_m"] = deck_end
 			previous["ramp_end_m"] = deck_end + ramp_length
-			previous["ramp_grade"] = MAXIMUM_RAMP_GRADE
+			previous["ramp_grade"] = maximum_allowed_grade
 			merged[-1] = previous
 		out[edge_id] = merged
 	return {"ok": true, "spans": MapLayoutCanonical.ordered_dictionary(out)}
 
 
-static func _apply_spans(routes: Dictionary, spans_by_edge: Dictionary) -> Dictionary:
+static func _apply_spans(routes: Dictionary, spans_by_edge: Dictionary,
+		quality: Dictionary = {}) -> Dictionary:
+	var landing: float = MapLayoutCanonical.float_value(physical_profile(quality).get("landing_m", 0.0))
 	var out: Dictionary = routes.duplicate(true)
 	for edge_id: String in MapLayoutCanonical.sorted_keys(spans_by_edge):
 		var edge: Dictionary = out[edge_id]
@@ -281,6 +329,11 @@ static func _apply_spans(routes: Dictionary, spans_by_edge: Dictionary) -> Dicti
 				"ramp_start_m", "deck_start_m", "deck_end_m", "ramp_end_m",
 			]:
 				positions.append(MapLayoutCanonical.float_value(span[key]))
+			if landing > 0.0:
+				positions.append(MapLayoutCanonical.float_value(span["ramp_start_m"]) + landing)
+				positions.append(MapLayoutCanonical.float_value(span["deck_start_m"]) - landing)
+				positions.append(MapLayoutCanonical.float_value(span["deck_end_m"]) + landing)
+				positions.append(MapLayoutCanonical.float_value(span["ramp_end_m"]) - landing)
 		positions.sort()
 		var unique: Array[float] = []
 		for position: float in positions:
@@ -291,7 +344,7 @@ static func _apply_spans(routes: Dictionary, spans_by_edge: Dictionary) -> Dicti
 		var edge_spans: Array = spans_by_edge[edge_id]
 		for position: float in unique:
 			var point: Vector3 = _point3_at_arc(line, position)
-			point.y = _height(position, edge_spans)
+			point.y += _height(position, edge_spans, quality)
 			graded.append(_a3(point))
 		graded[0] = line[0]
 		graded[-1] = line[-1]
@@ -300,24 +353,27 @@ static func _apply_spans(routes: Dictionary, spans_by_edge: Dictionary) -> Dicti
 	return MapLayoutCanonical.ordered_dictionary(out)
 
 
-static func _height(arc: float, spans: Array) -> float:
+static func _height(arc: float, spans: Array, quality: Dictionary = {}) -> float:
+	var governed: Dictionary = physical_profile(quality)
+	var required_clearance: float = MapLayoutCanonical.float_value(governed["minimum_vertical_clearance_m"])
+	var landing: float = MapLayoutCanonical.float_value(governed.get("landing_m", 0.0))
 	var height: float = 0.0
 	for span_v: Variant in spans:
 		var span: Dictionary = span_v
-		var ramp_start: float = MapLayoutCanonical.float_value(span["ramp_start_m"])
-		var deck_start: float = MapLayoutCanonical.float_value(span["deck_start_m"])
-		var deck_end: float = MapLayoutCanonical.float_value(span["deck_end_m"])
-		var ramp_end: float = MapLayoutCanonical.float_value(span["ramp_end_m"])
+		var ramp_start: float = MapLayoutCanonical.float_value(span["ramp_start_m"]) + landing
+		var deck_start: float = MapLayoutCanonical.float_value(span["deck_start_m"]) - landing
+		var deck_end: float = MapLayoutCanonical.float_value(span["deck_end_m"]) + landing
+		var ramp_end: float = MapLayoutCanonical.float_value(span["ramp_end_m"]) - landing
 		if arc < ramp_start or arc > ramp_end:
 			continue
 		if arc < deck_start:
-			height = maxf(height, MINIMUM_VERTICAL_CLEARANCE_M \
+			height = maxf(height, required_clearance \
 				* (arc - ramp_start) / maxf(deck_start - ramp_start,
 					PHYSICAL_PRECISION_M))
 		elif arc <= deck_end:
-			height = maxf(height, MINIMUM_VERTICAL_CLEARANCE_M)
+			height = maxf(height, required_clearance)
 		else:
-			height = maxf(height, MINIMUM_VERTICAL_CLEARANCE_M \
+			height = maxf(height, required_clearance \
 				* (ramp_end - arc) / maxf(ramp_end - deck_end,
 					PHYSICAL_PRECISION_M))
 	return height
@@ -550,10 +606,10 @@ static func _point3_at_arc(line: Array, requested_arc: float) -> Vector3:
 
 static func _receipt(conflicts: Array, orientations: Array,
 		span_count: int, elevated_length: float, ramp_burden: float,
-		routes: Dictionary) -> Dictionary:
+		routes: Dictionary, quality: Dictionary = {}) -> Dictionary:
 	return MapLayoutCanonical.ordered_dictionary({
 		"status": "GRADED" if span_count > 0 else "ALL_GROUND",
-		"profile": physical_profile(),
+		"profile": physical_profile(quality),
 		"conflicts": conflicts,
 		"orientations": orientations,
 		"bridge_span_count": span_count,

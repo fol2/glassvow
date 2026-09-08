@@ -17,7 +17,7 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 
 static func run(fails: Array[String]) -> void:
 	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
-		"res://docs/map/map-quality-v2.json"
+		"res://content/map-quality-v2.json"
 	))
 	_test_portal_geometry(fails, quality)
 	_test_causal_binding_closure(fails, quality)

@@ -7,7 +7,7 @@ static func _ok(fails: Array[String], value: bool, text: String) -> void:
 	if not value: fails.append("test_map_node_candidate_generator: " + text)
 static func run(fails: Array[String]) -> void:
 	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
-		"res://docs/map/map-quality-v2.json"))
+		"res://content/map-quality-v2.json"))
 	_test_identity_axes_and_contracts(fails, quality)
 	_test_no_go_filtering(fails, quality)
 	_test_generated_seeds(fails, quality)

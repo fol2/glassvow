@@ -1033,3 +1033,39 @@ waystone symbols. It carries no generated raster or external icon dependency.
 The Vigil's rose window remains concealed; the visible rose threshold belongs
 to Act IV. Native captures and final validation are recorded in
 `docs/reviews/map-reassembly/direction.md`; the concept image is not game proof.
+
+## Act III court ground — 7 September 2026
+
+`assets/art/stage/act3-court-floor.png` is a newly generated obsidian surface,
+created with the built-in image generator from the existing Act III ledge and
+native Obsidian Court material reference. Direction: large intact sombre slabs,
+quiet top faces, restrained cold edge glints and sparse violet accents; no busy
+magenta crack network. A second edit replaced the generator's baked checkerboard
+surround with pure black. Original generated source: `exec-360883ec-6415-4886-8914-7cc00ec9dd1b.png`.
+
+The black surround is not treated as alpha. `ObsidianFinish` binds the candidate
+to the combat ground shader; the existing ledge supplies the exact silhouette,
+with smoothly desaturated original edge shading blended into the candidate surround. Native transparent
+viewport verification compares all 98,304 alpha samples and requires identical
+coverage within one 8-bit alpha step. The original ledge remains the coverage
+source and comparison asset. The same finish authority defines the precinct
+stone colour, slab scale, joint treatment and roughness. Combat uses a painted
+perspective plate; the map uses lit three-dimensional surfaces. Other acts retain
+their existing materials.
+
+## Act IV path-in-void study — 7 September 2026
+
+`tools/map_workshop/act4/kit/` contains three original procedural glTF assets:
+`threshold-window.glb`, `memory-stele.glb` and `other-side-hearth.glb`. The inspected
+local Blender 5.2.1 builder is `tools/map_workshop/act4/build_kit.py`; it uses only
+metre-scale geometry and original materials, with no downloaded model or texture.
+The native study adds subordinate reverse-chapter echoes, real stair flights and
+an unbounded background of quiet cosmic haze and 42 instanced embers. No ground
+plane, surrounding court or reflection sheet is included.
+
+`MirroredFinish` shares the Act IV stone palette between the world shader and the
+actual combat ledge. The combat shader preserves the original texture's alpha,
+painted stelae and inherited canvas modulation. A generated alternate ledge was
+rejected because its checkerboard was baked into RGB; that candidate is not a
+runtime asset. Native three-shape comparisons, alpha verification and the kit's
+source/media fingerprints are in `docs/map/studies/act4-step3/void-v1/`.

@@ -1,0 +1,85 @@
+{
+  "bridgehead_overlap": {
+    "maximum_surface_separation": 0.0000000000000035527136788005,
+    "overlap_samples": 2153,
+    "radius": 1.5,
+    "worst": [
+      -28.2493858337402,
+      4.15661382675171
+    ]
+  },
+  "crossing_centres": 3,
+  "crossings": [
+    {
+      "at": [
+        -31.3595237731934,
+        -1.46351337432861
+      ],
+      "clearance": 3.51174545705713,
+      "floor": 1.77825454294287,
+      "soffit": 5.29
+    },
+    {
+      "at": [
+        14.8087368011475,
+        5.39110803604126
+      ],
+      "clearance": 2.86194067694605,
+      "floor": 2.51021213346053,
+      "soffit": 5.37215281040657
+    },
+    {
+      "at": [
+        60.2554054260254,
+        18.6082916259766
+      ],
+      "clearance": 2.86542846167105,
+      "floor": 2.42457557235795,
+      "soffit": 5.290004034029
+    }
+  ],
+  "edges": 76,
+  "expected_edges": 76,
+  "expected_nodes": 65,
+  "maximum_endpoint_height_error": 0.000000164031984439816,
+  "maximum_sampled_grade": 0.489980000828822,
+  "minimum_centre_headroom": 2.86194067694605,
+  "minimum_dry_margin": 0.597414202690125,
+  "missing_route_samples": [],
+  "nodes": 65,
+  "remaining_checks": [
+    "whole-width bridge clearance",
+    "library footprint and route obstruction",
+    "reference-shape readability",
+    "water motion and depth",
+    "owner review"
+  ],
+  "rendered_deck": {
+    "first_failures": [],
+    "maximum_height_difference_from_route": 0.135359451293945,
+    "maximum_rendered_triangle_grade": 3.34471686085591,
+    "missing": 0,
+    "samples": 28315,
+    "scope": "Actual deck triangles, all route samples at seven offsets across 1.2 m; triangle grade across both complete decks",
+    "steepest_at": [
+      34.9151000976562,
+      5.3835334777832,
+      38.8884010314941
+    ]
+  },
+  "rendered_width_checks": {
+    "failures": [],
+    "minimum_headroom": 2.55382823944092,
+    "sample_count": 609,
+    "sampling": "Rendered lower top and upper underside triangles, 0.125 m along / 0.15 m across, +/-0.9 m width at all three crossings"
+  },
+  "steepest": {
+    "at": [
+      11.1526670455933,
+      5.49705648422241,
+      2.779376745224
+    ],
+    "edge": "3:8,3>3:9,4",
+    "upper": true
+  }
+}

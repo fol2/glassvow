@@ -1,0 +1,46 @@
+{
+  "status": "Unaccepted single-asset trial; requires native inspection",
+  "source": "/Users/jamesto/.codex/worktrees/0633/glassvow/assets/art/map-journey/trials/tripo-arch-matte.glb",
+  "output": "assets/art/map-journey/trials/tripo-arch-web.glb",
+  "triangles_before": 24000,
+  "triangles_after": 24000,
+  "height": 5.5,
+  "source_blender_bounds": [
+    [
+      -2.2134206295013428,
+      -0.675157904624939,
+      0.0006407745531760156
+    ],
+    [
+      2.216280937194824,
+      0.6778948903083801,
+      5.499453067779541
+    ]
+  ],
+  "materials": [
+    "tripo_material_29753484-ee5d-4b95-a812-bdd3e32a4210"
+  ],
+  "images": [
+    {
+      "name": "stone+archway+3d+model_basecolor",
+      "size": [
+        4096,
+        4096
+      ]
+    },
+    {
+      "name": "stone+archway+3d+model_normal",
+      "size": [
+        4096,
+        4096
+      ]
+    }
+  ],
+  "uv_layers": 1,
+  "stone_treatment": {
+    "metallic": 0,
+    "roughness": 0.92,
+    "normal_strength": 0.45
+  },
+  "thin_ornamental_web": true
+}

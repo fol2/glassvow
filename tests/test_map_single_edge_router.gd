@@ -11,6 +11,13 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, str(straight.get("status", "")) == MapSingleEdgeRouter.ROUTED
 			and straight_points.size() == 2 and is_equal_approx(MapLayoutCanonical.float_value(straight_cost.get("route_length_ratio", 0.0)), 1.0)
 			and MapLayoutCanonical.int_value(straight_cost.get("bend_count", -1)) == 0, "unobstructed edge stays straight")
+	var distant: Array[Dictionary] = []
+	for i: int in range(20):
+		distant.append({"id":"off-path-%02d"%i,"polygon":_rect(-20+i*2,5,-19+i*2,6)})
+	var direct: Dictionary = MapSingleEdgeRouter.route(source,target,distant,.5,.1)
+	var work: Dictionary = direct["diagnostics"]
+	_check(fails,_points(direct)==straight_points and MapLayoutCanonical.int_value(work["search_state_count"])==0,
+		"a clear shortest segment does not search unrelated scenery vertices")
 	var box: Array[Dictionary] = [{"id": "box", "polygon": _rect(-1.0, -1.0, 1.0, 1.0)}]
 	var inflated: Array = MapSingleEdgeRouter.inflate_obstacles(box, 0.3)
 	var detour: Dictionary = MapSingleEdgeRouter.route(source, target, box, 0.2, 0.1)

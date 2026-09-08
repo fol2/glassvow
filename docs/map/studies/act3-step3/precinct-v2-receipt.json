@@ -1,0 +1,1414 @@
+{
+  "source_sha256": {
+    "domain/map_layout/map_layout_canonical.gd": "2a6ef6fbb589d7af94998c9beb1d6088eff5038dfd652ebb9c28107b9283ac47",
+    "domain/map_layout/map_layout_input.gd": "2069ec3f174b137748028ddf56156ec590d4480a8bd8f37367532ca5102a898c",
+    "domain/map_layout/map_layout_input_binding.gd": "3b4fe26d71c75f6091d88152514a9f99f231d078ce334d301049e66991f341e7",
+    "domain/map_layout/map_layout_result.gd": "70ce93f1a85a03d21170edcd5d1188a5e94760754065c8eb6a139903bd51c8f7",
+    "presentation/map/glass_waystone.gd": "370cc0edcab1ae8c105413bfcf755cf1b298f72a660431ec6887239100b00a69",
+    "presentation/map/map_asset_profiles.gd": "7e3bf44bf797d4ff45479e3a85c8aec1f51f99aef03be749ba2220c2bc0f72ac",
+    "presentation/map/map_band.gd": "3d9a4bfb1da8818382054696a831cf1ca18b8f4f927c92ca81fed3b935e86579",
+    "presentation/map/map_camera_rig.gd": "3d5b8c43e46e49dc5ee423860fc02c7155c6d5b81e67c887219b8e8932f44f5a",
+    "presentation/map/map_compatibility_selection_iterator.gd": "5b77d41e97884a39817814d098418e62957ffec1665728e0118be1f4c97d66ad",
+    "presentation/map/map_compatibility_selection_network.gd": "f0a10894dffaa5eea24b7f64f46ef471eb44f6961714fd1ccf84ced5b5ef8a40",
+    "presentation/map/map_court_stair_route.gd": "257ef98717c91d764ab7199c77bf8be9521b93be2b1fbfc44f4cb582a7bdbaf6",
+    "presentation/map/map_grade_separation.gd": "856189494c8e2ee6c6a8139dfc755d06d700f0cfa18fd4728a9bf8868f79bf86",
+    "presentation/map/map_ground.gdshader": "0d500ad6ad57a0694176e93d322aa6001c083497cc25713773608c433ba6d382",
+    "presentation/map/map_landscape.gd": "d6e0bc3ae827772f7cbb00aa36f6567cbc7a11f1d5bc5176370ac48c914c9979",
+    "presentation/map/map_landscape_assets.gd": "197a2980f8d2b271fabb97390f49dba2917605b736a42b2e3f226f34afc181e2",
+    "presentation/map/map_layout_compiler.gd": "ed09b1f6f774a226ad8ea5bcb53cadeaa0809f7cd865a01887d0b74aff28b97b",
+    "presentation/map/map_layout_compiler_routes.gd": "6c41f2f1576158cf7f2a66f763b83e53ec896840b13cfe082006093842bbb05c",
+    "presentation/map/map_materials.gd": "09352011dc45b686e1e3cee739c734edfbac8414df27027d5712d1968d326c66",
+    "presentation/map/map_mineral.gdshader": "4c8ed49777010545cffdfb26cad5aca1cf5e56cecdadccb449041e9123223a1a",
+    "presentation/map/map_node_candidate_generator.gd": "36610ee7d974c08b00ba3813c2bdfb4bce13d25c7f30302312f002cfb5d6a48e",
+    "presentation/map/map_passage_route.gd": "83002af12a83ab068b809197c4d6cd0bfc64168aa9735934f829fd4ec00801f0",
+    "presentation/map/map_pin_projection.gd": "1c60f634cbaf58a503f60571dcec18ee32d1c423f576f9c76328b663e6afe256",
+    "presentation/map/map_prop.gdshader": "f2413ccc937074c2c6eab9004242f9dc35a1c50f2f00cc0f7b56cf48ffdda115",
+    "presentation/map/map_quality_evaluator.gd": "c260beb7fad2cfbed0d2c9c2484d805e7f5855872a76093009613b196052d264",
+    "presentation/map/map_regions.gd": "1f3bbc3d79e4aa80fe938a76b0cd811368ddafc0d341bd35d40374b8f8c6cbfa",
+    "presentation/map/map_scene.gd": "a599e57aef6128d09da639ad08836e533c1b467eb495423ff2f78d9130c5e6d9",
+    "presentation/map/map_selection_screen_preflight.gd": "0f5efbf4e103b6285f5ebf30e3011cb4a4b7a6a8914c067d19c7c2c118672841",
+    "presentation/map/map_single_edge_router.gd": "cc1d59dfaf4182e1c224f13de48de85e4f34e9d72ba94ed08cf43cd0ed990c44",
+    "presentation/map/map_spatial_ordering.gd": "3e076983f9ae1583fcd66dac10d2c6c30f8a41aa8f58df549d0d984fd9405812",
+    "presentation/map/map_spatial_profile.gd": "7711208f45025e2ea5146c655ce03be90571bb6841c04437585cf18051ad281e",
+    "presentation/map/map_spatial_spacing.gd": "5c196b50010f3b0481c0415835770444ab71347f9d45542b9bb152dd810cb4c9",
+    "presentation/map/map_terrace_route.gd": "a59d6eb5732292c9db4e4704b14a9f589dadd1e4e3b7fc6d4fecf23af1b2a953",
+    "presentation/map/map_vigil.gdshader": "f8386c06ceabc9e92a84b28deb1a084d1a57e8feb381c8fd79ba8a4766dd2d93",
+    "presentation/map/map_waylight_tracer.gd": "479100090b6f960a7c0f26a960dce273d37d54a010c6bb15232e0e1f49d86c7e",
+    "presentation/map/world_map_screen.gd": "61457a1a5bf00e68a852ef48faaf7adef0479b2cbf3c3b44aab55cddb2e46443",
+    "tools/map_workshop/act2/audit.gd": "32466e99cba76d8032c3314f56fa875dca459274864abcac622f81c669bc55db",
+    "tools/map_workshop/act2/boundary_surfaces.gd": "2100fb6ff231f71c9ded2ec712c1536c3dca2ce450bf7add79869df5728c8b66",
+    "tools/map_workshop/act2/bridge_walkway_audit.gd": "476cfdb3334b4a72e152fab5ba48fe02af6baf3b71fd6f9e1fcce7988a4832c4",
+    "tools/map_workshop/act2/causeways.gd": "f73d96f9bd2376aaad59fcd1c9e624b4104fa0e8203e824dc378a23437bfa0d0",
+    "tools/map_workshop/act2/deck_audit.gd": "be422e5a078c8969ab0ba3ad2827b2ef21327d40b1520866a666a4cff42002c5",
+    "tools/map_workshop/act2/drowned_city.gd": "e42b62a066479fb9c8c0018222dc190df8c4c920e5e96a041114c291995cf41b",
+    "tools/map_workshop/act2/export_geometry.gd": "6ab1b151093c9545965a6735bd2f08b16f2303db57498c192f7222ff649a69dd",
+    "tools/map_workshop/act2/forecourt.gd": "b6ff40f223e6167e2c41948f087fee64f1bcc35e382e2eff43886d8e1b543fe8",
+    "tools/map_workshop/act2/glass.gdshader": "3117c9819a3e80fc29cb1f380a6a88ca48fd88dabd44a7448a90a8d498152135",
+    "tools/map_workshop/act2/gothic_spire.gd": "e862691446e802cafb23bb4860d27c5a2463352a815fc685a2dac97aa24863c9",
+    "tools/map_workshop/act2/inspect.gd": "b3310cbaf00054f72d3ce7d98e49448a95939dff40d83ed484243d7eb861aff6",
+    "tools/map_workshop/act2/joined_surfaces.gd": "737afc8728d461ba73959fd9d0e48920be43dad2c3559c57123bfe75aeaebf52",
+    "tools/map_workshop/act2/landing_surfaces.gd": "409bbe45405d249321a8531b5ede2d56a5e771b42b7be6570670219a9264f02c",
+    "tools/map_workshop/act2/levels.gd": "0066da66a1405e41a5126a305e1b8d38d4a0e8e150867a22862041ee289eb92f",
+    "tools/map_workshop/act2/library.gd": "6b645102993b4bb9f884d77a7ab8b344237c23e45774ab506fc0789052db6570",
+    "tools/map_workshop/act2/masonry.gdshader": "1a630139d6faa2183a5fa56a32d3ba319a1c3107cfca5d199840f98a8da0e5fb",
+    "tools/map_workshop/act2/mesh_probe.gd": "0353c2fb624f1b986ded604f524ea17eb0b1341b50d72d5c98d80df099fdbe82",
+    "tools/map_workshop/act2/paving.gdshader": "a9252d06ce62b0e3339dbb51f850cad1138e8f48c5e5d3a59c555ee602894a98",
+    "tools/map_workshop/act2/placement_audit.gd": "c4a3901fcb6bc4e112c71e0c735e22ceaecd9d756930e923d12eaf12d0078ee0",
+    "tools/map_workshop/act2/profile.gd": "da6b2c1e2cc61a6829eac0314da37a2495c797a026f4b8450f9fdf54a9de7841",
+    "tools/map_workshop/act2/reflection.gd": "200435568d8f1b56da6bb4b8bc923e14ca80ffa7db49db8f8a7d55663e5baf66",
+    "tools/map_workshop/act2/reflection.gdshader": "38b65f9fc25dda896df47be7cc850cb8e80906f1be3f6d70484003a760e58756",
+    "tools/map_workshop/act2/review_views.gd": "e0de298597155e80d2dcd12af5c358cd30f43cf555d2215d82c40f2086f0b308",
+    "tools/map_workshop/act2/ruin_plan.gd": "948c8d848e382711227187ae642fff89d3a26b272d6d5e25e3f21cc0a24251fb",
+    "tools/map_workshop/act2/run.gd": "36473f5f182b0d128c2ffae4487a904493133ce0f2d7ed3ee3b4b6287fb5d39e",
+    "tools/map_workshop/act2/scenery.gd": "d0d66b9072e6c0aac7b986d36936a24d8f5e1ab59489e742452d6207ccf5b62d",
+    "tools/map_workshop/act2/scenery_assets.gd": "f440914411a7e6430c0316cd3b8e4071eecc1eb5c736cb18d4933aa8a7bf9b66",
+    "tools/map_workshop/act2/scenery_gallery.gd": "d9f3c36ef2378890c468355af0ac632ae1fd033c56440dd82e7a0b609923db99",
+    "tools/map_workshop/act2/smooth_surfaces.gd": "55ca7f65c144d24110aca872e7e51447c52f9666fc243a55ec9dc57acfb0f531",
+    "tools/map_workshop/act2/submerged_city.gd": "3b40cb5387458037da0ea4f4b4ef10547aec04d3318b4dd10366333462b1749a",
+    "tools/map_workshop/act2/sunken_quarter.gd": "307b0b46777b700c6d51106661d24f2daf5985a0e19947d1a585860a14a1b9e2",
+    "tools/map_workshop/act2/verify_ruin_plan.gd": "08fd46df20e66e079d36ed6bbceb9827db0d145cc744b1649aa40698a5df9a77",
+    "tools/map_workshop/act2/verify_scenery_assets.gd": "6e2c4a0786e1f9881230f82113b3eda1157d0a1ce0d99b0be816698f97bda008",
+    "tools/map_workshop/act2/ward.gd": "b60bfebf440671f257cdf2387c2b29cb357649244523a0a04eca6509019547e2",
+    "tools/map_workshop/act2/water.gdshader": "deb1c75b916df9a6ace23503210027ff652ef553e534bfdb42243c03945c1495",
+    "tools/map_workshop/act3/audit.gd": "038dc7f1ca0663e1e922b5c3218901e46054b8872165c96b7f408888f149c580",
+    "tools/map_workshop/act3/clearance.gd": "8b96b8693d10f3292e35444f501634e248c3c3c15531d55f847517c3c6391297",
+    "tools/map_workshop/act3/destination.gd": "82da07b0722ae6ab1beb9bc6e3a72a38e373d5186656eb92f6c60b6605cae5ad",
+    "tools/map_workshop/act3/enclosure.gd": "24df6868148354ead3ff8855bf56cb6fce110117df2d6c816dfee154c5289132",
+    "tools/map_workshop/act3/flight_study.gd": "af8096a376d56070de5e6d55ee26468101224a605fd56eab51a6ad7c2b0d4c10",
+    "tools/map_workshop/act3/grade_probe.gd": "a6a7bd6971e29c97a7788dbf144c2355ec9e6743df0311abeaa61e8d0224a7f5",
+    "tools/map_workshop/act3/ground.gd": "6c6cd1b6917d56ac53187e2cfcdd474fd36ec4f8400c271c20b767c83d6344bc",
+    "tools/map_workshop/act3/inspect.gd": "b1e6ccbfcac5bf7cae4fc7cecc6e49c67a947a89b0bf766e4904bc7cdb0dc4e1",
+    "tools/map_workshop/act3/kit/cloister-bay.glb": "5c0328deaf355183e550152cc924078aee5ce0ec328c32053a1ad2f60485416e",
+    "tools/map_workshop/act3/kit/covered-cloister-bay.glb": "657b2e7c22d02a0309191260f61af8bb52d484a233b1b3664eeddfae0a988e0e",
+    "tools/map_workshop/act3/kit/glazed-gallery-bay.glb": "4e256a5ac6cddf8ed95e2edcd98cfaa1a7ed4ac992dfc249ac63fb0750ac1dbf",
+    "tools/map_workshop/act3/kit/obsidian-great-hall.glb": "67fe81ebd14d7b31263afda1257580adef18a3723edaf939d8f845bd6a95743d",
+    "tools/map_workshop/act3/kit_study.gd": "cdcee3b749a4980d42b24942d16a5829f2a75673128802a7de54d866a96a47e5",
+    "tools/map_workshop/act3/layout_study.gd": "32f1791e24f246ca36441a28e18b30725ad19293af1e5100ed64478b6069b9f5",
+    "tools/map_workshop/act3/materials.gd": "868e86a9e41f389cc83f664d8d8a0483d4d6df52660988994dc3a28a47c6d143",
+    "tools/map_workshop/act3/obsidian.gdshader": "0c7531e4e98c87e30cfe8cf4ca47c4a3de5d1401c0bdfe79e851cde3d2f09a7e",
+    "tools/map_workshop/act3/passage_foundations.gd": "96569da505146c2763bf4b7ab0c659373c34261372cc136a5cf8485ef2580032",
+    "tools/map_workshop/act3/passage_study.gd": "aa00d7090b42b4fc067ee75868bfe9049d831247944397234250f37f57db743d",
+    "tools/map_workshop/act3/precinct.gd": "7ea8bc601892e73b6e017fbc35bb558227894371ab70718e2c057fd7c84c7b7d",
+    "tools/map_workshop/act3/precinct_inspection.gd": "5a4e39a0e5b2bdb5dac9e6a980f73d73534b9e449e9baaaae8b9a88cbc3e1a79",
+    "tools/map_workshop/act3/precinct_study.gd": "6f11b323c5d1a708ae2552bcabd860eeecb70f956180c3c4580a845a0581facb",
+    "tools/map_workshop/act3/routes.gd": "0faa5f1233f9d80d6985cf87b33abdc792b7b07522152b3af3d8cfd5d09afc05",
+    "tools/map_workshop/act3/run.gd": "67476396c5a798c8c7ab23b103a6cc24f105a65ae0ad6a2827e238a393fb643b",
+    "tools/map_workshop/act3/scenery.gd": "de7c28d8a8ca8551845bfba7b678d398172c9f623b90341b072a43578a089fe8",
+    "tools/map_workshop/act3/sovereign_halo.gd": "dc92c2e1be09ddf279c16ac1b469ae85db512643641ec90c3dcaca8d5f3e7829",
+    "tools/map_workshop/act3/spatial-recipe.json": "8073403d9a3cc13c777f5cdb56b251d73faba98c1a92b216e6b9ccb11b83ffa1",
+    "tools/map_workshop/act3/stonework.gd": "969173bfc95a2e7d2b697a5722e57ff24511283a225c6499b63fa0159e323401",
+    "tools/map_workshop/act3/terrace_probe.gd": "6c9ef849114d1a611a30c5d7df4ea63549f1f4b2c504e027ea1d624566ee32cb",
+    "tools/map_workshop/act3/terrain-profile.json": "edd7e8731f76e5e3072951d041391be82d044e09345bb2c8f8a1f856238b440d",
+    "tools/map_workshop/asset_lights.gd": "440355cf46e13ecdf36ba6b8356fa7ea2f4795166ffa9b47cab424b72b08b0d0",
+    "tools/map_workshop/asset_locator.gd": "714f90cd704946a9b6a5d302858e39e609074b0bba32594890f543371f71c4bc",
+    "tools/map_workshop/asset_surfaces.gd": "c151a3e7130a48fd12f7d5c1d9472aa174cddce21bd37646d03f21c4c6c2e928",
+    "tools/map_workshop/audit_bridge_continuity.gd": "2893a3aa734073093a95a2d95ccfc904a6f75eeb5418e5cbdc0a15c7d398c3ca",
+    "tools/map_workshop/audit_bridge_surface_cases.gd": "54993290dc2c526a527713fab78c13ea583b805ec30f9abc1d75c7e78af76163",
+    "tools/map_workshop/audit_camera.gd": "6d548e18283c2c6cfdeae5b3c8768b8590facc130bcdfbb13294a5699296b2ee",
+    "tools/map_workshop/audit_conifer_envelope.gd": "e3dd5d625f64c9d9447b979b5d6cabceed31bbded01a924d6719f86a0d74e0be",
+    "tools/map_workshop/audit_grounding.gd": "77cf9b9ec0b8fd5a71a14093a31c27a47a5319f0e9972b4c4a3c49ea6e7389a9",
+    "tools/map_workshop/audit_journey_routes.gd": "e37f4c0439003db51e702bc1c49fb824ed2877bd1bcdff76cb7d8386a791d144",
+    "tools/map_workshop/audit_landing_overlay.gd": "bde3e1b6d85fffe539a9b75ff9fc09a858891d9c9724bc640f3bb4d5302d272d",
+    "tools/map_workshop/audit_physical_routes.gd": "a9300292b121644e6c6cef0d89c5f9b914f6472b093a939cd99cf7e948cea07c",
+    "tools/map_workshop/audit_planting_order.gd": "f098098b5ccb4955af78392b31187e87810f434ce7bd03f73334f059b6c8d8f0",
+    "tools/map_workshop/audit_river.gd": "71bd0cd4f1cf5ea34b651fb66853f79eb4187ec951d049f6b3b80e0409ee65fb",
+    "tools/map_workshop/audit_road_contacts.gd": "b0855b059b68733b7d293eccbc6e26a8239b2f1852457f951cbdb6c28369db68",
+    "tools/map_workshop/audit_route_paint.gd": "711dfb94816e8c84da3713895b52ad907bce9563ff55591686ff4b813ec82802",
+    "tools/map_workshop/bridge_geometry.gd": "b0c99465e20c360954fe1fb24aa09cc8fbfe6041f4a5f4d76539f73bb556ef57",
+    "tools/map_workshop/bridge_stone.gdshader": "a5628c73ba271752ad3efab8ce3ef55d011b2f00fc5c98a73524cc02993c7164",
+    "tools/map_workshop/bridge_structure.gd": "3a4854453320f340b2d85fafb7a73b16394ad3901335d4084a10d032b36d28b1",
+    "tools/map_workshop/bridge_surfaces.gd": "36660ecfce0f436479c04ed2e98eb36961b918f7cc6f747509ace13a947083b9",
+    "tools/map_workshop/build_conifer_envelope.gd": "2ecbb98f6f3f18f4963efb4eb951f0c49fabf950d4c4f74bb84ff0488e6b04c9",
+    "tools/map_workshop/camera.gd": "06c5c325ea081f41bfe599e70730d12f14d12678e0c3fe5ce2dae0869e6cd580",
+    "tools/map_workshop/common/architectural_occupancy.gd": "efd36098fdb811a77922204cea5cec7ed6aba733ab443051ed523c02de6dab02",
+    "tools/map_workshop/common/court_landscape_openings.gd": "c911fef4d161f7e25960ea4d47947c2973f3fcc065c5f3282a4a2fbab8990a6d",
+    "tools/map_workshop/common/court_stair_assembly.gd": "d292e58f3d0aa898fd3be309f3e2d5653d3fd28948131e73c1c3094b17cf89c5",
+    "tools/map_workshop/common/court_surface.gd": "214408eb870856624805d56fbfd715bb6bdb74a3657537b1dba323d5645cca6b",
+    "tools/map_workshop/common/fitted_routes.gd": "8cf8f910577f5f443e1a603b2f4922c760ca6f50e878718a8406f1e9345029c8",
+    "tools/map_workshop/common/flight_mesh.gd": "34009d512be997c32c5a1f1a825f2b9360ef43b25e4cc634e7e40041e42d0b51",
+    "tools/map_workshop/common/foundation_audit.gd": "1155240ce6e1a5b7750b9fac40c36a8633bff5b6b68e914bad1d11d5d2ddddfd",
+    "tools/map_workshop/common/inspection.gd": "0bf1deb65b630320dc69e7b5e35b12a4ed5a07c17997875bc338db41c558f06c",
+    "tools/map_workshop/common/landing_surfaces.gd": "084772b03d6ef1170e7d7b3d3f9eb74180a29b383c7adde2ce137d1530981464",
+    "tools/map_workshop/common/landscape_relief.gd": "9c6edb764a4d43b6f0863d7db3e79e4f80fe75a94da9598fdd88ecf91f334445",
+    "tools/map_workshop/common/mesh_probe.gd": "711b78f1ef94768294f7f7360a1e4aa5f848c229e7ce8f5b8c94e69181e9cd1c",
+    "tools/map_workshop/common/mesh_screen_probe.gd": "657a278e8f7e45e12ce26d4726af8aa6539ec16e29afd96de37ebf733ac7a150",
+    "tools/map_workshop/common/overview_groups.gd": "de7443019308caf12803602d66f8fb0f15964a8b7102b22e0a2c5d014c15c2da",
+    "tools/map_workshop/common/passage_masonry.gd": "feab9c4be0955267a5b5f9e2af7fcc1d3e7a76458c023956d9f0ab129f3be7c2",
+    "tools/map_workshop/common/precinct_envelope.gd": "645e53ed1c1258de58d77d04a927b37407a16bc78c67f682e280c69bdb5fb33f",
+    "tools/map_workshop/common/precinct_plinth.gd": "ed8d5bc0aaba6a43ba6e7d370b8146146bd6f58b19d760e14b8a559f3be0bb58",
+    "tools/map_workshop/common/precinct_sightlines.gd": "0b22a10a4c411117c99e4437c3c8367763f036d1424f6cb54135775df9a62bd5",
+    "tools/map_workshop/common/precinct_stone.gdshader": "f8f3c12494c73306e69e5f1fe9f7bd7192ec8eeb4e5c4ebc16b9afaee35da208",
+    "tools/map_workshop/common/precinct_threshold.gd": "95950d501f7c01e186ba9809e62fd0211308f54fe2722de2266e41d7010c868e",
+    "tools/map_workshop/common/profile.gd": "5e12de27dce8a249c0aed2b243df22ee422f89793e10d661e1ae9193f006f7f8",
+    "tools/map_workshop/common/resolved_flight.gd": "8bbe2638b957fe10845490b830eac6a4781276423a61870bdfe0b56cdc22bc28",
+    "tools/map_workshop/common/resolved_route_surface.gd": "66b7fc976e6452b8c611137e1c246471e7f6e40b7916f0207229e509994f1f16",
+    "tools/map_workshop/common/route_camera_heading.gd": "998e89d1c37d4c6704459b334240d7b6a903b065e5e17523d296319c67706fbc",
+    "tools/map_workshop/common/route_travel.gd": "0a19afc17cb86cccef5a677304cb710596833854dfeec4175ceab86edf059f81",
+    "tools/map_workshop/common/smooth_surfaces.gd": "b420cc480006d78b8c91591a33eea135a36fe48b3ed889ab7d2bdf8270c8c5c3",
+    "tools/map_workshop/common/terrace_levels.gd": "55e9488ddac3d29a485f258b52357d6ef327d942c4b201157b857921667f5d64",
+    "tools/map_workshop/common/threshold_mesh_audit.gd": "4f3719886317d377f242a337ce09db7c2e7f6b6c8fbbc0da2748d7e5cb0aafd8",
+    "tools/map_workshop/common/viewport_profile.gd": "361a2e3293a38741f164f95f5cf36cbfd4c3337b9487a7ac63ff46cdbc054c41",
+    "tools/map_workshop/common/walking_surface_union.gd": "b12c4d2197b1fdfe786cbae16de444f4fe8233b3b3f7216eaece0199884e3bff",
+    "tools/map_workshop/common/workshop_hero_binding.gd": "00c366ec541b6bce2bf684fc5224e2515c3bc80fb0b7d7da88a7ec8eca04dc82",
+    "tools/map_workshop/export_sample.gd": "5a1a1e2dca87ac0cd883a0410939bd6d2bb2c72aa49d0acc5076cbbd1672d2ef",
+    "tools/map_workshop/foliage_envelope.gd": "32717baece8456781b949bc310530aec9cfd30f3eee3805e8e92379f6ff99350",
+    "tools/map_workshop/gallery.gd": "156dce63f7e11b6ec36c250cdbb9bfd72dcca533df5881fbd4c12c2b32bf2c0d",
+    "tools/map_workshop/gateway_sites.gd": "a1ec64793737dc380ecc605e00820449dc5ad98221dea15600dc85dbebb0c139",
+    "tools/map_workshop/ground_contacts.gd": "631979e85b48c559aa72c7fd0f0b5cc4998fb322d52b1f81562fa648fc83d1eb",
+    "tools/map_workshop/journey.gd": "448fb3539e591a1ff7bc11bd612e04b070e845bc2300165fa45aaf8ef34ee2bb",
+    "tools/map_workshop/journey_capture.gd": "7d81ab3236fbdb3e328e6c045cb89a405fc0415e9ba89b550a102b0c8f990b90",
+    "tools/map_workshop/journey_pin.gd": "4445a19755f9980eed30bf854fe0abae8623b209e1a60d2c4b270f098827e0b8",
+    "tools/map_workshop/journey_routes.gd": "ff4f7b03ce2f09059c0326be2c84a8b64a17de503287f815d8c06f0d39ccbc49",
+    "tools/map_workshop/kit.gd": "049e2e3c6944ac61b8235b000555b23e0bbc486f65d1068ebf91ab8937859618",
+    "tools/map_workshop/landform.gd": "623d74de3ff7139c7d143e77b7fec403cf215d60b3f35ad71490217916d57a9e",
+    "tools/map_workshop/mesh_tools.gd": "39d895a83b36c0966b2ac9b6b156b82160cde59ad5f10fdca7ae740b4e47160f",
+    "tools/map_workshop/parapet_study/panels.gd": "32f740d7d4ef736839b90da6738f9c61a2c99b9d099caad01e0e471f67ace1d1",
+    "tools/map_workshop/parapet_study/run.gd": "64aa443052520c918149ff9ae9281016ad4d29d3f3c4829234034ed61220add2",
+    "tools/map_workshop/pilgrim.gd": "fd5619e90b8323e7e24623bc1a2fd6d33d349827ca440888786bb3a5fd54ed57",
+    "tools/map_workshop/river.gd": "b5db1b083694bab960252b40b67dd542efcec5988fbd1975b85ca244d0e33fc1",
+    "tools/map_workshop/river.gdshader": "56cdf7d0fdca7b8cdac714da01d40fb6f81ef2426bb890e014452931bba8bc10",
+    "tools/map_workshop/river_capture.gd": "9dcc56a92ec0b21a97820aca438b30188be3494bbecf629f4021ef9a6c90f389",
+    "tools/map_workshop/road_details.gd": "26ea5af1fde053c7d9e9bc45cd2078f76dcb206f5a883419c45f6585346ddf93",
+    "tools/map_workshop/road_paths.gd": "0c30c9465da71faf7b8f4c88b9302cb6bcda156e7cae74a5588d73ac6446d308",
+    "tools/map_workshop/run.gd": "a23579f9d1a654eff3b996ca50b81800a5d2c680c167faf9277b71020894c162",
+    "tools/map_workshop/sample.gd": "41f55801479c60291de513a43b25413f430c61bd52054c9219c42ceb65af9870",
+    "tools/map_workshop/scale_reference.gd": "d3131c05a2ce3a0b0b6857c6051444e90ffa06357f168110fa4fbead6d0d3eb5",
+    "tools/map_workshop/stone_bridge/edges.gd": "ef20cb7af81f61ea51ad303a83dff25ecd04ac9f5433c1a1bbbb7d8316277657",
+    "tools/map_workshop/stone_bridge/flight_grade.gd": "1a4fe248e5867358cd4a09f48470e6fa50afc3b91ff7f8a7910726606b0e210f",
+    "tools/map_workshop/stone_bridge/masonry.gdshader": "275edd0933ba7f548735b3bc393d247d9bb70916b810630ce88da023c340caba",
+    "tools/map_workshop/stone_bridge/outline.gd": "bb2d3da518a0b7ca214a76c43df22c72d14e2110b5fcae2bd936b5de8e1ef818",
+    "tools/map_workshop/stone_bridge/paving.gdshader": "d74ee92dff850588850c8bddacea7a1abb870f628c09af9e0ea44e2585704e1b",
+    "tools/map_workshop/stone_bridge/piers.gd": "271d86aee24b8fb8d512ca35341bbd0276fea78c5273eaf8f122a91848d59b29",
+    "tools/map_workshop/stone_bridge/pointed_parapets.gd": "e6b6fb3f8aec2cd78a9a4569218102cb6bc3c45386c1d1376d8d68a9f56820be",
+    "tools/map_workshop/stone_bridge/presets.gd": "c2f23b87f0da419329dad2bc5d9de169adc1e9cc40c8bb0915bf9e1b592092bd",
+    "tools/map_workshop/stone_bridge/profile.gd": "1df80d3864ae746e570db9a4ca4fc548029279ce20d70f01eec269f001932c0c",
+    "tools/map_workshop/stone_bridge/stairs.gd": "86b6a36b1d40015c1c500d26ef0e1a03950e3fe199ec0bc655c3582dcdefcd5a",
+    "tools/map_workshop/stone_bridge/verify_parapets.gd": "0a3dffb7feee6f550d494af33a102d7690c8e9f3fed06fa58fa4668ecfe4be3d",
+    "tools/map_workshop/stone_bridge/verify_stairs.gd": "549b4c01470994505088b95010dd892573069a8637943a04b029b2a6290e16f3",
+    "tools/map_workshop/terrain.gd": "1390a0e689dbd031467d35f13e3b80d326a32bd9a00bb502b8f50d90067bdc00",
+    "tools/map_workshop/terrain_paint.gd": "444105d37c29483e80f9dfd1be206bd94e8eacc20f4cee03ea1511c0bb1bb4c4",
+    "tools/map_workshop/terrain_paint.gdshader": "ee6eefbbae5bc34a6e5e8c51c2ee45dfbe328e4a97a4765d294131e93639c8cc",
+    "tools/map_workshop/view.gd": "d90b94422e2ec2ed93bc120acde72c553925bb11b7ba8bc39229eca05463503b",
+    "tools/map_workshop/water/presets.gd": "d2051019af1d97f8c27d8639ce8c810121d5124b20a00dcaeae6b2ac6aae1853",
+    "tools/map_workshop/water/surface.gd": "b435387e1f86ab2dfecae741bbbdad86e33914983e002a314a10215672dd379b",
+    "tools/map_workshop/water/surface.gdshader": "a254cda724c5cb83640436bcffccf237ea7a90250270e5a007e2e7c9b0a94b6a",
+    "tools/map_workshop/water/verify.gd": "4d9e98f10f152ad022c3d52b479ebeb960d38f551e764af12dda8bf64996de73"
+  },
+  "runs": [
+    {
+      "seed": 717,
+      "shape": "844x390",
+      "command": [
+        "godot",
+        "--path",
+        "/Users/jamesto/.codex/worktrees/0633/glassvow",
+        "-s",
+        "res://tools/map_workshop/act3/precinct_study.gd",
+        "--",
+        "--sample=/Users/jamesto/.codex/worktrees/0633/glassvow/docs/map/studies/act3-step3/precinct-v2-seed717.json",
+        "--viewport=844x390",
+        "--exercise-input",
+        "--exercise-all-nodes",
+        "--exercise-routes",
+        "--audit-thresholds",
+        "--audit-passage",
+        "--audit-foundations",
+        "--profile-native"
+      ],
+      "seconds": 40.68,
+      "images": {
+        "whole": {
+          "file": "precinct-v2-717-844x390-whole.png",
+          "sha256": "4a94730a5e88efcc173c61d4a8199a1f26958826429e7bf66ee34d0f8927001d"
+        },
+        "journey": {
+          "file": "precinct-v2-717-844x390-journey.png",
+          "sha256": "33fc0013e7410f66e5a2594a64a2bcd345f19a28805bb4e2512904e1967b2e0c"
+        },
+        "court": {
+          "file": "precinct-v2-717-844x390-court.png",
+          "sha256": "958a455bcc58b6da9279ce039f1751f50c45031c85a86bd5bcc480113ea24f66"
+        },
+        "threshold": {
+          "file": "precinct-v2-717-844x390-threshold.png",
+          "sha256": "8b36f7431e9a92a7017cecc61ae09b08dc467ab6a9f05830defe4229c6ef2541"
+        },
+        "passage": {
+          "file": "precinct-v2-717-844x390-passage.png",
+          "sha256": "6f88a6ce25edb7830971afed83950e320ab344345beb59e40578a16008b05b4c"
+        },
+        "input": {
+          "file": "precinct-v2-717-844x390-input.png",
+          "sha256": "fc98bb9fa0bfc69a03bc9de6b8164bb5fb6d658bc1fb04d8a913766d95ac7339"
+        }
+      },
+      "input": {
+        "all_nodes": {
+          "failures": [],
+          "ok": true,
+          "scope": "each node focused and clicked; desktop pointer, not physical touch",
+          "tested_nodes": 65
+        },
+        "current_visible": true,
+        "dimensions": [
+          844.0,
+          390.0
+        ],
+        "drag_pan": true,
+        "drag_preserves_selection": true,
+        "drag_probe": {
+          "camera_delta": 2.65753602981567,
+          "hovered": "none",
+          "motion_events": 1,
+          "origin": "(12.0, 195.0)",
+          "received_down": true,
+          "target": "(42.0, 205.0)",
+          "target_markers": []
+        },
+        "journey_button": true,
+        "marker_target": [
+          44.0,
+          44.0
+        ],
+        "overview": {
+          "cluster_open": true,
+          "cluster_transition": {
+            "after": 32.0,
+            "before": 147.743988037109,
+            "whole": false
+          },
+          "nodes": 65,
+          "overlaps": [],
+          "represented": 65,
+          "single_select": true,
+          "target_sizes_pass": true,
+          "targets": 17
+        },
+        "required_target": 44.0,
+        "route_camera": {
+          "edge_filter": "",
+          "heading_changes": 0,
+          "maximum_turn_degrees": 0.0,
+          "occlusions": [],
+          "ok": true,
+          "probes": 3067,
+          "scope": "rendered centre-line focus samples at <=0.5 m; no interpolation or full-width guarantee"
+        },
+        "select_current": true,
+        "sightlines": {
+          "blocked_node_centres": 0,
+          "heading_degrees": 25.0,
+          "scope": "current and reachable centres at focus; not entire routes",
+          "tested_node_centres": 3
+        },
+        "source_current_unchanged": true,
+        "target_sizes_pass": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      },
+      "timing": [
+        {
+          "draw_calls": 144.0,
+          "frame_interval_ms": {
+            "maximum": 20.666,
+            "median": 8.351,
+            "p95": 8.564
+          },
+          "frames": 120,
+          "gpu_timestamps_available": false,
+          "render_cpu_ms": {
+            "maximum": 0.301999986171722,
+            "median": 0.202999994158745,
+            "p95": 0.239999994635582
+          },
+          "render_gpu_ms": {
+            "maximum": 0.0,
+            "median": 0.0,
+            "p95": 0.0
+          },
+          "renderer_mib": 81.890625,
+          "scope": "desktop native stationary viewport; frame interval includes synchronisation; not device qualification",
+          "view": "whole"
+        },
+        {
+          "draw_calls": 56.0,
+          "frame_interval_ms": {
+            "maximum": 8.626,
+            "median": 8.344,
+            "p95": 8.547
+          },
+          "frames": 120,
+          "gpu_timestamps_available": false,
+          "render_cpu_ms": {
+            "maximum": 0.194999992847443,
+            "median": 0.148000001907349,
+            "p95": 0.180999994277954
+          },
+          "render_gpu_ms": {
+            "maximum": 0.0,
+            "median": 0.0,
+            "p95": 0.0
+          },
+          "renderer_mib": 81.890625,
+          "scope": "desktop native stationary viewport; frame interval includes synchronisation; not device qualification",
+          "view": "journey"
+        },
+        {
+          "draw_calls": 36.0,
+          "frame_interval_ms": {
+            "maximum": 16.567,
+            "median": 8.344,
+            "p95": 8.553
+          },
+          "frames": 120,
+          "gpu_timestamps_available": false,
+          "render_cpu_ms": {
+            "maximum": 0.214000001549721,
+            "median": 0.141000002622604,
+            "p95": 0.177000001072884
+          },
+          "render_gpu_ms": {
+            "maximum": 0.0,
+            "median": 0.0,
+            "p95": 0.0
+          },
+          "renderer_mib": 81.890625,
+          "scope": "desktop native stationary viewport; frame interval includes synchronisation; not device qualification",
+          "view": "court"
+        }
+      ]
+    },
+    {
+      "seed": 717,
+      "shape": "1180x820",
+      "command": [
+        "godot",
+        "--path",
+        "/Users/jamesto/.codex/worktrees/0633/glassvow",
+        "-s",
+        "res://tools/map_workshop/act3/precinct_study.gd",
+        "--",
+        "--sample=/Users/jamesto/.codex/worktrees/0633/glassvow/docs/map/studies/act3-step3/precinct-v2-seed717.json",
+        "--viewport=1180x820",
+        "--exercise-input",
+        "--exercise-all-nodes",
+        "--exercise-routes",
+        "--profile-native"
+      ],
+      "seconds": 39.46,
+      "images": {
+        "whole": {
+          "file": "precinct-v2-717-1180x820-whole.png",
+          "sha256": "32ced0500aa6bf09876c33903d9e79d6e37c8f9c23c7e4f4599212211f2f55c0"
+        },
+        "journey": {
+          "file": "precinct-v2-717-1180x820-journey.png",
+          "sha256": "6325b9f03f86a76111548eee7a13d5d94a0de5e3be67b8a8ecce699a5492a420"
+        },
+        "court": {
+          "file": "precinct-v2-717-1180x820-court.png",
+          "sha256": "4a5dfc880e69cb0f8a266b65bb882d02e13ad2a70755e16f984b54cec98a2867"
+        },
+        "threshold": {
+          "file": "precinct-v2-717-1180x820-threshold.png",
+          "sha256": "2826f745273546ee59942757893f4acd76202eb6ade9a6efac51d4e1290abd9d"
+        },
+        "passage": {
+          "file": "precinct-v2-717-1180x820-passage.png",
+          "sha256": "da0f4295ddff9e6d9cea2ed4ec1eb6a7feb883c7607c5b085fea8c5ed18b5dfa"
+        },
+        "input": {
+          "file": "precinct-v2-717-1180x820-input.png",
+          "sha256": "b4644db486a7e71f08720b71f5d41333a2e21f3dd92542d540fe11d18968e182"
+        }
+      },
+      "input": {
+        "all_nodes": {
+          "failures": [],
+          "ok": true,
+          "scope": "each node focused and clicked; desktop pointer, not physical touch",
+          "tested_nodes": 65
+        },
+        "current_visible": true,
+        "dimensions": [
+          1180.0,
+          820.0
+        ],
+        "drag_pan": true,
+        "drag_preserves_selection": true,
+        "drag_probe": {
+          "camera_delta": 1.26395010948181,
+          "hovered": "none",
+          "motion_events": 1,
+          "origin": "(12.0, 410.0)",
+          "received_down": true,
+          "target": "(42.0, 420.0)",
+          "target_markers": []
+        },
+        "journey_button": true,
+        "marker_target": [
+          60.0,
+          60.0
+        ],
+        "overview": {
+          "cluster_open": true,
+          "cluster_transition": {
+            "after": 32.0,
+            "before": 182.731658935547,
+            "whole": false
+          },
+          "nodes": 65,
+          "overlaps": [],
+          "represented": 65,
+          "single_select": true,
+          "target_sizes_pass": true,
+          "targets": 21
+        },
+        "required_target": 60.0,
+        "route_camera": {
+          "edge_filter": "",
+          "heading_changes": 0,
+          "maximum_turn_degrees": 0.0,
+          "occlusions": [],
+          "ok": true,
+          "probes": 3067,
+          "scope": "rendered centre-line focus samples at <=0.5 m; no interpolation or full-width guarantee"
+        },
+        "select_current": true,
+        "sightlines": {
+          "blocked_node_centres": 0,
+          "heading_degrees": 25.0,
+          "scope": "current and reachable centres at focus; not entire routes",
+          "tested_node_centres": 3
+        },
+        "source_current_unchanged": true,
+        "target_sizes_pass": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      },
+      "timing": [
+        {
+          "draw_calls": 145.0,
+          "frame_interval_ms": {
+            "maximum": 19.781,
+            "median": 8.318,
+            "p95": 8.536
+          },
+          "frames": 120,
+          "gpu_timestamps_available": false,
+          "render_cpu_ms": {
+            "maximum": 0.236000001430511,
+            "median": 0.194000005722046,
+            "p95": 0.211999997496605
+          },
+          "render_gpu_ms": {
+            "maximum": 0.0,
+            "median": 0.0,
+            "p95": 0.0
+          },
+          "renderer_mib": 118.5,
+          "scope": "desktop native stationary viewport; frame interval includes synchronisation; not device qualification",
+          "view": "whole"
+        },
+        {
+          "draw_calls": 35.0,
+          "frame_interval_ms": {
+            "maximum": 8.576,
+            "median": 8.314,
+            "p95": 8.49
+          },
+          "frames": 120,
+          "gpu_timestamps_available": false,
+          "render_cpu_ms": {
+            "maximum": 0.172999992966652,
+            "median": 0.120999999344349,
+            "p95": 0.13400000333786
+          },
+          "render_gpu_ms": {
+            "maximum": 0.0,
+            "median": 0.0,
+            "p95": 0.0
+          },
+          "renderer_mib": 118.5,
+          "scope": "desktop native stationary viewport; frame interval includes synchronisation; not device qualification",
+          "view": "journey"
+        },
+        {
+          "draw_calls": 34.0,
+          "frame_interval_ms": {
+            "maximum": 8.593,
+            "median": 8.326,
+            "p95": 8.51
+          },
+          "frames": 120,
+          "gpu_timestamps_available": false,
+          "render_cpu_ms": {
+            "maximum": 0.180999994277954,
+            "median": 0.13400000333786,
+            "p95": 0.165000006556511
+          },
+          "render_gpu_ms": {
+            "maximum": 0.0,
+            "median": 0.0,
+            "p95": 0.0
+          },
+          "renderer_mib": 118.5,
+          "scope": "desktop native stationary viewport; frame interval includes synchronisation; not device qualification",
+          "view": "court"
+        }
+      ]
+    },
+    {
+      "seed": 717,
+      "shape": "1458x820",
+      "command": [
+        "godot",
+        "--path",
+        "/Users/jamesto/.codex/worktrees/0633/glassvow",
+        "-s",
+        "res://tools/map_workshop/act3/precinct_study.gd",
+        "--",
+        "--sample=/Users/jamesto/.codex/worktrees/0633/glassvow/docs/map/studies/act3-step3/precinct-v2-seed717.json",
+        "--viewport=1458x820",
+        "--exercise-input",
+        "--exercise-all-nodes",
+        "--exercise-routes",
+        "--profile-native"
+      ],
+      "seconds": 39.64,
+      "images": {
+        "whole": {
+          "file": "precinct-v2-717-1458x820-whole.png",
+          "sha256": "9a9e97ace3a0761f3ef02496eb530180590d75b701c0fae6600bc7c9973c1d5b"
+        },
+        "journey": {
+          "file": "precinct-v2-717-1458x820-journey.png",
+          "sha256": "57b40d0286e63195aed6bb6384d969310f51abae744bfa5a21a43c1e5194f2a2"
+        },
+        "court": {
+          "file": "precinct-v2-717-1458x820-court.png",
+          "sha256": "7201381f78e144ccf16e0a3977d18dbd0d7b4e38e91f7622929cd74f12c6a450"
+        },
+        "threshold": {
+          "file": "precinct-v2-717-1458x820-threshold.png",
+          "sha256": "7d3046c46e31cd9efdd6c6b00b4915626aa2dbbc608cf022c19e97dfc0e1b62d"
+        },
+        "passage": {
+          "file": "precinct-v2-717-1458x820-passage.png",
+          "sha256": "da891fbce9d24ae0eb5a21aa62941c76e8d70c83e0efa967a03648b0d992bc8c"
+        },
+        "input": {
+          "file": "precinct-v2-717-1458x820-input.png",
+          "sha256": "93751ad2f453684c0f8705e58e75ce8eae7c0414ae67d0d3ee82c7852fdf2a80"
+        }
+      },
+      "input": {
+        "all_nodes": {
+          "failures": [],
+          "ok": true,
+          "scope": "each node focused and clicked; desktop pointer, not physical touch",
+          "tested_nodes": 65
+        },
+        "current_visible": true,
+        "dimensions": [
+          1458.0,
+          820.0
+        ],
+        "drag_pan": true,
+        "drag_preserves_selection": true,
+        "drag_probe": {
+          "camera_delta": 1.26395010948181,
+          "hovered": "none",
+          "motion_events": 1,
+          "origin": "(12.0, 410.0)",
+          "received_down": true,
+          "target": "(42.0, 420.0)",
+          "target_markers": []
+        },
+        "journey_button": true,
+        "marker_target": [
+          60.0,
+          60.0
+        ],
+        "overview": {
+          "cluster_open": true,
+          "cluster_transition": {
+            "after": 32.0,
+            "before": 145.867080688477,
+            "whole": false
+          },
+          "nodes": 65,
+          "overlaps": [],
+          "represented": 65,
+          "single_select": true,
+          "target_sizes_pass": true,
+          "targets": 31
+        },
+        "required_target": 60.0,
+        "route_camera": {
+          "edge_filter": "",
+          "heading_changes": 0,
+          "maximum_turn_degrees": 0.0,
+          "occlusions": [],
+          "ok": true,
+          "probes": 3067,
+          "scope": "rendered centre-line focus samples at <=0.5 m; no interpolation or full-width guarantee"
+        },
+        "select_current": true,
+        "sightlines": {
+          "blocked_node_centres": 0,
+          "heading_degrees": 25.0,
+          "scope": "current and reachable centres at focus; not entire routes",
+          "tested_node_centres": 3
+        },
+        "source_current_unchanged": true,
+        "target_sizes_pass": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      },
+      "timing": [
+        {
+          "draw_calls": 145.0,
+          "frame_interval_ms": {
+            "maximum": 16.782,
+            "median": 8.312,
+            "p95": 8.541
+          },
+          "frames": 120,
+          "gpu_timestamps_available": false,
+          "render_cpu_ms": {
+            "maximum": 0.326999992132187,
+            "median": 0.194999992847443,
+            "p95": 0.214000001549721
+          },
+          "render_gpu_ms": {
+            "maximum": 0.0,
+            "median": 0.0,
+            "p95": 0.0
+          },
+          "renderer_mib": 131.78125,
+          "scope": "desktop native stationary viewport; frame interval includes synchronisation; not device qualification",
+          "view": "whole"
+        },
+        {
+          "draw_calls": 43.0,
+          "frame_interval_ms": {
+            "maximum": 17.476,
+            "median": 8.314,
+            "p95": 8.526
+          },
+          "frames": 120,
+          "gpu_timestamps_available": false,
+          "render_cpu_ms": {
+            "maximum": 0.167999997735023,
+            "median": 0.12899999320507,
+            "p95": 0.142000004649162
+          },
+          "render_gpu_ms": {
+            "maximum": 0.0,
+            "median": 0.0,
+            "p95": 0.0
+          },
+          "renderer_mib": 131.78125,
+          "scope": "desktop native stationary viewport; frame interval includes synchronisation; not device qualification",
+          "view": "journey"
+        },
+        {
+          "draw_calls": 34.0,
+          "frame_interval_ms": {
+            "maximum": 16.171,
+            "median": 8.316,
+            "p95": 8.548
+          },
+          "frames": 120,
+          "gpu_timestamps_available": false,
+          "render_cpu_ms": {
+            "maximum": 0.185000002384186,
+            "median": 0.133000001311302,
+            "p95": 0.159999996423721
+          },
+          "render_gpu_ms": {
+            "maximum": 0.0,
+            "median": 0.0,
+            "p95": 0.0
+          },
+          "renderer_mib": 131.78125,
+          "scope": "desktop native stationary viewport; frame interval includes synchronisation; not device qualification",
+          "view": "court"
+        }
+      ]
+    },
+    {
+      "seed": 4,
+      "shape": "844x390",
+      "command": [
+        "godot",
+        "--path",
+        "/Users/jamesto/.codex/worktrees/0633/glassvow",
+        "-s",
+        "res://tools/map_workshop/act3/precinct_study.gd",
+        "--",
+        "--sample=/Users/jamesto/.codex/worktrees/0633/glassvow/docs/map/studies/act3-step3/precinct-v2-seed4.json",
+        "--viewport=844x390",
+        "--exercise-input",
+        "--exercise-all-nodes",
+        "--exercise-routes",
+        "--audit-thresholds",
+        "--audit-passage",
+        "--audit-foundations"
+      ],
+      "seconds": 40.51,
+      "images": {
+        "whole": {
+          "file": "precinct-v2-4-844x390-whole.png",
+          "sha256": "0bc9418310614695e99dd499c36251abeec0402a866b4ddba3578c53a3396e51"
+        },
+        "journey": {
+          "file": "precinct-v2-4-844x390-journey.png",
+          "sha256": "a1568ecee753396446dfb73b0888e5f9f876f97ad2a8c6998099daa07a18aef9"
+        },
+        "court": {
+          "file": "precinct-v2-4-844x390-court.png",
+          "sha256": "ba24086d01125df39325ace48781880a85b1b28236122de3358f5102696647e9"
+        },
+        "threshold": {
+          "file": "precinct-v2-4-844x390-threshold.png",
+          "sha256": "8dfb59adc7aec12120757ba66221de7613213a9788564194d7ce67499055f27c"
+        },
+        "passage": {
+          "file": "precinct-v2-4-844x390-passage.png",
+          "sha256": "a26b425c9c7d506ba0d733f813937e191074af1d3214eeec2ecab2c686c19179"
+        },
+        "input": {
+          "file": "precinct-v2-4-844x390-input.png",
+          "sha256": "c913409f574150ba8ed9d0a149629c2b09e4612d3c0ef12f45e9e7d4afa4911d"
+        }
+      },
+      "input": {
+        "all_nodes": {
+          "failures": [],
+          "ok": true,
+          "scope": "each node focused and clicked; desktop pointer, not physical touch",
+          "tested_nodes": 66
+        },
+        "current_visible": true,
+        "dimensions": [
+          844.0,
+          390.0
+        ],
+        "drag_pan": true,
+        "drag_preserves_selection": true,
+        "drag_probe": {
+          "camera_delta": 2.65753579139709,
+          "hovered": "none",
+          "motion_events": 1,
+          "origin": "(12.0, 195.0)",
+          "received_down": true,
+          "target": "(42.0, 205.0)",
+          "target_markers": [
+            "1,3"
+          ]
+        },
+        "journey_button": true,
+        "marker_target": [
+          44.0,
+          44.0
+        ],
+        "overview": {
+          "cluster_open": true,
+          "cluster_transition": {
+            "after": 46.1531562805176,
+            "before": 155.582473754883,
+            "whole": false
+          },
+          "nodes": 66,
+          "overlaps": [],
+          "represented": 66,
+          "single_select": true,
+          "target_sizes_pass": true,
+          "targets": 16
+        },
+        "required_target": 44.0,
+        "route_camera": {
+          "edge_filter": "",
+          "heading_changes": 0,
+          "maximum_turn_degrees": 0.0,
+          "occlusions": [],
+          "ok": true,
+          "probes": 3325,
+          "scope": "rendered centre-line focus samples at <=0.5 m; no interpolation or full-width guarantee"
+        },
+        "select_current": true,
+        "sightlines": {
+          "blocked_node_centres": 0,
+          "heading_degrees": -25.0,
+          "scope": "current and reachable centres at focus; not entire routes",
+          "tested_node_centres": 2
+        },
+        "source_current_unchanged": true,
+        "target_sizes_pass": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      },
+      "timing": []
+    },
+    {
+      "seed": 4,
+      "shape": "1180x820",
+      "command": [
+        "godot",
+        "--path",
+        "/Users/jamesto/.codex/worktrees/0633/glassvow",
+        "-s",
+        "res://tools/map_workshop/act3/precinct_study.gd",
+        "--",
+        "--sample=/Users/jamesto/.codex/worktrees/0633/glassvow/docs/map/studies/act3-step3/precinct-v2-seed4.json",
+        "--viewport=1180x820",
+        "--exercise-input",
+        "--exercise-all-nodes",
+        "--exercise-routes"
+      ],
+      "seconds": 39.78,
+      "images": {
+        "whole": {
+          "file": "precinct-v2-4-1180x820-whole.png",
+          "sha256": "51473ca7058d7da6f63706964d8a7f2a344ab4200c103aee86e4cc9a0f74ca41"
+        },
+        "journey": {
+          "file": "precinct-v2-4-1180x820-journey.png",
+          "sha256": "d63fc4e8a028d9a00cb6fa00ede2cd4b30f595e4a056ea8119b5908092a9541a"
+        },
+        "court": {
+          "file": "precinct-v2-4-1180x820-court.png",
+          "sha256": "82cde2d485c5a672d8ff107a9827970c804cabb1d23a4873d86055c0862a918a"
+        },
+        "threshold": {
+          "file": "precinct-v2-4-1180x820-threshold.png",
+          "sha256": "9fab2875f8a719963b9fcb82fd59d6f259046a9e835d9d5cf500cb3f660db06b"
+        },
+        "passage": {
+          "file": "precinct-v2-4-1180x820-passage.png",
+          "sha256": "dd2e3937e74e1f2f703e5acc3b44c869d23340a6fb10d620b267483dd66de70b"
+        },
+        "input": {
+          "file": "precinct-v2-4-1180x820-input.png",
+          "sha256": "7593746dee5edaa0b889bc4fb5b17fe743446b6f4c771a9ed1e96de225234638"
+        }
+      },
+      "input": {
+        "all_nodes": {
+          "failures": [],
+          "ok": true,
+          "scope": "each node focused and clicked; desktop pointer, not physical touch",
+          "tested_nodes": 66
+        },
+        "current_visible": true,
+        "dimensions": [
+          1180.0,
+          820.0
+        ],
+        "drag_pan": true,
+        "drag_preserves_selection": true,
+        "drag_probe": {
+          "camera_delta": 1.26394855976105,
+          "hovered": "none",
+          "motion_events": 1,
+          "origin": "(12.0, 410.0)",
+          "received_down": true,
+          "target": "(42.0, 420.0)",
+          "target_markers": []
+        },
+        "journey_button": true,
+        "marker_target": [
+          60.0,
+          60.0
+        ],
+        "overview": {
+          "cluster_open": true,
+          "cluster_transition": {
+            "after": 32.0,
+            "before": 208.864135742188,
+            "whole": false
+          },
+          "nodes": 66,
+          "overlaps": [],
+          "represented": 66,
+          "single_select": true,
+          "target_sizes_pass": true,
+          "targets": 20
+        },
+        "required_target": 60.0,
+        "route_camera": {
+          "edge_filter": "",
+          "heading_changes": 0,
+          "maximum_turn_degrees": 0.0,
+          "occlusions": [],
+          "ok": true,
+          "probes": 3325,
+          "scope": "rendered centre-line focus samples at <=0.5 m; no interpolation or full-width guarantee"
+        },
+        "select_current": true,
+        "sightlines": {
+          "blocked_node_centres": 0,
+          "heading_degrees": -25.0,
+          "scope": "current and reachable centres at focus; not entire routes",
+          "tested_node_centres": 2
+        },
+        "source_current_unchanged": true,
+        "target_sizes_pass": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      },
+      "timing": []
+    },
+    {
+      "seed": 4,
+      "shape": "1458x820",
+      "command": [
+        "godot",
+        "--path",
+        "/Users/jamesto/.codex/worktrees/0633/glassvow",
+        "-s",
+        "res://tools/map_workshop/act3/precinct_study.gd",
+        "--",
+        "--sample=/Users/jamesto/.codex/worktrees/0633/glassvow/docs/map/studies/act3-step3/precinct-v2-seed4.json",
+        "--viewport=1458x820",
+        "--exercise-input",
+        "--exercise-all-nodes",
+        "--exercise-routes"
+      ],
+      "seconds": 39.75,
+      "images": {
+        "whole": {
+          "file": "precinct-v2-4-1458x820-whole.png",
+          "sha256": "b2390165fef892c19e23f8416d3de600170ba010cbc891df25a18c2a14fe3971"
+        },
+        "journey": {
+          "file": "precinct-v2-4-1458x820-journey.png",
+          "sha256": "3583f909300931c6a602ada3fadc580dd9401c1e486cbe9f9a2fe618eeb29501"
+        },
+        "court": {
+          "file": "precinct-v2-4-1458x820-court.png",
+          "sha256": "060c2fb530b1412c9f57084efe07ea2a224a68658948076ca4e35542a11effdc"
+        },
+        "threshold": {
+          "file": "precinct-v2-4-1458x820-threshold.png",
+          "sha256": "d0746ca81d637980218652d7c3825d76f6bc18805b283c6ed7125a2cd1285d74"
+        },
+        "passage": {
+          "file": "precinct-v2-4-1458x820-passage.png",
+          "sha256": "d1ce1574cae796d6f5cc3abeaa956ef1c4bfe5020536d6bd77180308e01419a4"
+        },
+        "input": {
+          "file": "precinct-v2-4-1458x820-input.png",
+          "sha256": "a3696bfdd3ce23e68fe9f592ecec1706d3224b88a662f45de0888034af94ee59"
+        }
+      },
+      "input": {
+        "all_nodes": {
+          "failures": [],
+          "ok": true,
+          "scope": "each node focused and clicked; desktop pointer, not physical touch",
+          "tested_nodes": 66
+        },
+        "current_visible": true,
+        "dimensions": [
+          1458.0,
+          820.0
+        ],
+        "drag_pan": true,
+        "drag_preserves_selection": true,
+        "drag_probe": {
+          "camera_delta": 1.26394855976105,
+          "hovered": "none",
+          "motion_events": 1,
+          "origin": "(12.0, 410.0)",
+          "received_down": true,
+          "target": "(42.0, 420.0)",
+          "target_markers": []
+        },
+        "journey_button": true,
+        "marker_target": [
+          60.0000305175781,
+          60.0
+        ],
+        "overview": {
+          "cluster_open": true,
+          "cluster_transition": {
+            "after": 32.0,
+            "before": 166.7275390625,
+            "whole": false
+          },
+          "nodes": 66,
+          "overlaps": [],
+          "represented": 66,
+          "single_select": true,
+          "target_sizes_pass": true,
+          "targets": 25
+        },
+        "required_target": 60.0,
+        "route_camera": {
+          "edge_filter": "",
+          "heading_changes": 0,
+          "maximum_turn_degrees": 0.0,
+          "occlusions": [],
+          "ok": true,
+          "probes": 3325,
+          "scope": "rendered centre-line focus samples at <=0.5 m; no interpolation or full-width guarantee"
+        },
+        "select_current": true,
+        "sightlines": {
+          "blocked_node_centres": 0,
+          "heading_degrees": -25.0,
+          "scope": "current and reachable centres at focus; not entire routes",
+          "tested_node_centres": 2
+        },
+        "source_current_unchanged": true,
+        "target_sizes_pass": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      },
+      "timing": []
+    },
+    {
+      "seed": 2026,
+      "shape": "844x390",
+      "command": [
+        "godot",
+        "--path",
+        "/Users/jamesto/.codex/worktrees/0633/glassvow",
+        "-s",
+        "res://tools/map_workshop/act3/precinct_study.gd",
+        "--",
+        "--sample=/Users/jamesto/.codex/worktrees/0633/glassvow/docs/map/studies/act3-step3/precinct-v2-seed2026.json",
+        "--viewport=844x390",
+        "--exercise-input",
+        "--exercise-all-nodes",
+        "--exercise-routes",
+        "--audit-thresholds",
+        "--audit-passage",
+        "--audit-foundations"
+      ],
+      "seconds": 47.31,
+      "images": {
+        "whole": {
+          "file": "precinct-v2-2026-844x390-whole.png",
+          "sha256": "8118896875fe859b8713f37cf5caa8bcba35f5ffd542b13d2ebe2d79de982c59"
+        },
+        "journey": {
+          "file": "precinct-v2-2026-844x390-journey.png",
+          "sha256": "81910a415cfc29928fde661d517fe71835ae02b9d3f3781bc4e59e5f6cb3c01c"
+        },
+        "court": {
+          "file": "precinct-v2-2026-844x390-court.png",
+          "sha256": "00d9307261422d4f6f36fa8f866b15556deaefe0b850896d0d613938232eb5be"
+        },
+        "threshold": {
+          "file": "precinct-v2-2026-844x390-threshold.png",
+          "sha256": "b1ae06662985d92cd6e2d2a0421a7f1318f19efcb3b3d330c218fb1e9076befe"
+        },
+        "passage": {
+          "file": "precinct-v2-2026-844x390-passage.png",
+          "sha256": "2d4ff7311652d1c4b1fcf5cfa7483bc20dcf8a45c72530a87984fe27a6f8b48c"
+        },
+        "input": {
+          "file": "precinct-v2-2026-844x390-input.png",
+          "sha256": "6330d48e6b4d68cbcb821d5dc0954afdb7f7383b837e61f5487e63459321a356"
+        }
+      },
+      "input": {
+        "all_nodes": {
+          "failures": [],
+          "ok": true,
+          "scope": "each node focused and clicked; desktop pointer, not physical touch",
+          "tested_nodes": 54
+        },
+        "current_visible": true,
+        "dimensions": [
+          844.0,
+          390.0
+        ],
+        "drag_pan": true,
+        "drag_preserves_selection": true,
+        "drag_probe": {
+          "camera_delta": 2.65753579139709,
+          "hovered": "none",
+          "motion_events": 1,
+          "origin": "(12.0, 195.0)",
+          "received_down": true,
+          "target": "(42.0, 205.0)",
+          "target_markers": []
+        },
+        "journey_button": true,
+        "marker_target": [
+          44.0,
+          44.0
+        ],
+        "overview": {
+          "cluster_open": true,
+          "cluster_transition": {
+            "after": 59.8594779968262,
+            "before": 159.920700073242,
+            "whole": false
+          },
+          "nodes": 54,
+          "overlaps": [],
+          "represented": 54,
+          "single_select": true,
+          "target_sizes_pass": true,
+          "targets": 13
+        },
+        "required_target": 44.0,
+        "route_camera": {
+          "edge_filter": "",
+          "heading_changes": 0,
+          "maximum_turn_degrees": 0.0,
+          "occlusions": [],
+          "ok": true,
+          "probes": 3917,
+          "scope": "rendered centre-line focus samples at <=0.5 m; no interpolation or full-width guarantee"
+        },
+        "select_current": true,
+        "sightlines": {
+          "blocked_node_centres": 0,
+          "heading_degrees": -25.0,
+          "scope": "current and reachable centres at focus; not entire routes",
+          "tested_node_centres": 3
+        },
+        "source_current_unchanged": true,
+        "target_sizes_pass": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      },
+      "timing": []
+    },
+    {
+      "seed": 2026,
+      "shape": "1180x820",
+      "command": [
+        "godot",
+        "--path",
+        "/Users/jamesto/.codex/worktrees/0633/glassvow",
+        "-s",
+        "res://tools/map_workshop/act3/precinct_study.gd",
+        "--",
+        "--sample=/Users/jamesto/.codex/worktrees/0633/glassvow/docs/map/studies/act3-step3/precinct-v2-seed2026.json",
+        "--viewport=1180x820",
+        "--exercise-input",
+        "--exercise-all-nodes",
+        "--exercise-routes"
+      ],
+      "seconds": 45.89,
+      "images": {
+        "whole": {
+          "file": "precinct-v2-2026-1180x820-whole.png",
+          "sha256": "97584383b20887a6217acef953d666d1604bab2a19a81fe4dd88269738e86778"
+        },
+        "journey": {
+          "file": "precinct-v2-2026-1180x820-journey.png",
+          "sha256": "2aa2fce1bb68123a74322e414cd905f109d3e7af29170b992353277574f4a928"
+        },
+        "court": {
+          "file": "precinct-v2-2026-1180x820-court.png",
+          "sha256": "3cb1296c0b99e227df09255482832bf50ae908473994ddcdcd5354b9b383951c"
+        },
+        "threshold": {
+          "file": "precinct-v2-2026-1180x820-threshold.png",
+          "sha256": "42977dd5d5a71a9391d99c6302db40efca1a6e4bc2cff104a2ac01462b565ba8"
+        },
+        "passage": {
+          "file": "precinct-v2-2026-1180x820-passage.png",
+          "sha256": "07566c63331a150e66b54d7e5883ad90ec4e066bd07eadef105507f9b5bfbec5"
+        },
+        "input": {
+          "file": "precinct-v2-2026-1180x820-input.png",
+          "sha256": "02287f2a00e7d6b7af3668fb9f46313edb50b8f2aede43204d40e333ff598ddd"
+        }
+      },
+      "input": {
+        "all_nodes": {
+          "failures": [],
+          "ok": true,
+          "scope": "each node focused and clicked; desktop pointer, not physical touch",
+          "tested_nodes": 54
+        },
+        "current_visible": true,
+        "dimensions": [
+          1180.0,
+          820.0
+        ],
+        "drag_pan": true,
+        "drag_preserves_selection": true,
+        "drag_probe": {
+          "camera_delta": 1.26395130157471,
+          "hovered": "none",
+          "motion_events": 1,
+          "origin": "(12.0, 410.0)",
+          "received_down": true,
+          "target": "(42.0, 420.0)",
+          "target_markers": []
+        },
+        "journey_button": true,
+        "marker_target": [
+          60.0,
+          60.0000305175781
+        ],
+        "overview": {
+          "cluster_open": true,
+          "cluster_transition": {
+            "after": 37.4802284240723,
+            "before": 233.536407470703,
+            "whole": false
+          },
+          "nodes": 54,
+          "overlaps": [],
+          "represented": 54,
+          "single_select": true,
+          "target_sizes_pass": true,
+          "targets": 15
+        },
+        "required_target": 60.0,
+        "route_camera": {
+          "edge_filter": "",
+          "heading_changes": 0,
+          "maximum_turn_degrees": 0.0,
+          "occlusions": [],
+          "ok": true,
+          "probes": 3917,
+          "scope": "rendered centre-line focus samples at <=0.5 m; no interpolation or full-width guarantee"
+        },
+        "select_current": true,
+        "sightlines": {
+          "blocked_node_centres": 0,
+          "heading_degrees": -25.0,
+          "scope": "current and reachable centres at focus; not entire routes",
+          "tested_node_centres": 3
+        },
+        "source_current_unchanged": true,
+        "target_sizes_pass": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      },
+      "timing": []
+    },
+    {
+      "seed": 2026,
+      "shape": "1458x820",
+      "command": [
+        "godot",
+        "--path",
+        "/Users/jamesto/.codex/worktrees/0633/glassvow",
+        "-s",
+        "res://tools/map_workshop/act3/precinct_study.gd",
+        "--",
+        "--sample=/Users/jamesto/.codex/worktrees/0633/glassvow/docs/map/studies/act3-step3/precinct-v2-seed2026.json",
+        "--viewport=1458x820",
+        "--exercise-input",
+        "--exercise-all-nodes",
+        "--exercise-routes"
+      ],
+      "seconds": 45.85,
+      "images": {
+        "whole": {
+          "file": "precinct-v2-2026-1458x820-whole.png",
+          "sha256": "b9003f0ae7eb61a4ffacedbb2af35c483e57db9e8da26a61a080ffbe6e340c03"
+        },
+        "journey": {
+          "file": "precinct-v2-2026-1458x820-journey.png",
+          "sha256": "ce10e9374a24f8b833e14e5f7e78ca72f7097cb40a4d173b06ffd1bb3df64036"
+        },
+        "court": {
+          "file": "precinct-v2-2026-1458x820-court.png",
+          "sha256": "4895b5625064f6b1afcdb0fa8c7162639396de948b52e0b09b7e47267d990ee4"
+        },
+        "threshold": {
+          "file": "precinct-v2-2026-1458x820-threshold.png",
+          "sha256": "16d948eda0420654f3570c84a7b102957c0db8249853763f34300c1d9eb0b869"
+        },
+        "passage": {
+          "file": "precinct-v2-2026-1458x820-passage.png",
+          "sha256": "acc7a96c9e1cd78368fd71f6f62c75bc71838eea9e8438c5423e3648713d06d1"
+        },
+        "input": {
+          "file": "precinct-v2-2026-1458x820-input.png",
+          "sha256": "51014acb06ab6b65ab7a1b8233f7505e00b95d0992c4e7c1b0c94bec4023183b"
+        }
+      },
+      "input": {
+        "all_nodes": {
+          "failures": [],
+          "ok": true,
+          "scope": "each node focused and clicked; desktop pointer, not physical touch",
+          "tested_nodes": 54
+        },
+        "current_visible": true,
+        "dimensions": [
+          1458.0,
+          820.0
+        ],
+        "drag_pan": true,
+        "drag_preserves_selection": true,
+        "drag_probe": {
+          "camera_delta": 1.26395130157471,
+          "hovered": "none",
+          "motion_events": 1,
+          "origin": "(12.0, 410.0)",
+          "received_down": true,
+          "target": "(42.0, 420.0)",
+          "target_markers": []
+        },
+        "journey_button": true,
+        "marker_target": [
+          59.9999389648438,
+          60.0
+        ],
+        "overview": {
+          "cluster_open": true,
+          "cluster_transition": {
+            "after": 37.4802284240723,
+            "before": 186.422393798828,
+            "whole": false
+          },
+          "nodes": 54,
+          "overlaps": [],
+          "represented": 54,
+          "single_select": true,
+          "target_sizes_pass": true,
+          "targets": 17
+        },
+        "required_target": 60.0,
+        "route_camera": {
+          "edge_filter": "",
+          "heading_changes": 0,
+          "maximum_turn_degrees": 0.0,
+          "occlusions": [],
+          "ok": true,
+          "probes": 3917,
+          "scope": "rendered centre-line focus samples at <=0.5 m; no interpolation or full-width guarantee"
+        },
+        "select_current": true,
+        "sightlines": {
+          "blocked_node_centres": 0,
+          "heading_degrees": -25.0,
+          "scope": "current and reachable centres at focus; not entire routes",
+          "tested_node_centres": 3
+        },
+        "source_current_unchanged": true,
+        "target_sizes_pass": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      },
+      "timing": []
+    }
+  ],
+  "status": "native matrix captured; author visual inspection and final review required"
+}

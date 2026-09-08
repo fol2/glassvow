@@ -5,7 +5,7 @@ extends RefCounted
 const COMPILED: String = "COMPILED"
 const NO_FEASIBLE_NODE_ROUTE_LAYOUT: String = "NO_FEASIBLE_NODE_ROUTE_LAYOUT"
 const ALL_GROUND_EXHAUSTED: String = "ALL_GROUND_EXHAUSTED"
-const VERSION: String = "map-layout-compiler-v1"
+const VERSION: String = "map-layout-compiler-v2"
 const MAX_LOCAL_SUBSTITUTIONS: int = 64
 const _Routes = preload("res://presentation/map/map_layout_compiler_routes.gd")
 const _Grade = preload("res://presentation/map/map_grade_separation.gd")
@@ -49,6 +49,9 @@ static func compile(input: MapLayoutInput, quality: Dictionary,
 	var hero_report: Dictionary = _hero_placements(source, assets)
 	if hero_report.get("ok", false) != true:
 		return _failure(diagnostics, hero_report.get("binding", {}))
+	var strategy: String = str(quality.get("routing_strategy","ground-first-v1"))
+	if strategy not in ["ground-first-v1","grade-priority-v1"]:
+		return _failure(diagnostics,_binding("routing_strategy",strategy,"Unsupported routing strategy"))
 	var heroes: Dictionary = hero_report["placements"]
 	var candidate_report: Dictionary = MapNodeCandidateGenerator.generate(input, quality, 0)
 	diagnostics["candidate_digest"] = candidate_report.get("candidate_digest", "")
@@ -79,6 +82,18 @@ static func compile(input: MapLayoutInput, quality: Dictionary,
 				"node_candidate", node_id, "candidate set is empty", node_id
 			))
 		selection[node_id] = 0
+	# Explicit opt-in changes search priority, never the acceptance rules. A
+	# rejected grade candidate falls through to the complete legacy search.
+	if strategy == "grade-priority-v1":
+		var priority: Dictionary = _build_attempt(input,source,quality,assets,heroes,node_sets,selection,true)
+		diagnostics["priority_attempts"] = [priority["diagnostics"]]
+		if priority.get("ok",false) == true:
+			for key: String in ["route_order","inversion_components","access_lengths","route_calls",
+					"chosen_bypass_sides","selected_bypass_owners","rejected_route_plans","component_route_plans"]:
+				diagnostics[key] = priority["diagnostics"].get(key,diagnostics[key])
+			diagnostics["chosen_candidate_ids"] = priority.get("chosen_candidate_ids",{})
+			diagnostics["selected_strategy"] = strategy
+			return _success(diagnostics,priority["result"],priority["report"])
 	var queue: Array = [{"selection": selection.duplicate(true), "substitution": {}}]
 	var seen: Dictionary = {MapLayoutCanonical.digest(selection): true}
 	var last_binding: Dictionary = {}
@@ -247,6 +262,11 @@ static func _deferred_compile(input: MapLayoutInput, source: Dictionary,
 
 static func _validate_authorities(source: Dictionary, input: MapLayoutInput,
 		quality: Dictionary, assets: Dictionary) -> Dictionary:
+	var spatial_errors: Array[String] = preload(
+		"res://presentation/map/map_spatial_profile.gd").validate(
+			quality, MapLayoutCanonical.int_value(source["act"]))
+	if not spatial_errors.is_empty():
+		return _binding("spatial_profile", "quality", "; ".join(spatial_errors))
 	var quality_digest: String = MapLayoutCanonical.digest(quality)
 	if quality_digest != str(source["quality_registry_digest"]):
 		return _digest_binding("quality_registry_digest",
@@ -323,7 +343,7 @@ static func _hero_placements(source: Dictionary, assets: Dictionary) -> Dictiona
 static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 		quality: Dictionary, assets: Dictionary, heroes: Dictionary,
 		node_sets: Dictionary, selection: Dictionary,
-		deferred_grade: bool = false) -> Dictionary:
+		deferred_grade: bool = false, retain_rejected: bool = false) -> Dictionary:
 	var anchors: Dictionary = {}
 	var chosen_ids: Dictionary = {}
 	for node_id: String in MapLayoutCanonical.sorted_keys(node_sets):
@@ -459,14 +479,33 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 		if not routed_edge.get("row", {}).is_empty():
 			route_rows.append(routed_edge["row"])
 		routes[edge_id] = routed_edge["route"]
+	if quality.has("spatial_profile"):
+		var terrace: Dictionary = preload("res://presentation/map/map_terrace_route.gd").apply(routes, anchors)
+		if quality["spatial_profile"].get("stair_version", "") == "transverse-court-v1":
+			var court_rows: Array = quality["spatial_profile"]["rows"]
+			terrace = preload("res://presentation/map/map_court_stair_route.gd").apply(routes, anchors, court_rows)
+		if terrace.get("ok") != true:
+			return _attempt_failure(chosen_ids, route_rows, {
+				"kind":"terrace_surface", "id":"terrace_infeasible", "node_id":"",
+				"edge_id":terrace.get("edge_id", ""), "profile_id":"world",
+				"reason":terrace.get("reason", "terrace resolution failed"),
+				"details":terrace}, plan_diagnostics)
+		routes = terrace["routes"]
 	if deferred_grade:
 		var graded: Dictionary = _Grade.apply(routes, quality)
+		if graded.get("ok")!=true and quality.get("routing_strategy")=="grade-priority-v1":
+			graded = preload("res://presentation/map/map_journey_crossing.gd").repair(routes,quality,graded)
 		if graded.get("ok", false) != true:
-			return _attempt_failure(chosen_ids, route_rows,
+			var failure: Dictionary = _attempt_failure(chosen_ids, route_rows,
 				graded.get("binding", {}), plan_diagnostics)
+			if retain_rejected:
+				failure["rejected_geometry"] = {"node_anchors":anchors,"edges":routes}
+			return failure
 		plan_diagnostics["grade_receipt"] = graded["receipt"]
+		# This guard freezes the default deferred search, not the opt-in
+		# priority trial. A flat priority trial still faces every quality gate.
 		if MapLayoutCanonical.int_value(
-				graded["receipt"].get("bridge_span_count", 0)) == 0:
+				graded["receipt"].get("bridge_span_count", 0)) == 0 and quality.get("routing_strategy","ground-first-v1")!="grade-priority-v1":
 			return _attempt_failure(chosen_ids, route_rows, {
 				"kind": "grade_separation",
 				"id": "deferred_without_grade",
@@ -512,12 +551,17 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 	if second.get("hard_pass", false) != true:
 		var binding: Dictionary = _quality_binding(second, input)
 		attempt_diagnostics["first_binding_violation"] = binding
-		return {
+		var rejected: Dictionary = {
 			"ok": false,
 			"binding": binding,
 			"chosen_candidate_ids": chosen_ids,
 			"diagnostics": attempt_diagnostics,
 		}
+		if retain_rejected:
+			# Study-only diagnostics never enter compiled results or caches.
+			rejected["rejected_geometry"] = final_result.to_dict()
+			rejected["quality_violations"] = second.get("violations", [])
+		return rejected
 	return {
 		"ok": true,
 		"result": final_result,

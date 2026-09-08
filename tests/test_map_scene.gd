@@ -222,7 +222,7 @@ static func _compiled_layout(fails: Array[String]) -> void:
 			scene.free()
 			return
 	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
-		"res://docs/map/map-quality-v2.json"))
+		"res://content/map-quality-v2.json"))
 	var assets: Dictionary = scene.call(&"layout_asset_bundle")
 	var contract: Dictionary = scene.call(&"layout_hero_contract")
 	var terminus_anchor: Dictionary = contract.get("anchors", {}).get(

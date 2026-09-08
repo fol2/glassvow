@@ -1,0 +1,218 @@
+{
+  "bridge_walkway": {
+    "body_samples": 20225,
+    "decoration_hits": 24,
+    "examples": [
+      {
+        "at": [
+          -48.8648262023926,
+          -22.5151691436768
+        ],
+        "edge": "3:1,2>3:2,1",
+        "floor": 4.82200019073486,
+        "obstacle": 5.70199966430664
+      },
+      {
+        "at": [
+          -48.7712097167969,
+          -22.8380928039551
+        ],
+        "edge": "3:1,2>3:2,1",
+        "floor": 4.82200019073486,
+        "obstacle": 5.59200000762939
+      },
+      {
+        "at": [
+          -40.1940650939941,
+          30.8908367156982
+        ],
+        "edge": "3:2,5>3:3,6",
+        "floor": 4.82200019073486,
+        "obstacle": 5.70199966430664
+      },
+      {
+        "at": [
+          -40.1028289794922,
+          31.2349796295166
+        ],
+        "edge": "3:2,5>3:3,6",
+        "floor": 4.82200019073486,
+        "obstacle": 5.59200000762939
+      },
+      {
+        "at": [
+          -27.5869560241699,
+          -10.7325639724731
+        ],
+        "edge": "3:3,3>3:4,2",
+        "floor": 3.81776134681702,
+        "obstacle": 4.69779968261719
+      },
+      {
+        "at": [
+          -27.4943618774414,
+          -11.0747480392456
+        ],
+        "edge": "3:3,3>3:4,2",
+        "floor": 3.81779980659485,
+        "obstacle": 4.58780002593994
+      },
+      {
+        "at": [
+          17.867504119873,
+          10.5586013793945
+        ],
+        "edge": "3:8,3>3:9,4",
+        "floor": 4.59590005874634,
+        "obstacle": 5.36590003967285
+      },
+      {
+        "at": [
+          17.6192359924316,
+          10.5879764556885
+        ],
+        "edge": "3:8,3>3:9,4",
+        "floor": 4.59590005874634,
+        "obstacle": 5.4758996963501
+      },
+      {
+        "at": [
+          17.9058494567871,
+          10.8826856613159
+        ],
+        "edge": "3:8,3>3:9,4",
+        "floor": 4.59590005874634,
+        "obstacle": 5.4758996963501
+      },
+      {
+        "at": [
+          17.6575813293457,
+          10.9120607376099
+        ],
+        "edge": "3:8,3>3:9,4",
+        "floor": 4.59590005874634,
+        "obstacle": 5.4758996963501
+      },
+      {
+        "at": [
+          16.6645088195801,
+          11.029559135437
+        ],
+        "edge": "3:8,3>3:9,4",
+        "floor": 4.59590005874634,
+        "obstacle": 5.25522947311401
+      },
+      {
+        "at": [
+          16.4162406921387,
+          11.058934211731
+        ],
+        "edge": "3:8,3>3:9,4",
+        "floor": 4.59590005874634,
+        "obstacle": 5.25451278686523
+      }
+    ],
+    "scope": "Actual rail and pier triangles over rendered treads; five lateral samples across a 1.5 m corridor, 2.12 m body height."
+  },
+  "bridgehead_overlap": {
+    "maximum_surface_separation": 0.00000000000000444089209850063,
+    "overlap_samples": 2153,
+    "radius": 1.5,
+    "worst": [
+      38.7278633117676,
+      34.624641418457
+    ]
+  },
+  "crossing_centres": 3,
+  "crossings": [
+    {
+      "at": [
+        -31.3595237731934,
+        -1.46351337432861
+      ],
+      "clearance": 3.51115474685546,
+      "floor": 1.77884525314454,
+      "soffit": 5.29
+    },
+    {
+      "at": [
+        14.8087368011475,
+        5.39110803604126
+      ],
+      "clearance": 2.85951427615886,
+      "floor": 2.51030723030948,
+      "soffit": 5.36982150646834
+    },
+    {
+      "at": [
+        60.2554054260254,
+        18.6082916259766
+      ],
+      "clearance": 3.00524477770537,
+      "floor": 2.4246983451584,
+      "soffit": 5.42994312286377
+    }
+  ],
+  "edges": 76,
+  "expected_edges": 76,
+  "expected_nodes": 65,
+  "maximum_endpoint_height_error": 0.000000164031986216173,
+  "maximum_sampled_grade": 0.484061596833285,
+  "minimum_centre_headroom": 2.85951427615886,
+  "minimum_dry_margin": 0.597927041053772,
+  "missing_route_samples": [],
+  "nodes": 65,
+  "remaining_checks": [
+    "whole-width bridge clearance",
+    "library footprint and route obstruction",
+    "reference-shape readability",
+    "water motion and depth",
+    "owner review"
+  ],
+  "rendered_deck": {
+    "first_failures": [],
+    "maximum_height_difference_from_route": 0.109770938873291,
+    "maximum_rendered_triangle_grade": 1.04065419146543,
+    "missing": 0,
+    "samples": 28315,
+    "scope": "Actual deck triangles, all route samples at seven offsets across 1.2 m; triangle grade across both complete decks",
+    "steepest_at": [
+      12.0597333908081,
+      5.44756650924683,
+      2.53113341331482
+    ],
+    "steepest_projected_area": 0.00253110355697572,
+    "steepest_vertices": [
+      [
+        12.0,
+        5.39129972457886,
+        2.5
+      ],
+      [
+        12.05419921875,
+        5.41589975357056,
+        2.5
+      ],
+      [
+        12.125,
+        5.53550004959106,
+        2.59340000152588
+      ]
+    ]
+  },
+  "rendered_width_checks": {
+    "failures": [],
+    "minimum_headroom": 2.56797862052917,
+    "sample_count": 609,
+    "sampling": "Rendered lower top and upper underside triangles, 0.125 m along / 0.15 m across, +/-0.9 m width at all three crossings"
+  },
+  "steepest": {
+    "at": [
+      11.1526670455933,
+      5.354660987854,
+      2.779376745224
+    ],
+    "edge": "3:8,3>3:9,4",
+    "upper": true
+  }
+}

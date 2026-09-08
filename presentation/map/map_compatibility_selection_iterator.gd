@@ -1,7 +1,7 @@
 class_name MapCompatibilitySelectionIterator
 extends RefCounted
 ## Lazy, component-local assignment over exact #466 unary/pair receipts.
-const VERSION: String = "map-compatibility-selection-iterator-v1"
+const VERSION: String = "map-compatibility-selection-iterator-v2"
 const ASSIGNMENT: String = "ASSIGNMENT"
 const SELECTION_WORK_EXHAUSTED: String = "SELECTION_WORK_EXHAUSTED"
 const NO_COMPATIBLE_ASSIGNMENT: String = "NO_COMPATIBLE_ASSIGNMENT"
@@ -308,6 +308,8 @@ func _try_frame(cursor: Dictionary, frame_index: int,
 		var changes: Array[Dictionary] = []
 		var checked: String = _forward_check(cursor, component_index,
 			node_id, candidate_index, changes)
+		if checked=="compatible":
+			checked = _propagate_nogoods(cursor,component_index,changes)
 		if checked == "exhausted":
 			_decision_trace[-1]["outcome"] = "work_exhausted"
 			frame["active"] = true
@@ -371,6 +373,48 @@ func _forward_check(cursor: Dictionary, component_index: int,
 			other_domain.remove_at(position)
 		if other_domain.is_empty():
 			return "incompatible"
+	return "compatible"
+
+
+func _propagate_nogoods(cursor: Dictionary, component_index: int,
+		changes: Array[Dictionary]) -> String:
+	var assigned: Dictionary = cursor["assigned"]
+	var domains: Dictionary = cursor["domains"]
+	for nogood: Dictionary in _nogoods:
+		var ids: Array = nogood["node_ids"]
+		var values: Array = nogood["candidate_ids"]
+		var pending: String = ""
+		var forbidden: String = ""
+		var count: int = 0
+		var applies: bool = true
+		for index: int in range(ids.size()):
+			var id: String = str(ids[index])
+			# Cross-component solutions can advance independently. Keep their
+			# existing exact-match/backjump semantics; never prune a projection.
+			if MapLayoutCanonical.int_value(_node_components[id])!=component_index:
+				applies = false
+				break
+			if assigned.has(id):
+				if _candidate_id(id,MapLayoutCanonical.int_value(assigned[id]))!=str(values[index]):
+					applies = false
+					break
+			else:
+				pending = id
+				forbidden = str(values[index])
+				count += 1
+		if not applies or count!=1: continue
+		var domain: Array = domains[pending]
+		for position: int in range(domain.size()-1,-1,-1):
+			var candidate: int = MapLayoutCanonical.int_value(domain[position])
+			if _candidate_id(pending,candidate)!=forbidden: continue
+			if not _take("domain_value_removals",{
+					"operation":"nogood_domain_value_removal",
+					"component":_component_id(component_index),
+					"node_id":pending,"candidate_id":forbidden,
+					"nogood_digest":nogood["nogood_digest"]}): return "exhausted"
+			changes.append({"node_id":pending,"position":position,"candidate_index":candidate})
+			domain.remove_at(position)
+		if domain.is_empty(): return "nogood"
 	return "compatible"
 
 

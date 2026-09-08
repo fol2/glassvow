@@ -1,0 +1,34 @@
+{
+  "head": "c0570e4ba664a7d531d19e52ce6216540d41cb87",
+  "started_utc": "2026-09-07T10:25:28Z",
+  "checks": [
+    {
+      "name": "version",
+      "command": [
+        "godot",
+        "--version"
+      ],
+      "exit": 0,
+      "seconds": 0.03
+    },
+    {
+      "name": "scripts",
+      "command": [
+        "tools/check_scripts.sh"
+      ],
+      "exit": 0,
+      "seconds": 193.67
+    },
+    {
+      "name": "core",
+      "command": [
+        "godot",
+        "--headless",
+        "-s",
+        "res://tests/run_all.gd"
+      ],
+      "exit": 0,
+      "seconds": 1430.59
+    }
+  ]
+}
