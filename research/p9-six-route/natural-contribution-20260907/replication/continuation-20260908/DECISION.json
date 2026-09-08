@@ -1,0 +1,224 @@
+{
+  "status": "TWO_DIAGNOSTICS_COMPLETE_P9_UNFINISHED",
+  "candidate_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "descriptor_sha256": "2cfe1d8ff00d5ff695664c597be3a93e3960f39732fa049eac82b9397184bab7",
+  "fixed_validation": {
+    "rows": 1024,
+    "counts": {
+      "win": 721,
+      "loss": 303,
+      "stall": 0,
+      "error": 0
+    },
+    "classification": {
+      "correct": 619,
+      "total": 768,
+      "accuracy": 0.8059895833333334,
+      "unresolved_is_incorrect": true,
+      "scope": "distinguishes predefined controller trajectories, not seven-direction content validity"
+    },
+    "report_sha256": "8a96ea161f8e4324b6c65e882d2b6cee8239061e368ed743d94397df02a7fa83",
+    "raw_recovered": false
+  },
+  "original_arms": {
+    "rows": 2048,
+    "counts": {
+      "win": 382,
+      "loss": 1666,
+      "stall": 0,
+      "error": 0
+    },
+    "primary_sha256": "5c6220adc9433c45dec016fb1025f28712026d2b0b80c1c151d7339bb73888d5",
+    "execution_classification": "REPRODUCTION_OF_POSSIBLY_EXPOSED_ASSIGNMENT_NOT_FRESH_CONFIRMATION",
+    "smoke_complete_rows": 32,
+    "original_domain_exact_raw_parity_pairs": 16,
+    "metadata_replays_verified": 0,
+    "native_to_published_arithmetic_equal_cells": 32,
+    "native_to_published_equal_paired_gaps": 16,
+    "raw_archive_remote_verified": false
+  },
+  "signed_contribution": {
+    "scope": "Descriptive post-decision interactions, not whole-run effects or detector admission",
+    "n_each": 64,
+    "columns": [
+      "aspect",
+      "vow",
+      "route",
+      "anchor_positive_runs",
+      "wins_without_observed_anchor",
+      "interaction_sum",
+      "positive_run_sums",
+      "negative_run_sums",
+      "nominal_bootstrap_mean_lower",
+      "nominal_bootstrap_mean_upper"
+    ],
+    "rows": [
+      [
+        0,
+        0,
+        "facet",
+        44,
+        13,
+        3162,
+        44,
+        0,
+        38.38984375,
+        60.62578124999999
+      ],
+      [
+        0,
+        0,
+        "fervor",
+        61,
+        0,
+        6369,
+        61,
+        0,
+        83.249609375,
+        116.672265625
+      ],
+      [
+        0,
+        0,
+        "cycle",
+        58,
+        1,
+        5980,
+        58,
+        0,
+        80.609375,
+        106.484375
+      ],
+      [
+        0,
+        5,
+        "facet",
+        39,
+        4,
+        2594,
+        39,
+        0,
+        28.59375,
+        53.421875
+      ],
+      [
+        0,
+        5,
+        "fervor",
+        52,
+        0,
+        4292,
+        52,
+        0,
+        50.46875,
+        84.50078124999999
+      ],
+      [
+        0,
+        5,
+        "cycle",
+        45,
+        2,
+        4510,
+        45,
+        0,
+        54.0,
+        87.875390625
+      ],
+      [
+        1,
+        0,
+        "smolder",
+        47,
+        10,
+        8181,
+        47,
+        0,
+        101.49921875,
+        154.70468749999998
+      ],
+      [
+        1,
+        0,
+        "hand",
+        60,
+        3,
+        8161,
+        60,
+        0,
+        101.81171875,
+        155.62656249999998
+      ],
+      [
+        1,
+        0,
+        "cycle",
+        60,
+        4,
+        5693,
+        60,
+        0,
+        75.46875,
+        102.31328124999999
+      ],
+      [
+        1,
+        5,
+        "smolder",
+        54,
+        6,
+        9263,
+        54,
+        0,
+        120.28125,
+        169.328125
+      ],
+      [
+        1,
+        5,
+        "hand",
+        56,
+        6,
+        6938,
+        56,
+        0,
+        85.718359375,
+        132.828515625
+      ],
+      [
+        1,
+        5,
+        "cycle",
+        53,
+        9,
+        4321,
+        53,
+        0,
+        53.15625,
+        82.53125
+      ]
+    ],
+    "poison_not_combined_with_immediate_hp": true,
+    "model_refit": false,
+    "new_simulations": 0
+  },
+  "decisions": [
+    "Do not rerun the completed 1024 fingerprint assignment or the original-arm diagnostic for orientation.",
+    "Keep all six current routes as research candidates, not admitted packages. Local interaction replication is positive in every core context, but natural acquisition and whole-run package causality are not certified.",
+    "Preserve Dusk Facet V0 uncertainty and Ash Smolder unresolved observations. Do not refit or relabel the frozen predictor.",
+    "Keep original signed arm definitions separate from stronger research-controller results. Neither controller erases the other.",
+    "No new protected or admission cohort before an exact raw-upload/download capability preflight succeeds."
+  ],
+  "transport_rejection": {
+    "commit": "b7c31c07ae12be062085b11027ed5e02b1c60ef2",
+    "path": "ORIGINAL-PRIMARY.json",
+    "observed_blob": "794d1ac6af8ae42657cd460e0bb702d1b4704204",
+    "expected_blob": "25031751cb06b603347e08d0d66eadf0188cb2a6",
+    "admitted": false,
+    "replacement_commit": "34f1f210c063e64712c8907b2f9c12438d38a27e",
+    "replacement_blob": "99e9d0ff355811a4cee817662f16bf3b5734106b",
+    "replacement_readback_equal": true
+  },
+  "p9_packages_admitted": 0,
+  "p9_certified": false
+}

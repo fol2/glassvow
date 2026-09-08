@@ -1,50 +1,53 @@
 {
-  "status": "SESSION_HANDOFF_P9_UNFINISHED",
-  "audit_scope": "storage/source/statistical reconstruction only; no new gameplay execution",
+  "status": "P9_UNFINISHED_DIAGNOSTICS_COMPLETE_RAW_STORAGE_BOUNDARY",
   "branch": "research/p9-six-route-local-20260905",
-  "pre_handoff_head": "e4ace6829a333f3d7b02e0e0dc5b4c9100db9f5a",
   "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
-  "source_archive": {
-    "name": "p9-source-6217709e.zip",
-    "sha256": "89c4d00a84da7dbd95695b444e184dcfb584d10348cd19a99321679f1a5deaed",
-    "verified_git_blobs": 892
-  },
+  "verified_source_snapshot": "a7791720ec51a01f89ae24e32e6290bf25431bd4",
+  "candidate_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "descriptor_sha256": "2cfe1d8ff00d5ff695664c597be3a93e3960f39732fa049eac82b9397184bab7",
   "validation": {
     "assigned_rows": 1024,
     "assigned_chunks": 64,
-    "rows_per_chunk": 16,
-    "seeds": [
-      44010000,
-      44010063
-    ],
-    "durable_primary_chunks": 20,
-    "durable_primary_rows": 320,
-    "not_recovered_chunks": 44,
-    "not_recovered_rows": 704,
-    "parts_used": [
-      "PRIMARY-01.json",
-      "PRIMARY-02.json",
-      "PRIMARY-03.json",
-      "PRIMARY-04.json",
-      "PRIMARY-05.json"
-    ],
-    "quarantined": [
-      "PRIMARY-06.json"
-    ],
-    "original_raw_and_receipts_recovered": false
+    "durable_primary_rows": 1024,
+    "durable_primary_chunks": 64,
+    "missing_compact_rows": 0,
+    "old_primary_rows": 320,
+    "later_primary_rows": 704,
+    "original_raw_recovered": false,
+    "frozen_model_refit": false,
+    "rerun_for_orientation": false,
+    "report": "natural-contribution-20260907/replication/continuation-20260908/PUBLISHED-VALIDATION.json",
+    "report_sha256": "8a96ea161f8e4324b6c65e882d2b6cee8239061e368ed743d94397df02a7fa83"
   },
-  "training_reconstruction": {
-    "retained_records": 288,
-    "training_records": 192,
-    "frozen_model_exact_equal": true,
-    "descriptor_sha256": "2cfe1d8ff00d5ff695664c597be3a93e3960f39732fa049eac82b9397184bab7"
+  "original_arms": {
+    "assigned_rows": 2048,
+    "completed_rows": 2048,
+    "primary": "natural-contribution-20260907/replication/continuation-20260908/ORIGINAL-PRIMARY.json",
+    "primary_sha256": "5c6220adc9433c45dec016fb1025f28712026d2b0b80c1c151d7339bb73888d5",
+    "exposed_assignment_reproduction_not_fresh_confirmation": true,
+    "rerun_for_orientation": false,
+    "native_archive_name": "p9-original-arms-native-20260908.tar.xz",
+    "native_archive_sha256": "b866d60d7d9dad9bbd83610c145e242ed026bf046806ca5c7cab83f4b58d326c",
+    "native_archive_remote_verified": false
   },
-  "absent_in_current_runtime": [
-    "/mnt/data/p9_validation_finish",
-    "/mnt/data/p9-validation-preserved-current.zip"
-  ],
-  "previous_21_receipt_report": "historical readback only; unavailable now; not counted as recovered",
-  "active_research_processes_seen_in_current_runtime": 0,
+  "recovery_exposures": {
+    "interrupted_duplicate_validation_rows": 13,
+    "all_equal_to_preserved_primary": true,
+    "additional_independent_samples": 0
+  },
+  "storage": {
+    "github_code_and_compact_data": "write/readback available",
+    "google_drive_raw_upload": "403 ACCESS_TOKEN_SCOPE_INSUFFICIENT",
+    "notion_raw_upload": "upload handle created; binary POST failed because runtime host cannot be resolved; no bytes uploaded",
+    "local_archive_is_remote_backup": false
+  },
+  "no_active_research_processes": true,
   "p9_certified": false,
-  "primary_boundary": "Retained compact records and recorded raw hashes are not original native captures; no partial-panel outcome inference."
+  "packages_admitted": 0,
+  "remaining_milestones": [
+    "Six complete viable/reachable/distinct package certificates and admitted detector",
+    "Corrected independent confirmation, unrestricted endpoints, signed controls, ceilings and hard guardrails",
+    "Minimum lifecycle, independent review, governed exact-product integration and #108 receipt"
+  ],
+  "exact_next_action": "After approved raw-file write access is available, upload p9-original-arms-native-20260908.tar.xz, fetch it as bytes and require SHA256 b866d60d7d9dad9bbd83610c145e242ed026bf046806ca5c7cab83f4b58d326c. Then finish source-level canonical/null/subset package obligations before freezing new admission rows. Do not rerun either completed diagnostic."
 }

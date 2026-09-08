@@ -1,0 +1,58 @@
+{
+  "status": "COMPLETE_COMPACT_READOUT_AND_INTERRUPTED_DUPLICATE_AUDIT_NOT_P9",
+  "source_commit": "a7791720ec51a01f89ae24e32e6290bf25431bd4",
+  "source_export": {
+    "snapshot": "a7791720ec51a01f89ae24e32e6290bf25431bd4",
+    "artifact_id": 10046349212,
+    "workflow_run": 34202403063,
+    "archive_sha256": "8c9b5cd68bd6c778f053d714407fe93e788230f4a59a0f38fbb82c13038cfe64",
+    "verified_blobs": 920,
+    "scope": "source and committed compact publications, not missing raw captures"
+  },
+  "published_sources": 21,
+  "unique_chunks": 64,
+  "retained_rows": 1024,
+  "outcomes": {
+    "win": 721,
+    "loss": 303,
+    "stall": 0,
+    "error": 0
+  },
+  "readout_sha256": "8a96ea161f8e4324b6c65e882d2b6cee8239061e368ed743d94397df02a7fa83",
+  "readout_git_blob": "509487a7d8b5fe45c2c4c83b25fb79f9c9be8e25",
+  "frozen_descriptor_sha256": "2cfe1d8ff00d5ff695664c597be3a93e3960f39732fa049eac82b9397184bab7",
+  "interrupted_duplicate_rows": 13,
+  "interrupted_duplicate_cells": [
+    {
+      "id": "a0-balanced-v5-b1",
+      "complete_streamed_rows": 1,
+      "incomplete_tail_bytes": 12288,
+      "raw_sha256": "551fe79eba4a70d1f12beb2ef557f567815e15b6e0edd6b9f8947bc6ad4d72b5",
+      "all_complete_rows_equal_to_preserved_primary": true
+    },
+    {
+      "id": "a0-cycle-v5-b1",
+      "complete_streamed_rows": 3,
+      "incomplete_tail_bytes": 30070,
+      "raw_sha256": "5a594de8c5c25358c5dc57cab91ed2d924667b8fd7f3264833632a1af031dadc",
+      "all_complete_rows_equal_to_preserved_primary": true
+    },
+    {
+      "id": "a0-facet-v5-b1",
+      "complete_streamed_rows": 5,
+      "incomplete_tail_bytes": 7152,
+      "raw_sha256": "463f9b8d2b29cb9911e2bd82eeab27751e9913dd9be8d81a7a456ce72af4638c",
+      "all_complete_rows_equal_to_preserved_primary": true
+    },
+    {
+      "id": "a0-fervor-v5-b1",
+      "complete_streamed_rows": 4,
+      "incomplete_tail_bytes": 38620,
+      "raw_sha256": "cc08a9b2e2c7bc78d2462aaabf7b48c8fba355c8d5515493189a2860343107da",
+      "all_complete_rows_equal_to_preserved_primary": true
+    }
+  ],
+  "duplicate_rows_counted_as_new": 0,
+  "full_native_raw_recovered": false,
+  "next": "Reconcile original-arm diagnostic; do not rerun the complete 1024 fingerprint assignment."
+}

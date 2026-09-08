@@ -34,7 +34,8 @@ def main():
       'nominal_seed_bootstrap95':np.quantile(d[ix].mean(axis=1),[.025,.975]).tolist()})
  out={'status':'ORIGINAL_ARM_DEFINITIONS_DIAGNOSTIC_COMPLETE_NOT_P9','rows':2048,'cells':primary,'counts':dict(total),
   'catalogues':P['catalogues'],'protocol_sha256':sha(W/'PROTOCOL.json'),'freeze_sha256':sha(F/'freeze.json'),
-  'seeds':[45010000,45010063],'smoke_rows':32,'original_domain_parity_pairs':16,'metadata_replayed_pairs':8,
+  'seeds':[45010000,45010063],'smoke_rows':32,'original_domain_parity_pairs':16,'metadata_replayed_pairs':0,
+  'execution_classification':'REPRODUCTION_OF_POSSIBLY_EXPOSED_DIAGNOSTIC_ASSIGNMENT_NOT_FRESH_CONFIRMATION',
   'paired_catalogue_gaps':pairs,'limits':['Uses original signed arm definitions but diagnostic seeds; not a signed Phase A/C2 receipt.',
     'Original planned policy may not exploit optional research mechanics; it does not replace stronger research-controller evidence.',
     'Nominal bootstrap intervals are descriptive, not multiplicity-adjusted package admission.',
