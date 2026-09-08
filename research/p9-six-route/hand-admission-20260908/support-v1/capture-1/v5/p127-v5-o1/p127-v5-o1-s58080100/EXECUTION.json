@@ -1,0 +1,57 @@
+{
+  "config_id": "p127-v5-o1-s58080100",
+  "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-support-gg59nao0/project",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v5/p127-v5-o1/p127-v5-o1-s58080100/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v5/p127-v5-o1/p127-v5-o1-s58080100/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v5/p127-v5-o1/p127-v5-o1-s58080100/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 8.662889013000495,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 29424,
+      "sha256": "f832f5f83172f0d87898711cc4c766296fad215ce78834497d0be8ffc0cf1844"
+    },
+    "trace.ndjson": {
+      "bytes": 5011460,
+      "sha256": "4e12da6d5876f6bc189536ed21a4611cb30c0355791cdaef9f65ded38188af0c"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 98112,
+      "sha256": "cb14faa6cd49023dfd911482ead6f6c569a3099366585b3826fc2961100bc639"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3500,
+      "sha256": "0cbd0f890b5420c68b748636e0956a7ff7ead923bf2fbb0e4f347791e3d7a8c2"
+    },
+    "CONFIG.json": {
+      "bytes": 572,
+      "sha256": "dac86370623e2dd1557cd15535f236c16128cebfcd8419fc2937aeeaab7a242c"
+    },
+    "CELL.json": {
+      "bytes": 515,
+      "sha256": "74b2e82190ef1b7d246d7260279bfad4a948da2c502747c5fda9aa5e5c35188d"
+    }
+  },
+  "p9_certified": false
+}
