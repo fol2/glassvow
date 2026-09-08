@@ -1,0 +1,61 @@
+{
+  "status": "COMMAND_CONTRACT_FAIL",
+  "rows": 672,
+  "fixtures": 80,
+  "states": 822,
+  "checks": 312,
+  "failed_checks": 64,
+  "p9_certified": false,
+  "packages_admitted": 0,
+  "new_independent_samples": 0,
+  "frozen_head": "7b39ebd148bdc7ee23c7e3a4abff4cab79040d71",
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "native": {
+    "returncode": 0,
+    "stop_reason": null,
+    "elapsed_seconds": 2.225385320999976,
+    "command": [
+      "/mnt/data/p9-deps/godot/Godot_v4.7.2-stable_linux.x86_64",
+      "--headless",
+      "--path",
+      "/mnt/data/p9-fixture-project",
+      "-s",
+      "res://command_probe.gd",
+      "--",
+      "/mnt/data/p9-command-evidence/attempt-01/native.ndjson"
+    ],
+    "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+    "protocol_sha256": "f69129c016c0a38bdc752c2805d2513a10bbdf9f583f69947e27ac1e5e80a152",
+    "source_equal_after": true,
+    "probe_equal_after": true,
+    "files": {
+      "stderr.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native.ndjson": {
+        "bytes": 4374339,
+        "sha256": "62ae02bd4fda08381ce61a4a40b88a98391d7476b6b33d090bc896b622663785"
+      },
+      "stdout.log": {
+        "bytes": 73,
+        "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+      },
+      "parse.log": {
+        "bytes": 73,
+        "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+      }
+    }
+  },
+  "failure_classes": {
+    "FACET_FULL_HEALTH": 8,
+    "FACET_PROPER_SUBSET_HEALTH": 56
+  },
+  "reader_tests": {
+    "passed": 13,
+    "total": 13
+  },
+  "full_results_sha256": "81f5261c118eced66482a78857e3d1335beed80abc5e83d97215c5b9e6289e8f",
+  "full_raw_remote_complete": false,
+  "next": "Persist complete lossless native capture and decompose all Facet failures from existing events. No additional native runs or fixture retuning."
+}
