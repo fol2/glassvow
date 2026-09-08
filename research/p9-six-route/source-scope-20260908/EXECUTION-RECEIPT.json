@@ -1,0 +1,42 @@
+{
+  "kind": "REMOTE_SOURCE_RECONSTRUCTION_NOT_P9",
+  "source_head": "fbcb942b98a295ad6998fc3292e180888ca27ed0",
+  "sources": {
+    "audit_source.py": {
+      "bytes": 8758,
+      "sha256": "380ad3c99e721c53e425d0a32dfc2860bab99c6bacd72f58b1263434848fa251",
+      "git_blob": "fa86efc5a8a9a4995a795844216e11bf5a3e1cf1"
+    },
+    "test_source.py": {
+      "bytes": 2485,
+      "sha256": "f2948434d3bff35e565407b1942bd8cefc55f386ba467096401ec4b99597e794",
+      "git_blob": "1a78ffb5ce5f443efcff2919a1b831fcd0e489f5"
+    },
+    "SCOPE.md": {
+      "bytes": 5743,
+      "sha256": "7c27bd54fa691a62ec4d1cb0a61f5da77bd8fa96365765b184f801a7d67342a0",
+      "git_blob": "f5a9d5a3f41dbf9804f366536abb06838edc4c35"
+    }
+  },
+  "result_bytes": 14881,
+  "result_sha256": "9c6e0b83e28568fa4029e01d4a31b89653a9950be1499c746994f02c852d4d0a",
+  "result_git_blob": "a61edec7b039fa8b6350763ea5ed635d38b8b2d5",
+  "tests": 8,
+  "tests_returncode": 0,
+  "tests_log_sha256": "cabd7cc0f4cb4d4fcd9e02c13e3362fed392566751e23863d7d8594c9a62a813",
+  "decisions": {
+    "facet_named_pair_has_unchanged_intrinsic_combat_law": true,
+    "facet_new_echo_primitive_demonstrated": false,
+    "cycle_growth_operator_and_reset_unchanged": true,
+    "cycle_has_added_ordinary_draw": true,
+    "cycle_entire_action_equivalent_to_old_card": false,
+    "whole_game_equivalence_established": false,
+    "complete_closed_family_quotient_established": false,
+    "historical_cohort_failure_is_universal_nonviability": false,
+    "admission_from_labels_or_source_lineage_permitted": false
+  },
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}

@@ -1,0 +1,628 @@
+{
+  "status": "EXACT_SOURCE_LINEAGE_NOT_FULL_PACKAGE_EQUIVALENCE",
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "source_identities": {
+    "base": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8"
+    },
+    "candidate": {
+      "content/full-content.json": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+      "domain/rules/combat.gd": "a6fd99eb53030d3cf1401153bdeceec8b86ccc2af8b7643481855c681906f2ba"
+    }
+  },
+  "domain_changed": [
+    "domain/rules/combat.gd"
+  ],
+  "added_domain": [],
+  "unchanged_combat_functions": [
+    "_add_status",
+    "_apply_art_effect",
+    "_apply_effect",
+    "_apply_start_relics",
+    "_begin_finale_handoff",
+    "_compute_intents",
+    "_gate_death_dialogue",
+    "_init",
+    "_is_finale_handoff",
+    "_ji",
+    "_jump_smolder",
+    "_omen_mods",
+    "_on_enemy_death",
+    "_player_smolder_blocked",
+    "_preview_hit",
+    "_proc",
+    "_resolved_enemy",
+    "_sget",
+    "_shatter_enemy",
+    "_shuffle_cards",
+    "_start_player_turn",
+    "_tick_status",
+    "_vow_mods",
+    "_win_combat",
+    "_with_counterfactual",
+    "add_status_enemy",
+    "add_status_player",
+    "apply_chips",
+    "can_kindle",
+    "can_play",
+    "can_use_art",
+    "card_data",
+    "damage_player",
+    "draw_cards",
+    "eff_cost",
+    "end_turn",
+    "exhaust_card",
+    "gain_block_enemy",
+    "gain_block_player",
+    "gain_embers",
+    "handles_potion",
+    "handles_special",
+    "heal_player",
+    "hit_enemy",
+    "kindle_from_hand",
+    "lose_combat",
+    "play_card",
+    "preview_block",
+    "preview_enemy_dmg",
+    "start_combat",
+    "use_art",
+    "use_potion"
+  ],
+  "changed_combat_functions": [
+    "_apply_special",
+    "preview_play"
+  ],
+  "added_combat_functions": [
+    "resource_payoff"
+  ],
+  "removed_combat_functions": [],
+  "special_arms": {
+    "shatterEcho": {
+      "body_equal": true,
+      "base_body_sha256": "1fd264453e143cd2066dfc54102a34dd9d0d4099572badb7a1865f08e09daad9",
+      "candidate_body_sha256": "1fd264453e143cd2066dfc54102a34dd9d0d4099572badb7a1865f08e09daad9"
+    },
+    "momentum": {
+      "body_equal": true,
+      "base_body_sha256": "684077a5d2fda798114df8448af7752ad1c0b1caad55ec21b288508851acfe91",
+      "candidate_body_sha256": "684077a5d2fda798114df8448af7752ad1c0b1caad55ec21b288508851acfe91"
+    },
+    "catalyst": {
+      "body_equal": true,
+      "base_body_sha256": "72fd61446a71e60ae48c6455c9c1b2809edb5934628a7f2d88efa628476f41b3",
+      "candidate_body_sha256": "72fd61446a71e60ae48c6455c9c1b2809edb5934628a7f2d88efa628476f41b3"
+    },
+    "phantom": {
+      "body_equal": false,
+      "base_body_sha256": "b3b749857e5068da98e6b6084297a54f7edf22f8e550d1ac8c7efff908e69cfd",
+      "candidate_body_sha256": "28ce563a4b9fcb072f24e4d6c6581d90ef439e5c02df5f7ab5e52afdf2d80356"
+    }
+  },
+  "card_comparisons": {
+    "chisel": [
+      {
+        "upgraded": false,
+        "changed_keys": [],
+        "combat_projection_equal": true,
+        "base_effects": [
+          {
+            "kind": "dmg",
+            "n": 4
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "dmg",
+            "n": 4
+          }
+        ],
+        "base_rarity": "starter",
+        "candidate_rarity": "starter"
+      },
+      {
+        "upgraded": true,
+        "changed_keys": [],
+        "combat_projection_equal": true,
+        "base_effects": [
+          {
+            "kind": "dmg",
+            "n": 7
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "dmg",
+            "n": 7
+          }
+        ],
+        "base_rarity": "starter",
+        "candidate_rarity": "starter"
+      }
+    ],
+    "resonantLance": [
+      {
+        "upgraded": false,
+        "changed_keys": [
+          "rarity"
+        ],
+        "combat_projection_equal": true,
+        "base_effects": [
+          {
+            "kind": "special",
+            "id": "shatterEcho",
+            "n": 7
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "special",
+            "id": "shatterEcho",
+            "n": 7
+          }
+        ],
+        "base_rarity": "rare",
+        "candidate_rarity": "uncommon"
+      },
+      {
+        "upgraded": true,
+        "changed_keys": [
+          "rarity"
+        ],
+        "combat_projection_equal": true,
+        "base_effects": [
+          {
+            "kind": "special",
+            "id": "shatterEcho",
+            "n": 10
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "special",
+            "id": "shatterEcho",
+            "n": 10
+          }
+        ],
+        "base_rarity": "rare",
+        "candidate_rarity": "uncommon"
+      }
+    ],
+    "momentum": [
+      {
+        "upgraded": false,
+        "changed_keys": [
+          "effects",
+          "rarity",
+          "text",
+          "up"
+        ],
+        "combat_projection_equal": false,
+        "base_effects": [
+          {
+            "kind": "special",
+            "id": "momentum",
+            "n": 6,
+            "grow": 4
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "special",
+            "id": "momentum",
+            "n": 0,
+            "grow": 14
+          },
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "base_rarity": "uncommon",
+        "candidate_rarity": "common"
+      },
+      {
+        "upgraded": true,
+        "changed_keys": [
+          "effects",
+          "rarity",
+          "text",
+          "up"
+        ],
+        "combat_projection_equal": false,
+        "base_effects": [
+          {
+            "kind": "special",
+            "id": "momentum",
+            "n": 8,
+            "grow": 6
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "special",
+            "id": "momentum",
+            "n": 1,
+            "grow": 17
+          },
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "base_rarity": "uncommon",
+        "candidate_rarity": "common"
+      }
+    ],
+    "empower": [
+      {
+        "upgraded": false,
+        "changed_keys": [
+          "effects",
+          "rarity",
+          "text",
+          "up"
+        ],
+        "combat_projection_equal": false,
+        "base_effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "str",
+            "n": 2
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "str",
+            "n": 3
+          }
+        ],
+        "base_rarity": "uncommon",
+        "candidate_rarity": "common"
+      },
+      {
+        "upgraded": true,
+        "changed_keys": [
+          "effects",
+          "rarity",
+          "text",
+          "up"
+        ],
+        "combat_projection_equal": false,
+        "base_effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "str",
+            "n": 3
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "str",
+            "n": 4
+          }
+        ],
+        "base_rarity": "uncommon",
+        "candidate_rarity": "common"
+      }
+    ],
+    "flurry": [
+      {
+        "upgraded": false,
+        "changed_keys": [
+          "effects",
+          "rarity",
+          "text",
+          "up"
+        ],
+        "combat_projection_equal": false,
+        "base_effects": [
+          {
+            "kind": "dmg",
+            "n": 2,
+            "times": 3
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "dmg",
+            "n": 0,
+            "times": 5
+          }
+        ],
+        "base_rarity": "uncommon",
+        "candidate_rarity": "common"
+      },
+      {
+        "upgraded": true,
+        "changed_keys": [
+          "effects",
+          "rarity",
+          "text",
+          "up"
+        ],
+        "combat_projection_equal": false,
+        "base_effects": [
+          {
+            "kind": "dmg",
+            "n": 3,
+            "times": 3
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "dmg",
+            "n": 1,
+            "times": 5
+          }
+        ],
+        "base_rarity": "uncommon",
+        "candidate_rarity": "common"
+      }
+    ],
+    "nightSight": [
+      {
+        "upgraded": false,
+        "changed_keys": [
+          "rarity"
+        ],
+        "combat_projection_equal": true,
+        "base_effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "nightsight",
+            "n": 1
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "nightsight",
+            "n": 1
+          }
+        ],
+        "base_rarity": "uncommon",
+        "candidate_rarity": "rare"
+      },
+      {
+        "upgraded": true,
+        "changed_keys": [
+          "rarity"
+        ],
+        "combat_projection_equal": true,
+        "base_effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "nightsight",
+            "n": 1
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "nightsight",
+            "n": 1
+          }
+        ],
+        "base_rarity": "uncommon",
+        "candidate_rarity": "rare"
+      }
+    ],
+    "phantomBlades": [
+      {
+        "upgraded": false,
+        "changed_keys": [
+          "effects",
+          "rarity",
+          "text",
+          "up"
+        ],
+        "combat_projection_equal": false,
+        "base_effects": [
+          {
+            "kind": "special",
+            "id": "phantom",
+            "n": 3
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "special",
+            "id": "phantom",
+            "n": 6,
+            "reserve": 4,
+            "floor_per": 2
+          }
+        ],
+        "base_rarity": "rare",
+        "candidate_rarity": "common"
+      },
+      {
+        "upgraded": true,
+        "changed_keys": [
+          "effects",
+          "rarity",
+          "text",
+          "up"
+        ],
+        "combat_projection_equal": false,
+        "base_effects": [
+          {
+            "kind": "special",
+            "id": "phantom",
+            "n": 4
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "special",
+            "id": "phantom",
+            "n": 7,
+            "reserve": 4,
+            "floor_per": 2
+          }
+        ],
+        "base_rarity": "rare",
+        "candidate_rarity": "common"
+      }
+    ],
+    "venomStrike": [
+      {
+        "upgraded": false,
+        "changed_keys": [],
+        "combat_projection_equal": true,
+        "base_effects": [
+          {
+            "kind": "dmg",
+            "n": 4
+          },
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "poison",
+            "n": 4
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "dmg",
+            "n": 4
+          },
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "poison",
+            "n": 4
+          }
+        ],
+        "base_rarity": "common",
+        "candidate_rarity": "common"
+      },
+      {
+        "upgraded": true,
+        "changed_keys": [],
+        "combat_projection_equal": true,
+        "base_effects": [
+          {
+            "kind": "dmg",
+            "n": 6
+          },
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "poison",
+            "n": 5
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "dmg",
+            "n": 6
+          },
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "poison",
+            "n": 5
+          }
+        ],
+        "base_rarity": "common",
+        "candidate_rarity": "common"
+      }
+    ],
+    "catalyst": [
+      {
+        "upgraded": false,
+        "changed_keys": [
+          "rarity"
+        ],
+        "combat_projection_equal": true,
+        "base_effects": [
+          {
+            "kind": "special",
+            "id": "catalyst",
+            "n": 2
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "special",
+            "id": "catalyst",
+            "n": 2
+          }
+        ],
+        "base_rarity": "rare",
+        "candidate_rarity": "uncommon"
+      },
+      {
+        "upgraded": true,
+        "changed_keys": [
+          "rarity"
+        ],
+        "combat_projection_equal": true,
+        "base_effects": [
+          {
+            "kind": "special",
+            "id": "catalyst",
+            "n": 3
+          }
+        ],
+        "candidate_effects": [
+          {
+            "kind": "special",
+            "id": "catalyst",
+            "n": 3
+          }
+        ],
+        "base_rarity": "rare",
+        "candidate_rarity": "uncommon"
+      }
+    ]
+  },
+  "non_card_context_changes": {
+    "arts": [
+      "ashfall"
+    ],
+    "cardPools": [
+      "common",
+      "rare",
+      "uncommon"
+    ],
+    "relics": [
+      "ashenCore"
+    ]
+  },
+  "decisions": {
+    "facet_named_pair_has_unchanged_intrinsic_combat_law": true,
+    "facet_new_echo_primitive_demonstrated": false,
+    "cycle_growth_operator_and_reset_unchanged": true,
+    "cycle_has_added_ordinary_draw": true,
+    "cycle_entire_action_equivalent_to_old_card": false,
+    "whole_game_equivalence_established": false,
+    "complete_closed_family_quotient_established": false,
+    "historical_cohort_failure_is_universal_nonviability": false,
+    "admission_from_labels_or_source_lineage_permitted": false
+  },
+  "limits": [
+    "The explicit combat-card projection excludes presentation/acquisition metadata, not arbitrary fields.",
+    "Identical bodies are source evidence, not independently qualified runtime/source translation.",
+    "Facet is an unchanged named combat motif under matched context; different acquisition and global content prevent a whole-game equivalence claim.",
+    "Cycle composes old growth with draw and changed magnitudes. A union/decomposition screen is still required; scalar erasure is not a bisimulation proof.",
+    "Historical Dusk policy/cohort closures cannot establish universal Ash or changed-context futility.",
+    "Hand-size improvement is expressly permitted by the programme; generic primitives need not be globally aspect-exclusive."
+  ],
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
