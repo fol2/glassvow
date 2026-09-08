@@ -14,80 +14,49 @@ concurrency:
 
 jobs:
   bundle:
-    name: Cold readback of derived proof and current capsule - no engine
+    name: Preserve exact composition capture and reproduce readers - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
     permissions:
       contents: write
     steps:
-      - name: Check out exact committed evidence
+      - name: Check out exact committed source and evidence
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
           lfs: false
-          sparse-checkout: research/p9-six-route
-      - name: Reconstruct the full derived proof and refresh the existing capsule
+          sparse-checkout: |
+            domain
+            content
+            tools
+            research/p9-six-route
+      - name: Reconstruct and verify complete capture without native reruns
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess,sys
-          root=pathlib.Path('research/p9-six-route')
-          study=root/'package-proof-20260908/facet-language-v1'
-          source=study/'subsequence';output=source/'derived-1'
-          sha=lambda b:hashlib.sha256(b).hexdigest()
-          gitblob=lambda b:hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-          if (output/'REMOTE-READBACK.json').exists():raise RuntimeError('READBACK_ALREADY_EXISTS')
-          observed=[]
-          for line in subprocess.check_output(['git','ls-tree','-r','HEAD',str(source)]).decode().splitlines():
-              meta,path=line.split('\t');mode,kind,expected=meta.split()
-              b=pathlib.Path(path).read_bytes()
-              if kind!='blob' or gitblob(b)!=expected:raise RuntimeError('REMOTE_BYTE_IDENTITY:'+path)
-              observed.append({'path':path,'git_blob':expected,'bytes':len(b),'sha256':sha(b)})
-          if len(observed)!=6:raise RuntimeError('SOURCE_AND_RESULT_COVERAGE')
-          if sha((source/'read_subsequences.py').read_bytes())!='1543da716bbe0f05c1d71022d336ef1e8937178eb13032145c2d223902b13715':raise RuntimeError('READER_IDENTITY')
-          result=subprocess.check_output([sys.executable,str(source/'read_subsequences.py'),str(study)],timeout=90)
-          original=(output/'RESULTS.json').read_bytes()
-          if result!=original or len(result)!=42834 or sha(result)!='ee39bf48647c8e0767d4351aace6c8b7386bf8f1324a658ece39cc1f3619dcd8':raise RuntimeError('DERIVED_PROOF_IDENTITY')
-          execution=json.loads((output/'EXECUTION-RECEIPT.json').read_bytes())
-          for name,identity in execution['files'].items():
-              b=(output/name).read_bytes()
-              if len(b)!=identity['bytes'] or sha(b)!=identity['sha256'] or gitblob(b)!=identity['git_blob']:raise RuntimeError('EXECUTION_RECEIPT:'+name)
-          receipt={'kind':'COLD_REMOTE_BYTE_READBACK_AND_FULL_OFFLINE_REPRODUCTION','source_head':os.environ['GITHUB_SHA'],'original_published_head':'93ddad1b770f57e968d3897cd8d36b5ab15d2a37','files_matched':len(observed),'files':observed,'result_bytes':len(result),'result_sha256':sha(result),'result_git_blob':gitblob(result),'positional_proper_subsets':156,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
-          (output/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          state=json.loads((root/'SESSION-STATE.json').read_bytes())
-          if state.get('p9_certified') or state.get('packages_admitted',0)!=0:raise RuntimeError('CURRENT_STATE_ADVANCED')
-          state['status']='P9_UNFINISHED_BOUNDED_FACET_CHAIN_AND_PROPER_SUBWORDS_VERIFIED'
-          state['source_scope']={'source_head':'d364e49d310ebcb354d808ea952fab283c165a53','published_evidence_head':'9be033490c4f4b7ac6ccdcf466571289c2cf31f6','readback':'source-scope-20260908/REMOTE-READBACK.json','exact_closure_scope':'source-scope-20260908/EXACT-CLOSURE-SCOPE.json','complete_closed_family_quotient_established':False}
-          state['facet_language']={'verified_head':'f36d1428e595711aa997fd3ff8cea633c4df319a','directory':'package-proof-20260908/facet-language-v1','fixed_initial_states':4,'minimum_command_counts':[5,5,7,7],'raw_bytes':28412380,'raw_sha256':'c86b7bfffdc748400eed5436005feef36d990640f64d7505c131eb85a8dd289a','raw_remote_verified':True,'readback':'package-proof-20260908/facet-language-v1/native-1/REMOTE-READBACK.json','not_population_or_package_admission':True}
-          state['facet_proper_subwords']={'published_head':'93ddad1b770f57e968d3897cd8d36b5ab15d2a37','result_sha256':sha(result),'positional_proper_subsets':156,'legal_without_enabled_chain':110,'illegal_prefixes':46,'cases':execution['cases'],'new_native_runs':0,'new_independent_samples':0,'readback':'package-proof-20260908/facet-language-v1/subsequence/derived-1/REMOTE-READBACK.json','scope':'Command omission within four fixed words/states only; not all component interventions, canonical identity or natural reachability.'}
-          state['exact_next_action']='Complete the full observable package comparison for Chisel/coupled-Shatter/Echo versus the exact old eclipseSlash/warCry-to-Lance contracts and relevant closed Shatter contracts, then growth-plus-draw decomposition. The four-state legal-word and proper-subword questions are answered; do not rerun them. Use a checkable equivalence/decomposition witness or distinguishing trace, not names or more selected examples. Canonical, full population/policy, detector, confirmation/retention and exact-product obligations remain.'
-          state['remaining_milestones'][-1]='Minimum lifecycle, exact-head review under current owner authority, exact-product integration and #108 receipt'
-          (root/'SESSION-STATE.json').write_text(json.dumps(state,indent=2)+'\n')
-          handoff='# P9 current handoff — bounded Facet proof, no package admission\n\nP9 UNFINISHED: 0/6 current packages admitted. Continue #421 on the existing\nresearch/p9-six-route-local-20260905 branch. Target: three viable, reachable,\ngenuinely distinct strategies per aspect. Main reference stays 2ed6cdb0302ba3aab5845a18d862841165e8aaf7.\nAcceptance, coupled Stun/Shatter, IDs/RNG/saves and protected evidence are unchanged.\nOwner comment 5586269454 authorises SELF_REVIEW_NOT_INDEPENDENT; do not wait for\nanother reviewer or quota. Scientific confirmation independence still applies.\n\n## Closed work — reuse, do not replay\n\nThe 1024 compact validation rows, 2048 original-arm reproduction, v25, finite\nlocality/enactment work and frozen descriptor are not new work. Preserve exact\nhistorical limits in SESSION-STATE.json. The old 518348-byte original-arm archive\nstill lacks full verified remote storage; old full validation events remain missing.\n\nThe 672-row verifier remains COMMAND_CONTRACT_FAIL (64/312 checks). All raw bytes\nwere reconstructed remotely. Block absorption and after-hit Shatter explain its\nfailed controls; do not substitute a new metric, reset Block or change old signs.\n\nSource audit at 9be03349 has exact byte readback. Chisel/Lance’s intrinsic law is\ninherited. Old rejected Resonance used eclipseSlash/warCry, NOT Chisel; sharing a\nconsumer does not prove whole-package equivalence. Cycle retains growth but adds\ndraw; full decomposition is unresolved. Read source-scope-20260908/EXACT-CLOSURE-SCOPE.json.\n\n## New proof already preserved\n\npackage-proof-20260908/facet-language-v1 froze a different finite language query\nfrom four exact old states. Minimum legal words: 5/5 commands at V0 base/up,\n7/7 at V5. V5 waits one extra native turn then replays Chisel before Lance.\nShatter precedes the consumer; Echo-off removes 11/15 fewer HP in matched states.\nAll shorter prefixes and complete winning replays are retained. Full raw is\n28412380 bytes, remotely verified at f36d1428. This does not rescue the old exam.\n\nsubsequence/derived-1 derives all 156 positional proper prefix subsets from that\nexisting graph: 110 legal without the specified chain, 46 illegal. V5’s 63 masks\nrepresent 43 distinct words per case, not independent samples. Eight tests passed.\nThe complete 42834-byte result at 93ddad1b was cold-checkout reproduced; read its\nREMOTE-READBACK.json. No native replay was needed. This is bounded command necessity,\nnot every component intervention, natural reachability or a complete package.\n\n## Exact next acceptance obligation\n\nProduce a checkable full-observable-system comparison for Chisel/coupled-Shatter/\nEcho versus the exact old Cracked/Echo and relevant closed Shatter contracts;\nthen resolve growth-plus-draw decomposition. Include costs, target/instance identity,\ncommon combat state, reset and acquisition. Require equivalence/decomposition proof\nor a distinguishing trace, not names or more selected demonstrations. No full\nclosed-family quotient has yet been delivered. Ash hand-size improvement is allowed;\ndo not invent a requirement for six globally new primitives.\n\nRemaining: six complete package certificates; seven-direction detector; corrected\nindependent confirmation, unrestricted retention, signed controls and guardrails;\nminimum lifecycle, exact-head review, product integration and #108 receipt. No merge,\nP9 PASS or background task. GitHub read/write and direct evidence publication work;\nremaining science must not be reported as another tool failure. See SESSION-STATE.json\nand referenced receipts for exact hashes and remaining evidence gaps.\n'
-          (root/'SESSION-HANDOFF.md').write_text(handoff)
-          print('READBACK_RECEIPT='+json.dumps(receipt,sort_keys=True))
-          PY
-      - name: Preserve readback and reconcile current capsule without forcing the branch
+          python3 research/p9-six-route/package-proof-20260908/composition-v1/publish_capture.py
+      - name: Publish only the verified capture and readback
         shell: bash
         run: |
           set -euo pipefail
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$GITHUB_SHA"
-          root=research/p9-six-route
-          git add "$root/SESSION-STATE.json" "$root/SESSION-HANDOFF.md" "$root/package-proof-20260908/facet-language-v1/subsequence/derived-1/REMOTE-READBACK.json"
+          root=research/p9-six-route/package-proof-20260908/composition-v1
+          git add -f "$root/capture" "$root/REMOTE-READBACK.json"
           python3 - <<'PY'
-          import subprocess
-          root='research/p9-six-route/'
-          expected={root+'SESSION-STATE.json',root+'SESSION-HANDOFF.md',root+'package-proof-20260908/facet-language-v1/subsequence/derived-1/REMOTE-READBACK.json'}
-          if set(subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines())!=expected:raise RuntimeError('STAGED_SCOPE')
+          import pathlib,subprocess
+          root='research/p9-six-route/package-proof-20260908/composition-v1/'
+          expected={str(p) for p in pathlib.Path(root+'capture').iterdir() if p.is_file()}|{root+'REMOTE-READBACK.json'}
+          actual=set(subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines())
+          if actual!=expected or len(actual)!=26:raise RuntimeError('STAGED_SCOPE')
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): preserve cold proof readback and reconcile actual package frontier'
+          git commit -m 'research(p9): publish full composition capture and exact cold readback'
           git push origin "HEAD:refs/heads/$branch"
           printf 'PUBLISHED_HEAD=%s\n' "$(git rev-parse HEAD)"
