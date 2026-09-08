@@ -1,0 +1,29 @@
+{
+  "status": "FROZEN_NEW_BOUNDED_LANGUAGE_QUERY_NOT_RESCUE_OF_OLD_EXAM",
+  "question": "Do any legal producer/defend/end-turn words from each of the four exact old Dusk baseline states enable Resonant Lance before its hit with positive same-state Echo contribution? What is the shortest command count in this finite language?",
+  "source_parent": "a5392f0454206f8d1d759c04ef6b72290c7a129e",
+  "old_capture_head": "dada9b6b4a069b6478362e104cb0701ff11aecd1",
+  "old_raw_sha256": "62ae02bd4fda08381ce61a4a40b88a98391d7476b6b33d090bc896b622663785",
+  "candidate_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "cases": 4,
+  "max_commands_including_consumer": 10,
+  "max_player_turn": 4,
+  "max_nodes_per_case": 20000,
+  "watchdog_seconds": 180,
+  "raw_cap_bytes": 134217728,
+  "source_files": {
+    "search.gd": "00e5444acc72d00d73457f1a209d5136be6ea9322063a768c30049768773fa22",
+    "prepare.py": "cf40590903bf0823f23d9b133618df64dd9b7e4c8a32cab9d286a895b1fdee80",
+    "verify.py": "ecfea2cc6bf01307cda74738ce44b13081eed77357d234c749f5828740ef8a8f",
+    "SOURCE-MANIFEST.json": "63d236c16d3003bb5fa9549a6e4d75640980b63b64103246012728c9c44744ec",
+    "run.py": "6d9676c9e95dbde2fd4eed44ffd4005145fe38168325186b5a9b5add86b6b383",
+    "test_verify.py": "a0f2383b4c3bc4e31b28d4b489bb660a7ce45fc25ef21d5a903022cf90124857"
+  },
+  "grammar": "Prefix: any currently legal Chisel or Defend from the exact old hand/draw/discard state, or native endTurn; final consumer is UID1000 Resonant Lance. No earlier Lance, Art, potion, Kindle, inserted card, status/block rewrite, new seed or altered card. FIFO with exact future-state/RNG dedup; stop at first verified positive terminal or exhaust/cap. All shorter nodes and every allowed outgoing transition are retained.",
+  "contrast": "At an enabled terminal compare native consumer and exact same-state Echo-payoff-off clone. Keep Shatter, Stun, vulnerability, enemy block and command history. Actual HP and nominal damage remain separate. Direct fresh replay of the winning complete word must reproduce every step and final state.",
+  "decision": "Found = bounded minimum-word existence only. Exhausted = no word in this exact grammar/horizon, not global futility. Node/time/trace/identity/reader failure = inconclusive; retain raw and do not enlarge bounds after outcomes. No refit, protected or population samples, package admission, or P9 implied.",
+  "preservation": "Full raw plus logs/manifest committed to the same research branch; reconstruct/decompress from remote checkout and compare hashes before acceptance use. Existing artifact-finalize failure is not retried.",
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT under owner comment5586269454.",
+  "old_negative": "672-row COMMAND_CONTRACT_FAIL and all 64 Facet vetoes immutable. This different language question does not relabel old controls, add a producer to the old assignment, or retroactively rescue it."
+}
