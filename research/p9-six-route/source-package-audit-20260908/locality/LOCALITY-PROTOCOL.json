@@ -1,0 +1,110 @@
+{
+  "status": "FROZEN_CONSTRUCTED_LOCALITY_NOT_ADMISSION",
+  "question": "Do the six current route consumers have pairwise different finite payoff sensitivities after erasing route labels?",
+  "base_audit_commit": "f3e6fe20fc1ff18b25e4c6c100be611f2d5adf06",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "content_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "source_sha256": {
+    "test_locality.gd": "b482d7108d5f9b3b9c61fb61798e2ceb86c604177e98a52808de577491f51db8",
+    "test_package_nulls.gd": "13f7cebbb9ae91632e14d6acbb01194e641e81c2279f48814e2c5cd84c790a61",
+    "domain/rules/combat.gd": "a6fd99eb53030d3cf1401153bdeceec8b86ccc2af8b7643481855c681906f2ba"
+  },
+  "cases": 60,
+  "constructed_seed": 46000001,
+  "vow": 0,
+  "new_population_or_protected_trials": 0,
+  "operations": [
+    "baseline",
+    "target_reset",
+    "copy_reset",
+    "hand_trim",
+    "strength_reset"
+  ],
+  "expected_payoff_order_by_base_and_upgrade": {
+    "facet": [
+      [
+        17,
+        10,
+        17,
+        17,
+        14
+      ],
+      [
+        23,
+        13,
+        23,
+        23,
+        20
+      ]
+    ],
+    "fervor": [
+      [
+        15,
+        15,
+        15,
+        15,
+        0
+      ],
+      [
+        20,
+        20,
+        20,
+        20,
+        5
+      ]
+    ],
+    "cycle": [
+      [
+        17,
+        17,
+        3,
+        17,
+        14
+      ],
+      [
+        21,
+        21,
+        4,
+        21,
+        18
+      ]
+    ],
+    "smolder": [
+      [
+        4,
+        0,
+        4,
+        4,
+        4
+      ],
+      [
+        8,
+        0,
+        8,
+        8,
+        8
+      ]
+    ],
+    "hand": [
+      [
+        23,
+        23,
+        23,
+        11,
+        20
+      ],
+      [
+        25,
+        25,
+        25,
+        11,
+        22
+      ]
+    ]
+  },
+  "payoff": "poison_added for smolder, hp_removed otherwise; units never added together",
+  "decision": "Distinct signatures support finite state-dependency separation only; failed expectation stops readout pending diagnosis. Not full canonical quotient, proper-subset package proof or natural strategy enactment.",
+  "watchdog_seconds": 120,
+  "raw_preservation": "Complete NDJSON before/after states, events, logs and receipt; commit losslessly and verify downloaded bytes before claiming preservation. No edits to frozen validation or descriptor."
+}
