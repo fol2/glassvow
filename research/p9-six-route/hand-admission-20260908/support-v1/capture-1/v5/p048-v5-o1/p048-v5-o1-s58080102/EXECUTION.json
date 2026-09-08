@@ -1,0 +1,57 @@
+{
+  "config_id": "p048-v5-o1-s58080102",
+  "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-support-gg59nao0/project",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v5/p048-v5-o1/p048-v5-o1-s58080102/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v5/p048-v5-o1/p048-v5-o1-s58080102/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v5/p048-v5-o1/p048-v5-o1-s58080102/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 18.109329993999836,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 34055,
+      "sha256": "31b4a1c77990bf098660060f48aecaba251efa479b9abe34c45151386df2acf7"
+    },
+    "trace.ndjson": {
+      "bytes": 12471752,
+      "sha256": "61e6a329b05de33b1a69551d05d79926d6d9515fa40af6cea58ab794719fd397"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 166004,
+      "sha256": "f337ee949e822d3fcc83a3a35e3ad3280d79ecff7acd8de4ab23cf4757745c7f"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3840,
+      "sha256": "14deec715b2e2612c3a1d81b454339f3186ebd1b77650d79838a82e2e1ff1426"
+    },
+    "CONFIG.json": {
+      "bytes": 567,
+      "sha256": "65eae8c0b958d684458dbb60f3b74b711e3583be62f59f7431d0e02273fd43b5"
+    },
+    "CELL.json": {
+      "bytes": 7222,
+      "sha256": "7d37f76ecaab60b38aae0baefbb89c7660a82be8781b0e522a12004aff26f3bd"
+    }
+  },
+  "p9_certified": false
+}

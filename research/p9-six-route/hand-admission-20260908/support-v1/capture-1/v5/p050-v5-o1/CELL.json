@@ -1,0 +1,75 @@
+{
+  "policy_id": "15ac2d0cef00cefc71e7e6a809d9f7ac25d49f111b98ef65c87aac662b91c48c",
+  "policy_index": 50,
+  "vow": 5,
+  "route_preference": "cycle",
+  "runs": [
+    {
+      "seed": 58080100,
+      "result": "win",
+      "final_pair": false,
+      "historical_chain_active": false,
+      "positive_high_payoff": false,
+      "consumer_reached": false,
+      "consumers": [],
+      "decision_trace_sha256": "82e5493f2d31dd321607d10f2469e7a83fd686b725de3ba7feb580bb470b02f3",
+      "state_count": 593
+    },
+    {
+      "seed": 58080101,
+      "result": "win",
+      "final_pair": false,
+      "historical_chain_active": false,
+      "positive_high_payoff": false,
+      "consumer_reached": false,
+      "consumers": [],
+      "decision_trace_sha256": "ea30ed1c3d70baa84d1e7ebac0e6a8605282a124f06bf663bd5ead41dfd3bf90",
+      "state_count": 526
+    },
+    {
+      "seed": 58080102,
+      "result": "loss",
+      "final_pair": false,
+      "historical_chain_active": false,
+      "positive_high_payoff": false,
+      "consumer_reached": false,
+      "consumers": [],
+      "decision_trace_sha256": "ad6ebb3728b697c101b195e506c9230d8a304b2f7bd88ec4fa09823b0dbe8ece",
+      "state_count": 199
+    },
+    {
+      "seed": 58080103,
+      "result": "win",
+      "final_pair": true,
+      "historical_chain_active": true,
+      "positive_high_payoff": true,
+      "consumer_reached": true,
+      "consumers": [
+        {
+          "fight": 25,
+          "q": 4,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            25,
+            "1d84c5736e2eb7b7871cb38e1f2a6e2034e98784d08c2fa4462ddd3cafceb997",
+            "a374fa43c34031b95f66539e1d989654d76610d53dbb820b28391343706aec18"
+          ]
+        },
+        {
+          "fight": 25,
+          "q": 7,
+          "classification": "POSITIVE_SOURCE_BY_HIGH_PAYOFF_HEALTH_INTERACTION",
+          "high_health_contribution": 18,
+          "raw_reference": [
+            25,
+            "53540360eee3df46edcf8523fe58fb5f94cfab958f0786f9d2174ad8c0292a46",
+            "9f877eec0a3e8ace8d9bbb5e234434f8c6cdc21487ed1ab0efbf3e50ecee3f53"
+          ]
+        }
+      ],
+      "decision_trace_sha256": "f829f37111964e812872147b4ea508723470995cea41efa8c91a237b16149296",
+      "state_count": 510
+    }
+  ]
+}
