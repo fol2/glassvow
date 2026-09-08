@@ -1,0 +1,49 @@
+{
+  "status": "FROZEN_PROSPECTIVE_REIMPLEMENTATION_NOT_IDENTICAL_RECOVERY",
+  "parent": "a5b8c607207bc153dd0d508392fc9531c00f57e0",
+  "authority": "Direct owner continue/autonomous self-review; issue #421; exception comment 5586269454",
+  "old_protocol": "research/p9-six-route/command-chain-20260908/PROTOCOL.json at 000f928b963e981e68e4815925573aa86a62d7d2",
+  "recovery_boundary": "Old probe and reader bytes were not present in the committed command-chain directory or mounted backups. Old failed-attempt blob fb037da9bf5d4bbff70b0204cc139dd0bb04662c returned 404. Original receipt remains unchanged. This new implementation does NOT claim identity with the lost scripts or completion of their exact-byte protocol. It prospectively specifies the full fixture arrangement in probe.gd, preserves the candidate, assignment dimensions, estimands and predeclared sign checks, and does not replay a protected or selected historical sample. No outcomes from this implementation exist at freeze.",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "measurement_reference": "46401783b39ada692ce9b990f9deda342b79e7dd",
+  "candidate_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "engine_version": "4.7.2.stable.official.ed1daf0bf",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "files": {
+    "probe.gd": {
+      "bytes": 7635,
+      "sha256": "ddc8ba07b0cf67884f8bef658e21eb782e87c630ee9611b4e8297784b93d8566"
+    },
+    "read.py": {
+      "bytes": 7959,
+      "sha256": "71a018adf3687317eadf21ff90b757106d168f0d5fe2079d75fc208f3f7395e2"
+    },
+    "run.py": {
+      "bytes": 2945,
+      "sha256": "200d8ac3f99cbae96191fca2c21895614a8b9cd9cf14ebbaee67adf2579c4f23"
+    },
+    "test_read.py": {
+      "bytes": 2652,
+      "sha256": "c35066027a1e0587afafd1dd7bb43244e190beebb0e62151ba0f1fd80fcb361c"
+    },
+    "SOURCE-MANIFEST.json": {
+      "bytes": 4241,
+      "sha256": "3a7e8652409d7ff48b03dca18dfeba55f020ebf9f7528b74ccde6d84604a929f"
+    }
+  },
+  "fixtures": 80,
+  "rows": 672,
+  "watchdog_seconds": 120,
+  "trace_cap_bytes": 67108864,
+  "execution_processes": 1,
+  "decision": "All original predeclared command-law sign checks must hold; otherwise COMMAND_CONTRACT_FAIL. Preserve every assigned result unless containment or an execution/identity error terminates the process. Semantic negatives are not repaired by fixture/content retuning. A defective reader may be mechanically repaired with retained red/green evidence, without rerunning native rows.",
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "not_established": [
+    "Package canonical novelty",
+    "Population reachability and independent policy support",
+    "Seven-direction detector and endpoint retention",
+    "Protected qualification and exact-product P9"
+  ],
+  "new_independent_samples": 0,
+  "p9_certified": false
+}
