@@ -1,0 +1,31 @@
+{
+  "policy_id": "3c982d4e4656255cba8cca6554e1b3a0ec435d5dd5806198915f18771fdbf114",
+  "policy_index": 66,
+  "vow": 5,
+  "route_preference": "cycle",
+  "runs": [
+    {
+      "seed": 58080103,
+      "result": "win",
+      "final_pair": true,
+      "historical_chain_active": false,
+      "positive_high_payoff": true,
+      "consumer_reached": true,
+      "consumers": [
+        {
+          "fight": 25,
+          "q": 6,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 12,
+          "raw_reference": [
+            25,
+            "20011849fd49630283558d26eec36ec63ae67c6c043f4799aef029f478c06943",
+            "9d60447178652e9a9aff17db316dcd5b5af551345c13d48658afeb79de171078"
+          ]
+        }
+      ],
+      "decision_trace_sha256": "a3a463a6994e4949d6a236f5a6990493bc3a20eb9498804752fe33b9389348d8",
+      "state_count": 526
+    }
+  ]
+}
