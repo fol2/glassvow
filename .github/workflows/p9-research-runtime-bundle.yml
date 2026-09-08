@@ -14,67 +14,77 @@ concurrency:
 
 jobs:
   bundle:
-    name: Reunite checkpoints and transferred evidence - no engine
+    name: Complete existing census readback - no engine or new sample
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 8
+    timeout-minutes: 5
     permissions:
       contents: write
     steps:
-      - name: Check out exact reunion candidate
+      - name: Check out exact continuation
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
-          fetch-depth: 1
+          fetch-depth: 2
           persist-credentials: true
           lfs: false
-          sparse-checkout: |
-            domain
-            content
-            tools
-            research/p9-six-route
-            .github/workflows
-      - name: Reconcile ancestry and cold-reconstruct the transferred capture
+          sparse-checkout: research/p9-six-route/package-disposition-20260908
+      - name: Reconstruct all retained indicators and run existing tests
         shell: bash
         run: |
           set -euo pipefail
-          git fetch --no-tags --filter=blob:none --deepen=250 origin "$GITHUB_SHA"
-          root=research/p9-six-route/reunion-20260908
-          (cd "$root" && python3 -m unittest -v test_reunion) > "$root/TESTS-remote.log" 2>&1
+          test "$(git rev-parse HEAD^)" = f8a0bc3acf58576760bd2ae0b1cb32e39f0cb0ca
           python3 - <<'PY'
-          import sys
-          sys.path.insert(0,'research/p9-six-route/reunion-20260908')
-          import audit_reunion as a
-          a.KNOWN.extend(['016e960d95a0da1e145bc19dc6a4a425b633793e','1aeddb842fe31ce00001b43bfb22521aad6a8281','4e2c72d760beb78683e540f114250989e20e5f0a'])
-          a.main()
+          import hashlib,json,os,pathlib,subprocess,sys
+          root=pathlib.Path('research/p9-six-route/package-disposition-20260908')
+          sys.path.insert(0,str(root))
+          import census,read_packet
+          sha=lambda b:hashlib.sha256(b).hexdigest()
+          blob=lambda b:hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+          observed=[]
+          for record in subprocess.check_output(['git','ls-tree','-r','-z','HEAD',str(root)]).split(b'\0'):
+              if not record:continue
+              meta,name=record.split(b'\t',1);mode,kind,expected=meta.decode().split()
+              path=pathlib.Path(name.decode());data=path.read_bytes()
+              if kind!='blob' or blob(data)!=expected:raise RuntimeError('SOURCE_BYTE_MISMATCH:'+str(path))
+              observed.append({'path':str(path),'git_blob':expected,'bytes':len(data),'sha256':sha(data)})
+          primary=read_packet.unpack(root)
+          rendered=census.dump(primary)
+          if len(rendered)!=23941 or sha(rendered)!='f61e152c2aaaca46bdc358298975c9515a33f2208d827d783d3efcd74dba82a6':raise RuntimeError('PRIMARY_RECONSTRUCTION')
+          result=census.read(primary)
+          tests=subprocess.run([sys.executable,'-m','unittest','discover','-v','-p','test*.py'],cwd=root,capture_output=True,timeout=90)
+          if tests.returncode!=0 or b'Ran 19 tests' not in tests.stderr:raise RuntimeError('CENSUS_REGRESSION:'+tests.stderr.decode())
+          evidence={'CENSUS-PRIMARY.json':rendered,'CENSUS-READOUT.json':census.dump(result),'CENSUS-TESTS.log':tests.stdout+tests.stderr}
+          for name,data in evidence.items():
+              path=root/name
+              if path.exists():raise RuntimeError('EXISTING_OUTPUT:'+name)
+              path.write_bytes(data)
+          receipt={'kind':'COLD_CHECKOUT_RECONSTRUCTION_OF_EXISTING_COHORT_NOT_NEW_RESEARCH','source_head':os.environ['GITHUB_SHA'],'workflow_run':int(os.environ['GITHUB_RUN_ID']),'source_files':observed,'files':{name:{'bytes':len(data),'sha256':sha(data),'git_blob':blob(data)} for name,data in evidence.items()},'rows':result['rows'],'unique_base_policy_vectors':result['unique_base_policy_vectors'],'tests_passed':19,'new_native_runs':0,'new_independent_samples':0,'old_archive_remote_complete':False,'p9_certified':False}
+          (root/'CENSUS-EXECUTION.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print('CENSUS_RECEIPT='+json.dumps(receipt,sort_keys=True))
+          print('CANDIDATE_CENSUS='+json.dumps([x for x in result['cells'] if x['catalogue']=='candidate' and x['arm']==1],sort_keys=True))
           PY
-          python3 research/p9-six-route/package-proof-20260908/composition-v1/publish_capture.py
-      - name: Publish only reconciled bytes without overwriting another writer
+      - name: Publish only completed census evidence
         id: publish
         shell: bash
         run: |
           set -euo pipefail
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$GITHUB_SHA"
-          root=research/p9-six-route/reunion-20260908
-          cap=research/p9-six-route/package-proof-20260908/composition-v1
-          git add "$root/RESULTS.json" "$root/SUMMARY.json" "$root/TESTS-remote.log" "$cap/capture" "$cap/REMOTE-READBACK.json"
-          if [ -d "$root/divergent" ]; then git add "$root/divergent"; fi
+          root=research/p9-six-route/package-disposition-20260908
+          git add "$root/CENSUS-PRIMARY.json" "$root/CENSUS-READOUT.json" "$root/CENSUS-TESTS.log" "$root/CENSUS-EXECUTION.json"
           python3 - <<'PY'
           import subprocess
-          r='research/p9-six-route/reunion-20260908/'
-          c='research/p9-six-route/package-proof-20260908/composition-v1/'
-          names=set(subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines())
-          fixed={r+'RESULTS.json',r+'SUMMARY.json',r+'TESTS-remote.log',c+'REMOTE-READBACK.json'}
-          if not fixed.issubset(names) or any(n not in fixed and not n.startswith((r+'divergent/',c+'capture/')) for n in names):
-              raise RuntimeError('STAGED_SCOPE')
+          root='research/p9-six-route/package-disposition-20260908/'
+          expected={root+n for n in ('CENSUS-PRIMARY.json','CENSUS-READOUT.json','CENSUS-TESTS.log','CENSUS-EXECUTION.json')}
+          if set(subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines())!=expected:raise RuntimeError('STAGED_SCOPE')
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): reunite divergent checkpoints and verified composition capture'
+          git commit -m 'research(p9): preserve complete retained-cohort census and exact readback evidence'
           git push origin "HEAD:refs/heads/$branch"
           echo "head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-      - name: Fetch published results into a fresh directory
+      - name: Fetch the published evidence separately
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ steps.publish.outputs.head }}
@@ -82,25 +92,19 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
           lfs: false
-          sparse-checkout: |
-            research/p9-six-route/reunion-20260908
-            research/p9-six-route/package-proof-20260908/composition-v1
-      - name: Compare every published reunion and composition byte
+          sparse-checkout: research/p9-six-route/package-disposition-20260908
+      - name: Compare actual published bytes
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,json,pathlib,subprocess
-          roots=['research/p9-six-route/reunion-20260908','research/p9-six-route/package-proof-20260908/composition-v1']
-          sha=lambda b:hashlib.sha256(b).hexdigest()
-          blob=lambda b:hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-          observed=[]
-          for rec in subprocess.check_output(['git','-C','readback','ls-tree','-r','-z','HEAD','--']+roots).split(b'\0'):
-              if not rec:continue
-              meta,name=rec.split(b'\t',1);mode,kind,want=meta.decode().split();p=pathlib.Path(name.decode())
-              b=(pathlib.Path('readback')/p).read_bytes()
-              if b!=p.read_bytes() or blob(b)!=want:raise RuntimeError('READBACK_MISMATCH:'+str(p))
-              observed.append({'path':str(p),'bytes':len(b),'sha256':sha(b),'git_blob':want})
-          receipt={'published_head':subprocess.check_output(['git','-C','readback','rev-parse','HEAD']).decode().strip(),'files_matched':len(observed),'files':observed,'new_native_runs':0,'p9_certified':False}
-          print('REUNION_READBACK='+json.dumps(receipt,sort_keys=True))
+          root=pathlib.Path('research/p9-six-route/package-disposition-20260908')
+          names=('CENSUS-PRIMARY.json','CENSUS-READOUT.json','CENSUS-TESTS.log','CENSUS-EXECUTION.json')
+          for name in names:
+              path=root/name;data=(pathlib.Path('readback')/path).read_bytes()
+              actual=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+              expected=subprocess.check_output(['git','-C','readback','rev-parse','HEAD:'+str(path)]).decode().strip()
+              if data!=path.read_bytes() or actual!=expected:raise RuntimeError('PUBLISHED_BYTE_MISMATCH:'+name)
+          print('PUBLISHED_CENSUS_READBACK='+json.dumps({'published_head':subprocess.check_output(['git','-C','readback','rev-parse','HEAD']).decode().strip(),'files_matched':len(names),'new_native_runs':0,'p9_certified':False}))
           PY
