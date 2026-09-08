@@ -1,0 +1,2151 @@
+{
+  "status": "COMPLETE_SIX_CANDIDATE_DISPOSITION_WITH_EXPLICIT_OPEN_CLAIMS",
+  "candidate_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "combat_sha256": "a6fd99eb53030d3cf1401153bdeceec8b86ccc2af8b7643481855c681906f2ba",
+  "baseline_sha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+  "source_functions": {
+    "_init": {
+      "line": 25,
+      "sha256": "e0034b8d940fb0d936a6517ee7a0d76c966bf6e34cd6db12df5690312f8dc334"
+    },
+    "handles_special": {
+      "line": 30,
+      "sha256": "dd5f89f4065b411d4ac2bd25992d7881c699873be8dc50ace4e015233943b423"
+    },
+    "handles_potion": {
+      "line": 34,
+      "sha256": "e864df5a586f557699d3de28547fa2a29a860caa55ba012e769b720e12a5a299"
+    },
+    "_ji": {
+      "line": 39,
+      "sha256": "ebc9b10c487fcdeed50bfa706f81079d8466dc184b461e4ab4e5ffec68d8d8a1"
+    },
+    "_sget": {
+      "line": 44,
+      "sha256": "813c99a46e73770234432e2fba8eab4656999c987e694ce9d66edee9e40fcec4"
+    },
+    "_omen_mods": {
+      "line": 49,
+      "sha256": "49ab1f08bf80ade2a9b8fd42d789d24911895277ccf64d071d18008a865d6133"
+    },
+    "_vow_mods": {
+      "line": 56,
+      "sha256": "c42b04fea4ffbacf27a2b5f1dfc1e4e6b7d38db67f55de36015a99e0ef96557b"
+    },
+    "_resolved_enemy": {
+      "line": 76,
+      "sha256": "02363dba232fc3d14b4a16d5abe2ab1272934b2d17aca07cc2ed9ffa57b6c9af"
+    },
+    "_with_counterfactual": {
+      "line": 132,
+      "sha256": "f0fd1176ca4a1f3402c0ed48cf0ce32122a1ce8fd9ae2c822471128f398770d5"
+    },
+    "card_data": {
+      "line": 145,
+      "sha256": "9dd397e2e428ca0521ff568c80c44934e8d2f111c65881623b3fec20d84594b5"
+    },
+    "start_combat": {
+      "line": 158,
+      "sha256": "de1bfaba9f76bc2469d30b2ffe7778259afeac03adb728d3f440a510df22e752"
+    },
+    "_gate_death_dialogue": {
+      "line": 263,
+      "sha256": "9d60d4cd8a51fa1a396d498ceb378be5d551aefe6011174485fdff6850cc958e"
+    },
+    "_apply_start_relics": {
+      "line": 273,
+      "sha256": "7745592ae546fe4c9fc13d7e608baa8b036fbc09d33c0b398bb43d03882664c2"
+    },
+    "_proc": {
+      "line": 310,
+      "sha256": "a7d1b15872f583935e89a3a8516b5b1fd1082183248f50bf82944d4483a08fb3"
+    },
+    "_shuffle_cards": {
+      "line": 315,
+      "sha256": "ffb8e6767a4a298b38646ba01e7451c848db7ac68c9ca299add5253dfae86696"
+    },
+    "_compute_intents": {
+      "line": 323,
+      "sha256": "55e66ef748d3d985e097cac9c0a4e3c43e6e23b1b8afc968be1f3faef5c735ac"
+    },
+    "_start_player_turn": {
+      "line": 335,
+      "sha256": "0b838d849718e6f0d03420835ed2419a8a33dedd9ba2fc058a94aafb21ce0a01"
+    },
+    "draw_cards": {
+      "line": 375,
+      "sha256": "40a6049f853687ac5655baa4aa45365ec4d50f73ef64df411dab2c298bceb412"
+    },
+    "add_status_player": {
+      "line": 394,
+      "sha256": "b1a3692f511f7548ca4f987128a4d6a66ddee6cdc669d4518c591c9b2428c298"
+    },
+    "add_status_enemy": {
+      "line": 400,
+      "sha256": "a53884f050ccbf158a3a532466a5dce3c057476a23f99206dc46aa4dd99736f6"
+    },
+    "_player_smolder_blocked": {
+      "line": 408,
+      "sha256": "a47e91379305deeafe3cc6fcc6632e9627ada521786765fec27ffbb4b5d2a873"
+    },
+    "_add_status": {
+      "line": 412,
+      "sha256": "e88ddbb285b4dacf8ea2ccba2cbc77b010ba787ef7881a94e835227f5d19b71f"
+    },
+    "gain_embers": {
+      "line": 422,
+      "sha256": "324e59d5791a81e3376066e03ced984a493a2e2e50f100899d24bed85c898d59"
+    },
+    "damage_player": {
+      "line": 434,
+      "sha256": "3870dca3697463cb9e770d7875a5a009072822b90dbcf0d22fbdc23380dab0e3"
+    },
+    "lose_combat": {
+      "line": 490,
+      "sha256": "1cb75c171fa0588bc3483446ec7a7010a1846e6a838a25e2ee40a1d1d759e9ab"
+    },
+    "_win_combat": {
+      "line": 498,
+      "sha256": "def4830e734caceafd5498202e9d5b704df70edaaaf617729649526b0a777dc6"
+    },
+    "heal_player": {
+      "line": 520,
+      "sha256": "879e061814d18aa455dec081e342bc7abeb59f055d7c3d7289f0242c69b58567"
+    },
+    "hit_enemy": {
+      "line": 538,
+      "sha256": "b138d5d87ac72055823b51e9de46af6c456a8be3127797671ed58068740b08d0"
+    },
+    "_is_finale_handoff": {
+      "line": 593,
+      "sha256": "279cddbae1bb6c95fa3f874be6a6237ec195da4ea333502b63c8f5b5c7e8ca86"
+    },
+    "_begin_finale_handoff": {
+      "line": 597,
+      "sha256": "52ffcbf61067f960fcf75b144031f4a0d74c9b0fdeed1f2f7a94e1b6513d9458"
+    },
+    "_on_enemy_death": {
+      "line": 604,
+      "sha256": "337d6d90dac2178c5f2ca4f6e458f1dede9c2202f3a3d644b7032ff0fbac9126"
+    },
+    "gain_block_player": {
+      "line": 634,
+      "sha256": "abcc7426e66e527af8ab699f86e82659649045a44fb1ae81ccf7e7a95d993474"
+    },
+    "gain_block_enemy": {
+      "line": 650,
+      "sha256": "908d78a90854efa17cd107b46cd07330659dd0c96e9f138807e3c15fd31a0b5a"
+    },
+    "apply_chips": {
+      "line": 667,
+      "sha256": "384a227ec2c2f592dc623d8c81b958021bdf4bc81df96861d6a93d99e5ac814c"
+    },
+    "_shatter_enemy": {
+      "line": 685,
+      "sha256": "d36c91097b745353b5d75b069572cd244a101116b8849aa8042e542b9506bce8"
+    },
+    "_jump_smolder": {
+      "line": 718,
+      "sha256": "f9afa522a2286bb075e15fe340cc59ecea8e06f9637415a46550ce9f8f732a2b"
+    },
+    "eff_cost": {
+      "line": 734,
+      "sha256": "ffd102307b06565747cc5b0e78ada5578695ae755e92cc92cef9299f13a27766"
+    },
+    "can_play": {
+      "line": 746,
+      "sha256": "3d3dcadeffe594954760cbc97e3ed7acb6902b5b68b629395a08881b16bfd541"
+    },
+    "play_card": {
+      "line": 764,
+      "sha256": "cb14f29e267e2828ffa66e8638a8b3db9d47ca0557a2112e50d3da4fb89708fd"
+    },
+    "exhaust_card": {
+      "line": 852,
+      "sha256": "a9a0025901f210f740d51e17e7faa317584457b62322ed388657dcee6c71eb1a"
+    },
+    "_apply_effect": {
+      "line": 861,
+      "sha256": "144f54a8a669474889856b0dc7e3a8f701dfba9139556e098602a9e6909ec529"
+    },
+    "resource_payoff": {
+      "line": 950,
+      "sha256": "87ed6fc537d7a10964d74bf60cfaa18ff5ff72c9cf87a9e7f0127b222aed45cb"
+    },
+    "_apply_special": {
+      "line": 956,
+      "sha256": "df526a4ddd8bddc5de18924fb2407ebe62f9251690aa752f25c879b2a99fbf24"
+    },
+    "end_turn": {
+      "line": 1030,
+      "sha256": "b3109928a2702f5ea553ecc69716caa307f360f655010b88bb8479af41641fef"
+    },
+    "_tick_status": {
+      "line": 1158,
+      "sha256": "e425be4fd3c4941be3428e28834a18cb51c6800254b24b84756708380982ee77"
+    },
+    "can_kindle": {
+      "line": 1172,
+      "sha256": "5c90df948cd58154b807ec9c3e965a2e2503873a564f3a3704c22f7e22618238"
+    },
+    "kindle_from_hand": {
+      "line": 1181,
+      "sha256": "57994433a0d5e9aa7c7bec82c3f5830ef106de8c91b6c8957e75e45301c6c4aa"
+    },
+    "can_use_art": {
+      "line": 1207,
+      "sha256": "45427ab8d54f33ac881de733d9b0ce5bb1fe2e21df3d21b3377875739d22f3ce"
+    },
+    "use_art": {
+      "line": 1214,
+      "sha256": "e9df3f30b81b31c340e0d1ebb884d7573a922de78dd3b32e515db2e3084a67c7"
+    },
+    "_apply_art_effect": {
+      "line": 1233,
+      "sha256": "43a9203f077226abc47377189e45487d56e9d563e7a55b5a454f6d3d1dda041c"
+    },
+    "use_potion": {
+      "line": 1269,
+      "sha256": "bd126f2a0c4b0a94398739ddba1cacf1a84ab5450b00ecfe57cf1a7b225620dd"
+    },
+    "preview_block": {
+      "line": 1315,
+      "sha256": "77a7482cda359f8df5d1c5bc3c77ea06c4ac27692c4a2e3dd38f1b449c456fd5"
+    },
+    "preview_enemy_dmg": {
+      "line": 1325,
+      "sha256": "d1ee88c4e6071bd5955c187cf8ef2e52ca59304e6f6b7c03bd3f3e691648c779"
+    },
+    "preview_play": {
+      "line": 1346,
+      "sha256": "9c91cfd86e8d69ea074cbb88b92fb90315d9f9b4c6b675585fef30986f36644e"
+    },
+    "_preview_hit": {
+      "line": 1431,
+      "sha256": "e0b9e41c9855b5ba57d70afad0e298c6ef1c41849c82b1cadc32f2b4fe835d39"
+    }
+  },
+  "existing_candidate_added_card_ids": [
+    "banklight"
+  ],
+  "producer_source_inventory": {
+    "direct_draw": [
+      {
+        "card_id": "firstSpark",
+        "up": false,
+        "effect_index": 0,
+        "type": "skill",
+        "cost": 0,
+        "target": "self",
+        "exhaust": true,
+        "rarity": "starter",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "firstSpark",
+        "up": true,
+        "effect_index": 0,
+        "type": "skill",
+        "cost": 0,
+        "target": "self",
+        "exhaust": true,
+        "rarity": "starter",
+        "effect": {
+          "kind": "draw",
+          "n": 2
+        }
+      },
+      {
+        "card_id": "quickSlash",
+        "up": false,
+        "effect_index": 1,
+        "type": "attack",
+        "cost": 1,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "quickSlash",
+        "up": true,
+        "effect_index": 1,
+        "type": "attack",
+        "cost": 1,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "sidestep",
+        "up": false,
+        "effect_index": 1,
+        "type": "skill",
+        "cost": 1,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "sidestep",
+        "up": true,
+        "effect_index": 1,
+        "type": "skill",
+        "cost": 1,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "preparation",
+        "up": false,
+        "effect_index": 0,
+        "type": "skill",
+        "cost": 0,
+        "target": "self",
+        "exhaust": true,
+        "rarity": "common",
+        "effect": {
+          "kind": "draw",
+          "n": 2
+        }
+      },
+      {
+        "card_id": "preparation",
+        "up": true,
+        "effect_index": 0,
+        "type": "skill",
+        "cost": 0,
+        "target": "self",
+        "exhaust": true,
+        "rarity": "common",
+        "effect": {
+          "kind": "draw",
+          "n": 3
+        }
+      },
+      {
+        "card_id": "deflect",
+        "up": false,
+        "effect_index": 1,
+        "type": "skill",
+        "cost": 1,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "deflect",
+        "up": true,
+        "effect_index": 1,
+        "type": "skill",
+        "cost": 1,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "momentum",
+        "up": false,
+        "effect_index": 1,
+        "type": "attack",
+        "cost": 1,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "momentum",
+        "up": true,
+        "effect_index": 1,
+        "type": "attack",
+        "cost": 1,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "surge",
+        "up": false,
+        "effect_index": 1,
+        "type": "skill",
+        "cost": 0,
+        "target": "self",
+        "exhaust": true,
+        "rarity": "uncommon",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "surge",
+        "up": true,
+        "effect_index": 1,
+        "type": "skill",
+        "cost": 0,
+        "target": "self",
+        "exhaust": true,
+        "rarity": "uncommon",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "tithe",
+        "up": false,
+        "effect_index": 1,
+        "type": "skill",
+        "cost": 1,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "uncommon",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "tithe",
+        "up": true,
+        "effect_index": 1,
+        "type": "skill",
+        "cost": 1,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "uncommon",
+        "effect": {
+          "kind": "draw",
+          "n": 1
+        }
+      }
+    ],
+    "hand_additions": [],
+    "next_turn_draw": [
+      {
+        "card_id": "nightSight",
+        "up": false,
+        "effect_index": 0,
+        "type": "power",
+        "cost": 1,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "rare",
+        "effect": {
+          "kind": "status",
+          "who": "self",
+          "id": "nightsight",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "nightSight",
+        "up": true,
+        "effect_index": 0,
+        "type": "power",
+        "cost": 0,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "rare",
+        "effect": {
+          "kind": "status",
+          "who": "self",
+          "id": "nightsight",
+          "n": 1
+        }
+      }
+    ],
+    "hand_exchange": [
+      {
+        "card_id": "offering",
+        "up": false,
+        "effect_index": 0,
+        "type": "skill",
+        "cost": 1,
+        "target": "self",
+        "exhaust": true,
+        "rarity": "rare",
+        "effect": {
+          "kind": "special",
+          "id": "pyreTithe",
+          "draw": 3
+        }
+      },
+      {
+        "card_id": "offering",
+        "up": true,
+        "effect_index": 0,
+        "type": "skill",
+        "cost": 1,
+        "target": "self",
+        "exhaust": true,
+        "rarity": "rare",
+        "effect": {
+          "kind": "special",
+          "id": "pyreTithe",
+          "draw": 4
+        }
+      }
+    ],
+    "strength_or_ritual": [
+      {
+        "card_id": "empower",
+        "up": false,
+        "effect_index": 0,
+        "type": "power",
+        "cost": 1,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "status",
+          "who": "self",
+          "id": "str",
+          "n": 3
+        }
+      },
+      {
+        "card_id": "empower",
+        "up": true,
+        "effect_index": 0,
+        "type": "power",
+        "cost": 1,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "status",
+          "who": "self",
+          "id": "str",
+          "n": 4
+        }
+      },
+      {
+        "card_id": "risingLitany",
+        "up": false,
+        "effect_index": 0,
+        "type": "power",
+        "cost": 3,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "rare",
+        "effect": {
+          "kind": "status",
+          "who": "self",
+          "id": "ritual",
+          "n": 2
+        }
+      },
+      {
+        "card_id": "risingLitany",
+        "up": true,
+        "effect_index": 0,
+        "type": "power",
+        "cost": 3,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "rare",
+        "effect": {
+          "kind": "status",
+          "who": "self",
+          "id": "ritual",
+          "n": 3
+        }
+      }
+    ],
+    "poison_or_venomous": [
+      {
+        "card_id": "ashBite",
+        "up": false,
+        "effect_index": 1,
+        "type": "attack",
+        "cost": 2,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "starter",
+        "effect": {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 2
+        }
+      },
+      {
+        "card_id": "ashBite",
+        "up": true,
+        "effect_index": 1,
+        "type": "attack",
+        "cost": 2,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "starter",
+        "effect": {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 3
+        }
+      },
+      {
+        "card_id": "smother",
+        "up": false,
+        "effect_index": 1,
+        "type": "skill",
+        "cost": 1,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "starter",
+        "effect": {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 2
+        }
+      },
+      {
+        "card_id": "smother",
+        "up": true,
+        "effect_index": 1,
+        "type": "skill",
+        "cost": 1,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "starter",
+        "effect": {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 3
+        }
+      },
+      {
+        "card_id": "venomStrike",
+        "up": false,
+        "effect_index": 1,
+        "type": "attack",
+        "cost": 1,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 4
+        }
+      },
+      {
+        "card_id": "venomStrike",
+        "up": true,
+        "effect_index": 1,
+        "type": "attack",
+        "cost": 1,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 5
+        }
+      },
+      {
+        "card_id": "toxicMist",
+        "up": false,
+        "effect_index": 0,
+        "type": "skill",
+        "cost": 1,
+        "target": "allEnemies",
+        "exhaust": false,
+        "rarity": "uncommon",
+        "effect": {
+          "kind": "status",
+          "who": "allEnemies",
+          "id": "poison",
+          "n": 3
+        }
+      },
+      {
+        "card_id": "toxicMist",
+        "up": true,
+        "effect_index": 0,
+        "type": "skill",
+        "cost": 1,
+        "target": "allEnemies",
+        "exhaust": false,
+        "rarity": "uncommon",
+        "effect": {
+          "kind": "status",
+          "who": "allEnemies",
+          "id": "poison",
+          "n": 5
+        }
+      },
+      {
+        "card_id": "annihilate",
+        "up": false,
+        "effect_index": 1,
+        "type": "attack",
+        "cost": 2,
+        "target": "allEnemies",
+        "exhaust": false,
+        "rarity": "rare",
+        "effect": {
+          "kind": "status",
+          "who": "allEnemies",
+          "id": "poison",
+          "n": 3
+        }
+      },
+      {
+        "card_id": "annihilate",
+        "up": true,
+        "effect_index": 1,
+        "type": "attack",
+        "cost": 2,
+        "target": "allEnemies",
+        "exhaust": false,
+        "rarity": "rare",
+        "effect": {
+          "kind": "status",
+          "who": "allEnemies",
+          "id": "poison",
+          "n": 4
+        }
+      },
+      {
+        "card_id": "virulence",
+        "up": false,
+        "effect_index": 0,
+        "type": "power",
+        "cost": 2,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "rare",
+        "effect": {
+          "kind": "status",
+          "who": "self",
+          "id": "venomous",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "virulence",
+        "up": true,
+        "effect_index": 0,
+        "type": "power",
+        "cost": 1,
+        "target": "self",
+        "exhaust": false,
+        "rarity": "rare",
+        "effect": {
+          "kind": "status",
+          "who": "self",
+          "id": "venomous",
+          "n": 1
+        }
+      },
+      {
+        "card_id": "ashenChoir",
+        "up": false,
+        "effect_index": 0,
+        "type": "skill",
+        "cost": 1,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "uncommon",
+        "effect": {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 4
+        }
+      },
+      {
+        "card_id": "ashenChoir",
+        "up": true,
+        "effect_index": 0,
+        "type": "skill",
+        "cost": 1,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "uncommon",
+        "effect": {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 6
+        }
+      }
+    ],
+    "same_instance_growth": [
+      {
+        "card_id": "momentum",
+        "up": false,
+        "effect_index": 0,
+        "type": "attack",
+        "cost": 1,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "special",
+          "id": "momentum",
+          "n": 0,
+          "grow": 14
+        }
+      },
+      {
+        "card_id": "momentum",
+        "up": true,
+        "effect_index": 0,
+        "type": "attack",
+        "cost": 1,
+        "target": "enemy",
+        "exhaust": false,
+        "rarity": "common",
+        "effect": {
+          "kind": "special",
+          "id": "momentum",
+          "n": 1,
+          "grow": 17
+        }
+      }
+    ],
+    "explicit_chip": [
+      {
+        "card_id": "limitBreak",
+        "up": false,
+        "effect_index": 0,
+        "type": "skill",
+        "cost": 1,
+        "target": "allEnemies",
+        "exhaust": true,
+        "rarity": "rare",
+        "effect": {
+          "kind": "chip",
+          "n": 2
+        }
+      },
+      {
+        "card_id": "limitBreak",
+        "up": true,
+        "effect_index": 0,
+        "type": "skill",
+        "cost": 1,
+        "target": "allEnemies",
+        "exhaust": true,
+        "rarity": "rare",
+        "effect": {
+          "kind": "chip",
+          "n": 3
+        }
+      }
+    ],
+    "printed_attack_chip": [
+      {
+        "card_id": "chisel",
+        "up": false,
+        "chip": 1
+      },
+      {
+        "card_id": "chisel",
+        "up": true,
+        "chip": 1
+      },
+      {
+        "card_id": "heavyBlow",
+        "up": true,
+        "chip": 1
+      },
+      {
+        "card_id": "uppercut",
+        "up": false,
+        "chip": 1
+      },
+      {
+        "card_id": "uppercut",
+        "up": true,
+        "chip": 2
+      },
+      {
+        "card_id": "oblivionStrike",
+        "up": false,
+        "chip": 2
+      },
+      {
+        "card_id": "oblivionStrike",
+        "up": true,
+        "chip": 3
+      },
+      {
+        "card_id": "quakeblow",
+        "up": false,
+        "chip": 2
+      },
+      {
+        "card_id": "quakeblow",
+        "up": true,
+        "chip": 3
+      }
+    ]
+  },
+  "inventory_scope": "All current card effect declarations; relic/art/enemy/native lifecycle sources remain explicit shared-context dependencies, not omitted or declared exhaustively enumerated.",
+  "routes": [
+    {
+      "id": "duskblade/facet",
+      "aspect": "duskblade",
+      "vows": [
+        0,
+        5
+      ],
+      "contract": {
+        "producer": "Connecting Dusk Attack chips, including printed Chisel chip; exact Shatter threshold must be crossed on the same living target before the Echo consumer.",
+        "mediator": "Target staggered or vulnerable > 0 at the consumer guard; attributed Shatter must precede this action. Core Shatter also changes shell, overflow, Ember and enemy behaviour.",
+        "consumer": "resonantLance, legal living target, cost 1, raw base 7/up 10 doubled by the pre-hit guard.",
+        "payoff": "Nominal hit, Block absorbed and HP removed are separate; surplus nominal damage on a lethal target is not extra health benefit.",
+        "expiry_reset": "Target-status expiry, Stun consumption, target death and combat reset follow native code; post-hit Shatter cannot cause the preceding Echo.",
+        "policy": "Intentionally build and schedule enough same-target chip, then spend a separate legal consumer action before expiry; no forced off-route bans.",
+        "alternatives": "Direct Cracked producers can enable the same consumer but are a different complete producer contract; ordinary chip background must not be erased.",
+        "formal": "Two named old producer-role aliases refuted; relevant closed-family union comparison still open.",
+        "causal": "Old whole-command zero-interaction contract FAIL retained. Four-state shortest words/subwords and selective Echo evidence establish only bounded claims.",
+        "priority": 4,
+        "consumer_definitions": [
+          {
+            "type": "attack",
+            "rarity": "uncommon",
+            "cost": 1,
+            "target": "enemy",
+            "locked": "paneBreaker",
+            "vfx": "pierce",
+            "effects": [
+              {
+                "kind": "special",
+                "id": "shatterEcho",
+                "n": 7
+              }
+            ],
+            "name": "Resonant Lance",
+            "text": "Deal @7@ damage. Deals double to Staggered or Cracked glass."
+          },
+          {
+            "type": "attack",
+            "rarity": "uncommon",
+            "cost": 1,
+            "target": "enemy",
+            "locked": "paneBreaker",
+            "vfx": "pierce",
+            "effects": [
+              {
+                "kind": "special",
+                "id": "shatterEcho",
+                "n": 10
+              }
+            ],
+            "name": "Resonant Lance",
+            "text": "Deal @10@ damage. Deals double to Staggered or Cracked glass."
+          }
+        ]
+      },
+      "acquisition": "Current native starter/reward/shop/event/deed/reveal rules; preserve card pools, rarity/order and policy/RNG. Neither card locked metadata nor a final-deck example alone proves full reachability.",
+      "traces": "Use complete command/state/UID events and realised contribution. Co-play, names and a classifier label are not sufficient.",
+      "evidence_scope": {
+        "planned_arm_census": [
+          {
+            "catalogue": "candidate",
+            "aspect": "duskblade",
+            "vow": 0,
+            "arm": 1,
+            "route": "facet",
+            "n": 64,
+            "wins": 26,
+            "producer_offered": 0,
+            "consumer_offered": 39,
+            "both_final_owned": 32,
+            "both_played_anywhere": 32,
+            "consumer_played": 32,
+            "wins_with_both_played": 16,
+            "temporal_chain_count": null,
+            "independent_policy_count": null
+          },
+          {
+            "catalogue": "candidate",
+            "aspect": "duskblade",
+            "vow": 5,
+            "arm": 1,
+            "route": "facet",
+            "n": 64,
+            "wins": 9,
+            "producer_offered": 0,
+            "consumer_offered": 31,
+            "both_final_owned": 25,
+            "both_played_anywhere": 24,
+            "consumer_played": 24,
+            "wins_with_both_played": 4,
+            "temporal_chain_count": null,
+            "independent_policy_count": null
+          }
+        ],
+        "unique_base_policy_vectors": 1,
+        "new_independent_samples": 0
+      },
+      "obligations": {
+        "source_bound_contract": "DEFINED",
+        "formal_family": "OPEN_FULL_PACKAGE_COMPARISON",
+        "complete_causal_subset_null": "PARTIAL_RETAINED_EVIDENCE",
+        "competent_multi_policy_support": "MISSING_FOR_EXACT_CANDIDATE",
+        "population_reachability": "MISSING_QUALIFIED_SUPPORT",
+        "independent_complementarity": "MISSING",
+        "descriptor_admission": "MISSING_FINGERPRINT_NOT_SEVEN_DIRECTION_DETECTOR",
+        "all_guardrails": "UNPROVED"
+      },
+      "admitted": false,
+      "decision": "HOLD_FOR_NAMED_MISSING_EVIDENCE_NOT_INTRINSIC_IMPOSSIBILITY"
+    },
+    {
+      "id": "duskblade/fervor",
+      "aspect": "duskblade",
+      "vows": [
+        0,
+        5
+      ],
+      "contract": {
+        "producer": "Player Strength supplied by Empower, Ritual or source-defined relic/trigger paths; record actual source and timing rather than require only Empower.",
+        "mediator": "Persistent current player str before each eligible hit; shared attack modifiers remain part of the full state.",
+        "consumer": "Flurry cost 1, five hits with printed raw 0/up 1; per-hit Strength application preserves hit topology.",
+        "payoff": "Incremental per-hit health contribution, with common Weak/Cracked/Block/thorns/death and chip accounting unchanged.",
+        "expiry_reset": "Strength persists within combat unless a native operation changes it; new combat resets player combat state.",
+        "policy": "Acquire Strength and multihit capacity and choose setup versus immediate attack from public state; other source-defined Strength suppliers remain eligible.",
+        "alternatives": "All attacks can benefit from Strength. Multiplicity amplification must separate the package from generic global attack strength.",
+        "formal": "Source-level state dependency differs from per-instance growth, but complete closed/admitted-family disposition is open.",
+        "causal": "Finite topology-preserving selective Fervor nulls exist. The older five-to-one-hit removal is NOT a pure Fervor intervention and cannot certify this claim.",
+        "priority": 3,
+        "consumer_definitions": [
+          {
+            "type": "attack",
+            "rarity": "common",
+            "cost": 1,
+            "target": "enemy",
+            "vfx": "pierce",
+            "effects": [
+              {
+                "kind": "dmg",
+                "n": 0,
+                "times": 5
+              }
+            ],
+            "name": "Splinterstorm",
+            "text": "Deal @0@ damage 5 times."
+          },
+          {
+            "type": "attack",
+            "rarity": "common",
+            "cost": 1,
+            "target": "enemy",
+            "vfx": "pierce",
+            "effects": [
+              {
+                "kind": "dmg",
+                "n": 1,
+                "times": 5
+              }
+            ],
+            "name": "Splinterstorm",
+            "text": "Deal @1@ damage 5 times."
+          }
+        ]
+      },
+      "acquisition": "Current native starter/reward/shop/event/deed/reveal rules; preserve card pools, rarity/order and policy/RNG. Neither card locked metadata nor a final-deck example alone proves full reachability.",
+      "traces": "Use complete command/state/UID events and realised contribution. Co-play, names and a classifier label are not sufficient.",
+      "evidence_scope": {
+        "planned_arm_census": [
+          {
+            "catalogue": "candidate",
+            "aspect": "duskblade",
+            "vow": 0,
+            "arm": 1,
+            "route": "fervor",
+            "n": 64,
+            "wins": 26,
+            "producer_offered": 54,
+            "consumer_offered": 59,
+            "both_final_owned": 5,
+            "both_played_anywhere": 5,
+            "consumer_played": 7,
+            "wins_with_both_played": 3,
+            "temporal_chain_count": null,
+            "independent_policy_count": null
+          },
+          {
+            "catalogue": "candidate",
+            "aspect": "duskblade",
+            "vow": 5,
+            "arm": 1,
+            "route": "fervor",
+            "n": 64,
+            "wins": 9,
+            "producer_offered": 38,
+            "consumer_offered": 42,
+            "both_final_owned": 4,
+            "both_played_anywhere": 4,
+            "consumer_played": 4,
+            "wins_with_both_played": 1,
+            "temporal_chain_count": null,
+            "independent_policy_count": null
+          }
+        ],
+        "unique_base_policy_vectors": 1,
+        "new_independent_samples": 0
+      },
+      "obligations": {
+        "source_bound_contract": "DEFINED",
+        "formal_family": "OPEN_FULL_PACKAGE_COMPARISON",
+        "complete_causal_subset_null": "PARTIAL_RETAINED_EVIDENCE",
+        "competent_multi_policy_support": "MISSING_FOR_EXACT_CANDIDATE",
+        "population_reachability": "MISSING_QUALIFIED_SUPPORT",
+        "independent_complementarity": "MISSING",
+        "descriptor_admission": "MISSING_FINGERPRINT_NOT_SEVEN_DIRECTION_DETECTOR",
+        "all_guardrails": "UNPROVED"
+      },
+      "admitted": false,
+      "decision": "HOLD_FOR_NAMED_MISSING_EVIDENCE_NOT_INTRINSIC_IMPOSSIBILITY"
+    },
+    {
+      "id": "duskblade/cycle",
+      "aspect": "duskblade",
+      "vows": [
+        0,
+        5
+      ],
+      "contract": {
+        "producer": "An earlier play of one specific Momentum CardInst changes that same instance bonus by grow 14/up 17.",
+        "mediator": "The same UID bonus surviving in its native card zone, then returning to a legal hand position.",
+        "consumer": "A later play of that exact UID; cost 1 and n 0/up 1 plus accumulated bonus, then guarded ordinary draw 1.",
+        "payoff": "Current target health benefit from the prior instance bonus; record actual return path, Energy and combat duration.",
+        "expiry_reset": "Combat-copy bonus reset; active card is outside hand/draw/discard during its own effect, so no same-action self-redraw. No intrinsic bonus cap is asserted.",
+        "policy": "Arrange economically feasible return and replay rather than merely own/play any Momentum; do not force a route or hide competing cards.",
+        "alternatives": "Extra copies and ordinary draw are not evidence of same-instance repeat. Future-turn feedback remains in the complete shared environment.",
+        "formal": "Guarded growth-plus-draw expansion is proved; this is neither whole-card equivalence to old Honing nor a complete closed-package decomposition disposition.",
+        "causal": "Existing same-UID finite controls and selected witnesses are scoped; whole-run repeated-instance attribution and complete population proof remain open.",
+        "priority": 5,
+        "consumer_definitions": [
+          {
+            "type": "attack",
+            "rarity": "common",
+            "cost": 1,
+            "target": "enemy",
+            "vfx": "slash",
+            "effects": [
+              {
+                "kind": "special",
+                "id": "momentum",
+                "n": 0,
+                "grow": 14
+              },
+              {
+                "kind": "draw",
+                "n": 1
+              }
+            ],
+            "name": "Honing Edge",
+            "text": "Deal @0@ damage. Each play, this card gains +14 damage this combat. Draw 1 card."
+          },
+          {
+            "type": "attack",
+            "rarity": "common",
+            "cost": 1,
+            "target": "enemy",
+            "vfx": "slash",
+            "effects": [
+              {
+                "kind": "special",
+                "id": "momentum",
+                "n": 1,
+                "grow": 17
+              },
+              {
+                "kind": "draw",
+                "n": 1
+              }
+            ],
+            "name": "Honing Edge",
+            "text": "Deal @1@ damage. Each play, this card gains +17 damage this combat. Draw 1 card."
+          }
+        ]
+      },
+      "acquisition": "Current native starter/reward/shop/event/deed/reveal rules; preserve card pools, rarity/order and policy/RNG. Neither card locked metadata nor a final-deck example alone proves full reachability.",
+      "traces": "Use complete command/state/UID events and realised contribution. Co-play, names and a classifier label are not sufficient.",
+      "evidence_scope": {
+        "planned_arm_census": [
+          {
+            "catalogue": "candidate",
+            "aspect": "duskblade",
+            "vow": 0,
+            "arm": 1,
+            "route": "cycle",
+            "n": 64,
+            "wins": 26,
+            "producer_offered": 59,
+            "consumer_offered": 59,
+            "both_final_owned": 53,
+            "both_played_anywhere": 53,
+            "consumer_played": 53,
+            "wins_with_both_played": 22,
+            "temporal_chain_count": null,
+            "independent_policy_count": null
+          },
+          {
+            "catalogue": "candidate",
+            "aspect": "duskblade",
+            "vow": 5,
+            "arm": 1,
+            "route": "cycle",
+            "n": 64,
+            "wins": 9,
+            "producer_offered": 50,
+            "consumer_offered": 50,
+            "both_final_owned": 37,
+            "both_played_anywhere": 35,
+            "consumer_played": 35,
+            "wins_with_both_played": 8,
+            "temporal_chain_count": null,
+            "independent_policy_count": null
+          }
+        ],
+        "unique_base_policy_vectors": 1,
+        "new_independent_samples": 0
+      },
+      "obligations": {
+        "source_bound_contract": "DEFINED",
+        "formal_family": "OPEN_FULL_PACKAGE_COMPARISON",
+        "complete_causal_subset_null": "PARTIAL_RETAINED_EVIDENCE",
+        "competent_multi_policy_support": "MISSING_FOR_EXACT_CANDIDATE",
+        "population_reachability": "MISSING_QUALIFIED_SUPPORT",
+        "independent_complementarity": "MISSING",
+        "descriptor_admission": "MISSING_FINGERPRINT_NOT_SEVEN_DIRECTION_DETECTOR",
+        "all_guardrails": "UNPROVED"
+      },
+      "admitted": false,
+      "decision": "HOLD_FOR_NAMED_MISSING_EVIDENCE_NOT_INTRINSIC_IMPOSSIBILITY"
+    },
+    {
+      "id": "ashwarden/smolder",
+      "aspect": "ashwarden",
+      "vows": [
+        0,
+        5
+      ],
+      "contract": {
+        "producer": "Source-defined player poison suppliers, including Ash starters, Venom Strike, Toxic Mist and venomous hooks, on the eventual Catalyst target.",
+        "mediator": "Positive same-target poison immediately before Catalyst; already ticked, transferred, cleared or dead-target stock is not silently attributed.",
+        "consumer": "Catalyst cost 1, Exhaust, multiplying poison by 2/up 3; no immediate direct health damage is assumed.",
+        "payoff": "Additional realised future poison damage before target/combat death, plus actual setup and duration costs; poison_delta is not health removed.",
+        "expiry_reset": "Native poison tick/decrement, death effects/transfer and combat reset; Dusk player Smolder block is preserved.",
+        "policy": "Invest in poison then time multiplication on a surviving target; allow alternative poison sources and competing finishing attacks.",
+        "alternatives": "Starter/environmental poison may enable Catalyst without the named Venom Strike anchor. Consumer co-play alone is not chain evidence.",
+        "formal": "Exact mistbound and historical poison contracts must not be confused with all native poison. Complete comparison remains open.",
+        "causal": "Finite multiplier/null and selected temporal evidence exists; full realised DOT attribution and independent population claims remain open.",
+        "priority": 2,
+        "consumer_definitions": [
+          {
+            "type": "skill",
+            "rarity": "uncommon",
+            "cost": 1,
+            "target": "enemy",
+            "vfx": "poison",
+            "exhaust": true,
+            "effects": [
+              {
+                "kind": "special",
+                "id": "catalyst",
+                "n": 2
+              }
+            ],
+            "name": "Bellows",
+            "text": "Double an enemy's Smolder. Kindle."
+          },
+          {
+            "type": "skill",
+            "rarity": "uncommon",
+            "cost": 1,
+            "target": "enemy",
+            "vfx": "poison",
+            "exhaust": true,
+            "effects": [
+              {
+                "kind": "special",
+                "id": "catalyst",
+                "n": 3
+              }
+            ],
+            "name": "Bellows",
+            "text": "Triple an enemy's Smolder. Kindle."
+          }
+        ]
+      },
+      "acquisition": "Current native starter/reward/shop/event/deed/reveal rules; preserve card pools, rarity/order and policy/RNG. Neither card locked metadata nor a final-deck example alone proves full reachability.",
+      "traces": "Use complete command/state/UID events and realised contribution. Co-play, names and a classifier label are not sufficient.",
+      "evidence_scope": {
+        "planned_arm_census": [
+          {
+            "catalogue": "candidate",
+            "aspect": "ashwarden",
+            "vow": 0,
+            "arm": 1,
+            "route": "smolder",
+            "n": 64,
+            "wins": 23,
+            "producer_offered": 56,
+            "consumer_offered": 41,
+            "both_final_owned": 31,
+            "both_played_anywhere": 30,
+            "consumer_played": 40,
+            "wins_with_both_played": 18,
+            "temporal_chain_count": null,
+            "independent_policy_count": null
+          },
+          {
+            "catalogue": "candidate",
+            "aspect": "ashwarden",
+            "vow": 5,
+            "arm": 1,
+            "route": "smolder",
+            "n": 64,
+            "wins": 3,
+            "producer_offered": 45,
+            "consumer_offered": 30,
+            "both_final_owned": 15,
+            "both_played_anywhere": 14,
+            "consumer_played": 28,
+            "wins_with_both_played": 1,
+            "temporal_chain_count": null,
+            "independent_policy_count": null
+          }
+        ],
+        "unique_base_policy_vectors": 1,
+        "new_independent_samples": 0
+      },
+      "obligations": {
+        "source_bound_contract": "DEFINED",
+        "formal_family": "OPEN_FULL_PACKAGE_COMPARISON",
+        "complete_causal_subset_null": "PARTIAL_RETAINED_EVIDENCE",
+        "competent_multi_policy_support": "MISSING_FOR_EXACT_CANDIDATE",
+        "population_reachability": "MISSING_QUALIFIED_SUPPORT",
+        "independent_complementarity": "MISSING",
+        "descriptor_admission": "MISSING_FINGERPRINT_NOT_SEVEN_DIRECTION_DETECTOR",
+        "all_guardrails": "UNPROVED"
+      },
+      "admitted": false,
+      "decision": "HOLD_FOR_NAMED_MISSING_EVIDENCE_NOT_INTRINSIC_IMPOSSIBILITY"
+    },
+    {
+      "id": "ashwarden/hand",
+      "aspect": "ashwarden",
+      "vows": [
+        0,
+        5
+      ],
+      "contract": {
+        "producer": "Preparation/Surge are the historical producer alternatives; additionally enumerate direct draw, generated-hand cards, next-turn Night Sight and exchange hooks. Require actual stock or legal-play opportunity, not a DRAW event alone.",
+        "mediator": "Post-consumer-removal hand q in 0..9, available Energy and actual source/UID path; setup cost is not erased.",
+        "consumer": "Phantom Blades cost 1: base 2*min(q,4)+6*max(q-4,0); upgraded high slope 7. Consumer is removed before reading q.",
+        "payoff": "Intended stock-dependent health benefit of this action; keep raw, blocked, health and setup/duration consequences separate.",
+        "expiry_reset": "Native hand cap 10, hand/discard/exhaust transitions, end-turn discard and combat reset. Night Sight persists only under its native lifecycle.",
+        "policy": "Acquire adequate stock/energy producers and select setup-versus-consume from public state. Preparation can raise net stock; Surge primarily supplies play capacity/consumer access, not a guaranteed net hand gain.",
+        "alternatives": "Night Sight is NOT necessary for the historical package. Generic draw 1 usually replaces the played card; hand exchanges and relic triggers need contextual accounting.",
+        "formal": "Including/improving the admitted Ash hand-size family is expressly permitted. No demand for global primitive novelty. Exact current quantitative/causal inheritance is invalidated by changed card/payoff dependencies.",
+        "causal": "Old finite Night Sight/Phantom observations do not cover all historical producer alternatives; old phantomDamage population field is absent in the current original-arm capture.",
+        "priority": 1,
+        "consumer_definitions": [
+          {
+            "type": "attack",
+            "rarity": "common",
+            "cost": 1,
+            "target": "enemy",
+            "vfx": "pierce",
+            "effects": [
+              {
+                "kind": "special",
+                "id": "phantom",
+                "n": 6,
+                "reserve": 4,
+                "floor_per": 2
+              }
+            ],
+            "name": "Phantom Blades",
+            "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per unit above 4."
+          },
+          {
+            "type": "attack",
+            "rarity": "common",
+            "cost": 1,
+            "target": "enemy",
+            "vfx": "pierce",
+            "effects": [
+              {
+                "kind": "special",
+                "id": "phantom",
+                "n": 7,
+                "reserve": 4,
+                "floor_per": 2
+              }
+            ],
+            "name": "Phantom Blades",
+            "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per unit above 4."
+          }
+        ]
+      },
+      "acquisition": "Current native starter/reward/shop/event/deed/reveal rules; preserve card pools, rarity/order and policy/RNG. Neither card locked metadata nor a final-deck example alone proves full reachability.",
+      "traces": "Use complete command/state/UID events and realised contribution. Co-play, names and a classifier label are not sufficient.",
+      "evidence_scope": {
+        "planned_arm_census": [
+          {
+            "catalogue": "candidate",
+            "aspect": "ashwarden",
+            "vow": 0,
+            "arm": 1,
+            "route": "hand",
+            "n": 64,
+            "wins": 23,
+            "producer_offered": 43,
+            "consumer_offered": 54,
+            "both_final_owned": 10,
+            "both_played_anywhere": 8,
+            "consumer_played": 38,
+            "wins_with_both_played": 4,
+            "temporal_chain_count": null,
+            "independent_policy_count": null
+          },
+          {
+            "catalogue": "candidate",
+            "aspect": "ashwarden",
+            "vow": 5,
+            "arm": 1,
+            "route": "hand",
+            "n": 64,
+            "wins": 3,
+            "producer_offered": 37,
+            "consumer_offered": 43,
+            "both_final_owned": 5,
+            "both_played_anywhere": 5,
+            "consumer_played": 18,
+            "wins_with_both_played": 0,
+            "temporal_chain_count": null,
+            "independent_policy_count": null
+          }
+        ],
+        "unique_base_policy_vectors": 1,
+        "new_independent_samples": 0
+      },
+      "obligations": {
+        "source_bound_contract": "DEFINED",
+        "formal_family": "PERMITTED_INHERITED_FAMILY_DELTA_NOT_QUANTITATIVE_ADMISSION",
+        "complete_causal_subset_null": "PARTIAL_RETAINED_EVIDENCE",
+        "competent_multi_policy_support": "MISSING_FOR_EXACT_CANDIDATE",
+        "population_reachability": "MISSING_QUALIFIED_SUPPORT",
+        "independent_complementarity": "MISSING",
+        "descriptor_admission": "MISSING_FINGERPRINT_NOT_SEVEN_DIRECTION_DETECTOR",
+        "all_guardrails": "UNPROVED"
+      },
+      "admitted": false,
+      "decision": "HOLD_FOR_NAMED_MISSING_EVIDENCE_NOT_INTRINSIC_IMPOSSIBILITY"
+    },
+    {
+      "id": "ashwarden/cycle",
+      "aspect": "ashwarden",
+      "vows": [
+        0,
+        5
+      ],
+      "contract": {
+        "producer": "An earlier play of one specific Momentum CardInst changes that same instance bonus by grow 14/up 17.",
+        "mediator": "The same UID bonus surviving in its native card zone, then returning to a legal hand position.",
+        "consumer": "A later play of that exact UID; cost 1 and n 0/up 1 plus accumulated bonus, then guarded ordinary draw 1.",
+        "payoff": "Current target health benefit from the prior instance bonus; record actual return path, Energy and combat duration.",
+        "expiry_reset": "Combat-copy bonus reset; active card is outside hand/draw/discard during its own effect, so no same-action self-redraw. No intrinsic bonus cap is asserted.",
+        "policy": "Arrange economically feasible return and replay rather than merely own/play any Momentum; do not force a route or hide competing cards.",
+        "alternatives": "Extra copies and ordinary draw are not evidence of same-instance repeat. Future-turn feedback remains in the complete shared environment.",
+        "formal": "Guarded growth-plus-draw expansion is proved; this is neither whole-card equivalence to old Honing nor a complete closed-package decomposition disposition.",
+        "causal": "Existing same-UID finite controls and selected witnesses are scoped; whole-run repeated-instance attribution and complete population proof remain open.",
+        "priority": 5,
+        "consumer_definitions": [
+          {
+            "type": "attack",
+            "rarity": "common",
+            "cost": 1,
+            "target": "enemy",
+            "vfx": "slash",
+            "effects": [
+              {
+                "kind": "special",
+                "id": "momentum",
+                "n": 0,
+                "grow": 14
+              },
+              {
+                "kind": "draw",
+                "n": 1
+              }
+            ],
+            "name": "Honing Edge",
+            "text": "Deal @0@ damage. Each play, this card gains +14 damage this combat. Draw 1 card."
+          },
+          {
+            "type": "attack",
+            "rarity": "common",
+            "cost": 1,
+            "target": "enemy",
+            "vfx": "slash",
+            "effects": [
+              {
+                "kind": "special",
+                "id": "momentum",
+                "n": 1,
+                "grow": 17
+              },
+              {
+                "kind": "draw",
+                "n": 1
+              }
+            ],
+            "name": "Honing Edge",
+            "text": "Deal @1@ damage. Each play, this card gains +17 damage this combat. Draw 1 card."
+          }
+        ]
+      },
+      "acquisition": "Current native starter/reward/shop/event/deed/reveal rules; preserve card pools, rarity/order and policy/RNG. Neither card locked metadata nor a final-deck example alone proves full reachability.",
+      "traces": "Use complete command/state/UID events and realised contribution. Co-play, names and a classifier label are not sufficient.",
+      "evidence_scope": {
+        "planned_arm_census": [
+          {
+            "catalogue": "candidate",
+            "aspect": "ashwarden",
+            "vow": 0,
+            "arm": 1,
+            "route": "cycle",
+            "n": 64,
+            "wins": 23,
+            "producer_offered": 58,
+            "consumer_offered": 58,
+            "both_final_owned": 45,
+            "both_played_anywhere": 42,
+            "consumer_played": 42,
+            "wins_with_both_played": 18,
+            "temporal_chain_count": null,
+            "independent_policy_count": null
+          },
+          {
+            "catalogue": "candidate",
+            "aspect": "ashwarden",
+            "vow": 5,
+            "arm": 1,
+            "route": "cycle",
+            "n": 64,
+            "wins": 3,
+            "producer_offered": 40,
+            "consumer_offered": 40,
+            "both_final_owned": 30,
+            "both_played_anywhere": 28,
+            "consumer_played": 28,
+            "wins_with_both_played": 2,
+            "temporal_chain_count": null,
+            "independent_policy_count": null
+          }
+        ],
+        "unique_base_policy_vectors": 1,
+        "new_independent_samples": 0
+      },
+      "obligations": {
+        "source_bound_contract": "DEFINED",
+        "formal_family": "OPEN_FULL_PACKAGE_COMPARISON",
+        "complete_causal_subset_null": "PARTIAL_RETAINED_EVIDENCE",
+        "competent_multi_policy_support": "MISSING_FOR_EXACT_CANDIDATE",
+        "population_reachability": "MISSING_QUALIFIED_SUPPORT",
+        "independent_complementarity": "MISSING",
+        "descriptor_admission": "MISSING_FINGERPRINT_NOT_SEVEN_DIRECTION_DETECTOR",
+        "all_guardrails": "UNPROVED"
+      },
+      "admitted": false,
+      "decision": "HOLD_FOR_NAMED_MISSING_EVIDENCE_NOT_INTRINSIC_IMPOSSIBILITY"
+    }
+  ],
+  "historical_hand_contract": {
+    "head": "c802be36510273481b6d0f865b92fac43abf6aff",
+    "protocol": "research/issue-421/protocols/post-v38-hand-size-inventory-v1.json",
+    "protocol_blob": "9526a5f3280b2e7ac02ba96f68620c00d30ae1cf",
+    "correction_protocol": "research/issue-421/protocols/post-v38-hand-size-inventory-v2.json",
+    "correction_blob": "38b3a5b7d1ca7e308cb308edf037f9462d1bf73c",
+    "producers": [
+      "preparation",
+      "surge"
+    ],
+    "consumer": "phantomBlades",
+    "activation": "Final-deck Phantom and present Preparation or Surge; both played; phantomDamage positive.",
+    "support_scale": {
+      "policies": 128,
+      "active": 32,
+      "inactive": 32,
+      "reachable": 16,
+      "exclusive_each_direction": 8
+    },
+    "scope": "Historical structuralNull cohort only. These are not automatically transferable current-candidate counts."
+  },
+  "hand_card_deltas": {
+    "preparation": [
+      {
+        "up": false,
+        "changed": {},
+        "base": {
+          "type": "skill",
+          "rarity": "common",
+          "cost": 0,
+          "target": "self",
+          "vfx": "fire",
+          "exhaust": true,
+          "effects": [
+            {
+              "kind": "draw",
+              "n": 2
+            }
+          ],
+          "name": "Tinder",
+          "text": "Draw 2 cards. Kindle."
+        },
+        "candidate": {
+          "type": "skill",
+          "rarity": "common",
+          "cost": 0,
+          "target": "self",
+          "vfx": "fire",
+          "exhaust": true,
+          "effects": [
+            {
+              "kind": "draw",
+              "n": 2
+            }
+          ],
+          "name": "Tinder",
+          "text": "Draw 2 cards. Kindle."
+        }
+      },
+      {
+        "up": true,
+        "changed": {
+          "effects": {
+            "base": [
+              {
+                "kind": "draw",
+                "n": 2
+              }
+            ],
+            "candidate": [
+              {
+                "kind": "draw",
+                "n": 3
+              }
+            ]
+          },
+          "exhaust": {
+            "base": false,
+            "candidate": true
+          },
+          "text": {
+            "base": "Draw 2 cards.",
+            "candidate": "Draw 3 cards. Kindle."
+          }
+        },
+        "base": {
+          "type": "skill",
+          "rarity": "common",
+          "cost": 0,
+          "target": "self",
+          "vfx": "fire",
+          "exhaust": false,
+          "effects": [
+            {
+              "kind": "draw",
+              "n": 2
+            }
+          ],
+          "name": "Tinder",
+          "text": "Draw 2 cards."
+        },
+        "candidate": {
+          "type": "skill",
+          "rarity": "common",
+          "cost": 0,
+          "target": "self",
+          "vfx": "fire",
+          "exhaust": true,
+          "effects": [
+            {
+              "kind": "draw",
+              "n": 3
+            }
+          ],
+          "name": "Tinder",
+          "text": "Draw 3 cards. Kindle."
+        }
+      }
+    ],
+    "surge": [
+      {
+        "up": false,
+        "changed": {},
+        "base": {
+          "type": "skill",
+          "rarity": "uncommon",
+          "cost": 0,
+          "target": "self",
+          "vfx": "fire",
+          "exhaust": true,
+          "effects": [
+            {
+              "kind": "energy",
+              "n": 1
+            },
+            {
+              "kind": "draw",
+              "n": 1
+            }
+          ],
+          "name": "Struck Match",
+          "text": "Gain 1 Energy. Draw 1 card. Kindle."
+        },
+        "candidate": {
+          "type": "skill",
+          "rarity": "uncommon",
+          "cost": 0,
+          "target": "self",
+          "vfx": "fire",
+          "exhaust": true,
+          "effects": [
+            {
+              "kind": "energy",
+              "n": 1
+            },
+            {
+              "kind": "draw",
+              "n": 1
+            }
+          ],
+          "name": "Struck Match",
+          "text": "Gain 1 Energy. Draw 1 card. Kindle."
+        }
+      },
+      {
+        "up": true,
+        "changed": {},
+        "base": {
+          "type": "skill",
+          "rarity": "uncommon",
+          "cost": 0,
+          "target": "self",
+          "vfx": "fire",
+          "exhaust": true,
+          "effects": [
+            {
+              "kind": "energy",
+              "n": 2
+            },
+            {
+              "kind": "draw",
+              "n": 1
+            }
+          ],
+          "name": "Struck Match",
+          "text": "Gain 2 Energy. Draw 1 card. Kindle."
+        },
+        "candidate": {
+          "type": "skill",
+          "rarity": "uncommon",
+          "cost": 0,
+          "target": "self",
+          "vfx": "fire",
+          "exhaust": true,
+          "effects": [
+            {
+              "kind": "energy",
+              "n": 2
+            },
+            {
+              "kind": "draw",
+              "n": 1
+            }
+          ],
+          "name": "Struck Match",
+          "text": "Gain 2 Energy. Draw 1 card. Kindle."
+        }
+      }
+    ],
+    "phantomBlades": [
+      {
+        "up": false,
+        "changed": {
+          "effects": {
+            "base": [
+              {
+                "kind": "special",
+                "id": "phantom",
+                "n": 3
+              }
+            ],
+            "candidate": [
+              {
+                "kind": "special",
+                "id": "phantom",
+                "n": 6,
+                "reserve": 4,
+                "floor_per": 2
+              }
+            ]
+          },
+          "rarity": {
+            "base": "rare",
+            "candidate": "common"
+          },
+          "text": {
+            "base": "Deal @3@ damage for each card in your hand.",
+            "candidate": "Deal @2@ damage per card in your hand up to 4, then @6@ per unit above 4."
+          }
+        },
+        "base": {
+          "type": "attack",
+          "rarity": "rare",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "special",
+              "id": "phantom",
+              "n": 3
+            }
+          ],
+          "name": "Phantom Blades",
+          "text": "Deal @3@ damage for each card in your hand."
+        },
+        "candidate": {
+          "type": "attack",
+          "rarity": "common",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "special",
+              "id": "phantom",
+              "n": 6,
+              "reserve": 4,
+              "floor_per": 2
+            }
+          ],
+          "name": "Phantom Blades",
+          "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per unit above 4."
+        }
+      },
+      {
+        "up": true,
+        "changed": {
+          "effects": {
+            "base": [
+              {
+                "kind": "special",
+                "id": "phantom",
+                "n": 4
+              }
+            ],
+            "candidate": [
+              {
+                "kind": "special",
+                "id": "phantom",
+                "n": 7,
+                "reserve": 4,
+                "floor_per": 2
+              }
+            ]
+          },
+          "rarity": {
+            "base": "rare",
+            "candidate": "common"
+          },
+          "text": {
+            "base": "Deal @4@ damage for each card in your hand.",
+            "candidate": "Deal @2@ damage per card in your hand up to 4, then @7@ per unit above 4."
+          }
+        },
+        "base": {
+          "type": "attack",
+          "rarity": "rare",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "special",
+              "id": "phantom",
+              "n": 4
+            }
+          ],
+          "name": "Phantom Blades",
+          "text": "Deal @4@ damage for each card in your hand."
+        },
+        "candidate": {
+          "type": "attack",
+          "rarity": "common",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "special",
+              "id": "phantom",
+              "n": 7,
+              "reserve": 4,
+              "floor_per": 2
+            }
+          ],
+          "name": "Phantom Blades",
+          "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per unit above 4."
+        }
+      }
+    ],
+    "nightSight": [
+      {
+        "up": false,
+        "changed": {
+          "rarity": {
+            "base": "uncommon",
+            "candidate": "rare"
+          }
+        },
+        "base": {
+          "type": "power",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "self",
+          "locked": "darkWalker",
+          "vfx": "void",
+          "effects": [
+            {
+              "kind": "status",
+              "who": "self",
+              "id": "nightsight",
+              "n": 1
+            }
+          ],
+          "name": "Night Sight",
+          "text": "At the start of each turn, draw 1 extra card."
+        },
+        "candidate": {
+          "type": "power",
+          "rarity": "rare",
+          "cost": 1,
+          "target": "self",
+          "locked": "darkWalker",
+          "vfx": "void",
+          "effects": [
+            {
+              "kind": "status",
+              "who": "self",
+              "id": "nightsight",
+              "n": 1
+            }
+          ],
+          "name": "Night Sight",
+          "text": "At the start of each turn, draw 1 extra card."
+        }
+      },
+      {
+        "up": true,
+        "changed": {
+          "rarity": {
+            "base": "uncommon",
+            "candidate": "rare"
+          }
+        },
+        "base": {
+          "type": "power",
+          "rarity": "uncommon",
+          "cost": 0,
+          "target": "self",
+          "locked": "darkWalker",
+          "vfx": "void",
+          "effects": [
+            {
+              "kind": "status",
+              "who": "self",
+              "id": "nightsight",
+              "n": 1
+            }
+          ],
+          "name": "Night Sight",
+          "text": "At the start of each turn, draw 1 extra card."
+        },
+        "candidate": {
+          "type": "power",
+          "rarity": "rare",
+          "cost": 0,
+          "target": "self",
+          "locked": "darkWalker",
+          "vfx": "void",
+          "effects": [
+            {
+              "kind": "status",
+              "who": "self",
+              "id": "nightsight",
+              "n": 1
+            }
+          ],
+          "name": "Night Sight",
+          "text": "At the start of each turn, draw 1 extra card."
+        }
+      }
+    ]
+  },
+  "hand_payoff_curves": [
+    {
+      "up": false,
+      "q": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "old_raw": [
+        0,
+        3,
+        6,
+        9,
+        12,
+        15,
+        18,
+        21,
+        24,
+        27
+      ],
+      "candidate_raw": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        14,
+        20,
+        26,
+        32,
+        38
+      ],
+      "kind": "SOURCE_ARITHMETIC_NOT_NATIVE_REEXECUTION"
+    },
+    {
+      "up": true,
+      "q": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "old_raw": [
+        0,
+        4,
+        8,
+        12,
+        16,
+        20,
+        24,
+        28,
+        32,
+        36
+      ],
+      "candidate_raw": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        15,
+        22,
+        29,
+        36,
+        43
+      ],
+      "kind": "SOURCE_ARITHMETIC_NOT_NATIVE_REEXECUTION"
+    }
+  ],
+  "hand_first_decision": {
+    "inherited_family_eligible": true,
+    "old_numerical_admission_carries": false,
+    "requires_night_sight": false,
+    "mandatory_next": "Complete the actual Preparation/Surge -> stock/play-opportunity -> Phantom causal/observation contract, then freeze its missing multi-policy/independent support under unchanged gates. Do not rerun the Night Sight demonstration.",
+    "why_first": "Explicit inherited-family eligibility removes an unnecessary dependency on unresolved Facet/global-novelty synthesis; this is work ordering, not relaxed acceptance."
+  },
+  "guardrail_screen": {
+    "formal_hard_guardrail_pass": false,
+    "formal_hard_guardrail_failure_proved_by_this_census": false,
+    "reason": "Neither one exposed base-policy cohort nor high research-controller win rates are the signed C2/held-out CEM acceptance protocol. Retain the existing negative shifts as warnings; do not promote or universalise them."
+  },
+  "no_repeat": [
+    "v25",
+    "1024 fixed validation",
+    "2048 original-arm simulation",
+    "672 command verifier",
+    "reunion",
+    "Facet language/subwords",
+    "composition-v1",
+    "frozen model fit"
+  ],
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT"
+}
