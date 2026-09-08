@@ -1,0 +1,17 @@
+{
+  "status": "AUTHOR_REVIEW_PASS_FOR_HAND_PREFLIGHT_ONLY",
+  "kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "rows_bound": 1032,
+  "supplier_effect_records_checked": 1024,
+  "frozen_reader_unchanged": true,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "p9_certified": false,
+  "findings_fixed_by_additional_checks": [
+    "Require exact fixture metadata, integer mask and common initial state for every Ash intervention arm.",
+    "Bind source-specific supplier definitions, UID, target, stock and Energy effect transitions; require one Phantom observation when legal."
+  ],
+  "limits": [
+    "This is not trusted-runtime provenance, all-supplier exhaustiveness, population admission or an independent reviewer verdict."
+  ]
+}

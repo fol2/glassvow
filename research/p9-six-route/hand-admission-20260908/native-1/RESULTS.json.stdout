@@ -1,0 +1,1169 @@
+{
+  "status": "HAND_COMPONENT_OBSERVATION_PREFLIGHT_PASS",
+  "rows": 1032,
+  "states": 896,
+  "exact_native_off_pairs": 168,
+  "other_aspect_exact_null_pairs": 348,
+  "below_reserve_exact_null_pairs": 40,
+  "reflected_views_checked": 5712,
+  "effect_records_checked": 2608,
+  "blocked_opportunities_retained": 144,
+  "source_specific_contrasts": [
+    {
+      "vow": 0,
+      "up": false,
+      "context": "prep_branch",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 20,
+        "1": 8,
+        "2": 20,
+        "3": 8,
+        "4": 8,
+        "5": 8,
+        "6": 8,
+        "7": 8
+      },
+      "draw_high_payoff_health_interaction": 12
+    },
+    {
+      "vow": 0,
+      "up": false,
+      "context": "prep_cap",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 38,
+        "1": 32,
+        "2": 38,
+        "3": 32,
+        "4": 8,
+        "5": 8,
+        "6": 8,
+        "7": 8
+      },
+      "draw_high_payoff_health_interaction": 6
+    },
+    {
+      "vow": 0,
+      "up": false,
+      "context": "prep_empty",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 6,
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 6,
+        "7": 6
+      },
+      "draw_high_payoff_health_interaction": 0
+    },
+    {
+      "vow": 0,
+      "up": false,
+      "context": "prep_lethal",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3
+      },
+      "draw_high_payoff_health_interaction": 0
+    },
+    {
+      "vow": 0,
+      "up": false,
+      "context": "prep_modifiers",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 13,
+        "1": 4,
+        "2": 13,
+        "3": 4,
+        "4": 5,
+        "5": 4,
+        "6": 5,
+        "7": 4
+      },
+      "draw_high_payoff_health_interaction": 8
+    },
+    {
+      "vow": 0,
+      "up": false,
+      "context": "prep_stock",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 14,
+        "1": 6,
+        "2": 14,
+        "3": 6,
+        "4": 8,
+        "5": 6,
+        "6": 8,
+        "7": 6
+      },
+      "draw_high_payoff_health_interaction": 6
+    },
+    {
+      "vow": 0,
+      "up": false,
+      "context": "surge_access",
+      "consumer_permitted": {
+        "0": true,
+        "1": false,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": false,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 14,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 0,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 6
+    },
+    {
+      "vow": 0,
+      "up": false,
+      "context": "surge_branch",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 20,
+        "1": 14,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 8,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 6
+    },
+    {
+      "vow": 0,
+      "up": false,
+      "context": "surge_empty",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 8,
+        "1": 8,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 8,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 0
+    },
+    {
+      "vow": 0,
+      "up": false,
+      "context": "surge_energy",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 14,
+        "1": 8,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 8,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 6
+    },
+    {
+      "vow": 0,
+      "up": false,
+      "context": "surge_spare",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 14,
+        "1": 8,
+        "2": 14,
+        "3": 8,
+        "4": 8,
+        "5": 8,
+        "6": 8,
+        "7": 8
+      },
+      "draw_high_payoff_health_interaction": 6
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "context": "prep_branch",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 29,
+        "1": 8,
+        "2": 29,
+        "3": 8,
+        "4": 8,
+        "5": 8,
+        "6": 8,
+        "7": 8
+      },
+      "draw_high_payoff_health_interaction": 21
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "context": "prep_cap",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 43,
+        "1": 36,
+        "2": 43,
+        "3": 36,
+        "4": 8,
+        "5": 8,
+        "6": 8,
+        "7": 8
+      },
+      "draw_high_payoff_health_interaction": 7
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "context": "prep_empty",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 6,
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 6,
+        "7": 6
+      },
+      "draw_high_payoff_health_interaction": 0
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "context": "prep_lethal",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3
+      },
+      "draw_high_payoff_health_interaction": 0
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "context": "prep_modifiers",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 22,
+        "1": 4,
+        "2": 22,
+        "3": 4,
+        "4": 5,
+        "5": 4,
+        "6": 5,
+        "7": 4
+      },
+      "draw_high_payoff_health_interaction": 17
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "context": "prep_stock",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 22,
+        "1": 6,
+        "2": 22,
+        "3": 6,
+        "4": 8,
+        "5": 6,
+        "6": 8,
+        "7": 6
+      },
+      "draw_high_payoff_health_interaction": 14
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "context": "surge_access",
+      "consumer_permitted": {
+        "0": true,
+        "1": false,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": false,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 15,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 0,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 7
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "context": "surge_branch",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 22,
+        "1": 15,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 8,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 7
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "context": "surge_empty",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 8,
+        "1": 8,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 8,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 0
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "context": "surge_energy",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 15,
+        "1": 8,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 8,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 7
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "context": "surge_spare",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 15,
+        "1": 8,
+        "2": 15,
+        "3": 8,
+        "4": 8,
+        "5": 8,
+        "6": 8,
+        "7": 8
+      },
+      "draw_high_payoff_health_interaction": 7
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "context": "prep_branch",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 20,
+        "1": 8,
+        "2": 20,
+        "3": 8,
+        "4": 8,
+        "5": 8,
+        "6": 8,
+        "7": 8
+      },
+      "draw_high_payoff_health_interaction": 12
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "context": "prep_cap",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 38,
+        "1": 32,
+        "2": 38,
+        "3": 32,
+        "4": 8,
+        "5": 8,
+        "6": 8,
+        "7": 8
+      },
+      "draw_high_payoff_health_interaction": 6
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "context": "prep_empty",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 6,
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 6,
+        "7": 6
+      },
+      "draw_high_payoff_health_interaction": 0
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "context": "prep_lethal",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3
+      },
+      "draw_high_payoff_health_interaction": 0
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "context": "prep_modifiers",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 13,
+        "1": 4,
+        "2": 13,
+        "3": 4,
+        "4": 5,
+        "5": 4,
+        "6": 5,
+        "7": 4
+      },
+      "draw_high_payoff_health_interaction": 8
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "context": "prep_stock",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 14,
+        "1": 6,
+        "2": 14,
+        "3": 6,
+        "4": 8,
+        "5": 6,
+        "6": 8,
+        "7": 6
+      },
+      "draw_high_payoff_health_interaction": 6
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "context": "surge_access",
+      "consumer_permitted": {
+        "0": true,
+        "1": false,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": false,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 14,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 0,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 6
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "context": "surge_branch",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 20,
+        "1": 14,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 8,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 6
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "context": "surge_empty",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 8,
+        "1": 8,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 8,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 0
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "context": "surge_energy",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 14,
+        "1": 8,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 8,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 6
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "context": "surge_spare",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 14,
+        "1": 8,
+        "2": 14,
+        "3": 8,
+        "4": 8,
+        "5": 8,
+        "6": 8,
+        "7": 8
+      },
+      "draw_high_payoff_health_interaction": 6
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "context": "prep_branch",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 29,
+        "1": 8,
+        "2": 29,
+        "3": 8,
+        "4": 8,
+        "5": 8,
+        "6": 8,
+        "7": 8
+      },
+      "draw_high_payoff_health_interaction": 21
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "context": "prep_cap",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 43,
+        "1": 36,
+        "2": 43,
+        "3": 36,
+        "4": 8,
+        "5": 8,
+        "6": 8,
+        "7": 8
+      },
+      "draw_high_payoff_health_interaction": 7
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "context": "prep_empty",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 6,
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 6,
+        "6": 6,
+        "7": 6
+      },
+      "draw_high_payoff_health_interaction": 0
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "context": "prep_lethal",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3
+      },
+      "draw_high_payoff_health_interaction": 0
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "context": "prep_modifiers",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 22,
+        "1": 4,
+        "2": 22,
+        "3": 4,
+        "4": 5,
+        "5": 4,
+        "6": 5,
+        "7": 4
+      },
+      "draw_high_payoff_health_interaction": 17
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "context": "prep_stock",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 22,
+        "1": 6,
+        "2": 22,
+        "3": 6,
+        "4": 8,
+        "5": 6,
+        "6": 8,
+        "7": 6
+      },
+      "draw_high_payoff_health_interaction": 14
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "context": "surge_access",
+      "consumer_permitted": {
+        "0": true,
+        "1": false,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": false,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 15,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 0,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 7
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "context": "surge_branch",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 22,
+        "1": 15,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 8,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 7
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "context": "surge_empty",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 8,
+        "1": 8,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 8,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 0
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "context": "surge_energy",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": false,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": false,
+        "7": false
+      },
+      "consumer_hp_removed": {
+        "0": 15,
+        "1": 8,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 8,
+        "6": 0,
+        "7": 0
+      },
+      "draw_high_payoff_health_interaction": 7
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "context": "surge_spare",
+      "consumer_permitted": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true
+      },
+      "consumer_hp_removed": {
+        "0": 15,
+        "1": 8,
+        "2": 15,
+        "3": 8,
+        "4": 8,
+        "5": 8,
+        "6": 8,
+        "7": 8
+      },
+      "draw_high_payoff_health_interaction": 7
+    }
+  ],
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "scope": "Finite observer/three component-intervention preflight only. Preparation draw and Surge draw/Energy alternatives; not every supplier or natural policy support.",
+  "next": "Freeze complete competent multi-policy real-economy support with exact observation and unchanged signed controls; no existing-cohort rerun.",
+  "limitations": [
+    "Hand size and realised action damage are observed, not inferred from aggregate co-play.",
+    "The high-payoff intervention sets only n=0; the existing below-reserve floor, action costs, Exhaust and native side effects remain.",
+    "Dusk is an exact-null context for the Ash-scoped research interventions, not evidence that the shared Phantom card has no Dusk effect.",
+    "Constructor states are not naturally acquired decks, independent policy samples, a package certificate, a C2 or detector PASS.",
+    "Negative or zero contrasts outside the preregistered relevance witnesses are retained; no universal nonnegative interaction is assumed."
+  ]
+}
