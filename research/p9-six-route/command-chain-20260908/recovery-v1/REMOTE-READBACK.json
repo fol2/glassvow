@@ -1,0 +1,33 @@
+{
+  "status": "VERIFIED_REMOTE_RECONSTRUCTION_SCIENTIFIC_FAIL_RETAINED",
+  "source_head": "dada9b6b4a069b6478362e104cb0701ff11aecd1",
+  "workflow_head": "4777533740c9cb2ebbe98cddb9fa2e230d212e4d",
+  "workflow_run": 34251111138,
+  "job": 102145474134,
+  "scope": "Fresh GitHub checkout of all fifteen tracked recovery-v1 blobs, recomputed Git identities, complete reconstruction and existing archive tests. This receipt transcribes the observed READBACK_RECEIPT and test result; it is not a new engine run or independent semantic approval.",
+  "tracked_blobs_matched": 15,
+  "raw_bytes": 4374339,
+  "raw_sha256": "62ae02bd4fda08381ce61a4a40b88a98391d7476b6b33d090bc896b622663785",
+  "result_sha256": "81f5261c118eced66482a78857e3d1335beed80abc5e83d97215c5b9e6289e8f",
+  "rows": 672,
+  "fixtures": 80,
+  "states": 822,
+  "checks": 312,
+  "failed_checks": 64,
+  "scientific_status": "COMMAND_CONTRACT_FAIL",
+  "failed_checks_explained_by_block_coordinate": 64,
+  "existing_archive_tests_passed": 9,
+  "persistent_source": "command-chain-20260908/recovery-v1/raw.parts and RAW-MANIFEST.json",
+  "artifact_transport_failure": {
+    "run": 34250767246,
+    "job": 102144328177,
+    "phase": "FinalizeArtifact",
+    "http_status": 403,
+    "returned_artifacts": 0,
+    "backup_claim": false
+  },
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
