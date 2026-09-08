@@ -1,0 +1,57 @@
+{
+  "config_id": "p068-v0-o1-s58080100",
+  "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-support-gg59nao0/project",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p068-v0-o1/p068-v0-o1-s58080100/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p068-v0-o1/p068-v0-o1-s58080100/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p068-v0-o1/p068-v0-o1-s58080100/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 25.032279783000376,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 29785,
+      "sha256": "ce5bc7b5f657ccba43bef32f236f9ca471807d558fbde85cd46c1171bb0ce4fd"
+    },
+    "trace.ndjson": {
+      "bytes": 13258353,
+      "sha256": "bb32b4f7efbc1e4489d034bfcbaaaac9444993f6a9825f0c59ac4767109c244d"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 149088,
+      "sha256": "ceae2a29f292cf3a66de2501aac571883ae70a97b26c26066356cfa53e04b517"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3604,
+      "sha256": "b4911ba724ea4cdd2db38204dcf1493b58f4ee2be779c26d65681b6a1c838a03"
+    },
+    "CONFIG.json": {
+      "bytes": 567,
+      "sha256": "3a9a478f23ca717de4dfe79995567d67074ce96f38ace0963fb50667b978e37c"
+    },
+    "CELL.json": {
+      "bytes": 30701,
+      "sha256": "faf78c131383f53e029a173ddfce1befde7e7a42acc636fab2a0db18fd5e3aed"
+    }
+  },
+  "p9_certified": false
+}

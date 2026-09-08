@@ -1,0 +1,57 @@
+{
+  "config_id": "p064-v0-o1-s58080102",
+  "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-support-gg59nao0/project",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p064-v0-o1/p064-v0-o1-s58080102/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p064-v0-o1/p064-v0-o1-s58080102/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p064-v0-o1/p064-v0-o1-s58080102/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 17.925013860000035,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 26328,
+      "sha256": "784075294a47025411f145fb6bce2277ac253295c435fe1d4abde64b9e440a1d"
+    },
+    "trace.ndjson": {
+      "bytes": 9483011,
+      "sha256": "0087de93d4e73a189633c3a1bdefb22895565d4dc251347e202c8926afafd762"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 111348,
+      "sha256": "80b1666c0cf33f1a67bfd0e51c4b035d42ec3146bf82ff221c9036bedbc323ed"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3332,
+      "sha256": "dd2345119cf38031d647f67fede8498c037dc664729dab064c77e54480a13849"
+    },
+    "CONFIG.json": {
+      "bytes": 567,
+      "sha256": "14df254f0e7f06697b5707088f00ed32c788705ae8fff05f0170e8586687e349"
+    },
+    "CELL.json": {
+      "bytes": 16977,
+      "sha256": "1ccd8518e63ba9d8e7f4e5d3c2128df7ab48e82986424e16705add5518416830"
+    }
+  },
+  "p9_certified": false
+}
