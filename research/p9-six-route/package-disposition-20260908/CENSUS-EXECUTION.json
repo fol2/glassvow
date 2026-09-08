@@ -1,0 +1,91 @@
+{
+  "kind": "COLD_CHECKOUT_RECONSTRUCTION_OF_EXISTING_COHORT_NOT_NEW_RESEARCH",
+  "source_head": "64b3791d45f654bee14940a2c07bf09bd7e37063",
+  "workflow_run": 34270787762,
+  "source_files": [
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/CENSUS-MANIFEST.json",
+      "git_blob": "8ee06b118054a4f2e29b4a753944142734f3ec3a",
+      "bytes": 1134,
+      "sha256": "86e3436e6f8cfd8e56eb7db71d080adc62eb545df739694b50804e21957833a5"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/CENSUS-SCOPE.md",
+      "git_blob": "e467eccca777f051174305a80f6652c7404f047f",
+      "bytes": 1697,
+      "sha256": "6245c9b54d8a8580ee39ca4f93150870d74aaef58ca5ec5a7b3a61b7e1ac09b1"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/CENSUS.part00",
+      "git_blob": "f3b14c905340c6e063923f4840cb2701cef99e31",
+      "bytes": 2000,
+      "sha256": "2d9633153f4534e30854be891429017ac404df514cef057e262fe6e97ee6ad03"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/CENSUS.part01",
+      "git_blob": "aa92c2898df2ab08233ce56b97fa8f0a5c19fc58",
+      "bytes": 2000,
+      "sha256": "f084681c74a7a7a59a8f063a5ca55c3ebf527fd9f0fbbd22139a7de5aa5016ab"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/CENSUS.part02",
+      "git_blob": "8efb3cdec83e65f12cd1a10f4503399ec4a10e90",
+      "bytes": 2000,
+      "sha256": "7da6a9b344e1eec975d7e6656d94b07e874e193b7d22e7cae167bfa608368c23"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/CENSUS.part03",
+      "git_blob": "ae99bcdea053ed51a4e707e694e6bfbdb9962a63",
+      "bytes": 1778,
+      "sha256": "98eea15ad56848e29fa21d915143b45bd3138aef8f6178504747d9717ef7e205"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/WORK-ORDER.json",
+      "git_blob": "5a16ebf45e6724e62a3f5422310d1aa8be35b524",
+      "bytes": 2243,
+      "sha256": "1fa351244b07e47a7e8a892021ae57c8a021c995b457ec3122a0e4dd420aa1c8"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/census.py",
+      "git_blob": "2073819f29b0d01a5c20fc2479fdf18cff7df720",
+      "bytes": 9766,
+      "sha256": "fc6a90f1d6270ba24d7c888070dcdfbc00a9460afb9c65b52a3c1050d7001071"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/read_packet.py",
+      "git_blob": "732cbfdf298974a8d5e3f14f17439beb3016ecce",
+      "bytes": 1552,
+      "sha256": "a303699de752b78ea7bb80667890484c13c36bf8094a6fd715dd0f26562a211a"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/test_census.py",
+      "git_blob": "562e9090a564e865f13cb0034a1e4353d3a7bc0f",
+      "bytes": 3645,
+      "sha256": "b4a17a75f405a30d3ac23bbf6d840dca18f6e3d24422f45b72b51a95755ae634"
+    }
+  ],
+  "files": {
+    "CENSUS-PRIMARY.json": {
+      "bytes": 23941,
+      "sha256": "f61e152c2aaaca46bdc358298975c9515a33f2208d827d783d3efcd74dba82a6",
+      "git_blob": "3403194e73f9c5d847a79810f3c6568fdac0c121"
+    },
+    "CENSUS-READOUT.json": {
+      "bytes": 28890,
+      "sha256": "02b704c6f250bfd1ee590b20ce5bdc1f814d0d83d197f2860fdfebe5d809001e",
+      "git_blob": "9f159fe21fa5ab78303f38115b78a5e3bb460fda"
+    },
+    "CENSUS-TESTS.log": {
+      "bytes": 1666,
+      "sha256": "2b192cd09076a41b4b9128506c78506b77c899881f7097f1d31544e18efea1a4",
+      "git_blob": "e122cd3c385d75c2a38a5d793901b92b35689e84"
+    }
+  },
+  "rows": 2048,
+  "unique_base_policy_vectors": 1,
+  "tests_passed": 19,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "old_archive_remote_complete": false,
+  "p9_certified": false
+}
