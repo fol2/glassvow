@@ -1,0 +1,18 @@
+{
+  "kind": "EXACT_RETAINED_CONTROL_REVIEW_NOT_NEW_EXPERIMENT",
+  "parent": "e722f6fda3f541c3e7774a3961089db87fe2a3f9",
+  "archive": {"path":"review.tar.xz","bytes":5324,"sha256":"444716d62069ae40a875a7210d9dc23b1e8580f39d7db93256101ae2f0811739","git_blob":"10e38452a27bf531b86ab26902042bd044eea08b","codec":"tar.xz","members":6},
+  "files": {
+    "control_feasibility.py":{"bytes":5203,"sha256":"69b2aa692529a198af50c4c0e1e13f73ac8aaa5a8f5c6543b312a7652470d4d4","git_blob":"6ba5379c18ed6ae3f476d02484c3f0ba863aad6b"},
+    "test_control_feasibility.py":{"bytes":3264,"sha256":"bae2946f62e739faa37794a9df1d8b7ccdde7365d07516b2448dc3e03689eb5e","git_blob":"c63cb05539f2a8c26317b1c801779de2271f7793"},
+    "RESULT.json":{"bytes":3761,"sha256":"380a8df2fba2116a07ce3b803baf6d134e4126835d9c861bed036e08c191af33","git_blob":"2efd31d55ad3c224d9d051525695da96f50fdaa7"},
+    "TESTS.log":{"bytes":1363,"sha256":"0f1964f50d08986ef32d7016d95482c6cc8e6266347230312b086bd160540eb3","git_blob":"bf9cf298997b057f561a50cdbdf157edb8cb062e"},
+    "README.md":{"bytes":2114,"sha256":"ef1064b47fc2901c741f2326aa22b6128fee124fa2f1063f95acbbc1cba9df94","git_blob":"f39194803085afb8bd29c5132709aa81cef3b749"},
+    "EXECUTION.json":{"bytes":1387,"sha256":"88e4177e6eec268b4e110215e50384965a3e1bb7113a36571cfb779ec5ab317b","git_blob":"7e5f239f77f5b8117afed793df1b72bff3a5acb1"}
+  },
+  "execution": {"venue":"current local environment on hash-bound recovered source","tests_passed":14,"result_generated_by_reader":true,"new_native_runs":0,"new_independent_samples":0},
+  "review_kind":"AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "signed_C2_verdict":"NOT_EVALUATED",
+  "p9_certified":false,
+  "note":"Uploaded blob identity matches the local archive. A post-publication GET is still required before claiming remote byte readback. No shared disposition, capsule, workflow, frozen model or scientific record is replaced."
+}
