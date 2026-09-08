@@ -1,0 +1,22 @@
+{
+  "kind": "DELIVERY_ONLY_FIXED_ASSIGNMENT_RESUME",
+  "observed_remote_head": "105e2353a35b0c467e4e2c9e246e14e855a2168e",
+  "previous_workflow_run": 34283063800,
+  "previous_job": 102252157326,
+  "previous_status": "completed",
+  "previous_conclusion": "cancelled",
+  "previous_configured_timeout_minutes": 120,
+  "observed_start": "2026-09-08T21:53:44Z",
+  "observed_end": "2026-09-08T23:54:02Z",
+  "retained_v5_policies": 128,
+  "retained_v5_status": "HAND_NATURAL_SUPPORT_GATE_PASS_NOT_PACKAGE_ADMISSION",
+  "retained_v0_policies": 88,
+  "missing_v0_policies": 40,
+  "missing_v0_assigned_outcomes": 160,
+  "last_chunk_readback_interrupted": true,
+  "method": "Verify all complete child bytes and original integration captures from a fresh checkout, then execute only absent fixed configurations. Do not overwrite partial or failed configurations. Full final audit includes the last pushed chunk whose prior readback was cancelled. Any absent outcomes possibly executed before cancellation are not new independent confirmation.",
+  "unchanged": ["scientific protocol", "candidate", "engine", "sampler", "fixed policies and seeds", "stage gates", "native per-invocation containment", "observer", "expected signs", "protected evidence"],
+  "authority": "Existing owner standing delivery continuation; no quota renewal, scientific restart or support/P9 waiver.",
+  "packages_admitted": 0,
+  "p9_certified": false
+}
