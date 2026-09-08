@@ -1,0 +1,42 @@
+{
+  "policy_id": "3c09f04b22fb019c88b2d5155401594ae89cef1d9c2447570b5f5cf5c79fffff",
+  "policy_index": 5,
+  "vow": 0,
+  "route_preference": "smolder",
+  "runs": [
+    {
+      "seed": 58080102,
+      "result": "win",
+      "final_pair": true,
+      "historical_chain_active": true,
+      "positive_high_payoff": true,
+      "consumer_reached": true,
+      "consumers": [
+        {
+          "fight": 20,
+          "q": 6,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 12,
+          "raw_reference": [
+            20,
+            "b44978e094c4da391cd8fa22fc757fcf0b28c652ffde7864e65404c08cd8bded",
+            "dd6d6fdb8782a30c1bcdbeaab85f2340c76b5b49b7aa1bfed79497bb4904b009"
+          ]
+        },
+        {
+          "fight": 20,
+          "q": 5,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 4,
+          "raw_reference": [
+            20,
+            "7ca5acde1afa94864cc1106bc2acd8d2b82551d4a7688df3bfbdebd447491342",
+            "9772622cd3876b2f0c293759c8e3972fea40baf1eeb4f1249bf0dec40a4f00d4"
+          ]
+        }
+      ],
+      "decision_trace_sha256": "fc1363176975b4e9bb4bd50773d73c8ec3c822687ea4c76e9cb261beac9f3deb",
+      "state_count": 370
+    }
+  ]
+}

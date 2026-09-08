@@ -1,0 +1,119 @@
+{
+  "policy_id": "f801fb00ce71b810d3f7c9c8004cc2ba8d74fe8e689dc0225b9f22f88e84c42d",
+  "policy_index": 0,
+  "vow": 0,
+  "route_preference": "hand",
+  "runs": [
+    {
+      "seed": 58080102,
+      "result": "win",
+      "final_pair": true,
+      "historical_chain_active": true,
+      "positive_high_payoff": true,
+      "consumer_reached": true,
+      "consumers": [
+        {
+          "fight": 15,
+          "q": 3,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            15,
+            "230c16140c71098866ff72f672bbebe8e1d6c44c7327927ad41ef261aad9093f",
+            "ddb32352fd24819a04274677f9221d5ce414d267ea0c0fce4e62df6c1ccf60cb"
+          ]
+        },
+        {
+          "fight": 21,
+          "q": 7,
+          "classification": "POSITIVE_SOURCE_BY_HIGH_PAYOFF_HEALTH_INTERACTION",
+          "high_health_contribution": 18,
+          "raw_reference": [
+            21,
+            "7d53e379398e08f680fad1393c835f80b28a7f762c2fe5fa85d94ab61062971f",
+            "ab4416a1b9bef3cd27893943b33b6ac5d5e67cf2249d6952d60dcd5054bb11a7"
+          ]
+        },
+        {
+          "fight": 21,
+          "q": 6,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 12,
+          "raw_reference": [
+            21,
+            "ab4416a1b9bef3cd27893943b33b6ac5d5e67cf2249d6952d60dcd5054bb11a7",
+            "bedb966d0a74cf6617a2b54c80e7d6c3fb710e86d584bff76fcdbc4496636a76"
+          ]
+        },
+        {
+          "fight": 21,
+          "q": 0,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            21,
+            "cccb31444e8fe88c81a90008915d7e9e1ac7a75889e4de1444b40c75abb8f8b5",
+            "32a71c19467729cae4cbdb0266ba53c8901c9c5d8ab07e5ba1bc3ce72d10a8dc"
+          ]
+        },
+        {
+          "fight": 22,
+          "q": 5,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 6,
+          "raw_reference": [
+            22,
+            "b7a57e439cb0eae644c2a9449016f89203a930bff6a9ba9666d4ddac42fb377c",
+            "56488e23290df63a566d4951ba6f4c0af62537f0461b19521e42f8da6ac42db0"
+          ]
+        },
+        {
+          "fight": 22,
+          "q": 4,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            22,
+            "9a0d7bd1bd5d62534bb22fb724d730dcbb82dbf497fb4495722497e8b63c7be3",
+            "3806bb6b5b5d2098f77ab39ae55cc335231f8a242f6d128cb68031fdd0dbb210"
+          ]
+        },
+        {
+          "fight": 22,
+          "q": 5,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 6,
+          "raw_reference": [
+            22,
+            "093439315affa0e53ddc4e3a9986e3dd12015a5d2241f7fc372c5e72d83f9b27",
+            "e0a620f4587e47d095486c7c0c5f274160daef3f9cb967d7653d37f8ecc5152e"
+          ]
+        },
+        {
+          "fight": 22,
+          "q": 4,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            22,
+            "13eb7692f049e2e150ef3f9ca7cc9da3a2cf727a121fe31312c53316283bf538",
+            "500ffcd9270459c994d8f10bda972c09f7c621093f25d9d8db650ce42573e379"
+          ]
+        },
+        {
+          "fight": 22,
+          "q": 4,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            22,
+            "51d7e4891f7b0a602eba4e3558fd6b8ae84c6e201b21f1870b1c6d5eb1bf1fca",
+            "801abb329d7b156d44e7369de3b432af192fe9672fea4d3b647714e39655bc40"
+          ]
+        }
+      ],
+      "decision_trace_sha256": "68c4a36ce74e58599cf35c5097bdf0a28701d829d29706d42b3091b467f42e13",
+      "state_count": 448
+    }
+  ]
+}
