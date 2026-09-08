@@ -1,0 +1,25 @@
+{
+  "id": "p043-v0-o1-s58080100",
+  "policy_index": 43,
+  "policy_id": "957e01eaff3811ccac0197a3b5cd3c560b0561e1ca07020016054c69248c04b8",
+  "route": "balanced",
+  "params": {
+    "bank_mode": "current-plus-next",
+    "native_rollout": true,
+    "rollout_samples": 2,
+    "rollout_steps": 12,
+    "leaf_terminal": false,
+    "fit": 1.100653,
+    "life": 2.541746,
+    "rest": 67,
+    "route_low": 53,
+    "decline": 10.612552,
+    "shop_ratio": 0.129591
+  },
+  "aspect": 1,
+  "vow": 0,
+  "hand_observer": true,
+  "causal_probe": false,
+  "seed0": 58080100,
+  "runs": 1
+}
