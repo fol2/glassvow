@@ -1,0 +1,53 @@
+{
+  "policy_id": "82e88ab6c5b1d4cc9ae9a61a357643cfb8d0febcbda6ad85581793d8ef7fb9d2",
+  "policy_index": 6,
+  "vow": 5,
+  "route_preference": "cycle",
+  "runs": [
+    {
+      "seed": 58080103,
+      "result": "win",
+      "final_pair": true,
+      "historical_chain_active": true,
+      "positive_high_payoff": true,
+      "consumer_reached": true,
+      "consumers": [
+        {
+          "fight": 24,
+          "q": 5,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 6,
+          "raw_reference": [
+            24,
+            "8f070d11da9327c1678c71c4421e1c4fae6bdeabe6b38488859ebe564237f494",
+            "11d65439ea19b706bfdfb9a4778a096da02fb9eb058a9f1647333d07aedd7342"
+          ]
+        },
+        {
+          "fight": 25,
+          "q": 6,
+          "classification": "POSITIVE_SOURCE_BY_HIGH_PAYOFF_HEALTH_INTERACTION",
+          "high_health_contribution": 12,
+          "raw_reference": [
+            25,
+            "92a01ef22993f6c687cd8fab0f3595428923d03deebd3c4127046edfd5c5f716",
+            "cc97e0ba52a8317eea6707316cd468c90d307a8aa65a262917560ebc896133c4"
+          ]
+        },
+        {
+          "fight": 25,
+          "q": 4,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            25,
+            "ffd5d1ea787ed66413b7cb21cba72a91c2ca06fda2ac3f07aa285061fa4fc104",
+            "aa44c7f3a318b8312ea5363ec7e82d66dd392cd999cc5a74ce64ccf8699fc875"
+          ]
+        }
+      ],
+      "decision_trace_sha256": "7502c356cc1fb1f9d189e3f9649fabdced5c50b33357d54856779a82512b1af4",
+      "state_count": 541
+    }
+  ]
+}
