@@ -10,57 +10,36 @@ permissions:
 
 jobs:
   bundle:
-    name: Read back existing terminal only - no engine
+    name: Locate immutable package laws - no engine
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      - name: Check out exact published checkpoint
+      - name: Read exact historical archive
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: dada9b6b4a069b6478362e104cb0701ff11aecd1
+          ref: c802be36510273481b6d0f865b92fac43abf6aff
           fetch-depth: 1
           persist-credentials: false
           lfs: false
-          sparse-checkout: |
-            research/p9-six-route/command-chain-20260908/recovery-v1
-            AGENTS.md
-            docs/agents/ai-sdlc.md
-            docs/balance/p9-strategy-diversity-system.md
-            docs/rc-bar.md
-            .claude/skills/glassvow-godot/SKILL.md
-          sparse-checkout-cone-mode: false
-      - name: Verify remote bytes and reconstruct existing terminal
+          sparse-checkout: research/issue-421
+      - name: Print exact law paths and scope references
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = dada9b6b4a069b6478362e104cb0701ff11aecd1
-          export ROOT="$GITHUB_WORKSPACE/research/p9-six-route/command-chain-20260908/recovery-v1"
+          test "$(git rev-parse HEAD)" = c802be36510273481b6d0f865b92fac43abf6aff
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess,sys
-          root=pathlib.Path(os.environ['ROOT'])
-          sys.path.insert(0,str(root))
-          import complete,read
-          observed=[]
-          for line in subprocess.check_output(['git','ls-tree','-r','HEAD','research/p9-six-route/command-chain-20260908/recovery-v1']).decode().splitlines():
-              meta,path=line.split('\t');mode,kind,expected=meta.split()
-              if kind!='blob':raise RuntimeError('NON_BLOB')
-              data=pathlib.Path(path).read_bytes()
-              actual=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
-              if actual!=expected:raise RuntimeError('CHECKOUT_BYTE_MISMATCH:'+path)
-              observed.append({'path':path,'git_blob':actual,'bytes':len(data)})
-          raw=complete.reconstruct(root)
-          rows=[json.loads(x) for x in raw.splitlines()]
-          result=read.analyze(rows,json.loads((root/'PROTOCOL.json').read_text()))
-          rendered=(json.dumps(result,indent=2)+'\n').encode()
-          if complete.sha(rendered)!='81f5261c118eced66482a78857e3d1335beed80abc5e83d97215c5b9e6289e8f':raise RuntimeError('RESULT_IDENTITY')
-          explanation=complete.explain(rows,result)
-          receipt={'source_head':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'raw_bytes':len(raw),'raw_sha256':complete.sha(raw),'result_sha256':complete.sha(rendered),'status':result['status'],'rows':result['rows'],'fixtures':result['fixtures'],'states':result['states'],'checks':result['checks'],'failed_checks':result['failed_checks'],'all_failed_checks_explained':len(explanation['all_failed_checks']),'observed_git_blobs':observed,'new_native_runs':0,'new_independent_samples':0,'p9_certified':False,'packages_admitted':0}
-          print('READBACK_RECEIPT='+json.dumps(receipt,sort_keys=True))
-          print('FULL_CONTEXTS='+json.dumps(explanation['full_contexts'],sort_keys=True))
+          import hashlib,json,pathlib,re,subprocess
+          root=pathlib.Path('research/issue-421')
+          names=subprocess.check_output(['git','ls-tree','-r','--name-only','HEAD','research/issue-421']).decode().splitlines()
+          pattern=re.compile(r'honing|cadence|resonance|shatter.to|shatterer|strength|fervor|flurry|hand.size|phantom|smolder',re.I)
+          hits=[n for n in names if pattern.search(n)]
+          print('PATH_INVENTORY='+json.dumps({'archive_head':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'tracked_files':len(names),'matching_paths':hits},sort_keys=True))
+          summaries=[]
+          for name in hits:
+              p=pathlib.Path(name)
+              if '/summaries/' not in name or not name.endswith('.md'):continue
+              b=p.read_bytes()
+              summaries.append({'path':name,'bytes':len(b),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest(),'text':b.decode()})
+          print('EXACT_SUMMARIES='+json.dumps(summaries,sort_keys=True))
+          print('NO_NATIVE_RUNS=0; NO_NEW_SAMPLES=0; NO_P9_ADMISSION')
           PY
-      - name: Run existing archive and semantic-negative regression tests
-        working-directory: research/p9-six-route/command-chain-20260908/recovery-v1
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 90s python3 -m unittest -v test_complete
