@@ -14,14 +14,14 @@ concurrency:
 
 jobs:
   bundle:
-    name: Publish exact-source six-package disposition - no engine
+    name: Preserve exact Hand preflight - no population sample
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     permissions:
       contents: write
     steps:
-      - name: Check out exact submitted source
+      - name: Check out exact committed Hand sources
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
@@ -33,53 +33,77 @@ jobs:
             content
             tools
             research/p9-six-route
-      - name: Read only exact historical hand contracts
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        with:
-          ref: c802be36510273481b6d0f865b92fac43abf6aff
-          path: historical
-          fetch-depth: 1
-          persist-credentials: false
-          sparse-checkout: |
-            research/issue-421/protocols/post-v38-hand-size-inventory-v1.json
-            research/issue-421/protocols/post-v38-hand-size-inventory-v2.json
-          sparse-checkout-cone-mode: false
-      - name: Reproduce only the missing disposition and hand-scope evidence
+      - name: Bind frozen question and the existing official engine
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          python3 research/p9-six-route/package-disposition-20260908/publish_disposition.py
-      - name: Publish only the five derived files
+          python3 - <<'PY'
+          import hashlib,json,pathlib
+          p=json.loads(pathlib.Path('research/p9-six-route/hand-admission-20260908/PROTOCOL.json').read_bytes())
+          assert hashlib.sha256(json.dumps(p,sort_keys=True,separators=(',',':')).encode()).hexdigest()=='2efdcd710530db15b3d76aea0a9fa8b0930d01242b42d989e17873ca59f01b62'
+          PY
+          mkdir -p "$RUNNER_TEMP/p9-engine"
+          curl --fail --location --max-time 120 --output "$RUNNER_TEMP/p9-engine/engine.zip" https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          echo "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4  $RUNNER_TEMP/p9-engine/engine.zip" | sha256sum -c -
+          unzip -q "$RUNNER_TEMP/p9-engine/engine.zip" -d "$RUNNER_TEMP/p9-engine"
+          chmod +x "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64"
+      - name: Replay once and require equality with every local native byte
+        id: gate
+        continue-on-error: true
+        shell: bash
+        run: python3 research/p9-six-route/hand-admission-20260908/publish_gate.py "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64"
+      - name: Preserve successful or failed available capture without force
         id: publish
+        if: always() && steps.gate.outcome != 'skipped'
         shell: bash
         run: |
           set -euo pipefail
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$GITHUB_SHA"
-          root=research/p9-six-route/package-disposition-20260908
-          git add "$root/HAND-READOUT.json" "$root/DISPOSITION.json" "$root/ROADMAP.md" "$root/DISPOSITION-TESTS.log" "$root/DISPOSITION-EXECUTION.json"
+          root=research/p9-six-route/hand-admission-20260908/native-1
+          test -f "$root/EXECUTION.json"
+          git add "$root"
           python3 - <<'PY'
           import subprocess
-          root='research/p9-six-route/package-disposition-20260908/'
-          expected={root+n for n in ['HAND-READOUT.json','DISPOSITION.json','ROADMAP.md','DISPOSITION-TESTS.log','DISPOSITION-EXECUTION.json']}
-          if set(subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines())!=expected:raise RuntimeError('STAGED_SCOPE')
+          paths=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
+          assert paths and all(p.startswith('research/p9-six-route/hand-admission-20260908/native-1/') for p in paths)
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): publish verified six-package disposition and corrected hand-family scope'
+          git commit -m 'research(p9): preserve complete Hand preflight execution and raw'
           git push origin "HEAD:refs/heads/$branch"
           echo "head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-      - name: Fetch the published bytes separately
+      - name: Fetch published capture into a separate checkout
+        if: steps.publish.outputs.head != ''
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ steps.publish.outputs.head }}
           path: readback
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: research/p9-six-route/package-disposition-20260908
-      - name: Verify every published input and output byte
+          lfs: false
+          sparse-checkout: research/p9-six-route/hand-admission-20260908
+      - name: Verify remote bytes and reproduce the readout without an engine
+        if: steps.publish.outputs.head != ''
         shell: bash
         run: |
           set -euo pipefail
-          python3 research/p9-six-route/package-disposition-20260908/publish_disposition.py --readback readback
+          python3 - <<'PY'
+          import hashlib,json,lzma,pathlib,subprocess,sys
+          r=pathlib.Path('research/p9-six-route/hand-admission-20260908'); cold=pathlib.Path('readback')/r
+          checked=[]
+          for rec in subprocess.check_output(['git','-C','readback','ls-tree','-r','-z','HEAD','--',str(r)]).split(b'\0'):
+              if not rec:continue
+              meta,name=rec.split(b'\t',1);kind=meta.decode().split()[1];want=meta.decode().split()[2];p=pathlib.Path(name.decode());b=(pathlib.Path('readback')/p).read_bytes()
+              assert kind=='blob' and b==p.read_bytes()
+              assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==want
+              checked.append(str(p))
+          receipt=json.loads((cold/'native-1/EXECUTION.json').read_bytes())
+          print('REMOTE_READBACK='+json.dumps({'source_head':receipt['source_head'],'published_head':subprocess.check_output(['git','-C','readback','rev-parse','HEAD']).decode().strip(),'files_byte_equal':len(checked),'raw_sha256':receipt.get('raw_sha256'),'status':receipt['status'],'p9_certified':False},sort_keys=True))
+          assert receipt['status']=='HAND_PREFLIGHT_PASS_WITH_EXACT_LOCAL_REMOTE_BYTES'
+          raw=lzma.decompress((cold/'native-1/raw.ndjson.xz').read_bytes())
+          assert len(raw)==8768376 and hashlib.sha256(raw).hexdigest()=='46f1e8720060a925306cb07eb376cd40972b95114ba53e1377ad750cb38df267'
+          sys.path.insert(0,str(cold));from read_preflight import analyze
+          result=(json.dumps(analyze(raw,json.loads((cold/'PROTOCOL.json').read_bytes())),indent=2)+'\n').encode()
+          assert result==(cold/'native-1/RESULTS.json').read_bytes()
+          PY
