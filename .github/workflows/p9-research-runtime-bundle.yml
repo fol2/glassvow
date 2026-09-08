@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   bundle:
-    name: Export already-published research checkpoint only
+    name: Read back existing terminal only - no engine
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -22,37 +22,45 @@ jobs:
           persist-credentials: false
           lfs: false
           sparse-checkout: |
-            domain
-            content
-            tools
-            locale
-            tests
-            port_fixtures
-            research/p9-six-route
-            docs/agents
-            docs/balance
-            docs/rc-bar.md
-            .claude/skills/glassvow-godot
+            research/p9-six-route/command-chain-20260908/recovery-v1
             AGENTS.md
-            project.godot
+            docs/agents/ai-sdlc.md
+            docs/balance/p9-strategy-diversity-system.md
+            docs/rc-bar.md
+            .claude/skills/glassvow-godot/SKILL.md
           sparse-checkout-cone-mode: false
-      - name: Archive tracked sources without executing them
+      - name: Verify remote bytes and reconstruct existing terminal
         shell: bash
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = dada9b6b4a069b6478362e104cb0701ff11aecd1
-          mkdir -p bundle
-          git archive --format=tar HEAD domain content tools locale tests port_fixtures research/p9-six-route docs/agents docs/balance docs/rc-bar.md .claude/skills/glassvow-godot AGENTS.md project.godot | gzip -n > bundle/source.tar.gz
-          git ls-tree -r HEAD > bundle/source-tree.txt
-          git rev-parse HEAD > bundle/source-head.txt
-          git rev-parse HEAD^{tree} > bundle/source-root-tree.txt
-          cd bundle
-          sha256sum source.tar.gz source-tree.txt source-head.txt source-root-tree.txt > SHA256SUMS
-          printf '%s\n' 'Transport of existing committed sources only. No game, research, test, qualification or P9 execution.' > PURPOSE.txt
-      - name: Upload recoverable checkpoint
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: p9-published-checkpoint-dada9b6b
-          path: bundle/
-          if-no-files-found: error
-          retention-days: 7
+          export ROOT="$GITHUB_WORKSPACE/research/p9-six-route/command-chain-20260908/recovery-v1"
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess,sys
+          root=pathlib.Path(os.environ['ROOT'])
+          sys.path.insert(0,str(root))
+          import complete,read
+          observed=[]
+          for line in subprocess.check_output(['git','ls-tree','-r','HEAD','research/p9-six-route/command-chain-20260908/recovery-v1']).decode().splitlines():
+              meta,path=line.split('\t');mode,kind,expected=meta.split()
+              if kind!='blob':raise RuntimeError('NON_BLOB')
+              data=pathlib.Path(path).read_bytes()
+              actual=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+              if actual!=expected:raise RuntimeError('CHECKOUT_BYTE_MISMATCH:'+path)
+              observed.append({'path':path,'git_blob':actual,'bytes':len(data)})
+          raw=complete.reconstruct(root)
+          rows=[json.loads(x) for x in raw.splitlines()]
+          result=read.analyze(rows,json.loads((root/'PROTOCOL.json').read_text()))
+          rendered=(json.dumps(result,indent=2)+'\n').encode()
+          if complete.sha(rendered)!='81f5261c118eced66482a78857e3d1335beed80abc5e83d97215c5b9e6289e8f':raise RuntimeError('RESULT_IDENTITY')
+          explanation=complete.explain(rows,result)
+          receipt={'source_head':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'raw_bytes':len(raw),'raw_sha256':complete.sha(raw),'result_sha256':complete.sha(rendered),'status':result['status'],'rows':result['rows'],'fixtures':result['fixtures'],'states':result['states'],'checks':result['checks'],'failed_checks':result['failed_checks'],'all_failed_checks_explained':len(explanation['all_failed_checks']),'observed_git_blobs':observed,'new_native_runs':0,'new_independent_samples':0,'p9_certified':False,'packages_admitted':0}
+          print('READBACK_RECEIPT='+json.dumps(receipt,sort_keys=True))
+          print('FULL_CONTEXTS='+json.dumps(explanation['full_contexts'],sort_keys=True))
+          PY
+      - name: Run existing archive and semantic-negative regression tests
+        working-directory: research/p9-six-route/command-chain-20260908/recovery-v1
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 90s python3 -m unittest -v test_complete
