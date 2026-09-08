@@ -1,0 +1,13 @@
+test_complete_coverage (test_subsequences.SubwordTests.test_complete_coverage) ... ok
+test_different_consumer_rejected (test_subsequences.SubwordTests.test_different_consumer_rejected) ... ok
+test_duplicate_edge_rejected (test_subsequences.SubwordTests.test_duplicate_edge_rejected) ... ok
+test_illegal_prefix_is_reported (test_subsequences.SubwordTests.test_illegal_prefix_is_reported) ... ok
+test_missing_expanded_state_is_not_negative (test_subsequences.SubwordTests.test_missing_expanded_state_is_not_negative) ... ok
+test_positional_duplicates_not_independent (test_subsequences.SubwordTests.test_positional_duplicates_not_independent) ... ok
+test_positive_subset_rejected (test_subsequences.SubwordTests.test_positive_subset_rejected) ... ok
+test_zero_contribution_recorded (test_subsequences.SubwordTests.test_zero_contribution_recorded) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.001s
+
+OK

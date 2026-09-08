@@ -1,0 +1,1133 @@
+{
+  "status": "BOUNDED_PROPER_SUBWORD_CERTIFICATE_NOT_PACKAGE_ADMISSION",
+  "evidence_parent": "f36d1428e595711aa997fd3ff8cea633c4df319a",
+  "raw_sha256": "c86b7bfffdc748400eed5436005feef36d990640f64d7505c131eb85a8dd289a",
+  "parent_result_sha256": "e0714cb6943486eba9d70a63c41f9e4a88d300301ac356d1bdaaea14660cb5c5",
+  "cases": [
+    {
+      "vow": 0,
+      "up": false,
+      "parent_minimum_commands": 5,
+      "full_word": [
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 900
+        },
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 901
+        },
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 902
+        },
+        {
+          "t": "endTurn"
+        },
+        {
+          "t": "playCard",
+          "uid": 1000,
+          "target": 0
+        }
+      ],
+      "positional_proper_subsets": 15,
+      "distinct_retained_prefix_words": 15,
+      "outcomes": {
+        "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN": 15
+      },
+      "omitted_consumer": "SPECIFIED_CONSUMER_NOT_ENACTED_BY_DEFINITION_NOT_A_NATIVE_RUN",
+      "all_retained_consumer_proper_subwords_fail_specified_goal": true,
+      "rows": [
+        {
+          "mask": 0,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "b7da96457db1a6302b60836a1d251497c4b0e6058c433d9e438dc442645deec5"
+        },
+        {
+          "mask": 1,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "7cfde16d010ca8fd79d0a5c60d03988636769d20386091685a0a12c9ec002d9b"
+        },
+        {
+          "mask": 2,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "7625eb31f2d6f9a5e55ee423432024bf0b90b95d6a018ca436a7ad5d458293bc"
+        },
+        {
+          "mask": 3,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "8cbab2b26d0636b551139ff6e18d3ed36c17e1534b9f8c9fd24bd530028f4fff"
+        },
+        {
+          "mask": 4,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "de78f1ef6f8e9fed28ce82a5405c5a7dceb585667cbece9a38f6b1d406ebe22f"
+        },
+        {
+          "mask": 5,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "f2b121c71460cfc4ec1b185132e9e0000402ee58ef16749a2c269b9e276c3d11"
+        },
+        {
+          "mask": 6,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "6e3caaa86e8b47d56d52dadcc90815d8ef443e1714e9e073f37763877061c619"
+        },
+        {
+          "mask": 7,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "835815ad3d201bf942afe5b9a4d44c3fd7ddd901b3a669aa8523f1216860e4fc"
+        },
+        {
+          "mask": 8,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "88804c7a701802fb341e65aed55d9b57d54c956174024c5f7775a07fa7e552f6"
+        },
+        {
+          "mask": 9,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "1d17e334f02cc0767bfb99bdf8ce3c27915441356fb6af7d66de72d36cda56c9"
+        },
+        {
+          "mask": 10,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "755dac9c4d822b05ece39f40da548bdc128b7122bde114d552cc6c53428c12f7"
+        },
+        {
+          "mask": 11,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "4df7ffb641b7ec92bee5f838281ac0823ddfcbe7dfe910530468ca931bffab37"
+        },
+        {
+          "mask": 12,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "1ef28405bfefd06692f873552f18b5e226e9ff6b526834d05c3073fdf36ca1c5"
+        },
+        {
+          "mask": 13,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "1e9cd91c9765e3db20fe101b72b52f81e84269a95ec8d00c3f3c90885f09cd02"
+        },
+        {
+          "mask": 14,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "68a0c82fb351a817050cc46a73e14c9455d8240a02f7649260961dc9209cb598"
+        }
+      ]
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "parent_minimum_commands": 5,
+      "full_word": [
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 900
+        },
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 901
+        },
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 902
+        },
+        {
+          "t": "endTurn"
+        },
+        {
+          "t": "playCard",
+          "uid": 1000,
+          "target": 0
+        }
+      ],
+      "positional_proper_subsets": 15,
+      "distinct_retained_prefix_words": 15,
+      "outcomes": {
+        "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN": 15
+      },
+      "omitted_consumer": "SPECIFIED_CONSUMER_NOT_ENACTED_BY_DEFINITION_NOT_A_NATIVE_RUN",
+      "all_retained_consumer_proper_subwords_fail_specified_goal": true,
+      "rows": [
+        {
+          "mask": 0,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "e2ff9368f33e118e22e7898d0c953e3c22f2d45857000050a33a6f3e58083a69"
+        },
+        {
+          "mask": 1,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "de6d43e94e1a28ef3dff77d67481850dbbd30a024e8673cf89686ade19229feb"
+        },
+        {
+          "mask": 2,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "973e430a0e153de890fa9f20de8bdaaa1385027bd67ba4d87f76592e6c01202a"
+        },
+        {
+          "mask": 3,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "238473580f98c41eff29474741ff3fe67c831c083b5ca69a1f4fa92df48e31c6"
+        },
+        {
+          "mask": 4,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "ce334cb72fb4faeb1117e733374f1e9b12938d00cf4d429968b2f505c687d9fc"
+        },
+        {
+          "mask": 5,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "b11521d84683f21b6cb2499172f61a739c94a0e76af8650e8e173279e54c12ec"
+        },
+        {
+          "mask": 6,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "b1f1a5394a25b154dbc0d7d531774bbd9084e1b7476213a0e4ccbb188481e242"
+        },
+        {
+          "mask": 7,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "802f9393918f89158764476cdd5529f062469470e3fcc1deb644965e7d600855"
+        },
+        {
+          "mask": 8,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "f7e5527eadadf71ef1327e11da8f35f14eb6f3866745ae15ea394d4f6e5dab84"
+        },
+        {
+          "mask": 9,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "c172ef505ecbdfd42ed4bcfe46f09465fa4d38ff6341348785ad7dedb9b18234"
+        },
+        {
+          "mask": 10,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "309cc4ad5b416f5f0527c8d60e826f6eda5a2038872288d2cd3036f8bf69dfa0"
+        },
+        {
+          "mask": 11,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "89eec5feb4916ac3f146d2995e0d3095c8233d642fbf382d0368c18f86dd418f"
+        },
+        {
+          "mask": 12,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "e3e740ab896b165b5bef3076a8dcde48c4ff672ecd34bd27e5eba9d89cb7ef8f"
+        },
+        {
+          "mask": 13,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "8c6a99b35440caeddd5389951784b8ed9de7b32625834f9ea49e8691e41f93fd"
+        },
+        {
+          "mask": 14,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "fdc1713d4286c96a9ac2e382f534033d03d334ee262fb51425ee0232b6ee4249"
+        }
+      ]
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "parent_minimum_commands": 7,
+      "full_word": [
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 900
+        },
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 901
+        },
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 902
+        },
+        {
+          "t": "endTurn"
+        },
+        {
+          "t": "endTurn"
+        },
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 902
+        },
+        {
+          "t": "playCard",
+          "uid": 1000,
+          "target": 0
+        }
+      ],
+      "positional_proper_subsets": 63,
+      "distinct_retained_prefix_words": 43,
+      "outcomes": {
+        "ILLEGAL_PREFIX": 23,
+        "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN": 40
+      },
+      "omitted_consumer": "SPECIFIED_CONSUMER_NOT_ENACTED_BY_DEFINITION_NOT_A_NATIVE_RUN",
+      "all_retained_consumer_proper_subwords_fail_specified_goal": true,
+      "rows": [
+        {
+          "mask": 0,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "db7d139c90c36c5c7fefeac76b5c28283b0be0b133820a9f5fe9d52bacc639d7"
+        },
+        {
+          "mask": 1,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "ee33ce408cb34b42cf14b2840f72c18faf01e67a24b553c26084a3a1b76242d5"
+        },
+        {
+          "mask": 2,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "676a989a6e6a981d01262baa37aaad958511897b111fca3c89ba13669eb95870"
+        },
+        {
+          "mask": 3,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "43429760ab7748a50218646884cb7bbf3f3c4e417c1a3c97f7a98882c195df56"
+        },
+        {
+          "mask": 4,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "85b7b6e861d0384b2dd2ff493bec897b869817610362743b461392e89b2124a5"
+        },
+        {
+          "mask": 5,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "1b95323955639605351436aee0fc393b3984b0b13e61787cebcf41d3f9b3b892"
+        },
+        {
+          "mask": 6,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "5c02fa59db8ff799794bae894f5900375032e26ec5ed5346d75cc1831d189637"
+        },
+        {
+          "mask": 7,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "959fd8c9bf00049693857b255c556ba509b3635525e4e610d5ea0ffb8acf75a7"
+        },
+        {
+          "mask": 8,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "987eec43e56cc07cedd2e890e310c72cc48e37a54a051001038d39c0f0e0faf2"
+        },
+        {
+          "mask": 9,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "2403439ed909f8aaf9eb4a153eb25fc6c32877a477e5f8bb38d6dee8351dc05d"
+        },
+        {
+          "mask": 10,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "12504e36668d126318b37fa3f109a82a113fff275a1c3660bb215142c1486347"
+        },
+        {
+          "mask": 11,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "b25713407d566376c0f02a9a697d9057dc3e0ac59c34e716e05cd96ba725e365"
+        },
+        {
+          "mask": 12,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "0a4e600dcc905520169ef1fc77ee56ff705dfac91bbc27d379d739760ad64694"
+        },
+        {
+          "mask": 13,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "36ea64c4d16b0c63162b340030214d2df535ee356f044b70c57d11686b8cc38b"
+        },
+        {
+          "mask": 14,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "14548fb860d8a5ca6a42e7e5f3bca3dca3371f00eca8ac23bd92c877f294d89e"
+        },
+        {
+          "mask": 15,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "147bb33290d517d7ae38522408eb93a7babf5a8482974ee9fe3d5956c3ca94f8"
+        },
+        {
+          "mask": 16,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "987eec43e56cc07cedd2e890e310c72cc48e37a54a051001038d39c0f0e0faf2"
+        },
+        {
+          "mask": 17,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "2403439ed909f8aaf9eb4a153eb25fc6c32877a477e5f8bb38d6dee8351dc05d"
+        },
+        {
+          "mask": 18,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "12504e36668d126318b37fa3f109a82a113fff275a1c3660bb215142c1486347"
+        },
+        {
+          "mask": 19,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "b25713407d566376c0f02a9a697d9057dc3e0ac59c34e716e05cd96ba725e365"
+        },
+        {
+          "mask": 20,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "0a4e600dcc905520169ef1fc77ee56ff705dfac91bbc27d379d739760ad64694"
+        },
+        {
+          "mask": 21,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "36ea64c4d16b0c63162b340030214d2df535ee356f044b70c57d11686b8cc38b"
+        },
+        {
+          "mask": 22,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "14548fb860d8a5ca6a42e7e5f3bca3dca3371f00eca8ac23bd92c877f294d89e"
+        },
+        {
+          "mask": 23,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "147bb33290d517d7ae38522408eb93a7babf5a8482974ee9fe3d5956c3ca94f8"
+        },
+        {
+          "mask": 24,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "aa5a830deab5a21d19c8ce97d3a2a021b8530ea2a6b2f301538f1097c1346664"
+        },
+        {
+          "mask": 25,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "95764dcb0eb62f4ccbdae124b2d4dc6fad59d781cbbb67b4de09b8dd73fa4944"
+        },
+        {
+          "mask": 26,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "e4854dc67691224b66e0e75a6a09f791245cd273778133c8303aef3e2d917ea3"
+        },
+        {
+          "mask": 27,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "e933566d01827c721914e81b9546a8f6434934509d490f5a2147a8d49a60f054"
+        },
+        {
+          "mask": 28,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "1628f4efb58360beeca1eb4d20d5d0531e56e4d775359740b1eec8c976aef310"
+        },
+        {
+          "mask": 29,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "c13f491215309f89ebc16c5e6f574fdfac810367cb9e7a82cc4a7c2222acd40f"
+        },
+        {
+          "mask": 30,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "4df3d6162bfeb18d0f2e09e003817c5d4e9abf2c1a79c70eced3bc54f9c72093"
+        },
+        {
+          "mask": 31,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "f59dd294eb9e396c9a3009e755896b00a3a029e6a51d7f23c6a53be294d2e0b9"
+        },
+        {
+          "mask": 32,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "85b7b6e861d0384b2dd2ff493bec897b869817610362743b461392e89b2124a5"
+        },
+        {
+          "mask": 33,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "1b95323955639605351436aee0fc393b3984b0b13e61787cebcf41d3f9b3b892"
+        },
+        {
+          "mask": 34,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "5c02fa59db8ff799794bae894f5900375032e26ec5ed5346d75cc1831d189637"
+        },
+        {
+          "mask": 35,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "959fd8c9bf00049693857b255c556ba509b3635525e4e610d5ea0ffb8acf75a7"
+        },
+        {
+          "mask": 36,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "85b7b6e861d0384b2dd2ff493bec897b869817610362743b461392e89b2124a5"
+        },
+        {
+          "mask": 37,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "1b95323955639605351436aee0fc393b3984b0b13e61787cebcf41d3f9b3b892"
+        },
+        {
+          "mask": 38,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "5c02fa59db8ff799794bae894f5900375032e26ec5ed5346d75cc1831d189637"
+        },
+        {
+          "mask": 39,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "959fd8c9bf00049693857b255c556ba509b3635525e4e610d5ea0ffb8acf75a7"
+        },
+        {
+          "mask": 40,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "987eec43e56cc07cedd2e890e310c72cc48e37a54a051001038d39c0f0e0faf2"
+        },
+        {
+          "mask": 41,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "2403439ed909f8aaf9eb4a153eb25fc6c32877a477e5f8bb38d6dee8351dc05d"
+        },
+        {
+          "mask": 42,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "12504e36668d126318b37fa3f109a82a113fff275a1c3660bb215142c1486347"
+        },
+        {
+          "mask": 43,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "b25713407d566376c0f02a9a697d9057dc3e0ac59c34e716e05cd96ba725e365"
+        },
+        {
+          "mask": 44,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "0a4e600dcc905520169ef1fc77ee56ff705dfac91bbc27d379d739760ad64694"
+        },
+        {
+          "mask": 45,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "36ea64c4d16b0c63162b340030214d2df535ee356f044b70c57d11686b8cc38b"
+        },
+        {
+          "mask": 46,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "14548fb860d8a5ca6a42e7e5f3bca3dca3371f00eca8ac23bd92c877f294d89e"
+        },
+        {
+          "mask": 47,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "147bb33290d517d7ae38522408eb93a7babf5a8482974ee9fe3d5956c3ca94f8"
+        },
+        {
+          "mask": 48,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "987eec43e56cc07cedd2e890e310c72cc48e37a54a051001038d39c0f0e0faf2"
+        },
+        {
+          "mask": 49,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "2403439ed909f8aaf9eb4a153eb25fc6c32877a477e5f8bb38d6dee8351dc05d"
+        },
+        {
+          "mask": 50,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "12504e36668d126318b37fa3f109a82a113fff275a1c3660bb215142c1486347"
+        },
+        {
+          "mask": 51,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "b25713407d566376c0f02a9a697d9057dc3e0ac59c34e716e05cd96ba725e365"
+        },
+        {
+          "mask": 52,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "0a4e600dcc905520169ef1fc77ee56ff705dfac91bbc27d379d739760ad64694"
+        },
+        {
+          "mask": 53,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "36ea64c4d16b0c63162b340030214d2df535ee356f044b70c57d11686b8cc38b"
+        },
+        {
+          "mask": 54,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "14548fb860d8a5ca6a42e7e5f3bca3dca3371f00eca8ac23bd92c877f294d89e"
+        },
+        {
+          "mask": 55,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "147bb33290d517d7ae38522408eb93a7babf5a8482974ee9fe3d5956c3ca94f8"
+        },
+        {
+          "mask": 56,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "b750a2e7bc4f2ba6af55fb90a74267387d2b519bbcf16b567ee32f709b070c8d"
+        },
+        {
+          "mask": 57,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "12879b4bacc24d789eed65aff009a2201f2a72e66cbd459a5dfd438ecc7d1ebc"
+        },
+        {
+          "mask": 58,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "71740075d251098a365f266f505d67e03c90e6970b6fd410d4f16f1bcf45e0ed"
+        },
+        {
+          "mask": 59,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "c4736d05ccaf3d146af8683752dab5bc38fa70855aa599f169963d74b23db651"
+        },
+        {
+          "mask": 60,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "1628f4efb58360beeca1eb4d20d5d0531e56e4d775359740b1eec8c976aef310"
+        },
+        {
+          "mask": 61,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "c13f491215309f89ebc16c5e6f574fdfac810367cb9e7a82cc4a7c2222acd40f"
+        },
+        {
+          "mask": 62,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "4df3d6162bfeb18d0f2e09e003817c5d4e9abf2c1a79c70eced3bc54f9c72093"
+        }
+      ]
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "parent_minimum_commands": 7,
+      "full_word": [
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 900
+        },
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 901
+        },
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 902
+        },
+        {
+          "t": "endTurn"
+        },
+        {
+          "t": "endTurn"
+        },
+        {
+          "t": "playCard",
+          "target": 0,
+          "uid": 902
+        },
+        {
+          "t": "playCard",
+          "uid": 1000,
+          "target": 0
+        }
+      ],
+      "positional_proper_subsets": 63,
+      "distinct_retained_prefix_words": 43,
+      "outcomes": {
+        "ILLEGAL_PREFIX": 23,
+        "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN": 40
+      },
+      "omitted_consumer": "SPECIFIED_CONSUMER_NOT_ENACTED_BY_DEFINITION_NOT_A_NATIVE_RUN",
+      "all_retained_consumer_proper_subwords_fail_specified_goal": true,
+      "rows": [
+        {
+          "mask": 0,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "949cf36b7f01b53e2e459076e276ac46eff2ed18bb4d4a9610bb9a69af05ef71"
+        },
+        {
+          "mask": 1,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "f46f12182bb5da6fb381542a2fc59372f147815dbcd3d28d30433838e408d00e"
+        },
+        {
+          "mask": 2,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "66d4086bb2d4c7c2e0ec92b953c1826ed01854c23a458784bc0e6ba871e46400"
+        },
+        {
+          "mask": 3,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "2e1495e7e32c616fd1ffcd1b2980f0b72184f2d6c3e5459ab0935feff16da4ee"
+        },
+        {
+          "mask": 4,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "280f36035a6c2915ddd802839ba0b2c8d92c7a1a2046944065ae73a89c1ebd30"
+        },
+        {
+          "mask": 5,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "1546059af9cf6d1a5ed60d39184266e77388dcb12165138181242e3bad82f17a"
+        },
+        {
+          "mask": 6,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "399b3802f85392686884ccd56ea6f2d5963dcfdcc5e55289883d71ea0a95c256"
+        },
+        {
+          "mask": 7,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "148af37d62d7bc9dc7b3af1f5c5e7df6d6a31831cdf5943aa53446afeff7244e"
+        },
+        {
+          "mask": 8,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "f07f0e476759f5569df4e1ce44b25e71db547c85d243a54249266dd9c06b8a48"
+        },
+        {
+          "mask": 9,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "72ba7b6ee223803e6dd2c3843acce509f3324d9303bd44367d16eddda22338d5"
+        },
+        {
+          "mask": 10,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "b814cea7367b2f6a215bbf47a02020dcbe98ec07ab65eb1847d2eff7234ebe86"
+        },
+        {
+          "mask": 11,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "c20d9d68ab934d3e0f7b3c8906bee7fe5d5e686a6df7a5d07479e3684984298f"
+        },
+        {
+          "mask": 12,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "d1ef3da92e57e32900eec8492d587da3a0d22ec55e1f070bdb21e8d26e521187"
+        },
+        {
+          "mask": 13,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "8d55005dd108935cf0ef9520a7abb2a019312c86bb0c15821aa23be87a95779d"
+        },
+        {
+          "mask": 14,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "94c1289d3a7dd743ac60ae8a80841180b98eb8a4f4cf4466203b9a9ce6089214"
+        },
+        {
+          "mask": 15,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "0de4ca5ed6564fd6af4e4d431449c055559830ab38a46c402a78a0290992e158"
+        },
+        {
+          "mask": 16,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "f07f0e476759f5569df4e1ce44b25e71db547c85d243a54249266dd9c06b8a48"
+        },
+        {
+          "mask": 17,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "72ba7b6ee223803e6dd2c3843acce509f3324d9303bd44367d16eddda22338d5"
+        },
+        {
+          "mask": 18,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "b814cea7367b2f6a215bbf47a02020dcbe98ec07ab65eb1847d2eff7234ebe86"
+        },
+        {
+          "mask": 19,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "c20d9d68ab934d3e0f7b3c8906bee7fe5d5e686a6df7a5d07479e3684984298f"
+        },
+        {
+          "mask": 20,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "d1ef3da92e57e32900eec8492d587da3a0d22ec55e1f070bdb21e8d26e521187"
+        },
+        {
+          "mask": 21,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "8d55005dd108935cf0ef9520a7abb2a019312c86bb0c15821aa23be87a95779d"
+        },
+        {
+          "mask": 22,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "94c1289d3a7dd743ac60ae8a80841180b98eb8a4f4cf4466203b9a9ce6089214"
+        },
+        {
+          "mask": 23,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "0de4ca5ed6564fd6af4e4d431449c055559830ab38a46c402a78a0290992e158"
+        },
+        {
+          "mask": 24,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "3d3e4feb3bd37910491132bcd1c325e8486297b27cca7eccf2450ecb10fda9c8"
+        },
+        {
+          "mask": 25,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "d77f4186d2e220a8a8080c7ebf6b2b7c1b8774644b37581b42d670ac44e4909c"
+        },
+        {
+          "mask": 26,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "fe571371e876cfd97a54501303f93b221bc206180e5204bcb9979aa436e30d3d"
+        },
+        {
+          "mask": 27,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "4159bc63500199f64d51b929f8ac17d097f0e2897bc291e28de48ab92dda448b"
+        },
+        {
+          "mask": 28,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "f1cfdeef94b4545ae5d244c5a9ba741be41011e8648cdf843ec6afeb1b28ccd0"
+        },
+        {
+          "mask": 29,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "6dfe551bd00e00669a00bf8b53c4b087ebe4bb709117d101e310b0735493cbd2"
+        },
+        {
+          "mask": 30,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "56f5ebd4a1f0905d4818bae70c9fab116a440510056b5d480b68592ad4683d99"
+        },
+        {
+          "mask": 31,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "df192f614f07b7dc11d8eccc4373c95bdb3c9c69a4d4ec967021de56ef9f4a9d"
+        },
+        {
+          "mask": 32,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "280f36035a6c2915ddd802839ba0b2c8d92c7a1a2046944065ae73a89c1ebd30"
+        },
+        {
+          "mask": 33,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "1546059af9cf6d1a5ed60d39184266e77388dcb12165138181242e3bad82f17a"
+        },
+        {
+          "mask": 34,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "399b3802f85392686884ccd56ea6f2d5963dcfdcc5e55289883d71ea0a95c256"
+        },
+        {
+          "mask": 35,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "148af37d62d7bc9dc7b3af1f5c5e7df6d6a31831cdf5943aa53446afeff7244e"
+        },
+        {
+          "mask": 36,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "280f36035a6c2915ddd802839ba0b2c8d92c7a1a2046944065ae73a89c1ebd30"
+        },
+        {
+          "mask": 37,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "1546059af9cf6d1a5ed60d39184266e77388dcb12165138181242e3bad82f17a"
+        },
+        {
+          "mask": 38,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "399b3802f85392686884ccd56ea6f2d5963dcfdcc5e55289883d71ea0a95c256"
+        },
+        {
+          "mask": 39,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "148af37d62d7bc9dc7b3af1f5c5e7df6d6a31831cdf5943aa53446afeff7244e"
+        },
+        {
+          "mask": 40,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "f07f0e476759f5569df4e1ce44b25e71db547c85d243a54249266dd9c06b8a48"
+        },
+        {
+          "mask": 41,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "72ba7b6ee223803e6dd2c3843acce509f3324d9303bd44367d16eddda22338d5"
+        },
+        {
+          "mask": 42,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "b814cea7367b2f6a215bbf47a02020dcbe98ec07ab65eb1847d2eff7234ebe86"
+        },
+        {
+          "mask": 43,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "c20d9d68ab934d3e0f7b3c8906bee7fe5d5e686a6df7a5d07479e3684984298f"
+        },
+        {
+          "mask": 44,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "d1ef3da92e57e32900eec8492d587da3a0d22ec55e1f070bdb21e8d26e521187"
+        },
+        {
+          "mask": 45,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "8d55005dd108935cf0ef9520a7abb2a019312c86bb0c15821aa23be87a95779d"
+        },
+        {
+          "mask": 46,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "94c1289d3a7dd743ac60ae8a80841180b98eb8a4f4cf4466203b9a9ce6089214"
+        },
+        {
+          "mask": 47,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "0de4ca5ed6564fd6af4e4d431449c055559830ab38a46c402a78a0290992e158"
+        },
+        {
+          "mask": 48,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "f07f0e476759f5569df4e1ce44b25e71db547c85d243a54249266dd9c06b8a48"
+        },
+        {
+          "mask": 49,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "72ba7b6ee223803e6dd2c3843acce509f3324d9303bd44367d16eddda22338d5"
+        },
+        {
+          "mask": 50,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "b814cea7367b2f6a215bbf47a02020dcbe98ec07ab65eb1847d2eff7234ebe86"
+        },
+        {
+          "mask": 51,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "c20d9d68ab934d3e0f7b3c8906bee7fe5d5e686a6df7a5d07479e3684984298f"
+        },
+        {
+          "mask": 52,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "d1ef3da92e57e32900eec8492d587da3a0d22ec55e1f070bdb21e8d26e521187"
+        },
+        {
+          "mask": 53,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "8d55005dd108935cf0ef9520a7abb2a019312c86bb0c15821aa23be87a95779d"
+        },
+        {
+          "mask": 54,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "94c1289d3a7dd743ac60ae8a80841180b98eb8a4f4cf4466203b9a9ce6089214"
+        },
+        {
+          "mask": 55,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "0de4ca5ed6564fd6af4e4d431449c055559830ab38a46c402a78a0290992e158"
+        },
+        {
+          "mask": 56,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "88bac0b39604ecc8e559a07f9921d2620cde0493423ffa003eae20995050ed99"
+        },
+        {
+          "mask": 57,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "27bb3202308a3c58fab1ef76ef91585e2cf6ace00ac6ac8ede682ab33fc41f80"
+        },
+        {
+          "mask": 58,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "dcaff617514d4d4ccbfc8f88b3bedb008d4c0e0aaba811da38a645c788d5cc91"
+        },
+        {
+          "mask": 59,
+          "outcome": "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN",
+          "invalid_original_position": null,
+          "last_reached_state": "4c0a27176bd5401b6df6f4e2a592d58281c5047b5289e605ab0bc51096c9afae"
+        },
+        {
+          "mask": 60,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "f1cfdeef94b4545ae5d244c5a9ba741be41011e8648cdf843ec6afeb1b28ccd0"
+        },
+        {
+          "mask": 61,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "6dfe551bd00e00669a00bf8b53c4b087ebe4bb709117d101e310b0735493cbd2"
+        },
+        {
+          "mask": 62,
+          "outcome": "ILLEGAL_PREFIX",
+          "invalid_original_position": 5,
+          "last_reached_state": "56f5ebd4a1f0905d4818bae70c9fab116a440510056b5d480b68592ad4683d99"
+        }
+      ]
+    }
+  ],
+  "positional_proper_subsets": 156,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "limits": [
+    "Post-observation deductive reuse of a complete shorter-word frontier, not fresh confirmation or an extra experimental cohort.",
+    "The goal includes an already produced Shatter, an enabled Echo before the consumer hit, and positive same-state extra HP.",
+    "Only command omission from the four certified words and four fixed controlled initial states is covered; not every component-removal intervention or all natural states.",
+    "Illegal prefixes cannot enact the specified word; this is not a measurement of their hypothetical payoff.",
+    "Identical retained command words from different positional masks are not independent evidence.",
+    "Costs, target/instance IDs, Block and coupled Stun remain in the original native graph; no artificial compensator or graph repair.",
+    "This does not construct the full canonical closed-family quotient or prove real-economy support, policy viability, detector admission or P9."
+  ]
+}

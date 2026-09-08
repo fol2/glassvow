@@ -1,0 +1,90 @@
+{
+  "status": "BOUNDED_PROPER_SUBWORD_CERTIFICATE_NOT_PACKAGE_ADMISSION",
+  "source_head": "5fa4bb1ae6c5b766e79940f71611aa9c29ddf8d7",
+  "input_evidence_head": "f36d1428e595711aa997fd3ff8cea633c4df319a",
+  "sources": {
+    "read_subsequences.py": {
+      "sha256": "1543da716bbe0f05c1d71022d336ef1e8937178eb13032145c2d223902b13715",
+      "git_blob": "05216211a7e8fb77e64fc3672ff70b1b6903002e",
+      "bytes": 7456
+    },
+    "test_subsequences.py": {
+      "sha256": "2c62994064f93bf08304f6b2076c57007430a55aae4d926a6adc49bd949dd05c",
+      "git_blob": "2001238cac07a7305393085da7061589dfdc310e",
+      "bytes": 2573
+    }
+  },
+  "reader_returncode": 0,
+  "tests_returncode": 0,
+  "tests": 8,
+  "files": {
+    "DERIVATION.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "RESULTS.json": {
+      "bytes": 42834,
+      "sha256": "ee39bf48647c8e0767d4351aace6c8b7386bf8f1324a658ece39cc1f3619dcd8",
+      "git_blob": "d1b32cd558989169286a0e76e140ddadd77e2b04"
+    },
+    "TESTS.log": {
+      "bytes": 950,
+      "sha256": "8e33e927dd9c01575fe07318802eebb3e7f8d033cc9f1b72658736602ee1915e",
+      "git_blob": "1e1d6f708af1b27d8188f38ae0808aa4f93cc299"
+    }
+  },
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "positional_proper_subsets": 156,
+  "cases": [
+    {
+      "vow": 0,
+      "up": false,
+      "parent_minimum_commands": 5,
+      "positional_proper_subsets": 15,
+      "distinct_retained_prefix_words": 15,
+      "outcomes": {
+        "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN": 15
+      },
+      "all_retained_consumer_proper_subwords_fail_specified_goal": true
+    },
+    {
+      "vow": 0,
+      "up": true,
+      "parent_minimum_commands": 5,
+      "positional_proper_subsets": 15,
+      "distinct_retained_prefix_words": 15,
+      "outcomes": {
+        "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN": 15
+      },
+      "all_retained_consumer_proper_subwords_fail_specified_goal": true
+    },
+    {
+      "vow": 5,
+      "up": false,
+      "parent_minimum_commands": 7,
+      "positional_proper_subsets": 63,
+      "distinct_retained_prefix_words": 43,
+      "outcomes": {
+        "ILLEGAL_PREFIX": 23,
+        "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN": 40
+      },
+      "all_retained_consumer_proper_subwords_fail_specified_goal": true
+    },
+    {
+      "vow": 5,
+      "up": true,
+      "parent_minimum_commands": 7,
+      "positional_proper_subsets": 63,
+      "distinct_retained_prefix_words": 43,
+      "outcomes": {
+        "ILLEGAL_PREFIX": 23,
+        "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN": 40
+      },
+      "all_retained_consumer_proper_subwords_fail_specified_goal": true
+    }
+  ]
+}
