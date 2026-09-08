@@ -1,0 +1,17 @@
+{
+  "kind": "OWNER_REQUESTED_CONVERSATION_REUNION",
+  "observed_head": "0726f9e4eecd84ede09ae587befd1d216c038ab1",
+  "branch": "research/p9-six-route-local-20260905",
+  "scope": "Reconcile the existing Git history, mounted recovery files and verified evidence before further science. Preserve meaningful uncommitted work and produce one current handoff.",
+  "owner_authority": "The current owner explicitly requests git commit/push and reunion after accidentally branching the conversation. Prior author self-review permission remains; no independent-review claim is implied.",
+  "observed_handoff_blob": "5785ee1dc658ce4f85aee61645f3bf0695b972f5",
+  "initial_decision": "Do not restore an older conversation HEAD over the newer remote. Current remote handoff already records bounded Facet language and subsequence proofs absent from stale chat summaries.",
+  "safety": [
+    "No force push or rewrite of frozen scientific commits.",
+    "No new native run, refit, protected cohort, production change or P9 admission during reconciliation.",
+    "Use readback of committed bytes, not successful-write responses, to certify preservation.",
+    "Inspect current remote before each write; stop and reconcile any unexpected concurrent advancement."
+  ],
+  "reconciliation_complete": false,
+  "p9_certified": false
+}
