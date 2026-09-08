@@ -1,0 +1,28 @@
+{
+  "review_kind": "SELF_REVIEW_NOT_INDEPENDENT",
+  "owner_authority_comment": 5586269454,
+  "measurement_base": "7c3d09fd8fd2fd1bba5081ca15e51e33059c6c0b",
+  "measurement_head": "46401783b39ada692ce9b990f9deda342b79e7dd",
+  "continuation_parent": "b14d61435dd272f2b24a9f799617e6aad7ce22bc",
+  "verdict": "SELF_REVIEW_ACCEPT_LIMITED_CAPTURE_WITH_CHECKED_READER",
+  "initial_findings": [
+    "The old reader accepts re-sealed synthetic metric, state-context and producer-identity corruption; envelope integrity alone does not recompute semantics.",
+    "Producer records persist across turns; same-battle ordering is not evidence that the original mediator survived to consumption.",
+    "Factual equality is a source-bound native assertion, not independently reconstructable live parity: no second live post-state was retained."
+  ],
+  "disposition": "Added check_capture.py and negative regressions without changing frozen capture, protocol, operators, model or result. Arithmetic and identities recompute consistently on all 40 existing arms. Temporal and source-attestation limitations remain explicit; package admission remains denied.",
+  "checker_sha256": "5c22039998f5ca7f324e9a5dfdf5339c3d0cbc16deccd70188522a6890b7db3e",
+  "tests_sha256": "381b6e60a4109d05ba1b6ebf2233ef6bc83f93ee867e94139e0d4d9daddf3108",
+  "checker_output_sha256": "6370d87c35a7b22986c09f814381bf3a77c613b271d1601405b23d5fadb7f160",
+  "native_sha256": "d9c38348bc8632421307a3bae853175e2d96a8411d4c43128d87e8aa383b07f1",
+  "source_reconstruction": "All 43 entries in the frozen SOURCE-MANIFEST.json match the locally reconstructed measurement project; no GDScript execution used to establish this identity.",
+  "commands": [
+    {"command":"python check_capture.py", "returncode":0, "recomputed_arms":40},
+    {"command":"python -m unittest -v test_capture", "returncode":0, "tests":17, "passed":17, "old_reader_accepts_new_checker_rejects":14}
+  ],
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "p9_packages_admitted": 0,
+  "p9_certified": false,
+  "next_action": "Proceed to the unchanged canonical/complete-chain/package acceptance gate. Do not produce another selected-witness replay, repeat completed panels, or wait for an independent reviewer under this owner exception."
+}
