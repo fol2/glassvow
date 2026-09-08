@@ -7,6 +7,14 @@ from pathlib import Path
 import json,sys
 import run_support as runner
 single=runner.execute
+check_smoke=runner.smoke_check
+
+def bound_smoke(folder):
+    expected=json.loads((Path(__file__).parent/'INTEGRATION-EXPECTED.json').read_bytes())['cells']
+    for name,binding in expected.items():
+        actual=json.loads((folder/name/'EXECUTION.json').read_bytes())['raw']
+        runner.require(actual==binding,'LOCAL_REMOTE_INTEGRATION_BYTES:'+name)
+    return check_smoke(folder)
 
 def sliced(cfg,project,engine,out):
     if cfg['runs']==1:return single(cfg,project,engine,out)
@@ -25,4 +33,5 @@ def sliced(cfg,project,engine,out):
 
 if __name__=='__main__':
     runner.execute=sliced
+    runner.smoke_check=bound_smoke
     raise SystemExit(runner.main(Path(sys.argv[1]).resolve(),Path(sys.argv[2]).resolve(),Path(sys.argv[3]).resolve(),push='--push' in sys.argv))
