@@ -1,0 +1,57 @@
+{
+  "config_id": "p080-v5-o1-s58080103",
+  "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-support-gg59nao0/project",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v5/p080-v5-o1/p080-v5-o1-s58080103/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v5/p080-v5-o1/p080-v5-o1-s58080103/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v5/p080-v5-o1/p080-v5-o1-s58080103/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 22.054978425000172,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 33357,
+      "sha256": "1f9c296f6bcae122af75b975cf97fba1b624071c8b4185ac91cc58d4e7bdceb1"
+    },
+    "trace.ndjson": {
+      "bytes": 12832502,
+      "sha256": "e0fcd7c4ba4893b547e26413cc7ae6eb8a5e9d6243a26aa891f3494e272b206b"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 152660,
+      "sha256": "e2ef7ae8e600191c7f78021620064260378b76191e0d5cb09bab246577ffa925"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3980,
+      "sha256": "226149a793ee03264b0528a5e01e293a39b7aaf8262f346da22c58fbd006c490"
+    },
+    "CONFIG.json": {
+      "bytes": 567,
+      "sha256": "ce92df6da45f6ad07a58c7f0aa10242ca755aa261fff9865874bd3aad1f3c613"
+    },
+    "CELL.json": {
+      "bytes": 16161,
+      "sha256": "a5a691d55c1ac0c79d8186b892d8c9275f94eaaf79b24dcc914da3117be74cec"
+    }
+  },
+  "p9_certified": false
+}
