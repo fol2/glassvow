@@ -1,0 +1,64 @@
+{
+  "policy_id": "e9675051d844484c43ee4a94f3f5be6261b9ea8c9f5c8d63b4fd2b915cc51e0e",
+  "policy_index": 10,
+  "vow": 0,
+  "route_preference": "cycle",
+  "runs": [
+    {
+      "seed": 58080101,
+      "result": "win",
+      "final_pair": true,
+      "historical_chain_active": true,
+      "positive_high_payoff": true,
+      "consumer_reached": true,
+      "consumers": [
+        {
+          "fight": 23,
+          "q": 4,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            23,
+            "e7677945363125585ebad6b2ba86dcdd39352338aebaceeebd22721cea15bb2e",
+            "15c7cc470e97a891adad824afd2ebf497b4707725cbe8b8c8fdeb3aa2b3d35a4"
+          ]
+        },
+        {
+          "fight": 24,
+          "q": 8,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 24,
+          "raw_reference": [
+            24,
+            "5fa154fb273c391b258d0916f3a6ce58209ab6d4649a302c9067fd1c3d5f5a3c",
+            "9e4f962d77cd0a1f57759c1ac8fa0525935948e39bfb1f0b96d0390b08039314"
+          ]
+        },
+        {
+          "fight": 25,
+          "q": 3,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            25,
+            "7475202a6307e12e16694d45d67e134e4a71c46128ddbd445f1fc0c3933a8307",
+            "8c6d060cdea01b6ee8bb153eb049527667a13bf7df73c22d2ceae7473cb86136"
+          ]
+        },
+        {
+          "fight": 25,
+          "q": 9,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 30,
+          "raw_reference": [
+            25,
+            "63a1d92a116cc9f1ecf797fc220c4ec3fc1b634351fef21ad74899a18dcd1716",
+            "8068b8f9bf812c5490c174ef6401b603b9afcd8910f75757ebcfba802c255161"
+          ]
+        }
+      ],
+      "decision_trace_sha256": "2fcd1897fb23a0be516a520a462a72bb6d2195e75ce04d5c14c516b78d8eb89c",
+      "state_count": 485
+    }
+  ]
+}
