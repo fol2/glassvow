@@ -1,0 +1,86 @@
+{
+  "policy_id": "596aaca7d9b87fb8f21475fa2fb35a4f2c93047042afc631951a116b66f7112f",
+  "policy_index": 47,
+  "vow": 5,
+  "route_preference": "balanced",
+  "runs": [
+    {
+      "seed": 58080100,
+      "result": "win",
+      "final_pair": false,
+      "historical_chain_active": false,
+      "positive_high_payoff": false,
+      "consumer_reached": true,
+      "consumers": [
+        {
+          "fight": 21,
+          "q": 4,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            21,
+            "8c310c8fd4fb87509e4389b10e5f9fc47e52452cdb4934931ea97d967e345e71",
+            "be2c42a418824c342079a029288709ef6d81c064fad5904d98a4ecf7680c0685"
+          ]
+        },
+        {
+          "fight": 21,
+          "q": 2,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            21,
+            "5c418c80a09a985dc967bcd1ab4ae58a780a2b7ce81ccfe407540028cbf78bbb",
+            "c72f680adefd4c16da48492ec0f85a6afc37b6290e59eb9c241d74472f9d7734"
+          ]
+        },
+        {
+          "fight": 21,
+          "q": 4,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            21,
+            "87e5be671c38b4f2aae4b7f9b6bf5a97e0a494f0c06773381a1a796a04e19884",
+            "abae2ae61e1595bb7a49387e29eaf326909a67c926c8e13a263b6c09d06e4311"
+          ]
+        }
+      ],
+      "decision_trace_sha256": "bb87c3c716eff065503282ba0592e21df702fc65d00851727614547b6d14dcda",
+      "state_count": 421
+    },
+    {
+      "seed": 58080101,
+      "result": "loss",
+      "final_pair": false,
+      "historical_chain_active": false,
+      "positive_high_payoff": false,
+      "consumer_reached": false,
+      "consumers": [],
+      "decision_trace_sha256": "32237c226449270fc1b189642c2ce85d30cc8779d8cf61f6b69ef9c67b6dd046",
+      "state_count": 485
+    },
+    {
+      "seed": 58080102,
+      "result": "win",
+      "final_pair": false,
+      "historical_chain_active": false,
+      "positive_high_payoff": false,
+      "consumer_reached": false,
+      "consumers": [],
+      "decision_trace_sha256": "d73a8306a89763cae5a7b25c51e5eaf47eff51831b5f5be7bfbc7e69ede89790",
+      "state_count": 564
+    },
+    {
+      "seed": 58080103,
+      "result": "loss",
+      "final_pair": false,
+      "historical_chain_active": false,
+      "positive_high_payoff": false,
+      "consumer_reached": false,
+      "consumers": [],
+      "decision_trace_sha256": "b6b94a8222110eb351f171b050e66fe7d6a9c6e1d7325b3c6d2c7e695b78139b",
+      "state_count": 507
+    }
+  ]
+}
