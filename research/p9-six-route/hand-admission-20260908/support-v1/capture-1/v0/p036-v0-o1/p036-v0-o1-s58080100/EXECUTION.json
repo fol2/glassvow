@@ -1,0 +1,57 @@
+{
+  "config_id": "p036-v0-o1-s58080100",
+  "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-support-gg59nao0/project",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p036-v0-o1/p036-v0-o1-s58080100/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p036-v0-o1/p036-v0-o1-s58080100/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p036-v0-o1/p036-v0-o1-s58080100/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 27.70999544999995,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 28296,
+      "sha256": "e5469b591be55c42ab93eac02890df858d1b654255b2dbdb7905b5814d1d0717"
+    },
+    "trace.ndjson": {
+      "bytes": 12858176,
+      "sha256": "d6ffbd218a551dd29919358dd45332089ec1c6c9014fe636672acc943e42347b"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 155732,
+      "sha256": "191b3b6299cd76d55db3dd9900863032b8652342914ae5660d1d0a499fdafc40"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3404,
+      "sha256": "8f4d5e2d047d5e449dd32b1805d42cd02c601c441d5ded0d69d59e583eeeb90d"
+    },
+    "CONFIG.json": {
+      "bytes": 566,
+      "sha256": "37c9dee00dd9585e031de3782f4497d2885ee40a4504ae1b21ddb6bc6011fb68"
+    },
+    "CELL.json": {
+      "bytes": 30788,
+      "sha256": "0c5cae20632ecd061b9efc3e738ef33e8813c4080c0a841058412eb60385a55e"
+    }
+  },
+  "p9_certified": false
+}
