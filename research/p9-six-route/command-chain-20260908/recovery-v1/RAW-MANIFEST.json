@@ -1,0 +1,37 @@
+{
+  "format": "P9_LOSSLESS_JSON_DELTA_XZ_V1",
+  "source_freeze": "7b39ebd148bdc7ee23c7e3a4abff4cab79040d71",
+  "decoder": "pack_native.py",
+  "packed_bytes": 28628,
+  "packed_sha256": "174ea3e50c5d3a20d2ebb8dc9ad536c98318fc0ff5ed3c5bdc5f79b188f7661c",
+  "raw_bytes": 4374339,
+  "raw_sha256": "62ae02bd4fda08381ce61a4a40b88a98391d7476b6b33d090bc896b622663785",
+  "parts": [
+    {
+      "path": "raw.parts/part-00.b64",
+      "bytes": 10001,
+      "sha256": "7f4d0252415af5fe3da6235caa29827fd66b57eb9c4350896829a2a3ccae1a4b",
+      "git_blob": "6223e9c244c21e799abbcf72a0306a6844052270"
+    },
+    {
+      "path": "raw.parts/part-01.b64",
+      "bytes": 10001,
+      "sha256": "1c22c5a7753ac953e2a691f47fc2bf9aef88c907bf8f25fbbf0be3fbfc12f4e8",
+      "git_blob": "3a7b97abf6c68e4782ee6eeb1807509ddd6efb4d"
+    },
+    {
+      "path": "raw.parts/part-02.b64",
+      "bytes": 10001,
+      "sha256": "fb12dc32efe080bd98af4f7c47e894637d3e0ee430e023a8c9d4a4550b5cec7e",
+      "git_blob": "bead569a10b15ceda0ab94d242624561c531038f"
+    },
+    {
+      "path": "raw.parts/part-03.b64",
+      "bytes": 8173,
+      "sha256": "b749d2e416f717cf44e5c8affe0d843c75799f886a2ae2190219dfef6568225b",
+      "git_blob": "4bbac8a7b42569434451c8a47ab699e210afb151"
+    }
+  ],
+  "original_raw_reconstruction": "Join base64 parts in manifest order, decode, run pack_native.unpack. It restores every original byte; no source execution or inferred game transition is used.",
+  "engine_runs_during_packing": 0
+}
