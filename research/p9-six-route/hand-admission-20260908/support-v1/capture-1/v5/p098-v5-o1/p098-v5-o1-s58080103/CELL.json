@@ -1,0 +1,163 @@
+{
+  "policy_id": "ddca324cda16d598011bab7ed472d13e2b1ea9a52b00992a2f848aa1078eadc0",
+  "policy_index": 98,
+  "vow": 5,
+  "route_preference": "cycle",
+  "runs": [
+    {
+      "seed": 58080103,
+      "result": "win",
+      "final_pair": true,
+      "historical_chain_active": true,
+      "positive_high_payoff": true,
+      "consumer_reached": true,
+      "consumers": [
+        {
+          "fight": 14,
+          "q": 2,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            14,
+            "5c5187e95d8a3a7be3b2edf2a36b4f96ea04aa69e16a02d48592ee3dd5f8467d",
+            "867604a116bcb3a5d0f9ba9d2d85b8190a0cda54466a2247ddeb2e439eae2651"
+          ]
+        },
+        {
+          "fight": 14,
+          "q": 3,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            14,
+            "c77c3e693a55509a553cbec8d37b0fdbb4c710b5ecdfebe1956713d6c73f54b8",
+            "beaaeacf0deb4acf66dc2f4963ef9b2db405f2a404d5aded33bf831bdb60e1be"
+          ]
+        },
+        {
+          "fight": 15,
+          "q": 2,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            15,
+            "dbdb7c84079a952363cc3edd6f14ff7f5f53ac3782cd3227f77a249df3f31fe3",
+            "9ec86334ebdf7f523bcfcdd9bae8e88947a33e24be88a8d9fd47ee2c759291f1"
+          ]
+        },
+        {
+          "fight": 16,
+          "q": 8,
+          "classification": "POSITIVE_SOURCE_BY_HIGH_PAYOFF_HEALTH_INTERACTION",
+          "high_health_contribution": 24,
+          "raw_reference": [
+            16,
+            "be3b79c863c7f1a4b943f3b2e6a7912cada4b56ea34f45b875ca025e92152f13",
+            "7497ba7b181bf8031c533c63cf267e5ef0af9a65eb1008b731715fdb2d52a574"
+          ]
+        },
+        {
+          "fight": 17,
+          "q": 2,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            17,
+            "c10fb7ecb53f75d185537c9c732a85fa184c9f7d297ef76934a7b6338998be32",
+            "242629c34fcd0a65d8b50699c4319b12f833adfbea57d635a78df2fd3e8190de"
+          ]
+        },
+        {
+          "fight": 17,
+          "q": 5,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 6,
+          "raw_reference": [
+            17,
+            "b4b5ef4de3d63ae00b1234c0556f6af234fd491fea3d5f7aaf6c3c3344363dd0",
+            "96eafa783e81696e1dc70b31aed35af700085d46948eb5c5440835c16046f618"
+          ]
+        },
+        {
+          "fight": 17,
+          "q": 5,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 4,
+          "raw_reference": [
+            17,
+            "8bd5380feffd80cb7d1efc8fdf890288ab4505cb9a67191fddb522e3aafa6bf2",
+            "4f8331877cdc4c3398b23811c555f0ee78c83792573abd7bf57ff1f394b8a08a"
+          ]
+        },
+        {
+          "fight": 18,
+          "q": 5,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 6,
+          "raw_reference": [
+            18,
+            "4dca247d3cf188c903625092bfdcfaba45526bf70bdfc44b52f532203f405b7b",
+            "fb8b6a64f867de3841c7224acaa1ce0115f38953f7b490cbdab29eda760553c5"
+          ]
+        },
+        {
+          "fight": 19,
+          "q": 7,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 18,
+          "raw_reference": [
+            19,
+            "069deafef28ab7a0f334253fa73c1e3f08616e0f8c1ee9985bb3b1671ae08482",
+            "11a14be3aa1b48565fc807e5f9f75d769ecb94f4794526345bff04647e67bad3"
+          ]
+        },
+        {
+          "fight": 20,
+          "q": 5,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 6,
+          "raw_reference": [
+            20,
+            "0061f2525c19c0c77515862fc7a89d3b305a4fc49303129bf9a6c301096070e2",
+            "9316c310a6ada8fbb3fe0a8edaefcc15ee16be09ec32d5dfc89d136197317a4a"
+          ]
+        },
+        {
+          "fight": 22,
+          "q": 5,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 6,
+          "raw_reference": [
+            22,
+            "6c9501814f9390091544d101fe7d2aa60bc7df8f3d8382b0d92a44ea6107b920",
+            "cff0d480c37767f3fc209a85b2ab486da41d46f177056c43e917205d6320ea38"
+          ]
+        },
+        {
+          "fight": 23,
+          "q": 2,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            23,
+            "7ea7dd34d9fd135b4bed3f348e2cec4fcbf7ea678c1282b950b4c5e42a4689a7",
+            "cebf376d42dfe0c5bfc7da0ef6259343de427ec6adc21ba6ee3ad53876592b2c"
+          ]
+        },
+        {
+          "fight": 25,
+          "q": 8,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 24,
+          "raw_reference": [
+            25,
+            "02a5133dd06d1ec88c4c79a69ce001fd1047348f0799e34e2cc345ddf3ecab18",
+            "7ac7d9c8db838c06c6a4243c63efa1b6f6589a4d65539d7b03cb02967aa1b460"
+          ]
+        }
+      ],
+      "decision_trace_sha256": "fd00d1a1621c62de3a26cc0126b1546b1fed6bd7e3beda332686e9f2b21b9ea6",
+      "state_count": 635
+    }
+  ]
+}
