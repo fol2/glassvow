@@ -1,0 +1,241 @@
+{
+  "status": "COMPLETE",
+  "config_id": "p028-v0-o1",
+  "children": [
+    {
+      "config_id": "p028-v0-o1-s58080100",
+      "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-support-gg59nao0/project",
+        "-s",
+        "res://support_runner.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p028-v0-o1/p028-v0-o1-s58080100/CONFIG.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p028-v0-o1/p028-v0-o1-s58080100/endpoints.ndjson",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p028-v0-o1/p028-v0-o1-s58080100/trace.ndjson"
+      ],
+      "returncode": 0,
+      "seconds": 23.627845173999958,
+      "status": "COMPLETE",
+      "failure": null,
+      "raw": {
+        "endpoints.ndjson": {
+          "bytes": 29012,
+          "sha256": "a04fde9a8053cbdbb3f765e1d0b43a5e80f2a3bd7101bc82a59119c9f4e84357"
+        },
+        "trace.ndjson": {
+          "bytes": 11899599,
+          "sha256": "0293f9cd9bde93a4aa41eb1313f14176b831563bc2d5b50d2f477cf8f060e008"
+        }
+      },
+      "files": {
+        "trace.ndjson.xz": {
+          "bytes": 146096,
+          "sha256": "1c35487d64099f08ade86001caadc3e10ae225689f373bc5c121e8c4ca2b854a"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.log": {
+          "bytes": 73,
+          "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+        },
+        "endpoints.ndjson.xz": {
+          "bytes": 3464,
+          "sha256": "47661ec43176fdf08922ff8746af90d1bd5d6af93a398af54f8aab71098a8e08"
+        },
+        "CONFIG.json": {
+          "bytes": 567,
+          "sha256": "37ae26a64a84a18f678f8ae90d007f12f36343c04b306b6035223643977f3bb8"
+        },
+        "CELL.json": {
+          "bytes": 29989,
+          "sha256": "c093d043f98b1d52043d97d342ab8993db38d4295d2c21f03bd735b84dbee15d"
+        }
+      },
+      "p9_certified": false
+    },
+    {
+      "config_id": "p028-v0-o1-s58080101",
+      "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-support-gg59nao0/project",
+        "-s",
+        "res://support_runner.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p028-v0-o1/p028-v0-o1-s58080101/CONFIG.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p028-v0-o1/p028-v0-o1-s58080101/endpoints.ndjson",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p028-v0-o1/p028-v0-o1-s58080101/trace.ndjson"
+      ],
+      "returncode": 0,
+      "seconds": 16.32206029000008,
+      "status": "COMPLETE",
+      "failure": null,
+      "raw": {
+        "endpoints.ndjson": {
+          "bytes": 32458,
+          "sha256": "4b9ddac2cd96d811afc20f07750e994abf539b095b2dc1cffe53eb1efcf0455a"
+        },
+        "trace.ndjson": {
+          "bytes": 10174773,
+          "sha256": "297c37374bca00bfa96fa546d0080279d82eadbba3718b312101eb70c570faa2"
+        }
+      },
+      "files": {
+        "trace.ndjson.xz": {
+          "bytes": 139664,
+          "sha256": "75a1b9c5eb459ee56a98f96f290c2c2d359023681ae24973f289ea40d6e25d29"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.log": {
+          "bytes": 73,
+          "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+        },
+        "endpoints.ndjson.xz": {
+          "bytes": 3836,
+          "sha256": "2eed762b48bc0ba0bf1f2b82960731379d3f4490630c9c6f7dcfcb53bb462142"
+        },
+        "CONFIG.json": {
+          "bytes": 567,
+          "sha256": "3e6778a656788a4310eacb12ae610aa98849df8f41f12bbe02a8db27f6901aec"
+        },
+        "CELL.json": {
+          "bytes": 16586,
+          "sha256": "469007a764354406dbba16137ed146e12814b9dd3ea53727f6ec94ccae3b1509"
+        }
+      },
+      "p9_certified": false
+    },
+    {
+      "config_id": "p028-v0-o1-s58080102",
+      "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-support-gg59nao0/project",
+        "-s",
+        "res://support_runner.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p028-v0-o1/p028-v0-o1-s58080102/CONFIG.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p028-v0-o1/p028-v0-o1-s58080102/endpoints.ndjson",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p028-v0-o1/p028-v0-o1-s58080102/trace.ndjson"
+      ],
+      "returncode": 0,
+      "seconds": 12.65306559199962,
+      "status": "COMPLETE",
+      "failure": null,
+      "raw": {
+        "endpoints.ndjson": {
+          "bytes": 32527,
+          "sha256": "ea024c8f7e577eeb164d7025215fafb5ca1374c59a3101b56dd7ca1cd59052a9"
+        },
+        "trace.ndjson": {
+          "bytes": 7162885,
+          "sha256": "0aa695adcb71303935119731461e257ac6c8e850e5503653d78eb17f55692236"
+        }
+      },
+      "files": {
+        "trace.ndjson.xz": {
+          "bytes": 113544,
+          "sha256": "a18b87cdd5b0419071672602518bd10591633e9618c51483677cd07171789c0b"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.log": {
+          "bytes": 73,
+          "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+        },
+        "endpoints.ndjson.xz": {
+          "bytes": 3904,
+          "sha256": "569e49fd7f88c2882d69f0af87dfee94e00588c89edc9d9597bfa83d67c5bcde"
+        },
+        "CONFIG.json": {
+          "bytes": 567,
+          "sha256": "b39b9c660419ab30ce0ab34fd0c44f8e2ccbfc1f613948700dcd0a918307dda8"
+        },
+        "CELL.json": {
+          "bytes": 6001,
+          "sha256": "fc9e315b4321e6237761779ed6adca4c1987dbe8c7f9bbf5a79a06d9c3407d07"
+        }
+      },
+      "p9_certified": false
+    },
+    {
+      "config_id": "p028-v0-o1-s58080103",
+      "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-support-gg59nao0/project",
+        "-s",
+        "res://support_runner.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p028-v0-o1/p028-v0-o1-s58080103/CONFIG.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p028-v0-o1/p028-v0-o1-s58080103/endpoints.ndjson",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p028-v0-o1/p028-v0-o1-s58080103/trace.ndjson"
+      ],
+      "returncode": 0,
+      "seconds": 12.520977838000363,
+      "status": "COMPLETE",
+      "failure": null,
+      "raw": {
+        "endpoints.ndjson": {
+          "bytes": 31388,
+          "sha256": "b0e89387f0c6791a734ada87a174ea0396081aad399a9c78b0adc26a4896f9d2"
+        },
+        "trace.ndjson": {
+          "bytes": 6078927,
+          "sha256": "61f579d5f356595c25f7edffd2f43998609c8603cbfccec7e7725d7076dfda77"
+        }
+      },
+      "files": {
+        "trace.ndjson.xz": {
+          "bytes": 111980,
+          "sha256": "32c7d1587485e3078f28f0c83270013da7636f544ba7c7ecbdf1f975be79d0b4"
+        },
+        "stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout.log": {
+          "bytes": 73,
+          "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+        },
+        "endpoints.ndjson.xz": {
+          "bytes": 3428,
+          "sha256": "aa91e47137f7f3142766335121bbff9692b412b0d4b6403a12a4173de8414690"
+        },
+        "CONFIG.json": {
+          "bytes": 567,
+          "sha256": "0707e849abb3570611c8ba84cec0803f53901f2338a9e64ef8a7253d62dde59c"
+        },
+        "CELL.json": {
+          "bytes": 510,
+          "sha256": "0f6e7921e9a5714981d4078102ec984942cd1d1ad4b63374ae3a230f765901dd"
+        }
+      },
+      "p9_certified": false
+    }
+  ],
+  "seeds_counted_once": [
+    58080100,
+    58080101,
+    58080102,
+    58080103
+  ],
+  "p9_certified": false
+}

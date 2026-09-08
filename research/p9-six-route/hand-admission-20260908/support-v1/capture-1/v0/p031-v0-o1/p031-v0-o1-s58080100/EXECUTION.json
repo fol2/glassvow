@@ -1,0 +1,57 @@
+{
+  "config_id": "p031-v0-o1-s58080100",
+  "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-support-gg59nao0/project",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p031-v0-o1/p031-v0-o1-s58080100/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p031-v0-o1/p031-v0-o1-s58080100/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p031-v0-o1/p031-v0-o1-s58080100/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 17.349003264000203,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 27849,
+      "sha256": "ebb15fc4acb1506c62d2249bd46ec833deb5187303d5a712a79ca4f7c3000748"
+    },
+    "trace.ndjson": {
+      "bytes": 9512996,
+      "sha256": "720b7156c192b5a4898a6fa74b96c0923d09a62246368f78f3309eaf39942acc"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 128388,
+      "sha256": "ac2347d3f2775706d72581f73ff6fe593b76701aa5af881dec1c48b1c39264c0"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3360,
+      "sha256": "662b81dbcf8e4b6cdda807deacfa15499b0f54cf96a203a80e9b124458cfc7c2"
+    },
+    "CONFIG.json": {
+      "bytes": 571,
+      "sha256": "c1e7f5e79209cf07fad08b14c06a7a2fc6c56d974be89bdc9cdbb791740ca3f2"
+    },
+    "CELL.json": {
+      "bytes": 15477,
+      "sha256": "99cadcae9695c0626447480b80a4c4d01e7aef420f05f8359f6e65debe8cf6ee"
+    }
+  },
+  "p9_certified": false
+}

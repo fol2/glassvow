@@ -1,0 +1,57 @@
+{
+  "config_id": "p024-v0-o1-s58080103",
+  "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-support-gg59nao0/project",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p024-v0-o1/p024-v0-o1-s58080103/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p024-v0-o1/p024-v0-o1-s58080103/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p024-v0-o1/p024-v0-o1-s58080103/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 24.514694401999805,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 37249,
+      "sha256": "8c74cf8cb8bae95896a26fbf52ffcd64c729a3f5feb5a341aeb06a00c8cc2fbe"
+    },
+    "trace.ndjson": {
+      "bytes": 12389898,
+      "sha256": "12188844130fd0f56127e5ca3e6c505d3e7668ae8be3827afa0a7ba5db5a16e3"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 163540,
+      "sha256": "d98ba24d1745a2224aa6442bccaf10e30bddbb2a096dc32f64502a9f5cc285b5"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3872,
+      "sha256": "bd0c13f9823f0cf26f1f0678def0485cc72d927c2aae303adf97aebe20db9032"
+    },
+    "CONFIG.json": {
+      "bytes": 567,
+      "sha256": "0a240ff511ed4d5bafc63144c08812bf02711cf2508f01595da5ec32f2d8fcae"
+    },
+    "CELL.json": {
+      "bytes": 6463,
+      "sha256": "0aa3cf2eb02a4c20b401725e9ca5cc756b168ace1f395c94ff561fa8b50ff3a4"
+    }
+  },
+  "p9_certified": false
+}
