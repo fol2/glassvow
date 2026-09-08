@@ -1,0 +1,23 @@
+{
+  "status": "COMPLETE_AUDIT_RAW_DOWNLOADED_AND_RECONSTRUCTED_NOT_P9",
+  "source_commit": "f3e6fe20fc1ff18b25e4c6c100be611f2d5adf06",
+  "transport_commit": "e56caf3c49618ba8f6041297b00e085a22e3d2d3",
+  "workflow_run": 34215363381,
+  "artifact_id": 10051534179,
+  "download_sha256": "dba53c5c6276f1ca0acd90cb1d7a6eef0dad607d57e5e36abdc978397ebaa3c6",
+  "verified_git_blobs": 950,
+  "storage_probe_raw_bytes": 9495,
+  "storage_probe_raw_equal_to_original": true,
+  "native_archive_sha256": "5541b5d9e1de29e3bb08dc6d2f44173764be9bdc9d4aa248f88ef297c12702da",
+  "native_assertions": 677,
+  "native_failures": 0,
+  "reader_mutation_tests": 7,
+  "readouts": {
+    "RESULTS.json": "82f5757b5d187dc41bb5fce4f492e7a48b12bb1689bfc7ceef6dabfd41c5ae49",
+    "ACQUISITION-RESULTS.json": "70a929132c737b71b6c736e42c630a3cf8980619f8e7482401e18b0cd2c84e76"
+  },
+  "scope": "Complete emitted finite-audit raw and selected historical acquisition rows are preserved in committed parts. Not new independent trials or package admission.",
+  "historical_original_arms_archive_remote_complete": false,
+  "old_fixed_validation_raw_recovered": false,
+  "p9_certified": false
+}
