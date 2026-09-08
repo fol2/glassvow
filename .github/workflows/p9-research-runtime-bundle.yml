@@ -14,141 +14,84 @@ concurrency:
 
 jobs:
   bundle:
-    name: Frozen finite Facet language - full capture preserved
+    name: Derive all proper subwords from retained native graph - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 5
     permissions:
       contents: write
     env:
       STUDY: research/p9-six-route/package-proof-20260908/facet-language-v1
     steps:
-      - name: Check out exact research wrapper
+      - name: Check out exact committed inputs
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
           lfs: false
-          sparse-checkout: |
-            domain
-            content
-            tools
-            research/p9-six-route
-      - name: Validate frozen files and obtain pinned official engine
+          sparse-checkout: research/p9-six-route/package-proof-20260908/facet-language-v1
+      - name: Verify sources, execute offline reader and retain all results
         shell: bash
         run: |
           set -euo pipefail
-          test ! -e "$STUDY/native-1"
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess
-          r=pathlib.Path(os.environ['STUDY']);sha=lambda b:hashlib.sha256(b).hexdigest()
-          p=r/'PROTOCOL.json'
-          if sha(p.read_bytes())!='c7dc0c8b77eaf5a5c717b3c4f6405aa902699c744b0976a36b6c176b7c93f5e6':raise RuntimeError('PROTOCOL_IDENTITY')
-          for n,h in json.loads(p.read_bytes())['source_files'].items():
-              b=(r/n).read_bytes()
-              if sha(b)!=h:raise RuntimeError('FROZEN_SOURCE:'+n)
-              expected=subprocess.check_output(['git','rev-parse','HEAD:'+str(r/n)]).decode().strip()
-              if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=expected:raise RuntimeError('GIT_BYTE_IDENTITY:'+n)
-          print('FROZEN_SOURCE_READBACK_MATCH')
+          import hashlib,json,os,pathlib,subprocess,sys
+          study=pathlib.Path(os.environ['STUDY']).resolve()
+          source=study/'subsequence'; out=source/'derived-1'
+          if out.exists():raise RuntimeError('OUTPUT_ALREADY_EXISTS')
+          expected={'read_subsequences.py':'1543da716bbe0f05c1d71022d336ef1e8937178eb13032145c2d223902b13715','test_subsequences.py':'2c62994064f93bf08304f6b2076c57007430a55aae4d926a6adc49bd949dd05c'}
+          sha=lambda b:hashlib.sha256(b).hexdigest()
+          identities={}
+          for name,h in expected.items():
+              b=(source/name).read_bytes()
+              if sha(b)!=h:raise RuntimeError('SOURCE_IDENTITY:'+name)
+              blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+              path=(source/name).relative_to(pathlib.Path.cwd())
+              if blob!=subprocess.check_output(['git','rev-parse','HEAD:'+str(path)]).decode().strip():raise RuntimeError('SOURCE_GIT_BLOB')
+              identities[name]={'sha256':h,'git_blob':blob,'bytes':len(b)}
+          out.mkdir()
+          tests=subprocess.run([sys.executable,'-m','unittest','-v','test_subsequences'],cwd=source,capture_output=True,timeout=30)
+          (out/'TESTS.log').write_bytes(tests.stdout+tests.stderr)
+          result=subprocess.run([sys.executable,str(source/'read_subsequences.py'),str(study)],capture_output=True,timeout=90)
+          (out/'DERIVATION.log').write_bytes(result.stderr)
+          status='INCONCLUSIVE_READER_OR_TEST_FAILURE';parsed=None
+          if result.returncode==0:
+              parsed=json.loads(result.stdout)
+              (out/'RESULTS.json').write_bytes(result.stdout)
+              if tests.returncode==0 and b'Ran 8 tests' in tests.stderr:status='BOUNDED_PROPER_SUBWORD_CERTIFICATE_NOT_PACKAGE_ADMISSION'
+          else:(out/'FAILED-OUTPUT.log').write_bytes(result.stdout)
+          files={p.name:{'bytes':p.stat().st_size,'sha256':sha(p.read_bytes()),'git_blob':hashlib.sha1(b'blob '+str(p.stat().st_size).encode()+b'\0'+p.read_bytes()).hexdigest()} for p in sorted(out.iterdir()) if p.is_file()}
+          receipt={'status':status,'source_head':os.environ['GITHUB_SHA'],'input_evidence_head':'f36d1428e595711aa997fd3ff8cea633c4df319a','sources':identities,'reader_returncode':result.returncode,'tests_returncode':tests.returncode,'tests':8,'files':files,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
+          if parsed:
+              receipt['positional_proper_subsets']=parsed['positional_proper_subsets']
+              receipt['cases']=[{k:c[k] for k in ('vow','up','parent_minimum_commands','positional_proper_subsets','distinct_retained_prefix_words','outcomes','all_retained_consumer_proper_subwords_fail_specified_goal')} for c in parsed['cases']]
+          (out/'EXECUTION-RECEIPT.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print('DERIVED_RECEIPT='+json.dumps(receipt,sort_keys=True))
           PY
-          mkdir -p "$RUNNER_TEMP/p9-engine"
-          curl --fail --location --max-time 120 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/p9-engine/engine.zip"
-          unzip -q "$RUNNER_TEMP/p9-engine/engine.zip" -d "$RUNNER_TEMP/p9-engine"
-          chmod +x "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64"
-          printf '8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  %s\n' "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64" | sha256sum -c -
-      - name: Execute once with source-bound watchdog and record every available output
-        shell: bash
-        run: |
-          set -uo pipefail
-          python3 "$STUDY/run.py" "$GITHUB_WORKSPACE" "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64" "$RUNNER_TEMP/p9-facet-capture" > "$RUNNER_TEMP/p9-facet-driver.stdout" 2> "$RUNNER_TEMP/p9-facet-driver.stderr"
-          code=$?
-          mkdir -p "$RUNNER_TEMP/p9-facet-capture"
-          cp "$RUNNER_TEMP/p9-facet-driver.stdout" "$RUNNER_TEMP/p9-facet-capture/driver.stdout"
-          cp "$RUNNER_TEMP/p9-facet-driver.stderr" "$RUNNER_TEMP/p9-facet-capture/driver.stderr"
-          printf '%s\n' "$code" > "$RUNNER_TEMP/p9-facet-capture/exit-code.txt"
-          echo "CAPTURE_EXECUTOR_RETURN=$code"
-          if test "$code" = 0; then
-            cd "$STUDY"
-            P9_CAPTURE="$RUNNER_TEMP/p9-facet-capture" timeout 90s python3 -m unittest -v test_verify > "$RUNNER_TEMP/p9-facet-capture/tests.stdout" 2> "$RUNNER_TEMP/p9-facet-capture/tests.stderr"
-            printf '%s\n' "$?" > "$RUNNER_TEMP/p9-facet-capture/tests-exit-code.txt"
-          fi
-          exit 0
-      - name: Preserve full raw and logs on the existing branch
+      - name: Preserve the reader output without rewriting source or native evidence
         shell: bash
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          import hashlib,json,lzma,os,pathlib,shutil,subprocess
-          src=pathlib.Path(os.environ['RUNNER_TEMP'])/'p9-facet-capture'
-          out=pathlib.Path(os.environ['STUDY'])/'native-1';out.mkdir(exist_ok=False)
-          sha=lambda b:hashlib.sha256(b).hexdigest()
-          if (src/'native.ndjson').exists():
-              raw=(src/'native.ndjson').read_bytes();packed=lzma.compress(raw,preset=9)
-              if lzma.decompress(packed)!=raw:raise RuntimeError('LOSSLESS_RAW')
-              (out/'native.ndjson.xz').write_bytes(packed)
-          for p in src.iterdir():
-              if p.is_file() and p.name not in ('native.ndjson','native.ndjson.xz'):shutil.copyfile(p,out/p.name)
-          files={p.name:{'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())} for p in sorted(out.iterdir()) if p.is_file()}
-          manifest={'source_freeze':'4d0391d47e9471086b6188a4f152ee4c88c6a5cd','wrapper_head':os.environ['GITHUB_SHA'],'workflow_run':os.environ['GITHUB_RUN_ID'],'files':files,'raw_bytes':(src/'native.ndjson').stat().st_size if (src/'native.ndjson').exists() else 0,'raw_sha256':sha((src/'native.ndjson').read_bytes()) if (src/'native.ndjson').exists() else None,'new_independent_samples':0,'p9_certified':False}
-          (out/'CAPTURE-MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
-          print('CAPTURE_MANIFEST='+json.dumps(manifest,sort_keys=True))
-          PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$GITHUB_SHA"
-          git add "$STUDY/native-1"
+          out="$STUDY/subsequence/derived-1"
+          git add "$out"
           python3 - <<'PY'
           import os,subprocess
-          allowed=os.environ['STUDY']+'/native-1/'
+          prefix=os.environ['STUDY']+'/subsequence/derived-1/'
           paths=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
-          if not paths or not all(p.startswith(allowed) for p in paths):raise RuntimeError('PUBLICATION_SCOPE')
+          allowed={'RESULTS.json','TESTS.log','DERIVATION.log','FAILED-OUTPUT.log','EXECUTION-RECEIPT.json'}
+          if not paths or any(not p.startswith(prefix) or p[len(prefix):] not in allowed for p in paths):raise RuntimeError('STAGED_SCOPE')
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): preserve complete bounded-language native capture without admission'
+          git commit -m 'research(p9): preserve exhaustive proper-subword derivation without native replay'
           git push origin "HEAD:refs/heads/$branch"
-          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)"
-          echo "P9_PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-      - name: Fresh remote fetch and byte reconstruction without replaying the engine
-        shell: bash
-        run: |
-          set -euo pipefail
-          rb="$RUNNER_TEMP/p9-remote-readback"
-          git init -q "$rb"
-          git -C "$rb" remote add origin https://github.com/fol2/glassvow
-          git -C "$rb" -c protocol.version=2 fetch --depth=1 --filter=blob:none origin "$P9_PUBLISHED_HEAD"
-          git -C "$rb" sparse-checkout set "$STUDY"
-          git -C "$rb" checkout -q "$P9_PUBLISHED_HEAD"
-          export P9_READBACK_ROOT="$rb"
+          printf 'PUBLISHED_HEAD=%s\n' "$(git rev-parse HEAD)"
           python3 - <<'PY'
-          import hashlib,json,lzma,os,pathlib,subprocess,sys
-          root=pathlib.Path(os.environ['P9_READBACK_ROOT']);study=root/os.environ['STUDY'];out=study/'native-1';sha=lambda b:hashlib.sha256(b).hexdigest()
-          m=json.loads((out/'CAPTURE-MANIFEST.json').read_bytes())
-          for n,e in m['files'].items():
-              b=(out/n).read_bytes()
-              if len(b)!=e['bytes'] or sha(b)!=e['sha256']:raise RuntimeError('READBACK_FILE:'+n)
-              indexed=subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD:'+str((out/n).relative_to(root))]).decode().strip()
-              if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=indexed:raise RuntimeError('READBACK_BLOB:'+n)
-          receipt={'remote_head':os.environ['P9_PUBLISHED_HEAD'],'files_matched':len(m['files']),'raw_bytes':m['raw_bytes'],'raw_sha256':m['raw_sha256'],'native_execution_repeated':False,'p9_certified':False}
-          if m['raw_bytes']:
-              raw=lzma.decompress((out/'native.ndjson.xz').read_bytes())
-              if len(raw)!=m['raw_bytes'] or sha(raw)!=m['raw_sha256']:raise RuntimeError('READBACK_RAW')
-              if (out/'RESULTS.json').exists():
-                  sys.path.insert(0,str(study));from verify import verify
-                  initials={(r['vow'],r['up']):r['initial'] for r in json.loads((out/'OLD-INITIALS.json').read_bytes())}
-                  result=verify([json.loads(x) for x in raw.splitlines()],initials,sha((study/'search.gd').read_bytes()))
-                  b=(json.dumps(result,indent=2)+'\n').encode()
-                  if b!=(out/'RESULTS.json').read_bytes():raise RuntimeError('READBACK_RESULT')
-                  receipt['result_sha256']=sha(b);receipt['result']=result
-          print('REMOTE_READBACK='+json.dumps(receipt,sort_keys=True))
-          destination=pathlib.Path(os.environ['GITHUB_WORKSPACE'])/os.environ['STUDY']/'native-1/REMOTE-READBACK.json'
-          destination.write_text(json.dumps(receipt,indent=2)+'\n')
+          import json,os,pathlib
+          r=json.loads((pathlib.Path(os.environ['STUDY'])/'subsequence/derived-1/EXECUTION-RECEIPT.json').read_bytes())
+          if r['status']!='BOUNDED_PROPER_SUBWORD_CERTIFICATE_NOT_PACKAGE_ADMISSION':raise RuntimeError(r['status'])
           PY
-          git add "$STUDY/native-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record fresh remote byte readback of bounded-language capture'
-          git push origin HEAD:refs/heads/research/p9-six-route-local-20260905
-          echo "VERIFIED_RECEIPT_HEAD=$(git rev-parse HEAD)"
-          cat "$STUDY/native-1/exit-code.txt"
-          test "$(cat "$STUDY/native-1/exit-code.txt")" = 0
-          test "$(cat "$STUDY/native-1/tests-exit-code.txt")" = 0
