@@ -1,0 +1,64 @@
+{
+  "policy_id": "1f2524b0a56ae7271b086ebf6e1ce2790500b8d245bd2c19aa0920fa6e886e4c",
+  "policy_index": 59,
+  "vow": 5,
+  "route_preference": "balanced",
+  "runs": [
+    {
+      "seed": 58080102,
+      "result": "win",
+      "final_pair": false,
+      "historical_chain_active": false,
+      "positive_high_payoff": true,
+      "consumer_reached": true,
+      "consumers": [
+        {
+          "fight": 20,
+          "q": 6,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 12,
+          "raw_reference": [
+            20,
+            "2427831fc4b7e8205f0a2150a757ef4fa3b514c4176d112ef961a630cf4ee7f6",
+            "6754e4489193fbf03f570599d6d2e34a48d0922846cbffdba11b06a55933a90a"
+          ]
+        },
+        {
+          "fight": 26,
+          "q": 5,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 6,
+          "raw_reference": [
+            26,
+            "cb7d9fa98f0e6c6014a159ce63e69323a996a00694948cd85df4ddc438de22e0",
+            "fd5e15652a00e0d3f00595ca32e5c470e7d4afb4f58a56db0b743a5b473b49c4"
+          ]
+        },
+        {
+          "fight": 26,
+          "q": 4,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            26,
+            "a28b70c9fc5b06b884d37d3b17686c36421167ce382ef062b3a9aeaa84226669",
+            "36ae801d01c6d6b341a6ae1f0c59108316f51fad8f71edc8acf9099df572218b"
+          ]
+        },
+        {
+          "fight": 26,
+          "q": 4,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            26,
+            "6750c06528210491752b1b5f54d3606b734d5eefe00091f817734b790acdb208",
+            "fe9e7b98984414e26ecc054a454fbe140bf9df5721473e5309a863ddfd131010"
+          ]
+        }
+      ],
+      "decision_trace_sha256": "48d7ae43c38040e18a9f277bed2df9f0668523a7a6256d500508d6da2c6d6109",
+      "state_count": 664
+    }
+  ]
+}

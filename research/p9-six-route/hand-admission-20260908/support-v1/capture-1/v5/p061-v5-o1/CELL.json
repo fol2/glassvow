@@ -1,0 +1,75 @@
+{
+  "policy_id": "950c2571ceb9e406655ebd08814dd171b50df84edf6ef83fd01d145abaab0229",
+  "policy_index": 61,
+  "vow": 5,
+  "route_preference": "smolder",
+  "runs": [
+    {
+      "seed": 58080100,
+      "result": "win",
+      "final_pair": false,
+      "historical_chain_active": false,
+      "positive_high_payoff": false,
+      "consumer_reached": false,
+      "consumers": [],
+      "decision_trace_sha256": "5641305795e0edeab599677d02851a1448d51ed8c1a3dc1c5fb978f3cc168233",
+      "state_count": 310
+    },
+    {
+      "seed": 58080101,
+      "result": "win",
+      "final_pair": false,
+      "historical_chain_active": false,
+      "positive_high_payoff": false,
+      "consumer_reached": false,
+      "consumers": [],
+      "decision_trace_sha256": "2f8f6f6fcc7c6165151dfaa286cf3176945dcfa55636d66abce4aefecbc6514f",
+      "state_count": 337
+    },
+    {
+      "seed": 58080102,
+      "result": "loss",
+      "final_pair": false,
+      "historical_chain_active": false,
+      "positive_high_payoff": true,
+      "consumer_reached": true,
+      "consumers": [
+        {
+          "fight": 23,
+          "q": 6,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 12,
+          "raw_reference": [
+            23,
+            "d19ec7a6cc2e55dad7e0fdda0a6221f3c849ff61f0c6ce0d549669398e8acf81",
+            "21b36ce421b89a3497b83cb680e526c28e2ff380cf168d90d5acc28dc4ec8d43"
+          ]
+        },
+        {
+          "fight": 23,
+          "q": 4,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 0,
+          "raw_reference": [
+            23,
+            "741f69c5fa1f7dd175064434d72a2d74b95e32b9e8f95202bfe2d328ec9a8f3d",
+            "3100b30022911134601497024b0d6f888bd1db3c5cb1bfc8fe99655eca336a5e"
+          ]
+        }
+      ],
+      "decision_trace_sha256": "fb55a63276d28483733d40740ae13771caefeae005732cbf582188aff39ce14b",
+      "state_count": 514
+    },
+    {
+      "seed": 58080103,
+      "result": "loss",
+      "final_pair": false,
+      "historical_chain_active": false,
+      "positive_high_payoff": false,
+      "consumer_reached": false,
+      "consumers": [],
+      "decision_trace_sha256": "574926e842a30e149a0a32135d72fb913690ee9893fabf42dbaf57be633e87d4",
+      "state_count": 334
+    }
+  ]
+}
