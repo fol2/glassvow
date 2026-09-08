@@ -1,0 +1,57 @@
+{
+  "config_id": "p036-v5-o1-s58080100",
+  "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-support-gg59nao0/project",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v5/p036-v5-o1/p036-v5-o1-s58080100/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v5/p036-v5-o1/p036-v5-o1-s58080100/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v5/p036-v5-o1/p036-v5-o1-s58080100/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 22.110549570999865,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 32445,
+      "sha256": "dff88532012f2ac3a7bbe7d498413ab30cd201844b235bc563c90249466e942a"
+    },
+    "trace.ndjson": {
+      "bytes": 11109936,
+      "sha256": "a6f24dc99c47f3321c0b57d0b7a146c88e354dfcc8e95651668c4fc96840cef4"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 150232,
+      "sha256": "ae5475c4074f19dc9bcbffc151b7e9b8d327c8ff3511a5544e6b9cd1410f6589"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3764,
+      "sha256": "b7d9c8163d186353392f1d9e0eec9d99052f3e44e310be723f89dba5d41367b1"
+    },
+    "CONFIG.json": {
+      "bytes": 566,
+      "sha256": "cfe0716a1bf2b4b925f2a32a919e05fb00435d7a7fe45eb55eb47eb1f5038025"
+    },
+    "CELL.json": {
+      "bytes": 17059,
+      "sha256": "d86e7e0ac5a111ee79fdabdf3334fef51da76e82cd3ded113543f4b0dac5d4dc"
+    }
+  },
+  "p9_certified": false
+}
