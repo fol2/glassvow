@@ -1,0 +1,11 @@
+{
+  "kind": "DELIVERY_ONLY_PROCESS_SLICING",
+  "frozen_protocol_head": "5e71e8cf4fe33b8dab6f50af1807d36c17d595d8",
+  "source": "execute_support.py",
+  "sha256": "52f0800d3b980b2e2400a4a3b0be4ca2dd592998b24002544b90b4baae328b56",
+  "reason": "The integration run completed with observer runtime up to37.25 seconds for one whole run. Four seeds in one process could exceed the retained120-second watchdog. Slice each unchanged seed into its own invocation BEFORE population execution; retain all128x4 rows and combine only source-validated children.",
+  "unchanged": ["policy vectors and identities","simulation seeds and CRN pairing","native game/observer/driver","fixed support gates and failure rules","no seed replacement or added sample","120-second per-invocation watchdog and two workers"],
+  "integration": "support-integration-2 completed eight endpoints with four native/observer parity pairs; first outer container invocation was interrupted and its full/partial evidence is retained.",
+  "scientific_contract_changed": false,
+  "p9_certified": false
+}

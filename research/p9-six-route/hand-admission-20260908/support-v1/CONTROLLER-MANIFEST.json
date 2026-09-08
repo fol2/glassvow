@@ -1,0 +1,27 @@
+{
+  "source": "Existing captured-runtime-source.tar.xz from user supplied p9-recovery-update-20260908.zip; bytes not a new policy design",
+  "files": {
+    "lab_runner.gd": {
+      "bytes": 16878,
+      "sha256": "6315c0665d8da22cd9c3d3f585acbf8cb416e9d73744493e6522c96327a62b0c"
+    },
+    "lab_policy.gd": {
+      "bytes": 1825,
+      "sha256": "ef294f057d0ab23a13c2af57d9ced9a27c74d622c308550e4be932617c8d7261"
+    },
+    "rollout_policy.gd": {
+      "bytes": 3415,
+      "sha256": "7c4b833efd47616ec4aab4f2bd521d44bdc4a17021aefb77ba0b6bf0668a924c"
+    },
+    "legacy_policy.gd": {
+      "bytes": 13866,
+      "sha256": "731122ce5fbc0773f6c97696fab449e21df415692b741eceeab79c521c54a72d"
+    },
+    "random_shop_control.gd": {
+      "bytes": 1637,
+      "sha256": "3b70eb809555676fdc4e8126fed6ddd62730495acd18084ad10eb076dd984191"
+    }
+  },
+  "archive_bytes": 11264,
+  "archive_sha256": "af8d8aa54534b848d6fc291dd97587b2432c567d6b8b8a327ce67c8dd8387d18"
+}
