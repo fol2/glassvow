@@ -1,68 +1,57 @@
-# P9 handoff — fixed command verifier closed negative, full raw verified
+# P9 current handoff — bounded Facet proof, no package admission
 
-P9 UNFINISHED; 0/6 exact-current packages formally admitted. Continue #421 on
-`research/p9-six-route-local-20260905`; main remains
-`2ed6cdb0302ba3aab5845a18d862841165e8aaf7`. The owner target is three viable,
-reachable, genuinely distinct strategies per aspect. Acceptance, core law,
-coupled Stun/Shatter, IDs, saves and RNG/catalogue ordering are unchanged.
+P9 UNFINISHED: 0/6 current packages admitted. Continue #421 on the existing
+research/p9-six-route-local-20260905 branch. Target: three viable, reachable,
+genuinely distinct strategies per aspect. Main reference stays 2ed6cdb0302ba3aab5845a18d862841165e8aaf7.
+Acceptance, coupled Stun/Shatter, IDs/RNG/saves and protected evidence are unchanged.
+Owner comment 5586269454 authorises SELF_REVIEW_NOT_INDEPENDENT; do not wait for
+another reviewer or quota. Scientific confirmation independence still applies.
 
-## Current decisions, not another recovery loop
+## Closed work — reuse, do not replay
 
-The owner authorised author self-review in comment 5586269454. It is recorded
-as SELF_REVIEW_NOT_INDEPENDENT in `self-review-20260908/REVIEW.json` with the
-checked reader and tests. No isolated-reviewer approval is claimed; do not stop
-again for this missing capability. Scientific confirmation independence and
-release protection are unchanged.
+The 1024 compact validation rows, 2048 original-arm reproduction, v25, finite
+locality/enactment work and frozen descriptor are not new work. Preserve exact
+historical limits in SESSION-STATE.json. The old 518348-byte original-arm archive
+still lacks full verified remote storage; old full validation events remain missing.
 
-The prospective `command-chain-20260908/recovery-v1` verifier already completed
-672 rows / 80 fixtures / 822 states. The immutable result is
-COMMAND_CONTRACT_FAIL: 64 of 312 checks failed. Its source freeze is 7b39ebd148bdc7ee23c7e3a4abff4cab79040d71;
-it does not claim identity with the lost earlier probe/reader.
+The 672-row verifier remains COMMAND_CONTRACT_FAIL (64/312 checks). All raw bytes
+were reconstructed remotely. Block absorption and after-hit Shatter explain its
+failed controls; do not substitute a new metric, reset Block or change old signs.
 
-All 64 failed checks have zero pre-block interaction. Whole-command health
-interaction includes differing enemy Block absorption, including the downstream
-consequence of coupled Stun. Preexisting Cracked is not a whole-chain exact null.
-Dusk V5 baseline has no Echo gate before the consumer and Shatters only after its
-hit. Positive HP interaction is therefore not proof of the named mediator chain.
-This falsifies the fixed verifier/control assumptions, not all Facet policies,
-package viability or P9. Pre-block arithmetic explains the negative; it is not
-a new acceptance metric. Do not reset Block, uncouple Stun, alter old signs or
-retune fixtures to rescue the result.
+Source audit at 9be03349 has exact byte readback. Chisel/Lance’s intrinsic law is
+inherited. Old rejected Resonance used eclipseSlash/warCry, NOT Chisel; sharing a
+consumer does not prove whole-package equivalence. Cycle retains growth but adds
+draw; full decomposition is unresolved. Read source-scope-20260908/EXACT-CLOSURE-SCOPE.json.
 
-## Verified preservation
+## New proof already preserved
 
-At source head dada9b6b4a069b6478362e104cb0701ff11aecd1, a fresh remote checkout
-recomputed all 15 directory Git blobs, reconstructed all 4,374,339 raw bytes,
-reproduced the exact full result hash and passed all nine existing archive tests.
-Run 34251111138 / job 102145474134 completed successfully under workflow head
-4777533740c9cb2ebbe98cddb9fa2e230d212e4d. The full receipt is
-`command-chain-20260908/recovery-v1/REMOTE-READBACK.json`. No engine ran.
-Committed parts are durable; Actions is only a verification venue/transport.
-The preceding artifact export failed finalisation with 403 and produced no
-artifact; it was not repeatedly retried or called a successful backup.
+package-proof-20260908/facet-language-v1 froze a different finite language query
+from four exact old states. Minimum legal words: 5/5 commands at V0 base/up,
+7/7 at V5. V5 waits one extra native turn then replays Chisel before Lance.
+Shatter precedes the consumer; Echo-off removes 11/15 fewer HP in matched states.
+All shorter prefixes and complete winning replays are retained. Full raw is
+28412380 bytes, remotely verified at f36d1428. This does not rescue the old exam.
 
-Preserve earlier evidence and limits recorded in SESSION-STATE.json and the
-immutable b14d6143 handoff: all 1,024 compact validation rows; the 2,048 original
-arms (possibly exposed reproduction, not independent confirmation); finite audit,
-locality/observer repair and nine selected enactment runs. Ash Hand V0 and Ash
-Cycle V5 stay absent in the fixed selected witnesses. Cross-turn producer
-registration is temporal, not proof the mediator survived. Do not refit or rerun.
-The old 518,348-byte original-arm archive is still not fully remotely preserved;
-old complete validation events remain unavailable. Keep the supplied engine and
-legacy recovery dependencies. New raw does not fill historical gaps.
+subsequence/derived-1 derives all 156 positional proper prefix subsets from that
+existing graph: 110 legal without the specified chain, 46 illegal. V5’s 63 masks
+represent 43 distinct words per case, not independent samples. Eight tests passed.
+The complete 42834-byte result at 93ddad1b was cold-checkout reproduced; read its
+REMOTE-READBACK.json. No native replay was needed. This is bounded command necessity,
+not every component intervention, natural reachability or a complete package.
 
-## Exact continuation
+## Exact next acceptance obligation
 
-Recovery and this fixed verifier are complete. First finish the missing canonical
-comparison and full-chain acceptance map from existing source and exact historical
-closure scopes. Do not treat a scoped empirical negative as universal equivalence,
-or a renamed old mechanism as formal novelty. No new selected-witness demonstration
-or repeated panel answers these obligations. A new prospective experiment must
-name a genuinely missing acceptance claim, preserve prior negatives and freeze
-its complete inputs/controls before rows.
+Produce a checkable full-observable-system comparison for Chisel/coupled-Shatter/
+Echo versus the exact old Cracked/Echo and relevant closed Shatter contracts;
+then resolve growth-plus-draw decomposition. Include costs, target/instance identity,
+common combat state, reset and acquisition. Require equivalence/decomposition proof
+or a distinguishing trace, not names or more selected demonstrations. No full
+closed-family quotient has yet been delivered. Ash hand-size improvement is allowed;
+do not invent a requirement for six globally new primitives.
 
-Remaining: six complete package certificates; seven-direction detector admission;
-corrected independent confirmation, unrestricted endpoint retention, signed
-controls, ceilings and hard guardrails; minimum lifecycle after admitted interfaces,
-exact-product integration/review and #108 receipt. Row/test/commit counts are not
-P9 completion percentages. No P9 PASS, product merge or background research run.
+Remaining: six complete package certificates; seven-direction detector; corrected
+independent confirmation, unrestricted retention, signed controls and guardrails;
+minimum lifecycle, exact-head review, product integration and #108 receipt. No merge,
+P9 PASS or background task. GitHub read/write and direct evidence publication work;
+remaining science must not be reported as another tool failure. See SESSION-STATE.json
+and referenced receipts for exact hashes and remaining evidence gaps.

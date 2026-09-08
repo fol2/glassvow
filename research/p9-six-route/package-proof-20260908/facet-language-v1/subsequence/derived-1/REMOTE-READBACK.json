@@ -1,0 +1,52 @@
+{
+  "kind": "COLD_REMOTE_BYTE_READBACK_AND_FULL_OFFLINE_REPRODUCTION",
+  "source_head": "a541e9ab5810aeef38bb7738e6a49bbb5be2a151",
+  "original_published_head": "93ddad1b770f57e968d3897cd8d36b5ab15d2a37",
+  "files_matched": 6,
+  "files": [
+    {
+      "path": "research/p9-six-route/package-proof-20260908/facet-language-v1/subsequence/derived-1/DERIVATION.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/package-proof-20260908/facet-language-v1/subsequence/derived-1/EXECUTION-RECEIPT.json",
+      "git_blob": "61c7a4ffcc7390d23445719529d90c00ea1ce2b0",
+      "bytes": 2787,
+      "sha256": "5f21bd62a63520daf4340ea036b243d248e848c69847cbfaccfcb14544e11397"
+    },
+    {
+      "path": "research/p9-six-route/package-proof-20260908/facet-language-v1/subsequence/derived-1/RESULTS.json",
+      "git_blob": "d1b32cd558989169286a0e76e140ddadd77e2b04",
+      "bytes": 42834,
+      "sha256": "ee39bf48647c8e0767d4351aace6c8b7386bf8f1324a658ece39cc1f3619dcd8"
+    },
+    {
+      "path": "research/p9-six-route/package-proof-20260908/facet-language-v1/subsequence/derived-1/TESTS.log",
+      "git_blob": "1e1d6f708af1b27d8188f38ae0808aa4f93cc299",
+      "bytes": 950,
+      "sha256": "8e33e927dd9c01575fe07318802eebb3e7f8d033cc9f1b72658736602ee1915e"
+    },
+    {
+      "path": "research/p9-six-route/package-proof-20260908/facet-language-v1/subsequence/read_subsequences.py",
+      "git_blob": "05216211a7e8fb77e64fc3672ff70b1b6903002e",
+      "bytes": 7456,
+      "sha256": "1543da716bbe0f05c1d71022d336ef1e8937178eb13032145c2d223902b13715"
+    },
+    {
+      "path": "research/p9-six-route/package-proof-20260908/facet-language-v1/subsequence/test_subsequences.py",
+      "git_blob": "2001238cac07a7305393085da7061589dfdc310e",
+      "bytes": 2573,
+      "sha256": "2c62994064f93bf08304f6b2076c57007430a55aae4d926a6adc49bd949dd05c"
+    }
+  ],
+  "result_bytes": 42834,
+  "result_sha256": "ee39bf48647c8e0767d4351aace6c8b7386bf8f1324a658ece39cc1f3619dcd8",
+  "result_git_blob": "d1b32cd558989169286a0e76e140ddadd77e2b04",
+  "positional_proper_subsets": 156,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
