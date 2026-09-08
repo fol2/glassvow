@@ -1,0 +1,25 @@
+{
+  "status": "FROZEN_OBSERVER_COVERAGE_REPAIR_NOT_NEW_SCIENTIFIC_SAMPLES",
+  "question": "The earlier finite audit used fixture to_dict, which omits state. Does the existing causal projection observe those omitted fields and preserve the unchanged finite null verdicts?",
+  "original_protocol_sha256": "949d5de958d4545cb9e5ee597f3e0208b7a05bdc306f0e4b255d4d1f38f96488",
+  "content_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "source_sha256": {
+    "test_coverage.gd": "d6710b12078c5d4e6940933c1e838e7c1d8f71342bec80e85db973324c39f335",
+    "test_package_nulls.gd": "d806a0df01ab740681346a93c883df7993cc3d27cab697be43ed18ae267cd2a5",
+    "causal_probe.gd": "c6aa9a9075b11e2e35015fe379088caa8f4ea61ce4b271164aea8160ab4bdc7e",
+    "diagnostic_rules.gd": "c168a2d6741284db419429537b83dcfae20832029644b3fd67944bf709104144",
+    "health_accounting.gd": "61168bfeb608dcb0f417a69356b0a147ff8fca5e70a924cd9bdbc521bc497d5f",
+    "selective_fervor.gd": "c1890da615afa8d67e6980742202a996ed704f2f9846d04022e13b8591838cf7",
+    "domain/rules/combat.gd": "a6fd99eb53030d3cf1401153bdeceec8b86ccc2af8b7643481855c681906f2ba"
+  },
+  "coverage_mutations": 17,
+  "reexam_dormant_pairs": 116,
+  "reexam_active_cases": 48,
+  "constructed_seed": 46000001,
+  "fresh_population_or_protected_samples": 0,
+  "expected": "17 omitted-field mutations observed by existing full-field projection; all non-multihit dormant pairs, selective dormant/off pairs and same active hit/thorns results remain equal under richer state projection. Original multihit hit-collapse counterexamples remain.",
+  "stop": "Invalid execution or unexpected comparison stops; preserve all output. No scientific thresholds or frozen validation features change.",
+  "claim_limit": "This is a bounded serialization/observer repair. It is not canonical quotient or package admission, nor general process-provenance qualification or a reopening of Node O. Shared helper projection still requires appropriate independent validation before admission.",
+  "watchdog_seconds": 120
+}
