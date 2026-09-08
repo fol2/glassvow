@@ -1,0 +1,64 @@
+{
+  "policy_id": "e2c78ce6633a824f937bb582243fd4604b332f9ce9e1b704c63d2a626996e124",
+  "policy_index": 24,
+  "vow": 5,
+  "route_preference": "hand",
+  "runs": [
+    {
+      "seed": 58080101,
+      "result": "win",
+      "final_pair": true,
+      "historical_chain_active": true,
+      "positive_high_payoff": true,
+      "consumer_reached": true,
+      "consumers": [
+        {
+          "fight": 22,
+          "q": 6,
+          "classification": "NO_POSITIVE_COMPLETE_HISTORICAL_CHAIN",
+          "high_health_contribution": 12,
+          "raw_reference": [
+            22,
+            "eb40103b7c54e2d11b21556bf9ab438fb321f4bd92a0501d182b8e76cc4211ba",
+            "e31dcfc299a9edeb775010bc2e7a303408feb82adfcd3a190ee98cb9056f29c3"
+          ]
+        },
+        {
+          "fight": 22,
+          "q": 5,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 6,
+          "raw_reference": [
+            22,
+            "46525b3246b6b44cccc47691cc7d6087a85c077f7ed343ca5567198d3344417f",
+            "44ae48f7b125ca2440fb40ebda17ad4829fdda11e47979d3a5203e03f5b6c5bf"
+          ]
+        },
+        {
+          "fight": 22,
+          "q": 5,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 5,
+          "raw_reference": [
+            22,
+            "a37327462f7afbaccdf1ccaa682403e7f3b18f4add6a0fe0bc12af3d6e22f5f2",
+            "7d5319114f3ee1793ac45ba53534a1ae8142982c07f54e60402cc9ad3631f6c6"
+          ]
+        },
+        {
+          "fight": 22,
+          "q": 5,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 5,
+          "raw_reference": [
+            22,
+            "6365d9d3b87e3fe53aca6d1e5a6e5a0887946b28037f835b459216d1a141a780",
+            "b8aa7c99477890421bacb0877feb9240031cb7dcc7266649272d2581b638b1e6"
+          ]
+        }
+      ],
+      "decision_trace_sha256": "de8de87c464111e69f3d98e36706d2dc36a9c39f8769be3432dbbcf664d31832",
+      "state_count": 543
+    }
+  ]
+}
