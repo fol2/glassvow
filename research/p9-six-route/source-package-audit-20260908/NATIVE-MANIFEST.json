@@ -1,0 +1,21 @@
+{
+  "format": "split-tar-xz-v1",
+  "archive_bytes": 18492,
+  "archive_sha256": "5541b5d9e1de29e3bb08dc6d2f44173764be9bdc9d4aa248f88ef297c12702da",
+  "parts": [
+    {"file":"000.part","bytes":4096,"git_blob":"11e61d43c59829178df334a6014590aa62ecaefb","sha256":"9c082c3f1b645acc328f75a179ab15424a4e7592bb7669ffaae53bb6b433add9"},
+    {"file":"001.part","bytes":4096,"git_blob":"33f7027c2c91a21f54a63948718b392aea90e47d","sha256":"4f335d07c1f8a5990b58cedda53a3ff4551c71168446251c7831013fa47b04ed"},
+    {"file":"002.part","bytes":4096,"git_blob":"8b111cbdc715251c15696744be63df8c331dcec6","sha256":"e75be870e848b704849caad986b3318994878d398466fc23a2b55d4a6e04e315"},
+    {"file":"003.part","bytes":4096,"git_blob":"9453912bc17d81bdac0ec5ceb307eb3a9f412e22","sha256":"1d28f425cbbdc4d35464c1feb676e99d4b5ebe532efdcb04a60668463f9dc14e"},
+    {"file":"004.part","bytes":2108,"git_blob":"c9cc1206e427e65835251e12223c284e875a6894","sha256":"2ca7189dd7e53747e61a9e87ec01e08e98997b54f31c8aeaef9bbd2d35b3d88d"}
+  ],
+  "files": {
+    "import.log":{"bytes":3818,"sha256":"a51b08412399bc3a8bc6988d44d90a98c2ce3df1ba53e0bad10d2767fd8dafeb"},
+    "native.ndjson":{"bytes":314134,"sha256":"dbd735c7585f2f3425482d644da4d0e2847e2f93c51655ced5b5f8afa9ec67a0"},
+    "parse.log":{"bytes":322,"sha256":"e8b714e51f816f7e99aa169bca40a94f9ba3eb058a88ea79662a8a9630e1ae13"},
+    "receipt.json":{"bytes":849,"sha256":"ac2c2415ff447ef7e4f8bce4fc5b16768e8df5ed3847b18960bfea3dc076a788"},
+    "stderr.log":{"bytes":249,"sha256":"f9fd22c5da04f7c89dbcea80faedb5605a6873c684afb83616aafb1845055da1"},
+    "stdout.log":{"bytes":108,"sha256":"594d5284950d6e1476dcdc6b8c95e7ddbe21ea3caa0c575475e47582017b1854"}
+  },
+  "scope":"Complete raw output/logs/receipt of the finite constructed audit, not full original-arm historical raw archive."
+}
