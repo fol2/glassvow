@@ -1,80 +1,68 @@
-# P9 handoff — enactment captured, admission unfinished
+# P9 handoff — fixed command verifier closed negative, full raw verified
 
-**P9 UNFINISHED; 0/6 packages formally admitted.** Continue #421 on
-`research/p9-six-route-local-20260905`. Refresh current instructions without
-rebasing frozen experiments. Main reference remains `2ed6cdb0302ba3aab5845a18d862841165e8aaf7`.
+P9 UNFINISHED; 0/6 exact-current packages formally admitted. Continue #421 on
+`research/p9-six-route-local-20260905`; main remains
+`2ed6cdb0302ba3aab5845a18d862841165e8aaf7`. The owner target is three viable,
+reachable, genuinely distinct strategies per aspect. Acceptance, core law,
+coupled Stun/Shatter, IDs, saves and RNG/catalogue ordering are unchanged.
 
-Owner target remains three viable, reachable, genuinely distinct strategies per
-aspect. Labels are not requirements. Core law, coupled Stun/Shatter, IDs,
-RNG/catalogue order, saves and acceptance remain unchanged. Candidate and frozen
-descriptor identities are in SESSION-STATE.json. Do not repeat v25, the completed
-1,024-row validation or the 2,048-row original-arm diagnostic; do not refit.
-Historical Node O and closed campaigns remain historical, not newly passed.
+## Current decisions, not another recovery loop
 
-## Completed and remotely verified
+The owner authorised author self-review in comment 5586269454. It is recorded
+as SELF_REVIEW_NOT_INDEPENDENT in `self-review-20260908/REVIEW.json` with the
+checked reader and tests. No isolated-reviewer approval is claimed; do not stop
+again for this missing capability. Scientific confirmation independence and
+release protection are unchanged.
 
-The older fixed validation has all 64 compact chunks; no compact rows remain
-missing. Old full validation events are still unavailable. Original-arm outcomes
-remain reproduction of a possibly exposed assignment, not fresh confirmation.
+The prospective `command-chain-20260908/recovery-v1` verifier already completed
+672 rows / 80 fixtures / 822 states. The immutable result is
+COMMAND_CONTRACT_FAIL: 64 of 312 checks failed. Its source freeze is 7b39ebd148bdc7ee23c7e3a4abff4cab79040d71;
+it does not claim identity with the lost earlier probe/reader.
 
-`source-package-audit-20260908/` contains the 677-assertion finite audit, selected
-acquisition exhibits, 60 locality cases and 17-field observer coverage repair.
-The complete followup raw was downloaded, reconstructed and matched the supplied
-archive. The previously uncertain twelve reader tests now ran, passed and are
-committed. No native rerun was needed to close this readback gap.
+All 64 failed checks have zero pre-block interaction. Whole-command health
+interaction includes differing enemy Block absorption, including the downstream
+consequence of coupled Stun. Preexisting Cracked is not a whole-chain exact null.
+Dusk V5 baseline has no Echo gate before the consumer and Shatters only after its
+hit. Positive HP interaction is therefore not proof of the named mediator chain.
+This falsifies the fixed verifier/control assumptions, not all Facet policies,
+package viability or P9. Pre-block arithmetic explains the negative; it is not
+a new acceptance metric. Do not reset Block, uncouple Stun, alter old signs or
+retune fixtures to rescue the result.
 
-`natural-enactment-20260908/` adds a different observation: nine previously
-selected original-arm runs reproduce their final rows exactly. Ten of twelve
-fixed contexts contain the specified same-battle producer-then-positive-mediator
-consumer. Forty post-decision clones give ten factual matches and ten dormant
-null pairs. Ash Hand V0 and Ash Cycle V5 remain absent; no replacement seeds.
+## Verified preservation
 
-This is selected temporal/causal evidence, not population support, competent
-route-policy validation, full producer-removal/proper-subset proof or canonical
-comparison. Nominal damage, HP removed and poison stay separate. A lethal-target
-nominal boost can remove no extra HP; poison disappearing on death is not negative
-damage. The topology-preserving Fervor contrast and the old hit-collapse contrast
-are different estimands; neither rewrites the frozen descriptor or old negatives.
+At source head dada9b6b4a069b6478362e104cb0701ff11aecd1, a fresh remote checkout
+recomputed all 15 directory Git blobs, reconstructed all 4,374,339 raw bytes,
+reproduced the exact full result hash and passed all nine existing archive tests.
+Run 34251111138 / job 102145474134 completed successfully under workflow head
+4777533740c9cb2ebbe98cddb9fa2e230d212e4d. The full receipt is
+`command-chain-20260908/recovery-v1/REMOTE-READBACK.json`. No engine ran.
+Committed parts are durable; Actions is only a verification venue/transport.
+The preceding artifact export failed finalisation with 403 and produced no
+artifact; it was not repeatedly retried or called a successful backup.
 
-Measurement head: `46401783b39ada692ce9b990f9deda342b79e7dd`.
-Complete source/raw checkpoint: `5991d81f9f32a67d6a66e05a6928d2e1e573e881`.
-Export run `34229304900`, artifact `10057087468`: all 982 included Git blobs
-matched; downloaded readers/tests reproduced the results. New complete raw/source
-archive: 29,328 bytes, SHA256
-`61af4dc208880364c668ec724519e0bc639c44e447f1e106c4fad3893a3ca31b`.
-See `natural-enactment-20260908/REMOTE-READBACK.json` for all identities.
-That receipt and the twelve-test script were themselves fetched and blob-matched.
+Preserve earlier evidence and limits recorded in SESSION-STATE.json and the
+immutable b14d6143 handoff: all 1,024 compact validation rows; the 2,048 original
+arms (possibly exposed reproduction, not independent confirmation); finite audit,
+locality/observer repair and nine selected enactment runs. Ash Hand V0 and Ash
+Cycle V5 stay absent in the fixed selected witnesses. Cross-turn producer
+registration is temporal, not proof the mediator survived. Do not refit or rerun.
+The old 518,348-byte original-arm archive is still not fully remotely preserved;
+old complete validation events remain unavailable. Keep the supplied engine and
+legacy recovery dependencies. New raw does not fill historical gaps.
 
-Committed binary parts are the persistent record; seven-day Actions exports are
-transport only. Concatenate manifest-ordered parts and verify all hashes. The old
-518,348-byte original-arm archive still lacks complete verified remote storage;
-new captures do not restore it or old validation events. Keep the original
-recovery pack for official engine and legacy dependencies. Do not retry unchanged
-Drive scope or upload-host failures, or call a local ZIP a remote backup.
+## Exact continuation
 
-## Capability boundary and exact next action
+Recovery and this fixed verifier are complete. First finish the missing canonical
+comparison and full-chain acceptance map from existing source and exact historical
+closure scopes. Do not treat a scoped empirical negative as universal equivalence,
+or a renamed old mechanism as formal novelty. No new selected-witness demonstration
+or repeated panel answers these obligations. A new prospective experiment must
+name a genuinely missing acceptance claim, preserve prior negatives and freeze
+its complete inputs/controls before rows.
 
-No research process is active. Independent semantic review of the measurement
-candidate has not been obtained. The runtime has no codex/claude/grok executable;
-GitHub review submit/list/request actions do not launch the isolated reviewer.
-Plugin discovery found uninstalled candidates, not a connected execution surface.
-No provider, credentials, installation, research PR or self-approval was invented.
-
-Use `natural-enactment-20260908/REVIEW-CAPSULE.json` with the repository-defined
-fresh-context read-only reviewer on its exact base/head. It supplies contract,
-constraints and deterministic evidence only. This is not delegation of unresolved
-research, routine quota renewal, or an owner implementation task. A verdict on
-this limited measurement task does not admit a package or P9.
-
-After material findings are resolved, complete the remaining canonical,
-producer/subset and population/policy obligations as one acceptance-mapped package
-stage, not another selected-witness diagnostic. Preserve exact old closure scopes:
-no universal impossibility inference and no silent reopening. No complete
-closed-family comparison was produced in this continuation.
-
-Remaining P9 milestones: six complete package certificates; seven-direction
-detector admission; corrected independent confirmation, unrestricted endpoints,
-signed controls, ceilings and all guardrails; minimum lifecycle, independent
-review, exact-product integration and #108 receipt. Counts of rows, assertions or
-commits are not a percentage of P9 completion. Continue ordinary checkpoints
-without human approval whenever the required capability and evidence exist.
+Remaining: six complete package certificates; seven-direction detector admission;
+corrected independent confirmation, unrestricted endpoint retention, signed
+controls, ceilings and hard guardrails; minimum lifecycle after admitted interfaces,
+exact-product integration/review and #108 receipt. Row/test/commit counts are not
+P9 completion percentages. No P9 PASS, product merge or background research run.
