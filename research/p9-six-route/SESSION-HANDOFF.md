@@ -51,11 +51,42 @@ The old 518,348-byte original-arm archive is still not fully remotely preserved;
 old complete validation events remain unavailable. Keep the supplied engine and
 legacy recovery dependencies. New raw does not fill historical gaps.
 
+## Exact-source comparison completed, formal comparison remains incomplete
+
+Source audit d364e49d was cold-checkout reproduced by run 34255919526 and its
+result/receipt/test log committed automatically at
+9be033490c4f4b7ac6ccdcf466571289c2cf31f6. Subsequent connector fetches matched
+all three published blobs to the local bytes. The source audit passed eight
+negative/regression tests; its full result SHA256 is
+9c6e0b83e28568fa4029e01d4a31b89653a9950be1499c746994f02c852d4d0a.
+See `source-scope-20260908/REMOTE-READBACK.json`.
+
+The audit pins baseline/candidate bytes and establishes source lineage, NOT
+whole-game equivalence or a minimized closed-family quotient. Chisel/Lance
+intrinsic combat definitions and Echo code are unchanged; Lance rarity changes.
+Cycle retains growth/reset but appends draw, so the whole action is not simply
+the old Honing action. Do not erase draw or unknown fields to obtain an alias.
+
+A crucial exact-contract distinction is now preserved in
+`source-scope-20260908/EXACT-CLOSURE-SCOPE.json`: the old rejected Resonance
+protocol used eclipseSlash and warCry as producers, not Chisel. Its large local
+interaction but failed pilot-panel activation remains immutable. Sharing Lance
+alone does not prove equivalence of the whole Chisel/coupled-Shatter package.
+Nor does a different producer automatically prove novelty or eliminate a union
+of closed families. The cost>=2 heavy-Attack Energy relay is another contract,
+not an Echo-damage alias. Historical Ash hand-size improvement remains allowed.
+
+The artifact-independent publisher worked for this derived evidence. It does
+not repair the older raw archive gap. No new engine/cohort/independent sample.
+The complete six-package proof has NOT been delivered by these source checks.
+
 ## Exact continuation
 
-Recovery and this fixed verifier are complete. First finish the missing canonical
-comparison and full-chain acceptance map from existing source and exact historical
-closure scopes. Do not treat a scoped empirical negative as universal equivalence,
+Recovery and this fixed verifier are complete. First produce a checkable full-observable-system comparison for
+Chisel/coupled-Shatter/Echo versus the exact two old Cracked/Echo contracts and
+relevant closed Shatter contracts, then growth-plus-draw decomposition. Include
+costs, target/instance identity, shared combat state, expiry and acquisition
+context; do not silently add a requirement for six globally new primitives. Do not treat a scoped empirical negative as universal equivalence,
 or a renamed old mechanism as formal novelty. No new selected-witness demonstration
 or repeated panel answers these obligations. A new prospective experiment must
 name a genuinely missing acceptance claim, preserve prior negatives and freeze

@@ -1,0 +1,35 @@
+{
+  "kind": "DERIVED_EVIDENCE_COMMIT_AND_SUBSEQUENT_REMOTE_READBACK",
+  "source_head": "fbcb942b98a295ad6998fc3292e180888ca27ed0",
+  "published_head": "9be033490c4f4b7ac6ccdcf466571289c2cf31f6",
+  "workflow_run": 34255919526,
+  "workflow_conclusion": "success",
+  "publication_author": "github-actions[bot]",
+  "publication_parent_verified": true,
+  "published_files": {
+    "RESULTS.json": {
+      "bytes": 14881,
+      "sha256": "9c6e0b83e28568fa4029e01d4a31b89653a9950be1499c746994f02c852d4d0a",
+      "git_blob": "a61edec7b039fa8b6350763ea5ed635d38b8b2d5",
+      "subsequent_fetch_blob_matches": true
+    },
+    "EXECUTION-RECEIPT.json": {
+      "bytes": 1661,
+      "sha256": "cea3eba659eb59215929b09b8cde2196a173138b08431d1c15a55ea9c3a298f9",
+      "git_blob": "1522ea342ce076a2a7e339ba85043d992106b8e0",
+      "subsequent_fetch_blob_matches": true
+    },
+    "TESTS.log": {
+      "bytes": 960,
+      "sha256": "cabd7cc0f4cb4d4fcd9e02c13e3362fed392566751e23863d7d8594c9a62a813",
+      "git_blob": "0c3591762d8a473b8b9cf09ce556271f530f4256",
+      "subsequent_fetch_blob_matches": true
+    }
+  },
+  "source_verification": "The fresh-checkout workflow recomputed the three committed source Git blobs and SHA256 identities, reassembled the pinned candidate without an engine, passed eight tests, and required the result to match the complete local 14881-byte result before committing. A separate connector fetch then returned each published evidence blob matching the local bytes. No successful-write-only backup claim.",
+  "artifact_service_required": false,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
