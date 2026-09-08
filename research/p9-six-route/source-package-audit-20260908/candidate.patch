@@ -1,0 +1,349 @@
+--- a/content/full-content.json
++++ b/content/full-content.json
+@@ -519,12 +519,12 @@
+       ],
+       "up": {
+-        "exhaust": false,
++        "exhaust": true,
+         "effects": [
+           {
+             "kind": "draw",
+-            "n": 2
++            "n": 3
+           }
+         ],
+-        "text": "Draw 2 cards."
++        "text": "Draw 3 cards. Kindle."
+       },
+       "name": "Tinder",
+@@ -655,5 +655,5 @@
+     "flurry": {
+       "type": "attack",
+-      "rarity": "uncommon",
++      "rarity": "common",
+       "cost": 1,
+       "target": "enemy",
+@@ -662,6 +662,6 @@
+         {
+           "kind": "dmg",
+-          "n": 2,
+-          "times": 3
++          "n": 0,
++          "times": 5
+         }
+       ],
+@@ -670,12 +670,12 @@
+           {
+             "kind": "dmg",
+-            "n": 3,
+-            "times": 3
++            "n": 1,
++            "times": 5
+           }
+         ],
+-        "text": "Deal @3@ damage 3 times."
++        "text": "Deal @1@ damage 5 times."
+       },
+       "name": "Splinterstorm",
+-      "text": "Deal @2@ damage 3 times."
++      "text": "Deal @0@ damage 5 times."
+     },
+     "executioner": {
+@@ -709,5 +709,5 @@
+     "momentum": {
+       "type": "attack",
+-      "rarity": "uncommon",
++      "rarity": "common",
+       "cost": 1,
+       "target": "enemy",
+@@ -717,6 +717,10 @@
+           "kind": "special",
+           "id": "momentum",
+-          "n": 6,
+-          "grow": 4
++          "n": 0,
++          "grow": 14
++        },
++        {
++          "kind": "draw",
++          "n": 1
+         }
+       ],
+@@ -726,12 +730,16 @@
+             "kind": "special",
+             "id": "momentum",
+-            "n": 8,
+-            "grow": 6
++            "n": 1,
++            "grow": 17
++          },
++          {
++            "kind": "draw",
++            "n": 1
+           }
+         ],
+-        "text": "Deal @8@ damage. Each play, this card gains +6 damage this combat."
++        "text": "Deal @1@ damage. Each play, this card gains +17 damage this combat. Draw 1 card."
+       },
+       "name": "Honing Edge",
+-      "text": "Deal @6@ damage. Each play, this card gains +4 damage this combat."
++      "text": "Deal @0@ damage. Each play, this card gains +14 damage this combat. Draw 1 card."
+     },
+     "bulwark": {
+@@ -942,5 +950,5 @@
+     "empower": {
+       "type": "power",
+-      "rarity": "uncommon",
++      "rarity": "common",
+       "cost": 1,
+       "target": "self",
+@@ -951,5 +959,5 @@
+           "who": "self",
+           "id": "str",
+-          "n": 2
++          "n": 3
+         }
+       ],
+@@ -960,11 +968,11 @@
+             "who": "self",
+             "id": "str",
+-            "n": 3
++            "n": 4
+           }
+         ],
+-        "text": "Gain 3 Fervor."
++        "text": "Gain 4 Fervor."
+       },
+       "name": "Inner Blaze",
+-      "text": "Gain 2 Fervor."
++      "text": "Gain 3 Fervor."
+     },
+     "agility": {
+@@ -1080,5 +1088,5 @@
+     "phantomBlades": {
+       "type": "attack",
+-      "rarity": "rare",
++      "rarity": "common",
+       "cost": 1,
+       "target": "enemy",
+@@ -1088,5 +1096,7 @@
+           "kind": "special",
+           "id": "phantom",
+-          "n": 3
++          "n": 6,
++          "reserve": 4,
++          "floor_per": 2
+         }
+       ],
+@@ -1096,11 +1106,13 @@
+             "kind": "special",
+             "id": "phantom",
+-            "n": 4
++            "n": 7,
++            "reserve": 4,
++            "floor_per": 2
+           }
+         ],
+-        "text": "Deal @4@ damage for each card in your hand."
++        "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per unit above 4."
+       },
+       "name": "Phantom Blades",
+-      "text": "Deal @3@ damage for each card in your hand."
++      "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per unit above 4."
+     },
+     "devour": {
+@@ -1250,5 +1262,5 @@
+     "catalyst": {
+       "type": "skill",
+-      "rarity": "rare",
++      "rarity": "uncommon",
+       "cost": 1,
+       "target": "enemy",
+@@ -1412,5 +1424,5 @@
+     "resonantLance": {
+       "type": "attack",
+-      "rarity": "rare",
++      "rarity": "uncommon",
+       "cost": 1,
+       "target": "enemy",
+@@ -1472,6 +1484,6 @@
+     "pyreheart": {
+       "type": "power",
+-      "rarity": "rare",
+-      "cost": 2,
++      "rarity": "uncommon",
++      "cost": 1,
+       "target": "self",
+       "locked": "lanternFed",
+@@ -1482,12 +1494,21 @@
+           "who": "self",
+           "id": "emberflow",
+-          "n": 1
++          "n": 2
+         }
+       ],
+       "up": {
+-        "cost": 1
++        "cost": 1,
++        "effects": [
++          {
++            "kind": "status",
++            "who": "self",
++            "id": "emberflow",
++            "n": 3
++          }
++        ],
++        "text": "At the start of each turn, gain 3 Embers."
+       },
+       "name": "Pyreheart",
+-      "text": "At the start of each turn, gain 1 Ember."
++      "text": "At the start of each turn, gain 2 Embers."
+     },
+     "ashenChoir": {
+@@ -1549,5 +1570,5 @@
+     "nightSight": {
+       "type": "power",
+-      "rarity": "uncommon",
++      "rarity": "rare",
+       "cost": 1,
+       "target": "self",
+@@ -1570,6 +1591,6 @@
+     "novaflare": {
+       "type": "attack",
+-      "rarity": "rare",
+-      "cost": 2,
++      "rarity": "uncommon",
++      "cost": 1,
+       "target": "enemy",
+       "locked": "spendthrift",
+@@ -1579,5 +1600,8 @@
+           "kind": "special",
+           "id": "emberNova",
+-          "n": 3
++          "n": 6,
++          "reserve": 4,
++          "floor_per": 2,
++          "consumeEmbers": 3
+         }
+       ],
+@@ -1587,11 +1611,14 @@
+             "kind": "special",
+             "id": "emberNova",
+-            "n": 4
++            "n": 7,
++            "reserve": 4,
++            "floor_per": 2,
++            "consumeEmbers": 3
+           }
+         ],
+-        "text": "Deal @4@ damage for every Ember in your lantern."
++        "text": "Deal @2@ damage per held Ember up to 4, then @7@ per unit above 4. Spend up to 3 Embers before dealing damage based on the original bank."
+       },
+       "name": "Novaflare",
+-      "text": "Deal @3@ damage for every Ember in your lantern."
++      "text": "Deal @2@ damage per held Ember up to 4, then @6@ per unit above 4. Spend up to 3 Embers before dealing damage based on the original bank."
+     },
+     "emberdance": {
+@@ -1696,4 +1723,34 @@
+       "name": "Hex",
+       "text": "Unplayable. At the end of your turn, lose 1 HP if this is in your hand. Refuses the fire."
++    },
++    "banklight": {
++      "type": "skill",
++      "rarity": "uncommon",
++      "cost": 1,
++      "target": "self",
++      "vfx": "ward",
++      "effects": [
++        {
++          "kind": "special",
++          "id": "heldEmberWard",
++          "n": 2,
++          "per": 3,
++          "reserve": 4
++        }
++      ],
++      "up": {
++        "effects": [
++          {
++            "kind": "special",
++            "id": "heldEmberWard",
++            "n": 3,
++            "per": 4,
++            "reserve": 4
++          }
++        ],
++        "text": "Gain 3 Ward plus 4 per held Ember above 4."
++      },
++      "name": "Banked Light",
++      "text": "Gain 2 Ward plus 3 per held Ember above 4."
+     }
+   },
+@@ -1710,5 +1767,9 @@
+       "sidestep",
+       "preparation",
+-      "deflect"
++      "deflect",
++      "empower",
++      "flurry",
++      "momentum",
++      "phantomBlades"
+     ],
+     "uncommon": [
+@@ -1716,7 +1777,5 @@
+       "tempest",
+       "uppercut",
+-      "flurry",
+       "executioner",
+-      "momentum",
+       "bulwark",
+       "surge",
+@@ -1726,12 +1785,18 @@
+       "fortify",
+       "bloodRite",
+-      "empower",
+       "agility",
+       "ironSkin",
+-      "regrowth"
++      "regrowth",
++      "quakeblow",
++      "tithe",
++      "emberdance",
++      "novaflare",
++      "pyreheart",
++      "catalyst",
++      "resonantLance",
++      "banklight"
+     ],
+     "rare": [
+       "oblivionStrike",
+-      "phantomBlades",
+       "devour",
+       "annihilate",
+@@ -1739,9 +1804,9 @@
+       "offering",
+       "limitBreak",
+-      "catalyst",
+       "risingLitany",
+       "bastion",
+       "frenzy",
+-      "virulence"
++      "virulence",
++      "nightSight"
+     ]
+   },
+@@ -1864,5 +1929,6 @@
+       "tone": "#d3a15a",
+       "name": "Ashen Core",
+-      "text": "Enemies begin each combat with 3 Smolder."
++      "text": "Enemies begin each combat with 3 Smolder.",
++      "startSmolder": 1
+     },
+     "basaltIdol": {
+@@ -4697,5 +4763,5 @@
+           "who": "allEnemies",
+           "id": "poison",
+-          "n": 6
++          "n": 3
+         },
+         {

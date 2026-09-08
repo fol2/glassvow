@@ -1,0 +1,69 @@
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -15,7 +15,7 @@
+ 
+ const SPECIAL_IDS: Array[String] = [
+ 	"leech", "execute", "momentum", "doubleBlock", "phantom", "devour",
+-	"pyreTithe", "catalyst", "shatterEcho", "flawless", "emberNova", "emberdance",
++	"pyreTithe", "catalyst", "shatterEcho", "flawless", "emberNova", "emberdance", "heldEmberWard",
+ ]
+ const POTION_IDS: Array[String] = [
+ 	"healing", "strength", "swift", "block", "fire", "venom", "energy",
+@@ -946,6 +946,13 @@
+ 			push_error("CombatRules: unknown effect kind %s" % kind)
+ 
+ 
++## Research-only two-slope payoff. Missing floor_per is exactly the prior law.
++func resource_payoff(stock: int, fx: Dictionary) -> int:
++	var q: int = maxi(0, stock)
++	var reserve: int = maxi(0, _ji(fx.get("reserve", 0)))
++	return _ji(fx["n"]) * maxi(0, q - reserve) + _ji(fx.get("floor_per", 0)) * mini(q, reserve)
++
++
+ func _apply_special(
+ 	run: RunState,
+ 	cb: CombatState,
+@@ -968,10 +975,13 @@
+ 		"momentum":
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) + inst.bonus, true, damage_mult)
+ 			inst.bonus += _ji(fx.get("grow", 0))
++		"heldEmberWard":
++			var held: int = maxi(0, cb.embers - _ji(fx.get("reserve", 4)))
++			gain_block_player(cb, _ji(fx["n"]) + _ji(fx["per"]) * held, true, run)
+ 		"doubleBlock":
+ 			gain_block_player(cb, cb.player.block, false, run)
+ 		"phantom":
+-			hit_enemy(run, cb, target, _ji(fx["n"]) * cb.hand.size(), true, damage_mult)
++			hit_enemy(run, cb, target, resource_payoff(cb.hand.size(), fx), true, damage_mult)
+ 		"devour":
+ 			hit_enemy(run, cb, target, _ji(fx["n"]), true, damage_mult)
+ 			if target.hp <= 0:
+@@ -988,7 +998,13 @@
+ 			var echo: int = 2 if target.staggered or _sget(target.statuses, "vulnerable") > 0 else 1
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) * echo, true, damage_mult)
+ 		"emberNova":
+-			hit_enemy(run, cb, target, _ji(fx["n"]) * cb.embers, true, damage_mult)
++			var nova_raw: int = resource_payoff(cb.embers, fx)
++			var nova_spent: int = mini(cb.embers, maxi(0, _ji(fx.get("consumeEmbers", 0))))
++			if nova_spent > 0:
++				# Consume before the hit: a lethal action must still pay its resource cost.
++				gain_embers(run, cb, -nova_spent)
++				run.stats["embersSpent"] = _ji(run.stats.get("embersSpent", 0)) + nova_spent
++			hit_enemy(run, cb, target, nova_raw, true, damage_mult)
+ 		"pyreTithe":
+ 			for held: CardInst in cb.hand.duplicate():
+ 				cb.hand.erase(held)
+@@ -1355,6 +1371,13 @@
+ 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + bonus), "times": 1})
+ 			elif sid == "momentum":
+ 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + inst.bonus), "times": 1})
++			elif sid in ["phantom", "emberNova"] and fx.has("reserve"):
++				var stock: int = maxi(0, cb.hand.size() - 1) if sid == "phantom" else cb.embers
++				var raw_damage: int = resource_payoff(stock, fx)
++				hits.append({"dmg": _preview_hit(p, target, raw_damage), "times": 1})
++			elif sid == "heldEmberWard":
++				var held: int = maxi(0, cb.embers - _ji(fx.get("reserve", 4)))
++				block += preview_block(cb, _ji(fx["n"]) + _ji(fx["per"]) * held, run)
+ 			elif sid == "doubleBlock":
+ 				block += p.block
+ 	var fx_chips: int = 0

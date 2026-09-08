@@ -5,11 +5,12 @@ R=Path(__file__).resolve().parent
 
 def sha(data):return hashlib.sha256(data).hexdigest()
 def blob(data):return hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest()
-def read():
-    manifest=json.loads((R/'NATIVE-MANIFEST.json').read_text())
+def read(root=R):
+    root=Path(root)
+    manifest=json.loads((root/'NATIVE-MANIFEST.json').read_text())
     parts=[]
     for p in manifest['parts']:
-        d=(R/'native.parts'/p['file']).read_bytes()
+        d=(root/'native.parts'/p['file']).read_bytes()
         assert len(d)==p['bytes'] and sha(d)==p['sha256'] and blob(d)==p['git_blob']
         parts.append(d)
     archive=b''.join(parts)
@@ -27,14 +28,19 @@ def read():
     rows=[json.loads(s) for s in files['native.ndjson'].splitlines()]
     kinds=collections.Counter(x['kind'] for x in rows)
     assert kinds=={'manifest':1,'dormant':116,'active':48,'card_memory':2,'player_memory':2,'echo_disjunction':2,'reward_pool':2,'summary':1}
-    frozen=json.loads((R/'PROTOCOL.json').read_text()); first=rows[0]; summary=rows[-1]
+    frozen=json.loads((root/'PROTOCOL.json').read_text()); first=rows[0]; summary=rows[-1]
     assert first['content_sha256']==frozen['content_sha256']
     for field,path in [('test_sha256','test_package_nulls.gd'),('selective_sha256','selective_fervor.gd')]:
-        assert sha((R/path).read_bytes())==first[field]==frozen['source_sha256'][path]
-    assert summary['failures']==0
+        assert sha((root/path).read_bytes())==first[field]==frozen['source_sha256'][path]
+    assert first['legacy_sha256']==frozen['source_sha256']['diagnostic_legacy.gd']
+    assert first['combat_sha256']==frozen['source_sha256']['domain/rules/combat.gd']
+    assert first['engine']=='4.7.2-stable (official)'
+    assert summary['failures']==0 and summary['checks']==677
     dormant=[x for x in rows if x['kind']=='dormant']; active=[x for x in rows if x['kind']=='active']
-    assert len({(x['role'],x['aspect'],x['up'],x['environment']) for x in dormant})==116
-    assert len({(x['aspect'],x['up'],x['environment'],x['strength']) for x in active})==48
+    expected={(r,a,u,e) for r in ('echo','multihit','growth','handstock','catalyst') for a in (0,1) for u in (False,True) for e in ('plain','weak','thorns','weak_thorns','block','vulnerable') if r!='echo' or e!='vulnerable'}
+    assert {(x['role'],x['aspect'],x['up'],x['environment']) for x in dormant}==expected
+    expected_active={(a,u,e,s) for a in (0,1) for u in (False,True) for e in ('plain','weak','thorns','weak_thorns','block','vulnerable') for s in (1,3)}
+    assert {(x['aspect'],x['up'],x['environment'],x['strength']) for x in active}==expected_active
     def same(a,b):return all(a[k]==b[k] for k in ('state_sha256','events_sha256'))
     roles={}
     for role in sorted({x['role'] for x in dormant}):
@@ -49,7 +55,7 @@ def read():
         if x['role']=='multihit' and x['aspect']==0 and x['up']:
             witnesses.append({'environment':x['environment'],**{key:{k:x[key][k] for k in ('enemy_loss','player_loss','hit_events')} for key in ('baseline','legacy','selective')}})
     return {'status':'FINITE_NULL_AUDIT_COMPLETE_NOT_P9','checks':summary['checks'],'failures':0,
-      'frozen_protocol_sha256':sha((R/'PROTOCOL.json').read_bytes()),'content_sha256':first['content_sha256'],
+      'frozen_protocol_sha256':sha((root/'PROTOCOL.json').read_bytes()),'content_sha256':first['content_sha256'],
       'raw_sha256':sha(files['native.ndjson']),'archive_sha256':sha(archive),'native_rows':len(rows),
       'dormant_by_role':roles,'selective_dormant_exact':24,'selective_off_exact':48,
       'active_hit_and_thorns_preserved':48,'counterexamples':witnesses,
