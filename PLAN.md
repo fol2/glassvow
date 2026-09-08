@@ -62,7 +62,7 @@ from completed checklist items and change it only with an explained scope change
 | 5 — Visual acceptance | 10% | Judge the running section against approved chapter evidence, at all reference proportions, with navigation visible and hidden. Fix known defects before expanding. Record the actual visual verdict and rejected defects. Agent-owned gate; no routine owner approval. | 100% |
 | 6 — Generator generalisation | 25% | Generalise placement and chapter profiles over the maintained map corpus plus explicit dense branches, merges, crossing levels, long routes and edge cases. Retain node/edge truth, repeatability and walkable geometry. Resolve the preserved dense seed 4 failure rather than substitute an easier seed. | 100% |
 | 7 — Four-act production | 25% | Integrate all four approved identities into runtime assembly using qualified shared modules and chapter recipes. Verify per-chapter composition, combat alignment and transitions across the whole journey. No preview-only paths or palette-swap substitute. | 100% |
-| 8 — Integration and delivery | 20% | Real campaign entry/travel/encounter return/save-load, shapes/input/accessibility/performance, selected gates and independent review pass. Deliver review surface, merge the final reviewed outcome, observe integrated checks and clean only safely saved task branches. | 0% |
+| 8 — Integration and delivery | 20% | Real campaign entry/travel/encounter return/save-load, shapes/input/accessibility/performance, selected gates and independent review pass. Deliver review surface, merge the final reviewed outcome, observe integrated checks and clean only safely saved task branches. | 20% |
 
 Overall implementation acceptance starts at 0% for Steps 4–8; Step 3 is 100%
 owner-approved separately. Overall = sum(weight × accepted step fraction).
@@ -287,7 +287,7 @@ partial implementation does not receive fractional credit.
   [x] dense branches/merges/long routes; [x] crossing levels, contacts and bounds.
 - Step 7: [x] Act I final recipe; [x] Act II final recipe; [x] Act III final recipe;
   [x] Act IV final recipe; [x] whole-journey/combat alignment and transitions.
-- Step 8: [ ] actual campaign/encounter/save-load; [ ] input/accessibility and
+- Step 8: [x] actual campaign/encounter/save-load; [ ] input/accessibility and
   physical-device evidence; [ ] performance/lifecycle and selected local gates;
   [ ] exact-head independent review and PR CI; [ ] integrated checks, review
   surface, safe cleanup and final usage/completion report.
@@ -1230,3 +1230,55 @@ passwords are needed. TestFlight availability is not physical-device performance
 proof; preserve that distinction in the report. The corrected M4 release canary
 (99e11e3e) passes Act II: p95 4.426 ms, renderer peak 401.344 MiB, 2,380 raw frame
 samples, stable realised/source identity; its native journey image was inspected.
+
+
+### TestFlight preparation checkpoint — 8 September, 00:12 UTC
+
+The four native campaign/encounter/return/save-load probes and all three actual
+chapter transitions close Step 8's first finite item. Steps 4/5/6/7/8 are now
+80/100/100/100/20%; weighted acceptance is 80%. Remaining items are unchanged.
+No device, performance, final-review or merge gate is counted from this update.
+
+Candidate d6c83fb96ff799af3ae5e13ce5c628c5cfd90c11 produces a successfully
+archived and distribution-signed iOS Dev Review IPA: io.fol2.glassvow, 1.0.0 (5),
+iPhone and iPad. The archive and dSYMs are retained under
+build/ios-map-testflight/. Final IPA SHA-256:
+df0d2a04723960da115e073773680ea454c992d40b8906765cf86d923435bc61.
+It has not yet been uploaded. App Store Connect still reports build 4 as latest;
+the existing RC Beta group is internal. Local signing/API access is qualified.
+
+The full core replay is in progress. Its preceding completed run passed 132 test
+files and failed two release-identity files because build 5 was inconsistent with
+the diagnostic build tag and pinned assertions. Commit d6c83fb9 aligns all three;
+the two focused files now pass. The full replay is not counted until completed.
+The real Main cancellation probe passes all five conditions in 173.954 ms:
+geometry released, loading cleared, map released, title restored, run unchanged.
+
+The M4 release matrix completed all 24 act/shape/locale cases, but its raw bundle
+has not been retrieved: SSH now times out, including an observed direct LAN
+address. Tailscale ping succeeded earlier. Preserve the remote archive at
+/tmp/glassvow-matrix-results.tgz; do not label the aggregate or footprint checks
+passed without inspecting it. The owner has been asked to check power/network.
+No further performance-driven production edit is selected from incomplete data.
+
+TestFlight replaces tethered installation and supplies the physical validation
+venue. After the local candidate gates pass, upload an explicitly provisional
+internal beta for device qualification; processing and RC Beta availability must
+be observed. This does not waive the outstanding performance/device criteria.
+Final independent review remains the final-candidate gate before PR integration,
+after the required evidence is available. No public App Store submission.
+
+A supplemental four-act map/combat gallery is available at
+/docs/map/studies/campaign-review/. Its eight source images were inspected during
+native validation; the browser layout and map/combat switching were checked.
+It truthfully states that the build is prepared and verification remains in
+progress. This gallery is not the playable deliverable or a mobile-performance
+receipt.
+
+Usage at 00:06:41 UTC, relative to 12:19: input 226,483,210;
+cached input 223,817,728; uncached input 2,665,482; output 778,900.
+Reasoning 387,185 is included in output, not additional usage. These counters do
+not establish billing or Pro allowance. About 11h53m wall time has elapsed.
+No committed completion ETA while M4 access and physical-device evidence are
+unavailable; the previous 6–10 active-hour forecast remains conditional on those
+venues returning without a new structural performance failure.
