@@ -1,0 +1,49 @@
+{
+  "kind": "FROZEN_HAND_COMPONENT_OBSERVER_PREFLIGHT_NOT_PACKAGE_ADMISSION",
+  "candidate_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "combat_sha256": "a6fd99eb53030d3cf1401153bdeceec8b86ccc2af8b7643481855c681906f2ba",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "source_reference": "3d1aeb41166acfe8cb76278f7bd30cd9d22bf020",
+  "question": "Can source-specific preparation/surge draw, Energy and above-reserve Phantom payoff be observed and intervened upon under the complete native command envelope, with factual/off, other-aspect and dormant identity?",
+  "source_sha256": {
+    "hand_rules.gd": "273492adb05cbc718a16491f03def85e646980acdc338ebe7d7db4643a1c107e",
+    "preflight.gd": "aee2a470039c4d6e36f8aa6a54957c13f4af6043aa1a4cb7cced98fb0aca5d23",
+    "read_preflight.py": "96994d7ae25ba0b46a59aaefcb2fe8c291e43ed3630ea9d72645726ce5167c15"
+  },
+  "cases": {
+    "aspects": [0, 1], "vows": [0, 5], "upgrades": [false, true],
+    "supplier_contexts": ["prep_stock", "prep_empty", "prep_cap", "prep_branch", "prep_modifiers", "prep_lethal", "surge_energy", "surge_access", "surge_empty", "surge_branch", "surge_spare"],
+    "supplier_masks": [-1, 0, 1, 2, 3, 4, 5, 6, 7],
+    "direct_q": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], "direct_masks": [-1, 0, 4],
+    "expected_rows": 1032
+  },
+  "factors": {
+    "native": -1, "omitted_or_off": 0,
+    "bits": {
+      "1": "suppress only preparation/surge authored draw effect",
+      "2": "suppress only preparation/surge authored Energy effect",
+      "4": "set Phantom high-slope n=0; retain floor_per, reserve and native hit/command envelope"
+    },
+    "scope": "Ash only. Other aspect is an exact-null test, not an aspect-exclusive gameplay claim."
+  },
+  "seed": 49080001,
+  "watchdog_seconds": 120,
+  "initial_boundary": "Constructed rootheart start, declared hand/draw/energy/status/block/relic state; no hidden between-command edits. Consumer uid 901, producer 900. Unavailable commands are observed without applying them.",
+  "criteria": [
+    "Every original source-bound row/state/event retained; no diagnostic, schema/coverage failure or hidden mutation",
+    "Full native versus observer-off identity on every context; every enabled Dusk intervention exact null",
+    "All q=0..9 raw payoff reads match removal-before-read and current authored law; q<=4 high-off exact null",
+    "Preparation stock contexts have positive producer-draw by consumer-high-payoff health contrast for both upgrades and vows",
+    "Surge zero-Energy contexts lose consumer opportunity on Energy removal; draw removal loses access when Phantom starts in draw; ordinary Surge is not presumed net stock gain",
+    "Every convenience state view matches retained full reflection; HP removed, post-Block uncapped damage and blocked amount remain distinct"
+  ],
+  "failure": "Any failed criterion blocks this observer preflight; no tuning fixture or old evidence reinterpretation. Delivery parse/serialization repairs may preserve the fixed experiment; semantic changes require an explicit versioned disposition.",
+  "scope_limits": [
+    "No population, policy, economic reachability, detector or P9 claim",
+    "Only specified historical suppliers targeted; other suppliers and relic triggers are not globally suppressed",
+    "No native repetition of completed studies or protected seeds; no descriptor refit"
+  ],
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "new_independent_samples": 0,
+  "p9_certified": false
+}
