@@ -1,0 +1,24 @@
+{
+  "kind": "MOUNTED_RECOVERY_INVENTORY_NOT_REMOTE_BACKUP",
+  "git_worktrees_found": [],
+  "scope": "Supplied recovery ZIPs and loose P9 files. No local Git worktree exists in these mounted directories; archived source is not an unstaged working-tree change.",
+  "files": [
+    {"name":"p9-enactment-checkpoint-20260908(1).zip","bytes":749403,"sha256":"8675f5eb623c00f0ab0ad58d66dff5e98a14f06b2ea992bcf4a00e7c9b46bb94","members":112},
+    {"name":"p9-enactment-checkpoint-20260908.zip","bytes":749403,"sha256":"8675f5eb623c00f0ab0ad58d66dff5e98a14f06b2ea992bcf4a00e7c9b46bb94","duplicate_of":"p9-enactment-checkpoint-20260908(1).zip","members":112},
+    {"name":"p9-recovery-update-20260908.zip","bytes":8200767,"sha256":"3c1431cb926381a604ef0f775f73ee3dccc33fc701088984a29bc27db20970b1","members":18},
+    {"name":"p9-session-handoff-20260908(1).zip","bytes":105453338,"sha256":"8a1a52f33cab5ee03a9d05e35c089d581a8ee530f86e7deec29a9431ff02b165","members":15},
+    {"name":"p9-source-5991d81f.zip","bytes":7594362,"sha256":"bc4955b47b46b99aab2fb8d37b933a6cf90df1abdbe75a77591fbfc54162d063","source_head":"5991d81f9f32a67d6a66e05a6928d2e1e573e881"},
+    {"name":"p9-source-7c3d09fd.zip","bytes":7556418,"sha256":"8c5a3aae6b346d7b27ec4d744f65b493340c5aaabd070e675372574bf67e1e1c","source_head":"7c3d09fd8fd2fd1bba5081ca15e51e33059c6c0b"},
+    {"name":"p9-source-8d13baf5.zip","bytes":7457873,"sha256":"e664a476a4f424d5e3b18071bec051578f2aa23974926feb16eb7f5d03397628","source_head":"8d13baf53f742c75487c7f0f4fcd416fb72158a0"},
+    {"name":"p9-source-a7791720.zip","bytes":7450074,"sha256":"8c9b5cd68bd6c778f053d714407fe93e788230f4a59a0f38fbb82c13038cfe64","source_head":"a7791720ec51a01f89ae24e32e6290bf25431bd4"},
+    {"name":"p9-source-f3e6fe20.zip","bytes":7514223,"sha256":"dba53c5c6276f1ca0acd90cb1d7a6eef0dad607d57e5e36abdc978397ebaa3c6","source_head":"f3e6fe20fc1ff18b25e4c6c100be611f2d5adf06"},
+    {"name":"p9-next/native-followup.tar.xz","bytes":30764,"sha256":"b3705b716d6c5597b216d6ed56f0fb2349a17dd9d2a43896397cd2a89e18dfea"},
+    {"name":"p9-work/FINAL-REMOTE-READBACK.json","bytes":1512,"sha256":"bf4cdf24df6ceb812ed8a0f31b90b631c956cc6eb38a4ecb1ed19de7dc4b3882"},
+    {"name":"P9-SESSION-HANDOFF.md","bytes":10904,"sha256":"da42d549be6504d581c569c04c0d709d8b56eb6633ba35b2bd71ab2c0f6abeab"},
+    {"name":"p9r/SESSION-HANDOFF.md","bytes":10904,"sha256":"da42d549be6504d581c569c04c0d709d8b56eb6633ba35b2bd71ab2c0f6abeab"},
+    {"name":"p9src/AGENTS.md","bytes":9837,"sha256":"3b22bcd95bf60dc5119799da001edf360f1e0f80c6f38daa201492cc938b50ee"},
+    {"name":"p9-recovery-update/PUBLISHED-VALIDATION.json","bytes":18678,"sha256":"8a96ea161f8e4324b6c65e882d2b6cee8239061e368ed743d94397df02a7fa83"}
+  ],
+  "known_local_only_full_raw":{"name":"p9-original-arms-native-20260908.tar.xz","containing_zip":"p9-recovery-update-20260908.zip","bytes":518348,"sha256":"b866d60d7d9dad9bbd83610c145e242ed026bf046806ca5c7cab83f4b58d326c"},
+  "claim":"Inventory alone does not preserve file payload remotely. ZIP snapshots and old handoffs are not current authority."
+}
