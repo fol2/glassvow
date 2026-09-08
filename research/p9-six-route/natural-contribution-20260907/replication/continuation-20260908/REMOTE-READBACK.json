@@ -1,0 +1,36 @@
+{
+  "status": "REMOTE_BYTES_AND_RECONSTRUCTION_VERIFIED_NOT_P9",
+  "checkpoint_commit": "8d13baf53f742c75487c7f0f4fcd416fb72158a0",
+  "checkpoint_tree": "c148abf991bc99f637325139eaa3a34fbd352a62",
+  "transport_commit": "6873ea51c8dc3fc3070427f9713f62ca2c1053d5",
+  "workflow_run": 34206211359,
+  "artifact_id": 10047856602,
+  "downloaded_archive_sha256": "e664a476a4f424d5e3b18071bec051578f2aa23974926feb16eb7f5d03397628",
+  "verified_git_blobs": 926,
+  "updated_files_verified": 7,
+  "reproduced_readouts": [
+    {
+      "script": "read_published_validation.py",
+      "output": "PUBLISHED-VALIDATION.json",
+      "sha256": "8a96ea161f8e4324b6c65e882d2b6cee8239061e368ed743d94397df02a7fa83",
+      "byte_equal_to_local": true
+    },
+    {
+      "script": "read_original_published.py",
+      "output": "ORIGINAL-PUBLISHED-RESULTS.json",
+      "sha256": "455b04ee5eb8184c7b4a075b559f5fc98c024eabc2b7373dac75640e5ce8f7de",
+      "byte_equal_to_local": true
+    },
+    {
+      "script": "read_contribution_summary.py",
+      "output": "CONTRIBUTION-READOUT.json",
+      "sha256": "e158ca62ff924942aa355c0e73291f44ea38cbb85d7195cf3bc6cc4531db2f61",
+      "byte_equal_to_local": true
+    }
+  ],
+  "original_native_arithmetic_equal_cells": 32,
+  "original_native_paired_gaps_equal": 16,
+  "full_original_arm_raw_remote_verified": false,
+  "full_old_validation_raw_recovered": false,
+  "scope": "Byte verification of committed source, compact primary, and exact readouts; not independent scientific or P9 admission."
+}
