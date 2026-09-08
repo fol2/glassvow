@@ -1,0 +1,14 @@
+{
+  "format": "split-tar-xz-v1",
+  "status": "EXISTING_COMPONENT_ACQUISITION_WITNESSES_NOT_PACKAGE_ADMISSION",
+  "archive_bytes": 12800,
+  "archive_sha256": "957b86136985097805729a9cf4f7c5e07083a8a107fa6ac83e15b272109626e6",
+  "parts": [
+    {"file":"000.part","bytes":4096,"git_blob":"3da1d3662e4e4019b3642387a1f2c700def7c545","sha256":"6e1aec8095217d4e77767933906c4078bec879c4004c55fe3df164ecf027d583"},
+    {"file":"001.part","bytes":4096,"git_blob":"5654e095415f1dfe2909c4613e56300cd6082600","sha256":"f38eeb3835c6619f6f838a7fc2906989396d5a817225a4268ac3f2b7b8069d0d"},
+    {"file":"002.part","bytes":4096,"git_blob":"32e4490dccf94a67b2361a261193281addf64149","sha256":"7fe9700f30e9999778e0114098ba99641a8883a4f0e5af5d378a90a812da0039"},
+    {"file":"003.part","bytes":512,"git_blob":"9f3397fe5d0ae54e8689cc1cab9524d5d8714748","sha256":"f8f2ff76512367f6aa50b989b6946609cdc61af724ba921f88dc5de48278a38d"}
+  ],
+  "index_sha256":"924068879ade519c451657e0886f0df4d960d6fd7a3a94a044086dce41f146b9",
+  "scope":"Complete selected native rows/manifests/receipts/logs and selection index. Historical full archive remains unpreserved remotely; no new trials."
+}
