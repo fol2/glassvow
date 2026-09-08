@@ -1282,3 +1282,33 @@ not establish billing or Pro allowance. About 11h53m wall time has elapsed.
 No committed completion ETA while M4 access and physical-device evidence are
 unavailable; the previous 6–10 active-hour forecast remains conditional on those
 venues returning without a new structural performance failure.
+
+
+### Internal beta delivered — 8 September, 00:25 UTC
+
+TestFlight 1.0.0 (5) is VALID and IN_BETA_TESTING. Read-back confirms explicit
+membership of the existing internal RC Beta group; the en-US What to Test notes
+match the supplied content apart from Apple's trailing-newline normalisation.
+Build/upload ID: da2abdef-c5e3-4129-bd90-9fe44e36ca04. No public store or external
+beta submission was performed. Provenance and qualification limits are recorded
+in docs/map/studies/campaign-review/testflight-build.json. The gallery now states
+actual availability and the known first-construction delay.
+
+The full runtime core at d6c83fb9 completed PASS (134 tests), process exit 0.
+Archive signature verification and documentation anchors pass. Subsequent changes
+are documentation/captures only and do not change the uploaded runtime. PR #540
+now targets main and describes the complete four-act integration; it remains a
+draft. A final documentation push will make its CI evaluate the corrected base.
+No final-review, integrated-main or cleanup completion is claimed.
+
+M4 SSH is still unavailable after bounded, spaced retries. Its completed matrix
+bundle remains remote and uninspected. The local Mac is locked, so TestFlight UI
+launch inspection is also unavailable; provider availability does not prove an
+installed device launch. The owner has been asked to restore the test venue.
+No unqualified optimisation or acceptance waiver is introduced to bypass this.
+
+Steps 4/5/6/7/8 remain 80/100/100/100/20%; overall 80%. The beta is delivered,
+but the full programme is not complete. The remaining critical path is access to
+qualified performance/device evidence, any measured loading repair, final exact-
+head independent review, relevant PR/integrated checks and safe cleanup. Resume
+from the preserved raw matrix and current runtime, not a fresh visual redesign.
