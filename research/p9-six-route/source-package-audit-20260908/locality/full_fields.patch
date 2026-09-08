@@ -1,0 +1,25 @@
+--- a/test_locality.gd
++++ b/test_locality.gd
+@@ -24,12 +24,14 @@
+ 	g.cb.enemies[0].statuses["poison"] = 0 if op == "target_reset" else 4
+ 	# These are controlled states, not claims of legal acquisition/history.
+ 	var before: Array = [g.run.to_dict(),g.cb.to_dict()]
++	var before_fields: Variant = FullState.projection([g.run,g.cb,g.last_ret],{})
+ 	var hp: int = g.cb.enemies[0].hp
+ 	var poison: int = int(g.cb.enemies[0].statuses.get("poison",0))
+ 	var events: Array[Dictionary] = g.apply({"t":"playCard","uid":900,"target":0})
+ 	ck(g.last_ret == true, "controlled consumer legal")
+ 	return {"kind":"locality","aspect":spec.aspect,"route":spec.route,"up":up,"op":op,
+ 		"before":before,"after":[g.run.to_dict(),g.cb.to_dict()],"ret":g.last_ret,"events":events,
++		"before_fields":before_fields,"after_fields":FullState.projection([g.run,g.cb,g.last_ret],{}),
+ 		"hp_removed":hp-g.cb.enemies[0].hp,"poison_added":int(g.cb.enemies[0].statuses.get("poison",0))-poison}
+ 
+ func _initialize() -> void:
+@@ -49,6 +51,7 @@
+ 		"content_sha256":FileAccess.get_sha256(args[0]),
+ 		"script_sha256":FileAccess.get_sha256("res://test_locality.gd"),
+ 		"fixture_sha256":FileAccess.get_sha256("res://test_package_nulls.gd"),
++		"projection_sha256":FileAccess.get_sha256("res://causal_probe.gd"),
+ 		"combat_sha256":FileAccess.get_sha256("res://domain/rules/combat.gd"),
+ 		"scope":"60 fixed constructed state edits; not independent trials or canonical admission"})
+ 	for spec: Dictionary in CASES:
