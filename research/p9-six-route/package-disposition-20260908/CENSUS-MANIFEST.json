@@ -1,0 +1,14 @@
+{
+  "codec": "zlib",
+  "packed_bytes": 7778,
+  "packed_sha256": "11c15d8e94dba11a955d00a45bdbbe62c203f068764fc3530f81dba04e60d899",
+  "expanded_bytes": 23941,
+  "expanded_sha256": "f61e152c2aaaca46bdc358298975c9515a33f2208d827d783d3efcd74dba82a6",
+  "parts": [
+    {"path":"CENSUS.part00","bytes":2000,"sha256":"2d9633153f4534e30854be891429017ac404df514cef057e262fe6e97ee6ad03","git_blob":"f3b14c905340c6e063923f4840cb2701cef99e31"},
+    {"path":"CENSUS.part01","bytes":2000,"sha256":"f084681c74a7a7a59a8f063a5ca55c3ebf527fd9f0fbbd22139a7de5aa5016ab","git_blob":"aa92c2898df2ab08233ce56b97fa8f0a5c19fc58"},
+    {"path":"CENSUS.part02","bytes":2000,"sha256":"7da6a9b344e1eec975d7e6656d94b07e874e193b7d22e7cae167bfa608368c23","git_blob":"8efb3cdec83e65f12cd1a10f4503399ec4a10e90"},
+    {"path":"CENSUS.part03","bytes":1778,"sha256":"98eea15ad56848e29fa21d915143b45bd3138aef8f6178504747d9717ef7e205","git_blob":"ae99bcdea053ed51a4e707e694e6bfbdb9962a63"}
+  ],
+  "scope": "Lossless compact projection of all existing cohort outcomes, offer/final-coownership/aggregate-play flags and policy identity. Not the full original raw archive."
+}
