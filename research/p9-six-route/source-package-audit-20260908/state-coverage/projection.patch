@@ -1,0 +1,17 @@
+--- a/test_package_nulls.gd
++++ b/test_package_nulls.gd
+@@ -1,4 +1,5 @@
+ extends SceneTree
++const FullState: GDScript = preload("res://causal_probe.gd")
+ const Legacy: GDScript = preload("res://diagnostic_legacy.gd")
+ const Selective: GDScript = preload("res://selective_fervor.gd")
+ var db: ContentDB
+@@ -74,7 +75,7 @@
+ 		g.cb.enemies[0].statuses["vulnerable"] = 1
+ 	var events: Array[Dictionary] = g.apply({"t":"playCard","uid":900,"target":0})
+ 	ck(g.last_ret == true, "legal " + role)
+-	var state: String = JSON.stringify([g.run.to_dict(), g.cb.to_dict(), g.last_ret])
++	var state: String = JSON.stringify(FullState.projection([g.run, g.cb, g.last_ret], {}))
+ 	var nhit: int = 0
+ 	for event: Dictionary in events:
+ 		if event.get("t") == EventTypes.HIT_ENEMY:
