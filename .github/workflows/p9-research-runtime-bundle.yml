@@ -10,36 +10,75 @@ permissions:
 
 jobs:
   bundle:
-    name: Locate immutable package laws - no engine
+    name: Reproduce source audit and preserve derived bytes - no engine
     runs-on: ubuntu-24.04
     timeout-minutes: 5
+    permissions:
+      contents: write
     steps:
-      - name: Read exact historical archive
+      - name: Check out this exact research checkpoint
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: c802be36510273481b6d0f865b92fac43abf6aff
+          ref: ${{ github.sha }}
           fetch-depth: 1
-          persist-credentials: false
+          persist-credentials: true
           lfs: false
-          sparse-checkout: research/issue-421
-      - name: Print exact law paths and scope references
+          sparse-checkout: |
+            domain
+            content
+            tools
+            research/p9-six-route
+      - name: Verify source, assemble without executing, and reproduce
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = c802be36510273481b6d0f865b92fac43abf6aff
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           python3 - <<'PY'
-          import hashlib,json,pathlib,re,subprocess
-          root=pathlib.Path('research/issue-421')
-          names=subprocess.check_output(['git','ls-tree','-r','--name-only','HEAD','research/issue-421']).decode().splitlines()
-          pattern=re.compile(r'honing|cadence|resonance|shatter.to|shatterer|strength|fervor|flurry|hand.size|phantom|smolder',re.I)
-          hits=[n for n in names if pattern.search(n)]
-          print('PATH_INVENTORY='+json.dumps({'archive_head':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'tracked_files':len(names),'matching_paths':hits},sort_keys=True))
-          summaries=[]
-          for name in hits:
-              p=pathlib.Path(name)
-              if '/summaries/' not in name or not name.endswith('.md'):continue
-              b=p.read_bytes()
-              summaries.append({'path':name,'bytes':len(b),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest(),'text':b.decode()})
-          print('EXACT_SUMMARIES='+json.dumps(summaries,sort_keys=True))
-          print('NO_NATIVE_RUNS=0; NO_NEW_SAMPLES=0; NO_P9_ADMISSION')
+          import hashlib,json,pathlib,subprocess,sys,tempfile
+          root=pathlib.Path('research/p9-six-route/source-scope-20260908')
+          expected={'audit_source.py':'380ad3c99e721c53e425d0a32dfc2860bab99c6bacd72f58b1263434848fa251','test_source.py':'f2948434d3bff35e565407b1942bd8cefc55f386ba467096401ec4b99597e794','SCOPE.md':'7c27bd54fa691a62ec4d1cb0a61f5da77bd8fa96365765b184f801a7d67342a0'}
+          sha=lambda b:hashlib.sha256(b).hexdigest()
+          sources={}
+          for name,digest in expected.items():
+              data=(root/name).read_bytes()
+              if sha(data)!=digest:raise RuntimeError('SOURCE_IDENTITY:'+name)
+              blob=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+              indexed=subprocess.check_output(['git','rev-parse','HEAD:'+str(root/name)]).decode().strip()
+              if blob!=indexed:raise RuntimeError('REMOTE_BLOB:'+name)
+              sources[name]={'bytes':len(data),'sha256':digest,'git_blob':blob}
+          test=subprocess.run([sys.executable,'-m','unittest','-v','test_source'],cwd=root,capture_output=True)
+          (root/'TESTS.log').write_bytes(test.stdout+test.stderr)
+          if test.returncode!=0 or b'Ran 8 tests' not in test.stderr:raise RuntimeError('REGRESSION_FAILURE')
+          with tempfile.TemporaryDirectory(prefix='p9-source-audit-') as folder:
+              target=pathlib.Path(folder)/'candidate'
+              subprocess.run([sys.executable,'research/p9-six-route/source-package-audit-20260908/assemble.py','.',str(target)],check=True)
+              result=subprocess.check_output([sys.executable,str(root/'audit_source.py'),'.',str(target)])
+          digest=sha(result)
+          if digest!='9c6e0b83e28568fa4029e01d4a31b89653a9950be1499c746994f02c852d4d0a':raise RuntimeError('RESULT_BYTE_MISMATCH')
+          (root/'RESULTS.json').write_bytes(result)
+          parsed=json.loads(result)
+          receipt={'kind':'REMOTE_SOURCE_RECONSTRUCTION_NOT_P9','source_head':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'sources':sources,'result_bytes':len(result),'result_sha256':digest,'result_git_blob':hashlib.sha1(b'blob '+str(len(result)).encode()+b'\0'+result).hexdigest(),'tests':8,'tests_returncode':0,'tests_log_sha256':sha(test.stdout+test.stderr),'decisions':parsed['decisions'],'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
+          (root/'EXECUTION-RECEIPT.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print('SOURCE_AUDIT_RECEIPT='+json.dumps(receipt,sort_keys=True))
           PY
+      - name: Commit only derived evidence to the existing research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch=research/p9-six-route-local-20260905
+          remote_head=$(git ls-remote origin "refs/heads/$branch" | cut -f1)
+          test "$remote_head" = "$GITHUB_SHA"
+          root=research/p9-six-route/source-scope-20260908
+          git add "$root/RESULTS.json" "$root/EXECUTION-RECEIPT.json" "$root/TESTS.log"
+          python3 - <<'PY'
+          import subprocess
+          root='research/p9-six-route/source-scope-20260908/'
+          actual=set(subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines())
+          expected={root+x for x in ('RESULTS.json','EXECUTION-RECEIPT.json','TESTS.log')}
+          if actual!=expected:raise RuntimeError('STAGED_SCOPE_MISMATCH')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'research(p9): preserve reproduced source-scope evidence without native runs'
+          git push origin "HEAD:refs/heads/$branch"
+          printf 'PUBLISHED_HEAD=%s\n' "$(git rev-parse HEAD)"
