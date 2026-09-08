@@ -1,0 +1,15 @@
+{
+  "status": "OBSERVER_ONLY_REPAIR_OF_FROZEN_LOCALITY",
+  "original_protocol_sha256": "554795aecfcb9a78271b08e72ec8287729cd38f0e0993fa5f5be1f3a3080597c",
+  "original_test_sha256": "b482d7108d5f9b3b9c61fb61798e2ceb86c604177e98a52808de577491f51db8",
+  "observed_gap": "to_dict is a fixture projection and omits staggered and other mutable fields. The original 60 outputs are retained but not presented as full state.",
+  "updated_test_sha256": "8692acd487bd93712dbd16842e3e6caac891376a345f824a6952d85414440646",
+  "updated_fixture_sha256": "d806a0df01ab740681346a93c883df7993cc3d27cab697be43ed18ae267cd2a5",
+  "existing_projection_sha256": "c6aa9a9075b11e2e35015fe379088caa8f4ea61ce4b271164aea8160ab4bdc7e",
+  "unchanged_content_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+  "cases": 60,
+  "changed_inputs_or_expected_payoffs": false,
+  "new_independent_samples": 0,
+  "comparison": "Reproduce all 60 original rows with full reflected fields added. Require original fixture projections, events and payoffs byte-equivalent as parsed data. Preserve both captures.",
+  "scope": "Full script-field projection excludes append-only queue, whose events are captured separately. Not an independent source oracle or unbounded alias/equivalence proof."
+}
