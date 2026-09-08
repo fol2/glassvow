@@ -1,0 +1,57 @@
+{
+  "config_id": "p048-v0-o1-s58080103",
+  "source_head": "1b75d6a178a5eb194c12149be130d15e54990290",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-support-gg59nao0/project",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p048-v0-o1/p048-v0-o1-s58080103/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p048-v0-o1/p048-v0-o1-s58080103/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p048-v0-o1/p048-v0-o1-s58080103/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 24.095571689999815,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 37579,
+      "sha256": "32d0f83a3ecd4bf6d95d5666a953a62dbb2f8acfe24351248ce1eec0695afbbd"
+    },
+    "trace.ndjson": {
+      "bytes": 12441527,
+      "sha256": "f521c109de0884af2c71e9349d31b71534be83d5e3013a65411c91c634f7ef52"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 164400,
+      "sha256": "a1b022bd6e181b83879f7f2d41201e737644707cc61f9961eb75bebeb0d81b75"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3892,
+      "sha256": "307887efeee52edd1159533ab71522a6637a9a578d43f2f35aca66e03f300060"
+    },
+    "CONFIG.json": {
+      "bytes": 567,
+      "sha256": "ccc81c78fc587c86bbf27454238c9e40b861fbb6c1551a249c90c6429a0f8e45"
+    },
+    "CELL.json": {
+      "bytes": 6463,
+      "sha256": "5df488e421fabdb2e36f1da64a65692b7449998257aa1615b8774e0eb53a8ba5"
+    }
+  },
+  "p9_certified": false
+}
