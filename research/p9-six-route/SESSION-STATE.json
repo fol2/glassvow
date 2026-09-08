@@ -1,5 +1,5 @@
 {
-  "status": "P9_UNFINISHED_ENACTMENT_CAPTURE_CLOSED_INDEPENDENT_REVIEW_NOT_OBTAINED",
+  "status": "P9_UNFINISHED_COMMAND_CONTRACT_FAIL_REMOTELY_RECONSTRUCTED",
   "branch": "research/p9-six-route-local-20260905",
   "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
   "verified_measurement_head": "46401783b39ada692ce9b990f9deda342b79e7dd",
@@ -62,17 +62,12 @@
     ]
   },
   "review": {
-    "status": "NOT_OBTAINED",
-    "scope": "Independent semantic review of the frozen measurement/observer candidate before relying on it for package admission; not owner self-approval or a new P9 threshold.",
-    "capsule": "natural-enactment-20260908/REVIEW-CAPSULE.json",
-    "executables_checked": {
-      "codex": null,
-      "claude": null,
-      "grok": null
-    },
-    "available_connector": "GitHub PR review submit/list/request actions do not execute the isolated reviewer.",
-    "plugin_search": "Uninstalled candidates found; no new provider or credentials approved or installed.",
-    "no_fabricated_verdict": true
+    "status": "SELF_REVIEW_ACCEPT_LIMITED_CAPTURE_WITH_CHECKED_READER",
+    "kind": "SELF_REVIEW_NOT_INDEPENDENT",
+    "owner_authority_comment": 5586269454,
+    "record": "self-review-20260908/REVIEW.json",
+    "independent_approval": false,
+    "scope": "Owner-authorised author review permits continuation, not relaxed scientific independence, altered release protection or P9 admission."
   },
   "no_active_research_processes": true,
   "p9_certified": false,
@@ -83,5 +78,24 @@
     "Corrected independent confirmation, unrestricted endpoint retention, signed controls, ceilings and hard guardrails",
     "Minimum lifecycle, independent review, exact-product integration and #108 receipt"
   ],
-  "exact_next_action": "Use the repository-defined fresh-context read-only reviewer on REVIEW-CAPSULE.json, base 7c3d09fd and exact head 46401783. No implementation delegation or routine quota renewal. After resolving material findings, complete the missing canonical/producer-subset/population-policy proof as one acceptance-mapped package stage; do not add another selected-witness study or repeat completed panels."
+  "exact_next_action": "Complete the missing acceptance-mapped canonical and full-chain proof using existing source/closed-family scope first. Do not rerun the completed 672-row verifier, v25, 1024/2048 panels, refit or replace absent selected seeds. Any prospective experiment requires a different unanswered acceptance obligation, frozen inputs and controls; known negatives are not new samples.",
+  "command_chain": {
+    "source_freeze": "7b39ebd148bdc7ee23c7e3a4abff4cab79040d71",
+    "verified_source_head": "dada9b6b4a069b6478362e104cb0701ff11aecd1",
+    "status": "COMMAND_CONTRACT_FAIL",
+    "rows": 672,
+    "fixtures": 80,
+    "states": 822,
+    "checks": 312,
+    "failed_checks": 64,
+    "all_failed_checks_explained": 64,
+    "raw_bytes": 4374339,
+    "raw_sha256": "62ae02bd4fda08381ce61a4a40b88a98391d7476b6b33d090bc896b622663785",
+    "result_sha256": "81f5261c118eced66482a78857e3d1335beed80abc5e83d97215c5b9e6289e8f",
+    "raw_remote_complete": true,
+    "readback": "command-chain-20260908/recovery-v1/REMOTE-READBACK.json",
+    "new_native_runs_this_continuation": 0,
+    "new_independent_samples": 0,
+    "scope": "The fixed whole-command zero-interaction controls are falsified; not global Facet futility. Positive health interaction can be block-only and post-consumer Shatter cannot enable the preceding hit. Do not edit the frozen fixture, signs or treatment to rescue this terminal."
+  }
 }
