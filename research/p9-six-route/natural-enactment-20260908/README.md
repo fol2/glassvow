@@ -1,0 +1,11 @@
+# Nine preserved-run temporal enactment replays
+
+Run `python read_enactment.py` and `python test_read_enactment.py` here. No Godot or model fitting is needed to reconstruct the result from complete committed bytes. Expected RESULTS.json SHA256: `8778d516aee84d08f1a316655b3e05899041579ca63c19746a6496e3b816eb1d`.
+
+The ordered raw.parts reconstruct an ordinary tar.xz archive (29328 bytes; SHA256 `61af4dc208880364c668ec724519e0bc639c44e447f1e106c4fad3893a3ca31b`). It includes all emitted NDJSON, logs, receipts, exact observer/runner/assembler source, assignment and source manifest. The native study is complete; do not rerun it for orientation. Extracting `source/` provides the executed source without narrative reimplementation. The bounded execution script retains original workspace paths; remapping storage paths is not authority to change product, policy, sample or observation law.
+
+All nine final original-arm rows reproduce their previously published rows exactly. Ten of twelve fixed contexts contain the specified same-battle producer-then-positive-mediator-consumer observation. Ash Hand V0 and Ash Cycle V5 do not; no replacement seed is selected. Forty post-decision clones include ten factual state/event/return matches and ten exact dormant consumer nulls.
+
+These were already post-hoc-selected co-ownership/use witnesses. This replay adds missing temporal/causal observations, not independent samples or acquisition-frequency estimates. Nominal damage, actual health removed and poison are distinct units. Dusk Facet V0 and Ash Hand V5 nominal interactions are positive but extra health removed is zero on already-lethal targets. Poison lost on killing a target is not negative damage or an invented aggregate utility.
+
+Decision: retain the complete fixed result, reject treating component co-ownership as sufficient enacted-chain evidence, and do not extend this diagnostic. Full producer-removal/proper-subset/canonical and population/policy evidence is still required for package admission. No package, seven-direction detector, endpoint retention or P9 certificate is admitted here. The older full 518348-byte original-arm archive remains a separate unverified-remote preservation gap; these complete nine replay captures do not restore it.

@@ -1,0 +1,118 @@
+{
+  "format": "split-tar-xz-v1",
+  "archive_bytes": 29328,
+  "archive_sha256": "61af4dc208880364c668ec724519e0bc639c44e447f1e106c4fad3893a3ca31b",
+  "parts": [
+    {
+      "file": "000.part",
+      "bytes": 4096,
+      "sha256": "da62aae1997652798ffc53d4270168eb65dac99d5fda28aa7c29dd5eceb217d7",
+      "git_blob": "a8499eab318dec0a5188593f399a1f2902c1b8b3"
+    },
+    {
+      "file": "001.part",
+      "bytes": 4096,
+      "sha256": "6bb69c18ac269ef13f1da8bd383a4a40688ab452b37d360cb53b5e188f04b48a",
+      "git_blob": "237f484e410f81922af28dcf6c159b33550bf47e"
+    },
+    {
+      "file": "002.part",
+      "bytes": 4096,
+      "sha256": "d600867917a5647878eabda855d69f3e1ee1648c7a5e66f62b313b4e2e149017",
+      "git_blob": "3f5671da491aa9d6c3adaef35367582d7dc65a15"
+    },
+    {
+      "file": "003.part",
+      "bytes": 4096,
+      "sha256": "c85f2955bf3b8ca7cec9a0a9931f61739626fd9cb848e736d9258598706a4e17",
+      "git_blob": "b28e6d3963c1fa86718f9cb50b80db3a69a7672e"
+    },
+    {
+      "file": "004.part",
+      "bytes": 4096,
+      "sha256": "e53ed624b1496c3060fb05cd8fc171824bbf9d921d31506c9cf0e2e4dd6783a5",
+      "git_blob": "b1b6db97951b2addbfb3e02a2fe5d9fd854f2635"
+    },
+    {
+      "file": "005.part",
+      "bytes": 4096,
+      "sha256": "c79274587d1577f0b82933bd37f3154d3185bb220b319210879fadc13e413456",
+      "git_blob": "87eddaefd4ff3df89260144ce95b52a06ad6f78f"
+    },
+    {
+      "file": "006.part",
+      "bytes": 4096,
+      "sha256": "5cbbec9b24035a6ce152bb1a0fbb07699f57ac39733f805779779256f726b711",
+      "git_blob": "d6eba2a97be03e7473142b1ef3732b6e862b8947"
+    },
+    {
+      "file": "007.part",
+      "bytes": 656,
+      "sha256": "c79e95aa6bf7285363099613dd8363b88c67d323cfeb93c76451f067b20bf81f",
+      "git_blob": "52d456b8175a265995b6c69b7e10e7f579858de3"
+    }
+  ],
+  "files": {
+    "evidence/ASSEMBLY-NOTE.txt": {
+      "bytes": 304,
+      "sha256": "d942d0cef9d52dac0662ab4b32f90175ab6a6fc41e6b24ba66a47d8851a595c9"
+    },
+    "evidence/import-ready.log": {
+      "bytes": 3731,
+      "sha256": "a91f7373867051d6f8547b772d316429545e4fd8e0aefbd37f905d3d39314569"
+    },
+    "evidence/import.log": {
+      "bytes": 3731,
+      "sha256": "a91f7373867051d6f8547b772d316429545e4fd8e0aefbd37f905d3d39314569"
+    },
+    "evidence/native.ndjson": {
+      "bytes": 448945,
+      "sha256": "d9c38348bc8632421307a3bae853175e2d96a8411d4c43128d87e8aa383b07f1"
+    },
+    "evidence/parse.log": {
+      "bytes": 23,
+      "sha256": "98586196fe369245d2baaa755e51142631747608d415e587a922760d6b6ba13a"
+    },
+    "evidence/receipt.json": {
+      "bytes": 1482,
+      "sha256": "fb1e66e1d0b4babff56718a7e904dd050d6074e7d8a52e6d95d6633096119d26"
+    },
+    "evidence/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "evidence/stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "source/ASSIGNMENT.json": {
+      "bytes": 2685,
+      "sha256": "85c5fbaa9b29df01b9df99afad3b55df9955deb16b591d9865e4c5068e2d0ac1"
+    },
+    "source/PROTOCOL.json": {
+      "bytes": 3021,
+      "sha256": "b45a148a61d14195a1d053011debf0869c6726ae39d44738bda4eec21050c5d2"
+    },
+    "source/SOURCE-MANIFEST.json": {
+      "bytes": 4241,
+      "sha256": "3a7e8652409d7ff48b03dca18dfeba55f020ebf9f7528b74ccde6d84604a929f"
+    },
+    "source/assemble.py": {
+      "bytes": 2141,
+      "sha256": "6793eda54584124d07ff010896daab0f7fe568171473c46db21b98a6154b6647"
+    },
+    "source/enactment_game.gd": {
+      "bytes": 6165,
+      "sha256": "7a223e5a339abb78a2270b32e25900b8e06569ec755adc1f93ef125f8cef9bef"
+    },
+    "source/execute_enactment.py": {
+      "bytes": 2342,
+      "sha256": "1414ced77cde47bc0eb6cb71060415d153799efe359f8532da1d3435ecad7106"
+    },
+    "source/run_enactment.gd": {
+      "bytes": 1467,
+      "sha256": "9906cc64c14e7592bde2a128c3ac56b75d3c948e8f8c439383bbbc504e489c7f"
+    }
+  },
+  "scope": "Complete emitted nine-run native replay and source, not new independent or P9 evidence."
+}
