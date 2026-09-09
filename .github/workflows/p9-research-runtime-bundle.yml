@@ -10,10 +10,10 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/minimal-v1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1
 jobs:
   bundle:
-    name: One inherited Bloodfire preflight and complete byte readback
+    name: Fixed minimum Bloodfire signed controls and complete readback
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -26,42 +26,39 @@ jobs:
           fetch-depth: 1
           persist-credentials: true
           sparse-checkout: |
+            .github
             domain
             content
             tools
             research/p9-six-route/ash-inheritance-20260909
-      - name: Bind and commit all executable inputs before any native observation
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess
-          root=pathlib.Path(os.environ['STUDY'])
-          names=['build.py','probe.gd','read.py','run.py','test_minimal.py','PROTOCOL.json']
-          assert not (root/'FREEZE.json').exists()
-          sources={name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in names}
-          for name in names:
-              data=(root/name).read_bytes()
-              blob=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
-              assert blob==subprocess.check_output(['git','rev-parse','HEAD:'+str(root/name)]).decode().strip()
-          packet={'source_head':os.environ['GITHUB_SHA'],'source_sha256':sources,'new_native_observations_at_freeze':0,'p9_certified':False}
-          (root/'FREEZE.json').write_text(json.dumps(packet,indent=2)+'\n')
-          PY
-          branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$STUDY/FREEZE.json"
-          git commit -m 'research(p9): bind exact minimal Bloodfire preflight before observations'
-          git push origin HEAD:refs/heads/$branch
-          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-      - name: Load exact already-authorised official engine
-        id: engine
+            research/p9-six-route/guardrail-confirmation-20260909
+      - name: Verify exact source and focused falsification tests
+        id: checks
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          mkdir "$STUDY/execution-1"
+          mkdir "$STUDY/delivery-1"
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess
+          r=pathlib.Path(os.environ['STUDY'])
+          p=json.loads((r/'PROTOCOL.json').read_bytes())
+          for name,want in p['own_sha256'].items():
+              data=(r/name).read_bytes()
+              assert hashlib.sha256(data).hexdigest()==want,name
+              actual=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+              assert actual==subprocess.check_output(['git','rev-parse','HEAD:'+str(r/name)]).decode().strip(),name
+          PY
+          (cd "$STUDY" && python3 -m unittest -v test_screen) > "$STUDY/delivery-1/tests.stdout" 2> "$STUDY/delivery-1/tests.stderr"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - name: Load exact already-authorised official engine
+        id: engine
+        if: steps.checks.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
           {
             curl --fail --location --max-time 90 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip"
             unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
@@ -70,48 +67,37 @@ jobs:
             echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
             "$engine" --version
             echo "ENGINE=$engine" >> "$GITHUB_ENV"
-          } > "$STUDY/execution-1/engine.log" 2>&1
-      - name: Execute exactly the fixed preflight, no whole-run cohort
+          } > "$STUDY/delivery-1/engine.log" 2>&1
+      - name: Complete only the preselected eight cells, preserving matched chunks
         id: native
         if: steps.engine.outcome == 'success'
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          python3 "$STUDY/run.py" "$GITHUB_WORKSPACE" "$ENGINE" "$RUNNER_TEMP/native-capture" > "$STUDY/execution-1/runner.stdout" 2> "$STUDY/execution-1/runner.stderr"
-      - name: Preserve every available source and emitted raw byte
-        if: always() && env.PUBLISHED_HEAD != ''
+          python3 "$STUDY/screen.py" run "$GITHUB_WORKSPACE" "$ENGINE" "$STUDY/execution-1" "$RUNNER_TEMP/bloodfire-screen" --publish > "$STUDY/delivery-1/runner.stdout" 2> "$STUDY/delivery-1/runner.stderr"
+      - name: Preserve diagnostics even when delivery fails
+        if: always()
         shell: bash
         env:
+          CHECK_OUTCOME: ${{ steps.checks.outcome }}
           ENGINE_OUTCOME: ${{ steps.engine.outcome }}
           NATIVE_OUTCOME: ${{ steps.native.outcome }}
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,tarfile
-          root=pathlib.Path(os.environ['STUDY'])/'execution-1'
-          root.mkdir(exist_ok=True)
-          capture=pathlib.Path(os.environ['RUNNER_TEMP'])/'native-capture'
-          paths=[p for p in sorted(capture.rglob('*')) if p.is_file() and '.godot' not in p.parts] if capture.exists() else []
-          records=[]
-          with tarfile.open(root/'capture.tar.xz','w:xz') as archive:
-              for p in paths:
-                  data=p.read_bytes();relative=str(p.relative_to(capture))
-                  records.append({'path':relative,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
-                  archive.add(p,arcname=relative,recursive=False)
-          packed=(root/'capture.tar.xz').read_bytes()
-          record={'archive_bytes':len(packed),'archive_sha256':hashlib.sha256(packed).hexdigest(),'files':records,'excluded':'.godot generated import/cache only; engine binary stays separate','engine_outcome':os.environ['ENGINE_OUTCOME'],'native_outcome':os.environ['NATIVE_OUTCOME'],'new_independent_samples':0,'p9_certified':False}
-          (root/'ARCHIVE.json').write_text(json.dumps(record,indent=2)+'\n')
-          for name in ['TERMINAL.json','RESULTS.json','ASSEMBLY.json']:
-              if (capture/name).exists():(root/name).write_bytes((capture/name).read_bytes())
-          if not (root/'TERMINAL.json').exists():
-              (root/'TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','reason':'engine/setup/runner did not produce a terminal','new_independent_samples':0,'p9_certified':False},indent=2)+'\n')
-          print((root/'TERMINAL.json').read_text())
+          import json,os,pathlib
+          r=pathlib.Path(os.environ['STUDY']);(r/'delivery-1').mkdir(exist_ok=True)
+          p={'checks':os.environ['CHECK_OUTCOME'],'engine':os.environ['ENGINE_OUTCOME'],'native':os.environ['NATIVE_OUTCOME'],'source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'p9_certified':False}
+          (r/'delivery-1/EXECUTION.json').write_text(json.dumps(p,indent=2)+'\n')
           PY
           branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add -f "$STUDY/execution-1"
-          git commit -m 'research(p9): preserve full minimum Bloodfire native capture and honest terminal'
+          expected=${PUBLISHED_HEAD:-$GITHUB_SHA}
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$expected"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "$STUDY"
+          git diff --cached --quiet || git commit -m 'research(p9): preserve all available Bloodfire screen delivery diagnostics'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -121,56 +107,42 @@ jobs:
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/minimal-v1
-      - name: Reconstruct cold bytes and the exact result without an engine
+          sparse-checkout: |
+            .github
+            research/p9-six-route/ash-inheritance-20260909
+            research/p9-six-route/guardrail-confirmation-20260909
+      - name: Cold-read every published byte and reconstruct the result without Godot
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,importlib.util,json,os,pathlib,tarfile
-          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')/root
-          files=[]
-          for p in sorted(root.rglob('*')):
-              if not p.is_file():continue
+          import hashlib,json,os,pathlib
+          r=pathlib.Path(os.environ['STUDY']);entries=[]
+          paths=[p for p in sorted(r.rglob('*')) if p.is_file()]
+          paths.append(pathlib.Path('.github/workflows/p9-research-runtime-bundle.yml'))
+          for p in paths:
               data=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==data,str(p)
-              files.append({'path':str(p),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
-          record=json.loads((cold/'execution-1/ARCHIVE.json').read_bytes())
-          packed=(cold/'execution-1/capture.tar.xz').read_bytes()
-          assert len(packed)==record['archive_bytes'] and hashlib.sha256(packed).hexdigest()==record['archive_sha256']
-          target=pathlib.Path(os.environ['RUNNER_TEMP'])/'cold-capture';target.mkdir()
-          expected={x['path']:x for x in record['files']}
-          with tarfile.open(cold/'execution-1/capture.tar.xz','r:xz') as archive:
-              members=archive.getmembers()
-              assert len(members)==len(expected) and {m.name for m in members}==set(expected)
-              for m in members:
-                  assert m.isfile() and not m.name.startswith('/') and '..' not in pathlib.Path(m.name).parts
-                  data=archive.extractfile(m).read();r=expected[m.name]
-                  assert len(data)==r['bytes'] and hashlib.sha256(data).hexdigest()==r['sha256']
-                  path=target/m.name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(data)
-          terminal=json.loads((cold/'execution-1/TERMINAL.json').read_bytes())
-          replayed=False
-          if (target/'RESULTS.json').exists():
-              spec=importlib.util.spec_from_file_location('cold_read',cold/'read.py');reader=importlib.util.module_from_spec(spec);spec.loader.exec_module(reader)
-              result=reader.analyse(target/'raw');rendered=(json.dumps(result,indent=2)+'\n').encode()
-              assert rendered==(target/'RESULTS.json').read_bytes()==(cold/'execution-1/RESULTS.json').read_bytes()
-              replayed=True
-          receipt={'kind':'COMPLETE_BLOODFIRE_CAPTURE_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':files,'archived_files':len(expected),'all_archive_bytes_verified':True,'readout_reproduced':replayed,'scientific_status':terminal['status'],'new_native_runs_during_readback':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
-          (root/'execution-1/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          print('READBACK',json.dumps({k:v for k,v in receipt.items() if k!='files'},sort_keys=True))
-          if (cold/'execution-1/RESULTS.json').exists():print((cold/'execution-1/RESULTS.json').read_text())
+              entries.append({'path':str(p),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
+          (r/'delivery-1/SOURCE-READBACK.json').write_text(json.dumps({'published_head':os.environ['PUBLISHED_HEAD'],'files':entries,'all_bytes_equal':True,'p9_certified':False},indent=2)+'\n')
           PY
+          if test -f "$STUDY/execution-1/FILES.json"; then
+            python3 "cold/$STUDY/screen.py" verify cold "$STUDY/execution-1" "cold/$STUDY/execution-1" "$STUDY/execution-1/REMOTE-READBACK.json"
+          fi
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/execution-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): retain cold byte reconstruction of complete Bloodfire preflight'
+          git add -f "$STUDY"
+          git commit -m 'research(p9): retain complete cold readback of minimum Bloodfire screen'
           git push origin HEAD:refs/heads/$branch
-      - name: Preserve the actual scientific gate status
+      - name: Report scientific verdict separately from delivery status
         if: always()
         shell: bash
         run: |
           python3 - <<'PY'
           import json,os,pathlib
-          p=pathlib.Path(os.environ['STUDY'])/'execution-1/TERMINAL.json'
-          assert p.exists() and json.loads(p.read_bytes())['status']=='BLOODFIRE_MINIMAL_PREFLIGHT_PASS'
+          r=pathlib.Path(os.environ['STUDY'])/'execution-1'
+          p=json.loads((r/'TERMINAL.json').read_bytes())
+          print(json.dumps(p,indent=2))
+          if (r/'RESULTS.json').exists():print((r/'RESULTS.json').read_text())
+          assert p['status'] in ('SIGNED_CONTROL_NECESSARY_SCREEN_PASS_NOT_P9','SIGNED_CONTROL_NECESSARY_SCREEN_FAIL')
           PY
