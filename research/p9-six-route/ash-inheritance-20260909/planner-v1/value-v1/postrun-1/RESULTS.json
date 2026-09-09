@@ -1,0 +1,125 @@
+{
+  "kind": "PREASSIGNED_VALUE_BLOCK_TERMINAL_AUDIT",
+  "terminal_unchanged": {
+    "status": "INCONCLUSIVE",
+    "source_head": "233ae6814e4c2bd76ebbef6fea4fe6655ae52ad2",
+    "stages": {},
+    "packages_admitted": 0,
+    "p9_certified": false,
+    "failure": "ValueError('MATCHED_RESOURCE_CEILING')"
+  },
+  "fixed_blocks": {
+    "5": {
+      "value-screen": {
+        "status": "COMPLETE_FIXED_BLOCK_READOUT_NOT_PROMOTION",
+        "original_result_published": true,
+        "value": {
+          "first": 0,
+          "configurations": 32,
+          "rows_per_method": 128,
+          "stock_wins": 12,
+          "planner_wins": 86,
+          "point_difference": 0.578125,
+          "configuration_bootstrap_interval": [
+            0.484375,
+            0.671875
+          ],
+          "gates": {
+            "fixed_mean_gain_at_least_five_points": true,
+            "paired_configuration_lower_bound_positive": true
+          },
+          "pass": true,
+          "scope": "Conditional on four fixed seeds; configurations are not assumed independent seeds. No package or population-generalisation certificate.",
+          "costs": {
+            "stock": {
+              "process_cpu_seconds": 19.45,
+              "process_elapsed_seconds": 20.2,
+              "queries": 0,
+              "root_rollouts": 0,
+              "measured_run_seconds": 10.92168,
+              "measured_query_seconds": 0.0
+            },
+            "planner": {
+              "process_cpu_seconds": 963.0500000000001,
+              "process_elapsed_seconds": 963.63,
+              "queries": 49002,
+              "root_rollouts": 442808,
+              "measured_run_seconds": 953.113503,
+              "measured_query_seconds": 789.939685
+            }
+          },
+          "resource_ceiling_met": true
+        },
+        "cumulative_cpu_seconds": {
+          "stock": 19.45,
+          "planner": 963.0500000000001
+        }
+      },
+      "reserved-configuration-check": {
+        "status": "COMPLETE_FIXED_BLOCK_READOUT_NOT_PROMOTION",
+        "original_result_published": false,
+        "value": {
+          "first": 32,
+          "configurations": 96,
+          "rows_per_method": 384,
+          "stock_wins": 34,
+          "planner_wins": 258,
+          "point_difference": 0.5833333333333334,
+          "configuration_bootstrap_interval": [
+            0.5286458333333334,
+            0.6380208333333334
+          ],
+          "gates": {
+            "fixed_mean_gain_at_least_five_points": true,
+            "paired_configuration_lower_bound_positive": true
+          },
+          "pass": true,
+          "scope": "Conditional on four fixed seeds; configurations are not assumed independent seeds. No package or population-generalisation certificate.",
+          "costs": {
+            "stock": {
+              "process_cpu_seconds": 56.56,
+              "process_elapsed_seconds": 58.93,
+              "queries": 0,
+              "root_rollouts": 0,
+              "measured_run_seconds": 30.814469,
+              "measured_query_seconds": 0.0
+            },
+            "planner": {
+              "process_cpu_seconds": 3052.69,
+              "process_elapsed_seconds": 3054.71,
+              "queries": 154055,
+              "root_rollouts": 1400776,
+              "measured_run_seconds": 3022.565583,
+              "measured_query_seconds": 2519.434199
+            }
+          },
+          "resource_ceiling_met": false
+        },
+        "cumulative_cpu_seconds": {
+          "stock": 76.01,
+          "planner": 4015.7400000000002
+        }
+      }
+    }
+  },
+  "input_file_count": 1074,
+  "input_manifest_sha256": "e8e2e3314b3a6f062af2ef4d0719d7a71bb24762d65049e87a7ea28255e0bf5e",
+  "old_terminal_sha256": "561057c40c940718579cdeb1084003aa0bfc2cb64967b70772efc9b47ca4efba",
+  "old_readback_sha256": "63edf0d7884b17b5e0de23683c32f6680fdc9f682a8ebbe6d48d29a275cacbc2",
+  "same_frozen_reader": true,
+  "support_stage_newly_opened": false,
+  "v0_opened": false,
+  "controller_value_admitted": false,
+  "interpretation": [
+    "All actual child-process costs remain counted under the original 3600-second per-method per-vow ceiling.",
+    "Completed performance observations may be reported, but cannot override the original resource terminal.",
+    "Configuration bootstrap is conditional on four common seeds, not independent seed confirmation.",
+    "No suffix-only costing, rounding, changed CPU ceiling or later data pooling rescues this assignment.",
+    "No new support aggregation is opened by this diagnostic reader."
+  ],
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
