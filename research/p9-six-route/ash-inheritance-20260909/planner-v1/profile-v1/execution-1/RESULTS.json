@@ -1,0 +1,56 @@
+{
+  "kind": "FIXED_OLD_CELL_COMPUTATION_PROFILE",
+  "outcomes": 8,
+  "cell": "v5-000",
+  "all_native_trace_bytes_equal": true,
+  "all_endpoint_policy_and_decision_values_equal": true,
+  "excluded_from_endpoint_comparison": [
+    "top-level run_usec",
+    "top-level query_usec",
+    "separately source-bound header probe_sha256"
+  ],
+  "root_queries": 2580,
+  "root_rollouts": 24640,
+  "profile": {
+    "clone": {
+      "calls": 24640,
+      "usec": 10238039
+    },
+    "greedy": {
+      "calls": 72673,
+      "usec": 28657530
+    },
+    "leaf": {
+      "calls": 24640,
+      "usec": 1465365
+    },
+    "root": {
+      "calls": 2580,
+      "usec": 47449553
+    },
+    "run_map_copy": {
+      "calls": 24640,
+      "usec": 71440
+    }
+  },
+  "unattributed_root_usec": 7088619,
+  "root_time_fractions": {
+    "clone": 0.2157668166020447,
+    "greedy": 0.6039578497188371,
+    "leaf": 0.030882588082547374,
+    "run_map_copy": 0.0015055990095417758
+  },
+  "cpu": {
+    "user": 55.43,
+    "system": 0.08,
+    "elapsed": 55.57
+  },
+  "original_trace_sha256": "7ac249cb7c6ea7e98b327ce674c3b7488de3bb42811dafd6e118aefccbf6160e",
+  "profiled_trace_sha256": "7ac249cb7c6ea7e98b327ce674c3b7488de3bb42811dafd6e118aefccbf6160e",
+  "scope": "One predetermined old eight-outcome cell, timing instrumentation only. Inclusive map time is inside clone time. Instrumented cost is not the original workload timing or a speedup claim.",
+  "new_independent_samples": 0,
+  "new_policy_selected": false,
+  "whole_run_resource_ceiling_requalified": false,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
