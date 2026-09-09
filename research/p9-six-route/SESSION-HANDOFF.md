@@ -1,54 +1,23 @@
-# Current frontier: minimum Bloodfire signed-control screen passed
+# P9 current handoff — minimum controls pass; fixed Ash pair support closed
 
-The complete minimum Bloodfire preflight and its 1,024-row signed arm2 screen have passed their scoped gates, with full remote byte readback. Do not repeat them. The initial readback object comparison failed because integer Counter keys become JSON string keys; the unchanged result now reproduces exact serialized bytes. Read ash-inheritance-20260909/minimal-v1/screen-v1/readback-1/REMOTE-READBACK.json.
+Continue #421 on research/p9-six-route-local-20260905. Three complete viable/reachable/distinct strategies per aspect remain required; 0/6 current certificates. Main remains 2ed6cdb0302ba3aab5845a18d862841165e8aaf7. Author self-review is permitted, not independent confirmation.
 
-Complete the current minimum Bloodfire plus unchanged Hand proof under one source-bound causal/descriptor/policy/peer/economy contract. Preserve inherited identities but do not carry historical population outcomes. The passed preflight and signed-control screen are closed inputs; do not rerun either, v25, Hand support, aliases or bulk tuning. Additional P9 slots remain unresolved.
+## Decisions already complete
 
-P9 remains unfinished, 0/6 full current certificates. Main is unchanged. The earlier source-alias decisions and all historical limits below remain valid; their earlier next-action paragraph is superseded by the current frontier above.
+The minimum inherited Bloodfire preflight passed. Its fixed 1,024-row signed arm2 screen also passed all four contexts, with full 69-file readback. Dusk V0/V5 stayed31/7 wins per128; Ash V0 moved25 to27, Ash V5 stayed4. The serialization-only readback defect was repaired without a native replay or altered result. Do not rerun either stage.
 
----
+The next fixed128-policy/four-seed Ash pair study qualified the new observer and every Leech clone, then completed512 V5 outcomes. Bloodfire active15/inactive113/reachable19/exclusive9; Hand35/93/36/29; cross-active6. Bloodfire active support misses32. All249 Leech clone rectangles passed factual/null/state checks;15 policies had some positive incremental target HP. These local contributions are not whole-run treatment effects. The complete population had34 wins and478 losses, no stall/error.
 
-# P9 current handoff — exact old native role aliases resolved
+The paired-stage protocol therefore closes this exact current candidate/shipping-controller-family support claim and skips V0. It does not revoke historical Hand/Bloodfire admission, prove universal nonviability or erase the separately passed signed screen. Hand uses its historical necessary activation definition, not newly proven source causality. No full package is admitted.
 
-Continue #421 on research/p9-six-route-local-20260905. Three viable, reachable,
-genuinely distinct strategies per aspect remain the target. Main is unchanged
-at 2ed6cdb0302ba3aab5845a18d862841165e8aaf7. No P9 PASS; 0/6 complete current
-certificates. Owner permits author self-review, not invented independence.
-
-## Completed; do not restart
-
-formal-v1/execution-1 completed its original 23 tests and source-bound scoped
-composition calculation. It remains a restricted-algebra result, not eligibility.
-
-The decisive comparison is now registered-identity/execution-1: original #524
-PACKAGES explicitly contains VenomStrike/Catalyst and Empower/Flurry. All 51
-selected native semantic frame files match original source 0f005282 and current
-main. The proof preserves all card parameters, public combat previews, targets,
-costs, state/reset, RNG, rewards and native policy dependencies. It does not
-claim renderer/application equality or an executed source/runtime oracle.
-
-These two native role subsystems cannot become new distinct packages by names
-or by restricting the already registered family. This existential witness closes
-that question without an infinite search over every historical composition.
-Smolder's old held-out edge was positive; its complete package failed. Those
-are different facts. No universal population-failure claim or new threshold.
-
-Both complete static packets were committed, cold-checked and replayed offline.
-The identity result SHA256 is b074ed7f09b1b0506946ef2be34728abc8b8b351ff9d726dbbf7222d2ab62fd6.
-Read registered-identity/DECISION.json and its execution-1/REMOTE-READBACK.json.
-No native game or protected cohort was run; historical Python was parsed only.
-All earlier negatives, positive evidence, source-scope results and raw gaps in
-SESSION-STATE.json remain. Do not repeat reunion/census, v25, model fitting,
-Hand support, bulk tuning, native fixtures/capacity or trace-purity studies.
+Complete capture is under ash-inheritance-20260909/pair-v1/execution-1;146 files were cold-read and V5 decision rebuilt exactly. Source-bound postrun-1 uses all512 existing rows, no new game. Native acquisition valuation ignores the new Bloodfire status and Leech bonus magnitude; this is a shared source limitation, not proof that a particular fix will improve winning or reachability.
 
 ## Exact next action
 
-Do not run another native Smolder/Fervor confirmation: both exact role subsystems are explicitly registered in immutable #524. Use the already admitted Ash hand-size/Bloodfire directions as inherited identities, not new names: bind their exact supported source/content and isolate any required minimal current-product delta before its cheapest applicable guardrail. Do not restore the failed scalar substrate or import historical outcomes across changed dependencies. For additional slots, a complete non-equivalent package under current #421 authority must precede population work; check exact historical role registrations before inventing broader composition proofs. Keep Node O/E0/E1 terminals and all frozen cohorts sealed.
+Qualify a specifically source-bound research-controller capability change using the retained historical Bloodfire valuation/acquisition functions or already evidenced stronger controller. Do not change product scalars or retry random policy roots. Establish exact affected public-state interfaces and preserved null/signed-control semantics before any new fixed matched-cost controller experiment. No replacement is selected or qualified by this audit.
 
-## Remaining P9 work
+Do not repeat reunion/census, v25, aliases, Hand bulk support, failed content tunes, completed native capacity, preflight or passed controls. Do not rescue the just-closed family by trying another root. Keep all raw gaps and historical scopes in SESSION-STATE.json explicit. No scientific protected cohort, product merge or new scalar candidate is selected.
 
-Complete source-bound package certificates (three per aspect), admitted seven-
-direction detector, corrected independent confirmation, unrestricted endpoint
-retention and all guardrails; then minimum lifecycle, exact-head review under
-current authority, one exact-product integration and #108 receipt. Do not ship
-research scaffolding or call source/tests/commits a completion percentage.
+## Remaining milestones
+
+Complete current-source package certificates, three per aspect; seven-direction detector; corrected independent confirmation and unrestricted endpoint retention with all guardrails; minimum lifecycle; exact-head review under owner authority; one selected exact-product integration and #108 receipt. Test/row/commit counts are not completion percentages. No background research process remains.

@@ -1,3 +1,9 @@
+## Current evidence-driven frontier (9 September 2026)
+
+Minimum Bloodfire source/null preflight and signed controls passed. The fixed shipping-policy Ash pair support failed only Bloodfire active support (15<32); V0 skipped, no retry. Next: exact controller capability/source binding and a separately frozen matched-cost comparison, not content tuning or another root. Complete certificates, detector, independent retention and product receipt remain. Detailed source, pipeline and safe-state claims are in the current SESSION-HANDOFF and pair-v1/postrun-1.
+
+---
+
 # P9 — current outcome roadmap
 
 ## Current decision
