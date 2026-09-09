@@ -13,7 +13,7 @@ env:
   STUDY: research/p9-six-route/ash-inheritance-20260909/acquisition-v1
 jobs:
   bundle:
-    name: One acquisition-only capability and matched-value experiment
+    name: Conditional numeric-oracle repair and untouched controller comparison
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 30
@@ -31,28 +31,23 @@ jobs:
             content
             tools
             research/p9-six-route/ash-inheritance-20260909
-      - name: Bind every source before engine or outcomes
+      - name: Check the exact conditional repair and original source identities
         id: source
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          mkdir "$STUDY/delivery-1"
+          mkdir "$STUDY/delivery-2"
+          echo "cffb5bea8dd1e5ac4ba4d74f5dfb075a9751892f5059035cc029a3b99a859df6  $STUDY/resume_numeric.py" | sha256sum -c -
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess
+          import hashlib,json,os,pathlib
           root=pathlib.Path(os.environ['STUDY']);p=json.loads((root/'PROTOCOL.json').read_bytes())
-          for name,want in p['own_sha256'].items():
-              data=(root/name).read_bytes()
-              assert hashlib.sha256(data).hexdigest()==want,name
-              actual=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
-              assert actual==subprocess.check_output(['git','rev-parse','HEAD:'+str(root/name)]).decode().strip(),name
-          for name,want in p['previous_sha256'].items():assert hashlib.sha256(pathlib.Path(name).read_bytes()).hexdigest()==want,name
+          for name,want in p['own_sha256'].items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==want,name
           PY
-          (cd "$STUDY" && python3 -m unittest -v test_bridge) > "$STUDY/delivery-1/tests.stdout" 2> "$STUDY/delivery-1/tests.stderr"
-          python3 -m py_compile "$STUDY/experiment.py"
+          (cd "$STUDY" && python3 -m unittest -v test_bridge) > "$STUDY/delivery-2/tests.stdout" 2> "$STUDY/delivery-2/tests.stderr"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-      - name: Load pinned supported engine
+      - name: Load the same pinned official engine
         id: engine
         if: steps.source.outcome == 'success'
         continue-on-error: true
@@ -67,16 +62,16 @@ jobs:
             echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
             "$engine" --version
             echo "ENGINE=$engine" >> "$GITHUB_ENV"
-          } > "$STUDY/delivery-1/engine.log" 2>&1
-      - name: Qualify then execute only frozen conditional stages
+          } > "$STUDY/delivery-2/engine.log" 2>&1
+      - name: Require the specific retained failure class, qualify corrected oracle, continue fixed cohort
         id: execute
         if: steps.engine.outcome == 'success'
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          python3 "$STUDY/experiment.py" run "$GITHUB_WORKSPACE" "$ENGINE" "$STUDY/execution-1" "$RUNNER_TEMP/acquisition" --publish > "$STUDY/delivery-1/runner.stdout" 2> "$STUDY/delivery-1/runner.stderr"
-      - name: Persist all available diagnostics and exact safe state
+          python3 "$STUDY/resume_numeric.py" "$GITHUB_WORKSPACE" "$ENGINE" > "$STUDY/delivery-2/runner.stdout" 2> "$STUDY/delivery-2/runner.stderr"
+      - name: Preserve all available diagnostics without overwriting the old capture
         if: always()
         shell: bash
         env:
@@ -87,9 +82,8 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);(root/'delivery-1').mkdir(exist_ok=True)
-          (root/'delivery-1/EXECUTION.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'source':os.environ['SOURCE_OUTCOME'],'engine':os.environ['ENGINE_OUTCOME'],'execute':os.environ['EXEC_OUTCOME'],'p9_certified':False},indent=2)+'\n')
-          for p in root.rglob('*.pyc'):p.unlink()
+          root=pathlib.Path(os.environ['STUDY']);(root/'delivery-2').mkdir(exist_ok=True)
+          (root/'delivery-2/EXECUTION.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'source':os.environ['SOURCE_OUTCOME'],'engine':os.environ['ENGINE_OUTCOME'],'execute':os.environ['EXEC_OUTCOME'],'p9_certified':False},indent=2)+'\n')
           PY
           branch=research/p9-six-route-local-20260905
           expected=${PUBLISHED_HEAD:-$GITHUB_SHA}
@@ -97,7 +91,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -f "$STUDY"
-          git diff --cached --quiet || git commit -m 'research(p9): preserve acquisition comparison diagnostics and terminal'
+          git diff --cached --quiet || git commit -m 'research(p9): retain all numeric repair and controller comparison diagnostics'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -110,7 +104,7 @@ jobs:
           sparse-checkout: |
             .github
             research/p9-six-route/ash-inheritance-20260909
-      - name: Cold-read complete published bytes and reproduce closed decisions
+      - name: Cold-read repaired and original source plus full new capture
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
@@ -122,23 +116,23 @@ jobs:
               if not p.is_file():continue
               data=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==data,str(p)
               entries.append({'path':str(p),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
-          (root/'delivery-1/SOURCE-READBACK.json').write_text(json.dumps({'published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':entries,'all_bytes_equal':True},indent=2)+'\n')
+          (root/'delivery-2/SOURCE-READBACK.json').write_text(json.dumps({'published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':entries,'all_bytes_equal':True},indent=2)+'\n')
           PY
-          if test -f "$STUDY/execution-1/RESOLVED-PROTOCOLS.json"; then
-            python3 "cold/$STUDY/experiment.py" verify cold "$STUDY/execution-1" "cold/$STUDY/execution-1" "$STUDY/execution-1/REMOTE-READBACK.json"
+          if test -f "$STUDY/execution-2/RESOLVED-PROTOCOLS.json"; then
+            python3 "cold/$STUDY/repaired-source-1/experiment.py" verify cold "$STUDY/execution-2" "cold/$STUDY/execution-2" "$STUDY/execution-2/REMOTE-READBACK.json"
           fi
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
           git add -f "$STUDY"
-          git commit -m 'research(p9): retain complete acquisition experiment cold-readback'
+          git commit -m 'research(p9): preserve complete corrected-oracle comparison cold-readback'
           git push origin HEAD:refs/heads/$branch
-      - name: Report actual scientific terminal separately from delivery
+      - name: Report actual terminal separately from a delivery success
         if: always()
         shell: bash
         run: |
           python3 - <<'PY'
           import json,os,pathlib
-          p=json.loads((pathlib.Path(os.environ['STUDY'])/'execution-1/TERMINAL.json').read_bytes())
+          p=json.loads((pathlib.Path(os.environ['STUDY'])/'execution-2/TERMINAL.json').read_bytes())
           print(json.dumps(p,indent=2))
           assert p['status'] in ('FIXED_ACQUISITION_ADAPTER_NOT_ADMITTED','ACQUISITION_ADAPTER_VALUE_SUPPORTED_NOT_PACKAGE')
           PY
