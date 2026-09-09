@@ -1,0 +1,340 @@
+{
+  "kind": "COLD_REMOTE_BYTE_READBACK_AND_OFFLINE_RECONSTRUCTION",
+  "freeze_head": "9950059c98d2db245b0023a9c7f29dc79ef7c241",
+  "workflow_head": "80da82fc206d0e12567e58114a8aa7b2b77bdff4",
+  "workflow_run": "34298514275",
+  "published_head": "286f35104feecd24a6eca0739bc8b98c2c7b0146",
+  "files_matched": 53,
+  "files": [
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/EXECUTION.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/EXECUTION.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/PROTOCOL.json",
+      "bytes": 3527,
+      "sha256": "0ebcc9dbece994506d2d2037670f21d4c9342970aa28a8ede0b583e7c6e91a3f",
+      "git_blob": "6f53eee924dd9045234697351678fcd042c174e5"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/TESTS.log",
+      "bytes": 706,
+      "sha256": "451965fd61f2c17458be17639469d7a4eb444a21cc94d541c14f68594a85af3c",
+      "git_blob": "63b10f7b29740630fdef9ef3cd7093cb6327e2a4"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/foundation.py",
+      "bytes": 6698,
+      "sha256": "617f3bbbca3d2c465deed64a0757bb26038f198f07b1861b4c8ab9115aeedd48",
+      "git_blob": "394f4b8fd93146057ce4dcde46c6bebb217b1e39"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/RESULTS.json",
+      "bytes": 5003,
+      "sha256": "1c5ca032d20585f8b94e218967d6707b8e66860483483b74a2aa2a58ed324304",
+      "git_blob": "be70514cd3c0754ebbf4f83316a742a65c29a588"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/TERMINAL.json",
+      "bytes": 10825,
+      "sha256": "0ab07188d0ff38f98876813e49b748cf8a34dba50557e298d5bb89cc685fbda1",
+      "git_blob": "a80e94cca1bbd0588e3afc9f046845669a02f6c8"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v0.config.json",
+      "bytes": 148,
+      "sha256": "4d101024fa4cdc12335e43fa64f0833200182c8adba260c47f3b2fbb30dcb1ec",
+      "git_blob": "5940c4ffadcb82aa4343f7baab2e0e19474b3ef0"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v0.execution.json",
+      "bytes": 876,
+      "sha256": "8d619931e6dc0624d0c2c4901d3d769b0b7c2bf4e670df03434e9a88d232b6e2",
+      "git_blob": "dbe3bbef7ab58f77a03c19714c8e44a7f6a0b3e3"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v0.ndjson.xz",
+      "bytes": 41668,
+      "sha256": "3cb0103669d300c8775637d0dc7c95796f076a974579364064b6f48a00b91daf",
+      "git_blob": "3579684626edeea5d853ed7a215891619c7422f0"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v0.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v5.config.json",
+      "bytes": 148,
+      "sha256": "ef50ceb154a7920d51c0eff8120baff981d0de95d186a40a7bc28eb2daa2bc2c",
+      "git_blob": "48a9e9f05299cf12cf72dc37ca6065df7a6ba81f"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v5.execution.json",
+      "bytes": 876,
+      "sha256": "27a4a55d228ed327c79d768adaf4655aad3c5628fee877db0086968a3555f769",
+      "git_blob": "0597b3fc751d9f2ce4b77b9372bf1a283515f713"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v5.ndjson.xz",
+      "bytes": 32396,
+      "sha256": "d62b288ba8a38bce3e25b08439fd64ef0de87494a6c120490546031ebf7ef18c",
+      "git_blob": "153a973f130f4b78021c92b5e8cbcf33b0ac27c8"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v5.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v5.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v0.config.json",
+      "bytes": 148,
+      "sha256": "cab222affe4956efe735141a9dc0e1acec4407a5979a5b90741659c1f66767da",
+      "git_blob": "c2a7f9b22bbdbf71fc700a48ee19e0e443ae4d8d"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v0.execution.json",
+      "bytes": 875,
+      "sha256": "ca620e65596fc2b2904305ac5fac514fa7d82c0bffeaa0d1fcc6811c146e5b39",
+      "git_blob": "2bd8dff3f2be79746eca46ce5fcb9b3a6bb04ab8"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v0.ndjson.xz",
+      "bytes": 38132,
+      "sha256": "498cd25d963641fc1b6df609381d1df678f71db2d8da33ab6d4fa105ae9d32a0",
+      "git_blob": "2e8592d42677402aa20a82f29f7662eb712d0bcb"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v0.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v5.config.json",
+      "bytes": 148,
+      "sha256": "111e4b62e6b5b604bc9297fbfd9796082f1f28339bbe15165f1f7d51be344342",
+      "git_blob": "5a6aec84617ae994da0d9055714e8f77515afcad"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v5.execution.json",
+      "bytes": 875,
+      "sha256": "2e15b82099bf0c74db3469a9b02405f8dd3bc9ee6f71435f81be33ef066c0f24",
+      "git_blob": "dcafddd6e26a7dc976db81434dec206f28420877"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v5.ndjson.xz",
+      "bytes": 30144,
+      "sha256": "fc977aef6896d8d79dd9c46d75113223aa5aa3ea96cc39ff612126ddf623ea2a",
+      "git_blob": "c6aad338e1a812c157ff655012ab43f8699f3583"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v5.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v5.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/baseline-import.stdout",
+      "bytes": 3395,
+      "sha256": "07b2f57287b70b37493d64707d220468332fc9e06e5cd4902d4705d84c6ab241",
+      "git_blob": "e48985744ca4252845c7835e0bb1c88822e2ecf5"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v0.config.json",
+      "bytes": 150,
+      "sha256": "221914fa70962c60fe703d3bf22d289d37f833dc1dcdba2f27fef571d73de083",
+      "git_blob": "81bbc2fe0641cf643768ce884a4225d65ebdc2c8"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v0.execution.json",
+      "bytes": 881,
+      "sha256": "4275319b9f90e8a8eea6d190c42325dba23ad76481e868ec001e56769407a592",
+      "git_blob": "31cffae8865321ce6b8f01290193465aabbe6aec"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v0.ndjson.xz",
+      "bytes": 43452,
+      "sha256": "68c8655494634a0fb08f7f9eca3894ff7edebf1914bf8295139753d259d776c7",
+      "git_blob": "dcfcf6408ef0ff24210d7b528401e8aea2a2e7f9"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v0.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v5.config.json",
+      "bytes": 150,
+      "sha256": "15b06ccde06b7384f0afae446955a09f2582ef513de1ad74be7846e02bcd031c",
+      "git_blob": "32c6afd9b316b67ab26ac9c5f4867f4919966270"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v5.execution.json",
+      "bytes": 879,
+      "sha256": "9aca282f8a9e68ef1139d3bfc8bae4789b52d0c1b365f3cb62a1b43887007579",
+      "git_blob": "ed9a90e822b58deaffd3bbd6da4cfdb9149cb96f"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v5.ndjson.xz",
+      "bytes": 34504,
+      "sha256": "82476c2181d0f5c3624955f1dd0b7276a6aa3c91b52fd4714065be11e44d7009",
+      "git_blob": "c17f939dda3f55f673fb2407ed6d349bfee63ed7"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v5.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v5.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v0.config.json",
+      "bytes": 150,
+      "sha256": "c14f665a95af4a3750f80c7118975f82b6c3ad194fb1da2970d8e91e67ea5b19",
+      "git_blob": "22eca3a3b12e4b089b4b9dc0e66fde813380d922"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v0.execution.json",
+      "bytes": 874,
+      "sha256": "e12382dcd2f931e2bb2d587e907ed9bc2318395dba7bfd74960c2a7f8a318529",
+      "git_blob": "140a03f5dff4727d05042d3d7e11294015521fe7"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v0.ndjson.xz",
+      "bytes": 40544,
+      "sha256": "420e76ecf4eaa924744ceb5c665ea39ff82cd3c52bfdb55738316de9b652c3d9",
+      "git_blob": "eba7fe52ca2f789c0ccdfec694038b7fbf25bd3e"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v0.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v5.config.json",
+      "bytes": 150,
+      "sha256": "0366b4d0322ebc83d6297aa0f8d7a9c00b3bd6c323105d7d8e887f5e34c1c861",
+      "git_blob": "b4b2a709a6e66b0832f47e8734860ec8a543d1c7"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v5.execution.json",
+      "bytes": 880,
+      "sha256": "580755e0352249d2c41f8d027b3d67994bfca509d8513aa7f181b99046d48d3f",
+      "git_blob": "e77c04a77dfac627d82069cd024362d61e05627b"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v5.ndjson.xz",
+      "bytes": 31676,
+      "sha256": "08611c2818a722ba5e6d0d9a3b754b23ab7778957a3004eb062f7797639c5d72",
+      "git_blob": "57cfaa2c14d04b70f80e1ff5d07983bf8a89190e"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v5.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v5.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/candidate-import.stdout",
+      "bytes": 3569,
+      "sha256": "6f210d0854a0f36b56273dd6f907695257fcf0d959227b8e7093fe7682f052c4",
+      "git_blob": "0152b461c85cc1f1bf264eee66f4f835321a37ca"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/native-1/content-candidate.json",
+      "bytes": 137022,
+      "sha256": "91fd5de56727df42fdcb539b61e7cc7a32e77f3f85dbbe13baef3513e7003cfb",
+      "git_blob": "6a7c6e0d27bd0b2b746466e64ec35679e5d03c3a"
+    },
+    {
+      "path": "research/p9-six-route/native-foundation-20260909/test_foundation.py",
+      "bytes": 1552,
+      "sha256": "07a1b65ea9c14fad50df0846d929a9aa07deb03d426565e182c00b0132c43e9e",
+      "git_blob": "f667e1fd9c20e3daea5001894e0c419667c12ea4"
+    }
+  ],
+  "reconstruction": {
+    "new_native_runs": 0,
+    "p9_certified": false,
+    "packages_admitted": 0,
+    "result_sha256": "1c5ca032d20585f8b94e218967d6707b8e66860483483b74a2aa2a58ed324304",
+    "source_bound_raw_grids": 8,
+    "status": "SIGNED_CONTROL_NECESSARY_SCREEN_FAIL"
+  },
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT; separate checkout is byte independence, not a second scientific sample or semantic oracle."
+}
