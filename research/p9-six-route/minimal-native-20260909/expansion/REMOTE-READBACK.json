@@ -1,0 +1,106 @@
+{
+  "kind": "COLD_REMOTE_EXPANSION_BYTES_AND_OFFLINE_COMPARISON",
+  "source_freeze": "15523d086b1be513062965a3f8cc4d49d7de7b6c",
+  "workflow_head": "e4734e7e0d6f5238f93c446e42b66a2638985494",
+  "workflow_run": "34303928896",
+  "published_head": "c79f5dff1c03c59f42e3631e09f8ab1e088a3cdb",
+  "files_matched": 15,
+  "files": [
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/PROOF.md",
+      "bytes": 5279,
+      "sha256": "722507843b722e100d282ca1b4f51f0e940cce6ebff0de67d8e016f12b475682",
+      "git_blob": "13d39489b01c60e0c69ed3d2b3603d9868de357e"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/PROTOCOL.json",
+      "bytes": 1514,
+      "sha256": "9fcdd7f6b0cd68d590aaad8d9c91cd6fec7af6766c9c51d605d3a67b8d19936b",
+      "git_blob": "4e770a6218c9714c0ca8f204c8b39aa302e51b33"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/expand.py",
+      "bytes": 7453,
+      "sha256": "794353cccb5de5d8b19c9bf0facc5f96ffd64d5d8fe908e1d2db6632ae4d9bed",
+      "git_blob": "19e250ce4a9ea75a214365538f239665c8de5f95"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/expanded.gd",
+      "bytes": 1475,
+      "sha256": "3c6f8492120bf26c58b321394dcbb7026d2908261cc5be07c8ca5205cd528b1a",
+      "git_blob": "5238cf41184c3cdc6d767a194187de765a8d49b3"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/native-1/RESULTS.json",
+      "bytes": 63575,
+      "sha256": "00c68c7d34a610d490ee620bb8668e1ae80275e0b5f22e3cad13489e6e51b8d8",
+      "git_blob": "a2dece52656cdf75796192a365f2ddb544595525"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/native-1/TERMINAL.json",
+      "bytes": 1376,
+      "sha256": "b19db061ce79f5a9989fcb17bbb709dafe131ab4467e0067c183e9a992ff9a18",
+      "git_blob": "d9e73407ff1ca01736919d9d0f520be00aec8546"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/native-1/TESTS.log",
+      "bytes": 1110,
+      "sha256": "2f0add80c49e667faaeb7181e239bc046fa2e27a500ae32ccbf4c5ee53187707",
+      "git_blob": "7c56dffdd1bef728843155acd8623b6825fd9a6e"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/native-1/import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/native-1/import.stdout",
+      "bytes": 3028,
+      "sha256": "5a742a0ad47f6154a3155907bd7f3fe64f5777c9ba1f1f030cd14a729e154510",
+      "git_blob": "ae942c83e0c967bf770306b1ab78c9a8cb405b2b"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/native-1/native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/native-1/native.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/native-1/parse.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/native-1/parse.stdout",
+      "bytes": 23,
+      "sha256": "abfd600ff21ef5aa23517b4a9d50d5914f276aa3518d079edb4b75093ed9dbdc",
+      "git_blob": "8e8633e414c68e7b29ca38164fc6b664c14b3b80"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/native-1/raw.ndjson.xz",
+      "bytes": 45760,
+      "sha256": "04d6200b3709bec3331b1ca786c89b08137075d65bf9597dc34ce77b462db089",
+      "git_blob": "11764831ff8e982dde55d2d84d7af4d2a9c4dbcb"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/expansion/test_expand.py",
+      "bytes": 2173,
+      "sha256": "5b53ffb759db80e0395d29ebd7cc8970d97154ed32fbe96b5dcc2edf0cf52d37",
+      "git_blob": "27b4f45a761f493ea5af643bdf771d6bbb5c8912"
+    }
+  ],
+  "status": "GUARDED_WITHIN_CARD_EXPANSION_EQUIVALENT_ON_ALL_FIXED_CONTEXTS",
+  "raw_sha256": "fed9a5aae820725abbe79c6c44626665a759ee58ab28aef3bd6b2380b1a32547",
+  "new_native_runs_in_readback": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
