@@ -1,0 +1,34 @@
+{
+  "status": "UNQUALIFIED_COMMON_BACKGROUND_EQUIVALENCE_REFUTED",
+  "native_preview_sha256": "4c4692d7379e0a02d0328c0093f792916e0abf43dd6c0d5230a1f0ea7af852cc",
+  "historical_preview_sha256": "f83964b993ef27880e31ceecb9eaf4bd069ec3741dbd217a026477041f486eba",
+  "counterexample": {
+    "witness": "One ordinary unupgraded leechBlade, legal living target, no Bloodfire/Scoreline/Afterimage/Mistbound, native card definition.",
+    "native_preview_shape": "null: its sole special leech has no matching native preview branch, and all three accumulators remain empty/zero.",
+    "historical_preview_shape": "non-null dictionary with one hit: the leech branch appends an ordinary hit even when bloodfire is false.",
+    "historical_nominal_damage": "Not independently evaluated here; the return-shape distinction does not require assuming an unextracted historical helper.",
+    "conclusion": "The claim that removing or omitting the historical tags yields an identical complete public observation/background interface is false.",
+    "scope": "Exact source-level return-shape counterexample. No measured policy outcome, native trace or full-family equivalence is asserted."
+  },
+  "core_background": {
+    "ashen_core_definition": {
+      "rarity": "starter",
+      "glyph": "\u2601",
+      "tone": "#d3a15a",
+      "name": "Ashen Core",
+      "text": "Enemies begin each combat with 3 Smolder."
+    },
+    "source_body": "func _apply_start_relics(run: RunState, cb: CombatState) -> void:\n\tif run.has_relic(\"basaltIdol\"):\n\t\tcb.player.block += 10\n\t\t_proc(cb, \"basaltIdol\")\n\tif run.has_relic(\"warFetish\"):\n\t\tadd_status_player(cb, \"str\", 1)\n\t\t_proc(cb, \"warFetish\")\n\tif run.has_relic(\"riverPearl\"):\n\t\tadd_status_player(cb, \"dex\", 1)\n\t\t_proc(cb, \"riverPearl\")\n\tif run.has_relic(\"thornBand\"):\n\t\tadd_status_player(cb, \"thorns\", 2)\n\t\t_proc(cb, \"thornBand\")\n\tif run.has_relic(\"vialOfLife\"):\n\t\theal_player(run, cb, 2)\n\t\t_proc(cb, \"vialOfLife\")\n\tif run.has_relic(\"crownOfCinders\"):\n\t\tcb.ember_cap = 12\n\t\tcb.embers = clampi(cb.embers + 2, 0, cb.ember_cap)\n\t\t_proc(cb, \"crownOfCinders\")\n\tif run.has_relic(\"shatterersCrown\"):\n\t\tfor e: EnemyCombatant in cb.enemies:\n\t\t\te.facet_max = maxi(2, e.facet_max - 1)\n\t\t\te.statuses[\"str\"] = _sget(e.statuses, \"str\") + 1\n\t\t_proc(cb, \"shatterersCrown\")\n\tif run.has_relic(\"smolderingCoal\") and not _player_smolder_blocked(run):\n\t\tvar coal_smolder: int = _ji(content.relic(&\"smolderingCoal\").get(\"startSmolder\", 2))\n\t\tfor e: EnemyCombatant in cb.enemies:\n\t\t\te.statuses[\"poison\"] = _sget(e.statuses, \"poison\") + coal_smolder\n\t\t_proc(cb, \"smolderingCoal\")\n\tif run.has_relic(\"ashenCore\") and not _player_smolder_blocked(run):\n\t\tvar core_smolder: int = _ji(content.relic(&\"ashenCore\").get(\"startSmolder\", 3))\n\t\tfor e: EnemyCombatant in cb.enemies:\n\t\t\te.statuses[\"poison\"] = _sget(e.statuses, \"poison\") + core_smolder\n\t\t_proc(cb, \"ashenCore\")\n\n\n",
+    "scope": "Initial native poison is shared background. Zero clean-direct witnesses do not mean zero source benefit; the already frozen pure-source criterion is not relaxed."
+  },
+  "do_not_infer": [
+    "No claim that the game combat outcomes necessarily differ on every run.",
+    "No reuse of old aggregate outcomes or old policy support from shared consumer code alone.",
+    "No universal rejection of native Smolder; no new primitive is introduced by this background mismatch."
+  ],
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT"
+}

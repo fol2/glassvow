@@ -14,6 +14,17 @@ within-card decomposition now have complete source/raw/readback. Native Dusk
 sampling failed its necessary opportunity upper bounds; Ash Smolder survived
 both vows. None of these facts alone is a package certificate.
 
+## Current source-scope decision
+
+The exact historical Catalyst-extension relation and retained Ash source-lineage
+audit are now complete. A Leech public-preview counterexample refutes an
+unqualified whole-background bridge even with all historical tags absent.
+The 71/88 possible lineages and zero pure-source witnesses do not admit a package.
+Do not repeat these audits or tune witness purity. The next acceptance-changing
+work remains one complete current-source canonical comparison with explicit
+background, preview, acquisition and composition obligations. Only its eligible
+terminal may open the single unified mixed-background confirmation contract.
+
 ## The critical path
 
 1. Complete one native Smolder certificate, not another successful-example study.

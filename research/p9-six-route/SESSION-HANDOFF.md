@@ -1,52 +1,48 @@
-# P9 current handoff — native role laws checked; Smolder capacity survives
+# P9 current handoff — source-scope decisions complete; full certificate still missing
 
-Continue #421 on research/p9-six-route-local-20260905. Three viable, reachable,
-genuinely distinct strategies per aspect remain the target. P9 is unfinished;
-0/6 complete exact-current certificates. Owner author self-review is allowed,
-not independent confirmation. Main remains 2ed6cdb0302ba3aab5845a18d862841165e8aaf7.
+Continue #421 on research/p9-six-route-local-20260905. Target remains three
+viable, reachable, genuinely distinct strategies per aspect. P9 is unfinished:
+0/6 complete exact-current certificates. Author self-review is allowed, never
+independent confirmation. Product main remains 2ed6cdb0302ba3aab5845a18d862841165e8aaf7.
 
-## Completed decisions — do not repeat
+## Completed; do not restart
 
-Both failed bulk candidates and Hand's fixed-family support terminal stay closed.
-The retained candidate_sha256 and descriptor_sha256 identify those old frozen
-studies; they have NOT been overwritten with the unchanged-main reference.
+The prior reunion, six-route disposition, v25, frozen validation, command-chain
+negative, Hand support, both bulk-candidate negatives, native role fixtures and
+capacity studies remain unchanged. Historical raw gaps are still explicit in
+SESSION-STATE.json; new successful preservation does not repair those gaps.
 
-minimal-native-20260909 contains full exact-main Fervor and Smolder role contracts,
-component-intervention captures and a guarded within-card decomposition witness.
-Full state, aliases, events, costs, expiry and native side effects are retained.
-These are existing native operations, not new primitives or six new topologies.
-Old one-bit extra-Chip and ToxicMist/Catalyst comparisons remain exactly scoped.
-The complete closed/admitted quotient is still unproved; do not turn source
-expressibility or finite arithmetic into admission.
+smolder-certificate-20260909 now contains the exact historical/native Catalyst
+kernel relation, ten equal full runtime bodies, complete 1,024-row retained Ash
+source-lineage analysis and a source-level public-preview counterexample.
+The historical Leech preview returns a hit dictionary even without Bloodfire;
+current native preview returns null for that ordinary card. Omitted historical
+tags do not establish equality of the complete observation/background interface.
+Do not copy historical aggregate support or policy outcomes on that assumption.
 
-The separate cheap native-policy upper-bound screen completed on all assigned
-V5 contexts and conditional Ash V0. Dusk V0 was correctly not opened.
+| Vow | Old potential | Source-lineage possible | Winning possible | Clean-direct witnesses |
+|---|---:|---:|---:|---:|
+| 5 | 72 | 71 | 29 | 0 |
+| 0 | 88 | 88 | 43 | 0 |
 
-| Context | Potential active | Co-ownership/reached | Potential viable | Decision |
-|---|---:|---:|---:|---|
-| duskblade-v5 | 11 | 12 | 2 | FIXED_NATIVE_POLICY_FAMILY_INSUFFICIENT_UPPER_BOUND |
-| ashwarden-v5 | 72 | 82 | 29 | NATIVE_POLICY_CAPACITY_NOT_FALSIFIED_NOT_ADMISSION |
-| ashwarden-v0 | 88 | 91 | 43 | NATIVE_POLICY_CAPACITY_NOT_FALSIFIED_NOT_ADMISSION |
-
-Every set counts configurations within one fixed family, not independent players.
-Potential may include unrelated source, transfer or clipped payoff. Not-potential
-is not certified inactivity. Native sampler insufficiency is not universal Dusk
-nonviability and does not revoke stronger-controller evidence.
+All sets are configurations in one fixed family, not independent players.
+Possible is an upper bound; zero clean-direct witnesses is not inactivity or
+zero causal effect. Normal Ashen Core supplies background poison. Do not relax
+the old purity definition or run variants to manufacture witnesses. Direct
+mixed-background interventions, once formally eligible, answer the actual claim.
 
 ## Exact next action
 
-Prioritise the complete native Smolder package certificate against unchanged main. Finish the exact relevant closed/admitted-family classification, including ToxicMist/Catalyst and its shared background, without erasing target multiplicity, source hit/death guards or lifecycle. If that survives, freeze one unified independent causal/descriptor/policy/peer/economy confirmation contract using the retained source controls. For Dusk, retain stronger previously evidenced controllers as possible future witness suppliers; do not treat this weaker sampler result as nonviability or rerun v25. No new content mutation is selected by this decision.
+Do not rerun source extraction, role fixtures, capacity, retained-trace attribution, or pure-source witness variants. The exact named historical Catalyst-extension relation and public-preview counterexample are complete. Construct the missing complete current-source package transition comparison against the exact relevant closed/admitted contracts and their permitted shared-background compositions, including preview, acquisition and lifecycle; the old and current background cannot be assumed identical. Return one checkable full-scope equivalence/decomposition or non-equivalence disposition, not another local example. Only an eligible complete formal disposition opens one unified mixed-background causal/null/subset/descriptor/policy/peer/economy confirmation contract. Use actual source interventions with normal Ashen Core background, not a requirement for naturally pure VenomStrike stock. No fixed model refit, v25 replay, third bulk tune, protected-cohort use or product mutation is selected.
 
-## Durable evidence and scope
+## Preservation and scope
 
-All three captures, sources, configs/logs and readouts were committed and then
-fetched into separate checkouts for byte comparison and offline reconstruction.
-Their REMOTE-READBACK.json files bind the published bytes. No game runs during
-readback or this capsule update. The role capture's local/hosted replay counts
-once; expansion reuses old stock references; capacity uses its separate frozen
-policies/seeds. No new independent package confirmation is claimed.
+All emitted evidence is on this branch with exact sources, logs and raw input
+identities. derived-1 preserves the sparse-checkout delivery failure; derived-2
+preserves the repaired analysis and separate-checkout byte comparison/offline
+reconstruction. frame-1 contains the additional source counterexample. The final
+publication workflow records a separate cold-readback receipt for current files.
+No archived code or game was executed by these analyses. No P9 PASS, model
+refit, protected seed, product merge or new content candidate is implied.
 
-Historical raw gaps, old negative results and protected identities in
-SESSION-STATE.json remain unchanged. No force push, new research branch, product
-merge or #108 PASS. No research process is active after this metadata update.
-Use the existing ROADMAP.md; do not start another recovery/census/document loop.
+Use the existing ROADMAP.md. Do not start another recovery/census/roadmap loop.
