@@ -10,13 +10,13 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1
 jobs:
   bundle:
-    name: Read complete preassigned blocks only - no engine or new support stage
+    name: Same-policy memoisation equivalence and alternating compute regression
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     permissions:
       contents: write
     steps:
@@ -25,57 +25,115 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909
-      - name: Bind audit source, check negative regressions, reconstruct frozen readout
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/planner-v1
+      - name: Freeze exact computational delta before benchmark calls
         shell: bash
         run: |
           set -euo pipefail
-          echo "437075fb52bdac0758aed5af29a2534b8214c24b781038a0343aa03f789c7d11  $STUDY/audit_value_terminal.py" | sha256sum -c -
-          echo "d54a44d39d23669dbbfe573e3898a14924936b2d3d314c664493f92a660e4b42  $STUDY/test_audit_value_terminal.py" | sha256sum -c -
-          mkdir "$STUDY/postrun-1"
-          (cd "$STUDY" && python3 -m unittest -v test_audit_value_terminal) > "$STUDY/postrun-1/tests.stdout" 2> "$STUDY/postrun-1/tests.stderr"
-          python3 "$STUDY/audit_value_terminal.py" . > "$STUDY/postrun-1/RESULTS.json" 2> "$STUDY/postrun-1/audit.stderr"
-          cat "$STUDY/postrun-1/RESULTS.json"
-      - name: Preserve complete bounded readout, not a new verdict
-        shell: bash
-        run: |
-          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['STUDY'])
+          hashes={'benchmark.py':'28a08f95e377c79087dc9092bcede25fa2875731eeeb4f17a2a1d4463191a92d','test_benchmark.py':'48f0a87f5ac8fa76fc0cfc25092aca8b689c39acc8c53f23d220eaad87f49289','greedy_policy.gd':'909b24d5fc6eaca05a8eed79084cbe696dc4265c5eda89febdf5b5a7fa5dc4c7','PROTOCOL.json':'b5383612ba3cf4f4e459cbfba830a8fe32b91208bad4a495752c9d4dabce5d89'}
+          for name,want in hashes.items():
+              p=root/name;b=p.read_bytes();assert hashlib.sha256(b).hexdigest()==want,name
+              assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==subprocess.check_output(['git','rev-parse','HEAD:'+str(p)]).decode().strip()
+          assert not (root/'FREEZE.json').exists()
+          (root/'FREEZE.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'sources':hashes,'observations_before_freeze':0,'p9_certified':False},indent=2)+'\n')
+          PY
+          (cd "$STUDY" && python3 -m unittest -v test_benchmark)
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f "$STUDY/postrun-1"
-          git commit -m 'research(p9): preserve full fixed planner performance and actual resource exceedance'
+          git add "$STUDY/FREEZE.json"
+          git commit -m 'research(p9): bind memoisation regression before native performance measurement'
+          git push origin HEAD:refs/heads/$branch
+          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Load the same pinned official engine
+        id: engine
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$STUDY/execution-1"
+          {
+            curl --fail --location --max-time 90 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip"
+            unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
+            engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+            chmod +x "$engine"
+            echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
+            "$engine" --version
+            echo "ENGINE=$engine" >> "$GITHUB_ENV"
+          } > "$STUDY/execution-1/engine.log" 2>&1
+      - name: Measure identical fixed queries without new policy or population work
+        id: native
+        if: steps.engine.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "$STUDY/benchmark.py" run "$GITHUB_WORKSPACE" "$ENGINE" "$RUNNER_TEMP/memo-benchmark" > "$STUDY/execution-1/runner.stdout" 2> "$STUDY/execution-1/runner.stderr"
+      - name: Preserve complete raw, source, timing and honest terminal
+        if: always() && env.PUBLISHED_HEAD != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,tarfile
+          root=pathlib.Path(os.environ['STUDY'])/'execution-1';root.mkdir(exist_ok=True)
+          capture=pathlib.Path(os.environ['RUNNER_TEMP'])/'memo-benchmark';files=[]
+          with tarfile.open(root/'capture.tar.xz','w:xz') as archive:
+              for p in sorted(capture.rglob('*')):
+                  if not p.is_file() or '.godot' in p.parts:continue
+                  data=p.read_bytes();name=str(p.relative_to(capture));archive.add(p,arcname=name,recursive=False)
+                  files.append({'path':name,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
+          b=(root/'capture.tar.xz').read_bytes()
+          (root/'ARCHIVE.json').write_text(json.dumps({'archive_bytes':len(b),'archive_sha256':hashlib.sha256(b).hexdigest(),'files':files,'excluded':'.godot generated cache only','p9_certified':False},indent=2)+'\n')
+          for name in ('TERMINAL.json','RESULTS.json'):
+              if (capture/name).exists():(root/name).write_bytes((capture/name).read_bytes())
+          if not (root/'TERMINAL.json').exists():(root/'TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','reason':'No native benchmark terminal','p9_certified':False},indent=2)+'\n')
+          print((root/'TERMINAL.json').read_text())
+          PY
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
+          git add -f "$STUDY/execution-1"
+          git commit -m 'research(p9): preserve same-policy computational regression including all failures'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        if: always() && env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909
-      - name: Reconstruct result from committed capture without native execution
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1
+      - name: Cold-read every byte and reproduce performance readout offline
+        if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
-          python3 "cold/$STUDY/audit_value_terminal.py" cold > "$RUNNER_TEMP/cold-result.json"
-          cmp "$STUDY/postrun-1/RESULTS.json" "$RUNNER_TEMP/cold-result.json"
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess
-          root=pathlib.Path(os.environ['STUDY']);records=[]
-          paths=[root/'audit_value_terminal.py',root/'test_audit_value_terminal.py',*sorted((root/'postrun-1').glob('*'))]
-          for p in paths:
-              b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b
-              blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-              assert blob==subprocess.check_output(['git','-C','cold','rev-parse','HEAD:'+str(p)]).decode().strip()
-              records.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':blob})
-          result=json.loads((root/'postrun-1/RESULTS.json').read_bytes())
-          receipt={'kind':'POST_RESOURCE_TERMINAL_COMPLETE_BLOCK_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':records,'all_bytes_equal':True,'same_frozen_readout_reproduced':True,'original_terminal':result['terminal_unchanged']['status'],'new_native_runs':0,'support_stage_newly_opened':False,'packages_admitted':0,'p9_certified':False}
-          (root/'postrun-1/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          import hashlib,importlib.util,json,os,pathlib
+          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')/root;files=[]
+          for p in sorted(root.rglob('*')):
+              if not p.is_file():continue
+              b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b,str(p)
+              files.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+          spec=importlib.util.spec_from_file_location('cold_benchmark',cold/'benchmark.py');mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
+          target=pathlib.Path(os.environ['RUNNER_TEMP'])/'cold-memo';target.mkdir()
+          manifest=mod.unpack(cold/'execution-1',target)
+          t=json.loads((cold/'execution-1/TERMINAL.json').read_bytes());reproduced=False
+          if (target/'RESULTS.json').exists():
+              result=mod.readout(target);b=(json.dumps(result,indent=2)+'\n').encode()
+              assert b==(target/'RESULTS.json').read_bytes()==(cold/'execution-1/RESULTS.json').read_bytes();reproduced=True
+          receipt={'kind':'COMPLETE_QUERY_MEMOISATION_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':files,'archived_files':len(manifest['files']),'all_bytes_equal':True,'readout_reproduced':reproduced,'scientific_status':t['status'],'new_native_runs_during_readback':0,'packages_admitted':0,'p9_certified':False}
+          (root/'execution-1/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print(json.dumps(t,indent=2))
+          if reproduced:print((target/'RESULTS.json').read_text())
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/postrun-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): retain cold proof of fixed-block resource-terminal audit'
+          git add "$STUDY/execution-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): retain exact remote-byte proof of query-cache regression'
           git push origin HEAD:refs/heads/$branch
