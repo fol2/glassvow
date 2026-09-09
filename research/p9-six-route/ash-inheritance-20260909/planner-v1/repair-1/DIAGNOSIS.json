@@ -1,0 +1,55 @@
+{
+  "kind": "PARSE_GATE_PROJECT_ROOT_REPAIR",
+  "old_terminal": {
+    "status": "INCONCLUSIVE",
+    "source_head": "22012d817c01802dd7d9bd69d465fec6393f1d21",
+    "packages_admitted": 0,
+    "p9_certified": false,
+    "failure": "ValueError('PARSE')"
+  },
+  "old_command": {
+    "argv": [
+      "bash",
+      "/home/runner/work/glassvow/glassvow/tools/check_scripts.sh",
+      "additive_policy.gd",
+      "decision_gate.gd",
+      "greedy_policy.gd",
+      "greedy_stock.gd",
+      "lab_policy.gd",
+      "legacy_policy.gd",
+      "policy_buggy_v9.gd",
+      "policy_v8.gd",
+      "probe.gd",
+      "public_rollout.gd",
+      "public_rollout_base.gd",
+      "rollout_policy.gd"
+    ],
+    "returncode": 1,
+    "diagnostic": null,
+    "seconds": 2.0190882059999993
+  },
+  "regression": [
+    {
+      "root": "repo",
+      "returncode": 1,
+      "stdout": "fixture.gd  PROCESS Godot exited with status 1.\n\n1 of 1 script check(s) failed.\n",
+      "stderr": ""
+    },
+    {
+      "root": "project",
+      "returncode": 0,
+      "stdout": "scripts OK (1 checked)\n",
+      "stderr": ""
+    }
+  ],
+  "old_runner_sha256": "99508f9a4924bb8475293cc48e0a35a3bf88b16b620049057a98c61c0cb4ab68",
+  "new_runner_sha256": "00dddbd13d2699c4e4b4df52a5a5de438bca9437676d024febaa51cb80f3bbb8",
+  "changed_sources": [
+    "run.py"
+  ],
+  "same_protocol_and_cases": true,
+  "old_native_cases": 0,
+  "old_capture_preserved": true,
+  "new_gameplay_or_query_change": false,
+  "p9_certified": false
+}
