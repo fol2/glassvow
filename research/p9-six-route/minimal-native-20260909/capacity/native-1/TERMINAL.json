@@ -1,0 +1,1113 @@
+{
+  "status": "FIXED_NATIVE_POLICY_CAPACITY_COMPLETE_NOT_ADMISSION",
+  "grids": {
+    "duskblade-v5": {
+      "status": "FIXED_NATIVE_POLICY_FAMILY_INSUFFICIENT_UPPER_BOUND",
+      "aspect": "duskblade",
+      "vow": 5,
+      "rows": 512,
+      "policies": 128,
+      "potential_active_upper_bound": [
+        0,
+        17,
+        22,
+        26,
+        35,
+        55,
+        68,
+        78,
+        118,
+        124,
+        127
+      ],
+      "reachable_upper_bound": [
+        0,
+        17,
+        22,
+        26,
+        35,
+        55,
+        68,
+        78,
+        118,
+        124,
+        125,
+        127
+      ],
+      "potential_viable_upper_bound": [
+        22,
+        68
+      ],
+      "outcomes": {
+        "loss": 481,
+        "win": 31
+      },
+      "faults": [],
+      "gates": {
+        "potential_active_upper_bound_at_least32": false,
+        "reachable_upper_bound_at_least16": false,
+        "potential_viable_upper_bound_at_least16": false
+      },
+      "policy_manifest_sha256": "0142944b07e03277586264a523c65730999699ffb9b0179610be46998c445459",
+      "scope": "Conservative opportunity/viability counts in this exact stock controller family only. Potential is not causal activation, and not-potential is not a certified inactive strategy. No independent confirmation or replacement for the stronger retained research controller.",
+      "packages_admitted": 0,
+      "p9_certified": false
+    },
+    "ashwarden-v5": {
+      "status": "NATIVE_POLICY_CAPACITY_NOT_FALSIFIED_NOT_ADMISSION",
+      "aspect": "ashwarden",
+      "vow": 5,
+      "rows": 512,
+      "policies": 128,
+      "potential_active_upper_bound": [
+        0,
+        2,
+        4,
+        6,
+        7,
+        9,
+        10,
+        11,
+        15,
+        17,
+        18,
+        20,
+        21,
+        24,
+        25,
+        27,
+        29,
+        30,
+        33,
+        35,
+        36,
+        37,
+        40,
+        41,
+        42,
+        43,
+        44,
+        46,
+        47,
+        49,
+        55,
+        57,
+        58,
+        59,
+        60,
+        61,
+        64,
+        66,
+        67,
+        68,
+        69,
+        71,
+        72,
+        75,
+        77,
+        79,
+        83,
+        86,
+        87,
+        91,
+        93,
+        94,
+        95,
+        98,
+        99,
+        101,
+        102,
+        104,
+        105,
+        108,
+        109,
+        112,
+        114,
+        115,
+        116,
+        119,
+        120,
+        121,
+        123,
+        125,
+        126,
+        127
+      ],
+      "reachable_upper_bound": [
+        0,
+        2,
+        4,
+        6,
+        7,
+        9,
+        10,
+        11,
+        15,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        24,
+        25,
+        27,
+        28,
+        29,
+        30,
+        33,
+        35,
+        36,
+        37,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        51,
+        55,
+        57,
+        58,
+        59,
+        60,
+        61,
+        64,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        75,
+        77,
+        78,
+        79,
+        83,
+        85,
+        86,
+        87,
+        91,
+        93,
+        94,
+        95,
+        98,
+        99,
+        101,
+        102,
+        104,
+        105,
+        107,
+        108,
+        109,
+        112,
+        114,
+        115,
+        116,
+        119,
+        120,
+        121,
+        123,
+        125,
+        126,
+        127
+      ],
+      "potential_viable_upper_bound": [
+        0,
+        2,
+        9,
+        10,
+        25,
+        27,
+        29,
+        33,
+        35,
+        42,
+        46,
+        55,
+        60,
+        69,
+        75,
+        77,
+        79,
+        83,
+        93,
+        95,
+        98,
+        101,
+        105,
+        109,
+        115,
+        116,
+        119,
+        121,
+        125
+      ],
+      "outcomes": {
+        "loss": 462,
+        "win": 50
+      },
+      "faults": [],
+      "gates": {
+        "potential_active_upper_bound_at_least32": true,
+        "reachable_upper_bound_at_least16": true,
+        "potential_viable_upper_bound_at_least16": true
+      },
+      "policy_manifest_sha256": "0142944b07e03277586264a523c65730999699ffb9b0179610be46998c445459",
+      "scope": "Conservative opportunity/viability counts in this exact stock controller family only. Potential is not causal activation, and not-potential is not a certified inactive strategy. No independent confirmation or replacement for the stronger retained research controller.",
+      "packages_admitted": 0,
+      "p9_certified": false
+    },
+    "ashwarden-v0": {
+      "status": "NATIVE_POLICY_CAPACITY_NOT_FALSIFIED_NOT_ADMISSION",
+      "aspect": "ashwarden",
+      "vow": 0,
+      "rows": 512,
+      "policies": 128,
+      "potential_active_upper_bound": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        17,
+        18,
+        19,
+        20,
+        21,
+        24,
+        25,
+        27,
+        28,
+        29,
+        30,
+        31,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        57,
+        60,
+        61,
+        63,
+        64,
+        65,
+        66,
+        68,
+        69,
+        70,
+        76,
+        77,
+        78,
+        79,
+        80,
+        82,
+        83,
+        84,
+        86,
+        87,
+        89,
+        92,
+        93,
+        94,
+        95,
+        99,
+        101,
+        104,
+        105,
+        107,
+        108,
+        110,
+        112,
+        114,
+        115,
+        116,
+        117,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124
+      ],
+      "reachable_upper_bound": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23,
+        24,
+        25,
+        27,
+        28,
+        29,
+        30,
+        31,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        57,
+        58,
+        60,
+        61,
+        63,
+        64,
+        65,
+        66,
+        68,
+        69,
+        70,
+        76,
+        77,
+        78,
+        79,
+        80,
+        82,
+        83,
+        84,
+        86,
+        87,
+        89,
+        92,
+        93,
+        94,
+        95,
+        98,
+        99,
+        101,
+        104,
+        105,
+        107,
+        108,
+        110,
+        112,
+        114,
+        115,
+        116,
+        117,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124
+      ],
+      "potential_viable_upper_bound": [
+        3,
+        12,
+        15,
+        17,
+        18,
+        24,
+        25,
+        27,
+        33,
+        35,
+        37,
+        43,
+        44,
+        45,
+        46,
+        49,
+        50,
+        52,
+        57,
+        60,
+        61,
+        63,
+        66,
+        68,
+        69,
+        70,
+        79,
+        83,
+        86,
+        87,
+        93,
+        94,
+        101,
+        105,
+        107,
+        108,
+        110,
+        114,
+        117,
+        121,
+        122,
+        123,
+        124
+      ],
+      "outcomes": {
+        "loss": 413,
+        "win": 99
+      },
+      "faults": [],
+      "gates": {
+        "potential_active_upper_bound_at_least32": true,
+        "reachable_upper_bound_at_least16": true,
+        "potential_viable_upper_bound_at_least16": true
+      },
+      "policy_manifest_sha256": "0142944b07e03277586264a523c65730999699ffb9b0179610be46998c445459",
+      "scope": "Conservative opportunity/viability counts in this exact stock controller family only. Potential is not causal activation, and not-potential is not a certified inactive strategy. No independent confirmation or replacement for the stronger retained research controller.",
+      "packages_admitted": 0,
+      "p9_certified": false
+    }
+  },
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "independent_confirmation_samples": 0,
+  "files": {
+    "import.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "parse.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "import.stdout": {
+      "bytes": 3539,
+      "sha256": "7a22df3fe21c26ce2b9779c5e96facb08232eb61ad5d0dc29fad85a9744125ca"
+    },
+    "parse.stdout": {
+      "bytes": 23,
+      "sha256": "7991d8b6c50918e64ff93c2258be338bcaf4d4d0cfec83ec4f91cc906d11628b"
+    },
+    "integration/RESULTS.json": {
+      "bytes": 416,
+      "sha256": "03acb72add8333e2ea78f1db45d505f18515a1df2728df98132cdc70bd80759f"
+    },
+    "duskblade-v5/RESULTS.json": {
+      "bytes": 1128,
+      "sha256": "ee1b4a108f0f29448bae4bfed5afa96536b6926612f4c8c1addf7382b3f3aec4"
+    },
+    "ashwarden-v0/RESULTS.json": {
+      "bytes": 2723,
+      "sha256": "b1c7fc9e68ed413df273e48fb8c4b67183b5c4018fd37a47e4cc5627125ea167"
+    },
+    "ashwarden-v5/RESULTS.json": {
+      "bytes": 2411,
+      "sha256": "d6177e403345bf9bcb58e12576b9725af4da5d107c5077a274f645a6f0a95a9a"
+    },
+    "integration/ashwarden-v5-o1/EXECUTION.json": {
+      "bytes": 1139,
+      "sha256": "2cb028e0759d5945f11cbcb3941d5f512954ad40e225a2b1d2e8ef137ea1a0a9"
+    },
+    "integration/ashwarden-v5-o1/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "integration/ashwarden-v5-o1/trace.ndjson.xz": {
+      "bytes": 6184,
+      "sha256": "606a80a7f0141faeb6340822ae06b897a066d7ac899e5faf9ba3d0f4a016c72b"
+    },
+    "integration/ashwarden-v5-o1/endpoints.ndjson.xz": {
+      "bytes": 135224,
+      "sha256": "1308f74a3f1e17a3d201e5ccbfaf97ac0e19005cda5716f14414e1867f8f96df"
+    },
+    "integration/ashwarden-v5-o1/CONFIG.json": {
+      "bytes": 168,
+      "sha256": "1512ed18193687c3e8993ac10c6c265b1345bfe9aa99a4b6971525c61906595e"
+    },
+    "integration/ashwarden-v5-o1/CELL.json": {
+      "bytes": 662,
+      "sha256": "a33433973073612cf4321c266698420162d43a119336855f038ad0c2ac58ca76"
+    },
+    "integration/ashwarden-v5-o1/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "integration/ashwarden-v0-o0/EXECUTION.json": {
+      "bytes": 1137,
+      "sha256": "ca3a0ffa48a115267ccb4c13d15fb023c95d4ce19eeb5a7d3182fdfbac6d6380"
+    },
+    "integration/ashwarden-v0-o0/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "integration/ashwarden-v0-o0/trace.ndjson.xz": {
+      "bytes": 196,
+      "sha256": "6339e5f3710aa9e61286151dd4fc6fef50da3e4af82101fc86d6d5158270fa87"
+    },
+    "integration/ashwarden-v0-o0/endpoints.ndjson.xz": {
+      "bytes": 135380,
+      "sha256": "f306b0e90b19a1a2bae5250710f7bbab625669e63d0e5be60ec24eac54e79dd6"
+    },
+    "integration/ashwarden-v0-o0/CONFIG.json": {
+      "bytes": 169,
+      "sha256": "2a43bf6b3f08b37e10054e0602adfe18eb0944b9c7d465c5c3c1265404fc70cd"
+    },
+    "integration/ashwarden-v0-o0/CELL.json": {
+      "bytes": 665,
+      "sha256": "97b69abb8a0bd28de85bc65827895b0f5b9446f4edbdb3f2064429731afea0d2"
+    },
+    "integration/ashwarden-v0-o0/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "integration/duskblade-v5-o1/EXECUTION.json": {
+      "bytes": 1139,
+      "sha256": "99078cee0c952b8ba1aebb32119ca4250593b45543d40a89403ea5f0abfbcf79"
+    },
+    "integration/duskblade-v5-o1/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "integration/duskblade-v5-o1/trace.ndjson.xz": {
+      "bytes": 4140,
+      "sha256": "07944798b26dcd779b920f160fc17d23195401a8e3b89442f457aac7d108a475"
+    },
+    "integration/duskblade-v5-o1/endpoints.ndjson.xz": {
+      "bytes": 135004,
+      "sha256": "70e877974671a4c31853c1ad3c2945d1174afec3c38f13eb5abff3f2c3b5f2f5"
+    },
+    "integration/duskblade-v5-o1/CONFIG.json": {
+      "bytes": 168,
+      "sha256": "39744b1dc764d1506ff97e2c34c4575de342b2bc75e2aece5e48764ed5664708"
+    },
+    "integration/duskblade-v5-o1/CELL.json": {
+      "bytes": 664,
+      "sha256": "e2d0cb855400571be02404cfbbc173db35c376de68dd5464b67ac2b744b04a7d"
+    },
+    "integration/duskblade-v5-o1/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "integration/duskblade-v0-o0/EXECUTION.json": {
+      "bytes": 1136,
+      "sha256": "63a44549e8dd3951f3688d7ccbbe75099493aea16f8bf86b51eae180e3221ed1"
+    },
+    "integration/duskblade-v0-o0/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "integration/duskblade-v0-o0/trace.ndjson.xz": {
+      "bytes": 196,
+      "sha256": "a4f9d4195091917dd7f9b30edcf1056b231e617ffa0f6eefb94cd689040c2480"
+    },
+    "integration/duskblade-v0-o0/endpoints.ndjson.xz": {
+      "bytes": 135200,
+      "sha256": "005aba0058fc316616ce0d4a3f8b5183603f6fe3cf53d67968e90bbe89cabca3"
+    },
+    "integration/duskblade-v0-o0/CONFIG.json": {
+      "bytes": 169,
+      "sha256": "aa11126b6e0526125c135e0837d6db6fc3477cd401adaaa358f1ece582216235"
+    },
+    "integration/duskblade-v0-o0/CELL.json": {
+      "bytes": 665,
+      "sha256": "0ef02c6ce9579f09ce8c1aa58a19fefef4ae9dd12be351b41096ec049aa9d7c4"
+    },
+    "integration/duskblade-v0-o0/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "integration/ashwarden-v0-o1/EXECUTION.json": {
+      "bytes": 1140,
+      "sha256": "1653135c911345691af4a67c4b45e8fae172c94557b3a43307f1d77c517979c0"
+    },
+    "integration/ashwarden-v0-o1/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "integration/ashwarden-v0-o1/trace.ndjson.xz": {
+      "bytes": 11140,
+      "sha256": "f1c11955c166ec35d70e0fde385d8cd79cf2d50eeb7c279c0805b7f019474672"
+    },
+    "integration/ashwarden-v0-o1/endpoints.ndjson.xz": {
+      "bytes": 135380,
+      "sha256": "3ab667744fa0a300cc25d541b83dbbeb67435821748dc891272e2e3c7508b7f7"
+    },
+    "integration/ashwarden-v0-o1/CONFIG.json": {
+      "bytes": 168,
+      "sha256": "c68d4a970d883b2e42ec8d4649fa13ac668c668b667bdf4dbf65d2523a5b8a02"
+    },
+    "integration/ashwarden-v0-o1/CELL.json": {
+      "bytes": 665,
+      "sha256": "aedfbab5d45ed0b974dbed971baf671141206a6d48384bc20026a3c1308b3b23"
+    },
+    "integration/ashwarden-v0-o1/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "integration/ashwarden-v5-o0/EXECUTION.json": {
+      "bytes": 1137,
+      "sha256": "f9f1cfddab61826980c54eefda3f00eacac5f3c7c186c25cefeafbb80e2bbd2c"
+    },
+    "integration/ashwarden-v5-o0/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "integration/ashwarden-v5-o0/trace.ndjson.xz": {
+      "bytes": 196,
+      "sha256": "e557f8d047b7fc91bdac1c367571206c5ff78254c287928e11a3372ee696c00a"
+    },
+    "integration/ashwarden-v5-o0/endpoints.ndjson.xz": {
+      "bytes": 135224,
+      "sha256": "98119394a5727083353352ae3fd0cb5f81309a0ccb57007445a3cc655569b7c7"
+    },
+    "integration/ashwarden-v5-o0/CONFIG.json": {
+      "bytes": 169,
+      "sha256": "d2ee2ab669edb2f42acd00124d48dcd200d35a9cb5efbed6bee7c55efb206672"
+    },
+    "integration/ashwarden-v5-o0/CELL.json": {
+      "bytes": 665,
+      "sha256": "13564d428bc8c2076a799e9b5deb385f3d41d866a438bf6fd8fd243b2a8379f4"
+    },
+    "integration/ashwarden-v5-o0/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "integration/duskblade-v5-o0/EXECUTION.json": {
+      "bytes": 1137,
+      "sha256": "649bdd77d26039b2ec19ac8e21bf471b301ca9f3820359b4110c775e059164a3"
+    },
+    "integration/duskblade-v5-o0/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "integration/duskblade-v5-o0/trace.ndjson.xz": {
+      "bytes": 196,
+      "sha256": "8d844d97f151569287d54aca80602b1a21766ffe1482ba5b161bd9689a8481c0"
+    },
+    "integration/duskblade-v5-o0/endpoints.ndjson.xz": {
+      "bytes": 135004,
+      "sha256": "4e6cb3477cebc41d831e45d1241017da07d2bf3029153ceb9c92b30cd39781f4"
+    },
+    "integration/duskblade-v5-o0/CONFIG.json": {
+      "bytes": 169,
+      "sha256": "7c12b42164b2961516ccec1863c20c80298ba7f44f43d4bcf8ac7aec5b374a03"
+    },
+    "integration/duskblade-v5-o0/CELL.json": {
+      "bytes": 665,
+      "sha256": "6b045e01d52a3c8ec2cb66960d1bfb9666118fa54128d4ea8c8006ae79948225"
+    },
+    "integration/duskblade-v5-o0/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "integration/duskblade-v0-o1/EXECUTION.json": {
+      "bytes": 1140,
+      "sha256": "4fc2768e23eed2b94cd59bbd4767a363fea599727311b1cd5bde3c164bec32fa"
+    },
+    "integration/duskblade-v0-o1/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "integration/duskblade-v0-o1/trace.ndjson.xz": {
+      "bytes": 6292,
+      "sha256": "b6125b7083883260414a56ec601c9adcec54dbbbaf6dde403938f48bcc26b53a"
+    },
+    "integration/duskblade-v0-o1/endpoints.ndjson.xz": {
+      "bytes": 135200,
+      "sha256": "bf30456128902fd4ef6807904301b908a5033b0d0b4b1f08f09fffa77c26e437"
+    },
+    "integration/duskblade-v0-o1/CONFIG.json": {
+      "bytes": 168,
+      "sha256": "7e0f5d8fa33502e36661f59df88cd6a7e6de24cc466567a390094192a50b8982"
+    },
+    "integration/duskblade-v0-o1/CELL.json": {
+      "bytes": 666,
+      "sha256": "b71fcfe857ffdf97047205de672eb711e38a925454d8081590e81fbff0fe1ecb"
+    },
+    "integration/duskblade-v0-o1/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "duskblade-v5/p000/EXECUTION.json": {
+      "bytes": 1111,
+      "sha256": "3baacfc66dd6c74f0b958c7e481b4e844201c7d208d58e4522a72eaa6e34b717"
+    },
+    "duskblade-v5/p000/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "duskblade-v5/p000/trace.ndjson.xz": {
+      "bytes": 649920,
+      "sha256": "67d2acd0f2f1ad93d1a62d25d24365f16fcc6406a2cd80c4142763066114871a"
+    },
+    "duskblade-v5/p000/endpoints.ndjson.xz": {
+      "bytes": 181736,
+      "sha256": "ccb988aec6a13673fe914d0f16ff453ee0508e3d2a2ebe0f3aade9a140b1ca9b"
+    },
+    "duskblade-v5/p000/CONFIG.json": {
+      "bytes": 169,
+      "sha256": "1891f0f46aec23b8093ffe4a14f007d4d6fde226aebc2fe499901715dbc25625"
+    },
+    "duskblade-v5/p000/CELL.json": {
+      "bytes": 45124,
+      "sha256": "5fd1dc599b8bd99a352c87e70021810cbbb22b2f1e4c6beb598b69b2288c449f"
+    },
+    "duskblade-v5/p000/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "duskblade-v5/p064/EXECUTION.json": {
+      "bytes": 1112,
+      "sha256": "50fc87e5916ebf53709115137e158ef71a1b24c630b751722bfb6b85ba128ce3"
+    },
+    "duskblade-v5/p064/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "duskblade-v5/p064/trace.ndjson.xz": {
+      "bytes": 556048,
+      "sha256": "ba72b6b0d5e607d5b87a45661da914e5e0b9c9f6bdb49c8a5bf9a791d4fea6fa"
+    },
+    "duskblade-v5/p064/endpoints.ndjson.xz": {
+      "bytes": 178784,
+      "sha256": "569b13f51143d53638855e93b1ddf567da9b8ff4c83b8728d91c677e4fa9f09d"
+    },
+    "duskblade-v5/p064/CONFIG.json": {
+      "bytes": 170,
+      "sha256": "522142ce4fd58a3623d28cfc957e716c5dac228c3e98e4a4ed7e5fe6d671905a"
+    },
+    "duskblade-v5/p064/CELL.json": {
+      "bytes": 45181,
+      "sha256": "36ed4299e24e1caddea4c1178f344c57359adb297ec95dce6fa8ad5e59194cd7"
+    },
+    "duskblade-v5/p064/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "duskblade-v5/p032/EXECUTION.json": {
+      "bytes": 1111,
+      "sha256": "92e67c1b8097faa31ff4313136a7b664532a622f20c7265c78bd6bbb43c0edfe"
+    },
+    "duskblade-v5/p032/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "duskblade-v5/p032/trace.ndjson.xz": {
+      "bytes": 490456,
+      "sha256": "08d7dfb8905fa9a2feadb2b7be16e84a16bddff699c841ded16cc4ddc18b50cd"
+    },
+    "duskblade-v5/p032/endpoints.ndjson.xz": {
+      "bytes": 176412,
+      "sha256": "b5d3cb27a0efacba3108cf9e63454f3dbd73702739859df3f8e7798315bb5d6b"
+    },
+    "duskblade-v5/p032/CONFIG.json": {
+      "bytes": 170,
+      "sha256": "ddb374af186790f780c46ad9023e03eddaf18aede5a63dc4bbc2a020abd1efe5"
+    },
+    "duskblade-v5/p032/CELL.json": {
+      "bytes": 45178,
+      "sha256": "eaf1cc675969497b1b976ec1283a2d6cc51a5a44c135ba2e2d2fb5848a1c1713"
+    },
+    "duskblade-v5/p032/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "duskblade-v5/p096/EXECUTION.json": {
+      "bytes": 1112,
+      "sha256": "2cfc6a6b4b0d982738b91ef08086c0699c24b52a43af73fac84cad49ae57a73c"
+    },
+    "duskblade-v5/p096/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "duskblade-v5/p096/trace.ndjson.xz": {
+      "bytes": 565884,
+      "sha256": "8ab8774b6fc92bd64f20a2f71bee721caa2ed6db07922c84b18fb373a29b2fbd"
+    },
+    "duskblade-v5/p096/endpoints.ndjson.xz": {
+      "bytes": 178564,
+      "sha256": "3458158ae5122712ba63a59e3551f3a99700c779c4eb7b07ca747167bcd1abc8"
+    },
+    "duskblade-v5/p096/CONFIG.json": {
+      "bytes": 170,
+      "sha256": "c0369e4b9a22979d3f8f7ffa8eba33526c0b8fd57ef39c4be216aa579a1e10ba"
+    },
+    "duskblade-v5/p096/CELL.json": {
+      "bytes": 45266,
+      "sha256": "fc1f9190c44c9f5d0bb2c1b217da60941c007fa5a9c2eefa548eefff7edea770"
+    },
+    "duskblade-v5/p096/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "ashwarden-v0/p000/EXECUTION.json": {
+      "bytes": 1113,
+      "sha256": "2ed592b6f63a58c411129fbd688fd95ac08234ad68c4711dea084412c88c7b16"
+    },
+    "ashwarden-v0/p000/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ashwarden-v0/p000/trace.ndjson.xz": {
+      "bytes": 1064500,
+      "sha256": "e28373e9b47c6e9350c9edbc90bdfd81200e482d58fd138291646a63b8549341"
+    },
+    "ashwarden-v0/p000/endpoints.ndjson.xz": {
+      "bytes": 194364,
+      "sha256": "abdafe50f4e6026c038432cffe6d759f92744de5fdfcebf7cb8532065fd99bc9"
+    },
+    "ashwarden-v0/p000/CONFIG.json": {
+      "bytes": 169,
+      "sha256": "6307fdf6771d989200ec2c4fed57e4f7a48df39acb634b1836a7d81c25254f71"
+    },
+    "ashwarden-v0/p000/CELL.json": {
+      "bytes": 44955,
+      "sha256": "3ef4da2039821f844262fc79c43a9d17872d3f48ae58f56165065295bf215c7f"
+    },
+    "ashwarden-v0/p000/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "ashwarden-v0/p064/EXECUTION.json": {
+      "bytes": 1113,
+      "sha256": "8f321659009a3f0eb7a6f4874ea7b89b58415fef66ac06cfd3075971ee98fc4a"
+    },
+    "ashwarden-v0/p064/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ashwarden-v0/p064/trace.ndjson.xz": {
+      "bytes": 1013912,
+      "sha256": "fb21a6cb84c16209f933590e051881a248e35a88c5ebab3c578397a64b23ba24"
+    },
+    "ashwarden-v0/p064/endpoints.ndjson.xz": {
+      "bytes": 191788,
+      "sha256": "e35e2297831c3b165cefd8c8f212fe1c5274c085ffc9dbd3273ffc896926bdf9"
+    },
+    "ashwarden-v0/p064/CONFIG.json": {
+      "bytes": 170,
+      "sha256": "72b895b3d8ef627de9c3f5e9802d96dac888bbe75c058807effd23fe1db7ea42"
+    },
+    "ashwarden-v0/p064/CELL.json": {
+      "bytes": 45019,
+      "sha256": "89d15acf3cba0f3229f80b1cb4744bbfec96e4267eb7f0a50a4958fb3d0594b4"
+    },
+    "ashwarden-v0/p064/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "ashwarden-v0/p032/EXECUTION.json": {
+      "bytes": 1113,
+      "sha256": "4ebdec4e2d2671208ae6b96ea835299cdddd7bb58ee6e1b2035a308eeba632e0"
+    },
+    "ashwarden-v0/p032/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ashwarden-v0/p032/trace.ndjson.xz": {
+      "bytes": 1106572,
+      "sha256": "293f311967c63cae966c4dbca40bd61ce52b84806b7493580b2b7d518d1218c8"
+    },
+    "ashwarden-v0/p032/endpoints.ndjson.xz": {
+      "bytes": 195028,
+      "sha256": "cb35358e84906f94159117363becdf6995b1831369b23cfabe12699cd0211854"
+    },
+    "ashwarden-v0/p032/CONFIG.json": {
+      "bytes": 170,
+      "sha256": "eb2066538320af1d562892264a86e534c30ad0972a63a511db5e94157fef1f86"
+    },
+    "ashwarden-v0/p032/CELL.json": {
+      "bytes": 44960,
+      "sha256": "06894fd5db5cac5da6e9cf700e1075cda2be1f24b648ddfc393094959b728a4e"
+    },
+    "ashwarden-v0/p032/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "ashwarden-v0/p096/EXECUTION.json": {
+      "bytes": 1113,
+      "sha256": "ba4c927fef0d2284052158f3acdf6ae49a7c2c723d7a4e027e9a2a6b6dfa14e7"
+    },
+    "ashwarden-v0/p096/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ashwarden-v0/p096/trace.ndjson.xz": {
+      "bytes": 1065316,
+      "sha256": "a278ed63e7d50b73da5fa26a99df9ffb96cc2b4b719faab86641ddb4aa446765"
+    },
+    "ashwarden-v0/p096/endpoints.ndjson.xz": {
+      "bytes": 193584,
+      "sha256": "11659ac60dcf2bf9be45edeb615d5d3712e751eaf82d21b46ed51d554ade497d"
+    },
+    "ashwarden-v0/p096/CONFIG.json": {
+      "bytes": 170,
+      "sha256": "3cde10b5ecdeae8baa26363102a4b0bca254455a28e13940bc84ad28b7fe2e62"
+    },
+    "ashwarden-v0/p096/CELL.json": {
+      "bytes": 45139,
+      "sha256": "b1d64f1fc311613eb04792163e834a0c34547b830064cc7b84c8081b70667570"
+    },
+    "ashwarden-v0/p096/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "ashwarden-v5/p000/EXECUTION.json": {
+      "bytes": 1113,
+      "sha256": "66f75d4dfaa46990230ee39e1fee87ccfef13353aca27dac4590c429ccf2f1d8"
+    },
+    "ashwarden-v5/p000/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ashwarden-v5/p000/trace.ndjson.xz": {
+      "bytes": 903776,
+      "sha256": "db290d34bb540e622d842dba115e8ac5595a23f4e0f8347787932b078fc3aa77"
+    },
+    "ashwarden-v5/p000/endpoints.ndjson.xz": {
+      "bytes": 190676,
+      "sha256": "88bee1354f9098b96398e78ce8642ca3d94828291640cf2b088be28b42481cde"
+    },
+    "ashwarden-v5/p000/CONFIG.json": {
+      "bytes": 169,
+      "sha256": "c5a88339c4a73f01c4c2156b47bb6fa04a7d0a338c1f5b927524faa0a0b0ddcd"
+    },
+    "ashwarden-v5/p000/CELL.json": {
+      "bytes": 44986,
+      "sha256": "bfcacb769cf3afbbfe1ca7e7246a1990beb8a69e8f9f38969b6b2a623b2a4085"
+    },
+    "ashwarden-v5/p000/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "ashwarden-v5/p064/EXECUTION.json": {
+      "bytes": 1113,
+      "sha256": "f8b1d63eec203f841fef186d65e9cb4a0b102a6394a567e5bda22fe121f0f394"
+    },
+    "ashwarden-v5/p064/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ashwarden-v5/p064/trace.ndjson.xz": {
+      "bytes": 871940,
+      "sha256": "945d647c3c92dc6a12ad54570c22451b7d9415b0539db6782cb30b6a7ccca12e"
+    },
+    "ashwarden-v5/p064/endpoints.ndjson.xz": {
+      "bytes": 189388,
+      "sha256": "8fb2e0e596a6a9de86eeebcbe6fc53213121976f814c0827d50c95b069303d7e"
+    },
+    "ashwarden-v5/p064/CONFIG.json": {
+      "bytes": 170,
+      "sha256": "07ffc6a1708f1e023e8867987535bfa767e5b11e781a884fa19e2893c975a372"
+    },
+    "ashwarden-v5/p064/CELL.json": {
+      "bytes": 45046,
+      "sha256": "2b8e577e19f4f3a25723eb66171ddd0a431b26acaba033b2612d74b6cce78834"
+    },
+    "ashwarden-v5/p064/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "ashwarden-v5/p032/EXECUTION.json": {
+      "bytes": 1112,
+      "sha256": "49bfd1241028f12ab19c42233e34feda474f851124e8801cf7de35b49a5c8016"
+    },
+    "ashwarden-v5/p032/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ashwarden-v5/p032/trace.ndjson.xz": {
+      "bytes": 808236,
+      "sha256": "73b3ad406718756bcbe98571297a2209d5a915b6c99c389bdbb1748ac6bb681b"
+    },
+    "ashwarden-v5/p032/endpoints.ndjson.xz": {
+      "bytes": 187524,
+      "sha256": "8d98648c2925591fa455863d6262a0a1aa506678342a9cd0640c76472c23f090"
+    },
+    "ashwarden-v5/p032/CONFIG.json": {
+      "bytes": 170,
+      "sha256": "8a15bbf9f3a279e4ec48cba28e5c2085c666a845a4686ede9f06094e43040900"
+    },
+    "ashwarden-v5/p032/CELL.json": {
+      "bytes": 45003,
+      "sha256": "47c7835c8e592c864d6239b819dbf61608fe7a8892de6199eb4d64f02105477f"
+    },
+    "ashwarden-v5/p032/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "ashwarden-v5/p096/EXECUTION.json": {
+      "bytes": 1107,
+      "sha256": "cd86768b43872b24d34c39b807f0a43023b7b420ff6fe68971243aeee45b62c6"
+    },
+    "ashwarden-v5/p096/native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ashwarden-v5/p096/trace.ndjson.xz": {
+      "bytes": 867792,
+      "sha256": "e0198bf19837d5229b6da65ea516e1a889a003ad08214fd0530cca9cd6e6834e"
+    },
+    "ashwarden-v5/p096/endpoints.ndjson.xz": {
+      "bytes": 189044,
+      "sha256": "74ea028654063747f6c461cb6a49ad44a78c36230bc92cd50946f4653fdc2348"
+    },
+    "ashwarden-v5/p096/CONFIG.json": {
+      "bytes": 170,
+      "sha256": "6b0ecf5c5e08ead245ed9811d58f05f92f25f963fc48ed9342229fa56e868444"
+    },
+    "ashwarden-v5/p096/CELL.json": {
+      "bytes": 45153,
+      "sha256": "9dfc5dd9672142c1c7b0e4a30e70d63778e2fac433a48b020aa68b8f5af5fed4"
+    },
+    "ashwarden-v5/p096/native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    }
+  }
+}

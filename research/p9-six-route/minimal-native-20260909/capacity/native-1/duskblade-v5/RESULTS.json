@@ -1,0 +1,52 @@
+{
+  "status": "FIXED_NATIVE_POLICY_FAMILY_INSUFFICIENT_UPPER_BOUND",
+  "aspect": "duskblade",
+  "vow": 5,
+  "rows": 512,
+  "policies": 128,
+  "potential_active_upper_bound": [
+    0,
+    17,
+    22,
+    26,
+    35,
+    55,
+    68,
+    78,
+    118,
+    124,
+    127
+  ],
+  "reachable_upper_bound": [
+    0,
+    17,
+    22,
+    26,
+    35,
+    55,
+    68,
+    78,
+    118,
+    124,
+    125,
+    127
+  ],
+  "potential_viable_upper_bound": [
+    22,
+    68
+  ],
+  "outcomes": {
+    "loss": 481,
+    "win": 31
+  },
+  "faults": [],
+  "gates": {
+    "potential_active_upper_bound_at_least32": false,
+    "reachable_upper_bound_at_least16": false,
+    "potential_viable_upper_bound_at_least16": false
+  },
+  "policy_manifest_sha256": "0142944b07e03277586264a523c65730999699ffb9b0179610be46998c445459",
+  "scope": "Conservative opportunity/viability counts in this exact stock controller family only. Potential is not causal activation, and not-potential is not a certified inactive strategy. No independent confirmation or replacement for the stronger retained research controller.",
+  "packages_admitted": 0,
+  "p9_certified": false
+}

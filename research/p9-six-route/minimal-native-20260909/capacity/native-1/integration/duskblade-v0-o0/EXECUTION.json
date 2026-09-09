@@ -1,0 +1,33 @@
+{
+  "status": "COMPLETE",
+  "failure": null,
+  "native": {
+    "command": [
+      "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+      "--headless",
+      "--path",
+      "/tmp/p9-native-capacity-nti5pqtp",
+      "-s",
+      "res://probe.gd",
+      "--",
+      "/home/runner/work/glassvow/glassvow/research/p9-six-route/minimal-native-20260909/capacity/native-1/integration/duskblade-v0-o0/CONFIG.json",
+      "/home/runner/work/glassvow/glassvow/research/p9-six-route/minimal-native-20260909/capacity/native-1/integration/duskblade-v0-o0/endpoints.ndjson",
+      "/home/runner/work/glassvow/glassvow/research/p9-six-route/minimal-native-20260909/capacity/native-1/integration/duskblade-v0-o0/trace.ndjson"
+    ],
+    "returncode": 0,
+    "seconds": 0.702486480999994
+  },
+  "raw": [
+    {
+      "name": "trace.ndjson",
+      "bytes": 140,
+      "sha256": "ba39b0d63d73640f7932de1b3b675b6199cd5563f1802dfd31fec8a92553fa01"
+    },
+    {
+      "name": "endpoints.ndjson",
+      "bytes": 416949,
+      "sha256": "52062f01fe1b0036eec7a1d9a94488c1788335ab8390ae7dd11a9bf55c09deec"
+    }
+  ],
+  "p9_certified": false
+}
