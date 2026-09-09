@@ -1,0 +1,57 @@
+{
+  "config_id": "p115-v0-o1-s58080103",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p115-v0-o1/p115-v0-o1-s58080103/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p115-v0-o1/p115-v0-o1-s58080103/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p115-v0-o1/p115-v0-o1-s58080103/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 5.692757246999918,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 22075,
+      "sha256": "fe79647445b812dd251d390b6fd0ca9012c86ce03a8c56b7cb34e7706506335b"
+    },
+    "trace.ndjson": {
+      "bytes": 4003530,
+      "sha256": "8e1d677a39b41608c0c28b60853dae083aeedcb0ebf37edc15b266fc4caeb738"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 78896,
+      "sha256": "100273491343bd9fd65f38a303bf755f4171db8140ab3beb823be60282584df2"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3024,
+      "sha256": "1549fdce24c7e12c701d31a1c97c3e164c90cf7e1ce6d8f03b7ea64cf14dfebe"
+    },
+    "CONFIG.json": {
+      "bytes": 572,
+      "sha256": "d18d27530cabbd393e7453416336c6418db8ab99b23e4ac6fee2ffe524cb9756"
+    },
+    "CELL.json": {
+      "bytes": 516,
+      "sha256": "ddc1591dbd664639781b62f76931446b6d5c9cc6239d8c5bd5ad5df0b176d623"
+    }
+  },
+  "p9_certified": false
+}

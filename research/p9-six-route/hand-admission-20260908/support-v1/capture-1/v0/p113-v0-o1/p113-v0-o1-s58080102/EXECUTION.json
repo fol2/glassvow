@@ -1,0 +1,57 @@
+{
+  "config_id": "p113-v0-o1-s58080102",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p113-v0-o1/p113-v0-o1-s58080102/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p113-v0-o1/p113-v0-o1-s58080102/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p113-v0-o1/p113-v0-o1-s58080102/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 7.88179980599989,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 27577,
+      "sha256": "f60eb6fe1f34292322e7a4952b84198a31b5c9364157b6a4065d27e0d49793fe"
+    },
+    "trace.ndjson": {
+      "bytes": 5220329,
+      "sha256": "f2f1084b9b780fb66e72b171d6f2b7e4d411941f3f747ea5e0d50dabb9ca7a22"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 96976,
+      "sha256": "4cd38ea1b08c09d49cbae202d4dd777dac95a5505d857904aadc178650c4abd0"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3496,
+      "sha256": "7ccb1862e39a22e614f177e4c5db79d5a2f8e18c6e12f2c2101bc4127e8914e8"
+    },
+    "CONFIG.json": {
+      "bytes": 570,
+      "sha256": "2397f3f21c4687a2e01721a6e3ff07833f49b1a737b33b45baaf4c45af668da8"
+    },
+    "CELL.json": {
+      "bytes": 514,
+      "sha256": "7aa4f4897367d60f70ea9aac0f3aaea8d7a4707ba51229095ed92d42f630c890"
+    }
+  },
+  "p9_certified": false
+}

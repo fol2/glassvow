@@ -1,0 +1,57 @@
+{
+  "config_id": "p112-v0-o1-s58080101",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p112-v0-o1/p112-v0-o1-s58080101/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p112-v0-o1/p112-v0-o1-s58080101/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p112-v0-o1/p112-v0-o1-s58080101/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 15.972106413999882,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 32421,
+      "sha256": "c811220fbd42ce6fcc84d48e1cc8e836f13c62e020659a29b79b19eeb53a9860"
+    },
+    "trace.ndjson": {
+      "bytes": 10231265,
+      "sha256": "c576fef81ee6a29ec1c9a76e010bfeffee54c70f2b1a195b381cacccc9116c2c"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 140808,
+      "sha256": "6a979903e6fe3d5750a91fb4b87381facdde1103ddf9fbf7ffd3ba1e42d72c4a"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3820,
+      "sha256": "44047d2b068d82ab1db31e29da0434a117a925f418a25c13421c8112ea87403d"
+    },
+    "CONFIG.json": {
+      "bytes": 568,
+      "sha256": "f8eead6c555e104d699e712af53d5c9fafd07b389659cdf142f8a63e5a9e4d29"
+    },
+    "CELL.json": {
+      "bytes": 16598,
+      "sha256": "0ba76c77cad1ac819a3054335b761f66d33cb0d2f1f241eb62dce99d3a6ed216"
+    }
+  },
+  "p9_certified": false
+}

@@ -1,0 +1,57 @@
+{
+  "config_id": "p118-v0-o1-s58080100",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p118-v0-o1/p118-v0-o1-s58080100/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p118-v0-o1/p118-v0-o1-s58080100/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p118-v0-o1/p118-v0-o1-s58080100/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 12.741166278000037,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 28923,
+      "sha256": "5d9b0eafd3660ce37a860f8e5111f8e9a6165c21261653d17a9db878c2701d82"
+    },
+    "trace.ndjson": {
+      "bytes": 5205214,
+      "sha256": "d0a909ec8b3f9e3d7856eb8662529188ec1fce2672c53890c65a6e8bd63dcbdc"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 101212,
+      "sha256": "e47652ef73bb550ade797ead5b41312343463caa614beffaa1eb9e37e3d602f5"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3236,
+      "sha256": "1516fa73367804bc67463386a9fe55b44b1e4884d37a89631af5a71a16cce6ec"
+    },
+    "CONFIG.json": {
+      "bytes": 569,
+      "sha256": "152ba39961277c09ff1ff81b7742aec95a05d886139e687f18ff25af64e6491a"
+    },
+    "CELL.json": {
+      "bytes": 512,
+      "sha256": "63d1b90c736bb12b9d7f113b5383a25940efc054298308a2b727c9499a696ad7"
+    }
+  },
+  "p9_certified": false
+}

@@ -1,0 +1,57 @@
+{
+  "config_id": "p118-v0-o1-s58080103",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p118-v0-o1/p118-v0-o1-s58080103/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p118-v0-o1/p118-v0-o1-s58080103/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p118-v0-o1/p118-v0-o1-s58080103/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 16.183238337000148,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 27601,
+      "sha256": "29d4bc353602161eaeda0943d13b47208db0505ee39e18290d20cc30f4590e14"
+    },
+    "trace.ndjson": {
+      "bytes": 5377822,
+      "sha256": "a4ebaee20eebd2d07b7e30f5e037633e3feca63d9c62c6f554982aab476df67c"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 109604,
+      "sha256": "accf1a345245eeda563d51c44e99ea082890e549f94040b3b215db2f17c74f88"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3308,
+      "sha256": "ff33ebeafc6f981fcabe1c283ba18444a3610d37497ff5a562900dd6ac2d1191"
+    },
+    "CONFIG.json": {
+      "bytes": 569,
+      "sha256": "021ad23f126684578bf5b7cdef0a53aa57cdf56f56a3281309d1d4de0fe48c01"
+    },
+    "CELL.json": {
+      "bytes": 512,
+      "sha256": "9e6d0940eaa553f980a9606c920ff2fe90103a3bcbee4c6583b4150b6730b673"
+    }
+  },
+  "p9_certified": false
+}

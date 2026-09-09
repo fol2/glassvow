@@ -1,0 +1,57 @@
+{
+  "config_id": "p114-v0-o1-s58080103",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p114-v0-o1/p114-v0-o1-s58080103/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p114-v0-o1/p114-v0-o1-s58080103/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p114-v0-o1/p114-v0-o1-s58080103/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 13.837452482999879,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 36002,
+      "sha256": "b156a71c3be6572dcd30c2f9e74b80e4798a667578e0bf6db92f7a96b72e1c31"
+    },
+    "trace.ndjson": {
+      "bytes": 7465418,
+      "sha256": "eea915bbc2380e56eee371989b1e2a085ad31db975c07d35eb5fd4b0f055fc0a"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 134676,
+      "sha256": "aadd2ec7e9b20f5b8f0d9db84bada2598e391a7b72b30c39e14cdeec76193495"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3700,
+      "sha256": "cb03e363800afef98cc0e54821945a5862f36ee6da7537028ca3e0a7969051bc"
+    },
+    "CONFIG.json": {
+      "bytes": 568,
+      "sha256": "9395535f3062aee88abdbda78f4b08a4d2f6da85c42759b69266f41a32c34f4f"
+    },
+    "CELL.json": {
+      "bytes": 512,
+      "sha256": "c8fbcd915ace2f69d157a30a27f7fbe6acc2c3e9c72a4a91184cdf2fdf0798bb"
+    }
+  },
+  "p9_certified": false
+}

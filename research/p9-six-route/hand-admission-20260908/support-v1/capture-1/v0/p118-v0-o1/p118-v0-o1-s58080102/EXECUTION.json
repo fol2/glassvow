@@ -1,0 +1,57 @@
+{
+  "config_id": "p118-v0-o1-s58080102",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p118-v0-o1/p118-v0-o1-s58080102/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p118-v0-o1/p118-v0-o1-s58080102/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p118-v0-o1/p118-v0-o1-s58080102/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 9.696063156000037,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 28644,
+      "sha256": "0f257dd5908c56b21e364a5dc0e18d28df02661be6b719c1917b4fd68c0d321a"
+    },
+    "trace.ndjson": {
+      "bytes": 4956155,
+      "sha256": "ac43c80522b71da2cf711c76a86628bd0dd4af8c312a5a6207f130c661f1fa19"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 94504,
+      "sha256": "a36e42a99aa5089f708c93f6491a7dfb651f583bbff8e67cd4362f1f28386c89"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3492,
+      "sha256": "e4cc56e0385486b56edf51ee48f0815efbcd94b609ba0793dbe6c889d0d16569"
+    },
+    "CONFIG.json": {
+      "bytes": 569,
+      "sha256": "8cdb7eb33304f91173a20e38db0d03dd1e45c9105021a6c1d6a670c767d0b363"
+    },
+    "CELL.json": {
+      "bytes": 512,
+      "sha256": "53c902ae8eda4bc1b8355f7384c9c542a6671b88958a2e44d1d489e3b58bb157"
+    }
+  },
+  "p9_certified": false
+}

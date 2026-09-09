@@ -1,0 +1,57 @@
+{
+  "config_id": "p117-v0-o1-s58080102",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p117-v0-o1/p117-v0-o1-s58080102/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p117-v0-o1/p117-v0-o1-s58080102/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p117-v0-o1/p117-v0-o1-s58080102/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 7.101618799000107,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 24199,
+      "sha256": "87aebfa698728baf7e6ce668423e3ed8b1921c540b54e4d2678227b38320932f"
+    },
+    "trace.ndjson": {
+      "bytes": 4526807,
+      "sha256": "53f1809826841575421c6ac35b9d565a8bcd48d7f6c16faa13613ceee47cd42e"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 83876,
+      "sha256": "d8f441386d6857fff508687f302bb15eaafa73695e81e0fae9a37a0178d98566"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3128,
+      "sha256": "a8076349108f35598abf611172cf7bf7c363bfc8d9da323e7a59e1f7c2fda10a"
+    },
+    "CONFIG.json": {
+      "bytes": 571,
+      "sha256": "6b7980eb0fe2d7e8d338dcf099d5bfe731afaf3120c8ebd83ef0471c9e32e383"
+    },
+    "CELL.json": {
+      "bytes": 514,
+      "sha256": "544f3b3ba4fab52452befa73ec540de6a86512147aaa66395cc62bfc6a4cfa20"
+    }
+  },
+  "p9_certified": false
+}
