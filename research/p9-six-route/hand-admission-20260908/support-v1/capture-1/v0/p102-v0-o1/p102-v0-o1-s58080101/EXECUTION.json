@@ -1,0 +1,57 @@
+{
+  "config_id": "p102-v0-o1-s58080101",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p102-v0-o1/p102-v0-o1-s58080101/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p102-v0-o1/p102-v0-o1-s58080101/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p102-v0-o1/p102-v0-o1-s58080101/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 12.524554783999974,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 32504,
+      "sha256": "deb70dbc8c3e6d67aa24cfe3965abf2fd53c843938a2e4e0a5d3dfc6ee4caedf"
+    },
+    "trace.ndjson": {
+      "bytes": 5667213,
+      "sha256": "d1e913502ebf68f0b7f0294d226d91e7b26a305259e4878b8a481055c958dbcd"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 108876,
+      "sha256": "9eb6dad228605a1c134379755c1e7081204e42e89fe62f40add5d52b98433647"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3756,
+      "sha256": "4ddb00e8cbcdd2383397b7c554065960ab873fcf4205f6cc3b023dcfbe3757c2"
+    },
+    "CONFIG.json": {
+      "bytes": 569,
+      "sha256": "37fd925034fedf3e34db9017e02a9d449bf1a50c118a1632eeaf9b532627cabb"
+    },
+    "CELL.json": {
+      "bytes": 512,
+      "sha256": "a81d76d5163f2d9ad9e8698985949251a974dd3bcd28b73ee094bcf12c2f1842"
+    }
+  },
+  "p9_certified": false
+}

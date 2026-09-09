@@ -1,0 +1,57 @@
+{
+  "config_id": "p102-v0-o1-s58080103",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p102-v0-o1/p102-v0-o1-s58080103/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p102-v0-o1/p102-v0-o1-s58080103/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p102-v0-o1/p102-v0-o1-s58080103/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 16.324696030999917,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 27646,
+      "sha256": "331859ecccfc4c7bba69f2cd803a9e20b362280b004d117364e06a902326b20c"
+    },
+    "trace.ndjson": {
+      "bytes": 5329417,
+      "sha256": "bb6ab68b2f37b1d628e256bac914ce3799d5398ca48ac6416c8706c587502627"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 108036,
+      "sha256": "1c50f4c9c837682d9aef962c4fcc19e718e692e26dfae7db48effd65fa7f793d"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3320,
+      "sha256": "46f037e08e5f9cdcba0c5b5c0b3422d69902d764176c86700594d41886b36017"
+    },
+    "CONFIG.json": {
+      "bytes": 569,
+      "sha256": "033fca6a9c61829a467d9c14fd16523750c46291049af2661c10ad05b502264b"
+    },
+    "CELL.json": {
+      "bytes": 512,
+      "sha256": "f53b222b2faee058f4a2cef5063bc176b2d2356a49bc798a49b534e8f2d06297"
+    }
+  },
+  "p9_certified": false
+}

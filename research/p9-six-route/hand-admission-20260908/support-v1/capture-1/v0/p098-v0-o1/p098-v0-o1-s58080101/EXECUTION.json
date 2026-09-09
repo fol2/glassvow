@@ -1,0 +1,57 @@
+{
+  "config_id": "p098-v0-o1-s58080101",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p098-v0-o1/p098-v0-o1-s58080101/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p098-v0-o1/p098-v0-o1-s58080101/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p098-v0-o1/p098-v0-o1-s58080101/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 13.304276596999955,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 32942,
+      "sha256": "ac9060116787c8f843bb776d7675672844df182a83a3c8c7e0368d0eb754fb36"
+    },
+    "trace.ndjson": {
+      "bytes": 7475782,
+      "sha256": "86e531f0ece008f29333d3e831544788c13f52f10d80482e239cecebc199d91e"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 122048,
+      "sha256": "f642df05ef846ed249daa870447dd7d31fd56c06cccc94641c7842c66398871e"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3884,
+      "sha256": "fd80a74f2ad2a3e2b39251d494dfb9dcca12abb9e792ea92809ed49163bd18fd"
+    },
+    "CONFIG.json": {
+      "bytes": 568,
+      "sha256": "ee57fc2120f235a47a8e3315c8cf5e99e83d24b92a2847ad40dc6e25bd6139d0"
+    },
+    "CELL.json": {
+      "bytes": 4064,
+      "sha256": "ad2f276940609de3a12ba59dfe608376cb46549270190fc3f1168bda6300ec85"
+    }
+  },
+  "p9_certified": false
+}

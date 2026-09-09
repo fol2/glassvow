@@ -1,0 +1,57 @@
+{
+  "config_id": "p101-v0-o1-s58080103",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p101-v0-o1/p101-v0-o1-s58080103/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p101-v0-o1/p101-v0-o1-s58080103/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p101-v0-o1/p101-v0-o1-s58080103/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 7.411765247999938,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 29875,
+      "sha256": "60c8b970302e829d7a7529d5d4747831165a4fc388fe49fdfece2ae0bf5b30d2"
+    },
+    "trace.ndjson": {
+      "bytes": 3466255,
+      "sha256": "d1fceb6e306ce17fb72d345b8663f11ae29ff96160eaa0349b9626cf27f9ebbb"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 78180,
+      "sha256": "bd87ce72ea1ad419d5b39c6fb8a7c3b410ed1c9879f090bc7d0ddc4a86d5ccb4"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3748,
+      "sha256": "12114bdec290fb419ff9a3be86b60ed742b1612b79d0624e04cf9bfd1063e614"
+    },
+    "CONFIG.json": {
+      "bytes": 571,
+      "sha256": "ec16fc3c6e65b720a39afb16f493a6b4d0dec1686d078d417e2d9d9040d36a32"
+    },
+    "CELL.json": {
+      "bytes": 514,
+      "sha256": "3f6ab524f78ac494c758cfec7778021ae90ad7121c4eb7ad7bada07b2c98018e"
+    }
+  },
+  "p9_certified": false
+}

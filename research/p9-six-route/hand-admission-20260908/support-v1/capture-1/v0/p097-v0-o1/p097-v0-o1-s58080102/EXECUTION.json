@@ -1,0 +1,57 @@
+{
+  "config_id": "p097-v0-o1-s58080102",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p097-v0-o1/p097-v0-o1-s58080102/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p097-v0-o1/p097-v0-o1-s58080102/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p097-v0-o1/p097-v0-o1-s58080102/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 7.075067773000001,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 24607,
+      "sha256": "ce375080296c286d7e98778f3adaff01ec67d1a9e6215290c847c2fcbeef4a15"
+    },
+    "trace.ndjson": {
+      "bytes": 4435850,
+      "sha256": "ed8be4a8a75fde6307f60d81ab3eaaca19f975459f9fdd474643b5dc585543c5"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 83200,
+      "sha256": "da7dab96389f5838627636b5b9bc003d572f18876c329f254c422c22959ba547"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3256,
+      "sha256": "0f34b37580863959186985f266fc2249ba81ebe1ad65978d1faffb763fe206f7"
+    },
+    "CONFIG.json": {
+      "bytes": 568,
+      "sha256": "c82978418065250fd27c1c8a67a19221c1319016edef59f3f0ea245198f731dc"
+    },
+    "CELL.json": {
+      "bytes": 513,
+      "sha256": "19ba1475e0963d317ae56cbe7e975fda1dd08f3af87b8644043aa989ab7f36ca"
+    }
+  },
+  "p9_certified": false
+}
