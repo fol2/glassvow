@@ -1,0 +1,28 @@
+{
+  "kind": "EXACT_SOURCE_AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "reviewed_utc": "2026-09-09T00:11:01.842411+00:00",
+  "verdict": "ACCEPT_FOR_DECLARED_BOUNDED_EXECUTION_WITH_LIMITS",
+  "scope": "Delivery-only missing-policy resume, unchanged-support aggregation and frozen signed arm2 necessary guardrail screen. No package, detector, independent-confirmation or release approval.",
+  "evidence": {"support_audit_sources": "640c336f5770e3b7cc83c075200fbe750c0f09de", "signed_control_sources": "52fe8c9b03a46fe11c4787ec0f68912413027219", "local_resume_tests": 8, "local_control_tests": 14, "local_control_outcome_rows": 0, "remote_test_run": 34293077495, "remote_test_job": 102283677815, "remote_test_step_passed": true},
+  "checks": [
+    "Previous writer completed before non-forced ref update; completed, partial or failed configurations are not overwritten.",
+    "Original support source hashes, policies, seeds, masks, summaries and per-invocation containment remain fixed.",
+    "Control driver invokes the exact BalanceSim with empty bans, Policy.resolve({}), random_build=true and random_play=false, native shipping incentives and mature profile.",
+    "Control rectangle is neither the balanced research controller nor the old exposed 64-seed diagnostic.",
+    "Integer .5/.1 gates preserve exact boundaries; nominal bootstrap intervals are report-only.",
+    "Decoder tests reject missing/replaced seeds, policy drift, incorrect content and fabricated wins; compressed/uncompressed readouts agree.",
+    "Available raw and diagnostics survive failure; publication fetches and compares remote bytes in a separate Git repository."
+  ],
+  "limits": [
+    "Support and signed controls are necessary evidence only. Independent complementarity, peer/policy separation, duration, policy ceiling, detector and retention remain open.",
+    "Postrun hashing is not independent semantic or runtime-provenance qualification.",
+    "A blocked recorded prefix is not failure of counterfactual reoptimisation.",
+    "A failed partial control capture may have rows not represented in its completed-row counter; retained raw and cell receipts govern exposure, not a default zero.",
+    "The historical original-arm archive still lacks full remote payload storage."
+  ],
+  "new_native_runs_in_review": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
