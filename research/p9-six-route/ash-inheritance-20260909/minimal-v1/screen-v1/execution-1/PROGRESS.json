@@ -1,5 +1,5 @@
 {
-  "completed_cells": 2,
+  "completed_cells": 4,
   "assigned_cells": 8,
   "receipts": [
     {
@@ -60,6 +60,66 @@
       "raw": {
         "bytes": 1022351,
         "sha256": "1ceb8705bf7c929be4e864624431194f016a0df01587a0e24bebde1558e05def"
+      }
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/home/runner/work/_temp/bloodfire-screen/baseline",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-ashwarden-v5.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-ashwarden-v5.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 6.431783930999998,
+      "config": {
+        "id": "baseline-ashwarden-v5",
+        "catalogue": "baseline",
+        "aspect": "ashwarden",
+        "vow": 5,
+        "arm": 2,
+        "seed0": 73309200,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 854604,
+        "sha256": "bda920d4629ddbd502dd427530be1b566b8108df75ab891f42773817816587f7"
+      }
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/home/runner/work/_temp/bloodfire-screen/candidate",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-ashwarden-v5.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-ashwarden-v5.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 6.431705863999994,
+      "config": {
+        "id": "candidate-ashwarden-v5",
+        "catalogue": "candidate",
+        "aspect": "ashwarden",
+        "vow": 5,
+        "arm": 2,
+        "seed0": 73309200,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 856680,
+        "sha256": "770429ad1881797f2279b95647741aca4ceb4185cd6f10d281af0b411c11f5c3"
       }
     }
   ],
