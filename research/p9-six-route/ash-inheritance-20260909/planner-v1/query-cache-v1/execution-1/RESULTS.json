@@ -1,0 +1,176 @@
+{
+  "kind": "QUERY_LOCAL_MEMOISATION_EQUIVALENCE_AND_COST_REGRESSION",
+  "status": "EXACT_EQUIVALENCE_SPEEDUP_NOT_ESTABLISHED",
+  "equivalence_cases": 1920,
+  "all_raw_bytes_equal_preserved_qualification": true,
+  "cpu_seconds_by_repetition": {
+    "reference": [
+      22.36,
+      22.429999999999996
+    ],
+    "memo": [
+      22.36,
+      22.380000000000003
+    ]
+  },
+  "memo_reference_ratios": [
+    1.0,
+    0.9977708426214894
+  ],
+  "raw": [
+    {
+      "path": "raw/r0-baseline-reference.jsonl",
+      "bytes": 1903585,
+      "sha256": "c3b79d6e1aa1f83adaf5b8b6290b01ad4da2fbcd2f5efbd5d23edcaa18f027b7",
+      "cpu_seconds": 4.51,
+      "elapsed_seconds": 4.53
+    },
+    {
+      "path": "raw/r0-baseline-memo.jsonl",
+      "bytes": 1903585,
+      "sha256": "c3b79d6e1aa1f83adaf5b8b6290b01ad4da2fbcd2f5efbd5d23edcaa18f027b7",
+      "cpu_seconds": 4.53,
+      "elapsed_seconds": 4.62
+    },
+    {
+      "path": "raw/r0-active-reference.jsonl",
+      "bytes": 1951304,
+      "sha256": "5b83c3bb6b7a8612dacb32a103a5ec506d36a9f0630112f4a5708b0e12bf4456",
+      "cpu_seconds": 4.35,
+      "elapsed_seconds": 4.43
+    },
+    {
+      "path": "raw/r0-active-memo.jsonl",
+      "bytes": 1951304,
+      "sha256": "5b83c3bb6b7a8612dacb32a103a5ec506d36a9f0630112f4a5708b0e12bf4456",
+      "cpu_seconds": 4.39,
+      "elapsed_seconds": 4.43
+    },
+    {
+      "path": "raw/r0-off-reference.jsonl",
+      "bytes": 1947644,
+      "sha256": "9e6acf2bca8ce49899603aac4df3ab6ebd907f1e3d123b790e7bfa6d894c6acd",
+      "cpu_seconds": 4.569999999999999,
+      "elapsed_seconds": 4.62
+    },
+    {
+      "path": "raw/r0-off-memo.jsonl",
+      "bytes": 1947644,
+      "sha256": "9e6acf2bca8ce49899603aac4df3ab6ebd907f1e3d123b790e7bfa6d894c6acd",
+      "cpu_seconds": 4.54,
+      "elapsed_seconds": 4.62
+    },
+    {
+      "path": "raw/r0-producer_off-reference.jsonl",
+      "bytes": 1951698,
+      "sha256": "55e505b3cd1dfba28c91d36997c9f00823e53bb9851e2c72b0ef1d4b158159b4",
+      "cpu_seconds": 4.39,
+      "elapsed_seconds": 4.43
+    },
+    {
+      "path": "raw/r0-producer_off-memo.jsonl",
+      "bytes": 1951698,
+      "sha256": "55e505b3cd1dfba28c91d36997c9f00823e53bb9851e2c72b0ef1d4b158159b4",
+      "cpu_seconds": 4.36,
+      "elapsed_seconds": 4.43
+    },
+    {
+      "path": "raw/r0-consumer_off-reference.jsonl",
+      "bytes": 1951061,
+      "sha256": "8a93a10f94cb73f7ff0433aed743a2bfdfd8417cdb0d8f40880be5a2239cf4ec",
+      "cpu_seconds": 4.54,
+      "elapsed_seconds": 4.62
+    },
+    {
+      "path": "raw/r0-consumer_off-memo.jsonl",
+      "bytes": 1951061,
+      "sha256": "8a93a10f94cb73f7ff0433aed743a2bfdfd8417cdb0d8f40880be5a2239cf4ec",
+      "cpu_seconds": 4.54,
+      "elapsed_seconds": 4.62
+    },
+    {
+      "path": "raw/r1-baseline-reference.jsonl",
+      "bytes": 1903585,
+      "sha256": "c3b79d6e1aa1f83adaf5b8b6290b01ad4da2fbcd2f5efbd5d23edcaa18f027b7",
+      "cpu_seconds": 4.51,
+      "elapsed_seconds": 4.53
+    },
+    {
+      "path": "raw/r1-baseline-memo.jsonl",
+      "bytes": 1903585,
+      "sha256": "c3b79d6e1aa1f83adaf5b8b6290b01ad4da2fbcd2f5efbd5d23edcaa18f027b7",
+      "cpu_seconds": 4.54,
+      "elapsed_seconds": 4.62
+    },
+    {
+      "path": "raw/r1-active-reference.jsonl",
+      "bytes": 1951304,
+      "sha256": "5b83c3bb6b7a8612dacb32a103a5ec506d36a9f0630112f4a5708b0e12bf4456",
+      "cpu_seconds": 4.359999999999999,
+      "elapsed_seconds": 4.43
+    },
+    {
+      "path": "raw/r1-active-memo.jsonl",
+      "bytes": 1951304,
+      "sha256": "5b83c3bb6b7a8612dacb32a103a5ec506d36a9f0630112f4a5708b0e12bf4456",
+      "cpu_seconds": 4.369999999999999,
+      "elapsed_seconds": 4.43
+    },
+    {
+      "path": "raw/r1-off-reference.jsonl",
+      "bytes": 1947644,
+      "sha256": "9e6acf2bca8ce49899603aac4df3ab6ebd907f1e3d123b790e7bfa6d894c6acd",
+      "cpu_seconds": 4.62,
+      "elapsed_seconds": 4.71
+    },
+    {
+      "path": "raw/r1-off-memo.jsonl",
+      "bytes": 1947644,
+      "sha256": "9e6acf2bca8ce49899603aac4df3ab6ebd907f1e3d123b790e7bfa6d894c6acd",
+      "cpu_seconds": 4.53,
+      "elapsed_seconds": 4.62
+    },
+    {
+      "path": "raw/r1-producer_off-reference.jsonl",
+      "bytes": 1951698,
+      "sha256": "55e505b3cd1dfba28c91d36997c9f00823e53bb9851e2c72b0ef1d4b158159b4",
+      "cpu_seconds": 4.3999999999999995,
+      "elapsed_seconds": 4.43
+    },
+    {
+      "path": "raw/r1-producer_off-memo.jsonl",
+      "bytes": 1951698,
+      "sha256": "55e505b3cd1dfba28c91d36997c9f00823e53bb9851e2c72b0ef1d4b158159b4",
+      "cpu_seconds": 4.39,
+      "elapsed_seconds": 4.43
+    },
+    {
+      "path": "raw/r1-consumer_off-reference.jsonl",
+      "bytes": 1951061,
+      "sha256": "8a93a10f94cb73f7ff0433aed743a2bfdfd8417cdb0d8f40880be5a2239cf4ec",
+      "cpu_seconds": 4.54,
+      "elapsed_seconds": 4.62
+    },
+    {
+      "path": "raw/r1-consumer_off-memo.jsonl",
+      "bytes": 1951061,
+      "sha256": "8a93a10f94cb73f7ff0433aed743a2bfdfd8417cdb0d8f40880be5a2239cf4ec",
+      "cpu_seconds": 4.55,
+      "elapsed_seconds": 4.62
+    }
+  ],
+  "whole_run_resource_ceiling_requalified": false,
+  "original_value_terminal_overridden": false,
+  "same_policy_values_actions_and_native_states": true,
+  "old_v25_study_repeated": false,
+  "scope": "Two fixed alternating repetitions of the existing finite qualification matrix; this proves these exact input/output regressions and measured local compute only.",
+  "limits": [
+    "General equivalence additionally depends on the bound source argument that no native state/content changes within greedy choose_action.",
+    "No extrapolated CPU prediction admits the already failed full-workload resource contract.",
+    "Performance regression cases are not new independent package samples; no V0 or pair-support stage is opened."
+  ],
+  "new_native_benchmark_invocations": 20,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
