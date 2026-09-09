@@ -1,0 +1,16 @@
+{
+  "kind": "SAME_CONTROLLER_QUERY_LOCAL_MEMOISATION_COST_REPAIR",
+  "basis": "Complete original V5 fixed workload has positive frozen value readouts but remains INCONCLUSIVE because 4015.74 CPU seconds exceeded its unchanged 3600 ceiling. No result is retroactively promoted.",
+  "question": "Can repeated identical deck feature and card-count calculations be memoised within one immutable greedy scoring call without changing any action, score, forecast or native output, and with a measurable computational saving?",
+  "implementation_delta": "One wrapper for the existing greedy continuation. Cache features and copies lazily only while super.choose_action runs on one specific game object; clear every cache on entry/exit. All calls outside that window use the original implementation. No weights, candidates, samples, horizon, tie order, RNG, cost accounting or game law change.",
+  "source_argument": "The bound legacy and v8/v9/v18/v19 choose_action/score/draft closure reads game/content and writes only private policy memory. It calls no native command. Features and copies depend on the unchanged content and public deck within this synchronous call; callers only read their results. Reusing the first exact return therefore preserves the original arithmetic and candidate iteration. Memoisation never crosses a native action, future forecast or game identity.",
+  "risk_checks": "Reuse the complete already committed 480-case compatibility matrix, including off/Dusk, fatal source, hidden order/RNG changes, readonly queries, paid action legality, full states/events and score alternatives. Original captures stay immutable. Exact byte comparison is required, no numeric tolerance or field projection.",
+  "benchmark": {"repetitions": 2,"methods": ["reference","memo"],"modes": ["baseline","active","off","producer_off","consumer_off"],"cases_per_mode": 96,"method_order": "Alternate with repetition plus mode index parity", "native_workers": 1,"per_invocation_seconds":180,"raw_bytes_per_stream":67108864},
+  "measurement": "Child-process user plus system CPU per full mode; imports/parses reported separately, neither method receives a different timed scope. Both repetitions must be faster to call benchmark speedup; no estimate opens the full-workload resource gate.",
+  "stop": "Any input, source, parse, complete-capture or exact byte discrepancy stops this implementation from adoption. Retain all results. No cache key relaxation, dropped field, policy retune or smaller horizon to rescue it.",
+  "continuation_if_exact_and_faster": "Only a separately bound delivery reproduction of the original fixed workload, requiring complete old output equality and the same 3600 CPU ceiling, can qualify costs. Exposed rows remain reproduction, not fresh statistical confirmation. Original terminal remains immutable.",
+  "non_goals": ["No V0 execution","No new support aggregation","No package/P9 admission","No old v25 scientific study rerun","No promotion of research planner into product","No changed resource budget"],
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "packages_admitted": 0,
+  "p9_certified": false
+}
