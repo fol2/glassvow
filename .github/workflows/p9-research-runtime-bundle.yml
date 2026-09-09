@@ -10,10 +10,10 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/smolder-certificate-20260909
+  STUDY: research/p9-six-route/smolder-certificate-20260909/formal-v1
 jobs:
   bundle:
-    name: Publish source-frame decision and current capsule - no engine
+    name: Finish committed bounded comparison - no native samples
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -23,56 +23,60 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
-          persist-credentials: true
           fetch-depth: 1
+          persist-credentials: true
           sparse-checkout: |
-            .claude
-            .grok
-            .github
-            docs/agents
-            tools
             domain
             content
             research/p9-six-route/smolder-certificate-20260909
-            research/p9-six-route/package-disposition-20260908
-      - name: Check exact sources and evaluate source-frame counterexample
-        id: frame
+      - name: Validate committed inputs; execute existing comparison and tests
+        id: proof
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          mkdir "$STUDY/frame-1"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test ! -e "$STUDY/execution-1"
+          mkdir -p "$STUDY/execution-1"
           python3 - <<'PY'
-          import hashlib,os,pathlib
-          root=pathlib.Path(os.environ['STUDY'])
-          expected={'frame_counterexample.py':'f7104f99f1b3e90879500b393f2bd7295f306a025d8e4a559adbed588d774222','test_frame.py':'03803c2951e6827799032c1f241c3a5e029e34d0c741b23387c2de0f225d5d62','close_scope.py':'486bea69f0f60215005713a51277d668a871a07973ca29ef62966f1082caafc2','test_close.py':'4af52fe0ac7a0ea780ccb8f5be0c6d435eb9ca2aea7771d884816f29a48f0571'}
-          for name,digest in expected.items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest,name
+          import hashlib,json,os,pathlib,subprocess,sys
+          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1'
+          expected={'PROTOCOL.json':'558a3b38572758db5b8b19404101946d94faa4c9','compare.py':'d95bac03c4321e3fd6c1d4ad2830b33dbe8df8cc','test_compare.py':'c9a0f6d2af4b6c2f790a4d125315985b5b8c0c19'}
+          records={}
+          for name,want in expected.items():
+              b=(root/name).read_bytes();got=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+              if got!=want:raise RuntimeError('SOURCE_IDENTITY:'+name)
+              records[name]={'bytes':len(b),'git_blob':got,'sha256':hashlib.sha256(b).hexdigest()}
+          runs=[]
+          for name,cmd,cwd in [('tests',[sys.executable,'-m','unittest','-v','test_compare'],root),('comparison',[sys.executable,str(root/'compare.py'),'.',str(out/'analysis')],pathlib.Path('.'))]:
+              p=subprocess.run(cmd,cwd=cwd,capture_output=True,timeout=120)
+              (out/(name+'.stdout')).write_bytes(p.stdout);(out/(name+'.stderr')).write_bytes(p.stderr)
+              runs.append({'name':name,'command':cmd,'cwd':str(cwd),'returncode':p.returncode})
+              if p.returncode:break
+          receipt={'source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'source_blobs':records,'commands':runs,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
+          (out/'EXECUTION.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          if len(runs)!=2 or any(r['returncode'] for r in runs):raise RuntimeError('EXECUTION_FAILURE')
+          result=json.loads((out/'analysis/RESULTS.json').read_bytes())
+          if result['formal_eligibility'] or result['opens_population_confirmation']:raise RuntimeError('UNAUTHORISED_PROMOTION')
+          print('COMPARISON_STATUS='+result['status'])
+          print((out/'tests.stderr').read_text())
           PY
-          python3 tools/check_agent_contracts.py > "$STUDY/frame-1/agent-contracts.log" 2>&1
-          python3 -m unittest discover -s "$STUDY" -p 'test_*.py' -v > "$STUDY/frame-1/tests.log" 2>&1
-          python3 "$STUDY/frame_counterexample.py" . "$STUDY/frame-1/RESULTS.json" > "$STUDY/frame-1/stdout.log" 2> "$STUDY/frame-1/stderr.log"
-          cp research/p9-six-route/SESSION-STATE.json "$RUNNER_TEMP/state-before.json"
-          python3 "$STUDY/close_scope.py" . > "$STUDY/frame-1/capsule.stdout" 2> "$STUDY/frame-1/capsule.stderr"
-          python3 - <<'PY'
-          import json,os,pathlib
-          before=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'state-before.json').read_bytes())
-          after=json.loads(pathlib.Path('research/p9-six-route/SESSION-STATE.json').read_bytes())
-          changed=[k for k in before if before[k]!=after.get(k)]
-          assert set(changed)<= {'status','exact_next_action','smolder_source_scope'},changed
-          assert after['packages_admitted']==0 and after['p9_certified'] is False
-          (pathlib.Path(os.environ['STUDY'])/'frame-1/STATE-PRESERVATION.json').write_text(json.dumps({'changed_existing_keys':changed,'all_other_existing_fields_identical':True,'new_native_runs':0},indent=2)+'\n')
-          PY
-      - name: Preserve available evidence and changed capsule files
+      - name: Preserve all available emitted evidence only
         if: always()
         shell: bash
         run: |
           set -euo pipefail
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
-          git add "$STUDY" research/p9-six-route/SESSION-STATE.json research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/package-disposition-20260908/ROADMAP.md
+          git add "$STUDY/execution-1"
+          python3 - <<'PY'
+          import os,subprocess
+          paths=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
+          assert paths and all(p.startswith(os.environ['STUDY']+'/execution-1/') for p in paths),paths
+          PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): preserve source-frame decision and exact unfinished milestones'
+          git commit -m 'research(p9): retain bounded composition result without granting full eligibility'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -83,38 +87,35 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
           sparse-checkout: |
-            .github
-            research/p9-six-route/smolder-certificate-20260909
-            research/p9-six-route/package-disposition-20260908
             domain
             content
-      - name: Read back complete source and capsule bytes; replay source finding only
-        if: steps.frame.outcome == 'success'
+            research/p9-six-route/smolder-certificate-20260909
+      - name: Read back bytes and reconstruct result without network or engine
+        if: steps.proof.outcome == 'success'
         shell: bash
         run: |
           set -euo pipefail
-          python3 "cold/$STUDY/frame_counterexample.py" cold "$RUNNER_TEMP/frame-readback.json"
+          python3 "cold/$STUDY/compare.py" cold "$RUNNER_TEMP/formal-readback" --offline-inputs "cold/$STUDY/execution-1/analysis/inputs"
           python3 - <<'PY'
           import hashlib,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);entries=[]
-          paths=[p for p in root.rglob('*') if p.is_file()]
-          paths += [pathlib.Path(p) for p in ['research/p9-six-route/SESSION-STATE.json','research/p9-six-route/SESSION-HANDOFF.md','research/p9-six-route/package-disposition-20260908/ROADMAP.md','.github/workflows/p9-research-runtime-bundle.yml']]
-          for p in sorted(paths):
+          root=pathlib.Path(os.environ['STUDY']);items=[]
+          for p in sorted(root.rglob('*')):
+              if not p.is_file():continue
               b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b,str(p)
-              entries.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
-          assert (root/'frame-1/RESULTS.json').read_bytes()==(pathlib.Path(os.environ['RUNNER_TEMP'])/'frame-readback.json').read_bytes()
-          r={'status':'SOURCE_FRAME_AND_CURRENT_CAPSULE_EXACT_REMOTE_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':entries,'upstream_raw_readback':'derived-2/REMOTE-READBACK.json','new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
-          (root/'REMOTE-READBACK.json').write_text(json.dumps(r,indent=2)+'\n')
-          print('FINAL_SOURCE_SCOPE_READBACK_FILES='+str(len(entries)))
-          print((root/'DECISION.json').read_text())
+              items.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
+          out=root/'execution-1';replayed=pathlib.Path(os.environ['RUNNER_TEMP'])/'formal-readback'
+          for name in ('RESULTS.json','INPUTS.json'):
+              assert (out/'analysis'/name).read_bytes()==(replayed/name).read_bytes(),name
+          receipt={'kind':'COLD_CHECKOUT_BYTE_AND_OFFLINE_RESULT_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':items,'formal_eligibility':False,'new_native_runs':0,'new_independent_samples':0,'p9_certified':False}
+          (out/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print('FORMAL_READBACK_FILES='+str(len(items)))
           PY
-          git add "$STUDY/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record cold-readback of complete source-scope checkpoint'
+          git add "$STUDY/execution-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): record complete byte readback of scoped formal proof'
           test "$(git ls-remote origin refs/heads/research/p9-six-route-local-20260905 | cut -f1)" = "$PUBLISHED_HEAD"
           git push origin HEAD:refs/heads/research/p9-six-route-local-20260905
-      - name: Preserve fail-closed status
+      - name: Keep execution failures visible
         if: always()
-        shell: bash
         env:
-          FRAME_OUTCOME: ${{ steps.frame.outcome }}
-        run: test "$FRAME_OUTCOME" = success
+          OUTCOME: ${{ steps.proof.outcome }}
+        run: test "$OUTCOME" = success
