@@ -1,0 +1,1757 @@
+{
+  "published_head": "ce3a2a016e58916f9c7fde7b95e4d17f872cbef3",
+  "run_id": "34385196459",
+  "files": [
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/PROTOCOL.json",
+      "bytes": 6159,
+      "sha256": "c7d2962458de22360be21ecbe5c79da915066482ba86e82150fa10df771fc243"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/bridge.py",
+      "bytes": 5805,
+      "sha256": "1ff7eb5176437850987f83e226e742ff9b6be69a6d59595db1c915084bb4ec58"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/capability.gd",
+      "bytes": 3976,
+      "sha256": "f028406be7dbc20c8fae61ac69609b5139d073441bc2e243cc8dd28c63fb6e1c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/compare_value.py",
+      "bytes": 3170,
+      "sha256": "4cbbac8f817bf6409d7f8757830a9bd8e4cc652b487631445f9d0ddf64692377"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-1/EXECUTION.json",
+      "bytes": 186,
+      "sha256": "63aa6e80700bf72d181870ee4ae073b6ff761d8c6fd82d63184540e06bd3b57b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-1/SOURCE-READBACK.json",
+      "bytes": 9598,
+      "sha256": "b4f877db2269948bb85fc9ff0e87200f3f5df6b796c1b168d76e5d72d377fcf0"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-1/engine.log",
+      "bytes": 576,
+      "sha256": "9165799f6fb43b5e466c20765cf57625b24244d8ae894415f33b5b38a858e41e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-1/runner.stderr",
+      "bytes": 204,
+      "sha256": "b27fd8a59ca2d50a8b55d46371933c556135a46aaaf01f28b91bade20f545aa8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-1/runner.stdout",
+      "bytes": 4045,
+      "sha256": "673658b26e6bd83962c2e2fa3f6c525e830cf71f5b09e14029a7081992bfddfc"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-1/tests.stderr",
+      "bytes": 1364,
+      "sha256": "7a2bd8a7acb497a40ff99680611c0a42913e8d073ccfd1b5aa0cfe290172acf0"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-1/tests.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-2/EXECUTION.json",
+      "bytes": 186,
+      "sha256": "3695efcda7f6e3cf7da02d20e8da15b0111fb27f68b5f66dbd27017f04a23b97"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-2/engine.log",
+      "bytes": 576,
+      "sha256": "d91f0016c703fab0a645182e64cbd30dc5073ec604fe39bd0d40889845c623a8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-2/runner.stderr",
+      "bytes": 2040,
+      "sha256": "829a9d973a197b06e286f36a1ed30e398cbd2a249c742be8a8cf746139119c93"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-2/runner.stdout",
+      "bytes": 42436,
+      "sha256": "ef58991736f7b2d8c327afd9de6d783da9f050d760ca68fc04091cd8d43a63a6"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-2/tests.stderr",
+      "bytes": 1364,
+      "sha256": "7a2bd8a7acb497a40ff99680611c0a42913e8d073ccfd1b5aa0cfe290172acf0"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/delivery-2/tests.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/FILES.json",
+      "bytes": 4190,
+      "sha256": "bd7b02d8d3beac4f6345e7d2d338f2c9391fb23b132293a71a64e19e768a6d9f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/REMOTE-READBACK.json",
+      "bytes": 245,
+      "sha256": "53ff72386fd7a348ab01cc955a05a6bbb9a24450bb1addb13adb06d59cde7fbb"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/RESOLVED-PROTOCOLS.json",
+      "bytes": 14707,
+      "sha256": "410413878281169a5b49d7c091b6d2b0c3dca47bb1974616b48d975591a7bfc8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/SOURCE-DELTA.json",
+      "bytes": 581,
+      "sha256": "7ec63cce4714dbafc48923abab495c87f485c570c86b76f6b688d265ce57d82c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/SOURCE-MANIFEST.json",
+      "bytes": 19765,
+      "sha256": "ae9aac7e57a5f39aec18fa557d7d89e38e1a2a56910de9c4af778c3c15b390f5"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/TERMINAL.json",
+      "bytes": 218,
+      "sha256": "d4bf077c48e7ac9fe0943d04de655c989f2c1af8aab04f940de842301891d051"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/controller-runtime.tar.xz",
+      "bytes": 101444,
+      "sha256": "b0975b243afd0063d9f05e96ca5296a1c0e2e63217914dced32a1a473a2b66a4"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/original-source/RESOLVED-PROTOCOL.json",
+      "bytes": 7180,
+      "sha256": "61b2923b3f068937c19babb0e72aa19a00eb0c9944c9437c7e0edf0e8259b941"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/original-source/SOURCE-MANIFEST.json",
+      "bytes": 9076,
+      "sha256": "7f4b6552f560afe6f4db9f4a0b7ad5dc7051bd756e710f8b8675f30113cf4fb9"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/original-source/runtime-source.tar.xz",
+      "bytes": 99184,
+      "sha256": "aca39d83b04395d768b801b9a8f8b56a02704f11b875dd7daa924a3118f7cc43"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/aware-import.command.json",
+      "bytes": 255,
+      "sha256": "a9f6b6a739b032c4f4454bba98d0bfefe6673a5a9cf6e7952cb5ad0e93917a8c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/aware-import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/aware-import.stdout",
+      "bytes": 3743,
+      "sha256": "8d4cef64874b8e28fdef85a124f7e9536ef511abd2c3dbfe85ba0fbcac26099d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/aware-parse.command.json",
+      "bytes": 390,
+      "sha256": "5ada2e90da5c679684af651f480182b9064bc7105dae804701c1a7aedfa50c44"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/aware-parse.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/aware-parse.stdout",
+      "bytes": 23,
+      "sha256": "af501b02f1eb68da0adec841fd9ab5d42d3459b3a5b05fbfb888c5883e3ba68b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/capability.command.json",
+      "bytes": 461,
+      "sha256": "0a80c1d1193d947c9824ad0c4e6544afe00c9787beb2585620cff8eb3e5e1873"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/capability.jsonl",
+      "bytes": 1886706,
+      "sha256": "72d053c312b97987b6cd28be019ab75fb91d4829cd90d1b70cb03b3b282c6e73"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/capability.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/capability.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/stock-import.command.json",
+      "bytes": 259,
+      "sha256": "2f3ca8ef41bc7a74235e17cec57d676babe59bdb3090bf6ffecdb97c17274d63"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/stock-import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/stock-import.stdout",
+      "bytes": 3627,
+      "sha256": "cc09b62f52534499c9c7b967f77a3f5a0daf16431b8cf2fd137869d9544a3f62"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/stock-parse.command.json",
+      "bytes": 342,
+      "sha256": "34d776d359d5344275c21d4f62e85bef6c37d228afe0baa6fd8e5ae3246d0bd1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/stock-parse.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/stock-parse.stdout",
+      "bytes": 23,
+      "sha256": "98586196fe369245d2baaa755e51142631747608d415e587a922760d6b6ba13a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/tests.command.json",
+      "bytes": 168,
+      "sha256": "6e43ebb0e7126044fa1634877a23820371b6ecad33cacdccf02cc5709517bd47"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/tests.stderr",
+      "bytes": 1364,
+      "sha256": "b2d7d3be3f8337a58895bcb7f2976815afd46ad28e66e2e42a47e9e13618852e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/tests.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/FILES.json",
+      "bytes": 44522,
+      "sha256": "40084d45831d3e3e89174eb6ba2e4bf5e3f2fd5a9d8d68da17b6b2c4bd091b27"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/RESOLVED-PROTOCOLS.json",
+      "bytes": 14707,
+      "sha256": "56a1716f4c6474c9ee5806a5d7f77105ec8963ea7c128938a097920b1cac104f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/SOURCE-DELTA.json",
+      "bytes": 581,
+      "sha256": "7ec63cce4714dbafc48923abab495c87f485c570c86b76f6b688d265ce57d82c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/SOURCE-MANIFEST.json",
+      "bytes": 19765,
+      "sha256": "73c1b97afa34391673df7c77695060b1868f54b89049ce6b41418c11edf72843"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/TERMINAL.json",
+      "bytes": 2246,
+      "sha256": "b4b94c5ecc55d98f04b3ba72eab49c6afa7e98a57aae7264489f012c6a128d28"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/controller-runtime.tar.xz",
+      "bytes": 101460,
+      "sha256": "c254512a0bf81b3051a69ea8e9c2f39a8c7a406e7eca5071d83e67dec6d183c0"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/original-source/RESOLVED-PROTOCOL.json",
+      "bytes": 7180,
+      "sha256": "7ae370f9b5f8f6987f1bf8cacce835b0a4d93397b11ea7ca1262c05784b279a2"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/original-source/SOURCE-MANIFEST.json",
+      "bytes": 9076,
+      "sha256": "7f4b6552f560afe6f4db9f4a0b7ad5dc7051bd756e710f8b8675f30113cf4fb9"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/original-source/runtime-source.tar.xz",
+      "bytes": 99192,
+      "sha256": "008fcce8c2332d1f971234c3afe2e8811a59ec8db007ce23807a4246c797a895"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/RESULTS.json",
+      "bytes": 237,
+      "sha256": "c22189a5531642b8caa3a411847274562a064047dee4c6b56dddfd456293c65f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.RECEIPT.json",
+      "bytes": 717,
+      "sha256": "ff13ca62062025d1a7dcea9cb36f5bff2106b92108629e9148db3506b13d40a1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.command.json",
+      "bytes": 763,
+      "sha256": "73c67896ae38b4833e615635c7b149f4c403b09cefb005529c5eb13efc0e4551"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.config.json",
+      "bytes": 117,
+      "sha256": "383baa5f8dc5c9146dc733dc9ac28baa69236d918d479034f76301be469090ca"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.outcomes.jsonl.xz",
+      "bytes": 4536,
+      "sha256": "fbea346d6107418863647967809c6d088004745d500338f5189413e1298296c2"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.traces.jsonl.xz",
+      "bytes": 13628,
+      "sha256": "80cc559f8d199622f1857c5c0fc13f2e0fae243c92a1f54814eb5662820e31f2"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.RECEIPT.json",
+      "bytes": 717,
+      "sha256": "91925ed5d59861610b58eb1078bc8f05388308c8e887b61d49d3f840d659de9c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.command.json",
+      "bytes": 763,
+      "sha256": "73095dae1879c4384edb21064786133e1d8c14a97abc1975ab5a8aeefa443ee7"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.config.json",
+      "bytes": 117,
+      "sha256": "44dd4f06ca88f857a99f6874f065f58681130b59ef7fae526311b04e9422e9f3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.outcomes.jsonl.xz",
+      "bytes": 4260,
+      "sha256": "7bbb3cdb0a0fc23b3ca96611fcf6c3d8f758b5aaed122db2bb872d6ed8493412"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.traces.jsonl.xz",
+      "bytes": 9424,
+      "sha256": "00918b415362fd95f9bfa7b0a890aca02a4ec439fabca083cc758f700db51761"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-import.command.json",
+      "bytes": 264,
+      "sha256": "af57616e3087704e0f2da2f134214fb3301ac80ffa29829f5aef7bede8f47378"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-import.stdout",
+      "bytes": 3743,
+      "sha256": "8d4cef64874b8e28fdef85a124f7e9536ef511abd2c3dbfe85ba0fbcac26099d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-null.command.json",
+      "bytes": 444,
+      "sha256": "d55989056467301365fc1ca2e7bcd884edf2d4261f2f5348d5577309818980f9"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-null.jsonl",
+      "bytes": 25335,
+      "sha256": "38a067d9004a9ccc44151bae4bbc4c8a61b7e6b136eedad4c09e9b47d53b9991"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-null.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-null.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-parse.command.json",
+      "bytes": 391,
+      "sha256": "a79c4e5ec51a4c015df09d98d31ebe6bd903ab405e72f0ed49ce42ef0e1d7819"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-parse.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-parse.stdout",
+      "bytes": 23,
+      "sha256": "af501b02f1eb68da0adec841fd9ab5d42d3459b3a5b05fbfb888c5883e3ba68b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/capability.command.json",
+      "bytes": 444,
+      "sha256": "158769182712d5cc1a394191d6c3cdc5f990894ffe1583f5c78746cac176c090"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/capability.jsonl",
+      "bytes": 1886673,
+      "sha256": "2892ac2fbed0df837bafcd0cf3896ad11a1ff1dea714ab6f6bdfe5d5adee2898"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/capability.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/capability.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.RECEIPT.json",
+      "bytes": 717,
+      "sha256": "cf73945437ded1657d9937eecdd720b969cc619671fa25cfbaa4961f61512d69"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.command.json",
+      "bytes": 767,
+      "sha256": "a3f87009af1f9705b1962d5015f91f0e762ac7974f215a9b155fd2ff8fa756cd"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.config.json",
+      "bytes": 117,
+      "sha256": "383baa5f8dc5c9146dc733dc9ac28baa69236d918d479034f76301be469090ca"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.outcomes.jsonl.xz",
+      "bytes": 4560,
+      "sha256": "dba8fbd536fb45d7f00d54e35a0398578eaeedd9116f448a10481437307a6cf1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.traces.jsonl.xz",
+      "bytes": 13276,
+      "sha256": "cda2c58a740372226137b55933d9497aa967b4e33700833afc2c92808fa203ab"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.RECEIPT.json",
+      "bytes": 717,
+      "sha256": "612a377b4d3cb028833a16f8aaafe8eacc3d1afb7dc7d95f970175b8c06aee61"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.command.json",
+      "bytes": 767,
+      "sha256": "a65cf1714a524a8db2aac4e325e2e9190547a984bac0ac617376e797b05d3484"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.config.json",
+      "bytes": 117,
+      "sha256": "44dd4f06ca88f857a99f6874f065f58681130b59ef7fae526311b04e9422e9f3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.outcomes.jsonl.xz",
+      "bytes": 4240,
+      "sha256": "92044dba0a3fa116e0477b4fb5766cc1d233f7fe389ad7036b83aaa80da525c1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.traces.jsonl.xz",
+      "bytes": 9336,
+      "sha256": "05d83923ea56f0d8e0e5d64ad5c43d244a4ecaf40a5eb79593e7e271fedad821"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-import.command.json",
+      "bytes": 268,
+      "sha256": "b688aff1ffa48a8f768dab1df27ded2500b962064ccb40a76bb68b04d2d149c1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-import.stdout",
+      "bytes": 3627,
+      "sha256": "cc09b62f52534499c9c7b967f77a3f5a0daf16431b8cf2fd137869d9544a3f62"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-null.command.json",
+      "bytes": 448,
+      "sha256": "5d8f080d1a37816db77dd02e73dcdcd110c2ce27b8b456bf4a828632df7ee371"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-null.jsonl",
+      "bytes": 25335,
+      "sha256": "38a067d9004a9ccc44151bae4bbc4c8a61b7e6b136eedad4c09e9b47d53b9991"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-null.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-null.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-parse.command.json",
+      "bytes": 341,
+      "sha256": "f80661ba28b39d9ee3772d94800c94c0e87d3d87140c9b8d89c695a2a18db771"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-parse.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-parse.stdout",
+      "bytes": 23,
+      "sha256": "98586196fe369245d2baaa755e51142631747608d415e587a922760d6b6ba13a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/tests.command.json",
+      "bytes": 168,
+      "sha256": "924be8ede3093f0ecb1eaa95ceb3cbaf266c05e141fbd1e820986f27f10ba536"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/tests.stderr",
+      "bytes": 1364,
+      "sha256": "7a2bd8a7acb497a40ff99680611c0a42913e8d073ccfd1b5aa0cfe290172acf0"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/tests.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/COMPARISON.json",
+      "bytes": 1742,
+      "sha256": "0db62cf7c646c2d26016da7c162a809807ead05a9ce8e8809cf39f733c8ab3e0"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/RESULTS.json",
+      "bytes": 207058,
+      "sha256": "b94d2ceef745baa01fed590443af895818e5769e3c5d78699d5d1e4038dbdf4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.RECEIPT.json",
+      "bytes": 770,
+      "sha256": "e5392ac35194f4da3c4b3e20ebbfe434820d10d383836f012e97240ae318e803"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.command.json",
+      "bytes": 729,
+      "sha256": "d8074cbeff0c63bc370537cc3e4d1ad9901061641e89869f74646581e43f69d9"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.config.json",
+      "bytes": 160,
+      "sha256": "1a69c6447c1013c6a41b9682facabf918c8379751ab0fc5830c9633896255f99"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.outcomes.jsonl.xz",
+      "bytes": 19328,
+      "sha256": "12585b4540e9b79a96ef42ee772061548e9e0dbccbef3a709334705b2cfa990a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.traces.jsonl.xz",
+      "bytes": 266244,
+      "sha256": "c2ea60bb179c7878cdbf6a3728358d228e55517c72c70dd131b4c3d8896fdddf"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.RECEIPT.json",
+      "bytes": 769,
+      "sha256": "31938d6ccf7c1ad649807d9d209706dae45574986e52a40a69a6d50510010f60"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.command.json",
+      "bytes": 723,
+      "sha256": "1cc7f967447f00e39e969451ddd4dbd4c0f306202f529d7cd12e99911c62d1f3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.config.json",
+      "bytes": 160,
+      "sha256": "c52b8d1c1c2846e5a7a8a32518a6412af8a0f5ac64c2d49a8ba3aa8d3608ce8a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.outcomes.jsonl.xz",
+      "bytes": 18152,
+      "sha256": "e3791aab196b60143cd8941310c32eeee8ff3a03f956cc730a137126703b38e0"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.traces.jsonl.xz",
+      "bytes": 213668,
+      "sha256": "8f83f45cc360ea6b00a95ebb56ab5496c3ec961bd81aea8250c8a7152e9d1feb"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "4f714ef990ba550339288b705be5ecd85eb64d423010eaad5c0bf2ad98adfd0d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.command.json",
+      "bytes": 729,
+      "sha256": "a8c754a89242e318c65d745f0816a3addd40aed844fbe1671e936b6ee24ca564"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.config.json",
+      "bytes": 161,
+      "sha256": "d1466de9372155b19ff1ee7af26250132f83a96cccdd5326bb59a066eecba6fa"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.outcomes.jsonl.xz",
+      "bytes": 19100,
+      "sha256": "d874940059a8276ff4905abedad5b631793a4207b9f95189e3d8f7b411941497"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.traces.jsonl.xz",
+      "bytes": 263532,
+      "sha256": "949b474baea7f62b0b4c80efa4d2c14aa8a5999a434538fe25039c8d2c76d2a9"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.RECEIPT.json",
+      "bytes": 770,
+      "sha256": "42ab97e63c6b43ffed9dcd8c1c31f9fd5b644833be2471f9f864b10a4c8afca8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.command.json",
+      "bytes": 730,
+      "sha256": "f039013979715f0714d4e80b12ecac2c7c1f52fe3e22fc9dacacf742ae5de26a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.config.json",
+      "bytes": 161,
+      "sha256": "88d3000d6de1289bbe572be07f5a0a44edfded5239234c2b4c15b6fc45a7dafc"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.outcomes.jsonl.xz",
+      "bytes": 19136,
+      "sha256": "98875118c88fdb77d8d4cce66c01027ebc7565835590e68c051c1177e6d4742c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.traces.jsonl.xz",
+      "bytes": 258108,
+      "sha256": "357d93819355eea02b0eac3ac880090c4628a9cb8b3f951cc3b1bc34c519dd96"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "ca509793ee7e586924bb7ebe075a31068f68bbc2bfb02ed697cae2b4200909e8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.command.json",
+      "bytes": 729,
+      "sha256": "4681e0309d0db37d83c732bc9ffc443b2a3aee681fac8d36309ebd8090d4b566"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.config.json",
+      "bytes": 161,
+      "sha256": "f79e2d3e1af837ab1dd86b8404f753481ffd2055aeb01a48337ff2d203b7caef"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.outcomes.jsonl.xz",
+      "bytes": 19804,
+      "sha256": "9ea0f418a9e485d3631d90ab0482ca40b678ba28fef925e9485f0f6ba2cabc0f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.traces.jsonl.xz",
+      "bytes": 328872,
+      "sha256": "c4db45d23376963df6650d72bd18192664a506c193b7776aeed20565ad381e7a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "d23a417ab4bc6d66fc347be56ce709c3947f2cc9362423c59c7665ff51880038"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.command.json",
+      "bytes": 730,
+      "sha256": "51c96625c41c9805e7fe60f1b14232fcce1ea1457da48e5fe1c609ba699c295d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.config.json",
+      "bytes": 161,
+      "sha256": "81f7488f6cb88817a87e5c54c2709514df2d6c5f322c3ebc70bd7f6f834f5589"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.outcomes.jsonl.xz",
+      "bytes": 19476,
+      "sha256": "2613ee1e4b11639f943b4e4e159992e6f26933a1105cb6c5847d83e98693267b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.traces.jsonl.xz",
+      "bytes": 276772,
+      "sha256": "94080954eba6ab3a88f4e3dc925be8eed359f3f0ab7d8c3c8e16245c43305228"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "022901ad820482152c3f4a96fa2c3850e12be6a489d8535ad352a8d7f9f8f832"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.command.json",
+      "bytes": 729,
+      "sha256": "6936e1897407b8060426813b2c302fb17fac095d6bcb5f5ec151976c423b40d1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.config.json",
+      "bytes": 161,
+      "sha256": "af6f3afae424377ad23213aeff3f6161dda6a0c1fdda28f9763396b195cd2a17"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.outcomes.jsonl.xz",
+      "bytes": 19760,
+      "sha256": "a2f97e7d03a44de769e3f96deaa2f537d1d3d7f4d40eaa3b6f30323c85555eb8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.traces.jsonl.xz",
+      "bytes": 317988,
+      "sha256": "ff4bd8a60f24903b7d1c17c509dd911651913e9714e93ecd6eebdb85939aa97a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.RECEIPT.json",
+      "bytes": 770,
+      "sha256": "4bd6fa778367b3c08a6b97271d5d8570b3669c4a03f00234379d5febf32c4e3c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.command.json",
+      "bytes": 730,
+      "sha256": "0a3df9d3fc698f46eeee4569380039e6cd1e7d66230635f60df17cd868bc2464"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.config.json",
+      "bytes": 161,
+      "sha256": "d31730b16e1ef65842b332dd22b9b3b9816c02faced49d9faf72f991b9ca9656"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.outcomes.jsonl.xz",
+      "bytes": 18920,
+      "sha256": "4721cbcb0df4f47a552321501f91cf649bf067f4be83cb6c0bfbe48c8e7dc4ad"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.traces.jsonl.xz",
+      "bytes": 250448,
+      "sha256": "6d7140a5242c3f3607cac96e0cb6117d741adf9b7cfe662ff4e3d9ce2574348a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.RECEIPT.json",
+      "bytes": 770,
+      "sha256": "fcc7e7fa150d892dc79b3e1e997f64a435db32a7dae7617ed7aa75836e70799f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.command.json",
+      "bytes": 730,
+      "sha256": "bb979c85d9ed9581ebdf757e2645fd064eb7da4c7000b54de5bb1e6eea6f607a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.config.json",
+      "bytes": 161,
+      "sha256": "caa1b827e9e87822099b1bf3af13b659cb7f7d1d42df8d78b11a1f890309fff8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.outcomes.jsonl.xz",
+      "bytes": 19012,
+      "sha256": "bf13ad1af5965334035452b3cd3af8b5089efd4542194bdd2a75303488fe68c4"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.traces.jsonl.xz",
+      "bytes": 257944,
+      "sha256": "4301ae614dfda23979817c335bb517cf2c380a01d1f97f60ded133254b44ad0b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "7cc024b76bd517086db69c3eb81e9f612bda3d15a8b435200333be45ed2a150b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.command.json",
+      "bytes": 729,
+      "sha256": "9ba2722444802bea0e7eed982138ba349460a59cea473418a83be03ccf756530"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.config.json",
+      "bytes": 161,
+      "sha256": "3ee469501aaf4e55e668c0bf57339f5f1c1af5753876584e91aa6225eef2cb0f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.outcomes.jsonl.xz",
+      "bytes": 19508,
+      "sha256": "4bb83066f7f85eb3da7e77e9a491fa28c9598594f54887a4919c955b97f527c6"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.traces.jsonl.xz",
+      "bytes": 296124,
+      "sha256": "24cdc7d54564b3e7c337874056c8c901721e82c88f34f3a1fffb720754f0e9f9"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.RECEIPT.json",
+      "bytes": 770,
+      "sha256": "e21ef739940d11e382b75f5dc401046ab15e083608a23988cfc8de5924be7469"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.command.json",
+      "bytes": 730,
+      "sha256": "652e126d34af3ca24a1ddb68ba6f3058f15227e1d3088dc5e624467287037134"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.config.json",
+      "bytes": 161,
+      "sha256": "cf5a4f4e2ea0c2d0899d22ac6fea4aa3cb069fecbf9e5bce3c5683061b9a6b25"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.outcomes.jsonl.xz",
+      "bytes": 18404,
+      "sha256": "9e66458bf9e929532533bed27a4a9e536a50fc2d3ad9220d32469ca5279b1a0e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.traces.jsonl.xz",
+      "bytes": 239676,
+      "sha256": "adb300ecfed15bcefaf30a33361cc71f178a27c7acabe35fc16d22c83fa5ca26"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "46158bac49f506f7d2b4303cd7cd6198f0812014d742889a7fd6f245f4aac38b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.command.json",
+      "bytes": 729,
+      "sha256": "034c26995f0bae76ab8f8ed296bbfff17964cb9c019e4ccc0d80079f1263eb2e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.config.json",
+      "bytes": 161,
+      "sha256": "9ba822558dd1f733cde3b6885d129e5ffed6fca9729fe6742ba7dc372fe60fca"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.outcomes.jsonl.xz",
+      "bytes": 19700,
+      "sha256": "38e25e481a81eb2fc4ab7104b6e88e96069c4d1083324970a63b14022b3b8a74"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.traces.jsonl.xz",
+      "bytes": 329424,
+      "sha256": "8cc873a61d412e4b94cf396ae01b8a68c990ba0af490f75e312404f8342d67e3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.RECEIPT.json",
+      "bytes": 770,
+      "sha256": "eb3ef9dc2557b38602dc4ccd298cf9ed63fd49cf817d5d7feeb241b6f5c02208"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.command.json",
+      "bytes": 730,
+      "sha256": "23f2b83a02aff9ef08b13fc7353b1a714716e6672d2d4ab59af41d90a777ecbf"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.config.json",
+      "bytes": 161,
+      "sha256": "d06b981768c4644936740d4841b0f715699bc64a57e786e525f884b55e906975"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.outcomes.jsonl.xz",
+      "bytes": 18712,
+      "sha256": "d0392207ea926bea1e2a07b63fbcddb5237a75712b4b8f5fbe5ce38ce97fb8ed"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.traces.jsonl.xz",
+      "bytes": 246632,
+      "sha256": "26be8ee2bfcd29336cf85fb3aa04d39f4eac549bfe774c9cb179849bebfa4594"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "313191d374a86567d13f66be01cc5e5d861762054d44c521821fb80beedaa199"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.command.json",
+      "bytes": 730,
+      "sha256": "72d070094f66852d95efbb3e7a53c9c1b7c4e3c40c2028a876ac93d85f1bf02d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.config.json",
+      "bytes": 162,
+      "sha256": "2f161580505b92bca29edd9d21fefe6f4724650f3028674c43dc96647fe85187"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.outcomes.jsonl.xz",
+      "bytes": 18440,
+      "sha256": "7ce223e582d1a867dc116bff36d19fd814ff6e813d71cfb787d606309a0c021f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.traces.jsonl.xz",
+      "bytes": 238872,
+      "sha256": "b8aee5ce064e814ce1a0033075c23cb0ac7e515d23eb2e47a1f11cb6341db407"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "4f5a170bde481cd504bbf83f0755e856a09823848b954cd8e25df1e2115d71e4"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.command.json",
+      "bytes": 730,
+      "sha256": "88b9a589c181d1702cbb4f057843b12b74793503bfc00b65a7967c403bd571d7"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.config.json",
+      "bytes": 162,
+      "sha256": "208910cf071a8fe2e3a60440ecedfb63134108c5e2d9e3502f63efced96d2362"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.outcomes.jsonl.xz",
+      "bytes": 18676,
+      "sha256": "a5c77b5abe0d70bb3f50e9745984af7523d98d5befc144f5f7a42eb8b08e2817"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.traces.jsonl.xz",
+      "bytes": 261824,
+      "sha256": "0c3ca515d489c887edb36cda649e32848e1c6a2c674b72fed4bb9980831a1c0b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.RECEIPT.json",
+      "bytes": 772,
+      "sha256": "1ab8c4a68687bda0ad535c663aa581553879d6fa17c7910a755047465b241243"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.command.json",
+      "bytes": 730,
+      "sha256": "a51f0c86e989c345b8f45e0bfcf036ac622d771ec3a84e2abb8e3359c411271c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.config.json",
+      "bytes": 162,
+      "sha256": "df4a13b4471866c59b0c3aa2a2d6e671bacfe56d8476c01bbf5789f7bc739814"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.outcomes.jsonl.xz",
+      "bytes": 19424,
+      "sha256": "66cad34106f7baf49e8aa9e0008720e09b4e5b4e7c90cad3ae8f40d76a63b74c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.traces.jsonl.xz",
+      "bytes": 305768,
+      "sha256": "4ed49500b7620612bf49b686a61b83b91f235e5a691d9a97ba66a94c408593d6"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/RESULTS.json",
+      "bytes": 206818,
+      "sha256": "edeaf275f8cb31e3350799b155f1b149489fb37e6214d073d7e16852ab3cff53"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.RECEIPT.json",
+      "bytes": 769,
+      "sha256": "620694005d9e00154aa14cdd7b0dd8c32177f67bb6a65bd64356bf4e46ff6547"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.command.json",
+      "bytes": 734,
+      "sha256": "0ff9b65c20503f64172b780af201b6064d7a662ccb87f1d5a1e061134ae5a9a3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.config.json",
+      "bytes": 160,
+      "sha256": "1a69c6447c1013c6a41b9682facabf918c8379751ab0fc5830c9633896255f99"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.outcomes.jsonl.xz",
+      "bytes": 19232,
+      "sha256": "3bb120236de15208c18218ec6fb52828adfa31defb46db4a94230acce7f02c7b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.traces.jsonl.xz",
+      "bytes": 249284,
+      "sha256": "59de994e8455868465f6d0c88a1140076e6dcf678524935eddfe1ce9919eac0c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.RECEIPT.json",
+      "bytes": 769,
+      "sha256": "4005e890c24f027fe56daff02a09308cb7297e822a3e7ee84a74f6d2948b1710"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.command.json",
+      "bytes": 734,
+      "sha256": "9a379446ad6bb93c6af53e2cdc73a9f54ae96a811a441058dd6c08da4d9490c2"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.config.json",
+      "bytes": 160,
+      "sha256": "c52b8d1c1c2846e5a7a8a32518a6412af8a0f5ac64c2d49a8ba3aa8d3608ce8a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.outcomes.jsonl.xz",
+      "bytes": 18580,
+      "sha256": "2e4fa56bfe29d977c964eb049fc130ee8ef0064681420b53c4ca9b547689e365"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.traces.jsonl.xz",
+      "bytes": 232688,
+      "sha256": "eeebb20a12e2992becd78f9d83d0187b3a0dcc609e86ec9f3dc387e5b85b52b8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.RECEIPT.json",
+      "bytes": 770,
+      "sha256": "e7843327ffafcaea72ff8ad0baecc91ff2b1bfb40f7a498ef8e55e6f3ae5ee02"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.command.json",
+      "bytes": 733,
+      "sha256": "d82a92861c30c5eb0b59eec38e917ecc04678cd5f21797374f8f044768a09da0"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.config.json",
+      "bytes": 161,
+      "sha256": "d1466de9372155b19ff1ee7af26250132f83a96cccdd5326bb59a066eecba6fa"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.outcomes.jsonl.xz",
+      "bytes": 18720,
+      "sha256": "e7a3abcf0c5a6adb07625e6baf7967aff4045978053d8fb93efdaafd79d61a86"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.traces.jsonl.xz",
+      "bytes": 230492,
+      "sha256": "d01410fa9d2fc8cfb712c5a00927096734011a480b82b71544c7c1be26a7f81e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.RECEIPT.json",
+      "bytes": 770,
+      "sha256": "ea902ef0cda26201cca9cdfdcd0656a5df696efffb083bff72b107857d53bf06"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.command.json",
+      "bytes": 734,
+      "sha256": "80d0792d4e50e11d8bb7866261484e4910d71a08014a6e55dfd410eb4b67ebcc"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.config.json",
+      "bytes": 161,
+      "sha256": "88d3000d6de1289bbe572be07f5a0a44edfded5239234c2b4c15b6fc45a7dafc"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.outcomes.jsonl.xz",
+      "bytes": 19364,
+      "sha256": "f6906f8c0ae8aa24040aa48a06f697f9a2f33ffa0f4dfa3c78f6752658e4ea42"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.traces.jsonl.xz",
+      "bytes": 266560,
+      "sha256": "cfd5a336091f8956e1d6a7c27f884d26dafbd01691249ccf8cc8ca0d869a8e38"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "d11422cf27dff0d55a7f8c838ec016ea821ae99ca8b9d301b26d462dc37eb0a1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.command.json",
+      "bytes": 733,
+      "sha256": "8b7890aa1705fec3e6f031e43ccbadf6b32db271166abf50bebb9c75dbddfc86"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.config.json",
+      "bytes": 161,
+      "sha256": "f79e2d3e1af837ab1dd86b8404f753481ffd2055aeb01a48337ff2d203b7caef"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.outcomes.jsonl.xz",
+      "bytes": 19940,
+      "sha256": "6212fe9fd30f737f981efca80ed99569fa2139f4b3c05140db198d8077a85efa"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.traces.jsonl.xz",
+      "bytes": 330756,
+      "sha256": "3a5ec3d4e1077ad5f73c016448cd1734be5b5bbcc3df3c40284aab5cff1feef4"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "b9d9f932e6f5498592c08d19acdfed23d125e5c8a2a0a36294ab53970f4536c6"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.command.json",
+      "bytes": 734,
+      "sha256": "87c1aaaf838cdd92b0028e0de2608b1ed4b46e12a8800b576214ef9b937407a6"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.config.json",
+      "bytes": 161,
+      "sha256": "81f7488f6cb88817a87e5c54c2709514df2d6c5f322c3ebc70bd7f6f834f5589"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.outcomes.jsonl.xz",
+      "bytes": 19672,
+      "sha256": "738f2304ba7e2584eb7853776ab476eaca0a36a42a97b710962f884df8f43966"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.traces.jsonl.xz",
+      "bytes": 288720,
+      "sha256": "5d62e10ebce0825d694269597aeb42e4f7d2c599a22d89a40824c96abb157e24"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "b9ed528f4da4724a1c58e2cac47f30b9ec1a6815457a799020282692bdd50145"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.command.json",
+      "bytes": 733,
+      "sha256": "8d083866f4e86372ab0714ac9e0e01b5dcf9f0347eb005b1ba9ad151336f5152"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.config.json",
+      "bytes": 161,
+      "sha256": "af6f3afae424377ad23213aeff3f6161dda6a0c1fdda28f9763396b195cd2a17"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.outcomes.jsonl.xz",
+      "bytes": 20216,
+      "sha256": "1fc7ee94b834e620400c1d74ec105cfbf3c69feff57c664dfb314169323cbcf5"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.traces.jsonl.xz",
+      "bytes": 336608,
+      "sha256": "756fe124edd78da13b7bb6ff909788473f8d0f526a9b33f9cb70018b8a8d112e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.RECEIPT.json",
+      "bytes": 770,
+      "sha256": "8db9877d58f5c0075cd98c580c53a065070b48170a09effabcef112f8b79b89a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.command.json",
+      "bytes": 734,
+      "sha256": "66e35b0e258c3a61ea68777b5f4933e8f9d525f30ec8e962c3e3794cd0b0dd27"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.config.json",
+      "bytes": 161,
+      "sha256": "d31730b16e1ef65842b332dd22b9b3b9816c02faced49d9faf72f991b9ca9656"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.outcomes.jsonl.xz",
+      "bytes": 19096,
+      "sha256": "9bd4db56f11acd20202a24c16b621c1c9dc8b0f2ddb2816914672187bb81ef26"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.traces.jsonl.xz",
+      "bytes": 261252,
+      "sha256": "9fd94c3d46f6a92963af62fc129069a708ff277cdaa1e1a1bd8c49b52ef82297"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.RECEIPT.json",
+      "bytes": 770,
+      "sha256": "d1ffdf4c8812da4697e95f2b96d01e02ce34cd9ca05acfbd70d652edf179cd9c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.command.json",
+      "bytes": 734,
+      "sha256": "b98244fa5af03737053cb84645cf2341a25891277702e10174b6a6527e9e5485"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.config.json",
+      "bytes": 161,
+      "sha256": "caa1b827e9e87822099b1bf3af13b659cb7f7d1d42df8d78b11a1f890309fff8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.outcomes.jsonl.xz",
+      "bytes": 19240,
+      "sha256": "a9052359f37b54c5671898a009fd6a2e3f720f3129bbcc829f33a0cae67b1dde"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.traces.jsonl.xz",
+      "bytes": 266224,
+      "sha256": "3833a99b1893ef092306ddd7e1a699d5f4e49214c4e867ef4251d9dd2aa273f8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "03f98137d8b680473fe618f821575949271fde26fabba68417f315139034a067"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.command.json",
+      "bytes": 733,
+      "sha256": "1b0b1d1e34e552b1a898be6cad734a18017119387db9f9e01849a7f7627b7cc1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.config.json",
+      "bytes": 161,
+      "sha256": "3ee469501aaf4e55e668c0bf57339f5f1c1af5753876584e91aa6225eef2cb0f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.outcomes.jsonl.xz",
+      "bytes": 19496,
+      "sha256": "befbe0275835217a48f54fb3765ccc968251d92765be002ca2a051906dd53e14"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.traces.jsonl.xz",
+      "bytes": 286368,
+      "sha256": "fe0034ca06a3b3e8ac3d48833b646ea5e6fd5492fa2c1f398f400fa95aa45784"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.RECEIPT.json",
+      "bytes": 770,
+      "sha256": "91503c8cbacd3b212a8213e1797c221984bd793687d895f527002bd0342c98bb"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.command.json",
+      "bytes": 734,
+      "sha256": "71f51604bb75885e6036ba432d66b5724b871fa3242780eec24a53f141b6bd23"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.config.json",
+      "bytes": 161,
+      "sha256": "cf5a4f4e2ea0c2d0899d22ac6fea4aa3cb069fecbf9e5bce3c5683061b9a6b25"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.outcomes.jsonl.xz",
+      "bytes": 18416,
+      "sha256": "41b5bc05de755db1b0aae50b458346e728e3b16617fff9396b3981eeae9914f3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.traces.jsonl.xz",
+      "bytes": 227688,
+      "sha256": "b410d362f93cd6e9535c14558660ab3fd3dcc2f858c17e5a0b7f36ee65123370"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "effd411189ba853400384921a718fcf6b20ab716e07ad62fd392284ab1c27c58"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.command.json",
+      "bytes": 734,
+      "sha256": "47b6ba41fb550f9b7bc9aeae4284095b142928153ffed1c0c54b4247bd873cb7"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.config.json",
+      "bytes": 161,
+      "sha256": "9ba822558dd1f733cde3b6885d129e5ffed6fca9729fe6742ba7dc372fe60fca"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.outcomes.jsonl.xz",
+      "bytes": 19616,
+      "sha256": "2eaf34c05afbf8f8d4df82300d7c0db80ea0ffcf090f285f34375f940f834de5"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.traces.jsonl.xz",
+      "bytes": 315652,
+      "sha256": "a70cecb92de30c0ab092003cc9d5cb2e3734cde39e54a9627957dcb525df1997"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.RECEIPT.json",
+      "bytes": 770,
+      "sha256": "4fc3a2d935a6bb3b353f906a11e78be381d22ff3dfa5895a3075294a16608b03"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.command.json",
+      "bytes": 734,
+      "sha256": "87f5aa8ba6e9753c23767134091debfe6137e227412cf91b1f577c975d9c4aed"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.config.json",
+      "bytes": 161,
+      "sha256": "d06b981768c4644936740d4841b0f715699bc64a57e786e525f884b55e906975"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.outcomes.jsonl.xz",
+      "bytes": 18932,
+      "sha256": "cad7f5a766c74ffb952bfc14c5d3b32c8cc29afeb261af4d424c4cb393692380"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.traces.jsonl.xz",
+      "bytes": 259400,
+      "sha256": "2952c98facde0d1634472da12c01184d231085dea59c11969f8da27c5a6296e4"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.RECEIPT.json",
+      "bytes": 771,
+      "sha256": "f8093807df4188e8fbed430f9ac7d544cc966ab32b005f43445d59defda1a1ed"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.command.json",
+      "bytes": 733,
+      "sha256": "be7e306eebe33b4e0f710c69c570f5f68b0c0bc9a4c1e85718687a26c9aa7ecc"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.config.json",
+      "bytes": 162,
+      "sha256": "2f161580505b92bca29edd9d21fefe6f4724650f3028674c43dc96647fe85187"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.outcomes.jsonl.xz",
+      "bytes": 18564,
+      "sha256": "5ca05daee882f8a8efe4a7a11a3fbdb2e0e75be2c22c9754fa5aebf578355394"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.traces.jsonl.xz",
+      "bytes": 236876,
+      "sha256": "1e6b02bf7cad1ea7d285ff9d6f0672afb03898376464b91b69ac5d14f52c9653"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.RECEIPT.json",
+      "bytes": 772,
+      "sha256": "b87e63d109eae498e92a509e5d86ee52de5c89664d56f9d825c54f221d3fc7cb"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.command.json",
+      "bytes": 733,
+      "sha256": "e48ff9a4870a569c815d55e973ef9f523332ebb6801ec4e9d16725f49f9066e0"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.config.json",
+      "bytes": 162,
+      "sha256": "208910cf071a8fe2e3a60440ecedfb63134108c5e2d9e3502f63efced96d2362"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.outcomes.jsonl.xz",
+      "bytes": 19032,
+      "sha256": "755bd04777339f2f2baab1dd1301166f2c4c25c73efc23bf96121cde7b13a21c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.traces.jsonl.xz",
+      "bytes": 270052,
+      "sha256": "5eeecc13c4678803775691a9294f70be9472c1ca3d97941e79cda08680935d03"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.RECEIPT.json",
+      "bytes": 772,
+      "sha256": "b2d20c0b704216a6084ae70174e232dc6f2f9bdfa2e3554b2dedec14f4e7ab7c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.command.json",
+      "bytes": 732,
+      "sha256": "975cc684ab8991d47e76567b24634c98d740f8e749cc16469108693e45e9a260"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.config.json",
+      "bytes": 162,
+      "sha256": "df4a13b4471866c59b0c3aa2a2d6e671bacfe56d8476c01bbf5789f7bc739814"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.outcomes.jsonl.xz",
+      "bytes": 19828,
+      "sha256": "6feeb32f2498280966639415ab9c91f96beb1179996002994e29ee166e733605"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.traces.jsonl.xz",
+      "bytes": 330508,
+      "sha256": "dd5d726cf7f388b80b1af5165c927b42c9f2c27589207a58f744d07a9dd718f1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/experiment.py",
+      "bytes": 11972,
+      "sha256": "0c0e8e21bb6ed5854e6418c6de36a00a9deb3d1fbca2dbca48b49a90fdc63508"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/null_probe.gd",
+      "bytes": 665,
+      "sha256": "4ece4be0b93325faa1af50043c1056b59841aeba759ffe1b8ea4e6c0c5a29084"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repair-1/DIAGNOSIS.json",
+      "bytes": 1157,
+      "sha256": "70718d948c6d042da53d51b1e2ad87be2ccc746319a41d4924b90152d3b8f55d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/PROTOCOL.json",
+      "bytes": 6215,
+      "sha256": "0784a15b1c3383fa9d7a3a80e612f470d7bacb82b7d6d8e4a5fc1d4066c6b7d8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/bridge.py",
+      "bytes": 5805,
+      "sha256": "1ff7eb5176437850987f83e226e742ff9b6be69a6d59595db1c915084bb4ec58"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/capability.gd",
+      "bytes": 3991,
+      "sha256": "35d38cb8961db17bac2b2d0270daebb61844ee3339758991859c643ec745953b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/compare_value.py",
+      "bytes": 3170,
+      "sha256": "4cbbac8f817bf6409d7f8757830a9bd8e4cc652b487631445f9d0ddf64692377"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/experiment.py",
+      "bytes": 11972,
+      "sha256": "0c0e8e21bb6ed5854e6418c6de36a00a9deb3d1fbca2dbca48b49a90fdc63508"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/null_probe.gd",
+      "bytes": 665,
+      "sha256": "4ece4be0b93325faa1af50043c1056b59841aeba759ffe1b8ea4e6c0c5a29084"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/test_bridge.py",
+      "bytes": 2871,
+      "sha256": "5c2fbe5a25d1c0b17f0c0055bf22b957c4b21d255ebd4893befe69cb7d5ea015"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/resume_numeric.py",
+      "bytes": 6010,
+      "sha256": "cffb5bea8dd1e5ac4ba4d74f5dfb075a9751892f5059035cc029a3b99a859df6"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/test_bridge.py",
+      "bytes": 2871,
+      "sha256": "5c2fbe5a25d1c0b17f0c0055bf22b957c4b21d255ebd4893befe69cb7d5ea015"
+    }
+  ],
+  "all_bytes_equal": true
+}
