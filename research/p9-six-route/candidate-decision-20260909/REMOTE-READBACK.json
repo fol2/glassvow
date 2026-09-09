@@ -1,0 +1,54 @@
+{
+  "kind": "COLD_REMOTE_CURRENT_CAPSULE_BYTE_READBACK",
+  "source_head": "a985f0d329e438965f8719a3eae5da933971b74f",
+  "workflow_run": "34299726969",
+  "published_head": "4cfde897e57ee4bd8f4aaf0ef1047065110eacbe",
+  "files_matched": 7,
+  "files": [
+    {
+      "path": "research/p9-six-route/SESSION-STATE.json",
+      "bytes": 14187,
+      "sha256": "3626c8ba7614e365f2479526e5d9f7b40d3eb88cd9384f33ee02b3502ea2065b",
+      "git_blob": "7e092a3264946baf0c25ffa71f63f85ead898d9f"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-HANDOFF.md",
+      "bytes": 5518,
+      "sha256": "a763f2e369e5a9a6794a84d645d60b3285371115153be78a67fc69c1fea0438e",
+      "git_blob": "9cc61c1f90012db322b22459510daf2d7e0d713e"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/ROADMAP.md",
+      "bytes": 5188,
+      "sha256": "ca15789f64fa54efa033d434ec9fd9db26c05305ae7728db878ef715700276fd",
+      "git_blob": "97f8bf70accc5a4526f7c9739732360d395d5f29"
+    },
+    {
+      "path": "research/p9-six-route/candidate-decision-20260909/DECISION.json",
+      "bytes": 3934,
+      "sha256": "8a8bead981f9c3e5ec691d9d08799dabb50339c2bb2c092e55a90fc14e6273bf",
+      "git_blob": "e7e7c0722e02b60c153befc6711d26516ca1d1b7"
+    },
+    {
+      "path": "research/p9-six-route/candidate-decision-20260909/TESTS.log",
+      "bytes": 985,
+      "sha256": "8da57bb04781662afab448ef64f41169fa60290476c2268d7fb35a733d9898ac",
+      "git_blob": "df09d126b21d1c2d29a3e2fcf5b8a5344e306a91"
+    },
+    {
+      "path": "research/p9-six-route/candidate-decision-20260909/close_decision.py",
+      "bytes": 9537,
+      "sha256": "b03d1eaa3e00b1d1a59d4b8ce02ebf3f2de6b8c55ee3dcf85c13cabc6b10ac25",
+      "git_blob": "ddd43a2ca64774ff1bab7d881025f62b6cb281ba"
+    },
+    {
+      "path": "research/p9-six-route/candidate-decision-20260909/test_close_decision.py",
+      "bytes": 2178,
+      "sha256": "42584266f452235cd16a8184e0a0b24cff518e7571bce1ac684421ee428fc6aa",
+      "git_blob": "2ff6076dceeb37cb7301fedf6254ff6b2aa3cc51"
+    }
+  ],
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
