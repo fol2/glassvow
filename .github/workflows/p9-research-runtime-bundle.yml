@@ -10,9 +10,11 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
+  STUDY: research/p9-six-route/smolder-certificate-20260909
+  DERIVED: derived-2
 jobs:
   bundle:
-    name: Source-linked Smolder audit - zero new native rows
+    name: Retained Smolder audit - sparse-checkout delivery repair only
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 12
@@ -26,6 +28,7 @@ jobs:
           fetch-depth: 1
           sparse-checkout: |
             .claude
+            .grok
             .github
             docs/agents
             tools
@@ -33,24 +36,17 @@ jobs:
             content
             research/p9-six-route/smolder-certificate-20260909
             research/p9-six-route/minimal-native-20260909/capacity
-      - name: Restore reviewed source bytes from standard checkpoint archive
+      - name: Verify unchanged reviewed source and preserve delivery delta
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import base64,hashlib,io,pathlib,tarfile
-          root=pathlib.Path('research/p9-six-route/smolder-certificate-20260909')
-          data=base64.b64decode((root/'SOURCE-CHECKPOINT.tar.xz.b64').read_text().strip(),validate=True)
-          assert hashlib.sha256(data).hexdigest()=='3a227b2ce57f2e7e1a5c69a86db8bb17c04847a66741060f42114c062e5b8277'
+          import hashlib,json,os,pathlib
+          root=pathlib.Path(os.environ['STUDY']);out=root/os.environ['DERIVED'];out.mkdir()
           expected={'source_relation.py':'feeb378644e67391fc74161f80ac5ecff61d1e03987126201b019e6dadde82ac','trace_audit.py':'b11b70e911a93249d756aa5c0ec3a7b1f0fed381a96522ed777a3019c8bcf739','test_audit.py':'e7775177cf97b29061ec12a37dced379700ec7964ec14b30f12eb021ac21f1e3'}
-          with tarfile.open(fileobj=io.BytesIO(data),mode='r:xz') as tf:
-              members=tf.getmembers()
-              assert len(members)==len(expected) and {m.name for m in members}==set(expected)
-              for m in members:
-                  assert m.isfile() and m.size<50000 and not (root/m.name).exists()
-                  b=tf.extractfile(m).read();assert hashlib.sha256(b).hexdigest()==expected[m.name]
-                  (root/m.name).write_bytes(b)
-          print('THREE_REVIEWED_SOURCE_FILES_RESTORED')
+          for name,digest in expected.items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest,name
+          record={'kind':'DELIVERY_ONLY_REPAIR','prior_run':34333795138,'prior_failure':'Agent contract checker could not read omitted .grok workflow/history paths; research readers did not execute.','repair':'Include .grok in sparse checkout; use already committed identical reader source; preserve derived-1.','scientific_changes':[],'new_native_runs':0,'new_independent_samples':0}
+          (out/'DELIVERY-REPAIR.json').write_text(json.dumps(record,indent=2)+'\n')
           PY
       - name: Audit complete retained rectangles without engine execution
         id: audit
@@ -58,23 +54,22 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          study=research/p9-six-route/smolder-certificate-20260909
-          mkdir "$study/derived-1"
-          python3 tools/check_agent_contracts.py > "$study/derived-1/agent-contracts.log" 2>&1
-          python3 -m unittest discover -s "$study" -p 'test_audit.py' -v > "$study/derived-1/tests.log" 2>&1
-          python3 "$study/source_relation.py" . "$study/derived-1/SOURCE-RELATION.json" > "$study/derived-1/source.stdout" 2> "$study/derived-1/source.stderr"
-          python3 "$study/trace_audit.py" . "$study/derived-1/trace" > "$study/derived-1/trace.stdout" 2> "$study/derived-1/trace.stderr"
-      - name: Preserve source and all available audit outputs on existing branch
+          out="$STUDY/$DERIVED"
+          python3 tools/check_agent_contracts.py > "$out/agent-contracts.log" 2>&1
+          python3 -m unittest discover -s "$STUDY" -p 'test_audit.py' -v > "$out/tests.log" 2>&1
+          python3 "$STUDY/source_relation.py" . "$out/SOURCE-RELATION.json" > "$out/source.stdout" 2> "$out/source.stderr"
+          python3 "$STUDY/trace_audit.py" . "$out/trace" > "$out/trace.stdout" 2> "$out/trace.stderr"
+      - name: Preserve all available outputs on existing branch
         if: always()
         shell: bash
         run: |
           set -euo pipefail
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
-          git add research/p9-six-route/smolder-certificate-20260909
+          git add "$STUDY"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): preserve source relation and retained-trace audit capture'
+          git commit -m 'research(p9): preserve repaired source-linked audit execution and diagnostics'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -94,28 +89,27 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          study=research/p9-six-route/smolder-certificate-20260909
-          python3 "cold/$study/source_relation.py" cold "$RUNNER_TEMP/cold-source.json"
-          python3 "cold/$study/trace_audit.py" cold "$RUNNER_TEMP/cold-trace"
+          python3 "cold/$STUDY/source_relation.py" cold "$RUNNER_TEMP/cold-source.json"
+          python3 "cold/$STUDY/trace_audit.py" cold "$RUNNER_TEMP/cold-trace"
           python3 - <<'PY'
           import hashlib,json,os,pathlib
-          root=pathlib.Path('research/p9-six-route/smolder-certificate-20260909'); entries=[]
+          root=pathlib.Path(os.environ['STUDY']);out=root/os.environ['DERIVED'];entries=[]
           paths=[p for p in root.rglob('*') if p.is_file()]
-          result=json.loads((root/'derived-1/trace/RESULTS.json').read_bytes())
+          result=json.loads((out/'trace/RESULTS.json').read_bytes())
           paths += [pathlib.Path(p) for p in result['inputs']]
           for p in sorted(paths):
               b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b,str(p)
               entries.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
-          assert (root/'derived-1/SOURCE-RELATION.json').read_bytes()==(pathlib.Path(os.environ['RUNNER_TEMP'])/'cold-source.json').read_bytes()
-          for p in (root/'derived-1/trace').glob('*.json'):
+          assert (out/'SOURCE-RELATION.json').read_bytes()==(pathlib.Path(os.environ['RUNNER_TEMP'])/'cold-source.json').read_bytes()
+          for p in (out/'trace').glob('*.json'):
               assert p.read_bytes()==(pathlib.Path(os.environ['RUNNER_TEMP'])/'cold-trace'/p.name).read_bytes(),str(p)
           receipt={'status':'EXACT_REMOTE_BYTES_AND_OFFLINE_DERIVATION_MATCH','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':entries,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
-          (root/'derived-1/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          (out/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
           print('SMOLDER_AUDIT_READBACK_FILES='+str(len(entries)))
           print('SMOLDER_AUDIT_DECISIONS='+json.dumps(result['grids'],sort_keys=True))
           PY
-          git add "$study/derived-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record independent-checkout Smolder audit byte readback'
+          git add "$STUDY/$DERIVED/REMOTE-READBACK.json"
+          git commit -m 'research(p9): record cold-readback of source classification and attribution'
           test "$(git ls-remote origin refs/heads/research/p9-six-route-local-20260905 | cut -f1)" = "$PUBLISHED_HEAD"
           git push origin HEAD:refs/heads/research/p9-six-route-local-20260905
       - name: Fail closed on audit or delivery defects
