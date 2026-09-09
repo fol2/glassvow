@@ -1,0 +1,58 @@
+{
+  "kind": "PREPOPULATION_STATIC_ASSIGNMENT_DELIVERY_REPAIR",
+  "original_failure": {
+    "status": "INCONCLUSIVE",
+    "source_head": "92b36f7ec89addf19a1c8100742d33997c08cdb9",
+    "stages": {},
+    "packages_admitted": 0,
+    "p9_certified": false,
+    "failure": "ValueError('PROCESS_OR_SCRIPT_DIAGNOSTIC')"
+  },
+  "old_parse_log_blob": "76e8ce6a770c9dda079988b26f8b8027ee43cc33",
+  "changed_files": [
+    "combat_bridge.gd",
+    "null_bridge.gd",
+    "value_probe.gd"
+  ],
+  "unchanged_files": [
+    "PROTOCOL.json",
+    "experiment.py",
+    "read_value.py",
+    "test_value.py"
+  ],
+  "compiler_regression": {
+    "bad": {
+      "returncode": 1,
+      "stdout_sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "stderr_sha256": "e3573eaabbb5779549b356dfeffc546a3b75f27266050450e05aa39ffb2a4425"
+    },
+    "good": {
+      "returncode": 0,
+      "stdout_sha256": "f04c1d95c9456a9f17617771a416bda3372622746addb19427e0a2349a6d4dde",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "original_source_sha256": {
+    "PROTOCOL.json": "e1eb7bfb5bc1e80b0f206dda785503899cd01268000d6b92806445f71729258f",
+    "combat_bridge.gd": "dab17b96b58be8c382f95ecc7a4f9dc9d81097d355d702331a11c74a6df63bd3",
+    "experiment.py": "189186a038153e01c784f3d0e4d63076ada211bc18ab434040ed6107193a1695",
+    "null_bridge.gd": "bce80b99949792f7ec75b0f9dd25530c1871e33789c6d2e486ea0db6f44c12b8",
+    "read_value.py": "1ae6c928a743b0927d7a95056069e284fd3b2617d8deeeb4c6f6a9e953554b89",
+    "test_value.py": "22b68326d9b454912fdb1d56fd9b7c651d8fa352a9ee9abc05029b0afecda4bc",
+    "value_probe.gd": "e7f30416fc8587bfd54681dbbf8231c085a7ce4e3622415fe629ed6f4b97222b"
+  },
+  "repaired_source_sha256": {
+    "PROTOCOL.json": "e1eb7bfb5bc1e80b0f206dda785503899cd01268000d6b92806445f71729258f",
+    "combat_bridge.gd": "34da3978cfea31aa2aa4d89f637e559da51e54613f62861e789e2d3d2af3478e",
+    "experiment.py": "189186a038153e01c784f3d0e4d63076ada211bc18ab434040ed6107193a1695",
+    "null_bridge.gd": "272d29baf66aa84f8e134e07d1f0fc1e195f1c1ef8d4f593d56ce727795746aa",
+    "read_value.py": "1ae6c928a743b0927d7a95056069e284fd3b2617d8deeeb4c6f6a9e953554b89",
+    "test_value.py": "22b68326d9b454912fdb1d56fd9b7c651d8fa352a9ee9abc05029b0afecda4bc",
+    "value_probe.gd": "8f1a2f086f5c3a00bb891f082906e2547ed43ddaf7d6431fc04a0a9c03bd67d8"
+  },
+  "same_protocol_scoring_cohort_and_criteria": true,
+  "native_population_rows_before_repair": 0,
+  "new_fitted_parameters": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
