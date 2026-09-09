@@ -1,0 +1,78 @@
+{
+  "status": "FIXED_ACQUISITION_ADAPTER_NOT_ADMITTED",
+  "source_head": "a8064ec36b8124438f4eec5205b4020c32f990be",
+  "stages": {
+    "5": {
+      "kind": "ONE_FIXED_ACQUISITION_CONTROLLER_COMPARISON",
+      "vow": 5,
+      "activation_old": 11,
+      "activation_new": 42,
+      "gained_policies": 33,
+      "lost_policies": 2,
+      "paired_activation_difference": 0.2421875,
+      "one_sided_exact_sign_p": 1.8364517018198967e-08,
+      "win_difference": -0.00390625,
+      "policy_cluster_bootstrap_interval": [
+        -0.01953125,
+        0.01171875
+      ],
+      "stock_support": {
+        "bloodfire": {
+          "active": 11,
+          "inactive": 117,
+          "reachable": 13,
+          "exclusive": 3
+        },
+        "hand": {
+          "active": 42,
+          "inactive": 86,
+          "reachable": 44,
+          "exclusive": 34
+        }
+      },
+      "aware_support": {
+        "bloodfire": {
+          "active": 42,
+          "inactive": 86,
+          "reachable": 45,
+          "exclusive": 21
+        },
+        "hand": {
+          "active": 37,
+          "inactive": 91,
+          "reachable": 38,
+          "exclusive": 16
+        }
+      },
+      "stock_outcomes": {
+        "loss": 457,
+        "win": 55
+      },
+      "aware_outcomes": {
+        "loss": 459,
+        "win": 53
+      },
+      "gates": {
+        "paired_activation_gain": true,
+        "paired_activation_sign_test": true,
+        "win_point_not_worse": false,
+        "win_noninferiority_lower_bound": true,
+        "inherited_pair_support": true
+      },
+      "pass": false,
+      "status": "FIXED_ACQUISITION_CONTROLLER_VALUE_NOT_ESTABLISHED",
+      "limits": [
+        "Conditional on these four seeds and one fixed configuration family; not universal competence.",
+        "The old failed support stage is neither replaced nor extended.",
+        "Increased setup activity does not establish package viability or an unchanged C2 gap.",
+        "Current experiment has one nominated capability change; no further scalar or controller candidate is selected from this result."
+      ],
+      "packages_admitted": 0,
+      "p9_certified": false
+    }
+  },
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "last_vow": 5,
+  "v0_skipped": true
+}
