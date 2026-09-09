@@ -1,0 +1,25 @@
+{
+  "kind": "FROZEN_GUARDED_EFFECT_EXPANSION_WITNESS",
+  "question": "Does the exact within-card expansion preserve every native state/event/cost/reset on all previously fixed contexts?",
+  "main_sha": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "reference_freeze": "c88f7c8b47e57b058e8c71fd9151488808b5b5a4",
+  "reference_raw_sha256": "d8fe513d2cc8992e6168fb3ec4a64e970dd2b5ee82bd2e6c247a33df06bcfd2f",
+  "source_sha256": {
+    "expanded.gd": "3c6f8492120bf26c58b321394dcbb7026d2908261cc5be07c8ca5205cd528b1a",
+    "expand.py": "794353cccb5de5d8b19c9bf0facc5f96ffd64d5d8fe908e1d2db6632ae4d9bed",
+    "test_expand.py": "5b53ffb759db80e0395d29ebd7cc8970d97154ed32fbe96b5dcc2edf0cf52d37",
+    "PROOF.md": "722507843b722e100d282ca1b4f51f0e940cce6ebff0de67d8e016f12b475682"
+  },
+  "contexts": "All 208 original stock contexts; no selection, new fixture or replacement reference",
+  "new_constructed_traces": 208,
+  "reused_reference_traces": 208,
+  "containment": {
+    "per_process_seconds": 120,
+    "max_raw_bytes": 134217728
+  },
+  "decision": "All complete projected state/event/queue/return traces must equal the original native stock rows. Any inequality prevents equivalence; retain all emitted bytes. No content correction or new candidate is authorised by this test.",
+  "claim_scope": "Parametric source rewrite with full native-call witnesses; no complete old-family quotient, policy population, detector or P9 claim.",
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
