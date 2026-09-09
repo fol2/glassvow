@@ -1,0 +1,146 @@
+{
+  "status": "FIXED_EXPOSED_ASSIGNMENT_DECOMPOSITION_COMPLETE_NOT_ADMISSION",
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "reused": {
+    "00": {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v0.ndjson.xz",
+      "expanded": {
+        "bytes": 1020916,
+        "sha256": "3e817d184a84cd16afeb10bac1f2a27b5b33e4aeb7f60466adde25eba11803d1",
+        "git_blob": "e8b556a495d05ab490979130a65c0085efa9011b"
+      },
+      "compressed": {
+        "bytes": 42484,
+        "sha256": "901ba611a25729f3d98cbf4bcd96b280bcc3a4079e9f2b84f5760b656cfbd8dd",
+        "git_blob": "5abf9bdc85332a088ce284116ddfd5f7447eaa2d"
+      }
+    },
+    "11": {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-ashwarden-v0.ndjson.xz",
+      "expanded": {
+        "bytes": 919856,
+        "sha256": "025e25923d2d2fd30d08dcd3cee31c761eed21ce4d28b10f1d02cf8ea728b963",
+        "git_blob": "dd0cba98f81e6876a4c9999f8e628a58cae49860"
+      },
+      "compressed": {
+        "bytes": 37404,
+        "sha256": "53b08def33a99ed811ab03dc8d8fbc0d6b2bc00cb6f12b94cbac977c7ce0092b",
+        "git_blob": "07bb14cc98a3aac69ffc124bb14c6970723cda71"
+      }
+    }
+  },
+  "native_commands": [
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-attribution-zxjjv_o6/baseline",
+        "--import"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 4.423757281999997
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-attribution-zxjjv_o6/candidate",
+        "--import"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 2.168915907000155
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-attribution-zxjjv_o6/baseline",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/candidate-failure-20260909/native-1/corner-01.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/candidate-failure-20260909/native-1/corner-01.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 5.575406100999999,
+      "config": {
+        "id": "corner-01",
+        "catalogue": "01",
+        "aspect": "ashwarden",
+        "vow": 0,
+        "arm": 2,
+        "seed0": 60909000,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 889986,
+        "sha256": "9ceb6e75f2343b83c7ed5e91ca69ced30642e7ff830aa30fbc2e0cbf052fc548"
+      }
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-attribution-zxjjv_o6/candidate",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/candidate-failure-20260909/native-1/corner-10.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/candidate-failure-20260909/native-1/corner-10.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 6.577765650999936,
+      "config": {
+        "id": "corner-10",
+        "catalogue": "10",
+        "aspect": "ashwarden",
+        "vow": 0,
+        "arm": 2,
+        "seed0": 60909000,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 1027548,
+        "sha256": "79b3ee48689368fe6b53f9b68d151b10db6ba58ccee46ec06c4cc276d7e8bce2"
+      }
+    }
+  ],
+  "new_capture": [
+    {
+      "name": "corner-01.ndjson",
+      "raw": {
+        "bytes": 889986,
+        "sha256": "9ceb6e75f2343b83c7ed5e91ca69ced30642e7ff830aa30fbc2e0cbf052fc548",
+        "git_blob": "8329a6854e7e72c1dca43d0f226e41e8a0141e91"
+      },
+      "captured_outcome_lines": 128
+    },
+    {
+      "name": "corner-10.ndjson",
+      "raw": {
+        "bytes": 1027548,
+        "sha256": "79b3ee48689368fe6b53f9b68d151b10db6ba58ccee46ec06c4cc276d7e8bce2",
+        "git_blob": "033e2b73ec1c0560a6ad9c1222dceb8a14eba6b4"
+      },
+      "captured_outcome_lines": 128
+    }
+  ],
+  "actual_new_captured_outcome_lines": 256,
+  "new_independent_confirmation_samples": 0,
+  "source_head": "f7081a507575281c7f4186015bb491bd139ba0b3",
+  "source_sha256": {
+    "attribution.py": "d7b4e3b2c39fffc547b0be0ce2d2bca702c6580c04fea6067162551503067491",
+    "test_attribution.py": "dd4ef4cfaafab6267a7998efdcc9e77f347515ede3d6e9c0c097ae9d8bf51257"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-attribution-zxjjv_o6/baseline",
+    "-s",
+    "res://probe.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/candidate-failure-20260909/native-1/corner-01.config.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/candidate-failure-20260909/native-1/corner-01.ndjson"
+  ],
+  "returncode": 0,
+  "failure": null,
+  "seconds": 5.575406100999999,
+  "config": {
+    "id": "corner-01",
+    "catalogue": "01",
+    "aspect": "ashwarden",
+    "vow": 0,
+    "arm": 2,
+    "seed0": 60909000,
+    "runs": 128
+  },
+  "status": "COMPLETE",
+  "raw": {
+    "bytes": 889986,
+    "sha256": "9ceb6e75f2343b83c7ed5e91ca69ced30642e7ff830aa30fbc2e0cbf052fc548"
+  }
+}
