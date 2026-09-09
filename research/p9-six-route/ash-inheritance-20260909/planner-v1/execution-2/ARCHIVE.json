@@ -1,0 +1,1098 @@
+{
+  "archive_bytes": 155112,
+  "archive_sha256": "7770b3e03e12408b2b71da19312e8cda0307334409ce61a4aa335e986ec46f1d",
+  "files": [
+    {
+      "path": "RESULTS.json",
+      "bytes": 1750,
+      "sha256": "c922fdfb22c8f06986f7872dadc6669cc394c61ad0643112008ab2fca9068c20"
+    },
+    {
+      "path": "TERMINAL.json",
+      "bytes": 223,
+      "sha256": "906ccb38ab36bcf2ed493c0c037d3e27d2810a1b7da1a7c2aa9c0487e201b8f5"
+    },
+    {
+      "path": "active.command.json",
+      "bytes": 389,
+      "sha256": "92d6391f8dabd2560acfbfc949ae74019822d1ce64f1fc05d7f60292536c99b7"
+    },
+    {
+      "path": "active.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "active.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "assembly/SOURCE-BINDING.json",
+      "bytes": 28743,
+      "sha256": "4a1157efb50eb8ccf088744e8adb6ca57204cd0cd839211b1fa46870a757a992"
+    },
+    {
+      "path": "assembly/baseline/additive_policy.gd",
+      "bytes": 2447,
+      "sha256": "642a9597a54e1cabf8f46f95732eed8cad04c15cacaa99a2d3c4e479eb64583b"
+    },
+    {
+      "path": "assembly/baseline/additive_policy.gd.uid",
+      "bytes": 20,
+      "sha256": "ec66ee186a5dc889d81acfef07b09f3031c535e7ddd39f63dee166520ab5fb8e"
+    },
+    {
+      "path": "assembly/baseline/content/content_db.gd",
+      "bytes": 23151,
+      "sha256": "e1d0c2291ed50f820ba7ea202e16b46eb318f26244f37d37c294f5cb073cef6d"
+    },
+    {
+      "path": "assembly/baseline/content/content_db.gd.uid",
+      "bytes": 19,
+      "sha256": "be5eb901520779be510a8371ff85fe92d0cd5983f9fdeee731076b8224d03a10"
+    },
+    {
+      "path": "assembly/baseline/content/full-content.json",
+      "bytes": 135282,
+      "sha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    },
+    {
+      "path": "assembly/baseline/content/line-table.json",
+      "bytes": 57600,
+      "sha256": "772a7a2539dea6f5d24a1ca93ff0178f70b52546a55268d6ec9b8b5d763709cf"
+    },
+    {
+      "path": "assembly/baseline/content/mob-overrides.json",
+      "bytes": 3,
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "assembly/baseline/content/scenes.json",
+      "bytes": 9886,
+      "sha256": "ef3f4341495d732e0d22a0b4c3f4352f64b6326100c1403b8c590fe5560ae125"
+    },
+    {
+      "path": "assembly/baseline/decision_gate.gd",
+      "bytes": 8062,
+      "sha256": "9858aefbfd9a25f5a277740fab0070b3856d1b77469e4d57b0f0a6d6b5c86115"
+    },
+    {
+      "path": "assembly/baseline/decision_gate.gd.uid",
+      "bytes": 20,
+      "sha256": "cee2b4bca3f63bd660c1e1dbff9bf616e395c5ed5d59d07c7acb4b15520dc244"
+    },
+    {
+      "path": "assembly/baseline/domain/events/event_types.gd",
+      "bytes": 1762,
+      "sha256": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a"
+    },
+    {
+      "path": "assembly/baseline/domain/events/event_types.gd.uid",
+      "bytes": 19,
+      "sha256": "d20d59d1b222f5abf9001ad26f49ba5592bc4d0925aa3ab10269c110301c1ad5"
+    },
+    {
+      "path": "assembly/baseline/domain/game.gd",
+      "bytes": 2764,
+      "sha256": "4eb3f416eef60797bc0cfdf9169250f07fccb3a05c0b16dcb9d7ef054898c824"
+    },
+    {
+      "path": "assembly/baseline/domain/game.gd.uid",
+      "bytes": 20,
+      "sha256": "87d1fbc04a6e291e2774762051224e28f496c716380af5b96b2886de16b435da"
+    },
+    {
+      "path": "assembly/baseline/domain/map_layout/map_layout_canonical.gd",
+      "bytes": 6107,
+      "sha256": "2a6ef6fbb589d7af94998c9beb1d6088eff5038dfd652ebb9c28107b9283ac47"
+    },
+    {
+      "path": "assembly/baseline/domain/map_layout/map_layout_canonical.gd.uid",
+      "bytes": 20,
+      "sha256": "1b2114258249f967c79e53d2b7b9011cdaa1759f2183e38217b62ea8ab3a639d"
+    },
+    {
+      "path": "assembly/baseline/domain/map_layout/map_layout_input.gd",
+      "bytes": 7132,
+      "sha256": "2069ec3f174b137748028ddf56156ec590d4480a8bd8f37367532ca5102a898c"
+    },
+    {
+      "path": "assembly/baseline/domain/map_layout/map_layout_input.gd.uid",
+      "bytes": 20,
+      "sha256": "8c49b54d2889360bfa7621c8ac2d67e6da715458269486fb94c5ffaf4e23b331"
+    },
+    {
+      "path": "assembly/baseline/domain/map_layout/map_layout_input_binding.gd",
+      "bytes": 3675,
+      "sha256": "3b4fe26d71c75f6091d88152514a9f99f231d078ce334d301049e66991f341e7"
+    },
+    {
+      "path": "assembly/baseline/domain/map_layout/map_layout_input_binding.gd.uid",
+      "bytes": 29,
+      "sha256": "6092a5b5ef85229e58cc913828fbbd996c5e647e8df41915bcd6496659e4beef"
+    },
+    {
+      "path": "assembly/baseline/domain/map_layout/map_layout_result.gd",
+      "bytes": 9977,
+      "sha256": "70ce93f1a85a03d21170edcd5d1188a5e94760754065c8eb6a139903bd51c8f7"
+    },
+    {
+      "path": "assembly/baseline/domain/map_layout/map_layout_result.gd.uid",
+      "bytes": 20,
+      "sha256": "6f3bf383e9295a79e96250489e121094baa9e3f23903b471fcafbf7991c656e1"
+    },
+    {
+      "path": "assembly/baseline/domain/rng/rng.gd",
+      "bytes": 1105,
+      "sha256": "279665ca2dd8d26bc4e81d1c86bf5a23a80ad582f5c0ed4cb5cc222387a9adf8"
+    },
+    {
+      "path": "assembly/baseline/domain/rng/rng.gd.uid",
+      "bytes": 20,
+      "sha256": "da6b44bd7f32362081940b9c695f06e0e6b102358298ddcf4e19874d8b6b0021"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/combat.gd",
+      "bytes": 49036,
+      "sha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/combat.gd.uid",
+      "bytes": 20,
+      "sha256": "93cba16b3389fdc0fd994c3f33b124c7c303a00964691f1d14e58e38bc757dad"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/counterfactual_self.gd",
+      "bytes": 4999,
+      "sha256": "de02e57c8ea2fe41c6806dade8f786a1c8e2d0282c8cb9f4b3defddbe4db8e98"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/counterfactual_self.gd.uid",
+      "bytes": 20,
+      "sha256": "c9c975d29b72b878fc7771d95ea9fc9d125a0d19a052f597b24dca7995386dba"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/dawn_passages.gd",
+      "bytes": 5272,
+      "sha256": "eed19b1540e64eac3dbb647491741791e98d1d4362487248249abc93b7cf982b"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/dawn_passages.gd.uid",
+      "bytes": 19,
+      "sha256": "b45e374f4d035ed04484d493ce7fb890e601e0137081d38f204c8f0f5666f0a3"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/enemy_ai.gd",
+      "bytes": 8551,
+      "sha256": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/enemy_ai.gd.uid",
+      "bytes": 20,
+      "sha256": "5923124afc639fc7777105dc3cfc92c3119e7201753473feab6c6f80a719638c"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/line_table.gd",
+      "bytes": 12231,
+      "sha256": "ed5a9e4461ffd28607c4afc14293430413ac368289b18d7a4e98577d187a76b3"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/line_table.gd.uid",
+      "bytes": 20,
+      "sha256": "f63fc98eb120f05748dbe18cbca89684f876e1a7492c15a762d7e9dcc2a7e8bb"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/pool_beats.gd",
+      "bytes": 2599,
+      "sha256": "bc8fb56230ed2fa534eb1f85dc97104202ac6934aa1ec7570de9a4d94bc93c9f"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/pool_beats.gd.uid",
+      "bytes": 22,
+      "sha256": "d7eb82decd29e66059c6263694fa8abdd7a28dd02ff8f6009cb6a1559069cc32"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/quests.gd",
+      "bytes": 9532,
+      "sha256": "fede1a189d0f21c0e75b0d4779f36478b43971d0eab7a88c08396daadcf59aae"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/quests.gd.uid",
+      "bytes": 20,
+      "sha256": "c330ea3c22467e2c01b687d1f9aa88f4198557039c422f0a40eb5a32b00937aa"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/rewards.gd",
+      "bytes": 23820,
+      "sha256": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83"
+    },
+    {
+      "path": "assembly/baseline/domain/rules/rewards.gd.uid",
+      "bytes": 20,
+      "sha256": "7870f56200db1bb8ff603752c22565c84dd084c83ccef229a15ddeaf153bbef0"
+    },
+    {
+      "path": "assembly/baseline/domain/state/card_inst.gd",
+      "bytes": 740,
+      "sha256": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d"
+    },
+    {
+      "path": "assembly/baseline/domain/state/card_inst.gd.uid",
+      "bytes": 20,
+      "sha256": "6dc96cd2bbe675fb564d39f96fffcb0517267bd960ef0a6417aa933e193a87e6"
+    },
+    {
+      "path": "assembly/baseline/domain/state/combat_state.gd",
+      "bytes": 2118,
+      "sha256": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae"
+    },
+    {
+      "path": "assembly/baseline/domain/state/combat_state.gd.uid",
+      "bytes": 20,
+      "sha256": "ff15232124012eca670ea914aef6c355afa8e1dfa067461c594af71478efedd0"
+    },
+    {
+      "path": "assembly/baseline/domain/state/enemy_combatant.gd",
+      "bytes": 1149,
+      "sha256": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7"
+    },
+    {
+      "path": "assembly/baseline/domain/state/enemy_combatant.gd.uid",
+      "bytes": 20,
+      "sha256": "b4addf387977e5a1495302dd941fb3a5e292e3da9ad7526a97ebcb276735a586"
+    },
+    {
+      "path": "assembly/baseline/domain/state/map_node.gd",
+      "bytes": 2570,
+      "sha256": "f3947e2a476b037f1b76b843caa7ff5bd80019c28031350a7692b8144aa5ebed"
+    },
+    {
+      "path": "assembly/baseline/domain/state/map_node.gd.uid",
+      "bytes": 19,
+      "sha256": "ddba624ce1964e58de8399de4d7620faf7607a1346f89619ee20fea7cdb62125"
+    },
+    {
+      "path": "assembly/baseline/domain/state/player_combatant.gd",
+      "bytes": 513,
+      "sha256": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3"
+    },
+    {
+      "path": "assembly/baseline/domain/state/player_combatant.gd.uid",
+      "bytes": 19,
+      "sha256": "3ea3f4fbab91e12b23c84cee1a2038699c33c1023f907d8d113fa18c2671e934"
+    },
+    {
+      "path": "assembly/baseline/domain/state/run_state.gd",
+      "bytes": 18728,
+      "sha256": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19"
+    },
+    {
+      "path": "assembly/baseline/domain/state/run_state.gd.uid",
+      "bytes": 20,
+      "sha256": "eb319c70d9d53282b475abb206dec90875a7090e3b099cf2b0eee1ccf3fe62a1"
+    },
+    {
+      "path": "assembly/baseline/domain/state/vigil_state.gd",
+      "bytes": 12350,
+      "sha256": "ec2b95b5f6d08133d7e9f070b85d3a473abe510d5f1eaf8ecbbdb6394f723259"
+    },
+    {
+      "path": "assembly/baseline/domain/state/vigil_state.gd.uid",
+      "bytes": 19,
+      "sha256": "dd36185de478f66b61e76a2ad51e05a9b3d01728b86ddcd3b4a841f85925e2a1"
+    },
+    {
+      "path": "assembly/baseline/domain/state/world_map.gd",
+      "bytes": 11955,
+      "sha256": "b3f1beb4db34933fc7de0c2562749fbd9465f74c7d74bb1bd2c3598b0e984fe5"
+    },
+    {
+      "path": "assembly/baseline/domain/state/world_map.gd.uid",
+      "bytes": 19,
+      "sha256": "fc3c224c9d5c95c362f6162c9dfd832f4bf6e17f637209670efc7b18f7c8a63b"
+    },
+    {
+      "path": "assembly/baseline/greedy_policy.gd",
+      "bytes": 569,
+      "sha256": "2512e45d942886346acefb0781014f724341c6575560a4489090f188be628214"
+    },
+    {
+      "path": "assembly/baseline/greedy_policy.gd.uid",
+      "bytes": 19,
+      "sha256": "8764ae89f74540c575bcb38c5fad74abf7a5640a636eb6412122e69585214951"
+    },
+    {
+      "path": "assembly/baseline/greedy_stock.gd",
+      "bytes": 2946,
+      "sha256": "3ebd81dcc1e3f4aed99a88f7bb26718bb9f7f8a35065517889ad26bc6c5e44d2"
+    },
+    {
+      "path": "assembly/baseline/greedy_stock.gd.uid",
+      "bytes": 20,
+      "sha256": "01a8c24302ea37726fbf2a455ec15074945d15065539b34f420fe38f7470e7bd"
+    },
+    {
+      "path": "assembly/baseline/lab_policy.gd",
+      "bytes": 1825,
+      "sha256": "ef294f057d0ab23a13c2af57d9ced9a27c74d622c308550e4be932617c8d7261"
+    },
+    {
+      "path": "assembly/baseline/lab_policy.gd.uid",
+      "bytes": 20,
+      "sha256": "fec107b114f9246b71de216870852b47977fe2a16ff3b10acdaed43fdb891cf8"
+    },
+    {
+      "path": "assembly/baseline/legacy_policy.gd",
+      "bytes": 13866,
+      "sha256": "731122ce5fbc0773f6c97696fab449e21df415692b741eceeab79c521c54a72d"
+    },
+    {
+      "path": "assembly/baseline/legacy_policy.gd.uid",
+      "bytes": 19,
+      "sha256": "80c2b75ba8f5c089f9365961f0ff4e68fa26495f5d314f899c94105aa2baafec"
+    },
+    {
+      "path": "assembly/baseline/policy_buggy_v9.gd",
+      "bytes": 2539,
+      "sha256": "72868caa9a313fba7211a475c5651e1d55394048be31c8cb64bf7fb4159221fb"
+    },
+    {
+      "path": "assembly/baseline/policy_buggy_v9.gd.uid",
+      "bytes": 20,
+      "sha256": "eb951e8cd6698618b76e8a84c15a0337c3184d8be87eb19f3c5ffe42a09ba6da"
+    },
+    {
+      "path": "assembly/baseline/policy_v8.gd",
+      "bytes": 8082,
+      "sha256": "2131a9463700d05b93a4c9e16364596eb91e7884ee3d40c4434152802004b95c"
+    },
+    {
+      "path": "assembly/baseline/policy_v8.gd.uid",
+      "bytes": 20,
+      "sha256": "33add4c87d79335d029b672cdc1afdc5b895966be710c998c3609bc1cbb56ba8"
+    },
+    {
+      "path": "assembly/baseline/probe.gd",
+      "bytes": 5925,
+      "sha256": "7d78fdd0bc15f62c18f573db41ed2594b7f6a037aae31c621ed8958b5f161d73"
+    },
+    {
+      "path": "assembly/baseline/probe.gd.uid",
+      "bytes": 19,
+      "sha256": "775d5507b61877920a15302fd1d2146ae70ac3f708eaef72bf37a5b205a62910"
+    },
+    {
+      "path": "assembly/baseline/project.godot",
+      "bytes": 129,
+      "sha256": "016b91fe6062716cc5b76b541256739142e2319e4c3cac84a927d18eef433b17"
+    },
+    {
+      "path": "assembly/baseline/public_rollout.gd",
+      "bytes": 560,
+      "sha256": "58f12667e55a1324b393482f1f6d6649903680bfc77b7fdced2247cd8085152d"
+    },
+    {
+      "path": "assembly/baseline/public_rollout.gd.uid",
+      "bytes": 20,
+      "sha256": "88e9138edefc82da3f2cb03ca3ed764d2b758ee292bbb9b806cba9f4c5891298"
+    },
+    {
+      "path": "assembly/baseline/public_rollout_base.gd",
+      "bytes": 2207,
+      "sha256": "9e54f661563e5421e62595b9b5335e44e871e68acf89a020db7e8b9d0eacbce7"
+    },
+    {
+      "path": "assembly/baseline/public_rollout_base.gd.uid",
+      "bytes": 19,
+      "sha256": "3d2e4753c3fb72df749bc792d893f329b50349ae3ba3c57dd29d1a907f44258e"
+    },
+    {
+      "path": "assembly/baseline/rollout_policy.gd",
+      "bytes": 3415,
+      "sha256": "7c4b833efd47616ec4aab4f2bd521d44bdc4a17021aefb77ba0b6bf0668a924c"
+    },
+    {
+      "path": "assembly/baseline/rollout_policy.gd.uid",
+      "bytes": 19,
+      "sha256": "ee85ca87137813874c75b5e65a22e0d23168a0f464327d49ed7ce0304904537d"
+    },
+    {
+      "path": "assembly/baseline/tools/balance_catalogue.gd",
+      "bytes": 9145,
+      "sha256": "6e240546cd616a2518ee7a2b8fae41aa8a94078429155f89f6d9165eef1c20c0"
+    },
+    {
+      "path": "assembly/baseline/tools/balance_catalogue.gd.uid",
+      "bytes": 20,
+      "sha256": "a2df33eb882686c9394e67befe51466ff53c2c723a7ec0cd7320142ab8b5c05c"
+    },
+    {
+      "path": "assembly/baseline/tools/balance_metrics.gd",
+      "bytes": 5366,
+      "sha256": "6904043d83d9cc91265a60911b28f49a01074d185e353b2dccdad64293cd0deb"
+    },
+    {
+      "path": "assembly/baseline/tools/balance_metrics.gd.uid",
+      "bytes": 19,
+      "sha256": "e514de01365ae310a035951d6b491924ee9ae7c98b00f1cf3d8975106b235631"
+    },
+    {
+      "path": "assembly/baseline/tools/balance_pilot.gd",
+      "bytes": 22931,
+      "sha256": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    {
+      "path": "assembly/baseline/tools/balance_pilot.gd.uid",
+      "bytes": 20,
+      "sha256": "e1c0d9e00dba44432fe28aa41302490cf18f7a2235be1cc03f2b54caa0e63214"
+    },
+    {
+      "path": "assembly/baseline/tools/balance_policy.gd",
+      "bytes": 8196,
+      "sha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    {
+      "path": "assembly/baseline/tools/balance_policy.gd.uid",
+      "bytes": 20,
+      "sha256": "b38f108e415b715cc162a423b9e8a911e9be50da2d03fa7739922cddcbfa0558"
+    },
+    {
+      "path": "assembly/baseline/tools/balance_sim.gd",
+      "bytes": 24838,
+      "sha256": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    },
+    {
+      "path": "assembly/baseline/tools/balance_sim.gd.uid",
+      "bytes": 19,
+      "sha256": "0d3b75657710b9a9544e7d4c2fcb1c8538e804f04865f2377fc4e3106b6757a2"
+    },
+    {
+      "path": "assembly/baseline/tools/check_scripts.sh",
+      "bytes": 3572,
+      "sha256": "85e24824d059a12279b42b3c9de97e5a55770f5525a97f8106f112250faa38a9"
+    },
+    {
+      "path": "assembly/baseline/tools/vow_incentives.gd",
+      "bytes": 5342,
+      "sha256": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+    },
+    {
+      "path": "assembly/baseline/tools/vow_incentives.gd.uid",
+      "bytes": 19,
+      "sha256": "0424ba4aa9623f32599f384e4f9e931124f6aa9fb6e34288a423337244409f77"
+    },
+    {
+      "path": "assembly/candidate/additive_policy.gd",
+      "bytes": 2447,
+      "sha256": "642a9597a54e1cabf8f46f95732eed8cad04c15cacaa99a2d3c4e479eb64583b"
+    },
+    {
+      "path": "assembly/candidate/additive_policy.gd.uid",
+      "bytes": 20,
+      "sha256": "ec66ee186a5dc889d81acfef07b09f3031c535e7ddd39f63dee166520ab5fb8e"
+    },
+    {
+      "path": "assembly/candidate/content/content_db.gd",
+      "bytes": 23151,
+      "sha256": "e1d0c2291ed50f820ba7ea202e16b46eb318f26244f37d37c294f5cb073cef6d"
+    },
+    {
+      "path": "assembly/candidate/content/content_db.gd.uid",
+      "bytes": 19,
+      "sha256": "be5eb901520779be510a8371ff85fe92d0cd5983f9fdeee731076b8224d03a10"
+    },
+    {
+      "path": "assembly/candidate/content/full-content.json",
+      "bytes": 135934,
+      "sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9"
+    },
+    {
+      "path": "assembly/candidate/content/line-table.json",
+      "bytes": 57600,
+      "sha256": "772a7a2539dea6f5d24a1ca93ff0178f70b52546a55268d6ec9b8b5d763709cf"
+    },
+    {
+      "path": "assembly/candidate/content/mob-overrides.json",
+      "bytes": 3,
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "assembly/candidate/content/scenes.json",
+      "bytes": 9886,
+      "sha256": "ef3f4341495d732e0d22a0b4c3f4352f64b6326100c1403b8c590fe5560ae125"
+    },
+    {
+      "path": "assembly/candidate/decision_gate.gd",
+      "bytes": 8062,
+      "sha256": "9858aefbfd9a25f5a277740fab0070b3856d1b77469e4d57b0f0a6d6b5c86115"
+    },
+    {
+      "path": "assembly/candidate/decision_gate.gd.uid",
+      "bytes": 20,
+      "sha256": "cee2b4bca3f63bd660c1e1dbff9bf616e395c5ed5d59d07c7acb4b15520dc244"
+    },
+    {
+      "path": "assembly/candidate/domain/events/event_types.gd",
+      "bytes": 1762,
+      "sha256": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a"
+    },
+    {
+      "path": "assembly/candidate/domain/events/event_types.gd.uid",
+      "bytes": 19,
+      "sha256": "d20d59d1b222f5abf9001ad26f49ba5592bc4d0925aa3ab10269c110301c1ad5"
+    },
+    {
+      "path": "assembly/candidate/domain/game.gd",
+      "bytes": 2764,
+      "sha256": "4eb3f416eef60797bc0cfdf9169250f07fccb3a05c0b16dcb9d7ef054898c824"
+    },
+    {
+      "path": "assembly/candidate/domain/game.gd.uid",
+      "bytes": 20,
+      "sha256": "87d1fbc04a6e291e2774762051224e28f496c716380af5b96b2886de16b435da"
+    },
+    {
+      "path": "assembly/candidate/domain/map_layout/map_layout_canonical.gd",
+      "bytes": 6107,
+      "sha256": "2a6ef6fbb589d7af94998c9beb1d6088eff5038dfd652ebb9c28107b9283ac47"
+    },
+    {
+      "path": "assembly/candidate/domain/map_layout/map_layout_canonical.gd.uid",
+      "bytes": 20,
+      "sha256": "1b2114258249f967c79e53d2b7b9011cdaa1759f2183e38217b62ea8ab3a639d"
+    },
+    {
+      "path": "assembly/candidate/domain/map_layout/map_layout_input.gd",
+      "bytes": 7132,
+      "sha256": "2069ec3f174b137748028ddf56156ec590d4480a8bd8f37367532ca5102a898c"
+    },
+    {
+      "path": "assembly/candidate/domain/map_layout/map_layout_input.gd.uid",
+      "bytes": 20,
+      "sha256": "8c49b54d2889360bfa7621c8ac2d67e6da715458269486fb94c5ffaf4e23b331"
+    },
+    {
+      "path": "assembly/candidate/domain/map_layout/map_layout_input_binding.gd",
+      "bytes": 3675,
+      "sha256": "3b4fe26d71c75f6091d88152514a9f99f231d078ce334d301049e66991f341e7"
+    },
+    {
+      "path": "assembly/candidate/domain/map_layout/map_layout_input_binding.gd.uid",
+      "bytes": 29,
+      "sha256": "6092a5b5ef85229e58cc913828fbbd996c5e647e8df41915bcd6496659e4beef"
+    },
+    {
+      "path": "assembly/candidate/domain/map_layout/map_layout_result.gd",
+      "bytes": 9977,
+      "sha256": "70ce93f1a85a03d21170edcd5d1188a5e94760754065c8eb6a139903bd51c8f7"
+    },
+    {
+      "path": "assembly/candidate/domain/map_layout/map_layout_result.gd.uid",
+      "bytes": 20,
+      "sha256": "6f3bf383e9295a79e96250489e121094baa9e3f23903b471fcafbf7991c656e1"
+    },
+    {
+      "path": "assembly/candidate/domain/rng/rng.gd",
+      "bytes": 1105,
+      "sha256": "279665ca2dd8d26bc4e81d1c86bf5a23a80ad582f5c0ed4cb5cc222387a9adf8"
+    },
+    {
+      "path": "assembly/candidate/domain/rng/rng.gd.uid",
+      "bytes": 20,
+      "sha256": "da6b44bd7f32362081940b9c695f06e0e6b102358298ddcf4e19874d8b6b0021"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/combat.gd",
+      "bytes": 49871,
+      "sha256": "3ccb89f69f50e41d5a46eadd8f48c0a907fd0e382cd492b2c34dd5f93e091ad0"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/combat.gd.uid",
+      "bytes": 20,
+      "sha256": "93cba16b3389fdc0fd994c3f33b124c7c303a00964691f1d14e58e38bc757dad"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/counterfactual_self.gd",
+      "bytes": 4999,
+      "sha256": "de02e57c8ea2fe41c6806dade8f786a1c8e2d0282c8cb9f4b3defddbe4db8e98"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/counterfactual_self.gd.uid",
+      "bytes": 20,
+      "sha256": "c9c975d29b72b878fc7771d95ea9fc9d125a0d19a052f597b24dca7995386dba"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/dawn_passages.gd",
+      "bytes": 5272,
+      "sha256": "eed19b1540e64eac3dbb647491741791e98d1d4362487248249abc93b7cf982b"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/dawn_passages.gd.uid",
+      "bytes": 19,
+      "sha256": "b45e374f4d035ed04484d493ce7fb890e601e0137081d38f204c8f0f5666f0a3"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/enemy_ai.gd",
+      "bytes": 8551,
+      "sha256": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/enemy_ai.gd.uid",
+      "bytes": 20,
+      "sha256": "5923124afc639fc7777105dc3cfc92c3119e7201753473feab6c6f80a719638c"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/line_table.gd",
+      "bytes": 12231,
+      "sha256": "ed5a9e4461ffd28607c4afc14293430413ac368289b18d7a4e98577d187a76b3"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/line_table.gd.uid",
+      "bytes": 20,
+      "sha256": "f63fc98eb120f05748dbe18cbca89684f876e1a7492c15a762d7e9dcc2a7e8bb"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/pool_beats.gd",
+      "bytes": 2599,
+      "sha256": "bc8fb56230ed2fa534eb1f85dc97104202ac6934aa1ec7570de9a4d94bc93c9f"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/pool_beats.gd.uid",
+      "bytes": 22,
+      "sha256": "d7eb82decd29e66059c6263694fa8abdd7a28dd02ff8f6009cb6a1559069cc32"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/quests.gd",
+      "bytes": 9532,
+      "sha256": "fede1a189d0f21c0e75b0d4779f36478b43971d0eab7a88c08396daadcf59aae"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/quests.gd.uid",
+      "bytes": 20,
+      "sha256": "c330ea3c22467e2c01b687d1f9aa88f4198557039c422f0a40eb5a32b00937aa"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/rewards.gd",
+      "bytes": 23820,
+      "sha256": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83"
+    },
+    {
+      "path": "assembly/candidate/domain/rules/rewards.gd.uid",
+      "bytes": 20,
+      "sha256": "7870f56200db1bb8ff603752c22565c84dd084c83ccef229a15ddeaf153bbef0"
+    },
+    {
+      "path": "assembly/candidate/domain/state/card_inst.gd",
+      "bytes": 740,
+      "sha256": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d"
+    },
+    {
+      "path": "assembly/candidate/domain/state/card_inst.gd.uid",
+      "bytes": 20,
+      "sha256": "6dc96cd2bbe675fb564d39f96fffcb0517267bd960ef0a6417aa933e193a87e6"
+    },
+    {
+      "path": "assembly/candidate/domain/state/combat_state.gd",
+      "bytes": 2118,
+      "sha256": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae"
+    },
+    {
+      "path": "assembly/candidate/domain/state/combat_state.gd.uid",
+      "bytes": 20,
+      "sha256": "ff15232124012eca670ea914aef6c355afa8e1dfa067461c594af71478efedd0"
+    },
+    {
+      "path": "assembly/candidate/domain/state/enemy_combatant.gd",
+      "bytes": 1149,
+      "sha256": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7"
+    },
+    {
+      "path": "assembly/candidate/domain/state/enemy_combatant.gd.uid",
+      "bytes": 20,
+      "sha256": "b4addf387977e5a1495302dd941fb3a5e292e3da9ad7526a97ebcb276735a586"
+    },
+    {
+      "path": "assembly/candidate/domain/state/map_node.gd",
+      "bytes": 2570,
+      "sha256": "f3947e2a476b037f1b76b843caa7ff5bd80019c28031350a7692b8144aa5ebed"
+    },
+    {
+      "path": "assembly/candidate/domain/state/map_node.gd.uid",
+      "bytes": 19,
+      "sha256": "ddba624ce1964e58de8399de4d7620faf7607a1346f89619ee20fea7cdb62125"
+    },
+    {
+      "path": "assembly/candidate/domain/state/player_combatant.gd",
+      "bytes": 513,
+      "sha256": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3"
+    },
+    {
+      "path": "assembly/candidate/domain/state/player_combatant.gd.uid",
+      "bytes": 19,
+      "sha256": "3ea3f4fbab91e12b23c84cee1a2038699c33c1023f907d8d113fa18c2671e934"
+    },
+    {
+      "path": "assembly/candidate/domain/state/run_state.gd",
+      "bytes": 18728,
+      "sha256": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19"
+    },
+    {
+      "path": "assembly/candidate/domain/state/run_state.gd.uid",
+      "bytes": 20,
+      "sha256": "eb319c70d9d53282b475abb206dec90875a7090e3b099cf2b0eee1ccf3fe62a1"
+    },
+    {
+      "path": "assembly/candidate/domain/state/vigil_state.gd",
+      "bytes": 12350,
+      "sha256": "ec2b95b5f6d08133d7e9f070b85d3a473abe510d5f1eaf8ecbbdb6394f723259"
+    },
+    {
+      "path": "assembly/candidate/domain/state/vigil_state.gd.uid",
+      "bytes": 19,
+      "sha256": "dd36185de478f66b61e76a2ad51e05a9b3d01728b86ddcd3b4a841f85925e2a1"
+    },
+    {
+      "path": "assembly/candidate/domain/state/world_map.gd",
+      "bytes": 11955,
+      "sha256": "b3f1beb4db34933fc7de0c2562749fbd9465f74c7d74bb1bd2c3598b0e984fe5"
+    },
+    {
+      "path": "assembly/candidate/domain/state/world_map.gd.uid",
+      "bytes": 19,
+      "sha256": "fc3c224c9d5c95c362f6162c9dfd832f4bf6e17f637209670efc7b18f7c8a63b"
+    },
+    {
+      "path": "assembly/candidate/greedy_policy.gd",
+      "bytes": 569,
+      "sha256": "2512e45d942886346acefb0781014f724341c6575560a4489090f188be628214"
+    },
+    {
+      "path": "assembly/candidate/greedy_policy.gd.uid",
+      "bytes": 19,
+      "sha256": "8764ae89f74540c575bcb38c5fad74abf7a5640a636eb6412122e69585214951"
+    },
+    {
+      "path": "assembly/candidate/greedy_stock.gd",
+      "bytes": 2946,
+      "sha256": "3ebd81dcc1e3f4aed99a88f7bb26718bb9f7f8a35065517889ad26bc6c5e44d2"
+    },
+    {
+      "path": "assembly/candidate/greedy_stock.gd.uid",
+      "bytes": 20,
+      "sha256": "01a8c24302ea37726fbf2a455ec15074945d15065539b34f420fe38f7470e7bd"
+    },
+    {
+      "path": "assembly/candidate/lab_policy.gd",
+      "bytes": 1825,
+      "sha256": "ef294f057d0ab23a13c2af57d9ced9a27c74d622c308550e4be932617c8d7261"
+    },
+    {
+      "path": "assembly/candidate/lab_policy.gd.uid",
+      "bytes": 20,
+      "sha256": "fec107b114f9246b71de216870852b47977fe2a16ff3b10acdaed43fdb891cf8"
+    },
+    {
+      "path": "assembly/candidate/legacy_policy.gd",
+      "bytes": 13866,
+      "sha256": "731122ce5fbc0773f6c97696fab449e21df415692b741eceeab79c521c54a72d"
+    },
+    {
+      "path": "assembly/candidate/legacy_policy.gd.uid",
+      "bytes": 19,
+      "sha256": "80c2b75ba8f5c089f9365961f0ff4e68fa26495f5d314f899c94105aa2baafec"
+    },
+    {
+      "path": "assembly/candidate/policy_buggy_v9.gd",
+      "bytes": 2539,
+      "sha256": "72868caa9a313fba7211a475c5651e1d55394048be31c8cb64bf7fb4159221fb"
+    },
+    {
+      "path": "assembly/candidate/policy_buggy_v9.gd.uid",
+      "bytes": 20,
+      "sha256": "eb951e8cd6698618b76e8a84c15a0337c3184d8be87eb19f3c5ffe42a09ba6da"
+    },
+    {
+      "path": "assembly/candidate/policy_v8.gd",
+      "bytes": 8082,
+      "sha256": "2131a9463700d05b93a4c9e16364596eb91e7884ee3d40c4434152802004b95c"
+    },
+    {
+      "path": "assembly/candidate/policy_v8.gd.uid",
+      "bytes": 20,
+      "sha256": "33add4c87d79335d029b672cdc1afdc5b895966be710c998c3609bc1cbb56ba8"
+    },
+    {
+      "path": "assembly/candidate/probe.gd",
+      "bytes": 5925,
+      "sha256": "7d78fdd0bc15f62c18f573db41ed2594b7f6a037aae31c621ed8958b5f161d73"
+    },
+    {
+      "path": "assembly/candidate/probe.gd.uid",
+      "bytes": 19,
+      "sha256": "775d5507b61877920a15302fd1d2146ae70ac3f708eaef72bf37a5b205a62910"
+    },
+    {
+      "path": "assembly/candidate/project.godot",
+      "bytes": 129,
+      "sha256": "016b91fe6062716cc5b76b541256739142e2319e4c3cac84a927d18eef433b17"
+    },
+    {
+      "path": "assembly/candidate/public_rollout.gd",
+      "bytes": 560,
+      "sha256": "58f12667e55a1324b393482f1f6d6649903680bfc77b7fdced2247cd8085152d"
+    },
+    {
+      "path": "assembly/candidate/public_rollout.gd.uid",
+      "bytes": 20,
+      "sha256": "88e9138edefc82da3f2cb03ca3ed764d2b758ee292bbb9b806cba9f4c5891298"
+    },
+    {
+      "path": "assembly/candidate/public_rollout_base.gd",
+      "bytes": 2207,
+      "sha256": "9e54f661563e5421e62595b9b5335e44e871e68acf89a020db7e8b9d0eacbce7"
+    },
+    {
+      "path": "assembly/candidate/public_rollout_base.gd.uid",
+      "bytes": 19,
+      "sha256": "3d2e4753c3fb72df749bc792d893f329b50349ae3ba3c57dd29d1a907f44258e"
+    },
+    {
+      "path": "assembly/candidate/rollout_policy.gd",
+      "bytes": 3415,
+      "sha256": "7c4b833efd47616ec4aab4f2bd521d44bdc4a17021aefb77ba0b6bf0668a924c"
+    },
+    {
+      "path": "assembly/candidate/rollout_policy.gd.uid",
+      "bytes": 19,
+      "sha256": "ee85ca87137813874c75b5e65a22e0d23168a0f464327d49ed7ce0304904537d"
+    },
+    {
+      "path": "assembly/candidate/tools/balance_catalogue.gd",
+      "bytes": 9145,
+      "sha256": "6e240546cd616a2518ee7a2b8fae41aa8a94078429155f89f6d9165eef1c20c0"
+    },
+    {
+      "path": "assembly/candidate/tools/balance_catalogue.gd.uid",
+      "bytes": 20,
+      "sha256": "a2df33eb882686c9394e67befe51466ff53c2c723a7ec0cd7320142ab8b5c05c"
+    },
+    {
+      "path": "assembly/candidate/tools/balance_metrics.gd",
+      "bytes": 5366,
+      "sha256": "6904043d83d9cc91265a60911b28f49a01074d185e353b2dccdad64293cd0deb"
+    },
+    {
+      "path": "assembly/candidate/tools/balance_metrics.gd.uid",
+      "bytes": 19,
+      "sha256": "e514de01365ae310a035951d6b491924ee9ae7c98b00f1cf3d8975106b235631"
+    },
+    {
+      "path": "assembly/candidate/tools/balance_pilot.gd",
+      "bytes": 22931,
+      "sha256": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    {
+      "path": "assembly/candidate/tools/balance_pilot.gd.uid",
+      "bytes": 20,
+      "sha256": "e1c0d9e00dba44432fe28aa41302490cf18f7a2235be1cc03f2b54caa0e63214"
+    },
+    {
+      "path": "assembly/candidate/tools/balance_policy.gd",
+      "bytes": 8196,
+      "sha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    {
+      "path": "assembly/candidate/tools/balance_policy.gd.uid",
+      "bytes": 20,
+      "sha256": "b38f108e415b715cc162a423b9e8a911e9be50da2d03fa7739922cddcbfa0558"
+    },
+    {
+      "path": "assembly/candidate/tools/balance_sim.gd",
+      "bytes": 24838,
+      "sha256": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    },
+    {
+      "path": "assembly/candidate/tools/balance_sim.gd.uid",
+      "bytes": 19,
+      "sha256": "0d3b75657710b9a9544e7d4c2fcb1c8538e804f04865f2377fc4e3106b6757a2"
+    },
+    {
+      "path": "assembly/candidate/tools/check_scripts.sh",
+      "bytes": 3572,
+      "sha256": "85e24824d059a12279b42b3c9de97e5a55770f5525a97f8106f112250faa38a9"
+    },
+    {
+      "path": "assembly/candidate/tools/vow_incentives.gd",
+      "bytes": 5342,
+      "sha256": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+    },
+    {
+      "path": "assembly/candidate/tools/vow_incentives.gd.uid",
+      "bytes": 19,
+      "sha256": "0424ba4aa9623f32599f384e4f9e931124f6aa9fb6e34288a423337244409f77"
+    },
+    {
+      "path": "baseline-import.command.json",
+      "bytes": 270,
+      "sha256": "1eb8d616d7aa9d5b3e6297cffad611de492395295c9c44b499b3aa4d545880c2"
+    },
+    {
+      "path": "baseline-import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "baseline-import.stdout",
+      "bytes": 3963,
+      "sha256": "9e57a21c7f214e714f396892c27098118903fd724bb49ff623845c2b33d13857"
+    },
+    {
+      "path": "baseline-parse.command.json",
+      "bytes": 476,
+      "sha256": "c14e12f96cedcfec03236070258be8d0960be26238492ec21bb8ea0b4509749c"
+    },
+    {
+      "path": "baseline-parse.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "baseline-parse.stdout",
+      "bytes": 24,
+      "sha256": "d44ff07ce1aed5f51b6f9a8d321767aec510c73e87da68a686744de23df3bdee"
+    },
+    {
+      "path": "baseline.command.json",
+      "bytes": 386,
+      "sha256": "c86c85a50ec41034771e53303d87a93b2382b6a2883aabf9e462ef645078fed4"
+    },
+    {
+      "path": "baseline.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "baseline.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "candidate-import.command.json",
+      "bytes": 277,
+      "sha256": "73b7cb52a9172686044a4d67f81a45ef10ee70e5d16f22659d30e0e0aa2e77f5"
+    },
+    {
+      "path": "candidate-import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "candidate-import.stdout",
+      "bytes": 3963,
+      "sha256": "9e57a21c7f214e714f396892c27098118903fd724bb49ff623845c2b33d13857"
+    },
+    {
+      "path": "candidate-parse.command.json",
+      "bytes": 477,
+      "sha256": "d2c42d216d0e393cb4d8d2e80312ee813eba1e5a756c9056c9d635a11c3d86a6"
+    },
+    {
+      "path": "candidate-parse.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "candidate-parse.stdout",
+      "bytes": 24,
+      "sha256": "d44ff07ce1aed5f51b6f9a8d321767aec510c73e87da68a686744de23df3bdee"
+    },
+    {
+      "path": "consumer_off.command.json",
+      "bytes": 401,
+      "sha256": "d64108ccf1414eee0ebd933907404dad0cab3ae2ffd667d1231063e0d1b21778"
+    },
+    {
+      "path": "consumer_off.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "consumer_off.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "off.command.json",
+      "bytes": 383,
+      "sha256": "36e2977558bc24bfb2c909140854d2aa15d903f74320115beb2d5543b08dfdcf"
+    },
+    {
+      "path": "off.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "off.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "producer_off.command.json",
+      "bytes": 401,
+      "sha256": "41d6d4b5885bc85abe3ca665724536e7e2e52d1ccec9d5ebbc712444cac5424d"
+    },
+    {
+      "path": "producer_off.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "producer_off.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "path": "raw/active.jsonl",
+      "bytes": 1951304,
+      "sha256": "5b83c3bb6b7a8612dacb32a103a5ec506d36a9f0630112f4a5708b0e12bf4456"
+    },
+    {
+      "path": "raw/baseline.jsonl",
+      "bytes": 1903585,
+      "sha256": "c3b79d6e1aa1f83adaf5b8b6290b01ad4da2fbcd2f5efbd5d23edcaa18f027b7"
+    },
+    {
+      "path": "raw/consumer_off.jsonl",
+      "bytes": 1951061,
+      "sha256": "8a93a10f94cb73f7ff0433aed743a2bfdfd8417cdb0d8f40880be5a2239cf4ec"
+    },
+    {
+      "path": "raw/off.jsonl",
+      "bytes": 1947644,
+      "sha256": "9e6acf2bca8ce49899603aac4df3ab6ebd907f1e3d123b790e7bfa6d894c6acd"
+    },
+    {
+      "path": "raw/producer_off.jsonl",
+      "bytes": 1951698,
+      "sha256": "55e505b3cd1dfba28c91d36997c9f00823e53bb9851e2c72b0ef1d4b158159b4"
+    },
+    {
+      "path": "tests.command.json",
+      "bytes": 174,
+      "sha256": "e684e8916ea1a1ffa5b5b7873d0789c26986099006ed1073d2504ab3f2b4e010"
+    },
+    {
+      "path": "tests.stderr",
+      "bytes": 636,
+      "sha256": "e49fb2d969e2ca97f7c03d101e5694e3d7af094e7a0d9fe562f9fac840950499"
+    },
+    {
+      "path": "tests.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "excluded": ".godot generated cache only",
+  "p9_certified": false
+}
