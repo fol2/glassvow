@@ -1,3 +1,13 @@
+# Current frontier: minimum Bloodfire signed-control screen passed
+
+The complete minimum Bloodfire preflight and its 1,024-row signed arm2 screen have passed their scoped gates, with full remote byte readback. Do not repeat them. The initial readback object comparison failed because integer Counter keys become JSON string keys; the unchanged result now reproduces exact serialized bytes. Read ash-inheritance-20260909/minimal-v1/screen-v1/readback-1/REMOTE-READBACK.json.
+
+Complete the current minimum Bloodfire plus unchanged Hand proof under one source-bound causal/descriptor/policy/peer/economy contract. Preserve inherited identities but do not carry historical population outcomes. The passed preflight and signed-control screen are closed inputs; do not rerun either, v25, Hand support, aliases or bulk tuning. Additional P9 slots remain unresolved.
+
+P9 remains unfinished, 0/6 full current certificates. Main is unchanged. The earlier source-alias decisions and all historical limits below remain valid; their earlier next-action paragraph is superseded by the current frontier above.
+
+---
+
 # P9 current handoff — exact old native role aliases resolved
 
 Continue #421 on research/p9-six-route-local-20260905. Three viable, reachable,
