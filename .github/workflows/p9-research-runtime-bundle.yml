@@ -17,14 +17,14 @@ env:
 
 jobs:
   bundle:
-    name: Preserve the existing local role capture - count once
+    name: Check exact within-card decomposition - no population
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
       contents: write
     steps:
-      - name: Check out the exact owned source
+      - name: Check out exact frozen witness and retained reference
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
@@ -36,22 +36,20 @@ jobs:
             content
             tools
             research/p9-six-route/minimal-native-20260909
-      - name: Bind source and check the already-produced contracts
+      - name: Check frozen source and synthetic regression cases
         shell: bash
         run: |
           set -euo pipefail
-          root=research/p9-six-route/minimal-native-20260909
+          root=research/p9-six-route/minimal-native-20260909/expansion
           python3 - <<'PY'
           import hashlib,json,pathlib
-          r=pathlib.Path('research/p9-six-route/minimal-native-20260909')
-          sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
-          assert sha(r/'CONTRACT.json')=='a1c415acd486a024be513494e4050588f705feddda340ce9b1b6bc07b31f69cf'
-          expected={'prove_contract.py':'e5b51e6751c54c1e27bbb006546659eccddda9ea3fc63109d8f54a294d552dd4','test_contract.py':'aae54f09571d94d42ba363cba6a840a2a0eaae53b4a3650903d7c99a70f58588','run.py':'6f39d9732a9787f0222b01fd9611e38765821bd8f6a68187e1b0a213e946f9fd'}
-          expected.update(json.loads((r/'CONTRACT.json').read_bytes())['source_sha256'])
-          for n,h in expected.items():assert sha(r/n)==h,n
+          r=pathlib.Path('research/p9-six-route/minimal-native-20260909/expansion')
+          assert hashlib.sha256((r/'PROTOCOL.json').read_bytes()).hexdigest()=='9fcdd7f6b0cd68d590aaad8d9c91cd6fec7af6766c9c51d605d3a67b8d19936b'
+          p=json.loads((r/'PROTOCOL.json').read_bytes())
+          for n,h in p['source_sha256'].items():assert hashlib.sha256((r/n).read_bytes()).hexdigest()==h,n
           PY
-          (cd "$root" && python3 -m unittest -v test_contract) > "$RUNNER_TEMP/contract-tests.log" 2>&1
-      - name: Bind the same already-approved official engine
+          (cd "$root" && python3 -m unittest -v test_expand) > "$RUNNER_TEMP/expansion-tests.log" 2>&1
+      - name: Bind the same approved official engine
         shell: bash
         run: |
           set -euo pipefail
@@ -60,35 +58,35 @@ jobs:
           echo "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4  $RUNNER_TEMP/p9-engine/engine.zip" | sha256sum -c -
           unzip -q "$RUNNER_TEMP/p9-engine/engine.zip" -d "$RUNNER_TEMP/p9-engine"
           chmod +x "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64"
-      - name: Replay solely to preserve the already-observed exact bytes
+      - name: Execute only the transformed side of the fixed comparison
         shell: bash
         run: |
           set -euo pipefail
-          root=research/p9-six-route/minimal-native-20260909
-          python3 "$root/run.py" . "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64" "$root/native-1" capture
-      - name: Preserve all available capture before checking its verdict
+          root=research/p9-six-route/minimal-native-20260909/expansion
+          python3 "$root/expand.py" . "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64" "$root/native-1" capture
+      - name: Preserve complete available native bytes
         id: publish
         if: always()
         shell: bash
         run: |
           set -euo pipefail
-          root=research/p9-six-route/minimal-native-20260909
+          root=research/p9-six-route/minimal-native-20260909/expansion
           test -d "$root/native-1"
-          cp "$RUNNER_TEMP/contract-tests.log" "$root/native-1/TESTS.log"
+          cp "$RUNNER_TEMP/expansion-tests.log" "$root/native-1/TESTS.log"
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$(git rev-parse HEAD)"
           git add "$root/native-1"
           python3 - <<'PY'
           import subprocess
           files=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
-          assert files and all(n.startswith('research/p9-six-route/minimal-native-20260909/native-1/') for n in files)
+          assert files and all(n.startswith('research/p9-six-route/minimal-native-20260909/expansion/native-1/') for n in files)
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): preserve complete exact-byte native role capture'
+          git commit -m 'research(p9): preserve full effect-expansion capture and exact result'
           git push origin "HEAD:refs/heads/$branch"
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-      - name: Read the published evidence from a separate checkout
+      - name: Fetch published bytes into a fresh checkout
         if: steps.publish.outcome == 'success'
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -102,7 +100,7 @@ jobs:
             content
             tools
             research/p9-six-route/minimal-native-20260909
-      - name: Compare all bytes, reconstruct results offline, and save receipt
+      - name: Match every expansion byte and independently re-read the result
         if: steps.publish.outcome == 'success'
         env:
           PUBLISHED: ${{ steps.publish.outputs.sha }}
@@ -111,22 +109,20 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,json,os,pathlib,subprocess,sys
-          prefix=pathlib.Path('research/p9-six-route/minimal-native-20260909')
-          cold=pathlib.Path('cold-readback')
-          rows=[]
+          prefix=pathlib.Path('research/p9-six-route/minimal-native-20260909/expansion');cold=pathlib.Path('cold-readback');rows=[]
           for line in subprocess.check_output(['git','ls-tree','-r','HEAD','--',str(prefix)]).decode().splitlines():
               meta,name=line.split('\t');mode,kind,blob=meta.split();assert kind=='blob'
-              original=pathlib.Path(name).read_bytes();downloaded=(cold/name).read_bytes()
-              assert original==downloaded,name
-              assert hashlib.sha1(b'blob '+str(len(downloaded)).encode()+b'\0'+downloaded).hexdigest()==blob,name
-              rows.append({'path':name,'bytes':len(downloaded),'sha256':hashlib.sha256(downloaded).hexdigest(),'git_blob':blob})
-          subprocess.run([sys.executable,str(prefix/'run.py'),'.','unused-engine',str(prefix/'native-1'),'verify'],cwd=cold,check=True)
-          receipt={'kind':'COLD_REMOTE_ALL_BYTES_AND_OFFLINE_ROLE_PROOF','source_freeze':'c88f7c8b47e57b058e8c71fd9151488808b5b5a4','workflow_head':os.environ['GITHUB_SHA'],'workflow_run':os.environ['GITHUB_RUN_ID'],'published_head':os.environ['PUBLISHED'],'files_matched':len(rows),'files':rows,'raw_sha256':'d8fe513d2cc8992e6168fb3ec4a64e970dd2b5ee82bd2e6c247a33df06bcfd2f','local_and_hosted_capture_counted_once':True,'native_runs_in_readback':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
+              a=pathlib.Path(name).read_bytes();b=(cold/name).read_bytes();assert a==b,name
+              assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==blob,name
+              rows.append({'path':name,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':blob})
+          subprocess.run([sys.executable,str(prefix/'expand.py'),'.','unused-engine',str(prefix/'native-1'),'verify'],cwd=cold,check=True)
+          terminal=json.loads((cold/prefix/'native-1/TERMINAL.json').read_bytes())
+          receipt={'kind':'COLD_REMOTE_EXPANSION_BYTES_AND_OFFLINE_COMPARISON','source_freeze':'15523d086b1be513062965a3f8cc4d49d7de7b6c','workflow_head':os.environ['GITHUB_SHA'],'workflow_run':os.environ['GITHUB_RUN_ID'],'published_head':os.environ['PUBLISHED'],'files_matched':len(rows),'files':rows,'status':terminal['status'],'raw_sha256':terminal['raw_sha256'],'new_native_runs_in_readback':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
           (prefix/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
           print('READBACK='+json.dumps({k:v for k,v in receipt.items() if k!='files'},sort_keys=True))
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$(git rev-parse HEAD)"
-          git add research/p9-six-route/minimal-native-20260909/REMOTE-READBACK.json
-          git commit -m 'research(p9): persist exact-byte native-role readback receipt'
+          git add research/p9-six-route/minimal-native-20260909/expansion/REMOTE-READBACK.json
+          git commit -m 'research(p9): persist complete effect-expansion remote readback'
           git push origin "HEAD:refs/heads/$branch"
