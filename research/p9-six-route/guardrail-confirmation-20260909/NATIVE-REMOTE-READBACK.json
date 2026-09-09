@@ -1,0 +1,326 @@
+{
+  "published_head": "8eaa34a73b8ab40d0ee9b2172c1657fb3295989a",
+  "files_matched": 53,
+  "files": [
+    {
+      "path": "research/p9-six-route/SESSION-HANDOFF.md",
+      "bytes": 3827,
+      "sha256": "d3a0aab83e4f8baa982a26d3cf814657fe965d2d923519e0f1cd783e951da4c8",
+      "git_blob": "2531d387a982a841190541854c43c35fcc5e4333"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-STATE.json",
+      "bytes": 12353,
+      "sha256": "28e0d28125a4461819a796174a6387a8288b97a516fea58f43140d2a4a4d6d7c",
+      "git_blob": "6d3bb7d47b734f3d6c1f641f46e79d0fd60de67d"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/RESULTS.json",
+      "bytes": 5005,
+      "sha256": "87cb309b532068b0062b799b9590c146871bc39f5f3b27c8aec71b9c01232ff4",
+      "git_blob": "c3653360280ca5444d5b5e5c2183e14d7cc34a9c"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/TERMINAL.json",
+      "bytes": 3300,
+      "sha256": "87096e9dd48a4502ec10a9c61adc575fff40c401ff15675884781db48f2c68a4",
+      "git_blob": "17fd7e6dc485ad297ca7efba3419b6693ae92ead"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v0.config.json",
+      "bytes": 148,
+      "sha256": "446bc4b2feb7dc463be9a8dfb598738a9fca5377eda8630e8b830988de3de5c8",
+      "git_blob": "b8c4b35ba12af8809ac2b1e2257bef5a3d053621"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v0.execution.json",
+      "bytes": 884,
+      "sha256": "7785573e717609d8394679425f143251728420e316f996ceaec95ec6f7162542",
+      "git_blob": "aa610d4263c5084c60a4e6039f8832a0e56a42b5"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v0.ndjson.xz",
+      "bytes": 42484,
+      "sha256": "901ba611a25729f3d98cbf4bcd96b280bcc3a4079e9f2b84f5760b656cfbd8dd",
+      "git_blob": "5abf9bdc85332a088ce284116ddfd5f7447eaa2d"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v0.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v5.config.json",
+      "bytes": 148,
+      "sha256": "c95cc0562b18b7d173901693ce1a732c36f0a4e178c96e944d386b7a870ded0b",
+      "git_blob": "7c09ff30c27979703612e726f2332fa351ab0037"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v5.execution.json",
+      "bytes": 883,
+      "sha256": "7555262dde32530cc61814ee1b3ce3a5ce9642a5f7c60c1f73fe55001a4a99fe",
+      "git_blob": "b05a02408c59ef6720a5c406446de40fa4c077c4"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v5.ndjson.xz",
+      "bytes": 35184,
+      "sha256": "918aa82df73eb0852d7524f5f7ff3ba5ce9b7bf9c73209d25cdf16aab8588686",
+      "git_blob": "c22bbc44e6b3d2d0d06cf5c0f8952cbfd832b14f"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v5.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v5.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-duskblade-v0.config.json",
+      "bytes": 148,
+      "sha256": "6d448a1d209e64767ead78b0a926f2418eb91c5f1fa0bcae96b2f1df84924dc6",
+      "git_blob": "f25efc4922d0031810a66503d66c26541c670887"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-duskblade-v0.execution.json",
+      "bytes": 884,
+      "sha256": "3668c991d141da5ddbca3ea3eaa304531a0400596c4a8a9f98e215788eb7abf0",
+      "git_blob": "62e864b5d7a4e10f6710ea0a807d27decb88999a"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-duskblade-v0.ndjson.xz",
+      "bytes": 38172,
+      "sha256": "98d34b3a0c21e50ba66a6d81b542910d203d4f886c92084125edc6d816800e01",
+      "git_blob": "5f8d2c28d2c53d3e60746db172c7d36080f41031"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-duskblade-v0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-duskblade-v0.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-duskblade-v5.config.json",
+      "bytes": 148,
+      "sha256": "d2cffcad82308373a907c4b79757bcae23440bbbe831ba18e697be5dedda376c",
+      "git_blob": "616c668bd21abeaedb65ac9d3e6328424ca4cc8f"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-duskblade-v5.execution.json",
+      "bytes": 883,
+      "sha256": "e250c5008f5a26ff79d0252e241b76bd66acdaa2d9e8c19f6d20080b1db7f105",
+      "git_blob": "ed40614ca3a07749dee03d661de83489745367bc"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-duskblade-v5.ndjson.xz",
+      "bytes": 29316,
+      "sha256": "332029d6d7b491af0d6c9f80548f59459379f1bda08a28199960cbac8fe39ea9",
+      "git_blob": "43befa5babdc1d60ecd205166c67f371123619ce"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-duskblade-v5.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-duskblade-v5.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-import.stdout",
+      "bytes": 3395,
+      "sha256": "07b2f57287b70b37493d64707d220468332fc9e06e5cd4902d4705d84c6ab241",
+      "git_blob": "e48985744ca4252845c7835e0bb1c88822e2ecf5"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-parse.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-parse.stdout",
+      "bytes": 23,
+      "sha256": "905581e17b38aaea62430a5c587607978b0d68eaba983efcfcc2c295a1d660cc",
+      "git_blob": "b84b6f379095784ecdcff5b53fa130760dfc4976"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-ashwarden-v0.config.json",
+      "bytes": 150,
+      "sha256": "e2a561aceb2f8370b37ad8be11d82eb85f1fddec71c198f99357f727fec9e3a8",
+      "git_blob": "d23a3113371bc256b33fd64818b7d86905da1a71"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-ashwarden-v0.execution.json",
+      "bytes": 888,
+      "sha256": "4fc97f06bb7c6a18c8a7c982c692f9e777072a35e935bf2c1886718fa4bbc706",
+      "git_blob": "aed312aaf4666ad9d5a58db52ad968efb6f7492e"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-ashwarden-v0.ndjson.xz",
+      "bytes": 37404,
+      "sha256": "53b08def33a99ed811ab03dc8d8fbc0d6b2bc00cb6f12b94cbac977c7ce0092b",
+      "git_blob": "07bb14cc98a3aac69ffc124bb14c6970723cda71"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-ashwarden-v0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-ashwarden-v0.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-ashwarden-v5.config.json",
+      "bytes": 150,
+      "sha256": "110b9d2a01e875159e5a2f62389962a92f468217515c99b86535222248294fbb",
+      "git_blob": "662e5c2bea20231a26a8692e96852078f5530b9d"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-ashwarden-v5.execution.json",
+      "bytes": 888,
+      "sha256": "9cc2deb5b2e962d70466aaca4ac5e757662343aab4e69cc576373b9cbdcfe047",
+      "git_blob": "f880d3c55c186af13803f935fdfc173a3ec02ea1"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-ashwarden-v5.ndjson.xz",
+      "bytes": 29436,
+      "sha256": "397f8b9b2a0d01315851d59785729b91733164f6039ca2a79c54f74c68383546",
+      "git_blob": "6ca5338396c4ea3852ab120099ca742d92120bdf"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-ashwarden-v5.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-ashwarden-v5.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-duskblade-v0.config.json",
+      "bytes": 150,
+      "sha256": "5965f733ceb64a4a4ed19f975d37b106030e99f97b48456bf8f7ad867308f0a3",
+      "git_blob": "ca9ec0526dd27ce3a25fe9b429f6bb392f4898a7"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-duskblade-v0.execution.json",
+      "bytes": 887,
+      "sha256": "eb0fd8af5a8e648bbfd3cb39ea61a23654550532eed70c372dc251d9eca84fb1",
+      "git_blob": "31f6c33bc12b055a4f9bba1a91f8f9da6b5b74f2"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-duskblade-v0.ndjson.xz",
+      "bytes": 38468,
+      "sha256": "4623f7cece3fe72738643812f66151814b1f9ee0a7309a88ccdbfb828a74ad0d",
+      "git_blob": "679718a5abf50e3835fdabc21fc7557df8d93a90"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-duskblade-v0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-duskblade-v0.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-duskblade-v5.config.json",
+      "bytes": 150,
+      "sha256": "d30eccaff6d19ca048e2e3a4b9dffb8f6bf41771f8dc3aaee604144a7690ece4",
+      "git_blob": "eaff8e7230e0e8c6be1c08ac883884cd0aee2598"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-duskblade-v5.execution.json",
+      "bytes": 882,
+      "sha256": "8c50f437185273cc65e550a8b12ec9d1335d20c5db2e8e5f5877fbc0880b72c9",
+      "git_blob": "23bea8a42f36c1b2be8ac7dd3eecb2a5b12296e7"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-duskblade-v5.ndjson.xz",
+      "bytes": 29584,
+      "sha256": "049cf183e4dcbbd040f66169a9ad0e8fa493e859b8f0a41825008529c0a917bc",
+      "git_blob": "92cd54cbdc78d1232cf91e01a56a6d3e2542b60c"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-duskblade-v5.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-duskblade-v5.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-import.stdout",
+      "bytes": 3569,
+      "sha256": "6f210d0854a0f36b56273dd6f907695257fcf0d959227b8e7093fe7682f052c4",
+      "git_blob": "0152b461c85cc1f1bf264eee66f4f835321a37ca"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-parse.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/guardrail-confirmation-20260909/native-1/candidate-parse.stdout",
+      "bytes": 23,
+      "sha256": "905581e17b38aaea62430a5c587607978b0d68eaba983efcfcc2c295a1d660cc",
+      "git_blob": "b84b6f379095784ecdcff5b53fa130760dfc4976"
+    },
+    {
+      "path": "research/p9-six-route/hand-admission-20260908/support-v1/postrun/SUMMARY.json",
+      "bytes": 10412,
+      "sha256": "524823b9db51cf702408c81c0651fa8bc8b6e97c10ce7e93367a09c385d215f2",
+      "git_blob": "182f320d0d7aa84095630a121fe8dea4a8faec29"
+    }
+  ],
+  "new_native_runs": 0,
+  "p9_certified": false
+}
