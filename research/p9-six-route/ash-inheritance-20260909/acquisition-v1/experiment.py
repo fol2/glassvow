@@ -173,7 +173,7 @@ def verify(repo,original,cold,output):
     terminal=json.loads((cold/'TERMINAL.json').read_bytes())
     pp=json.loads((cold/'RESOLVED-PROTOCOLS.json').read_bytes())
     for vow in terminal['stages']:
-        results={name:reader.analyze(cold/f'v{vow}'/name,pp[name],int(vow)) for name in ('stock','aware')
+        results={name:reader.analyze(cold/f'v{vow}'/name,pp[name],int(vow)) for name in ('stock','aware')}
         result=compare_value.compare(results['stock'],results['aware'],p)
         require((json.dumps(result,indent=2)+'\n').encode()==(cold/f'v{vow}/COMPARISON.json').read_bytes(),'COMPARISON_READBACK')
     dump(output,{'kind':'COMPLETE_ACQUISITION_COMPARISON_COLD_READBACK','files':len(entries)+1,
