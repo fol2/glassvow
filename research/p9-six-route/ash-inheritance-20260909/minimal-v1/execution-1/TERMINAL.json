@@ -1,0 +1,217 @@
+{
+  "status": "BLOODFIRE_MINIMAL_PREFLIGHT_PASS",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "-v",
+        "test_minimal"
+      ],
+      "cwd": "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/minimal-v1",
+      "returncode": 0,
+      "elapsed_seconds": 0.11424226300000129,
+      "diagnostic_error": false,
+      "okay": true
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/home/runner/work/_temp/native-capture/baseline",
+        "--import"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "elapsed_seconds": 4.825906519999997,
+      "diagnostic_error": false,
+      "okay": true
+    },
+    {
+      "argv": [
+        "bash",
+        "/home/runner/work/_temp/native-capture/baseline/tools/check_scripts.sh",
+        "domain/rules/combat.gd",
+        "probe.gd"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "elapsed_seconds": 0.7158283050000023,
+      "diagnostic_error": false,
+      "okay": true
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/home/runner/work/_temp/native-capture/candidate",
+        "--import"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "elapsed_seconds": 2.6201717379999963,
+      "diagnostic_error": false,
+      "okay": true
+    },
+    {
+      "argv": [
+        "bash",
+        "/home/runner/work/_temp/native-capture/candidate/tools/check_scripts.sh",
+        "domain/rules/combat.gd",
+        "probe.gd"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "elapsed_seconds": 0.7157556370000009,
+      "diagnostic_error": false,
+      "okay": true
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/home/runner/work/_temp/native-capture/baseline",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "baseline",
+        "/home/runner/work/_temp/native-capture/raw/baseline.jsonl"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "elapsed_seconds": 0.7655333549999952,
+      "diagnostic_error": false,
+      "okay": true
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/home/runner/work/_temp/native-capture/candidate",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "off",
+        "/home/runner/work/_temp/native-capture/raw/off.jsonl"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "elapsed_seconds": 0.8157483009999993,
+      "diagnostic_error": false,
+      "okay": true
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/home/runner/work/_temp/native-capture/candidate",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "active",
+        "/home/runner/work/_temp/native-capture/raw/active.jsonl"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "elapsed_seconds": 0.7656134740000056,
+      "diagnostic_error": false,
+      "okay": true
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/home/runner/work/_temp/native-capture/candidate",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "producer_off",
+        "/home/runner/work/_temp/native-capture/raw/producer_off.jsonl"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "elapsed_seconds": 0.7655910329999998,
+      "diagnostic_error": false,
+      "okay": true
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/home/runner/work/_temp/native-capture/candidate",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "consumer_off",
+        "/home/runner/work/_temp/native-capture/raw/consumer_off.jsonl"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "elapsed_seconds": 0.7655667590000022,
+      "diagnostic_error": false,
+      "okay": true
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/home/runner/work/_temp/native-capture/candidate",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "erase_mediator",
+        "/home/runner/work/_temp/native-capture/raw/erase_mediator.jsonl"
+      ],
+      "cwd": null,
+      "returncode": 0,
+      "elapsed_seconds": 0.7658915230000005,
+      "diagnostic_error": false,
+      "okay": true
+    }
+  ],
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "raw": [
+    {
+      "path": "raw/active.jsonl",
+      "bytes": 1128396,
+      "sha256": "010e71b8bef7fa82d83f7970029dc955fc6578289443bd9d3fba0361f9d4729e"
+    },
+    {
+      "path": "raw/baseline.jsonl",
+      "bytes": 1110580,
+      "sha256": "9dc24b042dd0e9cc2698ecc21786d0d070f19a7f92176477ba2dad0e249db801"
+    },
+    {
+      "path": "raw/consumer_off.jsonl",
+      "bytes": 1120460,
+      "sha256": "a1159e23bbde896cf720857b4ed8192a34cf20d3a65c26314d6ec30e76e944fd"
+    },
+    {
+      "path": "raw/erase_mediator.jsonl",
+      "bytes": 1124078,
+      "sha256": "152247167c375ad8a247220532c35635bbe5bf6125110d958a5bbb796e244788"
+    },
+    {
+      "path": "raw/off.jsonl",
+      "bytes": 1110275,
+      "sha256": "123301f36318172a7c2443ca38bc00c0a60a7636d0ef7836aa9107e675df12a0"
+    },
+    {
+      "path": "raw/producer_off.jsonl",
+      "bytes": 1111432,
+      "sha256": "605c0d78cd4461bf97391df39f3cb903ad0bf073543328966ddbd2adf04e8667"
+    }
+  ],
+  "source_head": "10587e242a5dcc83fad5ae47e1ce31965c999fae"
+}
