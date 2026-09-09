@@ -1,0 +1,57 @@
+{
+  "config_id": "p126-v0-o1-s58080101",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p126-v0-o1/p126-v0-o1-s58080101/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p126-v0-o1/p126-v0-o1-s58080101/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p126-v0-o1/p126-v0-o1-s58080101/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 11.593844072000138,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 31560,
+      "sha256": "c90f4b490a46663da0df56759972aa2aee35e1535b83fecf345c9d18123c1d30"
+    },
+    "trace.ndjson": {
+      "bytes": 5526071,
+      "sha256": "5e3127e91feac815ead3d78d795c011ec3fac60ed1c1d8430a142c64cc197df0"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 107768,
+      "sha256": "306d51272c2e4700578b53ed11592c092e2b8e32fc1c1f5f06c4a1f4578822e6"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3648,
+      "sha256": "bb7844520d6bc247f26289fcf2db1f124e41a2aaad18fa41b33bf859220d420b"
+    },
+    "CONFIG.json": {
+      "bytes": 568,
+      "sha256": "1aacc04114bd461d032e5c2a4808cb4b0cfc8221a32bec8d9d92c3fd4e698840"
+    },
+    "CELL.json": {
+      "bytes": 512,
+      "sha256": "a6cd25173de6e84ddf1da6ef147e9cb76152abdf13403116fc2e96c12e63447b"
+    }
+  },
+  "p9_certified": false
+}

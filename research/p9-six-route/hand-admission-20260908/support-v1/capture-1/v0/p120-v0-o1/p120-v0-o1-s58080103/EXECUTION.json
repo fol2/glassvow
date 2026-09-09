@@ -1,0 +1,57 @@
+{
+  "config_id": "p120-v0-o1-s58080103",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p120-v0-o1/p120-v0-o1-s58080103/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p120-v0-o1/p120-v0-o1-s58080103/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p120-v0-o1/p120-v0-o1-s58080103/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 17.54671713599987,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 29232,
+      "sha256": "076179b3cb7420d2871bc862298f81946b98c20b0a6be1867fa2882faa71b135"
+    },
+    "trace.ndjson": {
+      "bytes": 8402170,
+      "sha256": "970224e356b5fd570b567fd6487d330ecf9eec9c3806b16f1b6453fe19a8ed09"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 124908,
+      "sha256": "566acb883183cc31ade349daabc74d1cd2f68b5cb3c1a5d6e7d89a3ce27cc7ea"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3356,
+      "sha256": "6893b029e91106fa147ed6d7fa35bcf86ac1c8fc36a4eb8c94a0a0446bf20d33"
+    },
+    "CONFIG.json": {
+      "bytes": 567,
+      "sha256": "937fe63262cf91d8cfd796fb0c499a229635e2a4f77beec8573c3186fce0fede"
+    },
+    "CELL.json": {
+      "bytes": 3654,
+      "sha256": "5580c44e978d031f0b067b5ecde60f2c41a78dd850503e6673dbe853caac8f86"
+    }
+  },
+  "p9_certified": false
+}

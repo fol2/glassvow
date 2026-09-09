@@ -1,0 +1,57 @@
+{
+  "config_id": "p125-v0-o1-s58080103",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p125-v0-o1/p125-v0-o1-s58080103/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p125-v0-o1/p125-v0-o1-s58080103/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p125-v0-o1/p125-v0-o1-s58080103/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 8.865755874000115,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 28077,
+      "sha256": "7b97783a39da64178a60001c47c06caafd05e89ada5dd7b1630848a7d6ae3d9d"
+    },
+    "trace.ndjson": {
+      "bytes": 4191164,
+      "sha256": "4a48b793a66178b6ac105c8ad2b14ff7ba5d87fc012e44296fde9b3ee707ee3a"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 85880,
+      "sha256": "6a9089224f3535fb290daf34e864c1342ddcb6e152b5cdc9b46e61fb97ba15c2"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3480,
+      "sha256": "c5038cc6f9ac1df5c38ca0234f301fc68f7dfb3e667841becc797b2da391eb5d"
+    },
+    "CONFIG.json": {
+      "bytes": 570,
+      "sha256": "bcffc08ec88217a6b197c96d83749283cffd419648501d9b5fd811be11f40743"
+    },
+    "CELL.json": {
+      "bytes": 2092,
+      "sha256": "1ed3ef8dc7e260091d20d2a80af390cf4d44736e04707ab51910f46ad9cacb34"
+    }
+  },
+  "p9_certified": false
+}
