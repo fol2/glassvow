@@ -1,0 +1,431 @@
+{
+  "post_v38_factorial.py": {
+    "bytes": 25971,
+    "sha256": "9418a3419c4feecae84360a9ea4068b60157c239d0359bb265939d3c579cdf97",
+    "outline": [
+      {
+        "name": "assignment",
+        "start": 18,
+        "end": 18
+      },
+      {
+        "name": "assignment",
+        "start": 19,
+        "end": 19
+      },
+      {
+        "name": "assignment",
+        "start": 20,
+        "end": 20
+      },
+      {
+        "name": "assignment",
+        "start": 21,
+        "end": 21
+      },
+      {
+        "name": "assignment",
+        "start": 22,
+        "end": 22
+      },
+      {
+        "name": "assignment",
+        "start": 23,
+        "end": 23
+      },
+      {
+        "name": "assignment",
+        "start": 24,
+        "end": 24
+      },
+      {
+        "name": "assignment",
+        "start": 25,
+        "end": 25
+      },
+      {
+        "name": "assignment",
+        "start": 26,
+        "end": 26
+      },
+      {
+        "name": "assignment",
+        "start": 27,
+        "end": 37
+      },
+      {
+        "name": "_variant_id",
+        "start": 40,
+        "end": 41
+      },
+      {
+        "name": "_set_payoffs",
+        "start": 44,
+        "end": 82
+      },
+      {
+        "name": "prepare_variants",
+        "start": 85,
+        "end": 103
+      },
+      {
+        "name": "_source_identity",
+        "start": 106,
+        "end": 120
+      },
+      {
+        "name": "verify",
+        "start": 123,
+        "end": 131
+      },
+      {
+        "name": "_local_rows",
+        "start": 134,
+        "end": 160
+      },
+      {
+        "name": "_local_plan",
+        "start": 163,
+        "end": 165
+      },
+      {
+        "name": "run_local",
+        "start": 168,
+        "end": 204
+      },
+      {
+        "name": "_cell_id",
+        "start": 207,
+        "end": 209
+      },
+      {
+        "name": "_factor_rows",
+        "start": 212,
+        "end": 238
+      },
+      {
+        "name": "_live_rows",
+        "start": 241,
+        "end": 253
+      },
+      {
+        "name": "_fault",
+        "start": 256,
+        "end": 257
+      },
+      {
+        "name": "_active",
+        "start": 260,
+        "end": 266
+      },
+      {
+        "name": "analyse_factor_cell",
+        "start": 269,
+        "end": 319
+      },
+      {
+        "name": "_factor_cells",
+        "start": 322,
+        "end": 324
+      },
+      {
+        "name": "_endpoint",
+        "start": 327,
+        "end": 341
+      },
+      {
+        "name": "factor_effects",
+        "start": 344,
+        "end": 391
+      },
+      {
+        "name": "run_factor",
+        "start": 394,
+        "end": 421
+      },
+      {
+        "name": "_store",
+        "start": 424,
+        "end": 429
+      },
+      {
+        "name": "execute",
+        "start": 432,
+        "end": 485
+      },
+      {
+        "name": "self_check",
+        "start": 488,
+        "end": 511
+      },
+      {
+        "name": "main",
+        "start": 514,
+        "end": 524
+      }
+    ]
+  },
+  "post_v38_blocked_crn.py": {
+    "bytes": 38485,
+    "sha256": "a6435cc05f13042ee9132de90a40d11a61716b56d116b729aff92faad5a152cb",
+    "outline": [
+      {
+        "name": "assignment",
+        "start": 21,
+        "end": 21
+      },
+      {
+        "name": "assignment",
+        "start": 22,
+        "end": 22
+      },
+      {
+        "name": "assignment",
+        "start": 23,
+        "end": 23
+      },
+      {
+        "name": "assignment",
+        "start": 24,
+        "end": 24
+      },
+      {
+        "name": "assignment",
+        "start": 25,
+        "end": 25
+      },
+      {
+        "name": "assignment",
+        "start": 26,
+        "end": 26
+      },
+      {
+        "name": "source_identity",
+        "start": 29,
+        "end": 49
+      },
+      {
+        "name": "verify_entry",
+        "start": 52,
+        "end": 100
+      },
+      {
+        "name": "cell_key",
+        "start": 103,
+        "end": 104
+      },
+      {
+        "name": "find_cell",
+        "start": 107,
+        "end": 112
+      },
+      {
+        "name": "cohort_rows",
+        "start": 115,
+        "end": 157
+      },
+      {
+        "name": "plan_for",
+        "start": 160,
+        "end": 167
+      },
+      {
+        "name": "validate_rectangle",
+        "start": 170,
+        "end": 200
+      },
+      {
+        "name": "split_rows",
+        "start": 203,
+        "end": 214
+      },
+      {
+        "name": "is_fault",
+        "start": 217,
+        "end": 219
+      },
+      {
+        "name": "route_counts",
+        "start": 222,
+        "end": 227
+      },
+      {
+        "name": "mean_turns",
+        "start": 230,
+        "end": 234
+      },
+      {
+        "name": "endpoint_reader",
+        "start": 237,
+        "end": 277
+      },
+      {
+        "name": "signed_interval",
+        "start": 280,
+        "end": 289
+      },
+      {
+        "name": "linear_effect",
+        "start": 292,
+        "end": 332
+      },
+      {
+        "name": "all_endpoints",
+        "start": 335,
+        "end": 336
+      },
+      {
+        "name": "fit_contrast",
+        "start": 339,
+        "end": 349
+      },
+      {
+        "name": "mechanism_blocks",
+        "start": 352,
+        "end": 420
+      },
+      {
+        "name": "interference_quad",
+        "start": 423,
+        "end": 430
+      },
+      {
+        "name": "trigger_from_effect",
+        "start": 433,
+        "end": 439
+      },
+      {
+        "name": "initial_interference",
+        "start": 442,
+        "end": 479
+      },
+      {
+        "name": "expanded_interference",
+        "start": 482,
+        "end": 493
+      },
+      {
+        "name": "candidate_gate",
+        "start": 496,
+        "end": 611
+      },
+      {
+        "name": "selection_key",
+        "start": 614,
+        "end": 622
+      },
+      {
+        "name": "protocol_observation_count",
+        "start": 625,
+        "end": 629
+      },
+      {
+        "name": "enforce_wall_cap",
+        "start": 632,
+        "end": 634
+      },
+      {
+        "name": "run_cells",
+        "start": 637,
+        "end": 657
+      },
+      {
+        "name": "execute",
+        "start": 660,
+        "end": 775
+      },
+      {
+        "name": "record_inconclusive",
+        "start": 778,
+        "end": 797
+      },
+      {
+        "name": "validate_design",
+        "start": 800,
+        "end": 866
+      },
+      {
+        "name": "main",
+        "start": 869,
+        "end": 880
+      }
+    ]
+  },
+  "post_v38_knob_identity.py": {
+    "bytes": 10528,
+    "sha256": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+    "outline": [
+      {
+        "name": "assignment",
+        "start": 18,
+        "end": 18
+      },
+      {
+        "name": "assignment",
+        "start": 19,
+        "end": 19
+      },
+      {
+        "name": "ledger_identity",
+        "start": 22,
+        "end": 40
+      },
+      {
+        "name": "source_identity",
+        "start": 43,
+        "end": 60
+      },
+      {
+        "name": "verify_inputs",
+        "start": 63,
+        "end": 77
+      },
+      {
+        "name": "run_probe",
+        "start": 80,
+        "end": 96
+      },
+      {
+        "name": "require_equal",
+        "start": 99,
+        "end": 101
+      },
+      {
+        "name": "main",
+        "start": 104,
+        "end": 244
+      }
+    ]
+  },
+  "post_v38_knob_identity_v2.py": {
+    "bytes": 9138,
+    "sha256": "e1b4983f6d2d0b8a5608dc099430c32e54ddd689a7797415a3f17f7f7127f7c8",
+    "outline": [
+      {
+        "name": "assignment",
+        "start": 18,
+        "end": 18
+      },
+      {
+        "name": "assignment",
+        "start": 19,
+        "end": 19
+      },
+      {
+        "name": "verify_inputs",
+        "start": 22,
+        "end": 36
+      },
+      {
+        "name": "invalid_key_fails_closed",
+        "start": 39,
+        "end": 63
+      },
+      {
+        "name": "main",
+        "start": 66,
+        "end": 227
+      }
+    ]
+  }
+}
