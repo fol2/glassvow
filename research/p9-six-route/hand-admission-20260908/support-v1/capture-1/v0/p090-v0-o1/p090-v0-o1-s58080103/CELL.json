@@ -1,0 +1,31 @@
+{
+  "policy_id": "184cab47efa00e95f6214cfbd8680b78d82cad78cb51a9b84e3deee58877e52b",
+  "policy_index": 90,
+  "vow": 0,
+  "route_preference": "cycle",
+  "runs": [
+    {
+      "seed": 58080103,
+      "result": "win",
+      "final_pair": true,
+      "historical_chain_active": true,
+      "positive_high_payoff": true,
+      "consumer_reached": true,
+      "consumers": [
+        {
+          "fight": 26,
+          "q": 5,
+          "classification": "SOURCE_REQUIRED_FOR_RECORDED_COMMAND_OPPORTUNITY",
+          "high_health_contribution": 5,
+          "raw_reference": [
+            26,
+            "cc9845b017e6b7ff9b8f77275552327df8dd0e67529287ce2f27b1db1d4785a2",
+            "a76f428e41db3d88ecd85d680656e460327456c0c7d68f3b6484e9f40067292b"
+          ]
+        }
+      ],
+      "decision_trace_sha256": "3a0a3a64510bfc2c27c77c73eecc5cad9443547d6c89100b362d8ef5f5fb9a6e",
+      "state_count": 598
+    }
+  ]
+}

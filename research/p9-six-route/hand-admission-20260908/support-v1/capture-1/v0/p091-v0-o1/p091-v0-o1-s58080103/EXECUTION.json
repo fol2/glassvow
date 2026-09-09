@@ -1,0 +1,57 @@
+{
+  "config_id": "p091-v0-o1-s58080103",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p091-v0-o1/p091-v0-o1-s58080103/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p091-v0-o1/p091-v0-o1-s58080103/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p091-v0-o1/p091-v0-o1-s58080103/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 7.447659888000004,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 24675,
+      "sha256": "4478810eb54f9af0165b01f00ef8c5fb36b35ba575d32de6a13759a6097157be"
+    },
+    "trace.ndjson": {
+      "bytes": 4351581,
+      "sha256": "f45b0c826a7e9f08d787ed0a256053b8f0f6444bf251cf955eeef210d10d0c83"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 86700,
+      "sha256": "6d17cf42cf0fd199244f3fd76e63736ccc084a61b03cc0ddd01e3bef8e9e1c7f"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3184,
+      "sha256": "ee7aedbe75337611d12814fe18aa153ad82bf4aff6abd2afb09146cf6a573fe0"
+    },
+    "CONFIG.json": {
+      "bytes": 571,
+      "sha256": "bbd4f0f9b88e278db93d6679cf3ba6e2e50b660ef9d4b7fd0f63b6a4a4d7d8f1"
+    },
+    "CELL.json": {
+      "bytes": 514,
+      "sha256": "c6bfea410aced537de6a429dd095b8bea6e4648f8dfa85a296a2cec16f4ff553"
+    }
+  },
+  "p9_certified": false
+}

@@ -1,0 +1,57 @@
+{
+  "config_id": "p091-v0-o1-s58080102",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p091-v0-o1/p091-v0-o1-s58080102/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p091-v0-o1/p091-v0-o1-s58080102/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p091-v0-o1/p091-v0-o1-s58080102/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 7.259608698999983,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 28197,
+      "sha256": "704684f06a0df2409f0b107377bd12733da4e13dd433a97549d70244ae3b7647"
+    },
+    "trace.ndjson": {
+      "bytes": 4566050,
+      "sha256": "8453c3676fe7780a261cd7686fc2013a2fe5d8e5d184b5cc865980f28d61f4c2"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 91532,
+      "sha256": "13a5c7613826148336579f9952ca60bcf89063760e0a6a1c2b2f6bae74448cfc"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3396,
+      "sha256": "40c315f7a4d6ed9461f3ea7089848f1c5afc6caba1b44dbc35f8b241d113f818"
+    },
+    "CONFIG.json": {
+      "bytes": 571,
+      "sha256": "f34478617130d450f70f4466849246c5f58a8d262a97b04fc7af977b77523ecb"
+    },
+    "CELL.json": {
+      "bytes": 514,
+      "sha256": "3d2fca60d6f455ba9a168fa6d449f17c56a2d6377d5c6a8bc70ffe1ff94af14a"
+    }
+  },
+  "p9_certified": false
+}

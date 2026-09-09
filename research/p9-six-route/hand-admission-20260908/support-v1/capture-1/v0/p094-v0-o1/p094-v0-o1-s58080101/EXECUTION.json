@@ -1,0 +1,57 @@
+{
+  "config_id": "p094-v0-o1-s58080101",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p094-v0-o1/p094-v0-o1-s58080101/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p094-v0-o1/p094-v0-o1-s58080101/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p094-v0-o1/p094-v0-o1-s58080101/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 11.766408504000026,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 31695,
+      "sha256": "d692d6aee676622e2ab3e36a0293df350435ac5c442975180420c29984d0bb93"
+    },
+    "trace.ndjson": {
+      "bytes": 5630701,
+      "sha256": "4d126f557007747d0b42c8eeddc6d67e74368217c7096531a509f37730666a26"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 108828,
+      "sha256": "6f5ef1a69f21c7ff569b0d9b7713db09d1f592666943c58ca0e131ce4e421b50"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3664,
+      "sha256": "99518e04c345bdb2a913017fc9ab8daf19c79404823b5de0aa00cdeae072094e"
+    },
+    "CONFIG.json": {
+      "bytes": 567,
+      "sha256": "a30ffdef3e96b4829a3ce72a014b99c59e0af42aeb40182c0015b06b45ad3e0d"
+    },
+    "CELL.json": {
+      "bytes": 511,
+      "sha256": "9feb2d51429449c81b49f1bde29dc7a9b37db9038f7d2deb286ecadba1448d03"
+    }
+  },
+  "p9_certified": false
+}
