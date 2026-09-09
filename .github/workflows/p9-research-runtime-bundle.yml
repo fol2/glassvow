@@ -1,103 +1,88 @@
 name: P9 research runtime bundle
-
 on:
   push:
     branches: [research/p9-six-route-local-20260905]
     paths: [.github/workflows/p9-research-runtime-bundle.yml]
-
 permissions:
   contents: read
-
 concurrency:
   group: p9-six-route-research-writer
   cancel-in-progress: false
-
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-
 jobs:
   bundle:
-    name: Publish current source and capacity decisions - no engine
+    name: Recover precise historical laws - no engine or outcome rows
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
       contents: write
     steps:
-      - name: Check out exact decision inputs
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
-          fetch-depth: 1
           persist-credentials: true
-          lfs: false
+          fetch-depth: 1
           sparse-checkout: |
-            research/p9-six-route
-      - name: Verify code, test negative boundaries and derive current metadata
+            domain
+            content
+            research/p9-six-route/smolder-certificate-20260909
+      - name: Extract complete pinned functions, never execute archived code
         shell: bash
         run: |
           set -euo pipefail
-          root=research/p9-six-route/minimal-native-20260909
+          study=research/p9-six-route/smolder-certificate-20260909
+          echo '2e684ac71e143a5d7ac86836e242e1903a0e8abdcf1dfa47e9ac1b472034d57c  research/p9-six-route/smolder-certificate-20260909/source_scope.py' | sha256sum -c -
+          curl --fail --location --max-time 60 https://raw.githubusercontent.com/fol2/glassvow/c802be36510273481b6d0f865b92fac43abf6aff/research/issue-421/raw/post-directive-harness-v2.tar.gz --output "$RUNNER_TEMP/history.tar.gz"
+          python3 "$study/source_scope.py" . "$RUNNER_TEMP/history.tar.gz" "$study/source-1"
           python3 - <<'PY'
-          import hashlib,pathlib
-          r=pathlib.Path('research/p9-six-route/minimal-native-20260909')
-          expected={'close_native.py':'040ead41ebd64b26360c8dce80bd9a3516d0774af0daf22668efdd9260ce909a','test_close.py':'d800e0b559dc4068288b48f53848abcc41405baadc0d27664a621d4739ad87dc'}
-          for n,h in expected.items():assert hashlib.sha256((r/n).read_bytes()).hexdigest()==h,n
+          import json,pathlib
+          p=pathlib.Path('research/p9-six-route/smolder-certificate-20260909/source-1/HISTORICAL-FUNCTIONS.json')
+          for name,record in json.loads(p.read_bytes()).items():
+              if '::' not in name:continue
+              lines=record['body'].splitlines()
+              picks=set()
+              for i,line in enumerate(lines):
+                  if 'mistbound' in line.lower() or 'bloodfire' in line.lower():
+                      picks.update(range(max(0,i-5),min(len(lines),i+9)))
+              if picks:
+                  print('HISTORICAL_FUNCTION',name,record['sha256'])
+                  for i in sorted(picks):print(str(i+1)+':'+lines[i])
           PY
-          (cd "$root" && python3 -m unittest -v test_close) > "$root/CLOSURE-TESTS.log" 2>&1
-          python3 "$root/close_native.py" .
-      - name: Commit only the exact current decision and capsule
-        id: publish
+      - name: Commit extracted source evidence on existing branch
         shell: bash
         run: |
           set -euo pipefail
           branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$(git rev-parse HEAD)"
-          git add research/p9-six-route/SESSION-STATE.json research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/package-disposition-20260908/ROADMAP.md research/p9-six-route/minimal-native-20260909/DECISION.json research/p9-six-route/minimal-native-20260909/CLOSURE-TESTS.log
-          python3 - <<'PY'
-          import subprocess
-          root='research/p9-six-route/'
-          expected={root+n for n in ('SESSION-STATE.json','SESSION-HANDOFF.md','package-disposition-20260908/ROADMAP.md','minimal-native-20260909/DECISION.json','minimal-native-20260909/CLOSURE-TESTS.log')}
-          actual=set(subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines())
-          assert actual==expected,actual
-          PY
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
+          git add research/p9-six-route/smolder-certificate-20260909/source-1
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): preserve native Smolder priority and Dusk sampler closure'
-          git push origin "HEAD:refs/heads/$branch"
-          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-      - name: Read published metadata from a separate checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+          git commit -m 'research(p9): preserve native and historical complete function identities'
+          git push origin HEAD:refs/heads/$branch
+          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ steps.publish.outputs.sha }}
-          path: cold-readback
+          ref: ${{ env.PUBLISHED_HEAD }}
+          path: cold
           fetch-depth: 1
           persist-credentials: false
-          lfs: false
-          sparse-checkout: |
-            research/p9-six-route
-      - name: Verify every delivered byte and preserve receipt
-        env:
-          PUBLISHED: ${{ steps.publish.outputs.sha }}
+          sparse-checkout: research/p9-six-route/smolder-certificate-20260909
+      - name: Verify remote bytes including executed extractor
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess
-          root=pathlib.Path('research/p9-six-route');r=root/'minimal-native-20260909';cold=pathlib.Path('cold-readback')
-          paths=[root/'SESSION-STATE.json',root/'SESSION-HANDOFF.md',root/'package-disposition-20260908/ROADMAP.md']+[r/n for n in ('DECISION.json','CLOSURE-TESTS.log','close_native.py','test_close.py')]
-          files=[]
-          for path in paths:
-              a=path.read_bytes();b=(cold/path).read_bytes();assert a==b,str(path)
-              blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-              expected=subprocess.check_output(['git','rev-parse','HEAD:'+str(path)]).decode().strip();assert blob==expected,str(path)
-              files.append({'path':str(path),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':blob})
-          receipt={'kind':'COLD_REMOTE_NATIVE_FRONTIER_METADATA_READBACK','source_head':os.environ['GITHUB_SHA'],'published_head':os.environ['PUBLISHED'],'workflow_run':os.environ['GITHUB_RUN_ID'],'files_matched':len(files),'files':files,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
-          (r/'FRONTIER-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          print('FRONTIER_READBACK='+json.dumps({k:v for k,v in receipt.items() if k!='files'},sort_keys=True))
+          import hashlib,json,pathlib,subprocess
+          root=pathlib.Path('research/p9-six-route/smolder-certificate-20260909')
+          result=[]
+          for path in sorted(root.rglob('*')):
+              if not path.is_file():continue
+              data=path.read_bytes(); other=pathlib.Path('cold')/path
+              assert other.read_bytes()==data,str(path)
+              digest=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+              assert digest==subprocess.check_output(['git','rev-parse','HEAD:'+str(path)]).decode().strip()
+              result.append({'path':str(path),'bytes':len(data),'git_blob':digest,'sha256':hashlib.sha256(data).hexdigest()})
+          print('REMOTE_SOURCE_READBACK='+json.dumps(result,sort_keys=True))
           PY
-          branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$(git rev-parse HEAD)"
-          git add research/p9-six-route/minimal-native-20260909/FRONTIER-READBACK.json
-          git commit -m 'research(p9): persist current native-frontier readback receipt'
-          git push origin "HEAD:refs/heads/$branch"
