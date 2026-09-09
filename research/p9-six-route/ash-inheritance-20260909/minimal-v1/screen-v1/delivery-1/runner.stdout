@@ -1,0 +1,82 @@
+[detached HEAD 1dc70f9] research(p9): freeze exact minimum Bloodfire screen inputs before outcomes
+ 7 files changed, 791 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/RESOLVED-PROTOCOL.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/RUNTIME-SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/runtime-source.tar.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/selected-binding/BINDING.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/selected-binding/EXACT-CONSTRUCTOR.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/selected-binding/SELECTED-HISTORICAL-CONTENT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/selected-binding/SELECTED-PROJECTION.json
+[detached HEAD 4211c3f] research(p9): preserve complete Bloodfire matched-control chunk
+ 29 files changed, 337 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/PROGRESS.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/headers/baseline-header.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/headers/baseline-header.execution.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/headers/baseline-header.ndjson
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/headers/baseline-header.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/headers/baseline-header.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/headers/candidate-header.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/headers/candidate-header.execution.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/headers/candidate-header.ndjson
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/headers/candidate-header.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/headers/candidate-header.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-ashwarden-v0.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-ashwarden-v0.execution.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-ashwarden-v0.ndjson.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-ashwarden-v0.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-ashwarden-v0.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-ashwarden-v0.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-ashwarden-v0.execution.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-ashwarden-v0.ndjson.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-ashwarden-v0.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-ashwarden-v0.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/setup/baseline-import.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/setup/baseline-import.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/setup/baseline-parse.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/setup/baseline-parse.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/setup/candidate-import.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/setup/candidate-import.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/setup/candidate-parse.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/setup/candidate-parse.stdout
+[detached HEAD bcdeb04] research(p9): preserve complete Bloodfire matched-control chunk
+ 11 files changed, 143 insertions(+), 1 deletion(-)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-ashwarden-v5.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-ashwarden-v5.execution.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-ashwarden-v5.ndjson.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-ashwarden-v5.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-ashwarden-v5.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-ashwarden-v5.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-ashwarden-v5.execution.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-ashwarden-v5.ndjson.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-ashwarden-v5.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-ashwarden-v5.stdout
+[detached HEAD b4b3443] research(p9): preserve complete Bloodfire matched-control chunk
+ 11 files changed, 143 insertions(+), 1 deletion(-)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v0.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v0.execution.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v0.ndjson.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v0.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v0.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-duskblade-v0.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-duskblade-v0.execution.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-duskblade-v0.ndjson.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-duskblade-v0.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-duskblade-v0.stdout
+[detached HEAD c96781c] research(p9): preserve complete Bloodfire matched-control chunk
+ 11 files changed, 143 insertions(+), 1 deletion(-)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v5.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v5.execution.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v5.ndjson.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v5.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v5.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-duskblade-v5.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-duskblade-v5.execution.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-duskblade-v5.ndjson.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-duskblade-v5.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-duskblade-v5.stdout
+[detached HEAD 0492349] research(p9): preserve terminal of fixed minimum Bloodfire control screen
+ 3 files changed, 526 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/FILES.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/RESULTS.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/TERMINAL.json
+{"published_head": "04923490c39c0cab020cc4d55b47fbac833a4c53", "terminal": {"decision": "Continue missing package confirmation; no gate is admitted by this screen alone.", "new_independent_confirmation_samples": 0, "p9_certified": false, "packages_admitted": 0, "rows": 1024, "source_head": "1c6c139ad7f91fb733d6a5abc6ee804a92aa9e8d", "status": "SIGNED_CONTROL_NECESSARY_SCREEN_PASS_NOT_P9"}}
