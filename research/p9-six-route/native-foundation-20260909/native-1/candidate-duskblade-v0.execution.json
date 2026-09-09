@@ -1,0 +1,30 @@
+{
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-native-foundation-q5cnxclu/candidate",
+    "-s",
+    "res://probe.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v0.config.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v0.ndjson"
+  ],
+  "returncode": 0,
+  "failure": null,
+  "seconds": 6.125505341,
+  "config": {
+    "id": "candidate-duskblade-v0",
+    "catalogue": "candidate",
+    "aspect": "duskblade",
+    "vow": 0,
+    "arm": 2,
+    "seed0": 62090000,
+    "runs": 128
+  },
+  "status": "COMPLETE",
+  "raw": {
+    "bytes": 971653,
+    "sha256": "4eb39f7f5b65d2cc6613a1e64046af2f56e9eca4810b39b7c406f243d995cb7f"
+  }
+}

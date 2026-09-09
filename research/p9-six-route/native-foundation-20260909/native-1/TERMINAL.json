@@ -1,0 +1,327 @@
+{
+  "status": "SIGNED_CONTROL_NECESSARY_SCREEN_FAIL",
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "raw": [
+    {
+      "name": "baseline-ashwarden-v0.ndjson",
+      "bytes": 1007026,
+      "sha256": "2bbbd9d00b628d9e6927ae71a7a1712d1812b83da4f02c402fd5ad3d730cfb60",
+      "captured_outcome_lines": 128
+    },
+    {
+      "name": "baseline-ashwarden-v5.ndjson",
+      "bytes": 845123,
+      "sha256": "068aea5045bdbb382904f92e145af18ec9472507baae9e06b1583298788e862a",
+      "captured_outcome_lines": 128
+    },
+    {
+      "name": "baseline-duskblade-v0.ndjson",
+      "bytes": 945960,
+      "sha256": "a4ac635bb5286dc40314807b240842463d7b636fc705ff22d153c55ce8fa6de2",
+      "captured_outcome_lines": 128
+    },
+    {
+      "name": "baseline-duskblade-v5.ndjson",
+      "bytes": 811663,
+      "sha256": "75b5ea5f0ab121f29d0a4bdf8a699af7f44fa5484e1fbd9331d0e51779be72d2",
+      "captured_outcome_lines": 128
+    },
+    {
+      "name": "candidate-ashwarden-v0.ndjson",
+      "bytes": 1029206,
+      "sha256": "d022bd7871473f65f5749a3df6a163ea321cf203c287f4a8fb48e0c771d28f94",
+      "captured_outcome_lines": 128
+    },
+    {
+      "name": "candidate-ashwarden-v5.ndjson",
+      "bytes": 873157,
+      "sha256": "18bd01c702027864701d4e0a8d5536eb15cfb179c8516553bdcb5150059230f1",
+      "captured_outcome_lines": 128
+    },
+    {
+      "name": "candidate-duskblade-v0.ndjson",
+      "bytes": 971653,
+      "sha256": "4eb39f7f5b65d2cc6613a1e64046af2f56e9eca4810b39b7c406f243d995cb7f",
+      "captured_outcome_lines": 128
+    },
+    {
+      "name": "candidate-duskblade-v5.ndjson",
+      "bytes": 826961,
+      "sha256": "a378721eaa25754855e6f7784cdd814ff80f6f53062b2e8cc5afcd0287413e76",
+      "captured_outcome_lines": 128
+    }
+  ],
+  "commands": [
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-native-foundation-q5cnxclu/baseline",
+        "--import"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 7.681187491000003
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-native-foundation-q5cnxclu/candidate",
+        "--import"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 2.3190027510000064
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-native-foundation-q5cnxclu/baseline",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v0.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v0.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 6.384569752000004,
+      "config": {
+        "id": "baseline-duskblade-v0",
+        "catalogue": "baseline",
+        "aspect": "duskblade",
+        "vow": 0,
+        "arm": 2,
+        "seed0": 62090000,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 945960,
+        "sha256": "a4ac635bb5286dc40314807b240842463d7b636fc705ff22d153c55ce8fa6de2"
+      }
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-native-foundation-q5cnxclu/baseline",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v5.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/baseline-duskblade-v5.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 4.824234850000003,
+      "config": {
+        "id": "baseline-duskblade-v5",
+        "catalogue": "baseline",
+        "aspect": "duskblade",
+        "vow": 5,
+        "arm": 2,
+        "seed0": 62090000,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 811663,
+        "sha256": "75b5ea5f0ab121f29d0a4bdf8a699af7f44fa5484e1fbd9331d0e51779be72d2"
+      }
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-native-foundation-q5cnxclu/baseline",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v0.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v0.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 6.877862450999999,
+      "config": {
+        "id": "baseline-ashwarden-v0",
+        "catalogue": "baseline",
+        "aspect": "ashwarden",
+        "vow": 0,
+        "arm": 2,
+        "seed0": 62090000,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 1007026,
+        "sha256": "2bbbd9d00b628d9e6927ae71a7a1712d1812b83da4f02c402fd5ad3d730cfb60"
+      }
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-native-foundation-q5cnxclu/baseline",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v5.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/baseline-ashwarden-v5.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 4.4717295590000035,
+      "config": {
+        "id": "baseline-ashwarden-v5",
+        "catalogue": "baseline",
+        "aspect": "ashwarden",
+        "vow": 5,
+        "arm": 2,
+        "seed0": 62090000,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 845123,
+        "sha256": "068aea5045bdbb382904f92e145af18ec9472507baae9e06b1583298788e862a"
+      }
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-native-foundation-q5cnxclu/candidate",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v0.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v0.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 6.125505341,
+      "config": {
+        "id": "candidate-duskblade-v0",
+        "catalogue": "candidate",
+        "aspect": "duskblade",
+        "vow": 0,
+        "arm": 2,
+        "seed0": 62090000,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 971653,
+        "sha256": "4eb39f7f5b65d2cc6613a1e64046af2f56e9eca4810b39b7c406f243d995cb7f"
+      }
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-native-foundation-q5cnxclu/candidate",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v5.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/candidate-duskblade-v5.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 4.271874955999998,
+      "config": {
+        "id": "candidate-duskblade-v5",
+        "catalogue": "candidate",
+        "aspect": "duskblade",
+        "vow": 5,
+        "arm": 2,
+        "seed0": 62090000,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 826961,
+        "sha256": "a378721eaa25754855e6f7784cdd814ff80f6f53062b2e8cc5afcd0287413e76"
+      }
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-native-foundation-q5cnxclu/candidate",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v0.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v0.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 6.576468426999995,
+      "config": {
+        "id": "candidate-ashwarden-v0",
+        "catalogue": "candidate",
+        "aspect": "ashwarden",
+        "vow": 0,
+        "arm": 2,
+        "seed0": 62090000,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 1029206,
+        "sha256": "d022bd7871473f65f5749a3df6a163ea321cf203c287f4a8fb48e0c771d28f94"
+      }
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/p9-native-foundation-q5cnxclu/candidate",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v5.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/native-foundation-20260909/native-1/candidate-ashwarden-v5.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 4.57178526500001,
+      "config": {
+        "id": "candidate-ashwarden-v5",
+        "catalogue": "candidate",
+        "aspect": "ashwarden",
+        "vow": 5,
+        "arm": 2,
+        "seed0": 62090000,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 873157,
+        "sha256": "18bd01c702027864701d4e0a8d5536eb15cfb179c8516553bdcb5150059230f1"
+      }
+    }
+  ],
+  "source_head": "80da82fc206d0e12567e58114a8aa7b2b77bdff4",
+  "protocol_sha256": "0ebcc9dbece994506d2d2037670f21d4c9342970aa28a8ede0b583e7c6e91a3f",
+  "actually_captured_outcome_lines": 1024,
+  "previous_candidate_remains_failed": true,
+  "closed_hand_support_reopened": false,
+  "scope": "One separately specified restored-foundation candidate and disjoint control seeds only. Not package admission, C2, retention, duration or a release claim."
+}
