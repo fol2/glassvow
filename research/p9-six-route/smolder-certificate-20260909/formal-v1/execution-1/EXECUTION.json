@@ -1,0 +1,50 @@
+{
+  "source_head": "1ce77cd28a2286ad880d74f2ae9686c2c8960d72",
+  "run_id": "34349623658",
+  "source_blobs": {
+    "PROTOCOL.json": {
+      "bytes": 4085,
+      "git_blob": "558a3b38572758db5b8b19404101946d94faa4c9",
+      "sha256": "304f694906c08a18ea105231525ce3183057019396ac53d150e37e6e53a6f999"
+    },
+    "compare.py": {
+      "bytes": 15462,
+      "git_blob": "d95bac03c4321e3fd6c1d4ad2830b33dbe8df8cc",
+      "sha256": "c3a4de2be41408058bff61f6a75932e20ad0ce6699b5efc92171cd530e01632d"
+    },
+    "test_compare.py": {
+      "bytes": 5810,
+      "git_blob": "c9a0f6d2af4b6c2f790a4d125315985b5b8c0c19",
+      "sha256": "5342cf23e133225aab8d98d6ff58d7567c7876bc69f801322f2c1dc7545b119f"
+    }
+  },
+  "commands": [
+    {
+      "name": "tests",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "-v",
+        "test_compare"
+      ],
+      "cwd": "research/p9-six-route/smolder-certificate-20260909/formal-v1",
+      "returncode": 0
+    },
+    {
+      "name": "comparison",
+      "command": [
+        "/usr/bin/python3",
+        "research/p9-six-route/smolder-certificate-20260909/formal-v1/compare.py",
+        ".",
+        "research/p9-six-route/smolder-certificate-20260909/formal-v1/execution-1/analysis"
+      ],
+      "cwd": ".",
+      "returncode": 0
+    }
+  ],
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}

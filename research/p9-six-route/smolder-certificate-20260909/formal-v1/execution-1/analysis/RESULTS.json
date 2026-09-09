@@ -1,0 +1,513 @@
+{
+  "algebra_atoms": [
+    "add_all",
+    "integer_scale_target",
+    "other_observable_draw",
+    "other_observable_energy",
+    "other_observable_leech",
+    "other_observable_loseHp",
+    "other_observable_phantom",
+    "visible_marker"
+  ],
+  "background_rebinding_countermodel": {
+    "current_atoms": {
+      "base": [
+        "add_target",
+        "other_observable_dmg"
+      ],
+      "up": [
+        "add_target",
+        "other_observable_dmg"
+      ]
+    },
+    "full_current_card": {
+      "cost": 1,
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 4
+        },
+        {
+          "id": "poison",
+          "kind": "status",
+          "n": 4,
+          "who": "target"
+        }
+      ],
+      "name": "Emberbite",
+      "rarity": "common",
+      "target": "enemy",
+      "text": "Deal @4@ damage. Apply 4 Smolder.",
+      "type": "attack",
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 6
+          },
+          {
+            "id": "poison",
+            "kind": "status",
+            "n": 5,
+            "who": "target"
+          }
+        ],
+        "text": "Deal @6@ damage. Apply 5 Smolder."
+      },
+      "vfx": "fire"
+    },
+    "full_historical_card": {
+      "cost": 1,
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 4
+        },
+        {
+          "id": "poison",
+          "kind": "status",
+          "n": 4,
+          "who": "target"
+        }
+      ],
+      "name": "Emberbite",
+      "rarity": "common",
+      "target": "enemy",
+      "text": "Deal @4@ damage. Apply 4 Smolder.",
+      "type": "attack",
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 6
+          },
+          {
+            "id": "poison",
+            "kind": "status",
+            "n": 5,
+            "who": "target"
+          }
+        ],
+        "text": "Deal @6@ damage. Apply 5 Smolder."
+      },
+      "vfx": "fire"
+    },
+    "historical_atoms": {
+      "base": [
+        "add_target",
+        "other_observable_dmg"
+      ],
+      "up": [
+        "add_target",
+        "other_observable_dmg"
+      ]
+    }
+  },
+  "formal_eligibility": false,
+  "full_card_bindings": {
+    "bloodRite": {
+      "full_card": {
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "loseHp",
+            "n": 3
+          },
+          {
+            "kind": "energy",
+            "n": 2
+          },
+          {
+            "id": "bloodfire",
+            "kind": "status",
+            "n": 1,
+            "who": "self"
+          }
+        ],
+        "name": "Blood for Oil",
+        "rarity": "uncommon",
+        "target": "self",
+        "text": "Lose 3 HP. Gain 2 Energy. Ashwarden: gain 1 Bloodfire.",
+        "type": "skill",
+        "up": {
+          "effects": [
+            {
+              "kind": "loseHp",
+              "n": 3
+            },
+            {
+              "kind": "energy",
+              "n": 3
+            },
+            {
+              "id": "bloodfire",
+              "kind": "status",
+              "n": 1,
+              "who": "self"
+            }
+          ],
+          "text": "Lose 3 HP. Gain 3 Energy. Ashwarden: gain 1 Bloodfire."
+        },
+        "vfx": "void"
+      },
+      "variants": {
+        "base": [
+          "other_observable_energy",
+          "other_observable_loseHp",
+          "visible_marker"
+        ],
+        "up": [
+          "other_observable_energy",
+          "other_observable_loseHp",
+          "visible_marker"
+        ]
+      }
+    },
+    "catalyst": {
+      "full_card": {
+        "cost": 1,
+        "effects": [
+          {
+            "id": "catalyst",
+            "kind": "special",
+            "mistboundBonus": 1,
+            "n": 2
+          }
+        ],
+        "exhaust": true,
+        "name": "Bellows",
+        "rarity": "rare",
+        "target": "enemy",
+        "text": "Double an enemy's Smolder. If Mistbound, consume it to triple instead. Kindle.",
+        "type": "skill",
+        "up": {
+          "effects": [
+            {
+              "id": "catalyst",
+              "kind": "special",
+              "mistboundBonus": 1,
+              "n": 3
+            }
+          ],
+          "text": "Triple an enemy's Smolder. If Mistbound, consume it to quadruple instead. Kindle."
+        },
+        "vfx": "poison"
+      },
+      "variants": {
+        "base": [
+          "integer_scale_target"
+        ],
+        "up": [
+          "integer_scale_target"
+        ]
+      }
+    },
+    "leechBlade": {
+      "full_card": {
+        "cost": 2,
+        "effects": [
+          {
+            "bonus": 10,
+            "id": "leech",
+            "kind": "special",
+            "n": 9
+          }
+        ],
+        "name": "Thirsting Shard",
+        "rarity": "uncommon",
+        "target": "enemy",
+        "text": "Deal @9@ damage. Heal for half the unblocked damage. Ashwarden: consume Bloodfire to deal @10@ more.",
+        "type": "attack",
+        "up": {
+          "effects": [
+            {
+              "bonus": 12,
+              "id": "leech",
+              "kind": "special",
+              "n": 13
+            }
+          ],
+          "text": "Deal @13@ damage. Heal for half the unblocked damage. Ashwarden: consume Bloodfire to deal @12@ more."
+        },
+        "vfx": "void"
+      },
+      "variants": {
+        "base": [
+          "other_observable_leech"
+        ],
+        "up": [
+          "other_observable_leech"
+        ]
+      }
+    },
+    "phantomBlades": {
+      "full_card": {
+        "cost": 1,
+        "effects": [
+          {
+            "id": "phantom",
+            "kind": "special",
+            "n": 3
+          }
+        ],
+        "name": "Phantom Blades",
+        "rarity": "rare",
+        "target": "enemy",
+        "text": "Deal @3@ damage for each card in your hand.",
+        "type": "attack",
+        "up": {
+          "effects": [
+            {
+              "id": "phantom",
+              "kind": "special",
+              "n": 4
+            }
+          ],
+          "text": "Deal @4@ damage for each card in your hand."
+        },
+        "vfx": "pierce"
+      },
+      "variants": {
+        "base": [
+          "other_observable_phantom"
+        ],
+        "up": [
+          "other_observable_phantom"
+        ]
+      }
+    },
+    "preparation": {
+      "full_card": {
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 2
+          }
+        ],
+        "exhaust": true,
+        "name": "Tinder",
+        "rarity": "common",
+        "target": "self",
+        "text": "Draw 2 cards. Kindle.",
+        "type": "skill",
+        "up": {
+          "effects": [
+            {
+              "kind": "draw",
+              "n": 2
+            }
+          ],
+          "exhaust": false,
+          "text": "Draw 2 cards."
+        },
+        "vfx": "fire"
+      },
+      "variants": {
+        "base": [
+          "other_observable_draw"
+        ],
+        "up": [
+          "other_observable_draw"
+        ]
+      }
+    },
+    "surge": {
+      "full_card": {
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "energy",
+            "n": 1
+          },
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "exhaust": true,
+        "name": "Struck Match",
+        "rarity": "uncommon",
+        "target": "self",
+        "text": "Gain 1 Energy. Draw 1 card. Kindle.",
+        "type": "skill",
+        "up": {
+          "effects": [
+            {
+              "kind": "energy",
+              "n": 2
+            },
+            {
+              "kind": "draw",
+              "n": 1
+            }
+          ],
+          "text": "Gain 2 Energy. Draw 1 card. Kindle."
+        },
+        "vfx": "fire"
+      },
+      "variants": {
+        "base": [
+          "other_observable_draw",
+          "other_observable_energy"
+        ],
+        "up": [
+          "other_observable_draw",
+          "other_observable_energy"
+        ]
+      }
+    },
+    "toxicMist": {
+      "full_card": {
+        "cost": 1,
+        "effects": [
+          {
+            "id": "poison",
+            "kind": "status",
+            "n": 4,
+            "who": "allEnemies"
+          },
+          {
+            "id": "mistbound",
+            "kind": "status",
+            "n": 1,
+            "who": "allEnemies"
+          }
+        ],
+        "name": "Ashcloud",
+        "rarity": "uncommon",
+        "target": "allEnemies",
+        "text": "Apply 4 Smolder to ALL enemies. Ashwarden: make them Mistbound.",
+        "type": "skill",
+        "up": {
+          "effects": [
+            {
+              "id": "poison",
+              "kind": "status",
+              "n": 6,
+              "who": "allEnemies"
+            },
+            {
+              "id": "mistbound",
+              "kind": "status",
+              "n": 1,
+              "who": "allEnemies"
+            }
+          ],
+          "text": "Apply 6 Smolder to ALL enemies. Ashwarden: make them Mistbound."
+        },
+        "vfx": "poison"
+      },
+      "variants": {
+        "base": [
+          "add_all",
+          "visible_marker"
+        ],
+        "up": [
+          "add_all",
+          "visible_marker"
+        ]
+      }
+    }
+  },
+  "full_scope_obligations_not_discharged": [
+    "A complete source-bound applicable closed/admitted component library, including the precisely scoped Emberglass/Kindle and other retained closures rather than assumed summary labels.",
+    "An explicit permitted framing/port-rebinding/decomposition algebra and proof that the comparison covers it; names and a selection of old packages do not define this algebra.",
+    "A full observable relation including public queries, acquisition and lifecycle for any proposed background-rebound comparator. Equal local runtime bodies do not supply it."
+  ],
+  "integer_width_bits": 64,
+  "modulus": 8,
+  "native_producer": [
+    {
+      "in_kernel_closure": false,
+      "positive_background_each_enemy": 8,
+      "residue_after_source": [
+        4,
+        0
+      ],
+      "selected_stock_after_source": 12,
+      "source_addition": 4,
+      "variant": "base"
+    },
+    {
+      "in_kernel_closure": false,
+      "positive_background_each_enemy": 8,
+      "residue_after_source": [
+        5,
+        0
+      ],
+      "selected_stock_after_source": 13,
+      "source_addition": 5,
+      "variant": "up"
+    }
+  ],
+  "new_independent_samples": 0,
+  "new_native_runs": 0,
+  "opens_population_confirmation": false,
+  "p9_certified": false,
+  "packages_admitted": 0,
+  "proof": [
+    "Inspect one complete producer action with two living enemies, positive poison 8 on each, no Venomous, a surviving source target and no phase advance. This is a symbolic interface context, not a sampled natural run or a purity criterion.",
+    "The registered poison producer applies every nonzero poison addition to ALL living enemies. Any such operation necessarily emits an untargeted-poison event. Later cancellation cannot erase that observable event. Splitting its target loop changes source multiplicity and is not a carrier rename.",
+    "Discarding that generator from a putative matching trace leaves integer poison multiplications, linear transfer/deletion and operations that do not inject enemy poison. The residue fixed point is an overapproximation of arbitrarily many such operations, including coefficient changes, guarded choice and interleaving.",
+    "All compatible poison stocks remain divisible by 8. This is preserved even under signed 64-bit wraparound because 8 divides 2**64. Current base/up VenomStrike yields 12/13 from selected stock 8 while leaving the other stock 8; neither is in that closure.",
+    "The argument refutes these registered-role decompositions and composites, not just a few sampled words. It does not establish a full closed-family inventory or source-complete observational equivalence."
+  ],
+  "registered_hand": {
+    "activation": "At least one final deck contains Phantom Blades and Preparation or Surge; Phantom Blades and a present producer are both played; phantomDamage is positive.",
+    "aspect": "ashwarden",
+    "consumer": "phantomBlades",
+    "lockTokens": [
+      "preparation",
+      "surge",
+      "phantomBlades"
+    ],
+    "producers": [
+      "preparation",
+      "surge"
+    ]
+  },
+  "registered_packages": {
+    "ash-bloodfire-leech": {
+      "appliedMetric": "bloodfireApplied",
+      "aspect": "ashwarden",
+      "cardMetric": "damage",
+      "cardMetricDirection": 1,
+      "consumedMetric": "bloodfireConsumed",
+      "consumer": "leechBlade",
+      "mediator": "player-bloodfire",
+      "producer": "bloodRite"
+    },
+    "ash-poison-catalyst": {
+      "appliedMetric": "mistboundAppliedByToxicMist",
+      "aspect": "ashwarden",
+      "cardMetric": "status:poison",
+      "cardMetricDirection": 1,
+      "consumedMetric": "mistboundConsumedByCatalyst",
+      "consumer": "catalyst",
+      "mediator": "enemy-mistbound",
+      "producer": "toxicMist"
+    }
+  },
+  "residue_fixed_point": [
+    [
+      0,
+      0
+    ]
+  ],
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "scope_countermodel": [
+    "The historical BACKGROUND also contains a target-poison VenomStrike. If it can replace the registered producer, the generator add_target enters the algebra and the refutation is no longer applicable.",
+    "The native Catalyst kernel is inherited. Rebinding that background producer and using the native kernel gives the source-level current role expression, not an equivalence of the archived complete product: its public-preview frame is already known to differ.",
+    "Whether this is an allowed closed-family decomposition must be established from the exact closure/grammar authority. Do not decide by silently excluding background rebinding, or by labelling every background primitive closed."
+  ],
+  "source_bindings": {
+    "_jump_smolder": "f9afa522a2286bb075e15fe340cc59ecea8e06f9637415a46550ce9f8f732a2b",
+    "_on_enemy_death": "337d6d90dac2178c5f2ca4f6e458f1dede9c2202f3a3d644b7032ff0fbac9126",
+    "end_turn": "b3109928a2702f5ea553ecc69716caa307f360f655010b88bb8479af41641fef",
+    "historical_catalyst": "a726bec3ecdee4e8913df24d0344de6ae5e900450a5f57c75aaef0cf12d7a6e5",
+    "native_catalyst": "72fd61446a71e60ae48c6455c9c1b2809edb5934628a7f2d88efa628476f41b3",
+    "play_card": "cb14f29e267e2828ffa66e8638a8b3db9d47ca0557a2112e50d3da4fb89708fd"
+  },
+  "status": "SCOPED_UNBOUNDED_COMPOSITION_REFUTATION_WITH_BACKGROUND_REBINDING_COUNTERMODEL"
+}

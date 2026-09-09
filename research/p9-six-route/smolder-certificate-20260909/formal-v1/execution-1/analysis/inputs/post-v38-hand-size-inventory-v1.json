@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Does immutable Ashwarden hand-size-payoff evidence remain source-identical and provide current whole-run policy sensitivity, reachability and separation from Poison; if not, do the frozen acquisition states give a first-acquisition state lock measured decision value?",
+  "sourceEvidenceProtocol": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e",
+  "retrospectiveScope": "This is a declared retrospective, zero-new-row reconciliation and necessary-capacity audit. Immutable #524/#525 complementarity is not re-estimated. Whole-run activation uses only registered producer play, Phantom Blades play/direct damage and final-deck acquisition witnesses. The state-lock capacity screen does not infer acquisition order or an unexecuted intervention outcome; a pass can authorise only the exact binary knob and identity preflight.",
+  "immutableEvidence": {
+    "packageOrderHeldoutProtocol": {
+      "path": "protocols/post-v38-package-order-heldout-v1.json",
+      "sha256": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e"
+    },
+    "packageOrderHeldoutSummary": {
+      "path": "summaries/post-v38-package-order-heldout-v1.json",
+      "sha256": "853df2c3988270f3d1236b51177b85d014b92e200bad52fc05a66059a3985070"
+    },
+    "packageOrderHeldoutAudit": {
+      "path": "summaries/post-v38-package-order-heldout-v1-audit.json",
+      "sha256": "77361eb742de4c916c0ffc7e764f46af5df7ee610d0156740819c21daa5df8a6"
+    },
+    "packageCommitmentCapacityProtocol": {
+      "path": "protocols/post-v38-package-commitment-capacity-v2.json",
+      "sha256": "928f1e84ffa6b8975f978e2e2224a1f15d28bebee39f9df9d0e04b4a7638c0b5"
+    },
+    "packageCommitmentCapacitySummary": {
+      "path": "summaries/post-v38-package-commitment-capacity-v2.json",
+      "sha256": "ebd909bbd23bc403e18894637dcb3041d1c4a240bb0e2464ae5eaa39b55cb4f2"
+    },
+    "exactCurrentMainToolchain": {
+      "path": "artifacts/godot-4.7.1-toolchain-v1.json",
+      "sha256": "0d06b45fe5be03b1a48c6c970103b235e4c47fbacc308dcbd539b7e480771a5b"
+    }
+  },
+  "immutableGitEvidence": {
+    "issue524TerminalFinding": {
+      "commit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "path": "research/issue-524/artifacts/scope-insufficiency-finding-v1.json",
+      "sha256": "acecbae3171e739aeae4fe71dde2d0635ce98c453c58400de9bde627b2368fa2"
+    },
+    "issue524PackageGate": {
+      "commit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "path": "research/issue-524/artifacts/stage-b-mechanism-package-gate-v1.json",
+      "sha256": "c7f12c85998b86a345d84c28593256676731733e605a38fbb57b46db777e313a"
+    },
+    "issue525TerminalFinding": {
+      "commit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "path": "research/issue-525/artifacts/terminal-stop-finding-v1.json",
+      "sha256": "46b10157cbc1d9abb60a2a2a5a68cbffe8b601088842cb6f7f02dae65953fa1c"
+    },
+    "issue525HandSizePositiveControl": {
+      "commit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "path": "research/issue-525/artifacts/phase-c-positive-control-v1.json",
+      "sha256": "202eb434198aaa4df76a16c0577a804a88bfbd7dc40973c445f85f1bd110374"
+    }
+  },
+  "immutableInputs": {
+    "runnerSha256": "54d25da12337954b996787d0ec0628dda5854c9dbb6b19380674690ace285736"
+  },
+  "sourceReconciliation": {
+    "commits": [
+      "0f005282e8881d970da284f4868caedf60cc8142",
+      "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+    ],
+    "files": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    },
+    "claim": "The #525 source commit and current main are byte-identical for content, combat rules, pilot and whole-run simulator before research-only instrumentation."
+  },
+  "handSizeCards": [
+    "preparation",
+    "surge",
+    "phantomBlades"
+  ],
+  "contentReconciliation": {
+    "live": {
+      "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "handSizeCardPacketSha256": "6dacfd41ef2bdaca01d387130d95506de5d213baeb6049ea02e3180167659f4f"
+    },
+    "frozenCandidate": {
+      "contentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+      "handSizeCardPacketSha256": "6dacfd41ef2bdaca01d387130d95506de5d213baeb6049ea02e3180167659f4f"
+    }
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "records": 478125,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok"
+  },
+  "arms": [
+    "structuralCandidate",
+    "structuralNull",
+    "liveBaseline"
+  ],
+  "decisionArm": "structuralNull",
+  "packages": {
+    "dusk-scoreline": {
+      "aspect": "duskblade",
+      "producers": [
+        "chisel"
+      ],
+      "consumer": "executioner",
+      "consumedMetric": "scorelineConsumed",
+      "lockTokens": [
+        "executioner"
+      ]
+    },
+    "dusk-afterimage-guard": {
+      "aspect": "duskblade",
+      "producers": [
+        "defend"
+      ],
+      "consumer": "guardedStrike",
+      "consumedMetric": "afterimageConsumed",
+      "lockTokens": [
+        "guardedStrike"
+      ]
+    },
+    "ash-hand-size-payoff": {
+      "aspect": "ashwarden",
+      "producers": [
+        "preparation",
+        "surge"
+      ],
+      "consumer": "phantomBlades",
+      "lockTokens": [
+        "preparation",
+        "surge",
+        "phantomBlades"
+      ],
+      "activation": "At least one final deck contains Phantom Blades and Preparation or Surge; Phantom Blades and a present producer are both played; phantomDamage is positive."
+    },
+    "ash-poison-catalyst": {
+      "aspect": "ashwarden",
+      "producers": [
+        "toxicMist"
+      ],
+      "consumer": "catalyst",
+      "consumedMetric": "mistboundConsumedByCatalyst",
+      "lockTokens": [
+        "toxicMist",
+        "catalyst"
+      ]
+    }
+  },
+  "aspectPackages": {
+    "duskblade": [
+      "dusk-scoreline",
+      "dusk-afterimage-guard"
+    ],
+    "ashwarden": [
+      "ash-hand-size-payoff",
+      "ash-poison-catalyst"
+    ]
+  },
+  "stateLock": {
+    "name": "firstAcquisitionPackageLock",
+    "levels": [
+      0,
+      1
+    ],
+    "null": "Level 0 must reproduce the frozen path, fields, policy, RNG and results exactly.",
+    "enabled": "At each policy card-acquisition decision, inspect only the current deck. If it contains at least one registered non-starter lock token from exactly one within-aspect package, cards registered only to the other package are ineligible in reward, card-pick event and policy shop acquisition. If neither or both token sets are present, no card is filtered. No persistent state or fitted threshold exists.",
+    "intendedMediator": "Card-acquisition eligibility after the first unambiguous package-specific card enters the deck.",
+    "aliasStructure": "Level 1 is invalid with universal packageOrder, positive-median policyPackageOrder or normalised-payoff policyPackageCommitment enabled; those grammars are closed.",
+    "identityBeforeRows": "Exact null, uncommitted, left-committed, right-committed, ambiguous-both, unrelated-card, reward, event and policy-shop surfaces must pass before any whole-run row."
+  },
+  "estimands": {
+    "sourceIdentity": "Exact Git-blob hashes at #525 source and current main, plus exact live/candidate hand-size card packets.",
+    "packageSupport": "Per arm and package, root-550 active/inactive, final-pair reachable and consumer-reached policy counts.",
+    "functionalSeparation": "Within each aspect and arm, active-policy left-only, right-only and cross-active counts.",
+    "stateLockCapacity": "Within each aspect and arm, policy counts acquiring only the left lock-token set, only the right set or both; do not infer which token arrived first.",
+    "faults": "Count policy rows with a non-empty error or stall/error outcome."
+  },
+  "gates": {
+    "minimumActiveAndInactivePolicies": 32,
+    "minimumReachablePolicies": 16,
+    "minimumExclusivePolicies": 8,
+    "minimumCrossActivePolicies": 16,
+    "provenance": "The 32/32 sensitivity, 16 reachability and eight separation minima are inherited unchanged from the package-order held-out protocol. Sixteen cross-active/dual-token policies is the unchanged reachability minimum applied to a decision-changing interference mediator."
+  },
+  "budget": {
+    "sourceWholeRunRows": 4608,
+    "sourcePolicyRows": 3072,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecution": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "admission": "On structuralNull, every package has at least 32 active and 32 inactive policies, at least 16 final-pair and consumer-reached policies, both aspect pairs have at least eight package-only policies in each direction, and faults are zero.",
+    "stateLock": "If admission fails, both packages in both aspects still have at least 32 active and 16 reachable/consumer-reached policies; each aspect has at least 16 cross-active and dual-token policies, at least eight left-token-only and eight right-token-only policies, and zero faults.",
+    "futility": "Neither the full current inventory nor the state-lock necessary-capacity gate passes on structuralNull.",
+    "inconclusive": "Any immutable Git/file/content/ledger hash, complete rectangle, exact policy identity, numeric input or wall-time assertion fails before the deterministic decision.",
+    "admissionAuthority": "Admit the current four-package inventory for matched detector construction without promoting the closed scalar or order grammars. This does not authorise detector calibration, product promotion or protected seeds by itself.",
+    "stateLockAuthority": "Authorise implementation of exactly the binary firstAcquisitionPackageLock research knob and its preregistered identity surfaces. Do not authorise a simulator row until identity passes; do not infer acquisition order, tune a threshold, add ML/RL, admit a detector, promote product content or spend protected seeds.",
+    "futilityAuthority": "Close the first-acquisition state-lock direction before implementation and continue to a materially different evidence-backed structure inside issue #421.",
+    "inconclusiveAuthority": "Record no decision and run no simulator row until the immutable evidence fault is resolved."
+  }
+}
