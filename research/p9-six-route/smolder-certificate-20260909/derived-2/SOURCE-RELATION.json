@@ -1,0 +1,54 @@
+{
+  "status": "EXACT_MISTBOUND_EXTENSION_AND_SHARED_NATIVE_KERNEL_SEPARATED",
+  "input_sha256": {
+    "SOURCE-INDEX.json": "93d94268da77ab53385046f83ddc461f3d0501dfa50b018145adf5383457743f",
+    "HISTORICAL-FUNCTIONS.json": "7158a8e070f583f5c5fd959183364f75c17009139adc27324bcfa504034177b0",
+    "NATIVE-FUNCTIONS.json": "3998de0cb74fca7ad702c2d95799b37562589403f5abf15552393d7d1257c145"
+  },
+  "shared_complete_function_hashes": {
+    "_apply_start_relics": "7745592ae546fe4c9fc13d7e608baa8b036fbc09d33c0b398bb43d03882664c2",
+    "_start_player_turn": "0b838d849718e6f0d03420835ed2419a8a33dedd9ba2fc058a94aafb21ce0a01",
+    "gain_embers": "324e59d5791a81e3376066e03ced984a493a2e2e50f100899d24bed85c898d59",
+    "damage_player": "3870dca3697463cb9e770d7875a5a009072822b90dbcf0d22fbdc23380dab0e3",
+    "_on_enemy_death": "337d6d90dac2178c5f2ca4f6e458f1dede9c2202f3a3d644b7032ff0fbac9126",
+    "_shatter_enemy": "d36c91097b745353b5d75b069572cd244a101116b8849aa8042e542b9506bce8",
+    "_jump_smolder": "f9afa522a2286bb075e15fe340cc59ecea8e06f9637415a46550ce9f8f732a2b",
+    "play_card": "cb14f29e267e2828ffa66e8638a8b3db9d47ca0557a2112e50d3da4fb89708fd",
+    "end_turn": "b3109928a2702f5ea553ecc69716caa307f360f655010b88bb8479af41641fef",
+    "use_potion": "bd126f2a0c4b0a94398739ddba1cacf1a84ab5450b00ecfe57cf1a7b225620dd"
+  },
+  "consumer_relation": {
+    "native_case": "\t\t\"catalyst\":\n\t\t\tvar poison: int = _sget(target.statuses, \"poison\")\n\t\t\tif poison > 0:\n\t\t\t\tadd_status_enemy(cb, target, \"poison\", poison * (_ji(fx[\"n\"]) - 1), run)",
+    "historical_case": "\t\t\"catalyst\":\n\t\t\tvar poison: int = _sget(target.statuses, \"poison\")\n\t\t\tif poison > 0:\n\t\t\t\tvar multiplier: int = _ji(fx[\"n\"])\n\t\t\t\tif run.aspect == 1 and _sget(target.statuses, \"mistbound\") > 0:\n\t\t\t\t\tmultiplier += _ji(fx.get(\"mistboundBonus\", 0))\n\t\t\t\t\tadd_status_enemy(cb, target, \"mistbound\", -1, run)\n\t\t\t\tadd_status_enemy(cb, target, \"poison\", poison * (multiplier - 1), run)",
+    "residual_after_explicit_extension_removal": "\t\t\"catalyst\":\n\t\t\tvar poison: int = _sget(target.statuses, \"poison\")\n\t\t\tif poison > 0:\n\t\t\t\tadd_status_enemy(cb, target, \"poison\", poison * (_ji(fx[\"n\"]) - 1), run)",
+    "same_residual_kernel": true,
+    "transformation_scope": "Read-only decomposition of the archived source case, not an authorised edit to old evidence or current product.",
+    "semantic_relation": "For positive target poison q and zero mistbound, the historical consumer body and native consumer body have the same native call. With positive mistbound the historical body also emits its consumption event, and uses m+bonus instead of m. At q<=0 neither body consumes mistbound or amplifies poison.",
+    "not_full_package_equivalence": true
+  },
+  "producer_relation": {
+    "same_complete_native_source_command": false,
+    "native_venomStrike": "Single-target Attack: ordinary hit first; poison only if the target survives. The one play envelope, chip settlement and hooks remain.",
+    "native_toxicMist": "All-living-target Skill: poison without a source hit; different target cardinality and damage/death dependence.",
+    "historical_registered_mediator": "mistbound, not just the native poison stock",
+    "distinguishing_contexts": [
+      "Two living targets retain non-selected target identity: native ToxicMist touches both, native VenomStrike does not.",
+      "A source hit lethally removes its target: native VenomStrike cannot then add its poison to that target.",
+      "Positive mistbound is visibly consumed by the old Catalyst extension; native Catalyst has no such operation."
+    ],
+    "scope": "Source-level counterexamples for the declared command/extension aliases. No claim that ordinary damage creates a new strategy family."
+  },
+  "disposition": {
+    "historical_mistbound_support_failure_is_native_poison_failure": false,
+    "native_amplifier_is_new_primitive": false,
+    "native_chain_novelty_relative_to_all_closed_compositions": "NOT_ESTABLISHED",
+    "complete_formal_package_admission": "NOT_ESTABLISHED",
+    "historical_whole_run_rows_carry_to_unchanged_main": "NOT_ESTABLISHED; content/controller/observable dependencies differ.",
+    "next_missing_formal_evidence": "A full registered-package transition comparison, including permitted shared-background composition and acquisition context. Do not substitute source inequality or the no-mistbound residual for that proof."
+  },
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT"
+}

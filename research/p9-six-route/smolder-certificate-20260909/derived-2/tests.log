@@ -1,0 +1,39 @@
+test_bad_amp_amount_rejected (test_audit.AuditTests.test_bad_amp_amount_rejected) ... ok
+test_command_sequence_fails (test_audit.AuditTests.test_command_sequence_fails) ... ok
+test_complete_policy_not_row_count (test_audit.AuditTests.test_complete_policy_not_row_count) ... ok
+test_conservative_transfer_keeps_possible (test_audit.AuditTests.test_conservative_transfer_keeps_possible) ... ok
+test_decay_is_not_direct_attribution (test_audit.AuditTests.test_decay_is_not_direct_attribution) ... ok
+test_direct_complete_stock_chain (test_audit.AuditTests.test_direct_complete_stock_chain) ... ok
+test_duplicate_case_rejected (test_audit.AuditTests.test_duplicate_case_rejected) ... ok
+test_duplicate_enemy_identity_fails_closed (test_audit.AuditTests.test_duplicate_enemy_identity_fails_closed) ... ok
+test_duplicate_row_end_fails (test_audit.AuditTests.test_duplicate_row_end_fails) ... ok
+test_empty_mediator_not_positive (test_audit.AuditTests.test_empty_mediator_not_positive) ... ok
+test_exact_source_case_mutation_fails (test_audit.AuditTests.test_exact_source_case_mutation_fails) ... ok
+test_extra_venomous_prevents_clean (test_audit.AuditTests.test_extra_venomous_prevents_clean) ... ok
+test_failed_source_not_counted (test_audit.AuditTests.test_failed_source_not_counted) ... ok
+test_generated_source_is_only_possible (test_audit.AuditTests.test_generated_source_is_only_possible) ... ok
+test_historical_consumption_mutation_rejected (test_audit.AuditTests.test_historical_consumption_mutation_rejected) ... ok
+test_lethal_source_does_not_add (test_audit.AuditTests.test_lethal_source_does_not_add) ... ok
+test_missing_seed_rejected (test_audit.AuditTests.test_missing_seed_rejected) ... ok
+test_missing_trace_row_fails (test_audit.AuditTests.test_missing_trace_row_fails) ... ok
+test_mutated_after_stock_never_clean (test_audit.AuditTests.test_mutated_after_stock_never_clean) ... ok
+test_new_fight_clears_all (test_audit.AuditTests.test_new_fight_clears_all) ... ok
+test_non_poison_command_preserves_clean (test_audit.AuditTests.test_non_poison_command_preserves_clean) ... ok
+test_other_poison_removes_clean_only (test_audit.AuditTests.test_other_poison_removes_clean_only) ... ok
+test_positive_amp_at_zero_rejected (test_audit.AuditTests.test_positive_amp_at_zero_rejected) ... ok
+test_residual_source_exact (test_audit.AuditTests.test_residual_source_exact) ... ok
+test_retarget_not_a_direct_chain (test_audit.AuditTests.test_retarget_not_a_direct_chain) ... ok
+test_short_rectangle_rejected (test_audit.AuditTests.test_short_rectangle_rejected) ... ok
+test_source_after_consumer_not_retroactive (test_audit.AuditTests.test_source_after_consumer_not_retroactive) ... ok
+test_source_and_immediate_jump (test_audit.AuditTests.test_source_and_immediate_jump) ... ok
+test_status_mutation_rejected (test_audit.AuditTests.test_status_mutation_rejected) ... ok
+test_unassigned_trace_fails (test_audit.AuditTests.test_unassigned_trace_fails) ... ok
+test_unrelated_source_not_venom (test_audit.AuditTests.test_unrelated_source_not_venom) ... ok
+test_upgrade_mismatch_rejected (test_audit.AuditTests.test_upgrade_mismatch_rejected) ... ok
+test_upgraded_amplifier (test_audit.AuditTests.test_upgraded_amplifier) ... ok
+test_zero_total_clears_provenance (test_audit.AuditTests.test_zero_total_clears_provenance) ... ok
+
+----------------------------------------------------------------------
+Ran 34 tests in 0.014s
+
+OK
