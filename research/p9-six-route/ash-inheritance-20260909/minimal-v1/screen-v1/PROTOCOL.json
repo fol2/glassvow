@@ -1,0 +1,68 @@
+{
+  "kind": "PRESELECTED_MINIMUM_BLOODFIRE_SIGNED_CONTROL_SCREEN",
+  "input_head": "1d37d516660760bfcc90348108a0b08d0e9147eb",
+  "product_main": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "question": "Does the one already source-bound minimum Bloodfire delta pass the necessary signed RandomBuild movement, ceiling and fault screen on its already preselected cohort?",
+  "entry": "Existing BLOODFIRE_MINIMAL_PREFLIGHT_PASS and complete cold readback. No repeat of its native fixtures.",
+  "candidate": "Exact build.py output already captured in execution-1/ASSEMBLY.json. Only inherited Bloodfire on unchanged native background; not either failed bulk candidate. No additional scalar or policy choice.",
+  "seed0": 73309200,
+  "seeds_per_grid": 128,
+  "grids": [
+    "duskblade:v0",
+    "duskblade:v5",
+    "ashwarden:v0",
+    "ashwarden:v5"
+  ],
+  "arms": [
+    "unchanged main signed arm2",
+    "minimum Bloodfire signed arm2"
+  ],
+  "outcome_rows": 1024,
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "git_blob_inputs": {
+    "research/p9-six-route/ash-inheritance-20260909/minimal-v1/build.py": "97364358098369978133e8648410e2d8f145f9c7",
+    "research/p9-six-route/ash-inheritance-20260909/minimal-v1/PROTOCOL.json": "88a0abcd9047d3c4c553fa6bd85707fc7705713e",
+    "research/p9-six-route/ash-inheritance-20260909/minimal-v1/execution-1/ASSEMBLY.json": "944d3f9d84cac867da35baa496a0ce2dea11054f",
+    "research/p9-six-route/ash-inheritance-20260909/minimal-v1/execution-1/TERMINAL.json": "82b7b74354cdc3d3fb0a6d2bdce2e9c3f5c1806a",
+    "research/p9-six-route/ash-inheritance-20260909/minimal-v1/execution-1/REMOTE-READBACK.json": "c08fae2d6c6bf1aaf946aea77f0828b38d2ba750",
+    "research/p9-six-route/guardrail-confirmation-20260909/PROTOCOL.json": "c8cf25e17d53e22ecbf819297b95e482c51c69a2",
+    "research/p9-six-route/guardrail-confirmation-20260909/probe.gd": "1b8931a4a6f9fa989c135d902249487c1967265c",
+    "research/p9-six-route/guardrail-confirmation-20260909/read_control.py": "2515bcbb7d9dc998d81654882abaa9173cd66c82",
+    "research/p9-six-route/guardrail-confirmation-20260909/execute_control.py": "45ec7b22bd6c194256c5cfe18e7b8c99dac1d480"
+  },
+  "own_sha256": {
+    "screen.py": "52d5ebf0bea2e691f889ca3d9e33b2b9d03a53de51260ad495802c313bc5e102",
+    "test_screen.py": "3e0af120b97001b3d5dd925b2803d1747560501b131bb7c1929866612a1aef6c"
+  },
+  "guardrails": {
+    "candidate_random_build_win_ceiling": 0.5,
+    "absolute_random_build_win_movement_maximum": 0.1,
+    "candidate_faults": 0,
+    "baseline_faults": 0
+  },
+  "estimator": "Reuse exact read_control.py, including integer boundary tests and report-only paired intervals. No replacement RandomBuild, pooled grids or interval override.",
+  "freeze": "These committed sources fix deterministic generation of RESOLVED-PROTOCOL and exact runtime manifests. Those generated identities and complete runtime source are committed before any outcome. Two zero-outcome metadata probes check bindings before population execution.",
+  "progress": "Publish each complete matched pair without looking at its win totals; evaluate scientifically only after the complete eight-cell rectangle. Cold checkout reconstructs and re-reads the full result without Godot.",
+  "containment": {
+    "workers": 2,
+    "per_native_process_seconds": 120,
+    "raw_bytes_per_cell": 67108864
+  },
+  "decision": {
+    "pass": "Necessary screen only. Continue complete current-candidate causal/policy/economy/peer/descriptor evidence, with no inherited empirical outcome assumed to carry.",
+    "fail": "Close this exact candidate screen. Do not alter bonus, controller, seeds or threshold, extend, pool old results, or execute a costly package-confirmation stage for this failed candidate.",
+    "inconclusive": "Preserve partial captures and exact defect. Correct delivery defects under unchanged contract; do not label infrastructure failures scientific failures or rerun completed observations."
+  },
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT; unchanged shared signed-arm driver/reader. Source identity, old-candidate substitution, failed preflight, output collision, wrong-source and readback corruption are tested. No old evidence modified.",
+  "no_repeat": [
+    "v25",
+    "frozen model fitting",
+    "Hand support",
+    "failed bulk candidates",
+    "native capacity",
+    "Smolder/Fervor alias studies",
+    "Bloodfire minimal preflight"
+  ],
+  "packages_admitted": 0,
+  "p9_certified": false
+}
