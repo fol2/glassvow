@@ -1,0 +1,43 @@
+{
+  "status": "GUARDED_WITHIN_CARD_EXPANSION_EQUIVALENT_ON_ALL_FIXED_CONTEXTS",
+  "p9_certified": false,
+  "packages_admitted": 0,
+  "new_independent_samples": 0,
+  "constructed_traces": 208,
+  "raw_bytes": 8460529,
+  "raw_sha256": "fed9a5aae820725abbe79c6c44626665a759ee58ab28aef3bd6b2380b1a32547",
+  "files": {
+    "import.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "parse.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "import.stdout": {
+      "bytes": 3028,
+      "sha256": "5a742a0ad47f6154a3155907bd7f3fe64f5777c9ba1f1f030cd14a729e154510"
+    },
+    "parse.stdout": {
+      "bytes": 23,
+      "sha256": "abfd600ff21ef5aa23517b4a9d50d5914f276aa3518d079edb4b75093ed9dbdc"
+    },
+    "raw.ndjson.xz": {
+      "bytes": 45760,
+      "sha256": "04d6200b3709bec3331b1ca786c89b08137075d65bf9597dc34ce77b462db089"
+    },
+    "RESULTS.json": {
+      "bytes": 63575,
+      "sha256": "00c68c7d34a610d490ee620bb8668e1ae80275e0b5f22e3cad13489e6e51b8d8"
+    },
+    "native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    }
+  }
+}
