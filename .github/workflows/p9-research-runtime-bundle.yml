@@ -10,10 +10,10 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/smolder-certificate-20260909/formal-v1
+  STUDY: research/p9-six-route/smolder-certificate-20260909/registered-identity
 jobs:
   bundle:
-    name: Finish committed bounded comparison - no native samples
+    name: Exact original registration and semantic frame - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -26,42 +26,38 @@ jobs:
           fetch-depth: 1
           persist-credentials: true
           sparse-checkout: |
-            domain
-            content
-            research/p9-six-route/smolder-certificate-20260909
-      - name: Validate committed inputs; execute existing comparison and tests
+            research/p9-six-route/smolder-certificate-20260909/registered-identity
+      - name: Read exact Git sources; test and evaluate identity
         id: proof
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test ! -e "$STUDY/execution-1"
-          mkdir -p "$STUDY/execution-1"
+          mkdir "$STUDY/execution-1"
+          git fetch --filter=blob:none --no-tags --depth=1 origin 0f005282e8881d970da284f4868caedf60cc8142 2ed6cdb0302ba3aab5845a18d862841165e8aaf7 f305b95d9e1d173e5d8150289afab9688c0ea7f0 > "$STUDY/execution-1/git.stdout" 2> "$STUDY/execution-1/git.stderr"
           python3 - <<'PY'
           import hashlib,json,os,pathlib,subprocess,sys
           root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1'
-          expected={'PROTOCOL.json':'558a3b38572758db5b8b19404101946d94faa4c9','compare.py':'d95bac03c4321e3fd6c1d4ad2830b33dbe8df8cc','test_compare.py':'c9a0f6d2af4b6c2f790a4d125315985b5b8c0c19'}
-          records={}
-          for name,want in expected.items():
-              b=(root/name).read_bytes();got=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-              if got!=want:raise RuntimeError('SOURCE_IDENTITY:'+name)
-              records[name]={'bytes':len(b),'git_blob':got,'sha256':hashlib.sha256(b).hexdigest()}
+          expected={'identity.py':'6a8f2f0f38801d06b141ae603a68877d2705067edeb4fb7448c9ae50b5bc5b69','test_identity.py':'cbe1c62e52ff2672246db784ec88f1fcf93927b524fe1aa981bcc7035faee5a8'}
+          for name,digest in expected.items():
+              if hashlib.sha256((root/name).read_bytes()).hexdigest()!=digest:raise RuntimeError('SOURCE_IDENTITY:'+name)
           runs=[]
-          for name,cmd,cwd in [('tests',[sys.executable,'-m','unittest','-v','test_compare'],root),('comparison',[sys.executable,str(root/'compare.py'),'.',str(out/'analysis')],pathlib.Path('.'))]:
-              p=subprocess.run(cmd,cwd=cwd,capture_output=True,timeout=120)
+          commands=[('tests',[sys.executable,'-m','unittest','-v','test_identity'],root),('collect',[sys.executable,str(root/'identity.py'),'collect','.',str(out/'inputs')],pathlib.Path('.')),('analyse',[sys.executable,str(root/'identity.py'),'analyse',str(out/'inputs'),str(out/'RESULTS.json')],pathlib.Path('.'))]
+          for name,cmd,cwd in commands:
+              p=subprocess.run(cmd,cwd=cwd,capture_output=True,timeout=180)
               (out/(name+'.stdout')).write_bytes(p.stdout);(out/(name+'.stderr')).write_bytes(p.stderr)
               runs.append({'name':name,'command':cmd,'cwd':str(cwd),'returncode':p.returncode})
               if p.returncode:break
-          receipt={'source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'source_blobs':records,'commands':runs,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
+          receipt={'source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'source_sha256':expected,'commands':runs,'new_native_runs':0,'new_independent_samples':0,'p9_certified':False}
           (out/'EXECUTION.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          if len(runs)!=2 or any(r['returncode'] for r in runs):raise RuntimeError('EXECUTION_FAILURE')
-          result=json.loads((out/'analysis/RESULTS.json').read_bytes())
-          if result['formal_eligibility'] or result['opens_population_confirmation']:raise RuntimeError('UNAUTHORISED_PROMOTION')
-          print('COMPARISON_STATUS='+result['status'])
+          if len(runs)!=3 or any(r['returncode'] for r in runs):raise RuntimeError('IDENTITY_EXECUTION_FAILED')
+          result=json.loads((out/'RESULTS.json').read_bytes())
+          print('EQUAL_FRAME_FILES='+str(result['equal_source_files']))
+          print('REGISTERED_IDENTITIES='+json.dumps([{'candidate':r['candidate'],'edge':r['registered_edge'],'disposition':r['novelty_disposition']} for r in result['rows']],sort_keys=True))
           print((out/'tests.stderr').read_text())
           PY
-      - name: Preserve all available emitted evidence only
+      - name: Preserve complete available packet without touching current capsule
         if: always()
         shell: bash
         run: |
@@ -76,7 +72,7 @@ jobs:
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): retain bounded composition result without granting full eligibility'
+          git commit -m 'research(p9): preserve exact native registration identity and complete source frame'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -86,35 +82,31 @@ jobs:
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: |
-            domain
-            content
-            research/p9-six-route/smolder-certificate-20260909
-      - name: Read back bytes and reconstruct result without network or engine
+          sparse-checkout: research/p9-six-route/smolder-certificate-20260909/registered-identity
+      - name: Cold readback and offline identity proof reconstruction
         if: steps.proof.outcome == 'success'
         shell: bash
         run: |
           set -euo pipefail
-          python3 "cold/$STUDY/compare.py" cold "$RUNNER_TEMP/formal-readback" --offline-inputs "cold/$STUDY/execution-1/analysis/inputs"
+          python3 "cold/$STUDY/identity.py" analyse "cold/$STUDY/execution-1/inputs" "$RUNNER_TEMP/identity-replayed.json"
           python3 - <<'PY'
           import hashlib,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);items=[]
+          root=pathlib.Path(os.environ['STUDY']);entries=[]
           for p in sorted(root.rglob('*')):
               if not p.is_file():continue
               b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b,str(p)
-              items.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
-          out=root/'execution-1';replayed=pathlib.Path(os.environ['RUNNER_TEMP'])/'formal-readback'
-          for name in ('RESULTS.json','INPUTS.json'):
-              assert (out/'analysis'/name).read_bytes()==(replayed/name).read_bytes(),name
-          receipt={'kind':'COLD_CHECKOUT_BYTE_AND_OFFLINE_RESULT_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':items,'formal_eligibility':False,'new_native_runs':0,'new_independent_samples':0,'p9_certified':False}
-          (out/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          print('FORMAL_READBACK_FILES='+str(len(items)))
+              entries.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
+          result=root/'execution-1/RESULTS.json'
+          assert result.read_bytes()==(pathlib.Path(os.environ['RUNNER_TEMP'])/'identity-replayed.json').read_bytes()
+          receipt={'kind':'EXACT_REGISTERED_IDENTITY_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'result_sha256':hashlib.sha256(result.read_bytes()).hexdigest(),'files':entries,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
+          (root/'execution-1/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print('REGISTERED_IDENTITY_READBACK_FILES='+str(len(entries)))
           PY
           git add "$STUDY/execution-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record complete byte readback of scoped formal proof'
+          git commit -m 'research(p9): record cold-readback and offline reproduction of registration proof'
           test "$(git ls-remote origin refs/heads/research/p9-six-route-local-20260905 | cut -f1)" = "$PUBLISHED_HEAD"
           git push origin HEAD:refs/heads/research/p9-six-route-local-20260905
-      - name: Keep execution failures visible
+      - name: Fail closed on incomplete proof execution
         if: always()
         env:
           OUTCOME: ${{ steps.proof.outcome }}
