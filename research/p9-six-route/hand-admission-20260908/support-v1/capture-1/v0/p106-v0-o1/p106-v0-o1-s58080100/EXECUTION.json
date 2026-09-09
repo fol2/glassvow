@@ -1,0 +1,57 @@
+{
+  "config_id": "p106-v0-o1-s58080100",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p106-v0-o1/p106-v0-o1-s58080100/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p106-v0-o1/p106-v0-o1-s58080100/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p106-v0-o1/p106-v0-o1-s58080100/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 13.376332048999984,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 28714,
+      "sha256": "5846ad2f1b5577aa70c6400a4b6d8dab871e57a9201e2738559bd9d5525a7d21"
+    },
+    "trace.ndjson": {
+      "bytes": 5581826,
+      "sha256": "3726eb896bc340ddd3cc0e6b58890dabfbc1280e8d4868627f6695036efcf9c8"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 109020,
+      "sha256": "d55b2fbf0fbe8929bf5045c0a229c1563d57a23c97f9c1931562879026e7c4cd"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3220,
+      "sha256": "221b48b180c3adf6a298773d16c65ff3d834adf5e2ff14bfd7c73a35e2c13bc2"
+    },
+    "CONFIG.json": {
+      "bytes": 568,
+      "sha256": "445418175638e38bfd24aa76b3b5082de821483d1192ce884271534d718e42f6"
+    },
+    "CELL.json": {
+      "bytes": 512,
+      "sha256": "a14aa2f042c8aa5eaa720c77ac5f9b2edbcd754f6b9d4fec26e124c5ef01e449"
+    }
+  },
+  "p9_certified": false
+}

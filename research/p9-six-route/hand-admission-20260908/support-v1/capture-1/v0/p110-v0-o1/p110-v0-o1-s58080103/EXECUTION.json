@@ -1,0 +1,57 @@
+{
+  "config_id": "p110-v0-o1-s58080103",
+  "source_head": "6e9a3b0a149fcef2bcda8abfa33f9919b59c2f7c",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-fixed-resume-qoisoev1/candidate",
+    "-s",
+    "res://support_runner.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p110-v0-o1/p110-v0-o1-s58080103/CONFIG.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p110-v0-o1/p110-v0-o1-s58080103/endpoints.ndjson",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/hand-admission-20260908/support-v1/capture-1/v0/p110-v0-o1/p110-v0-o1-s58080103/trace.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 13.600756466000007,
+  "status": "COMPLETE",
+  "failure": null,
+  "raw": {
+    "endpoints.ndjson": {
+      "bytes": 32310,
+      "sha256": "04f4165bfe5cd928fddd983fbb498a96400ed3382b6abd717b08ddf967211fce"
+    },
+    "trace.ndjson": {
+      "bytes": 6559481,
+      "sha256": "6007a6605b79239d41cfdeaa1f35082b802f4fe76fa19b091eae43f573818845"
+    }
+  },
+  "files": {
+    "trace.ndjson.xz": {
+      "bytes": 124796,
+      "sha256": "f7ccb244a9c7bb7aa137a35e34ad46c2e2807cdec392590dffda2c59e0e5a785"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    "endpoints.ndjson.xz": {
+      "bytes": 3544,
+      "sha256": "bcef5cf1cf6759c46d254a11ff1f5ddc1b7afd048ba4b00680f22b9a7f911f00"
+    },
+    "CONFIG.json": {
+      "bytes": 568,
+      "sha256": "08c5388344e53b7b4946b7ad94ec30b4844ee5d1a6e6d832cc43f78c1c8355ab"
+    },
+    "CELL.json": {
+      "bytes": 512,
+      "sha256": "ccd08875365e7affdd2ec0467cd1ef28cb84032cedda81ab53631c4b71309287"
+    }
+  },
+  "p9_certified": false
+}
