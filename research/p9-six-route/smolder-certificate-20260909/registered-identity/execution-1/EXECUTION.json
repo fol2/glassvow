@@ -1,0 +1,49 @@
+{
+  "source_head": "1695a2aafaa3601f73113252e13c25c1ab4d714f",
+  "run_id": "34350839941",
+  "source_sha256": {
+    "identity.py": "6a8f2f0f38801d06b141ae603a68877d2705067edeb4fb7448c9ae50b5bc5b69",
+    "test_identity.py": "cbe1c62e52ff2672246db784ec88f1fcf93927b524fe1aa981bcc7035faee5a8"
+  },
+  "commands": [
+    {
+      "name": "tests",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "-v",
+        "test_identity"
+      ],
+      "cwd": "research/p9-six-route/smolder-certificate-20260909/registered-identity",
+      "returncode": 0
+    },
+    {
+      "name": "collect",
+      "command": [
+        "/usr/bin/python3",
+        "research/p9-six-route/smolder-certificate-20260909/registered-identity/identity.py",
+        "collect",
+        ".",
+        "research/p9-six-route/smolder-certificate-20260909/registered-identity/execution-1/inputs"
+      ],
+      "cwd": ".",
+      "returncode": 0
+    },
+    {
+      "name": "analyse",
+      "command": [
+        "/usr/bin/python3",
+        "research/p9-six-route/smolder-certificate-20260909/registered-identity/identity.py",
+        "analyse",
+        "research/p9-six-route/smolder-certificate-20260909/registered-identity/execution-1/inputs",
+        "research/p9-six-route/smolder-certificate-20260909/registered-identity/execution-1/RESULTS.json"
+      ],
+      "cwd": ".",
+      "returncode": 0
+    }
+  ],
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "p9_certified": false
+}

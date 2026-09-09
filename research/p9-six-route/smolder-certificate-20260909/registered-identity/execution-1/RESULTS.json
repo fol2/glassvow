@@ -1,0 +1,295 @@
+{
+  "current_product_source": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "equal_source_files": 51,
+  "historical_evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+  "kind": "SOURCE_BOUND_EXISTENTIAL_ALIAS_WITNESS_NOT_UNIVERSAL_QUOTIENT",
+  "new_independent_samples": 0,
+  "new_native_runs": 0,
+  "old_product_source": "0f005282e8881d970da284f4868caedf60cc8142",
+  "p9_certified": false,
+  "packages_admitted": 0,
+  "proof": [
+    "The original literal PACKAGES registry explicitly contains both exact producer-consumer edges. No role is inferred from a label or substituted from unrelated background.",
+    "All bound source files, content bytes and their insertion order match. The shared frame includes commands, public combat previews, reward/map topology rules, state/reset/save data, RNG and the shipped policy tool dependencies.",
+    "For the same full initial native state, same external inputs, same runtime semantics and same commands, the identity relation on full state is preserved step by step, including events and returns. Induction covers arbitrary finite traces, not selected examples.",
+    "Restricting the old registered package to the already-registered selected edge introduces no new law. A single exhibited member/subsystem is sufficient to refute novelty; an exhaustive library is required to prove absence, not to exhibit membership.",
+    "Renderer geometry and application wrappers are not compared. Their excluded differences neither prove whole-product equivalence nor create a new producer-mediator-consumer law. No historical empirical outcome is transported to a changed workload."
+  ],
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "rows": [
+    {
+      "aspect": "ashwarden",
+      "candidate": "smolder",
+      "family": "ash-poison-catalyst",
+      "historical_controlled_edge": {
+        "delta": 8.0,
+        "pairedBootstrapP05": 8.0,
+        "pairedBootstrapP95": 8.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 4.0,
+        "standardisedDelta": 2.0
+      },
+      "historical_heldout_edge_promoted": true,
+      "historical_package_checks": {
+        "admitted": false,
+        "heldOutPanel": true,
+        "realEconomyReachability": true,
+        "withinPackageEdges": false
+      },
+      "native_cards": {
+        "catalyst": {
+          "cost": 1,
+          "effects": [
+            {
+              "id": "catalyst",
+              "kind": "special",
+              "n": 2
+            }
+          ],
+          "exhaust": true,
+          "name": "Bellows",
+          "rarity": "rare",
+          "target": "enemy",
+          "text": "Double an enemy's Smolder. Kindle.",
+          "type": "skill",
+          "up": {
+            "effects": [
+              {
+                "id": "catalyst",
+                "kind": "special",
+                "n": 3
+              }
+            ],
+            "text": "Triple an enemy's Smolder. Kindle."
+          },
+          "vfx": "poison"
+        },
+        "venomStrike": {
+          "cost": 1,
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 4
+            },
+            {
+              "id": "poison",
+              "kind": "status",
+              "n": 4,
+              "who": "target"
+            }
+          ],
+          "name": "Emberbite",
+          "rarity": "common",
+          "target": "enemy",
+          "text": "Deal @4@ damage. Apply 4 Smolder.",
+          "type": "attack",
+          "up": {
+            "effects": [
+              {
+                "kind": "dmg",
+                "n": 6
+              },
+              {
+                "id": "poison",
+                "kind": "status",
+                "n": 5,
+                "who": "target"
+              }
+            ],
+            "text": "Deal @6@ damage. Apply 5 Smolder."
+          },
+          "vfx": "fire"
+        }
+      },
+      "new_confirmation_authorised": false,
+      "novelty_disposition": "NOT_A_NEW_DISTINCT_PACKAGE_BY_RENAMING_OR_ROLE_RESTRICTION",
+      "registered_edge": {
+        "consumer": "catalyst",
+        "id": "venomStrike->catalyst",
+        "probe": "poison",
+        "producer": "venomStrike",
+        "response": "poisonApplied"
+      },
+      "registered_package": {
+        "aspects": [
+          "ashwarden"
+        ],
+        "edges": [
+          {
+            "consumer": "catalyst",
+            "id": "venomStrike->catalyst",
+            "probe": "poison",
+            "producer": "venomStrike",
+            "response": "poisonApplied"
+          },
+          {
+            "consumer": "catalyst",
+            "id": "toxicMist->catalyst",
+            "probe": "poison",
+            "producer": "toxicMist",
+            "response": "poisonApplied"
+          }
+        ],
+        "id": "ash-poison-catalyst",
+        "nodes": [
+          "venomStrike",
+          "toxicMist",
+          "catalyst"
+        ],
+        "panelResponse": "poisonApplied"
+      },
+      "source_relation": "IDENTICAL_REGISTERED_ROLE_SUBSYSTEM_IN_IDENTICAL_NATIVE_SEMANTIC_FRAME"
+    },
+    {
+      "aspect": "duskblade",
+      "candidate": "fervor",
+      "family": "strength-multihit",
+      "historical_controlled_edge": {
+        "delta": 6.0,
+        "pairedBootstrapP05": 6.0,
+        "pairedBootstrapP95": 6.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 3.0,
+        "standardisedDelta": 2.0
+      },
+      "historical_heldout_edge_promoted": false,
+      "historical_package_checks": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": false
+      },
+      "native_cards": {
+        "empower": {
+          "cost": 1,
+          "effects": [
+            {
+              "id": "str",
+              "kind": "status",
+              "n": 2,
+              "who": "self"
+            }
+          ],
+          "name": "Inner Blaze",
+          "rarity": "uncommon",
+          "target": "self",
+          "text": "Gain 2 Fervor.",
+          "type": "power",
+          "up": {
+            "effects": [
+              {
+                "id": "str",
+                "kind": "status",
+                "n": 3,
+                "who": "self"
+              }
+            ],
+            "text": "Gain 3 Fervor."
+          },
+          "vfx": "fire"
+        },
+        "flurry": {
+          "cost": 1,
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 2,
+              "times": 3
+            }
+          ],
+          "name": "Splinterstorm",
+          "rarity": "uncommon",
+          "target": "enemy",
+          "text": "Deal @2@ damage 3 times.",
+          "type": "attack",
+          "up": {
+            "effects": [
+              {
+                "kind": "dmg",
+                "n": 3,
+                "times": 3
+              }
+            ],
+            "text": "Deal @3@ damage 3 times."
+          },
+          "vfx": "pierce"
+        }
+      },
+      "new_confirmation_authorised": false,
+      "novelty_disposition": "NOT_A_NEW_DISTINCT_PACKAGE_BY_RENAMING_OR_ROLE_RESTRICTION",
+      "registered_edge": {
+        "consumer": "flurry",
+        "id": "empower->flurry",
+        "probe": "strength",
+        "producer": "empower",
+        "response": "directDamage"
+      },
+      "registered_package": {
+        "aspects": [
+          "duskblade",
+          "ashwarden"
+        ],
+        "edges": [
+          {
+            "consumer": "twinFangs",
+            "id": "empower->twinFangs",
+            "probe": "strength",
+            "producer": "empower",
+            "response": "directDamage"
+          },
+          {
+            "consumer": "flurry",
+            "id": "empower->flurry",
+            "probe": "strength",
+            "producer": "empower",
+            "response": "directDamage"
+          }
+        ],
+        "id": "strength-multihit",
+        "nodes": [
+          "empower",
+          "twinFangs",
+          "flurry"
+        ],
+        "panelResponse": "directDamage"
+      },
+      "source_relation": "IDENTICAL_REGISTERED_ROLE_SUBSYSTEM_IN_IDENTICAL_NATIVE_SEMANTIC_FRAME"
+    }
+  ],
+  "scope": [
+    "Source-level canonical membership only; not an executed source/runtime oracle or Node O PASS.",
+    "Old package failures retain their exact designs and thresholds; they do not prove every future policy or modified mechanism fails.",
+    "Smolder had a positive held-out edge. Rejecting its new-package label does not rewrite that positive evidence.",
+    "The later Mistbound extension and its preview mismatch are a different comparator, not a reason to ignore the original native #524 registration.",
+    "A valid new law requires its own bound claim. No new candidate, E0/E1 campaign or population confirmation is opened here."
+  ],
+  "semantic_source_manifest_sha256": "f8578e993cfec5a4ea8c7f9b4d7490f6e9b73e0dd98223099bbed9a60e3b13f4",
+  "static_external_references": [
+    [
+      "domain/game.gd",
+      "tools/vow_incentives.gd"
+    ],
+    [
+      "tools/balance_pilot.gd",
+      "tools/balance_policy.gd"
+    ],
+    [
+      "tools/balance_sim.gd",
+      "tools/balance_metrics.gd"
+    ],
+    [
+      "tools/balance_sim.gd",
+      "tools/balance_pilot.gd"
+    ],
+    [
+      "tools/balance_sim.gd",
+      "tools/balance_policy.gd"
+    ],
+    [
+      "tools/balance_sim.gd",
+      "tools/vow_incentives.gd"
+    ]
+  ]
+}
