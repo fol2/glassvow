@@ -1,0 +1,8 @@
+agent_contracts: .grok/workflows/studio-dcc-map-glb.rhai: cannot read: [Errno 2] No such file or directory: '/home/runner/work/glassvow/glassvow/.grok/workflows/studio-dcc-map-glb.rhai'
+agent_contracts: .grok/workflows/studio-dcc-map-glb.rhai: missing required contract text: 'Historical observed flow: .grok/history/studio-dcc-map-glb-flow.md'
+agent_contracts: .grok/workflows/studio-dcc-map-glb.rhai: missing required contract text: 'if task_id == "" { task_id = task_id_from(gen); }'
+agent_contracts: .grok/workflows/studio-dcc-map-glb.rhai: missing required contract text: 'generation stopped fail-closed without a manual file handoff'
+agent_contracts: .grok/workflows/studio-dcc-map-glb.rhai: missing required contract text: 'land_prompt += "--task-id " + task_id + " ";'
+agent_contracts: .grok/workflows/studio-dcc-map-glb.rhai: missing required contract text: 'driver: tools/studio_image_to_glb.py + tools/land_map_glb.py'
+agent_contracts: .grok/history/first-paid-map-glb.rhai: required historical workflow record is missing
+agent_contracts: .grok/history/studio-dcc-map-glb-flow.md: required historical workflow record is missing
