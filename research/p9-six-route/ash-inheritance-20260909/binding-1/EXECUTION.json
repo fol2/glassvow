@@ -1,0 +1,50 @@
+{
+  "source_head": "1278e839a1f29277c111d2dac9b3c792913a87a9",
+  "run_id": "34353648976",
+  "source_sha256": {
+    "bind.py": "7356edadd245e0c38be5e1dab84417b011d3929a7c693b560973411239d9b219",
+    "test_bind.py": "f24510a4f3122323beaec3d47f7c2e0ff5055554bb8e1c7162ba6178059449b4"
+  },
+  "commands": [
+    {
+      "name": "tests",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "-v",
+        "test_bind"
+      ],
+      "cwd": "research/p9-six-route/ash-inheritance-20260909",
+      "returncode": 0
+    },
+    {
+      "name": "collect",
+      "command": [
+        "/usr/bin/python3",
+        "research/p9-six-route/ash-inheritance-20260909/bind.py",
+        "collect",
+        ".",
+        "research/p9-six-route/ash-inheritance-20260909/binding-1/inputs"
+      ],
+      "cwd": ".",
+      "returncode": 0
+    },
+    {
+      "name": "analyse",
+      "command": [
+        "/usr/bin/python3",
+        "research/p9-six-route/ash-inheritance-20260909/bind.py",
+        "analyse",
+        "research/p9-six-route/ash-inheritance-20260909/binding-1/inputs",
+        "research/p9-six-route/ash-inheritance-20260909/binding-1/analysis"
+      ],
+      "cwd": ".",
+      "returncode": 0
+    }
+  ],
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}

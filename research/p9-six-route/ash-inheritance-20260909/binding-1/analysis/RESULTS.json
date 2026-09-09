@@ -1,0 +1,429 @@
+{
+  "admission_source": "c802be36510273481b6d0f865b92fac43abf6aff:research/issue-421/summaries/progress-post-directive-hand-size-ash-admission-v1.md",
+  "bloodfire_changed_combat_functions": [
+    "add_status_player",
+    "_apply_special",
+    "preview_play"
+  ],
+  "cards": {
+    "bloodRite": {
+      "current": {
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "loseHp",
+            "n": 3
+          },
+          {
+            "kind": "energy",
+            "n": 2
+          }
+        ],
+        "name": "Blood for Oil",
+        "rarity": "uncommon",
+        "target": "self",
+        "text": "Lose 3 HP. Gain 2 Energy.",
+        "type": "skill",
+        "up": {
+          "effects": [
+            {
+              "kind": "loseHp",
+              "n": 3
+            },
+            {
+              "kind": "energy",
+              "n": 3
+            }
+          ],
+          "text": "Lose 3 HP. Gain 3 Energy."
+        },
+        "vfx": "void"
+      },
+      "equal": false,
+      "harness": {
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "loseHp",
+            "n": 3
+          },
+          {
+            "kind": "energy",
+            "n": 2
+          },
+          {
+            "id": "bloodfire",
+            "kind": "status",
+            "n": 1,
+            "who": "self"
+          }
+        ],
+        "name": "Blood for Oil",
+        "rarity": "uncommon",
+        "target": "self",
+        "text": "Lose 3 HP. Gain 2 Energy. Ashwarden: gain 1 Bloodfire.",
+        "type": "skill",
+        "up": {
+          "effects": [
+            {
+              "kind": "loseHp",
+              "n": 3
+            },
+            {
+              "kind": "energy",
+              "n": 3
+            },
+            {
+              "id": "bloodfire",
+              "kind": "status",
+              "n": 1,
+              "who": "self"
+            }
+          ],
+          "text": "Lose 3 HP. Gain 3 Energy. Ashwarden: gain 1 Bloodfire."
+        },
+        "vfx": "void"
+      }
+    },
+    "leechBlade": {
+      "current": {
+        "cost": 2,
+        "effects": [
+          {
+            "id": "leech",
+            "kind": "special",
+            "n": 9
+          }
+        ],
+        "name": "Thirsting Shard",
+        "rarity": "uncommon",
+        "target": "enemy",
+        "text": "Deal @9@ damage. Heal for half the unblocked damage.",
+        "type": "attack",
+        "up": {
+          "effects": [
+            {
+              "id": "leech",
+              "kind": "special",
+              "n": 13
+            }
+          ],
+          "text": "Deal @13@ damage. Heal for half the unblocked damage."
+        },
+        "vfx": "void"
+      },
+      "equal": false,
+      "harness": {
+        "cost": 2,
+        "effects": [
+          {
+            "bonus": 10,
+            "id": "leech",
+            "kind": "special",
+            "n": 9
+          }
+        ],
+        "name": "Thirsting Shard",
+        "rarity": "uncommon",
+        "target": "enemy",
+        "text": "Deal @9@ damage. Heal for half the unblocked damage. Ashwarden: consume Bloodfire to deal @10@ more.",
+        "type": "attack",
+        "up": {
+          "effects": [
+            {
+              "bonus": 12,
+              "id": "leech",
+              "kind": "special",
+              "n": 13
+            }
+          ],
+          "text": "Deal @13@ damage. Heal for half the unblocked damage. Ashwarden: consume Bloodfire to deal @12@ more."
+        },
+        "vfx": "void"
+      }
+    },
+    "phantomBlades": {
+      "current": {
+        "cost": 1,
+        "effects": [
+          {
+            "id": "phantom",
+            "kind": "special",
+            "n": 3
+          }
+        ],
+        "name": "Phantom Blades",
+        "rarity": "rare",
+        "target": "enemy",
+        "text": "Deal @3@ damage for each card in your hand.",
+        "type": "attack",
+        "up": {
+          "effects": [
+            {
+              "id": "phantom",
+              "kind": "special",
+              "n": 4
+            }
+          ],
+          "text": "Deal @4@ damage for each card in your hand."
+        },
+        "vfx": "pierce"
+      },
+      "equal": true,
+      "harness": {
+        "cost": 1,
+        "effects": [
+          {
+            "id": "phantom",
+            "kind": "special",
+            "n": 3
+          }
+        ],
+        "name": "Phantom Blades",
+        "rarity": "rare",
+        "target": "enemy",
+        "text": "Deal @3@ damage for each card in your hand.",
+        "type": "attack",
+        "up": {
+          "effects": [
+            {
+              "id": "phantom",
+              "kind": "special",
+              "n": 4
+            }
+          ],
+          "text": "Deal @4@ damage for each card in your hand."
+        },
+        "vfx": "pierce"
+      }
+    },
+    "preparation": {
+      "current": {
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 2
+          }
+        ],
+        "exhaust": true,
+        "name": "Tinder",
+        "rarity": "common",
+        "target": "self",
+        "text": "Draw 2 cards. Kindle.",
+        "type": "skill",
+        "up": {
+          "effects": [
+            {
+              "kind": "draw",
+              "n": 2
+            }
+          ],
+          "exhaust": false,
+          "text": "Draw 2 cards."
+        },
+        "vfx": "fire"
+      },
+      "equal": true,
+      "harness": {
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 2
+          }
+        ],
+        "exhaust": true,
+        "name": "Tinder",
+        "rarity": "common",
+        "target": "self",
+        "text": "Draw 2 cards. Kindle.",
+        "type": "skill",
+        "up": {
+          "effects": [
+            {
+              "kind": "draw",
+              "n": 2
+            }
+          ],
+          "exhaust": false,
+          "text": "Draw 2 cards."
+        },
+        "vfx": "fire"
+      }
+    },
+    "surge": {
+      "current": {
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "energy",
+            "n": 1
+          },
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "exhaust": true,
+        "name": "Struck Match",
+        "rarity": "uncommon",
+        "target": "self",
+        "text": "Gain 1 Energy. Draw 1 card. Kindle.",
+        "type": "skill",
+        "up": {
+          "effects": [
+            {
+              "kind": "energy",
+              "n": 2
+            },
+            {
+              "kind": "draw",
+              "n": 1
+            }
+          ],
+          "text": "Gain 2 Energy. Draw 1 card. Kindle."
+        },
+        "vfx": "fire"
+      },
+      "equal": true,
+      "harness": {
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "energy",
+            "n": 1
+          },
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "exhaust": true,
+        "name": "Struck Match",
+        "rarity": "uncommon",
+        "target": "self",
+        "text": "Gain 1 Energy. Draw 1 card. Kindle.",
+        "type": "skill",
+        "up": {
+          "effects": [
+            {
+              "kind": "energy",
+              "n": 2
+            },
+            {
+              "kind": "draw",
+              "n": 1
+            }
+          ],
+          "text": "Gain 2 Energy. Draw 1 card. Kindle."
+        },
+        "vfx": "fire"
+      }
+    }
+  },
+  "claims": {
+    "current_bloodfire_mediator_implemented": false,
+    "historical_hand_and_bloodfire_directions_admitted": true,
+    "historical_whole_run_support_carries_to_current_main": false,
+    "minimal_product_delta_selected": false,
+    "new_population_execution_authorised": false,
+    "restore_failed_scalar_substrate_authorised": false
+  },
+  "construction_source_files": [
+    "research.py"
+  ],
+  "current_source": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "current_status_definitions": {},
+  "hand_card_packet_equal_in_this_harness": true,
+  "harness_content_sha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
+  "harness_is_selected_historical_content": false,
+  "harness_source": "c802be36510273481b6d0f865b92fac43abf6aff:research/issue-421/raw/post-directive-harness-v2.tar.gz",
+  "historical_status_definitions": {
+    "statuses/bloodfire": {
+      "desc": "Pain banked as heat. Thirsting Shard consumes one stack for bonus damage and healing.",
+      "icon": "\u2665",
+      "kind": "buff",
+      "name": "Bloodfire"
+    }
+  },
+  "kind": "INHERITED_DIRECTION_DEPENDENCY_BINDING_NOT_NEW_ADMISSION",
+  "limits": [
+    "Same card bytes alone do not carry whole-run policy, joint activation or peer separation across a changed content/rule/controller frame.",
+    "The harness content is distinguished from the selected content identity; recipe source is preserved for exact binding, never silently assumed identical.",
+    "This work reads immutable source/metadata/admission text only, not native or empirical rows. It does not rerun or reopen the old campaign."
+  ],
+  "new_independent_samples": 0,
+  "new_native_runs": 0,
+  "p9_certified": false,
+  "packages_admitted": 0,
+  "related_metadata": [
+    {
+      "git_blob": "b141fd3b2717ee40872de5a46675795269c5ad3e",
+      "kind": "blob",
+      "path": "research/issue-421/artifacts/ledger-freeze-hand-size-ash-admission-v1.json"
+    },
+    {
+      "git_blob": "162760241d060421b39cf71b82ae53cd755ce307",
+      "kind": "blob",
+      "path": "research/issue-421/artifacts/ledger-freeze-package-order-heldout-v1.json"
+    },
+    {
+      "git_blob": "b8f0f74f1c2c628fe091f75a809ffb1356cfc2c9",
+      "kind": "blob",
+      "path": "research/issue-421/protocols/post-v38-ash-package-pair-v1.json"
+    },
+    {
+      "git_blob": "9526a5f3280b2e7ac02ba96f68620c00d30ae1cf",
+      "kind": "blob",
+      "path": "research/issue-421/protocols/post-v38-hand-size-inventory-v1.json"
+    },
+    {
+      "git_blob": "38b3a5b7d1ca7e308cb308edf037f9462d1bf73c",
+      "kind": "blob",
+      "path": "research/issue-421/protocols/post-v38-hand-size-inventory-v2.json"
+    },
+    {
+      "git_blob": "96e899bf6fbaa2dc6ab926621aa72340818d8dda",
+      "kind": "blob",
+      "path": "research/issue-421/protocols/post-v38-package-order-heldout-v1.json"
+    },
+    {
+      "git_blob": "3a8f23d008b8cfcf052035f982003f3aa148867d",
+      "kind": "blob",
+      "path": "research/issue-421/summaries/post-v38-ash-package-pair-v1.json"
+    },
+    {
+      "git_blob": "14ab268fd7783a67baefb00c30df5e58b3f9d061",
+      "kind": "blob",
+      "path": "research/issue-421/summaries/post-v38-hand-size-inventory-v1.json"
+    },
+    {
+      "git_blob": "79f850c91f6afdf5b9f932b6f4b080a16ef7f5d7",
+      "kind": "blob",
+      "path": "research/issue-421/summaries/post-v38-hand-size-inventory-v2.json"
+    },
+    {
+      "git_blob": "2f2815fc4f0688cba1293b348aea2fe9830c5abf",
+      "kind": "blob",
+      "path": "research/issue-421/summaries/post-v38-package-order-heldout-v1-audit.json"
+    },
+    {
+      "git_blob": "64ec702d38679528d944e13fc173b00a412a9924",
+      "kind": "blob",
+      "path": "research/issue-421/summaries/post-v38-package-order-heldout-v1.json"
+    },
+    {
+      "git_blob": "8a24a986671427bd1a97cf7a847c001e14d6214d",
+      "kind": "blob",
+      "path": "research/issue-421/summaries/progress-post-directive-hand-size-ash-admission-v1.md"
+    },
+    {
+      "git_blob": "211cd0950a238e95f20a0eb975a36c48f249f922",
+      "kind": "blob",
+      "path": "research/issue-421/summaries/progress-post-directive-package-order-heldout-v1.md"
+    }
+  ],
+  "selected_content_exact_file_matches": [],
+  "selected_historical_content_sha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07"
+}
