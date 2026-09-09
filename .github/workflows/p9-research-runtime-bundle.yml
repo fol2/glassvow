@@ -10,13 +10,13 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1/profile-v1
 jobs:
   bundle:
-    name: Same-policy memoisation equivalence and alternating compute regression
+    name: Profile one original cell and prove unchanged native output
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 10
     permissions:
       contents: write
     steps:
@@ -25,32 +25,31 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/planner-v1
-      - name: Freeze exact computational delta before benchmark calls
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909
+      - name: Freeze timing-only source and run semantic-preservation tests
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,json,os,pathlib,subprocess
-          root=pathlib.Path(os.environ['STUDY'])
-          hashes={'benchmark.py':'28a08f95e377c79087dc9092bcede25fa2875731eeeb4f17a2a1d4463191a92d','test_benchmark.py':'48f0a87f5ac8fa76fc0cfc25092aca8b689c39acc8c53f23d220eaad87f49289','greedy_policy.gd':'909b24d5fc6eaca05a8eed79084cbe696dc4265c5eda89febdf5b5a7fa5dc4c7','PROTOCOL.json':'b5383612ba3cf4f4e459cbfba830a8fe32b91208bad4a495752c9d4dabce5d89'}
+          root=pathlib.Path(os.environ['STUDY']);hashes={'profile.py':'0c9b95f6f7ce3d3ef95cdee0b4871ce1d0cfad40a50d6f93aa7c273e44c7b352','test_profile.py':'41517f44d0e903e24e999c26b764d9747246fc90560f2e48488d28f355749c69','PROTOCOL.json':'1e092f12e94659e00545f3b6aa56fbe822e9eb6f08b5cfcc048e9e02301ceeca'}
           for name,want in hashes.items():
-              p=root/name;b=p.read_bytes();assert hashlib.sha256(b).hexdigest()==want,name
+              p=root/name;b=p.read_bytes();assert hashlib.sha256(b).hexdigest()==want
               assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==subprocess.check_output(['git','rev-parse','HEAD:'+str(p)]).decode().strip()
           assert not (root/'FREEZE.json').exists()
-          (root/'FREEZE.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'sources':hashes,'observations_before_freeze':0,'p9_certified':False},indent=2)+'\n')
+          (root/'FREEZE.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'sources':hashes,'new_outcomes_at_freeze':0,'p9_certified':False},indent=2)+'\n')
           PY
-          (cd "$STUDY" && python3 -m unittest -v test_benchmark)
+          (cd "$STUDY" && python3 -m unittest -v test_profile)
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "$STUDY/FREEZE.json"
-          git commit -m 'research(p9): bind memoisation regression before native performance measurement'
+          git commit -m 'research(p9): bind exact write-only timing instrumentation'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-      - name: Load the same pinned official engine
-        id: engine
+      - name: Load pinned engine and profile the fixed old cell
+        id: native
         continue-on-error: true
         shell: bash
         run: |
@@ -63,17 +62,9 @@ jobs:
             chmod +x "$engine"
             echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
             "$engine" --version
-            echo "ENGINE=$engine" >> "$GITHUB_ENV"
           } > "$STUDY/execution-1/engine.log" 2>&1
-      - name: Measure identical fixed queries without new policy or population work
-        id: native
-        if: steps.engine.outcome == 'success'
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 "$STUDY/benchmark.py" run "$GITHUB_WORKSPACE" "$ENGINE" "$RUNNER_TEMP/memo-benchmark" > "$STUDY/execution-1/runner.stdout" 2> "$STUDY/execution-1/runner.stderr"
-      - name: Preserve complete raw, source, timing and honest terminal
+          python3 "$STUDY/profile.py" run "$GITHUB_WORKSPACE" "$engine" "$RUNNER_TEMP/profile-capture" > "$STUDY/execution-1/runner.stdout" 2> "$STUDY/execution-1/runner.stderr"
+      - name: Preserve every source and timing trace, including failed delivery
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
@@ -81,23 +72,23 @@ jobs:
           python3 - <<'PY'
           import hashlib,json,os,pathlib,tarfile
           root=pathlib.Path(os.environ['STUDY'])/'execution-1';root.mkdir(exist_ok=True)
-          capture=pathlib.Path(os.environ['RUNNER_TEMP'])/'memo-benchmark';files=[]
+          capture=pathlib.Path(os.environ['RUNNER_TEMP'])/'profile-capture';records=[]
           with tarfile.open(root/'capture.tar.xz','w:xz') as archive:
               for p in sorted(capture.rglob('*')):
                   if not p.is_file() or '.godot' in p.parts:continue
-                  data=p.read_bytes();name=str(p.relative_to(capture));archive.add(p,arcname=name,recursive=False)
-                  files.append({'path':name,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
+                  b=p.read_bytes();name=str(p.relative_to(capture));archive.add(p,arcname=name,recursive=False)
+                  records.append({'path':name,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
           b=(root/'capture.tar.xz').read_bytes()
-          (root/'ARCHIVE.json').write_text(json.dumps({'archive_bytes':len(b),'archive_sha256':hashlib.sha256(b).hexdigest(),'files':files,'excluded':'.godot generated cache only','p9_certified':False},indent=2)+'\n')
+          (root/'ARCHIVE.json').write_text(json.dumps({'archive_bytes':len(b),'archive_sha256':hashlib.sha256(b).hexdigest(),'files':records,'excluded':'.godot only','p9_certified':False},indent=2)+'\n')
           for name in ('TERMINAL.json','RESULTS.json'):
               if (capture/name).exists():(root/name).write_bytes((capture/name).read_bytes())
-          if not (root/'TERMINAL.json').exists():(root/'TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','reason':'No native benchmark terminal','p9_certified':False},indent=2)+'\n')
+          if not (root/'TERMINAL.json').exists():(root/'TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','reason':'No profile terminal','p9_certified':False},indent=2)+'\n')
           print((root/'TERMINAL.json').read_text())
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
           git add -f "$STUDY/execution-1"
-          git commit -m 'research(p9): preserve same-policy computational regression including all failures'
+          git commit -m 'research(p9): preserve complete actual workload timing diagnosis'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -107,27 +98,32 @@ jobs:
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1
-      - name: Cold-read every byte and reproduce performance readout offline
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909
+      - name: Cold-read source, full trace and exact timing decomposition
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,importlib.util,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')/root;files=[]
+          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')/root;records=[]
           for p in sorted(root.rglob('*')):
               if not p.is_file():continue
-              b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b,str(p)
-              files.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
-          spec=importlib.util.spec_from_file_location('cold_benchmark',cold/'benchmark.py');mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
-          target=pathlib.Path(os.environ['RUNNER_TEMP'])/'cold-memo';target.mkdir()
-          manifest=mod.unpack(cold/'execution-1',target)
+              b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b
+              records.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+          def load(name,path):
+              spec=importlib.util.spec_from_file_location(name,path);mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod);return mod
+          archive=load('archive_reader',cold.parent/'query-cache-v1/benchmark.py')
+          target=pathlib.Path(os.environ['RUNNER_TEMP'])/'cold-profile';target.mkdir();manifest=archive.unpack(cold/'execution-1',target)
           t=json.loads((cold/'execution-1/TERMINAL.json').read_bytes());reproduced=False
           if (target/'RESULTS.json').exists():
-              result=mod.readout(target);b=(json.dumps(result,indent=2)+'\n').encode()
-              assert b==(target/'RESULTS.json').read_bytes()==(cold/'execution-1/RESULTS.json').read_bytes();reproduced=True
-          receipt={'kind':'COMPLETE_QUERY_MEMOISATION_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':files,'archived_files':len(manifest['files']),'all_bytes_equal':True,'readout_reproduced':reproduced,'scientific_status':t['status'],'new_native_runs_during_readback':0,'packages_admitted':0,'p9_certified':False}
+              reader=load('profile_reader',cold/'profile.py')
+              original=cold.parent/'value-v1/execution-2'
+              old=json.loads((original/'RESOLVED-PROTOCOLS.json').read_bytes())['planner']
+              new=json.loads((target/'RESOLVED-PROTOCOL.json').read_bytes())
+              result=reader.compare(original/'v5/planner',target/'cell',old['runtime']['probe_sha256'],new['runtime']['probe_sha256'])
+              b=(json.dumps(result,indent=2)+'\n').encode();assert b==(target/'RESULTS.json').read_bytes()==(cold/'execution-1/RESULTS.json').read_bytes();reproduced=True
+          receipt={'kind':'COMPLETE_WORKLOAD_PROFILE_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':records,'archived_files':len(manifest['files']),'all_bytes_equal':True,'readout_reproduced':reproduced,'scientific_status':t['status'],'new_native_runs_during_readback':0,'packages_admitted':0,'p9_certified':False}
           (root/'execution-1/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
           print(json.dumps(t,indent=2))
           if reproduced:print((target/'RESULTS.json').read_text())
@@ -135,5 +131,5 @@ jobs:
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
           git add "$STUDY/execution-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): retain exact remote-byte proof of query-cache regression'
+          git commit -m 'research(p9): retain complete cold byte proof of timing-only diagnosis'
           git push origin HEAD:refs/heads/$branch
