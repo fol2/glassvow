@@ -1,0 +1,54 @@
+{
+  "kind": "ACQUISITION_CLOSURE_COLD_READBACK",
+  "published_head": "9900f8a1e4a138f714aaa544100a1230a0ae9517",
+  "run_id": "34405892765",
+  "files": [
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/close_value.py",
+      "bytes": 15139,
+      "sha256": "ab9032e51485c88b7febfef464592977f51beea3651a6ac3ab6e55681e7739e6",
+      "git_blob": "a2d4475b232c374edcdde1f0da406d95fc912e23"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/closure-1/DECISION.json",
+      "bytes": 2839,
+      "sha256": "2d62e44c3cb2a0f8af276bbed28898f120c32bdc81e59914e5619448cb4ecb0d",
+      "git_blob": "37fe537bfbf2a6c465b838fca1d402fd45cbf8da"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/closure-1/INPUTS.json",
+      "bytes": 811,
+      "sha256": "db62b2a0e59d53ae85377ec66c53dc8d2d15548c3ef036c4ed72795821e3803d",
+      "git_blob": "01316295b3dbf3d0263613a42c0b699ac7ea3204"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/closure-1/STATE-PRESERVATION.json",
+      "bytes": 122,
+      "sha256": "0774b82c29061db9ca2192105f41ae2d827d372cf5af1db2100fb2c3b461a793",
+      "git_blob": "f2be68c6ac1a965a04745012a687f85d666600fd"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-STATE.json",
+      "bytes": 24939,
+      "sha256": "bafa1f0780ee9d52b35fc0a8e3cf74c867cd75a2b0abc21ff6d16e128c4f2c80",
+      "git_blob": "8f4dea538275b4f7e4cee694cd913da4e49dceb1"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-HANDOFF.md",
+      "bytes": 4001,
+      "sha256": "c92fd991ed7692efe2a4d9aa915d915dab54340d0b0acab772bdea59e0b56e74",
+      "git_blob": "7835ec2e230aa8b42460125a7582279150a1651e"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/ROADMAP.md",
+      "bytes": 2353,
+      "sha256": "3041c2d81fe860709585fc233fdfcaf45b234caaf66043b20d2ca15596360aec",
+      "git_blob": "e922e879ca86ee1b80225051a32ccc5892132445"
+    }
+  ],
+  "all_bytes_equal": true,
+  "decision_reproduced": true,
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
