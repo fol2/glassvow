@@ -1,0 +1,74 @@
+{
+  "status": "SIGNED_CONTROL_NECESSARY_SCREEN_FAIL",
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "rows": 1024,
+  "decision": "This fixed candidate cannot advance through this registered guardrail screen. Preserve the failed grid and all old evidence; no extension, weaker comparator or retune in this protocol.",
+  "raw": [
+    {
+      "name": "baseline-duskblade-v0.ndjson",
+      "raw_bytes": 944636,
+      "raw_sha256": "6f1fc506bc8b52862806888dbad2230ab58291be451c3be21989e2b2459a1d9f",
+      "packed_bytes": 38172,
+      "packed_sha256": "98d34b3a0c21e50ba66a6d81b542910d203d4f886c92084125edc6d816800e01"
+    },
+    {
+      "name": "baseline-ashwarden-v0.ndjson",
+      "raw_bytes": 1020916,
+      "raw_sha256": "3e817d184a84cd16afeb10bac1f2a27b5b33e4aeb7f60466adde25eba11803d1",
+      "packed_bytes": 42484,
+      "packed_sha256": "901ba611a25729f3d98cbf4bcd96b280bcc3a4079e9f2b84f5760b656cfbd8dd"
+    },
+    {
+      "name": "baseline-duskblade-v5.ndjson",
+      "raw_bytes": 801997,
+      "raw_sha256": "faec69b4435fad516d59d07a70487ac46b878a76e96b671f7060ced7a875061e",
+      "packed_bytes": 29316,
+      "packed_sha256": "332029d6d7b491af0d6c9f80548f59459379f1bda08a28199960cbac8fe39ea9"
+    },
+    {
+      "name": "baseline-ashwarden-v5.ndjson",
+      "raw_bytes": 886296,
+      "raw_sha256": "ebc2f830951534941a033a53f97e05d892a3c24188ec214cd1344cb0e31198c3",
+      "packed_bytes": 35184,
+      "packed_sha256": "918aa82df73eb0852d7524f5f7ff3ba5ce9b7bf9c73209d25cdf16aab8588686"
+    },
+    {
+      "name": "candidate-duskblade-v0.ndjson",
+      "raw_bytes": 937864,
+      "raw_sha256": "e3f26636c05dd2087f1d29a3427f4a6aab8836ed765167c93036623a7db068ce",
+      "packed_bytes": 38468,
+      "packed_sha256": "4623f7cece3fe72738643812f66151814b1f9ee0a7309a88ccdbfb828a74ad0d"
+    },
+    {
+      "name": "candidate-ashwarden-v5.ndjson",
+      "raw_bytes": 790500,
+      "raw_sha256": "5d0093ed1680327b90c967944268407f349d136d5898be7f792f4c97ffa64edc",
+      "packed_bytes": 29436,
+      "packed_sha256": "397f8b9b2a0d01315851d59785729b91733164f6039ca2a79c54f74c68383546"
+    },
+    {
+      "name": "candidate-duskblade-v5.ndjson",
+      "raw_bytes": 793997,
+      "raw_sha256": "c0b7742d927ab0dce7826c6905117179df498b247c83e355a69fc0d7a5bd872f",
+      "packed_bytes": 29584,
+      "packed_sha256": "049cf183e4dcbbd040f66169a9ad0e8fa493e859b8f0a41825008529c0a917bc"
+    },
+    {
+      "name": "candidate-ashwarden-v0.ndjson",
+      "raw_bytes": 919856,
+      "raw_sha256": "025e25923d2d2fd30d08dcd3cee31c761eed21ce4d28b10f1d02cf8ea728b963",
+      "packed_bytes": 37404,
+      "packed_sha256": "53b08def33a99ed811ab03dc8d8fbc0d6b2bc00cb6f12b94cbac977c7ce0092b"
+    }
+  ],
+  "protocol_sha256": "f8eaf9dffc65fa30222c80083ca0397a80174837cf8be1134c39613bf1c860c7",
+  "source_files": {
+    "execute_control.py": "b1361709c9f8f200477d2ab6b93d868b57931bb19de447787afb8aefc394b236",
+    "probe.gd": "2daacd6b3938eca3bf79d7a08d3a616eee34c8dfd4b3b79d6e1fdfb4fe840429",
+    "read_control.py": "ba73f78d85893dd691c9355912edd6b74311ab5d9b8185267c69a00d62d280a6",
+    "test_control.py": "9b3167ebeb2d6319eca512d2db43b9c2e884e76ba884812f57142012f48ba797"
+  },
+  "new_native_outcome_rows": 1024,
+  "scope": "Signed-control screen only; no package/P9 certificate or protected acceptance identities."
+}

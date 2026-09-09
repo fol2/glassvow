@@ -1,0 +1,30 @@
+{
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-signed-controls-j_jw3601/baseline",
+    "-s",
+    "res://probe.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v5.config.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/guardrail-confirmation-20260909/native-1/baseline-ashwarden-v5.ndjson"
+  ],
+  "returncode": 0,
+  "failure": null,
+  "seconds": 7.077426282000005,
+  "config": {
+    "id": "baseline-ashwarden-v5",
+    "catalogue": "baseline",
+    "aspect": "ashwarden",
+    "vow": 5,
+    "arm": 2,
+    "seed0": 60909000,
+    "runs": 128
+  },
+  "status": "COMPLETE",
+  "raw": {
+    "bytes": 886296,
+    "sha256": "ebc2f830951534941a033a53f97e05d892a3c24188ec214cd1344cb0e31198c3"
+  }
+}

@@ -51,3 +51,11 @@ support screen. Verify current remote/diff before writing and never compete with
 an active writer. Historical #535/PR #538 are completed capability records, not
 an instruction to reopen that work or a P9 approval. The source freeze and
 scientific stopping rules remain untouched.
+
+## Whole-candidate signed-control screen
+
+SIGNED_CONTROL_NECESSARY_SCREEN_FAIL
+
+Do not certify any package on this exact candidate as a product packet while its frozen signed-control screen fails. Preserve the separate Hand/support-family negative. Resolve the exact global failure against already-authorised alternatives before further package cohorts; no weakened control, extension or automatic retune of this closed screen.
+
+Hand raw and its negative remain unchanged. The whole-candidate control result is separate from a Hand-only causal claim.
