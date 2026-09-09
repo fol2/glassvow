@@ -1,0 +1,124 @@
+{
+  "kind": "COLD_REMOTE_ALL_BYTES_AND_OFFLINE_ROLE_PROOF",
+  "source_freeze": "c88f7c8b47e57b058e8c71fd9151488808b5b5a4",
+  "workflow_head": "3c9de7580d3715a2b4ee1db4e2e5f88bcc5702cb",
+  "workflow_run": "34303255271",
+  "published_head": "4c81f977a6b4f04e60b60e8ee09439ef32c5aa24",
+  "files_matched": 18,
+  "files": [
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/CONTRACT.json",
+      "bytes": 5180,
+      "sha256": "a1c415acd486a024be513494e4050588f705feddda340ce9b1b6bc07b31f69cf",
+      "git_blob": "6bf2758b32c34f405591352692b91e42a91e3767"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/native-1/RESULTS.json",
+      "bytes": 2852,
+      "sha256": "751623917ef3730450840de303980144b13ab4a591ad3a8db1eb41ae52dea97f",
+      "git_blob": "aef0a8c0f78449c746cadc77ac3753402e88a036"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/native-1/SOURCE-PROOF.json",
+      "bytes": 122696,
+      "sha256": "9eba122d0a9a77f65b7077e2331ac1b9dd0d7f1a5c3602914fc5a43bef47a176",
+      "git_blob": "229499877e4b2b54aa71ff0f04ed94c05f7ff00a"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/native-1/TERMINAL.json",
+      "bytes": 4139,
+      "sha256": "f82d8761798e219311af1a79c2239b863356394dea1219ee5bc26cb7029b066c",
+      "git_blob": "af8995d656b37823292df3721acd069b5d4d322d"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/native-1/TESTS.log",
+      "bytes": 2498,
+      "sha256": "85baaea20e7f85444e83c81ed045f2c13e92ffcd27d4b86febdae0aa1a863fca",
+      "git_blob": "6533e5ce82871ed1b962602f0259e3468bf1a880"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/native-1/import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/native-1/import.stdout",
+      "bytes": 3028,
+      "sha256": "5a742a0ad47f6154a3155907bd7f3fe64f5777c9ba1f1f030cd14a729e154510",
+      "git_blob": "ae942c83e0c967bf770306b1ab78c9a8cb405b2b"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/native-1/native.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/native-1/native.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/native-1/parse.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/native-1/parse.stdout",
+      "bytes": 23,
+      "sha256": "abfd600ff21ef5aa23517b4a9d50d5914f276aa3518d079edb4b75093ed9dbdc",
+      "git_blob": "8e8633e414c68e7b29ca38164fc6b664c14b3b80"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/native-1/raw.ndjson.xz",
+      "bytes": 95788,
+      "sha256": "0b6cd7260bae3f23ef2395f82eae3d01c691006729c90aba943c78f787a7a6ed",
+      "git_blob": "0d553929566b4d5964f592ff8426fb92477035bd"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/probe.gd",
+      "bytes": 6583,
+      "sha256": "07f287437a5059119f4d5725bb7688d5120dae0fc244ca994cb423fbac18f4b4",
+      "git_blob": "2de9b392899274a32aefecdeda15efb7bd9e5bd3"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/prove_contract.py",
+      "bytes": 10112,
+      "sha256": "e5b51e6751c54c1e27bbb006546659eccddda9ea3fc63109d8f54a294d552dd4",
+      "git_blob": "e867444960d9eb135d59687749800b0f7d3b5b7b"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/roles.gd",
+      "bytes": 2058,
+      "sha256": "37213426d0ab5e34e13ce2fc3e11524deca3cff010d7cb0f290875ba82e9c3bb",
+      "git_blob": "dd8d4dda0756ddb97e6dea9969382b063a09428d"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/run.py",
+      "bytes": 5946,
+      "sha256": "6f39d9732a9787f0222b01fd9611e38765821bd8f6a68187e1b0a213e946f9fd",
+      "git_blob": "eab5974ecbf29ab8753e6f1d094de2716b0ba581"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/test_contract.py",
+      "bytes": 4734,
+      "sha256": "aae54f09571d94d42ba363cba6a840a2a0eaae53b4a3650903d7c99a70f58588",
+      "git_blob": "e0951adf3bdda0ad6a67eff9cc51f743085d76dd"
+    },
+    {
+      "path": "research/p9-six-route/minimal-native-20260909/verify.py",
+      "bytes": 9553,
+      "sha256": "a44376a85350aeef910bb2545bcfdea80e5ae5ea5764c4d35b37165581f37c83",
+      "git_blob": "6be1c09bff5fffd3c26443b99a34cf7836fb23ee"
+    }
+  ],
+  "raw_sha256": "d8fe513d2cc8992e6168fb3ec4a64e970dd2b5ee82bd2e6c247a33df06bcfd2f",
+  "local_and_hosted_capture_counted_once": true,
+  "native_runs_in_readback": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
