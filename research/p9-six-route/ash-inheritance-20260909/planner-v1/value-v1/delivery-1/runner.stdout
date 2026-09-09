@@ -1,0 +1,34 @@
+[detached HEAD bb21aa5] research(p9): bind exact combat-only comparison runtime before observations
+ 11 files changed, 1552 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/RESOLVED-PROTOCOLS.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/planner-source/FINAL-SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/planner-source/RESOLVED-PROTOCOL.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/planner-source/SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/planner-source/bound-runtime.tar.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/planner-source/runtime-source.tar.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/stock-source/FINAL-SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/stock-source/RESOLVED-PROTOCOL.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/stock-source/SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/stock-source/bound-runtime.tar.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/stock-source/runtime-source.tar.xz
+[detached HEAD c0c11e0] research(p9): preserve actual terminal of fixed planner value study
+ 11 files changed, 252 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/FILES.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/TERMINAL.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/qualification/stock-import.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/qualification/stock-import.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/qualification/stock-import.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/qualification/stock-parse.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/qualification/stock-parse.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/qualification/stock-parse.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/qualification/tests.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/qualification/tests.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/execution-1/qualification/tests.stdout
+{
+  "status": "INCONCLUSIVE",
+  "source_head": "92b36f7ec89addf19a1c8100742d33997c08cdb9",
+  "stages": {},
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "failure": "ValueError('PROCESS_OR_SCRIPT_DIAGNOSTIC')"
+}
