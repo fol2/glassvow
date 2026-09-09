@@ -1,0 +1,13 @@
+{
+ "kind":"ONE_PRESERVED_PLANNER_CELL_TIMING_DIAGNOSIS",
+ "question":"Which unchanged controller operation consumes the actual retained full-run workload cost?",
+ "basis":"Original V5 46->344/512 wins, but 4015.74 CPU seconds exceeded frozen3600. Query-local cache preserved all bytes but did not establish speedup in its fixed regression. Neither failed condition is reset.",
+ "assignment":"Exactly original v5-000: two original configurations, four original seeds, planner method. No new root, policy, seed, candidate or outcome search.",
+ "measurement":"Write-only monotonic timers for whole root planning, public clone, nested RunState.map copy, greedy continuation and leaf evaluation. Counters must cover all original root queries/rollouts. Inclusive map timing is not added a second time to root totals.",
+ "validation":"Full native trace bytes must equal original. All endpoint and per-action alternatives remain identical after excluding only top-level run_usec/query_usec and the explicitly source-bound instrumented probe hash. No rounding or value tolerance. The same two-sample/twelve-step policy, costs, and signed boundaries remain unchanged.",
+ "limits":"Instrumented cost is diagnostic, not a speedup or resource admission. It cannot rescue original value-v1, open V0/support or become a new statistical sample.",
+ "containment":{"native_workers":1,"cell_seconds":240,"raw_bytes_per_stream":536870912},
+ "review":"AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+ "packages_admitted":0,
+ "p9_certified":false
+}
