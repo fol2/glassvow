@@ -1,37 +1,36 @@
-## Current evidence-driven frontier (9 September 2026)
-
-Minimum Bloodfire source/null preflight and signed controls passed. The fixed shipping-policy Ash pair support failed only Bloodfire active support (15<32); V0 skipped, no retry. Next: exact controller capability/source binding and a separately frozen matched-cost comparison, not content tuning or another root. Complete certificates, detector, independent retention and product receipt remain. Detailed source, pipeline and safe-state claims are in the current SESSION-HANDOFF and pair-v1/postrun-1.
-
----
-
 # P9 — current outcome roadmap
 
-## Current decision
+## Evidence-led frontier
 
-The unchanged native Smolder and Fervor role chains are explicit #524 package
-components under the same 51-file semantic frame. Their new-identity claims
-cannot progress by further samples or narrower labels. The direct registration
-proof is in ../smolder-certificate-20260909/registered-identity/DECISION.json.
-No complete current package certificate or new product candidate is admitted.
+Minimum Bloodfire source/null preflight and signed controls PASS. The initial
+shipping-family pair support FAIL remains. One acquisition-only adapter now
+passes source/null capability and supplies both inherited packages' V5 support,
+but FAILS its own point-win criterion (55->53 wins/512). V0 skipped. These partial
+claims are retained separately; full current certificates remain0/6. Detailed
+identities and immutable limits are in the current capsule and acquisition-v1/closure-1.
 
-## Shortest valid path
+## Critical path, not another sampler loop
 
-1. Reuse eligible, already-admitted Hand/Bloodfire identities with exact dependency
-   binding. Isolate any minimum current-product delta before costly validation;
-   do not copy the failed historical scalar substrate or its outcomes.
-2. Additional slots require an actually non-equivalent complete package under
-   the current #421 authority. Perform original-registration lookup first; an
-   existing exact member is a decisive rejection. No match is not a novelty proof.
-3. For a surviving complete package, freeze its missing causal/null/subset,
-   descriptor, competent-policy, peer-separation and real-economy evidence in
-   one contract; run the cheapest valid falsifier first. Keep independent data
-   distinct and stop that fixed branch at its frozen negative.
-4. Three complete certificates per aspect -> seven-direction detector admission
-   -> corrected untouched confirmation and unrestricted endpoint retention with
-   every hard guardrail -> minimum lifecycle and exact-product/#108 delivery.
+1. Bind the already evidenced public-state planner source, without rerunning v25
+   or fitting to its held-out evidence. Qualify only the necessary current-runtime
+   interface and bounded decision capability before any new matched-cost value
+   test. Do not tune the failed acquisition adapter or invent a new policy root
+   merely to improve support. A different controller is not yet selected/qualified.
+2. For surviving inherited identities, complete the exact current causal/subset/
+   null, descriptor, competent-policy, peer and real-economy certificate under one
+   preregistered confirmation contract. Avoid serial success demonstrations.
+   No source-equivalence or old directional admission transports population data
+   across changed content/controller dependencies. Additional slots require a
+   complete eligible mechanism; original #524 membership prevents relabels.
+3. Three full certificates per aspect -> seven-direction detector -> corrected
+   untouched confirmation and unrestricted endpoint retention with all hard
+   guardrails. A successful acquisition pattern or archive cell is not viability.
+4. Freeze one minimal product/detector/lifecycle packet; exact-head review under
+   current owner authority, relevant gates, governed integration and exact merged
+   #108 receipt. Keep research scaffolding and online policy machinery out of game.
 
-Existing research evidence is reused only where dependencies support it. No
-v25 rerun, old-panel replay, frozen-model refit, third bulk scalar rescue, new
-research-ticket chain or repeated recovery stage. All immutable scope limits
-and raw-preservation gaps remain in SESSION-STATE.json. A different controller
-or fixture cannot silently revive an old scientific terminal.
+Do not rerun closed panels, source extraction, record reconciliation, failed
+content/candidate/controller branches or frozen-model fitting. Every new expense
+needs an unmet acceptance claim and an evidenced changed prerequisite. Preserve
+all positive/negative evidence; do not lower thresholds to turn near misses green.
+No percentage of completion is inferred from rows, test counts or commits.

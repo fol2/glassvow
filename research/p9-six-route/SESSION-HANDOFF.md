@@ -1,23 +1,58 @@
-# P9 current handoff — minimum controls pass; fixed Ash pair support closed
+# P9 current handoff — qualified acquisition improves support, value test closed
 
-Continue #421 on research/p9-six-route-local-20260905. Three complete viable/reachable/distinct strategies per aspect remain required; 0/6 current certificates. Main remains 2ed6cdb0302ba3aab5845a18d862841165e8aaf7. Author self-review is permitted, not independent confirmation.
+Continue #421 on research/p9-six-route-local-20260905. Product main remains
+2ed6cdb0302ba3aab5845a18d862841165e8aaf7. Target: three complete viable, reachable,
+functionally distinct packages per aspect. Still 0/6 full current certificates;
+no P9 PASS or product promotion. Author self-review is not independent evidence.
 
-## Decisions already complete
+## Closed decisions; do not replay
 
-The minimum inherited Bloodfire preflight passed. Its fixed 1,024-row signed arm2 screen also passed all four contexts, with full 69-file readback. Dusk V0/V5 stayed31/7 wins per128; Ash V0 moved25 to27, Ash V5 stayed4. The serialization-only readback defect was repaired without a native replay or altered result. Do not rerun either stage.
+Minimum Bloodfire preflight and its 1,024-row signed RandomBuild screen passed.
+Signed grids: Dusk V0 31/128->31/128, V5 7->7; Ash V0 25->27, V5 4->4.
+The screen's integer-key JSON readback defect was repaired without game replay.
 
-The next fixed128-policy/four-seed Ash pair study qualified the new observer and every Leech clone, then completed512 V5 outcomes. Bloodfire active15/inactive113/reachable19/exclusive9; Hand35/93/36/29; cross-active6. Bloodfire active support misses32. All249 Leech clone rectangles passed factual/null/state checks;15 policies had some positive incremental target HP. These local contributions are not whole-run treatment effects. The complete population had34 wins and478 losses, no stall/error.
+pair-v1 completed 512 V5 runs: Bloodfire active15/inactive113/reachable19/
+exclusive9 and Hand35/93/36/29; Bloodfire<32 closed that fixed family, V0 skipped.
+All 249 consumer clone rectangles passed their full factual/state/null checks.
+The 146-file cold capture and full-row bottleneck audit are already complete.
 
-The paired-stage protocol therefore closes this exact current candidate/shipping-controller-family support claim and skips V0. It does not revoke historical Hand/Bloodfire admission, prove universal nonviability or erase the separately passed signed screen. Hand uses its historical necessary activation definition, not newly proven source causality. No full package is admitted.
+acquisition-v1 tested ONE historically grounded acquisition-only adapter, no
+fitted values. Query qualification first failed30 of9851 cases because its oracle
+read raw policy floats while the scorer uses float(str(value)). The old capture
+has zero population rows. Only three oracle casts were corrected; controller,
+cohort and criteria stayed identical; exact equality was not relaxed. The new
+9851-case qualification, four signed RandomBuild and eight observer pairs passed.
 
-Complete capture is under ash-inheritance-20260909/pair-v1/execution-1;146 files were cold-read and V5 decision rebuilt exactly. Source-bound postrun-1 uses all512 existing rows, no new game. Native acquisition valuation ignores the new Bloodfire status and Leech bonus magnitude; this is a shared source limitation, not proof that a particular fix will improve winning or reachability.
+The full fresh V5 stock/aware comparison completed1024 outcomes. Bloodfire active
+11->42 (33 gained,2 lost); exact paired sign p1.8364517018198967e-08. Aware V5
+support passes: Bloodfire42/86/45/21, Hand37/91/38/16 (active/inactive/reachable/
+exclusive). This is scoped support, not full Hand causality, viability or P9.
 
-## Exact next action
+The adapter nevertheless FAILS its frozen point-win criterion: stock55/512,
+aware53/512. The paired configuration interval[-.01953125,.01171875] crosses
+zero; do not claim proven population harm, nor use that interval to override the
+fixed negative. Controller admission remains false; V0 was NOT run. No more
+weights, partner formulas or policy roots are selected by this result.
 
-Qualify a specifically source-bound research-controller capability change using the retained historical Bloodfire valuation/acquisition functions or already evidenced stronger controller. Do not change product scalars or retry random policy roots. Establish exact affected public-state interfaces and preserved null/signed-control semantics before any new fixed matched-cost controller experiment. No replacement is selected or qualified by this audit.
+All292 corrected-experiment files were cold-read and the complete V5 result
+reconstructed; original qualification/correction records remain separately
+preserved. See acquisition-v1/closure-1/DECISION.json and execution-2/REMOTE-READBACK.json.
 
-Do not repeat reunion/census, v25, aliases, Hand bulk support, failed content tunes, completed native capacity, preflight or passed controls. Do not rescue the just-closed family by trying another root. Keep all raw gaps and historical scopes in SESSION-STATE.json explicit. No scientific protected cohort, product merge or new scalar candidate is selected.
+## Exact continuation
 
-## Remaining milestones
+Do not repeat or retune acquisition-v1. Source-bind the already evidenced public-state planning controller from the preserved v25 source only, without executing its closed studies or using their held-out outcomes for tuning. Establish compatibility with the exact minimum Bloodfire runtime and keep signed RandomBuild unchanged. A separate controller capability contract and decisive matched-cost value test are prerequisites to using it; no replacement controller, weight, cohort or product change is selected by this failed adapter. Complete causal/descriptor/viability and independent evidence is still required before package admission.
 
-Complete current-source package certificates, three per aspect; seven-direction detector; corrected independent confirmation and unrestricted endpoint retention with all guardrails; minimum lifecycle; exact-head review under owner authority; one selected exact-product integration and #108 receipt. Test/row/commit counts are not completion percentages. No background research process remains.
+Do not repeat recovery/reunion/census, v25, frozen models, aliases, native capacity,
+Hand bulk support, either bulk-content negative, minimum preflight, signed screen,
+pair-v1 or acquisition-v1. Do not reinstate historical failed substrates. Earlier
+positive evidence and raw-preservation gaps in SESSION-STATE.json remain explicit.
+
+## Remaining product-critical claims
+
+First complete source-bound viable package certificates with actual causal,
+policy/economy/descriptor and independently assigned confirmation evidence.
+Hand/Bloodfire retain inherited directions but neither gets full current admission
+from this work. Additional slots need genuinely different eligible packages.
+Then seven-direction detector, corrected independent confirmation, unrestricted
+endpoint retention and every hard guardrail; only then minimal lifecycle and one
+exact-product integration/#108 receipt. No native process remains running.

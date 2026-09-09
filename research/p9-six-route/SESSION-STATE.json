@@ -1,5 +1,5 @@
 {
-  "status": "P9_UNFINISHED_BLOODFIRE_CONTROLS_PASS_FIXED_PAIR_SUPPORT_FAIL",
+  "status": "P9_UNFINISHED_QUALIFIED_ACQUISITION_V5_SUPPORT_POSITIVE_VALUE_FAIL",
   "branch": "research/p9-six-route-local-20260905",
   "target_packages_per_aspect": 3,
   "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
@@ -80,7 +80,7 @@
     "Corrected independent confirmation, unrestricted endpoint retention, signed controls, ceilings and hard guardrails",
     "Minimum lifecycle, exact-head review under current owner authority, exact-product integration and #108 receipt"
   ],
-  "exact_next_action": "Qualify a specifically source-bound research-controller capability change using the retained historical Bloodfire valuation/acquisition functions or already evidenced stronger controller. Do not change product scalars or retry random policy roots. Establish exact affected public-state interfaces and preserved null/signed-control semantics before any new fixed matched-cost controller experiment. No replacement is selected or qualified by this audit.",
+  "exact_next_action": "Do not repeat or retune acquisition-v1. Source-bind the already evidenced public-state planning controller from the preserved v25 source only, without executing its closed studies or using their held-out outcomes for tuning. Establish compatibility with the exact minimum Bloodfire runtime and keep signed RandomBuild unchanged. A separate controller capability contract and decisive matched-cost value test are prerequisites to using it; no replacement controller, weight, cohort or product change is selected by this failed adapter. Complete causal/descriptor/viability and independent evidence is still required before package admission.",
   "command_chain": {
     "source_freeze": "7b39ebd148bdc7ee23c7e3a4abff4cab79040d71",
     "verified_source_head": "dada9b6b4a069b6478362e104cb0701ff11aecd1",
@@ -562,5 +562,86 @@
     "readback": "ash-inheritance-20260909/pair-v1/execution-1/REMOTE-READBACK.json",
     "postrun": "ash-inheritance-20260909/pair-v1/postrun-1/RESULTS.json",
     "packages_admitted": 0
+  },
+  "bloodfire_acquisition_controller": {
+    "source_head": "a8064ec36b8124438f4eec5205b4020c32f990be",
+    "status": "FIXED_ACQUISITION_ADAPTER_NOT_ADMITTED",
+    "vow5_comparison": {
+      "kind": "ONE_FIXED_ACQUISITION_CONTROLLER_COMPARISON",
+      "vow": 5,
+      "activation_old": 11,
+      "activation_new": 42,
+      "gained_policies": 33,
+      "lost_policies": 2,
+      "paired_activation_difference": 0.2421875,
+      "one_sided_exact_sign_p": 1.8364517018198967e-08,
+      "win_difference": -0.00390625,
+      "policy_cluster_bootstrap_interval": [
+        -0.01953125,
+        0.01171875
+      ],
+      "stock_support": {
+        "bloodfire": {
+          "active": 11,
+          "inactive": 117,
+          "reachable": 13,
+          "exclusive": 3
+        },
+        "hand": {
+          "active": 42,
+          "inactive": 86,
+          "reachable": 44,
+          "exclusive": 34
+        }
+      },
+      "aware_support": {
+        "bloodfire": {
+          "active": 42,
+          "inactive": 86,
+          "reachable": 45,
+          "exclusive": 21
+        },
+        "hand": {
+          "active": 37,
+          "inactive": 91,
+          "reachable": 38,
+          "exclusive": 16
+        }
+      },
+      "stock_outcomes": {
+        "loss": 457,
+        "win": 55
+      },
+      "aware_outcomes": {
+        "loss": 459,
+        "win": 53
+      },
+      "gates": {
+        "paired_activation_gain": true,
+        "paired_activation_sign_test": true,
+        "win_point_not_worse": false,
+        "win_noninferiority_lower_bound": true,
+        "inherited_pair_support": true
+      },
+      "pass": false,
+      "status": "FIXED_ACQUISITION_CONTROLLER_VALUE_NOT_ESTABLISHED",
+      "limits": [
+        "Conditional on these four seeds and one fixed configuration family; not universal competence.",
+        "The old failed support stage is neither replaced nor extended.",
+        "Increased setup activity does not establish package viability or an unchanged C2 gap.",
+        "Current experiment has one nominated capability change; no further scalar or controller candidate is selected from this result."
+      ],
+      "packages_admitted": 0,
+      "p9_certified": false
+    },
+    "v0_skipped": true,
+    "controller_qualified": true,
+    "controller_value_admitted": false,
+    "complete_raw_remote_verified": true,
+    "readback": "ash-inheritance-20260909/acquisition-v1/execution-2/REMOTE-READBACK.json",
+    "decision": "ash-inheritance-20260909/acquisition-v1/closure-1/DECISION.json",
+    "old_expected_weight_oracle_failure_preserved": true,
+    "old_controller_population_rows": 0,
+    "new_full_package_certificates": 0
   }
 }
