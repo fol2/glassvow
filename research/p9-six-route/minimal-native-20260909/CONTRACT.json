@@ -1,0 +1,78 @@
+{
+  "kind": "FIXED_MINIMAL_NATIVE_ROLE_CONTRACT_NOT_PACKAGE_ADMISSION",
+  "question": "Can the unmodified native Fervor and Smolder role chains be specified, component-intervened and distinguished without the two failed bulk catalogues or a new primitive?",
+  "authority": "#421 direct-native continuation; candidate-decision-20260909/DECISION.json at8c7277da. Owner permits author self-review, not independent confirmation.",
+  "main_sha": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "content_sha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+  "combat_sha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "families": [
+    "fervor",
+    "smolder"
+  ],
+  "contexts": [
+    "plain",
+    "block",
+    "rounding",
+    "thorns",
+    "lethal",
+    "background",
+    "retarget",
+    "repeat",
+    "dormant",
+    "energy_blocked",
+    "shatter",
+    "exhaust_hook",
+    "stacked"
+  ],
+  "factorial": "mask=-1 stock;0 wrapper off;1 producer component off;2 consumer amplification off;3 both off. Interventions only on nominated aspect. Costs, Exhaust, hit topology, hooks, death and RNG retain native semantics.",
+  "fervor": {
+    "scope": "Dusk; intrinsic Strength remains shared native law, not a new aspect-exclusive primitive",
+    "producer": "empower; cost1 Power consumed; +2/+3 player str",
+    "mediator": "visible numeric player str, additive, not consumed per hit/action, reset at new combat",
+    "consumer": "flurry cost1 Attack; 3 sequential hits of2/3 base, each consults str; one card lifecycle and chip settlement",
+    "payoff": "per-hit native weak/vulnerable floors, multiplication, Block and health/death/thorns guards; no scalar collapse to one hit",
+    "intervention": "remove Empower status only; remove str from hit2+ only while preserving all hits and one base contribution",
+    "ideal_marginal_interaction": "(3-1)*s =4/6 on plain first consumer; not a universal HP formula under clipping/rounding/death",
+    "acquisition": "both in native uncommon pool without deed/reveal requirements; actual offer and policy support unproved"
+  },
+  "smolder": {
+    "scope": "Ash; source add_status_enemy poison is blocked on core Dusk",
+    "producer": "venomStrike cost1 Attack; damage4/6 then add4/5 poison only to surviving target",
+    "mediator": "visible target poison; additive source; Catalyst multiplies2/3; next enemy phase applies poison then decrements; native transfer on death/Shatter",
+    "consumer": "catalyst cost1 targeted Skill; positive-stock multiplier; Exhaust, +1 Ember and optional Branch draw remain",
+    "payoff": "deferred HP loss, not immediate damage; record source hit separately; target death and jump can change subsequent path",
+    "intervention": "remove only source poison component; remove only multiplier body, retaining native lifecycle and resource costs",
+    "ideal_marginal_interaction": "p*(m-1)=4/10 additional stock on plain surviving source target, observed through next native enemy phase",
+    "acquisition": "source native common; Catalyst native rare with poolWave3 reveal, no deed injection; population support unproved"
+  },
+  "claims": [
+    "Full stock/off future-state, alias, queue and returned-event equality",
+    "Other-aspect exact-null for all component masks",
+    "Dormant amplifier exact-null with empty mediator; no claim source erasure is null when source is present",
+    "Plain source-by-amplifier algebra with nominal/actual/deferred units kept separate",
+    "Retarget distinguishes player memory from target memory; repeated consumer retains str but exhausts Catalyst instances",
+    "Full source/card/cost/reset/pool mapping, no new primitive from relabel",
+    "Guarded native composition, not equivalence to multiple separately played cards or a full historical quotient"
+  ],
+  "stopping": "Any identity/parity/coverage failure is invalid measurement, preserve capture and fix only implementation under unchanged inputs. Algebra/structural counterexample is a failed specific claim, no threshold rescue. No new population or product candidate is authorised solely by finite cases.",
+  "limits": [
+    "Constructed states and one fixture RNG are not natural reachability or independent samples",
+    "Underlying native laws already exist; distinction from one-bit extra-payoff contract does not erase its native background or prove formal novelty",
+    "Complete closed/admitted-family quotient, policy viability, descriptor, independent confirmation and P9 remain separate",
+    "Original Hand and both whole-catalogue negatives remain unchanged; no v25 or old panel replay"
+  ],
+  "containment": {
+    "per_process_seconds": 120,
+    "max_raw_bytes": 134217728,
+    "workers": 1
+  },
+  "source_sha256": {
+    "roles.gd": "37213426d0ab5e34e13ce2fc3e11524deca3cff010d7cb0f290875ba82e9c3bb",
+    "probe.gd": "07f287437a5059119f4d5725bb7688d5120dae0fc244ca994cb423fbac18f4b4",
+    "verify.py": "a44376a85350aeef910bb2545bcfdea80e5ae5ea5764c4d35b37165581f37c83"
+  },
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
