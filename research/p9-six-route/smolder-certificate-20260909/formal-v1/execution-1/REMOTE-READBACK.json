@@ -1,0 +1,95 @@
+{
+  "kind": "COLD_CHECKOUT_BYTE_AND_OFFLINE_RESULT_READBACK",
+  "published_head": "7eb320842a9b34660d25384f8edf50602701515a",
+  "run_id": "34349623658",
+  "files": [
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/PROTOCOL.json",
+      "bytes": 4085,
+      "sha256": "304f694906c08a18ea105231525ce3183057019396ac53d150e37e6e53a6f999",
+      "git_blob": "558a3b38572758db5b8b19404101946d94faa4c9"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/compare.py",
+      "bytes": 15462,
+      "sha256": "c3a4de2be41408058bff61f6a75932e20ad0ce6699b5efc92171cd530e01632d",
+      "git_blob": "d95bac03c4321e3fd6c1d4ad2830b33dbe8df8cc"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/execution-1/EXECUTION.json",
+      "bytes": 1417,
+      "sha256": "e526bcad8745552b469ff4a4255407b9ad7886f1e1173313d2db862217cd83dd",
+      "git_blob": "2a2561b4e3d013a8339fef8cc5bd5010f89a16d0"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/execution-1/analysis/INPUTS.json",
+      "bytes": 2196,
+      "sha256": "ad3fed0f5e7467e1f50b1fb0ba98bb8a8d060e55170f0fe322060f1df4122acf",
+      "git_blob": "b237b283eadba3e8ee4e682f2685770bd3ede83a"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/execution-1/analysis/RESULTS.json",
+      "bytes": 14461,
+      "sha256": "31c659ebd4a05e18455ddc412757b3e6ac71a8086bf063d6b1035179651af268",
+      "git_blob": "88477948b13f26c1b81ba7a9b64d170766b64c4c"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/execution-1/analysis/inputs/history.tar.gz",
+      "bytes": 88633,
+      "sha256": "9d06512a0d531cb38fcf559673a79e220d483311732df3f66861cbaeb3dbbdd6",
+      "git_blob": "0e963a6dfadb87912f9b1074b78d8629bbad2a47"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/execution-1/analysis/inputs/post-v38-hand-size-inventory-v1.json",
+      "bytes": 10655,
+      "sha256": "859f633351247bb86d6cc73bb68e4c5fbf54f54ed8104521fc77e09ae5234b51",
+      "git_blob": "9526a5f3280b2e7ac02ba96f68620c00d30ae1cf"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/execution-1/analysis/inputs/post-v38-package-order-heldout-v1.json",
+      "bytes": 17544,
+      "sha256": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e",
+      "git_blob": "96e899bf6fbaa2dc6ab926621aa72340818d8dda"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/execution-1/analysis/inputs/progress-post-directive-hand-size-ash-admission-v1.md",
+      "bytes": 4995,
+      "sha256": "5e142f7d739efe723ec9c43a9ed79efad8c073ad87210de0434a0d04ecde048d",
+      "git_blob": "8a24a986671427bd1a97cf7a847c001e14d6214d"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/execution-1/comparison.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/execution-1/comparison.stdout",
+      "bytes": 213,
+      "sha256": "363f3a679c04d8b14f4df99253eda76e009f1ed2ad3d157bc2ea0242d40194b4",
+      "git_blob": "fe838f6e54d85f595b10c043e46286c2cfcdd874"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/execution-1/tests.stderr",
+      "bytes": 2674,
+      "sha256": "7c524ed9ddba424e84ac31d9949930e8216128912a5f98b49e1123b369172417",
+      "git_blob": "6ed4a4aafe4a7fc16dc3b021e978f5f2bb6913e7"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/execution-1/tests.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/formal-v1/test_compare.py",
+      "bytes": 5810,
+      "sha256": "5342cf23e133225aab8d98d6ff58d7567c7876bc69f801322f2c1dc7545b119f",
+      "git_blob": "c9a0f6d2af4b6c2f790a4d125315985b5b8c0c19"
+    }
+  ],
+  "formal_eligibility": false,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "p9_certified": false
+}
