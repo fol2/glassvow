@@ -8,12 +8,9 @@ permissions:
 concurrency:
   group: p9-six-route-research-writer
   cancel-in-progress: false
-env:
-  PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909
 jobs:
   bundle:
-    name: Bind inherited directions to exact sources - no game
+    name: Read missing selected-content construction - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -23,83 +20,60 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
-          persist-credentials: true
           fetch-depth: 1
+          persist-credentials: true
           sparse-checkout: research/p9-six-route/ash-inheritance-20260909
-      - name: Verify sources, fetch immutable inputs and bind dependencies
-        id: binding
-        continue-on-error: true
+      - name: Preserve the exact missing recipe sources, do not execute them
         shell: bash
         run: |
           set -euo pipefail
-          test ! -e "$STUDY/binding-1"
-          mkdir "$STUDY/binding-1"
-          git fetch --filter=blob:none --no-tags --depth=1 origin c802be36510273481b6d0f865b92fac43abf6aff 2ed6cdb0302ba3aab5845a18d862841165e8aaf7 > "$STUDY/binding-1/git.stdout" 2> "$STUDY/binding-1/git.stderr"
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess,sys
-          root=pathlib.Path(os.environ['STUDY']);out=root/'binding-1'
-          expected={'bind.py':'7356edadd245e0c38be5e1dab84417b011d3929a7c693b560973411239d9b219','test_bind.py':'f24510a4f3122323beaec3d47f7c2e0ff5055554bb8e1c7162ba6178059449b4'}
-          for name,digest in expected.items():
-              if hashlib.sha256((root/name).read_bytes()).hexdigest()!=digest:raise RuntimeError('SOURCE:'+name)
-          commands=[('tests',[sys.executable,'-m','unittest','-v','test_bind'],root),('collect',[sys.executable,str(root/'bind.py'),'collect','.',str(out/'inputs')],pathlib.Path('.')),('analyse',[sys.executable,str(root/'bind.py'),'analyse',str(out/'inputs'),str(out/'analysis')],pathlib.Path('.'))]
-          runs=[]
-          for name,cmd,cwd in commands:
-              p=subprocess.run(cmd,cwd=cwd,capture_output=True,timeout=150)
-              (out/(name+'.stdout')).write_bytes(p.stdout);(out/(name+'.stderr')).write_bytes(p.stderr)
-              runs.append({'name':name,'command':cmd,'cwd':str(cwd),'returncode':p.returncode})
-              if p.returncode:break
-          receipt={'source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'source_sha256':expected,'commands':runs,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
-          (out/'EXECUTION.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          if len(runs)!=3 or any(r['returncode'] for r in runs):raise RuntimeError('INCOMPLETE_BINDING')
-          print((out/'analyse.stdout').read_text())
-          print((out/'tests.stderr').read_text())
+          import ast,hashlib,io,json,pathlib,tarfile
+          root=pathlib.Path('research/p9-six-route/ash-inheritance-20260909')
+          raw=(root/'binding-1/inputs/harness.tar.gz').read_bytes()
+          assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()=='0e963a6dfadb87912f9b1074b78d8629bbad2a47'
+          out=root/'minimal-v1/recipe-inputs';out.mkdir(exist_ok=False)
+          names=['post_v38_factorial.py','post_v38_blocked_crn.py','post_v38_knob_identity.py','post_v38_knob_identity_v2.py']
+          manifest={}
+          with tarfile.open(fileobj=io.BytesIO(raw),mode='r:gz') as tf:
+              for name in names:
+                  m=tf.getmember(name);assert m.isfile() and m.size<1000000
+                  data=tf.extractfile(m).read();(out/name).write_bytes(data)
+                  tree=ast.parse(data)
+                  outline=[{'name':getattr(n,'name','assignment'),'start':n.lineno,'end':n.end_lineno} for n in tree.body if isinstance(n,(ast.FunctionDef,ast.Assign,ast.AnnAssign))]
+                  manifest[name]={'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'outline':outline}
+          (out/'MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          print('RECIPE_SOURCE_OUTLINE='+json.dumps(manifest,sort_keys=True))
           PY
-      - name: Preserve available immutable-source packet
-        if: always()
+      - name: Commit isolated source evidence
         shell: bash
         run: |
           set -euo pipefail
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
-          git add "$STUDY/binding-1"
+          git add research/p9-six-route/ash-inheritance-20260909/minimal-v1/recipe-inputs
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): preserve inherited Ash dependencies without carrying unbound outcomes'
+          git commit -m 'research(p9): preserve selected-substrate construction for exact projection'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        if: always() && env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909
-      - name: Verify all bytes and offline reconstruction
-        if: steps.binding.outcome == 'success'
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/minimal-v1
+      - name: Read back all new source bytes
         shell: bash
         run: |
-          set -euo pipefail
-          python3 "cold/$STUDY/bind.py" analyse "cold/$STUDY/binding-1/inputs" "$RUNNER_TEMP/inheritance-offline"
           python3 - <<'PY'
-          import hashlib,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);files=[]
+          import hashlib,json,pathlib
+          root=pathlib.Path('research/p9-six-route/ash-inheritance-20260909/minimal-v1')
+          checks=[]
           for p in sorted(root.rglob('*')):
-              if not p.is_file():continue
-              b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b,str(p)
-              files.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
-          for p in (root/'binding-1/analysis').iterdir():
-              assert p.read_bytes()==(pathlib.Path(os.environ['RUNNER_TEMP'])/'inheritance-offline'/p.name).read_bytes(),p.name
-          receipt={'kind':'INHERITED_SOURCE_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':files,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
-          (root/'binding-1/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          print('INHERITED_BINDING_READBACK_FILES='+str(len(files)))
+              if p.is_file():
+                  data=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==data
+                  checks.append({'path':str(p),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
+          print('EXACT_REMOTE_READBACK='+json.dumps(checks,sort_keys=True))
           PY
-          git add "$STUDY/binding-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): retain exact cold-readback of inherited source binding'
-          test "$(git ls-remote origin refs/heads/research/p9-six-route-local-20260905 | cut -f1)" = "$PUBLISHED_HEAD"
-          git push origin HEAD:refs/heads/research/p9-six-route-local-20260905
-      - name: Keep incomplete execution visible
-        if: always()
-        env:
-          OUTCOME: ${{ steps.binding.outcome }}
-        run: test "$OUTCOME" = success
