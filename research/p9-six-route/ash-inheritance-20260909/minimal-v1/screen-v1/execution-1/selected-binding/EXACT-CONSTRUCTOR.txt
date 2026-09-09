@@ -1,0 +1,39 @@
+def _set_payoffs(content: dict[str, Any], score: str, after: str, rarity: str) -> None:
+    faultline = content["cards"]["executioner"]
+    normal = faultline["effects"][0]
+    upgraded = faultline["up"]["effects"][0]
+    faultline["rarity"] = rarity
+    if score == "high":
+        normal["scorelineBonus"], upgraded["scorelineBonus"] = 12, 15
+        faultline["text"] = (
+            "Deal @8@ damage. Cracked enemies take 6 more. Duskblade: consume Scoreline "
+            "to deal @12@ more and complete the enemy's remaining Facets."
+        )
+        faultline["up"]["text"] = (
+            "Deal @11@ damage. Cracked enemies take 8 more. Duskblade: consume Scoreline "
+            "to deal @15@ more and complete the enemy's remaining Facets."
+        )
+    else:
+        normal.pop("scorelineBonus", None)
+        upgraded.pop("scorelineBonus", None)
+        faultline["text"] = (
+            "Deal @8@ damage. Cracked enemies take 6 more. Duskblade: consume Scoreline "
+            "to complete the enemy's remaining Facets."
+        )
+        faultline["up"]["text"] = (
+            "Deal @11@ damage. Cracked enemies take 8 more. Duskblade: consume Scoreline "
+            "to complete the enemy's remaining Facets."
+        )
+    edge = content["cards"]["guardedStrike"]
+    reflection = 2 if after == "low" else 3
+    edge["effects"][0]["reflection"] = reflection
+    edge["up"]["effects"][0]["reflection"] = reflection
+    word = "twice" if reflection == 2 else "three times"
+    edge["text"] = (
+        f"Deal @5@ damage. Gain #4# Ward. Duskblade: consume Afterimage to deal damage "
+        f"equal to {word} your current Ward."
+    )
+    edge["up"]["text"] = (
+        f"Deal @7@ damage. Gain #6# Ward. Duskblade: consume Afterimage to deal damage "
+        f"equal to {word} your current Ward."
+    )

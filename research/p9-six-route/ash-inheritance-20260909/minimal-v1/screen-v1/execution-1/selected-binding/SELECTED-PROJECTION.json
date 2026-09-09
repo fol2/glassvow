@@ -1,0 +1,84 @@
+{
+  "selected_content_sha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+  "recipe_sha256": "9418a3419c4feecae84360a9ea4068b60157c239d0359bb265939d3c579cdf97",
+  "cards": {
+    "bloodRite": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 0,
+      "target": "self",
+      "vfx": "void",
+      "effects": [
+        {
+          "kind": "loseHp",
+          "n": 3
+        },
+        {
+          "kind": "energy",
+          "n": 2
+        },
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "bloodfire",
+          "n": 1
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "loseHp",
+            "n": 3
+          },
+          {
+            "kind": "energy",
+            "n": 3
+          },
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "bloodfire",
+            "n": 1
+          }
+        ],
+        "text": "Lose 3 HP. Gain 3 Energy. Ashwarden: gain 1 Bloodfire."
+      },
+      "name": "Blood for Oil",
+      "text": "Lose 3 HP. Gain 2 Energy. Ashwarden: gain 1 Bloodfire."
+    },
+    "leechBlade": {
+      "type": "attack",
+      "rarity": "uncommon",
+      "cost": 2,
+      "target": "enemy",
+      "vfx": "void",
+      "effects": [
+        {
+          "kind": "special",
+          "id": "leech",
+          "n": 9,
+          "bonus": 10
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "leech",
+            "n": 13,
+            "bonus": 12
+          }
+        ],
+        "text": "Deal @13@ damage. Heal for half the unblocked damage. Ashwarden: consume Bloodfire to deal @12@ more."
+      },
+      "name": "Thirsting Shard",
+      "text": "Deal @9@ damage. Heal for half the unblocked damage. Ashwarden: consume Bloodfire to deal @10@ more."
+    }
+  },
+  "status": {
+    "icon": "♥",
+    "kind": "buff",
+    "name": "Bloodfire",
+    "desc": "Pain banked as heat. Thirsting Shard consumes one stack for bonus damage and healing."
+  }
+}

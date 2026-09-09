@@ -1,0 +1,158 @@
+{
+  "kind": "PROSPECTIVE_SIGNED_CONTROL_NECESSARY_GUARDRAIL_SCREEN",
+  "question": "Does the exact production2_demand3 candidate satisfy the inherited signed RandomBuild level/movement/reliability screen against unchanged live baseline, before investing in full package confirmation?",
+  "scope": "Exact inherited minimum Bloodfire delta. Necessary signed arm2 screen only; no historical result carry.",
+  "authority": "#421 owner continuation and unchanged programme guardrails; numerical screening scales from post-v38-package-order-heldout-v1 at c802be36510273481b6d0f865b92fac43abf6aff. This does not promote or replace the release detector.",
+  "binding_reference": "research/issue-421/protocols/post-v38-package-order-heldout-v1.json",
+  "binding_reference_blob": "96e899bf6fbaa2dc6ab926621aa72340818d8dda",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "content_sha256": {
+    "baseline": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "candidate": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9"
+  },
+  "combat_sha256": {
+    "baseline": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+    "candidate": "3ccb89f69f50e41d5a46eadd8f48c0a907fd0e382cd492b2c34dd5f93e091ad0"
+  },
+  "domain_manifest_sha256": {
+    "baseline": "85c74ff18cdf73b7355dea340e535edbf01d6b38b53acdc0a251ec528d987b1e",
+    "candidate": "37353646f78f4ee0c982b02ee18a09edc23c16b0225b35711ca8ccd7a76d6241"
+  },
+  "tool_sha256": {
+    "balance_catalogue.gd": "6e240546cd616a2518ee7a2b8fae41aa8a94078429155f89f6d9165eef1c20c0",
+    "balance_metrics.gd": "6904043d83d9cc91265a60911b28f49a01074d185e353b2dccdad64293cd0deb",
+    "balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+    "balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+    "vow_incentives.gd": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+  },
+  "source_sha256": {
+    "execute_control.py": "b1361709c9f8f200477d2ab6b93d868b57931bb19de447787afb8aefc394b236",
+    "probe.gd": "2daacd6b3938eca3bf79d7a08d3a616eee34c8dfd4b3b79d6e1fdfb4fe840429",
+    "read_control.py": "ba73f78d85893dd691c9355912edd6b74311ab5d9b8185267c69a00d62d280a6",
+    "test_control.py": "9b3167ebeb2d6319eca512d2db43b9c2e884e76ba884812f57142012f48ba797"
+  },
+  "arm": 2,
+  "arm_contract": "BalanceSim.simulate(..., empty ban, default resolved policy, random_build=true, random_play=false); original mature-three-act-no-side-state-v1 profile, native shipping incentives. All reveals are the signed profile, not new injection.",
+  "seed0": 73309200,
+  "seeds_per_grid": 128,
+  "total_outcomes": 1024,
+  "grids": {
+    "catalogues": [
+      "baseline",
+      "candidate"
+    ],
+    "aspects": [
+      "duskblade",
+      "ashwarden"
+    ],
+    "vows": [
+      0,
+      5
+    ]
+  },
+  "sampling": "Each paired grid uses the same fixed seed sequence60909000..60909127. These are new control-screen identities, not independent policy configurations or protected acceptance seeds. No parameter selection from results.",
+  "gates": {
+    "candidate_random_build_win_ceiling": 0.5,
+    "maximum_absolute_random_build_win_movement": 0.1,
+    "candidate_faults": 0
+  },
+  "estimator": "Exact integer counts divided by128. Additionally report nominal paired percentile bootstrap intervals (5000 draws, fresh random.Random(421) per grid). Intervals are explicitly descriptive and cannot replace the inherited point-scale screen.",
+  "containment": {
+    "workers": 2,
+    "invocation_seconds": 120,
+    "raw_bytes_per_cell": 67108864
+  },
+  "decisions": {
+    "pass": "Only necessary guardrail screen passes; continue separately frozen missing package evidence. No P9, C2 or package admission.",
+    "fail": "Close this exact screen/candidate promotion path, retain all grids, and do not retune, weaken controls or extend within this protocol. No universal package nonviability theorem.",
+    "inconclusive": "Incomplete/binding/venue fault yields no scientific judgment. Retain capture and diagnose the actual delivery defect before any retry."
+  },
+  "retained_risk": "The old 64-seed original-arm record has candidate-vs-baseline Ash V0 arm2 wins5 vs14. This is disclosed motivation, not a reused sample, new result or automatic release failure.",
+  "no_repeat": [
+    "v25",
+    "1024/2048/672 historical panels",
+    "Hand observer1032",
+    "Hand support fixed128x4 cohort",
+    "frozen fingerprint fit"
+  ],
+  "non_goals": [
+    "No new research controller or numerical release criterion",
+    "No attribution of whole-catalogue shift to Hand alone",
+    "No independent complementarity, policy ceiling, duration, peer separation, detector or endpoint-retention claim",
+    "No E0/E1/NodeO reopening or product merge"
+  ],
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "p9_certified": false,
+  "packages_admitted": 0,
+  "resolved_policy_sha256": "1c271020f31a25becbc789d0fa8c6fb7cb0ad27e39fd016034ef67e6d55a7d7e",
+  "source_parent_contract": {
+    "kind": "PRESELECTED_MINIMUM_BLOODFIRE_SIGNED_CONTROL_SCREEN",
+    "input_head": "1d37d516660760bfcc90348108a0b08d0e9147eb",
+    "product_main": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+    "question": "Does the one already source-bound minimum Bloodfire delta pass the necessary signed RandomBuild movement, ceiling and fault screen on its already preselected cohort?",
+    "entry": "Existing BLOODFIRE_MINIMAL_PREFLIGHT_PASS and complete cold readback. No repeat of its native fixtures.",
+    "candidate": "Exact build.py output already captured in execution-1/ASSEMBLY.json. Only inherited Bloodfire on unchanged native background; not either failed bulk candidate. No additional scalar or policy choice.",
+    "seed0": 73309200,
+    "seeds_per_grid": 128,
+    "grids": [
+      "duskblade:v0",
+      "duskblade:v5",
+      "ashwarden:v0",
+      "ashwarden:v5"
+    ],
+    "arms": [
+      "unchanged main signed arm2",
+      "minimum Bloodfire signed arm2"
+    ],
+    "outcome_rows": 1024,
+    "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+    "git_blob_inputs": {
+      "research/p9-six-route/ash-inheritance-20260909/minimal-v1/build.py": "97364358098369978133e8648410e2d8f145f9c7",
+      "research/p9-six-route/ash-inheritance-20260909/minimal-v1/PROTOCOL.json": "88a0abcd9047d3c4c553fa6bd85707fc7705713e",
+      "research/p9-six-route/ash-inheritance-20260909/minimal-v1/execution-1/ASSEMBLY.json": "944d3f9d84cac867da35baa496a0ce2dea11054f",
+      "research/p9-six-route/ash-inheritance-20260909/minimal-v1/execution-1/TERMINAL.json": "82b7b74354cdc3d3fb0a6d2bdce2e9c3f5c1806a",
+      "research/p9-six-route/ash-inheritance-20260909/minimal-v1/execution-1/REMOTE-READBACK.json": "c08fae2d6c6bf1aaf946aea77f0828b38d2ba750",
+      "research/p9-six-route/guardrail-confirmation-20260909/PROTOCOL.json": "c8cf25e17d53e22ecbf819297b95e482c51c69a2",
+      "research/p9-six-route/guardrail-confirmation-20260909/probe.gd": "1b8931a4a6f9fa989c135d902249487c1967265c",
+      "research/p9-six-route/guardrail-confirmation-20260909/read_control.py": "2515bcbb7d9dc998d81654882abaa9173cd66c82",
+      "research/p9-six-route/guardrail-confirmation-20260909/execute_control.py": "45ec7b22bd6c194256c5cfe18e7b8c99dac1d480"
+    },
+    "own_sha256": {
+      "screen.py": "52d5ebf0bea2e691f889ca3d9e33b2b9d03a53de51260ad495802c313bc5e102",
+      "test_screen.py": "3e0af120b97001b3d5dd925b2803d1747560501b131bb7c1929866612a1aef6c"
+    },
+    "guardrails": {
+      "candidate_random_build_win_ceiling": 0.5,
+      "absolute_random_build_win_movement_maximum": 0.1,
+      "candidate_faults": 0,
+      "baseline_faults": 0
+    },
+    "estimator": "Reuse exact read_control.py, including integer boundary tests and report-only paired intervals. No replacement RandomBuild, pooled grids or interval override.",
+    "freeze": "These committed sources fix deterministic generation of RESOLVED-PROTOCOL and exact runtime manifests. Those generated identities and complete runtime source are committed before any outcome. Two zero-outcome metadata probes check bindings before population execution.",
+    "progress": "Publish each complete matched pair without looking at its win totals; evaluate scientifically only after the complete eight-cell rectangle. Cold checkout reconstructs and re-reads the full result without Godot.",
+    "containment": {
+      "workers": 2,
+      "per_native_process_seconds": 120,
+      "raw_bytes_per_cell": 67108864
+    },
+    "decision": {
+      "pass": "Necessary screen only. Continue complete current-candidate causal/policy/economy/peer/descriptor evidence, with no inherited empirical outcome assumed to carry.",
+      "fail": "Close this exact candidate screen. Do not alter bonus, controller, seeds or threshold, extend, pool old results, or execute a costly package-confirmation stage for this failed candidate.",
+      "inconclusive": "Preserve partial captures and exact defect. Correct delivery defects under unchanged contract; do not label infrastructure failures scientific failures or rerun completed observations."
+    },
+    "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT; unchanged shared signed-arm driver/reader. Source identity, old-candidate substitution, failed preflight, output collision, wrong-source and readback corruption are tested. No old evidence modified.",
+    "no_repeat": [
+      "v25",
+      "frozen model fitting",
+      "Hand support",
+      "failed bulk candidates",
+      "native capacity",
+      "Smolder/Fervor alias studies",
+      "Bloodfire minimal preflight"
+    ],
+    "packages_admitted": 0,
+    "p9_certified": false
+  }
+}
