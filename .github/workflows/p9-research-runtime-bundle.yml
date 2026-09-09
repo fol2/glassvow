@@ -13,7 +13,7 @@ env:
   STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1
 jobs:
   bundle:
-    name: One combat-only planner value and support experiment
+    name: Delivery-only dispatch correction and original planner value study
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 75
@@ -38,38 +38,11 @@ jobs:
             research/p9-six-route/v17
             research/p9-six-route/v18
             research/p9-six-route/v19
-      - name: Commit exact source identities before observations
+      - name: Load the same approved engine and prove the specific pre-population repair
         shell: bash
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess
-          root=pathlib.Path(os.environ['STUDY'])
-          expected={'PROTOCOL.json':'e1eb7bfb5bc1e80b0f206dda785503899cd01268000d6b92806445f71729258f','combat_bridge.gd':'dab17b96b58be8c382f95ecc7a4f9dc9d81097d355d702331a11c74a6df63bd3','experiment.py':'189186a038153e01c784f3d0e4d63076ada211bc18ab434040ed6107193a1695','null_bridge.gd':'bce80b99949792f7ec75b0f9dd25530c1871e33789c6d2e486ea0db6f44c12b8','read_value.py':'1ae6c928a743b0927d7a95056069e284fd3b2617d8deeeb4c6f6a9e953554b89','test_value.py':'22b68326d9b454912fdb1d56fd9b7c651d8fa352a9ee9abc05029b0afecda4bc','value_probe.gd':'e7f30416fc8587bfd54681dbbf8231c085a7ce4e3622415fe629ed6f4b97222b'}
-          assert not (root/'FREEZE.json').exists()
-          blobs={}
-          for name,want in expected.items():
-              p=root/name;b=p.read_bytes();assert hashlib.sha256(b).hexdigest()==want,name
-              blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-              assert blob==subprocess.check_output(['git','rev-parse','HEAD:'+str(p)]).decode().strip(),name
-              blobs[name]=blob
-          (root/'FREEZE.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'source_sha256':expected,'git_blobs':blobs,'new_native_observations':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
-          PY
-          branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$STUDY/FREEZE.json"
-          git commit -m 'research(p9): freeze combat-only planner comparison before native observations'
-          git push origin HEAD:refs/heads/$branch
-          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-      - name: Load pinned approved engine
-        id: engine
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir "$STUDY/delivery-1"
+          mkdir "$STUDY/delivery-2"
           {
             curl --fail --location --max-time 90 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip"
             unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
@@ -78,35 +51,43 @@ jobs:
             echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
             "$engine" --version
             echo "ENGINE=$engine" >> "$GITHUB_ENV"
-          } > "$STUDY/delivery-1/engine.log" 2>&1
-      - name: Qualify signed boundaries then execute only fixed conditional stages
+          } > "$STUDY/delivery-2/engine.log" 2>&1
+          echo "ab2c32022c9dec65228d25b3304ef4fb5aeb3976430e53e18b813f7e8f97ffb0  $STUDY/repair_dispatch.py" | sha256sum -c -
+          python3 "$STUDY/repair_dispatch.py" "$GITHUB_WORKSPACE" "$engine"
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "$STUDY/repair-1" "$STUDY/repaired-source-1"
+          git commit -m 'research(p9): bind exact setter repair without changing controller decisions or cohort'
+          git push origin HEAD:refs/heads/$branch
+          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Qualify boundaries and execute only original frozen conditional stages
         id: native
-        if: steps.engine.outcome == 'success'
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          python3 "$STUDY/experiment.py" run "$GITHUB_WORKSPACE" "$ENGINE" "$STUDY/execution-1" "$RUNNER_TEMP/planner-value" --publish > "$STUDY/delivery-1/runner.stdout" 2> "$STUDY/delivery-1/runner.stderr"
-      - name: Preserve every available diagnostic and safe-state receipt
+          python3 "$STUDY/repaired-source-1/experiment.py" run "$GITHUB_WORKSPACE" "$ENGINE" "$STUDY/execution-2" "$RUNNER_TEMP/planner-value" --publish > "$STUDY/delivery-2/runner.stdout" 2> "$STUDY/delivery-2/runner.stderr"
+      - name: Preserve every available diagnostic and actual terminal
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         env:
-          ENGINE_OUTCOME: ${{ steps.engine.outcome }}
           NATIVE_OUTCOME: ${{ steps.native.outcome }}
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);(root/'delivery-1').mkdir(exist_ok=True)
-          (root/'delivery-1/EXECUTION.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'engine':os.environ['ENGINE_OUTCOME'],'native':os.environ['NATIVE_OUTCOME'],'p9_certified':False},indent=2)+'\n')
-          (root/'execution-1').mkdir(exist_ok=True)
-          if not (root/'execution-1/TERMINAL.json').exists():
-              (root/'execution-1/TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','reason':'Engine/setup failed before terminal','stages':{},'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          root=pathlib.Path(os.environ['STUDY'])
+          (root/'delivery-2/EXECUTION.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'native':os.environ['NATIVE_OUTCOME'],'p9_certified':False},indent=2)+'\n')
+          (root/'execution-2').mkdir(exist_ok=True)
+          if not (root/'execution-2/TERMINAL.json').exists():
+              (root/'execution-2/TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','reason':'No runner terminal','stages':{},'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
           git add -f "$STUDY"
-          git diff --cached --quiet || git commit -m 'research(p9): preserve planner value diagnostics and exact terminal'
+          git diff --cached --quiet || git commit -m 'research(p9): preserve complete planner value delivery diagnostics after syntax repair'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -119,7 +100,7 @@ jobs:
           sparse-checkout: |
             .github
             research/p9-six-route/ash-inheritance-20260909
-      - name: Cold-read published bytes and reproduce actual conditional decisions
+      - name: Cold-read complete source and capture, replay only readers
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
@@ -134,23 +115,30 @@ jobs:
               blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
               assert blob==subprocess.check_output(['git','-C','cold','rev-parse','HEAD:'+str(p)]).decode().strip(),str(p)
               rows.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':blob})
-          (root/'delivery-1/SOURCE-READBACK.json').write_text(json.dumps({'published_head':os.environ['PUBLISHED_HEAD'],'files':rows,'all_bytes_equal':True,'p9_certified':False},indent=2)+'\n')
+          (root/'delivery-2/SOURCE-READBACK.json').write_text(json.dumps({'published_head':os.environ['PUBLISHED_HEAD'],'files':rows,'all_bytes_equal':True,'p9_certified':False},indent=2)+'\n')
           PY
-          if test -f "$STUDY/execution-1/FILES.json"; then
-            python3 "cold/$STUDY/experiment.py" verify cold "$STUDY/execution-1" "cold/$STUDY/execution-1" "$STUDY/execution-1/REMOTE-READBACK.json"
+          if test -f "$STUDY/execution-2/FILES.json"; then
+            python3 "cold/$STUDY/repaired-source-1/experiment.py" verify cold "$STUDY/execution-2" "cold/$STUDY/execution-2" "$STUDY/execution-2/REMOTE-READBACK.json"
           fi
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add -f "$STUDY/delivery-1/SOURCE-READBACK.json" "$STUDY/execution-1"
-          git commit -m 'research(p9): retain complete cold readback of fixed combat-planner value test'
+          git add -f "$STUDY/delivery-2/SOURCE-READBACK.json" "$STUDY/execution-2"
+          git commit -m 'research(p9): retain cold byte proof of repaired planner value capture'
           git push origin HEAD:refs/heads/$branch
-      - name: Separate actual scientific terminal from delivery success
+      - name: Report actual scientific status without claiming a package PASS
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           python3 - <<'PY'
           import json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY'])/'execution-1'
+          root=pathlib.Path(os.environ['STUDY'])/'execution-2'
           terminal=json.loads((root/'TERMINAL.json').read_bytes());print(json.dumps(terminal,indent=2))
+          if terminal['status']=='INCONCLUSIVE':
+              for p in sorted((root/'qualification').glob('*.stdout')):
+                  text=p.read_text()
+                  if text:print(p.name,text)
+              for p in sorted((root/'qualification').glob('*.stderr')):
+                  text=p.read_text()
+                  if text:print(p.name,text)
           assert terminal['status'] in ('FIXED_PLANNER_VALUE_OR_SUPPORT_NOT_ESTABLISHED','PLANNER_VALUE_AND_INHERITED_PAIR_SUPPORT_PASS_NOT_CERTIFICATE')
           PY
