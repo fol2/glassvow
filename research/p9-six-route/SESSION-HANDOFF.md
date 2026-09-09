@@ -1,48 +1,44 @@
-# P9 current handoff — source-scope decisions complete; full certificate still missing
+# P9 current handoff — exact old native role aliases resolved
 
-Continue #421 on research/p9-six-route-local-20260905. Target remains three
-viable, reachable, genuinely distinct strategies per aspect. P9 is unfinished:
-0/6 complete exact-current certificates. Author self-review is allowed, never
-independent confirmation. Product main remains 2ed6cdb0302ba3aab5845a18d862841165e8aaf7.
+Continue #421 on research/p9-six-route-local-20260905. Three viable, reachable,
+genuinely distinct strategies per aspect remain the target. Main is unchanged
+at 2ed6cdb0302ba3aab5845a18d862841165e8aaf7. No P9 PASS; 0/6 complete current
+certificates. Owner permits author self-review, not invented independence.
 
 ## Completed; do not restart
 
-The prior reunion, six-route disposition, v25, frozen validation, command-chain
-negative, Hand support, both bulk-candidate negatives, native role fixtures and
-capacity studies remain unchanged. Historical raw gaps are still explicit in
-SESSION-STATE.json; new successful preservation does not repair those gaps.
+formal-v1/execution-1 completed its original 23 tests and source-bound scoped
+composition calculation. It remains a restricted-algebra result, not eligibility.
 
-smolder-certificate-20260909 now contains the exact historical/native Catalyst
-kernel relation, ten equal full runtime bodies, complete 1,024-row retained Ash
-source-lineage analysis and a source-level public-preview counterexample.
-The historical Leech preview returns a hit dictionary even without Bloodfire;
-current native preview returns null for that ordinary card. Omitted historical
-tags do not establish equality of the complete observation/background interface.
-Do not copy historical aggregate support or policy outcomes on that assumption.
+The decisive comparison is now registered-identity/execution-1: original #524
+PACKAGES explicitly contains VenomStrike/Catalyst and Empower/Flurry. All 51
+selected native semantic frame files match original source 0f005282 and current
+main. The proof preserves all card parameters, public combat previews, targets,
+costs, state/reset, RNG, rewards and native policy dependencies. It does not
+claim renderer/application equality or an executed source/runtime oracle.
 
-| Vow | Old potential | Source-lineage possible | Winning possible | Clean-direct witnesses |
-|---|---:|---:|---:|---:|
-| 5 | 72 | 71 | 29 | 0 |
-| 0 | 88 | 88 | 43 | 0 |
+These two native role subsystems cannot become new distinct packages by names
+or by restricting the already registered family. This existential witness closes
+that question without an infinite search over every historical composition.
+Smolder's old held-out edge was positive; its complete package failed. Those
+are different facts. No universal population-failure claim or new threshold.
 
-All sets are configurations in one fixed family, not independent players.
-Possible is an upper bound; zero clean-direct witnesses is not inactivity or
-zero causal effect. Normal Ashen Core supplies background poison. Do not relax
-the old purity definition or run variants to manufacture witnesses. Direct
-mixed-background interventions, once formally eligible, answer the actual claim.
+Both complete static packets were committed, cold-checked and replayed offline.
+The identity result SHA256 is b074ed7f09b1b0506946ef2be34728abc8b8b351ff9d726dbbf7222d2ab62fd6.
+Read registered-identity/DECISION.json and its execution-1/REMOTE-READBACK.json.
+No native game or protected cohort was run; historical Python was parsed only.
+All earlier negatives, positive evidence, source-scope results and raw gaps in
+SESSION-STATE.json remain. Do not repeat reunion/census, v25, model fitting,
+Hand support, bulk tuning, native fixtures/capacity or trace-purity studies.
 
 ## Exact next action
 
-Do not rerun source extraction, role fixtures, capacity, retained-trace attribution, or pure-source witness variants. The exact named historical Catalyst-extension relation and public-preview counterexample are complete. Construct the missing complete current-source package transition comparison against the exact relevant closed/admitted contracts and their permitted shared-background compositions, including preview, acquisition and lifecycle; the old and current background cannot be assumed identical. Return one checkable full-scope equivalence/decomposition or non-equivalence disposition, not another local example. Only an eligible complete formal disposition opens one unified mixed-background causal/null/subset/descriptor/policy/peer/economy confirmation contract. Use actual source interventions with normal Ashen Core background, not a requirement for naturally pure VenomStrike stock. No fixed model refit, v25 replay, third bulk tune, protected-cohort use or product mutation is selected.
+Do not run another native Smolder/Fervor confirmation: both exact role subsystems are explicitly registered in immutable #524. Use the already admitted Ash hand-size/Bloodfire directions as inherited identities, not new names: bind their exact supported source/content and isolate any required minimal current-product delta before its cheapest applicable guardrail. Do not restore the failed scalar substrate or import historical outcomes across changed dependencies. For additional slots, a complete non-equivalent package under current #421 authority must precede population work; check exact historical role registrations before inventing broader composition proofs. Keep Node O/E0/E1 terminals and all frozen cohorts sealed.
 
-## Preservation and scope
+## Remaining P9 work
 
-All emitted evidence is on this branch with exact sources, logs and raw input
-identities. derived-1 preserves the sparse-checkout delivery failure; derived-2
-preserves the repaired analysis and separate-checkout byte comparison/offline
-reconstruction. frame-1 contains the additional source counterexample. The final
-publication workflow records a separate cold-readback receipt for current files.
-No archived code or game was executed by these analyses. No P9 PASS, model
-refit, protected seed, product merge or new content candidate is implied.
-
-Use the existing ROADMAP.md. Do not start another recovery/census/roadmap loop.
+Complete source-bound package certificates (three per aspect), admitted seven-
+direction detector, corrected independent confirmation, unrestricted endpoint
+retention and all guardrails; then minimum lifecycle, exact-head review under
+current authority, one exact-product integration and #108 receipt. Do not ship
+research scaffolding or call source/tests/commits a completion percentage.
