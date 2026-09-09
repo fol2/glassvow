@@ -1,5 +1,5 @@
 {
-  "completed_cells": 4,
+  "completed_cells": 6,
   "assigned_cells": 8,
   "receipts": [
     {
@@ -120,6 +120,66 @@
       "raw": {
         "bytes": 856680,
         "sha256": "770429ad1881797f2279b95647741aca4ceb4185cd6f10d281af0b411c11f5c3"
+      }
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/home/runner/work/_temp/bloodfire-screen/baseline",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v0.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v0.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 9.188867447000007,
+      "config": {
+        "id": "baseline-duskblade-v0",
+        "catalogue": "baseline",
+        "aspect": "duskblade",
+        "vow": 0,
+        "arm": 2,
+        "seed0": 73309200,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 952042,
+        "sha256": "e28053018a424314f25611af5501b7e68ee8ad88af70bfb79d7bacc0fead52d5"
+      }
+    },
+    {
+      "command": [
+        "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/home/runner/work/_temp/bloodfire-screen/candidate",
+        "-s",
+        "res://probe.gd",
+        "--",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-duskblade-v0.config.json",
+        "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/candidate-duskblade-v0.ndjson"
+      ],
+      "returncode": 0,
+      "failure": null,
+      "seconds": 9.389145410999987,
+      "config": {
+        "id": "candidate-duskblade-v0",
+        "catalogue": "candidate",
+        "aspect": "duskblade",
+        "vow": 0,
+        "arm": 2,
+        "seed0": 73309200,
+        "runs": 128
+      },
+      "status": "COMPLETE",
+      "raw": {
+        "bytes": 952044,
+        "sha256": "53438d62a36f35cb356089377414ea91e06893f6849460a00b3ab0f6ae0b923c"
       }
     }
   ],

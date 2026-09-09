@@ -1,0 +1,30 @@
+{
+  "command": [
+    "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/home/runner/work/_temp/bloodfire-screen/baseline",
+    "-s",
+    "res://probe.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v0.config.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/minimal-v1/screen-v1/execution-1/raw/baseline-duskblade-v0.ndjson"
+  ],
+  "returncode": 0,
+  "failure": null,
+  "seconds": 9.188867447000007,
+  "config": {
+    "id": "baseline-duskblade-v0",
+    "catalogue": "baseline",
+    "aspect": "duskblade",
+    "vow": 0,
+    "arm": 2,
+    "seed0": 73309200,
+    "runs": 128
+  },
+  "status": "COMPLETE",
+  "raw": {
+    "bytes": 952042,
+    "sha256": "e28053018a424314f25611af5501b7e68ee8ad88af70bfb79d7bacc0fead52d5"
+  }
+}
