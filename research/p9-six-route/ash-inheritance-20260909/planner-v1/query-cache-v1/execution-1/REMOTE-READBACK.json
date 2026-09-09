@@ -1,0 +1,74 @@
+{
+  "kind": "COMPLETE_QUERY_MEMOISATION_COLD_READBACK",
+  "published_head": "2a259d88a7f01619e315ea051136e68b19e71bfb",
+  "run_id": "34414515847",
+  "files": [
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1/FREEZE.json",
+      "bytes": 505,
+      "sha256": "82dd308b895a3079fe9473a435e80c2ea2bd886c0032707399e819091acd4d48"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1/PROTOCOL.json",
+      "bytes": 3136,
+      "sha256": "b5383612ba3cf4f4e459cbfba830a8fe32b91208bad4a495752c9d4dabce5d89"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1/benchmark.py",
+      "bytes": 8015,
+      "sha256": "28a08f95e377c79087dc9092bcede25fa2875731eeeb4f17a2a1d4463191a92d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1/execution-1/ARCHIVE.json",
+      "bytes": 129421,
+      "sha256": "f24c3e1055f30028f1fc722ea598b4e42c136c7c7d8672dea6d435fda488aadf"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1/execution-1/RESULTS.json",
+      "bytes": 5864,
+      "sha256": "0752091514f9695a294c5d483781dcf37ea2044660b13201d8da8cdd5813c01f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1/execution-1/TERMINAL.json",
+      "bytes": 140,
+      "sha256": "0742753786b6ec5a7f9ccc882812af2eea109ddf58360213e7a74e8f7055e081"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1/execution-1/capture.tar.xz",
+      "bytes": 384124,
+      "sha256": "735e738ca5391c2b2e4ae7793a5850f712f0dd9dcd0bec22509648b8f097b3e3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1/execution-1/engine.log",
+      "bytes": 576,
+      "sha256": "d35fa1e3e3aa80ae26befe55584d3122ff0c9a79bd04106ce9557fc93d6fca3d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1/execution-1/runner.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1/execution-1/runner.stdout",
+      "bytes": 140,
+      "sha256": "0742753786b6ec5a7f9ccc882812af2eea109ddf58360213e7a74e8f7055e081"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1/greedy_policy.gd",
+      "bytes": 874,
+      "sha256": "909b24d5fc6eaca05a8eed79084cbe696dc4265c5eda89febdf5b5a7fa5dc4c7"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/query-cache-v1/test_benchmark.py",
+      "bytes": 940,
+      "sha256": "48f0a87f5ac8fa76fc0cfc25092aca8b689c39acc8c53f23d220eaad87f49289"
+    }
+  ],
+  "archived_files": 715,
+  "all_bytes_equal": true,
+  "readout_reproduced": true,
+  "scientific_status": "EXACT_EQUIVALENCE_SPEEDUP_NOT_ESTABLISHED",
+  "new_native_runs_during_readback": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
