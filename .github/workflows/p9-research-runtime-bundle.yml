@@ -11,13 +11,12 @@ concurrency:
 env:
   PYTHONDONTWRITEBYTECODE: '1'
   STUDY: research/p9-six-route/smolder-certificate-20260909
-  DERIVED: derived-2
 jobs:
   bundle:
-    name: Retained Smolder audit - sparse-checkout delivery repair only
+    name: Publish source-frame decision and current capsule - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 5
     permissions:
       contents: write
     steps:
@@ -35,41 +34,45 @@ jobs:
             domain
             content
             research/p9-six-route/smolder-certificate-20260909
-            research/p9-six-route/minimal-native-20260909/capacity
-      - name: Verify unchanged reviewed source and preserve delivery delta
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);out=root/os.environ['DERIVED'];out.mkdir()
-          expected={'source_relation.py':'feeb378644e67391fc74161f80ac5ecff61d1e03987126201b019e6dadde82ac','trace_audit.py':'b11b70e911a93249d756aa5c0ec3a7b1f0fed381a96522ed777a3019c8bcf739','test_audit.py':'e7775177cf97b29061ec12a37dced379700ec7964ec14b30f12eb021ac21f1e3'}
-          for name,digest in expected.items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest,name
-          record={'kind':'DELIVERY_ONLY_REPAIR','prior_run':34333795138,'prior_failure':'Agent contract checker could not read omitted .grok workflow/history paths; research readers did not execute.','repair':'Include .grok in sparse checkout; use already committed identical reader source; preserve derived-1.','scientific_changes':[],'new_native_runs':0,'new_independent_samples':0}
-          (out/'DELIVERY-REPAIR.json').write_text(json.dumps(record,indent=2)+'\n')
-          PY
-      - name: Audit complete retained rectangles without engine execution
-        id: audit
+            research/p9-six-route/package-disposition-20260908
+      - name: Check exact sources and evaluate source-frame counterexample
+        id: frame
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          out="$STUDY/$DERIVED"
-          python3 tools/check_agent_contracts.py > "$out/agent-contracts.log" 2>&1
-          python3 -m unittest discover -s "$STUDY" -p 'test_audit.py' -v > "$out/tests.log" 2>&1
-          python3 "$STUDY/source_relation.py" . "$out/SOURCE-RELATION.json" > "$out/source.stdout" 2> "$out/source.stderr"
-          python3 "$STUDY/trace_audit.py" . "$out/trace" > "$out/trace.stdout" 2> "$out/trace.stderr"
-      - name: Preserve all available outputs on existing branch
+          mkdir "$STUDY/frame-1"
+          python3 - <<'PY'
+          import hashlib,os,pathlib
+          root=pathlib.Path(os.environ['STUDY'])
+          expected={'frame_counterexample.py':'f7104f99f1b3e90879500b393f2bd7295f306a025d8e4a559adbed588d774222','test_frame.py':'03803c2951e6827799032c1f241c3a5e029e34d0c741b23387c2de0f225d5d62','close_scope.py':'486bea69f0f60215005713a51277d668a871a07973ca29ef62966f1082caafc2','test_close.py':'4af52fe0ac7a0ea780ccb8f5be0c6d435eb9ca2aea7771d884816f29a48f0571'}
+          for name,digest in expected.items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest,name
+          PY
+          python3 tools/check_agent_contracts.py > "$STUDY/frame-1/agent-contracts.log" 2>&1
+          python3 -m unittest discover -s "$STUDY" -p 'test_*.py' -v > "$STUDY/frame-1/tests.log" 2>&1
+          python3 "$STUDY/frame_counterexample.py" . "$STUDY/frame-1/RESULTS.json" > "$STUDY/frame-1/stdout.log" 2> "$STUDY/frame-1/stderr.log"
+          cp research/p9-six-route/SESSION-STATE.json "$RUNNER_TEMP/state-before.json"
+          python3 "$STUDY/close_scope.py" . > "$STUDY/frame-1/capsule.stdout" 2> "$STUDY/frame-1/capsule.stderr"
+          python3 - <<'PY'
+          import json,os,pathlib
+          before=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'state-before.json').read_bytes())
+          after=json.loads(pathlib.Path('research/p9-six-route/SESSION-STATE.json').read_bytes())
+          changed=[k for k in before if before[k]!=after.get(k)]
+          assert set(changed)<= {'status','exact_next_action','smolder_source_scope'},changed
+          assert after['packages_admitted']==0 and after['p9_certified'] is False
+          (pathlib.Path(os.environ['STUDY'])/'frame-1/STATE-PRESERVATION.json').write_text(json.dumps({'changed_existing_keys':changed,'all_other_existing_fields_identical':True,'new_native_runs':0},indent=2)+'\n')
+          PY
+      - name: Preserve available evidence and changed capsule files
         if: always()
         shell: bash
         run: |
           set -euo pipefail
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
-          git add "$STUDY"
+          git add "$STUDY" research/p9-six-route/SESSION-STATE.json research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/package-disposition-20260908/ROADMAP.md
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): preserve repaired source-linked audit execution and diagnostics'
+          git commit -m 'research(p9): preserve source-frame decision and exact unfinished milestones'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -80,41 +83,38 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
           sparse-checkout: |
+            .github
             research/p9-six-route/smolder-certificate-20260909
-            research/p9-six-route/minimal-native-20260909/capacity
+            research/p9-six-route/package-disposition-20260908
             domain
             content
-      - name: Verify remote bytes and reproduce derived decisions offline
-        if: steps.audit.outcome == 'success'
+      - name: Read back complete source and capsule bytes; replay source finding only
+        if: steps.frame.outcome == 'success'
         shell: bash
         run: |
           set -euo pipefail
-          python3 "cold/$STUDY/source_relation.py" cold "$RUNNER_TEMP/cold-source.json"
-          python3 "cold/$STUDY/trace_audit.py" cold "$RUNNER_TEMP/cold-trace"
+          python3 "cold/$STUDY/frame_counterexample.py" cold "$RUNNER_TEMP/frame-readback.json"
           python3 - <<'PY'
           import hashlib,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);out=root/os.environ['DERIVED'];entries=[]
+          root=pathlib.Path(os.environ['STUDY']);entries=[]
           paths=[p for p in root.rglob('*') if p.is_file()]
-          result=json.loads((out/'trace/RESULTS.json').read_bytes())
-          paths += [pathlib.Path(p) for p in result['inputs']]
+          paths += [pathlib.Path(p) for p in ['research/p9-six-route/SESSION-STATE.json','research/p9-six-route/SESSION-HANDOFF.md','research/p9-six-route/package-disposition-20260908/ROADMAP.md','.github/workflows/p9-research-runtime-bundle.yml']]
           for p in sorted(paths):
               b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b,str(p)
               entries.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
-          assert (out/'SOURCE-RELATION.json').read_bytes()==(pathlib.Path(os.environ['RUNNER_TEMP'])/'cold-source.json').read_bytes()
-          for p in (out/'trace').glob('*.json'):
-              assert p.read_bytes()==(pathlib.Path(os.environ['RUNNER_TEMP'])/'cold-trace'/p.name).read_bytes(),str(p)
-          receipt={'status':'EXACT_REMOTE_BYTES_AND_OFFLINE_DERIVATION_MATCH','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':entries,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
-          (out/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          print('SMOLDER_AUDIT_READBACK_FILES='+str(len(entries)))
-          print('SMOLDER_AUDIT_DECISIONS='+json.dumps(result['grids'],sort_keys=True))
+          assert (root/'frame-1/RESULTS.json').read_bytes()==(pathlib.Path(os.environ['RUNNER_TEMP'])/'frame-readback.json').read_bytes()
+          r={'status':'SOURCE_FRAME_AND_CURRENT_CAPSULE_EXACT_REMOTE_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':entries,'upstream_raw_readback':'derived-2/REMOTE-READBACK.json','new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
+          (root/'REMOTE-READBACK.json').write_text(json.dumps(r,indent=2)+'\n')
+          print('FINAL_SOURCE_SCOPE_READBACK_FILES='+str(len(entries)))
+          print((root/'DECISION.json').read_text())
           PY
-          git add "$STUDY/$DERIVED/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record cold-readback of source classification and attribution'
+          git add "$STUDY/REMOTE-READBACK.json"
+          git commit -m 'research(p9): record cold-readback of complete source-scope checkpoint'
           test "$(git ls-remote origin refs/heads/research/p9-six-route-local-20260905 | cut -f1)" = "$PUBLISHED_HEAD"
           git push origin HEAD:refs/heads/research/p9-six-route-local-20260905
-      - name: Fail closed on audit or delivery defects
+      - name: Preserve fail-closed status
         if: always()
         shell: bash
         env:
-          AUDIT_OUTCOME: ${{ steps.audit.outcome }}
-        run: test "$AUDIT_OUTCOME" = success
+          FRAME_OUTCOME: ${{ steps.frame.outcome }}
+        run: test "$FRAME_OUTCOME" = success
