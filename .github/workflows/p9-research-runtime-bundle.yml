@@ -10,10 +10,10 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/smolder-certificate-20260909/registered-identity
+  STUDY: research/p9-six-route/ash-inheritance-20260909
 jobs:
   bundle:
-    name: Preserve exact alias decision and capsule - no engine
+    name: Bind inherited directions to exact sources - no game
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -23,69 +23,83 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
-          fetch-depth: 1
           persist-credentials: true
-          sparse-checkout: |
-            research/p9-six-route/smolder-certificate-20260909/registered-identity
-            research/p9-six-route/package-disposition-20260908
-      - name: Verify source and preserve every historical state field
+          fetch-depth: 1
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909
+      - name: Verify sources, fetch immutable inputs and bind dependencies
+        id: binding
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          echo '004477378930029dc289a4fdc4e66e39d27467af85f80686abc093e998507a7f  research/p9-six-route/smolder-certificate-20260909/registered-identity/close_identity.py' | sha256sum -c -
-          test ! -e "$STUDY/publication-1"
-          mkdir "$STUDY/publication-1"
-          cp research/p9-six-route/SESSION-STATE.json "$RUNNER_TEMP/state-before.json"
-          python3 "$STUDY/close_identity.py" . > "$STUDY/publication-1/stdout.log" 2> "$STUDY/publication-1/stderr.log"
+          test ! -e "$STUDY/binding-1"
+          mkdir "$STUDY/binding-1"
+          git fetch --filter=blob:none --no-tags --depth=1 origin c802be36510273481b6d0f865b92fac43abf6aff 2ed6cdb0302ba3aab5845a18d862841165e8aaf7 > "$STUDY/binding-1/git.stdout" 2> "$STUDY/binding-1/git.stderr"
           python3 - <<'PY'
-          import json,os,pathlib
-          before=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'state-before.json').read_bytes())
-          after=json.loads(pathlib.Path('research/p9-six-route/SESSION-STATE.json').read_bytes())
-          changed=[k for k in before if before[k]!=after.get(k)]
-          assert set(changed)<= {'status','exact_next_action','native_registered_identity'},changed
-          assert after['p9_certified'] is False and after['packages_admitted']==0
-          receipt={'source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'changed_existing_fields':changed,'other_existing_fields_unchanged':True,'new_native_runs':0,'new_independent_samples':0,'p9_certified':False}
-          (pathlib.Path(os.environ['STUDY'])/'publication-1/STATE-CHECK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          import hashlib,json,os,pathlib,subprocess,sys
+          root=pathlib.Path(os.environ['STUDY']);out=root/'binding-1'
+          expected={'bind.py':'7356edadd245e0c38be5e1dab84417b011d3929a7c693b560973411239d9b219','test_bind.py':'f24510a4f3122323beaec3d47f7c2e0ff5055554bb8e1c7162ba6178059449b4'}
+          for name,digest in expected.items():
+              if hashlib.sha256((root/name).read_bytes()).hexdigest()!=digest:raise RuntimeError('SOURCE:'+name)
+          commands=[('tests',[sys.executable,'-m','unittest','-v','test_bind'],root),('collect',[sys.executable,str(root/'bind.py'),'collect','.',str(out/'inputs')],pathlib.Path('.')),('analyse',[sys.executable,str(root/'bind.py'),'analyse',str(out/'inputs'),str(out/'analysis')],pathlib.Path('.'))]
+          runs=[]
+          for name,cmd,cwd in commands:
+              p=subprocess.run(cmd,cwd=cwd,capture_output=True,timeout=150)
+              (out/(name+'.stdout')).write_bytes(p.stdout);(out/(name+'.stderr')).write_bytes(p.stderr)
+              runs.append({'name':name,'command':cmd,'cwd':str(cwd),'returncode':p.returncode})
+              if p.returncode:break
+          receipt={'source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'source_sha256':expected,'commands':runs,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
+          (out/'EXECUTION.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          if len(runs)!=3 or any(r['returncode'] for r in runs):raise RuntimeError('INCOMPLETE_BINDING')
+          print((out/'analyse.stdout').read_text())
+          print((out/'tests.stderr').read_text())
           PY
-      - name: Commit only current decision and capsule
+      - name: Preserve available immutable-source packet
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
-          git add "$STUDY/DECISION.json" "$STUDY/publication-1" research/p9-six-route/SESSION-STATE.json research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/package-disposition-20260908/ROADMAP.md
+          git add "$STUDY/binding-1"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): close native role alias claims and stop redundant population work'
+          git commit -m 'research(p9): preserve inherited Ash dependencies without carrying unbound outcomes'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        if: always() && env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: |
-            research/p9-six-route/smolder-certificate-20260909/registered-identity
-            research/p9-six-route/package-disposition-20260908
-      - name: Verify complete published decision bytes
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909
+      - name: Verify all bytes and offline reconstruction
+        if: steps.binding.outcome == 'success'
         shell: bash
         run: |
           set -euo pipefail
+          python3 "cold/$STUDY/bind.py" analyse "cold/$STUDY/binding-1/inputs" "$RUNNER_TEMP/inheritance-offline"
           python3 - <<'PY'
           import hashlib,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);paths=[root/'close_identity.py',root/'DECISION.json']
-          paths+=list((root/'publication-1').iterdir())
-          paths+=[pathlib.Path('research/p9-six-route')/p for p in ('SESSION-STATE.json','SESSION-HANDOFF.md','package-disposition-20260908/ROADMAP.md')]
-          entries=[]
-          for p in sorted(paths):
+          root=pathlib.Path(os.environ['STUDY']);files=[]
+          for p in sorted(root.rglob('*')):
+              if not p.is_file():continue
               b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b,str(p)
-              entries.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
-          receipt={'kind':'CURRENT_ALIAS_DECISION_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':entries,'upstream_proof':'execution-1/REMOTE-READBACK.json','new_native_runs':0,'packages_admitted':0,'p9_certified':False}
-          (root/'publication-1/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          print('CURRENT_CAPSULE_READBACK_FILES='+str(len(entries)))
+              files.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
+          for p in (root/'binding-1/analysis').iterdir():
+              assert p.read_bytes()==(pathlib.Path(os.environ['RUNNER_TEMP'])/'inheritance-offline'/p.name).read_bytes(),p.name
+          receipt={'kind':'INHERITED_SOURCE_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':files,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
+          (root/'binding-1/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print('INHERITED_BINDING_READBACK_FILES='+str(len(files)))
           PY
-          git add "$STUDY/publication-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): retain verified current capsule readback'
+          git add "$STUDY/binding-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): retain exact cold-readback of inherited source binding'
           test "$(git ls-remote origin refs/heads/research/p9-six-route-local-20260905 | cut -f1)" = "$PUBLISHED_HEAD"
           git push origin HEAD:refs/heads/research/p9-six-route-local-20260905
+      - name: Keep incomplete execution visible
+        if: always()
+        env:
+          OUTCOME: ${{ steps.binding.outcome }}
+        run: test "$OUTCOME" = success
