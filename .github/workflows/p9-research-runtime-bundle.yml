@@ -17,14 +17,14 @@ env:
 
 jobs:
   bundle:
-    name: One native-Ash restoration - fixed disjoint signed controls
+    name: Close measured candidate paths and current capsule - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 5
     permissions:
       contents: write
     steps:
-      - name: Check out exact frozen inputs
+      - name: Check out exact closure inputs only
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
@@ -33,65 +33,45 @@ jobs:
           lfs: false
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            /domain/
-            /content/
-            /tools/
-            /research/p9-six-route/source-package-audit-20260908/
-            /research/p9-six-route/natural-contribution-20260907/diagnostic_rules.gd
-            /research/p9-six-route/guardrail-confirmation-20260909/
-            /research/p9-six-route/candidate-failure-20260909/attribution.py
-            /research/p9-six-route/native-foundation-20260909/
-      - name: Verify the single candidate and fixed gate before new outcomes
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+            /research/p9-six-route/guardrail-confirmation-20260909/native-1/RESULTS.json
+            /research/p9-six-route/candidate-failure-20260909/native-1/RESULTS.json
+            /research/p9-six-route/candidate-failure-20260909/REMOTE-READBACK.json
+            /research/p9-six-route/native-foundation-20260909/native-1/RESULTS.json
+            /research/p9-six-route/native-foundation-20260909/REMOTE-READBACK.json
+            /research/p9-six-route/candidate-decision-20260909/
+      - name: Verify closure code, test exact boundaries, derive metadata
         shell: bash
         run: |
           set -euo pipefail
-          root=research/p9-six-route/native-foundation-20260909
-          python3 - <<'PY'
-          import hashlib,json,pathlib
-          r=pathlib.Path('research/p9-six-route/native-foundation-20260909')
-          b=(r/'PROTOCOL.json').read_bytes()
-          assert hashlib.sha256(b).hexdigest()=='0ebcc9dbece994506d2d2037670f21d4c9342970aa28a8ede0b583e7c6e91a3f'
-          for name,h in json.loads(b)['source_sha256'].items():assert hashlib.sha256((r/name).read_bytes()).hexdigest()==h,name
-          PY
-          (cd "$root" && python3 -m unittest -v test_foundation) > "$root/TESTS.log" 2>&1
-      - name: Bind the existing official engine
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/p9-engine"
-          curl --fail --location --max-time 120 --output "$RUNNER_TEMP/p9-engine/engine.zip" https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
-          echo "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4  $RUNNER_TEMP/p9-engine/engine.zip" | sha256sum -c -
-          unzip -q "$RUNNER_TEMP/p9-engine/engine.zip" -d "$RUNNER_TEMP/p9-engine"
-          chmod +x "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64"
-          echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64" | sha256sum -c -
-      - name: Execute the one frozen disjoint control rectangle
-        shell: bash
-        run: |
-          set -euo pipefail
-          root=research/p9-six-route/native-foundation-20260909
-          python3 -u "$root/foundation.py" . "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64" "$root/native-1" > "$root/EXECUTION.stdout" 2> "$root/EXECUTION.stderr"
-      - name: Commit all available new capture without touching old negatives
+          root=research/p9-six-route/candidate-decision-20260909
+          echo "b03d1eaa3e00b1d1a59d4b8ce02ebf3f2de6b8c55ee3dcf85c13cabc6b10ac25  $root/close_decision.py" | sha256sum -c -
+          echo "42584266f452235cd16a8184e0a0b24cff518e7571bce1ac684421ee428fc6aa  $root/test_close_decision.py" | sha256sum -c -
+          (cd "$root" && python3 -m unittest -v test_close_decision) > "$root/TESTS.log" 2>&1
+          python3 "$root/close_decision.py" .
+      - name: Publish only current metadata and its deterministic decision
         id: publish
-        if: always()
         shell: bash
         run: |
           set -euo pipefail
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$GITHUB_SHA"
-          root=research/p9-six-route/native-foundation-20260909
-          git add "$root"
+          git add research/p9-six-route/SESSION-STATE.json research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/package-disposition-20260908/ROADMAP.md research/p9-six-route/candidate-decision-20260909/DECISION.json research/p9-six-route/candidate-decision-20260909/TESTS.log
           python3 - <<'PY'
           import subprocess
-          paths=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
-          assert paths and all(p.startswith('research/p9-six-route/native-foundation-20260909/') and '__pycache__' not in p for p in paths),'STAGED_SCOPE'
+          prefix='research/p9-six-route/'
+          expected={prefix+x for x in ('SESSION-STATE.json','SESSION-HANDOFF.md','package-disposition-20260908/ROADMAP.md','candidate-decision-20260909/DECISION.json','candidate-decision-20260909/TESTS.log')}
+          actual=set(subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines())
+          assert actual==expected,'PUBLICATION_SCOPE'
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): preserve restored-foundation signed-control result and full raw'
+          git commit -m 'research(p9): close tested candidate paths and retire stale continuation state'
           git push origin "HEAD:refs/heads/$branch"
           echo "head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-      - name: Fetch published evidence into a separate checkout
-        if: always() && steps.publish.outputs.head != ''
+      - name: Fetch published metadata into a separate checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ steps.publish.outputs.head }}
@@ -101,31 +81,33 @@ jobs:
           lfs: false
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            /research/p9-six-route/native-foundation-20260909/
-            /research/p9-six-route/guardrail-confirmation-20260909/
-            /research/p9-six-route/candidate-failure-20260909/attribution.py
-      - name: Verify every published byte and independently reconstruct the same readout
-        if: always() && steps.publish.outputs.head != ''
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+            /research/p9-six-route/candidate-decision-20260909/
+      - name: Verify all published bytes and preserve receipt
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess,sys
-          root=pathlib.Path('research/p9-six-route/native-foundation-20260909');cold=pathlib.Path('cold');observed=[]
-          for entry in subprocess.check_output(['git','-C','cold','ls-tree','-r','-z','HEAD','--',str(root)]).split(b'\0'):
-              if not entry:continue
-              meta,path=entry.split(b'\t');name=path.decode();expected=meta.split()[2].decode();b=(cold/name).read_bytes()
-              assert b==pathlib.Path(name).read_bytes(),name
-              blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest();assert blob==expected,name
-              observed.append({'path':name,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':blob})
-          proof=subprocess.check_output([sys.executable,str(cold/root/'foundation.py'),'--verify',str(cold),str(cold/root/'native-1')])
-          receipt={'kind':'COLD_REMOTE_BYTE_READBACK_AND_OFFLINE_RECONSTRUCTION','freeze_head':'9950059c98d2db245b0023a9c7f29dc79ef7c241','workflow_head':os.environ['GITHUB_SHA'],'workflow_run':os.environ['GITHUB_RUN_ID'],'published_head':subprocess.check_output(['git','-C','cold','rev-parse','HEAD']).decode().strip(),'files_matched':len(observed),'files':observed,'reconstruction':json.loads(proof),'new_native_runs':0,'packages_admitted':0,'p9_certified':False,'review':'AUTHOR_SELF_REVIEW_NOT_INDEPENDENT; separate checkout is byte independence, not a second scientific sample or semantic oracle.'}
-          (root/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          import hashlib,json,os,pathlib,subprocess
+          r=pathlib.Path('research/p9-six-route')
+          names=[str(r/x) for x in ('SESSION-STATE.json','SESSION-HANDOFF.md','package-disposition-20260908/ROADMAP.md')]
+          names+=subprocess.check_output(['git','ls-tree','-r','--name-only','HEAD','--',str(r/'candidate-decision-20260909')]).decode().splitlines()
+          files=[]
+          for name in names:
+              b=pathlib.Path(name).read_bytes();downloaded=(pathlib.Path('cold')/name).read_bytes()
+              assert b==downloaded,name
+              blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+              assert blob==subprocess.check_output(['git','-C','cold','rev-parse','HEAD:'+name]).decode().strip(),name
+              files.append({'path':name,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':blob})
+          receipt={'kind':'COLD_REMOTE_CURRENT_CAPSULE_BYTE_READBACK','source_head':os.environ['GITHUB_SHA'],'workflow_run':os.environ['GITHUB_RUN_ID'],'published_head':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'files_matched':len(files),'files':files,'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
+          (r/'candidate-decision-20260909/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
           print(json.dumps({k:v for k,v in receipt.items() if k!='files'},sort_keys=True))
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$(git rev-parse HEAD)"
-          git add research/p9-six-route/native-foundation-20260909/REMOTE-READBACK.json
-          git commit -m 'research(p9): persist restored-foundation exact-byte remote receipt'
+          git add research/p9-six-route/candidate-decision-20260909/REMOTE-READBACK.json
+          git commit -m 'research(p9): preserve current-capsule remote readback'
           git push origin "HEAD:refs/heads/$branch"
           echo "FINAL_HEAD=$(git rev-parse HEAD)"
