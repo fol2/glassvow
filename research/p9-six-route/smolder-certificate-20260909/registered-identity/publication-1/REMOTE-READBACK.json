@@ -1,0 +1,59 @@
+{
+  "kind": "CURRENT_ALIAS_DECISION_COLD_READBACK",
+  "published_head": "bbc78287e27ba10077ded079ec85b398d15db159",
+  "run_id": "34351900129",
+  "files": [
+    {
+      "path": "research/p9-six-route/SESSION-HANDOFF.md",
+      "bytes": 3158,
+      "sha256": "d715424fdf8413ed10c045fb722e9e36d27fe5fc1bf033ad35a2a53f9eb05bab",
+      "git_blob": "609ab97e99f585e6e6e69b733a51c5de9ce19464"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-STATE.json",
+      "bytes": 17938,
+      "sha256": "ca5dfe8c39bd2211b3977b712d1d5443b967b806eae2853de6be389c014287ed",
+      "git_blob": "79ed3c184f1f2eabb0714a8c58de17d1814acf05"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/ROADMAP.md",
+      "bytes": 1852,
+      "sha256": "5b93caabd78816cb7f42eb93949e386a2e6d2f983dbb562fd4348f9d50e8ee46",
+      "git_blob": "9040768d9e62a5927fe3e149e451a152d7839625"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/registered-identity/DECISION.json",
+      "bytes": 2874,
+      "sha256": "40254ff3b09d18b5275c6fa27f3110977d6fc9b03d026610320b973519a35014",
+      "git_blob": "c0a80eb82c3e5447244597cee635d30accd81d20"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/registered-identity/close_identity.py",
+      "bytes": 9896,
+      "sha256": "004477378930029dc289a4fdc4e66e39d27467af85f80686abc093e998507a7f",
+      "git_blob": "80c37161795ee0181e5b34faad0715d502f027f7"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/registered-identity/publication-1/STATE-CHECK.json",
+      "bytes": 289,
+      "sha256": "9dec3fbe5dbbbb6cd7e2deab5ed6e23a1e6b5a7176a621a8b37b50d6f6fcefc2",
+      "git_blob": "3cc3fe9e5512e05c9f44c82b1b744ee0fa42bcc1"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/registered-identity/publication-1/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/smolder-certificate-20260909/registered-identity/publication-1/stdout.log",
+      "bytes": 167,
+      "sha256": "308c12fae862234d2766c3003a4b08c6ca179aaa07967150079e50f80f8c5d69",
+      "git_blob": "5453e8818c28ebd1aee9794994e29e197cfd7f38"
+    }
+  ],
+  "upstream_proof": "execution-1/REMOTE-READBACK.json",
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
