@@ -1,0 +1,33 @@
+[detached HEAD 87fc0a0] research(p9): freeze acquisition controller runtimes before qualification
+ 7 files changed, 1068 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/RESOLVED-PROTOCOLS.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/SOURCE-DELTA.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/controller-runtime.tar.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/original-source/RESOLVED-PROTOCOL.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/original-source/SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/original-source/runtime-source.tar.xz
+[detached HEAD 93b5fc4] research(p9): preserve fixed acquisition controller terminal
+ 21 files changed, 10216 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/FILES.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/TERMINAL.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/aware-import.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/aware-import.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/aware-import.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/aware-parse.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/aware-parse.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/aware-parse.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/capability.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/capability.jsonl
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/capability.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/capability.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/stock-import.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/stock-import.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/stock-import.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/stock-parse.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/stock-parse.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/stock-parse.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/tests.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/tests.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-1/qualification/tests.stdout
+{"published_head": "93b5fc479d122f1137d40b04af527dcb8dabd1cc", "terminal": {"failure": "ValueError('PROCESS_OR_SCRIPT_DIAGNOSTIC')", "p9_certified": false, "packages_admitted": 0, "source_head": "02c7ebeb84198046e1815a764265c303bd9101ea", "stages": {}, "status": "INCONCLUSIVE"}}
