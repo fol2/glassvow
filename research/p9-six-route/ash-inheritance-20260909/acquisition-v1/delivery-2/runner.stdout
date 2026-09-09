@@ -1,0 +1,342 @@
+[detached HEAD a8064ec] research(p9): preserve conditional numeric-oracle repair before any population
+ 8 files changed, 575 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repair-1/DIAGNOSIS.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/PROTOCOL.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/bridge.py
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/capability.gd
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/compare_value.py
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/experiment.py
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/null_probe.gd
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/test_bridge.py
+{"controller_source_identical": true, "equality_tolerance_added": false, "explanation": "The frozen scorer resolves weights using float(str(value)); the oracle used direct float(value). Only its three expected-weight reads are corrected. Full qualification must pass again before any controller comparison; no outcome or expected sign is overwritten.", "failure_roles": ["bloodRite", "leechBlade"], "kind": "PREPOPULATION_EXPECTED_WEIGHT_CONVERSION_REPAIR", "maximum_serialized_score_difference": 1.0658141036401503e-13, "old_capture_sha256": "72d053c312b97987b6cd28be019ab75fb91d4829cd90d1b70cb03b3b282c6e73", "old_failed_checks": 30, "old_populations_run": 0, "old_protocol_sha256": "c7d2962458de22360be21ecbe5c79da915066482ba86e82150fa10df771fc243", "old_query_checks": 9851, "old_query_sha256": "f028406be7dbc20c8fae61ac69609b5139d073441bc2e243cc8dd28c63fb6e1c", "old_raw_and_terminal_preserved": true, "only_contract_identity_change": "own_sha256/capability.gd", "policy_cohort_seeds_thresholds_identical": true, "repaired_query_sha256": "35d38cb8961db17bac2b2d0270daebb61844ee3339758991859c643ec745953b"}
+[detached HEAD b16103c] research(p9): freeze acquisition controller runtimes before qualification
+ 7 files changed, 1068 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/RESOLVED-PROTOCOLS.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/SOURCE-DELTA.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/controller-runtime.tar.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/original-source/RESOLVED-PROTOCOL.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/original-source/SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/original-source/runtime-source.tar.xz
+[detached HEAD 5a7a5c3] research(p9): preserve passed acquisition capability and signed-null checks
+ 56 files changed, 10350 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/RESULTS.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-import.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-import.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-import.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-null.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-null.jsonl
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-null.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-null.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-parse.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-parse.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware-parse.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v0-000.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/aware/v5-000.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/capability.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/capability.jsonl
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/capability.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/capability.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-import.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-import.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-import.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-null.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-null.jsonl
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-null.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-null.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-parse.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-parse.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock-parse.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v0-000.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/stock/v5-000.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/tests.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/tests.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/qualification/tests.stdout
+[detached HEAD b586421] research(p9): preserve acquisition comparison v5 paired chunk 1
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-000.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-000.traces.jsonl.xz
+[detached HEAD 2e310ed] research(p9): preserve acquisition comparison v5 paired chunk 2
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-008.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-008.traces.jsonl.xz
+[detached HEAD 54a5b3a] research(p9): preserve acquisition comparison v5 paired chunk 3
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-016.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-016.traces.jsonl.xz
+[detached HEAD 7199869] research(p9): preserve acquisition comparison v5 paired chunk 4
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-024.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-024.traces.jsonl.xz
+[detached HEAD 7950fb8] research(p9): preserve acquisition comparison v5 paired chunk 5
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-032.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-032.traces.jsonl.xz
+[detached HEAD 5f10d42] research(p9): preserve acquisition comparison v5 paired chunk 6
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-040.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-040.traces.jsonl.xz
+[detached HEAD 674dc70] research(p9): preserve acquisition comparison v5 paired chunk 7
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-048.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-048.traces.jsonl.xz
+[detached HEAD fc4172e] research(p9): preserve acquisition comparison v5 paired chunk 8
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-056.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-056.traces.jsonl.xz
+[detached HEAD abb4c61] research(p9): preserve acquisition comparison v5 paired chunk 9
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-064.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-064.traces.jsonl.xz
+[detached HEAD 63a30b5] research(p9): preserve acquisition comparison v5 paired chunk 10
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-072.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-072.traces.jsonl.xz
+[detached HEAD 16e54a7] research(p9): preserve acquisition comparison v5 paired chunk 11
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-080.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-080.traces.jsonl.xz
+[detached HEAD 406fe19] research(p9): preserve acquisition comparison v5 paired chunk 12
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-088.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-088.traces.jsonl.xz
+[detached HEAD 83897dc] research(p9): preserve acquisition comparison v5 paired chunk 13
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-096.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-096.traces.jsonl.xz
+[detached HEAD 569a14b] research(p9): preserve acquisition comparison v5 paired chunk 14
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-104.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-104.traces.jsonl.xz
+[detached HEAD c73f412] research(p9): preserve acquisition comparison v5 paired chunk 15
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-112.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-112.traces.jsonl.xz
+[detached HEAD 46db358] research(p9): preserve acquisition comparison v5 paired chunk 16
+ 14 files changed, 126 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/v5-120.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/v5-120.traces.jsonl.xz
+[detached HEAD e1bb108] research(p9): preserve fixed acquisition controller terminal
+ 5 files changed, 18243 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/FILES.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/TERMINAL.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/COMPARISON.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/aware/RESULTS.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/acquisition-v1/execution-2/v5/stock/RESULTS.json
+{"published_head": "e1bb1081c58420ad142869a931d4fa93f7c8c65e", "terminal": {"last_vow": 5, "p9_certified": false, "packages_admitted": 0, "source_head": "a8064ec36b8124438f4eec5205b4020c32f990be", "stages": {"5": {"activation_new": 42, "activation_old": 11, "aware_outcomes": {"loss": 459, "win": 53}, "aware_support": {"bloodfire": {"active": 42, "exclusive": 21, "inactive": 86, "reachable": 45}, "hand": {"active": 37, "exclusive": 16, "inactive": 91, "reachable": 38}}, "gained_policies": 33, "gates": {"inherited_pair_support": true, "paired_activation_gain": true, "paired_activation_sign_test": true, "win_noninferiority_lower_bound": true, "win_point_not_worse": false}, "kind": "ONE_FIXED_ACQUISITION_CONTROLLER_COMPARISON", "limits": ["Conditional on these four seeds and one fixed configuration family; not universal competence.", "The old failed support stage is neither replaced nor extended.", "Increased setup activity does not establish package viability or an unchanged C2 gap.", "Current experiment has one nominated capability change; no further scalar or controller candidate is selected from this result."], "lost_policies": 2, "one_sided_exact_sign_p": 1.8364517018198967e-08, "p9_certified": false, "packages_admitted": 0, "paired_activation_difference": 0.2421875, "pass": false, "policy_cluster_bootstrap_interval": [-0.01953125, 0.01171875], "status": "FIXED_ACQUISITION_CONTROLLER_VALUE_NOT_ESTABLISHED", "stock_outcomes": {"loss": 457, "win": 55}, "stock_support": {"bloodfire": {"active": 11, "exclusive": 3, "inactive": 117, "reachable": 13}, "hand": {"active": 42, "exclusive": 34, "inactive": 86, "reachable": 44}}, "vow": 5, "win_difference": -0.00390625}}, "status": "FIXED_ACQUISITION_ADAPTER_NOT_ADMITTED", "v0_skipped": true}}
