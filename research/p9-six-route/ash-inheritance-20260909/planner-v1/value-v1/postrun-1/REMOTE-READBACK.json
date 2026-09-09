@@ -1,0 +1,50 @@
+{
+  "kind": "POST_RESOURCE_TERMINAL_COMPLETE_BLOCK_COLD_READBACK",
+  "published_head": "ff9fd1b7ba04a2f311020346fe56464b61756f3d",
+  "run_id": "34413893878",
+  "files": [
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/audit_value_terminal.py",
+      "bytes": 5730,
+      "sha256": "437075fb52bdac0758aed5af29a2534b8214c24b781038a0343aa03f789c7d11",
+      "git_blob": "5b3212394795e38ac6859a01a747fd73e895b8c6"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/test_audit_value_terminal.py",
+      "bytes": 1647,
+      "sha256": "d54a44d39d23669dbbfe573e3898a14924936b2d3d314c664493f92a660e4b42",
+      "git_blob": "ae4bcf0443d1adde87808b480e7b4d7d6d7f853a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/postrun-1/RESULTS.json",
+      "bytes": 4686,
+      "sha256": "68b7003968f688b243d2730ef67ed02b890541696b01518b0ad7897ba78e6a72",
+      "git_blob": "402ca88f38bef6a416a40945714b4efbd5340725"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/postrun-1/audit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/postrun-1/tests.stderr",
+      "bytes": 776,
+      "sha256": "ee893130d2bd86f39189272502bbdacb0f0a80b6a86cb1b53254496fdc6105c3",
+      "git_blob": "c204bd2eafa1d1b0dffd4413fef93754a20380f1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/postrun-1/tests.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    }
+  ],
+  "all_bytes_equal": true,
+  "same_frozen_readout_reproduced": true,
+  "original_terminal": "INCONCLUSIVE",
+  "new_native_runs": 0,
+  "support_stage_newly_opened": false,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
