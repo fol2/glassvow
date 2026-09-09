@@ -12,52 +12,49 @@ concurrency:
   group: p9-six-route-research-writer
   cancel-in-progress: false
 
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+
 jobs:
   bundle:
-    name: Resolve frozen whole-candidate signed controls - no Hand restart
+    name: Diagnose Ash regression - only two missing factorial corners
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 10
     permissions:
       contents: write
-      actions: read
     steps:
-      - name: Check out exact signed-control source
+      - name: Check out exact frozen sources and only required evidence
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
+          lfs: false
+          sparse-checkout-cone-mode: false
           sparse-checkout: |
-            domain
-            content
-            tools
-            research/p9-six-route
-      - name: Verify completed prior writer and unchanged scientific inputs
-        env:
-          GH_TOKEN: ${{ github.token }}
+            /domain/
+            /content/
+            /tools/
+            /research/p9-six-route/source-package-audit-20260908/
+            /research/p9-six-route/natural-contribution-20260907/diagnostic_rules.gd
+            /research/p9-six-route/guardrail-confirmation-20260909/
+            /research/p9-six-route/candidate-failure-20260909/
+      - name: Bind source bytes and exercise negative tests before native rows
         shell: bash
         run: |
           set -euo pipefail
-          gh api repos/fol2/glassvow/actions/runs/34293077495 --jq '{id,status,conclusion,head_sha}' > "$RUNNER_TEMP/prior.json"
+          root=research/p9-six-route/candidate-failure-20260909
           python3 - <<'PY'
-          import hashlib,json,os,pathlib
-          root=pathlib.Path('research/p9-six-route')
-          prior=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'prior.json').read_bytes())
-          assert prior['status']=='completed' and prior['conclusion']=='success'
-          guard=root/'guardrail-confirmation-20260909'
-          raw=(guard/'PROTOCOL.json').read_bytes()
-          assert hashlib.sha256(raw).hexdigest()=='f8eaf9dffc65fa30222c80083ca0397a80174837cf8be1134c39613bf1c860c7'
-          p=json.loads(raw)
-          for name,h in p['source_sha256'].items():assert hashlib.sha256((guard/name).read_bytes()).hexdigest()==h,name
-          assert not (guard/'native-1').exists(),'No duplicate control execution'
-          old=json.loads((guard/'NOT-EXECUTED.json').read_bytes())
-          assert old['new_control_rows']==0
-          support=json.loads((root/'hand-admission-20260908/support-v1/capture-1/TERMINAL.json').read_bytes())
-          assert support['status']=='HAND_NATURAL_SUPPORT_GATE_FAIL_IN_FIXED_POLICY_FAMILY'
-          print('Unchanged control protocol; previous Hand negative retained; control outcomes not yet generated.')
+          import hashlib,json,pathlib
+          r=pathlib.Path('research/p9-six-route/candidate-failure-20260909')
+          b=(r/'PROTOCOL.json').read_bytes()
+          assert hashlib.sha256(b).hexdigest()=='6b0d11b8fbfc6722ad98e581ef3ca1ff66398a9fbb11f0cd7586e1240cd10c6e'
+          for name,h in json.loads(b)['source_sha256'].items():
+              assert hashlib.sha256((r/name).read_bytes()).hexdigest()==h,name
           PY
-      - name: Bind pinned engine and execute the one registered control rectangle
+          (cd "$root" && python3 -m unittest -v test_attribution) > "$root/TESTS.log" 2>&1
+      - name: Bind the existing official engine
         shell: bash
         run: |
           set -euo pipefail
@@ -66,56 +63,72 @@ jobs:
           echo "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4  $RUNNER_TEMP/p9-engine/engine.zip" | sha256sum -c -
           unzip -q "$RUNNER_TEMP/p9-engine/engine.zip" -d "$RUNNER_TEMP/p9-engine"
           chmod +x "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64"
-          root=research/p9-six-route/guardrail-confirmation-20260909
-          python3 "$root/execute_control.py" . "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64" "$root/native-1"
-      - name: Preserve all raw and publish exact scoped decisions
+          echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64" | sha256sum -c -
+      - name: Execute only the two missing fixed corners
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=research/p9-six-route/candidate-failure-20260909
+          python3 -u "$root/attribution.py" . "$RUNNER_TEMP/p9-engine/Godot_v4.7.2-stable_linux.x86_64" "$root/native-1" > "$root/EXECUTION.stdout" 2> "$root/EXECUTION.stderr"
+      - name: Preserve all available new capture without changing old evidence
+        id: publish
         if: always()
         shell: bash
         run: |
           set -euo pipefail
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$GITHUB_SHA"
+          root=research/p9-six-route/candidate-failure-20260909
+          git add "$root"
           python3 - <<'PY'
-          import hashlib,json,lzma,os,pathlib,subprocess,sys
-          root=pathlib.Path('research/p9-six-route').resolve()
-          study=root/'hand-admission-20260908/support-v1'
-          guard=root/'guardrail-confirmation-20260909'
-          sys.path.insert(0,str(study));import run_support as r
-          from cohort import policies
-          # Projection of a completed audit, not another audit or simulation.
-          full=(study/'postrun/RESULTS.json').read_bytes();d=json.loads(full)
-          compact={k:v for k,v in d.items() if k!='checked_files'}
-          compact['full_result_binding']={'bytes':len(full),'sha256':hashlib.sha256(full).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(full)).encode()+b'\0'+full).hexdigest()}
-          compact['preference_groups']={}
-          policy=policies()
-          for vow in (5,0):
-              cell=json.loads((study/f'capture-1/v{vow}/RESULTS.json').read_bytes())
-              compact['preference_groups'][str(vow)]={route:{'configurations':sum(p['route']==route for p in policy),**{field:sum(policy[i]['route']==route for i in cell[field]) for field in ('active','inactive','ambiguous','reachable')}} for route in ('hand','smolder','cycle','balanced')}
-          compact['preference_group_scope']='Descriptive breakdown of already frozen classifications; not policy dependence, dominance, or a changed admission threshold.'
-          r.save(study/'postrun/SUMMARY.json',compact)
-          terminal_path=guard/'native-1/TERMINAL.json'
-          if terminal_path.exists():
-              terminal=json.loads(terminal_path.read_bytes())
-              if terminal['status']!='INCONCLUSIVE':
-                  sys.path.insert(0,str(guard));import read_control as c
-                  actual=c.analyze(guard/'native-1',json.loads((guard/'PROTOCOL.json').read_bytes()))
-                  assert r.dump(actual)==(guard/'native-1/RESULTS.json').read_bytes(),'Compressed readback differs'
-              state_path=root/'SESSION-STATE.json';state=json.loads(state_path.read_bytes())
-              state['signed_control_screen']={'status':terminal['status'],'source_head':os.environ['GITHUB_SHA'],'protocol':'guardrail-confirmation-20260909/PROTOCOL.json','terminal':'guardrail-confirmation-20260909/native-1/TERMINAL.json','scope':'Necessary whole-candidate screening only; Hand support remains closed negative.'}
-              if terminal['status']=='SIGNED_CONTROL_NECESSARY_SCREEN_FAIL':
-                  state['status']='P9_UNFINISHED_HAND_SUPPORT_AND_WHOLE_CANDIDATE_SCREEN_CLOSED_NEGATIVE'
-                  state['exact_next_action']='Do not certify any package on this exact candidate as a product packet while its frozen signed-control screen fails. Preserve the separate Hand/support-family negative. Resolve the exact global failure against already-authorised alternatives before further package cohorts; no weakened control, extension or automatic retune of this closed screen.'
-              elif terminal['status']=='SIGNED_CONTROL_NECESSARY_SCREEN_PASS_NOT_P9':
-                  state['status']='P9_UNFINISHED_HAND_SUPPORT_NEGATIVE_SIGNED_CONTROL_SCREEN_PASS'
-                  state['exact_next_action']='Continue the remaining eligible Smolder/Fervor formal and causal obligations from exact retained contracts. This necessary control screen does not reopen Hand, admit a package, establish C2, or authorize detector/retention/protected cohorts.'
-              else:
-                  state['status']='P9_UNFINISHED_SIGNED_CONTROL_CAPTURE_INCONCLUSIVE'
-                  state['exact_next_action']='Inspect the named control delivery failure and all retained partial output before a bounded repair; no scientific negative or pass is inferred from incomplete capture.'
-              state['no_active_research_processes']=True;r.save(state_path,state)
-              path=root/'SESSION-HANDOFF.md';text=path.read_text();marker='\n## Whole-candidate signed-control screen\n'
-              path.write_text(text.split(marker)[0]+marker+'\n'+terminal['status']+'\n\n'+state['exact_next_action']+'\n\nHand raw and its negative remain unchanged. The whole-candidate control result is separate from a Hand-only causal claim.\n')
-          before=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip()
-          receipt=r.publication(root,'research(p9): preserve whole-candidate signed controls and compact verified Hand decision',True)
-          r.save(guard/'NATIVE-REMOTE-READBACK.json',receipt)
-          final=r.publication(root,'research(p9): persist signed-control native byte readback',True)
-          print('CONTROL_FINAL='+json.dumps({'before':before,'published_head':final['published_head'],'scientific_status':terminal['status'] if terminal_path.exists() else 'NO_TERMINAL','p9_certified':False},sort_keys=True))
-          assert terminal_path.exists() and terminal['status']!='INCONCLUSIVE','No complete scientific control decision'
+          import subprocess
+          paths=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
+          assert paths and all(p.startswith('research/p9-six-route/candidate-failure-20260909/') for p in paths),'STAGED_SCOPE'
+          assert not any('__pycache__' in p for p in paths),'GENERATED_PYTHON_CACHE'
           PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'research(p9): retain complete Ash substrate attribution capture and original negatives'
+          git push origin "HEAD:refs/heads/$branch"
+          echo "head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Fetch published bytes into a separate checkout
+        if: always() && steps.publish.outputs.head != ''
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ steps.publish.outputs.head }}
+          path: cold
+          fetch-depth: 1
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            research/p9-six-route/candidate-failure-20260909
+            research/p9-six-route/guardrail-confirmation-20260909
+      - name: Verify every byte and reconstruct the four-corner readout without an engine
+        if: always() && steps.publish.outputs.head != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess,sys
+          root=pathlib.Path('research/p9-six-route/candidate-failure-20260909')
+          cold=pathlib.Path('cold')
+          observed=[]
+          for entry in subprocess.check_output(['git','-C','cold','ls-tree','-r','-z','HEAD','--',str(root)]).split(b'\0'):
+              if not entry:continue
+              meta,path=entry.split(b'\t');name=path.decode();expected=meta.split()[2].decode()
+              b=(cold/name).read_bytes()
+              assert b==pathlib.Path(name).read_bytes(),name
+              blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+              assert blob==expected,name
+              observed.append({'path':name,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':blob})
+          proof=subprocess.check_output([sys.executable,str(cold/root/'attribution.py'),'--verify',str(cold),str(cold/root/'native-1')])
+          receipt={'kind':'COLD_REMOTE_BYTE_READBACK_AND_OFFLINE_RECONSTRUCTION','freeze_head':'8aba195ea1f945779d8922f40043d0c400937672','workflow_head':os.environ['GITHUB_SHA'],'workflow_run':os.environ['GITHUB_RUN_ID'],'published_head':subprocess.check_output(['git','-C','cold','rev-parse','HEAD']).decode().strip(),'files_matched':len(observed),'files':observed,'reconstruction':json.loads(proof),'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
+          (root/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print(json.dumps({k:v for k,v in receipt.items() if k!='files'},sort_keys=True))
+          PY
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin "refs/heads/$branch" | cut -f1)" = "$(git rev-parse HEAD)"
+          git add research/p9-six-route/candidate-failure-20260909/REMOTE-READBACK.json
+          git commit -m 'research(p9): persist complete attribution remote-readback receipt'
+          git push origin "HEAD:refs/heads/$branch"
+          echo "FINAL_HEAD=$(git rev-parse HEAD)"
