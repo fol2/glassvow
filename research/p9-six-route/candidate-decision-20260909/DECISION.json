@@ -1,0 +1,90 @@
+{
+  "status": "TESTED_BULK_CANDIDATE_AND_SINGLE_RESTORATION_CLOSED",
+  "frozen_failed_candidates": [
+    {
+      "content_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
+      "failed_grids": [
+        {
+          "aspect": "ashwarden",
+          "vow": 0,
+          "n": 128,
+          "baseline_wins": 29,
+          "candidate_wins": 10,
+          "difference": -0.1484375,
+          "failed_gates": [
+            "absolute_random_build_movement_at_most_tenth"
+          ]
+        }
+      ]
+    },
+    {
+      "content_sha256": "91fd5de56727df42fdcb539b61e7cc7a32e77f3f85dbbe13baef3513e7003cfb",
+      "failed_grids": [
+        {
+          "aspect": "ashwarden",
+          "vow": 0,
+          "n": 128,
+          "baseline_wins": 15,
+          "candidate_wins": 28,
+          "difference": 0.1015625,
+          "failed_gates": [
+            "absolute_random_build_movement_at_most_tenth"
+          ]
+        }
+      ]
+    }
+  ],
+  "causal_diagnostic": {
+    "joint_substrate_effect_in_baseline_net_wins": -19,
+    "joint_substrate_effect_in_candidate_net_wins": -20,
+    "factor_interaction_net_wins": -1,
+    "scope": "Original exposed Ash V0 assignment only; no individual Core-vs-Art attribution or population theorem."
+  },
+  "new_raw_this_continuation": {
+    "diagnostic_outcomes": 256,
+    "disjoint_control_outcomes": 1024,
+    "independent_package_confirmations": 0
+  },
+  "candidate_selected_for_further_population_certification": null,
+  "next_action": "Do not run another whole-catalogue scalar/rollback trial. The tested bulk candidate and its one native-Ash restoration are closed. The next owned deliverable is one source-complete, minimal Smolder/Fervor package contract against unchanged main: exact producer, mediator, consumer, reset, costs, target/instance identity, real acquisition path and relevant closed/admitted family comparison, with an executable distinguishing or decomposition witness. A new candidate may be nominated only from a surviving contract, not from changing a number to cross these exposed screens. Reuse unchanged source-law facts; do not transfer old outcomes or reopen Hand. Then freeze its cheapest decisive controls before any larger population/confirmation work. This is research design still to be completed, not a new package PASS or a renewed quota/reviewer checkpoint.",
+  "inputs": [
+    {
+      "path": "guardrail-confirmation-20260909/native-1/RESULTS.json",
+      "bytes": 5005,
+      "git_blob": "c3653360280ca5444d5b5e5c2183e14d7cc34a9c",
+      "sha256": "87cb309b532068b0062b799b9590c146871bc39f5f3b27c8aec71b9c01232ff4"
+    },
+    {
+      "path": "candidate-failure-20260909/native-1/RESULTS.json",
+      "bytes": 3522,
+      "git_blob": "bf62b583f67f51339432afe3ffb1a203dd08c540",
+      "sha256": "9c36796cf14dcd243e850d1e09a6095930c39c9490019a5d4839d94b3dbabb84"
+    },
+    {
+      "path": "candidate-failure-20260909/REMOTE-READBACK.json",
+      "bytes": 8526,
+      "git_blob": "b13581d6dfdcbee77f99b2d6fca18a5edb26882a",
+      "sha256": "86423c81465070f3fc42c36c2027a086bb89e2e94313d8f848e19f0e4f50bfd2"
+    },
+    {
+      "path": "native-foundation-20260909/native-1/RESULTS.json",
+      "bytes": 5003,
+      "git_blob": "be70514cd3c0754ebbf4f83316a742a65c29a588",
+      "sha256": "1c5ca032d20585f8b94e218967d6707b8e66860483483b74a2aa2a58ed324304"
+    },
+    {
+      "path": "native-foundation-20260909/REMOTE-READBACK.json",
+      "bytes": 15723,
+      "git_blob": "f0a23cdfd367fddade284e2f0897c75ff5a50b85",
+      "sha256": "13c25dae37f4ce8a9fc5e74400a3458a817156cba89fb2010ce983317924c764"
+    }
+  ],
+  "historical_hand_claims_revoked": false,
+  "hand_fixed_support_failure_unchanged": true,
+  "universal_nonviability_proved": false,
+  "rounding_or_pooled_samples_used_to_rescue_failure": false,
+  "native_runs_in_this_closure": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT"
+}

@@ -1,3 +1,17 @@
+# Current P9 delivery path
+
+## 9 September 2026: executed candidate-path decisions
+
+Hand preflight/support, source disposition, whole-candidate signed controls, the missing-only two-corner causal diagnosis and ONE restoration alternative are complete. Hand V0 and both catalogue screens are closed negatives. Do not continue the obsolete Hand-first population route below.
+
+Do not run another whole-catalogue scalar/rollback trial. The tested bulk candidate and its one native-Ash restoration are closed. The next owned deliverable is one source-complete, minimal Smolder/Fervor package contract against unchanged main: exact producer, mediator, consumer, reset, costs, target/instance identity, real acquisition path and relevant closed/admitted family comparison, with an executable distinguishing or decomposition witness. A new candidate may be nominated only from a surviving contract, not from changing a number to cross these exposed screens. Reuse unchanged source-law facts; do not transfer old outcomes or reopen Hand. Then freeze its cheapest decisive controls before any larger population/confirmation work. This is research design still to be completed, not a new package PASS or a renewed quota/reviewer checkpoint.
+
+The still-required delivery milestones remain: complete three packages per aspect; seven-direction detector; corrected independent confirmation and unrestricted endpoint retention with every guardrail; minimal lifecycle and exact-product integration/#108 receipt. Earlier local/finite passes are reusable only with correct scope and identity, not admission by accumulation.
+
+---
+
+## Earlier disposition (retained scope, superseded execution order)
+
 # Current six-package disposition and shortest credible delivery path
 
 This is a complete disposition of the six current hypotheses, not six completed certificates. No negative is reset and no missing proof is marked PASS.

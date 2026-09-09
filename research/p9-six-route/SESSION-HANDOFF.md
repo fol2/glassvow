@@ -1,3 +1,15 @@
+# P9 current frontier
+
+## Latest authoritative frontier — two candidate paths are closed
+
+The original signed-control screen and the one native-Ash restoration both failed their frozen point-scale gate. All 29 diagnostic and 53 restoration files were cold-read and the original readouts reconstructed. The two new diagnostic corners gave 10/128 and 30/128; the independent restoration Ash V0 comparison gave 15/128 baseline vs 28/128 restored candidate. 13/128 exceeds 0.1; do not round, pool with diagnostic seeds, retry, or extend.
+
+Do not run another whole-catalogue scalar/rollback trial. The tested bulk candidate and its one native-Ash restoration are closed. The next owned deliverable is one source-complete, minimal Smolder/Fervor package contract against unchanged main: exact producer, mediator, consumer, reset, costs, target/instance identity, real acquisition path and relevant closed/admitted family comparison, with an executable distinguishing or decomposition witness. A new candidate may be nominated only from a surviving contract, not from changing a number to cross these exposed screens. Reuse unchanged source-law facts; do not transfer old outcomes or reopen Hand. Then freeze its cheapest decisive controls before any larger population/confirmation work. This is research design still to be completed, not a new package PASS or a renewed quota/reviewer checkpoint.
+
+Read candidate-decision-20260909/DECISION.json. P9 remains incomplete, 0/6 exact-current certificates. Tools/remote storage are functioning; the remaining work is a new source-complete design decision, not recovery or permission renewal. Neither failure establishes universal impossibility.
+
+---
+
 # P9 current handoff — fixed Hand support has a verified terminal
 
 Continue #421 on research/p9-six-route-local-20260905. Owner target remains
