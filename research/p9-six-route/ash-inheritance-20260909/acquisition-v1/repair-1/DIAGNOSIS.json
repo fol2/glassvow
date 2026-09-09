@@ -1,0 +1,21 @@
+{
+  "kind": "PREPOPULATION_EXPECTED_WEIGHT_CONVERSION_REPAIR",
+  "old_capture_sha256": "72d053c312b97987b6cd28be019ab75fb91d4829cd90d1b70cb03b3b282c6e73",
+  "old_query_checks": 9851,
+  "old_failed_checks": 30,
+  "failure_roles": [
+    "bloodRite",
+    "leechBlade"
+  ],
+  "maximum_serialized_score_difference": 1.0658141036401503e-13,
+  "old_query_sha256": "f028406be7dbc20c8fae61ac69609b5139d073441bc2e243cc8dd28c63fb6e1c",
+  "repaired_query_sha256": "35d38cb8961db17bac2b2d0270daebb61844ee3339758991859c643ec745953b",
+  "old_protocol_sha256": "c7d2962458de22360be21ecbe5c79da915066482ba86e82150fa10df771fc243",
+  "only_contract_identity_change": "own_sha256/capability.gd",
+  "controller_source_identical": true,
+  "policy_cohort_seeds_thresholds_identical": true,
+  "old_populations_run": 0,
+  "old_raw_and_terminal_preserved": true,
+  "equality_tolerance_added": false,
+  "explanation": "The frozen scorer resolves weights using float(str(value)); the oracle used direct float(value). Only its three expected-weight reads are corrected. Full qualification must pass again before any controller comparison; no outcome or expected sign is overwritten."
+}
