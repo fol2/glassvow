@@ -10,13 +10,13 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/acquisition-v1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1
 jobs:
   bundle:
-    name: Close preserved acquisition experiment - no engine
+    name: Existing planner current-runtime compatibility and complete capture
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 20
     permissions:
       contents: write
     steps:
@@ -26,66 +26,152 @@ jobs:
           fetch-depth: 1
           persist-credentials: true
           sparse-checkout: |
-            research/p9-six-route/ash-inheritance-20260909/acquisition-v1
-            research/p9-six-route/package-disposition-20260908
-      - name: Verify prepared source, regression tests and immutable terminal
+            domain
+            content
+            tools
+            research/p9-six-route/ash-inheritance-20260909
+            research/p9-six-route/v8
+            research/p9-six-route/v9
+            research/p9-six-route/v13
+            research/p9-six-route/v15
+            research/p9-six-route/v17
+            research/p9-six-route/v18
+            research/p9-six-route/v19
+      - name: Bind complete exact source before native observations
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,os,pathlib,subprocess
-          p=pathlib.Path(os.environ['STUDY'])/'close_value.py';data=p.read_bytes()
-          assert hashlib.sha256(data).hexdigest()=='ab9032e51485c88b7febfef464592977f51beea3651a6ac3ab6e55681e7739e6'
-          assert hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()==subprocess.check_output(['git','rev-parse','HEAD:'+str(p)]).decode().strip()
+          import hashlib,json,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['STUDY'])
+          expected={'PROTOCOL.json':'0dfdf6a441924add709a867006a2e682a5ee5a28','bind.py':'910097e432220a0b08e839168bab5f3f77c2db97','decision_gate.gd':'5ade7650f7bb09ca97d33656dec8500f558206be','legacy_policy.gd':'c43798dd10031a6293f962cd059e3e01e0d35119','public_rollout.gd':'5fa5655a93b06d05ad88d8b7a8bff2f93fac44e0','read.py':'f66938d57eba4f0f122ecaf2c061ce69ea6e1a2c','run.py':'8d97e95044ae1e5fa7992872b7770307499759b3','test_planner.py':'e41861bd0ea09d6388c3ef705bdd4fcb3b33acf6'}
+          assert not (root/'FREEZE.json').exists()
+          sources={}
+          for name,want in expected.items():
+              p=root/name;data=p.read_bytes()
+              actual=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+              assert actual==want==subprocess.check_output(['git','rev-parse','HEAD:'+str(p)]).decode().strip(),name
+              sources[name]=hashlib.sha256(data).hexdigest()
+          (root/'FREEZE.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'source_sha256':sources,'source_git_blobs':expected,'native_observations_at_freeze':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
           PY
-          python3 "$STUDY/close_value.py" --self-test
-          python3 "$STUDY/close_value.py" .
-      - name: Commit only closure evidence and current capsule
-        shell: bash
-        run: |
-          set -euo pipefail
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$STUDY/closure-1" research/p9-six-route/SESSION-STATE.json research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/package-disposition-20260908/ROADMAP.md
-          git commit -m 'research(p9): close fixed acquisition value failure and preserve positive V5 support'
+          git add "$STUDY/FREEZE.json"
+          git commit -m 'research(p9): freeze public planner compatibility before observations'
+          git push origin HEAD:refs/heads/$branch
+          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Load the same pinned official engine
+        id: engine
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$STUDY/execution-1"
+          {
+            curl --fail --location --max-time 90 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip"
+            unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
+            engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+            chmod +x "$engine"
+            echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
+            "$engine" --version
+            echo "ENGINE=$engine" >> "$GITHUB_ENV"
+          } > "$STUDY/execution-1/engine.log" 2>&1
+      - name: Execute only the fixed 480 constructed compatibility cases
+        id: native
+        if: steps.engine.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "$STUDY/run.py" "$GITHUB_WORKSPACE" "$ENGINE" "$RUNNER_TEMP/planner-capture" > "$STUDY/execution-1/runner.stdout" 2> "$STUDY/execution-1/runner.stderr"
+      - name: Preserve complete available source, native output and diagnostics
+        if: always() && env.PUBLISHED_HEAD != ''
+        shell: bash
+        env:
+          ENGINE_OUTCOME: ${{ steps.engine.outcome }}
+          NATIVE_OUTCOME: ${{ steps.native.outcome }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,tarfile
+          out=pathlib.Path(os.environ['STUDY'])/'execution-1';out.mkdir(exist_ok=True)
+          capture=pathlib.Path(os.environ['RUNNER_TEMP'])/'planner-capture'
+          paths=[p for p in sorted(capture.rglob('*')) if p.is_file() and '.godot' not in p.parts] if capture.exists() else []
+          rows=[]
+          with tarfile.open(out/'capture.tar.xz','w:xz') as archive:
+              for p in paths:
+                  data=p.read_bytes();rel=str(p.relative_to(capture))
+                  rows.append({'path':rel,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
+                  archive.add(p,arcname=rel,recursive=False)
+          b=(out/'capture.tar.xz').read_bytes()
+          (out/'ARCHIVE.json').write_text(json.dumps({'archive_bytes':len(b),'archive_sha256':hashlib.sha256(b).hexdigest(),'files':rows,'excluded':'.godot generated cache only; engine separate','engine_outcome':os.environ['ENGINE_OUTCOME'],'native_outcome':os.environ['NATIVE_OUTCOME'],'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          for name in ('TERMINAL.json','RESULTS.json'):
+              if (capture/name).exists():(out/name).write_bytes((capture/name).read_bytes())
+          if not (out/'TERMINAL.json').exists():(out/'TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','reason':'No complete runner terminal','packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          print((out/'TERMINAL.json').read_text())
+          PY
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
+          git add -f "$STUDY/execution-1"
+          git commit -m 'research(p9): retain complete planner compatibility capture and actual verdict'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        if: always() && env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: |
-            research/p9-six-route/ash-inheritance-20260909/acquisition-v1
-            research/p9-six-route/package-disposition-20260908
-      - name: Verify exact committed bytes and independently reconstruct the same decision
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/planner-v1
+      - name: Cold-read every preserved byte and reconstruct the existing decision
+        if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,importlib.util,json,os,pathlib,subprocess,sys
-          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')/root
-          paths=[root/'close_value.py',*sorted((root/'closure-1').glob('*')),pathlib.Path('research/p9-six-route/SESSION-STATE.json'),pathlib.Path('research/p9-six-route/SESSION-HANDOFF.md'),pathlib.Path('research/p9-six-route/package-disposition-20260908/ROADMAP.md')]
-          rows=[]
-          for p in paths:
-              b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b
-              blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-              assert blob==subprocess.check_output(['git','-C','cold','rev-parse','HEAD:'+str(p)]).decode().strip()
-              rows.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':blob})
-          sys.path.insert(0,str(cold.resolve()))
-          import close_value
-          load=lambda p:json.loads((cold/p).read_bytes())
-          result=close_value.verdict(load('execution-2/TERMINAL.json'),load('execution-2/REMOTE-READBACK.json'),load('execution-2/qualification/RESULTS.json'))
-          assert close_value.encoded(result)==(cold/'closure-1/DECISION.json').read_bytes()
-          receipt={'kind':'ACQUISITION_CLOSURE_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':rows,'all_bytes_equal':True,'decision_reproduced':True,'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
-          (root/'closure-1/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          print(json.dumps(receipt,indent=2))
+          import hashlib,importlib.util,json,os,pathlib,tarfile
+          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')/root;files=[]
+          for p in sorted(root.rglob('*')):
+              if not p.is_file():continue
+              b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b,str(p)
+              files.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+          manifest=json.loads((cold/'execution-1/ARCHIVE.json').read_bytes());packed=(cold/'execution-1/capture.tar.xz').read_bytes()
+          assert len(packed)==manifest['archive_bytes'] and hashlib.sha256(packed).hexdigest()==manifest['archive_sha256']
+          expected={r['path']:r for r in manifest['files']};target=pathlib.Path(os.environ['RUNNER_TEMP'])/'cold-planner';target.mkdir()
+          with tarfile.open(cold/'execution-1/capture.tar.xz','r:xz') as archive:
+              members=archive.getmembers();assert len(members)==len(expected) and {m.name for m in members}==set(expected)
+              for m in members:
+                  assert m.isfile() and not m.name.startswith('/') and '..' not in pathlib.Path(m.name).parts
+                  b=archive.extractfile(m).read();r=expected[m.name]
+                  assert len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
+                  p=target/m.name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b)
+          terminal=json.loads((cold/'execution-1/TERMINAL.json').read_bytes());reproduced=False
+          if (target/'RESULTS.json').exists():
+              spec=importlib.util.spec_from_file_location('cold_reader',cold/'read.py');mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
+              result=mod.analyze(target/'raw',json.loads((target/'assembly/SOURCE-BINDING.json').read_bytes()))
+              data=(json.dumps(result,indent=2)+'\n').encode()
+              assert data==(target/'RESULTS.json').read_bytes()==(cold/'execution-1/RESULTS.json').read_bytes()
+              reproduced=True
+          receipt={'kind':'COMPLETE_PLANNER_COMPATIBILITY_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':files,'archived_files':len(expected),'all_archive_bytes_verified':True,'readout_reproduced':reproduced,'scientific_status':terminal['status'],'new_native_runs_during_readback':0,'packages_admitted':0,'p9_certified':False}
+          (root/'execution-1/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print(json.dumps({k:v for k,v in receipt.items() if k!='files'},indent=2))
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/closure-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): retain cold readback of acquisition closure and task capsule'
+          git add "$STUDY/execution-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): retain exact cold reconstruction of planner qualification'
           git push origin HEAD:refs/heads/$branch
+      - name: Report actual qualification status
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          root=pathlib.Path(os.environ['STUDY'])/'execution-1'
+          print((root/'TERMINAL.json').read_text())
+          if (root/'RESULTS.json').exists():print((root/'RESULTS.json').read_text())
+          assert json.loads((root/'TERMINAL.json').read_bytes())['status']=='PLANNER_CURRENT_RUNTIME_COMPATIBILITY_PASS'
+          PY
