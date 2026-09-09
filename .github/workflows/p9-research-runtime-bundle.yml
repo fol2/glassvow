@@ -10,13 +10,13 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/pair-v1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/acquisition-v1
 jobs:
   bundle:
-    name: Reconcile existing pair terminal and exact controller source - no engine
+    name: One acquisition-only capability and matched-value experiment
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 30
     permissions:
       contents: write
     steps:
@@ -27,44 +27,81 @@ jobs:
           persist-credentials: true
           sparse-checkout: |
             .github
+            domain
+            content
+            tools
             research/p9-six-route/ash-inheritance-20260909
-            research/p9-six-route/package-disposition-20260908
-      - name: Evaluate the full retained pipeline and bind source facts
+      - name: Bind every source before engine or outcomes
+        id: source
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          echo "099c2c989d54c547951f1f426c2aad21bd8fa842c52e030f00c6cc4731173ff6  $STUDY/audit_terminal.py" | sha256sum -c -
-          python3 "$STUDY/audit_terminal.py" . "$STUDY/execution-1" "$STUDY/postrun-1"
+          mkdir "$STUDY/delivery-1"
           python3 - <<'PY'
-          import json,os,pathlib
-          r=pathlib.Path(os.environ['STUDY']);t=json.loads((r/'execution-1/TERMINAL.json').read_bytes());audit=json.loads((r/'postrun-1/RESULTS.json').read_bytes())
-          state_path=pathlib.Path('research/p9-six-route/SESSION-STATE.json');state=json.loads(state_path.read_bytes());before=dict(state)
-          state['status']='P9_UNFINISHED_BLOODFIRE_CONTROLS_PASS_FIXED_PAIR_SUPPORT_FAIL'
-          state['exact_next_action']=audit['next_action']
-          state['bloodfire_pair_support']={'source_head':t['source_head'],'status':t['status'],'stages':t['stages'],'v0_skipped':True,'complete_raw_remote_verified':True,'readback':'ash-inheritance-20260909/pair-v1/execution-1/REMOTE-READBACK.json','postrun':'ash-inheritance-20260909/pair-v1/postrun-1/RESULTS.json','packages_admitted':0}
-          assert state['packages_admitted']==0 and not state['p9_certified']
-          changed=[k for k in before if before[k]!=state.get(k)];assert set(changed)<= {'status','exact_next_action'}
-          state_path.write_text(json.dumps(state,indent=2)+'\n')
-          (r/'postrun-1/STATE-PRESERVATION.json').write_text(json.dumps({'changed_existing_keys':changed,'other_existing_fields_preserved':True},indent=2)+'\n')
-          text='# P9 current handoff — minimum controls pass; fixed Ash pair support closed\n\nContinue #421 on research/p9-six-route-local-20260905. Three complete viable/reachable/distinct strategies per aspect remain required; 0/6 current certificates. Main remains 2ed6cdb0302ba3aab5845a18d862841165e8aaf7. Author self-review is permitted, not independent confirmation.\n\n## Decisions already complete\n\nThe minimum inherited Bloodfire preflight passed. Its fixed 1,024-row signed arm2 screen also passed all four contexts, with full 69-file readback. Dusk V0/V5 stayed31/7 wins per128; Ash V0 moved25 to27, Ash V5 stayed4. The serialization-only readback defect was repaired without a native replay or altered result. Do not rerun either stage.\n\nThe next fixed128-policy/four-seed Ash pair study qualified the new observer and every Leech clone, then completed512 V5 outcomes. Bloodfire active15/inactive113/reachable19/exclusive9; Hand35/93/36/29; cross-active6. Bloodfire active support misses32. All249 Leech clone rectangles passed factual/null/state checks;15 policies had some positive incremental target HP. These local contributions are not whole-run treatment effects. The complete population had34 wins and478 losses, no stall/error.\n\nThe paired-stage protocol therefore closes this exact current candidate/shipping-controller-family support claim and skips V0. It does not revoke historical Hand/Bloodfire admission, prove universal nonviability or erase the separately passed signed screen. Hand uses its historical necessary activation definition, not newly proven source causality. No full package is admitted.\n\nComplete capture is under ash-inheritance-20260909/pair-v1/execution-1;146 files were cold-read and V5 decision rebuilt exactly. Source-bound postrun-1 uses all512 existing rows, no new game. Native acquisition valuation ignores the new Bloodfire status and Leech bonus magnitude; this is a shared source limitation, not proof that a particular fix will improve winning or reachability.\n\n## Exact next action\n\n'+audit['next_action']+'\n\nDo not repeat reunion/census, v25, aliases, Hand bulk support, failed content tunes, completed native capacity, preflight or passed controls. Do not rescue the just-closed family by trying another root. Keep all raw gaps and historical scopes in SESSION-STATE.json explicit. No scientific protected cohort, product merge or new scalar candidate is selected.\n\n## Remaining milestones\n\nComplete current-source package certificates, three per aspect; seven-direction detector; corrected independent confirmation and unrestricted endpoint retention with all guardrails; minimum lifecycle; exact-head review under owner authority; one selected exact-product integration and #108 receipt. Test/row/commit counts are not completion percentages. No background research process remains.\n'
-          pathlib.Path('research/p9-six-route/SESSION-HANDOFF.md').write_text(text)
-          roadmap=pathlib.Path('research/p9-six-route/package-disposition-20260908/ROADMAP.md')
-          old=roadmap.read_text();heading='## Current evidence-driven frontier (9 September 2026)\n\nMinimum Bloodfire source/null preflight and signed controls passed. The fixed shipping-policy Ash pair support failed only Bloodfire active support (15<32); V0 skipped, no retry. Next: exact controller capability/source binding and a separately frozen matched-cost comparison, not content tuning or another root. Complete certificates, detector, independent retention and product receipt remain. Detailed source, pipeline and safe-state claims are in the current SESSION-HANDOFF and pair-v1/postrun-1.\n\n---\n\n'
-          roadmap.write_text(heading+old)
+          import hashlib,json,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['STUDY']);p=json.loads((root/'PROTOCOL.json').read_bytes())
+          for name,want in p['own_sha256'].items():
+              data=(root/name).read_bytes()
+              assert hashlib.sha256(data).hexdigest()==want,name
+              actual=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+              assert actual==subprocess.check_output(['git','rev-parse','HEAD:'+str(root/name)]).decode().strip(),name
+          for name,want in p['previous_sha256'].items():assert hashlib.sha256(pathlib.Path(name).read_bytes()).hexdigest()==want,name
           PY
-      - name: Commit the terminal audit and current capsule
-        shell: bash
-        run: |
-          set -euo pipefail
-          branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
+          (cd "$STUDY" && python3 -m unittest -v test_bridge) > "$STUDY/delivery-1/tests.stdout" 2> "$STUDY/delivery-1/tests.stderr"
+          python3 -m py_compile "$STUDY/experiment.py"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$STUDY/postrun-1" research/p9-six-route/SESSION-STATE.json research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/package-disposition-20260908/ROADMAP.md
-          git commit -m 'research(p9): close failed fixed Ash pair and preserve full source-bound bottleneck'
+      - name: Load pinned supported engine
+        id: engine
+        if: steps.source.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            curl --fail --location --max-time 90 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip"
+            unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
+            engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+            chmod +x "$engine"
+            echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
+            "$engine" --version
+            echo "ENGINE=$engine" >> "$GITHUB_ENV"
+          } > "$STUDY/delivery-1/engine.log" 2>&1
+      - name: Qualify then execute only frozen conditional stages
+        id: execute
+        if: steps.engine.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "$STUDY/experiment.py" run "$GITHUB_WORKSPACE" "$ENGINE" "$STUDY/execution-1" "$RUNNER_TEMP/acquisition" --publish > "$STUDY/delivery-1/runner.stdout" 2> "$STUDY/delivery-1/runner.stderr"
+      - name: Persist all available diagnostics and exact safe state
+        if: always()
+        shell: bash
+        env:
+          SOURCE_OUTCOME: ${{ steps.source.outcome }}
+          ENGINE_OUTCOME: ${{ steps.engine.outcome }}
+          EXEC_OUTCOME: ${{ steps.execute.outcome }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,pathlib
+          root=pathlib.Path(os.environ['STUDY']);(root/'delivery-1').mkdir(exist_ok=True)
+          (root/'delivery-1/EXECUTION.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'source':os.environ['SOURCE_OUTCOME'],'engine':os.environ['ENGINE_OUTCOME'],'execute':os.environ['EXEC_OUTCOME'],'p9_certified':False},indent=2)+'\n')
+          for p in root.rglob('*.pyc'):p.unlink()
+          PY
+          branch=research/p9-six-route-local-20260905
+          expected=${PUBLISHED_HEAD:-$GITHUB_SHA}
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$expected"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "$STUDY"
+          git diff --cached --quiet || git commit -m 'research(p9): preserve acquisition comparison diagnostics and terminal'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        if: always() && env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
@@ -73,26 +110,35 @@ jobs:
           sparse-checkout: |
             .github
             research/p9-six-route/ash-inheritance-20260909
-            research/p9-six-route/package-disposition-20260908
-      - name: Cold-read all new bytes and reconstruct audit offline
+      - name: Cold-read complete published bytes and reproduce closed decisions
+        if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
-          python3 "cold/$STUDY/audit_terminal.py" cold "cold/$STUDY/execution-1" "$RUNNER_TEMP/audit-reproduced"
           python3 - <<'PY'
           import hashlib,json,os,pathlib
-          r=pathlib.Path(os.environ['STUDY']);entries=[]
-          paths=[p for p in (r/'postrun-1').rglob('*') if p.is_file()]
-          paths += [r/'audit_terminal.py',pathlib.Path('research/p9-six-route/SESSION-STATE.json'),pathlib.Path('research/p9-six-route/SESSION-HANDOFF.md'),pathlib.Path('research/p9-six-route/package-disposition-20260908/ROADMAP.md'),pathlib.Path('.github/workflows/p9-research-runtime-bundle.yml')]
-          for p in paths:
-              b=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==b,str(p)
-              entries.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
-          for name in ['RESULTS.json','CONTROLLER-SOURCE.json','HISTORICAL-CONTROLLER-SOURCE.json']:
-              assert (r/'postrun-1'/name).read_bytes()==(pathlib.Path(os.environ['RUNNER_TEMP'])/'audit-reproduced'/name).read_bytes(),name
-          (r/'postrun-1/REMOTE-READBACK.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':entries,'all_bytes_equal':True,'readout_reproduced':True,'new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          root=pathlib.Path(os.environ['STUDY']);entries=[]
+          for p in sorted(root.rglob('*')):
+              if not p.is_file():continue
+              data=p.read_bytes();assert (pathlib.Path('cold')/p).read_bytes()==data,str(p)
+              entries.append({'path':str(p),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
+          (root/'delivery-1/SOURCE-READBACK.json').write_text(json.dumps({'published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':entries,'all_bytes_equal':True},indent=2)+'\n')
           PY
+          if test -f "$STUDY/execution-1/RESOLVED-PROTOCOLS.json"; then
+            python3 "cold/$STUDY/experiment.py" verify cold "$STUDY/execution-1" "cold/$STUDY/execution-1" "$STUDY/execution-1/REMOTE-READBACK.json"
+          fi
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/postrun-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): preserve exact terminal-audit and capsule cold-readback'
+          git add -f "$STUDY"
+          git commit -m 'research(p9): retain complete acquisition experiment cold-readback'
           git push origin HEAD:refs/heads/$branch
+      - name: Report actual scientific terminal separately from delivery
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=json.loads((pathlib.Path(os.environ['STUDY'])/'execution-1/TERMINAL.json').read_bytes())
+          print(json.dumps(p,indent=2))
+          assert p['status'] in ('FIXED_ACQUISITION_ADAPTER_NOT_ADMITTED','ACQUISITION_ADAPTER_VALUE_SUPPORTED_NOT_PACKAGE')
+          PY
