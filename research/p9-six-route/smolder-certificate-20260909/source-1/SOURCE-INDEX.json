@@ -1,0 +1,332 @@
+{
+  "kind": "PINNED_SOURCE_EXTRACTION_NOT_PACKAGE_ADMISSION",
+  "archive_git_blob": "0e963a6dfadb87912f9b1074b78d8629bbad2a47",
+  "archive_files": {
+    "source/content/full-content.json": {
+      "bytes": 138094,
+      "sha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48"
+    },
+    "source/domain/rules/combat.gd": {
+      "bytes": 51402,
+      "sha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac"
+    },
+    "source/tools/balance_pilot.gd": {
+      "bytes": 25662,
+      "sha256": "93a32555c5c273bcd27ea9c5210fcb958f1c1962faad3b1e76bd20d5f3f7e901"
+    },
+    "source/tools/balance_sim.gd": {
+      "bytes": 28182,
+      "sha256": "45a3d3b95f53f89ab4444e45da32ba7f691090518d74706823e44478a2e55777"
+    },
+    "source/tools/research_421_probe.gd": {
+      "bytes": 18710,
+      "sha256": "f770cef88fb6e7a9b57e98f7d08b2ecc3fc2230dc77339e9fe75417c6d111245"
+    },
+    "source/tools/research_421_probe.gd.uid": {
+      "bytes": 20,
+      "sha256": "049784c159643d33e3cfb5a1b9a35ccb358646d83bb98d034dcfb1fee16764dd"
+    },
+    "research.py": {
+      "bytes": 106292,
+      "sha256": "0480163456dc6693e90d5f87163918d8452e4dd5c2c822c60543ab03efe3d6a9"
+    },
+    "post_v38_factorial.py": {
+      "bytes": 25971,
+      "sha256": "9418a3419c4feecae84360a9ea4068b60157c239d0359bb265939d3c579cdf97"
+    },
+    "post_v38_knob_identity.py": {
+      "bytes": 10528,
+      "sha256": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b"
+    },
+    "post_v38_knob_identity_v2.py": {
+      "bytes": 9138,
+      "sha256": "e1b4983f6d2d0b8a5608dc099430c32e54ddd689a7797415a3f17f7f7127f7c8"
+    },
+    "post_v38_blocked_crn.py": {
+      "bytes": 38485,
+      "sha256": "a6435cc05f13042ee9132de90a40d11a61716b56d116b729aff92faad5a152cb"
+    }
+  },
+  "native_content_sha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+  "native_combat_sha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+  "cards": {
+    "venomStrike": {
+      "type": "attack",
+      "rarity": "common",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "fire",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 4
+        },
+        {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 4
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 6
+          },
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "poison",
+            "n": 5
+          }
+        ],
+        "text": "Deal @6@ damage. Apply 5 Smolder."
+      },
+      "name": "Emberbite",
+      "text": "Deal @4@ damage. Apply 4 Smolder."
+    },
+    "toxicMist": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "allEnemies",
+      "vfx": "poison",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "allEnemies",
+          "id": "poison",
+          "n": 3
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "status",
+            "who": "allEnemies",
+            "id": "poison",
+            "n": 5
+          }
+        ],
+        "text": "Apply 5 Smolder to ALL enemies."
+      },
+      "name": "Ashcloud",
+      "text": "Apply 3 Smolder to ALL enemies."
+    },
+    "catalyst": {
+      "type": "skill",
+      "rarity": "rare",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "poison",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "special",
+          "id": "catalyst",
+          "n": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "catalyst",
+            "n": 3
+          }
+        ],
+        "text": "Triple an enemy's Smolder. Kindle."
+      },
+      "name": "Bellows",
+      "text": "Double an enemy's Smolder. Kindle."
+    },
+    "bloodRite": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 0,
+      "target": "self",
+      "vfx": "void",
+      "effects": [
+        {
+          "kind": "loseHp",
+          "n": 3
+        },
+        {
+          "kind": "energy",
+          "n": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "loseHp",
+            "n": 3
+          },
+          {
+            "kind": "energy",
+            "n": 3
+          }
+        ],
+        "text": "Lose 3 HP. Gain 3 Energy."
+      },
+      "name": "Blood for Oil",
+      "text": "Lose 3 HP. Gain 2 Energy."
+    },
+    "leechBlade": {
+      "type": "attack",
+      "rarity": "uncommon",
+      "cost": 2,
+      "target": "enemy",
+      "vfx": "void",
+      "effects": [
+        {
+          "kind": "special",
+          "id": "leech",
+          "n": 9
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "leech",
+            "n": 13
+          }
+        ],
+        "text": "Deal @13@ damage. Heal for half the unblocked damage."
+      },
+      "name": "Thirsting Shard",
+      "text": "Deal @9@ damage. Heal for half the unblocked damage."
+    },
+    "preparation": {
+      "type": "skill",
+      "rarity": "common",
+      "cost": 0,
+      "target": "self",
+      "vfx": "fire",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 2
+        }
+      ],
+      "up": {
+        "exhaust": false,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 2
+          }
+        ],
+        "text": "Draw 2 cards."
+      },
+      "name": "Tinder",
+      "text": "Draw 2 cards. Kindle."
+    },
+    "surge": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 0,
+      "target": "self",
+      "vfx": "fire",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "energy",
+          "n": 1
+        },
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "energy",
+            "n": 2
+          },
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "text": "Gain 2 Energy. Draw 1 card. Kindle."
+      },
+      "name": "Struck Match",
+      "text": "Gain 1 Energy. Draw 1 card. Kindle."
+    },
+    "phantomBlades": {
+      "type": "attack",
+      "rarity": "rare",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "pierce",
+      "effects": [
+        {
+          "kind": "special",
+          "id": "phantom",
+          "n": 3
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "phantom",
+            "n": 4
+          }
+        ],
+        "text": "Deal @4@ damage for each card in your hand."
+      },
+      "name": "Phantom Blades",
+      "text": "Deal @3@ damage for each card in your hand."
+    }
+  },
+  "native_function_hashes": {
+    "_apply_start_relics": "7745592ae546fe4c9fc13d7e608baa8b036fbc09d33c0b398bb43d03882664c2",
+    "_start_player_turn": "0b838d849718e6f0d03420835ed2419a8a33dedd9ba2fc058a94aafb21ce0a01",
+    "add_status_player": "b1a3692f511f7548ca4f987128a4d6a66ddee6cdc669d4518c591c9b2428c298",
+    "add_status_enemy": "a53884f050ccbf158a3a532466a5dce3c057476a23f99206dc46aa4dd99736f6",
+    "gain_embers": "324e59d5791a81e3376066e03ced984a493a2e2e50f100899d24bed85c898d59",
+    "damage_player": "3870dca3697463cb9e770d7875a5a009072822b90dbcf0d22fbdc23380dab0e3",
+    "_on_enemy_death": "337d6d90dac2178c5f2ca4f6e458f1dede9c2202f3a3d644b7032ff0fbac9126",
+    "_shatter_enemy": "d36c91097b745353b5d75b069572cd244a101116b8849aa8042e542b9506bce8",
+    "_jump_smolder": "f9afa522a2286bb075e15fe340cc59ecea8e06f9637415a46550ce9f8f732a2b",
+    "play_card": "cb14f29e267e2828ffa66e8638a8b3db9d47ca0557a2112e50d3da4fb89708fd",
+    "_apply_special": "26a3d44fe025745546a95f19d03ec888abe6110380b0dc3a8db1de481bc315b5",
+    "end_turn": "b3109928a2702f5ea553ecc69716caa307f360f655010b88bb8479af41641fef",
+    "use_potion": "bd126f2a0c4b0a94398739ddba1cacf1a84ab5450b00ecfe57cf1a7b225620dd"
+  },
+  "historical_function_hashes": {
+    "source/domain/rules/combat.gd::_apply_start_relics": "7745592ae546fe4c9fc13d7e608baa8b036fbc09d33c0b398bb43d03882664c2",
+    "source/domain/rules/combat.gd::_start_player_turn": "0b838d849718e6f0d03420835ed2419a8a33dedd9ba2fc058a94aafb21ce0a01",
+    "source/domain/rules/combat.gd::add_status_player": "1a9e7b3f1366e9ca7f0010bb01ebbe7e5a85374be79f68f4a1fd457d2f98550a",
+    "source/domain/rules/combat.gd::add_status_enemy": "4b8a6c2184329878d5df35f0cc67225aef0be11a78d49d939c095e308a43a458",
+    "source/domain/rules/combat.gd::gain_embers": "324e59d5791a81e3376066e03ced984a493a2e2e50f100899d24bed85c898d59",
+    "source/domain/rules/combat.gd::damage_player": "3870dca3697463cb9e770d7875a5a009072822b90dbcf0d22fbdc23380dab0e3",
+    "source/domain/rules/combat.gd::_on_enemy_death": "337d6d90dac2178c5f2ca4f6e458f1dede9c2202f3a3d644b7032ff0fbac9126",
+    "source/domain/rules/combat.gd::_shatter_enemy": "d36c91097b745353b5d75b069572cd244a101116b8849aa8042e542b9506bce8",
+    "source/domain/rules/combat.gd::_jump_smolder": "f9afa522a2286bb075e15fe340cc59ecea8e06f9637415a46550ce9f8f732a2b",
+    "source/domain/rules/combat.gd::play_card": "cb14f29e267e2828ffa66e8638a8b3db9d47ca0557a2112e50d3da4fb89708fd",
+    "source/domain/rules/combat.gd::_apply_special": "685c399f92f33f7b72a3d3b734aeccb56b8e824517e462c6fd71f5cfbdf9c32c",
+    "source/domain/rules/combat.gd::end_turn": "b3109928a2702f5ea553ecc69716caa307f360f655010b88bb8479af41641fef",
+    "source/domain/rules/combat.gd::use_potion": "bd126f2a0c4b0a94398739ddba1cacf1a84ab5450b00ecfe57cf1a7b225620dd",
+    "source/domain/rules/combat.gd::preview_play": "f83964b993ef27880e31ceecb9eaf4bd069ec3741dbd217a026477041f486eba",
+    "source/tools/balance_pilot.gd::_combat_score": "f94144858668204bf7d9951833bffd2f3e025faf600a92fca438ad378bbd7a46",
+    "source/tools/balance_pilot.gd::_target": "902e980876896d0b3642edb39f648669a4b74e082338eb4735e523e9ec77cbfa",
+    "source/tools/balance_pilot.gd::_incoming": "ecfc43cd7a2644378b8eff3a42a5f1e00c3820a4eb912f511f3e4de6fa1622cc",
+    "source/tools/balance_pilot.gd::card_score": "8ec66f086c37103774edc928704aca20b424e43bbb9a1d0dc21a672023743375",
+    "source/tools/balance_pilot.gd::_status_value": "5db1ae5b1cf1dfde3f9f2b8921597d081c80ec6b4859bc7f94ac9fe874ee46b1",
+    "source/tools/balance_pilot.gd::_special_value": "5e82154e5f3a62b66d53d21b32855a8f07a7459be5ec3c5c94ce3cdbc9424c03",
+    "source/tools/balance_pilot.gd::card_reward_score": "59f7f925904aaa07e95758a30ce22dc8437f13a3cf2c0b461e852e36a4c645f1",
+    "source/tools/balance_sim.gd::_fight": "3b0c699977c5e8619ab4027123b855f5afffe92d8c412754ca8ad6ed3718b856",
+    "source/tools/balance_sim.gd::_harvest_fight": "be741470b27dd77a0632641ec1644763721df5ac22d8426376f1f6380300d464",
+    "source/tools/research_421_probe.gd::_metrics": "28ebca9d33d6e830f72fe1a2aa40d5f0434a37b50484ca524764f81d20bd3454"
+  },
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
