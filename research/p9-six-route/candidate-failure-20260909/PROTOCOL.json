@@ -1,0 +1,69 @@
+{
+  "kind": "FROZEN_DIAGNOSTIC_FACTORIAL_COMPLETION_NOT_RESCREEN_OR_CANDIDATE_SELECTION",
+  "question": "On the already exposed failing signed Ash V0 assignment, separate the JOINT universal Ash substrate reductions from all remaining candidate deltas and their interaction.",
+  "authority": "Direct owner autonomous #421 continuation. This is diagnosis of a new observed failure, not reopening v25, Hand or any historical terminal.",
+  "evidence_head": "611caded70f12aee3821fcc4b679fb7357c4f5a3",
+  "old_protocol_sha256": "f8eaf9dffc65fa30222c80083ca0397a80174837cf8be1134c39613bf1c860c7",
+  "factor_definition": {
+    "R0": "Original baseline content/runtime except the substrate factor.",
+    "R1": "Exact production2_demand3 remaining content/runtime changes, including pool order, rarity, payoff laws, instance mechanics and preparation exhaustion.",
+    "S0": "Original Ashen Core definition (native default startSmolder3) and Ashfall definition (Smolder6).",
+    "S1": "Candidate Ashen Core startSmolder1 and Ashfall Smolder3; JOINT factor, not separated effects."
+  },
+  "corners": {
+    "00": "Reuse published baseline signed arm2 Ash V0 raw.",
+    "11": "Reuse published failed candidate signed arm2 Ash V0 raw.",
+    "01": "Execute original baseline plus the two existing substrate reductions only.",
+    "10": "Execute candidate with precisely those two full definitions restored from baseline."
+  },
+  "hybrid_content_sha256": {
+    "01": "1ad67585432a240e4347eb26e762c680ef14017565fd3af2093aa72cdc0713b8",
+    "10": "91fd5de56727df42fdcb539b61e7cc7a32e77f3f85dbbe13baef3513e7003cfb"
+  },
+  "assignment": {
+    "aspect": "ashwarden",
+    "vow": 0,
+    "arm": 2,
+    "seeds": {
+      "first": 60909000,
+      "last": 60909127,
+      "count": 128
+    },
+    "new_cells": 2,
+    "new_outcomes": 256,
+    "reused_cells": 2,
+    "reused_outcomes": 256,
+    "independent_confirmation_samples": 0
+  },
+  "estimands": "Per-seed full-run win response. Report both conditional effects for each factor and exact factorial interaction. No threshold-based hybrid selection, interval-based promotion or population claim.",
+  "decision": {
+    "complete": "Publish all four cells, all conditional contrasts and interaction. Retain SIGNED_CONTROL_NECESSARY_SCREEN_FAIL for the original candidate. Identify which measured conditional effects require design attention; no automatic retune or promotion.",
+    "inconclusive": "Any source, coverage, runtime, seed, outcome, parse, resource or replay identity defect. Preserve emitted raw; do not invent missing outcomes or call partial exposure zero."
+  },
+  "controls": "Original signed BalanceSim arm2, default resolved policy, original benchmark profile, empty ban; no research-controller replacement, forced card/relic, seed substitution or changes to opponent rules.",
+  "containment": {
+    "workers": 2,
+    "native_invocation_seconds": 120,
+    "raw_bytes_per_cell": 536870912,
+    "maximum_new_outcomes": 256,
+    "no_adaptive_extension": true
+  },
+  "non_goals": [
+    "No third new hybrid",
+    "No repeated baseline/candidate/Hand/v25 outcomes",
+    "No protected cohort",
+    "No individual Core-vs-Art causal attribution",
+    "No parameter search",
+    "No new package counts",
+    "No product changes",
+    "No weakening of original guards"
+  ],
+  "source_lineage": "Source audit establishes only combat.gd differs between baseline and candidate domain. Both JSON round trips are byte-identical, and outside Ashen Core/Ashfall each hybrid equals its corresponding parent with preserved key/pool ordering. Existing v25 changed Nova fuel/energy recipes and balanced research controls, not this exact signed failing substrate contrast.",
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "source_sha256": {
+    "attribution.py": "d7b4e3b2c39fffc547b0be0ce2d2bca702c6580c04fea6067162551503067491",
+    "test_attribution.py": "dd4ef4cfaafab6267a7998efdcc9e77f347515ede3d6e9c0c097ae9d8bf51257"
+  },
+  "packages_admitted": 0,
+  "p9_certified": false
+}
