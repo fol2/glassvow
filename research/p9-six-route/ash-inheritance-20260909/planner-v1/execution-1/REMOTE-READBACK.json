@@ -1,0 +1,89 @@
+{
+  "kind": "COMPLETE_PLANNER_COMPATIBILITY_COLD_READBACK",
+  "published_head": "90ed9db5c5944fcaa1f6267a31777c874d2cd572",
+  "run_id": "34407742463",
+  "files": [
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/FREEZE.json",
+      "bytes": 1424,
+      "sha256": "bd642691c9d8cc6b7887a78b6a1e850e733e421c2a6b774ae0a3403d438bff51"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/PROTOCOL.json",
+      "bytes": 3913,
+      "sha256": "e8846fd56822859bd858c6b7cfe543994cc188a6c618157cfa966d3b071bd639"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/bind.py",
+      "bytes": 5999,
+      "sha256": "90f93be878c203957a430731ce6aa08364ac9780b8320feb142bf05ba4033644"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/decision_gate.gd",
+      "bytes": 8062,
+      "sha256": "9858aefbfd9a25f5a277740fab0070b3856d1b77469e4d57b0f0a6d6b5c86115"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/execution-1/ARCHIVE.json",
+      "bytes": 30899,
+      "sha256": "1f268960ad1c9f4bf25908de36bba812a20281ef93103fce699931ecd1c1097d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/execution-1/TERMINAL.json",
+      "bytes": 179,
+      "sha256": "8174d3922f13af945abcb4dba51539744c43c8d1c8174db5326e42bd74b7b38a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/execution-1/capture.tar.xz",
+      "bytes": 116264,
+      "sha256": "d05c84e9cc0db40a6d603a76476942a25df4d007c53575bf9e97fa6cc3138505"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/execution-1/engine.log",
+      "bytes": 497,
+      "sha256": "9d81ddb331c5888f9dbd9a1d6b935b019a94af43636da41b23f47c8a1d4e9591"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/execution-1/runner.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/execution-1/runner.stdout",
+      "bytes": 179,
+      "sha256": "8174d3922f13af945abcb4dba51539744c43c8d1c8174db5326e42bd74b7b38a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/legacy_policy.gd",
+      "bytes": 13866,
+      "sha256": "731122ce5fbc0773f6c97696fab449e21df415692b741eceeab79c521c54a72d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/public_rollout.gd",
+      "bytes": 560,
+      "sha256": "58f12667e55a1324b393482f1f6d6649903680bfc77b7fdced2247cd8085152d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/read.py",
+      "bytes": 5493,
+      "sha256": "7b1cd541a541ec396ac32275fb8ba342ed5f9cd17a33bf0f1c6ad79953b6df9f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/run.py",
+      "bytes": 3149,
+      "sha256": "99508f9a4924bb8475293cc48e0a35a3bf88b16b620049057a98c61c0cb4ab68"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/test_planner.py",
+      "bytes": 1843,
+      "sha256": "b8bd41c7f3799f5f5ef3aecaf5564f97d61a83b7736e4cf8e96c3e1e06d26c01"
+    }
+  ],
+  "archived_files": 173,
+  "all_archive_bytes_verified": true,
+  "readout_reproduced": false,
+  "scientific_status": "INCONCLUSIVE",
+  "new_native_runs_during_readback": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
