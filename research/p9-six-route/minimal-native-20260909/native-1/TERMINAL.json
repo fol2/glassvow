@@ -1,0 +1,109 @@
+{
+  "status": "MINIMAL_NATIVE_ROLE_CONTRACT_CHECKED_NOT_ADMITTED",
+  "source_freeze": "c88f7c8b47e57b058e8c71fd9151488808b5b5a4",
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "purpose": "Exact-byte replay to preserve the already observed local capture, count once, no new independent sample.",
+  "counts": {
+    "rows": 1040,
+    "checked_snapshots": 9280,
+    "claims": 1656,
+    "blocked_prefixes": 120,
+    "stock_off_pairs": 208,
+    "dormant_pairs": 16,
+    "other_aspect_pairs": 312
+  },
+  "raw_bytes": 42171897,
+  "raw_sha256": "d8fe513d2cc8992e6168fb3ec4a64e970dd2b5ee82bd2e6c247a33df06bcfd2f",
+  "source_domain_sha256": "85c74ff18cdf73b7355dea340e535edbf01d6b38b53acdc0a251ec528d987b1e",
+  "command": [
+    "/home/runner/work/_temp/p9-engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/tmp/p9-native-role-axgdsbgg/project",
+    "-s",
+    "res://probe.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/minimal-native-20260909/CONTRACT.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/minimal-native-20260909/native-1/raw.ndjson"
+  ],
+  "returncode": 0,
+  "seconds": 13.359987862000025,
+  "source_dependencies": {
+    "domain/rules/combat.gd": {
+      "sha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "git_blob": "58c9b8c8f162e77d802fac6c10e5b884b53c8b15"
+    },
+    "domain/rules/rewards.gd": {
+      "sha256": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "git_blob": "55ecfc6f4615287d90c62737632f7ae4b3133085"
+    },
+    "domain/game.gd": {
+      "sha256": "4eb3f416eef60797bc0cfdf9169250f07fccb3a05c0b16dcb9d7ef054898c824",
+      "git_blob": "d38862f1726953692294246e9e78c2f027c0f635"
+    },
+    "domain/state/card_inst.gd": {
+      "sha256": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d",
+      "git_blob": "bfb25f0417f3d34e7b5670bfdb97bfea86da2c57"
+    },
+    "domain/state/run_state.gd": {
+      "sha256": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "git_blob": "24eeb6a223a67355d87839bbc7a6cd40a8610d96"
+    },
+    "domain/state/combat_state.gd": {
+      "sha256": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "git_blob": "257e5cfd6307db0ee54ce3c5c5db2100b4fe9418"
+    },
+    "domain/state/player_combatant.gd": {
+      "sha256": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3",
+      "git_blob": "9bef62231dbce6b31c460d6c1e9c5d85c2fd693b"
+    },
+    "domain/state/enemy_combatant.gd": {
+      "sha256": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "git_blob": "82a9761a13a9b0cd1b6203caf258022a4e42713f"
+    },
+    "tools/vow_incentives.gd": {
+      "sha256": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e",
+      "git_blob": "d89d067eac7213f24638d99ffa37c6d7500ec522"
+    }
+  },
+  "files": {
+    "import.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "native.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "parse.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "import.stdout": {
+      "bytes": 3028,
+      "sha256": "5a742a0ad47f6154a3155907bd7f3fe64f5777c9ba1f1f030cd14a729e154510"
+    },
+    "parse.stdout": {
+      "bytes": 23,
+      "sha256": "abfd600ff21ef5aa23517b4a9d50d5914f276aa3518d079edb4b75093ed9dbdc"
+    },
+    "raw.ndjson.xz": {
+      "bytes": 95788,
+      "sha256": "0b6cd7260bae3f23ef2395f82eae3d01c691006729c90aba943c78f787a7a6ed"
+    },
+    "RESULTS.json": {
+      "bytes": 2852,
+      "sha256": "751623917ef3730450840de303980144b13ab4a591ad3a8db1eb41ae52dea97f"
+    },
+    "SOURCE-PROOF.json": {
+      "bytes": 122696,
+      "sha256": "9eba122d0a9a77f65b7077e2331ac1b9dd0d7f1a5c3602914fc5a43bef47a176"
+    },
+    "native.stdout": {
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    }
+  }
+}

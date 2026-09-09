@@ -1,0 +1,5469 @@
+{
+  "status": "SOURCE_COMPLETE_NATIVE_ROLE_MAP_AND_GUARDED_DECOMPOSITION_CHECKED",
+  "cases_checked": 1040,
+  "native_actions_checked": 2040,
+  "source": {
+    "source_dependencies": {
+      "domain/rules/combat.gd": {
+        "sha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+        "git_blob": "58c9b8c8f162e77d802fac6c10e5b884b53c8b15"
+      },
+      "domain/rules/rewards.gd": {
+        "sha256": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+        "git_blob": "55ecfc6f4615287d90c62737632f7ae4b3133085"
+      },
+      "domain/game.gd": {
+        "sha256": "4eb3f416eef60797bc0cfdf9169250f07fccb3a05c0b16dcb9d7ef054898c824",
+        "git_blob": "d38862f1726953692294246e9e78c2f027c0f635"
+      },
+      "domain/state/card_inst.gd": {
+        "sha256": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d",
+        "git_blob": "bfb25f0417f3d34e7b5670bfdb97bfea86da2c57"
+      },
+      "domain/state/run_state.gd": {
+        "sha256": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+        "git_blob": "24eeb6a223a67355d87839bbc7a6cd40a8610d96"
+      },
+      "domain/state/combat_state.gd": {
+        "sha256": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+        "git_blob": "257e5cfd6307db0ee54ce3c5c5db2100b4fe9418"
+      },
+      "domain/state/player_combatant.gd": {
+        "sha256": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3",
+        "git_blob": "9bef62231dbce6b31c460d6c1e9c5d85c2fd693b"
+      },
+      "domain/state/enemy_combatant.gd": {
+        "sha256": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+        "git_blob": "82a9761a13a9b0cd1b6203caf258022a4e42713f"
+      },
+      "tools/vow_incentives.gd": {
+        "sha256": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e",
+        "git_blob": "d89d067eac7213f24638d99ffa37c6d7500ec522"
+      }
+    },
+    "cards": {
+      "empower": {
+        "base": {
+          "type": "power",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "self",
+          "vfx": "fire",
+          "effects": [
+            {
+              "kind": "status",
+              "who": "self",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "up": {
+            "effects": [
+              {
+                "kind": "status",
+                "who": "self",
+                "id": "str",
+                "n": 3
+              }
+            ],
+            "text": "Gain 3 Fervor."
+          },
+          "name": "Inner Blaze",
+          "text": "Gain 2 Fervor."
+        },
+        "upgraded": {
+          "type": "power",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "self",
+          "vfx": "fire",
+          "effects": [
+            {
+              "kind": "status",
+              "who": "self",
+              "id": "str",
+              "n": 3
+            }
+          ],
+          "up": {
+            "effects": [
+              {
+                "kind": "status",
+                "who": "self",
+                "id": "str",
+                "n": 3
+              }
+            ],
+            "text": "Gain 3 Fervor."
+          },
+          "name": "Inner Blaze",
+          "text": "Gain 3 Fervor."
+        },
+        "pool_gate": null,
+        "tiers": [
+          "uncommon"
+        ]
+      },
+      "flurry": {
+        "base": {
+          "type": "attack",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 2,
+              "times": 3
+            }
+          ],
+          "up": {
+            "effects": [
+              {
+                "kind": "dmg",
+                "n": 3,
+                "times": 3
+              }
+            ],
+            "text": "Deal @3@ damage 3 times."
+          },
+          "name": "Splinterstorm",
+          "text": "Deal @2@ damage 3 times."
+        },
+        "upgraded": {
+          "type": "attack",
+          "rarity": "uncommon",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "pierce",
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 3,
+              "times": 3
+            }
+          ],
+          "up": {
+            "effects": [
+              {
+                "kind": "dmg",
+                "n": 3,
+                "times": 3
+              }
+            ],
+            "text": "Deal @3@ damage 3 times."
+          },
+          "name": "Splinterstorm",
+          "text": "Deal @3@ damage 3 times."
+        },
+        "pool_gate": null,
+        "tiers": [
+          "uncommon"
+        ]
+      },
+      "venomStrike": {
+        "base": {
+          "type": "attack",
+          "rarity": "common",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "fire",
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 4
+            },
+            {
+              "kind": "status",
+              "who": "target",
+              "id": "poison",
+              "n": 4
+            }
+          ],
+          "up": {
+            "effects": [
+              {
+                "kind": "dmg",
+                "n": 6
+              },
+              {
+                "kind": "status",
+                "who": "target",
+                "id": "poison",
+                "n": 5
+              }
+            ],
+            "text": "Deal @6@ damage. Apply 5 Smolder."
+          },
+          "name": "Emberbite",
+          "text": "Deal @4@ damage. Apply 4 Smolder."
+        },
+        "upgraded": {
+          "type": "attack",
+          "rarity": "common",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "fire",
+          "effects": [
+            {
+              "kind": "dmg",
+              "n": 6
+            },
+            {
+              "kind": "status",
+              "who": "target",
+              "id": "poison",
+              "n": 5
+            }
+          ],
+          "up": {
+            "effects": [
+              {
+                "kind": "dmg",
+                "n": 6
+              },
+              {
+                "kind": "status",
+                "who": "target",
+                "id": "poison",
+                "n": 5
+              }
+            ],
+            "text": "Deal @6@ damage. Apply 5 Smolder."
+          },
+          "name": "Emberbite",
+          "text": "Deal @6@ damage. Apply 5 Smolder."
+        },
+        "pool_gate": null,
+        "tiers": [
+          "common"
+        ]
+      },
+      "catalyst": {
+        "base": {
+          "type": "skill",
+          "rarity": "rare",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "poison",
+          "exhaust": true,
+          "effects": [
+            {
+              "kind": "special",
+              "id": "catalyst",
+              "n": 2
+            }
+          ],
+          "up": {
+            "effects": [
+              {
+                "kind": "special",
+                "id": "catalyst",
+                "n": 3
+              }
+            ],
+            "text": "Triple an enemy's Smolder. Kindle."
+          },
+          "name": "Bellows",
+          "text": "Double an enemy's Smolder. Kindle."
+        },
+        "upgraded": {
+          "type": "skill",
+          "rarity": "rare",
+          "cost": 1,
+          "target": "enemy",
+          "vfx": "poison",
+          "exhaust": true,
+          "effects": [
+            {
+              "kind": "special",
+              "id": "catalyst",
+              "n": 3
+            }
+          ],
+          "up": {
+            "effects": [
+              {
+                "kind": "special",
+                "id": "catalyst",
+                "n": 3
+              }
+            ],
+            "text": "Triple an enemy's Smolder. Kindle."
+          },
+          "name": "Bellows",
+          "text": "Triple an enemy's Smolder. Kindle."
+        },
+        "pool_gate": "poolWave3",
+        "tiers": [
+          "rare"
+        ]
+      }
+    },
+    "source_locations": {
+      "per_hit_strength": 551,
+      "hit_loop": 877,
+      "producer_status": 904,
+      "consumer_multiplier": 986,
+      "poison_decrement": 1068,
+      "death_transfer": 624,
+      "one_card_chips": 803,
+      "power_lifecycle": 841,
+      "exhaust_ember": 855,
+      "ash_scope": 409
+    },
+    "formal_expressions": {
+      "fervor": "NativePlay(P, add_player_str(s)); NativePlay(C, guarded_per_target_repeat(3, NativeHit(d+str))); str is not consumed; native endTurn/newCombat.",
+      "smolder": "NativePlay(P, NativeHit(d); if target survives add_target_poison(p)); NativePlay(C, if poison>0 add_target_poison(poison*(m-1))); native Exhaust; native endTurn tick and target transfer."
+    },
+    "guarded_decomposition": {
+      "fervor": "The producer is one native status primitive; the consumer is an existing within-card hit loop. Cost/payment, hooks, pending chips and discard surround the entire loop, not each hit.",
+      "smolder": "Catalyst is an existing state-dependent increment q*(m-1), not an independent direct-damage primitive. Exhaust and Ember/Branch effects follow at the native card envelope."
+    },
+    "canonical_scope": {
+      "new_runtime_or_content_fields": 0,
+      "new_primitive_proved": false,
+      "complete_historical_quotient_proved": false,
+      "important_boundary": "The old Power-to-next-Attack extra-Chip contract already runs on native background containing Strength. Distinguishing its EXTRA bit from native Strength cannot prove that the complete native-background-plus-bit system lacks the Fervor sub-behaviour."
+    }
+  },
+  "distinguishing_traces": {
+    "fervor:lethal": [
+      {
+        "command": {
+          "t": "playCard",
+          "target": null,
+          "uid": 900
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 8,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "empower",
+              "uid": 900,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 0,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 3,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 3,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "empower",
+            "t": "play",
+            "targetIdx": null,
+            "uid": 900
+          },
+          {
+            "n": 7,
+            "t": "energy"
+          },
+          {
+            "id": "str",
+            "n": 2,
+            "t": "status",
+            "who": "player"
+          },
+          {
+            "t": "powerConsumed",
+            "uid": 900
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 901
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 3,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            901
+          ],
+          "embers": 1,
+          "energy": 6,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 0,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "flurry",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 901
+          },
+          {
+            "n": 6,
+            "t": "energy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": true,
+            "hpAfter": 0,
+            "idx": 0,
+            "killingBlow": true,
+            "overkill": 1,
+            "t": "hitEnemy"
+          },
+          {
+            "idx": 0,
+            "t": "die"
+          },
+          {
+            "n": 1,
+            "t": "ember",
+            "total": 1
+          },
+          {
+            "t": "toDiscard",
+            "uid": 901
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "endTurn"
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            901
+          ],
+          "embers": 1,
+          "energy": 6,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 0,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [],
+          "embers": 1,
+          "energy": 3,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "defend",
+              "uid": 904,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 96,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 0,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 2
+        },
+        "events": [
+          {
+            "t": "endTurn"
+          },
+          {
+            "t": "discardHand",
+            "uids": [
+              902,
+              903
+            ]
+          },
+          {
+            "idx": 1,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 96,
+            "source": 1,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 1,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "n": 2,
+            "t": "turn"
+          },
+          {
+            "n": 3,
+            "t": "energy"
+          },
+          {
+            "id": "defend",
+            "t": "draw",
+            "uid": 904
+          },
+          {
+            "n": 3,
+            "t": "reshuffle"
+          },
+          {
+            "id": "flurry",
+            "t": "draw",
+            "uid": 902
+          },
+          {
+            "id": "empower",
+            "t": "draw",
+            "uid": 903
+          },
+          {
+            "id": "flurry",
+            "t": "draw",
+            "uid": 901
+          }
+        ]
+      }
+    ],
+    "fervor:retarget": [
+      {
+        "command": {
+          "t": "playCard",
+          "target": null,
+          "uid": 900
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 8,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "empower",
+              "uid": 900,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 0,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "empower",
+            "t": "play",
+            "targetIdx": null,
+            "uid": 900
+          },
+          {
+            "n": 7,
+            "t": "energy"
+          },
+          {
+            "id": "str",
+            "n": 2,
+            "t": "status",
+            "who": "player"
+          },
+          {
+            "t": "powerConsumed",
+            "uid": 900
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 1,
+          "uid": 901
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            901
+          ],
+          "embers": 0,
+          "energy": 6,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 1,
+              "facet_max": 100,
+              "hp": 88,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "flurry",
+            "t": "play",
+            "targetIdx": 1,
+            "uid": 901
+          },
+          {
+            "n": 6,
+            "t": "energy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 96,
+            "idx": 1,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 92,
+            "idx": 1,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 88,
+            "idx": 1,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "chips": 1,
+            "facetMax": 100,
+            "idx": 1,
+            "n": 1,
+            "t": "chip"
+          },
+          {
+            "t": "toDiscard",
+            "uid": 901
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "endTurn"
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            901
+          ],
+          "embers": 0,
+          "energy": 6,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 1,
+              "facet_max": 100,
+              "hp": 88,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 3,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "defend",
+              "uid": 904,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 92,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 1,
+              "facet_max": 100,
+              "hp": 88,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 2
+        },
+        "events": [
+          {
+            "t": "endTurn"
+          },
+          {
+            "t": "discardHand",
+            "uids": [
+              902,
+              903
+            ]
+          },
+          {
+            "idx": 0,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 96,
+            "source": 0,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 1,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 92,
+            "source": 1,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 0,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "idx": 1,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "n": 2,
+            "t": "turn"
+          },
+          {
+            "n": 3,
+            "t": "energy"
+          },
+          {
+            "id": "defend",
+            "t": "draw",
+            "uid": 904
+          },
+          {
+            "n": 3,
+            "t": "reshuffle"
+          },
+          {
+            "id": "flurry",
+            "t": "draw",
+            "uid": 902
+          },
+          {
+            "id": "empower",
+            "t": "draw",
+            "uid": 903
+          },
+          {
+            "id": "flurry",
+            "t": "draw",
+            "uid": 901
+          }
+        ]
+      }
+    ],
+    "fervor:repeat": [
+      {
+        "command": {
+          "t": "playCard",
+          "target": null,
+          "uid": 900
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 8,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "empower",
+              "uid": 900,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 0,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "empower",
+            "t": "play",
+            "targetIdx": null,
+            "uid": 900
+          },
+          {
+            "n": 7,
+            "t": "energy"
+          },
+          {
+            "id": "str",
+            "n": 2,
+            "t": "status",
+            "who": "player"
+          },
+          {
+            "t": "powerConsumed",
+            "uid": 900
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 901
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            901
+          ],
+          "embers": 0,
+          "energy": 6,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 1,
+              "facet_max": 100,
+              "hp": 88,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "flurry",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 901
+          },
+          {
+            "n": 6,
+            "t": "energy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 96,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 92,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 88,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "chips": 1,
+            "facetMax": 100,
+            "idx": 0,
+            "n": 1,
+            "t": "chip"
+          },
+          {
+            "t": "toDiscard",
+            "uid": 901
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 902
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            901
+          ],
+          "embers": 0,
+          "energy": 6,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 1,
+              "facet_max": 100,
+              "hp": 88,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 2,
+          "discard_uids": [
+            901,
+            902
+          ],
+          "embers": 0,
+          "energy": 5,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 3,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 2,
+              "facet_max": 100,
+              "hp": 76,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "flurry",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 902
+          },
+          {
+            "n": 5,
+            "t": "energy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 84,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 80,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 76,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "chips": 2,
+            "facetMax": 100,
+            "idx": 0,
+            "n": 1,
+            "t": "chip"
+          },
+          {
+            "t": "toDiscard",
+            "uid": 902
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "endTurn"
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 2,
+          "discard_uids": [
+            901,
+            902
+          ],
+          "embers": 0,
+          "energy": 5,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 3,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 2,
+              "facet_max": 100,
+              "hp": 76,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 2,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 3,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "defend",
+              "uid": 904,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 3,
+          "player_hp": 92,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 2,
+              "facet_max": 100,
+              "hp": 76,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 2
+        },
+        "events": [
+          {
+            "t": "endTurn"
+          },
+          {
+            "t": "discardHand",
+            "uids": [
+              903
+            ]
+          },
+          {
+            "idx": 0,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 96,
+            "source": 0,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 1,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 92,
+            "source": 1,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 0,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "idx": 1,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "n": 2,
+            "t": "turn"
+          },
+          {
+            "n": 3,
+            "t": "energy"
+          },
+          {
+            "id": "defend",
+            "t": "draw",
+            "uid": 904
+          },
+          {
+            "n": 3,
+            "t": "reshuffle"
+          },
+          {
+            "id": "flurry",
+            "t": "draw",
+            "uid": 902
+          },
+          {
+            "id": "empower",
+            "t": "draw",
+            "uid": 903
+          },
+          {
+            "id": "flurry",
+            "t": "draw",
+            "uid": 901
+          }
+        ]
+      }
+    ],
+    "fervor:exhaust_hook": [
+      {
+        "command": {
+          "t": "playCard",
+          "target": null,
+          "uid": 900
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 8,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "empower",
+              "uid": 900,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 0,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "empower",
+            "t": "play",
+            "targetIdx": null,
+            "uid": 900
+          },
+          {
+            "n": 7,
+            "t": "energy"
+          },
+          {
+            "id": "str",
+            "n": 2,
+            "t": "status",
+            "who": "player"
+          },
+          {
+            "t": "powerConsumed",
+            "uid": 900
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 901
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            901
+          ],
+          "embers": 0,
+          "energy": 6,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 1,
+              "facet_max": 100,
+              "hp": 88,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "flurry",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 901
+          },
+          {
+            "n": 6,
+            "t": "energy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 96,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 92,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 88,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "chips": 1,
+            "facetMax": 100,
+            "idx": 0,
+            "n": 1,
+            "t": "chip"
+          },
+          {
+            "t": "toDiscard",
+            "uid": 901
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "endTurn"
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            901
+          ],
+          "embers": 0,
+          "energy": 6,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 1,
+              "facet_max": 100,
+              "hp": 88,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 3,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "defend",
+              "uid": 904,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 92,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 1,
+              "facet_max": 100,
+              "hp": 88,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 2
+        },
+        "events": [
+          {
+            "t": "endTurn"
+          },
+          {
+            "t": "discardHand",
+            "uids": [
+              902,
+              903
+            ]
+          },
+          {
+            "idx": 0,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 96,
+            "source": 0,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 1,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 92,
+            "source": 1,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 0,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "idx": 1,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "n": 2,
+            "t": "turn"
+          },
+          {
+            "n": 3,
+            "t": "energy"
+          },
+          {
+            "id": "defend",
+            "t": "draw",
+            "uid": 904
+          },
+          {
+            "n": 3,
+            "t": "reshuffle"
+          },
+          {
+            "id": "flurry",
+            "t": "draw",
+            "uid": 902
+          },
+          {
+            "id": "empower",
+            "t": "draw",
+            "uid": 903
+          },
+          {
+            "id": "flurry",
+            "t": "draw",
+            "uid": 901
+          }
+        ]
+      }
+    ],
+    "fervor:stacked": [
+      {
+        "command": {
+          "t": "playCard",
+          "target": null,
+          "uid": 900
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 8,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "empower",
+              "uid": 900,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 0,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "empower",
+            "t": "play",
+            "targetIdx": null,
+            "uid": 900
+          },
+          {
+            "n": 7,
+            "t": "energy"
+          },
+          {
+            "id": "str",
+            "n": 2,
+            "t": "status",
+            "who": "player"
+          },
+          {
+            "t": "powerConsumed",
+            "uid": 900
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": null,
+          "uid": 903
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "empower",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {
+            "str": 2
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 6,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {
+            "str": 4
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "empower",
+            "t": "play",
+            "targetIdx": null,
+            "uid": 903
+          },
+          {
+            "n": 6,
+            "t": "energy"
+          },
+          {
+            "id": "str",
+            "n": 2,
+            "t": "status",
+            "who": "player"
+          },
+          {
+            "t": "powerConsumed",
+            "uid": 903
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 901
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 6,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {
+            "str": 4
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            901
+          ],
+          "embers": 0,
+          "energy": 5,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 3,
+          "player_hp": 100,
+          "statuses": {
+            "str": 4
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 1,
+              "facet_max": 100,
+              "hp": 82,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "flurry",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 901
+          },
+          {
+            "n": 5,
+            "t": "energy"
+          },
+          {
+            "amount": 6,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 94,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "amount": 6,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 88,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "amount": 6,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 82,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "chips": 1,
+            "facetMax": 100,
+            "idx": 0,
+            "n": 1,
+            "t": "chip"
+          },
+          {
+            "t": "toDiscard",
+            "uid": 901
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "endTurn"
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            901
+          ],
+          "embers": 0,
+          "energy": 5,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 3,
+          "player_hp": 100,
+          "statuses": {
+            "str": 4
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 1,
+              "facet_max": 100,
+              "hp": 82,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 3,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "defend",
+              "uid": 904,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "flurry",
+              "uid": 901,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 3,
+          "player_hp": 92,
+          "statuses": {
+            "str": 4
+          },
+          "targets": [
+            {
+              "block": 0,
+              "chips": 1,
+              "facet_max": 100,
+              "hp": 82,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 2
+        },
+        "events": [
+          {
+            "t": "endTurn"
+          },
+          {
+            "t": "discardHand",
+            "uids": [
+              902
+            ]
+          },
+          {
+            "idx": 0,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 96,
+            "source": 0,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 1,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 92,
+            "source": 1,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 0,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "idx": 1,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "n": 2,
+            "t": "turn"
+          },
+          {
+            "n": 3,
+            "t": "energy"
+          },
+          {
+            "id": "defend",
+            "t": "draw",
+            "uid": 904
+          },
+          {
+            "n": 2,
+            "t": "reshuffle"
+          },
+          {
+            "id": "flurry",
+            "t": "draw",
+            "uid": 902
+          },
+          {
+            "id": "flurry",
+            "t": "draw",
+            "uid": 901
+          }
+        ]
+      }
+    ],
+    "smolder:lethal": [
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 900
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 8,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "venomStrike",
+              "uid": 900,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 0,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 3,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 1,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 0,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "venomStrike",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 900
+          },
+          {
+            "n": 7,
+            "t": "energy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": true,
+            "hpAfter": 0,
+            "idx": 0,
+            "killingBlow": true,
+            "overkill": 1,
+            "t": "hitEnemy"
+          },
+          {
+            "idx": 0,
+            "t": "die"
+          },
+          {
+            "n": 1,
+            "t": "ember",
+            "total": 1
+          },
+          {
+            "t": "toDiscard",
+            "uid": 900
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 901
+        },
+        "permitted": false,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 1,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 0,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 1,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 0,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": []
+      }
+    ],
+    "smolder:retarget": [
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 900
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 8,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "venomStrike",
+              "uid": 900,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 0,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 4
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "venomStrike",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 900
+          },
+          {
+            "n": 7,
+            "t": "energy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 96,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "id": "poison",
+            "n": 4,
+            "t": "status",
+            "who": 0
+          },
+          {
+            "t": "toDiscard",
+            "uid": 900
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 1,
+          "uid": 901
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 4
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 1,
+          "energy": 6,
+          "exhaust_uids": [
+            901
+          ],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 4
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "catalyst",
+            "t": "play",
+            "targetIdx": 1,
+            "uid": 901
+          },
+          {
+            "n": 6,
+            "t": "energy"
+          },
+          {
+            "t": "exhaust",
+            "uid": 901
+          },
+          {
+            "n": 1,
+            "t": "ember",
+            "total": 1
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "endTurn"
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 1,
+          "energy": 6,
+          "exhaust_uids": [
+            901
+          ],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 4
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [],
+          "embers": 1,
+          "energy": 3,
+          "exhaust_uids": [
+            901
+          ],
+          "hand": [
+            {
+              "id": "defend",
+              "uid": 904,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 900,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 92,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 92,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 3
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 2
+        },
+        "events": [
+          {
+            "t": "endTurn"
+          },
+          {
+            "t": "discardHand",
+            "uids": [
+              902,
+              903
+            ]
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 92,
+            "idx": 0,
+            "poison": true,
+            "t": "hitEnemy"
+          },
+          {
+            "idx": 0,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 96,
+            "source": 0,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 1,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 92,
+            "source": 1,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 0,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "idx": 1,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "n": 2,
+            "t": "turn"
+          },
+          {
+            "n": 3,
+            "t": "energy"
+          },
+          {
+            "id": "defend",
+            "t": "draw",
+            "uid": 904
+          },
+          {
+            "n": 3,
+            "t": "reshuffle"
+          },
+          {
+            "id": "catalyst",
+            "t": "draw",
+            "uid": 902
+          },
+          {
+            "id": "venomStrike",
+            "t": "draw",
+            "uid": 903
+          },
+          {
+            "id": "venomStrike",
+            "t": "draw",
+            "uid": 900
+          }
+        ]
+      }
+    ],
+    "smolder:repeat": [
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 900
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 8,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "venomStrike",
+              "uid": 900,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 0,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 4
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "venomStrike",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 900
+          },
+          {
+            "n": 7,
+            "t": "energy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 96,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "id": "poison",
+            "n": 4,
+            "t": "status",
+            "who": 0
+          },
+          {
+            "t": "toDiscard",
+            "uid": 900
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 901
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 4
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 1,
+          "energy": 6,
+          "exhaust_uids": [
+            901
+          ],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 8
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "catalyst",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 901
+          },
+          {
+            "n": 6,
+            "t": "energy"
+          },
+          {
+            "id": "poison",
+            "n": 4,
+            "t": "status",
+            "who": 0
+          },
+          {
+            "t": "exhaust",
+            "uid": 901
+          },
+          {
+            "n": 1,
+            "t": "ember",
+            "total": 1
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 902
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 1,
+          "energy": 6,
+          "exhaust_uids": [
+            901
+          ],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 8
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 2,
+          "energy": 5,
+          "exhaust_uids": [
+            901,
+            902
+          ],
+          "hand": [
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 3,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 16
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "catalyst",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 902
+          },
+          {
+            "n": 5,
+            "t": "energy"
+          },
+          {
+            "id": "poison",
+            "n": 8,
+            "t": "status",
+            "who": 0
+          },
+          {
+            "t": "exhaust",
+            "uid": 902
+          },
+          {
+            "n": 1,
+            "t": "ember",
+            "total": 2
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "endTurn"
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 2,
+          "energy": 5,
+          "exhaust_uids": [
+            901,
+            902
+          ],
+          "hand": [
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 3,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 16
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [],
+          "embers": 2,
+          "energy": 3,
+          "exhaust_uids": [
+            901,
+            902
+          ],
+          "hand": [
+            {
+              "id": "defend",
+              "uid": 904,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 900,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 3,
+          "player_hp": 92,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 80,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 15
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 2
+        },
+        "events": [
+          {
+            "t": "endTurn"
+          },
+          {
+            "t": "discardHand",
+            "uids": [
+              903
+            ]
+          },
+          {
+            "amount": 16,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 80,
+            "idx": 0,
+            "poison": true,
+            "t": "hitEnemy"
+          },
+          {
+            "idx": 0,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 96,
+            "source": 0,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 1,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 92,
+            "source": 1,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 0,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "idx": 1,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "n": 2,
+            "t": "turn"
+          },
+          {
+            "n": 3,
+            "t": "energy"
+          },
+          {
+            "id": "defend",
+            "t": "draw",
+            "uid": 904
+          },
+          {
+            "n": 2,
+            "t": "reshuffle"
+          },
+          {
+            "id": "venomStrike",
+            "t": "draw",
+            "uid": 903
+          },
+          {
+            "id": "venomStrike",
+            "t": "draw",
+            "uid": 900
+          }
+        ]
+      }
+    ],
+    "smolder:exhaust_hook": [
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 900
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 8,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "venomStrike",
+              "uid": 900,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 0,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 4
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "venomStrike",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 900
+          },
+          {
+            "n": 7,
+            "t": "energy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 96,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "id": "poison",
+            "n": 4,
+            "t": "status",
+            "who": 0
+          },
+          {
+            "t": "toDiscard",
+            "uid": 900
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 901
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 4
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 1,
+          "energy": 6,
+          "exhaust_uids": [
+            901
+          ],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            },
+            {
+              "id": "defend",
+              "uid": 904,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 8
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "catalyst",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 901
+          },
+          {
+            "n": 6,
+            "t": "energy"
+          },
+          {
+            "id": "poison",
+            "n": 4,
+            "t": "status",
+            "who": 0
+          },
+          {
+            "t": "exhaust",
+            "uid": 901
+          },
+          {
+            "n": 1,
+            "t": "ember",
+            "total": 1
+          },
+          {
+            "id": "defend",
+            "t": "draw",
+            "uid": 904
+          },
+          {
+            "id": "verdantBranch",
+            "t": "relicProc"
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "endTurn"
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 1,
+          "energy": 6,
+          "exhaust_uids": [
+            901
+          ],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            },
+            {
+              "id": "defend",
+              "uid": 904,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 8
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [],
+          "embers": 1,
+          "energy": 3,
+          "exhaust_uids": [
+            901
+          ],
+          "hand": [
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            },
+            {
+              "id": "defend",
+              "uid": 904,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 900,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 92,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 88,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 7
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 2
+        },
+        "events": [
+          {
+            "t": "endTurn"
+          },
+          {
+            "t": "discardHand",
+            "uids": [
+              902,
+              903,
+              904
+            ]
+          },
+          {
+            "amount": 8,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 88,
+            "idx": 0,
+            "poison": true,
+            "t": "hitEnemy"
+          },
+          {
+            "idx": 0,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 96,
+            "source": 0,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 1,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 92,
+            "source": 1,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 0,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "idx": 1,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "n": 2,
+            "t": "turn"
+          },
+          {
+            "n": 3,
+            "t": "energy"
+          },
+          {
+            "n": 4,
+            "t": "reshuffle"
+          },
+          {
+            "id": "venomStrike",
+            "t": "draw",
+            "uid": 903
+          },
+          {
+            "id": "defend",
+            "t": "draw",
+            "uid": 904
+          },
+          {
+            "id": "venomStrike",
+            "t": "draw",
+            "uid": 900
+          },
+          {
+            "id": "catalyst",
+            "t": "draw",
+            "uid": 902
+          }
+        ]
+      }
+    ],
+    "smolder:stacked": [
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 900
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 0,
+          "discard_uids": [],
+          "embers": 0,
+          "energy": 8,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "venomStrike",
+              "uid": 900,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 0,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {}
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 4
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "venomStrike",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 900
+          },
+          {
+            "n": 7,
+            "t": "energy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 96,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "id": "poison",
+            "n": 4,
+            "t": "status",
+            "who": 0
+          },
+          {
+            "t": "toDiscard",
+            "uid": 900
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 903
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 1,
+          "discard_uids": [
+            900
+          ],
+          "embers": 0,
+          "energy": 7,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 1,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 96,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 4
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 2,
+          "discard_uids": [
+            900,
+            903
+          ],
+          "embers": 0,
+          "energy": 6,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 92,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 8
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "venomStrike",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 903
+          },
+          {
+            "n": 6,
+            "t": "energy"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 92,
+            "idx": 0,
+            "killingBlow": false,
+            "overkill": 0,
+            "t": "hitEnemy"
+          },
+          {
+            "id": "poison",
+            "n": 4,
+            "t": "status",
+            "who": 0
+          },
+          {
+            "t": "toDiscard",
+            "uid": 903
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "playCard",
+          "target": 0,
+          "uid": 901
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 2,
+          "discard_uids": [
+            900,
+            903
+          ],
+          "embers": 0,
+          "energy": 6,
+          "exhaust_uids": [],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 901,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 2,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 92,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 8
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 2,
+          "discard_uids": [
+            900,
+            903
+          ],
+          "embers": 1,
+          "energy": 5,
+          "exhaust_uids": [
+            901
+          ],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 3,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 92,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 16
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "events": [
+          {
+            "id": "catalyst",
+            "t": "play",
+            "targetIdx": 0,
+            "uid": 901
+          },
+          {
+            "n": 5,
+            "t": "energy"
+          },
+          {
+            "id": "poison",
+            "n": 8,
+            "t": "status",
+            "who": 0
+          },
+          {
+            "t": "exhaust",
+            "uid": 901
+          },
+          {
+            "n": 1,
+            "t": "ember",
+            "total": 1
+          }
+        ]
+      },
+      {
+        "command": {
+          "t": "endTurn"
+        },
+        "permitted": true,
+        "before": {
+          "attacks": 2,
+          "discard_uids": [
+            900,
+            903
+          ],
+          "embers": 1,
+          "energy": 5,
+          "exhaust_uids": [
+            901
+          ],
+          "hand": [
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 3,
+          "player_hp": 100,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 92,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 16
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 1
+        },
+        "after": {
+          "attacks": 2,
+          "discard_uids": [],
+          "embers": 1,
+          "energy": 3,
+          "exhaust_uids": [
+            901
+          ],
+          "hand": [
+            {
+              "id": "defend",
+              "uid": 904,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 903,
+              "up": false
+            },
+            {
+              "id": "catalyst",
+              "uid": 902,
+              "up": false
+            },
+            {
+              "id": "venomStrike",
+              "uid": 900,
+              "up": false
+            }
+          ],
+          "over": false,
+          "played": 3,
+          "player_hp": 92,
+          "statuses": {},
+          "targets": [
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 76,
+              "idx": 0,
+              "staggered": false,
+              "statuses": {
+                "poison": 15
+              }
+            },
+            {
+              "block": 0,
+              "chips": 0,
+              "facet_max": 100,
+              "hp": 100,
+              "idx": 1,
+              "staggered": false,
+              "statuses": {}
+            }
+          ],
+          "turn": 2
+        },
+        "events": [
+          {
+            "t": "endTurn"
+          },
+          {
+            "t": "discardHand",
+            "uids": [
+              902
+            ]
+          },
+          {
+            "amount": 16,
+            "blocked": 0,
+            "dead": false,
+            "hpAfter": 76,
+            "idx": 0,
+            "poison": true,
+            "t": "hitEnemy"
+          },
+          {
+            "idx": 0,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 96,
+            "source": 0,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 1,
+            "move": "spit",
+            "name": "Spore Spit",
+            "t": "enemyAct"
+          },
+          {
+            "amount": 4,
+            "blocked": 0,
+            "hpAfter": 92,
+            "source": 1,
+            "t": "hitPlayer"
+          },
+          {
+            "idx": 0,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "idx": 1,
+            "move": "grow",
+            "t": "intent"
+          },
+          {
+            "n": 2,
+            "t": "turn"
+          },
+          {
+            "n": 3,
+            "t": "energy"
+          },
+          {
+            "id": "defend",
+            "t": "draw",
+            "uid": 904
+          },
+          {
+            "n": 3,
+            "t": "reshuffle"
+          },
+          {
+            "id": "venomStrike",
+            "t": "draw",
+            "uid": 903
+          },
+          {
+            "id": "catalyst",
+            "t": "draw",
+            "uid": 902
+          },
+          {
+            "id": "venomStrike",
+            "t": "draw",
+            "uid": 900
+          }
+        ]
+      }
+    ]
+  },
+  "decision": "Both minimal role chains are expressible by the unmodified product. They are existing-grammar research hypotheses, not formally new topologies; the one-bit closed family cannot be mapped by the word Power alone. Do not transfer the two failed bulk candidates or their performance.",
+  "remaining": "Full relevant closed/admitted-package equivalence/decomposition classification and population/competence/peer/descriptor evidence; no candidate or package is promoted by these finite cases.",
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT"
+}

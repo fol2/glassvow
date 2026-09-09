@@ -1,0 +1,133 @@
+{
+  "status": "MINIMAL_NATIVE_ROLE_CONTRACT_CHECKED_NOT_ADMITTED",
+  "counts": {
+    "rows": 1040,
+    "checked_snapshots": 9280,
+    "claims": 1656,
+    "blocked_prefixes": 120,
+    "stock_off_pairs": 208,
+    "dormant_pairs": 16,
+    "other_aspect_pairs": 312
+  },
+  "failures": [],
+  "plain_factorial": [
+    {
+      "family": "fervor",
+      "vow": 0,
+      "up": false,
+      "payoff_unit": "consumer_HP",
+      "factor_values": {
+        "0": 12,
+        "1": 6,
+        "2": 8,
+        "3": 6
+      },
+      "interaction": 4,
+      "expected": 4
+    },
+    {
+      "family": "fervor",
+      "vow": 0,
+      "up": true,
+      "payoff_unit": "consumer_HP",
+      "factor_values": {
+        "0": 18,
+        "1": 9,
+        "2": 12,
+        "3": 9
+      },
+      "interaction": 6,
+      "expected": 6
+    },
+    {
+      "family": "fervor",
+      "vow": 5,
+      "up": false,
+      "payoff_unit": "consumer_HP",
+      "factor_values": {
+        "0": 12,
+        "1": 6,
+        "2": 8,
+        "3": 6
+      },
+      "interaction": 4,
+      "expected": 4
+    },
+    {
+      "family": "fervor",
+      "vow": 5,
+      "up": true,
+      "payoff_unit": "consumer_HP",
+      "factor_values": {
+        "0": 18,
+        "1": 9,
+        "2": 12,
+        "3": 9
+      },
+      "interaction": 6,
+      "expected": 6
+    },
+    {
+      "family": "smolder",
+      "vow": 0,
+      "up": false,
+      "payoff_unit": "target_stock_then_next_phase_HP",
+      "factor_values": {
+        "0": 8,
+        "1": 0,
+        "2": 4,
+        "3": 0
+      },
+      "interaction": 4,
+      "expected": 4
+    },
+    {
+      "family": "smolder",
+      "vow": 0,
+      "up": true,
+      "payoff_unit": "target_stock_then_next_phase_HP",
+      "factor_values": {
+        "0": 15,
+        "1": 0,
+        "2": 5,
+        "3": 0
+      },
+      "interaction": 10,
+      "expected": 10
+    },
+    {
+      "family": "smolder",
+      "vow": 5,
+      "up": false,
+      "payoff_unit": "target_stock_then_next_phase_HP",
+      "factor_values": {
+        "0": 8,
+        "1": 0,
+        "2": 4,
+        "3": 0
+      },
+      "interaction": 4,
+      "expected": 4
+    },
+    {
+      "family": "smolder",
+      "vow": 5,
+      "up": true,
+      "payoff_unit": "target_stock_then_next_phase_HP",
+      "factor_values": {
+        "0": 15,
+        "1": 0,
+        "2": 5,
+        "3": 0
+      },
+      "interaction": 10,
+      "expected": 10
+    }
+  ],
+  "source_disposition": "Inherited native player-inventory/readout and target-inventory/amplifier compositions. No new primitive or complete closed-family quotient has been proved.",
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "raw_sha256": "d8fe513d2cc8992e6168fb3ec4a64e970dd2b5ee82bd2e6c247a33df06bcfd2f",
+  "contract_sha256": "a1c415acd486a024be513494e4050588f705feddda340ce9b1b6bc07b31f69cf"
+}
