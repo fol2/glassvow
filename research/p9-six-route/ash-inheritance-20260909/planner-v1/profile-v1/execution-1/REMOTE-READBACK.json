@@ -1,0 +1,69 @@
+{
+  "kind": "COMPLETE_WORKLOAD_PROFILE_COLD_READBACK",
+  "published_head": "c9e79c9097b1c4bdc0b88179dabe750cd98ec9d2",
+  "run_id": "34415551254",
+  "files": [
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/profile-v1/FREEZE.json",
+      "bytes": 405,
+      "sha256": "d5955aa1bbacd691f88e2c8bfe8efa7e53b41c3eb1f1432caa6b1be2072b7879"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/profile-v1/PROTOCOL.json",
+      "bytes": 1516,
+      "sha256": "1e092f12e94659e00545f3b6aa56fbe822e9eb6f08b5cfcc048e9e02301ceeca"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/profile-v1/execution-1/ARCHIVE.json",
+      "bytes": 20766,
+      "sha256": "a66195a8967914cf06e12e3ad30bf44670bce7fb4b94ad6c6e770655a89d6939"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/profile-v1/execution-1/RESULTS.json",
+      "bytes": 1584,
+      "sha256": "18819cffc150da36ba4139468db3a27d3d9ca57ac3de968623b9fb85fad2f0f9"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/profile-v1/execution-1/TERMINAL.json",
+      "bytes": 147,
+      "sha256": "9f7d3d6e3cf3e6c41aad0a89686fd6a24efb1ede2d6bfe0e2a3658ff34f79973"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/profile-v1/execution-1/capture.tar.xz",
+      "bytes": 274232,
+      "sha256": "051d945adb3bdb076c2938106805d6a31e492d1746d07a5577ba3ee7ab46e5d0"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/profile-v1/execution-1/engine.log",
+      "bytes": 576,
+      "sha256": "3a4867b680c1fa0d82627a5584fb1c67b0183c92acafbe653ca85d7ac38d790d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/profile-v1/execution-1/runner.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/profile-v1/execution-1/runner.stdout",
+      "bytes": 147,
+      "sha256": "9f7d3d6e3cf3e6c41aad0a89686fd6a24efb1ede2d6bfe0e2a3658ff34f79973"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/profile-v1/profile.py",
+      "bytes": 9943,
+      "sha256": "0c9b95f6f7ce3d3ef95cdee0b4871ce1d0cfad40a50d6f93aa7c273e44c7b352"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/profile-v1/test_profile.py",
+      "bytes": 794,
+      "sha256": "41517f44d0e903e24e999c26b764d9747246fc90560f2e48488d28f355749c69"
+    }
+  ],
+  "archived_files": 125,
+  "all_bytes_equal": true,
+  "readout_reproduced": true,
+  "scientific_status": "PROFILE_COMPLETE_WITH_EXACT_NATIVE_AND_DECISION_REPRODUCTION",
+  "new_native_runs_during_readback": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
