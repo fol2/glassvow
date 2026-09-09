@@ -1,21 +1,75 @@
 {
-  "status": "P9_UNFINISHED_REUNITED_COMPOSITION_VERIFIED_PACKAGE_CERTIFICATION_OPEN",
+  "status": "P9_UNFINISHED_FIXED_HAND_SUPPORT_CANDIDATE_CLOSED_NEGATIVE",
   "branch": "research/p9-six-route-local-20260905",
   "target_packages_per_aspect": 3,
   "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
   "verified_measurement_head": "46401783b39ada692ce9b990f9deda342b79e7dd",
   "candidate_sha256": "3c7b2f9dba362d19128ef82ad559d3f26e54925371d823a665767032255eadaa",
   "descriptor_sha256": "2cfe1d8ff00d5ff695664c597be3a93e3960f39732fa049eac82b9397184bab7",
-  "validation": {"assigned_rows":1024,"durable_compact_rows":1024,"missing_compact_rows":0,"original_raw_recovered":false,"rerun_or_refit":false},
-  "original_arms": {"completed_rows":2048,"exposed_assignment_reproduction_not_fresh_confirmation":true,"raw_archive_bytes":518348,"raw_archive_sha256":"b866d60d7d9dad9bbd83610c145e242ed026bf046806ca5c7cab83f4b58d326c","raw_archive_remote_complete":false},
-  "prior_finite_audit": {"native_assertions":677,"complete_raw_remote_verified":true,"receipt":"source-package-audit-20260908/AUDIT-REMOTE-READBACK.json"},
-  "followup": {"locality_cases":60,"omitted_field_mutations":17,"native_assertions_reexamined":677,"complete_raw_remote_verified":true,"reader_tests_passed":12,"archive_sha256":"b3705b716d6c5597b216d6ed56f0fb2349a17dd9d2a43896397cd2a89e18dfea","receipt":"source-package-audit-20260908/FOLLOWUP-REMOTE-READBACK.json"},
-  "enactment": {
-    "runs_reproduced":9,"requested_contexts":12,"temporal_witnesses":10,"factual_matches":10,"counterfactual_actions":40,"dormant_exact_null_pairs":10,"new_independent_samples":0,"complete_emitted_raw_remote_verified":true,
-    "raw_archive_bytes":29328,"raw_archive_sha256":"61af4dc208880364c668ec724519e0bc639c44e447f1e106c4fad3893a3ca31b","results_sha256":"8778d516aee84d08f1a316655b3e05899041579ca63c19746a6496e3b816eb1d","receipt":"natural-enactment-20260908/REMOTE-READBACK.json",
-    "absent_contexts":[{"aspect":"ashwarden","vow":0,"route":"hand","seed":45010004},{"aspect":"ashwarden","vow":5,"route":"cycle","seed":45010000}]
+  "validation": {
+    "assigned_rows": 1024,
+    "durable_compact_rows": 1024,
+    "missing_compact_rows": 0,
+    "original_raw_recovered": false,
+    "rerun_or_refit": false
   },
-  "review": {"status":"SELF_REVIEW_ACCEPT_LIMITED_CAPTURE_WITH_CHECKED_READER","kind":"SELF_REVIEW_NOT_INDEPENDENT","owner_authority_comment":5586269454,"record":"self-review-20260908/REVIEW.json","independent_approval":false,"scope":"Owner-authorised author review permits continuation, not relaxed scientific independence, altered release protection or P9 admission."},
+  "original_arms": {
+    "completed_rows": 2048,
+    "exposed_assignment_reproduction_not_fresh_confirmation": true,
+    "raw_archive_bytes": 518348,
+    "raw_archive_sha256": "b866d60d7d9dad9bbd83610c145e242ed026bf046806ca5c7cab83f4b58d326c",
+    "raw_archive_remote_complete": false
+  },
+  "prior_finite_audit": {
+    "native_assertions": 677,
+    "complete_raw_remote_verified": true,
+    "receipt": "source-package-audit-20260908/AUDIT-REMOTE-READBACK.json"
+  },
+  "followup": {
+    "locality_cases": 60,
+    "omitted_field_mutations": 17,
+    "native_assertions_reexamined": 677,
+    "complete_raw_remote_verified": true,
+    "reader_tests_passed": 12,
+    "archive_sha256": "b3705b716d6c5597b216d6ed56f0fb2349a17dd9d2a43896397cd2a89e18dfea",
+    "receipt": "source-package-audit-20260908/FOLLOWUP-REMOTE-READBACK.json"
+  },
+  "enactment": {
+    "runs_reproduced": 9,
+    "requested_contexts": 12,
+    "temporal_witnesses": 10,
+    "factual_matches": 10,
+    "counterfactual_actions": 40,
+    "dormant_exact_null_pairs": 10,
+    "new_independent_samples": 0,
+    "complete_emitted_raw_remote_verified": true,
+    "raw_archive_bytes": 29328,
+    "raw_archive_sha256": "61af4dc208880364c668ec724519e0bc639c44e447f1e106c4fad3893a3ca31b",
+    "results_sha256": "8778d516aee84d08f1a316655b3e05899041579ca63c19746a6496e3b816eb1d",
+    "receipt": "natural-enactment-20260908/REMOTE-READBACK.json",
+    "absent_contexts": [
+      {
+        "aspect": "ashwarden",
+        "vow": 0,
+        "route": "hand",
+        "seed": 45010004
+      },
+      {
+        "aspect": "ashwarden",
+        "vow": 5,
+        "route": "cycle",
+        "seed": 45010000
+      }
+    ]
+  },
+  "review": {
+    "status": "SELF_REVIEW_ACCEPT_LIMITED_CAPTURE_WITH_CHECKED_READER",
+    "kind": "SELF_REVIEW_NOT_INDEPENDENT",
+    "owner_authority_comment": 5586269454,
+    "record": "self-review-20260908/REVIEW.json",
+    "independent_approval": false,
+    "scope": "Owner-authorised author review permits continuation, not relaxed scientific independence, altered release protection or P9 admission."
+  },
   "no_active_research_processes": true,
   "p9_certified": false,
   "packages_admitted": 0,
@@ -26,43 +80,208 @@
     "Corrected independent confirmation, unrestricted endpoint retention, signed controls, ceilings and hard guardrails",
     "Minimum lifecycle, exact-head review under current owner authority, exact-product integration and #108 receipt"
   ],
-  "exact_next_action": "Complete one acceptance-mapped disposition stage for all six current packages: full package identity versus exact relevant closed/admitted contracts, causal/subset/null obligations, competent policy/real-economy support and descriptor evidence. Reuse the completed named-alias, guarded-loop, Facet-word and subword answers. Only surviving fully specified contracts open a frozen batch of missing admission observations; no repeated demos, v25, refit or completed-panel replay.",
+  "exact_next_action": "The fixed Hand/controller-family support screen is closed negative. Skip any stage forbidden by its terminal. Do not extend seeds, refit, change this sampler or replay Hand to rescue the label. Continue the already listed next eligible Smolder/Fervor package obligations; preserve the Hand evidence for scope-limited reuse. This does not establish universal Hand nonviability.",
   "command_chain": {
-    "source_freeze":"7b39ebd148bdc7ee23c7e3a4abff4cab79040d71","verified_source_head":"dada9b6b4a069b6478362e104cb0701ff11aecd1","status":"COMMAND_CONTRACT_FAIL","rows":672,"fixtures":80,"states":822,"checks":312,"failed_checks":64,"all_failed_checks_explained":64,
-    "raw_bytes":4374339,"raw_sha256":"62ae02bd4fda08381ce61a4a40b88a98391d7476b6b33d090bc896b622663785","result_sha256":"81f5261c118eced66482a78857e3d1335beed80abc5e83d97215c5b9e6289e8f","raw_remote_complete":true,"readback":"command-chain-20260908/recovery-v1/REMOTE-READBACK.json","new_native_runs_this_continuation":0,"new_independent_samples":0,
-    "scope":"Fixed whole-command zero-interaction controls are falsified, not global Facet futility. No resetting Block, unbundling Stun or altering old signs."
+    "source_freeze": "7b39ebd148bdc7ee23c7e3a4abff4cab79040d71",
+    "verified_source_head": "dada9b6b4a069b6478362e104cb0701ff11aecd1",
+    "status": "COMMAND_CONTRACT_FAIL",
+    "rows": 672,
+    "fixtures": 80,
+    "states": 822,
+    "checks": 312,
+    "failed_checks": 64,
+    "all_failed_checks_explained": 64,
+    "raw_bytes": 4374339,
+    "raw_sha256": "62ae02bd4fda08381ce61a4a40b88a98391d7476b6b33d090bc896b622663785",
+    "result_sha256": "81f5261c118eced66482a78857e3d1335beed80abc5e83d97215c5b9e6289e8f",
+    "raw_remote_complete": true,
+    "readback": "command-chain-20260908/recovery-v1/REMOTE-READBACK.json",
+    "new_native_runs_this_continuation": 0,
+    "new_independent_samples": 0,
+    "scope": "Fixed whole-command zero-interaction controls are falsified, not global Facet futility. No resetting Block, unbundling Stun or altering old signs."
   },
-  "source_scope": {"source_head":"d364e49d310ebcb354d808ea952fab283c165a53","published_evidence_head":"9be033490c4f4b7ac6ccdcf466571289c2cf31f6","readback":"source-scope-20260908/REMOTE-READBACK.json","exact_closure_scope":"source-scope-20260908/EXACT-CLOSURE-SCOPE.json","complete_closed_family_quotient_established":false},
-  "facet_language": {"verified_head":"f36d1428e595711aa997fd3ff8cea633c4df319a","directory":"package-proof-20260908/facet-language-v1","fixed_initial_states":4,"minimum_command_counts":[5,5,7,7],"raw_bytes":28412380,"raw_sha256":"c86b7bfffdc748400eed5436005feef36d990640f64d7505c131eb85a8dd289a","raw_remote_verified":true,"readback":"package-proof-20260908/facet-language-v1/native-1/REMOTE-READBACK.json","not_population_or_package_admission":true},
-  "facet_proper_subwords": {
-    "published_head":"93ddad1b770f57e968d3897cd8d36b5ab15d2a37","result_sha256":"ee39bf48647c8e0767d4351aace6c8b7386bf8f1324a658ece39cc1f3619dcd8","positional_proper_subsets":156,"legal_without_enabled_chain":110,"illegal_prefixes":46,
-    "cases":[
-      {"vow":0,"up":false,"parent_minimum_commands":5,"positional_proper_subsets":15,"distinct_retained_prefix_words":15,"outcomes":{"NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN":15},"all_retained_consumer_proper_subwords_fail_specified_goal":true},
-      {"vow":0,"up":true,"parent_minimum_commands":5,"positional_proper_subsets":15,"distinct_retained_prefix_words":15,"outcomes":{"NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN":15},"all_retained_consumer_proper_subwords_fail_specified_goal":true},
-      {"vow":5,"up":false,"parent_minimum_commands":7,"positional_proper_subsets":63,"distinct_retained_prefix_words":43,"outcomes":{"ILLEGAL_PREFIX":23,"NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN":40},"all_retained_consumer_proper_subwords_fail_specified_goal":true},
-      {"vow":5,"up":true,"parent_minimum_commands":7,"positional_proper_subsets":63,"distinct_retained_prefix_words":43,"outcomes":{"ILLEGAL_PREFIX":23,"NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN":40},"all_retained_consumer_proper_subwords_fail_specified_goal":true}
+  "source_scope": {
+    "source_head": "d364e49d310ebcb354d808ea952fab283c165a53",
+    "published_evidence_head": "9be033490c4f4b7ac6ccdcf466571289c2cf31f6",
+    "readback": "source-scope-20260908/REMOTE-READBACK.json",
+    "exact_closure_scope": "source-scope-20260908/EXACT-CLOSURE-SCOPE.json",
+    "complete_closed_family_quotient_established": false
+  },
+  "facet_language": {
+    "verified_head": "f36d1428e595711aa997fd3ff8cea633c4df319a",
+    "directory": "package-proof-20260908/facet-language-v1",
+    "fixed_initial_states": 4,
+    "minimum_command_counts": [
+      5,
+      5,
+      7,
+      7
     ],
-    "new_native_runs":0,"new_independent_samples":0,"readback":"package-proof-20260908/facet-language-v1/subsequence/derived-1/REMOTE-READBACK.json","scope":"Command omission in four fixed words/states; not all component interventions or natural reachability."
+    "raw_bytes": 28412380,
+    "raw_sha256": "c86b7bfffdc748400eed5436005feef36d990640f64d7505c131eb85a8dd289a",
+    "raw_remote_verified": true,
+    "readback": "package-proof-20260908/facet-language-v1/native-1/REMOTE-READBACK.json",
+    "not_population_or_package_admission": true
+  },
+  "facet_proper_subwords": {
+    "published_head": "93ddad1b770f57e968d3897cd8d36b5ab15d2a37",
+    "result_sha256": "ee39bf48647c8e0767d4351aace6c8b7386bf8f1324a658ece39cc1f3619dcd8",
+    "positional_proper_subsets": 156,
+    "legal_without_enabled_chain": 110,
+    "illegal_prefixes": 46,
+    "cases": [
+      {
+        "vow": 0,
+        "up": false,
+        "parent_minimum_commands": 5,
+        "positional_proper_subsets": 15,
+        "distinct_retained_prefix_words": 15,
+        "outcomes": {
+          "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN": 15
+        },
+        "all_retained_consumer_proper_subwords_fail_specified_goal": true
+      },
+      {
+        "vow": 0,
+        "up": true,
+        "parent_minimum_commands": 5,
+        "positional_proper_subsets": 15,
+        "distinct_retained_prefix_words": 15,
+        "outcomes": {
+          "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN": 15
+        },
+        "all_retained_consumer_proper_subwords_fail_specified_goal": true
+      },
+      {
+        "vow": 5,
+        "up": false,
+        "parent_minimum_commands": 7,
+        "positional_proper_subsets": 63,
+        "distinct_retained_prefix_words": 43,
+        "outcomes": {
+          "ILLEGAL_PREFIX": 23,
+          "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN": 40
+        },
+        "all_retained_consumer_proper_subwords_fail_specified_goal": true
+      },
+      {
+        "vow": 5,
+        "up": true,
+        "parent_minimum_commands": 7,
+        "positional_proper_subsets": 63,
+        "distinct_retained_prefix_words": 43,
+        "outcomes": {
+          "ILLEGAL_PREFIX": 23,
+          "NO_ENABLED_PREFIX_SHATTER_ECHO_CHAIN": 40
+        },
+        "all_retained_consumer_proper_subwords_fail_specified_goal": true
+      }
+    ],
+    "new_native_runs": 0,
+    "new_independent_samples": 0,
+    "readback": "package-proof-20260908/facet-language-v1/subsequence/derived-1/REMOTE-READBACK.json",
+    "scope": "Command omission in four fixed words/states; not all component interventions or natural reachability."
   },
   "composition": {
-    "transferred_head":"016e960d95a0da1e145bc19dc6a4a425b633793e","published_verified_head":"52b33efc993dc3e613356ed9b835c27462641f76","freeze_head":"0726f9e4eecd84ede09ae587befd1d216c038ab1",
-    "status":"GUARDED_COMPOSITION_PROVED_AND_TWO_NAMED_ALIASES_REFUTED_NOT_FULL_PACKAGE_EQUIVALENCE",
-    "raw_bytes":1861970,"raw_sha256":"70176a36ba032b4434bb4baee35e3963112c63d8b42f7aa96b74de1f12a59b09","archive_bytes":32596,"archive_sha256":"ddc8773e258fdc75dcadea24e01de9e6b8fa9895282b810f7a754c2651fbd703",
-    "constructed_native_traces":128,"original_files":24,"tests_passed":29,"checked_step_views":272,
-    "native_runs_in_reunion":0,"new_independent_samples":0,"readback":"package-proof-20260908/composition-v1/REMOTE-READBACK.json",
-    "full_closed_package_quotient_established":false,"scope":"Exact named producer-role comparisons and guarded Cycle effect-loop expansion only. Not whole-card equivalence to old Honing, a separate two-card sequence, population support or package admission."
+    "transferred_head": "016e960d95a0da1e145bc19dc6a4a425b633793e",
+    "published_verified_head": "52b33efc993dc3e613356ed9b835c27462641f76",
+    "freeze_head": "0726f9e4eecd84ede09ae587befd1d216c038ab1",
+    "status": "GUARDED_COMPOSITION_PROVED_AND_TWO_NAMED_ALIASES_REFUTED_NOT_FULL_PACKAGE_EQUIVALENCE",
+    "raw_bytes": 1861970,
+    "raw_sha256": "70176a36ba032b4434bb4baee35e3963112c63d8b42f7aa96b74de1f12a59b09",
+    "archive_bytes": 32596,
+    "archive_sha256": "ddc8773e258fdc75dcadea24e01de9e6b8fa9895282b810f7a754c2651fbd703",
+    "constructed_native_traces": 128,
+    "original_files": 24,
+    "tests_passed": 29,
+    "checked_step_views": 272,
+    "native_runs_in_reunion": 0,
+    "new_independent_samples": 0,
+    "readback": "package-proof-20260908/composition-v1/REMOTE-READBACK.json",
+    "full_closed_package_quotient_established": false,
+    "scope": "Exact named producer-role comparisons and guarded Cycle effect-loop expansion only. Not whole-card equivalence to old Honing, a separate two-card sequence, population support or package admission."
   },
   "reunion": {
-    "status":"COMPLETE_WITH_EXPLICIT_HISTORICAL_RAW_GAP",
-    "verified_evidence_head":"52b33efc993dc3e613356ed9b835c27462641f76",
-    "workflow_run":34265519152,"workflow_job":102193769145,
-    "known_checkpoints":28,"ancestor_checkpoints_before_union":24,"divergent_checkpoints":4,"unresolved_references":0,"unique_divergent_files_archived":7,"cold_checked_files":370,
-    "reconciliation_merge_additional_parents":["a9bda8e938c011a36e254ca7b8198bdfeed8988d","a0e15b238ea21002d208b63aecebd7f95fc6dc31","1aeddb842fe31ce00001b43bfb22521aad6a8281","4e2c72d760beb78683e540f114250989e20e5f0a"],
-    "readback":"reunion-20260908/REMOTE-READBACK.json",
-    "current_capsule_owner":"This reunion coordinator; composition writer explicitly transferred and stopped shared writes.",
-    "resume_rule":"Resolve remote, read this current capsule and only its new diff. Do not rerun the completed reunion audit. Non-fast-forward means reconcile, never force or assume expired permission.",
-    "local_inventory":"reunion-20260908/LOCAL-INVENTORY.json",
-    "local_git_worktrees_found":0,
-    "new_native_runs":0,"new_independent_samples":0
+    "status": "COMPLETE_WITH_EXPLICIT_HISTORICAL_RAW_GAP",
+    "verified_evidence_head": "52b33efc993dc3e613356ed9b835c27462641f76",
+    "workflow_run": 34265519152,
+    "workflow_job": 102193769145,
+    "known_checkpoints": 28,
+    "ancestor_checkpoints_before_union": 24,
+    "divergent_checkpoints": 4,
+    "unresolved_references": 0,
+    "unique_divergent_files_archived": 7,
+    "cold_checked_files": 370,
+    "reconciliation_merge_additional_parents": [
+      "a9bda8e938c011a36e254ca7b8198bdfeed8988d",
+      "a0e15b238ea21002d208b63aecebd7f95fc6dc31",
+      "1aeddb842fe31ce00001b43bfb22521aad6a8281",
+      "4e2c72d760beb78683e540f114250989e20e5f0a"
+    ],
+    "readback": "reunion-20260908/REMOTE-READBACK.json",
+    "current_capsule_owner": "This reunion coordinator; composition writer explicitly transferred and stopped shared writes.",
+    "resume_rule": "Resolve remote, read this current capsule and only its new diff. Do not rerun the completed reunion audit. Non-fast-forward means reconcile, never force or assume expired permission.",
+    "local_inventory": "reunion-20260908/LOCAL-INVENTORY.json",
+    "local_git_worktrees_found": 0,
+    "new_native_runs": 0,
+    "new_independent_samples": 0
+  },
+  "hand_support": {
+    "status": "HAND_NATURAL_SUPPORT_GATE_FAIL_IN_FIXED_POLICY_FAMILY",
+    "evidenced_source_head": "833ea05ae2f0b76eb84842b214c99b14d91b44be",
+    "protocol_path": "hand-admission-20260908/support-v1/PROTOCOL.json",
+    "terminal_path": "hand-admission-20260908/support-v1/capture-1/TERMINAL.json",
+    "audit_path": "hand-admission-20260908/support-v1/postrun/RESULTS.json",
+    "audit_sha256": "790e953d56695d720490fb569ca154d5a5eb6fe9dbc9845e4876827e8236b878",
+    "last_completed_vow": 0,
+    "stages": {
+      "5": {
+        "active": 62,
+        "inactive": 45,
+        "ambiguous": 21,
+        "reachable": 76,
+        "rows": 512,
+        "gates": {
+          "active": true,
+          "inactive": true,
+          "reachable": true,
+          "fault_free": true
+        },
+        "outcomes": {
+          "loss": 163,
+          "win": 349
+        },
+        "trajectory_classes": 128
+      },
+      "0": {
+        "active": 122,
+        "inactive": 6,
+        "ambiguous": 0,
+        "reachable": 124,
+        "rows": 512,
+        "gates": {
+          "active": true,
+          "inactive": false,
+          "reachable": true,
+          "fault_free": true
+        },
+        "outcomes": {
+          "win": 462,
+          "loss": 50
+        },
+        "trajectory_classes": 128
+      }
+    },
+    "raw_streams_checked": 2048,
+    "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+    "new_native_runs_in_postrun_audit": 0,
+    "independent_confirmation": false,
+    "scope": "Fixed 128-configuration existing-controller family and four seeds per gated stage. Necessary support only, not complete package certification."
+  },
+  "hand_causal_preflight": {
+    "evidence_head": "dadb74bff88a76bdc3b33d52c05d8c86a7045258",
+    "receipt": "hand-admission-20260908/native-1/EXECUTION.json",
+    "status": "HAND_PREFLIGHT_PASS_WITH_EXACT_LOCAL_REMOTE_BYTES",
+    "scope": "Already completed finite observer/component-intervention preflight; do not rerun."
   }
 }

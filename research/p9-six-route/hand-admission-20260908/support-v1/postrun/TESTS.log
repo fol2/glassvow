@@ -1,0 +1,39 @@
+test_alternative_positive_cannot_be_invented_as_historical_chain (test_audit_terminal.AuditTests.test_alternative_positive_cannot_be_invented_as_historical_chain) ... ok
+test_both_vows_are_required_for_full_support (test_audit_terminal.AuditTests.test_both_vows_are_required_for_full_support) ... ok
+test_every_compressed_and_expanded_byte_is_checked (test_audit_terminal.AuditTests.test_every_compressed_and_expanded_byte_is_checked) ... ok
+test_expanded_hash_cannot_be_replaced_by_compressed_hash (test_audit_terminal.AuditTests.test_expanded_hash_cannot_be_replaced_by_compressed_hash) ... ok
+test_inconclusive_is_not_failure (test_audit_terminal.AuditTests.test_inconclusive_is_not_failure) ... ok
+test_index_is_bound_to_configuration (test_audit_terminal.AuditTests.test_index_is_bound_to_configuration) ... ok
+test_no_package_admission_from_support (test_audit_terminal.AuditTests.test_no_package_admission_from_support) ... ok
+test_no_v0_after_negative (test_audit_terminal.AuditTests.test_no_v0_after_negative) ... ok
+test_opportunity_is_not_reported_as_positive_health_interaction (test_audit_terminal.AuditTests.test_opportunity_is_not_reported_as_positive_health_interaction) ... ok
+test_terminal_must_match_actual_stage (test_audit_terminal.AuditTests.test_terminal_must_match_actual_stage) ... ok
+test_unfinished_child_not_reused (test_audit_terminal.AuditTests.test_unfinished_child_not_reused) ... ok
+test_v0_negative_stays_negative (test_audit_terminal.AuditTests.test_v0_negative_stays_negative) ... ok
+test_v5_negative_stays_negative (test_audit_terminal.AuditTests.test_v5_negative_stays_negative) ... ok
+test_v5_success_alone_not_final_success (test_audit_terminal.AuditTests.test_v5_success_alone_not_final_success) ... ok
+test_absent_configs_only (test_resume_support.ResumeTests.test_absent_configs_only) ... ok
+test_absent_stage_does_not_invent_results (test_resume_support.ResumeTests.test_absent_stage_does_not_invent_results) ... ok
+test_existing_pass_or_fail_not_reexecuted (test_resume_support.ResumeTests.test_existing_pass_or_fail_not_reexecuted) ... ok
+test_failed_requires_named_repair (test_resume_support.ResumeTests.test_failed_requires_named_repair) ... ok
+test_inconclusive_does_not_authorize_blind_retry (test_resume_support.ResumeTests.test_inconclusive_does_not_authorize_blind_retry) ... ok
+test_no_support_certificate_upgrade (test_resume_support.ResumeTests.test_no_support_certificate_upgrade) ... ok
+test_partial_not_overwritten (test_resume_support.ResumeTests.test_partial_not_overwritten) ... ok
+test_unknown_directory_rejected (test_resume_support.ResumeTests.test_unknown_directory_rejected) ... ok
+test_31_active_is_failure_even_with_every_win (test_terminal_review.TerminalReview.test_31_active_is_failure_even_with_every_win) ... ok
+test_31_inactive_is_failure (test_terminal_review.TerminalReview.test_31_inactive_is_failure) ... ok
+test_all_minima_pass_only_necessary_gate (test_terminal_review.TerminalReview.test_all_minima_pass_only_necessary_gate) ... ok
+test_all_positive_other_supplier_is_ambiguous_not_inactive (test_terminal_review.TerminalReview.test_all_positive_other_supplier_is_ambiguous_not_inactive) ... ok
+test_any_late_positive_prevents_inactive (test_terminal_review.TerminalReview.test_any_late_positive_prevents_inactive) ... ok
+test_duplicate_policy_id_rejected (test_terminal_review.TerminalReview.test_duplicate_policy_id_rejected) ... ok
+test_missing_policy_rejected (test_terminal_review.TerminalReview.test_missing_policy_rejected) ... ok
+test_mixed_vow_rejected (test_terminal_review.TerminalReview.test_mixed_vow_rejected) ... ok
+test_one_active_seed_counts_one_policy_not_four (test_terminal_review.TerminalReview.test_one_active_seed_counts_one_policy_not_four) ... ok
+test_seed_replacement_rejected (test_terminal_review.TerminalReview.test_seed_replacement_rejected) ... ok
+test_stall_and_error_fail_closed (test_terminal_review.TerminalReview.test_stall_and_error_fail_closed) ... ok
+test_trajectory_aliases_reported_without_fake_replication (test_terminal_review.TerminalReview.test_trajectory_aliases_reported_without_fake_replication) ... ok
+
+----------------------------------------------------------------------
+Ran 34 tests in 0.059s
+
+OK
