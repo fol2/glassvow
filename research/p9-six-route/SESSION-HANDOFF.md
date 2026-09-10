@@ -30,12 +30,12 @@ The factual provenance fields have not acquired predictive/causal descriptor adm
 All old controller/resource/acquisition, v25, cohort, model and source-negative scopes remain unchanged.
 Historical older raw gaps remain recorded in SESSION-STATE.json.
 
+## Completed full source-path diagnosis
+
+All2048 retained runs /820147 commands were read; source-off worlds had zero direct-source draws or provenance leaks. In11,1973 Phantom plays include168 with either specified source path (158 retained-other,60 consumer-access,50 overlap). This is factual provenance, not a counterfactual descriptor or a certificate. Paired win responses: source44 favourable/17 adverse; consumer19/13; interaction15/15. No outcomes, intervals, cohorts or stopping rules were changed. Read `ash-inheritance-20260909/hand-value-v1/source-path-census-1/closure-1/DECISION.json` and its input cold-readback.
+
 ## Exact continuation
 
-Close this exact Hand group adaptive-value claim without extension or rescue. Reconcile the remaining package proof obligations and eligible already-authorized alternatives against the complete evidence; no new controller, seed reroll or descriptor-confirmation experiment is opened by this closure. A next study requires a genuinely different unmeasured acceptance claim, not a new threshold for this result.
+Keep hand-value-v1 and Bloodfire adaptive-value terminals closed. Do not extend their samples, replace their win estimand, or nominate another controller. The next design screen is the already-authored Hand two-slope consumer in source-package-audit-20260908/candidate.patch and observer.patch, considered ONLY as an isolated inherited-family improvement: native Preparation/Surge, rarity/pools, Core/Art, Bloodfire and other cards stay unchanged. First bind the exact eligible closure scope, full native payoff envelope and matched public-query/intervention contract at zero rows. The old coefficient-zero Hand mask cannot simply be reused: floor_per remains a payoff. Reject the design if this complete contract cannot be supplied; do not add a parameter grid. No new native cohort is opened by this diagnosis.
 
-Remaining: complete package causality/descriptor/policy/peer/economy/independent proof;
-three strategies per aspect; seven-direction detector; corrected independent confirmation and
-unrestricted endpoint retention; hard guardrails; minimal lifecycle, exact-head review,
-one selected product integration and exact-product #108 receipt.
-Author self-review is not independent evidence. No native process is launched by this closure.
+Remaining: full package causality/descriptor/policy/peer/economy/independent evidence; three distinct complete strategies per aspect; seven-direction detector; corrected confirmation and unrestricted retention; all hard guardrails; minimum lifecycle, exact-head review, one selected product integration and #108 receipt. Author review is not independent. No native or population work is launched by this closure.

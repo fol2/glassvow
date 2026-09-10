@@ -1,0 +1,61 @@
+{
+  "status": "CURRENT_HAND_VALUE_BRANCH_CLOSED_WITH_FULL_SOURCE_CENSUS",
+  "commands_read": 820147,
+  "runs_read": 2048,
+  "all_on_phantom_plays": 1973,
+  "all_on_either_source_path_plays": 168,
+  "all_on_either_source_fraction": 0.08514951849974658,
+  "all_on_source_path_overlap": 50,
+  "paired_responses": {
+    "counts_not_independent_samples": true,
+    "paired_response_distributions": {
+      "consumer": {
+        "-1": 13,
+        "0": 480,
+        "1": 19
+      },
+      "interaction": {
+        "-1": 15,
+        "0": 482,
+        "1": 15
+      },
+      "source": {
+        "-1": 17,
+        "0": 451,
+        "1": 44
+      }
+    },
+    "patterns": {
+      "0000": 163,
+      "0001": 5,
+      "0010": 4,
+      "0011": 33,
+      "0100": 2,
+      "0101": 10,
+      "0111": 6,
+      "1010": 6,
+      "1011": 6,
+      "1100": 12,
+      "1101": 4,
+      "1110": 3,
+      "1111": 258
+    },
+    "wins": {
+      "00": 289,
+      "01": 295,
+      "10": 316,
+      "11": 322
+    }
+  },
+  "decision": "Do not treat this negative as an unfinished tool/recovery problem. The checked source suppression did not leak, both specified source pathways were counted, and the fixed primary still failed. Stop this value nomination, not the entire Hand family or P9 programme.",
+  "interpretation_limit": "Sparse factual source linkage is a design diagnostic, not a causal attribution of every lost win. Zero average win interaction is neither no individual response nor equivalence.",
+  "next_action": "Keep hand-value-v1 and Bloodfire adaptive-value terminals closed. Do not extend their samples, replace their win estimand, or nominate another controller. The next design screen is the already-authored Hand two-slope consumer in source-package-audit-20260908/candidate.patch and observer.patch, considered ONLY as an isolated inherited-family improvement: native Preparation/Surge, rarity/pools, Core/Art, Bloodfire and other cards stay unchanged. First bind the exact eligible closure scope, full native payoff envelope and matched public-query/intervention contract at zero rows. The old coefficient-zero Hand mask cannot simply be reused: floor_per remains a payoff. Reject the design if this complete contract cannot be supplied; do not add a parameter grid. No new native cohort is opened by this diagnosis.",
+  "candidate_selected_or_admitted": false,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "evidence_head": "9daa2221faf38498d6ede31fa97bede6b72f7164",
+  "original_primary_unchanged": true
+}
