@@ -1,0 +1,778 @@
+{
+  "kind": "PRESERVED_QUERY_MISMATCH_DIAGNOSIS",
+  "summaries": {
+    "reference": {
+      "rows": 280,
+      "comparisons": {
+        "raw=True,native=True,score=False,draft=False,zero=True": 48,
+        "raw=True,native=True,score=True,draft=False,zero=True": 8,
+        "raw=True,native=True,score=True,draft=False,zero=False": 224
+      },
+      "first_example_of_each_comparison": {
+        "raw=True,native=True,score=False,draft=False,zero=True": {
+          "key": "0:0:false:0:plain:true",
+          "q": 0,
+          "up": false,
+          "aspect": 0,
+          "context": "plain",
+          "active": true,
+          "expected_raw": 0,
+          "actual_raw": 0,
+          "score": 0.0,
+          "expanded_score": 2.7,
+          "draft": 7.0,
+          "expanded_draft": 10.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "id": "phantom",
+                "kind": "special",
+                "n": 3.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @3@ damage for each card in your hand.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 4.0
+                }
+              ],
+              "text": "Deal @4@ damage for each card in your hand."
+            },
+            "vfx": "pierce"
+          }
+        },
+        "raw=True,native=True,score=True,draft=False,zero=True": {
+          "key": "0:0:false:0:block:true",
+          "q": 0,
+          "up": false,
+          "aspect": 0,
+          "context": "block",
+          "active": true,
+          "expected_raw": 0,
+          "actual_raw": 0,
+          "score": 0.0,
+          "expanded_score": 0.0,
+          "draft": 7.0,
+          "expanded_draft": 10.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "id": "phantom",
+                "kind": "special",
+                "n": 3.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @3@ damage for each card in your hand.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 4.0
+                }
+              ],
+              "text": "Deal @4@ damage for each card in your hand."
+            },
+            "vfx": "pierce"
+          }
+        },
+        "raw=True,native=True,score=True,draft=False,zero=False": {
+          "key": "0:0:false:4:plain:true",
+          "q": 4,
+          "up": false,
+          "aspect": 0,
+          "context": "plain",
+          "active": true,
+          "expected_raw": 12,
+          "actual_raw": 12,
+          "score": 14.7,
+          "expanded_score": 14.7,
+          "draft": 7.0,
+          "expanded_draft": 10.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "id": "phantom",
+                "kind": "special",
+                "n": 3.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @3@ damage for each card in your hand.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 4.0
+                }
+              ],
+              "text": "Deal @4@ damage for each card in your hand."
+            },
+            "vfx": "pierce"
+          }
+        }
+      }
+    },
+    "linear": {
+      "rows": 560,
+      "comparisons": {
+        "raw=True,native=True,score=False,draft=True,zero=True": 240,
+        "raw=True,native=True,score=False,draft=False,zero=True": 48,
+        "raw=True,native=True,score=True,draft=True,zero=True": 40,
+        "raw=True,native=True,score=True,draft=False,zero=True": 8,
+        "raw=True,native=True,score=True,draft=False,zero=False": 224
+      },
+      "first_example_of_each_comparison": {
+        "raw=True,native=True,score=False,draft=True,zero=True": {
+          "key": "0:0:false:0:plain:false",
+          "q": 0,
+          "up": false,
+          "aspect": 0,
+          "context": "plain",
+          "active": false,
+          "expected_raw": 0,
+          "actual_raw": 0,
+          "score": 0.0,
+          "expanded_score": 2.7,
+          "draft": -2.0,
+          "expanded_draft": -2.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "id": "phantom",
+                "kind": "special",
+                "n": 0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @3@ damage for each card in your hand.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 4.0
+                }
+              ],
+              "text": "Deal @4@ damage for each card in your hand."
+            },
+            "vfx": "pierce"
+          }
+        },
+        "raw=True,native=True,score=False,draft=False,zero=True": {
+          "key": "0:0:false:0:plain:true",
+          "q": 0,
+          "up": false,
+          "aspect": 0,
+          "context": "plain",
+          "active": true,
+          "expected_raw": 0,
+          "actual_raw": 0,
+          "score": 0.0,
+          "expanded_score": 2.7,
+          "draft": 7.0,
+          "expanded_draft": 10.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "id": "phantom",
+                "kind": "special",
+                "n": 3.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @3@ damage for each card in your hand.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 4.0
+                }
+              ],
+              "text": "Deal @4@ damage for each card in your hand."
+            },
+            "vfx": "pierce"
+          }
+        },
+        "raw=True,native=True,score=True,draft=True,zero=True": {
+          "key": "0:0:false:0:block:false",
+          "q": 0,
+          "up": false,
+          "aspect": 0,
+          "context": "block",
+          "active": false,
+          "expected_raw": 0,
+          "actual_raw": 0,
+          "score": 0.0,
+          "expanded_score": 0.0,
+          "draft": -2.0,
+          "expanded_draft": -2.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "id": "phantom",
+                "kind": "special",
+                "n": 0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @3@ damage for each card in your hand.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 4.0
+                }
+              ],
+              "text": "Deal @4@ damage for each card in your hand."
+            },
+            "vfx": "pierce"
+          }
+        },
+        "raw=True,native=True,score=True,draft=False,zero=True": {
+          "key": "0:0:false:0:block:true",
+          "q": 0,
+          "up": false,
+          "aspect": 0,
+          "context": "block",
+          "active": true,
+          "expected_raw": 0,
+          "actual_raw": 0,
+          "score": 0.0,
+          "expanded_score": 0.0,
+          "draft": 7.0,
+          "expanded_draft": 10.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "id": "phantom",
+                "kind": "special",
+                "n": 3.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @3@ damage for each card in your hand.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 4.0
+                }
+              ],
+              "text": "Deal @4@ damage for each card in your hand."
+            },
+            "vfx": "pierce"
+          }
+        },
+        "raw=True,native=True,score=True,draft=False,zero=False": {
+          "key": "0:0:false:4:plain:true",
+          "q": 4,
+          "up": false,
+          "aspect": 0,
+          "context": "plain",
+          "active": true,
+          "expected_raw": 12,
+          "actual_raw": 12,
+          "score": 14.7,
+          "expanded_score": 14.7,
+          "draft": 7.0,
+          "expanded_draft": 10.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "id": "phantom",
+                "kind": "special",
+                "n": 3.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @3@ damage for each card in your hand.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 4.0
+                }
+              ],
+              "text": "Deal @4@ damage for each card in your hand."
+            },
+            "vfx": "pierce"
+          }
+        }
+      }
+    },
+    "candidate": {
+      "rows": 560,
+      "comparisons": {
+        "raw=True,native=True,score=True,draft=True,zero=True": 280,
+        "raw=True,native=True,score=True,draft=False,zero=True": 56,
+        "raw=True,native=True,score=True,draft=False,zero=False": 224
+      },
+      "first_example_of_each_comparison": {
+        "raw=True,native=True,score=True,draft=True,zero=True": {
+          "key": "0:0:false:0:plain:false",
+          "q": 0,
+          "up": false,
+          "aspect": 0,
+          "context": "plain",
+          "active": false,
+          "expected_raw": 0,
+          "actual_raw": 0,
+          "score": 2.7,
+          "expanded_score": 2.7,
+          "draft": -2.0,
+          "expanded_draft": -2.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "floor_per": 0,
+                "id": "phantom",
+                "kind": "special",
+                "n": 0,
+                "reserve": 4.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per card above 4.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "floor_per": 2.0,
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 7.0,
+                  "reserve": 4.0
+                }
+              ],
+              "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per card above 4."
+            },
+            "vfx": "pierce"
+          }
+        },
+        "raw=True,native=True,score=True,draft=False,zero=True": {
+          "key": "0:0:false:0:plain:true",
+          "q": 0,
+          "up": false,
+          "aspect": 0,
+          "context": "plain",
+          "active": true,
+          "expected_raw": 0,
+          "actual_raw": 0,
+          "score": 2.7,
+          "expanded_score": 2.7,
+          "draft": -12.0,
+          "expanded_draft": 6.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "floor_per": 2.0,
+                "id": "phantom",
+                "kind": "special",
+                "n": 6.0,
+                "reserve": 4.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per card above 4.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "floor_per": 2.0,
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 7.0,
+                  "reserve": 4.0
+                }
+              ],
+              "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per card above 4."
+            },
+            "vfx": "pierce"
+          }
+        },
+        "raw=True,native=True,score=True,draft=False,zero=False": {
+          "key": "0:0:false:4:plain:true",
+          "q": 4,
+          "up": false,
+          "aspect": 0,
+          "context": "plain",
+          "active": true,
+          "expected_raw": 8,
+          "actual_raw": 8,
+          "score": 10.7,
+          "expanded_score": 10.7,
+          "draft": -12.0,
+          "expanded_draft": 6.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "floor_per": 2.0,
+                "id": "phantom",
+                "kind": "special",
+                "n": 6.0,
+                "reserve": 4.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per card above 4.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "floor_per": 2.0,
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 7.0,
+                  "reserve": 4.0
+                }
+              ],
+              "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per card above 4."
+            },
+            "vfx": "pierce"
+          }
+        }
+      }
+    },
+    "legacy-mask": {
+      "rows": 280,
+      "comparisons": {
+        "raw=True,native=True,score=True,draft=False,zero=True": 56,
+        "raw=False,native=False,score=False,draft=False,zero=True": 128,
+        "raw=False,native=False,score=True,draft=False,zero=True": 64,
+        "raw=False,native=True,score=False,draft=False,zero=True": 32
+      },
+      "first_example_of_each_comparison": {
+        "raw=True,native=True,score=True,draft=False,zero=True": {
+          "key": "0:0:false:0:plain:false",
+          "q": 0,
+          "up": false,
+          "aspect": 0,
+          "context": "plain",
+          "active": false,
+          "expected_raw": 0,
+          "actual_raw": 0,
+          "score": 2.7,
+          "expanded_score": 2.7,
+          "draft": 12.0,
+          "expanded_draft": -2.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "floor_per": 2.0,
+                "id": "phantom",
+                "kind": "special",
+                "n": 0,
+                "reserve": 4.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per card above 4.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "floor_per": 2.0,
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 7.0,
+                  "reserve": 4.0
+                }
+              ],
+              "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per card above 4."
+            },
+            "vfx": "pierce"
+          }
+        },
+        "raw=False,native=False,score=False,draft=False,zero=True": {
+          "key": "0:0:false:4:plain:false",
+          "q": 4,
+          "up": false,
+          "aspect": 0,
+          "context": "plain",
+          "active": false,
+          "expected_raw": 0,
+          "actual_raw": 8,
+          "score": 10.7,
+          "expanded_score": 2.7,
+          "draft": 12.0,
+          "expanded_draft": -2.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "floor_per": 2.0,
+                "id": "phantom",
+                "kind": "special",
+                "n": 0,
+                "reserve": 4.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per card above 4.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "floor_per": 2.0,
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 7.0,
+                  "reserve": 4.0
+                }
+              ],
+              "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per card above 4."
+            },
+            "vfx": "pierce"
+          }
+        },
+        "raw=False,native=False,score=True,draft=False,zero=True": {
+          "key": "0:0:false:4:block:false",
+          "q": 4,
+          "up": false,
+          "aspect": 0,
+          "context": "block",
+          "active": false,
+          "expected_raw": 0,
+          "actual_raw": 8,
+          "score": 0.0,
+          "expanded_score": 0.0,
+          "draft": 12.0,
+          "expanded_draft": -2.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "floor_per": 2.0,
+                "id": "phantom",
+                "kind": "special",
+                "n": 0,
+                "reserve": 4.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per card above 4.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "floor_per": 2.0,
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 7.0,
+                  "reserve": 4.0
+                }
+              ],
+              "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per card above 4."
+            },
+            "vfx": "pierce"
+          }
+        },
+        "raw=False,native=True,score=False,draft=False,zero=True": {
+          "key": "0:0:false:4:no-energy:false",
+          "q": 4,
+          "up": false,
+          "aspect": 0,
+          "context": "no-energy",
+          "active": false,
+          "expected_raw": 0,
+          "actual_raw": 8,
+          "score": 10.7,
+          "expanded_score": 2.7,
+          "draft": 12.0,
+          "expanded_draft": -2.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "floor_per": 2.0,
+                "id": "phantom",
+                "kind": "special",
+                "n": 0,
+                "reserve": 4.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per card above 4.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "floor_per": 2.0,
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 7.0,
+                  "reserve": 4.0
+                }
+              ],
+              "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per card above 4."
+            },
+            "vfx": "pierce"
+          }
+        }
+      }
+    },
+    "legacy-query": {
+      "rows": 280,
+      "comparisons": {
+        "raw=True,native=True,score=True,draft=False,zero=True": 56,
+        "raw=True,native=True,score=True,draft=False,zero=False": 224
+      },
+      "first_example_of_each_comparison": {
+        "raw=True,native=True,score=True,draft=False,zero=True": {
+          "key": "0:0:false:0:plain:true",
+          "q": 0,
+          "up": false,
+          "aspect": 0,
+          "context": "plain",
+          "active": true,
+          "expected_raw": 0,
+          "actual_raw": 0,
+          "score": 2.7,
+          "expanded_score": 2.7,
+          "draft": 4.0,
+          "expanded_draft": 6.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "floor_per": 2.0,
+                "id": "phantom",
+                "kind": "special",
+                "n": 6.0,
+                "reserve": 4.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per card above 4.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "floor_per": 2.0,
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 7.0,
+                  "reserve": 4.0
+                }
+              ],
+              "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per card above 4."
+            },
+            "vfx": "pierce"
+          }
+        },
+        "raw=True,native=True,score=True,draft=False,zero=False": {
+          "key": "0:0:false:4:plain:true",
+          "q": 4,
+          "up": false,
+          "aspect": 0,
+          "context": "plain",
+          "active": true,
+          "expected_raw": 8,
+          "actual_raw": 8,
+          "score": 10.7,
+          "expanded_score": 10.7,
+          "draft": 4.0,
+          "expanded_draft": 6.0,
+          "data": {
+            "cost": 1.0,
+            "effects": [
+              {
+                "floor_per": 2.0,
+                "id": "phantom",
+                "kind": "special",
+                "n": 6.0,
+                "reserve": 4.0
+              }
+            ],
+            "name": "Phantom Blades",
+            "rarity": "rare",
+            "target": "enemy",
+            "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per card above 4.",
+            "type": "attack",
+            "up": {
+              "effects": [
+                {
+                  "floor_per": 2.0,
+                  "id": "phantom",
+                  "kind": "special",
+                  "n": 7.0,
+                  "reserve": 4.0
+                }
+              ],
+              "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per card above 4."
+            },
+            "vfx": "pierce"
+          }
+        }
+      }
+    }
+  },
+  "new_native_runs": 0,
+  "new_population_outcomes": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "limits": "All fixed records examined. Comparison grouping is diagnostic, not scientific reclassification or changed acceptance."
+}
