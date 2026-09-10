@@ -1,0 +1,654 @@
+{
+  "stock": {
+    "additive_policy.gd": {
+      "bytes": 2447,
+      "sha256": "642a9597a54e1cabf8f46f95732eed8cad04c15cacaa99a2d3c4e479eb64583b"
+    },
+    "combat_bridge.gd": {
+      "bytes": 2228,
+      "sha256": "5ee7fd07374f810a061a0500534a925d65fa00686c3a32fcfa2de6cc17b5bf78"
+    },
+    "content/content_db.gd": {
+      "bytes": 23151,
+      "sha256": "e1d0c2291ed50f820ba7ea202e16b46eb318f26244f37d37c294f5cb073cef6d"
+    },
+    "content/content_db.gd.uid": {
+      "bytes": 19,
+      "sha256": "be5eb901520779be510a8371ff85fe92d0cd5983f9fdeee731076b8224d03a10"
+    },
+    "content/full-content.json": {
+      "bytes": 135934,
+      "sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9"
+    },
+    "content/line-table.json": {
+      "bytes": 57600,
+      "sha256": "772a7a2539dea6f5d24a1ca93ff0178f70b52546a55268d6ec9b8b5d763709cf"
+    },
+    "content/mob-overrides.json": {
+      "bytes": 3,
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    "content/scenes.json": {
+      "bytes": 9886,
+      "sha256": "ef3f4341495d732e0d22a0b4c3f4352f64b6326100c1403b8c590fe5560ae125"
+    },
+    "decision_gate.gd": {
+      "bytes": 8059,
+      "sha256": "0cabd91d0d384ebbfce4a5159ed6f90fec9cffada32506f7949b00a4c6a12062"
+    },
+    "domain/events/event_types.gd": {
+      "bytes": 1762,
+      "sha256": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a"
+    },
+    "domain/events/event_types.gd.uid": {
+      "bytes": 19,
+      "sha256": "d20d59d1b222f5abf9001ad26f49ba5592bc4d0925aa3ab10269c110301c1ad5"
+    },
+    "domain/game.gd": {
+      "bytes": 2764,
+      "sha256": "4eb3f416eef60797bc0cfdf9169250f07fccb3a05c0b16dcb9d7ef054898c824"
+    },
+    "domain/game.gd.uid": {
+      "bytes": 20,
+      "sha256": "87d1fbc04a6e291e2774762051224e28f496c716380af5b96b2886de16b435da"
+    },
+    "domain/map_layout/map_layout_canonical.gd": {
+      "bytes": 6107,
+      "sha256": "2a6ef6fbb589d7af94998c9beb1d6088eff5038dfd652ebb9c28107b9283ac47"
+    },
+    "domain/map_layout/map_layout_canonical.gd.uid": {
+      "bytes": 20,
+      "sha256": "1b2114258249f967c79e53d2b7b9011cdaa1759f2183e38217b62ea8ab3a639d"
+    },
+    "domain/map_layout/map_layout_input.gd": {
+      "bytes": 7132,
+      "sha256": "2069ec3f174b137748028ddf56156ec590d4480a8bd8f37367532ca5102a898c"
+    },
+    "domain/map_layout/map_layout_input.gd.uid": {
+      "bytes": 20,
+      "sha256": "8c49b54d2889360bfa7621c8ac2d67e6da715458269486fb94c5ffaf4e23b331"
+    },
+    "domain/map_layout/map_layout_input_binding.gd": {
+      "bytes": 3675,
+      "sha256": "3b4fe26d71c75f6091d88152514a9f99f231d078ce334d301049e66991f341e7"
+    },
+    "domain/map_layout/map_layout_input_binding.gd.uid": {
+      "bytes": 29,
+      "sha256": "6092a5b5ef85229e58cc913828fbbd996c5e647e8df41915bcd6496659e4beef"
+    },
+    "domain/map_layout/map_layout_result.gd": {
+      "bytes": 9977,
+      "sha256": "70ce93f1a85a03d21170edcd5d1188a5e94760754065c8eb6a139903bd51c8f7"
+    },
+    "domain/map_layout/map_layout_result.gd.uid": {
+      "bytes": 20,
+      "sha256": "6f3bf383e9295a79e96250489e121094baa9e3f23903b471fcafbf7991c656e1"
+    },
+    "domain/rng/rng.gd": {
+      "bytes": 1105,
+      "sha256": "279665ca2dd8d26bc4e81d1c86bf5a23a80ad582f5c0ed4cb5cc222387a9adf8"
+    },
+    "domain/rng/rng.gd.uid": {
+      "bytes": 20,
+      "sha256": "da6b44bd7f32362081940b9c695f06e0e6b102358298ddcf4e19874d8b6b0021"
+    },
+    "domain/rules/combat.gd": {
+      "bytes": 49871,
+      "sha256": "3ccb89f69f50e41d5a46eadd8f48c0a907fd0e382cd492b2c34dd5f93e091ad0"
+    },
+    "domain/rules/combat.gd.uid": {
+      "bytes": 20,
+      "sha256": "93cba16b3389fdc0fd994c3f33b124c7c303a00964691f1d14e58e38bc757dad"
+    },
+    "domain/rules/counterfactual_self.gd": {
+      "bytes": 4999,
+      "sha256": "de02e57c8ea2fe41c6806dade8f786a1c8e2d0282c8cb9f4b3defddbe4db8e98"
+    },
+    "domain/rules/counterfactual_self.gd.uid": {
+      "bytes": 20,
+      "sha256": "c9c975d29b72b878fc7771d95ea9fc9d125a0d19a052f597b24dca7995386dba"
+    },
+    "domain/rules/dawn_passages.gd": {
+      "bytes": 5272,
+      "sha256": "eed19b1540e64eac3dbb647491741791e98d1d4362487248249abc93b7cf982b"
+    },
+    "domain/rules/dawn_passages.gd.uid": {
+      "bytes": 19,
+      "sha256": "b45e374f4d035ed04484d493ce7fb890e601e0137081d38f204c8f0f5666f0a3"
+    },
+    "domain/rules/enemy_ai.gd": {
+      "bytes": 8551,
+      "sha256": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417"
+    },
+    "domain/rules/enemy_ai.gd.uid": {
+      "bytes": 20,
+      "sha256": "5923124afc639fc7777105dc3cfc92c3119e7201753473feab6c6f80a719638c"
+    },
+    "domain/rules/line_table.gd": {
+      "bytes": 12231,
+      "sha256": "ed5a9e4461ffd28607c4afc14293430413ac368289b18d7a4e98577d187a76b3"
+    },
+    "domain/rules/line_table.gd.uid": {
+      "bytes": 20,
+      "sha256": "f63fc98eb120f05748dbe18cbca89684f876e1a7492c15a762d7e9dcc2a7e8bb"
+    },
+    "domain/rules/pool_beats.gd": {
+      "bytes": 2599,
+      "sha256": "bc8fb56230ed2fa534eb1f85dc97104202ac6934aa1ec7570de9a4d94bc93c9f"
+    },
+    "domain/rules/pool_beats.gd.uid": {
+      "bytes": 22,
+      "sha256": "d7eb82decd29e66059c6263694fa8abdd7a28dd02ff8f6009cb6a1559069cc32"
+    },
+    "domain/rules/quests.gd": {
+      "bytes": 9532,
+      "sha256": "fede1a189d0f21c0e75b0d4779f36478b43971d0eab7a88c08396daadcf59aae"
+    },
+    "domain/rules/quests.gd.uid": {
+      "bytes": 20,
+      "sha256": "c330ea3c22467e2c01b687d1f9aa88f4198557039c422f0a40eb5a32b00937aa"
+    },
+    "domain/rules/rewards.gd": {
+      "bytes": 23820,
+      "sha256": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83"
+    },
+    "domain/rules/rewards.gd.uid": {
+      "bytes": 20,
+      "sha256": "7870f56200db1bb8ff603752c22565c84dd084c83ccef229a15ddeaf153bbef0"
+    },
+    "domain/state/card_inst.gd": {
+      "bytes": 740,
+      "sha256": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d"
+    },
+    "domain/state/card_inst.gd.uid": {
+      "bytes": 20,
+      "sha256": "6dc96cd2bbe675fb564d39f96fffcb0517267bd960ef0a6417aa933e193a87e6"
+    },
+    "domain/state/combat_state.gd": {
+      "bytes": 2118,
+      "sha256": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae"
+    },
+    "domain/state/combat_state.gd.uid": {
+      "bytes": 20,
+      "sha256": "ff15232124012eca670ea914aef6c355afa8e1dfa067461c594af71478efedd0"
+    },
+    "domain/state/enemy_combatant.gd": {
+      "bytes": 1149,
+      "sha256": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7"
+    },
+    "domain/state/enemy_combatant.gd.uid": {
+      "bytes": 20,
+      "sha256": "b4addf387977e5a1495302dd941fb3a5e292e3da9ad7526a97ebcb276735a586"
+    },
+    "domain/state/map_node.gd": {
+      "bytes": 2570,
+      "sha256": "f3947e2a476b037f1b76b843caa7ff5bd80019c28031350a7692b8144aa5ebed"
+    },
+    "domain/state/map_node.gd.uid": {
+      "bytes": 19,
+      "sha256": "ddba624ce1964e58de8399de4d7620faf7607a1346f89619ee20fea7cdb62125"
+    },
+    "domain/state/player_combatant.gd": {
+      "bytes": 513,
+      "sha256": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3"
+    },
+    "domain/state/player_combatant.gd.uid": {
+      "bytes": 19,
+      "sha256": "3ea3f4fbab91e12b23c84cee1a2038699c33c1023f907d8d113fa18c2671e934"
+    },
+    "domain/state/run_state.gd": {
+      "bytes": 18728,
+      "sha256": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19"
+    },
+    "domain/state/run_state.gd.uid": {
+      "bytes": 20,
+      "sha256": "eb319c70d9d53282b475abb206dec90875a7090e3b099cf2b0eee1ccf3fe62a1"
+    },
+    "domain/state/vigil_state.gd": {
+      "bytes": 12350,
+      "sha256": "ec2b95b5f6d08133d7e9f070b85d3a473abe510d5f1eaf8ecbbdb6394f723259"
+    },
+    "domain/state/vigil_state.gd.uid": {
+      "bytes": 19,
+      "sha256": "dd36185de478f66b61e76a2ad51e05a9b3d01728b86ddcd3b4a841f85925e2a1"
+    },
+    "domain/state/world_map.gd": {
+      "bytes": 11955,
+      "sha256": "b3f1beb4db34933fc7de0c2562749fbd9465f74c7d74bb1bd2c3598b0e984fe5"
+    },
+    "domain/state/world_map.gd.uid": {
+      "bytes": 19,
+      "sha256": "fc3c224c9d5c95c362f6162c9dfd832f4bf6e17f637209670efc7b18f7c8a63b"
+    },
+    "greedy_policy.gd": {
+      "bytes": 569,
+      "sha256": "2512e45d942886346acefb0781014f724341c6575560a4489090f188be628214"
+    },
+    "greedy_stock.gd": {
+      "bytes": 2946,
+      "sha256": "3ebd81dcc1e3f4aed99a88f7bb26718bb9f7f8a35065517889ad26bc6c5e44d2"
+    },
+    "lab_policy.gd": {
+      "bytes": 1825,
+      "sha256": "ef294f057d0ab23a13c2af57d9ced9a27c74d622c308550e4be932617c8d7261"
+    },
+    "legacy_policy.gd": {
+      "bytes": 13866,
+      "sha256": "731122ce5fbc0773f6c97696fab449e21df415692b741eceeab79c521c54a72d"
+    },
+    "method.txt": {
+      "bytes": 8,
+      "sha256": "a2b0739fba9eb7787e30e81257d6d7b0ecec03bcf377f0ad0a2888506fc3ab43"
+    },
+    "null_bridge.gd": {
+      "bytes": 1582,
+      "sha256": "272d29baf66aa84f8e134e07d1f0fc1e195f1c1ef8d4f593d56ce727795746aa"
+    },
+    "observed_game.gd": {
+      "bytes": 4354,
+      "sha256": "437e525d8834dd92d8de977a52b403264959e23c9b08121c44011cbe9b8bcdb1"
+    },
+    "policy_buggy_v9.gd": {
+      "bytes": 2539,
+      "sha256": "72868caa9a313fba7211a475c5651e1d55394048be31c8cb64bf7fb4159221fb"
+    },
+    "policy_v8.gd": {
+      "bytes": 8082,
+      "sha256": "2131a9463700d05b93a4c9e16364596eb91e7884ee3d40c4434152802004b95c"
+    },
+    "probe.gd": {
+      "bytes": 3130,
+      "sha256": "8f1a2f086f5c3a00bb891f082906e2547ed43ddaf7d6431fc04a0a9c03bd67d8"
+    },
+    "project.godot": {
+      "bytes": 129,
+      "sha256": "016b91fe6062716cc5b76b541256739142e2319e4c3cac84a927d18eef433b17"
+    },
+    "public_rollout.gd": {
+      "bytes": 560,
+      "sha256": "58f12667e55a1324b393482f1f6d6649903680bfc77b7fdced2247cd8085152d"
+    },
+    "public_rollout_base.gd": {
+      "bytes": 2207,
+      "sha256": "9e54f661563e5421e62595b9b5335e44e871e68acf89a020db7e8b9d0eacbce7"
+    },
+    "qualify.gd": {
+      "bytes": 1453,
+      "sha256": "f84e7c917b076fbdff347989be7244466fcd74b118219aa034528902341fa9b8"
+    },
+    "rollout_policy.gd": {
+      "bytes": 3415,
+      "sha256": "7c4b833efd47616ec4aab4f2bd521d44bdc4a17021aefb77ba0b6bf0668a924c"
+    },
+    "signed_composition.gd": {
+      "bytes": 828,
+      "sha256": "bba7b886720124fce5fcb2c5fdb097690ffaf2daf17d6e390741c9d116629e93"
+    },
+    "tools/balance_catalogue.gd": {
+      "bytes": 9145,
+      "sha256": "6e240546cd616a2518ee7a2b8fae41aa8a94078429155f89f6d9165eef1c20c0"
+    },
+    "tools/balance_metrics.gd": {
+      "bytes": 5366,
+      "sha256": "6904043d83d9cc91265a60911b28f49a01074d185e353b2dccdad64293cd0deb"
+    },
+    "tools/balance_pilot.gd": {
+      "bytes": 22931,
+      "sha256": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    "tools/balance_policy.gd": {
+      "bytes": 8196,
+      "sha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "tools/balance_sim.gd": {
+      "bytes": 24838,
+      "sha256": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    },
+    "tools/balance_sweep.gd": {
+      "bytes": 5242,
+      "sha256": "6d78dcd3d00aa6300aaf32fc498c7a3c9fb4ffea1725f59e6fc8be7b5fa61ff0"
+    },
+    "tools/check_scripts.sh": {
+      "bytes": 3572,
+      "sha256": "85e24824d059a12279b42b3c9de97e5a55770f5525a97f8106f112250faa38a9"
+    },
+    "tools/observed_sim.gd": {
+      "bytes": 24865,
+      "sha256": "d37f9e0db7206487c07fe948fb2d8cabc0ce87f5d1133c1dcc15a89636700a62"
+    },
+    "tools/vow_incentives.gd": {
+      "bytes": 5342,
+      "sha256": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+    }
+  },
+  "aware": {
+    "additive_policy.gd": {
+      "bytes": 2447,
+      "sha256": "642a9597a54e1cabf8f46f95732eed8cad04c15cacaa99a2d3c4e479eb64583b"
+    },
+    "capability.gd": {
+      "bytes": 3991,
+      "sha256": "35d38cb8961db17bac2b2d0270daebb61844ee3339758991859c643ec745953b"
+    },
+    "combat_bridge.gd": {
+      "bytes": 2228,
+      "sha256": "5ee7fd07374f810a061a0500534a925d65fa00686c3a32fcfa2de6cc17b5bf78"
+    },
+    "content/content_db.gd": {
+      "bytes": 23151,
+      "sha256": "e1d0c2291ed50f820ba7ea202e16b46eb318f26244f37d37c294f5cb073cef6d"
+    },
+    "content/content_db.gd.uid": {
+      "bytes": 19,
+      "sha256": "be5eb901520779be510a8371ff85fe92d0cd5983f9fdeee731076b8224d03a10"
+    },
+    "content/full-content.json": {
+      "bytes": 135934,
+      "sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9"
+    },
+    "content/line-table.json": {
+      "bytes": 57600,
+      "sha256": "772a7a2539dea6f5d24a1ca93ff0178f70b52546a55268d6ec9b8b5d763709cf"
+    },
+    "content/mob-overrides.json": {
+      "bytes": 3,
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    "content/scenes.json": {
+      "bytes": 9886,
+      "sha256": "ef3f4341495d732e0d22a0b4c3f4352f64b6326100c1403b8c590fe5560ae125"
+    },
+    "decision_gate.gd": {
+      "bytes": 8059,
+      "sha256": "0cabd91d0d384ebbfce4a5159ed6f90fec9cffada32506f7949b00a4c6a12062"
+    },
+    "domain/events/event_types.gd": {
+      "bytes": 1762,
+      "sha256": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a"
+    },
+    "domain/events/event_types.gd.uid": {
+      "bytes": 19,
+      "sha256": "d20d59d1b222f5abf9001ad26f49ba5592bc4d0925aa3ab10269c110301c1ad5"
+    },
+    "domain/game.gd": {
+      "bytes": 2764,
+      "sha256": "4eb3f416eef60797bc0cfdf9169250f07fccb3a05c0b16dcb9d7ef054898c824"
+    },
+    "domain/game.gd.uid": {
+      "bytes": 20,
+      "sha256": "87d1fbc04a6e291e2774762051224e28f496c716380af5b96b2886de16b435da"
+    },
+    "domain/map_layout/map_layout_canonical.gd": {
+      "bytes": 6107,
+      "sha256": "2a6ef6fbb589d7af94998c9beb1d6088eff5038dfd652ebb9c28107b9283ac47"
+    },
+    "domain/map_layout/map_layout_canonical.gd.uid": {
+      "bytes": 20,
+      "sha256": "1b2114258249f967c79e53d2b7b9011cdaa1759f2183e38217b62ea8ab3a639d"
+    },
+    "domain/map_layout/map_layout_input.gd": {
+      "bytes": 7132,
+      "sha256": "2069ec3f174b137748028ddf56156ec590d4480a8bd8f37367532ca5102a898c"
+    },
+    "domain/map_layout/map_layout_input.gd.uid": {
+      "bytes": 20,
+      "sha256": "8c49b54d2889360bfa7621c8ac2d67e6da715458269486fb94c5ffaf4e23b331"
+    },
+    "domain/map_layout/map_layout_input_binding.gd": {
+      "bytes": 3675,
+      "sha256": "3b4fe26d71c75f6091d88152514a9f99f231d078ce334d301049e66991f341e7"
+    },
+    "domain/map_layout/map_layout_input_binding.gd.uid": {
+      "bytes": 29,
+      "sha256": "6092a5b5ef85229e58cc913828fbbd996c5e647e8df41915bcd6496659e4beef"
+    },
+    "domain/map_layout/map_layout_result.gd": {
+      "bytes": 9977,
+      "sha256": "70ce93f1a85a03d21170edcd5d1188a5e94760754065c8eb6a139903bd51c8f7"
+    },
+    "domain/map_layout/map_layout_result.gd.uid": {
+      "bytes": 20,
+      "sha256": "6f3bf383e9295a79e96250489e121094baa9e3f23903b471fcafbf7991c656e1"
+    },
+    "domain/rng/rng.gd": {
+      "bytes": 1105,
+      "sha256": "279665ca2dd8d26bc4e81d1c86bf5a23a80ad582f5c0ed4cb5cc222387a9adf8"
+    },
+    "domain/rng/rng.gd.uid": {
+      "bytes": 20,
+      "sha256": "da6b44bd7f32362081940b9c695f06e0e6b102358298ddcf4e19874d8b6b0021"
+    },
+    "domain/rules/combat.gd": {
+      "bytes": 49871,
+      "sha256": "3ccb89f69f50e41d5a46eadd8f48c0a907fd0e382cd492b2c34dd5f93e091ad0"
+    },
+    "domain/rules/combat.gd.uid": {
+      "bytes": 20,
+      "sha256": "93cba16b3389fdc0fd994c3f33b124c7c303a00964691f1d14e58e38bc757dad"
+    },
+    "domain/rules/counterfactual_self.gd": {
+      "bytes": 4999,
+      "sha256": "de02e57c8ea2fe41c6806dade8f786a1c8e2d0282c8cb9f4b3defddbe4db8e98"
+    },
+    "domain/rules/counterfactual_self.gd.uid": {
+      "bytes": 20,
+      "sha256": "c9c975d29b72b878fc7771d95ea9fc9d125a0d19a052f597b24dca7995386dba"
+    },
+    "domain/rules/dawn_passages.gd": {
+      "bytes": 5272,
+      "sha256": "eed19b1540e64eac3dbb647491741791e98d1d4362487248249abc93b7cf982b"
+    },
+    "domain/rules/dawn_passages.gd.uid": {
+      "bytes": 19,
+      "sha256": "b45e374f4d035ed04484d493ce7fb890e601e0137081d38f204c8f0f5666f0a3"
+    },
+    "domain/rules/enemy_ai.gd": {
+      "bytes": 8551,
+      "sha256": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417"
+    },
+    "domain/rules/enemy_ai.gd.uid": {
+      "bytes": 20,
+      "sha256": "5923124afc639fc7777105dc3cfc92c3119e7201753473feab6c6f80a719638c"
+    },
+    "domain/rules/line_table.gd": {
+      "bytes": 12231,
+      "sha256": "ed5a9e4461ffd28607c4afc14293430413ac368289b18d7a4e98577d187a76b3"
+    },
+    "domain/rules/line_table.gd.uid": {
+      "bytes": 20,
+      "sha256": "f63fc98eb120f05748dbe18cbca89684f876e1a7492c15a762d7e9dcc2a7e8bb"
+    },
+    "domain/rules/pool_beats.gd": {
+      "bytes": 2599,
+      "sha256": "bc8fb56230ed2fa534eb1f85dc97104202ac6934aa1ec7570de9a4d94bc93c9f"
+    },
+    "domain/rules/pool_beats.gd.uid": {
+      "bytes": 22,
+      "sha256": "d7eb82decd29e66059c6263694fa8abdd7a28dd02ff8f6009cb6a1559069cc32"
+    },
+    "domain/rules/quests.gd": {
+      "bytes": 9532,
+      "sha256": "fede1a189d0f21c0e75b0d4779f36478b43971d0eab7a88c08396daadcf59aae"
+    },
+    "domain/rules/quests.gd.uid": {
+      "bytes": 20,
+      "sha256": "c330ea3c22467e2c01b687d1f9aa88f4198557039c422f0a40eb5a32b00937aa"
+    },
+    "domain/rules/rewards.gd": {
+      "bytes": 23820,
+      "sha256": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83"
+    },
+    "domain/rules/rewards.gd.uid": {
+      "bytes": 20,
+      "sha256": "7870f56200db1bb8ff603752c22565c84dd084c83ccef229a15ddeaf153bbef0"
+    },
+    "domain/state/card_inst.gd": {
+      "bytes": 740,
+      "sha256": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d"
+    },
+    "domain/state/card_inst.gd.uid": {
+      "bytes": 20,
+      "sha256": "6dc96cd2bbe675fb564d39f96fffcb0517267bd960ef0a6417aa933e193a87e6"
+    },
+    "domain/state/combat_state.gd": {
+      "bytes": 2118,
+      "sha256": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae"
+    },
+    "domain/state/combat_state.gd.uid": {
+      "bytes": 20,
+      "sha256": "ff15232124012eca670ea914aef6c355afa8e1dfa067461c594af71478efedd0"
+    },
+    "domain/state/enemy_combatant.gd": {
+      "bytes": 1149,
+      "sha256": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7"
+    },
+    "domain/state/enemy_combatant.gd.uid": {
+      "bytes": 20,
+      "sha256": "b4addf387977e5a1495302dd941fb3a5e292e3da9ad7526a97ebcb276735a586"
+    },
+    "domain/state/map_node.gd": {
+      "bytes": 2570,
+      "sha256": "f3947e2a476b037f1b76b843caa7ff5bd80019c28031350a7692b8144aa5ebed"
+    },
+    "domain/state/map_node.gd.uid": {
+      "bytes": 19,
+      "sha256": "ddba624ce1964e58de8399de4d7620faf7607a1346f89619ee20fea7cdb62125"
+    },
+    "domain/state/player_combatant.gd": {
+      "bytes": 513,
+      "sha256": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3"
+    },
+    "domain/state/player_combatant.gd.uid": {
+      "bytes": 19,
+      "sha256": "3ea3f4fbab91e12b23c84cee1a2038699c33c1023f907d8d113fa18c2671e934"
+    },
+    "domain/state/run_state.gd": {
+      "bytes": 18728,
+      "sha256": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19"
+    },
+    "domain/state/run_state.gd.uid": {
+      "bytes": 20,
+      "sha256": "eb319c70d9d53282b475abb206dec90875a7090e3b099cf2b0eee1ccf3fe62a1"
+    },
+    "domain/state/vigil_state.gd": {
+      "bytes": 12350,
+      "sha256": "ec2b95b5f6d08133d7e9f070b85d3a473abe510d5f1eaf8ecbbdb6394f723259"
+    },
+    "domain/state/vigil_state.gd.uid": {
+      "bytes": 19,
+      "sha256": "dd36185de478f66b61e76a2ad51e05a9b3d01728b86ddcd3b4a841f85925e2a1"
+    },
+    "domain/state/world_map.gd": {
+      "bytes": 11955,
+      "sha256": "b3f1beb4db34933fc7de0c2562749fbd9465f74c7d74bb1bd2c3598b0e984fe5"
+    },
+    "domain/state/world_map.gd.uid": {
+      "bytes": 19,
+      "sha256": "fc3c224c9d5c95c362f6162c9dfd832f4bf6e17f637209670efc7b18f7c8a63b"
+    },
+    "greedy_policy.gd": {
+      "bytes": 569,
+      "sha256": "2512e45d942886346acefb0781014f724341c6575560a4489090f188be628214"
+    },
+    "greedy_stock.gd": {
+      "bytes": 2946,
+      "sha256": "3ebd81dcc1e3f4aed99a88f7bb26718bb9f7f8a35065517889ad26bc6c5e44d2"
+    },
+    "lab_policy.gd": {
+      "bytes": 1825,
+      "sha256": "ef294f057d0ab23a13c2af57d9ced9a27c74d622c308550e4be932617c8d7261"
+    },
+    "legacy_policy.gd": {
+      "bytes": 13866,
+      "sha256": "731122ce5fbc0773f6c97696fab449e21df415692b741eceeab79c521c54a72d"
+    },
+    "method.txt": {
+      "bytes": 8,
+      "sha256": "a2b0739fba9eb7787e30e81257d6d7b0ecec03bcf377f0ad0a2888506fc3ab43"
+    },
+    "null_bridge.gd": {
+      "bytes": 1582,
+      "sha256": "272d29baf66aa84f8e134e07d1f0fc1e195f1c1ef8d4f593d56ce727795746aa"
+    },
+    "observed_game.gd": {
+      "bytes": 4354,
+      "sha256": "437e525d8834dd92d8de977a52b403264959e23c9b08121c44011cbe9b8bcdb1"
+    },
+    "policy_buggy_v9.gd": {
+      "bytes": 2539,
+      "sha256": "72868caa9a313fba7211a475c5651e1d55394048be31c8cb64bf7fb4159221fb"
+    },
+    "policy_v8.gd": {
+      "bytes": 8082,
+      "sha256": "2131a9463700d05b93a4c9e16364596eb91e7884ee3d40c4434152802004b95c"
+    },
+    "probe.gd": {
+      "bytes": 3130,
+      "sha256": "8f1a2f086f5c3a00bb891f082906e2547ed43ddaf7d6431fc04a0a9c03bd67d8"
+    },
+    "project.godot": {
+      "bytes": 129,
+      "sha256": "016b91fe6062716cc5b76b541256739142e2319e4c3cac84a927d18eef433b17"
+    },
+    "public_rollout.gd": {
+      "bytes": 560,
+      "sha256": "58f12667e55a1324b393482f1f6d6649903680bfc77b7fdced2247cd8085152d"
+    },
+    "public_rollout_base.gd": {
+      "bytes": 2207,
+      "sha256": "9e54f661563e5421e62595b9b5335e44e871e68acf89a020db7e8b9d0eacbce7"
+    },
+    "qualify.gd": {
+      "bytes": 1453,
+      "sha256": "f84e7c917b076fbdff347989be7244466fcd74b118219aa034528902341fa9b8"
+    },
+    "rollout_policy.gd": {
+      "bytes": 3415,
+      "sha256": "7c4b833efd47616ec4aab4f2bd521d44bdc4a17021aefb77ba0b6bf0668a924c"
+    },
+    "signed_composition.gd": {
+      "bytes": 828,
+      "sha256": "bba7b886720124fce5fcb2c5fdb097690ffaf2daf17d6e390741c9d116629e93"
+    },
+    "tools/balance_catalogue.gd": {
+      "bytes": 9145,
+      "sha256": "6e240546cd616a2518ee7a2b8fae41aa8a94078429155f89f6d9165eef1c20c0"
+    },
+    "tools/balance_metrics.gd": {
+      "bytes": 5366,
+      "sha256": "6904043d83d9cc91265a60911b28f49a01074d185e353b2dccdad64293cd0deb"
+    },
+    "tools/balance_pilot.gd": {
+      "bytes": 24532,
+      "sha256": "ec24ae7cff4fccce2759821cfdc03a2fb9c862077caac620e6c06fe565b91ff5"
+    },
+    "tools/balance_policy.gd": {
+      "bytes": 8196,
+      "sha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "tools/balance_sim.gd": {
+      "bytes": 24925,
+      "sha256": "a9050fe68678d5d650f9b4e1f204ffe0f0e2f8160e35d1697814ac6da4c8c1cb"
+    },
+    "tools/balance_sweep.gd": {
+      "bytes": 5242,
+      "sha256": "6d78dcd3d00aa6300aaf32fc498c7a3c9fb4ffea1725f59e6fc8be7b5fa61ff0"
+    },
+    "tools/check_scripts.sh": {
+      "bytes": 3572,
+      "sha256": "85e24824d059a12279b42b3c9de97e5a55770f5525a97f8106f112250faa38a9"
+    },
+    "tools/observed_sim.gd": {
+      "bytes": 24952,
+      "sha256": "f6ac401846fea02563b48b8a8cf915d6fca154dc17c4adab1b1c8ded64d24f7e"
+    },
+    "tools/stock_pilot.gd": {
+      "bytes": 22907,
+      "sha256": "ec51dc26ad47f97e7701ddf822f64c0f2f8b7ef7fd32656f69bd3d10820f4157"
+    },
+    "tools/vow_incentives.gd": {
+      "bytes": 5342,
+      "sha256": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+    }
+  }
+}

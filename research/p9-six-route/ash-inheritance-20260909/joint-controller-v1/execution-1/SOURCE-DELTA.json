@@ -1,0 +1,21 @@
+{
+  "changed_pilot_functions": [
+    "choose_card",
+    "choose_shop"
+  ],
+  "changed_simulator_functions": [
+    "_claim_rewards",
+    "_resolve_event"
+  ],
+  "added_pilot_functions": [
+    "bloodfire_consumer",
+    "bloodfire_source",
+    "card_reward_score"
+  ],
+  "combat_and_random_function_bodies_equal": true,
+  "pilot_sha256": "7bbbcd2ed76cd1b774b6f1277b1f747ebb6c1f21f7eb052aaa3cccad16487066",
+  "sim_sha256": "a9050fe68678d5d650f9b4e1f204ffe0f0e2f8160e35d1697814ac6da4c8c1cb",
+  "observed_sim_sha256": "249d72fe072cd101fb196452fff7fd69ee85b7e8f6a6c1b1db964845494a5985",
+  "random_play_guard_added": true,
+  "experimental_arm_scores_unchanged_by_guard": true
+}
