@@ -13,7 +13,7 @@ env:
   STUDY: research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1
 jobs:
   bundle:
-    name: Finish existing Hand call-path and capsule closure - no engine
+    name: Complete unchanged Hand source closure after indentation repair - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 8
@@ -43,22 +43,21 @@ jobs:
           assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()=='54d21b6d6a3ff38370788534c81751eea2d59c76'
           assert not (root/'closure-1').exists()
           old="    paths=[root/'finalize.py',root/'close.py',root/'descriptor.py',root/'descriptor-1/SYNC-MANIFEST.json']"
-          new="""    # Bind the inner manifest AFTER final capsule mutations, not the earlier sync.
-              sync_path=root/'descriptor-1/SYNC-MANIFEST.json'
-              sync_records=load(sync_path)
-              require(len({r['path'] for r in sync_records})==len(sync_records),'SYNC_DUPLICATE_PATH')
-              for r in sync_records:
-                  relative=Path(r['path'])
-                  require(not relative.is_absolute() and '..' not in relative.parts,'SYNC_PATH')
-                  data=(repo/relative).read_bytes()
-                  r.update(bytes=len(data),sha256=sha(data),git_blob=blob(data))
-              save(sync_path,sync_records)
-              paths=[root/'finalize.py',root/'test_finalize.py',root/'close.py',root/'descriptor.py',sync_path]"""
-          # Dedent only the source prefix introduced by YAML indentation.
-          lines=new.splitlines();new='\n'.join([lines[0]]+[x[10:] for x in lines[1:]])
+          new='\n'.join([
+              '    # Bind the inner manifest after final capsule mutations.',
+              "    sync_path=root/'descriptor-1/SYNC-MANIFEST.json'",
+              '    sync_records=load(sync_path)',
+              "    require(len({r['path'] for r in sync_records})==len(sync_records),'SYNC_DUPLICATE_PATH')",
+              '    for r in sync_records:',
+              "        relative=Path(r['path'])",
+              "        require(not relative.is_absolute() and '..' not in relative.parts,'SYNC_PATH')",
+              '        data=(repo/relative).read_bytes()',
+              '        r.update(bytes=len(data),sha256=sha(data),git_blob=blob(data))',
+              '    save(sync_path,sync_records)',
+              "    paths=[root/'finalize.py',root/'test_finalize.py',root/'close.py',root/'descriptor.py',sync_path]",
+          ])
           text=b.decode();assert text.count(old)==1
-          p.write_text(text.replace(old,new,1))
-          compile(p.read_text(),str(p),'exec')
+          changed=text.replace(old,new,1);compile(changed,str(p),'exec');p.write_text(changed)
           PY
           (cd "$STUDY" && python3 -m unittest -v test_finalize) > "$RUNNER_TEMP/hand-final-tests.log" 2>&1
           python3 "$STUDY/finalize.py" run "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/closure-1" > "$RUNNER_TEMP/hand-final-run.log" 2>&1
@@ -85,12 +84,12 @@ jobs:
           if [ '${{ steps.closure.outcome }}' = success ]; then
             git add "$STUDY/finalize.py" "$STUDY/closure-1" "$STUDY/descriptor-1/SYNC-MANIFEST.json" research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/SESSION-STATE.json research/p9-six-route/package-disposition-20260908/ROADMAP.md
           else
-            mkdir "$STUDY/closure-delivery-1"
-            cp "$RUNNER_TEMP"/hand-final-*.log "$STUDY/closure-delivery-1/" 2>/dev/null || true
-            printf '%s\n' '{"status":"CLOSURE_DELIVERY_INCOMPLETE","new_native_runs":0,"packages_admitted":0,"p9_certified":false}' > "$STUDY/closure-delivery-1/TERMINAL.json"
-            git add "$STUDY/closure-delivery-1"
+            mkdir "$STUDY/closure-delivery-2"
+            cp "$RUNNER_TEMP"/hand-final-*.log "$STUDY/closure-delivery-2/" 2>/dev/null || true
+            printf '%s\n' '{"status":"CLOSURE_DELIVERY_INCOMPLETE","new_native_runs":0,"packages_admitted":0,"p9_certified":false}' > "$STUDY/closure-delivery-2/TERMINAL.json"
+            git add "$STUDY/closure-delivery-2"
           fi
-          git commit -m 'research(p9): preserve exact Hand closure and actual delivery diagnostics'
+          git commit -m 'research(p9): preserve checked Hand closure and actual delivery diagnostics'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -113,7 +112,7 @@ jobs:
           set -euo pipefail
           python3 "cold/$STUDY/finalize.py" verify "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/closure-1/REMOTE-READBACK.json"
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess
+          import hashlib,json,os,pathlib
           root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')
           for r in json.loads((cold/root/'descriptor-1/SYNC-MANIFEST.json').read_bytes()):
               b=(cold/r['path']).read_bytes();assert len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
