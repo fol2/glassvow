@@ -1,0 +1,75 @@
+{
+  "kind": "INHERITED_PACKAGE_CAUSAL_VALUE_CONTRACT",
+  "input_head": "5d5375b3f2a36494ec575926b0450f585aad2cf0",
+  "product_main": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "candidate_content_sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9",
+  "candidate_combat_sha256": "3ccb89f69f50e41d5a46eadd8f48c0a907fd0e382cd492b2c34dd5f93e091ad0",
+  "source_erratum": {
+    "source": "content/full-content.json at product_main, bloodRite base/upgraded effects; minimal-v1/build.py preserves those effects before appending Bloodfire",
+    "base_effects": [{"kind":"loseHp","n":3},{"kind":"energy","n":2}],
+    "upgraded_effects": [{"kind":"loseHp","n":3},{"kind":"energy","n":3}],
+    "correction": "BloodRite has an HP/Energy trade-off, not an HP/draw trade-off. Earlier handoff/comment prose was wrong. Executed historical bytes, raw captures and terminal decisions are not rewritten.",
+    "consequence": "Never delete the whole source card, its HP cost or Energy effect to estimate the incremental Bloodfire mechanism. Never call all source-card HP loss the marginal cost of Bloodfire."
+  },
+  "packages": {
+    "bloodfire": {
+      "identity": "Inherited BloodRite/Bloodfire/Leech package, not a new label or new canonical family.",
+      "producer": "A surviving legal bloodRite applies one Ash-only Bloodfire stack after its unchanged HP and Energy effects.",
+      "mediator": "Player-visible combat Bloodfire count. One is consumed per enabled Leech; no turn decay; fresh combat resets it.",
+      "consumer": "Independently playable leechBlade. Enabled Ash Leech with positive stock consumes one and adds the fixed 10/12 bonus before the native hit and heal envelope.",
+      "bounded_payoff": "Native damage, blocked damage, actual HP removed and healing are separate observables. Preserve weak/vulnerable, integer conversion, overkill, maximum HP, death, thorns and coupled Shatter. Do not substitute nominal damage for actual HP removed or sum local clone payoffs into whole-run value.",
+      "interventions": {
+        "A": "Existing bloodfire_producer_enabled: disable only the appended status grant; keep HP/Energy, payment, card identity, destination and hooks.",
+        "B": "Existing bloodfire_consumer_enabled: disable only the added Bloodfire consumption/bonus path; retain original Leech hit/heal, costs and hooks.",
+        "M": "Direct removal of existing mediator before a consumer, already measured by retained complete consumer clones; this is a local consequence estimand, not adaptive whole-run source necessity."
+      },
+      "proper_subsets": "Retain all four A/B worlds. Source-only, consumer-only and neither may retain base-card utility. They must not be required to have zero whole-run HP or win interaction by an invented universal rule.",
+      "nulls": "Default all-on observer must preserve factual state/events. Source-disabled initially zero stock must remain zero. Other-aspect and globally-off minimum-delta evidence is carried only on unchanged dependencies; research ablations do not redefine product or signed random arms."
+    },
+    "hand": {
+      "identity": "Inherited hand-size-payoff family. Preparation/Phantom and Surge/Phantom are alternative source variants of one family, not separate strategy slots. Night Sight is not a mandatory source.",
+      "producer": "Direct draw on preparation or surge, subject to hand capacity, draw/discard state and native RNG. Surge Energy is a separate path. Exhaust, Ember and Verdant Branch draw remain native background effects.",
+      "mediator": "Actual retained hand instances at Phantom evaluation, after the played consumer is removed from hand; include legal consumer access and actual capacity/reshuffle effects.",
+      "consumer": "Independently enabled native phantom special, n times actual remaining hand size, inside the native attack envelope.",
+      "interventions": "Separate direct Preparation draw, direct Surge draw and Phantom special payoff switches. Do not remove source cards, Surge Energy, Exhaust/relic hooks, ordinary turn draw or RNG draws by compensating with injected cards. Preserve all source-subset worlds when qualifying this operator.",
+      "nulls": "Default-on equality is required. Hand is inherited native shared grammar: do not invent global aspect-exclusivity, suppress other-aspect draw or count a research ablation as a product-null proof.",
+      "current_gap": "Existing co-ownership/source-play/Phantom-damage activation is necessary support, not source-attributed incremental payoff. Whole-run Hand operator and descriptor evidence remain unqualified; this contract does not mark them complete."
+    }
+  },
+  "causal_vs_controller_value": "The closed joint trial asked whether changing acquisition improved its fixed aggregate controller criterion. The new question changes package effects while holding that exact audit policy fixed. No third controller is nominated, no failed controller is promoted, and no old failure is relabelled. A method-level failure is not a universal theorem that every constituent gameplay mechanism has zero causal value.",
+  "first_executable_question": "For the exact retained aware one-sample policy, does added Bloodfire have positive adaptive full-run value beyond the source card's original HP/Energy utility and original Leech utility? All four worlds start with the same native starter/reward/economy specification and matched seed/configuration. Policies may adapt to public state in each world; future actions and trajectories must not be forced to match treatment.",
+  "frozen_assignment": {
+    "policy_root": 73409000,
+    "policies": 128,
+    "policies_per_cell": 2,
+    "seeds_per_cell": 4,
+    "seed_formula": "73520100 + 1000*vow + 4*(first/2) + j, first in 0,2,...,126; j in 0,1,2,3",
+    "qualification_seed": 73520010,
+    "aspects": ["ashwarden"],
+    "ordered_vows": [5,0],
+    "worlds": {"00":[false,false],"01":[false,true],"10":[true,false],"11":[true,true]},
+    "coverage": "512 outcomes per world/vow; 256 distinct matched seed blocks per vow, each shared by two fixed policy configurations. Reject any seed overlap with retained executable configuration metadata and protected ranges before observations. No old outcomes are reused as new samples."
+  },
+  "readout": {
+    "primary": "Whole-run native win indicator; report paired source effect 11-01, consumer effect 11-10 and factorial interaction 11-10-01+00.",
+    "uncertainty": "Prespecified 10000 bootstrap draws over complete matched seed blocks, PRNG seed 421. Report nominal simultaneous 95% Bonferroni percentile intervals for the three contrasts: quantiles .05/6 and 1-.05/6. These are bootstrap estimates for the stated fixed-policy/context design, not exact finite-sample guarantees or final P9 multiplicity correction.",
+    "positive_value": "All three contrast lower bounds strictly positive, complete rectangle, all source/runtime/null/observer checks valid and every actual per-world CPU ceiling met. This opens only the already-fixed V0 causal rectangle; it does not admit a package.",
+    "otherwise": "Close this exact value claim as NOT_ESTABLISHED, or INCONCLUSIVE for invalid/incomplete delivery; preserve every world and no extra seeds, weights, configurations or lower bounds. A non-positive lower bound alone is not proof of no benefit.",
+    "secondary": "Report fixed necessary support32/32/16/8, charge conservation, legal plays, deaths, duration and local payoff vectors descriptively. Do not let activation significance replace the primary value decision. Do not condition the primary analysis on post-treatment route membership.",
+    "no_lookahead": "Analyze each complete fixed vow once. No outcome-based cell ordering, success-only selection, optional extension or opened V0 after a V5 negative."
+  },
+  "containment": {"workers":2,"seconds_per_invocation":240,"cpu_seconds_per_world_per_vow":3600,"raw_bytes_per_stream":536870912},
+  "proof_map_before_package_admission": {
+    "inherited_identity": "Bind the literal historical role/lifecycle authority and exact changed dependencies; do not claim formal novelty.",
+    "local_causality": "Reuse minimum Bloodfire360-case source/mediator/consumer evidence only where unchanged. Qualify new whole-run intervention plumbing, clone flag retention and source base-utility separation before population observations.",
+    "adaptive_value": "The new four-world experiment answers an unmeasured full-run causal claim; it is not another acquisition comparison.",
+    "descriptor": "Derive from realised, source-attributed charge/draw/consumer traces. Validate reproducibility, intervention stability, held-out decision prediction and peer separation. Do not refit the frozen validation model; raw counts alone do not meet this obligation.",
+    "policy_and_economy": "Natural starters/rewards/shops/events and all 128 fixed configurations retained. Necessary support is not optimality or independent package confirmation.",
+    "confirmation": "Independent policy/seed reproduction and corrected package-level error control remain required. The new matched seed blocks cannot be counted as additional players or as proof of unrestricted endpoint retention.",
+    "product": "Player/mobile legibility, signed C2, all guardrails, detector, retention, lifecycle and exact-product/#108 evidence remain required before P9 PASS."
+  },
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "source_freeze": "Commit exact executable sources and generated runtime identities before native observations. Repair delivery defects only under unchanged inputs/estimands; retain every failed capture. Verify remote bytes after each publication. Do not start an unbound population runner from this document alone.",
+  "packages_admitted": 0,
+  "p9_certified": false
+}
