@@ -1,0 +1,89 @@
+{
+  "status": "HAND_ADAPTIVE_GROUP_VALUE_NOT_ESTABLISHED",
+  "source_head": "a5680efc5c12f21235ce5b5e9151b93f2b77ee38",
+  "stages": {
+    "5": {
+      "rows_per_world": 512,
+      "policy_configurations": 128,
+      "distinct_seed_blocks": 256,
+      "wins": {
+        "00": 289,
+        "01": 295,
+        "10": 316,
+        "11": 322
+      },
+      "contrasts": {
+        "source_group": {
+          "point": 0.052734375,
+          "interval": [
+            0.017578125,
+            0.08984375
+          ],
+          "positive_lower_bound": true
+        },
+        "consumer": {
+          "point": 0.01171875,
+          "interval": [
+            -0.015625,
+            0.0390625
+          ],
+          "positive_lower_bound": false
+        },
+        "interaction": {
+          "point": 0.0,
+          "interval": [
+            -0.025390625,
+            0.0234375
+          ],
+          "positive_lower_bound": false
+        }
+      },
+      "outcome_patterns_00_01_10_11": {
+        "0000": 163,
+        "0001": 5,
+        "0010": 4,
+        "0011": 33,
+        "0100": 2,
+        "0101": 10,
+        "0111": 6,
+        "1010": 6,
+        "1011": 6,
+        "1100": 12,
+        "1101": 4,
+        "1110": 3,
+        "1111": 258
+      },
+      "primary_pass": false,
+      "uncertainty": "Preserved 10000-resample seed-block bootstrap, Random(421), linear Bonferroni percentiles .05/6 and 1-.05/6. Approximate fixed-policy inference, not final P9 error control.",
+      "vow": 5,
+      "cpu_seconds": {
+        "00": 2703.3699999999994,
+        "01": 2713.3300000000004,
+        "10": 2868.8100000000004,
+        "11": 2855.0600000000004
+      },
+      "resource_pass": true,
+      "pass_all": false,
+      "packages_admitted": 0,
+      "p9_certified": false,
+      "scope": "Joint direct Preparation/Surge draw group and Phantom payoff at the unchanged audit policy. Not separate producer-variant necessity or full package admission.",
+      "status": "HAND_ADAPTIVE_GROUP_VALUE_NOT_ESTABLISHED"
+    }
+  },
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "qualification": {
+    "status": "HAND_WORLD_ENTRY_BINDING_PASS",
+    "worlds": [
+      "00",
+      "01",
+      "10",
+      "11"
+    ],
+    "all_on_entry_state_events_equal": true,
+    "population_outcomes": 0,
+    "scope": "New constructor assignment and per-command invariant only; original384-mask qualification carried, not rerun."
+  },
+  "last_vow": 5,
+  "v0_skipped": true
+}
