@@ -10,13 +10,13 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/native-v1/query-repair-1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/control-v1
 jobs:
   bundle:
-    name: Corrected source-bound query and missing OFF coverage
+    name: Exact isolated-Hand signed RandomBuild screen and preservation
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 15
     permissions:
       contents: write
     steps:
@@ -25,26 +25,31 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/native-v1
-      - name: Verify explicit correction and run its exact tests
+          sparse-checkout: |
+            domain
+            content
+            tools
+            research/p9-six-route
+      - name: Bind fixed source and validate delivery regressions
         id: source
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
           echo "PUBLISHED_HEAD=$GITHUB_SHA" >> "$GITHUB_ENV"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           python3 - <<'PY'
           import hashlib,json,os,pathlib
           root=pathlib.Path(os.environ['STUDY']);p=json.loads((root/'PROTOCOL.json').read_bytes())
-          for name,want in p['source_git_blobs'].items():
-              b=(root/name).read_bytes()
-              assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==want,name
-              compile(b,str(root/name),'exec')
+          for n,h in p['source_git_blobs'].items():
+              b=(root/n).read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==h,n
+              compile(b,str(root/n),'exec')
+          assert p['seed0']==73760100 and p['assigned_outcomes']==1024 and p['arm']==2
           assert not (root/'execution-1').exists()
-          assert p['new_population_outcomes']==0 and p['packages_admitted']==0 and not p['p9_certified']
           PY
-          (cd "$STUDY" && python3 -m unittest -v test_repair) > "$RUNNER_TEMP/hand-repair-tests.log" 2>&1
-      - name: Restore exact previously captured runtime and observe only missing OFF cases
+          (cd "$STUDY" && python3 -m unittest -v test_control) > "$RUNNER_TEMP/hand-control-tests.log" 2>&1
+      - name: Run only the fixed signed-arm rectangle after exact header binding
         id: native
         if: steps.source.outcome == 'success'
         continue-on-error: true
@@ -57,29 +62,27 @@ jobs:
             engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
             chmod +x "$engine"
             echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
-          } > "$RUNNER_TEMP/hand-repair-engine.log" 2>&1
-          python3 "$STUDY/repair.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$RUNNER_TEMP/hand-query-off" > "$RUNNER_TEMP/hand-repair-run.stdout" 2> "$RUNNER_TEMP/hand-repair-run.stderr"
-      - name: Preserve complete results or actual delivery diagnostics
+          } > "$RUNNER_TEMP/hand-control-engine.log" 2>&1
+          python3 "$STUDY/control.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$RUNNER_TEMP/hand-control-work" > "$RUNNER_TEMP/hand-control-run.stdout" 2> "$RUNNER_TEMP/hand-control-run.stderr"
+      - name: Commit every available result and actual terminal
         if: always()
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,json,os,pathlib,shutil
-          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1';out.mkdir(exist_ok=True)
-          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('hand-repair-*'):
+          out=pathlib.Path(os.environ['STUDY'])/'execution-1';out.mkdir(exist_ok=True)
+          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('hand-control-*'):
               if p.is_file():shutil.copyfile(p,out/p.name)
           if not (out/'TERMINAL.json').exists():
-              (out/'TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','failure':'DELIVERY_BEFORE_NATIVE_TERMINAL','new_population_outcomes':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
-          records=[{'path':p.name,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.iterdir()) if p.is_file() and p.name!='FILES.json']
+              (out/'TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','failure':'DELIVERY_BEFORE_NATIVE_TERMINAL','packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          records=[{'path':str(p.relative_to(out)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.rglob('*')) if p.is_file() and p.name!='FILES.json']
           (out/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "$STUDY/execution-1"
-          git commit -m 'research(p9): preserve query-correction delivery and all actual diagnostics'
+          git commit -m 'research(p9): preserve complete isolated-Hand control capture and diagnostics'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -89,22 +92,22 @@ jobs:
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/native-v1
-      - name: Read all committed bytes and reconstruct the decision without an engine
+          sparse-checkout: research/p9-six-route
+      - name: Read every committed byte and rebuild the unchanged signed decision
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
-          cmp "$STUDY/repair.py" "cold/$STUDY/repair.py"
-          cmp "$STUDY/test_repair.py" "cold/$STUDY/test_repair.py"
+          cmp "$STUDY/control.py" "cold/$STUDY/control.py"
+          cmp "$STUDY/test_control.py" "cold/$STUDY/test_control.py"
           cmp "$STUDY/PROTOCOL.json" "cold/$STUDY/PROTOCOL.json"
-          python3 "cold/$STUDY/repair.py" verify "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$GITHUB_WORKSPACE/cold/$STUDY/execution-1" "$GITHUB_WORKSPACE/$STUDY/execution-1/REMOTE-READBACK.json"
+          python3 "cold/$STUDY/control.py" verify "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$GITHUB_WORKSPACE/cold/$STUDY/execution-1" "$GITHUB_WORKSPACE/$STUDY/execution-1/REMOTE-READBACK.json"
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
           git add "$STUDY/execution-1/REMOTE-READBACK.json"
           test "$(git diff --cached --name-only)" = "$STUDY/execution-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record exact remote readback of coherent Hand query correction'
+          git commit -m 'research(p9): record cold-reproduced isolated-Hand signed-control result'
           git push origin HEAD:refs/heads/$branch
-      - name: Keep incomplete qualification fail closed
+      - name: Keep incomplete delivery separate from scientific gate status
         if: always() && steps.native.outcome != 'success'
         run: exit 3
