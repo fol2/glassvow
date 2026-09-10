@@ -10,10 +10,10 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1
 jobs:
   bundle:
-    name: Exact continuation memoisation and alternating cost proof
+    name: Safe integer continuation refinement and unchanged output proof
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -37,17 +37,19 @@ jobs:
               data=(root/name).read_bytes()
               assert hashlib.sha256(data).hexdigest()==want,name
               assert hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()==subprocess.check_output(['git','rev-parse','HEAD:'+str(root/name)]).decode().strip()
+          subprocess.run(['python3',str(root/'refinement.py'),'build','.',str(root/'bound-source')],check=True)
+          assert hashlib.sha256((root/'bound-source/PROTOCOL.json').read_bytes()).hexdigest()==p['bound_protocol_sha256']
           assert not (root/'FREEZE.json').exists()
           (root/'FREEZE.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'protocol_sha256':hashlib.sha256((root/'PROTOCOL.json').read_bytes()).hexdigest(),'source_sha256':p['source_sha256'],'new_observations':0,'p9_certified':False},indent=2)+'\n')
           PY
           mkdir "$STUDY/execution-1"
-          (cd "$STUDY" && python3 -m unittest -v test_cache) > "$STUDY/execution-1/tests.log" 2>&1
+          (cd "$STUDY" && python3 -m unittest -v test_refinement) > "$STUDY/execution-1/tests.log" 2>&1
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$STUDY/FREEZE.json" "$STUDY/execution-1/tests.log"
-          git commit -m 'research(p9): bind exact continuation cache before fixed equivalence and timing calls'
+          git add "$STUDY/FREEZE.json" "$STUDY/execution-1/tests.log" "$STUDY/bound-source"
+          git commit -m 'research(p9): bind exact continuation integer refinement before fixed equivalence and timing calls'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - name: Run fixed exact-output and alternating compute experiment
@@ -64,7 +66,7 @@ jobs:
             echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
             "$engine" --version
           } > "$STUDY/execution-1/engine.log" 2>&1
-          python3 "$STUDY/benchmark.py" run "$GITHUB_WORKSPACE" "$engine" "$RUNNER_TEMP/cache-capture" > "$STUDY/execution-1/runner.stdout" 2> "$STUDY/execution-1/runner.stderr"
+          python3 "$STUDY/refinement.py" run "$GITHUB_WORKSPACE" "$engine" "$RUNNER_TEMP/cache-capture" > "$STUDY/execution-1/runner.stdout" 2> "$STUDY/execution-1/runner.stderr"
       - name: Preserve every available raw byte and exact source
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
@@ -88,7 +90,7 @@ jobs:
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
           git add -f "$STUDY/execution-1"
-          git commit -m 'research(p9): preserve complete continuation cache capture and actual verdict'
+          git commit -m 'research(p9): preserve complete continuation integer refinement capture and actual verdict'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -111,15 +113,15 @@ jobs:
               if not f.is_file():continue
               b=f.read_bytes();assert (pathlib.Path('cold')/f).read_bytes()==b,str(f)
               files.append({'path':str(f),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
-          spec=importlib.util.spec_from_file_location('cold_benchmark',cold/'benchmark.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+          spec=importlib.util.spec_from_file_location('cold_benchmark',cold/'refinement.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
           record=json.loads((cold/'execution-1/ARCHIVE.json').read_bytes());target=pathlib.Path(os.environ['RUNNER_TEMP'])/'cold-cache-capture'
-          m.unpack(cold/'execution-1/capture.tar.xz',target,record['files'],record['archive_sha256'])
+          m.base_module(pathlib.Path('cold')).unpack(cold/'execution-1/capture.tar.xz',target,record['files'],record['archive_sha256'])
           terminal=json.loads((cold/'execution-1/TERMINAL.json').read_bytes());replayed=False
           if (target/'RESULTS.json').exists():
               r=m.read(pathlib.Path('cold').resolve(),target)
               assert (json.dumps(r,indent=2)+'\n').encode()==(target/'RESULTS.json').read_bytes()==(cold/'execution-1/RESULTS.json').read_bytes()
               replayed=True
-          receipt={'kind':'COMPLETE_CONTINUATION_CACHE_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':files,'archive_members':len(record['files']),'all_bytes_equal':True,'readout_reproduced':replayed,'scientific_status':terminal['status'],'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
+          receipt={'kind':'COMPLETE_SAFE_INTEGER_REFINEMENT_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':files,'archive_members':len(record['files']),'all_bytes_equal':True,'readout_reproduced':replayed,'scientific_status':terminal['status'],'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
           (root/'execution-1/REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
           print(json.dumps({k:v for k,v in receipt.items() if k!='files'},indent=2))
           if (target/'RESULTS.json').exists():print((target/'RESULTS.json').read_text())
@@ -127,7 +129,7 @@ jobs:
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
           git add "$STUDY/execution-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): retain complete cold byte proof of continuation cache benchmark'
+          git commit -m 'research(p9): retain complete cold byte proof of continuation integer refinement benchmark'
           git push origin HEAD:refs/heads/$branch
       - name: Distinguish complete negative from an incomplete capture
         if: always()
