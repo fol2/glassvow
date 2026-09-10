@@ -1,0 +1,80 @@
+{
+  "status": "BLOODFIRE_ADAPTIVE_VALUE_NOT_ESTABLISHED",
+  "stages": {
+    "5": {
+      "rows_per_world": 512,
+      "policy_configurations": 128,
+      "distinct_seed_blocks": 256,
+      "wins": {
+        "00": 298,
+        "01": 298,
+        "10": 298,
+        "11": 302
+      },
+      "contrasts": {
+        "producer": {
+          "point": 0.0078125,
+          "bonferroni_percentile_interval": [
+            -0.005859375,
+            0.0234375
+          ],
+          "positive_lower_bound": false
+        },
+        "consumer": {
+          "point": 0.0078125,
+          "bonferroni_percentile_interval": [
+            -0.005859375,
+            0.0234375
+          ],
+          "positive_lower_bound": false
+        },
+        "interaction": {
+          "point": 0.0078125,
+          "bonferroni_percentile_interval": [
+            -0.005859375,
+            0.0234375
+          ],
+          "positive_lower_bound": false
+        }
+      },
+      "primary_pass": false,
+      "outcome_patterns_world_order_00_01_10_11": {
+        "0000": 207,
+        "0001": 7,
+        "1110": 3,
+        "1111": 295
+      },
+      "uncertainty": "10000 resamples of complete two-policy seed blocks, Random(421); linear percentile interpolation. Nominal simultaneous95% Bonferroni intervals for three contrasts; approximate bootstrap, not exact finite-sample or final P9 error control.",
+      "vow": 5,
+      "cpu_seconds": {
+        "00": 2130.0299999999997,
+        "01": 2133.98,
+        "10": 2128.720000000001,
+        "11": 2150.710000000001
+      },
+      "resource_pass": true,
+      "pass_all": false,
+      "packages_admitted": 0,
+      "p9_certified": false,
+      "scope": "Adaptive full-run incremental Bloodfire value at this fixed audit policy and assigned matched seed blocks. No controller promotion, descriptor certification or final package admission.",
+      "status": "BLOODFIRE_ADAPTIVE_VALUE_NOT_ESTABLISHED"
+    }
+  },
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "source_head": "d233bf5ddd754f67c681a3c547334516f5fa13bf",
+  "qualification": {
+    "status": "WHOLE_RUN_ABLATION_PLUMBING_PASS",
+    "constructed_cases": 128,
+    "consumer_clone_rectangles": 128,
+    "base_source_utility": "Lose3HP then gain2/3Energy if alive; no draw. Preserved across all masks.",
+    "scope": "New per-world observer/clone routing and complete source prefix separation only; old360-role qualification is not replayed or newly claimed.",
+    "new_independent_samples": 0,
+    "packages_admitted": 0,
+    "p9_certified": false,
+    "unsafe_clone_mutant_failures": 8,
+    "default_on_complete_trace_equal": true
+  },
+  "last_vow": 5,
+  "v0_skipped": true
+}
