@@ -1,0 +1,31 @@
+test_all_worlds_required (test_causal.CausalTests.test_all_worlds_required) ... ok
+test_assignment_rejects_invalid_first (test_causal.CausalTests.test_assignment_rejects_invalid_first) ... ok
+test_assignment_rejects_other_vow (test_causal.CausalTests.test_assignment_rejects_other_vow) ... ok
+test_blocks_are_seeds_not_individual_rows (test_causal.CausalTests.test_blocks_are_seeds_not_individual_rows) ... ok
+test_changed_seed_rejected (test_causal.CausalTests.test_changed_seed_rejected) ... ok
+test_complete_constant_positive_case (test_causal.CausalTests.test_complete_constant_positive_case) ... ok
+test_contract_not_silently_changed (test_causal.CausalTests.test_contract_not_silently_changed) ... ok
+test_cost_conjunction_is_exact (test_causal.CausalTests.test_cost_conjunction_is_exact) ... ok
+test_duplicate_not_counted_as_observation (test_causal.CausalTests.test_duplicate_not_counted_as_observation) ... ok
+test_error_is_not_loss (test_causal.CausalTests.test_error_is_not_loss) ... ok
+test_exact_null_cannot_pass (test_causal.CausalTests.test_exact_null_cannot_pass) ... ok
+test_missing_row_rejected_before_statistics (test_causal.CausalTests.test_missing_row_rejected_before_statistics) ... ok
+test_missing_seed_block_rejected (test_causal.CausalTests.test_missing_seed_block_rejected) ... ok
+test_named_unsafe_mutant_remains_distinguishable (test_causal.CausalTests.test_named_unsafe_mutant_remains_distinguishable) ... ok
+test_nonfinite_contrast_rejected (test_causal.CausalTests.test_nonfinite_contrast_rejected) ... ok
+test_policy_pairing_required (test_causal.CausalTests.test_policy_pairing_required) ... ok
+test_registered_assignment (test_causal.CausalTests.test_registered_assignment) ... ok
+test_source_flags_survive_both_clone_layers (test_causal.CausalTests.test_source_flags_survive_both_clone_layers) ... ok
+test_stall_is_not_loss (test_causal.CausalTests.test_stall_is_not_loss) ... ok
+test_vow_binding (test_causal.CausalTests.test_vow_binding) ... ok
+test_vows_have_disjoint_nonprotected_seed_blocks (test_causal.CausalTests.test_vows_have_disjoint_nonprotected_seed_blocks) ... ok
+test_wrong_observer_identity_rejected (test_causal.CausalTests.test_wrong_observer_identity_rejected) ... ok
+test_invalid_initial_values_rejected (test_utility_hp.UtilityHPTests.test_invalid_initial_values_rejected) ... ok
+test_surviving_exchange (test_utility_hp.UtilityHPTests.test_surviving_exchange) ... ok
+test_three_hp_lethal (test_utility_hp.UtilityHPTests.test_three_hp_lethal) ... ok
+test_two_hp_lethal (test_utility_hp.UtilityHPTests.test_two_hp_lethal) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 1.801s
+
+OK
