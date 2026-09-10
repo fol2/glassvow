@@ -1,0 +1,32 @@
+{
+  "kind": "HAND_ADAPTIVE_REPAIR_COLD_READBACK",
+  "all_bytes_equal": true,
+  "readout_reproduced": true,
+  "original_capture_unchanged": true,
+  "qualification": {
+    "status": "HAND_ADAPTIVE_QUERY_CLONE_QUALIFIED_NOT_CERTIFICATE",
+    "qualified_cases": 384,
+    "default_on_reference_cases": 48,
+    "named_mutants_detected": {
+      "public-mutant": 48,
+      "exact-mutant": 48
+    },
+    "source_energy_exhaust_and_background_draw_preserved": true,
+    "all_instance_ids_not_fixed_fixture_uids": true,
+    "all_three_masks_retained_by_both_clone_paths": true,
+    "full_all_on_policy_queries_and_state_transitions_equal": true,
+    "limits": [
+      "Constructed plumbing proof, not independent runtime/source oracle or population value.",
+      "Existing null preview behaviour for unsupported native specials is retained; no new preview prediction capability is claimed.",
+      "Preparation and Surge are alternative sources of one Hand family, not separate strategies.",
+      "Descriptor predictive validity, adaptive whole-run value, policy/economy and independent confirmation remain open."
+    ],
+    "new_population_outcomes": 0,
+    "new_independent_samples": 0,
+    "packages_admitted": 0,
+    "p9_certified": false
+  },
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
