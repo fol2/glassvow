@@ -1,0 +1,30 @@
+{
+  "command": [
+    "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/home/runner/work/_temp/hand-control-work2/baseline",
+    "-s",
+    "res://probe.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/control-v1/execution-2/raw/baseline-duskblade-v0.config.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/control-v1/execution-2/raw/baseline-duskblade-v0.ndjson"
+  ],
+  "returncode": 0,
+  "failure": null,
+  "seconds": 7.777527517999999,
+  "config": {
+    "id": "baseline-duskblade-v0",
+    "catalogue": "baseline",
+    "aspect": "duskblade",
+    "vow": 0,
+    "arm": 2,
+    "seed0": 73760100,
+    "runs": 128
+  },
+  "status": "COMPLETE",
+  "raw": {
+    "bytes": 962090,
+    "sha256": "8aff24d888da3ce0af0fd91ac2aecbaa6c2ee37c301c188963edea6b64f51754"
+  }
+}
