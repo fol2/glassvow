@@ -1,0 +1,61 @@
+{
+  "kind": "COMPLETE_JOINT_FRONTIER_COLD_READBACK",
+  "source_head": "83c5bd0f0fca8aba18aefecac2bdb324b616d4c7",
+  "published_head": "6470ac608f1c53802db3c0cb6de5fe1e4e817f54",
+  "run_id": "34470604095",
+  "files": [
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/close_joint.py",
+      "bytes": 24074,
+      "sha256": "1907d14fbb4050f1b55afe5cb1e0ab42edcc51f0be367b4ae8dd22127f5bf3aa",
+      "git_blob": "0ca04a6ad5c01d5aac0568f39e46e5b5ae2ca511"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/test_close_joint.py",
+      "bytes": 11181,
+      "sha256": "053dac2c5bfe959f2ace1a068fcf1ea218eeaefb96ae6303f182869f0aa6715a",
+      "git_blob": "02d89afaf42f9494b7e0fdd1eefc97b47e783339"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/closure-1/DECISION.json",
+      "bytes": 49304,
+      "sha256": "b97dc81150703218debacdb154c4d39c6b861d4557bb34d42b666f8c4598d75e",
+      "git_blob": "20a2322889eb0238847f6afb3b912094fb8a9a90"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/closure-1/TESTS.log",
+      "bytes": 3281,
+      "sha256": "bb24a7ec74d8e649b83001cdbb331ee39db07fa04f9b844bbca00615af116495",
+      "git_blob": "27a7b83a2281b43fd0c95349de005a405825d02b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/closure-1/TRACE-RESOURCE-LEDGER.json",
+      "bytes": 505606,
+      "sha256": "9fb2786fee36c2ac08ed23b207194bfcbb160b5760603fcd9cdc8fe0de64d478",
+      "git_blob": "7a5a8a82386fb542539c2d1f4412b502724af7c0"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-HANDOFF.md",
+      "bytes": 3001,
+      "sha256": "1159b002aa9aa978cfcd7a8f51d112a5f29e0320333d210acd8f1b87e1daf8d7",
+      "git_blob": "768450229e1e2ec62ebce7087b0db3168f7f60e5"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-STATE.json",
+      "bytes": 37167,
+      "sha256": "b7cf0823c0972eec3c4d5a27201c39b6ef61b14c4ee2595a7e0e0daf57f7b05a",
+      "git_blob": "945b7a30e410792b9ca85dad88673ac86792317c"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/ROADMAP.md",
+      "bytes": 1444,
+      "sha256": "95b21645329d9c78563e5bbc09052a3cd6f8a788b877eebcd7a29bdeb097af8a",
+      "git_blob": "6b454c3aee2c0b09fece4dfadc8edb5a80def4a8"
+    }
+  ],
+  "all_bytes_equal": true,
+  "decision_reproduced": true,
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
