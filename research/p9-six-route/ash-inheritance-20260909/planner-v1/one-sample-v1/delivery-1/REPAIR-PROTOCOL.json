@@ -1,0 +1,19 @@
+{
+  "kind": "ONE_SAMPLE_READER_SCHEMA_REPAIR_AND_EXACT_PARTIAL_RESUME",
+  "input_head": "d8f21a7ae5f738f7caa622a075bca8886a62b488",
+  "old_status": "INCONCLUSIVE/INCOMPLETE_PLANNER_STAGE",
+  "demonstrated_defect": "The population producer stores turn/action/root_rollouts/readonly/best, not alternatives. A new predicate incorrectly required that absent list. Constructed qualification has legal_candidates and remains valid; population and qualification have different deliberate schemas.",
+  "allowed_repair": "In a new reader copy only, replace the nonexistent-list predicate with a positive integer root-rollout count, retaining readonly and all row-total checks. Source-bound sample count remains1; the480 finite full-alternative compatibility cases, runtime, decisions and original statistical/support/resource conditions are unchanged.",
+  "not_claimed": "The population capture does not record every alternative. Do not fabricate those fields or claim its per-query complete choice-set count was directly observed.",
+  "entry": "All retained file hashes and cold byte proof must match. Each of the four planner cells must exhibit the exact old reader error with successful actual native process, and then pass corrected schema plus unchanged complete outcome/clone checks. Any different failure prevents continuation.",
+  "reuse": "Reuse first0,2,4,6 cells for both methods:64 already completed native outcomes. Read their actual saved CPU files; retain original failing receipts and terminal, create explicitly derived repaired receipts. No original game is rerun and no old CPU is erased.",
+  "remaining_work": "Execute only missing originally assigned cells. Same root73409000, seeds73412100..73412103, first32/reserved96, sample count1, horizon12, unchanged shipping acquisition, and3600 CPU seconds per method/vow. V5 value+cost+pair support alone opens original V0. Negatives stop, no sample/root/weight extension.",
+  "source_sha256": {
+    "resume.py": "6d3f71cc1704b330ab57af8ebf9ba07c4affbe59b76d27871b6f9c0309987b7c",
+    "test_resume.py": "0371b1dd4f7444a206194a776ec4ef83d5e45d8fc8c9803f5d212fd274e8990d"
+  },
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT; actual captured-schema red/green before further native rows.",
+  "old_terminal_unchanged": true,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
