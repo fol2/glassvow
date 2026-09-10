@@ -10,10 +10,10 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/hand-value-v1/source-path-census-1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1
 jobs:
   bundle:
-    name: Close verified Hand diagnosis and current capsule - no engine
+    name: Isolated inherited Hand design screen - no engine or population
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -25,9 +25,17 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
-          sparse-checkout: research/p9-six-route
-      - name: Verify inputs and update only current decisions
-        id: close
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/
+            /research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1/execution-1/
+            /research/p9-six-route/source-package-audit-20260908/candidate.patch
+            /research/p9-six-route/source-package-audit-20260908/observer.patch
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+      - name: Construct exact isolated delta and expose incompatible old readouts
+        id: screen
         continue-on-error: true
         shell: bash
         run: |
@@ -35,82 +43,113 @@ jobs:
           python3 - <<'PY'
           import hashlib,os,pathlib
           root=pathlib.Path(os.environ['STUDY'])
-          for n,h in {'close_census.py':'21232c6d919207fab0c7d880735aa4abb865af4a','test_close_census.py':'ce91342cb4816a8c19e9396bb3685ddd16f7deca'}.items():
+          for n,h in {'screen.py':'9ba0296cfd6e54586ffd78b66c2543fba60cb5e0','test_screen.py':'3a561b182b34586213a54dff189e81b6756eccb3'}.items():
               b=(root/n).read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==h,n
-          assert not (root/'closure-1').exists()
+          assert not (root/'execution-1').exists()
           PY
-          (cd "$STUDY" && python3 -m unittest -v test_close_census) > "$RUNNER_TEMP/census-close-tests.log" 2>&1
-          python3 "$STUDY/close_census.py" "$GITHUB_WORKSPACE" > "$RUNNER_TEMP/census-close-run.log" 2>&1
+          (cd "$STUDY" && python3 -m unittest -v test_screen) > "$RUNNER_TEMP/design-tests.log" 2>&1
+          python3 "$STUDY/screen.py" "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/execution-1" > "$RUNNER_TEMP/design-screen.log" 2>&1
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,shutil
-          root=pathlib.Path(os.environ['STUDY']);out=root/'closure-1';records=json.loads((out/'FILES.json').read_bytes())
-          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('census-close-*.log'):
-              q=out/p.name;shutil.copyfile(p,q);b=q.read_bytes()
-              records.append({'path':str(q),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
-          (out/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
+          import json,os,pathlib
+          root=pathlib.Path(os.environ['STUDY']);r=json.loads((root/'execution-1/RESULTS.json').read_bytes())
+          assert r['candidate']=={'content_sha256':'ac779e08b0afc5054242ecf5dc1f7421e648e4ee114607708584d1d74ce92cdc','combat_sha256':'9f3f0e41202a443bb54f431488dc5d1c4096adab0786d80e1b2e9ffe45f512df'}
+          base=pathlib.Path('research/p9-six-route');state=json.loads((base/'SESSION-STATE.json').read_bytes())
+          state.update(status='P9_UNFINISHED_ISOLATED_HAND_DESIGN_REQUIRES_MATCHED_READOUT',exact_next_action=r['next_action'],packages_admitted=0,p9_certified=False,no_active_research_processes=True)
+          state['hand_isolated_design']={'result':str((root/'execution-1/RESULTS.json').relative_to(base)),'readback':str((root/'execution-1/REMOTE-READBACK.json').relative_to(base)),'native_qualified':False,'population_opened':False,'parameters_reused_not_fitted':True}
+          (base/'SESSION-STATE.json').write_text(json.dumps(state,indent=2)+'\n')
+          p=base/'SESSION-HANDOFF.md';text=p.read_text();marker='## Exact continuation\n\n';assert text.count(marker)==1
+          start,tail=text.split(marker,1);following=tail[tail.index('\n\nRemaining:'):]
+          note=('## Isolated Hand zero-row design screen complete\n\nOnly the already-authored Phantom two-slope law was isolated; original source cards, rare rarity, pools, Core/Art and Bloodfire stay unchanged. '
+                'This is NOT the old broad candidate or a new admitted strategy. At q=4 the old n-only OFF mask leaves8 raw damage; the inherited linear scorer projects24 for a law that yields8. '
+                'The generated two-file candidate and complete intrinsic table are under `ash-inheritance-20260909/hand-two-slope-v1/execution-1/`. '
+                'Setting both n and floor_per to zero gives the intended algebraic consumer null; native query/operator/envelope qualification is still absent. '
+                'No native population, controller tuning, protected cohort or old model was opened.\n\n')
+          p.write_text(start+note+marker+r['next_action']+following)
+          (base/'package-disposition-20260908/ROADMAP.md').write_text('# P9 current outcome roadmap\n\n0/6 complete current certificates. Hand/Bloodfire fixed adaptive-value claims remain closed.\n\n1. '+r['next_action']+'\n2. Only an eligible, fully qualified design may enter prospective guardrails and adaptive/descriptor/policy/peer/economy/independent evidence.\n3. Complete three viable/reachable/distinct strategies per aspect, seven-direction detector, corrected independent confirmation and unrestricted retention.\n4. Meet all guardrails, minimum lifecycle, exact-head review, one selected product integration and exact-product #108 receipt.\n\nNo repeated recovery, cohorts, controller parameter search or frozen-model refit.\n')
           PY
-      - name: Commit closure or preserve exact failure logs
+      - name: Publish actual screen result and only its current capsule
         if: always()
         shell: bash
         run: |
           set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,shutil
+          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1';out.mkdir(exist_ok=True)
+          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('design-*.log'):shutil.copyfile(p,out/p.name)
+          ok='${{ steps.screen.outcome }}'=='success'
+          (out/'TERMINAL.json').write_text(json.dumps({'status':'ZERO_ROW_DESIGN_SCREEN_COMPLETE_NOT_NATIVE_QUALIFICATION' if ok else 'DESIGN_SCREEN_DELIVERY_INCOMPLETE','new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          paths=[root/'screen.py',root/'test_screen.py']+sorted(p for p in out.rglob('*') if p.is_file())
+          if ok:paths += [pathlib.Path('research/p9-six-route')/p for p in ('SESSION-HANDOFF.md','SESSION-STATE.json','package-disposition-20260908/ROADMAP.md')]
+          records=[]
+          for p in paths:
+              b=p.read_bytes();records.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
+          (out/'DELIVERY-FILES.json').write_text(json.dumps(records,indent=2)+'\n')
+          PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          if [ '${{ steps.close.outcome }}' = success ]; then
-            git add "$STUDY/closure-1" research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/SESSION-STATE.json research/p9-six-route/package-disposition-20260908/ROADMAP.md
-          else
-            mkdir "$STUDY/closure-delivery-1"
-            cp "$RUNNER_TEMP"/census-close-*.log "$STUDY/closure-delivery-1/" 2>/dev/null || true
-            printf '%s\n' '{"status":"CLOSURE_DELIVERY_INCOMPLETE","new_native_runs":0,"p9_certified":false}' > "$STUDY/closure-delivery-1/TERMINAL.json"
-            git add "$STUDY/closure-delivery-1"
+          git add "$STUDY/execution-1"
+          if [ '${{ steps.screen.outcome }}' = success ]; then
+            git add research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/SESSION-STATE.json research/p9-six-route/package-disposition-20260908/ROADMAP.md
           fi
           python3 - <<'PY'
           import os,subprocess
-          root=os.environ['STUDY'];names=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
+          root=os.environ['STUDY'];p=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
           shared={'research/p9-six-route/'+n for n in ('SESSION-HANDOFF.md','SESSION-STATE.json','package-disposition-20260908/ROADMAP.md')}
-          assert names and all(n in shared or n.startswith(root+'/closure-1/') or n.startswith(root+'/closure-delivery-1/') for n in names)
+          assert p and all(x in shared or x.startswith(root+'/execution-1/') for x in p)
           PY
-          git commit -m 'research(p9): close measured Hand bottleneck and preserve bounded design frontier'
+          git commit -m 'research(p9): preserve zero-row isolated Hand construction and matched-interface blockers'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        if: steps.close.outcome == 'success'
+        if: env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: research/p9-six-route
-      - name: Read back final current state and recompute the diagnosis
-        if: steps.close.outcome == 'success'
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/
+            /research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1/execution-1/
+            /research/p9-six-route/source-package-audit-20260908/candidate.patch
+            /research/p9-six-route/source-package-audit-20260908/observer.patch
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+      - name: Reconstruct all new bytes from a separate exact checkout
+        if: env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,importlib.util,json,os,pathlib,subprocess
-          root=pathlib.Path(os.environ['STUDY']);out=root/'closure-1';cold=pathlib.Path('cold')
-          raw=(out/'FILES.json').read_bytes();assert raw==(cold/out/'FILES.json').read_bytes();records=json.loads(raw)
+          import hashlib,json,os,pathlib,subprocess,sys,tempfile
+          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1';cold=pathlib.Path('cold')
+          data=(out/'DELIVERY-FILES.json').read_bytes();assert data==(cold/out/'DELIVERY-FILES.json').read_bytes();records=json.loads(data)
           for r in records:
               p=pathlib.Path(r['path']);assert not p.is_absolute() and '..' not in p.parts
               b=(cold/p).read_bytes();assert b==p.read_bytes() and len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
               h=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
               assert h==r['git_blob']==subprocess.check_output(['git','-C','cold','rev-parse','HEAD:'+str(p)]).decode().strip()
-          spec=importlib.util.spec_from_file_location('cold_diagnosis',cold/root/'close_census.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
-          expected=json.loads((cold/out/'DECISION.json').read_bytes());actual=m.decision(json.loads((cold/root/'execution-1/RESULTS.json').read_bytes()))
-          assert all(expected[k]==v for k,v in actual.items())
-          state=json.loads((cold/'research/p9-six-route/SESSION-STATE.json').read_bytes())
-          assert state['exact_next_action']==actual['next_action'] and state['packages_admitted']==0 and state['p9_certified'] is False
-          receipt={'kind':'HAND_FULL_SOURCE_DIAGNOSIS_AND_CAPSULE_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':records,'all_bytes_equal':True,'decision_reproduced':True,'current_capsule_consistent':True,'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
+          reproduced=False
+          if '${{ steps.screen.outcome }}'=='success':
+              with tempfile.TemporaryDirectory(prefix='isolated-hand-cold-') as d:
+                  target=pathlib.Path(d)/'screen'
+                  subprocess.run([sys.executable,str(cold/root/'screen.py'),str(cold.resolve()),str(target)],check=True,stdout=subprocess.DEVNULL)
+                  for r in json.loads((target/'FILES.json').read_bytes()):
+                      p=pathlib.Path(r['path']);assert (target/p).read_bytes()==(cold/out/p).read_bytes()
+                  assert (target/'FILES.json').read_bytes()==(cold/out/'FILES.json').read_bytes()
+              reproduced=True
+          receipt={'kind':'ISOLATED_HAND_ZERO_ROW_DESIGN_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':records,'all_bytes_equal':True,'full_design_reproduced':reproduced,'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
           (out/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/closure-1/REMOTE-READBACK.json"
-          test "$(git diff --cached --name-only)" = "$STUDY/closure-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record verified final Hand diagnosis and current capsule readback'
+          git add "$STUDY/execution-1/REMOTE-READBACK.json"
+          test "$(git diff --cached --name-only)" = "$STUDY/execution-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): verify isolated Hand source construction and capsule from cold checkout'
           git push origin HEAD:refs/heads/$branch
-      - name: Reject an incomplete closure
-        if: always() && steps.close.outcome != 'success'
+      - name: Reject an incomplete source screen
+        if: always() && steps.screen.outcome != 'success'
         run: exit 3
