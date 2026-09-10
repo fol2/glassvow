@@ -1,0 +1,32 @@
+{
+  "kind": "BOUNDED_INTEGRAL_FLOAT_IMPLEMENTATION_PROOF",
+  "input_head": "aff646397e9d93a9414f840b7300d5ec1016111f",
+  "product_main": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "question": "Does avoiding the existing decimal-string roundtrip for exactly integral TYPE_FLOAT values in [-1024,1024] remove a real remaining continuation cost without changing any policy or game result?",
+  "rationale": "The completed profile attributes about 60 percent of root time to greedy continuation. The current qualified ji fast path handles TYPE_INT only. First establish actual content types; do not assume a workload benefit.",
+  "reference_cache_sha256": "ef6f7e6c5c987874b9ee6adc19a5a2733cb220624d246fcbcc2c6a72650d32b2",
+  "baseline_content_sha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "allowed_change": "One ji conversion branch only: TYPE_FLOAT, bounded range, and exact equality to its integer conversion. Preserve the existing TYPE_INT branch. All other values execute the existing fallback unchanged. No tolerance, different score, cache lifecycle, parameters, content, acquisition or random law.",
+  "numeric_proof": {
+    "exhaustive_domain": "Every one of the 2049 integral binary64 values -1024 through 1024, plus signed zero; compare to the original native int(float(str(v))) operation.",
+    "fallbacks": "Adjacent fractional and out-of-range values, large integers, strings, StringName, booleans and null retain the reference result. Unsafe unconditional cast must be detected by known counterexamples.",
+    "real_input_measurement": "Count numeric Variant types and guarded-branch eligibility in parsed pinned content; report descriptive counts only.",
+    "stop": "Any equality failure or lack of relevant integral float inputs stops promotion; preserve the actual failure. A parser or delivery defect is not a scientific zero."
+  },
+  "conditional_workload_benchmark": {
+    "entry": "Only after numeric equivalence and source-only scope tests pass.",
+    "fixed_cells": ["v5-000", "v5-032", "v5-064", "v5-096"],
+    "selection": "First cell of each index quartile, selected by assignment rather than outcome or timing.",
+    "repetitions": 2,
+    "method_order": [["reference", "refined"], ["refined", "reference"]],
+    "reference": "Existing safe-integer continuation implementation, not a weaker controller.",
+    "acceptance": "Every full native trace and every endpoint/decision/score field equals the preserved original, excluding only already designated top-level timing counters. Both repetition aggregate refined/reference CPU ratios <=0.90; no per-cell ratio above1.05. No timing-based candidate selection.",
+    "limits": "A microbenchmark is not full-workload cost qualification. The old 4015.74 and3729.33-second terminals remain immutable. The3600-second whole-method/vow limit is unchanged. No support aggregation or V0 may open from these timings."
+  },
+  "preservation": "Commit source before native measurements; preserve all available stdout/stderr, commands, raw and manifests; obtain a separate remote byte readback. Never replace old captures.",
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
