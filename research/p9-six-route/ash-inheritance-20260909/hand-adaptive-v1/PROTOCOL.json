@@ -1,0 +1,16 @@
+{
+ "kind":"HAND_ADAPTIVE_INTERVENTION_VIEW_AND_CLONE_QUALIFICATION",
+ "input_research_head":"24b8da5f912df672ece50122e92b9c68d3063554",
+ "product_reference":"2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+ "question":"Can the already specified Hand source/payoff masks act on all native card instances and propagate unchanged through public-state forecasts and exact observer clones without losing Energy, costs, Exhaust, background draw or signed product semantics?",
+ "basis":"The preserved causal-contract-v1 instrument is fixed-UID and not propagated through planner/observer clone creation. Its default source-utility and proper-subset proof is retained, not rerun. This work closes the distinct adaptive interface obligation; it does not rescue closed Bloodfire or controller cohorts.",
+ "runtime":"Use the exact retained joint-controller aware runtime, content4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9 and combat3ccb89f69f50e41d5a46eadd8f48c0a907fd0e382cd492b2c34dd5f93e091ad0. No new controller weights, sample counts, depth, content or model fit.",
+ "operator":"Three independent effect-view switches: Preparation direct draw, Surge direct draw, Phantom hand-count coefficient. Resolve upgrades normally; only affected effect entries change on defensive copies. Costs, Surge Energy, Exhaust/Ember/Branch draw, ordinary draw, RNG and generic Strength/hit effects stay native. All-on returns the original card data. These are research ablations, not shipping configuration.",
+ "matrix":{"sources":["preparation","surge"],"upgraded":[false,true],"aspects":[0,1],"vows":[0,5],"contexts":["plain","empty","branch"],"masks":[0,1,2,3,4,5,6,7],"qualified_cases":384,"reference_all_on_cases":48,"mutant_cases_per_path":48,"seed":73530010,"source_uid":10001,"consumer_uid":10002},
+ "checks":"All384 mask cases cover exact and public clone flags, legal full native source/consumer effects, source Energy, draw instance identities, background Exhaust/Branch effects, unchanged content and live query state. All48 all-on cases must match original full policy queries, alternative scores and native states/events exactly. Omitting mask propagation in either clone path must be detected in all48 named negative cases. No population runs occur.",
+ "stop":"Any valid-case mismatch or surviving named mutant is a qualification failure, not a reason to change a fixture, expectation, controller or acceptance. Delivery defects may be fixed with retained diagnostics under unchanged contract. Complete output and code are committed and cold-read before this interface is used elsewhere.",
+ "budget":{"per_native_invocation_seconds":240,"maximum_new_population_runs":0,"workflow_minutes":15},
+ "next_claim":"Only after this qualification can a complete prospective Hand adaptive-value and descriptor contract be bound. No new population assignment is authorized here, no frozen validation model is refit, no current package is admitted.",
+ "review_kind":"AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+ "packages_admitted":0,"p9_certified":false
+}
