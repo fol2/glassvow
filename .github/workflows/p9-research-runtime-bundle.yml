@@ -13,10 +13,10 @@ env:
   STUDY: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/control-v1
 jobs:
   bundle:
-    name: Unchanged isolated-Hand control with source-bound delivery correction
+    name: Finish serialized control readback and capsule - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 10
     permissions:
       contents: write
     steps:
@@ -25,100 +25,102 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
+          sparse-checkout-cone-mode: false
           sparse-checkout: |
-            domain
-            content
-            tools
-            research/p9-six-route
-      - name: Verify original protocol, empty outcome frontier and repaired implementation
-        id: source
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/
+            /research/p9-six-route/guardrail-confirmation-20260909/
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          path: input-cold
+          fetch-depth: 1
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/
+            /research/p9-six-route/guardrail-confirmation-20260909/
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+      - name: Check source, test exact serialization and rebuild only the original readout
+        id: finish
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          echo "PUBLISHED_HEAD=$GITHUB_SHA" >> "$GITHUB_ENV"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           python3 - <<'PY'
-          import hashlib,json,os,pathlib
+          import hashlib,os,pathlib
           root=pathlib.Path(os.environ['STUDY'])
-          blob=lambda b:hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-          assert blob((root/'PROTOCOL.json').read_bytes())=='c33a0cde306eed3e8ee9ba68288db49cc6e1538d'
-          p=json.loads((root/'PROTOCOL.json').read_bytes());repair=json.loads((root/'SOURCE-REPAIR.json').read_bytes())
-          assert repair['scientific_protocol_git_blob']=='c33a0cde306eed3e8ee9ba68288db49cc6e1538d'
-          assert repair['original_control_git_blob']==p['source_git_blobs']['control.py']=='c8cfd274a697e1ca3619900778b04eeaec708d9c'
-          expected={'control.py':'116e429989aedf7d7607ce7036b75df97b0f61fd','test_control.py':'c883dbb462c3c7f0187b35c08246dfe82d4fa538','test_status_binding.py':'c87f262fecb53344504878b9930821b95e257829'}
-          assert repair['repaired_source_git_blobs']==expected
+          expected={'finish_control.py':'26b2bd77bd427390413ed8ea7cab03c2c6e23db7','test_finish_control.py':'b147b3da4b5f3d785797bf54651fe37079168622'}
           for n,h in expected.items():
-              b=(root/n).read_bytes();assert blob(b)==h,n;compile(b,str(root/n),'exec')
-          old=root/'execution-1';t=json.loads((old/'TERMINAL.json').read_bytes())
-          assert t['status']=='INCONCLUSIVE' and t['failure']=="ValueError('NONCARD_CONTENT_DELTA')"
-          assert not (old/'raw').exists() and not (old/'headers').exists()
-          assert not list(old.rglob('*.ndjson*')) and not list(old.rglob('*.config.json'))
-          assert json.loads((old/'REMOTE-READBACK.json').read_bytes())['all_bytes_equal'] is True
-          assert p['seed0']==73760100 and p['assigned_outcomes']==1024 and p['arm']==2
-          assert not (root/'execution-2').exists()
+              b=(root/n).read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==h,n
+              assert b==(pathlib.Path('input-cold')/root/n).read_bytes();compile(b,n,'exec')
+          assert not (root/'closure-1').exists()
           PY
-          (cd "$STUDY" && python3 -m unittest -v test_control test_status_binding) > "$RUNNER_TEMP/hand-control-tests.log" 2>&1
-      - name: Execute the original assigned screen after exact signed-header binding
-        id: native
-        if: steps.source.outcome == 'success'
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          {
-            curl --fail --location --max-time 90 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip"
-            unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
-            engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
-            chmod +x "$engine"
-            echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
-          } > "$RUNNER_TEMP/hand-control-engine.log" 2>&1
-          python3 "$STUDY/control.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-2" "$RUNNER_TEMP/hand-control-work2" > "$RUNNER_TEMP/hand-control-run.stdout" 2> "$RUNNER_TEMP/hand-control-run.stderr"
-      - name: Preserve every result and actual diagnostics without changing the old failure
+          (cd "$STUDY" && python3 -m unittest -v test_finish_control) > "$RUNNER_TEMP/control-finish-tests.log" 2>&1
+          python3 "$STUDY/finish_control.py" run "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/input-cold" "$GITHUB_WORKSPACE/$STUDY/closure-1" > "$RUNNER_TEMP/control-finish-run.log" 2>&1
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,shutil
+          out=pathlib.Path(os.environ['STUDY'])/'closure-1';records=json.loads((out/'FILES.json').read_bytes())
+          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('control-finish-*.log'):
+              q=out/p.name;shutil.copyfile(p,q);b=q.read_bytes()
+              records.append({'path':str(q),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
+          (out/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
+          PY
+      - name: Publish complete closure or actual failure diagnostics
         if: always()
         shell: bash
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib,shutil
-          out=pathlib.Path(os.environ['STUDY'])/'execution-2';out.mkdir(exist_ok=True)
-          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('hand-control-*'):
-              if p.is_file():shutil.copyfile(p,out/p.name)
-          if not (out/'TERMINAL.json').exists():
-              (out/'TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','failure':'DELIVERY_BEFORE_NATIVE_TERMINAL','packages_admitted':0,'p9_certified':False},indent=2)+'\n')
-          records=[{'path':str(p.relative_to(out)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.rglob('*')) if p.is_file() and p.name!='FILES.json']
-          (out/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
-          PY
           branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/execution-2"
-          git commit -m 'research(p9): preserve original isolated-Hand control outcome rectangle and repaired delivery'
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if [ '${{ steps.finish.outcome }}' = success ]; then
+            git add "$STUDY/closure-1" research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/SESSION-STATE.json research/p9-six-route/package-disposition-20260908/ROADMAP.md
+          else
+            mkdir -p "$STUDY/closure-delivery-1"
+            cp "$RUNNER_TEMP"/control-finish-*.log "$STUDY/closure-delivery-1/" 2>/dev/null || true
+            printf '%s\n' '{"status":"CONTROL_CLOSURE_INCOMPLETE","new_native_runs":0,"packages_admitted":0,"p9_certified":false}' > "$STUDY/closure-delivery-1/TERMINAL.json"
+            git add "$STUDY/closure-delivery-1"
+          fi
+          python3 - <<'PY'
+          import os,subprocess
+          root=os.environ['STUDY'];shared={'research/p9-six-route/'+n for n in ('SESSION-HANDOFF.md','SESSION-STATE.json','package-disposition-20260908/ROADMAP.md')}
+          paths=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
+          assert paths and all(p in shared or p.startswith(root+'/closure-1/') or p.startswith(root+'/closure-delivery-1/') for p in paths)
+          PY
+          git commit -m 'research(p9): preserve exact control-readback decision and current two-slope Hand capsule'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        if: always() && env.PUBLISHED_HEAD != ''
+        if: steps.finish.outcome == 'success'
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
-          path: cold
+          path: output-cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: research/p9-six-route
-      - name: Read every committed byte and reproduce the unchanged signed decision
-        if: always() && env.PUBLISHED_HEAD != ''
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+      - name: Compare every new closure and capsule byte after its commit
+        if: steps.finish.outcome == 'success'
         shell: bash
         run: |
           set -euo pipefail
-          for name in control.py test_control.py test_status_binding.py PROTOCOL.json SOURCE-REPAIR.json; do
-            cmp "$STUDY/$name" "cold/$STUDY/$name"
-          done
-          python3 "cold/$STUDY/control.py" verify "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/execution-2" "$GITHUB_WORKSPACE/cold/$STUDY/execution-2" "$GITHUB_WORKSPACE/$STUDY/execution-2/REMOTE-READBACK.json"
+          python3 "output-cold/$STUDY/finish_control.py" verify "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/output-cold" "$GITHUB_WORKSPACE/$STUDY/closure-1/REMOTE-READBACK.json"
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/execution-2/REMOTE-READBACK.json"
-          test "$(git diff --cached --name-only)" = "$STUDY/execution-2/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record exact cold readback of isolated-Hand signed controls'
+          git add "$STUDY/closure-1/REMOTE-READBACK.json"
+          test "$(git diff --cached --name-only)" = "$STUDY/closure-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): record cold-readback of complete isolated-Hand control closure'
           git push origin HEAD:refs/heads/$branch
-      - name: Keep delivery status separate from scientific gate status
-        if: always() && steps.native.outcome != 'success'
+      - name: Do not conceal incomplete delivery
+        if: always() && steps.finish.outcome != 'success'
         run: exit 3
