@@ -1,0 +1,85 @@
+{
+  "decision": {
+    "terminal": "FIXED_PLANNER_VALUE_OR_SUPPORT_NOT_ESTABLISHED",
+    "cpu_seconds": {
+      "stock": "89.02",
+      "planner": "2187.73"
+    },
+    "wins": {
+      "stock": 66,
+      "planner": 316
+    },
+    "value_pass": true,
+    "resource_pass": true,
+    "support_pass": false,
+    "support": {
+      "stock": {
+        "bloodfire": {
+          "active": 18,
+          "inactive": 110,
+          "reachable": 21,
+          "exclusive": 7
+        },
+        "hand": {
+          "active": 33,
+          "inactive": 95,
+          "reachable": 33,
+          "exclusive": 22
+        }
+      },
+      "planner": {
+        "bloodfire": {
+          "active": 26,
+          "inactive": 102,
+          "reachable": 39,
+          "exclusive": 8
+        },
+        "hand": {
+          "active": 49,
+          "inactive": 79,
+          "reachable": 50,
+          "exclusive": 31
+        }
+      }
+    },
+    "v0_opened": false
+  },
+  "policy_counts": {
+    "stock": {
+      "source_offered": 128,
+      "consumer_offered": 126,
+      "both_roles_offered_in_same_run": 116,
+      "source_in_final_deck": 57,
+      "consumer_in_final_deck": 74,
+      "both_in_final_deck": 25,
+      "source_played": 56,
+      "consumer_played": 59,
+      "bloodfire_applied": 56,
+      "bloodfire_consumed": 18,
+      "registered_active": 18,
+      "registered_reachable": 21,
+      "incremental_hp": 15,
+      "both_owned_but_not_active": 11,
+      "won_and_bloodfire_active": 8,
+      "won_and_hand_active": 15
+    },
+    "planner": {
+      "source_offered": 128,
+      "consumer_offered": 128,
+      "both_roles_offered_in_same_run": 128,
+      "source_in_final_deck": 71,
+      "consumer_in_final_deck": 86,
+      "both_in_final_deck": 40,
+      "source_played": 62,
+      "consumer_played": 84,
+      "bloodfire_applied": 62,
+      "bloodfire_consumed": 26,
+      "registered_active": 26,
+      "registered_reachable": 39,
+      "incremental_hp": 26,
+      "both_owned_but_not_active": 19,
+      "won_and_bloodfire_active": 21,
+      "won_and_hand_active": 42
+    }
+  }
+}
