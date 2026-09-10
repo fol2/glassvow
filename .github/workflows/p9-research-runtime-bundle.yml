@@ -10,13 +10,13 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/hand-value-v1
 jobs:
   bundle:
-    name: Complete unchanged Hand source closure after indentation repair - no engine
+    name: Fixed Hand source-group and consumer worlds - no new controller
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 8
+    timeout-minutes: 200
     permissions:
       contents: write
     steps:
@@ -27,73 +27,89 @@ jobs:
           persist-credentials: true
           sparse-checkout-cone-mode: false
           sparse-checkout: |
+            /research/p9-six-route/**/*.config.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/
             /research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1/
-            /research/p9-six-route/SESSION-HANDOFF.md
-            /research/p9-six-route/SESSION-STATE.json
-            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
-      - name: Repair manifest ordering and complete only the missing source closure
-        id: closure
-        continue-on-error: true
+            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/joint.py
+            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/RESOLVED-PROTOCOLS.json
+            /research/p9-six-route/ash-inheritance-20260909/acquisition-v1/bridge.py
+            /research/p9-six-route/ash-inheritance-20260909/acquisition-v1/compare_value.py
+            /research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/capability.gd
+            /research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/study.py
+            /research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/bound-source/
+            /research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/benchmark.py
+            /research/p9-six-route/ash-inheritance-20260909/planner-v1/bind.py
+            /research/p9-six-route/ash-inheritance-20260909/pair-v1/run_pair.py
+            /research/p9-six-route/ash-inheritance-20260909/pair-v1/read_pair.py
+            /research/p9-six-route/ash-inheritance-20260909/pair-v1/observed_game.gd
+            /research/p9-six-route/ash-inheritance-20260909/causal-value-v1/read_causal.py
+      - name: Bind exact tested sources before native observations
+        id: freeze
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);p=root/'finalize.py';b=p.read_bytes()
-          assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()=='54d21b6d6a3ff38370788534c81751eea2d59c76'
-          assert not (root/'closure-1').exists()
-          old="    paths=[root/'finalize.py',root/'close.py',root/'descriptor.py',root/'descriptor-1/SYNC-MANIFEST.json']"
-          new='\n'.join([
-              '    # Bind the inner manifest after final capsule mutations.',
-              "    sync_path=root/'descriptor-1/SYNC-MANIFEST.json'",
-              '    sync_records=load(sync_path)',
-              "    require(len({r['path'] for r in sync_records})==len(sync_records),'SYNC_DUPLICATE_PATH')",
-              '    for r in sync_records:',
-              "        relative=Path(r['path'])",
-              "        require(not relative.is_absolute() and '..' not in relative.parts,'SYNC_PATH')",
-              '        data=(repo/relative).read_bytes()',
-              '        r.update(bytes=len(data),sha256=sha(data),git_blob=blob(data))',
-              '    save(sync_path,sync_records)',
-              "    paths=[root/'finalize.py',root/'test_finalize.py',root/'close.py',root/'descriptor.py',sync_path]",
-          ])
-          text=b.decode();assert text.count(old)==1
-          changed=text.replace(old,new,1);compile(changed,str(p),'exec');p.write_text(changed)
+          import hashlib,json,os,pathlib,subprocess,sys
+          root=pathlib.Path(os.environ['STUDY']);sys.path.insert(0,str(root.resolve()))
+          import run_hand
+          expected={'entry.gd':'b255d395fe9c9a409d216e0fb0a4b3bb7995034da82c66d7aa4300eb9f527a95','read_hand.py':'0f2edc6d3df3ce0daca28b273698cd9591a0174844a24d1c368f2a0db46bafb2','run_hand.py':'a80c09c5524375f80b53201c228ecd4f499d58840fa5f95640fb3a0f06efdd89','test_hand.py':'acf733e3e2179238bbb7f7685b47e6e3246c6c5cbd5d3d10adca840d0395194c'}
+          hashes={}
+          for name in (*expected,'CONTRACT.json'):
+              p=root/name;b=p.read_bytes();digest=hashlib.sha256(b).hexdigest();h=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+              if name in expected:assert digest==expected[name],name
+              else:assert h=='150b9f0e849cfec053a4457f8ca534d42cba0c53'
+              assert h==subprocess.check_output(['git','rev-parse','HEAD:'+str(p)]).decode().strip()
+              hashes[name]=digest
+          run_hand.validate_contract(json.loads((root/'CONTRACT.json').read_bytes()))
+          assert not (root/'FREEZE.json').exists() and not (root/'execution-1').exists()
+          (root/'FREEZE.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'source_sha256':hashes,'native_rows_at_freeze':0,'review_kind':'AUTHOR_SELF_REVIEW_NOT_INDEPENDENT','p9_certified':False},indent=2)+'\n')
           PY
-          (cd "$STUDY" && python3 -m unittest -v test_finalize) > "$RUNNER_TEMP/hand-final-tests.log" 2>&1
-          python3 "$STUDY/finalize.py" run "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/closure-1" > "$RUNNER_TEMP/hand-final-run.log" 2>&1
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib,shutil
-          root=pathlib.Path(os.environ['STUDY']);out=root/'closure-1'
-          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('hand-final-*.log'):shutil.copyfile(p,out/p.name)
-          manifest=json.loads((out/'FILES.json').read_bytes())
-          for p in out.glob('*.log'):
-              b=p.read_bytes();manifest.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
-          (out/'FILES.json').write_text(json.dumps(manifest,indent=2)+'\n')
-          for r in json.loads((root/'descriptor-1/SYNC-MANIFEST.json').read_bytes()):
-              b=pathlib.Path(r['path']).read_bytes();assert len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
-          PY
-      - name: Publish coherent source and closure or retain actual failure
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
+          (cd "$STUDY" && timeout 120s python3 -m unittest -v test_hand) > "$RUNNER_TEMP/hand-value-tests.log" 2>&1
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          if [ '${{ steps.closure.outcome }}' = success ]; then
-            git add "$STUDY/finalize.py" "$STUDY/closure-1" "$STUDY/descriptor-1/SYNC-MANIFEST.json" research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/SESSION-STATE.json research/p9-six-route/package-disposition-20260908/ROADMAP.md
-          else
-            mkdir "$STUDY/closure-delivery-2"
-            cp "$RUNNER_TEMP"/hand-final-*.log "$STUDY/closure-delivery-2/" 2>/dev/null || true
-            printf '%s\n' '{"status":"CLOSURE_DELIVERY_INCOMPLETE","new_native_runs":0,"packages_admitted":0,"p9_certified":false}' > "$STUDY/closure-delivery-2/TERMINAL.json"
-            git add "$STUDY/closure-delivery-2"
-          fi
-          git commit -m 'research(p9): preserve checked Hand closure and actual delivery diagnostics'
+          git add "$STUDY/FREEZE.json"
+          git commit -m 'research(p9): freeze checked Hand group-value sources before any native observation'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Check new world entry then execute the fixed conditional stages
+        id: native
+        if: steps.freeze.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            curl --fail --location --max-time 90 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip"
+            unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
+            engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+            chmod +x "$engine"
+            echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
+            "$engine" --version
+          } > "$RUNNER_TEMP/hand-value-engine.log" 2>&1
+          python3 "$STUDY/run_hand.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$RUNNER_TEMP/hand-value-work" > "$RUNNER_TEMP/hand-value-run.stdout" 2> "$RUNNER_TEMP/hand-value-run.stderr"
+      - name: Preserve complete results or the actual incomplete capture
+        if: always() && steps.freeze.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,shutil,sys
+          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1';out.mkdir(exist_ok=True)
+          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('hand-value-*'):
+              if p.is_file():shutil.copyfile(p,out/p.name)
+          if not (out/'TERMINAL.json').exists():
+              (out/'TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','failure':'Execution did not emit a terminal; inspect preserved logs','stages':{},'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          records=[{'path':str(p.relative_to(out)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.rglob('*')) if p.is_file() and p!=out/'FILES.json']
+          (out/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
+          sys.path.insert(0,str(root.resolve()));import run_hand
+          _,_,base,_=run_hand.dependencies(pathlib.Path('.').resolve());head=base.git(pathlib.Path('.').resolve(),'rev-parse','HEAD')
+          published=base.publish(pathlib.Path('.').resolve(),out.resolve(),head,'research(p9): retain complete Hand world output and actual delivery logs')
+          with open(os.environ['GITHUB_ENV'],'a') as f:f.write('PUBLISHED_HEAD='+published+'\n')
+          PY
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        if: steps.closure.outcome == 'success' && env.PUBLISHED_HEAD != ''
+        if: always() && env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
@@ -101,31 +117,38 @@ jobs:
           persist-credentials: false
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            /research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1/
-            /research/p9-six-route/SESSION-HANDOFF.md
-            /research/p9-six-route/SESSION-STATE.json
-            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
-      - name: Read committed bytes and reconstruct the complete inherited call path
-        if: steps.closure.outcome == 'success' && env.PUBLISHED_HEAD != ''
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/
+            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/joint.py
+            /research/p9-six-route/ash-inheritance-20260909/acquisition-v1/bridge.py
+            /research/p9-six-route/ash-inheritance-20260909/acquisition-v1/compare_value.py
+            /research/p9-six-route/ash-inheritance-20260909/acquisition-v1/repaired-source-1/capability.gd
+            /research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/study.py
+            /research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/bound-source/
+            /research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/benchmark.py
+            /research/p9-six-route/ash-inheritance-20260909/planner-v1/bind.py
+            /research/p9-six-route/ash-inheritance-20260909/pair-v1/run_pair.py
+            /research/p9-six-route/ash-inheritance-20260909/pair-v1/read_pair.py
+            /research/p9-six-route/ash-inheritance-20260909/pair-v1/observed_game.gd
+            /research/p9-six-route/ash-inheritance-20260909/causal-value-v1/read_causal.py
+      - name: Read back every committed byte and reconstruct unchanged decision
+        if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
-          python3 "cold/$STUDY/finalize.py" verify "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/closure-1/REMOTE-READBACK.json"
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')
-          for r in json.loads((cold/root/'descriptor-1/SYNC-MANIFEST.json').read_bytes()):
-              b=(cold/r['path']).read_bytes();assert len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
-          result=json.loads((cold/root/'closure-1/DECISION.json').read_bytes())
-          print('CLOSURE_DECISION='+json.dumps({k:v for k,v in result.items() if k not in ('qualification','factual_fields')}))
-          print('CALL_PATH='+ (cold/root/'closure-1/PLANNER-CALL-PATH.json').read_text())
-          PY
+          python3 "cold/$STUDY/run_hand.py" verify "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$GITHUB_WORKSPACE/cold/$STUDY/execution-1" "$GITHUB_WORKSPACE/$STUDY/execution-1/REMOTE-READBACK.json"
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/closure-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record cold-read Hand call-path and capsule byte identities'
+          git add "$STUDY/execution-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): record complete cold readback of fixed Hand adaptive worlds'
           git push origin HEAD:refs/heads/$branch
-          echo "VERIFIED_HEAD=$(git rev-parse HEAD)"
-      - name: Reject incomplete delivery
-        if: always() && steps.closure.outcome != 'success'
-        run: exit 3
+          cat "$STUDY/execution-1/TERMINAL.json"
+      - name: Report actual scientific disposition separately from runner color
+        if: always() && env.PUBLISHED_HEAD != ''
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          result=json.loads((pathlib.Path(os.environ['STUDY'])/'execution-1/TERMINAL.json').read_bytes())
+          print('HAND_SCIENTIFIC_STATUS='+result['status'])
+          if result['status']=='INCONCLUSIVE':raise SystemExit(3)
+          PY
