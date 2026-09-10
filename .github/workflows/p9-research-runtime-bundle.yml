@@ -13,10 +13,10 @@ env:
   STUDY: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/native-v1
 jobs:
   bundle:
-    name: Isolated Hand law, envelope and query delta qualification
+    name: Diagnose preserved query mismatch - no engine or new observations
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 6
     permissions:
       contents: write
     steps:
@@ -25,102 +25,75 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909
-      - name: Freeze exact executable identities and test the reader before observations
-        id: binding
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);values={}
-          expected={'qualify.py':'b9981f0a400c3c2741384404b8bdfd4ef26eed8d','gate.gd':'56a07df41512e2c0060dd72af03eecc38bd07b38','test_qualify.py':'84b2129173fb5779af7088f00155d23ff4d3d27a','PROTOCOL.json':'c59bc97704c09fe4ad396c4a848d94d7b353aade'}
-          for n,h in expected.items():
-              b=(root/n).read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==h,n
-              values[n]=hashlib.sha256(b).hexdigest()
-          assert not (root/'FREEZE.json').exists() and not (root/'execution-1').exists()
-          (root/'FREEZE.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'source_sha256':values,'native_cases_at_freeze':0,'packages_admitted':0,'p9_certified':False,'review_kind':'AUTHOR_SELF_REVIEW_NOT_INDEPENDENT'},indent=2)+'\n')
-          PY
-          (cd "$STUDY" && python3 -m unittest -v test_qualify) > "$RUNNER_TEMP/law-tests.log" 2>&1
-          branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$STUDY/FREEZE.json"
-          git commit -m 'research(p9): freeze isolated Hand native delta sources before any observation'
-          git push origin HEAD:refs/heads/$branch
-          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-      - name: Run only the frozen constructed delta and its negative controls
-        id: native
-        if: steps.binding.outcome == 'success'
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/native-v1
+      - name: Check source identity and diagnose complete immutable capture
+        id: diagnosis
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          {
-            curl --fail --location --max-time 90 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip"
-            unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
-            engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
-            chmod +x "$engine"
-            echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
-          } > "$RUNNER_TEMP/law-engine.log" 2>&1
-          python3 "$STUDY/qualify.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$RUNNER_TEMP/isolated-hand-native" > "$RUNNER_TEMP/law-native.log" 2>&1
-      - name: Preserve every available capture and actual logs
-        if: always() && env.PUBLISHED_HEAD != ''
+          python3 - <<'PY'
+          import hashlib,os,pathlib
+          p=pathlib.Path(os.environ['STUDY'])/'diagnose.py';b=p.read_bytes()
+          assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()=='25940d4d52d1be5f27aff3bd0e562605b07bfa97'
+          compile(b,str(p),'exec')
+          PY
+          python3 "$STUDY/diagnose.py" "$STUDY/execution-1" "$STUDY/query-diagnosis-1" > "$RUNNER_TEMP/hand-query.log" 2>&1
+      - name: Preserve diagnosis or actual failure without changing native terminal
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p "$STUDY/query-diagnosis-1"
+          cp "$RUNNER_TEMP/hand-query.log" "$STUDY/query-diagnosis-1/run.log"
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,shutil,sys
-          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1';out.mkdir(exist_ok=True)
-          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('law-*.log'):shutil.copyfile(p,out/p.name)
-          if not (out/'TERMINAL.json').exists():
-              (out/'TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','failure':'ENTRY_OR_ENGINE_DELIVERY_FAILED','new_population_outcomes':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
-          records=[{'path':str(p.relative_to(out)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.rglob('*')) if p.is_file() and p.name!='FILES.json']
-          (out/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
-          sys.path.insert(0,str(root.resolve()));import qualify
-          qualify.publish(pathlib.Path('.').resolve(),out.resolve(),os.environ['PUBLISHED_HEAD'],'research(p9): preserve complete Hand law capture and transport diagnostics')
+          import hashlib,json,os,pathlib
+          p=pathlib.Path(os.environ['STUDY'])/'query-diagnosis-1'
+          (p/'DELIVERY.json').write_text(json.dumps({'status':'DIAGNOSIS_COMPLETE' if '${{ steps.diagnosis.outcome }}'=='success' else 'DIAGNOSIS_INCOMPLETE','new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          records=[{'path':f.name,'bytes':f.stat().st_size,'sha256':hashlib.sha256(f.read_bytes()).hexdigest()} for f in sorted(p.iterdir()) if f.is_file() and f.name!='FILES.json']
+          (p/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
           PY
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
+          git add "$STUDY/query-diagnosis-1"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'research(p9): preserve complete Hand query mismatch diagnosis'
+          git push origin HEAD:refs/heads/$branch
+          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        if: always() && env.PUBLISHED_HEAD != ''
+        if: steps.diagnosis.outcome == 'success'
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1
-      - name: Read back all preserved bytes and reconstruct the actual native verdict
-        if: always() && env.PUBLISHED_HEAD != ''
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/native-v1
+      - name: Reproduce diagnostic from separately fetched raw and compare every output byte
+        if: steps.diagnosis.outcome == 'success'
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,importlib.util,json,os,pathlib,subprocess,sys
-          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1';cold=pathlib.Path('cold')/out
-          b=(out/'FILES.json').read_bytes();assert b==(cold/'FILES.json').read_bytes();records=json.loads(b)
+          import hashlib,json,os,pathlib,subprocess,sys,tempfile
+          root=pathlib.Path(os.environ['STUDY']);out=root/'query-diagnosis-1';cold=pathlib.Path('cold')/root
+          assert (out/'FILES.json').read_bytes()==(cold/'query-diagnosis-1/FILES.json').read_bytes()
+          records=json.loads((out/'FILES.json').read_bytes())
           for r in records:
-              p=pathlib.Path(r['path']);assert not p.is_absolute() and '..' not in p.parts
-              data=(cold/p).read_bytes();assert data==(out/p).read_bytes() and len(data)==r['bytes'] and hashlib.sha256(data).hexdigest()==r['sha256']
-              h=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
-              assert h==subprocess.check_output(['git','-C','cold','rev-parse','HEAD:'+str(out/p)]).decode().strip()
-          spec=importlib.util.spec_from_file_location('cold_qualification',pathlib.Path('cold')/root/'qualify.py');mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
-          terminal=json.loads((cold/'TERMINAL.json').read_bytes());reproduced=False
-          if terminal['status']!='INCONCLUSIVE':
-              result=mod.check(cold,json.loads((pathlib.Path('cold')/root/'PROTOCOL.json').read_bytes()))
-              assert result==json.loads((cold/'RESULTS.json').read_bytes()) and all(terminal[k]==v for k,v in result.items())
-              reproduced=True
-          receipt={'kind':'COMPLETE_ISOLATED_HAND_NATIVE_DELTA_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':len(records)+1,'all_bytes_equal':True,'readout_reproduced':reproduced,'scientific_status':terminal['status'],'new_native_replays':0,'new_population_outcomes':0,'packages_admitted':0,'p9_certified':False}
-          (out/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          sys.path.insert(0,str(root.resolve()));import qualify
-          qualify.publish(pathlib.Path('.').resolve(),out.resolve(),os.environ['PUBLISHED_HEAD'],'research(p9): record exact cold-readback of isolated Hand native delta')
-          print(json.dumps(terminal,indent=2))
+              b=(cold/'query-diagnosis-1'/r['path']).read_bytes()
+              assert b==(out/r['path']).read_bytes() and len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
+          with tempfile.TemporaryDirectory() as d:
+              p=pathlib.Path(d)/'new'
+              subprocess.run([sys.executable,str(cold/'diagnose.py'),str(cold/'execution-1'),str(p)],check=True)
+              for name in ('RESULTS.json','SOURCES.json','MISMATCHES.json'):
+                  assert (p/name).read_bytes()==(out/name).read_bytes()
+          (out/'REMOTE-READBACK.json').write_text(json.dumps({'kind':'HAND_QUERY_DIAGNOSIS_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':records,'all_bytes_equal':True,'diagnosis_reproduced':True,'new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
           PY
-      - name: Report scientific qualification separately from job transport
-        if: always() && env.PUBLISHED_HEAD != ''
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          import json,os,pathlib,sys
-          t=json.loads((pathlib.Path(os.environ['STUDY'])/'execution-1/TERMINAL.json').read_bytes())
-          sys.exit(0 if t['status']=='ISOLATED_HAND_LAW_AND_INTRINSIC_QUERIES_QUALIFIED_NOT_CERTIFICATE' else 3)
-          PY
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
+          git add "$STUDY/query-diagnosis-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): record cold-reproduced Hand query diagnosis'
+          git push origin HEAD:refs/heads/$branch
+      - name: Do not mark incomplete diagnosis as complete
+        if: always() && steps.diagnosis.outcome != 'success'
+        run: exit 3
