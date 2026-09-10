@@ -1,0 +1,177 @@
+{
+  "status": "SIGNED_CONTROL_NECESSARY_SCREEN_PASS_NOT_P9",
+  "grids": [
+    {
+      "n": 128,
+      "baseline_wins": 33,
+      "candidate_wins": 32,
+      "difference": -0.0078125,
+      "gates": {
+        "candidate_random_build_at_most_half": true,
+        "absolute_random_build_movement_at_most_tenth": true,
+        "candidate_fault_free": true
+      },
+      "paired_discordance": {
+        "0": 127,
+        "-1": 1
+      },
+      "aspect": "duskblade",
+      "vow": 0,
+      "candidate_outcomes": {
+        "win": 32,
+        "loss": 96
+      },
+      "baseline_outcomes": {
+        "win": 33,
+        "loss": 95
+      },
+      "baseline_faults": 0,
+      "nominal_paired_interval_report_only": [
+        -0.0234375,
+        0.0
+      ]
+    },
+    {
+      "n": 128,
+      "baseline_wins": 13,
+      "candidate_wins": 11,
+      "difference": -0.015625,
+      "gates": {
+        "candidate_random_build_at_most_half": true,
+        "absolute_random_build_movement_at_most_tenth": true,
+        "candidate_fault_free": true
+      },
+      "paired_discordance": {
+        "0": 126,
+        "-1": 2
+      },
+      "aspect": "duskblade",
+      "vow": 5,
+      "candidate_outcomes": {
+        "loss": 117,
+        "win": 11
+      },
+      "baseline_outcomes": {
+        "loss": 115,
+        "win": 13
+      },
+      "baseline_faults": 0,
+      "nominal_paired_interval_report_only": [
+        -0.0390625,
+        0.0
+      ]
+    },
+    {
+      "n": 128,
+      "baseline_wins": 28,
+      "candidate_wins": 30,
+      "difference": 0.015625,
+      "gates": {
+        "candidate_random_build_at_most_half": true,
+        "absolute_random_build_movement_at_most_tenth": true,
+        "candidate_fault_free": true
+      },
+      "paired_discordance": {
+        "0": 126,
+        "1": 2
+      },
+      "aspect": "ashwarden",
+      "vow": 0,
+      "candidate_outcomes": {
+        "loss": 98,
+        "win": 30
+      },
+      "baseline_outcomes": {
+        "loss": 100,
+        "win": 28
+      },
+      "baseline_faults": 0,
+      "nominal_paired_interval_report_only": [
+        0.0,
+        0.0390625
+      ]
+    },
+    {
+      "n": 128,
+      "baseline_wins": 4,
+      "candidate_wins": 4,
+      "difference": 0.0,
+      "gates": {
+        "candidate_random_build_at_most_half": true,
+        "absolute_random_build_movement_at_most_tenth": true,
+        "candidate_fault_free": true
+      },
+      "paired_discordance": {
+        "0": 128
+      },
+      "aspect": "ashwarden",
+      "vow": 5,
+      "candidate_outcomes": {
+        "loss": 124,
+        "win": 4
+      },
+      "baseline_outcomes": {
+        "loss": 124,
+        "win": 4
+      },
+      "baseline_faults": 0,
+      "nominal_paired_interval_report_only": [
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "full_raw": [
+    {
+      "path": "baseline-duskblade-v0.ndjson",
+      "bytes": 962090,
+      "sha256": "8aff24d888da3ce0af0fd91ac2aecbaa6c2ee37c301c188963edea6b64f51754"
+    },
+    {
+      "path": "baseline-duskblade-v5.ndjson",
+      "bytes": 831201,
+      "sha256": "da70897f3ef915482d883236d457f6f5060668214f0d3ac0701d9c2caccdba4e"
+    },
+    {
+      "path": "baseline-ashwarden-v0.ndjson",
+      "bytes": 1007490,
+      "sha256": "f0bea9d2bee696cce36bed82ff67e83cc9c8b0261e7dbf84dc9f2ec6a176010d"
+    },
+    {
+      "path": "baseline-ashwarden-v5.ndjson",
+      "bytes": 867132,
+      "sha256": "738000b32ba8e322c92b7a9e3be4f7252c17428b74b99537af4851241763e3a2"
+    },
+    {
+      "path": "candidate-duskblade-v0.ndjson",
+      "bytes": 961062,
+      "sha256": "8f76c699056cb8cfdabc93e68a2e8c4a4ab250e5fa0a57f38b4ba58fd559d3be"
+    },
+    {
+      "path": "candidate-duskblade-v5.ndjson",
+      "bytes": 821960,
+      "sha256": "1408b1b5bb62d727bb18410f757d6d089684a8826b8d0d0a640d829e27fab295"
+    },
+    {
+      "path": "candidate-ashwarden-v0.ndjson",
+      "bytes": 1011262,
+      "sha256": "7a552cc2a8b3f36b9195e0998eb74f19dac3abdd012a9a3baa267292eccfec8d"
+    },
+    {
+      "path": "candidate-ashwarden-v5.ndjson",
+      "bytes": 868977,
+      "sha256": "bcdff16959a99bb7ff4d023bf947413895acfd394dffc1e58b3ea6e311e7f1bc"
+    }
+  ],
+  "rows": 1024,
+  "protocol_role": "Prospective exact-candidate necessary guardrail screen, not a release or independent package certificate.",
+  "decision": "Continue missing package confirmation; no gate is admitted by this screen alone.",
+  "limits": [
+    "Not the balanced research controller. Only the unchanged signed arm2 is compared.",
+    "Point-scale inherited screen and fixed paired intervals are separate; intervals do not override the frozen decision.",
+    "No causal attribution of a catalogue-wide change to Hand alone.",
+    "No C2 strategy gap, duration, policy-ceiling, detector, retention or full P9 assertion."
+  ],
+  "packages_admitted": 0,
+  "p9_certified": false
+}
