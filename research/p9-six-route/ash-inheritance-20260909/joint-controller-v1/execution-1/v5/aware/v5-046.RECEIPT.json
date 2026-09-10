@@ -1,0 +1,36 @@
+{
+  "status": "COMPLETE",
+  "cfg": {
+    "root": 73409000,
+    "first": 46,
+    "count": 2,
+    "seeds": [
+      73414100,
+      73414101,
+      73414102,
+      73414103
+    ],
+    "vow": 5,
+    "integration": false
+  },
+  "raw": [
+    {
+      "name": "v5-046.outcomes.jsonl.xz",
+      "raw_bytes": 1259304,
+      "raw_sha256": "00fcb7f9f39dc21086a003c799a13704ea2d3ff06019b5f3321190e70904a9df",
+      "packed_sha256": "0419c4f1f42e7dd96ed965566c3df7f071e55baf849724810b663bdca69442bc"
+    },
+    {
+      "name": "v5-046.traces.jsonl.xz",
+      "raw_bytes": 5551792,
+      "raw_sha256": "426419f13de18bcfd9f4fc7b304e5db04a14c3aa60ff205706742f14d6807d0e",
+      "packed_sha256": "08883fdc6ad440f781b4605d0fe5f248c81970c69bdc5ec0b1de303d8f11f8fb"
+    }
+  ],
+  "rows": 8,
+  "cpu": {
+    "user": 44.86,
+    "system": 0.09,
+    "elapsed": 44.97
+  }
+}
