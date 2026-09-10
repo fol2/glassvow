@@ -1,0 +1,80 @@
+From https://github.com/fol2/glassvow
+ * branch            dcfaa7c7eac24843ca38382de8d59711e7727794 -> FETCH_HEAD
+test_actual_count_not_merely_positive (test_study.SourceTests.test_actual_count_not_merely_positive) ... ok
+test_gate_and_parser_define_same_budget (test_study.SourceTests.test_gate_and_parser_define_same_budget) ... ok
+test_missing_or_duplicate_parameter_rejected (test_study.SourceTests.test_missing_or_duplicate_parameter_rejected) ... ok
+test_only_sample_parameter_changes (test_study.SourceTests.test_only_sample_parameter_changes) ... ok
+test_passthrough_source_identity (test_study.SourceTests.test_passthrough_source_identity) ... ok
+test_seed_check_excludes_only_own_study (test_study.SourceTests.test_seed_check_excludes_only_own_study) ... ok
+test_seed_collision_checks_nested_metadata (test_study.SourceTests.test_seed_collision_checks_nested_metadata) ... ok
+test_statistics_not_rewritten (test_study.SourceTests.test_statistics_not_rewritten) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.003s
+
+OK
+{
+  "kind": "ONE_PUBLIC_DETERMINIZATION_COMBAT_VALUE_AND_NECESSARY_PAIR_SUPPORT",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "policy_root": 73409000,
+  "seeds": [
+    73412100,
+    73412101,
+    73412102,
+    73412103
+  ],
+  "qualification_seed": 73412010,
+  "policies_per_cell": 2,
+  "cpu_seconds_per_method_per_vow": 3600,
+  "maximum_outcomes": 2048,
+  "methods": [
+    "stock",
+    "planner"
+  ],
+  "vow_order": [
+    5,
+    0
+  ],
+  "blocks": [
+    [
+      0,
+      32
+    ],
+    [
+      32,
+      96
+    ]
+  ],
+  "parameters": {
+    "bank_mode": "current-plus-next",
+    "native_rollout": true,
+    "rollout_samples": 1,
+    "rollout_steps": 12,
+    "leaf_terminal": false,
+    "acquisition": "unchanged shipping policy",
+    "implementation": "original qualified planner plus existing intervention-switch propagation; no rejected float or new cache candidate"
+  },
+  "value": ">=5 percentage point gain and positive unchanged paired-configuration bootstrap lower bound in BOTH fixed blocks",
+  "support_bounds": {
+    "active": 32,
+    "inactive": 32,
+    "reachable": 16,
+    "exclusive": 8
+  },
+  "source_delta": "Only sample count2->1 in actual combat/qualification; exact sample-count observables updated. Statistical value and support definitions are unchanged.",
+  "scope": "Not same-decision equivalence, package admission, independent seed confirmation or P9.",
+  "work_order_sha256": "dc905a23e85f4eff1018c6206e2ce5feea099480ac32a0d55d3e394c0efa2662",
+  "packages_admitted": 0,
+  "p9_certified": false
+}
+test_changed_configuration_rejected (test_value.Tests.test_changed_configuration_rejected) ... ok
+test_fault_not_loss (test_value.Tests.test_fault_not_loss) ... ok
+test_incomplete_not_negative (test_value.Tests.test_incomplete_not_negative) ... ok
+test_mutating_query_rejected (test_value.Tests.test_mutating_query_rejected) ... ok
+test_positive_and_null_are_distinct (test_value.Tests.test_positive_and_null_are_distinct) ... ok
+test_stock_never_gets_planner (test_value.Tests.test_stock_never_gets_planner) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.105s
+
+OK

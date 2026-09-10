@@ -1,0 +1,1559 @@
+[detached HEAD 0f85bf0] research(p9): preserve actual one-sample controller qualification before population
+ 35 files changed, 1501 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/RESULTS.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/SOURCE-BINDING.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/active.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/active.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/active.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/baseline-import.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/baseline-import.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/baseline-import.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/baseline-parse.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/baseline-parse.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/baseline-parse.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/baseline.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/baseline.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/baseline.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/candidate-import.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/candidate-import.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/candidate-import.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/candidate-parse.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/candidate-parse.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/candidate-parse.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/consumer_off.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/consumer_off.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/consumer_off.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/off.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/off.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/off.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/producer_off.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/producer_off.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/logs/producer_off.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/raw/active.jsonl
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/raw/baseline.jsonl
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/raw/consumer_off.jsonl
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/raw/off.jsonl
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/raw/producer_off.jsonl
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/preflight/runtime-source.tar.xz
+[detached HEAD 2a34c8f] research(p9): bind exact combat-only comparison runtime before observations
+ 11 files changed, 1552 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/RESOLVED-PROTOCOLS.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/planner-source/FINAL-SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/planner-source/RESOLVED-PROTOCOL.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/planner-source/SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/planner-source/bound-runtime.tar.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/planner-source/runtime-source.tar.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/stock-source/FINAL-SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/stock-source/RESOLVED-PROTOCOL.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/stock-source/SOURCE-MANIFEST.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/stock-source/bound-runtime.tar.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/stock-source/runtime-source.tar.xz
+[detached HEAD 0565247] research(p9): preserve signed-arm and unchanged acquisition qualification
+ 37 files changed, 3504 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/RESULTS.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/planner-import.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/planner-import.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/planner-import.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/planner-parse.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/planner-parse.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/planner-parse.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/signed-null.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/signed-null.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/signed-null.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/signed.jsonl
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/signed.traces.jsonl
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/stock-import.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/stock-import.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/stock-import.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/stock-parse.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/stock-parse.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/stock-parse.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/tests.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/tests.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/tests.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v0-000.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v0-000.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v0-000.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v0-000.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v0-000.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v0-000.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v0-000.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v0-000.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v5-000.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v5-000.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v5-000.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v5-000.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v5-000.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v5-000.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v5-000.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/qualification/v5-000.traces.jsonl.xz
+[detached HEAD 65e1dc5] research(p9): preserve matched planner v5 value-screen assigned group 1
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-000.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-000.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-000.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-000.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-000.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-000.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-000.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-000.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-002.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-002.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-002.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-002.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-002.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-002.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-002.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-002.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-004.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-004.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-004.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-004.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-004.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-004.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-004.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-004.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-006.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-006.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-006.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-006.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-006.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-006.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-006.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-006.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-000.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-000.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-000.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-000.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-000.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-000.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-000.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-000.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-002.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-002.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-002.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-002.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-002.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-002.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-002.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-002.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-004.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-004.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-004.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-004.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-004.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-004.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-004.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-004.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-006.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-006.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-006.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-006.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-006.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-006.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-006.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-006.traces.jsonl.xz
+[detached HEAD 0744ff2] research(p9): preserve matched planner v5 value-screen assigned group 2
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-008.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-008.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-008.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-008.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-008.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-008.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-008.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-008.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-010.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-010.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-010.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-010.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-010.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-010.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-010.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-010.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-012.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-012.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-012.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-012.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-012.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-012.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-012.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-012.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-014.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-014.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-014.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-014.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-014.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-014.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-014.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-014.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-008.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-008.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-008.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-008.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-008.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-008.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-008.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-008.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-010.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-010.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-010.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-010.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-010.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-010.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-010.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-010.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-012.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-012.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-012.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-012.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-012.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-012.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-012.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-012.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-014.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-014.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-014.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-014.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-014.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-014.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-014.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-014.traces.jsonl.xz
+[detached HEAD a38de0c] research(p9): preserve matched planner v5 value-screen assigned group 3
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-016.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-016.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-016.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-016.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-016.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-016.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-016.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-016.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-018.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-018.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-018.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-018.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-018.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-018.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-018.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-018.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-020.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-020.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-020.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-020.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-020.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-020.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-020.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-020.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-022.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-022.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-022.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-022.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-022.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-022.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-022.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-022.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-016.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-016.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-016.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-016.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-016.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-016.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-016.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-016.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-018.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-018.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-018.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-018.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-018.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-018.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-018.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-018.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-020.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-020.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-020.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-020.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-020.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-020.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-020.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-020.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-022.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-022.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-022.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-022.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-022.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-022.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-022.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-022.traces.jsonl.xz
+[detached HEAD cb2d9b0] research(p9): preserve matched planner v5 value-screen assigned group 4
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-024.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-024.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-024.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-024.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-024.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-024.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-024.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-024.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-026.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-026.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-026.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-026.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-026.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-026.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-026.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-026.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-028.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-028.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-028.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-028.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-028.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-028.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-028.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-028.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-030.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-030.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-030.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-030.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-030.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-030.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-030.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-030.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-024.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-024.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-024.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-024.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-024.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-024.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-024.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-024.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-026.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-026.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-026.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-026.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-026.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-026.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-026.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-026.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-028.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-028.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-028.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-028.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-028.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-028.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-028.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-028.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-030.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-030.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-030.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-030.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-030.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-030.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-030.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-030.traces.jsonl.xz
+[detached HEAD 960fb81] research(p9): preserve matched planner v5 reserved-configuration-check assigned group 1
+ 65 files changed, 629 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-032.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-032.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-032.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-032.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-032.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-032.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-032.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-032.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-034.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-034.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-034.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-034.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-034.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-034.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-034.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-034.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-036.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-036.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-036.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-036.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-036.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-036.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-036.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-036.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-038.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-038.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-038.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-038.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-038.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-038.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-038.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-038.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-032.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-032.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-032.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-032.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-032.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-032.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-032.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-032.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-034.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-034.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-034.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-034.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-034.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-034.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-034.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-034.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-036.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-036.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-036.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-036.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-036.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-036.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-036.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-036.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-038.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-038.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-038.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-038.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-038.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-038.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-038.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-038.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/value-screen.json
+[detached HEAD 6938178] research(p9): preserve matched planner v5 reserved-configuration-check assigned group 2
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-040.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-040.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-040.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-040.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-040.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-040.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-040.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-040.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-042.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-042.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-042.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-042.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-042.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-042.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-042.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-042.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-044.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-044.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-044.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-044.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-044.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-044.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-044.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-044.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-046.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-046.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-046.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-046.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-046.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-046.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-046.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-046.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-040.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-040.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-040.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-040.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-040.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-040.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-040.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-040.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-042.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-042.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-042.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-042.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-042.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-042.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-042.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-042.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-044.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-044.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-044.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-044.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-044.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-044.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-044.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-044.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-046.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-046.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-046.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-046.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-046.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-046.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-046.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-046.traces.jsonl.xz
+[detached HEAD 215e7c6] research(p9): preserve matched planner v5 reserved-configuration-check assigned group 3
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-048.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-048.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-048.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-048.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-048.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-048.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-048.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-048.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-050.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-050.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-050.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-050.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-050.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-050.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-050.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-050.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-052.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-052.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-052.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-052.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-052.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-052.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-052.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-052.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-054.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-054.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-054.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-054.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-054.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-054.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-054.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-054.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-048.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-048.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-048.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-048.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-048.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-048.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-048.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-048.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-050.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-050.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-050.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-050.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-050.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-050.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-050.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-050.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-052.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-052.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-052.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-052.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-052.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-052.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-052.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-052.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-054.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-054.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-054.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-054.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-054.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-054.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-054.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-054.traces.jsonl.xz
+[detached HEAD a6956d7] research(p9): preserve matched planner v5 reserved-configuration-check assigned group 4
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-056.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-056.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-056.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-056.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-056.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-056.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-056.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-056.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-058.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-058.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-058.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-058.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-058.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-058.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-058.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-058.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-060.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-060.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-060.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-060.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-060.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-060.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-060.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-060.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-062.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-062.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-062.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-062.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-062.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-062.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-062.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-062.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-056.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-056.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-056.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-056.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-056.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-056.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-056.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-056.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-058.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-058.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-058.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-058.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-058.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-058.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-058.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-058.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-060.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-060.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-060.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-060.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-060.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-060.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-060.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-060.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-062.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-062.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-062.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-062.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-062.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-062.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-062.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-062.traces.jsonl.xz
+[detached HEAD fbd2716] research(p9): preserve matched planner v5 reserved-configuration-check assigned group 5
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-064.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-064.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-064.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-064.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-064.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-064.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-064.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-064.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-066.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-066.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-066.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-066.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-066.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-066.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-066.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-066.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-068.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-068.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-068.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-068.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-068.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-068.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-068.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-068.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-070.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-070.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-070.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-070.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-070.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-070.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-070.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-070.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-064.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-064.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-064.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-064.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-064.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-064.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-064.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-064.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-066.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-066.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-066.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-066.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-066.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-066.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-066.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-066.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-068.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-068.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-068.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-068.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-068.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-068.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-068.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-068.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-070.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-070.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-070.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-070.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-070.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-070.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-070.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-070.traces.jsonl.xz
+[detached HEAD 2ad1271] research(p9): preserve matched planner v5 reserved-configuration-check assigned group 6
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-072.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-072.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-072.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-072.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-072.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-072.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-072.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-072.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-074.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-074.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-074.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-074.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-074.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-074.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-074.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-074.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-076.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-076.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-076.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-076.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-076.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-076.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-076.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-076.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-078.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-078.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-078.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-078.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-078.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-078.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-078.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-078.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-072.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-072.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-072.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-072.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-072.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-072.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-072.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-072.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-074.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-074.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-074.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-074.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-074.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-074.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-074.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-074.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-076.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-076.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-076.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-076.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-076.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-076.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-076.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-076.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-078.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-078.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-078.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-078.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-078.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-078.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-078.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-078.traces.jsonl.xz
+[detached HEAD 0570351] research(p9): preserve matched planner v5 reserved-configuration-check assigned group 7
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-080.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-080.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-080.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-080.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-080.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-080.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-080.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-080.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-082.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-082.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-082.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-082.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-082.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-082.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-082.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-082.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-084.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-084.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-084.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-084.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-084.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-084.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-084.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-084.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-086.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-086.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-086.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-086.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-086.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-086.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-086.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-086.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-080.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-080.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-080.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-080.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-080.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-080.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-080.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-080.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-082.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-082.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-082.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-082.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-082.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-082.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-082.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-082.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-084.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-084.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-084.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-084.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-084.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-084.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-084.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-084.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-086.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-086.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-086.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-086.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-086.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-086.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-086.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-086.traces.jsonl.xz
+[detached HEAD f05b788] research(p9): preserve matched planner v5 reserved-configuration-check assigned group 8
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-088.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-088.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-088.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-088.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-088.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-088.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-088.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-088.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-090.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-090.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-090.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-090.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-090.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-090.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-090.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-090.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-092.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-092.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-092.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-092.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-092.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-092.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-092.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-092.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-094.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-094.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-094.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-094.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-094.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-094.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-094.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-094.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-088.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-088.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-088.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-088.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-088.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-088.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-088.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-088.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-090.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-090.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-090.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-090.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-090.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-090.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-090.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-090.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-092.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-092.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-092.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-092.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-092.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-092.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-092.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-092.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-094.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-094.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-094.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-094.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-094.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-094.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-094.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-094.traces.jsonl.xz
+[detached HEAD e9ca36a] research(p9): preserve matched planner v5 reserved-configuration-check assigned group 9
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-096.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-096.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-096.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-096.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-096.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-096.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-096.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-096.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-098.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-098.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-098.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-098.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-098.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-098.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-098.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-098.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-100.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-100.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-100.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-100.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-100.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-100.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-100.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-100.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-102.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-102.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-102.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-102.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-102.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-102.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-102.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-102.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-096.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-096.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-096.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-096.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-096.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-096.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-096.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-096.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-098.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-098.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-098.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-098.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-098.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-098.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-098.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-098.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-100.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-100.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-100.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-100.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-100.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-100.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-100.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-100.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-102.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-102.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-102.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-102.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-102.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-102.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-102.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-102.traces.jsonl.xz
+[detached HEAD 72a38bf] research(p9): preserve matched planner v5 reserved-configuration-check assigned group 10
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-104.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-104.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-104.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-104.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-104.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-104.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-104.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-104.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-106.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-106.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-106.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-106.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-106.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-106.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-106.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-106.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-108.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-108.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-108.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-108.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-108.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-108.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-108.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-108.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-110.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-110.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-110.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-110.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-110.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-110.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-110.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-110.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-104.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-104.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-104.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-104.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-104.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-104.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-104.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-104.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-106.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-106.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-106.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-106.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-106.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-106.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-106.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-106.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-108.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-108.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-108.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-108.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-108.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-108.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-108.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-108.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-110.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-110.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-110.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-110.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-110.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-110.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-110.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-110.traces.jsonl.xz
+[detached HEAD c9a37d4] research(p9): preserve matched planner v5 reserved-configuration-check assigned group 11
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-112.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-112.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-112.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-112.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-112.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-112.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-112.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-112.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-114.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-114.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-114.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-114.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-114.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-114.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-114.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-114.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-116.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-116.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-116.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-116.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-116.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-116.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-116.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-116.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-118.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-118.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-118.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-118.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-118.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-118.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-118.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-118.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-112.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-112.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-112.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-112.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-112.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-112.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-112.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-112.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-114.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-114.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-114.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-114.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-114.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-114.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-114.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-114.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-116.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-116.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-116.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-116.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-116.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-116.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-116.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-116.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-118.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-118.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-118.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-118.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-118.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-118.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-118.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-118.traces.jsonl.xz
+[detached HEAD 76f4671] research(p9): preserve matched planner v5 reserved-configuration-check assigned group 12
+ 64 files changed, 592 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-120.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-120.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-120.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-120.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-120.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-120.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-120.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-120.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-122.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-122.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-122.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-122.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-122.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-122.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-122.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-122.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-124.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-124.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-124.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-124.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-124.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-124.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-124.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-124.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-126.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-126.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-126.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-126.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-126.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-126.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-126.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner/v5-126.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-120.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-120.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-120.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-120.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-120.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-120.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-120.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-120.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-122.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-122.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-122.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-122.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-122.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-122.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-122.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-122.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-124.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-124.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-124.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-124.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-124.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-124.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-124.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-124.traces.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-126.RECEIPT.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-126.command.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-126.config.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-126.cpu.txt
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-126.outcomes.jsonl.xz
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-126.stderr
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-126.stdout
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-126.traces.jsonl.xz
+[detached HEAD 923211f] research(p9): preserve actual terminal of fixed planner value study
+ 5 files changed, 22255 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/FILES.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/TERMINAL.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/planner-support.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/reserved-configuration-check.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock-support.json
+[detached HEAD ff6ffce] research(p9): preserve complete one-sample nomination terminal
+ 2 files changed, 5777 insertions(+)
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/FILES.json
+ create mode 100644 research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/TERMINAL.json
+{
+  "status": "FIXED_PLANNER_VALUE_OR_SUPPORT_NOT_ESTABLISHED",
+  "source_head": "0f85bf0b77ec20c6319011c33f39efd2d6fd5686",
+  "stages": {
+    "5": {
+      "value-screen": {
+        "first": 0,
+        "configurations": 32,
+        "rows_per_method": 128,
+        "stock_wins": 14,
+        "planner_wins": 82,
+        "point_difference": 0.53125,
+        "configuration_bootstrap_interval": [
+          0.4453125,
+          0.6171875
+        ],
+        "gates": {
+          "fixed_mean_gain_at_least_five_points": true,
+          "paired_configuration_lower_bound_positive": true
+        },
+        "pass": true,
+        "scope": "Conditional on four fixed seeds; configurations are not assumed independent seeds. No package or population-generalisation certificate.",
+        "costs": {
+          "stock": {
+            "process_cpu_seconds": 23.86,
+            "process_elapsed_seconds": 24.58,
+            "queries": 0,
+            "root_rollouts": 0,
+            "measured_run_seconds": 15.026728,
+            "measured_query_seconds": 0.0
+          },
+          "planner": {
+            "process_cpu_seconds": 553.95,
+            "process_elapsed_seconds": 554.72,
+            "queries": 44397,
+            "root_rollouts": 202730,
+            "measured_run_seconds": 543.768603,
+            "measured_query_seconds": 386.639351
+          }
+        },
+        "resource_ceiling_met": true
+      },
+      "reserved-configuration-check": {
+        "first": 32,
+        "configurations": 96,
+        "rows_per_method": 384,
+        "stock_wins": 52,
+        "planner_wins": 234,
+        "point_difference": 0.4739583333333333,
+        "configuration_bootstrap_interval": [
+          0.4140625,
+          0.5338541666666666
+        ],
+        "gates": {
+          "fixed_mean_gain_at_least_five_points": true,
+          "paired_configuration_lower_bound_positive": true
+        },
+        "pass": true,
+        "scope": "Conditional on four fixed seeds; configurations are not assumed independent seeds. No package or population-generalisation certificate.",
+        "costs": {
+          "stock": {
+            "process_cpu_seconds": 65.16,
+            "process_elapsed_seconds": 67.8,
+            "queries": 0,
+            "root_rollouts": 0,
+            "measured_run_seconds": 37.927142,
+            "measured_query_seconds": 0.0
+          },
+          "planner": {
+            "process_cpu_seconds": 1633.78,
+            "process_elapsed_seconds": 1636.3700000000001,
+            "queries": 136980,
+            "root_rollouts": 620098,
+            "measured_run_seconds": 1602.344593,
+            "measured_query_seconds": 1130.780191
+          }
+        },
+        "resource_ceiling_met": true
+      },
+      "support": {
+        "stock": {
+          "status": "INHERITED_PAIR_NATURAL_SUPPORT_FAIL_IN_FIXED_POLICY_FAMILY",
+          "vow": 5,
+          "rows": 512,
+          "policy_configurations": 128,
+          "packages": {
+            "bloodfire": {
+              "active": 18,
+              "inactive": 110,
+              "reachable": 21,
+              "exclusive": 7
+            },
+            "hand": {
+              "active": 33,
+              "inactive": 95,
+              "reachable": 33,
+              "exclusive": 22
+            }
+          },
+          "cross_active": 11,
+          "gates": {
+            "bloodfire": {
+              "active": false,
+              "inactive": true,
+              "reachable": true,
+              "exclusive": false
+            },
+            "hand": {
+              "active": true,
+              "inactive": true,
+              "reachable": true,
+              "exclusive": true
+            }
+          },
+          "pass": false,
+          "outcomes": {
+            "loss": 446,
+            "win": 66
+          },
+          "counterfactual_checks": {
+            "consumer_clone_actions": 501
+          },
+          "incremental_hp_policies": 15,
+          "limits": [
+            "Support is not complete certificate, source/runtime oracle or P9.",
+            "Hand uses historical necessary activation, not proof its producer caused the later damage.",
+            "BF clones intervene on existing stock and consumer read path; they do not model adaptive whole-run policy response or producer removal.",
+            "Do not aggregate repeated local clone payoffs into a whole-run treatment effect.",
+            "This fixed controller-family failure is not universal package nonviability."
+          ],
+          "new_independent_package_confirmation": false,
+          "packages_admitted": 0,
+          "p9_certified": false
+        },
+        "planner": {
+          "status": "INHERITED_PAIR_NATURAL_SUPPORT_FAIL_IN_FIXED_POLICY_FAMILY",
+          "vow": 5,
+          "rows": 512,
+          "policy_configurations": 128,
+          "packages": {
+            "bloodfire": {
+              "active": 26,
+              "inactive": 102,
+              "reachable": 39,
+              "exclusive": 8
+            },
+            "hand": {
+              "active": 49,
+              "inactive": 79,
+              "reachable": 50,
+              "exclusive": 31
+            }
+          },
+          "cross_active": 18,
+          "gates": {
+            "bloodfire": {
+              "active": false,
+              "inactive": true,
+              "reachable": true,
+              "exclusive": true
+            },
+            "hand": {
+              "active": true,
+              "inactive": true,
+              "reachable": true,
+              "exclusive": true
+            }
+          },
+          "pass": false,
+          "outcomes": {
+            "loss": 196,
+            "win": 316
+          },
+          "counterfactual_checks": {
+            "consumer_clone_actions": 2212
+          },
+          "incremental_hp_policies": 26,
+          "limits": [
+            "Support is not complete certificate, source/runtime oracle or P9.",
+            "Hand uses historical necessary activation, not proof its producer caused the later damage.",
+            "BF clones intervene on existing stock and consumer read path; they do not model adaptive whole-run policy response or producer removal.",
+            "Do not aggregate repeated local clone payoffs into a whole-run treatment effect.",
+            "This fixed controller-family failure is not universal package nonviability."
+          ],
+          "new_independent_package_confirmation": false,
+          "packages_admitted": 0,
+          "p9_certified": false
+        }
+      },
+      "support_pass": false
+    }
+  },
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "last_vow": 5,
+  "v0_skipped": true
+}
+{
+  "status": "FIXED_PLANNER_VALUE_OR_SUPPORT_NOT_ESTABLISHED",
+  "source_head": "a31e980b7cc69a8bd23e92229258a66abe169be4",
+  "new_controller_samples": 1,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "qualified_cases": 480,
+  "population_terminal": {
+    "status": "FIXED_PLANNER_VALUE_OR_SUPPORT_NOT_ESTABLISHED",
+    "source_head": "0f85bf0b77ec20c6319011c33f39efd2d6fd5686",
+    "stages": {
+      "5": {
+        "value-screen": {
+          "first": 0,
+          "configurations": 32,
+          "rows_per_method": 128,
+          "stock_wins": 14,
+          "planner_wins": 82,
+          "point_difference": 0.53125,
+          "configuration_bootstrap_interval": [
+            0.4453125,
+            0.6171875
+          ],
+          "gates": {
+            "fixed_mean_gain_at_least_five_points": true,
+            "paired_configuration_lower_bound_positive": true
+          },
+          "pass": true,
+          "scope": "Conditional on four fixed seeds; configurations are not assumed independent seeds. No package or population-generalisation certificate.",
+          "costs": {
+            "stock": {
+              "process_cpu_seconds": 23.86,
+              "process_elapsed_seconds": 24.58,
+              "queries": 0,
+              "root_rollouts": 0,
+              "measured_run_seconds": 15.026728,
+              "measured_query_seconds": 0.0
+            },
+            "planner": {
+              "process_cpu_seconds": 553.95,
+              "process_elapsed_seconds": 554.72,
+              "queries": 44397,
+              "root_rollouts": 202730,
+              "measured_run_seconds": 543.768603,
+              "measured_query_seconds": 386.639351
+            }
+          },
+          "resource_ceiling_met": true
+        },
+        "reserved-configuration-check": {
+          "first": 32,
+          "configurations": 96,
+          "rows_per_method": 384,
+          "stock_wins": 52,
+          "planner_wins": 234,
+          "point_difference": 0.4739583333333333,
+          "configuration_bootstrap_interval": [
+            0.4140625,
+            0.5338541666666666
+          ],
+          "gates": {
+            "fixed_mean_gain_at_least_five_points": true,
+            "paired_configuration_lower_bound_positive": true
+          },
+          "pass": true,
+          "scope": "Conditional on four fixed seeds; configurations are not assumed independent seeds. No package or population-generalisation certificate.",
+          "costs": {
+            "stock": {
+              "process_cpu_seconds": 65.16,
+              "process_elapsed_seconds": 67.8,
+              "queries": 0,
+              "root_rollouts": 0,
+              "measured_run_seconds": 37.927142,
+              "measured_query_seconds": 0.0
+            },
+            "planner": {
+              "process_cpu_seconds": 1633.78,
+              "process_elapsed_seconds": 1636.3700000000001,
+              "queries": 136980,
+              "root_rollouts": 620098,
+              "measured_run_seconds": 1602.344593,
+              "measured_query_seconds": 1130.780191
+            }
+          },
+          "resource_ceiling_met": true
+        },
+        "support": {
+          "stock": {
+            "status": "INHERITED_PAIR_NATURAL_SUPPORT_FAIL_IN_FIXED_POLICY_FAMILY",
+            "vow": 5,
+            "rows": 512,
+            "policy_configurations": 128,
+            "packages": {
+              "bloodfire": {
+                "active": 18,
+                "inactive": 110,
+                "reachable": 21,
+                "exclusive": 7
+              },
+              "hand": {
+                "active": 33,
+                "inactive": 95,
+                "reachable": 33,
+                "exclusive": 22
+              }
+            },
+            "cross_active": 11,
+            "gates": {
+              "bloodfire": {
+                "active": false,
+                "inactive": true,
+                "reachable": true,
+                "exclusive": false
+              },
+              "hand": {
+                "active": true,
+                "inactive": true,
+                "reachable": true,
+                "exclusive": true
+              }
+            },
+            "pass": false,
+            "outcomes": {
+              "loss": 446,
+              "win": 66
+            },
+            "counterfactual_checks": {
+              "consumer_clone_actions": 501
+            },
+            "incremental_hp_policies": 15,
+            "limits": [
+              "Support is not complete certificate, source/runtime oracle or P9.",
+              "Hand uses historical necessary activation, not proof its producer caused the later damage.",
+              "BF clones intervene on existing stock and consumer read path; they do not model adaptive whole-run policy response or producer removal.",
+              "Do not aggregate repeated local clone payoffs into a whole-run treatment effect.",
+              "This fixed controller-family failure is not universal package nonviability."
+            ],
+            "new_independent_package_confirmation": false,
+            "packages_admitted": 0,
+            "p9_certified": false
+          },
+          "planner": {
+            "status": "INHERITED_PAIR_NATURAL_SUPPORT_FAIL_IN_FIXED_POLICY_FAMILY",
+            "vow": 5,
+            "rows": 512,
+            "policy_configurations": 128,
+            "packages": {
+              "bloodfire": {
+                "active": 26,
+                "inactive": 102,
+                "reachable": 39,
+                "exclusive": 8
+              },
+              "hand": {
+                "active": 49,
+                "inactive": 79,
+                "reachable": 50,
+                "exclusive": 31
+              }
+            },
+            "cross_active": 18,
+            "gates": {
+              "bloodfire": {
+                "active": false,
+                "inactive": true,
+                "reachable": true,
+                "exclusive": true
+              },
+              "hand": {
+                "active": true,
+                "inactive": true,
+                "reachable": true,
+                "exclusive": true
+              }
+            },
+            "pass": false,
+            "outcomes": {
+              "loss": 196,
+              "win": 316
+            },
+            "counterfactual_checks": {
+              "consumer_clone_actions": 2212
+            },
+            "incremental_hp_policies": 26,
+            "limits": [
+              "Support is not complete certificate, source/runtime oracle or P9.",
+              "Hand uses historical necessary activation, not proof its producer caused the later damage.",
+              "BF clones intervene on existing stock and consumer read path; they do not model adaptive whole-run policy response or producer removal.",
+              "Do not aggregate repeated local clone payoffs into a whole-run treatment effect.",
+              "This fixed controller-family failure is not universal package nonviability."
+            ],
+            "new_independent_package_confirmation": false,
+            "packages_admitted": 0,
+            "p9_certified": false
+          }
+        },
+        "support_pass": false
+      }
+    },
+    "packages_admitted": 0,
+    "p9_certified": false,
+    "last_vow": 5,
+    "v0_skipped": true
+  }
+}
