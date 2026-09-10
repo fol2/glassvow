@@ -1,0 +1,51 @@
+{
+  "kind": "HAND_ADAPTIVE_READER_DELIVERY_REPAIR",
+  "status": "HAND_ADAPTIVE_QUERY_CLONE_QUALIFIED_NOT_CERTIFICATE",
+  "original_terminal": {
+    "status": "INCONCLUSIVE",
+    "source_head": "83fde721117baaf4f66987fbc80c92ac05088fe5",
+    "packages_admitted": 0,
+    "p9_certified": false,
+    "population_outcomes": 0,
+    "failure": "ValueError('DRAW_INSTANCE_PROVENANCE')"
+  },
+  "original_capture_sha256": "3b1ae4801349103f1e5fc975a3c5e5007f28be820ae0c073a602362c5a62ceae",
+  "original_reader_sha256": "711eeede46216092e5db81ae534710764de22412cd644f5f1f500953c22ad291",
+  "corrected_reader_sha256": "b5d42919d9fb9e742b1ab75ae1bb77b8a3dc8253977dd32ab487c61dba003270",
+  "native_draw_function": "func draw_cards(run: RunState, cb: CombatState, n: int) -> void:\n\tfor _i: int in range(n):\n\t\tif cb.hand.size() >= 10:\n\t\t\tbreak\n\t\tif cb.draw.is_empty():\n\t\t\tif cb.discard.is_empty():\n\t\t\t\tbreak\n\t\t\tvar count: int = cb.discard.size()\n\t\t\tcb.draw = cb.discard\n\t\t\tcb.discard = []\n\t\t\t_shuffle_cards(run.rng, cb.draw)\n\t\t\tcb.queue.append({\"t\": EventTypes.RESHUFFLE, \"n\": count})\n\t\tvar c: CardInst = cb.draw.pop_back()\n\t\tcb.hand.append(c)\n\t\tcb.queue.append({\"t\": EventTypes.DRAW, \"uid\": c.uid, \"id\": String(c.id)})\n\n\n# ---------------------------------------------------------------- shared laws\n",
+  "change": {
+    "before": "[10002,10003]+list(range(10100,10100+drawn))",
+    "after": "[10002,10003]+list(range(10105,10105-drawn,-1))"
+  },
+  "reason": "Native card identity/order was always the contract; the decoder expected front-pop instead of native back-pop. No intervention, fixture, engine, policy, raw outcome or acceptance rule is changed.",
+  "regression_tests": 9,
+  "original_source_checks_reused": 7,
+  "qualification": {
+    "status": "HAND_ADAPTIVE_QUERY_CLONE_QUALIFIED_NOT_CERTIFICATE",
+    "qualified_cases": 384,
+    "default_on_reference_cases": 48,
+    "named_mutants_detected": {
+      "public-mutant": 48,
+      "exact-mutant": 48
+    },
+    "source_energy_exhaust_and_background_draw_preserved": true,
+    "all_instance_ids_not_fixed_fixture_uids": true,
+    "all_three_masks_retained_by_both_clone_paths": true,
+    "full_all_on_policy_queries_and_state_transitions_equal": true,
+    "limits": [
+      "Constructed plumbing proof, not independent runtime/source oracle or population value.",
+      "Existing null preview behaviour for unsupported native specials is retained; no new preview prediction capability is claimed.",
+      "Preparation and Surge are alternative sources of one Hand family, not separate strategies.",
+      "Descriptor predictive validity, adaptive whole-run value, policy/economy and independent confirmation remain open."
+    ],
+    "new_population_outcomes": 0,
+    "new_independent_samples": 0,
+    "packages_admitted": 0,
+    "p9_certified": false
+  },
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "packages_admitted": 0,
+  "p9_certified": false
+}
