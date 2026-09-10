@@ -1,0 +1,89 @@
+{
+  "kind": "COMPLETE_CONTINUATION_CACHE_COLD_READBACK",
+  "published_head": "7b2d8c53ea7235f4cff5fb37434d69e50db12184",
+  "run_id": "34419817917",
+  "files": [
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/FREEZE.json",
+      "bytes": 591,
+      "sha256": "c6920f9efa80da54a9b34f7d8ef0bfc90d89b5eec6a84dbea31214b26404c285"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/PROTOCOL.json",
+      "bytes": 3233,
+      "sha256": "a46a0ef91d0354d278d9412acbded45f7b7f9806568dbeca4c44127a3dd619fa"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/benchmark.py",
+      "bytes": 11988,
+      "sha256": "15004a488edcbfd774d15ab6ecb0e26db597dcb9a0e9560be0118f5578d71919"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/cache_gate.gd",
+      "bytes": 2477,
+      "sha256": "699d003c82af7382507bfbb6a8a5c7aa175a26c2f50d05fc45748fca37c25eb9"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/continuation_cache.gd",
+      "bytes": 2618,
+      "sha256": "df6f1753217b905d1fcc9ec85a078c964b9ea18389fa07d9960208e094955e69"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/execution-1/ARCHIVE.json",
+      "bytes": 143819,
+      "sha256": "ea28dfb583de61b12b2c26db100725f12d2f860f54791fe6868c05ec93b45e0c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/execution-1/RESULTS.json",
+      "bytes": 2213,
+      "sha256": "98419cd3dca080e9aedc9c53f31acd725aa01c973333087fa8c1f4446b1fd887"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/execution-1/SOURCE-DELTA.json",
+      "bytes": 319,
+      "sha256": "d8ef96a90126128cc1e8dcd166bde94f5466a3d34ba5601e7ff89e6f30fb215c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/execution-1/TERMINAL.json",
+      "bytes": 178,
+      "sha256": "1aeb443a76b51436b553832b5dc9c178259eeab1dea1058d279eeb6fb47b5966"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/execution-1/capture.tar.xz",
+      "bytes": 711264,
+      "sha256": "96b93bc27d7906cf5854cfebbdc2e2dcc045db615c3834cca72f6a33d302b8ca"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/execution-1/engine.log",
+      "bytes": 576,
+      "sha256": "e82b345023cd388cd226e45db252344b89ab1313ce60c620a46e66b952fb1825"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/execution-1/runner.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/execution-1/runner.stdout",
+      "bytes": 178,
+      "sha256": "1aeb443a76b51436b553832b5dc9c178259eeab1dea1058d279eeb6fb47b5966"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/execution-1/tests.log",
+      "bytes": 761,
+      "sha256": "0ff72b12b51b67d422c6593df96009f17c1f730f32bd1768e4e02d95bdc39cbc"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-cache-v1/test_cache.py",
+      "bytes": 2796,
+      "sha256": "ff3a785bc63d19bf4d9d54ae69251187806530ee2b3c21d8947d928c9567245e"
+    }
+  ],
+  "archive_members": 813,
+  "all_bytes_equal": true,
+  "readout_reproduced": true,
+  "scientific_status": "EXACT_EQUIVALENCE_SPEEDUP_NOT_ESTABLISHED",
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
