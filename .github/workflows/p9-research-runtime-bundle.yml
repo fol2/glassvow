@@ -13,10 +13,10 @@ env:
   STUDY: research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1
 jobs:
   bundle:
-    name: Complete retained provenance and actual nested source audit - no engine
+    name: Finish existing Hand call-path and capsule closure - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 8
     permissions:
       contents: write
     steps:
@@ -25,82 +25,108 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
+          sparse-checkout-cone-mode: false
           sparse-checkout: |
-            research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1
-            research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1
-      - name: Bind source and complete only the two missing offline analyses
-        id: analysis
+            /research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1/
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+      - name: Repair manifest ordering and complete only the missing source closure
+        id: closure
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          echo "PUBLISHED_HEAD=$GITHUB_SHA" >> "$GITHUB_ENV"
           python3 - <<'PY'
-          import hashlib,os,pathlib,subprocess
-          root=pathlib.Path(os.environ['STUDY'])
-          expected={'descriptor.py':'f41337fb6a0ea7fa91a0e2ede26ebf0670cd724b','dispatch_audit.py':'0955637367dd836f9addb165922f708fabb41aa6'}
-          for n,h in expected.items():
-              b=(root/n).read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==h
-              assert subprocess.check_output(['git','rev-parse','HEAD:'+str(root/n)]).decode().strip()==h
-          assert not (root/'descriptor-1').exists() and not (root/'dispatch-1').exists()
+          import hashlib,os,pathlib
+          root=pathlib.Path(os.environ['STUDY']);p=root/'finalize.py';b=p.read_bytes()
+          assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()=='54d21b6d6a3ff38370788534c81751eea2d59c76'
+          assert not (root/'closure-1').exists()
+          old="    paths=[root/'finalize.py',root/'close.py',root/'descriptor.py',root/'descriptor-1/SYNC-MANIFEST.json']"
+          new="""    # Bind the inner manifest AFTER final capsule mutations, not the earlier sync.
+              sync_path=root/'descriptor-1/SYNC-MANIFEST.json'
+              sync_records=load(sync_path)
+              require(len({r['path'] for r in sync_records})==len(sync_records),'SYNC_DUPLICATE_PATH')
+              for r in sync_records:
+                  relative=Path(r['path'])
+                  require(not relative.is_absolute() and '..' not in relative.parts,'SYNC_PATH')
+                  data=(repo/relative).read_bytes()
+                  r.update(bytes=len(data),sha256=sha(data),git_blob=blob(data))
+              save(sync_path,sync_records)
+              paths=[root/'finalize.py',root/'test_finalize.py',root/'close.py',root/'descriptor.py',sync_path]"""
+          # Dedent only the source prefix introduced by YAML indentation.
+          lines=new.splitlines();new='\n'.join([lines[0]]+[x[10:] for x in lines[1:]])
+          text=b.decode();assert text.count(old)==1
+          p.write_text(text.replace(old,new,1))
+          compile(p.read_text(),str(p),'exec')
           PY
-          python3 "$STUDY/descriptor.py" --self-test > "$RUNNER_TEMP/field-tests.log" 2>&1
-          python3 "$STUDY/descriptor.py" "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/descriptor-1" > "$RUNNER_TEMP/field-readout.log" 2>&1
-          mkdir "$STUDY/dispatch-1"
-          python3 "$STUDY/dispatch_audit.py" "$STUDY/execution-1" "$STUDY/dispatch-1/SOURCE.json"
-      - name: Preserve complete output or actual diagnostics
+          (cd "$STUDY" && python3 -m unittest -v test_finalize) > "$RUNNER_TEMP/hand-final-tests.log" 2>&1
+          python3 "$STUDY/finalize.py" run "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/closure-1" > "$RUNNER_TEMP/hand-final-run.log" 2>&1
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,shutil
+          root=pathlib.Path(os.environ['STUDY']);out=root/'closure-1'
+          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('hand-final-*.log'):shutil.copyfile(p,out/p.name)
+          manifest=json.loads((out/'FILES.json').read_bytes())
+          for p in out.glob('*.log'):
+              b=p.read_bytes();manifest.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
+          (out/'FILES.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          for r in json.loads((root/'descriptor-1/SYNC-MANIFEST.json').read_bytes()):
+              b=pathlib.Path(r['path']).read_bytes();assert len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
+          PY
+      - name: Publish coherent source and closure or retain actual failure
         if: always()
         shell: bash
         run: |
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib,shutil,sys
-          root=pathlib.Path(os.environ['STUDY']);out=root/'offline-publication-1';out.mkdir(exist_ok=False)
-          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('field-*.log'):shutil.copyfile(p,out/p.name)
-          completed=(root/'descriptor-1/RESULTS.json').exists() and (root/'dispatch-1/SOURCE.json').exists()
-          (out/'TERMINAL.json').write_text(json.dumps({'status':'OFFLINE_ANALYSES_COMPLETE' if completed else 'OFFLINE_DELIVERY_INCOMPLETE','new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
-          paths=[root/'descriptor.py',root/'dispatch_audit.py']
-          for d in ('descriptor-1','dispatch-1','offline-publication-1'):
-              paths.extend(p for p in (root/d).glob('*') if p.is_file())
-          records=[{'path':str(p.relative_to(root)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(paths)]
-          (out/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
-          sys.path.insert(0,str(root.resolve()));import study
-          study.publish(pathlib.Path('.').resolve(),root.resolve(),os.environ.get('PUBLISHED_HEAD',os.environ['GITHUB_SHA']),'research(p9): preserve retained Hand provenance and exact nested dispatch outputs')
-          PY
+          set -euo pipefail
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if [ '${{ steps.closure.outcome }}' = success ]; then
+            git add "$STUDY/finalize.py" "$STUDY/closure-1" "$STUDY/descriptor-1/SYNC-MANIFEST.json" research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/SESSION-STATE.json research/p9-six-route/package-disposition-20260908/ROADMAP.md
+          else
+            mkdir "$STUDY/closure-delivery-1"
+            cp "$RUNNER_TEMP"/hand-final-*.log "$STUDY/closure-delivery-1/" 2>/dev/null || true
+            printf '%s\n' '{"status":"CLOSURE_DELIVERY_INCOMPLETE","new_native_runs":0,"packages_admitted":0,"p9_certified":false}' > "$STUDY/closure-delivery-1/TERMINAL.json"
+            git add "$STUDY/closure-delivery-1"
+          fi
+          git commit -m 'research(p9): preserve exact Hand closure and actual delivery diagnostics'
+          git push origin HEAD:refs/heads/$branch
+          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        if: always() && env.PUBLISHED_HEAD != ''
+        if: steps.closure.outcome == 'success' && env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
           fetch-depth: 1
           persist-credentials: false
+          sparse-checkout-cone-mode: false
           sparse-checkout: |
-            research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1
-            research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1
-      - name: Cold-read all new bytes and reproduce both offline analyses
-        if: steps.analysis.outcome == 'success'
+            /research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1/
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+      - name: Read committed bytes and reconstruct the complete inherited call path
+        if: steps.closure.outcome == 'success' && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
+          set -euo pipefail
+          python3 "cold/$STUDY/finalize.py" verify "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/closure-1/REMOTE-READBACK.json"
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess,sys,tempfile
-          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')/root;out=root/'offline-publication-1'
-          assert (out/'FILES.json').read_bytes()==(cold/'offline-publication-1/FILES.json').read_bytes()
-          records=json.loads((out/'FILES.json').read_bytes())
-          for r in records:
-              p=pathlib.Path(r['path']);assert not p.is_absolute() and '..' not in p.parts
-              a=(root/p).read_bytes();b=(cold/p).read_bytes();assert a==b and len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256'],str(p)
-          with tempfile.TemporaryDirectory(prefix='hand-offline-readback-') as d:
-              p=pathlib.Path(d)
-              subprocess.run([sys.executable,str(cold/'descriptor.py'),str(pathlib.Path('cold').resolve()),str(p/'descriptor')],check=True,stdout=subprocess.DEVNULL)
-              for n in ('RESULTS.json','FIELDS.jsonl','RUN-COVERAGE.json','INPUTS.json'):
-                  assert (p/'descriptor'/n).read_bytes()==(cold/'descriptor-1'/n).read_bytes(),n
-              subprocess.run([sys.executable,str(cold/'dispatch_audit.py'),str(cold/'execution-1'),str(p/'dispatch.json')],check=True)
-              assert (p/'dispatch.json').read_bytes()==(cold/'dispatch-1/SOURCE.json').read_bytes()
-          receipt={'kind':'HAND_RETAINED_FIELDS_AND_DISPATCH_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':records,'all_bytes_equal':True,'full_512_run_fields_reproduced':True,'actual_dispatch_source_reproduced':True,'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
-          (out/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          sys.path.insert(0,str(root.resolve()));import study
-          study.publish(pathlib.Path('.').resolve(),out.resolve(),os.environ['PUBLISHED_HEAD'],'research(p9): record cold-reproduced retained Hand fields and source audit')
-          print((root/'descriptor-1/RESULTS.json').read_text())
+          import hashlib,json,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')
+          for r in json.loads((cold/root/'descriptor-1/SYNC-MANIFEST.json').read_bytes()):
+              b=(cold/r['path']).read_bytes();assert len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
+          result=json.loads((cold/root/'closure-1/DECISION.json').read_bytes())
+          print('CLOSURE_DECISION='+json.dumps({k:v for k,v in result.items() if k not in ('qualification','factual_fields')}))
+          print('CALL_PATH='+ (cold/root/'closure-1/PLANNER-CALL-PATH.json').read_text())
           PY
-      - name: Reject incomplete analysis
-        if: always() && steps.analysis.outcome != 'success'
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
+          git add "$STUDY/closure-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): record cold-read Hand call-path and capsule byte identities'
+          git push origin HEAD:refs/heads/$branch
+          echo "VERIFIED_HEAD=$(git rev-parse HEAD)"
+      - name: Reject incomplete delivery
+        if: always() && steps.closure.outcome != 'success'
         run: exit 3
