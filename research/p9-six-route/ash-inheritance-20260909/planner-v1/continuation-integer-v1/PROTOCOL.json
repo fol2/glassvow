@@ -1,0 +1,21 @@
+{
+  "kind": "ONE_SAFE_INTEGER_COMPUTATION_REFINEMENT",
+  "reference_main": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "question": "Does replacing only the exact identity int->string->binary64->int conversion, for TYPE_INT inside +/-(2^53-1), remove enough remaining continuation work while preserving every decision?",
+  "base_kind": "continuation-cache-v1 remains EXACT_EQUIVALENCE_SPEEDUP_NOT_ESTABLISHED at ratios0.8490849837051894/0.8625701172870984. No result or target is changed.",
+  "change": "Append one bounded ji override. All floats, strings and large integers call the old conversion. Existing memo scopes/formulas, benchmark/inputs and performance threshold are unchanged.",
+  "source_sha256": {
+    "refinement.py": "9ba82b8ed7f94c1d3f3f0759bb6ee8836465ad6d8d4962558340571551a2898b",
+    "test_refinement.py": "e8fad1c22a47c0b80bf2485cbb05099906dbeef7c7b9599ea65fef25d9455cf9"
+  },
+  "bound_protocol_sha256": "79ec81b1609982c2b0ed08c4c7650fc19f798ccffce20f033dcbc810f8a98369",
+  "numeric_checks": 27,
+  "bound": 9007199254740991,
+  "qualification": "Original480 full compatibility captures, 24 cache lifecycle cases and stale-cache mutant; add exact numeric boundary/noninteger checks and unguarded-cast negative witnesses before timed queries.",
+  "benchmark": "Reuse exact original eight-run cell in fixed reference/memo then memo/reference order; both CPU ratios<=0.85. No new policy or independent sample, no increased repetitions.",
+  "decision": "Full-workload resource qualification remains necessary. Old resource terminal and both prior cache outcomes are immutable; no threshold amendment or statistical promotion.",
+  "author_review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT; valid int decimal round-trip is exact in this range; original conversion retained elsewhere.",
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
