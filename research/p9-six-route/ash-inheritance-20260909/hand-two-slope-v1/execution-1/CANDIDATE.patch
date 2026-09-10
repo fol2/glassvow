@@ -1,0 +1,57 @@
+--- a/content/full-content.json
++++ b/content/full-content.json
+@@ -1101,7 +1101,9 @@
+         {
+           "kind": "special",
+           "id": "phantom",
+-          "n": 3
++          "n": 6,
++          "reserve": 4,
++          "floor_per": 2
+         }
+       ],
+       "up": {
+@@ -1109,13 +1111,15 @@
+           {
+             "kind": "special",
+             "id": "phantom",
+-            "n": 4
++            "n": 7,
++            "reserve": 4,
++            "floor_per": 2
+           }
+         ],
+-        "text": "Deal @4@ damage for each card in your hand."
++        "text": "Deal @2@ damage per card in your hand up to 4, then @7@ per card above 4."
+       },
+       "name": "Phantom Blades",
+-      "text": "Deal @3@ damage for each card in your hand."
++      "text": "Deal @2@ damage per card in your hand up to 4, then @6@ per card above 4."
+     },
+     "devour": {
+       "type": "attack",
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -951,6 +951,13 @@
+ 			push_error("CombatRules: unknown effect kind %s" % kind)
+ 
+ 
++## Research-only isolated Hand law; missing fields recover native linear payoff.
++func _hand_two_slope_raw(stock: int, fx: Dictionary) -> int:
++	var q: int = maxi(0, stock)
++	var reserve: int = maxi(0, _ji(fx.get("reserve", 0)))
++	return _ji(fx["n"]) * maxi(0, q - reserve) + _ji(fx.get("floor_per", 0)) * mini(q, reserve)
++
++
+ func _apply_special(
+ 	run: RunState,
+ 	cb: CombatState,
+@@ -980,7 +987,7 @@
+ 		"doubleBlock":
+ 			gain_block_player(cb, cb.player.block, false, run)
+ 		"phantom":
+-			hit_enemy(run, cb, target, _ji(fx["n"]) * cb.hand.size(), true, damage_mult)
++			hit_enemy(run, cb, target, _hand_two_slope_raw(cb.hand.size(), fx), true, damage_mult)
+ 		"devour":
+ 			hit_enemy(run, cb, target, _ji(fx["n"]), true, damage_mult)
+ 			if target.hp <= 0:

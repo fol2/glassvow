@@ -1,0 +1,50 @@
+{
+  "status": "ISOLATED_HAND_DESIGN_CONSTRUCTED_CONTROLLER_AND_OPERATOR_QUALIFICATION_REQUIRED",
+  "source_parameters_reused_not_fitted": {
+    "false": {
+      "n": 6,
+      "reserve": 4,
+      "floor_per": 2
+    },
+    "true": {
+      "n": 7,
+      "reserve": 4,
+      "floor_per": 2
+    }
+  },
+  "base": {
+    "content_sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9",
+    "combat_sha256": "3ccb89f69f50e41d5a46eadd8f48c0a907fd0e382cd492b2c34dd5f93e091ad0"
+  },
+  "candidate": {
+    "content_sha256": "ac779e08b0afc5054242ecf5dc1f7421e648e4ee114607708584d1d74ce92cdc",
+    "combat_sha256": "9f3f0e41202a443bb54f431488dc5d1c4096adab0786d80e1b2e9ffe45f512df"
+  },
+  "scope": "One inherited Hand payoff isolation, NOT the failed broad candidate. Only Phantom effect fields/display text and its raw dispatch change. Native sources, rarity, pools, Core/Art, Bloodfire, IDs, save state and all other functions stay unchanged.",
+  "legacy_linear_scorers": [
+    {
+      "path": "legacy_policy.gd",
+      "sha256": "731122ce5fbc0773f6c97696fab449e21df415692b741eceeab79c521c54a72d"
+    }
+  ],
+  "decisions": {
+    "old_coefficient_zero_mask_invalid": true,
+    "new_all_terms_off_algebraic_null": true,
+    "native_linear_default_identity": true,
+    "native_query_or_parser_qualified": false,
+    "unchanged_controller_compatible_with_new_payoff_claimed": false,
+    "population_opened": false
+  },
+  "witness": "At q=4, n=0 with floor_per=2 still yields8 raw damage. The retained linear scorer at n=6,q=4 projects24 rather than8. A higher n is not by itself a controller-compatible nonlinear mechanic.",
+  "next_action": "Repair only the effect-law readout/consumer mask and source-bind the affected public queries with exact native-default parity; no weights or search-budget retuning. Then a finite native delta/null/envelope gate is required BEFORE any new signed-control/value cohort. Keep the historical Hand/Bloodfire negatives immutable.",
+  "limits": [
+    "Exact-source construction and algebra only; no new native execution or behavioral equivalence theorem.",
+    "The table covers native remaining-hand counts0..9; it is not a population distribution or HP/win forecast.",
+    "Inherited-family eligibility does not admit a new strategy or erase prior scoped failures.",
+    "No fixed validation model, reward ordering, statistical rule, controller result or protected cohort changes."
+  ],
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
