@@ -1,0 +1,30 @@
+{
+  "command": [
+    "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/home/runner/work/_temp/hand-control-work2/baseline",
+    "-s",
+    "res://probe.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/control-v1/execution-2/headers/baseline-header.config.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/control-v1/execution-2/headers/baseline-header.ndjson"
+  ],
+  "returncode": 0,
+  "failure": null,
+  "seconds": 0.46476089200000104,
+  "config": {
+    "id": "baseline-header",
+    "catalogue": "baseline",
+    "aspect": "ashwarden",
+    "vow": 0,
+    "arm": 2,
+    "seed0": 73760100,
+    "runs": 0
+  },
+  "status": "COMPLETE",
+  "raw": {
+    "bytes": 4231,
+    "sha256": "e047d80e3a46b5af961e44918d789f8c49e45a19c328a747de28c704df815fdf"
+  }
+}
