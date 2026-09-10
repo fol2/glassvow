@@ -1,0 +1,40 @@
+{
+  "kind": "ACTUAL_NESTED_PLANNER_DISPATCH_SOURCE_AUDIT",
+  "source": {
+    "lab_policy.gd": {
+      "bytes": 1825,
+      "sha256": "ef294f057d0ab23a13c2af57d9ced9a27c74d622c308550e4be932617c8d7261"
+    },
+    "public_rollout.gd": {
+      "bytes": 634,
+      "sha256": "0598188e72ea546ebf5fa14bb0c6448775d060dcf725afc53d9a01e04cdc11c5"
+    },
+    "public_rollout_base.gd": {
+      "bytes": 2207,
+      "sha256": "9e54f661563e5421e62595b9b5335e44e871e68acf89a020db7e8b9d0eacbce7"
+    }
+  },
+  "code": {
+    "lab_policy.gd": {
+      "prelude": "extends \"res://rollout_policy.gd\"\n## A native-confirmed terminal extension at the sampled leaf.\n## This is a bounded public-state forecast, not an optimal-play certificate.\nvar terminal_probes: int=0\nvar terminal_hits: int=0\n",
+      "functions": {
+        "one_action_terminal": "func one_action_terminal(g: GlassvowGame) -> Dictionary:\n if g.cb.over:return {}\n var living: Array[EnemyCombatant]=g.cb.living_enemies()\n if living.is_empty():return {}\n for card: CardInst in g.cb.hand:\n  var d: Dictionary=g.rules.card_data(card)\n  var targeting: String=str(d.get(\"target\",\"\"))\n  if targeting!=\"enemy\" and targeting!=\"allEnemies\":continue\n  if targeting==\"enemy\" and living.size()!=1:continue\n  var target: Variant=living[0].idx if targeting==\"enemy\" else null\n  if not g.rules.can_play(g.run,g.cb,card,target):continue\n  # Preview only selects work. Actual native terminal state is the authority.\n  var plausible: bool=true\n  for enemy: EnemyCombatant in living:\n   var pv: Variant=g.rules.preview_play(g.cb,card,enemy.idx,g.run)\n   if typeof(pv)!=TYPE_DICTIONARY or not pv.get(\"lethal\",false):\n    plausible=false;break\n  if not plausible:continue\n  var model: GlassvowGame=Cloner.clone_public(g,0)\n  var command: Dictionary={\"t\":\"playCard\",\"uid\":card.uid,\"target\":target}\n  model.apply(command);terminal_probes+=1\n  if model.last_ret==true and model.cb.over and model.cb.result==\"win\" and model.cb.player.hp>0:\n   terminal_hits+=1\n   return {\"command\":command,\"value\":1000000.0+10.0*model.run.player.hp}\n return {}\n"
+      }
+    },
+    "public_rollout.gd": {
+      "prelude": "extends RefCounted\n## Minimum runtime compatibility: preserve existing research intervention flags.\nconst Base: GDScript = preload(\"res://public_rollout_base.gd\")\nconst SWITCHES: Array[String] = [\"bloodfire_enabled\", \"bloodfire_producer_enabled\", \"bloodfire_consumer_enabled\", \"hand_preparation_enabled\", \"hand_surge_enabled\", \"hand_phantom_enabled\"]\n",
+      "functions": {
+        "clone_public": "static func clone_public(g: GlassvowGame, sample: int) -> GlassvowGame:\n var out: GlassvowGame = Base.clone_public(g,sample)\n for prop: Dictionary in g.rules.get_property_list():\n  var key: String = str(prop.name)\n  if key in SWITCHES:out.rules.set(key,g.rules.get(key))\n return out\n"
+      }
+    },
+    "public_rollout_base.gd": {
+      "prelude": "extends RefCounted\n## Research rollouts clone native state but replace hidden randomness/order.\n## This is a finite public-information forecast, never an exact win oracle.\nstatic var _field_names: Dictionary = {}\n",
+      "functions": {
+        "clone_public": "static func clone_public(g: GlassvowGame, sample: int) -> GlassvowGame:\n var memo: Dictionary={}\n var run: RunState=copy_value(g.run,memo)\n var cb: CombatState=copy_value(g.cb,memo)\n # Only the multiset is used. Never retain the actual top-of-deck order.\n cb.draw.sort_custom(card_order)\n var random: Rng=Rng.new(918317+7919*sample)\n for i: int in range(cb.draw.size()-1,0,-1):\n  var j: int=random.pick_index(i+1)\n  var card: CardInst=cb.draw[i];cb.draw[i]=cb.draw[j];cb.draw[j]=card\n run.rng=Rng.new(318193+15427*sample)\n var out: GlassvowGame=GlassvowGame.new(g.content,run);out.cb=cb\n return out\n"
+      }
+    }
+  },
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
