@@ -1,0 +1,21 @@
+{
+  "kind": "PREOUTCOME_CONTROL_DELIVERY_REPAIR",
+  "scientific_protocol_git_blob": "c33a0cde306eed3e8ee9ba68288db49cc6e1538d",
+  "original_control_git_blob": "c8cfd274a697e1ca3619900778b04eeaec708d9c",
+  "repaired_source_git_blobs": {
+    "control.py": "116e429989aedf7d7607ce7036b75df97b0f61fd",
+    "test_control.py": "c883dbb462c3c7f0187b35c08246dfe82d4fa538",
+    "test_status_binding.py": "c87f262fecb53344504878b9930821b95e257829"
+  },
+  "old_execution": "execution-1",
+  "old_terminal": "INCONCLUSIVE: NONCARD_CONTENT_DELTA",
+  "old_outcome_rows": 0,
+  "new_execution": "execution-2",
+  "defect": "The scope predicate compared every non-card section with product main, accidentally rejecting the Bloodfire status already explicitly included in the selected minimum background.",
+  "correction": "Bind candidate non-card sections to the exact archived inherited reference content SHA256 4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9; removing only that bound Bloodfire status must reproduce the entire main status dictionary and order. All other main non-card sections remain identical. No arbitrary status whitelist.",
+  "unchanged": ["candidate source archive and content/combat bytes", "shipping signed arm2 and reader", "128 assigned seeds starting73760100", "eight cells and1024 outcomes", "thresholds and report-only intervals", "watchdogs, workers and raw limits", "old failure capture"],
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "new_outcomes_at_repair": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
