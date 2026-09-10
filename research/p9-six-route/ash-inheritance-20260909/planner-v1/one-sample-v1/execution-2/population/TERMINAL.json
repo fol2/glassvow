@@ -1,0 +1,197 @@
+{
+  "status": "FIXED_PLANNER_VALUE_OR_SUPPORT_NOT_ESTABLISHED",
+  "source_head": "0f85bf0b77ec20c6319011c33f39efd2d6fd5686",
+  "stages": {
+    "5": {
+      "value-screen": {
+        "first": 0,
+        "configurations": 32,
+        "rows_per_method": 128,
+        "stock_wins": 14,
+        "planner_wins": 82,
+        "point_difference": 0.53125,
+        "configuration_bootstrap_interval": [
+          0.4453125,
+          0.6171875
+        ],
+        "gates": {
+          "fixed_mean_gain_at_least_five_points": true,
+          "paired_configuration_lower_bound_positive": true
+        },
+        "pass": true,
+        "scope": "Conditional on four fixed seeds; configurations are not assumed independent seeds. No package or population-generalisation certificate.",
+        "costs": {
+          "stock": {
+            "process_cpu_seconds": 23.86,
+            "process_elapsed_seconds": 24.58,
+            "queries": 0,
+            "root_rollouts": 0,
+            "measured_run_seconds": 15.026728,
+            "measured_query_seconds": 0.0
+          },
+          "planner": {
+            "process_cpu_seconds": 553.95,
+            "process_elapsed_seconds": 554.72,
+            "queries": 44397,
+            "root_rollouts": 202730,
+            "measured_run_seconds": 543.768603,
+            "measured_query_seconds": 386.639351
+          }
+        },
+        "resource_ceiling_met": true
+      },
+      "reserved-configuration-check": {
+        "first": 32,
+        "configurations": 96,
+        "rows_per_method": 384,
+        "stock_wins": 52,
+        "planner_wins": 234,
+        "point_difference": 0.4739583333333333,
+        "configuration_bootstrap_interval": [
+          0.4140625,
+          0.5338541666666666
+        ],
+        "gates": {
+          "fixed_mean_gain_at_least_five_points": true,
+          "paired_configuration_lower_bound_positive": true
+        },
+        "pass": true,
+        "scope": "Conditional on four fixed seeds; configurations are not assumed independent seeds. No package or population-generalisation certificate.",
+        "costs": {
+          "stock": {
+            "process_cpu_seconds": 65.16,
+            "process_elapsed_seconds": 67.8,
+            "queries": 0,
+            "root_rollouts": 0,
+            "measured_run_seconds": 37.927142,
+            "measured_query_seconds": 0.0
+          },
+          "planner": {
+            "process_cpu_seconds": 1633.78,
+            "process_elapsed_seconds": 1636.3700000000001,
+            "queries": 136980,
+            "root_rollouts": 620098,
+            "measured_run_seconds": 1602.344593,
+            "measured_query_seconds": 1130.780191
+          }
+        },
+        "resource_ceiling_met": true
+      },
+      "support": {
+        "stock": {
+          "status": "INHERITED_PAIR_NATURAL_SUPPORT_FAIL_IN_FIXED_POLICY_FAMILY",
+          "vow": 5,
+          "rows": 512,
+          "policy_configurations": 128,
+          "packages": {
+            "bloodfire": {
+              "active": 18,
+              "inactive": 110,
+              "reachable": 21,
+              "exclusive": 7
+            },
+            "hand": {
+              "active": 33,
+              "inactive": 95,
+              "reachable": 33,
+              "exclusive": 22
+            }
+          },
+          "cross_active": 11,
+          "gates": {
+            "bloodfire": {
+              "active": false,
+              "inactive": true,
+              "reachable": true,
+              "exclusive": false
+            },
+            "hand": {
+              "active": true,
+              "inactive": true,
+              "reachable": true,
+              "exclusive": true
+            }
+          },
+          "pass": false,
+          "outcomes": {
+            "loss": 446,
+            "win": 66
+          },
+          "counterfactual_checks": {
+            "consumer_clone_actions": 501
+          },
+          "incremental_hp_policies": 15,
+          "limits": [
+            "Support is not complete certificate, source/runtime oracle or P9.",
+            "Hand uses historical necessary activation, not proof its producer caused the later damage.",
+            "BF clones intervene on existing stock and consumer read path; they do not model adaptive whole-run policy response or producer removal.",
+            "Do not aggregate repeated local clone payoffs into a whole-run treatment effect.",
+            "This fixed controller-family failure is not universal package nonviability."
+          ],
+          "new_independent_package_confirmation": false,
+          "packages_admitted": 0,
+          "p9_certified": false
+        },
+        "planner": {
+          "status": "INHERITED_PAIR_NATURAL_SUPPORT_FAIL_IN_FIXED_POLICY_FAMILY",
+          "vow": 5,
+          "rows": 512,
+          "policy_configurations": 128,
+          "packages": {
+            "bloodfire": {
+              "active": 26,
+              "inactive": 102,
+              "reachable": 39,
+              "exclusive": 8
+            },
+            "hand": {
+              "active": 49,
+              "inactive": 79,
+              "reachable": 50,
+              "exclusive": 31
+            }
+          },
+          "cross_active": 18,
+          "gates": {
+            "bloodfire": {
+              "active": false,
+              "inactive": true,
+              "reachable": true,
+              "exclusive": true
+            },
+            "hand": {
+              "active": true,
+              "inactive": true,
+              "reachable": true,
+              "exclusive": true
+            }
+          },
+          "pass": false,
+          "outcomes": {
+            "loss": 196,
+            "win": 316
+          },
+          "counterfactual_checks": {
+            "consumer_clone_actions": 2212
+          },
+          "incremental_hp_policies": 26,
+          "limits": [
+            "Support is not complete certificate, source/runtime oracle or P9.",
+            "Hand uses historical necessary activation, not proof its producer caused the later damage.",
+            "BF clones intervene on existing stock and consumer read path; they do not model adaptive whole-run policy response or producer removal.",
+            "Do not aggregate repeated local clone payoffs into a whole-run treatment effect.",
+            "This fixed controller-family failure is not universal package nonviability."
+          ],
+          "new_independent_package_confirmation": false,
+          "packages_admitted": 0,
+          "p9_certified": false
+        }
+      },
+      "support_pass": false
+    }
+  },
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "last_vow": 5,
+  "v0_skipped": true
+}
