@@ -1,5 +1,5 @@
 {
-  "status": "P9_UNFINISHED_ISOLATED_HAND_DESIGN_REQUIRES_MATCHED_READOUT",
+  "status": "P9_UNFINISHED_ISOLATED_HAND_QUERY_AND_CONTROL_COMPLETE",
   "branch": "research/p9-six-route-local-20260905",
   "target_packages_per_aspect": 3,
   "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
@@ -80,7 +80,7 @@
     "Corrected independent confirmation, unrestricted endpoint retention, signed controls, ceilings and hard guardrails",
     "Minimum lifecycle, exact-head review under current owner authority, exact-product integration and #108 receipt"
   ],
-  "exact_next_action": "Repair only the effect-law readout/consumer mask and source-bind the affected public queries with exact native-default parity; no weights or search-budget retuning. Then a finite native delta/null/envelope gate is required BEFORE any new signed-control/value cohort. Keep the historical Hand/Bloodfire negatives immutable.",
+  "exact_next_action": "For this exact qualified two-slope Hand candidate, freeze the missing adaptive group-source/payoff value and descriptor/policy/peer/economy confirmation contract. Reuse the coherent archived controller and correct n-plus-floor OFF mask. Do not retune the controller or rerun old Hand/Bloodfire cohorts. This signed screen alone opens no population.",
   "command_chain": {
     "source_freeze": "7b39ebd148bdc7ee23c7e3a4abff4cab79040d71",
     "verified_source_head": "dada9b6b4a069b6478362e104cb0701ff11aecd1",
@@ -1176,5 +1176,66 @@
     "native_qualified": false,
     "population_opened": false,
     "parameters_reused_not_fitted": true
+  },
+  "hand_two_slope_frontier": {
+    "status": "SIGNED_CONTROL_NECESSARY_SCREEN_PASS_NOT_P9",
+    "decision": "ash-inheritance-20260909/hand-two-slope-v1/control-v1/closure-1/DECISION.json",
+    "readback": "ash-inheritance-20260909/hand-two-slope-v1/control-v1/closure-1/CAPTURE-READBACK.json",
+    "grids": [
+      {
+        "aspect": "duskblade",
+        "vow": 0,
+        "baseline_wins": 33,
+        "candidate_wins": 32,
+        "difference": -0.0078125,
+        "baseline_faults": 0,
+        "gates": {
+          "candidate_random_build_at_most_half": true,
+          "absolute_random_build_movement_at_most_tenth": true,
+          "candidate_fault_free": true
+        }
+      },
+      {
+        "aspect": "duskblade",
+        "vow": 5,
+        "baseline_wins": 13,
+        "candidate_wins": 11,
+        "difference": -0.015625,
+        "baseline_faults": 0,
+        "gates": {
+          "candidate_random_build_at_most_half": true,
+          "absolute_random_build_movement_at_most_tenth": true,
+          "candidate_fault_free": true
+        }
+      },
+      {
+        "aspect": "ashwarden",
+        "vow": 0,
+        "baseline_wins": 28,
+        "candidate_wins": 30,
+        "difference": 0.015625,
+        "baseline_faults": 0,
+        "gates": {
+          "candidate_random_build_at_most_half": true,
+          "absolute_random_build_movement_at_most_tenth": true,
+          "candidate_fault_free": true
+        }
+      },
+      {
+        "aspect": "ashwarden",
+        "vow": 5,
+        "baseline_wins": 4,
+        "candidate_wins": 4,
+        "difference": 0.0,
+        "baseline_faults": 0,
+        "gates": {
+          "candidate_random_build_at_most_half": true,
+          "absolute_random_build_movement_at_most_tenth": true,
+          "candidate_fault_free": true
+        }
+      }
+    ],
+    "candidate_content_sha256": "ac779e08b0afc5054242ecf5dc1f7421e648e4ee114607708584d1d74ce92cdc",
+    "full_certificate": false
   }
 }

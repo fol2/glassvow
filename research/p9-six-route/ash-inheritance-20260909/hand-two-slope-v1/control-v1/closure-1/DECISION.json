@@ -1,0 +1,91 @@
+{
+  "kind": "ISOLATED_HAND_QUERY_AND_SIGNED_CONTROL_FRONTIER",
+  "status": "SIGNED_CONTROL_NECESSARY_SCREEN_PASS_NOT_P9",
+  "grids": [
+    {
+      "aspect": "duskblade",
+      "vow": 0,
+      "baseline_wins": 33,
+      "candidate_wins": 32,
+      "difference": -0.0078125,
+      "baseline_faults": 0,
+      "gates": {
+        "candidate_random_build_at_most_half": true,
+        "absolute_random_build_movement_at_most_tenth": true,
+        "candidate_fault_free": true
+      }
+    },
+    {
+      "aspect": "duskblade",
+      "vow": 5,
+      "baseline_wins": 13,
+      "candidate_wins": 11,
+      "difference": -0.015625,
+      "baseline_faults": 0,
+      "gates": {
+        "candidate_random_build_at_most_half": true,
+        "absolute_random_build_movement_at_most_tenth": true,
+        "candidate_fault_free": true
+      }
+    },
+    {
+      "aspect": "ashwarden",
+      "vow": 0,
+      "baseline_wins": 28,
+      "candidate_wins": 30,
+      "difference": 0.015625,
+      "baseline_faults": 0,
+      "gates": {
+        "candidate_random_build_at_most_half": true,
+        "absolute_random_build_movement_at_most_tenth": true,
+        "candidate_fault_free": true
+      }
+    },
+    {
+      "aspect": "ashwarden",
+      "vow": 5,
+      "baseline_wins": 4,
+      "candidate_wins": 4,
+      "difference": 0.0,
+      "baseline_faults": 0,
+      "gates": {
+        "candidate_random_build_at_most_half": true,
+        "absolute_random_build_movement_at_most_tenth": true,
+        "candidate_fault_free": true
+      }
+    }
+  ],
+  "candidate_identity": "ac779e08b0afc5054242ecf5dc1f7421e648e4ee114607708584d1d74ce92cdc",
+  "query_qualification": {
+    "kind": "COHERENT_HAND_QUERY_REPAIR_COLD_READBACK",
+    "files": 18,
+    "all_bytes_equal": true,
+    "readout_reproduced": true,
+    "scientific_status": "COHERENT_HAND_QUERY_AND_OFF_MASK_QUALIFIED_NOT_CERTIFICATE",
+    "old_capture_unchanged": true,
+    "new_native_replays": 0,
+    "new_population_outcomes": 0,
+    "packages_admitted": 0,
+    "p9_certified": false
+  },
+  "signed_control_capture": {
+    "kind": "ISOLATED_HAND_SIGNED_CONTROL_SERIALIZED_COLD_READBACK",
+    "input_head": "c259a0f9dfa01688dea6977b9af51c4f034c7c3e",
+    "capture_files": 66,
+    "all_bytes_equal": true,
+    "original_json_bytes_reproduced": true,
+    "python_integer_key_difference_observed": true,
+    "scientific_status": "SIGNED_CONTROL_NECESSARY_SCREEN_PASS_NOT_P9",
+    "old_readback_failure_run": 34540101853,
+    "old_failure": "READOUT: Python integer-key mapping versus JSON string-key mapping",
+    "old_raw_protocol_and_terminal_unchanged": true,
+    "new_native_runs": 0,
+    "packages_admitted": 0,
+    "p9_certified": false
+  },
+  "decision": "The selected isolated-Hand candidate passes this fixed necessary signed-control screen; full package value and all remaining acceptance remain unproved.",
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
