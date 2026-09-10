@@ -1,0 +1,92 @@
+{
+  "kind": "FIXED_ISOLATED_HAND_EFFECT_LAW_DELTA_QUALIFICATION",
+  "question": "Can the already-isolated two-slope Hand law and exact intrinsic readout/consumer-OFF repair execute through unchanged native envelopes and both clone paths, while missing-field linear behavior stays unchanged?",
+  "source": "hand-two-slope-v1/execution-1/CANDIDATE.patch; no new coefficients or acquisition weights",
+  "roles": [
+    "reference",
+    "linear",
+    "candidate",
+    "legacy-mask",
+    "legacy-query"
+  ],
+  "cases": {
+    "aspects": [
+      0,
+      1
+    ],
+    "vows": [
+      0,
+      5
+    ],
+    "upgrades": [
+      false,
+      true
+    ],
+    "remaining_hand": [
+      0,
+      4,
+      5,
+      6,
+      9
+    ],
+    "contexts": [
+      "plain",
+      "block",
+      "weak-vulnerable",
+      "lethal",
+      "fatal-thorns",
+      "shatter",
+      "no-energy"
+    ],
+    "active": {
+      "reference": [
+        true
+      ],
+      "linear": [
+        false,
+        true
+      ],
+      "candidate": [
+        false,
+        true
+      ],
+      "legacy-mask": [
+        false
+      ],
+      "legacy-query": [
+        true
+      ]
+    }
+  },
+  "expected_cases": {
+    "reference": 280,
+    "linear": 560,
+    "candidate": 560,
+    "legacy-mask": 280,
+    "legacy-query": 280
+  },
+  "comparators": "Complete native state/events versus the same card expanded into exactly one native dmg effect with source-derived raw amount. Payment, card identity, hit/Block/floors, thorns/death, coupled chips/Shatter, discard and RNG are not stripped.",
+  "query_scope": "Intrinsic score/draft law only, preserving original weighting. Compare positive raw score to dmg expansion; raw-zero legacy score omits ordinary Strength and is explicitly NOT newly qualified. Eight complete unchanged-content planner decisions/alternatives are exact parity controls, not a competence proof.",
+  "gates": [
+    "all default-on reference/linear complete rows agree",
+    "all qualified linear/candidate raw law, exact clone and dmg expansion state/events agree",
+    "all public/exact Hand masks retained; source flags stay true",
+    "all score comparisons with positive raw and all draft projections agree",
+    "each named mutant is detected in all eight q4/plain contexts",
+    "zero unexpected engine/script errors and complete emitted raw retained"
+  ],
+  "failure": "Any qualified mismatch is INCONCLUSIVE for this interface. Keep all traces and exact inputs; delivery repair may not change the selected coefficients, cases or expected semantics. This gate never admits a package.",
+  "budgets": {
+    "command_seconds": 240,
+    "workflow_minutes": 15,
+    "new_population_rows": 0
+  },
+  "unchanged": "Content outside Phantom, rare rarity, pools, source cards, Core/Art, Bloodfire, IDs/saves/RNG, controller weights/parameters and old terminals.",
+  "limits": [
+    "Constructed native delta proof, not independent source/runtime oracle.",
+    "No new signed RandomBuild, adaptive value, descriptor admission or independent confirmation is opened here."
+  ],
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "p9_certified": false,
+  "packages_admitted": 0
+}
