@@ -1,42 +1,59 @@
-# P9 current handoff — adaptive Bloodfire closed; source-utility packet restored
+# P9 current handoff — Hand intervention interface and realised fields checked
 
-Continue #421 on `research/p9-six-route-local-20260905`. Product reference is
-`2ed6cdb0302ba3aab5845a18d862841165e8aaf7`. Three complete strategies per aspect;
-0/6 full current certificates. Author self-review is not independent evidence.
+Continue #421 on `research/p9-six-route-local-20260905`. Product reference remains
+`2ed6cdb0302ba3aab5845a18d862841165e8aaf7`. Target is three complete strategies
+per aspect. 0/6 full current certificates; no P9 PASS or product promotion.
+Author self-review is explicitly non-independent.
 
-## Completed evidence, not work to repeat
+## Completed; do not repeat
 
-The four-world adaptive study completed 512 outcomes/world at V5, 128 policies,
-256 matched seed blocks. Worlds 00/01/10 each won298; 11 won302. Producer,
-consumer and interaction estimates are0.0078125; all three frozen intervals
-[-0.005859375,0.0234375] cross zero. Actual resource gates passed. The terminal
-is BLOODFIRE_ADAPTIVE_VALUE_NOT_ESTABLISHED; V0 was not opened. The original2127-file
-cold-readback and every outcome remain unchanged. Do not extend this sample,
-claim no benefit or equivalence, change its primary metric, or tune a rescue.
+The adaptive Bloodfire study is closed NOT_ESTABLISHED: V5 worlds00/01/10 won298/512,
+world11 won302/512; frozen intervals cross zero, resources passed, V0 skipped.
+All2127 files are remotely preserved. This is not equivalence or universal futility.
+All previous controller/acquisition/resource negatives retain their precise scope.
 
-The complete local source-utility packet is now reconstructed under
-`ash-inheritance-20260909/causal-contract-v1/`:55 original files,1728 constructed
-records and39,273,762 raw bytes. Publication uses complete preserved DAG nodes
-and independently hash-bound missing file recipes; it does not claim the old
-incomplete transport was complete. Verify the external receipt at
-`ash-inheritance-20260909/causal-transport-v1/publication-1/REMOTE-READBACK.json`
-and its exact published-head binding. Original local-only receipts stay immutable.
-No engine replay or new independent sample is used for preservation.
+The old local source-utility packet is fully restored and remotely preserved:
+55 exact original files,1728 constructed records,39,273,762 raw bytes. The external
+receipt is `ash-inheritance-20260909/causal-transport-v1/publication-1/REMOTE-READBACK.json`.
+No replay was used to fill that transport gap. Historical other raw gaps remain.
+BloodRite is lose3HP then gain2/3Energy, NOT draw.
 
-Source correction: BloodRite loses3HP and grants2/3Energy, NOT draw. Preparation
-and Surge draw are separate Hand sources. Source cost/utility, mediator payoff,
-command eligibility, capped HP removal and overkill-based healing are distinct.
-Finite fixed-command proof does not establish adaptive whole-run Hand causality,
-validated descriptors, independent confirmation or package admission.
+Hand's three effect-view masks now apply by card ID, not fixed fixture UID, and
+survive both the public forecast clone and exact observer clone.384 mask cases,
+48 all-on full query/state/event references and48 negatives per clone path are
+preserved under `ash-inheritance-20260909/hand-adaptive-v1`. The first reader used
+front-pop instead of native back-pop; `reader-repair-1` changes only that decoder
+expectation and reuses every raw byte. No native replay, new policy or new content.
+The repaired result and its cold-readback are complete. Finite qualification is
+not an independent source/runtime oracle or a whole-population certificate.
 
-## Exact next action
+`descriptor-1` extracts actual retained direct-source hand instances, separates
+Exhaust/relic/ordinary draw and source-drawn consumer access. Its finite validation
+uses the preserved384 cases and96 factorial contrasts; source-null32 contrasts
+remain zero, and384 UID-renaming checks hold. Every assigned aware-arm run from
+the old joint study is read (512), not a selected successful subgroup. This is a
+factual provenance field extractor, NOT a counterfactual effect, validated predictor,
+new classifier fit, complete descriptor admission or fresh confirmation cohort.
 
-Use the preserved source-utility operators to close the remaining Hand adaptive intervention/query/clone and descriptor obligations before further population work. Retain the closed Bloodfire adaptive claim and controller trials; do not rerun or retune them. Full certificates still require competent-policy, peer, natural-economy and independently assigned confirmation evidence under unchanged P9 acceptance.
+## Exact continuation
 
-No repeated recovery/reunion/census, v25/model fitting, old panels, alias studies,
-controller/cache trials or source-utility matrices. Historical raw gaps in
-SESSION-STATE remain unchanged. No product merge or #108 PASS.
+Bind the complete prospective Hand package causal-value and descriptor-validation contract using the qualified general-instance masks and provenance extractor. Include adaptive source/payoff subsets, source-enabled consumer access, background draw, actual HP/utility and competent-policy/peer/real-economy and independent-confirmation obligations before any new population. Natural provenance is factual history, not counterfactual marginal value. Do not reopen Bloodfire value, controller tuning or frozen models.
 
-Remaining: six complete certificates; seven-direction detector; corrected untouched
-confirmation and unrestricted endpoint retention; hard guardrails; minimum lifecycle,
-exact-head review, one selected product integration and exact-product #108 receipt.
+Do not replay v25, source-utility matrices, old cohorts, the Hand clone gate, controller
+or cache trials. Do not manufacture new strategy slots from Preparation/Surge, which
+are alternative producers in one family. The failed joint policy is an audit instrument,
+not an admitted controller. No population stage is opened by this closure.
+
+Remaining: full exact-current package causality/descriptor/policy/peer/economy and
+independent proof; three strategies per aspect; seven-direction detector; corrected
+confirmation and unrestricted endpoint retention; every hard guardrail; minimum
+lifecycle, exact-head review, one selected product integration and #108 receipt.
+
+## Actual planner dispatch
+
+The complete inherited policy chain has been read from the archived qualified
+runtime. All named public-clone bindings resolve to the tested wrapper; no
+literal native-model allocation or direct base-cloner reference is present in
+that chain. See `ash-inheritance-20260909/hand-adaptive-v1/closure-1/PLANNER-CALL-PATH.json`.
+The full field readback is `hand-adaptive-v1/offline-publication-1/REMOTE-READBACK.json`.
+This source binding does not add a new native test or independent oracle claim.

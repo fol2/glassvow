@@ -95,7 +95,17 @@ def run(repo,out):
               'review_kind':'AUTHOR_SELF_REVIEW_NOT_INDEPENDENT','new_native_runs':0,
               'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
     save(out/'DECISION.json',decision)
-    paths=[root/'finalize.py',root/'close.py',root/'descriptor.py',root/'descriptor-1/SYNC-MANIFEST.json']
+    # Bind the inner manifest after final capsule mutations.
+    sync_path=root/'descriptor-1/SYNC-MANIFEST.json'
+    sync_records=load(sync_path)
+    require(len({r['path'] for r in sync_records})==len(sync_records),'SYNC_DUPLICATE_PATH')
+    for r in sync_records:
+        relative=Path(r['path'])
+        require(not relative.is_absolute() and '..' not in relative.parts,'SYNC_PATH')
+        data=(repo/relative).read_bytes()
+        r.update(bytes=len(data),sha256=sha(data),git_blob=blob(data))
+    save(sync_path,sync_records)
+    paths=[root/'finalize.py',root/'test_finalize.py',root/'close.py',root/'descriptor.py',sync_path]
     paths += list(out.iterdir())
     paths += [repo/ROOT/n for n in ('SESSION-HANDOFF.md','SESSION-STATE.json','package-disposition-20260908/ROADMAP.md')]
     save(out/'FILES.json',[{'path':str(p.relative_to(repo)),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes()),'git_blob':blob(p.read_bytes())} for p in sorted(paths) if p.is_file()])

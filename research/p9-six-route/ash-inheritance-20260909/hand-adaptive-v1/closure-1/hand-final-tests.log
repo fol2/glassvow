@@ -1,0 +1,12 @@
+test_direct_model_allocation_rejected (test_finalize.DispatchTests.test_direct_model_allocation_rejected) ... ok
+test_hash_drift_rejected (test_finalize.DispatchTests.test_hash_drift_rejected) ... ok
+test_inheritance_cycle_rejected (test_finalize.DispatchTests.test_inheritance_cycle_rejected) ... ok
+test_missing_hand_mask_rejected (test_finalize.DispatchTests.test_missing_hand_mask_rejected) ... ok
+test_missing_parent_manifest_rejected (test_finalize.DispatchTests.test_missing_parent_manifest_rejected) ... ok
+test_parent_cloner_bypass_rejected (test_finalize.DispatchTests.test_parent_cloner_bypass_rejected) ... ok
+test_reads_inherited_policy_not_just_leaf (test_finalize.DispatchTests.test_reads_inherited_policy_not_just_leaf) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.014s
+
+OK
