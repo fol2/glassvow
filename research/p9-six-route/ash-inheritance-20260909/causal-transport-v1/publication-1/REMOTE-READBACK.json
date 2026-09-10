@@ -1,0 +1,409 @@
+{
+  "kind": "COMPLETE_ORIGINAL_SOURCE_UTILITY_REMOTE_PUBLICATION",
+  "published_head": "fb677a795bea68b38fe1509376196afa5b7f7340",
+  "files": [
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/CONTRACT.md",
+      "bytes": 8737,
+      "sha256": "19eb835608a00701081e63b4cc04551d290e4cc36bb35e2f0c0ad366d3afac51",
+      "git_blob": "7a11e1b0433441fa9518a548d2d8d006c3b75f5f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/DECISION.json",
+      "bytes": 3206,
+      "sha256": "5fd3037bffbb4f17d295dd7a528a3853b257e5c2b8e5ff883ea3e6e198b1c0ab",
+      "git_blob": "f02b6077f68721542d8120f8e549a92c4d42eaca"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/FREEZE.json",
+      "bytes": 1050,
+      "sha256": "20cf982a27d701301d624f9af423175dc0d0ad0d06a6e74962823a7d56e4c5e4",
+      "git_blob": "d62a8c3c26755203a610ed5c833b5b5added92f3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/NEXT-ACTION.md",
+      "bytes": 3755,
+      "sha256": "3f37ef63015f8d6092b2527cb9569679ef0ed3d4bce7c5055106322eec3e9598",
+      "git_blob": "d1fffb17fa75cad6c5af72a634a210028f828453"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/PACKET-MANIFEST.json",
+      "bytes": 8035,
+      "sha256": "79a23738fce726368bd6c3a1aabbd4d378016d6a2a16ef263376cb6494174e8e",
+      "git_blob": "d5e1e33c2fde3c3b5f096ff08e9a04f7208cf4ef"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/PROTOCOL.json",
+      "bytes": 1494,
+      "sha256": "7ad68827f4177117c0181735995fb13344f5b615cbaa3bebae6f355ae5795d14",
+      "git_blob": "efc3868e8a2aba3d988462dd337f08fd70033bc3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/assemble.py",
+      "bytes": 5216,
+      "sha256": "790897626d619fe8701836885ef58d2df75ba65ad78f2bc9b7fa8e5ac557609a",
+      "git_blob": "8f9549c8da69d9407877c41da521c24365137de6"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/audit_capture.py",
+      "bytes": 9826,
+      "sha256": "7014abfa9b5173bd4742d29b9981fa8799560974b9f191970f5b14e141641ca5",
+      "git_blob": "67292156ed1ea6c0f7051e188932748b55ef655b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/causal_probe.gd",
+      "bytes": 5108,
+      "sha256": "b1331761e9c269692df0c4688336961a98a4476bd04e18a13ed15e1b66d1be35",
+      "git_blob": "e7d1694603999ae3b2028956676e561d3a02a8f5"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/causal_rules.gd",
+      "bytes": 1685,
+      "sha256": "cfbf579f3e66b716ac970a3ec75d77e554a926dfc1f8941060369abaa2dc8cd4",
+      "git_blob": "630c0b2e6f00bc6f191c3346e6eefd6f2da658ce"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/BASE-SOURCE-BINDING.json",
+      "bytes": 322,
+      "sha256": "d4bc09a55f51ec0abad8a21256476ce42a784adc60bbff76343755aab64de485",
+      "git_blob": "7e8888454274986ac3761105ef9ecc403750a1ca"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/FILES.json",
+      "bytes": 4130,
+      "sha256": "80c98a07e772d6d72fd197af910ae1fa5bc69e9ede588f070cfd44b2009e86cf",
+      "git_blob": "c9eade1d3a925e879ec649fd0157b09f021bb43f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/RESULTS.json",
+      "bytes": 193653,
+      "sha256": "51f3928a537a8cfdb44ca9329d2ea661d137d88de6e7821a25eba5cd002737af",
+      "git_blob": "6f04a1f9fa4a1e0fa35597f28f651899d673a041"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/RUNTIME-MANIFEST.json",
+      "bytes": 8007,
+      "sha256": "8edd1cd839c9473b0fa714d7424f21f51567ecdf8d0e2e6ca92e594fc5032871",
+      "git_blob": "e124f1df29d787647ae2c1dbc6c99810130eed23"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/TERMINAL.json",
+      "bytes": 344,
+      "sha256": "1771d6902b3b5ccb9bd603348a53647a9a1c9d324e681c1a13238b9489348337",
+      "git_blob": "8f67d6ff0d8233219be1095717e5f525d1f849ac"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/bloodRite.jsonl.xz",
+      "bytes": 26072,
+      "sha256": "bc6f5a441057a29db03f7e134e486b63346a30270880d50b36c0cf97d9b798ae",
+      "git_blob": "e239dcd8da47987384d1889265cb98181401e6c4"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/engine.receipt.json",
+      "bytes": 440,
+      "sha256": "f0baa405424b2992ee4548187eb25a1c75c721445b34ab8af2264db1ca881209",
+      "git_blob": "6b56679ae3c51412c3fe46f198d4d7984a5f4c86"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/engine.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/engine.stdout",
+      "bytes": 32,
+      "sha256": "edff16c1721dd4ae989cadf29a01f574ae8d51b118221f664725bd6980bbba5d",
+      "git_blob": "7cfa5cc95b8c302dfb6743b0aa6bd001a42f0655"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/import.receipt.json",
+      "bytes": 508,
+      "sha256": "631b8c2892553f1a177da3043ef493575c6fe3574fdbb13aa6130f8c8ae55eaf",
+      "git_blob": "df4c6dfb6b79ea6f6c5788949b97342aaf967308"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/import.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/import.stdout",
+      "bytes": 3028,
+      "sha256": "5a742a0ad47f6154a3155907bd7f3fe64f5777c9ba1f1f030cd14a729e154510",
+      "git_blob": "ae942c83e0c967bf770306b1ab78c9a8cb405b2b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/native-bloodRite.receipt.json",
+      "bytes": 696,
+      "sha256": "e619629f69d8bc7acb270e6edda505da67a840a65d017ecbfebbcc2010b2f225",
+      "git_blob": "cb671de71f373f8bc715d18da61a26f6efd991e6"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/native-bloodRite.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/native-bloodRite.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/native-preparation.receipt.json",
+      "bytes": 697,
+      "sha256": "f7de66dcd1556453b1fd2d686f94b2bdb48bb57923d3fea228b509ddbb9e738d",
+      "git_blob": "83d54bc7e91794e4d7473794b5de07038623bb91"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/native-preparation.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/native-preparation.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/native-surge.receipt.json",
+      "bytes": 694,
+      "sha256": "4e36f070a23f9cbe9a836f65121b3e8e251921a5c0bcd61e49e3a979ab0571b5",
+      "git_blob": "2e6ab3029785363b862b5a6ac9cf488ad816e535"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/native-surge.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/native-surge.stdout",
+      "bytes": 73,
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "git_blob": "ef295ec7a107867bd87e58236a2532ecbef02742"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/parse.receipt.json",
+      "bytes": 568,
+      "sha256": "40f68fa72530c3bc4dfb236549e5c016f64935d539e55a707506b1b9c170d894",
+      "git_blob": "0332469e076a5bf877aeca9150932e80240c02b7"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/parse.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/parse.stdout",
+      "bytes": 23,
+      "sha256": "abfd600ff21ef5aa23517b4a9d50d5914f276aa3518d079edb4b75093ed9dbdc",
+      "git_blob": "8e8633e414c68e7b29ca38164fc6b664c14b3b80"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/preparation.jsonl.xz",
+      "bytes": 42680,
+      "sha256": "1dfdf4d08b5753addcd5907dba3bc3cd601088f95d5eccd8e7de18a41f8f31a9",
+      "git_blob": "62361e2cf700e231092ec64fe1e1593776ae7ebb"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/runtime-source.tar.xz",
+      "bytes": 82960,
+      "sha256": "c695a87ab4f3966769611e2275109a653966edf1a9c2e2346fe35205acf259ee",
+      "git_blob": "362793723271a556f417ec4b2e1ef12785310c2c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/surge.jsonl.xz",
+      "bytes": 47876,
+      "sha256": "6f6b345f47ff86cfb9b96e2a22b51b65e971c865ae102be0d518523e2ad4f3e6",
+      "git_blob": "fa1401dead52924cec698a83af8e652d53e9347f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/tests.receipt.json",
+      "bytes": 531,
+      "sha256": "b1ccc81a11d2e253e4ba06cea87b9e6f66f4aba5ec111ca22b4fcbfb67c13d99",
+      "git_blob": "58a6a3914b76c363a58c2c1f86c59dfc81d6c27e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/tests.stderr",
+      "bytes": 1665,
+      "sha256": "bb63e81a5d048589263f40fc5d270f106b18a961039a0368edb34a3e88b3a7d8",
+      "git_blob": "5911ff0cc3a12eb2f8ff0747b44f2489263907cf"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/tests.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/read.py",
+      "bytes": 10491,
+      "sha256": "8c7a9025b86d34f14b156db6099938e95dcc49994940c01557e594fd796605d9",
+      "git_blob": "588b7232c9c3eddbf30a40ebb213a4177b7fdcf1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/review-1/AUDIT.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/review-1/AUDIT.stdout",
+      "bytes": 33072,
+      "sha256": "43bbadb5d38cbb79cf4160c66d1453335398b7be48222bbf7bffd758f584e432",
+      "git_blob": "55d549778a4f0d8b311a38e62a71b752453deaf5"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/review-1/CAUSAL-FIELDS.json",
+      "bytes": 473973,
+      "sha256": "f5a4d3440d1e0083ca41c53c00114f816a35216de0f3c81e91ca3406ba166758",
+      "git_blob": "442ff95a4fa9104df0fd67cada5f719120e86988"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/review-1/DELIVERY-FINDING.json",
+      "bytes": 442,
+      "sha256": "95d6578c3a817f3eb7e2779575d2c45382d532ce2f2a0913b12762c1c262f5e7",
+      "git_blob": "f49067a38c2eecc6c97e16df9aefa2156e093dfb"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/review-1/REVIEW.json",
+      "bytes": 33072,
+      "sha256": "43bbadb5d38cbb79cf4160c66d1453335398b7be48222bbf7bffd758f584e432",
+      "git_blob": "55d549778a4f0d8b311a38e62a71b752453deaf5"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/review-1/TESTS.stderr",
+      "bytes": 3568,
+      "sha256": "913581613406d9ca2b569f4fdce841bc3466c3c98c3b6aad965509dfafb370b1",
+      "git_blob": "824eb830dab68baad44662ced34cc5405748ebd8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/review-1/TESTS.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/review-1/clone.log",
+      "bytes": 148,
+      "sha256": "1423fc0ec619d9aa1ed36b4145fd02658c275b4ed8282c06456951038d813264",
+      "git_blob": "2cbfded1c8f9e6ca6fce257f7d08027aec0dfa0c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/review-1/first-audit-tests.stderr",
+      "bytes": 4127,
+      "sha256": "6c2fe03fcb0d4a2811c68284dcffa34ff58c30dce9bd0612c487950701c8c046",
+      "git_blob": "361e53edbc8fc0314fa772fc132a75f6c4fbd084"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/review-1/push-check.log",
+      "bytes": 100,
+      "sha256": "e570dfcd4a9e1e42e2a132135b11692c62636e93a32c3cba964184f9e7c497c9",
+      "git_blob": "b7edacbb23432eb318cb261ab003331e09611618"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/run.py",
+      "bytes": 5857,
+      "sha256": "44148bbdb4d9e437cd5aeb5f31a02d0fb1f1f493c3064f6ae4dcfa804ac31b01",
+      "git_blob": "2a4ec06568f8aeaf673746895237feb2f453ff62"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/test_capture.py",
+      "bytes": 5312,
+      "sha256": "2d3f8083f241ea1dd60260d8513e1b3f3edef12cd65838bfe69a82a170405be8",
+      "git_blob": "0044ad62a21e16f96ef6cf01023f167fa29d503a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/test_contract.py",
+      "bytes": 5287,
+      "sha256": "a83c78b58b80dd279b05fe183027df3b5e388689399ef50c1c8c5c43213b0fe1",
+      "git_blob": "6d7460ae6eb4a821be47b0cc22ef561f59f8d16f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/verify_packet.py",
+      "bytes": 2887,
+      "sha256": "bfb7301452b99762ce676b8c1369b0422d05085f51733e43c0474dea17abacfa",
+      "git_blob": "1732e119e0f668c8991bdde9972a7080fb76b556"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-HANDOFF.md",
+      "bytes": 2830,
+      "sha256": "97568d1f678f9d422885942a4f49ea25bada95386b7048959cea675aacfa37d8",
+      "git_blob": "1eddbf9045e54053e7fe5034c6262018dcfc0495"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-STATE.json",
+      "bytes": 38056,
+      "sha256": "47f39e50f675dbce0f0504e152f0a2cb5693b834bb0d7f948f5b9bac02eca579",
+      "git_blob": "128efb0c2bbd192c948472a7893852dceafe487b"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/ROADMAP.md",
+      "bytes": 1137,
+      "sha256": "f3b142fcf2faad49c09716059e7c8533c39461898ae8c9827f006425669ca3e6",
+      "git_blob": "5b645afeb20e341aeada1191326a74d949e4288f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-transport-v1/restore_packet.py",
+      "bytes": 9162,
+      "sha256": "be677c69fc7d8b442210af53a15910ca7717277f94c21684e14548e4dc87abb5",
+      "git_blob": "950f60713fc600509a5ae907c74542ad67789919"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-transport-v1/test_restore.py",
+      "bytes": 2353,
+      "sha256": "47f7e66c9e9f7b8a2b1f9c0b0698337890801dc61bae99ccab8a35424e5925da",
+      "git_blob": "89dd1a7e6d0cd3c624b90da16d2be9fae2752edd"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-transport-v1/publish_packet.py",
+      "bytes": 9179,
+      "sha256": "c906dcc694221b594aeacc69cbee955233d714e8f69c5b3cb1e9085b73b4f06f",
+      "git_blob": "3a5eb4492dff25647886a6bf43d300a5cb5f63e1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-transport-v1/supplement-00.b64",
+      "bytes": 10001,
+      "sha256": "2eca6fd63687ab91751da0ca9687c38d27c815803430942ae9bb5d353326fd80",
+      "git_blob": "e25476b7ae239ed3cc6b01f82c9719d3d02e54db"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-transport-v1/supplement-01.b64",
+      "bytes": 10001,
+      "sha256": "c629eec9791ed2d644159def30550ff2407b109931cf038a3a2165b614b4ef90",
+      "git_blob": "84ba461834b33ebf98a65fb201b72a3d5fc13cf8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-transport-v1/supplement-02.b64",
+      "bytes": 10001,
+      "sha256": "5a89cc99edaec8f74a1119b9541f81eccc8a3e009e8bbdc2cd7aecffe44cbbda",
+      "git_blob": "7dd6c961a12fff2c176c4a7488f3e2fc7ae214b5"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/causal-transport-v1/supplement-03.b64",
+      "bytes": 7977,
+      "sha256": "ed974d68b1586294ac2945b50dc7035204ddc804f231ebc9a11a2d53d29f66f3",
+      "git_blob": "ca32ca3f3788432a746bafc66ee4b6ba1f5e4f0e"
+    }
+  ],
+  "original_packet_files": 55,
+  "all_bytes_equal": true,
+  "packet_manifest_sha256": "79a23738fce726368bd6c3a1aabbd4d378016d6a2a16ef263376cb6494174e8e",
+  "runtime_members": 57,
+  "raw_records": 1728,
+  "raw_uncompressed_bytes": 39273762,
+  "original_scientific_terminal": "SOURCE_UTILITY_AND_MEDIATOR_SEPARATION_QUALIFIED_NOT_CERTIFICATE",
+  "historical_local_receipts_unchanged": true,
+  "transport_gap_repaired_by_exact_reconstruction": true,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
