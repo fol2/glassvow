@@ -1,0 +1,73 @@
+{
+  "records": [
+    {
+      "file": "experiment.py",
+      "source": "research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/repaired-source-1/experiment.py",
+      "before_sha256": "189186a038153e01c784f3d0e4d63076ada211bc18ab434040ed6107193a1695",
+      "after_sha256": "189186a038153e01c784f3d0e4d63076ada211bc18ab434040ed6107193a1695",
+      "changed": false
+    },
+    {
+      "file": "read_value.py",
+      "source": "research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/repaired-source-1/read_value.py",
+      "before_sha256": "1ae6c928a743b0927d7a95056069e284fd3b2617d8deeeb4c6f6a9e953554b89",
+      "after_sha256": "5f98765a5254ec5969c4e54a2c9e09fd175c2d221a6c2da558a1cb176494bf97",
+      "changed": true
+    },
+    {
+      "file": "combat_bridge.gd",
+      "source": "research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/repaired-source-1/combat_bridge.gd",
+      "before_sha256": "34da3978cfea31aa2aa4d89f637e559da51e54613f62861e789e2d3d2af3478e",
+      "after_sha256": "5ee7fd07374f810a061a0500534a925d65fa00686c3a32fcfa2de6cc17b5bf78",
+      "changed": true
+    },
+    {
+      "file": "value_probe.gd",
+      "source": "research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/repaired-source-1/value_probe.gd",
+      "before_sha256": "8f1a2f086f5c3a00bb891f082906e2547ed43ddaf7d6431fc04a0a9c03bd67d8",
+      "after_sha256": "8f1a2f086f5c3a00bb891f082906e2547ed43ddaf7d6431fc04a0a9c03bd67d8",
+      "changed": false
+    },
+    {
+      "file": "null_bridge.gd",
+      "source": "research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/repaired-source-1/null_bridge.gd",
+      "before_sha256": "272d29baf66aa84f8e134e07d1f0fc1e195f1c1ef8d4f593d56ce727795746aa",
+      "after_sha256": "272d29baf66aa84f8e134e07d1f0fc1e195f1c1ef8d4f593d56ce727795746aa",
+      "changed": false
+    },
+    {
+      "file": "test_value.py",
+      "source": "research/p9-six-route/ash-inheritance-20260909/planner-v1/value-v1/repaired-source-1/test_value.py",
+      "before_sha256": "22b68326d9b454912fdb1d56fd9b7c651d8fa352a9ee9abc05029b0afecda4bc",
+      "after_sha256": "22b68326d9b454912fdb1d56fd9b7c651d8fa352a9ee9abc05029b0afecda4bc",
+      "changed": false
+    },
+    {
+      "file": "decision_gate.gd",
+      "source": "research/p9-six-route/ash-inheritance-20260909/planner-v1/decision_gate.gd",
+      "before_sha256": "9858aefbfd9a25f5a277740fab0070b3856d1b77469e4d57b0f0a6d6b5c86115",
+      "after_sha256": "0cabd91d0d384ebbfce4a5159ed6f90fec9cffada32506f7949b00a4c6a12062",
+      "changed": true
+    },
+    {
+      "file": "compatibility_read.py",
+      "source": "research/p9-six-route/ash-inheritance-20260909/planner-v1/read.py",
+      "before_sha256": "7b1cd541a541ec396ac32275fb8ba342ed5f9cd17a33bf0f1c6ad79953b6df9f",
+      "after_sha256": "65affe8d9ffeed98dc245d48b03eaccf6e5bfd432ac7b3f8ff3ac2479248328e",
+      "changed": true
+    }
+  ],
+  "seed_metadata": {
+    "retained_config_files_checked": 356,
+    "requested_seeds": [
+      73412100,
+      73412101,
+      73412102,
+      73412103,
+      73412010
+    ],
+    "collisions": [],
+    "scope": "Retained executable configuration metadata only; no outcome/holdout reading or claim of global seed independence."
+  },
+  "old_terminals_unchanged": true
+}
