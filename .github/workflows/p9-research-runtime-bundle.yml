@@ -10,15 +10,13 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  TRANSPORT: research/p9-six-route/ash-inheritance-20260909/causal-transport-v1
-  STUDY: research/p9-six-route/ash-inheritance-20260909/causal-contract-v1
-  MANIFEST: 79a23738fce726368bd6c3a1aabbd4d378016d6a2a16ef263376cb6494174e8e
+  STUDY: research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1
 jobs:
   bundle:
-    name: Restore and remotely preserve original source-utility packet - no engine
+    name: Hand adaptive intervention seam and named clone mutants - no population
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 15
     permissions:
       contents: write
     steps:
@@ -29,87 +27,98 @@ jobs:
           persist-credentials: true
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            /domain/
-            /content/
-            /tools/
-            /research/p9-six-route/SESSION-HANDOFF.md
-            /research/p9-six-route/SESSION-STATE.json
-            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
-            /research/p9-six-route/ash-inheritance-20260909/causal-value-v1/execution-1/TERMINAL.json
-            /research/p9-six-route/ash-inheritance-20260909/causal-transport-v1/
-      - name: Reconstruct exact original files and run only their offline checks
+            /research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1/
+            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/FILES.json
+            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/SOURCE-MANIFEST.json
+            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/REMOTE-READBACK.json
+            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/runtime-source.tar.xz
+      - name: Check committed source identities and reader regressions before native observations
         shell: bash
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD:$TRANSPORT/restore_packet.py)" = 950f60713fc600509a5ae907c74542ad67789919
-          test "$(git rev-parse HEAD:$TRANSPORT/test_restore.py)" = 89dd1a7e6d0cd3c624b90da16d2be9fae2752edd
-          test ! -e "$TRANSPORT/publication-1"
-          mkdir "$TRANSPORT/publication-1"
-          python3 -m unittest discover -s "$TRANSPORT" -p test_restore.py -v > "$TRANSPORT/publication-1/RESTORE-TESTS.log" 2>&1
-          python3 "$TRANSPORT/restore_packet.py" "$TRANSPORT" . "$STUDY" "$TRANSPORT/publication-1/RESTORATION.json" > "$TRANSPORT/publication-1/RESTORATION.log" 2>&1
-          python3 -m unittest discover -s "$STUDY" -p 'test_*.py' -v > "$TRANSPORT/publication-1/ORIGINAL-TESTS.log" 2>&1
-          python3 "$STUDY/verify_packet.py" "$STUDY" "$MANIFEST" "$TRANSPORT/publication-1/PREPUBLICATION-VERIFY.json" --venue local-cold-checkout
-          python3 "$TRANSPORT/publish_packet.py" sync .
-      - name: Commit only the restored packet and current capsule
+          test ! -e "$STUDY/execution-1"
+          echo "PUBLISHED_HEAD=$GITHUB_SHA" >> "$GITHUB_ENV"
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['STUDY'])
+          f=json.loads((root/'FREEZE.json').read_bytes())
+          for n,expected in f['source_sha256'].items():
+              b=(root/n).read_bytes()
+              assert hashlib.sha256(b).hexdigest()==expected,n
+              actual=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+              assert actual==subprocess.check_output(['git','rev-parse','HEAD:'+str(root/n)]).decode().strip(),n
+          assert f['native_observations_at_freeze']==0
+          PY
+          (cd "$STUDY" && python3 -m unittest -v test_build test_read_gate) > "$RUNNER_TEMP/hand-tests.log" 2>&1
+      - name: Execute the fixed qualification once with the pinned engine
+        id: native
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
-          git add --sparse "$STUDY" "$TRANSPORT/publication-1" research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/SESSION-STATE.json research/p9-six-route/package-disposition-20260908/ROADMAP.md
+          {
+            curl --fail --location --max-time 90 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip"
+            unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
+            engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+            chmod +x "$engine"
+            echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
+            "$engine" --version
+          } > "$RUNNER_TEMP/hand-engine.log" 2>&1
+          python3 "$STUDY/study.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$RUNNER_TEMP/hand-work" > "$RUNNER_TEMP/hand-run.log" 2>&1
+      - name: Preserve actual diagnostics and unchanged source bytes
+        if: always() && env.PUBLISHED_HEAD != ''
+        shell: bash
+        run: |
+          set -euo pipefail
           python3 - <<'PY'
-          import os,subprocess
-          allowed={"research/p9-six-route/SESSION-HANDOFF.md","research/p9-six-route/SESSION-STATE.json","research/p9-six-route/package-disposition-20260908/ROADMAP.md"}
-          roots=(os.environ['STUDY']+'/',os.environ['TRANSPORT']+'/publication-1/')
-          paths=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
-          assert paths and all(p in allowed or p.startswith(roots) for p in paths), 'STAGED_SCOPE'
-          assert sum(p.startswith(roots[0]) for p in paths)==55, 'ORIGINAL_FILE_COUNT'
+          import hashlib,json,os,pathlib,shutil,sys
+          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1';out.mkdir(exist_ok=True)
+          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('hand-*.log'):
+              shutil.copyfile(p,out/p.name)
+          if not (out/'TERMINAL.json').exists():
+              (out/'TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','failure':'Read preserved delivery logs','packages_admitted':0,'p9_certified':False})+'\n')
+          records=[{'path':str(p.relative_to(out)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.rglob('*')) if p.is_file() and p.name!='FILES.json']
+          (out/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
+          sys.path.insert(0,str(root.resolve()));import study
+          study.publish(pathlib.Path('.').resolve(),out.resolve(),os.environ['PUBLISHED_HEAD'],'research(p9): preserve Hand qualification logs and complete source-bound capture')
           PY
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): preserve all 55 original causal files and close adaptive value frontier'
-          git push origin "HEAD:refs/heads/$branch"
-          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        if: always() && env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            /research/p9-six-route/SESSION-HANDOFF.md
-            /research/p9-six-route/SESSION-STATE.json
-            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
-            /research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/
-            /research/p9-six-route/ash-inheritance-20260909/causal-transport-v1/
-      - name: Rebuild the preserved result from a separate exact remote checkout
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1
+      - name: Cold-read all output bytes and reconstruct the exact decision without an engine
+        if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
           test "$(git -C cold rev-parse HEAD)" = "$PUBLISHED_HEAD"
-          python3 "cold/$STUDY/verify_packet.py" "cold/$STUDY" "$MANIFEST" "$TRANSPORT/publication-1/COLD-VERIFY.json" --venue remote-cold-checkout
-          python3 "$TRANSPORT/publish_packet.py" cold . cold "$TRANSPORT/publication-1/REMOTE-READBACK.json"
-          branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$TRANSPORT/publication-1/COLD-VERIFY.json" "$TRANSPORT/publication-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record verified remote preservation of original source-utility raw'
-          git push origin "HEAD:refs/heads/$branch"
-          echo "FINAL_PUBLISHED_HEAD=$(git rev-parse HEAD)"
-      - name: Preserve actual delivery failure without promoting partial restoration
-        if: failure()
+          python3 "$STUDY/study.py" verify "$GITHUB_WORKSPACE/$STUDY/execution-1" "$GITHUB_WORKSPACE/cold/$STUDY/execution-1" "$GITHUB_WORKSPACE/$STUDY/execution-1/REMOTE-READBACK.json"
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess,sys
+          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')/root
+          files=[]
+          for p in sorted(root.glob('*')):
+              if not p.is_file():continue
+              b=p.read_bytes();assert b==(cold/p.name).read_bytes()
+              actual=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+              assert actual==subprocess.check_output(['git','-C','cold','rev-parse','HEAD:'+str(p)]).decode().strip()
+              files.append({'name':p.name,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':actual})
+          (root/'execution-1/SOURCE-READBACK.json').write_text(json.dumps({'published_head':os.environ['PUBLISHED_HEAD'],'files':files,'all_bytes_equal':True},indent=2)+'\n')
+          sys.path.insert(0,str(root.resolve()));import study
+          study.publish(pathlib.Path('.').resolve(),(root/'execution-1').resolve(),os.environ['PUBLISHED_HEAD'],'research(p9): record exact remote Hand capture and source readback')
+          PY
+      - name: Report qualification separately from package admission
+        if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
-          set -euo pipefail
-          branch=research/p9-six-route-local-20260905
-          head=$(git rev-parse HEAD)
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$head"
-          mkdir -p "$TRANSPORT/publication-1"
-          printf '%s\n' '{"status":"DELIVERY_INCOMPLETE","p9_certified":false,"new_native_runs":0}' > "$TRANSPORT/publication-1/DELIVERY-FAILURE.json"
-          git reset
-          git add --sparse "$TRANSPORT/publication-1"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'research(p9): preserve exact restoration failure diagnostics without native replay'
-          git push origin "HEAD:refs/heads/$branch"
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path(os.environ['STUDY'])/'execution-1/TERMINAL.json'
+          t=json.loads(p.read_bytes());print(json.dumps(t,indent=2))
+          if t['status']=='INCONCLUSIVE':raise SystemExit(3)
+          PY
