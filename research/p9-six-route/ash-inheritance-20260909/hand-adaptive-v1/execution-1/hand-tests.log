@@ -1,0 +1,21 @@
+test_ambiguous_site (test_build.Tests.test_ambiguous_site) ... ok
+test_distinct_draw_sources (test_build.Tests.test_distinct_draw_sources) ... ok
+test_duplicate_function (test_build.Tests.test_duplicate_function) ... ok
+test_missing_site (test_build.Tests.test_missing_site) ... ok
+test_native_hooks_retained (test_build.Tests.test_native_hooks_retained) ... ok
+test_no_uid_specific_suppression (test_build.Tests.test_no_uid_specific_suppression) ... ok
+test_wrong_input (test_build.Tests.test_wrong_input) ... ok
+test_catalogue_mutation (test_read_gate.ReaderTests.test_catalogue_mutation) ... ok
+test_changed_default_query (test_read_gate.ReaderTests.test_changed_default_query) ... ok
+test_energy_loss (test_read_gate.ReaderTests.test_energy_loss) ... ok
+test_generic_strength_erased (test_read_gate.ReaderTests.test_generic_strength_erased) ... ok
+test_lost_public_mask (test_read_gate.ReaderTests.test_lost_public_mask) ... ok
+test_missing_case (test_read_gate.ReaderTests.test_missing_case) ... ok
+test_mutant_not_detected (test_read_gate.ReaderTests.test_mutant_not_detected) ... ok
+test_synthetic_positive (test_read_gate.ReaderTests.test_synthetic_positive) ... ok
+test_wrong_drawn_uid (test_read_gate.ReaderTests.test_wrong_drawn_uid) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.289s
+
+OK
