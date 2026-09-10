@@ -1,0 +1,67 @@
+{
+  "kind": "HAND_RETAINED_FIELDS_AND_DISPATCH_COLD_READBACK",
+  "published_head": "a61a6ee4a80d96f6a34b8b7e626d8bfb61a46c46",
+  "files": [
+    {
+      "path": "descriptor-1/FIELDS.jsonl",
+      "bytes": 1268346,
+      "sha256": "bcef7455caf1686a3e31a938869903d1fd943b587f795475adfd9eed25af165c"
+    },
+    {
+      "path": "descriptor-1/FILES.json",
+      "bytes": 560,
+      "sha256": "e4a51d4a52290913a3f394a5b278a5f8b73753073f3f44c22a0e773f5af6fa18"
+    },
+    {
+      "path": "descriptor-1/INPUTS.json",
+      "bytes": 10408,
+      "sha256": "aed35fa74d7dca8dc57ff845635fdd1eaf0864a481aac7b9c3e38515cb9fc4a1"
+    },
+    {
+      "path": "descriptor-1/RESULTS.json",
+      "bytes": 1529,
+      "sha256": "821c051883d6bc894648ea89ee062e8f61e1c57e4998e67314b9d81c55c821b3"
+    },
+    {
+      "path": "descriptor-1/RUN-COVERAGE.json",
+      "bytes": 67784,
+      "sha256": "59ecc10eaeddbdcc2666f9a21e229a239da1417c8a7dbbed9511201c69582b22"
+    },
+    {
+      "path": "descriptor.py",
+      "bytes": 11876,
+      "sha256": "8c55e9016e1201ede19011323477562916130708fe4ef4a667f2c959c52e58ac"
+    },
+    {
+      "path": "dispatch-1/SOURCE.json",
+      "bytes": 3932,
+      "sha256": "593b16278c8fc6baf18eac697de8ee5ed9ba87a9cb8230a8d0876418651db102"
+    },
+    {
+      "path": "dispatch_audit.py",
+      "bytes": 1454,
+      "sha256": "57bd84e97d0374f94de45d8d755b2b29064afa0d90d162514d0cbb136d00bf34"
+    },
+    {
+      "path": "offline-publication-1/TERMINAL.json",
+      "bytes": 119,
+      "sha256": "3905c1a339810f169db286098877f8a44028b0396c3658a660a70aa93f4f9d1c"
+    },
+    {
+      "path": "offline-publication-1/field-readout.log",
+      "bytes": 1529,
+      "sha256": "821c051883d6bc894648ea89ee062e8f61e1c57e4998e67314b9d81c55c821b3"
+    },
+    {
+      "path": "offline-publication-1/field-tests.log",
+      "bytes": 740,
+      "sha256": "f1060222d16f6d039b8a66da3cf49b48d8979dc1419c1f214b81408d78906c1c"
+    }
+  ],
+  "all_bytes_equal": true,
+  "full_512_run_fields_reproduced": true,
+  "actual_dispatch_source_reproduced": true,
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
