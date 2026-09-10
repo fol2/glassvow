@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   bundle:
-    name: Inspect existing recovery prefix only - no engine or qualification
+    name: Inspect original text-encoded recovery prefix - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -22,7 +22,7 @@ jobs:
           persist-credentials: false
           sparse-checkout: |
             research/p9-six-route/ash-inheritance-20260909/causal-transport-v1
-      - name: Verify existing parts and locate recoverable complete nodes
+      - name: Decode original transport and identify existing complete nodes
         shell: bash
         run: |
           set -euo pipefail
