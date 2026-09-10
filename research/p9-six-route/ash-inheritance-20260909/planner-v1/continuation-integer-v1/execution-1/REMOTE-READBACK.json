@@ -1,0 +1,99 @@
+{
+  "kind": "COMPLETE_SAFE_INTEGER_REFINEMENT_COLD_READBACK",
+  "published_head": "9580b9e2b3ccc115b3fd7e854fd4d6970c184c17",
+  "run_id": "34420828627",
+  "files": [
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/FREEZE.json",
+      "bytes": 411,
+      "sha256": "d8010d250e36597993a172603512cbf0dc4e6b16ea092328c191b8a3f98665c7"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/PROTOCOL.json",
+      "bytes": 1880,
+      "sha256": "c9d2e2b582849cb82c9219a75115668722382c99181efa0b7345b24664dfe080"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/bound-source/PROTOCOL.json",
+      "bytes": 505,
+      "sha256": "79ec81b1609982c2b0ed08c4c7650fc19f798ccffce20f033dcbc810f8a98369"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/bound-source/benchmark.py",
+      "bytes": 11988,
+      "sha256": "15004a488edcbfd774d15ab6ecb0e26db597dcb9a0e9560be0118f5578d71919"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/bound-source/cache_gate.gd",
+      "bytes": 3281,
+      "sha256": "e045f48f80725a313afb168d98e077ea0d991de1598e9a47d60a85bdb6643d40"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/bound-source/continuation_cache.gd",
+      "bytes": 2950,
+      "sha256": "ef6f7e6c5c987874b9ee6adc19a5a2733cb220624d246fcbcc2c6a72650d32b2"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/execution-1/ARCHIVE.json",
+      "bytes": 143819,
+      "sha256": "0dac0426e39995bd1bbe2aaba885abce787b05c76b983e769c9504b0c44e8c01"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/execution-1/RESULTS.json",
+      "bytes": 2436,
+      "sha256": "d7e242cf5f6083d5424d6185946688d159ab0615226140a5b43666e51f002e4e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/execution-1/SOURCE-DELTA.json",
+      "bytes": 319,
+      "sha256": "3eab8635f46cff1c3390850a98a2d232e60c6f91a4fbc588e270cca716e00803"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/execution-1/TERMINAL.json",
+      "bytes": 181,
+      "sha256": "770637f2098f7b36f4ef135f4b750fe3b36a5b64deca53025db0e9d2ab232443"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/execution-1/capture.tar.xz",
+      "bytes": 712640,
+      "sha256": "0c61d1bdb10ca5b4ae812427e0640e57a59f0a64cbaa4787a7b81c0b65f0e62c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/execution-1/engine.log",
+      "bytes": 497,
+      "sha256": "9c54d32d37a34a5a57471d3689a28e89e14bc9873eeb3373dc3a9f2383a2dbba"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/execution-1/runner.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/execution-1/runner.stdout",
+      "bytes": 181,
+      "sha256": "770637f2098f7b36f4ef135f4b750fe3b36a5b64deca53025db0e9d2ab232443"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/execution-1/tests.log",
+      "bytes": 612,
+      "sha256": "bb938f112547cc74feba0e3621d47c4965cfc052b830483046e313323372ab9f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/refinement.py",
+      "bytes": 4854,
+      "sha256": "9ba82b8ed7f94c1d3f3f0759bb6ee8836465ad6d8d4962558340571551a2898b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/continuation-integer-v1/test_refinement.py",
+      "bytes": 1005,
+      "sha256": "e8fad1c22a47c0b80bf2485cbb05099906dbeef7c7b9599ea65fef25d9455cf9"
+    }
+  ],
+  "archive_members": 813,
+  "all_bytes_equal": true,
+  "readout_reproduced": true,
+  "scientific_status": "EXACT_CONTINUATION_CACHE_SPEEDUP_ESTABLISHED",
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
