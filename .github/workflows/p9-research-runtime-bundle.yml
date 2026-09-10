@@ -10,14 +10,13 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1
-  SOURCE_REF: dcfaa7c7eac24843ca38382de8d59711e7727794
+  STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/closure-1
 jobs:
   bundle:
-    name: Verified source entry and original one-sample experiment
+    name: Complete retained support diagnosis - no engine or new cohort
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 85
+    timeout-minutes: 10
     permissions:
       contents: write
     steps:
@@ -26,127 +25,62 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
-          sparse-checkout: research/p9-six-route
-      - name: Bind actual committed source before any native work
-        id: binding
-        continue-on-error: true
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909
+      - name: Verify committed inputs, test interpretation, read every assigned run
         shell: bash
         run: |
           set -euo pipefail
-          echo "PUBLISHED_HEAD=$GITHUB_SHA" >> "$GITHUB_ENV"
-          {
-            git fetch --depth=1 origin "$SOURCE_REF"
-            python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess
-          root=pathlib.Path(os.environ['STUDY']);records=[]
-          for n in ['study.py','test_study.py','WORK-ORDER.json']:
-              p=root/n;b=p.read_bytes()
-              assert b==subprocess.check_output(['git','show',os.environ['SOURCE_REF']+':'+str(p)]),'SOURCE_CHANGE:'+n
-              h=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-              assert h==subprocess.check_output(['git','rev-parse','HEAD:'+str(p)]).decode().strip()
-              records.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':h})
-          old=root/'execution-1'
-          assert json.loads((old/'TERMINAL.json').read_bytes())['failure']=='SOURCE_BINDING_OR_ENGINE_ENTRY_FAILED'
-          assert [r['path'] for r in json.loads((old/'FILES.json').read_bytes())]==['TERMINAL.json']
-          text=(root.parent/'value-v1/repaired-source-1/combat_bridge.gd').read_text()
-          assert '"alternatives":planner.last_alternatives.duplicate(true)' in text
-          (root/'delivery-entry-2/SOURCE-BINDING.json').write_text(json.dumps({'reference_head':os.environ['SOURCE_REF'],'files':records,'actual_prior_native_rows':0,'runtime_or_reader_changed':False,'old_terminal_sha256':hashlib.sha256((old/'TERMINAL.json').read_bytes()).hexdigest()},indent=2)+'\n')
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 - <<'PY'
+          import hashlib,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['STUDY'])
+          for name in ('audit_capture.py','DECISION.json'):
+              p=root/name;b=p.read_bytes()
+              assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==subprocess.check_output(['git','rev-parse','HEAD:'+str(p)]).decode().strip()
           PY
-            (cd "$STUDY" && python3 -m unittest -v test_study)
-            python3 "$STUDY/study.py" build "$GITHUB_WORKSPACE"
-            (cd "$STUDY/bound-source" && python3 -m unittest -v test_value)
-          } > "$RUNNER_TEMP/one-entry-binding.log" 2>&1
+          python3 "$STUDY/audit_capture.py" --self-test > "$RUNNER_TEMP/one-sample-audit-tests.log" 2>&1
+          python3 "$STUDY/audit_capture.py" "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/capture-audit" > "$RUNNER_TEMP/one-sample-audit.stdout" 2> "$RUNNER_TEMP/one-sample-audit.stderr"
+          cp "$RUNNER_TEMP/one-sample-audit-tests.log" "$STUDY/capture-audit/TESTS.log"
+          cp "$RUNNER_TEMP/one-sample-audit.stdout" "$STUDY/capture-audit/runner.stdout"
+          cp "$RUNNER_TEMP/one-sample-audit.stderr" "$STUDY/capture-audit/runner.stderr"
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$STUDY/bound-source" "$STUDY/delivery-entry-2/SOURCE-BINDING.json"
-          git commit -m 'research(p9): freeze verified one-sample source before observations'
-          git push origin HEAD:refs/heads/$branch
-          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-      - name: Execute unchanged qualification and conditional value/support stages
-        id: native
-        if: steps.binding.outcome == 'success'
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          {
-            curl --fail --location --max-time 90 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip"
-            unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
-            engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
-            chmod +x "$engine"
-            echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
-            "$engine" --version
-          } > "$RUNNER_TEMP/one-entry-engine.log" 2>&1
-          python3 "$STUDY/study.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-2" "$RUNNER_TEMP/one-sample-runtime" --publish > "$RUNNER_TEMP/one-entry-run.stdout" 2> "$RUNNER_TEMP/one-entry-run.stderr"
-      - name: Preserve actual diagnostics and complete available capture
-        if: always() && env.PUBLISHED_HEAD != ''
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib,shutil
-          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-2';out.mkdir(exist_ok=True)
-          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('one-entry-*'):
-              if p.is_file():shutil.copyfile(p,out/p.name)
-          t=out/'TERMINAL.json'
-          if not t.exists():t.write_text(json.dumps({'status':'INCONCLUSIVE','failure':'ENTRY_OR_ENGINE_FAILED','source_head':os.environ['GITHUB_SHA'],'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
-          rows=[{'path':str(p.relative_to(out)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.rglob('*')) if p.is_file() and p!=out/'FILES.json']
-          (out/'FILES.json').write_text(json.dumps(rows,indent=2)+'\n')
-          files=[root/n for n in ['study.py','test_study.py','WORK-ORDER.json']]
-          for directory in ['bound-source','delivery-entry-2','execution-2']:files+=list((root/directory).rglob('*'))
-          rows=[{'path':str(p.relative_to(root)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(files) if p.is_file() and p!=root/'delivery-entry-2/PUBLISHED-FILES.json']
-          (root/'delivery-entry-2/PUBLISHED-FILES.json').write_text(json.dumps(rows,indent=2)+'\n')
-          PY
-          branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$(git rev-parse HEAD)"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f "$STUDY"
-          git diff --cached --name-only | awk -v p="$STUDY/" 'index($0,p)!=1 {exit 1}'
-          git commit -m 'research(p9): preserve actual one-sample evidence and entry diagnostics'
+          git add "$STUDY/capture-audit"
+          git diff --cached --name-only | awk -v prefix="$STUDY/capture-audit/" 'index($0,prefix)!=1 {exit 1}'
+          git commit -m 'research(p9): preserve complete one-sample acquisition and enactment diagnosis'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        if: always() && env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: research/p9-six-route
-      - name: Cold-read all source and data and reproduce actual decisions
-        if: always() && env.PUBLISHED_HEAD != ''
+          sparse-checkout: research/p9-six-route/ash-inheritance-20260909
+      - name: Read back all new bytes and independently re-run only the offline reader
         shell: bash
         run: |
           set -euo pipefail
+          python3 "cold/$STUDY/audit_capture.py" "$GITHUB_WORKSPACE/cold" "$RUNNER_TEMP/one-sample-audit-cold"
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess
-          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold');out=root/'execution-2'
-          p=root/'delivery-entry-2/PUBLISHED-FILES.json';data=p.read_bytes();assert data==(cold/p).read_bytes()
-          records=json.loads(data)
-          for r in records:
-              rel=pathlib.Path(r['path']);assert not rel.is_absolute() and '..' not in rel.parts
-              b=(cold/root/rel).read_bytes();assert b==(root/rel).read_bytes() and len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
-          receipt=out/'REMOTE-READBACK.json'
-          if (cold/root/'bound-source/FREEZE.json').exists():
-              subprocess.run(['python3',str(cold/root/'study.py'),'verify',str(cold.resolve()),str(out.resolve()),str((cold/out).resolve()),str(receipt.resolve())],check=True)
-          else:
-              receipt.write_text(json.dumps({'kind':'ENTRY_DIAGNOSTICS_COLD_READBACK','all_bytes_equal':True,'scientific_status':'INCONCLUSIVE','population_reproduced':False,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
-          (out/'SOURCE-READBACK.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':len(records)+1,'all_source_and_capture_bytes_equal':True,'new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          import hashlib,json,os,pathlib
+          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold');records=[]
+          files=[root/'audit_capture.py',root/'DECISION.json',*sorted((root/'capture-audit').glob('*'))]
+          for p in files:
+              b=p.read_bytes();assert (cold/p).read_bytes()==b,str(p)
+              records.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
+          replay=pathlib.Path(os.environ['RUNNER_TEMP'])/'one-sample-audit-cold'
+          for name in ('RESULTS.json','stock-rows.json','planner-rows.json'):
+              assert (replay/name).read_bytes()==(root/'capture-audit'/name).read_bytes(),name
+          result=json.loads((root/'capture-audit/RESULTS.json').read_bytes())
+          receipt={'kind':'COMPLETE_ONE_SAMPLE_AUDIT_COLD_READBACK','source_head':os.environ['GITHUB_SHA'],'published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':records,'all_bytes_equal':True,'readout_reproduced':True,'result_sha256':hashlib.sha256((root/'capture-audit/RESULTS.json').read_bytes()).hexdigest(),'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
+          (root/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print(json.dumps({'decision':result['decision'],'policy_counts':{m:r['policy_counts'] for m,r in result['methods'].items()}},indent=2))
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/execution-2/"*READBACK.json
-          git commit -m 'research(p9): retain cold byte proof of actual one-sample execution'
+          git add "$STUDY/REMOTE-READBACK.json"
+          git commit -m 'research(p9): retain cold byte proof of complete one-sample diagnosis'
           git push origin HEAD:refs/heads/$branch
-      - name: Report scientific terminal separately from successful delivery
-        if: always()
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          import json,os,pathlib,sys
-          t=json.loads((pathlib.Path(os.environ['STUDY'])/'execution-2/TERMINAL.json').read_bytes())
-          print(json.dumps(t,indent=2));sys.exit(3 if t['status']=='INCONCLUSIVE' else 0)
-          PY
