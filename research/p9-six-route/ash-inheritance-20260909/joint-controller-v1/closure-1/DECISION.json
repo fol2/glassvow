@@ -1,0 +1,1063 @@
+{
+  "kind": "EXACT_JOINT_CONTROLLER_DISPOSITION",
+  "status": "JOINT_CONTROLLER_VALUE_OR_SUPPORT_NOT_ESTABLISHED",
+  "stages": {
+    "5": {
+      "pass": false,
+      "stock_wins": 355,
+      "aware_wins": 344,
+      "rows_per_arm": 512,
+      "stock_support": {
+        "bloodfire": {
+          "active": 31,
+          "inactive": 97,
+          "reachable": 39,
+          "exclusive": 9
+        },
+        "hand": {
+          "active": 60,
+          "inactive": 68,
+          "reachable": 63,
+          "exclusive": 38
+        }
+      },
+      "aware_support": {
+        "bloodfire": {
+          "active": 78,
+          "inactive": 50,
+          "reachable": 88,
+          "exclusive": 28
+        },
+        "hand": {
+          "active": 63,
+          "inactive": 65,
+          "reachable": 66,
+          "exclusive": 13
+        }
+      },
+      "cpu_seconds": {
+        "stock": 2659.96,
+        "aware": 2650.0
+      },
+      "gates": {
+        "paired_activation_gain": true,
+        "paired_activation_sign_test": true,
+        "win_point_not_worse": false,
+        "win_noninferiority_lower_bound": false,
+        "inherited_pair_support": true
+      },
+      "resource_pass": true,
+      "failed_gates": [
+        "win_point_not_worse",
+        "win_noninferiority_lower_bound"
+      ],
+      "paired_activation_difference": 0.3671875,
+      "one_sided_exact_sign_p": 5.893063814710331e-13,
+      "win_difference": -0.021484375,
+      "configuration_bootstrap_interval": [
+        -0.05078125,
+        0.0078125
+      ]
+    }
+  },
+  "v0_opened": false,
+  "controller_and_necessary_pair_support_pass": false,
+  "readback_files": 1080,
+  "all_source_and_capture_bytes_verified": true,
+  "old_scientific_terminals_unchanged": true,
+  "new_native_runs": 0,
+  "new_independent_confirmation_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "limits": [
+    "Conditional on four common seeds and the fixed configuration family; not seed-independent confirmation.",
+    "Hand activation is not full producer attribution. Bloodfire local clones are not adaptive whole-run necessity.",
+    "Controller value and necessary support do not certify a package, descriptor, detector, retention or product."
+  ],
+  "descriptive_readout": {
+    "5": {
+      "kind": "COMPLETE_CAPTURE_POSTHOC_DESCRIPTION_NOT_ADMISSION",
+      "paired_rows": 512,
+      "outcome_pairs": {
+        "both_win": 324,
+        "both_loss": 137,
+        "aware_only_win": 20,
+        "reference_only_win": 31
+      },
+      "methods": {
+        "stock": {
+          "policy_membership_groups": {
+            "bloodfire_only": {
+              "configurations": 9,
+              "wins_histogram_0_to_4": [
+                1,
+                1,
+                0,
+                5,
+                2
+              ]
+            },
+            "hand_only": {
+              "configurations": 38,
+              "wins_histogram_0_to_4": [
+                1,
+                2,
+                8,
+                12,
+                15
+              ]
+            },
+            "both": {
+              "configurations": 22,
+              "wins_histogram_0_to_4": [
+                0,
+                1,
+                5,
+                7,
+                9
+              ]
+            },
+            "neither": {
+              "configurations": 59,
+              "wins_histogram_0_to_4": [
+                5,
+                5,
+                15,
+                22,
+                12
+              ]
+            }
+          },
+          "same_run_win_and_activation_configurations": {
+            "bloodfire": 27,
+            "hand": 54
+          }
+        },
+        "aware": {
+          "policy_membership_groups": {
+            "bloodfire_only": {
+              "configurations": 28,
+              "wins_histogram_0_to_4": [
+                2,
+                3,
+                3,
+                12,
+                8
+              ]
+            },
+            "hand_only": {
+              "configurations": 13,
+              "wins_histogram_0_to_4": [
+                0,
+                2,
+                2,
+                4,
+                5
+              ]
+            },
+            "both": {
+              "configurations": 50,
+              "wins_histogram_0_to_4": [
+                1,
+                4,
+                8,
+                18,
+                19
+              ]
+            },
+            "neither": {
+              "configurations": 37,
+              "wins_histogram_0_to_4": [
+                4,
+                6,
+                10,
+                15,
+                2
+              ]
+            }
+          },
+          "same_run_win_and_activation_configurations": {
+            "bloodfire": 66,
+            "hand": 55
+          }
+        }
+      },
+      "limits": [
+        "Realised route membership is post-treatment; these subgroups do not identify causal mediation or counterfactual optimality.",
+        "One to four wins are descriptive counts, not a new viability threshold or independent confirmation.",
+        "All 128 configurations and all four common seeds are retained; no selected-success subset or new gate."
+      ],
+      "new_native_runs": 0,
+      "admission_or_new_stage_opened": false
+    }
+  },
+  "charge_ledger_totals": {
+    "5": {
+      "stock": {
+        "commands": 222044,
+        "applied": 689,
+        "consumed": 136,
+        "unconsumed_decreases": 467,
+        "unexplained_increases": 0,
+        "continuity_breaks": 0,
+        "source_plays": 689,
+        "source_command_net_hp_decrease": 2067,
+        "final_stock": 86,
+        "runs": 512,
+        "conservation_failures": 0,
+        "unconsumed_decreases_by_command": {
+          "startCombat": 467
+        }
+      },
+      "aware": {
+        "commands": 218898,
+        "applied": 1591,
+        "consumed": 486,
+        "unconsumed_decreases": 946,
+        "unexplained_increases": 0,
+        "continuity_breaks": 0,
+        "source_plays": 1591,
+        "source_command_net_hp_decrease": 4773,
+        "final_stock": 159,
+        "runs": 512,
+        "conservation_failures": 0,
+        "unconsumed_decreases_by_command": {
+          "startCombat": 946
+        }
+      }
+    }
+  },
+  "source_head": "83c5bd0f0fca8aba18aefecac2bdb324b616d4c7",
+  "source_inputs": [
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/pair-v1/observed_game.gd",
+      "bytes": 4354,
+      "sha256": "437e525d8834dd92d8de977a52b403264959e23c9b08121c44011cbe9b8bcdb1",
+      "git_blob": "f1a60da814b2eff8b5c10bc7d2ce29e00d12268f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/joint.py",
+      "bytes": 18373,
+      "sha256": "574911f811b58b3c3e8719dd935f88221d0bce9fe4fb6dcb5e833d79d81c488a",
+      "git_blob": "9571bfbc8005df4f9b8e425314eb83e892a6f283"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/PROTOCOL.json",
+      "bytes": 5417,
+      "sha256": "f55d2a868d7c50630de80056e75b7b7f29cb3297e5eb9cea4d30722b0c72ced3",
+      "git_blob": "a5eeedc90e78bdbc168a2d0ceeb01df61de104ed"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/acquisition-v1/compare_value.py",
+      "bytes": 3170,
+      "sha256": "4cbbac8f817bf6409d7f8757830a9bd8e4cc652b487631445f9d0ddf64692377",
+      "git_blob": "22f1ba8575d91ff461e523370a139ccb3258ccc3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/TERMINAL.json",
+      "bytes": 3264,
+      "sha256": "76936d67c0f2309806dc5abedfe97e2ef0b5734e416b35497016908299050b62",
+      "git_blob": "22f7efde277502c2cca68f70a9b476eb82a3b407"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/REMOTE-READBACK.json",
+      "bytes": 290,
+      "sha256": "e33ec25cdc3cb9ff283365203b2d490ac8d9e9a697e200e143fb012147392098",
+      "git_blob": "bf89a50cbc34c91689774d3fe25aab820f91076d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/FILES.json",
+      "bytes": 162987,
+      "sha256": "5ba1b4cbcb3b2b837d48e4431ef7745412f5abdca3dd0ce5b8cc23de58076608",
+      "git_blob": "cc2081e21e7c603ef0624e399aeaab978a63f9d6"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock-support.json",
+      "bytes": 206805,
+      "sha256": "af792d46877c32e7015ea9718761aedde22738d82c4dcb82790316232c1a720a",
+      "git_blob": "a9805a088f20676c85088c1600c55afabd396430"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware-support.json",
+      "bytes": 207188,
+      "sha256": "9eee350ecd67fc7247731303b5902021372c928985fb455ed95929c3f4f13e8f",
+      "git_blob": "7e2328d0e9da12e7cc100e804d52f2799d87835c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/COMPARISON.json",
+      "bytes": 2377,
+      "sha256": "b12fb91092f205d55817e6bb75636c8d14158fa227ab30dd1fa42b68778509ec",
+      "git_blob": "a670bcd0f281040b5b281f5d8f0fa393c6e209c9"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-000.traces.jsonl.xz",
+      "bytes": 102408,
+      "sha256": "c001a34396fd81b462d260fba182aac9b231164dbb017b25fa4b9fb15cabd1f3",
+      "git_blob": "6786bf39ffc85492b453808a79fd52ac8b4dd530"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-002.traces.jsonl.xz",
+      "bytes": 122056,
+      "sha256": "0ae04624c69400e83fe19fdf4da25fcd4e4340460bdefe2b7098d92d3cbdf485",
+      "git_blob": "6ac838a287e026128a7a84ce9dc32f4af3e2f308"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-004.traces.jsonl.xz",
+      "bytes": 100888,
+      "sha256": "836097c2f993ff5466ccc5f9d72ceb66325c1769b512d9de007bb59fe0eb08b8",
+      "git_blob": "a1b8c90a2316580ed83e8d80b51569f214d92cd1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-006.traces.jsonl.xz",
+      "bytes": 119944,
+      "sha256": "7b8b48440237994afed62fc71ac2508e04893ace78d165b45beede8283df7099",
+      "git_blob": "e19e74647cb5c06da7c9a5a913059c3d7ab4fa5a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-008.traces.jsonl.xz",
+      "bytes": 115368,
+      "sha256": "656bf82fcab79777ff8c280ee6a486c721ff440eae6792a8b87748e728a9221d",
+      "git_blob": "b20286e6082f3e2782330df0b60d5a8d6999322e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-010.traces.jsonl.xz",
+      "bytes": 127924,
+      "sha256": "990181f4fed6e0023688e55f7aa6fdabbd8f69debadf67ddced672d7a65fb62d",
+      "git_blob": "fbb11f34678c3566cb693f3715ab37b757265066"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-012.traces.jsonl.xz",
+      "bytes": 154404,
+      "sha256": "69f9273bd7feca6585469ef1bacabb2b3c181f3ca56620e06dfac8846b9ec896",
+      "git_blob": "99fe7f701baa777623339476ec99a52db11054eb"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-014.traces.jsonl.xz",
+      "bytes": 132444,
+      "sha256": "dde5405c0524a52e5efba50a73b29bed6ff73ef8f96e9118be2ac229b3d07434",
+      "git_blob": "fa8c2958e66753d453299a619dc801a5912ba055"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-016.traces.jsonl.xz",
+      "bytes": 175784,
+      "sha256": "55efec3780daacd227346d7a6de22ad5c64588763b4068995f98e6250d8c1399",
+      "git_blob": "6300b149ddd10b9eff02241ebc37a89a5a016c71"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-018.traces.jsonl.xz",
+      "bytes": 145740,
+      "sha256": "e32c9674221cb5e9624f791713761e9791a46e2d28ac135c5917c96ca8807c98",
+      "git_blob": "743200dc36d97a0b30543c876f1495b5a28e5ec3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-020.traces.jsonl.xz",
+      "bytes": 135688,
+      "sha256": "f7993eab173cfd1061f488a14eb52f4a5fa5ea7488abf64aee1694f910c1f251",
+      "git_blob": "78519862a9346469452e5dfbc803359214c60794"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-022.traces.jsonl.xz",
+      "bytes": 127004,
+      "sha256": "9dde147ec45cf147d2c36fcb57f715fbd79c802dc8d3c58955e394215641b685",
+      "git_blob": "ffa0b59c13529cff262dc88bdee0fddb9644ad63"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-024.traces.jsonl.xz",
+      "bytes": 145248,
+      "sha256": "aedb3d22d034ff1993eabc7ade0ce1224a3d4895fe8028cab1affd42a3b22d15",
+      "git_blob": "002070527a55d248d9064ff42f078e148e7b913f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-026.traces.jsonl.xz",
+      "bytes": 108152,
+      "sha256": "001e16d1492828b7aea78be538c27fed6b0c002c0c2eb152e2dc6c0cd236342b",
+      "git_blob": "3a027cc06ba5dcadefd75c5f3f25ea4efdadb4dc"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-028.traces.jsonl.xz",
+      "bytes": 148544,
+      "sha256": "944feedbd321bb7a854af37dd15ab80e6cab17a0709e9cc3b10f4e9d2dbe7fbe",
+      "git_blob": "abd1441932b11a804a3f472c61f1e29fe4fc3d75"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-030.traces.jsonl.xz",
+      "bytes": 148624,
+      "sha256": "541f8be7a9c15f1c6fc26c1e8a2ba1032ba3e82df1c4311a960566650ab5b363",
+      "git_blob": "17bb5c64f383c1dbcea61f807a1181b2cfe7f5b4"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-032.traces.jsonl.xz",
+      "bytes": 133172,
+      "sha256": "54f4743b7ee2c2de46e4c63531d5eb0182265df5328aaf5b0148dfb912e7085c",
+      "git_blob": "3a9f64484232c3de4de64e643c1a58f4dabd426f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-034.traces.jsonl.xz",
+      "bytes": 129048,
+      "sha256": "71c25788a23f295f975f8591d3c985dc5aa33d11bc0183699f88f5ba530b09d6",
+      "git_blob": "e4e9274689dca242147d2066d1298e11c15ba0f2"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-036.traces.jsonl.xz",
+      "bytes": 131900,
+      "sha256": "5fed69ab8f26fa713aa85c63869a947490e95ba73138a40f3f57eed21cc0872e",
+      "git_blob": "5081ae5e04800a8e84ab04e93c78c92be25fbe27"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-038.traces.jsonl.xz",
+      "bytes": 144872,
+      "sha256": "029407315462905b62e4eb51af79fffdccb57aa59510a03cc72603e28bdc894d",
+      "git_blob": "98744dc75428d6481f0001ff458a5d35fc7e4a60"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-040.traces.jsonl.xz",
+      "bytes": 155580,
+      "sha256": "c657857c063eec9037a7b89f9badb285a49b59a77883295508aedee8d695e33d",
+      "git_blob": "c17f341b0c665df074b935efcd99b195216b1d1b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-042.traces.jsonl.xz",
+      "bytes": 117916,
+      "sha256": "63b1c1b51e0164e93269d2de73deab27aa48417a9f8eb057bfd74ef29c827b6f",
+      "git_blob": "8ef419778f80945716baca79acf1b7d78d0cfb00"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-044.traces.jsonl.xz",
+      "bytes": 121964,
+      "sha256": "77e1b30449966d2d1537f8f327884bece0cb4aff4f9b99d0009e3bec670afdea",
+      "git_blob": "9a93dc8a10301ee2330e92f06335c1329bef317d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-046.traces.jsonl.xz",
+      "bytes": 126716,
+      "sha256": "a3b5b163eb380c7b4136174d122d02bee37c55033a91b29379dc230115003482",
+      "git_blob": "dc8ef19d12e6cfa316ac8f37d0ac6c1c68fda5f0"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-048.traces.jsonl.xz",
+      "bytes": 179888,
+      "sha256": "7a71163c3d8e4ab72139c737601e333ef3571ffa13a543b3f133bed084128d14",
+      "git_blob": "79ca08349b626129d637ca7727e59cd7482f4b58"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-050.traces.jsonl.xz",
+      "bytes": 121220,
+      "sha256": "df34fd5609f2f2ccc88e4fe614b40aa8b17c87049294411353778fc613d134df",
+      "git_blob": "8d82c5b356c515e76bc644da51b1c93b00545176"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-052.traces.jsonl.xz",
+      "bytes": 131524,
+      "sha256": "74b71bffeabd2848ba9b574275df8a60af6dbf4730212e42d53cbf144c670f49",
+      "git_blob": "4e636cce877ced667a6fa12f7e3dcd65d7f39e8b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-054.traces.jsonl.xz",
+      "bytes": 132312,
+      "sha256": "5c9baa1d45e9382a6758fe7397f5f5305071e6a335017c86a4a92b2ada50a16d",
+      "git_blob": "092b406c1f1ddcbd87bfc67d968fdba2191bfe86"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-056.traces.jsonl.xz",
+      "bytes": 117704,
+      "sha256": "86c4dfb6f160234192b6fe2f2957134cef2944c1760106197dcfc3561fcd2c3b",
+      "git_blob": "4c05fb01b1913bf2364ccd20a9bf70b9e4c7f50d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-058.traces.jsonl.xz",
+      "bytes": 127988,
+      "sha256": "4a3ab74016c1845788be8760b992e9d4b563093f3db9b25adfe07674b4526004",
+      "git_blob": "3604ac7c7e7e9fd91434ea7bb0104614cf476730"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-060.traces.jsonl.xz",
+      "bytes": 138420,
+      "sha256": "b265ddba300b700489bf6db8b53e3e9d74b252ff8fb8fd47a6469953005e0001",
+      "git_blob": "7169f1f7d1f006315e17b60bb73a798732ab438f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-062.traces.jsonl.xz",
+      "bytes": 143020,
+      "sha256": "1ec1f35ebec846d2d0774fe015115712361f9306761be7b441a9f818c43baaef",
+      "git_blob": "ad0a58f07228f66ac8d91197e39d6373392be813"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-064.traces.jsonl.xz",
+      "bytes": 142584,
+      "sha256": "de2fe7e9eb198f49d37d57205cdf5684f55a80159c1f3060b576b6e84df8dce7",
+      "git_blob": "5cf15d6050ab34d76781d5f37a1e2d77f6ec7057"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-066.traces.jsonl.xz",
+      "bytes": 120040,
+      "sha256": "5919a6060c98bdbf70c06835081e285c3c83de43e246bc9056bde73833e4eacd",
+      "git_blob": "b4f55f10f6ce64cfe7169157c374102337eff74c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-068.traces.jsonl.xz",
+      "bytes": 123968,
+      "sha256": "37bc63c5b3ffaf34856b4b5ae5cf3485f6de8d73b50c06e30a20a6267e32eece",
+      "git_blob": "6007b0042c647d0f70a333ff8e2bd8499b0660ac"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-070.traces.jsonl.xz",
+      "bytes": 111672,
+      "sha256": "ea0a6145c85c6e33c2f2a14accfcbd1f551e561d62146a3c01d17d5979b98f8f",
+      "git_blob": "17d454d28113a78fc378b42e8e695da9d21cdb6b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-072.traces.jsonl.xz",
+      "bytes": 168124,
+      "sha256": "53e11afb108553e9134c68fb1d16cf5b3fac1bb261dd06174749c01a34608d12",
+      "git_blob": "71b5d2d06d699288e92c79b2aa017f327b44670a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-074.traces.jsonl.xz",
+      "bytes": 126968,
+      "sha256": "e3524e2bd9dcaed4587d76a95fb4dafe3727d7c6f5bb169dbfdef7ebe124e340",
+      "git_blob": "b3b2a3b52daa2aa0cd0483f6af5ec316025d34be"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-076.traces.jsonl.xz",
+      "bytes": 121936,
+      "sha256": "107205818502fc494fe69ebe10f5687d1d87f246644574aab59bc087ea656567",
+      "git_blob": "6af8e22dfe6ddeb9f77ae77532c93cbf32ea9001"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-078.traces.jsonl.xz",
+      "bytes": 120316,
+      "sha256": "25b830cae93a2512a899a065b6edcf3fb680fe2f22b6b28972d9f6cc3579d9c1",
+      "git_blob": "d54f37701c2291961b5d4b3f6d22bb350d36f6c8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-080.traces.jsonl.xz",
+      "bytes": 109728,
+      "sha256": "e2bdfedfd5c2f866e177383c359975c55c7bfb8982dee3b7b48ba355e4092bad",
+      "git_blob": "64e3d842e4f12bccb96db4d1601d5c0c834b793b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-082.traces.jsonl.xz",
+      "bytes": 103332,
+      "sha256": "f8e5034bacc3e7d74851bedad3decbd920377edaf05efa5777fccabfcd2ab750",
+      "git_blob": "2633a07cc606360a6eb4237e52e1d32ef5f308da"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-084.traces.jsonl.xz",
+      "bytes": 146992,
+      "sha256": "d2311cd5abd010aee7956c66da57a935e7fdbbbf2e15bbb13a39c5bd569e0f83",
+      "git_blob": "eeeeb6f66c46257b6c6ce28e90bb13551cf061a9"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-086.traces.jsonl.xz",
+      "bytes": 139780,
+      "sha256": "7613715d7272314dd17ea51772912f9260344a62b044ddc122bb8b65e19b6498",
+      "git_blob": "230d1b5093970e3beda5a1391a17bf2924b2e58b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-088.traces.jsonl.xz",
+      "bytes": 146920,
+      "sha256": "7c358f5282a4fcfb147ff4684beecd569d8feeb2199a8c0100cb3fc982608a5b",
+      "git_blob": "cb646ffaf95980bb1041ba86a9c047e2346b8c0a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-090.traces.jsonl.xz",
+      "bytes": 140964,
+      "sha256": "a78ac1ffcff74359c4748c9b90df28ac174671bc33106cdbb32500ce3222ebe1",
+      "git_blob": "1e87d2f6147e26ca0f05462c827bff86c10fa4d8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-092.traces.jsonl.xz",
+      "bytes": 130968,
+      "sha256": "954d47d5880f1c318798c4bf3b35629d14185d750659e8c4cfa864c4a8443202",
+      "git_blob": "e3d11ac2cb989a9ab8bf29f45c1c7fe470b20aed"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-094.traces.jsonl.xz",
+      "bytes": 114380,
+      "sha256": "56dc7c7bcd5d913489ef8448affcab38e99f1d7b5919ae58b37ba0309bd1eeeb",
+      "git_blob": "3fb27d7a50e9ac157b34792d8a56d8cd59d5a4dc"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-096.traces.jsonl.xz",
+      "bytes": 157416,
+      "sha256": "798fda80c0530d6bb31dd4571363f65439d9270d411be8c095ad6ffa37ba1c51",
+      "git_blob": "0db78f05aedd4185f7f00ebe792e45f076c2578b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-098.traces.jsonl.xz",
+      "bytes": 117320,
+      "sha256": "882f53f97e78f866db0d5acdf5695767134da6a5e478e8eb20ecc77024857414",
+      "git_blob": "a655e119692efc6fe7ec3613c7dfb5e3a0449d5b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-100.traces.jsonl.xz",
+      "bytes": 167540,
+      "sha256": "13175e728ca1c7f81d9dc9aa456d6257ccc202c88cd3348ea28edd3a23f7629e",
+      "git_blob": "04ee31a00b80e91ebe715c5cdbfa154143757bdf"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-102.traces.jsonl.xz",
+      "bytes": 120380,
+      "sha256": "d068307a262eff94dea26ee186b1df131f6eafeb2b3203f21b6496864da1e87b",
+      "git_blob": "af1dc928d902ef228fbefb56dfab4e017e5e42da"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-104.traces.jsonl.xz",
+      "bytes": 127524,
+      "sha256": "fc6b8bee6def13fbef08bba2ffe02baf7bf494b6e8b6ff2d5b246a0fef6dce87",
+      "git_blob": "51e32e0824d41f0d12c0665af9ba5aa67f35a464"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-106.traces.jsonl.xz",
+      "bytes": 95624,
+      "sha256": "9493d6cea91f5f21771625861226a9ccfe6c7f6984d2d0798f851a71b5c38b4c",
+      "git_blob": "b6d5b6ea9479c30162ea9a0c938a27c131fbe1bc"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-108.traces.jsonl.xz",
+      "bytes": 118236,
+      "sha256": "b3d3302acfc5867808215855450ca7867961fc400d82029751396c728d3fee69",
+      "git_blob": "c32cfe93b4207d5ec7a7c18e75f78f6fb8995b81"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-110.traces.jsonl.xz",
+      "bytes": 126468,
+      "sha256": "0526b5c62e4c69782d2f066f847e3251f4f577903b9ce12d4b2220e0857011b9",
+      "git_blob": "2ac4a4f6d3f38b0b276f00e01b449b0b8bf10f8b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-112.traces.jsonl.xz",
+      "bytes": 127600,
+      "sha256": "780c2b23944e780a2f18f6c66c59dd15d12bef0031cf4507f64013e57336fbf7",
+      "git_blob": "78ad6df372be9528eb678b224b15ea79f3b0cee6"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-114.traces.jsonl.xz",
+      "bytes": 90252,
+      "sha256": "b5793288efa319d267e4c35efcfe8e4b19b7be4fbfd8c664a7eb11cfa60628da",
+      "git_blob": "ef892eb9c5b366f46d363fd71e532f13ed2b496e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-116.traces.jsonl.xz",
+      "bytes": 87164,
+      "sha256": "79dafff2e74db064ca1dc87d4167f8df327f65e22fe87ba6f3c3c92857ed0199",
+      "git_blob": "f0e978ea63178b31fa9540529e7f4dc899066bfa"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-118.traces.jsonl.xz",
+      "bytes": 136716,
+      "sha256": "11fef21c9b65e9645226001fa28cba04381745df205152a7999e760b0b705f0d",
+      "git_blob": "ee5871a6ca992d79c641609294b938482bc74cce"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-120.traces.jsonl.xz",
+      "bytes": 152228,
+      "sha256": "56c8913a35accf13038eed1d79a2980b2818945c1e7db6a9dca53546187f5613",
+      "git_blob": "4e82ecea40af3d456638bc171b18913cb3cef31d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-122.traces.jsonl.xz",
+      "bytes": 135072,
+      "sha256": "c5b8470ff2ed9115f97aa914f15e38cebb2a82b4fefc3a7ebd17227eda51bcfd",
+      "git_blob": "9b261785980e9c9242fb355efbc0ceaf40e94bb9"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-124.traces.jsonl.xz",
+      "bytes": 113164,
+      "sha256": "4735ffeb9035146c6613f81b00c05f5196dd7076d662ba33d75e71973a61df02",
+      "git_blob": "70b044ba8589703370e9de8c079a719fbb6fa30f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/stock/v5-126.traces.jsonl.xz",
+      "bytes": 121400,
+      "sha256": "9ed24fe27a0141b1cc4c95f9b079f1519755ca31c75f71bbe1f83d58e115568c",
+      "git_blob": "984ec45dacb07945abb8cc9e07af997d51002b47"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-000.traces.jsonl.xz",
+      "bytes": 106048,
+      "sha256": "716c42474e9f367595fe8f4b7143bb19d67c8ddebfc79f18836dc5da181e914f",
+      "git_blob": "bed88f51321a33286c4a61eed6dd1da919245876"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-002.traces.jsonl.xz",
+      "bytes": 112220,
+      "sha256": "6b09707940ec4de6deb1b4d3349d7ee68015628b686f76a056da92c1ba6b860d",
+      "git_blob": "e7c75f43cd8f0e4785291a24ba81614c56f06362"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-004.traces.jsonl.xz",
+      "bytes": 100888,
+      "sha256": "836097c2f993ff5466ccc5f9d72ceb66325c1769b512d9de007bb59fe0eb08b8",
+      "git_blob": "a1b8c90a2316580ed83e8d80b51569f214d92cd1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-006.traces.jsonl.xz",
+      "bytes": 119944,
+      "sha256": "7b8b48440237994afed62fc71ac2508e04893ace78d165b45beede8283df7099",
+      "git_blob": "e19e74647cb5c06da7c9a5a913059c3d7ab4fa5a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-008.traces.jsonl.xz",
+      "bytes": 105236,
+      "sha256": "9be23bd3d67ac414e85cea2b1fb6d0de1a80b9191a3eae98aadb624b1000ebd9",
+      "git_blob": "4d5a2c7770c87b81a176e13147e75a1b52d5fa66"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-010.traces.jsonl.xz",
+      "bytes": 128096,
+      "sha256": "ca86585433bb8c88f85364b74989330e30de368ede48f52a67bc9faae9abb600",
+      "git_blob": "343be4ebbb155554c2cb2b4f12058359dfb6033c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-012.traces.jsonl.xz",
+      "bytes": 141328,
+      "sha256": "7939ebec51d837adac56f0a1193ab53496e302e24d172b9d192ab47ebe6017f7",
+      "git_blob": "6955b556b9aa5f368632125cfba9da0fb9cfe017"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-014.traces.jsonl.xz",
+      "bytes": 131904,
+      "sha256": "df13472c4b225c0e94202c25fb1b09fd6770457cfb8fdb4bffa2eeab7f6295b2",
+      "git_blob": "831667349bef9b6be7bb789eebbb678e381b0f56"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-016.traces.jsonl.xz",
+      "bytes": 170716,
+      "sha256": "cac5033ae9dc584059a351bff2497552c80f4688d0d9d7351e5d761007bbc0a3",
+      "git_blob": "86993f28e4fea8d53856445955a415e2e89cd62f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-018.traces.jsonl.xz",
+      "bytes": 160224,
+      "sha256": "2df76e0ff08145a38aff964d7ac0e8ae8155f682c4a4b2ebf5c606014295fc6b",
+      "git_blob": "6c35b7ff7c2d951b9082d1042ec59202349ccb11"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-020.traces.jsonl.xz",
+      "bytes": 149604,
+      "sha256": "5463077dada5fedc910aad07e9dc183fdbbcae514774d7c082834987ba50e651",
+      "git_blob": "cc87cf861c35acd74d0fce733906331cdb28ba5f"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-022.traces.jsonl.xz",
+      "bytes": 120560,
+      "sha256": "99be9a418f1f4306c3a1dccef190de4268e7cd74c45cf4289f3c07d7e1bf0c5d",
+      "git_blob": "db715c6b2cdc4a6195c6586456597a157526b6a4"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-024.traces.jsonl.xz",
+      "bytes": 149452,
+      "sha256": "b037ba85eb1bdb076dba2c4f9a7dccb2a98ca829caf0a4ffd5561a5891d8bf2d",
+      "git_blob": "05643b48f37733f58f47276708e6141920106d4a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-026.traces.jsonl.xz",
+      "bytes": 107840,
+      "sha256": "1615688e1319a3d17ea697e16e484f67720f98f85bb2ea65efcb6bcfa5006c54",
+      "git_blob": "a2f455fede3f1c5a10c777f1bd9207556dfa8c97"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-028.traces.jsonl.xz",
+      "bytes": 162948,
+      "sha256": "053c81d0782b7b2710f616c224390f23da083291afdbf93e824cd1305e051934",
+      "git_blob": "e6a4318bfdb04a8fc9571b93c22ed891bdb64f69"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-030.traces.jsonl.xz",
+      "bytes": 156044,
+      "sha256": "3d33abd187ba79308e982c8eaea46a6a8077013253a743765ea1d8f604cc1612",
+      "git_blob": "ba641a0e9d9107f6d9407b3256a40c8e8080f912"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-032.traces.jsonl.xz",
+      "bytes": 153752,
+      "sha256": "633b438ddd46064799ee26508fd550e3575683bc2bdf628e56a226e3208d1b0d",
+      "git_blob": "f3c5b9e8d5a9c725cd2a266d0920733ce6adc5d4"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-034.traces.jsonl.xz",
+      "bytes": 143872,
+      "sha256": "384f0102676ace3edffb35bdcc41385a26bd94dd9553dc63d7880984b45745c3",
+      "git_blob": "7210eccc1526416a6081090c489cf133ca210290"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-036.traces.jsonl.xz",
+      "bytes": 136512,
+      "sha256": "5d348a17d50062a1ff7c88d792ffe7db79ed43edcaca511ee664f42834d49910",
+      "git_blob": "718e0fe0dd639ee097f282e66de5452f34d3cdce"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-038.traces.jsonl.xz",
+      "bytes": 141888,
+      "sha256": "532e0fa227067cd3a4b1362ac6a9f18a6e8a84486f507278a699d87626499bce",
+      "git_blob": "494177ac006d7067d6ad407d0a367ed656af9a77"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-040.traces.jsonl.xz",
+      "bytes": 160512,
+      "sha256": "035922acf249f3408b2ee99451b6cd05e6e0e5563ccc05e8c0b0be807e28ee29",
+      "git_blob": "60a6367612de5c4b950f17463a86731ac06e6eb3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-042.traces.jsonl.xz",
+      "bytes": 120364,
+      "sha256": "026cc1b27c35f6ba97a6983f02eecfd88043f8b98b6eeb9def5b2772ceeb3e14",
+      "git_blob": "e097d97d811b06f5d7322b30dee7f3a645de2a08"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-044.traces.jsonl.xz",
+      "bytes": 111536,
+      "sha256": "c7c31cc5af43d726eea288316adf191ca70482375468752c165bea7ca85958b7",
+      "git_blob": "d71e4b90b98f6fbfb06678eeb2c7c9279621d95e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-046.traces.jsonl.xz",
+      "bytes": 127536,
+      "sha256": "08883fdc6ad440f781b4605d0fe5f248c81970c69bdc5ec0b1de303d8f11f8fb",
+      "git_blob": "cc23e0cd09952f5c033fd0e10738041d34565a48"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-048.traces.jsonl.xz",
+      "bytes": 196660,
+      "sha256": "06a193a01f8762a0e01c87b571ec827e99f36b9524bdcf890f433c7b29546254",
+      "git_blob": "888e6899fbf5533b8d090e9dd05fe4959f5dbf0a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-050.traces.jsonl.xz",
+      "bytes": 124056,
+      "sha256": "25c3e8d75c5fbe85db10807feae35f78838d754fd1cdbb4b4ddfde8263c95143",
+      "git_blob": "3dc03fa277963fc1de77702639d3de85c5375c70"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-052.traces.jsonl.xz",
+      "bytes": 130792,
+      "sha256": "c671b436aca63ac05cd396655fada10849cd798d892c577d38981598c69adae3",
+      "git_blob": "c65055dc6d41c3a74311969ac7bb7d0b866f54c8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-054.traces.jsonl.xz",
+      "bytes": 133444,
+      "sha256": "3710501eb1efb2a220df7177edfbbb3e97434850d39ed90e5c10bad9cacc7dd6",
+      "git_blob": "ccd844a6af90aeb19ea793cc03ea0859c0b2fdf2"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-056.traces.jsonl.xz",
+      "bytes": 127380,
+      "sha256": "4da4eb19789e752cfb8fbd70674f69c856ccad854bc08c17c7bbd2032c26b15e",
+      "git_blob": "2a393a5ea8c0f90e3d2cd2a46f6385ee1184b5ac"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-058.traces.jsonl.xz",
+      "bytes": 134168,
+      "sha256": "2fbeb5483c096d19e25fe0b7a093987a8a11cc540231475ee9729e0c01f366ef",
+      "git_blob": "ccf8ae27474484fdd8eda9a87b6a557e62820ba1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-060.traces.jsonl.xz",
+      "bytes": 147656,
+      "sha256": "207e7779c1c824b31cf689d352d4d86577d1aab2674b94c46995f0062f5fa0ad",
+      "git_blob": "4827fbf8c60484e65324d1e4dd83633941519f7a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-062.traces.jsonl.xz",
+      "bytes": 143956,
+      "sha256": "2eefdb41445f4604d5c4984b45ef91dbbb295e280d107051550c378c89623da7",
+      "git_blob": "085cb8ab70d9d0f5c9b4e2dbc2684c7389d62388"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-064.traces.jsonl.xz",
+      "bytes": 160964,
+      "sha256": "6f12932c646fc35318ac74e19fc0e912301329c7ae310811027226e68bdc3e9b",
+      "git_blob": "4a53b4e75260a42bb79a63f9c5294eb9585da82d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-066.traces.jsonl.xz",
+      "bytes": 135956,
+      "sha256": "ef9904d625fcfde7ef8ad97c18f9cf9048451f987530d1fa002a46ec0d6f83a0",
+      "git_blob": "47aa7fa8cc01284cc5c99996f58f1c3c572cf175"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-068.traces.jsonl.xz",
+      "bytes": 142340,
+      "sha256": "491f5eb2b3740a37cd90375cdf76dee381742a9868a677d8d2a0b5b7c38714f2",
+      "git_blob": "d784d2003cfaf89a090b6141e05d2a6221935cbc"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-070.traces.jsonl.xz",
+      "bytes": 103008,
+      "sha256": "eea874f5d3c2856cbdc48c9cb82c20584bfbe4d318aeae1cd26394c13c98ecf2",
+      "git_blob": "48fb4083fe74c74ae863b5d8d8bcc8830fe23549"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-072.traces.jsonl.xz",
+      "bytes": 153548,
+      "sha256": "a5a2765cc24014f0467a668688610eb9d7da76116049cae6750932d63d0b37de",
+      "git_blob": "4021ead286f987c6239ced9f9ca81aadbbcb9710"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-074.traces.jsonl.xz",
+      "bytes": 107240,
+      "sha256": "6cea6fad3b7fbf2804ba6ae4b957c67d2d3e476eaadc7efb91ef40a2e27ab288",
+      "git_blob": "cde4846dc408b5e3e6991b20efb64ba8f259bdff"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-076.traces.jsonl.xz",
+      "bytes": 121396,
+      "sha256": "dc56afb39a829a3d3b124ffa06f3ba9119184f826f67c7a5f7e06c711083bf62",
+      "git_blob": "d33648463385b8607f746f67e07a49ec542fddbc"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-078.traces.jsonl.xz",
+      "bytes": 130748,
+      "sha256": "bd030653b623c8c952692938ccd9095a865a903309bd36ec1f59bfde511a91ad",
+      "git_blob": "219698ba88bcfae8320c51468befb2452ff8b554"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-080.traces.jsonl.xz",
+      "bytes": 117656,
+      "sha256": "304902a9fba8f15531f83d63d02c9a3ec39e241d820f9461088540ceb45d77a3",
+      "git_blob": "5c7afff2ccff68b6f42666122817ccbd4c3145c8"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-082.traces.jsonl.xz",
+      "bytes": 111744,
+      "sha256": "d6f865d23d76f42f08b96d187890ec634d85ed4ae17737c583ae1c47bcf529b1",
+      "git_blob": "643a00efaa2e6a3b88e714858897c91cf71eea8e"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-084.traces.jsonl.xz",
+      "bytes": 150024,
+      "sha256": "b27dfd9ef8daf9e50bd1b8531f38a61e9f56b245581fa54e9895753ac8c9aa49",
+      "git_blob": "f681409ccbe349d18c0f3c5dddc024e1c929a979"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-086.traces.jsonl.xz",
+      "bytes": 149108,
+      "sha256": "4f671e6ed873c4d982b5df20c111eb7e756198ca96ee69c32ad06d5e7e427a4a",
+      "git_blob": "4fec9aa422280a4dc055ce94bd84eca6be8e79bf"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-088.traces.jsonl.xz",
+      "bytes": 157460,
+      "sha256": "46d35709c24f31e1375c2805d53420512dcb2eed082b526547ed8b9735be5db0",
+      "git_blob": "c161efd1423564dcecc8be9a3af3971e3b1bf0c7"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-090.traces.jsonl.xz",
+      "bytes": 142640,
+      "sha256": "0d7ff97ef01fb2891faf80a5c6ef808f2144633229759c330ed12b93b7c4bcfe",
+      "git_blob": "75cb686090dd9fcdf1871867b015e3795177af8a"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-092.traces.jsonl.xz",
+      "bytes": 126684,
+      "sha256": "d7a9ed201e71ffc4b7c1ff8625d807deda063c0a9ee08c9c509e398cd86d4ae2",
+      "git_blob": "ee24ba6ec8086180356bee23038f84acad6f3c29"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-094.traces.jsonl.xz",
+      "bytes": 112660,
+      "sha256": "97e75952b17107b8fd31f2b6d57390063f62250c0ef09ebd9a9281150649d1b9",
+      "git_blob": "b3e2211b95f4bd06fd1ecf16c62bd8bd51c666a7"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-096.traces.jsonl.xz",
+      "bytes": 185712,
+      "sha256": "25c80ed40157116ac74bddc3749d7eceb6f85e42500ea930e5baf49006bf8ff6",
+      "git_blob": "6a67621a1e236ef5276e41bad4f6b06c15b4f259"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-098.traces.jsonl.xz",
+      "bytes": 113924,
+      "sha256": "129e4c71cb35480fa7f09c5a98c6cdece8b49d2d8b8252127a9af2fc2aa55f1b",
+      "git_blob": "7a43752840e1a0fe8f761a89b4ba86128758d5f2"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-100.traces.jsonl.xz",
+      "bytes": 170484,
+      "sha256": "54af63db312b5e1f9beadd86da1f41b05b6b6cf79d176fdb170604dc5714c2df",
+      "git_blob": "5b51063f582f78e2601b72426ab00750153153e1"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-102.traces.jsonl.xz",
+      "bytes": 120516,
+      "sha256": "f2751f3e090cec6901b1d5789ccf491cce634b191f4db8d901399c7c76c15fc8",
+      "git_blob": "467e5b1734285bca2a7647a8cad66feec492c35d"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-104.traces.jsonl.xz",
+      "bytes": 150220,
+      "sha256": "2e6678986f7176b030f37937daf49fdbdae244a9b75e5071f238344585764876",
+      "git_blob": "a59ce475327edd98d2766718bde3f7fc68190468"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-106.traces.jsonl.xz",
+      "bytes": 95308,
+      "sha256": "145cbc53418d0188d46772b4ff76e6e22a3f2832419d7b8e997592ac6e3121f2",
+      "git_blob": "d815d328004aed75db24c425e8f14f5b99c67e25"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-108.traces.jsonl.xz",
+      "bytes": 110060,
+      "sha256": "6b48a2b0db3488831cf97e5bf265d0bc6ba27c430864e25ed3b488627109ea1d",
+      "git_blob": "89e8669944272329a6d9d2c95d332836cf8e33c2"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-110.traces.jsonl.xz",
+      "bytes": 124056,
+      "sha256": "ae4c9b2ad13575124997648cc2829c5c3cc4d5574f7149ed4b815c99f83548c2",
+      "git_blob": "02b393449eac093de32c8d1578a60f3e1f0430cb"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-112.traces.jsonl.xz",
+      "bytes": 118660,
+      "sha256": "d1ac1f09763c82469de50dee305779086cf6a68251b4642d346e8950e7cf4234",
+      "git_blob": "48ff4edb84538bc22e5612f411debc4c88886f93"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-114.traces.jsonl.xz",
+      "bytes": 114520,
+      "sha256": "0e0cc4b9e0070f9710390ccfa2b27ccdeafe21f75dc5a5e6f4f304af7370d17a",
+      "git_blob": "a755e309b1a9d93ae9306baa5f0a90510be1e1cc"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-116.traces.jsonl.xz",
+      "bytes": 91192,
+      "sha256": "a8372d01a2359fca57ba106c995d817d2a03b3c69f7973d0442c607ffa7fc12b",
+      "git_blob": "07f89a64a659f3b606f7aaa7ce3edb0b6d650172"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-118.traces.jsonl.xz",
+      "bytes": 140724,
+      "sha256": "cc2e8cd1475b442e477a564866dc0741e274b1ca55fa7f2a8e50b6aa4304cd00",
+      "git_blob": "74218eb5a1f6eff2a507c60c8240701145cd1ad3"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-120.traces.jsonl.xz",
+      "bytes": 152020,
+      "sha256": "3ce83ad37e0a86330b487d4c739ab1f6cf0baea40d45094852389af5ce2460ec",
+      "git_blob": "c29b76c1a7be2fe325a8779c0ca02bd92efe0de6"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-122.traces.jsonl.xz",
+      "bytes": 137228,
+      "sha256": "49d42cf58aaeee0687f0f8224067e2b7338eb18b4632b5edbb2382718363ec54",
+      "git_blob": "fe1a1064446099931562532e39586204e2c71e01"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-124.traces.jsonl.xz",
+      "bytes": 94460,
+      "sha256": "f7ba9752f9d2e44b192b10f985cd5feb221d03b3246f6647b10a6ebac789ca7d",
+      "git_blob": "992c5679399484ab4044c683e0c5ed771c072090"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-126.traces.jsonl.xz",
+      "bytes": 127444,
+      "sha256": "037ae190537328f4b651e65778ba14d3ddbb6e037812a873f4b096618dfd200f",
+      "git_blob": "85368ebf8522fd376435130c7820d6d324f0aebe"
+    }
+  ],
+  "exact_next_action": "Use the complete factual charge ledger and matched quality/membership readout to bind a package-level causal/value contract for inherited Hand/Bloodfire, separating the source card draw/HP trade-off from incremental mediator payoff. Do not nominate a third acquisition/planner combination, tune weights, or reuse exposed seeds. Name the complete missing producer/subset/descriptor and independent-confirmation obligations against unchanged P9 acceptance before any new native observation. The failed joint controller is not promoted."
+}

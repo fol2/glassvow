@@ -1,0 +1,34 @@
+test_cannot_sync_a_changed_product (test_close_joint.CapsuleTests.test_cannot_sync_a_changed_product) ... ok
+test_historical_dependencies_remain_unchanged (test_close_joint.CapsuleTests.test_historical_dependencies_remain_unchanged) ... ok
+test_no_unspecified_next_action (test_close_joint.CapsuleTests.test_no_unspecified_next_action) ... ok
+test_support_true_is_not_an_integer_count (test_close_joint.CapsuleTests.test_support_true_is_not_an_integer_count) ... ok
+test_cost_overrun_not_rounded (test_close_joint.ClosureTests.test_cost_overrun_not_rounded) ... ok
+test_duplicate_policy_partition_rejected (test_close_joint.ClosureTests.test_duplicate_policy_partition_rejected) ... ok
+test_false_effect_count_rejected (test_close_joint.ClosureTests.test_false_effect_count_rejected) ... ok
+test_false_success_without_v0 (test_close_joint.ClosureTests.test_false_success_without_v0) ... ok
+test_false_support_green_rejected (test_close_joint.ClosureTests.test_false_support_green_rejected) ... ok
+test_green_reader_without_readback_rejected (test_close_joint.ClosureTests.test_green_reader_without_readback_rejected) ... ok
+test_incomplete_outcomes_rejected (test_close_joint.ClosureTests.test_incomplete_outcomes_rejected) ... ok
+test_missing_arm_cost_rejected (test_close_joint.ClosureTests.test_missing_arm_cost_rejected) ... ok
+test_nonfinite_cost_rejected (test_close_joint.ClosureTests.test_nonfinite_cost_rejected) ... ok
+test_numeric_true_is_not_boolean (test_close_joint.ClosureTests.test_numeric_true_is_not_boolean) ... ok
+test_one_lost_win_stays_negative (test_close_joint.ClosureTests.test_one_lost_win_stays_negative) ... ok
+test_p9_cannot_be_promoted (test_close_joint.ClosureTests.test_p9_cannot_be_promoted) ... ok
+test_positive_still_not_package (test_close_joint.ClosureTests.test_positive_still_not_package) ... ok
+test_shared_active_identity_rejected (test_close_joint.ClosureTests.test_shared_active_identity_rejected) ... ok
+test_unwaived_support (test_close_joint.ClosureTests.test_unwaived_support) ... ok
+test_v0_after_negative_rejected (test_close_joint.ClosureTests.test_v0_after_negative_rejected) ... ok
+test_all_rows_and_configurations_remain (test_close_joint.DescriptiveTests.test_all_rows_and_configurations_remain) ... ok
+test_duplicate_cannot_replace_a_seed (test_close_joint.DescriptiveTests.test_duplicate_cannot_replace_a_seed) ... ok
+test_no_selected_success_subset (test_close_joint.DescriptiveTests.test_no_selected_success_subset) ... ok
+test_same_key_cannot_hide_changed_policy (test_close_joint.DescriptiveTests.test_same_key_cannot_hide_changed_policy) ... ok
+test_between_command_mutation_is_visible (test_close_joint.LedgerTests.test_between_command_mutation_is_visible) ... ok
+test_expiry_is_not_a_consumer (test_close_joint.LedgerTests.test_expiry_is_not_a_consumer) ... ok
+test_hidden_increase_cannot_be_called_conservation (test_close_joint.LedgerTests.test_hidden_increase_cannot_be_called_conservation) ... ok
+test_paid_then_consumed_conserves (test_close_joint.LedgerTests.test_paid_then_consumed_conserves) ... ok
+test_unbound_producer_event_rejected (test_close_joint.LedgerTests.test_unbound_producer_event_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 0.028s
+
+OK

@@ -1,5 +1,5 @@
 {
-  "status": "P9_UNFINISHED_IMPLEMENTATION_RESOURCE_REQUALIFICATION_FAIL",
+  "status": "P9_UNFINISHED_JOINT_CONTROLLER_VALUE_OR_SUPPORT_NOT_ESTABLISHED",
   "branch": "research/p9-six-route-local-20260905",
   "target_packages_per_aspect": 3,
   "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
@@ -80,7 +80,7 @@
     "Corrected independent confirmation, unrestricted endpoint retention, signed controls, ceilings and hard guardrails",
     "Minimum lifecycle, exact-head review under current owner authority, exact-product integration and #108 receipt"
   ],
-  "exact_next_action": "Preserve the failed full-workload resource requalification and all positive same-decision evidence. Do not rerun the same cohort, extrapolate microbenchmark speed, increase3600, or aggregate blocked support. A further implementation change must first identify and eliminate a measured remaining cost with exact semantic proof; absent that evidence, change the eligible research design rather than repeat performance trials.",
+  "exact_next_action": "Use the complete factual charge ledger and matched quality/membership readout to bind a package-level causal/value contract for inherited Hand/Bloodfire, separating the source card draw/HP trade-off from incremental mediator payoff. Do not nominate a third acquisition/planner combination, tune weights, or reuse exposed seeds. Name the complete missing producer/subset/descriptor and independent-confirmation obligations against unchanged P9 acceptance before any new native observation. The failed joint controller is not promoted.",
   "command_chain": {
     "source_freeze": "7b39ebd148bdc7ee23c7e3a4abff4cab79040d71",
     "verified_source_head": "dada9b6b4a069b6478362e104cb0701ff11aecd1",
@@ -752,5 +752,238 @@
       "leaf": 0.030882588082547374,
       "run_map_copy": 0.0015055990095417758
     }
+  },
+  "joint_controller_frontier": {
+    "kind": "EXACT_JOINT_CONTROLLER_DISPOSITION",
+    "status": "JOINT_CONTROLLER_VALUE_OR_SUPPORT_NOT_ESTABLISHED",
+    "stages": {
+      "5": {
+        "pass": false,
+        "stock_wins": 355,
+        "aware_wins": 344,
+        "rows_per_arm": 512,
+        "stock_support": {
+          "bloodfire": {
+            "active": 31,
+            "inactive": 97,
+            "reachable": 39,
+            "exclusive": 9
+          },
+          "hand": {
+            "active": 60,
+            "inactive": 68,
+            "reachable": 63,
+            "exclusive": 38
+          }
+        },
+        "aware_support": {
+          "bloodfire": {
+            "active": 78,
+            "inactive": 50,
+            "reachable": 88,
+            "exclusive": 28
+          },
+          "hand": {
+            "active": 63,
+            "inactive": 65,
+            "reachable": 66,
+            "exclusive": 13
+          }
+        },
+        "cpu_seconds": {
+          "stock": 2659.96,
+          "aware": 2650.0
+        },
+        "gates": {
+          "paired_activation_gain": true,
+          "paired_activation_sign_test": true,
+          "win_point_not_worse": false,
+          "win_noninferiority_lower_bound": false,
+          "inherited_pair_support": true
+        },
+        "resource_pass": true,
+        "failed_gates": [
+          "win_point_not_worse",
+          "win_noninferiority_lower_bound"
+        ],
+        "paired_activation_difference": 0.3671875,
+        "one_sided_exact_sign_p": 5.893063814710331e-13,
+        "win_difference": -0.021484375,
+        "configuration_bootstrap_interval": [
+          -0.05078125,
+          0.0078125
+        ]
+      }
+    },
+    "v0_opened": false,
+    "controller_and_necessary_pair_support_pass": false,
+    "readback_files": 1080,
+    "all_source_and_capture_bytes_verified": true,
+    "old_scientific_terminals_unchanged": true,
+    "new_native_runs": 0,
+    "new_independent_confirmation_samples": 0,
+    "packages_admitted": 0,
+    "p9_certified": false,
+    "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+    "limits": [
+      "Conditional on four common seeds and the fixed configuration family; not seed-independent confirmation.",
+      "Hand activation is not full producer attribution. Bloodfire local clones are not adaptive whole-run necessity.",
+      "Controller value and necessary support do not certify a package, descriptor, detector, retention or product."
+    ],
+    "descriptive_readout": {
+      "5": {
+        "kind": "COMPLETE_CAPTURE_POSTHOC_DESCRIPTION_NOT_ADMISSION",
+        "paired_rows": 512,
+        "outcome_pairs": {
+          "both_win": 324,
+          "both_loss": 137,
+          "aware_only_win": 20,
+          "reference_only_win": 31
+        },
+        "methods": {
+          "stock": {
+            "policy_membership_groups": {
+              "bloodfire_only": {
+                "configurations": 9,
+                "wins_histogram_0_to_4": [
+                  1,
+                  1,
+                  0,
+                  5,
+                  2
+                ]
+              },
+              "hand_only": {
+                "configurations": 38,
+                "wins_histogram_0_to_4": [
+                  1,
+                  2,
+                  8,
+                  12,
+                  15
+                ]
+              },
+              "both": {
+                "configurations": 22,
+                "wins_histogram_0_to_4": [
+                  0,
+                  1,
+                  5,
+                  7,
+                  9
+                ]
+              },
+              "neither": {
+                "configurations": 59,
+                "wins_histogram_0_to_4": [
+                  5,
+                  5,
+                  15,
+                  22,
+                  12
+                ]
+              }
+            },
+            "same_run_win_and_activation_configurations": {
+              "bloodfire": 27,
+              "hand": 54
+            }
+          },
+          "aware": {
+            "policy_membership_groups": {
+              "bloodfire_only": {
+                "configurations": 28,
+                "wins_histogram_0_to_4": [
+                  2,
+                  3,
+                  3,
+                  12,
+                  8
+                ]
+              },
+              "hand_only": {
+                "configurations": 13,
+                "wins_histogram_0_to_4": [
+                  0,
+                  2,
+                  2,
+                  4,
+                  5
+                ]
+              },
+              "both": {
+                "configurations": 50,
+                "wins_histogram_0_to_4": [
+                  1,
+                  4,
+                  8,
+                  18,
+                  19
+                ]
+              },
+              "neither": {
+                "configurations": 37,
+                "wins_histogram_0_to_4": [
+                  4,
+                  6,
+                  10,
+                  15,
+                  2
+                ]
+              }
+            },
+            "same_run_win_and_activation_configurations": {
+              "bloodfire": 66,
+              "hand": 55
+            }
+          }
+        },
+        "limits": [
+          "Realised route membership is post-treatment; these subgroups do not identify causal mediation or counterfactual optimality.",
+          "One to four wins are descriptive counts, not a new viability threshold or independent confirmation.",
+          "All 128 configurations and all four common seeds are retained; no selected-success subset or new gate."
+        ],
+        "new_native_runs": 0,
+        "admission_or_new_stage_opened": false
+      }
+    },
+    "charge_ledger_totals": {
+      "5": {
+        "stock": {
+          "commands": 222044,
+          "applied": 689,
+          "consumed": 136,
+          "unconsumed_decreases": 467,
+          "unexplained_increases": 0,
+          "continuity_breaks": 0,
+          "source_plays": 689,
+          "source_command_net_hp_decrease": 2067,
+          "final_stock": 86,
+          "runs": 512,
+          "conservation_failures": 0,
+          "unconsumed_decreases_by_command": {
+            "startCombat": 467
+          }
+        },
+        "aware": {
+          "commands": 218898,
+          "applied": 1591,
+          "consumed": 486,
+          "unconsumed_decreases": 946,
+          "unexplained_increases": 0,
+          "continuity_breaks": 0,
+          "source_plays": 1591,
+          "source_command_net_hp_decrease": 4773,
+          "final_stock": 159,
+          "runs": 512,
+          "conservation_failures": 0,
+          "unconsumed_decreases_by_command": {
+            "startCombat": 946
+          }
+        }
+      }
+    },
+    "source_head": "83c5bd0f0fca8aba18aefecac2bdb324b616d4c7",
+    "exact_next_action": "Use the complete factual charge ledger and matched quality/membership readout to bind a package-level causal/value contract for inherited Hand/Bloodfire, separating the source card draw/HP trade-off from incremental mediator payoff. Do not nominate a third acquisition/planner combination, tune weights, or reuse exposed seeds. Name the complete missing producer/subset/descriptor and independent-confirmation obligations against unchanged P9 acceptance before any new native observation. The failed joint controller is not promoted."
   }
 }

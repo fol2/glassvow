@@ -1,12 +1,12 @@
 # P9 current outcome roadmap
 
-Current exact terminal: `IMPLEMENTATION_RESOURCE_REQUALIFICATION_FAIL`. Full certificates:0/6.
+Current exact terminal: `JOINT_CONTROLLER_VALUE_OR_SUPPORT_NOT_ESTABLISHED`. Full certificates: 0/6.
 
-Preserve the failed full-workload resource requalification and all positive same-decision evidence. Do not rerun the same cohort, extrapolate microbenchmark speed, increase3600, or aggregate blocked support. A further implementation change must first identify and eliminate a measured remaining cost with exact semantic proof; absent that evidence, change the eligible research design rather than repeat performance trials.
+Use the complete factual charge ledger and matched quality/membership readout to bind a package-level causal/value contract for inherited Hand/Bloodfire, separating the source card draw/HP trade-off from incremental mediator payoff. Do not nominate a third acquisition/planner combination, tune weights, or reuse exposed seeds. Name the complete missing producer/subset/descriptor and independent-confirmation obligations against unchanged P9 acceptance before any new native observation. The failed joint controller is not promoted.
 
-1. Complete the first inherited Ash certificate with actual complete-chain, descriptor, competent-policy, peer and real-economy evidence; reuse only unchanged qualified dependencies.
-2. Fill three independently validated strategies per aspect. Check exact registered/closed identities before proposing additional complete mechanisms; do not revive failed labels or substrates.
-3. Admit seven-direction detector, corrected untouched confirmation and unrestricted endpoint retention with every existing hard guardrail.
-4. Integrate only one selected minimal product/detector/lifecycle packet, review exact head, and post the merged-product P9 receipt to #108.
+1. Complete full inherited Ash certificates: causal chain, descriptor, competent policy, peer separation, real economy and independent confirmation; carry only unchanged qualified dependencies.
+2. Fill three validated strategies per aspect; check exact registered/closed identities before nominating other complete packages.
+3. Admit the seven-direction detector, corrected untouched confirmation, unrestricted endpoint retention and every original hard guardrail.
+4. Integrate one selected minimum product/detector/lifecycle packet, review exact head, and post the exact merged-product P9 receipt to #108.
 
-Detailed completed decisions and immutable evidence identities remain in SESSION-STATE.json and each frozen terminal. No new native execution, independent sample, cost relaxation or admission is created by this roadmap.
+Completed research, exact negatives and old preservation gaps stay in the current capsule and immutable captures. No new sample or admission is created by this roadmap.
