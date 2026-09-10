@@ -1,0 +1,62 @@
+{
+  "kind": "COMPLETE_ONE_SAMPLE_AUDIT_COLD_READBACK",
+  "source_head": "cef8c1dda4916871f14181f83a6b01dcb3551c24",
+  "published_head": "7835fb3c16849d39139a5d88fae2ebdb6b735ed3",
+  "run_id": "34463067266",
+  "files": [
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/closure-1/audit_capture.py",
+      "bytes": 10001,
+      "sha256": "345774384c4a93f07c62e965f37ad97717edd10ae0790ee2e6fe61b768ac39ba",
+      "git_blob": "55443444fe38678fa5442f1e87bc352879c6a57c"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/closure-1/DECISION.json",
+      "bytes": 2099,
+      "sha256": "348dbcbca9f3aba3930e14746f4042d8feeb07b23ba0d42a0b5fbb0d7fc2575a",
+      "git_blob": "4f0fb293aab6c16beec03d9b2ab9ba68eca81455"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/closure-1/capture-audit/RESULTS.json",
+      "bytes": 31200,
+      "sha256": "188ff90983c5d6a5de92a0c1d22e5a71f5e6e1abe71f8e6838c727ddd2bdb11d",
+      "git_blob": "e45c4b91871aeaf433f7b74f72d59cdf0a666689"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/closure-1/capture-audit/TESTS.log",
+      "bytes": 612,
+      "sha256": "ae53d6fe70546f5540efb3d335645ba9458f960ae5ac7b96a60e54dec473c366",
+      "git_blob": "477fde3050abd2ac50a5833ae68464453171efc2"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/closure-1/capture-audit/planner-rows.json",
+      "bytes": 315707,
+      "sha256": "25036508bf9a98cb701921ead51aa75afc5c111d2c0a0921247f78fe23d734d3",
+      "git_blob": "ed445960d5fc2211d8676f52fcf8a630d7a2192b"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/closure-1/capture-audit/runner.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/closure-1/capture-audit/runner.stdout",
+      "bytes": 2070,
+      "sha256": "d002ec77797973e85920e67292688801566c4f91875f3c51d7ebc565cff9ecfe",
+      "git_blob": "3611bfb2464aa9bb2b8fa1fb8c9feb134d94e3cf"
+    },
+    {
+      "path": "research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/closure-1/capture-audit/stock-rows.json",
+      "bytes": 316519,
+      "sha256": "7a147690a594666ddf1a1f6fb9c5548be2f34cf94c11cd1996a1f3d0b8095e91",
+      "git_blob": "b03b82d694fa327ec590bba1f24bf84056e893f0"
+    }
+  ],
+  "all_bytes_equal": true,
+  "readout_reproduced": true,
+  "result_sha256": "188ff90983c5d6a5de92a0c1d22e5a71f5e6e1abe71f8e6838c727ddd2bdb11d",
+  "new_native_runs": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
