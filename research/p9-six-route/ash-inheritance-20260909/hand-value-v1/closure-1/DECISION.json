@@ -1,0 +1,179 @@
+{
+  "kind": "EXACT_HAND_GROUP_ADAPTIVE_VALUE_DISPOSITION",
+  "status": "HAND_ADAPTIVE_GROUP_VALUE_NOT_ESTABLISHED",
+  "verified_input_head": "f81f231c8141129b6962aadce816ddee1c9487d3",
+  "sources": {
+    "files": {
+      "CONTRACT.json": {
+        "path": "research/p9-six-route/ash-inheritance-20260909/hand-value-v1/CONTRACT.json",
+        "bytes": 7851,
+        "sha256": "a5ee9104d5432d51373a65dcacb63cdd77bdd1a599eed409e2a6b160f8ebdf64",
+        "git_blob": "150b9f0e849cfec053a4457f8ca534d42cba0c53"
+      },
+      "entry.gd": {
+        "path": "research/p9-six-route/ash-inheritance-20260909/hand-value-v1/entry.gd",
+        "bytes": 2975,
+        "sha256": "b255d395fe9c9a409d216e0fb0a4b3bb7995034da82c66d7aa4300eb9f527a95",
+        "git_blob": "69fff8e67e20f69d2ca5fbbaa6c69b650d53cffc"
+      },
+      "read_hand.py": {
+        "path": "research/p9-six-route/ash-inheritance-20260909/hand-value-v1/read_hand.py",
+        "bytes": 6645,
+        "sha256": "0f2edc6d3df3ce0daca28b273698cd9591a0174844a24d1c368f2a0db46bafb2",
+        "git_blob": "37337fadd6daaf296b4abb075bc7eb07d4d4a230"
+      },
+      "run_hand.py": {
+        "path": "research/p9-six-route/ash-inheritance-20260909/hand-value-v1/run_hand.py",
+        "bytes": 16111,
+        "sha256": "a80c09c5524375f80b53201c228ecd4f499d58840fa5f95640fb3a0f06efdd89",
+        "git_blob": "dc27966b3901e31b0949e8dde5b9880c72490f67"
+      },
+      "test_hand.py": {
+        "path": "research/p9-six-route/ash-inheritance-20260909/hand-value-v1/test_hand.py",
+        "bytes": 5814,
+        "sha256": "acf733e3e2179238bbb7f7685b47e6e3246c6c5cbd5d3d10adca840d0395194c",
+        "git_blob": "2a202d5d7842f3d34f52a25150e01a3424639452"
+      }
+    },
+    "freeze": {
+      "path": "research/p9-six-route/ash-inheritance-20260909/hand-value-v1/FREEZE.json",
+      "bytes": 635,
+      "sha256": "9b58841da404c91c314c7177c8e5e9b99f2fc889ca95619cd8ef59667e961047",
+      "git_blob": "ce212e5b53e4d8343206333a51c71ca188fb33e1"
+    }
+  },
+  "terminal": {
+    "path": "research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/TERMINAL.json",
+    "bytes": 2444,
+    "sha256": "486c2b7dbcf1b5cbdb05094913a86145eeb01cbe6d9016efcfd7354167b4bc89",
+    "git_blob": "df7a4da6db2e61dcd69e50406194a1430e13de16"
+  },
+  "capture_manifest": {
+    "path": "research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/FILES.json",
+    "bytes": 313114,
+    "sha256": "79dbaaa4330393c9cf53337ab4ee88698abd9ddf155c0834a170c50685c41688",
+    "git_blob": "57726541a2ca0d422f5b9b90bfb2086f175f79fd"
+  },
+  "original_readback": {
+    "path": "research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/REMOTE-READBACK.json",
+    "bytes": 284,
+    "sha256": "7b57e8fa88b68502cb88cc6fac0f9164d3674e644fcb169d7358929703d19d1e",
+    "git_blob": "4ff40d4cafb98731ec54ce5118b7c364db16deb7"
+  },
+  "capture_files_verified": 2116,
+  "stages": {
+    "5": {
+      "rows_per_world": 512,
+      "policy_configurations": 128,
+      "distinct_seed_blocks": 256,
+      "wins": {
+        "00": 289,
+        "01": 295,
+        "10": 316,
+        "11": 322
+      },
+      "contrasts": {
+        "source_group": {
+          "point": 0.052734375,
+          "interval": [
+            0.017578125,
+            0.08984375
+          ],
+          "positive_lower_bound": true
+        },
+        "consumer": {
+          "point": 0.01171875,
+          "interval": [
+            -0.015625,
+            0.0390625
+          ],
+          "positive_lower_bound": false
+        },
+        "interaction": {
+          "point": 0.0,
+          "interval": [
+            -0.025390625,
+            0.0234375
+          ],
+          "positive_lower_bound": false
+        }
+      },
+      "outcome_patterns_00_01_10_11": {
+        "0000": 163,
+        "0001": 5,
+        "0010": 4,
+        "0011": 33,
+        "0100": 2,
+        "0101": 10,
+        "0111": 6,
+        "1010": 6,
+        "1011": 6,
+        "1100": 12,
+        "1101": 4,
+        "1110": 3,
+        "1111": 258
+      },
+      "primary_pass": false,
+      "uncertainty": "Preserved 10000-resample seed-block bootstrap, Random(421), linear Bonferroni percentiles .05/6 and 1-.05/6. Approximate fixed-policy inference, not final P9 error control.",
+      "vow": 5,
+      "cpu_seconds": {
+        "00": 2703.3699999999994,
+        "01": 2713.3300000000004,
+        "10": 2868.8100000000004,
+        "11": 2855.0600000000004
+      },
+      "resource_pass": true,
+      "pass_all": false,
+      "packages_admitted": 0,
+      "p9_certified": false,
+      "scope": "Joint direct Preparation/Surge draw group and Phantom payoff at the unchanged audit policy. Not separate producer-variant necessity or full package admission.",
+      "status": "HAND_ADAPTIVE_GROUP_VALUE_NOT_ESTABLISHED"
+    }
+  },
+  "arithmetic": {
+    "5": {
+      "wins": {
+        "00": 289,
+        "01": 295,
+        "10": 316,
+        "11": 322
+      },
+      "contrasts": {
+        "source_group": 0.052734375,
+        "consumer": 0.01171875,
+        "interaction": 0.0
+      },
+      "outcome_patterns_00_01_10_11": {
+        "0000": 163,
+        "0001": 5,
+        "0010": 4,
+        "0011": 33,
+        "0100": 2,
+        "0101": 10,
+        "0111": 6,
+        "1010": 6,
+        "1011": 6,
+        "1100": 12,
+        "1101": 4,
+        "1110": 3,
+        "1111": 258
+      },
+      "rows_per_world": 512,
+      "configurations": 128,
+      "matched_seed_blocks": 256
+    }
+  },
+  "all_original_readout_and_stop_rules_reproduced": true,
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "limits": [
+    "The original seed-block bootstrap is reproduced, not replaced or strengthened.",
+    "Fixed audit policy and direct-draw source group only; not individual-source indispensability, optimality or all Hand strategies.",
+    "A nonpositive confidence bound is not proof of no benefit, equivalence or universal futility.",
+    "Causal value, even if supported, is not a validated descriptor, independent package confirmation, detector, retention or product receipt.",
+    "Historical controller, Bloodfire, model and study negatives remain immutable."
+  ]
+}

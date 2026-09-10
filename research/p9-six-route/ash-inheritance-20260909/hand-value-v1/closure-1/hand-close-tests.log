@@ -1,0 +1,33 @@
+test_complete_all_pattern_rectangle (test_close_value.ArithmeticTests.test_complete_all_pattern_rectangle) ... ok
+test_cross_world_consistent_but_changed_policy_rejected (test_close_value.ArithmeticTests.test_cross_world_consistent_but_changed_policy_rejected) ... ok
+test_duplicate_and_missing_matched_row_rejected (test_close_value.ArithmeticTests.test_duplicate_and_missing_matched_row_rejected) ... ok
+test_errors_are_not_losses (test_close_value.ArithmeticTests.test_errors_are_not_losses) ... ok
+test_float_identity_not_silently_coerced (test_close_value.ArithmeticTests.test_float_identity_not_silently_coerced) ... ok
+test_policy_drift_and_duplicate_policies_rejected (test_close_value.ArithmeticTests.test_policy_drift_and_duplicate_policies_rejected) ... ok
+test_v0_uses_its_own_assignment (test_close_value.ArithmeticTests.test_v0_uses_its_own_assignment) ... ok
+test_wrong_seed_rejected_even_with_512_rows (test_close_value.ArithmeticTests.test_wrong_seed_rejected_even_with_512_rows) ... ok
+test_complete_manifest_and_readback (test_close_value.CaptureTests.test_complete_manifest_and_readback) ... ok
+test_corrupt_or_missing_raw_rejected (test_close_value.CaptureTests.test_corrupt_or_missing_raw_rejected) ... ok
+test_duplicate_manifest_path_rejected (test_close_value.CaptureTests.test_duplicate_manifest_path_rejected) ... ok
+test_extra_unmanifested_file_rejected (test_close_value.CaptureTests.test_extra_unmanifested_file_rejected) ... ok
+test_no_readback_no_closure (test_close_value.CaptureTests.test_no_readback_no_closure) ... ok
+test_readback_count_and_status_must_match (test_close_value.CaptureTests.test_readback_count_and_status_must_match) ... ok
+test_unsafe_path_rejected (test_close_value.CaptureTests.test_unsafe_path_rejected) ... ok
+test_both_supported_still_no_certificate (test_close_value.GateTests.test_both_supported_still_no_certificate) ... ok
+test_exact_resource_boundary (test_close_value.GateTests.test_exact_resource_boundary) ... ok
+test_failure_cannot_be_hidden_by_terminal_colour (test_close_value.GateTests.test_failure_cannot_be_hidden_by_terminal_colour) ... ok
+test_nan_or_negative_resource_rejected (test_close_value.GateTests.test_nan_or_negative_resource_rejected) ... ok
+test_nonprimary_support_cannot_rescue_negative (test_close_value.GateTests.test_nonprimary_support_cannot_rescue_negative) ... ok
+test_positive_v5_alone_is_not_finished (test_close_value.GateTests.test_positive_v5_alone_is_not_finished) ... ok
+test_primary_source_result_mismatch_rejected (test_close_value.GateTests.test_primary_source_result_mismatch_rejected) ... ok
+test_v0_cannot_follow_negative_v5 (test_close_value.GateTests.test_v0_cannot_follow_negative_v5) ... ok
+test_v0_negative_is_retained (test_close_value.GateTests.test_v0_negative_is_retained) ... ok
+test_v5_negative_closes_without_v0 (test_close_value.GateTests.test_v5_negative_closes_without_v0) ... ok
+test_zero_lower_bound_is_not_positive (test_close_value.GateTests.test_zero_lower_bound_is_not_positive) ... ok
+test_complete_pipeline_and_capsule_preserve_old_limits (test_close_value.PipelineTests.test_complete_pipeline_and_capsule_preserve_old_limits) ... ok
+test_invalid_pipeline_never_writes_a_decision (test_close_value.PipelineTests.test_invalid_pipeline_never_writes_a_decision) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 0.174s
+
+OK
