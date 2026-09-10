@@ -1,0 +1,120 @@
+{
+  "kind": "FULL_ASSIGNED_HAND_SOURCE_PATH_CENSUS_NOT_NEW_INFERENCE",
+  "source_evidence_head": "a5891c3315bab3a7017595512566977b49f45632",
+  "runs_read": 2048,
+  "worlds": {
+    "00": {
+      "runs": 512,
+      "totals": {
+        "commands": 202192,
+        "direct_source_draws": 0,
+        "phantom_plays": 567,
+        "retained_source_plays": 0,
+        "source_access_plays": 0,
+        "either_source_path_plays": 0
+      },
+      "configurations_with_retained_source": 0,
+      "configurations_with_source_access": 0,
+      "configurations_with_either_factual_path": 0
+    },
+    "01": {
+      "runs": 512,
+      "totals": {
+        "commands": 202183,
+        "direct_source_draws": 0,
+        "phantom_plays": 1707,
+        "retained_source_plays": 0,
+        "source_access_plays": 0,
+        "either_source_path_plays": 0
+      },
+      "configurations_with_retained_source": 0,
+      "configurations_with_source_access": 0,
+      "configurations_with_either_factual_path": 0
+    },
+    "10": {
+      "runs": 512,
+      "totals": {
+        "commands": 207986,
+        "direct_source_draws": 6488,
+        "phantom_plays": 697,
+        "retained_source_plays": 60,
+        "source_access_plays": 19,
+        "either_source_path_plays": 64
+      },
+      "configurations_with_retained_source": 23,
+      "configurations_with_source_access": 13,
+      "configurations_with_either_factual_path": 24
+    },
+    "11": {
+      "runs": 512,
+      "totals": {
+        "commands": 207786,
+        "direct_source_draws": 6594,
+        "phantom_plays": 1973,
+        "retained_source_plays": 158,
+        "source_access_plays": 60,
+        "either_source_path_plays": 168
+      },
+      "configurations_with_retained_source": 36,
+      "configurations_with_source_access": 24,
+      "configurations_with_either_factual_path": 37
+    }
+  },
+  "paired_responses": {
+    "wins": {
+      "00": 289,
+      "01": 295,
+      "10": 316,
+      "11": 322
+    },
+    "patterns": {
+      "0000": 163,
+      "0001": 5,
+      "0010": 4,
+      "0011": 33,
+      "0100": 2,
+      "0101": 10,
+      "0111": 6,
+      "1010": 6,
+      "1011": 6,
+      "1100": 12,
+      "1101": 4,
+      "1110": 3,
+      "1111": 258
+    },
+    "paired_response_distributions": {
+      "source": {
+        "-1": 17,
+        "0": 451,
+        "1": 44
+      },
+      "consumer": {
+        "-1": 13,
+        "0": 480,
+        "1": 19
+      },
+      "interaction": {
+        "-1": 15,
+        "0": 482,
+        "1": 15
+      }
+    },
+    "counts_not_independent_samples": true
+  },
+  "immutable_primary_terminal": "HAND_ADAPTIVE_GROUP_VALUE_NOT_ESTABLISHED",
+  "observed_source_off_draw_leaks": 0,
+  "observed_source_off_provenance_leaks": 0,
+  "limits": [
+    "Post-observation complete census; no primary metric, interval or stopping rule changes.",
+    "Factual direct-draw provenance is not counterfactual marginal value or an admitted descriptor.",
+    "Aon/Boff can still draw and play Phantom. Boff can still have ordinary Strength/hit effects; zero HP is not asserted.",
+    "Consumer factor in FIELDS is assignment metadata, not an independently measured effect.",
+    "Configuration counts overlap and are not extra independent samples; no post-treatment subset is promoted.",
+    "Absence of these leakage defects cannot prove planner optimality, equivalence, global package futility or final P9."
+  ],
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
