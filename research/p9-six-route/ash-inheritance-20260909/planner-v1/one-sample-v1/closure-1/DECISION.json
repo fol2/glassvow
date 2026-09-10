@@ -1,0 +1,37 @@
+{
+  "kind": "COMPLETED_ONE_SAMPLE_CONTROLLER_DISPOSITION",
+  "input_head": "a4b2c318efacc17f2d003a684064dea12f1519f8",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "inputs": {
+    "execution-2/TERMINAL.json": "95b13f32f886f6300293fce3061103a4ad5e36e3",
+    "execution-2/REMOTE-READBACK.json": "ff4098353ccbb076d6c9451597a5ffa2f5ed3c30",
+    "WORK-ORDER.json": "9878b1b793b1747120cbf3c6ecfbfd3836972080"
+  },
+  "status": "FIXED_PLANNER_VALUE_OR_SUPPORT_NOT_ESTABLISHED",
+  "complete_v5_rows_per_method": 512,
+  "configurations": 128,
+  "seeds_per_configuration": 4,
+  "stock_wins": 66,
+  "planner_wins": 316,
+  "planner_cpu_seconds": 2187.73,
+  "stock_cpu_seconds": 89.02,
+  "cpu_limit_per_method_per_vow": 3600,
+  "both_fixed_value_blocks_pass": true,
+  "actual_resource_gate_pass": true,
+  "planner_support": {
+    "bloodfire": {"active": 26, "inactive": 102, "reachable": 39, "exclusive": 8},
+    "hand": {"active": 49, "inactive": 79, "reachable": 50, "exclusive": 31}
+  },
+  "support_bounds": {"active": 32, "inactive": 32, "reachable": 16, "exclusive": 8},
+  "failed_support_claim": "bloodfire active configurations 26 < 32",
+  "v0_opened": false,
+  "cold_readback_files": 1119,
+  "cold_readback_qualification_and_population_reproduced": true,
+  "scope": "Controller value and actual compute requirements passed conditional on four fixed common seeds. The inherited-pair support conjunction failed. Neither the whole controller/package conjunction nor P9 is admitted. This is not universal Bloodfire nonviability, independent-seed confirmation, or authority to add configurations/seeds to the closed nomination.",
+  "decision": "Stop performance tuning and do not replay this nomination. Read its retained complete traces to distinguish acquisition from enactment limitations before proposing any genuinely different intervention. Preserve all old sample budgets, negatives, content and model identities.",
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
