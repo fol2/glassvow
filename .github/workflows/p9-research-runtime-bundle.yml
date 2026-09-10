@@ -10,13 +10,13 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/closure-1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/joint-controller-v1
 jobs:
   bundle:
-    name: Complete retained support diagnosis - no engine or new cohort
+    name: One qualified acquisition and combat composition - fixed conditional stages
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 150
     permissions:
       contents: write
     steps:
@@ -25,62 +25,123 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909
-      - name: Verify committed inputs, test interpretation, read every assigned run
+          sparse-checkout: |
+            domain
+            content
+            tools
+            research/p9-six-route
+      - name: Bind committed source and run falsifying unit checks before native observations
+        id: binding
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          echo "PUBLISHED_HEAD=$GITHUB_SHA" >> "$GITHUB_ENV"
           python3 - <<'PY'
-          import hashlib,os,pathlib,subprocess
-          root=pathlib.Path(os.environ['STUDY'])
-          for name in ('audit_capture.py','DECISION.json'):
+          import hashlib,json,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['STUDY']);records={}
+          for name in ('joint.py','PROTOCOL.json'):
               p=root/name;b=p.read_bytes()
-              assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==subprocess.check_output(['git','rev-parse','HEAD:'+str(p)]).decode().strip()
+              actual=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+              assert actual==subprocess.check_output(['git','rev-parse','HEAD:'+str(p)]).decode().strip()
+              if name=='joint.py':assert actual=='9571bfbc8005df4f9b8e425314eb83e892a6f283'
+              records[name]=hashlib.sha256(b).hexdigest()
+          assert not (root/'FREEZE.json').exists()
+          (root/'FREEZE.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'source_sha256':records,'native_rows_at_freeze':0,'review_kind':'AUTHOR_SELF_REVIEW_NOT_INDEPENDENT','p9_certified':False},indent=2)+'\n')
           PY
-          python3 "$STUDY/audit_capture.py" --self-test > "$RUNNER_TEMP/one-sample-audit-tests.log" 2>&1
-          python3 "$STUDY/audit_capture.py" "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/capture-audit" > "$RUNNER_TEMP/one-sample-audit.stdout" 2> "$RUNNER_TEMP/one-sample-audit.stderr"
-          cp "$RUNNER_TEMP/one-sample-audit-tests.log" "$STUDY/capture-audit/TESTS.log"
-          cp "$RUNNER_TEMP/one-sample-audit.stdout" "$STUDY/capture-audit/runner.stdout"
-          cp "$RUNNER_TEMP/one-sample-audit.stderr" "$STUDY/capture-audit/runner.stderr"
+          python3 "$STUDY/joint.py" --self-test > "$RUNNER_TEMP/joint-tests.log" 2>&1
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$STUDY/capture-audit"
-          git diff --cached --name-only | awk -v prefix="$STUDY/capture-audit/" 'index($0,prefix)!=1 {exit 1}'
-          git commit -m 'research(p9): preserve complete one-sample acquisition and enactment diagnosis'
+          git add "$STUDY/FREEZE.json"
+          git commit -m 'research(p9): freeze exact joint source before qualification and outcomes'
+          git push origin HEAD:refs/heads/$branch
+          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Qualify composition and execute only the original conditional V5 and V0 rectangles
+        id: native
+        if: steps.binding.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            curl --fail --location --max-time 90 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip"
+            unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
+            engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+            chmod +x "$engine"
+            echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
+            "$engine" --version
+          } > "$RUNNER_TEMP/joint-engine.log" 2>&1
+          python3 "$STUDY/joint.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$RUNNER_TEMP/joint-work" --publish > "$RUNNER_TEMP/joint-run.stdout" 2> "$RUNNER_TEMP/joint-run.stderr"
+      - name: Preserve the real terminal and all available diagnostics without rewriting old evidence
+        if: always() && env.PUBLISHED_HEAD != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,shutil
+          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1';out.mkdir(exist_ok=True)
+          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('joint-*'):
+              if p.is_file():shutil.copyfile(p,out/p.name)
+          terminal=out/'TERMINAL.json'
+          if not terminal.exists():terminal.write_text(json.dumps({'status':'INCONCLUSIVE','failure':'SOURCE_OR_ENGINE_ENTRY_FAILED','source_head':os.environ['GITHUB_SHA'],'stages':{},'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          rows=[{'path':str(p.relative_to(out)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.rglob('*')) if p.is_file() and p!=out/'FILES.json']
+          (out/'FILES.json').write_text(json.dumps(rows,indent=2)+'\n')
+          rows=[{'path':str(p.relative_to(root)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(root.rglob('*')) if p.is_file() and p!=root/'PUBLISHED-FILES.json']
+          (root/'PUBLISHED-FILES.json').write_text(json.dumps(rows,indent=2)+'\n')
+          PY
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$(git rev-parse HEAD)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "$STUDY"
+          git diff --cached --name-only | awk -v prefix="$STUDY/" 'index($0,prefix)!=1 {exit 1}'
+          git commit -m 'research(p9): preserve complete joint controller source and emitted capture'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        if: always() && env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909
-      - name: Read back all new bytes and independently re-run only the offline reader
+          sparse-checkout: research/p9-six-route
+      - name: Cold-read every source and raw byte and reproduce all actually opened decisions
+        if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
-          python3 "cold/$STUDY/audit_capture.py" "$GITHUB_WORKSPACE/cold" "$RUNNER_TEMP/one-sample-audit-cold"
           python3 - <<'PY'
-          import hashlib,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold');records=[]
-          files=[root/'audit_capture.py',root/'DECISION.json',*sorted((root/'capture-audit').glob('*'))]
-          for p in files:
-              b=p.read_bytes();assert (cold/p).read_bytes()==b,str(p)
-              records.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
-          replay=pathlib.Path(os.environ['RUNNER_TEMP'])/'one-sample-audit-cold'
-          for name in ('RESULTS.json','stock-rows.json','planner-rows.json'):
-              assert (replay/name).read_bytes()==(root/'capture-audit'/name).read_bytes(),name
-          result=json.loads((root/'capture-audit/RESULTS.json').read_bytes())
-          receipt={'kind':'COMPLETE_ONE_SAMPLE_AUDIT_COLD_READBACK','source_head':os.environ['GITHUB_SHA'],'published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':records,'all_bytes_equal':True,'readout_reproduced':True,'result_sha256':hashlib.sha256((root/'capture-audit/RESULTS.json').read_bytes()).hexdigest(),'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
-          (root/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          print(json.dumps({'decision':result['decision'],'policy_counts':{m:r['policy_counts'] for m,r in result['methods'].items()}},indent=2))
+          import hashlib,json,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')
+          manifest=(root/'PUBLISHED-FILES.json').read_bytes();assert (cold/root/'PUBLISHED-FILES.json').read_bytes()==manifest
+          rows=json.loads(manifest);assert len({r['path'] for r in rows})==len(rows)
+          for r in rows:
+              p=pathlib.Path(r['path']);assert not p.is_absolute() and '..' not in p.parts
+              a=(root/p).read_bytes();b=(cold/root/p).read_bytes()
+              assert a==b and len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256'],str(p)
+          out=root/'execution-1';receipt=out/'REMOTE-READBACK.json'
+          if (cold/out/'RESOLVED-PROTOCOLS.json').exists():
+              subprocess.run(['python3',str(cold/root/'joint.py'),'verify',str(cold.resolve()),str(out.resolve()),str((cold/out).resolve()),str(receipt.resolve())],check=True)
+          else:
+              t=json.loads((cold/out/'TERMINAL.json').read_bytes());assert t['status']=='INCONCLUSIVE' and not t['stages']
+              receipt.write_text(json.dumps({'kind':'JOINT_ENTRY_DIAGNOSTICS_COLD_READBACK','files':len(rows)+1,'all_bytes_equal':True,'scientific_status':'INCONCLUSIVE','qualification_reproduced':False,'new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          (out/'SOURCE-READBACK.json').write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':len(rows)+1,'all_source_and_capture_bytes_equal':True,'new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/REMOTE-READBACK.json"
-          git commit -m 'research(p9): retain cold byte proof of complete one-sample diagnosis'
+          git add "$STUDY/execution-1/"*READBACK.json
+          git commit -m 'research(p9): retain complete cold byte proof of joint controller comparison'
           git push origin HEAD:refs/heads/$branch
+      - name: Report scientific and delivery conclusions separately
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib,sys
+          t=json.loads((pathlib.Path(os.environ['STUDY'])/'execution-1/TERMINAL.json').read_bytes())
+          print(json.dumps(t,indent=2))
+          sys.exit(3 if t['status']=='INCONCLUSIVE' else 0)
+          PY
