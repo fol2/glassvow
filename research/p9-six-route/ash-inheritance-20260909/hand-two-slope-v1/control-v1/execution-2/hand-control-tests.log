@@ -1,0 +1,17 @@
+test_archive_bytes_and_roles (test_control.Tests.test_archive_bytes_and_roles) ... ok
+test_archive_traversal_rejected_before_read (test_control.Tests.test_archive_traversal_rejected_before_read) ... ok
+test_collision_inside_old_range (test_control.Tests.test_collision_inside_old_range) ... ok
+test_fresh_metadata_pass (test_control.Tests.test_fresh_metadata_pass) ... ok
+test_missing_metadata_checkout_fails (test_control.Tests.test_missing_metadata_checkout_fails) ... ok
+test_nested_array_collision (test_control.Tests.test_nested_array_collision) ... ok
+test_protected_evidence_never_opened (test_control.Tests.test_protected_evidence_never_opened) ... ok
+test_range_end_is_exclusive (test_control.Tests.test_range_end_is_exclusive) ... ok
+test_card_or_rarity_scope_rejected (test_status_binding.StatusBindingTests.test_card_or_rarity_scope_rejected) ... ok
+test_preexisting_bound_status_passes_while_old_predicate_failed (test_status_binding.StatusBindingTests.test_preexisting_bound_status_passes_while_old_predicate_failed) ... ok
+test_unrelated_status_or_pool_rejected (test_status_binding.StatusBindingTests.test_unrelated_status_or_pool_rejected) ... ok
+test_wrong_bloodfire_definition_rejected (test_status_binding.StatusBindingTests.test_wrong_bloodfire_definition_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.012s
+
+OK
