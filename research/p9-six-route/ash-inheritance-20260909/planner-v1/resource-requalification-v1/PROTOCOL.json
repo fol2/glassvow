@@ -1,0 +1,36 @@
+{
+  "kind": "EXACT_IMPLEMENTATION_FULL_WORKLOAD_RESOURCE_REQUALIFICATION",
+  "product_main": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "question": "Does the verified same-decision integer/memo implementation meet the unchanged whole-vow cost limit, reproduce every completed V5 trajectory, and then satisfy the originally gated support/V0 obligations?",
+  "old_scope": "Original value-v1 execution-2 remains INCONCLUSIVE/MATCHED_RESOURCE_CEILING with4015.74 CPU seconds. This packet never rewrites that result or treats its exposed V5 replay as independent replication.",
+  "source_sha256": {
+    "requalify.py": "ad3b77d08d4ff0e8d7f77422ad5dffe5b3713a0255c083db2975a1ac6b7156a1",
+    "test_requalify.py": "77151ee44af7e6aa8c12a3d3057add0b8cc6795365dc4b390e650325b12f28d7"
+  },
+  "cache_result_sha256": "d7e242cf5f6083d5424d6185946688d159ab0615226140a5b43666e51f002e4e",
+  "optimized_source_sha256": "ef6f7e6c5c987874b9ee6adc19a5a2733cb220624d246fcbcc2c6a72650d32b2",
+  "entry": "Frozen continuation-integer-v1 exact-output and two alternating15-percent speed targets must pass, with complete remote byte readback; otherwise this packet cannot run.",
+  "unchanged_inputs": {
+    "policy_root": 73409000,
+    "configurations": 128,
+    "seeds": [73410100, 73410101, 73410102, 73410103],
+    "first_block": [0, 32],
+    "reserved_block": [32, 96],
+    "policies_per_cell": 2,
+    "cpu_seconds_per_method_per_vow": 3600,
+    "methods": ["stock", "planner"],
+    "vow_order": [5, 0]
+  },
+  "allowed_delta": "Only rollout Greedy factory and one scoped continuation-cache subclass with safe integer conversion. No method parameters, acquisition, content, public state, RNG, score, query budget, null or thresholds are edited.",
+  "v5_reuse": "Re-execute all originally complete V5 cells solely for new-implementation equivalence and resource cost. Full traces and all endpoint fields except two top-level timing counters must match the original. Same512 assigned outcomes per method; zero independent confirmation samples.",
+  "resource": "Measure all child user+system CPU for both original fixed blocks, independently per method and vow. Same3600 limit. No suffix-only costing, point rounding, unused-budget transfer, sample addition, or timing-ratio extrapolation.",
+  "gate_order": "Both original value blocks and actual full resource proof -> original inherited pair support analysis. V5 success only -> originally unopened V0 value and support on the same frozen assignment. Any failure stops; no altered policies or additional seeds.",
+  "scientific_contract": "read_value and read_pair are byte-bound unchanged. Positive point/interval observations do not override a failed cost or support criterion. Support is not complete causal admission, descriptor validation, seed-independent confirmation, detector, retention or P9.",
+  "preservation": "Push complete assigned groups after two workers finish; retain failures and all emitted data. Cold checkout every byte, recheck all original V5 trajectory identities and rebuild exact decisions; old files never overwritten.",
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "containment": {"workers": 2, "native_invocation_seconds": 240, "workflow_minutes": 85},
+  "new_full_package_certificates": 0,
+  "p9_certified": false,
+  "entry_head": "4536e774ec7274903dda346e8acb0f033139e132",
+  "entry_readback_git_blob": "91beb25a6fe4ed10df5964debd4e52fccde832a5"
+}
