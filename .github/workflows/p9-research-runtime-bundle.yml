@@ -13,7 +13,7 @@ env:
   STUDY: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/control-v1
 jobs:
   bundle:
-    name: Exact isolated-Hand signed RandomBuild screen and preservation
+    name: Unchanged isolated-Hand control with source-bound delivery correction
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -30,7 +30,7 @@ jobs:
             content
             tools
             research/p9-six-route
-      - name: Bind fixed source and validate delivery regressions
+      - name: Verify original protocol, empty outcome frontier and repaired implementation
         id: source
         continue-on-error: true
         shell: bash
@@ -41,15 +41,26 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           python3 - <<'PY'
           import hashlib,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);p=json.loads((root/'PROTOCOL.json').read_bytes())
-          for n,h in p['source_git_blobs'].items():
-              b=(root/n).read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==h,n
-              compile(b,str(root/n),'exec')
+          root=pathlib.Path(os.environ['STUDY'])
+          blob=lambda b:hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+          assert blob((root/'PROTOCOL.json').read_bytes())=='c33a0cde306eed3e8ee9ba68288db49cc6e1538d'
+          p=json.loads((root/'PROTOCOL.json').read_bytes());repair=json.loads((root/'SOURCE-REPAIR.json').read_bytes())
+          assert repair['scientific_protocol_git_blob']=='c33a0cde306eed3e8ee9ba68288db49cc6e1538d'
+          assert repair['original_control_git_blob']==p['source_git_blobs']['control.py']=='c8cfd274a697e1ca3619900778b04eeaec708d9c'
+          expected={'control.py':'116e429989aedf7d7607ce7036b75df97b0f61fd','test_control.py':'c883dbb462c3c7f0187b35c08246dfe82d4fa538','test_status_binding.py':'c87f262fecb53344504878b9930821b95e257829'}
+          assert repair['repaired_source_git_blobs']==expected
+          for n,h in expected.items():
+              b=(root/n).read_bytes();assert blob(b)==h,n;compile(b,str(root/n),'exec')
+          old=root/'execution-1';t=json.loads((old/'TERMINAL.json').read_bytes())
+          assert t['status']=='INCONCLUSIVE' and t['failure']=="ValueError('NONCARD_CONTENT_DELTA')"
+          assert not (old/'raw').exists() and not (old/'headers').exists()
+          assert not list(old.rglob('*.ndjson*')) and not list(old.rglob('*.config.json'))
+          assert json.loads((old/'REMOTE-READBACK.json').read_bytes())['all_bytes_equal'] is True
           assert p['seed0']==73760100 and p['assigned_outcomes']==1024 and p['arm']==2
-          assert not (root/'execution-1').exists()
+          assert not (root/'execution-2').exists()
           PY
-          (cd "$STUDY" && python3 -m unittest -v test_control) > "$RUNNER_TEMP/hand-control-tests.log" 2>&1
-      - name: Run only the fixed signed-arm rectangle after exact header binding
+          (cd "$STUDY" && python3 -m unittest -v test_control test_status_binding) > "$RUNNER_TEMP/hand-control-tests.log" 2>&1
+      - name: Execute the original assigned screen after exact signed-header binding
         id: native
         if: steps.source.outcome == 'success'
         continue-on-error: true
@@ -63,15 +74,15 @@ jobs:
             chmod +x "$engine"
             echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
           } > "$RUNNER_TEMP/hand-control-engine.log" 2>&1
-          python3 "$STUDY/control.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$RUNNER_TEMP/hand-control-work" > "$RUNNER_TEMP/hand-control-run.stdout" 2> "$RUNNER_TEMP/hand-control-run.stderr"
-      - name: Commit every available result and actual terminal
+          python3 "$STUDY/control.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-2" "$RUNNER_TEMP/hand-control-work2" > "$RUNNER_TEMP/hand-control-run.stdout" 2> "$RUNNER_TEMP/hand-control-run.stderr"
+      - name: Preserve every result and actual diagnostics without changing the old failure
         if: always()
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,json,os,pathlib,shutil
-          out=pathlib.Path(os.environ['STUDY'])/'execution-1';out.mkdir(exist_ok=True)
+          out=pathlib.Path(os.environ['STUDY'])/'execution-2';out.mkdir(exist_ok=True)
           for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('hand-control-*'):
               if p.is_file():shutil.copyfile(p,out/p.name)
           if not (out/'TERMINAL.json').exists():
@@ -81,8 +92,8 @@ jobs:
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/execution-1"
-          git commit -m 'research(p9): preserve complete isolated-Hand control capture and diagnostics'
+          git add "$STUDY/execution-2"
+          git commit -m 'research(p9): preserve original isolated-Hand control outcome rectangle and repaired delivery'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -93,21 +104,21 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
           sparse-checkout: research/p9-six-route
-      - name: Read every committed byte and rebuild the unchanged signed decision
+      - name: Read every committed byte and reproduce the unchanged signed decision
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
-          cmp "$STUDY/control.py" "cold/$STUDY/control.py"
-          cmp "$STUDY/test_control.py" "cold/$STUDY/test_control.py"
-          cmp "$STUDY/PROTOCOL.json" "cold/$STUDY/PROTOCOL.json"
-          python3 "cold/$STUDY/control.py" verify "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$GITHUB_WORKSPACE/cold/$STUDY/execution-1" "$GITHUB_WORKSPACE/$STUDY/execution-1/REMOTE-READBACK.json"
+          for name in control.py test_control.py test_status_binding.py PROTOCOL.json SOURCE-REPAIR.json; do
+            cmp "$STUDY/$name" "cold/$STUDY/$name"
+          done
+          python3 "cold/$STUDY/control.py" verify "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/execution-2" "$GITHUB_WORKSPACE/cold/$STUDY/execution-2" "$GITHUB_WORKSPACE/$STUDY/execution-2/REMOTE-READBACK.json"
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/execution-1/REMOTE-READBACK.json"
-          test "$(git diff --cached --name-only)" = "$STUDY/execution-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record cold-reproduced isolated-Hand signed-control result'
+          git add "$STUDY/execution-2/REMOTE-READBACK.json"
+          test "$(git diff --cached --name-only)" = "$STUDY/execution-2/REMOTE-READBACK.json"
+          git commit -m 'research(p9): record exact cold readback of isolated-Hand signed controls'
           git push origin HEAD:refs/heads/$branch
-      - name: Keep incomplete delivery separate from scientific gate status
+      - name: Keep delivery status separate from scientific gate status
         if: always() && steps.native.outcome != 'success'
         run: exit 3
