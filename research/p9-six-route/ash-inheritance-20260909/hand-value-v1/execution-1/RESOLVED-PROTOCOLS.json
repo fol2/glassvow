@@ -1,0 +1,90 @@
+{
+  "00": {
+    "kind": "FIXED_HAND_GROUP_VALUE_TRANSPORT",
+    "method": "planner",
+    "raw_bytes_per_stream": 536870912,
+    "runtime": {
+      "sources": {
+        "balance_sim.gd": "a9050fe68678d5d650f9b4e1f204ffe0f0e2f8160e35d1697814ac6da4c8c1cb",
+        "observed_sim.gd": "f6ac401846fea02563b48b8a8cf915d6fca154dc17c4adab1b1c8ded64d24f7e",
+        "balance_pilot.gd": "ec24ae7cff4fccce2759821cfdc03a2fb9c862077caac620e6c06fe565b91ff5",
+        "balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+        "balance_metrics.gd": "6904043d83d9cc91265a60911b28f49a01074d185e353b2dccdad64293cd0deb",
+        "vow_incentives.gd": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+      },
+      "content_sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9",
+      "combat_sha256": "5a9cc08ecbf12dc099a092941889ce64c341b51d8f65207a2bb401a1b3e44eba",
+      "observer_sha256": "66de21ab1c05c0aebf9ea28b19f5a9728d79c2a59499c732f93904255247eb08",
+      "probe_sha256": "8f1a2f086f5c3a00bb891f082906e2547ed43ddaf7d6431fc04a0a9c03bd67d8",
+      "bridge_sha256": "5ee7fd07374f810a061a0500534a925d65fa00686c3a32fcfa2de6cc17b5bf78"
+    },
+    "scientific_contract": "CONTRACT.json",
+    "world": "00"
+  },
+  "01": {
+    "kind": "FIXED_HAND_GROUP_VALUE_TRANSPORT",
+    "method": "planner",
+    "raw_bytes_per_stream": 536870912,
+    "runtime": {
+      "sources": {
+        "balance_sim.gd": "a9050fe68678d5d650f9b4e1f204ffe0f0e2f8160e35d1697814ac6da4c8c1cb",
+        "observed_sim.gd": "f6ac401846fea02563b48b8a8cf915d6fca154dc17c4adab1b1c8ded64d24f7e",
+        "balance_pilot.gd": "ec24ae7cff4fccce2759821cfdc03a2fb9c862077caac620e6c06fe565b91ff5",
+        "balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+        "balance_metrics.gd": "6904043d83d9cc91265a60911b28f49a01074d185e353b2dccdad64293cd0deb",
+        "vow_incentives.gd": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+      },
+      "content_sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9",
+      "combat_sha256": "5a9cc08ecbf12dc099a092941889ce64c341b51d8f65207a2bb401a1b3e44eba",
+      "observer_sha256": "465a0c89e4a8d83e50513738f9cf15ef6e63f376cd971f0bd951aa7fec8f5b0f",
+      "probe_sha256": "8f1a2f086f5c3a00bb891f082906e2547ed43ddaf7d6431fc04a0a9c03bd67d8",
+      "bridge_sha256": "5ee7fd07374f810a061a0500534a925d65fa00686c3a32fcfa2de6cc17b5bf78"
+    },
+    "scientific_contract": "CONTRACT.json",
+    "world": "01"
+  },
+  "10": {
+    "kind": "FIXED_HAND_GROUP_VALUE_TRANSPORT",
+    "method": "planner",
+    "raw_bytes_per_stream": 536870912,
+    "runtime": {
+      "sources": {
+        "balance_sim.gd": "a9050fe68678d5d650f9b4e1f204ffe0f0e2f8160e35d1697814ac6da4c8c1cb",
+        "observed_sim.gd": "f6ac401846fea02563b48b8a8cf915d6fca154dc17c4adab1b1c8ded64d24f7e",
+        "balance_pilot.gd": "ec24ae7cff4fccce2759821cfdc03a2fb9c862077caac620e6c06fe565b91ff5",
+        "balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+        "balance_metrics.gd": "6904043d83d9cc91265a60911b28f49a01074d185e353b2dccdad64293cd0deb",
+        "vow_incentives.gd": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+      },
+      "content_sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9",
+      "combat_sha256": "5a9cc08ecbf12dc099a092941889ce64c341b51d8f65207a2bb401a1b3e44eba",
+      "observer_sha256": "c0b9ebe5f9eb7b98ec7d7d71170aedb3dffe03b143a86fd180754fabaa37a5c6",
+      "probe_sha256": "8f1a2f086f5c3a00bb891f082906e2547ed43ddaf7d6431fc04a0a9c03bd67d8",
+      "bridge_sha256": "5ee7fd07374f810a061a0500534a925d65fa00686c3a32fcfa2de6cc17b5bf78"
+    },
+    "scientific_contract": "CONTRACT.json",
+    "world": "10"
+  },
+  "11": {
+    "kind": "FIXED_HAND_GROUP_VALUE_TRANSPORT",
+    "method": "planner",
+    "raw_bytes_per_stream": 536870912,
+    "runtime": {
+      "sources": {
+        "balance_sim.gd": "a9050fe68678d5d650f9b4e1f204ffe0f0e2f8160e35d1697814ac6da4c8c1cb",
+        "observed_sim.gd": "f6ac401846fea02563b48b8a8cf915d6fca154dc17c4adab1b1c8ded64d24f7e",
+        "balance_pilot.gd": "ec24ae7cff4fccce2759821cfdc03a2fb9c862077caac620e6c06fe565b91ff5",
+        "balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+        "balance_metrics.gd": "6904043d83d9cc91265a60911b28f49a01074d185e353b2dccdad64293cd0deb",
+        "vow_incentives.gd": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+      },
+      "content_sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9",
+      "combat_sha256": "5a9cc08ecbf12dc099a092941889ce64c341b51d8f65207a2bb401a1b3e44eba",
+      "observer_sha256": "72f66773100cbc1290b41b4f7628e6d8c14d66f583ba17b2ca0068829102e2b5",
+      "probe_sha256": "8f1a2f086f5c3a00bb891f082906e2547ed43ddaf7d6431fc04a0a9c03bd67d8",
+      "bridge_sha256": "5ee7fd07374f810a061a0500534a925d65fa00686c3a32fcfa2de6cc17b5bf78"
+    },
+    "scientific_contract": "CONTRACT.json",
+    "world": "11"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "worker_processes": 4,
+  "available_cpu_affinity": 4,
+  "runner_class": "ubuntu-24.04",
+  "per_world_cpu_ceiling": 3600
+}
