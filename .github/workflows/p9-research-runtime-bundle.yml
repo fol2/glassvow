@@ -10,8 +10,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   bundle:
-    name: Inspect original text-encoded recovery prefix - no engine
-    if: github.run_attempt == 1
+    name: Locate incomplete transport gap - no engine or scientific reexecution
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -22,8 +21,37 @@ jobs:
           persist-credentials: false
           sparse-checkout: |
             research/p9-six-route/ash-inheritance-20260909/causal-transport-v1
-      - name: Decode original transport and identify existing complete nodes
+      - name: Report complete decoded prefix before the actual transport gap
         shell: bash
         run: |
           set -euo pipefail
-          python3 research/p9-six-route/ash-inheritance-20260909/causal-transport-v1/inspect_prefix.py
+          python3 - <<'PY'
+          import pathlib,base64,lzma,json,codecs,hashlib
+          root=pathlib.Path('research/p9-six-route/ash-inheritance-20260909/causal-transport-v1')
+          parts=[p.read_bytes() for p in sorted(root.glob('part-*.xzpart'))]
+          print('PART_LENGTHS='+str([len(b) for b in parts]))
+          d=lzma.LZMADecompressor();raw=b'';accepted=[]
+          for i,b in enumerate(parts):
+              b=base64.b64decode(b.strip(),validate=True)
+              try:out=d.decompress(b)
+              except lzma.LZMAError as e:
+                  print('FIRST_NONCONTIGUOUS_PART='+str(i));break
+              raw+=out;accepted.append(i)
+          text=codecs.getincrementaldecoder('utf-8')().decode(raw,final=False)
+          pos=text.index('"nodes":[')+len('"nodes":[');nodes=[];decoder=json.JSONDecoder()
+          while pos<len(text):
+              if text[pos]==']':break
+              if text[pos]==',':pos+=1
+              try:n,end=decoder.raw_decode(text,pos)
+              except json.JSONDecodeError:break
+              nodes.append(n);pos=end
+          values=[]
+          for n in nodes:
+              if n[0]=='v':v=n[2]
+              elif n[0]=='a':v=[values[i] for i in n[1]]
+              elif n[0]=='d':v={values[k]:values[i] for k,i in n[1]}
+              else:raise ValueError(n[0])
+              values.append(v)
+          seq=[v for v in values if isinstance(v,dict) and v.get('kind')=='sequence']
+          print(json.dumps({'accepted_parts':accepted,'prefix_bytes':len(raw),'nodes':len(nodes),'node_array_complete':pos<len(text) and text[pos]==']','sequences':{s:sum(v.get('source')==s for v in seq) for s in ['bloodRite','preparation','surge']},'after_nodes':text[pos:pos+6000],'tail':text[-2000:],'new_native_runs':0,'complete_recovery':False},indent=2))
+          PY
