@@ -1,0 +1,21 @@
+{
+  "kind": "FLOAT_FASTPATH_SOURCE_FREEZE",
+  "source_head": "04a7e07d7618e47ab3b222c9be657ac480ea18fd",
+  "protocol_git_blob": "d98d35a012c756f7bae4774d570f0310e34cdafc",
+  "sources": {
+    "refine.py": "c5e325e19693897a73d22c5a0cf0df09149b7d9aa7cd03a0b0d9f3ac902816e1",
+    "numeric_gate.gd": "90e0cd7429c4156ce1a9a75307256ef581c1404ccfdf3c6a2b7f3f6c1ef7436c",
+    "experiment.py": "6d19377f60b1ef2e969273d89d13eb3655cf6e440bbd66f1b65bdce935663126",
+    "test_refine.py": "c653a770596ddea09d86168d3dfdb9f505f88cedd9983219442eb2fe0db6fb41"
+  },
+  "reference_cache_sha256": "ef6f7e6c5c987874b9ee6adc19a5a2733cb220624d246fcbcc2c6a72650d32b2",
+  "refined_cache_sha256": "e2f33a8045bfb98553929aa0d5b2f92dc5c49da59c9fa27b3d99c0200bf8d893",
+  "local_test_count": 9,
+  "local_conversion_shim_checks": 13270,
+  "local_conversion_shim_failures": 0,
+  "local_shim_is_full_controller_qualification": false,
+  "hosted_entry": "Run the numerical gate through the complete actual controller classes, not the standalone local shim. Then require exact existing 480-case full-state compatibility and cache-lifecycle negatives before any fixed-cell timing.",
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
