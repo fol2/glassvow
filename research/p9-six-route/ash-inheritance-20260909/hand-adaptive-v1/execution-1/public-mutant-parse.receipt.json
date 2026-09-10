@@ -1,0 +1,14 @@
+{
+  "command": [
+    "env",
+    "GODOT=/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+    "bash",
+    "tools/check_scripts.sh",
+    "domain/rules/combat.gd",
+    "public_rollout.gd",
+    "observed_game.gd",
+    "gate.gd"
+  ],
+  "returncode": 0,
+  "elapsed_seconds": 1.5172933059999991
+}
