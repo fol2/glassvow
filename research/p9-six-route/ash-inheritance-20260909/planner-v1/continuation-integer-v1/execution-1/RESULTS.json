@@ -1,0 +1,61 @@
+{
+  "kind": "EXACT_CONTINUATION_SAFE_INTEGER_REFINEMENT",
+  "status": "EXACT_CONTINUATION_CACHE_SPEEDUP_ESTABLISHED",
+  "qualification_cases": 480,
+  "cache_lifecycle_cases": 24,
+  "stale_mutant_failures": 24,
+  "all_qualification_bytes_equal": true,
+  "all_native_trace_bytes_equal": true,
+  "all_endpoint_policy_and_score_values_equal": true,
+  "excluded_fields": [
+    "top-level run_usec",
+    "top-level query_usec"
+  ],
+  "timings": {
+    "0": {
+      "reference": {
+        "raw_trace_sha256": "7ac249cb7c6ea7e98b327ce674c3b7488de3bb42811dafd6e118aefccbf6160e",
+        "canonical_outcome_sha256": "57c695069490bc029ce5711fecfabeb63548f2763d32f9e629899e14e22f426e",
+        "cpu_seconds": 55.09,
+        "elapsed_seconds": 55.1
+      },
+      "memo": {
+        "raw_trace_sha256": "7ac249cb7c6ea7e98b327ce674c3b7488de3bb42811dafd6e118aefccbf6160e",
+        "canonical_outcome_sha256": "57c695069490bc029ce5711fecfabeb63548f2763d32f9e629899e14e22f426e",
+        "cpu_seconds": 46.27,
+        "elapsed_seconds": 46.37
+      }
+    },
+    "1": {
+      "reference": {
+        "raw_trace_sha256": "7ac249cb7c6ea7e98b327ce674c3b7488de3bb42811dafd6e118aefccbf6160e",
+        "canonical_outcome_sha256": "57c695069490bc029ce5711fecfabeb63548f2763d32f9e629899e14e22f426e",
+        "cpu_seconds": 55.47,
+        "elapsed_seconds": 55.48
+      },
+      "memo": {
+        "raw_trace_sha256": "7ac249cb7c6ea7e98b327ce674c3b7488de3bb42811dafd6e118aefccbf6160e",
+        "canonical_outcome_sha256": "57c695069490bc029ce5711fecfabeb63548f2763d32f9e629899e14e22f426e",
+        "cpu_seconds": 46.88,
+        "elapsed_seconds": 46.93
+      }
+    }
+  },
+  "memo_reference_cpu_ratios": [
+    0.8398983481575604,
+    0.845141517937624
+  ],
+  "maximum_ratio_required": 0.85,
+  "old_resource_terminal_unchanged": true,
+  "old_3600_second_limit_changed": false,
+  "resource_ceiling_requalified_for_full_workload": false,
+  "new_native_outcome_samples": 0,
+  "scope": "Two alternating repetitions of one preassigned old eight-run cell. Same-decision delivery benchmark, not population confirmation, whole-workload timing or package admission.",
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "numeric_cases": 27,
+  "unguarded_integer_cast_counterexamples": 4,
+  "previous_memo_target_miss_preserved": true,
+  "source_reason": "Safe TYPE_INT fast path only. Other types and magnitudes call the unchanged conversion."
+}
