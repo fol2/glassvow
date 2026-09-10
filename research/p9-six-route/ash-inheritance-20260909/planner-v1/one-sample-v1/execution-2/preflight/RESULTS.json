@@ -1,0 +1,53 @@
+{
+  "status": "PLANNER_CURRENT_RUNTIME_COMPATIBILITY_PASS",
+  "constructed_cases": 480,
+  "checks_per_case": 13,
+  "baseline_null_pairs": 240,
+  "failed_checks": [],
+  "unadapted_clone_switch_mismatches": 288,
+  "original_v25_studies_repeated": false,
+  "parameters": {
+    "bank_mode": "current-plus-next",
+    "native_rollout": true,
+    "rollout_samples": 1,
+    "rollout_steps": 12,
+    "leaf_terminal": false
+  },
+  "raw": [
+    {
+      "path": "baseline.jsonl",
+      "bytes": 1904475,
+      "sha256": "2571eb2fbe98228d4ee3ffec787a5a25d22963961ddbd91341b9acad09859d16"
+    },
+    {
+      "path": "active.jsonl",
+      "bytes": 1951649,
+      "sha256": "12b93d8755f80ff0f3fc0776685dadb462440e1c61046feb43de27d7484840ec"
+    },
+    {
+      "path": "off.jsonl",
+      "bytes": 1948534,
+      "sha256": "a4ec82998d7140ee134e7165775192c69c5ba6bfee90f107444ff287d71febf5"
+    },
+    {
+      "path": "producer_off.jsonl",
+      "bytes": 1952043,
+      "sha256": "183ad85ec28c9dfe57e5e6fcab8f802ce4cf1af029527d7144a3b8d000d97478"
+    },
+    {
+      "path": "consumer_off.jsonl",
+      "bytes": 1951633,
+      "sha256": "40d42f714b0631c3fd82cadbb89effd2d6d5217d56ce6de275f79028f6ec04bd"
+    }
+  ],
+  "scope": "Existing planner source plus explicit intervention-switch propagation. Finite legality, isolation, public-state and off/Dusk compatibility only.",
+  "limits": [
+    "No optimality or whole-run performance claim.",
+    "No matched-cost planner value or package certificate yet.",
+    "Unchanged heuristic continuation and finite horizon may omit long-horizon setup value.",
+    "Acquisition adapter remains not admitted. No old outcomes are transported."
+  ],
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
