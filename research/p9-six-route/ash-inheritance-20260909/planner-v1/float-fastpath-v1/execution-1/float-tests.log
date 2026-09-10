@@ -1,0 +1,14 @@
+test_insufficient_gain_is_negative_not_error (test_refine.BenchmarkDecisionTests.test_insufficient_gain_is_negative_not_error) ... ok
+test_invalid_cost_rejected (test_refine.BenchmarkDecisionTests.test_invalid_cost_rejected) ... ok
+test_missing_cell_rejected (test_refine.BenchmarkDecisionTests.test_missing_cell_rejected) ... ok
+test_missing_repetition_rejected (test_refine.BenchmarkDecisionTests.test_missing_repetition_rejected) ... ok
+test_one_slow_cell_cannot_hide_in_aggregate (test_refine.BenchmarkDecisionTests.test_one_slow_cell_cannot_hide_in_aggregate) ... ok
+test_two_complete_repetitions_pass (test_refine.BenchmarkDecisionTests.test_two_complete_repetitions_pass) ... ok
+test_exact_integrality_and_range (test_refine.RefinementTests.test_exact_integrality_and_range) ... ok
+test_shim_requires_original_fallback (test_refine.RefinementTests.test_shim_requires_original_fallback) ... ok
+test_wrong_source_rejected (test_refine.RefinementTests.test_wrong_source_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.010s
+
+OK
