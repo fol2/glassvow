@@ -1,0 +1,43 @@
+{
+  "kind": "ONE_PROFILE_GUIDED_EXACT_CONTINUATION_CACHE",
+  "input_head": "71dae784d6e6699c6eeb8b3710ac46f7de124ee8",
+  "product_main": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "question": "Does memoising repeated pure reads inside each unchanged greedy continuation decision reduce measured cost without altering any outcome, score, action, policy memory, native trace, null or RNG?",
+  "evidence_basis": {
+    "profile": "planner-v1/profile-v1/execution-1/RESULTS.json",
+    "profile_sha256": "18819cffc150da36ba4139468db3a27d3d9ca57ac3de968623b9fb85fad2f0f9",
+    "greedy_root_time_fraction": 0.6039578497188371,
+    "old_root_query_cache": "EXACT_EQUIVALENCE_SPEEDUP_NOT_ESTABLISHED"
+  },
+  "delta": "Only rollout Greedy factory chooses a subclass that memoises ten pure query functions. Cache is cleared before and after each choose_action; random_play bypasses memo. All formulas, inherited functions, action order, root samples, horizon, acquired cards and cloned game states remain unchanged.",
+  "source_sha256": {
+    "benchmark.py": "15004a488edcbfd774d15ab6ecb0e26db597dcb9a0e9560be0118f5578d71919",
+    "continuation_cache.gd": "df6f1753217b905d1fcc9ec85a078c964b9ea18389fa07d9960208e094955e69",
+    "cache_gate.gd": "699d003c82af7382507bfbb6a8a5c7aa175a26c2f50d05fc45748fca37c25eb9",
+    "test_cache.py": "ff3a785bc63d19bf4d9d54ae69251187806530ee2b3c21d8947d928c9567245e"
+  },
+  "checks": [
+    "480 previously captured full compatibility cases reproduce byte-for-byte, no new independent sample",
+    "24 mutation-varying state/deck/route calls preserve action, state and policy memory; stale-cache mutant must be detected",
+    "Four timed calls to the same old first eight-run cell in fixed reference/memo, memo/reference order; all native trace bytes and all endpoint fields except two declared timing fields match the original",
+    "Both alternating CPU ratios must be at most0.85; no extra timing repetitions or candidate selection from results"
+  ],
+  "reference_cell": {
+    "stem": "v5-000",
+    "policy_root": 73409000,
+    "first": 0,
+    "count": 2,
+    "seeds": [73410100, 73410101, 73410102, 73410103]
+  },
+  "cpu_ratio_limit": 0.85,
+  "qualification_archive_sha256": "7770b3e03e12408b2b71da19312e8cda0307334409ce61a4aa335e986ec46f1d",
+  "workload_files_sha256": "e8e2e3314b3a6f062af2ef4d0719d7a71bb24762d65049e87a7ea28255e0bf5e",
+  "unchanged_terminal": "value-v1/execution-2 remains INCONCLUSIVE/MATCHED_RESOURCE_CEILING; old CPU4015.74 and ceiling3600 are never rewritten, discounted or retrospectively passed.",
+  "pass_scope": "Exact implementation optimization with one-cell cost evidence only. Full-workload resource requalification is still required before any blocked support/V0 stage; this does not reopen old panels or supply new independent samples.",
+  "failure_scope": "Preserve partial outputs and specific failure; equality failure forbids use; no measured speedup means no adoption on performance grounds. No automatic parameter or timing-repeat rescue.",
+  "review": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "containment": {"workers": 1, "native_invocation_seconds": 240, "workflow_minutes": 15},
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
