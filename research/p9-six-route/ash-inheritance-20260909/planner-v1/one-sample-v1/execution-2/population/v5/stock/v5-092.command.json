@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/usr/bin/time",
+    "-f",
+    "%U %S %e",
+    "-o",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-092.cpu.txt",
+    "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/home/runner/work/_temp/one-sample-runtime/population/stock/candidate",
+    "-s",
+    "res://probe.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-092.config.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-092.outcomes.jsonl",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1/execution-2/population/v5/stock/v5-092.traces.jsonl"
+  ],
+  "returncode": 0,
+  "error": null,
+  "seconds": 1.6842285650000122
+}
