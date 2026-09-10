@@ -1,0 +1,88 @@
+{
+  "kind": "ONE_FIXED_ACQUISITION_CONTROLLER_COMPARISON",
+  "vow": 5,
+  "activation_old": 31,
+  "activation_new": 78,
+  "gained_policies": 49,
+  "lost_policies": 2,
+  "paired_activation_difference": 0.3671875,
+  "one_sided_exact_sign_p": 5.893063814710331e-13,
+  "win_difference": -0.021484375,
+  "policy_cluster_bootstrap_interval": [
+    -0.05078125,
+    0.0078125
+  ],
+  "stock_support": {
+    "bloodfire": {
+      "active": 31,
+      "inactive": 97,
+      "reachable": 39,
+      "exclusive": 9
+    },
+    "hand": {
+      "active": 60,
+      "inactive": 68,
+      "reachable": 63,
+      "exclusive": 38
+    }
+  },
+  "aware_support": {
+    "bloodfire": {
+      "active": 78,
+      "inactive": 50,
+      "reachable": 88,
+      "exclusive": 28
+    },
+    "hand": {
+      "active": 63,
+      "inactive": 65,
+      "reachable": 66,
+      "exclusive": 13
+    }
+  },
+  "stock_outcomes": {
+    "loss": 157,
+    "win": 355
+  },
+  "aware_outcomes": {
+    "loss": 168,
+    "win": 344
+  },
+  "gates": {
+    "paired_activation_gain": true,
+    "paired_activation_sign_test": true,
+    "win_point_not_worse": false,
+    "win_noninferiority_lower_bound": false,
+    "inherited_pair_support": true
+  },
+  "pass": false,
+  "status": "FIXED_ACQUISITION_CONTROLLER_VALUE_NOT_ESTABLISHED",
+  "limits": [
+    "Conditional on these four seeds and one fixed configuration family; not universal competence.",
+    "The old failed support stage is neither replaced nor extended.",
+    "Increased setup activity does not establish package viability or an unchanged C2 gap.",
+    "Current experiment has one nominated capability change; no further scalar or controller candidate is selected from this result."
+  ],
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "comparison_scope": "Same one-sample combat in BOTH arms; stock and aware denote acquisition only.",
+  "costs": {
+    "stock": {
+      "process_cpu_seconds": 2659.96,
+      "process_elapsed_seconds": 2662.35,
+      "queries": 206004,
+      "root_rollouts": 941158,
+      "measured_run_seconds": 2620.757622,
+      "measured_query_seconds": 1922.770516
+    },
+    "aware": {
+      "process_cpu_seconds": 2650.0,
+      "process_elapsed_seconds": 2652.36,
+      "queries": 203060,
+      "root_rollouts": 926686,
+      "measured_run_seconds": 2610.154292,
+      "measured_query_seconds": 1901.119534
+    }
+  },
+  "resource_pass": true
+}
