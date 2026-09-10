@@ -13,10 +13,10 @@ env:
   STUDY: research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1
 jobs:
   bundle:
-    name: Repair native draw-order reader and cold-rebuild existing capture - no engine
+    name: Complete retained provenance and actual nested source audit - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 8
+    timeout-minutes: 10
     permissions:
       contents: write
     steps:
@@ -25,31 +25,46 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1
-      - name: Execute the bounded readout repair on unchanged complete bytes
-        id: readout
+          sparse-checkout: |
+            research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1
+            research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1
+      - name: Bind source and complete only the two missing offline analyses
+        id: analysis
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD:$STUDY/reader-repair-1/repair.py)" = 3ebd76bf04c51a6a0537c87cec220fdcc9bc9027
           echo "PUBLISHED_HEAD=$GITHUB_SHA" >> "$GITHUB_ENV"
-          python3 "$STUDY/reader-repair-1/repair.py" run "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/reader-repair-1/execution-1" > "$RUNNER_TEMP/reader-repair.log" 2>&1
-      - name: Preserve real result or failure without changing original capture
-        if: always() && env.PUBLISHED_HEAD != ''
+          python3 - <<'PY'
+          import hashlib,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['STUDY'])
+          expected={'descriptor.py':'f41337fb6a0ea7fa91a0e2ede26ebf0670cd724b','dispatch_audit.py':'0955637367dd836f9addb165922f708fabb41aa6'}
+          for n,h in expected.items():
+              b=(root/n).read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==h
+              assert subprocess.check_output(['git','rev-parse','HEAD:'+str(root/n)]).decode().strip()==h
+          assert not (root/'descriptor-1').exists() and not (root/'dispatch-1').exists()
+          PY
+          python3 "$STUDY/descriptor.py" --self-test > "$RUNNER_TEMP/field-tests.log" 2>&1
+          python3 "$STUDY/descriptor.py" "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/descriptor-1" > "$RUNNER_TEMP/field-readout.log" 2>&1
+          mkdir "$STUDY/dispatch-1"
+          python3 "$STUDY/dispatch_audit.py" "$STUDY/execution-1" "$STUDY/dispatch-1/SOURCE.json"
+      - name: Preserve complete output or actual diagnostics
+        if: always()
         shell: bash
         run: |
           python3 - <<'PY'
           import hashlib,json,os,pathlib,shutil,sys
-          root=pathlib.Path(os.environ['STUDY']);out=root/'reader-repair-1/execution-1';out.mkdir(exist_ok=True)
-          shutil.copyfile(pathlib.Path(os.environ['RUNNER_TEMP'])/'reader-repair.log',out/'EXECUTION.log')
-          if not (out/'RESULTS.json').exists():
-              (out/'FAILURE.json').write_text(json.dumps({'status':'INCONCLUSIVE','new_native_runs':0,'p9_certified':False})+'\n')
-          records=[{'path':p.name,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.iterdir()) if p.is_file() and p.name!='FILES.json']
+          root=pathlib.Path(os.environ['STUDY']);out=root/'offline-publication-1';out.mkdir(exist_ok=False)
+          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('field-*.log'):shutil.copyfile(p,out/p.name)
+          completed=(root/'descriptor-1/RESULTS.json').exists() and (root/'dispatch-1/SOURCE.json').exists()
+          (out/'TERMINAL.json').write_text(json.dumps({'status':'OFFLINE_ANALYSES_COMPLETE' if completed else 'OFFLINE_DELIVERY_INCOMPLETE','new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          paths=[root/'descriptor.py',root/'dispatch_audit.py']
+          for d in ('descriptor-1','dispatch-1','offline-publication-1'):
+              paths.extend(p for p in (root/d).glob('*') if p.is_file())
+          records=[{'path':str(p.relative_to(root)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(paths)]
           (out/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
           sys.path.insert(0,str(root.resolve()));import study
-          study.publish(pathlib.Path('.').resolve(),out.resolve(),os.environ['PUBLISHED_HEAD'],'research(p9): preserve actual Hand readout correction and unchanged raw identities')
+          study.publish(pathlib.Path('.').resolve(),root.resolve(),os.environ.get('PUBLISHED_HEAD',os.environ['GITHUB_SHA']),'research(p9): preserve retained Hand provenance and exact nested dispatch outputs')
           PY
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         if: always() && env.PUBLISHED_HEAD != ''
@@ -58,22 +73,34 @@ jobs:
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1
-      - name: Reconstruct corrected result from independent remote checkout
-        if: steps.readout.outcome == 'success'
+          sparse-checkout: |
+            research/p9-six-route/ash-inheritance-20260909/hand-adaptive-v1
+            research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1
+      - name: Cold-read all new bytes and reproduce both offline analyses
+        if: steps.analysis.outcome == 'success'
         shell: bash
         run: |
-          set -euo pipefail
-          test "$(git -C cold rev-parse HEAD)" = "$PUBLISHED_HEAD"
-          python3 "$STUDY/reader-repair-1/repair.py" verify "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/reader-repair-1/execution-1" "$GITHUB_WORKSPACE/cold/$STUDY/reader-repair-1/execution-1" "$GITHUB_WORKSPACE/$STUDY/reader-repair-1/execution-1/REMOTE-READBACK.json"
           python3 - <<'PY'
-          import json,os,pathlib,sys
-          root=pathlib.Path(os.environ['STUDY']);out=root/'reader-repair-1/execution-1'
-          assert (root/'reader-repair-1/repair.py').read_bytes()==(pathlib.Path('cold')/root/'reader-repair-1/repair.py').read_bytes()
+          import hashlib,json,os,pathlib,subprocess,sys,tempfile
+          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')/root;out=root/'offline-publication-1'
+          assert (out/'FILES.json').read_bytes()==(cold/'offline-publication-1/FILES.json').read_bytes()
+          records=json.loads((out/'FILES.json').read_bytes())
+          for r in records:
+              p=pathlib.Path(r['path']);assert not p.is_absolute() and '..' not in p.parts
+              a=(root/p).read_bytes();b=(cold/p).read_bytes();assert a==b and len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256'],str(p)
+          with tempfile.TemporaryDirectory(prefix='hand-offline-readback-') as d:
+              p=pathlib.Path(d)
+              subprocess.run([sys.executable,str(cold/'descriptor.py'),str(pathlib.Path('cold').resolve()),str(p/'descriptor')],check=True,stdout=subprocess.DEVNULL)
+              for n in ('RESULTS.json','FIELDS.jsonl','RUN-COVERAGE.json','INPUTS.json'):
+                  assert (p/'descriptor'/n).read_bytes()==(cold/'descriptor-1'/n).read_bytes(),n
+              subprocess.run([sys.executable,str(cold/'dispatch_audit.py'),str(cold/'execution-1'),str(p/'dispatch.json')],check=True)
+              assert (p/'dispatch.json').read_bytes()==(cold/'dispatch-1/SOURCE.json').read_bytes()
+          receipt={'kind':'HAND_RETAINED_FIELDS_AND_DISPATCH_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':records,'all_bytes_equal':True,'full_512_run_fields_reproduced':True,'actual_dispatch_source_reproduced':True,'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
+          (out/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
           sys.path.insert(0,str(root.resolve()));import study
-          study.publish(pathlib.Path('.').resolve(),out.resolve(),os.environ['PUBLISHED_HEAD'],'research(p9): record cold-read Hand adaptive qualification without native replay')
-          print((out/'RESULTS.json').read_text())
+          study.publish(pathlib.Path('.').resolve(),out.resolve(),os.environ['PUBLISHED_HEAD'],'research(p9): record cold-reproduced retained Hand fields and source audit')
+          print((root/'descriptor-1/RESULTS.json').read_text())
           PY
-      - name: Reject incomplete repaired evidence
-        if: always() && steps.readout.outcome != 'success'
+      - name: Reject incomplete analysis
+        if: always() && steps.analysis.outcome != 'success'
         run: exit 3
