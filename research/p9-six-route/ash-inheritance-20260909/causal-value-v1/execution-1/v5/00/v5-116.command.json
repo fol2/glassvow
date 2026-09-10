@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/usr/bin/time",
+    "-f",
+    "%U %S %e",
+    "-o",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/causal-value-v1/execution-1/v5/00/v5-116.cpu.txt",
+    "/home/runner/work/_temp/engine/Godot_v4.7.2-stable_linux.x86_64",
+    "--headless",
+    "--path",
+    "/home/runner/work/_temp/causal-work/00",
+    "-s",
+    "res://probe.gd",
+    "--",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/causal-value-v1/execution-1/v5/00/v5-116.config.json",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/causal-value-v1/execution-1/v5/00/v5-116.outcomes.jsonl",
+    "/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/causal-value-v1/execution-1/v5/00/v5-116.traces.jsonl"
+  ],
+  "returncode": 0,
+  "error": null,
+  "seconds": 20.649235064000095
+}
