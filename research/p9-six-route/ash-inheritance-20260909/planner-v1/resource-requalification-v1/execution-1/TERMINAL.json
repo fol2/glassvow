@@ -1,0 +1,89 @@
+{
+  "status": "IMPLEMENTATION_RESOURCE_REQUALIFICATION_FAIL",
+  "source_head": "cea8bb19f50f6aebb8c906c870581b96e9d94346",
+  "stages": {
+    "5": {
+      "value-screen": {
+        "first": 0,
+        "configurations": 32,
+        "rows_per_method": 128,
+        "stock_wins": 12,
+        "planner_wins": 86,
+        "point_difference": 0.578125,
+        "configuration_bootstrap_interval": [
+          0.484375,
+          0.671875
+        ],
+        "gates": {
+          "fixed_mean_gain_at_least_five_points": true,
+          "paired_configuration_lower_bound_positive": true
+        },
+        "pass": true,
+        "scope": "Conditional on four fixed seeds; configurations are not assumed independent seeds. No package or population-generalisation certificate.",
+        "costs": {
+          "stock": {
+            "process_cpu_seconds": 20.16,
+            "process_elapsed_seconds": 20.99,
+            "queries": 0,
+            "root_rollouts": 0,
+            "measured_run_seconds": 12.043096,
+            "measured_query_seconds": 0.0
+          },
+          "planner": {
+            "process_cpu_seconds": 889.74,
+            "process_elapsed_seconds": 890.55,
+            "queries": 49002,
+            "root_rollouts": 442808,
+            "measured_run_seconds": 880.334877,
+            "measured_query_seconds": 713.797461
+          }
+        },
+        "resource_ceiling_met": true
+      },
+      "reserved-configuration-check": {
+        "first": 32,
+        "configurations": 96,
+        "rows_per_method": 384,
+        "stock_wins": 34,
+        "planner_wins": 258,
+        "point_difference": 0.5833333333333334,
+        "configuration_bootstrap_interval": [
+          0.5286458333333334,
+          0.6380208333333334
+        ],
+        "gates": {
+          "fixed_mean_gain_at_least_five_points": true,
+          "paired_configuration_lower_bound_positive": true
+        },
+        "pass": true,
+        "scope": "Conditional on four fixed seeds; configurations are not assumed independent seeds. No package or population-generalisation certificate.",
+        "costs": {
+          "stock": {
+            "process_cpu_seconds": 58.84,
+            "process_elapsed_seconds": 61.35,
+            "queries": 0,
+            "root_rollouts": 0,
+            "measured_run_seconds": 33.934194,
+            "measured_query_seconds": 0.0
+          },
+          "planner": {
+            "process_cpu_seconds": 2839.59,
+            "process_elapsed_seconds": 2841.56,
+            "queries": 154055,
+            "root_rollouts": 1400776,
+            "measured_run_seconds": 2810.448268,
+            "measured_query_seconds": 2291.871183
+          }
+        },
+        "resource_ceiling_met": false
+      }
+    }
+  },
+  "old_terminal_sha256": "561057c40c940718579cdeb1084003aa0bfc2cb64967b70772efc9b47ca4efba",
+  "old_terminal_unchanged": true,
+  "same_policy_replay_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "last_vow": 5,
+  "v0_skipped": true
+}

@@ -1,0 +1,37 @@
+{
+  "first": 32,
+  "configurations": 96,
+  "rows_per_method": 384,
+  "stock_wins": 34,
+  "planner_wins": 258,
+  "point_difference": 0.5833333333333334,
+  "configuration_bootstrap_interval": [
+    0.5286458333333334,
+    0.6380208333333334
+  ],
+  "gates": {
+    "fixed_mean_gain_at_least_five_points": true,
+    "paired_configuration_lower_bound_positive": true
+  },
+  "pass": true,
+  "scope": "Conditional on four fixed seeds; configurations are not assumed independent seeds. No package or population-generalisation certificate.",
+  "costs": {
+    "stock": {
+      "process_cpu_seconds": 58.84,
+      "process_elapsed_seconds": 61.35,
+      "queries": 0,
+      "root_rollouts": 0,
+      "measured_run_seconds": 33.934194,
+      "measured_query_seconds": 0.0
+    },
+    "planner": {
+      "process_cpu_seconds": 2839.59,
+      "process_elapsed_seconds": 2841.56,
+      "queries": 154055,
+      "root_rollouts": 1400776,
+      "measured_run_seconds": 2810.448268,
+      "measured_query_seconds": 2291.871183
+    }
+  },
+  "resource_ceiling_met": false
+}
