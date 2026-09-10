@@ -10,13 +10,13 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1/float-fastpath-v1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/planner-v1/one-sample-v1
 jobs:
   bundle:
-    name: Exact float-domain proof and four fixed-cell implementation timings
+    name: One public determinization - unchanged value, support and resource bars
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 85
     permissions:
       contents: write
     steps:
@@ -26,29 +26,40 @@ jobs:
           fetch-depth: 1
           persist-credentials: true
           sparse-checkout: |
-            .github
+            domain
             content
-            research/p9-six-route/ash-inheritance-20260909
-      - name: Verify committed source and reject false timing promotions before native work
+            tools
+            research/p9-six-route
+      - name: Bind one nomination and unchanged comparison machinery before observations
+        id: binding
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
+          echo "PUBLISHED_HEAD=$GITHUB_SHA" >> "$GITHUB_ENV"
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess
-          root=pathlib.Path(os.environ['STUDY']);freeze=json.loads((root/'SOURCE-FREEZE.json').read_bytes())
-          for name,digest in freeze['sources'].items():
-              path=root/name;data=path.read_bytes()
-              assert hashlib.sha256(data).hexdigest()==digest,name
-              assert hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()==subprocess.check_output(['git','rev-parse','HEAD:'+str(path)]).decode().strip(),name
-          assert subprocess.check_output(['git','rev-parse','HEAD:'+str(root/'PROTOCOL.json')]).decode().strip()==freeze['protocol_git_blob']
-          assert not (root/'execution-1').exists()
+          import hashlib,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['STUDY'])
+          hashes={'study.py':'7079b6f62d9b3734a57e3e1e4fb37640c0838073d3fc0d208a3b528607210ba9','test_study.py':'b9480158de86691a8aee54607b39066fbbab6e3965d7c5e30d39e128923c4883'}
+          for name,digest in hashes.items():
+              p=root/name;b=p.read_bytes()
+              assert hashlib.sha256(b).hexdigest()==digest,name
+              assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==subprocess.check_output(['git','rev-parse','HEAD:'+str(p)]).decode().strip()
           PY
-          (cd "$STUDY" && python3 -m unittest -v test_refine) > "$RUNNER_TEMP/float-tests.log" 2>&1
+          (cd "$STUDY" && python3 -m unittest -v test_study) > "$RUNNER_TEMP/one-sample-tests.log" 2>&1
+          python3 "$STUDY/study.py" build "$GITHUB_WORKSPACE" > "$RUNNER_TEMP/one-sample-build.stdout" 2> "$RUNNER_TEMP/one-sample-build.stderr"
+          (cd "$STUDY/bound-source" && python3 -m unittest -v test_value) >> "$RUNNER_TEMP/one-sample-tests.log" 2>&1
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          echo "PUBLISHED_HEAD=$GITHUB_SHA" >> "$GITHUB_ENV"
-      - name: Run actual controller conversion proof and only the fixed benchmark
+          git add "$STUDY/bound-source"
+          git commit -m 'research(p9): freeze exact one-sample source and unused evaluation assignment'
+          git push origin HEAD:refs/heads/$branch
+          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Qualify the new decision procedure and execute only its frozen conditional stages
         id: native
+        if: steps.binding.outcome == 'success'
         continue-on-error: true
         shell: bash
         run: |
@@ -60,28 +71,32 @@ jobs:
             chmod +x "$engine"
             echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
             "$engine" --version
-          } > "$RUNNER_TEMP/float-engine.log" 2>&1
-          python3 "$STUDY/experiment.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$RUNNER_TEMP/float-work" --publish > "$RUNNER_TEMP/float-run.stdout" 2> "$RUNNER_TEMP/float-run.stderr"
-      - name: Preserve all available diagnostics and the actual terminal
+          } > "$RUNNER_TEMP/one-sample-engine.log" 2>&1
+          python3 "$STUDY/study.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$RUNNER_TEMP/one-sample" --publish > "$RUNNER_TEMP/one-sample-run.stdout" 2> "$RUNNER_TEMP/one-sample-run.stderr"
+      - name: Preserve all available source, actual terminal and complete diagnostics
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,json,os,pathlib,shutil
-          out=pathlib.Path(os.environ['STUDY'])/'execution-1';out.mkdir(parents=True,exist_ok=True)
-          for name in ['float-tests.log','float-engine.log','float-run.stdout','float-run.stderr']:
-              p=pathlib.Path(os.environ['RUNNER_TEMP'])/name
-              if p.exists():shutil.copyfile(p,out/name)
-          if not (out/'TERMINAL.json').exists():
-              (out/'TERMINAL.json').write_text(json.dumps({'status':'INCONCLUSIVE','failure':'ENTRY_OR_ENGINE_DELIVERY_FAILURE','packages_admitted':0,'p9_certified':False},indent=2)+'\n')
-          rows=[{'path':str(p.relative_to(out)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.rglob('*')) if p.is_file() and p!=out/'FILES.json']
-          (out/'FILES.json').write_text(json.dumps(rows,indent=2)+'\n')
+          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1';out.mkdir(exist_ok=True)
+          for path in pathlib.Path(os.environ['RUNNER_TEMP']).glob('one-sample-*'):
+              if path.is_file():shutil.copyfile(path,out/path.name)
+          terminal=out/'TERMINAL.json'
+          if not terminal.exists():terminal.write_text(json.dumps({'status':'INCONCLUSIVE','failure':'SOURCE_BINDING_OR_ENGINE_ENTRY_FAILED','source_head':os.environ['GITHUB_SHA'],'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          records=[{'path':str(p.relative_to(out)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.rglob('*')) if p.is_file() and p!=out/'FILES.json']
+          (out/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
+          files=[{'path':str(p.relative_to(root)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(root.rglob('*')) if p.is_file() and p!=root/'PUBLISHED-FILES.json']
+          (root/'PUBLISHED-FILES.json').write_text(json.dumps(files,indent=2)+'\n')
           PY
           branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add -f "$STUDY/execution-1"
-          git commit -m 'research(p9): retain complete actual float benchmark diagnostics'
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$(git rev-parse HEAD)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "$STUDY"
+          git diff --cached --name-only | awk -v prefix="$STUDY/" 'index($0,prefix)!=1 {exit 1}'
+          git commit -m 'research(p9): preserve exact one-sample capture and complete delivery diagnostics'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -91,34 +106,40 @@ jobs:
           path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout: |
-            content
-            research/p9-six-route/ash-inheritance-20260909
-      - name: Cold-read every source and capture byte; rebuild the actual decision
+          sparse-checkout: research/p9-six-route
+      - name: Cold-read all committed bytes and reproduce every opened decision
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold')
-          for name in ['PROTOCOL.json','SOURCE-FREEZE.json','refine.py','numeric_gate.gd','experiment.py','test_refine.py']:
-              assert (root/name).read_bytes()==(cold/root/name).read_bytes(),name
+          import hashlib,json,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['STUDY']);cold=pathlib.Path('cold');manifest=(root/'PUBLISHED-FILES.json').read_bytes()
+          assert manifest==(cold/root/'PUBLISHED-FILES.json').read_bytes()
+          files=json.loads(manifest)
+          for r in files:
+              p=pathlib.Path(r['path']);assert not p.is_absolute() and '..' not in p.parts
+              a=(root/p).read_bytes();b=(cold/root/p).read_bytes()
+              assert a==b and len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256'],str(p)
+          out=root/'execution-1';receipt=out/'REMOTE-READBACK.json'
+          if (cold/root/'bound-source/FREEZE.json').exists():
+              subprocess.run(['python3',str(cold/root/'study.py'),'verify',str(cold.resolve()),str(out.resolve()),str((cold/out).resolve()),str(receipt.resolve())],check=True)
+          else:
+              receipt.write_text(json.dumps({'kind':'SOURCE_ENTRY_DIAGNOSTICS_COLD_READBACK','files':len(files)+1,'all_bytes_equal':True,'qualification_reproduced':False,'population_reproduced':False,'scientific_status':'INCONCLUSIVE','packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          p=out/'SOURCE-READBACK.json';p.write_text(json.dumps({'source_head':os.environ['GITHUB_SHA'],'published_head':os.environ['PUBLISHED_HEAD'],'run_id':os.environ['GITHUB_RUN_ID'],'files':len(files)+1,'all_source_and_capture_bytes_equal':True,'new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
           PY
-          python3 "cold/$STUDY/experiment.py" verify "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$GITHUB_WORKSPACE/cold/$STUDY/execution-1" "$GITHUB_WORKSPACE/$STUDY/execution-1/REMOTE-READBACK.json"
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/execution-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): retain complete cold byte proof of float refinement'
+          git add "$STUDY/execution-1/"*READBACK.json
+          git commit -m 'research(p9): retain independent checkout byte proof of one-sample study'
           git push origin HEAD:refs/heads/$branch
-      - name: Keep delivery and scientific conclusions separate
-        if: always() && env.PUBLISHED_HEAD != ''
+      - name: Report delivery validity separately from package admission
+        if: always()
         shell: bash
         run: |
           python3 - <<'PY'
           import json,os,pathlib,sys
-          p=pathlib.Path(os.environ['STUDY'])/'execution-1'
-          terminal=json.loads((p/'TERMINAL.json').read_bytes())
-          print(json.dumps(terminal,indent=2))
-          sys.exit(3 if terminal['status']=='INCONCLUSIVE' else 0)
+          p=pathlib.Path(os.environ['STUDY'])/'execution-1/TERMINAL.json'
+          t=json.loads(p.read_bytes());print(json.dumps(t,indent=2))
+          sys.exit(3 if t['status']=='INCONCLUSIVE' else 0)
           PY
