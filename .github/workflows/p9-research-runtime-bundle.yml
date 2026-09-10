@@ -8,50 +8,108 @@ permissions:
 concurrency:
   group: p9-six-route-research-writer
   cancel-in-progress: false
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  TRANSPORT: research/p9-six-route/ash-inheritance-20260909/causal-transport-v1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/causal-contract-v1
+  MANIFEST: 79a23738fce726368bd6c3a1aabbd4d378016d6a2a16ef263376cb6494174e8e
 jobs:
   bundle:
-    name: Locate incomplete transport gap - no engine or scientific reexecution
+    name: Restore and remotely preserve original source-utility packet - no engine
+    if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
           fetch-depth: 1
-          persist-credentials: false
+          persist-credentials: true
+          sparse-checkout-cone-mode: false
           sparse-checkout: |
-            research/p9-six-route/ash-inheritance-20260909/causal-transport-v1
-      - name: Report complete decoded prefix before the actual transport gap
+            /domain/
+            /content/
+            /tools/
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+            /research/p9-six-route/ash-inheritance-20260909/causal-value-v1/execution-1/TERMINAL.json
+            /research/p9-six-route/ash-inheritance-20260909/causal-transport-v1/
+      - name: Reconstruct exact original files and run only their offline checks
         shell: bash
         run: |
           set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD:$TRANSPORT/restore_packet.py)" = 950f60713fc600509a5ae907c74542ad67789919
+          test "$(git rev-parse HEAD:$TRANSPORT/test_restore.py)" = 89dd1a7e6d0cd3c624b90da16d2be9fae2752edd
+          test ! -e "$TRANSPORT/publication-1"
+          mkdir "$TRANSPORT/publication-1"
+          python3 -m unittest discover -s "$TRANSPORT" -p test_restore.py -v > "$TRANSPORT/publication-1/RESTORE-TESTS.log" 2>&1
+          python3 "$TRANSPORT/restore_packet.py" "$TRANSPORT" . "$STUDY" "$TRANSPORT/publication-1/RESTORATION.json" > "$TRANSPORT/publication-1/RESTORATION.log" 2>&1
+          python3 -m unittest discover -s "$STUDY" -p 'test_*.py' -v > "$TRANSPORT/publication-1/ORIGINAL-TESTS.log" 2>&1
+          python3 "$STUDY/verify_packet.py" "$STUDY" "$MANIFEST" "$TRANSPORT/publication-1/PREPUBLICATION-VERIFY.json" --venue local-cold-checkout
+          python3 "$TRANSPORT/publish_packet.py" sync .
+      - name: Commit only the restored packet and current capsule
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
+          git add --sparse "$STUDY" "$TRANSPORT/publication-1" research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/SESSION-STATE.json research/p9-six-route/package-disposition-20260908/ROADMAP.md
           python3 - <<'PY'
-          import pathlib,base64,lzma,json,codecs,hashlib
-          root=pathlib.Path('research/p9-six-route/ash-inheritance-20260909/causal-transport-v1')
-          parts=[p.read_bytes() for p in sorted(root.glob('part-*.xzpart'))]
-          print('PART_LENGTHS='+str([len(b) for b in parts]))
-          d=lzma.LZMADecompressor();raw=b'';accepted=[]
-          for i,b in enumerate(parts):
-              b=base64.b64decode(b.strip(),validate=True)
-              try:out=d.decompress(b)
-              except lzma.LZMAError as e:
-                  print('FIRST_NONCONTIGUOUS_PART='+str(i));break
-              raw+=out;accepted.append(i)
-          text=codecs.getincrementaldecoder('utf-8')().decode(raw,final=False)
-          pos=text.index('"nodes":[')+len('"nodes":[');nodes=[];decoder=json.JSONDecoder()
-          while pos<len(text):
-              if text[pos]==']':break
-              if text[pos]==',':pos+=1
-              try:n,end=decoder.raw_decode(text,pos)
-              except json.JSONDecodeError:break
-              nodes.append(n);pos=end
-          values=[]
-          for n in nodes:
-              if n[0]=='v':v=n[2]
-              elif n[0]=='a':v=[values[i] for i in n[1]]
-              elif n[0]=='d':v={values[k]:values[i] for k,i in n[1]}
-              else:raise ValueError(n[0])
-              values.append(v)
-          seq=[v for v in values if isinstance(v,dict) and v.get('kind')=='sequence']
-          print(json.dumps({'accepted_parts':accepted,'prefix_bytes':len(raw),'nodes':len(nodes),'node_array_complete':pos<len(text) and text[pos]==']','sequences':{s:sum(v.get('source')==s for v in seq) for s in ['bloodRite','preparation','surge']},'after_nodes':text[pos:pos+6000],'tail':text[-2000:],'new_native_runs':0,'complete_recovery':False},indent=2))
+          import os,subprocess
+          allowed={"research/p9-six-route/SESSION-HANDOFF.md","research/p9-six-route/SESSION-STATE.json","research/p9-six-route/package-disposition-20260908/ROADMAP.md"}
+          roots=(os.environ['STUDY']+'/',os.environ['TRANSPORT']+'/publication-1/')
+          paths=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
+          assert paths and all(p in allowed or p.startswith(roots) for p in paths), 'STAGED_SCOPE'
+          assert sum(p.startswith(roots[0]) for p in paths)==55, 'ORIGINAL_FILE_COUNT'
           PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'research(p9): preserve all 55 original causal files and close adaptive value frontier'
+          git push origin "HEAD:refs/heads/$branch"
+          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.PUBLISHED_HEAD }}
+          path: cold
+          fetch-depth: 1
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+            /research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/
+            /research/p9-six-route/ash-inheritance-20260909/causal-transport-v1/
+      - name: Rebuild the preserved result from a separate exact remote checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C cold rev-parse HEAD)" = "$PUBLISHED_HEAD"
+          python3 "cold/$STUDY/verify_packet.py" "cold/$STUDY" "$MANIFEST" "$TRANSPORT/publication-1/COLD-VERIFY.json" --venue remote-cold-checkout
+          python3 "$TRANSPORT/publish_packet.py" cold . cold "$TRANSPORT/publication-1/REMOTE-READBACK.json"
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
+          git add "$TRANSPORT/publication-1/COLD-VERIFY.json" "$TRANSPORT/publication-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): record verified remote preservation of original source-utility raw'
+          git push origin "HEAD:refs/heads/$branch"
+          echo "FINAL_PUBLISHED_HEAD=$(git rev-parse HEAD)"
+      - name: Preserve actual delivery failure without promoting partial restoration
+        if: failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch=research/p9-six-route-local-20260905
+          head=$(git rev-parse HEAD)
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$head"
+          mkdir -p "$TRANSPORT/publication-1"
+          printf '%s\n' '{"status":"DELIVERY_INCOMPLETE","p9_certified":false,"new_native_runs":0}' > "$TRANSPORT/publication-1/DELIVERY-FAILURE.json"
+          git reset
+          git add --sparse "$TRANSPORT/publication-1"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'research(p9): preserve exact restoration failure diagnostics without native replay'
+          git push origin "HEAD:refs/heads/$branch"
