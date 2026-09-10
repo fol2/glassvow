@@ -94,7 +94,16 @@ def setup(repo,work,out,p):
     source_content=json.loads((repo/'content/full-content.json').read_bytes())
     candidate=json.loads(selected['content/full-content.json'])
     require(list(source_content)==list(candidate) and list(source_content['cards'])==list(candidate['cards']),'CATALOGUE_ORDER')
-    require(all(source_content[k]==candidate[k] for k in source_content if k!='cards'),'NONCARD_CONTENT_DELTA')
+    # The selected background already includes the hash-bound Bloodfire status.
+    # Compare with its preserved exact reference, not an unbounded status whitelist.
+    with tarfile.open(original/'runtime-source.tar.xz','r:xz') as tf:
+        inherited_bytes=copy_archive_file(tf,'reference','content/full-content.json',manifest)
+    require(sha(inherited_bytes)=='4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9','INHERITED_CONTENT_IDENTITY')
+    inherited=json.loads(inherited_bytes)
+    require(all(inherited[k]==candidate[k] for k in inherited if k!='cards'),'NONCARD_CONTENT_DELTA')
+    require(all(source_content[k]==candidate[k] for k in source_content if k not in ('cards','statuses')),'UNRELATED_NONCARD_DELTA')
+    status_without_bloodfire={k:v for k,v in candidate['statuses'].items() if k!='bloodfire'}
+    require(status_without_bloodfire==source_content['statuses'] and list(status_without_bloodfire)==list(source_content['statuses']),'ONLY_BOUND_BLOODFIRE_STATUS')
     changed={k for k in source_content['cards'] if source_content['cards'][k]!=candidate['cards'][k]}
     require(changed=={'bloodRite','leechBlade','phantomBlades'},'ONLY_SELECTED_CONTENT')
     require(candidate['cards']['phantomBlades']['rarity']==source_content['cards']['phantomBlades']['rarity'],'RARITY')
@@ -105,6 +114,7 @@ def setup(repo,work,out,p):
         scope='Single isolated Hand two-slope plus minimum Bloodfire versus exact current-main baseline. Signed shipping arm2 only; no planner nomination.')
     resolved['containment'].update(workers=2,invocation_seconds=120,raw_bytes_per_cell=67108864)
     resolved['source_parent_contract']=p
+    resolved['delivery_source']={'control_git_blob':blob(Path(__file__).read_bytes()),'correction':'Bind the already-selected exact Bloodfire status; original candidate, assignment, controller and thresholds unchanged.'}
     projects={};manifests={}
     for cat in ('baseline','candidate'):
         project=work/cat;project.mkdir()
