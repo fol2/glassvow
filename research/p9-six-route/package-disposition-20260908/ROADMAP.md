@@ -1,12 +1,18 @@
 # P9 current outcome roadmap
 
-Current exact terminal: `JOINT_CONTROLLER_VALUE_OR_SUPPORT_NOT_ESTABLISHED`. Full certificates: 0/6.
+Full exact-current certificates:0/6. Current fixed adaptive Bloodfire value claim
+is NOT_ESTABLISHED; the preserved negative is not universal nonviability.
 
-Use the complete factual charge ledger and matched quality/membership readout to bind a package-level causal/value contract for inherited Hand/Bloodfire, separating the source card draw/HP trade-off from incremental mediator payoff. Do not nominate a third acquisition/planner combination, tune weights, or reuse exposed seeds. Name the complete missing producer/subset/descriptor and independent-confirmation obligations against unchanged P9 acceptance before any new native observation. The failed joint controller is not promoted.
+1. Complete inherited Hand adaptive intervention/query/clone and descriptor proof;
+   retain exact source utility, mediator, consumer, null and proper-subset boundaries.
+   Reuse the now-preserved finite packet, not another set of chosen examples.
+2. Complete eligible package competent-policy, peer, real-economy and independent
+   confirmation evidence; fill three genuinely distinct strategies per aspect.
+3. Admit the seven-direction detector, corrected untouched confirmation and
+   unrestricted endpoint retention with all existing hard guardrails.
+4. Deliver one selected minimal product/detector/lifecycle packet, exact-head
+   review and exact merged-product #108 receipt. No premature promotion.
 
-1. Complete full inherited Ash certificates: causal chain, descriptor, competent policy, peer separation, real economy and independent confirmation; carry only unchanged qualified dependencies.
-2. Fill three validated strategies per aspect; check exact registered/closed identities before nominating other complete packages.
-3. Admit the seven-direction detector, corrected untouched confirmation, unrestricted endpoint retention and every original hard guardrail.
-4. Integrate one selected minimum product/detector/lifecycle packet, review exact head, and post the exact merged-product P9 receipt to #108.
-
-Completed research, exact negatives and old preservation gaps stay in the current capsule and immutable captures. No new sample or admission is created by this roadmap.
+Do not improve a progress number by weakening a gate, renaming a closed family,
+replaying exposed cohorts, tuning another controller or refitting frozen models.
+Restoration, runtime qualification and a strong solver are not package admission.

@@ -1,0 +1,14 @@
+test_duplicate_dictionary_keys_rejected (test_restore.RestoreTests.test_duplicate_dictionary_keys_rejected) ... ok
+test_existing_output_not_overwritten (test_restore.RestoreTests.test_existing_output_not_overwritten) ... ok
+test_forward_reference_rejected (test_restore.RestoreTests.test_forward_reference_rejected) ... ok
+test_missing_node_rejected (test_restore.RestoreTests.test_missing_node_rejected) ... ok
+test_path_boundaries (test_restore.RestoreTests.test_path_boundaries) ... ok
+test_retained_prefix_hash_checked (test_restore.RestoreTests.test_retained_prefix_hash_checked) ... ok
+test_type_confusion_rejected (test_restore.RestoreTests.test_type_confusion_rejected) ... ok
+test_typed_value_and_collection (test_restore.RestoreTests.test_typed_value_and_collection) ... ok
+test_wrong_supplement_fails_before_output (test_restore.RestoreTests.test_wrong_supplement_fails_before_output) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.008s
+
+OK

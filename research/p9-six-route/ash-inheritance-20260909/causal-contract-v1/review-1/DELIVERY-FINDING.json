@@ -1,0 +1,7 @@
+{
+  "kind": "POSTRUN_AUDIT_IMPLEMENTATION_REPAIR",
+  "finding": "Audit incorrectly equated a declared 3-HP self hit with a 3-HP state decrement at 2 current HP. Native player HP clamps to zero; raw event amount remains 3.",
+  "repair": "Compare both declared self-hit amount and actual clamped HP decrement. No frozen probe, reader, protocol, results, engine or raw changed.",
+  "new_native_runs": 0,
+  "scientific_terminal_changed": false
+}

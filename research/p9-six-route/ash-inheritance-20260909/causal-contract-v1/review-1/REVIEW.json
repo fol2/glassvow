@@ -1,0 +1,1047 @@
+{
+  "kind": "OFFLINE_AUTHOR_AUDIT_NOT_PACKAGE_ADMISSION",
+  "scope": "Same captured 192 constructed fixtures. No new native invocation or independence claim.",
+  "status": "FROZEN_CAPTURE_AND_SOURCE_UTILITY_FINDINGS_REPRODUCED",
+  "frozen_source_files": 8,
+  "manifest_entries_verified": 29,
+  "runtime_members_verified": 57,
+  "original_result_sha256": "51f3928a537a8cfdb44ca9329d2ea661d137d88de6e7821a25eba5cd002737af",
+  "constructed_descriptor_records": 192,
+  "undefined_fixed_command_contrasts_retained": 48,
+  "necessary_hand_pattern_without_source_draw_causality": 16,
+  "healing_without_additional_actual_hp_removal": 4,
+  "examples": [
+    {
+      "source": "bloodRite",
+      "aspect": 1,
+      "vow": 0,
+      "upgraded": false,
+      "context": "already_lethal",
+      "producer_uid": 900,
+      "consumer_uid": 901,
+      "consumer_id": "leechBlade",
+      "target_idx": 0,
+      "source_eligible": true,
+      "source_net_hp_delta": -3,
+      "source_net_energy_delta": 2,
+      "source_bloodfire_created": 1,
+      "source_drawn_uids": [],
+      "source_exhausted": false,
+      "post_source_embers": 0,
+      "consumer_eligible": true,
+      "consumer_entry_bloodfire": 1,
+      "consumer_entry_hand_uids": [
+        901,
+        920,
+        921
+      ],
+      "source_drawn_uids_present_at_consumer_entry": [],
+      "controlled_commands_between_source_and_consumer": 0,
+      "bloodfire_consumed_in_consumer": 1,
+      "all_on_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 5,
+        "healing_events": 9,
+        "native_hit_amount": 19,
+        "player_hp_delta": 9
+      },
+      "source_mediator_disabled_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 5,
+        "healing_events": 4,
+        "native_hit_amount": 9,
+        "player_hp_delta": 4
+      },
+      "interaction_with_energy_on": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 0,
+        "healing_interaction": 5
+      },
+      "interaction_with_energy_off": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 0,
+        "healing_interaction": 5
+      },
+      "energy_eligibility_effects": {
+        "mFalse-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mFalse-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        }
+      },
+      "necessary_proxy_without_source_causality": false,
+      "descriptor_status": "CONSTRUCTED_CAUSAL_FIELDS_ONLY_NOT_CLASSIFICATION_VALIDATION",
+      "incremental_player_hp_at_consumer": 5,
+      "healing_without_additional_actual_hp_removal": true
+    },
+    {
+      "source": "bloodRite",
+      "aspect": 1,
+      "vow": 0,
+      "upgraded": false,
+      "context": "available",
+      "producer_uid": 900,
+      "consumer_uid": 901,
+      "consumer_id": "leechBlade",
+      "target_idx": 0,
+      "source_eligible": true,
+      "source_net_hp_delta": -3,
+      "source_net_energy_delta": 2,
+      "source_bloodfire_created": 1,
+      "source_drawn_uids": [],
+      "source_exhausted": false,
+      "post_source_embers": 0,
+      "consumer_eligible": true,
+      "consumer_entry_bloodfire": 1,
+      "consumer_entry_hand_uids": [
+        901,
+        920,
+        921
+      ],
+      "source_drawn_uids_present_at_consumer_entry": [],
+      "controlled_commands_between_source_and_consumer": 0,
+      "bloodfire_consumed_in_consumer": 1,
+      "all_on_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 19,
+        "healing_events": 9,
+        "native_hit_amount": 19,
+        "player_hp_delta": 9
+      },
+      "source_mediator_disabled_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 9,
+        "healing_events": 4,
+        "native_hit_amount": 9,
+        "player_hp_delta": 4
+      },
+      "interaction_with_energy_on": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 10,
+        "healing_interaction": 5
+      },
+      "interaction_with_energy_off": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 10,
+        "healing_interaction": 5
+      },
+      "energy_eligibility_effects": {
+        "mFalse-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mFalse-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        }
+      },
+      "necessary_proxy_without_source_causality": false,
+      "descriptor_status": "CONSTRUCTED_CAUSAL_FIELDS_ONLY_NOT_CLASSIFICATION_VALIDATION",
+      "incremental_player_hp_at_consumer": 5,
+      "healing_without_additional_actual_hp_removal": false
+    },
+    {
+      "source": "bloodRite",
+      "aspect": 1,
+      "vow": 0,
+      "upgraded": false,
+      "context": "empty_draw",
+      "producer_uid": 900,
+      "consumer_uid": 901,
+      "consumer_id": "leechBlade",
+      "target_idx": 0,
+      "source_eligible": true,
+      "source_net_hp_delta": -3,
+      "source_net_energy_delta": 2,
+      "source_bloodfire_created": 1,
+      "source_drawn_uids": [],
+      "source_exhausted": false,
+      "post_source_embers": 0,
+      "consumer_eligible": true,
+      "consumer_entry_bloodfire": 1,
+      "consumer_entry_hand_uids": [
+        901,
+        920,
+        921
+      ],
+      "source_drawn_uids_present_at_consumer_entry": [],
+      "controlled_commands_between_source_and_consumer": 0,
+      "bloodfire_consumed_in_consumer": 1,
+      "all_on_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 19,
+        "healing_events": 9,
+        "native_hit_amount": 19,
+        "player_hp_delta": 9
+      },
+      "source_mediator_disabled_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 9,
+        "healing_events": 4,
+        "native_hit_amount": 9,
+        "player_hp_delta": 4
+      },
+      "interaction_with_energy_on": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 10,
+        "healing_interaction": 5
+      },
+      "interaction_with_energy_off": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 10,
+        "healing_interaction": 5
+      },
+      "energy_eligibility_effects": {
+        "mFalse-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mFalse-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        }
+      },
+      "necessary_proxy_without_source_causality": false,
+      "descriptor_status": "CONSTRUCTED_CAUSAL_FIELDS_ONLY_NOT_CLASSIFICATION_VALIDATION",
+      "incremental_player_hp_at_consumer": 5,
+      "healing_without_additional_actual_hp_removal": false
+    },
+    {
+      "source": "bloodRite",
+      "aspect": 1,
+      "vow": 0,
+      "upgraded": false,
+      "context": "no_energy",
+      "producer_uid": 900,
+      "consumer_uid": 901,
+      "consumer_id": "leechBlade",
+      "target_idx": 0,
+      "source_eligible": true,
+      "source_net_hp_delta": -3,
+      "source_net_energy_delta": 2,
+      "source_bloodfire_created": 1,
+      "source_drawn_uids": [],
+      "source_exhausted": false,
+      "post_source_embers": 0,
+      "consumer_eligible": true,
+      "consumer_entry_bloodfire": 1,
+      "consumer_entry_hand_uids": [
+        901,
+        920,
+        921
+      ],
+      "source_drawn_uids_present_at_consumer_entry": [],
+      "controlled_commands_between_source_and_consumer": 0,
+      "bloodfire_consumed_in_consumer": 1,
+      "all_on_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 19,
+        "healing_events": 9,
+        "native_hit_amount": 19,
+        "player_hp_delta": 9
+      },
+      "source_mediator_disabled_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 9,
+        "healing_events": 4,
+        "native_hit_amount": 9,
+        "player_hp_delta": 4
+      },
+      "interaction_with_energy_on": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 10,
+        "healing_interaction": 5
+      },
+      "interaction_with_energy_off": {
+        "identified_for_fixed_commands": false,
+        "ineligible_arms": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "actual_hp_interaction": null,
+        "healing_interaction": null
+      },
+      "energy_eligibility_effects": {
+        "mFalse-cFalse": {
+          "disabled_consumer_eligible": false,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": false
+        },
+        "mFalse-cTrue": {
+          "disabled_consumer_eligible": false,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": false
+        },
+        "mTrue-cFalse": {
+          "disabled_consumer_eligible": false,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": false
+        },
+        "mTrue-cTrue": {
+          "disabled_consumer_eligible": false,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": false
+        }
+      },
+      "necessary_proxy_without_source_causality": false,
+      "descriptor_status": "CONSTRUCTED_CAUSAL_FIELDS_ONLY_NOT_CLASSIFICATION_VALIDATION",
+      "incremental_player_hp_at_consumer": 5,
+      "healing_without_additional_actual_hp_removal": false
+    },
+    {
+      "source": "preparation",
+      "aspect": 1,
+      "vow": 0,
+      "upgraded": false,
+      "context": "already_lethal",
+      "producer_uid": 900,
+      "consumer_uid": 901,
+      "consumer_id": "phantomBlades",
+      "target_idx": 0,
+      "source_eligible": true,
+      "source_net_hp_delta": 0,
+      "source_net_energy_delta": 0,
+      "source_bloodfire_created": 0,
+      "source_drawn_uids": [
+        955,
+        954
+      ],
+      "source_exhausted": true,
+      "post_source_embers": 1,
+      "consumer_eligible": true,
+      "consumer_entry_bloodfire": 0,
+      "consumer_entry_hand_uids": [
+        901,
+        920,
+        921,
+        955,
+        954
+      ],
+      "source_drawn_uids_present_at_consumer_entry": [
+        955,
+        954
+      ],
+      "controlled_commands_between_source_and_consumer": 0,
+      "bloodfire_consumed_in_consumer": 0,
+      "all_on_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 5,
+        "healing_events": 0,
+        "native_hit_amount": 12,
+        "player_hp_delta": 0
+      },
+      "source_mediator_disabled_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 5,
+        "healing_events": 0,
+        "native_hit_amount": 6,
+        "player_hp_delta": 0
+      },
+      "interaction_with_energy_on": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 0,
+        "healing_interaction": 0
+      },
+      "interaction_with_energy_off": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 0,
+        "healing_interaction": 0
+      },
+      "energy_eligibility_effects": {
+        "mFalse-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mFalse-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        }
+      },
+      "necessary_proxy_without_source_causality": false,
+      "descriptor_status": "CONSTRUCTED_CAUSAL_FIELDS_ONLY_NOT_CLASSIFICATION_VALIDATION",
+      "incremental_player_hp_at_consumer": 0,
+      "healing_without_additional_actual_hp_removal": false
+    },
+    {
+      "source": "preparation",
+      "aspect": 1,
+      "vow": 0,
+      "upgraded": false,
+      "context": "available",
+      "producer_uid": 900,
+      "consumer_uid": 901,
+      "consumer_id": "phantomBlades",
+      "target_idx": 0,
+      "source_eligible": true,
+      "source_net_hp_delta": 0,
+      "source_net_energy_delta": 0,
+      "source_bloodfire_created": 0,
+      "source_drawn_uids": [
+        955,
+        954
+      ],
+      "source_exhausted": true,
+      "post_source_embers": 1,
+      "consumer_eligible": true,
+      "consumer_entry_bloodfire": 0,
+      "consumer_entry_hand_uids": [
+        901,
+        920,
+        921,
+        955,
+        954
+      ],
+      "source_drawn_uids_present_at_consumer_entry": [
+        955,
+        954
+      ],
+      "controlled_commands_between_source_and_consumer": 0,
+      "bloodfire_consumed_in_consumer": 0,
+      "all_on_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 12,
+        "healing_events": 0,
+        "native_hit_amount": 12,
+        "player_hp_delta": 0
+      },
+      "source_mediator_disabled_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 6,
+        "healing_events": 0,
+        "native_hit_amount": 6,
+        "player_hp_delta": 0
+      },
+      "interaction_with_energy_on": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 6,
+        "healing_interaction": 0
+      },
+      "interaction_with_energy_off": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 6,
+        "healing_interaction": 0
+      },
+      "energy_eligibility_effects": {
+        "mFalse-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mFalse-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        }
+      },
+      "necessary_proxy_without_source_causality": false,
+      "descriptor_status": "CONSTRUCTED_CAUSAL_FIELDS_ONLY_NOT_CLASSIFICATION_VALIDATION",
+      "incremental_player_hp_at_consumer": 0,
+      "healing_without_additional_actual_hp_removal": false
+    },
+    {
+      "source": "preparation",
+      "aspect": 1,
+      "vow": 0,
+      "upgraded": false,
+      "context": "empty_draw",
+      "producer_uid": 900,
+      "consumer_uid": 901,
+      "consumer_id": "phantomBlades",
+      "target_idx": 0,
+      "source_eligible": true,
+      "source_net_hp_delta": 0,
+      "source_net_energy_delta": 0,
+      "source_bloodfire_created": 0,
+      "source_drawn_uids": [],
+      "source_exhausted": true,
+      "post_source_embers": 1,
+      "consumer_eligible": true,
+      "consumer_entry_bloodfire": 0,
+      "consumer_entry_hand_uids": [
+        901,
+        920,
+        921
+      ],
+      "source_drawn_uids_present_at_consumer_entry": [],
+      "controlled_commands_between_source_and_consumer": 0,
+      "bloodfire_consumed_in_consumer": 0,
+      "all_on_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 6,
+        "healing_events": 0,
+        "native_hit_amount": 6,
+        "player_hp_delta": 0
+      },
+      "source_mediator_disabled_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 6,
+        "healing_events": 0,
+        "native_hit_amount": 6,
+        "player_hp_delta": 0
+      },
+      "interaction_with_energy_on": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 0,
+        "healing_interaction": 0
+      },
+      "interaction_with_energy_off": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 0,
+        "healing_interaction": 0
+      },
+      "energy_eligibility_effects": {
+        "mFalse-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mFalse-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        }
+      },
+      "necessary_proxy_without_source_causality": true,
+      "descriptor_status": "CONSTRUCTED_CAUSAL_FIELDS_ONLY_NOT_CLASSIFICATION_VALIDATION",
+      "incremental_player_hp_at_consumer": 0,
+      "healing_without_additional_actual_hp_removal": false
+    },
+    {
+      "source": "preparation",
+      "aspect": 1,
+      "vow": 0,
+      "upgraded": false,
+      "context": "no_energy",
+      "producer_uid": 900,
+      "consumer_uid": 901,
+      "consumer_id": "phantomBlades",
+      "target_idx": 0,
+      "source_eligible": true,
+      "source_net_hp_delta": 0,
+      "source_net_energy_delta": 0,
+      "source_bloodfire_created": 0,
+      "source_drawn_uids": [
+        955,
+        954
+      ],
+      "source_exhausted": true,
+      "post_source_embers": 1,
+      "consumer_eligible": false,
+      "consumer_entry_bloodfire": 0,
+      "consumer_entry_hand_uids": [
+        901,
+        920,
+        921,
+        955,
+        954
+      ],
+      "source_drawn_uids_present_at_consumer_entry": [
+        955,
+        954
+      ],
+      "controlled_commands_between_source_and_consumer": 0,
+      "bloodfire_consumed_in_consumer": 0,
+      "all_on_payoff": {
+        "eligible": false,
+        "actual_hp_removed": null,
+        "healing_events": null,
+        "native_hit_amount": null,
+        "player_hp_delta": null
+      },
+      "source_mediator_disabled_payoff": {
+        "eligible": false,
+        "actual_hp_removed": null,
+        "healing_events": null,
+        "native_hit_amount": null,
+        "player_hp_delta": null
+      },
+      "interaction_with_energy_on": {
+        "identified_for_fixed_commands": false,
+        "ineligible_arms": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "actual_hp_interaction": null,
+        "healing_interaction": null
+      },
+      "interaction_with_energy_off": {
+        "identified_for_fixed_commands": false,
+        "ineligible_arms": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "actual_hp_interaction": null,
+        "healing_interaction": null
+      },
+      "energy_eligibility_effects": {
+        "mFalse-cFalse": {
+          "disabled_consumer_eligible": false,
+          "enabled_consumer_eligible": false,
+          "cross_energy_payoff_identified": false
+        },
+        "mFalse-cTrue": {
+          "disabled_consumer_eligible": false,
+          "enabled_consumer_eligible": false,
+          "cross_energy_payoff_identified": false
+        },
+        "mTrue-cFalse": {
+          "disabled_consumer_eligible": false,
+          "enabled_consumer_eligible": false,
+          "cross_energy_payoff_identified": false
+        },
+        "mTrue-cTrue": {
+          "disabled_consumer_eligible": false,
+          "enabled_consumer_eligible": false,
+          "cross_energy_payoff_identified": false
+        }
+      },
+      "necessary_proxy_without_source_causality": false,
+      "descriptor_status": "CONSTRUCTED_CAUSAL_FIELDS_ONLY_NOT_CLASSIFICATION_VALIDATION",
+      "incremental_player_hp_at_consumer": null,
+      "healing_without_additional_actual_hp_removal": false
+    },
+    {
+      "source": "surge",
+      "aspect": 1,
+      "vow": 0,
+      "upgraded": false,
+      "context": "already_lethal",
+      "producer_uid": 900,
+      "consumer_uid": 901,
+      "consumer_id": "phantomBlades",
+      "target_idx": 0,
+      "source_eligible": true,
+      "source_net_hp_delta": 0,
+      "source_net_energy_delta": 1,
+      "source_bloodfire_created": 0,
+      "source_drawn_uids": [
+        955
+      ],
+      "source_exhausted": true,
+      "post_source_embers": 1,
+      "consumer_eligible": true,
+      "consumer_entry_bloodfire": 0,
+      "consumer_entry_hand_uids": [
+        901,
+        920,
+        921,
+        955
+      ],
+      "source_drawn_uids_present_at_consumer_entry": [
+        955
+      ],
+      "controlled_commands_between_source_and_consumer": 0,
+      "bloodfire_consumed_in_consumer": 0,
+      "all_on_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 5,
+        "healing_events": 0,
+        "native_hit_amount": 9,
+        "player_hp_delta": 0
+      },
+      "source_mediator_disabled_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 5,
+        "healing_events": 0,
+        "native_hit_amount": 6,
+        "player_hp_delta": 0
+      },
+      "interaction_with_energy_on": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 0,
+        "healing_interaction": 0
+      },
+      "interaction_with_energy_off": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 0,
+        "healing_interaction": 0
+      },
+      "energy_eligibility_effects": {
+        "mFalse-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mFalse-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        }
+      },
+      "necessary_proxy_without_source_causality": false,
+      "descriptor_status": "CONSTRUCTED_CAUSAL_FIELDS_ONLY_NOT_CLASSIFICATION_VALIDATION",
+      "incremental_player_hp_at_consumer": 0,
+      "healing_without_additional_actual_hp_removal": false
+    },
+    {
+      "source": "surge",
+      "aspect": 1,
+      "vow": 0,
+      "upgraded": false,
+      "context": "available",
+      "producer_uid": 900,
+      "consumer_uid": 901,
+      "consumer_id": "phantomBlades",
+      "target_idx": 0,
+      "source_eligible": true,
+      "source_net_hp_delta": 0,
+      "source_net_energy_delta": 1,
+      "source_bloodfire_created": 0,
+      "source_drawn_uids": [
+        955
+      ],
+      "source_exhausted": true,
+      "post_source_embers": 1,
+      "consumer_eligible": true,
+      "consumer_entry_bloodfire": 0,
+      "consumer_entry_hand_uids": [
+        901,
+        920,
+        921,
+        955
+      ],
+      "source_drawn_uids_present_at_consumer_entry": [
+        955
+      ],
+      "controlled_commands_between_source_and_consumer": 0,
+      "bloodfire_consumed_in_consumer": 0,
+      "all_on_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 9,
+        "healing_events": 0,
+        "native_hit_amount": 9,
+        "player_hp_delta": 0
+      },
+      "source_mediator_disabled_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 6,
+        "healing_events": 0,
+        "native_hit_amount": 6,
+        "player_hp_delta": 0
+      },
+      "interaction_with_energy_on": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 3,
+        "healing_interaction": 0
+      },
+      "interaction_with_energy_off": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 3,
+        "healing_interaction": 0
+      },
+      "energy_eligibility_effects": {
+        "mFalse-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mFalse-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        }
+      },
+      "necessary_proxy_without_source_causality": false,
+      "descriptor_status": "CONSTRUCTED_CAUSAL_FIELDS_ONLY_NOT_CLASSIFICATION_VALIDATION",
+      "incremental_player_hp_at_consumer": 0,
+      "healing_without_additional_actual_hp_removal": false
+    },
+    {
+      "source": "surge",
+      "aspect": 1,
+      "vow": 0,
+      "upgraded": false,
+      "context": "empty_draw",
+      "producer_uid": 900,
+      "consumer_uid": 901,
+      "consumer_id": "phantomBlades",
+      "target_idx": 0,
+      "source_eligible": true,
+      "source_net_hp_delta": 0,
+      "source_net_energy_delta": 1,
+      "source_bloodfire_created": 0,
+      "source_drawn_uids": [],
+      "source_exhausted": true,
+      "post_source_embers": 1,
+      "consumer_eligible": true,
+      "consumer_entry_bloodfire": 0,
+      "consumer_entry_hand_uids": [
+        901,
+        920,
+        921
+      ],
+      "source_drawn_uids_present_at_consumer_entry": [],
+      "controlled_commands_between_source_and_consumer": 0,
+      "bloodfire_consumed_in_consumer": 0,
+      "all_on_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 6,
+        "healing_events": 0,
+        "native_hit_amount": 6,
+        "player_hp_delta": 0
+      },
+      "source_mediator_disabled_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 6,
+        "healing_events": 0,
+        "native_hit_amount": 6,
+        "player_hp_delta": 0
+      },
+      "interaction_with_energy_on": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 0,
+        "healing_interaction": 0
+      },
+      "interaction_with_energy_off": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 0,
+        "healing_interaction": 0
+      },
+      "energy_eligibility_effects": {
+        "mFalse-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mFalse-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cFalse": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        },
+        "mTrue-cTrue": {
+          "disabled_consumer_eligible": true,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": true
+        }
+      },
+      "necessary_proxy_without_source_causality": true,
+      "descriptor_status": "CONSTRUCTED_CAUSAL_FIELDS_ONLY_NOT_CLASSIFICATION_VALIDATION",
+      "incremental_player_hp_at_consumer": 0,
+      "healing_without_additional_actual_hp_removal": false
+    },
+    {
+      "source": "surge",
+      "aspect": 1,
+      "vow": 0,
+      "upgraded": false,
+      "context": "no_energy",
+      "producer_uid": 900,
+      "consumer_uid": 901,
+      "consumer_id": "phantomBlades",
+      "target_idx": 0,
+      "source_eligible": true,
+      "source_net_hp_delta": 0,
+      "source_net_energy_delta": 1,
+      "source_bloodfire_created": 0,
+      "source_drawn_uids": [
+        955
+      ],
+      "source_exhausted": true,
+      "post_source_embers": 1,
+      "consumer_eligible": true,
+      "consumer_entry_bloodfire": 0,
+      "consumer_entry_hand_uids": [
+        901,
+        920,
+        921,
+        955
+      ],
+      "source_drawn_uids_present_at_consumer_entry": [
+        955
+      ],
+      "controlled_commands_between_source_and_consumer": 0,
+      "bloodfire_consumed_in_consumer": 0,
+      "all_on_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 9,
+        "healing_events": 0,
+        "native_hit_amount": 9,
+        "player_hp_delta": 0
+      },
+      "source_mediator_disabled_payoff": {
+        "eligible": true,
+        "actual_hp_removed": 6,
+        "healing_events": 0,
+        "native_hit_amount": 6,
+        "player_hp_delta": 0
+      },
+      "interaction_with_energy_on": {
+        "identified_for_fixed_commands": true,
+        "ineligible_arms": [],
+        "actual_hp_interaction": 3,
+        "healing_interaction": 0
+      },
+      "interaction_with_energy_off": {
+        "identified_for_fixed_commands": false,
+        "ineligible_arms": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "actual_hp_interaction": null,
+        "healing_interaction": null
+      },
+      "energy_eligibility_effects": {
+        "mFalse-cFalse": {
+          "disabled_consumer_eligible": false,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": false
+        },
+        "mFalse-cTrue": {
+          "disabled_consumer_eligible": false,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": false
+        },
+        "mTrue-cFalse": {
+          "disabled_consumer_eligible": false,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": false
+        },
+        "mTrue-cTrue": {
+          "disabled_consumer_eligible": false,
+          "enabled_consumer_eligible": true,
+          "cross_energy_payoff_identified": false
+        }
+      },
+      "necessary_proxy_without_source_causality": false,
+      "descriptor_status": "CONSTRUCTED_CAUSAL_FIELDS_ONLY_NOT_CLASSIFICATION_VALIDATION",
+      "incremental_player_hp_at_consumer": 0,
+      "healing_without_additional_actual_hp_removal": false
+    }
+  ],
+  "limits": [
+    "The public planning preview of switched effects is NOT qualified; the probe uses externally fixed commands only.",
+    "No adaptive policy, source substitution, trained descriptor, held-out prediction or population effect was evaluated.",
+    "The immutable historical support rule remains necessary-only; these findings neither retroactively change its gate nor admit a package.",
+    "Local source freeze and local readback are not remote publication or trusted external timing/provenance.",
+    "Only the enumerated contexts were executed; universal modifiers, relic and lifecycle coverage are not claimed."
+  ],
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "remote_preserved": false
+}

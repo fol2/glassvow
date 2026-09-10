@@ -1,0 +1,47 @@
+test_all_192_complete_native_groups (test_capture.NativeCaptureTests.test_all_192_complete_native_groups) ... ERROR
+test_duplicate_manifest_entry_is_rejected (test_capture.NativeCaptureTests.test_duplicate_manifest_entry_is_rejected) ... ok
+test_effect_draw_uid_is_not_a_label (test_capture.NativeCaptureTests.test_effect_draw_uid_is_not_a_label) ... ok
+test_empty_draw_necessary_pattern_not_causal (test_capture.NativeCaptureTests.test_empty_draw_necessary_pattern_not_causal) ... ok
+test_illegal_consumer_is_not_imputed_zero (test_capture.NativeCaptureTests.test_illegal_consumer_is_not_imputed_zero) ... ok
+test_manifest_tamper_is_rejected (test_capture.NativeCaptureTests.test_manifest_tamper_is_rejected) ... ok
+test_native_reference_is_the_existing_candidate (test_capture.NativeCaptureTests.test_native_reference_is_the_existing_candidate) ... ok
+test_omitted_proper_subset_is_rejected (test_capture.NativeCaptureTests.test_omitted_proper_subset_is_rejected) ... ok
+test_overkill_healing_is_not_erased_by_capped_damage (test_capture.NativeCaptureTests.test_overkill_healing_is_not_erased_by_capped_damage) ... ok
+test_parent_manifest_path_is_rejected (test_capture.NativeCaptureTests.test_parent_manifest_path_is_rejected) ... ok
+test_same_outcome_does_not_rescue_mismatched_reference (test_capture.NativeCaptureTests.test_same_outcome_does_not_rescue_mismatched_reference) ... ok
+test_source_energy_cannot_erase_hp_cost (test_capture.NativeCaptureTests.test_source_energy_cannot_erase_hp_cost) ... ok
+test_source_fatal_has_no_energy_or_charge (test_capture.NativeCaptureTests.test_source_fatal_has_no_energy_or_charge) ... ERROR
+test_source_mediator_cannot_change_original_energy (test_capture.NativeCaptureTests.test_source_mediator_cannot_change_original_energy) ... ok
+test_wrong_producer_uid_definition_rejected (test_capture.NativeCaptureTests.test_wrong_producer_uid_definition_rejected) ... ok
+
+======================================================================
+ERROR: test_all_192_complete_native_groups (test_capture.NativeCaptureTests.test_all_192_complete_native_groups)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/p9-causal-work/delivery/research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/test_capture.py", line 28, in test_all_192_complete_native_groups
+    audit.describe(key[0],key[1:],rows)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/p9-causal-work/delivery/research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/audit_capture.py", line 85, in describe
+    require(source_hp == -3, 'ORIGINAL_HP_COST_NOT_RETAINED')
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/p9-causal-work/delivery/research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/audit_capture.py", line 18, in require
+    raise ValueError(reason)
+ValueError: ORIGINAL_HP_COST_NOT_RETAINED
+
+======================================================================
+ERROR: test_source_fatal_has_no_energy_or_charge (test_capture.NativeCaptureTests.test_source_fatal_has_no_energy_or_charge)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/p9-causal-work/delivery/research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/test_capture.py", line 90, in test_source_fatal_has_no_energy_or_charge
+    r=audit.describe('bloodRite',(1,0,False,'source_fatal'),self.group(context='source_fatal'))
+  File "/mnt/data/p9-causal-work/delivery/research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/audit_capture.py", line 85, in describe
+    require(source_hp == -3, 'ORIGINAL_HP_COST_NOT_RETAINED')
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/p9-causal-work/delivery/research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/audit_capture.py", line 18, in require
+    raise ValueError(reason)
+ValueError: ORIGINAL_HP_COST_NOT_RETAINED
+
+----------------------------------------------------------------------
+Ran 15 tests in 1.927s
+
+FAILED (errors=2)

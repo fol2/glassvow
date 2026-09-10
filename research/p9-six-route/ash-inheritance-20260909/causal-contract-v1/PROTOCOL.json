@@ -1,0 +1,65 @@
+{
+  "kind": "SOURCE_UTILITY_MEDIATOR_CONSUMER_FACTORIAL",
+  "input_research_head": "5d5375b3f2a36494ec575926b0450f585aad2cf0",
+  "main": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "sources": [
+    "bloodRite",
+    "preparation",
+    "surge"
+  ],
+  "aspects": [
+    0,
+    1
+  ],
+  "vows": [
+    0,
+    5
+  ],
+  "upgrades": [
+    false,
+    true
+  ],
+  "contexts": [
+    "available",
+    "no_energy",
+    "hand_cap",
+    "empty_draw",
+    "shuffle",
+    "blocked",
+    "already_lethal",
+    "source_fatal"
+  ],
+  "arms": [
+    -1,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "arm_bits": {
+    "4": "original source Energy enabled",
+    "2": "source mediator enabled",
+    "1": "consumer mediator read enabled",
+    "-1": "uninstrumented current minimum reference"
+  },
+  "seed": 73416010,
+  "fixtures": 192,
+  "records": 1728,
+  "per_invocation_timeout_seconds": 180,
+  "raw_bytes_per_source_limit": 268435456,
+  "no_new_population": true,
+  "no_new_controller": true,
+  "no_model_refit": true,
+  "claim": "qualify source utility separation and falsify causal interpretation of necessary activation alone",
+  "null_eligibility_rule": "undefined contrast if any mandated command rejected; never impute zero",
+  "prior_research_unchanged": true,
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "remote_freeze_available": false,
+  "packages_admitted": 0,
+  "p9_certified": false
+}

@@ -1,0 +1,36 @@
+test_all_192_complete_native_groups (test_capture.NativeCaptureTests.test_all_192_complete_native_groups) ... ok
+test_duplicate_manifest_entry_is_rejected (test_capture.NativeCaptureTests.test_duplicate_manifest_entry_is_rejected) ... ok
+test_effect_draw_uid_is_not_a_label (test_capture.NativeCaptureTests.test_effect_draw_uid_is_not_a_label) ... ok
+test_empty_draw_necessary_pattern_not_causal (test_capture.NativeCaptureTests.test_empty_draw_necessary_pattern_not_causal) ... ok
+test_illegal_consumer_is_not_imputed_zero (test_capture.NativeCaptureTests.test_illegal_consumer_is_not_imputed_zero) ... ok
+test_manifest_tamper_is_rejected (test_capture.NativeCaptureTests.test_manifest_tamper_is_rejected) ... ok
+test_native_reference_is_the_existing_candidate (test_capture.NativeCaptureTests.test_native_reference_is_the_existing_candidate) ... ok
+test_omitted_proper_subset_is_rejected (test_capture.NativeCaptureTests.test_omitted_proper_subset_is_rejected) ... ok
+test_overkill_healing_is_not_erased_by_capped_damage (test_capture.NativeCaptureTests.test_overkill_healing_is_not_erased_by_capped_damage) ... ok
+test_parent_manifest_path_is_rejected (test_capture.NativeCaptureTests.test_parent_manifest_path_is_rejected) ... ok
+test_same_outcome_does_not_rescue_mismatched_reference (test_capture.NativeCaptureTests.test_same_outcome_does_not_rescue_mismatched_reference) ... ok
+test_source_energy_cannot_erase_hp_cost (test_capture.NativeCaptureTests.test_source_energy_cannot_erase_hp_cost) ... ok
+test_source_fatal_has_no_energy_or_charge (test_capture.NativeCaptureTests.test_source_fatal_has_no_energy_or_charge) ... ok
+test_source_mediator_cannot_change_original_energy (test_capture.NativeCaptureTests.test_source_mediator_cannot_change_original_energy) ... ok
+test_wrong_producer_uid_definition_rejected (test_capture.NativeCaptureTests.test_wrong_producer_uid_definition_rejected) ... ok
+test_altered_content_cannot_enter (test_contract.Tests.test_altered_content_cannot_enter) ... ok
+test_capped_health_not_hit_amount (test_contract.Tests.test_capped_health_not_hit_amount) ... ok
+test_complete_factorial_interaction (test_contract.Tests.test_complete_factorial_interaction) ... ok
+test_consumer_cannot_act_before_source (test_contract.Tests.test_consumer_cannot_act_before_source) ... ok
+test_energy_does_not_erase_hp (test_contract.Tests.test_energy_does_not_erase_hp) ... ok
+test_exact_patch_anchor_is_required (test_contract.Tests.test_exact_patch_anchor_is_required) ... ok
+test_false_return_not_integer_zero (test_contract.Tests.test_false_return_not_integer_zero) ... ok
+test_hp_and_healing_are_separate (test_contract.Tests.test_hp_and_healing_are_separate) ... ok
+test_ineligible_is_not_zero (test_contract.Tests.test_ineligible_is_not_zero) ... ok
+test_ineligible_rectangle_is_undefined (test_contract.Tests.test_ineligible_rectangle_is_undefined) ... ok
+test_missing_subset_fails (test_contract.Tests.test_missing_subset_fails) ... ok
+test_no_selected_success_reference (test_contract.Tests.test_no_selected_success_reference) ... ok
+test_not_an_admission (test_contract.Tests.test_not_an_admission) ... ok
+test_original_hp_utility_cannot_be_erased (test_contract.Tests.test_original_hp_utility_cannot_be_erased) ... ok
+test_unchanged_native_fallback_present (test_contract.Tests.test_unchanged_native_fallback_present) ... ok
+test_unknown_state_field_not_projected_out (test_contract.Tests.test_unknown_state_field_not_projected_out) ... ok
+
+----------------------------------------------------------------------
+Ran 31 tests in 2.283s
+
+OK
