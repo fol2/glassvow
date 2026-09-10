@@ -5,6 +5,12 @@ from pathlib import Path
 from read_causal import require, WORLDS
 
 
+def source_hp_after(initial_hp):
+    """The 3-point self-hit is retained; native lose_combat clamps state HP to zero."""
+    require(type(initial_hp) is int and initial_hp > 0, 'INITIAL_HP')
+    return max(0, initial_hp - 3)
+
+
 def records(path):
     data=[json.loads(s) for s in Path(path).read_bytes().splitlines()]
     require(data[-1]=={'kind':'terminal','cases':32} and len(data)==33,'GATE_COVERAGE')
@@ -38,7 +44,8 @@ def check(folder,reader):
             ref=rows['00'][k]
             require(all(row[n]==ref[n] for n in ('index','aspect','vow','upgraded','initial_hp','enemy_block','before')),'MATCHED_FIXTURE')
             alive=row['initial_hp']>3
-            require(source['combat']['player']['hp']==row['initial_hp']-3,'BASE_HP_UTILITY')
+            require(source['combat']['player']['hp']==source_hp_after(row['initial_hp']),'BASE_HP_UTILITY')
+            require(sum(e['amount'] for e in row['source_events'] if e.get('t')=='hitPlayer' and e.get('source')=='self')==3,'DECLARED_SELF_HIT')
             require(source['combat']['player']['energy']==((3 if row['upgraded'] else 2) if alive else 0),'BASE_ENERGY_UTILITY')
             require(source['return'] is True,'SOURCE_COMMAND_LEGAL')
             expected=int(a and row['aspect']==1 and alive)
