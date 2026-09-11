@@ -1,0 +1,41 @@
+{
+  "freeze": {
+    "source_head": "6ee0208f6136a3716ce0f7e393b37b4aba5287a5",
+    "source_sha256": {
+      "CONTRACT.md": "ef48d34a393800b659c2f4c5d6aa57e0cc62dc6fd4daa0c9bc9d1802db76e5d4",
+      "PROTOCOL.json": "97f9078716041dabf5d294bc09c327d47ee9369e55514231110f3e0ad9ea7f48",
+      "probe.gd": "14c42d24d699aa0dbb2993269b728d9787d8b5062be066961099659324978b45",
+      "check.py": "798b5779383b2283289d3ca316cfb96079f1e2d948f5609227fb350ffd864443",
+      "test_check.py": "d93883058ef87bfbb94e300176e795cec03c3f76349e959f7630b33103afec4f",
+      "execute.py": "123664e88010158e291e4c7633e7d9f8459a115f5feab06cb63c1f82271f15f3"
+    },
+    "remote_git_blobs_checked": {
+      "CONTRACT.md": "307920b610700be1357873564c8ce0b70f6823e1",
+      "PROTOCOL.json": "5a220bb099328670d25afe954ba2f9c67a929777",
+      "probe.gd": "28dc4e3de1e5ce5db72d495acc3ad907ce468d1e",
+      "check.py": "1c3769b4a136554fb084c202320d3114b6b94a63",
+      "test_check.py": "c42934e04348a0ad22fe010fa83c5ee9cf82356c",
+      "execute.py": "9140ccf4743205f47ff6a3b7052e2fa296e82c46"
+    },
+    "new_native_observations": 0,
+    "preflight": {
+      "synthetic_tests_passed": 18,
+      "native_capture_tests_pending": 10,
+      "native_script_parse": "scripts OK (1 checked)",
+      "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e"
+    },
+    "review_kind": "SELF_REVIEW_NOT_INDEPENDENT",
+    "review_authority_comment": 5586269454,
+    "review_scope": "Exact six source files, inherited runtime identities, finite assignment, false-positive fixtures, legal adaptive-prefix commands, source-utility separation, native all-on reference, complete capture and offline readback. No population, descriptor predictive validity, package or P9 approval.",
+    "packages_admitted": 0,
+    "p9_certified": false
+  },
+  "runtime_archive_sha256": "c695a87ab4f3966769611e2275109a653966edf1a9c2e2346fe35205acf259ee",
+  "content_sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9",
+  "combat_sha256": "3ccb89f69f50e41d5a46eadd8f48c0a907fd0e382cd492b2c34dd5f93e091ad0",
+  "venue": {
+    "runner_os": "Linux",
+    "github_run_id": "34606067726",
+    "timing_scope": "report-only; not the attested provenance profile"
+  }
+}
