@@ -1,0 +1,59 @@
+{
+  "source_head": "18a80067aba35b2657c979b8523fda10413d15ca",
+  "source_sha256": {
+    "CONTRACT.md": "ef48d34a393800b659c2f4c5d6aa57e0cc62dc6fd4daa0c9bc9d1802db76e5d4",
+    "PROTOCOL.json": "97f9078716041dabf5d294bc09c327d47ee9369e55514231110f3e0ad9ea7f48",
+    "probe.gd": "e0d3b22462da492f9bc4e117b8c1e15ffea67bd16e220081a4a773e29a9a5156",
+    "check.py": "798b5779383b2283289d3ca316cfb96079f1e2d948f5609227fb350ffd864443",
+    "test_check.py": "d93883058ef87bfbb94e300176e795cec03c3f76349e959f7630b33103afec4f",
+    "execute.py": "123664e88010158e291e4c7633e7d9f8459a115f5feab06cb63c1f82271f15f3"
+  },
+  "new_native_observations": 0,
+  "preflight": {
+    "synthetic_tests_passed": 18,
+    "native_capture_tests_pending": 10,
+    "native_script_parse": "scripts OK (1 checked)",
+    "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e"
+  },
+  "review_kind": "SELF_REVIEW_NOT_INDEPENDENT",
+  "review_authority_comment": 5586269454,
+  "review_scope": "Exact six source files, inherited runtime identities, finite assignment, false-positive fixtures, legal adaptive-prefix commands, source-utility separation, native all-on reference, complete capture and offline readback. No population, descriptor predictive validity, package or P9 approval.",
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "original_freeze_sha256": "9758507cba38cf35a7e34ddcb8a9dfdf2f08fa9dd0f75ab4294161800dbb55ce",
+  "repair_sha256": "bdb568e0872ea295634b7bba7f793e7a1782157565840c361bb9a49168a823e0",
+  "repair": "Replace the runtime-untyped conditional Array expression with a typed initial Array plus append; exact commands, cases and acceptance unchanged.",
+  "original_attempt_run": 34606067726,
+  "original_attempt_status": "INCONCLUSIVE_NATIVE_TYPED_ARRAY_FAILURE",
+  "local_regression": {
+    "red_expected_runtime_error_observed": true,
+    "green_both_branches_pass": true,
+    "new_game_outcomes": 0
+  },
+  "regression_evidence": {
+    "red": {
+      "source": "extends SceneTree\nfunc _initialize() -> void:\n\tfor repeat: bool in [false, true]:\n\t\tvar consumers: Array[int] = [901, 902] if repeat else [901]\n\t\tassert(consumers.size() == (2 if repeat else 1))\n\tprint(\"ARRAY_CHECKS_PASS\")\n\tquit(0)\n",
+      "stdout": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\n",
+      "stderr": "SCRIPT ERROR: Trying to assign an array of type \"Array\" to a variable of type \"Array[int]\".\n          at: _initialize (res://mnt/data/p9-20260911/temporal-v1/repair-1/red.gd:4)\n          GDScript backtrace (most recent call first):\n              [0] _initialize (res://mnt/data/p9-20260911/temporal-v1/repair-1/red.gd:4)\n",
+      "returncode": 0,
+      "command_suffix": [
+        "--headless",
+        "--quit",
+        "-s",
+        "red.gd"
+      ]
+    },
+    "green": {
+      "source": "extends SceneTree\nfunc _initialize() -> void:\n\tfor repeat: bool in [false, true]:\n\t\tvar consumers: Array[int] = [901]\n\t\tif repeat:\n\t\t\tconsumers.append(902)\n\t\tassert(consumers.size() == (2 if repeat else 1))\n\tprint(\"ARRAY_CHECKS_PASS\")\n\tquit(0)\n",
+      "stdout": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nARRAY_CHECKS_PASS\n",
+      "stderr": "",
+      "returncode": 0,
+      "command_suffix": [
+        "--headless",
+        "--quit",
+        "-s",
+        "green.gd"
+      ]
+    }
+  }
+}
