@@ -1,0 +1,23 @@
+test_birth_binds_actual_source_instance (test_bridge.Tests.test_birth_binds_actual_source_instance) ... ok
+test_bool_coefficient_rejected (test_bridge.Tests.test_bool_coefficient_rejected) ... ok
+test_bool_uid_rejected (test_bridge.Tests.test_bool_uid_rejected) ... ok
+test_drawn_consumer_access_is_separate (test_bridge.Tests.test_drawn_consumer_access_is_separate) ... ok
+test_duplicate_uid_rejected (test_bridge.Tests.test_duplicate_uid_rejected) ... ok
+test_exhaust_hook_draw_is_background (test_bridge.Tests.test_exhaust_hook_draw_is_background) ... ok
+test_illegal_action_not_zero (test_bridge.Tests.test_illegal_action_not_zero) ... ok
+test_input_is_read_only (test_bridge.Tests.test_input_is_read_only) ... ok
+test_missing_sequence_rejected (test_bridge.Tests.test_missing_sequence_rejected) ... ok
+test_negative_coefficient_rejected (test_bridge.Tests.test_negative_coefficient_rejected) ... ok
+test_output_metadata_does_not_alias_internal_state (test_bridge.Tests.test_output_metadata_does_not_alias_internal_state) ... ok
+test_repeat_consumer_does_not_spend_other_cards (test_bridge.Tests.test_repeat_consumer_does_not_spend_other_cards) ... ok
+test_same_id_distinct_source_instances_are_not_collapsed (test_bridge.Tests.test_same_id_distinct_source_instances_are_not_collapsed) ... ok
+test_spent_draw_is_not_retained (test_bridge.Tests.test_spent_draw_is_not_retained) ... ok
+test_state_discontinuity_rejected (test_bridge.Tests.test_state_discontinuity_rejected) ... ok
+test_turn_reset_same_uid_does_not_revive_old_origin (test_bridge.Tests.test_turn_reset_same_uid_does_not_revive_old_origin) ... ok
+test_two_runs_cannot_share_tracker (test_bridge.Tests.test_two_runs_cannot_share_tracker) ... ok
+test_wrong_played_id_rejected (test_bridge.Tests.test_wrong_played_id_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.002s
+
+OK

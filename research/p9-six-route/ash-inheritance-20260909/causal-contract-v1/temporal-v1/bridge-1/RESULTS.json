@@ -1,0 +1,23 @@
+{
+  "status": "TEMPORAL_TO_EXISTING_WHOLE_RUN_FIELDS_BOUND_NOT_CERTIFICATE",
+  "input_head": "05d9def6f9105ae8c6b839f355017b6222e60de4",
+  "content_sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9",
+  "combat_sha256": "3ccb89f69f50e41d5a46eadd8f48c0a907fd0e382cd492b2c34dd5f93e091ad0",
+  "native_trajectories_reused": 360,
+  "native_consumer_records_compared": 440,
+  "selected_existing_row": "5:1:73414101",
+  "selection": "First source-positive row in the immutable existing field publication; exposed diagnostic only.",
+  "whole_run_commands_read": 409,
+  "whole_run_consumers_compared": 15,
+  "new_native_runs": 0,
+  "new_population_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "review_kind": "SELF_REVIEW_NOT_INDEPENDENT",
+  "limits": [
+    "No replay of the 512-run census or any controller/query qualification.",
+    "Observed producer ancestry is not marginal HP, predictive validity, reachability frequency or policy value.",
+    "No transport to nonlinear consumer content or revised verdict for a closed nomination."
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "row_key": "5:1:73414101",
+  "sequence": 97,
+  "fight": 7,
+  "consumer_uid": 16,
+  "legacy_fields": {
+    "retained_hand_instances": 3,
+    "retained_direct_source_instances": {
+      "preparation": 1,
+      "surge": 0
+    },
+    "retained_direct_source_uids": {
+      "preparation": [
+        9
+      ],
+      "surge": []
+    },
+    "consumer_draw_origin": "background",
+    "hand_coefficient": 3,
+    "direct_source_hand_term_units": 3,
+    "scope": "Structural hand-count term before native attack envelope; not marginal HP, policy value or a causal effect estimate."
+  },
+  "retained_producer_occurrences": [
+    {
+      "held_uid": 9,
+      "source_card": "preparation",
+      "producer_uid": 18,
+      "birth_sequence": 93,
+      "birth_event_index": 2,
+      "birth_fight": 7
+    }
+  ],
+  "consumer_draw_occurrence": {
+    "source_card": "background",
+    "producer_uid": null,
+    "birth_sequence": 92,
+    "birth_event_index": 18,
+    "birth_fight": 7
+  },
+  "scope": "Observed ancestry, not marginal HP or whole-run causal value."
+}

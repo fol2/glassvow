@@ -1,0 +1,129 @@
+name: P9 research runtime bundle
+on:
+  push:
+    branches: [research/p9-six-route-local-20260905]
+    paths: [.github/workflows/p9-research-runtime-bundle.yml]
+permissions:
+  contents: read
+concurrency:
+  group: p9-six-route-research-writer
+  cancel-in-progress: false
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  STUDY: research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/temporal-v1
+  INPUT: 05d9def6f9105ae8c6b839f355017b6222e60de4
+jobs:
+  bundle:
+    name: Complete frozen offline occurrence bridge - no native replay
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /.github/workflows/p9-research-runtime-bundle.yml
+            /research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/temporal-v1/
+      - name: Run exact frozen bridge with the existing selected diagnostic
+        id: bridge
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e "$STUDY/bridge-1"
+          git fetch --no-tags --depth=1 --filter=blob:none origin "$INPUT"
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib
+          root=pathlib.Path(os.environ['STUDY'])
+          f=json.loads((root/'BRIDGE-FREEZE.json').read_bytes())
+          assert f['input_head']==os.environ['INPUT']
+          for n,h in f['source_sha256'].items():
+              assert hashlib.sha256((root/n).read_bytes()).hexdigest()==h,n
+          PY
+          (cd "$STUDY" && python3 -m unittest -v test_bridge) > "$RUNNER_TEMP/tests.stdout" 2> "$RUNNER_TEMP/tests.stderr"
+          timeout 300 python3 "$STUDY/bridge.py" "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/bridge-1" > "$RUNNER_TEMP/bridge.stdout" 2> "$RUNNER_TEMP/bridge.stderr"
+      - name: Preserve complete result or actual failure before cold verification
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,shutil
+          root=pathlib.Path(os.environ['STUDY']);out=root/'bridge-1';out.mkdir(exist_ok=True)
+          for name in ('tests.stdout','tests.stderr','bridge.stdout','bridge.stderr'):
+              p=pathlib.Path(os.environ['RUNNER_TEMP'])/name
+              if p.exists():shutil.copyfile(p,out/name)
+          for name in ('bridge.py','test_bridge.py','BRIDGE-FREEZE.json'):
+              shutil.copyfile(root/name,out/name)
+          shutil.copyfile('.github/workflows/p9-research-runtime-bundle.yml',out/'WORKFLOW.yml')
+          ok='${{ steps.bridge.outcome }}'=='success'
+          result=json.loads((out/'RESULTS.json').read_bytes()) if ok else None
+          t={'status':result['status'] if ok else 'OFFLINE_BRIDGE_INCONCLUSIVE','source_head':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'new_native_runs':0,'new_population_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
+          (out/'TERMINAL.json').write_text(json.dumps(t,indent=2)+'\n')
+          (out/'FILES.json').write_text(json.dumps([{'path':p.name,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.iterdir()) if p.is_file() and p.name!='FILES.json'],indent=2)+'\n')
+          PY
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
+          test -z "$(git diff --cached --name-only)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$STUDY/bridge-1"
+          python3 - <<'PY'
+          import os,subprocess
+          n=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
+          assert n and all(p.startswith(os.environ['STUDY']+'/bridge-1/') for p in n)
+          PY
+          git commit -m 'research(p9): preserve frozen offline bridge result and complete diagnostics'
+          git push origin HEAD:refs/heads/$branch
+          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        if: always() && env.PUBLISHED_HEAD != ''
+        with:
+          ref: ${{ env.PUBLISHED_HEAD }}
+          path: cold
+          persist-credentials: false
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/temporal-v1/
+      - name: Compare every remote byte and rebuild the same offline bridge
+        if: always() && env.PUBLISHED_HEAD != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C cold fetch --no-tags --depth=1 --filter=blob:none origin "$INPUT"
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess
+          root=pathlib.Path(os.environ['STUDY']);a=root/'bridge-1';b=pathlib.Path('cold')/a
+          assert (a/'FILES.json').read_bytes()==(b/'FILES.json').read_bytes()
+          entries=json.loads((b/'FILES.json').read_bytes())
+          assert {p.name for p in b.iterdir() if p.is_file()}=={r['path'] for r in entries}|{'FILES.json'}
+          for r in entries:
+              assert pathlib.Path(r['path']).name==r['path']
+              x=(a/r['path']).read_bytes();y=(b/r['path']).read_bytes()
+              assert x==y and len(y)==r['bytes'] and hashlib.sha256(y).hexdigest()==r['sha256']
+          terminal=json.loads((b/'TERMINAL.json').read_bytes());reproduced=False
+          if terminal['status']=='TEMPORAL_TO_EXISTING_WHOLE_RUN_FIELDS_BOUND_NOT_CERTIFICATE':
+              replay=pathlib.Path(os.environ['RUNNER_TEMP'])/'cold-bridge'
+              subprocess.run(['python3',str(pathlib.Path('cold')/root/'bridge.py'),'cold',str(replay)],check=True,timeout=300)
+              for n in ('RESULTS.json','INPUTS.json','RUN-FIELDS.json','SELECTED-WITNESS.json'):
+                  assert (replay/n).read_bytes()==(b/n).read_bytes(),n
+              reproduced=True
+          receipt={'kind':'FROZEN_OFFLINE_BRIDGE_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':len(entries)+1,'all_bytes_equal':True,'readout_reproduced':reproduced,'status':terminal['status'],'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
+          assert not (root/'BRIDGE-READBACK.json').exists()
+          (root/'BRIDGE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          PY
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
+          git add "$STUDY/BRIDGE-READBACK.json"
+          test "$(git diff --cached --name-only)" = "$STUDY/BRIDGE-READBACK.json"
+          git commit -m 'research(p9): record separate-checkout bridge byte and readout verification'
+          git push origin HEAD:refs/heads/$branch
+      - name: Preserve fail-closed bridge outcome
+        if: always() && steps.bridge.outcome != 'success'
+        run: exit 3
