@@ -1,0 +1,32 @@
+test_cross_world_policy (test_campaign.Assignment.test_cross_world_policy) ... ok
+test_duplicate_policy_identity (test_campaign.Assignment.test_duplicate_policy_identity) ... ok
+test_duplicate_row (test_campaign.Assignment.test_duplicate_row) ... ok
+test_error_is_not_loss (test_campaign.Assignment.test_error_is_not_loss) ... ok
+test_exact_block_and_policy_coverage (test_campaign.Assignment.test_exact_block_and_policy_coverage) ... ok
+test_float_and_bool_identity (test_campaign.Assignment.test_float_and_bool_identity) ... ok
+test_missing_row (test_campaign.Assignment.test_missing_row) ... ok
+test_policy_drift (test_campaign.Assignment.test_policy_drift) ... ok
+test_unsupported_context (test_campaign.Assignment.test_unsupported_context) ... ok
+test_vow_assignments_are_disjoint_and_not_old_cohort (test_campaign.Assignment.test_vow_assignments_are_disjoint_and_not_old_cohort) ... ok
+test_wrong_seed (test_campaign.Assignment.test_wrong_seed) ... ok
+test_assignment_primary_and_cost_are_not_mutable (test_campaign.Binding.test_assignment_primary_and_cost_are_not_mutable) ... ok
+test_concurrent_writer_stops_before_staging (test_campaign.Binding.test_concurrent_writer_stops_before_staging) ... ok
+test_contract (test_campaign.Binding.test_contract) ... ok
+test_current_scope_blocks_product_mutation (test_campaign.Binding.test_current_scope_blocks_product_mutation) ... ok
+test_git_blob_identity (test_campaign.Binding.test_git_blob_identity) ... ok
+test_manifest_indexes_complete_raw_without_itself (test_campaign.Binding.test_manifest_indexes_complete_raw_without_itself) ... ok
+test_no_content_drift_or_certificate (test_campaign.Binding.test_no_content_drift_or_certificate) ... ok
+test_unsafe_paths (test_campaign.Binding.test_unsafe_paths) ... ok
+test_all_three_bounds_required (test_campaign.Decisions.test_all_three_bounds_required) ... ok
+test_conditional_stage_transitions (test_campaign.Decisions.test_conditional_stage_transitions) ... ok
+test_cost_exact_boundary_and_invalid (test_campaign.Decisions.test_cost_exact_boundary_and_invalid) ... ok
+test_full_chain_only (test_campaign.Decisions.test_full_chain_only) ... ok
+test_invalid_interval (test_campaign.Decisions.test_invalid_interval) ... ok
+test_same_blocks_sent_to_preserved_bootstrap (test_campaign.Decisions.test_same_blocks_sent_to_preserved_bootstrap) ... ok
+test_source_only_is_not_complementarity (test_campaign.Decisions.test_source_only_is_not_complementarity) ... ok
+test_zero_bound_does_not_pass (test_campaign.Decisions.test_zero_bound_does_not_pass) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 0.228s
+
+OK
