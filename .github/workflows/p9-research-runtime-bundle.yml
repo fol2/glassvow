@@ -13,7 +13,7 @@ env:
   STUDY: research/p9-six-route/ash-inheritance-20260909/nightsight-opportunity-v1
 jobs:
   bundle:
-    name: Finish existing archived-profile availability proof - no engine
+    name: Prune source-only retry class and bind starter access - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 10
@@ -31,6 +31,15 @@ jobs:
             /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/FILES.json
             /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/SOURCE-MANIFEST.json
             /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/runtime-source.tar.xz
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/CONTRACT.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/TERMINAL.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/REMOTE-READBACK.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/FILES.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/SOURCE-MANIFEST.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/runtime-source.tar.xz
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/CONTRACT.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/TERMINAL.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/REMOTE-READBACK.json
       - name: Run only the already-committed pool proof and retain actual diagnostics
         id: analysis
         continue-on-error: true
@@ -39,20 +48,20 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,json,os,pathlib,shutil,subprocess,sys,time
-          root=pathlib.Path(os.environ['STUDY']);out=root/'availability-1'
-          script=root/'availability.py';data=script.read_bytes()
+          root=pathlib.Path(os.environ['STUDY']);out=root/'frontier-1'
+          script=root/'frontier.py';data=script.read_bytes()
           blob=lambda b:hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-          assert blob(data)=='eb35f539c77340708ff5d4b28afbf2fe74a5a571'
+          assert blob(data)=='0812073ea9c2b3378f77dbc6a931d506ab8a5895'
           assert not out.exists(),'NO_RERUN'
           terminal={'status':'INCONCLUSIVE','source_head':os.environ['GITHUB_SHA'],'source_blob':blob(data),'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False,'review_kind':'AUTHOR_SELF_REVIEW_NOT_INDEPENDENT'}
           logs=[]
           try:
               for label,args in [('tests',['--self-test']),('analysis',[os.environ['GITHUB_WORKSPACE'],str(out.resolve())])]:
-                  log=pathlib.Path(os.environ['RUNNER_TEMP'])/('availability-'+label+'.log');logs.append(log)
+                  log=pathlib.Path(os.environ['RUNNER_TEMP'])/('frontier-'+label+'.log');logs.append(log)
                   with log.open('wb') as f:
                       p=subprocess.run([sys.executable,str(script),*args],stdout=f,stderr=subprocess.STDOUT,timeout=180,check=False)
                   assert p.returncode==0,(label,p.returncode)
-              result=json.loads((out/'RESULTS.json').read_bytes());terminal['status']=result['status']
+              result=json.loads((out/'DECISION.json').read_bytes());terminal['status']=result['status']
           except Exception as e:
               terminal['failure']=repr(e)
           out.mkdir(parents=True,exist_ok=True)
@@ -71,16 +80,16 @@ jobs:
           set -euo pipefail
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
-          test -f "$STUDY/availability-1/TERMINAL.json"
+          test -f "$STUDY/frontier-1/TERMINAL.json"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$STUDY/availability-1"
+          git add "$STUDY/frontier-1"
           python3 - <<'PY'
           import os,subprocess
           names=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
-          assert names and all(n.startswith(os.environ['STUDY']+'/availability-1/') for n in names)
+          assert names and all(n.startswith(os.environ['STUDY']+'/frontier-1/') for n in names)
           PY
-          git commit -m 'research(p9): preserve archived-profile availability and exact draw-source inventory'
+          git commit -m 'research(p9): preserve archived-profile frontier and exact draw-source inventory'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -96,6 +105,15 @@ jobs:
             /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/FILES.json
             /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/SOURCE-MANIFEST.json
             /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/runtime-source.tar.xz
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/CONTRACT.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/TERMINAL.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/REMOTE-READBACK.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/FILES.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/SOURCE-MANIFEST.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/runtime-source.tar.xz
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/CONTRACT.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/TERMINAL.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/REMOTE-READBACK.json
       - name: Cold read every output byte and reproduce the source proof without engine
         if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
@@ -104,29 +122,29 @@ jobs:
           python3 - <<'PY'
           import hashlib,json,os,pathlib,subprocess,sys
           repo=pathlib.Path(os.environ['GITHUB_WORKSPACE']);rel=pathlib.Path(os.environ['STUDY'])
-          original=repo/rel/'availability-1';coldrepo=repo/'cold';cold=coldrepo/rel/'availability-1'
+          original=repo/rel/'frontier-1';coldrepo=repo/'cold';cold=coldrepo/rel/'frontier-1'
           manifest=(original/'FILES.json').read_bytes();assert manifest==(cold/'FILES.json').read_bytes()
           records=json.loads(manifest);assert len({r['path'] for r in records})==len(records)
           for r in records:
               p=pathlib.Path(r['path']);assert not p.is_absolute() and '..' not in p.parts
               b=(cold/p).read_bytes();assert b==(original/p).read_bytes() and len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
-          for name in ('availability.py','PROTOCOL.json'):
+          for name in ('frontier.py','PROTOCOL.json'):
               assert (repo/rel/name).read_bytes()==(coldrepo/rel/name).read_bytes()
           terminal=json.loads((cold/'TERMINAL.json').read_bytes());reproduced=False
           if terminal['status']!='INCONCLUSIVE':
-              replay=pathlib.Path(os.environ['RUNNER_TEMP'])/'availability-cold-reconstruction'
-              p=subprocess.run([sys.executable,str(coldrepo/rel/'availability.py'),str(coldrepo),str(replay)],capture_output=True,timeout=180,check=False)
+              replay=pathlib.Path(os.environ['RUNNER_TEMP'])/'frontier-cold-reconstruction'
+              p=subprocess.run([sys.executable,str(coldrepo/rel/'frontier.py'),str(coldrepo),str(replay)],capture_output=True,timeout=180,check=False)
               assert p.returncode==0,p.stderr.decode(errors='replace')
-              for name in ('RESULTS.json','SOURCE.json'):assert (replay/name).read_bytes()==(cold/name).read_bytes(),name
+              for name in ('DECISION.json','INPUTS.json'):assert (replay/name).read_bytes()==(cold/name).read_bytes(),name
               reproduced=True
-          receipt={'kind':'ARCHIVED_PROFILE_AVAILABILITY_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':len(records)+1,'all_bytes_equal':True,'source_proof_reproduced':reproduced,'scientific_status':terminal['status'],'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
+          receipt={'kind':'SOURCE_ONLY_FRONTIER_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':len(records)+1,'all_bytes_equal':True,'source_proof_reproduced':reproduced,'scientific_status':terminal['status'],'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
           (original/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/availability-1/REMOTE-READBACK.json"
-          test "$(git diff --cached --name-only)" = "$STUDY/availability-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record cold byte readback and exact availability reconstruction'
+          git add "$STUDY/frontier-1/REMOTE-READBACK.json"
+          test "$(git diff --cached --name-only)" = "$STUDY/frontier-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): record cold byte readback and exact frontier reconstruction'
           git push origin HEAD:refs/heads/$branch
       - name: Fail closed on actual analysis failure
         if: always() && steps.analysis.outcome != 'success'
