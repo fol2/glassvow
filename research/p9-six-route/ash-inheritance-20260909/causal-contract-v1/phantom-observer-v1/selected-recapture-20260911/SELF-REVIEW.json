@@ -1,0 +1,24 @@
+{
+  "kind": "AUTHOR_ADVERSARIAL_REVIEW_OF_FIXED_RECAPTURE",
+  "review_kind": "SELF_REVIEW_NOT_INDEPENDENT",
+  "native_replays_during_review": 0,
+  "tests_passed": 12,
+  "negative_capture_mutants_rejected": 10,
+  "positive_controls": [
+    "Unmodified complete 409-command capture with all 15 predictions",
+    "Only the two predeclared measured timers differ"
+  ],
+  "finding": {
+    "name": "PYTHON_BOOLEAN_INTEGER_EQUALITY_CAN_HIDE_TRACE_TYPE_DRIFT",
+    "original_reader_accepts_mutant": true,
+    "strict_json_typed_comparison_rejects_mutant": true,
+    "real_capture_has_type_drift": false,
+    "resolution": "Supplemental type-preserving projection comparison before invoking the unchanged frozen reader. No native replay or modification of original source, thresholds, raw data or prior verdicts."
+  },
+  "test_fixture_correction": "The first adversarial draft set an already-zero Vulnerable field to zero. It was not a mutation. The final test toggles the actual field; initial test output is retained.",
+  "review_source_sha256": "9affaed26480d396a268c2878e64d59f7928d0d650a776e09998f537ec6f4b87",
+  "test_log_sha256": "6fe1ad0080d6a952f9e4eb0c2c978859f3b6e1f4ef42a0a4ccab52e03fb5dbc1",
+  "preservation": "Review code and logs are locally committed. This summary does not assert remote preservation of the raw packet.",
+  "packages_admitted": 0,
+  "p9_certified": false
+}
