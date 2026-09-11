@@ -1,0 +1,91 @@
+{
+  "kind": "AVAILABILITY_AND_INFERENCE_SCOPE_COLD_READBACK",
+  "published_head": "891d119ef6dd5834151378c7637fc4f714c4eaab",
+  "files": [
+    {
+      "path": "research/p9-six-route/acceptance-scope-20260911/scope.py",
+      "bytes": 11326,
+      "sha256": "23da50a7d78374549f02c2c69fcc0538c58a745a031eed9082356f0c51af4ab7",
+      "git_blob": "dbf8ae99c3c7483931a28a0419ae7892c82573d2"
+    },
+    {
+      "path": "research/p9-six-route/acceptance-scope-20260911/close.py",
+      "bytes": 9469,
+      "sha256": "7fd574d6f766cb093d8cebfa7d5b02b88d7e9b00019fb5224e50f6d4a498a436",
+      "git_blob": "3d1899d32f4ca6650574d3e09d510ab237faeca0"
+    },
+    {
+      "path": "research/p9-six-route/acceptance-scope-20260911/execution-1/DECISION.json",
+      "bytes": 3258,
+      "sha256": "5044ad1e19fabbab40a277576655d87ea6e4c29f6b25334fc6a80a337bb9b8b0",
+      "git_blob": "dbadd1652981150d819a4610647e9cb9af8c7568"
+    },
+    {
+      "path": "research/p9-six-route/acceptance-scope-20260911/execution-1/FILES.json",
+      "bytes": 556,
+      "sha256": "8919ab894023af1554d263033bdefa765ceb2b35769ad8b8e218fe53596e6993",
+      "git_blob": "98f82015b1d2419a93d272bf01e6f9d100a676eb"
+    },
+    {
+      "path": "research/p9-six-route/acceptance-scope-20260911/execution-1/WITNESS.json",
+      "bytes": 22647,
+      "sha256": "5e112ecd513fdea477262256f1f5d5358091c415170be5469623fc0ebbbf4acb",
+      "git_blob": "2818527bdd3ae01b8ff28e7910efd5954ea59f52"
+    },
+    {
+      "path": "research/p9-six-route/acceptance-scope-20260911/execution-1/scope-run.log",
+      "bytes": 111,
+      "sha256": "3b719cdcd406f49155ba59251b65e2a66648a072f280af962108cdc292765c4b",
+      "git_blob": "68e93697f7ffe13598ff8797ca4256e474d2f41d"
+    },
+    {
+      "path": "research/p9-six-route/acceptance-scope-20260911/execution-1/scope-tests.log",
+      "bytes": 1004,
+      "sha256": "7e3bd7895f1d8012ed386f647d73a5dad57961d4fbd0b9ca0060e85f2f121f2f",
+      "git_blob": "5f96f237e4eccc270beab24e42c7969d890ae4b6"
+    },
+    {
+      "path": "research/p9-six-route/acceptance-scope-20260911/closure-1/DECISION.json",
+      "bytes": 1998,
+      "sha256": "155442730d98fec3755e7dea93eeac5b64151fcbe2690b5bb23f5c20a93ab496",
+      "git_blob": "8d44c9bd8bdea505236cd186be46693fb8a6a435"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-HANDOFF.md",
+      "bytes": 4225,
+      "sha256": "ac90163af44304862f3af84cee679f511003761a996af283cef936e75bbe6670",
+      "git_blob": "f204506f40e1f3f987ce4be947bcf442562fc692"
+    },
+    {
+      "path": "research/p9-six-route/SESSION-STATE.json",
+      "bytes": 52202,
+      "sha256": "bccd6e6bf64cb8acfafe75624fe8bb1fad4fdcc8c92f221075b380c1826ce251",
+      "git_blob": "6e86a6dc59434a2bd7e0b562f498badd5268a152"
+    },
+    {
+      "path": "research/p9-six-route/package-disposition-20260908/ROADMAP.md",
+      "bytes": 1453,
+      "sha256": "3ddff6fc956cbf68193fbe0e467420c2b94f54bf7fb7bc2d65bd3a8f8192ae8a",
+      "git_blob": "5afdfe910d14334d557bae54fecdca45bf85c20c"
+    },
+    {
+      "path": "research/p9-six-route/acceptance-scope-20260911/closure-1/scope-close.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": ".github/workflows/p9-research-runtime-bundle.yml",
+      "bytes": 9113,
+      "sha256": "e933295e216711dd3c24e580030e479e9324aecc2ea1052330e605475a9a3da3",
+      "git_blob": "30470fb2bffeba24b788ba1ddac0c417ed073d22"
+    }
+  ],
+  "all_bytes_equal": true,
+  "finite_counterexample_reproduced": true,
+  "earlier_scope_receipts_retained": true,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
