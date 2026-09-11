@@ -1,0 +1,100 @@
+{
+  "status": "TWO_SLOPE_HAND_ADAPTIVE_VALUE_NOT_ESTABLISHED",
+  "source_head": "5907a79b61cd8abb1a3e9094e5bfb25d2c51b931",
+  "stages": {
+    "5": {
+      "rows_per_world": 512,
+      "policy_configurations": 128,
+      "distinct_seed_blocks": 256,
+      "wins": {
+        "00": 283,
+        "01": 280,
+        "10": 306,
+        "11": 301
+      },
+      "contrasts": {
+        "source_group": {
+          "point": 0.041015625,
+          "interval": [
+            0.00390625,
+            0.08203125
+          ],
+          "positive_lower_bound": true
+        },
+        "consumer": {
+          "point": -0.009765625,
+          "interval": [
+            -0.03125,
+            0.009765625
+          ],
+          "positive_lower_bound": false
+        },
+        "interaction": {
+          "point": -0.00390625,
+          "interval": [
+            -0.01953125,
+            0.009765625
+          ],
+          "positive_lower_bound": false
+        }
+      },
+      "outcome_patterns_00_01_10_11": {
+        "0000": 176,
+        "0010": 2,
+        "0011": 40,
+        "0101": 8,
+        "0111": 3,
+        "1000": 1,
+        "1010": 10,
+        "1011": 3,
+        "1100": 21,
+        "1110": 1,
+        "1111": 247
+      },
+      "primary_pass": false,
+      "uncertainty": "Pinned 10000-resample paired-seed bootstrap Random(421); Bonferroni percentile bounds .05/6 and 1-.05/6. Approximate fixed-policy/context inference, not final P9 multiplicity control.",
+      "vow": 5,
+      "cpu_seconds": {
+        "00": 2772.6299999999987,
+        "01": 2757.31,
+        "10": 2913.899999999999,
+        "11": 2910.9300000000003
+      },
+      "resource_pass": true,
+      "pass_all": false,
+      "trace_counts": {
+        "00": {
+          "consumer_clone_actions": 2327
+        },
+        "01": {
+          "consumer_clone_actions": 2377
+        },
+        "10": {
+          "consumer_clone_actions": 2412
+        },
+        "11": {
+          "consumer_clone_actions": 2449
+        }
+      },
+      "packages_admitted": 0,
+      "p9_certified": false,
+      "status": "TWO_SLOPE_HAND_ADAPTIVE_VALUE_NOT_ESTABLISHED"
+    }
+  },
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "qualification": {
+    "status": "HAND_WORLD_ENTRY_BINDING_PASS",
+    "worlds": [
+      "00",
+      "01",
+      "10",
+      "11"
+    ],
+    "all_on_entry_state_events_equal": true,
+    "population_outcomes": 0,
+    "scope": "New constructor assignment and per-command invariant only; original384-mask qualification carried, not rerun."
+  },
+  "last_vow": 5,
+  "v0_skipped": true
+}
