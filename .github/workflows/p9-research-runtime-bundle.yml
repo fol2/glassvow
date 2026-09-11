@@ -10,10 +10,10 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/nightsight-opportunity-v1
+  STUDY: research/p9-six-route/acceptance-scope-20260911
 jobs:
   bundle:
-    name: Prune source-only retry class and bind starter access - no engine
+    name: Bind finite inference limits and complete current capsule - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 10
@@ -27,73 +27,74 @@ jobs:
           persist-credentials: true
           sparse-checkout-cone-mode: false
           sparse-checkout: |
+            /docs/balance/p9-strategy-diversity-system.md
+            /research/p9-six-route/acceptance-scope-20260911/
             /research/p9-six-route/ash-inheritance-20260909/nightsight-opportunity-v1/
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/FILES.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/SOURCE-MANIFEST.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/runtime-source.tar.xz
-            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/CONTRACT.json
             /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/TERMINAL.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/REMOTE-READBACK.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/FILES.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/SOURCE-MANIFEST.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/runtime-source.tar.xz
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/CONTRACT.json
             /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/TERMINAL.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/REMOTE-READBACK.json
-      - name: Run only the already-committed pool proof and retain actual diagnostics
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+      - name: Test the finite counterexample and bind unchanged authority and closed results
         id: analysis
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,shutil,subprocess,sys,time
-          root=pathlib.Path(os.environ['STUDY']);out=root/'frontier-1'
-          script=root/'frontier.py';data=script.read_bytes()
-          blob=lambda b:hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-          assert blob(data)=='0812073ea9c2b3378f77dbc6a931d506ab8a5895'
-          assert not out.exists(),'NO_RERUN'
-          terminal={'status':'INCONCLUSIVE','source_head':os.environ['GITHUB_SHA'],'source_blob':blob(data),'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False,'review_kind':'AUTHOR_SELF_REVIEW_NOT_INDEPENDENT'}
-          logs=[]
-          try:
-              for label,args in [('tests',['--self-test']),('analysis',[os.environ['GITHUB_WORKSPACE'],str(out.resolve())])]:
-                  log=pathlib.Path(os.environ['RUNNER_TEMP'])/('frontier-'+label+'.log');logs.append(log)
-                  with log.open('wb') as f:
-                      p=subprocess.run([sys.executable,str(script),*args],stdout=f,stderr=subprocess.STDOUT,timeout=180,check=False)
-                  assert p.returncode==0,(label,p.returncode)
-              result=json.loads((out/'DECISION.json').read_bytes());terminal['status']=result['status']
-          except Exception as e:
-              terminal['failure']=repr(e)
-          out.mkdir(parents=True,exist_ok=True)
-          for log in logs:
-              if log.exists():shutil.copyfile(log,out/log.name)
-          (out/'TERMINAL.json').write_text(json.dumps(terminal,indent=2)+'\n')
-          files=[{'path':p.name,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.iterdir()) if p.is_file() and p.name!='FILES.json']
-          (out/'FILES.json').write_text(json.dumps(files,indent=2)+'\n')
-          print(json.dumps(terminal,indent=2))
-          if terminal['status']=='INCONCLUSIVE':sys.exit(3)
+          import hashlib,os,pathlib
+          root=pathlib.Path(os.environ['STUDY'])
+          for name,want in {'scope.py':'dbf8ae99c3c7483931a28a0419ae7892c82573d2','close.py':'3d1899d32f4ca6650574d3e09d510ab237faeca0'}.items():
+              b=(root/name).read_bytes()
+              assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==want,name
+          assert not (root/'execution-1').exists() and not (root/'closure-1').exists()
           PY
-      - name: Commit and push complete available output without changing research verdicts
+          python3 "$STUDY/scope.py" --self-test > "$RUNNER_TEMP/scope-tests.log" 2>&1
+          python3 "$STUDY/scope.py" "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/execution-1" > "$RUNNER_TEMP/scope-run.log" 2>&1
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,shutil
+          root=pathlib.Path(os.environ['STUDY'])/'execution-1'
+          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('scope-*.log'):shutil.copyfile(p,root/p.name)
+          (root/'FILES.json').write_text(json.dumps([{'path':p.name,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(root.iterdir()) if p.is_file() and p.name!='FILES.json'],indent=2)+'\n')
+          PY
+          python3 "$STUDY/close.py" "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/closure-1" > "$RUNNER_TEMP/scope-close.log" 2>&1
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,shutil
+          root=pathlib.Path(os.environ['STUDY'])/'closure-1'
+          p=root/'scope-close.log';shutil.copyfile(pathlib.Path(os.environ['RUNNER_TEMP'])/p.name,p)
+          records=json.loads((root/'FILES.json').read_bytes())
+          for p in [p,pathlib.Path('.github/workflows/p9-research-runtime-bundle.yml')]:
+              b=p.read_bytes();records.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
+          (root/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
+          PY
+      - name: Preserve complete decision and current summaries or actual failure diagnostics
         if: always()
         shell: bash
         run: |
           set -euo pipefail
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
-          test -f "$STUDY/frontier-1/TERMINAL.json"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$STUDY/frontier-1"
+          if [ '${{ steps.analysis.outcome }}' = success ]; then
+            git add "$STUDY/execution-1" "$STUDY/closure-1" research/p9-six-route/SESSION-STATE.json research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/package-disposition-20260908/ROADMAP.md
+          else
+            mkdir "$STUDY/delivery-1"
+            cp "$RUNNER_TEMP"/scope-*.log "$STUDY/delivery-1/" 2>/dev/null || true
+            printf '%s\n' '{"status":"INFERENCE_SCOPE_DELIVERY_INCOMPLETE","new_native_runs":0,"packages_admitted":0,"p9_certified":false}' > "$STUDY/delivery-1/TERMINAL.json"
+            git add "$STUDY/delivery-1"
+          fi
           python3 - <<'PY'
           import os,subprocess
           names=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
-          assert names and all(n.startswith(os.environ['STUDY']+'/frontier-1/') for n in names)
+          shared={'research/p9-six-route/'+n for n in ('SESSION-STATE.json','SESSION-HANDOFF.md','package-disposition-20260908/ROADMAP.md')}
+          assert names and all(n in shared or n.startswith(os.environ['STUDY']+'/') for n in names)
           PY
-          git commit -m 'research(p9): preserve archived-profile frontier and exact draw-source inventory'
+          git commit -m 'research(p9): preserve finite inference limit and synchronized verified frontier'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        if: always() && env.PUBLISHED_HEAD != ''
+        if: steps.analysis.outcome == 'success'
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
@@ -101,51 +102,42 @@ jobs:
           persist-credentials: false
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            /research/p9-six-route/ash-inheritance-20260909/nightsight-opportunity-v1/
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/FILES.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/SOURCE-MANIFEST.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/runtime-source.tar.xz
-            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/CONTRACT.json
+            /.github/workflows/p9-research-runtime-bundle.yml
+            /docs/balance/p9-strategy-diversity-system.md
+            /research/p9-six-route/acceptance-scope-20260911/
             /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/TERMINAL.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/REMOTE-READBACK.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/FILES.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/SOURCE-MANIFEST.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1/runtime-source.tar.xz
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/CONTRACT.json
             /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/TERMINAL.json
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/REMOTE-READBACK.json
-      - name: Cold read every output byte and reproduce the source proof without engine
-        if: always() && env.PUBLISHED_HEAD != ''
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+      - name: Read every published byte from a separate checkout and reconstruct the same finite result
+        if: steps.analysis.outcome == 'success'
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,json,os,pathlib,subprocess,sys
-          repo=pathlib.Path(os.environ['GITHUB_WORKSPACE']);rel=pathlib.Path(os.environ['STUDY'])
-          original=repo/rel/'frontier-1';coldrepo=repo/'cold';cold=coldrepo/rel/'frontier-1'
-          manifest=(original/'FILES.json').read_bytes();assert manifest==(cold/'FILES.json').read_bytes()
-          records=json.loads(manifest);assert len({r['path'] for r in records})==len(records)
-          for r in records:
+          repo=pathlib.Path(os.environ['GITHUB_WORKSPACE']);cold=repo/'cold';rel=pathlib.Path(os.environ['STUDY']);folder=rel/'closure-1'
+          raw=(repo/folder/'FILES.json').read_bytes();assert raw==(cold/folder/'FILES.json').read_bytes()
+          files=json.loads(raw);assert len({r['path'] for r in files})==len(files)
+          for r in files:
               p=pathlib.Path(r['path']);assert not p.is_absolute() and '..' not in p.parts
-              b=(cold/p).read_bytes();assert b==(original/p).read_bytes() and len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
-          for name in ('frontier.py','PROTOCOL.json'):
-              assert (repo/rel/name).read_bytes()==(coldrepo/rel/name).read_bytes()
-          terminal=json.loads((cold/'TERMINAL.json').read_bytes());reproduced=False
-          if terminal['status']!='INCONCLUSIVE':
-              replay=pathlib.Path(os.environ['RUNNER_TEMP'])/'frontier-cold-reconstruction'
-              p=subprocess.run([sys.executable,str(coldrepo/rel/'frontier.py'),str(coldrepo),str(replay)],capture_output=True,timeout=180,check=False)
-              assert p.returncode==0,p.stderr.decode(errors='replace')
-              for name in ('DECISION.json','INPUTS.json'):assert (replay/name).read_bytes()==(cold/name).read_bytes(),name
-              reproduced=True
-          receipt={'kind':'SOURCE_ONLY_FRONTIER_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':len(records)+1,'all_bytes_equal':True,'source_proof_reproduced':reproduced,'scientific_status':terminal['status'],'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
-          (original/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
+              b=(cold/p).read_bytes();oid=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+              assert b==(repo/p).read_bytes() and len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256'] and oid==r['git_blob']
+              assert subprocess.check_output(['git','-C',str(cold),'rev-parse','HEAD:'+str(p)]).decode().strip()==oid
+          dest=pathlib.Path(os.environ['RUNNER_TEMP'])/'scope-offline-reconstruction'
+          p=subprocess.run([sys.executable,str(cold/rel/'scope.py'),str(cold),str(dest)],capture_output=True,timeout=120,check=False)
+          assert p.returncode==0,p.stderr.decode(errors='replace')
+          for name in ('WITNESS.json','DECISION.json'):assert (dest/name).read_bytes()==(cold/rel/'execution-1'/name).read_bytes(),name
+          receipt={'kind':'AVAILABILITY_AND_INFERENCE_SCOPE_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':files,'all_bytes_equal':True,'finite_counterexample_reproduced':True,'earlier_scope_receipts_retained':True,'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False}
+          (repo/folder/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/frontier-1/REMOTE-READBACK.json"
-          test "$(git diff --cached --name-only)" = "$STUDY/frontier-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record cold byte readback and exact frontier reconstruction'
+          git add "$STUDY/closure-1/REMOTE-READBACK.json"
+          test "$(git diff --cached --name-only)" = "$STUDY/closure-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): record cold byte readback of inference decision and current capsule'
           git push origin HEAD:refs/heads/$branch
-      - name: Fail closed on actual analysis failure
+      - name: Fail closed on actual offline analysis failure
         if: always() && steps.analysis.outcome != 'success'
         run: exit 3
