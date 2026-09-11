@@ -1,0 +1,33 @@
+test_absent_action_is_not_zero_payoff (test_check.AttributionTests.test_absent_action_is_not_zero_payoff) ... ok
+test_assignment_is_finite_and_has_no_surged_duplicate (test_check.AttributionTests.test_assignment_is_finite_and_has_no_surged_duplicate) ... ok
+test_boolean_is_not_uid (test_check.AttributionTests.test_boolean_is_not_uid) ... ok
+test_capped_hp_not_raw_hit (test_check.AttributionTests.test_capped_hp_not_raw_hit) ... ok
+test_consumer_itself_is_not_a_hand_unit (test_check.AttributionTests.test_consumer_itself_is_not_a_hand_unit) ... ok
+test_duplicate_draw_occurrence_rejected (test_check.AttributionTests.test_duplicate_draw_occurrence_rejected) ... ok
+test_duplicate_hand_uid_rejected (test_check.AttributionTests.test_duplicate_hand_uid_rejected) ... ok
+test_end_turn_expires_credit_even_when_same_uids_return (test_check.AttributionTests.test_end_turn_expires_credit_even_when_same_uids_return) ... ok
+test_epoch_change_without_endturn_event_fails_safe_credit (test_check.AttributionTests.test_epoch_change_without_endturn_event_fails_safe_credit) ... ok
+test_float_is_not_uid (test_check.AttributionTests.test_float_is_not_uid) ... ok
+test_missing_world_is_not_pass (test_check.AttributionTests.test_missing_world_is_not_pass) ... ok
+test_off_world_never_issues_drawn_card_command (test_check.AttributionTests.test_off_world_never_issues_drawn_card_command) ... ok
+test_old_uid_redrawn_by_other_card_does_not_revive (test_check.AttributionTests.test_old_uid_redrawn_by_other_card_does_not_revive) ... ok
+test_read_does_not_consume_other_cards (test_check.AttributionTests.test_read_does_not_consume_other_cards) ... ok
+test_reference_adapts_same_as_all_on (test_check.AttributionTests.test_reference_adapts_same_as_all_on) ... ok
+test_rejected_action_is_not_zero_payoff (test_check.AttributionTests.test_rejected_action_is_not_zero_payoff) ... ok
+test_spent_card_loses_credit (test_check.AttributionTests.test_spent_card_loses_credit) ... ok
+test_wrong_target_rejected (test_check.AttributionTests.test_wrong_target_rejected) ... ok
+test_actual_positive_control (test_check.NativeMutationTests.test_actual_positive_control) ... skipped 'Native capture not yet opened'
+test_consumer_retrocausality_rejects (test_check.NativeMutationTests.test_consumer_retrocausality_rejects) ... skipped 'Native capture not yet opened'
+test_cross_pile_duplicate_rejects (test_check.NativeMutationTests.test_cross_pile_duplicate_rejects) ... skipped 'Native capture not yet opened'
+test_event_deletion_rejects (test_check.NativeMutationTests.test_event_deletion_rejects) ... skipped 'Native capture not yet opened'
+test_false_native_reference_rejects (test_check.NativeMutationTests.test_false_native_reference_rejects) ... skipped 'Native capture not yet opened'
+test_false_target_hp_contrast_rejects (test_check.NativeMutationTests.test_false_target_hp_contrast_rejects) ... skipped 'Native capture not yet opened'
+test_mismatched_initial_state_rejects (test_check.NativeMutationTests.test_mismatched_initial_state_rejects) ... skipped 'Native capture not yet opened'
+test_missing_world_rejects (test_check.NativeMutationTests.test_missing_world_rejects) ... skipped 'Native capture not yet opened'
+test_rejected_consumer_rejects (test_check.NativeMutationTests.test_rejected_consumer_rejects) ... skipped 'Native capture not yet opened'
+test_undeclared_replacement_action_rejects (test_check.NativeMutationTests.test_undeclared_replacement_action_rejects) ... skipped 'Native capture not yet opened'
+
+----------------------------------------------------------------------
+Ran 28 tests in 0.001s
+
+OK (skipped=10)

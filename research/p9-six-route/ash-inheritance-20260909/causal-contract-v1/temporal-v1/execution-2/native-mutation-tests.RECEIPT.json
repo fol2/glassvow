@@ -1,0 +1,18 @@
+{
+  "command": [
+    "env",
+    "P9_NATIVE_CAPTURE=/home/runner/work/glassvow/glassvow/research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/temporal-v1/execution-2/raw.jsonl.xz",
+    "/usr/bin/python3",
+    "-m",
+    "unittest",
+    "-v",
+    "test_check"
+  ],
+  "cwd": "/home/runner/work/_temp/repaired-source",
+  "returncode": 0,
+  "failure": null,
+  "wall_seconds_report_only": 0.6656396300000011,
+  "cpu_seconds_report_only": 0.6267559999999992,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "d5306566c92c292620dc213f2e80c2b3a783cdeb3092615226879617734e282b"
+}
