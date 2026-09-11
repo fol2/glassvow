@@ -93,3 +93,7 @@ This is one fixed audit-policy claim, not all Hand policies or P9 impossibility.
 Exact next action: This exact two-slope/audit-policy value nomination is closed without extension or tuning. Use the complete decision to select only a genuinely unmeasured authorized package obligation; do not reroll seeds or relabel this negative.
 
 Remaining: full package causality/descriptor/policy/peer/economy/independent proof; six strategy coverage; seven-direction detector; corrected confirmation and unrestricted retention; all guardrails; minimum lifecycle, exact-head review, one selected product integration and #108 receipt.
+
+## Completed retained source-path accounting
+
+Every assigned two-slope Hand trace has been read under `ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/path-diagnosis-1/execution-1/`. It separates source-enabled consumer access, retained-other-card origin and above-reserve use. Counts and same-hand algebra are descriptive, not adaptive extra HP, new value evidence or descriptor admission. The original value terminal is unchanged. Do not repeat this accounting or tune the closed nominee.
