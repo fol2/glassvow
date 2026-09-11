@@ -97,3 +97,9 @@ Remaining: full package causality/descriptor/policy/peer/economy/independent pro
 ## Completed retained source-path accounting
 
 Every assigned two-slope Hand trace has been read under `ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/path-diagnosis-1/execution-1/`. It separates source-enabled consumer access, retained-other-card origin and above-reserve use. Counts and same-hand algebra are descriptive, not adaptive extra HP, new value evidence or descriptor admission. The original value terminal is unchanged. Do not repeat this accounting or tune the closed nominee.
+
+## Persistent-source opportunity decision
+
+FIXED_CAPTURE_PERSISTENT_SOURCE_OPPORTUNITY_INSUFFICIENT. All assigned retained worlds were read without engine execution. This is an upper-bound temporal opportunity, not extra-card attribution or causal value. Earlier primary negatives stay closed. See `ash-inheritance-20260909/nightsight-opportunity-v1/execution-1/`.
+
+Current next action: Do not open a Night Sight population cohort using this fixed capture/policy. Preserve the scoped opportunity negative and select another genuinely unmeasured authorized package obligation; no tuning or new seeds for the closed nomination.
