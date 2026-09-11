@@ -1,0 +1,330 @@
+{
+  "authored_draw_producer_inventory": [
+    {
+      "card": "firstSpark",
+      "cost": 0,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "in_initial_pool_upper_bound": false,
+      "locked": null,
+      "rarity": "starter",
+      "variant": "base"
+    },
+    {
+      "card": "firstSpark",
+      "cost": 0,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 2
+        }
+      ],
+      "in_initial_pool_upper_bound": false,
+      "locked": null,
+      "rarity": "starter",
+      "variant": "up"
+    },
+    {
+      "card": "quickSlash",
+      "cost": 1,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "in_initial_pool_upper_bound": true,
+      "locked": null,
+      "rarity": "common",
+      "variant": "base"
+    },
+    {
+      "card": "quickSlash",
+      "cost": 1,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "in_initial_pool_upper_bound": true,
+      "locked": null,
+      "rarity": "common",
+      "variant": "up"
+    },
+    {
+      "card": "sidestep",
+      "cost": 1,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "in_initial_pool_upper_bound": true,
+      "locked": null,
+      "rarity": "common",
+      "variant": "base"
+    },
+    {
+      "card": "sidestep",
+      "cost": 1,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "in_initial_pool_upper_bound": true,
+      "locked": null,
+      "rarity": "common",
+      "variant": "up"
+    },
+    {
+      "card": "preparation",
+      "cost": 0,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 2
+        }
+      ],
+      "in_initial_pool_upper_bound": true,
+      "locked": null,
+      "rarity": "common",
+      "variant": "base"
+    },
+    {
+      "card": "preparation",
+      "cost": 0,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 2
+        }
+      ],
+      "in_initial_pool_upper_bound": true,
+      "locked": null,
+      "rarity": "common",
+      "variant": "up"
+    },
+    {
+      "card": "deflect",
+      "cost": 1,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "in_initial_pool_upper_bound": true,
+      "locked": null,
+      "rarity": "common",
+      "variant": "base"
+    },
+    {
+      "card": "deflect",
+      "cost": 1,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "in_initial_pool_upper_bound": true,
+      "locked": null,
+      "rarity": "common",
+      "variant": "up"
+    },
+    {
+      "card": "surge",
+      "cost": 0,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "in_initial_pool_upper_bound": true,
+      "locked": null,
+      "rarity": "uncommon",
+      "variant": "base"
+    },
+    {
+      "card": "surge",
+      "cost": 0,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "in_initial_pool_upper_bound": true,
+      "locked": null,
+      "rarity": "uncommon",
+      "variant": "up"
+    },
+    {
+      "card": "offering",
+      "cost": 1,
+      "effects": [
+        {
+          "draw": 3,
+          "id": "pyreTithe",
+          "kind": "special"
+        }
+      ],
+      "in_initial_pool_upper_bound": true,
+      "locked": null,
+      "rarity": "rare",
+      "variant": "base"
+    },
+    {
+      "card": "offering",
+      "cost": 1,
+      "effects": [
+        {
+          "draw": 4,
+          "id": "pyreTithe",
+          "kind": "special"
+        }
+      ],
+      "in_initial_pool_upper_bound": true,
+      "locked": null,
+      "rarity": "rare",
+      "variant": "up"
+    },
+    {
+      "card": "tithe",
+      "cost": 1,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "in_initial_pool_upper_bound": false,
+      "locked": "lanternFed",
+      "rarity": "uncommon",
+      "variant": "base"
+    },
+    {
+      "card": "tithe",
+      "cost": 1,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "in_initial_pool_upper_bound": false,
+      "locked": "lanternFed",
+      "rarity": "uncommon",
+      "variant": "up"
+    },
+    {
+      "card": "nightSight",
+      "cost": 1,
+      "effects": [
+        {
+          "id": "nightsight",
+          "kind": "status",
+          "n": 1,
+          "who": "self"
+        }
+      ],
+      "in_initial_pool_upper_bound": false,
+      "locked": "darkWalker",
+      "rarity": "uncommon",
+      "variant": "base"
+    },
+    {
+      "card": "nightSight",
+      "cost": 0,
+      "effects": [
+        {
+          "id": "nightsight",
+          "kind": "status",
+          "n": 1,
+          "who": "self"
+        }
+      ],
+      "in_initial_pool_upper_bound": false,
+      "locked": "darkWalker",
+      "rarity": "uncommon",
+      "variant": "up"
+    }
+  ],
+  "countermodel_was_not_run_or_adopted": true,
+  "countermodel_with_deed_unlock_includes_card": true,
+  "dark_walker": {
+    "desc": "Enter 6 unlit lanterns",
+    "n": 6,
+    "name": "Walker of Unlit Ways",
+    "stat": "unlitVisited",
+    "unlocks": [
+      "card:nightSight",
+      "relic:thiefOfWicks"
+    ]
+  },
+  "decision": "Do not test Night Sight value with the existing profile and do not quietly unlock it only for the planned arm. Use eligible in-profile producers; a different progression context requires its own explicit contract and matched signed controls.",
+  "direct_draw_special_ids": [
+    "pyreTithe"
+  ],
+  "even_all_reveal_gates_open_is_insufficient": true,
+  "kind": "INITIAL_REWARD_POOL_PRODUCER_EXCLUSION",
+  "limits": [
+    "Initial card-pool exclusion under the actual archived observed-simulator profile. This is not a universal theorem about every event, future run or player progression.",
+    "The hypothetical deed-unlocked pool is a source-derived countermodel, not new natural play or a change to the signed comparator.",
+    "The inventory covers authored draw effects, persistent Night Sight and directly identified draw-special clauses; source call sites are supplied for remaining conditional/background channels.",
+    "Neither pool inclusion nor co-occurrence qualifies a strategy. Every prior value result and protected context remains unchanged."
+  ],
+  "native_direct_draw_callsite_functions": [
+    "_start_player_turn",
+    "_on_enemy_death",
+    "exhaust_card",
+    "_apply_effect",
+    "_apply_special",
+    "_apply_art_effect",
+    "use_potion"
+  ],
+  "new_independent_samples": 0,
+  "new_native_runs": 0,
+  "night_sight": {
+    "cost": 1,
+    "effects": [
+      {
+        "id": "nightsight",
+        "kind": "status",
+        "n": 1,
+        "who": "self"
+      }
+    ],
+    "locked": "darkWalker",
+    "name": "Night Sight",
+    "rarity": "uncommon",
+    "target": "self",
+    "text": "At the start of each turn, draw 1 extra card.",
+    "type": "power",
+    "up": {
+      "cost": 0
+    },
+    "vfx": "void"
+  },
+  "night_sight_in_any_base_pool": false,
+  "omen_draw_deltas": {
+    "emberWind": -1
+  },
+  "p9_certified": false,
+  "packages_admitted": 0,
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "source_factory": "simulate",
+  "source_profile_unlocks": [
+    "aspect2"
+  ],
+  "status": "NIGHTSIGHT_EXCLUDED_FROM_BOUND_INITIAL_POOL"
+}

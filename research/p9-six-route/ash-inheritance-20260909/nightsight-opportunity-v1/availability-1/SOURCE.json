@@ -1,0 +1,238 @@
+{
+  "identities": {
+    "additive_policy.gd": {
+      "bytes": 2447,
+      "sha256": "642a9597a54e1cabf8f46f95732eed8cad04c15cacaa99a2d3c4e479eb64583b"
+    },
+    "capability.gd": {
+      "bytes": 3991,
+      "sha256": "35d38cb8961db17bac2b2d0270daebb61844ee3339758991859c643ec745953b"
+    },
+    "combat_bridge.gd": {
+      "bytes": 2228,
+      "sha256": "5ee7fd07374f810a061a0500534a925d65fa00686c3a32fcfa2de6cc17b5bf78"
+    },
+    "content/content_db.gd": {
+      "bytes": 23151,
+      "sha256": "e1d0c2291ed50f820ba7ea202e16b46eb318f26244f37d37c294f5cb073cef6d"
+    },
+    "content/full-content.json": {
+      "bytes": 136098,
+      "sha256": "ac779e08b0afc5054242ecf5dc1f7421e648e4ee114607708584d1d74ce92cdc"
+    },
+    "decision_gate.gd": {
+      "bytes": 8059,
+      "sha256": "0cabd91d0d384ebbfce4a5159ed6f90fec9cffada32506f7949b00a4c6a12062"
+    },
+    "domain/events/event_types.gd": {
+      "bytes": 1762,
+      "sha256": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a"
+    },
+    "domain/game.gd": {
+      "bytes": 2764,
+      "sha256": "4eb3f416eef60797bc0cfdf9169250f07fccb3a05c0b16dcb9d7ef054898c824"
+    },
+    "domain/map_layout/map_layout_canonical.gd": {
+      "bytes": 6107,
+      "sha256": "2a6ef6fbb589d7af94998c9beb1d6088eff5038dfd652ebb9c28107b9283ac47"
+    },
+    "domain/map_layout/map_layout_input.gd": {
+      "bytes": 7132,
+      "sha256": "2069ec3f174b137748028ddf56156ec590d4480a8bd8f37367532ca5102a898c"
+    },
+    "domain/map_layout/map_layout_input_binding.gd": {
+      "bytes": 3675,
+      "sha256": "3b4fe26d71c75f6091d88152514a9f99f231d078ce334d301049e66991f341e7"
+    },
+    "domain/map_layout/map_layout_result.gd": {
+      "bytes": 9977,
+      "sha256": "70ce93f1a85a03d21170edcd5d1188a5e94760754065c8eb6a139903bd51c8f7"
+    },
+    "domain/rng/rng.gd": {
+      "bytes": 1105,
+      "sha256": "279665ca2dd8d26bc4e81d1c86bf5a23a80ad582f5c0ed4cb5cc222387a9adf8"
+    },
+    "domain/rules/combat.gd": {
+      "bytes": 51207,
+      "sha256": "1493d02fa2b4ff3b88c517448286ce26287e886b4ae2257251eb8ba0aea331be"
+    },
+    "domain/rules/counterfactual_self.gd": {
+      "bytes": 4999,
+      "sha256": "de02e57c8ea2fe41c6806dade8f786a1c8e2d0282c8cb9f4b3defddbe4db8e98"
+    },
+    "domain/rules/dawn_passages.gd": {
+      "bytes": 5272,
+      "sha256": "eed19b1540e64eac3dbb647491741791e98d1d4362487248249abc93b7cf982b"
+    },
+    "domain/rules/enemy_ai.gd": {
+      "bytes": 8551,
+      "sha256": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417"
+    },
+    "domain/rules/line_table.gd": {
+      "bytes": 12231,
+      "sha256": "ed5a9e4461ffd28607c4afc14293430413ac368289b18d7a4e98577d187a76b3"
+    },
+    "domain/rules/pool_beats.gd": {
+      "bytes": 2599,
+      "sha256": "bc8fb56230ed2fa534eb1f85dc97104202ac6934aa1ec7570de9a4d94bc93c9f"
+    },
+    "domain/rules/quests.gd": {
+      "bytes": 9532,
+      "sha256": "fede1a189d0f21c0e75b0d4779f36478b43971d0eab7a88c08396daadcf59aae"
+    },
+    "domain/rules/rewards.gd": {
+      "bytes": 23820,
+      "sha256": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83"
+    },
+    "domain/state/card_inst.gd": {
+      "bytes": 740,
+      "sha256": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d"
+    },
+    "domain/state/combat_state.gd": {
+      "bytes": 2118,
+      "sha256": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae"
+    },
+    "domain/state/enemy_combatant.gd": {
+      "bytes": 1149,
+      "sha256": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7"
+    },
+    "domain/state/map_node.gd": {
+      "bytes": 2570,
+      "sha256": "f3947e2a476b037f1b76b843caa7ff5bd80019c28031350a7692b8144aa5ebed"
+    },
+    "domain/state/player_combatant.gd": {
+      "bytes": 513,
+      "sha256": "f30653fcb20b776cd4efb51d22d83a2c6c1006b6bbc32ef4468f627c74fc46d3"
+    },
+    "domain/state/run_state.gd": {
+      "bytes": 18728,
+      "sha256": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19"
+    },
+    "domain/state/vigil_state.gd": {
+      "bytes": 12350,
+      "sha256": "ec2b95b5f6d08133d7e9f070b85d3a473abe510d5f1eaf8ecbbdb6394f723259"
+    },
+    "domain/state/world_map.gd": {
+      "bytes": 11955,
+      "sha256": "b3f1beb4db34933fc7de0c2562749fbd9465f74c7d74bb1bd2c3598b0e984fe5"
+    },
+    "entry.gd": {
+      "bytes": 2975,
+      "sha256": "dd703e18184c111b2bc39f663323ac41627da42bc4a71b7b829211eb36ebee2d"
+    },
+    "gate.gd": {
+      "bytes": 5127,
+      "sha256": "506bda66ccb2b03d22046dbfc67561a11a9a02f57b6433cc65e5e247a8c6bbc6"
+    },
+    "gate_delta.gd": {
+      "bytes": 6795,
+      "sha256": "762286f37f7d10f78f6b9663db55244fcb8b6230c2ffce6aa6f6462e82f855c2"
+    },
+    "greedy_policy.gd": {
+      "bytes": 569,
+      "sha256": "2512e45d942886346acefb0781014f724341c6575560a4489090f188be628214"
+    },
+    "greedy_stock.gd": {
+      "bytes": 2946,
+      "sha256": "3ebd81dcc1e3f4aed99a88f7bb26718bb9f7f8a35065517889ad26bc6c5e44d2"
+    },
+    "lab_policy.gd": {
+      "bytes": 1825,
+      "sha256": "ef294f057d0ab23a13c2af57d9ced9a27c74d622c308550e4be932617c8d7261"
+    },
+    "legacy_policy.gd": {
+      "bytes": 13866,
+      "sha256": "731122ce5fbc0773f6c97696fab449e21df415692b741eceeab79c521c54a72d"
+    },
+    "null_bridge.gd": {
+      "bytes": 1582,
+      "sha256": "272d29baf66aa84f8e134e07d1f0fc1e195f1c1ef8d4f593d56ce727795746aa"
+    },
+    "observed_game.gd": {
+      "bytes": 4569,
+      "sha256": "2495feaa44053bcfb9e2f4809d9363538b08b307bfde8f9e9918b66f0bd034f1"
+    },
+    "policy_buggy_v9.gd": {
+      "bytes": 2539,
+      "sha256": "72868caa9a313fba7211a475c5651e1d55394048be31c8cb64bf7fb4159221fb"
+    },
+    "policy_v8.gd": {
+      "bytes": 8082,
+      "sha256": "2131a9463700d05b93a4c9e16364596eb91e7884ee3d40c4434152802004b95c"
+    },
+    "probe.gd": {
+      "bytes": 3130,
+      "sha256": "8f1a2f086f5c3a00bb891f082906e2547ed43ddaf7d6431fc04a0a9c03bd67d8"
+    },
+    "public_rollout.gd": {
+      "bytes": 634,
+      "sha256": "0598188e72ea546ebf5fa14bb0c6448775d060dcf725afc53d9a01e04cdc11c5"
+    },
+    "public_rollout_base.gd": {
+      "bytes": 2207,
+      "sha256": "9e54f661563e5421e62595b9b5335e44e871e68acf89a020db7e8b9d0eacbce7"
+    },
+    "qualify.gd": {
+      "bytes": 1453,
+      "sha256": "f84e7c917b076fbdff347989be7244466fcd74b118219aa034528902341fa9b8"
+    },
+    "rollout_policy.gd": {
+      "bytes": 3415,
+      "sha256": "7c4b833efd47616ec4aab4f2bd521d44bdc4a17021aefb77ba0b6bf0668a924c"
+    },
+    "signed_composition.gd": {
+      "bytes": 828,
+      "sha256": "bba7b886720124fce5fcb2c5fdb097690ffaf2daf17d6e390741c9d116629e93"
+    },
+    "tools/balance_catalogue.gd": {
+      "bytes": 9145,
+      "sha256": "6e240546cd616a2518ee7a2b8fae41aa8a94078429155f89f6d9165eef1c20c0"
+    },
+    "tools/balance_metrics.gd": {
+      "bytes": 5366,
+      "sha256": "6904043d83d9cc91265a60911b28f49a01074d185e353b2dccdad64293cd0deb"
+    },
+    "tools/balance_pilot.gd": {
+      "bytes": 24532,
+      "sha256": "ec24ae7cff4fccce2759821cfdc03a2fb9c862077caac620e6c06fe565b91ff5"
+    },
+    "tools/balance_policy.gd": {
+      "bytes": 8196,
+      "sha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026"
+    },
+    "tools/balance_sim.gd": {
+      "bytes": 24925,
+      "sha256": "a9050fe68678d5d650f9b4e1f204ffe0f0e2f8160e35d1697814ac6da4c8c1cb"
+    },
+    "tools/balance_sweep.gd": {
+      "bytes": 5242,
+      "sha256": "6d78dcd3d00aa6300aaf32fc498c7a3c9fb4ffea1725f59e6fc8be7b5fa61ff0"
+    },
+    "tools/observed_sim.gd": {
+      "bytes": 24952,
+      "sha256": "f6ac401846fea02563b48b8a8cf915d6fca154dc17c4adab1b1c8ded64d24f7e"
+    },
+    "tools/stock_pilot.gd": {
+      "bytes": 22907,
+      "sha256": "ec51dc26ad47f97e7701ddf822f64c0f2f8b7ef7fd32656f69bd3d10820f4157"
+    },
+    "tools/vow_incentives.gd": {
+      "bytes": 5342,
+      "sha256": "f83e9273798c87ed6675c609997e09ffea8a2a0d4f3a4ef2b95a4f8d2864098e"
+    }
+  },
+  "methods": {
+    "card_pool": "func card_pool(run: RunState, tier: String) -> Array:\n\tvar base: Array = content.card_pools.get(tier, [])\n\tvar out: Array = []\n\tfor id_v: Variant in base:\n\t\tvar id: String = str(id_v)\n\t\tif not _pool_open(run, content.pool_gate_cards, id):\n\t\t\tcontinue\n\t\tout.append(id)\n\tfor unlock_v: Variant in run.unlocks:\n\t\tvar unlock: String = str(unlock_v)\n\t\tif unlock.begins_with(\"card:\"):\n\t\t\tvar id: String = unlock.trim_prefix(\"card:\")\n\t\t\tif content.cards.has(id) and content.cards[id].get(\"rarity\") == tier and not out.has(id):\n\t\t\t\tout.append(id)\n\treturn out\n\n\n",
+    "draw_callsites": {
+      "_apply_art_effect": "func _apply_art_effect(run: RunState, cb: CombatState, fx: Dictionary) -> void:\n\tvar p: PlayerCombatant = cb.player\n\tvar kind: String = str(fx.get(\"kind\", \"\"))\n\tmatch kind:\n\t\t\"dmg\":\n\t\t\tfor e: EnemyCombatant in cb.living_enemies():\n\t\t\t\tif not cb.over:\n\t\t\t\t\thit_enemy(run, cb, e, _ji(fx[\"n\"]), false)\n\t\t\"status\":\n\t\t\tvar sid: String = str(fx[\"id\"])\n\t\t\tvar sn: int = _ji(fx[\"n\"])\n\t\t\tif str(fx.get(\"who\", \"\")) == \"self\":\n\t\t\t\tadd_status_player(cb, sid, sn)\n\t\t\telse:\n\t\t\t\tfor e: EnemyCombatant in cb.living_enemies():\n\t\t\t\t\tadd_status_enemy(cb, e, sid, sn, run)\n\t\t\"block\":\n\t\t\tgain_block_player(cb, _ji(fx[\"n\"]), false, run)\n\t\t\"heal\":\n\t\t\theal_player(run, cb, _ji(fx[\"n\"]))\n\t\t\"energy\":\n\t\t\tp.energy += _ji(fx[\"n\"])\n\t\t\tcb.queue.append({\"t\": EventTypes.ENERGY, \"n\": p.energy})\n\t\t\"draw\":\n\t\t\tdraw_cards(run, cb, _ji(fx[\"n\"]))\n\t\t\"chip\":\n\t\t\tfor e: EnemyCombatant in cb.living_enemies():\n\t\t\t\tapply_chips(run, cb, e, _ji(fx[\"n\"]))\n\t\t\"ember\":\n\t\t\tgain_embers(run, cb, _ji(fx[\"n\"]))\n\t\t_:\n\t\t\tpush_error(\"CombatRules: unknown art effect kind %s\" % kind)\n\n\n# ---------------------------------------------------------------- potions\n\n",
+      "_apply_effect": "func _apply_effect(\n\trun: RunState,\n\tcb: CombatState,\n\tinst: CardInst,\n\td: Dictionary,\n\tfx: Dictionary,\n\ttarget: EnemyCombatant,\n\tdamage_mult: int = 1\n) -> void:\n\tvar p: PlayerCombatant = cb.player\n\tvar kind: String = str(fx.get(\"kind\", \"\"))\n\tvar all_enemies: bool = str(d.get(\"target\", \"\")) == \"allEnemies\"\n\tmatch kind:\n\t\t\"dmg\":\n\t\t\tvar times: int = _ji(fx.get(\"times\", 1))\n\t\t\tvar n: int = _ji(fx[\"n\"])\n\t\t\tfor _t: int in range(times):\n\t\t\t\tif all_enemies:\n\t\t\t\t\tfor e: EnemyCombatant in cb.enemies:\n\t\t\t\t\t\tif cb.over:\n\t\t\t\t\t\t\treturn\n\t\t\t\t\t\tif e.hp > 0:\n\t\t\t\t\t\t\thit_enemy(run, cb, e, n, true, damage_mult)\n\t\t\t\telif target != null:\n\t\t\t\t\tif cb.over:\n\t\t\t\t\t\treturn\n\t\t\t\t\thit_enemy(run, cb, target, n, true, damage_mult)\n\t\t\"block\":\n\t\t\tgain_block_player(cb, _ji(fx[\"n\"]), true, run)\n\t\t\"draw\":\n\t\t\tdraw_cards(run, cb, _ji(fx[\"n\"]))\n\t\t\"energy\":\n\t\t\tp.energy += _ji(fx[\"n\"])\n\t\t\tcb.queue.append({\"t\": EventTypes.ENERGY, \"n\": p.energy})\n\t\t\"heal\":\n\t\t\theal_player(run, cb, _ji(fx[\"n\"]))\n\t\t\"loseHp\":\n\t\t\tdamage_player(run, cb, _ji(fx[\"n\"]), \"self\")\n\t\t\"status\":\n\t\t\tvar sid: String = str(fx[\"id\"])\n\t\t\tvar sn: int = _ji(fx[\"n\"])\n\t\t\tvar who: String = str(fx.get(\"who\", \"\"))\n\t\t\tif who == \"self\":\n\t\t\t\tif sid != \"bloodfire\" or (bloodfire_enabled and bloodfire_producer_enabled and run.aspect == 1):\n\t\t\t\t\tadd_status_player(cb, sid, sn)\n\t\t\telif who == \"allEnemies\":\n\t\t\t\tfor e: EnemyCombatant in cb.enemies:\n\t\t\t\t\tif e.hp > 0:\n\t\t\t\t\t\tadd_status_enemy(cb, e, sid, sn, run)\n\t\t\telif target != null and target.hp > 0:\n\t\t\t\tadd_status_enemy(cb, target, sid, sn, run)\n\t\t\"addCard\":\n\t\t\tvar add_count: int = _ji(fx.get(\"n\", 1))\n\t\t\tfor _i: int in range(add_count):\n\t\t\t\tvar added: CardInst = CardInst.new(run.next_uid(), StringName(str(fx[\"id\"])), false)\n\t\t\t\tvar to_hand: bool = str(fx.get(\"where\", \"discard\")) == \"hand\" and cb.hand.size() < 10\n\t\t\t\tif to_hand:\n\t\t\t\t\tcb.hand.append(added)\n\t\t\t\telse:\n\t\t\t\t\tcb.discard.append(added)\n\t\t\t\tcb.queue.append({\n\t\t\t\t\t\"t\": &\"addCard\", \"id\": String(added.id),\n\t\t\t\t\t\"where\": \"hand\" if to_hand else \"discard\",\n\t\t\t\t})\n\t\t\"chip\":  # strikes at the glass itself, no blood needed\n\t\t\tvar cn: int = _ji(fx[\"n\"])\n\t\t\tvar each: Array[EnemyCombatant] = []\n\t\t\tif all_enemies:\n\t\t\t\teach = cb.living_enemies()\n\t\t\telif target != null:\n\t\t\t\teach = [target]\n\t\t\tfor e: EnemyCombatant in each:\n\t\t\t\tif e.hp <= 0:\n\t\t\t\t\tcontinue\n\t\t\t\tif cb.pending_chips_active:\n\t\t\t\t\tvar rec: Dictionary = cb.pending_chips.get(e.idx, {\"hit\": false, \"extra\": 0})\n\t\t\t\t\tvar extra: int = rec[\"extra\"]\n\t\t\t\t\trec[\"extra\"] = extra + cn\n\t\t\t\t\tcb.pending_chips[e.idx] = rec\n\t\t\t\telse:\n\t\t\t\t\tapply_chips(run, cb, e, cn)  # arts/phials chip immediately\n\t\t\"ember\":\n\t\t\tgain_embers(run, cb, _ji(fx[\"n\"]))\n\t\t\"special\":\n\t\t\t_apply_special(run, cb, inst, fx, target, damage_mult)\n\t\t_:\n\t\t\tpush_error(\"CombatRules: unknown effect kind %s\" % kind)\n\n\n## Research-only isolated Hand law; missing fields recover native linear payoff.\n",
+      "_apply_special": "func _apply_special(\n\trun: RunState,\n\tcb: CombatState,\n\tinst: CardInst,\n\tfx: Dictionary,\n\ttarget: EnemyCombatant,\n\tdamage_mult: int\n) -> void:\n\tvar sid: String = str(fx.get(\"id\", \"\"))\n\tmatch sid:\n\t\t\"leech\":\n\t\t\tvar ready: bool = bloodfire_enabled and bloodfire_consumer_enabled and run.aspect == 1 and _sget(cb.player.statuses, \"bloodfire\") > 0\n\t\t\tvar bloodfire_bonus: int = _ji(fx.get(\"bonus\", 0)) if ready else 0\n\t\t\tif ready:\n\t\t\t\tadd_status_player(cb, \"bloodfire\", -1)\n\t\t\tvar leech_loss: int = hit_enemy(run, cb, target, _ji(fx[\"n\"]) + bloodfire_bonus, true, damage_mult)\n\t\t\tif leech_loss > 0:\n\t\t\t\theal_player(run, cb, leech_loss / 2)\n\t\t\"execute\":\n\t\t\tvar bonus: int = 0\n\t\t\tif _sget(target.statuses, \"vulnerable\") > 0:\n\t\t\t\tbonus = _ji(fx.get(\"bonus\", 0))\n\t\t\thit_enemy(run, cb, target, _ji(fx[\"n\"]) + bonus, true, damage_mult)\n\t\t\"momentum\":\n\t\t\thit_enemy(run, cb, target, _ji(fx[\"n\"]) + inst.bonus, true, damage_mult)\n\t\t\tinst.bonus += _ji(fx.get(\"grow\", 0))\n\t\t\"doubleBlock\":\n\t\t\tgain_block_player(cb, cb.player.block, false, run)\n\t\t\"phantom\":\n\t\t\thit_enemy(run, cb, target, _hand_two_slope_raw(cb.hand.size(), fx), true, damage_mult)\n\t\t\"devour\":\n\t\t\thit_enemy(run, cb, target, _ji(fx[\"n\"]), true, damage_mult)\n\t\t\tif target.hp <= 0:\n\t\t\t\tif cb.over:\n\t\t\t\t\theal_player(run, null, _ji(fx[\"heal\"]))\n\t\t\t\telse:\n\t\t\t\t\tgain_embers(run, cb, _ji(fx[\"embers\"]))\n\t\t\t\t\theal_player(run, cb, _ji(fx[\"heal\"]))\n\t\t\"catalyst\":\n\t\t\tvar poison: int = _sget(target.statuses, \"poison\")\n\t\t\tif poison > 0:\n\t\t\t\tadd_status_enemy(cb, target, \"poison\", poison * (_ji(fx[\"n\"]) - 1), run)\n\t\t\"shatterEcho\":\n\t\t\tvar echo: int = 2 if target.staggered or _sget(target.statuses, \"vulnerable\") > 0 else 1\n\t\t\thit_enemy(run, cb, target, _ji(fx[\"n\"]) * echo, true, damage_mult)\n\t\t\"emberNova\":\n\t\t\thit_enemy(run, cb, target, _ji(fx[\"n\"]) * cb.embers, true, damage_mult)\n\t\t\"pyreTithe\":\n\t\t\tfor held: CardInst in cb.hand.duplicate():\n\t\t\t\tcb.hand.erase(held)\n\t\t\t\tcb.queue.append({\"t\": EventTypes.KINDLE, \"uid\": held.uid, \"id\": String(held.id)})\n\t\t\t\texhaust_card(run, cb, held)\n\t\t\tdraw_cards(run, cb, _ji(fx[\"draw\"]))\n\t\t\"flawless\":\n\t\t\tgain_block_player(cb, _ji(fx[\"n\"]), true, run)\n\t\t\tif cb.hp_lost == 0:\n\t\t\t\tgain_block_player(cb, _ji(fx[\"n\"]), true, run)\n\t\t\"emberdance\":\n\t\t\tvar spent: int = cb.embers\n\t\t\tif spent > 0:\n\t\t\t\trun.stats[\"embersSpent\"] = _ji(run.stats.get(\"embersSpent\", 0)) + spent\n\t\t\t\tgain_embers(run, cb, -spent)\n\t\t\t\tgain_block_player(cb, _ji(fx[\"n\"]) * spent, false, run)\n\t\t_:\n\t\t\tpush_error(\"CombatRules: unknown special %s\" % sid)\n\n\n# ---------------------------------------------------------------- end of turn\n\n",
+      "_on_enemy_death": "func _on_enemy_death(run: RunState, cb: CombatState, e: EnemyCombatant) -> void:\n\te.hp = 0\n\tvar smolder: int = _sget(e.statuses, \"poison\")  # capture before the vessel empties\n\te.statuses = {}\n\te.staggered = false\n\tcb.queue.append({\"t\": EventTypes.DIE, \"idx\": e.idx})\n\t# The death line rides right behind the die event (engine.js:1384-1385).\n\tvar death_line_v: Variant = e.def.get(\"deathDialogue\")\n\tif typeof(death_line_v) == TYPE_STRING and not str(death_line_v).is_empty():\n\t\tcb.queue.append({\"t\": EventTypes.VARIANT_DIALOGUE, \"idx\": e.idx,\n\t\t\t\"text\": str(death_line_v)})\n\tquests.on_enemy_death(run, e.def)\n\trun.stats[\"slain\"] = _ji(run.stats.get(\"slain\", 0)) + 1\n\tif e.elite:\n\t\trun.stats[\"elites\"] = _ji(run.stats.get(\"elites\", 0)) + 1\n\tif e.boss:\n\t\trun.stats[\"bosses\"] = _ji(run.stats.get(\"bosses\", 0)) + 1\n\tfor o: EnemyCombatant in cb.enemies:\n\t\tif o.hp > 0:\n\t\t\tgain_embers(run, cb, 1)  # the fire inside spills to your lantern\n\t\t\t_jump_smolder(run, cb, e, smolder)\n\t\t\tif run.has_relic(\"reapersBell\"):\n\t\t\t\tcb.player.energy += 1\n\t\t\t\tdraw_cards(run, cb, 1)\n\t\t\t\t_proc(cb, \"reapersBell\")\n\t\t\t\tcb.queue.append({\"t\": EventTypes.ENERGY, \"n\": cb.player.energy})\n\t\t\treturn\n\t_win_combat(run, cb)\n\n\n",
+      "_start_player_turn": "func _start_player_turn(run: RunState, cb: CombatState) -> void:\n\tif cb.over:\n\t\treturn\n\tcb.turn += 1\n\tvar p: PlayerCombatant = cb.player\n\tcb.queue.append({\"t\": EventTypes.TURN, \"n\": cb.turn})\n\t# Smolder ticks at the start of your turn.\n\tvar poison: int = _sget(p.statuses, \"poison\")\n\tif poison > 0:\n\t\tdamage_player(run, cb, poison, \"poison\")\n\t\tpoison -= 1\n\t\tif poison == 0:\n\t\t\tp.statuses.erase(\"poison\")\n\t\telse:\n\t\t\tp.statuses[\"poison\"] = poison\n\t\tif cb.over:\n\t\t\treturn\n\tif _sget(p.statuses, \"barricade\") == 0:\n\t\tp.block = 0\n\tvar ritual: int = _sget(p.statuses, \"ritual\")\n\tif ritual > 0:\n\t\tadd_status_player(cb, \"str\", ritual)\n\tvar emberflow: int = _sget(p.statuses, \"emberflow\")\n\tif emberflow > 0:\n\t\tgain_embers(run, cb, emberflow)\n\tvar energy: int = p.energy_max + _sget(p.statuses, \"energized\")\n\tif cb.turn == 1 and run.has_relic(\"emberLantern\"):\n\t\tenergy += 1\n\t\t_proc(cb, \"emberLantern\")\n\tp.energy = (p.energy if run.has_relic(\"frozenCore\") else 0) + energy\n\tcb.first_card_played = false\n\tcb.queue.append({\"t\": EventTypes.ENERGY, \"n\": p.energy})\n\tvar draws: int = 5 + _sget(p.statuses, \"nightsight\") \\\n\t\t+ _ji(_omen_mods(run).get(\"drawDelta\", 0))\n\tif cb.turn == 1 and run.has_relic(\"travelersPack\"):\n\t\tdraws += 2\n\t\t_proc(cb, \"travelersPack\")\n\tdraw_cards(run, cb, maxi(1, draws))\n\n\n",
+      "exhaust_card": "func exhaust_card(run: RunState, cb: CombatState, inst: CardInst) -> void:\n\tcb.exhaust.append(inst)\n\tcb.queue.append({\"t\": EventTypes.EXHAUST, \"uid\": inst.uid})\n\tgain_embers(run, cb, 1)  # everything burned feeds the lantern\n\tif run.has_relic(\"verdantBranch\"):\n\t\tdraw_cards(run, cb, 1)\n\t\t_proc(cb, \"verdantBranch\")\n\n\n",
+      "use_potion": "func use_potion(run: RunState, cb: CombatState, slot: int, target_idx: Variant = null) -> bool:\n\tif slot < 0 or slot >= run.player.potions.size():\n\t\treturn false\n\tvar id: String = run.player.potions[slot]\n\tif id == \"\":\n\t\treturn false\n\tvar pdef: Dictionary = content.potion(StringName(id))\n\tvar combat_only: bool = pdef.get(\"combatOnly\", false)\n\tif combat_only and (cb == null or cb.over):\n\t\treturn false\n\tvar needs_target: bool = pdef.get(\"needsTarget\", false)\n\tif needs_target:\n\t\tif target_idx == null:\n\t\t\treturn false\n\t\tvar ti: int = target_idx\n\t\tif ti < 0 or ti >= cb.enemies.size() or cb.enemies[ti].hp <= 0:\n\t\t\treturn false\n\trun.player.potions[slot] = \"\"\n\tif cb != null:\n\t\tcb.queue.append({\"t\": EventTypes.POTION, \"id\": id})\n\tmatch id:\n\t\t\"healing\":\n\t\t\theal_player(run, cb, 20)\n\t\t\"strength\":\n\t\t\tadd_status_player(cb, \"str\", 2)\n\t\t\"swift\":\n\t\t\tdraw_cards(run, cb, 3)\n\t\t\"block\":\n\t\t\tgain_block_player(cb, 12, false, run)\n\t\t\"fire\":\n\t\t\tvar fire_ti: int = target_idx\n\t\t\thit_enemy(run, cb, cb.enemies[fire_ti], 20, false)\n\t\t\"venom\":\n\t\t\tvar venom_ti: int = target_idx\n\t\t\tadd_status_enemy(cb, cb.enemies[venom_ti], \"poison\", 7, run)\n\t\t\"energy\":\n\t\t\tgain_embers(run, cb, 3)\n\t\t_:\n\t\t\tpush_error(\"CombatRules: unknown potion %s\" % id)\n\treturn true\n\n\n# ---------------------------------------------------------------- previews\n# Pure arithmetic mirrors of the laws above \u2014 no state touched. If a combat\n# calculation changes, its mirror here must change in lockstep.\n\n"
+    },
+    "observed_factory": "static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0,\n\t\tban: PackedStringArray = PackedStringArray(), policy: Dictionary = {},\n\t\trandom_build: bool = false, random_play: bool = false, mix: Dictionary = {},\n\t\tvigil: VigilState = null, strip_start_hex: bool = false) -> Dictionary:\n\t_probe = {}\n\tPilot.set_ban(ban)\n\tPilot.apply_policy(policy)\n\tPilot.set_modes(random_build, random_play)\n\tvar aspect_index: int = 1 if aspect == \"ashwarden\" else 0\n\tvar profile: Dictionary = {\n\t\t\"aspect\": aspect_index, \"vow\": vow, \"reveals\": content.reveal_ids.duplicate(),\n\t\t\"unlocks\": [\"aspect2\"], \"quests\": {}, \"shards\": [], \"lamplighter\": false,\n\t}\n\tif vigil != null:\n\t\tprofile[\"quests\"] = vigil.quests.duplicate(true)\n\t\tprofile[\"shards\"] = vigil.shards.duplicate()\n\tvar run: RunState = RunState.new_run(content, seed, \"sim-%s-%d\" % [aspect, seed], profile)\n\tif strip_start_hex:\n\t\t_strip_hex(run)\n\t_apply_ban(run)\n\tvar game: GlassvowGame = preload(\"res://observed_game.gd\").new(content, run)\n\t# Empty mix follows the live shipping overlay. Pass catalog `none` to measure\n\t# the penalty ladder without incentives.\n\tIncentives.apply(game.rewards, mix if not mix.is_empty() else Incentives.shipping(),\n\t\tvow)\n\tvar fights: Array[Dictionary] = []\n\tvar economy: Array[Dictionary] = []\n\tfor _act: int in range(3):\n\t\tvar map: WorldMap = WorldMap.benchmark(run)\n\t\twhile not map.is_finished():\n\t\t\tvar i: int = Pilot.choose_node(map, run)\n\t\t\tif not map.enter(i):\n\t\t\t\treturn _finish(run, aspect, seed, \"error\", fights, \"unreachable node\", economy,\n\t\t\t\t\tvigil, content)\n\t\t\tvar node: MapNode = map.current()\n\t\t\t_enter_node(run, node)\n\t\t\tif node.is_combat():\n\t\t\t\tvar fight: Dictionary = _fight(game, node)\n\t\t\t\t_harvest_fight(game)\n\t\t\t\tfights.append(fight)\n\t\t\t\tif fight[\"result\"] != \"win\":\n\t\t\t\t\treturn _finish(run, aspect, seed,\n\t\t\t\t\t\t\"stall\" if fight[\"result\"] == \"stall\" else \"loss\",\n\t\t\t\t\t\tfights, \"\", economy, vigil, content)\n\t\t\t\tif node.type == \"boss\" and run.act == 2:\n\t\t\t\t\teconomy.append(_economy_row(run))\n\t\t\t\t\treturn _finish(run, aspect, seed, \"win\", fights, \"\", economy, vigil, content)\n\t\t\t\t_claim_rewards(game, game.gen_combat_rewards(node.combat_kind(), game.cb.affix))\n\t\t\telse:\n\t\t\t\t_resolve_safe_node(game, node)\n\t\t\tmap.clear_current()\n\t\t\tif node.type == \"boss\" and not run.is_final_act():\n\t\t\t\teconomy.append(_economy_row(run))\n\t\t\t\tvar offered: Array[String] = game.rewards.roll_boss_relics(run)\n\t\t\t\tfor offered_id: String in offered:\n\t\t\t\t\tif offered_id == \"hollowCrown\":\n\t\t\t\t\t\t_bump(\"hollowCrownOffered\")\n\t\t\t\tvar relic: String = Pilot.choose_relic(offered, content, run.aspect, run.rng)\n\t\t\t\tif not relic.is_empty():\n\t\t\t\t\tif relic == \"hollowCrown\":\n\t\t\t\t\t\t_bump(\"hollowCrownPicked\")\n\t\t\t\t\t\t_bump(\"maxHpLostToCrown\", _ji(content.relic(&\"hollowCrown\").get(\"maxHpPenalty\", 10)))\n\t\t\t\t\tgame.rewards.gain_relic(run, relic)\n\t\t\t\trun.boss_relic_act = run.act\n\t\t\t\trun.start_next_act(content)\n\t\t\t\tbreak\n\treturn _finish(run, aspect, seed, \"error\", fights, \"run route exhausted\", economy, vigil, content)\n",
+    "vigil_refresh_unlocks": "func _refresh_unlocks(content: ContentDB, outcome: String) -> void:\n\tvar thresholds: Dictionary = content.progression.get(\"revealThresholds\", {})\n\tfor id: String in thresholds:\n\t\tvar trigger: Dictionary = thresholds[id]\n\t\tvar reached: bool = (\n\t\t\truns_played >= _ji(trigger[\"runsPlayed\"]) if trigger.has(\"runsPlayed\")\n\t\t\telse (_ji(deeds[\"wins\"]) >= _ji(trigger[\"wins\"]) if trigger.has(\"wins\")\n\t\t\t\telse shards.size() >= _ji(trigger.get(\"shards\", 999)))\n\t\t)\n\t\tif reached and not unlocks.has(id):\n\t\t\tunlocks.append(id)\n\tfor deed_v: Variant in content.deeds.values():\n\t\tvar deed: Dictionary = deed_v\n\t\tif _ji(deeds.get(str(deed.get(\"stat\")), 0)) < _ji(deed.get(\"n\", 0)):\n\t\t\tcontinue\n\t\tfor unlock_v: Variant in deed.get(\"unlocks\", []):\n\t\t\tvar unlock: String = str(unlock_v)\n\t\t\tif not unlocks.has(unlock):\n\t\t\t\tunlocks.append(unlock)\n\tif _ji(deeds[\"wins\"]) >= 1 and str(quests[\"paleOnes\"][\"state\"]) == \"dormant\":\n\t\tquests[\"paleOnes\"][\"state\"] = \"armed\"\n\tif outcome != \"win\":\n\t\treturn\n\tvar arm_wins: Array = content.progression.get(\"emberglass\", {}).get(\"armWins\", [])\n\tif not arm_wins.has(_ji(deeds[\"wins\"])):\n\t\treturn\n\tfor id: String in QUEST_IDS:\n\t\tif id != \"paleOnes\" and str(quests[id][\"state\"]) == \"dormant\":\n\t\t\tquests[id][\"state\"] = \"armed\"\n\t\t\tif id == \"eighthOmen\":\n\t\t\t\tquests[id][\"memory\"][\"dueIn\"] = 2\n\t\t\tbreak\n"
+  }
+}
