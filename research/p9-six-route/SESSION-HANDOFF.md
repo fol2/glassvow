@@ -1,105 +1,61 @@
-# P9 current handoff — two-slope adaptive-value decision
+# P9 current handoff — availability, retry pruning and inference scope complete
 
-Continue #421 on `research/p9-six-route-local-20260905`. Product main is unchanged. Target: three complete strategies per aspect;0/6 certificates. Author self-review is not independent.
+Continue #421 on `research/p9-six-route-local-20260905`.
+Product reference: `2ed6cdb0302ba3aab5845a18d862841165e8aaf7`.
+Target: three viable, reachable, genuinely distinct complete strategies per aspect.
+**0/6 current certificates; no P9 PASS, product promotion or revised acceptance.**
+Author self-review is not independent evidence.
 
-{
-  "status": "TWO_SLOPE_HAND_ADAPTIVE_VALUE_NOT_ESTABLISHED",
-  "stages": {
-    "5": {
-      "rows_per_world": 512,
-      "policy_configurations": 128,
-      "distinct_seed_blocks": 256,
-      "wins": {
-        "00": 283,
-        "01": 280,
-        "10": 306,
-        "11": 301
-      },
-      "contrasts": {
-        "source_group": {
-          "point": 0.041015625,
-          "interval": [
-            0.00390625,
-            0.08203125
-          ],
-          "positive_lower_bound": true
-        },
-        "consumer": {
-          "point": -0.009765625,
-          "interval": [
-            -0.03125,
-            0.009765625
-          ],
-          "positive_lower_bound": false
-        },
-        "interaction": {
-          "point": -0.00390625,
-          "interval": [
-            -0.01953125,
-            0.009765625
-          ],
-          "positive_lower_bound": false
-        }
-      },
-      "outcome_patterns_00_01_10_11": {
-        "0000": 176,
-        "0010": 2,
-        "0011": 40,
-        "0101": 8,
-        "0111": 3,
-        "1000": 1,
-        "1010": 10,
-        "1011": 3,
-        "1100": 21,
-        "1110": 1,
-        "1111": 247
-      },
-      "primary_pass": false,
-      "uncertainty": "Pinned 10000-resample paired-seed bootstrap Random(421); Bonferroni percentile bounds .05/6 and 1-.05/6. Approximate fixed-policy/context inference, not final P9 multiplicity control.",
-      "vow": 5,
-      "cpu_seconds": {
-        "00": 2772.6299999999987,
-        "01": 2757.31,
-        "10": 2913.899999999999,
-        "11": 2910.9300000000003
-      },
-      "resource_pass": true,
-      "pass_all": false,
-      "trace_counts": {
-        "00": {
-          "consumer_clone_actions": 2327
-        },
-        "01": {
-          "consumer_clone_actions": 2377
-        },
-        "10": {
-          "consumer_clone_actions": 2412
-        },
-        "11": {
-          "consumer_clone_actions": 2449
-        }
-      },
-      "packages_admitted": 0,
-      "p9_certified": false,
-      "status": "TWO_SLOPE_HAND_ADAPTIVE_VALUE_NOT_ESTABLISHED"
-    }
-  }
-}
+## Completed this continuation — no native runs
 
-Full exact-source capture and cold-readback: `ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/`.
+The previous availability workflow had never started: its file-SHA update was
+rejected. The existing availability.py has now run successfully. Its archived
+profile has all reveal IDs but only aspect2 unlocked; Night Sight is absent from
+the initial reward pool and starter. This is initial-profile evidence, not a claim
+that the live darkWalker progression path can never make the card available.
+First Spark is absent from reward tiers but appears once in both native starters.
+The complete pool-plus-starter source inventory and cold receipts are under
+`ash-inheritance-20260909/nightsight-opportunity-v1/availability-1/` and `frontier-1/`.
 
-This is one fixed audit-policy claim, not all Hand policies or P9 impossibility. Sources are one group; outcomes are not selected by realised activation. Earlier linear Hand/Bloodfire, controller and broad-candidate negatives are immutable. Source/query/native and shipping signed-control gates already complete are not rerun. No validation-model refit, protected cohort, new coefficients or controller weights. All older raw gaps remain in SESSION-STATE.
+For identical content, source-ON/consumer-OFF semantics, policy, profile, assigned
+initial states/seeds and readout, regrouping source interventions cannot change
+world11 or world10. Both archived Hand nominations already fail that necessary
+consumer contrast. The source-only retry class is conditionally pruned; changing
+any identity premise falls outside the theorem, not automatically inside a new
+permission. No source-only cohort should be launched to rescue these results.
 
-Exact next action: This exact two-slope/audit-policy value nomination is closed without extension or tuning. Use the complete decision to select only a genuinely unmeasured authorized package obligation; do not reroll seeds or relabel this negative.
+`acceptance-scope-20260911/execution-1/` contains a finite inference counterexample:
+complete focal source/mediator/consumer payoff can coexist with equal aggregate
+win outcomes when an adaptive policy uses an alternative route. It proves only
+that global-win necessity and route-payoff causality are not interchangeable.
+Neither toy route is a Glassvow package. It does not explain the real Hand negative,
+replace an old primary metric, amend acceptance, or admit any real strategy.
 
-Remaining: full package causality/descriptor/policy/peer/economy/independent proof; six strategy coverage; seven-direction detector; corrected confirmation and unrestricted retention; all guardrails; minimum lifecycle, exact-head review, one selected product integration and #108 receipt.
+## Immutable prior results
 
-## Completed retained source-path accounting
+Linear Hand: world00/01/10/11 wins289/295/316/322 per512; consumer6/512,
+interval[-0.015625,0.0390625], interaction0. NOT_ESTABLISHED, V0 skipped.
+Two-slope Hand: wins283/280/306/301 per512; consumer-5/512,
+interval[-0.03125,0.009765625]. NOT_ESTABLISHED, V0 skipped.
+Bloodfire value and all controller/acquisition/whole-candidate failures keep their
+exact scope. No old raw, threshold, model, protected cohort or verdict is edited.
+The completed source/query/clone gates, 55-file transport, all-trace censuses and
+availability work are not waiting to be recovered or rerun. Older unrelated raw
+gaps remain recorded in SESSION-STATE.json. BloodRite loses3HP then gains2/3Energy,
+not draw. Preparation/Surge are alternative producers of one Hand family.
 
-Every assigned two-slope Hand trace has been read under `ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/path-diagnosis-1/execution-1/`. It separates source-enabled consumer access, retained-other-card origin and above-reserve use. Counts and same-hand algebra are descriptive, not adaptive extra HP, new value evidence or descriptor admission. The original value terminal is unchanged. Do not repeat this accounting or tune the closed nominee.
+## Exact continuation
 
-## Persistent-source opportunity decision
+Prepare one acceptance-mapped complete package contract, separating native bounded-payoff causality from competent-policy quality, peer separation and signed global guardrails. The exact linear/two-slope audit-policy value nominations remain closed. Do not start a source-only rerun, repeat the availability/census work, change a frozen criterion, or treat the finite inference counterexample as a real-game certificate. Any genuinely new context/estimand must have its own explicit scope, fixed independent inputs and scientific error/stop rules before observations; no population is opened here.
 
-FIXED_CAPTURE_PERSISTENT_SOURCE_OPPORTUNITY_INSUFFICIENT. All assigned retained worlds were read without engine execution. This is an upper-bound temporal opportunity, not extra-card attribution or causal value. Earlier primary negatives stay closed. See `ash-inheritance-20260909/nightsight-opportunity-v1/execution-1/`.
+## Remaining P9 milestones
 
-Current next action: Do not open a Night Sight population cohort using this fixed capture/policy. Preserve the scoped opportunity negative and select another genuinely unmeasured authorized package obligation; no tuning or new seeds for the closed nomination.
+A complete current package still requires eligible formal identity, native full-chain
+and proper-subset/null causality, a validated descriptor, competent-policy and peer
+separation on real economy paths, and independently assigned confirmation.
+Then establish six-package coverage; admit the seven-direction detector; perform
+corrected untouched confirmation and unrestricted endpoint retention with all
+signed-control, ceiling, fault and duration guards; deliver minimum lifecycle,
+exact-head review and one selected exact-product integration/#108 receipt.
+No automatic scientific successor, new controller, or population start is hidden
+in this closure. Use the full active issue for future acceptance mapping.

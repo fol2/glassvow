@@ -1,0 +1,1237 @@
+{
+  "absent_peer_global_win_contrasts": [
+    1,
+    1,
+    1
+  ],
+  "adaptive_worlds_with_peer": {
+    "00": {
+      "chosen": "decay",
+      "focal_payoff": 0,
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 3
+        },
+        {
+          "clock": true,
+          "damage": 3,
+          "stock": 2
+        },
+        {
+          "clock": true,
+          "damage": 2,
+          "stock": 1
+        },
+        {
+          "clock": true,
+          "damage": 1,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    "01": {
+      "chosen": "decay",
+      "focal_payoff": 0,
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 3
+        },
+        {
+          "clock": true,
+          "damage": 3,
+          "stock": 2
+        },
+        {
+          "clock": true,
+          "damage": 2,
+          "stock": 1
+        },
+        {
+          "clock": true,
+          "damage": 1,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    "10": {
+      "chosen": "decay",
+      "focal_payoff": 0,
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 3
+        },
+        {
+          "clock": true,
+          "damage": 3,
+          "stock": 2
+        },
+        {
+          "clock": true,
+          "damage": 2,
+          "stock": 1
+        },
+        {
+          "clock": true,
+          "damage": 1,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    "11": {
+      "chosen": "burst",
+      "focal_payoff": 6,
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 1
+        },
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 2
+        },
+        {
+          "clock": false,
+          "damage": 6,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    }
+  },
+  "assignments": 64,
+  "complete_assignments": [
+    {
+      "burst_mask": "000",
+      "chosen": null,
+      "decay_mask": "000",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "000",
+      "chosen": null,
+      "decay_mask": "001",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "000",
+      "chosen": null,
+      "decay_mask": "010",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "000",
+      "chosen": null,
+      "decay_mask": "011",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "000",
+      "chosen": null,
+      "decay_mask": "100",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "000",
+      "chosen": null,
+      "decay_mask": "101",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "000",
+      "chosen": null,
+      "decay_mask": "110",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "000",
+      "chosen": "decay",
+      "decay_mask": "111",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 3
+        },
+        {
+          "clock": true,
+          "damage": 3,
+          "stock": 2
+        },
+        {
+          "clock": true,
+          "damage": 2,
+          "stock": 1
+        },
+        {
+          "clock": true,
+          "damage": 1,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "001",
+      "chosen": null,
+      "decay_mask": "000",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "001",
+      "chosen": null,
+      "decay_mask": "001",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "001",
+      "chosen": null,
+      "decay_mask": "010",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "001",
+      "chosen": null,
+      "decay_mask": "011",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "001",
+      "chosen": null,
+      "decay_mask": "100",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "001",
+      "chosen": null,
+      "decay_mask": "101",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "001",
+      "chosen": null,
+      "decay_mask": "110",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "001",
+      "chosen": "decay",
+      "decay_mask": "111",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 3
+        },
+        {
+          "clock": true,
+          "damage": 3,
+          "stock": 2
+        },
+        {
+          "clock": true,
+          "damage": 2,
+          "stock": 1
+        },
+        {
+          "clock": true,
+          "damage": 1,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "010",
+      "chosen": null,
+      "decay_mask": "000",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "010",
+      "chosen": null,
+      "decay_mask": "001",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "010",
+      "chosen": null,
+      "decay_mask": "010",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "010",
+      "chosen": null,
+      "decay_mask": "011",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "010",
+      "chosen": null,
+      "decay_mask": "100",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "010",
+      "chosen": null,
+      "decay_mask": "101",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "010",
+      "chosen": null,
+      "decay_mask": "110",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "010",
+      "chosen": "decay",
+      "decay_mask": "111",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 3
+        },
+        {
+          "clock": true,
+          "damage": 3,
+          "stock": 2
+        },
+        {
+          "clock": true,
+          "damage": 2,
+          "stock": 1
+        },
+        {
+          "clock": true,
+          "damage": 1,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "011",
+      "chosen": null,
+      "decay_mask": "000",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "011",
+      "chosen": null,
+      "decay_mask": "001",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "011",
+      "chosen": null,
+      "decay_mask": "010",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "011",
+      "chosen": null,
+      "decay_mask": "011",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "011",
+      "chosen": null,
+      "decay_mask": "100",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "011",
+      "chosen": null,
+      "decay_mask": "101",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "011",
+      "chosen": null,
+      "decay_mask": "110",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "011",
+      "chosen": "decay",
+      "decay_mask": "111",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 3
+        },
+        {
+          "clock": true,
+          "damage": 3,
+          "stock": 2
+        },
+        {
+          "clock": true,
+          "damage": 2,
+          "stock": 1
+        },
+        {
+          "clock": true,
+          "damage": 1,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "100",
+      "chosen": null,
+      "decay_mask": "000",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "100",
+      "chosen": null,
+      "decay_mask": "001",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "100",
+      "chosen": null,
+      "decay_mask": "010",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "100",
+      "chosen": null,
+      "decay_mask": "011",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "100",
+      "chosen": null,
+      "decay_mask": "100",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "100",
+      "chosen": null,
+      "decay_mask": "101",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "100",
+      "chosen": null,
+      "decay_mask": "110",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "100",
+      "chosen": "decay",
+      "decay_mask": "111",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 3
+        },
+        {
+          "clock": true,
+          "damage": 3,
+          "stock": 2
+        },
+        {
+          "clock": true,
+          "damage": 2,
+          "stock": 1
+        },
+        {
+          "clock": true,
+          "damage": 1,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "101",
+      "chosen": null,
+      "decay_mask": "000",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "101",
+      "chosen": null,
+      "decay_mask": "001",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "101",
+      "chosen": null,
+      "decay_mask": "010",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "101",
+      "chosen": null,
+      "decay_mask": "011",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "101",
+      "chosen": null,
+      "decay_mask": "100",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "101",
+      "chosen": null,
+      "decay_mask": "101",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "101",
+      "chosen": null,
+      "decay_mask": "110",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "101",
+      "chosen": "decay",
+      "decay_mask": "111",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 3
+        },
+        {
+          "clock": true,
+          "damage": 3,
+          "stock": 2
+        },
+        {
+          "clock": true,
+          "damage": 2,
+          "stock": 1
+        },
+        {
+          "clock": true,
+          "damage": 1,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "110",
+      "chosen": null,
+      "decay_mask": "000",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "110",
+      "chosen": null,
+      "decay_mask": "001",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "110",
+      "chosen": null,
+      "decay_mask": "010",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "110",
+      "chosen": null,
+      "decay_mask": "011",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "110",
+      "chosen": null,
+      "decay_mask": "100",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "110",
+      "chosen": null,
+      "decay_mask": "101",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "110",
+      "chosen": null,
+      "decay_mask": "110",
+      "trace": [],
+      "win": 0
+    },
+    {
+      "burst_mask": "110",
+      "chosen": "decay",
+      "decay_mask": "111",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 3
+        },
+        {
+          "clock": true,
+          "damage": 3,
+          "stock": 2
+        },
+        {
+          "clock": true,
+          "damage": 2,
+          "stock": 1
+        },
+        {
+          "clock": true,
+          "damage": 1,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "111",
+      "chosen": "burst",
+      "decay_mask": "000",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 1
+        },
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 2
+        },
+        {
+          "clock": false,
+          "damage": 6,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "111",
+      "chosen": "burst",
+      "decay_mask": "001",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 1
+        },
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 2
+        },
+        {
+          "clock": false,
+          "damage": 6,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "111",
+      "chosen": "burst",
+      "decay_mask": "010",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 1
+        },
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 2
+        },
+        {
+          "clock": false,
+          "damage": 6,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "111",
+      "chosen": "burst",
+      "decay_mask": "011",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 1
+        },
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 2
+        },
+        {
+          "clock": false,
+          "damage": 6,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "111",
+      "chosen": "burst",
+      "decay_mask": "100",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 1
+        },
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 2
+        },
+        {
+          "clock": false,
+          "damage": 6,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "111",
+      "chosen": "burst",
+      "decay_mask": "101",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 1
+        },
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 2
+        },
+        {
+          "clock": false,
+          "damage": 6,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "111",
+      "chosen": "burst",
+      "decay_mask": "110",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 1
+        },
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 2
+        },
+        {
+          "clock": false,
+          "damage": 6,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    },
+    {
+      "burst_mask": "111",
+      "chosen": "burst",
+      "decay_mask": "111",
+      "trace": [
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 1
+        },
+        {
+          "clock": false,
+          "damage": 0,
+          "stock": 2
+        },
+        {
+          "clock": false,
+          "damage": 6,
+          "stock": 0
+        }
+      ],
+      "win": 1
+    }
+  ],
+  "focal_payoff_contrasts": [
+    6,
+    6,
+    6
+  ],
+  "global_win_contrasts": [
+    0,
+    0,
+    0
+  ],
+  "kind": "FINITE_COMPENSATION_COUNTEREXAMPLE",
+  "route_masks": {
+    "burst": {
+      "000": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "001": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "010": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "011": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "100": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "101": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "110": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 1
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 2
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "111": {
+        "payoff": 6,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 1
+          },
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 2
+          },
+          {
+            "clock": false,
+            "damage": 6,
+            "stock": 0
+          }
+        ]
+      }
+    },
+    "decay": {
+      "000": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "001": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "010": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "011": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "100": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "101": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "110": {
+        "payoff": 0,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 3
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 2
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 1
+          },
+          {
+            "clock": true,
+            "damage": 0,
+            "stock": 0
+          }
+        ]
+      },
+      "111": {
+        "payoff": 6,
+        "reset": true,
+        "trace": [
+          {
+            "clock": false,
+            "damage": 0,
+            "stock": 3
+          },
+          {
+            "clock": true,
+            "damage": 3,
+            "stock": 2
+          },
+          {
+            "clock": true,
+            "damage": 2,
+            "stock": 1
+          },
+          {
+            "clock": true,
+            "damage": 1,
+            "stock": 0
+          }
+        ]
+      }
+    }
+  },
+  "what_is_not_proved": [
+    "Neither toy route is certified against the Glassvow closed-family quotient, detector, economy, C2 or other P9 bars.",
+    "This does not establish Hand, Bloodfire or any real-game candidate value, causal descriptor or independent validation.",
+    "No claim is made that actual observed Hand negatives were caused by successful fallback rather than weak payoff or another reason."
+  ],
+  "what_is_proved": "Global win necessity/interaction is not logically necessary for bounded route-specific causal payoff in an adaptive system with an alternative route."
+}
