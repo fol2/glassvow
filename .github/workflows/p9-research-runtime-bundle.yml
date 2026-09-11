@@ -8,30 +8,169 @@ permissions:
 concurrency:
   group: p9-six-route-research-writer
   cancel-in-progress: false
+env:
+  RECORD: research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/phantom-observer-v1/selected-recapture-20260911
 jobs:
   bundle:
-    name: Export already-published fixed replay inputs; no research execution
+    name: Synchronize published result summaries; no native execution or raw upload
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 5
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: 87e5cd3adb18cda1d5cac439d488683ec9cc1781
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: true
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /.github/workflows/p9-research-runtime-bundle.yml
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+            /research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/phantom-observer-v1/selected-recapture-20260911/
+      - name: Update only mutable capsule fields from existing approved summaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import copy,hashlib,json,os,pathlib
+          root=pathlib.Path('research/p9-six-route');record=pathlib.Path(os.environ['RECORD'])
+          def blob(b):return hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+          expected={'RESULT-INDEX.json':'f7be1dbdd81c4447f10360ee5e692bcee26f6f33','SELF-REVIEW.json':'dff161181ffe64fd4af0bc3112b9b096306eae7a'}
+          for name,want in expected.items():assert blob((record/name).read_bytes())==want,name
+          result=json.loads((record/'RESULT-INDEX.json').read_bytes());review=json.loads((record/'SELF-REVIEW.json').read_bytes())
+          assert result['commands_compared']==409 and result['phantom_hits_predicted_exactly']==15
+          assert result['packages_admitted']==0 and result['p9_certified'] is False
+          assert review['tests_passed']==12 and review['finding']['real_capture_has_type_drift'] is False
+          state_path=root/'SESSION-STATE.json';state=json.loads(state_path.read_bytes());before=copy.deepcopy(state)
+          assert state['packages_admitted']==0 and state['p9_certified'] is False
+          next_action=('The exact observer reobservation is complete: do not repeat the 39 fixtures, 409 commands, bridge, census or predictor examples. '
+            'Complete source/raw publication remains blocked by a platform safety decision; do not resend via another encoding, path or workflow. '
+            'All six original replay inputs and the complete new local capture are retained in the continuation checkpoint. '
+            'Before any new population, bind a complete prospective package confirmation contract for descriptor validity, competent-policy quality, '
+            'same-product peer separation and natural economy, with independent assignments and unchanged error/stop rules. '
+            'No old value nomination, frozen validation model, protected cohort or criterion is reopened.')
+          state['status']='P9_UNFINISHED_OBSERVER_COMPLETION_RECORDED_RAW_PUBLICATION_BLOCKED'
+          state['observer_completion_frontier']={'result_index':str(record/'RESULT-INDEX.json'),'self_review':str(record/'SELF-REVIEW.json'),
+            'selected_row':result['selected_row'],'commands_compared':409,'phantom_hits_predicted_exactly':15,
+            'finite_stage_reused_not_rerun':True,'new_population_assignments':0,'new_independent_samples':0,
+            'full_new_raw_remote_preserved':False,'full_new_packet_remote_verified':False,
+            'original_input_transfer':'Run 34632360972, artifact 10276124948; six exact existing inputs verified after download.',
+            'publication_boundary':'A new raw-data blob request was blocked. Only separately accepted text summaries are synchronized here.'}
+          state['no_active_research_processes']=True;state['exact_next_action']=next_action
+          allowed={'status','observer_completion_frontier','no_active_research_processes','exact_next_action'}
+          assert all(state[k]==v for k,v in before.items() if k not in allowed)
+          assert set(state)-set(before)<=allowed
+          state_path.write_text(json.dumps(state,indent=2)+'\n')
+          handoff='''# P9 current handoff - fixed observer completion recorded; raw publication blocked
+
+          Continue #421 on research/p9-six-route-local-20260905. Product reference remains
+          2ed6cdb0302ba3aab5845a18d862841165e8aaf7. Target remains three complete strategies
+          per aspect. 0/6 current certificates. Author self-review is not independent
+          scientific confirmation. No product promotion or revised acceptance.
+
+          ## Completed; do not rerun
+          The bridge, temporal matrix and finite Phantom observer matrix remain complete.
+          The six original replay inputs were exported with contents:read and no scripts,
+          downloaded through the artifact action and checked against their old manifest.
+          The one preassigned exposed row 5:1:73414101 was then reobserved exactly once.
+          All 409 legacy command records, outcome and decisions match. Only the two
+          predeclared measured timers are excluded. All 15 Phantom hit predictions match.
+          The prior 39-fixture / 117-command finite capture was reused, not re-executed.
+          Twelve local adversarial tests pass. The supplemental typed-JSON comparison
+          rejects a Boolean/integer drift that plain Python dictionary equality accepts.
+          The actual capture has no such drift. No native replay was needed for review.
+
+          ## Preservation boundary
+          RESULT-INDEX.json and SELF-REVIEW.json under the selected-recapture-20260911
+          directory are published summaries, not a claim that the complete raw packet
+          is remotely recoverable. A new raw-data blob publication was blocked by the
+          platform. No alternative encoding, route or workflow was used to retry it.
+          Earlier blocked predictor/qualification source publications remain unresolved.
+          The complete original inputs, new raw, source identities, logs, local commits
+          and self-review are in the local continuation checkpoint. Do not lose them.
+          This workflow synchronizes only already-approved summaries and mutable capsule
+          files; it executes no native research and transports no blocked payload.
+
+          ## Immutable scientific boundaries
+          The linear and two-slope Hand aggregate-win nominations remain NOT_ESTABLISHED;
+          V0 stays skipped under their own rules. Bloodfire/controller negatives retain
+          their scope. Availability, source-only retry pruning and the finite inference
+          counterexample are complete; none authorizes revising a metric or old outcome.
+          Preparation and Surge are alternative producers of one Hand family, not two
+          packages. Historical raw gaps remain as recorded in SESSION-STATE.json.
+
+          ## Exact next action
+          '''+next_action+'''
+
+          ## Remaining P9
+          Complete current package certificates still require validated descriptors,
+          competent-policy quality, same-product peer separation, natural economy and
+          independent confirmation. Then six-package coverage, seven-direction detector,
+          corrected confirmation, unrestricted endpoint retention and all signed-control,
+          ceiling, fault, duration and compatibility guards; finally minimum lifecycle,
+          exact-head review and one selected exact-product / #108 receipt.
+          '''
+          (root/'SESSION-HANDOFF.md').write_text('\n'.join(line[10:] if line.startswith('          ') else line for line in handoff.splitlines())+'\n')
+          (root/'package-disposition-20260908/ROADMAP.md').write_text('# P9 existing roadmap - current frontier\n\n0/6 complete current certificates; target three per aspect. No acceptance change.\n\n'
+            '1. Observer integration is complete for its fixed finite and one-row scope. Do not replay it. Full new source/raw publication remains blocked; summaries are not recovery.\n'
+            '2. Bind complete prospective package evidence: canonical inheritance, causal/null/subset law, validated descriptor, competent policy, same-product peers, natural economy and independent confirmation. Old aggregate-win nominations stay closed.\n'
+            '3. Establish six-package coverage, then the seven-direction detector, corrected confirmation and unrestricted endpoint retention with every unchanged hard guardrail.\n'
+            '4. Deliver minimum lifecycle, exact-head review and one selected exact-product integration / #108 receipt.\n\nExact next action and preservation boundary: SESSION-HANDOFF.md. Historical failures and raw gaps remain in SESSION-STATE.json.\n')
+          PY
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/p9-six-route/SESSION-STATE.json research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/package-disposition-20260908/ROADMAP.md
+          test "$(git diff --cached --name-only | wc -l)" -eq 3
+          git commit -m 'research(p9): synchronize actual observer completion and unresolved publication boundary'
+          git push origin HEAD:refs/heads/$branch
+          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.PUBLISHED_HEAD }}
+          path: cold
           fetch-depth: 1
           persist-credentials: false
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/FILES.json
-            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/REMOTE-READBACK.json
-            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/SOURCE-MANIFEST.json
-            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/runtime-source.tar.xz
-            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-000.outcomes.jsonl.xz
-            /research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/v5/aware/v5-000.traces.jsonl.xz
+            /.github/workflows/p9-research-runtime-bundle.yml
+            /research/p9-six-route/SESSION-STATE.json
+            /research/p9-six-route/SESSION-HANDOFF.md
+            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
+            /research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/phantom-observer-v1/selected-recapture-20260911/
+      - name: Read back six published summary and workflow files; do not claim raw recovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib
+          root=pathlib.Path('research/p9-six-route');record=pathlib.Path(os.environ['RECORD'])
+          paths=[root/'SESSION-STATE.json',root/'SESSION-HANDOFF.md',root/'package-disposition-20260908/ROADMAP.md',record/'RESULT-INDEX.json',record/'SELF-REVIEW.json',pathlib.Path('.github/workflows/p9-research-runtime-bundle.yml')]
+          files=[]
+          for p in paths:
+              a=p.read_bytes();b=(pathlib.Path('cold')/p).read_bytes();assert a==b,str(p)
+              files.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+          receipt={'kind':'CURRENT_CAPSULE_AND_SUMMARY_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':files,'all_bytes_equal':True,'full_new_raw_remote_preserved':False,'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
+          target=record/'SUMMARY-READBACK.json';assert not target.exists();target.write_text(json.dumps(receipt,indent=2)+'\n')
+          PY
+          branch=research/p9-six-route-local-20260905
+          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
+          git add "$RECORD/SUMMARY-READBACK.json"
+          test "$(git diff --cached --name-only)" = "$RECORD/SUMMARY-READBACK.json"
+          git commit -m 'research(p9): verify capsule bytes without overstating raw preservation'
+          git push origin HEAD:refs/heads/$branch
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: p9-pinned-replay-inputs-87e5cd3a
-          path: research/p9-six-route/ash-inheritance-20260909/joint-controller-v1/execution-1/
+          name: p9-current-capsule-readback
+          path: |
+            research/p9-six-route/SESSION-STATE.json
+            research/p9-six-route/SESSION-HANDOFF.md
+            research/p9-six-route/package-disposition-20260908/ROADMAP.md
+            research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/phantom-observer-v1/selected-recapture-20260911/
           if-no-files-found: error
-          compression-level: 0
           retention-days: 3
