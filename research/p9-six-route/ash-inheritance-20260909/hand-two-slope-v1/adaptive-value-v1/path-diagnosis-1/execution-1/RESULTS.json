@@ -1,0 +1,157 @@
+{
+  "kind": "COMPLETE_TWO_SLOPE_HAND_FACTUAL_PATH_ACCOUNTING",
+  "limits": [
+    "No new simulator outcome, controller, coefficients, random seed or fitted model.",
+    "Raw law units precede Strength, Block, vulnerability, death and HP clamps; they are not actual extra HP.",
+    "Source-enabled consumer access and retained-other-card paths overlap and must not be added.",
+    "An observed source path does not establish that an adaptive policy would lose its payoff without that source.",
+    "This audit cannot rescue the frozen value terminal or admit a descriptor/package."
+  ],
+  "new_independent_samples": 0,
+  "new_native_runs": 0,
+  "original_scientific_status": "TWO_SLOPE_HAND_ADAPTIVE_VALUE_NOT_ESTABLISHED",
+  "p9_certified": false,
+  "packages_admitted": 0,
+  "primary_changed": false,
+  "primary_terminal_sha256": "c8e2af62641f08208e3aee761b9752921258f9155a9e9a8d0408e0d6cc5db1f5",
+  "results": {
+    "5": {
+      "00": {
+        "configurations_with_observation": {
+          "above_reserve": 30,
+          "consumer": 78,
+          "either_source_path": 0,
+          "retained_source": 0,
+          "source_access": 0,
+          "source_path_above_reserve": 0
+        },
+        "counts": {
+          "above_reserve_plays": 55,
+          "commands": 202985,
+          "consumer_plays": 585,
+          "either_source_path_plays": 0,
+          "retained_source_plays": 0,
+          "source_access_plays": 0,
+          "source_path_above_reserve_plays": 0,
+          "structural_source_slot_deletion_sum": 0
+        },
+        "limits": "Descriptive full-assignment counts, not post-treatment-selected win inference or certified policy breadth.",
+        "remaining_hand_at_consumer": {
+          "0": 6,
+          "1": 26,
+          "2": 105,
+          "3": 174,
+          "4": 219,
+          "5": 31,
+          "6": 21,
+          "7": 1,
+          "9": 2
+        },
+        "runs": 512
+      },
+      "01": {
+        "configurations_with_observation": {
+          "above_reserve": 62,
+          "consumer": 79,
+          "either_source_path": 0,
+          "retained_source": 0,
+          "source_access": 0,
+          "source_path_above_reserve": 0
+        },
+        "counts": {
+          "above_reserve_plays": 299,
+          "commands": 202352,
+          "consumer_plays": 1230,
+          "either_source_path_plays": 0,
+          "retained_source_plays": 0,
+          "source_access_plays": 0,
+          "source_path_above_reserve_plays": 0,
+          "structural_source_slot_deletion_sum": 0
+        },
+        "limits": "Descriptive full-assignment counts, not post-treatment-selected win inference or certified policy breadth.",
+        "remaining_hand_at_consumer": {
+          "0": 3,
+          "1": 14,
+          "2": 89,
+          "3": 275,
+          "4": 550,
+          "5": 87,
+          "6": 172,
+          "7": 19,
+          "8": 13,
+          "9": 8
+        },
+        "runs": 512
+      },
+      "10": {
+        "configurations_with_observation": {
+          "above_reserve": 36,
+          "consumer": 77,
+          "either_source_path": 23,
+          "retained_source": 22,
+          "source_access": 12,
+          "source_path_above_reserve": 13
+        },
+        "counts": {
+          "above_reserve_plays": 67,
+          "commands": 205509,
+          "consumer_plays": 615,
+          "either_source_path_plays": 49,
+          "retained_source_plays": 44,
+          "source_access_plays": 15,
+          "source_path_above_reserve_plays": 15,
+          "structural_source_slot_deletion_sum": 0
+        },
+        "limits": "Descriptive full-assignment counts, not post-treatment-selected win inference or certified policy breadth.",
+        "remaining_hand_at_consumer": {
+          "0": 4,
+          "1": 21,
+          "2": 103,
+          "3": 184,
+          "4": 236,
+          "5": 36,
+          "6": 28,
+          "7": 2,
+          "9": 1
+        },
+        "runs": 512
+      },
+      "11": {
+        "configurations_with_observation": {
+          "above_reserve": 69,
+          "consumer": 80,
+          "either_source_path": 32,
+          "retained_source": 31,
+          "source_access": 20,
+          "source_path_above_reserve": 28
+        },
+        "counts": {
+          "above_reserve_plays": 365,
+          "commands": 205394,
+          "consumer_plays": 1313,
+          "either_source_path_plays": 138,
+          "retained_source_plays": 130,
+          "source_access_plays": 45,
+          "source_path_above_reserve_plays": 90,
+          "structural_source_slot_deletion_sum": 1126
+        },
+        "limits": "Descriptive full-assignment counts, not post-treatment-selected win inference or certified policy breadth.",
+        "remaining_hand_at_consumer": {
+          "0": 2,
+          "1": 24,
+          "2": 104,
+          "3": 296,
+          "4": 522,
+          "5": 102,
+          "6": 176,
+          "7": 46,
+          "8": 17,
+          "9": 24
+        },
+        "runs": 512
+      }
+    }
+  },
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "total_runs": 2048
+}
