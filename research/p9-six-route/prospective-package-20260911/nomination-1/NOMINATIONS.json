@@ -1,0 +1,176 @@
+{
+  "status": "EXPOSED_DEVELOPMENT_NOMINATIONS_FIXED_NOT_CERTIFICATES",
+  "input_head": "1cea2c1a9f486cab6d04b69ed96b0a22e1644322",
+  "content_sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9",
+  "combat_sha256": "3ccb89f69f50e41d5a46eadd8f48c0a907fd0e382cd492b2c34dd5f93e091ad0",
+  "ranking": [
+    "win_and_necessary_activation descending",
+    "wins descending",
+    "necessary_active_runs descending",
+    "necessary_exclusive_runs descending",
+    "index ascending"
+  ],
+  "nominations": [
+    {
+      "package": "hand",
+      "method": "stock",
+      "policy_root": 73409000,
+      "policy_index": 41,
+      "discovery_summary": {
+        "index": 41,
+        "necessary_active_runs": 4,
+        "exposed_wins": 4,
+        "exposed_win_and_necessary_activation": 4,
+        "necessary_exclusive_runs": 3
+      },
+      "nomination_id": "hand:stock:41"
+    },
+    {
+      "package": "hand",
+      "method": "stock",
+      "policy_root": 73409000,
+      "policy_index": 47,
+      "discovery_summary": {
+        "index": 47,
+        "necessary_active_runs": 4,
+        "exposed_wins": 4,
+        "exposed_win_and_necessary_activation": 4,
+        "necessary_exclusive_runs": 3
+      },
+      "nomination_id": "hand:stock:47"
+    },
+    {
+      "package": "bloodfire",
+      "method": "stock",
+      "policy_root": 73409000,
+      "policy_index": 30,
+      "discovery_summary": {
+        "index": 30,
+        "necessary_active_runs": 3,
+        "exposed_wins": 3,
+        "exposed_win_and_necessary_activation": 3,
+        "necessary_exclusive_runs": 1
+      },
+      "nomination_id": "bloodfire:stock:30"
+    },
+    {
+      "package": "bloodfire",
+      "method": "stock",
+      "policy_root": 73409000,
+      "policy_index": 126,
+      "discovery_summary": {
+        "index": 126,
+        "necessary_active_runs": 3,
+        "exposed_wins": 3,
+        "exposed_win_and_necessary_activation": 3,
+        "necessary_exclusive_runs": 1
+      },
+      "nomination_id": "bloodfire:stock:126"
+    },
+    {
+      "package": "hand",
+      "method": "aware",
+      "policy_root": 73409000,
+      "policy_index": 41,
+      "discovery_summary": {
+        "index": 41,
+        "necessary_active_runs": 4,
+        "exposed_wins": 4,
+        "exposed_win_and_necessary_activation": 4,
+        "necessary_exclusive_runs": 3
+      },
+      "nomination_id": "hand:aware:41"
+    },
+    {
+      "package": "hand",
+      "method": "aware",
+      "policy_root": 73409000,
+      "policy_index": 65,
+      "discovery_summary": {
+        "index": 65,
+        "necessary_active_runs": 4,
+        "exposed_wins": 4,
+        "exposed_win_and_necessary_activation": 4,
+        "necessary_exclusive_runs": 3
+      },
+      "nomination_id": "hand:aware:65"
+    },
+    {
+      "package": "bloodfire",
+      "method": "aware",
+      "policy_root": 73409000,
+      "policy_index": 96,
+      "discovery_summary": {
+        "index": 96,
+        "necessary_active_runs": 4,
+        "exposed_wins": 4,
+        "exposed_win_and_necessary_activation": 4,
+        "necessary_exclusive_runs": 4
+      },
+      "nomination_id": "bloodfire:aware:96"
+    },
+    {
+      "package": "bloodfire",
+      "method": "aware",
+      "policy_root": 73409000,
+      "policy_index": 52,
+      "discovery_summary": {
+        "index": 52,
+        "necessary_active_runs": 3,
+        "exposed_wins": 4,
+        "exposed_win_and_necessary_activation": 3,
+        "necessary_exclusive_runs": 3
+      },
+      "nomination_id": "bloodfire:aware:52"
+    }
+  ],
+  "unique_enacted_policies": [
+    {
+      "method": "aware",
+      "index": 41
+    },
+    {
+      "method": "aware",
+      "index": 52
+    },
+    {
+      "method": "aware",
+      "index": 65
+    },
+    {
+      "method": "aware",
+      "index": 96
+    },
+    {
+      "method": "stock",
+      "index": 30
+    },
+    {
+      "method": "stock",
+      "index": 41
+    },
+    {
+      "method": "stock",
+      "index": 47
+    },
+    {
+      "method": "stock",
+      "index": 126
+    }
+  ],
+  "max_factual_confirmation_runs": 4096,
+  "maximum_same_product_random_build_runs": 512,
+  "all_development_rows_retained_in_score_tables": true,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "scientific_status_of_old_terminals": "UNCHANGED",
+  "limits": [
+    "Selection only. All old aggregate-win, support, controller and content failures keep their exact scope.",
+    "Necessary activation in development is not causal contribution, descriptor validity or package membership.",
+    "No nomination is counted as competent or distinct until the separately bound prospective contract passes.",
+    "No new policy parameters, acquisition rule or planner are fitted.",
+    "Fresh assignments, complete source/raw preservation and the complete prospective reader must be qualified before any observations."
+  ]
+}

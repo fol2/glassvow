@@ -1,0 +1,55 @@
+{
+  "status": "EXPOSED_DEVELOPMENT_NOMINATIONS_FIXED_NOT_CERTIFICATES",
+  "input_head": "1cea2c1a9f486cab6d04b69ed96b0a22e1644322",
+  "content_sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9",
+  "combat_sha256": "3ccb89f69f50e41d5a46eadd8f48c0a907fd0e382cd492b2c34dd5f93e091ad0",
+  "ranking": [
+    "win_and_necessary_activation descending",
+    "wins descending",
+    "necessary_active_runs descending",
+    "necessary_exclusive_runs descending",
+    "index ascending"
+  ],
+  "unique_enacted_policies": [
+    {
+      "method": "aware",
+      "index": 41
+    },
+    {
+      "method": "aware",
+      "index": 52
+    },
+    {
+      "method": "aware",
+      "index": 65
+    },
+    {
+      "method": "aware",
+      "index": 96
+    },
+    {
+      "method": "stock",
+      "index": 30
+    },
+    {
+      "method": "stock",
+      "index": 41
+    },
+    {
+      "method": "stock",
+      "index": 47
+    },
+    {
+      "method": "stock",
+      "index": 126
+    }
+  ],
+  "max_factual_confirmation_runs": 4096,
+  "maximum_same_product_random_build_runs": 512,
+  "all_development_rows_retained_in_score_tables": true,
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "scientific_status_of_old_terminals": "UNCHANGED"
+}
