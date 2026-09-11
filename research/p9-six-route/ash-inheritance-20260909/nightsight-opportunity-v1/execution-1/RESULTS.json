@@ -1,0 +1,144 @@
+{
+  "consumer_records": 3743,
+  "kind": "RETAINED_NIGHTSIGHT_SOURCE_OPPORTUNITY_SCREEN",
+  "limits": [
+    "This is an upper bound on source-related opportunities, not attribution of particular extra cards: baseline draw, hand cap, empty piles and omens can remove marginal Night Sight draw. Neither temporal co-occurrence nor a win establishes a causal benefit.",
+    "This does not rescue either direct-draw primary claim or establish extra HP, value, descriptor or scientific independence.",
+    "A positive necessary screen only justifies missing source/operator qualification, never a population start or package admission."
+  ],
+  "new_independent_samples": 0,
+  "new_native_runs": 0,
+  "original_value_status": "TWO_SLOPE_HAND_ADAPTIVE_VALUE_NOT_ESTABLISHED",
+  "p9_certified": false,
+  "packages_admitted": 0,
+  "primary_changed": false,
+  "results": {
+    "5": {
+      "00": {
+        "configurations_with_possible_path": 0,
+        "configurations_with_possible_path_above_reserve": 0,
+        "configurations_with_winning_possible_path": 0,
+        "counts": {
+          "commands": 202985,
+          "consumer_plays": 585,
+          "possible_path_above_reserve": 0,
+          "possible_path_plays": 0
+        },
+        "possible_policy_ids": [],
+        "runs": 512,
+        "wins_descriptive_only": 283
+      },
+      "01": {
+        "configurations_with_possible_path": 0,
+        "configurations_with_possible_path_above_reserve": 0,
+        "configurations_with_winning_possible_path": 0,
+        "counts": {
+          "commands": 202352,
+          "consumer_plays": 1230,
+          "possible_path_above_reserve": 0,
+          "possible_path_plays": 0
+        },
+        "possible_policy_ids": [],
+        "runs": 512,
+        "wins_descriptive_only": 280
+      },
+      "10": {
+        "configurations_with_possible_path": 0,
+        "configurations_with_possible_path_above_reserve": 0,
+        "configurations_with_winning_possible_path": 0,
+        "counts": {
+          "commands": 205509,
+          "consumer_plays": 615,
+          "possible_path_above_reserve": 0,
+          "possible_path_plays": 0
+        },
+        "possible_policy_ids": [],
+        "runs": 512,
+        "wins_descriptive_only": 306
+      },
+      "11": {
+        "configurations_with_possible_path": 0,
+        "configurations_with_possible_path_above_reserve": 0,
+        "configurations_with_winning_possible_path": 0,
+        "counts": {
+          "commands": 205394,
+          "consumer_plays": 1313,
+          "possible_path_above_reserve": 0,
+          "possible_path_plays": 0
+        },
+        "possible_policy_ids": [],
+        "runs": 512,
+        "wins_descriptive_only": 301
+      }
+    }
+  },
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "screen": {
+    "5": {
+      "01": {
+        "possible_support": false,
+        "winning_support": false
+      },
+      "11": {
+        "possible_support": false,
+        "winning_support": false
+      }
+    }
+  },
+  "source": {
+    "card": {
+      "cost": 1,
+      "effects": [
+        {
+          "id": "nightsight",
+          "kind": "status",
+          "n": 1,
+          "who": "self"
+        }
+      ],
+      "locked": "darkWalker",
+      "name": "Night Sight",
+      "rarity": "uncommon",
+      "target": "self",
+      "text": "At the start of each turn, draw 1 extra card.",
+      "type": "power",
+      "up": {
+        "cost": 0
+      },
+      "vfx": "void"
+    },
+    "catalogue_player_status_emitters": {
+      "nightSight:base": {
+        "id": "nightsight",
+        "kind": "status",
+        "n": 1,
+        "who": "self"
+      },
+      "nightSight:up": {
+        "id": "nightsight",
+        "kind": "status",
+        "n": 1,
+        "who": "self"
+      }
+    },
+    "combat_identity": {
+      "bytes": 51207,
+      "sha256": "1493d02fa2b4ff3b88c517448286ce26287e886b4ae2257251eb8ba0aea331be"
+    },
+    "draw_cards": "func draw_cards(run: RunState, cb: CombatState, n: int) -> void:\n\tfor _i: int in range(n):\n\t\tif cb.hand.size() >= 10:\n\t\t\tbreak\n\t\tif cb.draw.is_empty():\n\t\t\tif cb.discard.is_empty():\n\t\t\t\tbreak\n\t\t\tvar count: int = cb.discard.size()\n\t\t\tcb.draw = cb.discard\n\t\t\tcb.discard = []\n\t\t\t_shuffle_cards(run.rng, cb.draw)\n\t\t\tcb.queue.append({\"t\": EventTypes.RESHUFFLE, \"n\": count})\n\t\tvar c: CardInst = cb.draw.pop_back()\n\t\tcb.hand.append(c)\n\t\tcb.queue.append({\"t\": EventTypes.DRAW, \"uid\": c.uid, \"id\": String(c.id)})\n\n\n# ---------------------------------------------------------------- shared laws\n\n",
+    "event_source": {
+      "bytes": 1762,
+      "path": "domain/events/event_types.gd",
+      "sha256": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a"
+    },
+    "event_types": {
+      "DRAW": "draw",
+      "STATUS": "status",
+      "TURN": "turn"
+    },
+    "limits": "Source-bound temporal opportunity. Extra draw versus baseline/cap/empty-pile counterfactual is not reconstructed.",
+    "start_turn": "func _start_player_turn(run: RunState, cb: CombatState) -> void:\n\tif cb.over:\n\t\treturn\n\tcb.turn += 1\n\tvar p: PlayerCombatant = cb.player\n\tcb.queue.append({\"t\": EventTypes.TURN, \"n\": cb.turn})\n\t# Smolder ticks at the start of your turn.\n\tvar poison: int = _sget(p.statuses, \"poison\")\n\tif poison > 0:\n\t\tdamage_player(run, cb, poison, \"poison\")\n\t\tpoison -= 1\n\t\tif poison == 0:\n\t\t\tp.statuses.erase(\"poison\")\n\t\telse:\n\t\t\tp.statuses[\"poison\"] = poison\n\t\tif cb.over:\n\t\t\treturn\n\tif _sget(p.statuses, \"barricade\") == 0:\n\t\tp.block = 0\n\tvar ritual: int = _sget(p.statuses, \"ritual\")\n\tif ritual > 0:\n\t\tadd_status_player(cb, \"str\", ritual)\n\tvar emberflow: int = _sget(p.statuses, \"emberflow\")\n\tif emberflow > 0:\n\t\tgain_embers(run, cb, emberflow)\n\tvar energy: int = p.energy_max + _sget(p.statuses, \"energized\")\n\tif cb.turn == 1 and run.has_relic(\"emberLantern\"):\n\t\tenergy += 1\n\t\t_proc(cb, \"emberLantern\")\n\tp.energy = (p.energy if run.has_relic(\"frozenCore\") else 0) + energy\n\tcb.first_card_played = false\n\tcb.queue.append({\"t\": EventTypes.ENERGY, \"n\": p.energy})\n\tvar draws: int = 5 + _sget(p.statuses, \"nightsight\") \\\n\t\t+ _ji(_omen_mods(run).get(\"drawDelta\", 0))\n\tif cb.turn == 1 and run.has_relic(\"travelersPack\"):\n\t\tdraws += 2\n\t\t_proc(cb, \"travelersPack\")\n\tdraw_cards(run, cb, maxi(1, draws))\n\n\n"
+  },
+  "status": "FIXED_CAPTURE_PERSISTENT_SOURCE_OPPORTUNITY_INSUFFICIENT",
+  "total_runs": 2048
+}

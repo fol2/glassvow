@@ -1,0 +1,90 @@
+{
+  "kind": "RETAINED_NIGHTSIGHT_SOURCE_OPPORTUNITY_SCREEN",
+  "status": "FIXED_CAPTURE_PERSISTENT_SOURCE_OPPORTUNITY_INSUFFICIENT",
+  "results": {
+    "5": {
+      "00": {
+        "runs": 512,
+        "wins_descriptive_only": 283,
+        "counts": {
+          "consumer_plays": 585,
+          "possible_path_plays": 0,
+          "possible_path_above_reserve": 0,
+          "commands": 202985
+        },
+        "configurations_with_possible_path": 0,
+        "configurations_with_winning_possible_path": 0,
+        "configurations_with_possible_path_above_reserve": 0,
+        "possible_policy_ids": []
+      },
+      "01": {
+        "runs": 512,
+        "wins_descriptive_only": 280,
+        "counts": {
+          "consumer_plays": 1230,
+          "possible_path_plays": 0,
+          "possible_path_above_reserve": 0,
+          "commands": 202352
+        },
+        "configurations_with_possible_path": 0,
+        "configurations_with_winning_possible_path": 0,
+        "configurations_with_possible_path_above_reserve": 0,
+        "possible_policy_ids": []
+      },
+      "10": {
+        "runs": 512,
+        "wins_descriptive_only": 306,
+        "counts": {
+          "consumer_plays": 615,
+          "possible_path_plays": 0,
+          "possible_path_above_reserve": 0,
+          "commands": 205509
+        },
+        "configurations_with_possible_path": 0,
+        "configurations_with_winning_possible_path": 0,
+        "configurations_with_possible_path_above_reserve": 0,
+        "possible_policy_ids": []
+      },
+      "11": {
+        "runs": 512,
+        "wins_descriptive_only": 301,
+        "counts": {
+          "consumer_plays": 1313,
+          "possible_path_plays": 0,
+          "possible_path_above_reserve": 0,
+          "commands": 205394
+        },
+        "configurations_with_possible_path": 0,
+        "configurations_with_winning_possible_path": 0,
+        "configurations_with_possible_path_above_reserve": 0,
+        "possible_policy_ids": []
+      }
+    }
+  },
+  "screen": {
+    "5": {
+      "01": {
+        "possible_support": false,
+        "winning_support": false
+      },
+      "11": {
+        "possible_support": false,
+        "winning_support": false
+      }
+    }
+  },
+  "total_runs": 2048,
+  "consumer_records": 3743,
+  "original_value_status": "TWO_SLOPE_HAND_ADAPTIVE_VALUE_NOT_ESTABLISHED",
+  "primary_changed": false,
+  "limits": [
+    "This is an upper bound on source-related opportunities, not attribution of particular extra cards: baseline draw, hand cap, empty piles and omens can remove marginal Night Sight draw. Neither temporal co-occurrence nor a win establishes a causal benefit.",
+    "This does not rescue either direct-draw primary claim or establish extra HP, value, descriptor or scientific independence.",
+    "A positive necessary screen only justifies missing source/operator qualification, never a population start or package admission."
+  ],
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}

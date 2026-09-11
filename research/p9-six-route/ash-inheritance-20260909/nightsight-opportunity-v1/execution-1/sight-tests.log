@@ -1,0 +1,23 @@
+test_aliases_come_from_bound_event_types (test_opportunity.Temporal.test_aliases_come_from_bound_event_types) ... ok
+test_consumer_before_source_not_retroactive (test_opportunity.Temporal.test_consumer_before_source_not_retroactive) ... ok
+test_different_source_is_not_automatically_nightsight_card (test_opportunity.Temporal.test_different_source_is_not_automatically_nightsight_card) ... ok
+test_duplicate_draw_events_do_not_duplicate_turn_counter (test_opportunity.Temporal.test_duplicate_draw_events_do_not_duplicate_turn_counter) ... ok
+test_duplicate_turn_rejected (test_opportunity.Temporal.test_duplicate_turn_rejected) ... ok
+test_empty_turn_packet_does_not_count (test_opportunity.Temporal.test_empty_turn_packet_does_not_count) ... ok
+test_fractional_status_rejected (test_opportunity.Temporal.test_fractional_status_rejected) ... ok
+test_hand_extent_not_damage (test_opportunity.Temporal.test_hand_extent_not_damage) ... ok
+test_held_identity_required (test_opportunity.Temporal.test_held_identity_required) ... ok
+test_illegal_consumer_not_observed (test_opportunity.Temporal.test_illegal_consumer_not_observed) ... ok
+test_old_fight_source_cannot_leak (test_opportunity.Temporal.test_old_fight_source_cannot_leak) ... ok
+test_regular_draw_is_not_turn_start (test_opportunity.Temporal.test_regular_draw_is_not_turn_start) ... ok
+test_removed_status_no_later_path (test_opportunity.Temporal.test_removed_status_no_later_path) ... ok
+test_repeated_source_and_multiple_fights_accounted (test_opportunity.Temporal.test_repeated_source_and_multiple_fights_accounted) ... ok
+test_same_turn_does_not_count (test_opportunity.Temporal.test_same_turn_does_not_count) ... ok
+test_source_loss_does_not_erase_current_turn_draw (test_opportunity.Temporal.test_source_loss_does_not_erase_current_turn_draw) ... ok
+test_source_then_next_turn_then_consumer (test_opportunity.Temporal.test_source_then_next_turn_then_consumer) ... ok
+test_wrong_who_or_failed_source_is_not_named (test_opportunity.Temporal.test_wrong_who_or_failed_source_is_not_named) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.001s
+
+OK
