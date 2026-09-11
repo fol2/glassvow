@@ -1,0 +1,28 @@
+{
+  "kind": "RETAINED_NIGHTSIGHT_SOURCE_OPPORTUNITY_SCREEN",
+  "question": "Does the preserved fixed policy actually play Night Sight, receive a later turn-start draw with its persistent status, and subsequently play Phantom in that turn often enough to justify qualifying this unmeasured source operator?",
+  "input_head": "65e5b3a792b41c4e2193bd44767307b98b3f7995",
+  "capture": "research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1",
+  "capture_manifest_blob": "a30213ec0d8552f15e257c3322effbe018e0534a",
+  "capture_readback_blob": "7a349a2bee8e7fd44adb165319df6b97745bf492",
+  "contract_blob": "5d738f65e6302dd33a8b5c2a22d60e38bca6c471",
+  "coverage": "Every preserved assigned outcome and command trace in all four worlds and all completed vows. No successful-only sample, new seeds, controller or game execution.",
+  "distinction": "The closed value studies suppressed only direct Preparation/Surge draw. Night Sight's persistent turn-start draw remained background. This accounting does not reopen their hypotheses, change their primary metrics, retune their candidates, or create an extra strategy slot.",
+  "source_binding": "Read the actual archived card definitions, EventTypes and native start-turn/draw functions. Verify the Night Sight status contribution and every consumed file against the preserved source/capture manifests.",
+  "observable": "A successful Night Sight status application in the same fight, followed by a later turn marker with positive remaining status and at least one actual turn-start draw, followed by a legal Phantom play during that turn. Same-turn plays, empty draw packets and previous-fight status do not qualify.",
+  "interpretation": "This is an upper bound on source-related opportunities, not attribution of particular extra cards: baseline draw, hand cap, empty piles and omens can remove marginal Night Sight draw. Neither temporal co-occurrence nor a win establishes a causal benefit.",
+  "screen": {
+    "worlds": ["01", "11"],
+    "minimum_configurations_with_possible_path": 32,
+    "minimum_configurations_with_winning_possible_path": 16,
+    "pass": "Both fixed payoff-on worlds satisfy these necessary opportunity counts. Only missing persistent-source operator qualification becomes a justified next action, not population or package admission.",
+    "fail": "This fixed policy/capture cannot supply the required opportunity support. Do not launch a new Night Sight population cohort, tune the closed nomination or equate this with universal Hand nonviability.",
+    "invalid": "Missing identities, unknown source semantics or inconsistent trace coverage produce INCONCLUSIVE with actual diagnostics, never fabricated zero support."
+  },
+  "preservation": "Commit code and protocol; preserve all derived records and source/coverage/input manifests; cold-read committed bytes and reconstruct the same readout without the engine. Keep every previous terminal immutable.",
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "new_native_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false
+}
