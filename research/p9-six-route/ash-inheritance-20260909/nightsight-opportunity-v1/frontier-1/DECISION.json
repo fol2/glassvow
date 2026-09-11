@@ -1,0 +1,472 @@
+{
+  "eligibility": {
+    "draw_sources": [
+      {
+        "access_class": "starter_or_pool",
+        "card": "firstSpark",
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "in_initial_pool_upper_bound": false,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "starter",
+        "starter_copies_by_aspect": {
+          "ashwarden": 1,
+          "duskblade": 1
+        },
+        "variant": "base"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "firstSpark",
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 2
+          }
+        ],
+        "in_initial_pool_upper_bound": false,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "starter",
+        "starter_copies_by_aspect": {
+          "ashwarden": 1,
+          "duskblade": 1
+        },
+        "variant": "up"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "quickSlash",
+        "cost": 1,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "in_initial_pool_upper_bound": true,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "common",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "base"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "quickSlash",
+        "cost": 1,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "in_initial_pool_upper_bound": true,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "common",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "up"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "sidestep",
+        "cost": 1,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "in_initial_pool_upper_bound": true,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "common",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "base"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "sidestep",
+        "cost": 1,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "in_initial_pool_upper_bound": true,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "common",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "up"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "preparation",
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 2
+          }
+        ],
+        "in_initial_pool_upper_bound": true,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "common",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "base"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "preparation",
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 2
+          }
+        ],
+        "in_initial_pool_upper_bound": true,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "common",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "up"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "deflect",
+        "cost": 1,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "in_initial_pool_upper_bound": true,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "common",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "base"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "deflect",
+        "cost": 1,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "in_initial_pool_upper_bound": true,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "common",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "up"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "surge",
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "in_initial_pool_upper_bound": true,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "uncommon",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "base"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "surge",
+        "cost": 0,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "in_initial_pool_upper_bound": true,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "uncommon",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "up"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "offering",
+        "cost": 1,
+        "effects": [
+          {
+            "draw": 3,
+            "id": "pyreTithe",
+            "kind": "special"
+          }
+        ],
+        "in_initial_pool_upper_bound": true,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "rare",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "base"
+      },
+      {
+        "access_class": "starter_or_pool",
+        "card": "offering",
+        "cost": 1,
+        "effects": [
+          {
+            "draw": 4,
+            "id": "pyreTithe",
+            "kind": "special"
+          }
+        ],
+        "in_initial_pool_upper_bound": true,
+        "locked": null,
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "rare",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "up"
+      },
+      {
+        "access_class": "absent_from_initial_starter_and_pool",
+        "card": "tithe",
+        "cost": 1,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "in_initial_pool_upper_bound": false,
+        "locked": "lanternFed",
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "uncommon",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "base"
+      },
+      {
+        "access_class": "absent_from_initial_starter_and_pool",
+        "card": "tithe",
+        "cost": 1,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "in_initial_pool_upper_bound": false,
+        "locked": "lanternFed",
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "uncommon",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "up"
+      },
+      {
+        "access_class": "absent_from_initial_starter_and_pool",
+        "card": "nightSight",
+        "cost": 1,
+        "effects": [
+          {
+            "id": "nightsight",
+            "kind": "status",
+            "n": 1,
+            "who": "self"
+          }
+        ],
+        "in_initial_pool_upper_bound": false,
+        "locked": "darkWalker",
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "uncommon",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "base"
+      },
+      {
+        "access_class": "absent_from_initial_starter_and_pool",
+        "card": "nightSight",
+        "cost": 0,
+        "effects": [
+          {
+            "id": "nightsight",
+            "kind": "status",
+            "n": 1,
+            "who": "self"
+          }
+        ],
+        "in_initial_pool_upper_bound": false,
+        "locked": "darkWalker",
+        "qualification": "source membership only; not natural frequency, causal value or strategy admission",
+        "rarity": "uncommon",
+        "starter_copies_by_aspect": {
+          "ashwarden": 0,
+          "duskblade": 0
+        },
+        "variant": "up"
+      }
+    ],
+    "important_limit": "Initial pool exclusion alone is not starter exclusion. No progression profile is changed.",
+    "source_identities": {
+      "content/full-content.json": "ac779e08b0afc5054242ecf5dc1f7421e648e4ee114607708584d1d74ce92cdc",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19"
+    },
+    "starter_construction": "static func new_run(\n\tcontent: ContentDB,\n\trun_seed: int,\n\trequested_run_id: String = \"\",\n\tprofile: Dictionary = {}\n) -> RunState:\n\tvar rs: RunState = RunState.new()\n\trs.seed = run_seed\n\trs.run_id = requested_run_id if not requested_run_id.is_empty() else \"run-%08x\" % (run_seed & 0xFFFFFFFF)\n\trs.rng = Rng.new(run_seed)\n\trs.aspect = clampi(_sji(profile.get(\"aspect\", 0)), 0, maxi(0, content.aspects.size() - 1))\n\trs.vow = clampi(_sji(profile.get(\"vow\", 0)), 0, content.vows.size())\n\tvar cp: Dictionary = content.aspects[rs.aspect] if not content.aspects.is_empty() else content.player\n\trs.art = StringName(str(cp.get(\"art\", \"flare\")))\n\trs.player.max_hp = _sji(cp.get(\"maxHp\", 1))\n\trs.player.hp = rs.player.max_hp\n\trs.player.gold = _sji(cp.get(\"startGold\", 0))\n\trs.player.energy_max = _sji(cp.get(\"energy\", 3))\n\trs.player.relics.append(str(cp.get(\"startRelic\", \"\")))\n\tfor _i: int in range(_sji(cp.get(\"potionSlots\", 3))):\n\t\trs.player.potions.append(\"\")\n\tvar deck_ids: Array = cp.get(\"startDeck\", [])\n\tfor id_v: Variant in deck_ids:\n\t\trs.player.deck.append(CardInst.new(rs.next_uid(), StringName(str(id_v)), false))\n\tfor unlock_v: Variant in profile.get(\"unlocks\", []):\n\t\trs.unlocks.append(str(unlock_v))\n\tvar reveals_v: Variant = profile.get(\"reveals\", [])\n\tif reveals_v == null:\n\t\trs.reveals_all = true\n\telse:\n\t\tfor reveal_v: Variant in reveals_v:\n\t\t\trs.reveals.append(str(reveal_v))\n\trs.boon = profile.get(\"boon\")\n\trs.monument = profile.get(\"monument\")\n\trs.shards = profile.get(\"shards\", []).duplicate()\n\tvar quests_v: Variant = profile.get(\"quests\")\n\tif typeof(quests_v) == TYPE_DICTIONARY:\n\t\tvar profile_quests: Dictionary = quests_v\n\t\tfor quest_id: String in content.quest_ids:\n\t\t\tvar source_v: Variant = profile_quests.get(quest_id)\n\t\t\tif typeof(source_v) == TYPE_DICTIONARY:\n\t\t\t\tvar source: Dictionary = source_v\n\t\t\t\trs.quests[quest_id] = {\n\t\t\t\t\t\"state\": str(source.get(\"state\", \"dormant\")),\n\t\t\t\t\t\"progress\": clampi(\n\t\t\t\t\t\t_sji(source.get(\"progress\", 0)), 0,\n\t\t\t\t\t\t_sji(content.quests[quest_id].get(\"target\", 0))\n\t\t\t\t\t),\n\t\t\t\t\t\"memory\": source.get(\"memory\", {}).duplicate(true),\n\t\t\t\t}\n\trs.pending_lamplighter = profile.get(\"lamplighter\", false)\n\tif rs.vow >= 4:\n\t\trs.player.deck.append(CardInst.new(rs.next_uid(), &\"hex\", false))\n\trs.omens.append(_omen_for_slot(rs, content, 0))\n\treturn rs\n\n\n"
+  },
+  "exceptions_requiring_fresh_authorized_contract": [
+    "Changed content, payoff law/operator, independent policy context, progression profile, assignment or estimand is outside the reuse theorem.",
+    "Changing an estimand or decision rule is not an implementation repair. Frozen results and scientific correction authority still apply.",
+    "An interval crossing zero is not proof of no benefit, universal Hand futility or P9 impossibility."
+  ],
+  "kind": "SOURCE_REDEFINITION_INVARIANT_CONSUMER_CONTRAST",
+  "new_independent_samples": 0,
+  "new_native_runs": 0,
+  "p9_certified": false,
+  "packages_admitted": 0,
+  "preserved_axes": [
+    "content",
+    "all_source_on_semantics",
+    "consumer_off_semantics",
+    "policy",
+    "initial_profile",
+    "assignment",
+    "readout"
+  ],
+  "proof": [
+    "For each assigned complete initial state/RNG and fixed policy, all source operators ON retain the original transitions.",
+    "A source-only regrouping changes neither world11 nor world10 when the content, consumer operator, policy and profile are identical.",
+    "Induction on the commands preserves each diagonal trajectory. Therefore every paired Y11-Y10 and its fixed-reader interval is unchanged.",
+    "Both archived nominations already fail this necessary consumer lower-bound gate. Altering only the source-off worlds cannot make their conjunction pass.",
+    "This is conditional evidence reuse for a closed fixed experiment, not an equivalence theorem for arbitrary future code."
+  ],
+  "review_kind": "AUTHOR_SELF_REVIEW_NOT_INDEPENDENT",
+  "status": "SOURCE_ONLY_RETRY_CLASS_PRUNED_WITH_EXPLICIT_IDENTITY_PREMISES",
+  "studies": {
+    "linear": {
+      "capture": "research/p9-six-route/ash-inheritance-20260909/hand-value-v1/execution-1",
+      "consumer_gate": {
+        "frozen_interval": [
+          -0.015625,
+          0.0390625
+        ],
+        "passes_frozen_consumer_requirement": false,
+        "point": 0.01171875,
+        "wins_10": 316,
+        "wins_11": 322
+      },
+      "contract_blob": "150b9f0e849cfec053a4457f8ca534d42cba0c53",
+      "decision": "Do not open source-only retries with identical paired worlds, assignment and reader.",
+      "original_status": "HAND_ADAPTIVE_GROUP_VALUE_NOT_ESTABLISHED",
+      "pair_binding": {
+        "all_nonobserver_sources_equal": true,
+        "observer_identity": {
+          "10": {
+            "bytes": 4983,
+            "sha256": "c0b9ebe5f9eb7b98ec7d7d71170aedb3dffe03b143a86fd180754fabaa37a5c6"
+          },
+          "11": {
+            "bytes": 4981,
+            "sha256": "72f66773100cbc1290b41b4f7628e6d8c14d66f583ba17b2ca0068829102e2b5"
+          }
+        },
+        "only_pair_observer_delta": "consumer construction/check boolean",
+        "source_group_enabled_in_both": true
+      },
+      "terminal_sha256": "486c2b7dbcf1b5cbdb05094913a86145eeb01cbe6d9016efcfd7354167b4bc89"
+    },
+    "two_slope": {
+      "capture": "research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1",
+      "consumer_gate": {
+        "frozen_interval": [
+          -0.03125,
+          0.009765625
+        ],
+        "passes_frozen_consumer_requirement": false,
+        "point": -0.009765625,
+        "wins_10": 306,
+        "wins_11": 301
+      },
+      "contract_blob": "5d738f65e6302dd33a8b5c2a22d60e38bca6c471",
+      "decision": "Do not open source-only retries with identical paired worlds, assignment and reader.",
+      "original_status": "TWO_SLOPE_HAND_ADAPTIVE_VALUE_NOT_ESTABLISHED",
+      "pair_binding": {
+        "all_nonobserver_sources_equal": true,
+        "observer_identity": {
+          "10": {
+            "bytes": 4983,
+            "sha256": "c0b9ebe5f9eb7b98ec7d7d71170aedb3dffe03b143a86fd180754fabaa37a5c6"
+          },
+          "11": {
+            "bytes": 4981,
+            "sha256": "72f66773100cbc1290b41b4f7628e6d8c14d66f583ba17b2ca0068829102e2b5"
+          }
+        },
+        "only_pair_observer_delta": "consumer construction/check boolean",
+        "source_group_enabled_in_both": true
+      },
+      "terminal_sha256": "c8e2af62641f08208e3aee761b9752921258f9155a9e9a8d0408e0d6cc5db1f5"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "status": "SOURCE_ONLY_RETRY_CLASS_PRUNED_WITH_EXPLICIT_IDENTITY_PREMISES",
+  "consumer_gates": {
+    "linear": {
+      "wins_11": 322,
+      "wins_10": 316,
+      "point": 0.01171875,
+      "frozen_interval": [
+        -0.015625,
+        0.0390625
+      ],
+      "passes_frozen_consumer_requirement": false
+    },
+    "two_slope": {
+      "wins_11": 301,
+      "wins_10": 306,
+      "point": -0.009765625,
+      "frozen_interval": [
+        -0.03125,
+        0.009765625
+      ],
+      "passes_frozen_consumer_requirement": false
+    }
+  }
+}
