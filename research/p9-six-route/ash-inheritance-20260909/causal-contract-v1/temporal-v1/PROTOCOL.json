@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "question": "Temporal Hand source attribution qualification, not package value or population admission",
+  "research_parent": "6365d58934602bd0a856e727f483592a3f0bf377",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "runtime_archive": "research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/execution-1/runtime-source.tar.xz",
+  "runtime_archive_sha256": "c695a87ab4f3966769611e2275109a653966edf1a9c2e2346fe35205acf259ee",
+  "runtime_manifest_sha256": "8edd1cd839c9473b0fa714d7424f21f51567ecdf8d0e2e6ca92e594fc5032871",
+  "content_sha256": "4107c7c0bbed5d9acf8c2bdf97023552426920242ea958c8ebdec793b712afd9",
+  "combat_sha256": "3ccb89f69f50e41d5a46eadd8f48c0a907fd0e382cd492b2c34dd5f93e091ad0",
+  "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "constructed_seed": 73416010,
+  "seed_scope": "Existing constructed-state fixture seed; not an independent sample or replay of its two-command trajectories.",
+  "sources": [
+    "preparation",
+    "surge"
+  ],
+  "aspects": [
+    0,
+    1
+  ],
+  "vows": [
+    0,
+    5
+  ],
+  "upgrades": [
+    false,
+    true
+  ],
+  "scenarios": [
+    "spend_one",
+    "unrelated_play",
+    "wait_turn",
+    "repeat_consumer"
+  ],
+  "preparation_only": [
+    "spend_all"
+  ],
+  "arms": [
+    -1,
+    0,
+    1,
+    2,
+    3
+  ],
+  "arm_bits": {
+    "2": "source explicit draw",
+    "1": "consumer Hand coefficient",
+    "-1": "plain minimum native reference"
+  },
+  "fixtures": 72,
+  "trajectories": 360,
+  "limits": {
+    "native_seconds": 180,
+    "import_seconds": 120,
+    "parse_seconds": 120,
+    "raw_bytes": 134217728
+  },
+  "new_population_runs": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "review_kind": "SELF_REVIEW_NOT_INDEPENDENT",
+  "authority_comment": 5586269454
+}
