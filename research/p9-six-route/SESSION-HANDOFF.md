@@ -1,103 +1,95 @@
-# P9 handoff — coherent two-slope Hand query and signed-control decision complete
+# P9 current handoff — two-slope adaptive-value decision
 
-Continue #421 on `research/p9-six-route-local-20260905`.
-Main remains `2ed6cdb0302ba3aab5845a18d862841165e8aaf7`.
-Target: three complete viable/reachable/distinct strategies per aspect. **0/6**.
-Author self-review is not independent evidence. No product promotion or P9 PASS.
+Continue #421 on `research/p9-six-route-local-20260905`. Product main is unchanged. Target: three complete strategies per aspect;0/6 certificates. Author self-review is not independent.
 
-## Current exact candidate and completed evidence
-
-The selected inherited Hand law is `n*max(0,q-4)+2*min(q,4)`, n6/7 base/upgraded,
-with existing minimum Bloodfire background. Sources, rarity, pools, Core/Art and
-unrelated product rules are not retuned. OFF zeros both n and floor_per.
-Native-v1's original query terminal remains INCONCLUSIVE. Its q4 projection and
-supposed legacy-query mutation were contradicted by the complete inherited scorer:
-the fixture's existing deck forecast is3; the added bottom-layer patch double-counted
-a normalization. `query-repair-1` uses the exact archived coherent legacy-query
-runtime without changing controller weights/search, reuses280 ON records and adds
-only280 previously missing OFF records. Its18-file cold-readback is complete.
-This explicit false-oracle correction does not rewrite the original raw or verdict.
-
-The signed shipping RandomBuild arm2 screen has1024 fixed outcomes,128 paired
-seeds73760100..73760227 per grid. No research planner/acquisition adapter is installed.
-The original pre-outcome NONCARD_CONTENT_DELTA failure remains in control-v1/execution-1.
-The predicate was corrected to bind the already-selected exact inherited Bloodfire
-status. Candidate, seeds and scientific criteria were unchanged for execution-2.
-The later readback fault was Python integer-key versus JSON string-key comparison;
-the unchanged original reader now reproduces the exact stored JSON bytes. No game
-was replayed for either delivery correction. See control-v1/closure-1/DECISION.json
-and CAPTURE-READBACK.json. Guards are necessary, not a certificate or full C2.
-
-SIGNED_CONTROL_NECESSARY_SCREEN_PASS_NOT_P9
-[
-  {
-    "aspect": "duskblade",
-    "vow": 0,
-    "baseline_wins": 33,
-    "candidate_wins": 32,
-    "difference": -0.0078125,
-    "baseline_faults": 0,
-    "gates": {
-      "candidate_random_build_at_most_half": true,
-      "absolute_random_build_movement_at_most_tenth": true,
-      "candidate_fault_free": true
-    }
-  },
-  {
-    "aspect": "duskblade",
-    "vow": 5,
-    "baseline_wins": 13,
-    "candidate_wins": 11,
-    "difference": -0.015625,
-    "baseline_faults": 0,
-    "gates": {
-      "candidate_random_build_at_most_half": true,
-      "absolute_random_build_movement_at_most_tenth": true,
-      "candidate_fault_free": true
-    }
-  },
-  {
-    "aspect": "ashwarden",
-    "vow": 0,
-    "baseline_wins": 28,
-    "candidate_wins": 30,
-    "difference": 0.015625,
-    "baseline_faults": 0,
-    "gates": {
-      "candidate_random_build_at_most_half": true,
-      "absolute_random_build_movement_at_most_tenth": true,
-      "candidate_fault_free": true
-    }
-  },
-  {
-    "aspect": "ashwarden",
-    "vow": 5,
-    "baseline_wins": 4,
-    "candidate_wins": 4,
-    "difference": 0.0,
-    "baseline_faults": 0,
-    "gates": {
-      "candidate_random_build_at_most_half": true,
-      "absolute_random_build_movement_at_most_tenth": true,
-      "candidate_fault_free": true
+{
+  "status": "TWO_SLOPE_HAND_ADAPTIVE_VALUE_NOT_ESTABLISHED",
+  "stages": {
+    "5": {
+      "rows_per_world": 512,
+      "policy_configurations": 128,
+      "distinct_seed_blocks": 256,
+      "wins": {
+        "00": 283,
+        "01": 280,
+        "10": 306,
+        "11": 301
+      },
+      "contrasts": {
+        "source_group": {
+          "point": 0.041015625,
+          "interval": [
+            0.00390625,
+            0.08203125
+          ],
+          "positive_lower_bound": true
+        },
+        "consumer": {
+          "point": -0.009765625,
+          "interval": [
+            -0.03125,
+            0.009765625
+          ],
+          "positive_lower_bound": false
+        },
+        "interaction": {
+          "point": -0.00390625,
+          "interval": [
+            -0.01953125,
+            0.009765625
+          ],
+          "positive_lower_bound": false
+        }
+      },
+      "outcome_patterns_00_01_10_11": {
+        "0000": 176,
+        "0010": 2,
+        "0011": 40,
+        "0101": 8,
+        "0111": 3,
+        "1000": 1,
+        "1010": 10,
+        "1011": 3,
+        "1100": 21,
+        "1110": 1,
+        "1111": 247
+      },
+      "primary_pass": false,
+      "uncertainty": "Pinned 10000-resample paired-seed bootstrap Random(421); Bonferroni percentile bounds .05/6 and 1-.05/6. Approximate fixed-policy/context inference, not final P9 multiplicity control.",
+      "vow": 5,
+      "cpu_seconds": {
+        "00": 2772.6299999999987,
+        "01": 2757.31,
+        "10": 2913.899999999999,
+        "11": 2910.9300000000003
+      },
+      "resource_pass": true,
+      "pass_all": false,
+      "trace_counts": {
+        "00": {
+          "consumer_clone_actions": 2327
+        },
+        "01": {
+          "consumer_clone_actions": 2377
+        },
+        "10": {
+          "consumer_clone_actions": 2412
+        },
+        "11": {
+          "consumer_clone_actions": 2449
+        }
+      },
+      "packages_admitted": 0,
+      "p9_certified": false,
+      "status": "TWO_SLOPE_HAND_ADAPTIVE_VALUE_NOT_ESTABLISHED"
     }
   }
-]
+}
 
-## Immutable earlier scope
+Full exact-source capture and cold-readback: `ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/`.
 
-Original Hand adaptive-value and Bloodfire adaptive-value claims remain NOT_ESTABLISHED;
-no old outcome, model, threshold, controller or cohort is rescued. Source-utility55-file
-packet, Hand clone/dispatch qualification and full factual source census are preserved.
-BloodRite loses3HP and grants2/3Energy, not draw. Preparation/Surge are alternative
-sources of one Hand family. Other historical raw gaps remain in SESSION-STATE.
+This is one fixed audit-policy claim, not all Hand policies or P9 impossibility. Sources are one group; outcomes are not selected by realised activation. Earlier linear Hand/Bloodfire, controller and broad-candidate negatives are immutable. Source/query/native and shipping signed-control gates already complete are not rerun. No validation-model refit, protected cohort, new coefficients or controller weights. All older raw gaps remain in SESSION-STATE.
 
-## Exact next action
+Exact next action: This exact two-slope/audit-policy value nomination is closed without extension or tuning. Use the complete decision to select only a genuinely unmeasured authorized package obligation; do not reroll seeds or relabel this negative.
 
-For this exact qualified two-slope Hand candidate, freeze the missing adaptive group-source/payoff value and descriptor/policy/peer/economy confirmation contract. Reuse the coherent archived controller and correct n-plus-floor OFF mask. Do not retune the controller or rerun old Hand/Bloodfire cohorts. This signed screen alone opens no population.
-
-Remaining: full package causality, descriptor, competent-policy/peer/natural-economy
-and independent confirmation; three strategies per aspect; seven-direction detector;
-corrected untouched confirmation and unrestricted endpoint retention; all guardrails;
-minimal lifecycle, exact-head review, one selected product integration and #108 receipt.
-Do not rerun the source/query matrices, this control screen, v25, old models or panels.
+Remaining: full package causality/descriptor/policy/peer/economy/independent proof; six strategy coverage; seven-direction detector; corrected confirmation and unrestricted retention; all guardrails; minimum lifecycle, exact-head review, one selected product integration and #108 receipt.
