@@ -27,6 +27,7 @@ jobs:
           persist-credentials: true
           sparse-checkout-cone-mode: false
           sparse-checkout: |
+            /.github/workflows/p9-research-runtime-bundle.yml
             /docs/balance/p9-strategy-diversity-system.md
             /research/p9-six-route/acceptance-scope-20260911/
             /research/p9-six-route/ash-inheritance-20260909/nightsight-opportunity-v1/
@@ -79,10 +80,13 @@ jobs:
           if [ '${{ steps.analysis.outcome }}' = success ]; then
             git add "$STUDY/execution-1" "$STUDY/closure-1" research/p9-six-route/SESSION-STATE.json research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/package-disposition-20260908/ROADMAP.md
           else
-            mkdir "$STUDY/delivery-1"
-            cp "$RUNNER_TEMP"/scope-*.log "$STUDY/delivery-1/" 2>/dev/null || true
-            printf '%s\n' '{"status":"INFERENCE_SCOPE_DELIVERY_INCOMPLETE","new_native_runs":0,"packages_admitted":0,"p9_certified":false}' > "$STUDY/delivery-1/TERMINAL.json"
-            git add "$STUDY/delivery-1"
+            mkdir "$STUDY/delivery-2"
+            cp "$RUNNER_TEMP"/scope-*.log "$STUDY/delivery-2/" 2>/dev/null || true
+            printf '%s\n' '{"status":"INFERENCE_SCOPE_DELIVERY_INCOMPLETE","new_native_runs":0,"packages_admitted":0,"p9_certified":false}' > "$STUDY/delivery-2/TERMINAL.json"
+            for part in execution-1 closure-1; do
+              if [ -d "$STUDY/$part" ]; then cp -a "$STUDY/$part" "$STUDY/delivery-2/partial-$part"; fi
+            done
+            git add "$STUDY/delivery-2"
           fi
           python3 - <<'PY'
           import os,subprocess
