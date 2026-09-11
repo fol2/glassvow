@@ -13,10 +13,10 @@ env:
   STUDY: research/p9-six-route/ash-inheritance-20260909/nightsight-opportunity-v1
 jobs:
   bundle:
-    name: Bound persistent-source opportunity on existing complete traces - no engine
+    name: Finish existing archived-profile availability proof - no engine
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 10
     permissions:
       contents: write
     steps:
@@ -27,54 +27,64 @@ jobs:
           persist-credentials: true
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            /research/p9-six-route/**/*.py
-            /research/p9-six-route/**/*.gd
-            /research/p9-six-route/**/*.json
             /research/p9-six-route/ash-inheritance-20260909/nightsight-opportunity-v1/
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/
-            /research/p9-six-route/SESSION-HANDOFF.md
-            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
-      - name: Check committed source and temporal negatives then read all assigned traces
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/FILES.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/SOURCE-MANIFEST.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/runtime-source.tar.xz
+      - name: Run only the already-committed pool proof and retain actual diagnostics
         id: analysis
         continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,os,pathlib,subprocess
-          root=pathlib.Path(os.environ['STUDY'])
-          for n,h in {'opportunity.py':'57f7dcbe87573f96557f036da90f2c724640674f','test_opportunity.py':'1d99649b7be364d700d9a46c6a873227a6910abf'}.items():
-              b=(root/n).read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==h
-              assert subprocess.check_output(['git','rev-parse','HEAD:'+str(root/n)]).decode().strip()==h
-          assert not (root/'execution-1').exists()
+          import hashlib,json,os,pathlib,shutil,subprocess,sys,time
+          root=pathlib.Path(os.environ['STUDY']);out=root/'availability-1'
+          script=root/'availability.py';data=script.read_bytes()
+          blob=lambda b:hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+          assert blob(data)=='eb35f539c77340708ff5d4b28afbf2fe74a5a571'
+          assert not out.exists(),'NO_RERUN'
+          terminal={'status':'INCONCLUSIVE','source_head':os.environ['GITHUB_SHA'],'source_blob':blob(data),'new_native_runs':0,'new_independent_samples':0,'packages_admitted':0,'p9_certified':False,'review_kind':'AUTHOR_SELF_REVIEW_NOT_INDEPENDENT'}
+          logs=[]
+          try:
+              for label,args in [('tests',['--self-test']),('analysis',[os.environ['GITHUB_WORKSPACE'],str(out.resolve())])]:
+                  log=pathlib.Path(os.environ['RUNNER_TEMP'])/('availability-'+label+'.log');logs.append(log)
+                  with log.open('wb') as f:
+                      p=subprocess.run([sys.executable,str(script),*args],stdout=f,stderr=subprocess.STDOUT,timeout=180,check=False)
+                  assert p.returncode==0,(label,p.returncode)
+              result=json.loads((out/'RESULTS.json').read_bytes());terminal['status']=result['status']
+          except Exception as e:
+              terminal['failure']=repr(e)
+          out.mkdir(parents=True,exist_ok=True)
+          for log in logs:
+              if log.exists():shutil.copyfile(log,out/log.name)
+          (out/'TERMINAL.json').write_text(json.dumps(terminal,indent=2)+'\n')
+          files=[{'path':p.name,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(out.iterdir()) if p.is_file() and p.name!='FILES.json']
+          (out/'FILES.json').write_text(json.dumps(files,indent=2)+'\n')
+          print(json.dumps(terminal,indent=2))
+          if terminal['status']=='INCONCLUSIVE':sys.exit(3)
           PY
-          (cd "$STUDY" && python3 -m unittest -v test_opportunity) > "$RUNNER_TEMP/sight-tests.log" 2>&1
-          python3 "$STUDY/opportunity.py" "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/$STUDY/execution-1" > "$RUNNER_TEMP/sight-analysis.log" 2>&1
-      - name: Preserve result or exact failure without changing the old primary
+      - name: Commit and push complete available output without changing research verdicts
         if: always()
         shell: bash
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib,shutil
-          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1';out.mkdir(exist_ok=True)
-          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('sight-*.log'):shutil.copyfile(p,out/p.name)
-          good='${{ steps.analysis.outcome }}'=='success' and (out/'RESULTS.json').is_file()
-          result=json.loads((out/'RESULTS.json').read_bytes()) if good else {}
-          (out/'TERMINAL.json').write_text(json.dumps({'status':result.get('status','INCONCLUSIVE'),'analysis_complete':good,'source_head':os.environ['GITHUB_SHA'],'new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
-          paths=[root/n for n in ('PROTOCOL.json','opportunity.py','test_opportunity.py')]+[p for p in sorted(out.iterdir()) if p.is_file()]
-          records=[{'path':str(p),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in paths]
-          (out/'PUBLICATION-FILES.json').write_text(json.dumps(records,indent=2)+'\n')
-          PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
+          test -f "$STUDY/availability-1/TERMINAL.json"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add --sparse "$STUDY/execution-1"
-          git commit -m 'research(p9): preserve complete persistent-source opportunity and actual diagnostics'
+          git add "$STUDY/availability-1"
+          python3 - <<'PY'
+          import os,subprocess
+          names=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
+          assert names and all(n.startswith(os.environ['STUDY']+'/availability-1/') for n in names)
+          PY
+          git commit -m 'research(p9): preserve archived-profile availability and exact draw-source inventory'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        if: always() && env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
           path: cold
@@ -82,82 +92,42 @@ jobs:
           persist-credentials: false
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            /research/p9-six-route/**/*.py
-            /research/p9-six-route/**/*.gd
-            /research/p9-six-route/**/*.json
             /research/p9-six-route/ash-inheritance-20260909/nightsight-opportunity-v1/
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/
-            /research/p9-six-route/SESSION-HANDOFF.md
-            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
-      - name: Cold-read every new byte and reproduce the same accounting
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/FILES.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/SOURCE-MANIFEST.json
+            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1/execution-1/runtime-source.tar.xz
+      - name: Cold read every output byte and reproduce the source proof without engine
+        if: always() && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
+          set -euo pipefail
           python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess,sys,tempfile
-          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1';cold=pathlib.Path('cold')
-          manifest=(out/'PUBLICATION-FILES.json').read_bytes();assert manifest==(cold/out/'PUBLICATION-FILES.json').read_bytes()
-          records=json.loads(manifest)
+          import hashlib,json,os,pathlib,subprocess,sys
+          repo=pathlib.Path(os.environ['GITHUB_WORKSPACE']);rel=pathlib.Path(os.environ['STUDY'])
+          original=repo/rel/'availability-1';coldrepo=repo/'cold';cold=coldrepo/rel/'availability-1'
+          manifest=(original/'FILES.json').read_bytes();assert manifest==(cold/'FILES.json').read_bytes()
+          records=json.loads(manifest);assert len({r['path'] for r in records})==len(records)
           for r in records:
               p=pathlib.Path(r['path']);assert not p.is_absolute() and '..' not in p.parts
-              a=p.read_bytes();b=(cold/p).read_bytes();assert a==b and len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
-          terminal=json.loads((cold/out/'TERMINAL.json').read_bytes());reproduced=False
-          if terminal['analysis_complete']:
-              with tempfile.TemporaryDirectory() as d:
-                  target=pathlib.Path(d)/'reproduced'
-                  subprocess.run([sys.executable,str(cold/root/'opportunity.py'),str(cold.resolve()),str(target)],check=True,stdout=subprocess.DEVNULL)
-                  for n in ('RESULTS.json','COVERAGE.json','FIELDS.jsonl','INPUTS.json','FILES.json'):
-                      assert (target/n).read_bytes()==(cold/out/n).read_bytes(),n
+              b=(cold/p).read_bytes();assert b==(original/p).read_bytes() and len(b)==r['bytes'] and hashlib.sha256(b).hexdigest()==r['sha256']
+          for name in ('availability.py','PROTOCOL.json'):
+              assert (repo/rel/name).read_bytes()==(coldrepo/rel/name).read_bytes()
+          terminal=json.loads((cold/'TERMINAL.json').read_bytes());reproduced=False
+          if terminal['status']!='INCONCLUSIVE':
+              replay=pathlib.Path(os.environ['RUNNER_TEMP'])/'availability-cold-reconstruction'
+              p=subprocess.run([sys.executable,str(coldrepo/rel/'availability.py'),str(coldrepo),str(replay)],capture_output=True,timeout=180,check=False)
+              assert p.returncode==0,p.stderr.decode(errors='replace')
+              for name in ('RESULTS.json','SOURCE.json'):assert (replay/name).read_bytes()==(cold/name).read_bytes(),name
               reproduced=True
-          receipt={'kind':'PERSISTENT_SOURCE_OPPORTUNITY_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':len(records)+1,'all_bytes_equal':True,'readout_reproduced':reproduced,'status':terminal['status'],'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
-          (out/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
-          if reproduced:
-              result=json.loads((out/'RESULTS.json').read_bytes())
-              next_action=('Qualify the previously unmeasured persistent Night Sight source operator and its native null/query/clone semantics; no population is authorized by opportunity alone.' if result['status']=='PERSISTENT_SOURCE_OPPORTUNITY_NOT_RULED_OUT' else 'Do not open a Night Sight population cohort using this fixed capture/policy. Preserve the scoped opportunity negative and select another genuinely unmeasured authorized package obligation; no tuning or new seeds for the closed nomination.')
-              capsule=pathlib.Path('research/p9-six-route');state=json.loads((capsule/'SESSION-STATE.json').read_bytes())
-              state['nightsight_opportunity']={'status':result['status'],'result':str(out/'RESULTS.json'),'readback':str(out/'REMOTE-READBACK.json'),'screen':result['screen'],'total_runs':result['total_runs'],'descriptor_admitted':False}
-              state['exact_next_action']=next_action;state['packages_admitted']=0;state['p9_certified']=False
-              (capsule/'SESSION-STATE.json').write_text(json.dumps(state,indent=2)+'\n')
-              handoff=capsule/'SESSION-HANDOFF.md';handoff.write_text(handoff.read_text()+'\n## Persistent-source opportunity decision\n\n'+result['status']+'. All assigned retained worlds were read without engine execution. This is an upper-bound temporal opportunity, not extra-card attribution or causal value. Earlier primary negatives stay closed. See `ash-inheritance-20260909/nightsight-opportunity-v1/execution-1/`.\n\nCurrent next action: '+next_action+'\n')
-              roadmap=capsule/'package-disposition-20260908/ROADMAP.md';roadmap.write_text('# P9 current outcome roadmap\n\n0/6 complete current certificates.\n\n1. '+next_action+'\n2. Complete three viable, reachable, functionally distinct strategies per aspect.\n3. Seven-direction detector, corrected independent confirmation, unrestricted endpoint retention and all hard guards.\n4. Minimal lifecycle, exact-head review and one exact-product/#108 delivery.\n\nNo replay of closed Hand/Bloodfire cohorts, controller tuning, v25/model refit or revival of a closed primary.\n')
-          shared=[pathlib.Path('research/p9-six-route')/n for n in ('SESSION-HANDOFF.md','SESSION-STATE.json','package-disposition-20260908/ROADMAP.md')] if reproduced else []
-          paths=[out/'REMOTE-READBACK.json']+shared
-          (out/'CLOSURE-FILES.json').write_text(json.dumps([{'path':str(p),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in paths],indent=2)+'\n')
+          receipt={'kind':'ARCHIVED_PROFILE_AVAILABILITY_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':len(records)+1,'all_bytes_equal':True,'source_proof_reproduced':reproduced,'scientific_status':terminal['status'],'new_native_runs':0,'packages_admitted':0,'p9_certified':False}
+          (original/'REMOTE-READBACK.json').write_text(json.dumps(receipt,indent=2)+'\n')
           PY
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add --sparse "$STUDY/execution-1/REMOTE-READBACK.json" "$STUDY/execution-1/CLOSURE-FILES.json" research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/SESSION-STATE.json research/p9-six-route/package-disposition-20260908/ROADMAP.md
-          git commit -m 'research(p9): record cold-reproduced persistent-source decision and current next action'
+          git add "$STUDY/availability-1/REMOTE-READBACK.json"
+          test "$(git diff --cached --name-only)" = "$STUDY/availability-1/REMOTE-READBACK.json"
+          git commit -m 'research(p9): record cold byte readback and exact availability reconstruction'
           git push origin HEAD:refs/heads/$branch
-          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        with:
-          ref: ${{ env.PUBLISHED_HEAD }}
-          path: closure-cold
-          fetch-depth: 1
-          persist-credentials: false
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            /research/p9-six-route/ash-inheritance-20260909/nightsight-opportunity-v1/
-            /research/p9-six-route/SESSION-HANDOFF.md
-            /research/p9-six-route/SESSION-STATE.json
-            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
-      - name: Verify committed capsule and receipt bytes
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib
-          out=pathlib.Path(os.environ['STUDY'])/'execution-1';cold=pathlib.Path('closure-cold')
-          b=(out/'CLOSURE-FILES.json').read_bytes();assert b==(cold/out/'CLOSURE-FILES.json').read_bytes()
-          records=json.loads(b)
-          for r in records:
-              p=pathlib.Path(r['path']);data=(cold/p).read_bytes();assert data==p.read_bytes() and len(data)==r['bytes'] and hashlib.sha256(data).hexdigest()==r['sha256']
-          (out/'CLOSURE-READBACK.json').write_text(json.dumps({'kind':'PERSISTENT_SOURCE_CAPSULE_COLD_READBACK','published_head':os.environ['PUBLISHED_HEAD'],'files':len(records),'all_bytes_equal':True,'new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
-          PY
-          branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add --sparse "$STUDY/execution-1/CLOSURE-READBACK.json"
-          git commit -m 'research(p9): preserve exact readback of persistent-source capsule'
-          git push origin HEAD:refs/heads/$branch
-      - name: Reject an incomplete analysis, not a scoped negative
+      - name: Fail closed on actual analysis failure
         if: always() && steps.analysis.outcome != 'success'
         run: exit 3
