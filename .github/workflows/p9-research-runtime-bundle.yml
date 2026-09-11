@@ -10,13 +10,15 @@ concurrency:
   cancel-in-progress: false
 env:
   PYTHONDONTWRITEBYTECODE: '1'
-  STUDY: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/control-v1
+  STUDY: research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/adaptive-value-v1
 jobs:
   bundle:
-    name: Finish serialized control readback and capsule - no engine
+    name: Fixed two-slope Hand adaptive value and verified terminal
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    # Operational containment for two conditional vows, four capped worlds and readback.
+    # Per-native-call 240s and per-world/vow 3600 CPU seconds remain unchanged.
+    timeout-minutes: 300
     permissions:
       contents: write
     steps:
@@ -25,102 +27,66 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: true
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/
-            /research/p9-six-route/guardrail-confirmation-20260909/
-            /research/p9-six-route/SESSION-HANDOFF.md
-            /research/p9-six-route/SESSION-STATE.json
-            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        with:
-          ref: ${{ github.sha }}
-          path: input-cold
-          fetch-depth: 1
-          persist-credentials: false
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/
-            /research/p9-six-route/guardrail-confirmation-20260909/
-            /research/p9-six-route/SESSION-HANDOFF.md
-            /research/p9-six-route/SESSION-STATE.json
-            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
-      - name: Check source, test exact serialization and rebuild only the original readout
-        id: finish
-        continue-on-error: true
+          sparse-checkout: research/p9-six-route
+      - name: Test exact source bytes and freeze the single scientific contract
+        id: freeze
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,os,pathlib
           root=pathlib.Path(os.environ['STUDY'])
-          expected={'finish_control.py':'26b2bd77bd427390413ed8ea7cab03c2c6e23db7','test_finish_control.py':'b147b3da4b5f3d785797bf54651fe37079168622'}
-          for n,h in expected.items():
-              b=(root/n).read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==h,n
-              assert b==(pathlib.Path('input-cold')/root/n).read_bytes();compile(b,n,'exec')
-          assert not (root/'closure-1').exists()
+          expected={'campaign.py':'aa1ed7d8d3e07f31644afb14254adcb128ae2774','readout.py':'f9e3aea4e7208febffd8fd69a6ff6de28f445e93','test_campaign.py':'bedc0c89462ce1960f0a1c873e5fca231804b2fa'}
+          for name,digest in expected.items():
+              b=(root/name).read_bytes()
+              assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==digest,name
+              compile(b,str(root/name),'exec')
           PY
-          (cd "$STUDY" && python3 -m unittest -v test_finish_control) > "$RUNNER_TEMP/control-finish-tests.log" 2>&1
-          python3 "$STUDY/finish_control.py" run "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/input-cold" "$GITHUB_WORKSPACE/$STUDY/closure-1" > "$RUNNER_TEMP/control-finish-run.log" 2>&1
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib,shutil
-          out=pathlib.Path(os.environ['STUDY'])/'closure-1';records=json.loads((out/'FILES.json').read_bytes())
-          for p in pathlib.Path(os.environ['RUNNER_TEMP']).glob('control-finish-*.log'):
-              q=out/p.name;shutil.copyfile(p,q);b=q.read_bytes()
-              records.append({'path':str(q),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'git_blob':hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()})
-          (out/'FILES.json').write_text(json.dumps(records,indent=2)+'\n')
-          PY
-      - name: Publish complete closure or actual failure diagnostics
-        if: always()
+          (cd "$STUDY" && python3 -m unittest -v test_campaign) > "$STUDY/source-tests.log" 2>&1
+          python3 "$STUDY/campaign.py" freeze "$GITHUB_WORKSPACE"
+      - name: Execute the fixed stages once using the pinned stable native engine
+        id: native
+        if: steps.freeze.outcome == 'success'
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$GITHUB_SHA"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          if [ '${{ steps.finish.outcome }}' = success ]; then
-            git add "$STUDY/closure-1" research/p9-six-route/SESSION-HANDOFF.md research/p9-six-route/SESSION-STATE.json research/p9-six-route/package-disposition-20260908/ROADMAP.md
-          else
-            mkdir -p "$STUDY/closure-delivery-1"
-            cp "$RUNNER_TEMP"/control-finish-*.log "$STUDY/closure-delivery-1/" 2>/dev/null || true
-            printf '%s\n' '{"status":"CONTROL_CLOSURE_INCOMPLETE","new_native_runs":0,"packages_admitted":0,"p9_certified":false}' > "$STUDY/closure-delivery-1/TERMINAL.json"
-            git add "$STUDY/closure-delivery-1"
-          fi
-          python3 - <<'PY'
-          import os,subprocess
-          root=os.environ['STUDY'];shared={'research/p9-six-route/'+n for n in ('SESSION-HANDOFF.md','SESSION-STATE.json','package-disposition-20260908/ROADMAP.md')}
-          paths=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
-          assert paths and all(p in shared or p.startswith(root+'/closure-1/') or p.startswith(root+'/closure-delivery-1/') for p in paths)
-          PY
-          git commit -m 'research(p9): preserve exact control-readback decision and current two-slope Hand capsule'
-          git push origin HEAD:refs/heads/$branch
-          echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          curl --fail --location --max-time 90 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip"
+          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
+          engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+          chmod +x "$engine"
+          echo "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e  $engine" | sha256sum -c -
+          python3 "$STUDY/campaign.py" run "$GITHUB_WORKSPACE" "$engine" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$RUNNER_TEMP/two-slope-value-work"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        if: steps.finish.outcome == 'success'
+        if: always() && steps.freeze.outcome == 'success' && env.PUBLISHED_HEAD != ''
         with:
           ref: ${{ env.PUBLISHED_HEAD }}
-          path: output-cold
+          path: cold
           fetch-depth: 1
           persist-credentials: false
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            /research/p9-six-route/ash-inheritance-20260909/hand-two-slope-v1/
-            /research/p9-six-route/SESSION-HANDOFF.md
-            /research/p9-six-route/SESSION-STATE.json
-            /research/p9-six-route/package-disposition-20260908/ROADMAP.md
-      - name: Compare every new closure and capsule byte after its commit
-        if: steps.finish.outcome == 'success'
+          sparse-checkout: research/p9-six-route
+      - name: Cold-read every captured byte and reproduce the exact primary decision
+        id: readback
+        if: always() && steps.freeze.outcome == 'success' && env.PUBLISHED_HEAD != ''
         shell: bash
         run: |
           set -euo pipefail
-          python3 "output-cold/$STUDY/finish_control.py" verify "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/output-cold" "$GITHUB_WORKSPACE/$STUDY/closure-1/REMOTE-READBACK.json"
-          branch=research/p9-six-route-local-20260905
-          test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/closure-1/REMOTE-READBACK.json"
-          test "$(git diff --cached --name-only)" = "$STUDY/closure-1/REMOTE-READBACK.json"
-          git commit -m 'research(p9): record cold-readback of complete isolated-Hand control closure'
-          git push origin HEAD:refs/heads/$branch
-      - name: Do not conceal incomplete delivery
-        if: always() && steps.finish.outcome != 'success'
+          python3 "$STUDY/campaign.py" verify "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/execution-1" "$GITHUB_WORKSPACE/cold/$STUDY/execution-1" "$GITHUB_WORKSPACE/$STUDY/execution-1/REMOTE-READBACK.json"
+          python3 "$STUDY/campaign.py" close "$GITHUB_WORKSPACE"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        if: always() && steps.readback.outcome == 'success'
+        with:
+          ref: ${{ env.PUBLISHED_HEAD }}
+          path: cold
+          fetch-depth: 1
+          persist-credentials: false
+          sparse-checkout: research/p9-six-route
+      - name: Verify committed source, terminal and current capsule together
+        if: always() && steps.readback.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "$STUDY/campaign.py" verify-closure "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/cold" "$GITHUB_WORKSPACE/$STUDY/closure-1/REMOTE-READBACK.json"
+      - name: Keep delivery failure separate from the scientific verdict
+        if: always() && (steps.freeze.outcome != 'success' || steps.native.outcome != 'success' || steps.readback.outcome != 'success')
         run: exit 3
