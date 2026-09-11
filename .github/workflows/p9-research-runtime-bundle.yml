@@ -13,7 +13,7 @@ env:
   STUDY: research/p9-six-route/ash-inheritance-20260909/causal-contract-v1/temporal-v1
 jobs:
   bundle:
-    name: Qualify finite temporal Hand attribution and preserve complete native evidence
+    name: Finish unchanged temporal matrix after typed-array delivery repair
     if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -35,21 +35,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test ! -e "$STUDY/execution-1"
+          test ! -e "$STUDY/execution-2"
           python3 - <<'PY'
           import hashlib,os,pathlib,json
           root=pathlib.Path(os.environ['STUDY'])
-          b=(root/'FREEZE.json').read_bytes()
-          assert hashlib.sha256(b).hexdigest()=='9758507cba38cf35a7e34ddcb8a9dfdf2f08fa9dd0f75ab4294161800dbb55ce'
-          for name,want in json.loads(b)['source_sha256'].items():
-              assert pathlib.Path(name).name==name
-              assert hashlib.sha256((root/name).read_bytes()).hexdigest()==want,name
+          b=(root/'repair-1/REPAIR-FREEZE.json').read_bytes()
+          assert hashlib.sha256(b).hexdigest()=='ec62455592cd8efedb2fec3834dbfc22962c78c41bf5456f1de0ec4e8fce21ec'
+          assert hashlib.sha256((root/'repair-1/repair.py').read_bytes()).hexdigest()==json.loads(b)['repair_sha256']
           PY
           curl --fail --location --retry 2 --max-time 120 'https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip' -o "$RUNNER_TEMP/godot.zip" 2> "$RUNNER_TEMP/provision.stderr"
           unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/engine"
           engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
           chmod +x "$engine"
-          python3 "$STUDY/execute.py" run "$(dirname "$STUDY")/execution-1" "$engine" "$STUDY/execution-1" "$RUNNER_TEMP/temporal-project" > "$RUNNER_TEMP/driver.stdout" 2> "$RUNNER_TEMP/driver.stderr"
+          python3 "$STUDY/repair-1/repair.py" run "$RUNNER_TEMP/repaired-source" "$(dirname "$STUDY")/execution-1" "$engine" "$STUDY/execution-2" "$RUNNER_TEMP/temporal-project" > "$RUNNER_TEMP/driver.stdout" 2> "$RUNNER_TEMP/driver.stderr"
       - name: Preserve all native output and diagnostics before interpretation
         if: always()
         shell: bash
@@ -57,7 +55,7 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import hashlib,json,os,pathlib,shutil
-          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-1';out.mkdir(exist_ok=True)
+          root=pathlib.Path(os.environ['STUDY']);out=root/'execution-2';out.mkdir(exist_ok=True)
           for name in ('driver.stdout','driver.stderr','provision.stderr'):
               p=pathlib.Path(os.environ['RUNNER_TEMP'])/name
               if p.exists():shutil.copyfile(p,out/name)
@@ -72,13 +70,13 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           test -z "$(git diff --cached --name-only)"
-          git add "$STUDY/execution-1"
+          git add "$STUDY/execution-2"
           python3 - <<'PY'
           import os,subprocess
           paths=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
-          assert paths and all(p.startswith(os.environ['STUDY']+'/execution-1/') for p in paths)
+          assert paths and all(p.startswith(os.environ['STUDY']+'/execution-2/') for p in paths)
           PY
-          git commit -m 'research(p9): preserve complete frozen temporal native capture'
+          git commit -m 'research(p9): preserve repaired temporal native capture and original failure'
           git push origin HEAD:refs/heads/$branch
           echo "PUBLISHED_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -97,25 +95,25 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [ -f "$STUDY/execution-1/SOURCE-BINDING.json" ]; then
-            python3 "cold/$STUDY/execute.py" verify "$STUDY/execution-1" "cold/$STUDY/execution-1" "$STUDY/REMOTE-READBACK.json"
+          if [ -f "$STUDY/execution-2/SOURCE-BINDING.json" ]; then
+            python3 "cold/$STUDY/repair-1/repair.py" verify "$RUNNER_TEMP/cold-repaired-source" "$STUDY/execution-2" "cold/$STUDY/execution-2" "$STUDY/REPAIR-READBACK.json"
           else
             python3 - <<'PY'
           import hashlib,json,os,pathlib
-          root=pathlib.Path(os.environ['STUDY']);a=root/'execution-1';b=pathlib.Path('cold')/a
+          root=pathlib.Path(os.environ['STUDY']);a=root/'execution-2';b=pathlib.Path('cold')/a
           assert (a/'FILES.json').read_bytes()==(b/'FILES.json').read_bytes()
           files=json.loads((a/'FILES.json').read_bytes())
           for r in files:
               assert pathlib.Path(r['path']).name==r['path']
               x=(a/r['path']).read_bytes();y=(b/r['path']).read_bytes()
               assert x==y and len(y)==r['bytes'] and hashlib.sha256(y).hexdigest()==r['sha256']
-          (root/'REMOTE-READBACK.json').write_text(json.dumps({'status':'INCONCLUSIVE','all_bytes_equal':True,'files':len(files)+1,'readout_reproduced':False,'new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
+          (root/'REPAIR-READBACK.json').write_text(json.dumps({'status':'INCONCLUSIVE','all_bytes_equal':True,'files':len(files)+1,'readout_reproduced':False,'new_native_runs':0,'packages_admitted':0,'p9_certified':False},indent=2)+'\n')
           PY
           fi
           branch=research/p9-six-route-local-20260905
           test "$(git ls-remote origin refs/heads/$branch | cut -f1)" = "$PUBLISHED_HEAD"
-          git add "$STUDY/REMOTE-READBACK.json"
-          test "$(git diff --cached --name-only)" = "$STUDY/REMOTE-READBACK.json"
+          git add "$STUDY/REPAIR-READBACK.json"
+          test "$(git diff --cached --name-only)" = "$STUDY/REPAIR-READBACK.json"
           git commit -m 'research(p9): record cold byte readback of temporal qualification'
           git push origin HEAD:refs/heads/$branch
       - name: Retain fail-closed execution status
