@@ -1,0 +1,36 @@
+{
+  "kind": "FIXED_EXPOSED_ROW_OBSERVER_COMPLETION",
+  "status": "PHANTOM_FACTUAL_SNAPSHOTS_AND_PINNED_RECAPTURE_QUALIFIED_NOT_CERTIFICATE",
+  "research_input_head": "87e5cd3adb18cda1d5cac439d488683ec9cc1781",
+  "product_reference": "2ed6cdb0302ba3aab5845a18d862841165e8aaf7",
+  "selected_row": "5:1:73414101",
+  "fixed_row_replays": 1,
+  "commands_compared": 409,
+  "phantom_hits_predicted_exactly": 15,
+  "legacy_fields_equal": true,
+  "outcome_and_decisions_equal": true,
+  "excluded_fields": ["query_usec", "run_usec"],
+  "finite_stage_reused_not_rerun": {
+    "fixtures": 39,
+    "commands_per_observer": 117,
+    "phantom_snapshots": 26,
+    "rejected_phantom_preserved": 1,
+    "leech_four_clone_records_unchanged": 13
+  },
+  "native_cpu_seconds_report_only": 7.2949530000000005,
+  "raw_sha256": {
+    "prior.traces.jsonl.xz": "726b9905f14e90e8036d600b7c13f93a840d05fdcbddd8e85399fffa2937254e",
+    "recapture.outcomes.jsonl.xz": "3e84aada7f29886a3c0144261599d22ba5fa632941ce1810ed91c1d8208a7ce7",
+    "recapture.traces.jsonl.xz": "e4b08763d99abb8d126b6060d1aae35fd7ae2f75d8e4b929a4b757c9b723914a"
+  },
+  "new_population_assignments": 0,
+  "new_independent_samples": 0,
+  "packages_admitted": 0,
+  "p9_certified": false,
+  "review_kind": "SELF_REVIEW_NOT_INDEPENDENT",
+  "preservation_scope": "This new result index does not assert that the complete local packet or previously blocked source has been published. Original input files were downloaded as an existing-data-only artifact and verified against their original manifest.",
+  "limits": [
+    "One preassigned exposed diagnostic, not held-out prediction or a new strategy sample.",
+    "No old primary, coefficient, controller, threshold or frozen validation model was changed."
+  ]
+}
