@@ -235,6 +235,53 @@ def run(manifest_path: Path, provenance_path: Path, regions_path: Path) -> list[
         findings, present = payload_findings(contract, rows, records, rasterize=_disk_raster)
         if findings or present != 0:
             errors.append(f"empty planned payload failed: {findings}/{present}")
+
+        live_manifest = json.loads((contract / "map-assets.json").read_text())
+        profile_id = str(next(row["id"] for row in rows if row["kind"] == "kit"))
+
+        poisoned = json.loads(json.dumps(live_manifest))
+        poisoned["unexpected_profile_field"] = True
+        (contract / "map-assets.json").write_text(json.dumps(poisoned))
+        _expect(errors, "profile-unknown-top", "manifest",
+                validate_manifest(contract, regions)[1])
+
+        poisoned = json.loads(json.dumps(live_manifest))
+        poisoned["profile_defaults"][profile_id]["unexpected"] = True
+        (contract / "map-assets.json").write_text(json.dumps(poisoned))
+        _expect(errors, "profile-unknown-default", "manifest",
+                validate_manifest(contract, regions)[1])
+
+        poisoned = json.loads(json.dumps(live_manifest))
+        poisoned["profile_defaults"][profile_id]["scale"] = -1.0
+        (contract / "map-assets.json").write_text(json.dumps(poisoned))
+        _expect(errors, "profile-negative-scale", "manifest",
+                validate_manifest(contract, regions)[1])
+
+        poisoned = json.loads(json.dumps(live_manifest))
+        poisoned["profile_defaults"].pop(profile_id)
+        (contract / "map-assets.json").write_text(json.dumps(poisoned))
+        _expect(errors, "profile-missing-id", "manifest",
+                validate_manifest(contract, regions)[1])
+
+        poisoned = json.loads(json.dumps(live_manifest))
+        poisoned["profile_overrides"]["missing-asset"] = {
+            "footprint": [[0, 0], [0, 1], [1, 1], [1, 0]],
+            "reason": "fixture",
+        }
+        (contract / "map-assets.json").write_text(json.dumps(poisoned))
+        _expect(errors, "profile-override-id", "manifest",
+                validate_manifest(contract, regions)[1])
+
+        poisoned = json.loads(json.dumps(live_manifest))
+        poisoned["profile_overrides"][profile_id] = {
+            "footprint": [[0, 0], [2, 0], [1, 0.5], [2, 1], [0, 1]],
+            "reason": "fixture",
+        }
+        (contract / "map-assets.json").write_text(json.dumps(poisoned))
+        _expect(errors, "profile-invalid-polygon", "manifest",
+                validate_manifest(contract, regions)[1])
+        (contract / "map-assets.json").write_text(json.dumps(live_manifest))
+
         (contract / "notes.txt").write_text("undeclared")
         findings, _present = payload_findings(contract, rows, records)
         _expect(errors, "undeclared", "undeclared", findings)

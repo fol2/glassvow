@@ -19,9 +19,22 @@ func _initialize() -> void:
 		quit(2)
 		return
 	var t0: int = Time.get_ticks_msec()
-	var content: ContentDB = ContentDB.load_full(false)
-	var git_out: Array = []
-	OS.execute("git", ["rev-parse", "HEAD"], git_out)
+	var loaded: Dictionary = BalanceCatalogue.open(opts)
+	if loaded.has("error"):
+		push_error("balance_cem: %s" % loaded["error"])
+		quit(2)
+		return
+	var identity_v: Variant = loaded["identity"]
+	if typeof(identity_v) != TYPE_DICTIONARY:
+		push_error("balance_cem: missing catalogue identity")
+		quit(2)
+		return
+	var identity: Dictionary = identity_v
+	var content: ContentDB = BalanceCatalogue.load_prepared(loaded)
+	if content == null:
+		push_error("balance_cem: content did not load a catalogue")
+		quit(2)
+		return
 	var island: int = _i(opts, "island")
 	var spec: Dictionary = _spec(str(opts["seedsJson"]), island)
 	if spec.has("error"):
@@ -36,7 +49,8 @@ func _initialize() -> void:
 	var grid: String = GRIDS[int(island / 6.0)]
 	var aspect: String = grid.get_slice(":", 0)
 	var vow: int = int(float(str(grid.get_slice(":", 1).trim_prefix("v"))))
-	var seed_pol: Dictionary = Policy.sample_range(215, _i(spec, "policyIndex"), 1)[0]
+	var sampler_root: int = _i(opts, "samplerRoot")
+	var seed_pol: Dictionary = Policy.sample_range(sampler_root, _i(spec, "policyIndex"), 1)[0]
 	var paths: PackedStringArray = _mag_paths()
 	var mag_mu: Array[float] = []
 	var mag_sd: Array[float] = []
@@ -57,14 +71,13 @@ func _initialize() -> void:
 	var n_train: int = _i(opts, "seedCount")
 	var train0: int = _i(opts, "trainSeed0")
 	var manifest: Dictionary = opts.duplicate()
+	manifest.merge(identity)
 	manifest["t"] = "manifest"
-	manifest["commit"] = str(git_out[0]).strip_edges() if not git_out.is_empty() else "unknown"
-	manifest["godot"] = Engine.get_version_info().get("string", "unknown")
-	manifest["contentSha256"] = FileAccess.get_sha256(ContentDB.FULL_PATH)
+	manifest["contentSha256"] = str(identity.get("contentFileSha256", ""))
 	manifest["grid"] = grid
 	manifest["startCell"] = str(spec["cell"])
 	manifest["policyIndex"] = _i(spec, "policyIndex")
-	manifest["samplerRoot"] = 215
+	manifest["samplerRoot"] = sampler_root
 	file.store_line(JSON.stringify(manifest))
 	file.flush()
 	var best_fit: float = -1.0
@@ -266,7 +279,9 @@ static func _spec(path: String, island: int) -> Dictionary:
 static func _options(args: PackedStringArray) -> Dictionary:
 	var out: Dictionary = {"island": 0, "seedsJson": "", "out": "", "popSize": 60, "elite": 15,
 		"maxGen": 20, "seedCount": 40, "trainSeed0": 4200, "holdoutSeed0": 5000,
-		"holdoutCount": 200, "rootSeed": 216}
+		"holdoutCount": 200, "rootSeed": 216, "samplerRoot": 215, "seedPacketSha256": "",
+		"content": "",
+		"space": BalanceCatalogue.DEFAULT_SPACE, "stage": ""}
 	for arg: String in args:
 		if not arg.begins_with("--") or not arg.contains("="):
 			return {"error": "expected --name=value, got %s" % arg}
@@ -275,12 +290,15 @@ static func _options(args: PackedStringArray) -> Dictionary:
 			return {"error": "unknown option --%s" % key}
 		out[key] = arg.substr(arg.find("=") + 1)
 	for key: String in ["island", "popSize", "elite", "maxGen", "seedCount", "trainSeed0",
-			"holdoutSeed0", "holdoutCount", "rootSeed"]:
+			"holdoutSeed0", "holdoutCount", "rootSeed", "samplerRoot"]:
 		if not str(out[key]).is_valid_int():
 			return {"error": "--%s must be an integer" % key}
 		out[key] = int(float(str(out[key])))
 	if str(out["out"]).is_empty() or str(out["seedsJson"]).is_empty():
 		return {"error": "--out and --seedsJson are required"}
+	if str(out["stage"]).begins_with("f1-") \
+			and (_i(out, "rootSeed") in [215, 216] or _i(out, "samplerRoot") in [215, 216]):
+		return {"error": "F1 CEM requires development roots, not 215/216"}
 	if _i(out, "island") < 0 or _i(out, "island") > 23 or _i(out, "popSize") < 1 \
 			or _i(out, "elite") < 1 or _i(out, "maxGen") < 1 or _i(out, "seedCount") < 1 \
 			or _i(out, "holdoutCount") < 1:

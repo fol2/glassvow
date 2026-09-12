@@ -1,0 +1,66 @@
+{
+  "commit": "679081621e757b802ebd1188cfb2b04e197be947",
+  "contentFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+  "contentSemanticSha256": "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa",
+  "digest": {
+    "outcomeDigest": "b02bca98709f70ddc5e1b163bd580f54bece86ece2e6fd2b364784245ec8fecf",
+    "pin": "b02bca98709f70ddc5e1b163bd580f54bece86ece2e6fd2b364784245ec8fecf",
+    "status": "PIN_MATCH"
+  },
+  "driverSha256": "619bc0e70d5b74bc0538f4568a0a30dcb1162d6d9994b681f64bbf3ad04b33ee",
+  "fingerprint": {
+    "errors": 0,
+    "fingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+    "grid": "2 aspects \u00d7 vows 0/5 \u00d7 64 seeds",
+    "rows": 256,
+    "rowsPerSecond": 47.806,
+    "seeds": {
+      "first": 5600,
+      "last": 5663
+    },
+    "stalls": 0,
+    "wallSeconds": 5.355,
+    "workers": 4
+  },
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "host": {
+    "arch": "arm64",
+    "cpu": "Apple M4",
+    "hostname": "Jamess-Mac-mini.local",
+    "os": "Darwin",
+    "workers": 4
+  },
+  "issue": 456,
+  "machine": "M4 Mac mini 16GB",
+  "qualified": true,
+  "role": "canonical",
+  "searchSpaceSha256": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
+  "throughput": {
+    "chosenWorkers": 8,
+    "drift": false,
+    "issue": 456,
+    "runs": [
+      {
+        "fingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+        "qualified": true,
+        "rowsPerSecond": 40.929,
+        "wallSeconds": 6.255,
+        "workers": 4
+      },
+      {
+        "fingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+        "qualified": true,
+        "rowsPerSecond": 46.69,
+        "wallSeconds": 5.483,
+        "workers": 6
+      },
+      {
+        "fingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+        "qualified": true,
+        "rowsPerSecond": 59.591,
+        "wallSeconds": 4.296,
+        "workers": 8
+      }
+    ]
+  }
+}

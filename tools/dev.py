@@ -256,11 +256,17 @@ def web_url(arguments: list[str], token: str) -> str:
     query = ([("token", token)] if token else []) + [("arg", arg) for arg in arguments]
     return "/web/index.html" + (f"?{urlencode(query)}" if query else "")
 
+def supported_godot_version(version: str) -> bool:
+    match = re.match(r"^(\d+)\.(\d+)\.(\d+)\.stable(?:\.|$)", version)
+    return bool(match and tuple(map(int, match.groups())) >= (4, 7, 2))
+
+
 def build_web() -> str:
     version = subprocess.run(
         ["godot", "--version"], text=True, capture_output=True, timeout=10, check=False)
-    if version.returncode or not version.stdout.startswith("4.7.2.stable"):
-        raise ToolError("Godot 4.7.2.stable is required for the Web development export.")
+    if version.returncode or not supported_godot_version(version.stdout.strip()):
+        raise ToolError(
+            "Godot 4.7.2 stable or later stable is required for the Web development export.")
     if WEB_BUILD.exists():
         shutil.rmtree(WEB_BUILD)
     WEB_BUILD.mkdir(parents=True)
@@ -570,6 +576,10 @@ def launch_scenario(payload: str) -> str:
 def check() -> None:
     assert len(BY_ID) == len(SURFACES)
     assert not hasattr(BaseHTTPRequestHandler, "run_command")
+    assert supported_godot_version("4.7.2.stable.official.ed1daf0bf")
+    assert supported_godot_version("4.8.0.stable")
+    assert not supported_godot_version("4.7.1.stable")
+    assert not supported_godot_version("4.7.3.rc1")
     retina = {"x": 3130, "y": 310, "width": 3620, "height": 2516}
     assert convert_point(retina, IDENTITY_GEOMETRY) == (1020, 101)
     assert convert_point(

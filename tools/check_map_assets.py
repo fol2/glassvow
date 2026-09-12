@@ -18,6 +18,7 @@ from map_asset_checks import (
     validate_manifest, validate_provenance,
 )
 from map_asset_self_test import run as run_fixture_tests
+from map_landscape_checks import scan as scan_landscape, self_test as test_landscape
 
 REPO = Path(__file__).resolve().parent.parent
 ASSET_DIR = REPO / "assets" / "art" / "map"
@@ -73,6 +74,10 @@ def scan(folder: Path) -> tuple[list[Finding], int]:
     rows, found = validate_manifest(folder, regions)
     records, provenance = validate_provenance(folder, {str(row["id"]) for row in rows})
     payload, present = payload_findings(folder, rows, records)
+    if folder.resolve() == ASSET_DIR.resolve():
+        landscape, landscape_count = scan_landscape(ASSET_DIR.with_name('map-atelier'))
+        found.extend(landscape)
+        present += landscape_count
     return found + provenance + payload + palette_findings(MATERIALS.read_text(), regions), present
 
 
@@ -86,12 +91,13 @@ def report(found: list[Finding], folder: Path, present: int) -> int:
     predicted = " ".join(f"act{i}={_under_key_gap(ground, prop, key):.3f}"
                          for i, key in enumerate(_band_keys(REGIONS.read_text())))
     print(f"value-gap OK  linear {ground - prop:.3f} ≥ {VALUE_GAP_MIN}; {predicted}")
-    print(f"map assets OK ({present} payload files; declared absence uses fallbacks)")
+    print(f"map assets OK ({present} payload files; runtime landscape and retained asset library)")
     return 0
 
 
 def self_test() -> int:
     errors = run_fixture_tests(ASSET_DIR / "map-assets.json", ASSET_DIR / "provenance.json", REGIONS)
+    errors.extend(test_landscape())
     if palette_findings(MATERIALS.read_text(), REGIONS.read_text()):
         errors.append("live MapRegions/MapMaterials palette must pass")
     poisoned = MATERIALS.read_text().replace("GROUND_VALUE: float = 0.420", "GROUND_VALUE: float = 0.100")

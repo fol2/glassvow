@@ -9,7 +9,7 @@
     "id": "duskblade",
     "hue": 225,
     "art": "flare",
-    "maxHp": 72,
+    "maxHp": 64,
     "energy": 3,
     "handSize": 5,
     "potionSlots": 3,
@@ -82,7 +82,7 @@
     "eclipseSlash": {
       "type": "attack",
       "rarity": "starter",
-      "cost": 1,
+      "cost": 2,
       "target": "enemy",
       "vfx": "slash",
       "effects": [
@@ -168,13 +168,13 @@
     "ashBite": {
       "type": "attack",
       "rarity": "starter",
-      "cost": 1,
+      "cost": 2,
       "target": "enemy",
       "vfx": "fire",
       "effects": [
         {
           "kind": "dmg",
-          "n": 5
+          "n": 6
         },
         {
           "kind": "status",
@@ -187,7 +187,7 @@
         "effects": [
           {
             "kind": "dmg",
-            "n": 7
+            "n": 8
           },
           {
             "kind": "status",
@@ -196,10 +196,10 @@
             "n": 3
           }
         ],
-        "text": "Deal @7@ damage. Apply 3 Smolder."
+        "text": "Deal @8@ damage. Apply 3 Smolder."
       },
       "name": "Ashbite",
-      "text": "Deal @5@ damage. Apply 2 Smolder."
+      "text": "Deal @6@ damage. Apply 2 Smolder."
     },
     "smother": {
       "type": "skill",
@@ -266,7 +266,7 @@
     "quickSlash": {
       "type": "attack",
       "rarity": "common",
-      "cost": 0,
+      "cost": 1,
       "target": "enemy",
       "vfx": "slash",
       "effects": [
@@ -300,7 +300,6 @@
       "rarity": "common",
       "cost": 2,
       "target": "enemy",
-      "chip": 1,
       "vfx": "blunt",
       "effects": [
         {
@@ -309,17 +308,17 @@
         }
       ],
       "up": {
-        "chip": 2,
+        "chip": 1,
         "effects": [
           {
             "kind": "dmg",
             "n": 16
           }
         ],
-        "text": "Deal @16@ damage. Chip 2 extra Facets."
+        "text": "Deal @16@ damage. Chip 1 extra Facet."
       },
       "name": "Quarry Maul",
-      "text": "Deal @12@ damage. Chip 1 extra Facet."
+      "text": "Deal @12@ damage."
     },
     "cleave": {
       "type": "attack",
@@ -360,7 +359,7 @@
           "kind": "status",
           "who": "target",
           "id": "poison",
-          "n": 3
+          "n": 4
         }
       ],
       "up": {
@@ -373,13 +372,13 @@
             "kind": "status",
             "who": "target",
             "id": "poison",
-            "n": 4
+            "n": 5
           }
         ],
-        "text": "Deal @6@ damage. Apply 4 Smolder."
+        "text": "Deal @6@ damage. Apply 5 Smolder."
       },
       "name": "Emberbite",
-      "text": "Deal @4@ damage. Apply 3 Smolder."
+      "text": "Deal @4@ damage. Apply 4 Smolder."
     },
     "lunge": {
       "type": "attack",
@@ -476,7 +475,7 @@
     "sidestep": {
       "type": "skill",
       "rarity": "common",
-      "cost": 0,
+      "cost": 1,
       "target": "self",
       "vfx": "ward",
       "effects": [
@@ -4624,17 +4623,11 @@
       "effects": [
         {
           "kind": "dmg",
-          "n": 7
-        },
-        {
-          "kind": "status",
-          "who": "allEnemies",
-          "id": "poison",
-          "n": 2
+          "n": 9
         }
       ],
       "name": "Flare",
-      "text": "The lantern vents. Deal 7 damage to ALL enemies and apply 2 Smolder."
+      "text": "The lantern vents. Deal 9 damage to ALL enemies."
     },
     "mendglass": {
       "glyph": "❋",
@@ -4703,7 +4696,7 @@
           "kind": "status",
           "who": "allEnemies",
           "id": "poison",
-          "n": 3
+          "n": 6
         },
         {
           "kind": "block",
@@ -4711,7 +4704,7 @@
         }
       ],
       "name": "Ashfall",
-      "text": "The Ashwarden's breath. Apply 3 Smolder to ALL enemies and gain 5 Ward."
+      "text": "The Ashwarden's breath. Apply 6 Smolder to ALL enemies and gain 5 Ward."
     }
   },
   "deeds": {
@@ -5422,7 +5415,7 @@
       "id": "duskblade",
       "hue": 225,
       "art": "flare",
-      "maxHp": 72,
+      "maxHp": 64,
       "energy": 3,
       "handSize": 5,
       "potionSlots": 3,
@@ -5449,7 +5442,7 @@
       "hue": 26,
       "art": "ashfall",
       "unlock": "aspect2",
-      "maxHp": 80,
+      "maxHp": 88,
       "energy": 3,
       "handSize": 5,
       "potionSlots": 3,

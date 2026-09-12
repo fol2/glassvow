@@ -1,139 +1,102 @@
 ---
 name: glassvow-godot
-description: Use when changing Glassvow Godot code, scenes, resources, imports or build configuration.
+description: Progressive-disclosure contract for Glassvow Godot runtime, test, scene, resource, import, and visual work. Do not load for docs-only work or pure Python balance research.
 ---
 
-# Glassvow Godot 4.7.2 Binding Contract
+# Glassvow Godot Delivery Contract
 
-## 1. Engine Contract
+## 1. Scope
 
-**Pin:** Godot 4.7.2 exact. Verify before running Godot in a new or changed environment: `godot --version` must print `4.7.2.stable`. Running any GDScript requires this exact version; mismatches silently break type checking and produce confusing test failures.
+Load this skill only when the task touches Godot runtime code, tests, scenes, resources, imports, visual composition, or engine-facing tools. `AGENTS.md` and `docs/agents/ai-sdlc.md` govern the development loop; this file supplies Godot-specific invariants.
 
-Historical evidence keeps the engine version it actually used. A dated packet
-that truthfully records 4.7.1 is not an active pin and must not be rewritten as
-though the run happened on 4.7.2.
+Pure documentation and isolated Python balance or ML research do not need this context and must not inherit the Godot gate merely because the repository is a game.
 
-**4.7 Gotchas (trap setters):**
-- **Typed-return overrides need an explicit `return`:** since 4.7, overriding a method whose declared return type is non-void without a `return` on every path is an error, not a silent null.
-- **`CONFUSABLE_TEMPORARY_MODIFICATION` warning (new in 4.7):** modifying a temporary value (`get_position().x = 1`, `dict_of_vectors["k"].x = 1` on value types) silently discards the write. Assign to a local, modify, write back. RefCounted/Object elements are references and are NOT affected.
+## 2. Engine contract
 
-## 2. Architecture Boundaries
+The minimum is Godot 4.7.2 stable; later stable releases are supported. Reject older and pre-release builds. A release or evidence protocol may bind one exact supported version, and historical evidence keeps the version it actually used.
 
-**Domain purity:** `domain/` holds pure game logic as `RefCounted` classes only — zero Node, SceneTree, FileAccess, DirAccess, Input, DisplayServer, OS, or `get_tree()` references. Tested in `tests/test_arch.gd` (banned-token scan). This boundary allows headless testing and deterministic playback.
+Before engine work, check `godot --version`. Do not install or replace the provisioned Cloud Agent toolchain unless the environment contract explicitly says it is missing.
 
-**Command → Event seam:** The facade `GlassvowGame.apply(cmd: Dictionary) -> Array[Dictionary]` receives a command dict (e.g. `{"t": "playCard", "uid": 1}` or `{"t": "endTurn"}`) and returns an array of GameEvent dicts (`{"t": StringName, ...}`). Command `t` values live in `domain/game.gd`; event type constants live in `domain/events/event_types.gd`. The presentation layer (`presentation/`) subscribes to these events and never owns game truth.
+Godot 4.7 traps that matter here:
 
-**Anti-patterns forbidden:**
-- **No global EventBus autoload.** Screens and managers signal upward to `application/main.tscn`; main routes and holds the single `GlassvowGame` instance.
-- **No manager singletons.** `application/main.tscn` is the only composition root. Dependency injection happens at scene instantiation.
+- Typed-return overrides need an explicit return on every path.
+- Modifying a temporary value can trigger `CONFUSABLE_TEMPORARY_MODIFICATION`; assign, mutate, and write back.
+- `godot --check-only` reports parse failures on stderr while often exiting zero. Never grade it directly; use `tools/check_scripts.sh`.
 
-## 3. IDs & Locale
+## 3. Architecture boundaries
 
-**Internal StringName IDs frozen:** Card, relic, enemy, status, and ability IDs are engine-internal constants (e.g. `poison`, `vulnerable`, `str`, `strike`, `leech`). Once M4 lands, these IDs never change — saves depend on them. Changes to an ID require a migration step or a new save-version envelope.
+- `domain/` contains pure `RefCounted` game logic. It must not depend on Node, SceneTree, FileAccess, DirAccess, Input, DisplayServer, OS, or `get_tree()`.
+- `GlassvowGame.apply(cmd: Dictionary) -> Array[Dictionary]` is the command-to-event seam. Event type constants live under `domain/events/`; presentation casts fields at the boundary.
+- `application/main.tscn` is the composition root. Do not add a global EventBus or manager singleton.
+- Presentation subscribes to events and renders state; it never becomes the source of game truth.
 
-**Display names are locale data:** Render "Block" instead of "defend"? Change the display string, never the internal key `defend`. This separation protects cross-version save loading. English display names live in the content catalogue (`content/full-content.json`). `Locale.hydrate_content` overlays the active language's `content.*` strings from `locale/<code>.json` onto those rows at boot (`application/locale.gd`); hydrating `en` is a no-op because the bake already is English.
+Search `CONCEPTS.md` for task terms and read only matching sections. Read a relevant ADR or solution note when the changed surface points to one; do not preload all historical design material.
 
-## 4. Editing Methods
+## 4. IDs, locale, determinism, and saves
 
-Use text edits for scripts, configuration and scenes when the change is clear.
-Prefer the Godot editor or an available Funplay MCP integration for complex
-scene layout, hierarchy inspection or restructuring. Neither is a prerequisite:
-text-edited scenes still need import/parse checks and relevant runtime evidence.
-Do not wait for an editor or MCP connection when the existing CLI tools suffice.
+Internal `StringName` IDs for cards, relics, enemies, statuses, and abilities are compatibility keys. Change display strings in locale or content data, not internal IDs. An ID change requires an explicit migration design.
 
-**Never:**
-- Edit `.godot/` directly.
-- Hand-edit `.import/` sidecars — they regenerate on `godot --headless --import`.
-- Commit without including `.import/` and `.uid` sidecars; they are version-specific import metadata.
+All gameplay randomness flows through the run's seeded RNG cursor. Do not introduce another random source. Dictionary events and cast-at-boundary semantics remain the serialization and test seam.
 
-## 5. Verification Commands
+The live save lineage is the v2 run/vigil pair. A breaking envelope or top-level schema change requires a version bump and migration handler. Loading validates every saved content ID; unknown IDs reject the whole save rather than being silently dropped or substituted.
 
-Follow **Verification** in `AGENTS.md`, the canonical local checklist and
-change-sensitive execution policy. Keep CI's additional checks in
-`.github/workflows/ci.yml`; do not duplicate their inventory here.
+## 5. Editing methods
 
-Use `tools/check_scripts.sh`, not the exit code of bare `--check-only`, to detect
-parse failures. Include new `.gd` files in the tracked sweep as described in
-`AGENTS.md`. Grade the test suite by its exit status and `PASS` line, not harmless
-dummy-renderer warnings.
+- Hand-edit small scripts and simple project or resource values.
+- Prefer the Godot editor for significant `.tscn` composition and Funplay MCP for presentation restructuring or hierarchy inspection when available. Text-edited scenes are acceptable with the same relevant import, parse and runtime evidence; tool availability alone is not a reason to wait.
+- Never edit `.godot/` or hand-edit generated import sidecars.
+- Include required `.import` and `.uid` sidecars with the asset they describe.
+- Keep one delivery outcome on one branch. Do not let another agent or machine mutate the same branch or worktree.
 
-## 6. Runtime Inspection
+## 6. Risk-proportional verification
 
-Choose evidence by observable effect, not by directory:
-- Layout or static visual changes: inspect a runtime screenshot before review.
-- Tweens or VFX: inspect the running transition or a temporal capture; a single
-  still does not prove motion.
-- Audio changes: verify playback and routing; a screenshot alone is insufficient.
-- Pure domain, architecture, tests or documentation with no audiovisual effect:
-  no capture is required. Content and locale changes may affect the visible UI.
+`tools/ci_scope.py` is the CI selection authority. Pull requests parse changed GDScript through the shared explicit-path gate, run the complete discovered Godot suite for Godot-code changes, and add only the specialist checks justified by overlapping scopes. Main pushes reclassify their exact introduced tree diff; scheduled and manual runs execute every maintained check.
 
-Use `tools/shot.sh` for one-off screenshots or `tools/live.sh` for iteration,
-following `docs/session-ownership.md` and `docs/dev-tools.md`. Editor/MCP views
-are useful supplementary inspection, not proof that the game renders correctly.
-Report missing required runtime evidence rather than claiming completion.
+During iteration, run the narrow deterministic check that answers the current question. Once a production Godot change is coherent, run the core final-candidate gate once before first push:
 
-## 7. Fixtures & Determinism
-
-**Fixtures are port-owned goldens** (amended 2026-08-16 by #317 D5; they were immutable before). The 18 files in `port_fixtures/` were captured once from roguecardv2's `tools/capture-port-fixtures.mjs` and now pin **this port's** behaviour, not the web's. Treat them as goldens: a fixture change is a behaviour change and needs its own commit saying what moved and why — never a silent edit to make a failing test pass. No port-side regeneration tool exists; it gets designed the first time a refactor actually needs one.
-
-**All randomness flows through run Rng:** A run's seed produces one seeded Mulberry32 stream (`run.rngState` int cursor). Every random draw (card pick, enemy AI, damage variance) pulls from this stream. No other randomness sources. This makes runs deterministic and reproducible.
-
-**Dictionary-event + cast-at-boundary pattern:** Events are `{"t": StringName, ...}` dictionaries — there are NO event classes. Presentation handlers cast individual fields at the boundary:
-```gdscript
-# domain/ returns events
-var events: Array[Dictionary] = game.apply(cmd)
-# presentation/ casts fields at the boundary
-for ev: Dictionary in events:
-	match ev["t"]:
-		EventTypes.HIT_ENEMY:
-			var amount: int = int(ev["amount"])
-			var idx: int = int(ev["idx"])
-			_play_hit(idx, amount)
+```bash
+godot --version
+tools/check_imports.sh
+tools/check_scripts.sh
+godot --headless -s res://tests/run_all.gd
 ```
 
-Dictionaries compare natively against the JSON parity fixtures and survive serialization; typed locals contain the untyped-access surface to one line per field.
+Grade `tests/run_all.gd` by its process status and `PASS (N tests)` line. The headless dummy renderer can emit harmless leaked-RID or null-material warnings on stderr; do not turn those into failures when the runner exits 0.
 
-## 8. Save Compatibility
+Add the specialist map, locale, performance, release, or containment check only when that surface changed. Stage new `.gd` files before the full script sweep because `tools/check_scripts.sh` discovers tracked scripts with `git ls-files`.
 
-**Lineage:** the live envelope is the v2 pair — `user://glassvow_run_v2.json` (run) and `user://glassvow_vigil_v2.json` (meta). The v1 lineage is deliberately not read or migrated (`application/save_service.gd`). The v2 schema is frozen; any breaking change requires a version bump and a migration handler in `SaveService`.
+For a focused component proof, parse only the owned files and use the filtered runner:
 
-**Web saves never migrate:** Users porting from web restart at the beginning; progress doesn't carry over (the map is redesigned anyway).
+```bash
+tools/check_scripts.sh presentation/map/map_waylight_tracer.gd tests/test_map_waylight_tracer.gd
+godot --headless -s res://tests/run_all.gd -- \
+  --tests=res://tests/test_map_waylight_tracer.gd
+```
 
-**Resume semantics:** If a save has `pending_encounter`, the next session re-enters combat at that step. Mid-combat state is never serialized (recomputed from deck + run state). Kill the app and resume — you're back to the same fight.
+The filtered runner rejects missing, duplicate, malformed, and outside-`tests/` paths. It does not replace the complete final-candidate gate for production delivery; it keeps component evidence from replaying unrelated tests.
 
-**ID validation on load:** `SaveService.load()` validates every card/relic/potion ID in the save against the current content registry. Any unknown ID **rejects the whole save** (load returns null; the player starts fresh) — same stale-content shield as the web engine's `normaliseRunSnapshot`. Never partially heal a save by dropping or substituting items.
+Never run unrelated suites to manufacture confidence, and never skip a relevant check. If the classifier misses a real dependency, run the needed check immediately, then extend `tools/ci_scope.py` and `tests/test_ci_scope.py` so the correction becomes permanent.
 
-## 9. Stop Conditions
+## 7. Visual and audio proof
 
-Pause the affected implementation and obtain an approved plan for an unexpected
-breaking save-schema change or native Android/iOS SDK integration. If the current
-approved task already covers that change and its migration or platform plan,
-continue within that scope; do not request the same approval again.
+Any layout, composition, animation, VFX, shader, camera, or audio-routing change requires inspection of the running result at the affected reference shapes. Use Funplay capture when the editor or runtime bridge is available; otherwise use `tools/shot.sh` or `tools/live.sh` as documented in `docs/dev-tools.md`.
 
-More than 400 changed lines is a scope-review signal, not an automatic halt.
-Check whether the increase is explained by the approved work, tests or generated
-content. Pause only for new unapproved scope, architecture or risk; continue
-independent in-scope work. Explicit one-shot, STOP and owner-approval boundaries
-in the task remain binding.
+A deterministic upstream gate should prove resolved values, state transitions, geometry, or contracts. A capture proves composition and perception. One does not replace the other. On headless Cloud Agents, captures require `xvfb-run` and an on-screen position; never use `--headless` for a viewport capture.
 
-## 10. Governance
+## 8. Fixtures and external reference
 
-Continue through implementation, relevant verification and fixes caused by the
-requested change until its acceptance criteria are met or a named approval
-boundary is reached. Record unrelated improvements as follow-ups rather than
-expanding the task. Report pre-existing failures separately; do not conceal them.
+`port_fixtures/` contains port-owned goldens. A deliberate behaviour change may update a fixture in an explicit commit describing what changed and why. Never edit a golden merely to clear a failure.
 
-For implementation PRs, retain one implementer and one reviewer; review is a
-handoff gate, not a pause after every edit. Read-only answers and mechanical
-non-semantic documentation corrections do not need a separate reviewer. Human
-visual decisions apply to the milestones or briefs that explicitly require them.
-No auto-revert machinery: a red CI is a handled event, not an emergency.
+The former web implementation is detached and is not a product oracle. Do not add new web-reference citations. When historical source must be inspected, use the pinned commit named in `docs/benchmark-divergence.md`, and never infer rendered behaviour from a function merely existing in source.
 
-**Historical milestones:** M0 scaffold, M1–M4 domain port, M5–M7 presentation.
-M8 was settled on 2026-08-16 (#317): this port ships independently. Current
-quality criteria are the commercial rubric (#157) and `docs/rc-bar.md`, not a
-new web-parity or M8 approval exercise.
+## 9. Stop conditions
 
-**Authority:** James signs off on concept briefs and high-level PRs. Preserve
-explicit merge, release, provider-spend and production-activation boundaries;
-local implementation permission does not grant those actions.
+Stop and produce a concrete blocker or separate migration or platform plan when any of these appears:
+
+1. A breaking save-schema or internal-ID change.
+2. Native Android or iOS plugin or SDK integration.
+3. More than 600 additions plus deletions in one code file in one commit.
+4. An unavailable relevant gate or evidence surface.
+5. A requested change that contradicts the commercial rubric, an active architecture contract, or the task's acceptance criteria.
+
+Do not weaken the requirement to keep moving.

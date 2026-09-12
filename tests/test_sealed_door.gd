@@ -3,6 +3,7 @@ extends RefCounted
 ## on the generated final-act map, not a one-node Act IV graph.
 
 const SAVE_PATH: String = "user://test_sealed_door_run_v2.json"
+const MapCompose: GDScript = preload("res://tests/test_map_compose.gd")
 
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
@@ -50,6 +51,7 @@ static func _door_on_final_act(fails: Array[String]) -> void:
 	_check(fails, map.nodes.size() > 1 and map.region == "obsidian_court",
 		"final-act six-shard map is the generated court graph")
 	var screen: WorldMapScreen = WorldMapScreen.new(map, content)
+	screen._layout_compile = MapCompose.fake_layout_compile()
 	screen.refresh(run)
 	_check(fails, screen._sealed_door.visible,
 		"six shards on the final act show the sealed-door affordance")
@@ -70,6 +72,7 @@ static func _door_hidden_off_final_act(fails: Array[String]) -> void:
 		five.append(VigilState.QUEST_IDS[i])
 	var short: RunState = _final_act_run(content, five)
 	var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.benchmark(short), content)
+	screen._layout_compile = MapCompose.fake_layout_compile()
 	screen.refresh(short)
 	_check(fails, not screen._sealed_door.visible,
 		"five shards on the final act hide the sealed door")
@@ -78,6 +81,7 @@ static func _door_hidden_off_final_act(fails: Array[String]) -> void:
 		"shards": VigilState.QUEST_IDS.duplicate(),
 	})
 	screen = WorldMapScreen.new(WorldMap.benchmark(early), content)
+	screen._layout_compile = MapCompose.fake_layout_compile()
 	screen.refresh(early)
 	_check(fails, early.act == 0 and not screen._sealed_door.visible,
 		"six shards before the final act hide the sealed door")
@@ -125,6 +129,7 @@ static func _six_shard_vigil() -> VigilState:
 
 static func _main(content: ContentDB) -> Main:
 	var main: Main = Main.new()
+	main._map_layout_compile = MapCompose.fake_layout_compile()
 	main.content = content
 	main._run_save_path = SAVE_PATH
 	main._vigil = VigilState.blank()

@@ -1,0 +1,61 @@
+{
+  "candidates": [
+    "c000",
+    "s009",
+    "c029"
+  ],
+  "commonPolicies": {
+    "ashwarden:v0": [
+      64,
+      218,
+      309,
+      59,
+      285,
+      322
+    ],
+    "ashwarden:v5": [
+      14,
+      293,
+      309,
+      285,
+      246,
+      328
+    ],
+    "duskblade:v0": [
+      115,
+      38,
+      244,
+      349,
+      241,
+      285
+    ],
+    "duskblade:v5": [
+      43,
+      244,
+      175,
+      210,
+      62,
+      64
+    ]
+  },
+  "inputs": {
+    "manifestSha256ByCandidate": {
+      "c000": "075d6d9d0a702eb06ab12c63f9ead858e344ffbbbc7dce3ba9b8d53285ff6e6b",
+      "c029": "d0ef095f0d8aec813acf74c137a6b2d2bf2b5e7ddc649f2b97bde299f96fc59b",
+      "s009": "31b0773142f10ef483fac41e063c33fc5675a41b6a1531a4c96468b1c43f23a3"
+    },
+    "observationsSha256ByCandidate": {
+      "c000": "262946bd4d7fdda2da02eda41c52ebbefd9ae0210ac690fc35fd921c398f5799",
+      "c029": "7de4d504028ffdb7a2b19691475a37776ace9a2f1a008de01447e6c70a0c6455",
+      "s009": "8f0b7ed6f874b04b3b93d09c07aedc739aab5e2f91c049e2755022c077d1973d"
+    },
+    "seedRegistrySha256": "c166c18195b0d9f780df67fb30c145fa11c6ac30521d5e3353c39c63bb0e9f9a",
+    "toolSha256ByModule": {
+      "balance_f0.py": "325fbf52eb91b19a21242aeaee793d9198c2ec49d3b5db452454f77238d758dc",
+      "balance_f1_cem_evidence.py": "59630d7d7845ccbf9388403e1ea90a281038cf292754a7c8953792b26f874779",
+      "balance_seed_contract.py": "9679ba3e9a9565ca41d1879eddc35d2b8e07502f16bd646b4f0c85a07275a0ae"
+    }
+  },
+  "issue": 458,
+  "policyRoot": 1454
+}

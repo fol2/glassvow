@@ -1,0 +1,1258 @@
+{
+  "schema": "glassvow.godot-runtime-provenance.profile/v1",
+  "campaign": "godot-runtime-v1",
+  "qualificationMethod": {
+    "freshness": "Every G00-G25 case starts one fresh actual Godot invocation with its own verifier-originated challenge, HOME and output root.",
+    "baseline": "G00-G14 and G19-G25 execute the exact canonical M09 baseline before the attack injector applies exactly the one declared post-capture attack transaction.",
+    "diagnostic": "G15-G18 execute the same canonical Godot path against a deliberately read-only output root, producing a genuine failed observation open and non-empty Godot stderr before the declared stderr attack is applied.",
+    "surrogateBan": "No case executes a surrogate executable, shadow script, shadow corpus or synthetic diagnostic. Substitution controls mutate untrusted post-capture evidence from a fresh real invocation and test independent rejection.",
+    "verifier": "Every case is decided by the same unchanged independently bound verifier, then replayed once to require a byte-identical receipt."
+  },
+  "authority": {
+    "issue": 535,
+    "comment": 5547979544,
+    "blockedConsumerIssue": 421,
+    "acceptedIntentMainSha": "5c5f2d325725b0a04e060c1ffe0b40a76f2e0928",
+    "profileFreezeMainSha": "fb6c497c45ad5c283176e7d25c2bc861aae17033",
+    "observerCommitRule": "The workflow supplies and the verifier binds the exact trusted checkout commit independently of the untrusted statement.",
+    "productCommitRule": "The workflow supplies and the verifier binds the exact product main commit; every frozen semantic product role must still match and the packet commit must have this commit as its sole parent.",
+    "g0ProductSha": "5c5f2d325725b0a04e060c1ffe0b40a76f2e0928",
+    "g0PacketSha": "15ea4d3af4b592c7015b4fd3569cf59d7ef93d77",
+    "g0ObserverHead": "5c3a5ccdb120c18a5a52ecdacf95972d88322f5f",
+    "g0Run": 33762926632,
+    "selectedVenue": "github-hosted-ubuntu-24.04",
+    "selectedBackend": "purpose-built-ptrace-synchronous-stop-godot-v1"
+  },
+  "g0": {
+    "runnerImage": {
+      "ImageOS": "ubuntu24",
+      "ImageVersion": "20260831.293.1",
+      "architecture": "X64",
+      "kernel": "6.17.0-1022-azure"
+    },
+    "traceFiles": 10,
+    "processes": 3,
+    "threads": 7,
+    "uniqueSyscalls": 61,
+    "syscallEvents": 8945,
+    "execveEvents": 4,
+    "clone3Events": 8,
+    "vforkEvents": 1,
+    "diagnosticTraceBytes": 2028198,
+    "netlinkKobjectSockets": 2,
+    "netlinkKobjectBinds": 2,
+    "externalNetworkEvents": 0,
+    "diagnosticSummaryDefect": "The immutable G0 summary reports network_events=0 because its grep escaped the opening parenthesis twice. The raw trace is authoritative and contains exactly two AF_NETLINK KOBJECT sockets plus two binds and no external network operation; the workflow summariser is corrected for future diagnostics.",
+    "uniqueSemanticBytes": 12737406,
+    "returnedSemanticReadBytes": 13476426,
+    "observationBytes": 55432,
+    "stdoutBytes": 309,
+    "stderrBytes": 0,
+    "tracedWallNsApproximate": 1615000000,
+    "conservativeMmapRequestedBytes": 794628296,
+    "conservativePositiveBrkGrowthBytes": 134316032,
+    "syscallAccountedAddressSpaceOvercountBytes": 928944328,
+    "godotElfPtLoadPageBytes": 149110784,
+    "smallElfAndInterpreterAllowanceBytes": 8388608,
+    "initialStackReservation": {
+      "processes": 4,
+      "bytesEach": 16777216
+    },
+    "vdsoVvarReservation": {
+      "processes": 4,
+      "bytesEach": 1048576
+    },
+    "conservativeAddressSpaceContractBytes": 1157746888,
+    "addressSpaceCapHeadroomBytes": 50212664,
+    "addressSpaceCapBasis": "The 1,152 MiB inherited RLIMIT_AS is a per-process fail-closed ceiling, not an observed peak. G0's 928,944,328-byte syscall-accounted total deliberately overcounts successful mmap requests and positive brk growth across all ten tasks without subtracting releases, repeated mappings or shared mappings. The fixed allowance also covers the exact Godot PT_LOAD page spans, bounded small executable and interpreter space, four exact G0 16 MiB initial-stack ceilings, and four conservative 1 MiB vDSO/vvar reservations.",
+    "semanticMechanism": "Every declared semantic role was consumed by read or pread64. No declared semantic role was mmaped.",
+    "identityMechanism": "Executable and runtime objects were executed, read or mmaped and are content-bound separately from semantic roles.",
+    "manifest": {
+      "path": "tools/execution_provenance/godot_runtime_g0_manifest.json",
+      "sha256": "c19b5035aa6da5e8d66e425963ccb33931e14959da78df9ae18c52779ac74669",
+      "semanticReadSetCount": 30,
+      "runtimeIdentitySetCount": 126,
+      "platformObservationSetCount": 13
+    },
+    "pathOperationClosure": {
+      "schema": "glassvow.godot-runtime-provenance.g0-path-operations/v1",
+      "traceSetCanonicalSha256": "f753a45a611f48173c5e25345107010c75e663ad53067cd3b348632d9ce8f7ec",
+      "recordsCanonicalSha256": "c0402265354894e66193fb82514630e6ed03cd5c0c1b6f1aee97d4f0c728ccc2",
+      "traceFiles": 10,
+      "traceBytes": 2028198,
+      "eventCount": 4097,
+      "recordCount": 782,
+      "uniqueOperationPathPairs": 760,
+      "symlinkTargetsCanonicalSha256": "c3e4d9de8bcac1a540ebc865dfee18e51c600a72aed703ee7df89a1d19f411ec",
+      "symlinkCount": 57
+    },
+    "configurationCapture": {
+      "path": "tools/execution_provenance/godot_runtime_configuration_manifest.json",
+      "sha256": "ec1b31b5cc7568b5babaf34adff4536d930b16744a005393db88bf65d99d4d5c",
+      "fixtureRoot": "tools/execution_provenance/godot_runtime_configuration",
+      "roleCount": 3,
+      "rule": "Run 33762926632 remains the invocation, platform and semantic-mechanism measurement authority. Fresh G0 diagnostic run 33768343626 is the sole byte authority for the three genuine Godot-generated configuration roles that its subsequent actual baseline invocation completely consumed without mutation."
+    },
+    "kernelInterpreterCapture": {
+      "run": 33778025696,
+      "artifactId": 9902474984,
+      "artifactSha256": "7c96470fc45ae40eb9c0b078c5d99085ac712d456d8775663fefbd707dd4cb47",
+      "captureSha256": "3923ffbb8ed2535db92bb38f28c0878676d79fab44eba24de07c437cdf48c35d",
+      "observerHead": "4a194d70829cef4da2769800fa5ae4a616cd92f7",
+      "requestedPath": "/lib64/ld-linux-x86-64.so.2",
+      "canonicalPath": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "size": 236616,
+      "sha256": "cd4df4f3c7b83673d61189bf2eaebd33ca4f2853ab9772b8a25e025ef99b1e81",
+      "rule": "The fresh exact-observer G0 diagnostic captures PT_INTERP from the actual Godot, env and shell executables, resolves it to one canonical regular file and binds that kernel-loaded executable identity separately from the four requested execve leaves."
+    },
+    "pathSummaryDefect": "The historical G0 consumed-file summariser extracted only descriptor annotations and execve arguments, so it omitted direct pathname arguments and no-follow aliases. The corrected closure is derived mechanically from all 4,097 pathname events in the same immutable raw artifact and is independently reconciled to both admission-policy implementations."
+  },
+  "trustMap": {
+    "trusted": [
+      "GitHub-hosted Ubuntu 24.04 VM kernel and runner boundary",
+      "pinned GitHub Actions and exact-main workflow tooling",
+      "packet ingester, capsule builder and Godot profile supervisor",
+      "purpose-built synchronous ptrace tracer",
+      "Landlock ABI 3 or newer pre-exec kernel admission boundary",
+      "external CLOCK_MONOTONIC_RAW observation",
+      "frozen Godot runtime profile",
+      "standalone independent Godot profile verifier"
+    ],
+    "untrusted": [
+      "content-bound Godot, Sentry extension, shell, xdg-user-dir and project checkout",
+      "Godot process and every descendant or thread",
+      "external GDScript and corpus supplied by the research packet",
+      "attack injector",
+      "statement, trace, byte sidecar, streams, output and replay packet supplied to the verifier"
+    ],
+    "separation": "Before the untrusted tracee enters ptrace or exec, the exact tracer replaces stdin with /dev/null, closes every inherited descriptor above stderr, then installs no_new_privs and a kernel-enforced Landlock read, execute and write domain inherited by all descendants. Exact frozen file leaves are the only readable inputs, exactly four requested executables plus their one G0-attested kernel interpreter may run, and only the two fresh roots plus the measured /dev/null sink are writable. The independent verifier imports or calls none of the supervisor, campaign, tracer, Godot driver, external GDScript or diagnostic validator.",
+    "excludedClaims": [
+      "malicious kernel, GitHub runner administrator or compiler resistance",
+      "hardware or TEE attestation",
+      "arbitrary executable, arbitrary Godot project or arbitrary input-mechanism coverage",
+      "semantic interpretation of stderr diagnostics",
+      "M07-M10, Gate O, E0, E1, balance, strategy, P9 or product evidence"
+    ]
+  },
+  "kernelAdmission": {
+    "schema": "glassvow.godot-runtime-kernel-admission/v1",
+    "policySchema": "GODOTACCESSv1",
+    "policyByteCapacity": 393216,
+    "mechanism": "Linux Landlock exact-leaf read and execute rules plus fresh-root write rules, inherited across fork and exec under PR_SET_NO_NEW_PRIVS",
+    "minimumAbi": 3,
+    "handledAccessFs": 32759,
+    "handledRights": [
+      "EXECUTE",
+      "WRITE_FILE",
+      "READ_FILE",
+      "REMOVE_DIR",
+      "REMOVE_FILE",
+      "MAKE_CHAR",
+      "MAKE_DIR",
+      "MAKE_REG",
+      "MAKE_SOCK",
+      "MAKE_FIFO",
+      "MAKE_BLOCK",
+      "MAKE_SYM",
+      "REFER",
+      "TRUNCATE"
+    ],
+    "readLeaves": [
+      "g0.semanticReadSet",
+      "g0.runtimeIdentitySet",
+      "g0.platformObservationSet"
+    ],
+    "executeLeaves": [
+      "/usr/bin/env",
+      "${GODOT}",
+      "/bin/sh",
+      "/usr/bin/xdg-user-dir"
+    ],
+    "kernelInterpreterLeaves": [
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+    ],
+    "writeSubtrees": [
+      "${HOME}",
+      "${OUTPUT}"
+    ],
+    "namedWriteFiles": [
+      "/dev/null"
+    ],
+    "pathPolicy": "One sorted duplicate-free GODOTACCESSv1 file is derived from the exact operation, resolved path and open-or-mkdir parameter closure of every immutable G0 pathname event, the two declared root translations, the frozen hwcapsProbeGrammar expansion and the frozen hidInputProbeGrammar expansion. Only relocation of the five declared roots, readlink probes of their ancestors, G0-observed mkdir(0775) probes of existing HOME ancestors, sibling substitution across the three declared glibc HWCAP levels, identity-only inputN/eventN/jsN/mouseN substitution under the frozen hidInputProbeGrammar device parents, class aliases and char minors for frozen indices 0-3, and ENOENT/EACCES results on expanded siblings are permitted. The independent verifier separately reconstructs the same bytes and checks every traced pathname event against them before deciding a case.",
+    "installation": "The tracee child applies resource limits, replaces fd 0 with read-only /dev/null, closes every fd >= 3, and installs the ruleset before PTRACE_TRACEME, the initial stop or any exec. Failure exits 124 without launching Godot.",
+    "privilegeRule": "PR_SET_NO_NEW_PRIVS is mandatory before restriction, so an exec or set-user-ID helper cannot escape the inherited read, execute and write domain.",
+    "initialDescriptors": {
+      "stdin": {
+        "fd": 0,
+        "path": "/dev/null",
+        "accessMode": 0
+      },
+      "stdout": {
+        "fd": 1,
+        "object": "distinct-outer-pipe",
+        "accessMode": 1
+      },
+      "stderr": {
+        "fd": 2,
+        "object": "distinct-outer-pipe",
+        "accessMode": 1
+      },
+      "higher": "closed-before-restriction"
+    },
+    "descriptorRule": "No inherited readable descriptor survives: fd 0 is read-only /dev/null, fd 1 and fd 2 are distinct output-only outer pipes, and every fd >= 3 is closed before restriction. Later anonymous pipes remain within the exact ptrace descriptor grammar.",
+    "selfTest": "The exact compiled tracer must report ABI >= 3, the fixed 32759 mask, policy schema and descriptor sanitisation support. Independent Linux regressions require exact allowed reads, static execs and dynamic execs with the attested interpreter to succeed; secret reads, secret execs, dynamic exec without its interpreter leaf and inherited readable descriptors to fail; stdin to become EOF /dev/null; and evidence/tooling writes to remain byte-for-byte unchanged.",
+    "failure": "Unavailable Landlock, rule installation failure or differing self-test metadata is pre-execution PROVENANCE_INCOMPLETE; no qualification case can pass."
+  },
+  "caps": {
+    "caseCount": 26,
+    "attemptsPerCase": 1,
+    "maxMinutesPerQualificationAttempt": 15,
+    "budgetEpochComment": 5547979544,
+    "validTasks": 10,
+    "validProcesses": 3,
+    "validThreads": 7,
+    "validLineageEvents": 9,
+    "validSignalEvents": 2,
+    "hardTaskCapacity": 16,
+    "maxAddressSpaceBytes": 1207959552,
+    "maxInitialStackBytes": 16777216,
+    "maxTasks": 16,
+    "maxEvents": 65536,
+    "maxExecve": 4,
+    "maxClone3": 8,
+    "maxVfork": 1,
+    "maxSyscalls": 16384,
+    "maxPathEvents": 8192,
+    "maxReadEvents": 1024,
+    "maxWriteEvents": 256,
+    "maxMmapEvents": 512,
+    "maxOpenEvents": 2048,
+    "maxCloseEvents": 2048,
+    "maxSocketEvents": 2,
+    "maxBindEvents": 2,
+    "maxDupEvents": 5,
+    "maxOpenFds": 64,
+    "maxCapturedBytes": 33554432,
+    "maxTraceBytes": 67108864,
+    "maxSingleReadBytes": 12582912,
+    "maxStdoutBytes": 4096,
+    "maxStderrBytes": 4096,
+    "maxObservationBytes": 65536,
+    "maxHomeOutputBytes": 4096,
+    "maxFileIdentities": 192,
+    "maxAdmissionFileRules": 192,
+    "maxAdmissionPathRules": 2304,
+    "maxAdmissionPolicyBytes": 393216,
+    "maxSemanticFiles": 32,
+    "maxIdentityDependencies": 160,
+    "maxPlatformObservations": 16,
+    "maxPlatformObservationBytes": 4096,
+    "maxSemanticReadBytes": 16777216,
+    "maxGodotBytes": 167772160,
+    "maxPathBytes": 4096,
+    "maxObservedPaths": 1024,
+    "directoryReadBufferBytes": 32768,
+    "validGetdents64Events": 34,
+    "validGetdents64Bytes": 16424,
+    "maxPacketMembers": 8,
+    "maxPacketBytes": 16777216,
+    "maxPacketManifestBytes": 65536,
+    "maxPacketRequests": 16,
+    "maxRequestIndex": 65535,
+    "maxCaseMembers": 11,
+    "maxStatementBytes": 4194304,
+    "maxCaseReceiptBytes": 4194304,
+    "maxChallengeBytes": 65,
+    "maxProfileBytes": 1048576,
+    "maxG0ManifestBytes": 4194304,
+    "maxProjectFiles": 3000,
+    "maxProjectBytes": 805306368,
+    "maxCasePacketBytes": 83886080,
+    "maxCampaignBytes": 536870912,
+    "maxCampaignMembers": 1024,
+    "judgementWallNs": 5000000000,
+    "timingAttackMinimumNs": 7500000000,
+    "supervisorKillWallNs": 15000000000,
+    "permittedDroppedEvents": 0,
+    "permittedExternalNetwork": 0,
+    "permittedSemanticMappings": 0,
+    "allowedNetlinkSockets": 2,
+    "allowedNetlinkBinds": 2,
+    "tracerStartLimitOrder": [
+      "hardTaskCapacity",
+      "maxAddressSpaceBytes",
+      "maxInitialStackBytes",
+      "maxSingleReadBytes",
+      "maxCapturedBytes",
+      "maxSyscalls",
+      "maxPathEvents",
+      "maxReadEvents",
+      "maxWriteEvents",
+      "maxMmapEvents",
+      "maxOpenFds",
+      "maxSemanticReadBytes",
+      "maxTraceBytes",
+      "maxOpenEvents",
+      "maxCloseEvents",
+      "maxSocketEvents",
+      "maxBindEvents",
+      "maxExecve",
+      "maxDupEvents",
+      "validLineageEvents"
+    ]
+  },
+  "budgetAccounting": {
+    "authority": "GitHub Actions API for this repository and workflow",
+    "attemptIdentity": "every run attempt containing the exact job name Qualify actual Godot runtime profile whose started_at is at or after the created_at of caps.budgetEpochComment, including the current attempt",
+    "reservationRule": "Each admitted specialist attempt reserves its full 15-minute job timeout even if it finishes earlier.",
+    "hostedMinuteEquation": "recorded reserved minutes = observed attempts * caps.maxMinutesPerQualificationAttempt",
+    "concurrency": "All godot-runtime qualification dispatches share one non-cancelling concurrency group so the remote count cannot race.",
+    "failureRule": "Missing current-job evidence or an incomplete remote listing fails closed before packet ingestion or any case. Cumulative attempt count is recorded and does not reject."
+  },
+  "clock": {
+    "name": "CLOCK_MONOTONIC_RAW",
+    "startBoundary": "immediately before the first traced child is created",
+    "finishBoundary": "after every traced task has been reaped",
+    "comparison": "integer nanoseconds with no tolerance",
+    "ownership": "external trusted supervisor and ptrace tracer"
+  },
+  "runtime": {
+    "platform": "Linux x86_64",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotSha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+    "archiveSha256": "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4",
+    "download": "https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip",
+    "identitySet": {
+      "source": "g0.manifest.runtimeIdentitySet",
+      "count": 126,
+      "canonicalSha256": "6ec134798ee9d3e17d23af6344b1929ba82887d469b5ef14d43fef15db0a89aa",
+      "rule": "Every executed, opened or mapped regular runtime object must match one path, size and SHA-256 record. Device and inode are bound in the current receipt."
+    },
+    "identityOnlyProductObject": "${PRODUCT}/addons/sentry/bin/linux/x86_64/libsentry.linux.debug.x86_64.so"
+  },
+  "invocation": {
+    "launcherEnvironment": [],
+    "launcherEnvironmentRule": "The corrected G0 tracer starts /usr/bin/env with an empty inherited environment. G1 retains that boundary before env -i establishes the exact three-entry Godot environment.",
+    "launcherArgvTemplate": [
+      "/usr/bin/env",
+      "-i",
+      "HOME=${HOME}",
+      "PATH=/usr/bin:/bin",
+      "LANG=C.UTF-8",
+      "${GODOT}",
+      "--headless",
+      "--path",
+      "${PRODUCT}",
+      "-s",
+      "${PACKET}/${EXTERNAL_SCRIPT}",
+      "--",
+      "--input",
+      "${PACKET}/${CORPUS}",
+      "--index",
+      "${INDEX}",
+      "--output",
+      "${OUTPUT}/observation.json"
+    ],
+    "godotArgvTemplate": [
+      "${GODOT}",
+      "--headless",
+      "--path",
+      "${PRODUCT}",
+      "-s",
+      "${PACKET}/${EXTERNAL_SCRIPT}",
+      "--",
+      "--input",
+      "${PACKET}/${CORPUS}",
+      "--index",
+      "${INDEX}",
+      "--output",
+      "${OUTPUT}/observation.json"
+    ],
+    "environment": [
+      "HOME=${HOME}",
+      "PATH=/usr/bin:/bin",
+      "LANG=C.UTF-8"
+    ],
+    "permittedDescendantExecs": [
+      {
+        "requestedPath": "/bin/sh",
+        "effectivePath": "/bin/sh",
+        "argv": [
+          "sh",
+          "-c",
+          "--",
+          "\"xdg-user-dir\" \"DESKTOP\" 2>/dev/null"
+        ],
+        "environment": [
+          "HOME=${HOME}",
+          "PATH=/usr/bin:/bin",
+          "LANG=C.UTF-8"
+        ]
+      },
+      {
+        "requestedPath": "/usr/bin/xdg-user-dir",
+        "effectivePath": "/bin/sh",
+        "argv": [
+          "/bin/sh",
+          "/usr/bin/xdg-user-dir",
+          "DESKTOP"
+        ],
+        "environment": [
+          "HOME=${HOME}",
+          "PATH=/usr/bin:/bin",
+          "LANG=C.UTF-8",
+          "PWD=${WORKING_DIRECTORY}"
+        ]
+      }
+    ],
+    "workingDirectory": "The tracer and verifier are launched with the trusted observer checkout root as cwd. G0 independently observed that cwd and a four-entry xdg environment; G1 fixes the fourth entry as the shell-exported PWD for a reproducible controlled launch.",
+    "freshRoots": [
+      "${HOME}",
+      "${OUTPUT}"
+    ]
+  },
+  "processGraph": {
+    "rootExecs": [
+      "/usr/bin/env",
+      "${GODOT}"
+    ],
+    "shellExec": "/bin/sh",
+    "xdgRequestedExec": "/usr/bin/xdg-user-dir",
+    "xdgEffectiveExec": "/bin/sh",
+    "rootToShellKind": "clone_process",
+    "rootToShellFlags": 4294983936,
+    "shellToXdgKind": "vfork_process",
+    "shellToXdgFlags": 0,
+    "rootThreadKind": "clone_thread",
+    "rootThreadFlags": 4001536,
+    "rootThreadCount": 7,
+    "signalGrammar": {
+      "count": 2,
+      "number": 17,
+      "binding": "Exactly one SIGCHLD is delivered to the shell after xdg-user-dir exits and exactly one SIGCHLD is delivered to the Godot root after the shell exits; no other signal delivery is admitted."
+    },
+    "binding": "One root task execs env then Godot, root clone3 creates the shell process, shell vfork creates xdg-user-dir, and all seven threads are direct CLONE_FILES children of the Godot root. No other lineage is admitted."
+  },
+  "roles": {
+    "productReadSet": {
+      "source": "g0.manifest.semanticReadSet paths below ${PRODUCT}",
+      "count": 28,
+      "coverage": "Every byte of every listed role must be observed through current read or pread64 events and byte-compared with the sidecar.",
+      "projectEvolution": "The receipt records the exact invocation's main commit. A later exact product commit is admissible only when every listed path, size and SHA-256 remains identical and the packet commit has that exact main commit as its sole parent."
+    },
+    "generatedGodotCache": {
+      "paths": [
+        "${PRODUCT}/.godot/extension_list.cfg",
+        "${PRODUCT}/.godot/global_script_class_cache.cfg",
+        "${PRODUCT}/.godot/uid_cache.bin"
+      ],
+      "derivation": "A trusted preflight runs the exact Godot binary once against the exact product checkout before the attested invocation. The tracked checkout identity and cleanliness are then bound, these exact measured generated roles are content-bound and current-read-covered, and the complete resulting product tree is mounted read-only for the attested invocation.",
+      "coverage": "complete current read coverage required"
+    },
+    "externalScript": {
+      "manifestRole": "externalScript",
+      "pathRule": "one regular non-symlink .gd file directly below the declared packet root",
+      "coverage": "complete current read coverage required",
+      "mapping": "unsupported"
+    },
+    "corpus": {
+      "manifestRole": "corpus",
+      "pathRule": "one regular non-symlink .json file directly below the declared packet root",
+      "coverage": "complete current read coverage required",
+      "mapping": "unsupported"
+    },
+    "requestIndex": {
+      "source": "exact canonical argv after the second -- separator",
+      "type": "base-10 integer string",
+      "baseline": "0",
+      "qualificationRule": "The qualification packet declares exactly index 0.",
+      "researchRule": "A #421 packet declares a unique finite requestIndices list; every invocation is externally bound to one canonical member before spawn."
+    },
+    "stdout": {
+      "fd": 1,
+      "binding": "actual write bytes, current file identity and final file bytes",
+      "qualificationBaseline": {
+        "size": 309,
+        "sha256": "cf17838058a5bf14bf5b23e8ab4bb06b2ad3d2aed9ea025003f9a2eeedf28479"
+      }
+    },
+    "stderr": {
+      "fd": 2,
+      "binding": "actual write bytes, current file identity and final raw bytes",
+      "qualificationBaseline": {
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "semanticPolicy": "The profile verifier does not interpret diagnostic meaning."
+    },
+    "output": {
+      "path": "${OUTPUT}/observation.json",
+      "binding": "fresh exclusive inode, actual write bytes, close, final size and SHA-256",
+      "qualificationBaseline": {
+        "observation": {
+          "size": 55432,
+          "sha256": "8df7ba42b663e7bfe0a12b7ca9d817d6fd678f754e726b8cf6241d0c065ec435"
+        },
+        "homeLog": {
+          "size": 309,
+          "sha256": "cf17838058a5bf14bf5b23e8ab4bb06b2ad3d2aed9ea025003f9a2eeedf28479"
+        },
+        "sentry": {
+          "size": 63,
+          "format": "sentry-ini-installation-uuid-v4-lowercase"
+        }
+      }
+    }
+  },
+  "packetIngress": {
+    "hash": "sha256",
+    "qualification": {
+      "authorityIssue": 535,
+      "authorityComment": 5535398605,
+      "historicalG0DiagnosticPacketSha": "15ea4d3af4b592c7015b4fd3569cf59d7ef93d77",
+      "baselineRoles": {
+        "externalScript": {
+          "size": 21331,
+          "sha256": "37fe74e4c2319e393f963139e3db300353956a025e6d3724cb4f83d8265f56e7"
+        },
+        "corpus": {
+          "size": 11660084,
+          "sha256": "ffaa165e59ee5cd59df3f7476932ec30938d27abf8a85f8f41667f4de5ee696a"
+        }
+      }
+    },
+    "research": {
+      "authorityIssue": 421,
+      "authorityComment": 5524340839,
+      "outputPolicy": {
+        "mode": "bounded-current-raw-channel",
+        "channels": [
+          "stdout",
+          "stderr",
+          "homeLog"
+        ],
+        "interpretation": "none",
+        "downstreamOwner": "unchanged A1-v2 diagnostic validator"
+      },
+      "packetRefPattern": "refs/heads/p9-packet-421-a1-v2-<lowercase safe token>",
+      "packetRefRule": "The workflow independently resolves exactly one ephemeral same-repository branch under the fixed A1-v2 prefix to the supplied packet commit immediately before fetch and again immediately before deletion.",
+      "authorityRule": "The exact bound owner comment authorises A1-v2 only after an exact-main #535 PASS marker. A later packet-freeze comment may narrow the experiment but cannot replace this execution authority.",
+      "requiredCapabilityMarker": "GODOT_RUNTIME_EXACT_MAIN_PASS head={productSha} tree={treeSha} profile_sha256={profileSha256} manifest_sha256={manifestSha256} run={runId} receipt_sha256={receiptSha256}"
+    },
+    "commitRule": "The exact packet commit has the exact product commit as its sole parent and differs only below one declared packet root.",
+    "manifestSchema": "glassvow.godot-runtime-packet/v1",
+    "manifestRule": "The packet manifest binds schema, exact product SHA, packet root, authority issue and comment, the finite canonical request-index list, role paths, sizes and SHA-256 values. The workflow independently binds the exact packet commit and its sole parent because a commit cannot content-bind its own SHA.",
+    "memberRule": "Regular non-symlink data files only; no workflow, shell or Python file may enter from the packet ref.",
+    "executionRule": "Trusted workflow and tools come only from the observer exact main. The product comes only from the exact product commit. Godot may load only the manifest-declared external GDScript and corpus from the packet.",
+    "mountRule": "Product and packet are made read-only before the traced invocation; HOME and output are fresh and exclusive.",
+    "cleanupRule": "Qualification preserves its immutable historical G0 packet tag. A1-v2 publishes a terminal admission receipt first, then a separate least-privilege job deletes only the exact authenticated ephemeral research branch with a force-with-lease bound to its packet commit and publishes a cleanup receipt. Missing or changed evidence preserves the ref and fails closed."
+  },
+  "accessGrammar": {
+    "allowedSyscalls": [
+      "access",
+      "arch_prctl",
+      "bind",
+      "brk",
+      "chdir",
+      "clock_nanosleep",
+      "clone3",
+      "close",
+      "dup2",
+      "execve",
+      "exit",
+      "exit_group",
+      "faccessat2",
+      "fadvise64",
+      "fcntl",
+      "fstat",
+      "fstatfs",
+      "futex",
+      "getcwd",
+      "getdents64",
+      "getegid",
+      "geteuid",
+      "getgid",
+      "getpid",
+      "getppid",
+      "getrandom",
+      "getresgid",
+      "getresuid",
+      "getsockname",
+      "getsockopt",
+      "getuid",
+      "lseek",
+      "lstat",
+      "madvise",
+      "mkdir",
+      "mmap",
+      "mprotect",
+      "munmap",
+      "newfstatat",
+      "openat",
+      "pipe2",
+      "poll",
+      "prctl",
+      "pread64",
+      "prlimit64",
+      "read",
+      "readlink",
+      "readlinkat",
+      "rseq",
+      "rt_sigaction",
+      "rt_sigprocmask",
+      "rt_sigreturn",
+      "set_robust_list",
+      "set_tid_address",
+      "setsockopt",
+      "socket",
+      "stat",
+      "statx",
+      "vfork",
+      "wait4",
+      "write"
+    ],
+    "unknown": "default-deny",
+    "processes": "One root that execs env then exact Godot, one measured sh descendant and one measured xdg-user-dir descendant; the valid path has exactly three processes, seven threads, ten tasks, four execve events, eight clone3 events and one vfork, and every task is reaped.",
+    "paths": {
+      "successfulRegularFileRule": "Every successful regular-file path must resolve to an exact semantic-read record, exact runtime-identity record, declared platform observation or one of the five declared outputs. A read-only root is not itself an allow rule.",
+      "directoryProbeRule": "Successful directory opens and all getdents64 return lengths are the exact G0 records below. The runner OS is trusted; product and packet directory enumeration is not admitted.",
+      "symlinkRule": "A system alias is admitted only when its resolved device, inode, size and content digest match one frozen runtime identity.",
+      "writableFiles": [
+        "fd 1 stdout",
+        "fd 2 stderr",
+        "${OUTPUT}/observation.json",
+        "${HOME}/.local/share/godot/app_userdata/Glassvow/logs/godot.log",
+        "${HOME}/.local/share/godot/app_userdata/Glassvow/sentry.dat"
+      ],
+      "writableDirectoryRule": "mkdir is limited to ancestors of the three path-named outputs below the two fresh exclusive roots; no other file creation or write is admitted.",
+      "successfulNamedPathOperations": [
+        {
+          "path": "/dev/input/event0",
+          "operations": [
+            "stat"
+          ],
+          "fileType": "character-device",
+          "major": 13,
+          "minor": 64
+        },
+        {
+          "path": "/dev/input/event1",
+          "operations": [
+            "stat"
+          ],
+          "fileType": "character-device",
+          "major": 13,
+          "minor": 65
+        }
+      ],
+      "platformObservationRule": "Only the thirteen exact G0 manifest records are admitted; four named udev records normalise only one decimal initialisation timestamp under a 512-byte member cap, and every other byte and path remains exact.",
+      "successfulDirectoryOperations": [
+        {
+          "operations": [
+            "openat",
+            "statx"
+          ],
+          "paths": [
+            "/"
+          ]
+        },
+        {
+          "operations": [
+            "openat"
+          ],
+          "paths": [
+            "/sys",
+            "/sys/bus",
+            "/sys/class",
+            "/sys/class/hidraw",
+            "/sys/dev",
+            "/sys/dev/char",
+            "/sys/devices",
+            "/sys/devices/0006:045E:0621.0001",
+            "/sys/devices/0006:045E:0621.0001/input",
+            "/sys/devices/virtual",
+            "/sys/devices/virtual/input",
+            "/sys/devices/LNXSYSTM:00",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input"
+          ]
+        },
+        {
+          "operations": [
+            "stat",
+            "openat"
+          ],
+          "paths": [
+            "/dev/input"
+          ]
+        },
+        {
+          "operations": [
+            "access",
+            "newfstatat",
+            "openat"
+          ],
+          "paths": [
+            "/etc/fonts/conf.d",
+            "/usr/share/fontconfig/conf.avail"
+          ]
+        },
+        {
+          "operations": [
+            "newfstatat",
+            "openat"
+          ],
+          "paths": [
+            "/usr/local/share/fonts",
+            "/usr/share/fonts",
+            "/usr/share/fonts/truetype",
+            "/usr/share/fonts/truetype/dejavu",
+            "/usr/share/fonts/truetype/lato",
+            "/usr/share/fonts/truetype/liberation",
+            "/usr/share/fonts/truetype/noto"
+          ]
+        },
+        {
+          "operations": [
+            "openat",
+            "readlinkat"
+          ],
+          "paths": [
+            "/sys/class/input",
+            "/sys/devices/virtual/input/mice",
+            "/sys/devices/0006:045E:0621.0001/input/input1",
+            "/sys/devices/0006:045E:0621.0001/input/input1/js0",
+            "/sys/devices/0006:045E:0621.0001/input/input1/event1",
+            "/sys/devices/0006:045E:0621.0001/input/input1/mouse0",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"
+          ]
+        }
+      ],
+      "successfulDirectoryAliases": [
+        {
+          "path": "/sys/class/input/mice",
+          "target": "/sys/devices/virtual/input/mice"
+        },
+        {
+          "path": "/sys/class/input/js0",
+          "target": "/sys/devices/0006:045E:0621.0001/input/input1/js0"
+        },
+        {
+          "path": "/sys/class/input/input1",
+          "target": "/sys/devices/0006:045E:0621.0001/input/input1"
+        },
+        {
+          "path": "/sys/class/input/event1",
+          "target": "/sys/devices/0006:045E:0621.0001/input/input1/event1"
+        },
+        {
+          "path": "/sys/class/input/mouse0",
+          "target": "/sys/devices/0006:045E:0621.0001/input/input1/mouse0"
+        },
+        {
+          "path": "/sys/class/input/input0",
+          "target": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0"
+        },
+        {
+          "path": "/sys/class/input/event0",
+          "target": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"
+        },
+        {
+          "path": "/sys/dev/char/13:65",
+          "target": "/sys/devices/0006:045E:0621.0001/input/input1/event1"
+        },
+        {
+          "path": "/sys/dev/char/13:64",
+          "target": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0/event0"
+        }
+      ],
+      "successfulDynamicDirectoryOperations": [
+        {
+          "operations": [
+            "chdir"
+          ],
+          "paths": [
+            "${PRODUCT}",
+            "${HOME}/.local/share/godot/app_userdata/Glassvow"
+          ]
+        },
+        {
+          "operations": [
+            "mkdir"
+          ],
+          "paths": [
+            "${HOME}/.local",
+            "${HOME}/.local/share",
+            "${HOME}/.local/share/godot",
+            "${HOME}/.local/share/godot/app_userdata",
+            "${HOME}/.local/share/godot/app_userdata/Glassvow",
+            "${HOME}/.local/share/godot/app_userdata/Glassvow/logs"
+          ]
+        },
+        {
+          "operations": [
+            "newfstatat"
+          ],
+          "paths": [
+            "${PRODUCT}/addons/sentry/bin/linux/x86_64"
+          ]
+        },
+        {
+          "operations": [
+            "readlinkat"
+          ],
+          "paths": [
+            "/sys/bus/hid",
+            "/sys/bus/serio",
+            "/sys/bus/vmbus",
+            "/sys/bus/acpi"
+          ]
+        }
+      ],
+      "successfulWorkingDirectoryOperations": [
+        "chdir",
+        "newfstatat"
+      ],
+      "successfulProbeOperations": [
+        {
+          "operations": [
+            "access"
+          ],
+          "paths": [
+            "${PRODUCT}/addons/sentry/bin/linux/arm64/crashpad_handler",
+            "${PRODUCT}/addons/sentry/bin/linux/x86_32/crashpad_handler",
+            "${PRODUCT}/addons/sentry/bin/linux/x86_64/crashpad_handler",
+            "/run/udev/control"
+          ]
+        },
+        {
+          "operations": [
+            "stat"
+          ],
+          "paths": [
+            "${PRODUCT}/addons/sentry/bin/linux/arm64/crashpad_handler",
+            "${PRODUCT}/addons/sentry/bin/linux/x86_32/crashpad_handler",
+            "${PRODUCT}/addons/sentry/bin/linux/x86_64/crashpad_handler"
+          ]
+        },
+        {
+          "operations": [
+            "faccessat2"
+          ],
+          "paths": [
+            "/sys/devices/0006:045E:0621.0001/uevent",
+            "/sys/devices/LNXSYSTM:00/uevent",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/uevent",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/uevent",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/uevent",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/uevent",
+            "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/uevent"
+          ]
+        }
+      ],
+      "directoryEnumerations": [
+        {
+          "path": "/dev/input",
+          "returns": [
+            224,
+            0,
+            224,
+            0
+          ]
+        },
+        {
+          "path": "/etc/fonts/conf.d",
+          "returns": [
+            1664,
+            0
+          ]
+        },
+        {
+          "path": "/sys/bus",
+          "returns": [
+            1128,
+            0,
+            1128,
+            0,
+            1128,
+            0
+          ]
+        },
+        {
+          "path": "/sys/class",
+          "returns": [
+            2160,
+            0,
+            2160,
+            0,
+            2160,
+            0
+          ]
+        },
+        {
+          "path": "/sys/class/hidraw",
+          "returns": [
+            48,
+            0
+          ]
+        },
+        {
+          "path": "/sys/class/input",
+          "returns": [
+            256,
+            0,
+            256,
+            0
+          ]
+        },
+        {
+          "path": "/sys/devices/0006:045E:0621.0001/input/input1",
+          "returns": [
+            488,
+            0,
+            488,
+            0
+          ]
+        },
+        {
+          "path": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0",
+          "returns": [
+            432,
+            0,
+            432,
+            0
+          ]
+        },
+        {
+          "path": "/usr/share/fontconfig/conf.avail",
+          "returns": [
+            2048,
+            0
+          ]
+        }
+      ],
+      "hwcapsProbeGrammar": {
+        "schema": "glassvow.godot-runtime-provenance.hwcaps-probe-grammar/v1",
+        "loader": "glibc-ld.so-x86-64-hwcaps-subdirs",
+        "levels": ["x86-64-v4", "x86-64-v3", "x86-64-v2"],
+        "identityClass": "identity-only-runtime-probe",
+        "fileIdentity": "none-unless-present-in-g0-identity-sets",
+        "rule": "If a frozen G0 pathOperationClosure record's logical path contains /glibc-hwcaps/<level>/ or ends at /glibc-hwcaps/<level>, and <level> is one of the frozen levels, both independent policy builders also admit the same operation, parameter and expected returns against every frozen level, substituting only that path segment. Missing higher levels remain ENOENT identity probes. Do not add Landlock file identities, semantic inputs, other libraries, or undocumented levels."
+      },
+      "hidInputProbeGrammar": {
+        "schema": "glassvow.godot-runtime-provenance.hid-input-probe-grammar/v1",
+        "authorityComment": 5549035179,
+        "parents": [
+          "/sys/devices/0006:045E:0621.0001/input",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input"
+        ],
+        "measuredChildren": {
+          "/sys/devices/0006:045E:0621.0001/input": "input1",
+          "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input": "input0"
+        },
+        "childIndices": ["0", "1", "2", "3"],
+        "leafKinds": ["event", "js", "mouse"],
+        "leafIndices": ["0", "1", "2", "3"],
+        "classParent": "/sys/class/input",
+        "classKinds": ["event", "input", "js", "mouse"],
+        "charPrefix": "/sys/dev/char/13:",
+        "charMinors": ["64", "65", "66", "67"],
+        "expandedNegativeReturns": [-13, -2],
+        "identityClass": "identity-only-runtime-probe",
+        "fileIdentity": "none-unless-present-in-g0-identity-sets",
+        "rule": "If a frozen G0 pathOperationClosure record's logical path is under one frozen device parent as input<N> or is that child, and <N> is one of the frozen childIndices, both independent policy builders also admit the same operation and parameter against every frozen child index under that same parent, substituting only that input<N> segment. If the remainder is /<kind><M> or /<kind><M>/..., and <kind> is event, js or mouse and <M> is a frozen leaf index, they also substitute that leaf index across the frozen leafIndices. If the logical path is /sys/class/input/<kind><N> for a frozen class kind and index, they substitute that trailing index across 0-3. If the logical path is /sys/dev/char/13:<minor> for a frozen char minor, they substitute that minor across 64-67. Expanded siblings, including class/char indices that were not the G0-measured path, also admit ENOENT (-2) and EACCES (-13). Missing nodes remain ENOENT identity probes. Do not add Landlock file identities, semantic inputs, mice expansion, virtual mice, other /sys trees, or undocumented indices."
+      },
+      "pathResultPolicy": {
+        "closureRule": "Every PATH_X operation, resolved path and open-or-mkdir parameter must be present in the frozen G0 pathOperationClosure, one of the two declared root translations, the frozen hwcapsProbeGrammar expansion or the frozen hidInputProbeGrammar expansion. Exact negative returns and non-open positive returns remain bound; a successful openat return is an opaque non-negative descriptor.",
+        "rootAncestorReadlink": {
+          "operation": "readlink",
+          "parameter": null,
+          "returned": -22
+        },
+        "existingHomeAncestorMkdir": {
+          "operation": "mkdir",
+          "parameter": 509,
+          "returned": -17
+        },
+        "diagnosticOutputDenial": {
+          "caseIds": [
+            "G15",
+            "G16",
+            "G17",
+            "G18"
+          ],
+          "operation": "openat",
+          "path": "${OUTPUT}/observation.json",
+          "parameter": 577,
+          "returned": -13
+        }
+      },
+      "unknownFailedPath": "default-deny",
+      "unknown": "default-deny"
+    },
+    "mappings": {
+      "anonymous": "permitted only within the inherited 1,152 MiB RLIMIT_AS, the inherited 16 MiB RLIMIT_STACK and measured syscall/event caps",
+      "runtimeIdentity": {
+        "count": 223,
+        "canonicalMultisetSha256": "f91d076bcd7f245b2b14e8cc6ed2dcfdfd313b11b8fe4e64f183a0ece7980612",
+        "normalisation": "Sort path, file offset, length, protection and flags after replacing the exact product mount prefix with ${PRODUCT}; omit ASLR addresses and task ids.",
+        "protectionValues": [
+          1,
+          3,
+          5
+        ],
+        "flagValues": [
+          1,
+          2,
+          2050,
+          2066
+        ],
+        "maximumMeasuredEofOverrunBytes": 109320,
+        "sharedReadOnlyPaths": [
+          "/usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache",
+          "/var/cache/fontconfig/0bd3dc0958fa2205aaaa8ebb13e2872b-le64.cache-9",
+          "/var/cache/fontconfig/3047814df9a2f067bd2d96a2b9c36e5a-le64.cache-9",
+          "/var/cache/fontconfig/bf3b770c553c462765856025a94f1ce6-le64.cache-9",
+          "/var/cache/fontconfig/d589a48862398ed80a3d6066f4f56f4c-le64.cache-9"
+        ],
+        "binding": "The complete G0 file-backed runtime mapping multiset is exact. It admits measured read-only shared caches and measured private ELF load spans, including exact BSS/EOF tails, but no additional tuple or writable shared mapping."
+      },
+      "semanticRole": "REJECT: SEMANTIC_MAPPING_DENIED",
+      "writableInput": "rejected"
+    },
+    "network": {
+      "family": 16,
+      "socketType": 526339,
+      "protocol": 15,
+      "bindPid": 0,
+      "bindGroups": 2,
+      "bindAddressLength": 12,
+      "permitted": "Exactly two AF_NETLINK SOCK_RAW|SOCK_CLOEXEC|SOCK_NONBLOCK sockets and successful NETLINK_KOBJECT_UEVENT binds to pid zero, group two and 12-byte sockaddr_nl, with no payload send or receive",
+      "external": "rejected"
+    },
+    "descriptorGrammar": {
+      "fcntlCommands": {
+        "F_DUPFD": 0,
+        "F_GETFD": 1,
+        "F_SETFD": 2
+      },
+      "duplicateMinimumFd": 10,
+      "closeOnExecFlag": 1,
+      "successfulDuplicates": 5,
+      "binding": "Every open, pipe, socket and successful descriptor duplicate enters a per-task inherited descriptor table. CLONE_FILES threads share it; process children copy it. IO, mmap, bind, close, fcntl and dup2 must match the current table, and exec drops close-on-exec entries."
+    },
+    "writes": "Only fd 1, fd 2, observation.json, godot.log and sentry.dat are writable; every successful write is byte-captured and bound to the current lineage.",
+    "internalPipe": {
+      "count": 1,
+      "pipe2Count": 1,
+      "pipe2Flags": 524288,
+      "dup2Count": 3,
+      "producerDup2Count": 1,
+      "producer": "stdout of the /bin/sh interpreter requested through /usr/bin/xdg-user-dir",
+      "producerFd": 1,
+      "consumer": "Godot parent",
+      "consumerFd": 3,
+      "closedFds": [
+        3,
+        4
+      ],
+      "payloadTemplate": "${HOME}/Desktop\n",
+      "binding": "Exactly one anonymous pipe carries this byte-exact payload once from the measured xdg-user-dir descendant to Godot; both positive write and read bytes are captured, share one device/inode identity and the pipe is closed at both ends. Outer stdout/stderr pipes are output transports, never semantic inputs."
+    }
+  },
+  "receiptSchema": {
+    "required": [
+      "fresh verifier challenge",
+      "profile and G0 manifest hashes",
+      "observer, product and packet commit identities",
+      "canonical command and environment",
+      "supplied role identities and hashes",
+      "complete consumed semantic byte evidence",
+      "runtime identities and mapping evidence",
+      "complete process and thread lineage",
+      "raw stdout and stderr writes and final bytes",
+      "fresh output write, close and final bytes",
+      "external CLOCK_MONOTONIC_RAW interval",
+      "contiguous event sequence and zero drops",
+      "independent verifier source hash",
+      "canonical receipt digest"
+    ],
+    "unsupported": [
+      "semantic mmap",
+      "unknown syscall, path, process, mapping or input mechanism",
+      "missing actual bytes",
+      "unreaped task or ambiguous lineage",
+      "missing or replaced external time",
+      "any dropped event outside G24"
+    ]
+  },
+  "cases": [
+    {
+      "id": "G00",
+      "attack": "none; actual baseline Godot invocation",
+      "expectedVerdict": "PASS",
+      "expectedReason": "ADMITTED"
+    },
+    {
+      "id": "G01",
+      "attack": "substitute the Godot executable bytes",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "GODOT_EXECUTABLE_MISMATCH"
+    },
+    {
+      "id": "G02",
+      "attack": "substitute one bound runtime dependency",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "RUNTIME_DEPENDENCY_MISMATCH"
+    },
+    {
+      "id": "G03",
+      "attack": "substitute one canonical Godot argument",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "ARGV_MISMATCH"
+    },
+    {
+      "id": "G04",
+      "attack": "add or substitute one environment entry",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "ENVIRONMENT_MISMATCH"
+    },
+    {
+      "id": "G05",
+      "attack": "substitute one non-cache project semantic role",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "PROJECT_SEMANTIC_BYTES_MISMATCH"
+    },
+    {
+      "id": "G06",
+      "attack": "substitute one generated Godot configuration role",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "GENERATED_CACHE_BYTES_MISMATCH"
+    },
+    {
+      "id": "G07",
+      "attack": "execute the expected external-script bytes from an alternate path",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "EXTERNAL_SCRIPT_PATH_MISMATCH"
+    },
+    {
+      "id": "G08",
+      "attack": "substitute the external-script bytes at the expected path",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "EXTERNAL_SCRIPT_BYTES_MISMATCH"
+    },
+    {
+      "id": "G09",
+      "attack": "consume the expected corpus bytes from an alternate path",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "CORPUS_PATH_MISMATCH"
+    },
+    {
+      "id": "G10",
+      "attack": "substitute the corpus bytes at the expected path",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "CORPUS_BYTES_MISMATCH"
+    },
+    {
+      "id": "G11",
+      "attack": "substitute the request index",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "REQUEST_INDEX_MISMATCH"
+    },
+    {
+      "id": "G12",
+      "attack": "read an undeclared semantic input",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "UNDECLARED_INPUT_PATH"
+    },
+    {
+      "id": "G13",
+      "attack": "read an undeclared cache path",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "UNDECLARED_CACHE_ACCESS"
+    },
+    {
+      "id": "G14",
+      "attack": "attempt an IP or other forbidden network family",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "FORBIDDEN_NETWORK_FAMILY"
+    },
+    {
+      "id": "G15",
+      "attack": "deny the declared output write to induce and capture a genuine non-M09 Godot error path",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "OUTPUT_WRITE_DENIED"
+    },
+    {
+      "id": "G16",
+      "attack": "suppress the genuine G15 stderr capture",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "STDERR_CAPTURE_MISSING"
+    },
+    {
+      "id": "G17",
+      "attack": "replace the genuine G15 stderr bytes",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "STDERR_CAPTURE_MISMATCH"
+    },
+    {
+      "id": "G18",
+      "attack": "replay the genuine G15 stderr under a fresh invocation challenge",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "STDERR_INVOCATION_MISMATCH"
+    },
+    {
+      "id": "G19",
+      "attack": "replay prior output without current semantic consumption",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "OUTPUT_NOT_CURRENT"
+    },
+    {
+      "id": "G20",
+      "attack": "replay a prior statement under a fresh challenge",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "INVOCATION_CHALLENGE_MISMATCH"
+    },
+    {
+      "id": "G21",
+      "attack": "alter the parent, child or thread lineage",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "PROCESS_LINEAGE_MISMATCH"
+    },
+    {
+      "id": "G22",
+      "attack": "omit or replace the externally owned monotonic interval",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "EXTERNAL_TIMING_MISMATCH"
+    },
+    {
+      "id": "G23",
+      "attack": "retain an in-cap internal claim while the external interval exceeds the judgement cap",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "EXTERNAL_WALL_CAP_EXCEEDED"
+    },
+    {
+      "id": "G24",
+      "attack": "remove one event or report a provenance drop",
+      "expectedVerdict": "INCONCLUSIVE",
+      "expectedReason": "PROVENANCE_INCOMPLETE"
+    },
+    {
+      "id": "G25",
+      "attack": "replace a semantic read with a file-backed semantic mapping",
+      "expectedVerdict": "REJECT",
+      "expectedReason": "SEMANTIC_MAPPING_DENIED"
+    }
+  ],
+  "decision": {
+    "pass": "G00 is ADMITTED; G01-G23 and G25 fail closed for their exact predeclared reasons; G24 is INCONCLUSIVE for PROVENANCE_INCOMPLETE; every case uses the same independent verifier; the unchanged inert campaign also passes.",
+    "fail": "Complete evidence admits any negative, rejects G00, gives a negative the wrong reason or weakens a bound.",
+    "inconclusive": "Actual semantic bytes, executable or runtime identity, process lineage, raw stderr, fresh output, zero-loss accounting or external time remains ambiguous outside the deliberate G24 control.",
+    "repair": "An implementation-only correction may retain every profile, trust, attack, cap and decision field, but invalidates the complete prior Godot campaign. A scientific, trust-boundary or acceptance change closes the profile rather than repairing it."
+  }
+}

@@ -1,7 +1,7 @@
 ---
 title: "The generating product is Studio; a SKIP is not the silhouette gate"
 date: 2026-08-19
-last_updated: 2026-08-20
+last_updated: 2026-08-25
 category: tooling-decisions
 module: assets/art/map
 problem_type: tooling_decision
@@ -118,6 +118,10 @@ above 0.04 fails.
    those commands; they do not browse. Default generate is **Chrome for
    Testing `--headless=new`** on port 9335 (Metal WebGL). gstack
    `chrome-headless-shell` 500s on `/workspace/generate` — do not use it.
+   Ordinary kits stay on Smart Mesh (no texture). Textured game content
+   (`--textured`, HD Model) is the other tab on the same driver — dry-run
+   then smoke-run before Generate; see
+   [the textured Studio path](the-textured-studio-path-is-the-hd-tab-not-the-script.md).
    The old gstack clicker is archived at
    `tools/archive/studio_smart_mesh.py`. Cookies come from Chrome Default
    (`ory_kratos_session` on `.tripo3d.ai`) cached at

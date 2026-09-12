@@ -11,13 +11,25 @@ func _initialize() -> void:
 		push_error("balance_sweep: %s" % opts["error"])
 		quit(2)
 		return
-	var content: ContentDB = ContentDB.load_full(false)
-	var git_out: Array = []
-	OS.execute("git", ["rev-parse", "HEAD"], git_out)
+	var loaded: Dictionary = BalanceCatalogue.open(opts)
+	if loaded.has("error"):
+		push_error("balance_sweep: %s" % loaded["error"])
+		quit(2)
+		return
+	var identity_v: Variant = loaded["identity"]
+	if typeof(identity_v) != TYPE_DICTIONARY:
+		push_error("balance_sweep: missing catalogue identity")
+		quit(2)
+		return
+	var identity: Dictionary = identity_v
+	var content: ContentDB = BalanceCatalogue.load_prepared(loaded)
+	if content == null:
+		push_error("balance_sweep: content did not load a catalogue")
+		quit(2)
+		return
 	var manifest: Dictionary = opts.duplicate()
-	manifest["commit"] = str(git_out[0]).strip_edges() if not git_out.is_empty() else "unknown"
-	manifest["godot"] = Engine.get_version_info().get("string", "unknown")
-	manifest["contentSha256"] = FileAccess.get_sha256(ContentDB.FULL_PATH)
+	manifest.merge(identity)
+	manifest["contentSha256"] = str(identity.get("contentFileSha256", ""))
 	var file: FileAccess = FileAccess.open(str(opts["out"]), FileAccess.WRITE)
 	if file == null:
 		push_error("balance_sweep: cannot write --out")
@@ -41,6 +53,8 @@ static func _controls(content: ContentDB, opts: Dictionary) -> Array[Dictionary]
 		{"arm": 3, "build": 0, "play": 1}, {"arm": 4, "build": 1, "play": 1},
 	]
 	for arm: Dictionary in arms:
+		if not str(opts["arms"]).split(",").has(str(arm["arm"])):
+			continue
 		for aspect: String in ["duskblade", "ashwarden"]:
 			for vow: int in [0, 5]:
 				for offset: int in range(_i(opts, "seeds")):
@@ -67,13 +81,17 @@ static func _write_policies(content: ContentDB, opts: Dictionary, file: FileAcce
 					file.store_line(JSON.stringify({"policyIndex": policy_index, "seed": row["seed"],
 						"aspect": row["aspect"], "vow": row["vow"], "outcome": row["outcome"],
 						"error": row["error"], "deck": row["deck"], "fights": row["fights"],
-						"rng": row["rng"], "policy": row["policy"]}))
+						"rng": row["rng"], "policy": row["policy"],
+						"deckIds": row.get("deckIds", []), "relics": row.get("relics", []),
+						"packageEvents": row.get("packageEvents", {})}))
 					count += 1
 	return count
 
 static func _options(args: PackedStringArray) -> Dictionary:
 	var out: Dictionary = {"mode": "sweep", "out": "", "rootSeed": 215,
-		"policyFirst": 0, "policyCount": 2000, "seeds": 40, "seed0": 3000}
+		"policyFirst": 0, "policyCount": 2000, "seeds": 40, "seed0": 3000,
+		"arms": "1,2,3,4", "content": "", "space": BalanceCatalogue.DEFAULT_SPACE,
+		"stage": "", "sealedToken": ""}
 	for arg: String in args:
 		if not arg.begins_with("--") or not arg.contains("="):
 			return {"error": "expected --name=value, got %s" % arg}
@@ -87,6 +105,14 @@ static func _options(args: PackedStringArray) -> Dictionary:
 		out[key] = int(float(str(out[key])))
 	if str(out["mode"]) not in ["preflight", "controls", "sweep"]:
 		return {"error": "--mode must be preflight, controls or sweep"}
+	var seen_arms: Dictionary = {}
+	for arm_text: String in str(out["arms"]).split(","):
+		if not arm_text.is_valid_int() or int(arm_text) < 1 or int(arm_text) > 4 \
+				or seen_arms.has(arm_text):
+			return {"error": "--arms must be unique values from 1,2,3,4"}
+		seen_arms[arm_text] = true
+	if seen_arms.is_empty():
+		return {"error": "--arms must not be empty"}
 	if str(out["out"]).is_empty() or _i(out, "policyFirst") < 0 \
 			or _i(out, "policyCount") < 1 or _i(out, "seeds") < 1:
 		return {"error": "--out is required and counts must be positive"}

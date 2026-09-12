@@ -310,8 +310,8 @@ func gain_relic(run: RunState, id: String) -> bool:
 			run.player.max_hp += 8
 			run.player.hp += 8
 		"hollowCrown":
-			run.player.energy_max += 1
-			run.player.max_hp = maxi(1, run.player.max_hp - 10)
+			run.player.energy_max += _ji(relic.get("energyGain", 1))
+			run.player.max_hp = maxi(1, run.player.max_hp - _ji(relic.get("maxHpPenalty", 10)))
 			run.player.hp = mini(run.player.hp, run.player.max_hp)
 	return true
 

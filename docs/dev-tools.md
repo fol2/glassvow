@@ -33,8 +33,8 @@ server is enabled. Native Proof instead uses Funplay's file-backed **runtime
 bridge** inside the running game; it does not depend on the editor MCP or port
 8765.
 
-The first Web build needs Godot's exact `4.7.2.stable`
-`web_nothreads_debug.zip` export template. Install the Web debug template from
+The first Web build needs Godot 4.7.2 stable or later stable, with that engine's
+matching `web_nothreads_debug.zip` export template. Install the Web debug template from
 **Editor → Manage Export Templates**, or ask the organiser to provision it.
 For a build-only check:
 
@@ -79,6 +79,41 @@ failing halfway through one.
 | Scenario launch | `--scenario=<json>` via `python3 tools/dev.py --scenario` | CLI only |
 | Editor scene inspection and mutation | Funplay editor plugin | Editor MCP only |
 | Music / SFX generation | `.claude/skills/glassvow-suno`, `.claude/skills/glassvow-elevenlabs`, `.cursor/mcp.json` | not a browser surface — ledgers `docs/music-ledger.md`, `docs/sfx-ledger.md` |
+
+### Hosted execution provenance
+
+The manual `Linux execution provenance evidence` workflow keeps its workload
+profiles separately gated. The original qualified inert profile remains fixed.
+The additive `godot-runtime` qualification mode is limited to the measured
+Godot 4.7.2 headless path: one exact current-main product, one external
+GDScript, one corpus, one request index, a fresh HOME, and a fresh output
+directory. It is a provenance capability, not a general executable sandbox or
+evidence that a research or balance claim is correct.
+
+A Godot run accepts an exact product commit, packet commit, packet root, and
+OWNER-authored authority comment. The packet commit must have current main as
+its sole parent and may add only the manifest-declared regular `.gd` and `.json`
+roles below that root. The trusted workflow, profile, runner, tracer, and
+verifier always come from the observer checkout. The declared GDScript executes
+only through the bound Godot invocation; packet content is never imported or
+executed as shell, Python, or workflow code. Product and packet inputs are
+mounted read-only. Full profile qualification re-runs the unchanged inert
+campaign before the frozen actual-Godot matrix and publishes only bounded
+capability evidence. Newly produced case receipts hash a bounded failure
+check/detail (and an exception category for unexpected errors) without using
+that text to decide admission. The Godot campaign hashes frozen runtime
+path/size/sha256 identities before launching Godot; an image label is
+observation only.
+
+The separate `godot-runtime-a1` mode admits one packet-declared request through
+the same qualified G00 path. It runs only from exact current `main`, requires
+the fixed #421 A1-v2 owner authority and an exact-main #535 PASS marker bound to
+the successful specialist run and independently rehashed campaign receipt. Its
+admission receipt also binds the exact capability run, receipt, and prerequisite
+record. A1 does not consume the #535 qualification-attempt budget, interpret
+mutation meaning, or replace A1's separately frozen scientific contract. The
+owning research run deletes its ephemeral packet ref after publishing the
+terminal receipt.
 
 Additional flags stay owned and parsed by their lab. The browser allow-list
 rejects another surface's selector and any flag that deliberately exits the live
@@ -137,6 +172,33 @@ manifest, every run row, derived metrics and calibration verdict as JSON:
 godot --headless -s res://tools/balance_sim.gd -- --aspect=all --runs=200 \
   --seed0=1000 --vow=0 --out=/tmp/balance.json [--mobs=path.json]
 ```
+
+The map profile probe checks all four runtime catalogues against independently
+loaded mesh bounds, then checks repeatable cosmetic placement over the requested
+seeds. It fails on missing geometry, another act's assets or non-determinism.
+Complete compiled-layout quality is measured separately through the native preview:
+
+```bash
+godot --headless -s res://tools/probe_map_seeds.gd -- --seeds=20
+godot -s res://tools/preview_map.gd -- --act-index=0 --seed=717 \
+  --shape=phone-landscape --pose=opening --output=/tmp/map.png
+godot --headless -s res://tools/preview_map.gd -- --act-index=0 --seed=717 \
+  --compile-only --quality=/tmp/map-quality.json
+```
+
+Omit `--output` for native drag, zoom and keyboard inspection. The preview mounts
+the production `WorldMapScreen`, compiler, assets and HUD. It prepares map state
+without playing opening boons or encounters; it does not run the main game's
+encounter transition. `--cache=/tmp/map-preview-cache` optionally reuses a pure
+compiler result keyed by the complete input digest; production never reads this cache.
+A cache hit still binds current scenery and evaluates its final geometry when
+`--quality` is supplied. `--steps=N`, `--pose=middle|terminus|focused` and
+`--zoom-stop=0..3` expose travelled and distant views. `--exercise` injects
+native viewport wheel, drag and keyboard events and verifies animated arrival,
+one selection hand-off and subsequent render freeze. The standard game-flow
+tests cover the main application separately. `--measure` reports 120 warmed pan
+frames on the current host, including an explicit GPU-timer availability flag;
+it does not qualify release-device performance.
 
 **`tools/probe_layout.gd` reads the composition back rather than photographing
 it.** A capture shows where something LOOKS like it is; on a 390px phone that is

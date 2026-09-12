@@ -1,0 +1,47 @@
+{
+  "candidates": {
+    "c029": {
+      "controlRows": 8,
+      "controlSha256": "e654f3fc4b5f0dba11c46dd70eb06f76ebfb17f1acffb397e428ad1f917e94b1",
+      "landscapeRows": 4,
+      "landscapeSha256": "8e2ab27cc1355128d64e8d8ae0511bded86d18c4325f02089d5dce9d55a58d95",
+      "match": true
+    },
+    "s009": {
+      "controlRows": 8,
+      "controlSha256": "62ffe4f5f6cdef290c943b15a9b199e3ff34914c418645485f028299584f9166",
+      "landscapeRows": 4,
+      "landscapeSha256": "87cde9e317444e62a15dd688127875c9d01747c369b99d63fde471302f8d1df4",
+      "match": true
+    }
+  },
+  "developmentReplay": {
+    "controls": {
+      "arms": [
+        1,
+        2
+      ],
+      "seed": 6327
+    },
+    "landscape": {
+      "policyIndex": 511,
+      "seed": 6231
+    }
+  },
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "issue": 458,
+  "m1Host": {
+    "cpu": "Apple M1 Max",
+    "fingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+    "hostname": "MacBookPro.lan",
+    "qualificationPacketSha256": "d9800f55ff11e3f9035e4292a9a1440ad4514e8954264b7a942615830cf11792",
+    "workers": 8
+  },
+  "m4Host": {
+    "cpu": "Apple M4",
+    "fingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+    "hostname": "Jamess-Mac-mini.local",
+    "qualificationPacketSha256": "4f290c9bd8d6e8379aae05e911ed4a23060bf7631ee79dbc2b160fa75400cff6",
+    "workers": 4
+  }
+}

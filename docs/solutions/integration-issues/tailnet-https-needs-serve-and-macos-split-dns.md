@@ -30,7 +30,7 @@ macOS system resolver was not routing `ts.net` queries to Tailscale DNS.
 
 The Glassvow tool itself was healthy. Its documented browser endpoint defaults
 to loopback port 8766 (`docs/dev-tools.md:14`), matching the host and port
-defaults in `tools/dev.py:641-642` (in `main`). A loopback request
+defaults in `tools/dev.py:651-652` (in `main`). A loopback request
 returned HTTP 200 before any Tailscale change.
 
 ## Symptoms

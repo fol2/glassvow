@@ -1,0 +1,227 @@
+{
+  "contentSha256": "517261b7b30fd0150b2889f304de62aea39f44096a699285ddce14721438cbde",
+  "godot": "4.7.2-stable (official)",
+  "commit": "394328d4a00a7f9f69a54976292b5adb16476627",
+  "verdict": "VETO",
+  "reasons": [
+    "holdout Dusk V0 62.5% outside 80\u201397",
+    "holdout Ash V0 74.5% outside 80\u201397",
+    "holdout Dusk V5 30.5% outside 55\u201385",
+    "holdout Ash V5 44.0% outside 55\u201385"
+  ],
+  "controls": [
+    {
+      "arm": 1,
+      "aspect": "duskblade",
+      "vow": 0,
+      "wins": 124,
+      "runs": 200,
+      "winRate": 0.62,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 1,
+      "aspect": "duskblade",
+      "vow": 5,
+      "wins": 42,
+      "runs": 200,
+      "winRate": 0.21,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 1,
+      "aspect": "ashwarden",
+      "vow": 0,
+      "wins": 164,
+      "runs": 200,
+      "winRate": 0.82,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 1,
+      "aspect": "ashwarden",
+      "vow": 5,
+      "wins": 72,
+      "runs": 200,
+      "winRate": 0.36,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 2,
+      "aspect": "duskblade",
+      "vow": 0,
+      "wins": 47,
+      "runs": 200,
+      "winRate": 0.235,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 2,
+      "aspect": "duskblade",
+      "vow": 5,
+      "wins": 15,
+      "runs": 200,
+      "winRate": 0.075,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 2,
+      "aspect": "ashwarden",
+      "vow": 0,
+      "wins": 48,
+      "runs": 200,
+      "winRate": 0.24,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 2,
+      "aspect": "ashwarden",
+      "vow": 5,
+      "wins": 14,
+      "runs": 200,
+      "winRate": 0.07,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 3,
+      "aspect": "duskblade",
+      "vow": 0,
+      "wins": 52,
+      "runs": 200,
+      "winRate": 0.26,
+      "stalls": 1,
+      "errors": 0
+    },
+    {
+      "arm": 3,
+      "aspect": "duskblade",
+      "vow": 5,
+      "wins": 10,
+      "runs": 200,
+      "winRate": 0.05,
+      "stalls": 1,
+      "errors": 0
+    },
+    {
+      "arm": 3,
+      "aspect": "ashwarden",
+      "vow": 0,
+      "wins": 144,
+      "runs": 200,
+      "winRate": 0.72,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 3,
+      "aspect": "ashwarden",
+      "vow": 5,
+      "wins": 65,
+      "runs": 200,
+      "winRate": 0.325,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 4,
+      "aspect": "duskblade",
+      "vow": 0,
+      "wins": 13,
+      "runs": 200,
+      "winRate": 0.065,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 4,
+      "aspect": "duskblade",
+      "vow": 5,
+      "wins": 5,
+      "runs": 200,
+      "winRate": 0.025,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 4,
+      "aspect": "ashwarden",
+      "vow": 0,
+      "wins": 48,
+      "runs": 200,
+      "winRate": 0.24,
+      "stalls": 0,
+      "errors": 0
+    },
+    {
+      "arm": 4,
+      "aspect": "ashwarden",
+      "vow": 5,
+      "wins": 7,
+      "runs": 200,
+      "winRate": 0.035,
+      "stalls": 0,
+      "errors": 0
+    }
+  ],
+  "holdout": {
+    "0": {
+      "duskblade": {
+        "wins": 125,
+        "runs": 200,
+        "winRate": 0.625,
+        "stalls": 0,
+        "errors": 0
+      },
+      "ashwarden": {
+        "wins": 149,
+        "runs": 200,
+        "winRate": 0.745,
+        "stalls": 0,
+        "errors": 0
+      }
+    },
+    "5": {
+      "duskblade": {
+        "wins": 61,
+        "runs": 200,
+        "winRate": 0.305,
+        "stalls": 0,
+        "errors": 0
+      },
+      "ashwarden": {
+        "wins": 88,
+        "runs": 200,
+        "winRate": 0.44,
+        "stalls": 0,
+        "errors": 0
+      }
+    }
+  },
+  "deltas": {
+    "arm2": {
+      "duskblade:v0": 0.01999999999999999,
+      "duskblade:v5": -0.0050000000000000044,
+      "ashwarden:v0": 0.065,
+      "ashwarden:v5": 0.0050000000000000044
+    },
+    "holdout": {
+      "duskblade:v0": 0.07499999999999996,
+      "duskblade:v5": 0.08499999999999999,
+      "ashwarden:v0": 0.040000000000000036,
+      "ashwarden:v5": 0.044999999999999984
+    }
+  },
+  "baseline": {
+    "path": "docs/balance/data/421-h39/phase-a.json",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "commit": "42645436f8fa54cfe4973a30759b9619d3d24eb0"
+  }
+}

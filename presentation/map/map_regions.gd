@@ -20,6 +20,17 @@ const FALLBACK_GLOWS: Array[Color] = [
 const FALLBACK_ACCENTS: Array[Color] = [
 	Color("#7ddb8f"), Color("#5fd6e8"), Color("#c99aff"), Color("#e8b890")]
 
+## Mineral albedo and basin colours for the reassembled landscape.
+const LAND_TINT: Array[Color] = [
+	Color("91acb6"), Color("7da8b5"), Color("9290ac"), Color("c3b6a2")]
+const WATER: Array[Color] = [
+	Color("14272e"), Color("1b404c"), Color("191b2b"), Color("24383b")]
+
+const LAND_KEY: Array[Color] = [
+	Color("f2e7cd"), Color("bbdedf"), Color("c8c1d3"), Color("ffe0ac")]
+const LAND_AMBIENT: Array[Color] = [
+	Color("98b1c2"), Color("688eae"), Color("778da6"), Color("879daa")]
+
 const WEATHER_BY_ACT: Array[StringName] = [&"ash", &"sunken", &"storm", &"dawn"]
 
 ## Light arc (#207 decision 11): dusk → night → storm → dawn. Written onto

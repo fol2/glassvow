@@ -23,6 +23,7 @@ const SENTINEL_SCENE: String = "sentinel-329"
 ## Where a developer's real save waits while the sentinels stand in for it.
 const STASH_SUFFIX: String = ".pretest"
 const BUILD: String = "test-profile-isolation-sha"
+const MapCompose: GDScript = preload("res://tests/test_map_compose.gd")
 
 ## The only functions in `application/main.gd` allowed to name `SaveService`,
 ## each mapped to the active-path field it must hand over. A helper that stops
@@ -270,6 +271,7 @@ static func _reference() -> ScenarioReference:
 static func _main(content: ContentDB, kernel: ScenarioKernel) -> Main:
 	Locale.active = Locale.new(Locale.CODE_EN)
 	var main: Main = Main.new()
+	main._map_layout_compile = MapCompose.fake_layout_compile()
 	main.content = content
 	main._dev_claimed = true
 	main._forced_seed = 32900

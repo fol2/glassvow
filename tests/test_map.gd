@@ -186,7 +186,9 @@ static func run(fails: Array[String]) -> void:
 		"first-clear II-prime elite pins both landed axes")
 	_check(fails, fourth.nodes[4].enemies == ["eternalKeeper"],
 		"first-clear hearth-prime pins the Eternal Keeper")
-	_check(fails, lifecycle.player.hp == 26,
+	var expected_mend: int = mini(lifecycle.player.max_hp,
+		1 + int(roundf(float(lifecycle.player.max_hp) * 0.35)))
+	_check(fails, lifecycle.player.hp == expected_mend,
 		"each boss transition mends 35 percent without exceeding max HP")
 	var boss_map: WorldMap = WorldMap.slice()
 	boss_map.at = 0
@@ -254,17 +256,6 @@ static func run(fails: Array[String]) -> void:
 	screen.node_chosen.connect(func(i: int) -> void: seen.append(i))
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	tree.root.add_child(screen)
-	# A same-lane edge must actually run straight. `signf(to.y - from.y)` gave it
-	# the full 10px bow off a sub-pixel jitter difference for three phases while
-	# the comment above it said otherwise (#69); 1.53px is the worst same-lane
-	# endpoint gap on seed 717, and a full lane step must still bow the full 10.
-	var flat_from: Vector2 = Vector2(0.0, 100.0)
-	var flat_mid: float = screen.edge_control(flat_from,
-		Vector2(200.0, 101.53)).y - 100.765
-	var step_mid: float = screen.edge_control(flat_from,
-		Vector2(200.0, 100.0 + screen._lane_gap())).y - (100.0 + screen._lane_gap() * 0.5)
-	_check(fails, absf(flat_mid) < 1.0, "a same-lane edge bows under 1px")
-	_check(fails, absf(step_mid - 10.0) < 0.01, "a full lane step still bows 10px")
 	# SkyBand/RegionBand, SPIRE_*, MapStrip skyband/region, FAR_BLEED, the
 	# terminus arch, crown bleed, and 2D road bed retired in #234 slice 7b2.
 	# A refresh mid-glide must RE-AIM, not seat. `set_shape` routes through

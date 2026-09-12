@@ -1,0 +1,7 @@
+{
+  "issue": 456,
+  "machine": "Linux/x86 cloud VM",
+  "qualified": false,
+  "status": "NOT_QUALIFIED",
+  "reason": "No parity packet was returned on this ticket. Exploratory diagnostics may still run on the VM, but its rows cannot enter candidate ranking until it matches docs/balance/data/456/canonical-host.json exactly."
+}

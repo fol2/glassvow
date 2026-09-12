@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "id": "421-content-v1",
+  "base": "content/full-content.json",
+  "description": "Eight conceptual content knobs for the first balanced DOE. Acceptance gates remain external and unchanged.",
+  "features": [
+    {
+      "id": "duskMaxHp",
+      "values": [60, 62, 64, 66, 68],
+      "writes": [
+        {"path": "player.maxHp"},
+        {"path": "aspects[0].maxHp"}
+      ]
+    },
+    {
+      "id": "flareDamage",
+      "values": [7, 8, 9, 10, 11],
+      "writes": [
+        {"path": "arts.flare.effects[0].n"}
+      ]
+    },
+    {
+      "id": "ashfallSmolder",
+      "values": [3, 4, 5, 6, 7],
+      "writes": [
+        {"path": "arts.ashfall.effects[0].n"}
+      ]
+    },
+    {
+      "id": "ashfallWard",
+      "values": [3, 4, 5, 6, 7],
+      "writes": [
+        {"path": "arts.ashfall.effects[1].n"}
+      ]
+    },
+    {
+      "id": "regrowthHeal",
+      "values": [1, 2, 3, 4],
+      "writes": [
+        {"path": "cards.regrowth.effects[0].n"},
+        {"path": "cards.regrowth.up.effects[0].n", "offset": 1}
+      ]
+    },
+    {
+      "id": "ironSkinWard",
+      "values": [2, 3, 4, 5],
+      "writes": [
+        {"path": "cards.ironSkin.effects[0].n"},
+        {"path": "cards.ironSkin.up.effects[0].n", "offset": 1}
+      ]
+    },
+    {
+      "id": "guardedStrikeWard",
+      "values": [3, 4, 5, 6],
+      "writes": [
+        {"path": "cards.guardedStrike.effects[1].n"},
+        {"path": "cards.guardedStrike.up.effects[1].n", "offset": 2}
+      ]
+    },
+    {
+      "id": "venomStrikeSmolder",
+      "values": [2, 3, 4, 5],
+      "writes": [
+        {"path": "cards.venomStrike.effects[1].n"},
+        {"path": "cards.venomStrike.up.effects[1].n", "offset": 1}
+      ]
+    }
+  ]
+}

@@ -3,6 +3,11 @@
 
 The walked driver is the .ts file. This exists so
 `.grok/workflows/studio-dcc-map-glb.rhai` can keep calling python3.
+
+Workflow: image in → arguments → 3D model out. Pass-through flags include
+--textured (HD Model albedo), --dry-run (no Chrome, no credits), --smoke-run
+(form only, Generate not clicked), --texture-quality, --pbr, --ultra-mesh,
+--ai-complete. See `bun tools/studio_image_to_glb.ts --help`.
 """
 from __future__ import annotations
 

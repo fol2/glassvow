@@ -3,18 +3,344 @@ extends RefCounted
 ## owns world input. Seed-717 projection↔hit-test agreement stays in test_map_pins.
 
 
+class FakeLayoutCompiler:
+	extends RefCounted
+	var calls: int = 0
+	var fail_next: bool = false
+	var drop_edge: bool = false
+
+	func compile(input: MapLayoutInput, _quality: Dictionary,
+			_assets: Dictionary) -> Dictionary:
+		calls += 1
+		var input_digest: String = input.digest()
+		if fail_next:
+			fail_next = false
+			return {
+				"status": MapLayoutCompiler.NO_FEASIBLE_NODE_ROUTE_LAYOUT,
+				"result": null,
+				"diagnostics": {"input_digest": input_digest},
+				"failure": {
+					"kind": "test", "id": "invalid", "reason": "forced failure",
+				},
+			}
+		var source: Dictionary = input.to_dict()
+		var anchors: Dictionary = {}
+		for node: Dictionary in input.node_records():
+			var anchor: Vector3 = MapPinProjection.lattice_point(
+				MapLayoutCanonical.int_value(node["row"]),
+				MapLayoutCanonical.int_value(node["col"]))
+			anchor.y = float(MapLayoutCanonical.int_value(node["row"]) % 3)
+			anchor.z += 2.75
+			anchors[str(node["id"])] = _a3(anchor)
+		var edges: Dictionary = {}
+		for edge: Dictionary in input.edge_records():
+			var from: Vector3 = _v3(anchors[str(edge["from"])])
+			var to: Vector3 = _v3(anchors[str(edge["to"])])
+			var bend: Vector3 = from.lerp(to, 0.5) + Vector3(0.0, 0.5, 1.0)
+			edges[str(edge["id"])] = {
+				"from": edge["from"], "to": edge["to"],
+				"centerline": [_a3(from), _a3(bend), _a3(to)],
+				"corridor_width": 2.5,
+			}
+		if drop_edge and not edges.is_empty():
+			drop_edge = false
+			edges.erase(MapLayoutCanonical.sorted_keys(edges)[0])
+		var heroes: Dictionary = {}
+		var contract: Dictionary = source["hero_anchor_contract"]
+		var contract_anchors: Dictionary = contract["anchors"]
+		for id: String in MapLayoutCanonical.sorted_keys(contract_anchors):
+			var anchor: Dictionary = contract_anchors[id]
+			heroes[id] = {
+				"asset_id": anchor["asset_id"], "profile_id": anchor["profile_id"],
+				"transform": {
+					"origin": anchor["position"],
+					"yaw_radians": anchor["yaw_radians"], "scale": anchor["scale"],
+				},
+			}
+		var result: MapLayoutResult = MapLayoutResult.create({
+			"schema_version": MapLayoutResult.SCHEMA_VERSION,
+			"generator_version": MapLayoutCompiler.VERSION,
+			"node_anchors": MapLayoutCanonical.ordered_dictionary(anchors),
+			"edges": MapLayoutCanonical.ordered_dictionary(edges),
+			"hero_placements": MapLayoutCanonical.ordered_dictionary(heroes),
+			"scenery_instances": {}, "hard_measurements": {}, "soft_scores": {},
+			"selected_restart_id": 0, "selected_candidate_id": "test/live-binding",
+			"input_digest": input_digest,
+		})
+		return {
+			"status": MapLayoutCompiler.COMPILED, "result": result,
+			"diagnostics": {"input_digest": input_digest},
+			"report": {"hard_pass": true},
+		}
+
+	func _a3(value: Vector3) -> Array[float]:
+		return [value.x, value.y, value.z]
+
+	func _v3(value: Variant) -> Vector3:
+		var row: Array = value
+		return Vector3(MapLayoutCanonical.float_value(row[0]),
+			MapLayoutCanonical.float_value(row[1]),
+			MapLayoutCanonical.float_value(row[2]))
+
+
+static var _shared_fake_layout_compiler: FakeLayoutCompiler = FakeLayoutCompiler.new()
+
+
+static func fake_layout_compile() -> Callable:
+	return Callable(_shared_fake_layout_compiler, "compile")
+
+
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
 	if not ok:
 		fails.append("test_map_compose: %s" % what)
 
 
 static func run(fails: Array[String]) -> void:
+	_compiled_result_binding(fails)
 	_five_shapes(fails)
 	_surface_rects(fails)
 	_act_and_live(fails)
 	_seats(fails)
 	_pin_select(fails)
 	_projection_cache(fails)
+
+
+static func _compiled_result_binding(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var run: RunState = RunState.new_run(content, 717, "run-map-live-layout")
+	var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.benchmark(run), content)
+	if not screen.has_method(&"layout_result"):
+		_check(fails, false, "WorldMapScreen exposes the final compiled result")
+		screen.free()
+		return
+	var compiler: FakeLayoutCompiler = FakeLayoutCompiler.new()
+	screen.set("_layout_compile", Callable(compiler, "compile"))
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	tree.root.add_child(screen)
+	_mount(screen, StageShape.IDENTITY)
+	screen.refresh(run)
+	var result_v: Variant = screen.call(&"layout_result")
+	var result: MapLayoutResult = result_v if result_v is MapLayoutResult else null
+	_check(fails, compiler.calls == 1 and result != null,
+		"refresh compiles and binds exactly one final live result")
+	if result == null:
+		tree.root.remove_child(screen)
+		screen.free()
+		return
+	var anchors: PackedVector3Array = PackedVector3Array()
+	var data: Dictionary = result.to_dict()
+	_check(fails, screen.layout_digest() == screen._map_scene.layout_digest()
+			and screen.layout_input_digest() == screen._map_scene.layout_input_digest(),
+		"screen and renderer expose the same input and layout digests")
+	for node: MapNode in screen.map.nodes:
+		anchors.append(compiler._v3(data["node_anchors"][node.id]))
+	var seats: PackedVector2Array = screen.projected_seats()
+	var direct: PackedVector2Array = screen._map_scene.project_anchors(anchors)
+	var legacy: PackedVector2Array = screen._map_scene.project_pins(screen.map.nodes)
+	_check(fails, seats == direct and not seats.is_empty()
+			and not seats[0].is_equal_approx(legacy[0]),
+		"waystones project the compiled anchors rather than the legacy lattice")
+	var reachable: Array[int] = screen.map.reachable()
+	for i: int in reachable:
+		_check(fails, screen.pick_node_at(seats[i]) == i,
+			"compiled anchor %d agrees with its hit test" % i)
+	if not reachable.is_empty():
+		var i: int = reachable[0]
+		var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
+			"res://docs/map/map-quality-v2.json"))
+		var bound: Dictionary = MapLayoutInputBinding.bind(screen.map, run.act)
+		var bound_nodes: Array = bound["nodes"]
+		var bound_edges: Array = bound["edges"]
+		var envelopes: Dictionary = MapQualityEvaluator.node_candidate_bounds(
+			bound_nodes, bound_edges, quality)
+		var expected: Vector2 = screen._map_scene.get_rig().pose_leading(
+			anchors[i], Vector2(StageShape.REFERENCES[StageShape.IDENTITY]),
+			MapQualityEvaluator.focused_touch_inset_px(quality),
+			MapQualityEvaluator.focused_anchor_envelope(
+				screen.map.nodes[i].id, envelopes))
+		_check(fails, screen._focus_xz(i).is_equal_approx(expected),
+			"focus uses the same compiled anchor as projection and hit testing")
+	_waylight_and_travel(fails, screen, run, result)
+	var first_digest: String = result.digest()
+	screen.map.at = 0
+	screen.map.cleared[0] = true
+	screen.refresh(run)
+	screen.set_shape(&"phone-landscape")
+	var reused_v: Variant = screen.call(&"layout_result")
+	var reused: MapLayoutResult = reused_v if reused_v is MapLayoutResult else null
+	_check(fails, compiler.calls == 1
+			and reused != null and reused.digest() == first_digest,
+		"semantic and stage-shape changes reuse the same layout")
+	run.seed += 1
+	screen.refresh(run)
+	var after_seed: int = compiler.calls
+	screen.map.nodes[0].jx += 0.01
+	screen.refresh(run)
+	var after_graph: int = compiler.calls
+	run.act = 1
+	screen.refresh(run)
+	var after_act: int = compiler.calls
+	screen.set_act_scenery(2)
+	_check(fails, after_seed == 2 and after_graph == 3 and after_act == 4
+			and compiler.calls == 5,
+		"seed, graph, act and active-profile changes each regenerate once")
+	compiler.fail_next = true
+	run.seed += 1
+	screen.call(&"_bind_compiled_layout")
+	_check(fails, screen.layout_result() == null
+			and not screen.layout_failure().is_empty()
+			and screen._map_scene.road_segments().is_empty()
+			and screen._map_scene._waylights.is_empty()
+			and screen.projected_seats().is_empty(),
+		"an invalid compile fails explicitly without legacy pin or road fallback")
+	compiler.drop_edge = true
+	run.seed += 1
+	screen.call(&"_bind_compiled_layout")
+	_check(fails, screen.layout_result() == null
+			and not screen.layout_failure().is_empty()
+			and screen._map_scene.road_segments().is_empty()
+			and screen._map_scene._waylights.is_empty()
+			and screen.projected_seats().is_empty(),
+		"an incomplete compiled result fails closed")
+	tree.root.remove_child(screen)
+	screen.free()
+
+
+static func _waylight_and_travel(fails: Array[String], screen: WorldMapScreen,
+		run: RunState, result: MapLayoutResult) -> void:
+	var scene: MapScene = screen._map_scene
+	var tracers: Dictionary = scene._waylights
+	var edges: Dictionary = result.identity_dict()["edges"]
+	_check(fails, MapLayoutCanonical.sorted_keys(tracers) \
+			== MapLayoutCanonical.sorted_keys(edges),
+		"every compiled edge has exactly one live waylight")
+	var geometry: Dictionary = {}
+	for edge_id: String in MapLayoutCanonical.sorted_keys(tracers):
+		var tracer_v: Variant = tracers[edge_id]
+		if not tracer_v is MapWaylightTracer:
+			_check(fails, false, "%s has a MapWaylightTracer" % edge_id)
+			continue
+		var tracer: MapWaylightTracer = tracer_v
+		_check(fails, tracer.get_parent() == scene._world,
+			"%s is attached to the depth-tested world" % edge_id)
+		geometry[edge_id] = {
+			"tracer": tracer,
+			"digest": tracer.geometry_digest(),
+			"builds": tracer.geometry_build_count(),
+			"transforms": tracer.instance_transforms(),
+		}
+	var by_id: Dictionary = {}
+	for i: int in range(screen.map.nodes.size()):
+		by_id[screen.map.nodes[i].id] = i
+	var source_i: int = -1
+	var middle_i: int = -1
+	for i: int in range(screen.map.nodes.size()):
+		for middle_id: String in screen.map.nodes[i].next:
+			var middle_v: Variant = by_id.get(middle_id, -1)
+			var candidate_i: int = MapLayoutCanonical.int_value(middle_v)
+			if candidate_i >= 0 and candidate_i < screen.map.nodes.size() \
+					and not screen.map.nodes[candidate_i].next.is_empty():
+				source_i = i
+				middle_i = candidate_i
+				break
+		if source_i >= 0:
+			break
+	_check(fails, source_i >= 0 and middle_i >= 0,
+		"representative live map contains a two-edge chain")
+	if source_i < 0 or middle_i < 0:
+		return
+	var saved_at: int = screen.map.at
+	var saved_cleared: Dictionary = screen.map.cleared.duplicate()
+	screen.map.cleared.clear()
+	screen.map.cleared[source_i] = true
+	screen.map.cleared[middle_i] = true
+	screen.map.at = middle_i
+	var layout_before_state: String = screen.layout_digest()
+	screen.refresh(run)
+	var refreshed: Dictionary = scene._waylights
+	var reachable: Array[int] = screen.map.reachable()
+	var states_seen: Dictionary = {}
+	for edge_id: String in MapLayoutCanonical.sorted_keys(edges):
+		var edge: Dictionary = edges[edge_id]
+		var from_i: int = MapLayoutCanonical.int_value(by_id.get(str(edge["from"]), -1))
+		var to_i: int = MapLayoutCanonical.int_value(by_id.get(str(edge["to"]), -1))
+		var expected: StringName = MapWaylightTracer.STATE_COLD
+		if screen.map.is_cleared(from_i) and screen.map.is_cleared(to_i):
+			expected = MapWaylightTracer.STATE_WALKED
+		elif screen.map.at == from_i and reachable.has(to_i):
+			expected = MapWaylightTracer.STATE_OPEN
+		states_seen[expected] = true
+		var tracer_v: Variant = refreshed.get(edge_id)
+		var tracer: MapWaylightTracer = tracer_v if tracer_v is MapWaylightTracer else null
+		var before: Dictionary = geometry.get(edge_id, {})
+		var before_tracer_v: Variant = before.get("tracer")
+		var before_tracer: MapWaylightTracer = before_tracer_v \
+			if before_tracer_v is MapWaylightTracer else null
+		var before_transforms: Array = before.get("transforms", [])
+		_check(fails, tracer != null and tracer.route_state() == expected,
+			"%s receives its exact live route state" % edge_id)
+		_check(fails, tracer != null and tracer == before_tracer \
+				and tracer.geometry_digest() == str(before.get("digest", "")) \
+				and tracer.geometry_build_count() == MapLayoutCanonical.int_value(
+					before.get("builds", -1)) \
+				and tracer.instance_transforms() == before_transforms,
+			"%s state refresh preserves its geometry identity" % edge_id)
+	_check(fails, states_seen.has(MapWaylightTracer.STATE_COLD) \
+			and states_seen.has(MapWaylightTracer.STATE_OPEN) \
+			and states_seen.has(MapWaylightTracer.STATE_WALKED),
+		"one live refresh covers cold, open and walked states")
+	_check(fails, screen.layout_digest() == layout_before_state,
+		"state-only refresh preserves the layout digest")
+
+	var source: MapNode = screen.map.nodes[source_i]
+	var middle: MapNode = screen.map.nodes[middle_i]
+	var travel_id: String = MapLayoutInput.edge_id(source.id, middle.id)
+	var travel_edge: Dictionary = edges[travel_id]
+	var line: Array = travel_edge["centerline"]
+	var start: Vector3 = _v3(line[0])
+	var bend: Vector3 = _v3(line[1])
+	var finish: Vector3 = _v3(line[-1])
+	var first_span: float = start.distance_to(bend)
+	var second_span: float = bend.distance_to(finish)
+	var half_distance: float = (first_span + second_span) * 0.5
+	var midpoint: Vector3 = start.lerp(bend, half_distance / first_span) \
+		if half_distance <= first_span else bend.lerp(
+			finish, (half_distance - first_span) / second_span)
+	_check(fails, midpoint.distance_to(start.lerp(finish, 0.5)) > 0.1,
+		"representative compiled travel route detours outside its endpoint chord")
+	screen.map.at = middle_i
+	screen.set("_travel_from_i", source_i)
+	screen.set("_travelling", true)
+	for shape_name: StringName in [&"phone-landscape", &"pad-landscape"]:
+		_mount(screen, shape_name)
+		var expected_points: Array[Vector3] = [start, midpoint, finish]
+		for sample_i: int in range(expected_points.size()):
+			screen.set("_travel_t", float(sample_i) * 0.5)
+			var world: Vector3 = screen.marker_world_position()
+			var expected_world: Vector3 = expected_points[sample_i]
+			var projected: PackedVector2Array = scene.project_anchors(
+				PackedVector3Array([expected_world]))
+			_check(fails, world.is_equal_approx(expected_world),
+				"%s travel sample %d follows compiled arc length" % [shape_name, sample_i])
+			_check(fails, not projected.is_empty() and screen.marker_screen_position() \
+					.is_equal_approx(projected[0]),
+				"%s travel sample %d projects after world sampling" % [shape_name, sample_i])
+	var reduce_motion: bool = Preferences.active.reduce_motion
+	Preferences.active.reduce_motion = true
+	screen.set("_travel_from_i", source_i)
+	screen.set("_travel_to_xz", screen._focus_xz(middle_i))
+	screen.set("_travelling", true)
+	screen.call(&"_glide", middle_i, false)
+	var reduced: Vector3 = screen.marker_world_position()
+	_check(fails, reduced.is_equal_approx(finish),
+		"reduced motion lands on the same compiled endpoint")
+	Preferences.active.reduce_motion = reduce_motion
+	screen.map.at = saved_at
+	screen.map.cleared = saved_cleared
+	screen.set("_travelling", false)
+	screen.set("_travel_from_i", -1)
+	_mount(screen, StageShape.IDENTITY)
+	screen.refresh(run)
 
 
 static func _five_shapes(fails: Array[String]) -> void:
@@ -36,8 +362,13 @@ static func _five_shapes(fails: Array[String]) -> void:
 				"%s: MapScene owns world-surface input" % shape_name)
 		_check(fails, screen._path_band != null
 				and screen._chip_band != null
-				and screen._path_band.get_index() > 0,
-				"%s: path overlay + chips stay in front" % shape_name)
+				and screen._path_band.get_index() > 0
+				and not screen._path_band.gated,
+				"%s: marker glow + chips stay in front" % shape_name)
+		_check(fails, not screen._path_band.has_method(&"_draw_graph"),
+				"%s: marker glow draws no 2D route topology" % shape_name)
+		_check(fails, not screen.has_method(&"edge_control"),
+				"%s: travel has no screen-space Bezier authority" % shape_name)
 		var extra: int = 0
 		for child: Node in screen.get_children():
 			if child is MapBand and not (
@@ -222,3 +553,10 @@ static func _mount(screen: WorldMapScreen, shape_name: StringName) -> void:
 		return
 	scene.size = screen.size
 	scene._fit()
+
+
+static func _v3(value: Variant) -> Vector3:
+	var row: Array = value
+	return Vector3(MapLayoutCanonical.float_value(row[0]),
+		MapLayoutCanonical.float_value(row[1]),
+		MapLayoutCanonical.float_value(row[2]))

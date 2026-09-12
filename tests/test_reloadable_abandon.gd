@@ -6,6 +6,7 @@ const TEST_RUN_PATH: String = "user://test_reloadable_abandon_v2.json"
 const MAIN_PATH: String = "res://application/main.gd"
 const RUN_STATE_PATH: String = "res://domain/state/run_state.gd"
 const Diff: GDScript = preload("res://tests/support/diff.gd")
+const MapCompose: GDScript = preload("res://tests/test_map_compose.gd")
 
 
 static func run(fails: Array[String]) -> void:
@@ -193,6 +194,7 @@ static func _preserved_projection(run_state: RunState) -> Dictionary:
 static func _main_for(content: ContentDB, run_state: RunState) -> Main:
 	Locale.active = Locale.new(Locale.CODE_EN)
 	var main: Main = Main.new()
+	main._map_layout_compile = MapCompose.fake_layout_compile()
 	main.content = content
 	main.game = GlassvowGame.new(content, run_state)
 	main._map = WorldMap.from_dict(run_state.map)

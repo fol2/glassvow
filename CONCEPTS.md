@@ -90,17 +90,32 @@ product: it does not pay generation and it must not call the API.
 A tool that records or verifies a named gate under its declared conditions.
 Evidence from a Harness keeps its own proof boundary; reaching the same surface
 through the Developer Console does not inherit that evidence — except the
-endgame surfaces named in `docs/rc-bar.md` P5, which may be signed on a Dev
+endgame surfaces the RC bar names, which may be signed on a Dev
 Review build reached through the Scenario kernel. That exception is an
 amendment of the sign-off protocol, not a waiver of any criterion, and it does
 not make Console-reached states evidence for any other surface. A capture
 meant for a human-signed gate is evidence only when a person can actually
 read the picture; an unreadable file on disk is not that gate running.
 
+### Probe
+A headless script that measures a rate or a distribution across many seeded
+runs, rather than returning a verdict on one.
+
+A Probe answers *how often*, where a Gate answers *did it fail*. Its output is a
+number whose meaning comes from comparison — against the same measurement before
+a change, or against the behaviour the change replaced — so a Probe is worth
+little alone and a great deal in pairs. Because it samples, a Probe's zero is a
+rate over the distribution it sampled and not a proof of impossibility: change
+what generates the inputs and the number has to be taken again. It differs from
+a Diagnostic overlay in being seed-addressed and reproducible, so its numbers can
+be quoted in a review; it differs from an Evidence Harness in certifying nothing,
+because no gate declared it.
+
 ### Diagnostic overlay
 A development-only live performance readout used to spot and reproduce likely
 problems. Its numbers guide investigation but are never release evidence; an
-Evidence Harness performs the release measurement.
+Evidence Harness performs the release measurement, and a Probe measures rates
+that are not evidence for any gate either.
 
 ## The release
 

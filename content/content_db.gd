@@ -54,8 +54,13 @@ static func load_slice() -> ContentDB:
 
 
 static func load_full(with_mob_overrides: bool = true) -> ContentDB:
+	return load_from(FULL_PATH, with_mob_overrides)
+
+
+static func load_from(path: String, with_mob_overrides: bool = true) -> ContentDB:
 	var db: ContentDB = ContentDB.new()
-	db._load(FULL_PATH)
+	if not db._load(path):
+		return null
 	db._load_line_table()
 	if with_mob_overrides:
 		db._load_mob_overrides()
@@ -406,17 +411,18 @@ static func _is_non_latin_letter(c: int) -> bool:
 	return false
 
 
-func _load(path: String) -> void:
+func _load(path: String) -> bool:
 	var text: String = FileAccess.get_file_as_string(path)
 	if text.is_empty():
 		push_error("ContentDB: cannot read %s" % path)
-		return
+		return false
 	var raw: Variant = JSON.parse_string(text)
 	if typeof(raw) != TYPE_DICTIONARY:
 		push_error("ContentDB: %s did not parse to a dictionary" % path)
-		return
+		return false
 	var root: Dictionary = raw
 	apply_catalogue(root)
+	return true
 
 
 func apply_catalogue(root: Dictionary) -> void:

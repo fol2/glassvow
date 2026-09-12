@@ -24,7 +24,9 @@ from typing import Any
 FILE_REPO = Path(__file__).resolve().parent.parent
 REPO = FILE_REPO
 sys.path.insert(0, str(FILE_REPO / "tools"))
-from map_asset_checks import Finding, inspect_glb  # noqa: E402
+from map_asset_checks import (  # noqa: E402
+    Finding, inspect_glb, pack_embedded_jpeg, _glb_chunks,
+)
 
 HKT = timezone(timedelta(hours=8))
 AUTHORITY_REVIEWER = "fol2"
@@ -148,6 +150,14 @@ def append_provenance(
     edits.append(
         f"accepted after signed capture {capture_rel.as_posix()} sha256 {sha256(signed_capture)}"
     )
+    textured = bool(extras.get("texture"))
+    if extras.get("texture") is None:
+        try:
+            gltf, _blob = _glb_chunks(dest.read_bytes())
+            textured = bool(gltf.get("images"))
+        except (OSError, ValueError, json.JSONDecodeError):
+            textured = False
+    face_limit = int(extras.get("face_limit") or extras.get("polycount_target") or 1500)
     record = {
         "asset_id": asset_id,
         "source": "Studio",
@@ -159,14 +169,14 @@ def append_provenance(
         "reviewer": reviewer,
         "verdict": "accepted",
         "task_id": task_id,
-        "face_limit": 1500,
-        "texture": False,
+        "face_limit": face_limit,
+        "texture": textured,
         "pbr": False,
         "concept_path": str(concept.relative_to(REPO)) if concept.is_file() and concept.is_relative_to(REPO)
         else str(concept),
         "concept_sha256": concept_sha,
         "land_method": extras.get("land_method") or "studio_download",
-        "polycount_target": 1500,
+        "polycount_target": face_limit,
     }
     if extras.get("faces_reported") is not None:
         record["faces_reported"] = extras["faces_reported"]
@@ -197,10 +207,11 @@ def review_png(dest: Path, asset_id: str) -> Path:
     return png
 
 
-def _retained_findings(found: list[Finding], ignore_rel: str | None) -> list[Finding]:
+def _retained_findings(found: list[Finding], ignore_rels: set[str] | None) -> list[Finding]:
+    if not ignore_rels:
+        return found
     return [item for item in found if not (
-        ignore_rel is not None and item.path == ignore_rel
-        and item.gate in {"provenance", "checksum"})]
+        item.path in ignore_rels and item.gate in {"provenance", "checksum"})]
 
 
 def gates(ignore_unaccepted_rel: str | None = None) -> str:
@@ -219,10 +230,12 @@ def gates(ignore_unaccepted_rel: str | None = None) -> str:
     else:
         from check_map_assets import scan
         found, present = scan(REPO / "assets/art/map")
-        found = _retained_findings(found, ignore_unaccepted_rel)
+        unsigned = {item.path for item in found if item.gate == "provenance"}
+        unsigned.add(ignore_unaccepted_rel)
+        found = _retained_findings(found, unsigned)
         if found:
             raise RuntimeError("; ".join(str(item) for item in found)[:1200])
-        chunks.append(f"map assets OK ({present} payload files; one signed review pending)")
+        chunks.append(f"map assets OK ({present} payload files; unsigned provenance pending)")
     chunks.append(run([sys.executable, "tools/check_anchors.py"], timeout=60))
     chunks.append(run([sys.executable, "tools/check_benchmark_freeze.py"], timeout=60))
     return "\n".join(chunks)
@@ -276,6 +289,8 @@ def main(argv: list[str] | None = None) -> int:
     extras = {"land_method": args.land_method, "edits": args.edit or [
         "land_map_glb.py copy of Studio Export GLB; no blender pass",
     ]}
+    extras["face_limit"] = int(row.get("triangle_max") or 1500)
+    extras["polycount_target"] = extras["face_limit"]
     if args.accept_signed_capture is not None:
         if not dest.is_file():
             return _fail(f"landed dest missing: {dest}")
@@ -308,6 +323,12 @@ def main(argv: list[str] | None = None) -> int:
         dest.parent.mkdir(parents=True, exist_ok=True)
         if src.resolve() != dest.resolve():
             shutil.copy2(src, dest)
+        cap = int(row.get("bytes_max") or 0)
+        if cap and dest.stat().st_size > cap:
+            try:
+                pack_embedded_jpeg(dest, cap)
+            except ValueError as error:
+                return _fail(str(error))
         provenance_written = False
         review = None if args.no_review else str(review_png(dest, args.asset).relative_to(REPO))
     gate_out = gates(None if provenance_written else str(row["path"])) if args.gates else ""
@@ -381,10 +402,14 @@ def self_test() -> int:
     else:
         print("self-test default-land: does not write provenance")
     probe = [Finding("provenance", "a", ""), Finding("checksum", "a", ""), Finding("mesh", "a", ""), Finding("provenance", "b", "")]
-    if [item.gate for item in _retained_findings(probe, "a")] != ["mesh", "provenance"]:
+    if [item.gate for item in _retained_findings(probe, {"a"})] != ["mesh", "provenance"]:
         errors.append("ordinary gate filter did not retain non-target findings")
     else:
         print("self-test ordinary-gates: only target provenance/checksum ignored")
+    if [item.gate for item in _retained_findings(probe, {"a", "b"})] != ["mesh"]:
+        errors.append("batch unsigned filter did not drop sibling provenance")
+    else:
+        print("self-test batch-unsigned: sibling provenance ignored")
 
     must_fail(lambda: validate_signed_acceptance(None, Path("x"), "a"), "missing reviewer")
     must_fail(lambda: validate_signed_acceptance("not-fol2", Path("x"), "a"), "arbitrary reviewer")

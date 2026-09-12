@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "491-tier1-f0-v1",
+  "issue": 491,
+  "seedRegistry": "docs/balance/421-content-search-seeds-v1.json",
+  "responseContract": "docs/balance/490-f0-response-contract-v1.json",
+  "registry": "docs/balance/490-tier1-registry-v1.json",
+  "hostPackets": [
+    "docs/balance/data/489/m1-max.json",
+    "docs/balance/data/489/m4-mac-mini.json"
+  ],
+  "evaluations": {
+    "f0": {
+      "controls": {
+        "stage": "tier1-f0-controls",
+        "root": 3454,
+        "first": 9100,
+        "last": 9131,
+        "arms": [1, 2]
+      },
+      "landscape": {
+        "stage": "tier1-f0-mini-landscape",
+        "root": 3454,
+        "policyFirst": 0,
+        "policyCount": 128,
+        "first": 9200,
+        "last": 9207
+      },
+      "bootstrap": 1000,
+      "bootstrapSeed": 3454,
+      "completeRectangle": true,
+      "candidateSource": "tier1",
+      "candidateCount": 48,
+      "candidateSeed": 490
+    }
+  },
+  "m4Replay": {
+    "candidate": "t1-c000",
+    "mode": "controls",
+    "aspect": "duskblade",
+    "vow": 0,
+    "arm": 1,
+    "seeds": {"first": 9100, "last": 9103},
+    "root": 3454,
+    "stage": "tier1-f0-controls"
+  }
+}

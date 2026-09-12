@@ -1,12 +1,12 @@
 class_name WorldMapScreen
 extends Control
-## The benchmark 15×7 pilgrimage graph on the 3D lattice road.
+## The pilgrimage graph bound to the canonical compiled 3D map.
 ##
 ## Presentation only. It reads the WorldMap graph and animates; the map's own
 ## `enter()` gate decides what is legal. Fully built in _init (no tree
 ## dependency) so headless tests can drive it — see the M5 screens.
-## Paint order is child order: MapScene (world) → path overlay → waystones →
-## veil → chrome. Pins sit on `projected_seats()`. Chips, sealed-door (#217)
+## Paint order is child order: MapScene (world) → marker glow → waystones →
+## chips → chrome. Pins sit on `projected_seats()`. Chips, sealed-door (#217)
 ## and HUD stay 2D.
 
 signal node_chosen(index: int)
@@ -16,6 +16,9 @@ signal sealed_door_requested
 var before_pick: Callable = Callable()
 
 const TRAVEL_TIME: float = 0.4
+const SCENERY_SEED_OFFSET: int = 97
+const _MAP_QUALITY: JSON = preload("res://docs/map/map-quality-v2.json")
+const _InputBinding = preload("res://domain/map_layout/map_layout_input_binding.gd")
 
 const HINT_PT: float = 13.0
 const HINT_TOP: float = -44.0
@@ -59,9 +62,14 @@ var _drift: PointerDrift = PointerDrift.new()
 var _map_scene: MapScene = null
 var _path_band: MapBand.PathBand = null
 var _chip_band: MapBand.ChipBand = null
-## Projection is shared by waystone layout, graph paint and marker queries.
-## The old path rebuilt all 65 seats for every edge endpoint, turning one
-## production frame into thousands of identical camera transforms (#447).
+var _layout_result: MapLayoutResult = null
+var _layout_data: Dictionary = {}
+var _layout_input_digest: String = ""
+var _layout_diagnostics: Dictionary = {}
+var _layout_failure: Dictionary = {}
+## Focused tests replace only the pure compiler call; production leaves this empty.
+var _layout_compile: Callable = Callable()
+## Projection is shared by waystone layout and marker queries.
 var _projected_seats_cache: PackedVector2Array = PackedVector2Array()
 var _projected_pose: Vector2 = Vector2(INF, INF)
 var _projected_zoom_stop: int = -1
@@ -81,12 +89,11 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	_trail_layout = LayoutBook.resolve(&"map", shape)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
-	# World → path overlay → waystones → veil → chrome: child order is paint order.
+	# World → marker glow → waystones → chips → chrome: child order is paint order.
 	_build_world_surface()
 	_build_bands()
 	_build_waystones()
-	# Between the stones and the weather: the chips label the play plane, so they
-	# sit on it, and the veil still drifts in front of them.
+	# Chips label the play plane and stay beneath the chrome.
 	_chip_band = MapBand.ChipBand.new()
 	_chip_band.host = self
 	add_child(_chip_band)
@@ -110,37 +117,9 @@ func _build_world_surface() -> void:
 	_map_scene = MapScene.new()
 	_map_scene.surface_tapped.connect(_on_surface_tapped)
 	add_child(_map_scene)
+	# Construction-only callers have no RunState yet. Live refresh replaces these
+	# anchors before a frame is presented; a failed compile never returns here.
 	MapPinProjection.resolve(map.nodes)
-	_map_scene.lay_road(_road_segments())
-
-
-## Every graph edge as a world-space endpoint pair, for MapScene to pave. The
-## graph lives here, so the conversion does too: MapScene stays buildable
-## without a WorldMap.
-func _road_segments() -> PackedVector3Array:
-	var by_id: Dictionary = {}
-	for node: MapNode in map.nodes:
-		by_id[node.id] = node
-	var out: PackedVector3Array = PackedVector3Array()
-	for node: MapNode in map.nodes:
-		var from: Vector3 = MapPinProjection.world_anchor(node)
-		for next_id: String in node.next:
-			var next_v: Variant = by_id.get(next_id)
-			if typeof(next_v) != TYPE_OBJECT:
-				continue
-			var next_node: MapNode = next_v
-			out.append(from)
-			out.append(MapPinProjection.world_anchor(next_node))
-	# The Vigil is where every run starts, so the road has to leave it. One arm
-	# per entrance waystone, which is what makes the fan read as a choice of
-	# first step rather than as one road that happens to begin somewhere.
-	var gate: Vector3 = Vector3(MapScene.THRESHOLD_XZ.x, 0.0, MapScene.THRESHOLD_XZ.y)
-	for node: MapNode in map.nodes:
-		if node.row != 0:
-			continue
-		out.append(gate)
-		out.append(MapPinProjection.world_anchor(node))
-	return out
 
 
 func _build_bands() -> void:
@@ -364,7 +343,7 @@ func refresh(run: RunState) -> void:
 		# Before the act binds: the salt is what the scenery is dealt from, and
 		# `_set_act_theme` is what rebinds the geometry that reads it.
 		if _map_scene != null:
-			_map_scene.set_scatter_salt(run.seed)
+			_map_scene.set_scatter_salt(run.seed + SCENERY_SEED_OFFSET)
 		_set_act_theme(run.act)
 		var act: Dictionary = content.acts[_act]
 		var act_name: String = Locale.active.t("ui.pilgrimage.roseWindow") \
@@ -378,6 +357,7 @@ func refresh(run: RunState) -> void:
 		_waystones[i].set_state(live.has(i), map.is_cleared(i), i == map.at)
 		if first_live == null and live.has(i):
 			first_live = _waystones[i]
+	_sync_waylights()
 	if live.is_empty():
 		_hint_label.visible = true
 		_hint_label.text = Locale.active.t("ui.pilgrimage.roadEnds")
@@ -409,10 +389,205 @@ func _set_act_theme(stage_act: int) -> void:
 	# The 3D ramp binds band_shade/band_key on MapScene.
 	if _map_scene != null:
 		_map_scene.set_act(stage_act)
-		# set_act rebinds the act's geometry, so the footprints the nodes step
-		# around have just changed underneath them.
-		MapPinProjection.resolve(map.nodes)
-		_map_scene.lay_road(_road_segments())
+		_bind_compiled_layout()
+
+
+func layout_result() -> MapLayoutResult:
+	return _layout_result
+
+
+func layout_digest() -> String:
+	return "" if _layout_result == null else _layout_result.digest()
+
+
+func layout_input_digest() -> String:
+	return "" if _layout_result == null else str(
+		_layout_result.to_dict().get("input_digest", ""))
+
+
+func layout_diagnostics() -> Dictionary:
+	return _layout_diagnostics.duplicate(true)
+
+
+func layout_failure() -> Dictionary:
+	return _layout_failure.duplicate(true)
+
+
+func _bind_compiled_layout() -> void:
+	if _run == null or _map_scene == null:
+		return
+	var quality: Dictionary = _quality_registry()
+	if quality.is_empty():
+		return _fail_compiled_layout({
+			"kind": "authority", "id": "quality_registry",
+			"reason": "governed map quality registry is unavailable",
+		})
+	var bound: Dictionary = _InputBinding.bind(map, _run.act)
+	if bound.get("ok", false) != true:
+		var binding_error: Dictionary = bound.get("error", {})
+		return _fail_compiled_layout(binding_error)
+	var assets: Dictionary = _map_scene.layout_asset_bundle()
+	var heroes: Dictionary = _map_scene.layout_hero_contract()
+	if assets.is_empty() or heroes.is_empty():
+		return _fail_compiled_layout({
+			"kind": "authority", "id": "active_map_assets",
+			"reason": "active map asset profiles or hero anchors are unavailable",
+		})
+	var nodes: Array = bound["nodes"]
+	var edges: Array = bound["edges"]
+	var input: MapLayoutInput = MapLayoutInput.from_dict({
+		"schema_version": MapLayoutInput.SCHEMA_VERSION,
+		"generator_schema": "map-compiler-v2",
+		"generator_version": MapLayoutCompiler.VERSION,
+		"nodes": nodes, "edges": edges, "act": _run.act,
+		"run_seed": _run.seed,
+		"scenery_seed": _run.seed + SCENERY_SEED_OFFSET,
+		"asset_profile_digest": assets["digest"],
+		"camera_profile_digest": MapQualityEvaluator.camera_registry(
+			nodes, quality, edges)["digest"],
+		"hero_anchor_contract": heroes,
+		"quality_registry_digest": MapLayoutCanonical.digest(quality),
+	})
+	if input == null:
+		return _fail_compiled_layout({
+			"kind": "input", "id": "live_map",
+			"reason": "canonical live map input is invalid",
+		})
+	var input_digest: String = input.digest()
+	if input_digest == _layout_input_digest:
+		return
+	_layout_input_digest = input_digest
+	var compiled_v: Variant = _layout_compile.call(input, quality, assets) \
+		if _layout_compile.is_valid() \
+		else MapLayoutCompiler.compile(input, quality, assets)
+	if typeof(compiled_v) != TYPE_DICTIONARY:
+		return _fail_compiled_layout({
+			"kind": "compiler", "id": "live_map",
+			"reason": "compiler returned a non-dictionary result",
+		})
+	var compiled: Dictionary = compiled_v
+	var diagnostics_v: Variant = compiled.get("diagnostics", {})
+	_layout_diagnostics = diagnostics_v.duplicate(true) \
+		if typeof(diagnostics_v) == TYPE_DICTIONARY else {}
+	var result_v: Variant = compiled.get("result", null)
+	if str(compiled.get("status", "")) != MapLayoutCompiler.COMPILED \
+			or not result_v is MapLayoutResult:
+		var failure_v: Variant = compiled.get("failure", {})
+		var compile_failure: Dictionary = failure_v if typeof(failure_v) \
+			== TYPE_DICTIONARY else {
+				"kind": "compiler", "id": "live_map", "reason": "compile failed",
+			}
+		return _fail_compiled_layout(compile_failure)
+	var compiled_result: MapLayoutResult = result_v
+	var result_data: Dictionary = compiled_result.identity_dict()
+	var result_nodes: Dictionary = result_data["node_anchors"]
+	var result_edges: Dictionary = result_data["edges"]
+	var expected_node_ids: Dictionary = {}
+	for node: Dictionary in nodes:
+		expected_node_ids[str(node["id"])] = true
+	var expected_edge_ids: Dictionary = {}
+	for edge: Dictionary in edges:
+		expected_edge_ids[str(edge["id"])] = true
+	if str(result_data["input_digest"]) != input_digest \
+			or MapLayoutCanonical.sorted_keys(result_nodes) \
+			!= MapLayoutCanonical.sorted_keys(expected_node_ids) \
+			or MapLayoutCanonical.sorted_keys(result_edges) \
+			!= MapLayoutCanonical.sorted_keys(expected_edge_ids):
+		return _fail_compiled_layout({
+			"kind": "compiler", "id": "result_coverage",
+			"reason": "compiled result does not exactly cover the live input",
+		})
+	var final_result: MapLayoutResult = _map_scene.bind_layout(compiled_result, quality)
+	if final_result == null:
+		return _fail_compiled_layout(_map_scene.layout_failure())
+	_layout_result = final_result
+	_layout_data = final_result.identity_dict()
+	_layout_failure.clear()
+	_layout_diagnostics["live_binding"] = _map_scene.layout_diagnostics()
+	_layout_diagnostics["layout_digest"] = final_result.digest()
+	_invalidate_projection()
+
+
+func _fail_compiled_layout(failure: Dictionary) -> void:
+	_layout_result = null
+	_layout_data.clear()
+	_layout_failure = failure.duplicate(true)
+	if _layout_failure.is_empty():
+		_layout_failure = {
+			"kind": "compiler", "id": "live_map", "reason": "compile failed",
+		}
+	_layout_diagnostics["live_failure"] = _layout_failure.duplicate(true)
+	if _map_scene != null:
+		_map_scene.bind_layout(null, _quality_registry())
+	_invalidate_projection()
+	push_error("WorldMapScreen compiled layout failed: %s/%s: %s" % [
+		str(_layout_failure.get("kind", "compiler")),
+		str(_layout_failure.get("id", "live_map")),
+		str(_layout_failure.get("reason", "compile failed")),
+	])
+
+
+func _quality_registry() -> Dictionary:
+	var value: Variant = _MAP_QUALITY.data
+	return value if typeof(value) == TYPE_DICTIONARY else {}
+
+
+func _sync_waylights() -> void:
+	if _map_scene == null or _layout_result == null:
+		return
+	if not _map_scene.set_waylight_states(_route_states()):
+		push_error("WorldMapScreen cannot bind complete depth-tested route states")
+	var states: Dictionary = {}
+	var reachable: Array[int] = map.reachable()
+	for i: int in range(map.nodes.size()):
+		states[map.nodes[i].id] = "current" if map.at == i else (
+			"open" if reachable.has(i) else ("walked" if map.is_cleared(i) else "cold"))
+	_map_scene.set_node_states(states)
+
+
+func _route_states() -> Dictionary:
+	var out: Dictionary = {}
+	if _layout_result == null:
+		return out
+	var by_id: Dictionary = {}
+	for i: int in range(map.nodes.size()):
+		by_id[map.nodes[i].id] = i
+	var reachable: Array[int] = map.reachable()
+	var edges: Dictionary = _layout_data.get("edges", {})
+	for edge_id: String in MapLayoutCanonical.sorted_keys(edges):
+		var edge: Dictionary = edges[edge_id]
+		var from_i: int = MapLayoutCanonical.int_value(by_id.get(str(edge["from"]), -1))
+		var to_i: int = MapLayoutCanonical.int_value(by_id.get(str(edge["to"]), -1))
+		if from_i < 0 or to_i < 0:
+			return {}
+		var state: StringName = MapWaylightTracer.STATE_COLD
+		if map.is_cleared(from_i) and map.is_cleared(to_i):
+			state = MapWaylightTracer.STATE_WALKED
+		elif map.at == from_i and reachable.has(to_i):
+			state = MapWaylightTracer.STATE_OPEN
+		out[edge_id] = state
+	return out
+
+
+func _ordered_layout_anchors(result: MapLayoutResult = _layout_result) \
+		-> PackedVector3Array:
+	var out: PackedVector3Array = PackedVector3Array()
+	if result == null:
+		return out
+	var anchors: Dictionary = result.to_dict()["node_anchors"]
+	for node: MapNode in map.nodes:
+		if not anchors.has(node.id):
+			return PackedVector3Array()
+		out.append(_v3(anchors[node.id]))
+	return out
+
+
+func _invalidate_projection() -> void:
+	_projected_seats_cache = PackedVector2Array()
+	_projected_pose = Vector2(INF, INF)
+	_projected_zoom_stop = -1
+	_projected_control_size = Vector2(-1.0, -1.0)
+	_projected_view_size = Vector2i(-1, -1)
 
 
 ## 3D lattice seats in this Control's px. Live waystones sit here.
@@ -430,7 +605,11 @@ func projected_seats() -> PackedVector2Array:
 			or _projected_zoom_stop != rig.zoom_stop \
 			or not _projected_control_size.is_equal_approx(size) \
 			or _projected_view_size != view_size:
-		_projected_seats_cache = _map_scene.project_pins(map.nodes)
+		var anchors: PackedVector3Array = _ordered_layout_anchors()
+		_projected_seats_cache = _map_scene.project_anchors(anchors) \
+			if not anchors.is_empty() else (
+				_map_scene.project_pins(map.nodes) if _run == null \
+				else PackedVector2Array())
 		_projected_pose = pose
 		_projected_zoom_stop = rig.zoom_stop
 		_projected_control_size = size
@@ -458,7 +637,10 @@ func first_live_waystone() -> Control:
 func pick_node_at(screen: Vector2) -> int:
 	if _map_scene == null:
 		return -1
-	return _map_scene.pin_at(screen, map.nodes, _pin_hit())
+	var anchors: PackedVector3Array = _ordered_layout_anchors()
+	if not anchors.is_empty():
+		return _map_scene.anchor_at(screen, anchors, _pin_hit())
+	return _map_scene.pin_at(screen, map.nodes, _pin_hit()) if _run == null else -1
 
 
 func _pin_hit() -> float:
@@ -470,6 +652,7 @@ func _pin_hit() -> float:
 ## act in a run — domain map generation stays the run's act (scenery only).
 func set_act_scenery(stage_act: int) -> void:
 	_set_act_theme(stage_act)
+	_sync_waylights()
 	if content != null and _act < content.acts.size() and _title_label != null:
 		var act: Dictionary = content.acts[_act]
 		_title_label.text = _act_line(
@@ -508,9 +691,30 @@ func _focus_xz(i: int) -> Vector2:
 	# reproduce, which is exactly what test_map's re-aim gate is watching for.
 	# The shape is known without a frame.
 	var reference: Vector2 = Vector2(StageShape.REFERENCES[shape])
-	var aspect: float = reference.x / maxf(reference.y, 1.0)
+	var quality: Dictionary = _quality_registry()
+	if quality.is_empty():
+		push_error("WorldMapScreen cannot resolve the governed map quality registry")
+		return MapCameraRig.DEFAULT_XZ
+	var anchors: PackedVector3Array = _ordered_layout_anchors()
+	var world: Vector3
+	if anchors.size() == map.nodes.size():
+		world = anchors[i]
+	elif _run == null:
+		world = MapPinProjection.world_anchor(map.nodes[i])
+	else:
+		push_error("WorldMapScreen cannot focus without the compiled node anchors")
+		return MapCameraRig.DEFAULT_XZ
+	var bound: Dictionary = _InputBinding.bind(map, _act)
+	if bound.get("ok", false) != true:
+		push_error("WorldMapScreen cannot bind the focused candidate envelope")
+		return MapCameraRig.DEFAULT_XZ
+	var bound_nodes: Array = bound["nodes"]
+	var bound_edges: Array = bound["edges"]
+	var envelopes: Dictionary = MapQualityEvaluator.node_candidate_bounds(
+		bound_nodes, bound_edges, quality)
 	return _map_scene.get_rig().pose_leading(
-		MapPinProjection.world_anchor(map.nodes[i]), aspect)
+		world, reference, MapQualityEvaluator.focused_touch_inset_px(quality),
+		MapQualityEvaluator.focused_anchor_envelope(map.nodes[i].id, envelopes))
 
 
 func _on_waystone_chosen(i: int) -> void:
@@ -529,6 +733,7 @@ func choose(i: int) -> bool:
 	var was_unlit: bool = map.nodes[i].unlit
 	if _travelling or not map.enter(i):
 		return false
+	_sync_waylights()
 	for ws: GlassWaystone in _waystones:
 		ws.set_state(false, ws.cleared)  # travel locks the road
 	if instant:
@@ -589,38 +794,33 @@ func _on_arrived(i: int) -> void:
 	node_chosen.emit(i)
 
 
-## The one control point for a trail edge, shared by the drawn dashes
-## (`MapBand.PathBand._draw_graph`) and by the marker gliding along them.
-##
-## Rising bows up, falling bows down so crossing paths pull apart rather than
-## stacking, SCALED by how far the edge actually climbs — a same-lane run is then
-## straight by construction. It used to be `signf(to.y - from.y) * 10.0`, which
-## is 0 only on an exact tie, and `node.jx * 6.0` jitter guarantees no tie, so
-## every "straight" edge took the full bow off a sub-pixel difference (#69).
-##
-## It lives here, in one place, because the same expression written twice is how
-## it went wrong: the marker's copy kept the old `signf` through the first draft
-## of that fix while its comment claimed it was "the same control the PathBand
-## edges use" (PR #78 PM R1). One function cannot disagree with itself.
-func edge_control(from: Vector2, to: Vector2) -> Vector2:
-	var lane_rise: float = clampf((to.y - from.y) / maxf(_lane_gap(), 1.0), -1.0, 1.0)
-	return (from + to) * 0.5 + Vector2(0.0, lane_rise * 10.0)
+## The traveller's world point. Travel samples the compiled centreline by arc
+## length; rest uses the same compiled node anchor as the waystone.
+func marker_world_position() -> Vector3:
+	if _layout_result == null or map.at < 0 or map.at >= map.nodes.size():
+		return Vector3.INF
+	if _travelling and _travel_from_i >= 0 and _travel_from_i < map.nodes.size():
+		var edge_id: String = MapLayoutInput.edge_id(
+			map.nodes[_travel_from_i].id, map.nodes[map.at].id)
+		var edges: Dictionary = _layout_data.get("edges", {})
+		var edge_v: Variant = edges.get(edge_id)
+		if typeof(edge_v) == TYPE_DICTIONARY:
+			var edge: Dictionary = edge_v
+			return MapWaylightTracer.point_at_progress(edge, _travel_t)
+	var anchors: Dictionary = _layout_data.get("node_anchors", {})
+	var anchor_v: Variant = anchors.get(map.nodes[map.at].id)
+	return _v3(anchor_v) if MapLayoutCanonical.vector(anchor_v, 3) else Vector3.INF
 
 
-## The glow's live screen point — bezier mid-glide, seated otherwise, stage
-## centre before any node. Recomputed each call so cam/drift stay coherent.
+## Project only after sampling in world space. The permitted overlay is the
+## traveller glow; it never reconstructs or paints route topology.
 func marker_screen_position() -> Vector2:
-	if map.at < 0 or map.at >= map.nodes.size():
+	var world: Vector3 = marker_world_position()
+	if not world.is_finite() or _map_scene == null:
 		return size * 0.5
-	var to: Vector2 = _node_pos(map.nodes[map.at])
-	if not _travelling or _travel_from_i < 0 \
-			or _travel_from_i >= map.nodes.size():
-		return to
-	var from: Vector2 = _node_pos(map.nodes[_travel_from_i])
-	var control: Vector2 = edge_control(from, to)
-	var t: float = _travel_t
-	var u: float = 1.0 - t
-	return from * u * u + control * 2.0 * u * t + to * t * t
+	var projected: PackedVector2Array = _map_scene.project_anchors(
+		PackedVector3Array([world]))
+	return projected[0] if not projected.is_empty() else size * 0.5
 
 
 # ---------------------------------------------------------------- frame
@@ -712,7 +912,10 @@ func _node_pos(node: MapNode) -> Vector2:
 	return seats[i] if i >= 0 and i < seats.size() else Vector2.ZERO
 
 
-## Lane spacing across the path. Col 3 is centre.
-func _lane_gap() -> float:
-	return clampf(size.y * _trail_num("laneRate", 0.06),
-		_trail_num("laneMin", 46.0), _trail_num("laneMax", 50.0))
+func _v3(value: Variant) -> Vector3:
+	if value is Vector3:
+		return value
+	var row: Array = value
+	return Vector3(MapLayoutCanonical.float_value(row[0]),
+		MapLayoutCanonical.float_value(row[1]),
+		MapLayoutCanonical.float_value(row[2]))

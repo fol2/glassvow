@@ -1,5 +1,5 @@
 extends Node
-## Release-renderer active-act residency and unloading probe for #295.
+## Release-renderer active-act catalogue residency and unloading probe for #295.
 ## Hosted by application/main.gd because iOS ignores `-s` on a deployed app.
 ## Launch through Info.plist user args: --map-asset-bench. The JSONL report is
 ## flushed after every row so CoreDevice can pull a complete prefix at any time.
@@ -34,7 +34,7 @@ func _ready() -> void:
 		"model": OS.get_model_name(),
 		"os": OS.get_version(),
 		"locale": str(Locale.active.code),
-		"manifest_sha256": _sha256(MapMaterials.MANIFEST_PATH),
+		"manifest_sha256": _sha256(MapLandscapeAssets.ROOT + "provenance.json"),
 		"screen": [get_viewport().size.x, get_viewport().size.y],
 		"cycles": CYCLES,
 		"settle_frames": SETTLE_FRAMES,

@@ -25,7 +25,7 @@ extends RefCounted
 ## 3.43-unit steps (15 rows spanning 48); cols spread the lanes along +Z in
 ## 6-unit steps (7 cols spanning 36). Both match `MapMaterials.GRADE_SIZE`, so
 ## one painted grade covers the run exactly. Footprint sits inside
-## MapScene.GROUND_SIZE with room for the pan frustum on every side.
+## the landscape bounds with room for the pan frustum on every side.
 const CELL: Vector2 = Vector2(72.0 / 14.0, 6.0)
 const ORIGIN_XZ: Vector2 = Vector2(-36.0, -18.0)
 
