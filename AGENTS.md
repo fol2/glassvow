@@ -1,6 +1,8 @@
 # Agent Contract — Glassvow Godot
 
-**Glassvow** (琉璃誓言) is a Godot 4.7.2 roguelite deckbuilder, parallel-ported from a web original and, since 2026-08-16, **detached from it** — see THE REFERENCE below. The 18 files in `port_fixtures/` began as exports from that original and are now the port's own regression goldens, pinning its behaviour rather than the web's. The map system was always a deliberate redesign (horizontal "glassvow world" journey, not the vertical tower). Before beginning any implementation work, load `.claude/skills/glassvow-godot/SKILL.md` — it binds the engine contract, architecture boundaries, testing strategy, and stop conditions. Music and SFX generation additionally load `.claude/skills/glassvow-suno/SKILL.md` and `.claude/skills/glassvow-elevenlabs/SKILL.md`; write the row in `docs/music-ledger.md` or `docs/sfx-ledger.md` first.
+**Glassvow** (琉璃誓言) is a Godot 4.7.2 roguelite deckbuilder, parallel-ported from a web original and, since 2026-08-16, **detached from it** — see THE REFERENCE below. The 18 files in `port_fixtures/` began as exports from that original and are now the port's own regression goldens, pinning its behaviour rather than the web's. The map system was always a deliberate redesign (horizontal "glassvow world" journey, not the vertical tower). Before changing Godot code, scenes, resources, imports or build configuration, load `.claude/skills/glassvow-godot/SKILL.md` — it binds the engine contract, architecture boundaries, testing strategy, and stop conditions. For music generation, load `.claude/skills/glassvow-suno/SKILL.md`; for SFX generation, load `.claude/skills/glassvow-elevenlabs/SKILL.md`. Write the corresponding ledger row before generation. For narrative changes, load `.claude/skills/glassvow-story/SKILL.md`. Pure documentation edits do not require the Godot skill.
+
+Use UK English for engineering artefacts and HK Cantonese when communicating with James. Narrative source copy follows the story skill’s zh-Hant contract; localisation follows the target locale.
 
 ## THE REFERENCE — detached 2026-08-16
 
@@ -54,6 +56,18 @@ draw. They never appeared on screen at either commit, and a port of them would
 have been a port of nothing. Measure the running thing; do not infer from source.
 
 ## Verification (all from repo root)
+
+This is the canonical local verification list; skills refer here rather than
+copying it. For documentation-only changes, run the anchor and benchmark-freeze
+checks below. During code or asset iteration, run affected checks; before pushing
+the final code or asset change, run the full list and any additional checks
+required by the acceptance contract. CI also runs specialised checks defined in
+`.github/workflows/ci.yml`; this list is not the entire CI workflow.
+
+Reuse passing results only while the checked inputs, dependencies and relevant
+environment remain unchanged. Run and fix failures caused by the requested
+change without asking at each local iteration. This does not authorise provider
+calls, production effects or retries of explicitly one-shot protocols.
 
 ```bash
 godot --version                          # must print 4.7.2.stable
@@ -142,7 +156,7 @@ The Cloud Agent environment boots with the toolchain already provisioned — `go
 — by an idempotent update script that also runs `godot --headless --import` to
 build the `.godot/` cache. You do **not** install Godot or those deps yourself; the
 script re-provisions any that a boot is missing. There is no `start` service. The
-verification gate is unchanged — run the four commands under **Verification** above.
+verification gate is unchanged — follow **Verification** above.
 
 - **Grade the test suite by its exit code and `PASS (N tests)` line, not stderr.**
   A headless run prints harmless `… leaked`, `RID … leaked`, and `Parameter

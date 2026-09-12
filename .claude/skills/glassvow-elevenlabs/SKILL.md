@@ -1,6 +1,6 @@
 ---
 name: glassvow-elevenlabs
-description: Generate Glassvow SFX with ElevenLabs sound-generation (MCP or official REST). Use when adding or replacing ashglass pack samples, unsealingSting, UI/combat one-shots, or wiring ElevenLabs MCP. Always read and update docs/sfx-ledger.md before shipping a file.
+description: Use when generating or replacing Glassvow SFX with ElevenLabs, or configuring its connection.
 ---
 
 # Glassvow ElevenLabs SFX
@@ -17,7 +17,7 @@ Open `docs/sfx-ledger.md`. Copy the cue, file stem, duration, and brief verbatim
 
 ## 2. Generate
 
-Prefer MCP when this session actually has ElevenLabs tools. Otherwise official REST. Stop if `ELEVENLABS_API_KEY` is unset.
+Prefer MCP when this session has a working, authenticated ElevenLabs connection. Otherwise use official REST, which requires `ELEVENLABS_API_KEY`. Missing REST credentials do not invalidate an authenticated MCP connection. If neither route is available, pause generation only; complete the brief and ledger preparation and report the missing prerequisite. Generation still requires authorised provider spend.
 
 Write candidates under `docs/design/<date>-<cue>/candidates/`, not straight into `assets/audio/sfx/`. Set `ELEVENLABS_MCP_BASE_PATH` to the workspace (`.cursor/mcp.json` already does). Default MCP output is `~/Desktop` and that path is wrong here.
 
@@ -38,7 +38,7 @@ curl -fsS -X POST "https://api.elevenlabs.io/v1/sound-generation" \
   --output docs/design/<date>-<cue>/candidates/<cue>-a.mp3
 ```
 
-Make at least three candidates (`a`/`b`/`c`). A sting that could pass for `sealedDoor`, `roseWindow`, or `chip` is wrong — regenerate.
+Make an initial batch of three candidates (`a`/`b`/`c`) within the authorised spend. A sting that could pass for `sealedDoor`, `roseWindow`, or `chip` fails the brief. Present the results, including failures; further batches require remaining explicit task budget or James’s approval, not an open-ended retry loop.
 
 ## 3. Ship
 

@@ -1,12 +1,17 @@
 ---
 name: glassvow-story
-description: Binding contract for all glassvow narrative work — story bible discipline, canon precedence, foreshadow-ledger rules, drafting pipeline. Load before writing or reviewing any game copy, scene script, or lore.
+description: Use when writing, changing or reviewing Glassvow narrative, dialogue, lore or story-bearing game copy.
 ---
 
 # Glassvow Story Contract
 
 Narrative counterpart to `glassvow-godot` (which binds engine work). Any
 session that writes, edits, or reviews story content loads this first.
+Non-narrative UI labels do not trigger the story pipeline. Mechanical spelling,
+punctuation or formatting corrections that preserve meaning, voice and reveal
+level need only the relevant text checks; they do not create a new batch or
+ledger entry, or require renewed approval of already approved copy. If that
+classification is uncertain, use the narrative workflow below.
 
 ## 1. The bible is law
 
@@ -25,7 +30,7 @@ bible **before** any copy leans on it — never invented inline.
 
 ## 3. Foreshadow-ledger discipline (the twist survives by this)
 
-Every line of copy — new or edited — enters `05-foreshadow-ledger.md` with:
+Every new or semantically changed narrative line enters `05-foreshadow-ledger.md` with:
 surface reading, post-twist reading, reveal-ladder level (00 §5), leak risk.
 
 - A line whose post-twist rereading fails is rewritten until it passes.
@@ -40,7 +45,9 @@ surface reading, post-twist reading, reveal-ladder level (00 §5), leak risk.
 
 zh-Hant is the source language: HK 書面語 register, 着/裏 orthography.
 English is a full rewrite, never a calque. Fable drafts, James reviews —
-copy enters `content/` or `locale/` only after James's review.
+new or semantically changed copy enters `content/` or `locale/` only after
+James's review. The mechanical-correction exception above applies only to
+already approved copy.
 
 ## 5. Voice sheets
 
@@ -60,7 +67,7 @@ retired. No rushing nomenclature — story first, names later.
 Mass copy is produced in batches per `04-delivery.md`: brief → draft against
 the bible → canon-lint agent pass → twist-safety agent pass → James review.
 Batch workflow lives at `.claude/workflows/story-draft.js` (created with the
-first batch). No freehand additions outside a batch.
+first batch). No new or semantically changed narrative additions outside a batch. The mechanical-correction exception above does not authorise new canon or publication of unreviewed drafts.
 
 ## 8. Scope boundaries
 

@@ -1,6 +1,6 @@
 ---
 name: glassvow-suno
-description: Generate Glassvow music with Suno. Use when adding or replacing stained-glass pack tracks, act4Combat, act4Boss, BGM loops. Official path is the Suno Pro website — Suno has no public API key. Always read and update docs/music-ledger.md before shipping a file.
+description: Use when generating or replacing Glassvow music with Suno.
 ---
 
 # Glassvow Suno music
@@ -22,7 +22,7 @@ Open `docs/music-ledger.md`. Copy the cue, file, and brief verbatim into the sty
 1. Open [suno.com](https://suno.com), signed into the same **Pro** workspace that made v1.
 2. Create → **Custom**. Turn **Instrumental** on. Lyrics empty or `[Instrumental]`.
 3. Paste the ledger brief into the style field. Title can wait — credits titles are display copy in the manifest.
-4. Generate at least two candidates per cue. Act IV must not be a re-encode or retitle of an Act III file.
+4. Generate an initial batch of two candidates per cue within the authorised spend. Present that batch for selection; further batches require remaining explicit task budget or James’s approval, not an open-ended retry loop. Act IV must not be a re-encode or retitle of an Act III file.
 5. Download the mp3 (audio, not the video). Drop them in `docs/design/<date>-<cue>/candidates/` or hand them to the agent. Do not write straight into `assets/audio/music/` until James picks.
 
 ## 3. Optional — AceDataCloud gateway (not Suno)

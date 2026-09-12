@@ -1,13 +1,13 @@
 ---
 name: glassvow-godot
-description: Binding contract for working in the glassvow Godot repo — engine pin, architecture boundaries, editing methods, verification, save compatibility, stop conditions. Load before any implementation work here.
+description: Use when changing Glassvow Godot code, scenes, resources, imports or build configuration.
 ---
 
 # Glassvow Godot 4.7.2 Binding Contract
 
 ## 1. Engine Contract
 
-**Pin:** Godot 4.7.2 exact. Verify before starting work: `godot --version` must print `4.7.2.stable`. Running any GDScript requires this exact version; mismatches silently break type checking and produce confusing test failures.
+**Pin:** Godot 4.7.2 exact. Verify before running Godot in a new or changed environment: `godot --version` must print `4.7.2.stable`. Running any GDScript requires this exact version; mismatches silently break type checking and produce confusing test failures.
 
 Historical evidence keeps the engine version it actually used. A dated packet
 that truthfully records 4.7.1 is not an active pin and must not be rewritten as
@@ -35,16 +35,11 @@ though the run happened on 4.7.2.
 
 ## 4. Editing Methods
 
-**By hand:** Small `.gd` scripts and `project.godot` / `.tres` bus layout. Hand-edit in the editor or IDE.
-
-**Via Godot editor:**
-- Medium/large `.tscn` scene tweaks: open in editor, drag/edit, Save.
-- New `.tscn` files for significant UI: use the editor, commit the result.
-
-**With MCP (funplay-godot-mcp):**
-- Large presentation scene generation or restructuring.
-- Screenshot-driven iteration (layout tweaks visible before commit).
-- Query scene hierarchy, bounding boxes, anchoring state.
+Use text edits for scripts, configuration and scenes when the change is clear.
+Prefer the Godot editor or an available Funplay MCP integration for complex
+scene layout, hierarchy inspection or restructuring. Neither is a prerequisite:
+text-edited scenes still need import/parse checks and relevant runtime evidence.
+Do not wait for an editor or MCP connection when the existing CLI tools suffice.
 
 **Never:**
 - Edit `.godot/` directly.
@@ -53,42 +48,29 @@ though the run happened on 4.7.2.
 
 ## 5. Verification Commands
 
-Run these three from the repo root, in order. All must pass before pushing:
+Follow **Verification** in `AGENTS.md`, the canonical local checklist and
+change-sensitive execution policy. Keep CI's additional checks in
+`.github/workflows/ci.yml`; do not duplicate their inventory here.
 
-```bash
-godot --version                          # confirm 4.7.2.stable
-tools/check_imports.sh                   # import; fail on stderr ERRORs or process status
-tools/check_scripts.sh                   # per-file parse + warnings-as-errors gate
-godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 with PASS
-```
+Use `tools/check_scripts.sh`, not the exit code of bare `--check-only`, to detect
+parse failures. Include new `.gd` files in the tracked sweep as described in
+`AGENTS.md`. Grade the test suite by its exit status and `PASS` line, not harmless
+dummy-renderer warnings.
 
-CI runs this same gate on every push to verify nothing is broken — literally the
-same script, called from `.github/workflows/ci.yml`, so local and CI cannot
-drift.
+## 6. Runtime Inspection
 
-**Never grade `--check-only` by its exit code.** It writes diagnostics to stderr
-and exits 0 whatever it found; measured on 4.7.1, a duplicate `var`, an
-unterminated string, a type mismatch and an untyped `var` all exited 0. The
-`|| exit 1` loop that stood here until 2026-08-06 therefore never failed once.
-`tools/check_scripts.sh` greps stderr for `SCRIPT ERROR` / `Failed to load
-script`, while separately failing on a non-zero process status so invocation
-failures and crashes cannot pass. Warnings-as-errors is genuinely reaching the
-check — `project.godot` sets four warning classes to level 2 and an untyped
-`var x = 1` prints `(Warning treated as error.)` — it is enforced by that grep,
-not by the exit code.
+Choose evidence by observable effect, not by directory:
+- Layout or static visual changes: inspect a runtime screenshot before review.
+- Tweens or VFX: inspect the running transition or a temporal capture; a single
+  still does not prove motion.
+- Audio changes: verify playback and routing; a screenshot alone is insufficient.
+- Pure domain, architecture, tests or documentation with no audiovisual effect:
+  no capture is required. Content and locale changes may affect the visible UI.
 
-## 6. Visual Inspection
-
-Any presentation-affecting change (screen layout, tween, VFX, audio routing) requires a screenshot before review. Use the Funplay MCP editor integration:
-
-1. Godot editor open, MCP connected (port 8765).
-2. Make the change, Save the scene.
-3. Call Funplay `capture_editor_view` (editor 2D/3D viewport) or `capture_runtime_view` (live game viewport via the runtime bridge). Both photograph the view that is showing; they do not take a `res://` scene path.
-4. Review the screenshot before committing.
-
-Without the editor, capture through `tools/shot.sh` (one-off) or `tools/live.sh` (iteration) — see `docs/dev-tools.md`.
-
-Changes that don't touch `presentation/` or audio buses (pure domain, architecture, test-only) skip this step.
+Use `tools/shot.sh` for one-off screenshots or `tools/live.sh` for iteration,
+following `docs/session-ownership.md` and `docs/dev-tools.md`. Editor/MCP views
+are useful supplementary inspection, not proof that the game renders correctly.
+Report missing required runtime evidence rather than claiming completion.
 
 ## 7. Fixtures & Determinism
 
@@ -123,20 +105,35 @@ Dictionaries compare natively against the JSON parity fixtures and survive seria
 
 ## 9. Stop Conditions
 
-**Halt implementation and produce a separate plan if any of these arise:**
+Pause the affected implementation and obtain an approved plan for an unexpected
+breaking save-schema change or native Android/iOS SDK integration. If the current
+approved task already covers that change and its migration or platform plan,
+continue within that scope; do not request the same approval again.
 
-1. **Save-schema change** — a breaking change to the save envelope or top-level structure that would require a new version.
-2. **Platform plugin work** — native Android/iOS SDK integration (push, analytics, in-app purchase). This is a separate skillset and project.
-3. **Scope creep >400 changed lines** — any single task that modifies >400 lines without review. Stop, present the findings, get a new plan (indicates the task is larger than estimated).
+More than 400 changed lines is a scope-review signal, not an automatic halt.
+Check whether the increase is explained by the approved work, tests or generated
+content. Pause only for new unapproved scope, architecture or risk; continue
+independent in-scope work. Explicit one-shot, STOP and owner-approval boundaries
+in the task remain binding.
 
 ## 10. Governance
 
-**Narrow loop:** One implementer + one reviewer + fast local gate (the three verification commands) + milestone gate (CI + parity fixtures + one human visual decision). No auto-revert machinery for this project — a red CI is a handled event, not an emergency.
+Continue through implementation, relevant verification and fixes caused by the
+requested change until its acceptance criteria are met or a named approval
+boundary is reached. Record unrelated improvements as follow-ups rather than
+expanding the task. Report pre-existing failures separately; do not conceal them.
 
-**Milestone checkpoints:**
-- **M0:** Scaffold (this).
-- **M1–M4:** Domain parity (RNG, content, combat, saves).
-- **M5–M7:** Presentation slice (combat screen, world map, mobile).
-- **M8:** ~~Decision gate (parity suite green; ship the full port, or return to web).~~ **Settled 2026-08-16 (#317): the port ships.** The reference is detached and "return to web" is off the table; what replaces this gate is the commercial rubric (#157) and the RC bar (`docs/rc-bar.md`).
+For implementation PRs, retain one implementer and one reviewer; review is a
+handoff gate, not a pause after every edit. Read-only answers and mechanical
+non-semantic documentation corrections do not need a separate reviewer. Human
+visual decisions apply to the milestones or briefs that explicitly require them.
+No auto-revert machinery: a red CI is a handled event, not an emergency.
 
-**Authority:** User (fol2) signs off on concept briefs (especially M6 map concept), high-level PRs, and the M8 decision. Otherwise, reviewers drive their lane.
+**Historical milestones:** M0 scaffold, M1–M4 domain port, M5–M7 presentation.
+M8 was settled on 2026-08-16 (#317): this port ships independently. Current
+quality criteria are the commercial rubric (#157) and `docs/rc-bar.md`, not a
+new web-parity or M8 approval exercise.
+
+**Authority:** James signs off on concept briefs and high-level PRs. Preserve
+explicit merge, release, provider-spend and production-activation boundaries;
+local implementation permission does not grant those actions.
