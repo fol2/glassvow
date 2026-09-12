@@ -18,7 +18,7 @@ Old status pages, review packets, evidence folders, handoffs, and `docs/session-
 ## Start with the smallest sufficient context
 
 1. Treat the user's instruction or the active GitHub issue as the task contract. A complete direct owner instruction does not need a mirror issue.
-2. Inspect the owned or changed surface and search before opening long documents. Read only matching sections of `CONCEPTS.md`, ADRs, solution notes, and skills.
+2. Before a delivery audit or edit, fetch the target branch and compare its head with the checkout. Read active instructions from the current target; reconcile a stale branch before applying policy changes. Do not replace newer operating rules with an older checkout’s rules. Inspect the owned or changed surface and search before opening long documents. Read only matching sections of `CONCEPTS.md`, ADRs, solution notes, and skills.
 3. Load `.claude/skills/glassvow-godot/SKILL.md` only for Godot runtime, test, scene, resource, import, or visual work. Load the story, Suno, or ElevenLabs skill only when that domain is actually in scope.
 4. Keep one task capsule: goal, non-goals, active constraints, acceptance, decisions, current head/diff/evidence, and next action.
 

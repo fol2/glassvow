@@ -43,8 +43,7 @@ The live save lineage is the v2 run/vigil pair. A breaking envelope or top-level
 ## 5. Editing methods
 
 - Hand-edit small scripts and simple project or resource values.
-- Use the Godot editor for significant `.tscn` composition and save the generated result.
-- Use the Funplay MCP for large presentation restructuring, hierarchy inspection, and screenshot-driven iteration.
+- Prefer the Godot editor for significant `.tscn` composition and Funplay MCP for presentation restructuring or hierarchy inspection when available. Text-edited scenes are acceptable with the same relevant import, parse and runtime evidence; tool availability alone is not a reason to wait.
 - Never edit `.godot/` or hand-edit generated import sidecars.
 - Include required `.import` and `.uid` sidecars with the asset they describe.
 - Keep one delivery outcome on one branch. Do not let another agent or machine mutate the same branch or worktree.

@@ -17,11 +17,11 @@ Open only the matching row in `docs/sfx-ledger.md`. Copy the cue, file stem, dur
 
 ## 2. Discovery loop
 
-Prefer the connected ElevenLabs sound-generation tool when available; otherwise use the official sound-generation REST endpoint. Stop when the required environment credential is absent. Never put credentials in the repository, prompts, logs, or generated evidence.
+Prefer the connected ElevenLabs sound-generation tool when available; otherwise use the official sound-generation REST endpoint. The REST route requires its environment credential; a working authenticated tool connection does not require a duplicate credential in the shell. If neither route is available, pause generation only, complete the brief and ledger preparation, and report the missing prerequisite. Never put credentials in the repository, prompts, logs, or generated evidence.
 
 Write candidates under `docs/design/<date>-<cue>/candidates/`, not directly into `assets/audio/sfx/`. Match the prompt influence and duration governed by the ledger row. Playback remains one-shot.
 
-Generate at least three distinct candidates. A sting that could pass for another governed cue is not a valid candidate.
+Generate an initial batch of three candidates within the accepted research budget. Additional batches consume that same finite budget; do not restart or enlarge it merely because candidates fail. When it is exhausted, report the result and the specific remaining decision. A sting that could pass for another governed cue is not a valid candidate.
 
 Candidate generation and comparison are one bounded research batch. Do not create an issue, branch, PR, CI run, or full repository context for every render. Record the actual generation parameters and decision once; only the selected candidate crosses into delivery.
 

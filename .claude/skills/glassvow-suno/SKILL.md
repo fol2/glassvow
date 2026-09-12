@@ -19,7 +19,7 @@ Open only the matching row in `docs/music-ledger.md`. Copy the cue, file, and br
 
 ## 2. Discovery loop
 
-Use Suno Pro → Create → Custom, enable Instrumental, and leave lyrics empty or `[Instrumental]`. Generate at least two candidates for the cue. Act IV must not be a re-encode or retitle of an Act III file.
+Use Suno Pro → Create → Custom, enable Instrumental, and leave lyrics empty or `[Instrumental]`. Generate an initial batch of two candidates within the accepted research budget. Additional batches consume that same finite budget; do not restart or enlarge it merely because candidates fail. When it is exhausted, report the result and the specific remaining decision. Act IV must not be a re-encode or retitle of an Act III file.
 
 Download audio, not video, into `docs/design/<date>-<cue>/candidates/`. Do not write candidates directly into `assets/audio/music/`.
 

@@ -7,6 +7,8 @@ description: Binding contract for Glassvow narrative work — story bible discip
 
 Narrative counterpart to `glassvow-godot`, which binds engine work. A task that writes, edits, or reviews story content loads this skill; unrelated development does not.
 
+Mechanical spelling, punctuation or formatting corrections to already accepted copy that preserve meaning, voice and reveal level need only relevant text checks, not a new batch or ledger entry. If that classification is uncertain, use the narrative workflow. Non-narrative UI labels do not trigger this pipeline; their actual locale/content delivery checks still apply.
+
 ## 1. The bible is law
 
 `docs/story/` is the single source of truth. Read `README.md`, then `00-truth.md`, then only the derived files the task touches. `00-truth.md` wins every conflict. A fact the bible lacks is added to the bible before any copy leans on it—never invented inline.
@@ -21,7 +23,7 @@ Routine copy constrained by settled canon does not require owner review. New set
 
 ## 3. Foreshadow-ledger discipline
 
-Every new or edited line enters `05-foreshadow-ledger.md` with its surface reading, post-twist reading, reveal-ladder level (`00-truth.md` §5), and leak risk.
+Every new or semantically changed narrative line enters `05-foreshadow-ledger.md` with its surface reading, post-twist reading, reveal-ladder level (`00-truth.md` §5), and leak risk.
 
 - A line whose post-twist rereading fails is rewritten until it passes.
 - A line that reveals above its ladder level is rewritten or rescheduled.
