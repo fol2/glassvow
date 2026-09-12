@@ -1,0 +1,10 @@
+{
+  "pid": 2091,
+  "frames": 503,
+  "active_gpu_ms": {
+    "median": 2.498667,
+    "p95": 4.3585,
+    "max": 6.605874
+  },
+  "scope": "Host Metal trace; per-frame union of active GPU intervals for this PID; excludes first/last frame; other applications may contend; not GPU allocation or frame latency"
+}

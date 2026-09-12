@@ -27,6 +27,9 @@ static func bool_value(value: Variant) -> bool:
 
 
 static func validate(value: Variant, path: String, errors: Array[String]) -> void:
+	# Successful validation needs no diagnostic paths. Construct those strings
+	# only when an invalid subtree actually needs the original detailed report.
+	if _valid_value(value): return
 	match typeof(value):
 		TYPE_NIL, TYPE_BOOL, TYPE_INT, TYPE_STRING:
 			pass
@@ -47,6 +50,25 @@ static func validate(value: Variant, path: String, errors: Array[String]) -> voi
 				validate(row[key], "%s.%s" % [path, key], errors)
 		_:
 			errors.append("%s uses unsupported Variant type %d" % [path, typeof(value)])
+
+
+static func _valid_value(value: Variant) -> bool:
+	match typeof(value):
+		TYPE_NIL, TYPE_BOOL, TYPE_INT, TYPE_STRING:
+			return true
+		TYPE_FLOAT:
+			return is_finite(float_value(value))
+		TYPE_ARRAY:
+			var rows: Array = value
+			for item: Variant in rows:
+				if not _valid_value(item): return false
+			return true
+		TYPE_DICTIONARY:
+			var row: Dictionary = value
+			for key: Variant in row:
+				if typeof(key)!=TYPE_STRING or not _valid_value(row[key]): return false
+			return true
+	return false
 
 
 static func fields(

@@ -1,0 +1,436 @@
+{
+	"act": 4,
+	"anchors": {
+		"n0": [
+			-36.0,
+			3.59999990463257,
+			-18.0
+		],
+		"n1": [
+			-18.0,
+			2.40000009536743,
+			0.0
+		],
+		"n2": [
+			0.0,
+			1.20000004768372,
+			18.0
+		],
+		"n3": [
+			18.0,
+			2.40000009536743,
+			0.0
+		],
+		"n4": [
+			36.0,
+			3.59999990463257,
+			-18.0
+		]
+	},
+	"asset_profile_digest": "a9c7313550997197b715bb269ee4d164b3695eabbe26346e725dbc35f042bb03",
+	"compiler_hard_pass": true,
+	"current": "n1",
+	"edges": {
+		"2:n0>2:n1": {
+			"centerline": [
+				[
+					-36.0,
+					3.59999990463257,
+					-18.0
+				],
+				[
+					-35.370002746582,
+					3.59999990463257,
+					-18.0
+				],
+				[
+					-27.7630748748779,
+					3.59999990463257,
+					-9.8205099105835
+				],
+				[
+					-26.2369251251221,
+					2.40000009536743,
+					-8.17948913574219
+				],
+				[
+					-18.6299991607666,
+					2.40000009536743,
+					0.0
+				],
+				[
+					-18.0,
+					2.40000009536743,
+					0.0
+				]
+			],
+			"corridor_width": 2.5,
+			"from": "n0",
+			"to": "n1"
+		},
+		"2:n1>2:n2": {
+			"centerline": [
+				[
+					-18.0,
+					2.40000009536743,
+					0.0
+				],
+				[
+					-17.3700008392334,
+					2.40000009536743,
+					0.0
+				],
+				[
+					-9.76307392120361,
+					2.40000009536743,
+					8.1794900894165
+				],
+				[
+					-8.23692417144775,
+					1.20000004768372,
+					9.82051086425781
+				],
+				[
+					-0.629999160766602,
+					1.20000004768372,
+					18.0
+				],
+				[
+					0.0,
+					1.20000004768372,
+					18.0
+				]
+			],
+			"corridor_width": 2.5,
+			"from": "n1",
+			"to": "n2"
+		},
+		"2:n2>2:n3": {
+			"centerline": [
+				[
+					0.0,
+					1.20000004768372,
+					18.0
+				],
+				[
+					0.629999160766602,
+					1.20000004768372,
+					18.0
+				],
+				[
+					8.23692607879639,
+					1.20000004768372,
+					9.8205099105835
+				],
+				[
+					9.76307582855225,
+					2.40000009536743,
+					8.17948913574219
+				],
+				[
+					17.3700008392334,
+					2.40000009536743,
+					0.0
+				],
+				[
+					18.0,
+					2.40000009536743,
+					0.0
+				]
+			],
+			"corridor_width": 2.5,
+			"from": "n2",
+			"to": "n3"
+		},
+		"2:n3>2:n4": {
+			"centerline": [
+				[
+					18.0,
+					2.40000009536743,
+					0.0
+				],
+				[
+					18.6299991607666,
+					2.40000009536743,
+					0.0
+				],
+				[
+					26.2369270324707,
+					2.40000009536743,
+					-8.1794900894165
+				],
+				[
+					27.7630767822266,
+					3.59999990463257,
+					-9.82051086425781
+				],
+				[
+					35.370002746582,
+					3.59999990463257,
+					-18.0
+				],
+				[
+					36.0,
+					3.59999990463257,
+					-18.0
+				]
+			],
+			"corridor_width": 2.5,
+			"from": "n3",
+			"to": "n4"
+		}
+	},
+	"hero_placements": {
+		"terminus": {
+			"asset_id": "act4-other-side-hearth",
+			"profile_id": "act4-other-side-hearth",
+			"transform": {
+				"origin": [
+					36.0,
+					3.59999990463257,
+					-27.0
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"yaw_radians": 0.0
+			}
+		},
+		"vigil": {
+			"asset_id": "act4-threshold-window",
+			"profile_id": "act4-threshold-window",
+			"transform": {
+				"origin": [
+					-36.0,
+					3.59999990463257,
+					-25.0
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"yaw_radians": 0.0
+			}
+		}
+	},
+	"hero_sources": {
+		"act4-other-side-hearth": {
+			"path": "res://tools/map_workshop/act4/kit/other-side-hearth.glb",
+			"sha256": "3462049b482f5e0f4495c819b8d8faa8b73b7956223539c6b5525c2b4b3a3dd0"
+		},
+		"act4-threshold-window": {
+			"path": "res://tools/map_workshop/act4/kit/threshold-window.glb",
+			"sha256": "001f1a9bd126b02801175c4629e9eb82ae38b7ee9e848e558cd744e288d33b33"
+		}
+	},
+	"history": [
+		"n0",
+		"n1"
+	],
+	"input_digest": "ae5ab968c2b4b7585afd61bb80103ffecdf4b7ca6b38ba96f143c1013aa80b59",
+	"layout_digest": "949b15e3bd830c686eef529015810b56c1a20600e5c94de7d4aba9518b7dafac",
+	"nodes": [
+		{
+			"col": 0,
+			"enemies": [
+				"unopenedSelf"
+			],
+			"id": "n0",
+			"jx": 0.0,
+			"jy": 0.0,
+			"next": [
+				"n1"
+			],
+			"row": 0,
+			"type": "monster"
+		},
+		{
+			"col": 0,
+			"enemies": [
+				"unobsidianSelf",
+				"unwalkedSelf"
+			],
+			"id": "n1",
+			"jx": 0.0,
+			"jy": 0.0,
+			"next": [
+				"n2"
+			],
+			"row": 1,
+			"type": "monster"
+		},
+		{
+			"col": 0,
+			"enemies": [
+				"uncrossedSelf",
+				"unsunkSelf"
+			],
+			"id": "n2",
+			"jx": 0.0,
+			"jy": 0.0,
+			"next": [
+				"n3"
+			],
+			"row": 2,
+			"type": "elite"
+		},
+		{
+			"col": 0,
+			"id": "n3",
+			"jx": 0.0,
+			"jy": 0.0,
+			"next": [
+				"n4"
+			],
+			"row": 3,
+			"type": "rest"
+		},
+		{
+			"col": 0,
+			"enemies": [
+				"eternalKeeper"
+			],
+			"id": "n4",
+			"jx": 0.0,
+			"jy": 0.0,
+			"next": [],
+			"row": 4,
+			"type": "boss"
+		}
+	],
+	"quality_registry_digest": "309fafca4c946a536dd78d5452c23bb1194386a57d24a31c3870ef7aaa5b94c2",
+	"reachable": [
+		"n2"
+	],
+	"seed": 717,
+	"spatial_profile": {
+		"act": 3.0,
+		"bounds_xz_m": [
+			-55.0,
+			-42.0,
+			55.0,
+			45.0
+		],
+		"id": "act4-mirrored-procession-v1",
+		"jitter_scale": 0.0,
+		"passage": {
+			"crossing_interval_m": 45.0,
+			"crossing_lane_spacing_m": 20.0,
+			"deck_depth_m": 0.65,
+			"headroom_m": 2.45,
+			"landing_m": 1.0,
+			"maximum_grade": 0.55
+		},
+		"rows": [
+			{
+				"centre_z_m": -18.0,
+				"height_m": 3.6,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": -36.0
+			},
+			{
+				"centre_z_m": -13.5,
+				"height_m": 3.3,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": -31.5
+			},
+			{
+				"centre_z_m": -9.0,
+				"height_m": 3.0,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": -27.0
+			},
+			{
+				"centre_z_m": -4.5,
+				"height_m": 2.7,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": -22.5
+			},
+			{
+				"centre_z_m": 0.0,
+				"height_m": 2.4,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": -18.0
+			},
+			{
+				"centre_z_m": 6.0,
+				"height_m": 2.0,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": -12.0
+			},
+			{
+				"centre_z_m": 12.0,
+				"height_m": 1.6,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": -6.0
+			},
+			{
+				"centre_z_m": 18.0,
+				"height_m": 1.2,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": 0.0
+			},
+			{
+				"centre_z_m": 12.0,
+				"height_m": 1.6,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": 6.0
+			},
+			{
+				"centre_z_m": 6.0,
+				"height_m": 2.0,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": 12.0
+			},
+			{
+				"centre_z_m": 0.0,
+				"height_m": 2.4,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": 18.0
+			},
+			{
+				"centre_z_m": -4.5,
+				"height_m": 2.7,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": 22.5
+			},
+			{
+				"centre_z_m": -9.0,
+				"height_m": 3.0,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": 27.0
+			},
+			{
+				"centre_z_m": -13.5,
+				"height_m": 3.3,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": 31.5
+			},
+			{
+				"centre_z_m": -18.0,
+				"height_m": 3.6,
+				"lane_spacing_m": 1.0,
+				"region": "mirror-court",
+				"station_m": 36.0
+			}
+		],
+		"schema_version": 1.0
+	}
+}

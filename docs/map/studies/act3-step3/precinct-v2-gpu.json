@@ -1,0 +1,24 @@
+{
+  "pid": 48995,
+  "frames": 632,
+  "active_gpu_ms": {
+    "median": 1.024041,
+    "p95": 1.467708,
+    "max": 6.289042
+  },
+  "scope": "Host Metal trace; per-frame union of active GPU intervals for this PID; excludes first/last frame; other applications may contend; not GPU allocation or frame latency",
+  "capture": {
+    "renderer": "Metal Mobile",
+    "viewport": [
+      1180,
+      820
+    ],
+    "sample": "precinct-v2-seed717.json",
+    "layout_digest": "c73265010553ec8f89ed976f43a7d8393304052acbd871f2d6b74dfe9aa8a158",
+    "view": "stationary interactive journey",
+    "seconds": 5,
+    "recorder_exit_code": 0,
+    "interval_table_sha256": "9f9e757793d3a34f9bb05051800bb87f86b9b5526196c922f0a77b3ef04c767b",
+    "failed_attempt": "Initial 10-second recording exited 139 without a usable trace; no values from it were accepted."
+  }
+}

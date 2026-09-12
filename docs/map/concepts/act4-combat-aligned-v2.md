@@ -1,0 +1,35 @@
+# Act IV — combat-aligned concept v2
+
+Status: approved by James in Step 1. Included in the four-act comparison.
+
+Subsequent combined review reopened this composition as too flat and sparse
+for the final chapter. Preserved as history; the recomposed sanctuary v4 is
+the current candidate, pending owner review.
+
+Output: [concept image](act4-combat-aligned-v2.png).
+Generated and refined with the built-in imagegen tool. Concept art only,
+not native runtime, generated layout or five-node gameplay evidence.
+
+## References and inspection
+
+Approved Act I v2 provides painted surface restraint and sculpted form.
+The Act IV native combat bench at `2ed6cdb0`, captured with
+`--fight=duskfang --act=3 --vp=1458x820 --seed=7 --settle=4`, supplies the amber
+rose window, teal/amber stelae and hearth-light identity. The combat bench uses
+a common enemy for visual comparison; it does not represent Act IV encounters.
+The reverse sequence follows `docs/story/03-acts.md`.
+
+The agent inspected the single continuous route, the five ordered visual echoes
+(threshold, court, city, woods, hearth), retained combat motifs, no horizon,
+and the warm terminus. A targeted material revision removed dense ground marks
+and preserved sparse monument reflections and crisp landmark detail. This
+passes concept review. Exact node placement, navigation states, scale and phone
+readability remain subsequent game-camera and runtime checks.
+
+## Initial generation prompt
+
+Use case: stylized-concept. Create ACT IV THE MIRRORED ROAD, final chapter map concept for Glassvow. Image 1 is ONLY the accepted painterly map language: quiet broad matte painted ground, clear path, substantial sculpted shapes, restrained detail, elevated top-down camera. Image 2 is the existing ACT IV COMBAT world: amber SIX-PETALLED circular rose window, tall dark memorial stelae with narrow teal or amber glass insets, deep blue charcoal stone, warm hearth light shining BACK towards the traveller. Use these exact motifs and colour relationships, but NOT its side-on camera, UI, characters or cards. Make one exquisite new single wide 16:9 environment concept. Elevated orthographic-like three-quarter top-down, same intimate scale as image 1, no sky, no horizon, no sunset, no visible sun, no distant vanishing point. This is mirror-space leading home to the hearth, not a golden palace or coastal landscape. ONE physically continuous gently bending UNBRANCHED stone pilgrimage road crosses the frame from lower-left to upper-right. Five quiet distinct places occur IN ORDER along that single path: 1 lower-left entry, the inner face of a large weathered freestanding circular rose window with six amber glass petals in a substantial dark stone surround beside the path; 2 a small broken obsidian halo remnant with muted violet glint beside a brief road widening; 3 a shallow reflecting basin and one small half-sunken Gothic library window fragment; 4 pale ash roots hugging the path edge and a pair of small warm lamps; 5 upper-right terminus, a modest sheltered stone hearth enclosure with a hooded STONE effigy and a contained amber fire at ground level. Every stop connected by the same road, no branch roads, no extra loops or stairs into voids. These echoes recall the earlier chapters in REVERSE order: threshold, obsidian court, drowned city, ash woods, hearth. Standing memorial stones accompany the road in spaced groups, not a fence or live queue of people. Each is dark slate with selected thin teal or amber glass insets from combat reference. Small number of stelae, leave breathing room. Surrounding ground is a continuous broad quiet mirror-dark polished slate plane, painted in muted blue-grey and deep violet, with restrained broad reflections of the monuments that establish uncanny space; no ocean waves or floating platforms. Path is pale warm grey matte stone made of very large smooth worn slabs, only occasional widely spaced seams, quiet painted interiors with broad tonal shifts and NO fine cracks or granular mottling. The path must remain the clearest readable structure. Light comes FROM THE FINAL HEARTH enclosure on the upper right, bathing the road backwards in restrained amber and rose-gold, increasing in warmth towards the hearth. Cool open shadow fill, readable midtones; dark stone and small amber/teal glass accents harmonise with combat. Rose window glows warmly but keep final hearth light emotionally focal. Enclosure modest in size, ending intimate rather than grandiose. Hand-painted gouache colour planes on sculpted 3D forms, crisp major outlines, unified soft contact shadows, refined mature fantasy, solemn, tender and quietly uncanny. Keep delicate glass tracery at the window, but simplify all open ground and stone surfaces. Avoid photorealistic gritty texture, crowded monuments, continuous tiny rubble, repeated tiny brush dabs, full-pavement crack networks, toy plastic, bloom, blur, black vignette, fog concealing route, trees everywhere, golden city, cathedral at terminus, sky gradient, sun, horizon, live characters, UI, text, arrows, number labels, graph circles, panels or watermark. This is art-direction concept, not native runtime or actual generated graph evidence.
+
+## Surface correction prompt
+
+Edit the supplied Mirrored Road concept with one targeted material correction. Keep every landmark, exact camera, single unbranched road, six-petalled amber rose window, teal/amber stelae, broken violet ring, circular basin, pale roots and lamps, final hooded stone effigy and warm hearth unchanged. Preserve their positions, scale, contact shadows and light sources. Repaint ALL OPEN GROUND outside the road as extremely quiet broad mirror-dark slate colour planes in deep blue-violet. Remove the all-over mottled patchwork, tiny jagged brush marks, ripples and rocky texture completely. Use smooth matte-to-satin broad painterly gradients with only sparse soft coherent reflections immediately below the standing monuments and rose window; no waves or watery ripples, no repeated flecks, no marble veining. It is uncanny polished mirror-ground, not a sea or a rocky field. The open empty areas should have very little visual information and let the monuments breathe. Repaint the path's large stone slab interiors as simple broad warm-grey matte colour planes, removing all tiny internal mottling and hairline cracks; KEEP ONLY the existing widely spaced slab boundary lines, edges and major shadow/light transitions. Keep a broad restrained amber light wash travelling backwards from the final hearth. Don't add glow along path edges. Retain crisp detailed architecture and glass, do not blur objects or reduce image resolution. Preserve mature hand-painted gouache modelling and substantial 3D form. Do not add/remove landmarks, change the five-stop sequence, add branches, turn the terrain into water, change the dusk palette, add sky/horizon/sun, text, UI or borders. The desired result is quiet and intimate: clear simple path across an uninterrupted dark reflective expanse, precisely detailed monuments, coherent warm light.

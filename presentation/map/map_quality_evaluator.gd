@@ -1,6 +1,9 @@
 class_name MapQualityEvaluator
 extends RefCounted
 ## Pure governed camera registry and geometric evaluator for Map Compiler v2 (#466).
+const _PortReserve = preload("res://presentation/map/map_journey_port_reserve.gd")
+const _Journey = preload("res://presentation/map/map_journey_camera_registry.gd")
+const _Spatial = preload("res://presentation/map/map_spatial_profile.gd")
 const VERSION: String = "map-quality-evaluator-v1"
 const EMPTY_MANIFEST: Dictionary = {"assets": [], "profile_defaults": {}, "profile_overrides": {}}
 const _Grade = preload("res://presentation/map/map_grade_separation.gd")
@@ -23,6 +26,16 @@ const SELECTION_PRIORITY_METRICS: PackedStringArray = [
 @warning_ignore_start("unsafe_call_argument")
 static func camera_registry(nodes: Array, quality: Dictionary,
 		edges: Array = []) -> Dictionary:
+	if quality.has("journey_camera") and not _Journey.enabled(quality):
+		return {"schema_version":1,"version":"unsupported-journey-camera","profiles":[],"errors":[{"reason":"unsupported journey camera contract"}],"digest":""}
+	var spatial_errors: Array[String] = _Spatial.validate(quality)
+	if spatial_errors.is_empty():
+		spatial_errors.append_array(_Spatial.validate_nodes(quality, nodes))
+	if not spatial_errors.is_empty():
+		return {"schema_version": 1, "version": "map-camera-profiles-v2",
+			"profiles": [], "errors": spatial_errors, "digest": ""}
+	if _Journey.enabled(quality):
+		return _Journey.build(nodes,quality,edges)
 	var chosen: Dictionary = {}
 	for value: Variant in nodes:
 		var node: Dictionary = value
@@ -35,6 +48,12 @@ static func camera_registry(nodes: Array, quality: Dictionary,
 		var row: int = int(row_v)
 		poses.append({"id": "row-%02d" % row, "kind": "focus", "focus": str(chosen[row]["id"]), "world": _a3(_authored(chosen[row], quality))})
 	var bounds: Rect2 = MapCameraRig.bounds_from_lattice()
+	if quality.has("spatial_profile"):
+		var foot: Rect2 = _Spatial.footprint(quality)
+		bounds = Rect2(foot.position + Vector2(0, MapCameraRig.look_dz()), foot.size)
+		if not rows.is_empty():
+			var opening: Vector3 = _authored(chosen[rows[0]], quality)
+			poses[0]["xz"] = Vector2(opening.x, opening.z + MapCameraRig.look_dz())
 	var lo: Vector2 = bounds.position; var hi: Vector2 = bounds.end; var mid: Vector2 = (lo + hi) * 0.5
 	for pair: Array in [["pan-left", Vector2(lo.x, mid.y)], ["pan-right", Vector2(hi.x, mid.y)], ["pan-near", Vector2(mid.x, lo.y)], ["pan-far", Vector2(mid.x, hi.y)], ["pan-near-left", lo], ["pan-near-right", Vector2(hi.x, lo.y)], ["pan-far-left", Vector2(lo.x, hi.y)], ["pan-far-right", hi]]:
 		poses.append({"id": pair[0], "kind": "pan", "focus": "", "xz": pair[1]})
@@ -55,7 +74,7 @@ static func camera_registry(nodes: Array, quality: Dictionary,
 					var world: Vector3 = _v3(pose["world"])
 					var resolved: Dictionary = MapCameraRig.resolve_leading(world,
 						Vector2(stage), zoom, focus_inset,
-						focused_anchor_envelope(str(pose["focus"]), focus_envelopes))
+						focused_anchor_envelope(str(pose["focus"]), focus_envelopes), bounds)
 					var resolved_pose_v: Variant = resolved.get("pose", null)
 					if resolved.get("ok", false) != true or not resolved_pose_v is Vector2:
 						var failure: Dictionary = resolved.get("failure", {}).duplicate(true)
@@ -83,7 +102,7 @@ static func node_candidate_bounds(nodes: Array, edges: Array,
 	var governed: Dictionary = quality["geometry"]["row_lane_envelope"]
 	var row_half: float = _f(governed["row_half_extent_m"])
 	var lane_half: float = _f(governed["lane_half_extent_m"])
-	var stage: Rect2 = MapPinProjection.lattice_footprint()
+	var stage: Rect2 = _Spatial.footprint(quality)
 	var initial: Dictionary = {}
 	for node: Dictionary in nodes:
 		var node_id: String = str(node["id"])
@@ -140,6 +159,7 @@ static func selection_screen_context(nodes: Array, edges: Array,
 		projected[str(profile["id"])] = rows
 	return {
 		"camera": camera,
+		"port_reserve": _PortReserve.context(nodes,edges,quality) if _Journey.enabled(quality) else {},
 		"hard": _index(quality["hard"]),
 		"epsilon": _f(quality["epsilon"]["screen_px"]),
 		"obstacles": obstacles,
@@ -177,6 +197,43 @@ static func selection_screen_feasibility(nodes: Array, edges: Array,
 	var camera: Dictionary = context["camera"]
 	var hard: Dictionary = context["hard"]
 	var epsilon: float = _f(context["epsilon"])
+	if _Journey.enabled(quality):
+		var blocked: Dictionary = _PortReserve.rejection(selected_ids,local_anchors,context["port_reserve"])
+		if not blocked.is_empty():
+			return {"hard_pass":false,"hard_values":{},"hard_margins":{},"priority_metric_ids":[],
+				"weakest_signed_hard_margin":-1.0,"rejection_reason":blocked,"violations":[blocked]}
+		var measured: Dictionary = {}
+		var priorities: Dictionary = {}
+		var rejected: Array = []
+		if not context.has("journey_projection_cache"): context["journey_projection_cache"] = {}
+		var cache: Dictionary = context["journey_projection_cache"]
+		var visited: Dictionary = {}
+		for profile: Dictionary in camera["profiles"]:
+			var visible_nodes: Array = _Journey.visible(local_nodes,profile)
+			if visible_nodes.is_empty(): continue
+			var member_ids: Array[String] = []
+			var member_anchors: Dictionary = {}
+			for node: Dictionary in visible_nodes:
+				var id: String = str(node["id"])
+				member_ids.append(id)
+				member_anchors[id] = local_anchors[id]
+			member_ids.sort()
+			var key: String = MapLayoutCanonical.digest({"stage":profile["stage"],"anchors":member_anchors})
+			if visited.has(key): continue
+			visited[key] = true
+			if not cache.has(key):
+				var local_profile: Dictionary = profile.duplicate(true)
+				local_profile["members"] = member_ids
+				local_profile["focus"] = member_ids[0]
+				var measured_row: Dictionary = _selection_screen(local_profile,visible_nodes,member_anchors,
+					context["obstacles"],quality,hard,epsilon)
+				measured_row.erase("projected_obstacles")
+				cache[key] = measured_row
+			var checked: Dictionary = cache[key]
+			measured[key] = checked["values"]
+			priorities[key] = checked["priority_values"]
+			rejected.append_array(checked["violations"])
+		return _selection_screen_summary(selected_ids,camera,hard,epsilon,measured,priorities,rejected)
 	if not shared_context.is_empty() and selected_ids.size() == 2:
 		return _cached_pair_feasibility(local_nodes, local_anchors,
 			selected_ids, quality, context)
@@ -483,6 +540,19 @@ static func _cached_candidate_profiles(node: Dictionary, anchor: Variant,
 ## selection-only node/node screen rule in at least one governed profile.
 static func selection_screen_local_pairs(node_sets: Dictionary,
 		quality: Dictionary, shared_context: Dictionary) -> Array[Array]:
+	if _Journey.enabled(quality):
+		var unique: Dictionary = {}
+		for profile: Dictionary in shared_context["camera"]["profiles"]:
+			var members: Array = profile["members"]
+			for i: int in range(members.size()):
+				for j: int in range(i+1,members.size()):
+					var pair: Array = [members[i],members[j]]
+					unique[MapLayoutCanonical.canonical_text(pair)] = pair
+		for pair: Array in _PortReserve.nearby_pairs(node_sets,shared_context["port_reserve"]):
+			unique[MapLayoutCanonical.canonical_text(pair)] = pair
+		var result: Array[Array] = []
+		for key: String in MapLayoutCanonical.sorted_keys(unique): result.append(unique[key])
+		return result
 	var calibration: Dictionary = quality["calibration"]["shipping_touch_waystone"]
 	var radius: float = _f(calibration["ink_radius_px"]) \
 		* _f(calibration["default_layout_scale"])
@@ -654,6 +724,9 @@ static func evaluate(input: MapLayoutInput, result: MapLayoutResult, assets: Dic
 	report["report_digest"] = MapLayoutCanonical.digest(report)
 	return MapLayoutCanonical.ordered_dictionary(report)
 static func _screen(profile: Dictionary, nodes: Array, topology: Array, anchors: Dictionary, edges: Dictionary, obstacles: Dictionary, quality: Dictionary, hard: Dictionary, epsilon: float) -> Dictionary:
+	if _Journey.enabled(quality):
+		profile = _Journey.resolve(profile,anchors)
+		nodes = _Journey.visible(nodes,profile)
 	var selection: Dictionary = _selection_screen(
 		profile, nodes, anchors, obstacles, quality, hard, epsilon
 	)
@@ -685,9 +758,17 @@ static func _selection_screen(profile: Dictionary, nodes: Array,
 		anchors: Dictionary, obstacles: Dictionary, quality: Dictionary,
 		hard: Dictionary, epsilon: float,
 		shared_projected_obstacles: Dictionary = {}) -> Dictionary:
+	if _Journey.enabled(quality):
+		profile = _Journey.resolve(profile,anchors)
+		nodes = _Journey.visible(nodes,profile)
+		shared_projected_obstacles = {}
 	var calibration: Dictionary = quality["calibration"]["shipping_touch_waystone"]
 	var radius: float = _f(calibration["ink_radius_px"]) * _f(calibration["default_layout_scale"])
 	var touch: float = _touch_size_px(quality)
+	if _Journey.enabled(quality):
+		radius = _f(profile["ink_radius"])
+		touch = _f(profile["touch_size"])
+
 	var values: Dictionary = {"node_ink_clearance_px": INF, "node_touch_target_min_px": touch, "node_touch_overlap_area_px2": 0.0, "node_touch_scenery_silhouette_overlap_area_px2": 0.0, "node_touch_hero_silhouette_overlap_area_px2": 0.0, "node_node_ink_overlap_area_px2": 0.0, "node_scenery_silhouette_overlap_area_px2": 0.0, "node_hero_silhouette_overlap_area_px2": 0.0, "branch_fanout_separation_px": INF, "focused_node_safe_frame_margin_px": INF, "route_state_exposure_ratio": 1.0}
 	var priority_values: Dictionary = {"node_ink_clearance_px": INF,
 		"focused_node_safe_frame_margin_px": INF}
@@ -835,6 +916,7 @@ static func _fanout(profile: Dictionary, topology: Array, edges: Dictionary, qua
 	var limit: float = _limit(hard, "branch_fanout_separation_px")
 	var applicable: bool = false
 	for source: String in MapLayoutCanonical.sorted_keys(by_source):
+		if profile.get("kind","")=="journey" and source!=str(profile["focus"]): continue
 		var ids: Array = by_source[source]
 		if ids.size() > 1:
 			applicable = true
@@ -922,11 +1004,7 @@ static func _point_at(points: Array, distance: float) -> Vector3:
 		distance -= length
 	return _v3(points[-1])
 static func _authored(node: Dictionary, quality: Dictionary) -> Vector3:
-	var stage: Dictionary = quality["calibration"]["stage_zoom_geometry"]
-	var cell: Vector2 = _v2(stage["cell_m"])
-	var origin: Vector2 = _v2(stage["origin_xz_m"])
-	var jitter: Vector2 = _v2(node["jitter"])
-	return Vector3(origin.x + (_f(node["row"]) + jitter.y) * cell.x, 0.0, origin.y + (_f(node["col"]) + jitter.x) * cell.y)
+	return _Spatial.anchor(node, quality)
 static func _node_world(center: Vector3, quality: Dictionary) -> PackedVector2Array:
 	return _rect(_xz(center), _v2(quality["calibration"]["shipping_touch_waystone"]["node_pair_half_extent_m"]))
 static func _circle(center: Vector2, radius: float) -> PackedVector2Array:

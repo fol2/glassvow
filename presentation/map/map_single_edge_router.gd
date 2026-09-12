@@ -41,6 +41,14 @@ static func route(source: Vector2, target: Vector2, obstacles: Array[Dictionary]
 	if (not channel.is_empty() and (not _inside(source, channel) or not _inside(target, channel))) \
 			or not _clear(source, source, inflated) or not _clear(target, target, inflated):
 		return _result(NO_ROUTE, [], half_width, {}, diagnostics, "endpoint infeasible")
+	# A clear segment reaches the Euclidean lower bound with no bends. Every
+	# detour is longer or loses the next cost tie-break; no visibility search
+	# can improve this result. Input/channel/obstacle validation still ran.
+	if _clear(source,target,inflated):
+		var direct: Array[Vector2] = [source,target]
+		var cost: Array = _path_cost(direct,inflated,source,target)
+		return _result(ROUTED,direct,half_width,_cost_dict(cost,source.distance_to(target)),
+			_diagnostics(prepared,2,1,0,0),"")
 	var points: Array[Vector2] = _candidates(source, target, inflated, channel)
 	if points.size() > MAX_CANDIDATES:
 		diagnostics = _diagnostics(prepared, points.size(), 0, 0, 0)

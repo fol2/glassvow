@@ -1,0 +1,66 @@
+{
+  "profile": "docs/map/studies/act2-step3/profile-library-waterline.json",
+  "profile_sha256": "b792b2306b55884715975fd47eca259f563d4a1e6464573ecb0490ed6c64e2e8",
+  "views": {
+    "library": {
+      "image": "v3-library.png",
+      "elapsed_seconds": 36.52
+    },
+    "precinct": {
+      "image": "v3-precinct.png",
+      "elapsed_seconds": 35.97
+    },
+    "bridge": {
+      "image": "v3-bridge.png",
+      "elapsed_seconds": 36.21
+    },
+    "whole": {
+      "image": "v3-whole.png",
+      "elapsed_seconds": 36.3
+    },
+    "phone": {
+      "image": "v3-phone.png",
+      "elapsed_seconds": 36.35,
+      "input": {
+        "current_visible": true,
+        "dimensions": [
+          844.0,
+          390.0
+        ],
+        "drag_pan": true,
+        "journey_button": true,
+        "marker_target": [
+          44.0,
+          44.0000152587891
+        ],
+        "select_current": true,
+        "source_current_unchanged": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      }
+    },
+    "pad": {
+      "image": "v3-pad.png",
+      "elapsed_seconds": 36.38,
+      "input": {
+        "current_visible": true,
+        "dimensions": [
+          1180.0,
+          820.0
+        ],
+        "drag_pan": true,
+        "journey_button": true,
+        "marker_target": [
+          44.0,
+          44.0
+        ],
+        "select_current": true,
+        "source_current_unchanged": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      }
+    }
+  }
+}

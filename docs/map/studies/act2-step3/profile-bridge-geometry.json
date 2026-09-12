@@ -1,0 +1,72 @@
+{
+  "bridgehead_overlap": {
+    "maximum_surface_separation": 0.481968642095197,
+    "overlap_samples": 2167,
+    "radius": 1.5,
+    "worst": [
+      27.9494075775146,
+      10.7641754150391
+    ]
+  },
+  "crossing_centres": 3,
+  "crossings": [
+    {
+      "at": [
+        -17.4219570159912,
+        -0.81306266784668
+      ],
+      "clearance": 3.51284119890718,
+      "floor": 1.77715880109282,
+      "soffit": 5.29
+    },
+    {
+      "at": [
+        8.22707557678223,
+        2.99505996704102
+      ],
+      "clearance": 2.77854424553322,
+      "floor": 2.51145575446678,
+      "soffit": 5.29
+    },
+    {
+      "at": [
+        33.475227355957,
+        10.3379402160645
+      ],
+      "clearance": 2.8632434333854,
+      "floor": 2.4267565666146,
+      "soffit": 5.29
+    }
+  ],
+  "edges": 76,
+  "expected_edges": 76,
+  "expected_nodes": 65,
+  "maximum_endpoint_height_error": 0.00000016403198266346,
+  "maximum_sampled_grade": 0.440009535623198,
+  "minimum_centre_headroom": 2.77854424553322,
+  "minimum_dry_margin": 0.595932550430298,
+  "missing_route_samples": [],
+  "nodes": 65,
+  "remaining_checks": [
+    "whole-width bridge clearance",
+    "library footprint and route obstruction",
+    "reference-shape readability",
+    "water motion and depth",
+    "owner review"
+  ],
+  "rendered_width_checks": {
+    "failures": [],
+    "minimum_headroom": 2.39074110984802,
+    "sample_count": 611,
+    "sampling": "Rendered lower top and upper underside triangles, 0.125 m along / 0.15 m across, +/-0.9 m width at all three crossings"
+  },
+  "steepest": {
+    "at": [
+      6.24127960205078,
+      5.51866579055786,
+      1.69359254837036
+    ],
+    "edge": "3:8,3>3:9,4",
+    "upper": true
+  }
+}

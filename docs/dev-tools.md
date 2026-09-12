@@ -200,6 +200,24 @@ tests cover the main application separately. `--measure` reports 120 warmed pan
 frames on the current host, including an explicit GPU-timer availability flag;
 it does not qualify release-device performance.
 
+The journey camera uses generated contexts for `opening`, `middle`, `terminus`,
+`crossing` and `overview`; `--overlays-off` exposes the unretouched world surface.
+Its imported woodland measurements are rebuilt after source asset edits with
+`python3 tools/map_workshop/update_journey_fingerprints.py`, followed by
+`godot --headless -s res://tools/map_workshop/build_journey_catalogue.gd`.
+`test_map_journey_cache.gd` compares the shipped catalogue with actual imported
+mesh measurements, including appearance fingerprints.
+
+For an actual title/Continue/map/encounter check, first run
+`godot --headless -s res://tools/map_campaign_probe.gd -- --prepare`, then start a
+new native process with `godot -s res://tools/map_campaign_probe.gd -- --travel
+--output=/tmp/campaign.png`. This mounts `application/main.tscn`, uses real viewport
+input and the normal compiler, and records load timing and run-state invariance.
+It owns only the `user://glassvow_map_delivery_probe_*` test profile. Preparation
+is a valid starting checkpoint, not evidence of playing the opening story.
+A fresh process with a retained derived surface and a first build with no derived
+surface are different load conditions; report both explicitly.
+
 **`tools/probe_layout.gd` reads the composition back rather than photographing
 it.** A capture shows where something LOOKS like it is; on a 390px phone that is
 how a twelve-pixel error survives. The probe builds the real `CombatScreen` at a

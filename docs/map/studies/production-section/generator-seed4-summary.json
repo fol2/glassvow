@@ -1,0 +1,22 @@
+{
+  "seed": 4,
+  "act": 1,
+  "status": "NO_FEASIBLE_NODE_ROUTE_LAYOUT",
+  "failure": {
+    "edge_id": "",
+    "id": "domain_empty",
+    "kind": "selection_screen_preflight",
+    "node_id": "0,0",
+    "profile_id": "selection",
+    "reason": "selection-only screen compatibility has an empty candidate domain",
+    "detail_keys": [
+      "deletion_certificate",
+      "local_node_ids",
+      "preflight_receipt",
+      "terminal"
+    ]
+  },
+  "input_digest": "dc9ce44058f18539d75337c5420b5348cb0a21d19790b228ff59c3167e5e673c",
+  "evidence": "generator-seed4.log.gz",
+  "scope": "Existing shipping camera and asset profiles; failure occurs before workshop terrain or scenery is built."
+}

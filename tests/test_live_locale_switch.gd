@@ -79,6 +79,7 @@ static func _map_round_trip(fails: Array[String]) -> void:
 	var main: Main = Main.new()
 	var compiler: MapCompose.FakeLayoutCompiler = MapCompose.FakeLayoutCompiler.new()
 	main._map_layout_compile = Callable(compiler, "compile")
+	main._map_quality_override = MapCompose.legacy_quality()
 	main.content = content
 	main.game = game
 	main._map = map

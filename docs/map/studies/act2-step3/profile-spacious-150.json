@@ -1,0 +1,28 @@
+{
+  "success": false,
+  "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+  "source_digest": "b1c94eb7a963596344288842550ae54669b94098cb3ce32d72c3350be5feeb69",
+  "scale": 1.5,
+  "vertices": 3958,
+  "constraints": 16461,
+  "landing_equalities": 28503,
+  "footprint_radius": 2.85,
+  "footprint_equalities": 28330,
+  "crossing_pairs": [
+    [
+      "3:3,2>3:4,3",
+      "3:3,3>3:4,2"
+    ],
+    [
+      "3:8,3>3:9,4",
+      "3:8,4>3:9,3"
+    ],
+    [
+      "4:11,6>4:12,5",
+      "4:13,5>4:14,3"
+    ]
+  ],
+  "grade_limit": 0.44,
+  "landing_run": 1.55,
+  "crossing_separation": 2.8
+}

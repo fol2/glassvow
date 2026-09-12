@@ -21,9 +21,16 @@ var _route_checkpoint_quarantined: bool = false
 ## Exact live route constructor; durable resume reconstructs the initial route.
 var _route_rebuilder: Callable = Callable()
 var _map_layout_compile: Callable = Callable()
+var _map_quality_override: Dictionary = {}
+var _map_screen_language: StringName = &""
+var _map_asset_preload: Node
 var _map_layout_input_digest: String = ""
 var _map_layout_packet: Variant = null
 var _map_screen: WorldMapScreen = null
+var _map_loading: bool = false
+var _map_preparation: Control
+## Retain one current-act surface across encounters; hidden viewports are stopped.
+var _parked_map_screen: WorldMapScreen = null
 var _choice_screen: Control = null
 var _reward_screen: RewardScreen = null
 var _route_screen: Control = null
@@ -683,12 +690,26 @@ func _onboard_arm_target() -> void:
 
 
 func _clear_route() -> void:
+	if _map_loading:
+		_map_loading=false
+		if is_instance_valid(_map_preparation): _map_preparation.queue_free()
+		_map_preparation=null
+		if is_instance_valid(_map_screen): _map_screen.queue_free()
+		_map_screen=null
 	# Everything below is about to be freed: drop the whole freeze stack, not
 	# one level of it, so no count survives into the next surface.
 	_freeze_count = 0
 	_thaw_surfaces()
 	if _hints != null:
 		_hints.hide_callout()
+	if game == null or game.run == null:
+		_discard_parked_map()
+	elif _map_screen != null:
+		_discard_parked_map()
+		_parked_map_screen = _map_screen
+		_parked_map_screen.hide()
+		_parked_map_screen.process_mode = Node.PROCESS_MODE_DISABLED
+		_map_screen = null
 	for screen: Control in [
 		_screen, _map_screen, _choice_screen, _reward_screen,
 		_route_screen, _run_hud, _modal,
@@ -702,6 +723,12 @@ func _clear_route() -> void:
 	_route_screen = null
 	_run_hud = null
 	_modal = null
+
+
+func _discard_parked_map() -> void:
+	if _parked_map_screen != null:
+		_parked_map_screen.queue_free()
+		_parked_map_screen = null
 
 
 func _freeze_under_modal() -> void:
@@ -867,6 +894,7 @@ func _show_title() -> void:
 	_remember_route(_show_title)
 	_apply_pending_content_hydration()
 	var saved: RunState = _load_run()
+	_prepare_saved_map_assets(saved)
 	var choices: Array[Dictionary] = []
 	if saved != null:
 		choices.append({"id": "continue", "label": Locale.active.t("ui.menu.backToRoad")})
@@ -1372,20 +1400,48 @@ func _compile_map_layout(input: MapLayoutInput, quality: Dictionary,
 
 
 func _show_map() -> void:
+	if _map_loading: return
 	_remember_route(_show_map)
 	_apply_pending_content_hydration()
 	if game != null and game.run != null:
 		_transitions.wipe()
 	_clear_route()
-	_map_screen = WorldMapScreen.new(_map, content, _shape)
-	# ponytail: retain only the current identity; add a cache only if routes can
-	# revisit older semantic identities.
-	_map_screen._layout_compile = _compile_map_layout
-	_map_screen.node_chosen.connect(_on_node_chosen)
-	_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
-	_map_screen.before_pick = _on_map_before_pick
-	add_child(_map_screen)
-	_map_screen.refresh(game.run)
+	var language: StringName = Locale.active.code if Locale.active != null else Locale.CODE_EN
+	if _parked_map_screen != null and _parked_map_screen.map == _map and _parked_map_screen.content == content and _map_screen_language == language:
+		_map_screen = _parked_map_screen
+		_parked_map_screen = null
+		_map_screen.process_mode = Node.PROCESS_MODE_INHERIT
+		_map_screen.set_shape(_shape)
+		_map_screen.show()
+	else:
+		_discard_parked_map()
+		_map_screen = WorldMapScreen.new(_map, content, _shape)
+		if _map_layout_compile.is_valid():
+			_map_screen._layout_compile = _compile_map_layout
+		_map_screen._layout_quality_override = _map_quality_override
+		_map_screen_language = language
+		_map_screen.node_chosen.connect(_on_node_chosen)
+		_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
+		_map_screen.before_pick = _on_map_before_pick
+		add_child(_map_screen)
+	if game.run.act==1 and DisplayServer.get_name()!="headless" and _map_screen.layout_result()==null:
+		_map_loading=true
+		var pending: WorldMapScreen = _map_screen
+		pending.hide()
+		var chapter: Dictionary = content.acts[game.run.act]
+		_map_preparation=preload("res://presentation/map/map_preparation.gd").new(str(chapter.get("name","")))
+		add_child(_map_preparation)
+		await RenderingServer.frame_post_draw
+		if not is_instance_valid(pending) or pending.is_queued_for_deletion() or _map_screen!=pending: return
+		await pending.refresh_async(game.run)
+		if not is_instance_valid(pending) or pending.is_queued_for_deletion() or _map_screen!=pending: return
+		_map_loading=false
+		if is_instance_valid(_map_preparation): _map_preparation.queue_free()
+		_map_preparation=null
+		pending.show()
+	else:
+		_map_screen.refresh(game.run)
+	_release_map_asset_preload()
 	# --map --act=N: dress scenery only (domain map stays the run's act).
 	if _forced_act >= 0:
 		_map_screen.set_act_scenery(_forced_act)
@@ -2503,7 +2559,7 @@ func _on_boss_relic_chosen(id: String) -> void:
 			# act plate stays on the sceneless path only.
 			_route_run()
 			return
-		_show_map()
+		await _show_map()
 		# The act-change plate rides over the arriving map, concurrent rather
 		# than awaited (reward.js:181 fires it on the boss-reward continue).
 		var act_name: String = "ACT %d" % (game.run.act + 1)
@@ -3415,3 +3471,21 @@ func _on_lamplighter_confirmed(boon_id: String, art_id: StringName) -> void:
 static func _combat_encounter_header(route_kind: String, act_number: int) -> String:
 	var kind: String = Locale.active.t("ui.combat.encounterKind.%s" % route_kind)
 	return Locale.active.t("ui.combat.encounterHeader", {"kind": kind, "act": act_number})
+
+func _prepare_saved_map_assets(saved: RunState) -> void:
+	if not is_inside_tree() or DisplayServer.get_name()=="headless": return
+	if saved==null or saved.act!=0:
+		_release_map_asset_preload()
+		return
+	if _map_asset_preload!=null: return
+	_map_asset_preload=preload("res://presentation/map/map_asset_preload.gd").new()
+	add_child(_map_asset_preload)
+	var paths: Array[String] = []
+	var profiles: Dictionary = preload("res://assets/art/map-journey/geometry-catalogue.res").get("profiles")
+	for profile: Dictionary in profiles.values(): paths.append(str(profile["source_path"]))
+	_map_asset_preload.call("begin",paths)
+
+func _release_map_asset_preload() -> void:
+	if _map_asset_preload!=null:
+		_map_asset_preload.call("release")
+		_map_asset_preload=null

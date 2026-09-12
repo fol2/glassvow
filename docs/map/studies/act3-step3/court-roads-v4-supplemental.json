@@ -1,0 +1,29 @@
+{
+  "court_structure": {
+    "body_samples": 20470,
+    "decoration_hits": 0,
+    "examples": [],
+    "scope": "Actual rail and pier triangles over rendered treads; five lateral samples across a 1.5 m corridor, 2.12 m body height."
+  },
+  "crossings": {
+    "failures": [],
+    "minimum_headroom": 2.35962653160095,
+    "sample_count": 609,
+    "sampling": "Rendered lower top and upper underside triangles, 0.125 m along / 0.15 m across, +/-0.9 m width at all three crossings"
+  },
+  "joints": {
+    "maximum_surface_separation": 4.44089209850063e-15,
+    "overlap_samples": 2153,
+    "radius": 1.5,
+    "worst": [
+      38.7278633117676,
+      34.624641418457
+    ]
+  },
+  "terrain_vs_treads": {
+    "examples": [],
+    "hits": 0,
+    "maximum_terrain_above_deck": -0.253791332244873,
+    "samples": 20472
+  }
+}

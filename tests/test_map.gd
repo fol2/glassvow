@@ -251,6 +251,7 @@ static func run(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_slice()
 	var walk: WorldMap = WorldMap.slice()
 	var screen: WorldMapScreen = WorldMapScreen.new(walk, content)
+	screen._layout_quality_override = preload("res://tests/test_map_compose.gd").legacy_quality()
 	screen.instant = true
 	var seen: Array[int] = []
 	screen.node_chosen.connect(func(i: int) -> void: seen.append(i))
@@ -298,6 +299,7 @@ static func run(fails: Array[String]) -> void:
 	# alone on the road were consistent with each other. Hold the DECISION, on
 	# the real seed-717 geometry, not just the rule.
 	var chip_screen: WorldMapScreen = WorldMapScreen.new(generated, benchmark_content)
+	chip_screen._layout_quality_override = preload("res://tests/test_map_compose.gd").legacy_quality()
 	chip_screen.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	chip_screen.size = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
 	tree.root.add_child(chip_screen)
@@ -325,6 +327,7 @@ static func run(fails: Array[String]) -> void:
 	# luck and a gate finds every run.
 	var sib_run: RunState = RunState.new_run(benchmark_content, 17634, "run-siblings")
 	var sib: WorldMapScreen = WorldMapScreen.new(WorldMap.benchmark(sib_run), benchmark_content)
+	sib._layout_quality_override = preload("res://tests/test_map_compose.gd").legacy_quality()
 	sib.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	sib.size = Vector2(390, 844)
 	tree.root.add_child(sib)
@@ -433,6 +436,7 @@ static func run(fails: Array[String]) -> void:
 	# the title line, which the slice does not carry.
 	var glide_run: RunState = RunState.new_run(full, 717, "run-glide")
 	var glider: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), full)
+	glider._layout_quality_override = preload("res://tests/test_map_compose.gd").legacy_quality()
 	glider.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	glider.size = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
 	tree.root.add_child(glider)

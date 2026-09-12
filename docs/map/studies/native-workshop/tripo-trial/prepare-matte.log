@@ -1,0 +1,14 @@
+12:14:03 | INFO: Data are loaded, start creating Blender stuff
+12:14:03 | INFO: Blender create Mesh node meshes[0]
+12:14:06 | INFO: glTF import finished in 3.29s
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+12:14:33 | INFO: Starting glTF 2.0 export
+12:14:33 | INFO: Extracting primitive: meshes[0]
+12:14:33 | INFO: Primitives created: 1
+12:14:33 | INFO: Finished glTF 2.0 export in 0.03296685218811035 s
+
+TRIAL_PREPARED {"status": "Unaccepted single-asset trial; requires native inspection", "source": "/Users/jamesto/Downloads/stone archway 3d model.glb", "output": "assets/art/map-journey/trials/tripo-arch-matte.glb", "triangles_before": 1977064, "triangles_after": 24000, "height": 5.5, "source_blender_bounds": [[-0.394561767578125, -0.12087249010801315, 0.0], [0.394561767578125, 0.12087249010801315, 0.980133056640625]], "materials": ["tripo_material_29753484-ee5d-4b95-a812-bdd3e32a4210"], "images": [{"name": "stone+archway+3d+model_basecolor.jpg", "size": [4096, 4096]}, {"name": "stone+archway+3d+model_normal.jpg", "size": [4096, 4096]}, {"name": "stone+archway+3d+model_rm.jpg", "size": [4096, 4096]}], "uv_layers": 1, "stone_treatment": {"metallic": 0, "roughness": 0.92, "normal_strength": 0.45}}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

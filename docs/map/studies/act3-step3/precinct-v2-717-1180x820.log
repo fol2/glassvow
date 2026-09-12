@@ -1,0 +1,21 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward Mobile - Using Device #0: Apple - Apple M1 Max (Apple7)
+
+Sentry: DEBUG: starting Sentry SDK version 2.1.1+d288ad9
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+WALKING_UNION removed_m2=179.340036571026 build_ms=168.306
+LANDSCAPE_OPENINGS count=0
+COURT_SURFACE triangles=4638
+ARCHITECTURE_OCCUPANCY conflicts=0
+PRECINCT_BUILD_MS 1767.631
+PRECINCT_TIMING {"draw_calls":145.0,"frame_interval_ms":{"maximum":19.781,"median":8.318,"p95":8.536},"frames":120,"gpu_timestamps_available":false,"render_cpu_ms":{"maximum":0.236000001430511,"median":0.194000005722046,"p95":0.211999997496605},"render_gpu_ms":{"maximum":0.0,"median":0.0,"p95":0.0},"renderer_mib":118.5,"scope":"desktop native stationary viewport; frame interval includes synchronisation; not device qualification","view":"whole"}
+PRECINCT_VIEW {"draw_calls":145.0,"primitives":428146.0,"renderer_mib":118.5,"scope":"native capture counters; not frame-time qualification","view":"whole"}
+PRECINCT_TIMING {"draw_calls":35.0,"frame_interval_ms":{"maximum":8.576,"median":8.314,"p95":8.49},"frames":120,"gpu_timestamps_available":false,"render_cpu_ms":{"maximum":0.172999992966652,"median":0.120999999344349,"p95":0.13400000333786},"render_gpu_ms":{"maximum":0.0,"median":0.0,"p95":0.0},"renderer_mib":118.5,"scope":"desktop native stationary viewport; frame interval includes synchronisation; not device qualification","view":"journey"}
+PRECINCT_VIEW {"draw_calls":35.0,"primitives":128066.0,"renderer_mib":118.5,"scope":"native capture counters; not frame-time qualification","view":"journey"}
+PRECINCT_TIMING {"draw_calls":34.0,"frame_interval_ms":{"maximum":8.593,"median":8.326,"p95":8.51},"frames":120,"gpu_timestamps_available":false,"render_cpu_ms":{"maximum":0.180999994277954,"median":0.13400000333786,"p95":0.165000006556511},"render_gpu_ms":{"maximum":0.0,"median":0.0,"p95":0.0},"renderer_mib":118.5,"scope":"desktop native stationary viewport; frame interval includes synchronisation; not device qualification","view":"court"}
+PRECINCT_VIEW {"draw_calls":34.0,"primitives":209051.0,"renderer_mib":118.5,"scope":"native capture counters; not frame-time qualification","view":"court"}
+PRECINCT_VIEW {"draw_calls":61.0,"primitives":269795.0,"renderer_mib":118.5,"scope":"native capture counters; not frame-time qualification","view":"threshold"}
+PRECINCT_VIEW {"draw_calls":12.0,"primitives":145253.0,"renderer_mib":118.5,"scope":"native capture counters; not frame-time qualification","view":"passage"}
+PRECINCT_COMPOSITION captured whole/journey/court; uncertified placement study
+PRECINCT_INPUT {"all_nodes":{"failures":[],"ok":true,"scope":"each node focused and clicked; desktop pointer, not physical touch","tested_nodes":65},"current_visible":true,"dimensions":[1180.0,820.0],"drag_pan":true,"drag_preserves_selection":true,"drag_probe":{"camera_delta":1.26395010948181,"hovered":"none","motion_events":1,"origin":"(12.0, 410.0)","received_down":true,"target":"(42.0, 420.0)","target_markers":[]},"journey_button":true,"marker_target":[60.0,60.0],"overview":{"cluster_open":true,"cluster_transition":{"after":32.0,"before":182.731658935547,"whole":false},"nodes":65,"overlaps":[],"represented":65,"single_select":true,"target_sizes_pass":true,"targets":21},"required_target":60.0,"route_camera":{"edge_filter":"","heading_changes":0,"maximum_turn_degrees":0.0,"occlusions":[],"ok":true,"probes":3067,"scope":"rendered centre-line focus samples at <=0.5 m; no interpolation or full-width guarantee"},"select_current":true,"sightlines":{"blocked_node_centres":0,"heading_degrees":25.0,"scope":"current and reachable centres at focus; not entire routes","tested_node_centres":3},"source_current_unchanged":true,"target_sizes_pass":true,"viewport_matches_pixels":true,"wheel_zoom":true,"whole_button":true}

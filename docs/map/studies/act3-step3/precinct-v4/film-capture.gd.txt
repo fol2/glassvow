@@ -1,0 +1,34 @@
+extends "res://tools/map_workshop/act3/precinct_study.gd"
+func _initialize() -> void:
+	_run.call_deferred()
+	_film.call_deferred()
+func _film() -> void:
+	var inspector: Inspector
+	for frame: int in range(900):
+		await process_frame
+		for child: Node in root.get_children():
+			if child is Inspector: inspector = child as Inspector
+		if inspector != null and inspector.guidance != null and inspector.guidance.overview != null: break
+	assert(inspector != null)
+	var before: String = JSON.stringify(inspector.data)
+	await create_timer(2).timeout
+	for target: String in inspector.data["reachable"]:
+		var journey: Button = inspector.controls["Journey"]
+		await inspector._click(journey.get_global_rect().get_center())
+		await create_timer(1).timeout
+		var choice: Button = inspector.markers[target]
+		await inspector._click(choice.get_global_rect().get_center())
+		await create_timer(2).timeout
+		var travel_button: Button = inspector.controls["Travel"]
+		await inspector._click(travel_button.get_global_rect().get_center())
+		assert(inspector.travel.active)
+		for frame: int in range(1200):
+			await process_frame
+			if not inspector.travel.active: break
+		assert(not inspector.travel.active)
+	var whole: Button = inspector.controls["Whole act"]
+	await inspector._click(whole.get_global_rect().get_center())
+	await create_timer(3).timeout
+	assert(JSON.stringify(inspector.data)==before)
+	print("GUIDANCE_FILM both_actual_choices=true complete_travel=true source_unchanged=true")
+	quit()

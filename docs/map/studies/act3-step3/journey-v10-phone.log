@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward Mobile - Using Device #0: Apple - Apple M1 Max (Apple7)
+
+Sentry: DEBUG: starting Sentry SDK version 2.1.1+d288ad9
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+STONE_BRIDGE_GRADED_FLIGHTS 17
+STONE_BRIDGE_GRADED_FLIGHTS 5
+SCRIPT ERROR: Parse Error: The argument 4 of the function "box()" requires the subtype "Material" but the supertype "Variant" was provided. (Warning treated as error.)
+          at: GDScript::reload (res://tools/map_workshop/act3/enclosure.gd:51)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+          at: GDScript::reload (res://tools/map_workshop/act3/run.gd:0)
+ERROR: Failed to load script "res://tools/map_workshop/act3/run.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

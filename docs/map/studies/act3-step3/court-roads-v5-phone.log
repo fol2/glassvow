@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward Mobile - Using Device #0: Apple - Apple M1 Max (Apple7)
+
+Sentry: DEBUG: starting Sentry SDK version 2.1.1+d288ad9
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+STONE_BRIDGE_GRADED_FLIGHTS 17
+STONE_BRIDGE_GRADED_FLIGHTS 5
+STONE_BRIDGE_FLIGHTS flights=17 treads=143 maximum_rise=0.16844170093536
+STONE_BRIDGE_FLIGHTS flights=5 treads=29 maximum_rise=0.16450125830514
+FITTED_ROUTE_ASSEMBLY nodes=65 edges=76 layers=2
+ACT_III_INTACT_SCENERY groups=8
+ACT_III_ENCLOSURE bays=25
+ACT_III_ROUTE_AUDIT {"bridge_walkway":{"body_samples":20470,"decoration_hits":0,"examples":[],"scope":"Actual solid terrace triangles over rendered treads; five lateral samples across a 1.5 m corridor, 2.12 m body height."},"clearance":{"architecture":{"architecture_meshes":2347,"body_samples":12282,"bounds_hits":0,"first_hits":[],"scope":"Conservative mesh AABBs, 0.5 m body width / 2.12 m above boots, centre and +/-0.5 m route offsets. Positive hits need triangle-level diagnosis."},"first_hits":[],"scope":"Rendered ground triangles at seven offsets across 1.5 m; all source and decorative routes. Building bounds use the shared conservative body probe.","terrain_body_hits":0,"terrain_samples":28658},"destination_count":1,"destination_owner":"14,3","edges":76,"nodes":65,"rendered_deck":{"first_failures":[],"maximum_height_difference_from_route":0.479940011978149,"maximum_rendered_triangle_grade":9.82073648894458,"missing":0,"samples":28658,"scope":"Actual deck triangles, all route samples at seven offsets across 1.2 m; triangle grade across both complete decks","steepest_at":[13.0004997253418,3.8219997882843,8.12769985198975],"steepest_projected_area":0.0000049499976739753,"steepest_vertices":[[13.0,3.80629992485046,8.125],[13.0015001296997,3.8066999912262,8.12650012969971],[13.0,3.8529999256134,8.13159942626953]]},"scope":"Seed 717 native rendered routes; architectural and terrain clearance require separate proof","source_digest":"1ca42389e05c9caa15b47496a6fbc91cf7f8a7049de04575ffe4d4f2a99b1168"}
+ACT_III_RENDER_SAMPLE {"draw_calls":488.0,"frames":120,"primitives":3620326.0,"scope":"Native host, warmed steady scene; not target-device qualification","seconds":1.017647}
+ACT_III_TRIAL_CAPTURE 0 /Users/jamesto/.codex/worktrees/0633/glassvow/docs/map/studies/act3-step3/court-roads-v5-phone.png

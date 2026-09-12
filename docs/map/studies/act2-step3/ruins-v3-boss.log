@@ -1,0 +1,22 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward Mobile - Using Device #0: Apple - Apple M1 Max (Apple7)
+
+Sentry: DEBUG: starting Sentry SDK version 2.1.1+d288ad9
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+STONE_BRIDGE_GRADED_FLIGHTS 24
+STONE_BRIDGE_GRADED_FLIGHTS 5
+STONE_BRIDGE_OUTLINE original=35611 simplified=4031
+POINTED_PARAPET_BAYS 596 STAIR_BAYS 112
+STONE_BRIDGE_BOUNDARY_PIECES 11960
+STONE_BRIDGE_OUTLINE original=3626 simplified=292
+POINTED_PARAPET_BAYS 64 STAIR_BAYS 11
+STONE_BRIDGE_BOUNDARY_PIECES 1041
+STONE_BRIDGE_FLIGHTS flights=24 treads=303 maximum_rise=0.16692799329758
+STONE_BRIDGE_FLIGHTS flights=5 treads=29 maximum_rise=0.16450125830514
+STONE_BRIDGE_PIER_PAIRS 110
+ACT_II_ROUTE_ASSEMBLY nodes=65 edges=76 layers=2
+ACT_II_GEOMETRY_AUDIT {"bridge_walkway":{"body_samples":22595,"decoration_hits":0,"examples":[],"scope":"Actual rail and pier triangles over rendered treads; five lateral samples across a 1.5 m corridor, 2.12 m body height."},"bridgehead_overlap":{"maximum_surface_separation":0.00000000000000444089209850063,"overlap_samples":2153,"radius":1.5,"worst":[38.7278633117676,34.624641418457]},"crossing_centres":3,"crossings":[{"at":[-31.3595237731934,-1.46351337432861],"clearance":3.51108893791006,"floor":1.77884525314454,"soffit":5.2899341910546},{"at":[14.8087368011475,5.39110803604126],"clearance":2.85928031169296,"floor":2.51030723030948,"soffit":5.36958754200243},{"at":[60.2554054260254,18.6082916259766],"clearance":2.83072882259217,"floor":2.4246983451584,"soffit":5.25542716775058}],"edges":76,"expected_edges":76,"expected_nodes":65,"maximum_endpoint_height_error":0.000000164031986216173,"maximum_sampled_grade":0.440092680016625,"minimum_centre_headroom":2.83072882259217,"minimum_dry_margin":0.597927041053772,"missing_route_samples":[],"nodes":65,"remaining_checks":["whole-width bridge clearance","library footprint and route obstruction","reference-shape readability","water motion and depth","owner review"],"rendered_deck":{"first_failures":[],"maximum_height_difference_from_route":0.479940011978149,"maximum_rendered_triangle_grade":22.1797943738887,"missing":0,"samples":31633,"scope":"Actual deck triangles, all route samples at seven offsets across 1.2 m; triangle grade across both complete decks","steepest_at":[22.0782012939453,4.75716638565063,27.4490661621094],"steepest_projected_area":0.000679607037454844,"steepest_vertices":[[22.0,4.82200002670288,27.375],[22.125,4.62750005722046,27.4875984191895],[22.1096000671387,4.82200002670288,27.4846000671387]]},"rendered_width_checks":{"failures":[],"minimum_headroom":2.35962653160095,"sample_count":609,"sampling":"Rendered lower top and upper underside triangles, 0.125 m along / 0.15 m across, +/-0.9 m width at all three crossings"},"ruin_connections":[{"centre":"(81.82576, 2.802, -2.420811)","entrance":"(76.82576, 4.822, -2.420811)","kind":"library","node":"14,3","ruin":0},{"centre":"(-10.20905, 0.0, -50.85177)","entrance":"(-11.39536, 1.0, -47.98774)","kind":"ward","node":"5,0","ruin":1},{"centre":"(31.24709, 0.0, -44.91106)","entrance":"(29.05506, 1.0, -42.71902)","kind":"ward","node":"9,0","ruin":2},{"centre":"(46.99176, 0.0, 1.683626)","entrance":"(43.89176, 1.0, 1.683626)","kind":"ward","node":"10,3","ruin":3},{"centre":"(-50.5417, 0.0, 10.96821)","entrance":"(-46.93857, 0.7, 9.47574)","kind":"quarter","node":"3,3","ruin":4},{"centre":"(-15.22457, 0.0, 7.583087)","entrance":"(-17.98228, 0.7, 10.3408)","kind":"quarter","node":"4,5","ruin":5},{"centre":"(9.790702, 0.0, 41.92631)","entrance":"(12.54842, 0.7, 39.16859)","kind":"quarter","node":"10,5","ruin":6},{"centre":"(-8.195654, 0.0, -9.742479)","entrance":"(-4.592524, 0.7, -11.23494)","kind":"quarter","node":"8,1","ruin":7}],"steepest":{"at":[13.4083032608032,2.94030356407166,6.27308177947998],"edge":"3:8,4>3:9,3","upper":false}}
+ACT_II_PLACEMENT_AUDIT {"architecture_meshes":4447,"body_samples":13305,"bounds_hits":0,"first_hits":[],"scope":"Conservative mesh AABBs, 0.5 m body width / 2.12 m above boots, centre and +/-0.5 m route offsets. Positive hits need triangle-level diagnosis."}
+ACT_II_WARM_RENDER frames=50 seconds=0.577114 average_fps=86.6379952660999
+ACT_II_ARCHITECTURE_CAPTURE 0 /Users/jamesto/.codex/worktrees/0633/glassvow/docs/map/studies/act2-step3/ruins-v3-boss.png

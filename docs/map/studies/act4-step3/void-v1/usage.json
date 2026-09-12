@@ -1,0 +1,32 @@
+{
+  "start_utc": "2026-09-07T09:42:20.427Z",
+  "baseline": {
+    "input_tokens": 1588469,
+    "cached_input_tokens": 1551872,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 5862,
+    "reasoning_output_tokens": 1349,
+    "total_tokens": 1594331
+  },
+  "source": "root token_count immediately preceding Act IV implementation instruction",
+  "through_utc": "2026-09-07T10:57:53.597Z",
+  "latest": {
+    "input_tokens": 21573549,
+    "cached_input_tokens": 21178240,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 97162,
+    "reasoning_output_tokens": 40770,
+    "total_tokens": 21670711
+  },
+  "delta": {
+    "input_tokens": 19985080,
+    "cached_input_tokens": 19626368,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 91300,
+    "reasoning_output_tokens": 39421,
+    "total_tokens": 20076380,
+    "uncached_input_tokens": 358712,
+    "cache_hit_percent": 98.205
+  },
+  "scope": "root-session counters only; excludes independently unreported reviewer/provider usage; reasoning is included in output; not Pro quota or billing attribution"
+}

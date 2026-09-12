@@ -1,0 +1,26 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward Mobile - Using Device #0: Apple - Apple M1 Max (Apple7)
+
+Sentry: DEBUG: starting Sentry SDK version 2.1.1+d288ad9
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+Movie Maker mode enabled, recording movie in 1180×820 @ 30 FPS...
+WALKING_UNION removed_m2=176.602820575237 build_ms=148.74
+LANDSCAPE_OPENINGS count=0
+COURT_SURFACE triangles=5241
+ARCHITECTURE_OCCUPANCY conflicts=0
+PRECINCT_BUILD_MS 1918.651
+PRECINCT_VIEW {"draw_calls":295.0,"primitives":437294.0,"renderer_mib":117.75,"scope":"native capture counters; not frame-time qualification","view":"whole"}
+PRECINCT_VIEW {"draw_calls":47.0,"primitives":150684.0,"renderer_mib":117.75,"scope":"native capture counters; not frame-time qualification","view":"journey"}
+PRECINCT_VIEW {"draw_calls":46.0,"primitives":217150.0,"renderer_mib":117.75,"scope":"native capture counters; not frame-time qualification","view":"court"}
+PRECINCT_VIEW {"draw_calls":128.0,"primitives":287267.0,"renderer_mib":121.578125,"scope":"native capture counters; not frame-time qualification","view":"threshold"}
+PRECINCT_VIEW {"draw_calls":15.0,"primitives":153820.0,"renderer_mib":121.578125,"scope":"native capture counters; not frame-time qualification","view":"passage"}
+PRECINCT_COMPOSITION captured whole/journey/court; uncertified placement study
+PRECINCT_INPUT {"current_visible":true,"dimensions":[1180.0,820.0],"drag_pan":true,"drag_preserves_selection":true,"drag_probe":{"camera_delta":1.26394855976105,"hovered":"none","motion_events":1,"origin":"(12.0, 410.0)","received_down":true,"target":"(42.0, 420.0)","target_markers":[]},"journey_button":true,"marker_target":[60.0,60.0],"overview":{"cluster_open":true,"cluster_transition":{"after":32.0,"before":182.731658935547,"whole":false},"nodes":65,"overlaps":[],"represented":65,"single_select":true,"target_sizes_pass":true,"targets":21},"required_target":60.0,"select_current":true,"sightlines":{"blocked_node_centres":0,"heading_degrees":-25.0,"scope":"current and reachable centres at focus; not entire routes","tested_node_centres":3},"source_current_unchanged":true,"target_sizes_pass":true,"tour":{"completed":true,"current_unchanged":true,"destination":"14,3","edges":["3:0,0>3:1,1","3:1,1>3:2,0","3:2,0>3:3,0","3:3,0>3:4,1","3:4,1>3:5,0","3:5,0>3:6,0","3:6,0>3:7,0","3:7,0>3:8,0","3:8,0>3:9,0","3:9,0>4:10,0","4:10,0>4:11,0","4:11,0>4:12,1","4:12,1>4:13,1","4:13,1>4:14,3"],"entrance":"0,0","frames":1779,"maximum_turn_degrees_per_second":40.0006395405318,"occlusions":0,"ok":true,"scope":"one continuous generated entrance-to-boss route; all rendered frames; other branches excluded"},"viewport_matches_pixels":true,"wheel_zoom":true,"whole_button":true}
+--------------------------------------------------------------------------------
+Done recording movie at path: /tmp/act3-entrance-tour.avi
+1832 frames at 30 FPS (movie length: 00:01:01:02), recorded in 00:00:27 (225% of real-time speed).
+CPU render time: 0.51 seconds (average: 0.28 ms/frame)
+GPU render time: 0.00 seconds (average: 0.00 ms/frame)
+Encoding time: 10.89 seconds (average: 5.95 ms/frame)
+--------------------------------------------------------------------------------

@@ -11,6 +11,16 @@ static func apply(host: Object, args: PackedStringArray) -> void:
 		push_error("host cannot apply a Development Scenario")
 		return
 	host.call("apply_dev_scenario", ref)
+	for argument: String in args:
+		if argument.begins_with("--journey-measure="):
+			var main: Main = host as Main
+			if main==null: return
+			var probe: Node = preload("res://presentation/dev/journey_measure.gd").new()
+			probe.host=main
+			probe.reference=ref
+			probe.output=argument.trim_prefix("--journey-measure=")
+			main.add_child(probe)
+			return
 
 
 static func parse_scenario_arg(args: PackedStringArray) -> ScenarioReference:

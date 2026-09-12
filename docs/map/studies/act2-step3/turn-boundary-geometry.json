@@ -1,0 +1,103 @@
+{
+  "bridgehead_overlap": {
+    "maximum_surface_separation": 0.0,
+    "overlap_samples": 2153,
+    "radius": 1.5,
+    "worst": [
+      0.0,
+      0.0
+    ]
+  },
+  "crossing_centres": 3,
+  "crossings": [
+    {
+      "at": [
+        -31.3595237731934,
+        -1.46351337432861
+      ],
+      "clearance": 3.51284119489618,
+      "floor": 1.77715880510382,
+      "soffit": 5.29
+    },
+    {
+      "at": [
+        14.8087368011475,
+        5.39110803604126
+      ],
+      "clearance": 2.85836583699639,
+      "floor": 2.51145566947196,
+      "soffit": 5.36982150646834
+    },
+    {
+      "at": [
+        60.2554054260254,
+        18.6082916259766
+      ],
+      "clearance": 3.00318632017241,
+      "floor": 2.42675680269136,
+      "soffit": 5.42994312286377
+    }
+  ],
+  "edges": 76,
+  "expected_edges": 76,
+  "expected_nodes": 65,
+  "maximum_endpoint_height_error": 0.00000016403198266346,
+  "maximum_sampled_grade": 0.440012819724038,
+  "minimum_centre_headroom": 2.85836583699639,
+  "minimum_dry_margin": 0.595932550430298,
+  "missing_route_samples": [],
+  "nodes": 65,
+  "remaining_checks": [
+    "whole-width bridge clearance",
+    "library footprint and route obstruction",
+    "reference-shape readability",
+    "water motion and depth",
+    "owner review"
+  ],
+  "rendered_deck": {
+    "first_failures": [],
+    "maximum_height_difference_from_route": 0.194797351837158,
+    "maximum_rendered_triangle_grade": 9.95286279668833,
+    "missing": 0,
+    "samples": 28315,
+    "scope": "Actual deck triangles, all route samples at seven offsets across 1.2 m; triangle grade across both complete decks",
+    "steepest_at": [
+      13.0004997253418,
+      3.82820010185242,
+      8.12769985198975
+    ],
+    "steepest_projected_area": 0.0000049499976739753,
+    "steepest_vertices": [
+      [
+        13.0,
+        3.81239986419678,
+        8.125
+      ],
+      [
+        13.0015001296997,
+        3.81269979476929,
+        8.12650012969971
+      ],
+      [
+        13.0,
+        3.85949993133545,
+        8.13159942626953
+      ]
+    ]
+  },
+  "rendered_width_checks": {
+    "failures": [],
+    "minimum_headroom": 2.56963300704956,
+    "sample_count": 609,
+    "sampling": "Rendered lower top and upper underside triangles, 0.125 m along / 0.15 m across, +/-0.9 m width at all three crossings"
+  },
+  "steepest": {
+    "at": [
+      31.5596008300781,
+      5.66683292388916,
+      39.9250907897949
+    ],
+    "edge": "4:11,6>4:12,5",
+    "upper": true
+  }
+}

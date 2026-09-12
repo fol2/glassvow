@@ -18,7 +18,7 @@ static func run(fails: Array[String]) -> void:
 	_check_concave_shore(fails)
 	var scene: MapScene = MapScene.new()
 	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
-		"res://docs/map/map-quality-v2.json"))
+		"res://content/map-quality-v2.json"))
 	var heroes: Dictionary = {}
 	var contract: Dictionary = scene.layout_hero_contract()
 	for id: String in contract["anchors"]:

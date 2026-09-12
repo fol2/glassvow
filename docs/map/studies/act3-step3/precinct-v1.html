@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en-GB">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Obsidian Court · Act III</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#100e16;color:#e5deeb}*{box-sizing:border-box}body{margin:0}main{max-width:1460px;margin:auto;padding:40px 24px 70px}header{max-width:830px;margin:0 0 30px}.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#bfa4bd}h1{font:400 clamp(38px,6vw,72px)/1.08 Georgia,serif;margin:17px 0}h2{font:400 30px Georgia,serif;margin:45px 0 18px}p{line-height:1.7;color:#bfb4c8;max-width:800px}nav,.sizes{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}button{font:inherit;min-height:48px;padding:10px 18px;border:1px solid #4c3f55;border-radius:5px;color:#d9cedf;background:#19141f;cursor:pointer}button[aria-pressed=true]{background:#503349;border-color:#a7769b;color:#fff}button:focus-visible,a:focus-visible{outline:3px solid #c49ebf;outline-offset:3px}.sizes{margin-bottom:18px}.sizes button{font-size:13px;min-height:44px}figure{margin:0}img,video{display:block;width:100%;height:auto;background:#121019;border:1px solid #362b40;border-radius:6px}figcaption{margin:13px 0;color:#b8aabe;font-size:14px;line-height:1.65}.pair{display:grid;grid-template-columns:1fr 1fr;gap:22px}.pair img{aspect-ratio:1.78;object-fit:contain}details{border-top:1px solid #3a2e43;margin-top:40px;padding-top:20px}summary{cursor:pointer;min-height:44px}a{color:#d3a7cc}li{line-height:1.7;color:#bfb4c8}.note{font-size:13px;color:#a590ad}@media(max-width:700px){main{padding:25px 12px 45px}.pair{grid-template-columns:1fr}nav button{flex:1;padding:10px}h1{font-size:42px}}
+</style>
+<main>
+<header><div class="eyebrow">Glassvow · Act III · Step 3 study</div><h1>The Obsidian Court</h1>
+<p>An intact royal precinct in obsidian and amethyst. The journey rises into the cloisters, descends into the audience court and climbs again towards the sovereign hall.</p>
+<p class="note">Native Godot captures · Chapter approval pending</p></header>
+<nav aria-label="Precinct views">
+<button data-view="court" aria-pressed="true">Sovereign court</button><button data-view="journey" aria-pressed="false">Cloisters</button><button data-view="threshold" aria-pressed="false">Court stairs</button><button data-view="passage" aria-pressed="false">Passage</button><button data-view="whole" aria-pressed="false">Whole journey</button><button data-view="input" aria-pressed="false">Waystones</button>
+</nav>
+<div class="sizes" aria-label="Capture proportions"><button data-shape="1458x820" aria-pressed="true">Wide</button><button data-shape="1180x820" aria-pressed="false">Tablet proportions</button><button data-shape="844x390" aria-pressed="false">Phone proportions</button></div>
+<figure><a id="full" href="precinct-v1-717-1458x820-court.png" target="_blank" rel="noopener"><img id="view" src="precinct-v1-717-1458x820-court.png" width="1458" height="820" alt="Native sovereign court with an intact hall, pointed arcades and amethyst windows"></a><figcaption id="caption">The hall and its surrounding arcades form the final precinct. Tap the image to inspect the original capture.</figcaption></figure>
+<h2>Follow the journey</h2>
+<video controls playsinline preload="metadata" poster="precinct-v1-717-1180x820-whole.png"><source src="precinct-v1-tour.mp4" type="video/mp4"></video>
+<p class="note">One continuous generated route from an entrance to the sovereign forecourt. This is a recorded native preview, not an interactive game or a survey of every branch.</p>
+<h2>Art direction and construction</h2>
+<div class="pair"><figure><a href="../../concepts/act3-obsidian-court-v5.png"><img loading="lazy" src="../../concepts/act3-obsidian-court-v5.png" alt="Approved Obsidian Court concept with stepped courts and Gothic architecture"></a><figcaption>Approved direction: intact architecture, quiet stone and concentrated magenta glazing.</figcaption></figure><figure><img loading="lazy" src="precinct-v1-717-1180x820-threshold.png" alt="Native courtyard platforms connected by open-air stairs"><figcaption>Native construction: distinct court levels, open-air stairs and shared stone surfaces.</figcaption></figure></div>
+<details><summary>Study scope and evidence</summary><p>These are desktop Godot captures at three reference proportions. They do not establish physical touch behaviour or mobile-device performance. The verification record distinguishes sampled full-width support, covered-passage headroom, node selection, sampled camera visibility and continuous travel.</p><p><a href="precinct-v1-receipt.json">Native capture and verification record</a> · <a href="precinct-v1-tour.log">Continuous tour log</a></p><p>Act I and Act II retain their approvals. Act III owner review and the later Act IV Step 3 review precede Step 4.</p></details>
+<p><a href="index.html">Previous published study</a></p>
+</main>
+<script>
+let view='court',shape='1458x820';
+const captions={court:'The hall and its surrounding arcades form the final precinct.',journey:'A quiet stretch through the cloister courts.',threshold:'Open-air stairs join the court platforms.',passage:'A short architectural passage separates the crossing routes.',whole:'The complete generated journey with its architecture visible.',input:'The native inspection interface with waystone selection.'};
+function update(){const path=`precinct-v1-717-${shape}-${view}.png`;const img=document.querySelector('#view');img.src=path;img.alt=captions[view];const [w,h]=shape.split('x');img.width=w;img.height=h;document.querySelector('#full').href=path;document.querySelector('#caption').textContent=captions[view]+' Tap the image to inspect the original capture.';}
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{view=b.dataset.view;document.querySelectorAll('[data-view]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));update();}));
+document.querySelectorAll('[data-shape]').forEach(b=>b.addEventListener('click',()=>{shape=b.dataset.shape;document.querySelectorAll('[data-shape]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));update();}));
+</script>
+</html>

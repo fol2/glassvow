@@ -1,0 +1,66 @@
+{
+  "profile": "docs/map/studies/act2-step3/profile-library-waterline.json",
+  "profile_sha256": "b792b2306b55884715975fd47eca259f563d4a1e6464573ecb0490ed6c64e2e8",
+  "views": {
+    "whole": {
+      "image": "v9-whole.png",
+      "elapsed_seconds": 31.99
+    },
+    "library": {
+      "image": "v9-library.png",
+      "elapsed_seconds": 30.88
+    },
+    "precinct": {
+      "image": "v9-precinct.png",
+      "elapsed_seconds": 30.75
+    },
+    "bridge": {
+      "image": "v9-bridge.png",
+      "elapsed_seconds": 30.85
+    },
+    "phone": {
+      "image": "v9-phone.png",
+      "elapsed_seconds": 31.0,
+      "input": {
+        "current_visible": true,
+        "dimensions": [
+          844.0,
+          390.0
+        ],
+        "drag_pan": true,
+        "journey_button": true,
+        "marker_target": [
+          44.0,
+          44.0000152587891
+        ],
+        "select_current": true,
+        "source_current_unchanged": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      }
+    },
+    "pad": {
+      "image": "v9-pad.png",
+      "elapsed_seconds": 30.97,
+      "input": {
+        "current_visible": true,
+        "dimensions": [
+          1180.0,
+          820.0
+        ],
+        "drag_pan": true,
+        "journey_button": true,
+        "marker_target": [
+          44.0,
+          44.0
+        ],
+        "select_current": true,
+        "source_current_unchanged": true,
+        "viewport_matches_pixels": true,
+        "wheel_zoom": true,
+        "whole_button": true
+      }
+    }
+  }
+}

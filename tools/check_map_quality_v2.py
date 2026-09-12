@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed validation for docs/map/map-quality-v2.json."""
+"""Fail-closed validation for content/map-quality-v2.json."""
 from __future__ import annotations
 
 import argparse
@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any
 
 REPO = Path(__file__).resolve().parent.parent
-DEFAULT = REPO / "docs" / "map" / "map-quality-v2.json"
+DEFAULT = REPO / "content" / "map-quality-v2.json"
 
 ROOT = {
     "schema_version", "contract_version", "registry_id", "evaluation_order", "units",
