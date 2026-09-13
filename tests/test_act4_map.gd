@@ -127,6 +127,7 @@ static func run(fails: Array[String]) -> void:
 	act4_omen.mark_mirrored_road_cleared()
 	_check(fails, act4_omen.unlocks.has(RunState.MIRRORED_ROAD),
 		"a final-act win records mirroredRoad")
+	_clear_bit_gates_occupancy(fails, content, injected)
 
 
 static func _act4_run(content: ContentDB, seed: int, extra_unlocks: Array) -> RunState:
@@ -138,6 +139,44 @@ static func _act4_run(content: ContentDB, seed: int, extra_unlocks: Array) -> Ru
 	var run: RunState = RunState.new_run(content, seed, "run-act4-%d" % seed, profile)
 	run.act = 3
 	return run
+
+
+static func _clear_bit_gates_occupancy(
+	fails: Array[String], content: ContentDB, injected: ContentDB
+) -> void:
+	var first: WorldMap = WorldMap.act4(_act4_run(content, 55130, []), content)
+	_check(fails, first.nodes[0].enemies == ["unopenedSelf"],
+		"first occupancy did not follow the absent mirroredRoad bit")
+	var repeat: WorldMap = WorldMap.act4(
+		_act4_run(content, 55131, [RunState.MIRRORED_ROAD]), content)
+	_check(fails, _in_pool(repeat.nodes[0].enemies, [
+			["unopenedSelf", "uncarvedSelf"],
+			["unwalkedSelf", "unobsidianSelf"],
+			["uncrossedSelf", "unsunkSelf"],
+			["unlitSelf", "unwoodedSelf"],
+		]),
+		"repeat occupancy did not follow a legitimate mirroredRoad bit")
+	var injected_repeat: WorldMap = WorldMap.act4(
+		_act4_run(injected, 55132, [RunState.MIRRORED_ROAD]), injected)
+	_check(fails, _in_pool(injected_repeat.nodes[0].enemies, [["unwalkedSelf"], ["uncrossedSelf"]]),
+		"repeat occupancy did not follow the legitimate bit against the injected pool")
+	var act3: RunState = RunState.new_run(content, 55133, "run-551-act3-mark")
+	act3.act = 2
+	act3.mark_mirrored_road_cleared()
+	_check(fails, not act3.unlocks.has(RunState.MIRRORED_ROAD),
+		"Act III domain mark granted mirroredRoad")
+	var legacy: RunState = _act4_run(content, 55134, [RunState.MIRRORED_ROAD])
+	legacy.act = 0
+	legacy.mark_mirrored_road_cleared()
+	_check(fails, legacy.unlocks == [RunState.MIRRORED_ROAD],
+		"pre-existing legacy mirroredRoad bit was rewritten")
+	var parsed: Variant = JSON.parse_string(JSON.stringify(legacy.to_save_dict()))
+	_check(fails, typeof(parsed) == TYPE_DICTIONARY, "legacy mirroredRoad save encoded")
+	if typeof(parsed) == TYPE_DICTIONARY:
+		var raw: Dictionary = parsed
+		var loaded: RunState = RunState.from_save_dict(raw, content)
+		_check(fails, loaded != null and loaded.unlocks.has(RunState.MIRRORED_ROAD),
+			"pre-existing legacy mirroredRoad bit did not survive reload")
 
 
 static func _in_pool(got: Array[String], groups: Array) -> bool:

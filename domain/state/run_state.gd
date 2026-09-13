@@ -103,6 +103,8 @@ func start_next_act(content: ContentDB) -> void:
 
 
 func mark_mirrored_road_cleared() -> void:
+	if act != 3 or not is_final_act():
+		return
 	if not unlocks.has(MIRRORED_ROAD):
 		unlocks.append(MIRRORED_ROAD)
 

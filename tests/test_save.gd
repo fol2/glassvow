@@ -18,6 +18,7 @@ static func run(fails: Array[String]) -> void:
 	_run_transaction_checkpoints(content, fails)
 	_run_terminal_receipt(content, fails)
 	_pre_rename_vigil_still_loads(fails)
+	_full_content_class_roundtrips(fails)
 
 
 static func _run_invalid_cases(content: ContentDB, fails: Array[String]) -> void:
@@ -297,3 +298,108 @@ static func _pre_rename_vigil_still_loads(fails: Array[String]) -> void:
 			or int(float(str(loaded.deeds["wins"]))) != 2 \
 			or int(float(str(loaded.deeds["bestVow"]))) != 1:
 		fails.append("pre-rename vigil: neighbouring fields did not survive")
+
+
+static func _full_content_class_roundtrips(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	if content == null or content.aspects.size() < 2:
+		fails.append("save full-content: Dusk/Ash aspects missing")
+		return
+	var dusk_id: String = str(content.aspects[0].get("id", ""))
+	var ash_id: String = str(content.aspects[1].get("id", ""))
+	if dusk_id != "duskblade" or ash_id != "ashwarden":
+		fails.append("save full-content: expected duskblade then ashwarden, got %s/%s"
+			% [dusk_id, ash_id])
+		return
+	var pending_tags: Array[String] = [
+		"pending combat", "pending reward", "pending scene", "pending dawn",
+	]
+	for aspect: int in [0, 1]:
+		var aspect_id: String = dusk_id if aspect == 0 else ash_id
+		var run: RunState = RunState.new_run(content, 55140 + aspect, "run-551-%s" % aspect_id, {
+			"aspect": aspect,
+		})
+		run.player.gold = 173 + aspect
+		run.quests["eighthOmen"] = {
+			"state": "armed", "progress": 0, "memory": {"seen": true},
+		}
+		run.quest_scratch["eighthOmen"] = {"active": true}
+		run.omens = ["eighthOmen"]
+		run.unlocks = ["lamplighter"]
+		var identity: Dictionary = _class_identity(run)
+		SaveService.clear(TEST_RUN_PATH)
+		if not SaveService.store(run, TEST_RUN_PATH):
+			fails.append("save full-content %s: store failed" % aspect_id)
+			continue
+		var loaded: RunState = SaveService.load_run(content, TEST_RUN_PATH)
+		if loaded == null:
+			fails.append("save full-content %s: load rejected" % aspect_id)
+			continue
+		var after: Dictionary = _class_identity(loaded)
+		var diverged_id: String = Diff.deep_eq(
+			StateBuild.jsonish(after), StateBuild.jsonish(identity))
+		if diverged_id != "":
+			fails.append("save full-content %s: identity/unrelated fields diverged at %s"
+				% [aspect_id, diverged_id])
+		for tag: String in pending_tags:
+			var pending_run: RunState = RunState.new_run(
+				content, 55150 + aspect, "run-551-%s-%s" % [aspect_id, tag], {
+					"aspect": aspect,
+				})
+			pending_run.player.gold = 211
+			pending_run.quests["ownShade"] = {
+				"state": "revealed", "progress": 1, "memory": {},
+			}
+			_apply_pending_tag(pending_run, tag)
+			var before: Dictionary = pending_run.to_save_dict().duplicate(true)
+			SaveService.clear(TEST_RUN_PATH)
+			if not SaveService.store(pending_run, TEST_RUN_PATH):
+				fails.append("save full-content %s %s: store failed" % [aspect_id, tag])
+				continue
+			var reloaded: RunState = SaveService.load_run(content, TEST_RUN_PATH)
+			if reloaded == null:
+				fails.append("save full-content %s %s: load rejected" % [aspect_id, tag])
+				continue
+			var diverged: String = Diff.deep_eq(
+				StateBuild.jsonish(reloaded.to_save_dict()), StateBuild.jsonish(before))
+			if diverged != "":
+				fails.append("save full-content %s %s diverges at %s" % [aspect_id, tag, diverged])
+	SaveService.clear(TEST_RUN_PATH)
+
+
+static func _apply_pending_tag(run: RunState, tag: String) -> void:
+	match tag:
+		"pending combat":
+			run.pending_combat = "monster"
+			run.pending_enemy_ids = ["duskfang"]
+		"pending reward":
+			run.pending_reward = {
+				"kind": "monster",
+				"rewards": {"gold": 11, "cards": ["strike"], "potion": null, "relic": null},
+				"taken": {"gold": false, "potion": false, "relic": false, "card": false},
+				"perfect": false,
+			}
+		"pending scene":
+			run.pending_scene = {"id": "opening", "cursor": 2}
+		"pending dawn":
+			run.pending_dawn = {
+				"events": [{"t": "questComplete"}], "cursor": 1, "newUnlocks": [],
+			}
+
+
+static func _class_identity(run: RunState) -> Dictionary:
+	return {
+		"runId": run.run_id,
+		"seed": run.seed,
+		"aspect": run.aspect,
+		"art": String(run.art),
+		"gold": run.player.gold,
+		"hp": run.player.hp,
+		"maxHp": run.player.max_hp,
+		"relics": run.player.relics.duplicate(),
+		"unlocks": run.unlocks.duplicate(),
+		"omens": run.omens.duplicate(),
+		"quests": run.quests.duplicate(true),
+		"questScratch": run.quest_scratch.duplicate(true),
+		"rng": run.rng_state(),
+	}

@@ -45,21 +45,7 @@ func advance(run: RunState, id: String, amount: int = 1) -> bool:
 func prepare_run(run: RunState) -> void:
 	if active(run, "paleOnes"):
 		run.quest_scratch["paleOnes"] = {"hiddenRemaining": 1}
-	var eighth: Dictionary = record(run, "eighthOmen")
-	if active(run, "eighthOmen"):
-		var memory: Dictionary = eighth.get("memory", {})
-		var due: int = _ji(memory.get("dueIn", 0))
-		var active_now: bool = due == 1 or (due > 1 and run.rng.next() < 1.0 / 3.0)
-		if active_now:
-			run.quest_scratch["eighthOmen"] = {"active": true}
-			if run.omens.is_empty():
-				run.omens.append("eighthOmen")
-			else:
-				run.omens[0] = "eighthOmen"
-			memory.erase("dueIn")
-			memory["seen"] = true
-		elif due > 1:
-			memory["dueIn"] = due - 1
+	_prepare_eighth_omen(run)
 	if active(run, "hollowLamplighter"):
 		var hollow: Dictionary = record(run, "hollowLamplighter")
 		var memory: Dictionary = hollow.get("memory", {})
@@ -77,6 +63,56 @@ func prepare_run(run: RunState) -> void:
 			run.quest_scratch["hollowLamplighter"] = {
 				"due": due, "met": false, "meetings": 0, "debtActive": false,
 			}
+
+
+func _prepare_eighth_omen(run: RunState) -> void:
+	if not active(run, "eighthOmen"):
+		return
+	var eighth: Dictionary = record(run, "eighthOmen")
+	var memory_v: Variant = eighth.get("memory")
+	if typeof(memory_v) != TYPE_DICTIONARY:
+		push_error("QuestRules: eighthOmen memory rejected (not a dictionary)")
+		return
+	var memory: Dictionary = memory_v
+	eighth["memory"] = memory
+	var ember_v: Variant = content.progression.get("emberglass", {})
+	if typeof(ember_v) != TYPE_DICTIONARY:
+		push_error("QuestRules: eighthOmen memory rejected (missing content rules)")
+		return
+	var ember: Dictionary = ember_v
+	var rules_v: Variant = ember.get("eighthOmen", {})
+	if typeof(rules_v) != TYPE_DICTIONARY:
+		push_error("QuestRules: eighthOmen memory rejected (missing content rules)")
+		return
+	var rules: Dictionary = rules_v
+	var chance: float = float(str(rules.get("recurrenceChance", 0)))
+	var due_max: int = _ji(rules.get("saveDueInMax", 0))
+	if memory.has("dueIn"):
+		var due: int = _ji(memory.get("dueIn", 0))
+		if due < 1 or due > due_max:
+			push_error("QuestRules: eighthOmen memory rejected (dueIn out of range)")
+			return
+		var active_now: bool = due == 1 or (due > 1 and run.rng.next() < chance)
+		if active_now:
+			_activate_eighth(run, memory)
+		elif due > 1:
+			memory["dueIn"] = due - 1
+		return
+	if memory.get("seen") == true:
+		if run.rng.next() < chance:
+			_activate_eighth(run, memory)
+		return
+	push_error("QuestRules: eighthOmen memory rejected (armed without dueIn or seen)")
+
+
+func _activate_eighth(run: RunState, memory: Dictionary) -> void:
+	run.quest_scratch["eighthOmen"] = {"active": true}
+	if run.omens.is_empty():
+		run.omens.append("eighthOmen")
+	else:
+		run.omens[0] = "eighthOmen"
+	memory.erase("dueIn")
+	memory["seen"] = true
 
 
 func stage_hollow_meeting(run: RunState, node: MapNode, was_unlit: bool) -> bool:
