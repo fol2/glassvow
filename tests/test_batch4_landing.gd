@@ -58,9 +58,30 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, LEAVES.size() == 87, "inventory is not 87 leaves (got %d)" % LEAVES.size())
 	_inventory(fails)
 	_dawn_archive(fails)
-	_dawn_feed(fails)
+	_dawn_feed_missing_quest(fails)
+	_check(fails, _dawn_feed(fails), "dawn feed helper did not complete")
 	_event_result_coda(fails)
 	_scene_player_hosts(fails)
+
+
+static func _require_quest(
+		fails: Array[String], quests: Dictionary, id: String, where: String
+) -> bool:
+	var value: Variant = quests.get(id)
+	var ok: bool = typeof(value) == TYPE_DICTIONARY
+	_check(fails, ok, "%s has no %s quest" % [where, id])
+	return ok
+
+
+static func _dawn_feed_missing_quest(fails: Array[String]) -> void:
+	var probe: Array[String] = []
+	var content: ContentDB = ContentDB.load_full()
+	var run: RunState = RunState.new_run(content, 35503, "run-batch4-dawn-missing")
+	_check(fails, not _require_quest(
+			probe, run.quests, "paleOnes", "dawn feed missing-profile control"),
+		"empty profile unexpectedly supplied paleOnes")
+	_check(fails, not probe.is_empty(),
+		"missing paleOnes did not fail the dawn-feed fixture")
 
 
 static func _inventory(fails: Array[String]) -> void:
@@ -128,15 +149,34 @@ static func _dawn_archive(fails: Array[String]) -> void:
 		"a v2 vigil without dawnLeaves did not default")
 
 
-static func _dawn_feed(fails: Array[String]) -> void:
+static func _dawn_feed(fails: Array[String]) -> bool:
 	var content: ContentDB = ContentDB.load_full()
 	SaveService.clear(RUN_PATH)
 	SaveService.clear_vigil(VIGIL_PATH)
-	var run: RunState = RunState.new_run(content, 35501, "run-batch4-dawn")
-	run.pending_run_end = {"outcome": "win", "bequestAnswered": true}
-	run.quests["paleOnes"]["state"] = "revealed"
-	run.quests["paleOnes"]["progress"] = 1
 	var main: Main = _main(content)
+	var before: Dictionary = main._vigil.quests.duplicate(true)
+	if not _require_quest(fails, before, "paleOnes", "dawn feed vigil profile"):
+		_dispose(main)
+		SaveService.clear(RUN_PATH)
+		SaveService.clear_vigil(VIGIL_PATH)
+		return false
+	var run: RunState = RunState.new_run(content, 35501, "run-batch4-dawn", {
+		"quests": before,
+	})
+	run.pending_run_end = {"outcome": "win", "bequestAnswered": true}
+	if not _require_quest(fails, run.quests, "paleOnes", "dawn feed run profile"):
+		_dispose(main)
+		SaveService.clear(RUN_PATH)
+		SaveService.clear_vigil(VIGIL_PATH)
+		return false
+	var after: Dictionary = run.quests["paleOnes"].duplicate(true)
+	after["state"] = "revealed"
+	after["progress"] = 1
+	run.quests["paleOnes"] = after
+	_check(fails, int(float(str(before["paleOnes"]["progress"]))) == 0
+			and str(before["paleOnes"]["state"]) == "dormant"
+			and int(float(str(main._vigil.quests["paleOnes"]["progress"]))) == 0,
+		"dawn feed before/after quest dictionaries were not independent")
 	main.game = GlassvowGame.new(content, run)
 	main._on_terminal_commit("commit")
 	var pending_v: Variant = main.game.run.pending_dawn
@@ -155,8 +195,13 @@ static func _dawn_feed(fails: Array[String]) -> void:
 		"terminal commit did not archive p1")
 	var rose: RoseWindowView = RoseWindowView.new(
 		main._vigil.quests, content.quests, 0, [])
-	var quest_v: Variant = main._vigil.quests.get("paleOnes", {})
-	var quest: Dictionary = quest_v if typeof(quest_v) == TYPE_DICTIONARY else {}
+	if not _require_quest(fails, main._vigil.quests, "paleOnes", "dawn feed archived vigil"):
+		rose.free()
+		_dispose(main)
+		SaveService.clear(RUN_PATH)
+		SaveService.clear_vigil(VIGIL_PATH)
+		return false
+	var quest: Dictionary = main._vigil.quests["paleOnes"]
 	_check(fails, rose._detail_copy("paleOnes", quest) \
 			== Locale.active.t("story.dawn.paleOnes.p1"),
 		"rose reread is not the earned p1 leaf")
@@ -164,6 +209,7 @@ static func _dawn_feed(fails: Array[String]) -> void:
 	_dispose(main)
 	SaveService.clear(RUN_PATH)
 	SaveService.clear_vigil(VIGIL_PATH)
+	return true
 
 
 static func _event_result_coda(fails: Array[String]) -> void:
