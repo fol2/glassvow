@@ -13,6 +13,10 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 		fails.append("act4_wiring: %s" % what)
 
 
+static func _flag(value: Variant) -> bool:
+	return value == true
+
+
 static func run(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full()
 	_crossing_first_and_repeat(fails, content)
@@ -394,59 +398,115 @@ static func _six_shards_and_entry_do_not_grant(fails: Array[String], content: Co
 
 static func _clear_bit_persists(fails: Array[String], content: ContentDB) -> void:
 	var main: Main = _boss_main(content)
+	var first: WorldMap = WorldMap.act4(main.game.run, content)
+	_check(fails, first.nodes[0].enemies == ["unopenedSelf"],
+		"first occupancy did not follow the absent mirroredRoad bit")
 	main._on_combat_over("win")
 	_check(fails, main.game.run.unlocks.has(RunState.MIRRORED_ROAD),
 		"Act IV win did not mark the run before save")
 	var disk: RunState = SaveService.load_run(content, RUN_PATH)
 	_check(fails, disk != null and disk.unlocks.has(RunState.MIRRORED_ROAD),
 		"mirroredRoad did not persist through the terminal run save")
-	var vigil: VigilState = VigilState.blank()
-	for unlock_v: Variant in disk.unlocks:
-		var unlock: String = str(unlock_v)
-		if not vigil.unlocks.has(unlock):
-			vigil.unlocks.append(unlock)
+	if disk == null:
+		_dispose(main)
+		return
+	# Accelerated six-shard fixture: prior panes already lit. Component
+	# evidence, not ordinary campaign acquisition.
+	var vigil: VigilState = _accelerated_six_pane_vigil()
+	_check(fails, _flag(not vigil.unlocks.has(RunState.MIRRORED_ROAD)),
+		"accelerated six-shard fixture itself granted mirroredRoad")
+	_check(fails, vigil.commit_run(disk, "win", content),
+		"genuine Act IV win commit_run rejected")
+	_check(fails, vigil.unlocks.has(RunState.MIRRORED_ROAD),
+		"commit_run did not fold mirroredRoad into the ledger")
+	_check(fails, _flag(vigil.commit_run(disk, "win", content)
+			and vigil.unlocks.count(RunState.MIRRORED_ROAD) == 1),
+		"duplicate Act IV terminal receipt double-granted mirroredRoad")
 	SaveService.store_vigil(vigil, VIGIL_PATH)
-	var loaded_vigil: VigilState = SaveService.load_vigil(VIGIL_PATH)
-	_check(fails, loaded_vigil != null and loaded_vigil.unlocks.has(RunState.MIRRORED_ROAD),
-		"mirroredRoad did not persist through vigil save/reload")
+	var loaded: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	_check(fails, loaded.unlocks.has(RunState.MIRRORED_ROAD),
+		"mirroredRoad did not persist through vigil save/reload after commit_run")
+	var next: RunState = _run_from_ledger(content, 55141, "run-551-after-clear", loaded)
+	next.act = 3
+	_check(fails, _flag(next.unlocks.has(RunState.MIRRORED_ROAD) and next.shards.size() == 6),
+		"subsequent run from reloaded ledger did not inherit the clear bit")
+	var repeat: WorldMap = WorldMap.act4(next, content)
+	_check(fails, _flag(_in_pool(repeat.nodes[0].enemies, [
+			["unopenedSelf", "uncarvedSelf"],
+			["unwalkedSelf", "unobsidianSelf"],
+			["uncrossedSelf", "unsunkSelf"],
+			["unlitSelf", "unwoodedSelf"],
+		]) and repeat.nodes[0].enemies != ["unopenedSelf"]),
+		"repeat occupancy did not follow the reloaded mirroredRoad bit")
 	_dispose(main)
 
 
 static func _cross_run_beats_stay_distinct(fails: Array[String], content: ContentDB) -> void:
-	var eighth: RunState = RunState.new_run(content, 55120, "run-551-eighth-beat", {
-		"quests": _armed_eighth_quests(),
-	})
-	eighth.act = QuestRules.EMBERGLASS_ACT
-	eighth.quest_scratch["eighthOmen"] = {"active": true}
+	SaveService.clear(RUN_PATH)
+	SaveService.clear_vigil(VIGIL_PATH)
+	# Accelerated five-pane fixture: five completed Shards, Eighth incomplete.
+	# Component evidence, not ordinary campaign acquisition.
+	var vigil: VigilState = _accelerated_five_pane_eighth_incomplete()
+	_check(fails, _flag(vigil.shards.size() == 5
+			and not vigil.shards.has("eighthOmen")
+			and str(vigil.quests["eighthOmen"].get("state", "")) != "complete"
+			and not vigil.unlocks.has("act4")
+			and not vigil.unlocks.has(RunState.MIRRORED_ROAD)),
+		"five-pane fixture was not five Shards with incomplete Eighth and no Act IV bit")
+	var finishing: RunState = _run_from_ledger(
+		content, 55120, "run-551-eighth-beat", vigil)
+	finishing.act = QuestRules.EMBERGLASS_ACT
+	var rules: QuestRules = QuestRules.new(content)
+	rules.prepare_run(finishing)
 	var boss: CombatState = CombatState.new()
 	boss.kind = &"boss"
-	QuestRules.new(content).on_combat_win(eighth, boss)
-	_check(fails, str(eighth.quests["eighthOmen"].get("state", "")) == "complete"
-			and not eighth.unlocks.has(RunState.MIRRORED_ROAD),
+	rules.on_combat_win(finishing, boss)
+	_check(fails, _flag(str(finishing.quests["eighthOmen"].get("state", "")) == "complete"
+			and not finishing.unlocks.has(RunState.MIRRORED_ROAD)),
 		"Eighth completion on the Act III boss was not distinct from the clear bit")
-	var vigil: VigilState = VigilState.blank()
-	for id: String in VigilState.QUEST_IDS:
-		vigil.quests[id]["state"] = "complete"
-		vigil.shards.append(id)
-	var folding: RunState = RunState.new_run(content, 55121, "run-551-final-shard", {
-		"quests": vigil.quests.duplicate(true),
-		"shards": vigil.shards.duplicate(),
-	})
-	folding.act = QuestRules.EMBERGLASS_ACT
-	_check(fails, vigil.commit_run(folding, "win", content)
-			and vigil.shards.size() == 6
+	var carried: Array = finishing.shards.duplicate()
+	_check(fails, _flag(carried.size() == 5 and not carried.has("eighthOmen")),
+		"finishing run did not carry exactly the five prior Shards")
+	_check(fails, vigil.shards.size() == 5,
+		"accelerated five-to-six fixture: Vigil already had six Shards before the fold")
+	_check(fails, vigil.commit_run(finishing, "win", content),
+		"final-shard terminal fold rejected")
+	_check(fails, _flag(vigil.shards.size() == 6
+			and vigil.shards.has("eighthOmen")
 			and vigil.unlocks.has("act4")
-			and not vigil.unlocks.has(RunState.MIRRORED_ROAD),
-		"final-shard terminal fold was not distinct from an Act IV clear")
-	var next: Main = _act4_main(content, 2, -1)
-	next._vigil.shards = vigil.shards.duplicate()
-	next._vigil.unlocks = vigil.unlocks.duplicate()
-	next._on_boss_relic_chosen("")
-	_wake(next)
-	_check(fails, next.game.run.act == 3 and next.game.run.is_final_act()
-			and not next.game.run.unlocks.has(RunState.MIRRORED_ROAD),
+			and not vigil.unlocks.has(RunState.MIRRORED_ROAD)),
+		"accelerated five-to-six fixture: fold did not light the sixth pane / reveal Act IV without mirroredRoad")
+	_check(fails, finishing.shards == carried,
+		"fold changed the finishing run's carried Shard list")
+	_check(fails, _flag(vigil.commit_run(finishing, "win", content)
+			and vigil.shards.size() == 6
+			and vigil.shards.count("eighthOmen") == 1),
+		"duplicate terminal receipt double-granted the sixth Shard")
+	SaveService.store_vigil(vigil, VIGIL_PATH)
+	var loaded: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	_check(fails, _flag(loaded.shards.size() == 6
+			and loaded.unlocks.has("act4")
+			and not loaded.unlocks.has(RunState.MIRRORED_ROAD)),
+		"reloaded Vigil did not keep six Shards / act4 without mirroredRoad")
+	var next: RunState = _run_from_ledger(
+		content, 55121, "run-551-next-from-ledger", loaded)
+	_check(fails, _flag(next.shards.size() == 6
+			and next.shards.has("eighthOmen")
+			and next.final_act() == 3
+			and next.unlocks.has("act4")
+			and not next.unlocks.has(RunState.MIRRORED_ROAD)),
+		"next run from loaded ledger did not inherit six Shards / Act IV-ready without mirroredRoad")
+	var next_main: Main = _main(content)
+	next_main._vigil = loaded
+	next.act = 2
+	next_main.game = GlassvowGame.new(content, next)
+	next_main._on_boss_relic_chosen("")
+	_wake(next_main)
+	_check(fails, _flag(next_main.game.run.act == 3
+			and next_main.game.run.is_final_act()
+			and not next_main.game.run.unlocks.has(RunState.MIRRORED_ROAD)),
 		"next-run Act IV entry was not distinct from an Act IV clear")
-	_dispose(next)
+	_dispose(next_main)
 	var clear: Main = _boss_main(content)
 	clear._on_combat_over("win")
 	_check(fails, clear.game.run.unlocks.has(RunState.MIRRORED_ROAD),
@@ -454,14 +514,53 @@ static func _cross_run_beats_stay_distinct(fails: Array[String], content: Conten
 	_dispose(clear)
 
 
-static func _armed_eighth_quests() -> Dictionary:
-	var quests: Dictionary = {}
+static func _accelerated_five_pane_eighth_incomplete() -> VigilState:
+	var vigil: VigilState = VigilState.blank()
 	for id: String in VigilState.QUEST_IDS:
-		quests[id] = {"state": "dormant", "progress": 0, "memory": {}}
-	quests["eighthOmen"] = {
-		"state": "armed", "progress": 0, "memory": {"dueIn": 1},
-	}
-	return quests
+		if id == "eighthOmen":
+			vigil.quests[id] = {
+				"state": "armed", "progress": 0, "memory": {"dueIn": 1},
+			}
+			continue
+		vigil.quests[id]["state"] = "complete"
+		vigil.shards.append(id)
+	return vigil
+
+
+static func _accelerated_six_pane_vigil() -> VigilState:
+	var vigil: VigilState = VigilState.blank()
+	for id: String in VigilState.QUEST_IDS:
+		vigil.quests[id]["state"] = "complete"
+		vigil.shards.append(id)
+	vigil.unlocks.append("act4")
+	return vigil
+
+
+static func _run_from_ledger(
+	content: ContentDB, seed: int, run_id: String, vigil: VigilState
+) -> RunState:
+	return RunState.new_run(content, seed, run_id, {
+		"quests": vigil.quests.duplicate(true),
+		"shards": vigil.shards.duplicate(),
+		"unlocks": vigil.unlocks.duplicate(),
+	})
+
+
+static func _in_pool(got: Array[String], groups: Array) -> bool:
+	for group_v: Variant in groups:
+		if typeof(group_v) != TYPE_ARRAY:
+			continue
+		var group: Array = group_v
+		if group.size() != got.size():
+			continue
+		var same: bool = true
+		for i: int in range(got.size()):
+			if str(group[i]) != got[i]:
+				same = false
+				break
+		if same:
+			return true
+	return false
 
 
 static func _act3_boss_main(content: ContentDB) -> Main:
