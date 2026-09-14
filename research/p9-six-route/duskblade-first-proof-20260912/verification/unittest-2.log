@@ -1,0 +1,66 @@
+test_unbound_zero_spend_unknown_history (test_prospective_admission.AllocationTemplateTests.test_unbound_zero_spend_unknown_history) ... ok
+test_548_reserve_inflated (test_prospective_admission.AllocationTests.test_548_reserve_inflated) ... ok
+test_alpha_committed_inflated (test_prospective_admission.AllocationTests.test_alpha_committed_inflated) ... ok
+test_bool_in_exposed_seeds (test_prospective_admission.AllocationTests.test_bool_in_exposed_seeds) ... ok
+test_conflicting_receipt (test_prospective_admission.AllocationTests.test_conflicting_receipt) ... ok
+test_cpu_cap_inflated (test_prospective_admission.AllocationTests.test_cpu_cap_inflated) ... ok
+test_distinct_execution_not_identical_readback (test_prospective_admission.AllocationTests.test_distinct_execution_not_identical_readback) ... ok
+test_event_fold_idempotent_readback (test_prospective_admission.AllocationTests.test_event_fold_idempotent_readback) ... ok
+test_fabricated_review_receipt (test_prospective_admission.AllocationTests.test_fabricated_review_receipt) ... ok
+test_interval_slots_changed (test_prospective_admission.AllocationTests.test_interval_slots_changed) ... ok
+test_malformed_row_missing_successes (test_prospective_admission.AllocationTests.test_malformed_row_missing_successes) ... ok
+test_negative_event (test_prospective_admission.AllocationTests.test_negative_event) ... ok
+test_status_approved_rejected (test_prospective_admission.AllocationTests.test_status_approved_rejected) ... ok
+test_good_packet_passes_without_labels (test_prospective_admission.AuthorGateTests.test_good_packet_passes_without_labels) ... ok
+test_role_injection_does_not_rescue_fault (test_prospective_admission.AuthorGateTests.test_role_injection_does_not_rescue_fault) ... ok
+test_single_fault_and_repair (test_prospective_admission.AuthorGateTests.test_single_fault_and_repair) ... ok
+test_b_zero_wins_with_rb_losses (test_prospective_admission.ConsistencyTests.test_b_zero_wins_with_rb_losses) ... ok
+test_blind_loss_exceeds_full_incorrect (test_prospective_admission.ConsistencyTests.test_blind_loss_exceeds_full_incorrect) ... ok
+test_exclusive_exceeds_enact (test_prospective_admission.ConsistencyTests.test_exclusive_exceeds_enact) ... ok
+test_implied_r_wins_via_gain (test_prospective_admission.ConsistencyTests.test_implied_r_wins_via_gain) ... ok
+test_repair_exclusive (test_prospective_admission.ConsistencyTests.test_repair_exclusive) ... ok
+test_summary_mismatch_is_not_provenance (test_prospective_admission.ConsistencyTests.test_summary_mismatch_is_not_provenance) ... ok
+test_derived_counts_match_passing_rows (test_prospective_admission.CountDerivationTests.test_derived_counts_match_passing_rows) ... ok
+test_empirical_cannot_select_synthetic_context (test_prospective_admission.EmpiricalGateTests.test_empirical_cannot_select_synthetic_context) ... ok
+test_empirical_without_receipts_blocked (test_prospective_admission.EmpiricalGateTests.test_empirical_without_receipts_blocked) ... ok
+test_missing_context_blocked (test_prospective_admission.EmpiricalGateTests.test_missing_context_blocked) ... ok
+test_each_material_guard_is_load_bearing (test_prospective_admission.GuardDeletionTests.test_each_material_guard_is_load_bearing) ... ok
+test_k_disagreement_requires_legal_action_difference (test_prospective_admission.IdentityRuleTests.test_k_disagreement_requires_legal_action_difference) ... ok
+test_k_hash_difference_without_action_difference_fails (test_prospective_admission.IdentityRuleTests.test_k_hash_difference_without_action_difference_fails) ... ok
+test_same_signed_B_across_panels_passes (test_prospective_admission.IdentityRuleTests.test_same_signed_B_across_panels_passes) ... ok
+test_registry_204 (test_prospective_admission.KernelTests.test_registry_204) ... ok
+test_sixteen_reference_methods (test_prospective_admission.KernelTests.test_sixteen_reference_methods) ... ok
+test_acquire_enact_win_enact_families (test_prospective_admission.KernelWiringTests.test_acquire_enact_win_enact_families) ... ok
+test_b_ceiling_fail_matches_kernel (test_prospective_admission.KernelWiringTests.test_b_ceiling_fail_matches_kernel) ... ok
+test_b_ceiling_straddle_matches_kernel (test_prospective_admission.KernelWiringTests.test_b_ceiling_straddle_matches_kernel) ... ok
+test_good_keys_match_kernel (test_prospective_admission.KernelWiringTests.test_good_keys_match_kernel) ... ok
+test_measurement_families (test_prospective_admission.KernelWiringTests.test_measurement_families) ... ok
+test_one_stratum_failure_is_not_averaged (test_prospective_admission.KernelWiringTests.test_one_stratum_failure_is_not_averaged) ... ok
+test_peer_families (test_prospective_admission.KernelWiringTests.test_peer_families) ... ok
+test_quality_fail_and_straddle (test_prospective_admission.KernelWiringTests.test_quality_fail_and_straddle) ... ok
+test_r_minus_b_fail_and_straddle (test_prospective_admission.KernelWiringTests.test_r_minus_b_fail_and_straddle) ... ok
+test_strict_b_boundary_not_pass_at_half (test_prospective_admission.KernelWiringTests.test_strict_b_boundary_not_pass_at_half) ... ok
+test_label_only_replacement_fails_author_gate (test_prospective_admission.LabelOnlySensitivityTests.test_label_only_replacement_fails_author_gate) ... ok
+test_all_abstain_from_predictions (test_prospective_admission.MeasurementProvenanceTests.test_all_abstain_from_predictions) ... ok
+test_full_equals_blind_from_model (test_prospective_admission.MeasurementProvenanceTests.test_full_equals_blind_from_model) ... ok
+test_identical_traces_renamed (test_prospective_admission.MeasurementProvenanceTests.test_identical_traces_renamed) ... ok
+test_invalid_ground_truth_native_mismatch (test_prospective_admission.MeasurementProvenanceTests.test_invalid_ground_truth_native_mismatch) ... ok
+test_selection_not_first_eligible (test_prospective_admission.MeasurementProvenanceTests.test_selection_not_first_eligible) ... ok
+test_stratum_key_swap (test_prospective_admission.MeasurementProvenanceTests.test_stratum_key_swap) ... ok
+test_constant_pass_predicates_fail_focused_suite (test_prospective_admission.NumericalMutantTests.test_constant_pass_predicates_fail_focused_suite) ... ok
+test_missing_authority (test_prospective_admission.ProvenanceRecordTests.test_missing_authority) ... ok
+test_nonexistent_locators (test_prospective_admission.ProvenanceRecordTests.test_nonexistent_locators) ... ok
+test_packet_well_formed_hash_does_not_replace_bytes (test_prospective_admission.ProvenanceRecordTests.test_packet_well_formed_hash_does_not_replace_bytes) ... ok
+test_repair_product_bytes (test_prospective_admission.ProvenanceRecordTests.test_repair_product_bytes) ... ok
+test_wrong_epoch (test_prospective_admission.ProvenanceRecordTests.test_wrong_epoch) ... ok
+test_wrong_product_bytes (test_prospective_admission.ProvenanceRecordTests.test_wrong_product_bytes) ... ok
+test_dev_confirm_overlap (test_prospective_admission.RootManifestTests.test_dev_confirm_overlap) ... ok
+test_missing_development_manifest (test_prospective_admission.RootManifestTests.test_missing_development_manifest) ... ok
+test_panel_root_overlap (test_prospective_admission.RootManifestTests.test_panel_root_overlap) ... ok
+test_same_roots_across_vows (test_prospective_admission.RootManifestTests.test_same_roots_across_vows) ... ok
+
+----------------------------------------------------------------------
+Ran 60 tests in 17.120s
+
+OK
+RUN2_EXIT=0
