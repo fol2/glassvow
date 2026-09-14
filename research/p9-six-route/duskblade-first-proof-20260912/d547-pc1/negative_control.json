@@ -1,0 +1,172 @@
+{
+  "batch": "D547-PC1",
+  "kind": "dry_run_negative_control_not_game_outcomes",
+  "cases": [
+    {
+      "id": "NC-FORM-OK",
+      "role": "form_ok",
+      "authority": "D547-PC1",
+      "unqualified": false,
+      "privileged": false,
+      "search_cost_class": "search-v1",
+      "runtime_cost_class": "runtime-v1",
+      "reference_search_cost_class": "search-v1",
+      "reference_runtime_cost_class": "runtime-v1",
+      "policy_family": "eligible-native-v1",
+      "competent_reference": "matched-cost-reference-v1",
+      "reference_is_c2_arm2": false,
+      "endpoint": "whole_run_enacted_at_vow",
+      "quality_conditional_on_success": false,
+      "winners_only": false,
+      "require_route_removal_to_reduce_adaptive_wins": false,
+      "events": {"offered": 1, "acquired": 1, "enacted": 1},
+      "population": "protocol-population",
+      "deterministic_reachability_proof": false,
+      "witness_kind": null,
+      "certificate_from_necessary_screen": false,
+      "sufficient_cutoff": null,
+      "r14_treated_as_admission": false,
+      "dusk_v0_status": "unopened",
+      "ground_truth_source": "trace-labels-v1",
+      "abstention_policy": "explicit-abstain",
+      "held_out_split_id": "holdout-A",
+      "estimator_name": "held-out-decision",
+      "identity_only": false,
+      "detector_threshold_transfer": false,
+      "budget_status": "UNKNOWN",
+      "treat_unknown_as": null,
+      "outcomes_required": false,
+      "outcomes_present": false,
+      "game_outcome_rows": 0,
+      "godot_runs": 0,
+      "unit_exposure": false,
+      "unit_duplicate": false,
+      "receipt_id": "d547-pc1-form-ok",
+      "spent_receipts": [],
+      "claim_certificate": false
+    },
+    {
+      "id": "NC-MISSING-AUTHORITY",
+      "role": "known_bad",
+      "authority": "",
+      "budget_status": "UNKNOWN"
+    },
+    {
+      "id": "NC-UNKNOWN-BUDGET-AS-AVAILABLE",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "budget_status": "UNKNOWN",
+      "treat_unknown_as": "available"
+    },
+    {
+      "id": "NC-UNKNOWN-BUDGET-AS-EXHAUSTED",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "budget_status": "UNKNOWN",
+      "treat_unknown_as": "exhausted"
+    },
+    {
+      "id": "NC-SCOPE-LIMITED-COUNTS-AS-CERTIFICATE",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "certificate_from_necessary_screen": true,
+      "sufficient_cutoff": "32/16/16"
+    },
+    {
+      "id": "NC-HAND-COUNTS-AS-CERTIFICATE",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "sufficient_cutoff": "32/32/16"
+    },
+    {
+      "id": "NC-POST-V38-COUNTS-AS-CERTIFICATE",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "sufficient_cutoff": "32/16/8"
+    },
+    {
+      "id": "NC-IDENTITY-ONLY-DESCRIPTOR",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "identity_only": true
+    },
+    {
+      "id": "NC-UNQUALIFIED-POLICY",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "unqualified": true
+    },
+    {
+      "id": "NC-PRIVILEGED-POLICY",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "privileged": true
+    },
+    {
+      "id": "NC-COST-UNMATCHED-POLICY",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "search_cost_class": "search-v1",
+      "runtime_cost_class": "runtime-v1",
+      "reference_search_cost_class": "search-v1",
+      "reference_runtime_cost_class": "runtime-cheap"
+    },
+    {
+      "id": "NC-EXPOSED-UNIT-AS-FRESH",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "unit_exposure": true
+    },
+    {
+      "id": "NC-DUPLICATED-UNIT-AS-FRESH",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "unit_duplicate": true
+    },
+    {
+      "id": "NC-MISSING-OUTCOMES",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "outcomes_required": true,
+      "outcomes_present": false
+    },
+    {
+      "id": "NC-EXCEEDED-CAPS",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "game_outcome_rows": 1,
+      "godot_runs": 0
+    },
+    {
+      "id": "NC-REPEATED-RECEIPT",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "receipt_id": "same-receipt",
+      "spent_receipts": ["same-receipt"]
+    },
+    {
+      "id": "NC-548-THRESHOLD-TRANSFER",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "detector_threshold_transfer": true
+    },
+    {
+      "id": "NC-WINNERS-ONLY-QUALITY",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "winners_only": true
+    },
+    {
+      "id": "NC-R14-AS-ADMISSION",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "r14_treated_as_admission": true
+    },
+    {
+      "id": "NC-V0-AS-FAILED",
+      "role": "known_bad",
+      "authority": "D547-PC1",
+      "dusk_v0_status": "failed"
+    }
+  ]
+}
