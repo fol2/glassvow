@@ -1,0 +1,231 @@
+{
+  "authority_comment": 5686963192,
+  "bound_547_head": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+  "card_inst_complete": "class_name CardInst\nextends RefCounted\n## One owned copy of a card: deck entries and in-combat instances.\n## `bonus` is combat-scoped growth (momentum); deck copies keep it 0.\n\n\nvar uid: int = 0\nvar id: StringName = &\"\"\nvar up: bool = false\nvar bonus: int = 0\n\n\nfunc _init(uid_: int, id_: StringName, up_: bool = false) -> void:\n\tuid = uid_\n\tid = id_\n\tup = up_\n\n\n## Fresh combat instance of a deck card (web: `{ ...c, bonus: 0 }`).\nfunc combat_copy() -> CardInst:\n\treturn CardInst.new(uid, id, up)\n\n\n## Fixture projection (web exporter projectCardInst): up/bonus only when set.\nfunc to_dict() -> Dictionary:\n\tvar out: Dictionary = {\"id\": String(id), \"uid\": uid}\n\tif up:\n\t\tout[\"up\"] = true\n\tif bonus != 0:\n\t\tout[\"bonus\"] = bonus\n\treturn out\n",
+  "limitations": [
+    "No game engine invoked",
+    "No natural reachability or population outcomes",
+    "Finite projections do not prove all closed-family comparisons",
+    "Full source git verification is optional and was not executable without a local repository",
+    "Historical protocol outcomes and source classifications are not new native evidence"
+  ],
+  "parameter_columns": {
+    "chisel": [
+      "cost",
+      "base_damage",
+      "up_damage",
+      "printed_extra_chip"
+    ],
+    "deflect": [
+      "cost",
+      "block",
+      "up_block",
+      "draw"
+    ],
+    "empower": [
+      "cost",
+      "strength",
+      "up_strength"
+    ],
+    "flurry": [
+      "cost",
+      "base_n",
+      "up_n",
+      "hits"
+    ],
+    "momentum": [
+      "cost",
+      "base_n",
+      "growth",
+      "up_n",
+      "up_growth",
+      "draw"
+    ],
+    "resonantLance": [
+      "cost",
+      "base_n",
+      "up_n"
+    ]
+  },
+  "parameters": {
+    "chisel": [
+      1,
+      4,
+      7,
+      1
+    ],
+    "deflect": [
+      1,
+      6,
+      9,
+      1
+    ],
+    "empower": [
+      1,
+      2,
+      3
+    ],
+    "flurry": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "momentum": [
+      1,
+      6,
+      4,
+      8,
+      6,
+      0
+    ],
+    "resonantLance": [
+      1,
+      7,
+      10
+    ]
+  },
+  "review_baseline": "7602711a0732bada6632956f445fb8c182d49421",
+  "schema": "D542-SOURCE-PROJECTION-1",
+  "scientific_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "source_transport": "GitHub fetch_file/fetch at immutable commits; reviewed fragments, not a full local checkout",
+  "sources": [
+    {
+      "blob": "1fdf17c5b5acda33159b4cc5badac9d166c3bf8e",
+      "commit": "07b5aa9dec8436132a524511d5438c510e322070",
+      "fragments": [],
+      "id": "content",
+      "path": "content/full-content.json"
+    },
+    {
+      "blob": "58c9b8c8f162e77d802fac6c10e5b884b53c8b15",
+      "commit": "07b5aa9dec8436132a524511d5438c510e322070",
+      "fragments": [
+        "hit_enemy(run, cb, target, _ji(fx[\"n\"]) + inst.bonus, true, damage_mult)\n\t\t\tinst.bonus += _ji(fx.get(\"grow\", 0))",
+        "var echo: int = 2 if target.staggered or _sget(target.statuses, \"vulnerable\") > 0 else 1",
+        "cb.pending_chips_active = true  # facet chips land after the whole card resolves",
+        "per = 1 + _ji(d.get(\"chip\", 0)) + _sget(p.statuses, \"beacon\")",
+        "var n: int = (per if hit_flag else 0) + extra",
+        "cb.draw = cb.discard\n\t\t\tcb.discard = []\n\t\t\t_shuffle_cards(run.rng, cb.draw)",
+        "var c: CardInst = cb.draw.pop_back()\n\t\tcb.hand.append(c)",
+        "if cb.hand.size() >= 10:",
+        "if e.hp <= 0 or cb.over:",
+        "if eff_cost(run, cb, inst) > cb.player.energy:",
+        "if is_attack and _sget(e.statuses, \"thorns\") > 0 and e.hp > 0 and not handoff:",
+        "e.facet_max += 1  # annealed: each pane reseams harder than the last",
+        "add_status_enemy(cb, e, \"vulnerable\", 2)\n\tgain_embers(run, cb, 2)"
+      ],
+      "id": "combat",
+      "path": "domain/rules/combat.gd"
+    },
+    {
+      "blob": "bfb25f0417f3d34e7b5670bfdb97bfea86da2c57",
+      "commit": "07b5aa9dec8436132a524511d5438c510e322070",
+      "fragments": [],
+      "id": "card_inst",
+      "path": "domain/state/card_inst.gd"
+    },
+    {
+      "blob": "e40270cf90c0752995f2eaaa83f93fe6aa923239",
+      "commit": "07b5aa9dec8436132a524511d5438c510e322070",
+      "fragments": [
+        "view.set_preview(loss, lethal and not dim)"
+      ],
+      "id": "ui_screen",
+      "path": "presentation/combat/combat_screen.gd"
+    },
+    {
+      "blob": "a3889fadcbd420f9764acbe713280609d6d1e0a1",
+      "commit": "f8a3c7b9965c6cb21fa1714b59c8537bcb89c3be",
+      "fragments": [],
+      "id": "closure_scope",
+      "path": "research/p9-six-route/source-scope-20260908/EXACT-CLOSURE-SCOPE.json"
+    },
+    {
+      "blob": "6bf2758b32c34f405591352692b91e42a91e3767",
+      "commit": "7602711a0732bada6632956f445fb8c182d49421",
+      "fragments": [],
+      "id": "native_contract",
+      "path": "research/p9-six-route/minimal-native-20260909/CONTRACT.json"
+    },
+    {
+      "blob": "9e6b3bc6cb39834ecfadfa1c190e113ca6e5d0d0",
+      "commit": "c802be36510273481b6d0f865b92fac43abf6aff",
+      "fragments": [],
+      "id": "resonance",
+      "path": "research/issue-421/protocols/resonance-package-v1.json"
+    },
+    {
+      "blob": "e6e5d04af98f0c8fb6d5f71fe6dfd6170fd190d7",
+      "commit": "c802be36510273481b6d0f865b92fac43abf6aff",
+      "fragments": [],
+      "id": "shatter_flow",
+      "path": "research/issue-421/protocols/shatter-flow-v1.json"
+    },
+    {
+      "blob": "1fcc694edb73c45c5b707fc47818f11b49d4e84c",
+      "commit": "c802be36510273481b6d0f865b92fac43abf6aff",
+      "fragments": [],
+      "id": "one_bit",
+      "path": "research/issue-421/protocols/post-v38-action-grammar-inventory-v1.json"
+    },
+    {
+      "blob": "1834721ea9ddce5eb38680f611d0a89ff5316627",
+      "commit": "c802be36510273481b6d0f865b92fac43abf6aff",
+      "fragments": [],
+      "id": "power_cycle",
+      "path": "research/issue-421/protocols/post-v38-power-cycle-capacity-v1.json"
+    },
+    {
+      "blob": "90d325492205d83e23e275541218973df75881d8",
+      "commit": "c802be36510273481b6d0f865b92fac43abf6aff",
+      "fragments": [],
+      "id": "honing_capacity",
+      "path": "research/issue-421/protocols/post-v38-momentum-preference-capacity-v1.json"
+    },
+    {
+      "blob": "74f9c0cb821fb1abf5985128a3a239b5e613a7bb",
+      "commit": "c802be36510273481b6d0f865b92fac43abf6aff",
+      "fragments": [],
+      "id": "honing_negative",
+      "path": "research/issue-421/summaries/progress-post-directive-momentum-preference-capacity-v1.md"
+    },
+    {
+      "blob": "bf04dec673867770131642ee7953713984991057",
+      "commit": "c802be36510273481b6d0f865b92fac43abf6aff",
+      "fragments": [],
+      "id": "coverage_index",
+      "path": "research/issue-421/summaries/post-v38-native-dusk-grammar-coverage-v1.json"
+    },
+    {
+      "blob": "265f2e7b696896659b0352e2bc69b31d5d938991",
+      "commit": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+      "fragments": [],
+      "id": "bound_contract",
+      "path": "research/p9-six-route/duskblade-first-proof-20260912/CONTRACT.md"
+    },
+    {
+      "blob": "45ca750e193fe114bb528f517088e21bbbcde908",
+      "commit": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+      "fragments": [],
+      "id": "bound_specification",
+      "path": "research/p9-six-route/duskblade-first-proof-20260912/SPECIFICATION.md"
+    },
+    {
+      "blob": "ba53bce69de7667ac62038026eb29474c5567460",
+      "commit": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+      "fragments": [],
+      "id": "bound_adapter",
+      "path": "research/p9-six-route/duskblade-first-proof-20260912/ADAPTER_RECORDS.md"
+    },
+    {
+      "blob": "d4e0c0c0b966ee838e188444fd1b2c4caddb01c7",
+      "commit": "07b5aa9dec8436132a524511d5438c510e322070",
+      "fragments": [
+        "vow_unlocked = maxi(vow_unlocked, mini(5, run.vow + 1))"
+      ],
+      "id": "vigil",
+      "path": "domain/state/vigil_state.gd"
+    }
+  ]
+}
