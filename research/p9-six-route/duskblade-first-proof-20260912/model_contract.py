@@ -154,26 +154,56 @@ def development_models(records, expected, check_published=True):
 
 
 def cost_envelope(records):
-    cost = records['cost']
-    declared_cap = None
-    for arm in ('R', 'K1', 'K2', 'K3'):
-        row = obj(cost.get(arm), 'cost arm')
-        if row.get('hidden_rng') is not False or row.get('privileged') is not False:
+    """Reconcile per-arm reports to per-invocation typed source work records."""
+    import math
+    from record_io import ARMS, crosscheck
+    cost, declared_cap, cpu_by_arm = records['cost'], None, {}
+    frozen_caps = obj(records['features'].get('policy_cost_caps'), 'frozen policy cost caps')
+    if set(frozen_caps) != set(ARMS):
+        raise BoundaryError('frozen_cost_arm_set')
+    if set(cost) != set(ARMS):
+        raise BoundaryError('cost_arm_set')
+    for arm in ARMS:
+        report = obj(cost[arm], 'cost arm')
+        if report.get('hidden_rng') is not False or report.get('privileged') is not False:
             raise BoundaryError('privileged_information')
-        cap = integer(row.get('forward_evals_per_decision'), 'available decision cap')
+        cap = integer(report.get('forward_evals_per_decision'), 'available decision cap')
+        if cap != integer(frozen_caps[arm], 'frozen available decision cap'):
+            raise BoundaryError('cost_envelope_not_frozen')
         if not 1 <= cap <= 128:
             raise BoundaryError('cost_envelope')
-        if declared_cap is not None and cap != declared_cap:
-            raise BoundaryError('cost_unmatched')
-        declared_cap = cap
-        evaluations = row.get('actual_evaluations')
-        if not isinstance(evaluations, list) or not evaluations:
-            raise BoundaryError('unknown_cost')
-        for value in evaluations:
-            if integer(value, 'actual evaluations') > cap:
-                raise BoundaryError('decision_cost_overrun')
-        stats = obj(row.get('statistics'), 'cost statistics')
+        if arm != 'B':
+            if declared_cap is not None and cap != declared_cap:
+                raise BoundaryError('cost_unmatched')
+            declared_cap = cap
+        observed = []
+        if arm != 'B':
+            for panel, vow in STRATA:
+                entries = records['development']['evaluations'][f'{panel}/v{vow}'][arm]
+                for entry in entries:
+                    observed.extend(array(obj(entry, 'cost configuration')['rows'], 64, 'development_size'))
+        for panel, vow in STRATA:
+            observed.extend(array(records['documents'][f'native_export/{panel}/v{vow}']['arms'][arm], kernel.N, 'native_row_completeness'))
+        evaluations, cpus = [], []
+        for native in observed:
+            work = obj(obj(native, 'cost native row').get('work'), 'native work accounting')
+            values = work.get('forward_evaluations')
+            if not isinstance(values, list) or not values:
+                raise BoundaryError('unknown_cost')
+            for value in values:
+                if integer(value, 'actual evaluations') > cap:
+                    raise BoundaryError('decision_cost_overrun')
+            cpu = work.get('cpu_seconds')
+            if type(cpu) not in (int, float) or not math.isfinite(cpu) or not 0 <= cpu <= 300:
+                raise BoundaryError('native_cpu_cost')
+            cpus.append(cpu); evaluations.extend(values)
+        crosscheck(report, 'actual_evaluations', evaluations)
         ordered = sorted(evaluations)
-        if stats != {'total': sum(evaluations), 'p50': ordered[(len(ordered)-1)//2],
-                     'p95': ordered[((len(ordered)-1)*95)//100]}:
+        statistics = {'total': sum(evaluations), 'p50': ordered[math.ceil(len(ordered)*.50)-1],
+                      'p95': ordered[math.ceil(len(ordered)*.95)-1], 'invocations': len(observed)}
+        if obj(report.get('statistics'), 'cost statistics') != statistics:
             raise BoundaryError('cost_statistics')
+        cpu_by_arm[arm] = math.fsum(cpus)
+        if report.get('cpu_seconds') != cpu_by_arm[arm]:
+            raise BoundaryError('cost_cpu_reconciliation')
+    return cpu_by_arm
