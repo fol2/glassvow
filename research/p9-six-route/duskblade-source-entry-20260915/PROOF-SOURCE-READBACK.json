@@ -1,0 +1,79 @@
+{
+  "additional_equal_objects": {
+    "domain/game.gd": "d38862f1726953692294246e9e78c2f027c0f635",
+    "domain/rules/rewards.gd": "55ecfc6f4615287d90c62737632f7ae4b3133085",
+    "domain/state/combat_state.gd": "257e5cfd6307db0ee54ce3c5c5db2100b4fe9418",
+    "domain/state/enemy_combatant.gd": "82a9761a13a9b0cd1b6203caf258022a4e42713f",
+    "domain/state/player_combatant.gd": "9bef62231dbce6b31c460d6c1e9c5d85c2fd693b",
+    "domain/state/vigil_state.gd": "d4e0c0c0b966ee838e188444fd1b2c4caddb01c7"
+  },
+  "authority_comment": 5687730761,
+  "claim_boundary": "Equality of the named native growth/zone/lifecycle source objects, NOT equality of whole products, profiles, policies, old experimental hooks or native outcomes. Current shared context is retained on both sides of the symbolic embedding.",
+  "complete_objects": [
+    {
+      "archived_baseline_blob": "1fdf17c5b5acda33159b4cc5badac9d166c3bf8e",
+      "path": "content/full-content.json",
+      "size": 135282,
+      "slate_blob": "1fdf17c5b5acda33159b4cc5badac9d166c3bf8e",
+      "source_id": "content"
+    },
+    {
+      "archived_baseline_blob": "58c9b8c8f162e77d802fac6c10e5b884b53c8b15",
+      "path": "domain/rules/combat.gd",
+      "size": 49036,
+      "slate_blob": "58c9b8c8f162e77d802fac6c10e5b884b53c8b15",
+      "source_id": "combat"
+    },
+    {
+      "archived_baseline_blob": "bfb25f0417f3d34e7b5670bfdb97bfea86da2c57",
+      "path": "domain/state/card_inst.gd",
+      "size": 740,
+      "slate_blob": "bfb25f0417f3d34e7b5670bfdb97bfea86da2c57",
+      "source_id": "card_inst"
+    }
+  ],
+  "contexts": {
+    "archived_baseline": {
+      "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+      "content_tree": "fd13719acbd2eb2994fc53de6680bb58c0bd5ce1",
+      "domain_tree": "37c9385cb139cd26b6c20672b311683e4ad0b0ca",
+      "rules_tree": "4109415968fe1614f1a7920f0e3ba4e67a697fcb",
+      "state_tree": "13e52bac05cd1ac759d5f0775b865f2d9df013ae"
+    },
+    "slate": {
+      "commit": "07b5aa9dec8436132a524511d5438c510e322070",
+      "content_tree": "fd13719acbd2eb2994fc53de6680bb58c0bd5ce1",
+      "domain_tree": "6722b8de0aa1fbae72ed6be0bcf8944945e0ed55",
+      "rules_tree": "12c08cce4d89d0e096c4ee9d5920a0eaa77f2ffe",
+      "state_tree": "187512fd73584b5c9c288f1a5c80ec43b28cfaac"
+    }
+  },
+  "empirical_spend": 0,
+  "material_nonidentity_not_waived": {
+    "domain/rules/quests.gd": {
+      "archived_baseline": "df1d1244ece4337db886b045530c31141988a07e",
+      "slate": "ba671fc1501f65bd2f6f9c90b7598b8236de559f"
+    },
+    "domain/state/run_state.gd": {
+      "archived_baseline": "24eeb6a223a67355d87839bbc7a6cd40a8610d96",
+      "slate": "95b6bbb10c5fd8ab2c6fdc79c61440f9959998eb"
+    },
+    "old_instrumented_combat_sha256": "76bb23bedc9d2b5631c954cb7a0f7715e3f55e2b65d3a195da6307f75e1363e7"
+  },
+  "method": "Live GitHub GET Git trees: commit -> directory objects -> complete file blob identity. No local checkout; no claim of local full combat/content SHA256 recomputation.",
+  "native_calls": 0,
+  "read_urls": [
+    "https://api.github.com/repos/fol2/glassvow/git/trees/07b5aa9dec8436132a524511d5438c510e322070",
+    "https://api.github.com/repos/fol2/glassvow/git/trees/c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "https://api.github.com/repos/fol2/glassvow/git/trees/6722b8de0aa1fbae72ed6be0bcf8944945e0ed55",
+    "https://api.github.com/repos/fol2/glassvow/git/trees/37c9385cb139cd26b6c20672b311683e4ad0b0ca",
+    "https://api.github.com/repos/fol2/glassvow/git/trees/12c08cce4d89d0e096c4ee9d5920a0eaa77f2ffe",
+    "https://api.github.com/repos/fol2/glassvow/git/trees/4109415968fe1614f1a7920f0e3ba4e67a697fcb",
+    "https://api.github.com/repos/fol2/glassvow/git/trees/187512fd73584b5c9c288f1a5c80ec43b28cfaac",
+    "https://api.github.com/repos/fol2/glassvow/git/trees/13e52bac05cd1ac759d5f0775b865f2d9df013ae",
+    "https://api.github.com/repos/fol2/glassvow/git/trees/fd13719acbd2eb2994fc53de6680bb58c0bd5ce1"
+  ],
+  "repository": "fol2/glassvow",
+  "schema": "D542-N3-GIT-OBJECT-READBACK-1",
+  "source_inputs_blob": "d645357de8bc463a1c54d63cbcfb1bc625e9cf07"
+}
