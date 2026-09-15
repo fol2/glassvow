@@ -1,8 +1,8 @@
-# P9 current capsule — #547 complete; #542 source-only disposition saved
+# P9 current capsule — #542 fixed-slate source/authority no-go proved
 
 ## Goal, scope and ownership
 
-Sole Pro author executed prepared #542 batch [5686963192](https://github.com/fol2/glassvow/issues/542#issuecomment-5686963192). The local writer remains parked. Existing `research/p9-six-route-local-20260905` and its history are preserved. Fixed leads: N1 coupled Facet, N2 shipping native Fervor, N3 native same-instance Honing replay. No replacement lead, new primitive, product mutation, native outcome, empirical spend, PR, CI invocation, or renewed #547 review occurred.
+The same sole Pro author completed prepared #542 proof-resolution batch [5687730761](https://github.com/fol2/glassvow/issues/542#issuecomment-5687730761), continuing `4b612c3fe19f27016582934960ad3ca656ba5759`. The local writer remains parked. Existing `research/p9-six-route-local-20260905` and its history are preserved. Fixed leads remain N1 coupled Facet, N2 shipping native Fervor, N3 native same-instance Honing replay. No replacement lead, new primitive, product mutation, native outcome, empirical spend, PR, CI invocation or renewed #547 review occurred.
 
 ## Bound identities (immutable)
 
@@ -17,28 +17,35 @@ Sole Pro author executed prepared #542 batch [5686963192](https://github.com/fol
 - `SESSION-STATE.json` blob, unchanged: `8be35c9286b4a31ffc90ea9cac411e4653707311`.
 - On-disk `ALLOCATION.json` remains the approved unbound zero-spend template (blob `824ff18acbca2f776533beed83a43b21d9a50f2c`, `status=OWNER_AUTHORISED_DESIGN_NOT_BOUND`, `binding_receipt=null`, all `used=0`). Template preservation is not an absence of the binding receipt.
 - Operating and pinned scientific main: `07b5aa9dec8436132a524511d5438c510e322070`.
-- Source-entry review baseline and original preserved in history: `7602711a0732bada6632956f445fb8c182d49421`.
+- Original source-entry baseline: `7602711a0732bada6632956f445fb8c182d49421`; earlier unresolved proof checkpoint: `4b612c3fe19f27016582934960ad3ca656ba5759`. Both remain historical.
 
-## Delivered source-only artifact
+## Completed author decision
 
-All outputs are under `research/p9-six-route/duskblade-source-entry-20260915/`.
-Exact source/evidence head: `c4cc4e88ad2bfbd3ce523ada94181401ffd0bccd`.
-Publication readback record: `2d82b3d30c13b86b7e3ccba2808a77d1626058fa:research/p9-six-route/duskblade-source-entry-20260915/REMOTE-READBACK.json`.
+**NO_SOURCE_QUALIFIED_TRIPLE_WITHIN_THIS_SLATE**, now based on **SUBSTANTIATED_SOURCE_AUTHORITY_EXCLUSION_OF_REQUIRED_N3**, not repeated uncompleted-comparison labels.
 
-- `SOURCE-ENTRY.md`: corrected the original overstatements once; three source-bound tuples, scoped exact comparisons, written source proofs, preserved negatives and explicit Q1/Q2/Q3/QP gaps.
-- `SOURCE-INPUTS.json` and `check_qualification.py`: pinned source projection and actual executable checker. Original `check_source_entry.py` is retained unchanged and supplies no current verdict.
-- `CHECKER-RESULTS.json` and `RUN-RECEIPT.json`: 69 matched source/contrary checks, deterministic repeat, compile success, five-hit and CardInst-corruption invocations rejected with exit 2 and no success output.
-- `CAUSAL-PREFLIGHT.md`: independent causal controls, legal per-vow acquisition/profile paths, later extractor/adapter mapping, public measurement design and non-circular stage order.
-- `NOMINATION.json`: `NO_SOURCE_QUALIFIED_TRIPLE_WITHIN_THIS_SLATE`; each N1/N2/N3 is `UNRESOLVED_WITH_EXACT_DEPENDENCY`.
+N3 is contained in the expressly closed native same-instance-growth/repeat family. `PROOF-RESOLUTION.md` supplies four arguments: native bonus equals the ordered fold of prior growth on the same combat instance; every legal N3 enactment necessarily contains the archived ordered equal-fight/UID repeat; the named native-law relation preserves the same current common context, costs, effects, zones and reset; and the standing no-reopening rule excludes that mandatory slot. The fixed three-slot conjunction therefore fails without further peer proofs.
 
-All seven source/evidence file Git blobs and sizes were read back against locally hashed bytes. The branch compare against both the review baseline and the bound #547 head showed no bound-prefix/product/SESSION-STATE edits. The subsequent readback record and this capsule are only research metadata.
+The old finite capacity experiment kept an **additional** repeat payoff unimplemented; it did not delete baseline native bonus and did not estimate its causal payoff. This is a source/authority exclusion, not an empirically failed native payoff, a Vow-0 negative, or universal Honing/Dusk impossibility. Optional Deflect, a new observer, or stricter successful-use labels add no independent source law to the fixed lead.
 
-## Status and precise remaining gaps
+Q3's family relation is resolved. Remaining N3 independent-consumer/visibility qualification, Q1, Q2 and all three QP pairs are **NOT_REQUIRED_FOR_THIS_SLATE_NO_GO**, not PASS and not claimed completed. N1/N2's useful source conclusions remain preserved; neither is rejected by this argument. No fourth lead follows.
 
-The source-only delivery is complete; the full source-qualification proofs are not. Q1 is N1's full shared-background Shatter/resonance-family comparison and required causal/null qualification. Q2 is N2's full native-Strength/multihit canonical decomposition and closed-family comparison. Q3 is N3's full closed-repeat/self-growth-plus-redraw relation, independent consumer and public observation qualification. QP is all three full peer comparisons. Narrow storage/retarget/UID witnesses do not discharge them. These are unresolved proof dependencies, not a universal impossibility finding or a claim that all cited source bytes are unavailable.
+## Exact recoverable proof/evidence
 
-#547 is CLOSED/completed and SPEC_BOUND; #421 A0 closeout is already done. Do not repeat either action. Complete Duskblade certificates remain **0/3**. Native calls, new game outcomes and empirical spend in this batch: **0**. No candidate or confirmation freeze, extraction receipt, guardrail receipt, policy roster or native exporter was issued. R11 remains SUMMARY_ONLY and R12 INCOMPLETE only for dependent claims.
+Owned directory: `research/p9-six-route/duskblade-source-entry-20260915/`.
+Coherent proof/disposition/evidence head: **`deb61d15199dfddfac6dee08d5dbfb01c529b5cf`**.
+Publication readback: `8ee69d127a856cdb21bb70fe48049af5ca51e329:research/p9-six-route/duskblade-source-entry-20260915/PROOF-REMOTE-READBACK.json`.
 
-## Exact next action boundary
+- `PROOF-RESOLUTION.md`: actual contracts, state/observation relation, edge footprint, register/history induction, one-way event inclusion, common-context argument, authority exclusion and slate conjunction.
+- `PROOF-SOURCE-READBACK.json`: complete content/combat/CardInst Git objects match the archived baseline through live GitHub tree resolution. Quests/RunState and old instrumented-source nonidentity are explicitly retained; no whole-product equivalence or local full-checkout claim.
+- `check_n3_relation.py`, `PROOF-CHECKS.json`, `PROOF-EXECUTION.json`: 22 matching new symbolic/source checks, byte-identical repeat and compilation success; growth-before-hit, copy-collapse and fight-erasure mutated invocations each reject with exit 2 and zero success output. Not native execution, a legality oracle, population evidence or a machine proof of natural-language authority.
+- `NOMINATION.json`: operative machine disposition, exclusion reason, skipped dependencies, evidence hashes and unopened stage flags.
 
-Consume the exact source-only disposition and evidence in the single #156 handoff. This capsule does not authorize a fourth lead, native work, budget spend, a closed-panel retry or another #547 review. Any future source nomination must discharge its named full-comparison dependencies rather than rerun this bounded bookkeeping check as admission. Missing legitimate predecessor profiles may be obtained inside properly authorized bounded preflight; development constructs the final confirmation freeze. This batch activated neither stage.
+All six complete local Git blob IDs were matched to immutable GitHub readback; `PROOF-REMOTE-READBACK.json` records their SHA256/byte inventories and checked ancestry/scope. Later publication metadata consists only of the readback record and this capsule. The previous 69-check suite was not rerun; SOURCE-ENTRY, SOURCE-INPUTS, CAUSAL-PREFLIGHT and all old evidence remain unchanged. Their historical unfinished Q labels are superseded only for this bounded decision.
+
+## Preservation and next action boundary
+
+#547 remains CLOSED/completed and SPEC_BOUND; #421 A0 closeout remains done. Do not repeat either action or review the bound artifact. The bound prefix, kernel, allocation, SESSION-STATE and product files are unchanged. #542 remains open: complete Duskblade certificates remain **0/3**. Native calls, new game outcomes and empirical spend in this batch are **0**. No candidate/confirmation freeze, extraction/guardrail receipt, policy roster or native exporter was issued.
+
+R3 remains COMMAND_CONTRACT_FAIL; no requirement to make that unchanged failed experiment PASS, and no component-arithmetic rescue is claimed. R14's exact stock sampler remains closed. R11 SUMMARY_ONLY and R12 INCOMPLETE constrain their dependent claims, not this exclusion proof.
+
+Next is the required sequential independent review of the **completed new source/authority decision**, using this exact new artifact and prepared batch. This author did not invoke a nested reviewer or self-approve the decision. Do not continue unnecessary comparisons merely to refill this excluded slate; no replacement lead, reopened family, native run or spending is automatically authorised. Properly authorised future predecessor-profile preflight and development still precede their final confirmation freeze, but this no-go activates none of those stages.
