@@ -1,0 +1,69 @@
+{
+  "all_listed_blobs_and_sizes_equal": true,
+  "empirical_spend": 0,
+  "files": {
+    "CAUSAL-PREFLIGHT.md": {
+      "bytes": 14905,
+      "git_blob": "eec8cb4b8403fefa47f2270ea9b479a49fb948f0",
+      "sha256": "db48346a0e301fa18f6ad6391724867352ce62f0d837fb2059273cf096841360"
+    },
+    "CHECKER-RESULTS.json": {
+      "bytes": 12332,
+      "git_blob": "1edae571c5701f1c505e1c7429219edfc1f8b3e3",
+      "sha256": "a0b694e4e51ae27a40c8ffa70a3c82d9aa7692efe153b7377a050e2edd35e365"
+    },
+    "NOMINATION.json": {
+      "bytes": 6060,
+      "git_blob": "99b3e52d235ee2dfd26f598c394b59b150ffd8d7",
+      "sha256": "55b0b78ac153c09f01829c161faac4319185b49b64364a86909ab8c857085a8b"
+    },
+    "RUN-RECEIPT.json": {
+      "bytes": 2802,
+      "git_blob": "526a831a2fb5cc2f9689b4af9dc0d4433810c057",
+      "sha256": "786026c045329447a09957ba5965c58e0ea966198c7141fdeaadb9f9491338df"
+    },
+    "SOURCE-ENTRY.md": {
+      "bytes": 20137,
+      "git_blob": "77e7b894eff1e126b3e8185ee43093472727dc0e",
+      "sha256": "136d4496173e3edff86f51f24106e0dcd746acbda041b32d04bbf30db46a3c7f"
+    },
+    "SOURCE-INPUTS.json": {
+      "bytes": 7999,
+      "git_blob": "d645357de8bc463a1c54d63cbcfb1bc625e9cf07",
+      "sha256": "2ab9fe12788b5fddd3194c4391f21884202043aad07dc0e9f22da2d1ac86d5b3"
+    },
+    "check_qualification.py": {
+      "bytes": 13870,
+      "git_blob": "84f50227482b5c32f75a9a04abd3832d3a5f9eb4",
+      "sha256": "b7adb83240115a6e1f31c1ceaa4f953bca9006ad445ba4200d4cef1d6f0a0bea"
+    }
+  },
+  "files_verified": 7,
+  "head": "c4cc4e88ad2bfbd3ce523ada94181401ffd0bccd",
+  "kind": "AUTHOR_GITHUB_CONTENT_ADDRESSED_READBACK_NOT_ADMISSION",
+  "method": "GitHub contents directory at immutable head returned all seven exact Git blobs and byte counts matching locally hashed source/evidence; checker source, input, and result content also fetched directly. This is publication readback, not empirical issuer authentication.",
+  "native_calls": 0,
+  "old_helper": "check_source_entry.py remains unchanged from the review baseline. This batch uses check_qualification.py; no result from the old helper is claimed.",
+  "prefix": "research/p9-six-route/duskblade-source-entry-20260915/",
+  "scope_checks": [
+    {
+      "ahead_by": 8,
+      "base": "7602711a0732bada6632956f445fb8c182d49421",
+      "behind_by": 0,
+      "changed_files": 8,
+      "head": "c4cc4e88ad2bfbd3ce523ada94181401ffd0bccd",
+      "only_owned_prefix_and_capsule": true
+    },
+    {
+      "SESSION_STATE_changed": false,
+      "ahead_by": 10,
+      "base": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+      "behind_by": 0,
+      "bound_547_prefix_changed": false,
+      "changed_files": 9,
+      "head": "c4cc4e88ad2bfbd3ce523ada94181401ffd0bccd",
+      "product_files_changed": false
+    }
+  ],
+  "source_qualification": "NO_SOURCE_QUALIFIED_TRIPLE_WITHIN_THIS_SLATE; Q1/Q2/Q3/QP unresolved"
+}
