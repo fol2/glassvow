@@ -1,0 +1,79 @@
+{
+  "commands": [
+    {
+      "command": "python3 -m py_compile check_qualification.py",
+      "exit_code": 0
+    },
+    {
+      "checks": 69,
+      "command": "python3 check_qualification.py > CHECKER-RESULTS.json",
+      "exit_code": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "byte_equal_to_first": true,
+      "command": "python3 check_qualification.py (deterministic repeat)",
+      "exit_code": 0
+    }
+  ],
+  "complete_duskblade_certificates": 0,
+  "empirical_spend": 0,
+  "files": {
+    "CAUSAL-PREFLIGHT.md": {
+      "bytes": 14905,
+      "git_blob": "eec8cb4b8403fefa47f2270ea9b479a49fb948f0",
+      "sha256": "db48346a0e301fa18f6ad6391724867352ce62f0d837fb2059273cf096841360"
+    },
+    "CHECKER-RESULTS.json": {
+      "bytes": 12332,
+      "git_blob": "1edae571c5701f1c505e1c7429219edfc1f8b3e3",
+      "sha256": "a0b694e4e51ae27a40c8ffa70a3c82d9aa7692efe153b7377a050e2edd35e365"
+    },
+    "NOMINATION.json": {
+      "bytes": 6060,
+      "git_blob": "99b3e52d235ee2dfd26f598c394b59b150ffd8d7",
+      "sha256": "55b0b78ac153c09f01829c161faac4319185b49b64364a86909ab8c857085a8b"
+    },
+    "SOURCE-ENTRY.md": {
+      "bytes": 20137,
+      "git_blob": "77e7b894eff1e126b3e8185ee43093472727dc0e",
+      "sha256": "136d4496173e3edff86f51f24106e0dcd746acbda041b32d04bbf30db46a3c7f"
+    },
+    "SOURCE-INPUTS.json": {
+      "bytes": 7999,
+      "git_blob": "d645357de8bc463a1c54d63cbcfb1bc625e9cf07",
+      "sha256": "2ab9fe12788b5fddd3194c4391f21884202043aad07dc0e9f22da2d1ac86d5b3"
+    },
+    "check_qualification.py": {
+      "bytes": 13870,
+      "git_blob": "84f50227482b5c32f75a9a04abd3832d3a5f9eb4",
+      "sha256": "b7adb83240115a6e1f31c1ceaa4f953bca9006ad445ba4200d4cef1d6f0a0bea"
+    }
+  },
+  "kind": "LOCAL_ABSTRACT_EXECUTION_RECEIPT_NOT_NATIVE",
+  "native_calls": 0,
+  "negative_invocations": [
+    {
+      "case": "five-hit-substitution",
+      "command": "python3 check_qualification.py --inputs <mutated-source-inputs.json>",
+      "exit_code": 2,
+      "stderr": "SOURCE_CHECK_REJECTED: not-the-fixed-shipping-projection",
+      "stdout_bytes": 0
+    },
+    {
+      "case": "CardInst-source-corruption",
+      "command": "python3 check_qualification.py --inputs <mutated-source-inputs.json>",
+      "exit_code": 2,
+      "stderr": "SOURCE_CHECK_REJECTED: check-failed:complete-CardInst-git-blob",
+      "stdout_bytes": 0
+    }
+  ],
+  "new_game_outcomes": 0,
+  "python": "3.13.5",
+  "source_comparison_limit": "No completed full closed-family quotient or source qualification; exact Q1/Q2/Q3/QP dependencies remain.",
+  "source_verification": {
+    "complete_CardInst_blob_recomputed": true,
+    "full_git_checkout_verification_executed": false,
+    "other_source_correspondence": "Immutable GitHub reads and named fragments; no claim of automated full-source extraction."
+  }
+}
