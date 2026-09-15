@@ -1,0 +1,87 @@
+SYNTHETIC AUTHOR CHECKS ONLY; no native calls, binding or independent approval
+code_head=f8a6bd076c55feeab2a99266deb65e8e6a8c34c3
+python=3.13.5
+test_confirmation_freeze_commits_alpha_no_refund (allocation_controls.AllocationRecordTests.test_confirmation_freeze_commits_alpha_no_refund) ... ok
+test_conflicting_readback_assignment_and_renamed_execution (allocation_controls.AllocationRecordTests.test_conflicting_readback_assignment_and_renamed_execution) ... ok
+test_event_stage_candidate_caps_clock_and_schema (allocation_controls.AllocationRecordTests.test_event_stage_candidate_caps_clock_and_schema) ... ok
+test_identical_readback_is_idempotent_distinct_retry_is_not (allocation_controls.AllocationRecordTests.test_identical_readback_is_idempotent_distinct_retry_is_not) ... ok
+test_immutable_caps_alpha_history_and_scope (allocation_controls.AllocationRecordTests.test_immutable_caps_alpha_history_and_scope) ... ok
+test_no_status_jump_or_concurrency_above_two (allocation_controls.AllocationRecordTests.test_no_status_jump_or_concurrency_above_two) ... ok
+test_one_invocation_requires_one_candidate_attempt (allocation_controls.AllocationRecordTests.test_one_invocation_requires_one_candidate_attempt) ... ok
+test_real_file_still_zero_after_all_test_ledgers (allocation_controls.AllocationRecordTests.test_real_file_still_zero_after_all_test_ledgers) ... ok
+test_resource_reports_reconcile_not_merely_under_caps (allocation_controls.AllocationRecordTests.test_resource_reports_reconcile_not_merely_under_caps) ... ok
+test_template_remains_unbound_zero_spend (allocation_controls.AllocationRecordTests.test_template_remains_unbound_zero_spend) ... ok
+test_crn_missing_reordered_and_alias_duplicates (boundary_controls.BoundaryRecordTests.test_crn_missing_reordered_and_alias_duplicates) ... ok
+test_cross_vow_and_cross_panel_roots_never_independent (boundary_controls.BoundaryRecordTests.test_cross_vow_and_cross_panel_roots_never_independent) ... ok
+test_development_exposure_protection_and_namespace (boundary_controls.BoundaryRecordTests.test_development_exposure_protection_and_namespace) ... ok
+test_effective_alias_is_not_an_extra_root (boundary_controls.BoundaryRecordTests.test_effective_alias_is_not_an_extra_root) ... ok
+test_every_role_is_pinned_not_a_locator_assertion (boundary_controls.BoundaryRecordTests.test_every_role_is_pinned_not_a_locator_assertion) ... ok
+test_missing_native_rows_and_schema_arrays (boundary_controls.BoundaryRecordTests.test_missing_native_rows_and_schema_arrays) ... ok
+test_missing_source_and_wrong_locator (boundary_controls.BoundaryRecordTests.test_missing_source_and_wrong_locator) ... ok
+test_preflight_state_actions_and_native_transition_links (boundary_controls.BoundaryRecordTests.test_preflight_state_actions_and_native_transition_links) ... ok
+test_sampler_content_after_explicit_synthetic_repin (boundary_controls.BoundaryRecordTests.test_sampler_content_after_explicit_synthetic_repin) ... ok
+test_stage_chronology (boundary_controls.BoundaryRecordTests.test_stage_chronology) ... ok
+test_label_only_or_unconditional_pass_is_detected (synthetic_controls.EntryTests.test_label_only_or_unconditional_pass_is_detected) ... ok
+test_packet_authority_faults_and_repair (synthetic_controls.EntryTests.test_packet_authority_faults_and_repair) ... ok
+test_positive_204_counts_152_predicates (synthetic_controls.EntryTests.test_positive_204_counts_152_predicates) ... ok
+test_summary_crosscheck_not_input (synthetic_controls.EntryTests.test_summary_crosscheck_not_input) ... ok
+test_unchanged_kernel_16_methods (synthetic_controls.EntryTests.test_unchanged_kernel_16_methods) ... ok
+test_digest_verifier_is_load_bearing (synthetic_controls.LoadBearingTests.test_digest_verifier_is_load_bearing) ... ok
+test_material_guard_deletion_exposes_false_acceptance (synthetic_controls.LoadBearingTests.test_material_guard_deletion_exposes_false_acceptance) ... ok
+test_boolean_public_features_zero_variance_and_ties (synthetic_controls.ModelTests.test_boolean_public_features_zero_variance_and_ties) ... ok
+test_cost_caps_are_frozen_not_reporter_selected (synthetic_controls.ModelTests.test_cost_caps_are_frozen_not_reporter_selected) ... ok
+test_model_mutations_and_development_selection (synthetic_controls.ModelTests.test_model_mutations_and_development_selection) ... ok
+test_native_work_and_cpu_are_observed_not_summary_assertions (synthetic_controls.ModelTests.test_native_work_and_cpu_are_observed_not_summary_assertions) ... ok
+test_no_qualified_development_configuration (synthetic_controls.ModelTests.test_no_qualified_development_configuration) ... ok
+test_bad_route_quality_and_activation_without_wins (synthetic_controls.NumericalEntryTests.test_bad_route_quality_and_activation_without_wins) ... ok
+test_fallback_only_success_insufficient_measurement (synthetic_controls.NumericalEntryTests.test_fallback_only_success_insufficient_measurement) ... ok
+test_identical_peer_fingerprints_not_rescued_by_arm_names (synthetic_controls.NumericalEntryTests.test_identical_peer_fingerprints_not_rescued_by_arm_names) ... ok
+test_low_support_but_complete_fixed_measurement (synthetic_controls.NumericalEntryTests.test_low_support_but_complete_fixed_measurement) ... ok
+test_recomputed_abstentions_are_wrong (synthetic_controls.NumericalEntryTests.test_recomputed_abstentions_are_wrong) ... ok
+test_recomputed_predictions_change_decisions_without_cached_bits (synthetic_controls.NumericalEntryTests.test_recomputed_predictions_change_decisions_without_cached_bits) ... ok
+test_reference_interval_straddles_actual_entry (synthetic_controls.NumericalEntryTests.test_reference_interval_straddles_actual_entry) ... ok
+test_weak_reference_fixed_failure (synthetic_controls.NumericalEntryTests.test_weak_reference_fixed_failure) ... ok
+test_all_memberships_and_terminal_are_required (synthetic_controls.PrimitiveTests.test_all_memberships_and_terminal_are_required) ... ok
+test_enactment_requires_same_root_prior_acquisition (synthetic_controls.PrimitiveTests.test_enactment_requires_same_root_prior_acquisition) ... ok
+test_first_enactment_natural_first_and_masks (synthetic_controls.PrimitiveTests.test_first_enactment_natural_first_and_masks) ... ok
+test_impossible_per_root_bits_even_with_unchanged_totals (synthetic_controls.PrimitiveTests.test_impossible_per_root_bits_even_with_unchanged_totals) ... ok
+test_native_source_view_root_and_illegal_prefix (synthetic_controls.PrimitiveTests.test_native_source_view_root_and_illegal_prefix) ... ok
+test_resolved_reference_cannot_point_to_another_root (synthetic_controls.PrimitiveTests.test_resolved_reference_cannot_point_to_another_root) ... ok
+test_supplied_peer_correctness_and_exclusive_are_only_crosschecks (synthetic_controls.PrimitiveTests.test_supplied_peer_correctness_and_exclusive_are_only_crosschecks) ... ok
+test_wrong_cached_predictions_reject_without_summary_rows (synthetic_controls.PrimitiveTests.test_wrong_cached_predictions_reject_without_summary_rows) ... ok
+test_wrong_native_ground_truth_rejects (synthetic_controls.PrimitiveTests.test_wrong_native_ground_truth_rejects) ... ok
+test_garbage_receipt_bytes_even_when_expected_digest_matches (boundary_controls.ReceiptTests.test_garbage_receipt_bytes_even_when_expected_digest_matches) ... ok
+test_missing_context_and_receipts_fail_closed (boundary_controls.ReceiptTests.test_missing_context_and_receipts_fail_closed) ... ok
+test_real_shaped_wrong_receipt_fields (boundary_controls.ReceiptTests.test_real_shaped_wrong_receipt_fields) ... ok
+test_synthetic_receipts_cannot_become_empirical_authority (boundary_controls.ReceiptTests.test_synthetic_receipts_cannot_become_empirical_authority) ... ok
+test_paired_truth_table (test_primitive_reduction.PrimitiveReductionTests.test_paired_truth_table) ... ok
+test_root_alignment_and_binary_types (test_primitive_reduction.PrimitiveReductionTests.test_root_alignment_and_binary_types) ... ok
+test_route_truth_table_and_impossible_enactment (test_primitive_reduction.PrimitiveReductionTests.test_route_truth_table_and_impossible_enactment) ... ok
+test_same_trajectory_membership_preserves_multiple_routes (test_primitive_reduction.PrimitiveReductionTests.test_same_trajectory_membership_preserves_multiple_routes) ... ok
+
+----------------------------------------------------------------------
+Ran 57 tests in 360.161s
+
+OK
+test_boundaries (reference_kernel.DesignTests.test_boundaries) ... ok
+test_cumulative_resources (reference_kernel.DesignTests.test_cumulative_resources) ... ok
+test_discordance_validation (reference_kernel.DesignTests.test_discordance_validation) ... ok
+test_effective_seed_alias (reference_kernel.DesignTests.test_effective_seed_alias) ... ok
+test_finite_grid_coverage (reference_kernel.DesignTests.test_finite_grid_coverage) ... ok
+test_interval_edges (reference_kernel.DesignTests.test_interval_edges) ... ok
+test_invalid_counts (reference_kernel.DesignTests.test_invalid_counts) ... ok
+test_ledger (reference_kernel.DesignTests.test_ledger) ... ok
+test_measurement (reference_kernel.DesignTests.test_measurement) ... ok
+test_peer_and_all_abstain (reference_kernel.DesignTests.test_peer_and_all_abstain) ... ok
+test_reference (reference_kernel.DesignTests.test_reference) ... ok
+test_registry (reference_kernel.DesignTests.test_registry) ... ok
+test_roots (reference_kernel.DesignTests.test_roots) ... ok
+test_rows (reference_kernel.DesignTests.test_rows) ... ok
+test_support (reference_kernel.DesignTests.test_support) ... ok
+test_viable_noninferiority (reference_kernel.DesignTests.test_viable_noninferiority) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.006s
+
+OK
+SOURCE_BLOBS_UNCHANGED; 204 counts; 152 PASS; paired-overlap=0; real allocation remains zero
