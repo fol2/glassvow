@@ -1,0 +1,593 @@
+{
+  "all_checks_matched": true,
+  "certificates": 0,
+  "check_count": 69,
+  "checker_sha256": "b7adb83240115a6e1f31c1ceaa4f953bca9006ad445ba4200d4cef1d6f0a0bea",
+  "checks": [
+    {
+      "expected": "bfb25f0417f3d34e7b5670bfdb97bfea86da2c57",
+      "name": "complete-CardInst-git-blob",
+      "observed": "bfb25f0417f3d34e7b5670bfdb97bfea86da2c57",
+      "result": "MATCH"
+    },
+    {
+      "name": "closed-five-hit-card-not-shipping",
+      "reason": "not-the-fixed-shipping-projection",
+      "result": "EXPECTED_REJECTION"
+    },
+    {
+      "expected": {
+        "adamant_spent": false,
+        "attributed": true,
+        "chips": 0,
+        "embers": 2,
+        "maximum": 3,
+        "staggered": true,
+        "vulnerable": 2
+      },
+      "name": "V0:Chisel-coupled-Shatter",
+      "observed": {
+        "adamant_spent": false,
+        "attributed": true,
+        "chips": 0,
+        "embers": 2,
+        "maximum": 3,
+        "staggered": true,
+        "vulnerable": 2
+      },
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        2,
+        1
+      ],
+      "name": "V0:retarget-does-not-transfer-Echo",
+      "observed": [
+        2,
+        1
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": 2,
+      "name": "V0:direct-Cracked-aliases-Echo-guard",
+      "observed": 2,
+      "result": "MATCH"
+    },
+    {
+      "expected": false,
+      "name": "V0:preexisting-Cracked-not-attributed",
+      "observed": false,
+      "result": "MATCH"
+    },
+    {
+      "expected": false,
+      "name": "V0:other-target-not-attributed",
+      "observed": false,
+      "result": "MATCH"
+    },
+    {
+      "expected": 0,
+      "name": "V0:blocked-Chisel-earns-no-printed-chip",
+      "observed": 0,
+      "result": "MATCH"
+    },
+    {
+      "expected": false,
+      "name": "V0:dead-target-earns-no-Shatter",
+      "observed": false,
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        3,
+        false,
+        0
+      ],
+      "name": "V0:adamant-first-break-is-not-Shatter",
+      "observed": [
+        3,
+        false,
+        0
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": 7,
+      "name": "V0:Echo-reads-before-own-chip-settlement",
+      "observed": 7,
+      "result": "MATCH"
+    },
+    {
+      "expected": 21,
+      "name": "V0:later-Echo-keeps-Cracked-modifier",
+      "observed": 21,
+      "result": "MATCH"
+    },
+    {
+      "expected": 4,
+      "name": "V0:Fervor-plain-interaction-2-2",
+      "observed": 4,
+      "result": "MATCH"
+    },
+    {
+      "expected": 6,
+      "name": "V0:Fervor-plain-interaction-3-3",
+      "observed": 6,
+      "result": "MATCH"
+    },
+    {
+      "expected": 1,
+      "name": "V0:Fervor-one-chip-settlement-not-three",
+      "observed": 1,
+      "result": "MATCH"
+    },
+    {
+      "expected": 1,
+      "name": "V0:Fervor-one-lifecycle",
+      "observed": 1,
+      "result": "MATCH"
+    },
+    {
+      "expected": 4,
+      "name": "V0:Fervor-background-Strength-retained",
+      "observed": 4,
+      "result": "MATCH"
+    },
+    {
+      "expected": 0,
+      "name": "V0:blocked-Fervor-refutes-universal-formula",
+      "observed": 0,
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        1,
+        0
+      ],
+      "name": "V0:terminal-Fervor-no-later-hits-or-chip",
+      "observed": [
+        1,
+        0
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        6,
+        2
+      ],
+      "name": "V0:Honing-hits-before-growth",
+      "observed": [
+        6,
+        2
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": true,
+      "name": "V0:same-object-returned",
+      "observed": true,
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        10,
+        0
+      ],
+      "name": "V0:same-UID-replay",
+      "observed": [
+        10,
+        0
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        6,
+        0
+      ],
+      "name": "V0:second-copy-has-no-growth",
+      "observed": [
+        6,
+        0
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        6,
+        0
+      ],
+      "name": "V0:new-combat-same-UID-resets",
+      "observed": [
+        6,
+        0
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": false,
+      "name": "V0:same-ID-not-same-UID",
+      "observed": false,
+      "result": "MATCH"
+    },
+    {
+      "expected": false,
+      "name": "V0:same-UID-not-same-combat",
+      "observed": false,
+      "result": "MATCH"
+    },
+    {
+      "expected": true,
+      "name": "V0:archive-exact-repeat-projection",
+      "observed": true,
+      "result": "MATCH"
+    },
+    {
+      "expected": {
+        "block": 0,
+        "blocked": 0,
+        "hp": 90,
+        "hp_removed": 10,
+        "nominal": 10,
+        "overkill": 0,
+        "reported_loss": 10
+      },
+      "name": "V0:later-damage-alone-not-growth-proof",
+      "observed": {
+        "block": 0,
+        "blocked": 0,
+        "hp": 90,
+        "hp_removed": 10,
+        "nominal": 10,
+        "overkill": 0,
+        "reported_loss": 10
+      },
+      "result": "MATCH"
+    },
+    {
+      "expected": {
+        "adamant_spent": false,
+        "attributed": true,
+        "chips": 0,
+        "embers": 2,
+        "maximum": 3,
+        "staggered": true,
+        "vulnerable": 2
+      },
+      "name": "V5:Chisel-coupled-Shatter",
+      "observed": {
+        "adamant_spent": false,
+        "attributed": true,
+        "chips": 0,
+        "embers": 2,
+        "maximum": 3,
+        "staggered": true,
+        "vulnerable": 2
+      },
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        2,
+        1
+      ],
+      "name": "V5:retarget-does-not-transfer-Echo",
+      "observed": [
+        2,
+        1
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": 2,
+      "name": "V5:direct-Cracked-aliases-Echo-guard",
+      "observed": 2,
+      "result": "MATCH"
+    },
+    {
+      "expected": false,
+      "name": "V5:preexisting-Cracked-not-attributed",
+      "observed": false,
+      "result": "MATCH"
+    },
+    {
+      "expected": false,
+      "name": "V5:other-target-not-attributed",
+      "observed": false,
+      "result": "MATCH"
+    },
+    {
+      "expected": 0,
+      "name": "V5:blocked-Chisel-earns-no-printed-chip",
+      "observed": 0,
+      "result": "MATCH"
+    },
+    {
+      "expected": false,
+      "name": "V5:dead-target-earns-no-Shatter",
+      "observed": false,
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        3,
+        false,
+        0
+      ],
+      "name": "V5:adamant-first-break-is-not-Shatter",
+      "observed": [
+        3,
+        false,
+        0
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": 7,
+      "name": "V5:Echo-reads-before-own-chip-settlement",
+      "observed": 7,
+      "result": "MATCH"
+    },
+    {
+      "expected": 21,
+      "name": "V5:later-Echo-keeps-Cracked-modifier",
+      "observed": 21,
+      "result": "MATCH"
+    },
+    {
+      "expected": 4,
+      "name": "V5:Fervor-plain-interaction-2-2",
+      "observed": 4,
+      "result": "MATCH"
+    },
+    {
+      "expected": 6,
+      "name": "V5:Fervor-plain-interaction-3-3",
+      "observed": 6,
+      "result": "MATCH"
+    },
+    {
+      "expected": 1,
+      "name": "V5:Fervor-one-chip-settlement-not-three",
+      "observed": 1,
+      "result": "MATCH"
+    },
+    {
+      "expected": 1,
+      "name": "V5:Fervor-one-lifecycle",
+      "observed": 1,
+      "result": "MATCH"
+    },
+    {
+      "expected": 4,
+      "name": "V5:Fervor-background-Strength-retained",
+      "observed": 4,
+      "result": "MATCH"
+    },
+    {
+      "expected": 0,
+      "name": "V5:blocked-Fervor-refutes-universal-formula",
+      "observed": 0,
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        1,
+        0
+      ],
+      "name": "V5:terminal-Fervor-no-later-hits-or-chip",
+      "observed": [
+        1,
+        0
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        6,
+        2
+      ],
+      "name": "V5:Honing-hits-before-growth",
+      "observed": [
+        6,
+        2
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": true,
+      "name": "V5:same-object-returned",
+      "observed": true,
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        10,
+        0
+      ],
+      "name": "V5:same-UID-replay",
+      "observed": [
+        10,
+        0
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        6,
+        0
+      ],
+      "name": "V5:second-copy-has-no-growth",
+      "observed": [
+        6,
+        0
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        6,
+        0
+      ],
+      "name": "V5:new-combat-same-UID-resets",
+      "observed": [
+        6,
+        0
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": false,
+      "name": "V5:same-ID-not-same-UID",
+      "observed": false,
+      "result": "MATCH"
+    },
+    {
+      "expected": false,
+      "name": "V5:same-UID-not-same-combat",
+      "observed": false,
+      "result": "MATCH"
+    },
+    {
+      "expected": true,
+      "name": "V5:archive-exact-repeat-projection",
+      "observed": true,
+      "result": "MATCH"
+    },
+    {
+      "expected": {
+        "block": 0,
+        "blocked": 0,
+        "hp": 90,
+        "hp_removed": 10,
+        "nominal": 10,
+        "overkill": 0,
+        "reported_loss": 10
+      },
+      "name": "V5:later-damage-alone-not-growth-proof",
+      "observed": {
+        "block": 0,
+        "blocked": 0,
+        "hp": 90,
+        "hp_removed": 10,
+        "nominal": 10,
+        "overkill": 0,
+        "reported_loss": 10
+      },
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        true,
+        false
+      ],
+      "name": "Power-bit-consumed-before-later-Attack",
+      "observed": [
+        true,
+        false
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        false
+      ],
+      "name": "Power-cycle-requires-distinct-cycle",
+      "observed": [
+        false
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        true
+      ],
+      "name": "Power-cycle-accepts-either-order",
+      "observed": [
+        true
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": [
+        10,
+        3
+      ],
+      "name": "overkill-not-physical-hp-removal",
+      "observed": [
+        10,
+        3
+      ],
+      "result": "MATCH"
+    },
+    {
+      "expected": 6,
+      "name": "Block-carried-between-hits",
+      "observed": 6,
+      "result": "MATCH"
+    },
+    {
+      "expected": true,
+      "name": "consumer-independently-affordable-without-mediator",
+      "observed": true,
+      "result": "MATCH"
+    },
+    {
+      "expected": false,
+      "name": "energy-denial-not-payoff-zero",
+      "observed": false,
+      "result": "MATCH"
+    },
+    {
+      "name": "Thorns-not-erased",
+      "reason": "collateral-native-continuation-required",
+      "result": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "finale-not-ordinary-terminal",
+      "reason": "collateral-native-continuation-required",
+      "result": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "dead-target-tail-UNKNOWN",
+      "reason": "dead-target:unavailable-tail=UNKNOWN",
+      "result": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "Bell-Prism-Smolder-not-erased",
+      "reason": "full-shatter-collateral-required",
+      "result": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "duplicate-instance-in-reshuffle",
+      "reason": "not-a-permutation",
+      "result": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "no-forced-discard-to-hand",
+      "reason": "no-legal-draw",
+      "result": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "hand-cap-preserved",
+      "reason": "no-legal-draw",
+      "result": "EXPECTED_REJECTION"
+    },
+    {
+      "name": "unaffordable-replay",
+      "reason": "illegal-consumer:UNKNOWN-tail",
+      "result": "EXPECTED_REJECTION"
+    }
+  ],
+  "default_source_transport": "GitHub read pins and manual source correspondence; complete CardInst recomputed",
+  "empirical_spend": 0,
+  "full_closed_family_quotient_proved": false,
+  "full_repository_blobs_verified": [],
+  "inputs_sha256": "2ab9fe12788b5fddd3194c4391f21884202043aad07dc0e9f22da2d1ac86d5b3",
+  "kind": "SOURCE_PROJECTION_CHECKS_NOT_NATIVE_EVIDENCE",
+  "native_calls": 0,
+  "source_qualified_leads": []
+}
