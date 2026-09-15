@@ -1,0 +1,73 @@
+{
+  "all_six_complete_local_git_blobs_equal_remote": true,
+  "authority_comment": 5687730761,
+  "branch": "research/p9-six-route-local-20260905",
+  "comparisons": [
+    {
+      "ahead_by": 6,
+      "base": "4b612c3fe19f27016582934960ad3ca656ba5759",
+      "behind_by": 0,
+      "changed_paths": "Exactly the six listed proof/disposition files in the owned directory.",
+      "head": "deb61d15199dfddfac6dee08d5dbfb01c529b5cf"
+    },
+    {
+      "ahead_by": 18,
+      "base": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+      "behind_by": 0,
+      "changed_paths": "Only source-entry directory and ordinary SESSION-HANDOFF; bound #547 prefix, SESSION-STATE and product untouched.",
+      "head": "deb61d15199dfddfac6dee08d5dbfb01c529b5cf"
+    }
+  ],
+  "directory_read_url": "https://api.github.com/repos/fol2/glassvow/contents/research/p9-six-route/duskblade-source-entry-20260915?ref=deb61d15199dfddfac6dee08d5dbfb01c529b5cf",
+  "empirical_spend": 0,
+  "evidence_head": "deb61d15199dfddfac6dee08d5dbfb01c529b5cf",
+  "files": {
+    "NOMINATION.json": {
+      "bytes": 6100,
+      "local_git_blob": "c5811b05ac68f9390d0cc10670be648a5927e9aa",
+      "match": true,
+      "remote_git_blob": "c5811b05ac68f9390d0cc10670be648a5927e9aa",
+      "sha256": "288cc9d8eb6e4ba8df6aed5dcc3c718bbb7b82623800e29751c846b3c2bba2dd"
+    },
+    "PROOF-CHECKS.json": {
+      "bytes": 5303,
+      "local_git_blob": "9ee3e8eadc45967fee431e248bb23ed683565fc1",
+      "match": true,
+      "remote_git_blob": "9ee3e8eadc45967fee431e248bb23ed683565fc1",
+      "sha256": "948c29de49fe3bd982e6d1d9f77a331fb6d1d04095b12d4d42e569f0f9c2376a"
+    },
+    "PROOF-EXECUTION.json": {
+      "bytes": 2443,
+      "local_git_blob": "6919ad2478705150ef19ef77a6493bbfc16e5046",
+      "match": true,
+      "remote_git_blob": "6919ad2478705150ef19ef77a6493bbfc16e5046",
+      "sha256": "c854c09fd557261753ed5d346d4f87a928b489d87d38565228e9179d133dbb72"
+    },
+    "PROOF-RESOLUTION.md": {
+      "bytes": 20284,
+      "local_git_blob": "8c9e8aed2503dd51c0b73a86a2f4e2451f0432b3",
+      "match": true,
+      "remote_git_blob": "8c9e8aed2503dd51c0b73a86a2f4e2451f0432b3",
+      "sha256": "976f515ff3026f4fa34178f9bfb6f81eb8eeb9a4e6e9fb5fd5dc9165bfc018e7"
+    },
+    "PROOF-SOURCE-READBACK.json": {
+      "bytes": 4067,
+      "local_git_blob": "31e602de63fb6faf4bfdf4a40dc7711bae62ad9f",
+      "match": true,
+      "remote_git_blob": "31e602de63fb6faf4bfdf4a40dc7711bae62ad9f",
+      "sha256": "0bfc84fc34a9f3cfa1ccfd5ca1785678b84abb33d10827dcdcf9a0e6f4c87201"
+    },
+    "check_n3_relation.py": {
+      "bytes": 9238,
+      "local_git_blob": "3ed915e8e7d71c75ec0037cfe93ba52031b5042d",
+      "match": true,
+      "remote_git_blob": "3ed915e8e7d71c75ec0037cfe93ba52031b5042d",
+      "sha256": "15c4dd1a623ce3943854059c194de46f8f321437f7b8baf31b3a48ed58796d26"
+    }
+  },
+  "independent_review": "Not performed; this is author publication verification, not approval.",
+  "method": "Recomputed SHA256 and Git blob IDs over complete local bytes; matched all six to immutable GitHub directory/file readback. Git blob calculation includes byte length. Direct source/readback/decision content inspections supplement identity checks; no local full repository checkout is claimed.",
+  "new_native_calls": 0,
+  "no_native_or_empirical_authority": true,
+  "schema": "D542-N3-PROOF-PUBLICATION-READBACK-1"
+}
