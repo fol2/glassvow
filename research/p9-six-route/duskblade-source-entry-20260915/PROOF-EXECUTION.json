@@ -1,0 +1,54 @@
+{
+  "commands": [
+    {
+      "command": "python3 check_n3_relation.py > PROOF-CHECKS.json",
+      "deterministic_second_run_byte_equal": true,
+      "exit": 0,
+      "stderr": "",
+      "stdout_sha256": "948c29de49fe3bd982e6d1d9f77a331fb6d1d04095b12d4d42e569f0f9c2376a"
+    },
+    {
+      "command": "python3 -m py_compile check_n3_relation.py",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "command": "python3 check_n3_relation.py (isolated mutated copy)",
+      "exit": 2,
+      "mutated_source_sha256": "f48127d11dcf07aeb7561f1ba6ef713a3d04684a21be87d73b16769e084ac346",
+      "mutation": "growth-before-hit",
+      "replacement_after": "def register_view(events: list[dict], mutant: str = 'growth-before-hit') -> list:",
+      "replacement_before": "def register_view(events: list[dict], mutant: str = '') -> list:",
+      "stderr": "N3 proof check rejected: native-base-replay\n",
+      "stdout_bytes": 0
+    },
+    {
+      "command": "python3 check_n3_relation.py (isolated mutated copy)",
+      "exit": 2,
+      "mutated_source_sha256": "eb1aa175198798a1bf58589e9831f55c3c80823cf947ca14423030a491948e4a",
+      "mutation": "collapse-copies",
+      "replacement_after": "def register_view(events: list[dict], mutant: str = 'collapse-copies') -> list:",
+      "replacement_before": "def register_view(events: list[dict], mutant: str = '') -> list:",
+      "stderr": "N3 proof check rejected: second-copy-interleaving\n",
+      "stdout_bytes": 0
+    },
+    {
+      "command": "python3 check_n3_relation.py (isolated mutated copy)",
+      "exit": 2,
+      "mutated_source_sha256": "4bead16fabdd74127c058d377240f3a0743499d5bcaf02dab39c2a11f8dca839",
+      "mutation": "erase-fight",
+      "replacement_after": "def register_view(events: list[dict], mutant: str = 'erase-fight') -> list:",
+      "replacement_before": "def register_view(events: list[dict], mutant: str = '') -> list:",
+      "stderr": "N3 proof check rejected: same-uid-new-combat\n",
+      "stdout_bytes": 0
+    }
+  ],
+  "empirical_debits": 0,
+  "interpretation": "New symbolic relation checks only. They check the written induction and identity mapping, not natural-game legality, native payoff or population support.",
+  "kind": "D542-N3-AUTHOR-EXECUTION-RECEIPT-1",
+  "native_calls": 0,
+  "new_game_outcomes": 0,
+  "old_69_check_suite_rerun": false,
+  "python": "3.13.5",
+  "source_inputs_reconstruction_git_blob": "d645357de8bc463a1c54d63cbcfb1bc625e9cf07"
+}
