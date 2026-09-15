@@ -98,4 +98,5 @@ def predict(model, values):
 def features(public, names):
     if not isinstance(public, dict) or any(name not in public for name in names):
         raise ValueError("missing registered public feature")
-    return vector([public[name] for name in names], len(names))
+    return vector([int(public[name]) if type(public[name]) is bool else public[name]
+                   for name in names], len(names))

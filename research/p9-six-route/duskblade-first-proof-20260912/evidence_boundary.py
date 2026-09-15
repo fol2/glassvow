@@ -24,7 +24,7 @@ SCOPES = {"independent_review": ("547-adapter", "APPROVE"),
 GUARDS = ["mec-source-closure", "legal-profile-provenance", "signed-control",
           "policy-information-cost", "unchanged-invariants"]
 INPUT_GROUPS = {"product", "content", "native_oracle", "profile_0", "profile_5",
-                "signed_B", "policies", "preflight", "development_manifest",
+                "signed_B", "policies", "preflight", "preflight_trace", "development_manifest",
                 "sampler_manifest", "freeze", "exposure_manifest", "features",
                 "model", "extractor_source"}
 
@@ -86,8 +86,13 @@ def flatten(value, prefix=""):
         text(key, "role")
         role = prefix + key
         if isinstance(item, dict):
-            out.update(flatten(item, role + "/"))
+            nested = flatten(item, role + "/")
+            if set(nested) & set(out):
+                raise BoundaryError("ambiguous role map")
+            out.update(nested)
         else:
+            if role in out:
+                raise BoundaryError("ambiguous role map")
             out[role] = text(item, "locator")
     return out
 
