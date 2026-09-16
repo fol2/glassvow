@@ -1,50 +1,57 @@
-# P9 current capsule — DD1-SOURCE-1 author complete
+# P9 current capsule — DD1-SOURCE-1 corrective author batch complete
 
-Updated 2026-09-16. Existing branch `research/p9-six-route-local-20260905`. This is the one mutable task capsule; immutable source, accepted designs, closed results and account records remain unchanged.
+Updated 2026-09-16. Existing branch `research/p9-six-route-local-20260905`; one sole Pro author. Local writer and reviewer remain parked. This capsule supersedes the active rejected K1/no-go summary, not immutable history or accepted artifacts.
 
-## Current author decisions
+## Authority and corrected disposition
 
-Authority: [#542 comment 5696615674](https://github.com/fol2/glassvow/issues/542#issuecomment-5696615674). The sole Pro author completed BOTH retained-route source decisions and the justified same-product follow-through. Local writer and completed DD1 reviewer remain parked; no competing worker was invoked.
+[Corrective batch 5701669070](https://github.com/fol2/glassvow/issues/542#issuecomment-5701669070) acts on [actual review 5700827076](https://github.com/fol2/glassvow/issues/542#issuecomment-5700827076), which REQUESTED CHANGES for predecessor `aa3f18e9a6ad530aa48677e37a5835e8d786a998`. That review accepts K2's bounded source-role conclusion, rejects the submitted K1 closure inference and dependent triple no-go, and does not reopen DD1/#547.
 
-- **K1/Q1: SOURCE_EXCLUDED_AS_REGISTERED_ROLE_COMPOSITION.** Complete paid Chisel/native coupled-Shatter producer plus the registered native Resonant Lance echo consumer compose through their existing same-target state interface. PROOF section 3 distinguishes the whole old packages, then supplies the narrower registered-component mapping and symmetric source identity induction. The applicable closed-component clause, not a copied empirical negative or shared name, supplies the source exclusion.
-- **K2/Q2: SOURCE_ROLE_ELIGIBLE_PENDING_NATIVE_QUALIFICATION.** Complete additive player Strength and independent three-hit repeated-read consumer retain a nonredundant controlled role. PROOF section 4 compares actual payoff ports with common native Strength on both sides, including the residual-role argument; it does not identify all host-game behaviour with a closed chip primitive. This is bounded source eligibility, not a native certificate or reservation of a slot.
-- **Triple: NO_SOURCE_QUALIFIED_TRIPLE_FOR_DD1_PLAN.** A necessary K1 slot is excluded. K2's useful decision is complete, accepted DD1-X is unchanged, and no replacement is nominated. Dependent three-way peer expansion, exporter and empirical-readiness work are NOT_REQUIRED_AFTER_K1_SOURCE_EXCLUSION, not PASS or unreported missing work.
+**K1: new author SOURCE_ROLE_ELIGIBLE_PENDING_NATIVE_QUALIFICATION.** Corrected PROOF sections 3–4 supply the complete coupled target-threshold/independent-echo law, nonredundancy/state-separation witnesses, genuine substitute controls, exact scoped closed-object distinctions and a residual-port composition argument under the same common-background convention accepted for K2. This is a bounded source-role conclusion requiring corrected-head review, not native producer necessity or a certificate.
 
-These are NEW **author semantic decisions awaiting a fresh exact-artifact review**, not independent approval. A0/#547 stays complete; A1/A2 remain **0/3 certificates**. The three independently usable Duskblade strategies into production/TestFlight, THEN Ashwarden, remain the product goal. There is no stock-game impossibility theorem or revised Honing result.
+**K2: independently accepted source-role eligibility preserved.** Reuse original PROOF section 4 and evidence at the reviewed predecessor. The retained native-role interpreter's classes/functions are AST-identical except that the rejected `registered_composition()` function is removed. No accepted standalone K2 suite or population is rerun. New mixed-peer checks are not new K2 admission.
+
+**DD1-X: accepted design unchanged.** Its original declaration/design/promotion/model/evidence is not edited or re-reviewed. New peer work uses the unchanged law on the same proposed product.
+
+**Dependent source decision: THREE_ROLE_SOURCE_PLAN_RETAINED_FOR_CONDITIONAL_NATIVE_QUALIFICATION.** All conditionally unblocked source peer/substitution/composition work and the narrow promotion supplement are complete. The old K1 registered-component exclusion, terminal no-go and dependent skip are WITHDRAWN, preserved only at the predecessor. Naming Chisel in Flow's producer list is not a closure of Chisel. Identical-recipe tests are no longer active or used as eligibility evidence.
+
+This is a completed **author correction**, not independent approval of the new K1/peer conclusion. The proposed product is M plus only accepted DD1 changes, not an existing executable/frozen product or a fully native-MEC-qualified triple. A0/#547 remains complete; A1/A2 remain **0/3 certificates**. Three independently usable Duskblade strategies into production/TestFlight, THEN Ashwarden, remains the goal.
 
 ## Exact recoverable source/proof
 
-**Coherent artifact head:** `171961a8aa9f48370d74d9560b339cc875cc7f56`.
-**Tree:** `cf6cc79bc1d59ed9988190dc30a39b8f8d09490c`.
+**Coherent artifact head:** `a18748752ce19332d06445738bdb5bbcb4681f45`.
+**Tree:** `9cdefd50758767550ec8fb0ca0798a56bea00489`.
+**Final tested code head:** `993a75314fd09ae996b357487e7387b3f8d18a98`.
 
-[Complete source/proof directory](https://github.com/fol2/glassvow/tree/171961a8aa9f48370d74d9560b339cc875cc7f56/research/p9-six-route/dusk-design-1-20260916/source-qualification)
+[Complete immutable source/proof directory](https://github.com/fol2/glassvow/tree/a18748752ce19332d06445738bdb5bbcb4681f45/research/p9-six-route/dusk-design-1-20260916/source-qualification)
 
-The six files are INPUTS.json (pre-check declaration and exact comparison ledger), PROOF.md (both arguments/dispositions, source bindings and interfaces), role_model.py, check_roles.py, CHECKS.json (actual observations) and EXECUTION.json (exact source, compile, repeat and mutant receipts).
+The coherent package is original INPUTS.json; pre-check CORRECTION.json; corrected PROOF.md; narrow NATIVE-HANDOFF.md; role_model.py, corrective_model.py and check_roles.py; actual CHECKS.json and EXECUTION.json. The old REMOTE-READBACK in that source commit is historical; use the updated receipt below for this corrected package.
 
-Declaration preceded execution at `abca64e2b4306993d82bf67fa6998891b12c7de6`, blob `b99d99ff2a85155f49108491391a332fc98bee54`.
+The declaration checkpoint `5e6ea932dda12da92ef7cf6dc9212be3af6b599a` was saved before new symbolic execution and recovered on this run. INPUTS is unchanged, not backdated.
 
-**Evidence:** 34 named non-native checks, 1,024 Q1 comparison cells and 192 Q2 contexts / 768 component cells; zero failed unmodified checks. Seven actual faulty variants rejected with exit 2. Complete model/checker/observations are published; no old 69-check or accepted Crosscut suite was replayed. No model count is native legality, population, causal or balance evidence.
+**Final evidence: 36 named checks; 1,024 K1 contexts / 4,096 component cells; all nine peer producer/consumer pairings; zero unmodified failures; ten actual faulty variants rejected.** In-memory compilation passed, normal/expanded runs were byte-identical, and the complete 4,096 constructed traces were reconstructed with the declared hash. CHECKS contains the full named observations and lossless grid-result rows. No native sample or outcome is implied.
 
-[Publication readback](https://github.com/fol2/glassvow/blob/fcf629489cec2604687c225f6ffa41b9aaeb1608/research/p9-six-route/dusk-design-1-20260916/source-qualification/REMOTE-READBACK.json): all six exact file descriptors; all five locally authored source/evidence files matched complete remote Git blobs and lengths. Post-publication local reproduction returned byte-identical CHECKS. Base-to-proof compare contains only the six new files, with no deletions or existing-file modification. The receipt and this capsule are later publication metadata, not circular source identities. Final #156 handoff binds the complete delivered/review head and their readback.
+A final capture defect was found and repaired: stored producer-zone lists changed after the consumer command. The new observer value-copies them and a focused regression checks preconsumer zones. Final code/results were rerun after that repair; the earlier execution-only save is historical. No declared role, formula or parameter changed.
 
-## Immutable authority and preservation
+[Corrected publication readback at e3416b9ad53659fea053e0057e829ed12d5ec7ab](https://github.com/fol2/glassvow/blob/e3416b9ad53659fea053e0057e829ed12d5ec7ab/research/p9-six-route/dusk-design-1-20260916/source-qualification/REMOTE-READBACK.json), blob `b19ea6c209096cd910216d3b19d95bd79af1784b`, records the exact nine-file package. All seven newly authored final source/evidence files match complete remote blob identities and byte lengths. Post-publication reproduction returns byte-identical CHECKS. U-to-source comparison contains only eight intended qualification paths; the receipt and this capsule are later metadata verified in the final #156 handoff.
 
-Operating/current and scientific main remains `07b5aa9dec8436132a524511d5438c510e322070`, freshly re-read unchanged at completion. AGENTS.md, AI-SDLC and the existing programme/formal-synthesis criteria were refreshed; the research tree was not rebased.
+## Native dependencies and honest limits
 
-Accepted DD1 head `746388323b8e886967e0e13fe109490a70206a66`, independent review [5695995257](https://github.com/fol2/glassvow/issues/421#issuecomment-5695995257), planner acceptance [5696565926](https://github.com/fol2/glassvow/issues/421#issuecomment-5696565926). All original DECLARATION/DESIGN/PROMOTION/model/checker/evidence/readback bytes remain untouched. Its existing PROMOTION.md is not replaced by a new framework and is not activated by this no-go.
+K1's four component immediate-consumer cells 00/01/10/11 are 7/7/10/21 in the declared plain state. These are not whole-command zero nulls. Ordinary chips and direct Cracked are genuine substitutions, and R3 COMMAND_CONTRACT_FAIL remains untouched. Native causal/proper-subset and source-specificity admission may still fail. No zero-valued unavailable tails or favourable-state population claim is used.
 
-Bound #547 head `5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6`, binding `D547-PC1-20260914-BIND-01` / [5683984558](https://github.com/fol2/glassvow/issues/547#issuecomment-5683984558); entire `research/p9-six-route/duskblade-first-proof-20260912/` remains read-only. `ADAPTER_RECORDS.md` remains the active future mapping; no re-review or edit. SESSION-STATE, allocation, historical UNKNOWN/spent accounts, protected/exposed seeds and all numerical/hard guards are unchanged.
+Source peers distinguish target-local coupled state, player-wide persistent Strength and consumed same-turn enemy address. The mixed trace retains shared modifiers and possible multiple chains; no one-hot labels or exclusive ownership of generic Strength/chips/Cracked/death. Native insertion-order/Bell/return ordering and attribution remain material; the model is not a full game, draw/shuffle, profile, policy or save oracle.
 
-Archive A `c802be36510273481b6d0f865b92fac43abf6aff`, source-scope E `f8a3c7b9965c6cb21fa1714b59c8537bcb89c3be`. Old fixed-slate source result, native same-copy Honing closure, R3 COMMAND_CONTRACT_FAIL, R11 SUMMARY_ONLY, R12 INCOMPLETE and R14's exact closed stock sampler retain their original meanings. No unavailable R11/R12 raw is claimed recovered or needed here. No #549 reconstruction.
+NATIVE-HANDOFF.md is only a conditional delta to accepted PROMOTION.md and bound ADAPTER_RECORDS.md. It specifies native source/intervention/refinement/substitution/peer obligations, real first-valid Dusk-earned predecessor profiles for vows 0/5, ordinary acquisition, public-policy/cost rules and actual authenticated extraction/guardrail receipts. None of those native evidence items or authorities is manufactured here. No exporter is implemented; no development or confirmation stage opens.
 
-## Interface clarification for any future authorised work
+## Preserved identities and interfaces
 
-Use shipping `resonantLance` / Resonant Lance, never a new `echoLance` ID. Native M `hit_enemy` emits ordinary unblocked loss including overkill in HIT_ENEMY.amount; physical HP removed is separately derived. Only finale handoff clamps to pre-hit HP minus one. PROOF section 7 records the exact source and the correction to the earlier review's contrary prose WITHOUT rewriting accepted DD1/review bytes. The ordinary example is amount=7, overkill=5, physical=2 on a 2-HP target.
+Current operating/scientific **M = 07b5aa9dec8436132a524511d5438c510e322070** was refreshed and re-read unchanged at completion. No scientific rebase occurred. Accepted **D = 746388323b8e886967e0e13fe109490a70206a66**, review 5695995257 and planner acceptance 5696565926 are preserved. **H = 5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6**, binding D547-PC1-20260914-BIND-01 / 5683984558, and its entire `duskblade-first-proof-20260912/` prefix are unchanged.
 
-Future implementation source is M, not B's older RunState. Preserve `if act != 3 or not is_final_act(): return` in `mark_mirrored_road_cleared`. M RunState blob `95b6bbb10c5fd8ab2c6fdc79c61440f9959998eb`; B blob `24eeb6a223a67355d87839bbc7a6cd40a8610d96`.
+Use shipping `resonantLance`, never an invented `echoLance`. Ordinary native HIT_ENEMY.amount includes overkill; physical HP removed is separately derived, with handoff and poison handled by their actual source paths. Future source remains M RunState `95b6bbb10c5fd8ab2c6fdc79c61440f9959998eb`, not the research tree's older `24eeb6a223a67355d87839bbc7a6cd40a8610d96`; preserve the Act-IV campaign guard.
 
-## Next boundary
+Archive A `c802be36510273481b6d0f865b92fac43abf6aff`, scope E `f8a3c7b9965c6cb21fa1714b59c8537bcb89c3be`, actual closed families/Honing/old fixed slate, R3, R11 SUMMARY_ONLY, R12 INCOMPLETE and R14 exact stock-sampler result retain scope. SESSION-STATE, allocation, historical UNKNOWN/spent balances, protected/exposed roots, numerical acceptance and hard guards remain unchanged. No #549 reconstruction or denied-payload retry.
 
-One fresh isolated read-only exact-artifact review of the NEW DD1-SOURCE-1 semantic decision, including the registered-component mapping, source correspondence, common-background discipline and evidence. Do not import the author's conversation or invoke this author as reviewer. Do not re-review unchanged DD1/#547, fill a replacement slot, build an exporter or open empirical stages on the strength of a symbolic pass.
+## Next gate
 
-**This batch: 0 native/game calls, 0 new outcomes, 0 empirical spend, 0 topology/parameter replacements, 0 policy fitting, 0 candidate/confirmation freezes, 0 production changes.** No allocation reset/top-up, #548 reserve, native receipts, PR/CI, merge or release. Any future native work needs separately recorded applicable authority, valid accounts and all stage prerequisites. No self-approval occurred.
+One fresh isolated read-only exact-artifact review of this corrected semantic delta and complete source/evidence, without importing the author conversation. Accepted K2/DD1/#547 are dependencies, not automatically unfinished review tasks. The final #156 handoff supplies the delivered review head and readback. No self-approval or competing worker has occurred.
+
+**0 native/game calls; 0 new outcomes; 0 empirical spending; 0 replacement topology/parameter variant; 0 policy fit; 0 candidate/confirmation freeze; 0 native receipts; 0 production changes.** Native work requires separately recorded applicable authority, valid accounts and stage prerequisites. No #548 reserve, PR/CI, merge, release or issue closure.
