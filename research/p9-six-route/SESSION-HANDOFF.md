@@ -1,3 +1,23 @@
+# P9 current capsule — DD1-NATIVE-1 native author batch complete
+
+Updated 2026-09-16. Existing branch `research/p9-six-route-local-20260905`; overlay tree `research/p9-six-route/dd1-native-1-overlay`. Sole local author. Reviewer parked. This capsule records the native N0 author batch. It does not replace accepted D/C/H bytes or the prior source-correction history below.
+
+## DD1-NATIVE-1 native overlay
+
+Owner authorised DD1-NATIVE-1 in [#421 comment 5704445133](https://github.com/fol2/glassvow/issues/421#issuecomment-5704445133). Activation recorded at [5704631815](https://github.com/fol2/glassvow/issues/421#issuecomment-5704631815) under current-main AI-SDLC and the four rules. Existing H preflight only. No development, confirmation, merge or release.
+
+**Scientific base M** `07b5aa9dec8436132a524511d5438c510e322070`. **Overlay implementation** `b569bf7e58347e4c2090e4907f63f0a1521d2533` (tree `80669ec62988b376208c6bb6066fcb0b499b93ff`). **Published overlay head** `d2aaf7a2e00e1c3cfe1a860d0db3aa9671982ed2`. Parent is M. The research branch's older runtime is not merged into main.
+
+[Qualification directory on the overlay tree](https://github.com/fol2/glassvow/tree/d2aaf7a2e00e1c3cfe1a860d0db3aa9671982ed2/research/p9-six-route/dusk-design-1-20260916/native-qualification)
+
+[NATIVE-AUTHOR-HANDOFF.md](https://github.com/fol2/glassvow/blob/d2aaf7a2e00e1c3cfe1a860d0db3aa9671982ed2/research/p9-six-route/dusk-design-1-20260916/native-qualification/NATIVE-AUTHOR-HANDOFF.md)
+
+Preflight used 90/8192 native starts; candidate attempt 1/1 consumed at first candidate-native invocation. ALLOCATION template bytes unchanged (`824ff18acbca2f776533beed83a43b21d9a50f2c`). Two identical PASS runs of `tests/test_dd1_native_overlay.gd`. Profile witnesses, natural acquisition, extraction/guardrail receipts, headed visual capture, N1/N2 and certificates remain unresolved. **0/3 Duskblade certificates.** A handoff ready for isolated review is not a native certificate.
+
+**Next gate:** one fresh isolated read-only exact-head review of the overlay artifact and evidence, without importing the author conversation. No production PR.
+
+---
+
 # P9 current capsule — DD1-SOURCE-1 corrective author batch complete
 
 Updated 2026-09-16. Existing branch `research/p9-six-route-local-20260905`; one sole Pro author. Local writer and reviewer remain parked. This capsule supersedes the active rejected K1/no-go summary, not immutable history or accepted artifacts.
