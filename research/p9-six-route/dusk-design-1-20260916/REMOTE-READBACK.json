@@ -1,0 +1,75 @@
+{
+  "schema": "DD1-X-REMOTE-READBACK-1",
+  "date": "2026-09-16",
+  "kind": "AUTHOR_PUBLICATION_READBACK_NOT_INDEPENDENT_REVIEW",
+  "repository": "fol2/glassvow",
+  "branch": "research/p9-six-route-local-20260905",
+  "artifact_commit": "1301454b60ea9d4e6b1848b12c9de8f09caa02f6",
+  "artifact_tree": "02d1a26ef92bb14a2143e13f2ea59638fa30be77",
+  "prefix": "research/p9-six-route/dusk-design-1-20260916/",
+  "scope_authorisation": {
+    "prepared_comment": 5693675219,
+    "recorded_comment": 5693811899,
+    "recorded_comment_url": "https://github.com/fol2/glassvow/issues/421#issuecomment-5693811899",
+    "exact_comment_read_back": true,
+    "prospective_design_only": true
+  },
+  "readback_method": "GitHub contents descriptors at the exact artifact commit, exact-commit content fetches for the declaration/design/promotion, and Git blob/byte-count comparison against all four locally executed source/evidence files. Scope independently queried with compare_commits. Local reproduction was rerun after publication; no claim of remote code execution or native execution.",
+  "files": {
+    "DECLARATION.json": {"bytes": 5750, "git_blob": "6aeeaea59eb7a74f3f67992047d95bb004531dbc", "content_readback": "full exact-commit JSON", "declared_before_checks_commit": "ef928cbfdab41c4e51d49f75b9072187315ae54b"},
+    "DESIGN.md": {"bytes": 28898, "git_blob": "a98b041d26aef80cd801c18d502d8875eef1666d", "content_readback": "exact-commit lines 1-45 and 109-137 plus complete descriptor"},
+    "PROMOTION.md": {"bytes": 25097, "git_blob": "ba9fc8004f385958b064598b6fa54dc9634cf577", "content_readback": "exact-commit lines 84-116 plus complete descriptor"},
+    "crosscut_model.py": {"bytes": 7709, "git_blob": "5f742741d5906f1f1caaeb65bf2f905505d166b9", "sha256": "57188dd6fd84caac18aed8a638fba3537082601e4a1cfe493daa3d6a869ca993", "local_tested_bytes_match_remote": true},
+    "check_crosscut.py": {"bytes": 9677, "git_blob": "f68b9c1e12ae914367325d6be07de1d5c8b924a0", "sha256": "3071d39adfca0433101371ec567ce937adb7b9775359506ff7be3c63e355a4ce", "local_tested_bytes_match_remote": true},
+    "CHECKS.json": {"bytes": 11697, "git_blob": "fa7a08b50c3d27ec3b808908de70a30308b3e3a6", "sha256": "fadd0da8eb5f357109b182380a7d13ce2aadf1d70a88abe868bbb22ee0f2759f", "local_tested_bytes_match_remote": true},
+    "EXECUTION.json": {"bytes": 3134, "git_blob": "26b6138d1b9706526beb7d411cc97396601539b4", "sha256": "a96da2e795dc89813d4868cd9b23e6aa0397eaa09cc1382e2413696c4fdb387a", "local_tested_bytes_match_remote": true}
+  },
+  "reproduction_after_publication": {
+    "command": "python check_crosscut.py",
+    "exit": 0,
+    "stdout_byte_identical_to_published_CHECKS": true,
+    "unique_named_checks": 40,
+    "finite_constructed_states": 216,
+    "mutations_reproduced": [
+      {"name": "copy-alias", "exit": 2, "failures": ["cross-combat-same-name-is-not-same-object"]},
+      {"name": "ignore-thorns", "exit": 2, "failures": ["first-hit-lethal-thorns-suppresses-return"]},
+      {"name": "same-target", "exit": 2, "failures": ["same-target-spends-without-return", "single-enemy-no-package-payoff", "finite-domain-return-law"]},
+      {"name": "retain-on-consume", "exit": 2, "failures": ["consume-once", "second-copy-cannot-reuse-anchor", "same-target-spends-without-return"]},
+      {"name": "eager-settlement", "exit": 2, "failures": ["deferred-chips-return-precedes-bell"]},
+      {"name": "sticky-reset", "exit": 2, "failures": ["end-turn-expiry"]}
+    ]
+  },
+  "publication_correction": {
+    "interim_checker_commit": "6ecf53f6c2bc260df34633db8263e4207c5bbe98",
+    "interim_checker_blob": "b3f97e1c3c99a7a7ca03f28bace7745b0bffda29",
+    "finding": "An inadvertently duplicated check in the publication copy was caught by readback.",
+    "restored_commit": "1be32d52104668db394013f37da6185c6efccd19",
+    "restored_exact_tested_blob": "f68b9c1e12ae914367325d6be07de1d5c8b924a0",
+    "declared_law_and_parameters_changed": false
+  },
+  "scope_compare": {
+    "base": "806c994ffa5af5974080b7f3fdea68595f0ee197",
+    "head": "1301454b60ea9d4e6b1848b12c9de8f09caa02f6",
+    "status": "ahead",
+    "ahead_by": 8,
+    "behind_by": 0,
+    "total_commits": 8,
+    "files_added": ["CHECKS.json", "DECLARATION.json", "DESIGN.md", "EXECUTION.json", "PROMOTION.md", "check_crosscut.py", "crosscut_model.py"],
+    "all_changed_paths_under_prefix": true,
+    "existing_files_modified": 0,
+    "production_or_content_files_changed": 0,
+    "bound_547_prefix_modified": false,
+    "historical_results_or_account_files_modified": false
+  },
+  "main_readback": {
+    "head": "07b5aa9dec8436132a524511d5438c510e322070",
+    "tree": "12ac11866a0d81d1e957580e34aec78ac5b7f69b",
+    "same_as_instruction_read": true
+  },
+  "bound_547": {"head": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6", "binding": "D547-PC1-20260914-BIND-01", "acceptance_reopened": false},
+  "accounts": {"native_calls": 0, "new_game_outcomes": 0, "empirical_spend": 0, "new_error_allowance": 0, "candidate_freezes": 0, "production_changes": 0},
+  "decision": "COMPLETE_DESIGN_ONLY_AUTHOR_ARTIFACT; DD1-X_BOUNDED_DESIGN_SURVIVOR; THREE_ROUTE_CERTIFICATION_NOT_ESTABLISHED",
+  "certificate": false,
+  "next": "One fresh exact-artifact review. Native implementation/qualification requires separately recorded applicable authority and prerequisites. No author self-review or empirical promotion.",
+  "receipt_scope": "This receipt covers the seven-file source/proof commit. The subsequent current-capsule update and this receipt's own remote availability are verified in the final issue handoff; neither is included in a circular self-hash."
+}
