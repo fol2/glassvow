@@ -1,3 +1,11 @@
+# P9 current capsule — DD1-NATIVE-1 Native Proof catalog/marker complete (5705322630)
+
+Updated 2026-09-16. Overlay `research/p9-six-route/dd1-native-1-overlay` published head `e5b5d04dd0308f8739e6d5e0d675c4b8a1325fee`. Original O `d8f4dde0…` retained. M `07b5aa9d…` unmutated.
+
+R0–R4: catalog display twins + Native Proof create/consume inspected. Attempt 1/1 not reset. Preflight 231/8192 remaining 7961. Isolated review is next. 0/3 certificates.
+
+---
+
 # P9 current capsule — DD1-NATIVE-1 N0 repair complete (5705322630)
 
 Updated 2026-09-16. Overlay `research/p9-six-route/dd1-native-1-overlay` repair head `ab74e33b4c80d435012c4313074481c2bd17ceb8` (plus identity commit after this handoff bind). Original O `d8f4dde0…` retained. M `07b5aa9d…` unmutated.
