@@ -1,0 +1,44 @@
+{
+  "schema": "DD1-SOURCE-1-INPUTS-1",
+  "kind": "SOURCE_COMPARISON_DECLARATION_NOT_EMPIRICAL_FREEZE",
+  "authority_comment": 5696615674,
+  "research_base": "746388323b8e886967e0e13fe109490a70206a66",
+  "scientific_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "archive": "c802be36510273481b6d0f865b92fac43abf6aff",
+  "source_scope": "f8a3c7b9965c6cb21fa1714b59c8537bcb89c3be",
+  "bound_547": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+  "accepted_dd1_review": 5695995257,
+  "questions": [
+    "Q1: does Chisel/coupled native Shatter/Resonant Lance retain an independent law after exact closed-role composition, rather than just differ from each complete historical package?",
+    "Q2: does native Empower/player Strength/three-hit Flurry have its own source role interface, or merely inherit the registered setup/power-cycle/other closed mediator?"
+  ],
+  "candidate_roles": {
+    "K1": {"producer": "chisel", "producer_cost": 1, "damage": [4, 7], "printed_chip": 1, "mediator": "same-target native threshold/overflow and coupled staggered plus vulnerable, with all native consequences", "consumer": "resonantLance", "consumer_cost": 1, "base_n": [7, 10], "consumer_guard": "target.staggered OR target.vulnerable>0", "expiry": "native enemy action/debuff tick, death and combat reset"},
+    "K2": {"producer": "empower", "producer_cost": 1, "strength": [2, 3], "producer_lifecycle": "powerConsumed, not exhaust", "mediator": "additive player str; producer contribution distinguished from shared background", "consumer": "flurry", "consumer_cost": 1, "hit_base": [2, 3], "hits": 3, "consumer_lifecycle": "one Attack command, one deferred chip settlement, discard", "expiry": "Strength persists through consumers and end-turn; new combat resets"},
+    "K3": {"status": "unchanged accepted DD1-X; not re-reviewed", "declaration_blob": "6aeeaea59eb7a74f3f67992047d95bb004531dbc", "design_blob": "a98b041d26aef80cd801c18d502d8875eef1666d", "promotion_blob": "ba9fc8004f385958b064598b6fa54dc9634cf577"}
+  },
+  "comparison_objects": [
+    {"id": "resonance", "path": "research/issue-421/protocols/resonance-package-v1.json", "blob": "9e6b3bc6cb39834ecfadfa1c190e113ca6e5d0d0", "owned_roles": "eclipseSlash/warCry direct-Cracked producer; native resonantLance echo consumer"},
+    {"id": "shatter-flow", "path": "research/issue-421/protocols/shatter-flow-v1.json", "blob": "e6e5d04af98f0c8fb6d5f71fe6dfd6170fd190d7", "owned_roles": "native chisel/limitBreak Shatter producers; separate fractureRhythm enabled draw/Energy payoff"},
+    {"id": "partial-facet", "path": "research/issue-421/protocols/facet-focus-v1.json", "blob": "45a0410e91868cf0767f00abc54dc5c441a552a2", "owned_roles": "chisel/limitBreak; facetFocus reads partial chips"},
+    {"id": "cracked-tempo", "path": "research/issue-421/protocols/cracked-tempo-v1.json", "blob": "f384d04c7090d13c659eb43bb12f7bd6457f1ff3", "owned_roles": "direct Cracked; crackstep conditional draw/refund and exhaust"},
+    {"id": "crown", "path": "research/issue-421/protocols/post-v38-crown-effect-crn-v1.json", "blob": "9a3e68e82311cd21bf2c22b56a442c9d0d681fe1", "owned_roles": "start enemy facet reduction and ENEMY Fervor, not player Empower"},
+    {"id": "heavy-relay", "path": "research/issue-421/protocols/post-v38-shatter-tempo-capacity-v1.json", "blob": "ed7230408149e9b24690b6754a7c549a7a868512", "owned_roles": "real Shatter; one cost reduction on later printed-cost>=2 Attack"},
+    {"id": "reseam", "path": "research/issue-421/protocols/post-v38-reseam-break-capacity-v1.json", "blob": "c1f53fc2634a5627186b2204301bd8b65872ff6c", "owned_roles": "first and second real same-enemy Shatter; one Energy"},
+    {"id": "reward-overchip", "path": "research/issue-421/protocols/post-v38-reward-overchip-capacity-v1.json", "blob": "80cd6b288570d8abe2b2cbab7081a5eb9969da8a", "owned_roles": "oblivionStrike/uppercut positive chip and overflow; Chisel explicitly excluded from candidate set"},
+    {"id": "one-bit", "path": "research/issue-421/protocols/post-v38-action-grammar-inventory-v1.json", "blob": "1fcc694edb73c45c5b707fc47818f11b49d4e84c", "owned_roles": "Power/Energy/draw-Skill arms nonstacking bit; next Attack consumes for extra chip; native Strength is common background"},
+    {"id": "power-cycle", "path": "research/issue-421/protocols/post-v38-power-cycle-capacity-v1.json", "blob": "1834721ea9ddce5eb38680f611d0a89ff5316627", "owned_roles": "Power AND draw-Skill readiness; next Attack extra chip"},
+    {"id": "multi-hit-facet", "path": "research/issue-421/protocols/post-v30-multihit-facet-capacity-v1.json", "blob": "05faf2da66215792fcb6404fcf2485e343b1ebfd", "owned_roles": "extra implicit Facet per additional unblocked hit; damage and native Strength unchanged"}
+  ],
+  "canonical_domain": {
+    "observations": "paid/effective resources, legal availability, ordered command and hit events, physical HP AND native amount/overkill, Block, player/enemy statuses, target and card identity, zones, counters, coupled Shatter/Adamant, collateral, reset; cosmetic names and test-only origin labels erased",
+    "shared_background": "identical M native commands, Strength from all other sources, ordinary attacks/chips/Cracked/death/cost callbacks and unchanged prospective DD1 on both sides; never remove native Empower/Flurry from a comparator",
+    "composition": "Only concrete registered role interfaces may support a closed-component witness. Show the interface and full command mapping; do not relabel an arbitrary enclosing-game behaviour a closed package. Selecting roles from two contracts is not claiming the two complete historical packages are equivalent.",
+    "arbitrary_history_proof": "A claimed all-history equality requires a source-correspondent identity relation over common state and identical command transitions, including unavailable branches and callbacks. Finite examples alone can only refute a proposed equality.",
+    "finite_projection": "Python standard-library projection of the named commands. Q1 grid: upgrades 2x2, HP 2/40, target Block 0/6, facet 3/5, every partial chip 0..facet-1, background Strength 0/2, weak off/on, Adamant hold off/on. Q2 grid: upgrades 2x2, HP 2/40, Block 0/6/40, background Strength 0/2, weak and Cracked off/on. Dedicated controls cover target/copy, absent/off/other-aspect, repeated consumers, wrong order, resource denial, native amount, Thorns/death, deferred settlement and reset. No RNG population is sampled.",
+    "finite_cap": "At most 20000 constructed comparison cells, plus small named controls. No enlarged search after a decisive witness. No old 69-check or accepted Crosscut suite replay."
+  },
+  "decision_rule": "Complete both route decisions from the source arguments plus relevant falsification evidence: supported source eligibility pending native qualification, exact-clause source exclusion, or genuine unresolved with the smallest remaining relation. Mere absence of a counterexample is not eligibility. After exclusion, skip dependent peer/exporter/readiness work and finish the other route. If both survive, check same-product source composition with unchanged DD1.",
+  "accounts": {"native_calls": 0, "new_game_outcomes": 0, "empirical_spend": 0, "new_topologies": 0, "policy_fits": 0, "candidate_freezes": 0, "production_changes": 0},
+  "publication": "New source-qualification files and mutable SESSION-HANDOFF.md only; preserve accepted DD1, H, SESSION-STATE, ALLOCATION and historical records. One final consolidated #156 handoff with readback."
+}
