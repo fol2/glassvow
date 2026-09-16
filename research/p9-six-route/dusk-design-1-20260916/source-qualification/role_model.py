@@ -1,7 +1,7 @@
 """DD1-SOURCE-1 non-native projection. No engine, RNG sampling or population.
 
-The shared interpreter exposes only named command seams. Full callback equality
-is a source proof in PROOF.md, not a claim that this model is a native simulator.
+The shared interpreter exposes only named command seams. It is not a native
+simulator or closure authority. The prior equal-recipe closure claim is withdrawn.
 """
 from __future__ import annotations
 from copy import deepcopy
@@ -58,16 +58,6 @@ def candidate(up_p=False, up_c=False):
             "C": {"type": "attack", "cost": 1, "chip": 0,
                    "ops": [("echo", 10 if up_c else 7)]}}
 
-
-def registered_composition(up_p=False, up_c=False):
-    # Independently assembled registered role interfaces, NOT whole Flow.
-    # Flow protocol shatterProducers[0] binds this complete native command.
-    shatter_producer = {"cost": 1, "chip": 1, "type": "attack",
-                        "ops": [("hit", (4, 7)[int(up_p)], 1)]}
-    # Resonance protocol candidate.consumer binds the native echo command.
-    echo_consumer = {"chip": 0, "cost": 1, "type": "attack",
-                     "ops": [("echo", (7, 10)[int(up_c)])]}
-    return {"P": shatter_producer, "C": echo_consumer}
 
 
 def card(name: str, up=False):
