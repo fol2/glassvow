@@ -9,9 +9,9 @@
   },
   "preflight_native_starts": {
     "cap": 8192,
-    "used": 226,
-    "remaining": 7966,
-    "note": "90 historical startCombat + 1 headed process + 132 this-batch startCombat (44x3 including thorns fixture fail) + 3 Native Proof shot.sh invocations"
+    "used": 231,
+    "remaining": 7961,
+    "note": "90 historical startCombat + 1 headed process + 132 R1–R3 startCombat (44x3 including thorns fixture fail) + 3 prior shot.sh + 2 catalog-test Godot processes + 1 catalog card-lab shot + 1 constructed-fight shot + 1 live.sh host (scenario combat; subsequent live shots reused that process)"
   },
   "epoch_usage": {
     "cpu_seconds": "UNKNOWN",
@@ -82,7 +82,37 @@
       "id": "DD1-N0-SHOT-3",
       "native_starts": 1,
       "command": "tools/shot.sh --cards=setTheAngle,crosscut --settle=1.2",
-      "result": "same 0-card lab"
+      "result": "same 0-card lab (catalog missing overlay IDs; retained)"
+    },
+    {
+      "id": "DD1-N0-CAT-1",
+      "native_starts": 1,
+      "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_catalog.gd",
+      "result": "PASS identical blob 90c42859…; 0 startCombat"
+    },
+    {
+      "id": "DD1-N0-CAT-2",
+      "native_starts": 1,
+      "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_catalog.gd",
+      "result": "PASS identical to CAT-1"
+    },
+    {
+      "id": "DD1-N0-SHOT-4",
+      "native_starts": 1,
+      "command": "tools/shot.sh --cards=setTheAngle,crosscut --settle=1.2",
+      "result": "PNG 64559 bytes; inspected UNCOMMON-2 Crosscut and Set the Angle (bare-pane art, names/text/cost visible)"
+    },
+    {
+      "id": "DD1-N0-SHOT-5",
+      "native_starts": 1,
+      "command": "tools/shot.sh --scenario=combat-normal add_cards setTheAngle x4 crosscut x4 --settle=0.8",
+      "result": "PNG inspected; opening hand includes Crosscut and Set the Angle"
+    },
+    {
+      "id": "DD1-N0-LIVE-1",
+      "native_starts": 1,
+      "command": "tools/live.sh start --scenario=…; click queried card/enemy centres; shot; stop",
+      "result": "inspected: Set the Angle targeting preview; MARKED chrome on primary after play (energy 3→2, Ward 4); Crosscut targeting with live MARKED; consume: both sporelings 9/14, MARKED gone, energy 1, discard 2"
     }
   ],
   "not_opened": [

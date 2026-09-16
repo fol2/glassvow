@@ -1,0 +1,21 @@
+Native Proof inspection — DD1-NATIVE-1 R4 visual (not a certificate)
+
+Route: tools/shot.sh and tools/live.sh (file-backed runtime bridge). Not Funplay editor MCP :8765.
+
+1. tools/shot.sh --cards=setTheAngle,crosscut --settle=1.2
+   After catalog repair: UNCOMMON — 2. Crosscut (attack, cost 1) and Set the Angle (skill, cost 1).
+   Bare pane (no assets/art/cards/<id>.jpg). Caption: card lab · 2 cards · 1:1.
+   File: dd1-cards-catalog.png (64559 bytes). Prior 0-card capture retained as dd1-cards.png.
+
+2. tools/shot.sh --scenario=combat-normal seed 18501 add_cards setTheAngle×4,crosscut×4 --settle=0.8
+   Opening hand includes Crosscut and Set the Angle with Ward, Edge, Eclipse Slash.
+   File: dd1-fight-constructed.png.
+
+3. tools/live.sh start with the same scenario. Clicks used queried Control global_position centres
+   (Set the Angle 834,762 then left sporeling 820,530; Crosscut 773,757 then right sporeling 1035,530).
+   - dd1-live-armed.png: Set the Angle targeting both sporelings.
+   - dd1-live-marked.png: MARKED on the aimed left sporeling; energy 2; Ward 4; producer in discard.
+   - dd1-live-crosscut-armed.png: Crosscut targeting; MARKED still on left.
+   - dd1-live-consumed.png: both sporelings 9/14; MARKED absent; energy 1; discard 2.
+
+Replace and end-turn expiry were not restaged on the live host; unit/preview tests remain the evidence for those.
