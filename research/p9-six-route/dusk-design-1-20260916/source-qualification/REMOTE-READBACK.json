@@ -1,91 +1,79 @@
 {
-  "accounts": {
-    "candidate_or_confirmation_freezes": 0,
-    "empirical_spend": 0,
-    "native_calls": 0,
-    "new_game_outcomes": 0,
-    "new_topologies": 0,
-    "production_changes": 0
-  },
-  "artifact_commit": "171961a8aa9f48370d74d9560b339cc875cc7f56",
-  "artifact_tree": "cf6cc79bc1d59ed9988190dc30a39b8f8d09490c",
-  "authority_comment": 5696615674,
-  "base": "746388323b8e886967e0e13fe109490a70206a66",
+  "schema": "DD1-SOURCE-1-CORRECTIVE-READBACK-1",
+  "kind": "AUTHOR_PUBLICATION_READBACK_NOT_INDEPENDENT_REVIEW",
+  "repository": "fol2/glassvow",
   "branch": "research/p9-six-route-local-20260905",
-  "decisions": {
-    "K1": "SOURCE_EXCLUDED_AS_REGISTERED_ROLE_COMPOSITION",
-    "K2": "SOURCE_ROLE_ELIGIBLE_PENDING_NATIVE_QUALIFICATION",
-    "K3": "ACCEPTED_DD1_UNCHANGED",
-    "dependent_peer_exporter_readiness": "NOT_REQUIRED_AFTER_K1_SOURCE_EXCLUSION",
-    "independent_review": "NOT_PERFORMED_BY_AUTHOR",
-    "triple": "NO_SOURCE_QUALIFIED_TRIPLE_FOR_DD1_PLAN"
-  },
-  "declaration_commit": "abca64e2b4306993d82bf67fa6998891b12c7de6",
+  "date": "2026-09-16",
+  "authority_comment": 5701669070,
+  "actual_review": 5700827076,
+  "reviewed_predecessor": "aa3f18e9a6ad530aa48677e37a5835e8d786a998",
+  "declaration_commit": "5e6ea932dda12da92ef7cf6dc9212be3af6b599a",
+  "artifact_commit": "a18748752ce19332d06445738bdb5bbcb4681f45",
+  "artifact_tree": "9cdefd50758767550ec8fb0ca0798a56bea00489",
+  "tested_code_commit": "993a75314fd09ae996b357487e7387b3f8d18a98",
+  "prefix": "research/p9-six-route/dusk-design-1-20260916/source-qualification/",
+  "method": "Exact-commit GitHub contents descriptors and returned blob identities compared with all seven locally authored final source/evidence files. Full CORRECTION and corrected proof decision were read back. GitHub compare_commits independently checked the entire changed-path set. Matching local source was reproduced after publication. No remote execution, full checkout or native run is claimed.",
   "files": {
-    "CHECKS.json": {
-      "bytes": 7447,
-      "git_blob": "19754f7ce71ce0064b82f05d6b97f71a52c52db0",
-      "local_source_or_evidence_matches_remote": true,
-      "sha256": "f09ed69d99d8367cdd8f119a56c4aeecf633c60d908bd2af2f3e8ac96ed3e683"
-    },
-    "EXECUTION.json": {
-      "bytes": 4565,
-      "git_blob": "ff7e6db872cb923578e5c34e0d8166c2ca24c419",
-      "local_source_or_evidence_matches_remote": true,
-      "sha256": "23a9d853ea0d06492761a1f065e535a9a82608ee3126ea3795e6223f7f840b12"
-    },
-    "INPUTS.json": {
-      "bytes": 7504,
-      "git_blob": "b99d99ff2a85155f49108491391a332fc98bee54",
-      "readback": "Full exact-commit declaration read; equals pre-check publication blob."
-    },
-    "PROOF.md": {
-      "bytes": 32021,
-      "git_blob": "0dafd7f392afb035a3e62963a4fd6e9f650543e7",
-      "local_source_or_evidence_matches_remote": true,
-      "sha256": "ec3522cf9b97f388d33aceb67a47fb9fdd9de0474b9565996b7d02b9c4c4fe56"
-    },
-    "check_roles.py": {
-      "bytes": 12040,
-      "git_blob": "c21a0b83f719b9b867806521e8ba809c53ff44a5",
-      "local_source_or_evidence_matches_remote": true,
-      "sha256": "72528dc87fc4ec1fb804526b0cbf78b8ac62dc2feee7031124302b24926aed8c"
-    },
-    "role_model.py": {
-      "bytes": 8841,
-      "git_blob": "92c2568b5b8034204789322a3b4bd44aef57f047",
-      "local_source_or_evidence_matches_remote": true,
-      "sha256": "c2f751d6d36ddf725c2a1735a0eea436b8a2a20081a24ee11188088b559cc9a4"
-    }
+    "INPUTS.json": {"bytes": 7504, "git_blob": "b99d99ff2a85155f49108491391a332fc98bee54", "unchanged_original_declaration": true},
+    "CORRECTION.json": {"bytes": 5500, "git_blob": "9ab5bd1fedaf4bab9b6c0902d628b6a0dcbd0e2c", "full_exact_content_readback": true, "declared_before_new_checks": true},
+    "PROOF.md": {"bytes": 33841, "git_blob": "31df434a6a195248d050205ed3f5da5fdb18423f", "sha256": "65f7867a3d3b26b4f7a0a8fb6a8bbd57712fd31f63ebafcee4e16981daf7104b", "local_bytes_match_remote": true},
+    "NATIVE-HANDOFF.md": {"bytes": 11148, "git_blob": "df007ee4a1032e57f3bcd90de98a6c0c1dca8fe2", "sha256": "86c7505de8f50a876882f6d196b51e0688c2cc69cc206bcba3e4b46d379e3fda", "local_bytes_match_remote": true},
+    "role_model.py": {"bytes": 8256, "git_blob": "d24b70d45d7551c5b189554411eb49a6232f3814", "sha256": "1fb40db82b65615f24c62f34a08931035ec7342262071db40cb52ae25f3ff3dc", "local_bytes_match_remote": true},
+    "corrective_model.py": {"bytes": 4632, "git_blob": "dda8a73183e2e1a2fe6def133e8b3f98e02982fa", "sha256": "5a2eb197c8e78a61770df3367eab72fcb94dda69d984d535c7a7cc0f92bd1ffb", "local_bytes_match_remote": true},
+    "check_roles.py": {"bytes": 16214, "git_blob": "9a78f528669534d4f9a298d09cba5bf994028896", "sha256": "e005bf733449237c952b820e5cec10096a6645ccf7652191bce3fc9c9ede06a3", "local_bytes_match_remote": true},
+    "CHECKS.json": {"bytes": 17673, "git_blob": "a7fe41d0634e16573a6c0814cac6e7e04902645d", "sha256": "b91979540c5d6644f634858ac8ea3a87ab47dbb906bca8f904baaafafef95293", "local_bytes_match_remote": true},
+    "EXECUTION.json": {"bytes": 6738, "git_blob": "b3e364105746cc797975e53c5a97a41235535e53", "sha256": "88dff94ccd562515641fa2c64c00aa254b0e185baf3dd228428f020b7549c9b5", "local_bytes_match_remote": true}
   },
-  "kind": "AUTHOR_PUBLICATION_READBACK_NOT_REVIEW",
-  "main_at_completion": "07b5aa9dec8436132a524511d5438c510e322070",
-  "method": "Exact-commit GitHub contents descriptors for all six files, full declaration and proof decision content readback, local Git blob and byte length comparison for all five subsequently authored files. GitHub compare_commits separately verified the complete changed-path set. No remote execution or full local checkout claim.",
-  "next": "One fresh exact-artifact review of the new semantic decision. Not DD1/#547 re-review. No native authority granted.",
-  "post_publication_local_reproduction": {
+  "post_publication_reproduction": {
     "command": "python check_roles.py",
     "exit": 0,
-    "named_checks": 34,
-    "q1_cells": 1024,
-    "q2_component_cells": 768,
-    "q2_contexts": 192,
     "stderr": "",
-    "stdout_matches_remote_CHECKS_blob": true
+    "stdout_byte_identical_to_published_CHECKS": true,
+    "named_checks": 36,
+    "q1_contexts": 1024,
+    "component_cells": 4096,
+    "peer_pairings": 9,
+    "failed_unmodified_checks": 0,
+    "actual_mutants_rejected": 10,
+    "mutant_evidence": "Complete failure lists and stdout digests at artifact EXECUTION.json; all executed against final code. No old K2 or DD1 standalone suite was rerun.",
+    "expanded_trace": "All 4096 constructed cell traces reproduced from the generator; complete result rows are losslessly stored in CHECKS. Expanded local trace is not claimed uploaded or native."
   },
-  "prefix": "research/p9-six-route/dusk-design-1-20260916/source-qualification/",
-  "receipt_boundary": "This receipt covers the six-file source/proof commit. Its own availability and the subsequent mutable capsule are read back in the final #156 handoff; no circular self-hash.",
-  "repository": "fol2/glassvow",
-  "schema": "DD1-SOURCE-1-REMOTE-READBACK-1",
-  "scope_comparison": {
-    "accepted_DD1_original_files_changed": false,
-    "ahead_by": 6,
-    "all_changes_under_owned_prefix": true,
+  "capture_repair": {
+    "finding": "Preconsumer producer-zone snapshots retained mutable list references.",
+    "repair_commit": "7321a1fae30daacf1b3adb032d85e40f97ee0ed1",
+    "regression_commit": "993a75314fd09ae996b357487e7387b3f8d18a98",
+    "resolved_before_final_results": true,
+    "declared_law_or_parameters_changed": false,
+    "earlier_execution_only_save": "37d62bc8f30e84c84d0652e9ff8b02af8f89f7ae is historical, not the final execution receipt."
+  },
+  "scope_compare": {
+    "base": "aa3f18e9a6ad530aa48677e37a5835e8d786a998",
+    "head": "a18748752ce19332d06445738bdb5bbcb4681f45",
+    "status": "ahead",
+    "ahead_by": 12,
     "behind_by": 0,
-    "bound_547_changed": false,
-    "existing_files_changed": 0,
-    "files_added": 6,
-    "historical_results_or_accounts_changed": false,
-    "production_changed": false,
-    "status": "ahead"
-  }
+    "changed_paths": ["CHECKS.json", "CORRECTION.json", "EXECUTION.json", "NATIVE-HANDOFF.md", "PROOF.md", "check_roles.py", "corrective_model.py", "role_model.py"],
+    "all_under_owned_prefix": true,
+    "original_INPUTS_changed": false,
+    "accepted_DD1_original_files_changed": false,
+    "bound_H_changed": false,
+    "SESSION_STATE_or_allocation_changed": false,
+    "historical_results_or_empirical_accounts_changed": false,
+    "production_changed": false
+  },
+  "decisions": {
+    "old_K1_exclusion_and_no_go": "WITHDRAWN_PER_ACTUAL_REVIEW",
+    "K1": "NEW_AUTHOR_SOURCE_ROLE_ELIGIBLE_PENDING_NATIVE_QUALIFICATION; CORRECTED_HEAD_REVIEW_REQUIRED",
+    "K2": "INDEPENDENTLY_ACCEPTED_SOURCE_ROLE_ELIGIBILITY_PRESERVED",
+    "DD1": "ACCEPTED_DESIGN_UNCHANGED",
+    "same_product": "THREE_ROLE_SOURCE_PLAN_RETAINED_FOR_CONDITIONAL_NATIVE_QUALIFICATION",
+    "source_follow_through": "COMPLETE_AT_DECLARED_SCOPE",
+    "native_or_certificate": false,
+    "certificates": "0/3"
+  },
+  "main_readback": "07b5aa9dec8436132a524511d5438c510e322070",
+  "bound_H": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+  "accounts": {"native_calls": 0, "new_game_outcomes": 0, "empirical_spend": 0, "replacement_topologies": 0, "policy_fits": 0, "candidate_freezes": 0, "production_changes": 0},
+  "next": "Fresh isolated exact-artifact review of the corrected semantic delta. Native implementation/qualification requires separately recorded applicable authority and stage/account prerequisites; no self-approval.",
+  "receipt_boundary": "Covers the nine-file source/proof package at artifact_commit. This receipt and the subsequent mutable capsule are publication metadata, verified by the final #156 handoff without a circular self-hash. The old receipt remains preserved at the reviewed predecessor."
 }
