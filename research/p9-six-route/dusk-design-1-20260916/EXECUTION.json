@@ -1,0 +1,129 @@
+{
+  "checks": 40,
+  "command": [
+    "python",
+    "check_crosscut.py"
+  ],
+  "compilation_exit": 0,
+  "empirical_spend": 0,
+  "exit": 0,
+  "files": {
+    "CHECKS.json": {
+      "bytes": 11697,
+      "git_blob": "fa7a08b50c3d27ec3b808908de70a30308b3e3a6",
+      "sha256": "fadd0da8eb5f357109b182380a7d13ce2aadf1d70a88abe868bbb22ee0f2759f"
+    },
+    "check_crosscut.py": {
+      "bytes": 9677,
+      "git_blob": "f68b9c1e12ae914367325d6be07de1d5c8b924a0",
+      "sha256": "3071d39adfca0433101371ec567ce937adb7b9775359506ff7be3c63e355a4ce"
+    },
+    "crosscut_model.py": {
+      "bytes": 7709,
+      "git_blob": "5f742741d5906f1f1caaeb65bf2f905505d166b9",
+      "sha256": "57188dd6fd84caac18aed8a638fba3537082601e4a1cfe493daa3d6a869ca993"
+    }
+  },
+  "finite_states": 216,
+  "mutations": [
+    {
+      "command": [
+        "python",
+        "check_crosscut.py",
+        "--mutant",
+        "copy-alias"
+      ],
+      "decision": "PROJECTION_CONTRACT_VIOLATION",
+      "exit": 2,
+      "failures": [
+        "cross-combat-same-name-is-not-same-object"
+      ],
+      "mutation": "copy-alias",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "check_crosscut.py",
+        "--mutant",
+        "ignore-thorns"
+      ],
+      "decision": "PROJECTION_CONTRACT_VIOLATION",
+      "exit": 2,
+      "failures": [
+        "first-hit-lethal-thorns-suppresses-return"
+      ],
+      "mutation": "ignore-thorns",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "check_crosscut.py",
+        "--mutant",
+        "same-target"
+      ],
+      "decision": "PROJECTION_CONTRACT_VIOLATION",
+      "exit": 2,
+      "failures": [
+        "same-target-spends-without-return",
+        "single-enemy-no-package-payoff",
+        "finite-domain-return-law"
+      ],
+      "mutation": "same-target",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "check_crosscut.py",
+        "--mutant",
+        "retain-on-consume"
+      ],
+      "decision": "PROJECTION_CONTRACT_VIOLATION",
+      "exit": 2,
+      "failures": [
+        "consume-once",
+        "second-copy-cannot-reuse-anchor",
+        "same-target-spends-without-return"
+      ],
+      "mutation": "retain-on-consume",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "check_crosscut.py",
+        "--mutant",
+        "eager-settlement"
+      ],
+      "decision": "PROJECTION_CONTRACT_VIOLATION",
+      "exit": 2,
+      "failures": [
+        "deferred-chips-return-precedes-bell"
+      ],
+      "mutation": "eager-settlement",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "check_crosscut.py",
+        "--mutant",
+        "sticky-reset"
+      ],
+      "decision": "PROJECTION_CONTRACT_VIOLATION",
+      "exit": 2,
+      "failures": [
+        "end-turn-expiry"
+      ],
+      "mutation": "sticky-reset",
+      "stderr": ""
+    }
+  ],
+  "native_calls": 0,
+  "python": "3.13.5",
+  "repeat_byte_identical": true,
+  "schema": "DD1-X-EXECUTION-1",
+  "scope": "Constructed non-native transition checks only; no population, save-execution or native-law certification."
+}
