@@ -19,6 +19,8 @@ var rarity_shift: float = 0.0
 var rarity_uncommon_only: bool = false
 var gold_vow_mult: float = 1.0
 var elite_relic_second: float = 0.0
+## Prospective Dusk-only Crosscut pair. Filter both insertion paths.
+const DUSK_ONLY_CARD_IDS: Array[String] = ["setTheAngle", "crosscut"]
 
 
 func _init(content_db: ContentDB) -> void:
@@ -44,14 +46,23 @@ func card_pool(run: RunState, tier: String) -> Array:
 		var id: String = str(id_v)
 		if not _pool_open(run, content.pool_gate_cards, id):
 			continue
+		if not _dusk_pool_ok(run, id):
+			continue
 		out.append(id)
 	for unlock_v: Variant in run.unlocks:
 		var unlock: String = str(unlock_v)
 		if unlock.begins_with("card:"):
 			var id: String = unlock.trim_prefix("card:")
 			if content.cards.has(id) and content.cards[id].get("rarity") == tier and not out.has(id):
-				out.append(id)
+				if _dusk_pool_ok(run, id):
+					out.append(id)
 	return out
+
+
+static func _dusk_pool_ok(run: RunState, id: String) -> bool:
+	if not DUSK_ONLY_CARD_IDS.has(id):
+		return true
+	return run.aspect == 0
 
 
 func relic_pool(run: RunState, tier: String) -> Array:

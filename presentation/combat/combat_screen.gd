@@ -3104,6 +3104,7 @@ func _sync_actors(reap: bool = false) -> void:
 			move_name = str(mv.get("name", String(e.move_key)))
 			dmg_text = _fmt_enemy_dmg(_rules.preview_enemy_dmg(cb, e, game.run))
 		view.sync(e, dmg_text, intent, move_name, game.content.statuses, reap)
+		view.set_crosscut_anchor(cb.crosscut_anchor == e)
 
 
 func _sync_all() -> void:
@@ -3461,6 +3462,7 @@ func _update_previews() -> void:
 	if _hero != null:
 		_hero.set_targetable(inspect and target == "self")
 
+	var return_preview: Variant = null
 	for view: EnemyView in _enemy_views:
 		var i: int = view.idx
 		if i >= game.cb.enemies.size():
@@ -3499,6 +3501,16 @@ func _update_previews() -> void:
 		var will_shatter: bool = pv.get("willShatter", false)
 		view.set_preview(loss, lethal and not dim)
 		view.set_facet_ghost(0 if dim else chips, will_shatter and not dim)
+		if not dim and pv.has("return"):
+			return_preview = pv["return"]
+	if typeof(return_preview) == TYPE_DICTIONARY:
+		var ret_pv: Dictionary = return_preview
+		var ret_idx: int = ret_pv.get("idx", -1)
+		var ret_loss: int = ret_pv.get("loss", 0)
+		var ret_lethal: bool = ret_pv.get("lethal", false)
+		var ret_view: EnemyView = _enemy_view(ret_idx)
+		if ret_view != null:
+			ret_view.set_preview(ret_loss, ret_lethal)
 
 
 func _clear_previews() -> void:

@@ -1,0 +1,96 @@
+M origin/main 07b5aa9dec8436132a524511d5438c510e322070
+D 746388323b8e886967e0e13fe109490a70206a66
+C cf27285a3103d8867a179f700c5ebf32661453d5
+H 5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6
+research/p9-six-route-local-20260905 cf27285a3103d8867a179f700c5ebf32661453d5
+PROMOTION.md blob ba9fc8004f385958b064598b6fa54dc9634cf577
+NATIVE-HANDOFF.md blob df007ee4a1032e57f3bcd90de98a6c0c1dca8fe2
+H CONTRACT.md blob 265f2e7b696896659b0352e2bc69b31d5d938991
+H SPECIFICATION.md blob 45ca750e193fe114bb528f517088e21bbbcde908
+H ADAPTER_RECORDS.md blob ba53bce69de7667ac62038026eb29474c5567460
+H ALLOCATION.json blob 824ff18acbca2f776533beed83a43b21d9a50f2c
+H reference_kernel.py blob ee091fb503849117358b3691264fca71803f8bbc
+PROMOTION D vs expected: empty
+NATIVE-HANDOFF C vs expected: empty
+H prefix vs research tip: empty for CONTRACT/SPECIFICATION/ADAPTER_RECORDS/ALLOCATION/reference_kernel
+--- ALLOCATION bytes ---
+{
+  "schema": "D547-PC1-ALLOCATION-1",
+  "epoch": "D547-PC1-20260914",
+  "status": "OWNER_AUTHORISED_DESIGN_NOT_BOUND",
+  "owner_authority": {
+    "decision_packet": "https://github.com/fol2/glassvow/issues/421#issuecomment-5663572978",
+    "activation": "Explicit option-A authorisation in the current owner/planner conversation on 2026-09-14; publish provenance with the batch."
+  },
+  "binding_receipt": null,
+  "independent_review": null,
+  "candidate": null,
+  "historical_accounts": {
+    "status": "UNKNOWN_WHERE_UNRECOVERED",
+    "spent": null,
+    "remaining": null,
+    "rule": "Retain all known historical ledgers; no inferred zero, exhaustion, credit or reset."
+  },
+  "candidate_attempts": {
+    "maximum": 1,
+    "used": 0,
+    "consume_at": "first new candidate-native invocation"
+  },
+  "alpha": {
+    "total_new_cap": 0.05,
+    "542": {
+      "cap": 0.025,
+      "committed": 0,
+      "status": "NOT_COMMITTED"
+    },
+    "548": {
+      "reserved": 0.025,
+      "spendable": 0,
+      "status": "REQUIRES_SEPARATE_548_PROTOCOL"
+    },
+    "interval_slots_542": 256,
+    "occupied_slots_542": 204,
+    "sealed_unused_slots_542": 52,
+    "refund_or_transfer_allowed": false
+  },
+  "native_starts": {
+    "preflight": {
+      "cap": 8192,
+      "used": 0
+    },
+    "development": {
+      "cap": 8192,
+      "used": 0
+    },
+    "confirmation": {
+      "cap": 40960,
+      "used": 0
+    },
+    "counterfactual": {
+      "cap": 24576,
+      "used": 0
+    }
+  },
+  "limits": {
+    "total_native_starts": 81920,
+    "cpu_seconds": 230400,
+    "active_elapsed_seconds": 172800,
+    "raw_emitted_bytes_cumulative": 68719476736,
+    "concurrent_native_executors": 2,
+    "per_invocation_cpu_seconds": 300,
+    "forward_transition_evaluations_per_policy_decision": 128
+  },
+  "usage": {
+    "cpu_seconds": 0,
+    "active_elapsed_seconds": 0,
+    "raw_emitted_bytes_cumulative": 0
+  },
+  "sample_sizes": {
+    "factual_per_arm_panel_vow": 2048,
+    "measurement_roots_per_stratum": 256
+  },
+  "effective_seed_mapping": "seed & 0xFFFFFFFF",
+  "exposure_frame_manifest": null,
+  "event_log": [],
+  "new_game_outcomes_in_this_planner_pass": 0
+}

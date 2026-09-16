@@ -1,0 +1,111 @@
+{
+  "schema": "DD1-NATIVE-1-CANDIDATE_PREFLIGHT-1",
+  "status": "FROZEN_BEFORE_FIRST_CANDIDATE_NATIVE_INVOCATION",
+  "frozen_at_utc": "2026-09-16T21:30:00Z",
+  "activation": {
+    "issue": 421,
+    "prepared_comment_id": 5704445133,
+    "author_activation_comment_id": 5704631815,
+    "authority": "existing H preflight only; no development/confirmation/merge/release"
+  },
+  "identities": {
+    "M": "07b5aa9dec8436132a524511d5438c510e322070",
+    "D": "746388323b8e886967e0e13fe109490a70206a66",
+    "C": "cf27285a3103d8867a179f700c5ebf32661453d5",
+    "H": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+    "PROMOTION_blob": "ba9fc8004f385958b064598b6fa54dc9634cf577",
+    "NATIVE_HANDOFF_blob": "df007ee4a1032e57f3bcd90de98a6c0c1dca8fe2",
+    "ALLOCATION_template_blob": "824ff18acbca2f776533beed83a43b21d9a50f2c"
+  },
+  "product_overlay": {
+    "base": "07b5aa9dec8436132a524511d5438c510e322070",
+    "roles": {
+      "K1": {
+        "producer": "shipping chisel",
+        "mediator": "coupled target threshold / Stun / Cracked",
+        "consumer": "shipping resonantLance",
+        "law_change": "none"
+      },
+      "K2": {
+        "producer": "shipping empower",
+        "mediator": "additive persistent player Strength",
+        "consumer": "THREE-hit shipping flurry",
+        "law_change": "none"
+      },
+      "K3_DD1": {
+        "producer": "setTheAngle",
+        "mediator": "nullable CombatState.crosscut_anchor",
+        "consumer": "crosscut",
+        "law": "accepted D PROMOTION / C NATIVE-HANDOFF"
+      }
+    },
+    "no_extra_ordinary_damage_beside_crosscut_special": true,
+    "no_new_save_field": true,
+    "dusk_only_pool_filter_both_paths": [
+      "card_pool base",
+      "card_pool unlocks"
+    ]
+  },
+  "profile_prerequisite_first_valid_witness": {
+    "vows": [
+      0,
+      5
+    ],
+    "status": "NOT_RUN_AT_FREEZE",
+    "note": "Legitimate Dusk-earned P_v witnesses require remaining preflight capacity and entry authority. Constructed test hands are not those witnesses."
+  },
+  "roster_command_policy": {
+    "status": "NOT_OPENED",
+    "note": "No development panel, no policy fitting, no confirmation freeze."
+  },
+  "intervention_and_null_table": {
+    "K1_P_off": "Strike vs Chisel: printed extra chip removed; ordinary hit/implicit chip/cost retained",
+    "K1_C_off": "ordinary attack / Eclipse Slash vs Resonant Lance: echo multiplier removed; Cracked scaling/hit/lifecycle retained",
+    "K1_guard": "staggered OR vulnerable>0; separately observable staggered-only and cracked-only",
+    "DD1_P_off": "consumer without producer: primary only",
+    "DD1_C_off": "producer without consumer: mark unused, expires before enemy phase",
+    "DD1_same_target": "consume without return",
+    "DD1_other_aspect": "Ash return null; Strength/echo not claimed absent on Ash",
+    "illegal": "missing UID / dead / OOR / insufficient energy do not clear mark"
+  },
+  "required_assertions": {
+    "authority": [
+      "PROMOTION.md §1 §3",
+      "NATIVE-HANDOFF.md",
+      "H ADAPTER_RECORDS D547-NATIVE-EXPORT-2"
+    ],
+    "drive": "GlassvowGame.apply / CombatRules.play_card / preview_play / card_pool / RunState v2 save"
+  },
+  "allowed_input_exposure_namespace": {
+    "constructed_native_states": "authorised for component/refinement tests only",
+    "protected_raw": "not accessed",
+    "historical_UNKNOWN": "retained, not credited",
+    "python_grid_CHECKS_json": "not a native observation"
+  },
+  "debit_and_stop": {
+    "account": "H preflight native_starts cap 8192 less actual applicable debits",
+    "candidate_attempts": {
+      "maximum": 1,
+      "consume_at": "first new candidate-native invocation"
+    },
+    "no_borrow": [
+      "development",
+      "confirmation",
+      "counterfactual",
+      "#548"
+    ],
+    "stop_on": [
+      "genuine failed law/guard",
+      "missing authority/exposure",
+      "cannot fit remaining cap"
+    ],
+    "epoch_ceilings": {
+      "cpu_hours": 64,
+      "active_elapsed_hours": 48,
+      "raw_gib": 64,
+      "executors": 2,
+      "per_invocation_cpu_seconds": 300
+    }
+  },
+  "ALLOCATION_template": "immutable zero-spend bytes; runtime events go to EVENT_LEDGER.json"
+}

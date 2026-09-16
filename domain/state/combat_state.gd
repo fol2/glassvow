@@ -32,6 +32,13 @@ var hp_lost: int = 0
 var prism_procd: bool = false
 ## True when the Eternal Keeper's lethal threshold handed the fight to #312.
 var finale_handoff: bool = false
+## Live Crosscut mark: the identical enemy object in this combat, or null.
+## Fight-local only. Never saved.
+var crosscut_anchor: EnemyCombatant = null
+
+
+func has_live_crosscut_anchor() -> bool:
+	return crosscut_anchor != null and crosscut_anchor.hp > 0 and enemies.has(crosscut_anchor)
 
 
 func living_enemies() -> Array[EnemyCombatant]:

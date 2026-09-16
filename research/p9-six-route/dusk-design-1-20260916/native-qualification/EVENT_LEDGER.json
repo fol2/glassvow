@@ -1,0 +1,56 @@
+{
+  "schema": "DD1-NATIVE-1-EVENT-LEDGER-1",
+  "ALLOCATION_template_untouched": "824ff18acbca2f776533beed83a43b21d9a50f2c",
+  "candidate_attempts": {
+    "maximum": 1,
+    "used": 1,
+    "consume_at": "first new candidate-native invocation"
+  },
+  "preflight_native_starts": {
+    "cap": 8192,
+    "used": 90,
+    "remaining": 8102
+  },
+  "epoch_usage": {
+    "cpu_seconds_estimated": 30,
+    "active_elapsed_seconds_estimated": 90,
+    "raw_emitted_bytes_cumulative": 0,
+    "executors": 1,
+    "per_invocation_cpu_seconds_max_observed": 15
+  },
+  "events": [
+    {
+      "id": "DD1-N0-INV-1",
+      "kind": "candidate_native_invocation",
+      "consumes_candidate_attempt": true,
+      "native_starts": 30,
+      "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_overlay.gd",
+      "result": "FAIL fixture HP too low for cracked-only Lance survival; law 21 damage held; not a failed declared law",
+      "log": "native-tests-0-fixture-hp.log"
+    },
+    {
+      "id": "DD1-N0-INV-2",
+      "kind": "preflight_native_starts",
+      "native_starts": 30,
+      "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_overlay.gd",
+      "result": "PASS (1 tests), native_starts=30",
+      "log": "native-tests-1.log"
+    },
+    {
+      "id": "DD1-N0-INV-3",
+      "kind": "preflight_native_starts",
+      "native_starts": 30,
+      "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_overlay.gd",
+      "result": "PASS (1 tests), native_starts=30; identical to INV-2",
+      "log": "native-tests-2.log"
+    }
+  ],
+  "not_opened": [
+    "development",
+    "confirmation",
+    "counterfactual",
+    "policy_fitting",
+    "#548"
+  ],
+  "certificates": "0/3 Duskblade"
+}

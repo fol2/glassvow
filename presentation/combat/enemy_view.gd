@@ -411,6 +411,8 @@ var _max_hp: int = 1
 ## segment needs an integer, and the rail's value is a float mid-tween.
 var _hp: int = 0
 var _marked: bool = false
+var _crosscut_mark: Label = null
+var _crosscut_on: bool = false
 var _ward_mesh: MeshInstance3D = null
 var _ward_mat: ShaderMaterial = null
 ## `wardOn` / `wardGrow` / `wardSiteF` — whether the shell is wanted, how much of
@@ -4414,6 +4416,18 @@ func _build_chrome(display_name: String) -> void:
 	_statuses = StatusRow.new()
 	_crown.add_child(_statuses)
 
+	if not is_hero:
+		_crosscut_mark = Label.new()
+		_crosscut_mark.visible = false
+		_crosscut_mark.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_crosscut_mark.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
+		_crosscut_mark.add_theme_font_size_override("font_size", 11)
+		_crosscut_mark.add_theme_color_override("font_color", GlassStyle.GLASS)
+		_crosscut_mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_crosscut_mark.text = Locale.active.t("ui.combat.crosscutMark")
+		_crosscut_mark.tooltip_text = Locale.active.t("ui.combat.crosscutMarkHint")
+		_crown.add_child(_crosscut_mark)
+
 	# ---- foot plate: name (foes only), ward + HP vial, facets (foes only).
 	# Anchored BELOW the feet.
 	_plate = VBoxContainer.new()
@@ -5028,6 +5042,16 @@ func intent_anchor() -> Control:
 
 func set_statuses(statuses: Dictionary, infos: Dictionary = {}) -> void:
 	_statuses.sync(statuses, infos)
+
+
+func set_crosscut_anchor(on: bool) -> void:
+	_crosscut_on = on
+	if _crosscut_mark == null:
+		return
+	_crosscut_mark.visible = on
+	if on:
+		_crosscut_mark.text = Locale.active.t("ui.combat.crosscutMark")
+		_crosscut_mark.tooltip_text = Locale.active.t("ui.combat.crosscutMarkHint")
 
 
 ## Which piece of this actor's chrome the pointer is over, as `[zone, id]`.

@@ -23,6 +23,8 @@
       "ashesSub": "Burned away — each fed the lantern an ember",
       "ashesTitle": "The Ashes",
       "buff": "Buff",
+      "crosscutMark": "MARKED",
+      "crosscutMarkHint": "Crosscut can return here this turn.",
       "debuff": "Debuff",
       "discard": "DISCARD",
       "discardPileAria": "Discard pile",
@@ -869,6 +871,11 @@
         "text": "Snuff an enemy's fire: it loses 2 Fervor. Kindle.",
         "textUp": "Snuff an enemy's fire: it loses 3 Fervor. Kindle."
       },
+      "crosscut": {
+        "name": "Crosscut",
+        "text": "Deal @5@ damage. If you marked a different living enemy this turn, deal @5@ damage to it too. Same-target spends the mark without a return.",
+        "textUp": "Deal @7@ damage. If you marked a different living enemy this turn, deal @7@ damage to it too. Same-target spends the mark without a return."
+      },
       "defend": {
         "name": "Ward",
         "text": "Gain #5# Ward.",
@@ -1020,6 +1027,11 @@
         "name": "Resonant Lance",
         "text": "Deal @7@ damage. Deals double to Staggered or Cracked glass.",
         "textUp": "Deal @10@ damage. Deals double to Staggered or Cracked glass."
+      },
+      "setTheAngle": {
+        "name": "Set the Angle",
+        "text": "Gain #4# Ward. Mark that enemy until this turn ends. Crosscut can return to it.",
+        "textUp": "Gain #6# Ward. Mark that enemy until this turn ends. Crosscut can return to it."
       },
       "shardstorm": {
         "name": "Shardstorm",

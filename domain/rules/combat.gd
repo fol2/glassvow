@@ -16,6 +16,7 @@ var quests: QuestRules
 const SPECIAL_IDS: Array[String] = [
 	"leech", "execute", "momentum", "doubleBlock", "phantom", "devour",
 	"pyreTithe", "catalyst", "shatterEcho", "flawless", "emberNova", "emberdance",
+	"crosscutAnchor", "crosscutReturn",
 ]
 const POTION_IDS: Array[String] = [
 	"healing", "strength", "swift", "block", "fire", "venom", "energy",
@@ -492,12 +493,14 @@ func lose_combat(run: RunState, cb: CombatState) -> void:
 	cb.result = "loss"
 	cb.player.hp = 0
 	run.player.hp = 0
+	_clear_crosscut_anchor(cb)
 	cb.queue.append({"t": EventTypes.DEFEAT})
 
 
 func _win_combat(run: RunState, cb: CombatState) -> void:
 	cb.over = true
 	cb.result = "win"
+	_clear_crosscut_anchor(cb)
 	quests.on_combat_win(run, cb)
 	run.player.hp = clampi(cb.player.hp, 1, run.player.max_hp)
 	if run.has_relic("emberHeart"):
@@ -597,11 +600,14 @@ func _is_finale_handoff(e: EnemyCombatant) -> bool:
 func _begin_finale_handoff(run: RunState, cb: CombatState, e: EnemyCombatant) -> void:
 	e.hp = 1
 	cb.finale_handoff = true
+	_clear_crosscut_anchor(cb)
 	cb.queue.append({"t": EventTypes.FINALE_HANDOFF, "idx": e.idx, "hpAfter": 1})
 	_win_combat(run, cb)
 
 
 func _on_enemy_death(run: RunState, cb: CombatState, e: EnemyCombatant) -> void:
+	if cb.crosscut_anchor == e:
+		_clear_crosscut_anchor(cb)
 	e.hp = 0
 	var smolder: int = _sget(e.statuses, "poison")  # capture before the vessel empties
 	e.statuses = {}
@@ -1005,8 +1011,44 @@ func _apply_special(
 				run.stats["embersSpent"] = _ji(run.stats.get("embersSpent", 0)) + spent
 				gain_embers(run, cb, -spent)
 				gain_block_player(cb, _ji(fx["n"]) * spent, false, run)
+		"crosscutAnchor":
+			if target != null and _crosscut_member_live(cb, target):
+				cb.crosscut_anchor = target
+		"crosscutReturn":
+			_apply_crosscut_return(run, cb, fx, target, damage_mult)
 		_:
 			push_error("CombatRules: unknown special %s" % sid)
+
+
+static func _clear_crosscut_anchor(cb: CombatState) -> void:
+	cb.crosscut_anchor = null
+
+
+static func _crosscut_member_live(cb: CombatState, e: EnemyCombatant) -> bool:
+	return e != null and not cb.over and e.hp > 0 and cb.enemies.has(e)
+
+
+func _apply_crosscut_return(
+	run: RunState,
+	cb: CombatState,
+	fx: Dictionary,
+	target: EnemyCombatant,
+	damage_mult: int
+) -> void:
+	var captured: EnemyCombatant = cb.crosscut_anchor
+	_clear_crosscut_anchor(cb)
+	var n: int = _ji(fx["n"])
+	if target != null:
+		hit_enemy(run, cb, target, n, true, damage_mult)
+	if cb.over:
+		return
+	if run.aspect != 0:
+		return
+	if not _crosscut_member_live(cb, captured):
+		return
+	if captured == target:
+		return
+	hit_enemy(run, cb, captured, n, true, damage_mult)
 
 
 # ---------------------------------------------------------------- end of turn
@@ -1041,6 +1083,9 @@ func end_turn(run: RunState, cb: CombatState) -> void:
 	# Player debuffs (and turn-scoped buffs) tick down at end of your turn.
 	for s: String in ["vulnerable", "weak", "frail", "beacon"]:
 		_tick_status(p.statuses, s)
+
+	# Crosscut mark expires before the enemy phase.
+	_clear_crosscut_anchor(cb)
 
 	# ---- enemy phase
 	for e: EnemyCombatant in cb.enemies:
@@ -1357,6 +1402,13 @@ func preview_play(
 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + inst.bonus), "times": 1})
 			elif sid == "doubleBlock":
 				block += p.block
+			elif sid == "shatterEcho":
+				var echo: int = 1
+				if target != null and (target.staggered or _sget(target.statuses, "vulnerable") > 0):
+					echo = 2
+				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) * echo), "times": 1})
+			elif sid == "crosscutReturn":
+				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"])), "times": 1})
 	var fx_chips: int = 0
 	for fx_v: Variant in effects:
 		var fx: Dictionary = fx_v
@@ -1394,7 +1446,7 @@ func preview_play(
 		if run != null and run.aspect != 0:
 			chips = 0
 		will_shatter = chips > 0 and target.chips + chips >= target.facet_max and not lethal
-	return {
+	var out: Dictionary = {
 		"hits": hits,
 		"total": total,
 		"loss": loss,
@@ -1402,6 +1454,47 @@ func preview_play(
 		"block": block,
 		"chips": chips,
 		"willShatter": will_shatter,
+	}
+	var ret_pv: Variant = _preview_crosscut_return(cb, inst, d, p, target, run)
+	if ret_pv != null:
+		out["return"] = ret_pv
+	return out
+
+
+func _preview_crosscut_return(
+	cb: CombatState,
+	inst: CardInst,
+	d: Dictionary,
+	p: PlayerCombatant,
+	selected: EnemyCombatant,
+	run: RunState
+) -> Variant:
+	if str(inst.id) != "crosscut":
+		return null
+	if run == null or run.aspect != 0:
+		return null
+	if selected == null or not cb.has_live_crosscut_anchor():
+		return null
+	var captured: EnemyCombatant = cb.crosscut_anchor
+	if captured == selected:
+		return null
+	var n: int = 0
+	for fx_v: Variant in d.get("effects", []):
+		var fx: Dictionary = fx_v
+		if str(fx.get("kind", "")) == "special" and str(fx.get("id", "")) == "crosscutReturn":
+			n = _ji(fx["n"])
+			break
+	if n <= 0:
+		return null
+	var dmg: int = _preview_hit(p, captured, n)
+	var soak: int = mini(captured.block, dmg)
+	var ret_loss: int = dmg - soak
+	return {
+		"idx": captured.idx,
+		"hits": [{"dmg": dmg, "times": 1}],
+		"total": dmg,
+		"loss": ret_loss,
+		"lethal": ret_loss >= captured.hp,
 	}
 
 
