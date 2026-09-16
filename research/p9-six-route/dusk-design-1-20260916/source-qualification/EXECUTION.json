@@ -1,167 +1,201 @@
 {
-  "certificate": false,
-  "compilation": "Both Python files compiled with built-in compile; no generated files or native tool invoked.",
-  "declaration_commit": "abca64e2b4306993d82bf67fa6998891b12c7de6",
-  "empirical_spend": 0,
+  "K2_reuse": "Accepted by review 5700827076 at aa3f18e9; original standalone suite not rerun. Retained model classes/functions are AST-identical. New mixed-peer probes are not new K2 admission.",
+  "accounts": {
+    "empirical_spend": 0,
+    "native_calls": 0,
+    "native_freeze": 0,
+    "new_game_outcomes": 0,
+    "policy_fit": 0,
+    "replacement_topologies": 0
+  },
+  "commands": [
+    {
+      "command": "in-memory compile() of three Python files",
+      "exit": 0
+    },
+    {
+      "command": "python check_roles.py",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "command": "python check_roles.py --export-cells expanded-cells.jsonl",
+      "exit": 0,
+      "stderr": "",
+      "stdout_byte_identical": true
+    }
+  ],
+  "declaration_commit": "5e6ea932dda12da92ef7cf6dc9212be3af6b599a",
+  "expanded_trace": {
+    "bytes": 1489968,
+    "reconstruction_verified": true,
+    "remote_evidence": "Lossless 1024 four-cell result rows in CHECKS.json plus complete deterministic generator; expanded trace is reconstructible, not claimed uploaded or native.",
+    "rows": 4096,
+    "sha256": "2327afd22c9abbf9eca2fd354d698df794ddd39ec8d9ed8b2f3432c998e946ef"
+  },
   "files": {
     "CHECKS.json": {
-      "bytes": 7447,
-      "git_blob": "19754f7ce71ce0064b82f05d6b97f71a52c52db0",
-      "sha256": "f09ed69d99d8367cdd8f119a56c4aeecf633c60d908bd2af2f3e8ac96ed3e683"
-    },
-    "PROOF.md": {
-      "bytes": 32021,
-      "git_blob": "0dafd7f392afb035a3e62963a4fd6e9f650543e7",
-      "sha256": "ec3522cf9b97f388d33aceb67a47fb9fdd9de0474b9565996b7d02b9c4c4fe56"
+      "bytes": 17242,
+      "git_blob": "6cfa3008f11d4b67b3b194c82115d12e83316b6d",
+      "sha256": "325bc52013b0eca87fd0353c378d8bfc7c6183b9bdb59173c6505fd78b3460d2"
     },
     "check_roles.py": {
-      "bytes": 12040,
-      "git_blob": "c21a0b83f719b9b867806521e8ba809c53ff44a5",
-      "sha256": "72528dc87fc4ec1fb804526b0cbf78b8ac62dc2feee7031124302b24926aed8c"
+      "bytes": 15948,
+      "git_blob": "5c2a89a379a1fc054bcfb5a5ff13a301878fc44b",
+      "sha256": "2e67d125000c35ff1724396c5ef424e11df9ec75d998ce14970ed42d05ecca35"
+    },
+    "corrective_model.py": {
+      "bytes": 4622,
+      "git_blob": "29d861ad8ed8b41c3d4471bf0e59b4aa4c3e9c92",
+      "sha256": "517666ee9cef40466a6932fde99e9901782cc8aec2b480c44740800faa99134c"
     },
     "role_model.py": {
-      "bytes": 8841,
-      "git_blob": "92c2568b5b8034204789322a3b4bd44aef57f047",
-      "sha256": "c2f751d6d36ddf725c2a1735a0eea436b8a2a20081a24ee11188088b559cc9a4"
+      "bytes": 8256,
+      "git_blob": "d24b70d45d7551c5b189554411eb49a6232f3814",
+      "sha256": "1fb40db82b65615f24c62f34a08931035ec7342262071db40cb52ae25f3ff3dc"
     }
   },
   "kind": "AUTHOR_NON_NATIVE_EXECUTION_NOT_REVIEW",
-  "native_calls": 0,
-  "new_game_outcomes": 0,
-  "python": "3.13.5",
-  "repeat_stdout_equal": true,
-  "runs": [
+  "mutants": [
     {
-      "command": [
-        "python",
-        "check_roles.py"
-      ],
-      "exit": 0,
-      "failures": [],
-      "stderr": "",
-      "stdout_sha256": "f09ed69d99d8367cdd8f119a56c4aeecf633c60d908bd2af2f3e8ac96ed3e683"
-    },
-    {
-      "command": [
-        "python",
-        "check_roles.py"
-      ],
-      "exit": 0,
-      "failures": [],
-      "stderr": "",
-      "stdout_sha256": "f09ed69d99d8367cdd8f119a56c4aeecf633c60d908bd2af2f3e8ac96ed3e683"
-    },
-    {
-      "command": [
-        "python",
-        "check_roles.py",
-        "--mutant",
-        "drop-stun"
-      ],
       "exit": 2,
-      "failures": [
-        "Q1-bidirectional-projection-equality",
-        "Q1-coupled-Stun-and-Cracked"
+      "failed": [
+        "K1-source-threshold-predictions",
+        "K1-source-consumer-predictions",
+        "K1-nonredundant-producer-and-reader",
+        "missing-consumer-preserves-producer-not-complete-chain",
+        "K1-joint-mediator-intervention-not-gameplay",
+        "K1-versus-complete-direct-Cracked-producer",
+        "disabled-echo-is-not-whole-command-zero",
+        "Adamant-is-not-real-Shatter",
+        "coupled-skip-and-decay-not-Boolean-echo-quotient",
+        "partial-Facet-remainder-cannot-be-erased",
+        "peer-target-binding-patterns",
+        "same-product-mixed-chains-not-one-hot"
       ],
+      "name": "drop-printed-chip",
       "stderr": "",
-      "stdout_sha256": "d569a1fdb6eedb4ac4e661ec405734128fc2964ce585f86015e96266e39cd87b"
+      "stdout_sha256": "7ebcf244b5541b570245fa17bc8663a028c02750b306dd538d3487c6f4a59b86"
     },
     {
-      "command": [
-        "python",
-        "check_roles.py",
-        "--mutant",
-        "wrong-target"
-      ],
       "exit": 2,
-      "failures": [
-        "Q1-bidirectional-projection-equality",
-        "Q1-target-equality-is-material"
+      "failed": [
+        "K1-source-threshold-predictions",
+        "missing-consumer-preserves-producer-not-complete-chain",
+        "K1-versus-complete-direct-Cracked-producer",
+        "coupled-skip-and-decay-not-Boolean-echo-quotient",
+        "partial-Facet-remainder-cannot-be-erased"
       ],
+      "name": "drop-stun",
       "stderr": "",
-      "stdout_sha256": "227b4ef650e9ba2020bc83040b8d407c761597575249fc6d1bcafde19d730c17"
+      "stdout_sha256": "bbacd67d05b4ef11ae6ae84fbf89746048f3945bf74c9fc33ae1b593d6a53e39"
     },
     {
-      "command": [
-        "python",
-        "check_roles.py",
-        "--mutant",
-        "per-hit-chips"
-      ],
       "exit": 2,
-      "failures": [
-        "Q2-one-card-three-hits-one-chip-settlement",
-        "deferred-Shatter-after-all-hits"
+      "failed": [
+        "K1-source-consumer-predictions",
+        "K1-nonredundant-producer-and-reader",
+        "ordinary-chip-is-genuine-producer-substitute",
+        "direct-Cracked-is-genuine-guard-substitute",
+        "K1-selected-target-read",
+        "peer-target-binding-patterns",
+        "same-product-mixed-chains-not-one-hot"
       ],
+      "name": "wrong-target",
       "stderr": "",
-      "stdout_sha256": "acd86eb85e85984b85fd953c6754e011d2d6a2e9dcd2bb44b6a1182d86987123"
+      "stdout_sha256": "2c18d65b1da01a80f0efe1822122f71db3bdcaba1ff4e9343364505c40810b3c"
     },
     {
-      "command": [
-        "python",
-        "check_roles.py",
-        "--mutant",
-        "consume-strength"
-      ],
       "exit": 2,
-      "failures": [
-        "Q2-persistent-retargeted-second-consumer"
+      "failed": [
+        "peer-target-binding-patterns",
+        "mixed-Strength-three-hits-before-single-settlement"
       ],
+      "name": "per-hit-chips",
       "stderr": "",
-      "stdout_sha256": "a285bab443b81891ddf838745fa1675fec54621b263bd75c2b68dc8c47661e37"
+      "stdout_sha256": "ab3f231c5c9080b6ea7442db7f5c8c2fd42c88c645692f1f9d956a37fc827392"
     },
     {
-      "command": [
-        "python",
-        "check_roles.py",
-        "--mutant",
-        "reset-strength"
-      ],
       "exit": 2,
-      "failures": [
-        "Q2-persistent-retargeted-second-consumer",
-        "combat-reset-not-turn-reset"
+      "failed": [
+        "peer-anchor-consumed-not-persistent-Strength"
       ],
+      "name": "retain-anchor",
       "stderr": "",
-      "stdout_sha256": "018f0716bdb9e8b1ab3482b7c2449df11889bb52c591b70a0fc243d7ffbf8654"
+      "stdout_sha256": "70bd04d053c741aaa233859a3b0ff314f361ef069c52a5d01fd5a56d03059668"
     },
     {
-      "command": [
-        "python",
-        "check_roles.py",
-        "--mutant",
-        "power-exhaust"
-      ],
       "exit": 2,
-      "failures": [
-        "Q2-one-Power-not-Exhaust"
+      "failed": [
+        "peer-anchor-expires-not-persistent-Strength"
       ],
+      "name": "sticky-anchor",
       "stderr": "",
-      "stdout_sha256": "552c40bd544b17dea104c3a2a9a8e311cc1b40f4ba0697b261d1628e7ca3d046"
+      "stdout_sha256": "a4bcc66cb8ce3fee159836afe006c777ee0403527fb71304a8dc9565add7476f"
     },
     {
-      "command": [
-        "python",
-        "check_roles.py",
-        "--mutant",
-        "clamp-amount"
-      ],
       "exit": 2,
-      "failures": [
-        "Q1-bidirectional-projection-equality",
-        "native-amount-includes-ordinary-overkill"
+      "failed": [
+        "peer-all-six-cross-substitutions-retained",
+        "peer-target-binding-patterns",
+        "same-product-mixed-chains-not-one-hot",
+        "peer-anchor-consumed-not-persistent-Strength",
+        "peer-insertion-order-and-return-before-Bell"
       ],
+      "name": "wrong-return-target",
       "stderr": "",
-      "stdout_sha256": "c7b4a16e3f5765ae25becb06d2ee20f6b746b93df1c3b30735a108f1352a4dd7"
+      "stdout_sha256": "c16a805d0b46032899d97dc4ed40338456bb4e28596022bd79e14503dcff645d"
+    },
+    {
+      "exit": 2,
+      "failed": [
+        "peer-insertion-order-and-return-before-Bell"
+      ],
+      "name": "eager-settlement",
+      "stderr": "",
+      "stdout_sha256": "b09fd5e25dbf63f821a86c8384fc232527d87b4a7a7dda5c4730406b3906124e"
+    },
+    {
+      "exit": 2,
+      "failed": [
+        "peer-insertion-order-and-return-before-Bell"
+      ],
+      "name": "sorted-pending",
+      "stderr": "",
+      "stdout_sha256": "f6616f9bcc432f1f5ea7b68fa803d20430accff9905ddf6349c9a1d656a1e053"
+    },
+    {
+      "exit": 2,
+      "failed": [
+        "native-amount-overkill-physical-separated"
+      ],
+      "name": "clamp-amount",
+      "stderr": "",
+      "stdout_sha256": "d4a397512b21c8abb56f216180936ffb9c98be494e0253c98ca19d248f15be9c"
     }
   ],
-  "schema": "DD1-SOURCE-1-EXECUTION-1",
-  "scope": "Manual source-correspondence argument plus finite non-native projection. No full local checkout, native execution or automatic proof of natural-language canonical authority.",
+  "python": "3.13.5",
+  "removed_function": "registered_composition; old equality/closure tests removed, not counted as evidence",
+  "retained_model_AST_equality": {
+    "Enemy": true,
+    "State": true,
+    "candidate": true,
+    "card": true,
+    "hit": true,
+    "phase_boundary": true,
+    "physical": true,
+    "play": true,
+    "public": true,
+    "settle": true
+  },
+  "reviewed_predecessor": "aa3f18e9a6ad530aa48677e37a5835e8d786a998",
+  "schema": "DD1-SOURCE-1-CORRECTIVE-EXECUTION-1",
   "summary": {
+    "component_cells": 4096,
     "failed": [],
-    "named_checks": 34,
-    "q1_cells": 1024,
-    "q2_contexts": 192,
-    "q2_factor_cells": 768
-  }
+    "named_checks": 35,
+    "peer_substitutions": 9,
+    "q1_contexts": 1024
+  },
+  "tested_code_commit": "415d47fac568bc9367fe906fd6e907395828b069"
 }
