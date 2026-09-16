@@ -1,82 +1,50 @@
-# P9 six-route current handoff — DUSK-DESIGN-1 author complete
+# P9 current capsule — DD1-SOURCE-1 author complete
 
-Updated 2026-09-16. One current capsule on `research/p9-six-route-local-20260905`. This replaces only the active handoff, not the immutable prior results, authority, account records or bound #547 artifact.
+Updated 2026-09-16. Existing branch `research/p9-six-route-local-20260905`. This is the one mutable task capsule; immutable source, accepted designs, closed results and account records remain unchanged.
 
-## Current decision and next stage
+## Current author decisions
 
-**DUSK-DESIGN-1 design-only author batch is complete.** One declared prospective topology, DD1-X / Crosscut, survives its bounded finite falsification and inspected exact-contract nonidentity comparisons. It is NOT a source-qualified complete triple, native-admitted candidate, balance result or certificate. A0/#547 stays complete; A1/A2 remain **0/3 Duskblade certificates**.
+Authority: [#542 comment 5696615674](https://github.com/fol2/glassvow/issues/542#issuecomment-5696615674). The sole Pro author completed BOTH retained-route source decisions and the justified same-product follow-through. Local writer and completed DD1 reviewer remain parked; no competing worker was invoked.
 
-The product goal remains THREE independently usable Duskblade strategies on one proposed product into the production/TestFlight line, THEN Ashwarden. No threshold or hard guard was lowered to turn the new design into a solved triple.
+- **K1/Q1: SOURCE_EXCLUDED_AS_REGISTERED_ROLE_COMPOSITION.** Complete paid Chisel/native coupled-Shatter producer plus the registered native Resonant Lance echo consumer compose through their existing same-target state interface. PROOF section 3 distinguishes the whole old packages, then supplies the narrower registered-component mapping and symmetric source identity induction. The applicable closed-component clause, not a copied empirical negative or shared name, supplies the source exclusion.
+- **K2/Q2: SOURCE_ROLE_ELIGIBLE_PENDING_NATIVE_QUALIFICATION.** Complete additive player Strength and independent three-hit repeated-read consumer retain a nonredundant controlled role. PROOF section 4 compares actual payoff ports with common native Strength on both sides, including the residual-role argument; it does not identify all host-game behaviour with a closed chip primitive. This is bounded source eligibility, not a native certificate or reservation of a slot.
+- **Triple: NO_SOURCE_QUALIFIED_TRIPLE_FOR_DD1_PLAN.** A necessary K1 slot is excluded. K2's useful decision is complete, accepted DD1-X is unchanged, and no replacement is nominated. Dependent three-way peer expansion, exporter and empirical-readiness work are NOT_REQUIRED_AFTER_K1_SOURCE_EXCLUSION, not PASS or unreported missing work.
 
-**Next: one fresh isolated, read-only exact-artifact review of the complete source/proof below and canonical sources.** Do not import the author's conversation, invoke the author as reviewer, or delegate a competing writer. There has been no self-approval. A design APPROVE is not permission for native execution. Native implementation/qualification requires separately recorded applicable authority, valid account/attempt eligibility and stage prerequisites.
+These are NEW **author semantic decisions awaiting a fresh exact-artifact review**, not independent approval. A0/#547 stays complete; A1/A2 remain **0/3 certificates**. The three independently usable Duskblade strategies into production/TestFlight, THEN Ashwarden, remain the product goal. There is no stock-game impossibility theorem or revised Honing result.
 
-## Authority and instructions
+## Exact recoverable source/proof
 
-- Owner's design exception: [#421/5693675219](https://github.com/fol2/glassvow/issues/421#issuecomment-5693675219).
-- Explicit owner activation recorded and read back: [#421/5693811899](https://github.com/fol2/glassvow/issues/421#issuecomment-5693811899).
-- Instructions read from current main **07b5aa9dec8436132a524511d5438c510e322070**: AGENTS.md, docs/agents/ai-sdlc.md, .claude/skills/glassvow-godot/SKILL.md. Main re-read at completion unchanged; tree **12ac11866a0d81d1e957580e34aec78ac5b7f69b**.
-- Sole Pro design author worked on the existing branch. Other writers/reviewers remained parked. No new programme, branch, PR/CI or experiment-ticket chain was opened.
+**Coherent artifact head:** `171961a8aa9f48370d74d9560b339cc875cc7f56`.
+**Tree:** `cf6cc79bc1d59ed9988190dc30a39b8f8d09490c`.
 
-## Exact complete source/proof delivery
+[Complete source/proof directory](https://github.com/fol2/glassvow/tree/171961a8aa9f48370d74d9560b339cc875cc7f56/research/p9-six-route/dusk-design-1-20260916/source-qualification)
 
-**Artifact commit: 1301454b60ea9d4e6b1848b12c9de8f09caa02f6**
+The six files are INPUTS.json (pre-check declaration and exact comparison ledger), PROOF.md (both arguments/dispositions, source bindings and interfaces), role_model.py, check_roles.py, CHECKS.json (actual observations) and EXECUTION.json (exact source, compile, repeat and mutant receipts).
 
-Tree: **02d1a26ef92bb14a2143e13f2ea59638fa30be77**
+Declaration preceded execution at `abca64e2b4306993d82bf67fa6998891b12c7de6`, blob `b99d99ff2a85155f49108491391a332fc98bee54`.
 
-[Complete artifact directory](https://github.com/fol2/glassvow/tree/1301454b60ea9d4e6b1848b12c9de8f09caa02f6/research/p9-six-route/dusk-design-1-20260916)
+**Evidence:** 34 named non-native checks, 1,024 Q1 comparison cells and 192 Q2 contexts / 768 component cells; zero failed unmodified checks. Seven actual faulty variants rejected with exit 2. Complete model/checker/observations are published; no old 69-check or accepted Crosscut suite was replayed. No model count is native legality, population, causal or balance evidence.
 
-Prefix: `research/p9-six-route/dusk-design-1-20260916/`
+[Publication readback](https://github.com/fol2/glassvow/blob/fcf629489cec2604687c225f6ffa41b9aaeb1608/research/p9-six-route/dusk-design-1-20260916/source-qualification/REMOTE-READBACK.json): all six exact file descriptors; all five locally authored source/evidence files matched complete remote Git blobs and lengths. Post-publication local reproduction returned byte-identical CHECKS. Base-to-proof compare contains only the six new files, with no deletions or existing-file modification. The receipt and this capsule are later publication metadata, not circular source identities. Final #156 handoff binds the complete delivered/review head and their readback.
 
-| File | Actual content / role |
-|---|---|
-| DECLARATION.json | One topology nominated before checking at ef928cbfdab41c4e51d49f75b9072187315ae54b; ceiling three, no refill or alternative values |
-| DESIGN.md | Exact law/costs/upgrades/acquisition, source ledger, closest closed-law/peer distinctions, derived model result and all THREE same-product slots with their dependencies |
-| crosscut_model.py | Small non-native state transition projection; tested blob 5f742741d5906f1f1caaeb65bf2f905505d166b9 |
-| check_crosscut.py | Executed finite/adverse/mutation checker; tested blob f68b9c1e12ae914367325d6be07de1d5c8b924a0 |
-| CHECKS.json | Actual full derived observations: 40 unique named checks, 216 constructed states, no failed checks; blob fa7a08b50c3d27ec3b808908de70a30308b3e3a6 |
-| EXECUTION.json | Exact local tested file digests, Python 3.13.5, exit codes, repeat equality, compilation and six actual mutation invocations |
-| PROMOTION.md | Conditional runtime/content/UI/save/pool changes, smallest native tests, profiles/policies/costs and bound record adapter map with correct stage order |
+## Immutable authority and preservation
 
-**Remote readback receipt commit: bc71cdd0707ec045806ef1ff4984266269dd4064**
+Operating/current and scientific main remains `07b5aa9dec8436132a524511d5438c510e322070`, freshly re-read unchanged at completion. AGENTS.md, AI-SDLC and the existing programme/formal-synthesis criteria were refreshed; the research tree was not rebased.
 
-[REMOTE-READBACK.json](https://github.com/fol2/glassvow/blob/bc71cdd0707ec045806ef1ff4984266269dd4064/research/p9-six-route/dusk-design-1-20260916/REMOTE-READBACK.json)
+Accepted DD1 head `746388323b8e886967e0e13fe109490a70206a66`, independent review [5695995257](https://github.com/fol2/glassvow/issues/421#issuecomment-5695995257), planner acceptance [5696565926](https://github.com/fol2/glassvow/issues/421#issuecomment-5696565926). All original DECLARATION/DESIGN/PROMOTION/model/checker/evidence/readback bytes remain untouched. Its existing PROMOTION.md is not replaced by a new framework and is not activated by this no-go.
 
-The exact-commit GitHub descriptors match all four local executed source/evidence files' Git blobs and byte counts. After publication the pure-Python checker was rerun, reproducing CHECKS.json byte-for-byte and all six mutation failure lists. Scope compare against **806c994ffa5af5974080b7f3fdea68595f0ee197** found only the seven added artifact files at the source/proof head; no old file or production path changed. The receipt and this current capsule are the only later publication metadata.
+Bound #547 head `5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6`, binding `D547-PC1-20260914-BIND-01` / [5683984558](https://github.com/fol2/glassvow/issues/547#issuecomment-5683984558); entire `research/p9-six-route/duskblade-first-proof-20260912/` remains read-only. `ADAPTER_RECORDS.md` remains the active future mapping; no re-review or edit. SESSION-STATE, allocation, historical UNKNOWN/spent accounts, protected/exposed seeds and all numerical/hard guards are unchanged.
 
-An interim duplicated check in publication commit 6ecf53f6c2bc260df34633db8263e4207c5bbe98 was caught by readback and restored to the exact tested bytes at 1be32d52104668db394013f37da6185c6efccd19. Use the delivered artifact, not that interim checkpoint. The declaration, law and numerical values did not change.
+Archive A `c802be36510273481b6d0f865b92fac43abf6aff`, source-scope E `f8a3c7b9965c6cb21fa1714b59c8537bcb89c3be`. Old fixed-slate source result, native same-copy Honing closure, R3 COMMAND_CONTRACT_FAIL, R11 SUMMARY_ONLY, R12 INCOMPLETE and R14's exact closed stock sampler retain their original meanings. No unavailable R11/R12 raw is claimed recovered or needed here. No #549 reconstruction.
 
-## Bounded design result
+## Interface clarification for any future authorised work
 
-DD1-X proposes two NEW, non-shipping IDs: `setTheAngle` (1 Energy uncommon Skill, 4/6 Block and one visible living-enemy anchor this turn) and `crosscut` (1 Energy uncommon Attack, primary 5/7 and one 5/7 ordinary return hit on the DIFFERENT anchored enemy if still legal/live after primary). Anchor capture/clear is one-use; overwrite/no stack; no turn/fight/save/copy carry. Native mitigation, Thorns, death and once-per-card chip settlement remain; full Stun/Shatter coupling is preserved. The return is not raw damage and Venomous remains selected-target-only.
+Use shipping `resonantLance` / Resonant Lance, never a new `echoLance` ID. Native M `hit_enemy` emits ordinary unblocked loss including overkill in HIT_ENEMY.amount; physical HP removed is separately derived. Only finale handoff clamps to pre-hit HP minus one. PROOF section 7 records the exact source and the correction to the earlier review's contrary prose WITHOUT rewriting accepted DD1/review bytes. The ordinary example is amount=7, overkill=5, physical=2 on a 2-HP target.
 
-The comparisons explicitly cover ordinary AoE/multi-hit/Strength, exact one-bit and power-cycle laws, Scoreline prototype and frozen target-local Scoreline, Afterimage, prospective target-switch/observation work, cross-enemy partial Facet, Resonance/Shatter Flow, same-copy Honing and native death/resource background. Novelty is not inferred from a new marker name. The target-memory erasure witness is bounded to the inspected old producer/read-set contracts, not a universal theorem against arbitrary history-aware programs.
+Future implementation source is M, not B's older RunState. Preserve `if act != 3 or not is_final_act(): return` in `mark_mirrored_road_cleared`. M RunState blob `95b6bbb10c5fd8ab2c6fdc79c61440f9959998eb`; B blob `24eeb6a223a67355d87839bbc7a6cd40a8610d96`.
 
-Adverse evidence matters: full Block can erase HP payoff, overkill reports are not physical HP, lethal primary Thorns/handoff stops return, Bell can remove anchor HP with both new factors off, and unavailable resource tails remain UNKNOWN. The component-mask checks do NOT discharge native whole-command/proper-subset obligations or repair historical R3 COMMAND_CONTRACT_FAIL.
+## Next boundary
 
-## All-three plan and unresolved gates
+One fresh isolated read-only exact-artifact review of the NEW DD1-SOURCE-1 semantic decision, including the registered-component mapping, source correspondence, common-background discipline and evidence. Do not import the author's conversation or invoke this author as reviewer. Do not re-review unchanged DD1/#547, fill a replacement slot, build an exporter or open empirical stages on the strength of a symbolic pass.
 
-| Required slot | Proposed route | Current gate |
-|---|---|---|
-| K1 | Native Chisel -> coupled Facet/Stun+Cracked -> Echo Lance | N1 facts retained; Q1 exact closed-law/union/full-command and direct-Cracked shortcut qualification still owed. Real Dusk-earned PaneBreaker/profile and ordinary acquisition also required. Not certified or rejected by the old slate result. |
-| K2 | Native Empower -> persistent Strength/Fervor -> Flurry | N2 facts retained; Q2 canonical/full-command/peer qualification and ordinary acquisition/support still owed. A familiar native effect is not a free strategy slot. |
-| K3 | Prospective DD1-X enemy-address/return-hit coordination | Bounded design survivor only. Fresh review, authorised native refinement/canonical/collateral tests and all admission/profile/development/confirmation obligations remain. |
-
-All three must be supported on the SAME proposed product and common legitimate predecessor profiles within a vow. Shared Strength/chips/Cracked/death background cannot be assigned exclusive route credit by a detector. Multi-route trajectories stay multi-label. If K1 or K2 is source-covered or fails, this proposed triple stops; no replacement is silently nominated. No result establishes empirical Honing nonviability or the impossibility of every Dusk design.
-
-## Bound #547 and historical evidence: preserve, do not re-review
-
-Bound artifact: **5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6**.
-
-Read-only prefix: `research/p9-six-route/duskblade-first-proof-20260912/`.
-
-Binding: **D547-PC1-20260914-BIND-01**; receipt #547/5683984558; accepted review #547/5682513452; downstream #542/5684770969. Current ADAPTER_RECORDS.md blob **ba53bce69de7667ac62038026eb29474c5567460** remains the contract. Do not substitute an archived count-first reader or rerun/review #547.
-
-The prior terminal fixed slate at **806c994ffa5af5974080b7f3fdea68595f0ee197**, its independent review #542/5688914410 and planner #542/5693649113 remain accepted. Prior coherent proof **deb61d15199dfddfac6dee08d5dbfb01c529b5cf** and readback **8ee69d127a856cdb21bb70fe48049af5ca51e329** remain historical source references, not re-executed evidence.
-
-Frozen source scope **f8a3c7b9965c6cb21fa1714b59c8537bcb89c3be**; archive **c802be36510273481b6d0f865b92fac43abf6aff**. Same-copy Honing/N3 remains source-excluded. R3 COMMAND_CONTRACT_FAIL (672 rows/64 failures), R11 SUMMARY_ONLY, R12 INCOMPLETE and R14 exact closed stock-Dusk V5 object remain unchanged. No V0 outcome was opened. The #549 five-file local-only archive was not recovered or reconstructed; it remains an independent later release-contract obligation.
-
-## Accounts and prohibitions
-
-This batch: **0 native/game calls; 0 new game outcomes; 0 empirical spend; 0 new error allowance; 0 policy fits; 0 candidate/confirmation freezes; 0 production/content edits; 0 extraction/guardrail receipts.** No #548 reserve, UNKNOWN credit, budget reset, candidate retry, merge or release. SESSION-STATE.json, ALLOCATION.json, historical results and the bound prefix were not edited. Original allocation-template bytes are not evidence of a refreshed empirical balance.
-
-All numerical acceptance and hard guards, protected/exposed seed namespaces, D547's canonical allocation/kernel and the .025/.025 split remain exactly as bound. Before any later native invocation, validate actual authority, attempt eligibility and resources; failed/retried invocations cannot disappear from accounting. Symbolic success is neither native legality/causality nor natural acquisition, policy-quality or balance evidence.
+**This batch: 0 native/game calls, 0 new outcomes, 0 empirical spend, 0 topology/parameter replacements, 0 policy fitting, 0 candidate/confirmation freezes, 0 production changes.** No allocation reset/top-up, #548 reserve, native receipts, PR/CI, merge or release. Any future native work needs separately recorded applicable authority, valid accounts and all stage prerequisites. No self-approval occurred.
