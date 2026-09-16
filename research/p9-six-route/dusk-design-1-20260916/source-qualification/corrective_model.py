@@ -113,6 +113,6 @@ def observe(s):
             "enemies": [[e.key, e.hp, e.block, e.chips, e.facet, e.cracked,
                          e.stunned, e.spent] for e in s.enemies],
             "anchor": anchor_index(s), "over": s.over,
-            "zones": [s.hand, s.discard, s.consumed],
+            "zones": deepcopy([s.hand, s.discard, s.consumed]),
             "counts": [s.cards, s.attacks], "embers": s.embers,
             "draws_owed": s.draws_owed, "events": deepcopy(s.events)}
