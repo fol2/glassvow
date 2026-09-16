@@ -205,6 +205,10 @@ def run(mutant="", export_cells=None):
         peers[producer+'->'+consumer]={'producer_state':producer_state,
             'hits': [e for e in s.events[start:] if e[0]=='hit'],
             'player': [s.block,s.strength], 'counts':[s.cards,s.attacks]}
+    check('peer-producer-snapshots-are-value-copies',
+          all(v['producer_state']['zones'][0] == [2,3,4] and
+              2 not in v['producer_state']['zones'][1] for v in peers.values()),
+          {k: v['producer_state']['zones'] for k,v in peers.items()})
     def targets(key): return [h[1] for h in peers[key]['hits']]
     check('peer-all-six-cross-substitutions-retained',
           targets('chisel->crosscut')==[1] and targets('empower->crosscut')==[1] and
