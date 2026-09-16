@@ -1,51 +1,82 @@
-# P9 current capsule — #542 fixed-slate source/authority no-go proved
+# P9 six-route current handoff — DUSK-DESIGN-1 author complete
 
-## Goal, scope and ownership
+Updated 2026-09-16. One current capsule on `research/p9-six-route-local-20260905`. This replaces only the active handoff, not the immutable prior results, authority, account records or bound #547 artifact.
 
-The same sole Pro author completed prepared #542 proof-resolution batch [5687730761](https://github.com/fol2/glassvow/issues/542#issuecomment-5687730761), continuing `4b612c3fe19f27016582934960ad3ca656ba5759`. The local writer remains parked. Existing `research/p9-six-route-local-20260905` and its history are preserved. Fixed leads remain N1 coupled Facet, N2 shipping native Fervor, N3 native same-instance Honing replay. No replacement lead, new primitive, product mutation, native outcome, empirical spend, PR, CI invocation or renewed #547 review occurred.
+## Current decision and next stage
 
-## Bound identities (immutable)
+**DUSK-DESIGN-1 design-only author batch is complete.** One declared prospective topology, DD1-X / Crosscut, survives its bounded finite falsification and inspected exact-contract nonidentity comparisons. It is NOT a source-qualified complete triple, native-admitted candidate, balance result or certificate. A0/#547 stays complete; A1/A2 remain **0/3 Duskblade certificates**.
 
-- Binding receipt: [#547 comment 5683984558](https://github.com/fol2/glassvow/issues/547#issuecomment-5683984558) (`D547-PC1-20260914-BIND-01`).
-- Independent exact-head review: [#547 comment 5682513452](https://github.com/fol2/glassvow/issues/547#issuecomment-5682513452), `Verdict: APPROVE`, head `5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6`.
-- Downstream delivery to #542: [#542 comment 5684770969](https://github.com/fol2/glassvow/issues/542#issuecomment-5684770969).
-- Bound artifact: `5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6:research/p9-six-route/duskblade-first-proof-20260912/`. This prefix is read-only.
-- Tested code head: `f8a6bd076c55feeab2a99266deb65e8e6a8c34c3`; the bound head is its evidence-only child.
-- Active implementation map: `ADAPTER_RECORDS.md` (blob `ba53bce69de7667ac62038026eb29474c5567460`). Do not use stale `OBLIGATION_MAP.md` as the live control index.
-- Frozen evidence snapshot, unchanged: `f8a3c7b9965c6cb21fa1714b59c8537bcb89c3be`.
-- Historical product reference, unchanged: `2ed6cdb0302ba3aab5845a18d862841165e8aaf7`.
-- `SESSION-STATE.json` blob, unchanged: `8be35c9286b4a31ffc90ea9cac411e4653707311`.
-- On-disk `ALLOCATION.json` remains the approved unbound zero-spend template (blob `824ff18acbca2f776533beed83a43b21d9a50f2c`, `status=OWNER_AUTHORISED_DESIGN_NOT_BOUND`, `binding_receipt=null`, all `used=0`). Template preservation is not an absence of the binding receipt.
-- Operating and pinned scientific main: `07b5aa9dec8436132a524511d5438c510e322070`.
-- Original source-entry baseline: `7602711a0732bada6632956f445fb8c182d49421`; earlier unresolved proof checkpoint: `4b612c3fe19f27016582934960ad3ca656ba5759`. Both remain historical.
+The product goal remains THREE independently usable Duskblade strategies on one proposed product into the production/TestFlight line, THEN Ashwarden. No threshold or hard guard was lowered to turn the new design into a solved triple.
 
-## Completed author decision
+**Next: one fresh isolated, read-only exact-artifact review of the complete source/proof below and canonical sources.** Do not import the author's conversation, invoke the author as reviewer, or delegate a competing writer. There has been no self-approval. A design APPROVE is not permission for native execution. Native implementation/qualification requires separately recorded applicable authority, valid account/attempt eligibility and stage prerequisites.
 
-**NO_SOURCE_QUALIFIED_TRIPLE_WITHIN_THIS_SLATE**, now based on **SUBSTANTIATED_SOURCE_AUTHORITY_EXCLUSION_OF_REQUIRED_N3**, not repeated uncompleted-comparison labels.
+## Authority and instructions
 
-N3 is contained in the expressly closed native same-instance-growth/repeat family. `PROOF-RESOLUTION.md` supplies four arguments: native bonus equals the ordered fold of prior growth on the same combat instance; every legal N3 enactment necessarily contains the archived ordered equal-fight/UID repeat; the named native-law relation preserves the same current common context, costs, effects, zones and reset; and the standing no-reopening rule excludes that mandatory slot. The fixed three-slot conjunction therefore fails without further peer proofs.
+- Owner's design exception: [#421/5693675219](https://github.com/fol2/glassvow/issues/421#issuecomment-5693675219).
+- Explicit owner activation recorded and read back: [#421/5693811899](https://github.com/fol2/glassvow/issues/421#issuecomment-5693811899).
+- Instructions read from current main **07b5aa9dec8436132a524511d5438c510e322070**: AGENTS.md, docs/agents/ai-sdlc.md, .claude/skills/glassvow-godot/SKILL.md. Main re-read at completion unchanged; tree **12ac11866a0d81d1e957580e34aec78ac5b7f69b**.
+- Sole Pro design author worked on the existing branch. Other writers/reviewers remained parked. No new programme, branch, PR/CI or experiment-ticket chain was opened.
 
-The old finite capacity experiment kept an **additional** repeat payoff unimplemented; it did not delete baseline native bonus and did not estimate its causal payoff. This is a source/authority exclusion, not an empirically failed native payoff, a Vow-0 negative, or universal Honing/Dusk impossibility. Optional Deflect, a new observer, or stricter successful-use labels add no independent source law to the fixed lead.
+## Exact complete source/proof delivery
 
-Q3's family relation is resolved. Remaining N3 independent-consumer/visibility qualification, Q1, Q2 and all three QP pairs are **NOT_REQUIRED_FOR_THIS_SLATE_NO_GO**, not PASS and not claimed completed. N1/N2's useful source conclusions remain preserved; neither is rejected by this argument. No fourth lead follows.
+**Artifact commit: 1301454b60ea9d4e6b1848b12c9de8f09caa02f6**
 
-## Exact recoverable proof/evidence
+Tree: **02d1a26ef92bb14a2143e13f2ea59638fa30be77**
 
-Owned directory: `research/p9-six-route/duskblade-source-entry-20260915/`.
-Coherent proof/disposition/evidence head: **`deb61d15199dfddfac6dee08d5dbfb01c529b5cf`**.
-Publication readback: `8ee69d127a856cdb21bb70fe48049af5ca51e329:research/p9-six-route/duskblade-source-entry-20260915/PROOF-REMOTE-READBACK.json`.
+[Complete artifact directory](https://github.com/fol2/glassvow/tree/1301454b60ea9d4e6b1848b12c9de8f09caa02f6/research/p9-six-route/dusk-design-1-20260916)
 
-- `PROOF-RESOLUTION.md`: actual contracts, state/observation relation, edge footprint, register/history induction, one-way event inclusion, common-context argument, authority exclusion and slate conjunction.
-- `PROOF-SOURCE-READBACK.json`: complete content/combat/CardInst Git objects match the archived baseline through live GitHub tree resolution. Quests/RunState and old instrumented-source nonidentity are explicitly retained; no whole-product equivalence or local full-checkout claim.
-- `check_n3_relation.py`, `PROOF-CHECKS.json`, `PROOF-EXECUTION.json`: 22 matching new symbolic/source checks, byte-identical repeat and compilation success; growth-before-hit, copy-collapse and fight-erasure mutated invocations each reject with exit 2 and zero success output. Not native execution, a legality oracle, population evidence or a machine proof of natural-language authority.
-- `NOMINATION.json`: operative machine disposition, exclusion reason, skipped dependencies, evidence hashes and unopened stage flags.
+Prefix: `research/p9-six-route/dusk-design-1-20260916/`
 
-All six complete local Git blob IDs were matched to immutable GitHub readback; `PROOF-REMOTE-READBACK.json` records their SHA256/byte inventories and checked ancestry/scope. Later publication metadata consists only of the readback record and this capsule. The previous 69-check suite was not rerun; SOURCE-ENTRY, SOURCE-INPUTS, CAUSAL-PREFLIGHT and all old evidence remain unchanged. Their historical unfinished Q labels are superseded only for this bounded decision.
+| File | Actual content / role |
+|---|---|
+| DECLARATION.json | One topology nominated before checking at ef928cbfdab41c4e51d49f75b9072187315ae54b; ceiling three, no refill or alternative values |
+| DESIGN.md | Exact law/costs/upgrades/acquisition, source ledger, closest closed-law/peer distinctions, derived model result and all THREE same-product slots with their dependencies |
+| crosscut_model.py | Small non-native state transition projection; tested blob 5f742741d5906f1f1caaeb65bf2f905505d166b9 |
+| check_crosscut.py | Executed finite/adverse/mutation checker; tested blob f68b9c1e12ae914367325d6be07de1d5c8b924a0 |
+| CHECKS.json | Actual full derived observations: 40 unique named checks, 216 constructed states, no failed checks; blob fa7a08b50c3d27ec3b808908de70a30308b3e3a6 |
+| EXECUTION.json | Exact local tested file digests, Python 3.13.5, exit codes, repeat equality, compilation and six actual mutation invocations |
+| PROMOTION.md | Conditional runtime/content/UI/save/pool changes, smallest native tests, profiles/policies/costs and bound record adapter map with correct stage order |
 
-## Preservation and next action boundary
+**Remote readback receipt commit: bc71cdd0707ec045806ef1ff4984266269dd4064**
 
-#547 remains CLOSED/completed and SPEC_BOUND; #421 A0 closeout remains done. Do not repeat either action or review the bound artifact. The bound prefix, kernel, allocation, SESSION-STATE and product files are unchanged. #542 remains open: complete Duskblade certificates remain **0/3**. Native calls, new game outcomes and empirical spend in this batch are **0**. No candidate/confirmation freeze, extraction/guardrail receipt, policy roster or native exporter was issued.
+[REMOTE-READBACK.json](https://github.com/fol2/glassvow/blob/bc71cdd0707ec045806ef1ff4984266269dd4064/research/p9-six-route/dusk-design-1-20260916/REMOTE-READBACK.json)
 
-R3 remains COMMAND_CONTRACT_FAIL; no requirement to make that unchanged failed experiment PASS, and no component-arithmetic rescue is claimed. R14's exact stock sampler remains closed. R11 SUMMARY_ONLY and R12 INCOMPLETE constrain their dependent claims, not this exclusion proof.
+The exact-commit GitHub descriptors match all four local executed source/evidence files' Git blobs and byte counts. After publication the pure-Python checker was rerun, reproducing CHECKS.json byte-for-byte and all six mutation failure lists. Scope compare against **806c994ffa5af5974080b7f3fdea68595f0ee197** found only the seven added artifact files at the source/proof head; no old file or production path changed. The receipt and this current capsule are the only later publication metadata.
 
-Next is the required sequential independent review of the **completed new source/authority decision**, using this exact new artifact and prepared batch. This author did not invoke a nested reviewer or self-approve the decision. Do not continue unnecessary comparisons merely to refill this excluded slate; no replacement lead, reopened family, native run or spending is automatically authorised. Properly authorised future predecessor-profile preflight and development still precede their final confirmation freeze, but this no-go activates none of those stages.
+An interim duplicated check in publication commit 6ecf53f6c2bc260df34633db8263e4207c5bbe98 was caught by readback and restored to the exact tested bytes at 1be32d52104668db394013f37da6185c6efccd19. Use the delivered artifact, not that interim checkpoint. The declaration, law and numerical values did not change.
+
+## Bounded design result
+
+DD1-X proposes two NEW, non-shipping IDs: `setTheAngle` (1 Energy uncommon Skill, 4/6 Block and one visible living-enemy anchor this turn) and `crosscut` (1 Energy uncommon Attack, primary 5/7 and one 5/7 ordinary return hit on the DIFFERENT anchored enemy if still legal/live after primary). Anchor capture/clear is one-use; overwrite/no stack; no turn/fight/save/copy carry. Native mitigation, Thorns, death and once-per-card chip settlement remain; full Stun/Shatter coupling is preserved. The return is not raw damage and Venomous remains selected-target-only.
+
+The comparisons explicitly cover ordinary AoE/multi-hit/Strength, exact one-bit and power-cycle laws, Scoreline prototype and frozen target-local Scoreline, Afterimage, prospective target-switch/observation work, cross-enemy partial Facet, Resonance/Shatter Flow, same-copy Honing and native death/resource background. Novelty is not inferred from a new marker name. The target-memory erasure witness is bounded to the inspected old producer/read-set contracts, not a universal theorem against arbitrary history-aware programs.
+
+Adverse evidence matters: full Block can erase HP payoff, overkill reports are not physical HP, lethal primary Thorns/handoff stops return, Bell can remove anchor HP with both new factors off, and unavailable resource tails remain UNKNOWN. The component-mask checks do NOT discharge native whole-command/proper-subset obligations or repair historical R3 COMMAND_CONTRACT_FAIL.
+
+## All-three plan and unresolved gates
+
+| Required slot | Proposed route | Current gate |
+|---|---|---|
+| K1 | Native Chisel -> coupled Facet/Stun+Cracked -> Echo Lance | N1 facts retained; Q1 exact closed-law/union/full-command and direct-Cracked shortcut qualification still owed. Real Dusk-earned PaneBreaker/profile and ordinary acquisition also required. Not certified or rejected by the old slate result. |
+| K2 | Native Empower -> persistent Strength/Fervor -> Flurry | N2 facts retained; Q2 canonical/full-command/peer qualification and ordinary acquisition/support still owed. A familiar native effect is not a free strategy slot. |
+| K3 | Prospective DD1-X enemy-address/return-hit coordination | Bounded design survivor only. Fresh review, authorised native refinement/canonical/collateral tests and all admission/profile/development/confirmation obligations remain. |
+
+All three must be supported on the SAME proposed product and common legitimate predecessor profiles within a vow. Shared Strength/chips/Cracked/death background cannot be assigned exclusive route credit by a detector. Multi-route trajectories stay multi-label. If K1 or K2 is source-covered or fails, this proposed triple stops; no replacement is silently nominated. No result establishes empirical Honing nonviability or the impossibility of every Dusk design.
+
+## Bound #547 and historical evidence: preserve, do not re-review
+
+Bound artifact: **5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6**.
+
+Read-only prefix: `research/p9-six-route/duskblade-first-proof-20260912/`.
+
+Binding: **D547-PC1-20260914-BIND-01**; receipt #547/5683984558; accepted review #547/5682513452; downstream #542/5684770969. Current ADAPTER_RECORDS.md blob **ba53bce69de7667ac62038026eb29474c5567460** remains the contract. Do not substitute an archived count-first reader or rerun/review #547.
+
+The prior terminal fixed slate at **806c994ffa5af5974080b7f3fdea68595f0ee197**, its independent review #542/5688914410 and planner #542/5693649113 remain accepted. Prior coherent proof **deb61d15199dfddfac6dee08d5dbfb01c529b5cf** and readback **8ee69d127a856cdb21bb70fe48049af5ca51e329** remain historical source references, not re-executed evidence.
+
+Frozen source scope **f8a3c7b9965c6cb21fa1714b59c8537bcb89c3be**; archive **c802be36510273481b6d0f865b92fac43abf6aff**. Same-copy Honing/N3 remains source-excluded. R3 COMMAND_CONTRACT_FAIL (672 rows/64 failures), R11 SUMMARY_ONLY, R12 INCOMPLETE and R14 exact closed stock-Dusk V5 object remain unchanged. No V0 outcome was opened. The #549 five-file local-only archive was not recovered or reconstructed; it remains an independent later release-contract obligation.
+
+## Accounts and prohibitions
+
+This batch: **0 native/game calls; 0 new game outcomes; 0 empirical spend; 0 new error allowance; 0 policy fits; 0 candidate/confirmation freezes; 0 production/content edits; 0 extraction/guardrail receipts.** No #548 reserve, UNKNOWN credit, budget reset, candidate retry, merge or release. SESSION-STATE.json, ALLOCATION.json, historical results and the bound prefix were not edited. Original allocation-template bytes are not evidence of a refreshed empirical balance.
+
+All numerical acceptance and hard guards, protected/exposed seed namespaces, D547's canonical allocation/kernel and the .025/.025 split remain exactly as bound. Before any later native invocation, validate actual authority, attempt eligibility and resources; failed/retried invocations cannot disappear from accounting. Symbolic success is neither native legality/causality nor natural acquisition, policy-quality or balance evidence.
