@@ -157,11 +157,13 @@ The new peer wrapper preserves native first-connected-target insertion order. Th
 
 ## 6. Executable evidence, reproduction and abstraction limits
 
+During final evidence inspection, a producer-zone snapshot alias was found: later consumer execution mutated the stored list reference. `observe()` now value-copies zones, and a new focused regression checks the preconsumer hand/discard snapshot. This capture repair changes no declared role, parameter or source conclusion. The final source and all results were rerun after the repair; the earlier execution-only save remains history.
+
 The active entry is `python check_roles.py`. It imports `corrective_model.py` plus retained `role_model.py` and the Python standard library only. No accepted standalone K2/Crosscut, old Honing or #547 suites are invoked. `registered_composition()` and the old closure-equality tests are removed. The new `power-cycle-enabled-but-unarmed-no-draw` check correctly labels form=true/flow=false; it is not evidence that the old two-stage port fired.
 
 CORRECTION fixed the K1 grid before execution: independent producer/consumer upgrades; target HP 2/80, Block 0/40, background Strength 0/2, Weak on/off, Adamant on/off; facets 3/5 and every partial remainder. There are **1,024 contexts and 4,096 component cells**. Four settings suppress only printed extra chip and the echo multiplier as declared. Missing legal consumer tails retain null/UNKNOWN, not a numerical zero.
 
-Actual final execution: **35 named checks, zero unmodified failures; all ten deliberately faulty variants rejected with exit 2**. Both ordinary and expanded-output runs were byte-identical; in-memory compilation passed. The expanded generator emitted 4,096 constructed traces and reproduced its recorded hash. These are transcription/adversarial checks, not a scientific verdict or native population.
+Actual final execution: **36 named checks, zero unmodified failures; all ten deliberately faulty variants rejected with exit 2**. Both ordinary and expanded-output runs were byte-identical; in-memory compilation passed. The expanded generator emitted 4,096 constructed traces and reproduced its recorded hash. These are transcription/adversarial checks, not a scientific verdict or native population.
 
 CHECKS contains every named observation plus a lossless run-length encoding of all 1,024 four-cell result rows (consumer legality, preconsumer guard, immediate physical HP or null). The deterministic generator reconstructs complete input/preconsumer/postcommand/event traces in exact order with `python check_roles.py --export-cells /tmp/dd1-corrective-cells.jsonl`. The expanded-trace hash checks reconstruction, not evidence in place of actual source. EXECUTION records the actual compiled source digests, repeated results and mutation outcomes. The scientific source verdict is intentionally absent from transition inputs and is not calculated from test PASS counts.
 
