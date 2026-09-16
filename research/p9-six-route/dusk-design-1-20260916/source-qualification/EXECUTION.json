@@ -8,6 +8,7 @@
     "policy_fit": 0,
     "replacement_topologies": 0
   },
+  "capture_repair": "Before final evidence delivery, producer-zone snapshots were made value copies and a focused regression added; no declared law or parameter changed.",
   "commands": [
     {
       "command": "in-memory compile() of three Python files",
@@ -35,19 +36,19 @@
   },
   "files": {
     "CHECKS.json": {
-      "bytes": 17242,
-      "git_blob": "6cfa3008f11d4b67b3b194c82115d12e83316b6d",
-      "sha256": "325bc52013b0eca87fd0353c378d8bfc7c6183b9bdb59173c6505fd78b3460d2"
+      "bytes": 17673,
+      "git_blob": "a7fe41d0634e16573a6c0814cac6e7e04902645d",
+      "sha256": "b91979540c5d6644f634858ac8ea3a87ab47dbb906bca8f904baaafafef95293"
     },
     "check_roles.py": {
-      "bytes": 15948,
-      "git_blob": "5c2a89a379a1fc054bcfb5a5ff13a301878fc44b",
-      "sha256": "2e67d125000c35ff1724396c5ef424e11df9ec75d998ce14970ed42d05ecca35"
+      "bytes": 16214,
+      "git_blob": "9a78f528669534d4f9a298d09cba5bf994028896",
+      "sha256": "e005bf733449237c952b820e5cec10096a6645ccf7652191bce3fc9c9ede06a3"
     },
     "corrective_model.py": {
-      "bytes": 4622,
-      "git_blob": "29d861ad8ed8b41c3d4471bf0e59b4aa4c3e9c92",
-      "sha256": "517666ee9cef40466a6932fde99e9901782cc8aec2b480c44740800faa99134c"
+      "bytes": 4632,
+      "git_blob": "dda8a73183e2e1a2fe6def133e8b3f98e02982fa",
+      "sha256": "5a2eb197c8e78a61770df3367eab72fcb94dda69d984d535c7a7cc0f92bd1ffb"
     },
     "role_model.py": {
       "bytes": 8256,
@@ -75,7 +76,7 @@
       ],
       "name": "drop-printed-chip",
       "stderr": "",
-      "stdout_sha256": "7ebcf244b5541b570245fa17bc8663a028c02750b306dd538d3487c6f4a59b86"
+      "stdout_sha256": "9ca105b6eae4cf69ab65619fe631b534b668523344b1b54187d8e596af7af30e"
     },
     {
       "exit": 2,
@@ -88,7 +89,7 @@
       ],
       "name": "drop-stun",
       "stderr": "",
-      "stdout_sha256": "bbacd67d05b4ef11ae6ae84fbf89746048f3945bf74c9fc33ae1b593d6a53e39"
+      "stdout_sha256": "0379cc982c2ceee513356fed9b50887a8a709a83e209bf55b8a969fcf83b9330"
     },
     {
       "exit": 2,
@@ -103,7 +104,7 @@
       ],
       "name": "wrong-target",
       "stderr": "",
-      "stdout_sha256": "2c18d65b1da01a80f0efe1822122f71db3bdcaba1ff4e9343364505c40810b3c"
+      "stdout_sha256": "5690b50b1f2b68692add0d08ec7ac0efdc1fc681ba56d566fd690fae7078edb2"
     },
     {
       "exit": 2,
@@ -113,7 +114,7 @@
       ],
       "name": "per-hit-chips",
       "stderr": "",
-      "stdout_sha256": "ab3f231c5c9080b6ea7442db7f5c8c2fd42c88c645692f1f9d956a37fc827392"
+      "stdout_sha256": "4467f9a678c97a8a3303fe30d63334e7be0ea08a25650bedb62d91fb69fa4b2f"
     },
     {
       "exit": 2,
@@ -122,7 +123,7 @@
       ],
       "name": "retain-anchor",
       "stderr": "",
-      "stdout_sha256": "70bd04d053c741aaa233859a3b0ff314f361ef069c52a5d01fd5a56d03059668"
+      "stdout_sha256": "78eb13f44d0479abf43a8aa624076672612a22cf2b8a285f45f5694f14cc5952"
     },
     {
       "exit": 2,
@@ -131,7 +132,7 @@
       ],
       "name": "sticky-anchor",
       "stderr": "",
-      "stdout_sha256": "a4bcc66cb8ce3fee159836afe006c777ee0403527fb71304a8dc9565add7476f"
+      "stdout_sha256": "90cfcb3f089056e9d389a3ccd8fcd3aae26a1ba867e4ede3797c036ea3bb4397"
     },
     {
       "exit": 2,
@@ -144,7 +145,7 @@
       ],
       "name": "wrong-return-target",
       "stderr": "",
-      "stdout_sha256": "c16a805d0b46032899d97dc4ed40338456bb4e28596022bd79e14503dcff645d"
+      "stdout_sha256": "214d73fc83b5daf6e0719944013981c2f7f110413da37759d070b2eb6b85fd40"
     },
     {
       "exit": 2,
@@ -153,7 +154,7 @@
       ],
       "name": "eager-settlement",
       "stderr": "",
-      "stdout_sha256": "b09fd5e25dbf63f821a86c8384fc232527d87b4a7a7dda5c4730406b3906124e"
+      "stdout_sha256": "1313fef6ced9f4ea2c49e185388a4c15a54e4c30f281447c8371a2814e9fd9ed"
     },
     {
       "exit": 2,
@@ -162,7 +163,7 @@
       ],
       "name": "sorted-pending",
       "stderr": "",
-      "stdout_sha256": "f6616f9bcc432f1f5ea7b68fa803d20430accff9905ddf6349c9a1d656a1e053"
+      "stdout_sha256": "ea2680e92799d56a16eabc400a4f75847ab54dbe8e4d4b73de15bc157e967737"
     },
     {
       "exit": 2,
@@ -171,7 +172,7 @@
       ],
       "name": "clamp-amount",
       "stderr": "",
-      "stdout_sha256": "d4a397512b21c8abb56f216180936ffb9c98be494e0253c98ca19d248f15be9c"
+      "stdout_sha256": "c37d280acf0a2298ecbb64fcf37b97663a0ef9a07f62214c8f0eeaaf9a210f6b"
     }
   ],
   "python": "3.13.5",
@@ -193,9 +194,9 @@
   "summary": {
     "component_cells": 4096,
     "failed": [],
-    "named_checks": 35,
+    "named_checks": 36,
     "peer_substitutions": 9,
     "q1_contexts": 1024
   },
-  "tested_code_commit": "415d47fac568bc9367fe906fd6e907395828b069"
+  "tested_code_commit": "993a75314fd09ae996b357487e7387b3f8d18a98"
 }
