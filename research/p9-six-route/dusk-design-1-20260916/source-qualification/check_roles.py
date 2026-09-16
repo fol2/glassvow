@@ -1,236 +1,294 @@
-"""Executed source-projection checks; reports observations, never certificates."""
+"""Corrective source evidence only; does not calculate scientific eligibility.
+
+The previous equal-recipe checks are removed. K2's accepted standalone evidence
+is reused by exact predecessor, not rerun here. Peer checks use its unchanged law.
+"""
 from __future__ import annotations
 import argparse
 import hashlib
 import json
 from copy import deepcopy
 from itertools import product
-from role_model import (Enemy, State, candidate, registered_composition, card,
-                        play, physical, public, phase_boundary)
+from role_model import Enemy, card, play, physical
+from corrective_model import ProductState as State, play_named as act, boundary, observe
+
+MUTANTS = ("drop-printed-chip", "drop-stun", "wrong-target", "per-hit-chips",
+           "retain-anchor", "sticky-anchor", "wrong-return-target",
+           "eager-settlement", "sorted-pending", "clamp-amount")
 
 
-def canonical(value):
-    return json.dumps(value, sort_keys=True, separators=(",", ":"))
+def canonical(x):
+    return json.dumps(x, sort_keys=True, separators=(",", ":"))
 
 
-def run(mutant=""):
+def rle(xs):
+    out = []
+    for x in xs:
+        if out and x == out[-1][1]:
+            out[-1][0] += 1
+        else:
+            out.append([1, x])
+    return out
+
+
+def hits_since(s, start, t=0):
+    return sum(e[4] for e in s.events[start:] if e[0] == "hit" and e[1] == t)
+
+
+def run(mutant="", export_cells=None):
     checks = []
-    def check(name, predicate, observation):
-        checks.append({"name": name, "pass": bool(predicate), "observation": observation})
-    def word(s, recipe, **kw):
-        a = play(s, recipe["P"], 1, 0, **kw)
-        b = play(s, recipe["C"], 2, 0, **kw)
-        return [a, b]
+    def check(name, ok, observed):
+        checks.append({"name": name, "pass": bool(ok), "observed": observed})
+    def fresh(**kw):
+        return State(enemies=[Enemy(0, hp=80, chips=3), Enemy(1, hp=80)], **kw)
+    def command(s, name, uid, target=0, **kw):
+        return act(s, name, uid, target, mutant=mutant, **kw)
 
-    recipe_matches = [candidate(p, c) == registered_composition(p, c)
-                      for p, c in product((False, True), repeat=2)]
-    check("Q1-complete-paid-role-recipes", all(recipe_matches), recipe_matches)
-    count = 0
-    mismatches = []
-    digest = hashlib.sha256()
-    for up_p, up_c, hp, block, facet, strength, weak, adamant in product(
-            (False, True), (False, True), (2, 40), (0, 6), (3, 5),
-            (0, 2), (False, True), (False, True)):
+    grid = []
+    guard_errors, payoff_errors = [], []
+    stream = hashlib.sha256()
+    if export_cells:
+        export_cells.write('')
+    # Ordering and domains were committed in CORRECTION.json before these runs.
+    for up_p, up_c, hp, block, strength, weak, adamant, facet in product(
+            (False, True), (False, True), (2, 80), (0, 40), (0, 2),
+            (False, True), (False, True), (3, 5)):
         for chips in range(facet):
-            a = State(enemies=[Enemy(0, hp=hp, block=block, facet=facet,
-                    chips=chips, adamant=adamant), Enemy(1)],
+            cfg = [up_p, up_c, hp, block, strength, weak, adamant, facet, chips]
+            row = []
+            for p_on, c_on in product((False, True), repeat=2):
+                s = State(enemies=[Enemy(0, hp=hp, block=block, chips=chips,
+                    facet=facet, adamant=adamant), Enemy(1, hp=80)],
                     strength=strength, weak=weak)
-            b = deepcopy(a)
-            r1 = word(a, candidate(up_p, up_c))
-            r2 = word(b, registered_composition(up_p, up_c), mutant=mutant)
-            same = (r1, public(a)) == (r2, public(b))
-            if not same:
-                mismatches.append(count)
-            digest.update((canonical([count, r1, public(a), r2, public(b)]) + "\n").encode())
-            count += 1
-    check("Q1-bidirectional-projection-equality", not mismatches,
-          {"cells": count, "mismatches": mismatches, "all_pairs_sha256": digest.hexdigest()})
+                command(s, 'chisel', 1, up=up_p, p_on=p_on)
+                e = s.enemies[0]
+                before = [e.hp, e.block, e.chips, e.facet, e.cracked, e.stunned, e.spent]
+                # Independent source arithmetic for the narrowly declared grid.
+                pd = (7 if up_p else 4) + strength
+                if weak:
+                    pd = pd * 3 // 4
+                loss = max(0, pd - block)
+                alive = loss < hp
+                total = chips + ((1 + int(p_on)) if loss > 0 and alive else 0)
+                crossed = total >= facet and alive
+                predicted = [max(0, hp-loss), max(0, block-pd),
+                             total-facet if crossed else total,
+                             facet+int(crossed),
+                             2 if crossed and not adamant else 0,
+                             crossed and not adamant, crossed and adamant]
+                if before != predicted:
+                    guard_errors.append([len(grid), int(p_on), int(c_on)])
+                gate = e.stunned or e.cracked > 0
+                start = len(s.events)
+                result = command(s, 'resonantLance', 2, up=up_c, c_on=c_on)
+                amount = None if result != 'PLAYED' else hits_since(s, start)
+                expected = None
+                if alive:
+                    d = (10 if up_c else 7) * (2 if predicted[4] > 0 and c_on else 1) + strength
+                    if weak:
+                        d = d * 3 // 4
+                    if predicted[4] > 0:
+                        d = d * 3 // 2
+                    expected = min(predicted[0], max(0, d-predicted[1]))
+                if amount != expected:
+                    payoff_errors.append([len(grid), int(p_on), int(c_on)])
+                row.append([int(result == 'PLAYED'), int(gate), amount])
+                full = [cfg, [p_on, c_on], before, result, observe(s)]
+                line = canonical(full) + '\n'
+                stream.update(line.encode())
+                if export_cells:
+                    export_cells.write(line)
+            grid.append(row)
+    check('K1-source-threshold-predictions', not guard_errors,
+          {'contexts': len(grid), 'mismatches': guard_errors})
+    check('K1-source-consumer-predictions', not payoff_errors,
+          {'component_cells': len(grid)*4, 'mismatches': payoff_errors})
 
-    q1 = candidate()
-    a = State(enemies=[Enemy(0, chips=3), Enemy(1)])
-    word(a, q1, mutant=mutant)
-    b = State(enemies=[Enemy(0, chips=3), Enemy(1)])
-    play(b, card("warCry"), 1)
-    play(b, q1["C"], 2)
-    check("Q1-direct-Cracked-is-not-complete-threshold-producer",
-          (a.enemies[0].facet, a.enemies[0].stunned, a.embers) !=
-          (b.enemies[0].facet, b.enemies[0].stunned, b.embers),
-          {"coupled": public(a), "direct": public(b)})
+    cells = {}
+    for p_on, c_on in product((False, True), repeat=2):
+        s = fresh()
+        command(s, 'chisel', 1, p_on=p_on)
+        start = len(s.events)
+        command(s, 'resonantLance', 2, c_on=c_on)
+        cells[f'{int(p_on)}{int(c_on)}'] = hits_since(s, start)
+    check('K1-nonredundant-producer-and-reader', list(cells.values()) == [7,7,10,21], cells)
+    a=fresh(); command(a,'resonantLance',2)
+    check('missing-producer-consumer-independently-playable',physical(a)==7 and a.cards==1,a.events)
+    a=fresh(); command(a,'chisel',1)
+    check('missing-consumer-preserves-producer-not-complete-chain',
+          physical(a)==4 and a.enemies[0].stunned and a.cards==1,a.events)
+    a, b = fresh(), fresh()
+    command(a, 'chisel', 1); command(b, 'chisel', 1)
+    b.enemies[0].stunned = False; b.enemies[0].cracked = 0
+    command(a, 'resonantLance', 2); command(b, 'resonantLance', 2)
+    check('K1-joint-mediator-intervention-not-gameplay', physical(a) > physical(b),
+          {'intact': physical(a), 'joint_stun_cracked_erased': physical(b)})
+    a, b = fresh(), fresh()
+    command(a, 'chisel', 1); command(b, 'warCry', 1)
+    check('K1-versus-complete-direct-Cracked-producer',
+          a.enemies[0].stunned and not b.enemies[0].stunned and a.embers > b.embers,
+          {'chisel': observe(a), 'warCry': observe(b)})
     a = State(enemies=[Enemy(0, block=40), Enemy(1)])
     b = deepcopy(a)
-    play(a, q1["P"], 1)
-    play(b, card("eclipseSlash"), 1)
-    check("Q1-reverse-direction-blocked-direct-status",
+    command(a, 'chisel', 1); command(b, 'eclipseSlash', 1)
+    check('reverse-separation-blocked-direct-status',
           a.enemies[0].cracked == 0 and b.enemies[0].cracked == 1,
           [a.enemies[0].cracked, b.enemies[0].cracked])
-    a = State(enemies=[Enemy(0, cracked=1), Enemy(1)])
-    b = deepcopy(a)
-    play(a, q1["C"], 2)
-    play(b, q1["C"], 2, c_enabled=False)
-    check("Q1-existing-Cracked-substitutes-consumer-guard",
-          physical(a) > physical(b), [physical(a), physical(b)])
-    check("Q1-disabled-echo-command-is-not-zero-null",
-          physical(b) > 7, {"physical": physical(b), "base": 7,
-          "reason": "ordinary Cracked mitigation persists; not a repair of R3"})
-    a = State(enemies=[Enemy(0, chips=3, adamant=True), Enemy(1)])
-    play(a, q1["P"], 1, mutant=mutant)
-    check("Q1-Adamant-hold-not-real-Shatter",
-          (a.enemies[0].facet, a.enemies[0].stunned, a.enemies[0].cracked, a.embers)
-          == (6, False, 0, 0), public(a))
-    a = State(enemies=[Enemy(0, chips=3), Enemy(1)])
-    play(a, q1["P"], 1, mutant=mutant)
-    check("Q1-coupled-Stun-and-Cracked", a.enemies[0].stunned and a.enemies[0].cracked == 2,
-          [a.enemies[0].stunned, a.enemies[0].cracked])
-    before = physical(a, 1)
-    play(a, q1["C"], 2, 1, mutant=mutant)
-    check("Q1-target-equality-is-material", physical(a, 1) - before == 7,
-          {"other_target_physical": physical(a, 1) - before})
+    a = fresh(); a.enemies[0].chips = 4
+    command(a, 'strike', 1)
+    start = len(a.events); command(a, 'resonantLance', 2)
+    check('ordinary-chip-is-genuine-producer-substitute', hits_since(a,start) == 21,
+          {'lance_hp': hits_since(a,start), 'trace': a.events})
+    a = fresh(); a.enemies[0].chips = 0; a.enemies[0].cracked = 1
+    command(a,'resonantLance',2)
+    check('direct-Cracked-is-genuine-guard-substitute', physical(a) == 21, a.events)
+    a = fresh(); command(a,'chisel',1); command(a,'resonantLance',2,c_on=False)
+    check('disabled-echo-is-not-whole-command-zero', physical(a) == 14, a.events)
+    a = fresh(); command(a,'resonantLance',2); command(a,'chisel',1)
+    check('reverse-order-cannot-change-earlier-hit',
+          next(e[4] for e in a.events if e[0]=='hit') == 7, a.events)
+    a = fresh(); command(a,'chisel',1)
+    start=len(a.events); command(a,'resonantLance',2,1)
+    check('K1-selected-target-read',hits_since(a,start,1)==7,a.events)
+    a = fresh(); a.enemies[0].adamant=True
+    command(a,'chisel',1)
+    check('Adamant-is-not-real-Shatter',
+          [a.enemies[0].stunned,a.enemies[0].cracked,a.enemies[0].spent,a.embers]==[False,0,True,0],observe(a))
+    a = fresh(); command(a,'chisel',1)
+    branches = ['skip' if e.stunned else 'act' for e in a.enemies]
+    boundary(a,mutant); mid=[a.enemies[0].stunned,a.enemies[0].cracked]
+    boundary(a,mutant)
+    check('coupled-skip-and-decay-not-Boolean-echo-quotient',
+          branches==['skip','act'] and mid==[False,1] and a.enemies[0].cracked==0,
+          {'source_enemy_phase_branches':branches,'after_one_boundary':mid,'after_two':a.enemies[0].cracked})
+    a,b=fresh(),fresh(); a.enemies[0].chips=2
+    command(a,'chisel',1); command(b,'chisel',1)
+    check('partial-Facet-remainder-cannot-be-erased',
+          not a.enemies[0].stunned and b.enemies[0].stunned,[observe(a),observe(b)])
+    for label,s,uid in [('energy',fresh(energy=0),1),('copy',fresh(hand=[9]),1),
+                         ('terminal',fresh(over=True),1)]:
+        before=deepcopy(s); result=command(s,'chisel',uid)
+        check('unavailable-'+label,result=='ILLEGAL_UNAVAILABLE' and s==before,
+              {'result':result,'unchanged':s==before,'tail':'UNKNOWN'})
+    a=fresh(); a.enemies[0].hp=2
+    command(a,'chisel',1); result=command(a,'resonantLance',2)
+    check('producer-death-denies-consumer-not-zero',result=='ILLEGAL_UNAVAILABLE',{'tail':'UNKNOWN','trace':a.events})
+    a=fresh(energy=1,discount=1)
+    res=[command(a,'chisel',1),command(a,'resonantLance',2)]
+    check('effective-cost-discount-retained',res==['PLAYED','PLAYED'] and a.energy==0,observe(a))
+    a=fresh(); b=deepcopy(a)
+    for s,controls,p_on,c_on in [(a,True,True,True),(b,False,False,False)]:
+        command(s,'chisel',1,controls=controls,p_on=p_on)
+        command(s,'resonantLance',2,controls=controls,c_on=c_on)
+    check('K1-wrapper-off-is-exact-stock-projection',observe(a)==observe(b),{'equal':observe(a)==observe(b)})
+    others=[]
+    for p_on,c_on in product((False,True),repeat=2):
+        s=fresh(dusk=False)
+        command(s,'chisel',1,p_on=p_on); command(s,'resonantLance',2,c_on=c_on)
+        others.append(observe(s))
+    check('K1-other-aspect-wrapper-null',all(o==others[0] for o in others),others[0])
+    a=fresh(hp=2); a.enemies[0].thorns=3
+    command(a,'chisel',1)
+    check('producer-lethal-Thorns-suppresses-settlement',a.over and a.enemies[0].chips==3,observe(a))
+    a=State(enemies=[Enemy(0,hp=2),Enemy(1)])
+    command(a,'resonantLance',2)
+    check('native-amount-overkill-physical-separated',next(e[2:5] for e in a.events if e[0]=='hit')==[7,5,2],a.events)
 
-    q2_count = 0
-    algebra_cases = []
-    cells_digest = hashlib.sha256()
-    component_counterexamples = []
-    for up_p, up_c, hp, block, background, weak, cracked in product(
-            (False, True), (False, True), (2, 40), (0, 6, 40),
-            (0, 2), (False, True), (False, True)):
-        cells = {}
-        for p_on, c_on in product((False, True), repeat=2):
-            s = State(enemies=[Enemy(0, hp=hp, block=block, cracked=int(cracked)), Enemy(1)],
-                      strength=background, weak=weak)
-            play(s, card("empower", up_p), 1, p_enabled=p_on, mutant=mutant)
-            play(s, card("flurry", up_c), 2, c_enabled=c_on, mutant=mutant)
-            cells[f"{int(p_on)}{int(c_on)}"] = {"physical": physical(s), "state": public(s)}
-        i = cells["11"]["physical"] - cells["10"]["physical"] - cells["01"]["physical"] + cells["00"]["physical"]
-        if hp == 40 and block == 0 and not weak and not cracked:
-            algebra_cases.append(i == 2 * (3 if up_p else 2))
-        if i != 2 * (3 if up_p else 2):
-            component_counterexamples.append(q2_count)
-        cells_digest.update((canonical([q2_count, cells, i]) + "\n").encode())
-        q2_count += 1
-    check("Q2-restricted-component-algebra", all(algebra_cases),
-          {"plain_cases": len(algebra_cases), "cells": q2_count,
-           "factor_cells": q2_count * 4, "all_cells_sha256": cells_digest.hexdigest()})
-    check("Q2-2s-is-not-universal-HP", bool(component_counterexamples),
-          {"counterexample_count": len(component_counterexamples),
-           "first_indices": component_counterexamples[:8]})
-
-    a = State(strength=2)
-    play(a, card("empower"), 1, mutant=mutant)
-    play(a, card("flurry"), 2, mutant=mutant)
-    phase_boundary(a, mutant)
-    play(a, card("flurry"), 3, 1, mutant=mutant)
-    check("Q2-persistent-retargeted-second-consumer", a.strength == 4 and physical(a, 1) == 18,
-          {"strength": a.strength, "second_target_physical": physical(a, 1)})
-    check("Q2-one-Power-not-Exhaust", a.consumed == [1] and a.embers == 0,
-          {"consumed": a.consumed, "embers": a.embers})
-    check("Q2-one-card-three-hits-one-chip-settlement",
-          a.attacks == 2 and sum(e[0] == "chip" for e in a.events) == 2,
-          {"attack_commands": a.attacks, "chip_events": [e for e in a.events if e[0] == "chip"]})
-    a = State(strength=2)
-    play(a, card("empower"), 1, p_enabled=False)
-    play(a, card("flurry"), 2, c_enabled=False)
-    check("Q2-producer-erasure-preserves-other-Strength", a.strength == 2 and physical(a) == 12,
-          {"strength": a.strength, "physical": physical(a)})
-    a = State()
-    play(a, card("flurry"), 2)
-    play(a, card("empower"), 1)
-    check("Q2-reverse-order-no-retroactive-payoff", physical(a) == 6, physical(a))
-    a = State()
-    play(a, card("empower"), 1)
-    check("Q2-producer-only-no-hit", physical(a) == 0 and a.strength == 2, public(a))
-    a = State()
-    r = play(a, card("flurry"), 2)
-    check("Q2-consumer-independently-enabled", r == "PLAYED" and physical(a) == 6, [r, physical(a)])
-
-    # The old chip factors do not remove native Strength on either side.
-    old = {}
-    for family, enabled in product(("one-bit", "power-cycle"), (False, True)):
-        s = State()
-        play(s, card("empower"), 1, family=family, enabled=enabled)
-        play(s, card("flurry"), 2, family=family, enabled=enabled)
-        old[f"{family}:{enabled}"] = [s.strength, physical(s), s.enemies[0].chips, s.ready]
-    check("Q2-common-native-background-present-in-old-factors",
-          all(v[:2] == [2, 12] for v in old.values()), old)
-    native, disabled = State(), State()
-    for c, uid in [(card("empower"), 1), (card("flurry"), 2)]:
-        play(native, c, uid)
-        play(disabled, c, uid, family="one-bit", enabled=False)
-    check("old-factor-off-is-full-native-identity", public(native) == public(disabled),
-          {"equal": public(native) == public(disabled), "ready": disabled.ready})
-    check("Q2-old-active-payoff-not-Fervor-payoff",
-          old["one-bit:True"][2] == 2 and old["one-bit:False"][2] == 1 and
-          old["power-cycle:True"][2] == 1, old)
-    a = State()
-    play(a, card("empower"), 1)
-    play(a, card("empower", True), 3)
-    check("Q2-additive-state-not-setup-Boolean", a.strength == 5, a.strength)
-    other = []
-    for p_on, c_on in product((False, True), repeat=2):
-        s = State(dusk=False)
-        play(s, card("empower"), 1, p_enabled=p_on)
-        play(s, card("flurry"), 2, c_enabled=c_on)
-        other.append(public(s))
-    check("other-aspect-wrapper-null-not-absence-of-native-Strength",
-          all(x == other[0] for x in other) and physical(s) == 12,
-          {"four_paths_equal": all(x == other[0] for x in other), "physical": physical(s)})
-    a, b = State(), State()
-    play(a, card("empower"), 1)
-    play(a, card("flurry"), 2)
-    play(b, card("empower"), 1, enabled=False, p_enabled=False)
-    play(b, card("flurry"), 2, enabled=False, c_enabled=False)
-    check("omitted-explicit-off-wrapper-identity", public(a) == public(b), public(b))
-
-    for label, s, c, uid in [
-            ("energy", State(energy=0), q1["P"], 1),
-            ("copy", State(hand=[9]), q1["P"], 1),
-            ("terminal", State(over=True), q1["P"], 1)]:
-        before = deepcopy(s)
-        r = play(s, c, uid)
-        check("denial-" + label, r == "ILLEGAL_UNAVAILABLE" and s == before,
-              {"result": r, "unchanged": s == before, "continuation": "UNKNOWN"})
-    a = State(energy=1, discount=1)
-    r = word(a, q1)
-    check("effective-costs-not-fixed-two-Energy", r == ["PLAYED", "PLAYED"] and a.energy == 0,
-          {"results": r, "paid": [e[3] for e in a.events if e[0] == "play"]})
-    a = State(enemies=[Enemy(0, hp=2), Enemy(1)])
-    play(a, q1["C"], 2, mutant=mutant)
-    h = next(e for e in a.events if e[0] == "hit")
-    check("native-amount-includes-ordinary-overkill", h[2:5] == [7, 5, 2], h)
-    a = State(enemies=[Enemy(0, hp=2, finale=True), Enemy(1)])
-    play(a, q1["C"], 2, mutant=mutant)
-    h = next(e for e in a.events if e[0] == "hit")
-    check("native-finale-handoff-clamps-amount", h[2:5] == [1, 0, 1] and a.over, h)
-    a = State(hp=2, enemies=[Enemy(0, thorns=3), Enemy(1)])
-    play(a, card("flurry"), 2, mutant=mutant)
-    check("lethal-Thorns-interrupts-sequential-hits", a.over and physical(a) == 2,
-          {"physical": physical(a), "over": a.over})
-    a = State(enemies=[Enemy(0, hp=2), Enemy(1)], reaper=True)
-    play(a, card("flurry"), 2)
-    check("nonfinal-death-keeps-resource-obligation", a.energy == 4 and a.draws_owed == 1,
-          {"energy": a.energy, "draws_owed_not_cards": a.draws_owed})
-    a = State(enemies=[Enemy(0, chips=4), Enemy(1)], bell=True)
-    play(a, card("flurry"), 2, mutant=mutant)
-    kinds = [e[0] for e in a.events]
-    check("deferred-Shatter-after-all-hits", kinds.index("shatter") > max(i for i, e in enumerate(a.events) if e[0] == "hit" and e[1] == 0), a.events)
-    a = State(strength=5, attributed=3)
-    phase_boundary(a, mutant)
-    fresh = State()
-    check("combat-reset-not-turn-reset", a.strength == 5 and fresh.strength == 0,
-          {"after_phase": a.strength, "new_combat": fresh.strength})
-    failed = [c["name"] for c in checks if not c["pass"]]
-    return {"schema": "DD1-SOURCE-1-CHECKS-1", "native": False,
-            "certificate": False, "mutant": mutant, "checks": checks,
-            "summary": {"named_checks": len(checks), "q1_cells": count,
-                        "q2_contexts": q2_count, "q2_factor_cells": q2_count * 4,
-                        "failed": failed}}
+    # Same product, same initial resources/targets. These are source peer probes,
+    # not reruns of either accepted standalone suite or strategy labels.
+    peers={}
+    for producer,consumer in product(('chisel','empower','setTheAngle'),
+                                    ('resonantLance','flurry','crosscut')):
+        s=fresh(); command(s,producer,1,0)
+        producer_state=observe(s)
+        start=len(s.events); command(s,consumer,2,1 if consumer=='crosscut' else 0)
+        peers[producer+'->'+consumer]={'producer_state':producer_state,
+            'hits': [e for e in s.events[start:] if e[0]=='hit'],
+            'player': [s.block,s.strength], 'counts':[s.cards,s.attacks]}
+    def targets(key): return [h[1] for h in peers[key]['hits']]
+    check('peer-all-six-cross-substitutions-retained',
+          targets('chisel->crosscut')==[1] and targets('empower->crosscut')==[1] and
+          targets('setTheAngle->crosscut')==[1,0] and
+          len(targets('setTheAngle->flurry'))==3 and
+          peers['chisel->flurry']['player'][1]==0 and
+          peers['empower->resonantLance']['hits'][0][4]==9,peers)
+    # Two continuations for each producer retain different target/lifetime laws.
+    matrix={}
+    for route,prod,cons in [('K1','chisel','resonantLance'),('K2','empower','flurry'),('DD1','setTheAngle','crosscut')]:
+        vals=[]
+        for t in (0,1):
+            s=fresh(); command(s,prod,1,0)
+            start=len(s.events); command(s,cons,2,t)
+            vals.append([e for e in s.events[start:] if e[0]=='hit'])
+        matrix[route]=vals
+    check('peer-target-binding-patterns',
+          [h[4] for h in matrix['K1'][0]]==[21] and [h[4] for h in matrix['K1'][1]]==[7] and
+          [h[4] for h in matrix['K2'][0]]==[4,4,4] and [h[4] for h in matrix['K2'][1]]==[4,4,4] and
+          [h[1] for h in matrix['DD1'][0]]==[0] and [h[1] for h in matrix['DD1'][1]]==[1,0],matrix)
+    a=fresh(energy=10,hand=list(range(1,9))); a.enemies[0].hp=a.enemies[1].hp=200
+    for name,uid,t in [('setTheAngle',1,0),('chisel',2,0),('empower',3,0),
+                       ('crosscut',4,1),('resonantLance',5,0),('flurry',6,0)]:
+        command(a,name,uid,t)
+    direct=[e[4] for e in a.events if e[0]=='hit']
+    check('same-product-mixed-chains-not-one-hot',direct==[4,7,10,24,6,6,6],observe(a))
+    a=fresh(); a.enemies[0].chips=0
+    command(a,'setTheAngle',1,0); command(a,'crosscut',2,1); command(a,'crosscut',3,1)
+    check('peer-anchor-consumed-not-persistent-Strength',
+          len([e for e in a.events if e[0]=='hit' and e[1]==0])==1,observe(a))
+    a=fresh(); command(a,'setTheAngle',1,0); boundary(a,mutant)
+    command(a,'crosscut',2,1)
+    check('peer-anchor-expires-not-persistent-Strength',
+          [e[1] for e in a.events if e[0]=='hit']==[1],observe(a))
+    a=fresh(); a.anchor=Enemy(0,hp=80)
+    command(a,'crosscut',2,1)
+    check('peer-anchor-object-identity-not-matching-key',
+          [e[1] for e in a.events if e[0]=='hit']==[1],observe(a))
+    # Both targets close to a threshold, primary index 1 before return index 0.
+    # Bell kills target 0 only after its return, in correct native ordering.
+    a=State(enemies=[Enemy(0,hp=9,chips=4),Enemy(1,hp=80,chips=4)],bell=True)
+    command(a,'setTheAngle',1,0); command(a,'crosscut',2,1)
+    chips=[e[1] for e in a.events if e[0]=='chip']
+    direct=[e for e in a.events if e[0]=='hit']
+    check('peer-insertion-order-and-return-before-Bell',
+          len(direct)>=3 and direct[0][1:5]==[1,5,0,5] and
+          direct[1][1:5]==[0,5,0,5] and chips==[1],observe(a))
+    # Null DD1 does not remove generic native collateral or turn it into DD1 credit.
+    a=State(enemies=[Enemy(0,hp=80),Enemy(1,hp=80,chips=4)],bell=True)
+    command(a,'setTheAngle',1,0,dd1_on=False); command(a,'crosscut',2,1,dd1_on=False)
+    check('collateral-can-hit-anchor-with-DD1-off',physical(a,0)==4,observe(a))
+    # Corrected label only: enabled power-cycle has no draw-Skill and is unarmed.
+    a=State()
+    play(a,card('empower'),1,family='power-cycle',enabled=True)
+    play(a,card('flurry'),2,family='power-cycle',enabled=True)
+    check('power-cycle-enabled-but-unarmed-no-draw',
+          not a.flow and a.ready and a.enemies[0].chips==1,
+          {'flow':a.flow,'form':a.ready,'chips':a.enemies[0].chips,'not_port_ON':True})
+    # Native interpretation must not run three chip settlements for Flurry.
+    a=fresh(); a.enemies[0].chips=4
+    command(a,'empower',1); command(a,'flurry',2)
+    check('mixed-Strength-three-hits-before-single-settlement',
+          [e[0] for e in a.events].count('chip')==1 and
+          [e[4] for e in a.events if e[0]=='hit']==[4,4,4],a.events)
+    failed=[x['name'] for x in checks if not x['pass']]
+    return {'schema':'DD1-SOURCE-1-CORRECTED-CHECKS-1','native':False,'certificate':False,
+            'mutant':mutant,'checks':checks,
+            'grid':{'order':'upP,upC,HP,Block,Strength,Weak,Adamant,facet,all remainders; settings 00,01,10,11',
+                    'cell_columns':['consumer_legal','preconsumer_OR_guard','consumer_physical_HP_or_null'],
+                    'rows_rle':rle(grid),'expanded_trace_sha256':stream.hexdigest()},
+            'summary':{'named_checks':len(checks),'q1_contexts':len(grid),'component_cells':len(grid)*4,
+                       'peer_substitutions':9,'failed':failed},
+            'interpretation':'Transcription, state separation and adverse evidence; source eligibility is a separate author proof, not this return value.'}
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--mutant", default="", choices=("", "drop-stun", "wrong-target",
-                        "per-hit-chips", "consume-strength", "reset-strength",
-                        "power-exhaust", "clamp-amount"))
-    args = parser.parse_args()
-    result = run(args.mutant)
+if __name__=='__main__':
+    p=argparse.ArgumentParser()
+    p.add_argument('--mutant',choices=('',)+MUTANTS,default='')
+    p.add_argument('--export-cells',help='Optional complete deterministic constructed cell traces; never native records.')
+    args=p.parse_args()
+    if args.export_cells:
+        with open(args.export_cells,'w',encoding='utf-8') as f:
+            result=run(args.mutant,f)
+    else:
+        result=run(args.mutant)
     print(canonical(result))
-    raise SystemExit(2 if result["summary"]["failed"] else 0)
+    raise SystemExit(2 if result['summary']['failed'] else 0)
