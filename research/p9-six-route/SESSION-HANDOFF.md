@@ -1,3 +1,11 @@
+# P9 current capsule — DD1-NATIVE-1 N0 repair complete (5705322630)
+
+Updated 2026-09-16. Overlay `research/p9-six-route/dd1-native-1-overlay` repair head `ab74e33b4c80d435012c4313074481c2bd17ceb8` (plus identity commit after this handoff bind). Original O `d8f4dde0…` retained. M `07b5aa9d…` unmutated.
+
+R0–R3 repaired on the same candidate. Attempt 1/1 not reset. Preflight 226/8192. Isolated review is next. 0/3 certificates.
+
+---
+
 # P9 current capsule — DD1-NATIVE-1 native author batch complete
 
 Updated 2026-09-16. Existing branch `research/p9-six-route-local-20260905`; overlay tree `research/p9-six-route/dd1-native-1-overlay`. Sole local author. Reviewer parked. This capsule records the native N0 author batch. It does not replace accepted D/C/H bytes or the prior source-correction history below.
