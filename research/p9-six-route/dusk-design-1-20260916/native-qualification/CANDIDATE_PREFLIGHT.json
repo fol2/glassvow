@@ -1,7 +1,15 @@
 {
   "schema": "DD1-NATIVE-1-CANDIDATE_PREFLIGHT-1",
-  "status": "FROZEN_BEFORE_FIRST_CANDIDATE_NATIVE_INVOCATION",
+  "status": "RECONCILED_R0_BEFORE_NEXT_NATIVE_INVOCATION",
   "frozen_at_utc": "2026-09-16T21:30:00Z",
+  "r0_reconciled_at_utc": "2026-09-16T22:40:00Z",
+  "exact_pre_next_invocation": {
+    "O": "d8f4dde0905db7156008a53173e3851768448b8d",
+    "test_dd1_blob_at_O": "baaeff7b43c4804fc812d0f11e8b94ac432b328f",
+    "combat_blob_at_O": "8110f15efe5119c5a0d82947b8ddd695ba17d66b",
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_overlay.gd"
+  },
   "activation": {
     "issue": 421,
     "prepared_comment_id": 5704445133,
@@ -59,13 +67,14 @@
     "note": "No development panel, no policy fitting, no confirmation freeze."
   },
   "intervention_and_null_table": {
-    "K1_P_off": "Strike vs Chisel: printed extra chip removed; ordinary hit/implicit chip/cost retained",
-    "K1_C_off": "ordinary attack / Eclipse Slash vs Resonant Lance: echo multiplier removed; Cracked scaling/hit/lifecycle retained",
+    "K1_P_off": "research_mask_printed_chip on the same paid chisel: printed extra chip removed; ordinary hit/implicit chip/cost retained",
+    "K1_C_off": "research_mask_echo on the same paid resonantLance: echo multiplier removed; Cracked scaling/hit/cost/lifecycle retained",
+    "K1_substitutions": "Strike and Eclipse Slash remain lawful substitutions, not component-off masks",
     "K1_guard": "staggered OR vulnerable>0; separately observable staggered-only and cracked-only",
-    "DD1_P_off": "consumer without producer: primary only",
-    "DD1_C_off": "producer without consumer: mark unused, expires before enemy phase",
+    "DD1_P_off": "research_mask_anchor: Set the Angle still grants Block and does not install the marker",
+    "DD1_C_off": "research_mask_return: Crosscut still pays and delivers primary, no return",
     "DD1_same_target": "consume without return",
-    "DD1_other_aspect": "Ash return null; Strength/echo not claimed absent on Ash",
+    "DD1_other_aspect": "Ash does not install the public marker; Block/primary retained; Strength/echo not claimed absent on Ash",
     "illegal": "missing UID / dead / OOR / insufficient energy do not clear mark"
   },
   "required_assertions": {

@@ -23,22 +23,29 @@ static func run(fails: Array[String]) -> void:
 	_both_pool_paths(fails)
 	_v2_save_and_pending_reconstruction(fails)
 	_marker_and_export_reader(fails)
+	_r1_same_command_masks(fails)
+	_r1_sequential_energy_and_vow(fails)
+	_r2_ash_marker_and_thorns_preview(fails)
+	_r2_finale_handoff_suppresses_return(fails)
+	_r3_ordering_negative_and_bell(fails)
+	_r3_overkill_and_m_fixture(fails)
 	print("  DD1-NATIVE-1 native_starts=%d" % native_starts)
 
 
 static func _fight(
 	tag: String,
 	aspect: int = 0,
-	enemy_ids: Array = ["sporeling", "sporeling"]
+	enemy_ids: Array = ["sporeling", "sporeling"],
+	vow: int = 0
 ) -> GlassvowGame:
 	native_starts += 1
 	var content: ContentDB = ContentDB.load_full(false)
-	var run: RunState = RunState.new_run(content, 4211601, tag, {"aspect": aspect, "vow": 0})
+	var run: RunState = RunState.new_run(content, 4211601, tag, {"aspect": aspect, "vow": vow})
 	var game: GlassvowGame = GlassvowGame.new(content, run)
 	game.apply({"t": "startCombat", "enemies": enemy_ids, "kind": "normal"})
 	if game.cb == null:
 		return game
-	game.cb.player.energy = 3
+	game.cb.player.energy = 10
 	game.cb.player.block = 0
 	game.cb.first_card_played = true
 	for e: EnemyCombatant in game.cb.enemies:
@@ -54,8 +61,16 @@ static func _fight(
 static func _add(game: GlassvowGame, id: StringName, up: bool = false) -> CardInst:
 	var inst: CardInst = CardInst.new(game.run.next_uid(), id, up)
 	game.cb.hand.append(inst)
-	game.cb.player.energy = maxi(game.cb.player.energy, 3)
 	return inst
+
+
+static func _cap(game: GlassvowGame, events: Array, pre_hp: Dictionary, tag: String) -> Dictionary:
+	return DuskNativeExportReader.bind_capture(events, pre_hp, {
+		"role": "native_export/N0/v0",
+		"tag": tag,
+		"vow": game.run.vow,
+		"aspect": game.run.aspect,
+	})
 
 
 static func _play(game: GlassvowGame, inst: CardInst, target: Variant) -> Array[Dictionary]:
@@ -103,19 +118,30 @@ static func _crosscut_return_and_order(fails: Array[String]) -> void:
 	_fail(fails, game.cb.crosscut_anchor == null, "consumer consumes the mark")
 	var hits: Array = _hits(events_c)
 	_fail(fails, hits.size() == 2, "consumer two ordinary hits, got %d" % hits.size())
-	if hits.size() >= 2:
-		_fail(fails, _ji(hits[0].get("idx", -1)) == b.idx, "primary is B")
-		_fail(fails, _ji(hits[1].get("idx", -1)) == a.idx, "return is A")
-		_fail(fails, _ji(hits[0].get("amount", 0)) == 5, "primary amount 5")
-		_fail(fails, _ji(hits[1].get("amount", 0)) == 5, "return amount 5")
+	if hits.size() != 2:
+		return
+	_fail(fails, _ji(hits[0].get("idx", -1)) == b.idx, "primary is B idx 1")
+	_fail(fails, _ji(hits[1].get("idx", -1)) == a.idx, "return is A idx 0")
+	_fail(fails, _ji(hits[0].get("amount", 0)) == 5, "primary amount 5")
+	_fail(fails, _ji(hits[1].get("amount", 0)) == 5, "return amount 5")
 	_fail(fails, b.hp == 15 and a.hp == 15, "physical HP after both hits")
-	var obs: Array = DuskNativeExportReader.hit_observations(events_c, pre_hp)
-	if obs.size() >= 2:
-		_fail(fails, _ji(obs[0]["physicalHpLoss"]) == 5, "physical primary 5")
-		_fail(fails, _ji(obs[1]["physicalHpLoss"]) == 5, "physical return 5")
-		_fail(fails, _ji(obs[0]["overkill"]) == 0, "no overkill on primary")
-	_fail(fails, DuskNativeExportReader.first_hit_index_before_chips(events_c) == 1,
-		"both hits before chip settlement")
+	_fail(fails, DuskNativeExportReader.ordinary_hits_precede_first_chip(events_c, 2),
+		"both Crosscut hits before this card's first chip")
+	var cap: Dictionary = _cap(game, events_c, pre_hp, "return-order")
+	var obs_v: Variant = DuskNativeExportReader.hit_observations(cap)
+	_fail(fails, typeof(obs_v) == TYPE_ARRAY, "reader resolved hits")
+	if typeof(obs_v) != TYPE_ARRAY:
+		return
+	var obs: Array = obs_v
+	_fail(fails, obs.size() == 2, "reader two hits")
+	if obs.size() != 2:
+		return
+	_fail(fails, _ji(obs[0]["physicalHpLoss"]) == 5, "physical primary 5")
+	_fail(fails, _ji(obs[1]["physicalHpLoss"]) == 5, "physical return 5")
+	_fail(fails, _ji(obs[0]["overkill"]) == 0, "no overkill on primary")
+	var p0: Dictionary = obs[0]["pointer"]
+	_fail(fails, DuskNativeExportReader.resolve(p0, cap) != null,
+		"primary pointer resolves against captured bytes")
 	var chips: Array = DuskNativeExportReader.chip_order(events_c)
 	_fail(fails, chips.size() == 2, "one-card chips on both connected targets")
 	if chips.size() >= 2:
@@ -187,6 +213,8 @@ static func _crosscut_illegal_does_not_mutate(fails: Array[String]) -> void:
 	var ash: GlassvowGame = _fight("illegal-ash", 1)
 	if ash.cb != null:
 		_play(ash, _add(ash, &"setTheAngle"), 0)
+		_fail(fails, ash.cb.player.block == 4, "Ash producer still grants Block")
+		_fail(fails, ash.cb.crosscut_anchor == null, "Ash must not install the public marker")
 		var ash_events: Array[Dictionary] = _play(ash, _add(ash, &"crosscut"), 1)
 		_fail(fails, _hits(ash_events).size() == 1, "Ash return is null-domain")
 
@@ -199,7 +227,8 @@ static func _crosscut_costs_and_upgrades(fails: Array[String]) -> void:
 	var c_up: CardInst = _add(game, &"crosscut", true)
 	var events: Array[Dictionary] = _play(game, c_up, 1)
 	var hits: Array = _hits(events)
-	if hits.size() >= 2:
+	_fail(fails, hits.size() == 2, "upgraded consumer two hits")
+	if hits.size() == 2:
 		_fail(fails, _ji(hits[0].get("amount", 0)) == 7, "upgraded primary 7")
 		_fail(fails, _ji(hits[1].get("amount", 0)) == 7, "upgraded return 7")
 	var disc: GlassvowGame = _fight("duskmirror")
@@ -366,13 +395,14 @@ static func _k2_empower_flurry_strength(fails: Array[String]) -> void:
 	var events: Array[Dictionary] = _play(game, _add(game, &"flurry"), 0)
 	var hits: Array = _hits(events)
 	_fail(fails, hits.size() == 3, "Flurry three sequential hits, got %d" % hits.size())
-	if hits.size() == 3:
-		_fail(fails, _ji(hits[0].get("amount", 0)) == 4, "hit1 2+2 str")
-		_fail(fails, _ji(hits[1].get("amount", 0)) == 4, "hit2 2+2 str")
-		_fail(fails, _ji(hits[2].get("amount", 0)) == 4, "hit3 2+2 str")
+	if hits.size() != 3:
+		return
+	_fail(fails, _ji(hits[0].get("amount", 0)) == 4, "hit1 2+2 str")
+	_fail(fails, _ji(hits[1].get("amount", 0)) == 4, "hit2 2+2 str")
+	_fail(fails, _ji(hits[2].get("amount", 0)) == 4, "hit3 2+2 str")
 	_fail(fails, e.hp == 8, "three Strength-boosted hits, hp %d" % e.hp)
-	_fail(fails, DuskNativeExportReader.first_hit_index_before_chips(events) == 1,
-		"three hits before one settlement")
+	_fail(fails, DuskNativeExportReader.ordinary_hits_precede_first_chip(events, 3),
+		"three Flurry hits before this card's first chip")
 	_fail(fails, game.cb.counters_attacks == 1, "Flurry counts as one Attack")
 	var ritual: GlassvowGame = _fight("k2-ritual", 0, ["sporeling"])
 	ritual.cb.player.statuses["str"] = 1
@@ -383,10 +413,17 @@ static func _k2_empower_flurry_strength(fails: Array[String]) -> void:
 	tal.cb.counters_attacks = 2
 	_play(tal, _add(tal, &"flurry"), 0)
 	_fail(fails, _ji(tal.cb.player.statuses.get("str", 0)) == 1, "Iron Talisman on the third Attack")
-	var obs: Array = DuskNativeExportReader.hit_observations(events, pre_hp)
-	_fail(fails, obs.size() == 3, "reader sees three native hits")
-	if obs.size() == 3:
-		_fail(fails, _ji(obs[0]["physicalHpLoss"]) == 4, "reader physical matches amount")
+	var cap: Dictionary = _cap(game, events, pre_hp, "k2-flurry")
+	var obs_v: Variant = DuskNativeExportReader.hit_observations(cap)
+	_fail(fails, typeof(obs_v) == TYPE_ARRAY, "reader resolved Flurry hits")
+	if typeof(obs_v) == TYPE_ARRAY:
+		var obs: Array = obs_v
+		_fail(fails, obs.size() == 3, "reader sees three native hits")
+		if obs.size() == 3:
+			_fail(fails, _ji(obs[0]["physicalHpLoss"]) == 4, "reader physical matches amount")
+			var fp: Dictionary = obs[0]["pointer"]
+			_fail(fails, DuskNativeExportReader.resolve(fp, cap) != null,
+				"Flurry pointer resolves")
 
 
 static func _mixed_three_roles(fails: Array[String]) -> void:
@@ -396,9 +433,10 @@ static func _mixed_three_roles(fails: Array[String]) -> void:
 	var events: Array[Dictionary] = _play(game, _add(game, &"crosscut"), 1)
 	var hits: Array = _hits(events)
 	_fail(fails, hits.size() == 2, "Strength applies to both Crosscut hits")
-	if hits.size() >= 2:
-		_fail(fails, _ji(hits[0].get("amount", 0)) == 7, "primary 5+2 str")
-		_fail(fails, _ji(hits[1].get("amount", 0)) == 7, "return 5+2 str")
+	if hits.size() != 2:
+		return
+	_fail(fails, _ji(hits[0].get("amount", 0)) == 7, "primary 5+2 str")
+	_fail(fails, _ji(hits[1].get("amount", 0)) == 7, "return 5+2 str")
 	_play(game, _add(game, &"chisel"), 1)
 	var lance: GlassvowGame = _fight("mixed-lance")
 	lance.cb.enemies[0].staggered = true
@@ -492,7 +530,8 @@ static func _marker_and_export_reader(fails: Array[String]) -> void:
 	var src: String = FileAccess.get_file_as_string("res://presentation/combat/enemy_view.gd")
 	_fail(fails, src.contains("set_crosscut_anchor") and src.contains("_crosscut_mark"),
 		"marker source exists")
-	var plays: Array = DuskNativeExportReader.play_observations(game.cb.queue)
+	var cap: Dictionary = _cap(game, game.cb.queue, DuskNativeExportReader.pre_hp_map(game.cb), "marker")
+	var plays: Array = DuskNativeExportReader.play_observations(cap)
 	_fail(fails, plays.size() >= 2, "reader binds ordered play pointers")
 	if plays.size() >= 2:
 		_fail(fails, str(plays[0]["id"]) == "setTheAngle", "first play is producer")
@@ -500,5 +539,219 @@ static func _marker_and_export_reader(fails: Array[String]) -> void:
 		_fail(fails, typeof(plays[0]["pointer"]) == TYPE_DICTIONARY, "pointer is a dict")
 		if typeof(plays[0]["pointer"]) == TYPE_DICTIONARY:
 			var ptr: Dictionary = plays[0]["pointer"]
-			_fail(fails, str(ptr.get("role", "")) == "native_export/A/v0",
-				"pointer uses bound role")
+			_fail(fails, str(ptr.get("role", "")) == "native_export/N0/v0",
+				"pointer uses N0 role")
+			_fail(fails, plays[0].get("resolved") == true, "play pointer resolves")
+
+
+static func _r1_same_command_masks(fails: Array[String]) -> void:
+	# Same paid Chisel, printed extra chip off. Strike substitution stays separate.
+	var ch: GlassvowGame = _fight("r1-chisel-mask", 0, ["sporeling"])
+	var e: EnemyCombatant = ch.cb.enemies[0]
+	e.facet_max = 8
+	e.chips = 0
+	ch.rules.research_mask_printed_chip = true
+	_play(ch, _add(ch, &"chisel"), 0)
+	_fail(fails, e.hp == 16, "masked Chisel still deals ordinary 4")
+	_fail(fails, e.chips == 1, "masked Chisel keeps implicit chip only")
+	_fail(fails, ch.cb.player.energy == 9, "masked Chisel still paid 1")
+	# Same paid Lance, echo multiplier off; Cracked scaling remains.
+	var ln: GlassvowGame = _fight("r1-lance-mask", 0, ["sporeling"])
+	var e2: EnemyCombatant = ln.cb.enemies[0]
+	e2.hp = 40
+	e2.max_hp = 40
+	e2.staggered = false
+	e2.statuses["vulnerable"] = 1
+	ln.rules.research_mask_echo = true
+	_play(ln, _add(ln, &"resonantLance"), 0)
+	_fail(fails, e2.hp == 40 - 10, "echo-off Lance is 7 then Cracked 1.5 = 10, hp %d" % e2.hp)
+	# DD1: mask anchor keeps Block; mask return keeps primary.
+	var p_off: GlassvowGame = _fight("r1-anchor-mask")
+	p_off.rules.research_mask_anchor = true
+	_play(p_off, _add(p_off, &"setTheAngle"), 0)
+	_fail(fails, p_off.cb.player.block == 4, "anchor-off still grants Block")
+	_fail(fails, p_off.cb.crosscut_anchor == null, "anchor-off does not install marker")
+	var c_off: GlassvowGame = _fight("r1-return-mask")
+	_play(c_off, _add(c_off, &"setTheAngle"), 0)
+	c_off.rules.research_mask_return = true
+	var ev: Array[Dictionary] = _play(c_off, _add(c_off, &"crosscut"), 1)
+	_fail(fails, _hits(ev).size() == 1, "return-off keeps primary only")
+	_fail(fails, c_off.cb.crosscut_anchor == null, "return-off still consumes the mark")
+	# Substitutions remain labelled substitutions (not masks).
+	var sub: GlassvowGame = _fight("r1-strike-sub", 0, ["sporeling"])
+	var e3: EnemyCombatant = sub.cb.enemies[0]
+	e3.facet_max = 8
+	e3.chips = 0
+	_play(sub, _add(sub, &"strike"), 0)
+	_fail(fails, e3.chips == 1, "Strike substitution is implicit chip only")
+
+
+static func _r1_sequential_energy_and_vow(fails: Array[String]) -> void:
+	var game: GlassvowGame = _fight("r1-energy")
+	game.cb.player.energy = 2
+	var p: CardInst = _add(game, &"setTheAngle")
+	var c: CardInst = _add(game, &"crosscut")
+	_fail(fails, game.cb.player.energy == 2, "_add does not refill energy")
+	_play(game, p, 0)
+	_fail(fails, game.cb.player.energy == 1, "producer spent 1 of 2")
+	_play(game, c, 1)
+	_fail(fails, game.cb.player.energy == 0, "consumer spent last energy")
+	var extra: CardInst = _add(game, &"setTheAngle")
+	game.apply({"t": "playCard", "uid": extra.uid, "target": 0})
+	_fail(fails, game.last_ret == false, "third card denied at 0 energy")
+	var v5: GlassvowGame = _fight("r1-vow5", 0, ["sporeling", "sporeling"], 5)
+	_play(v5, _add(v5, &"setTheAngle"), 0)
+	var v5e: Array[Dictionary] = _play(v5, _add(v5, &"crosscut"), 1)
+	_fail(fails, _hits(v5e).size() == 2, "vow 5 still delivers return")
+	var v5c: GlassvowGame = _fight("r1-vow5-chisel", 0, ["sporeling"], 5)
+	v5c.cb.enemies[0].facet_max = 8
+	_play(v5c, _add(v5c, &"chisel"), 0)
+	_fail(fails, v5c.cb.enemies[0].chips == 2, "vow 5 Chisel still prints extra chip")
+
+
+static func _r2_ash_marker_and_thorns_preview(fails: Array[String]) -> void:
+	var ash: GlassvowGame = _fight("r2-ash-mark", 1)
+	_play(ash, _add(ash, &"setTheAngle"), 0)
+	_fail(fails, ash.cb.player.block == 4, "Ash Block retained")
+	_fail(fails, not ash.cb.has_live_crosscut_anchor(), "Ash public marker absent")
+	var th: GlassvowGame = _fight("r2-thorns")
+	th.cb.enemies[1].statuses["thorns"] = 3
+	_play(th, _add(th, &"setTheAngle"), 0)
+	th.cb.player.hp = 2
+	th.cb.player.block = 0
+	var consumer: CardInst = _add(th, &"crosscut")
+	var pv: Variant = th.rules.preview_play(th.cb, consumer, 1, th.run)
+	_fail(fails, typeof(pv) == TYPE_DICTIONARY, "thorns preview exists")
+	if typeof(pv) == TYPE_DICTIONARY:
+		var pvd: Dictionary = pv
+		_fail(fails, not pvd.has("return"), "primary-Thorns-lethal preview suppresses return")
+	var ev: Array[Dictionary] = _play(th, consumer, 1)
+	_fail(fails, th.cb.over, "Thorns 3 kills 2 HP player")
+	_fail(fails, _hits(ev).size() == 1, "Thorns-lethal primary suppresses return")
+
+
+static func _r2_finale_handoff_suppresses_return(fails: Array[String]) -> void:
+	var game: GlassvowGame = _fight("r2-finale", 0, ["sporeling", "eternalKeeper"])
+	if game.cb == null or game.cb.enemies.size() < 2:
+		_fail(fails, false, "finale fight missing")
+		return
+	var keeper: EnemyCombatant = game.cb.enemies[1]
+	keeper.hp = 3
+	keeper.max_hp = 3
+	_play(game, _add(game, &"setTheAngle"), 0)
+	var consumer: CardInst = _add(game, &"crosscut")
+	var pv: Variant = game.rules.preview_play(game.cb, consumer, 1, game.run)
+	if typeof(pv) == TYPE_DICTIONARY:
+		var pvd: Dictionary = pv
+		_fail(fails, not pvd.has("return"), "finale-lethal preview suppresses return")
+	var ev: Array[Dictionary] = _play(game, consumer, 1)
+	_fail(fails, game.cb.finale_handoff or game.cb.over, "keeper lethal is handoff/terminal")
+	_fail(fails, _hits(ev).size() == 1, "finale handoff suppresses return")
+
+
+static func _r3_ordering_negative_and_bell(fails: Array[String]) -> void:
+	var bad: Array = [
+		{"t": "hitEnemy", "idx": 1, "amount": 5, "hpAfter": 15, "overkill": 0},
+		{"t": "chip", "idx": 1, "n": 1},
+		{"t": "hitEnemy", "idx": 0, "amount": 5, "hpAfter": 15, "overkill": 0},
+		{"t": "chip", "idx": 0, "n": 1},
+	]
+	_fail(fails, not DuskNativeExportReader.ordinary_hits_precede_first_chip(bad, 2),
+		"interleaved hit/chip must fail the ordering predicate")
+	var good: Array = [
+		{"t": "hitEnemy", "idx": 1},
+		{"t": "hitEnemy", "idx": 0},
+		{"t": "chip", "idx": 1},
+		{"t": "hitEnemy", "idx": 0},
+	]
+	_fail(fails, DuskNativeExportReader.ordinary_hits_precede_first_chip(good, 2),
+		"Bell-like hit after settlement is allowed")
+	var missing: Dictionary = DuskNativeExportReader.bind_capture(
+		[{"t": "hitEnemy", "idx": 0, "amount": 7}],
+		{},
+		{"role": "native_export/N0/v0"}
+	)
+	_fail(fails, DuskNativeExportReader.hit_observations(missing) == null,
+		"reader rejects manufactured HP without pre snapshot / hpAfter")
+	var bell: GlassvowGame = _fight("r3-bell")
+	bell.run.player.relics.append("bellOfEndings")
+	var a: EnemyCombatant = bell.cb.enemies[0]
+	var b: EnemyCombatant = bell.cb.enemies[1]
+	a.hp = 6
+	a.max_hp = 6
+	b.facet_max = 4
+	b.chips = 3
+	_play(bell, _add(bell, &"setTheAngle"), 0)
+	var ev: Array[Dictionary] = _play(bell, _add(bell, &"crosscut"), 1)
+	_fail(fails, DuskNativeExportReader.ordinary_hits_precede_first_chip(ev, 2),
+		"Crosscut hits still precede first chip when Bell is armed")
+	_fail(fails, a.hp <= 0, "Bell kills anchor A before A's chip can land")
+	var chips: Array = DuskNativeExportReader.chip_order(ev)
+	var a_chip: bool = false
+	for rec_v: Variant in chips:
+		var rec: Dictionary = rec_v
+		if _ji(rec.get("idx", -1)) == a.idx:
+			a_chip = true
+	_fail(fails, not a_chip, "dead A receives no chip settlement")
+
+
+static func _r3_overkill_and_m_fixture(fails: Array[String]) -> void:
+	var ov: GlassvowGame = _fight("r3-overkill", 0, ["sporeling"])
+	var e: EnemyCombatant = ov.cb.enemies[0]
+	e.hp = 2
+	e.max_hp = 2
+	var pre: Dictionary = DuskNativeExportReader.pre_hp_map(ov.cb)
+	var ev: Array[Dictionary] = _play(ov, _add(ov, &"resonantLance"), 0)
+	var hits: Array = _hits(ev)
+	_fail(fails, hits.size() == 1, "overkill one hit")
+	if hits.size() == 1:
+		_fail(fails, _ji(hits[0].get("amount", 0)) == 7, "reported amount 7")
+		_fail(fails, _ji(hits[0].get("overkill", 0)) == 5, "overkill 5")
+		_fail(fails, _ji(hits[0].get("hpAfter", -1)) == 0, "hpAfter 0")
+	var cap: Dictionary = _cap(ov, ev, pre, "overkill")
+	var obs_v: Variant = DuskNativeExportReader.hit_observations(cap)
+	if typeof(obs_v) == TYPE_ARRAY:
+		var obs: Array = obs_v
+		_fail(fails, obs.size() == 1 and _ji(obs[0]["physicalHpLoss"]) == 2,
+			"physical HP removed is 2, not reported 7")
+	# M fixture via SaveService, not an overlay-minted save labelled as recovered.
+	var content: ContentDB = ContentDB.load_full(false)
+	var raw: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string("res://port_fixtures/saves/snapshots.json")
+	)
+	_fail(fails, typeof(raw) == TYPE_DICTIONARY, "M snapshot fixture readable")
+	if typeof(raw) != TYPE_DICTIONARY:
+		return
+	var root: Dictionary = raw
+	var snapshots: Array = root.get("snapshots", [])
+	_fail(fails, snapshots.size() > 0, "M snapshot list")
+	if snapshots.is_empty():
+		return
+	var entry: Dictionary = snapshots[0]
+	var snapshot: Dictionary = entry["snapshot"]
+	var save: Dictionary = snapshot.duplicate(true)
+	save["v"] = 2
+	save["runId"] = "dd1-m-fixture"
+	save["map"] = {"nodes": [], "visited": []}
+	save["pendingCombat"] = "monster"
+	save["pendingEnemyIds"] = ["sporeling", "sporeling"]
+	var path: String = "user://dd1_m_fixture_v2.json"
+	var rs: RunState = RunState.from_save_dict(save, content)
+	_fail(fails, rs != null, "M fixture from_save_dict accepted")
+	if rs == null:
+		return
+	_fail(fails, SaveService.store(rs, path), "SaveService stored M fixture")
+	var loaded: RunState = SaveService.load_run(content, path)
+	_fail(fails, loaded != null, "SaveService.load_run is the application load seam")
+	if loaded == null:
+		return
+	native_starts += 1
+	var resumed: GlassvowGame = GlassvowGame.new(content, loaded)
+	resumed.apply({
+		"t": "startCombat",
+		"enemies": loaded.pending_enemy_ids,
+		"kind": "normal",
+	})
+	_fail(fails, resumed.cb != null and resumed.cb.crosscut_anchor == null,
+		"M-fixture pending resume is marker-free")
+	SaveService.clear(path)

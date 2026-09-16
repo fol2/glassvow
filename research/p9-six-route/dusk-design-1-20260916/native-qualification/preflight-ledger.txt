@@ -1,8 +1,49 @@
-VENUE
-godot: 4.7.2.stable.official.ed1daf0bf
-cwd: /Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-16-dd1-native-overlay
-HEAD: 07b5aa9dec8436132a524511d5438c510e322070
-base M: 07b5aa9dec8436132a524511d5438c510e322070
-activation: 5704631815
-CANDIDATE_PREFLIGHT frozen before this invocation
-first candidate-native invocation: this godot test run
+R0 reconciled execution account — DD1-NATIVE-1
+Reconciled BEFORE further native invocations. Not a reset of the consumed attempt.
+
+IDENTITIES (exact, overlay clean)
+  O overlay HEAD  d8f4dde0905db7156008a53173e3851768448b8d
+  O tree          f116c8fd625a3469b6d6c80c6cb335161dc6b927
+  parent          d2aaf7a2e00e1c3cfe1a860d0db3aa9671982ed2
+  M origin/main   07b5aa9dec8436132a524511d5438c510e322070
+  implementation  b569bf7e58347e4c2090e4907f63f0a1521d2533
+  research capsule 20802e38713fd8bd9e425e807a89df482fcf4e89
+  D               746388323b8e886967e0e13fe109490a70206a66
+  C               cf27285a3103d8867a179f700c5ebf32661453d5
+  H               5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6
+  PROMOTION blob  ba9fc8004f385958b064598b6fa54dc9634cf577
+  NATIVE-HANDOFF  df007ee4a1032e57f3bcd90de98a6c0c1dca8fe2
+  ALLOCATION      824ff18acbca2f776533beed83a43b21d9a50f2c (empty diff vs research tip)
+  test_dd1 blob   baaeff7b43c4804fc812d0f11e8b94ac432b328f
+  combat.gd blob  8110f15efe5119c5a0d82947b8ddd695ba17d66b
+  reader blob     799af6eb1b8e0df6437f097619649cf4ac262954
+  content blob    81aa6473cf9c95525416fa93e79e339c33d105af
+  EVENT_LEDGER    18158491551a03b4a18de61ad013a6aee1a66132
+  CANDIDATE_PREFLIGHT cb6e41897d08755fe0d63fe043a786c19912589f
+  engine          4.7.2.stable.official.ed1daf0bf
+  command         godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_overlay.gd
+  headed command  godot --path . --quit-after 1  (timeout 8s, exit 124)
+  dirty           0
+
+MEASURED native starts
+  INV-1 fixture FAIL native_starts=30  (log 2764 bytes)  KEEP
+  INV-2 PASS          native_starts=30  (log 400 bytes)
+  INV-3 PASS          native_starts=30  (log 400 bytes, identical blob to INV-2)
+  headed Metal        1 process invocation, startCombat count UNKNOWN (quit-after 1; no combat log)
+  SUM measured starts = 90
+  conservative extra debit for headed process = 1
+  used = 91
+  remaining = 8101 of 8192
+  candidate attempt = 1/1 consumed at INV-1 (not reset)
+
+CPU / elapsed / bytes
+  CPU seconds: UNKNOWN (no process accounting). Conservative upper bound: INV tests finished without hitting 300s/invocation; headed killed at 8s; prior import ~39s. Bound << 230400 epoch.
+  active elapsed: UNKNOWN exact. Conservative: this epoch's observed work is minutes, not 48h.
+  raw emitted: MEASURED published logs 4553 bytes (not zero). UNKNOWN additional unretained import/stderr. Conservative bound: 1 MiB.
+  executors observed: 1 at a time (headed + tests were sequential)
+
+AUTHORITY FOR FURTHER NATIVE CALLS
+  remaining 8101 starts and conservative CPU/elapsed bounds fit focused R1–R4 tests and at most a few Native Proof shots.
+  Historical UNKNOWN CPU/elapsed/headed-combat-count retained as UNKNOWN, not invented as zero.
+  No second candidate, refund, top-up, or fresh elapsed clock.
+  Further native starts authorised under this bound.

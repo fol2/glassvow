@@ -4,5 +4,8 @@ Sentry: DEBUG: starting Sentry SDK version 2.1.1+d288ad9
 Sentry: DEBUG: Automatic initialization is disabled in the project settings.
 Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
   DD1-NATIVE-1 native_starts=44
-ok   res://tests/test_dd1_native_overlay.gd
-PASS (1 tests)
+FAIL res://tests/test_dd1_native_overlay.gd
+FAIL (3)
+  - dd1-native: primary-Thorns-lethal preview suppresses return
+  - dd1-native: Thorns 3 kills 2 HP player
+  - dd1-native: Thorns-lethal primary suppresses return

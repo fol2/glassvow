@@ -12,6 +12,11 @@ extends RefCounted
 
 var content: ContentDB
 var quests: QuestRules
+## Research-only N0 masks. Shipping play leaves all false. Not a gameplay law.
+var research_mask_printed_chip: bool = false
+var research_mask_echo: bool = false
+var research_mask_anchor: bool = false
+var research_mask_return: bool = false
 
 const SPECIAL_IDS: Array[String] = [
 	"leech", "execute", "momentum", "doubleBlock", "phantom", "devour",
@@ -817,7 +822,10 @@ func play_card(run: RunState, cb: CombatState, uid: int, target_idx: Variant = n
 	if cb.pending_chips_active and not cb.over:
 		var per: int = 0
 		if card_type == "attack":
-			per = 1 + _ji(d.get("chip", 0)) + _sget(p.statuses, "beacon")
+			var printed: int = _ji(d.get("chip", 0))
+			if research_mask_printed_chip:
+				printed = 0
+			per = 1 + printed + _sget(p.statuses, "beacon")
 		for idx_v: Variant in cb.pending_chips.keys():  # insertion order == JS Map order
 			var idx: int = idx_v
 			var rec: Dictionary = cb.pending_chips[idx]
@@ -992,6 +1000,8 @@ func _apply_special(
 				add_status_enemy(cb, target, "poison", poison * (_ji(fx["n"]) - 1), run)
 		"shatterEcho":
 			var echo: int = 2 if target.staggered or _sget(target.statuses, "vulnerable") > 0 else 1
+			if research_mask_echo:
+				echo = 1
 			hit_enemy(run, cb, target, _ji(fx["n"]) * echo, true, damage_mult)
 		"emberNova":
 			hit_enemy(run, cb, target, _ji(fx["n"]) * cb.embers, true, damage_mult)
@@ -1012,7 +1022,9 @@ func _apply_special(
 				gain_embers(run, cb, -spent)
 				gain_block_player(cb, _ji(fx["n"]) * spent, false, run)
 		"crosscutAnchor":
-			if target != null and _crosscut_member_live(cb, target):
+			if run.aspect != 0 or research_mask_anchor:
+				pass
+			elif target != null and _crosscut_member_live(cb, target):
 				cb.crosscut_anchor = target
 		"crosscutReturn":
 			_apply_crosscut_return(run, cb, fx, target, damage_mult)
@@ -1042,7 +1054,7 @@ func _apply_crosscut_return(
 		hit_enemy(run, cb, target, n, true, damage_mult)
 	if cb.over:
 		return
-	if run.aspect != 0:
+	if run.aspect != 0 or research_mask_return:
 		return
 	if not _crosscut_member_live(cb, captured):
 		return
@@ -1406,6 +1418,8 @@ func preview_play(
 				var echo: int = 1
 				if target != null and (target.staggered or _sget(target.statuses, "vulnerable") > 0):
 					echo = 2
+				if research_mask_echo:
+					echo = 1
 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) * echo), "times": 1})
 			elif sid == "crosscutReturn":
 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"])), "times": 1})
@@ -1441,7 +1455,10 @@ func preview_play(
 		# Ash (aspect != 0) still computes per, then zeros — apply_chips no-ops.
 		var per: int = 0
 		if str(d.get("type", "")) == "attack":
-			per = 1 + _ji(d.get("chip", 0)) + _sget(p.statuses, "beacon")
+			var printed: int = _ji(d.get("chip", 0))
+			if research_mask_printed_chip:
+				printed = 0
+			per = 1 + printed + _sget(p.statuses, "beacon")
 		chips = (per if (hits.size() > 0 and loss > 0) else 0) + fx_chips
 		if run != null and run.aspect != 0:
 			chips = 0
@@ -1486,6 +1503,19 @@ func _preview_crosscut_return(
 			break
 	if n <= 0:
 		return null
+	if research_mask_return:
+		return null
+	# Primary-hit consequences can suppress return (Thorns lethal, finale handoff).
+	var p_dmg: int = _preview_hit(p, selected, n)
+	var p_loss: int = p_dmg - mini(selected.block, p_dmg)
+	if p_loss >= selected.hp and selected.def.get("finaleHandoff", false) == true:
+		return null
+	if p_loss < selected.hp:
+		var thorns: int = _sget(selected.statuses, "thorns")
+		if thorns > 0:
+			var thorns_through: int = thorns - mini(p.block, thorns)
+			if thorns_through >= p.hp:
+				return null
 	var dmg: int = _preview_hit(p, captured, n)
 	var soak: int = mini(captured.block, dmg)
 	var ret_loss: int = dmg - soak

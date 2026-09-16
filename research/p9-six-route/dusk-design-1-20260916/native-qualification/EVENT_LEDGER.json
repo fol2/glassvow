@@ -4,45 +4,85 @@
   "candidate_attempts": {
     "maximum": 1,
     "used": 1,
-    "consume_at": "first new candidate-native invocation"
+    "consume_at": "first new candidate-native invocation",
+    "reset": false
   },
   "preflight_native_starts": {
     "cap": 8192,
-    "used": 90,
-    "remaining": 8102
+    "used": 226,
+    "remaining": 7966,
+    "note": "90 historical startCombat + 1 headed process + 132 this-batch startCombat (44x3 including thorns fixture fail) + 3 Native Proof shot.sh invocations"
   },
   "epoch_usage": {
-    "cpu_seconds_estimated": 30,
-    "active_elapsed_seconds_estimated": 90,
-    "raw_emitted_bytes_cumulative": 0,
+    "cpu_seconds": "UNKNOWN",
+    "cpu_seconds_conservative_bound": 300,
+    "active_elapsed_seconds": "UNKNOWN",
+    "active_elapsed_conservative_bound": 3600,
+    "raw_emitted_bytes_measured_logs": 4553,
+    "raw_emitted_bytes_this_batch_logs_and_pngs": "UNKNOWN_FULL",
     "executors": 1,
-    "per_invocation_cpu_seconds_max_observed": 15
+    "per_invocation_cpu_seconds_max_observed": "UNKNOWN; headed timeout 8s; tests finished; shots finished <40s"
   },
   "events": [
     {
       "id": "DD1-N0-INV-1",
-      "kind": "candidate_native_invocation",
-      "consumes_candidate_attempt": true,
       "native_starts": 30,
-      "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_overlay.gd",
-      "result": "FAIL fixture HP too low for cracked-only Lance survival; law 21 damage held; not a failed declared law",
+      "result": "FAIL fixture HP",
       "log": "native-tests-0-fixture-hp.log"
     },
     {
       "id": "DD1-N0-INV-2",
-      "kind": "preflight_native_starts",
       "native_starts": 30,
-      "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_overlay.gd",
-      "result": "PASS (1 tests), native_starts=30",
-      "log": "native-tests-1.log"
+      "result": "PASS",
+      "log": "native-tests-1.log (historical identical PASS)"
     },
     {
       "id": "DD1-N0-INV-3",
-      "kind": "preflight_native_starts",
       "native_starts": 30,
-      "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_overlay.gd",
-      "result": "PASS (1 tests), native_starts=30; identical to INV-2",
+      "result": "PASS",
+      "log": "native-tests-2.log (historical)"
+    },
+    {
+      "id": "DD1-N0-HEADED-1",
+      "native_starts": 1,
+      "command": "godot --path . --quit-after 1",
+      "result": "timeout 124 Metal started"
+    },
+    {
+      "id": "DD1-N0-INV-4",
+      "native_starts": 44,
+      "result": "FAIL Thorns soaked by producer Block; fixture repaired",
+      "log": "native-tests-0-thorns-fixture.log"
+    },
+    {
+      "id": "DD1-N0-INV-5",
+      "native_starts": 44,
+      "result": "PASS",
+      "log": "native-tests-1.log"
+    },
+    {
+      "id": "DD1-N0-INV-6",
+      "native_starts": 44,
+      "result": "PASS identical",
       "log": "native-tests-2.log"
+    },
+    {
+      "id": "DD1-N0-SHOT-1",
+      "native_starts": 1,
+      "command": "tools/shot.sh --cards=setTheAngle,crosscut",
+      "result": "PNG written; inspected 0 cards in lab"
+    },
+    {
+      "id": "DD1-N0-SHOT-2",
+      "native_starts": 1,
+      "command": "tools/shot.sh --fight=sporeling,sporeling --settle=0.5",
+      "result": "PNG written; inspected real two-sporeling combat; starter hand has no Crosscut so no MARKED chrome"
+    },
+    {
+      "id": "DD1-N0-SHOT-3",
+      "native_starts": 1,
+      "command": "tools/shot.sh --cards=setTheAngle,crosscut --settle=1.2",
+      "result": "same 0-card lab"
     }
   ],
   "not_opened": [

@@ -1,12 +1,76 @@
-DISPLAY=unset
-WAYLAND=unset
-shot.sh: /Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-16-dd1-native-overlay/tools/shot.sh
-funplay: checking 8765
-curl: (7) Failed to connect to 127.0.0.1 port 8765 after 0 ms: Couldn't connect to server
-headed_exit:124
+route: tools/shot.sh (Native Proof; not Funplay :8765)
+DISPLAY=unset WAYLAND=unset
 Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
 Metal 4.0 - Forward Mobile - Using Device #0: Apple - Apple M4 (Apple9)
 
 Sentry: DEBUG: starting Sentry SDK version 2.1.1+d288ad9
 Sentry: DEBUG: Automatic initialization is disabled in the project settings.
 Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+glassvow boot 4.7.2-stable (official)
+WARNING: card lab: no such card id: setTheAngle, crosscut
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _init (res://presentation/lab/card_lab.gd:194)
+         [1] _ready (res://application/main.gd:390)
+card lab: no such card id: setTheAngle, crosscut
+shot saved: /var/folders/n6/_k_lxb0d1g772gzms8lk43j00000gn/T/grok-goal-0b48186bcdcc/implementer/dd1-cards.png
+cards_exit:0
+-rw-r--r--@ 1 jamesto  staff  6531 16 Sep 23:43 /var/folders/n6/_k_lxb0d1g772gzms8lk43j00000gn/T/grok-goal-0b48186bcdcc/implementer/dd1-cards.png
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward Mobile - Using Device #0: Apple - Apple M4 (Apple9)
+
+Sentry: DEBUG: starting Sentry SDK version 2.1.1+d288ad9
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+glassvow boot 4.7.2-stable (official)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready(). 
+If you want to set size, change the anchors or consider using set_deferred().
+     at: _set_size (scene/gui/control.cpp:1519)
+     GDScript backtrace (most recent call first):
+         [0] projected_seats (res://presentation/map/world_map_screen.gd:598)
+         [1] _layout_waystones (res://presentation/map/world_map_screen.gd:897)
+         [2] _notification (res://presentation/map/world_map_screen.gd:110)
+         [3] _show_map (res://application/main.gd:1387)
+         [4] _route_run (res://application/main.gd:1279)
+         [5] _new_run (res://application/main.gd:1167)
+         [6] _ready (res://application/main.gd:474)
+ERROR: WorldMapScreen compiled layout failed: node_candidate/0,4: no legal #467 node candidate
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail_compiled_layout (res://presentation/map/world_map_screen.gd:523)
+       [1] _bind_compiled_layout (res://presentation/map/world_map_screen.gd:480)
+       [2] _set_act_theme (res://presentation/map/world_map_screen.gd:392)
+       [3] refresh (res://presentation/map/world_map_screen.gd:347)
+       [4] _show_map (res://application/main.gd:1388)
+       [5] _route_run (res://application/main.gd:1279)
+       [6] _new_run (res://application/main.gd:1167)
+       [7] _ready (res://application/main.gd:474)
+ERROR: WorldMapScreen cannot focus without the compiled node anchors
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _focus_xz (res://presentation/map/world_map_screen.gd:705)
+       [1] _seat_marker (res://presentation/map/world_map_screen.gd:671)
+       [2] refresh (res://presentation/map/world_map_screen.gd:371)
+       [3] _show_map (res://application/main.gd:1388)
+       [4] _route_run (res://application/main.gd:1279)
+       [5] _new_run (res://application/main.gd:1167)
+       [6] _ready (res://application/main.gd:474)
+shot saved: /var/folders/n6/_k_lxb0d1g772gzms8lk43j00000gn/T/grok-goal-0b48186bcdcc/implementer/dd1-fight.png
+fight_exit:0
+-rw-r--r--@ 1 jamesto  staff  1465662 16 Sep 23:43 /var/folders/n6/_k_lxb0d1g772gzms8lk43j00000gn/T/grok-goal-0b48186bcdcc/implementer/dd1-fight.png
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward Mobile - Using Device #0: Apple - Apple M4 (Apple9)
+
+Sentry: DEBUG: starting Sentry SDK version 2.1.1+d288ad9
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+glassvow boot 4.7.2-stable (official)
+WARNING: card lab: no such card id: setTheAngle, crosscut
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _init (res://presentation/lab/card_lab.gd:194)
+         [1] _ready (res://application/main.gd:390)
+card lab: no such card id: setTheAngle, crosscut
+shot saved: /var/folders/n6/_k_lxb0d1g772gzms8lk43j00000gn/T/grok-goal-0b48186bcdcc/implementer/dd1-cards-settle.png
+cards2_exit:0
+-rw-r--r--@ 1 jamesto  staff  6531 16 Sep 23:44 /var/folders/n6/_k_lxb0d1g772gzms8lk43j00000gn/T/grok-goal-0b48186bcdcc/implementer/dd1-cards-settle.png
