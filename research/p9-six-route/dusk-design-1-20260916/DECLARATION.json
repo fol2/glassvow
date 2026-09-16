@@ -1,0 +1,57 @@
+{
+  "schema": "DUSK-DESIGN-1-DECLARATION-1",
+  "status": "PROSPECTIVE_DESIGN_ONLY_NOT_NATIVE_CANDIDATE_FREEZE",
+  "authority": "https://github.com/fol2/glassvow/issues/421#issuecomment-5693675219",
+  "activation": "https://github.com/fol2/glassvow/issues/421#issuecomment-5693811899",
+  "main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "research_base": "806c994ffa5af5974080b7f3fdea68595f0ee197",
+  "bound_547": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+  "topology_ceiling": 3,
+  "topologies_nominated": 1,
+  "no_refill_in_this_batch": true,
+  "candidate": {
+    "id": "DD1-X",
+    "working_name": "Crosscut",
+    "new_cards_are_proposals_not_shipping_ids": true,
+    "producer": {
+      "provisional_id": "setTheAngle",
+      "type": "skill",
+      "target": "enemy",
+      "rarity": "uncommon",
+      "cost": 1,
+      "base_block": 4,
+      "upgraded_block": 6,
+      "law": "After a legal paid play and ordinary Block gain, Duskblade records the selected living enemy object as the sole public anchor for this player turn. A new producer replaces, never stacks, the anchor. No damage, chips, draw, Energy, Ember or Strength is added by anchoring."
+    },
+    "mediator": "One nullable live-enemy reference owned by the current CombatState; public marker on that enemy. Not an enemy type, card UID, seed, future intent or run-persistent status.",
+    "consumer": {
+      "provisional_id": "crosscut",
+      "type": "attack",
+      "target": "enemy",
+      "rarity": "uncommon",
+      "cost": 1,
+      "base_primary_damage": 5,
+      "upgraded_primary_damage": 7,
+      "base_return_damage": 5,
+      "upgraded_return_damage": 7,
+      "law": "At a legal paid consumer start, take and clear the anchor. Resolve the ordinary Attack hit on the selected target B. Only if combat remains live, player survives, the captured anchor A is still the identical living enemy in this CombatState, A differs from B, and aspect is Duskblade, resolve exactly one ordinary Attack hit on A. Both hits use native Strength/mitigation/Thorns/death and the existing one-card deferred per-connected-target chip settlement. The second hit cannot recursively invoke Crosscut or rearm it. Same-target or otherwise invalid anchors are spent, not retained."
+    },
+    "parameters": "Exactly the base/upgraded values above; no outcome-guided alternatives. Producer and consumer upgrades are independent.",
+    "reset": "Clear before the enemy phase, on combat terminal/handoff/abandon, and on constructing or reconstructing combat. No carry across turns, fights, saves or card copies. Dead anchor is unavailable immediately; no inheritance by matching idx/type.",
+    "composition": "Only producer installs this anchor; only the explicitly designated consumer uses it. Ordinary native background and both coupled Stun/Shatter components remain. Any number of legal unrelated actions may intervene within the same player turn. Repeated producers overwrite; one producer enables at most one return hit. No auto-consumption by generic attacks, Flurry, Honing, Echo, Flare or an observer.",
+    "acquisition": "Prospective additions to the ordinary Duskblade uncommon reward/shop pool, no free grant, starter replacement, new deed or progression bypass. Keep current IDs unchanged. Required ordinary pool-reveal/profile paths and eligibility must be source-verified; no natural support is assumed.",
+    "player_tradeoff": "Spend one card/Energy and accept lower standalone Block to reserve a different enemy for a split attack this turn, rather than concentrate damage, defend more, or spend the Energy on another action. At least two living enemies and both affordable roles are needed. No payoff accumulation or benefit from delaying expiry."
+  },
+  "predictions_before_checking": [
+    "A live different-target ordered pair can deliver one attributed return hit; reversing order, removing either role, removing the anchor, or using another aspect cannot.",
+    "Two producer histories differing only in the anchored enemy can have the same old game-state projection but different return-hit targets under the same consumer command; a single setup bit or unconditional all-enemy attack cannot preserve both traces and collateral.",
+    "Same-target use consumes without return; replacement targets do not stack; an anchor cannot survive end-turn or combat reconstruction.",
+    "Insufficient Energy makes the relevant play unavailable, not a zero-valued legal continuation. First-hit lethal Thorns or terminal handoff suppresses the return.",
+    "Full Block can eliminate return HP payoff despite syntactic activation. Native collateral and alternate lawful actions can defeat naive command-null or uniqueness claims; these cases must be retained, not used to change the formula.",
+    "This topology alone does not establish a three-route product: reused coupled-Facet and native-Fervor slots keep their outstanding source qualification and all empirical obligations."
+  ],
+  "experiment": "Small standard-library Python transition model and adversarial controls; no Godot, simulator, policy fit, game roots or native observations.",
+  "decisions": "Reject if exact closed-law decomposition or a material contract counterexample is established; otherwise report a source-bounded prospective survivor with explicit abstraction and route dependencies. No automatic empirical admission.",
+  "accounts": {"native_calls": 0, "new_game_outcomes": 0, "empirical_spend": 0, "new_error_allowance": 0},
+  "non_goals": ["production edits", "candidate or confirmation freeze", "new branch", "new ticket chain", "native exporter implementation", "general simulator", "review or change of bound #547", "reopening closed laws", "#549 reconstruction", "release", "self-approval"]
+}
