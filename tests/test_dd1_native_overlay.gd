@@ -770,18 +770,22 @@ static func _r3_byte_root_controls(fails: Array[String]) -> void:
 	_fail(fails, str(cap.get("digest", "")) == DuskNativeExportReader.digest_bytes(str(cap["bytes"])),
 		"bind_capture digest matches bytes")
 	var intact: Variant = DuskNativeExportReader.hit_observations(cap)
-	_fail(fails, typeof(intact) == TYPE_ARRAY and (intact as Array).size() == 1,
-		"intact byte roundtrip resolves one hit")
-	if typeof(intact) == TYPE_ARRAY and (intact as Array).size() == 1:
-		var row: Dictionary = intact[0]
-		_fail(fails, _ji(row["physicalHpLoss"]) == _ji(row["amount"]),
-			"observations match the resolved record")
-		var resolved_v: Variant = DuskNativeExportReader.resolve(row["pointer"], cap)
-		_fail(fails, typeof(resolved_v) == TYPE_DICTIONARY, "pointer resolves from bytes")
-		if typeof(resolved_v) == TYPE_DICTIONARY:
-			var resolved: Dictionary = resolved_v
-			_fail(fails, _ji(resolved.get("amount", -1)) == _ji(row["amount"]),
-				"resolved event amount equals observation")
+	if typeof(intact) != TYPE_ARRAY:
+		_fail(fails, false, "intact byte roundtrip resolves one hit")
+	else:
+		var obs: Array = intact
+		_fail(fails, obs.size() == 1, "intact byte roundtrip resolves one hit")
+		if obs.size() == 1:
+			var row: Dictionary = obs[0]
+			_fail(fails, _ji(row["physicalHpLoss"]) == _ji(row["amount"]),
+				"observations match the resolved record")
+			var p0: Dictionary = row["pointer"]
+			var resolved_v: Variant = DuskNativeExportReader.resolve(p0, cap)
+			_fail(fails, typeof(resolved_v) == TYPE_DICTIONARY, "pointer resolves from bytes")
+			if typeof(resolved_v) == TYPE_DICTIONARY:
+				var resolved: Dictionary = resolved_v
+				_fail(fails, _ji(resolved.get("amount", -1)) == _ji(row["amount"]),
+					"resolved event amount equals observation")
 	var bytes_only: Dictionary = {
 		"bytes": cap["bytes"],
 		"digest": cap["digest"],
@@ -789,8 +793,7 @@ static func _r3_byte_root_controls(fails: Array[String]) -> void:
 	_fail(fails, typeof(DuskNativeExportReader.hit_observations(bytes_only)) == TYPE_ARRAY,
 		"observations succeed from bytes with companions dropped")
 	var mutated: Dictionary = cap.duplicate(true)
-	var events_v: Variant = mutated["events"]
-	var events: Array = events_v
+	var events: Array = mutated["events"]
 	var first: Dictionary = events[0].duplicate(true)
 	first["amount"] = 999
 	events[0] = first

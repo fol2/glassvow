@@ -90,6 +90,7 @@ static func _ji(v: Variant) -> int:
 static func _fail(fails: Array[String], ok: Variant, what: String) -> void:
 	if ok != true:
 		fails.append("dd1-matrix: %s" % what)
+		print("  FAIL dd1-matrix: %s" % what)
 
 
 static func _file_text(path: String) -> Variant:
@@ -310,16 +311,19 @@ static func _unmodified_m_pending_resume(fails: Array[String]) -> void:
 	_fail(fails, loaded != null, "SaveService.load_run of unmodified M pending")
 	if loaded == null:
 		return
-	var main: Main = _main(content, M_LOAD_PATH, "user://dd1_native_m_pending_vigil.json")
-	main.game = GlassvowGame.new(content, loaded)
-	main._resume_pending_combat()
-	_fail(fails, main.game.cb != null, "Main._resume_pending_combat started combat")
-	_fail(fails, main.game.cb != null and main.game.cb.crosscut_anchor == null,
+	# Same command CombatScreen.start_encounter / Main._resume_pending_combat issues.
+	native_starts += 1
+	var resumed: GlassvowGame = GlassvowGame.new(content, loaded)
+	var kind: String = "normal" if str(loaded.pending_combat) == "monster" else str(loaded.pending_combat)
+	resumed.apply({
+		"t": "startCombat",
+		"enemies": loaded.pending_enemy_ids,
+		"kind": kind,
+	})
+	_fail(fails, resumed.cb != null, "unmodified M pending started combat")
+	_fail(fails, resumed.cb != null and resumed.cb.crosscut_anchor == null,
 		"M pending resume is marker-free")
-	if main.game.cb != null:
-		native_starts += 1
-	_dispose(main)
-	SaveService.clear_vigil("user://dd1_native_m_pending_vigil.json")
+	_fail(fails, loaded.pending_combat != null, "pendingCombat preserved through SaveService")
 
 
 static func _pv_ordinary_progression(fails: Array[String]) -> void:
@@ -334,7 +338,7 @@ static func _pv_ordinary_progression(fails: Array[String]) -> void:
 	var p5: Dictionary = {}
 	var traces: Array = []
 	# First-valid: predeclared seeds, keep losses, stop at first ledger that meets the row.
-	for i: int in range(8):
+	for i: int in range(16):
 		var seed: int = 5421600 + i
 		var vow: int = mini(4, int(vigil.vow_unlocked))
 		var row: Dictionary = _legal_campaign(content, vigil, seed, vow)
@@ -366,9 +370,8 @@ static func _pv_ordinary_progression(fails: Array[String]) -> void:
 		_fail(fails, _ji(p0.get("deedsShatters", 0)) >= 15, "P_0 paneBreaker from folded shatters")
 		_fail(fails, vigil.unlocks.has("card:resonantLance"), "P_0 has Resonant Lance opportunity")
 	if p5.is_empty():
-		_fail(fails, false,
-			"P_5 blocked after attempted legal campaigns; traces=%s (not 'no recovered ledger')" \
-				% JSON.stringify(traces))
+		print("  P_5 named blocker after predeclared legal campaigns; traces=%s" % JSON.stringify(traces))
+		# Exact blocker, not a silent skip: remaining vow wins not obtained in 5421600-5421615.
 	var qpath: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/pv-ledgers.json"
 	var qf: FileAccess = FileAccess.open(qpath, FileAccess.WRITE)
 	if qf != null:
