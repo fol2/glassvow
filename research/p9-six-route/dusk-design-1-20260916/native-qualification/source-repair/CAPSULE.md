@@ -2,9 +2,9 @@
 
 Status: IN PROGRESS; source-only author checkpoint, not acceptance.
 
-Authority: owner takeover in the current Pro session; local writer and reviewers parked. Prepared batch https://github.com/fol2/glassvow/issues/542#issuecomment-5721191528. Sole source author; no reviewer invocation or self-approval.
+Authority: owner takeover and renewed GitHub write grant in the current Pro session; local writer and reviewers parked. Prepared batch https://github.com/fol2/glassvow/issues/542#issuecomment-5721191528. Sole source author; no reviewer invocation or self-approval.
 
-Starting overlay R = 4fab9db600567a1978893d66ac5c489061c56068. Historical tested/reported source S = 6c2253f6bb746652704591d47ecf9628d905cff9 (tree 94e7abb1271de65df259c1ef737a22f6124a2084); S to R changes only historical readback. Current scientific/operating main M = 07b5aa9dec8436132a524511d5438c510e322070, refreshed through the connector with AGENTS.md, docs/agents/ai-sdlc.md and the Godot skill. No rebase or main mutation.
+Starting overlay R = 4fab9db600567a1978893d66ac5c489061c56068. Historical tested/reported source S = 6c2253f6bb746652704591d47ecf9628d905cff9 (tree 94e7abb1271de65df259c1ef737a22f6124a2084); S to R changes only historical readback. Current scientific/operating main M = 07b5aa9dec8436132a524511d5438c510e322070, refreshed through the connector with AGENTS.md, docs/agents/ai-sdlc.md and the Godot skill. No rebase or main mutation. This continuation resumes pre-existing repair head 4f7d76c5548977843520fbdacb1b13ff5c1dd7b5, tree 2bbcb38485bb59278c62127bfe37c1a38a204161, rather than restarting or claiming its nine prior commits as new work.
 
 Goal: repair the connected ordinary driver, command/save provenance and complete-unit reservation enforcement. Exactly-once combat identity must survive reward completion and safe nodes; actual unmodified Pilot commands and native observations must remain linked to durable ordinary saves; a constructed profile is structural data, never an earned witness. Reserve starts, CPU and all raw channels before any child, with fail-closed identity/cap/interrupt controls.
 
@@ -14,6 +14,6 @@ Preserve accepted D=746388323b8e886967e0e13fe109490a70206a66; C=cf27285a3103d886
 
 Non-goals: zero engine/native/capture/profile launches including Godot version/parse/import; no new allowance, receipt activation, real-account mutation, production law or Pilot policy change, reordered roots, N0 certificate, N1/N2, #548 spend, production PR/CI, review, merge, closure or release. Certificates remain 0/3.
 
-Publication surface: existing overlay branch through the GitHub connector. Local network Git is unavailable (DNS); use connector reads/writes without substituting local downloads for delivery. Protected original outputs are never reconstructed or overwritten.
+Publication surface: existing overlay branch through the GitHub connector. Protected original outputs are never reconstructed or overwritten. The prior session lacked exposed write actions; this continuation explicitly retries publication before substantial local work.
 
 Next action: finish the three connected repair areas and their focused falsifiers; publish final source/inert evidence and one #156 handoff with exact head/tree and readback.
