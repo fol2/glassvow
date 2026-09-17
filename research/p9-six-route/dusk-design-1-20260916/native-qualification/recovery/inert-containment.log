@@ -1,0 +1,9 @@
+PASS exhausted reservation rejected; account unchanged
+PASS stale identity rejected: stale scientific M identity
+PASS empty receipt rejected
+PASS missing receipt path is not permission
+PASS file existence alone rejected: wrong or missing launch-receipt schema
+PASS environment variable is not authority
+PASS child CPU limit failed closed killed='' rc=-24 starts=1
+PASS output limit failed closed killed='output_limit' raw=65536 starts=1
+PASS interruption failed closed killed='interrupt' starts=1

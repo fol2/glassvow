@@ -1,19 +1,16 @@
-# DD1-NATIVE-1 — author correction for 5715191434 (not a certificate)
+# DD1-N0-RECOVERY-1 — sole-author transition 2 (not a certificate)
 
-Sole local author. Continues activation 5704631815 / task 5704445133 / N0 contract 5705322630 / batch 5706552165. Completes planner batch [5715191434](https://github.com/fol2/glassvow/issues/542#issuecomment-5715191434) against review [5712464645](https://github.com/fol2/glassvow/issues/542#issuecomment-5712464645).
+Sole local author. Binding [5718448223](https://github.com/fol2/glassvow/issues/421#issuecomment-5718448223). Task [5718464731](https://github.com/fol2/glassvow/issues/542#issuecomment-5718464731). Protocol [5717964158](https://github.com/fol2/glassvow/issues/421#issuecomment-5717964158) SHA-256 `92b78c7a93ddf5f46cc4ff1fe77f42729223a9814fc59241f8cccddade06b7df`. Review map: [5712464645](https://github.com/fol2/glassvow/issues/542#issuecomment-5712464645).
 
-Parent F `3993b3f0a98ef436ed144ba800e7e031583baa0a` tree `f8a116444fc47d3580a6f9464a743d7b881e14ba`. Overlay `research/p9-six-route/dd1-native-1-overlay`.
+Overlay `research/p9-six-route/dd1-native-1-overlay` started at G=`84cd143f44923294e614def62de74e720598648a`. Scientific M=`07b5aa9dec8436132a524511d5438c510e322070`. D/C/H/ALLOCATION unchanged. Attempt 1/1 not reset. Certificates **0/3**. N0 **BLOCKED** (P_5 not earned in the fixed 16-root reconstruction).
 
-D=`746388323b8e886967e0e13fe109490a70206a66` C=`cf27285a3103d8867a179f700c5ebf32661453d5` H=`5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6` ALLOCATION `824ff18acbca2f776533beed83a43b21d9a50f2c` byte-identical. Attempt 1/1 not reset. Preflight listed-event **1277/8192 remaining 6915** (not spendable authority). Certificates **0/3**. N0 **BLOCKED**.
+## Delivered
 
-## What this head repairs (source)
+- Receipt-bound launch (`tests/support/dd1_native_launch_receipt.gd` + stored GitHub bodies). Env/file-existence is not permission.
+- Smallest meter `tools/dd1_recovery_meter.py`. Inert non-game containment PASS (exhausted / stale / empty / existence / env / CPU / output / interrupt).
+- Reader compile+runtime; once-only `Main._on_combat_over`; N0 witness ACCEPT/BLOCKED.
+- Unchanged-M pending 5420099 ordinary map-route bytes + overlay resume.
+- First-valid P_0 vigil + recovered pre-terminal run (seed 5421603). P_5 absent after completing 5421600–5421615 (win then vow-1 deaths). Incomplete stays INCOMPLETE.
+- Dual account: historical 1277/8192 remainder 6915 unspendable; recovery 1786/2048 remaining 262. Clock 2026-09-17T17:54:40Z → 2026-09-24T17:54:40Z.
 
-Reader fail-closed on required digest, non-dict events, exact-integer fields, and `play_observations` null-vs-empty. Main-route driver replaces the partial campaign helper. Routine regression does not overwrite `pv-ledgers.json` or auto-acquire. F pending JSON retired as ordinary-route proof; resume goes through SaveService + `Main._continue_run`.
-
-## What remains BLOCKED (named prerequisite)
-
-No Godot/native/capture/profile process: original 8-seed selection failed P_5; 8-to-16 not ratified; cpu_seconds and active_elapsed_seconds UNKNOWN; INV-9 log missing. Durable first-valid P_0/P_5 bytes and a real unchanged-M map-route pending are absent. See IMPLEMENTED.md nine-bullet map.
-
-Resolved and preserved: O-pin / INV-11 distinct process; byte-root (now fail-closed); K1/collateral source-present; accepted D/C/H.
-
-No development, confirmation, self-approval, production PR, merge or release. Do not commission a reviewer while these mandatory rows remain BLOCKED.
+No N1/N2, self-approval, production PR/CI, merge, or release. Do not commission the N0 reviewer until a later owner task names a complete candidate or accepts this BLOCKED handoff as the N0 input.

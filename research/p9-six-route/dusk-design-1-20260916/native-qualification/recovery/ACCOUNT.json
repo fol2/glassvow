@@ -1,0 +1,681 @@
+{
+  "historical": {
+    "attempt": "1/1 consumed",
+    "cpu_seconds": "UNKNOWN",
+    "elapsed_seconds": "UNKNOWN",
+    "note": "Visible unspendable history. Recovery does not spend the 6915 remainder or rewrite UNKNOWN.",
+    "raw_bytes": "UNKNOWN",
+    "spendable": false,
+    "starts_cap": 8192,
+    "starts_remaining_arithmetic": 6915,
+    "starts_used": 1277
+  },
+  "recovery": {
+    "cpu_ns_cap": 14400000000000,
+    "cpu_ns_used": 380532833995,
+    "deadline_utc": "2026-09-24T17:54:40Z",
+    "events": [
+      {
+        "at_utc": "2026-09-17T17:54:40Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd,res://tests/test_dd1_native_catalog.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T17:59:48Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd,res://tests/test_dd1_native_catalog.gd"
+        ],
+        "cpu_ns": 3610257000,
+        "elapsed_s": 308.0138669160078,
+        "killed": "wait_timeout",
+        "kind": "fail",
+        "raw_bytes": 1397,
+        "returncode": -9
+      },
+      {
+        "at_utc": "2026-09-17T18:07:22Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "--import",
+          "--quit"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:07:57Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "--import",
+          "--quit"
+        ],
+        "cpu_ns": 174810433000,
+        "elapsed_s": 35.65874495799653,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 117719,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:09:17Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd,res://tests/test_dd1_native_catalog.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:18:59Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd,res://tests/test_dd1_native_catalog.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:22:44Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_catalog.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:22:45Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_catalog.gd"
+        ],
+        "cpu_ns": 396846000,
+        "elapsed_s": 1.1563684159773402,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 368,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:23:10Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:23:12Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd"
+        ],
+        "cpu_ns": 554648000,
+        "elapsed_s": 1.0823641250026412,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 4337,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:23:32Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_matrix.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:24:25Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_matrix.gd"
+        ],
+        "cpu_ns": 815539000,
+        "elapsed_s": 53.01826474998961,
+        "killed": "wait_timeout",
+        "kind": "fail",
+        "raw_bytes": 1193,
+        "returncode": -9
+      },
+      {
+        "at_utc": "2026-09-17T18:26:04Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_matrix.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:26:06Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_matrix.gd"
+        ],
+        "cpu_ns": 1290800999,
+        "elapsed_s": 1.9499472499883268,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 4741,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:27:04Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_matrix.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:27:06Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_matrix.gd"
+        ],
+        "cpu_ns": 1312314000,
+        "elapsed_s": 2.1359291250118986,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 3557,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:27:44Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_matrix.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:27:46Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_matrix.gd"
+        ],
+        "cpu_ns": 1641746999,
+        "elapsed_s": 2.241140833008103,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 859,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:28:01Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd,res://tests/test_dd1_native_catalog.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:28:03Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd,res://tests/test_dd1_native_catalog.gd"
+        ],
+        "cpu_ns": 2020835000,
+        "elapsed_s": 2.8170170839875937,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 1982,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:28:03Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd,res://tests/test_dd1_native_catalog.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:28:05Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd,res://tests/test_dd1_native_catalog.gd"
+        ],
+        "cpu_ns": 1873167000,
+        "elapsed_s": 2.0242162499926053,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 1982,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:28:30Z",
+        "kind": "contained_starts",
+        "note": "contained startCombat/_fight from focused DD1 tests (overlay 45 + matrix 14 per PASS pair, plus overlay-only 45 + matrix-only 14)",
+        "starts": 177
+      },
+      {
+        "at_utc": "2026-09-17T18:28:34Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/var/folders/n6/_k_lxb0d1g772gzms8lk43j00000gn/T/grok-goal-e37ad47f93cd/implementer/m-tree",
+          "--import",
+          "--quit"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:29:08Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/var/folders/n6/_k_lxb0d1g772gzms8lk43j00000gn/T/grok-goal-e37ad47f93cd/implementer/m-tree",
+          "--import",
+          "--quit"
+        ],
+        "cpu_ns": 171693850000,
+        "elapsed_s": 34.533462082996266,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 115754,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:29:26Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/var/folders/n6/_k_lxb0d1g772gzms8lk43j00000gn/T/grok-goal-e37ad47f93cd/implementer/m-tree",
+          "-s",
+          "res://tools/dd1_recovery_pending.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:29:27Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/var/folders/n6/_k_lxb0d1g772gzms8lk43j00000gn/T/grok-goal-e37ad47f93cd/implementer/m-tree",
+          "-s",
+          "res://tools/dd1_recovery_pending.gd"
+        ],
+        "cpu_ns": 1182043999,
+        "elapsed_s": 1.359601708012633,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 652,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:30:01Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_matrix.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:30:04Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_matrix.gd"
+        ],
+        "cpu_ns": 1829889999,
+        "elapsed_s": 2.6622444160166197,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 1392,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:30:14Z",
+        "kind": "contained_starts",
+        "note": "matrix resume run contained starts including ordinary pending CombatScreen",
+        "starts": 15
+      },
+      {
+        "at_utc": "2026-09-17T18:30:14Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tools/dd1_recovery_acquire.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:30:18Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tools/dd1_recovery_acquire.gd"
+        ],
+        "cpu_ns": 3578545000,
+        "elapsed_s": 3.757369332975941,
+        "killed": "",
+        "kind": "fail",
+        "raw_bytes": 623434,
+        "returncode": 2
+      },
+      {
+        "at_utc": "2026-09-17T18:31:46Z",
+        "kind": "contained_starts",
+        "note": "contained combats from acquire attempt 1 (INCOMPLETE; map.at unset; charged failure)",
+        "starts": 1206
+      },
+      {
+        "at_utc": "2026-09-17T18:31:56Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tools/dd1_recovery_acquire.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:32:01Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tools/dd1_recovery_acquire.gd"
+        ],
+        "cpu_ns": 4045941000,
+        "elapsed_s": 5.0681540409859736,
+        "killed": "",
+        "kind": "fail",
+        "raw_bytes": 2012,
+        "returncode": 2
+      },
+      {
+        "at_utc": "2026-09-17T18:32:51Z",
+        "kind": "contained_starts",
+        "note": "contained combats from acquire attempt 2 (P0 earned, P5 not; 16-root sequence complete)",
+        "starts": 330
+      },
+      {
+        "at_utc": "2026-09-17T18:33:07Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tools/dd1_recovery_replay_p0.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:33:10Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tools/dd1_recovery_replay_p0.gd"
+        ],
+        "cpu_ns": 1529966999,
+        "elapsed_s": 2.3380162920220755,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 451,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:33:52Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tools/dd1_recovery_replay_p0.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:33:53Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tools/dd1_recovery_replay_p0.gd"
+        ],
+        "cpu_ns": 1446297000,
+        "elapsed_s": 1.7519354170071892,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 528,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:34:14Z",
+        "kind": "contained_starts",
+        "note": "contained combats from charged same-seed P0 run-byte replay 5421603",
+        "starts": 30
+      },
+      {
+        "at_utc": "2026-09-17T18:35:04Z",
+        "command": [
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5/tools/check_scripts.sh",
+          "tests/support/dd1_native_main_route.gd",
+          "tests/support/dd1_native_launch_receipt.gd",
+          "tests/support/dd1_native_driver_main.gd",
+          "tests/support/dusk_native_export_reader.gd",
+          "tests/test_dd1_native_matrix.gd",
+          "tools/dd1_recovery_pending.gd",
+          "tools/dd1_recovery_acquire.gd",
+          "tools/dd1_recovery_replay_p0.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T18:35:12Z",
+        "command": [
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5/tools/check_scripts.sh",
+          "tests/support/dd1_native_main_route.gd",
+          "tests/support/dd1_native_launch_receipt.gd",
+          "tests/support/dd1_native_driver_main.gd",
+          "tests/support/dusk_native_export_reader.gd",
+          "tests/test_dd1_native_matrix.gd",
+          "tools/dd1_recovery_pending.gd",
+          "tools/dd1_recovery_acquire.gd",
+          "tools/dd1_recovery_replay_p0.gd"
+        ],
+        "cpu_ns": 6899713000,
+        "elapsed_s": 8.257848792010918,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 23,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T18:35:20Z",
+        "kind": "contained_starts",
+        "note": "check_scripts.sh inner godot --check-only processes (8 owned files)",
+        "starts": 8
+      }
+    ],
+    "executors": 1,
+    "first_engine_launch_utc": "2026-09-17T17:54:40Z",
+    "id": "DD1-N0-RECOVERY-1",
+    "per_invocation_cpu_seconds": 300,
+    "raw_bytes_cap": 1073741824,
+    "raw_bytes_used": 882381,
+    "starts_cap": 2048,
+    "starts_used": 1786
+  },
+  "schema": "DD1-N0-RECOVERY-1-ACCOUNT-1"
+}

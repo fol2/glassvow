@@ -1,0 +1,97 @@
+extends SceneTree
+## First-valid ordinary Dusk P_0/P_5 on exposed roots 5421600–5421615.
+## Launch must already be receipt-permitted by the process wrapper.
+
+
+const MainRoute: GDScript = preload("res://tests/support/dd1_native_main_route.gd")
+const QUAL: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification"
+const P0_RUN: String = QUAL + "/p0-first-valid-run-v2.json"
+const P0_VIGIL: String = QUAL + "/p0-first-valid-vigil-v2.json"
+const P5_RUN: String = QUAL + "/p5-first-valid-run-v2.json"
+const P5_VIGIL: String = QUAL + "/p5-first-valid-vigil-v2.json"
+const TRACE_PATH: String = QUAL + "/recovery/PV-TRACES.json"
+
+
+func _initialize() -> void:
+	if not MainRoute.launch_permitted():
+		print("DD1_ACQUIRE_FAIL launch receipt invalid")
+		quit(1)
+		return
+	var default_run: Variant = MainRoute.file_text("user://glassvow_run_v2.json")
+	var default_vigil: Variant = MainRoute.file_text("user://glassvow_vigil_v2.json")
+	var content: ContentDB = ContentDB.load_full(false)
+	var vigil: VigilState = VigilState.blank()
+	var freeze: Dictionary = MainRoute.bind_unmodified_pilot()
+	var p0_archived: bool = false
+	var p5_archived: bool = false
+	var traces: Array = []
+	var starts: int = 0
+	for seed: int in range(5421600, 5421616):
+		var vow: int = mini(vigil.vow_unlocked, 4)
+		var run_path: String = "user://dd1_pv_run_%d_v2.json" % seed
+		var vigil_path: String = "user://dd1_pv_vigil_%d_v2.json" % seed
+		SaveService.store_vigil(vigil, vigil_path)
+		var row: Dictionary = MainRoute.drive_ordinary(
+			content, vigil, seed, vow, run_path, vigil_path)
+		starts += int(float(str(row.get("starts", 0))))
+		var loaded: VigilState = SaveService.load_vigil(vigil_path)
+		if loaded != null:
+			vigil = loaded
+		var status: String = str(row.get("status", "INCOMPLETE"))
+		traces.append({
+			"seed": seed,
+			"vow": vow,
+			"status": status,
+			"starts": row.get("starts", 0),
+			"shatters": row.get("shatters", 0),
+			"incomplete_reason": row.get("incomplete_reason", ""),
+			"run_id": row.get("run_id", ""),
+			"run_sha": row.get("run_sha", ""),
+			"vigil_sha": row.get("vigil_sha", ""),
+			"combat_dispatches": row.get("combat_dispatches", 0),
+			"rng_initial": row.get("rng_initial", 0),
+			"rng_final": row.get("rng_final", 0),
+			"p0_now": MainRoute.ledger_satisfies_p0(vigil),
+			"p5_now": MainRoute.ledger_satisfies_p5(vigil),
+			"vow_unlocked": vigil.vow_unlocked,
+		})
+		print("DD1_ACQUIRE_ROW seed=%d vow=%d status=%s starts=%d shatters=%s p0=%s p5=%s vow_unlocked=%d" % [
+			seed, vow, status, int(float(str(row.get("starts", 0)))), str(row.get("shatters", 0)),
+			str(MainRoute.ledger_satisfies_p0(vigil)), str(MainRoute.ledger_satisfies_p5(vigil)),
+			vigil.vow_unlocked,
+		])
+		if status == "INCOMPLETE":
+			continue
+		if not p0_archived and MainRoute.ledger_satisfies_p0(vigil):
+			MainRoute.archive_bytes(run_path, P0_RUN)
+			MainRoute.archive_bytes(vigil_path, P0_VIGIL)
+			p0_archived = true
+			print("DD1_ACQUIRE_P0 seed=%d" % seed)
+		if p0_archived and not p5_archived and MainRoute.ledger_satisfies_p5(vigil):
+			MainRoute.archive_bytes(run_path, P5_RUN)
+			MainRoute.archive_bytes(vigil_path, P5_VIGIL)
+			p5_archived = true
+			print("DD1_ACQUIRE_P5 seed=%d" % seed)
+			break
+	var gate: Dictionary = MainRoute.evaluate_n0_witness(P0_RUN, P0_VIGIL, P5_RUN, P5_VIGIL, content)
+	var payload: Dictionary = {
+		"pilot": freeze,
+		"starts": starts,
+		"p0_archived": p0_archived,
+		"p5_archived": p5_archived,
+		"gate": gate,
+		"traces": traces,
+	}
+	var tf: FileAccess = FileAccess.open(TRACE_PATH, FileAccess.WRITE)
+	if tf != null:
+		tf.store_string(JSON.stringify(payload))
+		tf.close()
+	if MainRoute.file_text("user://glassvow_run_v2.json") != default_run \
+			or MainRoute.file_text("user://glassvow_vigil_v2.json") != default_vigil:
+		print("DD1_ACQUIRE_FAIL default owner saves were touched")
+		quit(1)
+		return
+	print("DD1_ACQUIRE_DONE starts=%d p0=%s p5=%s gate=%s" % [
+		starts, str(p0_archived), str(p5_archived), str(gate.get("result", "")),
+	])
+	quit(0 if str(gate.get("result", "")) == "ACCEPT" else 2)

@@ -364,12 +364,24 @@ static func _is_number(v: Variant) -> bool:
 	return typeof(v) == TYPE_INT or typeof(v) == TYPE_FLOAT
 
 
+static func _as_float(v: Variant) -> float:
+	match typeof(v):
+		TYPE_INT:
+			var n: int = v
+			return float(n)
+		TYPE_FLOAT:
+			var f: float = v
+			return f
+		_:
+			return NAN
+
+
 static func _same(a: Variant, b: Variant) -> bool:
 	if _is_number(a) or _is_number(b):
 		if not _is_number(a) or not _is_number(b):
 			return false
-		var fa: float = float(a)
-		var fb: float = float(b)
+		var fa: float = _as_float(a)
+		var fb: float = _as_float(b)
 		if is_inf(fa) or is_nan(fa) or is_inf(fb) or is_nan(fb):
 			return false
 		return fa == fb

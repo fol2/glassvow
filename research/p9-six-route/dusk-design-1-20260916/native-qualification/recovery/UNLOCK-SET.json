@@ -1,0 +1,53 @@
+{
+  "aspect": 0,
+  "frozen_before_outputs": true,
+  "p0": {
+    "pool_access": {
+      "dd1_consumer": "crosscut dusk uncommon pool",
+      "dd1_producer": "setTheAngle dusk uncommon pool",
+      "k1_consumer": "resonantLance via paneBreaker",
+      "k1_producer": "chisel starter",
+      "k2_consumer": "flurry uncommon pool",
+      "k2_producer": "empower uncommon pool"
+    },
+    "required_deed": {
+      "id": "paneBreaker",
+      "n": 15,
+      "stat": "shatters"
+    },
+    "required_unlocks": [
+      "card:resonantLance"
+    ]
+  },
+  "p5": {
+    "inherits_p0": true,
+    "run_vow": "min(vow_unlocked, 4) until a win at vow 4 earns 5",
+    "vow_unlocked_min": 5
+  },
+  "pilot": {
+    "ban": [],
+    "policy": {},
+    "random_build": false,
+    "random_play": false,
+    "version": "p8-d0-v1"
+  },
+  "roots": [
+    5421600,
+    5421601,
+    5421602,
+    5421603,
+    5421604,
+    5421605,
+    5421606,
+    5421607,
+    5421608,
+    5421609,
+    5421610,
+    5421611,
+    5421612,
+    5421613,
+    5421614,
+    5421615
+  ],
+  "schema": "DD1-N0-RECOVERY-1-UNLOCK-SET-1"
+}

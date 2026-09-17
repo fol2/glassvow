@@ -6,11 +6,14 @@ extends RefCounted
 
 const Pilot: GDScript = preload("res://tools/balance_pilot.gd")
 const MainRoute: GDScript = preload("res://tests/support/dd1_native_main_route.gd")
+const Receipt: GDScript = preload("res://tests/support/dd1_native_launch_receipt.gd")
 const M_PENDING_PATH: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/m-pending-run-v2.json"
 const M_PENDING_ORDINARY_PATH: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/m-pending-ordinary-run-v2.json"
 const PV_LEDGERS_PATH: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/pv-ledgers.json"
 const QUAL_PV_P0_BYTES: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/p0-first-valid-run-v2.json"
 const QUAL_PV_P5_BYTES: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/p5-first-valid-run-v2.json"
+const QUAL_PV_P0_VIGIL: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/p0-first-valid-vigil-v2.json"
+const QUAL_PV_P5_VIGIL: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/p5-first-valid-vigil-v2.json"
 const PV_VIGIL_PATH: String = "user://dd1_native_pv_vigil_v2.json"
 const PV_RUN_PATH: String = "user://dd1_native_pv_run_v2.json"
 const ABANDON_RUN_PATH: String = "user://dd1_native_abandon_run_v2.json"
@@ -34,6 +37,8 @@ static func run(fails: Array[String]) -> void:
 	_reaper_draw_energy(fails)
 	_return_thorns(fails)
 	_abandon_clears_mark(fails)
+	_launch_receipt_controls(fails)
+	_combat_dispatch_once(fails)
 	_unmodified_m_pending_resume(fails)
 	_pv_ordinary_progression(fails)
 	if _file_text(DEFAULT_RUN_PATH) != default_run \
@@ -287,6 +292,100 @@ static func _abandon_clears_mark(fails: Array[String]) -> void:
 	_dispose(main)
 
 
+static func _launch_receipt_controls(fails: Array[String]) -> void:
+	OS.set_environment("DD1_NATIVE_LAUNCH_PERMIT", "1")
+	OS.set_environment("DD1_NATIVE_ACQUIRE", "")
+	var env_only: Dictionary = Receipt.evaluate("user://dd1_missing_launch_receipt.json")
+	_fail(fails, env_only.get("ok", true) != true, "environment variable is not launch authority")
+	var empty_path: String = "user://dd1_empty_launch_receipt.json"
+	var empty_f: FileAccess = FileAccess.open(empty_path, FileAccess.WRITE)
+	_fail(fails, empty_f != null, "could not write empty receipt")
+	if empty_f != null:
+		empty_f.store_string("")
+		empty_f.close()
+	var empty_row: Dictionary = Receipt.evaluate(empty_path)
+	_fail(fails, empty_row.get("ok", true) != true, "empty receipt rejects")
+	_fail(fails, str(empty_row.get("reason", "")).contains("empty"),
+		"empty receipt names emptiness")
+	var exist_path: String = "user://dd1_exist_only_launch.json"
+	var exist_f: FileAccess = FileAccess.open(exist_path, FileAccess.WRITE)
+	if exist_f != null:
+		exist_f.store_string("{}\n")
+		exist_f.close()
+	var exist_row: Dictionary = Receipt.evaluate(exist_path)
+	_fail(fails, exist_row.get("ok", true) != true, "file existence alone rejects")
+	var stale_path: String = "user://dd1_stale_launch.json"
+	var stale: Dictionary = {
+		"schema": Receipt.SCHEMA,
+		"operation": Receipt.OPERATION,
+		"bodies": {},
+		"source": {"scientific_m": "0".repeat(40), "starting_overlay_commit": "0".repeat(40)},
+		"inputs": {"pending_seed": 1, "pv_roots": []},
+	}
+	var stale_f: FileAccess = FileAccess.open(stale_path, FileAccess.WRITE)
+	if stale_f != null:
+		stale_f.store_string(JSON.stringify(stale))
+		stale_f.close()
+	var stale_row: Dictionary = Receipt.evaluate(stale_path)
+	_fail(fails, stale_row.get("ok", true) != true, "stale identity rejects")
+	if FileAccess.file_exists(Receipt.DEFAULT_RECEIPT_PATH):
+		var good: Dictionary = Receipt.evaluate(Receipt.DEFAULT_RECEIPT_PATH)
+		_fail(fails, good.get("ok", false) == true, "populated bound receipt permits: %s" % str(good.get("reason", "")))
+	OS.set_environment("DD1_NATIVE_LAUNCH_PERMIT", "")
+	SaveService.clear(empty_path)
+	SaveService.clear(exist_path)
+	SaveService.clear(stale_path)
+
+
+static func _combat_dispatch_once(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full(false)
+	var run_path: String = "user://dd1_dispatch_run_v2.json"
+	var vigil_path: String = "user://dd1_dispatch_vigil_v2.json"
+	SaveService.clear(run_path)
+	SaveService.clear_vigil(vigil_path)
+	var main: Main = MainRoute.make_main(content, run_path, vigil_path)
+	main._forced_seed = 5420099
+	main._new_run({"aspect": 0, "vow": 0})
+	if main._map == null or main.game == null:
+		_fail(fails, false, "dispatch setup missing map")
+		MainRoute.dispose(main)
+		return
+	var reachable: Array[int] = main._map.reachable()
+	_fail(fails, not reachable.is_empty(), "dispatch row-0 reachable")
+	if reachable.is_empty():
+		MainRoute.dispose(main)
+		return
+	var pick: int = reachable[0]
+	main._map.at = pick
+	var node: MapNode = main._map.current()
+	main.game.run.node_id = node.id
+	main._arm_encounter(node)
+	var enemies: Array = main.game.run.pending_enemy_ids if typeof(main.game.run.pending_enemy_ids) == TYPE_ARRAY else ["sporeling"]
+	native_starts += 1
+	main.game.apply({"t": "startCombat", "enemies": enemies, "kind": "normal"})
+	_fail(fails, main.game.cb != null, "dispatch armed a combat")
+	if main.game.cb == null:
+		MainRoute.dispose(main)
+		return
+	main.game.cb.over = true
+	main.game.cb.result = "win"
+	var rng0: int = main.game.run.rng.get_state()
+	_fail(fails, MainRoute.dispatch_combat_result_once(main, false) == true,
+		"first completed combat dispatches through Main._on_combat_over")
+	var rng1: int = main.game.run.rng.get_state()
+	_fail(fails, main.game.run.pending_reward != null or main.game.run.pending_run_end != null,
+		"first dispatch wrote pending reward or terminal")
+	_fail(fails, MainRoute.dispatch_combat_result_once(main, true) == false,
+		"already-dispatched combat does not enter _on_combat_over again")
+	var rng2: int = main.game.run.rng.get_state()
+	_fail(fails, rng2 == rng1, "second poll does not advance RNG / regenerate rewards")
+	_fail(fails, rng1 != rng0 or main.game.run.pending_reward != null or main.game.run.pending_run_end != null,
+		"first dispatch generated rewards or a terminal")
+	MainRoute.dispose(main)
+	SaveService.clear(run_path)
+	SaveService.clear_vigil(vigil_path)
+
+
 static func _unmodified_m_pending_resume(fails: Array[String]) -> void:
 	if not FileAccess.file_exists(M_PENDING_PATH):
 		_fail(fails, false,
@@ -307,8 +406,8 @@ static func _unmodified_m_pending_resume(fails: Array[String]) -> void:
 	_fail(fails, nodes.is_empty() and _ji(save.get("floorsClimbed", -1)) == 0
 			and str(save.get("runId", "")) == "m-pending-5420099",
 		"F m-pending-run-v2.json remains constructed history (empty map, not ordinary-route)")
-	_fail(fails, not FileAccess.file_exists(M_PENDING_ORDINARY_PATH),
-		"ordinary-route M pending witness is absent (BLOCKED, not invented)")
+	if FileAccess.file_exists(M_PENDING_ORDINARY_PATH):
+		_resume_ordinary_pending(fails)
 	# Application resume of the constructed fixture: unmodified bytes through
 	# SaveService then Main._continue_run → _resume_pending_combat.
 	# This is not ordinary-route proof.
@@ -340,6 +439,45 @@ static func _unmodified_m_pending_resume(fails: Array[String]) -> void:
 	MainRoute.dispose(main)
 
 
+static func _resume_ordinary_pending(fails: Array[String]) -> void:
+	var raw: String = FileAccess.get_file_as_string(M_PENDING_ORDINARY_PATH)
+	var parsed: Variant = JSON.parse_string(raw)
+	_fail(fails, typeof(parsed) == TYPE_DICTIONARY, "ordinary pending JSON")
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return
+	var save: Dictionary = parsed
+	var map_v: Variant = save.get("map", {})
+	var nodes: Array = []
+	if typeof(map_v) == TYPE_DICTIONARY:
+		nodes = map_v.get("nodes", [])
+	_fail(fails, not nodes.is_empty(), "ordinary pending has map nodes")
+	_fail(fails, save.get("pendingCombat") != null, "ordinary pending has pendingCombat")
+	_fail(fails, not save.has("crosscut_anchor") and not save.has("crosscutAnchor"),
+		"ordinary pending has no overlay mark field")
+	var load_path: String = "user://dd1_ordinary_pending_load.json"
+	var wf: FileAccess = FileAccess.open(load_path, FileAccess.WRITE)
+	if wf == null:
+		_fail(fails, false, "could not copy ordinary pending bytes")
+		return
+	wf.store_string(raw)
+	wf.close()
+	var content: ContentDB = ContentDB.load_full(false)
+	var loaded: RunState = SaveService.load_run(content, load_path)
+	_fail(fails, loaded != null, "SaveService.load_run of ordinary pending")
+	if loaded == null:
+		return
+	_fail(fails, loaded.run_id == str(save.get("runId", "")), "ordinary runId survives load")
+	_fail(fails, loaded.pending_combat != null, "ordinary pendingCombat through SaveService")
+	native_starts += 1
+	var main: Main = MainRoute.resume_pending(content, loaded, load_path, ABANDON_VIGIL_PATH)
+	_fail(fails, main.game != null and main.game.cb != null,
+		"ordinary pending resumed through Main._continue_run")
+	_fail(fails, main.game != null and main.game.cb != null and main.game.cb.crosscut_anchor == null,
+		"ordinary resume is marker-free")
+	MainRoute.dispose(main)
+	SaveService.clear(load_path)
+
+
 static func _pv_ordinary_progression(fails: Array[String]) -> void:
 	# Routine regression never acquires profiles and never rewrites pv-ledgers.json.
 	if MainRoute.acquire_requested():
@@ -365,34 +503,120 @@ static func _pv_retained_provenance_gate(fails: Array[String]) -> void:
 	var admission: String = str(ledgers.get("admission", ""))
 	_fail(fails, admission == "UNSUPPORTED_SUMMARIES_NOT_DURABLE_PROVENANCE",
 		"P_v summaries are not admitted as earned durable proof")
-	_fail(fails, not FileAccess.file_exists(QUAL_PV_P0_BYTES) \
-			and not FileAccess.file_exists(QUAL_PV_P5_BYTES),
-		"durable first-valid P_v byte files are absent (not invented)")
-	var p5: Dictionary = ledgers.get("p5", {})
-	_fail(fails, not p5.is_empty(), "P_5 summary history is kept")
-	_fail(fails, str(ledgers.get("n0_result", "")) == "BLOCKED",
-		"missing mandatory P_5 makes N0 BLOCKED, not print-then-PASS")
-	_fail(fails, str(ledgers.get("blocked_prerequisite", "")).contains("8-seed"),
-		"P_5 BLOCKED names the original 8-seed / account prerequisite")
+	var content: ContentDB = ContentDB.load_full(false)
+	var canonical: Dictionary = MainRoute.evaluate_n0_witness(
+		QUAL_PV_P0_BYTES, QUAL_PV_P0_VIGIL, QUAL_PV_P5_BYTES, QUAL_PV_P5_VIGIL, content)
+	if str(canonical.get("result", "")) == "BLOCKED":
+		_fail(fails, str(canonical.get("reason", "")).contains("missing"),
+			"missing mandatory witness is BLOCKED, not success")
+		_fail(fails, str(ledgers.get("n0_result", "")) == "BLOCKED",
+			"F ledger still records historical N0 BLOCKED")
+	elif str(canonical.get("result", "")) == "ACCEPT":
+		_fail(fails, int(float(str(canonical.get("p5_vow_unlocked", 0)))) >= 5,
+			"canonical P_5 witness has vow_unlocked>=5")
+	else:
+		_fail(fails, str(canonical.get("result", "")) == "REJECT",
+			"present but invalid witness is REJECT not PASS")
+	_n0_supplied_witness_accepts(fails, content)
+	var p0_before: Variant = MainRoute.file_text(QUAL_PV_P0_BYTES)
+	var p5_before: Variant = MainRoute.file_text(QUAL_PV_P5_BYTES)
+	_fail(fails, MainRoute.file_text(QUAL_PV_P0_BYTES) == p0_before
+			and MainRoute.file_text(QUAL_PV_P5_BYTES) == p5_before,
+		"ordinary regression does not overwrite canonical P_v artifacts")
+
+
+static func _n0_supplied_witness_accepts(fails: Array[String], content: ContentDB) -> void:
+	var p0_run_path: String = "user://dd1_supplied_p0_run_v2.json"
+	var p0_vigil_path: String = "user://dd1_supplied_p0_vigil_v2.json"
+	var p5_run_path: String = "user://dd1_supplied_p5_run_v2.json"
+	var p5_vigil_path: String = "user://dd1_supplied_p5_vigil_v2.json"
+	var p0_run: RunState = RunState.new_run(content, 5421601, "supplied-p0", {"aspect": 0, "vow": 0})
+	var p5_run: RunState = RunState.new_run(content, 5421609, "supplied-p5", {"aspect": 0, "vow": 4})
+	_fail(fails, SaveService.store(p0_run, p0_run_path) and SaveService.store(p5_run, p5_run_path),
+		"supplied witness run store")
+	var p0_vigil: VigilState = VigilState.blank()
+	p0_vigil.runs_played = 1
+	p0_vigil.deeds["shatters"] = 15
+	p0_vigil.unlocks.append("card:resonantLance")
+	var p5_vigil: VigilState = VigilState.blank()
+	p5_vigil.runs_played = 6
+	p5_vigil.deeds["shatters"] = 40
+	p5_vigil.vow_unlocked = 5
+	p5_vigil.unlocks.append("card:resonantLance")
+	_fail(fails, SaveService.store_vigil(p0_vigil, p0_vigil_path)
+			and SaveService.store_vigil(p5_vigil, p5_vigil_path),
+		"supplied witness vigil store")
+	var missing: Dictionary = MainRoute.evaluate_n0_witness(
+		"user://dd1_absent_p0_run.json", p0_vigil_path, p5_run_path, p5_vigil_path, content)
+	_fail(fails, str(missing.get("result", "")) == "BLOCKED",
+		"N0 path BLOCKED/REJECTs a missing mandatory witness")
+	var supplied: Dictionary = MainRoute.evaluate_n0_witness(
+		p0_run_path, p0_vigil_path, p5_run_path, p5_vigil_path, content)
+	_fail(fails, str(supplied.get("result", "")) == "ACCEPT",
+		"N0 path accepts a genuine supplied witness: %s" % str(supplied.get("reason", "")))
+	SaveService.clear(p0_run_path)
+	SaveService.clear(p5_run_path)
+	SaveService.clear_vigil(p0_vigil_path)
+	SaveService.clear_vigil(p5_vigil_path)
 
 
 static func _pv_acquire_via_main(fails: Array[String]) -> void:
-	SaveService.clear(PV_VIGIL_PATH)
-	SaveService.clear(PV_RUN_PATH)
+	if not MainRoute.launch_permitted():
+		_fail(fails, false, "P_v acquisition BLOCKED: launch receipt invalid")
+		return
 	var content: ContentDB = ContentDB.load_full(false)
 	var vigil: VigilState = VigilState.blank()
-	Pilot.set_ban(PackedStringArray())
-	Pilot.apply_policy({})
-	Pilot.set_modes(false, false)
-	var row: Dictionary = MainRoute.drive_ordinary(
-		content, vigil, 5421600, 0, PV_RUN_PATH, PV_VIGIL_PATH)
-	native_starts += int(row.get("starts", 0))
-	if str(row.get("status", "")) == "INCOMPLETE":
+	var freeze: Dictionary = MainRoute.bind_unmodified_pilot()
+	_fail(fails, str(freeze.get("version", "")) == "p8-d0-v1", "unmodified Pilot identity")
+	var p0_archived: bool = false
+	var p5_archived: bool = false
+	var traces: Array = []
+	for seed: int in range(5421600, 5421616):
+		var vow: int = mini(vigil.vow_unlocked, 4)
+		var run_path: String = "user://dd1_pv_run_%d_v2.json" % seed
+		var vigil_path: String = "user://dd1_pv_vigil_%d_v2.json" % seed
+		SaveService.store_vigil(vigil, vigil_path)
+		var row: Dictionary = MainRoute.drive_ordinary(
+			content, vigil, seed, vow, run_path, vigil_path)
+		native_starts += int(float(str(row.get("starts", 0))))
+		row["seed"] = seed
+		row["vow"] = vow
+		traces.append({
+			"seed": seed,
+			"vow": vow,
+			"status": row.get("status", ""),
+			"starts": row.get("starts", 0),
+			"shatters": row.get("shatters", 0),
+			"incomplete_reason": row.get("incomplete_reason", ""),
+			"run_sha": row.get("run_sha", ""),
+			"vigil_sha": row.get("vigil_sha", ""),
+			"combat_dispatches": row.get("combat_dispatches", 0),
+		})
+		var loaded: VigilState = SaveService.load_vigil(vigil_path)
+		if loaded != null:
+			vigil = loaded
+		if str(row.get("status", "")) == "INCOMPLETE":
+			# Incomplete is not death/win and earns no profile credit.
+			SaveService.clear(run_path)
+			continue
+		if not p0_archived and MainRoute.ledger_satisfies_p0(vigil):
+			MainRoute.archive_bytes(run_path, QUAL_PV_P0_BYTES)
+			MainRoute.archive_bytes(vigil_path, QUAL_PV_P0_VIGIL)
+			p0_archived = true
+		if p0_archived and not p5_archived and MainRoute.ledger_satisfies_p5(vigil):
+			MainRoute.archive_bytes(run_path, QUAL_PV_P5_BYTES)
+			MainRoute.archive_bytes(vigil_path, QUAL_PV_P5_VIGIL)
+			p5_archived = true
+			break
+		SaveService.clear(run_path)
+	var gate: Dictionary = MainRoute.evaluate_n0_witness(
+		QUAL_PV_P0_BYTES, QUAL_PV_P0_VIGIL, QUAL_PV_P5_BYTES, QUAL_PV_P5_VIGIL, content)
+	if str(gate.get("result", "")) != "ACCEPT":
 		_fail(fails, false,
-			"ordinary Main campaign INCOMPLETE (not death): %s" % JSON.stringify(row))
+			"acquisition finished without durable P_0/P_5: %s traces=%s" % [
+				str(gate), JSON.stringify(traces)])
 		return
-	_fail(fails, false,
-		"acquisition ran but durable P_v files are still the reviewer's missing-proof row")
+	_fail(fails, p0_archived and p5_archived, "first-valid P_0 and P_5 archived")
 
 
 static func _main(content: ContentDB, run_path: String, vigil_path: String) -> Main:
