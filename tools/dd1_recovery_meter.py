@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-"""Smallest existing-tool wrapper for DD1-N0-RECOVERY-1.
+"""DD1 receipt preflight and complete-unit reservation entry.
 
-Validates owner/method/binding receipt bodies, operation, source/driver/input
-identities, reservations and expiry before any spawn. File existence and
-environment variables are not permission. Counts engine starts, process-tree
-CPU (wait4 rusage), and cumulative raw stdout+stderr. Failures remain charged.
-Inert non-game controls live in --self-test.
+Native entry is SOURCE_BLOCKED until aggregate CPU/process-tree/all-raw
+containment is demonstrated. Stored legacy receipts/accounts are not rewritten.
+Source-only self-test uses explicitly synthetic temporary accounts.
 """
 from __future__ import annotations
 
@@ -69,15 +67,13 @@ def parse_utc(value: Any) -> datetime | None:
 
 
 def read_json(path: Path) -> dict[str, Any]:
-    raw = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(raw, dict):
-        raise MeterError(f"JSON object required: {path}")
-    return raw
+    from dd1_reservations import read
+    return read(path)
 
 
 def write_json(path: Path, value: Mapping[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    from dd1_reservations import atomic_write
+    atomic_write(path, value)
 
 
 def git_rev_parse(rev: str) -> str:
@@ -133,26 +129,10 @@ def verify_stored_bodies(bindings: Mapping[str, Any]) -> dict[str, str]:
     return out
 
 
-def remaining_ok(account: Mapping[str, Any], reserve_starts: int, reserve_cpu_s: int) -> None:
-    recovery = account.get("recovery")
-    if not isinstance(recovery, dict):
-        raise MeterError("recovery account missing")
-    used = int(recovery.get("starts_used", 0))
-    cap = int(recovery.get("starts_cap", STARTS_CAP))
-    if used + reserve_starts > cap:
-        raise MeterError("exhausted reservation: starts")
-    cpu_used = int(recovery.get("cpu_ns_used", 0))
-    cpu_cap = int(recovery.get("cpu_ns_cap", CPU_NS_CAP))
-    if cpu_used + reserve_cpu_s * 10**9 > cpu_cap:
-        raise MeterError("exhausted reservation: cpu")
-    raw_used = int(recovery.get("raw_bytes_used", 0))
-    raw_cap = int(recovery.get("raw_bytes_cap", RAW_CAP))
-    if raw_used >= raw_cap:
-        raise MeterError("exhausted reservation: raw")
-    first = parse_utc(recovery.get("first_engine_launch_utc"))
-    deadline = parse_utc(recovery.get("deadline_utc"))
-    if first is not None and deadline is not None and utc_now() > deadline:
-        raise MeterError("recovery window expired")
+def remaining_ok(account: Mapping[str, Any], reserve_starts: int, reserve_cpu_s: int,
+                 reserve_raw_bytes: int = 0) -> None:
+    from dd1_reservations import available, natural
+    available(account, reserve_starts, natural(reserve_cpu_s, "CPU seconds") * 10**9, reserve_raw_bytes)
 
 
 def validate_launch_receipt(
@@ -196,15 +176,26 @@ def validate_launch_receipt(
     if require_descendant and overlay_head != STARTING_G:
         if not git_is_ancestor(STARTING_G, overlay_head):
             raise MeterError("overlay head is not G or a descendant of G")
-    remaining_ok(account, 1, 0)
+    for key in ("d", "c", "h", "allocation"):
+        if not bindings.get(key) or source.get(key) != bindings[key]:
+            raise MeterError("accepted source mismatch: " + key)
+    caps = receipt.get("reservations", {})
+    for key in ("starts_cap", "cpu_ns_cap", "raw_bytes_cap", "per_invocation_cpu_seconds", "executors"):
+        if type(caps.get(key)) is not int or caps[key] != account["recovery"].get(key):
+            raise MeterError("receipt cap mismatch: " + key)
+    if receipt.get("expiry", {}).get("deadline_utc") != account["recovery"].get("deadline_utc"):
+        raise MeterError("receipt expiry mismatch")
+    remaining_ok(account, 0, 0, 0)  # integrity preflight only; NEVER launch permission
     return {
         "ok": True,
         "overlay_head": overlay_head,
         "bodies": bodies,
+        "launch_permitted": False,
     }
 
 
 def build_launch_receipt(bindings: Mapping[str, Any], account: Mapping[str, Any]) -> dict[str, Any]:
+    # Pure historical representation only. The CLI cannot publish/activate it.
     bodies = verify_stored_bodies(bindings)
     recovery = account["recovery"]
     return {
@@ -256,37 +247,8 @@ def load_account(path: Path = ACCOUNT_PATH) -> dict[str, Any]:
     return read_json(path)
 
 
-def charge_account(
-    account: dict[str, Any],
-    *,
-    starts: int,
-    cpu_ns: int,
-    raw_bytes: int,
-    event: Mapping[str, Any],
-    clock_start: bool,
-) -> dict[str, Any]:
-    recovery = dict(account["recovery"])
-    recovery["starts_used"] = int(recovery.get("starts_used", 0)) + starts
-    recovery["cpu_ns_used"] = int(recovery.get("cpu_ns_used", 0)) + max(0, cpu_ns)
-    recovery["raw_bytes_used"] = int(recovery.get("raw_bytes_used", 0)) + max(0, raw_bytes)
-    if clock_start and not recovery.get("first_engine_launch_utc"):
-        started = utc_now()
-        recovery["first_engine_launch_utc"] = utc_stamp(started)
-        recovery["deadline_utc"] = utc_stamp(started + timedelta(days=WINDOW_DAYS))
-    events = list(recovery.get("events", []))
-    events.append(dict(event))
-    recovery["events"] = events
-    account = dict(account)
-    account["recovery"] = recovery
-    return account
-
-
-def _preexec_limits(cpu_seconds: int, output_bytes: int) -> None:
-    os.setsid()
-    resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds))
-    # stdout/stderr are pipes; file-size limit still covers redirected files.
-    if output_bytes > 0:
-        resource.setrlimit(resource.RLIMIT_FSIZE, (output_bytes, output_bytes))
+def charge_account(*args, **kwargs):
+    raise MeterError("post-process charging is not before-start authority; legacy observations remain unchanged")
 
 
 def run_metered(
@@ -301,155 +263,29 @@ def run_metered(
     counts_as_engine: bool,
     overlay_head: str | None = None,
     wait_seconds: int | None = None,
+    unit_path: Path | None = None,
 ) -> dict[str, Any]:
+    if unit_path is None:
+        raise MeterError("complete pre-reserved unit demand is required; legacy one-start path removed")
+    if not counts_as_engine or interrupt_after_s is not None:
+        raise MeterError("native CLI cannot borrow inert-test authority")
+    from dd1_meter_entry import run_complete_unit
     bindings = load_bindings()
-    account = load_account(account_path)
-    if not receipt_path.is_file():
-        raise MeterError("launch receipt missing")
-    if receipt_path.stat().st_size == 0:
-        raise MeterError("empty launch receipt")
     receipt = read_json(receipt_path)
+    unit = read_json(unit_path)
+    if cpu_seconds != unit.get("cpu_seconds") or output_limit != unit.get("raw_bytes"):
+        raise MeterError("CLI CPU/raw limits differ from complete unit")
+    if wait_seconds is not None and wait_seconds != unit.get("wall_seconds"):
+        raise MeterError("CLI wall limit differs from complete unit")
     head = overlay_head or git_rev_parse("HEAD")
-    validate_launch_receipt(receipt, bindings=bindings, account=account, overlay_head=head)
-    remaining_ok(account, 1, 0)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    stdout_path = out_dir / "stdout.bin"
-    stderr_path = out_dir / "stderr.bin"
-    # Reserve before spawn. Failures stay charged.
-    reserved_at = utc_stamp(utc_now())
-    account = charge_account(
-        account,
-        starts=1,
-        cpu_ns=0,
-        raw_bytes=0,
-        event={
-            "kind": "reserve",
-            "at_utc": reserved_at,
-            "command": list(command),
-            "counts_as_engine": counts_as_engine,
-        },
-        clock_start=counts_as_engine,
-    )
-    write_json(account_path, account)
-    if account_path.resolve() == ACCOUNT_PATH.resolve():
-        write_json(LAUNCH_RECEIPT_PATH, build_launch_receipt(bindings, account))
-
-    env = os.environ.copy()
-    env.pop("DD1_NATIVE_LAUNCH_PERMIT", None)
-
-    usage_before = resource.getrusage(resource.RUSAGE_CHILDREN)
-    started = time.monotonic()
-    proc = subprocess.Popen(
-        list(command),
-        cwd=str(REPO),
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        env=env,
-        preexec_fn=lambda: _preexec_limits(cpu_seconds, output_limit),
-    )
-    killed = ""
-    stdout_chunks: list[bytes] = []
-    stderr_chunks: list[bytes] = []
-    raw = 0
-
-    def _ingest(stream, bucket: list[bytes]) -> None:
-        nonlocal raw, killed
-        assert stream is not None
-        while True:
-            block = stream.read(65536)
-            if not block:
-                break
-            bucket.append(block)
-            raw += len(block)
-            if raw > output_limit:
-                killed = "output_limit"
-                os.killpg(proc.pid, signal.SIGKILL)
-                break
-
-    import threading
-    t_out = threading.Thread(target=_ingest, args=(proc.stdout, stdout_chunks), daemon=True)
-    t_err = threading.Thread(target=_ingest, args=(proc.stderr, stderr_chunks), daemon=True)
-    t_out.start()
-    t_err.start()
-    if interrupt_after_s is not None:
-        time.sleep(interrupt_after_s)
-        if proc.poll() is None:
-            killed = killed or "interrupt"
-            os.killpg(proc.pid, signal.SIGTERM)
-            time.sleep(0.2)
-            if proc.poll() is None:
-                os.killpg(proc.pid, signal.SIGKILL)
-    wait_s = max(5, cpu_seconds + 8)
-    if wait_seconds is not None:
-        wait_s = max(wait_s, wait_seconds)
-    if interrupt_after_s is not None:
-        wait_s = max(wait_s, interrupt_after_s + 5)
-    try:
-        returncode = proc.wait(timeout=wait_s)
-    except subprocess.TimeoutExpired:
-        killed = killed or "wait_timeout"
-        try:
-            os.killpg(proc.pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
-        returncode = proc.wait()
-    t_out.join(timeout=2)
-    t_err.join(timeout=2)
-    elapsed_s = time.monotonic() - started
-    usage_after = resource.getrusage(resource.RUSAGE_CHILDREN)
-    cpu_s = (usage_after.ru_utime - usage_before.ru_utime) + (
-        usage_after.ru_stime - usage_before.ru_stime
-    )
-    cpu_ns = int(cpu_s * 1_000_000_000)
-    stdout_bytes = b"".join(stdout_chunks)
-    stderr_bytes = b"".join(stderr_chunks)
-    stdout_path.write_bytes(stdout_bytes)
-    stderr_path.write_bytes(stderr_bytes)
-    success = returncode == 0 and not killed
-    account = load_account(account_path)
-    account = charge_account(
-        account,
-        starts=0,
-        cpu_ns=cpu_ns,
-        raw_bytes=len(stdout_bytes) + len(stderr_bytes),
-        event={
-            "kind": "complete" if success else "fail",
-            "at_utc": utc_stamp(utc_now()),
-            "returncode": returncode,
-            "killed": killed,
-            "cpu_ns": cpu_ns,
-            "raw_bytes": len(stdout_bytes) + len(stderr_bytes),
-            "elapsed_s": elapsed_s,
-            "command": list(command),
-        },
-        clock_start=False,
-    )
-    write_json(account_path, account)
-    if account_path.resolve() == ACCOUNT_PATH.resolve():
-        write_json(LAUNCH_RECEIPT_PATH, build_launch_receipt(bindings, account))
-    result = {
-        "success": success,
-        "returncode": returncode,
-        "killed": killed,
-        "cpu_ns": cpu_ns,
-        "raw_bytes": len(stdout_bytes) + len(stderr_bytes),
-        "elapsed_s": elapsed_s,
-        "stdout_path": str(stdout_path),
-        "stderr_path": str(stderr_path),
-        "account": account["recovery"],
-    }
-    if not success:
-        result["error"] = killed or f"exit {returncode}"
-    return result
+    def authority(account):
+        validate_launch_receipt(receipt, bindings=bindings, account=account, overlay_head=head)
+    return run_complete_unit(list(command), unit=unit, account_path=account_path,
+        receipt_path=receipt_path, output=out_dir, head=head, repo=REPO, authority_check=authority)
 
 
 def cmd_write_receipt() -> int:
-    bindings = load_bindings()
-    account = load_account()
-    receipt = build_launch_receipt(bindings, account)
-    write_json(LAUNCH_RECEIPT_PATH, receipt)
-    print(json.dumps({"wrote": str(LAUNCH_RECEIPT_PATH), "sha256": sha256_file(LAUNCH_RECEIPT_PATH)}))
-    return 0
+    raise MeterError("source-only disposition: no new or refreshed launch receipt")
 
 
 def cmd_validate(receipt_path: Path) -> int:
@@ -468,6 +304,7 @@ def cmd_validate(receipt_path: Path) -> int:
 
 
 def _write_temp_account(directory: Path, **recovery_over: Any) -> Path:
+    # Retained for this source checkpoint; never called by the new self-test.
     account = {
         "schema": "DD1-N0-RECOVERY-1-ACCOUNT-1",
         "historical": {
@@ -499,198 +336,14 @@ def _write_temp_account(directory: Path, **recovery_over: Any) -> Path:
 
 
 def cmd_self_test(log_path: Path) -> int:
-    """Inert non-game containment: no Godot, no game I/O."""
-    bindings = load_bindings()
-    lines: list[str] = []
-    failures: list[str] = []
-
-    def note(msg: str) -> None:
-        lines.append(msg)
-        print(msg)
-
-    with tempfile.TemporaryDirectory(prefix="dd1-inert-") as raw_tmp:
-        tmp = Path(raw_tmp)
-        good_account = load_account()
-        good_receipt = build_launch_receipt(bindings, good_account)
-        receipt_path = tmp / "LAUNCH-RECEIPT.json"
-        write_json(receipt_path, good_receipt)
-        head = git_rev_parse("HEAD")
-
-        # 1. Exhausted reservation.
-        exhausted = tmp / "exhausted"
-        exhausted.mkdir()
-        acc = _write_temp_account(exhausted, starts_used=STARTS_CAP)
-        try:
-            validate_launch_receipt(
-                good_receipt, bindings=bindings, account=read_json(acc), overlay_head=head)
-            failures.append("exhausted reservation was accepted")
-            note("FAIL exhausted reservation accepted")
-        except MeterError as error:
-            if "exhausted" not in str(error):
-                failures.append(f"exhausted wrong error: {error}")
-                note(f"FAIL exhausted: {error}")
-            else:
-                after = read_json(acc)
-                if int(after["recovery"]["starts_used"]) != STARTS_CAP:
-                    failures.append("exhausted reservation reset the account")
-                    note("FAIL exhausted reset")
-                else:
-                    note("PASS exhausted reservation rejected; account unchanged")
-
-        # 2. Wrong / stale identity.
-        stale = dict(good_receipt)
-        stale_source = dict(stale["source"])
-        stale_source["scientific_m"] = "0" * 40
-        stale["source"] = stale_source
-        try:
-            validate_launch_receipt(
-                stale, bindings=bindings, account=good_account, overlay_head=head)
-            failures.append("stale M identity accepted")
-            note("FAIL stale identity accepted")
-        except MeterError as error:
-            note(f"PASS stale identity rejected: {error}")
-
-        empty_path = tmp / "empty.json"
-        empty_path.write_text("", encoding="utf-8")
-        try:
-            if empty_path.stat().st_size == 0:
-                raise MeterError("empty receipt")
-            failures.append("empty receipt not rejected")
-        except MeterError:
-            note("PASS empty receipt rejected")
-
-        missing = tmp / "missing.json"
-        if missing.exists():
-            failures.append("missing path existed")
-        else:
-            note("PASS missing receipt path is not permission")
-
-        exist_only = tmp / "LAUNCH-PERMITTED.json"
-        exist_only.write_text("{}\n", encoding="utf-8")
-        try:
-            validate_launch_receipt(
-                read_json(exist_only), bindings=bindings, account=good_account, overlay_head=head)
-            failures.append("file-existence empty object accepted")
-            note("FAIL existence-only accepted")
-        except MeterError as error:
-            note(f"PASS file existence alone rejected: {error}")
-
-        os.environ["DD1_NATIVE_LAUNCH_PERMIT"] = "1"
-        try:
-            validate_launch_receipt(
-                {"schema": "nope"}, bindings=bindings, account=good_account, overlay_head=head)
-            failures.append("env var authorised a bad receipt")
-            note("FAIL env var authorised")
-        except MeterError:
-            note("PASS environment variable is not authority")
-        finally:
-            os.environ.pop("DD1_NATIVE_LAUNCH_PERMIT", None)
-
-        # 3. Child CPU limit.
-        cpu_dir = tmp / "cpu"
-        cpu_dir.mkdir()
-        cpu_account = _write_temp_account(cpu_dir)
-        cpu_receipt = cpu_dir / "LAUNCH-RECEIPT.json"
-        write_json(cpu_receipt, build_launch_receipt(bindings, read_json(cpu_account)))
-        cpu_out = cpu_dir / "out"
-        busy = [sys.executable, "-c", "x=0\nwhile True:\n x+=1"]
-        cpu_result = run_metered(
-            busy,
-            receipt_path=cpu_receipt,
-            account_path=cpu_account,
-            out_dir=cpu_out,
-            cpu_seconds=1,
-            output_limit=1_000_000,
-            interrupt_after_s=None,
-            counts_as_engine=False,
-            overlay_head=head,
-        )
-        cpu_after = read_json(cpu_account)
-        if cpu_result.get("success"):
-            failures.append("CPU-limited busy loop succeeded")
-            note("FAIL CPU limit succeeded")
-        elif int(cpu_after["recovery"]["starts_used"]) < 1:
-            failures.append("CPU limit reset starts")
-            note("FAIL CPU limit reset account")
-        else:
-            note(
-                "PASS child CPU limit failed closed "
-                f"killed={cpu_result.get('killed')!r} rc={cpu_result.get('returncode')} "
-                f"starts={cpu_after['recovery']['starts_used']}"
-            )
-
-        # 4. Output limit.
-        out_lim = tmp / "outlim"
-        out_lim.mkdir()
-        out_account = _write_temp_account(out_lim)
-        out_receipt = out_lim / "LAUNCH-RECEIPT.json"
-        write_json(out_receipt, build_launch_receipt(bindings, read_json(out_account)))
-        writer = [sys.executable, "-c", "import sys\nwhile True:\n sys.stdout.write('A'*4096); sys.stdout.flush()"]
-        out_result = run_metered(
-            writer,
-            receipt_path=out_receipt,
-            account_path=out_account,
-            out_dir=out_lim / "out",
-            cpu_seconds=30,
-            output_limit=64_000,
-            interrupt_after_s=None,
-            counts_as_engine=False,
-            overlay_head=head,
-        )
-        out_after = read_json(out_account)
-        if out_result.get("success"):
-            failures.append("output-limit writer succeeded")
-            note("FAIL output limit succeeded")
-        elif int(out_after["recovery"]["starts_used"]) < 1:
-            failures.append("output limit reset starts")
-            note("FAIL output limit reset")
-        else:
-            note(
-                "PASS output limit failed closed "
-                f"killed={out_result.get('killed')!r} raw={out_result.get('raw_bytes')} "
-                f"starts={out_after['recovery']['starts_used']}"
-            )
-
-        # 5. Interruption.
-        intr = tmp / "intr"
-        intr.mkdir()
-        intr_account = _write_temp_account(intr)
-        intr_receipt = intr / "LAUNCH-RECEIPT.json"
-        write_json(intr_receipt, build_launch_receipt(bindings, read_json(intr_account)))
-        sleeper = [sys.executable, "-c", "import time; time.sleep(30)"]
-        intr_result = run_metered(
-            sleeper,
-            receipt_path=intr_receipt,
-            account_path=intr_account,
-            out_dir=intr / "out",
-            cpu_seconds=30,
-            output_limit=1_000_000,
-            interrupt_after_s=0.2,
-            counts_as_engine=False,
-            overlay_head=head,
-        )
-        intr_after = read_json(intr_account)
-        if intr_result.get("success"):
-            failures.append("interrupted sleep succeeded")
-            note("FAIL interrupt succeeded")
-        elif int(intr_after["recovery"]["starts_used"]) < 1:
-            failures.append("interrupt reset starts")
-            note("FAIL interrupt reset")
-        else:
-            note(
-                "PASS interruption failed closed "
-                f"killed={intr_result.get('killed')!r} starts={intr_after['recovery']['starts_used']}"
-            )
-
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-    log_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    if failures:
-        print("SELF-TEST FAIL")
-        for row in failures:
-            print(f"  - {row}")
-        return 1
-    print("SELF-TEST PASS")
-    return 0
+    # Python-only unittest module. No live account, receipt mutation or engine.
+    import unittest
+    import test_dd1_source_repair
+    suite = unittest.defaultTestLoader.loadTestsFromModule(test_dd1_source_repair)
+    with log_path.open("w", encoding="utf-8") as log:
+        result = unittest.TextTestRunner(stream=log, verbosity=2).run(suite)
+    print(log_path.read_text())
+    return 0 if result.wasSuccessful() else 1
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -707,6 +360,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     p_run.add_argument("--output-limit", type=int, default=RAW_CAP)
     p_run.add_argument("--engine", action="store_true", help="counts as recovery engine launch")
     p_run.add_argument("--wait-seconds", type=int, default=0)
+    p_run.add_argument("--unit", type=Path, required=True)
     p_run.add_argument("command", nargs=argparse.REMAINDER)
     p_chg = sub.add_parser("charge-contained")
     p_chg.add_argument("--starts", type=int, required=True)
@@ -715,32 +369,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     p_test = sub.add_parser("self-test")
     p_test.add_argument("--log", type=Path, required=True)
     args = parser.parse_args(argv)
+    from dd1_reservations import ReservationError
     try:
         if args.cmd == "write-receipt":
             return cmd_write_receipt()
         if args.cmd == "validate":
             return cmd_validate(args.receipt)
         if args.cmd == "charge-contained":
-            account = load_account(args.account)
-            remaining_ok(account, max(0, args.starts), 0)
-            account = charge_account(
-                account,
-                starts=max(0, args.starts),
-                cpu_ns=0,
-                raw_bytes=0,
-                event={
-                    "kind": "contained_starts",
-                    "at_utc": utc_stamp(utc_now()),
-                    "starts": args.starts,
-                    "note": args.note,
-                },
-                clock_start=False,
-            )
-            write_json(args.account, account)
-            if args.account.resolve() == ACCOUNT_PATH.resolve():
-                write_json(LAUNCH_RECEIPT_PATH, build_launch_receipt(load_bindings(), account))
-            print(json.dumps({"starts_used": account["recovery"]["starts_used"]}))
-            return 0
+            raise MeterError("deferred contained-start authority removed; no account changed")
+        if args.cmd == "self-test":
+            return cmd_self_test(args.log)
         if args.cmd == "run":
             command = list(args.command)
             if command and command[0] == "--":
@@ -757,10 +395,11 @@ def main(argv: Sequence[str] | None = None) -> int:
                 interrupt_after_s=None,
                 counts_as_engine=bool(args.engine),
                 wait_seconds=(args.wait_seconds or None),
+                unit_path=args.unit,
             )
             print(json.dumps(result, sort_keys=True, default=str))
             return 0 if result.get("success") else 1
-    except MeterError as error:
+    except (MeterError, ReservationError, OSError, ValueError) as error:
         print(json.dumps({"ok": False, "error": str(error)}), file=sys.stderr)
         return 2
     return 2
