@@ -3,11 +3,12 @@ extends RefCounted
 ## explicitly invoked ordinary-route acquisition. Not a second campaign.
 ## Routine regression must not call drive_ordinary unless launch is permitted.
 
-
 const MapCompose: GDScript = preload("res://tests/test_map_compose.gd")
 const Pilot: GDScript = preload("res://tools/balance_pilot.gd")
 const Receipt: GDScript = preload("res://tests/support/dd1_native_launch_receipt.gd")
 const DriverMain: GDScript = preload("res://tests/support/dd1_native_driver_main.gd")
+const Ordinary: GDScript = preload("res://tests/support/dd1_ordinary_capture.gd")
+const Unit: GDScript = preload("res://tests/support/dd1_unit_grant.gd")
 const QUAL: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification"
 const RECOVERY: String = QUAL + "/recovery"
 const TURN_CAP: int = 30
@@ -20,34 +21,23 @@ static func acquire_requested() -> bool:
 
 
 static func launch_permitted() -> bool:
-	return Receipt.permitted()
+	return Receipt.permitted() and Unit.remaining() > 0
 
 
-## Returns true when this call actually entered Main._on_combat_over.
-## A completed combat is dispatched once: a second poll must not regenerate
-## rewards or advance RNG even if the caller passes already_dispatched=false.
+## Object/encounter identity survives reward completion and all safe screens.
+## The old caller Boolean is an extra refusal, never permission to re-arm.
 static func dispatch_combat_result_once(main: Main, already_dispatched: bool) -> bool:
-	if already_dispatched:
+	if already_dispatched or not main.has_method("dispatch_once"):
 		return false
-	if main.game == null or main.game.cb == null or not main.game.cb.over:
-		return false
-	if main.game.run != null and (
-			main.game.run.pending_reward != null or main.game.run.pending_run_end != null):
-		return false
-	main._on_combat_over(str(main.game.cb.result))
-	return true
+	return main.call("dispatch_once") == true
 
 
 static func bind_unmodified_pilot() -> Dictionary:
 	Pilot.set_ban(PackedStringArray())
 	Pilot.apply_policy({})
 	Pilot.set_modes(false, false)
-	return {
-		"version": Pilot.VERSION,
-		"snapshot": Pilot.policy_snapshot(),
-		"random_build": Pilot.random_build,
-		"random_play": Pilot.random_play,
-	}
+	return {"version": Pilot.VERSION, "snapshot": Pilot.policy_snapshot(),
+		"random_build": Pilot.random_build, "random_play": Pilot.random_play}
 
 
 static func make_main(content: ContentDB, run_path: String, vigil_path: String) -> Main:
@@ -105,278 +95,60 @@ static func file_text(path: String) -> Variant:
 	return FileAccess.get_file_as_string(path)
 
 
+static func _write_new_bytes(path: String, raw: String) -> bool:
+	if raw.is_empty() or FileAccess.file_exists(path):
+		return false  # original archives and failed captures are not overwritten
+	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(raw)
+	file.flush()
+	var error: Error = file.get_error()
+	file.close()
+	return error == OK and file_text(path) == raw
+
+
 static func archive_bytes(src_path: String, dest_path: String) -> String:
-	if not FileAccess.file_exists(src_path):
+	var raw: Variant = file_text(src_path)
+	if typeof(raw) != TYPE_STRING or not _write_new_bytes(dest_path, raw):
 		return ""
-	var raw: String = FileAccess.get_file_as_string(src_path)
-	var dest: FileAccess = FileAccess.open(dest_path, FileAccess.WRITE)
-	if dest == null:
-		return ""
-	dest.store_string(raw)
-	dest.close()
-	return raw.sha256_text()
+	return str(raw).sha256_text()
 
 
-## Durable P_v row: keep drive_ordinary commands, pre-terminal run bytes,
-## initial SHA and post-commit vigil receipts. Status/counts alone are not
-## a trace. Do not read post-terminal disk for the run archive.
-static func durable_trace_row(
-	seed: int,
-	vow: int,
-	row: Dictionary,
-	vigil: VigilState
-) -> Dictionary:
-	var commands_v: Variant = row.get("commands", [])
-	var commands: Array = commands_v if typeof(commands_v) == TYPE_ARRAY else []
-	var pre_v: Variant = row.get("pre_terminal_run", "")
-	var commit_v: Variant = row.get("commit_vigil", "")
-	return {
-		"seed": seed,
-		"vow": vow,
-		"status": row.get("status", ""),
-		"starts": row.get("starts", 0),
-		"shatters": row.get("shatters", 0),
-		"incomplete_reason": row.get("incomplete_reason", ""),
-		"run_id": row.get("run_id", ""),
-		"run_sha": row.get("run_sha", ""),
-		"vigil_sha": row.get("vigil_sha", ""),
-		"combat_dispatches": row.get("combat_dispatches", 0),
-		"rng_initial": row.get("rng_initial", 0),
-		"rng_final": row.get("rng_final", 0),
-		"commands": commands,
-		"pre_terminal_run": pre_v if typeof(pre_v) == TYPE_STRING else "",
-		"initial_run_sha": row.get("initial_run_sha", ""),
-		"initial_vigil_sha": row.get("initial_vigil_sha", ""),
-		"commit_vigil": commit_v if typeof(commit_v) == TYPE_STRING else "",
-		"p0_now": vigil != null and ledger_satisfies_p0(vigil),
-		"p5_now": vigil != null and ledger_satisfies_p5(vigil),
-		"vow_unlocked": vigil.vow_unlocked if vigil != null else 0,
-		"pilot_version": row.get("pilot_version", PILOT_VERSION),
-	}
+## Retain the entire producer record, including initial bytes and journal.
+## Derived access flags are summaries; they never authenticate acquisition.
+static func durable_trace_row(seed: int, vow: int, row: Dictionary, vigil: VigilState) -> Dictionary:
+	var trace: Dictionary = row.duplicate(true)
+	if int(row.get("seed", seed)) != seed or int(row.get("vow", vow)) != vow:
+		trace["status"] = "INCOMPLETE"
+		trace["incomplete_reason"] = "trace_input_identity_mismatch"
+	trace["seed"] = seed
+	trace["vow"] = vow
+	trace["p0_now"] = vigil != null and ledger_satisfies_p0(vigil)
+	trace["p5_now"] = vigil != null and ledger_satisfies_p5(vigil)
+	trace["vow_unlocked"] = vigil.vow_unlocked if vigil != null else 0
+	return trace
 
 
-## Archive P_0/P_5 run bytes from the pre-terminal snapshot. Empty
-## pre_terminal_run is failure; never fall back to post-terminal disk.
 static func archive_profile_run(row: Dictionary, dest_path: String) -> bool:
-	var pre_v: Variant = row.get("pre_terminal_run", "")
-	if typeof(pre_v) != TYPE_STRING or str(pre_v).is_empty():
-		return false
-	var dest: FileAccess = FileAccess.open(dest_path, FileAccess.WRITE)
-	if dest == null:
-		return false
-	dest.store_string(str(pre_v))
-	dest.close()
-	return true
+	var pre: Variant = row.get("pre_terminal_run")
+	return typeof(pre) == TYPE_STRING and _write_new_bytes(dest_path, pre)
 
 
 static func write_pv_traces(path: String, payload: Dictionary) -> bool:
-	var tf: FileAccess = FileAccess.open(path, FileAccess.WRITE)
-	if tf == null:
-		return false
-	tf.store_string(JSON.stringify(payload))
-	tf.close()
-	return true
+	return _write_new_bytes(path, JSON.stringify(payload))
 
 
-## Ordinary-route campaign through Main choice/combat/terminal seams.
-## A turn/action cap is INCOMPLETE, never a fabricated death.
-## Each completed combat is dispatched through Main._on_combat_over once.
-static func drive_ordinary(
-	content: ContentDB,
-	vigil: VigilState,
-	seed: int,
-	vow: int,
-	run_path: String,
-	vigil_path: String
-) -> Dictionary:
-	bind_unmodified_pilot()
-	SaveService.clear(run_path)
-	SaveService.clear_vigil(vigil_path)
-	var main: Main = make_main(content, run_path, vigil_path)
-	main._vigil = vigil
-	main._forced_seed = seed
-	main._new_run({"aspect": 0, "vow": vow})
-	var initial_run: Variant = file_text(run_path)
-	var initial_vigil: Variant = file_text(vigil_path)
-	var rng_initial: int = 0
-	if main.game != null and main.game.run != null:
-		rng_initial = main.game.run.rng.get_state()
-	var starts: int = 0
-	var combat_dispatches: int = 0
-	var reward_claims: int = 0
-	var status: String = "INCOMPLETE"
-	var incomplete_reason: String = "step_cap"
-	var steps: int = 0
-	var commands: Array = []
-	var combat_result_dispatched: bool = false
-	while steps < STEP_CAP:
-		steps += 1
-		if main.game == null or main.game.run == null:
-			incomplete_reason = "missing_game"
-			break
-		if main.game.run.pending_run_end != null:
-			var pending: Dictionary = main.game.run.pending_run_end
-			status = str(pending.get("outcome", "INCOMPLETE"))
-			var pre_terminal: Variant = file_text(run_path)
-			var shatters_term: int = 0
-			var run_id_term: String = ""
-			var rng_final_term: int = rng_initial
-			var map_at_term: int = -1
-			if main.game != null and main.game.run != null:
-				shatters_term = int(float(str(main.game.run.stats.get("shatters", 0))))
-				run_id_term = main.game.run.run_id
-				rng_final_term = main.game.run.rng.get_state()
-			if main._map != null:
-				map_at_term = main._map.at
-			commands.append({"t": "terminal_commit", "outcome": status})
-			main._on_terminal_commit("ok")
-			incomplete_reason = ""
-			var vigil_after: Variant = file_text(vigil_path)
-			dispose(main)
-			return {
-				"status": status,
-				"starts": starts,
-				"shatters": shatters_term,
-				"steps": steps,
-				"combat_dispatches": combat_dispatches,
-				"reward_claims": reward_claims,
-				"incomplete_reason": "",
-				"run_id": run_id_term,
-				"seed": seed,
-				"vow": vow,
-				"rng_initial": rng_initial,
-				"rng_final": rng_final_term,
-				"map_at": map_at_term,
-				"pre_terminal_run": pre_terminal if typeof(pre_terminal) == TYPE_STRING else "",
-				"commit_vigil": vigil_after if typeof(vigil_after) == TYPE_STRING else "",
-				"initial_run_sha": str(initial_run).sha256_text() if typeof(initial_run) == TYPE_STRING else "",
-				"initial_vigil_sha": str(initial_vigil).sha256_text() if typeof(initial_vigil) == TYPE_STRING else "",
-				"run_sha": str(pre_terminal).sha256_text() if typeof(pre_terminal) == TYPE_STRING else "",
-				"vigil_sha": str(vigil_after).sha256_text() if typeof(vigil_after) == TYPE_STRING else "",
-				"commands": commands,
-				"pilot_version": Pilot.VERSION,
-			}
-		if main.game.cb != null and not main.game.cb.over:
-			if main.game.cb.turn >= TURN_CAP:
-				status = "INCOMPLETE"
-				incomplete_reason = "turn_cap"
-				break
-			var rng_before_turn: int = main.game.run.rng.get_state()
-			Pilot.play_turn(main.game)
-			commands.append({
-				"t": "play_turn",
-				"turn": main.game.cb.turn if main.game.cb != null else -1,
-				"rng_before": rng_before_turn,
-			})
-			if main.game.cb != null and not main.game.cb.over:
-				main.game.apply({"t": "endTurn"})
-				commands.append({"t": "endTurn"})
-			continue
-		if main.game.cb != null and main.game.cb.over and not combat_result_dispatched:
-			var rng_before: int = main.game.run.rng.get_state()
-			if dispatch_combat_result_once(main, combat_result_dispatched):
-				combat_result_dispatched = true
-				combat_dispatches += 1
-				commands.append({
-					"t": "combat_over",
-					"result": str(main.game.cb.result) if main.game.cb != null else "",
-					"rng_before": rng_before,
-					"rng_after": main.game.run.rng.get_state(),
-				})
-		if main.game.run.pending_reward != null:
-			_claim_pending_reward(main, content)
-			reward_claims += 1
-			commands.append({"t": "reward"})
-			continue
-		if main._has_pending_boss_relic():
-			var offer_v: Variant = main.game.run.quest_scratch.get("bossRelicOffer")
-			var relic_id: String = ""
-			if typeof(offer_v) == TYPE_ARRAY:
-				relic_id = Pilot.choose_relic(offer_v, content, main.game.run.aspect, main.game.run.rng)
-			main._on_boss_relic_chosen(relic_id)
-			commands.append({"t": "boss_relic", "id": relic_id})
-			continue
-		if main.game.run.pending_combat != null:
-			if main._screen == null or main.game.cb == null:
-				main._resume_pending_combat()
-				starts += 1
-				combat_result_dispatched = false
-				commands.append({"t": "resume_pending_combat", "starts": starts})
-			continue
-		if main._map == null:
-			incomplete_reason = "missing_map"
-			break
-		var node: MapNode = main._map.current()
-		if node != null and not main._map.is_cleared(main._map.at):
-			if not _resolve_current_safe(main, node, commands):
-				status = "INCOMPLETE"
-				incomplete_reason = "unresolved_node:%s" % node.type
-				break
-			continue
-		if main._map.is_finished():
-			status = "INCOMPLETE"
-			incomplete_reason = "map_finished_without_terminal"
-			break
-		var reachable: Array[int] = main._map.reachable()
-		if reachable.is_empty():
-			status = "INCOMPLETE"
-			incomplete_reason = "no_reachable"
-			break
-		var pick: int = Pilot.choose_node(main._map, main.game.run)
-		if pick < 0 or not reachable.has(pick):
-			pick = reachable[0]
-		if not main._map.enter(pick):
-			incomplete_reason = "map_enter_failed"
-			status = "INCOMPLETE"
-			break
-		commands.append({"t": "node_chosen", "index": pick})
-		main._on_node_chosen(pick)
-		if main.game != null and main.game.cb != null:
-			starts += 1
-			combat_result_dispatched = false
-	var shatters: int = 0
-	var run_id: String = ""
-	var rng_final: int = rng_initial
-	var map_at: int = -1
-	if main.game != null and main.game.run != null:
-		shatters = int(float(str(main.game.run.stats.get("shatters", 0))))
-		run_id = main.game.run.run_id
-		rng_final = main.game.run.rng.get_state()
-	if main._map != null:
-		map_at = main._map.at
-	var run_bytes: Variant = file_text(run_path)
-	var vigil_bytes: Variant = file_text(vigil_path)
-	dispose(main)
-	return {
-		"status": status,
-		"starts": starts,
-		"shatters": shatters,
-		"steps": steps,
-		"combat_dispatches": combat_dispatches,
-		"reward_claims": reward_claims,
-		"incomplete_reason": incomplete_reason,
-		"run_id": run_id,
-		"seed": seed,
-		"vow": vow,
-		"rng_initial": rng_initial,
-		"rng_final": rng_final,
-		"map_at": map_at,
-		"pilot_version": Pilot.VERSION,
-		"commands": commands,
-		"pre_terminal_run": "",
-		"commit_vigil": vigil_bytes if typeof(vigil_bytes) == TYPE_STRING else "",
-		"initial_run_sha": str(initial_run).sha256_text() if typeof(initial_run) == TYPE_STRING else "",
-		"run_sha": str(run_bytes).sha256_text() if typeof(run_bytes) == TYPE_STRING else "",
-		"vigil_sha": str(vigil_bytes).sha256_text() if typeof(vigil_bytes) == TYPE_STRING else "",
-		"initial_vigil_sha": str(initial_vigil).sha256_text() if typeof(initial_vigil) == TYPE_STRING else "",
-	}
+static func drive_ordinary(content: ContentDB, vigil: VigilState, seed: int, vow: int,
+		run_path: String, vigil_path: String, contained_limit: int = 0) -> Dictionary:
+	return Ordinary.drive(content, vigil, seed, vow, run_path, vigil_path, contained_limit)
 
 
 static func _claim_pending_reward(main: Main, content: ContentDB) -> void:
 	var pending: Dictionary = main.game.run.pending_reward
 	var rewards_v: Variant = pending.get("rewards", {})
 	if typeof(rewards_v) != TYPE_DICTIONARY:
-		main._on_reward_finished()
+		main._show_save_error("dd1_invalid_rewards")
 		return
 	var rewards: Dictionary = rewards_v
 	main._on_reward_claimed(&"gold", "")
@@ -423,10 +195,7 @@ static func _resolve_current_safe(main: Main, node: MapNode, commands: Array) ->
 			return true
 		"event":
 			return _event_legal(main, commands)
-		_:
-			main._finish_node()
-			commands.append({"t": "finish", "type": node.type})
-			return true
+	return false  # no invented finish for a route without a mapped public choice
 
 
 static func _shop_legal(main: Main, commands: Array) -> bool:
@@ -434,9 +203,7 @@ static func _shop_legal(main: Main, commands: Array) -> bool:
 		main._show_shop()
 	var stock_v: Variant = main.game.run.quest_scratch.get("shopStock", {})
 	if typeof(stock_v) != TYPE_DICTIONARY:
-		main._on_shop_choice("leave")
-		commands.append({"t": "shop", "choice": "leave"})
-		return true
+		return false
 	var stock: Dictionary = stock_v
 	var bought: Array[Dictionary] = Pilot.choose_shop(stock, main.game.run, main.content)
 	for row: Dictionary in bought:
@@ -448,7 +215,7 @@ static func _shop_legal(main: Main, commands: Array) -> bool:
 			continue
 		var rows_v: Variant = stock.get(category, [])
 		if typeof(rows_v) != TYPE_ARRAY:
-			continue
+			return false
 		var rows: Array = rows_v
 		var want: String = str(row.get("id", ""))
 		for i: int in range(rows.size()):
@@ -472,19 +239,19 @@ static func _event_legal(main: Main, commands: Array) -> bool:
 	main._on_event_choice("0", event_id)
 	if main.game.run.quest_scratch.has("eventPending"):
 		var pending_v: Variant = main.game.run.quest_scratch.get("eventPending")
-		if typeof(pending_v) == TYPE_DICTIONARY:
-			var pending: Dictionary = pending_v
-			var kind: String = str(pending.get("kind", ""))
-			if kind == "card":
-				var cards: Array = pending.get("cards", [])
-				if cards.is_empty():
-					return false
-				var pick: String = Pilot.choose_card(cards, main.content, main.game.run.aspect, main.game.run.rng)
-				if pick.is_empty():
-					pick = str(cards[0])
-				main._on_event_pick(pick, kind)
-			else:
-				return false
+		if typeof(pending_v) != TYPE_DICTIONARY:
+			return false
+		var pending: Dictionary = pending_v
+		var kind: String = str(pending.get("kind", ""))
+		if kind != "card":
+			return false
+		var cards: Array = pending.get("cards", [])
+		if cards.is_empty():
+			return false
+		var pick: String = Pilot.choose_card(cards, main.content, main.game.run.aspect, main.game.run.rng)
+		if pick.is_empty():
+			pick = str(cards[0])
+		main._on_event_pick(pick, kind)
 	if typeof(main.game.run.quest_scratch.get("eventStory")) == TYPE_DICTIONARY:
 		main._on_event_story_continue()
 		if typeof(main.game.run.quest_scratch.get("eventStory")) == TYPE_DICTIONARY:
@@ -494,66 +261,55 @@ static func _event_legal(main: Main, commands: Array) -> bool:
 
 
 static func ledger_satisfies_p0(vigil: VigilState) -> bool:
+	# Both frozen required-deed and required-unlock obligations; not OR.
 	return vigil.unlocks.has("card:resonantLance") \
-		or int(float(str(vigil.deeds.get("shatters", 0)))) >= 15
+		and int(float(str(vigil.deeds.get("shatters", 0)))) >= 15
 
 
 static func ledger_satisfies_p5(vigil: VigilState) -> bool:
 	return vigil.vow_unlocked >= 5 and ledger_satisfies_p0(vigil)
 
 
-static func evaluate_n0_witness(
-	p0_run_path: String,
-	p0_vigil_path: String,
-	p5_run_path: String,
-	p5_vigil_path: String,
-	content: ContentDB
-) -> Dictionary:
-	var missing: Array[String] = []
+## Storage/structure preflight only. Full linked-byte provenance is checked by
+## tools/dd1_provenance.py with the host's existing C/H evidence boundary.
+## Loading four files, self-hashes and fixture fields cannot grant N0 ACCEPT.
+static func evaluate_n0_witness(p0_run_path: String, p0_vigil_path: String,
+		p5_run_path: String, p5_vigil_path: String, content: ContentDB) -> Dictionary:
 	for path: String in [p0_run_path, p0_vigil_path, p5_run_path, p5_vigil_path]:
 		if not FileAccess.file_exists(path):
-			missing.append(path)
-	if not missing.is_empty():
-		return {
-			"result": "BLOCKED",
-			"reason": "missing mandatory witness",
-			"missing": missing,
-		}
-	var p0_run: RunState = SaveService.load_run(content, p0_run_path)
-	var p0_vigil: VigilState = SaveService.load_vigil(p0_vigil_path)
-	var p5_run: RunState = SaveService.load_run(content, p5_run_path)
-	var p5_vigil: VigilState = SaveService.load_vigil(p5_vigil_path)
-	if p0_run == null or p5_run == null:
-		return {"result": "REJECT", "reason": "run bytes failed SaveService.load_run"}
-	if p0_vigil == null or p5_vigil == null:
-		return {"result": "REJECT", "reason": "vigil bytes failed load"}
-	if not ledger_satisfies_p0(p0_vigil):
-		return {"result": "REJECT", "reason": "P_0 lacks paneBreaker / resonantLance opportunity"}
-	if not ledger_satisfies_p5(p5_vigil):
-		return {"result": "REJECT", "reason": "P_5 lacks vow_unlocked>=5"}
-	if p0_run.seed < 0 or p5_run.seed < 0:
-		return {"result": "REJECT", "reason": "seed missing"}
-	return {
-		"result": "ACCEPT",
-		"reason": "",
-		"p0_seed": p0_run.seed,
-		"p5_seed": p5_run.seed,
-		"p0_shatters": int(float(str(p0_vigil.deeds.get("shatters", 0)))),
-		"p5_vow_unlocked": p5_vigil.vow_unlocked,
-	}
+			return {"result": "BLOCKED", "reason": "missing mandatory witness", "missing": [path]}
+	var p0: VigilState = null
+	var p5: VigilState = null
+	for pair: Array in [[p0_run_path, p0_vigil_path], [p5_run_path, p5_vigil_path]]:
+		var run: RunState = SaveService.load_run(content, pair[0])
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(pair[1]))
+		var vigil: VigilState = VigilState.from_dict(parsed) if typeof(parsed) == TYPE_DICTIONARY else null
+		if run == null or vigil == null:
+			return {"result": "REJECT", "reason": "invalid run or vigil bytes"}
+		var receipt: Variant = vigil.receipts.get("runEnd")
+		var nodes: Array = run.map.get("nodes", [])
+		if nodes.is_empty() or run.aspect != 0 or run.seed < 5421600 or run.seed > 5421615 \
+				or typeof(run.pending_run_end) != TYPE_DICTIONARY or typeof(receipt) != TYPE_DICTIONARY:
+			return {"result": "REJECT", "reason": "constructed or nonterminal witness"}
+		if receipt.get("runId") != run.run_id or receipt.get("outcome") != run.pending_run_end.get("outcome"):
+			return {"result": "REJECT", "reason": "unrelated terminal receipt"}
+		if pair[0] == p0_run_path:
+			p0 = vigil
+		else:
+			p5 = vigil
+	if not ledger_satisfies_p0(p0) or not ledger_satisfies_p5(p5):
+		return {"result": "REJECT", "reason": "missing frozen access requirements"}
+	return {"result": "BLOCKED", "reason": "missing linked ordinary journal and authenticated C/H provenance",
+		"structure": "VALID_NOT_EARNED_PROOF", "n0_accepted": false}
 
 
 ## Map-selection, encounter-arm, SaveService freeze. Does not start combat
-## or write canonical qualification artifacts.
-static func capture_pending_map_route(
-	content: ContentDB,
-	seed: int,
-	run_path: String,
-	vigil_path: String
-) -> Dictionary:
+## or write canonical qualification artifacts. Existing outputs are preserved.
+static func capture_pending_map_route(content: ContentDB, seed: int,
+		run_path: String, vigil_path: String) -> Dictionary:
+	if FileAccess.file_exists(run_path) or FileAccess.file_exists(vigil_path):
+		return {"ok": false, "reason": "existing isolated output"}
 	bind_unmodified_pilot()
-	SaveService.clear(run_path)
-	SaveService.clear_vigil(vigil_path)
 	var main: Main = make_main(content, run_path, vigil_path)
 	main._vigil = VigilState.blank()
 	main._forced_seed = seed
@@ -595,17 +351,12 @@ static func capture_pending_map_route(
 		nodes = map_v.get("nodes", [])
 	var result: Dictionary = {
 		"ok": ok and not nodes.is_empty() and save.get("pendingCombat") != null,
-		"pick": pick,
-		"pendingCombat": save.get("pendingCombat"),
-		"pendingEnemyIds": save.get("pendingEnemyIds"),
-		"nodeId": save.get("nodeId"),
-		"runId": save.get("runId"),
-		"seed": save.get("seed"),
-		"node_count": nodes.size(),
+		"pick": pick, "pendingCombat": save.get("pendingCombat"),
+		"pendingEnemyIds": save.get("pendingEnemyIds"), "nodeId": save.get("nodeId"),
+		"runId": save.get("runId"), "seed": save.get("seed"), "node_count": nodes.size(),
 		"bytes": str(raw) if typeof(raw) == TYPE_STRING else "",
 		"sha256": str(raw).sha256_text() if typeof(raw) == TYPE_STRING else "",
-		"reason": "" if ok else "save unreadable",
-	}
+		"reason": "" if ok else "save unreadable"}
 	if result["ok"] != true and str(result["reason"]) == "":
 		result["reason"] = "pending capture lacked map nodes or pendingCombat"
 	dispose(main)
