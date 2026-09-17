@@ -1,3 +1,11 @@
+# P9 current capsule — DD1-NATIVE-1 5706552165 four-finding repair
+
+Updated 2026-09-17. Overlay `research/p9-six-route/dd1-native-1-overlay` published head `5122254236769f33d10d7a5544e70ec9ddc18049` (tree `8cd0d76281eebc020aa0eaed656421308faea4ae`). Coherent PASS pair `92da314c066b84fc565c428cbbda03375ef03481`. Original O `d8f4dde0…` retained. M `07b5aa9d…` unmutated.
+
+Findings 1–4: byte-root reader; per-invocation identities; ordinary P_0/P_5; PROMOTION §3 matrix including unmodified M pending. Attempt 1/1 not reset. Preflight 1277/8192 remaining 6915. Isolated review of this **new** head is next. **0/3 certificates.**
+
+---
+
 # P9 current capsule — DD1-NATIVE-1 Native Proof catalog/marker complete (5705322630)
 
 Updated 2026-09-16. Overlay `research/p9-six-route/dd1-native-1-overlay` published head `e5b5d04dd0308f8739e6d5e0d675c4b8a1325fee`. Original O `d8f4dde0…` retained. M `07b5aa9d…` unmutated.
