@@ -1,0 +1,55 @@
+{
+  "schema": "DD1-SOURCE-REPAIR-GITHUB-READBACK-1",
+  "batch_comment": 5721191528,
+  "disposition": "SOURCE_BLOCKED / NATIVE_UNVERIFIED",
+  "branch": "research/p9-six-route/dd1-native-1-overlay",
+  "resumed_head": "4f7d76c5548977843520fbdacb1b13ff5c1dd7b5",
+  "implementation_head": "b2e2399c71b101db1e740db6d43672d84d3cd661",
+  "implementation_tree": "574fa8a6f2ec766a8fe88046fe90585cab67d555",
+  "source_evidence_head": "4bbaded568f84c8edfa27cd5314ff3f95db649e4",
+  "source_evidence_tree": "623e31a5f5d736e946196320b04503f3a22b8bd4",
+  "main_readback": "07b5aa9dec8436132a524511d5438c510e322070",
+  "handoff": {
+    "issue": 156,
+    "comment_id": 5722807792,
+    "url": "https://github.com/fol2/glassvow/issues/156#issuecomment-5722807792",
+    "comment_created_at_utc": "2026-09-17T23:52:53Z",
+    "initial_body_read_back": true,
+    "scope": "Author source/inert delivery with explicit missing aggregate containment backend; not approval or acceptance. The same comment records this file's containing commit and tree after publication."
+  },
+  "verification": {
+    "candidate_source_files_blob_matched": 12,
+    "source_manifest_blob": "acda54f89c67eab3590f58c9331c4ed2db05acdd",
+    "evidence_files_blob_matched": 7,
+    "evidence_blobs": {
+      "CAPSULE.md": "8cdc9a895f85f8ab4ce7e03e4aebc4580162da9f",
+      "EVIDENCE.md": "de6286e7cf333c9af5bb01087f06693c341eed98",
+      "EXECUTION-DEMAND.md": "b602ee8cd1f99facbeabbd8f559757535cbe7492",
+      "HOST-CAPABILITY.json": "3b2839fa64b40d8f6f16013ebc22c8eeecb1d85e",
+      "INERT-CONTROLS.json": "522d6040604949e0b168a1df4de14e77cec644de",
+      "INERT-TESTS.log": "122d9a2ee1e3f328acb0be53b70fb17175b2c94b",
+      "SOURCE-AND-RESULTS.json": "acda54f89c67eab3590f58c9331c4ed2db05acdd"
+    },
+    "inert_tests": 23,
+    "inert_exit_code": 0,
+    "native_launches": 0,
+    "GDScript_execution": "UNEXECUTED",
+    "H_integration": "UNEXECUTED; adapter seam tests explicitly mocked",
+    "native_containment_backend": "UNIMPLEMENTED; native entry blocks before reservation/spawn"
+  },
+  "preserved": {
+    "D": "746388323b8e886967e0e13fe109490a70206a66",
+    "C": "cf27285a3103d8867a179f700c5ebf32661453d5",
+    "H": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+    "H_ALLOCATION": "824ff18acbca2f776533beed83a43b21d9a50f2c",
+    "recovery_ACCOUNT_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "reported_recovery_starts": "2040/2048; arithmetic 8 not permission",
+    "reported_historical_starts": "1277/8192; arithmetic 6915 unspendable; UNKNOWN observations unchanged",
+    "live_account_writes": 0,
+    "certificates": "0/3",
+    "review_or_self_approval": false,
+    "new_allowance_or_clock_reset": false,
+    "merge_or_release": false
+  },
+  "readback_commit_scope": "Only this new file; implementation and source/evidence identities above are unchanged. The containing commit cannot include its own hash; the single handoff records that final tip/tree and is read back after update."
+}
