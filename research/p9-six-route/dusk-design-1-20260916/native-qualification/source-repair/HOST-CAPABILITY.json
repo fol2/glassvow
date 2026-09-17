@@ -1,0 +1,25 @@
+{
+  "kind": "INERT_HOST_CAPABILITY_OBSERVATION",
+  "native_launches": 0,
+  "platform": "Linux",
+  "cgroup_directory_present": true,
+  "cgroup_root_writable": false,
+  "fuse_device_present": false,
+  "unshare_binary": "/usr/bin/unshare",
+  "cgroup_mount_flags": [
+    "ro,nosuid,nodev,noexec,relatime,nsdelegate"
+  ],
+  "private_namespace_probe": {
+    "argv": [
+      "/usr/bin/unshare",
+      "--user",
+      "--map-root-user",
+      "--mount",
+      "true"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "scope": "Read-only host inspection and one inert namespace child. Does not establish all-channel native containment or portability to the recorded macOS host."
+}

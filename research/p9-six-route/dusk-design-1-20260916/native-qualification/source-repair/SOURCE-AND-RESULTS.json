@@ -1,0 +1,99 @@
+{
+  "schema": "DD1-SOURCE-REPAIR-INERT-EVIDENCE-1",
+  "authority_comment": 5721191528,
+  "source_head": "b2e2399c71b101db1e740db6d43672d84d3cd661",
+  "source_tree": "574fa8a6f2ec766a8fe88046fe90585cab67d555",
+  "basis": "partial local source subset; all 12 candidate files matched live GitHub blob readback, not a full checkout",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux",
+  "command": "PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tools -p test_dd1_source_repair.py -v",
+  "exit_code": 0,
+  "tests_run": 23,
+  "result": "PASS_INERT_ONLY",
+  "native_launches": 0,
+  "live_account_writes": 0,
+  "review": "NOT_REQUESTED; NO_SELF_APPROVAL",
+  "unexecuted": [
+    "Godot version/parse/import/runtime",
+    "tests/test_dd1_source_repair.gd",
+    "changed tests/test_dd1_native_matrix.gd orchestration",
+    "one-route native capture",
+    "real H-boundary integration and empirical receipts",
+    "aggregate native CPU/process-tree/all-raw containment"
+  ],
+  "files": {
+    "tests/support/dd1_native_driver_main.gd": {
+      "git_blob_sha1": "d8d2eff17399ff1ea49fcd3b45877d29bee5d4e4",
+      "sha256": "94e6d194820008c15a7f415ca0fd2a3e02a5861f20655265b092bcd9e1703332",
+      "bytes": 11669,
+      "remote_blob_readback": "d8d2eff17399ff1ea49fcd3b45877d29bee5d4e4"
+    },
+    "tests/support/dd1_ordinary_capture.gd": {
+      "git_blob_sha1": "271d3e790e7d75609a4bdb045cbf36a3322573c4",
+      "sha256": "5a62567a60946a6414d7d3a8bf630ccb007cb20a6ad33ee8db87921d41862968",
+      "bytes": 9830,
+      "remote_blob_readback": "271d3e790e7d75609a4bdb045cbf36a3322573c4"
+    },
+    "tests/support/dd1_route_journal.gd": {
+      "git_blob_sha1": "08548076dbb053a3b00d6c3a27ac4c0cd96323ad",
+      "sha256": "c9f4c0e166383825510715486abc74d32f08bd043176a9382f75bcad7d1f509e",
+      "bytes": 6141,
+      "remote_blob_readback": "08548076dbb053a3b00d6c3a27ac4c0cd96323ad"
+    },
+    "tests/support/dd1_unit_grant.gd": {
+      "git_blob_sha1": "48f3f8ea273aeee720c340a54698179bf9583cad",
+      "sha256": "a636122369530eb838af6ab6aeb14a067f7a91deea4b62d0f2078d7a9b652de2",
+      "bytes": 4321,
+      "remote_blob_readback": "48f3f8ea273aeee720c340a54698179bf9583cad"
+    },
+    "tests/test_dd1_native_matrix.gd": {
+      "git_blob_sha1": "b8ae5ccd3964b0702ff41bce7d21635db246e0f3",
+      "sha256": "3dcb820c1bfdcf10efc733607c62de66f2acd713ee9785b68c5987d9c02781f1",
+      "bytes": 4293,
+      "remote_blob_readback": "b8ae5ccd3964b0702ff41bce7d21635db246e0f3"
+    },
+    "tests/test_dd1_source_repair.gd": {
+      "git_blob_sha1": "0fd416c2c904220cfd2622f46b7188dc1578586f",
+      "sha256": "8b8b8a6e8b7d465d15074c3d84f3096f381d256651dc1319933e9290713d823e",
+      "bytes": 5975,
+      "remote_blob_readback": "0fd416c2c904220cfd2622f46b7188dc1578586f"
+    },
+    "tools/dd1_meter_entry.py": {
+      "git_blob_sha1": "505464c1b74f6b44f048c6cf8f23e081b1485a36",
+      "sha256": "ed215e6fa0137dd641e82de7b31c6200b062fc813d199bc5de934a6f30d0177b",
+      "bytes": 2413,
+      "remote_blob_readback": "505464c1b74f6b44f048c6cf8f23e081b1485a36"
+    },
+    "tools/dd1_provenance.py": {
+      "git_blob_sha1": "4be9cebf696ea513746d29c440020f7610d4ee95",
+      "sha256": "33e32508d5b79dca125152a2556d7a7e928d9164fb5873777a45284b5e26d898",
+      "bytes": 19879,
+      "remote_blob_readback": "4be9cebf696ea513746d29c440020f7610d4ee95"
+    },
+    "tools/dd1_recovery_acquire.gd": {
+      "git_blob_sha1": "37b1f0e27140eb69ac369602707b6de729fe0092",
+      "sha256": "15932383c4e413df819baf266c156fcf01b10f70ea2aae6f84731f5423b635f1",
+      "bytes": 4075,
+      "remote_blob_readback": "37b1f0e27140eb69ac369602707b6de729fe0092"
+    },
+    "tools/dd1_reservations.py": {
+      "git_blob_sha1": "41962753fa5e146597825bf405ddb23aa8ac4bc5",
+      "sha256": "f7cac316d784668e5639b81dcecc689f861c58f44046e3cd0f2e8a76335ba6ec",
+      "bytes": 11797,
+      "remote_blob_readback": "41962753fa5e146597825bf405ddb23aa8ac4bc5"
+    },
+    "tools/dd1_synthetic_capture.py": {
+      "git_blob_sha1": "6fd196a8719a75e2f7a6d8da8b37764c7e259ef5",
+      "sha256": "36f0083bc062e03001a7079a0a106cfe070a7367225cb4d67d94f9de42f47a74",
+      "bytes": 7449,
+      "remote_blob_readback": "6fd196a8719a75e2f7a6d8da8b37764c7e259ef5"
+    },
+    "tools/test_dd1_source_repair.py": {
+      "git_blob_sha1": "547383d71ca5814fbbe29a7c93eb90a21553b792",
+      "sha256": "0f80c2a667ddd9612e51feccfed83013a29d627850fc4136674a21c1dbced316",
+      "bytes": 19261,
+      "remote_blob_readback": "547383d71ca5814fbbe29a7c93eb90a21553b792"
+    }
+  },
+  "log_sha256": "dc1586208fca666d2853996daaa4d8b70053520e9cd268dea7d4e2fa80959fa1"
+}
