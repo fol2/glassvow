@@ -480,6 +480,7 @@ static func _resume_ordinary_pending(fails: Array[String]) -> void:
 
 static func _pv_ordinary_progression(fails: Array[String]) -> void:
 	# Routine regression never acquires profiles and never rewrites pv-ledgers.json.
+	_pv_trace_producer_retains_bytes(fails)
 	if MainRoute.acquire_requested():
 		if not MainRoute.launch_permitted():
 			_fail(fails, false,
@@ -560,6 +561,72 @@ static func _n0_supplied_witness_accepts(fails: Array[String], content: ContentD
 	SaveService.clear_vigil(p5_vigil_path)
 
 
+static func _pv_trace_producer_retains_bytes(fails: Array[String]) -> void:
+	# Ordinary regression must fail if the shipped producer drops commands or
+	# archives from post-terminal disk. Does not replay 5421600–5421615.
+	var content: ContentDB = ContentDB.load_full(false)
+	var run_path: String = "user://dd1_producer_run_v2.json"
+	var vigil_path: String = "user://dd1_producer_vigil_v2.json"
+	var dest_run: String = "user://dd1_producer_archive_run_v2.json"
+	var dest_empty: String = "user://dd1_producer_archive_empty_v2.json"
+	var run: RunState = RunState.new_run(content, 5421603, "producer-retain", {"aspect": 0, "vow": 1})
+	_fail(fails, SaveService.store(run, run_path), "producer fixture run store")
+	var pre_v: Variant = MainRoute.file_text(run_path)
+	_fail(fails, typeof(pre_v) == TYPE_STRING and not str(pre_v).is_empty(),
+		"producer fixture emitted run bytes")
+	if typeof(pre_v) != TYPE_STRING:
+		return
+	var pre: String = str(pre_v)
+	var vigil: VigilState = VigilState.blank()
+	vigil.unlocks.append("card:resonantLance")
+	_fail(fails, SaveService.store_vigil(vigil, vigil_path), "producer fixture vigil store")
+	var commit_v: Variant = MainRoute.file_text(vigil_path)
+	var initial_sha: String = pre.sha256_text()
+	SaveService.clear(run_path)
+	_fail(fails, MainRoute.file_text(run_path) == null, "post-terminal disk cleared")
+	var row: Dictionary = {
+		"status": "death",
+		"starts": 30,
+		"shatters": 0,
+		"incomplete_reason": "",
+		"run_id": run.run_id,
+		"run_sha": initial_sha,
+		"commands": [
+			{"t": "node_chosen", "index": 0},
+			{"t": "combat_over", "result": "loss"},
+			{"t": "terminal_commit", "outcome": "death"},
+		],
+		"pre_terminal_run": pre,
+		"initial_run_sha": initial_sha,
+		"commit_vigil": commit_v if typeof(commit_v) == TYPE_STRING else "",
+		"rng_initial": 1,
+		"rng_final": 2,
+		"pilot_version": "p8-d0-v1",
+	}
+	var trace: Dictionary = MainRoute.durable_trace_row(5421603, 1, row, vigil)
+	var commands_v: Variant = trace.get("commands", [])
+	_fail(fails, typeof(commands_v) == TYPE_ARRAY and commands_v.size() == 3,
+		"shipped producer retains drive_ordinary commands")
+	_fail(fails, str(trace.get("pre_terminal_run", "")) == pre,
+		"shipped producer retains pre_terminal_run bytes")
+	_fail(fails, str(trace.get("initial_run_sha", "")) == initial_sha,
+		"shipped producer retains initial_run_sha")
+	_fail(fails, str(trace.get("commit_vigil", "")) != "",
+		"shipped producer retains commit vigil receipts")
+	_fail(fails, MainRoute.archive_profile_run(row, dest_run),
+		"archive_profile_run writes pre_terminal_run")
+	_fail(fails, MainRoute.file_text(dest_run) == pre,
+		"archived P_0 run is pre-terminal bytes, not post-terminal disk")
+	var empty_row: Dictionary = {"pre_terminal_run": "", "status": "death"}
+	_fail(fails, MainRoute.archive_profile_run(empty_row, dest_empty) == false,
+		"archive_profile_run refuses empty pre_terminal_run (no disk fallback)")
+	_fail(fails, not FileAccess.file_exists(dest_empty),
+		"empty pre_terminal_run does not create an archive from disk")
+	SaveService.clear(run_path)
+	SaveService.clear(dest_run)
+	SaveService.clear_vigil(vigil_path)
+
+
 static func _pv_acquire_via_main(fails: Array[String]) -> void:
 	if not MainRoute.launch_permitted():
 		_fail(fails, false, "P_v acquisition BLOCKED: launch receipt invalid")
@@ -579,35 +646,23 @@ static func _pv_acquire_via_main(fails: Array[String]) -> void:
 		var row: Dictionary = MainRoute.drive_ordinary(
 			content, vigil, seed, vow, run_path, vigil_path)
 		native_starts += int(float(str(row.get("starts", 0))))
-		row["seed"] = seed
-		row["vow"] = vow
-		traces.append({
-			"seed": seed,
-			"vow": vow,
-			"status": row.get("status", ""),
-			"starts": row.get("starts", 0),
-			"shatters": row.get("shatters", 0),
-			"incomplete_reason": row.get("incomplete_reason", ""),
-			"run_sha": row.get("run_sha", ""),
-			"vigil_sha": row.get("vigil_sha", ""),
-			"combat_dispatches": row.get("combat_dispatches", 0),
-		})
 		var loaded: VigilState = SaveService.load_vigil(vigil_path)
 		if loaded != null:
 			vigil = loaded
+		traces.append(MainRoute.durable_trace_row(seed, vow, row, vigil))
 		if str(row.get("status", "")) == "INCOMPLETE":
 			# Incomplete is not death/win and earns no profile credit.
 			SaveService.clear(run_path)
 			continue
 		if not p0_archived and MainRoute.ledger_satisfies_p0(vigil):
-			MainRoute.archive_bytes(run_path, QUAL_PV_P0_BYTES)
-			MainRoute.archive_bytes(vigil_path, QUAL_PV_P0_VIGIL)
-			p0_archived = true
+			if MainRoute.archive_profile_run(row, QUAL_PV_P0_BYTES):
+				MainRoute.archive_bytes(vigil_path, QUAL_PV_P0_VIGIL)
+				p0_archived = true
 		if p0_archived and not p5_archived and MainRoute.ledger_satisfies_p5(vigil):
-			MainRoute.archive_bytes(run_path, QUAL_PV_P5_BYTES)
-			MainRoute.archive_bytes(vigil_path, QUAL_PV_P5_VIGIL)
-			p5_archived = true
-			break
+			if MainRoute.archive_profile_run(row, QUAL_PV_P5_BYTES):
+				MainRoute.archive_bytes(vigil_path, QUAL_PV_P5_VIGIL)
+				p5_archived = true
+				break
 		SaveService.clear(run_path)
 	var gate: Dictionary = MainRoute.evaluate_n0_witness(
 		QUAL_PV_P0_BYTES, QUAL_PV_P0_VIGIL, QUAL_PV_P5_BYTES, QUAL_PV_P5_VIGIL, content)

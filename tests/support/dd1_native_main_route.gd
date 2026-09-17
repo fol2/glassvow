@@ -112,6 +112,67 @@ static func archive_bytes(src_path: String, dest_path: String) -> String:
 	return raw.sha256_text()
 
 
+## Durable P_v row: keep drive_ordinary commands, pre-terminal run bytes,
+## initial SHA and post-commit vigil receipts. Status/counts alone are not
+## a trace. Do not read post-terminal disk for the run archive.
+static func durable_trace_row(
+	seed: int,
+	vow: int,
+	row: Dictionary,
+	vigil: VigilState
+) -> Dictionary:
+	var commands_v: Variant = row.get("commands", [])
+	var commands: Array = commands_v if typeof(commands_v) == TYPE_ARRAY else []
+	var pre_v: Variant = row.get("pre_terminal_run", "")
+	var commit_v: Variant = row.get("commit_vigil", "")
+	return {
+		"seed": seed,
+		"vow": vow,
+		"status": row.get("status", ""),
+		"starts": row.get("starts", 0),
+		"shatters": row.get("shatters", 0),
+		"incomplete_reason": row.get("incomplete_reason", ""),
+		"run_id": row.get("run_id", ""),
+		"run_sha": row.get("run_sha", ""),
+		"vigil_sha": row.get("vigil_sha", ""),
+		"combat_dispatches": row.get("combat_dispatches", 0),
+		"rng_initial": row.get("rng_initial", 0),
+		"rng_final": row.get("rng_final", 0),
+		"commands": commands,
+		"pre_terminal_run": pre_v if typeof(pre_v) == TYPE_STRING else "",
+		"initial_run_sha": row.get("initial_run_sha", ""),
+		"initial_vigil_sha": row.get("initial_vigil_sha", ""),
+		"commit_vigil": commit_v if typeof(commit_v) == TYPE_STRING else "",
+		"p0_now": vigil != null and ledger_satisfies_p0(vigil),
+		"p5_now": vigil != null and ledger_satisfies_p5(vigil),
+		"vow_unlocked": vigil.vow_unlocked if vigil != null else 0,
+		"pilot_version": row.get("pilot_version", PILOT_VERSION),
+	}
+
+
+## Archive P_0/P_5 run bytes from the pre-terminal snapshot. Empty
+## pre_terminal_run is failure; never fall back to post-terminal disk.
+static func archive_profile_run(row: Dictionary, dest_path: String) -> bool:
+	var pre_v: Variant = row.get("pre_terminal_run", "")
+	if typeof(pre_v) != TYPE_STRING or str(pre_v).is_empty():
+		return false
+	var dest: FileAccess = FileAccess.open(dest_path, FileAccess.WRITE)
+	if dest == null:
+		return false
+	dest.store_string(str(pre_v))
+	dest.close()
+	return true
+
+
+static func write_pv_traces(path: String, payload: Dictionary) -> bool:
+	var tf: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if tf == null:
+		return false
+	tf.store_string(JSON.stringify(payload))
+	tf.close()
+	return true
+
+
 ## Ordinary-route campaign through Main choice/combat/terminal seams.
 ## A turn/action cap is INCOMPLETE, never a fabricated death.
 ## Each completed combat is dispatched through Main._on_combat_over once.
@@ -152,14 +213,19 @@ static func drive_ordinary(
 			var pending: Dictionary = main.game.run.pending_run_end
 			status = str(pending.get("outcome", "INCOMPLETE"))
 			var pre_terminal: Variant = file_text(run_path)
-			commands.append({"t": "terminal_commit", "outcome": status})
-			main._on_terminal_commit("ok")
-			incomplete_reason = ""
 			var shatters_term: int = 0
 			var run_id_term: String = ""
+			var rng_final_term: int = rng_initial
+			var map_at_term: int = -1
 			if main.game != null and main.game.run != null:
 				shatters_term = int(float(str(main.game.run.stats.get("shatters", 0))))
 				run_id_term = main.game.run.run_id
+				rng_final_term = main.game.run.rng.get_state()
+			if main._map != null:
+				map_at_term = main._map.at
+			commands.append({"t": "terminal_commit", "outcome": status})
+			main._on_terminal_commit("ok")
+			incomplete_reason = ""
 			var vigil_after: Variant = file_text(vigil_path)
 			dispose(main)
 			return {
@@ -174,7 +240,12 @@ static func drive_ordinary(
 				"seed": seed,
 				"vow": vow,
 				"rng_initial": rng_initial,
+				"rng_final": rng_final_term,
+				"map_at": map_at_term,
 				"pre_terminal_run": pre_terminal if typeof(pre_terminal) == TYPE_STRING else "",
+				"commit_vigil": vigil_after if typeof(vigil_after) == TYPE_STRING else "",
+				"initial_run_sha": str(initial_run).sha256_text() if typeof(initial_run) == TYPE_STRING else "",
+				"initial_vigil_sha": str(initial_vigil).sha256_text() if typeof(initial_vigil) == TYPE_STRING else "",
 				"run_sha": str(pre_terminal).sha256_text() if typeof(pre_terminal) == TYPE_STRING else "",
 				"vigil_sha": str(vigil_after).sha256_text() if typeof(vigil_after) == TYPE_STRING else "",
 				"commands": commands,
@@ -287,6 +358,8 @@ static func drive_ordinary(
 		"map_at": map_at,
 		"pilot_version": Pilot.VERSION,
 		"commands": commands,
+		"pre_terminal_run": "",
+		"commit_vigil": vigil_bytes if typeof(vigil_bytes) == TYPE_STRING else "",
 		"initial_run_sha": str(initial_run).sha256_text() if typeof(initial_run) == TYPE_STRING else "",
 		"run_sha": str(run_bytes).sha256_text() if typeof(run_bytes) == TYPE_STRING else "",
 		"vigil_sha": str(vigil_bytes).sha256_text() if typeof(vigil_bytes) == TYPE_STRING else "",

@@ -12,7 +12,7 @@
   },
   "recovery": {
     "cpu_ns_cap": 14400000000000,
-    "cpu_ns_used": 380532833995,
+    "cpu_ns_used": 388713616993,
     "deadline_utc": "2026-09-24T17:54:40Z",
     "events": [
       {
@@ -666,6 +666,112 @@
         "kind": "contained_starts",
         "note": "check_scripts.sh inner godot --check-only processes (8 owned files)",
         "starts": 8
+      },
+      {
+        "at_utc": "2026-09-17T19:12:41Z",
+        "command": [
+          "./tools/check_scripts.sh",
+          "tests/support/dd1_native_main_route.gd",
+          "tests/test_dd1_native_matrix.gd",
+          "tools/dd1_recovery_acquire.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T19:12:46Z",
+        "command": [
+          "./tools/check_scripts.sh",
+          "tests/support/dd1_native_main_route.gd",
+          "tests/test_dd1_native_matrix.gd",
+          "tools/dd1_recovery_acquire.gd"
+        ],
+        "cpu_ns": 3670553000,
+        "elapsed_s": 4.637764041021001,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 23,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T19:12:53Z",
+        "kind": "contained_starts",
+        "note": "check_scripts.sh inner godot --check-only (3 owned producer files)",
+        "starts": 3
+      },
+      {
+        "at_utc": "2026-09-17T19:12:53Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd,res://tests/test_dd1_native_catalog.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T19:12:55Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd,res://tests/test_dd1_native_catalog.gd"
+        ],
+        "cpu_ns": 2107908999,
+        "elapsed_s": 2.343172749999212,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 2515,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T19:13:06Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd,res://tests/test_dd1_native_catalog.gd"
+        ],
+        "counts_as_engine": true,
+        "kind": "reserve"
+      },
+      {
+        "at_utc": "2026-09-17T19:13:09Z",
+        "command": [
+          "godot",
+          "--headless",
+          "--path",
+          "/Users/jamesto/.grok/worktrees/coding-glassvow/2026-09-17-1969f3e5",
+          "-s",
+          "res://tests/run_all.gd",
+          "--",
+          "--tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd,res://tests/test_dd1_native_catalog.gd"
+        ],
+        "cpu_ns": 2402320999,
+        "elapsed_s": 3.3129522079834715,
+        "killed": "",
+        "kind": "complete",
+        "raw_bytes": 2515,
+        "returncode": 0
+      },
+      {
+        "at_utc": "2026-09-17T19:13:10Z",
+        "kind": "contained_starts",
+        "note": "contained startCombat from focused DD1 PASS pair x2 (overlay 45 + matrix 15 each)",
+        "starts": 120
       }
     ],
     "executors": 1,
@@ -673,9 +779,9 @@
     "id": "DD1-N0-RECOVERY-1",
     "per_invocation_cpu_seconds": 300,
     "raw_bytes_cap": 1073741824,
-    "raw_bytes_used": 882381,
+    "raw_bytes_used": 887434,
     "starts_cap": 2048,
-    "starts_used": 1786
+    "starts_used": 1912
   },
   "schema": "DD1-N0-RECOVERY-1-ACCOUNT-1"
 }

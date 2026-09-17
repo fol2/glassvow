@@ -38,41 +38,30 @@ func _initialize() -> void:
 		if loaded != null:
 			vigil = loaded
 		var status: String = str(row.get("status", "INCOMPLETE"))
-		traces.append({
-			"seed": seed,
-			"vow": vow,
-			"status": status,
-			"starts": row.get("starts", 0),
-			"shatters": row.get("shatters", 0),
-			"incomplete_reason": row.get("incomplete_reason", ""),
-			"run_id": row.get("run_id", ""),
-			"run_sha": row.get("run_sha", ""),
-			"vigil_sha": row.get("vigil_sha", ""),
-			"combat_dispatches": row.get("combat_dispatches", 0),
-			"rng_initial": row.get("rng_initial", 0),
-			"rng_final": row.get("rng_final", 0),
-			"p0_now": MainRoute.ledger_satisfies_p0(vigil),
-			"p5_now": MainRoute.ledger_satisfies_p5(vigil),
-			"vow_unlocked": vigil.vow_unlocked,
-		})
-		print("DD1_ACQUIRE_ROW seed=%d vow=%d status=%s starts=%d shatters=%s p0=%s p5=%s vow_unlocked=%d" % [
+		traces.append(MainRoute.durable_trace_row(seed, vow, row, vigil))
+		var commands_v: Variant = row.get("commands", [])
+		var command_n: int = commands_v.size() if typeof(commands_v) == TYPE_ARRAY else 0
+		print("DD1_ACQUIRE_ROW seed=%d vow=%d status=%s starts=%d shatters=%s p0=%s p5=%s vow_unlocked=%d commands=%d pre_len=%d" % [
 			seed, vow, status, int(float(str(row.get("starts", 0)))), str(row.get("shatters", 0)),
 			str(MainRoute.ledger_satisfies_p0(vigil)), str(MainRoute.ledger_satisfies_p5(vigil)),
-			vigil.vow_unlocked,
+			vigil.vow_unlocked, command_n, str(row.get("pre_terminal_run", "")).length(),
 		])
 		if status == "INCOMPLETE":
 			continue
 		if not p0_archived and MainRoute.ledger_satisfies_p0(vigil):
-			MainRoute.archive_bytes(run_path, P0_RUN)
-			MainRoute.archive_bytes(vigil_path, P0_VIGIL)
-			p0_archived = true
-			print("DD1_ACQUIRE_P0 seed=%d" % seed)
+			if MainRoute.archive_profile_run(row, P0_RUN):
+				MainRoute.archive_bytes(vigil_path, P0_VIGIL)
+				p0_archived = true
+				print("DD1_ACQUIRE_P0 seed=%d" % seed)
+			else:
+				print("DD1_ACQUIRE_P0_SKIP seed=%d empty pre_terminal_run" % seed)
 		if p0_archived and not p5_archived and MainRoute.ledger_satisfies_p5(vigil):
-			MainRoute.archive_bytes(run_path, P5_RUN)
-			MainRoute.archive_bytes(vigil_path, P5_VIGIL)
-			p5_archived = true
-			print("DD1_ACQUIRE_P5 seed=%d" % seed)
-			break
+			if MainRoute.archive_profile_run(row, P5_RUN):
+				MainRoute.archive_bytes(vigil_path, P5_VIGIL)
+				p5_archived = true
+				print("DD1_ACQUIRE_P5 seed=%d" % seed)
+				break
+			print("DD1_ACQUIRE_P5_SKIP seed=%d empty pre_terminal_run" % seed)
 	var gate: Dictionary = MainRoute.evaluate_n0_witness(P0_RUN, P0_VIGIL, P5_RUN, P5_VIGIL, content)
 	var payload: Dictionary = {
 		"pilot": freeze,
@@ -82,10 +71,10 @@ func _initialize() -> void:
 		"gate": gate,
 		"traces": traces,
 	}
-	var tf: FileAccess = FileAccess.open(TRACE_PATH, FileAccess.WRITE)
-	if tf != null:
-		tf.store_string(JSON.stringify(payload))
-		tf.close()
+	if not MainRoute.write_pv_traces(TRACE_PATH, payload):
+		print("DD1_ACQUIRE_FAIL could not write PV-TRACES")
+		quit(1)
+		return
 	if MainRoute.file_text("user://glassvow_run_v2.json") != default_run \
 			or MainRoute.file_text("user://glassvow_vigil_v2.json") != default_vigil:
 		print("DD1_ACQUIRE_FAIL default owner saves were touched")
