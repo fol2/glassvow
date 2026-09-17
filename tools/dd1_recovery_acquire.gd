@@ -1,86 +1,80 @@
 extends SceneTree
-## First-valid ordinary Dusk P_0/P_5 on exposed roots 5421600–5421615.
-## Launch must already be receipt-permitted by the process wrapper.
-
-
-const MainRoute: GDScript = preload("res://tests/support/dd1_native_main_route.gd")
-const QUAL: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification"
-const P0_RUN: String = QUAL + "/p0-first-valid-run-v2.json"
-const P0_VIGIL: String = QUAL + "/p0-first-valid-vigil-v2.json"
-const P5_RUN: String = QUAL + "/p5-first-valid-run-v2.json"
-const P5_VIGIL: String = QUAL + "/p5-first-valid-vigil-v2.json"
-const TRACE_PATH: String = QUAL + "/recovery/PV-TRACES.json"
+## Explicit source-bound ordinary capture, not an N0 certificate producer.
+## Native entry is currently disabled: this script grants no launch or credit.
+const Route: GDScript = preload("res://tests/support/dd1_native_main_route.gd")
+const Unit: GDScript = preload("res://tests/support/dd1_unit_grant.gd")
 
 
 func _initialize() -> void:
-	if not MainRoute.launch_permitted():
-		print("DD1_ACQUIRE_FAIL launch receipt invalid")
+	if not Route.launch_permitted():
+		print("DD1_ACQUIRE_BLOCKED missing launch receipt or enclosing reservation")
 		quit(1)
 		return
-	var default_run: Variant = MainRoute.file_text("user://glassvow_run_v2.json")
-	var default_vigil: Variant = MainRoute.file_text("user://glassvow_vigil_v2.json")
+	var root: String = Unit.output_root()
+	var limit: int = Unit.root_limit()
+	if root.is_empty() or limit <= 0 or DirAccess.dir_exists_absolute(root) \
+			or DirAccess.make_dir_recursive_absolute(root) != OK:
+		print("DD1_ACQUIRE_BLOCKED output must be new and reserved")
+		quit(1)
+		return
+	var default_run: Variant = Route.file_text("user://glassvow_run_v2.json")
+	var default_vigil: Variant = Route.file_text("user://glassvow_vigil_v2.json")
 	var content: ContentDB = ContentDB.load_full(false)
 	var vigil: VigilState = VigilState.blank()
-	var freeze: Dictionary = MainRoute.bind_unmodified_pilot()
-	var p0_archived: bool = false
-	var p5_archived: bool = false
 	var traces: Array = []
+	var profiles: Dictionary = {}
 	var starts: int = 0
-	for seed: int in range(5421600, 5421616):
+	var reason: String = ""
+	for seed: int in range(5421600, 5421600 + limit):
+		var run_path: String = root.path_join("run-%d.json" % seed)
+		var vigil_path: String = root.path_join("vigil-%d.json" % seed)
+		if Unit.remaining() <= 0:
+			reason = "enclosing_contained_start_limit"
+			break
+		# Copy the last actual native commit (blank only for the first root).
+		# Exact bytes are read by drive_ordinary before anything can clear them.
+		if FileAccess.file_exists(run_path) or FileAccess.file_exists(vigil_path) \
+				or not SaveService.store_vigil(vigil, vigil_path) \
+				or Route.file_text(vigil_path) != JSON.stringify(vigil.to_dict()):
+			reason = "initial_vigil_persistence_failure"
+			break
 		var vow: int = mini(vigil.vow_unlocked, 4)
-		var run_path: String = "user://dd1_pv_run_%d_v2.json" % seed
-		var vigil_path: String = "user://dd1_pv_vigil_%d_v2.json" % seed
-		SaveService.store_vigil(vigil, vigil_path)
-		var row: Dictionary = MainRoute.drive_ordinary(
-			content, vigil, seed, vow, run_path, vigil_path)
-		starts += int(float(str(row.get("starts", 0))))
+		var row: Dictionary = Route.drive_ordinary(content, vigil, seed, vow, run_path, vigil_path)
+		starts += int(row.get("starts", 0))
+		traces.append(row)
+		if not Route.write_pv_traces(root.path_join("row-%d.json" % seed), row):
+			reason = "row_persistence_failure"
+			break
+		print("DD1_CAPTURE_ROW seed=%d status=%s starts=%d" % [seed, str(row.get("status", "INCOMPLETE")), int(row.get("starts", 0))])
+		if str(row.get("status", "INCOMPLETE")) not in ["win", "death"]:
+			reason = "incomplete_route:" + str(row.get("incomplete_reason", "unknown"))
+			break  # Never clear failed evidence or continue into an unrelated chain.
 		var loaded: VigilState = SaveService.load_vigil(vigil_path)
-		if loaded != null:
-			vigil = loaded
-		var status: String = str(row.get("status", "INCOMPLETE"))
-		traces.append(MainRoute.durable_trace_row(seed, vow, row, vigil))
-		var commands_v: Variant = row.get("commands", [])
-		var command_n: int = commands_v.size() if typeof(commands_v) == TYPE_ARRAY else 0
-		print("DD1_ACQUIRE_ROW seed=%d vow=%d status=%s starts=%d shatters=%s p0=%s p5=%s vow_unlocked=%d commands=%d pre_len=%d" % [
-			seed, vow, status, int(float(str(row.get("starts", 0)))), str(row.get("shatters", 0)),
-			str(MainRoute.ledger_satisfies_p0(vigil)), str(MainRoute.ledger_satisfies_p5(vigil)),
-			vigil.vow_unlocked, command_n, str(row.get("pre_terminal_run", "")).length(),
-		])
-		if status == "INCOMPLETE":
-			continue
-		if not p0_archived and MainRoute.ledger_satisfies_p0(vigil):
-			if MainRoute.archive_profile_run(row, P0_RUN):
-				MainRoute.archive_bytes(vigil_path, P0_VIGIL)
-				p0_archived = true
-				print("DD1_ACQUIRE_P0 seed=%d" % seed)
-			else:
-				print("DD1_ACQUIRE_P0_SKIP seed=%d empty pre_terminal_run" % seed)
-		if p0_archived and not p5_archived and MainRoute.ledger_satisfies_p5(vigil):
-			if MainRoute.archive_profile_run(row, P5_RUN):
-				MainRoute.archive_bytes(vigil_path, P5_VIGIL)
-				p5_archived = true
-				print("DD1_ACQUIRE_P5 seed=%d" % seed)
+		if loaded == null or Route.file_text(vigil_path) != row.get("commit_vigil"):
+			reason = "committed_vigil_readback_failure"
+			break
+		vigil = loaded
+		for name: String in ["p0", "p5"]:
+			var eligible: bool = Route.ledger_satisfies_p0(vigil) if name == "p0" else Route.ledger_satisfies_p5(vigil)
+			if profiles.has(name) or not eligible:
+				continue
+			if not Route.archive_profile_run(row, root.path_join(name + "-run.json")) \
+					or Route.archive_bytes(vigil_path, root.path_join(name + "-vigil.json")).is_empty():
+				reason = "profile_persistence_failure:" + name
 				break
-			print("DD1_ACQUIRE_P5_SKIP seed=%d empty pre_terminal_run" % seed)
-	var gate: Dictionary = MainRoute.evaluate_n0_witness(P0_RUN, P0_VIGIL, P5_RUN, P5_VIGIL, content)
-	var payload: Dictionary = {
-		"pilot": freeze,
-		"starts": starts,
-		"p0_archived": p0_archived,
-		"p5_archived": p5_archived,
-		"gate": gate,
-		"traces": traces,
-	}
-	if not MainRoute.write_pv_traces(TRACE_PATH, payload):
-		print("DD1_ACQUIRE_FAIL could not write PV-TRACES")
+			profiles[name] = {"root": seed, "run_bytes": row["pre_terminal_run"], "vigil_bytes": row["commit_vigil"]}
+		if not reason.is_empty() or profiles.has("p5"):
+			break
+	if Route.file_text("user://glassvow_run_v2.json") != default_run \
+			or Route.file_text("user://glassvow_vigil_v2.json") != default_vigil:
+		reason = "default_profile_changed"
+	var payload: Dictionary = {"operation": "DD1-N0-RECOVERY-1", "traces": traces,
+		"profiles": profiles, "starts": starts, "incomplete_reason": reason,
+		"result": "CAPTURED_PREFIX_UNVERIFIED" if reason.is_empty() else "INCOMPLETE",
+		"n0_accepted": false}
+	if not Route.write_pv_traces(root.path_join("linked-capture.json"), payload):
+		print("DD1_ACQUIRE_FAIL final evidence persistence failure; retained partial files")
 		quit(1)
 		return
-	if MainRoute.file_text("user://glassvow_run_v2.json") != default_run \
-			or MainRoute.file_text("user://glassvow_vigil_v2.json") != default_vigil:
-		print("DD1_ACQUIRE_FAIL default owner saves were touched")
-		quit(1)
-		return
-	print("DD1_ACQUIRE_DONE starts=%d p0=%s p5=%s gate=%s" % [
-		starts, str(p0_archived), str(p5_archived), str(gate.get("result", "")),
-	])
-	quit(0 if str(gate.get("result", "")) == "ACCEPT" else 2)
+	print("DD1_CAPTURE_DONE starts=%d roots=%d profiles=%s result=%s" % [starts, traces.size(), str(profiles.keys()), payload["result"]])
+	quit(0 if reason.is_empty() else 2)

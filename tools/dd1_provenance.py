@@ -314,7 +314,13 @@ def evaluate_witness(packet, context=None):
             binding = expected["roles"].get(name)
             need(isinstance(binding, dict), "missing bound role:" + name)
             return obj(context.resolve(binding["locator"]))
-        report = inspect_sequence(role("preflight_trace"), role("extractor_source"))
+        manifest = role("development_manifest")
+        producer = expected["roles"].get("extractor_source", {})
+        # Preserve H's extractor_source as actual producer bytes, not a JSON
+        # substitute. The development manifest is already an externally bound role.
+        need(manifest.get("extractor_sha256") == producer.get("sha256") and
+             isinstance(producer.get("sha256"), str), "unbound extractor/source manifest")
+        report = inspect_sequence(role("preflight_trace"), manifest)
         if not report["both_profiles"]:
             return dict(report, result="INCOMPLETE", reason="no complete captured P_0/P_5 chain")
         return dict(report, result="SYNTHETIC_ONLY" if context.kind == "synthetic" else "LINKED_PROVENANCE_VERIFIED",

@@ -86,3 +86,19 @@ static func claim_root(seed: int) -> bool:
 		return false
 	_root_index += 1
 	return true
+
+
+static func output_root() -> String:
+	if remaining() <= 0 or _grant.get("mode") != "fixed_ordinary":
+		return ""
+	var root: String = str(_grant.get("artifact_root", ""))
+	return root if root.is_absolute_path() and not root.begins_with("res://") \
+		and not root.begins_with("user://") and not root.contains("..") else ""
+
+
+static func root_limit() -> int:
+	var value: Variant = _grant.get("max_roots", 16)
+	if typeof(value) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(value)) \
+			or float(value) != floorf(float(value)) or float(value) < 1 or float(value) > 16:
+		return 0
+	return int(value)

@@ -55,7 +55,7 @@ func state() -> Dictionary:
 		var combat: Dictionary = game.cb.to_dict()
 		combat["object_id"] = str(game.cb.get_instance_id())
 		combat["queue_size"] = game.cb.queue.size()
-		combat["crosscut_anchor"] = game.cb.crosscut_anchor.idx if game.cb.crosscut_anchor != null else null
+		combat["crosscut_anchor"] = game.cb.enemies.find(game.cb.crosscut_anchor) if game.cb.crosscut_anchor != null else null
 		out["combat"] = combat
 	return out
 
@@ -133,7 +133,10 @@ func source_bytes(expected: Dictionary = {}) -> Dictionary:
 
 func packet() -> Dictionary:
 	var raw: String = FileAccess.get_file_as_string(sink) if not sink.is_empty() else ""
-	if not sink.is_empty() and raw.to_utf8_buffer().size() != raw_bytes:
+	var expected: String = ""
+	for row: Dictionary in rows:
+		expected += JSON.stringify(row) + "\n"
+	if not sink.is_empty() and (raw != expected or raw.to_utf8_buffer().size() != raw_bytes):
 		fail("journal_final_readback")
 	return {"schema": SCHEMA, "rows": rows.duplicate(true), "errors": errors.duplicate(),
 		"open_actions": stack.duplicate(), "raw_bytes": raw_bytes,

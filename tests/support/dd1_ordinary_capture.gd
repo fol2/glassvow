@@ -56,9 +56,6 @@ static func drive(content: ContentDB, vigil: VigilState, seed: int, vow: int,
 			main._on_terminal_commit("commit")
 			reason = "" if main.complete_terminal() else "terminal_incomplete"
 			break
-		if main._route_checkpoint_quarantined:
-			reason = "quarantined_route"
-			break
 		if main.game.run.pending_scene != null or main.game.run.pending_pool != null \
 				or main.game.run.pending_hollow != null or main.game.run.pending_lamplighter:
 			reason = "unmapped_pending_public_choice"
@@ -85,7 +82,7 @@ static func drive(content: ContentDB, vigil: VigilState, seed: int, vow: int,
 			token = main.capture.begin("reward_policy", main.game.run.pending_reward.duplicate(true))
 			if token < 0:
 				break
-			route._claim_pending_reward(main, content)
+			_claim_pending_reward(main, content)
 			main.capture.finish(token)
 			reward_claims += 1
 			continue
@@ -182,3 +179,35 @@ static func drive(content: ContentDB, vigil: VigilState, seed: int, vow: int,
 
 static func _incomplete(reason: String) -> Dictionary:
 	return {"status": "INCOMPLETE", "starts": 0, "incomplete_reason": reason}
+
+
+static func _claim_pending_reward(main: Variant, content: ContentDB) -> void:
+	# Same Pilot choices; bind them to the native singular relic/nullable potion
+	# fields rather than inventing a potion from str(null) or dropping a relic.
+	var rewards: Dictionary = main.game.run.pending_reward.get("rewards", {})
+	main._on_reward_claimed(&"gold", "")
+	var cards: Array = rewards.get("cards", [])
+	if not cards.is_empty() and main.capture.errors.is_empty():
+		var pick: String = Pilot.choose_card(cards, content, main.game.run.aspect, main.game.run.rng)
+		if not pick.is_empty():
+			if not cards.has(pick):
+				main.capture.fail("unoffered_pilot_card")
+				return
+			var definition: Dictionary = content.cards.get(pick, {})
+			if Pilot.accepts_card_reward(Pilot.card_score(definition, main.game.run.aspect, pick)):
+				main._on_reward_claimed(&"card", pick)
+	var relic_v: Variant = rewards.get("relic")
+	if typeof(relic_v) == TYPE_STRING and not str(relic_v).is_empty() and main.capture.errors.is_empty():
+		var offered: Array = [str(relic_v)]
+		var pick: String = Pilot.choose_relic(offered, content, main.game.run.aspect, main.game.run.rng)
+		if not pick.is_empty():
+			if not offered.has(pick):
+				main.capture.fail("unoffered_pilot_relic")
+				return
+			main._on_reward_claimed(&"relic", pick)
+	var potion_v: Variant = rewards.get("potion")
+	if typeof(potion_v) == TYPE_STRING and not str(potion_v).is_empty() \
+			and main.game.run.player.potions.has("") and main.capture.errors.is_empty():
+		main._on_reward_claimed(&"potion", str(potion_v))
+	if main.capture.errors.is_empty():
+		main._on_reward_finished()
