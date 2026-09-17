@@ -9,118 +9,45 @@
   },
   "preflight_native_starts": {
     "cap": 8192,
-    "used": 231,
-    "remaining": 7961,
-    "note": "90 historical startCombat + 1 headed process + 132 R1–R3 startCombat (44x3 including thorns fixture fail) + 3 prior shot.sh + 2 catalog-test Godot processes + 1 catalog card-lab shot + 1 constructed-fight shot + 1 live.sh host (scenario combat; subsequent live shots reused that process)"
+    "used": 1277,
+    "remaining": 6915,
+    "note": "231 historical + 1 M-pending emit process + 1 INV-7 parse-fail process + 153 INV-8 matrix + 45 overlay-only + 153 matrix-P5-cap + 201 matrix-16-seed + 246 INV-10 + 246 INV-11"
   },
   "epoch_usage": {
     "cpu_seconds": "UNKNOWN",
-    "cpu_seconds_conservative_bound": 300,
+    "cpu_seconds_conservative_bound": 7200,
     "active_elapsed_seconds": "UNKNOWN",
-    "active_elapsed_conservative_bound": 3600,
+    "active_elapsed_conservative_bound": 7200,
     "raw_emitted_bytes_measured_logs": 4553,
     "raw_emitted_bytes_this_batch_logs_and_pngs": "UNKNOWN_FULL",
     "executors": 1,
-    "per_invocation_cpu_seconds_max_observed": "UNKNOWN; headed timeout 8s; tests finished; shots finished <40s"
+    "per_invocation_cpu_seconds_max_observed": "UNKNOWN; INV-10/11 identical PASS pair; matrix campaigns finished"
   },
   "events": [
-    {
-      "id": "DD1-N0-INV-1",
-      "native_starts": 30,
-      "result": "FAIL fixture HP",
-      "log": "native-tests-0-fixture-hp.log"
-    },
-    {
-      "id": "DD1-N0-INV-2",
-      "native_starts": 30,
-      "result": "PASS",
-      "log": "native-tests-1.log (historical identical PASS)"
-    },
-    {
-      "id": "DD1-N0-INV-3",
-      "native_starts": 30,
-      "result": "PASS",
-      "log": "native-tests-2.log (historical)"
-    },
-    {
-      "id": "DD1-N0-HEADED-1",
-      "native_starts": 1,
-      "command": "godot --path . --quit-after 1",
-      "result": "timeout 124 Metal started"
-    },
-    {
-      "id": "DD1-N0-INV-4",
-      "native_starts": 44,
-      "result": "FAIL Thorns soaked by producer Block; fixture repaired",
-      "log": "native-tests-0-thorns-fixture.log"
-    },
-    {
-      "id": "DD1-N0-INV-5",
-      "native_starts": 44,
-      "result": "PASS",
-      "log": "native-tests-1.log"
-    },
-    {
-      "id": "DD1-N0-INV-6",
-      "native_starts": 44,
-      "result": "PASS identical",
-      "log": "native-tests-2.log"
-    },
-    {
-      "id": "DD1-N0-SHOT-1",
-      "native_starts": 1,
-      "command": "tools/shot.sh --cards=setTheAngle,crosscut",
-      "result": "PNG written; inspected 0 cards in lab"
-    },
-    {
-      "id": "DD1-N0-SHOT-2",
-      "native_starts": 1,
-      "command": "tools/shot.sh --fight=sporeling,sporeling --settle=0.5",
-      "result": "PNG written; inspected real two-sporeling combat; starter hand has no Crosscut so no MARKED chrome"
-    },
-    {
-      "id": "DD1-N0-SHOT-3",
-      "native_starts": 1,
-      "command": "tools/shot.sh --cards=setTheAngle,crosscut --settle=1.2",
-      "result": "same 0-card lab (catalog missing overlay IDs; retained)"
-    },
-    {
-      "id": "DD1-N0-CAT-1",
-      "native_starts": 1,
-      "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_catalog.gd",
-      "result": "PASS identical blob 90c42859…; 0 startCombat"
-    },
-    {
-      "id": "DD1-N0-CAT-2",
-      "native_starts": 1,
-      "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_catalog.gd",
-      "result": "PASS identical to CAT-1"
-    },
-    {
-      "id": "DD1-N0-SHOT-4",
-      "native_starts": 1,
-      "command": "tools/shot.sh --cards=setTheAngle,crosscut --settle=1.2",
-      "result": "PNG 64559 bytes; inspected UNCOMMON-2 Crosscut and Set the Angle (bare-pane art, names/text/cost visible)"
-    },
-    {
-      "id": "DD1-N0-SHOT-5",
-      "native_starts": 1,
-      "command": "tools/shot.sh --scenario=combat-normal add_cards setTheAngle x4 crosscut x4 --settle=0.8",
-      "result": "PNG inspected; opening hand includes Crosscut and Set the Angle"
-    },
-    {
-      "id": "DD1-N0-LIVE-1",
-      "native_starts": 1,
-      "command": "tools/live.sh start --scenario=…; click queried card/enemy centres; shot; stop",
-      "result": "inspected: Set the Angle targeting preview; MARKED chrome on primary after play (energy 3→2, Ward 4); Crosscut targeting with live MARKED; consume: both sporelings 9/14, MARKED gone, energy 1, discard 2"
-    }
+    {"id": "DD1-N0-INV-1", "native_starts": 30, "result": "FAIL fixture HP", "log": "native-tests-0-fixture-hp.log"},
+    {"id": "DD1-N0-INV-2", "native_starts": 30, "result": "PASS", "log": "native-tests-1.log (historical identical PASS)"},
+    {"id": "DD1-N0-INV-3", "native_starts": 30, "result": "PASS", "log": "native-tests-2.log (historical)"},
+    {"id": "DD1-N0-HEADED-1", "native_starts": 1, "command": "godot --path . --quit-after 1", "result": "timeout 124 Metal started"},
+    {"id": "DD1-N0-INV-4", "native_starts": 44, "result": "FAIL Thorns soaked by producer Block; fixture repaired", "log": "native-tests-0-thorns-fixture.log"},
+    {"id": "DD1-N0-INV-5", "native_starts": 44, "result": "PASS", "log": "native-tests-1.log (pre-5706552165)"},
+    {"id": "DD1-N0-INV-6", "native_starts": 44, "result": "PASS identical", "log": "native-tests-2.log (pre-5706552165)"},
+    {"id": "DD1-N0-SHOT-1", "native_starts": 1, "command": "tools/shot.sh --cards=setTheAngle,crosscut", "result": "PNG written; inspected 0 cards in lab"},
+    {"id": "DD1-N0-SHOT-2", "native_starts": 1, "command": "tools/shot.sh --fight=sporeling,sporeling --settle=0.5", "result": "PNG written"},
+    {"id": "DD1-N0-SHOT-3", "native_starts": 1, "command": "tools/shot.sh --cards=setTheAngle,crosscut --settle=1.2", "result": "same 0-card lab (retained)"},
+    {"id": "DD1-N0-CAT-1", "native_starts": 1, "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_catalog.gd", "result": "PASS"},
+    {"id": "DD1-N0-CAT-2", "native_starts": 1, "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_catalog.gd", "result": "PASS identical to CAT-1"},
+    {"id": "DD1-N0-SHOT-4", "native_starts": 1, "command": "tools/shot.sh --cards=setTheAngle,crosscut --settle=1.2", "result": "catalog PNG inspected"},
+    {"id": "DD1-N0-SHOT-5", "native_starts": 1, "command": "tools/shot.sh --scenario=combat-normal add_cards setTheAngle x4 crosscut x4 --settle=0.8", "result": "constructed fight PNG"},
+    {"id": "DD1-N0-LIVE-1", "native_starts": 1, "command": "tools/live.sh", "result": "create/consume MARKED inspected"},
+    {"id": "DD1-N0-M-PENDING-EMIT-1", "native_starts": 1, "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_m_pending_emit.gd", "result": "unchanged M pending bytes; 0 startCombat; supporting baseline", "head": "07b5aa9dec8436132a524511d5438c510e322070", "log": "m-pending-emit.log"},
+    {"id": "DD1-N0-INV-7", "native_starts": 1, "result": "FAIL parse: new matrix test before godot --import", "head": "d731da87af3ae9ead4bdae92b79d040cffdf1db5"},
+    {"id": "DD1-N0-INV-8", "native_starts": 153, "result": "matrix FAIL P_5 8-seed cap; overlay parse on as-cast", "head": "d731da87af3ae9ead4bdae92b79d040cffdf1db5"},
+    {"id": "DD1-N0-INV-9", "native_starts": 45, "result": "PASS overlay-only after byte-root parse fix", "log": "native-overlay-only.log"},
+    {"id": "DD1-N0-MATRIX-P5-CAP", "native_starts": 153, "result": "FAIL P_5 at 8 seeds; P_0 earned; named traces kept"},
+    {"id": "DD1-N0-MATRIX-16", "native_starts": 201, "result": "PASS matrix; P_0 seed 5421601; P_5 seed 5421609"},
+    {"id": "DD1-N0-INV-10", "native_starts": 246, "result": "PASS (2 tests) overlay+matrix identical pair", "log": "native-tests-1.log", "head": "92da314c066b84fc565c428cbbda03375ef03481"},
+    {"id": "DD1-N0-INV-11", "native_starts": 246, "result": "PASS identical to INV-10", "log": "native-tests-2.log", "head": "92da314c066b84fc565c428cbbda03375ef03481"}
   ],
-  "not_opened": [
-    "development",
-    "confirmation",
-    "counterfactual",
-    "policy_fitting",
-    "#548"
-  ],
+  "not_opened": ["development", "confirmation", "counterfactual", "policy_fitting", "#548"],
   "certificates": "0/3 Duskblade"
 }

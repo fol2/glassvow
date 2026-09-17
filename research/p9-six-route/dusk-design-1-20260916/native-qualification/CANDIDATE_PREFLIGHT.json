@@ -1,19 +1,30 @@
 {
   "schema": "DD1-NATIVE-1-CANDIDATE_PREFLIGHT-1",
-  "status": "RECONCILED_R0_BEFORE_NEXT_NATIVE_INVOCATION",
+  "status": "RECONCILED_AFTER_5706552165_BATCH",
   "frozen_at_utc": "2026-09-16T21:30:00Z",
   "r0_reconciled_at_utc": "2026-09-16T22:40:00Z",
+  "author_batch_5706552165_at_utc": "2026-09-17T01:40:00Z",
   "exact_pre_next_invocation": {
+    "note": "INV-10/11 already executed at 92da314. Do not attach that SHA to INV-1..6.",
+    "coherent_PASS_pair": "92da314c066b84fc565c428cbbda03375ef03481",
+    "test_dd1_blob": "1daa3f8f7c16f9e7237251fad38cda46c32960d0",
+    "matrix_test_blob": "5411fef977049782dd93aee2a193fe180b349695",
+    "combat_blob": "4288f589fab3dba90fbd94cb04c49e0d88c0131d",
+    "reader_blob": "6c08fc23eff8871468167b36d61523437c4dd908",
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd"
+  },
+  "historical_O_freeze_not_for_post_O_debits": {
     "O": "d8f4dde0905db7156008a53173e3851768448b8d",
     "test_dd1_blob_at_O": "baaeff7b43c4804fc812d0f11e8b94ac432b328f",
-    "combat_blob_at_O": "8110f15efe5119c5a0d82947b8ddd695ba17d66b",
-    "engine": "4.7.2.stable.official.ed1daf0bf",
-    "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_overlay.gd"
+    "combat_blob_at_O": "8110f15efe5119c5a0d82947b8ddd695ba17d66b"
   },
   "activation": {
     "issue": 421,
     "prepared_comment_id": 5704445133,
     "author_activation_comment_id": 5704631815,
+    "corrective_batch": 5706552165,
+    "review": 5706393140,
     "authority": "existing H preflight only; no development/confirmation/merge/release"
   },
   "identities": {
@@ -49,47 +60,28 @@
     },
     "no_extra_ordinary_damage_beside_crosscut_special": true,
     "no_new_save_field": true,
-    "dusk_only_pool_filter_both_paths": [
-      "card_pool base",
-      "card_pool unlocks"
-    ]
+    "dusk_only_pool_filter_both_paths": ["card_pool base", "card_pool unlocks"]
   },
   "profile_prerequisite_first_valid_witness": {
-    "vows": [
-      0,
-      5
-    ],
-    "status": "NOT_RUN_AT_FREEZE",
-    "note": "Legitimate Dusk-earned P_v witnesses require remaining preflight capacity and entry authority. Constructed test hands are not those witnesses."
+    "vows": [0, 5],
+    "status": "EARNED",
+    "p0_seed": 5421601,
+    "p5_seed": 5421609,
+    "ledger": "pv-ledgers.json",
+    "note": "Ordinary VigilState.commit_run on legal campaigns; constructed _fight hands are not these witnesses."
   },
   "roster_command_policy": {
     "status": "NOT_OPENED",
     "note": "No development panel, no policy fitting, no confirmation freeze."
   },
   "intervention_and_null_table": {
-    "K1_P_off": "research_mask_printed_chip on the same paid chisel: printed extra chip removed; ordinary hit/implicit chip/cost retained",
-    "K1_C_off": "research_mask_echo on the same paid resonantLance: echo multiplier removed; Cracked scaling/hit/cost/lifecycle retained",
-    "K1_substitutions": "Strike and Eclipse Slash remain lawful substitutions, not component-off masks",
-    "K1_guard": "staggered OR vulnerable>0; separately observable staggered-only and cracked-only",
-    "DD1_P_off": "research_mask_anchor: Set the Angle still grants Block and does not install the marker",
-    "DD1_C_off": "research_mask_return: Crosscut still pays and delivers primary, no return",
-    "DD1_same_target": "consume without return",
-    "DD1_other_aspect": "Ash does not install the public marker; Block/primary retained; Strength/echo not claimed absent on Ash",
-    "illegal": "missing UID / dead / OOR / insufficient energy do not clear mark"
-  },
-  "required_assertions": {
-    "authority": [
-      "PROMOTION.md §1 §3",
-      "NATIVE-HANDOFF.md",
-      "H ADAPTER_RECORDS D547-NATIVE-EXPORT-2"
-    ],
-    "drive": "GlassvowGame.apply / CombatRules.play_card / preview_play / card_pool / RunState v2 save"
-  },
-  "allowed_input_exposure_namespace": {
-    "constructed_native_states": "authorised for component/refinement tests only",
-    "protected_raw": "not accessed",
-    "historical_UNKNOWN": "retained, not credited",
-    "python_grid_CHECKS_json": "not a native observation"
+    "K1_P_off": "research_mask_printed_chip on the same paid chisel",
+    "K1_C_off": "research_mask_echo on the same paid resonantLance",
+    "K1_mediator_off": "research_mask_shatter: chips land; Stun AND Cracked neither apply",
+    "K1_substitutions": "Strike and Eclipse Slash remain lawful substitutions",
+    "DD1_P_off": "research_mask_anchor",
+    "DD1_C_off": "research_mask_return",
+    "DD1_other_aspect": "Ash does not install the public marker"
   },
   "debit_and_stop": {
     "account": "H preflight native_starts cap 8192 less actual applicable debits",
@@ -97,17 +89,7 @@
       "maximum": 1,
       "consume_at": "first new candidate-native invocation"
     },
-    "no_borrow": [
-      "development",
-      "confirmation",
-      "counterfactual",
-      "#548"
-    ],
-    "stop_on": [
-      "genuine failed law/guard",
-      "missing authority/exposure",
-      "cannot fit remaining cap"
-    ],
+    "no_borrow": ["development", "confirmation", "counterfactual", "#548"],
     "epoch_ceilings": {
       "cpu_hours": 64,
       "active_elapsed_hours": 48,
