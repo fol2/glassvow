@@ -1,3 +1,9 @@
+# P9 current capsule — DD1-NATIVE-1 INV-11 distinct-process repair
+
+Updated 2026-09-17. Overlay head `3993b3f0a98ef436ed144ba800e7e031583baa0a` (tree `f8a116444fc47d3580a6f9464a743d7b881e14ba`). INV-11 is a distinct Godot process (`native-tests-2.time` real 2.32s), not a copy of INV-10. Matrix blob `5411fef977049782dd93aee2a193fe180b349695`. Attempt 1/1. 1277/8192 remaining 6915. **0/3 certificates.**
+
+---
+
 # P9 current capsule — DD1-NATIVE-1 5706552165 four-finding repair
 
 Updated 2026-09-17. Overlay `research/p9-six-route/dd1-native-1-overlay` published head `5122254236769f33d10d7a5544e70ec9ddc18049` (tree `8cd0d76281eebc020aa0eaed656421308faea4ae`). Coherent PASS pair `92da314c066b84fc565c428cbbda03375ef03481`. Original O `d8f4dde0…` retained. M `07b5aa9d…` unmutated.
