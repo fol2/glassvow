@@ -3,44 +3,84 @@
   "all_comment_bodies_match": true,
   "blobs": [
     {
-      "github_sha": "59011157d418b81f411cf0d3ae2412bd2fc3dd88",
-      "github_size": 21568,
-      "local_git_blob": "59011157d418b81f411cf0d3ae2412bd2fc3dd88",
+      "github_sha": "74375b7089b4eff2158089b41011f18d71d0111f",
+      "github_size": 22364,
+      "local_git_blob": "74375b7089b4eff2158089b41011f18d71d0111f",
       "match": true,
       "path": "tests/support/dd1_native_main_route.gd",
-      "ref": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7"
+      "ref": "6c2253f6bb746652704591d47ecf9628d905cff9"
     },
     {
-      "github_sha": "20e65259f4ebc630a09dbc7900cc15dad3e6b2a2",
-      "github_size": 31330,
-      "local_git_blob": "20e65259f4ebc630a09dbc7900cc15dad3e6b2a2",
+      "github_sha": "ca41c39252dbd06340a53fd20a3e6a35e44857d6",
+      "github_size": 32799,
+      "local_git_blob": "ca41c39252dbd06340a53fd20a3e6a35e44857d6",
       "match": true,
       "path": "tests/test_dd1_native_matrix.gd",
-      "ref": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7"
+      "ref": "6c2253f6bb746652704591d47ecf9628d905cff9"
     },
     {
-      "github_sha": "de2a951da9837f783dd491cf435a04b0b6be17e5",
-      "github_size": 3883,
-      "local_git_blob": "de2a951da9837f783dd491cf435a04b0b6be17e5",
+      "github_sha": "e1d18585e6d84f41f9bacf020ca345c5bdc4e639",
+      "github_size": 4189,
+      "local_git_blob": "e1d18585e6d84f41f9bacf020ca345c5bdc4e639",
       "match": true,
-      "path": "tools/dd1_recovery_acquire.gd",
-      "ref": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7"
+      "path": "tools/dd1_recovery_pending.gd",
+      "ref": "6c2253f6bb746652704591d47ecf9628d905cff9"
     },
     {
-      "github_sha": "1816fcd8e4012746a5437e5ffd437d773d7f371d",
-      "github_size": 4881,
-      "local_git_blob": "1816fcd8e4012746a5437e5ffd437d773d7f371d",
+      "github_sha": "bc3e28da6ae44121de335a7f743ef69b02583932",
+      "github_size": 5020,
+      "local_git_blob": "bc3e28da6ae44121de335a7f743ef69b02583932",
       "match": true,
       "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/IMPLEMENTED.md",
-      "ref": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7"
+      "ref": "6c2253f6bb746652704591d47ecf9628d905cff9"
     },
     {
-      "github_sha": "3469885a65186f68c23f25ffc0b3d3b8d3efe02b",
-      "github_size": 2050,
-      "local_git_blob": "3469885a65186f68c23f25ffc0b3d3b8d3efe02b",
+      "github_sha": "23b567dcc66d0c7dcbdf009a8d05a24890ac1eae",
+      "github_size": 2046,
+      "local_git_blob": "23b567dcc66d0c7dcbdf009a8d05a24890ac1eae",
       "match": true,
       "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/NATIVE-AUTHOR-HANDOFF.md",
-      "ref": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7"
+      "ref": "6c2253f6bb746652704591d47ecf9628d905cff9"
+    },
+    {
+      "github_sha": "b5457e296efdde1b3e7814d35e8983a31b3d01c3",
+      "github_size": 8316,
+      "local_git_blob": "b5457e296efdde1b3e7814d35e8983a31b3d01c3",
+      "match": true,
+      "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/m-pending-ordinary-run-v2.json",
+      "ref": "6c2253f6bb746652704591d47ecf9628d905cff9"
+    },
+    {
+      "github_sha": "3cec043e968441dbdce69d7c7ce61a9836902a0b",
+      "github_size": 652,
+      "local_git_blob": "3cec043e968441dbdce69d7c7ce61a9836902a0b",
+      "match": true,
+      "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/recovery/m-pending-recapture.log",
+      "ref": "6c2253f6bb746652704591d47ecf9628d905cff9"
+    },
+    {
+      "github_sha": "bc576d777798570a766e6c495a3b87489d062b29",
+      "github_size": 2529,
+      "local_git_blob": "bc576d777798570a766e6c495a3b87489d062b29",
+      "match": true,
+      "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/recovery/source-tests-witness-1.log",
+      "ref": "6c2253f6bb746652704591d47ecf9628d905cff9"
+    },
+    {
+      "github_sha": "bc576d777798570a766e6c495a3b87489d062b29",
+      "github_size": 2529,
+      "local_git_blob": "bc576d777798570a766e6c495a3b87489d062b29",
+      "match": true,
+      "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/recovery/source-tests-witness-2.log",
+      "ref": "6c2253f6bb746652704591d47ecf9628d905cff9"
+    },
+    {
+      "github_sha": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+      "github_size": 28141,
+      "local_git_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+      "match": true,
+      "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/recovery/ACCOUNT.json",
+      "ref": "6c2253f6bb746652704591d47ecf9628d905cff9"
     },
     {
       "github_sha": "3bd18010b179657e92ae207acc118ee5e6e86548",
@@ -48,89 +88,51 @@
       "local_git_blob": "3bd18010b179657e92ae207acc118ee5e6e86548",
       "match": true,
       "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/p0-first-valid-vigil-v2.json",
-      "ref": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7"
-    },
-    {
-      "github_sha": "e89548dab8fa7a912435c70030a6e9e6b070d37c",
-      "github_size": 13223,
-      "local_git_blob": "e89548dab8fa7a912435c70030a6e9e6b070d37c",
-      "match": true,
-      "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/recovery/PV-TRACES.json",
-      "ref": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7"
-    },
-    {
-      "github_sha": "42dcb50c887ce4def335ab8958acd15066306a39",
-      "github_size": 9961,
-      "local_git_blob": "42dcb50c887ce4def335ab8958acd15066306a39",
-      "match": true,
-      "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/recovery/replay-p0-run-v2.json",
-      "ref": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7"
-    },
-    {
-      "github_sha": "f2332c14ae71e7e4b57859307c44ca840afc83b4",
-      "github_size": 23751,
-      "local_git_blob": "f2332c14ae71e7e4b57859307c44ca840afc83b4",
-      "match": true,
-      "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/recovery/ACCOUNT.json",
-      "ref": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7"
-    },
-    {
-      "github_sha": "cb7bd59939ec97884c8903531714409a0b2b0d63",
-      "github_size": 2529,
-      "local_git_blob": "cb7bd59939ec97884c8903531714409a0b2b0d63",
-      "match": true,
-      "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/recovery/source-tests-producer-1.log",
-      "ref": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7"
-    },
-    {
-      "github_sha": "cb7bd59939ec97884c8903531714409a0b2b0d63",
-      "github_size": 2529,
-      "local_git_blob": "cb7bd59939ec97884c8903531714409a0b2b0d63",
-      "match": true,
-      "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/recovery/source-tests-producer-2.log",
-      "ref": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7"
+      "ref": "6c2253f6bb746652704591d47ecf9628d905cff9"
     }
   ],
   "certificates": "0/3",
-  "comment_156": "https://github.com/fol2/glassvow/issues/156#issuecomment-5719866502",
-  "comment_542": "https://github.com/fol2/glassvow/issues/542#issuecomment-5719866687",
+  "comment_156": "https://github.com/fol2/glassvow/issues/156#issuecomment-5720009946",
+  "comment_542": "https://github.com/fol2/glassvow/issues/542#issuecomment-5720010111",
   "comments": {
-    "5719866502": {
-      "body_len": 3458,
-      "body_sha256": "4b505d6698dae2c3e6e4d4a6a6e167c471c3bf393539bd07f8f587dbfb07cfad",
+    "5720009946": {
+      "body_len": 3375,
+      "body_sha256": "f13e4061fc64023ccc5524fb115f423286636f875859f0b168c5193bb65edc56",
       "contains_head": true,
-      "created_at": "2026-09-17T19:15:03Z",
-      "html_url": "https://github.com/fol2/glassvow/issues/156#issuecomment-5719866502",
-      "id": 5719866502,
+      "created_at": "2026-09-17T19:27:11Z",
+      "html_url": "https://github.com/fol2/glassvow/issues/156#issuecomment-5720009946",
+      "id": 5720009946,
       "match": true,
-      "published_sha256": "4b505d6698dae2c3e6e4d4a6a6e167c471c3bf393539bd07f8f587dbfb07cfad",
+      "published_sha256": "f13e4061fc64023ccc5524fb115f423286636f875859f0b168c5193bb65edc56",
       "user": "fol2"
     },
-    "5719866687": {
-      "body_len": 628,
-      "body_sha256": "0af955891759e2e7179ac66cda424fec195e9f7364518fd1761d77bc0a8a6d68",
+    "5720010111": {
+      "body_len": 608,
+      "body_sha256": "3dbb7c704361fdc7b5677a87f0075973d21e5be7e65a2fa398ae5d61e8d8820a",
       "contains_head": true,
-      "created_at": "2026-09-17T19:15:04Z",
-      "html_url": "https://github.com/fol2/glassvow/issues/542#issuecomment-5719866687",
-      "id": 5719866687,
+      "created_at": "2026-09-17T19:27:12Z",
+      "html_url": "https://github.com/fol2/glassvow/issues/542#issuecomment-5720010111",
+      "id": 5720010111,
       "match": true,
-      "published_sha256": "0af955891759e2e7179ac66cda424fec195e9f7364518fd1761d77bc0a8a6d68",
+      "published_sha256": "3dbb7c704361fdc7b5677a87f0075973d21e5be7e65a2fa398ae5d61e8d8820a",
       "user": "fol2"
     }
   },
   "disposition": "BLOCKED / P_5 not earned; sequence P_0 pre-terminal ABSENT; 16-root durable traces unrestored",
-  "github_commit_sha": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7",
-  "github_tree_sha": "1e4667accb65e2360c02f3380233a63552ea13a0",
+  "github_commit_sha": "6c2253f6bb746652704591d47ecf9628d905cff9",
+  "github_tree_sha": "94e7abb1271de65df259c1ef737a22f6124a2084",
   "head_match": true,
+  "m_pending_sha256": "5b778ab57008761c14bf9ec52bc790df6135cee9b40b5e1b4eef36fc5450c6f7",
   "n0": "BLOCKED / NOT ACCEPTED",
   "no_development_confirmation_merge_release": true,
   "oracle": "GitHub publication+readback",
   "origin_main": "07b5aa9dec8436132a524511d5438c510e322070",
-  "overlay_head": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7",
-  "overlay_tree": "1e4667accb65e2360c02f3380233a63552ea13a0",
+  "overlay_head": "6c2253f6bb746652704591d47ecf9628d905cff9",
+  "overlay_tree": "94e7abb1271de65df259c1ef737a22f6124a2084",
   "prior_source_head": "4adfff99c2190cbe40aafcfb764bf40d7b636382",
+  "producer_fix_head": "05a175fdcfef2c31dbd875fd0c4afaa6071b22e7",
   "production_pr_from_overlay": [],
-  "readback_at_utc": "2026-09-17T19:15:36Z",
-  "remaining_starts": 136,
+  "readback_at_utc": "2026-09-17T19:28:16Z",
+  "remaining_starts": 8,
   "tree_match": true
 }
