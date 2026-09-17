@@ -39,6 +39,7 @@ static func run(fails: Array[String]) -> void:
 	_abandon_clears_mark(fails)
 	_launch_receipt_controls(fails)
 	_combat_dispatch_once(fails)
+	_shipped_pending_capture(fails)
 	_unmodified_m_pending_resume(fails)
 	_pv_ordinary_progression(fails)
 	if _file_text(DEFAULT_RUN_PATH) != default_run \
@@ -356,7 +357,7 @@ static func _combat_dispatch_once(fails: Array[String]) -> void:
 		MainRoute.dispose(main)
 		return
 	var pick: int = reachable[0]
-	main._map.at = pick
+	_fail(fails, main._map.enter(pick), "dispatch map.enter before arm")
 	var node: MapNode = main._map.current()
 	main.game.run.node_id = node.id
 	main._arm_encounter(node)
@@ -375,6 +376,8 @@ static func _combat_dispatch_once(fails: Array[String]) -> void:
 	var rng1: int = main.game.run.rng.get_state()
 	_fail(fails, main.game.run.pending_reward != null or main.game.run.pending_run_end != null,
 		"first dispatch wrote pending reward or terminal")
+	_fail(fails, MainRoute.dispatch_combat_result_once(main, false) == false,
+		"second poll with already_dispatched=false does not re-enter _on_combat_over")
 	_fail(fails, MainRoute.dispatch_combat_result_once(main, true) == false,
 		"already-dispatched combat does not enter _on_combat_over again")
 	var rng2: int = main.game.run.rng.get_state()
@@ -382,6 +385,26 @@ static func _combat_dispatch_once(fails: Array[String]) -> void:
 	_fail(fails, rng1 != rng0 or main.game.run.pending_reward != null or main.game.run.pending_run_end != null,
 		"first dispatch generated rewards or a terminal")
 	MainRoute.dispose(main)
+	SaveService.clear(run_path)
+	SaveService.clear_vigil(vigil_path)
+
+
+static func _shipped_pending_capture(fails: Array[String]) -> void:
+	# Drives the shipped map-selection / arm / SaveService freeze. Does not
+	# overwrite the unchanged-M ordinary pending archive.
+	var content: ContentDB = ContentDB.load_full(false)
+	var run_path: String = "user://dd1_capture_pending_run_v2.json"
+	var vigil_path: String = "user://dd1_capture_pending_vigil_v2.json"
+	var before: Variant = MainRoute.file_text(M_PENDING_ORDINARY_PATH)
+	var row: Dictionary = MainRoute.capture_pending_map_route(
+		content, 5420099, run_path, vigil_path)
+	_fail(fails, row.get("ok", false) == true,
+		"shipped capture_pending_map_route ok: %s" % str(row.get("reason", "")))
+	_fail(fails, _ji(row.get("seed", -1)) == 5420099, "shipped pending seed 5420099")
+	_fail(fails, row.get("pendingCombat") != null, "shipped pending has pendingCombat")
+	_fail(fails, _ji(row.get("node_count", 0)) > 0, "shipped pending has map nodes")
+	_fail(fails, MainRoute.file_text(M_PENDING_ORDINARY_PATH) == before,
+		"shipped capture does not overwrite canonical ordinary pending")
 	SaveService.clear(run_path)
 	SaveService.clear_vigil(vigil_path)
 
@@ -551,6 +574,8 @@ static func _n0_supplied_witness_accepts(fails: Array[String], content: ContentD
 		"user://dd1_absent_p0_run.json", p0_vigil_path, p5_run_path, p5_vigil_path, content)
 	_fail(fails, str(missing.get("result", "")) == "BLOCKED",
 		"N0 path BLOCKED/REJECTs a missing mandatory witness")
+	_fail(fails, str(missing.get("result", "")) != "ACCEPT",
+		"missing mandatory witness is not success")
 	var supplied: Dictionary = MainRoute.evaluate_n0_witness(
 		p0_run_path, p0_vigil_path, p5_run_path, p5_vigil_path, content)
 	_fail(fails, str(supplied.get("result", "")) == "ACCEPT",

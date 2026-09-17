@@ -5,12 +5,12 @@
       "sha256": "047be75866ae10b42b242a4016743b45c515e4c83acafe5a774cffd202563715"
     },
     "IMPLEMENTED.md": {
-      "bytes": 4881,
-      "sha256": "9e521476ab55e0fda8816ca09916e2cc78b710c960aa73a14a624a4dc5d9db48"
+      "bytes": 5020,
+      "sha256": "479d4038579de0b6aadd9c6f50978790d28e9943ad0bf700e30efaedd7057c1e"
     },
     "NATIVE-AUTHOR-HANDOFF.md": {
-      "bytes": 2050,
-      "sha256": "46af6af1355408b58ecc6c5a34a7e53b8e5f3b86aaa4eef1bb76c052d4c1b94b"
+      "bytes": 2046,
+      "sha256": "aadff5fd5b588a42dd47f2b24fdcaa5a30111cb7bc456d68ba7ac51ecb3d8a80"
     },
     "m-pending-ordinary-run-v2.json": {
       "bytes": 8316,
@@ -21,20 +21,20 @@
       "sha256": "25d4da7617c91edbfa1d35163e43248f894ec4a9a768a983e9c5887006f08c7f"
     },
     "recovery/ACCOUNT.json": {
-      "bytes": 23751,
-      "sha256": "5fd8c59eae34b012081af512b0946f3dd775d0021f11add5c28f4aabc3b0933e"
+      "bytes": 28141,
+      "sha256": "f7ccdb78402aec260a3cfbfc9fe398644c59214962b50a288fff34a95fa829a1"
     },
     "recovery/DISPOSITION.md": {
-      "bytes": 1475,
-      "sha256": "e03c9552622b0b988e3c6ff5b549119492fb4f491ae1233a91ed1332ff37548e"
+      "bytes": 1494,
+      "sha256": "abf1ecef8d37529ad3796ccf71a150c9a5a717a52d55b273572085d8e21e2ece"
     },
     "recovery/LAUNCH-RECEIPT.json": {
       "bytes": 2097,
-      "sha256": "0be31ac98df0378276754e08fa0c0f916f9fa931a11dd52f6a194f8bee7131f8"
+      "sha256": "1479b2e62f7f4e7fa0d323d0cdcc5a4a0fee356b67547fa4e44846d59da4d7e6"
     },
     "recovery/PV-TRACES.json": {
-      "bytes": 13223,
-      "sha256": "2f10fa32242ea9ba69196b69c0065c47254d19511066e4133415d274c5b177a1"
+      "bytes": 13221,
+      "sha256": "183767d1ba7698c79a6f37663ed693c38c46b34aac4bbc021d8adc33d9d22341"
     },
     "recovery/RECEIPT-BINDINGS.json": {
       "bytes": 1792,
@@ -124,6 +124,10 @@
       "bytes": 497,
       "sha256": "7ad8ad0b8c9fd41f89d69940d7be17fcab6b1866c7093045ca309ddb87711c1b"
     },
+    "recovery/m-pending-recapture.log": {
+      "bytes": 652,
+      "sha256": "8b1516c730004ffba21e0ca7a504bd4d31e31287c6c3df526255a7647ddb95aa"
+    },
     "recovery/receipts/binding-5718448223.md": {
       "bytes": 6112,
       "sha256": "831a90e638bfbd3f01a2995d3cb2ec6ad5e370cc1ebdf768ddec4b66c7e2aefd"
@@ -171,6 +175,14 @@
     "recovery/source-tests-producer-2.log": {
       "bytes": 2529,
       "sha256": "21b8912856b1da0c3f4e5ec1130a1ec4f19f7c86396ce7bd94f1d99618c44098"
+    },
+    "recovery/source-tests-witness-1.log": {
+      "bytes": 2529,
+      "sha256": "52cd4b4bede1f8b825c94969a24de5c341cb0804769eebf7c857a2deab461dc7"
+    },
+    "recovery/source-tests-witness-2.log": {
+      "bytes": 2529,
+      "sha256": "52cd4b4bede1f8b825c94969a24de5c341cb0804769eebf7c857a2deab461dc7"
     }
   },
   "schema": "DD1-N0-RECOVERY-1-BYTE-IDENTITIES-1"

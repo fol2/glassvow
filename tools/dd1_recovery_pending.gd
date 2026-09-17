@@ -53,10 +53,12 @@ func _initialize() -> void:
 	var pick: int = Pilot.choose_node(main._map, main.game.run)
 	if pick < 0 or not reachable.has(pick):
 		pick = reachable[0]
+	if not main._map.enter(pick):
+		_fail("pending: map.enter failed")
+		return
 	var n: MapNode = main._map.nodes[pick]
 	main.game.run.node_id = n.id
 	main.game.run.waystones_lit = n.row + 1
-	main._map.at = pick
 	main.game.run.map = main._map.to_dict()
 	if not main._store_run():
 		_fail("pending: chosen waystone store failed")

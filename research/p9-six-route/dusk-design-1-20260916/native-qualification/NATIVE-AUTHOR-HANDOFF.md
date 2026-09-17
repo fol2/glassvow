@@ -10,7 +10,7 @@ Overlay `research/p9-six-route/dd1-native-1-overlay` started at G=`84cd143f44923
 - Smallest meter `tools/dd1_recovery_meter.py`. Inert non-game containment PASS (exhausted / stale / empty / existence / env / CPU / output / interrupt).
 - Reader compile+runtime; once-only `Main._on_combat_over`; N0 witness ACCEPT/BLOCKED.
 - Unchanged-M pending 5420099 ordinary map-route bytes + overlay resume.
-- First-valid P_0 sequence vigil (seed 5421603). Sequence pre-terminal run ABSENT (cleared at terminal commit; replay runId differs and is stored under `recovery/replay-p0-*.json`, not as canonical P_0). P_5 absent after 5421600–5421615. Producer now persists commands/pre_terminal_run/initial_run_sha/commit_vigil; 16-root rerun NOT_PERFORMED (262 remaining starts). Incomplete stays INCOMPLETE.
-- Dual account: historical 1277/8192 remainder 6915 unspendable; recovery 1912/2048 remaining 136. Clock 2026-09-17T17:54:40Z → 2026-09-24T17:54:40Z.
+- First-valid P_0 sequence vigil (seed 5421603). Sequence pre-terminal run ABSENT (cleared at terminal commit; replay runId differs and is stored under `recovery/replay-p0-*.json`, not as canonical P_0). P_5 absent after 5421600–5421615. Producer now persists commands/pre_terminal_run/initial_run_sha/commit_vigil; 16-root rerun NOT_PERFORMED (8 remaining starts). Incomplete stays INCOMPLETE.
+- Dual account: historical 1277/8192 remainder 6915 unspendable; recovery 2040/2048 remaining 8. Clock 2026-09-17T17:54:40Z → 2026-09-24T17:54:40Z.
 
 No N1/N2, self-approval, production PR/CI, merge, or release. Do not commission the N0 reviewer until a later owner task names a complete candidate or accepts this BLOCKED handoff as the N0 input.

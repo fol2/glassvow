@@ -24,10 +24,15 @@ static func launch_permitted() -> bool:
 
 
 ## Returns true when this call actually entered Main._on_combat_over.
+## A completed combat is dispatched once: a second poll must not regenerate
+## rewards or advance RNG even if the caller passes already_dispatched=false.
 static func dispatch_combat_result_once(main: Main, already_dispatched: bool) -> bool:
 	if already_dispatched:
 		return false
 	if main.game == null or main.game.cb == null or not main.game.cb.over:
+		return false
+	if main.game.run != null and (
+			main.game.run.pending_reward != null or main.game.run.pending_run_end != null):
 		return false
 	main._on_combat_over(str(main.game.cb.result))
 	return true
@@ -538,9 +543,8 @@ static func evaluate_n0_witness(
 	}
 
 
-## Capture an unchanged-M pending encounter: map choice, arm, SaveService store.
-## Caller copies the run file immediately; this function does not resume into
-## a second store. _prepare_encounter stores before CombatScreen.apply.
+## Map-selection, encounter-arm, SaveService freeze. Does not start combat
+## or write canonical qualification artifacts.
 static func capture_pending_map_route(
 	content: ContentDB,
 	seed: int,
@@ -564,7 +568,23 @@ static func capture_pending_map_route(
 	var pick: int = Pilot.choose_node(main._map, main.game.run)
 	if pick < 0 or not reachable.has(pick):
 		pick = reachable[0]
-	main._on_node_chosen(pick)
+	if not main._map.enter(pick):
+		dispose(main)
+		return {"ok": false, "reason": "map.enter failed"}
+	var node: MapNode = main._map.nodes[pick]
+	main.game.run.node_id = node.id
+	main.game.run.waystones_lit = node.row + 1
+	main.game.run.map = main._map.to_dict()
+	if not main._store_run():
+		dispose(main)
+		return {"ok": false, "reason": "chosen waystone store failed"}
+	main._arm_encounter(node)
+	if typeof(main.game.run.pending_enemy_ids) != TYPE_ARRAY:
+		dispose(main)
+		return {"ok": false, "reason": "encounter arm produced no enemies"}
+	if not main._store_run():
+		dispose(main)
+		return {"ok": false, "reason": "armed encounter store failed"}
 	var raw: Variant = file_text(run_path)
 	var parsed: Variant = JSON.parse_string(str(raw)) if typeof(raw) == TYPE_STRING else null
 	var ok: bool = typeof(parsed) == TYPE_DICTIONARY

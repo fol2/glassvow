@@ -23,18 +23,18 @@ Starting G `84cd143f44923294e614def62de74e720598648a`. Binding [5718448223](http
 ### Pending compatibility (two cases)
 
 8. **F `m-pending-run-v2.json` remains constructed history.**
-9. **Ordinary-route pending.** Unchanged M seed **5420099**: 63 map nodes, `pendingCombat=monster`, three sporelings, 8316 bytes, SHA-256 `5b778ab57008761c14bf9ec52bc790df6135cee9b40b5e1b4eef36fc5450c6f7`. Overlay `Main._continue_run` resume PASS (matrix `native_starts=15` including that resume). Marker absent pre- and post-resume.
+9. **Ordinary-route pending.** Unchanged M seed **5420099**: 63 map nodes, `pendingCombat=monster`, three sporelings, 8316 bytes, SHA-256 `5b778ab57008761c14bf9ec52bc790df6135cee9b40b5e1b4eef36fc5450c6f7`. Recapture on M HEAD `07b5aa9d` with `map.enter` + `_arm_encounter` + SaveService emitted the same SHA. Overlay shipped `capture_pending_map_route` is tested and does not overwrite the archive. Overlay `Main._continue_run` resume PASS. Marker absent pre- and post-resume.
 
 ## Account (dual)
 
 Historical **1277 / 8192 remaining 6915** listed-event arithmetic — **not spendable**. Attempt 1/1. CPU/elapsed **UNKNOWN**. ALLOCATION `824ff18a` untouched.
 
-Recovery DD1-N0-RECOVERY-1: first engine launch **2026-09-17T17:54:40Z**, deadline **2026-09-24T17:54:40Z**. Starts **1912 / 2048** remaining **136**. Process-tree CPU **388713616993 ns**. Raw **887434** bytes of 1 GiB. One executor. Failures remain charged. No 6915 spend, no top-up. Identities: `recovery/ACCOUNT.json`, `recovery/LAUNCH-RECEIPT.json`, `recovery/BYTE-IDENTITIES.json`.
+Recovery DD1-N0-RECOVERY-1: first engine launch **2026-09-17T17:54:40Z**, deadline **2026-09-24T17:54:40Z**. Starts **2040 / 2048** remaining **8**. Process-tree CPU **398617197992 ns**. Raw **893139** bytes of 1 GiB. One executor. Failures remain charged. No 6915 spend, no top-up. Identities: `recovery/ACCOUNT.json`, `recovery/LAUNCH-RECEIPT.json`, `recovery/BYTE-IDENTITIES.json`.
 
 ## Residuals
 
 - P_5 not earned in 5421600–5421615; sequence P_0 pre-terminal run bytes ABSENT; N0 stays BLOCKED.
-- Acquire2 PV-TRACES omit commands/pre_terminal_run/initial_run_sha/commit_vigil. Producer source is fixed; 16-root rerun not performed (262 remaining starts < 330 observed).
+- Acquire2 PV-TRACES omit commands/pre_terminal_run/initial_run_sha/commit_vigil. Producer source is fixed; 16-root rerun not performed (8 remaining starts < 330 observed).
 - Live replace/expiry, overlay card art, Crosscut clipping, extraction/guardrail receipts unchanged downstream.
 - N1/N2 / 2048-run D547-NATIVE-EXPORT-2 not opened.
 - Certificates **0/3**. Isolated N0 review is not commissioned by this author batch.
