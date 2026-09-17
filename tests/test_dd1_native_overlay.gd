@@ -29,6 +29,7 @@ static func run(fails: Array[String]) -> void:
 	_r2_finale_handoff_suppresses_return(fails)
 	_r3_ordering_negative_and_bell(fails)
 	_r3_overkill_and_m_fixture(fails)
+	_r3_byte_root_controls(fails)
 	print("  DD1-NATIVE-1 native_starts=%d" % native_starts)
 
 
@@ -755,3 +756,77 @@ static func _r3_overkill_and_m_fixture(fails: Array[String]) -> void:
 	_fail(fails, resumed.cb != null and resumed.cb.crosscut_anchor == null,
 		"M-fixture pending resume is marker-free")
 	SaveService.clear(path)
+
+
+static func _r3_byte_root_controls(fails: Array[String]) -> void:
+	var game: GlassvowGame = _fight("byte-root", 0, ["sporeling"])
+	var e: EnemyCombatant = game.cb.enemies[0]
+	e.hp = 20
+	var pre: Dictionary = DuskNativeExportReader.pre_hp_map(game.cb)
+	var ev: Array[Dictionary] = _play(game, _add(game, &"strike"), 0)
+	var cap: Dictionary = _cap(game, ev, pre, "byte-root")
+	_fail(fails, cap.has("bytes") and str(cap["bytes"]).contains("\"role\""),
+		"serialized payload contains role")
+	_fail(fails, str(cap.get("digest", "")) == DuskNativeExportReader.digest_bytes(str(cap["bytes"])),
+		"bind_capture digest matches bytes")
+	var intact: Variant = DuskNativeExportReader.hit_observations(cap)
+	_fail(fails, typeof(intact) == TYPE_ARRAY and (intact as Array).size() == 1,
+		"intact byte roundtrip resolves one hit")
+	if typeof(intact) == TYPE_ARRAY and (intact as Array).size() == 1:
+		var row: Dictionary = intact[0]
+		_fail(fails, _ji(row["physicalHpLoss"]) == _ji(row["amount"]),
+			"observations match the resolved record")
+		var resolved_v: Variant = DuskNativeExportReader.resolve(row["pointer"], cap)
+		_fail(fails, typeof(resolved_v) == TYPE_DICTIONARY, "pointer resolves from bytes")
+		if typeof(resolved_v) == TYPE_DICTIONARY:
+			var resolved: Dictionary = resolved_v
+			_fail(fails, _ji(resolved.get("amount", -1)) == _ji(row["amount"]),
+				"resolved event amount equals observation")
+	var bytes_only: Dictionary = {
+		"bytes": cap["bytes"],
+		"digest": cap["digest"],
+	}
+	_fail(fails, typeof(DuskNativeExportReader.hit_observations(bytes_only)) == TYPE_ARRAY,
+		"observations succeed from bytes with companions dropped")
+	var mutated: Dictionary = cap.duplicate(true)
+	var events_v: Variant = mutated["events"]
+	var events: Array = events_v
+	var first: Dictionary = events[0].duplicate(true)
+	first["amount"] = 999
+	events[0] = first
+	mutated["events"] = events
+	_fail(fails, DuskNativeExportReader.hit_observations(mutated) == null,
+		"companion-only mutation is rejected")
+	mutated["events"] = cap["events"]
+	_fail(fails, typeof(DuskNativeExportReader.hit_observations(mutated)) == TYPE_ARRAY,
+		"restoring the companion input succeeds")
+	var digest_mismatch: Dictionary = cap.duplicate(true)
+	digest_mismatch["bytes"] = str(cap["bytes"]).replace("strike", "XXXXXX")
+	_fail(fails, DuskNativeExportReader.hit_observations(digest_mismatch) == null,
+		"bytes changed without the bound digest fail")
+	var malformed: Dictionary = cap.duplicate(true)
+	malformed["bytes"] = "{"
+	malformed["digest"] = DuskNativeExportReader.digest_bytes("{")
+	_fail(fails, DuskNativeExportReader.hit_observations(malformed) == null,
+		"malformed payload fails")
+	var wrong_role: Dictionary = {"role": "native_export/OTHER/v0", "path": ["events", 0]}
+	_fail(fails, DuskNativeExportReader.resolve(wrong_role, cap) == null,
+		"wrong capture identity/role fails")
+	var wrong_path: Dictionary = {"role": "native_export/N0/v0", "path": ["events", 99]}
+	_fail(fails, DuskNativeExportReader.resolve(wrong_path, cap) == null,
+		"wrong path fails")
+	var pub: String = "user://dd1_reader_capture_bytes.json"
+	var f: FileAccess = FileAccess.open(pub, FileAccess.WRITE)
+	_fail(fails, f != null, "could not write capture bytes")
+	if f != null:
+		f.store_string(str(cap["bytes"]))
+		f.close()
+	var qpath: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/reader-capture-bytes.json"
+	var qf: FileAccess = FileAccess.open(qpath, FileAccess.WRITE)
+	if qf != null:
+		qf.store_string(JSON.stringify({
+			"digest": cap["digest"],
+			"bytes": cap["bytes"],
+			"tag": "byte-root",
+		}))
+		qf.close()

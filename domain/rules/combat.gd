@@ -17,6 +17,8 @@ var research_mask_printed_chip: bool = false
 var research_mask_echo: bool = false
 var research_mask_anchor: bool = false
 var research_mask_return: bool = false
+## Joint mediator off: chips still land; Stun AND Cracked stay bundled (neither applies).
+var research_mask_shatter: bool = false
 
 const SPECIAL_IDS: Array[String] = [
 	"leech", "execute", "momentum", "doubleBlock", "phantom", "devour",
@@ -688,6 +690,8 @@ func apply_chips(run: RunState, cb: CombatState, e: EnemyCombatant, n: int) -> v
 		"chips": mini(e.chips, e.facet_max),
 		"facetMax": e.facet_max,
 	})
+	if research_mask_shatter:
+		return
 	while e.chips >= e.facet_max and e.hp > 0:
 		e.chips -= e.facet_max
 		_shatter_enemy(run, cb, e)
