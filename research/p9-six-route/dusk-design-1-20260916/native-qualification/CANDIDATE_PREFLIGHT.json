@@ -5,7 +5,7 @@
   "r0_reconciled_at_utc": "2026-09-16T22:40:00Z",
   "author_batch_5706552165_at_utc": "2026-09-17T01:40:00Z",
   "exact_pre_next_invocation": {
-    "note": "INV-10/11 already executed at 92da314. Do not attach that SHA to INV-1..6.",
+    "note": "INV-10 executed at 92da314. INV-11 is a later distinct process frozen at 901023cf + dirty IMPLEMENTED.md before launch (pre-invocation-INV-11.json). Do not attach those SHAs to INV-1..6.",
     "coherent_PASS_pair": "92da314c066b84fc565c428cbbda03375ef03481",
     "test_dd1_blob": "1daa3f8f7c16f9e7237251fad38cda46c32960d0",
     "matrix_test_blob": "5411fef977049782dd93aee2a193fe180b349695",

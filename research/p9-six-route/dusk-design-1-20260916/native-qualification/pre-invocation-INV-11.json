@@ -1,0 +1,36 @@
+{
+  "invocation": "DD1-N0-INV-11",
+  "bound_at_utc": "2026-09-17T01:55:47Z",
+  "bound_local": "2026-09-17T02:55:47+0100",
+  "HEAD": "901023cfb86e824efc170c0ba0476888bab48dea",
+  "tree": "2d81c72a1101a543b47cd91d7737309a46307441",
+  "porcelain": "M research/p9-six-route/dusk-design-1-20260916/native-qualification/IMPLEMENTED.md\n?? research/p9-six-route/dusk-design-1-20260916/native-qualification/dd1-cards-catalog.png.import\n?? research/p9-six-route/dusk-design-1-20260916/native-qualification/dd1-cards.png.import\n?? research/p9-six-route/dusk-design-1-20260916/native-qualification/dd1-fight-constructed.png.import\n?? research/p9-six-route/dusk-design-1-20260916/native-qualification/dd1-fight.png.import\n?? research/p9-six-route/dusk-design-1-20260916/native-qualification/dd1-live-armed.png.import\n?? research/p9-six-route/dusk-design-1-20260916/native-qualification/dd1-live-consumed.png.import\n?? research/p9-six-route/dusk-design-1-20260916/native-qualification/dd1-live-crosscut-armed.png.import\n?? research/p9-six-route/dusk-design-1-20260916/native-qualification/dd1-live-marked.png.import",
+  "dirty_blobs": {
+    "research/p9-six-route/dusk-design-1-20260916/native-qualification/IMPLEMENTED.md": "41c4359e4132d5cd206938324e3ac3676a403ecd"
+  },
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "command": "godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_dd1_native_overlay.gd,res://tests/test_dd1_native_matrix.gd",
+  "input": {
+    "tests": [
+      "res://tests/test_dd1_native_overlay.gd",
+      "res://tests/test_dd1_native_matrix.gd"
+    ],
+    "M_pending_path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/m-pending-run-v2.json",
+    "pv_seeds": "5421600..5421615",
+    "isolated_user": [
+      "user://dd1_native_pv_*",
+      "user://dd1_native_abandon_*",
+      "user://dd1_native_m_pending_*",
+      "user://dd1_reader_capture_bytes.json"
+    ]
+  },
+  "runtime_blobs": {
+    "combat.gd": "4288f589fab3dba90fbd94cb04c49e0d88c0131d",
+    "reader": "6c08fc23eff8871468167b36d61523437c4dd908",
+    "overlay_test": "1daa3f8f7c16f9e7237251fad38cda46c32960d0",
+    "matrix_test": "5411fef977049782dd93aee2a193fe180b349695",
+    "content": "81aa6473cf9c95525416fa93e79e339c33d105af"
+  },
+  "containment": "headless; isolated user:// paths inside tests; default saves snapshotted",
+  "note": "Distinct second process. No future output digests in this freeze. IMPLEMENTED.md dirty only for matrix blob 5411fef9 correction."
+}

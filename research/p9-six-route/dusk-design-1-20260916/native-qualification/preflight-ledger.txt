@@ -51,7 +51,9 @@ AUTHORITY FOR FURTHER NATIVE CALLS
 ---
 5706552165 author batch (2026-09-17)
   PASS-pair HEAD 92da314c066b84fc565c428cbbda03375ef03481
-  INV-10/11 identical PASS (2 tests) native_starts=201+45 log blob d722fd0d…
+  INV-10 PASS (2 tests) native_starts=201+45 log blob d722fd0d…
+  INV-11 distinct Godot process 2026-09-17 02:56:02–02:56:05 /usr/bin/time real 2.32; same PASS counts; stdout not a copy of INV-10
+  matrix blob 5411fef977049782dd93aee2a193fe180b349695
   used 1277 / remaining 6915 / cap 8192
   attempt 1/1 not reset
   CPU/elapsed still UNKNOWN; conservative +8 invocations × 300s

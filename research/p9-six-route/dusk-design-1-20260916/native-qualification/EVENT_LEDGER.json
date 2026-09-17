@@ -21,7 +21,7 @@
     "raw_emitted_bytes_measured_logs": 4553,
     "raw_emitted_bytes_this_batch_logs_and_pngs": "UNKNOWN_FULL",
     "executors": 1,
-    "per_invocation_cpu_seconds_max_observed": "UNKNOWN; INV-10/11 identical PASS pair; matrix campaigns finished"
+    "per_invocation_cpu_seconds_max_observed": "UNKNOWN; INV-11 /usr/bin/time real 2.32 user 1.77 (distinct process 2026-09-17 02:56:02–02:56:05)"
   },
   "events": [
     {"id": "DD1-N0-INV-1", "native_starts": 30, "result": "FAIL fixture HP", "log": "native-tests-0-fixture-hp.log"},
@@ -46,7 +46,7 @@
     {"id": "DD1-N0-MATRIX-P5-CAP", "native_starts": 153, "result": "FAIL P_5 at 8 seeds; P_0 earned; named traces kept"},
     {"id": "DD1-N0-MATRIX-16", "native_starts": 201, "result": "PASS matrix; P_0 seed 5421601; P_5 seed 5421609"},
     {"id": "DD1-N0-INV-10", "native_starts": 246, "result": "PASS (2 tests) overlay+matrix identical pair", "log": "native-tests-1.log", "head": "92da314c066b84fc565c428cbbda03375ef03481"},
-    {"id": "DD1-N0-INV-11", "native_starts": 246, "result": "PASS identical to INV-10", "log": "native-tests-2.log", "head": "92da314c066b84fc565c428cbbda03375ef03481"}
+    {"id": "DD1-N0-INV-11", "native_starts": 246, "result": "PASS (2 tests) distinct process; native_starts=201+45; /usr/bin/time real 2.32; stdout not a copy of INV-10", "log": "native-tests-2.log", "time": "native-tests-2.time", "pre_invocation": "pre-invocation-INV-11.json", "head": "901023cfb86e824efc170c0ba0476888bab48dea", "bound_at_utc": "2026-09-17T01:55:47Z", "local_start": "2026-09-17 02:56:02", "local_end": "2026-09-17 02:56:05"}
   ],
   "not_opened": ["development", "confirmation", "counterfactual", "policy_fitting", "#548"],
   "certificates": "0/3 Duskblade"

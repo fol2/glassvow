@@ -6,6 +6,6 @@ Sole local author. Continues activation 5704631815 / task 5704445133 / N0 contra
 
 D=`746388323b8e886967e0e13fe109490a70206a66` C=`cf27285a3103d8867a179f700c5ebf32661453d5` H=`5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6` ALLOCATION `824ff18acbca2f776533beed83a43b21d9a50f2c` byte-identical. Attempt 1/1 not reset. Preflight **1277/8192 remaining 6915**. Certificates **0/3**.
 
-Four findings: (1) byte-root reader; (2) per-invocation identities; (3) ordinary P_0/P_5; (4) PROMOTION §3 matrix including unmodified M pending. See IMPLEMENTED.md, EVENT_LEDGER.json, CANDIDATE_PREFLIGHT.json, pv-ledgers.json, m-pending-run-v2.json, reader-capture-bytes.json, native-tests-1.log / native-tests-2.log (identical blob `d722fd0d88f6f84f6a0a58cbde0e55d99fd41f6a`).
+Four findings: (1) byte-root reader; (2) per-invocation identities; (3) ordinary P_0/P_5; (4) PROMOTION §3 matrix including unmodified M pending. See IMPLEMENTED.md, EVENT_LEDGER.json, CANDIDATE_PREFLIGHT.json, pv-ledgers.json, m-pending-run-v2.json, reader-capture-bytes.json, native-tests-1.log (INV-10) and native-tests-2.log (INV-11 distinct process, `native-tests-2.time` real 2.32s). Matrix test blob `5411fef977049782dd93aee2a193fe180b349695`.
 
 No development, confirmation, self-approval, production PR, merge or release. Later isolated review evaluates this new head.

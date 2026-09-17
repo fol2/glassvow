@@ -5,14 +5,6 @@ Sentry: DEBUG: Automatic initialization is disabled in the project settings.
 Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
   DD1-NATIVE-1-matrix native_starts=201
 ok   res://tests/test_dd1_native_matrix.gd
-ERROR: Parse JSON failed. Error at line 0: Expected '}'
-   at: parse_string (core/io/json.cpp:629)
-   GDScript backtrace (most recent call first):
-       [0] decoded_payload (res://tests/support/dusk_native_export_reader.gd:65)
-       [1] hit_observations (res://tests/support/dusk_native_export_reader.gd:111)
-       [2] _r3_byte_root_controls (res://tests/test_dd1_native_overlay.gd:813)
-       [3] run (res://tests/test_dd1_native_overlay.gd:32)
-       [4] _initialize (res://tests/run_all.gd:17)
   DD1-NATIVE-1 native_starts=45
 ok   res://tests/test_dd1_native_overlay.gd
 PASS (2 tests)
