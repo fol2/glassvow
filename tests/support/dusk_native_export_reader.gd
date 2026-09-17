@@ -4,10 +4,36 @@ extends RefCounted
 ## Serialized `bytes` are the sole resolution/observation root. Companion
 ## dictionaries, if retained, must match the decoded payload or the capture
 ## is rejected. Does not edit H or claim 2048-run qualification.
+##
+## Fail-closed: required digest before parse; a non-dictionary event rejects
+## the whole capture; integer fields accept only an int or a finite float
+## exactly equal to that integer; play_observations returns null on failure
+## and a successful empty Array when a well-formed capture has no play events.
 
 
-static func _ji(v: Variant) -> int:
-	return int(float(str(v)))
+static func exact_int(v: Variant) -> Variant:
+	match typeof(v):
+		TYPE_INT:
+			return v
+		TYPE_FLOAT:
+			var f: float = v
+			if is_inf(f) or is_nan(f):
+				return null
+			var n: int = int(f)
+			if float(n) != f:
+				return null
+			return n
+		_:
+			return null
+
+
+static func object_index_key(k: Variant) -> Variant:
+	if typeof(k) == TYPE_STRING or typeof(k) == TYPE_STRING_NAME:
+		var s: String = str(k)
+		if s.is_valid_int():
+			return s.to_int()
+		return null
+	return exact_int(k)
 
 
 static func digest_bytes(bytes: String) -> String:
@@ -36,7 +62,14 @@ static func bind_capture(
 		serial_events.append(row)
 	var serial_pre: Dictionary = {}
 	for k: Variant in pre.keys():
-		serial_pre[str(_ji(k))] = _ji(pre[k])
+		var idx_v: Variant = object_index_key(k)
+		var val_v: Variant = exact_int(pre[k])
+		if idx_v == null or val_v == null:
+			return {}
+		var idx: int = idx_v
+		if serial_pre.has(str(idx)):
+			return {}
+		serial_pre[str(idx)] = val_v
 	var payload: Dictionary = {
 		"role": role,
 		"identity": ident,
@@ -55,18 +88,25 @@ static func bind_capture(
 
 
 static func decoded_payload(capture: Dictionary) -> Variant:
+	if not capture.has("digest"):
+		return null
+	if typeof(capture["digest"]) != TYPE_STRING:
+		return null
+	var claimed: String = capture["digest"]
+	if claimed.is_empty():
+		return null
 	if not capture.has("bytes") or typeof(capture["bytes"]) != TYPE_STRING:
 		return null
-	var bytes: String = str(capture["bytes"])
+	var bytes: String = capture["bytes"]
 	if bytes.is_empty():
 		return null
-	if capture.has("digest") and str(capture["digest"]) != digest_bytes(bytes):
+	if claimed != digest_bytes(bytes):
 		return null
 	var parsed: Variant = JSON.parse_string(bytes)
 	if typeof(parsed) != TYPE_DICTIONARY:
 		return null
 	var payload: Dictionary = _normalize_payload(parsed)
-	if not payload.has("events") or not payload.has("pre_hp") or not payload.has("identity"):
+	if payload.is_empty():
 		return null
 	if _companions_present(capture) and not _companions_match(capture, payload):
 		return null
@@ -87,18 +127,21 @@ static func resolve(pointer: Dictionary, capture: Dictionary) -> Variant:
 		var step: String = str(step_v)
 		if typeof(node) == TYPE_DICTIONARY:
 			var d: Dictionary = node
-			if not d.has(step):
-				# JSON object keys are strings; integer event idx stays numeric in path.
-				if not step.is_valid_int() or not d.has(_ji(step)):
-					return null
-				node = d[_ji(step)]
-			else:
+			if d.has(step):
 				node = d[step]
+			else:
+				var idx_v: Variant = object_index_key(step)
+				if idx_v == null or not d.has(idx_v):
+					return null
+				node = d[idx_v]
 		elif typeof(node) == TYPE_ARRAY:
 			var arr: Array = node
-			if not step.is_valid_int():
+			var idx_v: Variant = exact_int(step_v)
+			if idx_v == null and step.is_valid_int():
+				idx_v = step.to_int()
+			if idx_v == null:
 				return null
-			var idx: int = int(step)
+			var idx: int = idx_v
 			if idx < 0 or idx >= arr.size():
 				return null
 			node = arr[idx]
@@ -127,11 +170,23 @@ static func hit_observations(capture: Dictionary) -> Variant:
 			continue
 		if not ev.has("idx") or not ev.has("amount") or not ev.has("hpAfter") or not ev.has("overkill"):
 			return null
-		var idx: int = _ji(ev["idx"])
+		var idx_v: Variant = exact_int(ev["idx"])
+		var amount_v: Variant = exact_int(ev["amount"])
+		var hp_after_v: Variant = exact_int(ev["hpAfter"])
+		var overkill_v: Variant = exact_int(ev["overkill"])
+		if idx_v == null or amount_v == null or hp_after_v == null or overkill_v == null:
+			return null
+		var idx: int = idx_v
 		if not hp.has(idx):
 			return null
-		var hp_after: int = _ji(ev["hpAfter"])
-		var before: int = _ji(hp[idx])
+		var before_v: Variant = exact_int(hp[idx])
+		if before_v == null:
+			return null
+		var hp_after: int = hp_after_v
+		var before: int = before_v
+		var blocked_v: Variant = exact_int(ev.get("blocked", 0))
+		if blocked_v == null:
+			return null
 		var physical: int = maxi(0, before - hp_after)
 		hp[idx] = hp_after
 		var ptr: Dictionary = {
@@ -143,10 +198,10 @@ static func hit_observations(capture: Dictionary) -> Variant:
 		out.append({
 			"seq": seq,
 			"idx": idx,
-			"amount": _ji(ev["amount"]),
-			"blocked": _ji(ev.get("blocked", 0)),
+			"amount": amount_v,
+			"blocked": blocked_v,
 			"hpAfter": hp_after,
-			"overkill": _ji(ev["overkill"]),
+			"overkill": overkill_v,
 			"dead": ev.get("dead", false) == true,
 			"physicalHpLoss": physical,
 			"pointer": ptr,
@@ -155,13 +210,13 @@ static func hit_observations(capture: Dictionary) -> Variant:
 	return out
 
 
-static func play_observations(capture: Dictionary) -> Array:
+static func play_observations(capture: Dictionary) -> Variant:
 	var root_v: Variant = decoded_payload(capture)
 	if typeof(root_v) != TYPE_DICTIONARY:
-		return []
+		return null
 	var payload: Dictionary = root_v
 	if typeof(payload["events"]) != TYPE_ARRAY:
-		return []
+		return null
 	var events: Array = payload["events"]
 	var role: String = str(payload.get("role", ""))
 	var out: Array = []
@@ -170,13 +225,16 @@ static func play_observations(capture: Dictionary) -> Array:
 		var ev: Dictionary = events[i]
 		if str(ev.get("t", "")) != "play":
 			continue
+		var uid_v: Variant = exact_int(ev.get("uid", -1))
+		if uid_v == null:
+			return null
 		var ptr: Dictionary = {
 			"role": role,
 			"path": ["events", i],
 		}
 		out.append({
 			"seq": seq,
-			"uid": _ji(ev.get("uid", -1)),
+			"uid": uid_v,
 			"id": str(ev.get("id", "")),
 			"targetIdx": ev.get("targetIdx"),
 			"pointer": ptr,
@@ -189,9 +247,16 @@ static func play_observations(capture: Dictionary) -> Array:
 static func chip_order(events: Array) -> Array:
 	var out: Array = []
 	for ev_v: Variant in events:
+		if typeof(ev_v) != TYPE_DICTIONARY:
+			continue
 		var ev: Dictionary = ev_v
-		if str(ev.get("t", "")) == "chip":
-			out.append({"idx": _ji(ev.get("idx", -1)), "n": _ji(ev.get("n", 0))})
+		if str(ev.get("t", "")) != "chip":
+			continue
+		var idx_v: Variant = exact_int(ev.get("idx", -1))
+		var n_v: Variant = exact_int(ev.get("n", 0))
+		if idx_v == null or n_v == null:
+			return []
+		out.append({"idx": idx_v, "n": n_v})
 	return out
 
 
@@ -204,6 +269,8 @@ static func ordinary_hits_precede_first_chip(events: Array, expected_hits: int) 
 	var hits_before: int = 0
 	var saw_chip: bool = false
 	for ev_v: Variant in events:
+		if typeof(ev_v) != TYPE_DICTIONARY:
+			return false
 		var ev: Dictionary = ev_v
 		var t: String = str(ev.get("t", ""))
 		if t == "chip":
@@ -249,23 +316,30 @@ static func _normalize_payload(raw_v: Variant) -> Dictionary:
 	var role: String = str(raw.get("role", ident.get("role", "")))
 	if role.is_empty():
 		return {}
-	var pre_v: Variant = raw.get("pre_hp", {})
+	if not raw.has("pre_hp") or typeof(raw["pre_hp"]) != TYPE_DICTIONARY:
+		return {}
+	if not raw.has("events") or typeof(raw["events"]) != TYPE_ARRAY:
+		return {}
+	var pre: Dictionary = raw["pre_hp"]
 	var pre_out: Dictionary = {}
-	if typeof(pre_v) == TYPE_DICTIONARY:
-		var pre: Dictionary = pre_v
-		for k: Variant in pre.keys():
-			pre_out[_ji(k)] = _ji(pre[k])
-	var events_v: Variant = raw.get("events", [])
+	for k: Variant in pre.keys():
+		var idx_v: Variant = object_index_key(k)
+		var val_v: Variant = exact_int(pre[k])
+		if idx_v == null or val_v == null:
+			return {}
+		if pre_out.has(idx_v):
+			return {}
+		pre_out[idx_v] = val_v
 	var events_out: Array = []
-	if typeof(events_v) == TYPE_ARRAY:
-		for ev_v: Variant in events_v:
-			if typeof(ev_v) != TYPE_DICTIONARY:
-				continue
-			var ev: Dictionary = ev_v
-			ev = ev.duplicate(true)
-			if ev.has("t"):
-				ev["t"] = str(ev["t"])
-			events_out.append(ev)
+	for ev_v: Variant in raw["events"]:
+		if typeof(ev_v) != TYPE_DICTIONARY:
+			return {}
+		var ev: Dictionary = ev_v.duplicate(true)
+		if ev.has("t"):
+			ev["t"] = str(ev["t"])
+		if not _integer_fields_ok(ev):
+			return {}
+		events_out.append(ev)
 	return {
 		"role": role,
 		"identity": ident.duplicate(true),
@@ -274,11 +348,31 @@ static func _normalize_payload(raw_v: Variant) -> Dictionary:
 	}
 
 
-static func _same(a: Variant, b: Variant) -> bool:
-	if typeof(a) == TYPE_INT or typeof(a) == TYPE_FLOAT:
-		if typeof(b) != TYPE_INT and typeof(b) != TYPE_FLOAT:
+static func _integer_fields_ok(ev: Dictionary) -> bool:
+	var keys: Array[String] = [
+		"idx", "amount", "hpAfter", "overkill", "blocked", "uid", "n", "chips",
+	]
+	for key: String in keys:
+		if not ev.has(key) or ev[key] == null:
+			continue
+		if exact_int(ev[key]) == null:
 			return false
-		return _ji(a) == _ji(b)
+	return true
+
+
+static func _is_number(v: Variant) -> bool:
+	return typeof(v) == TYPE_INT or typeof(v) == TYPE_FLOAT
+
+
+static func _same(a: Variant, b: Variant) -> bool:
+	if _is_number(a) or _is_number(b):
+		if not _is_number(a) or not _is_number(b):
+			return false
+		var fa: float = float(a)
+		var fb: float = float(b)
+		if is_inf(fa) or is_nan(fa) or is_inf(fb) or is_nan(fb):
+			return false
+		return fa == fb
 	if typeof(a) == TYPE_STRING_NAME or typeof(b) == TYPE_STRING_NAME \
 			or typeof(a) == TYPE_STRING or typeof(b) == TYPE_STRING:
 		return str(a) == str(b)

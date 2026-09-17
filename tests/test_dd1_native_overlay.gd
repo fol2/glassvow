@@ -532,7 +532,11 @@ static func _marker_and_export_reader(fails: Array[String]) -> void:
 	_fail(fails, src.contains("set_crosscut_anchor") and src.contains("_crosscut_mark"),
 		"marker source exists")
 	var cap: Dictionary = _cap(game, game.cb.queue, DuskNativeExportReader.pre_hp_map(game.cb), "marker")
-	var plays: Array = DuskNativeExportReader.play_observations(cap)
+	var plays_v: Variant = DuskNativeExportReader.play_observations(cap)
+	_fail(fails, typeof(plays_v) == TYPE_ARRAY, "play_observations succeeds on a well-formed capture")
+	if typeof(plays_v) != TYPE_ARRAY:
+		return
+	var plays: Array = plays_v
 	_fail(fails, plays.size() >= 2, "reader binds ordered play pointers")
 	if plays.size() >= 2:
 		_fail(fails, str(plays[0]["id"]) == "setTheAngle", "first play is producer")
@@ -758,34 +762,200 @@ static func _r3_overkill_and_m_fixture(fails: Array[String]) -> void:
 	SaveService.clear(path)
 
 
+static func _retained_capture() -> Dictionary:
+	var path: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/reader-capture-bytes.json"
+	var raw: String = FileAccess.get_file_as_string(path)
+	var parsed: Variant = JSON.parse_string(raw)
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return {}
+	return parsed
+
+
+static func _capture_from_payload(payload: Dictionary) -> Dictionary:
+	var bytes: String = JSON.stringify(payload)
+	return {
+		"bytes": bytes,
+		"digest": DuskNativeExportReader.digest_bytes(bytes),
+	}
+
+
+static func _assert_retained_hit(fails: Array[String], cap: Dictionary, tag: String) -> void:
+	var intact: Variant = DuskNativeExportReader.hit_observations(cap)
+	if typeof(intact) != TYPE_ARRAY:
+		_fail(fails, false, "%s hit_observations succeed" % tag)
+		return
+	var obs: Array = intact
+	_fail(fails, obs.size() == 1, "%s resolves one hit" % tag)
+	if obs.is_empty():
+		return
+	var row: Dictionary = obs[0]
+	_fail(fails, _ji(row["idx"]) == 0, "%s hit idx 0" % tag)
+	_fail(fails, _ji(row["amount"]) == 6, "%s amount 6" % tag)
+	_fail(fails, _ji(row["physicalHpLoss"]) == 6, "%s physical 6 not overkill" % tag)
+	_fail(fails, _ji(row["overkill"]) == 0, "%s overkill 0" % tag)
+	var ptr: Dictionary = row["pointer"]
+	var path_v: Variant = ptr.get("path", [])
+	_fail(fails, typeof(path_v) == TYPE_ARRAY, "%s pointer path is an array" % tag)
+	if typeof(path_v) == TYPE_ARRAY:
+		var path: Array = path_v
+		_fail(fails, path.size() == 2 and str(path[0]) == "events" and _ji(path[1]) == 2,
+			"%s hit ordinal 2" % tag)
+	var plays_v: Variant = DuskNativeExportReader.play_observations(cap)
+	_fail(fails, typeof(plays_v) == TYPE_ARRAY, "%s play_observations is an array" % tag)
+	if typeof(plays_v) == TYPE_ARRAY:
+		var plays: Array = plays_v
+		_fail(fails, plays.size() == 1, "%s one play event" % tag)
+
+
 static func _r3_byte_root_controls(fails: Array[String]) -> void:
+	var retained: Dictionary = _retained_capture()
+	_fail(fails, retained.has("bytes") and retained.has("digest"),
+		"retained F capture file is readable")
+	if not retained.has("bytes"):
+		return
+	_fail(fails, str(retained["digest"]) == DuskNativeExportReader.digest_bytes(str(retained["bytes"])),
+		"retained digest is the SHA-256 of bytes (integrity, not issuer auth)")
+	var payload_v: Variant = JSON.parse_string(str(retained["bytes"]))
+	_fail(fails, typeof(payload_v) == TYPE_DICTIONARY, "retained bytes decode")
+	if typeof(payload_v) != TYPE_DICTIONARY:
+		return
+	var payload: Dictionary = payload_v
+	var evs: Array = payload.get("events", [])
+	_fail(fails, evs.size() == 5, "retained five events")
+	if evs.size() >= 5:
+		_fail(fails, str(evs[0].get("t", "")) == "play"
+				and str(evs[1].get("t", "")) == "energy"
+				and str(evs[2].get("t", "")) == "hitEnemy"
+				and str(evs[3].get("t", "")) == "chip"
+				and str(evs[4].get("t", "")) == "toDiscard",
+			"retained event ordinals play/energy/hitEnemy/chip/toDiscard")
+	var pre: Dictionary = payload.get("pre_hp", {})
+	_fail(fails, pre.has("0") and DuskNativeExportReader.exact_int(pre["0"]) == 20,
+		"retained pre_hp canonical string index key 0")
+	_assert_retained_hit(fails, retained, "intact retained")
+	# Missing required digest rejects before observations.
+	var no_digest: Dictionary = retained.duplicate(true)
+	no_digest.erase("digest")
+	_fail(fails, DuskNativeExportReader.decoded_payload(no_digest) == null,
+		"missing digest rejects before observations")
+	_fail(fails, DuskNativeExportReader.hit_observations(no_digest) == null,
+		"missing digest yields null hits")
+	var plays_missing: Variant = DuskNativeExportReader.play_observations(no_digest)
+	_fail(fails, plays_missing == null, "missing digest play_observations is null")
+	_fail(fails, typeof(plays_missing) != TYPE_ARRAY,
+		"invalid play_observations is not an empty-success array")
+	_assert_retained_hit(fails, retained, "restore after missing digest")
+	# Malformed digest type.
+	var bad_digest_type: Dictionary = retained.duplicate(true)
+	bad_digest_type["digest"] = 1
+	_fail(fails, DuskNativeExportReader.decoded_payload(bad_digest_type) == null,
+		"non-string digest rejects")
+	_assert_retained_hit(fails, retained, "restore after malformed digest")
+	# Mismatching digest.
+	var mismatch: Dictionary = retained.duplicate(true)
+	mismatch["digest"] = "0".repeat(64)
+	_fail(fails, DuskNativeExportReader.decoded_payload(mismatch) == null,
+		"mismatching digest rejects")
+	_assert_retained_hit(fails, retained, "restore after digest mismatch")
+	# Non-dictionary event anywhere rejects the whole capture (no drop/reindex).
+	var with_gap: Dictionary = payload.duplicate(true)
+	var gapped: Array = evs.duplicate()
+	gapped.insert(2, "not-a-dict")
+	with_gap["events"] = gapped
+	var gapped_cap: Dictionary = _capture_from_payload(with_gap)
+	_fail(fails, DuskNativeExportReader.decoded_payload(gapped_cap) == null,
+		"non-dict event rejects the whole capture")
+	_fail(fails, DuskNativeExportReader.hit_observations(gapped_cap) == null,
+		"non-dict event does not reindex the hit")
+	_assert_retained_hit(fails, retained, "restore after non-dict insert")
+	# 1.9 in a compared integer field rejects; 1.9 is not 1.
+	var frac: Dictionary = payload.duplicate(true)
+	var frac_events: Array = evs.duplicate(true)
+	var chip: Dictionary = frac_events[3].duplicate(true)
+	chip["n"] = 1.9
+	frac_events[3] = chip
+	frac["events"] = frac_events
+	var frac_cap: Dictionary = _capture_from_payload(frac)
+	_fail(fails, DuskNativeExportReader.decoded_payload(frac_cap) == null,
+		"fractional integer field 1.9 rejects")
+	_fail(fails, DuskNativeExportReader.hit_observations(frac_cap) == null,
+		"1.9 is not truncated to 1")
+	_assert_retained_hit(fails, retained, "restore after 1.9")
+	# Boolean in an integer field rejects.
+	var bool_payload: Dictionary = payload.duplicate(true)
+	var bool_events: Array = evs.duplicate(true)
+	var hit: Dictionary = bool_events[2].duplicate(true)
+	hit["amount"] = true
+	bool_events[2] = hit
+	bool_payload["events"] = bool_events
+	var bool_cap: Dictionary = _capture_from_payload(bool_payload)
+	_fail(fails, DuskNativeExportReader.decoded_payload(bool_cap) == null,
+		"boolean in an integer field rejects")
+	_assert_retained_hit(fails, retained, "restore after boolean amount")
+	# Arbitrary numeric string in an integer field rejects.
+	var str_payload: Dictionary = payload.duplicate(true)
+	var str_events: Array = evs.duplicate(true)
+	var hit_s: Dictionary = str_events[2].duplicate(true)
+	hit_s["amount"] = "6"
+	str_events[2] = hit_s
+	str_payload["events"] = str_events
+	var str_cap: Dictionary = _capture_from_payload(str_payload)
+	_fail(fails, DuskNativeExportReader.decoded_payload(str_cap) == null,
+		"numeric string in an integer field rejects")
+	_assert_retained_hit(fails, retained, "restore after string amount")
+	# Object-index key collision rejects rather than merging.
+	var collide: Dictionary = retained.duplicate(true)
+	collide["pre_hp"] = {0: 20, "0": 21}
+	_fail(fails, DuskNativeExportReader.decoded_payload(collide) == null,
+		"object-index key collision rejects")
+	_assert_retained_hit(fails, retained, "restore after key collision")
+	# Malformed bytes.
+	var malformed: Dictionary = retained.duplicate(true)
+	malformed["bytes"] = "{"
+	malformed["digest"] = DuskNativeExportReader.digest_bytes("{")
+	_fail(fails, DuskNativeExportReader.hit_observations(malformed) == null,
+		"malformed payload fails")
+	var malformed_plays: Variant = DuskNativeExportReader.play_observations(malformed)
+	_fail(fails, malformed_plays == null, "malformed play_observations is null not []")
+	_assert_retained_hit(fails, retained, "restore after malformed bytes")
+	# Wrong context/path.
+	var wrong_role: Dictionary = {"role": "native_export/OTHER/v0", "path": ["events", 2]}
+	_fail(fails, DuskNativeExportReader.resolve(wrong_role, retained) == null,
+		"wrong capture identity/role fails")
+	var wrong_path: Dictionary = {"role": "native_export/N0/v0", "path": ["events", 99]}
+	_fail(fails, DuskNativeExportReader.resolve(wrong_path, retained) == null,
+		"wrong path fails")
+	_assert_retained_hit(fails, retained, "restore after wrong context")
+	# Valid capture with no play events: successful empty list, not failure.
+	var no_play_payload: Dictionary = payload.duplicate(true)
+	var no_play_events: Array = []
+	for row_v: Variant in evs:
+		var row: Dictionary = row_v
+		if str(row.get("t", "")) == "play":
+			continue
+		no_play_events.append(row)
+	no_play_payload["events"] = no_play_events
+	var no_play_cap: Dictionary = _capture_from_payload(no_play_payload)
+	var no_play_v: Variant = DuskNativeExportReader.play_observations(no_play_cap)
+	_fail(fails, typeof(no_play_v) == TYPE_ARRAY, "valid no-play capture succeeds")
+	if typeof(no_play_v) == TYPE_ARRAY:
+		var no_play: Array = no_play_v
+		_fail(fails, no_play.is_empty(), "valid no-play is a successful empty list")
+	_fail(fails, typeof(DuskNativeExportReader.hit_observations(no_play_cap)) == TYPE_ARRAY,
+		"valid no-play still yields hit observations")
+	# Live bind_capture roundtrip and companion controls (does not rewrite the retained file).
 	var game: GlassvowGame = _fight("byte-root", 0, ["sporeling"])
 	var e: EnemyCombatant = game.cb.enemies[0]
 	e.hp = 20
-	var pre: Dictionary = DuskNativeExportReader.pre_hp_map(game.cb)
-	var ev: Array[Dictionary] = _play(game, _add(game, &"strike"), 0)
-	var cap: Dictionary = _cap(game, ev, pre, "byte-root")
+	var live_pre: Dictionary = DuskNativeExportReader.pre_hp_map(game.cb)
+	var live_ev: Array[Dictionary] = _play(game, _add(game, &"strike"), 0)
+	var cap: Dictionary = _cap(game, live_ev, live_pre, "byte-root")
 	_fail(fails, cap.has("bytes") and str(cap["bytes"]).contains("\"role\""),
 		"serialized payload contains role")
 	_fail(fails, str(cap.get("digest", "")) == DuskNativeExportReader.digest_bytes(str(cap["bytes"])),
 		"bind_capture digest matches bytes")
-	var intact: Variant = DuskNativeExportReader.hit_observations(cap)
-	if typeof(intact) != TYPE_ARRAY:
-		_fail(fails, false, "intact byte roundtrip resolves one hit")
-	else:
-		var obs: Array = intact
-		_fail(fails, obs.size() == 1, "intact byte roundtrip resolves one hit")
-		if obs.size() == 1:
-			var row: Dictionary = obs[0]
-			_fail(fails, _ji(row["physicalHpLoss"]) == _ji(row["amount"]),
-				"observations match the resolved record")
-			var p0: Dictionary = row["pointer"]
-			var resolved_v: Variant = DuskNativeExportReader.resolve(p0, cap)
-			_fail(fails, typeof(resolved_v) == TYPE_DICTIONARY, "pointer resolves from bytes")
-			if typeof(resolved_v) == TYPE_DICTIONARY:
-				var resolved: Dictionary = resolved_v
-				_fail(fails, _ji(resolved.get("amount", -1)) == _ji(row["amount"]),
-					"resolved event amount equals observation")
+	var live_hits: Variant = DuskNativeExportReader.hit_observations(cap)
+	_fail(fails, typeof(live_hits) == TYPE_ARRAY, "live byte roundtrip resolves hits")
 	var bytes_only: Dictionary = {
 		"bytes": cap["bytes"],
 		"digest": cap["digest"],
@@ -803,33 +973,11 @@ static func _r3_byte_root_controls(fails: Array[String]) -> void:
 	mutated["events"] = cap["events"]
 	_fail(fails, typeof(DuskNativeExportReader.hit_observations(mutated)) == TYPE_ARRAY,
 		"restoring the companion input succeeds")
-	var digest_mismatch: Dictionary = cap.duplicate(true)
-	digest_mismatch["bytes"] = str(cap["bytes"]).replace("strike", "XXXXXX")
-	_fail(fails, DuskNativeExportReader.hit_observations(digest_mismatch) == null,
-		"bytes changed without the bound digest fail")
-	var malformed: Dictionary = cap.duplicate(true)
-	malformed["bytes"] = "{"
-	malformed["digest"] = DuskNativeExportReader.digest_bytes("{")
-	_fail(fails, DuskNativeExportReader.hit_observations(malformed) == null,
-		"malformed payload fails")
-	var wrong_role: Dictionary = {"role": "native_export/OTHER/v0", "path": ["events", 0]}
-	_fail(fails, DuskNativeExportReader.resolve(wrong_role, cap) == null,
-		"wrong capture identity/role fails")
-	var wrong_path: Dictionary = {"role": "native_export/N0/v0", "path": ["events", 99]}
-	_fail(fails, DuskNativeExportReader.resolve(wrong_path, cap) == null,
-		"wrong path fails")
-	var pub: String = "user://dd1_reader_capture_bytes.json"
-	var f: FileAccess = FileAccess.open(pub, FileAccess.WRITE)
-	_fail(fails, f != null, "could not write capture bytes")
-	if f != null:
-		f.store_string(str(cap["bytes"]))
-		f.close()
-	var qpath: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/reader-capture-bytes.json"
-	var qf: FileAccess = FileAccess.open(qpath, FileAccess.WRITE)
-	if qf != null:
-		qf.store_string(JSON.stringify({
-			"digest": cap["digest"],
-			"bytes": cap["bytes"],
-			"tag": "byte-root",
-		}))
-		qf.close()
+	# Missing-HP still rejects (idx without pre_hp entry).
+	var missing_hp: Dictionary = payload.duplicate(true)
+	missing_hp["pre_hp"] = {}
+	var missing_cap: Dictionary = _capture_from_payload(missing_hp)
+	_fail(fails, DuskNativeExportReader.hit_observations(missing_cap) == null,
+		"missing-HP rejects rather than inventing")
+	_assert_retained_hit(fails, retained, "final restore of retained capture")
+

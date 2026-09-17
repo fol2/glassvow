@@ -45,10 +45,12 @@ Historical UNKNOWN is retained, not credited as zero.
 
 ## Remaining authority for this batch
 
-Starts remaining **7961**, attempt already consumed, conservative CPU/elapsed/raw under epoch ceilings. Further focused overlay tests, one M-baseline pending emit, and a bounded legal P_v driver **fit**. Each launch must still freeze an exact pre-invocation manifest and charge actual `native_starts` / measured CPU-or-UNKNOWN on H’s original clock.
+Listed-event remainder **6915** (EVENT_LEDGER used 1277 / cap 8192) is **not independently spendable authority**. The **7961** figure above is a pre-batch snapshot and is stale. cpu_seconds and active_elapsed_seconds remain **UNKNOWN**. The 7200s conservative bound is 24 listed events × H’s 300s ceiling, not measured containment.
 
-Executors observed historically: 1. This author will not exceed 2.
+Author batch **5715191434** launched **0** native/engine/capture/profile processes. Original 8-seed selection failed P_5; the 8-to-16 extension is charged history, not a ratified first-valid proof or a new cohort. No top-up, refund, or #548 borrow.
+
+Executors observed historically: 1.
 
 ## Stop
 
-If a named invocation cannot bind commit/tree, test/reader/content, engine, command, and input/seed, do not launch it.
+If a named invocation cannot bind commit/tree, test/reader/content, engine, command, and input/seed, do not launch it. Do not launch while cpu/elapsed remain UNKNOWN and the original selection/stop cannot be established.

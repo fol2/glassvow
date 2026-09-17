@@ -1,11 +1,16 @@
 extends RefCounted
 ## DD1-NATIVE-1 PROMOTION §3 / C mandatory rows that were unmapped at E.
-## Constructed fixtures are labelled. P_v uses ordinary Vigil commit_run.
+## Constructed fixtures are labelled. Routine P_v is a read-only provenance
+## gate; acquisition is an explicit Main-route operation and is not auto-run.
 
 
 const Pilot: GDScript = preload("res://tools/balance_pilot.gd")
-const MapCompose: GDScript = preload("res://tests/test_map_compose.gd")
+const MainRoute: GDScript = preload("res://tests/support/dd1_native_main_route.gd")
 const M_PENDING_PATH: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/m-pending-run-v2.json"
+const M_PENDING_ORDINARY_PATH: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/m-pending-ordinary-run-v2.json"
+const PV_LEDGERS_PATH: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/pv-ledgers.json"
+const QUAL_PV_P0_BYTES: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/p0-first-valid-run-v2.json"
+const QUAL_PV_P5_BYTES: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/p5-first-valid-run-v2.json"
 const PV_VIGIL_PATH: String = "user://dd1_native_pv_vigil_v2.json"
 const PV_RUN_PATH: String = "user://dd1_native_pv_run_v2.json"
 const ABANDON_RUN_PATH: String = "user://dd1_native_abandon_run_v2.json"
@@ -285,7 +290,7 @@ static func _abandon_clears_mark(fails: Array[String]) -> void:
 static func _unmodified_m_pending_resume(fails: Array[String]) -> void:
 	if not FileAccess.file_exists(M_PENDING_PATH):
 		_fail(fails, false,
-			"unmodified M pending bytes missing at %s (emit on unchanged M first)" % M_PENDING_PATH)
+			"constructed F pending fixture missing at %s" % M_PENDING_PATH)
 		return
 	var raw: String = FileAccess.get_file_as_string(M_PENDING_PATH)
 	_fail(fails, not raw.is_empty(), "M pending file empty")
@@ -294,39 +299,84 @@ static func _unmodified_m_pending_resume(fails: Array[String]) -> void:
 	if typeof(parsed) != TYPE_DICTIONARY:
 		return
 	var save: Dictionary = parsed
-	_fail(fails, _ji(save.get("v", 0)) == 2, "M pending is v2 as emitted")
-	_fail(fails, save.get("pendingCombat") != null, "M pending has pendingCombat in the bytes")
+	_fail(fails, _ji(save.get("v", 0)) == 2, "constructed pending is v2")
+	var map_v: Variant = save.get("map", {})
+	var nodes: Array = []
+	if typeof(map_v) == TYPE_DICTIONARY:
+		nodes = map_v.get("nodes", [])
+	_fail(fails, nodes.is_empty() and _ji(save.get("floorsClimbed", -1)) == 0
+			and str(save.get("runId", "")) == "m-pending-5420099",
+		"F m-pending-run-v2.json remains constructed history (empty map, not ordinary-route)")
+	_fail(fails, not FileAccess.file_exists(M_PENDING_ORDINARY_PATH),
+		"ordinary-route M pending witness is absent (BLOCKED, not invented)")
+	# Application resume of the constructed fixture: unmodified bytes through
+	# SaveService then Main._continue_run → _resume_pending_combat.
+	# This is not ordinary-route proof.
+	_fail(fails, save.get("pendingCombat") != null, "constructed pending has pendingCombat")
 	_fail(fails, typeof(save.get("pendingEnemyIds")) == TYPE_ARRAY,
-		"M pending has pendingEnemyIds in the bytes")
+		"constructed pending has pendingEnemyIds")
 	_fail(fails, not save.has("crosscut_anchor") and not save.has("crosscutAnchor"),
-		"M pending has no overlay mark field")
+		"constructed pending has no overlay mark field")
 	var wf: FileAccess = FileAccess.open(M_LOAD_PATH, FileAccess.WRITE)
-	_fail(fails, wf != null, "could not copy M pending bytes")
+	_fail(fails, wf != null, "could not copy constructed pending bytes")
 	if wf == null:
 		return
 	wf.store_string(raw)
 	wf.close()
 	var content: ContentDB = ContentDB.load_full(false)
 	var loaded: RunState = SaveService.load_run(content, M_LOAD_PATH)
-	_fail(fails, loaded != null, "SaveService.load_run of unmodified M pending")
+	_fail(fails, loaded != null, "SaveService.load_run of constructed pending")
 	if loaded == null:
 		return
-	# Same command CombatScreen.start_encounter / Main._resume_pending_combat issues.
+	_fail(fails, loaded.run_id == str(save.get("runId", "")),
+		"runId survives the store/load boundary")
 	native_starts += 1
-	var resumed: GlassvowGame = GlassvowGame.new(content, loaded)
-	var kind: String = "normal" if str(loaded.pending_combat) == "monster" else str(loaded.pending_combat)
-	resumed.apply({
-		"t": "startCombat",
-		"enemies": loaded.pending_enemy_ids,
-		"kind": kind,
-	})
-	_fail(fails, resumed.cb != null, "unmodified M pending started combat")
-	_fail(fails, resumed.cb != null and resumed.cb.crosscut_anchor == null,
-		"M pending resume is marker-free")
+	var main: Main = MainRoute.resume_pending(content, loaded, M_LOAD_PATH, ABANDON_VIGIL_PATH)
+	_fail(fails, main.game != null and main.game.cb != null,
+		"constructed pending resumed through Main._continue_run")
+	_fail(fails, main.game != null and main.game.cb != null and main.game.cb.crosscut_anchor == null,
+		"Main resume is marker-free")
 	_fail(fails, loaded.pending_combat != null, "pendingCombat preserved through SaveService")
+	MainRoute.dispose(main)
 
 
 static func _pv_ordinary_progression(fails: Array[String]) -> void:
+	# Routine regression never acquires profiles and never rewrites pv-ledgers.json.
+	if MainRoute.acquire_requested():
+		if not MainRoute.launch_permitted():
+			_fail(fails, false,
+				"P_5 acquisition BLOCKED: DD1_NATIVE_ACQUIRE set without launch-permitted freeze (original 8-seed cap failed P_5; 16-seed not ratified; cpu/elapsed UNKNOWN)")
+			return
+		_pv_acquire_via_main(fails)
+		return
+	_pv_retained_provenance_gate(fails)
+
+
+static func _pv_retained_provenance_gate(fails: Array[String]) -> void:
+	_fail(fails, FileAccess.file_exists(PV_LEDGERS_PATH), "pv-ledgers.json history retained")
+	var raw: String = FileAccess.get_file_as_string(PV_LEDGERS_PATH)
+	var parsed: Variant = JSON.parse_string(raw)
+	_fail(fails, typeof(parsed) == TYPE_DICTIONARY, "pv-ledgers JSON")
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return
+	var ledgers: Dictionary = parsed
+	_fail(fails, ledgers.has("p0") and ledgers.has("p5") and ledgers.has("traces"),
+		"F summary history is preserved")
+	var admission: String = str(ledgers.get("admission", ""))
+	_fail(fails, admission == "UNSUPPORTED_SUMMARIES_NOT_DURABLE_PROVENANCE",
+		"P_v summaries are not admitted as earned durable proof")
+	_fail(fails, not FileAccess.file_exists(QUAL_PV_P0_BYTES) \
+			and not FileAccess.file_exists(QUAL_PV_P5_BYTES),
+		"durable first-valid P_v byte files are absent (not invented)")
+	var p5: Dictionary = ledgers.get("p5", {})
+	_fail(fails, not p5.is_empty(), "P_5 summary history is kept")
+	_fail(fails, str(ledgers.get("n0_result", "")) == "BLOCKED",
+		"missing mandatory P_5 makes N0 BLOCKED, not print-then-PASS")
+	_fail(fails, str(ledgers.get("blocked_prerequisite", "")).contains("8-seed"),
+		"P_5 BLOCKED names the original 8-seed / account prerequisite")
+
+
+static func _pv_acquire_via_main(fails: Array[String]) -> void:
 	SaveService.clear(PV_VIGIL_PATH)
 	SaveService.clear(PV_RUN_PATH)
 	var content: ContentDB = ContentDB.load_full(false)
@@ -334,149 +384,20 @@ static func _pv_ordinary_progression(fails: Array[String]) -> void:
 	Pilot.set_ban(PackedStringArray())
 	Pilot.apply_policy({})
 	Pilot.set_modes(false, false)
-	var p0: Dictionary = {}
-	var p5: Dictionary = {}
-	var traces: Array = []
-	# First-valid: predeclared seeds, keep losses, stop at first ledger that meets the row.
-	for i: int in range(16):
-		var seed: int = 5421600 + i
-		var vow: int = mini(4, int(vigil.vow_unlocked))
-		var row: Dictionary = _legal_campaign(content, vigil, seed, vow)
-		traces.append({
-			"seed": seed, "vow": vow, "outcome": row.get("outcome", ""),
-			"shatters": row.get("shatters", 0), "starts": row.get("starts", 0),
-			"paneBreaker": vigil.unlocks.has("card:resonantLance"),
-			"vowUnlocked": vigil.vow_unlocked,
-		})
-		SaveService.store_vigil(vigil, PV_VIGIL_PATH)
-		if p0.is_empty() and vigil.unlocks.has("card:resonantLance"):
-			p0 = {
-				"seed": seed, "vowUnlocked": vigil.vow_unlocked,
-				"unlocks": vigil.unlocks.duplicate(),
-				"deedsShatters": _ji(vigil.deeds.get("shatters", 0)),
-				"runsPlayed": vigil.runs_played,
-			}
-		if p5.is_empty() and vigil.vow_unlocked >= 5 and vigil.unlocks.has("card:resonantLance"):
-			p5 = {
-				"seed": seed, "vowUnlocked": vigil.vow_unlocked,
-				"unlocks": vigil.unlocks.duplicate(),
-			}
-			break
-		if not p0.is_empty() and vigil.vow_unlocked >= 5:
-			break
-	_fail(fails, not p0.is_empty(),
-		"P_0 not earned after attempted legal campaigns: %s" % JSON.stringify(traces))
-	if not p0.is_empty():
-		_fail(fails, _ji(p0.get("deedsShatters", 0)) >= 15, "P_0 paneBreaker from folded shatters")
-		_fail(fails, vigil.unlocks.has("card:resonantLance"), "P_0 has Resonant Lance opportunity")
-	if p5.is_empty():
-		print("  P_5 named blocker after predeclared legal campaigns; traces=%s" % JSON.stringify(traces))
-		# Exact blocker, not a silent skip: remaining vow wins not obtained in 5421600-5421615.
-	var qpath: String = "res://research/p9-six-route/dusk-design-1-20260916/native-qualification/pv-ledgers.json"
-	var qf: FileAccess = FileAccess.open(qpath, FileAccess.WRITE)
-	if qf != null:
-		qf.store_string(JSON.stringify({"p0": p0, "p5": p5, "traces": traces}))
-		qf.close()
-
-
-static func _legal_campaign(content: ContentDB, vigil: VigilState, seed: int, vow: int) -> Dictionary:
-	var profile: Dictionary = {
-		"aspect": 0,
-		"vow": vow,
-		"reveals": vigil.unlocks.filter(func(id: String) -> bool: return content.reveal_ids.has(id)),
-		"unlocks": vigil.unlocks.duplicate(),
-		"quests": vigil.quests.duplicate(true),
-		"shards": vigil.shards.duplicate(),
-		"lamplighter": vigil.unlocks.has("lamplighter"),
-	}
-	var run: RunState = RunState.new_run(content, seed, "dd1-pv-%d" % seed, profile)
-	var game: GlassvowGame = GlassvowGame.new(content, run)
-	var starts: int = 0
-	var outcome: String = "error"
-	for _act: int in range(3):
-		var map: WorldMap = WorldMap.benchmark(run)
-		var act_ok: bool = true
-		while not map.is_finished():
-			var reachable: Array[int] = map.reachable()
-			if reachable.is_empty():
-				act_ok = false
-				break
-			var i: int = Pilot.choose_node(map, run)
-			if not map.enter(i):
-				act_ok = false
-				break
-			var node: MapNode = map.current()
-			run.node_id = node.id
-			run.waystones_lit = node.row + 1
-			if node.is_combat():
-				var enemies: Array[String] = node.enemies.duplicate()
-				if enemies.is_empty():
-					enemies = game.rewards.roll_encounter(run, node.type, node.row, node)
-				native_starts += 1
-				starts += 1
-				game.apply({"t": "startCombat", "enemies": enemies, "kind": node.combat_kind()})
-				while game.cb != null and not game.cb.over:
-					Pilot.play_turn(game)
-					if game.cb.over:
-						break
-					if game.cb.turn >= 30:
-						break
-					game.apply({"t": "endTurn"})
-				if game.cb == null or not game.cb.over or str(game.cb.result) != "win":
-					outcome = "loss"
-					act_ok = false
-					break
-				if node.type == "boss" and run.act == 2:
-					outcome = "win"
-					map.clear_current()
-					act_ok = true
-					break
-				BalanceSim._claim_rewards(game, game.gen_combat_rewards(node.combat_kind(), game.cb.affix))
-			else:
-				BalanceSim._resolve_safe_node(game, node)
-			map.clear_current()
-			if node.type == "boss" and not run.is_final_act():
-				var offered: Array[String] = game.rewards.roll_boss_relics(run)
-				var relic: String = Pilot.choose_relic(offered, content, run.aspect, run.rng)
-				if not relic.is_empty():
-					game.rewards.gain_relic(run, relic)
-				run.boss_relic_act = run.act
-				run.start_next_act(content)
-				break
-		if outcome == "win" or outcome == "loss" or not act_ok:
-			break
-	if outcome == "error":
-		outcome = "loss"
-	var commit: String = "win" if outcome == "win" else "death"
-	vigil.commit_run(run, commit, content)
-	return {
-		"outcome": outcome,
-		"starts": starts,
-		"shatters": _ji(run.stats.get("shatters", 0)),
-		"vow": run.vow,
-	}
+	var row: Dictionary = MainRoute.drive_ordinary(
+		content, vigil, 5421600, 0, PV_RUN_PATH, PV_VIGIL_PATH)
+	native_starts += int(row.get("starts", 0))
+	if str(row.get("status", "")) == "INCOMPLETE":
+		_fail(fails, false,
+			"ordinary Main campaign INCOMPLETE (not death): %s" % JSON.stringify(row))
+		return
+	_fail(fails, false,
+		"acquisition ran but durable P_v files are still the reviewer's missing-proof row")
 
 
 static func _main(content: ContentDB, run_path: String, vigil_path: String) -> Main:
-	var main: Main = Main.new()
-	main._map_layout_compile = MapCompose.fake_layout_compile()
-	main.content = content
-	main._run_save_path = run_path
-	main._vigil_save_path = vigil_path
-	main._vigil = VigilState.blank()
-	main._opening_suppressed = true
-	main._transitions = TransitionLayer.new()
-	main._transitions.instant = true
-	main.add_child(main._transitions)
-	main._music = MusicBus.new()
-	main.add_child(main._music)
-	main._sfx_bus = SfxBus.new()
-	main.add_child(main._sfx_bus)
-	return main
+	return MainRoute.make_main(content, run_path, vigil_path)
 
 
 static func _dispose(main: Main) -> void:
-	main._clear_route()
-	for child: Node in main.get_children():
-		child.free()
-	main.free()
+	MainRoute.dispose(main)

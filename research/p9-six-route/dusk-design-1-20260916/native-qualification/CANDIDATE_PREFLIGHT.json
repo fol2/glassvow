@@ -5,7 +5,7 @@
   "r0_reconciled_at_utc": "2026-09-16T22:40:00Z",
   "author_batch_5706552165_at_utc": "2026-09-17T01:40:00Z",
   "exact_pre_next_invocation": {
-    "note": "INV-10 executed at 92da314. INV-11 is a later distinct process frozen at 901023cf + dirty IMPLEMENTED.md before launch (pre-invocation-INV-11.json). Do not attach those SHAs to INV-1..6.",
+    "note": "INV-10 executed at 92da314. INV-11 is a later distinct process frozen at 901023cf + dirty IMPLEMENTED.md before launch (pre-invocation-INV-11.json). Do not attach those SHAs to INV-1..6. Author 5715191434 did not launch; any later process needs a new freeze of then-current source with no output digests.",
     "coherent_PASS_pair": "92da314c066b84fc565c428cbbda03375ef03481",
     "test_dd1_blob": "1daa3f8f7c16f9e7237251fad38cda46c32960d0",
     "matrix_test_blob": "5411fef977049782dd93aee2a193fe180b349695",
@@ -64,11 +64,12 @@
   },
   "profile_prerequisite_first_valid_witness": {
     "vows": [0, 5],
-    "status": "EARNED",
+    "status": "UNSUPPORTED_SUMMARIES_NOT_DURABLE_PROVENANCE",
+    "n0_result": "BLOCKED",
     "p0_seed": 5421601,
     "p5_seed": 5421609,
     "ledger": "pv-ledgers.json",
-    "note": "Ordinary VigilState.commit_run on legal campaigns; constructed _fight hands are not these witnesses."
+    "note": "F summaries retained as charged history. Not first-valid earned proof: durable initial profile, ordered commands/observations, preterminal/terminal run/Vigil bytes, and genuine commit receipts are absent. Original 8-seed cap failed P_5; 16-seed extension not ratified; cpu/elapsed UNKNOWN. Constructed _fight hands are not these witnesses."
   },
   "roster_command_policy": {
     "status": "NOT_OPENED",

@@ -49,5 +49,10 @@
     {"id": "DD1-N0-INV-11", "native_starts": 246, "result": "PASS (2 tests) distinct process; native_starts=201+45; /usr/bin/time real 2.32; stdout not a copy of INV-10", "log": "native-tests-2.log", "time": "native-tests-2.time", "pre_invocation": "pre-invocation-INV-11.json", "head": "901023cfb86e824efc170c0ba0476888bab48dea", "bound_at_utc": "2026-09-17T01:55:47Z", "local_start": "2026-09-17 02:56:02", "local_end": "2026-09-17 02:56:05"}
   ],
   "not_opened": ["development", "confirmation", "counterfactual", "policy_fitting", "#548"],
+  "author_batch_5715191434": {
+    "native_starts": 0,
+    "godot_launched": false,
+    "reason": "original 8-seed P_5 fail; 16-seed not ratified; cpu/elapsed UNKNOWN; no launch-permitted freeze"
+  },
   "certificates": "0/3 Duskblade"
 }
