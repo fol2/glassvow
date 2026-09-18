@@ -42,5 +42,9 @@ int dd1_isolate(const char *root,const char *out) {
     struct __user_cap_header_struct h={.version=_LINUX_CAPABILITY_VERSION_3,.pid=0};
     struct __user_cap_data_struct d[2]={{0},{0}};
     if(syscall(SYS_capset,&h,d)||prctl(PR_SET_NO_NEW_PRIVS,1,0,0,0)) dd1_die("drop capabilities");
+    if(syscall(SYS_capget,&h,d) || d[0].effective || d[0].permitted || d[0].inheritable ||
+       d[1].effective || d[1].permitted || d[1].inheritable ||
+       prctl(PR_GET_NO_NEW_PRIVS,0,0,0,0)!=1 ||
+       !(prctl(PR_GET_SECUREBITS,0,0,0,0)&SECBIT_NOROOT_LOCKED)) dd1_die("privilege drop readback");
     return 0;
 }

@@ -83,6 +83,8 @@ int main(int argc,char **argv) {
     pid_t supervisor=getpid(),pid=fork();if(pid<0) dd1_die("fork workload");
     if(!pid) {
         parent_death(supervisor);close(s[0]);
+        char release;
+        if(read(s[1],&release,1)!=1 || release!='G') _exit(124);
         limit(RLIMIT_CPU,workcpu);limit(RLIMIT_CORE,0);limit(RLIMIT_AS,2ULL<<30);
         limit(RLIMIT_NOFILE,128);limit(RLIMIT_FSIZE,cap);
         /* Open streams before chroot; ONLY these and bootstrap socket survive.
@@ -111,7 +113,12 @@ int main(int argc,char **argv) {
     close(s[1]);
     /* Small bounded bootstrap receipt enables parent/subreaper crash controls. */
     printf("{\"phase\":\"started\",\"supervisor\":%d,\"workload\":%d}\n",getpid(),pid);fflush(stdout);
-    int listener=recvfd(s[0]);close(s[0]);
+    char release; int listener=-1;
+    /* The parent durably binds PID/start identities to the existing reservation
+     * BEFORE acknowledging release. No ACK means no workload exec. */
+    if(read(0,&release,1)==1 && release=='G' && write(s[0],&release,1)==1)
+        listener=recvfd(s[0]);
+    close(s[0]);
     unsigned threads=1,execs=0,denied=0,clone3=0,requests=0;int last=-1,status=0,channel=0;
     if(listener<0) {channel=1;kill(pid,SIGKILL);}
     struct rusage wr={0},sr={0};int reaped=0;
