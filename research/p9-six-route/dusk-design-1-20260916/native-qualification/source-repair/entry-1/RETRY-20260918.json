@@ -1,0 +1,161 @@
+{
+  "schema": "DD1-LINUX-ENTRY-1-RETRY-OBSERVATION-1",
+  "observation_date_utc": "2026-09-18",
+  "operation": "DD1-LINUX-ENTRY-1",
+  "disposition": "BLOCKED_BEFORE_ENGINE_ENTRY",
+  "resumed_head": "959305b569b20477338df8d5d54b9333239e86e2",
+  "resumed_tree": "ca3a2c6ac9629faa34315d55a8af4aafeae58cc7",
+  "accepted_B1_head": "3bb4205caf55f882a4507272445997ae448fcd7b",
+  "main_readback": "07b5aa9dec8436132a524511d5438c510e322070",
+  "selection": {
+    "proposal_comment": 5734400738,
+    "existing_record_comment": 5735810042,
+    "renewed_direct_owner_instruction": true,
+    "scope_changed": false,
+    "maximum_new_engine_plus_contained_starts": 8,
+    "top_up": false,
+    "note": "The repeated owner selection continues the same operation, not a new eight-start allowance or clock reset."
+  },
+  "previous_handoff": {
+    "issue": 156,
+    "comment_id": 5735988692,
+    "retained_unchanged": true
+  },
+  "host_observation": {
+    "observed_at_utc": "2026-09-18T21:01:45.447456+00:00",
+    "system": "Linux",
+    "release": "6.18.44",
+    "machine": "x86_64",
+    "pointer_bytes": 8,
+    "libc": [
+      "glibc",
+      "2.41"
+    ],
+    "requested_archive_exists": false,
+    "requested_archive_bytes": null,
+    "engine_executed": false
+  },
+  "transport_observations": [
+    {
+      "channel": "execution-container curl",
+      "command": "curl -IL --connect-timeout 10 --max-time 20 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip 2>&1 | head -30",
+      "diagnostic": "curl: (6) Could not resolve host: github.com",
+      "exit_status": null,
+      "qualification": "The displayed diagnostic is retained. The piped probe did not separately capture curl process status; no inferred exit-status observation."
+    },
+    {
+      "channel": "container.download",
+      "attempts": 2,
+      "diagnostic": "ERROR: download failed because url not viewed in conversation before. open the file or url using web.run first.",
+      "qualification": "The second call followed the requested web.open, which itself returned Cache miss. Neither call staged a file; not an HTTP-404 or release-absence result."
+    },
+    {
+      "channel": "web fetch",
+      "diagnostics": [
+        "Fixed ZIP URL: Cache miss",
+        "Fixed archive page: Cache miss",
+        "Official downloads redirect: not accessible via this tool",
+        "Fixed GitHub release page: Cache miss"
+      ],
+      "qualification": "Search and a separate page reader could retrieve release-page text; those are not binary transfer or verification."
+    },
+    {
+      "channel": "TinyFish browser transfer",
+      "status": "failed",
+      "run_started": false,
+      "reason": "wallet_out_of_funds",
+      "non_retryable": true,
+      "qualification": "Provider rejected before starting a browser. No top-up, retry, engine execution or artifact transfer occurred. Private balance/checkout token are deliberately not published. Payment would not itself prove downloadable-artifact export capability."
+    }
+  ],
+  "official_asset_metadata_readback": {
+    "url": "https://api.github.com/repos/godotengine/godot-builds/releases/assets/519677358",
+    "asset_id": 519677358,
+    "name": "Godot_v4.7.2-stable_linux.x86_64.zip",
+    "expected_archive_bytes": 77860424,
+    "expected_archive_sha256": "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4",
+    "archive_bytes_verified": false,
+    "executable_sha256": null,
+    "qualification": "Official metadata, not independently hashed downloaded bytes."
+  },
+  "new_static_diagnosis": {
+    "upstream_repository": "godotengine/godot",
+    "release_tag": "4.7.2-stable",
+    "resolved_commit": "ed1daf0bf001b61586d9930840f2f1394092c079",
+    "project_data": {
+      "path": "core/config/project_settings.cpp",
+      "git_blob": "0e078c32c978281a98cdd8e05708c3ddd972039d",
+      "inspected_ranges": [
+        [
+          45,
+          170
+        ],
+        [
+          845,
+          940
+        ]
+      ],
+      "observed": "get_project_data_path is rooted in res:// and get_imported_files_path appends imported. setup makes the directory name from the hidden-prefix Boolean and the fixed project-data suffix.",
+      "inference": "For the proposed /source project under unchanged B1, changing use_hidden_project_data_directory does not relocate imports to /out. An ordinary fresh import into /source is not an admitted cache-preparation plan.",
+      "limit": "This is source-level layout diagnosis, not an executed import failure and not proof that every possible pre-imported layout is impossible."
+    },
+    "worker_threads": {
+      "path": "core/object/worker_thread_pool.cpp",
+      "git_blob": "f5574c47a05c6d959382972556ed7413076c0328",
+      "inspected_ranges": [
+        [
+          805,
+          850
+        ],
+        [
+          850,
+          1049
+        ]
+      ],
+      "observed": "init obtains a default count when its argument is negative, resizes the pool, and starts each pool thread. The reserve(5) call reserves vector capacity, not five observed thread births. Named pools can also call init.",
+      "inference": "A one-core affinity or the reserve constant alone cannot close the four-lifetime-thread admission. Actual selected settings and all relevant pool/other-thread creation paths still need a bound.",
+      "limit": "No engine setting was selected, changed or tested from this partial static inspection; actual engine thread count remains unmeasured."
+    }
+  },
+  "graph": {
+    "stage_0": "BLOCKED: exact executable not staged; independent cache/thread prerequisites remain unclosed",
+    "stage_1": "NOT_ENTERED",
+    "stage_2": "NOT_ENTERED",
+    "stage_3": "retry evidence/account handoff to be published and read back"
+  },
+  "execution_demand": null,
+  "argv": null,
+  "reservation": null,
+  "grant": null,
+  "account_observation": {
+    "git_blob_read_back": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "equals_previous_published_blob": true,
+    "reported_starts_used": 2040,
+    "starts_cap": 2048,
+    "reported_cpu_ns_used": 398617197992,
+    "cpu_ns_cap": 14400000000000,
+    "reported_raw_bytes_used": 893139,
+    "raw_bytes_cap": 1073741824,
+    "new_unit_reservations": 0,
+    "new_engine_plus_contained_commitments": 0,
+    "new_engine_plus_contained_launches": 0,
+    "live_account_writes": 0,
+    "historical_starts": "1277/8192; 6915 unspendable; UNKNOWN observations retained",
+    "deadline_utc": "2026-09-24T17:54:40Z",
+    "qualification": "Exact published GitHub blob equality, not certification of historical metering or another executor private state."
+  },
+  "preservation": {
+    "B1_D_C_H": true,
+    "existing_GDScript_and_Pilot": true,
+    "old_evidence": true,
+    "full_B1_or_H_suite_rerun": false,
+    "reviewer_invocation": false,
+    "self_approval": false,
+    "ordinary_acquisition": false,
+    "N1_N2": false,
+    "merge_release": false,
+    "certificates": "0/3"
+  },
+  "next_admission_condition": "A working permitted artifact channel must stage and independently hash the fixed official archive/executable. Then immutable runtime/source/import closure, bounded threads/syscalls and genuine prospective H-bound complete demand must close under the existing account/deadline. Do not substitute another engine, expand B1, fabricate caches or consume starts on a predictable setup failure.",
+  "evidence_scope": "New source/transport observations only. Earlier H import/refusal evidence is reused with its original identity and is not relabelled as rerun. The containing commit/tree and one retry handoff are recorded by the final GitHub handoff after publication."
+}
