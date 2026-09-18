@@ -171,7 +171,7 @@ class ReservationTests(unittest.TestCase):
 
     def test_native_entry_cannot_spawn_or_spend_with_valid_demands(self):
         # All fake source bytes are explicitly synthetic; test only reaches the
-        # entry's disabled-backend guard, not a claimed native source identity.
+        # entry's external-authority guard, not a claimed native source identity.
         a = account(); a.pop("synthetic")
         r.atomic_write(self.path, a)
         receipt = self.root / "receipt.json"; receipt.write_text("synthetic receipt")
@@ -183,7 +183,7 @@ class ReservationTests(unittest.TestCase):
         original_available = r.available
         with patch.object(entry.reservations, "reserve_and_run") as spawn, \
                 patch.object(r, "available", side_effect=lambda a, s, c, b: original_available(a, s, c, b, NOW)):
-            with self.assertRaisesRegex(entry.BackendBlocked, "aggregate CPU/process-tree/all-raw"):
+            with self.assertRaisesRegex(entry.BackendBlocked, "missing H host-authenticated exact execution demand"):
                 entry.run_complete_unit(self.cmd, unit=u, account_path=self.path, receipt_path=receipt,
                     output=self.root / "never", head=self.head, repo=self.root, authority_check=lambda _: None)
             spawn.assert_not_called()
