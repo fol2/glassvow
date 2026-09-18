@@ -1,7 +1,7 @@
 """Before-child complete-unit reservations. Legacy observations are immutable.
 
 The runner dependency is an internal seam for inert tests. Native entry supplies
-no runner until the aggregate containment backend is proved. A reservation stays
+the fixed Linux backend, never a caller-selected runner. A reservation stays
 fully charged on failure, interruption, or incomplete final reporting; no refund.
 """
 from __future__ import annotations
@@ -9,6 +9,10 @@ from contextlib import contextmanager
 from copy import deepcopy
 from datetime import datetime, timezone
 import fcntl
+from contextvars import ContextVar
+
+_lease = ContextVar("dd1_executor_lease", default=-1)
+_active_reservation = ContextVar("dd1_active_reservation", default=None)
 import hashlib
 import json
 import math
@@ -94,7 +98,11 @@ def account_lock(path: Path):
             fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as exc:
             raise ReservationError("one executor already holds account") from exc
-        yield
+        token = _lease.set(fd)
+        try:
+            yield fd
+        finally:
+            _lease.reset(token)
     finally:
         os.close(fd)
 
@@ -188,13 +196,17 @@ def reserve_and_run(account_path: Path, unit: Mapping, *, command: list[str], he
                       account_sha=digest(before_bytes), source_reader=source_reader)
         units = account["recovery"].get("unit_reservations_v2", [])
         need(all(row["unit_id"] != unit["unit_id"] for row in units), "unit already reserved; no second spawn")
+        need(all(row.get("backend") != "linux-x86_64-lp64-v1" or
+                 (row.get("observations") or {}).get("cleanup_confirmed") is True for row in units),
+             "unresolved prior workload; stale reservation requires cleanup evidence, never credit")
         need(not output.exists() and not output.is_symlink() and output.absolute() == output.resolve(),
              "output must be new and unaliased; no historical overwrite")
-        metadata = 4 * len(before_bytes) + 4 * len(encode(unit)) + 131072
+        metadata = 4 * len(before_bytes) + 4 * len(encode(unit)) + 524288
         need(metadata + 4096 < unit["raw_bytes"], "raw envelope cannot fit control bytes and probe")
         reserve = {"unit_id": unit["unit_id"], "starts": 1 + unit["contained_starts"],
                    "cpu_ns": unit["cpu_seconds"] * 10**9, "raw_bytes": unit["raw_bytes"],
                    "before_account_sha256": digest(before_bytes), "demand_sha256": digest(encode(unit)),
+                   "backend": unit.get("linux", {}).get("abi"), "release_protocol": "B1-ACK-1" if unit.get("linux") else None,
                    "state": "RESERVED", "observations": None}
         available(account, reserve["starts"], reserve["cpu_ns"], reserve["raw_bytes"], now)
         changed = deepcopy(account)
@@ -207,7 +219,11 @@ def reserve_and_run(account_path: Path, unit: Mapping, *, command: list[str], he
         try:
             output.mkdir(parents=True, exist_ok=False)
             atomic_write(output / "UNIT-GRANT.json", grant)
-            result = runner(grant, output)
+            active = _active_reservation.set((account_path, changed, reserve))
+            try:
+                result = runner(grant, output)
+            finally:
+                _active_reservation.reset(active)
             need(isinstance(result, dict), "invalid runner observation")
             result = json.loads(encode(result))
             need(len(encode(result)) <= 65536, "oversized control observation")
@@ -220,3 +236,55 @@ def reserve_and_run(account_path: Path, unit: Mapping, *, command: list[str], he
         atomic_write(account_path, changed)
         atomic_write(output / "UNIT-RESULT.json", {"unit": reserve, "result": result})
         return dict(result, charged=reserve, n0_accepted=False)
+
+
+def attach_processes(identities):
+    """Trusted fixed backend only: persist identities before sending exec ACK."""
+    active = _active_reservation.get()
+    need(active is not None and _lease.get() >= 3, "no active process reservation")
+    path, account, row = active
+    need(row["state"] == "RESERVED" and row["release_protocol"] == "B1-ACK-1", "wrong release state")
+    need("processes" not in row, "process identity already bound")
+    row["processes"] = identities
+    atomic_write(path, account)
+
+
+def process_identity(pid):
+    raw = Path("/proc") / str(pid) / "stat"
+    fields = raw.read_text().rsplit(")", 1)[1].split()
+    return dict(pid=pid, start_ticks=int(fields[19]), ppid=int(fields[1]),
+                boot_id=Path("/proc/sys/kernel/random/boot_id").read_text().strip())
+
+
+def reconcile_stale(account_path):
+    """No launch or credit: close only B1-ACK-1 records with kernel absence.
+
+    This is NOT called by native entry. A subsequent demand must bind the new
+    account bytes. Any surviving PID blocks, even if its identity appears reused.
+    Unknown pre-B1 records cannot be reconciled with this protocol.
+    """
+    with account_lock(account_path):
+        account = read(account_path)
+        before = totals(account)
+        boot = Path("/proc/sys/kernel/random/boot_id").read_text().strip()
+        rows = account["recovery"].get("unit_reservations_v2", [])
+        changed = []
+        for row in rows:
+            if row.get("backend") != "linux-x86_64-lp64-v1" or (row.get("observations") or {}).get("cleanup_confirmed") is True:
+                continue
+            need(row.get("release_protocol") == "B1-ACK-1", "missing stale release protocol")
+            processes = row.get("processes", {})
+            for item in processes.values():
+                need(item.get("boot_id") != boot or not (Path("/proc") / str(item["pid"])).exists(),
+                     "stale workload/controller PID still present; cannot reconcile")
+            # No identities means no durable ACK was possible. The inherited
+            # executor lock covers the bootstrap until its death/normal reap.
+            row["state"] = "INTERRUPTED"
+            row["observations"] = dict(success=False, cleanup_confirmed=True,
+                reconciliation="B1-ACK-1 executor lock and recorded PID absence",
+                no_release_record=not bool(processes))
+            changed.append(row["unit_id"])
+        need(totals(account) == before, "reconciliation changed costs")
+        if changed:
+            atomic_write(account_path, account)
+        return dict(reconciled=changed, totals=before, launch_permitted=False)
