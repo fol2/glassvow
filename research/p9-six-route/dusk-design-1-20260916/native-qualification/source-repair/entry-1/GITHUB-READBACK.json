@@ -1,0 +1,68 @@
+{
+  "schema": "DD1-LINUX-ENTRY-1-GITHUB-READBACK-1",
+  "operation": "DD1-LINUX-ENTRY-1",
+  "disposition": "BLOCKED_BEFORE_ENGINE_ENTRY",
+  "stage_graph": {
+    "0": "BLOCKED",
+    "1": "NOT_ENTERED",
+    "2": "NOT_ENTERED",
+    "3": "HANDOFF_PUBLISHED_AND_READ_BACK"
+  },
+  "branch": "research/p9-six-route/dd1-native-1-overlay",
+  "accepted_source_head": "3bb4205caf55f882a4507272445997ae448fcd7b",
+  "accepted_source_tree": "56ad1534dcec2c2d0f5d3f5125dd152065c5ec45",
+  "evidence_head": "8b206238146afbc0b7bdd2f0c9f9a64f6f751d78",
+  "evidence_tree": "3e3af841f5ea20c1ae013058ecf19c41c1e61afe",
+  "main_readback": "07b5aa9dec8436132a524511d5438c510e322070",
+  "owner_selection": {
+    "proposal": 5734400738,
+    "record": 5735810042,
+    "read_back": true
+  },
+  "handoff": {
+    "issue": 156,
+    "comment_id": 5735988692,
+    "url": "https://github.com/fol2/glassvow/issues/156#issuecomment-5735988692",
+    "created_at_utc": "2026-09-18T20:47:45Z",
+    "initial_body_read_back": true
+  },
+  "entry_file_blobs_matched": {
+    "ACCOUNT-OBSERVATION.json": "ee70349ee51f127df26e3d723c055724bdc5f5fa",
+    "H-CLOSURE.exit.txt": "573541ac9702dd3969c9bc859d2b91ec1f7e6e56",
+    "H-CLOSURE.stderr.txt": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "H-CLOSURE.stdout.json": "e0df996d92e0bc8fa2fd8bc65a06aa4b672e1075",
+    "OWNER-SELECTION.json": "8f49134f9372ecf9172d71a40d01d0872c8545d9",
+    "RAW-OBSERVATIONS.json": "8d5ca29df413987386f0caa5b42a4de1edba89e4",
+    "REPORT.md": "a7378c56d196ab04bc5d7c00a3ce79101d6eb913",
+    "SOURCE-REFERENCES.json": "afd3b37637f40a8da4511f1f14b10806bca28e71",
+    "STAGE0-MANIFEST.json": "e3919ac27f7552aa62a4604ac075ea2e817596c9",
+    "check_h_closure.py": "81601cc60a65de13735f41dcca184a0909ddb5f9"
+  },
+  "capsule_blob_matched": "0c351b4de505dfd148192e2429d6774ecc0de1e0",
+  "account": {
+    "before_git_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "at_evidence_head_git_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "unchanged": true,
+    "new_engine_plus_contained_commitments": 0,
+    "new_live_account_writes": 0,
+    "reported_starts_used": 2040,
+    "starts_cap": 2048,
+    "no_historical_completeness_certification": true
+  },
+  "observed_control": {
+    "H_real_import": "PASS",
+    "H_missing_manifest_refusal": "MissingAuthority: missing_external_manifest",
+    "exit_code": 0,
+    "stderr_bytes": 0,
+    "native_demand_authenticated": false,
+    "engine_launches": 0
+  },
+  "scope_checks": {
+    "E_to_P": "Only ten new entry-1 files/checker and existing capsule; no accepted source or old evidence changes.",
+    "native_qualification": false,
+    "B1_re_review_or_full_suite": false,
+    "self_approval": false,
+    "merge_release": false
+  },
+  "containing_commit_scope": "Only this new readback file. The containing commit cannot include its own hash; the same #156 handoff records the final readback head/tree after publication and is fetched again. No second handoff."
+}
