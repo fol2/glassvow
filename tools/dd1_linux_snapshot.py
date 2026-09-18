@@ -12,10 +12,12 @@ import struct
 import dd1_reservations as r
 
 ABI = "linux-x86_64-lp64-v1"
+# Exact helper built/tested in this source artifact, not a unit-selected runner.
+PINNED_HELPER_SHA256 = "dae7a481fd0d6c25f093c38056673a6039f98d899e816a65953537a54d00c7ce"
 HELPER_SOURCES = frozenset("res://tools/" + p for p in (
     "dd1_linux/policy.h", "dd1_linux/policy.c", "dd1_linux/isolate.c",
     "dd1_linux/supervisor.c", "dd1_linux_snapshot.py", "dd1_linux_backend.py",
-    "dd1_meter_entry.py", "dd1_reservations.py"))
+    "dd1_meter_entry.py", "dd1_reservations.py", "dd1_recovery_meter.py"))
 
 
 def read_regular(root: Path, name: str, maximum: int = 1 << 30) -> bytes:
@@ -108,8 +110,34 @@ def prepare(unit: dict, command: list[str], repo: Path) -> dict:
             r.need(interp is None or interp in files, "unbound interpreter: " + str(interp))
             r.need(all(n in files if n.startswith("/") else n in basenames for n in needed), "unbound runtime dependency")
     helper = read_regular(repo, b["helper"]["path"])
-    r.need(r.digest(helper) == b["helper"]["sha256"] and elf(helper) == (None, []), "helper must be pinned static ELF")
+    r.need(r.digest(helper) == b["helper"]["sha256"] == PINNED_HELPER_SHA256 and elf(helper) == (None, []), "helper must be pinned static ELF")
     # Payload copies + worst-case path/creation metadata. No compression credit.
     setup_raw = len(helper) + sum(len(raw) + 16384 for raw, _ in files.values()) + 32768
     r.need(setup_raw + b["workload_raw_bytes"] + 524288 < unit["raw_bytes"], "raw cannot fit immutable inputs and workload")
     return dict(files=files, source=source, helper=helper, setup_raw=setup_raw, config=b)
+
+
+def verify_ancestry(bodies, head: str, ancestor: str) -> None:
+    """Verify supplied Git commit bytes without spawning Git inside the unit.
+
+    The same H-bound demand carries these immutable object bytes; this checks
+    ancestry, not issuer authentication. A path may follow any declared parent.
+    """
+    import hashlib
+    r.need(isinstance(bodies, list) and len(bodies) <= 128, "bounded Git ancestry bytes required")
+    current = head
+    for index, body in enumerate(bodies):
+        r.need(isinstance(body, str) and 0 < len(body.encode()) <= 65536, "invalid Git commit bytes")
+        raw = body.encode()
+        actual = hashlib.sha1(b"commit " + str(len(raw)).encode() + b"\0" + raw).hexdigest()
+        r.need(actual == current and current != ancestor, "Git ancestry object mismatch")
+        parents = [line[7:] for line in body.split("\n\n", 1)[0].splitlines() if line.startswith("parent ")]
+        if index + 1 == len(bodies):
+            current = ancestor
+        else:
+            nxt = bodies[index + 1]
+            r.need(isinstance(nxt, str), "invalid next Git commit")
+            data = nxt.encode()
+            current = hashlib.sha1(b"commit " + str(len(data)).encode() + b"\0" + data).hexdigest()
+        r.need(current in parents, "Git ancestry parent mismatch")
+    r.need(current == ancestor, "missing Git ancestry chain")

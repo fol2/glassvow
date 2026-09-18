@@ -34,7 +34,7 @@ def build():
     for dest, source in runtime.items():
         shutil.copyfile(source, out / Path(dest).name)
     result = dict(commands=records, host=platform.uname()._asdict(),
-        libc=platform.libc_ver(), binaries={p.name: dict(bytes=p.stat().st_size, sha256=r.digest(p.read_bytes())) for p in out.iterdir() if p.is_file()})
+        libc=platform.libc_ver(), binaries={p.name: dict(bytes=p.stat().st_size, sha256=r.digest(p.read_bytes())) for p in out.iterdir() if p.is_file() and p.name != "BUILD.json"})
     (out / "BUILD.json").write_bytes(r.encode(result))
     return result
 

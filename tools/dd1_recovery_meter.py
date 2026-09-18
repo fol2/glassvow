@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """DD1 receipt preflight and complete-unit reservation entry.
 
-Native entry is SOURCE_BLOCKED until aggregate CPU/process-tree/all-raw
-containment is demonstrated. Stored legacy receipts/accounts are not rewritten.
+Native entry requires H host-authenticated exact execution demand and venue
+authority. The bare CLI cannot supply it. Legacy receipts/accounts are unchanged.
 Source-only self-test uses explicitly synthetic temporary accounts.
 """
 from __future__ import annotations
@@ -264,24 +264,27 @@ def run_metered(
     overlay_head: str | None = None,
     wait_seconds: int | None = None,
     unit_path: Path | None = None,
+    trusted_context: Any = None,
+    evidence_packet: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     if unit_path is None:
         raise MeterError("complete pre-reserved unit demand is required; legacy one-start path removed")
     if not counts_as_engine or interrupt_after_s is not None:
         raise MeterError("native CLI cannot borrow inert-test authority")
+    if trusted_context is None or evidence_packet is None:
+        raise MeterError("native execution requires H host-authenticated exact demand; bare CLI is inert")
     from dd1_meter_entry import run_complete_unit
-    bindings = load_bindings()
-    receipt = read_json(receipt_path)
     unit = read_json(unit_path)
     if cpu_seconds != unit.get("cpu_seconds") or output_limit != unit.get("raw_bytes"):
         raise MeterError("CLI CPU/raw limits differ from complete unit")
     if wait_seconds is not None and wait_seconds != unit.get("wall_seconds"):
         raise MeterError("CLI wall limit differs from complete unit")
-    head = overlay_head or git_rev_parse("HEAD")
-    def authority(account):
-        validate_launch_receipt(receipt, bindings=bindings, account=account, overlay_head=head)
+    if overlay_head is None:
+        raise MeterError("exact host-bound head required; no Git child inside the execution unit")
+    head = overlay_head
     return run_complete_unit(list(command), unit=unit, account_path=account_path,
-        receipt_path=receipt_path, output=out_dir, head=head, repo=REPO, authority_check=authority)
+        receipt_path=receipt_path, output=out_dir, head=head, repo=REPO,
+        trusted_context=trusted_context, evidence_packet=evidence_packet)
 
 
 def cmd_write_receipt() -> int:

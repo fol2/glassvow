@@ -13,6 +13,12 @@ import dd1_reservations as reservations
 import dd1_linux_backend as backend
 
 
+# Test authority is restricted to these two harmless fixture builds, not any
+# caller-named executable with a self-hash. Native entry cannot select this path.
+INERT_BINARIES = frozenset(("ead0fc4d0660d8a691469296c59827c66bad717b98d54671ecdb6eed8dcc9129",
+                            "5144e1676b1ace6f29432e80b9e9f6eac49300a0b4173edb2b61e03dac9da1a1"))
+
+
 class BackendBlocked(reservations.ReservationError):
     """Unsupported or unbound execution, not an unconditional backend stub."""
 
@@ -21,7 +27,7 @@ def require_native_backend(unit, command, repo, lifetime):
     return backend.Prepared(unit, command, repo, lifetime)
 
 
-def _complete(command, unit, account_path, receipt_path, output, head, repo, check, lifetime):
+def _complete(command, unit, account_path, receipt_path, output, head, repo, check, lifetime, inert=False):
     # A canonical immutable copy prevents caller mutation after validation.
     unit = json.loads(reservations.encode(unit))
     account = reservations.read(account_path)
@@ -30,6 +36,9 @@ def _complete(command, unit, account_path, receipt_path, output, head, repo, che
     reservations.available(account, 1 + unit["contained_starts"], unit["cpu_seconds"] * 10**9, unit["raw_bytes"])
     try:
         prepared = require_native_backend(unit, list(command), repo, lifetime)
+        if inert:
+            reservations.need(reservations.digest(prepared.pinned["files"][command[0]][0]) in INERT_BINARIES,
+                              "inert entry permits only pinned harmless fixture")
         receipt = receipt_path.read_bytes()
         prepared.receipt_bytes = receipt
         prepared.account_bytes = account_path.read_bytes()
@@ -63,12 +72,13 @@ def run_complete_unit(command, *, unit: Mapping, account_path: Path, receipt_pat
         and trusted_context.resolve(binding.get("locator")) == raw, "unbound native execution demand/source")
     reservations.need(unit.get("mode") != "inert_control" and REQUIRED_SOURCES <= unit["source_files"].keys(),
                       "native mode/source closure invalid")
-    from dd1_recovery_meter import load_bindings, validate_launch_receipt
+    from dd1_recovery_meter import STARTING_G, load_bindings, validate_launch_receipt
+    backend.snapshot.verify_ancestry(unit.get("linux", {}).get("ancestry"), head, STARTING_G)
     bindings = load_bindings()
     receipt = reservations.read(receipt_path)
     def check(account):
         reservations.need(account.get("synthetic") is not True, "native entry rejects synthetic account")
-        validate_launch_receipt(receipt, bindings=bindings, account=account, overlay_head=head)
+        validate_launch_receipt(receipt, bindings=bindings, account=account, overlay_head=head, require_descendant=False)
     return _complete(command, unit, account_path, receipt_path, output, head, repo, check, lifetime)
 
 
@@ -90,4 +100,4 @@ def _run_inert_unit(command, *, unit, account_path, receipt_path, output, head, 
                       "res://tools/dd1_linux/inert.c" in unit["source_files"], "inert fixture binding required")
     def check(account):
         reservations.need(account.get("synthetic") is True, "inert entry requires synthetic account")
-    return _complete(command, unit, account_path, receipt_path, output, head, repo, check, lifetime)
+    return _complete(command, unit, account_path, receipt_path, output, head, repo, check, lifetime, inert=True)

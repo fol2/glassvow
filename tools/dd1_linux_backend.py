@@ -36,13 +36,16 @@ def controller_limits(unit):
     start = time.monotonic()
     deadline = __import__("datetime").datetime.fromisoformat(r.DEADLINE.replace("Z", "+00:00")).timestamp()
     wall = min(float(unit["wall_seconds"]), deadline - time.time())
-    r.need(wall > 0, "unit lifetime already expired")
+    r.need(wall >= 3, "complete wall envelope needs two seconds of cleanup headroom")
     def interrupt(signum, _):
         raise InterruptedError("controller signal " + str(signum))
-    for sig in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP, signal.SIGALRM):
+    for sig in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP):
         signal.signal(sig, interrupt)
+    # Fatal hard deadline cannot be swallowed by reservation/error handling.
+    # The workload/communicate soft deadline reserves two seconds for cleanup.
+    signal.signal(signal.SIGALRM, lambda *_: os._exit(124))
     signal.setitimer(signal.ITIMER_REAL, wall)
-    return start, wall
+    return start, wall - 2
 
 
 def sealed_helper(raw):
@@ -133,8 +136,7 @@ class Prepared:
             interruption = type(exc).__name__ + ":" + str(exc)
             if proc is not None:
                 proc.kill()
-                # Disable repeated signal delivery during the bounded reap.
-                signal.setitimer(signal.ITIMER_REAL, 0)
+                # The hard controller deadline remains armed during cleanup.
                 rest, err = proc.communicate(timeout=2)
                 raw = first + rest
         finally:

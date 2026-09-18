@@ -142,6 +142,40 @@ class BackendTests(unittest.TestCase):
             self.assertEqual(v, record["account_after"]["recovery"][k])
         return result["supervisor_report"]
 
+    def test_public_meter_has_no_cli_authority_or_callback_bypass(self):
+        import dd1_recovery_meter as meter
+        root, unit = self.case("public-meter-denial")
+        before = (root / "ACCOUNT.json").read_bytes()
+        with self.assertRaisesRegex(meter.MeterError, "native execution requires H host-authenticated exact demand") as raised:
+            meter.run_metered(["/workload", "positive"], receipt_path=root / "receipt.json",
+                account_path=root / "ACCOUNT.json", out_dir=root / "result", cpu_seconds=11,
+                output_limit=unit["raw_bytes"], interrupt_after_s=None, counts_as_engine=True,
+                unit_path=root / "demand.json")
+        self.assertEqual(before, (root / "ACCOUNT.json").read_bytes())
+        self.assertFalse((root / "result").exists())
+        RECORDS.append(dict(name="public-meter-denial", entry="run_metered", demand=unit,
+            account_before=json.loads(before), account_after=r.read(root / "ACCOUNT.json"),
+            actual_error=str(raised.exception), native_context_absent=True, output_absent=True))
+
+    def test_ancestry_objects_without_spawning_git(self):
+        import hashlib
+        import dd1_linux_snapshot as snapshot
+        from dd1_recovery_meter import STARTING_G
+        body = "tree " + "1" * 40 + "\nparent " + STARTING_G + "\n\nINERT ANCESTRY\n"
+        data = body.encode()
+        head = hashlib.sha1(b"commit " + str(len(data)).encode() + b"\0" + data).hexdigest()
+        snapshot.verify_ancestry([body], head, STARTING_G)
+        snapshot.verify_ancestry([], STARTING_G, STARTING_G)
+        for bodies, claimed in (([], head), ([body + "changed"], head), ([body], "0" * 40)):
+            with self.assertRaises(r.ReservationError):
+                snapshot.verify_ancestry(bodies, claimed, STARTING_G)
+        entry = (REPO / "tools/dd1_meter_entry.py").read_text()
+        self.assertIn("require_descendant=False", entry)
+        self.assertIn("verify_ancestry", entry)
+        RECORDS.append(dict(name="ancestry", environment="SYNTHETIC_GIT_OBJECTS",
+            head=head, body=body, ancestor=STARTING_G, command="verify_ancestry (in-process)",
+            note="Content-addressed parent link only; not native authentication or a published Git object"))
+
     def test_threaded_atomic_save_positive(self):
         root, _ = self.case("positive")
         rec = self.run_case(root); report = self.report(rec)
@@ -173,7 +207,7 @@ class BackendTests(unittest.TestCase):
     def test_aggregate_cpu_and_wall_blocked_io(self):
         for mode in ("cpu", "blocked_io"):
             with self.subTest(mode=mode):
-                root, _ = self.case(mode, mode, wall_seconds=2)
+                root, _ = self.case(mode, mode, wall_seconds=4)
                 rec = self.run_case(root); report = self.report(rec)
                 self.assertEqual(rec["controller_exit"], 1)
                 self.assertEqual(report["signal"], signal.SIGKILL)
@@ -235,7 +269,7 @@ class BackendTests(unittest.TestCase):
         for target, sig in (("supervisor", signal.SIGTERM), ("supervisor", signal.SIGKILL),
                 ("supervisor", signal.SIGSTOP), ("controller", signal.SIGTERM), ("controller", signal.SIGKILL)):
             with self.subTest(target=target, signal=sig):
-                root, unit = self.case(target + "-" + str(int(sig)), "linger", wall_seconds=2)
+                root, unit = self.case(target + "-" + str(int(sig)), "linger", wall_seconds=4)
                 before = r.read(root / "ACCOUNT.json")
                 proc, cmd = self.launch(root)
                 row = self.wait_live(root, proc)
@@ -340,6 +374,14 @@ class BackendTests(unittest.TestCase):
             target.write_bytes(b"CHANGED AFTER DEMAND")
             self.rejected(root, "runtime identity mismatch" if binary == "inert" else "helper must be pinned", copy)
             target.write_bytes(original)
+        root, unit = self.case("arbitrary-static-helper", repo=copy)
+        unit["linux"]["helper"] = deepcopy(unit["linux"]["runtime"]["/workload"])
+        fixture.sign(root, unit)
+        self.rejected(root, "helper must be pinned", copy)
+        root, unit = self.case("non-fixture-workload", repo=copy)
+        unit["linux"]["runtime"]["/workload"] = dict(unit["linux"]["helper"], executable=True)
+        fixture.sign(root, unit)
+        self.rejected(root, "inert entry permits only pinned harmless fixture", copy)
         root, unit = self.case("unsupported-ELF", repo=copy)
         target = copy / "tools/dd1_linux/build/inert"
         original = target.read_bytes(); wrong = bytearray(original); wrong[18:20] = b"\x03\x00"
