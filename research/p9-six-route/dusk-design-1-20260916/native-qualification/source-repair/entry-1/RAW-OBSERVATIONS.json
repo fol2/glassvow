@@ -1,0 +1,104 @@
+{
+  "schema": "DD1-LINUX-ENTRY-1-STATIC-OBSERVATIONS-1",
+  "recorded_at_utc": "2026-09-18T20:38:44.378411+00:00",
+  "host": {
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "uname": [
+      "Linux",
+      "localhost",
+      "6.18.44",
+      "#1 SMP Sat Sep 12 15:35:21 UTC 2026",
+      "x86_64"
+    ],
+    "libc": [
+      "glibc",
+      "2.41"
+    ],
+    "python": "3.13.5",
+    "engine_path_lookup": {
+      "godot": null,
+      "godot4": null
+    },
+    "engine_executed": false,
+    "pointer_bytes": 8,
+    "long_bytes": 8
+  },
+  "http_client_observations": [
+    {
+      "url": "https://api.github.com/repos/godotengine/godot-builds/releases/tags/4.7.2-stable",
+      "retrieved_at_utc": "2026-09-18T20:29:36.383971+00:00",
+      "error": "ConnectionError: HTTPSConnectionPool(host='api.github.com', port=443): Max retries exceeded with url: /repos/godotengine/godot-builds/releases/tags/4.7.2-stable (Caused by NameResolutionError(\"HTTPSConnection(host='api.github.com', port=443): Failed to resolve 'api.github.com' ([Errno -3] Temporary failure in name resolution)\"))"
+    },
+    {
+      "url": "https://godotengine.org/download/archive/4.7.2-stable/",
+      "retrieved_at_utc": "2026-09-18T20:29:36.392691+00:00",
+      "error": "ConnectionError: HTTPSConnectionPool(host='godotengine.org', port=443): Max retries exceeded with url: /download/archive/4.7.2-stable/ (Caused by NameResolutionError(\"HTTPSConnection(host='godotengine.org', port=443): Failed to resolve 'godotengine.org' ([Errno -3] Temporary failure in name resolution)\"))"
+    }
+  ],
+  "binary_transport_tool_transcript": [
+    {
+      "tool": "container.download",
+      "url": "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip",
+      "error": "download failed because url not viewed in conversation before. open the file or url using web.run first."
+    },
+    {
+      "tool": "web.open",
+      "url": "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip",
+      "error": "Cache miss"
+    },
+    {
+      "tool": "container.download",
+      "url": "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip",
+      "error": "download failed because url not viewed in conversation before. open the file or url using web.run first."
+    }
+  ],
+  "tool_transcript_scope": "Transcribed actual tool errors; no HTTP 404, release absence, or engine failure inferred.",
+  "engine_inventory": {
+    "path_lookup": {
+      "godot": null,
+      "godot4": null
+    },
+    "command": "find /opt /usr/local/bin /usr/bin /tmp /mnt/data /home/oai/share -maxdepth 4 -iname '*godot*'",
+    "matches": [],
+    "scope": "Inspected paths only, not a whole-filesystem absence proof",
+    "requested_archive_exists": false
+  },
+  "official_metadata": {
+    "retrieval": "GitHub connector GET; selected-asset fields extracted from actual release metadata, NOT downloaded-byte verification",
+    "url": "https://api.github.com/repos/godotengine/godot-builds/releases/assets/519677358",
+    "release_id": 372477026,
+    "tag": "4.7.2-stable",
+    "release_draft": false,
+    "release_prerelease": false,
+    "release_published_at_utc": "2026-08-18T15:56:46Z",
+    "asset_id": 519677358,
+    "asset_name": "Godot_v4.7.2-stable_linux.x86_64.zip",
+    "asset_size": 77860424,
+    "asset_digest": "sha256:cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4",
+    "browser_download_url": "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip",
+    "downloaded_archive_sha256": null,
+    "extracted_executable_sha256": null,
+    "ELF_runtime_closure": null
+  },
+  "H_control": {
+    "command": [
+      "python3",
+      "-I",
+      "-B",
+      "-S",
+      "/mnt/data/dd1-entry-work/package/check_h_closure.py",
+      "/mnt/data/dd1-entry-work/controller/research/p9-six-route/duskblade-first-proof-20260912"
+    ],
+    "exit_code": 0,
+    "stdout_file": "H-CLOSURE.stdout.json",
+    "stdout_sha256": "093478858b4659e7377f334e9de8c76a41bad86916cd7c5949abb233b2a3583c",
+    "stderr_file": "H-CLOSURE.stderr.txt",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 0,
+    "scope": "Actual unchanged H imports and explicit missing-manifest refusal only; no mocked H, positive empirical context, full H suite or native entry."
+  },
+  "engine_plus_contained_starts": 0,
+  "live_account_writes": 0,
+  "engine_or_helper_compilations": 0,
+  "B1_23_plus_12_suite_rerun": false
+}

@@ -1,0 +1,75 @@
+{
+  "scope": "Read-only source dependency map, not a complete native execution snapshot",
+  "files": {
+    "AGENTS.md": {
+      "ref": "07b5aa9dec8436132a524511d5438c510e322070",
+      "git_blob": "114f0215fdc211b7171b073e767dfef37f1055f2",
+      "url": "https://github.com/fol2/glassvow/blob/07b5aa9dec8436132a524511d5438c510e322070/AGENTS.md"
+    },
+    "docs/agents/ai-sdlc.md": {
+      "ref": "07b5aa9dec8436132a524511d5438c510e322070",
+      "git_blob": "22dd5f564ef9d2964506cba39c0b86fe94854afe",
+      "url": "https://github.com/fol2/glassvow/blob/07b5aa9dec8436132a524511d5438c510e322070/docs/agents/ai-sdlc.md"
+    },
+    ".claude/skills/glassvow-godot/SKILL.md": {
+      "ref": "07b5aa9dec8436132a524511d5438c510e322070",
+      "git_blob": "f79f436b114c90958b73114540c576e5f006385e",
+      "url": "https://github.com/fol2/glassvow/blob/07b5aa9dec8436132a524511d5438c510e322070/.claude/skills/glassvow-godot/SKILL.md"
+    },
+    "tools/check_imports.sh": {
+      "ref": "07b5aa9dec8436132a524511d5438c510e322070",
+      "git_blob": "8925859cb164ccf8d2048ee8c8b82417fc3f2d59",
+      "url": "https://github.com/fol2/glassvow/blob/07b5aa9dec8436132a524511d5438c510e322070/tools/check_imports.sh"
+    },
+    "tools/check_scripts.sh": {
+      "ref": "07b5aa9dec8436132a524511d5438c510e322070",
+      "git_blob": "a987abe0a77ff06494cece9d82488fc50ed15cea",
+      "url": "https://github.com/fol2/glassvow/blob/07b5aa9dec8436132a524511d5438c510e322070/tools/check_scripts.sh"
+    },
+    "tools/dd1_meter_entry.py": {
+      "ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+      "git_blob": "a22552e2717652391def848917d2b6d7cfa795a4",
+      "url": "https://github.com/fol2/glassvow/blob/3bb4205caf55f882a4507272445997ae448fcd7b/tools/dd1_meter_entry.py"
+    },
+    "tools/dd1_linux_snapshot.py": {
+      "ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+      "git_blob": "13a0cd1a32713ca646ebfa4592ae00336a4a957b",
+      "url": "https://github.com/fol2/glassvow/blob/3bb4205caf55f882a4507272445997ae448fcd7b/tools/dd1_linux_snapshot.py"
+    },
+    "tools/dd1_linux/isolate.c": {
+      "ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+      "git_blob": "27ca5451292172b57753918eed08a2c1a8d518ec",
+      "url": "https://github.com/fol2/glassvow/blob/3bb4205caf55f882a4507272445997ae448fcd7b/tools/dd1_linux/isolate.c"
+    },
+    "project.godot": {
+      "ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+      "git_blob": "319cdc9006d3579ff2abb567830e204a8ff86d9c",
+      "url": "https://github.com/fol2/glassvow/blob/3bb4205caf55f882a4507272445997ae448fcd7b/project.godot"
+    },
+    "tests/test_dd1_source_repair.gd": {
+      "ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+      "git_blob": "0fd416c2c904220cfd2622f46b7188dc1578586f",
+      "url": "https://github.com/fol2/glassvow/blob/3bb4205caf55f882a4507272445997ae448fcd7b/tests/test_dd1_source_repair.gd"
+    },
+    "research/p9-six-route/dusk-design-1-20260916/native-qualification/source-repair/b1/EXECUTION-DEMAND.md": {
+      "ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+      "git_blob": "d635663491b4aa986752bfd8e31aee2a94d10abc",
+      "url": "https://github.com/fol2/glassvow/blob/3bb4205caf55f882a4507272445997ae448fcd7b/research/p9-six-route/dusk-design-1-20260916/native-qualification/source-repair/b1/EXECUTION-DEMAND.md"
+    },
+    "research/p9-six-route/dusk-design-1-20260916/native-qualification/recovery/ACCOUNT.json": {
+      "ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+      "git_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+      "url": "https://github.com/fol2/glassvow/blob/3bb4205caf55f882a4507272445997ae448fcd7b/research/p9-six-route/dusk-design-1-20260916/native-qualification/recovery/ACCOUNT.json"
+    },
+    "research/p9-six-route/duskblade-first-proof-20260912/evidence_boundary.py": {
+      "ref": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+      "git_blob": "a88db0791572f430ea3e5cde85683c8527cead39",
+      "url": "https://github.com/fol2/glassvow/blob/5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6/research/p9-six-route/duskblade-first-proof-20260912/evidence_boundary.py"
+    },
+    "research/p9-six-route/duskblade-first-proof-20260912/reference_kernel.py": {
+      "ref": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+      "git_blob": "ee091fb503849117358b3691264fca71803f8bbc",
+      "url": "https://github.com/fol2/glassvow/blob/5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6/research/p9-six-route/duskblade-first-proof-20260912/reference_kernel.py"
+    }
+  }
+}

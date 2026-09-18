@@ -1,0 +1,49 @@
+{
+  "schema": "DD1-LINUX-ENTRY-1-ACCOUNT-OBSERVATION-1",
+  "not_an_account_or_grant": true,
+  "source_ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+  "source_path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/recovery/ACCOUNT.json",
+  "source_git_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+  "scope": "Current GitHub ledger read, not an independent certification of historical account completeness",
+  "reported": {
+    "engine_plus_contained_used": 2040,
+    "engine_plus_contained_cap": 2048,
+    "cpu_ns_used": 398617197992,
+    "cpu_ns_cap": 14400000000000,
+    "raw_bytes_used": 893139,
+    "raw_bytes_cap": 1073741824,
+    "executors": 1,
+    "per_invocation_cpu_seconds": 300,
+    "first_engine_launch_utc": "2026-09-17T17:54:40Z",
+    "deadline_utc": "2026-09-24T17:54:40Z"
+  },
+  "arithmetic_remaining": {
+    "starts": 8,
+    "cpu_ns": 14001382802008,
+    "raw_bytes": 1072848685
+  },
+  "unit_reservations_v2": "Absent in this unchanged accepted account blob; no new B1/entry reservation is present",
+  "historical": {
+    "starts_used": 1277,
+    "starts_cap": 8192,
+    "arithmetic_remainder": 6915,
+    "spendable": false,
+    "attempt": "1/1 consumed",
+    "cpu_seconds": "UNKNOWN",
+    "elapsed_seconds": "UNKNOWN",
+    "raw_bytes": "UNKNOWN"
+  },
+  "this_invocation": {
+    "owner_ceiling": 8,
+    "admitted_units": 0,
+    "committed_starts": 0,
+    "engine_launches": 0,
+    "contained_starts": 0,
+    "live_account_writes": 0,
+    "new_account": false,
+    "refunded": false,
+    "reset": false,
+    "interpretation": "No execution unit admitted. Inert Python import/refusal and static planning records are not engine results or a new recovery account."
+  },
+  "post_publication_verification": "The final handoff/readback must compare this account blob with the publication tip; no account is overwritten by this observation record."
+}

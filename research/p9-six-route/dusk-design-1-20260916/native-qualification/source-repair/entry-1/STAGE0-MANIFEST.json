@@ -1,0 +1,99 @@
+{
+  "schema": "DD1-LINUX-ENTRY-1-STAGE0-MANIFEST-1",
+  "operation": "DD1-LINUX-ENTRY-1",
+  "disposition": "BLOCKED_BEFORE_ENGINE_ENTRY",
+  "admitted": false,
+  "source_head": "3bb4205caf55f882a4507272445997ae448fcd7b",
+  "source_tree": "56ad1534dcec2c2d0f5d3f5125dd152065c5ec45",
+  "scientific_operating_M": "07b5aa9dec8436132a524511d5438c510e322070",
+  "owner_selection_comment": 5735810042,
+  "account_git_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+  "stage_graph": [
+    {
+      "stage": 0,
+      "result": "BLOCKED",
+      "completed": [
+        "owner selection recorded/read back",
+        "current-main instructions refreshed",
+        "accepted B1 authority preserved",
+        "current GitHub account and unchanged blob read",
+        "supported host tuple observed without engine",
+        "fixed official asset metadata located",
+        "exact H module closure materialised and imported; missing-manifest refusal observed"
+      ],
+      "blocking_prerequisite": "Required official executable bytes are not staged; normal binary transport attempts failed",
+      "additional_unclosed_prerequisites": [
+        "exact executable/interpreter/library hashes",
+        "pinned supervisor binary staging",
+        "complete necessary source/content/import snapshot and verified cache layout",
+        "source-supported engine thread/syscall plan",
+        "genuine prospective H-bound exact execution_demand, all unit costs and release manifest"
+      ]
+    },
+    {
+      "stage": 1,
+      "result": "NOT_ENTERED",
+      "engine_starts": 0,
+      "contained_starts": 0,
+      "reason": "Stage 0 admission did not hold; not an observed engine incompatibility"
+    },
+    {
+      "stage": 2,
+      "result": "NOT_ENTERED",
+      "engine_starts": 0,
+      "contained_starts": 0,
+      "reason": "Stage 1 absent; project/import/cache and complete costs unclosed"
+    },
+    {
+      "stage": 3,
+      "result": "STATIC_STOP_DISPOSITION_PREPARED",
+      "completion_record": "Single #156 handoff and GitHub readback record at publication tip"
+    }
+  ],
+  "candidate_stage1_argv": null,
+  "candidate_stage2_argv": null,
+  "execution_demand": null,
+  "reservation": null,
+  "grant": null,
+  "why_null": "Missing exact binary/runtime/cache inputs are never replaced by plausible hashes, guessed argv/layouts or synthetic authority.",
+  "fixed_fixture": {
+    "path": "tests/test_dd1_source_repair.gd",
+    "git_blob": "0fd416c2c904220cfd2622f46b7188dc1578586f",
+    "source_ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+    "scope": "Constructed two-combat runtime fixture, not ordinary acquisition",
+    "declared_engine_plus_contained_demand": 3,
+    "executed": false
+  },
+  "remaining_start_reasoning": {
+    "ceiling": 8,
+    "stage1_identity_nominal": 1,
+    "fixture_nominal": 3,
+    "left_for_all_actual_import_parse_other_engine_prerequisites": 4,
+    "qualification": "A conditional count identity, NOT proof the complete project stage fits. check_scripts.sh runs one engine per selected script; all processes/copies/caps must be bound before stage release."
+  },
+  "native_acceptance": false,
+  "ENTRY_VERIFIED": false,
+  "FIXTURE_VERIFIED": false,
+  "INCOMPATIBLE_observed": false,
+  "preserved": {
+    "B1": "3bb4205caf55f882a4507272445997ae448fcd7b",
+    "B1_review": 5732200372,
+    "B1_acceptance": 5734355049,
+    "D": "746388323b8e886967e0e13fe109490a70206a66",
+    "C": "cf27285a3103d8867a179f700c5ebf32661453d5",
+    "H": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+    "H_ALLOCATION_blob": "824ff18acbca2f776533beed83a43b21d9a50f2c",
+    "certificates": "0/3"
+  },
+  "exclusions": [
+    "ordinary acquisition",
+    "N1/N2",
+    "top-up",
+    "new account",
+    "B1 redesign/re-review",
+    "self-approval",
+    "production PR/CI",
+    "merge",
+    "release"
+  ]
+}
