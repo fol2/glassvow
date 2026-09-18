@@ -1,0 +1,36 @@
+{
+  "schema": "DD1-B1-XZ-TRANSPORT-1",
+  "encoding": "concatenated-parts-xz",
+  "raw_name": "REAL-INERT-CONTROLS.json",
+  "raw_bytes": 765752,
+  "raw_sha256": "f77c4215c6f5c82f1093345ee568f1bf136361b131c639e5a9c3a00c865a1319",
+  "compressed_bytes": 40096,
+  "compressed_sha256": "3706d1b6452c314e88d0883fd144b0c95bd224af45b0c7d8f1ef9cf74f210c21",
+  "parts": [
+    {
+      "path": "REAL-INERT-CONTROLS.json.xz.part01",
+      "bytes": 10500,
+      "sha256": "16c29bec9bfabc6a0ce7ced3812c3a1fa9daab0cd096e7aec5da54bca3e02867",
+      "git_blob": "62ba89b4f234727d275bf97d61aa5dc62428dbe6"
+    },
+    {
+      "path": "REAL-INERT-CONTROLS.json.xz.part02",
+      "bytes": 9500,
+      "sha256": "14e151a1ee795ff980d3927c65719c2c51ddcd3d8036d6b590a520e3b07bbd82",
+      "git_blob": "8520200eaa05d5be27cb30c2a45aef59f23d7dec"
+    },
+    {
+      "path": "REAL-INERT-CONTROLS.json.xz.part03",
+      "bytes": 10500,
+      "sha256": "ed9d657d59695716f834880e49968495823aa27f9c36ff612bbe1ca426c5a4d2",
+      "git_blob": "18ef4609d75cc1a49737077ee850a6403873f85c"
+    },
+    {
+      "path": "REAL-INERT-CONTROLS.json.xz.part04",
+      "bytes": 9596,
+      "sha256": "b466aaab2b46796c19b1784d17d688fc7bf50f2d282dd63423722b7154138382",
+      "git_blob": "4211ddce53bd9bc798fe4392e95b07ae3fda07ef"
+    }
+  ],
+  "meaning": "Lossless transport only; compression creates no capacity or credit. All decoded records are synthetic/inert, not game outcomes."
+}

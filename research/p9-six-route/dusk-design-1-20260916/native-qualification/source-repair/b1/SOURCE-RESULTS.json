@@ -1,0 +1,181 @@
+{
+  "schema": "DD1-B1-FINAL-CHECKS-1",
+  "implementation_head": "efdac6a25dd0436de5ef2c52136b5f8ce71c4da7",
+  "implementation_tree": "19781b453689203eb3d6696a247e3d5a08ca8d3a",
+  "sources": {
+    "tools/dd1_linux/.gitignore": {
+      "bytes": 20,
+      "git_blob": "3d43339293004eaa6de63cf66c6ef986a0922141",
+      "sha256": "c7cd0fc55d4b88bc4ed87b1cdc33670d9046174ab762188a0f2ce10290bb56e0"
+    },
+    "tools/dd1_linux/build_inert.py": {
+      "bytes": 2121,
+      "git_blob": "d0a9a851184a9e96880616af828c4a75877d1df9",
+      "sha256": "82fe567bcec98818a3ca4bb6c8fbb15fac008b17f57087e059c7487269329bac"
+    },
+    "tools/dd1_linux/evidence.py": {
+      "bytes": 2358,
+      "git_blob": "82953d74971710aada2849125c23292121c2d479",
+      "sha256": "ea6303555b9a119e38838fd61da459bcaff74b4df7f484f7457ee68faac16b36"
+    },
+    "tools/dd1_linux/inert.c": {
+      "bytes": 5532,
+      "git_blob": "2ab67a85162e8ac5dda9741462d4fa560598909b",
+      "sha256": "7de25acb81443ace787041d0bd03e084f8b50f3592a72e4bab9b51f12815e916"
+    },
+    "tools/dd1_linux/inert_cases.py": {
+      "bytes": 2577,
+      "git_blob": "189d222e778490b53feeb769adb14b73e9916074",
+      "sha256": "f8c8b86acdadd918c7f12b6f74657b3af9e2ca7220dd3258649dfb62b01e9e8b"
+    },
+    "tools/dd1_linux/inert_entry.py": {
+      "bytes": 979,
+      "git_blob": "6c846ffce5a5d34a15249bfc7b7c173785a62c1d",
+      "sha256": "73f19132931b5174a93dc9bed56b18242d4ef423627d3f448c719148cb618e57"
+    },
+    "tools/dd1_linux/isolate.c": {
+      "bytes": 2584,
+      "git_blob": "27ca5451292172b57753918eed08a2c1a8d518ec",
+      "sha256": "54f0f132ec231620cab138e91b79c308949644088bf24e733807c6b3cb30cc5c"
+    },
+    "tools/dd1_linux/policy.c": {
+      "bytes": 6780,
+      "git_blob": "1ce6c49b7ab39ac29ba7e67f6bbc8e94c2d1bc04",
+      "sha256": "0455f115803fba779a9f7ca1ac15990a7f4ba4217dca4a5463d5b30369de0543"
+    },
+    "tools/dd1_linux/policy.h": {
+      "bytes": 481,
+      "git_blob": "af26a3fcc21a6a1587310466be13ccb81ec088c8",
+      "sha256": "4f239404e778cd2ca611dda3965681ea481391656d9d23f3199eae10c8a7ff76"
+    },
+    "tools/dd1_linux/supervisor.c": {
+      "bytes": 7896,
+      "git_blob": "11c8a1de2089b433c9f4df5f2e8344d3e0dd755c",
+      "sha256": "3c8a65dc128e9ffae22cd6b9ea0dbe197011138b64383224efd445eae53e7545"
+    },
+    "tools/dd1_linux/test_backend.py": {
+      "bytes": 25174,
+      "git_blob": "cbe2871952b45c9413494e25bf85db07fb1813eb",
+      "sha256": "69095e1d1d4eb1bb05ed4ebc58bc8333137db0012df1d8e345bdab8e2a722952"
+    },
+    "tools/dd1_linux_snapshot.py": {
+      "bytes": 8228,
+      "git_blob": "13a0cd1a32713ca646ebfa4592ae00336a4a957b",
+      "sha256": "64576a0f5d1001da7c30fff928a50a845603696c9ad54e418e032659a1a5ed19"
+    },
+    "tools/dd1_linux_backend.py": {
+      "bytes": 8293,
+      "git_blob": "1d5e0070b9e4e4bc8d99c96d0e68fb05a5f2c421",
+      "sha256": "f31dfac11666ff9f29a88ed371e4ad8e18b5971e92e42d5670f870f1cf01fc76"
+    },
+    "tools/dd1_meter_entry.py": {
+      "bytes": 6488,
+      "git_blob": "a22552e2717652391def848917d2b6d7cfa795a4",
+      "sha256": "5ac8c4c9c0da0a228871b5fda200327baebf6c087042cb5d7f6e565fdbb85dcb"
+    },
+    "tools/dd1_recovery_meter.py": {
+      "bytes": 16025,
+      "git_blob": "7625951ae8f4b676819ce17159b5c7006ee7dbfb",
+      "sha256": "2c18163481e9ccf33d4109ae45142fcf829c809b79b4d6815572ee32fad43532"
+    },
+    "tools/dd1_reservations.py": {
+      "bytes": 15264,
+      "git_blob": "64d71b55fa5342de2011abbae7311ab1f430ae12",
+      "sha256": "d577b1290ce143af4c7a260ce2e7a86d0a9937b5c9db714bd122f19a55c39f83"
+    },
+    "tools/test_dd1_source_repair.py": {
+      "bytes": 19280,
+      "git_blob": "bfe3e4657b45f76e7a5cc1df8c9da278c2f66945",
+      "sha256": "85cd8f0844b3d0866c6722137fb05edfe2ba2584cb0f0ff5c777652598aeede3"
+    },
+    "tools/dd1_provenance.py": {
+      "bytes": 19879,
+      "git_blob": "4be9cebf696ea513746d29c440020f7610d4ee95",
+      "sha256": "33e32508d5b79dca125152a2556d7a7e928d9164fb5873777a45284b5e26d898"
+    },
+    "tools/dd1_synthetic_capture.py": {
+      "bytes": 7449,
+      "git_blob": "6fd196a8719a75e2f7a6d8da8b37764c7e259ef5",
+      "sha256": "36f0083bc062e03001a7079a0a106cfe070a7367225cb4d67d94f9de42f47a74"
+    },
+    "tests/support/dd1_native_driver_main.gd": {
+      "bytes": 11669,
+      "git_blob": "d8d2eff17399ff1ea49fcd3b45877d29bee5d4e4",
+      "sha256": "94e6d194820008c15a7f415ca0fd2a3e02a5861f20655265b092bcd9e1703332"
+    },
+    "tests/support/dd1_route_journal.gd": {
+      "bytes": 6141,
+      "git_blob": "08548076dbb053a3b00d6c3a27ac4c0cd96323ad",
+      "sha256": "c9f4c0e166383825510715486abc74d32f08bd043176a9382f75bcad7d1f509e"
+    },
+    "tests/support/dd1_ordinary_capture.gd": {
+      "bytes": 9830,
+      "git_blob": "271d3e790e7d75609a4bdb045cbf36a3322573c4",
+      "sha256": "5a62567a60946a6414d7d3a8bf630ccb007cb20a6ad33ee8db87921d41862968"
+    }
+  },
+  "source_after_identical": true,
+  "python": "/opt/pyvenv/bin/python",
+  "python_version": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "python_sha256": "17b78e0a93175e86f9ac03141924fd7a7f0c0c52e66b34bfa0de20ffef989df1",
+  "host": {
+    "system": "Linux",
+    "node": "localhost",
+    "release": "6.18.44",
+    "version": "#1 SMP Sat Sep 12 15:35:21 UTC 2026",
+    "machine": "x86_64",
+    "processor": ""
+  },
+  "libc": [
+    "glibc",
+    "2.41"
+  ],
+  "commands": [
+    {
+      "name": "PRIOR-23",
+      "argv": [
+        "/opt/pyvenv/bin/python",
+        "-I",
+        "-S",
+        "-c",
+        "import sys,runpy;sys.path.insert(0,\"tools\");runpy.run_path(\"tools/test_dd1_source_repair.py\",run_name=\"__main__\")"
+      ],
+      "cwd": "/mnt/data/glassvow-b1",
+      "environment_delta": {
+        "DD1_INERT_CODE_HEAD": "efdac6a25dd0436de5ef2c52136b5f8ce71c4da7",
+        "DD1_B1_OUTPUT": "/mnt/data/b1-final/real"
+      },
+      "start_utc": "2026-09-18T10:55:05.429113+00:00",
+      "elapsed_seconds": 1.3784039929996652,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "test_H_role_adapter_keeps_producer_bytes_and_manifest_separate (__main__.ProvenanceTests.test_H_role_adapter_keeps_producer_bytes_and_manifest_separate) ... ok\ntest_after_reward_safe_node_next_created_combat_is_structurally_valid (__main__.ProvenanceTests.test_after_reward_safe_node_next_created_combat_is_structurally_valid) ... ok\ntest_after_reward_safe_node_old_combat_rejects_at_identity_guard (__main__.ProvenanceTests.test_after_reward_safe_node_old_combat_rejects_at_identity_guard) ... ok\ntest_constructed_complete_fixture_is_structural_only (__main__.ProvenanceTests.test_constructed_complete_fixture_is_structural_only) ... ok\ntest_existing_H_boundary_is_called_before_record_inspection (__main__.ProvenanceTests.test_existing_H_boundary_is_called_before_record_inspection) ... ok\ntest_interruption_raw_damage_parent_and_summary_reject (__main__.ProvenanceTests.test_interruption_raw_damage_parent_and_summary_reject) ... ok\ntest_missing_preterminal_clear_receipt_or_dawn_reject (__main__.ProvenanceTests.test_missing_preterminal_clear_receipt_or_dawn_reject) ... ok\ntest_rehashed_opaque_commands_dropped_events_and_failed_saves_reject (__main__.ProvenanceTests.test_rehashed_opaque_commands_dropped_events_and_failed_saves_reject) ... ok\ntest_rehashed_stale_combat_object_or_wrong_encounter_reject (__main__.ProvenanceTests.test_rehashed_stale_combat_object_or_wrong_encounter_reject) ... ok\ntest_unearned_unrelated_and_wrong_first_profiles_reject (__main__.ProvenanceTests.test_unearned_unrelated_and_wrong_first_profiles_reject) ... ok\ntest_wrong_root_vow_source_or_policy_reject (__main__.ProvenanceTests.test_wrong_root_vow_source_or_policy_reject) ... ok\ntest_account_reset_historical_credit_and_clock_denied (__main__.ReservationTests.test_account_reset_historical_credit_and_clock_denied) ... ok\ntest_child_sees_full_durable_reservation_and_history_unchanged (__main__.ReservationTests.test_child_sees_full_durable_reservation_and_history_unchanged) ... ok\ntest_duplicate_json_and_symlink_accounts_reject (__main__.ReservationTests.test_duplicate_json_and_symlink_accounts_reject) ... ok\ntest_existing_output_never_overwritten (__main__.ReservationTests.test_existing_output_never_overwritten) ... ok\ntest_failure_and_interrupt_never_refund (__main__.ReservationTests.test_failure_and_interrupt_never_refund) ... ok\ntest_final_write_failure_preserves_initial_reservation (__main__.ReservationTests.test_final_write_failure_preserves_initial_reservation) ... ok\ntest_mismatched_caps_identity_source_command_unsafe_limits (__main__.ReservationTests.test_mismatched_caps_identity_source_command_unsafe_limits) ... ok\ntest_native_entry_cannot_spawn_or_spend_with_valid_demands (__main__.ReservationTests.test_native_entry_cannot_spawn_or_spend_with_valid_demands) ... ok\ntest_one_executor_duplicate_unit_and_output_alias (__main__.ReservationTests.test_one_executor_duplicate_unit_and_output_alias) ... ok\ntest_starts_cpu_and_cumulative_raw_deny_before_runner (__main__.ReservationTests.test_starts_cpu_and_cumulative_raw_deny_before_runner) ... ok\ntest_debit_before_native_apply_and_once_only_observer (__main__.SourceShapeTests.test_debit_before_native_apply_and_once_only_observer) ... ok\ntest_terminal_and_initial_bytes_are_not_shortcuts (__main__.SourceShapeTests.test_terminal_and_initial_bytes_are_not_shortcuts) ... ok\n\n----------------------------------------------------------------------\nRan 23 tests in 1.298s\n\nOK\n"
+    },
+    {
+      "name": "BACKEND-12",
+      "argv": [
+        "/opt/pyvenv/bin/python",
+        "-I",
+        "-S",
+        "tools/dd1_linux/test_backend.py"
+      ],
+      "cwd": "/mnt/data/glassvow-b1",
+      "environment_delta": {
+        "DD1_INERT_CODE_HEAD": "efdac6a25dd0436de5ef2c52136b5f8ce71c4da7",
+        "DD1_B1_OUTPUT": "/mnt/data/b1-final/real"
+      },
+      "start_utc": "2026-09-18T10:55:06.807747+00:00",
+      "elapsed_seconds": 12.573279191999973,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "test_aggregate_cpu_and_wall_blocked_io (__main__.BackendTests.test_aggregate_cpu_and_wall_blocked_io) ... ok\ntest_ancestry_objects_without_spawning_git (__main__.BackendTests.test_ancestry_objects_without_spawning_git) ... ok\ntest_concurrent_and_duplicate_units_deny_at_intended_guard (__main__.BackendTests.test_concurrent_and_duplicate_units_deny_at_intended_guard) ... ok\ntest_exhausted_reservations_and_changed_identity_before_effects (__main__.BackendTests.test_exhausted_reservations_and_changed_identity_before_effects) ... ok\ntest_forbidden_process_and_alternative_output_paths (__main__.BackendTests.test_forbidden_process_and_alternative_output_paths) ... ok\ntest_output_alias_and_non_synthetic_account_reject (__main__.BackendTests.test_output_alias_and_non_synthetic_account_reject) ... ok\ntest_pinned_dynamic_runtime_and_missing_dependencies (__main__.BackendTests.test_pinned_dynamic_runtime_and_missing_dependencies) ... ok\ntest_public_meter_has_no_cli_authority_or_callback_bypass (__main__.BackendTests.test_public_meter_has_no_cli_authority_or_callback_bypass) ... ok\ntest_real_signals_cleanup_and_charges (__main__.BackendTests.test_real_signals_cleanup_and_charges) ... ok\ntest_repeated_and_competing_writes_reach_budget_guard (__main__.BackendTests.test_repeated_and_competing_writes_reach_budget_guard) ... ok\ntest_source_aliases_and_escape_with_changed_original (__main__.BackendTests.test_source_aliases_and_escape_with_changed_original) ... ok\ntest_threaded_atomic_save_positive (__main__.BackendTests.test_threaded_atomic_save_positive) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 12.510s\n\nOK\n"
+    }
+  ],
+  "proof_scope": {
+    "native_launches": 0,
+    "live_account_access_by_tests": false,
+    "GDScript": "UNEXECUTED; source-shape assertions only",
+    "H_integration": "UNEXECUTED; prior tests explicitly mock H",
+    "full_source_blob_readback_count": 22
+  }
+}

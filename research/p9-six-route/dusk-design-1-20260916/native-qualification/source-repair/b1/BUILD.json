@@ -1,0 +1,92 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-static",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/mnt/data/glassvow-b1/tools/dd1_linux/supervisor.c",
+        "/mnt/data/glassvow-b1/tools/dd1_linux/policy.c",
+        "/mnt/data/glassvow-b1/tools/dd1_linux/isolate.c",
+        "-o",
+        "/mnt/data/glassvow-b1/tools/dd1_linux/build/supervisor"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-static",
+        "-pthread",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/mnt/data/glassvow-b1/tools/dd1_linux/inert.c",
+        "-o",
+        "/mnt/data/glassvow-b1/tools/dd1_linux/build/inert"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-pthread",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/mnt/data/glassvow-b1/tools/dd1_linux/inert.c",
+        "-o",
+        "/mnt/data/glassvow-b1/tools/dd1_linux/build/inert-dynamic"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "host": {
+    "system": "Linux",
+    "node": "localhost",
+    "release": "6.18.44",
+    "version": "#1 SMP Sat Sep 12 15:35:21 UTC 2026",
+    "machine": "x86_64",
+    "processor": ""
+  },
+  "libc": [
+    "glibc",
+    "2.41"
+  ],
+  "binaries": {
+    "libc.so.6": {
+      "bytes": 1995216,
+      "sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826"
+    },
+    "ld-linux-x86-64.so.2": {
+      "bytes": 225672,
+      "sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"
+    },
+    "supervisor": {
+      "bytes": 823744,
+      "sha256": "dae7a481fd0d6c25f093c38056673a6039f98d899e816a65953537a54d00c7ce"
+    },
+    "inert": {
+      "bytes": 893192,
+      "sha256": "ead0fc4d0660d8a691469296c59827c66bad717b98d54671ecdb6eed8dcc9129"
+    },
+    "inert-dynamic": {
+      "bytes": 17440,
+      "sha256": "5144e1676b1ace6f29432e80b9e9f6eac49300a0b4173edb2b61e03dac9da1a1"
+    }
+  }
+}
