@@ -61,6 +61,21 @@ def validate_task(unit):
            task["stage"] == unit["stage"], "missing/mismatched task contract")
     r.need(task["kind"] == ("exact-files" if unit["mode"] == "inert_control" else "godot-stage"),
            "wrong task kind")
+    if unit["mode"] == "engineering":
+        entry, stage = unit["argv"][0], unit["stage"]
+        prefix = [entry, "--headless", "--path", "/source"]
+        if stage == "identity":
+            valid = unit["argv"] == [entry, "--version"]
+        elif stage == "preparation":
+            valid = unit["argv"] == prefix + ["--import", "--quit"] and bool(unit.get("preparation"))
+        elif stage == "parse":
+            valid = (len(unit["argv"]) == 7 and unit["argv"][:6] == prefix + ["--check-only", "-s"]
+                     and unit["argv"][6] in unit["source_files"] and unit["argv"][6].endswith(".gd")
+                     and bool(unit.get("sealed_input")))
+        else:
+            valid = (unit["argv"] == prefix + ["-s", "res://tests/run_all.gd", "--",
+                     "--tests=res://tests/test_dd1_source_repair.gd"] and bool(unit.get("sealed_input")))
+        r.need(valid, "argv does not implement the declared engine stage")
     files = task["files"]
     r.need(isinstance(files, dict) and len(files) <= 128 and
            (unit["mode"] != "inert_control" or bool(files)), "task output inventory")
