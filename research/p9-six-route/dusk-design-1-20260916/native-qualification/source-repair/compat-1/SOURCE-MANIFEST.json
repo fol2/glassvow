@@ -1,0 +1,161 @@
+{
+  "accepted_H_modules": {
+    "evidence_boundary.py": {
+      "bytes": 7961,
+      "git_blob": "a88db0791572f430ea3e5cde85683c8527cead39",
+      "ref": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+      "sha256": "12cfe237609ac8c9e2951b2557ff8643497c139bbd6ff44002f6c929be3b4bad"
+    },
+    "reference_kernel.py": {
+      "bytes": 15131,
+      "git_blob": "ee091fb503849117358b3691264fca71803f8bbc",
+      "ref": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+      "sha256": "7aa2592fd696a13cab2ba6b3c035b0ebb8545bfb6ca0986ef9afccb3fbe4cd52"
+    }
+  },
+  "account_expected_preserved_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+  "base_head": "289a6734f5ce75e85530db9abee4c44b583f040a",
+  "binaries_observed_after_tests": {
+    "inert_fixture": {
+      "bytes": 17360,
+      "observed_path": "/mnt/data/compat-work/tools/dd1_linux/build/compat-feasibility",
+      "sha256": "599e9b799b6674a8d78f37a9539082655a6ca7e3c0a38167babbc6ae3283ff5b"
+    },
+    "libc": {
+      "bytes": 1995216,
+      "observed_path": "/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826"
+    },
+    "loader": {
+      "bytes": 225672,
+      "observed_path": "/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"
+    },
+    "official_engine_NOT_EXECUTED": {
+      "bytes": 146414384,
+      "observed_path": "/mnt/data/compat-work/engine/official-elf-readonly",
+      "sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e"
+    },
+    "strict_supervisor": {
+      "bytes": 823744,
+      "observed_path": "/mnt/data/compat-work/tools/dd1_linux/build/supervisor",
+      "sha256": "dae7a481fd0d6c25f093c38056673a6039f98d899e816a65953537a54d00c7ce"
+    }
+  },
+  "live_account_mounted_in_test_root": false,
+  "main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "new_source_readback_blobs_match": true,
+  "official_engine_executed": false,
+  "operation": "DD1-B1-COMPAT-1",
+  "source_blobs": {
+    "tools/dd1_linux/check_compat_feasibility.py": {
+      "bytes": 13246,
+      "git_blob": "d02d7168ac4808f2c16862c5e4984ff19b561456",
+      "ref": "7cc46c3e241f7195672d17309a179c2425097c32",
+      "sha256": "0b3aff79a3ca884e8ea481d2bf52dd1f7f3a6ef88fcf9020efa003d71fdbd294"
+    },
+    "tools/dd1_linux/check_compat_h_bindings.py": {
+      "bytes": 3544,
+      "git_blob": "d45172a0d67fd67e2838f051304fb37dcc205195",
+      "ref": "7cc46c3e241f7195672d17309a179c2425097c32",
+      "sha256": "e8416f840597f7a7e93f34beb9ae9aba7503a8239d5d99b68f8ff9b4b345e57f"
+    },
+    "tools/dd1_linux/compat_feasibility.c": {
+      "bytes": 3609,
+      "git_blob": "33e196fd2a68d92c7077a3f913bb5c3f0028ea09",
+      "ref": "7cc46c3e241f7195672d17309a179c2425097c32",
+      "sha256": "c92e5383933c3a1c1fda2b04a17e9bd397560f4948a675529b2c32c064e5047d"
+    },
+    "tools/dd1_linux/isolate.c": {
+      "bytes": 2584,
+      "git_blob": "27ca5451292172b57753918eed08a2c1a8d518ec",
+      "ref": "289a6734f5ce75e85530db9abee4c44b583f040a",
+      "sha256": "54f0f132ec231620cab138e91b79c308949644088bf24e733807c6b3cb30cc5c"
+    },
+    "tools/dd1_linux/policy.c": {
+      "bytes": 6780,
+      "git_blob": "1ce6c49b7ab39ac29ba7e67f6bbc8e94c2d1bc04",
+      "ref": "289a6734f5ce75e85530db9abee4c44b583f040a",
+      "sha256": "0455f115803fba779a9f7ca1ac15990a7f4ba4217dca4a5463d5b30369de0543"
+    },
+    "tools/dd1_linux/policy.h": {
+      "bytes": 481,
+      "git_blob": "af26a3fcc21a6a1587310466be13ccb81ec088c8",
+      "ref": "289a6734f5ce75e85530db9abee4c44b583f040a",
+      "sha256": "4f239404e778cd2ca611dda3965681ea481391656d9d23f3199eae10c8a7ff76"
+    },
+    "tools/dd1_linux/supervisor.c": {
+      "bytes": 7896,
+      "git_blob": "11c8a1de2089b433c9f4df5f2e8344d3e0dd755c",
+      "ref": "289a6734f5ce75e85530db9abee4c44b583f040a",
+      "sha256": "3c8a65dc128e9ffae22cd6b9ea0dbe197011138b64383224efd445eae53e7545"
+    },
+    "tools/dd1_reservations.py": {
+      "bytes": 15264,
+      "git_blob": "64d71b55fa5342de2011abbae7311ab1f430ae12",
+      "ref": "289a6734f5ce75e85530db9abee4c44b583f040a",
+      "sha256": "d577b1290ce143af4c7a260ce2e7a86d0a9937b5c9db714bd122f19a55c39f83"
+    }
+  },
+  "source_head": "7cc46c3e241f7195672d17309a179c2425097c32",
+  "source_tree": "ffe8f042391441d93f89b08a0b2d3edcd50c89fd",
+  "upstream_source": [
+    {
+      "git_blob": "2fc62fdc54303e51951a69317055aa2982f3f945",
+      "path": "main/main.cpp",
+      "read_scope": "2030-2220: editor init(-1,0.75), noneditor configured worker_threads; earlier initialization/version ordering retained in receiving evidence",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/main/main.cpp"
+    },
+    {
+      "git_blob": "f5574c47a05c6d959382972556ed7413076c0328",
+      "path": "core/object/worker_thread_pool.cpp",
+      "read_scope": "175-200: worker entry calls Thread::set_name; 200-330 calling-thread fallback; init function in earlier exact receiving reads",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/core/object/worker_thread_pool.cpp"
+    },
+    {
+      "git_blob": "885f865bc6f5a2ee2ccb2c4cf127b5b9c4cbfdac",
+      "path": "drivers/unix/thread_posix.cpp",
+      "read_scope": "full file: Linux pthread_setname_np(pthread_self(),...) callback installation",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/drivers/unix/thread_posix.cpp"
+    },
+    {
+      "git_blob": "ffc0dff1c747abb5f0ba60f2cf375db74cb60f65",
+      "path": "core/os/os.cpp",
+      "read_scope": "450-560: hardware_concurrency processor count",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/core/os/os.cpp"
+    },
+    {
+      "git_blob": "fd7b0c896a969ed2a2a59bd78a08f4bf8f1e0938",
+      "path": "core/os/os.h",
+      "read_scope": "290-400: get_default_thread_pool_size delegates to processor count",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/core/os/os.h"
+    },
+    {
+      "git_blob": "0e078c32c978281a98cdd8e05708c3ddd972039d",
+      "path": "core/config/project_settings.cpp",
+      "read_scope": "previous exact receiving evidence: project/import data rooted at res://, hidden directory naming not relocation",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/core/config/project_settings.cpp"
+    },
+    {
+      "git_blob": "43d7129579ded03ccf8580cf6d680b17c74e587f",
+      "path": "platform/linuxbsd/os_linuxbsd.cpp",
+      "read_scope": "previous exact receiving evidence: startup desktop query and genuine failed-execute fallback",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/platform/linuxbsd/os_linuxbsd.cpp"
+    },
+    {
+      "git_blob": "21e0abfe3d218fedb4465967859fb5c752db7e90",
+      "path": "drivers/unix/os_unix.cpp",
+      "read_scope": "piped execute/popen and fallback; unrelated isatty code was located but is NOT asserted to be mandatory startup",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/drivers/unix/os_unix.cpp"
+    }
+  ],
+  "working_copy": "Sparse owned tooling + exact H modules; not a full checkout or imported game project"
+}

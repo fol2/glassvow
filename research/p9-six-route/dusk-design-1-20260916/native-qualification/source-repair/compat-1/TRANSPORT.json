@@ -1,0 +1,28 @@
+{
+  "compressed_bytes": 21052,
+  "compressed_sha256": "f5a1195902e193b78504907168a6fb786b0cb3384a63f4fb21bf02c85ece532c",
+  "decode": "cat EVIDENCE.json.xz.part01 EVIDENCE.json.xz.part02 | xz -dc",
+  "decoded_bytes": 554851,
+  "decoded_sha256": "c4a9e21db37b5ed2ee9b5567362d60c4a074bc34ac42f16a6eae3175c78a1bd8",
+  "development_helper_attempts_preserved": 17,
+  "engine_launches": 0,
+  "final_kernel_controls": 8,
+  "format": "XZ compressed UTF-8 JSON, no executable/library payload",
+  "joined_git_blob": "a8fc9bdcdbce6803c2f9221569cecd458ce5a012",
+  "live_account_writes": 0,
+  "parts": [
+    {
+      "bytes": 10526,
+      "git_blob": "5767e85bd299190c1e2fb48199405768cff8f1a9",
+      "name": "EVIDENCE.json.xz.part01",
+      "sha256": "546534a23df889d2baad7d6ccab8c94bea9a7424d530a18fa43c8ef624574de5"
+    },
+    {
+      "bytes": 10526,
+      "git_blob": "555315ea50e9f2276c4c9c7a326fc25cb0cc18c8",
+      "name": "EVIDENCE.json.xz.part02",
+      "sha256": "492f5ba0a282b2d56ef40566fc0068171c8471f512c281371e9f83c7719189ce"
+    }
+  ],
+  "real_H_role_checks": 6
+}

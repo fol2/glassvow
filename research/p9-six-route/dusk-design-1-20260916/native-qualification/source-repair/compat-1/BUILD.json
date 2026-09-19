@@ -1,0 +1,98 @@
+{
+  "all_compiler_exits_zero": true,
+  "binaries": {
+    "inert_fixture": {
+      "bytes": 17360,
+      "observed_path": "/mnt/data/compat-work/tools/dd1_linux/build/compat-feasibility",
+      "sha256": "599e9b799b6674a8d78f37a9539082655a6ca7e3c0a38167babbc6ae3283ff5b"
+    },
+    "libc": {
+      "bytes": 1995216,
+      "observed_path": "/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826"
+    },
+    "loader": {
+      "bytes": 225672,
+      "observed_path": "/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"
+    },
+    "official_engine_NOT_EXECUTED": {
+      "bytes": 146414384,
+      "observed_path": "/mnt/data/compat-work/engine/official-elf-readonly",
+      "sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e"
+    },
+    "strict_supervisor": {
+      "bytes": 823744,
+      "observed_path": "/mnt/data/compat-work/tools/dd1_linux/build/supervisor",
+      "sha256": "dae7a481fd0d6c25f093c38056673a6039f98d899e816a65953537a54d00c7ce"
+    }
+  },
+  "builds": [
+    {
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-static",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/mnt/data/compat-work/tools/dd1_linux/supervisor.c",
+        "/mnt/data/compat-work/tools/dd1_linux/policy.c",
+        "/mnt/data/compat-work/tools/dd1_linux/isolate.c",
+        "-o",
+        "/mnt/data/compat-work/tools/dd1_linux/build/supervisor"
+      ],
+      "binary": {
+        "bytes": 823744,
+        "sha256": "dae7a481fd0d6c25f093c38056673a6039f98d899e816a65953537a54d00c7ce"
+      },
+      "exit": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-pthread",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/mnt/data/compat-work/tools/dd1_linux/compat_feasibility.c",
+        "-o",
+        "/mnt/data/compat-work/tools/dd1_linux/build/compat-feasibility"
+      ],
+      "binary": {
+        "bytes": 17304,
+        "sha256": "1e8518e085cfd72aa27d6d98bb5f95542a7b5c5985c8ddb60b267f5762f4bb68"
+      },
+      "exit": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-pthread",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/mnt/data/compat-work/tools/dd1_linux/compat_feasibility.c",
+        "-o",
+        "/mnt/data/compat-work/tools/dd1_linux/build/compat-feasibility"
+      ],
+      "binary": {
+        "bytes": 17360,
+        "sha256": "599e9b799b6674a8d78f37a9539082655a6ca7e3c0a38167babbc6ae3283ff5b"
+      },
+      "exit": 0,
+      "stderr": "",
+      "stdout": ""
+    }
+  ],
+  "no_engine_build_or_execution": true
+}
