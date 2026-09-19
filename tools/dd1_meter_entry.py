@@ -15,11 +15,28 @@ import dd1_preparation as preparation
 import dd1_compatibility as compatibility
 
 
-# Test authority is restricted to these two harmless fixture builds, not any
+# Test authority is restricted to code-pinned harmless fixture builds, not any
 # caller-named executable with a self-hash. Native entry cannot select this path.
-INERT_BINARIES = frozenset(("1a6d26ea751283ca3f43a3cd7794ded2a7acafbe21d8ee9df69d2dbf64952677",
+INERT_BINARIES = frozenset(("fe3c55267b67ae1f7ecf3443854e1e70c89fb3365320fe540f30917f29436933",
                             "ead0fc4d0660d8a691469296c59827c66bad717b98d54671ecdb6eed8dcc9129",
                             "5144e1676b1ace6f29432e80b9e9f6eac49300a0b4173edb2b61e03dac9da1a1"))
+
+
+H_PREFIX = "research/p9-six-route/duskblade-first-proof-20260912/"
+H_BLOBS = {"evidence_boundary.py": "a88db0791572f430ea3e5cde85683c8527cead39",
+           "reference_kernel.py": "ee091fb503849117358b3691264fca71803f8bbc"}
+
+
+def check_h_closure(root):
+    """Pin accepted H bytes before import; this does not authenticate a caller."""
+    import hashlib
+    files = {}
+    for name, wanted in H_BLOBS.items():
+        raw = preparation._regular(root / name, 65536)
+        actual = hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\0" + raw).hexdigest()
+        reservations.need(actual == wanted, "not accepted H module bytes:" + name)
+        files["res://" + H_PREFIX + name] = reservations.digest(raw)
+    return files
 
 
 class BackendBlocked(reservations.ReservationError):
@@ -67,7 +84,11 @@ def run_complete_unit(command, *, unit: Mapping, account_path: Path, receipt_pat
     if authority_check is not None or trusted_context is None or evidence_packet is None:
         raise BackendBlocked("missing H host-authenticated exact execution demand; callbacks are not native authority")
     reservations.need(trusted_context.kind == "empirical", "native entry rejects synthetic authority")
+    unit = json.loads(reservations.encode(unit))
     lifetime = backend.controller_limits(unit)
+    h_files = check_h_closure(Path(__file__).resolve().parents[1] / H_PREFIX)
+    reservations.need(all(unit.get("source_files", {}).get(k) == v for k, v in h_files.items()),
+                      "accepted H closure missing from execution demand")
     from dd1_provenance import REQUIRED_SOURCES, _load_boundary
     expected = _load_boundary().verify_bindings(evidence_packet, trusted_context)
     binding = expected["roles"].get("execution_demand", {})
@@ -94,6 +115,7 @@ def _run_inert_unit(command, *, unit, account_path, receipt_path, output, head, 
     runner or test clock. A synthetic account and exact test-only receipt are
     mandatory; the repository's live account path cannot be selected.
     """
+    unit = json.loads(reservations.encode(unit))
     lifetime = backend.controller_limits(unit)
     reservations.need(not account_path.resolve().is_relative_to(repo.resolve()), "inert account cannot be a repository account")
     receipt = reservations.read(receipt_path)

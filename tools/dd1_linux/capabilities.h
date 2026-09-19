@@ -8,7 +8,7 @@ struct dd1_task {pid_t tid; uint64_t start;};
 struct dd1_capabilities {
     pid_t workload;
     unsigned enabled, naming_cap, clone3_cap, process_refusals, naming_refusals;
-    unsigned unexpected, refused_requests, fatal;
+    unsigned unexpected, refused_requests, fatal, preparation;
     struct dd1_task named[4];
 };
 uint64_t dd1_task_start(pid_t group,pid_t tid);
