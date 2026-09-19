@@ -13,11 +13,13 @@ import dd1_reservations as r
 
 ABI = "linux-x86_64-lp64-v1"
 # Exact helper built/tested in this source artifact, not a unit-selected runner.
-PINNED_HELPER_SHA256 = "dae7a481fd0d6c25f093c38056673a6039f98d899e816a65953537a54d00c7ce"
+PINNED_HELPER_SHA256 = "8d4842806c4d56afeabb4e23f68b9b57345cec6387ea63c4e605ffb5744ac74f"
 HELPER_SOURCES = frozenset("res://tools/" + p for p in (
     "dd1_linux/policy.h", "dd1_linux/policy.c", "dd1_linux/isolate.c",
     "dd1_linux/supervisor.c", "dd1_linux_snapshot.py", "dd1_linux_backend.py",
-    "dd1_meter_entry.py", "dd1_reservations.py", "dd1_recovery_meter.py"))
+    "dd1_meter_entry.py", "dd1_reservations.py", "dd1_recovery_meter.py",
+    "dd1_linux/capabilities.h", "dd1_linux/capabilities.c",
+    "dd1_compatibility.py", "dd1_preparation.py"))
 
 
 def read_regular(root: Path, name: str, maximum: int = 1 << 30) -> bytes:
@@ -77,7 +79,7 @@ def elf(raw: bytes) -> tuple[str | None, list[str]]:
     return interp, names
 
 
-def prepare(unit: dict, command: list[str], repo: Path) -> dict:
+def prepare(unit: dict, command: list[str], repo: Path, generated=None) -> dict:
     r.need(platform.system() == "Linux" and platform.machine() == "x86_64" and platform.release() == "6.18.44" and struct.calcsize("P") == 8,
            "unsupported host/ABI; no fallback")
     b = unit.get("linux", {})
@@ -91,13 +93,16 @@ def prepare(unit: dict, command: list[str], repo: Path) -> dict:
         raw = read_regular(repo, name[6:])
         r.need(r.digest(raw) == wanted, "actual source bytes differ: " + name)
         source[name] = raw; files["/source/" + name[6:]] = (raw, False)
+    for name, raw in (generated or {}).items():
+        r.need(name not in source and name.startswith("res://"), "generated source collision")
+        files["/source/" + name[6:]] = (raw, False)
     runtime = b.get("runtime")
     r.need(isinstance(runtime, dict) and runtime and len(files) + len(runtime) <= 4096, "runtime closure size")
     for dest, item in runtime.items():
         parts = PurePosixPath(dest).parts
         r.need(len(dest.encode()) <= 384 and len(parts) <= 12 and dest.startswith("/") and str(PurePosixPath(dest)) == dest and
                ".." not in parts and len(parts) > 1 and parts[1] not in ("source", "out", "proc", "sys", "dev") and
-               dest not in ("/grant.json", "/launch-receipt.json"), "unsafe runtime destination")
+               dest not in ("/grant.json", "/launch-receipt.json", "/dd1-preparation.layout"), "unsafe runtime destination")
         raw = read_regular(repo, item["path"])
         r.need(r.digest(raw) == item["sha256"] and type(item["executable"]) is bool, "runtime identity mismatch")
         files[dest] = (raw, item["executable"])
@@ -114,7 +119,16 @@ def prepare(unit: dict, command: list[str], repo: Path) -> dict:
     # Payload copies + worst-case path/creation metadata. No compression credit.
     setup_raw = len(helper) + sum(len(raw) + 16384 for raw, _ in files.values()) + 32768
     r.need(setup_raw + b["workload_raw_bytes"] + 524288 < unit["raw_bytes"], "raw cannot fit immutable inputs and workload")
-    return dict(files=files, source=source, helper=helper, setup_raw=setup_raw, config=b)
+    import dd1_preparation as preparation
+    import dd1_compatibility as compatibility
+    recipe = preparation.validate_recipe(unit, source)
+    promotion = preparation.reserve_copy_bytes(recipe, source)
+    result = dict(files=files, source=source, helper=helper, setup_raw=setup_raw + promotion,
+                  config=b, preparation=recipe, promotion_raw=promotion)
+    result["profile"] = compatibility.validate_profile(unit, result)
+    r.need(result["setup_raw"] + b["workload_raw_bytes"] + 524288 < unit["raw_bytes"],
+           "complete preparation/copy raw envelope")
+    return result
 
 
 def verify_ancestry(bodies, head: str, ancestor: str) -> None:

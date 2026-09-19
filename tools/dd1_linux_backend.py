@@ -15,6 +15,8 @@ import subprocess
 import time
 import dd1_reservations as r
 import dd1_linux_snapshot as snapshot
+import dd1_preparation as preparation
+import dd1_compatibility as compatibility
 
 _once = False
 
@@ -24,12 +26,19 @@ def controller_limits(unit):
     r.need(not _once and len(list(Path("/proc/self/task").iterdir())) == 1, "dedicated single-thread controller required")
     _once = True
     r.need(11 <= r.natural(unit.get("cpu_seconds"), "CPU") <= 300, "CPU partition")
-    # Controller hard total is 3 CPU seconds plus at most 1 reserved grace. The
-    # supervisor gets 2+1 grace; workload total-10 +1 grace; two seconds slack.
+    # Retain a high HARD ceiling only until fork/exec so the workload can
+    # LOWER its inherited limit to U-10. The controller SOFT limit remains 3,
+    # unblocked/default-fatal; controller then irreversibly lowers hard to 3.
+    # Bounds including one-second enforcement headroom per process:
+    # controller <=4, supervisor bootstrap <=4, workload <=U-9: total <=U-1.
     used = resource.getrusage(resource.RUSAGE_SELF)
     r.need(used.ru_utime + used.ru_stime < 1, "fresh controller CPU baseline required")
-    hard = 3
-    resource.setrlimit(resource.RLIMIT_CPU, (hard, hard))
+    inherited = resource.getrlimit(resource.RLIMIT_CPU)
+    r.need(inherited[1] == resource.RLIM_INFINITY or inherited[1] >= unit["cpu_seconds"],
+           "inherited CPU ceiling cannot support demand")
+    signal.signal(signal.SIGXCPU, signal.SIG_DFL)
+    signal.pthread_sigmask(signal.SIG_UNBLOCK, {signal.SIGXCPU})
+    resource.setrlimit(resource.RLIMIT_CPU, (3, unit["cpu_seconds"]))
     resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
     libc = ctypes.CDLL(None, use_errno=True)
     r.need(libc.prctl(36, 1, 0, 0, 0) == 0, "controller subreaper unavailable")
@@ -75,9 +84,9 @@ def reap_adopted():
 
 
 class Prepared:
-    def __init__(self, unit, command, repo, lifetime):
+    def __init__(self, unit, command, repo, lifetime, generated=None):
         self.unit, self.command, self.lifetime = unit, command, lifetime
-        self.pinned = snapshot.prepare(unit, command, repo)
+        self.pinned = snapshot.prepare(unit, command, repo, generated)
 
     def __call__(self, grant, output):
         p = self.pinned
@@ -109,6 +118,7 @@ class Prepared:
         # Entry validated these exact receipt bytes; never remount live receipt.
         (root / "launch-receipt.json").write_bytes(self.receipt_bytes)
         (root / "launch-receipt.json").chmod(0o400)
+        preparation.create_slots(root, capture, p["preparation"])
         helper = sealed_helper(p["helper"])
         lease = r._lease.get()
         r.need(lease >= 3, "missing inherited account executor lease")
@@ -117,12 +127,15 @@ class Prepared:
         r.need(wall_ms >= 100, "setup exhausted unit wall bound")
         args = ["dd1-supervisor", str(root), str(capture), str(allowance),
                 str(self.unit["cpu_seconds"] - 10), str(wall_ms), str(p["config"]["threads"]),
-                str(os.getpid()), str(lease), *self.command]
+                str(os.getpid()), str(lease), str(int(p["profile"] is not None)),
+                str(p["profile"]["naming_total"] if p["profile"] else 0),
+                str(p["profile"]["clone3_maximum"] if p["profile"] else 0), *self.command]
         proc, raw, err, interruption, first = None, b"", b"", None, b""
         try:
             proc = subprocess.Popen(args, executable="/proc/self/fd/" + str(helper),
                 pass_fds=(helper, lease), stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, env={})
+            resource.setrlimit(resource.RLIMIT_CPU, (3, 3))
             first = proc.stdout.readline(512)
             started = json.loads(first)
             r.need(started.get("phase") == "started" and started.get("supervisor") == proc.pid, "bootstrap identity")
@@ -141,13 +154,31 @@ class Prepared:
                 raw = first + rest
         finally:
             os.close(helper)
-        r.need(len(raw) <= 4096 and len(err) <= 4096, "trusted diagnostic size contract")
         clean, adopted = reap_adopted()
+        r.need(len(raw) <= 32768 and len(err) <= 4096, "trusted diagnostic size contract")
         events = [json.loads(line) for line in raw.splitlines()]
         report = next((x for x in events if x.get("phase") == "result"), {})
         success = report.get("success") is True and proc is not None and proc.returncode == 0 and clean and not interruption
+        classification = next((x for x in events if x.get("phase") == "classification"), {})
+        task = {"ok": False, "errors": ["missing successful enforcement/task exit"]}
+        sealed = None
+        if success:
+            try:
+                task = compatibility.task_outcome(self.unit, capture, classification)
+                success = success and task["ok"]
+                if success:
+                    sealed = preparation.seal(self.unit, p, output, clean, success)
+            except (OSError, ValueError, r.ReservationError) as exc:
+                task = {"ok": False, "errors": [type(exc).__name__ + ":" + str(exc)]}
+                success = False
         usage = resource.getrusage(resource.RUSAGE_SELF)
         return dict(success=success, cleanup_confirmed=clean,
+            classification=classification, task_outcome=task, sealed_preparation=sealed,
+            strict_verdict=bool(classification.get("strict_success") and success),
+            compatibility_verdict=bool(p.get("profile") and success),
+            classification_scope="kernel refusals, cleanup and exit; task validation is separate",
+            controller_cpu_limits=list(resource.getrlimit(resource.RLIMIT_CPU)),
+            refused_requests=[e for e in events if e.get("phase") == "refusal"],
             controller_cpu_seconds_at_report=usage.ru_utime + usage.ru_stime,
             elapsed_seconds_at_report=time.monotonic() - self.lifetime[0],
             backend=snapshot.ABI, source_snapshot_sha256=r.digest(r.encode({k: r.digest(v[0]) for k, v in p["files"].items()})),

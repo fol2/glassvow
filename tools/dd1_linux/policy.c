@@ -64,7 +64,7 @@ int dd1_listener(void) {
 
 int dd1_notify(int fd,uint64_t cap,uint64_t *used,unsigned *threads,
                unsigned max_threads,unsigned *execs,unsigned *denied,
-               int *last_denied,unsigned *clone3) {
+               int *last_denied,unsigned *clone3,struct dd1_capabilities *capabilities) {
     struct seccomp_notif q;
     struct seccomp_notif_resp a;
     memset(&q,0,sizeof(q)); memset(&a,0,sizeof(a));
@@ -132,6 +132,10 @@ int dd1_notify(int fd,uint64_t cap,uint64_t *used,unsigned *threads,
     }
     if (a.flags) a.error=0;
     else if (q.data.nr!=__NR_clone3) {++*denied; *last_denied=q.data.nr;}
-    if (ioctl(fd,SECCOMP_IOCTL_NOTIF_SEND,&a) && errno!=ENOENT) return -1;
+    uint64_t start=a.flags?0:dd1_task_start(capabilities->workload,(pid_t)q.pid);
+    int sent=ioctl(fd,SECCOMP_IOCTL_NOTIF_SEND,&a)==0;
+    int error=errno;
+    if (!a.flags) dd1_refusal(capabilities,&q,&a,*threads,*execs,*clone3,sent,start);
+    if (!sent && error!=ENOENT) return -1;
     return 0;
 }

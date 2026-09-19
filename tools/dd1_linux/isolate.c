@@ -7,6 +7,8 @@
 #include <sched.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 #include <sys/mount.h>
 #include <sys/prctl.h>
 #include <sys/syscall.h>
@@ -18,6 +20,27 @@ static void text(const char *p,const char *s) {
     size_t n=0; while(s[n])++n;
     if(write(f,s,n)!=(ssize_t)n) dd1_die("namespace map write");
     close(f);
+}
+/* Layout is emitted by the fixed controller from the authenticated recipe.
+ * No guest runs yet. Root and original directory topology stay read-only. */
+static void generated_mounts(const char *root,const char *out) {
+    char path[4096],line[512],target[4096],backing[4096];
+    snprintf(path,sizeof(path),"%s/dd1-preparation.layout",root);
+    FILE *f=fopen(path,"r"); if(!f) {if(errno==ENOENT)return;dd1_die("layout");}
+    unsigned count=0,index;char kind,name[384],extra;
+    while(fgets(line,sizeof(line),f)) {
+        if(++count>128 || sscanf(line,"%c %383s %u %c",&kind,name,&index,&extra)!=3 ||
+           (kind!='f'&&kind!='d') || index!=count-1 || strncmp(name,"source/",7) ||
+           strstr(name,"..") || strlen(name)>350) dd1_die("layout syntax");
+        for(char *p=name;*p;p++) if(!isalnum((unsigned char)*p)&&!strchr("/_.-",*p)) dd1_die("layout path");
+        snprintf(target,sizeof(target),"%s/%s",root,name);
+        snprintf(backing,sizeof(backing),"%s/generated/%u",out,index);
+        if(mount(backing,target,NULL,MS_BIND,NULL) ||
+           mount(NULL,target,NULL,MS_REMOUNT|MS_BIND|MS_NOSUID|MS_NODEV|MS_NOEXEC,NULL))
+            dd1_die("generated slot mount");
+    }
+    if(ferror(f)) dd1_die("layout read");
+    fclose(f);
 }
 int dd1_isolate(const char *root,const char *out) {
     uid_t uid=getuid(); gid_t gid=getgid(); char b[80],target[4096];
@@ -32,6 +55,7 @@ int dd1_isolate(const char *root,const char *out) {
     if(snprintf(target,sizeof(target),"%s/out",root)>=(int)sizeof(target)) dd1_die("root path");
     if(mount(out,target,NULL,MS_BIND,NULL)) dd1_die("bind output");
     if(mount(NULL,target,NULL,MS_REMOUNT|MS_BIND|MS_NOSUID|MS_NODEV|MS_NOEXEC,NULL)) dd1_die("output flags");
+    generated_mounts(root,out);
     if(chdir(root)||chroot(".")||chdir("/out")) dd1_die("chroot");
     /* No proc/sys/dev mount and no descriptor to the old root. UID 0 in this
      * one-entry user namespace loses all caps AND all root exec privileges. */
