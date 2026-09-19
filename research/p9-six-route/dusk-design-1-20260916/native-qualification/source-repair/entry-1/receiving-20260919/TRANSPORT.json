@@ -1,0 +1,13 @@
+{
+  "format": "XZ compressed UTF-8 JSON; no engine/library bytes",
+  "compressed_bytes": 3764,
+  "compressed_sha256": "c33fe4799b052d0fcf14bca47493899df35911cfca797e59bad137c9c90442fd",
+  "decoded_bytes": 21403,
+  "decoded_sha256": "ba6ffb57ddc7a6ea7a35a9f7b8a2b0c8b568a5bdda27d5facf41748f804e6c9a",
+  "command_count": 7,
+  "all_commands_exit_zero": true,
+  "all_stderr_empty": true,
+  "scope": "Static byte-inspection tool outputs, not engine/native outcomes",
+  "decode_command": "xz -dc DECISIVE-STATIC-TOOLS.json.xz",
+  "unpublished_exploratory_logs": "Redundant full readelf symbol/version dumps and the symbol-alias objdump query are not claimed as delivered decisive evidence. The alias query produced only section headings and is not counted as proof."
+}

@@ -1,0 +1,58 @@
+{
+  "operation": "DD1-LINUX-ENTRY-1",
+  "resumed_head": "f1acc8a16af28c19720b67c68dac049d1444b9af",
+  "accepted_B1": "3bb4205caf55f882a4507272445997ae448fcd7b",
+  "operating_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "owner_selection_record": 5735810042,
+  "new_grant": false,
+  "stage_graph": {
+    "0": "BLOCKED_STATIC_PROCESS_TOPOLOGY after verified transfer and DT_NEEDED staging",
+    "1": "NOT_ENTERED",
+    "2": "NOT_ENTERED",
+    "3": "EVIDENCE_ACCOUNT_HANDOFF"
+  },
+  "transport_resolved": true,
+  "declared_ELF_dependency_closure": true,
+  "full_startup_runtime_closure": false,
+  "observed_engine_incompatibility": false,
+  "static_incompatibility": "Linux OS initialization invokes popen before --version parsing; accepted B1 forbids descendant workloads and marks denied syscalls unsuccessful. See exact source trace and static libc disassembly.",
+  "admitted": false,
+  "execution_demand": null,
+  "reservation": null,
+  "grant": null,
+  "ENTRY_VERIFIED": false,
+  "FIXTURE_VERIFIED": false,
+  "engine_starts": 0,
+  "contained_starts": 0,
+  "live_account_writes": 0,
+  "account": {
+    "before_git_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "at_checkpoint_git_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "reported_starts_used": 2040,
+    "starts_cap": 2048,
+    "reported_cpu_ns_used": 398617197992,
+    "cpu_ns_cap": 14400000000000,
+    "reported_raw_bytes_used": 893139,
+    "raw_bytes_cap": 1073741824,
+    "new_unit_reservations": 0,
+    "historical_starts": "1277/8192",
+    "historical_remainder": "6915 unspendable",
+    "historical_unknowns_preserved": true,
+    "deadline_utc": "2026-09-24T17:54:40Z",
+    "scope": "Published ledger identity only; no historical completeness or private-executor-state certification."
+  },
+  "staged_payload_bytes": 149655752,
+  "preparation_note": "Private local engine/library copies are preparation, not an admitted B1 root. No claim of zero filesystem activity or free future setup; all copies must fit any later complete raw envelope.",
+  "preserved": {
+    "D": "746388323b8e886967e0e13fe109490a70206a66",
+    "C": "cf27285a3103d8867a179f700c5ebf32661453d5",
+    "H": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+    "H_ALLOCATION_blob": "824ff18acbca2f776533beed83a43b21d9a50f2c",
+    "certificates": "0/3"
+  },
+  "deferred_after_static_stop": [
+    "No supervisor rebuild or unchanged B1/H suite; these cannot resolve this compatibility conflict.",
+    "No prospective empirical context or imported cache fabricated.",
+    "No engine/ABI/syscall/topology/venue change or release decision made."
+  ]
+}

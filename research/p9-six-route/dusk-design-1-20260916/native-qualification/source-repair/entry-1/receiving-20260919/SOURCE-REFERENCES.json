@@ -1,0 +1,134 @@
+{
+  "scope": "Exact immutable source references read via GitHub; interpretations are static, not executed engine outcomes. Ranges are source-file lines, not tool wrapper lines.",
+  "references": [
+    {
+      "repository": "godotengine/godot",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "path": "platform/linuxbsd/godot_linuxbsd.cpp",
+      "git_blob": "d96c940e8b8f97f66854170b45d1ec73e13692ce",
+      "read_ranges": null,
+      "claim": "Platform calls Main::setup before deciding ERR_HELP success.",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/platform/linuxbsd/godot_linuxbsd.cpp"
+    },
+    {
+      "repository": "godotengine/godot",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "path": "main/main.cpp",
+      "git_blob": "2fc62fdc54303e51951a69317055aa2982f3f945",
+      "read_ranges": [
+        [
+          1035,
+          1150
+        ],
+        [
+          1150,
+          1320
+        ]
+      ],
+      "claim": "OS initialization precedes --version argument branch.",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/main/main.cpp"
+    },
+    {
+      "repository": "godotengine/godot",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "path": "platform/linuxbsd/os_linuxbsd.cpp",
+      "git_blob": "43d7129579ded03ccf8580cf6d680b17c74e587f",
+      "read_ranges": [
+        [
+          70,
+          235
+        ],
+        [
+          939,
+          1006
+        ],
+        [
+          1150,
+          1380
+        ]
+      ],
+      "claim": "Desktop cache initialization; xdg-user-dir subprocess; optional fontconfig constructor.",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/platform/linuxbsd/os_linuxbsd.cpp"
+    },
+    {
+      "repository": "godotengine/godot",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "path": "platform/linuxbsd/os_linuxbsd.h",
+      "git_blob": "d483e61937574bac7bc455710077ded381b4c15d",
+      "read_ranges": [
+        [
+          70,
+          240
+        ]
+      ],
+      "claim": "Default String desktop cache and inherited execute method.",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/platform/linuxbsd/os_linuxbsd.h"
+    },
+    {
+      "repository": "godotengine/godot",
+      "ref": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "path": "drivers/unix/os_unix.cpp",
+      "git_blob": "21e0abfe3d218fedb4465967859fb5c752db7e90",
+      "read_ranges": [
+        [
+          740,
+          900
+        ]
+      ],
+      "claim": "Non-null r_pipe branch calls popen.",
+      "url": "https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/drivers/unix/os_unix.cpp"
+    },
+    {
+      "repository": "fol2/glassvow",
+      "ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+      "path": "tools/dd1_linux/policy.c",
+      "git_blob": "1ce6c49b7ab39ac29ba7e67f6bbc8e94c2d1bc04",
+      "read_ranges": null,
+      "claim": "Exact NPTL clone predicate; process creation and later exec denied.",
+      "url": "https://github.com/fol2/glassvow/blob/3bb4205caf55f882a4507272445997ae448fcd7b/tools/dd1_linux/policy.c"
+    },
+    {
+      "repository": "fol2/glassvow",
+      "ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+      "path": "tools/dd1_linux/supervisor.c",
+      "git_blob": "11c8a1de2089b433c9f4df5f2e8344d3e0dd755c",
+      "read_ranges": null,
+      "claim": "success requires no denied syscalls.",
+      "url": "https://github.com/fol2/glassvow/blob/3bb4205caf55f882a4507272445997ae448fcd7b/tools/dd1_linux/supervisor.c"
+    },
+    {
+      "repository": "fol2/glassvow",
+      "ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+      "path": "tools/dd1_linux_backend.py",
+      "git_blob": "1d5e0070b9e4e4bc8d99c96d0e68fb05a5f2c421",
+      "read_ranges": null,
+      "claim": "Fixed immutable snapshot and concrete runner.",
+      "url": "https://github.com/fol2/glassvow/blob/3bb4205caf55f882a4507272445997ae448fcd7b/tools/dd1_linux_backend.py"
+    },
+    {
+      "repository": "fol2/glassvow",
+      "ref": "3bb4205caf55f882a4507272445997ae448fcd7b",
+      "path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/source-repair/b1/BUILD.json",
+      "git_blob": "fa91017fa2803ed04144651c7927fba37be15d89",
+      "read_ranges": null,
+      "claim": "libc and loader hashes match actual receiving host.",
+      "url": "https://github.com/fol2/glassvow/blob/3bb4205caf55f882a4507272445997ae448fcd7b/research/p9-six-route/dusk-design-1-20260916/native-qualification/source-repair/b1/BUILD.json"
+    }
+  ],
+  "binary_strings": {
+    "scope": "Static string presence only, not control-flow or executed version output",
+    "embedded_commit": {
+      "offset": 82952520,
+      "value": "ed1daf0bf001b61586d9930840f2f1394092c079"
+    },
+    "build_label": {
+      "offset": 82952582,
+      "value": "4.7.2.stable.official"
+    },
+    "subprocess_name": {
+      "offset": 82909361,
+      "value": "xdg-user-dir"
+    },
+    "dynamic_import": "popen@GLIBC_2.2.5"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "operation": "DD1-LINUX-ENTRY-1",
+  "scope": "Receiving and static admission evidence; not native qualification or launch authority",
+  "resumed_head": "f1acc8a16af28c19720b67c68dac049d1444b9af",
+  "byte_checkpoint": "9ba2b4ee1f96eecf9ce83edef322eadc1354f596",
+  "byte_verification_blob": "720e8f43ed4e3a3da163383eb6c3b13e7011a5ae",
+  "files": {
+    "RUNTIME-CLOSURE.json": {
+      "bytes": 8406,
+      "sha256": "406bd8ae89d83bcb63a0e27d401579974d18f1c378c9b8219a46fd7344020300",
+      "git_blob": "ccdc727218bf1857fefe5bfc92c7dd545106172d"
+    },
+    "inspect_runtime.py": {
+      "bytes": 3993,
+      "sha256": "348607932bcce486007be80df2992f2f45f5bbe1261331af6171d3f3e06aac5e",
+      "git_blob": "94f2eda3bb04df1b1694c8e382ea8aa5944aeb06"
+    },
+    "REPORT.md": {
+      "bytes": 8944,
+      "sha256": "3f54b1946f09f73b90cefb9e311fa064471cc16c8b230110327ea706c5ab2927",
+      "git_blob": "9ce47d62a46e4a425b83df9ae33484362794c1f1"
+    },
+    "SOURCE-REFERENCES.json": {
+      "bytes": 5128,
+      "sha256": "91add3aed248125b7690b0d8eff04fb1942e4a67ec38c90d7a87a2dad6d94bb3",
+      "git_blob": "cb3e155194c066473b82bdf7448da7fed5831a34"
+    },
+    "STAGE0-DISPOSITION.json": {
+      "bytes": 2596,
+      "sha256": "5d06162255fb01976181f731af054b271d5f041a15d9bd200265b6fb3df59ffe",
+      "git_blob": "2c2c49bd5d3daa215fee0f7fc6952bf42df2e63e"
+    },
+    "TRANSPORT.json": {
+      "bytes": 763,
+      "sha256": "e91243706155c04f5ce6fd4c1c7f8428707c3fdfdfff4419f5c2784caa9dd9dd",
+      "git_blob": "2de3f96b4e67de4659ba22b4293df22eec2430aa"
+    },
+    "DECISIVE-STATIC-TOOLS.json.xz": {
+      "bytes": 3764,
+      "sha256": "c33fe4799b052d0fcf14bca47493899df35911cfca797e59bad137c9c90442fd",
+      "git_blob": "7bb19b8104d22feaceae3f94e8524261b4e2b9d5"
+    }
+  },
+  "current_capsule": {
+    "bytes": 5028,
+    "sha256": "db3e1cc7ccc68c79309fc7a84fc28a0f87d8bb9a09467b022f09aad496b8ea8e",
+    "git_blob": "29546e439fedd54941872e51ce3103416328edea"
+  },
+  "actual_runtime_inspector_command": [
+    "python",
+    "/mnt/data/dd1-entry-continuation/inspect_runtime.py"
+  ],
+  "runtime_inspector_exit": 0,
+  "static_tool_commands": 7,
+  "static_tool_exit_codes": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "engine_and_contained_starts": 0,
+  "live_account_writes": 0,
+  "final_head_binding": "The containing head/tree and all GitHub blob readbacks are recorded in the one #156 handoff. No self-hash or authority is inferred from this manifest."
+}
