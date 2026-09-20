@@ -17,7 +17,7 @@ import dd1_compatibility as compatibility
 
 # Test authority is restricted to code-pinned harmless fixture builds, not any
 # caller-named executable with a self-hash. Native entry cannot select this path.
-INERT_BINARIES = frozenset(("fe3c55267b67ae1f7ecf3443854e1e70c89fb3365320fe540f30917f29436933",
+INERT_BINARIES = frozenset(("1a6d26ea751283ca3f43a3cd7794ded2a7acafbe21d8ee9df69d2dbf64952677",
                             "ead0fc4d0660d8a691469296c59827c66bad717b98d54671ecdb6eed8dcc9129",
                             "5144e1676b1ace6f29432e80b9e9f6eac49300a0b4173edb2b61e03dac9da1a1"))
 
