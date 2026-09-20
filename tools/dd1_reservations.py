@@ -163,11 +163,19 @@ def validate_unit(unit: Mapping, command: list[str], *, head: str, receipt_sha: 
     need(isinstance(command, list) and command and all(isinstance(v, str) and v and "\0" not in v for v in command)
          and unit.get("argv") == command, "command not bound to complete unit")
     need(bool(re.fullmatch(r"[A-Za-z0-9._-]{1,80}", str(unit.get("unit_id", "")))), "unsafe unit identity")
-    need(unit.get("mode") in ("focused_fixture", "fixed_ordinary", "inert_control"), "unknown unit mode")
+    need(unit.get("mode") in ("focused_fixture", "fixed_ordinary", "inert_control", "engineering"), "unknown unit mode")
     contained = natural(unit.get("contained_starts"), "contained_starts")
     need(contained <= 2047, "unsafe contained-start bound")
     if unit.get("mode") == "fixed_ordinary":
         need(1 <= natural(unit.get("max_roots", 16), "max_roots") <= 16, "unsafe root prefix bound")
+    if unit.get("mode") == "engineering":
+        from dd1_compatibility import PROFILE, STAGES, validate_task
+        need(isinstance(unit.get("compatibility"), dict) and
+             unit["compatibility"].get("id") == PROFILE and unit.get("stage") in STAGES,
+             "engineering requires its bound capability profile and stage")
+        need(contained == (2 if unit["stage"] == "fixture" else 0),
+             "engineering stage contained-start bound")
+        validate_task(unit)
     cpu = natural(unit.get("cpu_seconds"), "cpu_seconds")
     need(4 <= cpu <= 300, "unsafe complete-unit CPU bound")
     wall = unit.get("wall_seconds")
