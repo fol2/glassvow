@@ -124,7 +124,7 @@ class Prepared:
         r.atomic_write(root / "grant.json", inside)
         (root / "grant.json").chmod(0o400)
         # Entry validated these exact receipt bytes; never remount live receipt.
-        (root / "launch-receipt.json").write_bytes(self.receipt_bytes())
+        (root / "launch-receipt.json").write_bytes(self.receipt_bytes)
         (root / "launch-receipt.json").chmod(0o400)
         preparation.create_slots(root, capture, p["preparation"])
         helper = sealed_helper(p["helper"])
