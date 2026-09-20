@@ -1,7 +1,7 @@
 """Bounded .import value/lineage checks, not an importer or Godot interpreter.
 
-Authored values retain their exact type/token spelling (apart from unquoted
-whitespace). No inferred defaults or post-result normalization is permitted.
+Authored values retain their exact lexical spelling, including interior
+whitespace. No inferred defaults or post-result normalization is permitted.
 Unsupported syntax/options fail closed. Producer qualification is separate;
 a final matching document cannot authenticate how a resource was generated.
 """
@@ -20,9 +20,9 @@ def blob(raw):
 
 
 def tokens(value):
-    """Whitespace canonicalization only; never evaluates expressions."""
+    """Validate bounded delimiters; retain interior bytes, never evaluate."""
     out, stack, quoted, escaped = [], [], False, False
-    for ch in value:
+    for ch in value.strip():
         if quoted:
             out.append(ch)
             if escaped:
@@ -41,7 +41,7 @@ def tokens(value):
         elif ch in ')]}':
             r.need(stack and stack.pop() == {')': '(', ']': '[', '}': '{'}[ch], 'import value delimiters')
             out.append(ch)
-        elif not ch.isspace():
+        else:
             r.need(ch not in ';#\x00', 'ambiguous import value/comment')
             out.append(ch)
     r.need(not quoted and not stack and out, 'incomplete import value')
