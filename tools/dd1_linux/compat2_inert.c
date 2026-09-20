@@ -15,7 +15,7 @@
 #include <time.h>
 #include <unistd.h>
 
-static int repeat_name,skip_name,worker_spawn;
+static int repeat_name,skip_name,worker_spawn,block_thread;
 static void die(const char *s) {perror(s);exit(91);}
 static void write_file(const char *p,const char *s) {
     int f=open(p,O_WRONLY|O_CREAT|O_TRUNC,0600);if(f<0)die(p);
@@ -53,6 +53,10 @@ static void *worker(void *unused) {
             printf("NAME_REPEAT rc=%d\n",rc);if(rc!=EOPNOTSUPP)die("repeat name");
         }
     }
+    if(block_thread) {
+        save(); puts("ACTIVE_THREAD_READY"); fflush(stdout);
+        for(;;){struct timespec t={.tv_sec=0,.tv_nsec=10000000};nanosleep(&t,NULL);}
+    }
     return NULL;
 }
 static void thread(void) {
@@ -73,17 +77,30 @@ static void prepare(const char *mode) {
     errno=0;int f=open("/source/inputs/frozen.txt",O_WRONLY|O_TRUNC);
     int err=errno;printf("FROZEN_WRITE fd=%d errno=%d\n",f,err);
     if(f>=0||(err!=EROFS&&err!=EACCES))die("frozen input not protected");
+    int nested=strstr(mode,"nested")!=NULL;
+    const char *tmp=nested?"/source/.godot/sub/cache.tmp":"/source/.godot/cache.tmp";
+    const char *cache=nested?"/source/.godot/sub/cache.bin":"/source/.godot/cache.bin";
     if(!strcmp(mode,"prep-symlink")) {
         if(symlink("/source/inputs/frozen.txt","/source/.godot/cache.bin"))die("symlink");
     } else {
-        write_file("/source/.godot/cache.tmp","DERIVED-INERT\n");
-        if(rename("/source/.godot/cache.tmp","/source/.godot/cache.bin"))die("derived rename");
+        write_file(tmp,"DERIVED-INERT\n");
+        if(rename(tmp,cache))die("derived rename");
     }
     if(strcmp(mode,"prep-missing"))write_file("/source/inputs/demo.uid","INERT-UID\n");
     if(!strcmp(mode,"prep-extra"))write_file("/source/.godot/unexpected.bin","UNDECLARED\n");
     if(!strcmp(mode,"prep-hardlink")&&link("/source/.godot/cache.bin","/source/.godot/cache2.bin"))die("hardlink");
     if(!strcmp(mode,"prep-escape")) {
         if(symlink("/../../source/inputs/frozen.txt","/source/.godot/cache2.bin"))die("escape symlink");
+    }
+    if(strstr(mode,"transient")) {
+        const char *unexpected=nested?"/source/.godot/sub/transient.bin":"/source/.godot/transient.bin";
+        write_file(unexpected,"UNDECLARED\n");
+        if(unlink(unexpected))die("transient delete");
+    }
+    if(!strcmp(mode,"prep-replace-slot")) {
+        errno=0;int rc=rename("/out/generated/1","/out/generated/old-uid");
+        printf("REPLACE_BACKING rc=%d errno=%d\n",rc,errno);
+        if(rc!=-1||errno!=ENOENT)die("backing parent visible");
     }
     errno=0;int backing=open("/out/generated/0/cache.bin",O_WRONLY|O_TRUNC);
     printf("BACKING_ALIAS fd=%d errno=%d\n",backing,errno);
@@ -93,17 +110,13 @@ static void prepare(const char *mode) {
 int main(int argc,char **argv) {
     if(argc!=2)return 92;
     const char *m=argv[1];
+    block_thread=!strcmp(m,"block-thread");
     struct rlimit lim;if(getrlimit(RLIMIT_CPU,&lim))die("getrlimit");
     printf("LIMIT %llu %llu\n",(unsigned long long)lim.rlim_cur,(unsigned long long)lim.rlim_max);fflush(stdout);
     if(!strcmp(m,"plain")){save();return 0;}
     if(!strcmp(m,"refusal-overflow")) {
         for(int i=0;i<40;i++)syscall(SYS_prctl,PR_SET_DUMPABLE,0,0,0,0);
         return 99;
-    }
-    if(!strcmp(m,"later-exec")) {
-        char *a[]={"again",NULL},*e[]={NULL};
-        errno=0;execve("/workload",a,e);
-        printf("LATER_EXEC errno=%d\n",errno);save();return 0;
     }
     if(!strcmp(m,"unnamed")){skip_name=1;thread();save();return 0;}
     if(!strcmp(m,"worker-process")) {
@@ -127,6 +140,13 @@ int main(int argc,char **argv) {
     if(!strcmp(m,"wrong-prctl")) {
         errno=0;long rc=syscall(SYS_prctl,PR_SET_DUMPABLE,0,0,0,0);
         printf("WRONG_PRCTL rc=%ld errno=%d\n",rc,errno);
+    }
+    if(!strcmp(m,"later-exec")) {
+        char *a[]={"/workload","plain",NULL},*e[]={NULL};
+        errno=0;execve(a[0],a,e);printf("LATER_EXEC errno=%d\n",errno);
+    }
+    if(!strcmp(m,"refusal-flood")) {
+        for(int i=0;i<40;i++)syscall(SYS_prctl,PR_SET_DUMPABLE,0,0,0,0);
     }
     if(!strcmp(m,"unknown-syscall")) {
         errno=0;long rc=syscall(SYS_getpriority,0,0);printf("UNKNOWN rc=%ld errno=%d\n",rc,errno);
@@ -157,6 +177,7 @@ int main(int argc,char **argv) {
         close(f);printf("RAW_CAUGHT errno=%d\n",failed);if(failed!=EFBIG)return 98;
     }
     if(!strcmp(m,"task-fail")||!strcmp(m,"prep-fail"))return 7;
+    if(!strcmp(m,"missing-save"))unlink("/out/save.bin");
     if(!strcmp(m,"cpu-above-three"))burn(4.2);
     if(!strcmp(m,"cpu-exhaust"))burn(12);
     if(!strcmp(m,"block")||!strcmp(m,"prep-block"))for(;;){struct timespec t={.tv_sec=0,.tv_nsec=10000000};nanosleep(&t,NULL);}

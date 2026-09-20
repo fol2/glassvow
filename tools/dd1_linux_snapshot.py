@@ -19,7 +19,7 @@ HELPER_SOURCES = frozenset("res://tools/" + p for p in (
     "dd1_linux/supervisor.c", "dd1_linux_snapshot.py", "dd1_linux_backend.py",
     "dd1_meter_entry.py", "dd1_reservations.py", "dd1_recovery_meter.py",
     "dd1_linux/capabilities.h", "dd1_linux/capabilities.c",
-    "dd1_compatibility.py", "dd1_preparation.py"))
+    "dd1_compatibility.py", "dd1_preparation.py", "dd1_preparation_watch.py"))
 
 
 def read_regular(root: Path, name: str, maximum: int = 1 << 30) -> bytes:
@@ -92,11 +92,10 @@ def prepare(unit: dict, command: list[str], repo: Path, generated=None) -> dict:
     for name, wanted in unit["source_files"].items():
         raw = read_regular(repo, name[6:])
         r.need(r.digest(raw) == wanted, "actual source bytes differ: " + name)
+        if name in HELPER_SOURCES and name.endswith(".py"):
+            actual = read_regular(Path(__file__).resolve().parents[1], name[6:])
+            r.need(actual == raw, "loaded controller source differs:" + name)
         source[name] = raw; files["/source/" + name[6:]] = (raw, False)
-    controller_root = Path(__file__).resolve().parents[1]
-    for name in HELPER_SOURCES:
-        r.need(read_regular(controller_root, name[6:]) == source[name],
-               "controller source differs from bound snapshot: " + name)
     for name, raw in (generated or {}).items():
         r.need(name not in source and name.startswith("res://"), "generated source collision")
         files["/source/" + name[6:]] = (raw, False)

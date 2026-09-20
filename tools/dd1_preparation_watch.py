@@ -25,7 +25,7 @@ class Watch:
         self.allowed = set()
         if recipe is None:
             return
-        base = capture / 'generated'
+        base = capture.parent / 'derived'
         for index, slot in enumerate(recipe['slots']):
             prefix = str(index)
             self.allowed.add(prefix)
@@ -58,18 +58,19 @@ class Watch:
             os.close(self.fd)
             self.fd = -1
 
-    def finish(self):
+    def finish(self, output):
         if self.fd < 0:
             return dict(ok=True, events=0, scope='no preparation')
-        errors, count, total = [], 0, 0
+        errors, count, total, journal = [], 0, 0, bytearray()
         try:
             while True:
                 try:
-                    block = os.read(self.fd, 65536)
+                    block = os.read(self.fd, min(65536, MAX_BYTES - total + 1))
                 except BlockingIOError:
                     break
                 if not block:
                     break
+                journal.extend(block)
                 total += len(block)
                 if total > MAX_BYTES:
                     errors.append('generated observer byte limit'); break
@@ -91,7 +92,13 @@ class Watch:
                     at += 16 + size
                 if len(errors) > 16 or count > MAX_EVENTS:
                     break
+            # The bounded raw kernel journal is retained even on failure; no
+            # selective event filtering is used to manufacture promotion.
+            path = output / "PREPARATION-MUTATIONS.bin"
+            with path.open("xb") as stream:
+                stream.write(journal); stream.flush(); os.fsync(stream.fileno())
             return dict(ok=not errors, events=count, bytes_read=total, errors=errors,
+                        journal_path=str(path), journal_sha256=r.digest(journal),
                         scope='kernel generated-path mutation audit; not import-semantic validation')
         finally:
             self.close()

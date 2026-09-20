@@ -17,6 +17,7 @@ import dd1_reservations as r
 import dd1_linux_snapshot as snapshot
 import dd1_preparation as preparation
 import dd1_compatibility as compatibility
+import dd1_preparation_watch as preparation_watch
 
 _once = False
 
@@ -139,6 +140,7 @@ class Prepared:
                 str(p["profile"]["naming_total"] if p["profile"] else 0),
                 str(p["profile"]["clone3_maximum"] if p["profile"] else 0), *self.command]
         proc, raw, err, interruption, first = None, b"", b"", None, b""
+        watcher = preparation_watch.Watch(capture, p["preparation"])
         try:
             proc = subprocess.Popen(args, executable="/proc/self/fd/" + str(helper),
                 pass_fds=(helper, lease), stdin=subprocess.PIPE,
@@ -163,10 +165,11 @@ class Prepared:
         finally:
             os.close(helper)
         clean, adopted = reap_adopted()
+        audit = watcher.finish(output)
         r.need(len(raw) <= 32768 and len(err) <= 4096, "trusted diagnostic size contract")
         events = [json.loads(line) for line in raw.splitlines()]
         report = next((x for x in events if x.get("phase") == "result"), {})
-        success = report.get("success") is True and proc is not None and proc.returncode == 0 and clean and not interruption
+        success = report.get("success") is True and proc is not None and proc.returncode == 0 and clean and not interruption and audit["ok"]
         classification = next((x for x in events if x.get("phase") == "classification"), {})
         task = {"ok": False, "errors": ["missing successful enforcement/task exit"]}
         sealed = None
@@ -182,6 +185,7 @@ class Prepared:
         usage = resource.getrusage(resource.RUSAGE_SELF)
         return dict(success=success, cleanup_confirmed=clean,
             classification=classification, task_outcome=task, sealed_preparation=sealed,
+            preparation_audit=audit,
             strict_verdict=bool(classification.get("strict_success") and success),
             compatibility_verdict=bool(p.get("profile") and success),
             classification_scope="kernel refusals, cleanup and exit; task validation is separate",

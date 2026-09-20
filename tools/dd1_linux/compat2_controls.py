@@ -24,7 +24,7 @@ import dd1_reservations as r
 import dd1_linux_snapshot as snap
 import dd1_compatibility as compat
 
-HEAD = '44ab7dc8fd1e11624f02dc6eff69abeca2664674'
+HEAD = '8efbea0a4bf0a2e9fcf9dfcc9606816011925fa8'
 SAVE = b'COMPAT2\n'
 
 
@@ -92,13 +92,14 @@ def save_inputs(where,unit):
     unit['receipt_sha256']=r.digest(raw);(where/'unit.json').write_bytes(r.encode(unit))
 
 
-def controller(where,repo):
+def controller(where,repo,ap=None):
     import dd1_meter_entry as entry
     unit=r.read(where/'unit.json')
+    ap=ap or where/'synthetic-account.json'
     # A synthetic marker is mandatory even before entering the test-only API.
-    r.need(r.read(where/'synthetic-account.json').get('synthetic') is True, 'not a synthetic control')
+    r.need(r.read(ap).get('synthetic') is True, 'not a synthetic control')
     try:
-        result=entry._run_inert_unit(unit['argv'],unit=unit,account_path=where/'synthetic-account.json',
+        result=entry._run_inert_unit(unit['argv'],unit=unit,account_path=ap,
             receipt_path=where/'receipt.json',output=Path(unit['linux']['output_root']),head=HEAD,repo=repo)
         print(json.dumps(result,sort_keys=True))
         return 0
@@ -107,15 +108,16 @@ def controller(where,repo):
         return 2
 
 
-def controller_command(where,repo):
-    return [sys.executable,'-I','-B','-S',str(Path(__file__).resolve()),'--head',HEAD,'--controller',str(where),'--repo',str(repo)]
+def controller_command(where,repo,ap=None):
+    return [sys.executable,'-I','-B','-S',str(Path(__file__).resolve()),'--head',HEAD,'--controller',str(where),'--repo',str(repo), *(['--account',str(ap)] if ap else [])]
 
-def run_one(where,repo):
-    cmd=controller_command(where, repo)
-    before=(where/'synthetic-account.json').read_bytes()
+def run_one(where,repo,ap=None):
+    ap=ap or where/'synthetic-account.json'
+    cmd=controller_command(where, repo,ap)
+    before=ap.read_bytes()
     p=subprocess.run(cmd,capture_output=True,text=True,timeout=25)
     record=dict(account_before_hex=before.hex(),argv=cmd,exit=p.returncode,stdout=p.stdout,stderr=p.stderr,
-        account=r.read(where/'synthetic-account.json'),unit=r.read(where/'unit.json'),receipt=r.read(where/'receipt.json'))
+        account=r.read(ap),unit=r.read(where/'unit.json'),receipt=r.read(where/'receipt.json'))
     if p.stdout:
         try:record['result']=json.loads(p.stdout)
         except ValueError:pass
@@ -132,9 +134,10 @@ def run_one(where,repo):
 def main():
     global HEAD
     a=argparse.ArgumentParser();a.add_argument('--head',default=HEAD);a.add_argument('--controller',type=Path);a.add_argument('--repo',type=Path)
+    a.add_argument('--account',type=Path)
     a.add_argument('--first',action='store_true');a.add_argument('--output',type=Path)
     args=a.parse_args();HEAD=args.head
-    if args.controller:return controller(args.controller,args.repo)
+    if args.controller:return controller(args.controller,args.repo,args.account)
     where=Path(tempfile.mkdtemp(prefix='dd1-compat2-'))
     unit,repo=make_unit(where)
     record=run_one(where,repo)
