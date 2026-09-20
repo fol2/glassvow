@@ -19,33 +19,55 @@ def blob(raw):
     return hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest()
 
 
-def tokens(value):
-    """Validate bounded delimiters; retain interior bytes, never evaluate."""
-    out, stack, quoted, escaped = [], [], False, False
-    for ch in value.strip():
-        if quoted:
-            out.append(ch)
-            if escaped:
-                escaped = False
-            elif ch == '\\':
-                escaped = True
+def _read_value(first, remaining):
+    """Linear, bounded multiline delimiter scan; never evaluates a Variant.
+
+    Godot texture metadata is commonly a multiline dictionary. Interior bytes
+    remain significant, including whitespace: this is not default insertion or
+    a normalization permission. The whole document already has a 64-KiB cap.
+    """
+    chunks, stack, quoted, escaped = [], [], False, False
+    line = first.strip()
+    while True:
+        chunks.append(line)
+        for ch in line:
+            if quoted:
+                if escaped:
+                    escaped = False
+                elif ch == '\\':
+                    escaped = True
+                elif ch == '"':
+                    quoted = False
+                elif ord(ch) < 32:
+                    raise r.ReservationError('control character in import string')
             elif ch == '"':
-                quoted = False
-            elif ord(ch) < 32:
-                raise r.ReservationError('control character in import string')
-        elif ch == '"':
-            quoted = True; out.append(ch)
-        elif ch in '([{':
-            stack.append(ch); out.append(ch)
-            r.need(len(stack) <= 16, 'import value nesting')
-        elif ch in ')]}':
-            r.need(stack and stack.pop() == {')': '(', ']': '[', '}': '{'}[ch], 'import value delimiters')
-            out.append(ch)
-        else:
-            r.need(ch not in ';#\x00', 'ambiguous import value/comment')
-            out.append(ch)
-    r.need(not quoted and not stack and out, 'incomplete import value')
-    return ''.join(out)
+                quoted = True
+            elif ch in '([{':
+                stack.append(ch)
+                r.need(len(stack) <= 16, 'import value nesting')
+            elif ch in ')]}':
+                r.need(stack and stack.pop() == {')': '(', ']': '[', '}': '{'}[ch], 'import value delimiters')
+            else:
+                r.need(ch not in ';#\x00', 'ambiguous import value/comment')
+        r.need(not quoted, 'incomplete import string')
+        if not stack:
+            value = '\n'.join(chunks).strip()
+            r.need(value, 'incomplete import value')
+            return value
+        try:
+            line = next(remaining)
+        except StopIteration as exc:
+            raise r.ReservationError('incomplete import value') from exc
+
+
+def tokens(value):
+    lines = iter(value.splitlines())
+    try:
+        result = _read_value(next(lines), lines)
+    except StopIteration as exc:
+        raise r.ReservationError('incomplete import value') from exc
+    r.need(not any(line.strip() for line in lines), 'trailing import value')
+    return result
 
 
 def document(raw):
@@ -53,7 +75,8 @@ def document(raw):
            'import document bound')
     text = raw.decode('utf-8')
     rows, section = {}, None
-    for line in text.splitlines():
+    lines = iter(text.splitlines())
+    for line in lines:
         line = line.strip()
         if not line or line.startswith(';'):
             continue
@@ -63,11 +86,11 @@ def document(raw):
                    'duplicate/unknown import section')
             rows[section] = {}
             continue
-        r.need(section is not None and '=' in line, 'unsupported multiline import syntax')
+        r.need(section is not None and '=' in line, 'invalid import assignment')
         key, value = line.split('=', 1); key = key.strip()
         r.need(re.fullmatch(r'[A-Za-z0-9_./-]{1,160}', key) and key not in rows[section],
                'duplicate/invalid import key')
-        rows[section][key] = tokens(value)
+        rows[section][key] = _read_value(value, lines)
     r.need(set(rows) == {'remap', 'deps', 'params'}, 'incomplete import sections')
     return rows
 

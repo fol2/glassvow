@@ -6,6 +6,7 @@ static var _grant: Dictionary = {}
 static var _read: bool = false
 static var _used: int = 0
 static var _root_index: int = 0
+static var _verified_sources: Dictionary = {}
 static var error: String = ""
 
 
@@ -52,6 +53,31 @@ static func remaining() -> int:
 		if typeof(files) != TYPE_DICTIONARY or files.is_empty():
 			error = "missing_enclosing_sources"
 			return 0
+		# PREP-1 keeps original identities and the actual sealed runtime view
+		# distinct. This consumer cannot authenticate/issue the host grant.
+		# Only the engineering fixture may consume this projection; existing
+		# .uid, code, content, assets and restored project bytes cannot change.
+		if _grant.has("execution_files"):
+			var execution_v: Variant = _grant.get("execution_files")
+			if _grant.get("mode") != "engineering" or _grant.get("stage") != "fixture" \
+					or typeof(_grant.get("sealed_input")) != TYPE_DICTIONARY \
+					or typeof(execution_v) != TYPE_DICTIONARY or execution_v.is_empty():
+				error = "unbound_execution_projection"
+				return 0
+			var execution: Dictionary = execution_v
+			for original_v: Variant in files:
+				var original_path: String = str(original_v)
+				if not execution.has(original_path) or (execution[original_path] != files[original_v] \
+						and not original_path.ends_with(".import")):
+					error = "changed_original_execution_input"
+					return 0
+			for generated_v: Variant in execution:
+				var generated_path: String = str(generated_v)
+				if not files.has(generated_path) and not generated_path.begins_with("res://.godot/") \
+						and not generated_path.ends_with(".uid") and not generated_path.ends_with(".import"):
+					error = "undeclared_execution_source_kind"
+					return 0
+			files = execution
 		for path_v: Variant in files:
 			var source_path: String = str(path_v)
 			if not source_path.begins_with("res://") or source_path.contains("..") \
@@ -69,6 +95,7 @@ static func remaining() -> int:
 			if not files.has(required):
 				error = "unbound_execution_source"
 				return 0
+		_verified_sources = files.duplicate(true)
 	var value: Variant = _grant.get("contained_starts")
 	if typeof(value) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(value)) \
 			or float(value) != floorf(float(value)) or float(value) < 1 or float(value) > 2047:
@@ -93,7 +120,7 @@ static func consume() -> bool:
 
 
 static func source_manifest() -> Dictionary:
-	return _grant.get("source_files", {}).duplicate(true) if remaining() > 0 else {}
+	return _verified_sources.duplicate(true) if remaining() > 0 else {}
 
 
 static func journal_limit() -> int:

@@ -50,6 +50,14 @@ def main():
     for name,raw in [('duplicate-key',c.SEED+b'quality=7\n'),('new-default',c.SEED+b'new_option=true\n'),('type-drift',c.SEED.replace(b'quality=7',b'quality=7.0')),('token-joining',c.SEED.replace(b'dest_files=[',b'dest_files=[ tru e, ')),('group-drift',c.SEED.replace(b'[deps]',b'group_file="res://other.glb"\n[deps]'))]:
         data={c.SIDECAR:raw,'res://.godot/imported/probe.resource':c.RESOURCE}
         refused(name,lambda d=data:s.validate_result(slot,source,d),'duplicate' if name=='duplicate-key' else 'drift')
+    metadata = c.SEED.replace(b'[deps]', b'metadata={\n"vram_texture": false\n}\n[deps]')
+    sample = {c.SIDECAR: metadata, 'res://assets/probe.bin': c.ASSET}
+    result = {c.SIDECAR: b'; generated\n'+metadata, 'res://.godot/imported/probe.resource': c.RESOURCE}
+    assert s.validate_result(slot, sample, result)['normalizations'] == []
+    passed('multiline-metadata-preserved', scope='bounded lexical identity, not an engine import')
+    changed = dict(result);changed[c.SIDECAR] = changed[c.SIDECAR].replace(b'false',b'true')
+    refused('multiline-metadata-drift',lambda:s.validate_result(slot,sample,changed),'drift')
+    refused('unfinished-multiline',lambda:s.document(metadata.replace(b'}\n[deps]',b'[deps]')),'incomplete import value')
     # Existing schema-2 no-overlap rule is still exercised directly, not bypassed.
     old=dict(schema='DD1-PREPARATION-2',source_head=args.head,source_manifest_sha256=r.digest(r.encode({c.SIDECAR:r.digest(c.SEED)})),engine_sha256='e'*64,slots=[dict(path='assets/probe.bin.import',kind='file',files={'':dict(min_bytes=1,max_bytes=4096)})])
     unit=dict(stage='preparation',overlay_head=args.head,source_files={c.SIDECAR:r.digest(c.SEED)},argv=['/workload'],linux={'runtime':{'/workload':{'sha256':'e'*64}}},preparation=old)
@@ -89,6 +97,34 @@ def main():
     rawstore['preparation_disposition']=r.encode(dict(authority='synthetic:forbidden'))
     e['roles']['preparation_disposition']=dict(locator='preparation_disposition',sha256=r.digest(rawstore['preparation_disposition']))
     refused('PREP-untrusted-issuer',lambda:v.native_bindings(u,e,context),'unauthenticated PREP-1 issuer')
+    # GDScript is not executed or parsed here. Verify the exact adapter source
+    # routing and report that narrower claim; actual native parse remains gated.
+    consumer_path=HERE.parents[1]/'tests/support/dd1_unit_grant.gd'
+    consumer=consumer_path.read_text()
+    for marker in ('_grant.has("execution_files")', 'typeof(_grant.get("sealed_input")) != TYPE_DICTIONARY',
+                   'not execution.has(original_path)', 'not original_path.ends_with(".import")',
+                   'not generated_path.begins_with("res://.godot/")',
+                   '_verified_sources = files.duplicate(true)',
+                   'return _verified_sources.duplicate(true) if remaining() > 0 else {}'):
+        assert marker in consumer,marker
+    assert consumer.index('files = execution') < consumer.index('FileAccess.get_sha256(source_path)')
+    assert consumer.index('FileAccess.get_sha256(source_path)') < consumer.index('_verified_sources = files.duplicate(true)')
+    assert consumer.count('_grant.get("mode") != "fixed_ordinary"')==2
+    passed('fixture-execution-view-consumer-source', source_sha256=r.digest(consumer_path.read_bytes()),
+           scope='source routing/order only; GDScript parsing/runtime NOT EXECUTED')
+    # Projection fact used by that consumer: only explicitly seeded .import
+    # files may differ; config/code/UID identities remain original.
+    original_map={'res://project.godot':'p','res://x.gd':'g','res://x.gd.uid':'u','res://a.png.import':'i'}
+    execution_map=dict(original_map);execution_map['res://a.png.import']='generated'
+    execution_map['res://.godot/imported/a.ctex']='resource'
+    def shape_ok(o,e):
+        return all(n in e and (o[n]==e[n] or n.endswith('.import')) for n in o) and all(
+            n in o or n.startswith('res://.godot/') or n.endswith(('.uid','.import')) for n in e)
+    assert shape_ok(original_map,execution_map)
+    for name in ('res://project.godot','res://x.gd','res://x.gd.uid'):
+        altered=dict(execution_map);altered[name]='changed';assert not shape_ok(original_map,altered)
+    altered=dict(execution_map);altered['res://unexpected.gd']='new';assert not shape_ok(original_map,altered)
+    passed('execution-view-shape-falsifiers',scope='pure supplied maps, not a GDScript interpreter')
     assert entry.check_h_closure(args.h.resolve())==identities
     print(json.dumps(dict(checks=records,count=len(records),head=args.head,H_blobs=entry.H_BLOBS,H_sha256s=identities,H_mocked=False,engine_runs=0,live_account_writes=0,empirical_context_created=False,native_positive=False),indent=2))
     return 0

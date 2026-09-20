@@ -69,13 +69,15 @@ int main(int argc,char **argv) {
     else read_file(SEED,seed,sizeof(seed));
     if(strcmp(seed,archive))fail("wrong initial seed");
     if(!strstr(seed,"quality=7"))fail("authored parameter not read");
+    char quality=strstr(seed,"quality=")[8];
     puts("SEED_READ_AND_CONFIG_PROJECTED");
     if(!strcmp(mode,"mutate-restore")) {
         char bad[4096];strcpy(bad,seed);replace(bad,"quality=7","quality=9");
         write_file(SEED,bad);
         read_file(SEED,bad,sizeof(bad)); /* Distinct unapproved intermediate read. */
+        quality=strstr(bad,"quality=")[8];
     }
-    char resource[256];snprintf(resource,sizeof(resource),"DD1-INERT-RESOURCE:quality=%c:%s",'7',asset);
+    char resource[256];snprintf(resource,sizeof(resource),"DD1-INERT-RESOURCE:quality=%c:%s",quality,asset);
     if(strcmp(mode,"missing-resource"))write_file(RESOURCE,resource);
     char output[8192];snprintf(output,sizeof(output),"; DERIVED-INERT\n%s",seed);
     if(!strcmp(mode,"wrong-uid"))replace(output,"uid://dd1seed","uid://dd1oops");

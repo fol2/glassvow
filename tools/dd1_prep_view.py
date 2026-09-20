@@ -49,7 +49,7 @@ def require_plugin_inputs(source):
         entries = {n[len(key):]: raw for n,raw in source.items() if n.startswith(key)}
         r.need(entries and tree(entries) == wanted, 'missing/altered original plugin inventory:' + prefix)
 # Replaced only when the exact harmless producer build changes, never by a unit.
-INERT_PRODUCER = 'e50ce1698220a9cd2c2ac27f848b7a2e34fd29a6f683b7cf3432e17e0a749b13'
+INERT_PRODUCER = 'd13b4975c0c131e15780f435474d88f2950cb25629c69fe497cbb7824a446629'
 
 
 def selected(recipe):
@@ -103,7 +103,7 @@ def validate(unit, source):
         r.need(recipe['engine_sha256'] == ENGINE, 'PREP-1 fixed engine identity')
         require_plugin_inputs(source)
     seeds = seeded(recipe)
-    r.need(seeds and len(seeds) <= 64, 'bounded explicit seeded sidecars required')
+    r.need(seeds and len(seeds) <= 128, 'bounded explicit seeded sidecars required')
     generated = {'res://' + s['path'] + ('/' + rel if rel else '')
                  for s in recipe['slots'] for rel in s['files']}
     for slot in seeds.values():

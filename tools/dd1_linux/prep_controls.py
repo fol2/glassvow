@@ -206,6 +206,9 @@ class Matrix:
             rec=self.run(mode,w,u,repo,ap,False);z=rec['result']
             if mode in ('never-read','double-write','mutate-restore'):
                 check(not z['preparation_audit']['seed_history']['ok'],mode+': did not reach history guard')
+            if mode == 'mutate-restore':
+                check(bytes.fromhex(rec['files']['derived/0/imported/probe.resource']) == RESOURCE.replace(b'quality=7', b'quality=9'),
+                      'intermediate changed option was not actually used to generate the resource')
             if mode in ('wrong-uid','wrong-param','wrong-source'):
                 check(any('drift' in s for s in z['task_outcome']['errors']),mode+': did not reach semantics')
             if mode in ('alias','hardlink'):
