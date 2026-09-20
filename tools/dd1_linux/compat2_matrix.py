@@ -133,6 +133,12 @@ class Matrix:
                 unit['source_files']['res://inputs/pipe']='0'*64
             self.run('binding-'+name,where,unit,repo,False,pre=expected)
             self.passed('binding-'+name,'specific guard rejects before output/reservation')
+        where,unit,repo=self.case('binding-controller-source')
+        q=repo/'tools/dd1_compatibility.py';q.write_bytes(q.read_bytes()+b'\\n# substituted staged source\\n')
+        unit['source_files']['res://tools/dd1_compatibility.py']=r.digest(q.read_bytes())
+        unit['compatibility']=c.profile(unit)
+        self.run('binding-controller-source',where,unit,repo,False,pre='loaded controller source differs')
+        self.passed('binding-controller-source','self-consistent staged hashes cannot substitute loaded controller source')
         where,unit,repo=self.case('binding-selfhashed-inert')
         q=repo/'tools/dd1_linux/build/compat2-inert';q.write_bytes(q.read_bytes()+b'changed')
         unit['linux']['runtime']['/workload']['sha256']=r.digest(q.read_bytes())
@@ -163,6 +169,20 @@ class Matrix:
             if n==14:check(z['supervisor_report']['signal']==9,'workload hard CPU exhaustion')
             self.passed(name,'actual installed CPU partitions and bounded workload endpoint')
 
+    def preparation_budget(self):
+        import dd1_preparation as prep
+        where,unit,repo=self.case('temporary-layout-budget','prep',stage='preparation')
+        self.recipe(unit)
+        source={k:(repo/k[6:]).read_bytes() for k in unit['source_files']}
+        small=prep.reserve_copy_bytes(unit['preparation'],source)
+        unit['preparation']['slots'][0]['temporary_files'] += ['temp%d/file.tmp'%i for i in range(256)]
+        unit['compatibility']=c.profile(unit)
+        large=prep.reserve_copy_bytes(unit['preparation'],source)
+        check(large-small >= 512*16384,'temporary layout metadata not reserved')
+        self.run('temporary-layout-budget',where,unit,repo,False,pre='complete preparation/copy raw envelope')
+        self.retain('temporary-layout-cost',dict(small=small,large=large,raw_envelope=unit['raw_bytes']))
+        self.passed('temporary-layout-budget','precreated temporary paths/directories cannot escape the complete raw reservation')
+
     def recipe(self,unit,nested=False):
         prefix='sub/' if nested else ''
         unit['preparation']=dict(schema='DD1-PREPARATION-2',source_head=unit['overlay_head'],
@@ -176,12 +196,10 @@ class Matrix:
     def preparations(self):
         positive=None
         for mode in ['prep','prep-nested','prep-missing','prep-extra','prep-transient',
-                     'prep-nested-transient','prep-symlink','prep-hardlink','prep-replace-slot','prep-fail']:
+                     'prep-nested-transient','prep-symlink','prep-hardlink','prep-alias-symlink',
+                     'prep-alias-hardlink','prep-replace-slot','prep-fail']:
             where,unit,repo=self.case(mode,mode,stage='preparation')
             self.recipe(unit,'nested' in mode)
-            if mode=='prep-hardlink':
-                unit['preparation']['slots'][0]['files']['cache2.bin']=dict(min_bytes=14,max_bytes=14)
-                unit['compatibility']=c.profile(unit)
             ok=mode in ('prep','prep-nested','prep-replace-slot')
             rec=self.run(mode,where,unit,repo,ok);z=rec['result']
             text=bytes.fromhex(rec['files'].get('capture/stdout.bin','')).decode()
@@ -193,7 +211,12 @@ class Matrix:
             else:check(not z.get('sealed_preparation'),'failed preparation promoted')
             if 'transient' in mode or mode == 'prep-extra':
                 check(not z['preparation_audit']['ok'],'transient/replaced path escaped audit')
-            if mode=='prep-hardlink':check('hardlink' in str(z['task_outcome']),'intended hardlink guard')
+            if mode in ('prep-symlink','prep-hardlink','prep-alias-symlink','prep-alias-hardlink'):
+                nr = 88 if 'symlink' in mode else 86
+                check(any(e['nr']==nr and e['errno']==95 and e['capability_class']=='UNEXPECTED'
+                          for e in z['refused_requests']), 'alias before-effect refusal not reached')
+                check(z['classification']['unexpected_denials'] >= 1, 'caught alias refusal hidden')
+                check('rc=-1 errno=95' in text, 'alias effect was not refused')
             self.passed(mode,'kernel readonly originals, actual generated outputs, promotion decision')
         self.sealed(*positive)
         for name,mutate,expected in [
@@ -312,9 +335,9 @@ def main():
         if args.section in ('all','kernel'):m.kernel_cases();m.replay()
         if args.section in ('all','binding'):m.bindings()
         if args.section in ('all','cpu'):m.cpu()
-        if args.section in ('all','prep'):m.preparations()
+        if args.section in ('all','prep'):m.preparations();m.preparation_budget()
         if args.section in ('all','kill'):
-            m.killed('supervisor');m.killed('controller');m.killed('supervisor',True)
+            m.killed('supervisor');m.killed('controller');m.killed('supervisor',True);m.killed('controller',True)
     except BaseException as exc:
         (args.output/'FAILURE.json').write_bytes(r.encode(dict(error=type(exc).__name__+':'+str(exc),directory=str(m.root))))
         raise

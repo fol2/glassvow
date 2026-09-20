@@ -81,8 +81,17 @@ def reserve_copy_bytes(recipe, source):
     if recipe is None:
         return 0
     generated = sum(v["max_bytes"] + 16384 for s in recipe["slots"] for v in s["files"].values())
-    # One complete sealed copy, plus a bounded manifest and mountpoint metadata.
-    return sum(len(b) + 16384 for b in source.values()) + generated + 524288 + 139264 + 32768 * len(recipe["slots"])
+    # Charge the complete predeclared layout too: temporary paths can require
+    # directories/watch entries even when they leave no final output file.
+    layout = set()
+    for index, slot in enumerate(recipe["slots"]):
+        for name in (*slot["files"], *slot.get("temporary_files", [])):
+            full = str(index) + ("/" + name if name else "")
+            layout.add(full)
+            layout.update(str(p) for p in PurePosixPath(full).parents if str(p) != ".")
+    # One complete sealed copy, bounded manifest/journal, and layout metadata.
+    return (sum(len(b) + 16384 for b in source.values()) + generated +
+            524288 + 139264 + 32768 * len(recipe["slots"]) + 16384 * len(layout))
 
 
 def create_slots(root, capture, recipe):

@@ -136,8 +136,15 @@ int main(int argc,char **argv) {
         listener=recvfd(s[0],&installed);
     close(s[0]);
     unsigned threads=1,execs=0,denied=0,clone3=0,requests=0;int last=-1,status=0,channel=0;
+    /* The fixed controller emits this immutable file only for a validated
+     * preparation recipe. No workload has access to the original root path. */
+    char layout[4096];
+    if(snprintf(layout,sizeof(layout),"%s/dd1-preparation.layout",argv[1])>=(int)sizeof(layout))
+        dd1_die("layout path");
+    errno=0;int has_layout=access(layout,F_OK)==0;
+    if(!has_layout && errno!=ENOENT) dd1_die("layout presence");
     struct dd1_capabilities capabilities={.workload=pid,.enabled=compat,
-        .naming_cap=names,.clone3_cap=c3cap};
+        .naming_cap=names,.clone3_cap=c3cap,.preparation=has_layout};
     if(listener<0 || installed.rlim_cur!=workcpu || installed.rlim_max!=workcpu) {
         channel=1;kill(pid,SIGKILL);
     }

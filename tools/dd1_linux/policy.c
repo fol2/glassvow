@@ -82,8 +82,13 @@ int dd1_notify(int fd,uint64_t cap,uint64_t *used,unsigned *threads,
     /* Path strings themselves are not inspected. Kernel path length is
      * bounded by PATH_MAX; charge worst-case metadata before every mutation. */
     case __NR_rename: case __NR_renameat: case __NR_renameat2:
-    case __NR_symlink: case __NR_symlinkat: case __NR_link: case __NR_linkat:
         n=8192; scalar=1; break;
+    case __NR_symlink: case __NR_symlinkat: case __NR_link: case __NR_linkat:
+        /* An alias at a declared temporary name could be removed before the
+         * final inventory. Refuse its creation BEFORE effect in preparation.
+         * Other phases retain strict B1's existing filesystem semantics. */
+        if (!capabilities->preparation) {n=8192; scalar=1;}
+        break;
     case __NR_unlink: case __NR_unlinkat: case __NR_mkdir: case __NR_mkdirat: case __NR_rmdir:
         n=4096; scalar=1; break;
     case __NR_fcntl:

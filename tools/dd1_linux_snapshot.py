@@ -13,7 +13,7 @@ import dd1_reservations as r
 
 ABI = "linux-x86_64-lp64-v1"
 # Exact helper built/tested in this source artifact, not a unit-selected runner.
-PINNED_HELPER_SHA256 = "697c3ee4c8bdc097f27cbd5242821fc698b063ca131acece7e89566d8297120f"
+PINNED_HELPER_SHA256 = "b22fdaba90df2a1a317f1d3a690522736a1301f9b442016764d5bf173f2fdf0f"
 HELPER_SOURCES = frozenset("res://tools/" + p for p in (
     "dd1_linux/policy.h", "dd1_linux/policy.c", "dd1_linux/isolate.c",
     "dd1_linux/supervisor.c", "dd1_linux_snapshot.py", "dd1_linux_backend.py",

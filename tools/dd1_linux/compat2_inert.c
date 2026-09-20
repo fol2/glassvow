@@ -81,14 +81,28 @@ static void prepare(const char *mode) {
     const char *tmp=nested?"/source/.godot/sub/cache.tmp":"/source/.godot/cache.tmp";
     const char *cache=nested?"/source/.godot/sub/cache.bin":"/source/.godot/cache.bin";
     if(!strcmp(mode,"prep-symlink")) {
-        if(symlink("/source/inputs/frozen.txt","/source/.godot/cache.bin"))die("symlink");
-    } else {
-        write_file(tmp,"DERIVED-INERT\n");
-        if(rename(tmp,cache))die("derived rename");
+        errno=0;int rc=symlink("/source/inputs/frozen.txt","/source/.godot/cache.bin");
+        printf("FINAL_SYMLINK rc=%d errno=%d\n",rc,errno);
+        if(rc!=-1||errno!=EOPNOTSUPP)die("symlink must be refused");
     }
+    write_file(tmp,"DERIVED-INERT\n");
+    if(rename(tmp,cache))die("derived rename");
     if(strcmp(mode,"prep-missing"))write_file("/source/inputs/demo.uid","INERT-UID\n");
+    if(strstr(mode,"alias-")) {
+        errno=0;
+        int rc=strstr(mode,"symlink")?symlink("/source/inputs/frozen.txt",tmp):link(cache,tmp);
+        int alias_errno=errno;
+        printf("TRANSIENT_ALIAS rc=%d errno=%d\n",rc,alias_errno);
+        if(rc==0) {
+            if(unlink(tmp))die("alias cleanup");
+        } else if(alias_errno!=EOPNOTSUPP)die("alias refusal");
+    }
     if(!strcmp(mode,"prep-extra"))write_file("/source/.godot/unexpected.bin","UNDECLARED\n");
-    if(!strcmp(mode,"prep-hardlink")&&link("/source/.godot/cache.bin","/source/.godot/cache2.bin"))die("hardlink");
+    if(!strcmp(mode,"prep-hardlink")) {
+        errno=0;int rc=link("/source/.godot/cache.bin","/source/.godot/cache.tmp");
+        printf("FINAL_HARDLINK rc=%d errno=%d\n",rc,errno);
+        if(rc!=-1||errno!=EOPNOTSUPP)die("hardlink must be refused");
+    }
     if(!strcmp(mode,"prep-escape")) {
         if(symlink("/../../source/inputs/frozen.txt","/source/.godot/cache2.bin"))die("escape symlink");
     }
