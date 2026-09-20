@@ -21,11 +21,19 @@ import dd1_compatibility as compatibility
 _once = False
 
 
+def cpu_partition(total):
+    """Conservative aggregate bound, including one second per-process headroom."""
+    r.need(11 <= r.natural(total, "CPU") <= 300, "CPU partition")
+    return dict(total=total, fork_soft=3, fork_hard=total, controller_final=3,
+                supervisor_bootstrap_soft=3, supervisor_final=2,
+                workload=total - 10, aggregate_with_headroom=4 + 4 + total - 9)
+
+
 def controller_limits(unit):
     global _once
     r.need(not _once and len(list(Path("/proc/self/task").iterdir())) == 1, "dedicated single-thread controller required")
     _once = True
-    r.need(11 <= r.natural(unit.get("cpu_seconds"), "CPU") <= 300, "CPU partition")
+    partition = cpu_partition(unit.get("cpu_seconds"))
     # Retain a high HARD ceiling only until fork/exec so the workload can
     # LOWER its inherited limit to U-10. The controller SOFT limit remains 3,
     # unblocked/default-fatal; controller then irreversibly lowers hard to 3.
@@ -38,7 +46,7 @@ def controller_limits(unit):
            "inherited CPU ceiling cannot support demand")
     signal.signal(signal.SIGXCPU, signal.SIG_DFL)
     signal.pthread_sigmask(signal.SIG_UNBLOCK, {signal.SIGXCPU})
-    resource.setrlimit(resource.RLIMIT_CPU, (3, unit["cpu_seconds"]))
+    resource.setrlimit(resource.RLIMIT_CPU, (partition["fork_soft"], partition["fork_hard"]))
     resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
     libc = ctypes.CDLL(None, use_errno=True)
     r.need(libc.prctl(36, 1, 0, 0, 0) == 0, "controller subreaper unavailable")
@@ -116,7 +124,7 @@ class Prepared:
         r.atomic_write(root / "grant.json", inside)
         (root / "grant.json").chmod(0o400)
         # Entry validated these exact receipt bytes; never remount live receipt.
-        (root / "launch-receipt.json").write_bytes(self.receipt_bytes)
+        (root / "launch-receipt.json").write_bytes(self.receipt_bytes())
         (root / "launch-receipt.json").chmod(0o400)
         preparation.create_slots(root, capture, p["preparation"])
         helper = sealed_helper(p["helper"])
@@ -126,7 +134,7 @@ class Prepared:
         wall_ms = int((self.lifetime[1] - elapsed - .1) * 1000)
         r.need(wall_ms >= 100, "setup exhausted unit wall bound")
         args = ["dd1-supervisor", str(root), str(capture), str(allowance),
-                str(self.unit["cpu_seconds"] - 10), str(wall_ms), str(p["config"]["threads"]),
+                str(cpu_partition(self.unit["cpu_seconds"])["workload"]), str(wall_ms), str(p["config"]["threads"]),
                 str(os.getpid()), str(lease), str(int(p["profile"] is not None)),
                 str(p["profile"]["naming_total"] if p["profile"] else 0),
                 str(p["profile"]["clone3_maximum"] if p["profile"] else 0), *self.command]
