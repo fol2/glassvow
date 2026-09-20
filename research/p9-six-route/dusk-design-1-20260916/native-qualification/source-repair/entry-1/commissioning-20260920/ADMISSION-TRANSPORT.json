@@ -1,0 +1,35 @@
+{
+  "compressed_bytes": 8448,
+  "compressed_sha256": "ef4d25c2f352fde0a171f20d95e3798a3e3b1b3ce8187443fa9e184f392ec6b3",
+  "decode": "xz -dc ADMISSION-RECORDS.json.xz",
+  "decoded_bytes": 29181,
+  "decoded_sha256": "44148b4ba9637de31c96b8117ca53fcdef9d7e595e6b1fad18fa641ea16cdeb8",
+  "files": {
+    "ADMISSION.json": {
+      "bytes": 5545,
+      "sha256": "1ab11a93740ccd7b48f995f53224b0050c5a1054f8964c79da7d2aba8624db55"
+    },
+    "BUDGET.json": {
+      "bytes": 4281,
+      "sha256": "e985dfa62f327cec3244f6df96f31e9be61400804efd52921fc60a3cf0d671c0"
+    },
+    "SOURCE-MAP.json": {
+      "bytes": 10211,
+      "sha256": "3f3fa1cc8776a40ef9f168e908d1c82595e442f93ebf068e32502d6983fd8422"
+    },
+    "STATIC-CHECK.json": {
+      "bytes": 2580,
+      "sha256": "4276d79683aadc574a3e9b54f3166669599cdd95a1377c33ad5678643e0ead74"
+    },
+    "TRACKED-SIDECAR.import.txt": {
+      "bytes": 801,
+      "sha256": "547e638b5b5d9b2106c11e95af787a74102e2cb4bc2de6404703fba0b5308cef"
+    },
+    "check_static_admission.py": {
+      "bytes": 3719,
+      "sha256": "7ab88566b97cc67660eedb133d6d88e787407f54be477d46751bc94f6349aac6"
+    }
+  },
+  "format": "XZ-compressed UTF-8 JSON containing exact source/record text",
+  "scope": "New pure static recipe guard, complete streams, pinned-source map, blocked admission and dormant arithmetic. No engine/library/font binary; the .import.txt is the original 801-byte metadata, not generated cache."
+}
