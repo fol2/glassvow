@@ -1,12 +1,33 @@
 extends RefCounted
 ## Process-wide consumption inside a complete unit already reserved by the host.
-## This file cannot issue authority. The native Python entry remains blocked.
+## This file cannot issue authority. Native admission belongs to the host.
 
 static var _grant: Dictionary = {}
 static var _read: bool = false
 static var _used: int = 0
 static var _root_index: int = 0
 static var error: String = ""
+
+
+## The protected host grant retains its actual engineering mode. Only the
+## reviewed two-combat fixture can consume it; root acquisition remains gated
+## on fixed_ordinary below. This is a consumer check, never launch authority.
+static func _valid_mode(grant: Dictionary) -> bool:
+	var mode: String = str(grant.get("mode", ""))
+	if mode in ["fixed_ordinary", "focused_fixture"]:
+		return true
+	if mode != "engineering" or grant.get("stage") != "fixture":
+		return false
+	var profile_v: Variant = grant.get("compatibility")
+	if typeof(profile_v) != TYPE_DICTIONARY:
+		return false
+	var profile: Dictionary = profile_v
+	return profile.get("id") == "DD1-B1-COMPAT-2-CAPABILITIES-1" \
+		and profile.get("operation") == "DD1-LINUX-ENTRY-1" \
+		and profile.get("stage") == "fixture" \
+		and profile.get("source_head") == grant.get("overlay_head") \
+		and profile.get("attribution") == "CAPABILITY_CLASS_ONLY" \
+		and grant.get("engine_starts") == 1 and grant.get("contained_starts") == 2
 
 
 static func remaining() -> int:
@@ -24,7 +45,7 @@ static func remaining() -> int:
 		if _grant.get("schema") != "DD1-RESERVED-UNIT-2" \
 				or _grant.get("operation") != "DD1-N0-RECOVERY-1" \
 				or _grant.get("scientific_m") != "07b5aa9dec8436132a524511d5438c510e322070" \
-				or _grant.get("mode") not in ["fixed_ordinary", "focused_fixture"]:
+				or not _valid_mode(_grant):
 			error = "wrong_enclosing_operation"
 			return 0
 		var files: Variant = _grant.get("source_files")

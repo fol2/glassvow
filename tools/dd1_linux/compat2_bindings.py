@@ -82,6 +82,28 @@ def main():
         records.append(dict(name=name,result='PASS',scope='pure supplied bytes, not engine output',
             stderr_hex=stderr.hex(),classification=classification,errors=errors,
             expected_diagnostic_count=expected_count,origin_authenticated=False))
+    # Source-contract check only: no GDScript parser/interpreter is invoked.
+    consumer_path=Path(__file__).resolve().parents[2]/'tests/support/dd1_unit_grant.gd'
+    consumer=consumer_path.read_text()
+    check_mode=consumer.split('static func _valid_mode(',1)[1].split('static func remaining()',1)[0]
+    for obligation in (
+        'mode in ["fixed_ordinary", "focused_fixture"]',
+        'mode != "engineering" or grant.get("stage") != "fixture"',
+        'typeof(profile_v) != TYPE_DICTIONARY',
+        'profile.get("id") == "DD1-B1-COMPAT-2-CAPABILITIES-1"',
+        'profile.get("operation") == "DD1-LINUX-ENTRY-1"',
+        'profile.get("stage") == "fixture"',
+        'profile.get("source_head") == grant.get("overlay_head")',
+        'profile.get("attribution") == "CAPABILITY_CLASS_ONLY"',
+        'grant.get("engine_starts") == 1 and grant.get("contained_starts") == 2'):
+        assert obligation in check_mode,obligation
+    assert 'or not _valid_mode(_grant):' in consumer
+    assert consumer.count('_grant.get("mode") != "fixed_ordinary"')==2
+    assert 'if remaining() <= 0:' in consumer and '_used += 1' in consumer
+    records.append(dict(name='fixture-consumer-source-contract',result='PASS',
+        source_sha256=r.digest(consumer_path.read_bytes()),
+        scope='source markers and routing; GDScript parse/runtime UNEXECUTED',
+        ordinary_acquisition_enabled=False))
     assert entry.check_h_closure(args.h.resolve())==identities
     print(json.dumps(dict(checks=records,count=len(records),H_blobs=entry.H_BLOBS,H_sha256s=identities,
         accepted_H='5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6',H_mocked=False,
