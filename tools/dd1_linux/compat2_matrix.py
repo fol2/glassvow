@@ -112,6 +112,10 @@ class Matrix:
         changes=[
             ('profile-id',lambda u,p:u['compatibility'].update(id='other'),'profile exact-invocation'),
             ('profile-signature',lambda u,p:u['compatibility']['process_signature'].update(flags=17),'profile exact-invocation'),
+            ('naming-zero',lambda u,p:u['compatibility'].update(naming_total=0),'profile finite refusal bounds'),
+            ('naming-excess',lambda u,p:u['compatibility'].update(naming_total=5),'profile finite refusal bounds'),
+            ('naming-repeat-contract',lambda u,p:u['compatibility'].update(naming_per_thread=2),'profile exact-invocation'),
+            ('clone3-excess-contract',lambda u,p:u['compatibility'].update(clone3_maximum=6),'profile finite refusal bounds'),
             ('argv',lambda u,p:u['argv'].__setitem__(1,'plain'),'profile exact-invocation'),
             ('stage',lambda u,p:u.update(stage='parse'),'profile exact-invocation'),
             ('environment',lambda u,p:u['linux']['environment'].update(HOME='/elsewhere'),'unbound/changed workload'),
@@ -247,6 +251,10 @@ class Matrix:
                  ('symlink',lambda:(target.unlink(),target.symlink_to('/etc/passwd')),'derived symlink'),
                  ('hardlink',lambda:os.link(target,target.parent/'extra.bin'),'sealed snapshot inventory changed')]
         for name,action,reason in actions:
+            # Explicit HOST-side corruption injection after the preparation
+            # process has exited. These modes are never workload authority;
+            # the runtime positive above proves its kernel read-only mount.
+            target.parent.chmod(0o700); target.chmod(0o600)
             action()
             where,unit,_=self.case('sealed-'+name,'sealed-runtime',stage='fixture',repo=repo,existing_account=r.read(shared))
             unit['sealed_input']=binding;unit['compatibility']=c.profile(unit)
@@ -254,7 +262,7 @@ class Matrix:
             if target.is_symlink() or target.exists():target.unlink()
             extra=target.parent/'extra.bin'
             if extra.exists():extra.unlink()
-            target.write_bytes(original);target.chmod(0o400)
+            target.write_bytes(original);target.chmod(0o400);target.parent.chmod(0o500)
             self.passed('sealed-'+name,'altered sealed inputs cannot reserve or execute')
         where,unit,_=self.case('sealed-failed-parent','sealed-runtime',stage='fixture',repo=repo,existing_account=r.read(shared))
         unit['sealed_input']=binding;unit['compatibility']=c.profile(unit)

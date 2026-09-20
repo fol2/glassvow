@@ -62,6 +62,26 @@ def main():
     raw=r.encode({'synthetic':True});shape=dict(roles={'compatibility_profile':dict(locator='p',sha256=r.digest(raw))})
     ctx=SimpleNamespace(resolve={'p':raw}.get,receipts={})
     refusal('missing-native-disposition',lambda:compat.native_bindings({'compatibility':{'synthetic':True}},shape,ctx),'missing compatibility disposition')
+    # Pure contract/diagnostic falsifiers, explicitly NOT a native run or an
+    # empirical binding. The public native refusals above remain the entry test.
+    refusal('engineering-profile-required',lambda:compat.validate_profile(
+        {'mode':'engineering'},{}),'engineering/preparation requires bound profile')
+    good={'process_refusals':1,'unexpected_denials':0}
+    diagnostic_cases=[
+        ('one-source-derived-diagnostic',compat.DESKTOP_ERROR+b'\n',good,False,1),
+        ('repeated-diagnostic',compat.DESKTOP_ERROR+b'\n'+compat.DESKTOP_ERROR,good,True,1),
+        ('diagnostic-without-class',compat.DESKTOP_ERROR,{},True,0),
+        ('diagnostic-with-unexpected-denial',compat.DESKTOP_ERROR,
+            {'process_refusals':1,'unexpected_denials':1},True,0),
+        ('other-error',b'ERROR: unrelated',good,True,0),
+        ('parse-error',b'SCRIPT ERROR: Parse Error',good,True,0),
+        ('load-error',b'Failed to load script',good,True,0)]
+    for name,stderr,classification,failed,count in diagnostic_cases:
+        errors,expected_count=compat.diagnose(stderr,classification)
+        assert bool(errors)==failed and expected_count==count,name
+        records.append(dict(name=name,result='PASS',scope='pure supplied bytes, not engine output',
+            stderr_hex=stderr.hex(),classification=classification,errors=errors,
+            expected_diagnostic_count=expected_count,origin_authenticated=False))
     assert entry.check_h_closure(args.h.resolve())==identities
     print(json.dumps(dict(checks=records,count=len(records),H_blobs=entry.H_BLOBS,H_sha256s=identities,
         accepted_H='5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6',H_mocked=False,
