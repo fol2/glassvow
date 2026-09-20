@@ -76,7 +76,9 @@ def create_slots(root, capture, recipe):
     if recipe is None:
         return
     lines = []
-    directory = capture / "generated"
+    # Backing parents are NOT visible at /out: otherwise the workload could
+    # rename a backing directory and substitute different bytes after generation.
+    directory = capture.parent / "derived"
     directory.mkdir(mode=0o700)
     for index, slot in enumerate(recipe["slots"]):
         target = root / "source" / slot["path"]
@@ -133,7 +135,7 @@ def seal(unit, pinned, output, cleanup, task_ok):
     # a source for a subsequent child; validated bytes are copied to a NEW tree.
     derived = {}
     for index, slot in enumerate(recipe["slots"]):
-        backing = output / "capture/generated" / str(index)
+        backing = output / "derived" / str(index)
         if slot["kind"] == "directory":
             r.need(backing.is_dir() and not backing.is_symlink(), "missing generated directory")
             r.need(_inventory(backing) == set(slot["files"]), "stale/missing/unexpected generated inventory")

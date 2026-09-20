@@ -85,6 +85,9 @@ static void prepare(const char *mode) {
     if(!strcmp(mode,"prep-escape")) {
         if(symlink("/../../source/inputs/frozen.txt","/source/.godot/cache2.bin"))die("escape symlink");
     }
+    errno=0;int backing=open("/out/generated/0/cache.bin",O_WRONLY|O_TRUNC);
+    printf("BACKING_ALIAS fd=%d errno=%d\n",backing,errno);
+    if(backing>=0)die("writable preparation backing alias");
     puts("DERIVED_OUTPUT_READY");fflush(stdout);
 }
 int main(int argc,char **argv) {
@@ -93,6 +96,15 @@ int main(int argc,char **argv) {
     struct rlimit lim;if(getrlimit(RLIMIT_CPU,&lim))die("getrlimit");
     printf("LIMIT %llu %llu\n",(unsigned long long)lim.rlim_cur,(unsigned long long)lim.rlim_max);fflush(stdout);
     if(!strcmp(m,"plain")){save();return 0;}
+    if(!strcmp(m,"refusal-overflow")) {
+        for(int i=0;i<40;i++)syscall(SYS_prctl,PR_SET_DUMPABLE,0,0,0,0);
+        return 99;
+    }
+    if(!strcmp(m,"later-exec")) {
+        char *a[]={"again",NULL},*e[]={NULL};
+        errno=0;execve("/workload",a,e);
+        printf("LATER_EXEC errno=%d\n",errno);save();return 0;
+    }
     if(!strcmp(m,"unnamed")){skip_name=1;thread();save();return 0;}
     if(!strcmp(m,"worker-process")) {
         worker_spawn=1;thread();

@@ -34,7 +34,7 @@ static void generated_mounts(const char *root,const char *out) {
            strstr(name,"..") || strlen(name)>350) dd1_die("layout syntax");
         for(char *p=name;*p;p++) if(!isalnum((unsigned char)*p)&&!strchr("/_.-",*p)) dd1_die("layout path");
         snprintf(target,sizeof(target),"%s/%s",root,name);
-        snprintf(backing,sizeof(backing),"%s/generated/%u",out,index);
+        snprintf(backing,sizeof(backing),"%s/../derived/%u",out,index);
         if(mount(backing,target,NULL,MS_BIND,NULL) ||
            mount(NULL,target,NULL,MS_REMOUNT|MS_BIND|MS_NOSUID|MS_NODEV|MS_NOEXEC,NULL))
             dd1_die("generated slot mount");

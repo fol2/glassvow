@@ -123,6 +123,9 @@ int main(int argc,char **argv) {
         execve(argv[12],&argv[12],env);_exit(123);
     }
     limit(RLIMIT_CPU,2);limit(RLIMIT_CORE,0);
+    struct rlimit supervisor_limits;
+    if(getrlimit(RLIMIT_CPU,&supervisor_limits) || supervisor_limits.rlim_cur!=2 ||
+       supervisor_limits.rlim_max!=2) dd1_die("supervisor limit readback");
     close(s[1]);
     /* Small bounded bootstrap receipt enables parent/subreaper crash controls. */
     printf("{\"phase\":\"started\",\"supervisor\":%d,\"workload\":%d}\n",getpid(),pid);fflush(stdout);
@@ -170,12 +173,13 @@ int main(int argc,char **argv) {
            "\"process_refusals\":%u,\"naming_refusals\":%u,"
            "\"unexpected_denials\":%u,\"fatal\":%u,"
            "\"refused_requests\":%u,\"inherited_cpu_soft\":%llu,"
-           "\"inherited_cpu_hard\":%llu,\"supervisor_cpu_limit\":2,"
+           "\"inherited_cpu_hard\":%llu,\"supervisor_cpu_soft\":%llu,\"supervisor_cpu_hard\":%llu,"
            "\"workload_cpu_soft\":%llu,\"workload_cpu_hard\":%llu}\n",
            strict?"true":"false",compatibility?"true":"false",containment?"true":"false",
            exitcode==0?"true":"false",denied+clone3,denied,capabilities.process_refusals,capabilities.naming_refusals,
            capabilities.unexpected,capabilities.fatal,capabilities.refused_requests,
            (unsigned long long)inherited.rlim_cur,(unsigned long long)inherited.rlim_max,
+           (unsigned long long)supervisor_limits.rlim_cur,(unsigned long long)supervisor_limits.rlim_max,
            (unsigned long long)installed.rlim_cur,(unsigned long long)installed.rlim_max);
     printf("{\"phase\":\"result\",\"success\":%s,\"reserved_before_writes\":%llu,"
        "\"raw_cap\":%llu,\"denied\":%u,\"last_denied_syscall\":%d,\"clone3_denied\":%u,"

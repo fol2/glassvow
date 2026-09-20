@@ -13,7 +13,7 @@ import dd1_reservations as r
 
 ABI = "linux-x86_64-lp64-v1"
 # Exact helper built/tested in this source artifact, not a unit-selected runner.
-PINNED_HELPER_SHA256 = "8d4842806c4d56afeabb4e23f68b9b57345cec6387ea63c4e605ffb5744ac74f"
+PINNED_HELPER_SHA256 = "697c3ee4c8bdc097f27cbd5242821fc698b063ca131acece7e89566d8297120f"
 HELPER_SOURCES = frozenset("res://tools/" + p for p in (
     "dd1_linux/policy.h", "dd1_linux/policy.c", "dd1_linux/isolate.c",
     "dd1_linux/supervisor.c", "dd1_linux_snapshot.py", "dd1_linux_backend.py",
@@ -32,7 +32,7 @@ def read_regular(root: Path, name: str, maximum: int = 1 << 30) -> bytes:
         for component in parts[:-1]:
             new = os.open(component, os.O_PATH | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd)
             os.close(fd); fd = new
-        file = os.open(parts[-1], os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=fd)
+        file = os.open(parts[-1], os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC | os.O_NONBLOCK, dir_fd=fd)
         with os.fdopen(file, "rb") as stream:
             s = os.fstat(stream.fileno())
             r.need(stat.S_ISREG(s.st_mode) and s.st_nlink == 1 and s.st_size <= maximum, "nonregular/linked/oversized input")
@@ -93,6 +93,10 @@ def prepare(unit: dict, command: list[str], repo: Path, generated=None) -> dict:
         raw = read_regular(repo, name[6:])
         r.need(r.digest(raw) == wanted, "actual source bytes differ: " + name)
         source[name] = raw; files["/source/" + name[6:]] = (raw, False)
+    controller_root = Path(__file__).resolve().parents[1]
+    for name in HELPER_SOURCES:
+        r.need(read_regular(controller_root, name[6:]) == source[name],
+               "controller source differs from bound snapshot: " + name)
     for name, raw in (generated or {}).items():
         r.need(name not in source and name.startswith("res://"), "generated source collision")
         files["/source/" + name[6:]] = (raw, False)
