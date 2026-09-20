@@ -17,7 +17,8 @@ import dd1_compatibility as compatibility
 
 # Test authority is restricted to code-pinned harmless fixture builds, not any
 # caller-named executable with a self-hash. Native entry cannot select this path.
-INERT_BINARIES = frozenset(("00c91a9e612699082649e44536a8f40c436572378841ee4eaf70e8c45d1f7fa7",
+INERT_BINARIES = frozenset(("e50ce1698220a9cd2c2ac27f848b7a2e34fd29a6f683b7cf3432e17e0a749b13",
+                            "00c91a9e612699082649e44536a8f40c436572378841ee4eaf70e8c45d1f7fa7",
                             "ead0fc4d0660d8a691469296c59827c66bad717b98d54671ecdb6eed8dcc9129",
                             "5144e1676b1ace6f29432e80b9e9f6eac49300a0b4173edb2b61e03dac9da1a1"))
 
@@ -125,7 +126,8 @@ def _run_inert_unit(command, *, unit, account_path, receipt_path, output, head, 
         reservations.digest(reservations.encode(unsigned)), "inert demand/receipt mismatch")
     reservations.need(unit.get("mode") == "inert_control" and command[0] == "/workload" and
                       ("res://tools/dd1_linux/inert.c" in unit["source_files"] or
-                       "res://tools/dd1_linux/compat2_inert.c" in unit["source_files"]), "inert fixture binding required")
+                       "res://tools/dd1_linux/compat2_inert.c" in unit["source_files"] or
+                       "res://tools/dd1_linux/prep_inert.c" in unit["source_files"]), "inert fixture binding required")
     def check(account):
         reservations.need(account.get("synthetic") is True, "inert entry requires synthetic account")
     return _complete(command, unit, account_path, receipt_path, output, head, repo, check, lifetime, inert=True)

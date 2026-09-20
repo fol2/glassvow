@@ -21,6 +21,7 @@ MAX_EVENTS, MAX_BYTES = 4096, 131072
 class Watch:
     def __init__(self, capture, recipe):
         self.fd = -1
+        self.recipe = recipe
         self.paths = {}
         self.allowed = set()
         if recipe is None:
@@ -46,7 +47,11 @@ class Watch:
                 r.need(not p.is_symlink(), 'generated observer alias')
                 # Watch files too: replacement of a file-slot backing must not
                 # detach validation from the inode actually mounted in /source.
-                wd = libc.inotify_add_watch(fd, os.fsencode(p), MASK)
+                import dd1_prep_view as view
+                flags = MASK
+                if view.selected(recipe) and p.parent == base and p.name.isdigit() and "seed" in recipe["slots"][int(p.name)]:
+                    flags |= 0x31  # ACCESS, CLOSE_NOWRITE, OPEN on seeded inode only.
+                wd = libc.inotify_add_watch(fd, os.fsencode(p), flags)
                 r.need(wd >= 0, 'generated watch installation failed')
                 self.paths[wd] = p.relative_to(base).as_posix()
         except BaseException:
@@ -97,7 +102,11 @@ class Watch:
             path = output / "PREPARATION-MUTATIONS.bin"
             with path.open("xb") as stream:
                 stream.write(journal); stream.flush(); os.fsync(stream.fileno())
-            return dict(ok=not errors, events=count, bytes_read=total, errors=errors,
+            import dd1_prep_view as view
+            history = view.seed_audit(self.recipe, self.paths, journal) if view.selected(self.recipe) else None
+            if history is not None:
+                errors.extend(history["errors"])
+            return dict(ok=not errors, events=count, bytes_read=total, errors=errors, seed_history=history,
                         journal_path=str(path), journal_sha256=r.digest(journal),
                         scope='kernel generated-path mutation audit; not import-semantic validation')
         finally:

@@ -11,6 +11,7 @@ import os
 import re
 import stat
 import dd1_reservations as r
+import dd1_prep_view as view
 
 
 def path_name(name):
@@ -29,8 +30,12 @@ def validate_recipe(unit, source):
     r.need(unit.get("stage") == "preparation" and unit.get("sealed_input") is None,
            "preparation stage/lineage mismatch")
     required = {"schema", "source_head", "source_manifest_sha256", "engine_sha256", "slots"}
+    amended = view.selected(recipe)
+    if amended:
+        required |= {"view", "producer"}
     r.need(isinstance(recipe, dict) and set(recipe) == required and
-           recipe["schema"] == "DD1-PREPARATION-2", "preparation recipe schema")
+           recipe["schema"] in ("DD1-PREPARATION-2", view.SCHEMA), "preparation recipe schema")
+    r.need(len(r.encode(recipe)) <= 131072, "preparation recipe size bound")
     r.need(recipe["source_head"] == unit["overlay_head"] and
            recipe["source_manifest_sha256"] == r.digest(r.encode(unit["source_files"])),
            "preparation source lineage")
@@ -41,11 +46,15 @@ def validate_recipe(unit, source):
     original = {s[6:] for s in source}
     roots, outputs = [], set()
     for slot in slots:
-        r.need(isinstance(slot, dict) and set(slot) in ({"path", "kind", "files"}, {"path", "kind", "files", "temporary_files"}), "slot schema")
+        r.need(isinstance(slot, dict), "slot schema")
+        schema = set(slot) - ({"seed"} if amended else set())
+        r.need(schema in ({"path", "kind", "files"}, {"path", "kind", "files", "temporary_files"}), "slot schema")
         name = path_name(slot["path"])
         r.need(slot["kind"] in ("file", "directory"), "slot kind")
+        overlap = {name} if amended and "seed" in slot and name in original else set()
         r.need(not any(name == p or name.startswith(p + "/") or p.startswith(name + "/")
-                       for p in original | set(roots)), "slot shadows/aliases frozen input")
+                       for p in (original - overlap) | set(roots)), "slot shadows/aliases frozen input")
+        r.need("seed" not in slot or overlap == {name}, "seed must name an existing immutable original")
         r.need((slot["kind"] == "directory" and name == ".godot") or
                (slot["kind"] == "file" and name.endswith((".import", ".uid"))),
                "not a generated import/UID/cache slot")
@@ -74,6 +83,8 @@ def validate_recipe(unit, source):
                    "generated file/directory collision")
             r.need(len(paths) <= 4096, "generated paths bound")
     r.need(len(outputs) <= 4096, "generated file count")
+    if amended:
+        view.validate(unit, source)
     return recipe
 
 
@@ -89,12 +100,19 @@ def reserve_copy_bytes(recipe, source):
             full = str(index) + ("/" + name if name else "")
             layout.add(full)
             layout.update(str(p) for p in PurePosixPath(full).parents if str(p) != ".")
+    # Seed backing initialization plus an immutable original archive at sealing.
+    extra = 0
+    if view.selected(recipe):
+        archives = (view.PROJECT, *view.seeded(recipe))
+        extra = sum(len(source[n]) + 16384 for n in archives)
+        extra += sum(len(source[n]) + 16384 for n in view.seeded(recipe))
+        extra += 2 * len(r.encode(recipe)) + 16384
     # One complete sealed copy, bounded manifest/journal, and layout metadata.
-    return (sum(len(b) + 16384 for b in source.values()) + generated +
+    return extra + (sum(len(b) + 16384 for b in source.values()) + generated +
             524288 + 139264 + 32768 * len(recipe["slots"]) + 16384 * len(layout))
 
 
-def create_slots(root, capture, recipe):
+def create_slots(root, capture, recipe, source=None):
     if recipe is None:
         return
     lines = []
@@ -103,7 +121,12 @@ def create_slots(root, capture, recipe):
     directory.mkdir(mode=0o700)
     for index, slot in enumerate(recipe["slots"]):
         target = root / "source" / slot["path"]
-        r.need(not target.exists() and not target.is_symlink(), "nonfresh generated mountpoint")
+        seed = None
+        if view.selected(recipe) and "seed" in slot:
+            seed = source["res://" + slot["path"]]
+            r.need(_regular(target, len(seed)) == seed, "seeded mountpoint not exact original")
+        else:
+            r.need(not target.exists() and not target.is_symlink(), "nonfresh generated mountpoint")
         target.parent.mkdir(parents=True, exist_ok=True)
         backing = directory / str(index)
         if slot["kind"] == "directory":
@@ -113,7 +136,15 @@ def create_slots(root, capture, recipe):
             for relative in (*slot["files"], *slot.get("temporary_files", [])):
                 (backing / relative).parent.mkdir(parents=True, exist_ok=True)
         else:
-            target.touch(exist_ok=False); backing.touch(exist_ok=False)
+            if seed is None:
+                target.touch(exist_ok=False)
+            with backing.open("xb") as stream:
+                if seed is not None:
+                    stream.write(seed)
+                stream.flush(); os.fsync(stream.fileno())
+            backing.chmod(0o600)
+            if seed is not None:
+                r.need(_regular(backing, len(seed)) == seed, "seed backing readback")
         lines.append(f"{slot['kind'][0]} source/{slot['path']} {index}\n")
     with (root / "dd1-preparation.layout").open("x") as f:
         f.writelines(lines); f.flush(); os.fsync(f.fileno())
@@ -177,7 +208,12 @@ def seal(unit, pinned, output, cleanup, task_ok):
                        for name in slot.get("temporary_files", [])), "stale temporary generated output")
     original = pinned["source"]
     combined = {**original, **derived}
-    r.need(len(combined) == len(original) + len(derived), "derived source overwrite")
+    fields, archives = {}, {}
+    if view.selected(recipe):
+        r.need(set(original) & set(derived) == set(view.seeded(recipe)), "undeclared seeded overwrite")
+        fields, archives = view.seal_fields(unit, pinned, derived, output)
+    else:
+        r.need(len(combined) == len(original) + len(derived), "derived source overwrite")
     dest = output / "sealed"
     dest.mkdir(mode=0o700)
     payload = dest / "payload"; payload.mkdir(mode=0o700)
@@ -189,7 +225,14 @@ def seal(unit, pinned, output, cleanup, task_ok):
         p.chmod(0o400)
         r.need(_regular(p, len(raw)) == raw, "sealed copy readback")
         actual += len(raw) + 16384
-    receipt = dict(schema="DD1-SEALED-PREPARATION-2", unit_id=unit["unit_id"],
+    for name, raw in archives.items():
+        p = dest / "originals" / name[6:]; p.parent.mkdir(parents=True, exist_ok=True)
+        with p.open("xb") as f:
+            f.write(raw); f.flush(); os.fsync(f.fileno())
+        p.chmod(0o400)
+        r.need(_regular(p, len(raw)) == raw, "sealed original archive readback")
+        actual += len(raw) + 16384
+    receipt = dict(schema="DD1-SEALED-PREPARATION-3" if fields else "DD1-SEALED-PREPARATION-2", unit_id=unit["unit_id"],
         source_head=unit["overlay_head"], source_manifest_sha256=r.digest(r.encode(unit["source_files"])),
         engine_sha256=recipe["engine_sha256"], runtime_sha256=r.digest(r.encode(unit["linux"]["runtime"])),
         recipe_sha256=r.digest(r.encode(recipe)), demand_sha256=r.digest(r.encode(unit)),
@@ -197,14 +240,16 @@ def seal(unit, pinned, output, cleanup, task_ok):
         files={k: {"sha256": r.digest(v), "bytes": len(v)} for k, v in combined.items()},
         task_ok=True, cleanup_confirmed=True, protection="READ_ONLY_ROOT_EXACT_GENERATED_SLOTS",
         copied_raw_bytes=actual)
+    receipt.update(fields)
     raw = r.encode(receipt)
+    r.need(len(raw) <= 524288, "sealed receipt byte bound")
     r.need(actual + len(raw) + 16384 <= pinned["promotion_raw"], "sealed copy exceeds pre-reserved raw")
     with (dest / "SEAL.json").open("xb") as f:
         f.write(raw); f.flush(); os.fsync(f.fileno())
     (dest / "SEAL.json").chmod(0o400)
     # In-host filesystem modes are defense in depth. Subsequent execution uses
     # validated copied bytes in a fresh KERNEL read-only root, not these modes.
-    for p in sorted(payload.rglob("*"), key=lambda p: len(p.parts), reverse=True):
+    for p in sorted(dest.rglob("*"), key=lambda p: len(p.parts), reverse=True):
         if p.is_dir(): p.chmod(0o500)
     payload.chmod(0o500); dest.chmod(0o500)
     return {"sha256": r.digest(raw), "receipt_path": str(dest / "SEAL.json"),
@@ -227,7 +272,8 @@ def load_sealed(unit, account):
     raw = _regular(path, 524288)
     r.need(path.name == "SEAL.json" and r.digest(raw) == binding["sha256"], "sealed receipt changed")
     receipt = __import__("json").loads(raw)
-    r.need(receipt["schema"] == "DD1-SEALED-PREPARATION-2" and receipt["task_ok"] is True and
+    amended = receipt.get("schema") == "DD1-SEALED-PREPARATION-3"
+    r.need(receipt["schema"] in ("DD1-SEALED-PREPARATION-2", "DD1-SEALED-PREPARATION-3") and receipt["task_ok"] is True and
            receipt["cleanup_confirmed"] is True and receipt["unit_id"] == binding["unit_id"] and
            receipt["demand_sha256"] == rows[0]["demand_sha256"] and
            receipt["before_account_sha256"] == rows[0]["before_account_sha256"] and
@@ -237,12 +283,13 @@ def load_sealed(unit, account):
            receipt["runtime_sha256"] == r.digest(r.encode(unit["linux"]["runtime"])), "sealed engine/source/demand lineage")
     originals = set(unit["source_files"])
     generated_names = set(receipt["generated"])
-    r.need(not (originals & generated_names) and
+    allowed = set(view.seeded(receipt["recipe"])) if amended else set()
+    r.need((originals & generated_names) == allowed and
            set(receipt["files"]) == originals | generated_names,
            "incomplete or overlapping sealed input inventory")
     payload = path.parent / "payload"
     r.need(_inventory(payload) == {n[6:] for n in receipt["files"]}, "sealed snapshot inventory changed")
-    data = {}
+    data, original_bytes = {}, {}
     for name, expected in receipt["files"].items():
         r.need(name.startswith("res://"), "sealed name")
         p = payload / path_name(name[6:]); b = _regular(p, expected["bytes"])
@@ -252,4 +299,19 @@ def load_sealed(unit, account):
             data[name] = b
         else:
             r.need(unit["source_files"].get(name) == expected["sha256"], "sealed original mismatch")
+            original_bytes[name] = b
+    if amended:
+        archive = path.parent / "originals"
+        wanted = {view.PROJECT, *allowed}
+        r.need(set(receipt["original_archive"]) == wanted and
+               _inventory(archive) == {n[6:] for n in wanted}, "sealed original archive inventory")
+        for name, spec in receipt["original_archive"].items():
+            b = _regular(archive / path_name(name[6:]), spec["bytes"])
+            r.need(len(b) == spec["bytes"] and r.digest(b) == spec["sha256"] == unit["source_files"].get(name),
+                   "sealed original archive corruption")
+            r.need(name != view.PROJECT or original_bytes.get(name) == b, "runtime project restoration changed")
+            original_bytes[name] = b
+        r.need(unit["mode"] == "inert_control" or receipt.get("semantic_scope") == "HOST_QUALIFICATION_REQUIRED",
+               "synthetic preparation cannot become native input")
+        return view.verify_seal(receipt, unit, original_bytes, data)
     return data

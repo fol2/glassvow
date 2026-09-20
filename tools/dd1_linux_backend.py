@@ -127,7 +127,7 @@ class Prepared:
         # Entry validated these exact receipt bytes; never remount live receipt.
         (root / "launch-receipt.json").write_bytes(self.receipt_bytes)
         (root / "launch-receipt.json").chmod(0o400)
-        preparation.create_slots(root, capture, p["preparation"])
+        preparation.create_slots(root, capture, p["preparation"], p["source"])
         helper = sealed_helper(p["helper"])
         lease = r._lease.get()
         r.need(lease >= 3, "missing inherited account executor lease")
@@ -166,6 +166,7 @@ class Prepared:
             os.close(helper)
         clean, adopted = reap_adopted()
         audit = watcher.finish(output)
+        p["seed_audit"] = audit.get("seed_history")
         r.need(len(raw) <= 32768 and len(err) <= 4096, "trusted diagnostic size contract")
         events = [json.loads(line) for line in raw.splitlines()]
         report = next((x for x in events if x.get("phase") == "result"), {})

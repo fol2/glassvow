@@ -45,6 +45,8 @@ def validate_profile(unit, pinned):
         task_sha256=r.digest(r.encode(unit.get("task"))),
         preparation_sha256=r.digest(r.encode(unit.get("preparation"))),
         sealed_input_sha256=r.digest(r.encode(unit.get("sealed_input"))))
+    if "execution_files" in unit:
+        expected["execution_files_sha256"] = r.digest(r.encode(unit["execution_files"]))
     r.need(r.encode(profile) == r.encode(expected), "profile exact-invocation binding")
     r.need(1 <= r.natural(profile["naming_total"], "naming bound") <= b["threads"] <= 4 and
            1 <= r.natural(profile["clone3_maximum"], "clone3 bound") <= b["threads"] + 1 <= 5,
@@ -141,11 +143,17 @@ def native_bindings(unit, expected, context):
            context.receipts.get("compatibility_disposition") == raw, "unauthenticated compatibility issuer")
     if unit.get("preparation") is not None:
         bound_role(expected, context, "preparation_recipe", r.encode(unit["preparation"]))
+        import dd1_prep_view as view
+        view.native_bindings(unit, expected, context)
     if unit.get("sealed_input") is not None:
         sealed = expected["roles"].get("preparation_seal", {})
         r.need(sealed.get("sha256") == unit["sealed_input"]["sha256"], "missing prospective sealed input role")
         data = context.resolve(sealed.get("locator"))
         r.need(isinstance(data, bytes) and r.digest(data) == sealed["sha256"], "altered sealed input role")
+        record = json.loads(data)
+        if record.get("schema") == "DD1-SEALED-PREPARATION-3":
+            bound_role(expected, context, "preparation_projection", r.encode(record["execution_view"]))
+            r.need(record.get("semantic_scope") == "HOST_QUALIFICATION_REQUIRED", "inert PREP-1 seal is not native authority")
 
 
 def task_outcome(unit, capture, classification=None):

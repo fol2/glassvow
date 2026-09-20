@@ -19,7 +19,8 @@ HELPER_SOURCES = frozenset("res://tools/" + p for p in (
     "dd1_linux/supervisor.c", "dd1_linux_snapshot.py", "dd1_linux_backend.py",
     "dd1_meter_entry.py", "dd1_reservations.py", "dd1_recovery_meter.py",
     "dd1_linux/capabilities.h", "dd1_linux/capabilities.c",
-    "dd1_compatibility.py", "dd1_preparation.py", "dd1_preparation_watch.py"))
+    "dd1_compatibility.py", "dd1_preparation.py", "dd1_preparation_watch.py",
+    "dd1_prep_view.py", "dd1_import_semantics.py"))
 
 
 def read_regular(root: Path, name: str, maximum: int = 1 << 30) -> bytes:
@@ -96,8 +97,13 @@ def prepare(unit: dict, command: list[str], repo: Path, generated=None) -> dict:
             actual = read_regular(Path(__file__).resolve().parents[1], name[6:])
             r.need(actual == raw, "loaded controller source differs:" + name)
         source[name] = raw; files["/source/" + name[6:]] = (raw, False)
+    import dd1_prep_view as view
+    sealed = isinstance(generated, view.SealedInputs)
+    allowed = generated.seeded_paths if sealed else set()
+    if sealed:
+        r.need(generated.recipe["view"] == view.describe(source), "sealed runtime source/view drift")
     for name, raw in (generated or {}).items():
-        r.need(name not in source and name.startswith("res://"), "generated source collision")
+        r.need((name not in source or name in allowed) and name.startswith("res://"), "generated source collision")
         files["/source/" + name[6:]] = (raw, False)
     runtime = b.get("runtime")
     r.need(isinstance(runtime, dict) and runtime and len(files) + len(runtime) <= 4096, "runtime closure size")
@@ -105,7 +111,8 @@ def prepare(unit: dict, command: list[str], repo: Path, generated=None) -> dict:
         parts = PurePosixPath(dest).parts
         r.need(len(dest.encode()) <= 384 and len(parts) <= 12 and dest.startswith("/") and str(PurePosixPath(dest)) == dest and
                ".." not in parts and len(parts) > 1 and parts[1] not in ("source", "out", "proc", "sys", "dev") and
-               dest not in ("/grant.json", "/launch-receipt.json", "/dd1-preparation.layout"), "unsafe runtime destination")
+               dest not in ("/grant.json", "/launch-receipt.json", "/dd1-preparation.layout") and
+               parts[1] != "dd1-originals", "unsafe runtime destination")
         raw = read_regular(repo, item["path"])
         r.need(r.digest(raw) == item["sha256"] and type(item["executable"]) is bool, "runtime identity mismatch")
         files[dest] = (raw, item["executable"])
@@ -119,12 +126,25 @@ def prepare(unit: dict, command: list[str], repo: Path, generated=None) -> dict:
             r.need(all(n in files if n.startswith("/") else n in basenames for n in needed), "unbound runtime dependency")
     helper = read_regular(repo, b["helper"]["path"])
     r.need(r.digest(helper) == b["helper"]["sha256"] == PINNED_HELPER_SHA256 and elf(helper) == (None, []), "helper must be pinned static ELF")
+    import dd1_preparation as preparation
+    recipe = preparation.validate_recipe(unit, source)
+    overrides, archives = view.execution_files(recipe, source)
+    if sealed:
+        archives = generated.originals
+    for name, raw in overrides.items():
+        files["/source/" + name[6:]] = (raw, False)
+    for name, raw in archives.items():
+        files["/dd1-originals/" + name[6:]] = (raw, False)
+    r.need(len(files) <= 4096, "projected runtime file count")
+    if view.selected(recipe) or sealed:
+        actual_view = {"res://"+n[len("/source/"):]: r.digest(v[0])
+                       for n,v in files.items() if n.startswith("/source/")}
+        r.need(unit.get("execution_files") == actual_view, "actual execution files differ from demand")
     # Payload copies + worst-case path/creation metadata. No compression credit.
     setup_raw = len(helper) + sum(len(raw) + 16384 for raw, _ in files.values()) + 32768
     r.need(setup_raw + b["workload_raw_bytes"] + 524288 < unit["raw_bytes"], "raw cannot fit immutable inputs and workload")
     import dd1_preparation as preparation
     import dd1_compatibility as compatibility
-    recipe = preparation.validate_recipe(unit, source)
     promotion = preparation.reserve_copy_bytes(recipe, source)
     result = dict(files=files, source=source, helper=helper, setup_raw=setup_raw + promotion,
                   config=b, preparation=recipe, promotion_raw=promotion)
