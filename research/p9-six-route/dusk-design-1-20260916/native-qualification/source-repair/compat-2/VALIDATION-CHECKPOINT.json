@@ -1,0 +1,19 @@
+{
+  "operation": "DD1-B1-COMPAT-2",
+  "status": "CHECKPOINT_NOT_FINAL_HANDOFF_OR_APPROVAL",
+  "selection": "#421/5744752364; recorded #421/5745100317",
+  "tested_source_head": "89f397357f820bb427c6d07af458b2d3012da9ad",
+  "tested_source_tree": "78273c07f11b64913c745479d8d48125faa07a79",
+  "operating_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "scope": "SOURCE_AND_REAL_INERT_CONTROLS_ONLY",
+  "host": "Linux 6.18.44 x86_64 LP64; glibc 2.41",
+  "build": {"exit": 0, "helper_sha256": "b22fdaba90df2a1a317f1d3a690522736a1301f9b442016764d5bf173f2fdf0f", "inert_sha256": "00c91a9e612699082649e44536a8f40c436572378841ee4eaf70e8c45d1f7fa7"},
+  "matrix": {"command": "python -I -B -S tools/dd1_linux/compat2_matrix.py --head 89f397357f820bb427c6d07af458b2d3012da9ad --output <fresh-evidence-directory>", "exit": 0, "assertion_groups_passed": 65, "checker_stderr": "", "complete_existing_matrix": true},
+  "observed": {"combined_compatibility_success": true, "combined_strict_success": false, "combined_process_refusals": 1, "combined_naming_refusals": 1, "combined_clone3_refusals": 2, "cpu16_workload_seconds": 4.201680, "cpu300_installed_workload_soft_hard": [290, 290], "cpu14_exhaustion_signal": 9},
+  "remaining_in_this_batch": ["real H/public-entry binding checks", "remaining source/static admission and dormant-demand map", "complete lossless records and exact-head source/evidence handoff with readback"],
+  "engine_runs": 0,
+  "live_account_writes": 0,
+  "live_account_reservations": 0,
+  "independent_review": "NOT_INVOKED",
+  "note": "The result counts passing test assertions, including intentional strict/compatibility failures; not 65 successful workloads. All executed workloads are code-pinned harmless controls using disposable synthetic accounts. No engine, account or native authority is supplied by this checkpoint. Continue remaining work."
+}
