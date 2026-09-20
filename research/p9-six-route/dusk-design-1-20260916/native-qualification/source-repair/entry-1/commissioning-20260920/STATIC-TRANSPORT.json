@@ -1,0 +1,47 @@
+{
+  "compressed_bytes": 7556,
+  "compressed_sha256": "2b76d30b4ea25eb5e9b25b1e33fffc180e5d5175b1f1c88842e67c515ef399d0",
+  "decode": "xz -dc STATIC-OBSERVATIONS.json.xz",
+  "decoded_bytes": 31646,
+  "decoded_sha256": "5d46a0ab92aedc20a14a86390acbd3a22988ae69933458d657b0f8e1b5351725",
+  "files": {
+    "HELPER-BUILD.json": {
+      "bytes": 732,
+      "sha256": "4e74554cafa614da18fd0a94f96e5b056cdad55f78064d3c192f27f7faf1abf0"
+    },
+    "HOST.json": {
+      "bytes": 1016,
+      "sha256": "171de45d67551c1f72996e89d0375e5daf6b6f847dd7115d6cbc130c925e862f"
+    },
+    "OBSERVATION-SCOPE.json": {
+      "bytes": 1492,
+      "sha256": "b884bacdc6715929ef157672dbb953750e559296de62e9e1688bcfee4affe973"
+    },
+    "PRIOR-SOURCE-IDENTITIES.json": {
+      "bytes": 5735,
+      "sha256": "4a367679a231e5674c371a9f095cd550edcab9b3037b2c9819901279d854bfb5"
+    },
+    "RUNTIME-BYTES.json": {
+      "bytes": 3577,
+      "sha256": "3699470e236d82b1094784628d1813f8b728a232a19b607d0d63ac94ea7cf227"
+    },
+    "SOURCE-BYTES.json": {
+      "bytes": 7561,
+      "sha256": "fedb8b2e3a1bc9d0445ac4a6cd9dc1c0de2bec672f90c2271796acb3ef4d7ee1"
+    },
+    "SOURCE-REFERENCE-CORRECTION.json": {
+      "bytes": 784,
+      "sha256": "cdcd9d74ce915d70d1bd6bc2dea9ed5257b9c7a9e397c88fea60512b364d9815"
+    },
+    "finalize_static.py": {
+      "bytes": 4057,
+      "sha256": "e230b7bc2e63efeff84724e4a881681ffaa0f0aab42921a4cca3dfe4d4a9aabe"
+    },
+    "inspect_host.py": {
+      "bytes": 4470,
+      "sha256": "297fd6c59a5f12c062dc2f3e1abeb684a321d5df3b7c80b51013082fda1488bc"
+    }
+  },
+  "format": "XZ-compressed UTF-8 JSON with exact text file contents",
+  "scope": "Actual static byte/host inspections and helper compilation only. No executable/library/font payload."
+}
