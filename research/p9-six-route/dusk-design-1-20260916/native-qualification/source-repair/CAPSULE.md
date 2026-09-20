@@ -1,4 +1,22 @@
-# #542 task capsule — DD1-B1-COMPAT-1
+# #542 task capsule — DD1 native source-repair
+
+## Current: DD1-B1-COMPAT-2 (evidence published, not accepted)
+
+Status: **SOURCE_INERT_EVIDENCE_PUBLISHED / NOT ACCEPTED.** Tested implementation remains `d8ea1d696242ed26c8c598474e39e68b4800ba9c`, tree `aea292f13a8096560e1cb2c507acc806cb9e0e2d`. This capsule/evidence commit does not change tested code. Publication is not COMPAT-2 acceptance, N0 admission, or a strategy certificate.
+
+Authority: option A of #421/5744752364, recorded #421/5745100317, task #542/5745114075, publication assignment #542/5750774949. Sole Pro source author and reviewers remain parked. Publisher role is byte-verification and lossless GitHub publication only. Current-main operating baseline `07b5aa9dec8436132a524511d5438c510e322070`; frozen science not rebased. COMPAT-2 base `7450da8d2c7afd5a1a380fbffc4bfaf66aef789b`.
+
+Author-executed result (not rerun here): exact helper/inert builds match code pins; 69 connected matrix assertion groups pass at this exact head; 22 real-H/public-entry, diagnostic-byte and consumer-source checks pass. Complete command streams, raw matrix records, generated-artifact records, cleanup observations, obligation map and dormant demand are published under `source-repair/compat-2/` via lossless concatenated-xz transport (`TRANSPORT.json` + `RECORDS.json.xz.part01`–`part16`). The dedicated-controller preflight failure is kept distinct (`FIRST-CONTROL.json`) from the successful run. Publisher independently verified recovered implementation/test bytes against live overlay blobs and independently decodes transport against the local original ZIP records.
+
+Historical `compat-2/VALIDATION-CHECKPOINT.json` remains blob `d1906acff8390fdef1bfa41257db4d32f210667c`: the earlier 65-assertion run at `89f397357f820bb427c6d07af458b2d3012da9ad`. It is not relabelled as the 69+22 run.
+
+Connected capability-refusal, CPU partition and protected preparation/sealing controls passed, including deliberate strict failures and interruption/no-refund. These are not engine outcomes or native acceptance. GDScript parse/runtime, whole engine/source/plugin/import/thread admission and genuine H stage demand remain unexecuted/unclosed as enumerated in `compat-2/DORMANT-DEMAND.md`.
+
+Both real accounts remain unchanged at ACCOUNT blob `8b7e4e6367ad4bc366c04b930ef4fc3810e2a900`. Recovery reported 2040/2048; historical 1277/8192 and 6915 unspendable; original 2026-09-24T17:54:40Z deadline. Zero new real reservations/engine/contained-game starts/live-account writes. Preserve fixed engine, prohibited effects, strict B1 history, D=`746388323b8e886967e0e13fe109490a70206a66`, C=`cf27285a3103d8867a179f700c5ebf32661453d5`, H=`5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6`, H ALLOCATION `824ff18acbca2f776533beed83a43b21d9a50f2c`, Pilot/game laws and all failed/closed/protected evidence. Certificates remain 0/3.
+
+Next: one exact-head #156 publication handoff with object/comment readback. One subsequent fresh scoped review of the whole COMPAT-2 amendment remains required by the selected contract and is not invoked here. No self-approval, engine run, ordinary acquisition, N1/N2, production CI, merge or release.
+
+## Historical: DD1-B1-COMPAT-1
 
 Status: **SOURCE_FEASIBILITY_STOP_ADDITIONAL_PRCTL_REFUSAL.** The source/inert feasibility and evidence work is delivered; the requested enabling expected-refusal profile and import-promotion implementation are NOT complete or enabled. No compatibility approval, engine entry, fixture verification or N0 acceptance is claimed. The unchanged strict backend still rejects every additional workload process and every unsupported syscall.
 

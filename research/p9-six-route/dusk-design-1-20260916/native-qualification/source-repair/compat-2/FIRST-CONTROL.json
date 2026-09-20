@@ -1,0 +1,175 @@
+{
+  "account_before_hex": "7b22686973746f726963616c223a7b22617474656d7074223a22312f3120636f6e73756d6564222c226370755f7365636f6e6473223a22554e4b4e4f574e222c22656c61707365645f7365636f6e6473223a22554e4b4e4f574e222c227261775f6279746573223a22554e4b4e4f574e222c227370656e6461626c65223a66616c73652c227374617274735f636170223a383139322c227374617274735f72656d61696e696e675f61726974686d65746963223a363931352c227374617274735f75736564223a313237377d2c227265636f76657279223a7b226370755f6e735f636170223a31343430303030303030303030302c226370755f6e735f75736564223a3339383631373139373939322c22646561646c696e655f757463223a22323032362d30392d32345431373a35343a34305a222c226576656e7473223a5b5d2c226578656375746f7273223a312c2266697273745f656e67696e655f6c61756e63685f757463223a22323032362d30392d31375431373a35343a34305a222c226964223a224444312d4e302d5245434f564552592d31222c227065725f696e766f636174696f6e5f6370755f7365636f6e6473223a3330302c227261775f62797465735f636170223a313037333734313832342c227261775f62797465735f75736564223a3839333133392c227374617274735f636170223a323034382c227374617274735f75736564223a323034307d2c22736368656d61223a224444312d4e302d5245434f564552592d312d4143434f554e542d31222c2273796e746865746963223a747275657d0a",
+  "argv": [
+    "/opt/pyvenv/bin/python",
+    "-I",
+    "-B",
+    "-S",
+    "/mnt/data/compat2-continuation/source/tools/dd1_linux/compat2_controls.py",
+    "--head",
+    "d8ea1d696242ed26c8c598474e39e68b4800ba9c",
+    "--controller",
+    "/tmp/dd1-compat2-4eyfnj_r",
+    "--repo",
+    "/tmp/dd1-compat2-4eyfnj_r/source",
+    "--account",
+    "/tmp/dd1-compat2-4eyfnj_r/synthetic-account.json"
+  ],
+  "exit": 2,
+  "stdout": "{\"pre_release_error\": \"ReservationError:dedicated single-thread controller required\"}\n",
+  "stderr": "",
+  "account": {
+    "historical": {
+      "attempt": "1/1 consumed",
+      "cpu_seconds": "UNKNOWN",
+      "elapsed_seconds": "UNKNOWN",
+      "raw_bytes": "UNKNOWN",
+      "spendable": false,
+      "starts_cap": 8192,
+      "starts_remaining_arithmetic": 6915,
+      "starts_used": 1277
+    },
+    "recovery": {
+      "cpu_ns_cap": 14400000000000,
+      "cpu_ns_used": 398617197992,
+      "deadline_utc": "2026-09-24T17:54:40Z",
+      "events": [],
+      "executors": 1,
+      "first_engine_launch_utc": "2026-09-17T17:54:40Z",
+      "id": "DD1-N0-RECOVERY-1",
+      "per_invocation_cpu_seconds": 300,
+      "raw_bytes_cap": 1073741824,
+      "raw_bytes_used": 893139,
+      "starts_cap": 2048,
+      "starts_used": 2040
+    },
+    "schema": "DD1-N0-RECOVERY-1-ACCOUNT-1",
+    "synthetic": true
+  },
+  "unit": {
+    "account_sha256": "990c4f88b91bd6aaa178d6df1e1e507e1ad5d479755160324e194cc351c7582f",
+    "argv": [
+      "/workload",
+      "combined"
+    ],
+    "compatibility": {
+      "argv_sha256": "2a3dfe6ff5d3d33dc13378391836d6308b0a68695e2c44d0ff2d337fc812dcef",
+      "attribution": "CAPABILITY_CLASS_ONLY",
+      "clone3_maximum": 5,
+      "environment_sha256": "bd0bd9199415aea1b39feb37a46cd01f4dd3f18ed0ffa266c64b19e11a5c5af1",
+      "executable_sha256": "00c91a9e612699082649e44536a8f40c436572378841ee4eaf70e8c45d1f7fa7",
+      "helper_sha256": "b22fdaba90df2a1a317f1d3a690522736a1301f9b442016764d5bf173f2fdf0f",
+      "id": "DD1-B1-COMPAT-2-CAPABILITIES-1",
+      "libc_sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826",
+      "naming_option": 15,
+      "naming_per_thread": 1,
+      "naming_total": 4,
+      "operation": "DD1-LINUX-ENTRY-1",
+      "preparation_sha256": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+      "process_signature": {
+        "arch": 3221225534,
+        "before_thread_births": true,
+        "child_tid": 0,
+        "flags": 16657,
+        "initial_thread_only": true,
+        "maximum": 1,
+        "parent_tid": 0,
+        "syscall": 56,
+        "tls": 0
+      },
+      "runtime_sha256": "654a0b7d7c4732fcb3769c64edeff1daabebcdd1617f3c6807f098d8b8fb7aa1",
+      "sealed_input_sha256": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+      "source_head": "d8ea1d696242ed26c8c598474e39e68b4800ba9c",
+      "source_manifest_sha256": "7289e6671d5ffb6ea2b687ecce7fddb443761c50e76c26f3f8a0c36fdb7109e6",
+      "stage": "identity",
+      "task_sha256": "f0866cabc5faa899e2d8ed5ede037387c2e444391d5777e6d5701adcbde2c19e"
+    },
+    "contained_starts": 0,
+    "cpu_seconds": 16,
+    "linux": {
+      "abi": "linux-x86_64-lp64-v1",
+      "entry": "/workload",
+      "environment": {
+        "DD1_NATIVE_LAUNCH_RECEIPT": "/launch-receipt.json",
+        "DD1_RESERVED_UNIT_PATH": "/grant.json",
+        "HOME": "/out",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TMPDIR": "/out",
+        "XDG_CACHE_HOME": "/out/cache",
+        "XDG_DATA_HOME": "/out/data"
+      },
+      "helper": {
+        "path": "tools/dd1_linux/build/supervisor",
+        "sha256": "b22fdaba90df2a1a317f1d3a690522736a1301f9b442016764d5bf173f2fdf0f"
+      },
+      "output_root": "/tmp/dd1-compat2-4eyfnj_r/output",
+      "runtime": {
+        "/lib/x86_64-linux-gnu/libc.so.6": {
+          "executable": false,
+          "path": "tools/dd1_linux/build/libc.so.6",
+          "sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826"
+        },
+        "/lib64/ld-linux-x86-64.so.2": {
+          "executable": true,
+          "path": "tools/dd1_linux/build/ld-linux-x86-64.so.2",
+          "sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"
+        },
+        "/workload": {
+          "executable": true,
+          "path": "tools/dd1_linux/build/compat2-inert",
+          "sha256": "00c91a9e612699082649e44536a8f40c436572378841ee4eaf70e8c45d1f7fa7"
+        }
+      },
+      "threads": 4,
+      "workload_raw_bytes": 131072
+    },
+    "mode": "inert_control",
+    "operation": "DD1-N0-RECOVERY-1",
+    "overlay_head": "d8ea1d696242ed26c8c598474e39e68b4800ba9c",
+    "raw_bytes": 8388608,
+    "receipt_sha256": "a676bae67df7e34427cfb43f0163c8aca09c04d26fca8efec041efde1e876c95",
+    "schema": "DD1-COMPLETE-UNIT-DEMAND-2",
+    "scientific_m": "07b5aa9dec8436132a524511d5438c510e322070",
+    "source_files": {
+      "res://inputs/frozen.txt": "d159c4462a869e3d573d36b7c105f1e237443d5bc0f5151ce7fa90fff3973c69",
+      "res://tools/dd1_compatibility.py": "2d48d7f33efaaa4fca56e2dfad514e53153091336380a75699938ab383a7e1ff",
+      "res://tools/dd1_linux/capabilities.c": "6f8f34e9eb04d6f541d736fc02a7cd747925f212078fe7c1b22cb0e5b1de87ff",
+      "res://tools/dd1_linux/capabilities.h": "4cdc6c8669f11e8e175de76ebad0f2c02e02f53064459da68d299ae9f7d4d7c4",
+      "res://tools/dd1_linux/compat2_inert.c": "afefefc53d879084b00e4794c319f83d7e25b3f7cfb1bfd254dd48f9f94f5127",
+      "res://tools/dd1_linux/isolate.c": "92b2afc724ac92ea78260f23bf27fb5821ffd2d0eb0597232b347700a7ecd9d9",
+      "res://tools/dd1_linux/policy.c": "70a997ec4a78a9b7188e4e37ab9a2862e2be2f109b4fd5b84ebbc59ba05246d3",
+      "res://tools/dd1_linux/policy.h": "7333b5ce6290b5722ed30a07b3f02e8a74decb4e254514d0614823af26aced44",
+      "res://tools/dd1_linux/supervisor.c": "6c09642212d58c27034ba9e93328f48f8572fb80a034b0b3ecae1cef8a3f89a3",
+      "res://tools/dd1_linux_backend.py": "83a9092ce3d035f0a294db8d5bc66a85a2788796a26c166a84edc6a020803c66",
+      "res://tools/dd1_linux_snapshot.py": "d6efbb83d3c34404a267effaf464fb62aaa12e574be0722b4fee958a4e1cdb2d",
+      "res://tools/dd1_meter_entry.py": "00b0e3c33fe6f24360ce4fe4dba3c4e006ba22502b1e19158ef54077d48e06be",
+      "res://tools/dd1_preparation.py": "41cb538c995fb687d3532e53581879822b2f691e409f744f0c422f44f756bb65",
+      "res://tools/dd1_preparation_watch.py": "4da58d1ead638a9e1934d94c6601448c4ea0826d812f4acba135d02abaae7329",
+      "res://tools/dd1_recovery_meter.py": "2c18163481e9ccf33d4109ae45142fcf829c809b79b4d6815572ee32fad43532",
+      "res://tools/dd1_reservations.py": "37c1a5bd1a625920c93d4449fd741e6465cf843e14275e86b085c221c836c2e0"
+    },
+    "stage": "identity",
+    "task": {
+      "files": {
+        "save.bin": {
+          "bytes": 8,
+          "sha256": "a57be6e784f5e9b99dde4208c2fd3e699bc2a62aeacbe89aeb176f34f09a025b"
+        }
+      },
+      "kind": "exact-files",
+      "stage": "identity"
+    },
+    "unit_id": "dd1-compat2-4eyfnj_r",
+    "wall_seconds": 15
+  },
+  "receipt": {
+    "demand_sha256": "66b2482bbeb729c740f7f85d3ebbc80ca82360e6113ef708a86a48f3bc194fed",
+    "schema": "DD1-INERT-ONLY"
+  },
+  "result": {
+    "pre_release_error": "ReservationError:dedicated single-thread controller required"
+  },
+  "files": {},
+  "frozen_after_hex": "46524f5a454e2d494e4552540a"
+}

@@ -1,0 +1,62 @@
+{
+  "operation": "DD1-B1-COMPAT-2",
+  "source_head": "d8ea1d696242ed26c8c598474e39e68b4800ba9c",
+  "source_tree": "aea292f13a8096560e1cb2c507acc806cb9e0e2d",
+  "source_modified_this_continuation": false,
+  "github_published": false,
+  "A": {
+    "status": "CONNECTED_INERT_AND_REFUSAL_CHECKS_PASS",
+    "evidence": [
+      "matrix/combined.json",
+      "matrix/strict-refusals.json",
+      "matrix/capability-only.json",
+      "matrix/INDEX.json",
+      "BINDINGS.stdout.json"
+    ],
+    "limit": "No host-authenticated native positive or function-origin authentication."
+  },
+  "B": {
+    "status": "CONNECTED_LIMITS_AND_EXHAUSTION_PASS",
+    "evidence": [
+      "matrix/cpu-range.json",
+      "matrix/cpu-11.json",
+      "matrix/cpu-16.json",
+      "matrix/cpu-300.json",
+      "matrix/cpu-14.json"
+    ],
+    "limit": "Range arithmetic and actual installed boundary limits; no expensive300second burn or priced Godot stage."
+  },
+  "C": {
+    "status": "CONNECTED_PROTECTED_GENERATION_SEAL_AND_ADVERSE_CHECKS_PASS",
+    "evidence": [
+      "matrix/prep.json",
+      "matrix/prep-nested.json",
+      "matrix/sealed-runtime.json",
+      "matrix/INDEX.json",
+      "POST-MATRIX-ARTIFACTS.json"
+    ],
+    "limit": "Harmless generated stand-ins, not Godot metadata."
+  },
+  "D": {
+    "status": "DORMANT_MAP_PREPARED_NATIVE_ADMISSION_UNCLOSED",
+    "evidence": [
+      "STATIC-SOURCE-REFERENCES.json",
+      "DORMANT-BUDGET-ARITHMETIC.json",
+      "../publication/DORMANT-DEMAND.md"
+    ],
+    "limit": "Transitive native dependency/plugin/thread/import proof and genuine demand remain later prerequisites."
+  },
+  "delivery": {
+    "status": "BLOCKED_PUBLICATION",
+    "evidence": [
+      "PUBLICATION-STATUS.json"
+    ],
+    "missing": "GitHub source/evidence/capsule publication and one handoff with readback."
+  },
+  "checks": {
+    "matrix_assertion_groups": 69,
+    "bindings_and_source_diagnostic_checks": 22,
+    "engine_runs": 0,
+    "live_account_writes": 0
+  }
+}

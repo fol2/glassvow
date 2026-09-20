@@ -1,0 +1,19 @@
+{
+  "scope": "Python controller/test-parent provisioning only; unchanged fixed supervisor and workload environment",
+  "MALLOC_CONF_before": "narenas:1,background_thread:true,lg_tcache_max:10,dirty_decay_ms:5000,muzzy_decay_ms:5000",
+  "MALLOC_CONF_after": "narenas:1,background_thread:false,lg_tcache_max:10,dirty_decay_ms:5000,muzzy_decay_ms:5000",
+  "LD_PRELOAD_unchanged": "/usr/lib/x86_64-linux-gnu/libjemalloc.so.2",
+  "reason": "existing allocator background thread violates dedicated-single-thread requirement",
+  "source_changed": false,
+  "engine_environment_changed": false,
+  "inventory_argv": [
+    "/opt/pyvenv/bin/python",
+    "-I",
+    "-B",
+    "-S",
+    "/mnt/data/compat2-continuation/evidence/controller_inventory.py",
+    "/mnt/data/compat2-continuation/source/tools"
+  ],
+  "inventory_exit": 0,
+  "reference": "https://jemalloc.net/jemalloc.3.html#opt.background_thread"
+}

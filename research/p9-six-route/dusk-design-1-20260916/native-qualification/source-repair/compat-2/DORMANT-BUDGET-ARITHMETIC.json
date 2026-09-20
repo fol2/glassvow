@@ -1,0 +1,71 @@
+{
+  "source_head": "d8ea1d696242ed26c8c598474e39e68b4800ba9c",
+  "scope": "conditional lower bounds only; NOT a demand, grant or full affordability proof",
+  "recovery_reported_raw_remaining": 1072848685,
+  "runtime_payload_per_engine_process": 149655752,
+  "basis": "receiving RUNTIME-CLOSURE.json blob ccdc727218bf1857fefe5bfc92c7dd545106172d",
+  "formula": "identity 1 + preparation 1 + parse m + fixture engine 1 + contained 2 = 5 + m",
+  "unpriced": "source/content/helper/metadata/grant/receipt/writes/derived/sealed copies and extra prerequisites",
+  "scenarios": [
+    {
+      "parse_processes": 0,
+      "engine_processes": 3,
+      "contained_starts": 2,
+      "total_starts": 5,
+      "runtime_payload_copies_bytes": 448967256,
+      "remaining_after_payload_only_bytes": 623881429,
+      "fits_eight_start_arithmetic": true,
+      "admitted": false
+    },
+    {
+      "parse_processes": 1,
+      "engine_processes": 4,
+      "contained_starts": 2,
+      "total_starts": 6,
+      "runtime_payload_copies_bytes": 598623008,
+      "remaining_after_payload_only_bytes": 474225677,
+      "fits_eight_start_arithmetic": true,
+      "admitted": false
+    },
+    {
+      "parse_processes": 2,
+      "engine_processes": 5,
+      "contained_starts": 2,
+      "total_starts": 7,
+      "runtime_payload_copies_bytes": 748278760,
+      "remaining_after_payload_only_bytes": 324569925,
+      "fits_eight_start_arithmetic": true,
+      "admitted": false
+    },
+    {
+      "parse_processes": 3,
+      "engine_processes": 6,
+      "contained_starts": 2,
+      "total_starts": 8,
+      "runtime_payload_copies_bytes": 897934512,
+      "remaining_after_payload_only_bytes": 174914173,
+      "fits_eight_start_arithmetic": true,
+      "admitted": false
+    },
+    {
+      "parse_processes": 4,
+      "engine_processes": 7,
+      "contained_starts": 2,
+      "total_starts": 9,
+      "runtime_payload_copies_bytes": 1047590264,
+      "remaining_after_payload_only_bytes": 25258421,
+      "fits_eight_start_arithmetic": false,
+      "admitted": false
+    },
+    {
+      "parse_processes": 5,
+      "engine_processes": 8,
+      "contained_starts": 2,
+      "total_starts": 10,
+      "runtime_payload_copies_bytes": 1197246016,
+      "remaining_after_payload_only_bytes": -124397331,
+      "fits_eight_start_arithmetic": false,
+      "admitted": false
+    }
+  ]
+}

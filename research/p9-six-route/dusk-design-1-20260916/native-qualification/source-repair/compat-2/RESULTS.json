@@ -1,0 +1,40 @@
+{
+  "operation": "DD1-B1-COMPAT-2",
+  "source_head": "d8ea1d696242ed26c8c598474e39e68b4800ba9c",
+  "source_tree": "aea292f13a8096560e1cb2c507acc806cb9e0e2d",
+  "operating_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "source_modified_this_continuation": false,
+  "build_exit": 0,
+  "helper_sha256": "b22fdaba90df2a1a317f1d3a690522736a1301f9b442016764d5bf173f2fdf0f",
+  "inert_sha256": "00c91a9e612699082649e44536a8f40c436572378841ee4eaf70e8c45d1f7fa7",
+  "matrix": {
+    "exit": 0,
+    "assertion_groups": 69,
+    "stderr_empty": true,
+    "source": "matrix/SUMMARY.json"
+  },
+  "bindings": {
+    "exit": 0,
+    "checks": 22,
+    "stderr_empty": true,
+    "source": "BINDINGS.stdout.json"
+  },
+  "failed_preflight": {
+    "count": 1,
+    "effect": "refused before reservation due existing controller allocator thread",
+    "source": "FIRST-CONTROL.json"
+  },
+  "live_account": {
+    "github_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "writes": 0,
+    "new_reservations": 0,
+    "observation": "unchanged published Git blob; no independent retrospective ledger certification"
+  },
+  "engine_runs": 0,
+  "contained_game_starts": 0,
+  "native_qualified": false,
+  "independent_review": false,
+  "github_publication_complete": false,
+  "github_handoff_comment_id": null,
+  "status": "SOURCE_INERT_VALIDATED_LOCALLY__PUBLICATION_BLOCKED"
+}

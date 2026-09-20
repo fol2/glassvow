@@ -1,0 +1,69 @@
+PASS combined: connected enforcement/task/cleanup and full retained reservation
+PASS strict-plain: connected enforcement/task/cleanup and full retained reservation
+PASS strict-unnamed: connected enforcement/task/cleanup and full retained reservation
+PASS strict-refusals: connected enforcement/task/cleanup and full retained reservation
+PASS capability-only: connected enforcement/task/cleanup and full retained reservation
+PASS four-thread-bound: connected enforcement/task/cleanup and full retained reservation
+PASS repeat-process: connected enforcement/task/cleanup and full retained reservation
+PASS wrong-process: connected enforcement/task/cleanup and full retained reservation
+PASS worker-process: connected enforcement/task/cleanup and full retained reservation
+PASS late-process: connected enforcement/task/cleanup and full retained reservation
+PASS repeat-name: connected enforcement/task/cleanup and full retained reservation
+PASS wrong-prctl: connected enforcement/task/cleanup and full retained reservation
+PASS unknown-call: connected enforcement/task/cleanup and full retained reservation
+PASS clone3-bound: connected enforcement/task/cleanup and full retained reservation
+PASS extra-thread: connected enforcement/task/cleanup and full retained reservation
+PASS later-exec: connected enforcement/task/cleanup and full retained reservation
+PASS refusal-flood: connected enforcement/task/cleanup and full retained reservation
+PASS raw-bound: connected enforcement/task/cleanup and full retained reservation
+PASS task-exit: connected enforcement/task/cleanup and full retained reservation
+PASS missing-save: connected enforcement/task/cleanup and full retained reservation
+PASS replay: same unit cannot spawn twice or refund
+PASS binding-profile-id: specific guard rejects before output/reservation
+PASS binding-profile-signature: specific guard rejects before output/reservation
+PASS binding-naming-zero: specific guard rejects before output/reservation
+PASS binding-naming-excess: specific guard rejects before output/reservation
+PASS binding-naming-repeat-contract: specific guard rejects before output/reservation
+PASS binding-clone3-excess-contract: specific guard rejects before output/reservation
+PASS binding-argv: specific guard rejects before output/reservation
+PASS binding-stage: specific guard rejects before output/reservation
+PASS binding-environment: specific guard rejects before output/reservation
+PASS binding-task-binding: specific guard rejects before output/reservation
+PASS binding-helper: specific guard rejects before output/reservation
+PASS binding-runtime-digest: specific guard rejects before output/reservation
+PASS binding-source-digest: specific guard rejects before output/reservation
+PASS binding-source-fifo: specific guard rejects before output/reservation
+PASS binding-controller-source: self-consistent staged hashes cannot substitute loaded controller source
+PASS binding-selfhashed-inert: self-hashed altered executable cannot gain inert authority
+PASS binding-receipt: missing/altered binding cannot release
+PASS cpu-range: all supported demands 11..300 have bounded conservative aggregate partition
+PASS cpu-11: actual installed CPU partitions and bounded workload endpoint
+PASS cpu-16: actual installed CPU partitions and bounded workload endpoint
+PASS cpu-300: actual installed CPU partitions and bounded workload endpoint
+PASS cpu-14: actual installed CPU partitions and bounded workload endpoint
+PASS prep: kernel readonly originals, actual generated outputs, promotion decision
+PASS prep-nested: kernel readonly originals, actual generated outputs, promotion decision
+PASS prep-missing: kernel readonly originals, actual generated outputs, promotion decision
+PASS prep-extra: kernel readonly originals, actual generated outputs, promotion decision
+PASS prep-transient: kernel readonly originals, actual generated outputs, promotion decision
+PASS prep-nested-transient: kernel readonly originals, actual generated outputs, promotion decision
+PASS prep-symlink: kernel readonly originals, actual generated outputs, promotion decision
+PASS prep-hardlink: kernel readonly originals, actual generated outputs, promotion decision
+PASS prep-alias-symlink: kernel readonly originals, actual generated outputs, promotion decision
+PASS prep-alias-hardlink: kernel readonly originals, actual generated outputs, promotion decision
+PASS prep-replace-slot: kernel readonly originals, actual generated outputs, promotion decision
+PASS prep-fail: kernel readonly originals, actual generated outputs, promotion decision
+PASS sealed-runtime: fresh readonly runtime uses sealed lineage, never mutated preparation backing
+PASS sealed-corrupt: altered sealed inputs cannot reserve or execute
+PASS sealed-missing: altered sealed inputs cannot reserve or execute
+PASS sealed-symlink: altered sealed inputs cannot reserve or execute
+PASS sealed-hardlink: altered sealed inputs cannot reserve or execute
+PASS sealed-failed-parent: failed lineage never promoted
+PASS slot-source: preparation binding refuses before release
+PASS slot-traversal: preparation binding refuses before release
+PASS wrong-lineage: preparation binding refuses before release
+PASS temporary-layout-budget: precreated temporary paths/directories cannot escape the complete raw reservation
+PASS kill-supervisor: actual signal after save; exclusivity, process death, no refund/promotion
+PASS kill-controller: actual signal after save; exclusivity, process death, no refund/promotion
+PASS kill-supervisor-prep: actual signal after save; exclusivity, process death, no refund/promotion
+PASS kill-controller-prep: actual signal after save; exclusivity, process death, no refund/promotion

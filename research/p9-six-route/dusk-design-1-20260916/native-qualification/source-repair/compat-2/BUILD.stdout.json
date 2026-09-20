@@ -1,0 +1,71 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "/mnt/data/compat2-continuation/source/tools/dd1_linux/supervisor.c",
+        "/mnt/data/compat2-continuation/source/tools/dd1_linux/policy.c",
+        "/mnt/data/compat2-continuation/source/tools/dd1_linux/isolate.c",
+        "/mnt/data/compat2-continuation/source/tools/dd1_linux/capabilities.c",
+        "-o",
+        "/mnt/data/compat2-continuation/source/tools/dd1_linux/build/supervisor"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pthread",
+        "/mnt/data/compat2-continuation/source/tools/dd1_linux/compat2_inert.c",
+        "-o",
+        "/mnt/data/compat2-continuation/source/tools/dd1_linux/build/compat2-inert"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "host": {
+    "system": "Linux",
+    "node": "localhost",
+    "release": "6.18.44",
+    "version": "#1 SMP Sat Sep 12 15:35:21 UTC 2026",
+    "machine": "x86_64",
+    "processor": ""
+  },
+  "libc": [
+    "glibc",
+    "2.41"
+  ],
+  "binaries": {
+    "ld-linux-x86-64.so.2": {
+      "bytes": 225672,
+      "sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"
+    },
+    "compat2-inert": {
+      "bytes": 22336,
+      "sha256": "00c91a9e612699082649e44536a8f40c436572378841ee4eaf70e8c45d1f7fa7"
+    },
+    "libc.so.6": {
+      "bytes": 1995216,
+      "sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826"
+    },
+    "supervisor": {
+      "bytes": 958936,
+      "sha256": "b22fdaba90df2a1a317f1d3a690522736a1301f9b442016764d5bf173f2fdf0f"
+    }
+  }
+}

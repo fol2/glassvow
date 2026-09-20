@@ -1,0 +1,198 @@
+{
+  "checks": [
+    {
+      "name": "real-H-synthetic-prospective-roles",
+      "result": "PASS",
+      "launchable": false
+    },
+    {
+      "name": "missing-H-manifest",
+      "exception": "MissingAuthority",
+      "reason": "missing_external_manifest"
+    },
+    {
+      "name": "missing-profile-role",
+      "exception": "BoundaryError",
+      "reason": "external_role_set"
+    },
+    {
+      "name": "wrong-demand-locator",
+      "exception": "BoundaryError",
+      "reason": "role_locator:execution_demand"
+    },
+    {
+      "name": "altered-execution_demand",
+      "exception": "BoundaryError",
+      "reason": "role_digest:execution_demand"
+    },
+    {
+      "name": "altered-compatibility_profile",
+      "exception": "BoundaryError",
+      "reason": "role_digest:compatibility_profile"
+    },
+    {
+      "name": "altered-preparation_recipe",
+      "exception": "BoundaryError",
+      "reason": "role_digest:preparation_recipe"
+    },
+    {
+      "name": "altered-preparation_seal",
+      "exception": "BoundaryError",
+      "reason": "role_digest:preparation_seal"
+    },
+    {
+      "name": "synthetic-not-empirical",
+      "exception": "BoundaryError",
+      "reason": "manifest_environment"
+    },
+    {
+      "name": "public-missing-authority",
+      "exception": "BackendBlocked",
+      "reason": "missing H host-authenticated exact execution demand; callbacks are not native authority"
+    },
+    {
+      "name": "public-callback",
+      "exception": "BackendBlocked",
+      "reason": "missing H host-authenticated exact execution demand; callbacks are not native authority"
+    },
+    {
+      "name": "public-synthetic-context",
+      "exception": "ReservationError",
+      "reason": "native entry rejects synthetic authority"
+    },
+    {
+      "name": "missing-native-disposition",
+      "exception": "ReservationError",
+      "reason": "missing compatibility disposition"
+    },
+    {
+      "name": "engineering-profile-required",
+      "exception": "ReservationError",
+      "reason": "engineering/preparation requires bound profile"
+    },
+    {
+      "name": "one-source-derived-diagnostic",
+      "result": "PASS",
+      "scope": "pure supplied bytes, not engine output",
+      "stderr_hex": "4552524f523a2043616e6e6f742063726561746520706970652066726f6d20636f6d6d616e643a20227864672d757365722d6469722220224445534b544f502220323e2f6465762f6e756c6c2e0a",
+      "classification": {
+        "process_refusals": 1,
+        "unexpected_denials": 0
+      },
+      "errors": [],
+      "expected_diagnostic_count": 1,
+      "origin_authenticated": false
+    },
+    {
+      "name": "repeated-diagnostic",
+      "result": "PASS",
+      "scope": "pure supplied bytes, not engine output",
+      "stderr_hex": "4552524f523a2043616e6e6f742063726561746520706970652066726f6d20636f6d6d616e643a20227864672d757365722d6469722220224445534b544f502220323e2f6465762f6e756c6c2e0a4552524f523a2043616e6e6f742063726561746520706970652066726f6d20636f6d6d616e643a20227864672d757365722d6469722220224445534b544f502220323e2f6465762f6e756c6c2e",
+      "classification": {
+        "process_refusals": 1,
+        "unexpected_denials": 0
+      },
+      "errors": [
+        "unexpected Godot error diagnostic"
+      ],
+      "expected_diagnostic_count": 1,
+      "origin_authenticated": false
+    },
+    {
+      "name": "diagnostic-without-class",
+      "result": "PASS",
+      "scope": "pure supplied bytes, not engine output",
+      "stderr_hex": "4552524f523a2043616e6e6f742063726561746520706970652066726f6d20636f6d6d616e643a20227864672d757365722d6469722220224445534b544f502220323e2f6465762f6e756c6c2e",
+      "classification": {},
+      "errors": [
+        "unexpected Godot error diagnostic"
+      ],
+      "expected_diagnostic_count": 0,
+      "origin_authenticated": false
+    },
+    {
+      "name": "diagnostic-with-unexpected-denial",
+      "result": "PASS",
+      "scope": "pure supplied bytes, not engine output",
+      "stderr_hex": "4552524f523a2043616e6e6f742063726561746520706970652066726f6d20636f6d6d616e643a20227864672d757365722d6469722220224445534b544f502220323e2f6465762f6e756c6c2e",
+      "classification": {
+        "process_refusals": 1,
+        "unexpected_denials": 1
+      },
+      "errors": [
+        "unexpected Godot error diagnostic"
+      ],
+      "expected_diagnostic_count": 0,
+      "origin_authenticated": false
+    },
+    {
+      "name": "other-error",
+      "result": "PASS",
+      "scope": "pure supplied bytes, not engine output",
+      "stderr_hex": "4552524f523a20756e72656c61746564",
+      "classification": {
+        "process_refusals": 1,
+        "unexpected_denials": 0
+      },
+      "errors": [
+        "unexpected Godot error diagnostic"
+      ],
+      "expected_diagnostic_count": 0,
+      "origin_authenticated": false
+    },
+    {
+      "name": "parse-error",
+      "result": "PASS",
+      "scope": "pure supplied bytes, not engine output",
+      "stderr_hex": "534352495054204552524f523a205061727365204572726f72",
+      "classification": {
+        "process_refusals": 1,
+        "unexpected_denials": 0
+      },
+      "errors": [
+        "script diagnostic"
+      ],
+      "expected_diagnostic_count": 0,
+      "origin_authenticated": false
+    },
+    {
+      "name": "load-error",
+      "result": "PASS",
+      "scope": "pure supplied bytes, not engine output",
+      "stderr_hex": "4661696c656420746f206c6f616420736372697074",
+      "classification": {
+        "process_refusals": 1,
+        "unexpected_denials": 0
+      },
+      "errors": [
+        "script diagnostic"
+      ],
+      "expected_diagnostic_count": 0,
+      "origin_authenticated": false
+    },
+    {
+      "name": "fixture-consumer-source-contract",
+      "result": "PASS",
+      "source_sha256": "d45ab1eb2cd963e49e06ea29b7abb317a20e417d9ed237b1dd94d90a8fa2b77b",
+      "scope": "source markers and routing; GDScript parse/runtime UNEXECUTED",
+      "ordinary_acquisition_enabled": false
+    }
+  ],
+  "count": 22,
+  "H_blobs": {
+    "evidence_boundary.py": "a88db0791572f430ea3e5cde85683c8527cead39",
+    "reference_kernel.py": "ee091fb503849117358b3691264fca71803f8bbc"
+  },
+  "H_sha256s": {
+    "res://research/p9-six-route/duskblade-first-proof-20260912/evidence_boundary.py": "12cfe237609ac8c9e2951b2557ff8643497c139bbd6ff44002f6c929be3b4bad",
+    "res://research/p9-six-route/duskblade-first-proof-20260912/reference_kernel.py": "7aa2592fd696a13cab2ba6b3c035b0ebb8545bfb6ca0986ef9afccb3fbe4cd52"
+  },
+  "accepted_H": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+  "H_mocked": false,
+  "numerical_tests": false,
+  "empirical_context_created": false,
+  "native_positive": false,
+  "future_outcome_receipts": false,
+  "engine_runs": 0,
+  "account_writes": 0
+}

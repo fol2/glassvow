@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File [35m"/mnt/data/compat2-continuation/source/tools/dd1_linux/compat2_controls.py"[0m, line [35m151[0m, in [35m<module>[0m
+    if __name__=='__main__':sys.exit([31mmain[0m[1;31m()[0m)
+                                     [31m~~~~[0m[1;31m^^[0m
+  File [35m"/mnt/data/compat2-continuation/source/tools/dd1_linux/compat2_controls.py"[0m, line [35m146[0m, in [35mmain[0m
+    assert [1;31mrecord['exit']==0 and record['result']['success'][0m, 'connected positive did not reach endpoint'
+           [1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+[1;35mAssertionError[0m: [35mconnected positive did not reach endpoint[0m
