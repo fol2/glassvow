@@ -94,7 +94,7 @@ def create_slots(root, capture, recipe):
 
 def _regular(path, maximum):
     r.need(path.absolute() == path.resolve() and not path.is_symlink(), "derived/sealed path alias")
-    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC | os.O_NONBLOCK)
     with os.fdopen(fd, "rb") as f:
         st = os.fstat(f.fileno())
         r.need(stat.S_ISREG(st.st_mode) and st.st_nlink == 1 and st.st_size <= maximum,
@@ -105,7 +105,7 @@ def _regular(path, maximum):
 
 
 def _inventory(root):
-    files, stack, seen = set(), [root], 0
+    files, directories, stack, seen = set(), set(), [root], 0
     while stack:
         for p in stack.pop().iterdir():
             seen += 1
@@ -113,10 +113,14 @@ def _inventory(root):
             r.need(not p.is_symlink(), "derived symlink")
             if p.is_dir():
                 r.need(p.absolute() == p.resolve(), "derived directory alias")
+                directories.add(p.relative_to(root).as_posix())
                 stack.append(p)
             else:
                 files.add(p.relative_to(root).as_posix())
             r.need(len(files) + len(stack) <= 8192, "derived inventory bound")
+    parents = {str(parent) for name in files for parent in PurePosixPath(name).parents
+               if str(parent) != "."}
+    r.need(directories <= parents, "unexpected empty generated directory")
     return files
 
 
@@ -199,6 +203,11 @@ def load_sealed(unit, account):
            receipt["source_manifest_sha256"] == r.digest(r.encode(unit["source_files"])) and
            receipt["engine_sha256"] == unit["linux"]["runtime"][unit["argv"][0]]["sha256"] and
            receipt["runtime_sha256"] == r.digest(r.encode(unit["linux"]["runtime"])), "sealed engine/source/demand lineage")
+    originals = set(unit["source_files"])
+    generated_names = set(receipt["generated"])
+    r.need(not (originals & generated_names) and
+           set(receipt["files"]) == originals | generated_names,
+           "incomplete or overlapping sealed input inventory")
     payload = path.parent / "payload"
     r.need(_inventory(payload) == {n[6:] for n in receipt["files"]}, "sealed snapshot inventory changed")
     data = {}
