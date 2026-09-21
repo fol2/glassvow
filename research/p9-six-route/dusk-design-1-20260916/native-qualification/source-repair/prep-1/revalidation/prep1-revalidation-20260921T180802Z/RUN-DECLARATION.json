@@ -1,0 +1,84 @@
+{
+  "schema": "PREP1-REVALIDATION-RUN-1",
+  "run_id": "prep1-revalidation-20260921T180802Z",
+  "status": "NEW_EXECUTION_NOT_RECOVERY",
+  "authority": "#542/5757861057",
+  "worker": "sole Pro validation/publishing worker; no delegated author or reviewer",
+  "implementation": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+  "implementation_tree": "f635cace1f659b236590cd44ed502841233d2d93",
+  "comparison_base": "36c607355bb7add7968ae51bf7b738c2c078d7d8",
+  "publication_baseline": "d86e444d79a7ac2a800ca3cae230431abeebc8a2",
+  "publication_parent_observed": "01e98e0e8eed99cc2f3d1f07009133779e99282e",
+  "current_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "ancestry_observation": "GitHub compare I to observed branch head: ahead 31, behind 0, merge base I; changed paths are PREP-1 evidence and the existing capsule only",
+  "source_manifest": {
+    "scope": "immutable I tree; listed blob identities independently read through GitHub; local hydration and complete execution-closure verification pending before any build or matrix",
+    "project.godot": "319cdc9006d3579ff2abb567830e204a8ff86d9c",
+    "tools/dd1_linux/build_prep.py": "ecf3c1e8c109c88fa1de20ea3cb3987421e50f05",
+    "tools/dd1_linux/prep_controls.py": "056bc1c7608bbca4b0268643066997c8d1363ed7",
+    "tools/dd1_linux/prep_bindings.py": "fb6cd0aaf01dc6b64d1e6fef5e2981a311fb8a14",
+    "tools/dd1_linux_snapshot.py": "351bdc111735caf12b7fa23a6df37766b8667c51",
+    "tools/dd1_meter_entry.py": "3ae1a4509c520f68df825f782ac2c0ad90408c5c"
+  },
+  "H_dependency_manifest": {
+    "commit": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+    "directory": "research/p9-six-route/duskblade-first-proof-20260912",
+    "expected_blobs_from_pinned_entry": {
+      "evidence_boundary.py": "a88db0791572f430ea3e5cde85683c8527cead39",
+      "reference_kernel.py": "ee091fb503849117358b3691264fca71803f8bbc"
+    },
+    "actual_pinned_byte_hydration": "PENDING; no H execution or mock claimed"
+  },
+  "host_observed_utc": "2026-09-21T18:08:02.511109+00:00",
+  "host": {
+    "system": "Linux", "release": "6.18.44", "machine": "x86_64",
+    "pointer_bytes": 8, "distribution": "Debian GNU/Linux 13.3", "libc": "glibc 2.41",
+    "source_host_predicate": "matches tools/dd1_linux_snapshot.py prepare Linux/release/architecture/pointer-width predicate; this is not native admission"
+  },
+  "controller": {
+    "executable": "/usr/bin/python3", "version": "3.13.5", "flags": ["-I", "-B", "-S"],
+    "observed_tasks_after_standard_library_imports": 1,
+    "sha256": "e59d0124ff06c248546876e01fcfb1ea3cda63534949f94a9372bfcfe3bfc3f5",
+    "default_venv_python_rejected_for_execution": "initial observation had 10 tasks; no control was run under it"
+  },
+  "build_prerequisites": {
+    "compiler_version_command": ["/usr/bin/cc", "--version"],
+    "compiler_version_exit": 0, "compiler_version": "cc (Debian 14.2.0-19) 14.2.0",
+    "compiler_sha256": "a23ecab8ff08f09ad8c80602c2c5df7f49e09c25905cb8975902e101bf72635f",
+    "static_libc_query": ["/usr/bin/cc", "-print-file-name=libc.a"],
+    "static_libc_query_exit": 0,
+    "static_libc_query_stdout": "/usr/lib/gcc/x86_64-linux-gnu/14/../../../x86_64-linux-gnu/libc.a\n",
+    "libc_sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826",
+    "loader_sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0",
+    "expected_supervisor_sha256": "b22fdaba90df2a1a317f1d3a690522736a1301f9b442016764d5bf173f2fdf0f",
+    "build_and_fixture_pin_verification": "PENDING; no compilation or helper launch yet"
+  },
+  "source_transport": {
+    "GitHub_connector_reads": "available",
+    "container_git_ls_remote": "failed once: Could not resolve host: github.com; no authentication attempt, no retry",
+    "plan": "hydrate exact source through the permitted GitHub connector and verify Git blob identities; no source edits or substitution"
+  },
+  "workspace": "/mnt/data/prep-revalidation-20260921T180802Z/source",
+  "output": "/mnt/data/prep-revalidation-20260921T180802Z/new-evidence",
+  "command_environment": {
+    "PATH": "/usr/bin:/bin", "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8",
+    "HOME": "/mnt/data/prep-revalidation-20260921T180802Z/control-home",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "intended_commands": [
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/build_prep.py"],
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/prep_controls.py", "--head", "d4e91e4fc70d57c81922cc1883b339877d835a53", "--output", "/mnt/data/prep-revalidation-20260921T180802Z/new-evidence/matrix", "--section", "all"],
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/prep_bindings.py", "--head", "d4e91e4fc70d57c81922cc1883b339877d835a53", "--h", "/mnt/data/prep-revalidation-20260921T180802Z/source/research/p9-six-route/duskblade-first-proof-20260912"]
+  ],
+  "additional_work": "predeclare tracked .import sample identities/selection; pure-reader check; new source-based contract and dormant resource/admission map; preserve complete raw command units progressively",
+  "execution_gate": "declaration byte readback and exact source/build/host/controller qualification before matrix; stop dependent execution if publication is denied",
+  "outcomes": [],
+  "boundaries": {
+    "engine_runs": 0, "helper_runs": 0, "build_runs": 0, "live_account_writes": 0,
+    "source_changes": 0, "review_or_approval": false, "merge_release_closure": false,
+    "account_blob_preserved": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "reported_recovery": "2040/2048", "historical": "1277/8192; attempt consumed; UNKNOWN and unspendable remainder preserved",
+    "deadline_unchanged": "2026-09-24T17:54:40Z", "N0": "BLOCKED", "certificates": "0/3"
+  },
+  "history": "all earlier PREP-1 recovery fragments and prior revalidation directories remain separate and unchanged; none supplies an outcome for this run"
+}
