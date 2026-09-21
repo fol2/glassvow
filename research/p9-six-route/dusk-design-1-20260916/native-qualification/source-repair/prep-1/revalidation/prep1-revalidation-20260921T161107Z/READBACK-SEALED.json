@@ -1,0 +1,50 @@
+{
+  "schema":"DD1-READABLE-NEW-READBACK-COMMAND-1",
+  "expansion":"The captured stdout is json.dumps(stdout_json,indent=2)+newline, preserving insertion order. No workload rerun.",
+  "command":{
+    "schema":"DD1-NEW-PURE-READBACK-COMMAND-1",
+    "run_id":"prep1-revalidation-20260921T161107Z",
+    "I":"d4e91e4fc70d57c81922cc1883b339877d835a53",
+    "observed_execution_run_id":"prep1-revalidation-20260921T121658Z",
+    "argv":["/usr/bin/python3","-I","-B","-S","/mnt/data/prep1-revalidation-20260921T161107Z/verify_evidence.py","WITNESS-SEALED"],
+    "cwd":"/mnt/data/prep1-revalidation-20260921T161107Z",
+    "environment":{"PATH":"/usr/bin:/bin","LANG":"C","LC_ALL":"C","HOME":"/mnt/data/prep1-revalidation-20260921T161107Z","PYTHONDONTWRITEBYTECODE":"1"},
+    "host":{"kernel":"6.18.44","machine":"x86_64","libc":["glibc","2.41"]},
+    "checker_sha256":"b567c98a46d9bdc9764d82dbedc1605ca7408966ba0992b71bbbbfb5170cd161",
+    "start_ns":1790008676058782251,"end_ns":1790008676092171241,"exit":0,"stderr":"",
+    "child_cpu_user_seconds":0.024339000000000003,"child_cpu_system_seconds":0.008708999999999998,"child_maxrss_kib":12108,
+    "engine_runs":0,"live_account_writes":0,"matrix_rerun":false,
+    "stdout_bytes":4195,"stdout_sha256":"66bb343cad2c4f36fe5c08cbb7d292a8fde1764e41e92cd85ce9c780367f94ee"
+  },
+  "stdout_json":{
+    "schema":"DD1-FRESH-EVIDENCE-READBACK-1",
+    "run_id":"prep1-revalidation-20260921T161107Z",
+    "I":"d4e91e4fc70d57c81922cc1883b339877d835a53",
+    "observed_execution_run_id":"prep1-revalidation-20260921T121658Z",
+    "scope":"WITNESS-SEALED",
+    "status":"EXACT_REMOTE_BYTES_DECODED_AND_VERIFIED",
+    "input_git_blob":"0e05f3249b7789eeed0d5dca13c1c5d9859852af",
+    "input_sha256":"8296992bc6d6949713c3440e2a86f808f06606376f6def9ea4b4e98e1f9a2b83","input_bytes":13117,
+    "compressed_sha256":"e1bcdab79f25c1756aa3c84d654d1079de123fb31ec2696b6c1dfa7e70166e8f","compressed_bytes":7472,
+    "decoded_sha256":"cc4678782db48ef401bb4a4abfec127e1aa63f80c9163a08fa66e95cfe952b35","decoded_bytes":225499,
+    "source_dependencies":{},
+    "records":[
+      {"name":"replay.json","bytes":18577,"sha256":"2372572e2bcd3397bf05c4b9182c551604c44fdc403e949d5498ad907901bc9a","exit":2,"success":null,"pre_release_error":null},
+      {"name":"sealed-failed-parent.json","bytes":26498,"sha256":"5ec242c1c3994b06f7deca3b15d937ade7defa1761e35f7007e3d7bc52aa1dc6","exit":2,"success":null,"pre_release_error":"ReservationError:missing/failed preparation reservation"},
+      {"name":"sealed-original-seed.json","bytes":26496,"sha256":"6657c1a16d5633c7e5fdaf60c3842774cb28e5e8a6bd0f288054b0334ccbfeee","exit":2,"success":null,"pre_release_error":"ReservationError:sealed original archive corruption"},
+      {"name":"sealed-runtime-config.json","bytes":26484,"sha256":"87c48565fa4459e055a7bae6109beee6245986ebde8c1c1df264b2b95bef8a59","exit":2,"success":null,"pre_release_error":"ReservationError:sealed snapshot corruption"},
+      {"name":"sealed-seal-bytes.json","bytes":26460,"sha256":"15fe0cf93c6b01dfb94f62469c92cfe6c2fdda7f4031eb43b69b68bff6a58d18","exit":2,"success":null,"pre_release_error":"ReservationError:sealed receipt changed"},
+      {"name":"sealed-sidecar-corrupt.json","bytes":26488,"sha256":"0916eea4f92a6b4c133e0ceb5735492776a6e7351fe0b5a210947b6a90c86256","exit":2,"success":null,"pre_release_error":"ReservationError:sealed snapshot corruption"},
+      {"name":"sealed-sidecar-missing.json","bytes":26502,"sha256":"06b26c05fcfbe826e4054db2108269d90341526fdeb4feead8766cd3c931c1fa","exit":2,"success":null,"pre_release_error":"ReservationError:sealed snapshot inventory changed"},
+      {"name":"sealed-sidecar-symlink.json","bytes":26466,"sha256":"850cb125f7d28f7e42c8366d407c691f0d36e7da388b68973069bf39a6e160de","exit":2,"success":null,"pre_release_error":"ReservationError:derived symlink"},
+      {"name":"sealed-spliced-receipt.json","bytes":26490,"sha256":"ae9298f8b39751a3a05bf82b6d502f7dadbd0dc1814941a600f35cdc899cd15f","exit":2,"success":null,"pre_release_error":"ReservationError:unbound preparation receipt"},
+      {"name":"sealed-wrong-engine.json","bytes":26494,"sha256":"02d14a31be69064978ca061bfcdebf8c4c3a0aaf668a9bb769b901b020097e31","exit":2,"success":null,"pre_release_error":"ReservationError:sealed engine/source/demand lineage"},
+      {"name":"sealed-wrong-runtime-view.json","bytes":26514,"sha256":"d2440e310560dc020c1656733b31e3e7d52da04d2dfb623ed6769e09ce7459aa","exit":2,"success":null,"pre_release_error":"ReservationError:wrong bound sealed execution view"}
+    ],
+    "start_ns":1790008676082100007,"end_ns":1790008676088267817,
+    "cpu_user_seconds":0.0013130000000000017,"cpu_system_seconds":0.004681,"maxrss_kib":12108,
+    "matrix_rerun":false,"engine_runs":0,"live_account_writes":0,
+    "limitation":"Fresh byte-level verification of the named saved revalidation execution. Not an independent review, new matrix execution, or proof of the unavailable original run."
+  },
+  "replay_observation":{"stdout":"{\"pre_release_error\": \"ReservationError:unit already reserved; no second spawn\"}\n","exit":2,"note":"Replay result is in captured stdout, not the optional result object. Existing completed reservation retained; no second spawn."}
+}
