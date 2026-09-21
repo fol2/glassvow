@@ -1,0 +1,106 @@
+{
+  "schema": "DD1-PREP1-REVALIDATION-DECLARATION-1",
+  "run_id": "prep1-revalidation-20260921T110207Z",
+  "status": "NEW_EXECUTION_NOT_RECOVERY",
+  "phase": "PRE_EXECUTION_PUBLICATION_PREREQUISITE",
+  "authority": "https://github.com/fol2/glassvow/issues/542#issuecomment-5757861057",
+  "worker": "sole Pro validation/publishing worker; no delegated worker or reviewer",
+  "source": {
+    "implementation_I": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+    "implementation_tree": "f635cace1f659b236590cd44ed502841233d2d93",
+    "publication_baseline_P": "d86e444d79a7ac2a800ca3cae230431abeebc8a2",
+    "whole_PREP1_base": "36c607355bb7add7968ae51bf7b738c2c078d7d8",
+    "current_main_instructions": "07b5aa9dec8436132a524511d5438c510e322070",
+    "branch": "research/p9-six-route/dd1-native-1-overlay",
+    "remote_identity_observation": "GitHub commit GET confirms I/tree; ref GET confirms P; I-to-P comparison is ahead by two commits with only prep-1 evidence and source-repair/CAPSULE.md changes",
+    "local_materialization": "NOT_YET_COMPLETE; no validation result is claimed"
+  },
+  "source_dependency_manifest": {
+    "scope": "All implementation inputs remain rooted at the exact I tree; the following entrypoint and inspected dependency identities are initial manifest anchors, not a claim that the complete runnable closure has already been materialized",
+    "git_blob_sha1": {
+      "tools/dd1_linux/build_prep.py": "ecf3c1e8c109c88fa1de20ea3cb3987421e50f05",
+      "tools/dd1_linux/prep_controls.py": "056bc1c7608bbca4b0268643066997c8d1363ed7",
+      "tools/dd1_linux/prep_bindings.py": "fb6cd0aaf01dc6b64d1e6fef5e2981a311fb8a14",
+      "tools/dd1_meter_entry.py": "3ae1a4509c520f68df825f782ac2c0ad90408c5c",
+      "tools/dd1_linux_backend.py": "fc7547d31d9222481eb370c07de33a0f74fe5153",
+      "tools/dd1_linux_snapshot.py": "351bdc111735caf12b7fa23a6df37766b8667c51",
+      "tools/dd1_prep_view.py": "84da0f4b7e6d35d6d2cf59bc15f8770040b19874"
+    },
+    "H_commit": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+    "H_directory": "research/p9-six-route/duskblade-first-proof-20260912",
+    "H_required_git_blob_sha1": {
+      "evidence_boundary.py": "a88db0791572f430ea3e5cde85683c8527cead39",
+      "reference_kernel.py": "ee091fb503849117358b3691264fca71803f8bbc"
+    },
+    "H_observation": "Expected identities read from preserved dd1_meter_entry.py; actual pinned H bytes must be fetched and verified before checker execution; no mocks are permitted",
+    "required_helper_source_paths": [
+      "tools/dd1_linux/policy.h", "tools/dd1_linux/policy.c", "tools/dd1_linux/isolate.c", "tools/dd1_linux/supervisor.c",
+      "tools/dd1_linux_snapshot.py", "tools/dd1_linux_backend.py", "tools/dd1_meter_entry.py", "tools/dd1_reservations.py",
+      "tools/dd1_recovery_meter.py", "tools/dd1_linux/capabilities.h", "tools/dd1_linux/capabilities.c", "tools/dd1_compatibility.py",
+      "tools/dd1_preparation.py", "tools/dd1_preparation_watch.py", "tools/dd1_prep_view.py", "tools/dd1_import_semantics.py"
+    ],
+    "build_expected_sha256": {
+      "supervisor": "b22fdaba90df2a1a317f1d3a690522736a1301f9b442016764d5bf173f2fdf0f",
+      "prep-inert": "d13b4975c0c131e15780f435474d88f2950cb25629c69fe497cbb7824a446629"
+    },
+    "build_identity_status": "NOT_BUILT_OR_EXECUTED; committed build_prep.py must reuse exact matching bytes or build once and reject pin mismatch"
+  },
+  "observed_host": {
+    "os": "Debian GNU/Linux 13.3 (trixie)",
+    "kernel": "6.18.44",
+    "machine": "x86_64",
+    "libc": "glibc 2.41",
+    "uid": 0,
+    "gid": 0,
+    "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+    "compiler_target": "x86_64-linux-gnu",
+    "compiler_probes": [
+      {"argv": ["cc", "--version"], "cwd": "/", "exit": 0, "stdout": "cc (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n", "stderr": "", "start_ns": 1789988610993976834, "end_ns": 1789988611011919897},
+      {"argv": ["cc", "-dumpmachine"], "cwd": "/", "exit": 0, "stdout": "x86_64-linux-gnu\n", "stderr": "", "start_ns": 1789988611011926954, "end_ns": 1789988611024342602}
+    ],
+    "libc_file": {"path": "/usr/lib/x86_64-linux-gnu/libc.so.6", "bytes": 1995216, "sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826"},
+    "loader_file": {"path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2", "bytes": 225672, "sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"},
+    "isolated_python_probe": {
+      "argv": ["/opt/pyvenv/bin/python3", "-I", "-B", "-S", "-"],
+      "version": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+      "executable_sha256": "17b78e0a93175e86f9ac03141924fd7a7f0c0c52e66b34bfa0de20ffef989df1",
+      "observed_task_ids": ["378"],
+      "observed_threads": 1,
+      "LD_PRELOAD": null,
+      "MALLOC_CONF": null,
+      "PYTHONPATH": null,
+      "scope": "Fresh isolated Python process only; actual controller module closure and kernel facilities still require verification"
+    },
+    "support_status": "Observed kernel and machine match snapshot.prepare predicates; complete controller/build/backend support NOT YET ESTABLISHED",
+    "direct_git_read_probe": {"argv": ["git", "ls-remote", "https://github.com/fol2/glassvow.git", "refs/heads/research/p9-six-route/dd1-native-1-overlay"], "GIT_TERMINAL_PROMPT": "0", "timeout_seconds": 20, "exit": 128, "stdout": "", "stderr": "fatal: unable to access 'https://github.com/fol2/glassvow.git/': Could not resolve host: github.com\n"},
+    "source_read_route": "Connected GitHub read actions work; no network workaround or credential search attempted"
+  },
+  "intended_commands": {
+    "cwd": "/mnt/data/prep1-revalidation-20260921T110207Z/source",
+    "build": ["python3", "tools/dd1_linux/build_prep.py"],
+    "matrix_once": ["python3", "tools/dd1_linux/prep_controls.py", "--head", "d4e91e4fc70d57c81922cc1883b339877d835a53", "--output", "/mnt/data/prep1-revalidation-20260921T110207Z/output/matrix", "--section", "all"],
+    "real_H_checker_once": ["python3", "tools/dd1_linux/prep_bindings.py", "--head", "d4e91e4fc70d57c81922cc1883b339877d835a53", "--h", "/mnt/data/prep1-revalidation-20260921T110207Z/H/research/p9-six-route/duskblade-first-proof-20260912"],
+    "metadata_reader": "Declare exact tracked .import sample identities and deterministic selection rule before the new pure-reader check",
+    "capture": "Full argv, cwd, execution environment, actual start/end/exit/stdout/stderr, source/build identities, raw output, disposable synthetic accounts and retained matrix root; publish complete units progressively with byte readback"
+  },
+  "outcomes": [],
+  "prerequisite_gate": "Do not execute the matrix until this meaningful declaration has been published and its actual bytes read back, and exact runnable source/dependencies/controller/build prerequisites are verified",
+  "stop_rules": [
+    "No matrix while publication is known unavailable; respect explicit platform denial without alternate-route bypass",
+    "Preserve and diagnose one meaningful setup failure before dependent checks; never relabel setup failure as an exercised control",
+    "Preserve material assertion failure, complete independent available sections, and hand off a precise source finding without source repair",
+    "No repeated unchanged publication probe, old-log search, old suite replay, rebase, pin weakening, or moving-source substitution"
+  ],
+  "preservation": {
+    "engine_runs": 0,
+    "live_account_writes": 0,
+    "source_changes": 0,
+    "reviewers_commissioned": 0,
+    "old_records": "Unchanged; original retrieval endpoint accepted at its limited scope; this run cannot prove the unavailable historical execution",
+    "recovery_account_required_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "account_scope": "No empirical reservation, new funding, refund or account credit; historical 1277/8192 and reported recovery 2040/2048 remain at their original scopes",
+    "deadline": "2026-09-24T17:54:40Z",
+    "N0": "BLOCKED",
+    "certificates": "0/3"
+  }
+}
