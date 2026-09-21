@@ -1,0 +1,42 @@
+{
+  "schema": "DD1-NEW-MATRIX-COMMAND-1",
+  "run_id": "prep1-revalidation-20260921T110207Z",
+  "status": "NEW_EXECUTION_NOT_RECOVERY",
+  "I": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+  "command": {
+    "argv": ["python3", "tools/dd1_linux/prep_controls.py", "--head", "d4e91e4fc70d57c81922cc1883b339877d835a53", "--output", "/mnt/data/prep1-revalidation-20260921T110207Z/output/matrix", "--section", "all"],
+    "cwd": "/mnt/data/prep1-revalidation-20260921T110207Z/source",
+    "environment": {"HOME": "/mnt/data/prep1-revalidation-20260921T110207Z", "LANG": "C", "LC_ALL": "C", "PATH": "/opt/pyvenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", "PYTHONDONTWRITEBYTECODE": "1"},
+    "start_ns": 1789990474073938263,
+    "start_utc": "2026-09-21T11:34:34.073990+00:00",
+    "end_ns": 1789990490021247880,
+    "exit": 0,
+    "wall_seconds": 15.947308477999968,
+    "child_user_seconds": 10.71973,
+    "child_system_seconds": 5.556222,
+    "child_maxrss_kib": 97460,
+    "stdout": "PASS positive\nPASS sealed-runtime\nPASS sealed-sidecar-corrupt\nPASS sealed-sidecar-symlink\nPASS sealed-sidecar-missing\nPASS sealed-original-seed\nPASS sealed-runtime-config\nPASS sealed-seal-bytes\nPASS sealed-failed-parent\nPASS sealed-spliced-receipt\nPASS sealed-wrong-engine\nPASS sealed-wrong-runtime-view\nPASS replay\nPASS wrong-uid\nPASS wrong-param\nPASS wrong-source\nPASS invalid\nPASS malformed\nPASS incomplete\nPASS missing-resource\nPASS undeclared\nPASS alias\nPASS hardlink\nPASS source-mutation\nPASS config-mutation\nPASS never-read\nPASS double-write\nPASS mutate-restore\nPASS failed\nPASS binding-seed-sha\nPASS binding-seed-blob\nPASS binding-asset-sha\nPASS binding-seed-path\nPASS binding-traversal\nPASS binding-engine\nPASS binding-recipe-head\nPASS binding-undeclared-dependency\nPASS binding-execution-view\nPASS binding-producer\nPASS binding-execution-map\nPASS binding-unpriced-copies\nPASS concurrent-controller\nPASS kill-controller\nPASS concurrent-supervisor\nPASS kill-supervisor\n",
+    "stdout_bytes": 977,
+    "stdout_sha256": "a7e07089663fa31f5a9ad5a10b5beebccf98b75bb3a8a660bc40c5f6af8010ed",
+    "stderr": "",
+    "stderr_bytes": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "source_verification": {
+    "before_equals_after": true,
+    "all_22_exact_I_paths_verified": true,
+    "source_git_blob_manifest": "EXECUTION-PREFLIGHT.json:source_manifest",
+    "manifest_commit": "b81c2720f5ac3aae9e3c13d0cc5269ad649900e5",
+    "full_before_after_byte_manifests": "Also retained in the independently complete per-section bundles with the original command capture",
+    "source_changes": 0
+  },
+  "summary": {"assertion_groups": 45, "complete": true, "engine_runs": 0, "head": "d4e91e4fc70d57c81922cc1883b339877d835a53", "live_account_writes": 0, "root": "/tmp/dd1-prep1-nfsvyhk0", "synthetic_only": true},
+  "publication": {
+    "scope": "Complete readable top-level command/result unit; detailed per-case witness bundles are separate and not yet all delivered at this checkpoint",
+    "invalid_envelope": "MATRIX-COMMAND.json.gz.b64.json at 20f00b6cfed1fd8e560b5a05f0bb2540303f4341",
+    "invalid_envelope_git_blob": "e8182cb536025f300a9c3c6135d82755b2a64d5c",
+    "invalid_reason": "Author transfer truncated the data string and ended with a question mark. GitHub readback confirmed malformed/incomplete base64; its stated decoded size/hash are NOT verification. It must not be used as evidence. This readable file supersedes it; the failed submission remains in Git history.",
+    "matrix_replayed_for_publication": false
+  },
+  "limits": ["New execution, not recovery or proof of the unavailable historical run", "Harmless synthetic controls, not Godot-generated imports or game outcomes", "No native admission, empirical account credit or self-approval"]
+}
