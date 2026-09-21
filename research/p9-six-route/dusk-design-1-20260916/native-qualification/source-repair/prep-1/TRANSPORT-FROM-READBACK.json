@@ -1,0 +1,108 @@
+{
+  "schema": "DD1-PREP-1-LOSSLESS-TAR-1",
+  "source_head": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+  "parts": [
+    {
+      "path": "RECORDS.tar.xz.part01",
+      "bytes": 18000,
+      "sha256": "d38ac77beb42873fca2d6feb51e79411a26603d7d0debeb2aeb5365356a3be2a",
+      "git_blob": "842b8f7ceebea99766f895f3a6a7638429fccb91"
+    },
+    {
+      "path": "RECORDS.tar.xz.part02",
+      "bytes": 18000,
+      "sha256": "c21b58a26252f2ab9f5165b754053541bd036360d51f60612d3c1f90032b7800",
+      "git_blob": "7fcb6cf11585751f62deb03494fe520c039c48ae"
+    },
+    {
+      "path": "RECORDS.tar.xz.part03",
+      "bytes": 18000,
+      "sha256": "5f9dff152b9da57588c7e52b15d3019affefe2090a95d931bfbdac9be288b49f",
+      "git_blob": "275609f89cbb0626999367e2b4ef88d2ed7138f6"
+    },
+    {
+      "path": "RECORDS.tar.xz.part04",
+      "bytes": 18000,
+      "sha256": "fb3f58262916ba1ac6964ecf47a67af20574d59159be2781cfb755db39cdd8a3",
+      "git_blob": "fe19fe054aea46a5e86f744e1711b5416c9b4f08"
+    },
+    {
+      "path": "RECORDS.tar.xz.part05",
+      "bytes": 18000,
+      "sha256": "5a300d3ddeb36586880d50cc4a837ea2eaa906667ec1b8554cc82bc786666012",
+      "git_blob": "d19163319e12039ea23b149b5541e1b1a976a7ef"
+    },
+    {
+      "path": "RECORDS.tar.xz.part06",
+      "bytes": 18000,
+      "sha256": "bfe6575f1da3ef648c1dc0ed69a03c095c1c4cf5ce7edaf94a68c195508a955d",
+      "git_blob": "5ac8d0e7c77db79f32aad44e96044c4a201b7094"
+    },
+    {
+      "path": "RECORDS.tar.xz.part07",
+      "bytes": 18000,
+      "sha256": "d70c378c52993988a42f67ee05bd9bb11a5a5001f06024849871fc895504e7b1",
+      "git_blob": "f6aa60282642a1841031cdd67cd695a96d666c12"
+    },
+    {
+      "path": "RECORDS.tar.xz.part08",
+      "bytes": 18000,
+      "sha256": "9e2a2ccdae894eab3cc7bf1cb5f675c802809b25b1bcac4f0f31add357d4d59e",
+      "git_blob": "1ba8a89d9fcada4daac4f386587bacd0545fd78a"
+    },
+    {
+      "path": "RECORDS.tar.xz.part09",
+      "bytes": 18000,
+      "sha256": "5a9bc646076d73f9f3d032f185d35476f36ef14c237472068d886799d225a55b",
+      "git_blob": "2640f56824cff77e44e89c3531e6105c686408f0"
+    },
+    {
+      "path": "RECORDS.tar.xz.part10",
+      "bytes": 18000,
+      "sha256": "887c14bd31e4a0f7c5e5c7d36eff19ed3d68efc37104a9d02898bba19ab8ef2c",
+      "git_blob": "e0f611d5f3e2c2ec7c4565036e6a813d4fc8d0f3"
+    },
+    {
+      "path": "RECORDS.tar.xz.part11",
+      "bytes": 18000,
+      "sha256": "d55d4c679ac99ac78485922346728cdfdbb99d74698380e873d318ed0610ec29",
+      "git_blob": "1fe5d0a5e37c98928cb440f5326eb5fdf6434f09"
+    },
+    {
+      "path": "RECORDS.tar.xz.part12",
+      "bytes": 18000,
+      "sha256": "ca2d579dfec56063da7e0a39393d13f1452aa11c9bab3ba60b2191f995393647",
+      "git_blob": "5f958d808541bc2191349193f96f74aad47f5bb5"
+    },
+    {
+      "path": "RECORDS.tar.xz.part13",
+      "bytes": 18000,
+      "sha256": "28a8eb49cd8bbff0e712b9c1893ffaf54435ecec73e808e890e1a81b4266c4fb",
+      "git_blob": "a4368ef33e5753c77b4e2e65e59e53d9a1706c30"
+    },
+    {
+      "path": "RECORDS.tar.xz.part14",
+      "bytes": 5664,
+      "sha256": "f51054d314ee162b2e0370159ee20c938cb7d22d23228317aac8d2ad806c4555",
+      "git_blob": "0e0671f5cad881b0a8527366c8350e9c3b567a34"
+    }
+  ],
+  "compressed_bytes": 239664,
+  "compressed_sha256": "3ad76192ea0038b380b9e8086418330782428f4c41a4485b4121292e18a694d6",
+  "decoded_tar_bytes": 11909120,
+  "decoded_tar_sha256": "788cab85d3026158270ad5be2f1e69b114fb5d21bff5bb7d8c418fb8b86e739f",
+  "restored_record_count": 284,
+  "record_inventory_sha256": "c752d2f6758067b66637e04e4d55421594f71b8479faa49245063693ad6ed5da",
+  "record_inventory_encoding": "canonical sorted JSON object {relative name:{bytes,sha256}} plus LF",
+  "nested_source_checkpoint": {
+    "stored": "__transport__/expanded-source-checkpoint.json",
+    "restored_xz": "SOURCE-CHECKPOINT.json.xz",
+    "preset": 6,
+    "restored_xz_sha256": "8fb39177b89a84a9dd9f777346bfec1b40eca84b63cfac3541fe697dd57e09e4",
+    "restored_base64": "SOURCE-CHECKPOINT.b64",
+    "restored_base64_sha256": "190eceb7d8128258e1ca62176036c86d747581ced61034291cd9af30f4233560",
+    "note": "Lossless removal of redundant nested compression and its base64 copy; decoder recreates both and verifies every original record. Actual raw outcome files are stored directly."
+  },
+  "engine_payload": false,
+  "font_payload": false
+}
