@@ -1,0 +1,52 @@
+{
+  "run_id": "prep1-revalidation-20260921T211017Z",
+  "status": "NEW_EXECUTION_NOT_RECOVERY",
+  "authority": "#542/5757861057",
+  "worker": "sole Pro validation/publishing worker; no reviewer commissioned",
+  "observed_utc": "2026-09-21T21:10:17.068494+00:00",
+  "implementation": {"commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "tree": "f635cace1f659b236590cd44ed502841233d2d93"},
+  "whole_prep_base": "36c607355bb7add7968ae51bf7b738c2c078d7d8",
+  "publication_start": "ac155d0821d3f0985f341c8ea93b96f31b353ed1",
+  "operating_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "ancestry_observation": "GitHub comparison I to publication_start is ahead by 40, behind by 0; changed paths are existing capsule and prep-1 evidence only. Earlier revalidation records are preserved, not attributed to this run.",
+  "source_manifest": {
+    "scope": "Pinned entry-point identities read from I; full executable dependency closure must be fetched and verified before execution.",
+    "tools/dd1_linux/build_prep.py": "ecf3c1e8c109c88fa1de20ea3cb3987421e50f05",
+    "tools/dd1_linux/prep_controls.py": "056bc1c7608bbca4b0268643066997c8d1363ed7",
+    "tools/dd1_linux/prep_bindings.py": "fb6cd0aaf01dc6b64d1e6fef5e2981a311fb8a14",
+    "tools/dd1_meter_entry.py": "3ae1a4509c520f68df825f782ac2c0ad90408c5c"
+  },
+  "H": {
+    "commit": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+    "directory": "research/p9-six-route/duskblade-first-proof-20260912/",
+    "expected_blobs_from_pinned_entry": {"evidence_boundary.py": "a88db0791572f430ea3e5cde85683c8527cead39", "reference_kernel.py": "ee091fb503849117358b3691264fca71803f8bbc"},
+    "local_bytes_status": "NOT_YET_STAGED; actual pinned bytes required, no mocks"
+  },
+  "host": {
+    "system": "Linux", "release": "6.18.44", "machine": "x86_64", "libc": ["glibc", "2.41"],
+    "boot_id": "d0864e9f-3592-4f03-9800-01af9ddfb74b", "pointer_bytes": 8, "long_bytes": 8,
+    "uid": 0, "gid": 0,
+    "controller_executable": "/usr/bin/python3", "controller_task_count_observed": 1,
+    "controller_python": "3.13.5 (main, Jun 25 2025, 18:55:22) [GCC 14.2.0]",
+    "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+    "compiler_sha256": "a23ecab8ff08f09ad8c80602c2c5df7f49e09c25905cb8975902e101bf72635f",
+    "libc_sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826",
+    "loader_sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"
+  },
+  "workspace": "/mnt/data/prep1-revalidation-20260921T211017Z/source",
+  "environment": {"PATH": "/usr/bin:/bin", "HOME": "/mnt/data/prep1-revalidation-20260921T211017Z/controller-home", "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PYTHONDONTWRITEBYTECODE": "1"},
+  "environment_policy": "Explicit clean child environment; no inherited preload or jemalloc configuration. Repeat the task-count check in this exact environment before the matrix. No engine probe.",
+  "intended_commands": [
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/build_prep.py"],
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/prep_controls.py", "--head", "d4e91e4fc70d57c81922cc1883b339877d835a53", "--output", "/mnt/data/prep1-revalidation-20260921T211017Z/evidence/matrix", "--section", "all"],
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/prep_bindings.py", "--head", "d4e91e4fc70d57c81922cc1883b339877d835a53", "--h", "/mnt/data/prep1-revalidation-20260921T211017Z/source/research/p9-six-route/duskblade-first-proof-20260912"]
+  ],
+  "build_prerequisite": "No existing build in this fresh workspace. Use the committed build script once after verifying its complete source closure; require exact pins, never alter them.",
+  "metadata_plan": "Declare a bounded deterministic tracked .import sample and exact identities at I before pure-reader checking; no engine parsing or generated-import claim.",
+  "publication_gate": "This actual declaration must be read back before building or running controls. Publish complete independently recoverable command/evidence units progressively. Do not accumulate a local-only matrix if publication fails.",
+  "outcomes": [],
+  "build_status": "NOT_RUN", "matrix_status": "NOT_RUN", "bindings_status": "NOT_RUN",
+  "source_changes": 0, "engine_runs": 0, "helper_runs": 0, "live_account_writes": 0,
+  "account_preservation": {"recovery_ACCOUNT_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900", "recovery_reported": "2040/2048", "historical": "1277/8192; attempt consumed; UNKNOWN/unspendable remainder", "deadline": "2026-09-24T17:54:40Z"},
+  "native_status": "N0 BLOCKED; certificates 0/3; no native funding, launch receipt, self-approval, merge, release or issue closure"
+}
