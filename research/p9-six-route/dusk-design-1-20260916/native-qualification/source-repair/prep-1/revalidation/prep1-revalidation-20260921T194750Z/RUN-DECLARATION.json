@@ -1,0 +1,43 @@
+{
+  "schema": "PREP-1-REVALIDATION-DECLARATION-1",
+  "run_id": "prep1-revalidation-20260921T194750Z",
+  "status": "NEW_EXECUTION_NOT_RECOVERY",
+  "authority": "#542/5757861057",
+  "contract": "#421/5753240365",
+  "worker": "sole Pro validation/publishing worker; no delegated author or reviewer",
+  "implementation": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+  "implementation_tree": "f635cace1f659b236590cd44ed502841233d2d93",
+  "whole_PREP1_base": "36c607355bb7add7968ae51bf7b738c2c078d7d8",
+  "publication_baseline": "d86e444d79a7ac2a800ca3cae230431abeebc8a2",
+  "observed_branch_head": "15a61859bc44346fe269404ab6abfcb7e187c2c8",
+  "observed_branch_comparison": {"base": "d4e91e4fc70d57c81922cc1883b339877d835a53", "status": "ahead", "ahead_by": 33, "behind_by": 0, "scope": "prep-1 evidence and existing CAPSULE.md only"},
+  "operating_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "instructions_read": ["AGENTS.md", "docs/agents/ai-sdlc.md", "#542/5757861057", "#421/5753240365"],
+  "source_manifest_initial": {
+    "tools/dd1_linux/build_prep.py": {"git_blob": "ecf3c1e8c109c88fa1de20ea3cb3987421e50f05", "origin": "implementation", "read": "complete"},
+    "tools/dd1_linux/prep_controls.py": {"origin": "implementation", "read": "partial; remaining source must be read and byte-verified before execution"},
+    "tools/dd1_linux/prep_bindings.py": {"git_blob": "fb6cd0aaf01dc6b64d1e6fef5e2981a311fb8a14", "origin": "implementation", "read": "complete"},
+    "tools/dd1_meter_entry.py": {"git_blob": "3ae1a4509c520f68df825f782ac2c0ad90408c5c", "origin": "implementation", "read": "complete"}
+  },
+  "H": {"commit": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6", "directory": "research/p9-six-route/duskblade-first-proof-20260912", "required_blobs": {"evidence_boundary.py": "a88db0791572f430ea3e5cde85683c8527cead39", "reference_kernel.py": "ee091fb503849117358b3691264fca71803f8bbc"}, "local_byte_verification": "pending; no mocks permitted"},
+  "host_observed_utc": "2026-09-21T19:47:50.931085+00:00",
+  "host": {"system": "Linux", "release": "6.18.44", "machine": "x86_64", "distribution": "Debian GNU/Linux 13.3 (trixie)", "libc": "glibc 2.41", "boot_id": "3e178ded-8464-4060-a0a5-7b6c6194cac4", "uid": 0, "gid": 0, "long_bytes": 8, "pointer_bytes": 8},
+  "controller": {"executable": "/usr/bin/python3.13", "python": "3.13.5", "argv": ["/usr/bin/python3", "-I", "-B", "-S"], "environment": {"PATH": "/usr/bin:/bin", "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8"}, "observed_tasks": 1, "CapEff": "00000000800405fb", "CapBnd": "00000000800405fb", "NoNewPrivs": "0", "Seccomp": "0", "Seccomp_filters": "0", "sha256": "e59d0124ff06c248546876e01fcfb1ea3cda63534949f94a9372bfcfe3bfc3f5"},
+  "compiler": {"command": ["cc", "--version"], "version": "cc (Debian 14.2.0-19) 14.2.0", "resolved": "/usr/bin/x86_64-linux-gnu-gcc-14", "sha256": "a23ecab8ff08f09ad8c80602c2c5df7f49e09c25905cb8975902e101bf72635f"},
+  "runtime_files": {"/usr/lib/x86_64-linux-gnu/libc.so.6": {"bytes": 1995216, "sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826"}, "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {"bytes": 225672, "sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"}},
+  "workspace": "/mnt/data/prep-revalidation-20260921T194750Z/source",
+  "output": "/mnt/data/prep-revalidation-20260921T194750Z/evidence",
+  "intended_commands": [
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/build_prep.py"],
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/prep_controls.py", "--head", "d4e91e4fc70d57c81922cc1883b339877d835a53", "--output", "/mnt/data/prep-revalidation-20260921T194750Z/evidence/matrix", "--section", "all"],
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/prep_bindings.py", "--head", "d4e91e4fc70d57c81922cc1883b339877d835a53", "--h", "/mnt/data/prep-revalidation-20260921T194750Z/H"]
+  ],
+  "pre_execution_gates": ["readback this declaration", "complete and byte-verify preserved source and H closure", "verify source-defined host/controller requirements", "reuse exact available harmless binaries or run committed build once with unchanged pins", "publish complete build evidence before matrix", "predeclare actual tracked metadata samples before reader check"],
+  "direct_git_observation": {"command": "GIT_TERMINAL_PROMPT=0 timeout 20 git ls-remote https://github.com/fol2/glassvow.git refs/heads/research/p9-six-route/dd1-native-1-overlay refs/heads/main", "exit": 128, "stderr": "fatal: unable to access 'https://github.com/fol2/glassvow.git/': Could not resolve host: github.com", "alternative": "available GitHub connector content writes and exact-byte readback; no direct-Git retry planned"},
+  "build_outcomes": [],
+  "matrix_outcomes": [],
+  "binding_outcomes": [],
+  "metadata_outcomes": [],
+  "preservation": {"live_account_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900", "recovery_reported": "2040/2048", "historical": "1277/8192; consumed attempt; UNKNOWN costs and unspendable remainder preserved", "deadline": "2026-09-24T17:54:40Z", "engine_runs": 0, "live_account_writes": 0, "new_live_reservations": 0, "native_admission": "BLOCKED", "certificates": "0/3"},
+  "limits": "No implementation, original product/config/sidecar, account or protected evidence edits. No engine, Godot parser/import/version, acquisition, N1/N2, approval, merge, release or closure. All results are prospective new observations; prior runs and unavailable old records remain separate."
+}
