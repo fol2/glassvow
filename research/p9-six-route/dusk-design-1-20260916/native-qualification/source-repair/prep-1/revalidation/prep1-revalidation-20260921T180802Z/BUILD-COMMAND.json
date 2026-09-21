@@ -1,0 +1,43 @@
+{
+  "argv": ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/build_prep.py"],
+  "build_files": {
+    "ld-linux-x86-64.so.2": {"bytes": 225672, "sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"},
+    "libc.so.6": {"bytes": 1995216, "sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826"},
+    "prep-inert": {"bytes": 17720, "sha256": "d13b4975c0c131e15780f435474d88f2950cb25629c69fe497cbb7824a446629"},
+    "supervisor": {"bytes": 958936, "sha256": "b22fdaba90df2a1a317f1d3a690522736a1301f9b442016764d5bf173f2fdf0f"}
+  },
+  "cwd": "/mnt/data/prep-revalidation-20260921T180802Z/source",
+  "end_utc": "2026-09-21T18:20:47.253502+00:00",
+  "environment": {"HOME": "/mnt/data/prep-revalidation-20260921T180802Z/control-home", "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PATH": "/usr/bin:/bin", "PYTHONDONTWRITEBYTECODE": "1"},
+  "exit": 0,
+  "head": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+  "host": {"boot_id": "b00280eb-1a18-4ffb-8622-f7a8647b4658", "machine": "x86_64", "release": "6.18.44", "system": "Linux"},
+  "measured_child_resource": {"block_inputs": 440, "block_outputs": 6608, "maxrss_kib": 34352, "scope": "command process and collected children; not live programme ledger credit", "system_cpu_seconds": 0.12575499999999998, "user_cpu_seconds": 0.517879},
+  "observer_tasks": 1,
+  "run_id": "prep1-revalidation-20260921T180802Z",
+  "source_after_verified_equal": true,
+  "source_before": {
+    "tools/dd1_import_semantics.py": {"bytes": 7708, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "00fc12812aecb91c44f0ddc7243aa8c6197ba0a3", "sha256": "81468005a558f0d54891abe4f43c08ea4cd10e27e4d8c209d0cb57df37a44296"},
+    "tools/dd1_linux/build_prep.py": {"bytes": 2022, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "ecf3c1e8c109c88fa1de20ea3cb3987421e50f05", "sha256": "b6db4c7d4b0d42d826edd86807b066f54c31622b4ae18ac6d96be5c4a97e708d"},
+    "tools/dd1_linux/capabilities.c": {"bytes": 3503, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "292b3d04d44c891f235b3509e99ab018a3a983de", "sha256": "6f8f34e9eb04d6f541d736fc02a7cd747925f212078fe7c1b22cb0e5b1de87ff"},
+    "tools/dd1_linux/capabilities.h": {"bytes": 749, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "401c0c1761896ccb332b8983594e45dbe363e331", "sha256": "4cdc6c8669f11e8e175de76ebad0f2c02e02f53064459da68d299ae9f7d4d7c4"},
+    "tools/dd1_linux/compat2_controls.py": {"bytes": 7734, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "a8dc169b10ff5db0f2e11e0570c24bd3d15f2235", "sha256": "4c13fb8a68b5b0f2d143ee95b35b324f305dfca34b111aa6ca454d02b51d4c73"},
+    "tools/dd1_linux/isolate.c": {"bytes": 3913, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "e619f47a692fd76b5aec4687e941bc1787fb7654", "sha256": "92b2afc724ac92ea78260f23bf27fb5821ffd2d0eb0597232b347700a7ecd9d9"},
+    "tools/dd1_linux/policy.c": {"bytes": 7337, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "97b54c5ee36e9e2028e48be38b7d8628e09bdc1b", "sha256": "70a997ec4a78a9b7188e4e37ab9a2862e2be2f109b4fd5b84ebbc59ba05246d3"},
+    "tools/dd1_linux/policy.h": {"bytes": 561, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "12ba07cf683328057a8c88dafbc894de7cb8180e", "sha256": "7333b5ce6290b5722ed30a07b3f02e8a74decb4e254514d0614823af26aced44"},
+    "tools/dd1_linux/prep_inert.c": {"bytes": 5513, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "3700e3f5b3d82fb51191213be14dada89d64a0b4", "sha256": "dcaf5d028450b4484b6bf5a6962a07104f6d84bdc21e3c9a99936a5a6c2cdfc7"},
+    "tools/dd1_linux/supervisor.c": {"bytes": 11061, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "8dcbe88ecbb7f70db0fb2bc1b5e8e0bf891cb698", "sha256": "6c09642212d58c27034ba9e93328f48f8572fb80a034b0b3ecae1cef8a3f89a3"},
+    "tools/dd1_linux_snapshot.py": {"bytes": 10431, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "351bdc111735caf12b7fa23a6df37766b8667c51", "sha256": "093de995833918bbab3f6a7d5afa837a4f0c82d6613ba5f3a792a2739b122f17"},
+    "tools/dd1_prep_view.py": {"bytes": 12876, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "84da0f4b7e6d35d6d2cf59bc15f8770040b19874", "sha256": "918301c56834205a95dc6b73cbbd2df8e7a6239d72dbfd670065245bd03d6c7f"},
+    "tools/dd1_reservations.py": {"bytes": 15767, "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "git_blob": "eded41530ef8f625db06948bf43e0094e125d59a", "sha256": "37c1a5bd1a625920c93d4449fd741e6465cf843e14275e86b085c221c836c2e0"}
+  },
+  "start_utc": "2026-09-21T18:20:46.585945+00:00",
+  "status": "NEW_EXECUTION_NOT_RECOVERY",
+  "stderr": "",
+  "stdout": "{\n  \"builds\": [\n    {\n      \"argv\": [\n        \"cc\",\n        \"-std=c11\",\n        \"-O2\",\n        \"-Wall\",\n        \"-Wextra\",\n        \"-Werror\",\n        \"-static\",\n        \"/mnt/data/prep-revalidation-20260921T180802Z/source/tools/dd1_linux/supervisor.c\",\n        \"/mnt/data/prep-revalidation-20260921T180802Z/source/tools/dd1_linux/policy.c\",\n        \"/mnt/data/prep-revalidation-20260921T180802Z/source/tools/dd1_linux/isolate.c\",\n        \"/mnt/data/prep-revalidation-20260921T180802Z/source/tools/dd1_linux/capabilities.c\",\n        \"-o\",\n        \"/mnt/data/prep-revalidation-20260921T180802Z/source/tools/dd1_linux/build/supervisor\"\n      ],\n      \"exit\": 0,\n      \"stdout\": \"\",\n      \"stderr\": \"\"\n    },\n    {\n      \"argv\": [\n        \"cc\",\n        \"-std=c11\",\n        \"-O2\",\n        \"-Wall\",\n        \"-Wextra\",\n        \"-Werror\",\n        \"-pthread\",\n        \"/mnt/data/prep-revalidation-20260921T180802Z/source/tools/dd1_linux/prep_inert.c\",\n        \"-o\",\n        \"/mnt/data/prep-revalidation-20260921T180802Z/source/tools/dd1_linux/build/prep-inert\"\n      ],\n      \"exit\": 0,\n      \"stdout\": \"\",\n      \"stderr\": \"\"\n    },\n    {\n      \"source\": \"/usr/lib/x86_64-linux-gnu/libc.so.6\",\n      \"destination\": \"/mnt/data/prep-revalidation-20260921T180802Z/source/tools/dd1_linux/build/libc.so.6\",\n      \"reused\": false,\n      \"bytes\": 1995216,\n      \"sha256\": \"fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826\"\n    },\n    {\n      \"source\": \"/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2\",\n      \"destination\": \"/mnt/data/prep-revalidation-20260921T180802Z/source/tools/dd1_linux/build/ld-linux-x86-64.so.2\",\n      \"reused\": false,\n      \"bytes\": 225672,\n      \"sha256\": \"438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0\"\n    }\n  ],\n  \"engine_runs\": 0,\n  \"helper_runs\": 0\n}\n",
+  "streams": {
+    "BUILD-stderr.txt": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    "BUILD-stdout.txt": {"bytes": 1802, "sha256": "47201b1bc1309a38f8e649a5355176eaf98398cb9eefe391c73765b94d1ffadf"}
+  },
+  "wall_seconds": 0.6675478900000371
+}
