@@ -1,0 +1,42 @@
+{
+  "schema": "DD1-NEW-PURE-READBACK-COMMAND-1",
+  "run_id": "prep1-revalidation-20260921T161107Z",
+  "I": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+  "observed_execution_run_id": "prep1-revalidation-20260921T121658Z",
+  "argv": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "-S",
+    "/mnt/data/prep1-revalidation-20260921T161107Z/verify_evidence.py",
+    "WITNESS-CRASH"
+  ],
+  "cwd": "/mnt/data/prep1-revalidation-20260921T161107Z",
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "HOME": "/mnt/data/prep1-revalidation-20260921T161107Z",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "host": {
+    "kernel": "6.18.44",
+    "machine": "x86_64",
+    "libc": [
+      "glibc",
+      "2.41"
+    ]
+  },
+  "checker_sha256": "b567c98a46d9bdc9764d82dbedc1605ca7408966ba0992b71bbbbfb5170cd161",
+  "start_ns": 1790007619706494983,
+  "end_ns": 1790007619739165838,
+  "exit": 0,
+  "stdout": "{\n  \"schema\": \"DD1-FRESH-EVIDENCE-READBACK-1\",\n  \"run_id\": \"prep1-revalidation-20260921T161107Z\",\n  \"I\": \"d4e91e4fc70d57c81922cc1883b339877d835a53\",\n  \"observed_execution_run_id\": \"prep1-revalidation-20260921T121658Z\",\n  \"scope\": \"WITNESS-CRASH\",\n  \"status\": \"EXACT_REMOTE_BYTES_DECODED_AND_VERIFIED\",\n  \"input_git_blob\": \"d651090467247bb914f195aeaeae4fa9813fae31\",\n  \"input_sha256\": \"9b2ef26815360ccd3057c545a57d55fe56bc96c86fd7f1e7e237a2084bd75515\",\n  \"input_bytes\": 14789,\n  \"compressed_sha256\": \"1475a77709e8aa2ebc6da636cc462514c88c0fbc9f59d8761c20e436f55e3627\",\n  \"compressed_bytes\": 9276,\n  \"decoded_sha256\": \"e81279317e798a989b251a523e5dd6689aa78cab7580823e9ecb5baa02d8263d\",\n  \"decoded_bytes\": 141683,\n  \"source_dependencies\": {},\n  \"records\": [\n    {\n      \"name\": \"CRASH-ARTIFACTS.json\",\n      \"bytes\": 172401,\n      \"sha256\": \"2e1e024f930b7e4c039440d81d7706b217a05e73e5034d40ed87f1cac7f740fc\",\n      \"exit\": null,\n      \"success\": null,\n      \"pre_release_error\": null\n    },\n    {\n      \"name\": \"concurrent-controller.json\",\n      \"bytes\": 16067,\n      \"sha256\": \"15fec54f9e731ad49ec56786e1454e33cd36b9328e719fd62cca5bafe4f2914d\",\n      \"exit\": 2,\n      \"success\": null,\n      \"pre_release_error\": \"ReservationError:one executor already holds account\"\n    },\n    {\n      \"name\": \"concurrent-supervisor.json\",\n      \"bytes\": 16067,\n      \"sha256\": \"39384f65847afe96d7763f00ce443635650bc9efabb5cea7d90df2a7f89efbe7\",\n      \"exit\": 2,\n      \"success\": null,\n      \"pre_release_error\": \"ReservationError:one executor already holds account\"\n    },\n    {\n      \"name\": \"kill-controller.json\",\n      \"bytes\": 2844,\n      \"sha256\": \"34c3d447a2fc0a0bfe6ef6186a67cd71b6e101c9d8c29bfa8d42a7141019092c\",\n      \"exit\": -9,\n      \"success\": null,\n      \"pre_release_error\": null\n    },\n    {\n      \"name\": \"kill-supervisor.json\",\n      \"bytes\": 13259,\n      \"sha256\": \"2300c0d78f5a76cd7918d2fb6ea8ecea13db9dfe929887e515f6a275cfd45139\",\n      \"exit\": 0,\n      \"success\": null,\n      \"pre_release_error\": null\n    }\n  ],\n  \"start_ns\": 1790007619732241551,\n  \"end_ns\": 1790007619735587179,\n  \"cpu_user_seconds\": 0.0032169999999999976,\n  \"cpu_system_seconds\": 0.0,\n  \"maxrss_kib\": 12148,\n  \"matrix_rerun\": false,\n  \"engine_runs\": 0,\n  \"live_account_writes\": 0,\n  \"limitation\": \"Fresh byte-level verification of the named saved revalidation execution. Not an independent review, new matrix execution, or proof of the unavailable original run.\"\n}\n",
+  "stderr": "",
+  "child_cpu_user_seconds": 0.023627999999999996,
+  "child_cpu_system_seconds": 0.008567,
+  "child_maxrss_kib": 12148,
+  "engine_runs": 0,
+  "live_account_writes": 0,
+  "matrix_rerun": false
+}
