@@ -1,0 +1,77 @@
+{
+  "schema": "DD1-PREP1-REVALIDATION-DECLARATION-1",
+  "run_id": "prep1-revalidation-20260921T161107Z",
+  "status": "NEW_EXECUTION_NOT_RECOVERY",
+  "authority": "https://github.com/fol2/glassvow/issues/542#issuecomment-5757861057",
+  "worker": "sole Pro validation/publishing worker; no delegated writer or reviewer",
+  "implementation": {
+    "commit": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+    "tree": "f635cace1f659b236590cd44ed502841233d2d93",
+    "comparison_base": "36c607355bb7add7968ae51bf7b738c2c078d7d8",
+    "entry_blobs_read": {
+      "tools/dd1_linux/build_prep.py": "ecf3c1e8c109c88fa1de20ea3cb3987421e50f05",
+      "tools/dd1_linux/prep_controls.py": "fetch read; full materialisation and blob verification pending",
+      "tools/dd1_linux/prep_bindings.py": "fb6cd0aaf01dc6b64d1e6fef5e2981a311fb8a14"
+    }
+  },
+  "dependencies": {
+    "H_commit": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+    "H_directory": "research/p9-six-route/duskblade-first-proof-20260912",
+    "required_actual_modules": ["reference_kernel.py", "evidence_boundary.py"],
+    "local_materialisation": "PENDING; no mocks permitted"
+  },
+  "operating_authority": {
+    "current_main": "07b5aa9dec8436132a524511d5438c510e322070",
+    "AGENTS_blob": "114f0215fdc211b7171b073e767dfef37f1055f2",
+    "ai_sdlc": "current-main docs/agents/ai-sdlc.md read",
+    "rebase_frozen_source": false
+  },
+  "publication": {
+    "baseline_P": "d86e444d79a7ac2a800ca3cae230431abeebc8a2",
+    "observed_pre_write_head": "453857ab818dea272284d7f7ccf1ae61dd75db2e",
+    "P_to_head": "GitHub compare: ahead 24, behind 0; 22 added revalidation evidence files only",
+    "route": "GitHub connector UTF-8 contents writes and exact-commit byte readback",
+    "declaration_readback": "PENDING"
+  },
+  "host_observation": {
+    "observed_at_utc": "2026-09-21T16:11:07Z",
+    "kernel": "6.18.44",
+    "machine": "x86_64",
+    "libc": ["glibc", "2.41"],
+    "pointer_bytes": 8,
+    "uid": 0,
+    "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+    "python_executable": "/usr/bin/python3.13",
+    "python_version": "3.13.5",
+    "controller_pid": 383,
+    "controller_tasks": ["383"],
+    "controller_environment": {"PATH": "/usr/bin:/bin", "LANG": "C", "LC_ALL": "C"},
+    "controller_invocation": "env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C /usr/bin/python3 -I -B -S -",
+    "scope": "fresh host/compiler/single-thread prerequisite observation only; no helper or engine executed",
+    "exact_build_pins": "PENDING"
+  },
+  "saved_checkpoints": {
+    "run_ids": ["prep1-revalidation-20260921T110207Z", "prep1-revalidation-20260921T121658Z"],
+    "status": "new revalidation checkpoints discovered on current branch; completeness/byte verification pending; not the unavailable original PREP-1 run",
+    "reuse_rule": "Do not relabel saved execution as execution in this continuation. Verify complete units; execute only genuinely missing required proof, with new captures and explicit reason."
+  },
+  "intended_commands": [
+    "python3 tools/dd1_linux/build_prep.py (once if exact verified binaries are needed and absent)",
+    "python3 tools/dd1_linux/prep_controls.py --head d4e91e4fc70d57c81922cc1883b339877d835a53 --output <NEW_OUTPUT>/matrix --section all (once if saved required raw units cannot establish complete current proof)",
+    "python3 tools/dd1_linux/prep_bindings.py --head d4e91e4fc70d57c81922cc1883b339877d835a53 --h <EXACT_H_MODULE_DIRECTORY> (once if needed)",
+    "byte-level verification of saved new evidence; bounded predeclared tracked-import reader coverage; new contract/resource analysis and exact-head readback"
+  ],
+  "outcomes": [],
+  "unchanged_boundaries": {
+    "engine_runs": 0,
+    "live_account_writes": 0,
+    "native_positive": false,
+    "N0": "BLOCKED",
+    "certificates": "0/3",
+    "recovery_ACCOUNT_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "reported_recovery_starts": "2040/2048; no credit or reset",
+    "historical_starts": "1277/8192; consumed attempt; UNKNOWN/unspendable remainder",
+    "deadline": "2026-09-24T17:54:40Z",
+    "prohibited": "engine/version/import/parser/game/profile/capture, source/account edits, acquisition, N1/N2, self-approval, merge, release, closure"
+  }
+}
