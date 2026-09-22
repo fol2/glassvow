@@ -1,0 +1,33 @@
+{
+  "schema": "PREP1-CAPTURE-PLAN-1",
+  "run_id": "prep1-continuation-20260922T065413Z",
+  "authority": "#542/5757861057",
+  "observed_utc": "2026-09-22T08:08:44Z",
+  "status": "NEW_EXECUTION_NOT_RECOVERY; BUILD_AND_MATRIX_NOT_YET_RUN",
+  "decision": "The interrupted NEW run prep1-revalidation-20260921T211017Z preserves independently verified case bundles and complete H/build commands, but its published folder has no top-level MATRIX-COMMAND record. Actual command timing, resource usage and full outer command metadata cannot be reconstructed from individual case results. Execute the frozen matrix once with complete capture; retain previous new-run evidence as supplemental. This does not reopen retrieval of lost original PREP-1 records.",
+  "implementation": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+  "source_closure": {
+    "files": 21,
+    "bytes": 182214,
+    "verification": "All materialized executable/build/helper/controller source and project bytes independently matched their GitHub I Git blobs, byte counts and SHA256s before execution. No mocks or replacement modules. Entire local closure will be recorded before and after each command.",
+    "manifest_bytes": 5419,
+    "manifest_sha256": "958cde2697a43bab0f5555d7cba69d980443709295425a015262a3f86588bae2",
+    "scope": "Exact executable closure, not a full Git checkout. Global implementation equivalence is additionally checked with GitHub commit/tree comparison. The complete real-H command remains independently verified under its own prior NEW run identity; it will not be rerun."
+  },
+  "observer": {
+    "path": "/mnt/data/prep1-continuation-20260922T065413Z/capture_command.py",
+    "bytes": 3989,
+    "sha256": "14b4c589075ffdb24e4651d55c388914cbddd7c3d9d6d30b7066f158b32512f2",
+    "scope": "Evidence-only observer, not implementation. Full observer source is included in each command record. One subprocess invocation, full file-backed stdout/stderr, actual start/end/exit, wall time, waited child CPU/rusage, boot/host identity, source and build identities."
+  },
+  "commands": [
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/build_prep.py"],
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/prep_controls.py", "--head", "d4e91e4fc70d57c81922cc1883b339877d835a53", "--output", "/mnt/data/prep1-continuation-20260922T065413Z/evidence/matrix", "--section", "all"]
+  ],
+  "cwd": "/mnt/data/prep1-continuation-20260922T065413Z/source",
+  "environment": {"PATH": "/usr/bin:/bin", "HOME": "/mnt/data/prep1-continuation-20260922T065413Z/controller-home", "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PYTHONDONTWRITEBYTECODE": "1"},
+  "execution_policy": "Build once using committed harmless script and unchanged exact pins. Publish/read back complete build record before matrix. Run full frozen matrix once; preserve any failure without weakening or repeated-until-green execution. Retain complete per-case raw evidence and post-run cleanup observations. Publish complete independently decodable units, not missing multipart tails.",
+  "excluded": ["engine or loader execution", "native/engineering run", "H numerical outcomes", "live account or source changes", "repeated COMPAT-2 or B1 suite", "self-approval", "merge", "release"],
+  "outcomes": [],
+  "N0": "BLOCKED; certificates 0/3"
+}
