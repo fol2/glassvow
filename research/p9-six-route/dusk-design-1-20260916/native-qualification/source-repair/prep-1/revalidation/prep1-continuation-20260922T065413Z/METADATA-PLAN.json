@@ -1,0 +1,27 @@
+{
+  "schema": "PREP1-METADATA-PLAN-1",
+  "run_id": "prep1-continuation-20260922T065413Z",
+  "authority": "#542/5757861057",
+  "status": "NEW_EXECUTION_NOT_RECOVERY; NOT_YET_EXECUTED",
+  "implementation": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+  "selection_rule": "First lexicographic immediate-child tracked .import file in each of assets/fonts, assets/icon, assets/audio/music at I. Three bounded metadata families; no historical sample identities or count are inferred. Candidate directory entries were read before this declaration, but metadata contents have not yet been parsed or checked.",
+  "samples": [
+    {"path": "assets/fonts/Alegreya-400.woff2.import", "git_blob": "383ec66c8e1b20a0a03fe0b21eef2ec2d0ef9971", "bytes": 780},
+    {"path": "assets/icon/glassvow-icon.png.import", "git_blob": "4a1962ea54ff2be6bc55cb6f519d233953d20ef5", "bytes": 955},
+    {"path": "assets/audio/music/act1-boss.mp3.import", "git_blob": "a4d1b77ebee91fee829b37abd093084df3351752", "bytes": 374}
+  ],
+  "reader_sources": [
+    {"path": "tools/dd1_import_semantics.py", "git_blob": "00fc12812aecb91c44f0ddc7243aa8c6197ba0a3", "bytes": 7708, "sha256": "81468005a558f0d54891abe4f43c08ea4cd10e27e4d8c209d0cb57df37a44296"},
+    {"path": "tools/dd1_reservations.py", "git_blob": "eded41530ef8f625db06948bf43e0094e125d59a", "bytes": 15767, "sha256": "37c1a5bd1a625920c93d4449fd741e6465cf843e14275e86b085c221c836c2e0"}
+  ],
+  "reader_closure": "document, string and paths use only the two exact pinned source modules and Python standard library. No mock module, account function, subprocess/engine function, asset decoding or lazy validate_seed import is called.",
+  "planned_checks": ["source/input Git identity before execution", "bounded document parsing", "literal importer/type/UID/source identity", "literal generated dependency path inventory", "preserve full parsed authored value strings and semantic digest", "source/input identity after execution"],
+  "argv": ["/usr/bin/python3", "-I", "-B", "-S", "/mnt/data/prep1-continuation-20260922T065413Z/metadata_reader_check.py"],
+  "cwd": "/mnt/data/prep1-continuation-20260922T065413Z/source",
+  "environment": {"PATH": "/usr/bin:/bin", "HOME": "/mnt/data/prep1-continuation-20260922T065413Z/controller-home", "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PYTHONDONTWRITEBYTECODE": "1"},
+  "capture": "One invocation. Preserve exact checker text, all three actual metadata text inputs, source hashes, full stdout/stderr, start/end/exit, wall and child CPU/rusage observations. Continue independent samples on a parse failure; no repeated-until-green check.",
+  "limits": "Pure metadata reader only: no Godot Variant evaluation, generated resource, validate_seed asset-byte claim, importer execution, native writer closure or native qualification. No font, texture or audio binary is fetched or published.",
+  "outcomes": [],
+  "engine_runs": 0,
+  "live_account_writes": 0
+}
