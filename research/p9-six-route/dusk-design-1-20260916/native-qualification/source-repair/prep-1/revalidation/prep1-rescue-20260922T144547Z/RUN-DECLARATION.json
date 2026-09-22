@@ -1,0 +1,59 @@
+{
+  "schema": "PREP1-RESCUE-DECLARATION-1",
+  "run_id": "prep1-rescue-20260922T144547Z",
+  "authority": "#542/5757861057 and owner continuation/rescue instruction",
+  "status": "NEW_READBACK_AND_ANALYSIS_OF_NEW_REVALIDATION; NOT_RECOVERY_OF_LOST_ORIGINAL_RUN",
+  "worker": "sole Pro evidence worker; no delegated writer or reviewer",
+  "observed_utc": "2026-09-22T14:45:47.786981+00:00",
+  "implementation": {"commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "tree": "f635cace1f659b236590cd44ed502841233d2d93"},
+  "whole_prep_base": "36c607355bb7add7968ae51bf7b738c2c078d7d8",
+  "publication_baseline": "d86e444d79a7ac2a800ca3cae230431abeebc8a2",
+  "publication_start": "e469476598cff36493e377865ec3df5447e52651",
+  "operating_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "operating_instructions_read": ["AGENTS.md", "docs/agents/ai-sdlc.md:1-125", "#542 body", "#542/5757861057"],
+  "source_equivalence_observed": "GitHub compare I to P: ahead 2/behind 0, capsule and recovery evidence only. Compare P to publication_start: ahead 55/behind 0, 53 added paths under prep-1/revalidation only; no implementation or account change in either diff.",
+  "source_manifest": {
+    "tools/dd1_linux/build_prep.py": {"git_blob": "ecf3c1e8c109c88fa1de20ea3cb3987421e50f05", "status": "actual pinned contents read; not executed"},
+    "H_commit": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+    "H_directory": "research/p9-six-route/duskblade-first-proof-20260912/",
+    "H_local_bytes_status": "NOT_STAGED; no H execution claimed in this rescue"
+  },
+  "host": {
+    "system": "Linux", "release": "6.18.44", "machine": "x86_64", "libc": ["glibc", "2.41"],
+    "pointer_bytes": 8, "long_bytes": 8, "uid": 0, "gid": 0,
+    "boot_id": "f2a56030-5577-40ca-8f67-d25c53b07c6f", "controller_task_count": 1,
+    "controller_executable": "/usr/bin/python3", "python_version": "3.13.5 (main, Jun 25 2025, 18:55:22) [GCC 14.2.0]",
+    "Seccomp": "0", "CapEff": "00000000800405fb",
+    "python_sha256": "e59d0124ff06c248546876e01fcfb1ea3cda63534949f94a9372bfcfe3bfc3f5",
+    "compiler_sha256": "a23ecab8ff08f09ad8c80602c2c5df7f49e09c25905cb8975902e101bf72635f",
+    "libc_sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826",
+    "loader_sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"
+  },
+  "environment": {"PATH": "/usr/bin:/bin", "HOME": "/tmp", "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8"},
+  "host_observation_command": "/usr/bin/env -i PATH=/usr/bin:/bin HOME=/tmp LANG=C.UTF-8 LC_ALL=C.UTF-8 /usr/bin/python3 -I -B -S - (stdlib read-only platform/proc/file-hash observation)",
+  "transport_observations": {
+    "direct_git_read": "GIT_TERMINAL_PROMPT=0 timeout 20 git ls-remote https://github.com/fol2/glassvow.git refs/heads/research/p9-six-route/dd1-native-1-overlay exited 128: Could not resolve host: github.com. No direct Git write attempted.",
+    "GitHub_connector_read": "WORKING; immutable source, evidence, refs and complete compare metadata read",
+    "GitHub_connector_write": "This actual declaration is the first write in this rescue; readback must follow before substantial new validation. No disposable access ping."
+  },
+  "rescue_findings_so_far": {
+    "remote_progress_exists": "Prior interrupted attempts published NEW revalidation records across seven run directories, including complete self-contained bundles and a continuation directory. Preserve execution identities; do not rerun merely because chat displayed Thinking failed.",
+    "capsule": "Still routes to obsolete original-record retrieval; needs reconciliation after evidence verification. Existing blob 642ace1c50ed7cc77c345ac1607b492542048376.",
+    "earlier_continuation": "prep1-continuation-20260922T065413Z has readback reports for H, crash/post-matrix, a mutation witness, and build/metadata records. These are prior reports, not commands observed in this rescue.",
+    "local": "This host initially contained only the two attached instruction transcripts in /mnt/data. No prior PREP-1 workspace was found in the single bounded initial path inventory. The closed original-record retrieval is not reopened."
+  },
+  "intended_work": [
+    "Read back this declaration and verify additive ancestry.",
+    "Verify complete retained NEW command/evidence units, retaining each original execution identity and distinguishing observed bytes from inherited execution reports.",
+    "Publish useful verified units and newly authored contract/admission/resource analysis progressively; do not duplicate intact raw evidence solely for upload counts.",
+    "Execute only genuinely missing authorised independent checks after exact source/dependency and publication prerequisites are met; no unchanged-matrix reassurance replay.",
+    "Reconcile the existing capsule; publish one exact-head #156 handoff with remaining evidence gaps and actual limitations."
+  ],
+  "outcomes": [],
+  "build_status": "NOT_RUN_IN_THIS_RESCUE",
+  "matrix_status": "NOT_RUN_IN_THIS_RESCUE",
+  "bindings_status": "NOT_RUN_IN_THIS_RESCUE",
+  "engine_runs": 0, "source_changes": 0, "live_account_writes": 0,
+  "account_preservation": {"recovery_ACCOUNT_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900", "recovery_reported": "2040/2048", "historical": "1277/8192; 6915 unspendable; consumed attempt; CPU/elapsed/raw UNKNOWN", "deadline": "2026-09-24T17:54:40Z"},
+  "native_status": "N0 BLOCKED; certificates 0/3; no native funding, engine call, self-approval, merge, release or closure"
+}
