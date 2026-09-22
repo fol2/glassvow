@@ -1,0 +1,52 @@
+{
+  "run_id": "prep1-continuation-20260922T065413Z",
+  "authority": "#542/5757861057",
+  "status": "NEW_EXECUTION_NOT_RECOVERY",
+  "worker": "sole Pro worker; other authors and reviewers remain parked",
+  "observed_utc": "2026-09-22T06:54:13.622543+00:00",
+  "implementation": {"commit": "d4e91e4fc70d57c81922cc1883b339877d835a53", "tree": "f635cace1f659b236590cd44ed502841233d2d93"},
+  "whole_prep_base": "36c607355bb7add7968ae51bf7b738c2c078d7d8",
+  "publication_baseline": "d86e444d79a7ac2a800ca3cae230431abeebc8a2",
+  "publication_start": "5d40619df0511c158069ed58db8b9cd6edc0a761",
+  "operating_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "source_equivalence_preflight": "GitHub compare I to publication_start: ahead 49, behind 0; only existing capsule and prep-1 evidence changed.",
+  "source_manifest": {
+    "identity_scope": "Pinned implementation tree and entry points; local executable closure must be verified before any execution.",
+    "tools/dd1_linux/build_prep.py": "ecf3c1e8c109c88fa1de20ea3cb3987421e50f05",
+    "tools/dd1_linux/prep_controls.py": "056bc1c7608bbca4b0268643066997c8d1363ed7",
+    "tools/dd1_linux/prep_bindings.py": "fb6cd0aaf01dc6b64d1e6fef5e2981a311fb8a14",
+    "tools/dd1_linux_snapshot.py": "351bdc111735caf12b7fa23a6df37766b8667c51"
+  },
+  "H": {
+    "commit": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+    "directory": "research/p9-six-route/duskblade-first-proof-20260912/",
+    "local_bytes_status": "NOT_YET_STAGED; use actual pinned bytes, no mocks"
+  },
+  "host": {
+    "system": "Linux", "release": "6.18.44", "machine": "x86_64", "libc": ["glibc", "2.41"],
+    "boot_id": "80e6ae90-b5b6-4c21-b041-47871e877272", "pointer_bytes": 8, "long_bytes": 8, "uid": 0, "gid": 0,
+    "controller_executable": "/usr/bin/python3", "controller_python": "3.13.5 (main, Jun 25 2025, 18:55:22) [GCC 14.2.0]",
+    "controller_task_count_observed": 1, "controller_Seccomp": 0, "controller_CapEff": "00000000800405fb",
+    "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+    "compiler_sha256": "a23ecab8ff08f09ad8c80602c2c5df7f49e09c25905cb8975902e101bf72635f",
+    "python_sha256": "e59d0124ff06c248546876e01fcfb1ea3cda63534949f94a9372bfcfe3bfc3f5",
+    "libc_sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826",
+    "loader_sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"
+  },
+  "workspace": "/mnt/data/prep1-continuation-20260922T065413Z/source",
+  "environment": {"PATH": "/usr/bin:/bin", "HOME": "/mnt/data/prep1-continuation-20260922T065413Z/controller-home", "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PYTHONDONTWRITEBYTECODE": "1"},
+  "continuation_decision": "The branch already contains NEW_EXECUTION_NOT_RECOVERY records from interrupted attempts, including prep1-revalidation-20260921T211017Z. First decode and verify complete command/evidence units; retain their original execution identity. Do not claim their commands ran in this continuation. Reuse sufficient verified new validation rather than replay unchanged controls. Execute genuinely missing independent checks and publish newly authored analysis under this run ID. Unavailable original PREP-1 records remain unavailable; no original-record retrieval is reopened.",
+  "conditional_commands": [
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/build_prep.py"],
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/prep_controls.py", "--head", "d4e91e4fc70d57c81922cc1883b339877d835a53", "--output", "/mnt/data/prep1-continuation-20260922T065413Z/evidence/matrix", "--section", "all"],
+    ["/usr/bin/python3", "-I", "-B", "-S", "tools/dd1_linux/prep_bindings.py", "--head", "d4e91e4fc70d57c81922cc1883b339877d835a53", "--h", "/mnt/data/prep1-continuation-20260922T065413Z/source/research/p9-six-route/duskblade-first-proof-20260912"]
+  ],
+  "build_policy": "No existing helpers in this fresh workspace. Build only if genuinely needed after prior NEW evidence verification; use committed harmless build script once with unchanged exact pins. No engine probe or policy workaround.",
+  "metadata_plan": "Before any new pure-reader check, declare a deterministic bounded sample of actual tracked .import bytes at I, with exact identities. No generated-import or Godot parsing claim.",
+  "publication_gate": "Read this actual declaration back before substantial validation. Publish complete independently recoverable units progressively. Stop dependent execution if publication is unavailable; never accumulate another local-only matrix.",
+  "outcomes": [],
+  "matrix_status": "NOT_RUN_IN_THIS_CONTINUATION", "bindings_status": "NOT_RUN_IN_THIS_CONTINUATION",
+  "engine_runs": 0, "source_changes": 0, "live_account_writes": 0,
+  "account_preservation": {"recovery_ACCOUNT_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900", "recovery_reported": "2040/2048", "historical": "1277/8192; consumed attempt; UNKNOWN/unspendable remainder", "deadline": "2026-09-24T17:54:40Z"},
+  "native_status": "N0 BLOCKED; certificates 0/3; no native funding, self-approval, merge, release or issue closure"
+}
