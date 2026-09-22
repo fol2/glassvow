@@ -1,0 +1,29 @@
+{
+  "schema": "PREP1-NEW-EVIDENCE-READBACK-1",
+  "run_id": "prep1-continuation-20260922T065413Z",
+  "observed_utc": "2026-09-22T06:58:12.658986+00:00",
+  "observation": "New byte/decode/result verification of intact prior revalidation evidence; not a new H command execution, not recovery of lost original records",
+  "evidence_execution_run_id": "prep1-revalidation-20260921T211017Z",
+  "evidence_head": "5d40619df0511c158069ed58db8b9cd6edc0a761",
+  "evidence_path": "research/p9-six-route/dusk-design-1-20260916/native-qualification/source-repair/prep-1/revalidation/prep1-revalidation-20260921T211017Z/H-BINDINGS-COMMAND.json",
+  "wrapper_git_blob": "785fa889dd66c8fbb1d89b5f48b42f3fcc2d6db2",
+  "wrapper_bytes": 6342,
+  "decoded_bytes": 15151,
+  "decoded_sha256": "6feeaf6ce4138aec8625edcee046acaa3cbcfdd8059becfe55ff8e44f75693f6",
+  "compressed_bytes": 4208,
+  "compressed_sha256": "9a2fb8ec502d3d93981785160980383ab46e45f9cd6492708f9d7e2cebc71977",
+  "verification": [
+    "Complete GitHub wrapper materialized byte-for-byte; Git blob verified",
+    "Strict base64 decoding; compressed length and SHA256 verified",
+    "XZ decoded length and SHA256 verified",
+    "stdout and stderr exact lengths and SHA256 verified",
+    "Parsed command exited zero; empty stderr; 32 distinct PASS outcomes; recorded source-after equivalence and observer task count 1"
+  ],
+  "implementation": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+  "recorded_H_blobs": {"evidence_boundary.py": "a88db0791572f430ea3e5cde85683c8527cead39", "reference_kernel.py": "ee091fb503849117358b3691264fca71803f8bbc"},
+  "verified_outcome_count": 32,
+  "coverage": ["exact config delta and ambiguity refusals", "seed eligibility and semantic identity refusals", "multiline metadata and legacy-overlap behavior", "real-H prospective role shape and six altered-role refusals", "missing writer closure", "public native-entry authority/callback/synthetic refusals", "PREP disposition and issuer refusals", "GDScript consumer source routing/order and execution-view shape"],
+  "claim_limits": {"H_mocked_in_record": false, "native_positive": false, "GDScript": "source routing/order only; no interpreter", "empirical_context_created": false, "H_command_rerun_here": false},
+  "result": "PASS",
+  "scope": "Evidence readback verification, not independent PREP-1 approval. The complete command, source manifest, raw stdout/stderr, build identities and resource observations remain in the verified original new-run bundle."
+}
