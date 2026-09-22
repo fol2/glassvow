@@ -1,0 +1,232 @@
+{
+  "schema": "PREP1-RESCUE-READBACK-1",
+  "run_id": "prep1-rescue-20260922T144547Z",
+  "authority": "#542/5757861057; owner rescue continuation",
+  "evidence_head": "e469476598cff36493e377865ec3df5447e52651",
+  "implementation": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+  "started_utc": "2026-09-22T14:56:29.069050+00:00",
+  "ended_utc": "2026-09-22T14:56:29.070125+00:00",
+  "result": "PASS_READBACK_ONLY",
+  "reader_sha256": "cb55b792dd1bdd3f97874fa71aaec6df31e95771c67fd8d04c16d1c7ccd13ec0",
+  "host": {
+    "system": "Linux",
+    "release": "6.18.44",
+    "machine": "x86_64",
+    "boot_id": "f2a56030-5577-40ca-8f67-d25c53b07c6f",
+    "task_count": 1
+  },
+  "new_reader_resources": {
+    "wall_seconds": 0.0012687490000189428,
+    "user_cpu_seconds": 0.0005949999999999983,
+    "system_cpu_seconds": 0.00042000000000000023,
+    "maxrss_kib_high_water": 12672,
+    "scope": "Only this reader execution, excluding retrieval, materialization, earlier decodes and analysis; no ledger credit."
+  },
+  "units": {
+    "BUILD-COMMAND-BUNDLE.json": {
+      "git_blob": "b95d8685e7a717ce50e239ee13a613f9efa75a95",
+      "bytes": 7928,
+      "sha256": "21d3a31d1dd57e3adf84d565731522f8af3c1a3671682f457212d6226399c053",
+      "decoded_bytes": 25597,
+      "decoded_sha256": "e82398dc3b14b6e4a66efb34461f95e85c97d02835ae2cc2e63d7b8140ff7646",
+      "compressed_bytes": 5316,
+      "compressed_sha256": "e26a593088a295251a5e69a12a6b9323a58c0367202ae8e3e5ca0145a2b221c1",
+      "execution_run_id": "prep1-continuation-20260922T065413Z",
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-S",
+        "tools/dd1_linux/build_prep.py"
+      ],
+      "started_utc": "2026-09-22T08:10:28.301014+00:00",
+      "ended_utc": "2026-09-22T08:10:28.967750+00:00",
+      "exit": 0,
+      "wall_seconds": 0.6664874580001197,
+      "stdout_bytes": 1811,
+      "stdout_sha256": "8869a4c7d1c7f6e5d62e0153c023574f3a08d10d762a261c2fc56e7c9b7214d7",
+      "source_manifest_files": 21,
+      "source_manifest_bytes": 182214,
+      "recorded_sources_before_equal_after": true,
+      "build_after": {
+        "ld-linux-x86-64.so.2": {
+          "bytes": 225672,
+          "git_blob": "08b14d8057a6a9e9108f1c9c72b2b010f6ddd793",
+          "sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"
+        },
+        "libc.so.6": {
+          "bytes": 1995216,
+          "git_blob": "960e76f5ef0f8305d3e356cfed556cc1a825d560",
+          "sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826"
+        },
+        "prep-inert": {
+          "bytes": 17720,
+          "git_blob": "48901f8ac4cab81c4cecc7f24b2c02af26a53fe1",
+          "sha256": "d13b4975c0c131e15780f435474d88f2950cb25629c69fe497cbb7824a446629"
+        },
+        "supervisor": {
+          "bytes": 958936,
+          "git_blob": "4316cc6beda0cffea74ee36a854a1a1f7b0f5130",
+          "sha256": "b22fdaba90df2a1a317f1d3a690522736a1301f9b442016764d5bf173f2fdf0f"
+        }
+      },
+      "recorded_resources": {
+        "user_cpu_seconds": 0.42734099999999997,
+        "system_cpu_seconds": 0.19850199999999998,
+        "maxrss_kib_high_water": 34244,
+        "inblock_delta": 432,
+        "oublock_delta": 6624,
+        "scope": "waited command process and its waited descendants; not a reservation refund or live-account credit"
+      },
+      "prior_observer_correction": "Include declared immutable commit I in observed source-manifest rows. No source file, digest requirement, compiler pin or matrix assertion changed. Record this preflight failure in all command records."
+    },
+    "METADATA-COMMAND-BUNDLE.json": {
+      "git_blob": "63c488cee9af1df72d8e48a1828cd0ae05437f97",
+      "bytes": 6236,
+      "sha256": "3c5679fc665d2c069cfd1d92ef0f786fdb6823dab4da9767144cffeaa314cdea",
+      "decoded_bytes": 13204,
+      "decoded_sha256": "5423e621675a216fa73a1c14d31c9766d7ef5c786bea1e516d7a516a15848eb6",
+      "compressed_bytes": 4008,
+      "compressed_sha256": "749fcaa5f8cbaa2d54afdbac71d688274541b40c9290cfbf3ec9a03666d03136",
+      "execution_run_id": "prep1-continuation-20260922T065413Z",
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-S",
+        "/mnt/data/prep1-continuation-20260922T065413Z/metadata_reader_check.py"
+      ],
+      "started_utc": "2026-09-22T07:41:46.158779+00:00",
+      "ended_utc": "2026-09-22T07:41:46.201974+00:00",
+      "exit": 0,
+      "wall_seconds": 0.04316522999988592,
+      "stdout_bytes": 5193,
+      "stdout_sha256": "e74af6b1d2367120a0095277a1a994d7bc8885e54147b2082d4387481d8a3316",
+      "sample_inputs": {
+        "assets/icon/glassvow-icon.png.import": {
+          "bytes": 955,
+          "git_blob": "4a1962ea54ff2be6bc55cb6f519d233953d20ef5",
+          "sha256": "ebc8bbdbc126414b9d68e6a16b695da6538ad472ae3c6ac496b42e2d4b2f0dcc"
+        },
+        "assets/fonts/Alegreya-400.woff2.import": {
+          "bytes": 780,
+          "git_blob": "383ec66c8e1b20a0a03fe0b21eef2ec2d0ef9971",
+          "sha256": "9243b0565587ad7696f0fa10c91cd8fe63092959ec288c00746fb0df597c06ed"
+        },
+        "assets/audio/music/act1-boss.mp3.import": {
+          "bytes": 374,
+          "git_blob": "a4d1b77ebee91fee829b37abd093084df3351752",
+          "sha256": "dca4f8862417ad4f41ed0403a22c28cc9c1fa5e588921aa46a0a5bb717700988"
+        }
+      },
+      "sample_results": [
+        {
+          "path": "assets/fonts/Alegreya-400.woff2.import",
+          "result": "PASS"
+        },
+        {
+          "path": "assets/icon/glassvow-icon.png.import",
+          "result": "PASS"
+        },
+        {
+          "path": "assets/audio/music/act1-boss.mp3.import",
+          "result": "PASS"
+        }
+      ],
+      "checker_sha256": "4ef9418abc7672712b1586e3fb5b38dd20979512c3e817f1dc7f0f69c068a6ef",
+      "recorded_resources": {
+        "user_cpu_seconds": 0.038695,
+        "system_cpu_seconds": 0.0042439999999999995,
+        "maxrss_kib": 13428,
+        "inblock": 0,
+        "oublock": 0
+      },
+      "limits": "Three predeclared actual tracked metadata files. Not Godot parsing, seed admission against actual asset bytes, generated-import behavior or native qualification. No engine/account calls. Resource observations are fresh static-reader costs; no historical-account credit."
+    },
+    "MATRIX-RESULT-194750.json": {
+      "git_blob": "05dcfbef0163aa8927fef7818ab5a5f201a688d8",
+      "bytes": 4789,
+      "sha256": "fe90821821f9687aabce46fc8089506659eaf7a6319fb78669666f4f584e914a",
+      "execution_run_id": "prep1-revalidation-20260921T194750Z",
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-S",
+        "tools/dd1_linux/prep_controls.py",
+        "--head",
+        "d4e91e4fc70d57c81922cc1883b339877d835a53",
+        "--output",
+        "/mnt/data/prep-revalidation-20260921T194750Z/evidence/matrix",
+        "--section",
+        "all"
+      ],
+      "started_utc": "2026-09-21T20:09:23.281027+00:00",
+      "ended_utc": "2026-09-21T20:09:32.355003+00:00",
+      "exit": 0,
+      "wall_seconds": 9.074966583999867,
+      "recorded_resources": {
+        "block_inputs": 0,
+        "block_outputs": 319840,
+        "maxrss_kib": 22784,
+        "scope": "command and collected children, not live programme ledger credit",
+        "system_cpu_seconds": 2.090759,
+        "user_cpu_seconds": 6.83414
+      },
+      "groups": [
+        "positive",
+        "sealed-runtime",
+        "sealed-sidecar-corrupt",
+        "sealed-sidecar-symlink",
+        "sealed-sidecar-missing",
+        "sealed-original-seed",
+        "sealed-runtime-config",
+        "sealed-seal-bytes",
+        "sealed-failed-parent",
+        "sealed-spliced-receipt",
+        "sealed-wrong-engine",
+        "sealed-wrong-runtime-view",
+        "replay",
+        "wrong-uid",
+        "wrong-param",
+        "wrong-source",
+        "invalid",
+        "malformed",
+        "incomplete",
+        "missing-resource",
+        "undeclared",
+        "alias",
+        "hardlink",
+        "source-mutation",
+        "config-mutation",
+        "never-read",
+        "double-write",
+        "mutate-restore",
+        "failed",
+        "binding-seed-sha",
+        "binding-seed-blob",
+        "binding-asset-sha",
+        "binding-seed-path",
+        "binding-traversal",
+        "binding-engine",
+        "binding-recipe-head",
+        "binding-undeclared-dependency",
+        "binding-execution-view",
+        "binding-producer",
+        "binding-execution-map",
+        "binding-unpriced-copies",
+        "concurrent-controller",
+        "kill-controller",
+        "concurrent-supervisor",
+        "kill-supervisor"
+      ],
+      "source_after_verified_equal_recorded": true,
+      "limits": "Actual aggregate command record; not a substitute for all underlying raw cases or command metadata of another run."
+    }
+  },
+  "engine_runs_here": 0,
+  "build_or_matrix_or_metadata_reruns_here": 0,
+  "live_account_writes_here": 0,
+  "source_changes_here": 0,
+  "limits": "Verification of retained NEW evidence, not new execution of recorded commands, not recovery of unavailable original PREP-1 evidence, not independent approval; retain each execution run identity."
+}
