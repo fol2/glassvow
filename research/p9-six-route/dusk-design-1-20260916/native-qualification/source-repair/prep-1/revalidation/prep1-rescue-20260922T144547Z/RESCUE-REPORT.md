@@ -1,0 +1,77 @@
+# PREP-1 rescue: surviving evidence, stop point and remaining admission
+
+Status: **RESCUE EVIDENCE PUBLISHED; PREP-1 REVALIDATION NOT YET REVIEW-READY.** This is new readback/static analysis under #542/5757861057 and the owner's rescue continuation. It is not recovery of the unavailable original run, a fresh connected matrix, independent approval, or native admission.
+
+## Exact identities and preserved work
+
+Implementation I is `d4e91e4fc70d57c81922cc1883b339877d835a53`, tree `f635cace1f659b236590cd44ed502841233d2d93`. Whole PREP base is `36c607355bb7add7968ae51bf7b738c2c078d7d8`. Operating main was refreshed at `07b5aa9dec8436132a524511d5438c510e322070`; its AGENTS, AI-SDLC and relevant Godot skill govern, with the explicit no-engine restriction controlling this task. No science rebase or source repair was performed.
+
+At rescue start E0=`e469476598cff36493e377865ec3df5447e52651`, GitHub already contained 55 commits and 53 added revalidation files after publication baseline P=`d86e444d79a7ac2a800ca3cae230431abeebc8a2`. All P-to-E0 paths were inside the existing PREP-1 revalidation directory. I-to-P changed only the capsule and original-recovery evidence. Thus the interrupted conversations did not erase all progress, and neither comparison changed implementation or accounts.
+
+The seven retained directories are `prep1-revalidation-20260921T110207Z`, `...T121658Z`, `...T161107Z`, `...T180802Z`, `...T194750Z`, `...T211017Z`, and `prep1-continuation-20260922T065413Z`. They remain intact; this rescue does not flatten different executions into one run or duplicate existing bundles merely to increase upload counts. The new rescue directory is `prep1-rescue-20260922T144547Z`.
+
+## Newly verified evidence
+
+`READBACK-RESULTS.json` and its exact `verify_retained_units.py` were executed in this rescue and published/read back. The reader SHA256 is `cb55b792dd1bdd3f97874fa71aaec6df31e95771c67fd8d04c16d1c7ccd13ec0`. The report blob is `f5375f49f904e8e2671cb4d71828f38f87449f49`; the reader blob is `fe8bcf0d2e913edd026620db270ad22936bf8a5e`.
+
+All source evidence paths below are relative to the parent revalidation directory at E0. Verification checked the actual whole-file Git identity before decoding, strict base64, compressed and decoded lengths/SHA256, complete XZ streams, exact stdout/stderr identities and the stated result predicates. These checks establish intact recorded evidence, not a new observation of another boot's processes.
+
+| Retained unit | Exact Git blob | New verification and scope |
+|---|---|---|
+| `prep1-continuation-20260922T065413Z/BUILD-COMMAND-BUNDLE.json` | `b95d8685e7a717ce50e239ee13a613f9efa75a95` | Complete 25,597-byte command record decoded. Recorded build exit 0, empty stderr, exact supervisor/inert pins, and equal before/after manifests for 21 files / 182,214 bytes. No binary execution. |
+| `prep1-continuation-20260922T065413Z/METADATA-COMMAND-BUNDLE.json` | `63c488cee9af1df72d8e48a1828cd0ae05437f97` | Complete 13,204-byte command record, actual checker and all three metadata inputs verified. Recorded exit 0. Pure lexical/path reader, not an engine import. |
+| `prep1-revalidation-20260921T194750Z/MATRIX-RESULT.json` | `05dcfbef0163aa8927fef7818ab5a5f201a688d8` | Actual 4,789-byte outer command record; 45 distinct PASS groups, full streams, start/end/exit and resource observations. Aggregate evidence is not all underlying raw cases. |
+| `prep1-revalidation-20260921T211017Z/H-BINDINGS-COMMAND.json` | `785fa889dd66c8fbb1d89b5f48b42f3fcc2d6db2` | Complete 15,151-byte command record decoded in this rescue. 32 distinct passing checks, real-H identities, no mock H, no empirical context and no native positive. |
+
+The additional fresh H verification, all 32 recorded outcomes and its exact checker source are in the independently decodable `H-READBACK-BUNDLE.json`, blob `5adfc674bebee8b62551c0f125c20297cbff21ac`. Decoding yields 12,613 bytes, SHA256 `79be259fb2e7cb17b1df8759de60e6c4f74df2b74e6c7929dd7628c337fdbd1f`. This is a complete single bundle, not a multipart promise. Original raw H evidence remains at the path above.
+
+Metadata selection was explicitly recorded in `prep1-continuation-20260922T065413Z/METADATA-PLAN.json`, blob `e18f5f815c65f6e99eb1ad541e53d00c7636c097`: first lexicographic immediate-child tracked `.import` in fonts, icon and audio/music. Actual inputs were Alegreya-400.woff2.import, glassvow-icon.png.import and act1-boss.mp3.import. All three byte identities were recomputed by the new reader. These are three named NEW-run samples, not the original missing four; original asset bytes and generated engine outputs were not tested here.
+
+## Other surviving evidence: retain its verification level
+
+The continuation's `READBACK-H.json`, `READBACK-CRASH-POST.json` and `MUTATION-WITNESS.md` were read as existing reports. H now additionally has the new independent byte/decode check above. The crash/post and sixteen-negative raw bundles were not decoded again in this rescue; their earlier verification must keep that provenance.
+
+Those reports point to the self-contained `prep1-revalidation-20260921T211017Z` bundles: `positive-and-sealed.json`, `pre-release-bindings.json`, `semantic-and-mutation.json`, `crash-exclusivity.json` and `post-matrix-capture.json`. The existing mutation witness documents an actually generated quality-9 resource followed by a restored quality-7 sidecar, failed history validation and no seal. The existing crash report records retained synthetic reservations and cleanup, plus the original observation that 60 boot/PID/start identities were absent. These are not newly observed process absences on this rescue's different boot.
+
+The earlier 19:47 run's aggregate timing/CPU must not be assigned to the 21:10 run's raw cases. Different run IDs, boot IDs and output roots are substantive provenance boundaries, not filenames to reconcile away.
+
+## Where the latest continuation visibly stopped
+
+The latest continuation predeclared a full-capture matrix at 08:08:44 UTC on 22 September 2026. Its first observer failed before starting any compiler or matrix: observed source-identity rows omitted the `commit` member that the declaration included. The retained record states all actual lengths, Git blobs and SHA256s matched. The correction added I to the observer rows; no implementation, pin or assertion was weakened.
+
+The corrected harmless build then ran from **08:10:28.301014 to 08:10:28.967750 UTC**, exited 0 and matched both pins. That is the latest published completed command found in this continuation at E0. There is no subsequent matrix-command/result file in that directory's retained diff. This means the subsequent execution/publication outcome is unavailable; it does not establish a matrix failure, nor prove that no unrecorded command ever ran.
+
+An earlier complete matrix command DOES survive: 21 September 20:09:23.281027–20:09:32.355003 UTC, exit 0 and 45 groups. A later H command survives at 21:59:04 UTC with 32 groups. The accurate diagnosis is fragmented execution/evidence delivery and stale routing, not 'nothing was done' or a demonstrated broken compiler/backend.
+
+The chat's 'Thinking failed' messages provide no diagnostic stack or exit status. No exact platform root cause can be inferred from them. The prior observer error is known and already corrected; it is not evidence of the cause of every interrupted chat.
+
+This current host had no prior PREP workspace in the bounded initial inventory. Direct `git ls-remote` failed DNS resolution for github.com; the GitHub connector both reads and writes successfully, including this rescue. Therefore no new GitHub write grant is required, and the direct-DNS failure is not presented as a total publication outage. Closed retrieval of the original missing parts was not reopened.
+
+## Source-to-evidence and remaining whole-path admission map
+
+This is a newly authored scoped map, not a reconstructed missing original analytical file. Source facts below were read at I. Earlier commissioning analysis is explicitly inherited from `entry-1/commissioning-20260920/REPORT.md`, blob `e7d3cd40970f3c693c4d536dbd32788e21bc9a6c`; it is not a new engine observation.
+
+| Surface / stage | Established scope | Remaining obligation, without an engine claim |
+|---|---|---|
+| Original → preparation → runtime config | `dd1_prep_view.py` pins original project blob `319cdc9006d3579ff2abb567830e204a8ff86d9c`, removes only the exact Funplay enabled-list entry, binds original/derived execution identities and restores the original for runtime. Recorded H checks distinguish original and derived hashes and reject ambiguous config. | Actual admitted runtime payload, projection and complete source inventory remain required; a boolean or altered original project is not a substitute. |
+| Editor plugins / autoloads / extensions | The actual project lists Funplay, web export and iOS export. PREP's native validator recomputes all three pinned plugin input trees; it cannot establish absence by dropping their files. The project has no explicit `[autoload]` section and sets Sentry auto_init=false. | No inference that all extension/module/editor startup effects disappear. Full reachable plugin, GDExtension, module and writer inventory is still an analytical obligation. The two retained export plugins and implicit engine services cannot be dismissed because Funplay is removed. |
+| Seeded sidecars / generated output | `dd1_import_semantics.py` binds tracked seed Git/SHA, actual asset path/SHA, importer/type/UID and declared generated paths. It enforces a bounded lexical document and equality of authored values; resource dependencies must exist and be nonempty. `.uid` or code cannot be relabelled as seed slots. | Enumerate every actual required seed/asset/output and supported importer behavior. Three sample documents do not close the whole inventory. No unobserved defaults, handwritten native output, missing-resource waiver or arbitrary new writable paths. |
+| Producer history and promotion | `seed_audit` is supporting bounded inotify ordering, explicitly not a complete call trace. Native `native_bindings` additionally requires H-bound authenticated disposition and writer-closure proof tied to exact source, producer, engine and seeds. Inert mutate/use/restore is a negative witness, not Godot qualification. | Actual native writer closure is not supplied by this rescue. Source pins plus final equality cannot by themselves prove all intermediate reads/writes. Do not mint a synthetic positive disposition to fill this gap. |
+| Preparation / parse / fixture services and threads | Earlier exact-engine analysis excludes the headless preview worker, but leaves editor worker-pool, resolver, conditional audio and other lifetime births to close. The current project uses a custom main-loop and references splash/icon/audio resources. Earlier fixture source analysis reaches driver/Main, content, theme/font and audio/transition nodes. | Finish source-decidable transitive reads, optional libraries, UID/global-class metadata and lifetime thread bounds. Distinguish that missing analysis from future measured engine effects. No socket/refusal/thread/ABI/privilege expansion is authorised here. |
+| Connected backend / sealing / crash accounting | Preserved source controls use real inert entry/backend and disposable synthetic accounts. The rescued matrix aggregate records 45 groups; separate retained raw bundles and earlier readbacks exist. | Establish one explicit complete execution-to-raw-record coverage map without cross-run substitution. A PASS aggregate alone is not all raw grant/result/journal/receipt/account records; a command planned but not published is not a completed command. |
+| H / fixture consumer | The rescued H record covers real prospective roles and six altered-role refusals, missing writer closure/disposition, synthetic/callback refusals and source-level GDScript consumer checks. | GDScript parsing/runtime was not executed. Fresh independent review/planner acceptance and actual later stage-specific H/host/account admission remain separate; this author supplies none. |
+| Whole-unit affordability | Actual rescued static/build/reader measurements are retained separately below. Source I's pricing still applies to copies, originals, seeds, staging, promotion, rewrites, metadata and failed work. | Complete actual source/generated/runtime/unit/account inventories and cumulative pricing before any useful native stage. Historical lower bounds are not a current admission certificate; static work and reused immutable bytes do not confer an unobserved zero-copy exemption or refund. |
+
+PREP base-to-I comprises three commits: thirteen implementation/test paths plus the development CHECKPOINT. I-to-current evidence preservation does not confer the old COMPAT-2 approval on those changed interfaces. This rescue did not complete the whole native-source inventory, writer proof or cumulative pricing; those are outstanding work, not proved impossibilities or reasons to restart scientific research.
+
+## Costs, account facts and continuation boundary
+
+The recorded latest build used 0.666487458 s wall, 0.427341 s child user CPU and 0.198502 s child system CPU; its supervisor is 958,936 bytes and harmless producer 17,720 bytes. The recorded three-sample metadata check used 0.043165230 s wall. The recorded 45-group matrix used 9.074966584 s wall, 6.83414 s user CPU and 2.090759 s system CPU. H used 0.087596436 s wall. These belong to their respective original NEW runs; they are not combined as one campaign total.
+
+This rescue's first reader measured 0.001268749 s wall, and the H reader 0.000588345 s wall, narrowly excluding retrieval/materialization/earlier decoding/analysis. Complete session wall/token/static-write totals are unavailable and are not invented. No measured amount is live-account credit or permission to omit earlier static/failed costs.
+
+Recovery remains the published 2040/2048 at ACCOUNT blob `8b7e4e6367ad4bc366c04b930ef4fc3810e2a900`; historical1277/8192, unspendable6915, consumed attempt and UNKNOWNs remain separate. Published ledger identity is not a current private executor-lock/account observation. Deadline remains **2026-09-24T17:54:40Z**. No live ledger was modified.
+
+The next useful continuation is bounded evidence completion on I, not another original-record hunt, new grant, wholesale rebuild or repeated H/metadata run. First decide the retained matrix coverage using exact existing run identities. If required full command/raw provenance remains genuinely absent, capture only the unresolved authorised validation under a new ID, with independently decodable progressive uploads and an outer command record; never reconstruct lost timing. Complete the native input/writer/thread/cost analytical gaps separately. Any fresh execution requires actual pinned local source closure and build bytes, not reliance on this rescue's remote hash observations alone.
+
+The previous complete-record retrieval is CLOSED. The original missing 284-record payload and original four-sample claim are not rehabilitated. Existing source and all intact NEW records are recoverable directly from GitHub. The capsule is reconciled to this evidence-completion state; the terminal #156 comment pins the final containing head/tree and readback. No reviewer, engine, loader, live account, native funding, self-approval, merge, release or issue closure was invoked. **N0 remains BLOCKED; certificates 0/3.**
