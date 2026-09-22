@@ -1,0 +1,74 @@
+{
+  "execution_run_id": "prep1-revalidation-20260921T211017Z",
+  "implementation": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+  "group_counts": {
+    "positive-and-sealed": 13,
+    "semantic-and-mutation": 16,
+    "pre-release-bindings": 12,
+    "crash-exclusivity": 4
+  },
+  "unique_cases": 45,
+  "cases": {
+    "positive-and-sealed": [
+      "positive",
+      "replay",
+      "sealed-failed-parent",
+      "sealed-original-seed",
+      "sealed-runtime",
+      "sealed-runtime-config",
+      "sealed-seal-bytes",
+      "sealed-sidecar-corrupt",
+      "sealed-sidecar-missing",
+      "sealed-sidecar-symlink",
+      "sealed-spliced-receipt",
+      "sealed-wrong-engine",
+      "sealed-wrong-runtime-view"
+    ],
+    "semantic-and-mutation": [
+      "alias",
+      "config-mutation",
+      "double-write",
+      "failed",
+      "hardlink",
+      "incomplete",
+      "invalid",
+      "malformed",
+      "missing-resource",
+      "mutate-restore",
+      "never-read",
+      "source-mutation",
+      "undeclared",
+      "wrong-param",
+      "wrong-source",
+      "wrong-uid"
+    ],
+    "pre-release-bindings": [
+      "binding-asset-sha",
+      "binding-engine",
+      "binding-execution-map",
+      "binding-execution-view",
+      "binding-producer",
+      "binding-recipe-head",
+      "binding-seed-blob",
+      "binding-seed-path",
+      "binding-seed-sha",
+      "binding-traversal",
+      "binding-undeclared-dependency",
+      "binding-unpriced-copies"
+    ],
+    "crash-exclusivity": [
+      "concurrent-controller",
+      "concurrent-supervisor",
+      "kill-controller",
+      "kill-supervisor"
+    ]
+  },
+  "decision": "NO_MISSING_INERT_CLAIM_DEMONSTRATED; NO_REEXECUTION",
+  "nonblocking_limit": "Same-run shared outer matrix timing/CPU aggregate not published; never borrow different-run timing. Individual raw command/result/account/grant/journal and same-run postcleanup evidence cover the material case claims.",
+  "verification_provenance": {
+    "positive-and-sealed": "this run: verify_positive_post.py / POSITIVE-POST-RESULT.xz.b64.json",
+    "semantic-and-mutation": "reused prep1-continuation-20260922T065413Z/MUTATION-WITNESS.md, verified at 2026-09-22T07:22:50.675179+00:00",
+    "pre-release-bindings": "reused prep1-completion-20260922T160909Z/BINDING-CRASH-COVERAGE.md",
+    "crash-exclusivity": "reused prep1-completion-20260922T160909Z/BINDING-CRASH-COVERAGE.md"
+  }
+}
