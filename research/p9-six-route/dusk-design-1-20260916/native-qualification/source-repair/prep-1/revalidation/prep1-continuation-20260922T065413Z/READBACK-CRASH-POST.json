@@ -1,0 +1,48 @@
+{
+  "schema": "PREP1-NEW-EVIDENCE-READBACK-1",
+  "run_id": "prep1-continuation-20260922T065413Z",
+  "authority": "#542/5757861057",
+  "evidence_execution_run_id": "prep1-revalidation-20260921T211017Z",
+  "evidence_head": "5d40619df0511c158069ed58db8b9cd6edc0a761",
+  "scope": "Actual new byte/decode/outcome verification of intact NEW revalidation records; commands were not rerun here. No lost original record was recovered.",
+  "crash_bundle": {
+    "name": "crash-exclusivity.json",
+    "git_blob": "731dc7a0ef3fa6b49e2b535d3f856156367fe2b0",
+    "wrapper_bytes": 10062,
+    "compressed_bytes": 6776,
+    "compressed_sha256": "14ca459e003250bd145316ad68530ce0f51c92f5cbce4c2eff716771258dcf27",
+    "decoded_bytes": 47378,
+    "decoded_sha256": "becdc773845c122eb08f7b8170c598f9c313b8d218eb135124a6ce5d4af09c95",
+    "checks": "Whole wrapper Git identity, strict base64, compressed/decoded lengths and SHA256s, then lossless restoration and original length/SHA256 of all four records.",
+    "restored_records": {
+      "concurrent-controller": {"bytes": 16067, "sha256": "ca35ff3fa987528e23ec014f956211bb0660af98a88012577b16c88b19a4c5a0"},
+      "concurrent-supervisor": {"bytes": 16067, "sha256": "63883e2a229032845eff7a6f93694138ce52139954fcab34dae0e54d4dbfbfc9"},
+      "kill-controller": {"bytes": 2844, "sha256": "e83e22f30eea0b209dafd0ebc46e04ccb88fcb944a23334f26735fb8ea77144d"},
+      "kill-supervisor": {"bytes": 13211, "sha256": "59dac4e0005a18a7167fddc73a4a0a0d2c4c0aedec0aac59304aa6f89ec2f29f"}
+    },
+    "observed_outcomes": {
+      "competing_controllers": "Both exit 2 with ReservationError:one executor already holds account; before/after synthetic account bytes equal, no captured output files. Existing DD1-INERT-ONLY input receipt hashes verify against demand without its receipt_sha256, exactly as pinned save_inputs specifies. Not a native launch receipt.",
+      "killed_controller": "Exit -9; supervisor and workload adopted/reaped with SIGKILL status 9; remaining_pids empty; full RESERVED row and entire account unchanged after kill.",
+      "killed_supervisor": "Supervisor exit -9; FAILED row; success false, cleanup_confirmed true, sealed_preparation null; remaining_pids empty.",
+      "reservation_retention": "Both killed cases retain starts=1, cpu_ns=16000000000, raw_bytes=12582912; no refund or additional live reservation."
+    }
+  },
+  "post_matrix_bundle": {
+    "name": "post-matrix-capture.json",
+    "git_blob": "e62f92ac3ab4cc75d580b2f4ea75da5e08235fa4",
+    "wrapper_bytes": 15687,
+    "compressed_bytes": 10920,
+    "compressed_sha256": "82b06cf9fdc96741684a0ce181e05b5c1cbe23fa79c5a2ebb2031049eb4fd496",
+    "decoded_bytes": 253284,
+    "decoded_sha256": "3769527707ce7ac8a12537da0e313f6b49c2e76d144ec75addb06aa0e72adfaf",
+    "retained_file_observations": {"present_and_length_SHA256_verified": 64, "bytes": 213332, "explicit_absence_observations": 16},
+    "cleanup": {"connected_units_recorded": 20, "distinct_boot_pid_start_identities": 60, "all_recorded_absent_at_original_postcheck": true, "original_boot_id": "d0864e9f-3592-4f03-9800-01af9ddfb74b"},
+    "original_project_observed": {"bytes": 2179, "git_blob_recomputed": "319cdc9006d3579ff2abb567830e204a8ff86d9c", "sha256": "458619f45e53a0acde22facbe4727db0fd6d7f18b07e3bffd8f2f3d1307683c0"},
+    "limits": "Post-matrix filesystem observations retain their recorded phase. Positive inputs may reflect the later replay; absent killed-controller final artifacts are not reconstructed. Process absence is the original run's observation, not a new observation across this different boot."
+  },
+  "local_checker_corrections": "No implementation failure or rerun: the new readback helper initially assumed per-field byte/hash members on all transport descriptors, then assumed an absent pre-release receipt. Inspection showed UTF-8 descriptors are protected by restored whole-record hashes and save_inputs precreates an inert receipt excluding receipt_sha256 from its demand digest. The verifier was corrected to that published schema/source; all four original record hashes remained mandatory and passed.",
+  "result": "PASS_WITH_STATED_SCOPE",
+  "native_approval": false,
+  "engine_runs_in_continuation": 0,
+  "live_account_writes_in_continuation": 0
+}
