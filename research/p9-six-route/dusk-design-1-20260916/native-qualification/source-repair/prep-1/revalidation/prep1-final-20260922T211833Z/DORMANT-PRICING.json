@@ -1,0 +1,87 @@
+{
+  "schema": "PREP1-DORMANT-PRICING-1",
+  "run_id": "prep1-finish-20260923T063615Z",
+  "authority": "#542/5779715600",
+  "status": "COMPLETE_CONDITIONAL_SOURCE_PRICING; NOT_NATIVE_ADMISSION",
+  "location_note": "Newly authored in this completion run. Placed beside the preserved SOURCE-ADMISSION.md to supply its previously unpublished DORMANT-PRICING.json reference. This is not a recovered prior-run artifact.",
+  "implementation": "d4e91e4fc70d57c81922cc1883b339877d835a53",
+  "source_references": {
+    "tools/dd1_linux_snapshot.py": "351bdc111735caf12b7fa23a6df37766b8667c51",
+    "tools/dd1_preparation.py": "ddb491997436f86af223ca90fa5129f7bfd49c51",
+    "tools/dd1_meter_entry.py": "3ae1a4509c520f68df825f782ac2c0ad90408c5c",
+    "tools/dd1_linux_backend.py": "fc7547d31d9222481eb370c07de33a0f74fe5153",
+    "tools/dd1_reservations.py": "eded41530ef8f625db06948bf43e0094e125d59a",
+    "source_scope": "Actual pinned functions were read in this completion, not imported or executed. Pricing is their conservative reservation formula, not measured native expenditure."
+  },
+  "definitions": {
+    "H": "Exact supervisor byte length, once per invoked unit; currently 958936.",
+    "F_i": "Final private-root file map after preparation overrides or sealed-input projection, including source, runtime, applicable generated files and immutable original archives. Count each destination once at its actual byte length and mode.",
+    "S_i": "Complete original source-file byte map; not only the tooling control closure or a lexical list of dependencies.",
+    "A_i": "Actual canonical before-reservation account byte length for unit i, not an assumed constant across growing reservations.",
+    "L_i": "Actual bound launch-receipt byte length for unit i.",
+    "U_i": "Actual canonical encoded unit demand byte length, including complete source/execution/runtime and recipe data.",
+    "W_i": "Reserved workload cumulative raw envelope, including writes, rewrites, truncates, creates, renames, removes, capture and failure effects under the fixed policy; not just final output size.",
+    "P_i": "Preparation promotion/copy reserve defined below; zero only when no preparation recipe is present.",
+    "Q_static": "Distinct applicable prior static/compiler/staging/failed-work costs not already booked or otherwise included; UNKNOWN, never zero by default. Resolve overlap by artifact/run identity rather than repeatedly charging one report.",
+    "N_layout": "Cardinality of the exact set of slot-index/final-or-temporary paths and their non-dot parents, as reserve_copy_bytes computes."
+  },
+  "exact_formulas": {
+    "snapshot_setup": "H + sum_F_i(bytes + 16384) + 32768 + P_i",
+    "entry_setup": "snapshot_setup + L_i + A_i + 32768",
+    "metadata": "4*A_i + 4*U_i + 524288",
+    "full_unit_required_raw": "H + sum_F_i(bytes + 16384) + P_i + L_i + 5*A_i + 4*U_i + 593920 + W_i",
+    "admission_predicate": "full_unit_required_raw <= unit.raw_bytes AND every earlier strict snapshot/raw guard and all source/host/authority constraints pass; this formula does not replace validation.",
+    "prep_generated_reserve": "sum_each_declared_final_file(max_bytes + 16384)",
+    "prep_extra": "sum_project_and_seed_archives(original_bytes + 16384) + sum_seed_backing_initialization(seed_bytes + 16384) + 2*encoded_recipe_bytes + 16384",
+    "prep_promotion": "prep_extra + sum_S_i(original_bytes + 16384) + prep_generated_reserve + 524288 + 139264 + 32768*slot_count + 16384*N_layout",
+    "scope": "prep_extra is for selected DD1-PREPARATION-3. Final-file maxima, temporary layout, complete original source and original archive are conservatively reserved even where final merged sealing replaces a seeded path. Do not remove those terms as duplicate-looking optimization.",
+    "later_parse_fixture": "P_i=0 without a preparation recipe, but F_i still contains copied sealed generated inputs and the original archives. Prepared.__call__ writes fresh per-unit files and the helper memfd. Reusing immutable host inputs does not establish zero-copy runtime delivery."
+  },
+  "known_inventories": {
+    "core_runtime": {"files": 7, "bytes": 149655752, "engine_bytes": 146414384, "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e", "scope": "Reused receiving/commissioning static byte observations; excludes optional libraries/extensions and source. No restaging or engine/loader run here."},
+    "supervisor": {"bytes": 958936, "sha256": "b22fdaba90df2a1a317f1d3a690522736a1301f9b442016764d5bf173f2fdf0f", "scope": "Same-run retained BUILD-COMMAND identity, not a new build."},
+    "font_tree": {"git_tree": "fb965110125b0b2fcd69e55f81312b9702abd6c0", "entries": 22, "raw_fonts": {"files": 9, "bytes": 2349952}, "seed_sidecars": {"files": 9, "bytes": 7099}, "four_license_texts_bytes": 17665, "immediate_three_font_pairs": {"files": 6, "bytes": 768620, "payload_plus_file_metadata": 866924}, "all_nine_pairs": {"files": 18, "bytes": 2357051, "payload_plus_file_metadata": 2651963}, "entire_directory": {"files": 22, "bytes": 2374716, "payload_plus_file_metadata": 2735164}, "scope": "Fresh complete Git-tree metadata read and tree-object reconstruction. File sizes are GitHub metadata, not newly fetched font bytes. Three immediate pairs follow the retained constructor analysis; nine faces are a bounded possible set, not a claim all are loaded. If the entire directory is staged, its four license files must also count. No font files were republished."},
+    "sentry_conditional": {"debug_so_bytes": 4974456, "release_so_bytes": 4472280, "handler_bytes": 940520, "scope": "Reused exact Git inventories in SOURCE-ADMISSION.md, not downloaded binary/ELF proof. Price the actually selected library/handler/dependency set, not both alternatives by assumption. The immutable handler permission conflict is not solved by paying for its bytes."}
+  },
+  "published_account_facts": {
+    "ACCOUNT_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "recovery_reported_starts": "2040/2048",
+    "nominal_start_remainder": 8,
+    "raw_limit": 1073741824,
+    "reported_raw_used": 893139,
+    "nominal_raw_remainder": 1072848685,
+    "cpu_limit_ns": 14400000000000,
+    "reported_cpu_used_ns": 398617197992,
+    "nominal_cpu_remainder_ns": 14001382802008,
+    "deadline": "2026-09-24T17:54:40Z",
+    "historical": "1277/8192; 6915 unspendable; attempt consumed; CPU/elapsed/raw UNKNOWN",
+    "limits": "Read-only published facts, not a current executor lock/account/outstanding-reservation observation. At most min(8, actual lawful remainder), no top-up, refund, reset or native authorization."
+  },
+  "conditional_graph": {
+    "engine_invocations": "3+m: identity, preparation, m separate parser processes, one filtered fixture process",
+    "engine_plus_contained_starts": "5+m: above plus two contained combat creations within the fixture, not two OS child processes",
+    "parser_selection": "m is not an authorization to omit required parse coverage. The previous narrow two-script selection is a conditional example, not a launchable plan.",
+    "unit_cpu": "Each total 11..300 CPU seconds includes fixed controller/supervisor/bootstrap/cleanup partitioning. k*300 fitting arithmetically is neither observed runtime feasibility nor raw/host admission.",
+    "per_invocation_core_floor": {"runtime_and_helper_payload": 150614688, "seven_runtime_file_metadata": 114688, "fixed_copy_control": 593920, "sum": 151323296},
+    "scenarios": [
+      {"m":0,"engine_invocations":3,"starts":5,"nominal_start_margin":3,"core_payload_floor":451844064,"core_payload_metadata_control_floor":453969888,"nominal_raw_minus_floor":618878797,"after_distinct_unbooked_prior_static_floor_if_applicable":468067180},
+      {"m":1,"engine_invocations":4,"starts":6,"nominal_start_margin":2,"core_payload_floor":602458752,"core_payload_metadata_control_floor":605293184,"nominal_raw_minus_floor":467555501,"after_distinct_unbooked_prior_static_floor_if_applicable":316743884},
+      {"m":2,"engine_invocations":5,"starts":7,"nominal_start_margin":1,"core_payload_floor":753073440,"core_payload_metadata_control_floor":756616480,"nominal_raw_minus_floor":316232205,"after_distinct_unbooked_prior_static_floor_if_applicable":165420588},
+      {"m":3,"engine_invocations":6,"starts":8,"nominal_start_margin":0,"core_payload_floor":903688128,"core_payload_metadata_control_floor":907939776,"nominal_raw_minus_floor":164908909,"after_distinct_unbooked_prior_static_floor_if_applicable":14097292}
+    ],
+    "prior_static_floor": {"bytes":150811617,"source":"source-repair/entry-1/commissioning-20260920/REPORT.md, blob e7d3cd40970f3c693c4d536dbd32788e21bc9a6c","scope":"Previously reported distinct static runtime/helper/source payload writes. Deduct once if applicable and not already booked. It excludes unknown compiler temporaries and other cumulative work; not a new current-run measurement."},
+    "remaining_terms": "From every displayed positive margin subtract all omitted source/execution/archive/seed/generated/promotion/optional-runtime/extension costs, L_i+5*A_i+4*U_i+W_i, and all remaining applicable Q_static. Positive margins above are only incomplete lower-bound arithmetic, never admission."
+  },
+  "observed_static_work": {
+    "current_proof": "../prep1-finish-20260923T063615Z/STATIC-CHECK-BUNDLE.json at ef6176bd142b684611e32f4b8eb9bff16ef0a5a1; Git blob a5d188b72e8baeb0676581a9a8b4a8f4099755a0",
+    "current_result_sha256": "a1f2f2d4591ec28a0e40300a424151181816a55e00cfd2fbb8b32824e7b6af4b",
+    "command": "2026-09-23T06:51:08.024096+00:00 to 06:51:08.082775+00:00; exit0; empty stderr; full argv/environment/checker/results retained",
+    "command_wall_seconds": 0.058406963999914296,
+    "command_child_user_cpu_seconds": 0.05289,
+    "command_child_system_cpu_seconds": 0.005062,
+    "inner_reader_wall_seconds": 0.0017255530001420993,
+    "known_failed_work": "Evidence-reader syntax error before any statement executed, then one documented brace correction; command bundle preserves before/after checker hashes and diagnostic. No implementation or predicate weakened.",
+    "unmeasured": "Complete session/tool/publication/token/static-write totals are unavailable. These narrow measurements exclude retrieval, materialization, earlier decoding and analysis. They do not create account credit. Reused prior build/H/metadata/matrix resources retain their own run identities and are not summed as a fabricated campaign total."
+  },
+  "final_disposition": "Conditional pricing analysis complete. Native affordability remains unestablished because actual native inventory/output bounds, current executor state and cumulative applicable costs are unbound. W+4 versus four-thread preparation conflict and the conditional Sentry handler-mode conflict remain independent blockers. No engine or inert run, implementation/account write, self-approval, merge or release; N0 BLOCKED; certificates 0/3."
+}
