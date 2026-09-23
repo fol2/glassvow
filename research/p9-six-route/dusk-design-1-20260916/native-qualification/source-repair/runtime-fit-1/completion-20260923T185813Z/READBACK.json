@@ -1,0 +1,129 @@
+{
+  "schema": "DD1-FIT-PUBLICATION-READBACK-1",
+  "scope": "Publication finalization; not execution, full raw decode or independent approval",
+  "checked_head": "bebcb0ad1eaaac5c3f64992fad195b5c6442c468",
+  "checked_tree": "8633295759ba729cbc863fe21d8747416fa4097e",
+  "completion_tree": "dd8d727bc26c35bf92808c6dd43ee73f11fd0000",
+  "completion_tree_truncated": false,
+  "base": "8e13ccd6ca045a17df75597f5c06d31ecd177947",
+  "earlier_positive_input": "b82d4c47d033a57dae91ee57907b09e44d479fbb",
+  "completion_input": "b6b7d24a3c995f5481e33ea2891d266cce9916d0",
+  "source_comparisons": {
+    "base_to_completion": "12 implementation/test paths and 8 FIT evidence paths; ahead9/behind0",
+    "positive_to_completion": "3 evidence paths only; ahead3/behind0",
+    "completion_to_checked": "16 FIT evidence paths only; ahead16/behind0"
+  },
+  "completion_objects": [
+    {
+      "path": "ADMISSION-AND-PROOF-MAP.md",
+      "git_blob": "6be23a503e3f3d8b76ec6d1699cf51120108ed40",
+      "github_bytes": 18192,
+      "checked": "GitHub tree/object metadata; unchanged raw execution evidence"
+    },
+    {
+      "path": "BUILD-BUNDLE.json",
+      "git_blob": "60644a54e41014f85295b4b7599d55c9d3cd12f4",
+      "github_bytes": 5274,
+      "checked": "GitHub tree/object metadata; unchanged raw execution evidence"
+    },
+    {
+      "path": "CRASH-BUNDLE.json",
+      "git_blob": "8ec9ca46447dfa1a221d4d8f72319031c4448246",
+      "github_bytes": 21492,
+      "checked": "GitHub tree/object metadata; unchanged raw execution evidence"
+    },
+    {
+      "path": "DECLARATION.json",
+      "git_blob": "234470f457931ce2ea567ba1cd9d0e8e1707a2ec",
+      "github_bytes": 3478,
+      "checked": "GitHub tree/object metadata; unchanged raw execution evidence"
+    },
+    {
+      "path": "GUARDS-BUNDLE.json",
+      "git_blob": "d038a8a40314cd2f8d72974a91954df1eb5a6bb2",
+      "github_bytes": 22157,
+      "checked": "GitHub tree/object metadata; unchanged raw execution evidence"
+    },
+    {
+      "path": "KERNEL-CASES-1.json",
+      "git_blob": "fe227ec553a3ffd7111a3174ef0062b8118597d5",
+      "github_bytes": 13706,
+      "checked": "GitHub tree/object metadata; unchanged raw execution evidence"
+    },
+    {
+      "path": "KERNEL-CASES-2.json",
+      "git_blob": "e39be5f33511bccfd0c9ff635e915ec25c363518",
+      "github_bytes": 15115,
+      "checked": "GitHub tree/object metadata; unchanged raw execution evidence"
+    },
+    {
+      "path": "KERNEL-CASES-3.json",
+      "git_blob": "cf095a0e5b9afbaeb90b22eb05ba8865f9c13c71",
+      "github_bytes": 14447,
+      "checked": "GitHub tree/object metadata; unchanged raw execution evidence"
+    },
+    {
+      "path": "KERNEL-CASES-4.json",
+      "git_blob": "9bf5506a8be5e8d1f095f2e4f3ec60bb75292a39",
+      "github_bytes": 15336,
+      "checked": "GitHub tree/object metadata; unchanged raw execution evidence"
+    },
+    {
+      "path": "KERNEL-COMMAND.json",
+      "git_blob": "b7eb8ab12ec95242efa7681d4581ddb5318b2594",
+      "github_bytes": 14678,
+      "checked": "GitHub tree/object metadata; unchanged raw execution evidence"
+    },
+    {
+      "path": "POSITIVE-READBACK-BUNDLE.json",
+      "git_blob": "4bfced0f5e3bfe1bd4447970fe99b217a7db0135",
+      "github_bytes": 13030,
+      "checked": "GitHub tree/object metadata; unchanged raw execution evidence"
+    },
+    {
+      "path": "SEALED-BUNDLE.json",
+      "git_blob": "0a4b7ad2b6f934ba6ab3428e43f9243398c9a254",
+      "github_bytes": 28605,
+      "checked": "GitHub tree/object metadata; unchanged raw execution evidence"
+    }
+  ],
+  "earlier_positive_objects": [
+    {
+      "path": "../continuation-20260923T171716Z/BUILD-BUNDLE.json",
+      "git_blob": "92002c29d2f4f04f18c44878d5408880cacac04a",
+      "github_bytes": 5513
+    },
+    {
+      "path": "../continuation-20260923T171716Z/DECLARATION.json",
+      "git_blob": "df15b8672b6689bfe98ad95c4a58bb2e93aec4f0",
+      "github_bytes": 4171
+    },
+    {
+      "path": "../continuation-20260923T171716Z/POSITIVE-BUNDLE.json",
+      "git_blob": "041e938b3a1ab5a51e8701b04ba78efcfe91c319",
+      "github_bytes": 30268
+    }
+  ],
+  "account_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+  "previous_capsule_blob": "f9e400df8ef39e63054c51cdc9a5ef78e0f622ea",
+  "verification_level": {
+    "complete_text_read": [
+      "ADMISSION-AND-PROOF-MAP.md",
+      "DECLARATION.json",
+      "previous CAPSULE.md"
+    ],
+    "raw_bundle_decode_repeated": false,
+    "controls_or_build_repeated": false,
+    "execution_claims": "Attributed to author records and their retained verification; not freshly observed in finalization",
+    "new_docs": "Final Git tree/content and exact-head comment are read back after atomic publication; terminal receipt records actual IDs"
+  },
+  "preservation": {
+    "native_or_engine_runs": 0,
+    "live_account_writes": 0,
+    "implementation_changes": 0,
+    "deadline": "2026-09-24T17:54:40Z",
+    "acceptance": false,
+    "N0": "BLOCKED",
+    "certificates": "0/3"
+  }
+}
