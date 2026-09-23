@@ -1,0 +1,22 @@
+{
+  "schema": "PREP1-FINAL-PUBLICATION-INDEX-1",
+  "run_id": "prep1-finish-20260923T063615Z",
+  "authority": "#542/5779715600",
+  "scope": "Actual completed content readbacks before the terminal report/capsule commit. Final containing head/tree and those final files' readbacks are recorded in the terminal #156 handoff, not predicted here.",
+  "publication_start": "b07747d18041a232fd789c0267f4d2e1b0d37e43",
+  "prefinal_head": "d22d87440d78b71eba2b08141de9ca21bedaad5d",
+  "prefinal_tree": "db419d42c5411eed3e7fba2c39592cf8165df260",
+  "relative_root": "research/p9-six-route/dusk-design-1-20260916/native-qualification/source-repair/prep-1/revalidation",
+  "new_units": [
+    {"path":"prep1-finish-20260923T063615Z/RUN-DECLARATION.json","commit":"3fda1e8d7b42f473e5310ea96621504f15829a94","blob":"67803f342b4aa121ee60b05298035f2bcfa1305f","readback":"Complete GitHub text before substantive new proof"},
+    {"path":"prep1-finish-20260923T063615Z/COVERAGE.md","commit":"5c39364770c340a2d517b1c5017c143da8d58cca","blob":"ae362c40f24091861652e05e9ebb1ceae8bfc336","readback":"Complete text in consecutive file ranges1-57 and58-140"},
+    {"path":"prep1-finish-20260923T063615Z/STATIC-CHECK-BUNDLE.json","commit":"ef6176bd142b684611e32f4b8eb9bff16ef0a5a1","blob":"a5d188b72e8baeb0676581a9a8b4a8f4099755a0","bytes":8937,"decoded_bytes":22267,"decoded_sha256":"18f66fe4004d75ffa82d1495803bb0f6290434022a23c593d2982f1b30542cee","readback":"Complete text in consecutive ranges1-37 and38-80; returned whole Git blob matches locally generated wrapper"},
+    {"path":"prep1-final-20260922T211833Z/DORMANT-PRICING.json","commit":"d22d87440d78b71eba2b08141de9ca21bedaad5d","blob":"0aea7f7bfc15d8c6d8ff8d8e7879bfb88a5217dc","readback":"Complete text in consecutive ranges1-56 and57-130; newly authored current-run pricing, not reconstructed history"}
+  ],
+  "reused_primary_map": {"path":"prep1-final-20260922T211833Z/SOURCE-ADMISSION.md","head":"b07747d18041a232fd789c0267f4d2e1b0d37e43","blob":"12c6d2c3ad5b1f65b989e46bb95816a3819fbce2","readback":"All169lines read, with focused78-101 read covering the truncated display; earlier author identity retained"},
+  "reused_positive_result": {"path":"prep1-final-20260922T211833Z/POSITIVE-POST-RESULT.xz.b64.json","blob":"27360b8142573045c813c9adac768a8ef1c14956","bytes":7318,"decoded_bytes":21165,"decoded_sha256":"0d4be671945bb23df52e6fe700700254f9e2ad818a805eea7c497e3af420fc88","verification":"Complete actual GitHub text materialized, whole blob recomputed, strict base64/XZ and lengths/hashes checked. Fresh static checker source/results/command in the new bundle. This is prior verifier-result verification, not a rerun of underlying cases."},
+  "source_preservation": {"B":"36c607355bb7add7968ae51bf7b738c2c078d7d8","I":"d4e91e4fc70d57c81922cc1883b339877d835a53","B_to_I":"ahead3/behind0; thirteen implementation/test paths and development CHECKPOINT","I_to_prefinal":"ahead76/behind0; every changed path is the existing capsule or prep-1 evidence; no implementation/account change","main":"07b5aa9dec8436132a524511d5438c510e322070","ACCOUNT_blob":"8b7e4e6367ad4bc366c04b930ef4fc3810e2a900","account_observation":"Actual current publication-head file read; private executor state not inspected"},
+  "actions": {"engine_runs":0,"additional_inert_runs":0,"implementation_changes":0,"live_account_writes":0,"reviewer_invocations":0,"self_approval":false,"merge":false,"release":false},
+  "limitations": ["Original missing run not recovered or verified.","Same-run final outer matrix duration/CPU absent; complete material case units are attributed instead, without cross-run splicing.","Conditional native input/host/writer/resource obligations remain as classified in the source map; no launch disposition."],
+  "next_gate": "Whole B-to-final PREP independent source/inert review; no automatic native transition."
+}
