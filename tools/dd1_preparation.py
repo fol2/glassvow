@@ -12,6 +12,7 @@ import re
 import stat
 import dd1_reservations as r
 import dd1_prep_view as view
+import dd1_runtime_fit as fit
 
 
 def path_name(name):
@@ -218,12 +219,14 @@ def seal(unit, pinned, output, cleanup, task_ok):
     dest.mkdir(mode=0o700)
     payload = dest / "payload"; payload.mkdir(mode=0o700)
     actual = 0
+    mode_fields = fit.seal_fields(unit, combined)
     for name, raw in combined.items():
         p = payload / name[6:]; p.parent.mkdir(parents=True, exist_ok=True)
         with p.open("xb") as f:
             f.write(raw); f.flush(); os.fsync(f.fileno())
-        p.chmod(0o400)
-        r.need(_regular(p, len(raw)) == raw, "sealed copy readback")
+        mode = mode_fields.get('execution_modes', {}).get(name, 0o400)
+        p.chmod(mode)
+        r.need(_regular(p, len(raw)) == raw and stat.S_IMODE(p.stat().st_mode) == mode, "sealed copy byte/mode readback")
         actual += len(raw) + 16384
     for name, raw in archives.items():
         p = dest / "originals" / name[6:]; p.parent.mkdir(parents=True, exist_ok=True)
@@ -241,6 +244,7 @@ def seal(unit, pinned, output, cleanup, task_ok):
         task_ok=True, cleanup_confirmed=True, protection="READ_ONLY_ROOT_EXACT_GENERATED_SLOTS",
         copied_raw_bytes=actual)
     receipt.update(fields)
+    receipt.update(mode_fields)
     raw = r.encode(receipt)
     r.need(len(raw) <= 524288, "sealed receipt byte bound")
     r.need(actual + len(raw) + 16384 <= pinned["promotion_raw"], "sealed copy exceeds pre-reserved raw")
@@ -313,5 +317,7 @@ def load_sealed(unit, account):
             original_bytes[name] = b
         r.need(unit["mode"] == "inert_control" or receipt.get("semantic_scope") == "HOST_QUALIFICATION_REQUIRED",
                "synthetic preparation cannot become native input")
+        fit.verify_seal(unit, receipt, payload, original_bytes)
         return view.verify_seal(receipt, unit, original_bytes, data)
+    fit.verify_seal(unit, receipt, payload, original_bytes)
     return data

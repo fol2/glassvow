@@ -41,7 +41,8 @@ void dd1_refusal(struct dd1_capabilities *c,const struct seccomp_notif *q,
         kind="PROCESS_CREATION_UNAVAILABLE"; ++c->process_refusals;
     } else if(c->enabled && sent && start && execs==1 &&
               a->error==-EOPNOTSUPP && q->data.nr==__NR_prctl && q->data.args[0]==15 &&
-              c->naming_refusals<c->naming_cap && c->naming_refusals<threads) {
+              c->naming_refusals<c->naming_cap && c->naming_refusals<threads &&
+              c->naming_refusals<DD1_FIT_THREADS) {
         unsigned i;
         for(i=0;i<c->naming_refusals;i++)
             if(c->named[i].tid==(pid_t)q->pid && c->named[i].start==start) break;
@@ -53,7 +54,7 @@ void dd1_refusal(struct dd1_capabilities *c,const struct seccomp_notif *q,
     ++c->refused_requests;
     /* Emit EVERY received refusal. A finite diagnostic cap terminates the unit
      * after this event, never silently drops records to turn it into success. */
-    if(c->refused_requests>=32) c->fatal=1;
+    if(c->refused_requests>=DD1_REFUSAL_RECORDS) c->fatal=1;
     printf("{\"phase\":\"refusal\",\"sequence\":%u,\"id\":%llu,\"tid\":%u,"
            "\"start_ticks\":%llu,\"nr\":%d,\"arch\":%u,\"ip\":%llu,"
            "\"args\":[%llu,%llu,%llu,%llu,%llu,%llu],\"errno\":%d,"

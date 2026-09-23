@@ -97,7 +97,9 @@ def validate(unit, source):
     r.need(unit.get('execution_files') == recipe['view']['execution_files'], 'wrong bound preparation execution view')
     r.need(recipe['producer'] == producer_contract(unit, recipe), 'wrong producer/recipe binding')
     if unit['mode'] == 'inert_control':
-        r.need(recipe['engine_sha256'] == INERT_PRODUCER, 'not the pinned harmless preparation producer')
+        import dd1_runtime_fit as fit
+        wanted = fit.INERT_BINARY if fit.selected(unit) else INERT_PRODUCER
+        r.need(recipe['engine_sha256'] == wanted, 'not the pinned harmless preparation producer')
     else:
         from dd1_compatibility import ENGINE
         r.need(recipe['engine_sha256'] == ENGINE, 'PREP-1 fixed engine identity')

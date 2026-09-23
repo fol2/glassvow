@@ -10,17 +10,18 @@ import platform
 import stat
 import struct
 import dd1_reservations as r
+import dd1_runtime_fit as fit
 
 ABI = "linux-x86_64-lp64-v1"
 # Exact helper built/tested in this source artifact, not a unit-selected runner.
-PINNED_HELPER_SHA256 = "b22fdaba90df2a1a317f1d3a690522736a1301f9b442016764d5bf173f2fdf0f"
+PINNED_HELPER_SHA256 = "41a4529af3bb2fb3f065d164dee8ac9cd2af7d761311c5ee63538347a44e45a4"
 HELPER_SOURCES = frozenset("res://tools/" + p for p in (
     "dd1_linux/policy.h", "dd1_linux/policy.c", "dd1_linux/isolate.c",
     "dd1_linux/supervisor.c", "dd1_linux_snapshot.py", "dd1_linux_backend.py",
     "dd1_meter_entry.py", "dd1_reservations.py", "dd1_recovery_meter.py",
     "dd1_linux/capabilities.h", "dd1_linux/capabilities.c",
     "dd1_compatibility.py", "dd1_preparation.py", "dd1_preparation_watch.py",
-    "dd1_prep_view.py", "dd1_import_semantics.py"))
+    "dd1_prep_view.py", "dd1_import_semantics.py", "dd1_runtime_fit.py"))
 
 
 def read_regular(root: Path, name: str, maximum: int = 1 << 30) -> bytes:
@@ -86,7 +87,7 @@ def prepare(unit: dict, command: list[str], repo: Path, generated=None) -> dict:
     b = unit.get("linux", {})
     r.need(b.get("abi") == ABI, "missing supported Linux demand")
     r.need(HELPER_SOURCES <= unit["source_files"].keys(), "backend source closure missing")
-    r.need(1 <= r.natural(b.get("threads"), "threads") <= 4, "unsafe thread bound")
+    fit.limit(unit)
     r.need(11 <= unit["cpu_seconds"] <= 300, "CPU partition requires at least eleven reserved seconds")
     r.need(0 < r.natural(b.get("workload_raw_bytes"), "workload raw") <= unit["raw_bytes"], "invalid workload raw bound")
     source, files = {}, {}
@@ -148,6 +149,7 @@ def prepare(unit: dict, command: list[str], repo: Path, generated=None) -> dict:
     promotion = preparation.reserve_copy_bytes(recipe, source)
     result = dict(files=files, source=source, helper=helper, setup_raw=setup_raw + promotion,
                   config=b, preparation=recipe, promotion_raw=promotion)
+    result["private_modes"], result["mode_projection"] = fit.validate(unit, source, files)
     result["profile"] = compatibility.validate_profile(unit, result)
     r.need(result["setup_raw"] + b["workload_raw_bytes"] + 524288 < unit["raw_bytes"],
            "complete preparation/copy raw envelope")

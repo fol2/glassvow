@@ -47,9 +47,14 @@ def validate_profile(unit, pinned):
         sealed_input_sha256=r.digest(r.encode(unit.get("sealed_input"))))
     if "execution_files" in unit:
         expected["execution_files_sha256"] = r.digest(r.encode(unit["execution_files"]))
+    import dd1_runtime_fit as fit
+    ceiling = fit.MAX_THREADS if fit.selected(unit) else 4
+    if fit.selected(unit):
+        expected['runtime_fit_sha256'] = r.digest(r.encode(unit['runtime_fit']))
+        expected['execution_modes_sha256'] = r.digest(r.encode(unit['execution_modes']))
     r.need(r.encode(profile) == r.encode(expected), "profile exact-invocation binding")
-    r.need(1 <= r.natural(profile["naming_total"], "naming bound") <= b["threads"] <= 4 and
-           1 <= r.natural(profile["clone3_maximum"], "clone3 bound") <= b["threads"] + 1 <= 5,
+    r.need(1 <= r.natural(profile["naming_total"], "naming bound") <= b["threads"] <= ceiling and
+           1 <= r.natural(profile["clone3_maximum"], "clone3 bound") <= b["threads"] + 1 <= ceiling + 1,
            "profile finite refusal bounds")
     validate_task(unit)
     return profile
@@ -119,6 +124,8 @@ def native_bindings(unit, expected, context):
     if unit.get("compatibility") is None:
         r.need(unit.get("mode") != "engineering", "missing engineering profile")
         return
+    import dd1_runtime_fit as fit
+    fit.native_bindings(unit, expected, context)
     bound_role(expected, context, "compatibility_profile", r.encode(unit["compatibility"]))
     # A later host-authenticated disposition must explicitly admit this stage and
     # exact amended source. Old strict-B1 approval never fills this role.

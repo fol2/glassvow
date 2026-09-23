@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 #include "policy.h"
 #include <errno.h>
+#include <limits.h>
 #include <fcntl.h>
 #include <linux/seccomp.h>
 #include <poll.h>
@@ -47,6 +48,8 @@ static double cpu(struct rusage *r) {
            (r->ru_utime.tv_usec+r->ru_stime.tv_usec)/1e6;
 }
 static uint64_t number(const char *s) {
+    if(!*s) dd1_die("numeric argument");
+    for(const char *p=s;*p;p++) if(*p<'0'||*p>'9') dd1_die("numeric argument");
     char *e; errno=0; unsigned long long n=strtoull(s,&e,10);
     if(errno||!*s||*e||s[0]=='-') dd1_die("numeric argument");
     return n;
@@ -62,15 +65,19 @@ int main(int argc,char **argv) {
        sizes.seccomp_notif_resp!=sizeof(struct seccomp_notif_resp) ||
        sizes.seccomp_data!=sizeof(struct seccomp_data)) return 6;
     uint64_t cap=number(argv[3]),used=0,wall=number(argv[5]);
-    unsigned workcpu=number(argv[4]),maxthreads=number(argv[6]);
-    pid_t controller=number(argv[7]);int lease=number(argv[8]);
-    if(!cap||workcpu<1||workcpu>290||wall<100||wall>3600000||maxthreads<1||maxthreads>4||lease<3) return 4;
+    /* Validate wide integers BEFORE narrowing. compat=2 is the selected FIT
+     * envelope; 0/1 preserve strict/COMPAT-2 four-thread behavior. */
+    uint64_t wc=number(argv[4]),mt=number(argv[6]),cp=number(argv[7]),lf=number(argv[8]);
+    uint64_t cm=number(argv[9]),nm=number(argv[10]),c3=number(argv[11]);
+    if(cm>2 || !cap || wc<1 || wc>290 || wall<100 || wall>3600000 ||
+       mt<1 || mt>(cm==2?DD1_FIT_THREADS:4) || !cp || cp>INT_MAX || lf<3 || lf>INT_MAX) return 4;
+    if(nm>mt || c3>mt+1 || (cm && (!nm || !c3))) return 8;
+    unsigned workcpu=(unsigned)wc,maxthreads=(unsigned)mt;
+    pid_t controller=(pid_t)cp;int lease=(int)lf;
     struct rlimit inherited;
     if(getrlimit(RLIMIT_CPU,&inherited) || inherited.rlim_cur>3 ||
        inherited.rlim_max<workcpu) return 7;
-    unsigned compat=number(argv[9]),names=number(argv[10]),c3cap=number(argv[11]);
-    if(compat>1 || names>maxthreads || names>4 || c3cap>5 ||
-       (compat && (!names || !c3cap))) return 8;
+    unsigned compat=(unsigned)cm,names=(unsigned)nm,c3cap=(unsigned)c3;
     parent_death(controller);
     struct sigaction sa={.sa_handler=stop};sigemptyset(&sa.sa_mask);
     sigaction(SIGTERM,&sa,0);sigaction(SIGINT,&sa,0);sigaction(SIGHUP,&sa,0);
@@ -190,10 +197,10 @@ int main(int argc,char **argv) {
            (unsigned long long)installed.rlim_cur,(unsigned long long)installed.rlim_max);
     printf("{\"phase\":\"result\",\"success\":%s,\"reserved_before_writes\":%llu,"
        "\"raw_cap\":%llu,\"denied\":%u,\"last_denied_syscall\":%d,\"clone3_denied\":%u,"
-       "\"thread_births_including_main\":%u,\"execs\":%u,\"requests\":%u,"
+       "\"thread_births_including_main\":%u,\"thread_limit\":%u,\"profile_mode\":%u,\"execs\":%u,\"requests\":%u,"
        "\"exit\":%d,\"signal\":%d,\"stop_signal\":%d,\"channel_failure\":%d,"
        "\"workload_cpu_seconds\":%.6f,\"supervisor_cpu_seconds\":%.6f,\"cleanup_confirmed\":true}\n",
        success?"true":"false",(unsigned long long)used,(unsigned long long)cap,denied,last,clone3,
-       threads,execs,requests,exitcode,sig,(int)stopped,channel,cpu(&wr),cpu(&sr));
+       threads,maxthreads,compat,execs,requests,exitcode,sig,(int)stopped,channel,cpu(&wr),cpu(&sr));
     close(lease);return success?0:1;
 }

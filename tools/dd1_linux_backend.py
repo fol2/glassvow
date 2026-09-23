@@ -11,6 +11,8 @@ import os
 from pathlib import Path
 import resource
 import signal
+import stat
+import dd1_runtime_fit as fit
 import subprocess
 import time
 import dd1_reservations as r
@@ -110,8 +112,10 @@ class Prepared:
             path = root / name[1:]; path.parent.mkdir(parents=True, exist_ok=True)
             with path.open("xb") as stream:
                 stream.write(raw); stream.flush(); os.fsync(stream.fileno())
-            path.chmod(0o500 if executable else 0o400)
-            r.need(path.read_bytes() == raw, "private snapshot readback mismatch")
+            mode = p['private_modes'].get(name, 0o500 if executable else 0o400)
+            path.chmod(mode)
+            r.need(path.read_bytes() == raw and stat.S_IMODE(path.stat().st_mode) == mode,
+                   "private snapshot byte/mode readback mismatch")
         # The legacy GDScript receipt reader needs a read-only account INPUT,
         # not the writable live account. Only the exact pre-reservation bytes
         # bound in the demand are copied here; no alias to account_path exists.
@@ -136,7 +140,7 @@ class Prepared:
         r.need(wall_ms >= 100, "setup exhausted unit wall bound")
         args = ["dd1-supervisor", str(root), str(capture), str(allowance),
                 str(cpu_partition(self.unit["cpu_seconds"])["workload"]), str(wall_ms), str(p["config"]["threads"]),
-                str(os.getpid()), str(lease), str(int(p["profile"] is not None)),
+                str(os.getpid()), str(lease), str(2 if fit.selected(self.unit) else int(p["profile"] is not None)),
                 str(p["profile"]["naming_total"] if p["profile"] else 0),
                 str(p["profile"]["clone3_maximum"] if p["profile"] else 0), *self.command]
         proc, raw, err, interruption, first = None, b"", b"", None, b""
@@ -176,6 +180,10 @@ class Prepared:
         sealed = None
         if success:
             try:
+                r.need(report.get('thread_limit') == p['config']['threads'] and
+                       report.get('profile_mode') == (2 if fit.selected(self.unit) else int(p['profile'] is not None)) and
+                       1 <= report.get('thread_births_including_main', 0) <= p['config']['threads'],
+                       'helper thread/profile result mismatch')
                 task = compatibility.task_outcome(self.unit, capture, classification)
                 success = success and task["ok"]
                 if success:
@@ -200,4 +208,7 @@ class Prepared:
             workload_raw_reserved=allowance, supervisor_report=report,
             supervisor_stdout=raw.decode(), supervisor_stderr=err.decode(),
             supervisor_exit=proc.returncode if proc else None, adopted=adopted,
-            interruption=interruption, native_qualified=False)
+            interruption=interruption, native_qualified=False,
+            runtime_fit_sha256=r.digest(r.encode(self.unit.get('runtime_fit'))),
+            execution_modes_sha256=r.digest(r.encode(self.unit.get('execution_modes'))),
+            private_modes_sha256=r.digest(r.encode(p['private_modes'])))

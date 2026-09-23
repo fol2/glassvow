@@ -59,7 +59,9 @@ def _complete(command, unit, account_path, receipt_path, output, head, repo, che
         generated = preparation.load_sealed(unit, account)
         prepared = require_native_backend(unit, list(command), repo, lifetime, generated)
         if inert:
-            reservations.need(reservations.digest(prepared.pinned["files"][command[0]][0]) in INERT_BINARIES,
+            import dd1_runtime_fit as fit
+            allowed = INERT_BINARIES | ({fit.INERT_BINARY} if fit.selected(unit) else set())
+            reservations.need(reservations.digest(prepared.pinned["files"][command[0]][0]) in allowed,
                               "inert entry permits only pinned harmless fixture")
         receipt = receipt_path.read_bytes()
         prepared.receipt_bytes = receipt
@@ -127,7 +129,8 @@ def _run_inert_unit(command, *, unit, account_path, receipt_path, output, head, 
     reservations.need(unit.get("mode") == "inert_control" and command[0] == "/workload" and
                       ("res://tools/dd1_linux/inert.c" in unit["source_files"] or
                        "res://tools/dd1_linux/compat2_inert.c" in unit["source_files"] or
-                       "res://tools/dd1_linux/prep_inert.c" in unit["source_files"]), "inert fixture binding required")
+                       "res://tools/dd1_linux/prep_inert.c" in unit["source_files"] or
+                       "res://tools/dd1_linux/fit_inert.c" in unit["source_files"]), "inert fixture binding required")
     def check(account):
         reservations.need(account.get("synthetic") is True, "inert entry requires synthetic account")
     return _complete(command, unit, account_path, receipt_path, output, head, repo, check, lifetime, inert=True)
