@@ -1,0 +1,35 @@
+{
+  "schema": "RUNTIME-FIT-BUILD-RESULTS-1",
+  "run_id": "runtime-fit-20260923T102858Z",
+  "authority": "#421/5793093948 option A; selection5793181710",
+  "scope": "Actual new harmless compilation only. No helper, fixture, handler or engine executed by these commands. Full source and complete capture follow in the connected implementation/evidence commits.",
+  "cwd": "/mnt/data/runtime-fit/source",
+  "environment": {"PATH":"/usr/bin:/bin","HOME":"/tmp","LANG":"C.UTF-8","LC_ALL":"C.UTF-8","PYTHONDONTWRITEBYTECODE":"1"},
+  "commands": [
+    {
+      "argv": ["cc","-std=c11","-O2","-Wall","-Wextra","-Werror","-static","/mnt/data/runtime-fit/source/tools/dd1_linux/supervisor.c","/mnt/data/runtime-fit/source/tools/dd1_linux/policy.c","/mnt/data/runtime-fit/source/tools/dd1_linux/isolate.c","/mnt/data/runtime-fit/source/tools/dd1_linux/capabilities.c","-o","/mnt/data/runtime-fit/source/tools/dd1_linux/build/supervisor"],
+      "start": "2026-09-23T10:56:05.831132+00:00", "end": "2026-09-23T10:56:06.202942+00:00",
+      "exit":0,"stdout":"","stderr":"","wall_seconds":0.37183710699991934,
+      "child_user_cpu":0.281543,"child_system_cpu":0.08968999999999999,
+      "binary":{"bytes":958936,"sha256":"5515590dc1f05c80b1697f95977e7ef99ea56c781b1561ebe85aa683a5f16ef8"}
+    },
+    {
+      "argv": ["cc","-std=c11","-O2","-Wall","-Wextra","-Werror","-pthread","/mnt/data/runtime-fit/source/tools/dd1_linux/fit_inert.c","-o","/mnt/data/runtime-fit/source/tools/dd1_linux/build/fit-inert"],
+      "start":"2026-09-23T10:56:06.205419+00:00","end":"2026-09-23T10:56:06.338560+00:00",
+      "exit":1,"stdout":"",
+      "stderr":"/mnt/data/runtime-fit/source/tools/dd1_linux/fit_inert.c: In function ‘main’:\n/mnt/data/runtime-fit/source/tools/dd1_linux/fit_inert.c:110:9: error: this ‘if’ clause does not guard... [-Werror=misleading-indentation]\n  110 |         if(rc==0)_exit(94);denied(rc,e,\"process\");\n      |         ^~\n/mnt/data/runtime-fit/source/tools/dd1_linux/fit_inert.c:110:28: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’\n  110 |         if(rc==0)_exit(94);denied(rc,e,\"process\");\n      |                            ^~~~~~\ncc1: all warnings being treated as errors\n",
+      "wall_seconds":0.13316145299995696,"child_user_cpu":0.11589699999999997,"child_system_cpu":0.01667500000000001,
+      "fixture_source_sha256":"65affbaa940b0cb53f462cbe269e5f3ec4b49134ed1b237302b6672e2d4d021b"
+    },
+    {
+      "argv": ["cc","-std=c11","-O2","-Wall","-Wextra","-Werror","-pthread","/mnt/data/runtime-fit/source/tools/dd1_linux/fit_inert.c","-o","/mnt/data/runtime-fit/source/tools/dd1_linux/build/fit-inert"],
+      "correction":"Split the unguarded denied() call onto its own line after if(rc==0)_exit(94). No compiler flag or test predicate changed. Only the changed fixture was recompiled; successful supervisor reused.",
+      "start":"2026-09-23T10:56:39.207872+00:00","end":"2026-09-23T10:56:39.349688+00:00",
+      "exit":0,"stdout":"","stderr":"","wall_seconds":0.14184112399993865,"child_user_cpu":0.125411,"child_system_cpu":0.015844,
+      "fixture_source_sha256":"80025290b4e1c3459634e183b0220a7029bc5fbe457d097c76177bf5fbabb13a",
+      "binary":{"bytes":26728,"sha256":"cf2c102fc73338cc991f41ab22c261dd5d06fac75c948caa1535c23fbff6e5f7"}
+    }
+  ],
+  "runtime_inputs": {"libc.so.6":{"bytes":1995216,"sha256":"fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826"},"ld-linux-x86-64.so.2":{"bytes":225672,"sha256":"438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"}},
+  "limits":"These are measured compiler-command and waited-child costs, not a total session cost, native funding or account credit. Both real accounts and the fixed engine are unchanged. Source/inert proof remains in progress; no self-approval or native admission."
+}
