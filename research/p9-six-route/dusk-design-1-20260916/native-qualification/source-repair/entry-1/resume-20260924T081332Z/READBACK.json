@@ -1,0 +1,42 @@
+{
+  "schema": "DD1-ENTRY-PUBLICATION-INDEX-1",
+  "run_id": "entry-resume-20260924T081332Z",
+  "execution_input": "5cd51a959ee98e68ede46d1d86d68f30240fdd80",
+  "operating_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "publication_parent": "740d29f475e5975119eb539fdd8b3f57a3b945ec",
+  "checkpoint_readbacks": {
+    "HOST-OBSERVATION.json": {
+      "commit": "cfed24a856f4638d16a2a1857bfb0310f5daca29",
+      "git_blob": "db02abad8fe4bcbc3994145885c077a02f147ddd",
+      "method": "complete contents fetched; source and original stdout read back. Published envelope adds interpretation and differs in serialization from local capture envelope."
+    },
+    "INVENTORY-BUNDLE.json": {
+      "commit": "740d29f475e5975119eb539fdd8b3f57a3b945ec",
+      "bytes": 7834,
+      "sha256": "56008c65d8e8ce9a1aa6b5e9ae0bcf8956041b76372f31ec2acab3fd8af01d34",
+      "git_blob": "f63cce96e7246977595fa723376e9ba3736a8326",
+      "method": "stored object matches complete locally verified envelope Git blob; local XZ/base64 decode and all four tree checks passed."
+    }
+  },
+  "terminal_files": {
+    "REPORT.md": {
+      "bytes": 14240,
+      "sha256": "abf24d77e2806c9b5d143d0333e362f6357df0ca3a50f20d0ad9bae7ab38cf6d",
+      "git_blob": "54b119319eab418c11ad0f66d1383feecec520b9"
+    },
+    "CAPSULE.md": {
+      "bytes": 4685,
+      "sha256": "4e6ee96e9cedfe445dabb90e819afff9aa324218ec13cba22060b45bb53d8028",
+      "git_blob": "e31b8f78802cd46345110ee49dad3bd09039eecb"
+    }
+  },
+  "account": {
+    "kind": "published_only_not_private_executor_attestation",
+    "git_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "live_writes": 0,
+    "new_live_reservations": 0
+  },
+  "deadline_utc": "2026-09-24T17:54:40Z",
+  "status": "BLOCKED_BEFORE_RESERVATION",
+  "final_readback_location": "Single #156 terminal comment after final commit/ref/content/diff/account readbacks. This file does not self-assert a future commit SHA."
+}
