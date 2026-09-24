@@ -1,0 +1,19 @@
+{
+  "schema": "DD1-HOST-BRIDGE-CONNECTED-PROOF-PLAN-1",
+  "source_head": "f6202b33fe5d451fee4cbf155fc1a4e3ff9c2061",
+  "scope": "SOURCE_INERT_ONLY",
+  "question": "Does the new bridge.inert call-through reach the unchanged real complete-unit reservation/backend with a pinned harmless workload, and retain charge on interruption?",
+  "maximum_workload_units": 2,
+  "cases": ["one strict positive save/thread unit", "one held harmless unit interrupted after durable process binding"],
+  "per_synthetic_unit": {"starts": 1, "cpu_seconds": 16, "wall_seconds": 12, "raw_bytes": 12582912, "contained_game_starts": 0},
+  "helper_sha256": "41a4529af3bb2fb3f065d164dee8ac9cd2af7d761311c5ee63538347a44e45a4",
+  "fixture_source": "tools/dd1_linux/inert.c",
+  "fixture_blob": "2ab67a85162e8ac5dda9741462d4fa560598909b",
+  "build": "Compile only exact owned helper and harmless static fixture with the existing build flags. Require accepted helper and inert allowlist pins; mismatch stops without changing a pin.",
+  "account": "Fresh disposable synthetic fixtures outside repository; neither real account is copied, created, locked or written.",
+  "stop": "No retry after a material backend/venue incompatibility; preserve failure, charges and cleanup. No native authority, engine, loader or game execution; no old FIT matrix replay.",
+  "replay": "One readback/replay rejection after a completed synthetic unit; no extra admitted workload.",
+  "actual_channel": "Already observed adapter HTTPS bootstrap DNS failure is retained, not retried through an offline-authority fallback. Connector-read provenance stays separate.",
+  "deadline": "2026-09-24T17:54:40Z",
+  "not_an_allowance": true
+}
