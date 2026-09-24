@@ -103,7 +103,9 @@ def deployment_reasons(deployment, review, confirmation, registry, unit, host, h
           review['author_session'] != review['reviewer_session'], 'missing distinct scoped review')
     check(review.get('qualification_sha256') == deployment.get('qualification_sha256') and
           isinstance(review.get('qualification_sha256'), str), 'review does not bind qualification')
-    check(confirmation.get('executor_identity') == registry.get('executor_identity') and
+    check(isinstance(registry.get('actual_custodian'), str) and bool(registry['actual_custodian']) and
+          confirmation.get('custodian') == registry['actual_custodian'] and
+          confirmation.get('executor_identity') == registry.get('executor_identity') and
           confirmation.get('generation') == registry.get('current_generation') and
           confirmation.get('reservation_history_sha256') == registry.get('reservation_history_sha256') and
           confirmation.get('same_existing_custodian') is True and
@@ -172,7 +174,8 @@ def price_plan(cost, unit, now=None):
              'planned contained-start scope')
         cpu = channel.natural(row.get('cpu_seconds'), 'planned CPU')
         raw = channel.natural(row.get('raw_bytes'), 'planned raw')
-        wall = channel.natural(row.get('wall_seconds'), 'planned wall')
+        wall = row.get('wall_seconds')
+        need(type(wall) in (int, float) and 3 <= wall <= 3600, 'planned wall bound')
         need(11 <= cpu <= 300 and 0 < raw <= 1073741824 and 3 <= wall <= 3600, 'planned resource bound')
         need(isinstance(row.get('input_contract_sha256'), str) and re.fullmatch(r'[0-9a-f]{64}', row['input_contract_sha256']),
              'missing prospective input/output contract')
@@ -212,6 +215,19 @@ def read_roles(api, qualification, unit, head):
     return store
 
 
+def _binding_shape(store, unit, boundary, environment):
+    """Pure correspondence data. Neither this mapping nor environment is authority."""
+    need(environment in ('synthetic', 'empirical'), 'binding environment')
+    need(required_roles(unit) <= store.keys() and all(isinstance(v, bytes) for v in store.values()),
+         'missing or non-byte role store')
+    roles = {name: dict(locator=name, sha256=sha(raw)) for name, raw in store.items()}
+    inputs, evidence = boundary.manifest_digests(roles)
+    expected = dict(environment=environment, epoch=boundary.kernel.EPOCH,
+                    artifact_head=unit['overlay_head'], candidate=unit['unit_id'], roles=roles,
+                    inputs_sha256=inputs, evidence_sha256=evidence)
+    return expected, dict(evidence={name: name for name in roles})
+
+
 def _compose_verified(store, unit, boundary):
     """Use only inside live bootstrap after authenticated qualification read.
 
@@ -226,12 +242,9 @@ def _compose_verified(store, unit, boundary):
             need(doc.get('authority') == ISSUER, 'disposition from undesignated producer')
             authorities[role] = dict(authority=ISSUER, sha256=sha(store[role]))
             receipts[role] = store[role]
-    roles = {name: dict(locator=name, sha256=sha(raw)) for name, raw in store.items()}
-    inputs, evidence = boundary.manifest_digests(roles)
-    expected = dict(environment='empirical', epoch=boundary.kernel.EPOCH,
-                    artifact_head=unit['overlay_head'], candidate=unit['unit_id'], roles=roles,
-                    inputs_sha256=inputs, evidence_sha256=evidence, receipt_authorities=authorities)
-    return _HostContext(expected, store, receipts), dict(evidence={name: name for name in roles})
+    expected, packet = _binding_shape(store, unit, boundary, 'empirical')
+    expected['receipt_authorities'] = authorities
+    return _HostContext(expected, store, receipts), packet
 
 
 def inspect(unit, head, root=ROOT):
@@ -242,6 +255,7 @@ def inspect(unit, head, root=ROOT):
 
 def _inspect(unit, head, root):
     channel.commit(head)
+    need(root.resolve() == ROOT, 'inspect must use its installed source root')
     need(isinstance(unit, dict), 'unit object required')
     unit = decode(canonical(unit))
     report = dict(schema='DD1-HOST-BRIDGE-INSPECTION-1', head=head, operation=OPERATION,
@@ -256,6 +270,12 @@ def _inspect(unit, head, root):
             ('Linux', '6.18.44', 'x86_64', 8, 8) else ['unsupported fixed ABI'], observation=host)
     except OSError as exc:
         host = {}; row('host', ['host observation unavailable:' + type(exc).__name__])
+    used = resource.getrusage(resource.RUSAGE_SELF)
+    controller_cpu = used.ru_utime + used.ru_stime
+    controller_threads = len(list(Path('/proc/self/task').iterdir()))
+    row('controller', [] if controller_threads == 1 and controller_cpu < 1 else
+        ['existing dedicated fresh controller requirement not met'],
+        threads=controller_threads, cpu_seconds=controller_cpu)
     observation = custody.observe(root)
     row('custody', ['authenticated registration not yet available'], observation=observation)
     row('deployment', ['missing authenticated bridge deployment and distinct bridge/qualification review'])
@@ -300,7 +320,7 @@ def _inspect(unit, head, root):
         row('qualification', [], roles=sorted(store), issuer=ISSUER)
         # No empirical context is assembled while any already-known gate fails.
         need(all(r['status'] == 'VERIFIED' for n, r in report['rows'].items()
-                 if n in ('window', 'host', 'custody', 'deployment', 'authenticated_retrieval', 'qualification')),
+                 if n in ('window', 'host', 'controller', 'custody', 'deployment', 'authenticated_retrieval', 'qualification')),
              'pre-admission gate failed')
         verify_code(api, root, head, deployment['host_source_blobs'])
         import dd1_meter_entry as entry
@@ -337,12 +357,17 @@ def _inspect(unit, head, root):
              cost.get('account_sha256') == sha(raw_account) and cost.get('unpriced_terms') == [] and
              cost.get('source_witnesses'), 'incomplete cumulative price or unknown prior costs')
         planned = price_plan(cost, unit)
+        need(cost['prior_unledgered_cpu_ns'] == 0 and cost['prior_unledgered_raw_bytes'] == 0,
+             'prior costs require authoritative ledger reconciliation; bridge never books or refunds them')
         reservations.available(account, planned['starts'], planned['cpu_ns'], planned['raw_bytes'])
         row('price', [], complete_unit_setup_raw=setup, total_unit_raw=unit['raw_bytes'], useful_endpoint_plan=planned)
         row('existing_validators', [], H=channel.H, native_positive=False)
         need(api.comment(custody.REGISTRATION_COMMENT, 421).body_sha256 == registration.body_sha256,
              'custody registration changed during bootstrap')
         need(not window_reasons(unit), 'deadline elapsed during bootstrap')
+        used = resource.getrusage(resource.RUSAGE_SELF)
+        need(len(list(Path('/proc/self/task').iterdir())) == 1 and used.ru_utime + used.ru_stime < 1,
+             'bootstrap consumed existing controller freshness budget')
         state = (context, packet, registration.body_sha256)
     except (ValueError, OSError, KeyError, TypeError, AttributeError, ImportError, RuntimeError) as exc:
         report['blocking_exception'] = type(exc).__name__ + ':' + str(exc)

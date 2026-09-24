@@ -73,6 +73,8 @@ def observe(root):
                       history_sha256=sha(canonical({'events': recovery.get('events'), 'units': units})),
                       synthetic=account.get('synthetic') is True)
         for row in units:
+            need(row.get('observations') is None or isinstance(row.get('observations'), dict),
+                 'malformed reservation observation')
             if row.get('state') == 'RESERVED' or (row.get('backend') == 'linux-x86_64-lp64-v1' and
                     (row.get('observations') or {}).get('cleanup_confirmed') is not True):
                 report['pending'].append(row.get('unit_id'))
@@ -103,6 +105,8 @@ def reasons(registry, observation, host, root, head, unit):
     check(registry.get('deadline_utc') == DEADLINE, 'custody cannot extend window')
     check(registry.get('account_relative_path') == ACCOUNT_REL and
           registry.get('lease_relative_path') == ACCOUNT_REL + '.lock', 'custody path policy')
+    check(isinstance(registry.get('actual_custodian'), str) and bool(registry['actual_custodian']),
+          'actual custodian identity missing')
     executor = registry.get('executor_identity') or {}
     expected = dict(host=host, uid=os.geteuid(), root=str(Path(root).absolute()))
     check(executor == expected, 'different or unknown owning executor')

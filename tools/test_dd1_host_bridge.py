@@ -132,7 +132,7 @@ class Tests(unittest.TestCase):
         obs=dict(account={'sha256':'a'*64,'uid':os.geteuid(),'mode':0o600},generation='a'*64,history_sha256='b'*64,
                  synthetic=False,errors=[],pending=[])
         reg=dict(schema='DD1-HOST-CUSTODY-REGISTRATION-1',repository=c.REPOSITORY,operation=b.OPERATION,
-                 status='REGISTERED',scope='ENGINEERING_ONLY',artifact_head=HEAD,deadline_utc=k.DEADLINE,
+                 status='REGISTERED',scope='ENGINEERING_ONLY',actual_custodian='SYNTHETIC_CUSTODIAN',artifact_head=HEAD,deadline_utc=k.DEADLINE,
                  account_relative_path=k.ACCOUNT_REL,lease_relative_path=k.ACCOUNT_REL+'.lock',
                  executor_identity=executor,live_account_identity=obs['account'],current_generation='a'*64,
                  reservation_history_sha256='b'*64,custody_mode='EXISTING_SAME_EXECUTOR',
@@ -143,6 +143,7 @@ class Tests(unittest.TestCase):
                             registered_account=False,native_positive=False))
         for name,key,value,reason in [
             ('custody-other-host','executor_identity',{},'owning executor'),
+            ('custody-no-custodian','actual_custodian',None,'custodian identity'),
             ('custody-stale-generation','current_generation','c'*64,'stale ledger'),
             ('custody-history-splice','reservation_history_sha256','c'*64,'history'),
             ('custody-wrong-head','artifact_head','c'*40,'exact head'),
@@ -212,10 +213,8 @@ class Tests(unittest.TestCase):
         # No empirical context/disposition is made. Real H checks the bridge's
         # actual prospective role names in an explicitly synthetic host context.
         store={role:c.canonical({'schema':'SYNTHETIC_ONLY','role':role}) for role in sorted(b.BASE_ROLES|b.PREP_ROLES)}
-        roles={role:dict(locator=role,sha256=c.sha(raw)) for role,raw in store.items()}
-        inputs,evidence=h.manifest_digests(roles)
-        expected=dict(environment='synthetic',epoch=h.kernel.EPOCH,artifact_head=HEAD,candidate='BRIDGE-SYNTHETIC',
-                      roles=roles,inputs_sha256=inputs,evidence_sha256=evidence)
+        expected,packet=b._binding_shape(store,dict(overlay_head=HEAD,unit_id='BRIDGE-SYNTHETIC'),h,'synthetic')
+        roles=expected['roles']
         context=SimpleNamespace(kind='synthetic',expected_identities={'provenance':expected},resolve=store.get,receipts={})
         packet=dict(evidence={role:role for role in roles})
         self.assertEqual(h.verify_bindings(packet,context),expected)
@@ -227,6 +226,90 @@ class Tests(unittest.TestCase):
             store[role]=old
         packet['evidence'].pop('runtime_fit_thread_bound')
         self.refused('H-missing-thread-bound',lambda:h.verify_bindings(packet,context),'external_role_set')
+
+    def test_inert_wrapper_call_through(self):
+        # Only the delegate is spied. This proves NEW argument wiring, not the
+        # unchanged Linux backend's behavior. No empirical context is assembled.
+        with tempfile.TemporaryDirectory(prefix='dd1-bridge-call-through-') as name:
+            root=Path(name);repo=root/'repo';repo.mkdir();ap=root/'synthetic.json'
+            before=c.canonical(synthetic_account());ap.write_bytes(before)
+            captured={}
+            def delegate(command,**kwargs):
+                captured.update(command=command,**kwargs)
+                return {'marker':'SYNTHETIC_DELEGATE_ONLY'}
+            with patch.dict(sys.modules,{'dd1_meter_entry':SimpleNamespace(_run_inert_unit=delegate)}):
+                unit={'mode':'inert_control','argv':['/workload','positive']}
+                z=b.inert(unit,account_path=ap,receipt_path=root/'receipt',output=root/'out',head=HEAD,repo=repo)
+            self.assertEqual(z,{'marker':'SYNTHETIC_DELEGATE_ONLY'})
+            self.assertEqual(captured,dict(command=unit['argv'],unit=unit,account_path=ap,
+                receipt_path=root/'receipt',output=root/'out',head=HEAD,repo=repo))
+            self.assertEqual(ap.read_bytes(),before);self.assertFalse((root/'out').exists())
+            RECORDS.append(dict(name='inert-delegate-argument-wiring',result='PASS',delegate_spied=True,
+                native_positive=False,OS_execution=False,fields=sorted(captured)))
+
+    def test_deployment_scope_separation(self):
+        host={'fixture':'SYNTHETIC_ONLY'};unit={'stage':'identity'}
+        base=dict(repository=c.REPOSITORY,operation=b.OPERATION,artifact_head=HEAD)
+        reg=dict(actual_custodian='SYNTHETIC_CUSTODIAN',executor_identity=host,current_generation='a'*64,reservation_history_sha256='b'*64)
+        d=dict(base,schema='DD1-HOST-BRIDGE-DEPLOYMENT-1',scope='ENGINEERING_ONLY',launch_selected=True,
+            selection_comment=c.SELECTION,deadline_utc=k.DEADLINE,stage='identity',host=host,qualification_sha256='c'*64)
+        review=dict(base,schema='DD1-HOST-BRIDGE-REVIEW-1',scope='HOST_BRIDGE_AND_QUALIFICATION',verdict='APPROVE',
+            author_session='synthetic-author',reviewer_session='synthetic-reviewer',qualification_sha256='c'*64)
+        confirm=dict(base,schema='DD1-HOST-CUSTODIAN-CONFIRMATION-1',custodian='SYNTHETIC_CUSTODIAN',executor_identity=host,generation='a'*64,
+            reservation_history_sha256='b'*64,same_existing_custodian=True,other_executors_retired=True,unresolved_history=[])
+        self.assertEqual(b.deployment_reasons(d,review,confirm,reg,unit,host,HEAD),[])
+        RECORDS.append(dict(name='deployment-structure-only',result='PASS',synthetic_dictionary=True,
+                            authenticated=False,native_positive=False))
+        for name,target,key,value,reason in [
+            ('deploy-source-only',0,'scope','SOURCE_INERT_ONLY','native deployment'),
+            ('deploy-host',0,'host',{},'stage/host'),
+            ('deploy-stage',0,'stage','preparation','stage/host'),
+            ('deploy-head',0,'artifact_head','0'*40,'artifact'),
+            ('deploy-repo',0,'repository','fol2/other','repository'),
+            ('review-self',1,'reviewer_session','synthetic-author','distinct'),
+            ('review-qualification',1,'qualification_sha256','d'*64,'qualification'),
+            ('custodian-retirement',2,'other_executors_retired',False,'reconciled'),
+            ('custodian-history',2,'unresolved_history',['unknown'],'reconciled')]:
+            docs=deepcopy([d,review,confirm]);docs[target][key]=value
+            errors=b.deployment_reasons(*docs,reg,unit,host,HEAD)
+            self.assertTrue(any(reason in x for x in errors),(name,errors))
+            RECORDS.append(dict(name=name,result='PASS',reasons=errors,synthetic_dictionary=True))
+
+    def test_qualification_correspondence(self):
+        unit=dict(overlay_head=HEAD,unit_id='SYNTHETIC_SHAPE',stage='identity',account_sha256='a'*64,
+                  compatibility={'synthetic':True},runtime_fit={'host':{'fixture':True}},
+                  execution_modes={},mode_projection={})
+        values={name:c.canonical({'scope':'SYNTHETIC_ONLY'}) for name in b.BASE_ROLES}
+        values['execution_demand']=c.canonical(unit)
+        for name,key in [('compatibility_profile','compatibility'),('runtime_fit_profile','runtime_fit'),
+                         ('runtime_fit_modes','execution_modes'),('runtime_fit_projection','mode_projection')]:
+            values[name]=c.canonical(unit[key])
+        q=dict(schema='DD1-HOST-QUALIFICATION-1',repository=c.REPOSITORY,operation=b.OPERATION,
+               artifact_head=HEAD,stage='identity',host=unit['runtime_fit']['host'],account_sha256='a'*64,
+               records_ref=HEAD,roles={n:dict(path=n,git_blob=c.git_blob(raw),sha256=c.sha(raw)) for n,raw in values.items()})
+        class SyntheticFiles:
+            def file(self,ref,path,blob):
+                self_test.assertEqual(ref,HEAD)
+                raw=values[path];self_test.assertEqual(c.git_blob(raw),blob)
+                return raw
+        self_test=self;api=SyntheticFiles()
+        self.assertEqual(b.read_roles(api,q,unit,HEAD),values)
+        RECORDS.append(dict(name='qualification-byte-correspondence',result='PASS',synthetic_transport=True,
+                            authenticated=False,native_positive=False))
+        for name,change,reason in [
+            ('qualification-head',lambda d:d.update(artifact_head='0'*40),'artifact'),
+            ('qualification-host',lambda d:d.update(host={}), 'host'),
+            ('qualification-ledger',lambda d:d.update(account_sha256='b'*64),'generation'),
+            ('qualification-stage',lambda d:d.update(stage='fixture'),'stage'),
+            ('qualification-role-omission',lambda d:d['roles'].pop('runtime_fit_thread_bound'),'roles'),
+            ('qualification-changed-bytes',lambda d:d['roles']['execution_demand'].update(sha256='b'*64),'changed')]:
+            altered=deepcopy(q);change(altered)
+            self.refused(name,lambda d=altered:b.read_roles(api,d,unit,HEAD),reason)
+        # Invalid credential bytes must fail without printing them or connecting.
+        with patch.dict(os.environ,{'GH_TOKEN':'SYNTHETIC\nSECRET'}):
+            api=c.GitHubReadOnly()
+            self.refused('credential-header-refusal',lambda:api.comment(c.SELECTION,421),'invalid header')
+            self.assertNotIn('SECRET',json.dumps(api.observations))
 
     def test_existing_inert_transaction_seam(self):
         # This is intentionally NOT evidence of OS confinement or of a newly

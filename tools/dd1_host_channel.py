@@ -139,6 +139,8 @@ class GitHubReadOnly:
         headers = {"Accept": "application/vnd.github+json", "User-Agent": "DD1-HOST-BRIDGE-1",
                    "X-GitHub-Api-Version": "2022-11-28", "Cache-Control": "no-cache"}
         if self._token:
+            need(self._token.isascii() and all(33 <= ord(x) <= 126 for x in self._token),
+                 "configured host credential has invalid header format")
             headers["Authorization"] = "Bearer " + self._token
         observation = {'path': API_ROOT + suffix, 'started_utc': datetime.now(timezone.utc).isoformat(),
                        'result': 'REQUEST_STARTED'}
