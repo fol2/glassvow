@@ -247,6 +247,20 @@ def _compose_verified(store, unit, boundary):
     return _HostContext(expected, store, receipts), packet
 
 
+def recheck_records(api, records):
+    """Refresh every live authority read; an edited/revoked record is not reusable.
+
+    GitHub comments are mutable. This detects changes during bootstrap, not an
+    atomic cross-GitHub/filesystem lease. Cross-host custody remains an explicit
+    owner/custodian obligation; the existing entry locks and checks ledger bytes.
+    """
+    for original in records:
+        current = api.comment(original.number, original.issue)
+        need(current.body_sha256 == original.body_sha256 and
+             current.updated_at == original.updated_at,
+             'authority record changed during bootstrap:' + str(original.number))
+
+
 def inspect(unit, head, root=ROOT):
     """Public nonexecuting preflight. Never accepts a provider/context callback."""
     report, _ = _inspect(unit, head, Path(root))
@@ -310,7 +324,8 @@ def _inspect(unit, head, root):
         deployment = deployment_record.document('DD1-HOST-BRIDGE-DEPLOYMENT-1')
         review_record = api.comment(deployment['review_comment'], 542)
         review = review_record.document('DD1-HOST-BRIDGE-REVIEW-1')
-        confirmation = api.comment(registry['original_custodian_confirmation'], 421).document('DD1-HOST-CUSTODIAN-CONFIRMATION-1')
+        confirmation_record = api.comment(registry['original_custodian_confirmation'], 421)
+        confirmation = confirmation_record.document('DD1-HOST-CUSTODIAN-CONFIRMATION-1')
         row('deployment', deployment_reasons(deployment, review, confirmation, registry, unit, host, head))
         need(review_record.body_sha256 == deployment.get('review_body_sha256'), 'changed review record')
         qualified_record = api.comment(registry['qualification_comment'], 421)
@@ -362,12 +377,19 @@ def _inspect(unit, head, root):
         reservations.available(account, planned['starts'], planned['cpu_ns'], planned['raw_bytes'])
         row('price', [], complete_unit_setup_raw=setup, total_unit_raw=unit['raw_bytes'], useful_endpoint_plan=planned)
         row('existing_validators', [], H=channel.H, native_positive=False)
-        need(api.comment(custody.REGISTRATION_COMMENT, 421).body_sha256 == registration.body_sha256,
-             'custody registration changed during bootstrap')
+        recheck_records(api, (selection, registration, deployment_record, review_record,
+                             confirmation_record, qualified_record))
+        final_custody = custody.observe(root)
+        custody_errors = custody.reasons(registry, final_custody, host, root, head, unit)
+        row('custody', custody_errors, observation=final_custody)
+        need(not custody_errors, 'custody changed during bootstrap')
         need(not window_reasons(unit), 'deadline elapsed during bootstrap')
         used = resource.getrusage(resource.RUSAGE_SELF)
-        need(len(list(Path('/proc/self/task').iterdir())) == 1 and used.ru_utime + used.ru_stime < 1,
-             'bootstrap consumed existing controller freshness budget')
+        final_threads = len(list(Path('/proc/self/task').iterdir()))
+        fresh = final_threads == 1 and used.ru_utime + used.ru_stime < 1
+        row('controller', [] if fresh else ['bootstrap consumed existing controller freshness budget'],
+            threads=final_threads, cpu_seconds=used.ru_utime + used.ru_stime)
+        need(fresh, 'bootstrap consumed existing controller freshness budget')
         state = (context, packet, registration.body_sha256)
     except (ValueError, OSError, KeyError, TypeError, AttributeError, ImportError, RuntimeError) as exc:
         report['blocking_exception'] = type(exc).__name__ + ':' + str(exc)

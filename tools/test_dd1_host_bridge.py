@@ -311,6 +311,22 @@ class Tests(unittest.TestCase):
             self.refused('credential-header-refusal',lambda:api.comment(c.SELECTION,421),'invalid header')
             self.assertNotIn('SECRET',json.dumps(api.observations))
 
+    def test_selection_and_all_record_revalidation(self):
+        original = c.LiveRecord(123,421,'SYNTHETIC_ONLY','a'*64,
+                                '2026-09-24T12:00:00Z','2026-09-24T13:00:00Z')
+        with patch.object(c.GitHubReadOnly,'comment',return_value=original):
+            api=c.GitHubReadOnly()
+            self.refused('selection-keywords-not-authority',lambda:api.selection(),'scope changed')
+            b.recheck_records(api,[original])
+        for field,value in [('body_sha256','b'*64),('updated_at','2026-09-24T12:01:00Z')]:
+            from dataclasses import replace
+            changed=replace(original,**{field:value})
+            with patch.object(c.GitHubReadOnly,'comment',return_value=changed):
+                self.refused('authority-revalidation-'+field,
+                             lambda:b.recheck_records(c.GitHubReadOnly(),[original]),'record changed')
+        RECORDS.append(dict(name='all-authority-revalidation-shape',result='PASS',synthetic_transport=True,
+                            authenticated=False,native_positive=False))
+
     def test_existing_inert_transaction_seam(self):
         # This is intentionally NOT evidence of OS confinement or of a newly
         # executed FIT workload. New wrapper call-through proof remains distinct.
@@ -331,17 +347,18 @@ class Tests(unittest.TestCase):
                     return dict(success=True,cleanup_confirmed=True)
                 result=r.reserve_and_run(ap,unit,command=unit['argv'],head=HEAD,receipt_sha='r'*64,
                     source_reader=lambda _:source,authority_check=lambda a:self.assertTrue(a['synthetic']),
-                    output=out,runner=task)
+                    output=out,runner=task,now=c.stamp('2026-09-24T12:00:00Z'))
                 self.assertEqual(result['charged']['state'],'INTERRUPTED' if interrupt else 'COMPLETE')
                 after=ap.read_bytes()
                 self.refused('transaction-replay-'+str(interrupt),lambda:r.reserve_and_run(ap,unit,
                     command=unit['argv'],head=HEAD,receipt_sha='r'*64,source_reader=lambda _:source,
-                    authority_check=lambda a:None,output=out,runner=task),'stale receipt/account',r.ReservationError)
+                    authority_check=lambda a:None,output=out,runner=task,now=c.stamp('2026-09-24T12:00:00Z')),'stale receipt/account',r.ReservationError)
                 self.assertEqual(after,ap.read_bytes())
                 RECORDS.append(dict(name='existing-inert-transaction-'+str(interrupt),result='PASS',
                     route='dd1_reservations.reserve_and_run internal inert-test seam; NOT Linux native entry',
                     account_before_hex=before.hex(),account_after_hex=after.hex(),observation=result,
-                    emitted={p.name:p.read_bytes().hex() for p in out.iterdir() if p.is_file()},engine_runs=0))
+                    emitted={p.name:p.read_bytes().hex() for p in out.iterdir() if p.is_file()},engine_runs=0,
+                    clock_scope='fixed synthetic timestamp at internal transaction seam only'))
 
 
 if __name__=='__main__':

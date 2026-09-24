@@ -23,6 +23,8 @@ OWNER = ("fol2", 105634418)
 API_ROOT = "/repos/" + REPOSITORY
 PROPOSAL = 5812756062
 SELECTION = 5813769137
+# Exact source/inert selection, validated after TLS and issuer checks.
+SELECTION_BODY_SHA256 = "f3e2dc66284f50995b542d853681cf388d9fea09f9f9b7a7c72f9fe3b260d7cc"
 ACCEPTED_FIT = "5cd51a959ee98e68ede46d1d86d68f30240fdd80"
 H = "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6"
 H_ROOT = "research/p9-six-route/duskblade-first-proof-20260912/"
@@ -189,9 +191,7 @@ class GitHubReadOnly:
 
     def selection(self):
         record = self.comment(SELECTION, 421)
-        need("owner option A recorded" in record.body and str(PROPOSAL) in record.body
-             and "source/inert" in record.body and "not an independent review" in record.body,
-             "selection scope changed")
+        need(record.body_sha256 == SELECTION_BODY_SHA256, "selection scope changed")
         return record
 
     def h_sources(self):
