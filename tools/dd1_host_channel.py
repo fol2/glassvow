@@ -140,6 +140,9 @@ class GitHubReadOnly:
                    "X-GitHub-Api-Version": "2022-11-28", "Cache-Control": "no-cache"}
         if self._token:
             headers["Authorization"] = "Bearer " + self._token
+        observation = {'path': API_ROOT + suffix, 'started_utc': datetime.now(timezone.utc).isoformat(),
+                       'result': 'REQUEST_STARTED'}
+        self.observations.append(observation)
         connection = http.client.HTTPSConnection("api.github.com", timeout=8,
                                                  context=ssl.create_default_context())
         try:
@@ -150,10 +153,11 @@ class GitHubReadOnly:
             raw = response.read(MAX_RESPONSE + 1)
             need(len(raw) <= MAX_RESPONSE, "oversized GitHub response")
             observed = datetime.now(timezone.utc).isoformat()
-            self.observations.append({"path": API_ROOT + suffix, "status": response.status,
-                                      "bytes": len(raw), "sha256": sha(raw), "observed_utc": observed})
+            observation.update(status=response.status, bytes=len(raw), sha256=sha(raw),
+                               observed_utc=observed, result="RECEIVED")
             return decode(raw), observed
         except (OSError, http.client.HTTPException) as exc:
+            observation.update(result="UNAVAILABLE", error_type=type(exc).__name__)
             # Do not publish exception request/header data or any credential.
             raise ChannelUnavailable("api.github.com HTTPS GET unavailable: " + type(exc).__name__) from None
         finally:
