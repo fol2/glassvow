@@ -1,0 +1,38 @@
+{
+  "schema": "DD1-HOST-BRIDGE-CONTINUATION-1",
+  "observed_utc": "2026-09-24T13:34:06.051633+00:00",
+  "base": "2fcfbfced835eb4c4e61a19abbb25dcc4c4a6122",
+  "resumed_source": "cb2e41ad4353b9e9167add8a2b96c4b826b7f646",
+  "operating_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "selection_comment": 5813769137,
+  "registration_comment": 5813829774,
+  "local_source": {
+    "tools/dd1_host_channel.py": {
+      "bytes": 8186,
+      "sha256": "348c5ca61d4eedae00e4d9d0502325cb296a2a395a9398f055eb3ad9dd28cef3",
+      "git_blob": "9aa80777479978e5178cb24db062df0aa9106fc3"
+    },
+    "tools/dd1_host_bridge.py": {
+      "bytes": 25900,
+      "sha256": "5d41e27316ef8541fdf1e53078ab075049cb7e8687dd053489620779a6832927",
+      "git_blob": "22f5e6a6c6eb385c27b787c03ba60ae07cf127d4"
+    },
+    "tools/dd1_host_custody.py": {
+      "bytes": 7451,
+      "sha256": "8a119b262807555934d57c44802b5eb94a15f8eb7bc8d9630ca1601512ab8cda",
+      "git_blob": "d9d8bb13a0cc1614ac81935a41493648029a1410"
+    }
+  },
+  "scope": "SOURCE_INERT_ONLY; new evidence, no recovery of previous process observations",
+  "engine_runs": 0,
+  "live_account_writes": 0,
+  "task": "Finish source/inert integration and read-only custody evidence; no arbitrary authority or deployment positive",
+  "no_rerun": "Reuse accepted FIT/PREP/B1 source and prior OS enforcement evidence; only new bridge proof",
+  "host": {
+    "system": "Linux",
+    "release": "6.18.44",
+    "machine": "x86_64",
+    "pointer_bytes": 8,
+    "boot_id": "a0f555bc-1e32-40cc-ba07-006483f0de9a"
+  }
+}
