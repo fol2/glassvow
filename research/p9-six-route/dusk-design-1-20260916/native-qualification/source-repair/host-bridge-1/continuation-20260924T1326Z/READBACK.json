@@ -1,0 +1,100 @@
+{
+  "schema": "DD1-HOST-BRIDGE-PUBLICATION-INDEX-1",
+  "contract_comment": 5812756062,
+  "selection_comment": 5813769137,
+  "custody_registration_comment": 5813829774,
+  "whole_bridge_base": "2fcfbfced835eb4c4e61a19abbb25dcc4c4a6122",
+  "resumed_checkpoint": "cb2e41ad4353b9e9167add8a2b96c4b826b7f646",
+  "tested_source_head": "f6202b33fe5d451fee4cbf155fc1a4e3ff9c2061",
+  "tested_source_tree": "1e50f284580366a5e476b6bf5985f8933e425328",
+  "operating_main": "07b5aa9dec8436132a524511d5438c510e322070",
+  "publication_parent": "3ae816b53b147ceaedab275c5c142542aaa1ab90",
+  "source_files": {
+    "tools/dd1_host_bridge.py": {
+      "bytes": 27108,
+      "sha256": "d6ddabefa1af80ef81d3a7d1e3f2d9fa0b26b0eb16e367e92d8400deb091f3bc",
+      "git_blob": "f67ee477194927d8e31303120351f6b7be0e8b5d"
+    },
+    "tools/dd1_host_channel.py": {
+      "bytes": 8211,
+      "sha256": "49c19f3ab0e88b1048b9980e7700fcac646beaaa8972197ac8a4ba183044c049",
+      "git_blob": "f6dc438f85a68669a84ff7efb6ea6bf3a137b33d"
+    },
+    "tools/dd1_host_custody.py": {
+      "bytes": 7451,
+      "sha256": "8a119b262807555934d57c44802b5eb94a15f8eb7bc8d9630ca1601512ab8cda",
+      "git_blob": "d9d8bb13a0cc1614ac81935a41493648029a1410"
+    },
+    "tools/test_dd1_host_bridge.py": {
+      "bytes": 25659,
+      "sha256": "4e094ca13e9b89fa7430d2c81d3c2ea02571164aa62ec1d2b9d351018fc8f168",
+      "git_blob": "4fb7edeb07f4a7c95e49fc12ec2396a3e07379f9"
+    }
+  },
+  "proof_files": {
+    "SOURCE-BUNDLE.json": {
+      "bytes": 16123,
+      "sha256": "5e9ee194bbed65efe506b080608153183d2f244a54923014eef339df4b106582",
+      "git_blob": "364243945d8bb94da9c1b28ade1113945ea0be35",
+      "commit": "d7fe44bf6e625318a8f58fa3e3834178db8a2c90",
+      "readback": "GitHub returned full-file Git blob matching the complete locally verified transport; partial content fetch does not claim a new execution"
+    },
+    "CONNECTED-BUNDLE.json": {
+      "bytes": 21467,
+      "sha256": "51ecc942e169f49d1699673d149eb9f7852d9bb4e31e804de45ecae60df450d8",
+      "git_blob": "4a511a6497a757ad5e74bb05c64ab6783c4e92c3",
+      "commit": "9ed1a0f76b64d26528ec0afcadc478062b9b42b6",
+      "readback": "GitHub returned full-file Git blob matching the complete locally verified transport; partial content fetch does not claim a new execution"
+    },
+    "VERIFICATION-BUNDLE.json": {
+      "bytes": 8441,
+      "sha256": "bc1c5230ac30c3364b0a41306f444c9d0cfd80d1b442dab89e77f9b6c830319b",
+      "git_blob": "ac8e42f4218a277f23a9e019cc7337209030cc45",
+      "commit": "3ae816b53b147ceaedab275c5c142542aaa1ab90",
+      "readback": "GitHub returned full-file Git blob matching the complete locally verified transport; partial content fetch does not claim a new execution"
+    }
+  },
+  "terminal_files": {
+    "REPORT.md": {
+      "bytes": 15128,
+      "sha256": "cd1070c156434c4c43977ddab4007962f46cbbe8f29efa99b9d04405c8460cee",
+      "git_blob": "a9e0f563cdcb6a34733614a7a168eee0ebbb41f4"
+    },
+    "CAPSULE.md": {
+      "bytes": 5256,
+      "sha256": "53344ab64c660d920e81655325d19cf53fcb336edb1d2a67ddb5f360858565a0",
+      "git_blob": "189ddb7de8ebb9f790a5c69e900755e004213ef2"
+    }
+  },
+  "earlier_checkpoint_readbacks": {
+    "RESUME.json": {
+      "commit": "0c0531ab29e54911b4a3a2a18086e989d210a462",
+      "git_blob": "ef4c848e075d9070f02df6569f4908716d768ffe",
+      "method": "complete source/declaration contents read back"
+    },
+    "CONNECTED-PLAN.json": {
+      "commit": "3e3db4f9560e6e674972ec6ecc08b78cde9519a0",
+      "git_blob": "71526448f2190b8864e7a5a0ed472ca6daaae6a6",
+      "method": "complete plan read back before two released harmless units"
+    }
+  },
+  "H": {
+    "commit": "5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6",
+    "blobs": {
+      "evidence_boundary.py": "a88db0791572f430ea3e5cde85683c8527cead39",
+      "reference_kernel.py": "ee091fb503849117358b3691264fca71803f8bbc"
+    },
+    "overlay_files_added": false
+  },
+  "account": {
+    "published_blob": "8b7e4e6367ad4bc366c04b930ef4fc3810e2a900",
+    "receipt_blob": "a99a29b76e645c8a4052f0cd43fdf58d2dd46a2a",
+    "live_writes": 0,
+    "new_live_reservations": 0,
+    "custody_status": "UNREGISTERED",
+    "private_executor_attested": false
+  },
+  "deadline_utc": "2026-09-24T17:54:40Z",
+  "scope": "AUTHOR_SOURCE_INERT_DELIVERY; independent review pending; actual HTTPS bootstrap unavailable; native not admitted",
+  "final_readback_location": "Single #156 comment after containing commit/ref/content/diff/account readbacks; final containing SHA is not self-asserted by this index."
+}

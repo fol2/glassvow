@@ -1,31 +1,33 @@
-# #542 task capsule — DD1-LINUX-ENTRY-1
+# #542 task capsule — DD1-HOST-BRIDGE-1
 
-## Current: terminal admission diagnosis delivered; native work blocked
+## Current: author source/inert delivery complete; whole-bridge review next
 
-Authority: #542/5810089011 and the owner's continuation; original graph #421/5734400738 / selection5735810042. RUNTIME-FIT-1 SOURCE/INERT is ACCEPTED at F=`5cd51a959ee98e68ede46d1d86d68f30240fdd80`, tree `db02adf2709f2d1e2fe98b340aae370cee7b12c3`, by review5809541527 and planner5810089011. No further unchanged FIT/PREP/COMPAT-2/B1 review is next. Reviewers and other writers remain parked.
+Owner option A: #421/5812756062, selection #421/5813769137. Read-only custody registration #421/5813829774 remains UNREGISTERED, not a custody transfer. The designated prospective engineering producer is now the owner-controlled code-pinned bridge; the former unnamed-existing-runner assumption is not the next task.
 
-Run `entry-resume-20260924T081332Z` has operational result **BLOCKED_BEFORE_RESERVATION**, not an engine failure or native qualification. Zero engine/helper/loader calls, contained starts, live reservations or live-account writes. N0 BLOCKED; certificates0/3. The source author has completed this venue's terminal diagnosis/publication; no launchable positive admission package is claimed.
+Whole HOST-BRIDGE base B=`2fcfbfced835eb4c4e61a19abbb25dcc4c4a6122`. Resumed checkpoint C=`cb2e41ad4353b9e9167add8a2b96c4b826b7f646`. Final tested implementation I=`f6202b33fe5d451fee4cbf155fc1a4e3ff9c2061`, tree `1e50f284580366a5e476b6bf5985f8933e425328`. Existing branch `research/p9-six-route/dd1-native-1-overlay`; publication thereafter is evidence/capsule only. The single #156 handoff records the containing final head/tree and readbacks.
 
-Canonical current evidence: `entry-1/resume-20260924T081332Z/REPORT.md`, `HOST-OBSERVATION.json`, `INVENTORY-BUNDLE.json`, and `READBACK.json`. The single #156 terminal handoff records the containing exact head/tree and final readbacks. Progressive commits `cfed24a856f4638d16a2a1857bfb0310f5daca29` and `740d29f475e5975119eb539fdd8b3f57a3b945ec` save the new host and inventory evidence. The terminal commit updates this existing capsule with the report/index atomically. All publication changes are evidence/capsule only; implementation remains F.
+Canonical evidence is `host-bridge-1/continuation-20260924T1326Z/`: REPORT.md, READBACK.json, RESUME.json, CONNECTED-PLAN.json, SOURCE-BUNDLE.json, CONNECTED-BUNDLE.json and VERIFICATION-BUNDLE.json. Earlier PROGRESS.md is a preserved checkpoint, not current routing. Both bundles are complete independently decodable XZ/base64 with identities; verification includes its own script and command.
 
-## Concrete admission result
+## Implemented and proven scope
 
-The new read-only host observation matches Linux6.18.44/x86_64/LP64/glibc2.41, but finds no identified DD1 runtime/account/context on the declared workspace/mount/locator surface. Its Python observer has ten threads, not the required dedicated single-thread controller. Absence is bounded to that inspected surface; no universal host incompatibility is claimed.
+New host_channel/custody/bridge modules and focused test file implement fixed-origin HTTPS GET/owner-record checks, exact source/H pins, read-only custody, prospective role/cost composition, nonexecuting inspection and the unchanged public native entry caller. No supplied context/callback/clock/runner or offline-JSON authority. Exact selection body and all six authority records are rechecked; final custody/controller/window checks stay mandatory. No native disposition or qualification is invented.
 
-Missing contractual provider: the existing authenticating Linux runner host supplying H expected_identities.provenance, exact byte store, receipt_authorities/receipts, and authoritative current recovery account_path/outstanding reservations/lease. H TrustedContext is only post-authentication transport. Source authors, caller callbacks, synthetic objects, old launch receipts and review strings do not replace that provider. No invented issuer/controller/account was created.
+Final focused suite: 13 methods, 88 records PASS; real H role validation remains synthetic. One additional targeted custody observation and four pin checks retain actual-path versus synthetic-module scope. Actual inspect exits2/BLOCKED_BEFORE_RESERVATION: host/controller/H byte checks pass, adapter api.github.com HTTPS GET fails DNS/gaierror. Connector authority retrieval is real but is not a successful adapter bootstrap. Actual successful native composition/deployment remains unproved.
 
-Independently verified metadata closes39 required plugin files and22 font/sidecar/licence entries at their four Git-tree identities. It does not close whole native SHA256/ELF/dlopen/build/global-class/resource inputs. Native stage-specific creation-site repetitions, actual producer/writer qualification, generated/temporary maxima and full cumulative affordability remain unavailable; each is specifically mapped in REPORT. No large engine restaging or accepted-control replay can resolve the missing context/account.
+Two predeclared actual harmless units reached bridge.inert and the unchanged real reservation/Linux backend. Positive save/streams/two-thread files passed; replay refused without another workload/debit; held controller SIGKILL retained RESERVED/full charge and recorded complete process cleanup. No old FIT matrix replay. The initial stdout-reader assertion wrongly expected a seventeenth NUL; failed reader/raw command are preserved, corrected readback reused the positive without rerunning it. Verification exits0/PASS on 29 embedded raw records and their demand/receipt/account/output relationships.
 
-## Account, deadline and no-rerun boundary
+## Custody and native boundary
 
-Published ACCOUNT blob `8b7e4e6367ad4bc366c04b930ef4fc3810e2a900` is unchanged: recovery2040/2048, CPU398617197992ns, raw893139B; historical1277/8192, attempt1/1 consumed,6915unspendable and UNKNOWNs preserved. This is not live executor-state attestation. No refund/top-up/cap change. Deadline stays **2026-09-24T17:54:40Z**; expiry closes affected native work without erasing accepted evidence.
+Registration pins actual recovery ACCOUNT/.lock relative paths and the retained original executor root. The installed-root observation and one targeted original-root lookup found no authoritative ledger here. Custodian, live generation, history, release, deployment and qualification fields remain unavailable/null. No broad scan, lock acquisition, account copy/create/write/adoption or cross-host exclusivity claim. A missing-account pending=[] is not cleared history.
 
-The m=2 core floor and distinct earlier static payload leave165420588B before unpriced terms; this is not a budget certificate. The new plugin/Sentry scenarios remain conditional, not actual expenditure. Unknown cumulative costs are not zero.
+Future native use requires a working concrete authenticated GET channel, independently reviewed bridge/qualification and scoped deployment, genuine native thread/build/input/writer/output/cost evidence and confirmed same-account custody. The bridge rejects a different executor/transfer; original custody must be released/reconciled and other executors retired before any separately authorized handoff. Local flock and Git snapshots are not cross-host proof. The author does not self-approve or manufacture empirical records.
 
-Apply #5810089011's external corrections without rewriting old evidence: CPU6.3546s, configured6s, signal9; raw reserved258124/cap262144, primary write1/errno27; zero-count is source-only. Accepted FIT remains five reused positives plus41 new cases. Existing source/inert evidence and H=`5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6` retain their original execution scope; no merge of the old research runtime.
+## Preserved accounts, clock and dependencies
 
-## Next permitted transition
+ACCOUNT blob `8b7e4e6367ad4bc366c04b930ef4fc3810e2a900`; LAUNCH-RECEIPT `a99a29b76e645c8a4052f0cd43fdf58d2dd46a2a`. Recovery reported2040/2048, CPU398617197992ns, raw893139B; historical1277/8192, consumed attempt,6915unspendable and UNKNOWNs remain unchanged. Disposable inert reservations are not real charges or allowances.
 
-Only actual availability of the existing commissioned context/account and complete native bound records, within the original window, can change this admission result. Do not request another routine owner grant, repeat FIT/PREP reviews, rerun intact controls, launch a version-only probe, fabricate private account state or extend the clock. No ordinary acquisition, N1/N2, implementation change, self-approval, merge or release.
+Original deadline **2026-09-24T17:54:40Z** stays fixed. Source/inert work/review cannot extend it; expired history must survive any future decision. N0 BLOCKED; certificates0/3. No engine/native deployment, ordinary acquisition, N1/N2, live-account changes, self-approval, merge or release.
 
-Current-main operating rules were refreshed at `07b5aa9dec8436132a524511d5438c510e322070` without rebasing frozen science. Earlier capsule remains at F, blob `cbc74a94ae7eff47efe2e998031810ce56da5452`; historical raw/closed/protected records and D/C/H/kernel/ALLOCATION/#547 are unchanged.
+Accepted FIT F=`5cd51a959ee98e68ede46d1d86d68f30240fdd80` and its #542/5810089011 corrections remain accepted. H=`5b6b3a718b8c6200d12d5c06c85702ea9a0f35c6`, PREP/COMPAT-2/B1, existing backend/pins, D/C/H/kernel/ALLOCATION/#547 and closed/protected evidence are unchanged. Current-main instructions refreshed at `07b5aa9dec8436132a524511d5438c510e322070`; no frozen-science rebase.
+
+Next: one fresh isolated whole-HOST-BRIDGE review from B to the exact final handoff head. Other writers/reviewers stayed parked during authorship. No unchanged-component review, publication rescue, identical bootstrap retry or source-polishing loop is requested.
