@@ -1,7 +1,21 @@
 # DD1-KERNEL-COMPAT-1 — K1 design lock (source/inert only)
 
-**Role:** Claude Code design lead. Codex implements from this lock's commit SHA. Design only;
-no Python module/test is implemented here, no engine/K2/helper build is run.
+**Role:** Claude Code design lead. Design only; no Python module/test is implemented here, no
+engine/K2/helper build is run. The implementer is a separate agent per the routing note below.
+
+> **AMENDMENT 1 (2026-09-25) — authority fol2/glassvow#156 comment `5828245869`.**
+> Previous lock SHA `454d4ac3242db1abab5ebb113ecb021c742cfc41` (unamended). The K1 lock correctly
+> found the delivery blocker: at the frozen base the shared reservation/backend clock is pinned to
+> the **expired** N0 window, so a K2 run through the existing inert path refuses before any release.
+> The ruling's lawful minimal repair is an **operation-scoped reservation policy used only by
+> DD1-KERNEL-COMPAT-1 inert controls**; the expired `DD1-N0-RECOVERY-1` constants/account stay
+> immutable and unusable. This amendment supersedes **only** the text that treated the expired clock
+> as an external custodian precondition and forbade touching `dd1_reservations.py` (the §1 "no
+> change" bullet + files-touched list, the §8 "K2-runtime precondition" paragraph, the §9 non-claim
+> naming `dd1_reservations.py`). The full amended design is in **§10**, which governs on conflict; it
+> neither widens nor narrows the ruling, and the commit landing it is the implementation start SHA.
+> No window is extended, reset, revived, spent or reinterpreted; the old N0 clock/account remain
+> expired and keep rejecting. No new owner decision is required for this repair.
 
 ## 1. Scope, base, authority
 
@@ -18,16 +32,22 @@ no Python module/test is implemented here, no engine/K2/helper build is run.
     executor grokbot-vm; all counters 0; 17 HELPER_SOURCES clone bytes equal the git blobs at base.
   - The exact K1/K2 contract packet is `5827737668`; this lock designs against it verbatim and
     neither widens nor narrows it.
-- **Files touched by K1 (nothing else changes):**
+- **Files touched by K1 (nothing else changes) — amended by §10:**
   1. **add** `tools/dd1_kernel_qualification.py`
   2. **modify** `tools/dd1_linux_snapshot.py` — `prepare()` gate + `HELPER_SOURCES`
   3. **modify** `tools/dd1_compatibility.py` — `validate_profile()`, `native_bindings()`
-  4. **add** `tools/dd1_linux/kernel_compat_controls.py` (the one K2 driver)
-  5. **add** `tools/test_dd1_kernel_qualification.py`
+  4. **modify** `tools/dd1_reservations.py` — internal optional `policy=None` seam (§10.2); `FIRST`,
+     `DEADLINE`, `OPERATION` and legacy account schema/caps/history semantics **unchanged**
+  5. **modify** `tools/dd1_linux_backend.py` — `controller_limits(unit, deadline_utc=None)` (§10.3)
+  6. **modify** `tools/dd1_meter_entry.py` — `_complete`/`_run_inert_unit` policy plumbing (§10.4)
+  7. **add** `tools/dd1_linux/kernel_compat_controls.py` (the one K2 driver)
+  8. **add** `tools/test_dd1_kernel_qualification.py`
 - **No** change to `supervisor.c/policy.c/isolate.c/capabilities.c/.h/policy.h` or any
-  `tools/dd1_linux/*.c|*.h`; **no** change to `PINNED_HELPER_SHA256`; **no** change to
-  `dd1_reservations.py`, accepted B1/D/C/H/FIT/PREP/COMPAT-2/HOST-BRIDGE semantics, P9/#108, `main`,
-  or the overlay branch.
+  `tools/dd1_linux/*.c|*.h`; **no** change to `PINNED_HELPER_SHA256`; **no** change to accepted
+  B1/D/C/H/FIT/PREP/COMPAT-2/HOST-BRIDGE semantics, P9/#108, `main`, or the overlay branch.
+  <br>~~**No** change to `dd1_reservations.py`.~~ **Superseded by AMENDMENT 1 / §10.2:**
+  `dd1_reservations.py` gains an internal `policy=None` parameter only; with `policy is None` its
+  behaviour is byte-for-byte the legacy behaviour, so accepted semantics are preserved.
 
 ## 2. `tools/dd1_kernel_qualification.py` — signatures and constants
 
@@ -351,25 +371,226 @@ supervisor-hash mismatch, zero releases), and `NOT_REACHABLE_ON_HOST` (KC15 only
 first with SIGSEGV and zero forbidden effects, record `NOT_REACHABLE_ON_HOST` and make **no**
 seccomp-arch claim; exit 0 / any effect ⇒ `INCOMPATIBLE`; SIGSYS at the seccomp arch guard ⇒ pass).
 
-**K2-runtime precondition (custodian, not a K1 change) — recorded so Codex/Tushar hit it knowingly:**
-at the frozen base, the shared reservation/backend clock is pinned to the **expired** N0 window —
-`dd1_reservations.DEADLINE == "2026-09-24T17:54:40Z"`, and `dd1_linux_backend.controller_limits`
-computes `wall = min(wall_seconds, DEADLINE - time.time())` with `need(wall >= 3)`, while
-`dd1_reservations.totals` enforces `first_engine_launch_utc == FIRST` / `deadline_utc == DEADLINE`
-and `start <= now < expiry`. On 2026-09-25/26 that window is already closed, so a run through the
-existing inert path raises `outside recovery window` / `complete wall envelope needs two seconds of
-cleanup headroom` **before** any release. K1 does **not** touch `dd1_reservations.py` (out of packet
-scope; a reservation/account-window change is a stop condition). Resolving the synthetic-account
-window / controller clock for K2 execution is a **custodian/owner precondition** the driver must
-satisfy (e.g. via a synthetic account + clock valid at run time) or escalate — it is not a K1
-source/inert edit and does not block committing this design lock.
+**K2-runtime clock (SUPERSEDED by AMENDMENT 1 / §10).** ~~At the frozen base the shared
+reservation/backend clock is pinned to the expired N0 window; resolving it for K2 was recorded here
+as a custodian/owner precondition and K1 was told not to touch `dd1_reservations.py`.~~ Per
+#156/`5828245869`, the diagnosis stands but the resolution changes: the expired window is repaired
+inside K1 by the operation-scoped inert reservation policy of **§10**, not deferred to a custodian.
+The base facts remain true and are why §10 exists — `dd1_reservations.DEADLINE ==
+"2026-09-24T17:54:40Z"`; `controller_limits` computes `wall = min(wall_seconds, DEADLINE -
+time.time())` with `need(wall >= 3)`; `totals` enforces `first_engine_launch_utc == FIRST` /
+`deadline_utc == DEADLINE` and `start <= now < expiry`, so a legacy-path run on 2026-09-25/26 raises
+`outside recovery window` / `complete wall envelope needs two seconds of cleanup headroom` before any
+release. §10 connects the already owner-selected K1 window to a K1-only synthetic inert
+reservation/backend path so this exact operation runs, while the legacy default (`policy is None`)
+keeps rejecting on the expired N0 clock unchanged.
 
 ## 9. Out of scope / non-claims
 
 - No Godot/engine/import/parse/game run; K2 is **not** executed here; no helper/fixture compile or run.
 - No change to P9/#108, accepted B1/D/C/H/FIT/PREP/COMPAT-2/HOST-BRIDGE semantics beyond the exact
-  additive packet, `dd1_reservations.py`, `main`, or the overlay branch. No merge, release, or
-  self-approval.
+  additive packet, `main`, or the overlay branch. No merge, release, or self-approval. **Amended by
+  §10:** the "no change to `dd1_reservations.py`" clause is superseded — the module gains an internal
+  `policy=None` seam whose `policy is None` path is byte-for-byte the legacy behaviour, so accepted
+  semantics are still not changed; the FIRST/DEADLINE/OPERATION constants and expired N0 account
+  remain untouched. No N0 window is extended, reset, revived, spent or reinterpreted.
 - A K2 PASS would qualify **only** this exact grokbot-vm `6.12.94+` kernel identity for the amended
   enforcement contract; it is not Godot/native/N0/scientific qualification, and it does not create the
   `DD1-KERNEL-COMPAT-DISPOSITION-1` record that native admission still requires downstream.
+
+## 10. AMENDMENT 1 — operation-scoped inert reservation policy (authority #156/`5828245869`)
+
+The K2 clock repair. Scope is exactly the ruling; §10 governs where it conflicts with earlier text.
+
+### 10.1 `tools/dd1_kernel_qualification.py` — selected-operation policy authority
+
+In addition to the §2 host-qualification schema, define the exact inert reservation policy **in
+code** (a module constant; no caller shapes it):
+
+```python
+INERT_RESERVATION_POLICY = {
+    "operation": "DD1-KERNEL-COMPAT-1",
+    "selection": 5827591001,
+    "start_utc": "2026-09-25T05:57:00Z",
+    "deadline_utc": "2026-09-26T05:57:00Z",
+    "synthetic_only": True,
+    "starts_cap": 16,             # starts / reserved-case ceiling
+    "cpu_ns_cap": 300_000_000_000,  # aggregate CPU ceiling (300 s)
+    "raw_bytes_cap": 134_217_728,   # aggregate retained raw ceiling (128 MiB)
+    "per_invocation_cpu_seconds": 30,
+    "executors": 1,
+}
+```
+
+`inert_reservation_policy(unit)` returns **exactly** `INERT_RESERVATION_POLICY` (a fresh copy) only
+when **all** hold, else fail closed via `r.need(...)`:
+- `unit.get("mode") == "inert_control"`;
+- `unit.get("operation") == "DD1-KERNEL-COMPAT-1"`;
+- the exact selection/deadline are bound in the unit — `unit["kernel_qualification"]["selection"]
+  == 5827591001` and `unit["kernel_qualification"]["operation"] == "DD1-KERNEL-COMPAT-1"`, and the
+  unit carries the selected `start_utc`/`deadline_utc` values (see §10.5: the K2 driver binds them
+  into every unit; the returned deadline is always the code-pinned one, never a copied caller field);
+- `unit["kernel_qualification"]["status"] == "REQUALIFYING"` for the **exact K0 host identity**
+  (`host_identity == QUALIFIED_IDENTITY`, the §2 grokbot-vm 6.12.94+ identity, exact equality).
+
+`inert_reservation_policy` is **never** authority for `run_complete_unit` or any engineering/native
+mode; it raises there (mode/operation/status mismatch). It performs no I/O and reads no clock.
+
+### 10.2 `tools/dd1_reservations.py` — internal `policy=None` seam; legacy default byte-for-byte
+
+**Unchanged:** `FIRST, DEADLINE = "2026-09-17T17:54:40Z", "2026-09-24T17:54:40Z"`,
+`OPERATION = "DD1-N0-RECOVERY-1"`, `STARTS_CAP/CPU_CAP/RAW_CAP`, `M`, and the legacy
+`DD1-N0-RECOVERY-1-ACCOUNT-1` schema/caps/history/recovery-minima/expired-window semantics.
+
+Add an internal optional `policy=None` to the real existing signatures:
+- `totals(account, now=None, policy=None)`
+- `available(account, starts, cpu_ns, raw_bytes, now=None, policy=None)`
+- `validate_unit(unit, command, *, head, receipt_sha, account_sha, source_reader, policy=None)`
+- `reserve_and_run(account_path, unit, *, command, head, receipt_sha, source_reader,
+  authority_check, output, runner, now=None, policy=None)` — threads `policy` into its internal
+  `validate_unit` and `available` calls.
+
+**`policy is None` ⇒ execute the existing legacy behaviour unchanged** (exact N0 schema/id/FIRST/
+DEADLINE, history, recovery minima, `start <= now < expiry` expired-window rejection, the
+`deadline_unix` from `DEADLINE` at the current `reserve_and_run` grant line). Byte-for-byte identical
+output; no accepted no-qualification unit is perturbed.
+
+**`policy is not None`** ⇒ enforce every ruling rule (`r.need(...)` fail-closed on each):
+- `policy` must **equal** the exact code-pinned object returned by
+  `dd1_kernel_qualification.inert_reservation_policy(unit)` — no caller-shaped deadline/range is
+  accepted; a caller may pass a `policy` object but it is compared for equality against the pinned
+  one and rejected if it differs.
+- `account.get("synthetic") is True` and `unit.get("mode") == "inert_control"`.
+- account schema `"DD1-KERNEL-COMPAT-1-SYNTHETIC-ACCOUNT-1"` with recovery `id ==
+  "DD1-KERNEL-COMPAT-1"`, exact selection `5827591001`, `first_engine_launch_utc ==
+  policy["start_utc"]`, `deadline_utc == policy["deadline_utc"]`, caps `starts_cap==16`,
+  `cpu_ns_cap==300_000_000_000`, `raw_bytes_cap==134_217_728`, `per_invocation_cpu_seconds==30`,
+  `executors==1`, and **no `historical` credit section** (its presence is rejected).
+- `unit.get("operation") == "DD1-KERNEL-COMPAT-1"` (no scientific `M` and no old N0 account identity
+  is borrowed); `validate_unit`'s operation check is parameterised so `policy` selects the
+  KERNEL-COMPAT operation while `policy is None` still requires `OPERATION`/`M` exactly as today.
+- **real current UTC time** is used against `policy["start_utc"]`/`policy["deadline_utc"]`
+  (`start <= now < deadline`); see the test-seam rule below.
+- sum durable reservations against the **16 / 300 s / 128 MiB** operation caps; **no refund** after
+  reservation.
+- `UNIT-GRANT.deadline_unix` is taken from `policy["deadline_utc"]`, never from a caller field:
+  `datetime.fromisoformat(policy["deadline_utc"].replace("Z","+00:00")).timestamp()` = **`1790402220`**
+  (integer, `2026-09-26T05:57:00Z`).
+- A pre-`G` failure may conservatively retain its durable reservation (the existing
+  RESERVED→FAILED/INTERRUPTED no-refund path is unchanged). The separately recorded K2
+  `workload_releases` counter still follows #156/`5827737668` (increment on known/uncertain `G`);
+  conservative retention only reduces available work, never manufactures a 17th release.
+
+**Exact new synthetic-account JSON shape** (`policy is not None`):
+```json
+{"schema": "DD1-KERNEL-COMPAT-1-SYNTHETIC-ACCOUNT-1", "synthetic": true,
+ "recovery": {"id": "DD1-KERNEL-COMPAT-1", "selection": 5827591001,
+   "starts_used": 0, "starts_cap": 16,
+   "cpu_ns_used": 0, "cpu_ns_cap": 300000000000,
+   "raw_bytes_used": 0, "raw_bytes_cap": 134217728,
+   "executors": 1, "per_invocation_cpu_seconds": 30,
+   "first_engine_launch_utc": "2026-09-25T05:57:00Z",
+   "deadline_utc": "2026-09-26T05:57:00Z",
+   "unit_reservations_v2": [],
+   "events": [{"note": "SYNTHETIC K1 inert reservation account; no historical credit"}]}}
+```
+No `historical` key exists; `totals(..., policy=...)` computes `used` from `recovery` cap fields +
+`unit_reservations_v2` sums only (no `historical` recovery-minima block).
+
+**Test seam / "no caller clock in K2" (ruling test 10).** The existing `now=` parameter is retained
+**for pure unit tests only** (§10.6 tests 3/4). It is unreachable in K2: `kernel_compat_controls.py`
+and `dd1_meter_entry` never accept or forward `now`/deadline, so every K2 path uses
+`datetime.now(timezone.utc)`; the `deadline_unix` and window bounds come from the code-pinned
+`policy` (equal-checked against `inert_reservation_policy`), never a caller field; a non-pinned
+`policy` is rejected at that equality check before any reservation or grant.
+
+### 10.3 `tools/dd1_linux_backend.py::controller_limits(unit, deadline_utc=None)`
+
+- `deadline_utc is None` ⇒ existing behaviour **exactly** (the `deadline = fromisoformat(r.DEADLINE)`
+  line and `wall = min(float(unit["wall_seconds"]), deadline - time.time())` with `need(wall >= 3)`
+  cleanup headroom).
+- Non-null `deadline_utc` is accepted **only** for an exact `DD1-KERNEL-COMPAT-1` inert REQUALIFYING
+  unit and must **equal** the code-pinned selected deadline
+  `dd1_kernel_qualification.inert_reservation_policy(unit)["deadline_utc"]` (else `r.need` raises).
+  Then `deadline = fromisoformat(deadline_utc)` and the same
+  `wall = min(float(unit["wall_seconds"]), deadline - time.time())`, `need(wall >= 3)` headroom
+  computation runs. No fake time, no extension, no native use. All other `controller_limits` work
+  (single-thread guard, CPU baseline, rlimits, subreaper, itimer) is unchanged.
+
+### 10.4 `tools/dd1_meter_entry.py`
+
+- `_complete(command, unit, account_path, receipt_path, output, head, repo, check, lifetime,
+  inert=False, reservation_policy=None)`: pass `reservation_policy` into
+  `reservations.available(...)` (line 57) and `reservations.reserve_and_run(...)` (line 75) as
+  `policy=reservation_policy`. `reservation_policy=None` ⇒ today's calls exactly.
+- `_run_inert_unit(...)`: for an **exact** `DD1-KERNEL-COMPAT-1` REQUALIFYING unit, obtain the policy
+  **only** from `dd1_kernel_qualification.inert_reservation_policy(unit)`, call
+  `backend.controller_limits(unit, policy["deadline_utc"])`, and pass the **same** policy into
+  `_complete(..., reservation_policy=policy)`. All **old** inert units (N0-operation
+  `inert.c`/`compat2_inert.c`/`prep_inert.c`/`fit_inert.c` fixtures) keep `policy=None` and call
+  `controller_limits(unit)` with no deadline — byte-for-byte today.
+- `run_complete_unit` remains legacy/native and **must never select this policy**
+  (`controller_limits(unit)`, `reservation_policy=None`); existing native/H/FIT/PREP/COMPAT admission
+  is unchanged.
+
+### 10.5 `tools/dd1_linux/kernel_compat_controls.py` (K2 driver — additions to §8)
+
+Its disposable account is built with the **§10.2 synthetic-account schema/caps** (never the §8/legacy
+`DD1-N0-RECOVERY-1-ACCOUNT-1` shape, never the published or historical N0 account). Into **every** K2
+unit it binds: operation `DD1-KERNEL-COMPAT-1`, selection comment `5827591001`, the selected
+`start_utc`/`deadline_utc` exactly, and the exact K0/K1 host qualification (§2 REQUALIFYING profile
+with `QUALIFIED_IDENTITY`). The separate whole-operation ledger remains authoritative for the
+packet's 16-release / 300 s / 128 MiB accounting and K0/K2 custody (§8 unchanged).
+
+### 10.6 `tools/test_dd1_kernel_qualification.py` — reservation-policy tests (added)
+
+Pure logic on `python3`; build a synthetic account + unit and call `totals`/`available`/
+`reserve_and_run`/`controller_limits` directly. In addition to the §7 kernel/profile tests and the
+16-case `test_k2_plan_is_exactly_16_cases`, add the ruling's 12 (names as in the ruling):
+1. `test_legacy_deadline_constant_unchanged` — `FIRST/DEADLINE/OPERATION` still the exact old values.
+2. `test_legacy_after_expiry_rejects` — legacy N0-shaped path, `now` after 2026-09-24, rejects
+   `outside recovery window` exactly as before.
+3. `test_kernel_policy_before_selected_deadline_passes` — exact K1 synthetic account + pinned policy,
+   `now` within 25–26 Sep, validates.
+4. `test_kernel_policy_at_or_after_deadline_rejects` — same, `now >= 2026-09-26T05:57:00Z` rejects.
+5. `test_kernel_policy_field_mismatch_rejects` — parametrised: wrong start / deadline / selection /
+   operation / account schema / any cap / `synthetic!=True` each rejects.
+6. `test_kernel_policy_for_old_inert_unit_rejects` — pinned policy for an old N0 inert unit rejects.
+7. `test_kernel_policy_on_native_path_rejects_before_effect` — policy on a native/engineering unit
+   rejects before any reservation/effect.
+8. `test_grant_deadline_is_selected_deadline` — durable K1 reservation emits `deadline_unix ==
+   1790402220` (`2026-09-26T05:57:00Z`).
+9. `test_backend_default_vs_k1_clock` — `controller_limits(unit)` uses the old N0 deadline;
+   `controller_limits(unit, policy["deadline_utc"])` uses the selected deadline with `wall >= 3`.
+10. `test_no_caller_clock_reaches_k2_release` — no caller `now`/deadline/alternate policy reaches a
+    K2 release (driver/meter never forward one; non-pinned policy rejected).
+11. `test_operation_totals_16_300s_128mib_no_refund` — totals enforce 16 reservations, 300 s CPU and
+    128 MiB raw, no refund after reservation.
+12. `test_legacy_reservation_tests_unchanged` — existing legacy reservation expectations stay green
+    with unchanged N0 semantics (guards `test_dd1_source_repair.py`/`test_backend.py`).
+
+### 10.7 Helper / source-closure impact
+
+This amendment **does** change the `HELPER_SOURCES` Python controller-closure bytes:
+`tools/dd1_reservations.py`, `tools/dd1_linux_backend.py`, `tools/dd1_meter_entry.py`, and the new
+`tools/dd1_kernel_qualification.py`. It does **not** change any compiled-helper input —
+`supervisor.c`, `policy.c`, `isolate.c`, `capabilities.c/.h`, `policy.h`, and no `tools/dd1_linux/*.c
+|*.h`. Therefore `PINNED_HELPER_SHA256` stays
+`41a4529af3bb2fb3f065d164dee8ac9cd2af7d761311c5ee63538347a44e45a4`. Before K2, Tushar refreshes the
+K1-candidate `HELPER_SOURCES` path/hash map (the Python closure changed from the K0 base bytes) and
+rebuilds/reads back the **unchanged** helper once as already budgeted. A helper-hash mismatch is
+`INCOMPATIBLE_BUILD`; **do not** re-pin to match an unexplained binary.
+
+### 10.8 Invariants / non-claims / routing
+
+- No N0 window extension, reset, revival, spend or reinterpretation; the expired
+  `DD1-N0-RECOVERY-1` account and FIRST/DEADLINE/OPERATION constants stay immutable and continue
+  rejecting on the legacy (`policy is None`) path.
+- No new owner decision is needed for this deadline repair (ruling "Owner decision"): it connects the
+  already owner-selected K1 window (`5827591001`) to the K1-only synthetic inert reservation/backend
+  path; it creates/extends no window.
+- **Open routing item (not a technical grant):** Codex is unavailable until after the fixed deadline,
+  and the owner standing rule names Codex as implementer, so implementer substitution needs **one
+  small owner process exception** (existing scope/budget/deadline/helper pin and the K4 fresh
+  isolated reviewer all preserved). This lock does **not** name an implementer; that is a separate
+  owner process step. Changing the implementer does not reduce K4 independence.
