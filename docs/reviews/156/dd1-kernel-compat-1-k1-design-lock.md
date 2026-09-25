@@ -425,11 +425,17 @@ INERT_RESERVATION_POLICY = {
 `inert_reservation_policy(unit)` returns **exactly** `INERT_RESERVATION_POLICY` (a fresh copy) only
 when **all** hold, else fail closed via `r.need(...)`:
 - `unit.get("mode") == "inert_control"`;
-- `unit.get("operation") == "DD1-KERNEL-COMPAT-1"`;
-- the exact selection/deadline are bound in the unit — `unit["kernel_qualification"]["selection"]
-  == 5827591001` and `unit["kernel_qualification"]["operation"] == "DD1-KERNEL-COMPAT-1"`, and the
-  unit carries the selected `start_utc`/`deadline_utc` values (see §10.5: the K2 driver binds them
-  into every unit; the returned deadline is always the code-pinned one, never a copied caller field);
+- `unit.get("operation") == "DD1-KERNEL-COMPAT-1"` — this is the **existing top-level `unit["operation"]`
+  key** that `dd1_reservations.validate_unit` already reads (today `== OPERATION`; under `policy` it
+  must be `"DD1-KERNEL-COMPAT-1"`, see §10.2);
+- `unit["kernel_qualification"]["selection"] == 5827591001` and
+  `unit["kernel_qualification"]["operation"] == "DD1-KERNEL-COMPAT-1"`;
+- **the selected window lives in two new top-level unit keys** (the §2/§4 `kernel_qualification`
+  profile is closed "no extra fields", so it cannot carry them): `unit["operation_start_utc"] ==
+  "2026-09-25T05:57:00Z"` and `unit["operation_deadline_utc"] == "2026-09-26T05:57:00Z"`, each
+  compared by **exact equality** to `INERT_RESERVATION_POLICY["start_utc"]` /
+  `["deadline_utc"]`. Mismatch **or absence** of either key ⇒ fail closed. The returned deadline is
+  always the code-pinned `INERT_RESERVATION_POLICY["deadline_utc"]`, never a copied caller field;
 - `unit["kernel_qualification"]["status"] == "REQUALIFYING"` for the **exact K0 host identity**
   (`host_identity == QUALIFIED_IDENTITY`, the §2 grokbot-vm 6.12.94+ identity, exact equality).
 
@@ -469,6 +475,14 @@ output; no accepted no-qualification unit is perturbed.
 - `unit.get("operation") == "DD1-KERNEL-COMPAT-1"` (no scientific `M` and no old N0 account identity
   is borrowed); `validate_unit`'s operation check is parameterised so `policy` selects the
   KERNEL-COMPAT operation while `policy is None` still requires `OPERATION`/`M` exactly as today.
+- **the two top-level window keys `unit["operation_start_utc"]` / `unit["operation_deadline_utc"]`**
+  (§10.1) are read by `validate_unit` **only when `policy is not None`**, where they must be present
+  and exactly equal to `policy["start_utc"]` / `policy["deadline_utc"]` (mismatch or absence ⇒ fail
+  closed). Legacy safety: today's `validate_unit` reads named keys via `unit.get(...)` and has **no**
+  closed unit-key set (verified — no `set(unit) == …` check), so when `policy is None` these keys are
+  simply ignored, adding neither a new rejection nor a new acceptance path; the legacy unit remains
+  byte-for-byte. They are metadata only — the enforced window still comes from the code-pinned
+  `policy`, not from these keys.
 - **real current UTC time** is used against `policy["start_utc"]`/`policy["deadline_utc"]`
   (`start <= now < deadline`); see the test-seam rule below.
 - sum durable reservations against the **16 / 300 s / 128 MiB** operation caps; **no refund** after
@@ -537,9 +551,11 @@ and `dd1_meter_entry` never accept or forward `now`/deadline, so every K2 path u
 
 Its disposable account is built with the **§10.2 synthetic-account schema/caps** (never the §8/legacy
 `DD1-N0-RECOVERY-1-ACCOUNT-1` shape, never the published or historical N0 account). Into **every** K2
-unit it binds: operation `DD1-KERNEL-COMPAT-1`, selection comment `5827591001`, the selected
-`start_utc`/`deadline_utc` exactly, and the exact K0/K1 host qualification (§2 REQUALIFYING profile
-with `QUALIFIED_IDENTITY`). The separate whole-operation ledger remains authoritative for the
+unit it binds: `unit["operation"] == "DD1-KERNEL-COMPAT-1"`, selection comment `5827591001`, the
+selected window as **exactly the two top-level keys** `unit["operation_start_utc"] ==
+"2026-09-25T05:57:00Z"` and `unit["operation_deadline_utc"] == "2026-09-26T05:57:00Z"` (§10.1/§10.2;
+never inside the closed `kernel_qualification` profile), and the exact K0/K1 host qualification (§2
+REQUALIFYING profile with `QUALIFIED_IDENTITY`). The separate whole-operation ledger remains authoritative for the
 packet's 16-release / 300 s / 128 MiB accounting and K0/K2 custody (§8 unchanged).
 
 ### 10.6 `tools/test_dd1_kernel_qualification.py` — reservation-policy tests (added)
@@ -553,8 +569,10 @@ Pure logic on `python3`; build a synthetic account + unit and call `totals`/`ava
 3. `test_kernel_policy_before_selected_deadline_passes` — exact K1 synthetic account + pinned policy,
    `now` within 25–26 Sep, validates.
 4. `test_kernel_policy_at_or_after_deadline_rejects` — same, `now >= 2026-09-26T05:57:00Z` rejects.
-5. `test_kernel_policy_field_mismatch_rejects` — parametrised: wrong start / deadline / selection /
-   operation / account schema / any cap / `synthetic!=True` each rejects.
+5. `test_kernel_policy_field_mismatch_rejects` — parametrised: wrong/missing `unit["operation_start_utc"]`
+   / wrong/missing `unit["operation_deadline_utc"]` / wrong account `first_engine_launch_utc` or
+   `deadline_utc` / wrong selection / operation / account schema / any cap / `synthetic!=True` each
+   rejects.
 6. `test_kernel_policy_for_old_inert_unit_rejects` — pinned policy for an old N0 inert unit rejects.
 7. `test_kernel_policy_on_native_path_rejects_before_effect` — policy on a native/engineering unit
    rejects before any reservation/effect.
