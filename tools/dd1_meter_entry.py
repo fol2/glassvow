@@ -48,13 +48,15 @@ def require_native_backend(unit, command, repo, lifetime, generated=None):
     return backend.Prepared(unit, command, repo, lifetime, generated)
 
 
-def _complete(command, unit, account_path, receipt_path, output, head, repo, check, lifetime, inert=False):
+def _complete(command, unit, account_path, receipt_path, output, head, repo, check, lifetime,
+              inert=False, reservation_policy=None):
     # A canonical immutable copy prevents caller mutation after validation.
     unit = json.loads(reservations.encode(unit))
     account = reservations.read(account_path)
     check(account)
     reservations.need(unit.get("linux", {}).get("output_root") == str(output.resolve()), "unbound output root")
-    reservations.available(account, 1 + unit["contained_starts"], unit["cpu_seconds"] * 10**9, unit["raw_bytes"])
+    reservations.available(account, 1 + unit["contained_starts"], unit["cpu_seconds"] * 10**9, unit["raw_bytes"],
+                           policy=reservation_policy)
     try:
         generated = preparation.load_sealed(unit, account)
         prepared = require_native_backend(unit, list(command), repo, lifetime, generated)
@@ -74,7 +76,7 @@ def _complete(command, unit, account_path, receipt_path, output, head, repo, che
                           "complete raw envelope cannot fit input/control/workload copies")
         return reservations.reserve_and_run(account_path, unit, command=list(command), head=head,
             receipt_sha=reservations.digest(receipt), source_reader=lambda name: prepared.pinned["source"][name],
-            authority_check=check, output=output, runner=prepared)
+            authority_check=check, output=output, runner=prepared, policy=reservation_policy)
     finally:
         signal.setitimer(signal.ITIMER_REAL, 0)
 
@@ -119,7 +121,13 @@ def _run_inert_unit(command, *, unit, account_path, receipt_path, output, head, 
     mandatory; the repository's live account path cannot be selected.
     """
     unit = json.loads(reservations.encode(unit))
-    lifetime = backend.controller_limits(unit)
+    policy = None
+    if unit.get("operation") == "DD1-KERNEL-COMPAT-1":
+        import dd1_kernel_qualification as kernel_qualification
+        policy = kernel_qualification.inert_reservation_policy(unit)
+        lifetime = backend.controller_limits(unit, policy["deadline_utc"])
+    else:
+        lifetime = backend.controller_limits(unit)
     reservations.need(not account_path.resolve().is_relative_to(repo.resolve()), "inert account cannot be a repository account")
     receipt = reservations.read(receipt_path)
     # Receipt binds a demand with its receipt field omitted, avoiding a hash cycle.
@@ -133,4 +141,5 @@ def _run_inert_unit(command, *, unit, account_path, receipt_path, output, head, 
                        "res://tools/dd1_linux/fit_inert.c" in unit["source_files"]), "inert fixture binding required")
     def check(account):
         reservations.need(account.get("synthetic") is True, "inert entry requires synthetic account")
-    return _complete(command, unit, account_path, receipt_path, output, head, repo, check, lifetime, inert=True)
+    return _complete(command, unit, account_path, receipt_path, output, head, repo, check, lifetime,
+                     inert=True, reservation_policy=policy)

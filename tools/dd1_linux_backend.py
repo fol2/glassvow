@@ -32,7 +32,7 @@ def cpu_partition(total):
                 workload=total - 10, aggregate_with_headroom=4 + 4 + total - 9)
 
 
-def controller_limits(unit):
+def controller_limits(unit, deadline_utc=None):
     global _once
     r.need(not _once and len(list(Path("/proc/self/task").iterdir())) == 1, "dedicated single-thread controller required")
     _once = True
@@ -54,7 +54,13 @@ def controller_limits(unit):
     libc = ctypes.CDLL(None, use_errno=True)
     r.need(libc.prctl(36, 1, 0, 0, 0) == 0, "controller subreaper unavailable")
     start = time.monotonic()
-    deadline = __import__("datetime").datetime.fromisoformat(r.DEADLINE.replace("Z", "+00:00")).timestamp()
+    if deadline_utc is None:
+        deadline = __import__("datetime").datetime.fromisoformat(r.DEADLINE.replace("Z", "+00:00")).timestamp()
+    else:
+        import dd1_kernel_qualification as kernel_qualification
+        pinned = kernel_qualification.inert_reservation_policy(unit)
+        r.need(deadline_utc == pinned["deadline_utc"], "unpinned kernel deadline")
+        deadline = __import__("datetime").datetime.fromisoformat(str(deadline_utc).replace("Z", "+00:00")).timestamp()
     wall = min(float(unit["wall_seconds"]), deadline - time.time())
     r.need(wall >= 3, "complete wall envelope needs two seconds of cleanup headroom")
     def interrupt(signum, _):

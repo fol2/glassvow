@@ -107,8 +107,51 @@ def account_lock(path: Path):
         os.close(fd)
 
 
-def totals(account: Mapping, now: datetime | None = None) -> dict:
+def _pinned_policy(policy):
+    import dd1_kernel_qualification as kernel_qualification
+    need(isinstance(policy, dict) and policy == kernel_qualification.INERT_RESERVATION_POLICY,
+         "caller-shaped reservation policy rejected")
+    return policy
+
+
+def _totals_kernel(account: Mapping, now: datetime, policy: Mapping) -> dict:
+    policy = _pinned_policy(policy)
+    need(account.get("synthetic") is True, "kernel reservation account must be synthetic")
+    need(account.get("schema") == "DD1-KERNEL-COMPAT-1-SYNTHETIC-ACCOUNT-1", "wrong account schema")
+    need("historical" not in account, "historical credit forbidden")
+    recovery = account.get("recovery", {})
+    need(isinstance(recovery, dict), "invalid accounts")
+    need(recovery.get("id") == "DD1-KERNEL-COMPAT-1", "wrong account operation")
+    need(recovery.get("selection") == policy["selection"], "wrong account selection")
+    need(recovery.get("first_engine_launch_utc") == policy["start_utc"]
+         and recovery.get("deadline_utc") == policy["deadline_utc"], "wrong account window")
+    for field in ("starts_cap", "cpu_ns_cap", "raw_bytes_cap", "per_invocation_cpu_seconds", "executors"):
+        need(type(recovery.get(field)) is int and recovery[field] == policy[field], "mismatched cap: " + field)
+    start = datetime.fromisoformat(policy["start_utc"].replace("Z", "+00:00"))
+    expiry = datetime.fromisoformat(policy["deadline_utc"].replace("Z", "+00:00"))
+    need(now.tzinfo is not None and start <= now < expiry, "outside selected window")
+    result = {"starts": natural(recovery.get("starts_used"), "starts_used"),
+              "cpu_ns": natural(recovery.get("cpu_ns_used"), "cpu_ns_used"),
+              "raw_bytes": natural(recovery.get("raw_bytes_used"), "raw_bytes_used")}
+    units, seen = recovery.get("unit_reservations_v2", []), set()
+    need(isinstance(units, list), "invalid reservation ledger")
+    for row in units:
+        need(isinstance(row, dict) and isinstance(row.get("unit_id"), str) and
+             row["unit_id"] and row["unit_id"] not in seen, "duplicate/invalid reservation identity")
+        seen.add(row["unit_id"])
+        need(row.get("state") in ("RESERVED", "COMPLETE", "FAILED", "INTERRUPTED"), "invalid reservation state")
+        for field in result:
+            result[field] += natural(row.get(field), "reserved " + field)
+    for field, cap in (("starts", policy["starts_cap"]), ("cpu_ns", policy["cpu_ns_cap"]),
+                       ("raw_bytes", policy["raw_bytes_cap"])):
+        need(result[field] <= cap, "reported/committed capacity already exceeds " + field)
+    return result
+
+
+def totals(account: Mapping, now: datetime | None = None, policy=None) -> dict:
     now = now or datetime.now(timezone.utc)
+    if policy is not None:
+        return _totals_kernel(account, now, policy)
     need(account.get("schema") == "DD1-N0-RECOVERY-1-ACCOUNT-1", "wrong account schema")
     r, historical = account.get("recovery", {}), account.get("historical", {})
     need(isinstance(r, dict) and isinstance(historical, dict), "invalid accounts")
@@ -146,18 +189,33 @@ def totals(account: Mapping, now: datetime | None = None) -> dict:
 
 
 def available(account: Mapping, starts: int, cpu_ns: int, raw_bytes: int,
-              now: datetime | None = None) -> dict:
-    used = totals(account, now)
-    for field, proposed, cap in (("starts", starts, STARTS_CAP), ("cpu_ns", cpu_ns, CPU_CAP),
-                                 ("raw_bytes", raw_bytes, RAW_CAP)):
+              now: datetime | None = None, policy=None) -> dict:
+    used = totals(account, now, policy)
+    if policy is None:
+        caps = (("starts", starts, STARTS_CAP), ("cpu_ns", cpu_ns, CPU_CAP), ("raw_bytes", raw_bytes, RAW_CAP))
+    else:
+        policy = _pinned_policy(policy)
+        need(natural(cpu_ns, "cpu_ns") <= policy["per_invocation_cpu_seconds"] * 1_000_000_000,
+             "per-invocation CPU ceiling")
+        caps = (("starts", starts, policy["starts_cap"]), ("cpu_ns", cpu_ns, policy["cpu_ns_cap"]),
+                ("raw_bytes", raw_bytes, policy["raw_bytes_cap"]))
+    for field, proposed, cap in caps:
         need(used[field] + natural(proposed, field) <= cap, "exhausted complete-unit reservation: " + field)
     return used
 
 
 def validate_unit(unit: Mapping, command: list[str], *, head: str, receipt_sha: str,
-                  account_sha: str, source_reader: Callable[[str], bytes]) -> None:
+                  account_sha: str, source_reader: Callable[[str], bytes], policy=None) -> None:
     need(unit.get("schema") == "DD1-COMPLETE-UNIT-DEMAND-2", "complete unit demand required")
-    need(unit.get("operation") == OPERATION and unit.get("scientific_m") == M, "wrong unit operation/M")
+    if policy is None:
+        need(unit.get("operation") == OPERATION and unit.get("scientific_m") == M, "wrong unit operation/M")
+    else:
+        import dd1_kernel_qualification as kernel_qualification
+        pinned = kernel_qualification.inert_reservation_policy(unit)
+        need(policy == pinned, "caller-shaped reservation policy rejected")
+        need(unit.get("operation_start_utc") == policy["start_utc"]
+             and unit.get("operation_deadline_utc") == policy["deadline_utc"],
+             "selected window is not bound on the unit")
     need(unit.get("overlay_head") == head and bool(re.fullmatch(r"[0-9a-f]{40}", head)), "wrong exact source head")
     need(unit.get("receipt_sha256") == receipt_sha and unit.get("account_sha256") == account_sha, "stale receipt/account identity")
     need(isinstance(command, list) and command and all(isinstance(v, str) and v and "\0" not in v for v in command)
@@ -178,10 +236,14 @@ def validate_unit(unit: Mapping, command: list[str], *, head: str, receipt_sha: 
         validate_task(unit)
     cpu = natural(unit.get("cpu_seconds"), "cpu_seconds")
     need(4 <= cpu <= 300, "unsafe complete-unit CPU bound")
+    if policy is not None:
+        need(cpu <= policy["per_invocation_cpu_seconds"], "unsafe complete-unit CPU bound")
     wall = unit.get("wall_seconds")
     need(type(wall) in (int, float) and math.isfinite(wall) and 0 < wall <= 3600, "unsafe wall limit")
     raw = natural(unit.get("raw_bytes"), "raw_bytes")
     need(0 < raw <= RAW_CAP, "unsafe complete-unit raw bound")
+    if policy is not None:
+        need(raw <= policy["raw_bytes_cap"], "unsafe complete-unit raw bound")
     files = unit.get("source_files")
     need(isinstance(files, dict) and files, "missing exact source file bindings")
     for name, wanted in files.items():
@@ -194,14 +256,19 @@ def validate_unit(unit: Mapping, command: list[str], *, head: str, receipt_sha: 
 def reserve_and_run(account_path: Path, unit: Mapping, *, command: list[str], head: str,
                     receipt_sha: str, source_reader: Callable[[str], bytes],
                     authority_check: Callable[[Mapping], None], output: Path,
-                    runner: Callable[[dict, Path], dict], now: datetime | None = None) -> dict:
+                    runner: Callable[[dict, Path], dict], now: datetime | None = None,
+                    policy=None) -> dict:
     """Internal runner seam, not a CLI permission or an aggregate OS sandbox."""
+    if policy is not None:
+        import dd1_kernel_qualification as kernel_qualification
+        need(policy == kernel_qualification.inert_reservation_policy(unit),
+             "caller-shaped reservation policy rejected")
     with account_lock(account_path):
         before_bytes = account_path.read_bytes()
         account = read(account_path)
         authority_check(account)
         validate_unit(unit, command, head=head, receipt_sha=receipt_sha,
-                      account_sha=digest(before_bytes), source_reader=source_reader)
+                      account_sha=digest(before_bytes), source_reader=source_reader, policy=policy)
         units = account["recovery"].get("unit_reservations_v2", [])
         need(all(row["unit_id"] != unit["unit_id"] for row in units), "unit already reserved; no second spawn")
         need(all(row.get("backend") != "linux-x86_64-lp64-v1" or
@@ -216,14 +283,17 @@ def reserve_and_run(account_path: Path, unit: Mapping, *, command: list[str], he
                    "before_account_sha256": digest(before_bytes), "demand_sha256": digest(encode(unit)),
                    "backend": unit.get("linux", {}).get("abi"), "release_protocol": "B1-ACK-1" if unit.get("linux") else None,
                    "state": "RESERVED", "observations": None}
-        available(account, reserve["starts"], reserve["cpu_ns"], reserve["raw_bytes"], now)
+        available(account, reserve["starts"], reserve["cpu_ns"], reserve["raw_bytes"], now, policy)
         changed = deepcopy(account)
         changed["recovery"].setdefault("unit_reservations_v2", []).append(reserve)
         atomic_write(account_path, changed)  # Durable full charge BEFORE any runner/child.
+        deadline_unix = datetime.fromisoformat(DEADLINE.replace("Z", "+00:00")).timestamp()
+        if policy is not None:
+            deadline_unix = int(datetime.fromisoformat(policy["deadline_utc"].replace("Z", "+00:00")).timestamp())
         grant = dict(unit, schema="DD1-RESERVED-UNIT-2", engine_starts=1,
                      artifact_root=str((output / "capture").resolve()),
                      metadata_raw_reserved=metadata, child_raw_bytes=unit["raw_bytes"] - metadata - 4096,
-                     deadline_unix=datetime.fromisoformat(DEADLINE.replace("Z", "+00:00")).timestamp())
+                     deadline_unix=deadline_unix)
         try:
             output.mkdir(parents=True, exist_ok=False)
             atomic_write(output / "UNIT-GRANT.json", grant)
