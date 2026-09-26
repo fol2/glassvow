@@ -21,7 +21,8 @@ HELPER_SOURCES = frozenset("res://tools/" + p for p in (
     "dd1_meter_entry.py", "dd1_reservations.py", "dd1_recovery_meter.py",
     "dd1_linux/capabilities.h", "dd1_linux/capabilities.c",
     "dd1_compatibility.py", "dd1_preparation.py", "dd1_preparation_watch.py",
-    "dd1_prep_view.py", "dd1_import_semantics.py", "dd1_runtime_fit.py"))
+    "dd1_prep_view.py", "dd1_import_semantics.py", "dd1_runtime_fit.py",
+    "dd1_kernel_qualification.py"))
 
 
 def read_regular(root: Path, name: str, maximum: int = 1 << 30) -> bytes:
@@ -82,8 +83,11 @@ def elf(raw: bytes) -> tuple[str | None, list[str]]:
 
 
 def prepare(unit: dict, command: list[str], repo: Path, generated=None) -> dict:
-    r.need(platform.system() == "Linux" and platform.machine() == "x86_64" and platform.release() == "6.18.44" and struct.calcsize("P") == 8,
-           "unsupported host/ABI; no fallback")
+    import dd1_kernel_qualification as kernel_qualification
+    host = dict(system=platform.system(), machine=platform.machine(),
+                kernel_release=platform.release(), kernel_version=platform.version(),
+                pointer_bytes=struct.calcsize("P"), libc=list(platform.libc_ver()))
+    kernel_qualification.require(unit, host)
     b = unit.get("linux", {})
     r.need(b.get("abi") == ABI, "missing supported Linux demand")
     r.need(HELPER_SOURCES <= unit["source_files"].keys(), "backend source closure missing")

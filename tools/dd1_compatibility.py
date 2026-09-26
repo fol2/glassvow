@@ -52,6 +52,8 @@ def validate_profile(unit, pinned):
     if fit.selected(unit):
         expected['runtime_fit_sha256'] = r.digest(r.encode(unit['runtime_fit']))
         expected['execution_modes_sha256'] = r.digest(r.encode(unit['execution_modes']))
+    if unit.get("kernel_qualification") is not None:
+        expected["kernel_qualification_sha256"] = r.digest(r.encode(unit["kernel_qualification"]))
     r.need(r.encode(profile) == r.encode(expected), "profile exact-invocation binding")
     r.need(1 <= r.natural(profile["naming_total"], "naming bound") <= b["threads"] <= ceiling and
            1 <= r.natural(profile["clone3_maximum"], "clone3 bound") <= b["threads"] + 1 <= ceiling + 1,
@@ -124,6 +126,8 @@ def native_bindings(unit, expected, context):
     if unit.get("compatibility") is None:
         r.need(unit.get("mode") != "engineering", "missing engineering profile")
         return
+    import dd1_kernel_qualification as kernel_qualification
+    kernel_qualification.native_bindings(unit, expected, context)
     import dd1_runtime_fit as fit
     fit.native_bindings(unit, expected, context)
     bound_role(expected, context, "compatibility_profile", r.encode(unit["compatibility"]))
