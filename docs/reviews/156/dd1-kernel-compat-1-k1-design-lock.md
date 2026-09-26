@@ -17,6 +17,16 @@ engine/K2/helper build is run. The implementer is a separate agent per the routi
 > No window is extended, reset, revived, spent or reinterpreted; the old N0 clock/account remain
 > expired and keep rejecting. No new owner decision is required for this repair.
 
+> **AMENDMENT 2 (2026-09-26) — authority fol2/glassvow#156 comment `5845725453`.**
+> Previous lock SHA `2f33b6bd25076559eb146ebf7cfc1b747570f3a0`. The owner selection
+> `5827591001` window (2026-09-25T05:57:00Z → 2026-09-26T05:57:00Z, grant `deadline_unix`
+> `1790402220`) expired unused (0 releases). Operation ID stays `DD1-KERNEL-COMPAT-1`.
+> This amendment re-pins ONLY the owner-selection id, the selected window and the grant
+> `deadline_unix`. Every envelope value, the stop graph, helper pin and all design/semantics
+> are unchanged. Implementer is Grok Build (grok-4.7-xhigh) per the owner exception. This
+> docs-only re-pin was written by the implementer because Claude Code was unavailable, and
+> is reviewed by Ash (PM). AMENDMENT 2 governs on conflict for these values only.
+
 ## 1. Scope, base, authority
 
 - **Frozen base:** `c17ae971a447c28e597b78d0ecb5eb29f36e644a`, tree
@@ -25,11 +35,18 @@ engine/K2/helper build is run. The implementer is a separate agent per the routi
   Operating main remains `07b5aa9dec8436132a524511d5438c510e322070` (rules authority; never mutated).
 - **Authority comments (issue fol2/glassvow#156):**
   - Owner selection `5827591001` — selected 2026-09-25T05:57:00Z, absolute deadline
-    2026-09-26T05:57:00Z. Verbatim owner authorisation of DD1-KERNEL-COMPAT-1.
+    2026-09-26T05:57:00Z. Verbatim original owner authorisation of DD1-KERNEL-COMPAT-1.
+    Historical: that window expired unused (0 releases) and is not the current selection.
+  - Renewed-window selection + implementer exception `5845725453` — start
+    2026-09-26T11:02:00Z, absolute deadline 2026-09-27T11:02:00Z (`deadline_unix`
+    `1790506920`). Current selection record for DD1-KERNEL-COMPAT-1; names Grok Build
+    (grok-4.7-xhigh) as this K1 implementer only.
   - Envelope + K0–K5 stop graph `5827472523`.
   - K0 bounded JSON `5827803459` — `K0.json` sha256
     `e4dbba67824aeb6b5d52c5697e948e4baec78e38f19ed9cd6cefb790de139c66`; custodian Tushar,
     executor grokbot-vm; all counters 0; 17 HELPER_SOURCES clone bytes equal the git blobs at base.
+    Historical under the expired `5827591001` window. Tushar must re-verify K0 custody for
+    the `5845725453` window before K2.
   - The exact K1/K2 contract packet is `5827737668`; this lock designs against it verbatim and
     neither widens nor narrows it.
 - **Files touched by K1 (nothing else changes) — amended by §10:**
@@ -54,7 +71,7 @@ engine/K2/helper build is run. The implementer is a separate agent per the routi
 ```python
 SCHEMA     = "DD1-KERNEL-QUALIFICATION-1"
 OPERATION  = "DD1-KERNEL-COMPAT-1"
-SELECTION  = 5827591001
+SELECTION  = 5845725453
 DISPOSITION_SCHEMA = "DD1-KERNEL-COMPAT-DISPOSITION-1"
 PRIMITIVES = frozenset((                       # exact required primitive-name set (9)
     "seccomp_user_notif", "user_namespace", "mount_namespace", "network_namespace",
@@ -199,7 +216,7 @@ Exactly these keys, no extra fields:
 |---|---|---|
 | `schema` | str | `"DD1-KERNEL-QUALIFICATION-1"` |
 | `operation` | str | `"DD1-KERNEL-COMPAT-1"` |
-| `selection` | int | `5827591001` |
+| `selection` | int | `5845725453` |
 | `source_head` | str | `^[0-9a-f]{40}$`, **== `unit["overlay_head"]`** |
 | `status` | str | `"REQUALIFYING"` \| `"QUALIFIED"` |
 | `mode` | str | `== unit["mode"]`; `"inert_control"` when `status=="REQUALIFYING"` |
@@ -234,7 +251,7 @@ release), never a `kernel_qualification` field. K1 adds no boot_id anywhere.
   selected operation; it is never native/engineering authority and is rejected in `native_bindings`.
 - **`QUALIFIED`** is consumable by a later engineering unit **only** via the externally authenticated
   `kernel_qualification_disposition` role: schema `DD1-KERNEL-COMPAT-DISPOSITION-1`, owner selection
-  `5827591001`, exact `profile_sha256`, exact `source_head`, exact `kernel_identity`,
+  `5845725453`, exact `profile_sha256`, exact `source_head`, exact `kernel_identity`,
   `independent_review=="APPROVE"`, `planner_acceptance=="ACCEPTED"`, `launch_admitted is True`,
   non-synthetic receipt authority, `context.kind=="empirical"`. K1/K2 cannot manufacture it, so
   **native admission stays rejected in this operation.**
@@ -317,7 +334,7 @@ python3 -I -B -S tools/dd1_linux/kernel_compat_controls.py \
 ```
 
 **Refusal preconditions (all must hold before any workload release `G`):** valid K0 record present;
-owner selection `5827591001`; now `< 2026-09-26T05:57:00Z` deadline; whole-operation `flock -n LOCK`
+owner selection `5845725453`; now `< 2026-09-27T11:02:00Z` deadline; whole-operation `flock -n LOCK`
 held under `--root`; `--head` equals the exact K1 candidate head bound in the unit
 (`unit["overlay_head"]`). Any failure → emit one JSON record and refuse **before** `G`.
 
@@ -410,9 +427,9 @@ code** (a module constant; no caller shapes it):
 ```python
 INERT_RESERVATION_POLICY = {
     "operation": "DD1-KERNEL-COMPAT-1",
-    "selection": 5827591001,
-    "start_utc": "2026-09-25T05:57:00Z",
-    "deadline_utc": "2026-09-26T05:57:00Z",
+    "selection": 5845725453,
+    "start_utc": "2026-09-26T11:02:00Z",
+    "deadline_utc": "2026-09-27T11:02:00Z",
     "synthetic_only": True,
     "starts_cap": 16,             # starts / reserved-case ceiling
     "cpu_ns_cap": 300_000_000_000,  # aggregate CPU ceiling (300 s)
@@ -428,11 +445,11 @@ when **all** hold, else fail closed via `r.need(...)`:
 - `unit.get("operation") == "DD1-KERNEL-COMPAT-1"` — this is the **existing top-level `unit["operation"]`
   key** that `dd1_reservations.validate_unit` already reads (today `== OPERATION`; under `policy` it
   must be `"DD1-KERNEL-COMPAT-1"`, see §10.2);
-- `unit["kernel_qualification"]["selection"] == 5827591001` and
+- `unit["kernel_qualification"]["selection"] == 5845725453` and
   `unit["kernel_qualification"]["operation"] == "DD1-KERNEL-COMPAT-1"`;
 - **the selected window lives in two new top-level unit keys** (the §2/§4 `kernel_qualification`
   profile is closed "no extra fields", so it cannot carry them): `unit["operation_start_utc"] ==
-  "2026-09-25T05:57:00Z"` and `unit["operation_deadline_utc"] == "2026-09-26T05:57:00Z"`, each
+  "2026-09-26T11:02:00Z"` and `unit["operation_deadline_utc"] == "2026-09-27T11:02:00Z"`, each
   compared by **exact equality** to `INERT_RESERVATION_POLICY["start_utc"]` /
   `["deadline_utc"]`. Mismatch **or absence** of either key ⇒ fail closed. The returned deadline is
   always the code-pinned `INERT_RESERVATION_POLICY["deadline_utc"]`, never a copied caller field;
@@ -468,7 +485,7 @@ output; no accepted no-qualification unit is perturbed.
   one and rejected if it differs.
 - `account.get("synthetic") is True` and `unit.get("mode") == "inert_control"`.
 - account schema `"DD1-KERNEL-COMPAT-1-SYNTHETIC-ACCOUNT-1"` with recovery `id ==
-  "DD1-KERNEL-COMPAT-1"`, exact selection `5827591001`, `first_engine_launch_utc ==
+  "DD1-KERNEL-COMPAT-1"`, exact selection `5845725453`, `first_engine_launch_utc ==
   policy["start_utc"]`, `deadline_utc == policy["deadline_utc"]`, caps `starts_cap==16`,
   `cpu_ns_cap==300_000_000_000`, `raw_bytes_cap==134_217_728`, `per_invocation_cpu_seconds==30`,
   `executors==1`, and **no `historical` credit section** (its presence is rejected).
@@ -488,8 +505,8 @@ output; no accepted no-qualification unit is perturbed.
 - sum durable reservations against the **16 / 300 s / 128 MiB** operation caps; **no refund** after
   reservation.
 - `UNIT-GRANT.deadline_unix` is taken from `policy["deadline_utc"]`, never from a caller field:
-  `datetime.fromisoformat(policy["deadline_utc"].replace("Z","+00:00")).timestamp()` = **`1790402220`**
-  (integer, `2026-09-26T05:57:00Z`).
+  `datetime.fromisoformat(policy["deadline_utc"].replace("Z","+00:00")).timestamp()` = **`1790506920`**
+  (integer, `2026-09-27T11:02:00Z`).
 - A pre-`G` failure may conservatively retain its durable reservation (the existing
   RESERVED→FAILED/INTERRUPTED no-refund path is unchanged). The separately recorded K2
   `workload_releases` counter still follows #156/`5827737668` (increment on known/uncertain `G`);
@@ -498,13 +515,13 @@ output; no accepted no-qualification unit is perturbed.
 **Exact new synthetic-account JSON shape** (`policy is not None`):
 ```json
 {"schema": "DD1-KERNEL-COMPAT-1-SYNTHETIC-ACCOUNT-1", "synthetic": true,
- "recovery": {"id": "DD1-KERNEL-COMPAT-1", "selection": 5827591001,
+ "recovery": {"id": "DD1-KERNEL-COMPAT-1", "selection": 5845725453,
    "starts_used": 0, "starts_cap": 16,
    "cpu_ns_used": 0, "cpu_ns_cap": 300000000000,
    "raw_bytes_used": 0, "raw_bytes_cap": 134217728,
    "executors": 1, "per_invocation_cpu_seconds": 30,
-   "first_engine_launch_utc": "2026-09-25T05:57:00Z",
-   "deadline_utc": "2026-09-26T05:57:00Z",
+   "first_engine_launch_utc": "2026-09-26T11:02:00Z",
+   "deadline_utc": "2026-09-27T11:02:00Z",
    "unit_reservations_v2": [],
    "events": [{"note": "SYNTHETIC K1 inert reservation account; no historical credit"}]}}
 ```
@@ -551,9 +568,9 @@ and `dd1_meter_entry` never accept or forward `now`/deadline, so every K2 path u
 
 Its disposable account is built with the **§10.2 synthetic-account schema/caps** (never the §8/legacy
 `DD1-N0-RECOVERY-1-ACCOUNT-1` shape, never the published or historical N0 account). Into **every** K2
-unit it binds: `unit["operation"] == "DD1-KERNEL-COMPAT-1"`, selection comment `5827591001`, the
+unit it binds: `unit["operation"] == "DD1-KERNEL-COMPAT-1"`, selection comment `5845725453`, the
 selected window as **exactly the two top-level keys** `unit["operation_start_utc"] ==
-"2026-09-25T05:57:00Z"` and `unit["operation_deadline_utc"] == "2026-09-26T05:57:00Z"` (§10.1/§10.2;
+"2026-09-26T11:02:00Z"` and `unit["operation_deadline_utc"] == "2026-09-27T11:02:00Z"` (§10.1/§10.2;
 never inside the closed `kernel_qualification` profile), and the exact K0/K1 host qualification (§2
 REQUALIFYING profile with `QUALIFIED_IDENTITY`). The separate whole-operation ledger remains authoritative for the
 packet's 16-release / 300 s / 128 MiB accounting and K0/K2 custody (§8 unchanged).
@@ -567,8 +584,8 @@ Pure logic on `python3`; build a synthetic account + unit and call `totals`/`ava
 2. `test_legacy_after_expiry_rejects` — legacy N0-shaped path, `now` after 2026-09-24, rejects
    `outside recovery window` exactly as before.
 3. `test_kernel_policy_before_selected_deadline_passes` — exact K1 synthetic account + pinned policy,
-   `now` within 25–26 Sep, validates.
-4. `test_kernel_policy_at_or_after_deadline_rejects` — same, `now >= 2026-09-26T05:57:00Z` rejects.
+   `now` within 2026-09-26T11:02:00Z..2026-09-27T11:02:00Z, validates.
+4. `test_kernel_policy_at_or_after_deadline_rejects` — same, `now >= 2026-09-27T11:02:00Z` rejects.
 5. `test_kernel_policy_field_mismatch_rejects` — parametrised: wrong/missing `unit["operation_start_utc"]`
    / wrong/missing `unit["operation_deadline_utc"]` / wrong account `first_engine_launch_utc` or
    `deadline_utc` / wrong selection / operation / account schema / any cap / `synthetic!=True` each
@@ -577,7 +594,7 @@ Pure logic on `python3`; build a synthetic account + unit and call `totals`/`ava
 7. `test_kernel_policy_on_native_path_rejects_before_effect` — policy on a native/engineering unit
    rejects before any reservation/effect.
 8. `test_grant_deadline_is_selected_deadline` — durable K1 reservation emits `deadline_unix ==
-   1790402220` (`2026-09-26T05:57:00Z`).
+   1790506920` (`2026-09-27T11:02:00Z`).
 9. `test_backend_default_vs_k1_clock` — `controller_limits(unit)` uses the old N0 deadline;
    `controller_limits(unit, policy["deadline_utc"])` uses the selected deadline with `wall >= 3`.
 10. `test_no_caller_clock_reaches_k2_release` — no caller `now`/deadline/alternate policy reaches a
@@ -604,11 +621,10 @@ rebuilds/reads back the **unchanged** helper once as already budgeted. A helper-
 - No N0 window extension, reset, revival, spend or reinterpretation; the expired
   `DD1-N0-RECOVERY-1` account and FIRST/DEADLINE/OPERATION constants stay immutable and continue
   rejecting on the legacy (`policy is None`) path.
-- No new owner decision is needed for this deadline repair (ruling "Owner decision"): it connects the
-  already owner-selected K1 window (`5827591001`) to the K1-only synthetic inert reservation/backend
-  path; it creates/extends no window.
-- **Open routing item (not a technical grant):** Codex is unavailable until after the fixed deadline,
-  and the owner standing rule names Codex as implementer, so implementer substitution needs **one
-  small owner process exception** (existing scope/budget/deadline/helper pin and the K4 fresh
-  isolated reviewer all preserved). This lock does **not** name an implementer; that is a separate
-  owner process step. Changing the implementer does not reduce K4 independence.
+- No new owner decision is needed for the §10 deadline repair itself (ruling "Owner decision"): it connects the
+  current owner-selected K1 window (`5845725453`) to the K1-only synthetic inert reservation/backend
+  path. It does not extend, reset, revive, spend or reinterpret the expired N0 window. The prior
+  selection `5827591001` expired unused and is historical (AMENDMENT 2).
+- **Routing resolved by #156/`5845725453`:** Grok Build (grok-4.7-xhigh) is the named K1 implementer
+  for this operation only (owner implementer exception). Scope, budget, helper pin and the fresh
+  isolated K4 reviewer are unchanged. Changing the implementer does not reduce K4 independence.
