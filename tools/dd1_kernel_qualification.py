@@ -76,22 +76,27 @@ def native_bindings(unit, expected, context):
     q = unit.get("kernel_qualification")
     if q is None:
         return
+    r.need(isinstance(q, dict), "kernel qualification profile required")
     r.need(q.get("status") == "QUALIFIED",
            "REQUALIFYING/incomplete kernel qualification is not native authority")
     role = expected["roles"].get("kernel_qualification_disposition", {})
     raw = context.resolve(role.get("locator"))
     r.need(isinstance(raw, bytes) and r.digest(raw) == role.get("sha256"),
            "missing kernel qualification disposition")
-    d = json.loads(raw)
-    r.need(d["schema"] == DISPOSITION_SCHEMA, "wrong disposition schema")
-    r.need(d["operation"] == OPERATION, "wrong disposition operation")
-    r.need(d["owner_selection"] == SELECTION, "wrong disposition owner selection")
-    r.need(d["profile_sha256"] == profile_sha256(unit), "wrong disposition profile")
-    r.need(d["source_head"] == unit["overlay_head"], "wrong disposition source head")
-    r.need(d["kernel_identity"] == q["host_identity"], "wrong disposition kernel identity")
-    r.need(d["independent_review"] == "APPROVE", "disposition review is not approved")
-    r.need(d["planner_acceptance"] == "ACCEPTED", "disposition is not accepted")
-    r.need(d["launch_admitted"] is True, "disposition launch is not admitted")
+    try:
+        d = json.loads(raw)
+    except ValueError as exc:
+        raise r.ReservationError("malformed kernel qualification disposition") from exc
+    r.need(isinstance(d, dict), "malformed kernel qualification disposition")
+    r.need(d.get("schema") == DISPOSITION_SCHEMA, "wrong disposition schema")
+    r.need(d.get("operation") == OPERATION, "wrong disposition operation")
+    r.need(d.get("owner_selection") == SELECTION, "wrong disposition owner selection")
+    r.need(d.get("profile_sha256") == profile_sha256(unit), "wrong disposition profile")
+    r.need(d.get("source_head") == unit["overlay_head"], "wrong disposition source head")
+    r.need(d.get("kernel_identity") == q["host_identity"], "wrong disposition kernel identity")
+    r.need(d.get("independent_review") == "APPROVE", "disposition review is not approved")
+    r.need(d.get("planner_acceptance") == "ACCEPTED", "disposition is not accepted")
+    r.need(d.get("launch_admitted") is True, "disposition launch is not admitted")
     auth = expected.get("receipt_authorities", {}).get("kernel_qualification_disposition", {})
     r.need(isinstance(auth.get("authority"), str) and auth["authority"]
            and not auth["authority"].startswith("synthetic:")
