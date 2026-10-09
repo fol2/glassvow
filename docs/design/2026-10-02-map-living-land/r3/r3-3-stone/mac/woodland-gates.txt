@@ -1,0 +1,27 @@
+# R3.1 b's woodland gates at R3.3's code-final runtime (lane head 1ae3888c, whose runtime equals the PR head's) against main 711302a5.
+# Mac, A12 Metal condition (GODOT_MTL_DISABLE_ARGUMENT_BUFFERS=1, --rendering-driver metal --rendering-method mobile), lean, seed 1.
+# tools/wood_gates.zsh.txt: R3.1 b's look.gd (flat-magenta cover, the ruins' stone cards skipped: MAGENTA_SKIP), its fix round's metrics.py, its tint pass's bands.py, R2's pin mount (look4.gd) and pin_contrast.py.
+== wood gates r33-ctl
+pad journey: exit 0 0 shader errors, 0 script errors
+pad journey metrics {"red": 0.1668, "orange": 0.2461, "crimson": 0.0004, "cover_d06": 0.3978, "cover_d01": 0.5112, "cover_magenta": 0.4532, "wood_red": 0.42, "wood_orange": 0.135, "wood_other": 0.445} bands {"red": 0.1668, "sat_red": 0.0971, "b345_355": 0.0, "b355_5": 0.589, "b5_15": 0.411, "orange": 0.2461, "crimson": 0.0004, "v_median": 0.235, "wood_red": 0.42, "wood_orange": 0.135, "wood_v_median": 0.137, "wood_bright": 0.126, "cover_magenta": 0.4532} skip MAGENTA_SKIP 0
+pad whole: exit 0 0 shader errors, 0 script errors
+pad whole metrics {"red": 0.1152, "orange": 0.1307, "crimson": 0.0013, "cover_d06": 0.3482, "cover_d01": 0.4612, "cover_magenta": 0.4388, "wood_red": 0.323, "wood_orange": 0.089, "wood_other": 0.588} bands {"red": 0.1152, "sat_red": 0.0612, "b345_355": 0.0, "b355_5": 0.551, "b5_15": 0.449, "orange": 0.1307, "crimson": 0.0013, "v_median": 0.141, "wood_red": 0.323, "wood_orange": 0.089, "wood_v_median": 0.102, "wood_bright": 0.088, "cover_magenta": 0.4388} skip MAGENTA_SKIP 0
+pad fresh: exit 0 0 shader errors, 0 script errors
+pad fresh metrics {"red": 0.1246, "orange": 0.2303, "crimson": 0.0003, "cover_d06": 0.3873, "cover_d01": 0.4908, "cover_magenta": 0.4581, "wood_red": 0.298, "wood_orange": 0.105, "wood_other": 0.597} bands {"red": 0.1246, "sat_red": 0.0839, "b345_355": 0.0, "b355_5": 0.571, "b5_15": 0.429, "orange": 0.2303, "crimson": 0.0003, "v_median": 0.212, "wood_red": 0.298, "wood_orange": 0.105, "wood_v_median": 0.114, "wood_bright": 0.118, "cover_magenta": 0.4581} skip MAGENTA_SKIP 0
+phone journey: exit 0 0 shader errors, 0 script errors
+phone journey metrics {"red": 0.1253, "orange": 0.281, "crimson": 0.0002, "cover_d06": 0.3718, "cover_d01": 0.4783, "cover_magenta": 0.4417, "wood_red": 0.334, "wood_orange": 0.112, "wood_other": 0.554} bands {"red": 0.1253, "sat_red": 0.0708, "b345_355": 0.0, "b355_5": 0.598, "b5_15": 0.402, "orange": 0.281, "crimson": 0.0002, "v_median": 0.22, "wood_red": 0.334, "wood_orange": 0.112, "wood_v_median": 0.114, "wood_bright": 0.093, "cover_magenta": 0.4417}
+pad-landscape pins rim min 1.93 disc min 1.16 pins 10 shader 0 script 0
+phone-landscape pins rim min 1.07 disc min 1.03 pins 10 shader 0 script 0
+desktop-landscape pins rim min 1.96 disc min 1.16 pins 10 shader 0 script 0
+== wood gates wt-r33
+pad journey: exit 0 0 shader errors, 0 script errors
+pad journey metrics {"red": 0.1611, "orange": 0.3059, "crimson": 0.0005, "cover_d06": 0.4009, "cover_d01": 0.5076, "cover_magenta": 0.4365, "wood_red": 0.403, "wood_orange": 0.176, "wood_other": 0.421} bands {"red": 0.1611, "sat_red": 0.1115, "b345_355": 0.0, "b355_5": 0.548, "b5_15": 0.452, "orange": 0.3059, "crimson": 0.0005, "v_median": 0.263, "wood_red": 0.403, "wood_orange": 0.176, "wood_v_median": 0.153, "wood_bright": 0.171, "cover_magenta": 0.4365} skip MAGENTA_SKIP 37
+pad whole: exit 0 0 shader errors, 0 script errors
+pad whole metrics {"red": 0.1225, "orange": 0.1635, "crimson": 0.0014, "cover_d06": 0.3573, "cover_d01": 0.4549, "cover_magenta": 0.4283, "wood_red": 0.346, "wood_orange": 0.106, "wood_other": 0.548} bands {"red": 0.1225, "sat_red": 0.0654, "b345_355": 0.0, "b355_5": 0.589, "b5_15": 0.411, "orange": 0.1635, "crimson": 0.0014, "v_median": 0.141, "wood_red": 0.346, "wood_orange": 0.106, "wood_v_median": 0.11, "wood_bright": 0.095, "cover_magenta": 0.4283} skip MAGENTA_SKIP 37
+pad fresh: exit 0 0 shader errors, 0 script errors
+pad fresh metrics {"red": 0.1229, "orange": 0.2645, "crimson": 0.0004, "cover_d06": 0.3967, "cover_d01": 0.4949, "cover_magenta": 0.4575, "wood_red": 0.292, "wood_orange": 0.12, "wood_other": 0.588} bands {"red": 0.1229, "sat_red": 0.0845, "b345_355": 0.0, "b355_5": 0.556, "b5_15": 0.444, "orange": 0.2645, "crimson": 0.0004, "v_median": 0.216, "wood_red": 0.292, "wood_orange": 0.12, "wood_v_median": 0.118, "wood_bright": 0.135, "cover_magenta": 0.4575} skip MAGENTA_SKIP 37
+phone journey: exit 0 0 shader errors, 0 script errors
+phone journey metrics {"red": 0.1409, "orange": 0.3301, "crimson": 0.0002, "cover_d06": 0.3602, "cover_d01": 0.4722, "cover_magenta": 0.4281, "wood_red": 0.375, "wood_orange": 0.128, "wood_other": 0.497} bands {"red": 0.1409, "sat_red": 0.0795, "b345_355": 0.0, "b355_5": 0.58, "b5_15": 0.42, "orange": 0.3301, "crimson": 0.0002, "v_median": 0.231, "wood_red": 0.375, "wood_orange": 0.128, "wood_v_median": 0.122, "wood_bright": 0.112, "cover_magenta": 0.4281}
+pad-landscape pins rim min 1.91 disc min 1.19 pins 10 shader 0 script 0
+phone-landscape pins rim min 1.04 disc min 1.0 pins 10 shader 0 script 0
+desktop-landscape pins rim min 1.93 disc min 1.17 pins 10 shader 0 script 0

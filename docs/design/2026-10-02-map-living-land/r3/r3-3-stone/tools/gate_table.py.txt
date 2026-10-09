@@ -1,0 +1,28 @@
+"""Lane R3.3 (scratch): the core gate's and the specialist checks' logs as one markdown table.
+  python3 gate_table.py <log> [<log> ...]"""
+import re, sys
+rows = []; head = ''
+for path in sys.argv[1:]:
+    text = open(path).read()
+    head = head or re.search(r'^head .*', text, re.M).group(0)
+    for block in re.split(r'\n(?=\$ )', text):
+        if not block.startswith('$ '):
+            continue
+        cmd = block.splitlines()[0][2:].replace('/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane/tmp/', '<lane>/')
+        m = re.search(r'^exit (\d+)', block, re.M)
+        lines = [l for l in block.splitlines()[1:] if l and not l.startswith('exit ') and not l.startswith('done ')
+                 and 'leaked at exit' not in l and '\x1b' not in l and not l.startswith(('<', '</'))]
+        note = ''
+        for pat in (r'^(PASS|FAIL) \(.*', r'scripts OK.*', r'asset import OK', r'.*\bOK\b.*', r'^4\.\d.*', r'.*(pass|PASS|ok).*'):
+            hit = [l for l in lines if re.search(pat, l)]
+            if hit:
+                note = hit[-1].strip(); break
+        rows.append((cmd, m.group(1) if m else '?', note[:110]))
+print(head)
+print()
+print('| Command | Exit | Last verdict line |')
+print('|---|---|---|')
+for cmd, code, note in rows:
+    print(f'| `{cmd}` | {code} | {note.replace("|", "/")} |')
+print()
+print(f'{sum(1 for r in rows if r[1] == "0")} of {len(rows)} steps exit 0.')

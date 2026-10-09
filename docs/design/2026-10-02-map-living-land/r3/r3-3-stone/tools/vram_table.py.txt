@@ -1,0 +1,48 @@
+"""Lane R3.3 (scratch): every launch's video memory in a device batch, one row a launch, and the
+pooled Journey-hold medians by build. Reads the batch folder's own rows (<label>.jsonl); writes nothing.
+    python3 vram_table.py <batch dir> [<batch dir> ...]"""
+import json, glob, os, statistics, sys
+rows = []
+for root in sys.argv[1:]:
+    for f in sorted(glob.glob(os.path.join(root, '*.jsonl'))):
+        if f.endswith('.wrong.jsonl'):
+            continue
+        label = os.path.basename(f)[:-6]
+        build, boot, opens, hold = '?', None, [], None
+        for line in open(f, errors='replace'):
+            try:
+                d = json.loads(line)
+            except ValueError:
+                continue
+            p = d.get('probe')
+            if p == 'start':
+                build = d.get('build', '?')
+            elif p == 'boot':
+                boot = d
+            elif p == 'open':
+                opens.append(d)
+            elif p == 'hold_start' and d.get('view') == 'journey' and hold is None:
+                hold = d.get('video_mib')
+        if hold is None and boot is None:
+            continue
+        def v(d):
+            if not d:
+                return '-'
+            after = d.get('vram_after') or ['-']
+            return '%s/%s/%s/%s' % (d.get('vram_start'), d.get('vram_peak'), d.get('vram_end'), after[-1])
+        rows.append((os.path.basename(root), label, build, v(boot),
+                     ' '.join('%s:%s' % (o.get('kind', '?'), v(o)) for o in opens), hold))
+print('| Batch | Launch | Build | Boot start/peak/end/after | Opens start/peak/end/after | Journey hold (MiB) |')
+print('|---|---|---|---|---|---|')
+for r in rows:
+    print('| %s | %s | `%s` | %s | %s | %s |' % r)
+by = {}
+for r in rows:
+    if r[5] is not None:
+        by.setdefault(r[2], []).append(float(r[5]))
+print()
+for b, vals in by.items():
+    print('%s: %d launches, Journey hold median %.1f MiB, values %s' % (b, len(vals), statistics.median(vals), sorted(vals)))
+if len(by) == 2:
+    (a, va), (b, vb) = sorted(by.items(), key=lambda kv: statistics.median(kv[1]))
+    print('pooled median delta %s - %s: %+.1f MiB' % (b, a, statistics.median(vb) - statistics.median(va)))

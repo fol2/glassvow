@@ -1,0 +1,35 @@
+"""Lane R3.3: the phone's weakest token on R2's pin-contrast mount, main against the branch: its rim band,
+disc and land ring (pin_contrast.py's own bands), the pixels that changed in each, and an 8x crop of both
+builds with their difference.
+    python3 pin_diag.py <main dir> <branch dir> <out dir>"""
+import json, sys
+import numpy as np
+from PIL import Image
+A, B, OUT = sys.argv[1:4]
+def load(d):
+    img = np.asarray(Image.open(f"{d}/contrast-phone-landscape.png").convert("RGB")).astype(float)
+    pins = json.loads([l for l in open(f"{d}/contrast-phone-landscape.log") if l.startswith("PINS ")][-1][5:])
+    rows = json.load(open(f"{d}/contrast-phone-landscape.json"))["pins"]
+    return img, pins, rows
+ia, pa, ra = load(A); ib, pb, rb = load(B)
+weak = min(rb, key=lambda r: r["rim_vs_land"])
+cx, cy, rad = min(pb, key=lambda p: abs(p[0] - weak["at"][0]) + abs(p[1] - weak["at"][1]))
+main_row = [r for r in ra if abs(r["at"][0] - weak["at"][0]) < 3 and abs(r["at"][1] - weak["at"][1]) < 3]
+def lum(c):
+    c = c / 255; c = np.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4); return c @ [0.2126, 0.7152, 0.0722]
+La, Lb = lum(ia), lum(ib)
+h, w = La.shape; yy, xx = np.mgrid[0:h, 0:w]; d = np.hypot(xx - cx, yy - cy)
+bands = {"rim band (r-5..r-1, mean)": ((d >= rad - 5) & (d <= rad - 1), np.mean),
+         "disc (0.55r..r-6, median)": ((d >= rad * 0.55) & (d <= rad - 6), np.median),
+         "land ring (r+16..r+28, median)": ((d >= rad + 16) & (d <= rad + 28), np.median)}
+print(f"weakest phone token at {weak['at']} (radius {rad:.0f} px): rim vs land main {main_row[0]['rim_vs_land'] if main_row else '?'}, branch {weak['rim_vs_land']}")
+diff = np.abs(ia - ib).max(-1)
+for name, (m, f) in bands.items():
+    print(f"  {name}: main {f(La[m]):.4f}, branch {f(Lb[m]):.4f}; pixels changed (> 4/255) {int(((diff > 4) & m).sum())} of {int(m.sum())}, largest {diff[m].max():.0f}")
+r = int(rad + 32); box = (int(cx - r), int(cy - r), int(cx + r), int(cy + r))
+ca = Image.fromarray(ia.astype(np.uint8)).crop(box); cb = Image.fromarray(ib.astype(np.uint8)).crop(box)
+dd = Image.fromarray(np.clip(diff[box[1]:box[3], box[0]:box[2]] * 4, 0, 255).astype(np.uint8)).convert("RGB")
+W = 2 * r * 8; out = Image.new("RGB", (W * 3 + 20, W))
+for i, im in enumerate([ca, cb, dd]): out.paste(im.resize((W, W), Image.NEAREST), (i * (W + 10), 0))
+out.save(f"{OUT}/pin-phone-weakest-main-branch-diff-8x.png")
+print(f"  crop: {OUT}/pin-phone-weakest-main-branch-diff-8x.png")

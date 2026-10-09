@@ -1,0 +1,488 @@
+# The final core gate: the complete core gate and every check tools/ci_scope.py selects for the PR's diff, on the final code and tests (4fa0cee8) at d03e5c35 (docs only on top), on 711302a5. tools/final_gate.zsh.txt; each step's last lines, its exit status and the load when it began.
+head d03e5c35 (code and tests 4fa0cee8) on 711302a5 05:39:10
+$ godot --version   [load 23.76 20.95 18.39]
+4.7.2.stable.official.ed1daf0bf
+exit 0
+
+$ tools/check_imports.sh   [load 23.76 20.95 18.39]
+asset import OK
+
+asset import OK
+exit 0
+
+$ tools/check_scripts.sh   [load 22.82 20.80 18.35]
+scripts OK (497 checked)
+scripts OK (497 checked)
+exit 0
+
+$ godot --headless -s res://tests/run_all.gd   [load 6.74 11.90 14.93]
+PASS (157 tests)
+ERROR: 3 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.
+ERROR: 226 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 9 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+ERROR: 15 RID allocations of type 'PN18TextServerAdvanced27FontAdvancedLinkedVariationE' were leaked at exit.
+exit 0
+
+$ python3 -B tests/test_ci_scope.py   [load 13.85 11.35 10.53]
+Ran 37 tests in 0.005s
+
+OK
+exit 0
+
+$ python3 tools/check_store_dev_exclusion.py   [load 13.85 11.35 10.53]
+store-dev-exclusion OK
+exit 0
+
+$ tools/test_check_store_dev_exclusion.sh   [load 13.85 11.35 10.53]
+ok - pck v4
+ok - pck sentry extension
+check_store_dev_exclusion regression tests OK (12 cases)
+exit 0
+
+$ python3 -B tools/check_export_paths.py --self-test   [load 13.85 11.35 10.53]
+ok - allow-list entry
+ok - missing presets fail closed
+export-paths self-test OK (10 cases)
+exit 0
+
+$ python3 -B tools/check_export_paths.py   [load 13.85 11.35 10.53]
+export-paths OK
+exit 0
+
+$ godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_release_identity.gd,res://tests/test_sentry_release.gd   [load 13.85 11.35 10.53]
+PASS (2 tests)
+ok   res://tests/test_release_identity.gd
+ok   res://tests/test_sentry_release.gd
+PASS (2 tests)
+exit 0
+
+$ python3 -B tools/check_anchors.py   [load 13.85 11.35 10.53]
+anchors OK
+exit 0
+
+$ python3 -B tools/check_benchmark_freeze.py   [load 13.85 11.35 10.53]
+benchmark citations frozen (592 in 52 file(s))
+exit 0
+
+$ python3 -B tools/build_site.py --self-test   [load 13.38 11.30 10.52]
+self-test display font drift: rejected
+self-test missing display glyph: rejected
+site self-test OK (20 seeded defects rejected; samples rendered exactly)
+exit 0
+
+$ python3 -B tools/build_site.py --check   [load 13.38 11.30 10.52]
+site is current: 7 files; the zh-Hant heading face covers all 54 display characters
+exit 0
+
+$ python3 -B tools/check_map_assets.py --self-test   [load 13.38 11.30 10.52]
+self-test file-size: correctly failed file-size
+self-test value-gap: correctly failed value-gap
+self-test OK (all injected gates failed; GPU silhouette uses _silhouette_noise)
+exit 0
+
+$ python3 -B tools/land_map_glb.py --self-test   [load 13.38 11.30 10.52]
+self-test pending schema: correctly failed
+self-test api not forbidden: correctly failed
+self-test OK (default land writes no provenance; accept is provenance-only)
+exit 0
+
+$ python3 -B tools/check_map_assets.py   [load 13.38 11.30 10.52]
+gpu-silhouette <branch worktree>/assets/art/map-atelier/slate-cluster.glb  yaw 315 noise 0.0004 ≤ 0.04
+value-gap OK  linear 0.320 ≥ 0.272; act0=0.235 act1=0.280 act2=0.261 act3=0.282
+map assets OK (48 payload files; runtime landscape and retained asset library)
+exit 0
+
+$ python3 -B tools/check_map_quality_v2.py --self-test   [load 26.57 39.08 29.31]
+self-test baseline defect coverage: correctly failed
+self-test baseline defect coverage: correctly failed
+self-test OK (12 fail-closed mutation fixtures)
+exit 0
+
+$ python3 -B tools/check_map_quality_v2.py   [load 26.57 39.08 29.31]
+map quality v2 OK schema=1 contract=2.0.0 hard=18 soft=12 provisional=25 digest=4b54927afa7459be4b8b1bedc88fd8d653b8d9ba4ef8b79a53dce1282ecb0b5f
+exit 0
+
+$ python3 -B tests/test_performance_budget.py   [load 26.57 39.08 29.31]
+Ran 16 tests in 2.247s
+
+OK
+exit 0
+
+$ godot --headless -s res://tools/probe_map_seeds.gd -- --seeds=20   [load 26.57 39.08 29.31]
+Act 4 mipmapped texture bytes: 44729072
+Act 4 profiles f3f3e8659193a101439a3eb7b1548a6406e96c67fde6b73285010a18401779d9: 20 cosmetic seeds repeat exactly
+map profiles OK (4 acts, 125978 candidate transforms; complete-layout proof is separate)
+exit 0
+
+$ godot --headless -s res://tests/choice_scroll_reachability.gd   [load 22.18 37.49 28.92]
+EVIDENCE focused final control for 7 plain choices viewport=[P: (0.0, 0.0), S: (844.0, 390.0)] control=[P: (171.0, 343.0), S: (496.0, 47.0)] scroll_y=133
+EVIDENCE focused final control for 8 plain choices viewport=[P: (0.0, 0.0), S: (844.0, 390.0)] control=[P: (171.0, 343.0), S: (496.0, 47.0)] scroll_y=192
+PASS choice scroll reachability (844x390)
+exit 0
+
+$ godot --headless -s res://tests/boss_relic_choice_containment.gd   [load 22.18 37.49 28.92]
+EVIDENCE zh-Hant pad-landscape choice=2 rect=[P: (342.0, 502.0), S: (496.0, 72.0)] minimum=(20.0, 72.0) wrap=3
+EVIDENCE zh-Hant pad-landscape choice=3 rect=[P: (342.0, 588.0), S: (496.0, 48.0)] minimum=(20.0, 48.0) wrap=3
+PASS boss relic choice containment (1180x820 en+zh-Hant)
+exit 0
+
+$ godot --headless -s res://tests/dawn_phone_containment.gd   [load 20.97 36.98 28.79]
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+PASS dawn containment (en + zh-Hant, pad-landscape)
+exit 0
+
+$ godot --headless -s res://tests/measure_hud_location.gd   [load 20.97 36.98 28.79]
+zh-Hant  desktop-landscape act2  granted= 910.0  natural= 242.0  fits     黑曜王庭 · 第 14 塊引路石 · 永恆君王
+zh-Hant  desktop-landscape act3  granted= 910.0  natural= 242.0  fits     鏡中歸途 · 第 14 塊引路石 · 永恆留者
+MEASURE OK (0 clipped)
+exit 0
+
+$ godot --headless -s res://tests/event_phone_containment.gd   [load 20.97 36.98 28.79]
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+PASS event containment (2024 rects, en + zh-Hant, 11 events, 3 shapes)
+exit 0
+
+$ python3 tools/payload_report.py   [load 18.44 35.92 28.50]
+assets/audio/sfx                        0.6        -  
+(12 smaller groups)                     2.9
+TOTAL (pck estimate)                  282.1      400  ok
+exit 0
+
+$ python3 tools/ci_scope.py --changed-paths-nul <lane>/tmp/changed.nul --changed-gdscript-nul <lane>/tmp/changed-gd.nul --repository-root .   [load 17.68 35.47 28.39]
+</details>
+exit 0
+
+done 06:16:16
+
+# The suite's own lines (tests/run_all.gd above): every test file and the verdict
+ok   res://tests/test_act4_catalogue.gd
+ok   res://tests/test_act4_map.gd
+ok   res://tests/test_act4_region_visuals.gd
+ok   res://tests/test_act4_scene_wiring.gd
+ok   res://tests/test_act_flag.gd
+ok   res://tests/test_arch.gd
+ok   res://tests/test_ash_flame.gd
+ok   res://tests/test_ash_way_stats.gd
+ok   res://tests/test_aspect_shatter.gd
+ok   res://tests/test_balance_adaptive_lit.gd
+ok   res://tests/test_balance_arms.gd
+ok   res://tests/test_balance_bots_hand.gd
+ok   res://tests/test_balance_bots_smolder.gd
+ok   res://tests/test_balance_catalogue.gd
+ok   res://tests/test_balance_invariance.gd
+ok   res://tests/test_balance_pilot_cache.gd
+ok   res://tests/test_balance_pilot_play.gd
+ok   res://tests/test_balance_search.gd
+ok   res://tests/test_balance_sim.gd
+ok   res://tests/test_baseline_hardship.gd
+ok   res://tests/test_batch4_landing.gd
+ok   res://tests/test_bespoke_staging.gd
+ok   res://tests/test_card_backs.gd
+ok   res://tests/test_card_faces.gd
+ok   res://tests/test_card_flights.gd
+ok   res://tests/test_card_turn.gd
+ok   res://tests/test_checkpoint_validation.gd
+ok   res://tests/test_class_scope.gd
+ok   res://tests/test_coarse_pointer.gd
+ok   res://tests/test_combat_probes.gd
+ok   res://tests/test_combat_traces.gd
+ok   res://tests/test_confirm_sheets.gd
+ok   res://tests/test_content.gd
+ok   res://tests/test_counterfactual_self.gd
+ok   res://tests/test_credits_roll.gd
+ok   res://tests/test_dawn_screen.gd
+ok   res://tests/test_departure.gd
+ok   res://tests/test_dev_boot_profile.gd
+ok   res://tests/test_dev_tools.gd
+ok   res://tests/test_diagnostics_consent.gd
+ok   res://tests/test_edge_way.gd
+ok   res://tests/test_enemy_ai.gd
+ok   res://tests/test_enemy_death_shards.gd
+ok   res://tests/test_enemy_death_warm.gd
+ok   res://tests/test_eternal_keeper.gd
+ok   res://tests/test_event_rolls.gd
+ok   res://tests/test_first_launch_flow.gd
+ok   res://tests/test_flame.gd
+ok   res://tests/test_flame_kindling.gd
+ok   res://tests/test_flame_lantern.gd
+ok   res://tests/test_flame_like.gd
+ok   res://tests/test_flame_recognition.gd
+ok   res://tests/test_focus_modality.gd
+ok   res://tests/test_fracture.gd
+ok   res://tests/test_hand_size.gd
+ok   res://tests/test_help_room.gd
+ok   res://tests/test_hint_system.gd
+ok   res://tests/test_i2_combat_chrome_locale.gd
+ok   res://tests/test_ios_plist_privacy.gd
+ok   res://tests/test_lantern_flame.gd
+ok   res://tests/test_lantern_hud.gd
+ok   res://tests/test_layout_book.gd
+ok   res://tests/test_leadlight.gd
+ok   res://tests/test_leadlight_seat.gd
+ok   res://tests/test_leadlight_sheet_reach.gd
+ok   res://tests/test_line_table.gd
+ok   res://tests/test_lit_riders.gd
+ok   res://tests/test_live_locale_switch.gd
+ok   res://tests/test_locale.gd
+ok   res://tests/test_locale_hydration.gd
+ok   res://tests/test_locale_hydration_catalogue.gd
+ok   res://tests/test_locale_hydration_main.gd
+ok   res://tests/test_map.gd
+ok   res://tests/test_map_act_title.gd
+ok   res://tests/test_map_asset_profiles.gd
+ok   res://tests/test_map_asset_shortfall.gd
+ok   res://tests/test_map_compatibility_selection_iterator.gd
+ok   res://tests/test_map_compose.gd
+ok   res://tests/test_map_film_grain.gd
+ok   res://tests/test_map_floor.gd
+ok   res://tests/test_map_journey.gd
+ok   res://tests/test_map_keep_screen.gd
+ok   res://tests/test_map_landscape.gd
+ok   res://tests/test_map_landscape_prefetch.gd
+ok   res://tests/test_map_layout_compiler.gd
+ok   res://tests/test_map_layout_contract.gd
+ok   res://tests/test_map_layout_fast.gd
+ok   res://tests/test_map_layout_input_binding.gd
+ok   res://tests/test_map_layout_job.gd
+ok   res://tests/test_map_layout_single_node.gd
+ok   res://tests/test_map_node_candidate_generator.gd
+ok   res://tests/test_map_open_cache.gd
+ok   res://tests/test_map_pins.gd
+ok   res://tests/test_map_quality_evaluator.gd
+ok   res://tests/test_map_scene.gd
+ok   res://tests/test_map_single_edge_router.gd
+ok   res://tests/test_map_stone.gd
+ok   res://tests/test_map_title_road.gd
+ok   res://tests/test_map_tokens.gd
+ok   res://tests/test_map_waylight_tracer.gd
+ok   res://tests/test_map_wood.gd
+ok   res://tests/test_music_variants.gd
+ok   res://tests/test_narrative_planting.gd
+ok   res://tests/test_opening_flow.gd
+ok   res://tests/test_performance_probe.gd
+ok   res://tests/test_pile_fight.gd
+ok   res://tests/test_piles.gd
+ok   res://tests/test_pool_callers.gd
+ok   res://tests/test_pool_hygiene.gd
+ok   res://tests/test_preferences.gd
+ok   res://tests/test_presentation.gd
+ok   res://tests/test_privacy_policy_link.gd
+ok   res://tests/test_profile_isolation.gd
+ok   res://tests/test_quest_closers.gd
+ok   res://tests/test_quests.gd
+ok   res://tests/test_release_identity.gd
+ok   res://tests/test_reloadable_abandon.gd
+ok   res://tests/test_resume_routes.gd
+ok   res://tests/test_reward_embers.gd
+ok   res://tests/test_rng.gd
+ok   res://tests/test_room_passage.gd
+ok   res://tests/test_room_warm.gd
+ok   res://tests/test_rooms_rubric.gd
+ok   res://tests/test_rules_text_wrap.gd
+ok   res://tests/test_run_all.gd
+ok   res://tests/test_run_hud.gd
+ok   res://tests/test_run_stats.gd
+ok   res://tests/test_save.gd
+ok   res://tests/test_scenario.gd
+ok   res://tests/test_scenario_catalogue.gd
+ok   res://tests/test_scene_plate_fallback.gd
+ok   res://tests/test_scene_player.gd
+ok   res://tests/test_scene_script.gd
+ok   res://tests/test_scene_wiring.gd
+ok   res://tests/test_script_error_guard.gd
+ok   res://tests/test_sealed_door.gd
+ok   res://tests/test_sentry_release.gd
+ok   res://tests/test_sfx_rotation.gd
+ok   res://tests/test_stage_plates.gd
+ok   res://tests/test_stage_shape.gd
+ok   res://tests/test_stagecraft.gd
+ok   res://tests/test_stagecraft_screens.gd
+ok   res://tests/test_stall_layout.gd
+ok   res://tests/test_story_acceptance.gd
+ok   res://tests/test_suite_isolation.gd
+ok   res://tests/test_title_reach.gd
+ok   res://tests/test_title_rubric.gd
+ok   res://tests/test_title_screen.gd
+ok   res://tests/test_title_world.gd
+ok   res://tests/test_transition_rm.gd
+ok   res://tests/test_tree_ready.gd
+ok   res://tests/test_vigil_hall.gd
+ok   res://tests/test_vigil_hold.gd
+ok   res://tests/test_vigil_screen.gd
+ok   res://tests/test_vow_ladder_bakeoff.gd
+ok   res://tests/test_ware_tag.gd
+ok   res://tests/test_way_walls.gd
+PASS (157 tests)
+
+
+# ==== The earlier run, at abde6da0 (the code commit's runtime, before the test commit) ====
+# The core gate and every specialist check tools/ci_scope.py selects for this diff, at abde6da0 (the code commit 9a33cfd8 plus the docs commit before its evidence) on 711302a5. tools/core_gate.zsh.txt and tools/extra_checks.zsh.txt; each step's last lines and its exit status.
+head abde6da0 on 711302a5 03:51:34
+$ godot --version
+4.7.2.stable.official.ed1daf0bf
+exit 0
+
+$ tools/check_imports.sh
+asset import OK
+[  16% ] loading_editor_layout | Loading docks...
+[ DONE ] loading_editor_layout
+
+asset import OK
+exit 0
+
+$ tools/check_scripts.sh
+scripts OK (497 checked)
+scripts OK (497 checked)
+exit 0
+
+$ godot --headless -s res://tests/run_all.gd
+PASS (157 tests)
+ERROR: 3 RID allocations of type 'N13RendererDummy9DummyMeshE' were leaked at exit.
+ERROR: 65 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 3 RID allocations of type 'N17RendererSceneCull8InstanceE' were leaked at exit.
+ERROR: 226 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 9 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+ERROR: 15 RID allocations of type 'PN18TextServerAdvanced27FontAdvancedLinkedVariationE' were leaked at exit.
+exit 0
+
+$ python3 tools/check_store_dev_exclusion.py
+store-dev-exclusion OK
+exit 0
+
+$ tools/test_check_store_dev_exclusion.sh
+ok - pck v4
+ok - pck sentry extension
+check_store_dev_exclusion regression tests OK (12 cases)
+exit 0
+
+$ python3 -B tools/check_export_paths.py --self-test
+ok - allow-list entry
+ok - missing presets fail closed
+export-paths self-test OK (10 cases)
+exit 0
+
+$ python3 -B tools/check_export_paths.py
+export-paths OK
+exit 0
+
+$ godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_release_identity.gd,res://tests/test_sentry_release.gd
+PASS (2 tests)
+ok   res://tests/test_release_identity.gd
+ok   res://tests/test_sentry_release.gd
+PASS (2 tests)
+exit 0
+
+$ python3 -B tools/check_anchors.py
+anchors OK
+exit 0
+
+$ python3 -B tools/check_benchmark_freeze.py
+benchmark citations frozen (592 in 52 file(s))
+exit 0
+
+$ python3 -B tools/build_site.py --self-test
+self-test display font drift: rejected
+self-test missing display glyph: rejected
+site self-test OK (20 seeded defects rejected; samples rendered exactly)
+exit 0
+
+$ python3 -B tools/build_site.py --check
+site is current: 7 files; the zh-Hant heading face covers all 54 display characters
+exit 0
+
+$ python3 -B tools/check_map_assets.py --self-test
+self-test file-size: correctly failed file-size
+self-test value-gap: correctly failed value-gap
+self-test OK (all injected gates failed; GPU silhouette uses _silhouette_noise)
+exit 0
+
+$ python3 -B tools/land_map_glb.py --self-test
+self-test pending schema: correctly failed
+self-test api not forbidden: correctly failed
+self-test OK (default land writes no provenance; accept is provenance-only)
+exit 0
+
+$ python3 -B tools/check_map_assets.py
+gpu-silhouette <branch worktree>/assets/art/map-atelier/slate-cluster.glb  yaw 315 noise 0.0004 ≤ 0.04
+value-gap OK  linear 0.320 ≥ 0.272; act0=0.235 act1=0.280 act2=0.261 act3=0.282
+map assets OK (48 payload files; runtime landscape and retained asset library)
+exit 0
+
+$ python3 -B tools/check_map_quality_v2.py --self-test
+self-test baseline defect coverage: correctly failed
+self-test baseline defect coverage: correctly failed
+self-test OK (12 fail-closed mutation fixtures)
+exit 0
+
+$ python3 -B tools/check_map_quality_v2.py
+map quality v2 OK schema=1 contract=2.0.0 hard=18 soft=12 provisional=25 digest=4b54927afa7459be4b8b1bedc88fd8d653b8d9ba4ef8b79a53dce1282ecb0b5f
+exit 0
+
+$ python3 -B tests/test_performance_budget.py
+Ran 16 tests in 2.262s
+
+OK
+exit 0
+
+$ python3 tools/payload_report.py
+assets/audio/sfx                        0.6        -  
+(12 smaller groups)                     2.9
+TOTAL (pck estimate)                  282.1      400  ok
+exit 0
+
+$ python3 tools/ci_scope.py --changed-paths-nul <lane>/changed.nul --changed-gdscript-nul <lane>/changed-gd.nul --repository-root .
+</ul>
+
+</details>
+exit 0
+
+done 04:28:03
+
+# The specialist checks the core gate script does not run (tools/extra_checks.zsh.txt)
+head abde6da0 on 711302a5 04:30:18
+$ python3 -B tests/test_ci_scope.py
+Ran 37 tests in 0.006s
+
+OK
+exit 0
+
+$ godot --headless -s res://tools/probe_map_seeds.gd -- --seeds=20
+Act 4 mipmapped texture bytes: 44729072
+Act 4 profiles f3f3e8659193a101439a3eb7b1548a6406e96c67fde6b73285010a18401779d9: 20 cosmetic seeds repeat exactly
+map profiles OK (4 acts, 125978 candidate transforms; complete-layout proof is separate)
+exit 0
+
+$ godot --headless -s res://tests/choice_scroll_reachability.gd
+EVIDENCE focused final control for 7 plain choices viewport=[P: (0.0, 0.0), S: (844.0, 390.0)] control=[P: (171.0, 343.0), S: (496.0, 47.0)] scroll_y=133
+EVIDENCE focused final control for 8 plain choices viewport=[P: (0.0, 0.0), S: (844.0, 390.0)] control=[P: (171.0, 343.0), S: (496.0, 47.0)] scroll_y=192
+PASS choice scroll reachability (844x390)
+exit 0
+
+$ godot --headless -s res://tests/boss_relic_choice_containment.gd
+EVIDENCE zh-Hant pad-landscape choice=2 rect=[P: (342.0, 502.0), S: (496.0, 72.0)] minimum=(20.0, 72.0) wrap=3
+EVIDENCE zh-Hant pad-landscape choice=3 rect=[P: (342.0, 588.0), S: (496.0, 48.0)] minimum=(20.0, 48.0) wrap=3
+PASS boss relic choice containment (1180x820 en+zh-Hant)
+exit 0
+
+$ godot --headless -s res://tests/dawn_phone_containment.gd
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+PASS dawn containment (en + zh-Hant, pad-landscape)
+exit 0
+
+$ godot --headless -s res://tests/measure_hud_location.gd
+zh-Hant  desktop-landscape act2  granted= 910.0  natural= 242.0  fits     黑曜王庭 · 第 14 塊引路石 · 永恆君王
+zh-Hant  desktop-landscape act3  granted= 910.0  natural= 242.0  fits     鏡中歸途 · 第 14 塊引路石 · 永恆留者
+MEASURE OK (0 clipped)
+exit 0
+
+$ godot --headless -s res://tests/event_phone_containment.gd
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+PASS event containment (2024 rects, en + zh-Hant, 11 events, 3 shapes)
+exit 0
+
+done 04:30:50
+

@@ -1,0 +1,43 @@
+#!/bin/zsh
+# Lane R3.3 batch T1 (QA app only, under the device lock; deletes nothing on the iPad or
+# the Mac outside this batch's own folder): the title path at the branch's code-final head.
+# Four fresh installs: the branch's builds whose floor and stone shaders carry the never-used nonces
+# NA and NB (shader_nonce.py: one uniform at 1.0 multiplied into each shader's output, so
+# the pipeline hash is one this iPad has never compiled), and main's with its five floor
+# shaders under the nonces NM and NN, interleaved, each launched once fresh and once cached.
+set -u
+source ${0:A:h}/common.zsh
+OUT=$M/device/${BATCH:-batchT1}
+mkdir -p $OUT; guard_out
+CTL_BUILD=$(cat $M/ipa/ctl.build)
+$FLOW/ipad_lock.sh acquire map-r33
+trap "$FLOW/ipad_lock.sh release map-r33; echo \"== lock released \$(date +%T)\"; battery" EXIT
+UDID=$(mt_udid); [[ -n "$UDID" ]] || { echo "no iPad"; exit 1; }
+tt_launch() {  # label wait args...
+  local label=$1 wait=$2 i; shift 2
+  _mt_start $label "$@"
+  [[ -n "$MT_PID" ]] || { echo "== $label: launch failed"; return 1; }
+  sleep $wait
+  for i in $(seq 1 20); do
+    _mt_pull title_probe.jsonl $OUT/$label.jsonl
+    if grep -q "$MT_NONCE" $OUT/$label.jsonl 2>/dev/null && grep -q '"probe":"\(open\|seed\)"' $OUT/$label.jsonl; then
+      echo "== $label nonce $MT_NONCE: rows fresh ($(grep -o '"build":"[^"]*"' $OUT/$label.jsonl | head -1))"; return 0
+    fi
+    sleep 5
+  done
+  echo "== $label nonce $MT_NONCE: rows MISSING"; return 1
+}
+echo "== batch ${BATCH:-batchT1} start $(date +%T)"; battery
+install_build ctl $M/ipa/ctl.ipa || exit 1
+tt_launch ctl-seed 40 --map --seed=1 --map-steps=2 --title-trace-probe=seed
+tt_launch ctl-title1 50 --title-trace-probe=title
+# Fresh installs, main and the branch in turn, each launched fresh and then cached.
+for pair in "ctlM ctl-nM ctl-M" "devA dev-nA dev-A" "ctlN ctl-nN ctl-N" "devB dev-nB dev-B"; do
+  set -- ${=pair}
+  $FLOW/ipad_lock.sh acquire map-r33
+  install_build $1 $M/ipa/$2.ipa || exit 1
+  tt_launch $3-title1-fresh 70 --title-trace-probe=title
+  tt_launch $3-title2-cached 50 --title-trace-probe=title
+done
+battery
+echo "== batch ${BATCH:-batchT1} done $(date +%T)"

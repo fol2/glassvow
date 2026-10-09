@@ -1,0 +1,24 @@
+#!/bin/zsh
+# Lane R3.3: summaries of the device batches (scratch). S1: every launch's rows by build and its video memory;
+# S2: the traces read at the reference clock (tonemap 0.270 ms). T1: the title path's rows.
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+WT=$M/wt-r33
+S=$M/device/batchS1; T=$M/device/batchT1
+if [[ -d $S ]]; then
+  python3 $M/tools/summarise.py $S > $S/summary.txt 2>&1
+  python3 $M/tools/summarise_opens.py $S > $S/opens.txt 2>&1
+  python3 $M/tools/coldrows.py $S > $S/coldrows.txt 2>&1
+  python3 $M/tools/vram_table.py $S > $S/vram.txt 2>&1
+fi
+S2=$M/device/batchS2
+if [[ -d $S2 ]]; then
+  for t in none stone ground; do
+    [[ -f $S2/dev-t$t.passes.txt ]] && python3 $WT/tools/map_trace/roles.py $S2/dev-t$t.passes.txt --frames $S2/dev-t$t.frames.json \
+      --ref-pass tonemap --ref-ms 0.270 > $S2/dev-t$t.roles.txt 2>&1
+  done
+fi
+if [[ -d $T ]]; then
+  python3 $M/tools/summarise_title.py $T > $T/summary.txt 2>&1
+  python3 $M/tools/title_table.py $M/device T1 > $T/table.txt 2>&1
+fi
+echo done

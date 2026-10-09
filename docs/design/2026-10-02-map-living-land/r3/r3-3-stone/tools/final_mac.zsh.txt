@@ -1,0 +1,35 @@
+#!/bin/zsh
+# Lane R3.3: the Mac proofs at the code-final head, one Godot run at a time (scratch).
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+F=$M/final; mkdir -p $F
+echo "== final Mac proofs at $(git -C $M/wt-r33 rev-parse --short HEAD), main $(git -C $M/r33-ctl rev-parse --short HEAD) $(date +%T)"
+# 1. The token gate, Act I, seeds 717 and 1-3, both shapes, both builds.
+for seed in 717 1 2 3; do
+  for shape in pad-landscape phone-landscape; do
+    for build in ctl dev; do
+      WT=$M/r33-ctl; [[ $build == dev ]] && WT=$M/wt-r33
+      OUT=$F/token/$build; mkdir -p $OUT; log=$OUT/a0-s$seed-$shape.log
+      GODOT_MTL_DISABLE_ARGUMENT_BUFFERS=1 timeout 400 godot --path $WT --rendering-driver metal --rendering-method mobile --position 1400,900 \
+        -s res://tools/map_token_gate.gd -- --act-index=0 --seed=$seed --shape=$shape --output=$OUT > $log 2>&1
+      echo "token $build a0 s$seed $shape exit $? shader-errors $(grep -c 'Error compiling shader\|SHADER ERROR' $log) script-errors $(grep -c 'SCRIPT ERROR' $log)"
+    done
+  done
+done
+# 2. The woodland, each seed twice on the branch, once on main.
+mkdir -p $F/wood
+for seed in 717 1 2 3; do
+  for run in a b; do
+    (cd $M/wt-r33 && timeout 200 godot --headless --path . -s $M/tools/wood_dump.gd -- --seed=$seed --out=$F/wood/wt-r33-$seed-$run.json > /dev/null 2>&1)
+  done
+  (cd $M/r33-ctl && timeout 200 godot --headless --path . -s $M/tools/wood_dump.gd -- --seed=$seed --out=$F/wood/r33-ctl-$seed.json > /dev/null 2>&1)
+  echo "wood seed $seed dumped"
+done
+# 3. R3.1b's woodland gates, both builds.
+for b in r33-ctl wt-r33; do echo "== wood gates $b"; $M/tools/wood_gates.zsh $M/$b $F/woodgates-$b 2>&1; done
+# 4. The A12 condition at the three shapes and both locales, and Reduce Motion, both builds.
+for b in r33-ctl wt-r33; do echo "== mac proof $b"; $M/tools/mac_proof.zsh $M/$b $F/proof-$b 2>&1; done
+# 5. The floor's GPU proof under the A12 condition (the branch).
+(cd $M/wt-r33 && GODOT_MTL_DISABLE_ARGUMENT_BUFFERS=1 timeout 600 godot --path . --rendering-driver metal --rendering-method mobile --position 1400,900 \
+  -s res://tools/check_floor_bake.gd -- --map --seed=1 --map-steps=2 --shape=pad-landscape > $F/floor-bake-check.log 2>&1; echo "floor bake check exit $?")
+grep "^ok\|^FAIL\|FLOOR_BAKE" $F/floor-bake-check.log
+echo "== final Mac proofs done $(date +%T)"

@@ -1,0 +1,93 @@
+# The 8 MiB hunt (9 Oct, 04:50-05:12, Mac M1 Max, the A12 Metal condition). Scratch tools: tools/hunt.zsh.txt, tools/tex_cost.gd.txt, tools/staging_rule.gd.txt, tools/vram_log_patch.py.txt (a measuring worktree's loads logged, then reverted).
+
+## 1. Godot's own accounting at the Journey hold, the five earlier branch runs (mac/probe.txt): textures and buffers identical in the low (251.2) and high (259.2) runs
+probe-r33-ctl.log video 236.6 tracked {'buffers_mib': 17.8, 'textures_mib': -884.9, 'total_mib': 236.6}
+probe-r33-dev.log video 251.2 tracked {'buffers_mib': 19.8, 'textures_mib': -879.9, 'total_mib': 251.2}
+probe2-r33-ctl-1.log video 236.6 tracked {'buffers_mib': 17.8, 'textures_mib': -884.9, 'total_mib': 236.6}
+probe2-r33-ctl-2.log video 236.6 tracked {'buffers_mib': 17.8, 'textures_mib': -884.9, 'total_mib': 236.6}
+probe2-r33-ctl-3.log video 236.6 tracked {'buffers_mib': 17.8, 'textures_mib': -884.9, 'total_mib': 236.6}
+probe2-r33-ctl-4.log video 236.6 tracked {'buffers_mib': 17.8, 'textures_mib': -884.9, 'total_mib': 236.6}
+probe2-r33-dev-1.log video 251.2 tracked {'buffers_mib': 19.8, 'textures_mib': -879.9, 'total_mib': 251.2}
+probe2-r33-dev-2.log video 259.2 tracked {'buffers_mib': 19.8, 'textures_mib': -879.9, 'total_mib': 259.2}
+probe2-r33-dev-3.log video 251.2 tracked {'buffers_mib': 19.8, 'textures_mib': -879.9, 'total_mib': 251.2}
+probe2-r33-dev-4.log video 259.2 tracked {'buffers_mib': 19.8, 'textures_mib': -879.9, 'total_mib': 259.2}
+
+## 2. The step is there before the first frame and never moves: the boot row's first frames and the holds
+probe2-r33-ctl-1.log boot frame 2 238.3 frame 3 206.4 boot end 232.6
+probe2-r33-ctl-2.log boot frame 2 238.3 frame 3 206.4 boot end 232.6
+probe2-r33-ctl-3.log boot frame 2 238.3 frame 3 206.4 boot end 232.6
+probe2-r33-ctl-4.log boot frame 2 238.3 frame 3 206.4 boot end 232.6
+probe2-r33-dev-1.log boot frame 2 242.7 frame 3 207.1 boot end 237.3
+probe2-r33-dev-2.log boot frame 2 258.7 frame 3 226.9 boot end 255.2
+probe2-r33-dev-3.log boot frame 2 250.7 frame 3 218.9 boot end 247.2
+probe2-r33-dev-4.log boot frame 2 258.7 frame 3 226.9 boot end 255.2
+
+## 3. Every later branch run reads the high figure (load 7-67; the last six began at load 67, over the lane's 50 limit, a slip)
+== hunt 04:53:49 load: 7.41 11.03 13.33
+1 r33-ctl exit 124 
+2 r33-dev exit 124 
+
+hunt2/1-r33-ctl.log "video_mib":236.6
+hunt2/2-r33-dev.log "video_mib":259.2
+hunt2/3-r33-dev.log "video_mib":259.2
+hunt2/4-r33-dev.log "video_mib":259.2
+hunt2/5-r33-ctl.log "video_mib":236.6
+hunt2/6-r33-dev.log "video_mib":259.2
+hunt2/7-r33-dev.log "video_mib":259.2
+hunt2/8-r33-dev.log "video_mib":259.2
+hunt3/1-r33-dev.log "video_mib":259.2
+hunt3/2-r33-dev.log "video_mib":259.2
+hunt3/3-r33-dev.log "video_mib":259.2
+hunt3/4-r33-dev.log "video_mib":259.2
+hunt3/5-r33-dev.log "video_mib":259.2
+hunt3/6-r33-dev.log "video_mib":259.2
+
+## 4. Live device memory at the takes (hunt2, logged): the woodland atlas's take costs +17.3 MiB of driver memory on main and +34.3 on the branch
+1-r33-ctl.log
+VRAMLOG request impostors/wood-albedo.png,impostors/wood-normal.png 3023 total 121.0 tex 73.2 buf 1.8
+VRAMLOG taken impostors/wood-albedo.png 3036 total 138.3 tex 56.1 buf 2.4
+VRAMLOG taken impostors/wood-normal.png 3036 total 138.3 tex 56.1 buf 2.4
+2-r33-dev.log
+VRAMLOG request impostors/wood-albedo.png,impostors/wood-normal.png 2954 total 121.3 tex 73.5 buf 1.8
+VRAMLOG taken impostors/wood-albedo.png 2964 total 155.6 tex 57.5 buf 2.3
+VRAMLOG taken impostors/wood-normal.png 2964 total 155.6 tex 57.5 buf 2.3
+VRAMLOG request stone/stone-pieces.res,stone/stone-albedo.png,stone/stone-normal.png 2971 total 155.6 tex 57.5 buf 2.3
+VRAMLOG taken stone/stone-pieces.res 2973 total 158.6 tex 60.6 buf 2.3
+VRAMLOG taken stone/stone-albedo.png 2973 total 158.6 tex 60.6 buf 2.3
+VRAMLOG taken stone/stone-normal.png 2973 total 158.6 tex 60.6 buf 2.3
+
+## 5. Each texture alone, loaded on the loader's threads one after another (tools/tex_cost.gd.txt), load 8.71 18.74 15.98
+r33-ctl TEXCOST start total 35.39 tex -11.11 buf 1.58
+r33-ctl TEXCOST after impostors/wood-albedo.png total 39.28 tex -7.22 buf 1.58
+r33-ctl TEXCOST after impostors/wood-normal.png total 40.33 tex -6.17 buf 1.58
+r33-dev TEXCOST start total 35.39 tex -11.11 buf 1.58
+r33-dev TEXCOST after impostors/wood-albedo.png total 56.16 tex -6.35 buf 1.58
+r33-dev TEXCOST after impostors/wood-normal.png total 57.42 tex -5.08 buf 1.58
+r33-dev TEXCOST after stone/stone-albedo.png total 59.44 tex -3.06 buf 1.58
+r33-dev TEXCOST after stone/stone-normal.png total 60.48 tex -2.02 buf 1.58
+r33-ctl TEXCOST start total 35.39 tex -11.11 buf 1.58
+r33-ctl TEXCOST after impostors/wood-albedo.png total 39.28 tex -7.22 buf 1.58
+r33-ctl TEXCOST after impostors/wood-normal.png total 40.33 tex -6.17 buf 1.58
+r33-dev TEXCOST start total 35.39 tex -11.11 buf 1.58
+r33-dev TEXCOST after impostors/wood-albedo.png total 56.16 tex -6.35 buf 1.58
+r33-dev TEXCOST after impostors/wood-normal.png total 57.42 tex -5.08 buf 1.58
+r33-dev TEXCOST after stone/stone-albedo.png total 59.44 tex -3.06 buf 1.58
+r33-dev TEXCOST after stone/stone-normal.png total 60.48 tex -2.02 buf 1.58
+
+## 6. The engine's rule, with plain uploads of known sizes in a bare process (tools/staging_rule.gd.txt): the untracked cost is the transfer staging buffer growing to the next power of two above the largest upload, and it is never shrunk
+STAGING upload 2.00 MiB: total +2.00, texture +2.00, untracked +0.00
+STAGING upload 4.00 MiB: total +6.00, texture +4.00, untracked +2.00
+STAGING upload 4.69 MiB: total +9.00, texture +5.00, untracked +4.00
+STAGING upload 8.59 MiB: total +17.00, texture +9.00, untracked +8.00
+--
+STAGING upload 4.69 MiB: total +11.00, texture +5.00, untracked +6.00
+--
+STAGING upload 8.59 MiB: total +23.00, texture +9.00, untracked +14.00
+--
+
+## 7. Texture sizes as imported (.godot/imported, the Mac's S3TC; iOS's ETC2 is the same size): the branch's woodland albedo is the only texture in the game whose mip chain is over 4 MiB
+2097228 r33-dev/.godot/imported/stone-albedo.png-4b04723557211df029b09fb801d627aa.s3tc.ctex
+2106020 r33-dev/.godot/imported/ash-twigs.png-db03bf41e42878179d017724735a2c85.s3tc.ctex
+2106020 r33-dev/.godot/imported/conifer-sprays.png-9fc7a54e6121e92998cc49fb7b2546d0.s3tc.ctex
+4850468 r33-dev/.godot/imported/wood-albedo.png-f9c3a9eb547482dc42c896a3bf9ada4d.s3tc.ctex
+main: 3844964 r33-ctl/.godot/imported/wood-albedo.png-f9c3a9eb547482dc42c896a3bf9ada4d.s3tc.ctex

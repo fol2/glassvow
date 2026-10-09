@@ -1,0 +1,37 @@
+import json, glob, os, sys, statistics
+D = sys.argv[1]
+res = {}
+for path in sorted(glob.glob(os.path.join(D, '*-l1.jsonl'))):
+    label = os.path.basename(path)[:-6]
+    b = label[:3]
+    r = res.setdefault(b, {'boot_vram': [], 'hold_vram': [], 'cold': [], 'reopen': [], 'warmed': [], 'bake_boot': [], 'bake_cold': [], 'warm_worst': [], 'boot_ready': [], 'hold': [], 'boot_frames': [], 'total': []})
+    for l in open(path):
+        d = json.loads(l)
+        p = d.get('probe')
+        if p == 'boot':
+            r['boot_vram'].append((label, d['vram_end']))
+            r['boot_ready'].append((label, d['elapsed_ms'], d['worst_frame_ms']))
+            fm = d.get('floor_ms')
+            if isinstance(fm, dict) and fm.get('bake'):
+                r['bake_boot'].append((label, round(fm['bake']['wall_ms'], 1), [round(x, 1) for x in fm['bake'].get('frames_ms', [])]))
+        elif p == 'open':
+            r[d['kind']].append((label, d['ready_ms'], d.get('call_ms')))
+            fm = d.get('floor_ms')
+            if d['kind'] == 'cold' and isinstance(fm, dict) and fm.get('bake'):
+                r['bake_cold'].append((label, round(fm['bake']['wall_ms'], 1), [round(x, 1) for x in fm['bake'].get('frames_ms', [])]))
+        elif p == 'warm':
+            r['warm_worst'].append((label, d['worst_frame_ms'], d['slow_frames']))
+        elif p == 'hold_start':
+            r['hold_vram'].append((label, d['video_mib']))
+            r['total'].append((label, (d.get('memory') or {}).get('total_mib')))
+        elif p == 'hold_end':
+            r['hold'].append((label, d['mean_ms'], d['p95_ms'], d['missed']))
+for b, r in res.items():
+    print('==', b)
+    for k, v in r.items():
+        print('  %-11s %s' % (k, v))
+    for k in ('cold', 'reopen', 'warmed'):
+        xs = [x[1] for x in r[k]]
+        if xs:
+            print('  MEDIAN %-6s %.1f (n=%d, max %.1f)' % (k, statistics.median(xs), len(xs), max(xs)))
+    print('  MEDIAN hold vram %.1f, boot vram %.1f' % (statistics.median([x[1] for x in r['hold_vram']]), statistics.median([x[1] for x in r['boot_vram']])))

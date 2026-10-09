@@ -99,11 +99,12 @@ Where the floor still differs from the target:
 
 ## How the floor is drawn
 
-**The plan (worker thread)**: `FloorPlan.build`, `presentation/map/landscape/floor_plan.gd:59 (build)`, is built
+**The plan (worker thread)**: `FloorPlan.build`, `presentation/map/landscape/floor_plan.gd:60 (build)`, is built
 with the land and reads what the land already holds:
 
 - every tree's light-facing shadow card (undergrowth casts none: wide, low
-  cards facing one way streaked);
+  cards facing one way streaked), and since R3.3 every standing ruin's
+  (gravestones and broken walls);
 - radial stamps for the 2D fields pass: litter reach and foot for trees;
   reach, foot and an offset shade for shrubs; grit and foot for rocks; a foot
   for stones and a wider one for waystones' seats (`SEAT_FOOT`). This is how
@@ -167,9 +168,11 @@ glints out.
 
 - it swaps every chunk's material (`draw_floor`);
 - it puts out the road details the bake drew;
-- it stops every live caster but the gateway arch, the slate outcrops and the
-  bridges' parapets (`presentation/map/landscape/land_floor.gd:153 (quiet)`). Their live shadows give
-  them form and fall on the decks and on each other, none of which is floor.
+- it stops every live caster but the gateway arch and the bridges' parapets
+  (`presentation/map/landscape/land_floor.gd:153 (quiet)`). Their live shadows give them form and fall
+  on the decks and on each other, none of which is floor. Until R3.3 the
+  slate outcrops cast live too; R3.3's granite and cliffs cast into the bake
+  only.
 
 The pilgrim casts no live shadow and stands on its blob
 (`presentation/map/landscape/pilgrim.gd:114 (ground_blob)`).
@@ -185,7 +188,7 @@ The pilgrim casts no live shadow and stands on its blob
 
 **The warm-up**: `FloorWarm` draws a sample of every pipeline the bake and the
 floor use, before the title's first frame shows, behind the launch screen
-(`presentation/map/landscape/floor_warm.gd:87 (draw_now)`). `MapJourneyPrefetch.prime` calls it for a
+(`presentation/map/landscape/floor_warm.gd:88 (draw_now)`). `MapJourneyPrefetch.prime` calls it for a
 run to resume (`presentation/map/map_journey_prefetch.gd:152 (in prime)`), and the title calls it for
 everyone else (`application/main.gd:1330 (in _show_title)`). See
 [Round 3](#round-3-the-title-stall-and-the-cold-open). The fallback is the old ground: where nothing can bake
@@ -282,12 +285,12 @@ What the batches showed:
 
 The change:
 
-- `presentation/map/landscape/floor_warm.gd:40 (warm)`: builds the samples once a process, inside the
+- `presentation/map/landscape/floor_warm.gd:41 (warm)`: builds the samples once a process, inside the
   title's build, and draws them at once.
-- `presentation/map/landscape/floor_warm.gd:87 (draw_now)`: draws every view twice with
+- `presentation/map/landscape/floor_warm.gd:88 (draw_now)`: draws every view twice with
   `RenderingServer.force_draw(false)`, nothing presented, under the bake's
   soft key, then lets go.
-- `presentation/map/landscape/floor_warm.gd:108 (_canvas)`: the 2D samples, in views of the bake's
+- `presentation/map/landscape/floor_warm.gd:109 (_canvas)`: the 2D samples, in views of the bake's
   kinds. The stamps go in a clear view; the mip chain is the bake's own, from a
   small picture of the floor's format. Each sample's command goes to the
   renderer as it is built.

@@ -1,0 +1,29 @@
+shader_type spatial;
+// Scratch (lane R3.1b fix round): the wood's cards as flat magenta, for the
+// flat-magenta canopy-cover count; the same cut-out as impostor.gdshader.
+render_mode unshaded, cull_back, depth_draw_opaque, shadows_disabled;
+uniform sampler2D atlas_albedo : source_color, filter_linear_mipmap, repeat_disable;
+uniform float scissor = 0.5;
+// Lane R3.3: tiles not counted as canopy (the ruins' stone cards).
+uniform vec4 skip[48];
+uniform int skip_count = 0;
+varying vec4 tile_uv;
+varying float skipped;
+void vertex() {
+	tile_uv = INSTANCE_CUSTOM;
+	skipped = 0.0;
+	for (int i = 0; i < skip_count; i++) {
+		if (all(lessThan(abs(INSTANCE_CUSTOM - skip[i]), vec4(1e-4)))) {
+			skipped = 1.0;
+		}
+	}
+}
+void fragment() {
+	if (skipped > 0.5) {
+		discard;
+	}
+	vec2 uv = tile_uv.xy + clamp(UV, vec2(0.0), vec2(1.0)) * tile_uv.zw;
+	ALBEDO = vec3(1.0, 0.0, 1.0);
+	ALPHA = texture(atlas_albedo, uv).a;
+	ALPHA_SCISSOR_THRESHOLD = scissor;
+}

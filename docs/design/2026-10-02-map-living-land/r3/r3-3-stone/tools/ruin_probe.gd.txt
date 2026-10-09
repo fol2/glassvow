@@ -1,0 +1,143 @@
+extends SceneTree
+## Lane R3.3 scratch (never committed): builds Act I's land headless (as
+## test_map_stone does) and, for every ruin the kit placed, says whether its
+## card fits the woodland's sight and, if not, which protected category hides
+## behind it. Run: godot --headless --path <wt> -s <this> [-- --seed=717]
+
+const Planting = preload("res://presentation/map/landscape/wood_planting.gd")
+const Sight = preload("res://presentation/map/landscape/wood_sight.gd")
+const Atlas = preload("res://presentation/map/landscape/impostor_atlas.gd")
+const River = preload("res://presentation/map/landscape/river.gd")
+var seed_value: int = 717
+
+
+func _initialize() -> void:
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--seed="): seed_value = int(arg.get_slice("=", 1))
+	_run.call_deferred()
+
+
+func _run() -> void:
+	MapJourneyLandscape.Kit.preload_scenes()
+	var content: ContentDB = ContentDB.load_full()
+	var run_state: RunState = RunState.new_run(content, seed_value, "run-map-stone")
+	var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.for_run(run_state, content), content)
+	root.add_child(screen)
+	screen.size = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
+	screen.set_shape(StageShape.IDENTITY)
+	screen.refresh(run_state)
+	var land: MapJourneyLandscape = screen._map_scene.journey_landscape()
+	var planting: Planting = land.wood.planting
+	var seats: PackedVector3Array = []
+	for base: Node3D in land.journey.bases:
+		seats.append(base.position)
+	var kit: Node3D = land.kit
+	var cats: Dictionary = {}
+	for cat: String in ["lanes", "decks", "seats", "lamps", "water", "arch", "memorial", "standing", "rocks"]:
+		var sight: Sight = Sight.new()
+		sight.begin(land.terrain.bounds)
+		_protect(cat, sight, planting, kit, seats, land)
+		cats[cat] = sight
+	var shown: Dictionary = {}
+	for i: int in range(planting.kinds.size()):
+		if Planting.STONES.has(planting.kinds[i]):
+			shown["%.2f,%.2f" % [planting.bases[i].x, planting.bases[i].z]] = true
+	var tally: Dictionary = {}
+	var total: int = 0
+	var fitted: int = 0
+	for item: Dictionary in kit.placed:
+		var kind: String = item["kind"]
+		if not Planting.STONES.has(kind):
+			continue
+		total += 1
+		var at: Vector3 = item["position"]
+		var key: String = "%.2f,%.2f" % [at.x, at.z]
+		if shown.has(key):
+			fitted += 1
+			continue
+		var tile: int = Atlas.tile_for(kind, float(str(item["yaw"])))
+		var scale_value: float = float(str(item["scale"]))
+		var blockers: PackedStringArray = []
+		for cat: String in cats:
+			var sight: Sight = cats[cat]
+			if not sight.fits(tile, at, scale_value):
+				blockers.append(cat)
+		var label: String = "+".join(blockers) if not blockers.is_empty() else "none?"
+		tally[label] = int(str(tally.get(label, 0))) + 1
+		print("RUIN_OUT %s at %.1f,%.1f road %.2f river %.2f by %s" % [kind, at.x, at.z,
+			land.terrain.distance_to_roads(at), River.distance(at.x, at.z) * River.CHANNEL, label])
+	var t0: int = Time.get_ticks_usec()
+	MapJourneyLandscape.Kit.Islands.find(land.terrain)
+	var t1: int = Time.get_ticks_usec()
+	var probe_sight: Sight = Sight.new()
+	probe_sight.begin(land.terrain.bounds)
+	var lamps: PackedVector3Array = kit.call("lamp_anchors")
+	Planting.protect_ground(probe_sight, land.terrain, lamps, seats)
+	var t2: int = Time.get_ticks_usec()
+	var roads: float = 0.0
+	for i: int in range(500):
+		roads += land.terrain.distance_to_roads(Vector3(randf_range(-40, 40), 0, randf_range(-25, 25)))
+	var t3: int = Time.get_ticks_usec()
+	print("PARTS islands_find_ms %.1f sight_ground_ms %.1f road_query_us %.1f kit_query_us %d kit_queries %d" % [(t1 - t0) / 1000.0, (t2 - t1) / 1000.0, (t3 - t2) / 500.0, kit.query_us, kit.query_count])
+	var fam: Dictionary = {}
+	for item: Dictionary in kit.placed:
+		var k: String = item["kind"]
+		var f: String = k.get_slice("-", 0)
+		if Planting.STONES.has(k) or MapJourneyLandscape.Kit.is_rock(k) or k == "memorial":
+			fam[f] = int(str(fam.get(f, 0))) + 1
+	print("RUIN_FIT %d of %d; left out by %s; placed %s; islands %d; timings %s" % [fitted, total, tally, fam,
+		mini(8, MapJourneyLandscape.Kit.Islands.find(land.terrain).size()), JSON.stringify(kit.stone_timings)])
+	print("REJECTED ", planting.rejected)
+	quit(0)
+
+
+func _protect(cat: String, sight: Sight, planting: Planting, kit: Node3D, seats: PackedVector3Array,
+		land: MapJourneyLandscape) -> void:
+	if cat == "lanes":
+		var half: Vector2 = Vector2(Planting.LANE + Planting.LANE_STEP * 0.5, (Planting.LANE + Planting.LANE_STEP * 0.5) * sight.toward.y)
+		for line: PackedVector3Array in land.terrain.lines:
+			for i: int in range(line.size() - 1):
+				var steps: int = maxi(1, ceili(line[i].distance_to(line[i + 1]) / Planting.LANE_STEP))
+				for step: int in range(steps + 1):
+					var q: Vector3 = line[i].lerp(line[i + 1], float(step) / steps)
+					sight.protect_rect(Rect2(sight.plane(q) - half, half * 2.0), sight.depth(q))
+	elif cat == "decks":
+		for deck: Vector3 in planting._decks(0.75):
+			var at: Vector2 = sight.plane(deck)
+			sight.protect_rect(Rect2(at.x - Planting.DECK_SIGHT, at.y - 0.9, Planting.DECK_SIGHT * 2.0, 1.6), sight.depth(deck))
+	elif cat == "seats":
+		for seat: Vector3 in seats:
+			sight.protect_rect(Planting.seat_guard(sight.plane(seat)), sight.depth(seat))
+	elif cat == "lamps":
+		for flame: Vector3 in kit.call("lamp_anchors"):
+			var at: Vector2 = sight.plane(flame)
+			sight.protect_rect(Rect2(at - Vector2(0.6, 0.6), Vector2(1.2, 1.2)), sight.depth(flame) - 0.2)
+	elif cat == "water":
+		var water: Vector2 = Vector2(Planting.RIVER_SIGHT, Planting.LANE_STEP * sight.toward.y * 0.5 + 0.1)
+		for cut: float in MapRavine.CUTS:
+			var z: float = -land.terrain.river_half_length
+			while z <= land.terrain.river_half_length:
+				var q: Vector3 = Vector3(River.centre(z, cut), River.LEVEL, z)
+				sight.protect_rect(Rect2(sight.plane(q) - water, water * 2.0), sight.depth(q))
+				z += Planting.LANE_STEP
+	else:
+		for item: Dictionary in kit.placed:
+			var kind: String = item["kind"]
+			var base: Vector3 = item["position"]
+			var at: Vector2 = sight.plane(base)
+			if cat == "arch" and kind == "amber-arch":
+				sight.protect_rect(Rect2(at + Vector2(-2.9, -4.6), Vector2(5.8, 5.4)), sight.depth(base) - 0.8)
+			elif cat == "memorial" and kind == "memorial":
+				sight.protect_rect(Rect2(at + Vector2(-0.6, -1.8), Vector2(1.2, 2.2)), sight.depth(base) - 0.5)
+			elif cat == "standing" and Planting.STANDING.has(kind) and Atlas.by_kind.has(kind):
+				var scale_value: float = float(str(item["scale"]))
+				var body: Vector2 = (Planting.GRAVE_SIGHT if kind.begins_with("grave") else Planting.WALL_SIGHT) * scale_value
+				var own: int = Atlas.tile_for(kind, float(str(item["yaw"])))
+				sight.protect_rect(Rect2(at.x - body.x * 0.5, at.y - body.y, body.x, body.y),
+					sight.depth(base) + Atlas.shift(own) * scale_value + Sight.DEPTH_MARGIN + 0.05)
+			elif cat == "rocks" and MapJourneyLandscape.Kit.is_rock(kind):
+				var across: float = float(str(item["radius"])) * Planting.ROCK_ACROSS
+				var rise: float = float(str(item["height"])) * sight.toward.z
+				var top: float = maxf(rise * Planting.ROCK_TOP, rise * Planting.ROCK_FOOT + Sight.FINE * 2.0)
+				sight.protect_rect(Rect2(at.x - across, at.y - top, across * 2.0, top - rise * Planting.ROCK_FOOT),
+					sight.depth(base))

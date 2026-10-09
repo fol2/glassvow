@@ -1,0 +1,87 @@
+# The token gate (tools/map_token_gate.gd), Mac, A12 Metal condition. Act I at R3.3's code-final runtime (lane head 1ae3888c) against main 711302a5:
+# seeds 717 and 1-3, phone and pad. Acts II-IV at the lane's earlier head 99a23e3c against main faa98347 (their runtime is untouched by R3.3), seeds 1-3.
+# Per run: tokens measured, failed, worst margin, its stop and kind (tools/token_table.py.txt). Main on the left, the branch on the right.
+
+## Act I
+a0-s1-pad-landscape          measured  73 failed 0 worst 1.022 whole monster   ||   a0-s1-pad-landscape          measured  73 failed 0 worst 1.022 journey unlit
+a0-s1-phone-landscape        measured  76 failed 0 worst 1.021 whole monster   ||   a0-s1-phone-landscape        measured  76 failed 0 worst 1.021 whole monster
+a0-s2-pad-landscape          measured  70 failed 0 worst 1.017 whole monster   ||   a0-s2-pad-landscape          measured  70 failed 0 worst 1.017 whole monster
+a0-s2-phone-landscape        measured  79 failed 0 worst 1.022 journey monster   ||   a0-s2-phone-landscape        measured  79 failed 0 worst 1.022 journey monster
+a0-s3-pad-landscape          measured  78 failed 0 worst 1.025 journey monster   ||   a0-s3-pad-landscape          measured  78 failed 0 worst 1.025 journey monster
+a0-s3-phone-landscape        measured  82 failed 0 worst 1.023 close monster   ||   a0-s3-phone-landscape        measured  82 failed 0 worst 1.023 whole monster
+a0-s717-pad-landscape        measured  74 failed 0 worst 1.006 whole event   ||   a0-s717-pad-landscape        measured  74 failed 0 worst 1.006 whole event
+a0-s717-phone-landscape      measured  78 failed 0 worst 1.023 whole event   ||   a0-s717-phone-landscape      measured  78 failed 0 worst 1.024 whole event
+
+## Acts II-IV
+a1-s1-pad-landscape          measured  53 failed 0 worst 1.103 stop1 monster   ||   a1-s1-pad-landscape          measured  53 failed 0 worst 1.103 stop1 monster
+a1-s1-phone-landscape        measured  79 failed 0 worst 1.103 stop0 monster   ||   a1-s1-phone-landscape        measured  79 failed 0 worst 1.103 stop0 monster
+a1-s2-pad-landscape          measured  63 failed 0 worst 1.103 stop1 monster   ||   a1-s2-pad-landscape          measured  63 failed 0 worst 1.103 stop1 monster
+a1-s2-phone-landscape        measured  89 failed 0 worst 1.103 stop1 monster   ||   a1-s2-phone-landscape        measured  89 failed 0 worst 1.103 stop1 monster
+a1-s3-pad-landscape          measured  65 failed 0 worst 1.103 stop1 monster   ||   a1-s3-pad-landscape          measured  65 failed 0 worst 1.103 stop1 monster
+a1-s3-phone-landscape        measured  80 failed 0 worst 1.103 stop0 monster   ||   a1-s3-phone-landscape        measured  80 failed 0 worst 1.103 stop0 monster
+a2-s1-pad-landscape          measured  53 failed 0 worst 1.103 stop1 monster   ||   a2-s1-pad-landscape          measured  53 failed 0 worst 1.103 stop1 monster
+a2-s1-phone-landscape        measured  79 failed 0 worst 1.103 stop0 monster   ||   a2-s1-phone-landscape        measured  79 failed 0 worst 1.103 stop0 monster
+a2-s2-pad-landscape          measured  63 failed 0 worst 1.103 stop1 monster   ||   a2-s2-pad-landscape          measured  63 failed 0 worst 1.103 stop1 monster
+a2-s2-phone-landscape        measured  89 failed 0 worst 1.103 stop1 monster   ||   a2-s2-phone-landscape        measured  89 failed 0 worst 1.103 stop1 monster
+a2-s3-pad-landscape          measured  65 failed 0 worst 1.103 stop1 monster   ||   a2-s3-pad-landscape          measured  65 failed 0 worst 1.103 stop1 monster
+a2-s3-phone-landscape        measured  80 failed 0 worst 1.103 stop0 monster   ||   a2-s3-phone-landscape        measured  80 failed 0 worst 1.103 stop0 monster
+a3-s1-pad-landscape          measured   7 failed 0 worst 1.455 stop0 monster   ||   a3-s1-pad-landscape          measured   7 failed 0 worst 1.455 stop0 monster
+a3-s1-phone-landscape        measured  10 failed 0 worst 1.103 stop3 monster   ||   a3-s1-phone-landscape        measured  10 failed 0 worst 1.103 stop3 monster
+a3-s2-pad-landscape          measured   7 failed 0 worst 1.431 stop0 monster   ||   a3-s2-pad-landscape          measured   7 failed 0 worst 1.455 stop0 monster
+a3-s2-phone-landscape        measured  10 failed 0 worst 1.103 stop3 monster   ||   a3-s2-phone-landscape        measured  10 failed 0 worst 1.103 stop3 monster
+a3-s3-pad-landscape          measured   7 failed 0 worst 1.455 stop0 monster   ||   a3-s3-pad-landscape          measured   7 failed 0 worst 1.431 stop0 monster
+a3-s3-phone-landscape        measured  10 failed 0 worst 1.103 stop3 monster   ||   a3-s3-phone-landscape        measured  10 failed 0 worst 1.103 stop3 monster
+
+## Capture runs (exit, A12 shader-error lines, script errors): Acts II-IV's 10 lines a run are main's map_mineral sampler(17), on both builds
+token ctl a0 s717 pad-landscape exit 0 shader-errors 0 script-errors 0
+token dev a0 s717 pad-landscape exit 0 shader-errors 0 script-errors 0
+token ctl a0 s717 phone-landscape exit 0 shader-errors 0 script-errors 0
+token dev a0 s717 phone-landscape exit 0 shader-errors 0 script-errors 0
+token ctl a0 s1 pad-landscape exit 0 shader-errors 0 script-errors 0
+token dev a0 s1 pad-landscape exit 0 shader-errors 0 script-errors 0
+token ctl a0 s1 phone-landscape exit 0 shader-errors 0 script-errors 0
+token dev a0 s1 phone-landscape exit 0 shader-errors 0 script-errors 0
+token ctl a0 s2 pad-landscape exit 0 shader-errors 0 script-errors 0
+token dev a0 s2 pad-landscape exit 0 shader-errors 0 script-errors 0
+token ctl a0 s2 phone-landscape exit 0 shader-errors 0 script-errors 0
+token dev a0 s2 phone-landscape exit 0 shader-errors 0 script-errors 0
+token ctl a0 s3 pad-landscape exit 0 shader-errors 0 script-errors 0
+token dev a0 s3 pad-landscape exit 0 shader-errors 0 script-errors 0
+token ctl a0 s3 phone-landscape exit 0 shader-errors 0 script-errors 0
+token dev a0 s3 phone-landscape exit 0 shader-errors 0 script-errors 0
+ctl a1 s1 pad-landscape exit 0 shader-errors 10 script-errors 0
+dev a1 s1 pad-landscape exit 0 shader-errors 10 script-errors 0
+ctl a1 s1 phone-landscape exit 0 shader-errors 10 script-errors 0
+dev a1 s1 phone-landscape exit 0 shader-errors 10 script-errors 0
+ctl a1 s2 pad-landscape exit 0 shader-errors 10 script-errors 0
+dev a1 s2 pad-landscape exit 0 shader-errors 10 script-errors 0
+ctl a1 s2 phone-landscape exit 0 shader-errors 10 script-errors 0
+dev a1 s2 phone-landscape exit 0 shader-errors 10 script-errors 0
+ctl a1 s3 pad-landscape exit 0 shader-errors 10 script-errors 0
+dev a1 s3 pad-landscape exit 0 shader-errors 10 script-errors 0
+ctl a1 s3 phone-landscape exit 0 shader-errors 10 script-errors 0
+dev a1 s3 phone-landscape exit 0 shader-errors 10 script-errors 0
+ctl a2 s1 pad-landscape exit 0 shader-errors 10 script-errors 0
+dev a2 s1 pad-landscape exit 0 shader-errors 10 script-errors 0
+ctl a2 s1 phone-landscape exit 0 shader-errors 10 script-errors 0
+dev a2 s1 phone-landscape exit 0 shader-errors 10 script-errors 0
+ctl a2 s2 pad-landscape exit 0 shader-errors 10 script-errors 0
+dev a2 s2 pad-landscape exit 0 shader-errors 10 script-errors 0
+ctl a2 s2 phone-landscape exit 0 shader-errors 10 script-errors 0
+dev a2 s2 phone-landscape exit 0 shader-errors 10 script-errors 0
+ctl a2 s3 pad-landscape exit 0 shader-errors 10 script-errors 0
+dev a2 s3 pad-landscape exit 0 shader-errors 10 script-errors 0
+ctl a2 s3 phone-landscape exit 0 shader-errors 10 script-errors 0
+dev a2 s3 phone-landscape exit 0 shader-errors 10 script-errors 0
+ctl a3 s1 pad-landscape exit 0 shader-errors 10 script-errors 0
+dev a3 s1 pad-landscape exit 0 shader-errors 10 script-errors 0
+ctl a3 s1 phone-landscape exit 0 shader-errors 10 script-errors 0
+dev a3 s1 phone-landscape exit 0 shader-errors 10 script-errors 0
+ctl a3 s2 pad-landscape exit 0 shader-errors 10 script-errors 0
+dev a3 s2 pad-landscape exit 0 shader-errors 10 script-errors 0
+ctl a3 s2 phone-landscape exit 0 shader-errors 10 script-errors 0
+dev a3 s2 phone-landscape exit 0 shader-errors 10 script-errors 0
+ctl a3 s3 pad-landscape exit 0 shader-errors 10 script-errors 0
+dev a3 s3 pad-landscape exit 0 shader-errors 10 script-errors 0
+ctl a3 s3 phone-landscape exit 0 shader-errors 10 script-errors 0
+dev a3 s3 phone-landscape exit 0 shader-errors 10 script-errors 0

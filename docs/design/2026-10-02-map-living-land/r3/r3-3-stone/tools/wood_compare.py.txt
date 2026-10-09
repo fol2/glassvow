@@ -1,0 +1,20 @@
+"""Lane R3.3 scratch: compares main's woodland with the branch's (wood_dump.gd JSON), stone-only cards excluded."""
+import json, sys
+from collections import Counter
+M = sys.argv[1]
+STONE = ("grave-", "wall-", "rubble-")
+for seed in sys.argv[2:]:
+    a = json.load(open(f"{M}/wood/r33-ctl-{seed}.json")); b = json.load(open(f"{M}/wood/wt-r33-{seed}.json"))
+    ca = [tuple(c[:5]) for c in a["cards"]]
+    cb = [tuple(c[:5]) for c in b["cards"] if not c[0].startswith(STONE)]
+    sa, sb = Counter(ca), Counter(cb)
+    same = sum((sa & sb).values())
+    # kit foliage (kinds the planting adopts) and kit placements by family
+    ka = Counter(k[0] for k in a["kit"]); kb = Counter(k[0] for k in b["kit"])
+    pos_a = set((k[0], k[1], k[2]) for k in a["kit"]); pos_b = set((k[0], k[1], k[2]) for k in b["kit"])
+    print(f"seed {seed}: digest equal {a['digest'] == b['digest']}; cards main {len(ca)} branch {len(cb)} (stone cards excluded); identical {same}; "
+          f"main-only {len(ca) - same}; branch-only {len(cb) - same}")
+    print(f"  kit placements main {len(a['kit'])} branch {len(b['kit'])}; same kind+position {len(pos_a & pos_b)}")
+    print(f"  card kinds main {dict(Counter(c[0] for c in ca).most_common(6))}")
+    print(f"  card kinds branch {dict(Counter(c[0] for c in cb).most_common(6))}")
+    print(f"  rejected main {a['rejected']}\n  rejected branch {b['rejected']}")

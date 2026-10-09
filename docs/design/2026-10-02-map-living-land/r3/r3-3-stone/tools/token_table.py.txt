@@ -1,0 +1,9 @@
+"""Lane R3.3 scratch: summarise token-gate logs (TOKEN rows): measured, failed, worst margin with its stop and kind."""
+import json, sys, glob, os
+for path in sorted(glob.glob(sys.argv[1] + "/*.log")):
+    rows = [json.loads(l[6:]) for l in open(path, errors="replace") if l.startswith("TOKEN {")]
+    judged = [r for r in rows if r.get("judged")]
+    failed = [r for r in judged if not r.get("pass")]
+    worst = min(judged, key=lambda r: r["margin"]) if judged else None
+    print("%-28s measured %3d failed %d worst %s %s %s" % (os.path.basename(path)[:-4], len(judged), len(failed),
+          worst and worst["margin"], worst and worst["stop"], worst and worst["kind"]))

@@ -1,0 +1,19 @@
+# tools/check_floor_bake.gd at R3.3's code-final runtime (lane head 1ae3888c), the A12 Metal condition
+# GODOT_MTL_DISABLE_ARGUMENT_BUFFERS=1 godot --path . --rendering-driver metal --rendering-method mobile -s res://tools/check_floor_bake.gd -- --map --seed=1 --map-steps=2 --shape=pad-landscape
+ok    the floor baked ()
+ok    every ground chunk draws the baked floor
+ok    the bake's views and world are freed
+ok    the bake spans its frames (5) and no step holds the main thread past 40 ms (13.6)
+ok    the lit picture is 1536x960 with 11 levels
+ok    the lit picture has a picture in it
+ok    a mip level is the mean, as light, of the one below
+ok    no seam where the tiles meet
+ok    paced, the bake takes a frame a tile and four more (8), no step past 40 ms (2.5)
+ok    the mask holds a pool round the lamps, each with its flame's phase (21 phases)
+ok    the mask holds standing water
+ok    no water stands at any of the 57 waystones' seats (wettest 0.00)
+ok    letting the land go frees the floor's textures
+ok    the warm-up builds the bake's own mip chain (3 levels) from a picture of the floor's format
+ok    every 2D view of the warm-up draws in its forced draws (4 of 4)
+ok    the warm-up draws and lets go, its picture freed
+FLOOR_BAKE_CHECK PASS (0 failed)

@@ -1,0 +1,46 @@
+extends SceneTree
+## Lane R3.3 scratch (never committed): the device memory one texture load costs on this renderer.
+## Loads the named files on the loader's threads (together, as a take does, or one at a time) and
+## prints the driver's total and Godot's tracked textures and buffers before and after each.
+##   godot --path <wt> --rendering-driver metal --rendering-method mobile -s <this> -- --together=a,b --then=c,d
+
+var rd: RenderingDevice
+
+
+func _initialize() -> void:
+	rd = RenderingServer.get_rendering_device()
+	_run.call_deferred()
+
+
+func _mem(label: String) -> void:
+	print("TEXCOST ", label, " total ", snappedf(rd.get_memory_usage(RenderingDevice.MEMORY_TOTAL) / 1048576.0, 0.01),
+		" tex ", snappedf(rd.get_memory_usage(RenderingDevice.MEMORY_TEXTURES) / 1048576.0, 0.01),
+		" buf ", snappedf(rd.get_memory_usage(RenderingDevice.MEMORY_BUFFERS) / 1048576.0, 0.01))
+
+
+func _take(paths: PackedStringArray) -> Array:
+	for p: String in paths:
+		ResourceLoader.load_threaded_request(p, "")
+	var got: Array = []
+	for p: String in paths:
+		while ResourceLoader.load_threaded_get_status(p) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			await process_frame
+		got.append(ResourceLoader.load_threaded_get(p))
+	for i: int in range(3):
+		await process_frame
+	return got
+
+
+func _run() -> void:
+	var groups: Array = []
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--together=") or arg.begins_with("--then="):
+			groups.append(PackedStringArray(arg.get_slice("=", 1).split(",")))
+	for i: int in range(5):
+		await process_frame
+	_mem("start")
+	var held: Array = []
+	for g: PackedStringArray in groups:
+		held.append_array(await _take(g))
+		_mem("after " + ",".join(g).replace("res://assets/art/map-journey/", ""))
+	quit(0)

@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+"""Lane R3.3 scratch (never committed): log the driver's video memory around each threaded texture
+take and the floor warm-up in a measuring worktree, for the 8 MiB hunt. Revert with
+`git -C <worktree> checkout -- presentation/map/landscape` (build_ipas.zsh does so before every export).
+    python3 vram_log_patch.py <worktree>"""
+import sys
+from pathlib import Path
+wt = Path(sys.argv[1]).resolve()
+LOG = ('print("VRAMLOG ", %s, " ", Time.get_ticks_msec(), " total ", '
+       'snappedf(RenderingServer.get_rendering_device().get_memory_usage(RenderingDevice.MEMORY_TOTAL) / 1048576.0, 0.1), " tex ", '
+       'snappedf(RenderingServer.get_rendering_device().get_memory_usage(RenderingDevice.MEMORY_TEXTURES) / 1048576.0, 0.1), " buf ", '
+       'snappedf(RenderingServer.get_rendering_device().get_memory_usage(RenderingDevice.MEMORY_BUFFERS) / 1048576.0, 0.1))')
+def patch(rel, pairs):
+    p = wt / rel
+    s = p.read_text()
+    for old, new in pairs:
+        assert s.count(old) == 1, (rel, old)
+        s = s.replace(old, new)
+    p.write_text(s)
+    print("patched", p)
+atlas = (wt / "presentation/map/landscape/impostor_atlas.gd").read_text()
+taken_old = ("			if taken != null and (hint.is_empty() or taken.is_class(hint)):\n				textures[path] = taken\n"
+    if "hint.is_empty()" in atlas else "			if texture is Texture2D:\n				textures[path] = texture\n")
+patch("presentation/map/landscape/impostor_atlas.gd", [
+    ("	func request() -> void:\n		for path: String in paths:\n",
+     "	func request() -> void:\n		" + LOG % '"request " + ",".join(paths)' + "\n		for path: String in paths:\n"),
+    (taken_old, taken_old + "				" + LOG % '"taken " + path' + "\n"),
+])
+patch("presentation/map/landscape/floor_warm.gd", [
+    ("static func warm() -> void:\n", "static func warm() -> void:\n	" + LOG % '"warm"' + "\n"),
+    ("	RenderingServer.directional_soft_shadow_filter_set_quality(quality as RenderingServer.ShadowQuality)\n	queue_free()",
+     "	RenderingServer.directional_soft_shadow_filter_set_quality(quality as RenderingServer.ShadowQuality)\n	" + LOG % '"warm drawn"' + "\n	queue_free()"),
+])

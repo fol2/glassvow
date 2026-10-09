@@ -1,0 +1,20 @@
+"""Lane R3.2 round 3: each launch's boot bake and cold open (ready, the build's end, the bake's frames)."""
+import json, sys, glob, os
+for path in sorted(glob.glob(os.path.join(sys.argv[1], '*.jsonl'))):
+    label = os.path.basename(path)[:-6]
+    build = '?'
+    for l in open(path):
+        try:
+            d = json.loads(l)
+        except Exception:
+            continue
+        if d.get('probe') == 'start':
+            build = d.get('build')
+        if d.get('probe') == 'boot' or (d.get('probe') == 'open' and d.get('kind') == 'cold'):
+            fm = d.get('floor_ms') if isinstance(d.get('floor_ms'), dict) else {}
+            b = (fm or {}).get('bake', {})
+            lm = d.get('land_ms') or {}
+            print('%-10s %-15s %-5s ready %7s built %7s call %6s frames %4s | land %s | bake %s frames %s steps %s variant %s' % (
+                label, build, 'boot' if d['probe'] == 'boot' else 'cold', d.get('ready_ms', d.get('elapsed_ms')), d.get('built_ms', '-'), d.get('call_ms', '-'), d.get('frames'),
+                lm.get('total'), round(b.get('wall_ms', 0), 1) if b else '-', [round(x, 1) for x in b.get('frames_ms', [])] if b else '-',
+                [round(x, 1) for x in b.get('steps_ms', [])] if b else '-', b.get('qa_variant') if b else '-'))

@@ -1,0 +1,43 @@
+weakest phone token at [266, 113] (radius 28 px): rim vs land main 1.07, branch 1.05
+  rim band (r-5..r-1, mean): main 0.0228, branch 0.0242; pixels changed (> 4/255) 185 of 631, largest 58
+  disc (0.55r..r-6, median): main 0.0202, branch 0.0204; pixels changed (> 4/255) 137 of 776, largest 39
+  land ring (r+16..r+28, median): main 0.0180, branch 0.0207; pixels changed (> 4/255) 1713 of 3769, largest 155
+  crop: frames/pin-phone-weakest-8x.png
+
+Where the token at (266,113) is drawn, rings round its centre (the branch's capture; changed = any channel > 4/255 against main):
+  0-10 px: changed 0 of 316, mean luminance 0.022
+  10-14 px: changed 0 of 301, mean luminance 0.015
+  14-16 px: changed 0 of 187, mean luminance 0.328
+  16-18 px: changed 25 of 216, mean luminance 0.107
+  18-20 px: changed 48 of 237, mean luminance 0.026
+  20-23 px: changed 106 of 405, mean luminance 0.025
+  23-28 px: changed 237 of 803, mean luminance 0.024
+  pane radius 28.0
+
+The probe reports the token's pane radius as 28 px; the drawn token ends at about 16 px (its silver rim at 14-16 px). R2's method's
+"rim" band (23-27 px) and most of its "disc" band (15-22 px) lie on the land outside the token: for #679's tokens it compares land
+with land, near 1.0 by construction. Nothing inside the drawn token changed. The land round it changed: a crimson crown re-flowed
+to its left, and the floor beside it. Across the lane's heads the figure read 1.02 (0a06fbab, token (455,285)), 1.05 (6bbb2497)
+and 1.04 (the code-final head); main reads 1.07.
+
+At the earlier head 0a06fbab the weakest phone token was (455,285), 1.07 -> 1.02:
+  R3.3: the phone token at (455,285), R2's pin-contrast mount (look4.gd), seed 1, Mac, A12 Metal condition.
+  Main faa98347 (runtime 3005a377) against the branch 0a06fbab. The token's radius is 28 px.
+  
+  Mean or median linear luminance (pin_contrast.py's own bands):
+    rim band (r-5..r-1 px), mean:     main 0.0238  branch 0.0236   (the token: unchanged)
+    disc (0.55 r..r-6), median:       main 0.0165  branch 0.0170   (the token: unchanged)
+    land ring (r+16..r+28), median:   main 0.0189  branch 0.0222   (the land: lighter)
+    rim vs land = (0.0238+0.05)/(0.0189+0.05) = 1.07 on main; (0.0236+0.05)/(0.0222+0.05) = 1.02 on the branch.
+  
+  Changed pixels (any channel > 4/255): disc 0 of 783 (max 4); rim band 21 of 630 (max 18, edge pixels
+  blended with the land behind by the tilt-shift); between the rim and the ring 889 of 3626 (max 80);
+  the ring 1154 of 3764 (max 83). The change is on the land, not the token
+  (frame: phone-455-285-main-branch-diff-8x.png: main, branch, difference x4).
+  
+  What moved there (look4n.gd, NEAR listing): the gateway's companion bank.
+    main:   slate-bank at (-23.09, 22.04), 3.1 m from the river's line with a 2.18 m circle, reaching over the water;
+            an ember-oak (crimson crown) at (-26.89, 27.29), whose dark crown fills the ring's lower half.
+    branch: the companion is placed off the water (ROCK_WATER), at (-26.09, 24.04): a mossy granite-bank;
+            the ember-oak is gone from that spot (the bank holds its ground).
+  So the lower half of the ring now holds the lighter, mossy granite where main had a dark crimson crown.

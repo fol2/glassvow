@@ -1,0 +1,19 @@
+"""Lane R3.3 scratch: the map probe's rows (TRACE_PROBE) as a table: stage and shadow geometry per view,
+the opens (cold, reopened, warmed) and the land's build timings."""
+import json, sys
+for path in sys.argv[1:]:
+    rows = [json.loads(l[12:]) for l in open(path, errors="replace") if l.startswith("TRACE_PROBE {")]
+    print("==", path.rsplit("/", 1)[-1], "build", rows[0].get("build"))
+    for r in rows:
+        p = r.get("probe")
+        if p == "hold_start":
+            g = r["render"]
+            print("  %-8s stage %6d prims %3d draws | shadow %5d prims %2d draws | video %.1f MiB" % (r["view"], g["stage_primitives"], g["stage_draw_calls"], g["shadow_primitives"], g["shadow_draw_calls"], r["video_mib"]))
+        elif p == "hold_end":
+            print("  %-8s mean %.3f p95 %.2f missed %d" % (r["view"], r["mean_ms"], r["p95_ms"], r["missed"]))
+        elif p in ("boot", "open", "warm") or "first_frame_ms" in r:
+            land = r.get("land_ms") or r.get("land") or {}
+            print("  %-6s %s elapsed %.1f first %.1f built %.1f worst %s bake wall %s" % (p, r.get("kind", ""), r.get("elapsed_ms", -1), r.get("first_frame_ms", -1), r.get("built_ms", -1),
+                  r.get("worst_ms", r.get("slow_frames", "")), (r.get("floor_ms") or {}).get("bake", {}).get("wall_ms")))
+            if isinstance(land, dict) and land:
+                print("        land", json.dumps({k: land[k] for k in ("total", "scenery", "wood", "terrain", "stone_parts") if k in land}))

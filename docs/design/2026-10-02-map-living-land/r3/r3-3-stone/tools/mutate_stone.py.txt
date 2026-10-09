@@ -1,0 +1,105 @@
+"""Lane R3.3 mutation proof of tests/test_map_stone.gd: each mutation breaks one
+behaviour in the production code; the test must fail on it. Each file is backed
+up before it is touched and copied back after, whatever happens.
+    python3 mutate_stone.py <worktree> <backup dir> [indices]"""
+import shutil, subprocess, sys
+from pathlib import Path
+WT = Path(sys.argv[1])
+OUT = Path(sys.argv[2])
+OUT.mkdir(parents=True, exist_ok=True)
+L = "presentation/map/landscape/"
+M = [
+ ("an anisotropic sampler", L + "stone.gdshader",
+  "uniform sampler2D albedo_atlas : source_color, filter_linear_mipmap, repeat_disable;",
+  "uniform sampler2D albedo_atlas : source_color, filter_linear_mipmap_anisotropic, repeat_disable;"),
+ ("the stone moves", L + "stone.gdshader",
+  "	NORMAL_MAP = mapped;", "	NORMAL_MAP = mapped + vec3(0.0 * sin(TIME));"),
+ ("a vertex stage of its own", L + "stone.gdshader",
+  "void fragment() {", "void vertex() {\n}\n\nvoid fragment() {"),
+ ("a fourth sampler", L + "stone.gdshader",
+  "uniform sampler2D albedo_atlas : source_color, filter_linear_mipmap, repeat_disable;",
+  "uniform sampler2D albedo_atlas : source_color, filter_linear_mipmap, repeat_disable;\nuniform sampler2D spare : filter_linear;"),
+ ("no strata on the banks", L + "floor_paint.gdshader",
+  "uniform sampler2D strata : source_color, filter_linear_mipmap, repeat_enable;",
+  "uniform sampler2D stratum : source_color, filter_linear_mipmap, repeat_enable;"),
+ ("cliffs on one bank only", L + "ravine_cliffs.gd",
+  "		for side: float in [-1.0, 1.0]:", "		for side: float in [1.0]:"),
+ ("cliffs face away from the water", L + "ravine_cliffs.gd",
+  "	var face: Vector3 = -outward * side", "	var face: Vector3 = outward * side"),
+ ("cliffs shrunk, feet above the water", L + "ravine_cliffs.gd",
+  "	var size: float = maxf(1.0, (rim - River.LEVEL + FOOT) / REACH)",
+  "	var size: float = minf(1.0, (rim - River.LEVEL + FOOT) / REACH) * 0.8"),
+ ("cliffs reckoned too deep, feet above the water", L + "ravine_cliffs.gd",
+  "const REACH: float = 4.0", "const REACH: float = 5.4"),
+ ("cliffs by the waystones", L + "ravine_cliffs.gd",
+  "		if flat.distance_to(Vector2(seat.x, seat.z)) < SEAT_CLEAR:",
+  "		if flat.distance_to(Vector2(seat.x, seat.z)) < SEAT_CLEAR * 0.3:"),
+ ("cliffs by the bridge decks", L + "ravine_cliffs.gd",
+  "		if flat.distance_to(Vector2(deck.x, deck.z)) < DECK_CLEAR:",
+  "		if flat.distance_to(Vector2(deck.x, deck.z)) < DECK_CLEAR * 0.3:"),
+ ("cliffs to the land's near edge", L + "ravine_cliffs.gd",
+  "	var last: float = minf(terrain.river_half_length, bounds.end.y) - NEAR_EDGE",
+  "	var last: float = minf(terrain.river_half_length, bounds.end.y) - EDGE"),
+ ("a draw per half cell", L + "land_stone.gd",
+  "		var key: Vector2i = Vector2i(floori(at.origin.x / CELL), floori(at.origin.z / CELL))",
+  "		var key: Vector2i = Vector2i(floori(at.origin.x / (CELL * 0.5)), floori(at.origin.z / CELL))"),
+ ("the stone casts nothing", L + "land_stone.gd",
+  "		draw.material_override = _material",
+  "		draw.material_override = _material\n		draw.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF"),
+ ("triangles miscounted", L + "land_stone.gd",
+  "		triangles += piece_triangles(str(pose[0]))", "		triangles += piece_triangles(str(pose[0])) - 1"),
+ ("islands without outcrops", L + "kit.gd",
+  '		for rock: String in ["granite-tor", "granite-bank", "granite-boulder"]:', '		for rock: String in []:'),
+ ("no islands' groups", L + "kit.gd",
+  '	_timed("islands", _islands.bind(grey))', '	pass'),
+ ("walls on the roads", L + "kit.gd",
+  "		if road < RUIN_ROAD.x or road > RUIN_ROAD.y:", "		if false:"),
+ ("no verge gravestones", L + "kit.gd",
+  '	_timed("verge_graves", _verge_graves.bind(grey))', '	pass'),
+ ("no shrine gravestones", L + "kit.gd",
+  '	_timed("shrine_graves", _shrine_graves.bind(grey))', '	pass'),
+ ("ruins placed blind to the woodland's sight", L + "kit.gd",
+  "	return _sight.fits(ImpostorAtlas.tile_for(kind, yaw), p, scale_value) \\\n",
+  "	return true or _sight.fits(ImpostorAtlas.tile_for(kind, yaw), p, scale_value) \\\n"),
+ ("ruins hide what stands behind them", L + "kit.gd",
+  "		if limit > depth and cover.intersects(kept):", "		if false and limit > depth and cover.intersects(kept):"),
+ ("rocks over the water", L + "kit.gd",
+  "	if is_rock(kind) and River.distance(p.x, p.z) * River.CHANNEL < River.HALF_WIDTH * River.CHANNEL + radius * ROCK_WATER:",
+  "	if false and is_rock(kind):"),
+ ("standing ruins cast no card", L + "wood_planting.gd",
+  "	return TREES.has(kind) or STANDING.has(kind)", "	return TREES.has(kind)"),
+ ("ruins sway", L + "impostor_wood.gd",
+  "	var foot: float = 0.0 if Planting.STONES.has(kind) else -Atlas.low[tile].y / Atlas.size[tile].y",
+  "	var foot: float = -Atlas.low[tile].y / Atlas.size[tile].y"),
+ ("the bake skips the ruins' cards", L + "floor_plan.gd",
+  "		if Planting.casts(planting.kinds[i]):", "		if Planting.TREES.has(planting.kinds[i]):"),
+ ("an unseeded draw in a placement stage", L + "kit.gd",
+  "_near(_grave(rng), at, rng.randf_range(0.85, 1.05), rng.randf_range(-0.3, 0.3), grey, 0.5, 1)",
+  "_near(_grave(rng), at, rng.randf_range(0.85, 1.05), randf_range(-0.3, 0.3), grey, 0.5, 1)"),
+]
+only = sys.argv[3].split(",") if len(sys.argv) > 3 else None
+results = []
+for i, (name, rel, before, after) in enumerate(M):
+    if only and str(i) not in only:
+        continue
+    path = WT / rel
+    backup = OUT / ("backup-%d" % i)
+    shutil.copy2(path, backup)
+    try:
+        text = path.read_text()
+        if text.count(before) != 1:
+            results.append((name, "ANCHOR NOT FOUND"))
+            print("%-44s %s" % results[-1], flush=True)
+            continue
+        path.write_text(text.replace(before, after))
+        run = subprocess.run(["godot", "--headless", "-s", "res://tests/run_all.gd", "--", "--tests=res://tests/test_map_stone.gd"],
+                             cwd=WT, capture_output=True, text=True, timeout=1500)
+        out = run.stdout + run.stderr
+        failed = "FAIL res://tests/test_map_stone.gd" in out or "PASS (1 tests)" not in out
+        lines = [l for l in out.splitlines() if l.startswith("  - test_map_stone")]
+        results.append((name, ("caught: " + "; ".join(l.strip()[18:] for l in lines[:4])) if failed and lines
+                        else ("caught (no assertion line; parse or run error)" if failed else "SURVIVED")))
+    finally:
+        shutil.copy2(backup, path)
+    print("%-44s %s" % results[-1], flush=True)
+print("caught %d of %d" % (sum(1 for r in results if r[1].startswith("caught")), len(results)))

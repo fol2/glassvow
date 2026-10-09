@@ -1,0 +1,56 @@
+extends SceneTree
+## Lane R3.3 scratch (never committed): builds Act I's land headless for a run
+## seed (as test_map_stone does) and writes the woodland as JSON: every
+## planted card (kind, base, scale, tile, from the kit) and every kit
+## placement (kind, position, scale, yaw). Works on main and the branch.
+##   godot --headless --path <wt> -s <this> -- --seed=<n> --out=<json>
+
+var seed_value: int = 717
+var out: String = ""
+
+
+func _initialize() -> void:
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--seed="): seed_value = int(arg.get_slice("=", 1))
+		elif arg.begins_with("--out="): out = arg.get_slice("=", 1)
+	_run.call_deferred()
+
+
+func _run() -> void:
+	MapJourneyLandscape.Kit.preload_scenes()
+	var content: ContentDB = ContentDB.load_full()
+	var run_state: RunState = RunState.new_run(content, seed_value, "run-map-stone")
+	var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.for_run(run_state, content), content)
+	root.add_child(screen)
+	screen.size = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
+	screen.set_shape(StageShape.IDENTITY)
+	screen.refresh(run_state)
+	var land: MapJourneyLandscape = screen._map_scene.journey_landscape()
+	var planting: RefCounted = land.wood.planting
+	var cards: Array = []
+	var kinds: PackedStringArray = planting.get("kinds")
+	var bases: PackedVector3Array = planting.get("bases")
+	var scales: PackedFloat32Array = planting.get("scales")
+	var tiles: PackedInt32Array = planting.get("tiles")
+	var from_kit: PackedByteArray = planting.get("from_kit")
+	for i: int in range(kinds.size()):
+		cards.append([kinds[i], snappedf(bases[i].x, 0.0001), snappedf(bases[i].y, 0.0001), snappedf(bases[i].z, 0.0001),
+			snappedf(scales[i], 0.0001), tiles[i], from_kit[i]])
+	var kit: Array = []
+	for item: Dictionary in land.kit.placed:
+		var at: Vector3 = item["position"]
+		kit.append([str(item["kind"]), snappedf(at.x, 0.0001), snappedf(at.z, 0.0001),
+			snappedf(float(str(item["scale"])), 0.0001), snappedf(float(str(item["yaw"])), 0.0001)])
+	var stone: Array = []
+	var stone_node: Node = land.kit.get("stone")
+	if stone_node != null:
+		for item: Dictionary in stone_node.get("placed"):
+			var pose: Transform3D = item["transform"]
+			stone.append([str(item["kind"]), snappedf(pose.origin.x, 0.0001), snappedf(pose.origin.y, 0.0001),
+				snappedf(pose.origin.z, 0.0001), snappedf(pose.basis.get_scale().x, 0.0001)])
+	var file: FileAccess = FileAccess.open(out, FileAccess.WRITE)
+	file.store_string(JSON.stringify({"seed": seed_value, "digest": screen.layout_digest(), "cards": cards, "kit": kit, "stone": stone,
+		"rejected": planting.get("rejected")}))
+	file.close()
+	print("WOOD_DUMP ", out, " cards ", cards.size(), " kit ", kit.size())
+	quit(0)

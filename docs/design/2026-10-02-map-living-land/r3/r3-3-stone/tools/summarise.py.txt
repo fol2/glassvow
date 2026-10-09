@@ -1,0 +1,66 @@
+"""Lane R3.2 batch A summary: every launch's rows, per build, graded on medians."""
+import json, sys, glob, statistics, os
+D = sys.argv[1]
+rows = {}
+for path in sorted(glob.glob(os.path.join(D, '*-l[12].jsonl'))):
+    label = os.path.basename(path)[:-6]
+    rows[label] = [json.loads(l) for l in open(path)]
+def med(xs):
+    return statistics.median(xs) if xs else float('nan')
+out = []
+def p(*a):
+    out.append(' '.join(str(x) for x in a))
+for b in ('ctl', 'dev'):
+    p('=' * 20, b)
+    holds = {}
+    opens = {}
+    boots = []
+    for label, rs in rows.items():
+        if not label.startswith(b):
+            continue
+        for d in rs:
+            pr = d.get('probe')
+            if pr == 'hold_end':
+                view = d.get('view', 'default')
+                if label.endswith('l2'):
+                    view = 'opening'
+                holds.setdefault((view, d['mode']), []).append((label, d))
+            elif pr == 'hold_start':
+                view = d.get('view', 'default')
+                if label.endswith('l2'):
+                    view = 'opening'
+                holds.setdefault(('start', view, d['mode']), []).append((label, d))
+            elif pr == 'open':
+                opens.setdefault(d['kind'], []).append((label, d))
+            elif pr == 'boot':
+                boots.append((label, d))
+    p('-- boots (l1 = first launch after its install; l2 = later launch)')
+    for label, d in boots:
+        bake = (d.get('floor_ms') or {}).get('bake', {}) if isinstance(d.get('floor_ms'), dict) else {}
+        p('  %-8s ready %7.1f worst %7.1f slow %s vram %s->%s peak %s after10 %s | bake %s frames_ms %s' % (
+            label, d['elapsed_ms'], d['worst_frame_ms'], d['slow_frames'], d['vram_start'], d['vram_end'], d['vram_peak'],
+            (d.get('vram_after') or ['-'])[-1], round(bake.get('wall_ms', 0), 1) if bake else '-',
+            [round(x, 1) for x in bake.get('frames_ms', [])] if bake else '-'))
+    p('-- opens')
+    for kind in ('cold', 'reopen', 'warmed'):
+        for label, d in opens.get(kind, []):
+            bake = (d.get('floor_ms') or {}).get('bake', {}) if (kind == 'cold' and isinstance(d.get('floor_ms'), dict)) else {}
+            p('  %-6s %-8s ready %7.1f first %7.1f call %7.1f worst %6.1f vram %s->%s peak %s after10 %s%s' % (
+                kind, label, d['ready_ms'], d.get('first_frame_ms', -1), d.get('call_ms', -1), d['worst_frame_ms'],
+                d['vram_start'], d['vram_end'], d['vram_peak'], (d.get('vram_after') or ['-'])[-1],
+                (' | bake %.1f frames_ms %s' % (bake.get('wall_ms', 0), [round(x, 1) for x in bake.get('frames_ms', [])])) if bake else ''))
+        rs = [d['ready_ms'] for _, d in opens.get(kind, [])]
+        if rs:
+            p('  %-6s MEDIAN ready %.1f over %d' % (kind, med(rs), len(rs)))
+    p('-- holds (mean ms / p95 / missed / max), render at start')
+    for key in sorted(k for k in holds if k[0] != 'start'):
+        view, mode = key
+        items = holds[key]
+        starts = holds.get(('start', view, mode), [])
+        p('  %-8s %-7s means %s | p95 %s | missed %s | max %s' % (view, mode,
+            ' / '.join('%.3f' % d['mean_ms'] for _, d in items), ' / '.join('%.2f' % d['p95_ms'] for _, d in items),
+            ' / '.join('%d' % d['missed'] for _, d in items), ' / '.join('%.1f' % d['max_ms'] for _, d in items)))
+        p('  %-8s %-7s MEDIAN mean %.3f p95 %.2f missed %s | render %s | video_mib %s' % (view, mode,
+            med([d['mean_ms'] for _, d in items]), med([d['p95_ms'] for _, d in items]), med([d['missed'] for _, d in items]),
+            starts[0][1]['render'] if starts else '-', ' / '.join(str(d['video_mib']) for _, d in starts)))
+print('\n'.join(out))

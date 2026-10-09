@@ -1,0 +1,71 @@
+extends SceneTree
+## Lane R3.3 scratch (never committed): every hero stone piece on its real
+## material under the land's own key light and ambient, seen from the journey
+## camera's pitch, in a row on a dark ground. Captures the window.
+##   godot --path <wt> -s <this> -- --out=<png> [--kinds=a,b] [--size=<ortho m>]
+
+const Stone = preload("res://presentation/map/landscape/land_stone.gd")
+var out: String = ""
+var kinds: PackedStringArray = []
+var ortho: float = 15.0
+
+
+func _initialize() -> void:
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--out="): out = arg.get_slice("=", 1)
+		elif arg.begins_with("--kinds="): kinds = arg.get_slice("=", 1).split(",")
+		elif arg.begins_with("--size="): ortho = float(arg.get_slice("=", 1))
+	_run.call_deferred()
+
+
+func _run() -> void:
+	root.size = Vector2i(1600, 900)
+	Stone.prepare_step(true)
+	if kinds.is_empty():
+		kinds = PackedStringArray(Array(Stone.OUTCROPS) + Array(Stone.CLIFFS))
+	var world: Node3D = Node3D.new()
+	root.add_child(world)
+	var key: DirectionalLight3D = DirectionalLight3D.new()
+	var environment: Environment = Environment.new()
+	MapJourneyLandscape.light(key, environment)
+	key.shadow_enabled = true
+	world.add_child(key)
+	var we: WorldEnvironment = WorldEnvironment.new()
+	environment.background_mode = Environment.BG_COLOR
+	environment.background_color = Color(0.08, 0.07, 0.06)
+	we.environment = environment
+	world.add_child(we)
+	var ground: MeshInstance3D = MeshInstance3D.new()
+	var plane: PlaneMesh = PlaneMesh.new()
+	plane.size = Vector2(80, 40)
+	ground.mesh = plane
+	var gm: StandardMaterial3D = StandardMaterial3D.new()
+	gm.albedo_color = Color(0.16, 0.12, 0.09)
+	ground.material_override = gm
+	world.add_child(ground)
+	var x: float = -float(kinds.size() - 1) * 1.9
+	for kind: String in kinds:
+		var mi: MeshInstance3D = MeshInstance3D.new()
+		var mesh: ArrayMesh = ArrayMesh.new()
+		var arrays: Array = Stone._pieces.arrays[kind]
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		mi.mesh = mesh
+		mi.material_override = Stone.material()
+		mi.position = Vector3(x, 0.0, 0.0)
+		if Stone.CLIFFS.has(kind):
+			mi.position.y = 2.5
+		world.add_child(mi)
+		x += 3.8
+	var camera: Camera3D = Camera3D.new()
+	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	camera.size = ortho
+	camera.rotation_degrees = Vector3(-MapJourneyCameraContract.PITCH, 0, 0)
+	camera.position = Vector3(0, 0, 0) + camera.transform.basis.z * 30.0
+	world.add_child(camera)
+	camera.current = true
+	for i: int in range(30):
+		await process_frame
+	await RenderingServer.frame_post_draw
+	root.get_texture().get_image().save_png(out)
+	print("STONE_LOOK ", out)
+	quit(0)

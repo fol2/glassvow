@@ -1,0 +1,24 @@
+#!/bin/zsh
+# mac_proof.zsh <worktree> <outdir>: lane R3.3's Mac proof at one head (scratch):
+# the A12 Metal condition (GODOT_MTL_DISABLE_ARGUMENT_BUFFERS=1, metal, mobile) at the three
+# reference shapes, en and zh-Hant lean, en full; Reduce Motion at Close (two frames 1.5 s apart).
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+WT=$1; OUT=$2; mkdir -p $OUT
+typeset -A VP; VP=(pad-landscape 1180x820 phone-landscape 844x390 desktop-landscape 1458x820)
+for shape in pad-landscape phone-landscape desktop-landscape; do
+  for loc in en zh-Hant; do
+    $M/tools/cap.sh $WT $OUT/$shape-$loc-lean.png --map-steps=2 --shape=$shape --vp=$VP[$shape] --locale=$loc --look-lean --look-view=journey | sed "s/^/$shape $loc lean: /"
+  done
+  $M/tools/cap.sh $WT $OUT/$shape-en-full.png --map-steps=2 --shape=$shape --vp=$VP[$shape] --locale=en --look-view=journey | sed "s/^/$shape en full: /"
+done
+for rm in on off; do
+  args=(--map-steps=2 --shape=pad-landscape --vp=1180x820 --look-lean --look-view=close --look-burst=1.5 --look-noair)
+  [[ $rm == on ]] && args+=(--look-still)
+  $M/tools/cap.sh $WT $OUT/rm-$rm.png $args | sed "s/^/reduce motion $rm: /"
+  echo "reduce motion $rm changed px $(python3 -c "
+import numpy as np
+from PIL import Image
+a=np.asarray(Image.open('$OUT/rm-$rm.png').convert('RGB')).astype(int); b=np.asarray(Image.open('$OUT/rm-$rm-later.png').convert('RGB')).astype(int)
+print(int((np.abs(a-b).max(-1)>6).sum()))")"
+done
+echo "all logs: shader errors $(cat $OUT/*.log | grep -c 'SHADER ERROR\|Error compiling shader'), script errors $(cat $OUT/*.log | grep -c 'SCRIPT ERROR'), other ERROR lines $(cat $OUT/*.log | grep '^ERROR' | grep -vc 'resources still in use\|leaked at exit\|RID allocations')"

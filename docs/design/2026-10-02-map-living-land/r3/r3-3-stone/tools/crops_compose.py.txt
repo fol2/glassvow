@@ -1,0 +1,23 @@
+"""Lane R3.3: the README's crops at 2x, main beside the branch, from the Close captures (tools/crops.zsh.txt) and the token gate's stops."""
+from PIL import Image, ImageDraw, ImageFont
+M = '/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane'
+OUT = M + '/evidence/frames/'
+try:
+    font = ImageFont.truetype('/System/Library/Fonts/Supplemental/Arial.ttf', 20)
+except Exception:
+    font = ImageFont.load_default()
+def pair(a, b, box, out, title):
+    ia = Image.open(a).convert('RGB').crop(box); ib = Image.open(b).convert('RGB').crop(box)
+    w, h = ia.width * 2, ia.height * 2
+    sheet = Image.new('RGB', (w * 2 + 12, h + 34), (24, 22, 26))
+    d = ImageDraw.Draw(sheet); d.text((8, 6), title + '  (main left, R3.3 right; 2x)', fill=(230, 220, 200), font=font)
+    sheet.paste(ia.resize((w, h), Image.LANCZOS), (0, 34)); sheet.paste(ib.resize((w, h), Image.LANCZOS), (w + 12, 34))
+    sheet.save(OUT + out, quality=88)
+C = M + '/final/crops/'
+T = M + '/final/token/'
+pair(C + 'r33-ctl-close-8_-6.png', C + 'wt-r33-close-8_-6.png', (380, 100, 820, 720), 'crop-ravine.jpg', 'The ravine at Close, seed 1, pad')
+pair(C + 'r33-ctl-close-8_-12.png', C + 'wt-r33-close-8_-12.png', (200, 380, 640, 720), 'crop-island.jpg', "An island's group at Close: the tor and a conifer behind it, the ravine's strata beside them")
+pair(C + 'r33-ctl-close-0_0.png', C + 'wt-r33-close-0_0.png', (0, 280, 560, 680), 'crop-outcrops.jpg', 'Outcrops and gravestones at Close, by the gateway')
+pair(C + 'r33-ctl-close-4_6.png', C + 'wt-r33-close-4_6.png', (130, 40, 720, 420), 'crop-ruins.jpg', 'Gravestones on the verges and by the bridge, Close')
+pair(T + 'ctl/a0-s1-pad-landscape-journey.png', T + 'dev/a0-s1-pad-landscape-journey.png', (100, 160, 460, 440), 'crop-wall.jpg', 'A broken wall and the mossy outcrops at Journey')
+print('ok')

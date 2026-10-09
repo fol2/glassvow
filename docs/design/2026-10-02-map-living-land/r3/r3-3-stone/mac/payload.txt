@@ -1,0 +1,61 @@
+# tools/payload_report.py (iOS): main 711302a5, then the branch's code-final head. Exact group bytes (the report's measure()): presentation 3,315,085 -> 3,357,566 (+42,481 B: the stone's scripts and shaders); assets/art/map-journey 12,158,865 -> 17,226,255 (+5,067,390 B, 4.83 MiB: the stone's atlas, normals, pieces and strata, and the woodland atlas's growth); the pck estimate 277.22 -> 282.08 MiB (+4.86 MiB). The budgets for those two groups are raised to 3.3 and 17 MiB.
+## main
+payload report: preset 'iOS', platform iOS
+group                                   MiB   budget  status
+assets/audio/music                     80.8       84  ok
+assets/art/cards                       31.4       33  ok
+assets/art/map-atelier                 30.1       32  ok
+assets/art/map                         29.4       31  ok
+assets/art/enemies                     19.9       21  ok
+assets/art/stage                       13.7       15  ok
+assets/art/scenes                      11.9       13  ok
+assets/art/map-journey                 11.6       12  ok
+assets/art/events                       7.7        8  ok
+assets/art/ui                           4.7        5  ok
+assets/art/statuses                     4.0        5  ok
+assets/icon                             4.0        5  ok
+assets/art/portraits                    3.8        4  ok
+assets/art/relics                       3.3        4  ok
+presentation                            3.2      3.2  ok
+assets/art/meta                         2.9        4  ok
+assets/fonts                            2.3        3  ok
+assets/art/title-background             1.8        2  ok
+assets/art/boons                        1.7        2  ok
+assets/art/title                        1.6        2  ok
+assets/art/arts                         1.2        2  ok
+assets/art/omens                        1.0        -  
+assets/art/heroes                       0.9        -  
+assets/art/props                        0.9        -  
+assets/audio/sfx                        0.6        -  
+(12 smaller groups)                     2.9
+TOTAL (pck estimate)                  277.2      400  ok
+## branch
+payload report: preset 'iOS', platform iOS
+group                                   MiB   budget  status
+assets/audio/music                     80.8       84  ok
+assets/art/cards                       31.4       33  ok
+assets/art/map-atelier                 30.1       32  ok
+assets/art/map                         29.4       31  ok
+assets/art/enemies                     19.9       21  ok
+assets/art/map-journey                 16.4       17  ok
+assets/art/stage                       13.7       15  ok
+assets/art/scenes                      11.9       13  ok
+assets/art/events                       7.7        8  ok
+assets/art/ui                           4.7        5  ok
+assets/art/statuses                     4.0        5  ok
+assets/icon                             4.0        5  ok
+assets/art/portraits                    3.8        4  ok
+assets/art/relics                       3.3        4  ok
+presentation                            3.2      3.3  ok
+assets/art/meta                         2.9        4  ok
+assets/fonts                            2.3        3  ok
+assets/art/title-background             1.8        2  ok
+assets/art/boons                        1.7        2  ok
+assets/art/title                        1.6        2  ok
+assets/art/arts                         1.2        2  ok
+assets/art/omens                        1.0        -  
+assets/art/heroes                       0.9        -  
+assets/art/props                        0.9        -  
+assets/audio/sfx                        0.6        -  
+(12 smaller groups)                     2.9
+TOTAL (pck estimate)                  282.1      400  ok

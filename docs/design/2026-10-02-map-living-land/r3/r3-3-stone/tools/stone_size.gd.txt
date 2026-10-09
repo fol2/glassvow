@@ -1,0 +1,37 @@
+extends SceneTree
+## Lane R3.3 scratch (never committed): the merged stone's buffer sizes on a
+## built land (vertices, indices, the vertex format) and the held pieces'.
+##   godot --headless --path <wt> -s <this> -- --seed=1
+
+var seed_value: int = 1
+
+
+func _initialize() -> void:
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--seed="): seed_value = int(arg.get_slice("=", 1))
+	_run.call_deferred()
+
+
+func _run() -> void:
+	MapJourneyLandscape.Kit.preload_scenes()
+	var content: ContentDB = ContentDB.load_full()
+	var run_state: RunState = RunState.new_run(content, seed_value, "run-stone-size")
+	var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.for_run(run_state, content), content)
+	root.add_child(screen)
+	screen.size = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
+	screen.set_shape(StageShape.IDENTITY)
+	screen.refresh(run_state)
+	var land: MapJourneyLandscape = screen._map_scene.journey_landscape()
+	var vertices: int = 0
+	var indices: int = 0
+	var format: int = 0
+	for draw: MeshInstance3D in land.kit.stone.draws:
+		vertices += draw.mesh.surface_get_array_len(0)
+		indices += draw.mesh.surface_get_array_index_len(0)
+		format = draw.mesh.surface_get_format(0)
+	var stride: int = 12 + 8 + 8
+	print("STONE_SIZE ", JSON.stringify({"draws": land.kit.stone.draws.size(), "pieces": land.kit.stone.placed.size(),
+		"triangles": land.kit.stone.triangles, "vertices": vertices, "indices": indices, "format": format,
+		"compressed": (format & Mesh.ARRAY_FLAG_COMPRESS_ATTRIBUTES) != 0,
+		"estimate_mib": snappedf((vertices * stride + indices * 4) / 1048576.0, 0.01)}))
+	quit(0)

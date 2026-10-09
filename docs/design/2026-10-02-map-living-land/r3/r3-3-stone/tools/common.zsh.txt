@@ -1,0 +1,25 @@
+# Lane R3.3 device batches: shared set-up (sourced). QA app only, under the lock.
+# Every output and every cleanup stays under $M; the committed device helper's own
+# removals (each launch's stale row and launch files, a cut-short trace) are inside $OUT.
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+FLOW=/Users/jamesto/Coding/glassvow/.claude/worktrees/device13-flow
+WT=$M/wt-r33
+source $WT/tools/map_trace/device.zsh
+# Every devicectl copy under a 300 s timeout.
+_mt_pull() {
+  timeout 300 xcrun devicectl device copy from --device $UDID --domain-type appDataContainer \
+    --domain-identifier $MT_QA --source Documents/$1 --destination $2 >/dev/null 2>&1
+}
+install_build() {  # name ipa
+  echo "== install $1 $(date +%T)"
+  timeout 300 zsh -c "source $WT/tools/map_trace/device.zsh; UDID=$UDID; OUT=$OUT; mt_install $2" || { echo "install $1 failed"; return 1; }
+}
+# The rows must name the build this launch should have run.
+check_build() {  # label build
+  grep -q "\"build\":\"$2\"" $OUT/$1.jsonl 2>/dev/null && echo "   $1: build $2" || { echo "   $1: WRONG BUILD (wanted $2)"; mv $OUT/$1.jsonl $OUT/$1.wrong.jsonl 2>/dev/null; }
+}
+battery() { echo "== battery $($M/tools/battery.sh) $(date +%T)"; }
+guard_out() {  # refuse any OUT outside $M
+  [[ "${OUT:A}" == $M/* ]] || { echo "OUT $OUT is outside $M; refusing"; exit 1; }
+  echo "== OUT (every cleanup stays inside it): ${OUT:A}"
+}

@@ -1,0 +1,16 @@
+"""Lane R3.3 scratch: per-kind card counts, main against the branch, stone-only cards excluded; flags moves over 10%."""
+import json, sys
+from collections import Counter
+M = sys.argv[1]
+STONE = ("grave-", "wall-", "rubble-")
+tot_a, tot_b = Counter(), Counter()
+for seed in sys.argv[2:]:
+    a = json.load(open(f"{M}/wood/r33-ctl-{seed}.json")); b = json.load(open(f"{M}/wood/wt-r33-{seed}.json"))
+    ca = Counter(c[0] for c in a["cards"]); cb = Counter(c[0] for c in b["cards"] if not c[0].startswith(STONE))
+    tot_a += ca; tot_b += cb
+    moved = {k: (ca[k], cb[k]) for k in set(ca) | set(cb) if abs(cb[k] - ca[k]) > 0.1 * max(ca[k], 1)}
+    print(f"seed {seed}: kinds moving over 10%: {moved}")
+print("all four seeds, main -> branch:")
+for k in sorted(set(tot_a) | set(tot_b), key=lambda k: -tot_a[k]):
+    d = (tot_b[k] - tot_a[k]) / max(tot_a[k], 1) * 100
+    print(f"  {k:14s} {tot_a[k]:5d} -> {tot_b[k]:5d}  {d:+.1f}%{'  <-- over 10%' if abs(d) > 10 else ''}")

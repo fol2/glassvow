@@ -1,0 +1,19 @@
+"""Print the tool_result text for Bash tool_use calls whose command contains a needle (in one transcript)."""
+import json, sys
+f, needle = sys.argv[1], sys.argv[2]
+ids = {}
+with open(f, errors="replace") as fh:
+    rows = [json.loads(l) for l in fh if l.strip()]
+for d in rows:
+    msg = d.get("message") or {}
+    for b in msg.get("content") or [] if isinstance(msg.get("content"), list) else []:
+        if not isinstance(b, dict):
+            continue
+        if b.get("type") == "tool_use" and needle in json.dumps(b.get("input", {})):
+            ids[b["id"]] = d.get("timestamp", "")
+        if b.get("type") == "tool_result" and b.get("tool_use_id") in ids:
+            c = b.get("content")
+            if isinstance(c, list):
+                c = "\n".join(x.get("text", "") for x in c if isinstance(x, dict))
+            print("=====", ids[b["tool_use_id"]])
+            print(c)

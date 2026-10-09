@@ -1,0 +1,47 @@
+#!/bin/zsh
+# Lane R3.3: the complete core gate and every check tools/ci_scope.py selects for the PR's diff, at the
+# worktree's head, one step at a time, each step waiting for load under 50 (scratch).
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+cd $M/wt-r33
+git diff -z --name-only origin/main HEAD > $M/tmp/changed.nul
+git diff -z --name-only origin/main HEAD -- '*.gd' > $M/tmp/changed-gd.nul
+L=$M/final/gate3-logs; mkdir -p $L; N=0
+load() { uptime | sed 's/.*averages: //' | cut -d' ' -f1 | cut -d. -f1; }
+step() {
+  N=$((N+1))
+  while (( $(load) >= 50 )); do echo "  (load $(load): waiting)"; sleep 20; done
+  echo "\$ $*   [load $(uptime | sed 's/.*averages: //')]"
+  "$@" > $L/step-$N.log 2>&1; local s=$?
+  grep -E "^(PASS|FAIL) \(|scripts OK|asset import OK" $L/step-$N.log | tail -1
+  tail -${TAIL:-3} $L/step-$N.log | sed -e 's/\x1b\[[0-9;]*m//g'; echo "exit $s"; echo
+}
+echo "head $(git rev-parse --short HEAD) (code and tests $(git rev-parse --short HEAD~1)) on $(git rev-parse --short origin/main) $(date +%T)"
+step godot --version
+TAIL=2 step tools/check_imports.sh
+TAIL=2 step tools/check_scripts.sh
+TAIL=4 step godot --headless -s res://tests/run_all.gd
+step python3 -B tests/test_ci_scope.py
+step python3 tools/check_store_dev_exclusion.py
+step tools/test_check_store_dev_exclusion.sh
+step python3 -B tools/check_export_paths.py --self-test
+step python3 -B tools/check_export_paths.py
+step godot --headless -s res://tests/run_all.gd -- --tests=res://tests/test_release_identity.gd,res://tests/test_sentry_release.gd
+step python3 -B tools/check_anchors.py
+step python3 -B tools/check_benchmark_freeze.py
+step python3 -B tools/build_site.py --self-test
+step python3 -B tools/build_site.py --check
+step python3 -B tools/check_map_assets.py --self-test
+step python3 -B tools/land_map_glb.py --self-test
+step python3 -B tools/check_map_assets.py
+step python3 -B tools/check_map_quality_v2.py --self-test
+step python3 -B tools/check_map_quality_v2.py
+step python3 -B tests/test_performance_budget.py
+step godot --headless -s res://tools/probe_map_seeds.gd -- --seeds=20
+step godot --headless -s res://tests/choice_scroll_reachability.gd
+step godot --headless -s res://tests/boss_relic_choice_containment.gd
+step godot --headless -s res://tests/dawn_phone_containment.gd
+step godot --headless -s res://tests/measure_hud_location.gd
+step godot --headless -s res://tests/event_phone_containment.gd
+step python3 tools/payload_report.py
+TAIL=1 step python3 tools/ci_scope.py --changed-paths-nul $M/tmp/changed.nul --changed-gdscript-nul $M/tmp/changed-gd.nul --repository-root .
+echo "done $(date +%T)"

@@ -1,0 +1,15 @@
+#!/bin/zsh
+# Lane R3.3 (scratch): the 8 MiB hunt. Short Mac probes (A12 condition, lean, pad, seed 1, a Journey hold,
+# no opens) with the scratch texture listing and VRAM log, main and the branch interleaved.
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+F=$M/final/${HUNT:-hunt}; mkdir -p $F
+echo "== hunt $(date +%T) load: $(uptime | sed 's/.*averages: //')"
+n=0
+ORDER=${ORDER:-"r33-ctl r33-dev r33-dev r33-dev r33-ctl r33-dev r33-dev r33-dev"}
+for b in ${=ORDER}; do
+  n=$((n+1))
+  while (( $(uptime | sed 's/.*averages: //' | cut -d' ' -f1 | cut -d. -f1) >= 50 )); do echo "load over 50: waiting $(date +%T)"; sleep 20; done
+  GODOT_MTL_DISABLE_ARGUMENT_BUFFERS=1 timeout 300 godot --path $M/$b --rendering-driver metal --rendering-method mobile --position 1400,900 -- --map --map-trace-probe --map-lean --seed=1 --shape=pad-landscape --vp=1180x820 --map-steps=2 --holds=cadence --hold-frames=60 --probe-view=journey ${=EXTRA:-} > $F/$n-$b.log 2>&1
+  echo "$n $b exit $? $(grep -o '"video_mib":[0-9.]*' $F/$n-$b.log | head -1)"
+done
+echo "== hunt done $(date +%T) load: $(uptime | sed 's/.*averages: //')"

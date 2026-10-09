@@ -1,0 +1,7 @@
+#!/bin/zsh
+# battery.sh: the iPad 8's battery level and charging state (libimobiledevice; the UDID is never printed).
+for U in $(timeout 30 idevice_id -l 2>/dev/null); do
+  [[ "$(timeout 30 ideviceinfo -u $U -k ProductType 2>/dev/null)" == "iPad11,6" ]] || continue
+  info=$(timeout 30 ideviceinfo -u $U -q com.apple.mobile.battery 2>/dev/null)
+  echo "$(date '+%H:%M') battery $(echo $info | awk '/BatteryCurrentCapacity/{print $2}')% charging $(echo $info | awk '/BatteryIsCharging/{print $2}') external $(echo $info | awk '/ExternalConnected/{print $2}')"
+done

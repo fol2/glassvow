@@ -1,0 +1,218 @@
+# The map probe on the Mac (tools/map_trace/probe.gd, armed by qa_patch.py), A12 Metal condition, lean, pad 1180x820, seed 1, two steps in,
+# --holds=cadence --hold-frames=120 --probe-view=journey,river,close,whole --opens --reopens=3. Tables by tools/probe_table.py.txt.
+== probe-r33-ctl.log build 711302a5
+  boot    elapsed 1579.8 first -1.0 built -1.0 worst [[221.0, 63.5], [418.0, 196.9]] bake wall 46.555
+  open   cold elapsed 1730.2 first 608.8 built 1694.0 worst [[609.0, 608.8]] bake wall 35.965
+  open   reopen elapsed 14.1 first 14.1 built -1.0 worst [] bake wall 35.965
+  open   reopen elapsed 14.2 first 14.2 built -1.0 worst [] bake wall 35.965
+  warm    elapsed 2503.0 first -1.0 built -1.0 worst [] bake wall None
+  open   warmed elapsed 56.3 first 56.3 built -1.0 worst [[56.0, 56.3]] bake wall 57.515
+  journey  stage  56430 prims  79 draws | shadow  5031 prims  8 draws | video 236.6 MiB
+  journey  mean 8.327 p95 8.98 missed 0
+  river    stage  54718 prims  68 draws | shadow  3758 prims  5 draws | video 236.5 MiB
+  river    mean 8.338 p95 8.72 missed 0
+  close    stage  44010 prims  58 draws | shadow  4706 prims  6 draws | video 236.5 MiB
+  close    mean 8.333 p95 8.79 missed 0
+  whole    stage 109134 prims 220 draws | shadow  5928 prims 14 draws | video 236.8 MiB
+  whole    mean 8.322 p95 9.49 missed 0
+== probe-r33-dev.log build 1ae3888c
+  boot    elapsed 1694.8 first -1.0 built -1.0 worst [[211.0, 63.1], [374.0, 163.1], [1226.0, 149.9], [1355.0, 129.3]] bake wall 51.401
+  open   cold elapsed 1811.5 first 594.5 built 1776.4 worst [[594.0, 594.5], [1119.0, 50.9], [1257.0, 82.8]] bake wall 34.229
+  open   reopen elapsed 14.3 first 14.3 built -1.0 worst [] bake wall 34.229
+  open   reopen elapsed 16.4 first 16.4 built -1.0 worst [] bake wall 34.229
+  open   reopen elapsed 15.0 first 15.0 built -1.0 worst [] bake wall 34.229
+  warm    elapsed 2640.4 first -1.0 built -1.0 worst [] bake wall None
+  open   warmed elapsed 54.7 first 54.7 built -1.0 worst [[55.0, 54.7]] bake wall 57.451
+  journey  stage  86882 prims  78 draws | shadow  4118 prims  2 draws | video 251.2 MiB
+  journey  mean 8.333 p95 8.92 missed 0
+  river    stage  98376 prims  68 draws | shadow  3108 prims  1 draws | video 251.2 MiB
+  river    mean 8.338 p95 8.77 missed 0
+  close    stage  74400 prims  57 draws | shadow  4118 prims  2 draws | video 251.2 MiB
+  close    mean 8.325 p95 8.84 missed 0
+  whole    stage 173292 prims 214 draws | shadow  4118 prims  2 draws | video 251.3 MiB
+  whole    mean 8.333 p95 9.23 missed 0
+
+# The merged stone's buffers on a built land (tools/stone_size.gd.txt), seeds 1 and 717
+STONE_SIZE {"compressed":false,"draws":6,"estimate_mib":2.47,"format":34359742487,"indices":207534,"pieces":65,"triangles":69178,"vertices":62719}
+STONE_SIZE {"compressed":false,"draws":7,"estimate_mib":1.88,"format":34359742487,"indices":158598,"pieces":49,"triangles":52866,"vertices":47932}
+
+# Re-run at 04:28-04:33 on 9 Oct, load 7-12, after the core gate: four interleaved pairs (tools/final3.zsh.txt, tools/probe_more.zsh.txt), main 711302a5 (r33-ctl) against the branch's code-final runtime (r33-dev at 1ae3888c, whose production files are the code commit 9a33cfd8's). The first pair above (the final run of tools/final_all.zsh.txt) had a test suite running beside main's probe, so its timings are left out; its geometry stands.
+== probe2-r33-ctl-1.log build 711302a5
+  boot    elapsed 1594.9 first -1.0 built -1.0 worst [[210.0, 60.7], [263.0, 53.3], [410.0, 147.3]] bake wall 55.869
+        land {"total": 1388, "scenery": 341, "wood": 97, "terrain": 702}
+  open   cold elapsed 1689.5 first 594.3 built 1653.2 worst [[594.0, 594.3]] bake wall 35.449
+        land {"total": 1346, "scenery": 328, "wood": 97, "terrain": 667}
+  open   reopen elapsed 13.5 first 13.5 built -1.0 worst [] bake wall 35.449
+        land {"total": 1346, "scenery": 328, "wood": 97, "terrain": 667}
+  open   reopen elapsed 13.4 first 13.4 built -1.0 worst [] bake wall 35.449
+        land {"total": 1346, "scenery": 328, "wood": 97, "terrain": 667}
+  open   reopen elapsed 13.3 first 13.3 built -1.0 worst [] bake wall 35.449
+        land {"total": 1346, "scenery": 328, "wood": 97, "terrain": 667}
+  warm    elapsed 2490.6 first -1.0 built -1.0 worst [] bake wall None
+  open   warmed elapsed 53.2 first 53.2 built -1.0 worst [[53.0, 53.2]] bake wall 57.138
+        land {"total": 1882, "scenery": 334, "wood": 97, "terrain": 918}
+  journey  stage  56430 prims  79 draws | shadow  5031 prims  8 draws | video 236.6 MiB
+  journey  mean 8.323 p95 8.91 missed 0
+  river    stage  54718 prims  68 draws | shadow  3758 prims  5 draws | video 236.5 MiB
+  river    mean 8.325 p95 8.70 missed 0
+  close    stage  44010 prims  58 draws | shadow  4706 prims  6 draws | video 236.5 MiB
+  close    mean 8.330 p95 8.83 missed 0
+  whole    stage 109134 prims 220 draws | shadow  5928 prims 14 draws | video 236.8 MiB
+  whole    mean 8.335 p95 9.31 missed 0
+== probe2-r33-dev-1.log build 1ae3888c
+  boot    elapsed 1647.1 first -1.0 built -1.0 worst [[206.0, 58.1], [412.0, 205.7]] bake wall 56.397
+        land {"total": 1431, "scenery": 393, "wood": 91, "terrain": 701, "stone_parts": {"island_search": 8.97, "islands": 25.983, "ruins": 1.124, "shrine_graves": 3.092, "sight": 6.566, "stone": 9.384, "verge_graves": 1.502}}
+  open   cold elapsed 1774.7 first 586.5 built 1738.3 worst [[586.0, 586.5]] bake wall 35.017
+        land {"total": 1430, "scenery": 395, "wood": 90, "terrain": 684, "stone_parts": {"island_search": 8.923, "islands": 25.636, "ruins": 1.122, "shrine_graves": 3.081, "sight": 6.45, "stone": 9.835, "verge_graves": 1.457}}
+  open   reopen elapsed 14.7 first 14.7 built -1.0 worst [] bake wall 35.017
+        land {"total": 1430, "scenery": 395, "wood": 90, "terrain": 684, "stone_parts": {"island_search": 8.923, "islands": 25.636, "ruins": 1.122, "shrine_graves": 3.081, "sight": 6.45, "stone": 9.835, "verge_graves": 1.457}}
+  open   reopen elapsed 14.4 first 14.4 built -1.0 worst [] bake wall 35.017
+        land {"total": 1430, "scenery": 395, "wood": 90, "terrain": 684, "stone_parts": {"island_search": 8.923, "islands": 25.636, "ruins": 1.122, "shrine_graves": 3.081, "sight": 6.45, "stone": 9.835, "verge_graves": 1.457}}
+  open   reopen elapsed 14.1 first 14.1 built -1.0 worst [] bake wall 35.017
+        land {"total": 1430, "scenery": 395, "wood": 90, "terrain": 684, "stone_parts": {"island_search": 8.923, "islands": 25.636, "ruins": 1.122, "shrine_graves": 3.081, "sight": 6.45, "stone": 9.835, "verge_graves": 1.457}}
+  warm    elapsed 2667.0 first -1.0 built -1.0 worst [] bake wall None
+  open   warmed elapsed 60.1 first 60.1 built -1.0 worst [[60.0, 60.1]] bake wall 59.192
+        land {"total": 2051, "scenery": 478, "wood": 91, "terrain": 935, "stone_parts": {"island_search": 8.735, "islands": 25.265, "ruins": 1.109, "shrine_graves": 3.062, "sight": 6.424, "stone": 98.037, "verge_graves": 1.414}}
+  journey  stage  86882 prims  78 draws | shadow  4118 prims  2 draws | video 251.2 MiB
+  journey  mean 8.344 p95 8.87 missed 0
+  river    stage  98376 prims  68 draws | shadow  3108 prims  1 draws | video 251.2 MiB
+  river    mean 8.345 p95 8.77 missed 0
+  close    stage  74400 prims  57 draws | shadow  4118 prims  2 draws | video 251.2 MiB
+  close    mean 8.332 p95 8.81 missed 0
+  whole    stage 173292 prims 214 draws | shadow  4118 prims  2 draws | video 251.3 MiB
+  whole    mean 8.325 p95 9.31 missed 0
+== probe2-r33-ctl-2.log build 711302a5
+  boot    elapsed 1586.1 first -1.0 built -1.0 worst [[229.0, 71.7], [420.0, 141.7]] bake wall 46.363
+        land {"total": 1377, "scenery": 336, "wood": 97, "terrain": 698}
+  open   cold elapsed 1703.9 first 592.1 built 1668.7 worst [[592.0, 592.1]] bake wall 34.828
+        land {"total": 1364, "scenery": 335, "wood": 97, "terrain": 676}
+  open   reopen elapsed 13.7 first 13.7 built -1.0 worst [] bake wall 34.828
+        land {"total": 1364, "scenery": 335, "wood": 97, "terrain": 676}
+  open   reopen elapsed 14.1 first 14.1 built -1.0 worst [] bake wall 34.828
+        land {"total": 1364, "scenery": 335, "wood": 97, "terrain": 676}
+  open   reopen elapsed 13.5 first 13.5 built -1.0 worst [] bake wall 34.828
+        land {"total": 1364, "scenery": 335, "wood": 97, "terrain": 676}
+  warm    elapsed 2508.2 first -1.0 built -1.0 worst [] bake wall None
+  open   warmed elapsed 55.3 first 55.3 built -1.0 worst [[55.0, 55.3]] bake wall 57.443
+        land {"total": 1893, "scenery": 331, "wood": 96, "terrain": 931}
+  journey  stage  56430 prims  79 draws | shadow  5031 prims  8 draws | video 236.6 MiB
+  journey  mean 8.329 p95 9.12 missed 0
+  river    stage  54718 prims  68 draws | shadow  3758 prims  5 draws | video 236.5 MiB
+  river    mean 8.325 p95 8.91 missed 0
+  close    stage  44010 prims  58 draws | shadow  4706 prims  6 draws | video 236.5 MiB
+  close    mean 8.332 p95 8.78 missed 0
+  whole    stage 109134 prims 220 draws | shadow  5928 prims 14 draws | video 236.8 MiB
+  whole    mean 8.335 p95 9.38 missed 0
+== probe2-r33-dev-2.log build 1ae3888c
+  boot    elapsed 1635.3 first -1.0 built -1.0 worst [[226.0, 77.3], [395.0, 169.8]] bake wall 46.125
+        land {"total": 1435, "scenery": 393, "wood": 91, "terrain": 699, "stone_parts": {"island_search": 8.901, "islands": 25.476, "ruins": 1.103, "shrine_graves": 3.058, "sight": 6.387, "stone": 9.05, "verge_graves": 1.435}}
+  open   cold elapsed 1765.3 first 596.1 built 1729.0 worst [[596.0, 596.1]] bake wall 34.816
+        land {"total": 1421, "scenery": 389, "wood": 90, "terrain": 674, "stone_parts": {"island_search": 8.895, "islands": 25.572, "ruins": 1.107, "shrine_graves": 3.059, "sight": 6.411, "stone": 9.17, "verge_graves": 1.46}}
+  open   reopen elapsed 14.9 first 14.9 built -1.0 worst [] bake wall 34.816
+        land {"total": 1421, "scenery": 389, "wood": 90, "terrain": 674, "stone_parts": {"island_search": 8.895, "islands": 25.572, "ruins": 1.107, "shrine_graves": 3.059, "sight": 6.411, "stone": 9.17, "verge_graves": 1.46}}
+  open   reopen elapsed 14.2 first 14.2 built -1.0 worst [] bake wall 34.816
+        land {"total": 1421, "scenery": 389, "wood": 90, "terrain": 674, "stone_parts": {"island_search": 8.895, "islands": 25.572, "ruins": 1.107, "shrine_graves": 3.059, "sight": 6.411, "stone": 9.17, "verge_graves": 1.46}}
+  open   reopen elapsed 14.4 first 14.4 built -1.0 worst [] bake wall 34.816
+        land {"total": 1421, "scenery": 389, "wood": 90, "terrain": 674, "stone_parts": {"island_search": 8.895, "islands": 25.572, "ruins": 1.107, "shrine_graves": 3.059, "sight": 6.411, "stone": 9.17, "verge_graves": 1.46}}
+  warm    elapsed 2600.3 first -1.0 built -1.0 worst [] bake wall None
+  open   warmed elapsed 57.2 first 57.2 built -1.0 worst [[57.0, 57.2]] bake wall 58.476
+        land {"total": 2014, "scenery": 460, "wood": 90, "terrain": 905, "stone_parts": {"island_search": 8.863, "islands": 25.523, "ruins": 1.099, "shrine_graves": 3.073, "sight": 6.456, "stone": 80.387, "verge_graves": 1.458}}
+  journey  stage  86882 prims  78 draws | shadow  4118 prims  2 draws | video 259.2 MiB
+  journey  mean 8.326 p95 8.88 missed 0
+  river    stage  98376 prims  68 draws | shadow  3108 prims  1 draws | video 259.2 MiB
+  river    mean 8.335 p95 8.74 missed 0
+  close    stage  74400 prims  57 draws | shadow  4118 prims  2 draws | video 259.2 MiB
+  close    mean 8.326 p95 8.92 missed 0
+  whole    stage 173292 prims 214 draws | shadow  4118 prims  2 draws | video 259.3 MiB
+  whole    mean 8.329 p95 9.29 missed 0
+== probe2-r33-ctl-3.log build 711302a5
+  boot    elapsed 1591.2 first -1.0 built -1.0 worst [[225.0, 68.1], [415.0, 190.2]] bake wall 46.324
+        land {"total": 1383, "scenery": 334, "wood": 98, "terrain": 707}
+  open   cold elapsed 1728.3 first 609.0 built 1693.0 worst [[609.0, 609.0]] bake wall 34.382
+        land {"total": 1372, "scenery": 337, "wood": 97, "terrain": 675}
+  open   reopen elapsed 14.8 first 14.8 built -1.0 worst [] bake wall 34.382
+        land {"total": 1372, "scenery": 337, "wood": 97, "terrain": 675}
+  open   reopen elapsed 14.1 first 14.1 built -1.0 worst [] bake wall 34.382
+        land {"total": 1372, "scenery": 337, "wood": 97, "terrain": 675}
+  open   reopen elapsed 14.4 first 14.4 built -1.0 worst [] bake wall 34.382
+        land {"total": 1372, "scenery": 337, "wood": 97, "terrain": 675}
+  warm    elapsed 2423.6 first -1.0 built -1.0 worst [] bake wall None
+  open   warmed elapsed 54.6 first 54.6 built -1.0 worst [[55.0, 54.6]] bake wall 58.078
+        land {"total": 1818, "scenery": 329, "wood": 96, "terrain": 889}
+  journey  stage  56430 prims  79 draws | shadow  5031 prims  8 draws | video 236.6 MiB
+  journey  mean 8.331 p95 8.90 missed 0
+  river    stage  54718 prims  68 draws | shadow  3758 prims  5 draws | video 236.5 MiB
+  river    mean 8.331 p95 8.87 missed 0
+  close    stage  44010 prims  58 draws | shadow  4706 prims  6 draws | video 236.5 MiB
+  close    mean 8.333 p95 9.04 missed 0
+  whole    stage 109134 prims 220 draws | shadow  5928 prims 14 draws | video 236.8 MiB
+  whole    mean 8.331 p95 9.38 missed 0
+== probe2-r33-dev-3.log build 1ae3888c
+  boot    elapsed 1631.4 first -1.0 built -1.0 worst [[315.0, 157.0], [416.0, 101.1]] bake wall 46.579
+        land {"total": 1426, "scenery": 385, "wood": 89, "terrain": 699, "stone_parts": {"island_search": 8.783, "islands": 26.055, "ruins": 1.114, "shrine_graves": 3.059, "sight": 6.333, "stone": 9.635, "verge_graves": 1.464}}
+  open   cold elapsed 1753.6 first 593.2 built 1718.7 worst [[593.0, 593.2]] bake wall 33.408
+        land {"total": 1413, "scenery": 394, "wood": 90, "terrain": 667, "stone_parts": {"island_search": 8.723, "islands": 25.512, "ruins": 1.162, "shrine_graves": 3.075, "sight": 6.389, "stone": 9.334, "verge_graves": 1.53}}
+  open   reopen elapsed 14.5 first 14.5 built -1.0 worst [] bake wall 33.408
+        land {"total": 1413, "scenery": 394, "wood": 90, "terrain": 667, "stone_parts": {"island_search": 8.723, "islands": 25.512, "ruins": 1.162, "shrine_graves": 3.075, "sight": 6.389, "stone": 9.334, "verge_graves": 1.53}}
+  open   reopen elapsed 14.3 first 14.3 built -1.0 worst [] bake wall 33.408
+        land {"total": 1413, "scenery": 394, "wood": 90, "terrain": 667, "stone_parts": {"island_search": 8.723, "islands": 25.512, "ruins": 1.162, "shrine_graves": 3.075, "sight": 6.389, "stone": 9.334, "verge_graves": 1.53}}
+  open   reopen elapsed 14.1 first 14.1 built -1.0 worst [] bake wall 33.408
+        land {"total": 1413, "scenery": 394, "wood": 90, "terrain": 667, "stone_parts": {"island_search": 8.723, "islands": 25.512, "ruins": 1.162, "shrine_graves": 3.075, "sight": 6.389, "stone": 9.334, "verge_graves": 1.53}}
+  warm    elapsed 2632.3 first -1.0 built -1.0 worst [] bake wall None
+  open   warmed elapsed 60.3 first 60.3 built -1.0 worst [[60.0, 60.3]] bake wall 58.653
+        land {"total": 2035, "scenery": 482, "wood": 90, "terrain": 915, "stone_parts": {"island_search": 8.877, "islands": 26.095, "ruins": 1.114, "shrine_graves": 3.143, "sight": 6.494, "stone": 94.869, "verge_graves": 1.471}}
+  journey  stage  86882 prims  78 draws | shadow  4118 prims  2 draws | video 251.2 MiB
+  journey  mean 8.333 p95 8.86 missed 0
+  river    stage  98376 prims  68 draws | shadow  3108 prims  1 draws | video 251.2 MiB
+  river    mean 8.335 p95 8.82 missed 0
+  close    stage  74400 prims  57 draws | shadow  4118 prims  2 draws | video 251.2 MiB
+  close    mean 8.339 p95 8.76 missed 0
+  whole    stage 173292 prims 214 draws | shadow  4118 prims  2 draws | video 251.3 MiB
+  whole    mean 8.323 p95 9.40 missed 0
+== probe2-r33-ctl-4.log build 711302a5
+  boot    elapsed 1586.9 first -1.0 built -1.0 worst [[236.0, 77.7], [409.0, 173.3]] bake wall 45.673
+        land {"total": 1380, "scenery": 334, "wood": 97, "terrain": 702}
+  open   cold elapsed 1711.5 first 598.5 built 1675.0 worst [[599.0, 598.5]] bake wall 35.636
+        land {"total": 1365, "scenery": 336, "wood": 97, "terrain": 676}
+  open   reopen elapsed 14.1 first 14.1 built -1.0 worst [] bake wall 35.636
+        land {"total": 1365, "scenery": 336, "wood": 97, "terrain": 676}
+  open   reopen elapsed 14.6 first 14.6 built -1.0 worst [] bake wall 35.636
+        land {"total": 1365, "scenery": 336, "wood": 97, "terrain": 676}
+  open   reopen elapsed 15.5 first 15.5 built -1.0 worst [] bake wall 35.636
+        land {"total": 1365, "scenery": 336, "wood": 97, "terrain": 676}
+  warm    elapsed 2516.6 first -1.0 built -1.0 worst [] bake wall None
+  open   warmed elapsed 55.1 first 55.1 built -1.0 worst [[55.0, 55.1]] bake wall 57.994
+        land {"total": 1906, "scenery": 329, "wood": 96, "terrain": 915}
+  journey  stage  56430 prims  79 draws | shadow  5031 prims  8 draws | video 236.6 MiB
+  journey  mean 8.339 p95 9.00 missed 0
+  river    stage  54718 prims  68 draws | shadow  3758 prims  5 draws | video 236.5 MiB
+  river    mean 8.330 p95 9.02 missed 0
+  close    stage  44010 prims  58 draws | shadow  4706 prims  6 draws | video 236.5 MiB
+  close    mean 8.336 p95 8.88 missed 0
+  whole    stage 109134 prims 220 draws | shadow  5928 prims 14 draws | video 236.8 MiB
+  whole    mean 8.334 p95 9.31 missed 0
+== probe2-r33-dev-4.log build 1ae3888c
+  boot    elapsed 1626.4 first -1.0 built -1.0 worst [[256.0, 99.4], [413.0, 156.8]] bake wall 45.054
+        land {"total": 1421, "scenery": 386, "wood": 91, "terrain": 696, "stone_parts": {"island_search": 8.774, "islands": 25.252, "ruins": 1.128, "shrine_graves": 2.979, "sight": 6.333, "stone": 9.264, "verge_graves": 1.399}}
+  open   cold elapsed 1762.2 first 592.7 built 1726.1 worst [[593.0, 592.7]] bake wall 35.111
+        land {"total": 1421, "scenery": 388, "wood": 89, "terrain": 675, "stone_parts": {"island_search": 8.862, "islands": 25.36, "ruins": 1.108, "shrine_graves": 2.988, "sight": 6.481, "stone": 9.132, "verge_graves": 1.511}}
+  open   reopen elapsed 14.2 first 14.2 built -1.0 worst [] bake wall 35.111
+        land {"total": 1421, "scenery": 388, "wood": 89, "terrain": 675, "stone_parts": {"island_search": 8.862, "islands": 25.36, "ruins": 1.108, "shrine_graves": 2.988, "sight": 6.481, "stone": 9.132, "verge_graves": 1.511}}
+  open   reopen elapsed 13.3 first 13.3 built -1.0 worst [] bake wall 35.111
+        land {"total": 1421, "scenery": 388, "wood": 89, "terrain": 675, "stone_parts": {"island_search": 8.862, "islands": 25.36, "ruins": 1.108, "shrine_graves": 2.988, "sight": 6.481, "stone": 9.132, "verge_graves": 1.511}}
+  open   reopen elapsed 14.0 first 14.0 built -1.0 worst [] bake wall 35.111
+        land {"total": 1421, "scenery": 388, "wood": 89, "terrain": 675, "stone_parts": {"island_search": 8.862, "islands": 25.36, "ruins": 1.108, "shrine_graves": 2.988, "sight": 6.481, "stone": 9.132, "verge_graves": 1.511}}
+  warm    elapsed 2634.2 first -1.0 built -1.0 worst [] bake wall None
+  open   warmed elapsed 54.9 first 54.9 built -1.0 worst [[55.0, 54.9]] bake wall 58.239
+        land {"total": 2030, "scenery": 480, "wood": 89, "terrain": 922, "stone_parts": {"island_search": 8.736, "islands": 25.322, "ruins": 1.096, "shrine_graves": 3.089, "sight": 6.407, "stone": 101.073, "verge_graves": 1.453}}
+  journey  stage  86882 prims  78 draws | shadow  4118 prims  2 draws | video 259.2 MiB
+  journey  mean 8.331 p95 8.84 missed 0
+  river    stage  98376 prims  68 draws | shadow  3108 prims  1 draws | video 259.2 MiB
+  river    mean 8.339 p95 8.74 missed 0
+  close    stage  74400 prims  57 draws | shadow  4118 prims  2 draws | video 259.2 MiB
+  close    mean 8.342 p95 8.82 missed 0
+  whole    stage 173292 prims 214 draws | shadow  4118 prims  2 draws | video 259.3 MiB
+  whole    mean 8.330 p95 9.29 missed 0
+
+# Medians of the four pairs: cold open main 1707.7 ms (1689.5, 1703.9, 1728.3, 1711.5), branch 1763.8 (1774.7, 1765.3, 1753.6, 1762.2), +56.1; warmed open main 54.9 (53.2, 55.3, 54.6, 55.1), branch 58.7 (60.1, 57.2, 60.3, 54.9); reopens main 13.3-15.5, branch 13.3-14.9.
+# Video memory at the Journey hold: main 236.6 MiB in all five runs; the branch 251.2 (three runs: the first pair above and pairs 1 and 3) or 259.2 (pairs 2 and 4), +14.6 or +22.6 MiB. The branch's reading moves between runs by one step of exactly 8.0 MiB.

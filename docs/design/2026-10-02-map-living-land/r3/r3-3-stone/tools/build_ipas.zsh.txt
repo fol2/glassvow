@@ -1,0 +1,55 @@
+#!/bin/zsh
+# Lane R3.3: the QA builds for the device batches (scratch). main's control (r33-ctl, armed with
+# its own map probe and the title probe), the branch at its head (r33-dev, armed the same way),
+# and two branch builds whose floor and stone shaders carry never-used nonces (fresh installs).
+# No install: the batches install under the lock. qa_export.sh clears <worktree>/build/ios-qa
+# (inside these scratch worktrees) before each export; its preset backup goes to $M/tmp.
+set -eu
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+FLOW=/Users/jamesto/Coding/glassvow/.claude/worktrees/device13-flow
+export TMPDIR=$M/tmp
+mkdir -p $M/ipa
+HEAD=$(git -C $M/wt-r33 rev-parse HEAD)
+# The control.
+git -C $M/r33-ctl checkout -q -- presentation/map/landscape
+CTL=$M/r33-ctl
+python3 $CTL/tools/map_trace/qa_patch.py $CTL
+python3 $M/tools/title_patch.py $CTL
+echo "qa_export clears: $CTL/build/ios-qa"
+$FLOW/qa_export.sh $CTL --no-install
+cp $CTL/build/ios-qa/export-dev/glassvow.ipa $M/ipa/ctl.ipa
+git -C $CTL rev-parse --short=8 HEAD > $M/ipa/ctl.build
+# Main's two fresh-install builds: its five floor shaders carry never-used nonces.
+for tag in M N; do
+  nonce=r33n$(echo $tag | tr 'A-Z' 'a-z')
+  python3 $M/tools/shader_nonce.py $CTL $nonce
+  (cd $CTL && godot --headless --import > $M/logs/import-ctl-$nonce.log 2>&1)
+  echo "qa_export clears: $CTL/build/ios-qa"
+  $FLOW/qa_export.sh $CTL --no-install
+  cp $CTL/build/ios-qa/export-dev/glassvow.ipa $M/ipa/ctl-n$tag.ipa
+  git -C $CTL checkout -q -- presentation/map/landscape
+done
+(cd $CTL && godot --headless --import > $M/logs/import-ctl-final.log 2>&1)
+# The branch at its head.
+DEV=$M/r33-dev
+git -C $DEV checkout -q --detach $HEAD
+git -C $DEV checkout -q -- application/main.gd presentation/map/landscape 2>/dev/null || true
+python3 $DEV/tools/map_trace/qa_patch.py $DEV
+python3 $M/tools/title_patch.py $DEV
+(cd $DEV && godot --headless --import > $M/logs/import-dev-final.log 2>&1)
+echo "qa_export clears: $DEV/build/ios-qa"
+$FLOW/qa_export.sh $DEV --no-install
+cp $DEV/build/ios-qa/export-dev/glassvow.ipa $M/ipa/dev.ipa
+git -C $DEV rev-parse --short=8 HEAD > $M/ipa/dev.build
+# The two fresh-install builds.
+for tag in NA NB; do
+  nonce=r33$(echo $tag | tr 'A-Z' 'a-z')
+  python3 $M/tools/shader_nonce.py $DEV $nonce
+  (cd $DEV && godot --headless --import > $M/logs/import-dev-$nonce.log 2>&1)
+  echo "qa_export clears: $DEV/build/ios-qa"
+  $FLOW/qa_export.sh $DEV --no-install
+  cp $DEV/build/ios-qa/export-dev/glassvow.ipa $M/ipa/dev-n${tag#N}.ipa
+  git -C $DEV checkout -q -- presentation/map/landscape
+done
+(cd $DEV && godot --headless --import > $M/logs/import-dev-final2.log 2>&1)
+ls -la $M/ipa

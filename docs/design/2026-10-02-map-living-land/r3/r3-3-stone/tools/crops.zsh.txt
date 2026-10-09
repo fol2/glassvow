@@ -1,0 +1,10 @@
+#!/bin/zsh
+# Lane R3.3: Close captures for the crops, main and the branch, seed 1, pad, lean, A12 Metal condition.
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+OUT=$M/final/crops; mkdir -p $OUT
+for pan in 0,0 8,-6 -6,-8 4,6; do
+  n=$(echo $pan | tr ',' '_')
+  for b in r33-ctl wt-r33; do
+    $M/tools/cap.sh $M/$b $OUT/$b-close-$n.png --shape=pad-landscape --vp=1180x820 --map-steps=2 --look-lean --look-view=close --look-noair --look-pan=$pan --look-stone | sed "s/^/$b $pan: /"
+  done
+done

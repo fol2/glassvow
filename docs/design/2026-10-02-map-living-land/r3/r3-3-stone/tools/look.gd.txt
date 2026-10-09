@@ -1,0 +1,367 @@
+extends SceneTree
+## Scratch harness, lane R3.1b (never committed). Boots the game's Main with
+## the user args (--map --seed=1 --map-steps=2 --shape=... --locale=...),
+## forces the lean profile and Reduce Motion when asked, waits for Act I's
+## land, frames a view, settles, then captures the window and prints PINS and
+## WOOD rows. Extra args:
+##   --look-out=<png>      capture path (omit: no capture)
+##   --look-lean           MapScene.lean_override = 1 (phones and tablets)
+##   --look-still          Preferences.active.reduce_motion = true
+##   --look-view=close|journey|whole
+##   --look-settle=<frames>
+##   --look-cover          also capture with the wood's cards hidden (-bare.png)
+##   --look-burst=<s>      also capture <s> seconds later (-later.png)
+##   --look-noair          hide the drifting air (embers, ash) for diffs
+##   --look-pan=x,z        pan the journey camera by metres before capture
+
+var out: String = ""
+var lean: bool = false
+var still: bool = false
+var view: String = ""
+var settle: int = 60
+var cover: bool = false
+var burst: float = 0.0
+var noair: bool = false
+var pan: Vector2 = Vector2.ZERO
+var dump: String = ""
+var probes: String = ""
+var magenta: bool = false
+var floor_dump: String = ""
+
+
+func _initialize() -> void:
+	for arg: String in OS.get_cmdline_user_args():
+		var value: String = arg.get_slice("=", 1)
+		if arg.begins_with("--look-out="): out = value
+		elif arg == "--look-lean": lean = true
+		elif arg == "--look-still": still = true
+		elif arg.begins_with("--look-view="): view = value
+		elif arg.begins_with("--look-settle="): settle = int(value)
+		elif arg == "--look-cover": cover = true
+		elif arg.begins_with("--look-burst="): burst = float(value)
+		elif arg == "--look-noair": noair = true
+		elif arg == "--look-magenta": magenta = true
+		elif arg.begins_with("--look-floor="): floor_dump = value
+		elif arg.begins_with("--look-dump="): dump = value
+		elif arg.begins_with("--look-probe="): probes = value
+		elif arg.begins_with("--look-pan="):
+			pan = Vector2(float(value.get_slice(",", 0)), float(value.get_slice(",", 1)))
+	if lean:
+		MapScene.lean_override = 1
+	if "--look-device" in OS.get_cmdline_user_args():
+		# The iPad's shadow settings (the project's `.mobile` overrides).
+		ProjectSettings.set_setting("rendering/lights_and_shadows/directional_shadow/size", 2048)
+		ProjectSettings.set_setting("rendering/lights_and_shadows/directional_shadow/soft_shadow_filter_quality", 0)
+		RenderingServer.directional_shadow_atlas_set_size(2048, true)
+		RenderingServer.directional_soft_shadow_filter_set_quality(RenderingServer.SHADOW_QUALITY_HARD)
+	change_scene_to_file("res://application/main.tscn")
+	_run.call_deferred()
+
+
+func _run() -> void:
+	await process_frame
+	await process_frame
+	if still:
+		Preferences.active.reduce_motion = true
+	var main: Node = null
+	var screen: WorldMapScreen = null
+	var t0: int = Time.get_ticks_msec()
+	for i: int in range(4000):
+		await process_frame
+		main = current_scene
+		if main == null:
+			continue
+		var found: Variant = main.get("_map_screen")
+		if found is WorldMapScreen and is_instance_valid(found):
+			screen = found
+			if not screen.landscape_pending():
+				break
+	if screen == null:
+		printerr("LOOK no map screen")
+		quit(2)
+		return
+	var ready_ms: int = Time.get_ticks_msec() - t0
+	await _frames(90)
+	var levels: Dictionary = {"close": MapJourneyView.Level.CLOSE,
+		"journey": MapJourneyView.Level.JOURNEY, "whole": MapJourneyView.Level.WHOLE}
+	if levels.has(view) and screen._journey != null and screen._journey.active():
+		screen._journey.view.level = levels[view]
+		var map: WorldMap = main.get("_map")
+		screen._journey.frame(map.at)
+		await _frames(30)
+	if pan != Vector2.ZERO:
+		screen._map_scene.get_rig().pan_world(pan)
+		screen._invalidate_projection()
+		await _frames(10)
+	var scene: MapScene = screen._map_scene
+	var land: MapJourneyLandscape = scene.journey_landscape()
+	if noair and land != null and land.air != null:
+		land.air.set_process(false)
+		land.air.visible = false
+	await _frames(settle)
+	var pins: Array = []
+	for stone: GlassWaystone in screen._waystones:
+		if stone.visible:
+			var centre: Vector2 = stone.get_global_rect().get_center()
+			pins.append([centre.x, centre.y, stone.pane_radius()])
+	print("PINS ", JSON.stringify(pins))
+	var wood_info: Dictionary = {}
+	if land != null:
+		var wood: Node = land.get_node_or_null("Impostor wood")
+		if wood != null and wood.has_method("stats"):
+			wood_info = wood.call("stats")
+		wood_info["land_ms"] = land.timings_ms
+	print("WOOD ", JSON.stringify(wood_info))
+	if land != null:
+		print("LAND ", JSON.stringify(land.timings_ms))
+	var cam: Camera3D = screen._map_scene.get_rig().get_camera()
+	print("CAM ", JSON.stringify({"pos": [cam.global_position.x, cam.global_position.y, cam.global_position.z], "size": cam.size}))
+	if not dump.is_empty() and land != null:
+		_dump(land)
+	if not floor_dump.is_empty() and land != null and land.forest_floor != null:
+		_dump_floor(land)
+	if land != null and OS.get_environment("LOOK_PROFILE") == "1":
+		var pl: RefCounted = land.get_node("Impostor wood").get("planting")
+		var u0: int = Time.get_ticks_usec()
+		var decks: PackedVector3Array = pl.call("_decks", 1.0)
+		var u1: int = Time.get_ticks_usec()
+		var chain_points: int = 0
+		for chain: Dictionary in land.terrain.get_meta("bridge_chains", []):
+			var pts: PackedVector3Array = chain["points"]
+			chain_points += pts.size()
+		var length: float = 0.0
+		for line: PackedVector3Array in land.terrain.lines:
+			for i: int in range(line.size() - 1):
+				length += line[i].distance_to(line[i + 1])
+		var seats_p: PackedVector3Array = []
+		for b: Node3D in land.journey.bases:
+			seats_p.append(b.position)
+		var v0: int = Time.get_ticks_usec()
+		var d15: PackedVector3Array = pl.call("_decks", 1.5)
+		var v1: int = Time.get_ticks_usec()
+		for deck: Vector3 in d15:
+			pl.call("_stamp", deck.x, deck.z, 1.9, 1.5)
+		var v2: int = Time.get_ticks_usec()
+		pl.call("_mask_structures", land.kit, seats_p)
+		var v3: int = Time.get_ticks_usec()
+		pl.call("_protect", land.kit, seats_p)
+		var v4: int = Time.get_ticks_usec()
+		var hsum: float = 0.0
+		for k: int in range(4000):
+			hsum += land.terrain.surface_height(randf_range(-40, 40), randf_range(-25, 25))
+		var v5: int = Time.get_ticks_usec()
+		print("PROFILE2 ", JSON.stringify({"decks15_us": v1 - v0, "n_decks15": d15.size(), "deck_stamps_us": v2 - v1, "mask_structures_us": v3 - v2, "protect_us": v4 - v3, "surface_height_4000_us": v5 - v4}))
+		print("PROFILE ", JSON.stringify({"decks_us": u1 - u0, "deck_points": decks.size(), "chain_points": chain_points, "road_m": length, "lines": land.terrain.lines.size(), "seats": land.journey.bases.size()}))
+	if not probes.is_empty() and land != null:
+		_probe(screen, land)
+	if "--look-stone" in OS.get_cmdline_user_args() and land != null and "stone" in land.kit and land.kit.get("stone") != null:
+		var stage_view2: Viewport = cam.get_viewport()
+		var to_window: float = float(root.size.x) / float(stage_view2.get_visible_rect().size.x)
+		var stone_node: Node = land.kit.get("stone")
+		var stone_placed: Array = stone_node.get("placed")
+		for item: Dictionary in stone_placed:
+			var pose: Transform3D = item["transform"]
+			var sp: Vector2 = cam.unproject_position(pose.origin) * to_window
+			if sp.x < -50 or sp.y < -50 or sp.x > root.size.x + 50 or sp.y > root.size.y + 50:
+				continue
+			print("STONE %s at %.2f,%.2f,%.2f scale %.2f screen %d,%d" % [item["kind"], pose.origin.x, pose.origin.y, pose.origin.z, pose.basis.get_scale().x, sp.x, sp.y])
+	print("LOOK ", JSON.stringify({"ready_ms": ready_ms, "stage": [scene.get_stage().size.x, scene.get_stage().size.y],
+		"lean": MapScene.lean_profile(), "still": Preferences.active.reduce_motion,
+		"motion": MapJourneyLandscape.LandMotion.enabled,
+		"vram_mib": snappedf(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0, 0.1),
+		"tex_mib": snappedf(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED) / 1048576.0, 0.1),
+		"buf_mib": snappedf(Performance.get_monitor(Performance.RENDER_BUFFER_MEM_USED) / 1048576.0, 0.1),
+		"layout_digest": screen.layout_digest(), "zoom": scene.get_rig().get_camera().size}))
+	if out.is_empty():
+		quit(0)
+		return
+	if not OS.get_environment("LOOK_PICK").is_empty() and land != null:
+		var stage_view: Viewport = cam.get_viewport()
+		var scale_to_stage: float = float(stage_view.get_visible_rect().size.x) / float(root.size.x)
+		for spec: String in OS.get_environment("LOOK_PICK").split(";"):
+			var xy: PackedStringArray = spec.split(",")
+			var px: Vector2 = Vector2(float(xy[0]), float(xy[1])) * scale_to_stage
+			var o: Vector3 = cam.project_ray_origin(px)
+			var d: Vector3 = cam.project_ray_normal(px)
+			var t: float = 0.0
+			var hit: Vector3 = o
+			for _k: int in range(60):
+				hit = o + d * t
+				var h: float = land.terrain.surface_height(hit.x, hit.z)
+				if hit.y <= h:
+					break
+				t += maxf((hit.y - h) * 0.5, 0.02)
+			var near: Array = []
+			for n: Node in land.find_children("*", "Node3D", true, false):
+				var n3: Node3D = n
+				if Vector2(n3.global_position.x - hit.x, n3.global_position.z - hit.z).length() < 3.0:
+					near.append("%s(%s)@%.1f,%.1f,%.1f" % [n3.name, n3.get_parent().name, n3.global_position.x, n3.global_position.y, n3.global_position.z])
+			print("PICK ", spec, " world ", hit, " near ", near.slice(0, 40))
+	if OS.get_environment("LOOK_NOGROUND") == "1" and land != null:
+		for g: Node in land.terrain.find_children("*", "MeshInstance3D", false, false):
+			if str(g.name).begins_with("Ground chunk") or str(g.name) == "Quiet sculpted ground":
+				(g as Node3D).visible = false
+	scene.set_live(true)
+	await _frames(4)
+	await RenderingServer.frame_post_draw
+	root.get_texture().get_image().save_png(out)
+	if burst > 0.0:
+		await create_timer(burst).timeout
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(out.replace(".png", "-later.png"))
+	if magenta and land != null:
+		var wood_m: Node = land.get_node_or_null("Impostor wood")
+		var flat: ShaderMaterial = ShaderMaterial.new()
+		flat.shader = load("/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane/tools/magenta.gdshader")
+		# Lane R3.3: the ruins' stone cards are not canopy.
+		var atlas_script: GDScript = load("res://presentation/map/landscape/impostor_atlas.gd")
+		var ruins: PackedStringArray = atlas_script.get_script_constant_map().get("RUINS", PackedStringArray())
+		var skip: Array = []
+		var by_kind: Dictionary = atlas_script.get("by_kind")
+		var uvs: PackedVector4Array = atlas_script.get("uv")
+		for kind: String in ruins:
+			var tiles_of: PackedInt32Array = by_kind.get(kind, PackedInt32Array())
+			for tile: int in tiles_of:
+				var r: Vector4 = uvs[tile]
+				skip.append(Vector4(r.x, r.y, r.z, r.w))
+		flat.set_shader_parameter("skip", skip)
+		flat.set_shader_parameter("skip_count", skip.size())
+		print("MAGENTA_SKIP ", skip.size())
+		var atlas: ShaderMaterial = (wood_m.find_children("Wood cards*", "", true, false)[0] as GeometryInstance3D).material_override
+		flat.set_shader_parameter("atlas_albedo", atlas.get_shader_parameter("atlas_albedo"))
+		for card: Node in wood_m.find_children("Wood cards*", "", true, false):
+			(card as GeometryInstance3D).material_override = flat
+		await _frames(6)
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(out.replace(".png", "-magenta.png"))
+		for card: Node in wood_m.find_children("Wood cards*", "", true, false):
+			(card as GeometryInstance3D).material_override = atlas
+		await _frames(4)
+	if cover and land != null:
+		var wood_node: Node = land.get_node_or_null("Impostor wood")
+		if wood_node != null:
+			for card: Node in wood_node.find_children("Wood cards*", "", true, false):
+				(card as Node3D).visible = false
+		await _frames(6)
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(out.replace(".png", "-bare.png"))
+	quit(0)
+
+
+func _dump_floor(land: MapJourneyLandscape) -> void:
+	var f: Node = land.forest_floor
+	var fb: Rect2 = f.get("plan").get("bounds")
+	print("FLOOR ", JSON.stringify({"state": f.get("state"), "failure": f.get("failure"), "timings": f.get("timings_ms"), "bounds": [fb.position.x, fb.position.y, fb.size.x, fb.size.y]}))
+	var rids: Array = f.get("_rids")
+	if rids.is_empty():
+		return
+	var rd: RenderingDevice = RenderingServer.get_rendering_device()
+	var plan: RefCounted = f.get("plan")
+	var bounds: Rect2 = plan.get("bounds")
+	var sizes: Array = [Vector2i(ceili(bounds.size.x * 16.0), ceili(bounds.size.y * 16.0)), Vector2i(ceili(bounds.size.x * 8.0), ceili(bounds.size.y * 8.0))]
+	for i: int in range(2):
+		var rid: RID = rids[i]
+		var data: PackedByteArray = rd.texture_get_data(rid, 0)
+		var size: Vector2i = sizes[i]
+		var image: Image = Image.create_from_data(size.x, size.y, false, Image.FORMAT_RGBA8, data.slice(0, size.x * size.y * 4))
+		image.save_png(floor_dump + ("/lit.png" if i == 0 else "/mask.png"))
+		if i == 0:
+			var off: int = size.x * size.y * 4
+			var half: Vector2i = Vector2i(size.x / 2, size.y / 2)
+			Image.create_from_data(half.x, half.y, false, Image.FORMAT_RGBA8, data.slice(off, off + half.x * half.y * 4)).save_png(floor_dump + "/lit-mip1.png")
+
+
+func _frames(count: int) -> void:
+	for _i: int in range(count):
+		await process_frame
+
+
+func _dump(land: MapJourneyLandscape) -> void:
+	var wood: Node = land.get_node_or_null("Impostor wood")
+	var planting: RefCounted = wood.get("planting")
+	var columns: int = planting.get("_columns")
+	var rows: int = planting.get("_rows")
+	var ground: PackedByteArray = planting.get("_ground")
+	var image: Image = Image.create(columns, rows, false, Image.FORMAT_RGB8)
+	for r: int in range(rows):
+		for c: int in range(columns):
+			var f: int = ground[r * columns + c]
+			image.set_pixel(c, r, Color(1.0 if f & 1 else 0.0, 1.0 if f & 2 else 0.0, 1.0 if f & 4 else 0.0))
+	image.save_png(dump + "/ground.png")
+	var fc: int = planting.get("_fine_columns")
+	var fr: int = planting.get("_fine_rows")
+	var fine: PackedFloat32Array = planting.get("_fine")
+	var plane: Image = Image.create(fc, fr, false, Image.FORMAT_RGB8)
+	for r: int in range(fr):
+		for c: int in range(fc):
+			var d: float = fine[r * fc + c]
+			plane.set_pixel(c, r, Color(0, 0, 0) if d == INF else (Color(1, 0, 0) if d == -INF else Color(0.2, 0.6 + 0.01 * clampf(d, -40, 40), 1.0)))
+	plane.save_png(dump + "/plane.png")
+	var bases: PackedVector3Array = planting.get("bases")
+	var kinds: PackedStringArray = planting.get("kinds")
+	var rows_out: Array = []
+	for i: int in range(bases.size()):
+		rows_out.append([kinds[i], bases[i].x, bases[i].z])
+	var decks: Array = []
+	for deck: Vector3 in planting.call("_decks", 0.5):
+		decks.append([deck.x, deck.z, deck.y])
+	var structures: Array = []
+	for item: Dictionary in land.kit.placed:
+		var at: Vector3 = item["position"]
+		structures.append([str(item["kind"]), at.x, at.z, float(str(item["radius"]))])
+	var file: FileAccess = FileAccess.open(dump + "/plants.json", FileAccess.WRITE)
+	file.store_string(JSON.stringify({"rejects": planting.get("debug_rejects") if "debug_rejects" in planting else [], "decks": decks, "kit": structures, "origin": [planting.get("_origin").x, planting.get("_origin").y], "plane_origin": [planting.get("_plane_origin").x, planting.get("_plane_origin").y], "plants": rows_out}))
+
+
+## For screen points: the ground under them and why a heath at 0.7 fails there.
+func _probe(screen: WorldMapScreen, land: MapJourneyLandscape) -> void:
+	var planting: RefCounted = land.get_node("Impostor wood").get("planting")
+	var cam: Camera3D = screen._map_scene.get_rig().get_camera()
+	var stage: SubViewport = screen._map_scene.get_stage()
+	for pair: String in probes.split(";"):
+		var sp: Vector2 = Vector2(float(pair.get_slice(",", 0)), float(pair.get_slice(",", 1)))
+		var stage_point: Vector2 = sp * Vector2(stage.size) / Vector2(1180, 820)
+		var origin: Vector3 = cam.project_ray_origin(stage_point)
+		var direction: Vector3 = cam.project_ray_normal(stage_point)
+		var hit: Vector3 = Vector3.INF
+		for k: int in range(4000):
+			var p: Vector3 = origin + direction * (k * 0.05)
+			if p.y <= land.terrain.surface_height(p.x, p.z):
+				hit = p
+				break
+		if not hit.is_finite():
+			print("PROBE ", sp, " no ground")
+			continue
+		var out: Dictionary = {"screen": [sp.x, sp.y], "ground": [hit.x, hit.y, hit.z],
+			"road": planting.call("road_distance", hit.x, hit.z)}
+		var Atlas: GDScript = load("res://presentation/map/landscape/impostor_atlas.gd")
+		for kind: String in ["ash-heath", "ash-fern", "olive-heath"]:
+			var tile: int = Atlas.call("tile_for", kind, 0.35)
+			for sc: float in [0.5, 0.7, 1.0]:
+				out["%s@%.1f" % [kind, sc]] = planting.call("_fits", tile, hit, sc)
+		var ground: PackedByteArray = planting.get("_ground")
+		var origin2: Vector2 = planting.get("_origin")
+		var column: int = floori((hit.x - origin2.x) / 0.5)
+		var row: int = floori((hit.z - origin2.y) / 0.5)
+		var columns: int = planting.get("_columns")
+		out["flags"] = ground[row * columns + column]
+		# What blocks the 0.7 heath: the first failing fine cell.
+		var tile0: int = Atlas.call("tile_for", "ash-heath", 0.35)
+		var rect: Rect2 = Atlas.call("rect", tile0, hit, 0.7)
+		var toward: Vector3 = planting.get("_toward")
+		var shift: float = Atlas.call("shift", tile0)
+		var limit: float = hit.dot(toward) + shift * 0.7 + 0.15
+		out["rect"] = [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
+		out["limit"] = limit
+		var fine: PackedFloat32Array = planting.get("_fine")
+		var fc: int = planting.get("_fine_columns")
+		var po: Vector2 = planting.get("_plane_origin")
+		var blockers: Array = []
+		for fy: int in range(floori((rect.position.y - po.y) / 0.25), floori((rect.end.y - po.y) / 0.25) + 1):
+			for fx: int in range(floori((rect.position.x - po.x) / 0.25), floori((rect.end.x - po.x) / 0.25) + 1):
+				var d: float = fine[fy * fc + fx]
+				if d < limit:
+					blockers.append([snappedf(po.x + (fx + 0.5) * 0.25, 0.01), snappedf(po.y + (fy + 0.5) * 0.25, 0.01), snappedf(d, 0.01)])
+		out["blockers"] = blockers.slice(0, 6)
+		out["n_blockers"] = blockers.size()
+		print("PROBE ", JSON.stringify(out))

@@ -1,0 +1,25 @@
+#!/bin/zsh
+# Lane R3.3: every Mac proof at the code-final head, one Godot run at a time.
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+cd $M/wt-r33
+HEAD=$(git rev-parse --short HEAD)
+echo "== all Mac proofs at $HEAD $(date +%T)"
+(echo "head $HEAD"; python3 $M/tools/mutate_stone.py $M/wt-r33 $M/build/mutate-backups) > $M/final/mutations.txt 2>&1
+echo "mutations: $(tail -1 $M/final/mutations.txt)"
+$M/tools/final_mac.zsh > $M/final/final-mac.txt 2>&1
+echo "final mac: $(tail -1 $M/final/final-mac.txt)"
+DEV=$M/r33-dev
+git -C $DEV checkout -q -- application/main.gd; git -C $DEV checkout -q --detach $(git rev-parse HEAD)
+python3 $DEV/tools/map_trace/qa_patch.py $DEV > /dev/null; (cd $DEV && godot --headless --import > $M/logs/import-dev-3.log 2>&1)
+python3 $M/r33-ctl/tools/map_trace/qa_patch.py $M/r33-ctl > /dev/null
+for b in r33-ctl r33-dev; do
+  GODOT_MTL_DISABLE_ARGUMENT_BUFFERS=1 timeout 600 godot --path $M/$b --rendering-driver metal --rendering-method mobile --position 1400,900 -- --map --map-trace-probe --map-lean --seed=1 --shape=pad-landscape --vp=1180x820 --map-steps=2 --holds=cadence --hold-frames=120 --probe-view=journey,river,close,whole --opens --reopens=3 > $M/final/probe-$b.log 2>&1
+  echo "probe $b exit $?"
+done
+$M/tools/crops.zsh
+(cd $M/wt-r33 && timeout 120 godot --path . --rendering-driver metal --rendering-method mobile --position 1400,900 -s $M/tools/stone_look.gd -- --out=$M/final/pieces-out.png --kinds=granite-bank,granite-ridge,granite-shard,granite-tor,granite-boulder --size=9 > $M/logs/stone_look2.log 2>&1)
+(cd $M/wt-r33 && timeout 120 godot --path . --rendering-driver metal --rendering-method mobile --position 1400,900 -s $M/tools/stone_look.gd -- --out=$M/final/pieces-cliff.png --kinds=cliff-wall,cliff-notch,cliff-buttress,cliff-bend,cliff-step,cliff-tall --size=13 >> $M/logs/stone_look2.log 2>&1)
+for s in 1 717; do (cd $M/wt-r33 && timeout 120 godot --headless --path . -s $M/tools/stone_size.gd -- --seed=$s 2>&1 | grep STONE_SIZE); done > $M/final/stone-size.txt
+$M/tools/core_gate.zsh > $M/final/core-gate.txt 2>&1
+echo "core gate: $(grep -c '^exit 0' $M/final/core-gate.txt) steps exit 0, $(grep -c '^exit [1-9]' $M/final/core-gate.txt) failed"
+echo "== all done $(date +%T)"

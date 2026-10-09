@@ -1,0 +1,12 @@
+"""Lane R3.3: replaces ⟦path|symbol⟧ in a draft with `path:LINE (symbol)`, the line where the symbol is
+declared (func, static func, const, var, class, or a shader's void function)."""
+import re, sys
+from pathlib import Path
+wt = Path(sys.argv[1]); src = Path(sys.argv[2]).read_text()
+def line_of(path, symbol):
+    for i, line in enumerate((wt / path).read_text().splitlines(), 1):
+        if re.match(r"^(static\s+)?(func|const|var|class|void|float|vec\d)\s+%s\b" % re.escape(symbol), line):
+            return i
+    raise SystemExit("no %s in %s" % (symbol, path))
+out = re.sub(r"⟦([^|⟧]+)\|([^⟧]+)⟧", lambda m: "`%s:%d (%s)`" % (m.group(1), line_of(m.group(1), m.group(2)), m.group(2)), src)
+sys.stdout.write(out)

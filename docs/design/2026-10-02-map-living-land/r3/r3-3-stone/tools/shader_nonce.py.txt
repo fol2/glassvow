@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""Lane R3.2 scratch, extended to the stone shader in lane R3.3 (never part of the game): give a measuring worktree's floor
+shaders a pipeline hash the iPad has never compiled, so the QA build installed
+from it meets them cold, as a fresh install does. Each floor shader gains one
+uniform named after the nonce, at 1.0, multiplied into its output: the
+picture is the same, the generated shader source (and so the cache key) is
+not. Edits files inside the given worktree only; deletes nothing.
+
+    python3 shader_nonce.py <worktree> <nonce>
+
+On main, which has no stone, the stone's entry is skipped.
+"""
+import sys
+from pathlib import Path
+wt = Path(sys.argv[1]).resolve()
+nonce = sys.argv[2]
+assert nonce.isalnum(), nonce
+base = wt / "presentation/map/landscape"
+edits = {
+    "floor_paint.gdshader": ("	EMISSION = albedo * pool_colour * pools.x * (1.0 - f.contact * contact_depth * 0.5);\n}",
+                             "	EMISSION = albedo * pool_colour * pools.x * (1.0 - f.contact * contact_depth * 0.5);\n	ALBEDO *= qa_nonce_%s;\n}"),
+    "floor_mask.gdshader": ("	ALBEDO = as_stored(clamp(vec3(share, pools.y, f.wet), 0.0, 1.0));\n}",
+                            "	ALBEDO = as_stored(clamp(vec3(share, pools.y, f.wet), 0.0, 1.0)) * qa_nonce_%s;\n}"),
+    "floor_caster.gdshader": ("	ALPHA = texture(atlas_albedo, uv).a;\n",
+                              "	ALPHA = texture(atlas_albedo, uv).a * qa_nonce_%s;\n"),
+    "floor.gdshader": ("	ALBEDO = colour;\n}", "	ALBEDO = colour * qa_nonce_%s;\n}"),
+    "floor_mip.gdshader": ("	COLOR = vec4(as_stored(sum * 0.25), 1.0);\n}",
+                           "	COLOR = vec4(as_stored(sum * 0.25) * qa_nonce_%s, 1.0);\n}"),
+    # Lane R3.3: the stone's shader too.
+    "stone.gdshader": ("	SPECULAR = 0.3;\n}", "	SPECULAR = 0.3;\n	ALBEDO *= qa_nonce_%s;\n}"),
+}
+for name, (old, new) in edits.items():
+    path = base / name
+    assert path.resolve().is_relative_to(wt), path
+    if name == "stone.gdshader" and not path.exists():
+        print("nonce", nonce, "-> no stone.gdshader here (main): skipped")
+        continue
+    text = path.read_text()
+    assert "qa_nonce_" not in text, f"{name} already has a nonce"
+    assert text.count(old) == 1, (name, old)
+    text = text.replace(old, new % nonce)
+    lines = text.split("\n")
+    # The uniform goes after the shader_type/render_mode header lines.
+    at = max(i for i, l in enumerate(lines[:40]) if l.startswith("render_mode") or l.startswith("shader_type") or l.startswith("#include")) + 1
+    lines.insert(at, "uniform float qa_nonce_%s = 1.0;" % nonce)
+    path.write_text("\n".join(lines))
+    print("nonce", nonce, "->", name)

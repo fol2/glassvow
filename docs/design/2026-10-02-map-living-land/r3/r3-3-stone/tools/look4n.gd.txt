@@ -1,0 +1,103 @@
+extends SceneTree
+## Scratch (lane R3.1b, never committed): R2's pin-contrast mount
+## (docs/.../proof/r2/concept_look.gd.txt with concept "none"): the production
+## WorldMapScreen and RunHud mounted directly, seed 1, two steps in, Act I,
+## pins held still, the stage live. LEAN=1 for the lean profile, STILL=1 for
+## Reduce Motion. Prints PINS and saves the window.
+##   godot --path <wt> -s look2.gd -- --shape=pad-landscape --output=x.png [--locale=zh-Hant]
+
+func _initialize() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
+	var shape: StringName = &"pad-landscape"
+	var output: String = ""
+	var locale: StringName = &"en"
+	var steps: int = 2
+	for arg: String in OS.get_cmdline_user_args():
+		var value: String = arg.get_slice("=", 1)
+		if arg.begins_with("--shape="): shape = StringName(value)
+		elif arg.begins_with("--output="): output = value
+		elif arg.begins_with("--locale="): locale = StringName(value)
+		elif arg.begins_with("--steps="): steps = int(value)
+	if OS.get_environment("STILL") == "1":
+		Preferences.active.reduce_motion = true
+	if OS.get_environment("LEAN") == "1":
+		MapScene.lean_override = 1
+	# As Main does: the woodland keeps the shown shape's touch squares clear.
+	if ResourceLoader.exists("res://presentation/map/landscape/wood_planting.gd"):
+		var planting: GDScript = load("res://presentation/map/landscape/wood_planting.gd")
+		if "stage_shape" in planting:
+			planting.set("stage_shape", shape)
+	var dimensions: Vector2i = StageShape.REFERENCES[shape]
+	DisplayServer.window_set_size(dimensions)
+	root.size = dimensions
+	root.content_scale_size = dimensions
+	Locale.active = Locale.new(locale)
+	var content: ContentDB = ContentDB.load_full()
+	Locale.active.hydrate_content(content)
+	var run: RunState = RunState.new_run(content, 1)
+	var world_map: WorldMap = WorldMap.for_run(run, content)
+	for step: int in range(steps):
+		var next: Array[int] = world_map.reachable()
+		if not next.is_empty():
+			world_map.enter(next[0])
+			world_map.clear_current()
+	var screen: WorldMapScreen = WorldMapScreen.new(world_map, content, shape)
+	root.add_child(screen)
+	screen.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	screen.size = Vector2(dimensions)
+	screen.refresh(run)
+	screen.set_survey_retired(steps > 0)
+	root.add_child(RunHud.new(run, content, shape))
+	var waited: int = 0
+	while screen.landscape_pending() and waited < 3000:
+		await process_frame
+		waited += 1
+	for frame: int in range(60):
+		await process_frame
+	screen._layout_waystones()
+	var pins: Array = []
+	for stone: GlassWaystone in screen._waystones:
+		if stone.visible:
+			var centre: Vector2 = stone.get_global_rect().get_center()
+			pins.append([centre.x, centre.y, stone.pane_radius()])
+	print("PINS ", JSON.stringify(pins))
+	for stone: GlassWaystone in screen._waystones:
+		stone.set_process(false)
+	if OS.get_environment("NOWOOD") == "1":
+		var land_nw: MapJourneyLandscape = screen._map_scene.journey_landscape()
+		land_nw.get_node("Impostor wood").visible = false
+	if OS.get_environment("NOCAST") == "1":
+		var land_nc: MapJourneyLandscape = screen._map_scene.journey_landscape()
+		for caster: Node in land_nc.find_children("Wood casters*", "", true, false):
+			(caster as Node3D).visible = false
+	screen._map_scene.set_live(true)
+	for frame: int in range(24):
+		await process_frame
+	print("LOOK2 ", JSON.stringify({"layout_digest": screen.layout_digest(), "lean": MapScene.lean_profile(),
+		"still": Preferences.active.reduce_motion}))
+	# Lane R3.3: what the kit placed near a picked screen point (NEAR=x,y,px).
+	if not OS.get_environment("NEAR").is_empty():
+		var spec: PackedStringArray = OS.get_environment("NEAR").split(",")
+		var at: Vector2 = Vector2(float(spec[0]), float(spec[1]))
+		var reach: float = float(spec[2])
+		var land_n: MapJourneyLandscape = screen._map_scene.journey_landscape()
+		var cam: Camera3D = screen._map_scene.get_rig().get_camera()
+		var scale_to_window: float = float(root.size.x) / float(cam.get_viewport().get_visible_rect().size.x)
+		for item: Dictionary in land_n.kit.placed:
+			var pos: Vector3 = item["position"]
+			var sp: Vector2 = cam.unproject_position(pos) * scale_to_window
+			if sp.distance_to(at) < reach:
+				print("NEAR %s at %s screen %d,%d" % [item["kind"], item["position"], sp.x, sp.y])
+		var planting: RefCounted = land_n.wood.planting
+		var kinds: PackedStringArray = planting.get("kinds")
+		var bases: PackedVector3Array = planting.get("bases")
+		for i: int in range(kinds.size()):
+			var sp2: Vector2 = cam.unproject_position(bases[i]) * scale_to_window
+			if sp2.distance_to(at) < reach:
+				print("NEARCARD %s at %s screen %d,%d" % [kinds[i], bases[i], sp2.x, sp2.y])
+	await RenderingServer.frame_post_draw
+	root.get_texture().get_image().save_png(output)
+	quit(0)

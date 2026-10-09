@@ -1,0 +1,40 @@
+extends SceneTree
+## Lane R3.3 scratch (never committed): builds Act I's land headless several
+## times for one run seed and prints its build timings each time (works on
+## main and the branch).
+##   godot --headless --path <wt> -s <this> -- --seed=1 --times=5
+
+var seed_value: int = 1
+var times: int = 5
+
+
+func _initialize() -> void:
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--seed="): seed_value = int(arg.get_slice("=", 1))
+		elif arg.begins_with("--times="): times = int(arg.get_slice("=", 1))
+	_run.call_deferred()
+
+
+func _run() -> void:
+	MapJourneyLandscape.Kit.preload_scenes()
+	var content: ContentDB = ContentDB.load_full()
+	for i: int in range(times):
+		var run_state: RunState = RunState.new_run(content, seed_value, "run-land-time")
+		var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.for_run(run_state, content), content)
+		root.add_child(screen)
+		screen.size = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
+		screen.set_shape(StageShape.IDENTITY)
+		var started: int = Time.get_ticks_usec()
+		screen.refresh(run_state)
+		var wall: float = (Time.get_ticks_usec() - started) / 1000.0
+		var land: MapJourneyLandscape = screen._map_scene.journey_landscape()
+		var kit: Node = land.kit
+		var query_us: int = kit.get("query_us")
+		var placed: Array = kit.get("placed")
+		print("LAND_TIME ", JSON.stringify({"i": i, "refresh_ms": snappedf(wall, 0.1), "land": land.timings_ms,
+			"kit_queries": kit.get("query_count"), "kit_query_ms": snappedf(query_us / 1000.0, 0.1),
+			"placed": placed.size()}))
+		root.remove_child(screen)
+		screen.free()
+		MapScene.release_kept_journey()
+	quit(0)

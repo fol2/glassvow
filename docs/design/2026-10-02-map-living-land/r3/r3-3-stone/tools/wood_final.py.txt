@@ -1,0 +1,51 @@
+"""Lane R3.3: the woodland, main against the branch, from wood_dump.gd's JSON (two branch runs a seed):
+determinism, cards identical and re-flowed (stone-only cards excluded), totals, the share of re-flowed
+cards within 5 m of a stone or ruin, the kit's placements, kinds moving by more than 10%, the tree mix,
+and main's rocks reaching over the water.
+    python3 wood_final.py <dir> 717 1 2 3"""
+import json, math, sys
+from collections import Counter
+D = sys.argv[1]; SEEDS = sys.argv[2:]
+STONE = ("grave-", "wall-", "rubble-")
+ROCKS = {"slate-bank": 1.9, "slate-ridge": 2.25, "slate-shard": 1.2}
+FAM = {"conifer": "conifers", "conifer-spire": "conifers", "conifer-wind": "conifers", "ember-oak": "crimson",
+       "ember-round": "crimson", "rust-oak": "rust and amber", "amber-round": "rust and amber"}
+def centre(cut, z): return cut + math.sin(z * 0.19) * 1.4 + math.sin(z * 0.61) * 0.3
+tot_a, tot_b = Counter(), Counter()
+for s in SEEDS:
+    ra = open(f"{D}/wt-r33-{s}-a.json", "rb").read(); rb = open(f"{D}/wt-r33-{s}-b.json", "rb").read()
+    a = json.load(open(f"{D}/r33-ctl-{s}.json")); b = json.loads(ra)
+    ca = Counter(tuple(c[:5]) for c in a["cards"]); cb = Counter(tuple(c[:5]) for c in b["cards"] if not c[0].startswith(STONE))
+    same = sum((ca & cb).values()); diff = list((ca - cb).elements()) + list((cb - ca).elements())
+    stones = [(k[1], k[2]) for k in b["kit"] if k[0].startswith(STONE + ("granite-",))] + [(t[1], t[3]) for t in b.get("stone", [])]
+    near = sum(1 for c in diff if stones and min(math.hypot(c[1] - x, c[3] - z) for x, z in stones) < 5.0)
+    nca, ncb = sum(ca.values()), sum(cb.values())
+    ruins = sum(1 for c in b["cards"] if c[0].startswith(STONE))
+    ka = set((k[0], k[1], k[2]) for k in a["kit"]); kb = set((k[0], k[1], k[2]) for k in b["kit"])
+    rocks = []
+    for k in a["kit"]:
+        if k[0] in ROCKS:
+            d = min(abs(k[1] - centre(c, k[2])) for c in (-20.5, 10.5))
+            if d < 2.4 + 0.75 * ROCKS[k[0]] * k[3]: rocks.append(k[0])
+    mix = {}
+    for name, cards in (("main", ca), ("branch", cb)):
+        fam = Counter()
+        for c, n in cards.items():
+            if c[0] in FAM: fam[FAM[c[0]]] += n
+        t = sum(fam.values()); mix[name] = "trees %d: conifers %.1f%%, crimson %.1f%%, rust and amber %.1f%%" % (
+            t, 100 * fam["conifers"] / t, 100 * fam["crimson"] / t, 100 * fam["rust and amber"] / t)
+    print(f"seed {s}: branch built twice, identical: {ra == rb}; layout digest equal: {a['digest'] == b['digest']}")
+    print(f"  cards (stone excluded) main {nca}, branch {ncb} ({100.0 * (ncb - nca) / nca:+.1f}%); identical {same} "
+          f"({100.0 * same / nca:.1f}% of main's); re-flowed {nca - same} of main's, {ncb - same} of the branch's; "
+          f"of all {len(diff)} re-flowed, {near} ({100.0 * near / max(len(diff), 1):.0f}%) within 5 m of a stone or ruin")
+    print(f"  the branch's ruin cards {ruins}; kit placements main {len(a['kit'])}, branch {len(b['kit'])}, same kind and place {len(ka & kb)}")
+    print(f"  mix main {mix['main']} | branch {mix['branch']}")
+    print(f"  'kit sight' left out main {a['rejected'].get('kit sight', 0)}, branch {b['rejected'].get('kit sight', 0)}; "
+          f"main's rocks reaching over the water: {len(rocks)} ({', '.join(rocks)})")
+    tot_a += Counter(c[0] for c in a["cards"]); tot_b += Counter(c[0] for c in b["cards"] if not c[0].startswith(STONE))
+print("by kind, all seeds, main -> branch:")
+for k in sorted(set(tot_a) | set(tot_b), key=lambda k: -tot_a[k]):
+    d = (tot_b[k] - tot_a[k]) / max(tot_a[k], 1) * 100
+    print(f"  {k:14s} {tot_a[k]:5d} -> {tot_b[k]:5d}  {d:+.1f}%{'  over 10%' if abs(d) > 10 else ''}")
+t_a, t_b = sum(tot_a.values()), sum(tot_b.values())
+print(f"  all            {t_a:5d} -> {t_b:5d}  {(t_b - t_a) / t_a * 100:+.1f}%")

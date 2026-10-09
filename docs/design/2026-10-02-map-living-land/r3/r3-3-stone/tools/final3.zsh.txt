@@ -1,0 +1,22 @@
+#!/bin/zsh
+# Lane R3.3 (scratch): the land's build and the Mac opens at the code-final runtime, after the core gate,
+# one Godot run at a time. Main is r33-ctl (711302a5); the branch is wt-r33 for the build and r33-dev for the probe
+# (r33-dev is at 1ae3888c, whose production files equal the PR's code commit).
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+F=$M/final; mkdir -p $F
+until grep -q "^done" $F/core-gate-2.txt; do sleep 15; done
+echo "== land time: branch $(git -C $M/wt-r33 rev-parse --short HEAD) main $(git -C $M/r33-ctl rev-parse --short HEAD) $(date +%T) load: $(uptime | sed 's/.*averages: //')"
+for round in 1 2 3; do
+  for b in r33-ctl wt-r33; do
+    (cd $M/$b && timeout 300 godot --headless --path . -s $M/tools/land_time.gd -- --seed=1 --times=3 2>&1) | grep "^LAND_TIME" | sed "s/^/$b round $round /"
+  done
+done
+echo "end $(date +%T) load: $(uptime | sed 's/.*averages: //')"
+echo "== probes $(date +%T) load: $(uptime | sed 's/.*averages: //')"
+for run in 1 2; do
+  for b in r33-ctl r33-dev; do
+    GODOT_MTL_DISABLE_ARGUMENT_BUFFERS=1 timeout 600 godot --path $M/$b --rendering-driver metal --rendering-method mobile --position 1400,900 -- --map --map-trace-probe --map-lean --seed=1 --shape=pad-landscape --vp=1180x820 --map-steps=2 --holds=cadence --hold-frames=120 --probe-view=journey,river,close,whole --opens --reopens=3 > $F/probe2-$b-$run.log 2>&1
+    echo "probe $b run $run exit $? $(git -C $M/$b rev-parse --short HEAD)"
+  done
+done
+echo "== final3 done $(date +%T) load: $(uptime | sed 's/.*averages: //')"

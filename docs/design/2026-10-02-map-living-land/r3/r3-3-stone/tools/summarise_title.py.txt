@@ -1,0 +1,18 @@
+import json, sys, glob, os
+for f in sorted(glob.glob(os.path.join(sys.argv[1], '*.jsonl'))):
+    label = os.path.basename(f)[:-6]
+    for l in open(f):
+        d = json.loads(l)
+        if d['probe'] == 'start':
+            build = d.get('build')
+        elif d['probe'] == 'seed':
+            print('%-11s %s seed stored %s act %s' % (label, build, d['stored'], d['act']))
+        elif d['probe'] == 'title':
+            print('%-11s %s TITLE frame 0 %.1f ms; after it %d frames, worst %.1f; over 25 ms: %s; warm-up drawn on frame %s, gone by %s; prefetch step %s; first frames %s' % (
+                label, build, d['frame0_ms'], d['frames'], d['worst_after0_ms'], d['slow'], d['warm_frame'], d['warm_gone_frame'], d['prefetch_step'], [round(x, 1) for x in d['first_frames_ms'][:6]]))
+        elif d['probe'] == 'open':
+            fl = d.get('floor') or {}
+            b = (fl.get('floor_ms') or {}).get('bake', {}) if fl else {}
+            print('%-11s %s OPEN Back to the Road -> map drawn %.1f ms; %d frames, worst %.1f; over 25 ms: %s; floor %s%s' % (
+                label, build, d['ready_ms'], d['frames'], d['worst_ms'], d['slow'], ('state %s' % fl.get('state')) if fl else 'none (main)',
+                (' (baked under the title: paced %s, %d frames, worst %.1f ms, wall %.1f ms)' % (b.get('paced'), b.get('frames', 0), max(b.get('frames_ms', [0])), b.get('wall_ms', 0))) if b else ''))

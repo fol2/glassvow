@@ -700,6 +700,37 @@ makes every shipped file from them, byte for byte on a re-run.
 
 All import VRAM-compressed with mipmaps.
 
+**R3.3 additions (the stone, 9 Oct 2026), lane picks, owner re-pick open:**
+
+Act I's granite outcrops, the ravine's cliff kit and its ruins, crafted in
+Blender 5.2.2 (background, 4 threads) from one recipe per kind in
+`tools/map_atelier/journey/stone/` (`outcrops.py`, `cliffs.py`, `ruins.py`,
+the shared workshop `sculpt.py`, entry `build_stone.py`); the masters are in
+`tools/map_atelier/journey/sources/<kind>.blend`. Each kind is sculpted from
+fused masses, cut on its joints, cracked by seeded Voronoi noise, reduced to
+its triangle budget and baked in Cycles (normals, occlusion, colour). The two
+source pictures were generated on 5 Oct 2026 with the built-in image
+generator (ChatGPT's image tool through the lane's runner), one candidate
+each, kept as the lane's pick; the prompts are in
+`tools/map_atelier/journey/stone/sources/prompts.txt`, the pictures (JPEG at
+quality 95) beside them. `prepare_stone.py` (numpy, Pillow) makes the tiles
+the kit paints with and the shipped strata, byte for byte on a re-run. A
+re-run of `build_stone.py` reproduces every shipped and source file byte for
+byte except the `.blend` masters, which Blender writes with bytes of its own.
+
+| Asset | From | Notes |
+|---|---|---|
+| `stone/stone-albedo.png` | `build_stone.py` (Blender, Cycles), the granite and strata tiles | 2048×1536 RGB, 4×3 cells of 512: the five outcrops (`granite-bank`, `-ridge`, `-shard`, `-tor`, `-boulder`) and the six cliff pieces (`cliff-wall`, `-notch`, `-buttress`, `-bend`, `-step`, `-tall`), each kind's colour baked into its own cell and darkened by its baked occlusion (a share of 0.75). Granite: a cool mid grey under the warm key, its lichen muted; strata: warm grey-browns. 2.1 MB ETC2. |
+| `stone/stone-normal.png` | the same bake | 1024×768: the tangent-space normals at half the colour's size, renormalised. Imports as a normal map (RG): 1.0 MB ETC2. |
+| `stone/stone-pieces.res` | `pack_stone.gd` (Godot, headless) from `tools/map_atelier/journey/stone/glb/<kind>.glb` | The eleven hero kinds' reduced meshes as plain arrays (vertex, normal, tangent, UV, index), 874–1,400 triangles an outcrop and 1,074 a cliff piece; the land merges them on its worker. 0.47 MB. The GLBs do not ship. |
+| `stone/strata.png` | `prepare_stone.py` from `sources/strata.jpg` | 512×512 RGB, the strata the floor's bake lays on the ravine's steep banks (`floor_paint.gdshader`), 1.6 m a tile. 0.17 MB ETC2. |
+| `stone/manifest.json` | `build_stone.py` | Every kind's triangles, footprint circle, top and foot, atlas cell and description. Not loaded by the game. |
+| `impostors/wood-albedo.png`, `wood-normal.png`, `wood-tiles.json` | `bake_impostors.gd` and `pack_impostors.py` (R3.1's), with ten new recipes | The ruins as impostor kinds, re-baked into the woodland's atlas, which grows from 2048×1408 to 2048×1776 (79 tiles, 37 of them the ruins'): four gravestones (`grave-arched`, `-cross`, `-broken`, `-tablet`) and three broken walls (`wall-run`, `-corner`, `-pier`) at four yaws, three rubble clusters (`rubble-blocks`, `-scree`, `-mossy`) at three. Their sources are the kit's own sculpts at 2,500–6,000 triangles with their colour baked onto their own UVs (`tools/map_atelier/journey/impostors/stone/`, not shipped). The woodland's 42 tiles are the same as before on every covered texel. +1.25 MB ETC2. |
+
+The moss on the outcrops is the floor's own `floor/floor-moss.png`, sampled
+in world space and lifted to an olive green by `stone.gdshader`: nothing new
+ships for it.
+
 ## Rejection note — what "technically shippable" means
 
 Judging generated character art by eye is not enough; two of the five

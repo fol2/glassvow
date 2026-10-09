@@ -1,0 +1,16 @@
+#!/bin/zsh
+# Lane R3.3: the mutation proof, main's crops and the core gate at the code-final head, one Godot run at a time.
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+cd $M/wt-r33
+HEAD=$(git rev-parse --short HEAD)
+echo "== final at $HEAD $(date +%T)"
+(echo "head $HEAD"; python3 $M/tools/mutate_stone.py $M/wt-r33 $M/build/mutate-backups) > $M/final/mutations.txt 2>&1
+echo "mutations: $(tail -1 $M/final/mutations.txt)"
+for pan in 0,0 8,-6 -6,-8; do
+  n=$(echo $pan | tr ',' '_')
+  $M/tools/cap.sh $M/r33-ctl $M/final/crops/r33-ctl-close-$n.png --shape=pad-landscape --vp=1180x820 --map-steps=2 --look-lean --look-view=close --look-noair --look-pan=$pan --look-stone | sed "s/^/r33-ctl $pan: /"
+done
+git diff -z --name-only origin/main HEAD > $M/tmp/changed.nul; git diff -z --name-only origin/main HEAD -- '*.gd' > $M/tmp/changed-gd.nul
+$M/tools/core_gate.zsh > $M/final/core-gate.txt 2>&1
+echo "core gate: $(grep -c '^exit 0' $M/final/core-gate.txt) steps exit 0, $(grep -c '^exit [1-9]' $M/final/core-gate.txt) failed"
+echo "== final done $(date +%T)"

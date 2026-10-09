@@ -1,0 +1,175 @@
+extends Node
+## Scratch QA probe, lane R3.2 (never part of the game): the title path's warm-up and
+## its first map open, on the device. Armed by title_patch.py as
+## `tools/qa_title_probe.gd` with `--title-trace-probe=<mode>`:
+##   seed  (with --map --seed=1 --map-steps=2): store the run the map boot
+##         made, so the next launch's title has Act I's road to warm; quit.
+##   title (no --map): time frame 0 (main's route and the title's first frame,
+##         where `prime()` draws the floor's warm-up and the title its own),
+##         every frame after it while the title warms the land and bakes its
+##         floor, then press Back to the Road once the prefetch is done and
+##         time the open to the drawn map; quit.
+## Rows go to user://title_probe.jsonl and to stdout as TITLE_PROBE. The probe
+## reads and writes nothing else, and deletes nothing.
+
+const ROW_PATH: String = "user://title_probe.jsonl"
+const BUILD: String = "unstamped"
+const SLOW_MS: float = 25.0
+const TITLE_HOLD_S: float = 8.0
+const TITLE_LIMIT_S: float = 25.0
+
+var mode: String = "title"
+var _main: Node = null
+var _rows: FileAccess = null
+var _started_us: int = 0
+var _last_us: int = 0
+var _frames: PackedFloat32Array = PackedFloat32Array()
+var _first_ms: float = -1.0
+var _warm_seen: int = -1
+var _warm_gone: int = -1
+var _pipelines_frame0: Dictionary = {}
+## Draws made before the first frame's processing (`RenderingServer.force_draw`
+## inside the route, behind the launch screen): ms since the route began.
+var _force_draws: Array = []
+var _processing: bool = false
+
+
+func _ready() -> void:
+	_started_us = Time.get_ticks_usec()
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_main = get_parent()
+	_rows = FileAccess.open(ROW_PATH, FileAccess.WRITE)
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--title-trace-probe="):
+			mode = arg.get_slice("=", 1)
+	_row({"probe": "start", "mode": mode, "engine_ms": Time.get_ticks_msec(),
+		"args": OS.get_cmdline_user_args(), "build": _build()})
+	RenderingServer.frame_post_draw.connect(_drawn)
+	get_tree().process_frame.connect(func() -> void: _processing = true, CONNECT_ONE_SHOT)
+	_run.call_deferred()
+
+
+func _build() -> String:
+	return BUILD
+
+
+func _drawn() -> void:
+	var now: int = Time.get_ticks_usec()
+	if not _processing:
+		_force_draws.append(snappedf((now - _started_us) / 1000.0, 0.1))
+		return
+	if _first_ms < 0.0:
+		_first_ms = (now - _started_us) / 1000.0
+		_pipelines_frame0 = _pipelines()
+	else:
+		_frames.append((now - _last_us) / 1000.0)
+	_last_us = now
+	var warm: bool = get_tree().root.get_node_or_null("Floor pipelines") != null
+	if warm and _warm_seen < 0:
+		_warm_seen = _frames.size()
+	if not warm and _warm_seen >= 0 and _warm_gone < 0:
+		_warm_gone = _frames.size()
+
+
+## The renderer's pipeline compilations so far, by where they were made: at
+## draw time (a frame waits), for a new surface or mesh (worker threads),
+## specialised (worker threads), and for the canvas.
+static func _pipelines() -> Dictionary:
+	return {"draw": RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_DRAW),
+		"surface": RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_SURFACE),
+		"mesh": RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_MESH),
+		"specialization": RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_SPECIALIZATION),
+		"canvas": RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_CANVAS)}
+
+
+func _row(data: Dictionary) -> void:
+	var line: String = JSON.stringify(data)
+	print("TITLE_PROBE ", line)
+	if _rows != null:
+		_rows.store_line(line)
+		_rows.flush()
+
+
+func _wait(frames: int) -> void:
+	for _i: int in range(frames):
+		await get_tree().process_frame
+
+
+func _run() -> void:
+	if mode == "seed":
+		await _wait(60)
+		var stored: Variant = _main.call("_store_run")
+		_row({"probe": "seed", "stored": stored, "act": int(str(_main.get("game").get("run").get("act")))})
+		await _wait(5)
+		get_tree().quit(0)
+		return
+	var saved: Variant = _main.call("_load_run")
+	_row({"probe": "save", "has_run": saved != null})
+	# The title: until its warm-up and the land's prefetch are done.
+	var started: int = Time.get_ticks_msec()
+	while true:
+		await get_tree().process_frame
+		var elapsed: float = (Time.get_ticks_msec() - started) / 1000.0
+		var step: int = MapJourneyPrefetch.current_step()
+		var done: bool = step == MapJourneyPrefetch.Step.DONE or step == MapJourneyPrefetch.Step.FAILED or step == -1
+		if (elapsed >= TITLE_HOLD_S and done) or elapsed >= TITLE_LIMIT_S:
+			break
+	var title_frames: PackedFloat32Array = _frames.duplicate()
+	var prefetch: Dictionary = {}
+	var current: Variant = MapJourneyPrefetch._current
+	if current != null:
+		var land: Variant = current.get("_land")
+		if land != null and land.get("forest_floor") != null:
+			prefetch = {"floor_state": land.get("forest_floor").get("state"), "floor_ms": land.get("forest_floor").get("timings_ms")}
+	_row({"probe": "title", "frame0_ms": _first_ms, "frames": title_frames.size(),
+		"worst_after0_ms": _worst(title_frames, 0), "slow": _slow(title_frames, 0),
+		"warm_frame": _warm_seen, "warm_gone_frame": _warm_gone,
+		"prefetch_step": MapJourneyPrefetch.current_step(), "prefetch": prefetch,
+		"pipelines_frame0": _pipelines_frame0, "pipelines_title": _pipelines(),
+		"force_draws_ms": _force_draws,
+		"first_frames_ms": Array(title_frames.slice(0, 12))})
+	# Back to the Road, as the player presses it.
+	var screen: Variant = _main.get("_choice_screen")
+	var pressed_at: int = _frames.size()
+	var press_us: int = Time.get_ticks_usec()
+	_main.call("_on_title_pick", "continue", screen, _main.call("_load_run"))
+	var ready_ms: float = -1.0
+	for _i: int in range(1800):
+		await get_tree().process_frame
+		var map: Variant = _main.get("_map_screen")
+		if map is Node and is_instance_valid(map):
+			var node: Node = map
+			if node.is_inside_tree() and not node.call("landscape_pending"):
+				ready_ms = (Time.get_ticks_usec() - press_us) / 1000.0
+				break
+	await _wait(90)
+	var open_frames: PackedFloat32Array = _frames.slice(pressed_at)
+	var floor_state: Variant = null
+	var map_now: Variant = _main.get("_map_screen")
+	if map_now != null and is_instance_valid(map_now):
+		var scene: Variant = map_now.get("_map_scene")
+		if scene != null:
+			var land_now: Variant = scene.call("journey_landscape")
+			if land_now != null and land_now.get("forest_floor") != null:
+				floor_state = {"state": land_now.get("forest_floor").get("state"), "floor_ms": land_now.get("forest_floor").get("timings_ms")}
+	_row({"probe": "open", "ready_ms": ready_ms, "frames": open_frames.size(),
+		"worst_ms": _worst(open_frames, 0), "slow": _slow(open_frames, 0), "floor": floor_state,
+		"pipelines_open": _pipelines(),
+		"vram_mib": snappedf(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0, 0.1)})
+	await _wait(5)
+	get_tree().quit(0)
+
+
+static func _worst(frames: PackedFloat32Array, start: int) -> float:
+	var worst: float = 0.0
+	for i: int in range(start, frames.size()):
+		worst = maxf(worst, frames[i])
+	return snappedf(worst, 0.1)
+
+
+static func _slow(frames: PackedFloat32Array, start: int) -> Array:
+	var out: Array = []
+	for i: int in range(start, frames.size()):
+		if frames[i] > SLOW_MS:
+			out.append([i, snappedf(frames[i], 0.1)])
+	return out

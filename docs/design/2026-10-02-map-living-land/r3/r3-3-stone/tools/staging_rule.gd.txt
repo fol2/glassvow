@@ -1,0 +1,38 @@
+extends SceneTree
+## Lane R3.3 scratch (never committed): what one texture upload of a given size costs the driver, beyond
+## the texture. Uploads RGBA8 images (no mipmaps) of the given heights at 2048 wide, one after another,
+## and prints the driver's total against Godot's tracked textures after each.
+##   godot --rendering-driver metal --rendering-method mobile -s <this> -- --heights=256,600,1100
+
+var rd: RenderingDevice
+var keep: Array = []
+
+
+func _initialize() -> void:
+	rd = RenderingServer.get_rendering_device()
+	_run.call_deferred()
+
+
+func _mem() -> Array:
+	return [rd.get_memory_usage(RenderingDevice.MEMORY_TOTAL) / 1048576.0, rd.get_memory_usage(RenderingDevice.MEMORY_TEXTURES) / 1048576.0]
+
+
+func _run() -> void:
+	var heights: PackedStringArray = PackedStringArray()
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--heights="):
+			heights = arg.get_slice("=", 1).split(",")
+	for i: int in range(5):
+		await process_frame
+	for h: String in heights:
+		var before: Array = _mem()
+		var image: Image = Image.create_empty(2048, int(h), false, Image.FORMAT_RGBA8)
+		image.fill(Color(0.5, 0.3, 0.2, 1.0))
+		keep.append(ImageTexture.create_from_image(image))
+		for i: int in range(3):
+			await process_frame
+		var after: Array = _mem()
+		var total: float = after[0] - before[0]
+		var tracked: float = after[1] - before[1]
+		print("STAGING upload %.2f MiB: total +%.2f, texture +%.2f, untracked +%.2f" % [2048 * int(h) * 4 / 1048576.0, total, tracked, total - tracked])
+	quit(0)

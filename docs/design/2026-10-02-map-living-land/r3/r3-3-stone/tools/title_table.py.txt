@@ -1,0 +1,22 @@
+"""Lane R3.2 round 3 (scratch): one row per title launch of the named batches.
+Reads only the batch folders' own rows; writes nothing."""
+import json, glob, os, sys
+root = sys.argv[1]
+for b in sys.argv[2:]:
+    for f in sorted(glob.glob(os.path.join(root, 'batch' + b, '*title*.jsonl'))):
+        t = o = None
+        for line in open(f):
+            d = json.loads(line)
+            if d.get('probe') == 'title': t = d
+            if d.get('probe') == 'open': o = d
+        if t is None:
+            print(b, os.path.basename(f), 'no title row'); continue
+        fd = t.get('force_draws_ms') or []
+        over = [s for s in t.get('slow', []) if s[1] > 100]
+        bake = ''
+        if o and o.get('floor') and isinstance(o['floor'], dict) and o['floor'].get('floor_ms'):
+            bk = o['floor']['floor_ms'].get('bake')
+            if bk: bake = 'bake worst %.1f' % max(bk['frames_ms'])
+        print('%-2s %-24s %-9s frame0 %7.1f  force_draws %-16s next %6.1f  over100 after0 %-22s open ready %6.1f worst %6.1f  %s' % (
+            b, os.path.basename(f)[:-6], t.get('build', '?')[:9], t['frame0_ms'], ','.join('%.0f' % x for x in fd) or '-',
+            t.get('frame1_ms', float('nan')), over, o['ready_ms'] if o else float('nan'), o['worst_ms'] if o else float('nan'), bake))

@@ -1,0 +1,53 @@
+"""Lane R3.3 sheets: main (left) beside the branch (right) at every stop, one
+sheet per act and shape, rows = seeds (Act I: 717, 1, 2, 3; Acts II-IV: 1-3);
+and per capture how many pixels differ between the two builds.
+    python3 sheets.py <token-gate root with ctl/ and dev/> <out dir> <main label> <branch label>"""
+import sys, os
+from PIL import Image, ImageDraw, ImageFont
+import numpy as np
+R, OUT, MAIN, BRANCH = sys.argv[1:5]
+os.makedirs(OUT, exist_ok=True)
+STOPS = {0: ['close', 'journey', 'whole'], 1: ['stop0', 'stop1', 'stop2', 'stop3'], 2: ['stop0', 'stop1', 'stop2', 'stop3'], 3: ['stop0', 'stop1', 'stop2', 'stop3']}
+SEEDS = {0: (717, 1, 2, 3), 1: (1, 2, 3), 2: (1, 2, 3), 3: (1, 2, 3)}
+try:
+    font = ImageFont.truetype('/System/Library/Fonts/Supplemental/Arial.ttf', 18)
+except Exception:
+    font = ImageFont.load_default()
+report = []
+for act in range(4):
+    for shape in ('pad-landscape', 'phone-landscape'):
+        cell_w = 520 if shape == 'pad-landscape' else 560
+        tiles = []
+        for seed in SEEDS[act]:
+            for stop in STOPS[act]:
+                a = os.path.join(R, 'ctl', 'a%d-s%d-%s-%s.png' % (act, seed, shape, stop))
+                b = os.path.join(R, 'dev', 'a%d-s%d-%s-%s.png' % (act, seed, shape, stop))
+                if not (os.path.exists(a) and os.path.exists(b)):
+                    report.append('missing a%d s%d %s %s' % (act, seed, shape, stop))
+                    continue
+                ia = Image.open(a).convert('RGB'); ib = Image.open(b).convert('RGB')
+                na = np.asarray(ia).astype(int); nb = np.asarray(ib).astype(int)
+                diff = int((np.abs(na - nb).max(axis=2) > 6).sum()) if na.shape == nb.shape else -1
+                report.append('a%d s%-3d %-15s %-7s changed px %8d of %d (%.1f%%)' % (act + 1, seed, shape, stop, diff, na.shape[0] * na.shape[1], 100.0 * diff / (na.shape[0] * na.shape[1])))
+                tiles.append((seed, stop, ia, ib))
+        if not tiles:
+            continue
+        cols = len(STOPS[act]); rows = len(SEEDS[act])
+        w0, h0 = tiles[0][2].size
+        cw = cell_w
+        ch = int(h0 * cw / w0)
+        sheet = Image.new('RGB', (cols * (2 * cw + 12) + 10, rows * (ch + 30) + 40), (24, 22, 26))
+        d = ImageDraw.Draw(sheet)
+        d.text((10, 8), 'Act %d, %s: main %s (left of each pair) and R3.3 %s (right), seeds %s, every stop' % (
+            act + 1, shape, MAIN, BRANCH, ', '.join(str(s) for s in SEEDS[act])), fill=(230, 220, 200), font=font)
+        for seed, stop, ia, ib in tiles:
+            r = SEEDS[act].index(seed)
+            c = STOPS[act].index(stop)
+            x = 10 + c * (2 * cw + 12)
+            y = 40 + r * (ch + 30)
+            d.text((x, y), 'seed %d, %s' % (seed, stop), fill=(200, 190, 170), font=font)
+            sheet.paste(ia.resize((cw, ch), Image.LANCZOS), (x, y + 22))
+            sheet.paste(ib.resize((cw, ch), Image.LANCZOS), (x + cw + 4, y + 22))
+        sheet.save(os.path.join(OUT, 'act%d-%s.jpg' % (act + 1, shape.split('-')[0])), quality=84)
+open(os.path.join(OUT, 'pixel-diff.txt'), 'w').write('\n'.join(report) + '\n')
+print('\n'.join(report[-12:]))

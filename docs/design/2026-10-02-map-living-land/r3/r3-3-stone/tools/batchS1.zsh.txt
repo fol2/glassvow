@@ -1,0 +1,51 @@
+#!/bin/zsh
+# Lane R3.3 batch S1 (QA app only, under the device lock): the gates at the branch's
+# code-final head against main, interleaved, two installs each. Per install: L1 = the
+# first launch after the install (its boot), the opens (cold, reopen x6, warmed) and
+# 600-frame rests at the cadence and live at Journey, river, Close and Whole act;
+# L2 = the fresh-run opening view's rests; V1-V3 = short launches for video memory (a
+# Journey hold at the cadence, no opens), so each build has six more VRAM readings.
+# PART=traces runs the rest as its own batch (S2): a screenshot, and Metal System Traces
+# of the branch at Journey, live: as it is, without the stone, and without the ground.
+set -u
+source ${0:A:h}/common.zsh
+OUT=$M/device/${BATCH:-batchS1}
+mkdir -p $OUT; guard_out
+DEV_IPA=$M/ipa/dev.ipa; CTL_IPA=$M/ipa/ctl.ipa
+DEV_BUILD=$(cat $M/ipa/dev.build); CTL_BUILD=$(cat $M/ipa/ctl.build)
+$FLOW/ipad_lock.sh acquire map-r33
+trap "$FLOW/ipad_lock.sh release map-r33; echo \"== lock released \$(date +%T)\"; battery" EXIT
+UDID=$(mt_udid); [[ -n "$UDID" ]] || { echo "no iPad"; exit 1; }
+echo "== batch ${BATCH:-batchS1} (${PART:-gates}) start $(date +%T): dev $DEV_BUILD, main $CTL_BUILD"; battery
+if [[ ${PART:-gates} == gates ]]; then
+for n in 1 2; do
+  for b in ctl dev; do
+    $FLOW/ipad_lock.sh acquire map-r33
+    if [[ $b == ctl ]]; then ipa=$CTL_IPA; build=$CTL_BUILD; else ipa=$DEV_IPA; build=$DEV_BUILD; fi
+    install_build $b$n $ipa || exit 1
+    MT_WAIT=110 mt_launch $b$n-l1 --map --map-trace-probe --map-lean --seed=1 --shape=pad-landscape --map-steps=2 --opens --reopens=6 --holds=cadence,live --probe-view=journey,river,close,whole
+    check_build $b$n-l1 $build
+    MT_WAIT=40 mt_launch $b$n-l2 --map --map-trace-probe --map-lean --seed=1 --shape=pad-landscape --holds=cadence,live
+    check_build $b$n-l2 $build
+    for v in 1 2 3; do
+      MT_WAIT=40 mt_launch $b$n-v$v --map --map-trace-probe --map-lean --seed=1 --shape=pad-landscape --map-steps=2 --holds=cadence --hold-frames=60 --probe-view=journey
+      check_build $b$n-v$v $build
+    done
+    battery
+  done
+done
+else
+$FLOW/ipad_lock.sh acquire map-r33
+install_build devS $DEV_IPA || exit 1
+MT_SHOT=40 MT_WAIT=60 mt_launch dev-shot --map --map-trace-probe --map-lean --seed=1 --shape=pad-landscape --map-steps=2 --holds=cadence --hold-frames=120 --linger=25
+check_build dev-shot $DEV_BUILD
+for kill in none stone ground; do
+  $FLOW/ipad_lock.sh acquire map-r33
+  args=(--map --map-trace-probe --map-lean --seed=1 --shape=pad-landscape --map-steps=2 --holds=live --hold-frames=2400)
+  [[ $kill != none ]] && args+=(--trace-kill=$kill)
+  MT_WAIT=60 mt_trace dev-t$kill 6 24 $args
+  check_build dev-t$kill $DEV_BUILD
+  mt_export dev-t$kill
+done
+fi
+echo "== batch ${BATCH:-batchS1} done $(date +%T)"

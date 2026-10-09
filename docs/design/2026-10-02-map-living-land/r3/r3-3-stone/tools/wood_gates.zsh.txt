@@ -1,0 +1,20 @@
+#!/bin/zsh
+# wood_gates.zsh <worktree> <outdir>: R3.1b's woodland gates at one head (lane R3.3 scratch):
+# the flat-magenta canopy cover (stone cards excluded) and the red share at the pad's three views
+# and the phone's Journey (lean, Reduce Motion stills, no air, seed 1), and R2's pin-contrast mount
+# at the three shapes. Mac, A12 Metal condition.
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+WT=$1; OUT=$2; mkdir -p $OUT
+for view in journey whole fresh; do
+  args=(--map-steps=2 --look-view=$view); [[ $view == fresh ]] && args=()
+  $M/tools/cap.sh $WT $OUT/pad-$view.png --shape=pad-landscape --vp=1180x820 $args --look-lean --look-still --look-noair --look-cover --look-magenta | sed "s/^/pad $view: /"
+  echo "pad $view metrics $(python3 $M/tools/metrics.py $OUT/pad-$view.png) bands $(python3 $M/tools/bands.py $OUT/pad-$view.png) skip $(grep -o 'MAGENTA_SKIP [0-9]*' $OUT/pad-$view.log)"
+done
+$M/tools/cap.sh $WT $OUT/phone-journey.png --shape=phone-landscape --vp=844x390 --map-steps=2 --look-view=journey --look-lean --look-still --look-noair --look-cover --look-magenta | sed "s/^/phone journey: /"
+echo "phone journey metrics $(python3 $M/tools/metrics.py $OUT/phone-journey.png) bands $(python3 $M/tools/bands.py $OUT/phone-journey.png)"
+for shape in pad-landscape phone-landscape desktop-landscape; do
+  LEAN=1 GODOT_MTL_DISABLE_ARGUMENT_BUFFERS=1 timeout 240 godot --path $WT --rendering-driver metal --rendering-method mobile --position 1400,900 \
+    -s $M/tools/look4.gd -- --shape=$shape --output=$OUT/contrast-$shape.png > $OUT/contrast-$shape.log 2>&1
+  python3 $M/tools/pin_contrast.py $OUT/contrast-$shape.png $OUT/contrast-$shape.log > $OUT/contrast-$shape.json
+  echo "$shape pins $(python3 -c "import json; d=json.load(open('$OUT/contrast-$shape.json')); print('rim min', d['min_rim_vs_land'], 'disc min', d['min_disc_vs_land'], 'pins', len(d['pins']))") shader $(grep -c 'SHADER ERROR' $OUT/contrast-$shape.log) script $(grep -c 'SCRIPT ERROR' $OUT/contrast-$shape.log)"
+done

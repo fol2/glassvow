@@ -1,0 +1,36 @@
+# The A12 Metal condition (GODOT_MTL_DISABLE_ARGUMENT_BUFFERS=1, --rendering-driver metal --rendering-method mobile) at the three
+# reference shapes, en and zh-Hant lean and en full, Journey; and Reduce Motion at Close (two frames 1.5 s apart, no drifting air).
+# tools/mac_proof.zsh.txt. Main 711302a5 first, then R3.3's code-final runtime (lane head 1ae3888c).
+== mac proof r33-ctl
+pad-landscape en lean: exit 0 0 shader errors, 0 script errors
+pad-landscape zh-Hant lean: exit 0 0 shader errors, 0 script errors
+pad-landscape en full: exit 0 0 shader errors, 0 script errors
+phone-landscape en lean: exit 0 0 shader errors, 0 script errors
+phone-landscape zh-Hant lean: exit 0 0 shader errors, 0 script errors
+phone-landscape en full: exit 0 0 shader errors, 0 script errors
+desktop-landscape en lean: exit 0 0 shader errors, 0 script errors
+desktop-landscape zh-Hant lean: exit 0 0 shader errors, 0 script errors
+desktop-landscape en full: exit 0 0 shader errors, 0 script errors
+reduce motion on: exit 0 0 shader errors, 0 script errors
+reduce motion on changed px 10288
+reduce motion off: exit 0 0 shader errors, 0 script errors
+reduce motion off changed px 116513
+all logs: shader errors 0, script errors 0, other ERROR lines 0
+== mac proof wt-r33
+pad-landscape en lean: exit 0 0 shader errors, 0 script errors
+pad-landscape zh-Hant lean: exit 0 0 shader errors, 0 script errors
+pad-landscape en full: exit 0 0 shader errors, 0 script errors
+phone-landscape en lean: exit 0 0 shader errors, 0 script errors
+phone-landscape zh-Hant lean: exit 0 0 shader errors, 0 script errors
+phone-landscape en full: exit 0 0 shader errors, 0 script errors
+desktop-landscape en lean: exit 0 0 shader errors, 0 script errors
+desktop-landscape zh-Hant lean: exit 0 0 shader errors, 0 script errors
+desktop-landscape en full: exit 0 0 shader errors, 0 script errors
+reduce motion on: exit 0 0 shader errors, 0 script errors
+reduce motion on changed px 12801
+reduce motion off: exit 0 0 shader errors, 0 script errors
+reduce motion off changed px 115904
+all logs: shader errors 0, script errors 0, other ERROR lines 0
+
+Under Reduce Motion every changed pixel is the river's water, in both builds (frames/reduce-motion-close.png: magenta, main left);
+the branch shows more water at this frame because main's slate bank there stood over the river.

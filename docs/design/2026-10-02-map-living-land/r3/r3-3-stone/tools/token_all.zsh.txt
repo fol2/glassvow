@@ -1,0 +1,20 @@
+#!/bin/zsh
+# token_all.zsh <outroot>: the token gate (tools/map_token_gate.gd) for main (r33-ctl) and the branch (wt-r33),
+# every act, seeds 1-3 (and 717 in Act I), phone and pad, A12 Metal condition. Lane R3.3 scratch.
+M=/Users/jamesto/Coding/glassvow/.claude/worktrees/map-lane
+R=$1
+for act in 0 1 2 3; do
+  seeds=(1 2 3); [[ $act == 0 ]] && seeds=(717 1 2 3)
+  for seed in $seeds; do
+    for shape in pad-landscape phone-landscape; do
+      for build in ctl dev; do
+        WT=$M/r33-ctl; [[ $build == dev ]] && WT=$M/wt-r33
+        OUT=$R/$build; mkdir -p $OUT
+        log=$OUT/a$act-s$seed-$shape.log
+        GODOT_MTL_DISABLE_ARGUMENT_BUFFERS=1 timeout 400 godot --path $WT --rendering-driver metal --rendering-method mobile --position 1400,900 \
+          -s res://tools/map_token_gate.gd -- --act-index=$act --seed=$seed --shape=$shape --output=$OUT > $log 2>&1
+        echo "$build a$act s$seed $shape exit $? shader-errors $(grep -c 'Error compiling shader\|SHADER ERROR' $log) script-errors $(grep -c 'SCRIPT ERROR' $log)"
+      done
+    done
+  done
+done
